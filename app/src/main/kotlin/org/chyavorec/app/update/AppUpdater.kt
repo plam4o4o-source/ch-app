@@ -195,7 +195,7 @@ class AppUpdater(
                 val request = Request.Builder().url(info.apkUrl).header("User-Agent", "ChitalishteYavorec-Android/${config.versionName}").build()
                 downloadClient.newCall(request).execute().use { response ->
                     val body = response.body
-                    if (!response.isSuccessful || body == null) throw IOException("HTTP ${response.code}")
+                    if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
                     val total = body.contentLength().takeIf { it > 0 } ?: info.sizeBytes
                     if (total != null && total > MAX_APK_BYTES) throw IOException("too large")
                     body.byteStream().use { input ->

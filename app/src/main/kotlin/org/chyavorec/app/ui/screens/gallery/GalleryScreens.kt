@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -140,6 +141,7 @@ fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: (
         state.data?.firstOrNull { it.name == album }?.photos.orEmpty()
     } else urls.mapIndexed { i, u -> GalleryPhoto("u$i", "", u, u, "", u) }
     val context = LocalContext.current
+    val resources = LocalResources.current
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         if (photos.isNotEmpty()) {
             val pager = rememberPagerState(initialPage = index.coerceIn(0, photos.lastIndex)) { photos.size }
@@ -158,7 +160,7 @@ fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: (
                     color = Color.White, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f),
                 )
-                IconButton(onClick = { Intents.share(context, current.title.ifBlank { context.getString(R.string.gallery_title) }, current.pageUrl) }) {
+                IconButton(onClick = { Intents.share(context, current.title.ifBlank { resources.getString(R.string.gallery_title) }, current.pageUrl) }) {
                     Icon(Icons.Outlined.Share, stringResource(R.string.action_share), tint = Color.White)
                 }
             }

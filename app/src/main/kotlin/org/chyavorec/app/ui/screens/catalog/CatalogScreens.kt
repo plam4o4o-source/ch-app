@@ -69,6 +69,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -341,6 +342,7 @@ fun BookScreen(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit) {
     val ui by vm.ui.collectAsStateWithLifecycle()
     val hold by vm.holdResult.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val resources = LocalResources.current
     val b = ui.book
 
     Scaffold(topBar = {
@@ -349,7 +351,7 @@ fun BookScreen(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit) {
                 IconButton(onClick = {
                     Intents.share(
                         context, b.title,
-                        listOf(b.title, b.author, context.getString(R.string.share_book_footer, container.config.siteBaseUrl + "/elektronen-katalog"))
+                        listOf(b.title, b.author, resources.getString(R.string.share_book_footer, container.config.siteBaseUrl + "/elektronen-katalog"))
                             .filter { it.isNotBlank() }.joinToString("\n"),
                     )
                 }) { Icon(Icons.Outlined.Share, contentDescription = stringResource(R.string.action_share)) }

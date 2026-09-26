@@ -242,12 +242,13 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
         }
     }
     val context = LocalContext.current
+    val carouselLabel = stringResource(R.string.home_carousel)
     Column {
         HorizontalPager(
             state = pager,
             contentPadding = PaddingValues(horizontal = 16.dp),
             pageSpacing = 12.dp,
-            modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = context.getString(R.string.home_carousel) },
+            modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = carouselLabel },
         ) { page ->
             val a = items[page]
             val offset = (pager.currentPage - page) + pager.currentPageOffsetFraction
