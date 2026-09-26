@@ -1,8 +1,8 @@
 import java.util.Properties
 
+// AGP 9: вграденият Kotlin (без плъгина org.jetbrains.kotlin.android).
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
@@ -115,8 +115,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
         isCoreLibraryDesugaringEnabled = false
     }
 
@@ -169,7 +169,7 @@ androidComponents {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
         // Стабилните по поведение, но още маркирани като експериментални Compose API
         // (TopAppBar scroll behavior, PullToRefreshBox, FlowRow, Pager).
         optIn.addAll(
@@ -228,6 +228,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp)
     implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.zxing.core)
 
     testImplementation(kotlin("test"))

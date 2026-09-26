@@ -1,0 +1,42 @@
+# Автоматични обновления на зависимостите (Kotlin, Android Gradle Plugin,
+# AndroidX, библиотеки, Gradle wrapper, GitHub Actions): всяка седмица
+# Dependabot отваря PR, по който CI пуска тестовете, lint и release build.
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Sofia
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "deps"
+    groups:
+      # Kotlin, KSP и kotlinx трябва да се обновяват заедно.
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "org.jetbrains.kotlinx*"
+          - "com.google.devtools.ksp*"
+      android:
+        patterns:
+          - "com.android.*"
+          - "androidx.*"
+      libraries:
+        patterns:
+          - "*"
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Sofia
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        patterns:
+          - "*"
