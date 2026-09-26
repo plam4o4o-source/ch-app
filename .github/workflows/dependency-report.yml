@@ -1,0 +1,23 @@
+name: Dependency report
+
+# Ръчна проверка кои зависимости имат по-нова стабилна версия
+# (автоматичните обновления идват от Dependabot — .github/dependabot.yml).
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/dependency_report.py
+      - .github/workflows/dependency-report.yml
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python3 tools/dependency_report.py | tee -a "$GITHUB_STEP_SUMMARY"
