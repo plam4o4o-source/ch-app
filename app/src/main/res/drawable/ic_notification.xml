@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Монохромна иконка за лентата на известията (пламък над книга). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,20 C62,30 66,38 62.5,47 C60.5,52 57,54 54,54 C51,54 47.5,52 45.5,47 C42,38 46,30 54,20 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M51.5,88 C44,82 35,79.5 22,80.5 L22,59 C35,58 44.5,61 51.5,67 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M56.5,88 C64,82 73,79.5 86,80.5 L86,59 C73,58 63.5,61 56.5,67 Z" />
+</vector>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Цветове от визуалната идентичност на chyavorec.org -->
+    <color name="brand_ink">#FF1A1208</color>
+    <color name="brand_gold">#FFC9A84C</color>
+    <color name="brand_gold_dark">#FF8B6914</color>
+    <color name="brand_gold_light">#FFE8D5A3</color>
+    <color name="brand_burgundy">#FF6B1F2A</color>
+    <color name="brand_cream">#FFFAF7F2</color>
+    <color name="brand_parchment">#FFF5F0E8</color>
+</resources>

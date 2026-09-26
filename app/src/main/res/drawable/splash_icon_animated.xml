@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Кратка анимация на splash екрана (Android 12+): пламъкът „пламва“ над книгата. -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="108dp"
+            android:height="108dp"
+            android:viewportWidth="108"
+            android:viewportHeight="108">
+            <group
+                android:name="flame"
+                android:pivotX="54"
+                android:pivotY="55"
+                android:scaleX="0.2"
+                android:scaleY="0.2">
+                <path
+                    android:fillColor="@color/brand_gold"
+                    android:pathData="M54,27 C61,35.5 64.5,42 61.5,49.5 C59.8,53.6 56.8,55.5 54,55.5 C51.2,55.5 48.2,53.6 46.5,49.5 C43.5,42 47,35.5 54,27 Z" />
+                <path
+                    android:fillColor="@color/brand_gold_light"
+                    android:pathData="M54,39 C57.2,43 58.4,46.5 56.9,49.8 C56.1,51.6 55,52.4 54,52.4 C53,52.4 51.9,51.6 51.1,49.8 C49.6,46.5 50.8,43 54,39 Z" />
+            </group>
+            <path
+                android:fillColor="@color/brand_gold"
+                android:pathData="M52.6,79 C46,73.8 38.4,71.8 29,72.4 L29,56.6 C38.6,56 46.4,58.4 52.6,63.4 Z" />
+            <path
+                android:fillColor="@color/brand_gold"
+                android:pathData="M55.4,79 C62,73.8 69.6,71.8 79,72.4 L79,56.6 C69.4,56 61.6,58.4 55.4,63.4 Z" />
+        </vector>
+    </aapt:attr>
+    <target android:name="flame">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="600"
+                    android:interpolator="@android:interpolator/overshoot"
+                    android:propertyName="scaleX"
+                    android:valueFrom="0.2"
+                    android:valueTo="1" />
+                <objectAnimator
+                    android:duration="600"
+                    android:interpolator="@android:interpolator/overshoot"
+                    android:propertyName="scaleY"
+                    android:valueFrom="0.2"
+                    android:valueTo="1" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>
