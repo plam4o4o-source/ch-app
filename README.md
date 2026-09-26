@@ -71,7 +71,7 @@ store/    Google Play метаданни, графики, политика за 
 Kotlin 2.4 · Jetpack Compose (BOM 2026.09) · Material 3 · Navigation Compose ·
 Coroutines/Flow · kotlinx.serialization · OkHttp 5 · Jsoup · Room · DataStore ·
 WorkManager · Coil 3 · ZXing (само кодиране) · Android Keystore ·
-AGP 9.4 (вграден Kotlin) · Gradle 9.8 · Java 21 (build с JDK 25) · minSdk 26 (Android 8.0) · target/compileSdk 36.
+AGP 9.4 (вграден Kotlin) · Gradle 9.8 · Java 21 (build с JDK 25) · minSdk 26 (Android 8.0) · target/compileSdk 37 (Android 17).
 
 **Обновяване на зависимостите:** Dependabot (`.github/dependabot.yml`) всяка
 седмица проверява Kotlin, AGP, AndroidX, библиотеките, Gradle wrapper и GitHub
@@ -84,7 +84,7 @@ Actions и отваря PR (групирани: kotlin / android / libraries / a
 
 ## Настройка и build
 
-Изисквания: **JDK 21+** (CI ползва JDK 25), **Android SDK** с platform 36 (Android Studio
+Изисквания: **JDK 21+** (CI ползва JDK 25), **Android SDK** с platform 37 (Android Studio
 Narwhal/по-нова го инсталира автоматично).
 
 ```bash

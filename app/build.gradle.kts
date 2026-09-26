@@ -45,12 +45,12 @@ val updateManifestUrl = config(
 
 android {
     namespace = "org.chyavorec.app"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "org.chyavorec.app"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = config("VERSION_CODE", "1").toInt()
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
