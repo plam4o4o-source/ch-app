@@ -13,9 +13,28 @@ on:
         default: ""
   push:
     tags: ["v*"]
+  # Извиква се от auto-release.yml (автоматично издание след сливане в main).
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      notes:
+        type: string
+        required: false
+        default: ""
+      ref:
+        description: "Commit за издаване"
+        type: string
+        required: false
+        default: ""
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -23,6 +42,8 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
 
       - uses: actions/setup-java@v4
         with:
@@ -33,10 +54,11 @@ jobs:
 
       - name: Version
         run: |
-          V="${{ github.event.inputs.version }}"
+          V="${{ inputs.version }}"
           if [ -z "$V" ]; then V="${GITHUB_REF_NAME#v}"; fi
           echo "VERSION=$V" >> "$GITHUB_ENV"
-          echo "VERSION_CODE=${{ github.run_number }}" >> "$GITHUB_ENV"
+          # versionCode расте монотонно независимо кой workflow издава: минути от 01.01.2024.
+          echo "VERSION_CODE=$(( ($(date -u +%s) - 1704067200) / 60 ))" >> "$GITHUB_ENV"
 
       - name: Tests and lint
         run: |
@@ -84,7 +106,7 @@ jobs:
       - name: Update manifest
         if: env.SIGNING_KIND == 'upload-key'
         env:
-          NOTES: ${{ github.event.inputs.notes }}
+          NOTES: ${{ inputs.notes }}
         run: |
           python3 - <<'PY'
           import json, os, hashlib
@@ -106,7 +128,7 @@ jobs:
 
       - name: Release notes
         env:
-          NOTES: ${{ github.event.inputs.notes }}
+          NOTES: ${{ inputs.notes }}
         run: |
           cat > notes.md <<NOTES
           Читалище Яворец — Android приложение v$VERSION (versionCode $VERSION_CODE)
@@ -135,5 +157,5 @@ jobs:
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" dist/* --clobber
           else
-            gh release create "$TAG" dist/* --title "Читалище Яворец $VERSION" --notes-file notes.md --target "$GITHUB_SHA"
+            gh release create "$TAG" dist/* --title "Читалище Яворец $VERSION" --notes-file notes.md --target "$(git rev-parse HEAD)"
           fi

@@ -73,11 +73,20 @@ Coroutines/Flow · kotlinx.serialization · OkHttp 5 · Jsoup · Room · DataSto
 WorkManager · Coil 3 · ZXing (само кодиране) · Android Keystore ·
 AGP 9.4 (вграден Kotlin) · Gradle 9.8 · Java 21 (build с JDK 25) · minSdk 26 (Android 8.0) · target/compileSdk 37 (Android 17).
 
-**Обновяване на зависимостите:** Dependabot (`.github/dependabot.yml`) всяка
-седмица проверява Kotlin, AGP, AndroidX, библиотеките, Gradle wrapper и GitHub
-Actions и отваря PR (групирани: kotlin / android / libraries / actions), за
-който CI пуска тестовете, lint и release build. Текущото състояние спрямо
-последните стабилни версии: Actions → „Dependency report“ (`tools/dependency_report.py`).
+**Автоматично: обновяване → сливане → build → издание**
+
+1. Dependabot (`.github/dependabot.yml`) всяка седмица отваря PR към `main` с
+   новите версии на Kotlin, AGP, AndroidX, библиотеките, Gradle wrapper и
+   GitHub Actions (групирани: kotlin / android / libraries / actions).
+2. CI (`android.yml`) пуска тестовете, lint и release build.
+3. Ако е зелен, `dependabot-automerge.yml` слива PR-а в `main`.
+4. `auto-release.yml` издава нова версия (patch +1, напр. v1.1.0 → v1.1.1) —
+   също и след всеки push в `main`, който променя приложението (не само
+   документация/CI). Release-ът съдържа APK, AAB и `update.json`, а
+   инсталираните приложения се обновяват сами.
+
+Ръчно: Actions → Release (конкретна версия, напр. `1.2.0`) или tag `v1.2.0`.
+Текущото състояние спрямо последните версии: Actions → „Dependency report“.
 
 Шрифтове: Cormorant Garamond и Raleway (SIL Open Font License, с кирилица) —
 същите като на сайта.

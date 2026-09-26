@@ -1,10 +1,12 @@
 # Автоматични обновления на зависимостите (Kotlin, Android Gradle Plugin,
 # AndroidX, библиотеки, Gradle wrapper, GitHub Actions): всяка седмица
-# Dependabot отваря PR, по който CI пуска тестовете, lint и release build.
+# Dependabot отваря PR към main; ако CI мине (тестове, lint, release build),
+# dependabot-automerge.yml го слива и auto-release.yml издава нова версия.
 version: 2
 updates:
   - package-ecosystem: gradle
     directory: "/"
+    target-branch: main
     schedule:
       interval: weekly
       day: monday
@@ -29,6 +31,7 @@ updates:
           - "*"
   - package-ecosystem: github-actions
     directory: "/"
+    target-branch: main
     schedule:
       interval: weekly
       day: monday

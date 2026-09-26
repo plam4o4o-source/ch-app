@@ -1,0 +1,41 @@
+name: Dependabot auto-merge
+
+# Слива PR на Dependabot в main, след като „Android CI“ е минал успешно за него
+# (тестове, lint, release build), и пуска автоматичното издание.
+# (workflow_run работи с правата на хранилището — PR-ите на Dependabot сами
+# по себе си имат само права за четене.)
+on:
+  workflow_run:
+    workflows: ["Android CI"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  merge:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]' &&
+      startsWith(github.event.workflow_run.head_branch, 'dependabot/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          PR=$(gh pr list --repo "$REPO" --head "$BRANCH" --state open --json number,author,headRefOid,baseRefName \
+                 --jq ".[] | select(.author.login == \"app/dependabot\" and .headRefOid == \"$HEAD_SHA\" and .baseRefName == \"main\") | .number")
+          if [ -z "$PR" ]; then
+            echo "Няма отворен PR на Dependabot към main за $BRANCH@$HEAD_SHA (или има нов commit) — пропускам."
+            exit 0
+          fi
+          gh pr merge "$PR" --repo "$REPO" --squash --delete-branch
+          # Сливане с GITHUB_TOKEN не пуска CI за main — изданието се пуска изрично.
+          gh workflow run auto-release.yml --repo "$REPO" --ref main
