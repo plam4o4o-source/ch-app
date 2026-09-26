@@ -52,7 +52,8 @@ class NewsRepository(
         CachedResource(cache, cacheKey("news:article:", article.url), ArticleDetail.serializer(), clock, ONE_HOUR)
             .load(force) { service.fetchArticle(article) }
 
-    suspend fun find(id: String): NewsArticle? = list.cached()?.data?.firstOrNull { it.id == id }
+    /** По идентификатор или по публичния адрес (/news/<slug>) — за вътрешните връзки. */
+    suspend fun find(id: String): NewsArticle? = list.cached()?.data?.firstOrNull { it.id == id || it.url.trimEnd('/') == id.trimEnd('/') }
 }
 
 class EventsRepository(
@@ -85,7 +86,7 @@ class EventsRepository(
         }.sortedBy { it.date }
     }
 
-    suspend fun find(id: String): Event? = list.cached()?.data?.firstOrNull { it.id == id }
+    suspend fun find(id: String): Event? = cachedRolled()?.data?.firstOrNull { it.id == id }
 
     fun upcoming(events: List<Event>): List<Event> {
         val today = clock.today().toString()

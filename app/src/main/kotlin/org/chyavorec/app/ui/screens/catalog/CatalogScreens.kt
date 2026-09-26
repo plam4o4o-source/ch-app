@@ -19,6 +19,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import org.chyavorec.app.ui.components.BrandImage
+import org.chyavorec.app.ui.components.animateEntrance
+import org.chyavorec.app.ui.components.sharedElementKey
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -137,7 +141,21 @@ fun CatalogScreen(navigate: (String) -> Unit) {
 
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text(stringResource(R.string.tab_catalog), style = MaterialTheme.typography.headlineMedium) },
+            title = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    BrandImage(R.drawable.logo_catalog, null, Modifier.size(40.dp))
+                    Spacer(Modifier.width(10.dp))
+                    Column {
+                        Text(stringResource(R.string.catalog_title), style = MaterialTheme.typography.titleLarge, maxLines = 1)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            BrandImage(R.drawable.logo_invlib, null, Modifier.size(width = 20.dp, height = 13.dp))
+                            Spacer(Modifier.width(4.dp))
+                            Text(stringResource(R.string.catalog_powered_by), style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+            },
             actions = {
                 Box {
                     IconButton(onClick = { sortMenu = true }) {
@@ -214,8 +232,8 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                                 )
                             }
-                            items(state.page, key = { it.inv }) { b ->
-                                BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem())
+                            itemsIndexed(state.page, key = { _, b -> b.inv }) { i, b ->
+                                BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i))
                             }
                             if (state.canLoadMore) {
                                 item {
@@ -239,7 +257,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
 @Composable
 fun BookListItem(b: CatalogBook, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 10.dp)) {
-        BookCover(b, width = 60.dp)
+        BookCover(b, width = 60.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(b.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -331,7 +349,7 @@ fun BookScreen(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit) {
                 IconButton(onClick = {
                     Intents.share(
                         context, b.title,
-                        listOf(b.title, b.author, context.getString(R.string.share_book_footer, container.config.siteBaseUrl + "/index/elektronen_katalog/0-70"))
+                        listOf(b.title, b.author, context.getString(R.string.share_book_footer, container.config.siteBaseUrl + "/elektronen-katalog"))
                             .filter { it.isNotBlank() }.joinToString("\n"),
                     )
                 }) { Icon(Icons.Outlined.Share, contentDescription = stringResource(R.string.action_share)) }
@@ -345,7 +363,7 @@ fun BookScreen(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit) {
         Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 32.dp)) {
             SyncBanner(ui.fromCache, ui.syncedAt, null)
             Row(Modifier.padding(20.dp), verticalAlignment = Alignment.Top) {
-                BookCover(b, width = 124.dp)
+                BookCover(b, width = 124.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"))
                 Spacer(Modifier.width(18.dp))
                 Column(Modifier.weight(1f)) {
                     Text(b.title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })

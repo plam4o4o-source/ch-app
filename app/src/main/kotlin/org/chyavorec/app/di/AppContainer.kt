@@ -74,15 +74,16 @@ class AppContainer(
     /** Шифрован кеш за читателските данни. */
     val readerCache by lazy { FilePayloadCache(File(context.noBackupFilesDir, "cache/reader"), cipher) }
 
+    /** Показва се само ако страницата „Контакти“ не се зареди (данни от сайта към 09.2026). */
     val fallbackContacts = Contacts(
         organization = "НЧ „Васил Левски – 1922“",
-        address = null,
+        address = "пл. 9-ти Септември 3, с. Яворец, общ. Габрово, ПК 5334",
         phones = emptyList(),
         emails = listOf("chitalishte_yavorets@abv.bg"),
         website = config.siteBaseUrl,
         facebook = "https://www.facebook.com/nchvasillevski1922/",
         workingHours = emptyList(),
-        mapQuery = "Народно читалище Васил Левски 1922, Яворец, Габрово",
+        mapQuery = "пл. 9-ти Септември 3, 5334 Яворец, Габрово",
         fromSite = false,
         sourceUrl = null,
     )
@@ -106,7 +107,7 @@ class AppContainer(
     }
 
     val newsRepository by lazy { NewsRepository(siteService, publicCache, clock) }
-    val eventsRepository by lazy { EventsRepository(siteService, newsRepository, publicCache, clock) }
+    val eventsRepository by lazy { EventsRepository(siteService, publicCache, clock) }
     val catalogRepository by lazy { CatalogRepository(catalogService, publicCache, clock) }
     val siteRepository by lazy { SiteRepository(siteService, publicCache, clock) }
 

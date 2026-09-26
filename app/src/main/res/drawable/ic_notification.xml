@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Монохромна иконка за лентата на известията (пламък над книга). -->
+<!-- Монохромна иконка за лентата на известията: отворената книга от логото на читалището. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
+    android:viewportWidth="24"
+    android:viewportHeight="24">
     <path
         android:fillColor="#FFFFFFFF"
-        android:pathData="M54,20 C62,30 66,38 62.5,47 C60.5,52 57,54 54,54 C51,54 47.5,52 45.5,47 C42,38 46,30 54,20 Z" />
+        android:pathData="M3,6.2C5.3,5 8.2,4.6 11.2,5.4V19.2C8.4,18.4 5.6,18.6 3,19.6ZM12.8,5.4C15.8,4.6 18.7,5 21,6.2V19.6C18.4,18.6 15.6,18.4 12.8,19.2Z" />
     <path
         android:fillColor="#FFFFFFFF"
-        android:pathData="M51.5,88 C44,82 35,79.5 22,80.5 L22,59 C35,58 44.5,61 51.5,67 Z" />
-    <path
-        android:fillColor="#FFFFFFFF"
-        android:pathData="M56.5,88 C64,82 73,79.5 86,80.5 L86,59 C73,58 63.5,61 56.5,67 Z" />
+        android:pathData="M1.5,8.2H2.3V20.8C5.6,19.6 8.9,19.6 12,20.9C15.1,19.6 18.4,19.6 21.7,20.8V8.2H22.5V21.9C19,20.6 15.4,20.6 12,22.1C8.6,20.6 5,20.6 1.5,21.9Z" />
 </vector>

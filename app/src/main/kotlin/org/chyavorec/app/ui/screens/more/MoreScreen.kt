@@ -11,6 +11,7 @@ import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.Computer
 import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.material.icons.outlined.Place
@@ -71,6 +72,7 @@ fun MoreScreen(navigate: (String) -> Unit) {
                 MoreItem(Icons.Outlined.Computer, l.title, stringResource(R.string.more_digital_desc)) { navigate(Routes.page(l.url, l.title)) }
             }
             MoreItem(Icons.Outlined.Photo, stringResource(R.string.gallery_title), stringResource(R.string.more_gallery_desc)) { navigate(Routes.GALLERY) }
+            MoreItem(Icons.Outlined.Folder, stringResource(R.string.documents_title), stringResource(R.string.more_documents_desc)) { navigate(Routes.DOCUMENTS) }
             MoreItem(Icons.Outlined.Place, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc)) { navigate(Routes.CONTACTS) }
             HorizontalDivider(Modifier.padding(vertical = 8.dp))
             MoreItem(Icons.Outlined.Settings, stringResource(R.string.settings_title)) { navigate(Routes.SETTINGS) }

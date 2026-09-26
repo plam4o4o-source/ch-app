@@ -26,6 +26,12 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Landscape
+import androidx.compose.material.icons.outlined.Accessibility
+import androidx.compose.material.icons.outlined.ChildCare
+import androidx.compose.material.icons.outlined.Cottage
+import androidx.compose.material.icons.outlined.PhotoAlbum
+import androidx.compose.foundation.lazy.itemsIndexed
+import org.chyavorec.app.ui.components.animateEntrance
 import androidx.compose.material.icons.outlined.LibraryMusic
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.material.icons.outlined.Place
@@ -73,22 +79,29 @@ fun sectionIcon(s: SiteSection): ImageVector = when (s) {
     SiteSection.LIBRARY, SiteSection.CATALOG -> Icons.AutoMirrored.Outlined.MenuBook
     SiteSection.EVENTS -> Icons.Outlined.Event
     SiteSection.FOLKLORE -> Icons.Outlined.LibraryMusic
+    SiteSection.ENSEMBLE -> Icons.Outlined.ChildCare
     SiteSection.DANCE -> Icons.Outlined.Diversity3
     SiteSection.CLUBS -> Icons.Outlined.Groups
     SiteSection.PROJECTS -> Icons.Outlined.Rocket
     SiteSection.DIGITAL_CLUB -> Icons.Outlined.Computer
     SiteSection.CONTACTS -> Icons.Outlined.Place
     SiteSection.GALLERY -> Icons.Outlined.Photo
+    SiteSection.EXHIBITION -> Icons.Outlined.PhotoAlbum
     SiteSection.NEWS -> Icons.AutoMirrored.Outlined.Article
     SiteSection.DOCUMENTS, SiteSection.PUBLICATIONS -> Icons.Outlined.Folder
     SiteSection.DONATIONS -> Icons.Outlined.Favorite
-    SiteSection.VILLAGE -> Icons.Outlined.Landscape
+    SiteSection.VILLAGE -> Icons.Outlined.Cottage
+    SiteSection.NATURE -> Icons.Outlined.Landscape
     SiteSection.PRIVACY, SiteSection.TERMS -> Icons.Outlined.Policy
+    SiteSection.ACCESSIBILITY -> Icons.Outlined.Accessibility
     SiteSection.OTHER -> Icons.Outlined.TheaterComedy
 }
 
 /** Страниците, които имат собствени екрани в приложението, не се дублират като „дейности“. */
-private val nativeSections = setOf(SiteSection.NEWS, SiteSection.EVENTS, SiteSection.GALLERY, SiteSection.CONTACTS, SiteSection.CATALOG, SiteSection.PRIVACY, SiteSection.TERMS)
+private val nativeSections = setOf(
+    SiteSection.NEWS, SiteSection.EVENTS, SiteSection.GALLERY, SiteSection.CONTACTS, SiteSection.CATALOG,
+    SiteSection.PRIVACY, SiteSection.TERMS, SiteSection.DOCUMENTS, SiteSection.ACCESSIBILITY, SiteSection.PUBLICATIONS,
+)
 
 /** Отваря връзка от сайта: вътрешните страници — native, останалото — в Custom Tab. */
 fun openSiteLink(link: SiteLink, navigate: (String) -> Unit, openExternal: (String) -> Unit) {
@@ -98,7 +111,7 @@ fun openSiteLink(link: SiteLink, navigate: (String) -> Unit, openExternal: (Stri
         SiteSection.GALLERY -> navigate(Routes.GALLERY)
         SiteSection.CONTACTS -> navigate(Routes.CONTACTS)
         SiteSection.CATALOG -> navigate(Routes.CATALOG)
-        SiteSection.DOCUMENTS -> openExternal(link.url)
+        SiteSection.DOCUMENTS, SiteSection.PUBLICATIONS -> navigate(Routes.DOCUMENTS)
         else -> navigate(Routes.page(link.url, link.title))
     }
 }
@@ -121,12 +134,12 @@ fun ActivitiesScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExterna
                         Text(stringResource(R.string.activities_intro), style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
                     }
-                    items(links, key = { it.url }) { l ->
+                    itemsIndexed(links, key = { _, l -> l.url }) { i, l ->
                         ListItem(
                             headlineContent = { Text(l.title, style = MaterialTheme.typography.titleMedium) },
                             leadingContent = { Icon(sectionIcon(l.kind), null, tint = MaterialTheme.colorScheme.primary) },
                             trailingContent = { Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, null) },
-                            modifier = Modifier.clickable { openSiteLink(l, navigate, openExternal) }.animateItem(),
+                            modifier = Modifier.clickable { openSiteLink(l, navigate, openExternal) }.animateItem().animateEntrance(i),
                         )
                     }
                 }
@@ -141,7 +154,7 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     Scaffold(topBar = {
-        BackTopBar(title, onBack, actions = {
+        BackTopBar(title.ifBlank { state.data?.title.orEmpty() }, onBack, actions = {
             IconButton(onClick = { Intents.openUrl(context, url) }) {
                 Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = stringResource(R.string.action_open_site))
             }
@@ -152,7 +165,7 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
                 state = state, onRetry = { vm.refresh() }, isEmpty = { it.blocks.isEmpty() },
                 skeleton = { SkeletonCards() },
                 empty = { EmptyView(stringResource(R.string.page_empty)) },
-                errorSubject = title,
+                errorSubject = title.ifBlank { null },
             ) { page ->
                 LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
                     item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }

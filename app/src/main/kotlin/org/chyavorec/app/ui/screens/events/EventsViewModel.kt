@@ -18,11 +18,10 @@ import org.chyavorec.domain.model.Event
 import java.time.LocalDate
 import java.time.YearMonth
 
-enum class EventsRange { UPCOMING, PAST, ALL }
-
 data class EventsUiState(
     val state: ScreenState<List<Event>> = ScreenState(),
-    val range: EventsRange = EventsRange.UPCOMING,
+    val categories: List<String> = emptyList(),
+    val category: String? = null,
     val calendarMode: Boolean = false,
     val month: YearMonth,
     val selectedDate: LocalDate? = null,
@@ -39,34 +38,35 @@ class EventsViewModel(
 ) : ViewModel() {
 
     private val load = MutableStateFlow(ScreenState<List<Event>>())
-    private val range = MutableStateFlow(EventsRange.UPCOMING)
+    private val category = MutableStateFlow<String?>(null)
     private val calendarMode = MutableStateFlow(false)
     private val month = MutableStateFlow(YearMonth.from(clock.today()))
     private val selected = MutableStateFlow<LocalDate?>(null)
 
-    private val controls = combine(range, calendarMode, month, selected) { r, c, m, s -> Controls(r, c, m, s) }
-    private data class Controls(val range: EventsRange, val calendar: Boolean, val month: YearMonth, val selected: LocalDate?)
+    private val controls = combine(category, calendarMode, month, selected) { r, c, m, s -> Controls(r, c, m, s) }
+    private data class Controls(val category: String?, val calendar: Boolean, val month: YearMonth, val selected: LocalDate?)
 
     val ui: StateFlow<EventsUiState> = combine(load, controls, reminders.reminderIds) { s, c, rem ->
         val today = clock.today()
         val all = s.data.orEmpty()
-        val dated = all.mapNotNull { e -> e.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() }?.let { it to e } }
+        val filtered = all.filter { c.category == null || it.category == c.category }
+        val dated = filtered.mapNotNull { e -> e.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() }?.let { it to e } }
         val visible = if (c.calendar) {
             dated.filter { (d, _) -> YearMonth.from(d) == c.month && (c.selected == null || d == c.selected) }.map { it.second }
-        } else when (c.range) {
-            EventsRange.UPCOMING -> dated.filter { !it.first.isBefore(today) }.map { it.second }
-            EventsRange.PAST -> dated.filter { it.first.isBefore(today) }.sortedByDescending { it.first }.map { it.second }
-            EventsRange.ALL -> all
+        } else {
+            // Годишният календар винаги е „предстоящ“: датите вече са следващите настъпвания.
+            dated.filter { !it.first.isBefore(today) }.sortedBy { it.first }.map { it.second }
         }
         EventsUiState(
-            state = s, range = c.range, calendarMode = c.calendar, month = c.month, selectedDate = c.selected,
+            state = s, categories = all.mapNotNull { it.category }.groupingBy { it }.eachCount().entries.sortedByDescending { it.value }.map { it.key },
+            category = c.category, calendarMode = c.calendar, month = c.month, selectedDate = c.selected,
             visible = visible, daysWithEvents = dated.map { it.first }.toSet(), reminderIds = rem.toSet(), today = today,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EventsUiState(month = YearMonth.from(clock.today()), today = clock.today()))
 
     init {
         viewModelScope.launch {
-            repo.cached()?.let { c -> load.value = c.toState().copy(loading = true) }
+            repo.cachedRolled()?.let { c -> load.value = c.toState().copy(loading = true) }
             refresh(false)
         }
     }
@@ -76,7 +76,7 @@ class EventsViewModel(
         load.update { it.with(repo.events(force)) }
     }
 
-    fun setRange(r: EventsRange) { range.value = r }
+    fun setCategory(c: String?) { category.value = if (category.value == c) null else c }
     fun setCalendarMode(on: Boolean) { calendarMode.value = on; selected.value = null }
     fun shiftMonth(delta: Long) { month.update { it.plusMonths(delta) }; selected.value = null }
     fun select(date: LocalDate?) { selected.value = if (selected.value == date) null else date }

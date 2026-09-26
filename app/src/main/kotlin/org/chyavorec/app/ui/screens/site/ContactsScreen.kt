@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Place
@@ -77,6 +78,9 @@ fun ContactsScreen(onBack: () -> Unit) {
                             FilledTonalButton(onClick = { Intents.openUrl(context, c.website) }) { ActionContent(Icons.Outlined.Language, stringResource(R.string.contacts_site)) }
                         }
                         ContactCard(Icons.Outlined.Place, stringResource(R.string.contacts_address), listOfNotNull(c.address).ifEmpty { listOf(stringResource(R.string.contacts_see_site)) })
+                        if (c.persons.isNotEmpty()) {
+                            ContactCard(Icons.Outlined.Groups, stringResource(R.string.contacts_persons), c.persons.map { "${it.role}: ${it.name}" })
+                        }
                         if (c.phones.isNotEmpty()) ContactCard(Icons.Outlined.Call, stringResource(R.string.contacts_phone), c.phones) { Intents.dial(context, it) }
                         if (c.emails.isNotEmpty()) ContactCard(Icons.Outlined.Email, stringResource(R.string.contacts_email_label), c.emails) { Intents.email(context, it) }
                         ContactCard(Icons.Outlined.Schedule, stringResource(R.string.contacts_hours), c.workingHours.ifEmpty { listOf(stringResource(R.string.contacts_hours_unknown)) })

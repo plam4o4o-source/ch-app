@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_body">The official mobile app of the “Vasil Levski – 1922” Community Centre in Yavorets — founded on 14 February 1922.\n\n# Where the data comes from\n\nNews, events, photos and pages — from chyavorec.org (RSS feeds and the site’s pages). The library catalogue — from the public catalogue of the InvLib system the library uses. Nothing is entered twice: staff maintain content only on the website and in InvLib.\n\n# Privacy\n\nNo ads, no tracking, no behavioural analytics. Personal data on the device is stored encrypted.</string>
+    <string name="about_body">The official mobile app of the “Vasil Levski – 1922” Community Centre in Yavorets — founded on 17 December 1922.\n\n# Where the data comes from\n\nNews, events, photos, documents and pages — straight from the data published by chyavorec.org. The library catalogue — from the public catalogue of the InvLib system the library uses. Nothing is entered twice: staff maintain content only on the website and in InvLib.\n\n# Privacy\n\nNo ads, no tracking, no behavioural analytics. Personal data on the device is stored encrypted.</string>
+    <string name="about_catalog_desc">The library’s books with current availability — search by title, author, keyword.</string>
+    <string name="about_creator">Created by</string>
+    <string name="about_creator_name">Plamen Hristov</string>
     <string name="about_env">Environment: %1$s · demo data: %2$s</string>
     <string name="about_invlib">The InvLib library system</string>
+    <string name="about_invlib_desc">The free, open-source library system the library uses. The catalogue comes from it.</string>
     <string name="about_title">About the app</string>
     <string name="about_version">Version %1$s</string>
     <string name="about_version_full">Version %1$s (%2$d)</string>
@@ -27,7 +31,7 @@
     <string name="action_share">Share</string>
     <string name="action_unsave">Remove from saved</string>
     <string name="activities_empty">No pages found.</string>
-    <string name="activities_intro">The centre’s activities, groups and projects — content comes straight from chyavorec.org.</string>
+    <string name="activities_intro">The centre’s activities, groups, projects and history — content comes straight from chyavorec.org.</string>
     <string name="activities_title">Activities</string>
     <string name="app_subtitle">Community Centre “Vasil Levski – 1922”</string>
     <string name="app_title">Chitalishte Yavorets</string>
@@ -73,8 +77,10 @@
     <string name="catalog_filters">Filters</string>
     <string name="catalog_no_results">No books match this search.</string>
     <string name="catalog_no_results_hint">Try another word, check the spelling or remove filters.</string>
+    <string name="catalog_powered_by">powered by InvLib</string>
     <string name="catalog_search_hint">Search by %1$s</string>
     <string name="catalog_sort">Sort</string>
+    <string name="catalog_title">Online catalogue</string>
     <string name="channel_events">Events</string>
     <string name="channel_events_desc">Event reminders</string>
     <string name="channel_library">Library</string>
@@ -91,6 +97,7 @@
     <string name="contacts_hours">Opening hours</string>
     <string name="contacts_hours_unknown">Not listed on the website</string>
     <string name="contacts_map">Open map</string>
+    <string name="contacts_persons">Contact persons</string>
     <string name="contacts_phone">Phone</string>
     <string name="contacts_see_site">See the Contacts page on the website</string>
     <string name="contacts_site">Open website</string>
@@ -98,6 +105,10 @@
     <string name="contacts_title">Contacts</string>
     <string name="contacts_web">Online</string>
     <string name="demo_banner">DEMO DATA — development only, not real</string>
+    <string name="documents_empty">No documents to show.</string>
+    <string name="documents_tab_docs">Documents</string>
+    <string name="documents_tab_publications">Historical articles</string>
+    <string name="documents_title">Documents &amp; archive</string>
     <string name="due_today">Due today</string>
     <string name="error_network">Check your internet connection and try again.</string>
     <string name="error_no_app">No app available to open this.</string>
@@ -109,19 +120,16 @@
     <string name="error_title">Something went wrong</string>
     <string name="error_unauthorized">Your session has expired. Please sign in again.</string>
     <string name="event_add_calendar">Add to calendar</string>
-    <string name="event_date_is_publication">Publication date</string>
-    <string name="event_date_is_publication_long">No explicit date in the text — the publication date is shown. Please check the details on the website.</string>
     <string name="event_no_date">Date not announced</string>
+    <string name="event_recurring">An event from the centre’s annual calendar — it recurs every year on this date.</string>
     <string name="event_remind">Remind me</string>
     <string name="event_remove_reminder">Remove reminder</string>
     <string name="event_source">View the post</string>
     <string name="events_calendar_view">Calendar view</string>
     <string name="events_empty">No events to show</string>
-    <string name="events_empty_hint">Events are taken from posts on the community centre’s website.</string>
+    <string name="events_empty_hint">Events come from the annual calendar on the centre’s website.</string>
     <string name="events_list_view">List view</string>
-    <string name="events_past">Past</string>
     <string name="events_title">Events</string>
-    <string name="events_upcoming">Upcoming</string>
     <string name="field_all">Everything</string>
     <string name="field_author">Author</string>
     <string name="field_inventory">Inventory no.</string>
@@ -143,9 +151,11 @@
     <string name="hold_login_needed">Sign in to place a hold.</string>
     <string name="hold_ok_text">The library will set the book aside for you.</string>
     <string name="hold_ok_title">Hold placed</string>
+    <string name="home_carousel">Latest news</string>
     <string name="home_catalog_footer">The catalogue lists %1$d items · data as of %2$s</string>
     <string name="home_latest_news">More news</string>
     <string name="home_new_books">New arrivals</string>
+    <string name="home_today">Today · %1$s</string>
     <string name="home_upcoming">Upcoming events</string>
     <string name="label_calendar">Calendar</string>
     <string name="label_library">Library</string>
@@ -186,6 +196,7 @@
     <string name="more_activities_desc">Groups, clubs, projects</string>
     <string name="more_contacts_desc">Address, phone, map</string>
     <string name="more_digital_desc">Services, training, hours</string>
+    <string name="more_documents_desc">Statute, reports, jubilee newspaper</string>
     <string name="more_events_desc">Community centre calendar</string>
     <string name="more_gallery_desc">Photos from the website</string>
     <string name="my_books">My books</string>
@@ -299,6 +310,9 @@
     <string name="sort_year_asc">Year (oldest first)</string>
     <string name="sort_year_desc">Year (newest first)</string>
     <string name="stale_banner">We can’t refresh the data right now. Showing the last available data.</string>
+    <string name="stat_books">catalogue items</string>
+    <string name="stat_events">events this month</string>
+    <string name="stat_years">years of history</string>
     <string name="status_available">Available</string>
     <string name="status_not_on_shelf">Not on the shelf</string>
     <string name="status_on_loan">On loan</string>

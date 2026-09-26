@@ -45,6 +45,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.graphicsLayer
+import org.chyavorec.app.ui.components.BrandIntro
+import org.chyavorec.app.ui.components.LocalNavAnimatedScope
+import org.chyavorec.app.ui.components.LocalSharedScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
@@ -80,23 +95,31 @@ import org.chyavorec.app.ui.screens.settings.TermsScreen
 import org.chyavorec.app.ui.screens.site.AboutChitalishteScreen
 import org.chyavorec.app.ui.screens.site.ActivitiesScreen
 import org.chyavorec.app.ui.screens.site.ContactsScreen
+import org.chyavorec.app.ui.screens.site.DocumentsScreen
 import org.chyavorec.app.ui.screens.site.SitePageScreen
 import org.chyavorec.app.util.Intents
 import org.chyavorec.core.Urls
 
+/** Анимираното въведение се показва веднъж на процес (студен старт), не при всяко завъртане. */
+private object IntroState { var shown = false }
+
 @Composable
-fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: MutableStateFlow<String?>) {
+fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: MutableStateFlow<String?>, showIntro: Boolean = true) {
     val scope = rememberCoroutineScope()
+    var intro by remember { mutableStateOf(showIntro && !IntroState.shown) }
     CompositionLocalProvider(LocalAppContainer provides container) {
-        if (!settings.onboardingDone) {
-            OnboardingScreen(onFinish = { login ->
-                scope.launch {
-                    container.settings.setOnboardingDone()
-                    if (login) deepLink.value = "login"
-                }
-            })
-        } else {
-            MainScaffold(container, deepLink)
+        Box(Modifier.fillMaxSize()) {
+            if (!settings.onboardingDone) {
+                OnboardingScreen(onFinish = { login ->
+                    scope.launch {
+                        container.settings.setOnboardingDone()
+                        if (login) deepLink.value = "login"
+                    }
+                })
+            } else {
+                MainScaffold(container, deepLink)
+            }
+            if (intro) BrandIntro(onFinished = { IntroState.shown = true; intro = false })
         }
     }
 }
@@ -125,16 +148,23 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
 
     fun navigate(target: String) = if (target in topLevelRoutes) nav.navigateTab(target) else nav.navigate(target)
 
-    /** Връзка от съдържанието на сайта: вътрешна страница → native екран; иначе Custom Tab. */
+    /** Връзка от съдържанието на сайта: вътрешна страница → native екран; файл/външен адрес → Custom Tab. */
     fun openLink(url: String) {
         val base = container.config.siteBaseUrl
-        if (url.startsWith("https://") && Urls.sameSite(url, base)) {
-            val path = Uri.parse(url).path.orEmpty()
+        if (Urls.sameSite(url, base)) {
+            val path = Uri.parse(url).path.orEmpty().trimEnd('/').ifEmpty { "/" }
+            val isFile = path.substringAfterLast('/').contains('.')
             when {
-                path.startsWith("/index/elektronen_katalog") -> return nav.navigateTab(Routes.CATALOG)
-                path.trimEnd('/') == "/news" -> return nav.navigateTab(Routes.NEWS)
-                path.trimEnd('/') == "/photo" -> return nav.navigate(Routes.GALLERY)
-                path.startsWith("/index/") && !path.substringAfterLast('/').contains('.') -> return nav.navigate(Routes.page(url, ""))
+                isFile -> Unit
+                path == "/" -> return nav.navigateTab(Routes.HOME)
+                path == "/elektronen-katalog" -> return nav.navigateTab(Routes.CATALOG)
+                path == "/news" -> return nav.navigateTab(Routes.NEWS)
+                path.startsWith("/news/") -> return nav.navigate(Routes.article(url))
+                path == "/events" -> return nav.navigate(Routes.EVENTS)
+                path == "/kontakti" -> return nav.navigate(Routes.CONTACTS)
+                path == "/load" || path == "/istoricheski-publikacii" -> return nav.navigate(Routes.DOCUMENTS)
+                path == "/policy" -> return nav.navigate(Routes.PRIVACY)
+                path.count { it == '/' } == 1 -> return nav.navigate(Routes.page(url, ""))
             }
         }
         Intents.openUrl(context, url)
@@ -165,10 +195,20 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
                     NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
                         TopTab.entries.forEach { tab ->
                             val selected = route == tab.route
+                            val iconScale by animateFloatAsState(
+                                if (selected) 1.15f else 1f,
+                                spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium),
+                                label = "tab-icon",
+                            )
                             NavigationBarItem(
                                 selected = selected,
                                 onClick = { nav.navigateTab(tab.route) },
-                                icon = { Icon(if (selected) tab.selectedIcon else tab.icon, contentDescription = null) },
+                                icon = {
+                                    Icon(
+                                        if (selected) tab.selectedIcon else tab.icon, contentDescription = null,
+                                        modifier = Modifier.graphicsLayer { scaleX = iconScale; scaleY = iconScale },
+                                    )
+                                },
                                 label = { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                                 colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colorScheme.primaryContainer),
                             )
@@ -200,6 +240,8 @@ private fun AppNavHost(
     openExternal: (String) -> Unit,
 ) {
     val dur = 280
+    SharedTransitionLayout {
+    CompositionLocalProvider(LocalSharedScope provides this) {
     NavHost(
         navController = nav,
         startDestination = Routes.HOME,
@@ -214,35 +256,35 @@ private fun AppNavHost(
             else slideOutHorizontally(tween(dur)) { it / 5 } + fadeOut(tween(dur))
         },
     ) {
-        composable(Routes.HOME) { HomeScreen(navigate) }
-        composable(Routes.CATALOG) { CatalogScreen(navigate) }
-        composable(Routes.MY) { MyHubScreen(navigate) }
-        composable(Routes.NEWS) { NewsListScreen(navigate) }
-        composable(Routes.MORE) { MoreScreen(navigate) }
+        screen(Routes.HOME) { HomeScreen(navigate) }
+        screen(Routes.CATALOG) { CatalogScreen(navigate) }
+        screen(Routes.MY) { MyHubScreen(navigate) }
+        screen(Routes.NEWS) { NewsListScreen(navigate) }
+        screen(Routes.MORE) { MoreScreen(navigate) }
 
-        composable(Routes.ARTICLE, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
+        screen(Routes.ARTICLE, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
             ArticleScreen(Uri.decode(it.arguments?.getString("id").orEmpty()), back, navigate, openLink)
         }
-        composable(Routes.EVENTS) { EventsScreen(back, navigate) }
-        composable(Routes.EVENT, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
+        screen(Routes.EVENTS) { EventsScreen(back, navigate) }
+        screen(Routes.EVENT, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
             EventDetailScreen(Uri.decode(it.arguments?.getString("id").orEmpty()), back, openLink)
         }
-        composable(Routes.BOOK, arguments = listOf(navArgument("inv") { type = NavType.LongType })) {
+        screen(Routes.BOOK, arguments = listOf(navArgument("inv") { type = NavType.LongType })) {
             BookScreen(it.arguments?.getLong("inv") ?: 0L, back, navigate)
         }
-        composable(Routes.SEARCH) { SearchScreen(back, navigate, openExternal) }
-        composable(Routes.LOGIN) {
+        screen(Routes.SEARCH) { SearchScreen(back, navigate, openExternal, openLink) }
+        screen(Routes.LOGIN) {
             LoginScreen(back, onLoggedIn = { nav.popBackStack(); nav.navigateTab(Routes.MY) }, onAddCard = { nav.popBackStack(); nav.navigate(Routes.CARD) })
         }
-        composable(Routes.PROFILE) { ProfileScreen(back) }
-        composable(Routes.CARD) { CardScreen(back, onFullscreen = { nav.navigate(Routes.CARD_FULL) }, onLogin = { nav.navigate(Routes.LOGIN) }) }
-        composable(Routes.CARD_FULL) { CardFullscreen(onClose = back) }
-        composable(Routes.LOANS) { LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
-        composable(Routes.MEMBERSHIP) { MembershipScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
-        composable(Routes.NOTIFICATIONS) { NotificationSettingsScreen(back) }
-        composable(Routes.ACTIVITIES) { ActivitiesScreen(back, navigate, openExternal) }
-        composable(Routes.ABOUT_CHITALISHTE) { AboutChitalishteScreen(back, navigate, openLink) }
-        composable(
+        screen(Routes.PROFILE) { ProfileScreen(back) }
+        screen(Routes.CARD) { CardScreen(back, onFullscreen = { nav.navigate(Routes.CARD_FULL) }, onLogin = { nav.navigate(Routes.LOGIN) }) }
+        screen(Routes.CARD_FULL) { CardFullscreen(onClose = back) }
+        screen(Routes.LOANS) { LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
+        screen(Routes.MEMBERSHIP) { MembershipScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
+        screen(Routes.NOTIFICATIONS) { NotificationSettingsScreen(back) }
+        screen(Routes.ACTIVITIES) { ActivitiesScreen(back, navigate, openExternal) }
+        screen(Routes.ABOUT_CHITALISHTE) { AboutChitalishteScreen(back, navigate, openLink) }
+        screen(
             Routes.PAGE,
             arguments = listOf(
                 navArgument("url") { type = NavType.StringType; defaultValue = "" },
@@ -253,11 +295,11 @@ private fun AppNavHost(
             val title = Uri.decode(it.arguments?.getString("title").orEmpty())
             SitePageScreen(url, title, back, navigate, openLink)
         }
-        composable(Routes.GALLERY) { GalleryScreen(back, navigate) }
-        composable(Routes.ALBUM, arguments = listOf(navArgument("name") { type = NavType.StringType })) {
+        screen(Routes.GALLERY) { GalleryScreen(back, navigate) }
+        screen(Routes.ALBUM, arguments = listOf(navArgument("name") { type = NavType.StringType })) {
             AlbumScreen(Uri.decode(it.arguments?.getString("name").orEmpty()), back, navigate)
         }
-        composable(
+        screen(
             Routes.VIEWER,
             arguments = listOf(
                 navArgument("album") { type = NavType.StringType; defaultValue = "" },
@@ -268,10 +310,22 @@ private fun AppNavHost(
             val urls = Uri.decode(it.arguments?.getString("url").orEmpty()).split('\n').filter { u -> u.isNotBlank() }
             PhotoViewerScreen(Uri.decode(it.arguments?.getString("album").orEmpty()), it.arguments?.getInt("index") ?: 0, urls, back)
         }
-        composable(Routes.CONTACTS) { ContactsScreen(back) }
-        composable(Routes.SETTINGS) { SettingsScreen(back, navigate) }
-        composable(Routes.PRIVACY) { PrivacyScreen(back, navigate) }
-        composable(Routes.TERMS) { TermsScreen(back, navigate) }
-        composable(Routes.ABOUT) { AboutAppScreen(back) }
+        screen(Routes.CONTACTS) { ContactsScreen(back) }
+        screen(Routes.DOCUMENTS) { DocumentsScreen(back, openLink) }
+        screen(Routes.SETTINGS) { SettingsScreen(back, navigate) }
+        screen(Routes.PRIVACY) { PrivacyScreen(back, navigate) }
+        screen(Routes.TERMS) { TermsScreen(back, navigate) }
+        screen(Routes.ABOUT) { AboutAppScreen(back) }
     }
+    }
+    }
+}
+
+/** Пренася AnimatedContentScope на дестинацията към shared element преходите. */
+private fun NavGraphBuilder.screen(
+    route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
+) = composable(route, arguments) { entry ->
+    CompositionLocalProvider(LocalNavAnimatedScope provides this) { content(entry) }
 }

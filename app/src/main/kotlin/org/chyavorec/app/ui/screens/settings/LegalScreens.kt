@@ -2,7 +2,14 @@ package org.chyavorec.app.ui.screens.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ElevatedCard
+import org.chyavorec.app.ui.components.BrandImage
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -104,7 +111,33 @@ fun AboutAppScreen(onBack: () -> Unit) {
             Spacer(Modifier.height(8.dp))
             RichText(stringResource(R.string.about_body))
             OutlinedButton(onClick = { Intents.openUrl(context, c.config.siteBaseUrl) }) { Text(stringResource(R.string.contacts_site)) }
-            OutlinedButton(onClick = { Intents.openUrl(context, "https://invlib.com/") }) { Text(stringResource(R.string.about_invlib)) }
+            Spacer(Modifier.height(12.dp))
+            // Библиотечната система, от която идва каталогът.
+            ElevatedCard(onClick = { Intents.openUrl(context, "https://invlib.com/") }, modifier = Modifier.fillMaxWidth()) {
+                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    BrandImage(R.drawable.logo_invlib, null, Modifier.size(width = 72.dp, height = 44.dp))
+                    Spacer(Modifier.width(14.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.about_invlib), style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.about_invlib_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+            ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    BrandImage(R.drawable.logo_catalog, null, Modifier.size(48.dp))
+                    Spacer(Modifier.width(14.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.catalog_title), style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.about_catalog_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+            Spacer(Modifier.height(20.dp))
+            // Създателят на приложението.
+            Text(stringResource(R.string.about_creator).uppercase(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            BrandImage(R.drawable.logo_creator, stringResource(R.string.about_creator_name), Modifier.fillMaxWidth(0.55f).aspectRatio(2f))
+            Text(stringResource(R.string.about_creator_name), style = MaterialTheme.typography.titleLarge)
         }
     }
 }

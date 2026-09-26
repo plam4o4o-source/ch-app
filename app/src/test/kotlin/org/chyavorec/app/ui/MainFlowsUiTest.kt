@@ -52,9 +52,10 @@ class MainFlowsUiTest {
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
-                "/news/rss/" -> MockResponse().setBody(TestResources.text("news-rss.xml"))
+                "/data/news.json" -> MockResponse().setBody(TestResources.text("site-news.json"))
+                "/rss.xml" -> MockResponse().setBody(TestResources.text("site-rss.xml"))
+                "/javora/index.json" -> MockResponse().setBody(TestResources.text("site-index.json"))
                 "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json"))
-                "/" -> MockResponse().setBody("<html><body><nav><a href='/index/history/0-64'>История</a></nav></body></html>")
                 else -> MockResponse().setResponseCode(404)
             }
         }
@@ -80,7 +81,7 @@ class MainFlowsUiTest {
         )
         compose.setContent {
             ChitalishteTheme {
-                ChitalishteRoot(container, AppSettings(onboardingDone = true), MutableStateFlow(null))
+                ChitalishteRoot(container, AppSettings(onboardingDone = true), MutableStateFlow(null), showIntro = false)
             }
         }
     }
@@ -104,8 +105,8 @@ class MainFlowsUiTest {
 
     @Test fun homeShowsLatestNewsFromSite() {
         launch()
-        waitForText("Покана за концерт по случай 1 ноември")
-        compose.onAllNodesWithText("Покана за концерт по случай 1 ноември").onFirst().assertExists()
+        waitForText("45-ти общински фолклорен събор", substring = true)
+        compose.onAllNodesWithText("45-ти общински фолклорен събор", substring = true).onFirst().assertExists()
     }
 
     @Test fun catalogSearchAndBookDetails() {
@@ -132,7 +133,7 @@ class MainFlowsUiTest {
 
     @Test fun bottomNavigationShowsAllTabs() {
         launch()
-        waitForText("Покана за концерт по случай 1 ноември")
+        waitForText("45-ти общински фолклорен събор", substring = true)
         clickTab("Моето")
         waitForText("Добре дошъл!")
         waitForText("Онлайн вход все още не се поддържа", substring = true)

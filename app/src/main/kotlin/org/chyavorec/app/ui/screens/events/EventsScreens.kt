@@ -22,6 +22,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.icons.outlined.Sell
+import org.chyavorec.app.ui.components.animateEntrance
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -115,12 +119,12 @@ fun EventCard(e: Event, onClick: () -> Unit, modifier: Modifier = Modifier) {
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
                 Text(e.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                val meta = listOfNotNull(e.time, e.place).joinToString(" · ")
+                val meta = listOfNotNull(e.time, e.place).joinToString(" · ").ifBlank { e.description }
                 if (meta.isNotBlank()) {
-                    Text(meta, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(meta, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
-                if (!e.dateIsExplicit) {
-                    Text(stringResource(R.string.event_date_is_publication), style = MaterialTheme.typography.labelMedium, color = LocalExtendedColors.current.warn)
+                e.category?.let {
+                    Text(it.uppercase(), style = MaterialTheme.typography.labelSmall, color = LocalExtendedColors.current.gold, modifier = Modifier.padding(top = 4.dp))
                 }
             }
         }
@@ -149,15 +153,12 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     if (calendar) {
                         MonthCalendar(ui, onPrev = { vm.shiftMonth(-1) }, onNext = { vm.shiftMonth(1) }, onSelect = vm::select)
                     } else {
-                        Row(Modifier.padding(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            EventsRange.entries.forEach { r ->
-                                FilterChip(ui.range == r, onClick = { vm.setRange(r) }, label = {
-                                    Text(stringResource(when (r) {
-                                        EventsRange.UPCOMING -> R.string.events_upcoming
-                                        EventsRange.PAST -> R.string.events_past
-                                        EventsRange.ALL -> R.string.filter_all
-                                    }))
-                                })
+                        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            item {
+                                FilterChip(ui.category == null, onClick = { vm.setCategory(null) }, label = { Text(stringResource(R.string.filter_all)) })
+                            }
+                            items(ui.categories) { c ->
+                                FilterChip(ui.category == c, onClick = { vm.setCategory(c) }, label = { Text(c) })
                             }
                         }
                     }
@@ -171,8 +172,8 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     errorSubject = stringResource(R.string.subject_events),
                 ) { list ->
                     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        items(list, key = { it.id }) { e ->
-                            EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.fillMaxWidth().animateItem())
+                        itemsIndexed(list, key = { _, e -> e.id }) { i, e ->
+                            EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.fillMaxWidth().animateItem().animateEntrance(i))
                         }
                     }
                 }
@@ -291,9 +292,10 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(e.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
                 DetailLine(Icons.Outlined.Event, Formatters.date(context, e.date) ?: stringResource(R.string.event_no_date))
-                if (!e.dateIsExplicit) {
-                    Text(stringResource(R.string.event_date_is_publication_long), style = MaterialTheme.typography.bodySmall, color = LocalExtendedColors.current.warn)
+                if (e.recurring) {
+                    Text(stringResource(R.string.event_recurring), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
+                e.category?.let { DetailLine(Icons.Outlined.Sell, it) }
                 e.time?.let { DetailLine(Icons.Outlined.AccessTime, it) }
                 e.place?.let { DetailLine(Icons.Outlined.Place, it) }
                 e.organizer?.let { DetailLine(Icons.Outlined.Groups, it) }

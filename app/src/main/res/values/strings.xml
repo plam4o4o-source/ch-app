@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_body">Официалното мобилно приложение на Народно читалище „Васил Левски – 1922“, с. Яворец — основано на 14 февруари 1922 г.\n\n# Откъде идват данните\n\nНовини, събития, снимки и страници — от сайта chyavorec.org (RSS емисии и страниците на сайта). Библиотечният каталог — от публичния каталог на системата InvLib, която библиотеката използва. Нищо не се въвежда два пъти: служителите поддържат съдържанието само в сайта и в InvLib.\n\n# Поверителност\n\nБез реклами, без проследяване, без анализ на поведението. Личните данни на устройството се пазят шифровани.</string>
+    <string name="about_body">Официалното мобилно приложение на Народно читалище „Васил Левски – 1922“, с. Яворец — основано на 17 декември 1922 г.\n\n# Откъде идват данните\n\nНовини, събития, снимки, документи и страници — направо от данните, които публикува сайтът chyavorec.org. Библиотечният каталог — от публичния каталог на системата InvLib, която библиотеката използва. Нищо не се въвежда два пъти: служителите поддържат съдържанието само в сайта и в InvLib.\n\n# Поверителност\n\nБез реклами, без проследяване, без анализ на поведението. Личните данни на устройството се пазят шифровани.</string>
+    <string name="about_catalog_desc">Книгите на библиотеката с актуална наличност — търсене по заглавие, автор, ключова дума.</string>
+    <string name="about_creator">Създател</string>
+    <string name="about_creator_name">Пламен Христов</string>
     <string name="about_env">Среда: %1$s · демо данни: %2$s</string>
     <string name="about_invlib">Библиотечната система InvLib</string>
+    <string name="about_invlib_desc">Безплатната библиотечна система с отворен код, с която работи библиотеката. Оттук идва каталогът.</string>
     <string name="about_title">За приложението</string>
     <string name="about_version">Версия %1$s</string>
     <string name="about_version_full">Версия %1$s (%2$d)</string>
@@ -27,7 +31,7 @@
     <string name="action_share">Сподели</string>
     <string name="action_unsave">Премахни от запазените</string>
     <string name="activities_empty">Няма открити страници.</string>
-    <string name="activities_intro">Дейностите, групите и проектите на читалището — съдържанието идва директно от сайта chyavorec.org.</string>
+    <string name="activities_intro">Дейностите, групите, проектите и историята на читалището — съдържанието идва директно от сайта chyavorec.org.</string>
     <string name="activities_title">Дейности</string>
     <string name="app_subtitle">НЧ „Васил Левски – 1922“</string>
     <string name="app_title">Читалище Яворец</string>
@@ -73,8 +77,10 @@
     <string name="catalog_filters">Филтри</string>
     <string name="catalog_no_results">Не открихме книги по това търсене.</string>
     <string name="catalog_no_results_hint">Опитай с друга дума, провери правописа или премахни филтрите.</string>
+    <string name="catalog_powered_by">данни от InvLib</string>
     <string name="catalog_search_hint">Търси по %1$s</string>
     <string name="catalog_sort">Подреждане</string>
+    <string name="catalog_title">Електронен каталог</string>
     <string name="channel_events">Събития</string>
     <string name="channel_events_desc">Напомняния за събития</string>
     <string name="channel_library">Библиотека</string>
@@ -91,6 +97,7 @@
     <string name="contacts_hours">Работно време</string>
     <string name="contacts_hours_unknown">Не е обявено в сайта</string>
     <string name="contacts_map">Отвори карта</string>
+    <string name="contacts_persons">Лица за контакт</string>
     <string name="contacts_phone">Телефон</string>
     <string name="contacts_see_site">Виж страницата „Контакти“ в сайта</string>
     <string name="contacts_site">Отвори сайта</string>
@@ -98,6 +105,10 @@
     <string name="contacts_title">Контакти</string>
     <string name="contacts_web">В интернет</string>
     <string name="demo_banner">ДЕМО ДАННИ — само за разработка, не са реални</string>
+    <string name="documents_empty">Няма документи за показване.</string>
+    <string name="documents_tab_docs">Документи</string>
+    <string name="documents_tab_publications">Исторически публикации</string>
+    <string name="documents_title">Документи и архив</string>
     <string name="due_today">Срокът е днес</string>
     <string name="error_network">Провери интернет връзката си и опитай отново.</string>
     <string name="error_no_app">Няма приложение, което да отвори това.</string>
@@ -109,19 +120,16 @@
     <string name="error_title">Нещо се обърка</string>
     <string name="error_unauthorized">Сесията е изтекла. Моля, влез отново.</string>
     <string name="event_add_calendar">Добави в календара</string>
-    <string name="event_date_is_publication">Дата на публикуване</string>
-    <string name="event_date_is_publication_long">В текста няма изрична дата — показана е датата на публикуване. Провери подробностите в сайта.</string>
     <string name="event_no_date">Без обявена дата</string>
+    <string name="event_recurring">Събитие от годишния календар на читалището — повтаря се всяка година на тази дата.</string>
     <string name="event_remind">Напомни ми</string>
     <string name="event_remove_reminder">Премахни напомнянето</string>
     <string name="event_source">Виж публикацията</string>
     <string name="events_calendar_view">Изглед календар</string>
     <string name="events_empty">Няма събития за показване</string>
-    <string name="events_empty_hint">Събитията се извличат от публикациите на сайта на читалището.</string>
+    <string name="events_empty_hint">Събитията идват от годишния календар на сайта на читалището.</string>
     <string name="events_list_view">Изглед списък</string>
-    <string name="events_past">Минали</string>
     <string name="events_title">Събития</string>
-    <string name="events_upcoming">Предстоящи</string>
     <string name="field_all">Всичко</string>
     <string name="field_author">Автор</string>
     <string name="field_inventory">Инв. номер</string>
@@ -143,9 +151,11 @@
     <string name="hold_login_needed">За да заявиш книга, влез в профила си.</string>
     <string name="hold_ok_text">Библиотеката ще отдели книгата за теб.</string>
     <string name="hold_ok_title">Заявката е изпратена</string>
+    <string name="home_carousel">Последни новини</string>
     <string name="home_catalog_footer">Каталогът съдържа %1$d документа · данни към %2$s</string>
     <string name="home_latest_news">Още новини</string>
     <string name="home_new_books">Нови постъпления</string>
+    <string name="home_today">Днес · %1$s</string>
     <string name="home_upcoming">Предстоящи събития</string>
     <string name="label_calendar">Календар</string>
     <string name="label_library">Библиотека</string>
@@ -186,6 +196,7 @@
     <string name="more_activities_desc">Групи, клубове, проекти</string>
     <string name="more_contacts_desc">Адрес, телефон, карта</string>
     <string name="more_digital_desc">Услуги, обучения, работно време</string>
+    <string name="more_documents_desc">Устав, отчети, юбилейният вестник</string>
     <string name="more_events_desc">Календар на читалището</string>
     <string name="more_gallery_desc">Снимки от сайта</string>
     <string name="my_books">Моите книги</string>
@@ -299,6 +310,9 @@
     <string name="sort_year_asc">Година (стари първо)</string>
     <string name="sort_year_desc">Година (нови първо)</string>
     <string name="stale_banner">Временно не можем да обновим данните. Показваме последно наличните.</string>
+    <string name="stat_books">документа в каталога</string>
+    <string name="stat_events">събития през месеца</string>
+    <string name="stat_years">години история</string>
     <string name="status_available">Налична</string>
     <string name="status_not_on_shelf">Не е на рафта</string>
     <string name="status_on_loan">Заета</string>

@@ -36,7 +36,7 @@ class PageViewModel(private val url: String, private val repo: SiteRepository) :
     }
 }
 
-/** „За читалището“: първата открита страница „За нас“ или „История“. */
+/** „За читалището“: страницата „За нас“ (или „История“) от сайта. */
 class AboutChitalishteViewModel(private val repo: SiteRepository) : ViewModel() {
     val link = MutableStateFlow<SiteLink?>(null)
     val failed = MutableStateFlow(false)
@@ -67,5 +67,15 @@ class GalleryViewModel(private val repo: SiteRepository) : ViewModel() {
     fun refresh(force: Boolean = true) = viewModelScope.launch {
         _state.update { it.startRefresh() }
         _state.update { it.with(repo.gallery(force)) }
+    }
+}
+
+class DocumentsViewModel(private val repo: SiteRepository) : ViewModel() {
+    private val _state = MutableStateFlow(ScreenState<List<org.chyavorec.domain.model.SiteDocument>>())
+    val state: StateFlow<ScreenState<List<org.chyavorec.domain.model.SiteDocument>>> = _state.asStateFlow()
+    init { refresh(false) }
+    fun refresh(force: Boolean = true) = viewModelScope.launch {
+        _state.update { it.startRefresh() }
+        _state.update { it.with(repo.documents(force)) }
     }
 }

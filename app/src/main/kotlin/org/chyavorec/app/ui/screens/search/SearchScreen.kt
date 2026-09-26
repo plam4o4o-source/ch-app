@@ -67,13 +67,12 @@ import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.BookListItem
 import org.chyavorec.app.ui.screens.news.NewsRow
-import org.chyavorec.app.ui.screens.site.openSiteLink
 import org.chyavorec.app.ui.screens.site.sectionIcon
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.SearchAggregator
 import org.chyavorec.data.SearchResults
-import org.chyavorec.domain.model.SiteLink
-import org.chyavorec.domain.model.SitePage
+import org.chyavorec.domain.model.SiteSearchDoc
+import org.chyavorec.data.site.SiteLinkClassifier
 
 enum class SearchScope { ALL, BOOKS, NEWS, EVENTS, PAGES }
 
@@ -88,15 +87,16 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
     val ui = MutableStateFlow(SearchUi())
     val recent = c.settings.recentSearches.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     private val query = MutableStateFlow("")
-    private var pages: List<Pair<SiteLink, SitePage?>> = emptyList()
+    private var siteDocs: List<SiteSearchDoc> = emptyList()
 
     init {
         viewModelScope.launch {
             // Зареждаме данните за търсене (от кеша, при нужда — от мрежата).
             c.catalogRepository.cached() ?: c.catalogRepository.catalog(false)
             if (c.newsRepository.cached() == null) c.newsRepository.latest(false)
-            val links = (c.siteRepository.links(false) as? Outcome.Success)?.value?.data.orEmpty()
-            pages = links.map { it to c.siteRepository.cachedPage(it.url) }
+            if (c.eventsRepository.cachedRolled() == null) c.eventsRepository.events(false)
+            siteDocs = c.siteRepository.cachedSearchIndex()
+                ?: (c.siteRepository.searchIndex(false) as? Outcome.Success)?.value?.data.orEmpty()
             run(query.value)
         }
         viewModelScope.launch(Dispatchers.Default) { query.debounce(180).collect { run(it) } }
@@ -110,14 +110,14 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
     private suspend fun run(q: String) {
         val engine = c.catalogRepository.inMemory()?.data
         val news = c.newsRepository.cached()?.data.orEmpty()
-        val events = c.eventsRepository.cached()?.data.orEmpty()
-        val r = withContext(Dispatchers.Default) { SearchAggregator.search(q, engine, news, events, pages) }
+        val events = c.eventsRepository.cachedRolled()?.data.orEmpty()
+        val r = withContext(Dispatchers.Default) { SearchAggregator.search(q, engine, news, events, siteDocs) }
         ui.update { if (it.query == q) it.copy(results = r, searching = false) else it }
     }
 }
 
 @Composable
-fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (String) -> Unit) {
+fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (String) -> Unit, openLink: (String) -> Unit) {
     val vm = appViewModel { GlobalSearchViewModel(it) }
     val ui by vm.ui.collectAsStateWithLifecycle()
     val recent by vm.recent.collectAsStateWithLifecycle()
@@ -171,14 +171,14 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
                     }
                 }
             } else {
-                Results(ui, navigate, openExternal, onOpen = { vm.commit() })
+                Results(ui, navigate, openExternal, openLink, onOpen = { vm.commit() })
             }
         }
     }
 }
 
 @Composable
-private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (String) -> Unit, onOpen: () -> Unit) {
+private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (String) -> Unit, openLink: (String) -> Unit, onOpen: () -> Unit) {
     val r = ui.results
     val show = { s: SearchScope -> ui.scope == SearchScope.ALL || ui.scope == s }
     val limit = if (ui.scope == SearchScope.ALL) 5 else Int.MAX_VALUE
@@ -219,12 +219,19 @@ private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (Str
         }
         if (show(SearchScope.PAGES) && r.pages.isNotEmpty()) {
             item { Header(stringResource(R.string.search_pages)) }
-            items(r.pages.take(limit), key = { "p-" + it.link.url }) { hit ->
+            items(r.pages.take(limit), key = { "p-" + it.doc.id }) { hit ->
+                val link = SiteLinkClassifier.link(hit.doc.title, hit.doc.url, "")
                 ListItem(
-                    headlineContent = { Text(hit.link.title) },
+                    overlineContent = hit.doc.category?.let { { Text(it) } },
+                    headlineContent = { Text(hit.doc.title) },
                     supportingContent = { Text(hit.snippet, maxLines = 2, overflow = TextOverflow.Ellipsis) },
-                    leadingContent = { Icon(sectionIcon(hit.link.kind), null) },
-                    modifier = Modifier.clickable { onOpen(); openSiteLink(hit.link, navigate, openExternal) }.animateItem(),
+                    leadingContent = { Icon(sectionIcon(link.kind), null) },
+                    modifier = Modifier.clickable {
+                        onOpen()
+                        // Документ/публикация → PDF файлът; иначе страницата (или котвата в нея).
+                        val file = hit.doc.fileUrl
+                        if (file != null) openExternal(file) else openLink(hit.doc.url)
+                    }.animateItem(),
                 )
             }
         }

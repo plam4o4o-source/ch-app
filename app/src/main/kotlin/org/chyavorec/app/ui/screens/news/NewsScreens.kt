@@ -64,6 +64,8 @@ import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
+import org.chyavorec.app.ui.components.animateEntrance
+import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Formatters
@@ -136,7 +138,7 @@ fun NewsListScreen(navigate: (String) -> Unit) {
                                     onClick = { navigate(Routes.article(a.id)) },
                                     isFavorite = a.id in ui.favoriteIds,
                                     onToggleFavorite = { vm.toggleFavorite(a, a.id in ui.favoriteIds) },
-                                    modifier = Modifier.animateItem(),
+                                    modifier = Modifier.animateItem().animateEntrance(index),
                                 )
                             }
                         }
@@ -152,7 +154,7 @@ private fun FeaturedNews(a: NewsArticle, onClick: () -> Unit) {
     val context = LocalContext.current
     Column(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(16.dp)) {
         if (a.imageUrl != null) {
-            RemoteImage(a.imageUrl, contentDescription = null, modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large))
+            RemoteImage(a.imageUrl, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large))
             Spacer(Modifier.height(12.dp))
         }
         MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
@@ -184,7 +186,7 @@ fun NewsRow(
         modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        RemoteImage(a.imageUrl, contentDescription = null, modifier = Modifier.size(84.dp).clip(RoundedCornerShape(14.dp)))
+        RemoteImage(a.imageUrl, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").size(84.dp).clip(RoundedCornerShape(14.dp)))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
@@ -254,7 +256,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                     item {
                         RemoteImage(
                             hero, contentDescription = null,
-                            modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).padding(horizontal = 16.dp).clip(MaterialTheme.shapes.large)
+                            modifier = Modifier.padding(horizontal = 16.dp).sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large)
                                 .clickable { navigate(Routes.viewerUrls(gallery, gallery.indexOf(hero))) },
                         )
                     }

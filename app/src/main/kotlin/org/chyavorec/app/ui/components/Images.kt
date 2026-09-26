@@ -144,15 +144,31 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
 
 private fun Color.darken(f: Float = 0.78f) = Color(red * f, green * f, blue * f, alpha)
 
-/** Кръгла емблема на читалището. */
+/**
+ * Логото на НЧ „Васил Левски – 1922“ върху бял кръг — четимо и в тъмна тема
+ * (самото лого е в сиви тонове върху прозрачен фон).
+ */
 @Composable
-fun Emblem(size: Dp, modifier: Modifier = Modifier) {
-    androidx.compose.foundation.Image(
-        painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.ic_emblem),
-        contentDescription = null,
-        modifier = modifier.size(size),
-    )
+fun Emblem(size: Dp, modifier: Modifier = Modifier, description: String? = null) {
+    Box(
+        modifier.size(size).shadow(size * 0.08f, CircleShape).background(Color.White, CircleShape).padding(size * 0.06f),
+        contentAlignment = Alignment.Center,
+    ) {
+        androidx.compose.foundation.Image(
+            painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.logo_chitalishte),
+            contentDescription = description,
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
 }
 
-@Suppress("unused")
-private val previewGold = Brand.Gold
+/** Произволно лого от ресурсите (каталог, InvLib, създател) със запазени пропорции. */
+@Composable
+fun BrandImage(res: Int, description: String?, modifier: Modifier = Modifier) {
+    androidx.compose.foundation.Image(
+        painter = androidx.compose.ui.res.painterResource(res),
+        contentDescription = description,
+        contentScale = ContentScale.Fit,
+        modifier = modifier,
+    )
+}
