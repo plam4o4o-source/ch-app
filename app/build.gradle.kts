@@ -188,6 +188,8 @@ room {
 }
 
 tasks.withType<Test>().configureEach {
+    // Robolectric (SDK 36) на JDK 25 чете jdk.internal.access чрез reflection.
+    jvmArgs("--add-exports=java.base/jdk.internal.access=ALL-UNNAMED", "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED")
     testLogging {
         events("failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
