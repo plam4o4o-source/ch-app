@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+<title>НЧ Васил Левски - 1922 | село Яворец</title>
+<link>https://chyavorec.org/</link>
+<description>Новини на сайта</description>
+<item>
+<title>Покана за концерт по случай 1 ноември</title>
+<description><![CDATA[<img src="/_nw/1/12345.jpg" alt=""> Каним ви на тържествен концерт на 1 ноември 2026 г. от 17:30 ч. в салона на читалището.]]></description>
+<content:encoded><![CDATA[<p>Каним ви на <b>тържествен концерт</b> на 1 ноември 2026 г. от 17:30 ч.</p><p>Място: салона на читалището</p><p>Организатор: НЧ „Васил Левски – 1922“</p>]]></content:encoded>
+<link>http://chyavorec.org/news/pokana_za_koncert/2026-10-20-15</link>
+<category>Събития</category>
+<dc:creator>admin</dc:creator>
+<guid>https://chyavorec.org/news/pokana_za_koncert/2026-10-20-15</guid>
+<pubDate>Tue, 20 Oct 2026 09:15:00 GMT</pubDate>
+</item>
+<item>
+<title>Нови книги в библиотеката &amp; дарения</title>
+<description><![CDATA[<p>Библиотеката получи 40 нови книги.</p>]]></description>
+<link>https://chyavorec.org/news/novi_knigi/2026-09-01-14</link>
+<category>Библиотека</category>
+<guid>https://chyavorec.org/news/novi_knigi/2026-09-01-14</guid>
+<pubDate>Tue, 01 Sep 2026 07:00:00 GMT</pubDate>
+</item>
+<item>
+<title></title>
+<link>https://chyavorec.org/news/empty/1</link>
+</item>
+</channel>
+</rss>

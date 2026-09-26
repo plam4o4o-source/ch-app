@@ -1,0 +1,29 @@
+# Gradle / build
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+output-metadata.json
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Локални настройки и тайни — НИКОГА в Git
+local.properties
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+keystore.properties
+google-services.json
+secrets.properties
