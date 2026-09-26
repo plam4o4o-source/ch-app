@@ -18,14 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "17"
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
 
       - name: Shared core tests (JVM)
         working-directory: shared
@@ -75,12 +75,12 @@ jobs:
           jarsigner -verify app/build/outputs/bundle/prodRelease/app-prod-release.aab | tail -1
           echo "Signed with: $SIGNING_KIND"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: debug-apks
           path: app/build/outputs/apk/*/debug/*.apk
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-${{ env.SIGNING_KIND }}
           path: |
@@ -88,7 +88,7 @@ jobs:
             app/build/outputs/apk/prod/release/*.apk
             app/build/outputs/mapping/prodRelease/mapping.txt
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reports
