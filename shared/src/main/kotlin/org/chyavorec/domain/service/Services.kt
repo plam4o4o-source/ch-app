@@ -6,6 +6,7 @@ import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
 import org.chyavorec.domain.model.CatalogSnapshot
 import org.chyavorec.domain.model.Contacts
+import org.chyavorec.domain.model.DailyFeast
 import org.chyavorec.domain.model.Event
 import org.chyavorec.domain.model.GalleryPhoto
 import org.chyavorec.domain.model.Loan
@@ -13,8 +14,10 @@ import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.NewsArticle
 import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.ServiceCapabilities
+import org.chyavorec.domain.model.SiteDocument
 import org.chyavorec.domain.model.SiteLink
 import org.chyavorec.domain.model.SitePage
+import org.chyavorec.domain.model.SiteSearchDoc
 
 /*
  * Интерфейси към външните източници на данни. Всяка реализация е заменяема:
@@ -28,16 +31,15 @@ interface CatalogService {
     suspend fun fetchCatalog(): Outcome<Pair<String, CatalogSnapshot>>
 }
 
-/** Новини от chyavorec.org. */
+/** Новини от chyavorec.org (/data/news.json). */
 interface NewsService {
     suspend fun fetchLatest(): Outcome<List<NewsArticle>>
     suspend fun fetchArticle(article: NewsArticle): Outcome<ArticleDetail>
 }
 
-/** Събития от chyavorec.org. */
+/** Събития от календара на chyavorec.org. */
 interface EventsService {
-    /** [news] — вече заредените новини (събитията се извличат и от тях). */
-    suspend fun fetchEvents(news: List<NewsArticle>): Outcome<List<Event>>
+    suspend fun fetchEvents(): Outcome<List<Event>>
 }
 
 /** Страници, навигация, контакти и галерия на chyavorec.org. */
@@ -46,6 +48,10 @@ interface SiteContentService {
     suspend fun fetchPage(url: String): Outcome<SitePage>
     suspend fun fetchContacts(links: List<SiteLink>): Outcome<Contacts>
     suspend fun fetchGallery(): Outcome<List<GalleryPhoto>>
+    suspend fun fetchDocuments(): Outcome<List<SiteDocument>>
+    suspend fun fetchSearchIndex(): Outcome<List<SiteSearchDoc>>
+    /** [date] във формат Г-М-Д без водещи нули (както очаква сайтът). */
+    suspend fun fetchFeast(date: String): Outcome<DailyFeast>
 }
 
 /** Вход в читателския профил (InvLib — бъдещ онлайн API). */

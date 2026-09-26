@@ -6,9 +6,7 @@ import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.Event
 import org.chyavorec.domain.model.NewsArticle
-import org.chyavorec.domain.model.SiteLink
-import org.chyavorec.domain.model.SitePage
-import org.chyavorec.domain.model.plainText
+import org.chyavorec.domain.model.SiteSearchDoc
 
 /** Резултат от глобалното търсене. */
 sealed interface SearchHit {
@@ -16,7 +14,7 @@ sealed interface SearchHit {
     data class Book(val book: CatalogBook) : SearchHit { override val title get() = book.title }
     data class News(val article: NewsArticle) : SearchHit { override val title get() = article.title }
     data class EventHit(val event: Event) : SearchHit { override val title get() = event.title }
-    data class Page(val link: SiteLink, val snippet: String) : SearchHit { override val title get() = link.title }
+    data class Page(val doc: SiteSearchDoc, val snippet: String) : SearchHit { override val title get() = doc.title }
 }
 
 data class SearchResults(
@@ -30,7 +28,7 @@ data class SearchResults(
     val total get() = books.size + authors.size + news.size + events.size + pages.size
 }
 
-/** Глобално търсене в каталога, новините, събитията и страниците на сайта. */
+/** Глобално търсене в каталога, новините, събитията и индекса на сайта. */
 object SearchAggregator {
 
     fun search(
@@ -38,7 +36,7 @@ object SearchAggregator {
         catalog: CatalogSearchEngine?,
         news: List<NewsArticle>,
         events: List<Event>,
-        pages: List<Pair<SiteLink, SitePage?>>,
+        siteDocs: List<SiteSearchDoc>,
         limitPerType: Int = 20,
     ): SearchResults {
         val tokens = TextNormalizer.tokens(query)
@@ -55,10 +53,11 @@ object SearchAggregator {
             authors = authors,
             news = news.filter { matches(it.title, it.summary, it.category) }.take(limitPerType).map { SearchHit.News(it) },
             events = events.filter { matches(it.title, it.description, it.place) }.take(limitPerType).map { SearchHit.EventHit(it) },
-            pages = pages.mapNotNull { (link, page) ->
-                val text = page?.blocks?.plainText().orEmpty()
-                if (!matches(link.title, text)) return@mapNotNull null
-                SearchHit.Page(link, snippet(text, tokens.first()))
+            // Страници, архив, публикации и документи от търсещия индекс на сайта
+            // (новините и събитията вече са търсени по-горе).
+            pages = siteDocs.filter { it.type !in setOf("news", "event") }.mapNotNull { d ->
+                if (!matches(d.title, d.text, d.category)) return@mapNotNull null
+                SearchHit.Page(d, snippet(d.text.ifBlank { d.excerpt }, tokens.first()))
             }.take(limitPerType),
         )
     }

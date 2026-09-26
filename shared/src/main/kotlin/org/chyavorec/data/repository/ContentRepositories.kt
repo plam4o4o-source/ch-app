@@ -11,6 +11,9 @@ import org.chyavorec.data.catalog.CatalogSearchEngine
 import org.chyavorec.data.catalog.KatalogParser
 import org.chyavorec.domain.model.ArticleDetail
 import org.chyavorec.domain.model.Contacts
+import org.chyavorec.domain.model.DailyFeast
+import org.chyavorec.domain.model.SiteDocument
+import org.chyavorec.domain.model.SiteSearchDoc
 import org.chyavorec.domain.model.Event
 import org.chyavorec.domain.model.GalleryAlbum
 import org.chyavorec.domain.model.GalleryPhoto
@@ -54,7 +57,6 @@ class NewsRepository(
 
 class EventsRepository(
     private val service: EventsService,
-    private val news: NewsRepository,
     cache: PayloadCache,
     private val clock: AppClock,
 ) {
@@ -62,12 +64,25 @@ class EventsRepository(
 
     suspend fun cached(): Synced<List<Event>>? = list.cached()
 
-    suspend fun events(force: Boolean = false): Outcome<Synced<List<Event>>> = list.load(force) {
-        val newsItems = when (val n = news.latest(force)) {
-            is Outcome.Success -> n.value.data
-            is Outcome.Failure -> return@load n
+    suspend fun events(force: Boolean = false): Outcome<Synced<List<Event>>> =
+        when (val r = list.load(force) { service.fetchEvents() }) {
+            is Outcome.Failure -> r
+            // Кешираният годишен календар се „превърта“ към следващото настъпване днес.
+            is Outcome.Success -> Outcome.Success(r.value.map { rollForward(it) })
         }
-        service.fetchEvents(newsItems)
+
+    suspend fun cachedRolled(): Synced<List<Event>>? = list.cached()?.map { rollForward(it) }
+
+    private fun rollForward(events: List<Event>): List<Event> {
+        val today = clock.today()
+        return events.map { e ->
+            val d = e.date?.let { runCatching { java.time.LocalDate.parse(it) }.getOrNull() }
+            if (e.recurring && d != null && d.isBefore(today)) {
+                var next = d
+                while (next!!.isBefore(today)) next = next.plusYears(1)
+                e.copy(date = next.toString())
+            } else e
+        }.sortedBy { it.date }
     }
 
     suspend fun find(id: String): Event? = list.cached()?.data?.firstOrNull { it.id == id }
@@ -138,6 +153,8 @@ class SiteRepository(
     private val links = CachedResource(cache, "site:links", ListSerializer(SiteLink.serializer()), clock, ONE_HOUR)
     private val gallery = CachedResource(cache, "site:gallery", ListSerializer(GalleryPhoto.serializer()), clock, FIVE_MINUTES)
     private val contacts = CachedResource(cache, "site:contacts", Contacts.serializer(), clock, ONE_HOUR)
+    private val documents = CachedResource(cache, "site:documents", ListSerializer(SiteDocument.serializer()), clock, ONE_HOUR)
+    private val index = CachedResource(cache, "site:index", ListSerializer(SiteSearchDoc.serializer()), clock, ONE_HOUR)
 
     suspend fun links(force: Boolean = false): Outcome<Synced<List<SiteLink>>> = links.load(force) { service.discoverLinks() }
 
@@ -161,9 +178,21 @@ class SiteRepository(
             is Outcome.Success -> Outcome.Success(r.value.map { photos -> albums(photos) })
         }
 
+    suspend fun documents(force: Boolean = false): Outcome<Synced<List<SiteDocument>>> = documents.load(force) { service.fetchDocuments() }
+
+    suspend fun searchIndex(force: Boolean = false): Outcome<Synced<List<SiteSearchDoc>>> = index.load(force) { service.fetchSearchIndex() }
+
+    suspend fun cachedSearchIndex(): List<SiteSearchDoc>? = index.cached()?.data
+
+    /** Празникът за днес (не се кешира на диска — важи само за деня). */
+    suspend fun feastToday(): DailyFeast? {
+        val d = clock.today()
+        return (service.fetchFeast("${d.year}-${d.monthValue}-${d.dayOfMonth}") as? Outcome.Success)?.value
+    }
+
     fun albums(photos: List<GalleryPhoto>): List<GalleryAlbum> =
         photos.groupBy { it.album }.map { (name, list) -> GalleryAlbum(name, list) }
-            .sortedByDescending { album -> album.photos.maxOfOrNull { it.publishedAtMillis ?: 0 } ?: 0 }
+            .sortedBy { if (it.name == "Новини") 1 else 0 }
 
     companion object {
         fun describe(error: AppError): String = error.toString()

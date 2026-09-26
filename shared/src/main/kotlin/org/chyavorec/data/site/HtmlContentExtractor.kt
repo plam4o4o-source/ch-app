@@ -9,33 +9,24 @@ import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 
 /**
- * Превръща HTML съдържание (страница от uCoz Page Editor или пълна новина) в
- * структурирани [ContentBlock]-ове. Това е „контролиран парсер“: търси основния
- * контейнер по познати uCoz селектори, маха навигация/скриптове/формуляри и
- * пренася само смислово съдържание — заглавия, параграфи, списъци, снимки, връзки.
+ * Превръща HTML съдържание (страница от chyavorec.org или тялото на новина от
+ * /data/news.json) в структурирани [ContentBlock]-ове. Сайтът е статичен (Vercel,
+ * генериран от scripts/build-preview.py) и съдържанието на всяка страница стои в
+ * `#hp .hp-inner`; парсерът маха навигация/скриптове/формуляри и пренася само
+ * смислово съдържание — заглавия, параграфи, списъци, снимки, цитати, файлове.
  */
 class HtmlContentExtractor(private val baseUrl: String) {
 
-    /**
-     * Контейнери по приоритет:
-     * - `.eMessage`, `.eText` — пълна новина (стандартни uCoz класове);
-     * - `.ec-message-text`, `.nf-body` — персонализираните шаблони на сайта;
-     * - `#mc` — основната колона на skeleton-а (подстраниците от Page Editor);
-     * - `main`, `#content`, `article` — общи резервни варианти.
-     */
-    private val containerSelectors = listOf(
-        ".eMessage", ".eText", ".ec-message-text", ".nf-body", "#nativeroll_video_cont",
-        "#mc", "main", "article", "#content", ".content",
-    )
+    /** Контейнери по приоритет: съдържанието на страницата, после общи резервни варианти. */
+    private val containerSelectors = listOf("#hp .hp-inner", "#hp", "main", "article", "#content")
 
     /** Елементи, които никога не са съдържание. */
     private val junkSelector = listOf(
         "script", "style", "noscript", "iframe", "form", "input", "button", "select", "textarea",
         "nav", "header", "footer", "svg", "object", "embed",
-        "#hp", ".mobile-nav", ".mob-ov", ".m-bnav", ".hamburger", ".drawer",
+        ".mobile-nav", ".scroll-progress", ".btm-bar", ".bti-fab", ".yv-lnk-bar", ".yv-lnk-net",
         "[aria-hidden=true]", "[style*=display:none]", "[style*=display: none]",
-        ".ec-details", ".ec-moder", ".eDetails", ".eDetails1", ".eDetails2", ".uc-share", ".share",
-        ".comments", "#comments", ".cBlock1", ".cBlock2", ".commTable", ".breadcrumbs",
+        ".share", ".breadcrumbs", ".lb-image", "#lbImg",
     ).joinToString(",")
 
     fun findContainer(doc: Document): Element {
@@ -47,12 +38,13 @@ class HtmlContentExtractor(private val baseUrl: String) {
         return doc.body() ?: doc
     }
 
+    /** Заглавието на страницата: `<title>` до „ | “ (сайтът го поддържа чисто), иначе h1. */
     fun title(doc: Document): String {
-        val h1 = findContainer(doc).selectFirst("h1")?.text()?.trim()
-        if (!h1.isNullOrEmpty()) return h1
-        val og = doc.selectFirst("meta[property=og:title]")?.attr("content")?.trim()
+        val t = doc.title().substringBefore(" | ").substringBefore(" – НЧ").trim()
+        if (t.isNotEmpty()) return t
+        val og = doc.selectFirst("meta[property=og:title]")?.attr("content")?.substringBefore(" | ")?.trim()
         if (!og.isNullOrEmpty()) return og
-        return doc.title().substringBefore(" - ").substringBefore(" | ").trim()
+        return findContainer(doc).selectFirst("h1")?.text()?.trim().orEmpty()
     }
 
     fun extract(doc: Document): List<ContentBlock> = extract(findContainer(doc))
@@ -60,6 +52,11 @@ class HtmlContentExtractor(private val baseUrl: String) {
     fun extract(root: Element): List<ContentBlock> {
         val copy = root.clone()
         copy.select(junkSelector).remove()
+        // Анимираните броячи на сайта са „0“ в HTML-а; истинската стойност е в data-target.
+        copy.select("[data-target]").forEach { el ->
+            val target = el.attr("data-target")
+            if (target.isNotBlank() && el.text().trim().let { it.isEmpty() || it == "0" }) el.text(target)
+        }
         val blocks = ArrayList<ContentBlock>()
         walk(copy, blocks)
         return blocks.dedupe()
@@ -197,15 +194,20 @@ class HtmlContentExtractor(private val baseUrl: String) {
         val src = img.attr("data-src").ifBlank { img.attr("src") }
         val url = Urls.absolutize(src, baseUrl) ?: return null
         val lower = url.lowercase()
-        // Иконки, емотикони, броячи и пиксели не са съдържание.
+        // Иконки, логото, подписът и изображения без истински адрес не са съдържание.
         if (IGNORED_IMAGE_PARTS.any { lower.contains(it) }) return null
+        if (IMAGE_EXT.none { lower.substringBefore('?').endsWith(it) }) return null
         val w = img.attr("width").toIntOrNull()
         val h = img.attr("height").toIntOrNull()
         if ((w != null && w < 48) || (h != null && h < 48)) return null
         return url
     }
 
-    private fun List<TextRun>.normalizeRuns(): List<TextRun> {
+    private fun List<TextRun>.normalizeRuns(): List<TextRun> = normalizeRunsRaw().let { runs ->
+        if (runs.joinToString("") { it.text }.any { it.isLetterOrDigit() }) runs else emptyList()
+    }
+
+    private fun List<TextRun>.normalizeRunsRaw(): List<TextRun> {
         // Слепваме съседни еднакво форматирани парчета и нормализираме интервалите.
         val merged = ArrayList<TextRun>()
         for (r in this) {
@@ -241,8 +243,8 @@ class HtmlContentExtractor(private val baseUrl: String) {
         private val INLINE = setOf("a", "b", "strong", "i", "em", "span", "u", "small", "sup", "sub", "font", "mark", "abbr", "time", "label", "cite", "q")
         private val FILE_EXT = listOf(".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".zip")
         private val IGNORED_IMAGE_PARTS = listOf(
-            "/.s/sm/", "/.s/img/", "/.s/t/", "smile", "emoji", "counter", "pixel", "spacer", "blank.gif",
-            "/icons/", "rating", "loader", "facebook.com/tr",
+            "logo-256", "logo.", "signature", "emoji", "pixel", "spacer", "/icons/", "facebook.com/tr",
         )
+        private val IMAGE_EXT = listOf(".webp", ".jpg", ".jpeg", ".png", ".gif", ".avif")
     }
 }

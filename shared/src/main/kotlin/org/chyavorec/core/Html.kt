@@ -14,7 +14,9 @@ object Urls {
             trimmed.startsWith("/") -> base.trimEnd('/') + trimmed
             else -> base.trimEnd('/') + "/" + trimmed
         }
-        return upgradeToHttps(abs)
+        // Адресите на самия сайт следват неговата схема (в production — https);
+        // всички външни http:// адреси се повдигат до https.
+        return if (base.startsWith("http://") && sameSite(abs, base)) abs else upgradeToHttps(abs)
     }
 
     /** Приложението позволява само HTTPS; http:// адреси се повдигат. */

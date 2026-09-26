@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Основни мета тагове -->
+<title>Фотодокументална изложба | НЧ Васил Левски 1922 – Яворец</title>
+
+<meta name="keywords" content="читалище, читалище Яворец, НЧ Васил Левски 1922, Яворец, библиотека, култура, фолклор, събития, Габрово">
+<meta name="author" content="НЧ Васил Левски – 1922">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="theme-color" content="#1a1208">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="indexnow" content="6d16d8c7f40c42ba8f2d67e8e100556d">
+<meta name="google-site-verification" content="X-7s330AcD7UNKEd8h8EzjCr1a9O69-e4Si7Sjr_oAc">
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="НЧ Васил Левски - 1922 | село Яворец">
+<meta property="og:title" content="НЧ Васил Левски - 1922 | село Яворец">
+
+<meta property="og:type" content="website">
+
+<meta property="og:image" content="https://chyavorec.org/assets/images/og-logo-1200-630.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="bg_BG">
+<meta property="article:publisher" content="https://www.facebook.com/nchvasillevski1922">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Favicon. Няколко размера, за да няма какво да гадае Google: печатът
+     на читалището е знакът на сайта. -->
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/images/chitalishte/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/images/chitalishte/icon-512.png">
+<!-- Сайтът е на ЧИТАЛИЩЕТО. ЯВОРА е търсачката в него и има свой manifest,
+     стеснен до /search — страница със собствен manifest (така прави и
+     електронният каталог за InvLib) измества този при сглобяването.
+     Дотук тук стоеше манифестът на ЯВОРА с "scope":"/" — заради това
+     Google показваше в резултатите златното листо на търсачката вместо
+     печата на читалището. -->
+<link rel="manifest" href="/site.webmanifest">
+<link rel="apple-touch-icon" href="/assets/images/chitalishte/touch-180.png">
+<meta name="apple-mobile-web-app-title" content="НЧ Яворец">
+<meta name="theme-color" content="#1a1208">
+
+<!-- ══ РЕЖИМ ПОДДРЪЖКА ══
+     Чете data/maintenance.json и пренасочва към /maintenance (цял сайт)
+     или /under-construction (отделна страница). Управлява се от
+     админ панела (/admin.html → таб „Поддръжка“).
+     Съдържанието се крие само докато трае проверката (~50ms от CDN),
+     с 1.2s предпазен таймер, за да не остане страницата празна, ако
+     мрежата откаже. -->
+<style id="mtGuardStyle">html.mt-checking body{visibility:hidden}</style>
+<script>
+(function(){
+  var d = document.documentElement;
+  var path = location.pathname.replace(/\/+$/, '') || '/';
+
+  /* Тези никога не се заключват — иначе няма как да се отключи обратно */
+  if (path === '/maintenance' || path === '/under-construction' ||
+      path === '/admin.html' || path === '/admin') return;
+
+  var done = false;
+  function reveal(){
+    if (done) return;
+    done = true;
+    d.classList.remove('mt-checking');
+  }
+  d.classList.add('mt-checking');
+  setTimeout(reveal, 1200);
+
+  fetch('/data/maintenance.json', {cache: 'no-store'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(cfg){
+      if (done || !cfg) { reveal(); return; }
+      if (cfg.siteOff){ location.replace('/maintenance'); return; }
+      var off = cfg.pagesOff || [];
+      for (var i = 0; i < off.length; i++){
+        var p = String(off[i]).replace(/\/+$/, '') || '/';
+        if (p === path){ location.replace('/under-construction'); return; }
+      }
+      reveal();
+    })
+    .catch(reveal);
+})();
+</script>
+
+<!-- ══ БАНЕРИ В ГОРНАТА ЧАСТ НА СТРАНИЦАТА ══
+     Чете data/banners.json и слага активните банери най-отгоре в
+     съдържанието (#hp-inner), преди всичко останало. Управлява се от
+     админ панела (/admin.html → таб „Банери“): всеки банер пази своя
+     HTML, списък страници и дали е активен.
+     Банер с page "*" излиза на всички страници.
+     ВНИМАНИЕ: HTML-ът НЕ е безопасен сам по себе си. innerHTML
+     наистина не изпълнява <script>, но <img src=x onerror=…>,
+     <svg onload=…> и <iframe> се изпълняват без проблем. А
+     data/banners.json може да бъде редактиран и направо през GitHub,
+     без панела. Затова всеки банер минава през sanitizeBanner()
+     ПРИ ЧЕТЕНЕ, преди да стигне до innerHTML. -->
+
+
+<!-- Fonts -->
+<!-- Шрифтовете са на сайта (/fonts/; @font-face от fonts/fonts-v1.css влиза в
+     общия CSS при build-а). Предзареждат се
+     само двата, които първият екран ползва веднага: основният текст и курсивът
+     на заглавията. -->
+<link rel="preload" href="/fonts/raleway-normal-cyrillic.ac99ad1c.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/cormorant-garamond-italic-cyrillic.cb13c045.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- Schema.org -->
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "НЧ Васил Левски - 1922 | село Яворец",
+    "alternateName": "Народно читалище Васил Левски 1922",
+    "url": "https://chyavorec.org/"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "NGO",
+    "name": "НЧ Васил Левски - 1922 | село Яворец",
+    "url": "https://chyavorec.org",
+    "logo": "https://chyavorec.org/assets/images/chitalishte/icon-512.png",
+    "email": "chitalishte_yavorec@abv.bg",
+    "taxID": "000211969",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "пл. 9-ти септември 3",
+      "addressLocality": "Яворец",
+      "addressRegion": "Габрово",
+      "postalCode": "5334",
+      "addressCountry": "BG"
+    }
+  }
+]
+</script>
+
+<!-- ══ СЪГЛАСИЕ ЗА БИСКВИТКИ И АНАЛИТИКА ══
+     Google Analytics и Tag Manager се зареждат САМО след изрично
+     съгласие на посетителя (GDPR, чл. 6). До тогава не се пуска нито
+     една заявка към Google и не се записва нито една бисквитка.
+     Използва Google Consent Mode v2 със статут „отказано" по подразбиране.
+     Банерът е част от сайта — не зависи от външен доставчик, така че
+     съгласие се иска и когато чужд сървър е недостъпен. -->
+<script>
+(function(w, d){
+  var KEY = 'yv_consent_v1';
+  var GA_ID = 'G-RZDRWL8B2H';
+  var GTM_ID = 'GTM-NNWCBN';
+
+  w.dataLayer = w.dataLayer || [];
+  function gtag(){ w.dataLayer.push(arguments); }
+  w.gtag = gtag;
+
+  /* Отказано по подразбиране — важи и ако скриптовете се заредят по-късно */
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted'
+  });
+
+  function read(){ try { return w.localStorage.getItem(KEY); } catch(e){ return null; } }
+  function write(v){ try { w.localStorage.setItem(KEY, v); } catch(e){} }
+
+  var loaded = false;
+  function loadAnalytics(){
+    if (loaded) return;
+    loaded = true;
+    gtag('consent', 'update', {
+      ad_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+      analytics_storage: 'granted'
+    });
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    var a = d.createElement('script');
+    a.async = true;
+    a.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    d.head.appendChild(a);
+    w.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    var g = d.createElement('script');
+    g.async = true;
+    g.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
+    d.head.appendChild(g);
+  }
+
+  w.yvConsent = {
+    /* 'granted' | 'denied' | null (още не е избрано) */
+    state: read,
+    accept: function(){ write('granted'); loadAnalytics(); w.yvConsent._hide(); },
+    reject: function(){ write('denied'); w.yvConsent._hide(); },
+    reopen: function(){ w.yvConsent._show(); },
+    _show: function(){}, /* презаписват се, щом банерът се построи */
+    _hide: function(){}
+  };
+
+  if (read() === 'granted') loadAnalytics();
+})(window, document);
+</script>
+<link rel="stylesheet" href="/assets/site-2483057b9085.css">
+<link rel="preload" href="/assets/site-d286938d8c45.js" as="script">
+
+
+<!-- Скриптът, който вдигаше чуждото бисквитково копче над долната
+     мобилна лента, е премахнат заедно с външния доставчик на
+     съгласие — собственият банер е широк колкото екрана и не
+     застъпва лентата. -->
+
+
+<script>
+(function(){
+  var p = window.location.pathname.replace(/\/+$/, '') || '/';
+  var isHome = (p === '' || p === '/' || /^\/(index(\.html?)?)?$/.test(p));
+  if(!isHome) document.documentElement.classList.add('sp');
+})();
+</script>
+
+<link rel="canonical" href="https://chyavorec.org/fotodokumentalna-izlozhba">
+<meta property="og:url" content="https://chyavorec.org/fotodokumentalna-izlozhba">
+<meta name="description" content="Архивни фотографии и документи в четири раздела — читалището, стопанският двор, село Яворец и училището. Миналото в снимки.">
+<meta property="og:description" content="Архивни фотографии и документи в четири раздела — читалището, стопанският двор, село Яворец и училището. Миналото в снимки.">
+</head>
+<body>
+<!-- GTM noscript рамката е премахната нарочно: без JavaScript няма как да се
+     поиска съгласие, а тя зарежда Tag Manager безусловно. -->
+<a href="#hp" class="skip-link">Прескочи към съдържанието</a>
+<div id="scroll-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+<button id="back-top" aria-label="Обратно нагоре" title="Обратно нагоре">↑</button>
+<div id="mn-bd" aria-hidden="true"></div>
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Навигация" aria-hidden="true">
+<button class="mn-close" id="mnCloseBtn" aria-label="Затвори менюто"></button>
+<div class="mn-head">
+<a href="/" class="mn-brand">
+<img src="/assets/images/logo-256.webp" alt="НЧ Васил Левски – 1922" width="36" height="36" class="mn-brand-img">
+<div class="mn-brand-txt"><span class="mn-brand-name">НЧ „Васил Левски“</span><span class="mn-brand-sub">с. Яворец · 1922</span></div>
+</a>
+</div>
+<div class="mn-body">
+<ul class="mn-main">
+<li><a href="/" class="mn-lnk">Начало</a></li>
+<li><a href="/news" class="mn-lnk">Новини</a></li>
+<li><a href="/events" class="mn-lnk">Събития</a></li>
+<li><a href="/history" class="mn-lnk">История</a></li>
+<li><a href="/selo-yavorec" class="mn-lnk">с.Яворец</a></li>
+<li><a href="/darenija" class="mn-lnk">Дарения</a></li>
+<li><a href="/elektronen-katalog" class="mn-lnk">Електронен каталог</a></li>
+<li><a href="/search" class="mn-lnk">Търсене · ЯВОРА</a></li>
+</ul>
+<div class="mn-sep"><span class="mn-sep-line"></span><span class="mn-sep-txt">Дейности</span><span class="mn-sep-line"></span></div>
+<ul class="mn-sub">
+<li><a href="/library" class="mn-slnk"><span class="mn-ico">📚</span>Библиотека</a></li>
+<li><a href="/folklorna-grupa" class="mn-slnk"><span class="mn-ico">🎵</span>Фолклорна група</a></li>
+<li><a href="/tancov-klub" class="mn-slnk"><span class="mn-ico">💃</span>Народни танци</a></li>
+<li><a href="/klubove-i-krzhoci" class="mn-slnk"><span class="mn-ico">🏛️</span>Клубове</a></li>
+<li><a href="/proekti" class="mn-slnk"><span class="mn-ico">📋</span>Проекти</a></li>
+<li><a href="/load" class="mn-slnk"><span class="mn-ico">📁</span>Документи</a></li>
+</ul>
+</div>
+<div class="mn-foot">
+<a href="https://www.facebook.com/nchvasillevski1922/" target="_blank" rel="noopener" class="mn-social"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> Facebook</a>
+</div>
+</div>
+<nav id="mainNav" role="navigation" aria-label="Основна навигация">
+<a href="/" class="nav-logo">
+<img src="/assets/images/logo-256.webp"
+  alt="НЧ Васил Левски – 1922"
+  class="nav-logo-img"
+  width="78"
+  height="78"
+>
+<div class="nav-logo-text">
+<span class="nav-logo-main">НЧ „Васил Левски – 1922“</span>
+<span class="nav-logo-sub">село Яворец</span>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/news">Новини</a></li>
+<li><a href="/events">Събития</a></li>
+<li class="nav-has-dropdown nav-current">
+<a href="#">Дейности</a>
+<ul class="nav-dropdown">
+<li><a href="/library">Библиотека</a></li>
+<li><a href="/folklorna-grupa">Фолклорна група</a></li>
+<li><a href="/tancov-klub">Клуб за народни танци</a></li>
+<li><a href="/klubove-i-krzhoci">Клубове и кръжоци</a></li>
+<li><a href="/proekti">Проекти</a></li>
+<li><a href="/istoricheski-publikacii">Исторически публикации</a></li>
+<li><a href="/yavorski-hlapeta">Сценичен ансамбъл<br>Яворски хлапета</a></li>
+<li><a href="/fotodokumentalna-izlozhba" aria-current="page">Фотодокументална<br>изложба</a></li>
+</ul>
+</li>
+<li><a href="/history">История</a></li>
+<li><a href="/load">Документи</a></li>
+<li><a href="/selo-yavorec">с.Яворец</a></li>
+<li><a href="/darenija">Дарения</a></li>
+<li><a href="/elektronen-katalog" title="Електронен каталог на библиотеката">Каталог</a></li>
+</ul>
+<div style="display:flex;align-items:center;gap:.5rem;">
+<a href="javascript:void(0)"
+   class="nav-login"
+   style="display:none;"
+   title="Вход в сайта">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+<circle cx="12" cy="8" r="4"/>
+<path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+</svg>
+  Вход
+</a>
+<a href="/search" class="nav-search" title="Търсене в библиотеката и Яворец (Ctrl+K)" aria-label="Търсене"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></a>
+<a href="/kontakti" class="nav-cta">Свържете се</a>
+</div>
+<button class="hamburger" id="mnHbr" aria-label="Отвори менюто" aria-expanded="false" aria-controls="mobileNav">
+<span class="hb-ln"></span><span class="hb-ln"></span><span class="hb-ln"></span>
+</button>
+</nav>
+<div id="hp" role="main" tabindex="-1" aria-label="Основно съдържание">
+<div id="hp-inner">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ExhibitionEvent",
+  "name": "Фотодокументална изложба",
+  "url": "https://chyavorec.org/fotodokumentalna-izlozhba",
+  "description": "Фотодокументална изложба в четири раздела — читалището, стопанският двор (ТКЗС), село Яворец и училището в Яворец. Архивни снимки и документи от историята на с. Яворец и НЧ „Васил Левски 1922“.",
+  "location": {
+    "@type": "Organization",
+    "name": "НЧ „Васил Левски 1922“, с. Яворец",
+    "url": "https://chyavorec.org/"
+  },
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode"
+}
+</script>
+
+
+
+<script>
+(function(){ document.documentElement.classList.add('sp'); })();
+</script>
+
+<style>
+/* ══ ФОТОДОКУМЕНТАЛНА ИЗЛОЖБА ══ */
+.exh-page{font-family:'Raleway',sans-serif;color:#1a1208;max-width:980px;margin-top:6.5rem;}
+@media(max-width:768px){.exh-page{margin-top:max(5.5rem,calc(4rem + env(safe-area-inset-top,0px)));}}
+
+/* ── Hero ── */
+.exh-hero{background:#1a1208;padding:3rem;margin-bottom:4rem;position:relative;overflow:hidden;}
+.exh-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 85% 50%,rgba(107,31,42,.4) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 5% 80%,rgba(201,168,76,.1) 0%,transparent 55%);}
+.exh-hero-inner{position:relative;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center;}
+.exh-lbl{font-size:.55rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:#c9a84c;display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem;}
+.exh-lbl::before{content:'';display:block;width:1.5rem;height:1px;background:#c9a84c;}
+.exh-hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:300;color:#f5f0e8;line-height:1.12;margin-bottom:.8rem;}
+.exh-hero-title em{font-style:italic;color:#e8d5a3;}
+.exh-hero-desc{font-size:.87rem;font-weight:300;line-height:1.85;color:rgba(245,240,232,.5);max-width:52ch;}
+.exh-hero-badge{border:1px solid rgba(201,168,76,.3);padding:1.5rem 2rem;text-align:center;flex-shrink:0;}
+.exh-badge-num{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:300;color:#c9a84c;line-height:1;display:block;}
+.exh-badge-lbl{font-size:.52rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,168,76,.78);display:block;margin-top:.3rem;}
+
+/* ── Intro strip ── */
+.exh-intro{background:#f5f0e8;border:1px solid rgba(201,168,76,.2);padding:2rem 2.5rem;margin-bottom:4rem;display:flex;gap:2rem;align-items:flex-start;}
+.exh-intro-icon{font-size:2rem;flex-shrink:0;margin-top:.2rem;}
+.exh-intro-text p{font-size:.88rem;font-weight:300;line-height:1.9;color:#756a5c;margin-bottom:.5rem;}
+.exh-intro-text p:last-child{margin-bottom:0;}
+.exh-intro-text p strong{color:#1a1208;font-weight:500;}
+
+/* ══ ИЗЛОЖБА ══ */
+
+/* Разделител между секции */
+.exh-section{margin-bottom:4rem;}
+.exh-section-head{display:flex;align-items:center;gap:1.5rem;margin-bottom:2.5rem;}
+.exh-section-head-line{flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,.4),transparent);}
+.exh-section-head-line.rev{background:linear-gradient(to left,rgba(201,168,76,.4),transparent);}
+.exh-section-head-label{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#1a1208;white-space:nowrap;}
+.exh-section-head-label em{font-style:italic;color:#6b1f2a;}
+
+/* ── Exhibit Item — голямо (цяла ширина) ── */
+.exh-item-full{border:1px solid rgba(201,168,76,.2);overflow:hidden;margin-bottom:1.5rem;transition:border-color .25s;}
+.exh-item-full:hover{border-color:rgba(201,168,76,.45);}
+.exh-item-full .exh-photo{position:relative;background:#1a1208;overflow:hidden;}
+.exh-item-full .exh-photo img{width:100%;max-height:480px;object-fit:cover;display:block;filter:sepia(5%) contrast(1.05);transition:transform .6s ease;}
+.exh-item-full:hover .exh-photo img{transform:scale(1.02);}
+.exh-item-full .exh-caption{padding:1.8rem 2.5rem;background:#f5f0e8;}
+
+/* ── Exhibit Item — двуколонно ── */
+.exh-pair{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+
+/* ── Exhibit Item — три колонно ── */
+.exh-triple{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+
+/* ── Exhibit Item — асиметрично (2fr + 1fr) ── */
+.exh-asymm{display:grid;grid-template-columns:1.6fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.exh-asymm.rev{grid-template-columns:1fr 1.6fr;}
+
+/* ── Обща карта за малки снимки ── */
+.exh-card{border:1px solid rgba(201,168,76,.2);overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s;}
+.exh-card:hover{border-color:rgba(201,168,76,.45);}
+.exh-card .exh-photo{position:relative;overflow:hidden;background:#1a1208;flex-shrink:0;}
+.exh-card .exh-photo img{width:100%;height:220px;object-fit:cover;display:block;filter:sepia(6%) contrast(1.05);transition:transform .5s ease;}
+.exh-card:hover .exh-photo img{transform:scale(1.04);}
+.exh-card .exh-caption{padding:1.2rem 1.4rem;background:#f5f0e8;flex:1;display:flex;flex-direction:column;}
+
+/* ── Общ caption стил ── */
+.exh-num{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#866410;margin-bottom:.4rem;}
+.exh-caption-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:#1a1208;line-height:1.3;margin-bottom:.5rem;}
+.exh-caption-title.lg{font-size:1.35rem;}
+.exh-caption-date{display:inline-flex;align-items:center;gap:.4rem;font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#866410;margin-bottom:.6rem;padding:.2rem .6rem;border:1px solid rgba(201,168,76,.25);background:rgba(201,168,76,.06);}
+.exh-caption-desc{font-size:.83rem;font-weight:300;color:#756a5c;line-height:1.8;flex:1;}
+.exh-caption-facts{margin-top:.8rem;display:flex;flex-direction:column;gap:.3rem;}
+.exh-fact{font-size:.75rem;font-weight:300;color:#756a5c;padding:.3rem 0;border-top:1px solid rgba(201,168,76,.1);display:flex;gap:.5rem;}
+.exh-fact::before{content:'—';color:#c9a84c;flex-shrink:0;font-weight:700;}
+/* Placeholder за снимка */
+.exh-placeholder{width:100%;height:220px;display:flex;align-items:center;justify-content:center;font-size:3rem;opacity:.3;}
+.exh-photo-cap-bar{background:#1a1208;padding:.45rem .9rem;font-size:.55rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,168,76,.78);}
+
+/* ── Цитат между снимки ── */
+.exh-quote{border-left:3px solid #c9a84c;padding:1.2rem 2rem;background:#f5f0e8;margin:2rem 0;}
+.exh-quote-text{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;font-weight:300;color:#1a1208;line-height:1.6;margin-bottom:.6rem;}
+.exh-quote-source{font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#866410;}
+
+/* ── CTA ── */
+.exh-cta{background:#1a1208;padding:2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-top:4rem;}
+.exh-cta-text{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:#f5f0e8;line-height:1.3;}
+.exh-cta-text em{font-style:italic;color:#e8d5a3;}
+.exh-cta-btn{display:inline-flex;align-items:center;justify-content:center;text-align:center;gap:.5rem;padding:.85rem 2rem;background:#c9a84c;color:#1a1208;font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:background .2s;}
+.exh-cta-btn:hover{background:#e8d5a3;}
+
+@media(max-width:768px){
+  .exh-hero-inner{grid-template-columns:1fr;}
+  .exh-hero-badge{display:none;}
+  .exh-intro{flex-direction:column;gap:1rem;}
+  .exh-pair,.exh-triple,.exh-asymm,.exh-asymm.rev{grid-template-columns:1fr;}
+  .exh-card .exh-photo img{height:200px;}
+  .exh-item-full .exh-caption{padding:1.4rem 1.5rem;}
+  .exh-cta{flex-direction:column;}
+  .exh-hero{padding:2rem 1.5rem;}
+}
+@media(max-width:480px){
+  .exh-card .exh-photo img{height:180px;}
+}
+
+/* ══════════════════════════════════════════
+   LIGHTBOX — голям преглед на снимките
+   ══════════════════════════════════════════ */
+/* ══ ПОДРАЗДЕЛИ ══ */
+.exh-subhead{display:flex;align-items:center;gap:.9rem;margin:2.5rem 0 1.4rem;}
+.exh-subhead-ico{font-size:1.1rem;flex-shrink:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1);}
+.exh-subhead:hover .exh-subhead-ico{transform:scale(1.15) rotate(-8deg);}
+.exh-subhead-txt{font-family:'Cormorant Garamond',serif;font-size:1.12rem;font-weight:400;
+  color:#6b1f2a;white-space:nowrap;font-style:italic;}
+.exh-subhead-line{flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,.35),transparent);
+  transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.22,1,.36,1) .1s;}
+.exh-subhead.exh-in .exh-subhead-line{transform:scaleX(1);}
+.exh-subhead-txt{opacity:0;transform:translateX(-8px);
+  transition:opacity .7s cubic-bezier(.16,1,.3,1) .15s,transform .7s cubic-bezier(.16,1,.3,1) .15s;}
+.exh-subhead.exh-in .exh-subhead-txt{opacity:1;transform:translateX(0);}
+@media(max-width:600px){.exh-subhead-txt{font-size:1rem;white-space:normal;}}
+
+/* ══ АНИМАЦИИ ══ */
+@keyframes exh-fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@keyframes exh-shim{from{left:-80%}to{left:140%}}
+@keyframes exh-glow{0%,100%{opacity:.85}50%{opacity:1}}
+
+/* Hero — влизане */
+.exh-hero-inner > div:first-child{animation:exh-fadeUp .9s cubic-bezier(.16,1,.3,1) both;}
+.exh-hero-badge{animation:exh-fadeUp .9s cubic-bezier(.16,1,.3,1) .25s both;position:relative;overflow:hidden;}
+.exh-hero-badge::after{
+  content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(232,213,163,.22),transparent);
+  transform:skewX(-18deg);animation:exh-shim 5s ease-in-out 1.5s 1 both;pointer-events:none;
+}
+.exh-badge-num{animation:exh-glow 4s ease-in-out 1 both;}
+.exh-hero::before{animation:exh-glow 8s ease-in-out 1 both;}
+
+/* Reveal при скрол */
+.exh-r{opacity:0;transform:translateY(26px);
+  transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
+.exh-r.exh-in{opacity:1;transform:translateY(0) scale(1);}
+.exh-r-sc{transform:translateY(20px) scale(.96);}
+
+/* Заглавия на раздели — линиите се разгъват */
+.exh-section-head-line{transform:scaleX(0);transform-origin:left;
+  transition:transform .9s cubic-bezier(.22,1,.36,1) .1s;}
+.exh-section-head-line.rev{transform-origin:right;}
+.exh-section-head.exh-in .exh-section-head-line{transform:scaleX(1);}
+.exh-section-head-label{opacity:0;transform:translateY(10px);
+  transition:opacity .7s cubic-bezier(.16,1,.3,1) .2s,transform .7s cubic-bezier(.16,1,.3,1) .2s;}
+.exh-section-head.exh-in .exh-section-head-label{opacity:1;transform:translateY(0);}
+
+/* Карти — подобрен hover */
+.exh-item-full,.exh-card{
+  transition:border-color .3s,box-shadow .35s,transform .35s cubic-bezier(.16,1,.3,1);
+}
+.exh-item-full:hover,.exh-card:hover{
+  box-shadow:0 14px 34px rgba(26,18,8,.14);
+  transform:translateY(-4px);
+}
+/* Снимката — плавно приближаване + изсветляване */
+.exh-card .exh-photo img,.exh-item-full .exh-photo img{
+  transition:transform .7s cubic-bezier(.22,1,.36,1),filter .5s ease;
+}
+.exh-card:hover .exh-photo img{transform:scale(1.06);filter:sepia(0%) contrast(1.07) saturate(1.05);}
+.exh-item-full:hover .exh-photo img{transform:scale(1.03);filter:sepia(0%) contrast(1.07);}
+/* Лента с надпис — плъзга се нагоре */
+.exh-photo-cap-bar{transition:transform .35s cubic-bezier(.16,1,.3,1),background .3s;}
+.exh-item-full:hover .exh-photo-cap-bar{transform:translateY(-2px);}
+/* Номерът на експоната */
+.exh-num{transition:color .25s,letter-spacing .3s;}
+.exh-item-full:hover .exh-num,.exh-card:hover .exh-num{color:#866410;letter-spacing:.3em;}
+/* Фактите се появяват стъпаловидно */
+.exh-in .exh-fact{animation:exh-fadeUp .55s cubic-bezier(.16,1,.3,1) both;}
+.exh-in .exh-fact:nth-child(1){animation-delay:.25s;}
+.exh-in .exh-fact:nth-child(2){animation-delay:.33s;}
+.exh-in .exh-fact:nth-child(3){animation-delay:.41s;}
+
+/* Цитат — акцентна лява линия расте */
+.exh-quote{position:relative;}
+.exh-quote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(to bottom,#c9a84c,rgba(201,168,76,.15));
+  transform:scaleY(0);transform-origin:top;transition:transform .9s cubic-bezier(.22,1,.36,1) .15s;}
+.exh-quote.exh-in::before{transform:scaleY(1);}
+
+/* Въведение — иконата леко плува */
+@keyframes exh-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.exh-intro-icon{animation:exh-float 4s ease-in-out 1 both;}
+
+/* CTA бутон — проблясък */
+.exh-cta-btn{position:relative;overflow:hidden;}
+.exh-cta-btn::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:skewX(-18deg);pointer-events:none;}
+.exh-cta-btn:hover::after{animation:exh-shim .9s ease;}
+
+/* Мобилни */
+@media(hover:none){
+  .exh-item-full:hover,.exh-card:hover{transform:none;}
+  .exh-photo.lb-trigger::after{opacity:.7;transform:scale(1);}
+}
+
+.exh-photo.lb-trigger{cursor:pointer;}
+.exh-photo.lb-trigger::after{
+  content:'⤢';position:absolute;top:.7rem;right:.7rem;width:2.1rem;height:2.1rem;
+  background:rgba(26,18,8,.65);color:#e8d5a3;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+  opacity:0;transform:scale(.7);
+  transition:opacity .25s ease,transform .25s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;z-index:2;
+}
+.exh-photo.lb-trigger:hover::after{opacity:1;transform:scale(1);}
+.exh-photo.lb-trigger:focus-visible{outline:2px solid #c9a84c;outline-offset:-2px;}
+
+.exh-lightbox{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(13,9,4,.96);
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem;
+  opacity:0;visibility:hidden;
+  transition:opacity .35s cubic-bezier(.16,1,.3,1),visibility .35s;
+}
+.exh-lightbox.open{opacity:1;visibility:visible;}
+
+.lb-stage{position:relative;max-width:90vw;max-height:72vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.lb-image{
+  max-width:90vw;max-height:72vh;object-fit:contain;display:block;
+  box-shadow:0 24px 64px rgba(0,0,0,.55);
+  border:1px solid rgba(201,168,76,.25);
+  opacity:0;transform:scale(.96);
+  will-change:opacity,transform;
+}
+
+.lb-caption{margin-top:1.5rem;text-align:center;max-width:640px;padding:0 1rem;}
+.lb-counter{font-family:'Raleway',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,168,76,.55);margin-bottom:.5rem;}
+.lb-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;color:#f5f0e8;line-height:1.35;margin-bottom:.45rem;}
+.lb-date{font-family:'Raleway',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.1em;color:#c9a84c;text-transform:uppercase;}
+
+.lb-close{
+  position:fixed;top:1.2rem;right:1.2rem;width:46px;height:46px;
+  border:1px solid rgba(201,168,76,.35);background:rgba(26,18,8,.75);color:#c9a84c;
+  font-size:1.15rem;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:2002;line-height:1;
+  transition:background .2s,transform .3s cubic-bezier(.16,1,.3,1),border-color .2s;
+}
+.lb-close:hover{background:rgba(201,168,76,.16);border-color:#c9a84c;transform:rotate(90deg);}
+
+.lb-nav{
+  position:fixed;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;
+  border:1px solid rgba(201,168,76,.3);background:rgba(26,18,8,.6);color:#c9a84c;
+  font-size:1.7rem;display:flex;align-items:center;justify-content:center;line-height:1;
+  cursor:pointer;z-index:2002;
+  transition:background .2s,border-color .2s,transform .2s;
+}
+.lb-nav:hover{background:rgba(201,168,76,.18);border-color:#c9a84c;}
+.lb-prev{left:1.2rem;}
+.lb-next{right:1.2rem;}
+.lb-prev:active{transform:translateY(-50%) translateX(-3px);}
+.lb-next:active{transform:translateY(-50%) translateX(3px);}
+
+@media(max-width:640px){
+  .lb-nav{width:42px;height:42px;font-size:1.3rem;}
+  .lb-prev{left:.5rem;}
+  .lb-next{right:.5rem;}
+  .lb-close{width:40px;height:40px;top:.7rem;right:.7rem;font-size:1rem;}
+  .lb-title{font-size:1.05rem;}
+  .lb-caption{margin-top:1rem;}
+  .lb-stage{max-height:62vh;}
+  .lb-image{max-height:62vh;}
+}
+@media(prefers-reduced-motion:reduce){
+  .exh-lightbox,.lb-image,.lb-close,.lb-nav,.exh-photo.lb-trigger::after{transition-duration:.01ms!important;}
+}
+</style>
+
+<div class="exh-page">
+
+  <!-- ══ HERO ══ -->
+  <div class="exh-hero">
+    <div class="exh-hero-inner">
+      <div>
+        <div class="exh-lbl">НЧ „Васил Левски – 1922“ · с. Яворец</div>
+        <h1 class="exh-hero-title">
+          <em>Фотодокументална<br>изложба</em>
+        </h1>
+        <p class="exh-hero-desc">
+          Архивни фотографии и документален текст в четири раздела —
+          читалището, стопанският двор (ТКЗС), село Яворец
+          и училището в Яворец.
+        </p>
+      </div>
+      <div class="exh-hero-badge">
+        <span class="exh-badge-num">1922</span>
+        <span class="exh-badge-lbl">Година на<br>основаване</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ВЪВЕДЕНИЕ ══ -->
+  <div class="exh-intro">
+    <div class="exh-intro-icon">🏛️</div>
+    <div class="exh-intro-text">
+      <p>
+        Тази фотодокументална изложба представя <strong>историята на
+        с. Яворец</strong> в четири раздела — <strong>читалището</strong>,
+        <strong>стопанският двор (ТКЗС)</strong>, <strong>селото</strong>
+        и <strong>училището</strong>. Всяка фотография е прозорец към
+        отминало време — свидетелство за будността, труда и духовния
+        живот на яворчани.
+      </p>
+      <p>
+        Изложбата съдържа <strong>29 експоната</strong>, подредени в
+        тематични подраздели. Снимките са от <strong>архива на
+        читалището</strong> и от личните колекции на жители на Яворец.
+        Посветена е на всички, допринесли за повече от <strong>100
+        години читалищна история</strong>.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       СЕКЦИЯ I — ЧИТАЛИЩЕТО
+  ══════════════════════════════════ -->
+  <div class="exh-section" id="exh-chitalishte">
+    <div class="exh-section-head">
+      <div class="exh-section-head-line"></div>
+      <div class="exh-section-head-label">I. <em>Читалището</em></div>
+      <div class="exh-section-head-line rev"></div>
+    </div>
+
+    <!-- Голяма снимка -->
+    <div class="exh-item-full">
+      <div class="exh-photo">
+        <!-- СНИМКА: замени src с реалния път от File Manager -->
+        <img width="1800" height="1124" src="/assets/images/Chitalishte.webp" alt="Сградата на читалището в Яворец"
+          loading="lazy"
+          onerror="this.style.cssText='width:100%;height:360px;display:block;background:linear-gradient(145deg,#1a1208,#2d1810)'">
+        <div class="exh-photo-cap-bar">Снимка 01 · Народно читалище „Васил Левски – 1922“ · с. Яворец</div>
+      </div>
+      <div class="exh-caption">
+        <div class="exh-num">Експонат 01</div>
+        <div class="exh-caption-title lg">Народно читалище „Васил Левски – 1922“</div>
+        <div class="exh-caption-date">📅 основано 1922 г.</div>
+        <p class="exh-caption-desc">
+          Основано през 1922 г. от будни граждани и учители на с. Яворец,
+          читалището носи името на Апостола на свободата. Повече от сто
+          години то е духовното огнище на селото — библиотека, сцена,
+          школа и място за среща на поколенията.
+        </p>
+        <div class="exh-caption-facts">
+          <div class="exh-fact">Година на основаване: 1922 г.</div>
+          <div class="exh-fact">Наименувано на: Васил Левски</div>
+          <div class="exh-fact">Дейности: библиотека, самодейност, школи, чествания</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exh-quote">
+      <p class="exh-quote-text">„Читалището е огнището на просветата — тук се ражда духовният живот на Яворец."</p>
+      <div class="exh-quote-source">Из читалищния летопис</div>
+    </div>
+
+    <!-- Три снимки -->
+    <div class="exh-triple">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img width="1800" height="1186" src="/pictures/folkloren-sastav-minaloto.webp" alt="Фолклорен състав при читалището"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#744210,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 02</div>
+          <div class="exh-caption-title">Фолклорен състав при читалището</div>
+          <div class="exh-caption-date">📅 70-те г.</div>
+          <p class="exh-caption-desc">Фолклорният състав на читалището — песни и хора, съхранили автентичния дух на Балкана през десетилетията.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img width="1800" height="1274" src="/pictures/hor-chitalishte.webp" alt="Самодейци"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#6b1f2a,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 03</div>
+          <div class="exh-caption-title">Хорът на сцена</div>
+          <div class="exh-caption-date">📅 през годините</div>
+          <p class="exh-caption-desc">Читалищният хор на сцената на салона — гласовете, които десетилетия наред събираха публика от цялото село.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img width="1800" height="1064" src="/pictures/chitalishte-star-izgled.webp" alt="Сградата през 70-те години"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#553c9a,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 04</div>
+          <div class="exh-caption-title">70-те години</div>
+          <div class="exh-caption-date">📅 през годините</div>
+          <p class="exh-caption-desc">Сградата на читалището такава, каквато е изглеждала през 70-те години на XX век.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Подраздел: Сцена, школи и съвременност -->
+    <div class="exh-subhead">
+      <span class="exh-subhead-ico">🎭</span>
+      <span class="exh-subhead-txt">Сцената, школите и днешният ден</span>
+      <span class="exh-subhead-line"></span>
+    </div>
+
+    <div class="exh-triple">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img width="1024" height="678" src="/assets/images/ans-group.webp" alt="Сценичен ансамбъл Яворски хлапета"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#6b1f2a,#2d1810)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 05</div>
+          <div class="exh-caption-title">Сценичен ансамбъл Яворски хлапета</div>
+          <div class="exh-caption-date">📅 през годините</div>
+          <p class="exh-caption-desc">Сценичният ансамбъл „Яворски хлапета“ — постановки и изяви, които събират най-малките таланти на селото.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img width="945" height="758" src="/assets/images/folk-grupa-s.webp" alt="Фолклорна група Явор"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#8b2635,#744210)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 06</div>
+          <div class="exh-caption-title">Фолклорна група Явор</div>
+          <div class="exh-caption-date">📅 през годините</div>
+          <p class="exh-caption-desc">Фолклорна група „Явор“ — пази и предава автентичните песни и хора на родния край.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img width="900" height="420" src="/assets/images/dance-festival.webp" alt="Клуб за народни танци"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#276749,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 07</div>
+          <div class="exh-caption-title">Клуб за народни танци</div>
+          <div class="exh-caption-date">📅 наши дни</div>
+          <p class="exh-caption-desc">Клубът за народни танци на читалището — уроци и изяви, съхраняващи балканската танцова традиция за новите поколения.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       СЕКЦИЯ II — СТОПАНСКИ ДВОР (ТКЗС)
+  ══════════════════════════════════ -->
+  <div class="exh-section" id="exh-tkzs">
+    <div class="exh-section-head">
+      <div class="exh-section-head-line"></div>
+      <div class="exh-section-head-label">II. <em>Стопанският двор · ТКЗС</em></div>
+      <div class="exh-section-head-line rev"></div>
+    </div>
+
+    <div class="exh-item-full">
+      <div class="exh-photo">
+        <img src="/files/exh-05-stopanski-dvor.jpg" alt="Стопанският двор на ТКЗС в Яворец"
+          loading="lazy"
+          onerror="this.style.cssText='width:100%;height:340px;display:block;background:linear-gradient(145deg,#276749,#1a1208)'">
+        <div class="exh-photo-cap-bar">Снимка 08 · Стопанският двор · ТКЗС</div>
+      </div>
+      <div class="exh-caption">
+        <div class="exh-num">Експонат 08</div>
+        <div class="exh-caption-title lg">Стопанският двор — сърцето на трудовия живот</div>
+        <div class="exh-caption-date">📅 периодът на ТКЗС</div>
+        <p class="exh-caption-desc">
+          Стопанският двор на трудово-кооперативното земеделско стопанство
+          е мястото, където се събира трудовият живот на селото — техника,
+          животновъдство, полска работа и хора, работили рамо до рамо.
+          Снимките са свидетелство за бита и труда на едно поколение.
+        </p>
+      </div>
+    </div>
+
+    <!-- Асиметрична двойка -->
+    <div class="exh-asymm">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-06-tehnika.jpg" alt="Селскостопанска техника"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#744210,#276749)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 09</div>
+          <div class="exh-caption-title">Техниката на стопанството</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Трактори, машини и инвентар — гръбнакът на полската работа в стопанския двор.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-07-trudov-den.jpg" alt="Трудов ден"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#2d6a4f,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 10</div>
+          <div class="exh-caption-title">Хората на труда</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Работници и кооператори — лицата зад ежедневието на стопанството.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Подраздел: Животновъдство -->
+    <div class="exh-subhead">
+      <span class="exh-subhead-ico">🐄</span>
+      <span class="exh-subhead-txt">Животновъдство</span>
+      <span class="exh-subhead-line"></span>
+    </div>
+
+    <div class="exh-pair">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-08-ferma.jpg" alt="Животновъдна ферма"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#744210,#2d6a4f)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 11</div>
+          <div class="exh-caption-title">Фермите на стопанството</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Обори, стада и всекидневната грижа за животните — важен дял от поминъка на селото.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-09-ovchari.jpg" alt="Овчари и стада"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#276749,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 12</div>
+          <div class="exh-caption-title">Пастири и стада</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Балканските пасища около Яворец и хората, извеждали стадата всеки ден.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Подраздел: Полската работа -->
+    <div class="exh-subhead">
+      <span class="exh-subhead-ico">🌾</span>
+      <span class="exh-subhead-txt">Полската работа и жътвата</span>
+      <span class="exh-subhead-line"></span>
+    </div>
+
+    <div class="exh-triple">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-10-zhitva.jpg" alt="Жътва"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#8a6d1f,#744210)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 13</div>
+          <div class="exh-caption-title">Жътва</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Жътвената кампания — най-натовареното време в годината на стопанството.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-11-harman.jpg" alt="Харман"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#744210,#6b1f2a)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 14</div>
+          <div class="exh-caption-title">Харманът</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Вършитба и прибиране на реколтата — обща работа за цялото село.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-12-brigada.jpg" alt="Бригада"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#1d3557,#276749)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 15</div>
+          <div class="exh-caption-title">Бригадите</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Полските бригади — групови снимки от дните на общия труд.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Подраздел: Сгради и стопанство -->
+    <div class="exh-subhead">
+      <span class="exh-subhead-ico">🏗️</span>
+      <span class="exh-subhead-txt">Сградите на стопанството</span>
+      <span class="exh-subhead-line"></span>
+    </div>
+
+    <div class="exh-asymm rev">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-13-sklad.jpg" alt="Складове"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#553c9a,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 16</div>
+          <div class="exh-caption-title">Складове и хамбари</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Мястото, където се съхранява реколтата на стопанството.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/assets/images/exh-17-osnovopolozhnici.webp"
+            alt="Възпоменателна табела на основоположниците на ТКЗС „с. Яворец, Габровско“ — председател, управителен и контролен съвет и редовите основатели"
+            loading="lazy">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 17</div>
+          <div class="exh-caption-title">Основоположници на ТКЗС</div>
+          <div class="exh-caption-date">📅 15 февруари 1957 г.</div>
+          <p class="exh-caption-desc">Възпоменателна табела на основоположниците на ТКЗС „с. Яворец,
+            Габровско“. Първи председател — Христо Ст. Влаев. В управителния съвет —
+            Илия Хр. Ненчев, Петко Д. Колев, Лапо П. Лалев и Трифон Б. Маринов; в
+            контролния съвет — Христо И. Иванов, Кольо Ст. Колев и Трифон Ц. Дамянов.
+            Заедно с тях — редовите основатели на стопанството.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       СЕКЦИЯ III — СЕЛО ЯВОРЕЦ
+  ══════════════════════════════════ -->
+  <div class="exh-section" id="exh-yavorec">
+    <div class="exh-section-head">
+      <div class="exh-section-head-line"></div>
+      <div class="exh-section-head-label">III. <em>Село Яворец</em></div>
+      <div class="exh-section-head-line rev"></div>
+    </div>
+
+    <div class="exh-item-full">
+      <div class="exh-photo">
+        <img src="/files/exh-08-yavorec-panorama.jpg" alt="Панорама на село Яворец"
+          loading="lazy"
+          onerror="this.style.cssText='width:100%;height:340px;display:block;background:linear-gradient(145deg,#1a1208,#2d6a4f)'">
+        <div class="exh-photo-cap-bar">Снимка 18 · Панорама на с. Яворец</div>
+      </div>
+      <div class="exh-caption">
+        <div class="exh-num">Експонат 18</div>
+        <div class="exh-caption-title lg">Село Яворец — в полите на Балкана</div>
+        <div class="exh-caption-date">📅 през годините</div>
+        <p class="exh-caption-desc">
+          Улиците, къщите, площадът и хората — Яворец през различни
+          десетилетия. Снимките показват как се променя селото и как
+          остава непроменен духът на общността му.
+        </p>
+      </div>
+    </div>
+
+    <!-- Три снимки -->
+    <div class="exh-triple">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-09-ulici.jpg" alt="Улиците на Яворец"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#1d3557,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 19</div>
+          <div class="exh-caption-title">Улици и къщи</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Старите улици и характерната балканджийска архитектура на селото.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-10-hora.jpg" alt="Жителите на Яворец"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#8b2635,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 20</div>
+          <div class="exh-caption-title">Яворчани</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Лицата на селото — семейства, съседи, съграждани.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-11-praznik.jpg" alt="Селски празник"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#744210,#6b1f2a)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 21</div>
+          <div class="exh-caption-title">Празници и събори</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Съборът, хорото и празничните дни, които събират цялото село.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Подраздел: Църквата и площадът -->
+    <div class="exh-subhead">
+      <span class="exh-subhead-ico">⛪</span>
+      <span class="exh-subhead-txt">Църквата, площадът и чешмите</span>
+      <span class="exh-subhead-line"></span>
+    </div>
+
+    <div class="exh-triple">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-12-cyrkva.jpg" alt="Църквата в Яворец"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#553c9a,#2d1810)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 22</div>
+          <div class="exh-caption-title">Църквата</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Храмът на Яворец — духовният център на селото през поколенията.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-13-ploshtad.jpg" alt="Площадът"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#1d3557,#744210)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 23</div>
+          <div class="exh-caption-title">Площадът</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Централният площад — мястото за срещи, събрания и празници.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-14-cheshma.jpg" alt="Чешмата"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#276749,#1d3557)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 24</div>
+          <div class="exh-caption-title">Старите чешми</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Каменните чешми на Яворец — свидетели на всекидневието на селото.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Подраздел: Природа и околност -->
+    <div class="exh-subhead">
+      <span class="exh-subhead-ico">🏞️</span>
+      <span class="exh-subhead-txt">Природата и околността</span>
+      <span class="exh-subhead-line"></span>
+    </div>
+
+    <div class="exh-pair">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-15-priroda.jpg" alt="Природата около Яворец"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#2d6a4f,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 25</div>
+          <div class="exh-caption-title">В полите на Балкана</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Гори, поляни и балкански гледки — природата, обгърнала Яворец.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-16-zanayati.jpg" alt="Стари занаяти"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#8b2635,#744210)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 26</div>
+          <div class="exh-caption-title">Бит и стари занаяти</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Домашният бит, тъкането и занаятите, предавани от поколение на поколение.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       СЕКЦИЯ IV — УЧИЛИЩЕТО В ЯВОРЕЦ
+  ══════════════════════════════════ -->
+  <div class="exh-section" id="exh-uchilishte">
+    <div class="exh-section-head">
+      <div class="exh-section-head-line"></div>
+      <div class="exh-section-head-label">IV. <em>Училището в Яворец</em></div>
+      <div class="exh-section-head-line rev"></div>
+    </div>
+
+    <div class="exh-item-full">
+      <div class="exh-photo">
+        <img src="/files/exh-12-uchilishte.jpg" alt="Училището в Яворец"
+          loading="lazy"
+          onerror="this.style.cssText='width:100%;height:340px;display:block;background:linear-gradient(145deg,#553c9a,#1a1208)'">
+        <div class="exh-photo-cap-bar">Снимка 27 · Училището в с. Яворец</div>
+      </div>
+      <div class="exh-caption">
+        <div class="exh-num">Експонат 27</div>
+        <div class="exh-caption-title lg">Училището — първите букви на Яворец</div>
+        <div class="exh-caption-date">📅 през годините</div>
+        <p class="exh-caption-desc">
+          Училището и читалището вървят ръка за ръка още от 1922 г. —
+          учителите са сред основателите на читалищното дело.
+          Класните стаи, учениците и учителите на Яворец в снимки,
+          съхранили спомена за няколко поколения.
+        </p>
+      </div>
+    </div>
+
+    <!-- Двойка -->
+    <div class="exh-pair">
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-13-klas.jpg" alt="Класна снимка"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#1d3557,#744210)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 28</div>
+          <div class="exh-caption-title">Класни снимки</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Поколения ученици на Яворец — всяка снимка е спомен за цял един випуск.</p>
+        </div>
+      </div>
+      <div class="exh-card">
+        <div class="exh-photo">
+          <img src="/files/exh-14-uchiteli.jpg" alt="Учителите"
+            loading="lazy"
+            onerror="this.style.cssText='width:100%;height:220px;display:block;background:linear-gradient(145deg,#276749,#1a1208)'">
+        </div>
+        <div class="exh-caption">
+          <div class="exh-num">Експонат 29</div>
+          <div class="exh-caption-title">Учителите</div>
+          <div class="exh-caption-date">📅 —</div>
+          <p class="exh-caption-desc">Учителите на Яворец — сред основателите на читалището и будители на селото.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CTA ══ -->
+  <div class="exh-cta">
+    <div class="exh-cta-text">
+      Имате снимки от архива?<br>
+      <em>Помогнете ни да разширим изложбата</em>
+    </div>
+    <a href="/kontakti" class="exh-cta-btn">Свържете се →</a>
+  </div>
+
+</div>
+
+<!-- ══ LIGHTBOX — голям преглед на снимките ══ -->
+<div class="exh-lightbox" id="exhLightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Преглед на снимка в голям размер">
+  <button class="lb-close" id="lbClose" aria-label="Затвори преглед">✕</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Предишна снимка">‹</button>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Следваща снимка">›</button>
+  <div class="lb-stage">
+    <img class="lb-image" id="lbImg" src="" alt="">
+  </div>
+  <div class="lb-caption">
+    <div class="lb-counter" id="lbCounter"></div>
+    <div class="lb-title" id="lbTitle"></div>
+    <div class="lb-date" id="lbDate"></div>
+  </div>
+</div>
+
+<script>
+/* ══ Lightbox за фотодокументалната изложба ══
+   Клик върху снимка → отваря на голям екран в същия слайдшоу.
+   Навигация: бутони ‹ ›, клавиши ←/→, swipe на мобилен, Escape затваря. */
+(function(){
+  var photoEls=document.querySelectorAll('.exh-photo');
+  var slides=[];
+
+  photoEls.forEach(function(photoEl){
+    var img=photoEl.querySelector('img');
+    if(!img) return;
+    var wrap=photoEl.closest('.exh-item-full, .exh-card');
+    var titleEl=wrap?wrap.querySelector('.exh-caption-title'):null;
+    var dateEl=wrap?wrap.querySelector('.exh-caption-date'):null;
+    var title=titleEl?titleEl.textContent.trim():(img.alt||'');
+    var date=dateEl?dateEl.textContent.trim():'';
+
+    slides.push({src:img.currentSrc||img.src, alt:img.alt||title, title:title, date:date});
+
+    var idx=slides.length-1;
+    photoEl.classList.add('lb-trigger');
+    photoEl.setAttribute('tabindex','0');
+    photoEl.setAttribute('role','button');
+    photoEl.setAttribute('aria-label','Виж в голям размер: '+title);
+    photoEl.addEventListener('click',function(){ openLightbox(idx); });
+    photoEl.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLightbox(idx); }
+    });
+  });
+
+  if(!slides.length) return;
+
+  var lb=document.getElementById('exhLightbox');
+  var lbImg=document.getElementById('lbImg');
+  var lbTitle=document.getElementById('lbTitle');
+  var lbDate=document.getElementById('lbDate');
+  var lbCounter=document.getElementById('lbCounter');
+  var lbClose=document.getElementById('lbClose');
+  var lbPrev=document.getElementById('lbPrev');
+  var lbNext=document.getElementById('lbNext');
+
+  var current=0, savedScrollY=0, isOpen=false;
+
+  function renderSlide(i,dir){
+    var s=slides[i];
+    if(!s||!lbImg) return;
+    lbImg.style.transition='none';
+    lbImg.style.opacity='0';
+    lbImg.style.transform = dir==='next' ? 'translateX(26px) scale(.98)'
+                            : dir==='prev' ? 'translateX(-26px) scale(.98)'
+                            : 'scale(.96)';
+    void lbImg.offsetWidth; /* force reflow */
+    lbImg.src=s.src;
+    lbImg.alt=s.alt;
+    if(lbTitle) lbTitle.textContent=s.title;
+    if(lbDate) lbDate.textContent=s.date;
+    if(lbCounter) lbCounter.textContent=(i+1)+' / '+slides.length;
+    requestAnimationFrame(function(){
+      lbImg.style.transition='opacity .4s ease, transform .4s cubic-bezier(.16,1,.3,1)';
+      lbImg.style.opacity='1';
+      lbImg.style.transform='translateX(0) scale(1)';
+    });
+  }
+
+  function openLightbox(i){
+    current=i; isOpen=true;
+    savedScrollY=window.scrollY;
+    document.body.style.position='fixed';
+    document.body.style.top='-'+savedScrollY+'px';
+    document.body.style.width='100%';
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden','false');
+    renderSlide(current,null);
+    setTimeout(function(){ if(lbClose) lbClose.focus(); },60);
+  }
+  function closeLightbox(){
+    isOpen=false;
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden','true');
+    document.body.style.position='';
+    document.body.style.top='';
+    document.body.style.width='';
+    window.scrollTo(0,savedScrollY);
+  }
+  function next(){ current=(current+1)%slides.length; renderSlide(current,'next'); }
+  function prev(){ current=(current-1+slides.length)%slides.length; renderSlide(current,'prev'); }
+
+  if(lbClose) lbClose.addEventListener('click',closeLightbox);
+  if(lbNext) lbNext.addEventListener('click',next);
+  if(lbPrev) lbPrev.addEventListener('click',prev);
+  /* клик извън снимката (върху тъмния фон) затваря */
+  if(lb) lb.addEventListener('click',function(e){ if(e.target===lb) closeLightbox(); });
+
+  document.addEventListener('keydown',function(e){
+    if(!isOpen) return;
+    if(e.key==='Escape') closeLightbox();
+    else if(e.key==='ArrowRight') next();
+    else if(e.key==='ArrowLeft') prev();
+  });
+
+  /* swipe навигация на мобилен */
+  var touchX=0;
+  if(lb){
+    lb.addEventListener('touchstart',function(e){ touchX=e.touches[0].clientX; },{passive:true});
+    lb.addEventListener('touchend',function(e){
+      var dx=e.changedTouches[0].clientX-touchX;
+      if(dx>50) prev();
+      else if(dx<-50) next();
+    },{passive:true});
+  }
+})();
+</script>
+
+<script>
+/* ══ Reveal анимации при скрол + навигация по раздели ══ */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Маркираме елементите за появяване */
+  var targets = [];
+  document.querySelectorAll('.exh-intro, .exh-quote, .exh-item-full, .exh-card')
+    .forEach(function(el){ el.classList.add('exh-r'); targets.push(el); });
+  document.querySelectorAll('.exh-card').forEach(function(el){ el.classList.add('exh-r-sc'); });
+  document.querySelectorAll('.exh-section-head, .exh-subhead').forEach(function(el){ targets.push(el); });
+
+  if(reduce || !('IntersectionObserver' in window)){
+    targets.forEach(function(el){ el.classList.add('exh-in'); });
+    return;
+  }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var el = e.target;
+      /* Стъпаловидно за карти в един ред (двойка/тройка) */
+      var delay = 0;
+      var row = el.parentElement;
+      if(row && /exh-(pair|triple|asymm)/.test(row.className)){
+        delay = Array.prototype.indexOf.call(row.children, el) * 110;
+      }
+      setTimeout(function(){ el.classList.add('exh-in'); }, delay);
+      io.unobserve(el);
+    });
+  }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+
+  targets.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+</div>
+</div>
+
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div>
+<div style="display:flex;align-items:center;gap:.8rem;margin-bottom:.6rem;">
+<img src="/assets/images/logo-256.webp" alt="НЧ Васил Левски – 1922" class="nav-logo-img" style="width:56px;height:56px;">
+<div>
+<div class="footer-brand-name">НЧ „Васил Левски – 1922“<br>с. Яворец</div>
+<div class="footer-brand-est"></div>
+</div>
+</div>
+<p class="footer-brand-desc">Повече от век пазим огъня на просветата, изкуството и общността в сърцето на Балкана.</p>
+<div style="margin-top:1.6rem;">
+<p style="font-size:.52rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#c9a84c;margin-bottom:.75rem;">Следете ни</p>
+<a href="https://www.facebook.com/nchvasillevski1922/"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Facebook страница на читалището"
+     style="display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1.3rem;border:1px solid #c9a84c;color:#e8d5a3;background:rgba(201,168,76,.06);font-family:'Raleway',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="#c9a84c" aria-hidden="true"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+    Facebook
+  </a>
+</div>
+</div>
+<div>
+<div class="footer-col-title">Навигация</div>
+<ul class="footer-links">
+<li><a href="/news">Новини</a></li>
+<li><a href="/about">За нас</a></li>
+<li><a href="/events">Събития</a></li>
+<li><a href="/nature">Забележителности</a></li>
+<li><a href="/history">История</a></li>
+<li><a href="/load">Документи</a></li>
+<li><a href="/selo-yavorec">с.Яворец</a></li>
+</ul>
+</div>
+<div>
+<div class="footer-col-title">Услуги</div>
+<ul class="footer-links">
+<li><a href="/library">Библиотека</a></li>
+<li><a href="/elektronen-katalog">Електронен каталог</a></li>
+<li><a href="/klubove-i-krzhoci">Клубове</a></li>
+<li><a href="/library">Интернет достъп</a></li>
+<li><a href="/#membership">Членство</a></li>
+<li><a href="/#partners">Партньори</a></li>
+<li><a href="/kontakti">Записване</a></li>
+</ul>
+</div>
+<div>
+<div class="footer-col-title">Информация</div>
+<ul class="footer-links">
+<li><a href="/kontakti">Контакти</a></li>
+<li><a href="/kontakti">Работно Време</a></li>
+<li><a href="/kontakti">Членство</a></li>
+<li><a href="/darenija">Дарения</a></li>
+<li><a href="/load">Документи</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<p class="footer-copyright"><strong>© <span id="ftYear">2026</span> НЧ „Васил Левски – 1922“, с. Яворец | Всички права запазени.</strong></p>
+
+<div class="footer-legal">
+<a href="/policy">Политика за поверителност</a>
+<a href="/policy#cookies">Бисквитки</a>
+<a href="/dostapnost">Достъпност</a>
+</div>
+</div>
+<!-- Авторски подпис на разработчика (знак „ПХ“) — единствената входна точка
+     към /projects (личното портфолио): няма я в менютата и в sitemap.xml.
+     width/height пазят мястото — без подскачане, докато снимката се зарежда. -->
+<a class="ftr-sig" href="/projects" aria-label="ПХ — Web &amp; Digital Projects">
+<img src="/assets/images/ph-signature.webp" width="245" height="120" alt="" loading="lazy" decoding="async" class="ftr-sig-mark">
+<span class="ftr-sig-txt">Web &amp; Digital Projects</span>
+</a>
+</div>
+</footer>
+
+
+<!-- IndexNow се изпраща от GitHub Action след deploy, не оттук.
+     Причини: (1) api.indexnow.org / bing.com не пращат CORS заглавия,
+     така че браузърна заявка винаги гърми с "Failed to fetch" — в
+     конзолата на всеки посетител; (2) този блок ползваше ключ
+     f3c7b8e2… , а хостнатият ключов файл е 6d16d8c7… — дори без CORS
+     проблема верификацията щеше да пропада.
+     Виж .github/workflows/build-site.yml → стъпка „IndexNow". -->
+
+
+<!-- ══ ENHANCEMENTS: animations + responsive ══ -->
+<style>
+/* ── Нови анимации ── */
+@keyframes bookGrow{from{transform:scaleY(0);opacity:0}to{transform:scaleY(1);opacity:.8}}
+.library-visual .book{transform-origin:bottom;transform:scaleY(0);opacity:0}
+.library-visual.visible .book{animation:bookGrow .55s cubic-bezier(.16,1,.3,1) both}
+.library-visual.visible .book:hover{animation:none;transform:translateY(-8px);opacity:1}
+.library-visual.visible .book-shelf .book:nth-child(1){animation-delay:.03s}
+.library-visual.visible .book-shelf .book:nth-child(2){animation-delay:.07s}
+.library-visual.visible .book-shelf .book:nth-child(3){animation-delay:.11s}
+.library-visual.visible .book-shelf .book:nth-child(4){animation-delay:.15s}
+.library-visual.visible .book-shelf .book:nth-child(5){animation-delay:.19s}
+.library-visual.visible .book-shelf .book:nth-child(6){animation-delay:.23s}
+.library-visual.visible .book-shelf .book:nth-child(7){animation-delay:.27s}
+.library-visual.visible .book-shelf .book:nth-child(8){animation-delay:.31s}
+.library-visual.visible .book-shelf .book:nth-child(9){animation-delay:.35s}
+.library-visual.visible .book-shelf .book:nth-child(10){animation-delay:.39s}
+.library-visual.visible .book-shelf-2 .book{animation-delay:calc(.25s + var(--i,0)*0s)}
+.library-visual.visible .book-shelf-2 .book:nth-child(1){animation-delay:.28s}
+.library-visual.visible .book-shelf-2 .book:nth-child(2){animation-delay:.32s}
+.library-visual.visible .book-shelf-2 .book:nth-child(3){animation-delay:.36s}
+.library-visual.visible .book-shelf-2 .book:nth-child(4){animation-delay:.4s}
+.library-visual.visible .book-shelf-2 .book:nth-child(5){animation-delay:.44s}
+.library-visual.visible .book-shelf-3 .book:nth-child(1){animation-delay:.5s}
+.library-visual.visible .book-shelf-3 .book:nth-child(2){animation-delay:.54s}
+.library-visual.visible .book-shelf-3 .book:nth-child(3){animation-delay:.58s}
+.library-visual.visible .book-shelf-3 .book:nth-child(4){animation-delay:.62s}
+.library-visual.visible .book-shelf-3 .book:nth-child(5){animation-delay:.66s}
+
+/* Емблемата в „За нас" — бавно въртящ се пунктиран пръстен */
+@keyframes emblemSpin{to{transform:rotate(360deg)}}
+.about-emblem::after{content:'';position:absolute;inset:-8px;border:1px dashed rgba(201,168,76,.35);border-radius:50%;animation:emblemSpin 40s linear 1 both}
+
+/* Датата на събитието изскача при появата на картата */
+@keyframes datePop{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.event-card.visible .event-date-day{animation:datePop .55s cubic-bezier(.34,1.56,.64,1) .15s both;display:inline-block}
+
+/* Номерата на дейностите изскачат */
+.anim-stagger.visible .activity-num{animation:datePop .5s cubic-bezier(.34,1.56,.64,1) .1s both;display:inline-block}
+
+/* nav-cta / btn shine sweep */
+@keyframes navShine{from{left:-70%}to{left:140%}}
+.nav-cta{position:relative;overflow:hidden}
+.nav-cta::before{content:'';position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);pointer-events:none}
+.nav-cta:hover::before{animation:navShine .8s ease}
+
+/* Икона на документа — люлеене при hover */
+@keyframes docWiggle{0%,100%{transform:rotate(0)}30%{transform:rotate(-8deg)}60%{transform:rotate(6deg)}}
+.doc-item:hover .doc-icon{animation:docWiggle .5s ease}
+.doc-item{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1),border-color .25s}
+.doc-item.visible{opacity:1;transform:translateY(0)}
+.doc-item.visible:hover{transform:translateX(4px)}
+
+/* Featured събитие — меко пулсиращ златен кант */
+@keyframes featGlow{0%,100%{border-color:rgba(201,168,76,.15)}50%{border-color:rgba(201,168,76,.45)}}
+.event-card.featured.visible{animation:featGlow 4s ease-in-out 1s 1 both}
+
+/* Пилони — иконата се завърта при hover */
+.pillar-icon{display:inline-block;transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.pillar:hover .pillar-icon{transform:scale(1.2) rotate(-8deg)}
+
+/* Контакт икони — leко подскачане */
+.contact-icon{transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .25s,color .25s}
+.contact-info-item:hover .contact-icon{transform:scale(1.1) rotate(-5deg);background:var(--ink);color:var(--gold)}
+
+/* ── Адаптивни оптимизации ── */
+/* Големи екрани — по-широк контейнер и по-едър шрифт */
+@media(min-width:1600px){
+  html{font-size:17px}
+  .container{max-width:1320px}
+}
+/* Таблет 769–1024: събития в 2 колони, галерия в 2 */
+@media(min-width:641px) and (max-width:1024px){
+  .events-grid{grid-template-columns:repeat(2,1fr)}
+  .event-card.featured{grid-column:span 2}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .gallery-cell:nth-child(3){grid-column:span 2}
+  .about-visual{margin:0 auto}
+}
+@media(max-width:640px){
+  .events-grid{grid-template-columns:1fr}
+  .event-card.featured{grid-column:span 1}
+}
+/* Телефон в пейзаж — компактен hero */
+@media(max-height:520px) and (orientation:landscape){
+  .hero{min-height:auto}
+  .hero-left{min-height:auto;padding:6rem 2rem 3rem}
+  .scroll-hint{display:none}
+  section{padding:3.5rem 0}
+}
+/* Много малки екрани ≤360px */
+@media(max-width:360px){
+  .container{padding:0 .9rem}
+  .hero-left{padding-left:1rem;padding-right:1rem}
+  .hero-title{font-size:1.75rem}
+  .stat-number,.lib-stat-num{font-size:1.8rem}
+  .section-title{font-size:1.55rem}
+  .event-card{padding:1.4rem 1.2rem}
+  .btn-primary,.btn-outline{padding:.9rem 1.2rem;font-size:.68rem}
+  .marquee-item{font-size:.58rem;padding:0 1.2rem;gap:1.2rem}
+}
+/* Touch устройства — тилт и магнитните бутони са изключени в JS; тук стабилизираме hover-зависимите елементи */
+@media(hover:none){
+  .about-emblem::after{animation-duration:60s}
+  .event-card.featured.visible{animation:none;border-color:rgba(201,168,76,.3)}
+}
+</style>
+<!-- ══ / ENHANCEMENTS ══ -->
+
+<!-- ══ BOTTOM BAR ══ -->
+<style>
+#btm-bar{display:none;}
+@media(max-width:768px){
+  /* push all page content above the bar */
+  body{padding-bottom:calc(60px + env(safe-area-inset-bottom))!important;}
+  html.sp #hp,#mc{padding-bottom:calc(60px + env(safe-area-inset-bottom))!important;}
+
+  #btm-bar{
+    display:flex;
+    position:fixed;
+    bottom:0;left:0;right:0;
+    height:calc(56px + env(safe-area-inset-bottom));
+    padding-bottom:env(safe-area-inset-bottom);
+    padding-left:env(safe-area-inset-left);
+    padding-right:env(safe-area-inset-right);
+    background:rgba(250,247,242,.97);
+    -webkit-backdrop-filter:blur(20px);
+    backdrop-filter:blur(20px);
+    border-top:1px solid rgba(201,168,76,.15);
+    z-index:890;
+    align-items:stretch;
+  }
+  #btm-bar::before{
+    content:'';position:absolute;top:-1px;left:8%;right:8%;
+    height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.45),transparent);
+  }
+
+  /* hide bar when mobile menu is open (covered by backdrop) */
+  body.menu-is-open #btm-bar{opacity:0;pointer-events:none;transition:opacity .2s;}
+
+  .bti{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:3px;color:rgba(26,18,8,.32);text-decoration:none;
+    font-family:'Raleway',sans-serif;font-size:.48rem;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;
+    background:none;border:none;cursor:pointer;padding:0;
+    position:relative;-webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;user-select:none;
+    transition:color .2s cubic-bezier(.16,1,.3,1);
+  }
+  .bti svg{
+    width:22px;height:22px;stroke:currentColor;fill:none;
+    stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;
+    flex-shrink:0;
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1),stroke .2s;
+  }
+
+  /* Active state */
+  .bti.active{color:var(--gold-dark);}
+  .bti.active svg{transform:scale(1.14);}
+  .bti.active::after{
+    content:'';position:absolute;
+    top:0;left:50%;transform:translateX(-50%);
+    width:28px;height:3px;
+    background:var(--gold);
+    border-radius:0 0 6px 6px;
+    animation:btmPill .4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes btmPill{from{transform:translateX(-50%) scaleX(0);}to{transform:translateX(-50%) scaleX(1);}}
+
+  /* Tap press effect */
+  .bti:active{color:var(--gold);}
+  .bti:active svg{transform:scale(.82);}
+
+  /* Menu button — special: shows open state */
+  #btmMenu svg{transition:transform .35s cubic-bezier(.77,0,.175,1),stroke .2s;}
+  body.menu-is-open #btmMenu{color:var(--gold-dark);}
+
+  /* FAB-style centre Меню button */
+  #btmMenu{
+    position:relative;
+    flex:1;
+  }
+  #btmMenu .bti-fab{
+    position:absolute;
+    top:-16px;left:50%;transform:translateX(-50%);
+    width:48px;height:48px;
+    background:var(--ink);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 16px rgba(26,18,8,.25),0 0 0 3px rgba(250,247,242,.97);
+    transition:background .25s,transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;
+  }
+  #btmMenu .bti-fab svg{stroke:var(--gold);width:20px;height:20px;stroke-width:1.7;}
+  #btmMenu:active .bti-fab{transform:translateX(-50%) scale(.88);background:var(--gold);}
+  #btmMenu:active .bti-fab svg{stroke:var(--ink);}
+  body.menu-is-open #btmMenu .bti-fab{background:var(--gold);}
+  body.menu-is-open #btmMenu .bti-fab svg{stroke:var(--ink);}
+  /* кръгът (top:-16px + 48px висок) стига до 32px от върха на лентата —
+     надписът трябва да започва под тази линия, иначе FAB-ът го покрива */
+  #btmMenu span{margin-top:30px;}
+}
+</style>
+
+<div id="btm-bar" role="navigation" aria-label="Бърза навигация">
+  <a href="/" class="bti" data-href="/" aria-label="Начало">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12L12 4l9 8"/><path d="M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
+    <span>Начало</span>
+  </a>
+  <a href="/news" class="bti" data-href="/news" aria-label="Новини">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h7"/></svg>
+    <span>Новини</span>
+  </a>
+  <button class="bti" id="btmMenu" aria-label="Меню" aria-controls="mobileNav" aria-expanded="false">
+    <div class="bti-fab" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <line x1="4" y1="7" x2="20" y2="7" class="hml1"/>
+        <line x1="4" y1="12" x2="20" y2="12" class="hml2"/>
+        <line x1="4" y1="17" x2="20" y2="17" class="hml3"/>
+      </svg>
+    </div>
+    <span>Меню</span>
+  </button>
+  <a href="/events" class="bti" data-href="/events" aria-label="Събития">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 9h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+    <span>Събития</span>
+  </a>
+  <a href="/kontakti" class="bti" data-href="/kontakti" aria-label="Контакти">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+    <span>Контакти</span>
+  </a>
+</div>
+
+<style>
+/* FAB menu lines → X animation */
+@media(max-width:768px){
+  .hml1,.hml2,.hml3{transition:transform .32s cubic-bezier(.77,0,.175,1),opacity .2s;}
+  body.menu-is-open .hml1{transform:translateY(5px) rotate(45deg);transform-origin:center;}
+  body.menu-is-open .hml2{opacity:0;transform:scaleX(0);}
+  body.menu-is-open .hml3{transform:translateY(-5px) rotate(-45deg);transform-origin:center;}
+}
+</style>
+
+
+<!-- ══ / BOTTOM BAR ══ -->
+
+<!-- Вторият IndexNow блок (дневно подаване на целия sitemap) също е
+     преместен в GitHub Action-а — по същите причини като горния. -->
+
+
+<!-- ══════════════════════════════════════════════════
+     СПОДЕЛЯНЕ В СОЦИАЛНИ МРЕЖИ · НЧ „Васил Левски – 1922“
+     Вграден в главния шаблон, преди </body>.
+     Появява се на ВСИЧКИ страници на сайта.
+     ══════════════════════════════════════════════════ -->
+<style>
+.yv-lnk-bar{
+  position:fixed;
+  right:1.4rem;top:50%;
+  transform:translateY(-50%);
+  z-index:900;
+  display:flex;flex-direction:column;
+  gap:.6rem;
+  opacity:0;pointer-events:none;
+  transition:opacity .5s ease;
+}
+.yv-lnk-bar.yv-lnk-ready{opacity:1;pointer-events:auto;}
+
+.yv-lnk-label{display:none;}
+.yv-lnk-txt{display:none;}
+
+.yv-lnk-btn{
+  width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  background:#1a1208;
+  border:1px solid rgba(201,168,76,.35);
+  color:#c9a84c;
+  text-decoration:none;
+  cursor:pointer;
+  transition:background .25s,border-color .25s,transform .25s,box-shadow .25s;
+  position:relative;
+  overflow:hidden;
+}
+.yv-lnk-btn svg{width:18px;height:18px;fill:currentColor;position:relative;z-index:1;transition:transform .3s;}
+.yv-lnk-btn:hover{
+  background:#c9a84c;color:#1a1208;
+  border-color:#c9a84c;
+  transform:translateX(-4px);
+  box-shadow:0 6px 16px rgba(201,168,76,.3);
+}
+.yv-lnk-btn:hover svg{transform:scale(1.12);}
+.yv-lnk-btn:active{transform:translateX(-4px) scale(.94);}
+
+.yv-lnk-btn::after{
+  content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:skewX(-18deg);pointer-events:none;
+}
+.yv-lnk-btn:hover::after{animation:yvLnkShine .8s ease;}
+@keyframes yvLnkShine{from{left:-80%}to{left:140%}}
+
+.yv-lnk-btn .yv-lnk-tip{
+  position:absolute;right:calc(100% + .7rem);top:50%;
+  transform:translateY(-50%) translateX(6px);
+  background:#1a1208;color:#f5edda;
+  font-family:'Raleway',sans-serif;
+  font-size:.65rem;font-weight:600;letter-spacing:.03em;
+  padding:.35rem .7rem;white-space:nowrap;
+  border:1px solid rgba(201,168,76,.3);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;
+}
+.yv-lnk-btn:hover .yv-lnk-tip{opacity:1;transform:translateY(-50%) translateX(0);}
+
+.yv-lnk-btn.yv-lnk-copy.copied{background:#2E5C44;border-color:#2E5C44;color:#f5edda;}
+.yv-lnk-btn.yv-lnk-copy.copied svg{transform:scale(1.1);}
+
+/* ── Мобилно поведение: компактен FAB над долната навигация (#btm-bar),
+     БЕЗ застъпване с нея — разгъва иконите нагоре при натискане ── */
+.yv-lnk-fab{display:none;}
+@media(max-width:768px){
+  .yv-lnk-bar{
+    right:1rem;left:auto;
+    top:auto;
+    bottom:calc(60px + env(safe-area-inset-bottom,0px) + 1rem);
+    transform:none;
+    flex-direction:column-reverse;
+    align-items:flex-end;
+    gap:.55rem;
+    /* колоната е висока колкото разгънатите икони и стои върху
+       стрелката „към началото" — докосвания лови не тя, а бутоните */
+    pointer-events:none;
+  }
+  .yv-lnk-bar.yv-lnk-ready{pointer-events:none;}
+  .yv-lnk-bar .yv-lnk-fab{pointer-events:auto;}
+  .yv-lnk-label{display:none;}
+
+  .yv-lnk-fab{
+    display:flex;
+    width:48px;height:48px;
+    border-radius:50%;
+    background:#1a1208;
+    border:none;
+    align-items:center;justify-content:center;
+    box-shadow:0 4px 16px rgba(26,18,8,.3),0 0 0 3px rgba(250,247,242,.97);
+    cursor:pointer;
+    transition:background .25s,transform .35s cubic-bezier(.34,1.56,.64,1);
+    position:relative;z-index:2;
+  }
+  .yv-lnk-fab svg{width:20px;height:20px;stroke:#c9a84c;fill:none;stroke-width:1.7;transition:transform .35s cubic-bezier(.34,1.56,.64,1);}
+  .yv-lnk-fab:active{transform:scale(.9);}
+  .yv-lnk-bar.yv-lnk-open .yv-lnk-fab{background:#c9a84c;}
+  .yv-lnk-bar.yv-lnk-open .yv-lnk-fab svg{stroke:#1a1208;transform:rotate(135deg);}
+
+  .yv-lnk-net{
+    display:flex;flex-direction:column;gap:.55rem;
+    align-items:flex-end;
+  }
+  .yv-lnk-net .yv-lnk-btn{
+    width:42px;height:42px;
+    opacity:0;transform:translateY(10px) scale(.7);
+    pointer-events:none;
+    transition:opacity .3s cubic-bezier(.34,1.56,.64,1),transform .3s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 3px 10px rgba(26,18,8,.25);
+  }
+  .yv-lnk-net .yv-lnk-btn:hover{transform:none;}
+  .yv-lnk-bar.yv-lnk-open .yv-lnk-net .yv-lnk-btn{
+    opacity:1;transform:translateY(0) scale(1);pointer-events:auto;
+  }
+  .yv-lnk-bar.yv-lnk-open .yv-lnk-net .yv-lnk-btn:nth-child(1){transition-delay:.02s;}
+  .yv-lnk-bar.yv-lnk-open .yv-lnk-net .yv-lnk-btn:nth-child(2){transition-delay:.06s;}
+  .yv-lnk-bar.yv-lnk-open .yv-lnk-net .yv-lnk-btn:nth-child(3){transition-delay:.1s;}
+  .yv-lnk-bar.yv-lnk-open .yv-lnk-net .yv-lnk-btn:nth-child(4){transition-delay:.14s;}
+  .yv-lnk-bar.yv-lnk-open .yv-lnk-net .yv-lnk-btn:nth-child(5){transition-delay:.18s;}
+
+  .yv-lnk-btn .yv-lnk-tip{display:none;}
+  .yv-lnk-txt{display:none;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .yv-lnk-bar,.yv-lnk-btn,.yv-lnk-btn svg,.yv-lnk-btn .yv-lnk-tip,.yv-lnk-fab,.yv-lnk-fab svg{transition-duration:.01ms!important;}
+  .yv-lnk-btn:hover::after{animation:none!important;}
+}
+</style>
+
+<div class="yv-lnk-bar yv-lnk-top" id="yvLnkBar" aria-label="Споделяне в социални мрежи">
+  <span class="yv-lnk-label">Сподели</span>
+
+  <button type="button" class="yv-lnk-fab" id="yvLnkFab" aria-label="Отвори опции за споделяне" aria-expanded="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+  </button>
+
+  <div class="yv-lnk-net" id="yvLnkNet">
+    <a class="yv-lnk-btn yv-lnk-a" id="yvLnkA" href="#" role="button" aria-label="Сподели във Facebook">
+      <span class="yv-lnk-tip">Facebook</span>
+      <svg viewBox="0 0 24 24"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg>
+      <span class="yv-lnk-txt">FB</span>
+    </a>
+
+    <a class="yv-lnk-btn yv-lnk-b" id="yvLnkB" href="#" aria-label="Сподели във Viber">
+      <span class="yv-lnk-tip">Viber</span>
+      <svg viewBox="0 0 24 24"><path d="M12.9 2C8.4 1.9 4 3.4 3.6 8.9c-.1 2.1-.1 4.9 0 7.1.2 3 2.7 4.6 3.1 4.7.3.1 1.5.4 2.2 0v-2.1c.9.4 1.9.6 3.3.6 5.4 0 9.8-1.5 9.8-9.6C22 3.6 18.4 2.1 12.9 2zm.1 15.4c-1.2 0-2.1-.2-2.9-.5l-1.2 1.5v-1.9c-1.9-.4-3-1.7-3.1-3.8-.1-2 0-4.6.1-6.6.3-4.1 3.4-5.2 6.9-5.1 4.4.1 7.2 1.1 7.2 7C20 15.5 16.9 17.4 13 17.4zm2.9-8.6c-.2-.6-.6-1-1.2-1.3-.5-.2-1-.2-1.4 0l-.3.2c-.2.2-.2.4-.1.6l.5.9c.1.2.4.3.6.2.4-.1.9-.1 1.2.2.3.3.3.7.2 1.1-.1.2 0 .5.2.6l.9.5c.2.1.5.1.6-.1l.2-.3c.4-.5.4-1.1.1-1.6l-1.5-1zm-3.9-2.3c0-.2-.2-.4-.4-.4-.2 0-.4.2-.4.4 0 1.8 1.5 3.3 3.3 3.3.2 0 .4-.2.4-.4 0-.2-.2-.4-.4-.4-1.4 0-2.5-1.1-2.5-2.5z"/></svg>
+      <span class="yv-lnk-txt">Viber</span>
+    </a>
+
+    <a class="yv-lnk-btn yv-lnk-c" id="yvLnkC" href="#" role="button" aria-label="Сподели през WhatsApp">
+      <span class="yv-lnk-tip">WhatsApp</span>
+      <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.1c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.11.11-1.79-.11-.41-.13-.94-.3-1.62-.6-2.85-1.23-4.71-4.1-4.85-4.29-.14-.19-1.16-1.54-1.16-2.94s.73-2.09.99-2.37c.26-.28.56-.35.75-.35s.37 0 .54.01c.17.01.4-.06.63.48.24.56.81 1.96.88 2.1.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.93 1.94 1.22 2.22 1.36.28.14.44.12.6-.07.16-.19.68-.79.86-1.06.18-.28.36-.23.6-.14.24.09 1.55.73 1.82.87.27.14.45.21.51.32.07.12.07.66-.17 1.34z"/></svg>
+      <span class="yv-lnk-txt">WA</span>
+    </a>
+
+    <a class="yv-lnk-btn yv-lnk-d" id="yvLnkD" href="#" aria-label="Сподели по имейл">
+      <span class="yv-lnk-tip">Имейл</span>
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      <span class="yv-lnk-txt">Имейл</span>
+    </a>
+
+    <button type="button" class="yv-lnk-btn yv-lnk-copy" id="yvLnkCopy" aria-label="Копирай връзка">
+      <span class="yv-lnk-tip" id="yvLnkCopyTip">Копирай връзка</span>
+      <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+      <span class="yv-lnk-txt">Линк</span>
+    </button>
+  </div>
+</div>
+
+
+
+
+
+<!-- ══ БАНЕР ЗА СЪГЛАСИЕ ЗА БИСКВИТКИ ══
+     Строи се само ако посетителят още не е избрал. Изборът се пази
+     локално в браузъра и може да бъде променен от „Бисквитки" в долната
+     част на страницата. -->
+<style>
+.yv-ck{position:fixed;left:0;right:0;bottom:0;z-index:1200;
+  background:#1a1208;color:rgba(245,240,232,.92);
+  border-top:2px solid #c9a84c;box-shadow:0 -8px 40px rgba(26,18,8,.4);
+  padding:1.15rem max(1.1rem,env(safe-area-inset-left)) calc(1.15rem + env(safe-area-inset-bottom));
+  font-family:'Raleway',sans-serif;
+  transform:translateY(110%);transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.yv-ck.on{transform:translateY(0)}
+.yv-ck-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;
+  gap:1.4rem;flex-wrap:wrap}
+.yv-ck-txt{flex:1 1 22rem;font-size:.83rem;font-weight:300;line-height:1.6}
+.yv-ck-txt b{font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+  font-weight:600;color:#e8d5a3;display:block;margin-bottom:.25rem;letter-spacing:.02em}
+.yv-ck-txt a{color:#e8d5a3;text-decoration:underline;text-underline-offset:2px}
+.yv-ck-btns{display:flex;gap:.65rem;flex-wrap:wrap;flex-shrink:0}
+.yv-ck-b{font-family:'Raleway',sans-serif;font-size:.68rem;font-weight:700;min-height:44px;
+  letter-spacing:.14em;text-transform:uppercase;padding:.8rem 1.5rem;
+  border:1px solid transparent;cursor:pointer;white-space:nowrap;
+  transition:background .25s,color .25s,border-color .25s}
+.yv-ck-yes{background:#c9a84c;color:#1a1208}
+.yv-ck-yes:hover{background:#e8d5a3}
+.yv-ck-no{background:transparent;color:rgba(245,240,232,.85);
+  border-color:rgba(245,240,232,.35)}
+.yv-ck-no:hover{border-color:#c9a84c;color:#e8d5a3}
+@media(max-width:760px){
+  /* над долната мобилна лента (56px) */
+  .yv-ck{padding-bottom:calc(1.1rem + 56px + env(safe-area-inset-bottom))}
+  .yv-ck-in{gap:.95rem}
+  .yv-ck-btns{width:100%}
+  .yv-ck-b{flex:1 1 auto;text-align:center}
+}
+</style>
+
+
+
+
+
+
+
+<script src="/assets/site-d286938d8c45.js"></script>
+</body>
+</html>

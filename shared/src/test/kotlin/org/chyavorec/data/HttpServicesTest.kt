@@ -54,24 +54,62 @@ class HttpServicesTest {
         assertEquals(AppError.NotFound, (svc.fetchCatalog() as Outcome.Failure).error)
     }
 
-    @Test fun siteNewsFromRssAndArticlePage() = runTest {
+    private fun site(): ChyavorecSiteService {
         val base = server.url("/").toString().trimEnd('/')
-        server.enqueue(MockResponse().setBody(TestUtil.resource("news-rss.xml")).setHeader("Content-Type", "application/rss+xml; charset=utf-8"))
-        server.enqueue(MockResponse().setBody("<html><body><div class='eMessage'><h1>Покана за концерт по случай 1 ноември</h1><p>Пълният текст на новината е тук и е достатъчно дълъг.</p><img src='/_nw/1/9.jpg' width='600'></div></body></html>"))
-        val fallback = Contacts("НЧ", null, emptyList(), emptyList(), base, null, emptyList(), "q", false, null)
-        val svc = ChyavorecSiteService(http, base, clock, fallback)
-        val news = (svc.fetchLatest() as Outcome.Success).value
-        assertEquals("/news/rss/", server.takeRequest().path)
-        val detail = (svc.fetchArticle(news[0].copy(url = "$base/news/1")) as Outcome.Success).value
-        assertTrue(detail.blocks.none { it is org.chyavorec.domain.model.ContentBlock.Heading }, "заглавието не се повтаря")
-        assertTrue(detail.gallery.any { it.endsWith("/_nw/1/9.jpg") })
+        val fallback = Contacts("НЧ", null, emptyList(), emptyList(), emptyList(), base, null, emptyList(), "q", false, null)
+        return ChyavorecSiteService(http, base, clock, fallback)
+    }
+
+    private fun siteDispatcher(failNews: Boolean = false) = object : okhttp3.mockwebserver.Dispatcher() {
+        override fun dispatch(request: okhttp3.mockwebserver.RecordedRequest): MockResponse = when (request.path) {
+            "/data/news.json" -> if (failNews) MockResponse().setResponseCode(500) else MockResponse().setBody(TestUtil.resource("site-news.json"))
+            "/rss.xml" -> MockResponse().setBody(TestUtil.resource("site-rss.xml"))
+            "/javora/index.json" -> MockResponse().setBody(TestUtil.resource("site-index.json"))
+            "/data/files.json" -> MockResponse().setBody(TestUtil.resource("site-files.json"))
+            "/kontakti" -> MockResponse().setBody(TestUtil.resource("site-kontakti.html"))
+            "/about" -> MockResponse().setBody(TestUtil.resource("site-about.html"))
+            "/fotodokumentalna-izlozhba" -> MockResponse().setBody(TestUtil.resource("site-izlozhba.html"))
+            "/api/calendar?d=2026-9-26" -> MockResponse().setBody("""{"date":"2026-9-26","line":"**Св. ап. и ев. Йоан Богослов**"}""")
+            else -> MockResponse().setResponseCode(404)
+        }
+    }
+
+    @Test fun siteNewsEventsDocumentsFromVercelData() = runTest {
+        server.dispatcher = siteDispatcher()
+        val svc = site()
+        val news = svc.fetchLatest().let { it as? Outcome.Success ?: error("news: $it") }.value
+        assertEquals(3, news.size)
+        assertTrue(news[0].url.endsWith("/news/45-ti-obshtinski-folkloren-sabor-na-narodnoto-tvorchestvo-ot-timok-do"))
+        val detail = (svc.fetchArticle(news[0]) as Outcome.Success).value
+        assertTrue(detail.blocks.isNotEmpty())
+        assertEquals(news[0].imageUrl, detail.gallery.first())
+        val events = svc.fetchEvents().let { it as? Outcome.Success ?: error("events: $it") }.value
+        assertEquals(8, events.size)
+        val docs = svc.fetchDocuments().let { it as? Outcome.Success ?: error("docs: $it") }.value
+        assertEquals(3 + 2, docs.size)
+        val links = svc.discoverLinks().let { it as? Outcome.Success ?: error("links: $it") }.value
+        assertTrue(links.any { it.url.endsWith("/about") })
+        assertTrue(links.any { it.url.endsWith("/policy") })
+        val page = svc.fetchPage(server.url("/about").toString()).let { it as? Outcome.Success ?: error("page: $it") }.value
+        assertEquals("За нас", page.title)
+        val contacts = svc.fetchContacts(links).let { it as? Outcome.Success ?: error("contacts: $it") }.value
+        assertTrue(contacts.fromSite)
+        assertEquals("**Св. ап. и ев. Йоан Богослов**", svc.fetchFeast("2026-9-26").let { it as? Outcome.Success ?: error("feast: $it") }.value.line)
+    }
+
+    @Test fun siteGalleryUsesExhibitionCaptionsAndNewsCovers() = runTest {
+        server.dispatcher = siteDispatcher()
+        val photos = (site().fetchGallery() as Outcome.Success).value
+        assertTrue(photos.any { it.album == "Новини" })
+        val exh = photos.filter { it.album == "Фотодокументална изложба" }
+        assertTrue(exh.size >= 5, "експонати: ${exh.size}")
+        assertTrue(exh.any { it.title == "Хорът на сцена" })
+        assertTrue(photos.none { it.fullUrl.contains("logo-256") || it.fullUrl.contains("signature") })
     }
 
     @Test fun siteServerErrorIsTyped() = runTest {
-        server.enqueue(MockResponse().setResponseCode(500))
-        val base = server.url("/").toString().trimEnd('/')
-        val svc = ChyavorecSiteService(http, base, clock, Contacts("", null, emptyList(), emptyList(), "", null, emptyList(), "", false, null))
-        assertEquals(AppError.Server(500), (svc.fetchLatest() as Outcome.Failure).error)
+        server.dispatcher = siteDispatcher(failNews = true)
+        assertEquals(AppError.Server(500), (site().fetchLatest() as Outcome.Failure).error)
     }
 
     // --- Предложеният InvLib API (docs/API.md) ---

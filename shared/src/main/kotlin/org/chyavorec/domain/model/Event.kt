@@ -3,9 +3,9 @@ package org.chyavorec.domain.model
 import kotlinx.serialization.Serializable
 
 /**
- * Събитие на читалището. Датата и часът се извличат от текста на публикацията
- * на сайта — затова [dateIsExplicit] казва дали датата е намерена в текста
- * (true) или е взета датата на публикуване (false).
+ * Събитие от календара на читалището (chyavorec.org/events). Календарът на
+ * сайта е годишен — [recurring] = true означава, че датата се повтаря всяка
+ * година, а [date] е най-близкото предстоящо настъпване.
  */
 @Serializable
 data class Event(
@@ -22,8 +22,9 @@ data class Event(
     val sourceUrl: String,
     val category: String? = null,
     val dateIsExplicit: Boolean = true,
-    val source: EventSource = EventSource.NEWS,
+    val recurring: Boolean = false,
+    val source: EventSource = EventSource.CALENDAR,
 )
 
 @Serializable
-enum class EventSource { NEWS, EVENTS_PAGE }
+enum class EventSource { CALENDAR, NEWS }
