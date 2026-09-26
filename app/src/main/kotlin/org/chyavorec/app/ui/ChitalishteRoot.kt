@@ -101,6 +101,7 @@ import org.chyavorec.app.util.Intents
 import org.chyavorec.app.ui.components.UpdateDialog
 import org.chyavorec.app.ui.screens.messages.MessagesScreen
 import org.chyavorec.core.Urls
+import kotlinx.coroutines.flow.first
 
 /** Анимираното въведение се показва веднъж на процес (студен старт), не при всяко завъртане. */
 private object IntroState { var shown = false }
@@ -138,6 +139,10 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     val link by deepLink.collectAsState()
 
     LaunchedEffect(link) {
+        if (link == null) return@LaunchedEffect
+        // При студен старт (докосване на известие) графът на навигацията още не е
+        // зададен в първия кадър — изчакваме първия екран, преди да навигираме.
+        nav.currentBackStackEntryFlow.first()
         when {
             link == null -> Unit
             link == "login" -> nav.navigate(Routes.LOGIN)
