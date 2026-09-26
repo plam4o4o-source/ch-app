@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 /*
@@ -146,8 +147,10 @@ kotlin {
     }
 }
 
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
+// Схемата на Room се пази в Git (за проверка на миграциите); плъгинът разделя
+// изхода по вариант, така че dev/prod не пишат едновременно в един файл.
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
