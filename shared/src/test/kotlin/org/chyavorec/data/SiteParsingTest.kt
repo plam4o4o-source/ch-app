@@ -73,7 +73,7 @@ class SiteParsingTest {
         val c = ContactsExtractor(base, fallback).extract(doc, "$base/index/kontakti/0-65")
         assertTrue(c.fromSite)
         assertEquals("пл. „Девети септември“ № 3, с. Яворец, общ. Габрово", c.address)
-        assertEquals(listOf("+359897284168", "0897 284 168"), c.phones)
+        assertEquals(listOf("0897 284 168"), c.phones)
         assertEquals(listOf("chitalishte_yavorets@abv.bg"), c.emails)
         assertEquals(listOf("Понеделник – Петък: 09:00 – 16:30 ч."), c.workingHours)
         assertEquals("https://www.facebook.com/nchvasillevski1922/", c.facebook)

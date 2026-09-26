@@ -65,6 +65,9 @@ object Notifier {
             // Заглавията на заети книги са лична информация — скрити на заключен екран.
             .setVisibility(if (channel == Channel.LOANS) NotificationCompat.VISIBILITY_PRIVATE else NotificationCompat.VISIBILITY_PUBLIC)
             .build()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) return
         runCatching { NotificationManagerCompat.from(context).notify(id, notification) }
     }
 }

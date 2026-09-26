@@ -99,7 +99,7 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
             pages = links.map { it to c.siteRepository.cachedPage(it.url) }
             run(query.value)
         }
-        viewModelScope.launch { query.debounce(180).collect { run(it) } }
+        viewModelScope.launch(Dispatchers.Default) { query.debounce(180).collect { run(it) } }
     }
 
     fun setQuery(q: String) { ui.update { it.copy(query = q, searching = q.isNotBlank()) }; query.value = q }

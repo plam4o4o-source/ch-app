@@ -48,7 +48,7 @@ class ViewModelTest {
     }
 
     @Test fun catalogSearchIsDebouncedAndFiltered() = runTest(dispatcher) {
-        val vm = CatalogViewModel(CatalogRepository(catalogService, InMemoryPayloadCache(), clock))
+        val vm = CatalogViewModel(CatalogRepository(catalogService, InMemoryPayloadCache(), clock), dispatcher)
         advanceUntilIdle()
         val initial = vm.state.value
         assertEquals(60, initial.totalResults)
@@ -65,7 +65,7 @@ class ViewModelTest {
 
     @Test fun catalogOfflineWithoutCacheShowsError() = runTest(dispatcher) {
         catalogService.fail = true
-        val vm = CatalogViewModel(CatalogRepository(catalogService, InMemoryPayloadCache(), clock))
+        val vm = CatalogViewModel(CatalogRepository(catalogService, InMemoryPayloadCache(), clock), dispatcher)
         advanceUntilIdle()
         assertEquals(AppError.Network, vm.state.value.engine.error)
         catalogService.fail = false

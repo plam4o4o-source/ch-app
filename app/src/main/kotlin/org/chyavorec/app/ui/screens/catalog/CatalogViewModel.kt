@@ -2,6 +2,7 @@ package org.chyavorec.app.ui.screens.catalog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +40,11 @@ data class CatalogUiState(
 }
 
 @OptIn(FlowPreview::class)
-class CatalogViewModel(private val repo: CatalogRepository) : ViewModel() {
+class CatalogViewModel(
+    private val repo: CatalogRepository,
+    /** Търсенето и debounce-ът вървят извън главната нишка (тестовете подават свой диспечер). */
+    private val searchDispatcher: CoroutineDispatcher = Dispatchers.Default,
+) : ViewModel() {
 
     private val _state = MutableStateFlow(CatalogUiState())
     val state: StateFlow<CatalogUiState> = _state.asStateFlow()
@@ -51,7 +56,7 @@ class CatalogViewModel(private val repo: CatalogRepository) : ViewModel() {
             refresh(force = false)
         }
         // Instant search: търсим 200 ms след последния натиснат клавиш.
-        viewModelScope.launch { queryFlow.debounce(200).collect { runSearch() } }
+        viewModelScope.launch(searchDispatcher) { queryFlow.debounce(200).collect { runSearch() } }
     }
 
     fun refresh(force: Boolean = true) = viewModelScope.launch {
@@ -76,7 +81,7 @@ class CatalogViewModel(private val repo: CatalogRepository) : ViewModel() {
     private suspend fun runSearch() {
         val engine = _state.value.engine.data ?: return
         val q = _state.value.query
-        val (results, suggestions) = withContext(Dispatchers.Default) {
+        val (results, suggestions) = withContext(searchDispatcher) {
             engine.search(q) to (if (q.text.length >= 2 && q.field != SearchField.INVENTORY && q.field != SearchField.ISBN) engine.suggestions(q.text, 6) else emptyList())
         }
         _state.update {

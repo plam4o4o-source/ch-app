@@ -20,9 +20,12 @@ class ContactsExtractor(private val baseUrl: String, private val fallback: Conta
         val lines = container.wholeText().lines().map { it.replace(' ', ' ').trim() }.filter { it.isNotEmpty() }
         val text = lines.joinToString("\n")
 
-        val phones = (container.select("a[href^=tel:]").map { it.attr("href").removePrefix("tel:") } +
-            phoneRegex.findAll(text).map { it.value })
-            .map { normalizePhone(it) }.filter { it.count(Char::isDigit) >= 9 }.distinct()
+        // Номерът от текста е в „човешки“ формат — предпочитаме него пред tel: връзката;
+        // един и същ номер (+359… и 0…) се показва веднъж (по последните 9 цифри).
+        val phones = (phoneRegex.findAll(text).map { it.value }.toList() +
+            container.select("a[href^=tel:]").map { it.attr("href").removePrefix("tel:") })
+            .map { normalizePhone(it) }.filter { it.count(Char::isDigit) >= 9 }
+            .distinctBy { p -> p.filter(Char::isDigit).takeLast(9) }
         val emails = (container.select("a[href^=mailto:]").map { it.attr("href").removePrefix("mailto:").substringBefore('?') } +
             emailRegex.findAll(text).map { it.value })
             .map { it.trim().lowercase() }.distinct()

@@ -1,6 +1,5 @@
 package org.chyavorec.app.di
 
-import kotlinx.coroutines.delay
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
@@ -33,7 +32,6 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
     )
 
     override suspend fun login(cardNumber: String, password: CharArray): Outcome<AuthSession> {
-        delay(400)
         val ok = cardNumber.trim().equals("DEMO-0001", ignoreCase = true) && String(password) == "demo"
         password.fill('\u0000')
         return if (ok) Outcome.Success(AuthSession("demo-token", "demo-refresh", clock.now().toEpochMilli() + 3_600_000, "demo-reader"))
@@ -57,7 +55,6 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
     )
 
     override suspend fun loans(session: AuthSession): Outcome<List<Loan>> {
-        delay(300)
         val t = today()
         return Outcome.Success(
             listOf(
