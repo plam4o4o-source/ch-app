@@ -8,6 +8,8 @@ import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToString
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -42,7 +44,7 @@ import java.time.Instant
  * MockWebServer вместо chyavorec.org и GitHub.
  */
 @RunWith(AndroidJUnit4::class)
-@Config(application = Application::class)
+@Config(application = Application::class, qualifiers = "w411dp-h891dp-xxhdpi")
 class MainFlowsUiTest {
     @get:Rule val compose = createComposeRule()
     private val server = MockWebServer()
@@ -86,7 +88,8 @@ class MainFlowsUiTest {
     /** Кликва таб от долната навигация (изчаква анимираното ѝ появяване). */
     private fun clickTab(label: String) {
         val matcher = hasText(label) and isSelectable()
-        compose.waitUntil(10_000) { compose.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty() }
+        runCatching { compose.waitUntil(10_000) { compose.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty() } }
+            .onFailure { println(compose.onRoot(useUnmergedTree = true).printToString()); throw it }
         compose.onAllNodes(matcher).onFirst().performClick()
     }
 
@@ -107,7 +110,7 @@ class MainFlowsUiTest {
 
     @Test fun catalogSearchAndBookDetails() {
         launch()
-        clickTab("Каталог")
+        clickText("Каталог")
         waitForText("резултата", substring = true)
         compose.onNode(hasSetTextAction()).performTextInput("Джиан")
         waitForText("\"Ох...\"")
@@ -119,10 +122,7 @@ class MainFlowsUiTest {
 
     @Test fun guestSeesHonestLoginMessageAndCanAddCard() {
         launch(useMock = false)
-        clickTab("Моето")
-        waitForText("Добре дошъл!")
-        waitForText("Онлайн вход все още не се поддържа", substring = true)
-        clickText("Читателска карта")
+        clickText("Членска карта")
         waitForText("Дигитална карта")
         compose.onAllNodes(hasSetTextAction()).onFirst().performTextInput("r-0042")
         clickText("Запази")
@@ -130,11 +130,19 @@ class MainFlowsUiTest {
         compose.onNodeWithText("Покажи картата").performScrollTo().assertExists()
     }
 
+    @Test fun bottomNavigationShowsAllTabs() {
+        launch()
+        waitForText("Покана за концерт по случай 1 ноември")
+        clickTab("Моето")
+        waitForText("Добре дошъл!")
+        waitForText("Онлайн вход все още не се поддържа", substring = true)
+    }
+
     @Test fun demoLoginShowsLoansWithDueIndicators() {
         assumeTrue("демо данните съществуват само в dev flavor", BuildConfig.FLAVOR == "dev")
         launch(useMock = true)
-        clickTab("Моето")
-        clickText("Вход")
+        clickText("Членска карта")
+        clickText("Вход с библиотечни данни")
         waitForText("Читателски номер")
         compose.onAllNodes(hasSetTextAction())[0].performTextInput("DEMO-0001")
         compose.onAllNodes(hasSetTextAction())[1].performTextInput("demo")
