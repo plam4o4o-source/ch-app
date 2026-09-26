@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
@@ -82,6 +83,19 @@ class MainFlowsUiTest {
         }
     }
 
+    /** Кликва таб от долната навигация (изчаква анимираното ѝ появяване). */
+    private fun clickTab(label: String) {
+        val matcher = hasText(label) and isSelectable()
+        compose.waitUntil(10_000) { compose.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(matcher).onFirst().performClick()
+    }
+
+    private fun clickText(label: String) {
+        val matcher = hasText(label) and hasClickAction()
+        compose.waitUntil(10_000) { compose.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(matcher).onFirst().performClick()
+    }
+
     private fun waitForText(text: String, substring: Boolean = false) =
         compose.waitUntil(10_000) { compose.onAllNodes(hasText(text, substring = substring)).fetchSemanticsNodes().isNotEmpty() }
 
@@ -93,11 +107,11 @@ class MainFlowsUiTest {
 
     @Test fun catalogSearchAndBookDetails() {
         launch()
-        compose.onAllNodesWithText("Каталог").onFirst().performClick()
+        clickTab("Каталог")
         waitForText("резултата", substring = true)
         compose.onNode(hasSetTextAction()).performTextInput("Джиан")
         waitForText("\"Ох...\"")
-        compose.onAllNodesWithText("\"Ох...\"").onFirst().performClick()
+        clickText("\"Ох...\"")
         waitForText("ЦБ/840/Д 51")
         compose.onNodeWithText("Сигнатура").assertExists()
         compose.onAllNodesWithText("Налична").onFirst().assertExists()
@@ -105,13 +119,13 @@ class MainFlowsUiTest {
 
     @Test fun guestSeesHonestLoginMessageAndCanAddCard() {
         launch(useMock = false)
-        compose.onAllNodesWithText("Моето").onFirst().performClick()
+        clickTab("Моето")
         waitForText("Добре дошъл!")
         waitForText("Онлайн вход все още не се поддържа", substring = true)
-        compose.onNodeWithText("Читателска карта").performClick()
+        clickText("Читателска карта")
         waitForText("Дигитална карта")
         compose.onAllNodes(hasSetTextAction()).onFirst().performTextInput("r-0042")
-        compose.onNodeWithText("Запази").performClick()
+        clickText("Запази")
         waitForText("Читателски № R-0042")
         compose.onNodeWithText("Покажи картата").performScrollTo().assertExists()
     }
@@ -119,15 +133,14 @@ class MainFlowsUiTest {
     @Test fun demoLoginShowsLoansWithDueIndicators() {
         assumeTrue("демо данните съществуват само в dev flavor", BuildConfig.FLAVOR == "dev")
         launch(useMock = true)
-        compose.onAllNodesWithText("Моето").onFirst().performClick()
-        waitForText("Вход")
-        compose.onAllNodes(hasText("Вход") and hasClickAction()).onFirst().performClick()
+        clickTab("Моето")
+        clickText("Вход")
         waitForText("Читателски номер")
         compose.onAllNodes(hasSetTextAction())[0].performTextInput("DEMO-0001")
         compose.onAllNodes(hasSetTextAction())[1].performTextInput("demo")
-        compose.onAllNodes(hasText("Вход") and hasClickAction()).onFirst().performClick()
+        clickText("Вход")
         waitForText("Демо Читател")
-        compose.onNodeWithText("Моите книги").performClick()
+        clickText("Моите книги")
         waitForText("Под игото")
         waitForText("остават 7 дни")
         waitForText("просрочена с 3 дни")
