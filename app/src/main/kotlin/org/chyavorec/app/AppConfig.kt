@@ -13,6 +13,12 @@ data class AppConfig(
     val useMockData: Boolean,
     val versionName: String,
     val versionCode: Int,
+    /** update.json на последното GitHub Release (празно = без самообновяване). */
+    val updateManifestUrl: String = "",
+    /** true само в prodRelease (APK извън Google Play); false в Play и debug build-овете. */
+    val selfUpdate: Boolean = false,
+    /** debug | release | play */
+    val buildType: String = "debug",
 ) {
     /** Приема се само HTTPS адрес — HTTP би изложил токените. */
     val inflibConfigured: Boolean get() = inflibApiUrl.startsWith("https://")
@@ -27,6 +33,9 @@ data class AppConfig(
             useMockData = BuildConfig.USE_MOCK_DATA,
             versionName = BuildConfig.VERSION_NAME,
             versionCode = BuildConfig.VERSION_CODE,
+            updateManifestUrl = BuildConfig.UPDATE_MANIFEST_URL.trim().takeIf { it.startsWith("https://") }.orEmpty(),
+            selfUpdate = BuildConfig.SELF_UPDATE,
+            buildType = BuildConfig.BUILD_TYPE,
         )
     }
 }

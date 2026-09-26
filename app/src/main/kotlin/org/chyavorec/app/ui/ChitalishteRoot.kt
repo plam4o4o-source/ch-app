@@ -98,6 +98,7 @@ import org.chyavorec.app.ui.screens.site.ContactsScreen
 import org.chyavorec.app.ui.screens.site.DocumentsScreen
 import org.chyavorec.app.ui.screens.site.SitePageScreen
 import org.chyavorec.app.util.Intents
+import org.chyavorec.app.ui.components.UpdateDialog
 import org.chyavorec.core.Urls
 
 /** Анимираното въведение се показва веднъж на процес (студен старт), не при всяко завъртане. */
@@ -141,10 +142,14 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
             link == "login" -> nav.navigate(Routes.LOGIN)
             link == "my/loans" -> nav.navigate(Routes.LOANS)
             link == "events" -> nav.navigate(Routes.EVENTS)
+            link == "update" -> container.updater.showPrompt()
             link!!.startsWith("news") -> nav.navigateTab(Routes.NEWS)
         }
         deepLink.value = null
     }
+
+    LaunchedEffect(Unit) { container.updater.checkOnLaunch() }
+    UpdateDialog(container.updater)
 
     fun navigate(target: String) = if (target in topLevelRoutes) nav.navigateTab(target) else nav.navigate(target)
 

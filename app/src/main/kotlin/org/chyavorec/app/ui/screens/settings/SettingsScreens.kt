@@ -25,6 +25,7 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PrivacyTip
+import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -58,6 +59,7 @@ import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.BackTopBar
+import org.chyavorec.app.ui.components.updateStatusText
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.ThemeMode
 import org.chyavorec.app.util.Intents
@@ -111,6 +113,27 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             GroupTitle(stringResource(R.string.settings_notifications))
             NavItem(Icons.Outlined.NotificationsNone, stringResource(R.string.my_notifications), stringResource(R.string.settings_notifications_desc)) {
                 navigate(Routes.NOTIFICATIONS)
+            }
+
+            GroupTitle(stringResource(R.string.settings_updates))
+            val updater = c.updater
+            if (updater.enabled) {
+                val updateState by updater.state.collectAsStateWithLifecycle()
+                SwitchItem(stringResource(R.string.update_auto), stringResource(R.string.update_auto_desc), s.autoUpdate) { on ->
+                    scope.launch { c.settings.setAutoUpdate(on) }
+                }
+                NavItem(Icons.Outlined.SystemUpdate, stringResource(R.string.update_check_now), updateStatusText(updateState, updater)) {
+                    updater.checkNow()
+                    updater.showPrompt()
+                }
+            } else {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.about_version, c.config.versionName)) },
+                    supportingContent = {
+                        Text(stringResource(if (c.config.buildType == "play") R.string.update_disabled_play else R.string.update_disabled_dev))
+                    },
+                    leadingContent = { Icon(Icons.Outlined.SystemUpdate, null) },
+                )
             }
 
             GroupTitle(stringResource(R.string.settings_data))

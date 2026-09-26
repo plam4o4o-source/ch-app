@@ -37,6 +37,11 @@ val catalogUrls = config(
         "https://cdn.jsdelivr.net/gh/plam4o4o-source/yavorec-katalog@main/katalog.json",
 )
 val inflibApiUrl = config("INFLIB_API_URL", "")
+// Автоматично обновяване извън Google Play: update.json към последното GitHub Release.
+val updateManifestUrl = config(
+    "UPDATE_MANIFEST_URL",
+    "https://github.com/plam4o4o-source/ch-app/releases/latest/download/update.json",
+)
 
 android {
     namespace = "org.chyavorec.app"
@@ -54,6 +59,7 @@ android {
         buildConfigField("String", "SITE_BASE_URL", siteBaseUrl.quoted())
         buildConfigField("String", "CATALOG_URLS", catalogUrls.quoted())
         buildConfigField("String", "INFLIB_API_URL", inflibApiUrl.quoted())
+        buildConfigField("String", "UPDATE_MANIFEST_URL", updateManifestUrl.quoted())
     }
 
     flavorDimensions += "env"
@@ -99,6 +105,13 @@ android {
                 signingConfig = signingConfigs.getByName("release")
             }
         }
+        // Същото като release, но за Google Play: без самообновяване и без
+        // разрешението REQUEST_INSTALL_PACKAGES (правилата на Play го забраняват —
+        // там обновяването е от самия Google Play). Виж src/play/AndroidManifest.xml.
+        create("play") {
+            initWith(getByName("release"))
+            matchingFallbacks += "release"
+        }
     }
 
     compileOptions {
@@ -136,6 +149,21 @@ android {
         disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion", "OldTargetApi")
         xmlReport = true
         htmlReport = true
+    }
+}
+
+androidComponents {
+    // Play build има смисъл само за production.
+    beforeVariants { v ->
+        if (v.buildType == "play" && v.productFlavors.any { it.second == "dev" }) v.enable = false
+    }
+    // Самообновяване от GitHub Releases: само в prodRelease (APK за директно инсталиране).
+    onVariants { v ->
+        val selfUpdate = v.buildType == "release" && v.flavorName == "prod"
+        v.buildConfigFields?.put(
+            "SELF_UPDATE",
+            com.android.build.api.variant.BuildConfigField("boolean", selfUpdate.toString(), "Обновяване от GitHub Releases"),
+        )
     }
 }
 

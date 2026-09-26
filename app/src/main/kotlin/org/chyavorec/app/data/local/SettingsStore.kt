@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
@@ -26,6 +27,8 @@ data class AppSettings(
     val notifyLoans: Boolean = true,
     val notifyLibrary: Boolean = true,
     val lastNewsId: String? = null,
+    /** Автоматично обновяване (само в APK извън Google Play). */
+    val autoUpdate: Boolean = true,
 )
 
 class SettingsStore(private val context: Context) {
@@ -41,6 +44,11 @@ class SettingsStore(private val context: Context) {
         val notifiedLoans = stringSetPreferencesKey("notified_loans")
         val recentSearches = stringPreferencesKey("recent_searches")
         val lastBackgroundSync = longPreferencesKey("last_bg_sync")
+        val autoUpdate = booleanPreferencesKey("auto_update")
+        val lastUpdateCheck = longPreferencesKey("last_update_check")
+        val notifiedUpdate = intPreferencesKey("notified_update_code")
+        val snoozedUpdate = intPreferencesKey("snoozed_update_code")
+        val snoozedUntil = longPreferencesKey("snoozed_update_until")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -53,6 +61,7 @@ class SettingsStore(private val context: Context) {
             notifyLoans = p[Keys.notifyLoans] ?: true,
             notifyLibrary = p[Keys.notifyLibrary] ?: true,
             lastNewsId = p[Keys.lastNewsId],
+            autoUpdate = p[Keys.autoUpdate] ?: true,
         )
     }
 
@@ -67,6 +76,20 @@ class SettingsStore(private val context: Context) {
     suspend fun setNotifyLibrary(on: Boolean) = context.dataStore.edit { it[Keys.notifyLibrary] = on }
     suspend fun setLastNewsId(id: String) = context.dataStore.edit { it[Keys.lastNewsId] = id }
     suspend fun setLastBackgroundSync(millis: Long) = context.dataStore.edit { it[Keys.lastBackgroundSync] = millis }
+
+    suspend fun setAutoUpdate(on: Boolean) = context.dataStore.edit { it[Keys.autoUpdate] = on }
+    val lastUpdateCheck: Flow<Long> = context.dataStore.data.map { it[Keys.lastUpdateCheck] ?: 0L }
+    suspend fun setLastUpdateCheck(millis: Long) = context.dataStore.edit { it[Keys.lastUpdateCheck] = millis }
+    suspend fun notifiedUpdateCode(): Int = context.dataStore.data.first()[Keys.notifiedUpdate] ?: 0
+    suspend fun setNotifiedUpdateCode(code: Int) = context.dataStore.edit { it[Keys.notifiedUpdate] = code }
+    suspend fun snoozeUpdate(code: Int, untilMillis: Long) = context.dataStore.edit {
+        it[Keys.snoozedUpdate] = code
+        it[Keys.snoozedUntil] = untilMillis
+    }
+    suspend fun updateSnoozed(code: Int, nowMillis: Long): Boolean {
+        val p = context.dataStore.data.first()
+        return p[Keys.snoozedUpdate] == code && (p[Keys.snoozedUntil] ?: 0L) > nowMillis
+    }
 
     /** Кои заемания вече са получили известие за даден статус (ключ „loanId:STATUS“). */
     suspend fun notifiedLoans(): Set<String> = context.dataStore.data.first()[Keys.notifiedLoans].orEmpty()

@@ -20,6 +20,7 @@ enum class Channel(val id: String, val nameRes: Int, val descRes: Int, val impor
     EVENTS("events", R.string.channel_events, R.string.channel_events_desc, NotificationManager.IMPORTANCE_DEFAULT),
     NEWS("news", R.string.channel_news, R.string.channel_news_desc, NotificationManager.IMPORTANCE_LOW),
     LIBRARY("library", R.string.channel_library, R.string.channel_library_desc, NotificationManager.IMPORTANCE_DEFAULT),
+    UPDATES("updates", R.string.channel_updates, R.string.channel_updates_desc, NotificationManager.IMPORTANCE_DEFAULT),
 }
 
 object Notifier {
@@ -27,7 +28,7 @@ object Notifier {
 
     fun createChannels(context: Context) {
         val nm = context.getSystemService(NotificationManager::class.java) ?: return
-        Channel.entries.forEach { c ->
+        Channel.entries.filter { it != Channel.UPDATES || org.chyavorec.app.BuildConfig.SELF_UPDATE }.forEach { c ->
             nm.createNotificationChannel(
                 NotificationChannel(c.id, context.getString(c.nameRes), c.importance).apply {
                     description = context.getString(c.descRes)

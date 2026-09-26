@@ -290,6 +290,41 @@ S = {
 "channel_news_desc": ("Нова публикация в сайта", "A new post on the website"),
 "channel_library": ("Библиотека", "Library"),
 "channel_library_desc": ("Съобщения от библиотеката", "Messages from the library"),
+"channel_updates": ("Обновления", "Updates"),
+"channel_updates_desc": ("Нови версии на приложението", "New versions of the app"),
+"settings_updates": ("Обновления", "Updates"),
+"update_auto": ("Автоматично обновяване", "Automatic updates"),
+"update_auto_desc": ("Проверка при отваряне и два пъти дневно; изтегляне по Wi-Fi; инсталиране, докато приложението не се използва (Android 12+), или с едно докосване", "Checked on launch and twice a day; downloaded over Wi-Fi; installed while the app isn’t in use (Android 12+) or with a single tap"),
+"update_check_now": ("Провери за нова версия", "Check for updates"),
+"update_status_checking": ("Проверка за нова версия…", "Checking for updates…"),
+"update_status_current": ("Имате последната версия (%1$s)", "You have the latest version (%1$s)"),
+"update_status_available": ("Налична е версия %1$s", "Version %1$s is available"),
+"update_status_downloading": ("Изтегляне на новата версия…", "Downloading the new version…"),
+"update_status_ready": ("Версия %1$s е готова за инсталиране", "Version %1$s is ready to install"),
+"update_disabled_play": ("Приложението се обновява автоматично от Google Play.", "The app is updated automatically by Google Play."),
+"update_disabled_dev": ("Автоматичното обновяване работи в официалната версия от страницата с версиите.", "Automatic updates work in the official build from the releases page."),
+"update_dialog_title": ("Нова версия %1$s", "New version %1$s"),
+"update_dialog_available": ("Излезе нова версия на приложението.", "A new version of the app is available."),
+"update_size": ("Размер: %1$s", "Size: %1$s"),
+"update_notes": ("Какво ново", "What’s new"),
+"update_download": ("Изтегли и инсталирай", "Download and install"),
+"update_install": ("Инсталирай", "Install"),
+"update_later": ("По-късно", "Later"),
+"update_hide": ("Скрий", "Hide"),
+"update_progress": ("%1$d%%", "%1$d%%"),
+"update_ready": ("Новата версия е изтеглена и проверена (контролна сума и подпис).", "The new version has been downloaded and verified (checksum and signature)."),
+"update_permission": ("За да се обнови, разрешете на „Читалище Яворец“ да инсталира приложения, след което се върнете тук.", "To update, allow “Chitalishte Yavorets” to install apps, then come back here."),
+"update_permission_action": ("Към настройките", "Open settings"),
+"update_installing": ("Инсталиране… Приложението ще се затвори за момент.", "Installing… The app will close for a moment."),
+"update_error_check": ("Проверката за нова версия не успя. Опитайте отново по-късно.", "Couldn’t check for updates. Please try again later."),
+"update_error_network": ("Изтеглянето не успя. Проверете връзката и опитайте отново.", "The download failed. Check your connection and try again."),
+"update_error_checksum": ("Изтегленият файл не премина проверката и беше изтрит. Опитайте отново.", "The downloaded file failed verification and was deleted. Please try again."),
+"update_error_signature": ("Новата версия е подписана с различен ключ и не може да замени инсталираната. Изтеглете я ръчно от страницата на версията (след деинсталиране на текущата).", "The new version is signed with a different key and can’t replace the installed one. Download it manually from the release page (after uninstalling the current one)."),
+"update_error_install": ("Инсталирането не беше завършено.", "The installation wasn’t completed."),
+"update_open_release": ("Страница на версията", "Release page"),
+"notif_update_available": ("Налична е нова версия %1$s", "New version %1$s available"),
+"notif_update_ready": ("Версия %1$s е готова за инсталиране", "Version %1$s is ready to install"),
+"notif_update_text": ("Докоснете, за да обновите приложението.", "Tap to update the app."),
 "notif_new_article": ("Нова публикация", "New post"),
 "notif_due_soon": ("Наближава срок за връщане", "Due date approaching"),
 "notif_overdue": ("Просрочена книга", "Overdue book"),
@@ -348,6 +383,8 @@ PRIVACY_BG = """# Кой обработва данните
 
 Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели.
 
+Обновления: версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от Настройки → Обновления. Версията от Google Play се обновява от Google Play.
+
 Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака.
 
 Читателска карта: ако въведеш номера на своята карта, той (и името, ако го въведеш) се пази шифрован с ключ от Android Keystore само на това устройство.
@@ -381,6 +418,8 @@ The app collects as little data as possible. It has no ads, no behavioural analy
 # What data is processed
 
 Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data.
+
+Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 
 Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud.
 

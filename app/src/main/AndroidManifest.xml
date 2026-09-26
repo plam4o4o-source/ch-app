@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Известия (Android 13+): искат се едва когато потребителят включи известие. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Самообновяване от GitHub Releases (APK извън Google Play). Play build-ът
+         премахва тези разрешения — виж src/play/AndroidManifest.xml. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
 
     <!-- Отваряне на телефон, имейл, карта и календар. -->
     <queries>
@@ -56,6 +60,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Резултат от инсталирането на обновление (само от системата). -->
+        <receiver
+            android:name=".update.UpdateInstallReceiver"
+            android:exported="false" />
 
         <!-- Езикът на приложението (Android 12 и по-стари) — AppCompat пази избора. -->
         <service

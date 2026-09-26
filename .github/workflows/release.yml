@@ -7,6 +7,10 @@ on:
         description: "Версия (напр. 1.0.0)"
         required: true
         default: "1.0.0"
+      notes:
+        description: "Какво ново (показва се в приложението при обновяване)"
+        required: false
+        default: ""
   push:
     tags: ["v*"]
 
@@ -66,27 +70,59 @@ jobs:
       - name: Build release
         run: |
           sed -i "s/versionName = \".*\"/versionName = \"$VERSION\"/" app/build.gradle.kts
-          ./gradlew --no-daemon bundleProdRelease assembleProdRelease assembleDevDebug
+          ./gradlew --no-daemon bundleProdPlay assembleProdRelease assembleDevDebug
           mkdir -p dist
-          cp app/build/outputs/bundle/prodRelease/app-prod-release.aab "dist/chitalishte-yavorets-$VERSION.aab"
+          cp app/build/outputs/bundle/prodPlay/app-prod-play.aab "dist/chitalishte-yavorets-$VERSION.aab"
           cp app/build/outputs/apk/prod/release/app-prod-release.apk "dist/chitalishte-yavorets-$VERSION.apk"
           cp app/build/outputs/apk/dev/debug/app-dev-debug.apk "dist/chitalishte-yavorets-$VERSION-dev-debug.apk"
           (cd dist && sha256sum * > SHA256SUMS.txt)
 
+      # update.json — по него инсталираните APK-та откриват новата версия
+      # (https://github.com/<repo>/releases/latest/download/update.json).
+      # Публикува се САМО при постоянен ключ: APK, подписан с различен (временен)
+      # ключ, не може да замени инсталираното приложение.
+      - name: Update manifest
+        if: env.SIGNING_KIND == 'upload-key'
+        env:
+          NOTES: ${{ github.event.inputs.notes }}
+        run: |
+          python3 - <<'PY'
+          import json, os, hashlib
+          v = os.environ["VERSION"]; apk = f"dist/chitalishte-yavorets-{v}.apk"
+          repo = os.environ["GITHUB_REPOSITORY"]
+          data = {
+              "versionCode": int(os.environ["VERSION_CODE"]),
+              "versionName": v,
+              "apkUrl": f"https://github.com/{repo}/releases/download/v{v}/chitalishte-yavorets-{v}.apk",
+              "sha256": hashlib.sha256(open(apk, "rb").read()).hexdigest(),
+              "size": os.path.getsize(apk),
+              "minSdk": 26,
+              "notes": os.environ.get("NOTES", "").strip(),
+              "releaseUrl": f"https://github.com/{repo}/releases/tag/v{v}",
+          }
+          json.dump(data, open("dist/update.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+          print(json.dumps(data, ensure_ascii=False, indent=2))
+          PY
+
       - name: Release notes
+        env:
+          NOTES: ${{ github.event.inputs.notes }}
         run: |
           cat > notes.md <<NOTES
           Читалище Яворец — Android приложение v$VERSION (versionCode $VERSION_CODE)
 
+          $NOTES
+
           Файлове:
-          - chitalishte-yavorets-$VERSION.apk — инсталиране директно на телефон (Android 8.0+)
-          - chitalishte-yavorets-$VERSION.aab — за Google Play
+          - chitalishte-yavorets-$VERSION.apk — инсталиране директно на телефон (Android 8.0+); обновява се автоматично
+          - chitalishte-yavorets-$VERSION.aab — за Google Play (обновява се от Google Play)
           - chitalishte-yavorets-$VERSION-dev-debug.apk — за разработка (с ДЕМО читателски данни, вход DEMO-0001 / demo)
 
           Подпис: $SIGNING_KIND
           NOTES
           if [ "$SIGNING_KIND" = "ci-test-key" ]; then
             echo "" >> notes.md
+            echo "⚠ Без update.json: автоматичното обновяване изисква постоянен ключ за подписване (secrets по-долу)." >> notes.md
             echo "⚠ Подписано с временен CI ключ — годно за тестове, НЕ за качване в Google Play. За Play добавете secrets UPLOAD_KEYSTORE_BASE64, UPLOAD_STORE_PASSWORD, UPLOAD_KEY_ALIAS, UPLOAD_KEY_PASSWORD (виж README)." >> notes.md
           fi
           sed -i 's/^          //' notes.md

@@ -67,13 +67,21 @@ jobs:
           fi
           echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
 
-      - name: Release AAB + APK (prod)
-        run: ./gradlew --no-daemon bundleProdRelease assembleProdRelease
+      # AAB за Google Play = prodPlay (без самообновяване); APK за директно
+      # инсталиране = prodRelease (със самообновяване от GitHub Releases).
+      - name: Release AAB (Play) + APK (prod)
+        run: ./gradlew --no-daemon bundleProdPlay assembleProdRelease
 
-      - name: Verify release signature
+      - name: Verify release signature and Play manifest
         run: |
-          jarsigner -verify app/build/outputs/bundle/prodRelease/app-prod-release.aab | tail -1
+          jarsigner -verify app/build/outputs/bundle/prodPlay/app-prod-play.aab | tail -1
           echo "Signed with: $SIGNING_KIND"
+          M=app/build/intermediates/merged_manifest/prodPlay/processProdPlayMainManifest/AndroidManifest.xml
+          [ -f "$M" ] || M=$(find app/build/intermediates -path '*prodPlay*' -name AndroidManifest.xml | head -1)
+          if grep -q "REQUEST_INSTALL_PACKAGES\|UpdateInstallReceiver" "$M"; then
+            echo "::error::Play build must not contain self-update"; exit 1
+          fi
+          echo "Play manifest OK ($M)"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -84,9 +92,10 @@ jobs:
         with:
           name: release-${{ env.SIGNING_KIND }}
           path: |
-            app/build/outputs/bundle/prodRelease/*.aab
+            app/build/outputs/bundle/prodPlay/*.aab
             app/build/outputs/apk/prod/release/*.apk
             app/build/outputs/mapping/prodRelease/mapping.txt
+            app/build/outputs/mapping/prodPlay/mapping.txt
 
       - uses: actions/upload-artifact@v4
         if: always()

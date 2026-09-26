@@ -9,6 +9,7 @@ import coil.memory.MemoryCache
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.notifications.SyncWorker
+import org.chyavorec.app.update.UpdateWorker
 
 class ChitalishteApp : Application(), ImageLoaderFactory, Configuration.Provider {
 
@@ -20,6 +21,7 @@ class ChitalishteApp : Application(), ImageLoaderFactory, Configuration.Provider
         container = AppContainer(this)
         Notifier.createChannels(this)
         SyncWorker.schedule(this)
+        UpdateWorker.schedule(this, container.updater.enabled)
     }
 
     /** Изображенията се кешират на диска — работят и офлайн. */

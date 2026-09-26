@@ -114,6 +114,13 @@ UI показва `SyncBanner` („Няма интернет връзка. По�
 |---|---|---|
 | `devDebug` / `devRelease` | `org.chyavorec.app.dev` | по `USE_MOCK_DATA` (по подразбиране `true`) |
 | `prodDebug` / `prodRelease` | `org.chyavorec.app` | **никога** |
+| `prodPlay` (AAB за Google Play) | `org.chyavorec.app` | **никога** |
+
+Самообновяване (`AppUpdater`, `UpdateWorker`, `UpdateInstallReceiver`) е
+включено само в `prodRelease` (`BuildConfig.SELF_UPDATE`). `prodPlay` е
+`release` + `src/play/AndroidManifest.xml`, който премахва
+`REQUEST_INSTALL_PACKAGES`, `UPDATE_PACKAGES_WITHOUT_USER_ACTION` и receiver-а;
+CI проверява, че ги няма в слетия манифест. Подробно — README, „Автоматично обновяване“.
 
 ## Тестове
 
@@ -123,6 +130,7 @@ UI показва `SyncBanner` („Няма интернет връзка. По�
 | Парсери | `SiteParsingTest`, `KatalogParserTest` | реалните news.json, rss.xml, index.json, files.json, страниците „За нас“ и „Контакти“, реален katalog.json |
 | Търсене | `CatalogSearchEngineTest` | всички полета, филтри, сортиране, 15 000 записа < 200 ms |
 | Repository | `RepositoryTest`, `AuthRepositoryTest` | офлайн fallback, ограничение на честотата, сесии, refresh, изход, brute-force |
+| Обновяване | `UpdateCheckerTest`, `app/.../AppUpdaterTest` | update.json (строга проверка на адреса и SHA-256), по-нова версия/minSdk, отхвърляне на повреден или чужд файл, изключено извън prodRelease |
 | API | `HttpServicesTest` (MockWebServer) | резервен източник на каталога, данните на сайта, предложеният InvLib API, грешки |
 | Сигурно съхранение | `app/.../SecureStorageTest` | шифроване на диска, повреден кеш, сесия без запомняне |
 | ViewModel | `app/.../ViewModelTest` | debounce търсене, филтри на новини, любими, офлайн грешка |

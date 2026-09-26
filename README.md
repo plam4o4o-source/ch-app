@@ -101,6 +101,7 @@ cp .env.example .env          # по желание — стойностите �
 | `API_BASE_URL` | `https://chyavorec.org` | сайтът на читалището |
 | `CATALOG_URLS` | raw.githubusercontent … `\|` cdn.jsdelivr … | основен и резервен адрес на `katalog.json` |
 | `INFLIB_API_URL` | *(празно)* | онлайн API на InvLib (само `https://`); празно = функцията е „недостъпна“ |
+| `UPDATE_MANIFEST_URL` | `…/releases/latest/download/update.json` | откъде APK-то извън Google Play проверява за нова версия; празно = без самообновяване |
 | `APP_ENV` | `development` | само за dev; prod е винаги `production` |
 | `USE_MOCK_DATA` | `true` | само за dev flavor — демо читателски данни |
 | `VERSION_CODE` | `1` | версия за Google Play |
@@ -140,7 +141,8 @@ cd shared && ../gradlew test && cd ..                 # ядро: парсери
 ./gradlew testDevDebugUnitTest testProdDebugUnitTest   # ViewModel, сигурно съхранение, Compose UI (Robolectric)
 ./gradlew lintDevDebug lintProdRelease
 ./gradlew assembleDevDebug assembleProdDebug
-./gradlew bundleProdRelease                            # AAB за Google Play
+./gradlew bundleProdPlay                               # AAB за Google Play (без самообновяване)
+./gradlew assembleProdRelease                          # APK за директно инсталиране (със самообновяване)
 ```
 
 GitHub Actions (`.github/workflows/android.yml`) пуска всичко това при всеки
@@ -161,8 +163,8 @@ push и качва APK/AAB като artifacts.
    VERSION_CODE=1
    ```
    ```bash
-   ./gradlew bundleProdRelease
-   # → app/build/outputs/bundle/prodRelease/app-prod-release.aab
+   ./gradlew bundleProdPlay
+   # → app/build/outputs/bundle/prodPlay/app-prod-play.aab
    ```
 3. **Build в GitHub Actions:** добавете secrets `UPLOAD_KEYSTORE_BASE64`
    (`base64 -w0 upload.jks`), `UPLOAD_STORE_PASSWORD`, `UPLOAD_KEY_ALIAS`,
@@ -174,6 +176,44 @@ push и качва APK/AAB като artifacts.
    страница в chyavorec.org и въведете адреса ѝ.
 5. При всяка нова версия увеличете `VERSION_CODE` и `versionName`
    (`app/build.gradle.kts`).
+
+## Автоматично обновяване
+
+| Инсталация | Как се обновява |
+|---|---|
+| APK от [GitHub Releases](https://github.com/plam4o4o-source/ch-app/releases) (`prodRelease`) | **самото приложение** — виж по-долу |
+| Google Play (`prodPlay` AAB) | от Google Play (правилата на Play забраняват самообновяване, затова този build е без него и без разрешението `REQUEST_INSTALL_PACKAGES`) |
+| `devDebug` / `prodDebug` | изключено |
+
+Как работи (`app/.../update/`, `shared/.../data/update/`):
+
+1. При всяко отваряне и на ~12 часа във фона (WorkManager) приложението чете
+   `update.json` от последното GitHub Release: `versionCode`, `versionName`,
+   `apkUrl`, `sha256`, `size`, `minSdk`, `notes`.
+2. Ако `versionCode` е по-висок, по Wi-Fi новата версия се изтегля веднага
+   (по мобилни данни — след „Изтегли и инсталирай“).
+3. Файлът се проверява: SHA-256 от манифеста, същият пакет и версия, **същият
+   ключ за подписване** като инсталираното приложение. Иначе се изтрива.
+4. Инсталиране през `PackageInstaller`:
+   - когато приложението е отворено — диалог „Нова версия X“ → „Инсталирай“;
+     първия път Android иска разрешение „Инсталиране на неизвестни приложения“;
+   - на Android 12+, след като приложението веднъж се е обновило само, следващите
+     версии се инсталират **без въпрос**, докато приложението не се използва;
+   - иначе — известие „Версия X е готова за инсталиране“.
+5. Настройки → Обновления: вкл./изкл. и „Провери за нова версия“.
+   „По-късно“ отлага същата версия с 24 часа.
+
+**Издаване на нова версия:** Actions → Release → Run workflow (версия, напр.
+`1.2.0`, и по желание „Какво ново“). Workflow-ът качва APK, AAB и `update.json`;
+инсталираните приложения го откриват сами.
+
+> ⚠ **Необходим е постоянен ключ за подписване** (secrets `UPLOAD_KEYSTORE_BASE64`,
+> `UPLOAD_STORE_PASSWORD`, `UPLOAD_KEY_ALIAS`, `UPLOAD_KEY_PASSWORD` — виж
+> „Release и Google Play“). Android приема обновление само ако е подписано със
+> същия ключ. Без тези secrets всеки release се подписва с нов временен ключ и
+> затова workflow-ът **не публикува** `update.json`. Версиите до момента (v1.0.0)
+> са с временен ключ — те трябва да се деинсталират и инсталират еднократно
+> ръчно; оттам нататък обновяването е автоматично.
 
 ## Графика и лога
 
