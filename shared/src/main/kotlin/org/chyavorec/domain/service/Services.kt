@@ -52,6 +52,8 @@ interface SiteContentService {
     suspend fun fetchSearchIndex(): Outcome<List<SiteSearchDoc>>
     /** [date] във формат Г-М-Д без водещи нули (както очаква сайтът). */
     suspend fun fetchFeast(date: String): Outcome<DailyFeast>
+    /** Съобщенията до приложението (`/data/app-messages.json`); няма файл = няма съобщения. */
+    suspend fun fetchMessages(): Outcome<List<org.chyavorec.domain.model.AppMessage>>
 }
 
 /** Вход в читателския профил (InvLib — бъдещ онлайн API). */

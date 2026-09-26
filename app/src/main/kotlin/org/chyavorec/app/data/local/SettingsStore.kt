@@ -29,7 +29,11 @@ data class AppSettings(
     val lastNewsId: String? = null,
     /** Автоматично обновяване (само в APK извън Google Play). */
     val autoUpdate: Boolean = true,
+    /** Известия за съобщения от читалището. */
+    val notifyMessages: Boolean = true,
 )
+
+private const val MAX_MESSAGE_IDS = 300
 
 class SettingsStore(private val context: Context) {
     private object Keys {
@@ -49,6 +53,10 @@ class SettingsStore(private val context: Context) {
         val notifiedUpdate = intPreferencesKey("notified_update_code")
         val snoozedUpdate = intPreferencesKey("snoozed_update_code")
         val snoozedUntil = longPreferencesKey("snoozed_update_until")
+        val notifyMessages = booleanPreferencesKey("notify_messages")
+        val readMessages = stringSetPreferencesKey("read_messages")
+        val notifiedMessages = stringSetPreferencesKey("notified_messages")
+        val messagesInitialized = booleanPreferencesKey("messages_initialized")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -62,6 +70,7 @@ class SettingsStore(private val context: Context) {
             notifyLibrary = p[Keys.notifyLibrary] ?: true,
             lastNewsId = p[Keys.lastNewsId],
             autoUpdate = p[Keys.autoUpdate] ?: true,
+            notifyMessages = p[Keys.notifyMessages] ?: true,
         )
     }
 
@@ -90,6 +99,20 @@ class SettingsStore(private val context: Context) {
         val p = context.dataStore.data.first()
         return p[Keys.snoozedUpdate] == code && (p[Keys.snoozedUntil] ?: 0L) > nowMillis
     }
+
+    suspend fun setNotifyMessages(on: Boolean) = context.dataStore.edit { it[Keys.notifyMessages] = on }
+    val readMessageIds: Flow<Set<String>> = context.dataStore.data.map { it[Keys.readMessages].orEmpty() }
+    suspend fun readMessageIdsNow(): Set<String> = readMessageIds.first()
+    /** Пазят се най-много [MAX_MESSAGE_IDS] идентификатора (старите отпадат). */
+    suspend fun addReadMessages(ids: Collection<String>) = context.dataStore.edit {
+        it[Keys.readMessages] = (it[Keys.readMessages].orEmpty() + ids).toList().takeLast(MAX_MESSAGE_IDS).toSet()
+    }
+    suspend fun notifiedMessageIds(): Set<String> = context.dataStore.data.first()[Keys.notifiedMessages].orEmpty()
+    suspend fun setNotifiedMessages(ids: Set<String>) = context.dataStore.edit {
+        it[Keys.notifiedMessages] = (it[Keys.notifiedMessages].orEmpty() + ids).toList().takeLast(MAX_MESSAGE_IDS).toSet()
+    }
+    suspend fun messagesInitialized(): Boolean = context.dataStore.data.first()[Keys.messagesInitialized] ?: false
+    suspend fun setMessagesInitialized() = context.dataStore.edit { it[Keys.messagesInitialized] = true }
 
     /** Кои заемания вече са получили известие за даден статус (ключ „loanId:STATUS“). */
     suspend fun notifiedLoans(): Set<String> = context.dataStore.data.first()[Keys.notifiedLoans].orEmpty()

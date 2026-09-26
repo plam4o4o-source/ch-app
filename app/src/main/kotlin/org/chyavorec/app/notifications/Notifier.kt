@@ -20,6 +20,8 @@ enum class Channel(val id: String, val nameRes: Int, val descRes: Int, val impor
     EVENTS("events", R.string.channel_events, R.string.channel_events_desc, NotificationManager.IMPORTANCE_DEFAULT),
     NEWS("news", R.string.channel_news, R.string.channel_news_desc, NotificationManager.IMPORTANCE_LOW),
     LIBRARY("library", R.string.channel_library, R.string.channel_library_desc, NotificationManager.IMPORTANCE_DEFAULT),
+    MESSAGES("messages", R.string.channel_messages, R.string.channel_messages_desc, NotificationManager.IMPORTANCE_DEFAULT),
+    MESSAGES_IMPORTANT("messages_important", R.string.channel_messages_important, R.string.channel_messages_important_desc, NotificationManager.IMPORTANCE_HIGH),
     UPDATES("updates", R.string.channel_updates, R.string.channel_updates_desc, NotificationManager.IMPORTANCE_DEFAULT),
 }
 

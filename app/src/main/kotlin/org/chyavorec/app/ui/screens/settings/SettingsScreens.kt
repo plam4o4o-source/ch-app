@@ -244,6 +244,7 @@ fun NotificationSettingsScreen(onBack: () -> Unit) {
             fun enable(on: Boolean, save: suspend (Boolean) -> Unit) {
                 if (on) permission.request { scope.launch { save(true) } } else scope.launch { save(false) }
             }
+            SwitchItem(stringResource(R.string.channel_messages), stringResource(R.string.channel_messages_desc), s.notifyMessages) { enable(it, { v -> c.settings.setNotifyMessages(v) }) }
             SwitchItem(stringResource(R.string.channel_news), stringResource(R.string.channel_news_desc), s.notifyNews) { enable(it, { v -> c.settings.setNotifyNews(v) }) }
             SwitchItem(stringResource(R.string.channel_events), stringResource(R.string.channel_events_desc), s.notifyEvents) { enable(it, { v -> c.settings.setNotifyEvents(v) }) }
             SwitchItem(

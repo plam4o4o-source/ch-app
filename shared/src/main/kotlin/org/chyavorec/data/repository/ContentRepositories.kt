@@ -6,6 +6,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.map
 import org.chyavorec.core.Synced
 import org.chyavorec.data.catalog.CatalogSearchEngine
 import org.chyavorec.data.catalog.KatalogParser
@@ -30,6 +31,7 @@ import java.time.Instant
 
 private const val FIVE_MINUTES = 5 * 60 * 1000L
 private const val ONE_HOUR = 60 * 60 * 1000L
+private const val TEN_MINUTES = 10 * 60 * 1000L
 
 internal fun cacheKey(prefix: String, value: String): String {
     val digest = MessageDigest.getInstance("SHA-256").digest(value.toByteArray())
@@ -198,4 +200,26 @@ class SiteRepository(
     companion object {
         fun describe(error: AppError): String = error.toString()
     }
+}
+
+/**
+ * Съобщенията от читалището. [isMember] решава дали се виждат и тези „само за членове“.
+ * Файлът е публичен — филтрирането е за удобство, не за сигурност (затова админ
+ * панелът предупреждава да не се пишат лични данни).
+ */
+class MessagesRepository(
+    private val service: SiteContentService,
+    cache: PayloadCache,
+    private val clock: AppClock,
+) {
+    private val list = CachedResource(cache, "site:messages", ListSerializer(org.chyavorec.domain.model.AppMessage.serializer()), clock, TEN_MINUTES)
+
+    suspend fun messages(isMember: Boolean, force: Boolean = false): Outcome<Synced<List<org.chyavorec.domain.model.AppMessage>>> =
+        list.load(force) { service.fetchMessages() }.map { synced -> synced.map { visible(it, isMember) } }
+
+    suspend fun cached(isMember: Boolean): List<org.chyavorec.domain.model.AppMessage> =
+        list.cached()?.data?.let { visible(it, isMember) }.orEmpty()
+
+    private fun visible(all: List<org.chyavorec.domain.model.AppMessage>, isMember: Boolean) =
+        org.chyavorec.data.site.AppMessagesParser.visible(all, isMember, clock.now().atZone(org.chyavorec.data.site.AppMessagesParser.SOFIA).toLocalDate())
 }

@@ -56,6 +56,12 @@ class MainFlowsUiTest {
                 "/rss.xml" -> MockResponse().setBody(TestResources.text("site-rss.xml"))
                 "/javora/index.json" -> MockResponse().setBody(TestResources.text("site-index.json"))
                 "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json"))
+                "/data/app-messages.json" -> MockResponse().setBody(
+                    """[{"id":"msg-1","title":"Промяна в работното време","body":"От 1 октомври библиотеката работи до 17:00.",
+                         "audience":"all","priority":"high","createdAt":"2026-09-25T08:00:00Z"},
+                        {"id":"msg-2","title":"Общо събрание на членовете","body":"…","audience":"members",
+                         "createdAt":"2026-09-24T08:00:00Z"}]""",
+                )
                 else -> MockResponse().setResponseCode(404)
             }
         }
@@ -64,7 +70,7 @@ class MainFlowsUiTest {
 
     @After fun stop() = server.shutdown()
 
-    private fun launch(useMock: Boolean = false) {
+    private fun launch(useMock: Boolean = false, deepLink: String? = null) {
         val base = server.url("/").toString().trimEnd('/')
         val config = AppConfig(
             siteBaseUrl = base,
@@ -81,7 +87,7 @@ class MainFlowsUiTest {
         )
         compose.setContent {
             ChitalishteTheme {
-                ChitalishteRoot(container, AppSettings(onboardingDone = true), MutableStateFlow(null), showIntro = false)
+                ChitalishteRoot(container, AppSettings(onboardingDone = true), MutableStateFlow(deepLink), showIntro = false)
             }
         }
     }
@@ -153,5 +159,13 @@ class MainFlowsUiTest {
         waitForText("Под игото")
         waitForText("остават 7 дни")
         waitForText("просрочена с 3 дни")
+    }
+
+    @Test fun guestSeesPublicMessagesButNotMembersOnly() {
+        launch(deepLink = "messages")
+        waitForText("Промяна в работното време")
+        compose.onNodeWithText("От 1 октомври библиотеката работи до 17:00.").assertExists()
+        waitForText("Някои съобщения са само за членове", substring = true)
+        compose.onAllNodesWithText("Общо събрание на членовете").fetchSemanticsNodes().let { check(it.isEmpty()) { "members-only message shown to a guest" } }
     }
 }

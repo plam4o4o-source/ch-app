@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.Computer
+import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Info
@@ -65,6 +66,7 @@ fun MoreScreen(navigate: (String) -> Unit) {
             actions = { Emblem(36.dp, Modifier.padding(end = 16.dp)) })
     }) { padding ->
         Column(Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState())) {
+            MoreItem(Icons.Outlined.Campaign, stringResource(R.string.messages_title), stringResource(R.string.more_messages_desc)) { navigate(Routes.MESSAGES) }
             MoreItem(Icons.Outlined.Event, stringResource(R.string.events_title), stringResource(R.string.more_events_desc)) { navigate(Routes.EVENTS) }
             MoreItem(Icons.Outlined.TheaterComedy, stringResource(R.string.activities_title), stringResource(R.string.more_activities_desc)) { navigate(Routes.ACTIVITIES) }
             MoreItem(Icons.Outlined.AccountBalance, stringResource(R.string.qa_about), stringResource(R.string.more_about_desc)) { navigate(Routes.ABOUT_CHITALISHTE) }

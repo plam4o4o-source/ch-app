@@ -41,6 +41,7 @@ object Routes {
     const val VIEWER = "viewer?album={album}&index={index}&url={url}"
     const val CONTACTS = "contacts"
     const val DOCUMENTS = "documents"
+    const val MESSAGES = "messages"
     const val SETTINGS = "settings"
     const val PRIVACY = "privacy"
     const val TERMS = "terms"

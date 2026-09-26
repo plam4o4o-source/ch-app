@@ -325,6 +325,18 @@ S = {
 "notif_update_available": ("Налична е нова версия %1$s", "New version %1$s available"),
 "notif_update_ready": ("Версия %1$s е готова за инсталиране", "Version %1$s is ready to install"),
 "notif_update_text": ("Докоснете, за да обновите приложението.", "Tap to update the app."),
+"channel_messages": ("Съобщения от читалището", "Messages from the centre"),
+"channel_messages_desc": ("Съобщения, изпратени от читалището до потребителите на приложението", "Messages the centre sends to app users"),
+"channel_messages_important": ("Важни съобщения", "Important messages"),
+"channel_messages_important_desc": ("Съобщения, отбелязани от читалището като важни", "Messages the centre marks as important"),
+"messages_title": ("Съобщения", "Messages"),
+"messages_empty": ("Няма съобщения от читалището", "No messages from the centre"),
+"messages_members_hint": ("Някои съобщения са само за членове. Въведете членската си карта (или влезте) в „Моето“, за да ги виждате.", "Some messages are for members only. Enter your member card (or sign in) under “My” to see them."),
+"messages_members_only": ("За членове", "Members"),
+"messages_new": ("Ново", "New"),
+"messages_valid_until": ("Валидно до %1$s", "Valid until %1$s"),
+"messages_open_link": ("Отвори връзката", "Open link"),
+"more_messages_desc": ("Съобщения и покани от читалището", "Announcements and invitations from the centre"),
 "notif_new_article": ("Нова публикация", "New post"),
 "notif_due_soon": ("Наближава срок за връщане", "Due date approaching"),
 "notif_overdue": ("Просрочена книга", "Overdue book"),
@@ -383,6 +395,8 @@ PRIVACY_BG = """# Кой обработва данните
 
 Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели.
 
+Съобщения от читалището: приложението проверява на около час публичния файл със съобщения на chyavorec.org. Съобщенията „само за членове“ се показват, ако сте въвели членска карта или сте влезли — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
+
 Обновления: версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от Настройки → Обновления. Версията от Google Play се обновява от Google Play.
 
 Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака.
@@ -418,6 +432,8 @@ The app collects as little data as possible. It has no ads, no behavioural analy
 # What data is processed
 
 Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data.
+
+Messages from the centre: about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered a member card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
 
 Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 
@@ -514,6 +530,7 @@ P = {
 "catalog_show_results": (("Покажи %1$d резултат", "Покажи %1$d резултата"), ("Show %1$d result", "Show %1$d results")),
 "due_days_left": (("остава %1$d ден", "остават %1$d дни"), ("%1$d day left", "%1$d days left")),
 "due_overdue_days": (("просрочена с %1$d ден", "просрочена с %1$d дни"), ("%1$d day overdue", "%1$d days overdue")),
+"messages_unread": (("%1$d непрочетено съобщение", "%1$d непрочетени съобщения"), ("%1$d unread message", "%1$d unread messages")),
 "photos_count": (("%1$d снимка", "%1$d снимки"), ("%1$d photo", "%1$d photos")),
 }
 

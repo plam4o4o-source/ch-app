@@ -15,6 +15,7 @@ import org.chyavorec.app.network.ConnectivityObserver
 import org.chyavorec.app.network.NetworkModule
 import org.chyavorec.app.notifications.ReminderScheduler
 import org.chyavorec.app.update.AppUpdater
+import org.chyavorec.app.messages.MessageCenter
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.SystemClock
 import org.chyavorec.data.catalog.GitHubCatalogService
@@ -26,6 +27,7 @@ import org.chyavorec.data.repository.CatalogRepository
 import org.chyavorec.data.repository.EventsRepository
 import org.chyavorec.data.repository.LibraryRepository
 import org.chyavorec.data.repository.MembershipRepository
+import org.chyavorec.data.repository.MessagesRepository
 import org.chyavorec.data.repository.NewsRepository
 import org.chyavorec.data.repository.ProfileRepository
 import org.chyavorec.data.repository.SelfCardRepository
@@ -119,6 +121,9 @@ class AppContainer(
     val libraryRepository by lazy { LibraryRepository(readerServices.reader, authRepository, readerCache, clock) }
     val membershipRepository by lazy { MembershipRepository(readerServices.membership, authRepository, readerCache, clock) }
     val selfCardRepository by lazy { SelfCardRepository(SecureSelfCardStore(File(context.noBackupFilesDir, "secure/card.bin"), cipher)) }
+
+    val messagesRepository by lazy { MessagesRepository(siteService, publicCache, clock) }
+    val messages by lazy { MessageCenter(messagesRepository, authRepository, selfCardRepository, settings) }
 
     val updater by lazy { AppUpdater(context, okHttp, http, config, settings, clock) }
 

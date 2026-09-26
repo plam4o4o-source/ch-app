@@ -208,4 +208,11 @@ class ChyavorecSiteService(
                 DailyFeast(o["date"]?.jsonPrimitive?.content ?: date, line)
             }
         }
+
+    override suspend fun fetchMessages(): Outcome<List<org.chyavorec.domain.model.AppMessage>> =
+        when (val r = http.get(url("/data/app-messages.json"), mapOf("Cache-Control" to "no-cache"))) {
+            is Outcome.Failure -> if (r.error == org.chyavorec.core.AppError.NotFound) Outcome.Success(emptyList()) else r
+            is Outcome.Success -> AppMessagesParser.parse(r.value.text())?.let { Outcome.Success(it) }
+                ?: Outcome.Failure(org.chyavorec.core.AppError.Parse("app-messages.json"))
+        }
 }

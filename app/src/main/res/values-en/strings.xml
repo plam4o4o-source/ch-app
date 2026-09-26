@@ -87,6 +87,10 @@
     <string name="channel_library_desc">Messages from the library</string>
     <string name="channel_loans">Due dates</string>
     <string name="channel_loans_desc">An upcoming or passed due date for a borrowed book</string>
+    <string name="channel_messages">Messages from the centre</string>
+    <string name="channel_messages_desc">Messages the centre sends to app users</string>
+    <string name="channel_messages_important">Important messages</string>
+    <string name="channel_messages_important_desc">Messages the centre marks as important</string>
     <string name="channel_news">News</string>
     <string name="channel_news_desc">A new post on the website</string>
     <string name="channel_updates">Updates</string>
@@ -194,6 +198,13 @@
     <string name="membership_suspended">Suspended</string>
     <string name="membership_unknown">Unknown</string>
     <string name="membership_valid_until">Valid until</string>
+    <string name="messages_empty">No messages from the centre</string>
+    <string name="messages_members_hint">Some messages are for members only. Enter your member card (or sign in) under “My” to see them.</string>
+    <string name="messages_members_only">Members</string>
+    <string name="messages_new">New</string>
+    <string name="messages_open_link">Open link</string>
+    <string name="messages_title">Messages</string>
+    <string name="messages_valid_until">Valid until %1$s</string>
     <string name="more_about_desc">History and mission</string>
     <string name="more_activities_desc">Groups, clubs, projects</string>
     <string name="more_contacts_desc">Address, phone, map</string>
@@ -201,6 +212,7 @@
     <string name="more_documents_desc">Statute, reports, jubilee newspaper</string>
     <string name="more_events_desc">Community centre calendar</string>
     <string name="more_gallery_desc">Photos from the website</string>
+    <string name="more_messages_desc">Announcements and invitations from the centre</string>
     <string name="my_books">My books</string>
     <string name="my_books_desc">Borrowed books and due dates</string>
     <string name="my_card">Library card</string>
@@ -261,7 +273,7 @@
     <string name="page_empty">This page has no content to show.</string>
     <string name="page_source">Source: %1$s</string>
     <string name="photo_n">Photo %1$d</string>
-    <string name="privacy_body"># Who processes the data\n\n“Chitalishte Yavorets” is the official mobile app of the “Vasil Levski – 1922” Community Centre (chitalishte), Yavorets village, Gabrovo municipality, Bulgaria (“the centre”). Contact: chitalishte_yavorets@abv.bg.\n\n# Principle\n\nThe app collects as little data as possible. It has no ads, no behavioural analytics, no tracking services and does not send crash reports to third parties.\n\n# What data is processed\n\nPublic content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data.\n\nUpdates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.\n\nData kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud.\n\nLibrary card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.\n\nSign-in (once the library system offers online access): your password is sent only over HTTPS to the library’s server and is never stored. Only an encrypted session token is kept. Borrowed items, due dates and membership come from the library’s server and are cached encrypted.\n\n# Notifications\n\nNotifications are prepared on the device (periodic checks for new posts and due dates). No push notification servers are used.\n\n# Your rights\n\nYou can delete the data on the device at any time: “Sign out” deletes the session and reader data; “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. For the data the library keeps about you as a reader, you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).\n\n# Children\n\nThe app can be used without signing in and without any personal data.\n\n# Changes\n\nIf this policy changes, the new version is published in the app and on the centre’s website.</string>
+    <string name="privacy_body"># Who processes the data\n\n“Chitalishte Yavorets” is the official mobile app of the “Vasil Levski – 1922” Community Centre (chitalishte), Yavorets village, Gabrovo municipality, Bulgaria (“the centre”). Contact: chitalishte_yavorets@abv.bg.\n\n# Principle\n\nThe app collects as little data as possible. It has no ads, no behavioural analytics, no tracking services and does not send crash reports to third parties.\n\n# What data is processed\n\nPublic content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data.\n\nMessages from the centre: about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered a member card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.\n\nUpdates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.\n\nData kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud.\n\nLibrary card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.\n\nSign-in (once the library system offers online access): your password is sent only over HTTPS to the library’s server and is never stored. Only an encrypted session token is kept. Borrowed items, due dates and membership come from the library’s server and are cached encrypted.\n\n# Notifications\n\nNotifications are prepared on the device (periodic checks for new posts and due dates). No push notification servers are used.\n\n# Your rights\n\nYou can delete the data on the device at any time: “Sign out” deletes the session and reader data; “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. For the data the library keeps about you as a reader, you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).\n\n# Children\n\nThe app can be used without signing in and without any personal data.\n\n# Changes\n\nIf this policy changes, the new version is published in the app and on the centre’s website.</string>
     <string name="privacy_title">Privacy policy</string>
     <string name="profile_category">Category</string>
     <string name="profile_delete_request">Request data deletion</string>
@@ -392,6 +404,10 @@
     <plurals name="due_overdue_days">
         <item quantity="one">%1$d day overdue</item>
         <item quantity="other">%1$d days overdue</item>
+    </plurals>
+    <plurals name="messages_unread">
+        <item quantity="one">%1$d unread message</item>
+        <item quantity="other">%1$d unread messages</item>
     </plurals>
     <plurals name="photos_count">
         <item quantity="one">%1$d photo</item>

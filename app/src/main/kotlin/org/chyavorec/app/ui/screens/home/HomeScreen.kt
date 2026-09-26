@@ -59,6 +59,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material3.Badge as CountBadge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material.icons.outlined.NotificationsNone
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -120,7 +124,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
 
     PullToRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp), modifier = Modifier.fillMaxSize()) {
-            item("header") { HomeHeader(onSearch = { navigate(Routes.SEARCH) }) }
+            item("header") { HomeHeader(onSearch = { navigate(Routes.SEARCH) }, onMessages = { navigate(Routes.MESSAGES) }) }
             item("sync") { SyncBanner(state.news.fromCache, state.news.syncedAt, state.news.refreshError) }
             state.feast?.let { f -> item("feast") { FeastCard(f) } }
             item("hero") {
@@ -195,7 +199,10 @@ fun HomeScreen(navigate: (String) -> Unit) {
 }
 
 @Composable
-private fun HomeHeader(onSearch: () -> Unit) {
+private fun HomeHeader(onSearch: () -> Unit, onMessages: () -> Unit) {
+    val center = LocalAppContainer.current.messages
+    val unread by center.unreadCount.collectAsStateWithLifecycle(initialValue = 0)
+    LaunchedEffect(Unit) { runCatching { center.refresh(force = false) } }
     Row(
         Modifier.fillMaxWidth().statusBarsPadding().padding(start = 20.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -205,6 +212,12 @@ private fun HomeHeader(onSearch: () -> Unit) {
         Column(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }) {
             Text(stringResource(R.string.org_short), style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(stringResource(R.string.org_place), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        IconButton(onClick = onMessages, modifier = Modifier.size(48.dp)) {
+            val label = if (unread > 0) pluralStringResource(R.plurals.messages_unread, unread, unread) else stringResource(R.string.messages_title)
+            BadgedBox(badge = { if (unread > 0) CountBadge { Text(if (unread > 9) "9+" else unread.toString()) } }) {
+                Icon(Icons.Outlined.NotificationsNone, contentDescription = label)
+            }
         }
         IconButton(onClick = onSearch, modifier = Modifier.size(48.dp)) {
             Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.action_search))
