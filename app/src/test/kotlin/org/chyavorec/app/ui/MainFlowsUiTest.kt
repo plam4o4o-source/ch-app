@@ -44,7 +44,7 @@ import java.time.Instant
  * MockWebServer вместо chyavorec.org и GitHub.
  */
 @RunWith(AndroidJUnit4::class)
-@Config(application = Application::class, qualifiers = "w411dp-h891dp-xxhdpi")
+@Config(application = Application::class, qualifiers = "bg-w411dp-h891dp-xxhdpi")
 class MainFlowsUiTest {
     @get:Rule val compose = createComposeRule()
     private val server = MockWebServer()
