@@ -16,7 +16,7 @@
 │  domain/model       модели: NewsArticle, Event, CatalogBook, Loan, …   │
 │  domain/service     интерфейси: CatalogService, NewsService, …         │
 │  domain/repository  PayloadCache, SessionStore, SelfCardStore          │
-│  data/site          chyavorec.org: RSS, страници, събития, контакти    │
+│  data/site          chyavorec.org (Vercel): news.json, index.json, …   │
 │  data/catalog       katalog.json: парсер, търсачка в паметта           │
 │  data/invlib        InvLib: RemoteInvLibClient (предложен API),        │
 │                     UnavailableInvLibServices (production по подразб.) │
@@ -39,7 +39,7 @@
 | Интерфейс | Реализация днес | Бъдеща реализация |
 |---|---|---|
 | `CatalogService` | `GitHubCatalogService` (raw.githubusercontent → jsDelivr) | онлайн API на InvLib |
-| `NewsService`, `EventsService`, `SiteContentService` | `ChyavorecSiteService` (uCoz RSS + страници) | JSON API на сайта, ако бъде добавен |
+| `NewsService`, `EventsService`, `SiteContentService` | `ChyavorecSiteService` (JSON данните на сайта във Vercel + страници) | динамичен API на сайта, ако бъде добавен |
 | `AuthenticationService`, `ReaderService`, `MembershipService` | `UnavailableInvLibServices` (prod) / `DemoInvLibServices` (само dev) | `RemoteInvLibClient` — вече готов, включва се с `INFLIB_API_URL` |
 
 Смяната става само в `AppContainer` — репозиториите и UI не се променят.
@@ -49,9 +49,9 @@
 | Репозитори | Отговорност |
 |---|---|
 | `NewsRepository` | новини + пълни статии, кеш, ограничение на честотата (5 мин.) |
-| `EventsRepository` | събития от новините и страницата „Събития“ |
+| `EventsRepository` | годишният календар на сайта (превърта се към следващото настъпване) |
 | `CatalogRepository` | каталогът в паметта + суровият JSON на диска (офлайн търсене) |
-| `SiteRepository` | навигация, страници, контакти, галерия |
+| `SiteRepository` | раздели, страници, контакти, галерия, документи, индекс за търсене, празник на деня |
 | `AuthRepository` | вход, подновяване на токена, изход (изтрива личния кеш), защита от налучкване |
 | `ProfileRepository`, `LibraryRepository`, `MembershipRepository` | читателски данни през валидна сесия; шифрован кеш |
 | `SelfCardRepository` | ръчно въведената карта (Code 39 валидиране) |
@@ -80,7 +80,13 @@ UI показва `SyncBanner` („Няма интернет връзка. По�
 - **Компоненти**: `BookCover` (генерирана корица в цвета на УДК раздела),
   `LibraryCard` (карта в размер ID-1 с Code 39), `ContentBlocksView` (native
   рисуване на съдържание от сайта), `PressableCard` (micro-interaction),
-  shimmer skeleton, pull-to-refresh, parallax на началния екран.
+  shimmer skeleton, pull-to-refresh.
+- **Анимации**: кратко въведение с логото (пръстен + появяване на името) след
+  системния splash; въртяща се лента с новини с parallax; shared element
+  преходи (корица на книга, снимка на новина) между списък и детайли;
+  поетапно появяване на елементите; „подскачащи“ икони в долната навигация;
+  анимирани броячи. Всички анимации се изключват при системната настройка
+  „Премахване на анимациите“.
 - **Достъпност**: семантични заглавия, `contentDescription`, live regions за
   грешки/офлайн, статусите имат текст (не само цвят), мащабируем текст (sp),
   touch targets ≥ 48 dp, shimmer уважава „Премахване на анимациите“.
@@ -114,10 +120,10 @@ UI показва `SyncBanner` („Няма интернет връзка. По�
 | Вид | Къде | Какво покрива |
 |---|---|---|
 | Unit | `shared/src/test` | дати, нормализиране на текст, URL, сроковете, членство |
-| Парсери | `SiteParsingTest`, `KatalogParserTest` | uCoz RSS, страници, събития, контакти, навигация, реален katalog.json |
+| Парсери | `SiteParsingTest`, `KatalogParserTest` | реалните news.json, rss.xml, index.json, files.json, страниците „За нас“ и „Контакти“, реален katalog.json |
 | Търсене | `CatalogSearchEngineTest` | всички полета, филтри, сортиране, 15 000 записа < 200 ms |
 | Repository | `RepositoryTest`, `AuthRepositoryTest` | офлайн fallback, ограничение на честотата, сесии, refresh, изход, brute-force |
-| API | `HttpServicesTest` (MockWebServer) | резервен източник на каталога, RSS, предложеният InvLib API, грешки |
+| API | `HttpServicesTest` (MockWebServer) | резервен източник на каталога, данните на сайта, предложеният InvLib API, грешки |
 | Сигурно съхранение | `app/.../SecureStorageTest` | шифроване на диска, повреден кеш, сесия без запомняне |
 | ViewModel | `app/.../ViewModelTest` | debounce търсене, филтри на новини, любими, офлайн грешка |
 | UI (Compose + Robolectric) | `app/.../MainFlowsUiTest` | начален екран от сайта, търсене в каталога → книга, гост → ръчна карта, демо вход → „Моите книги“ |
