@@ -299,6 +299,3 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
         }
     }
 }
-
-@Suppress("unused")
-private val boxAlign = Box::class

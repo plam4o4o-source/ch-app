@@ -65,7 +65,6 @@ android {
             buildConfigField("String", "APP_ENV", config("APP_ENV", "development").quoted())
             // В dev по подразбиране читателските екрани работят с ясно маркирани демо данни.
             buildConfigField("boolean", "USE_MOCK_DATA", config("USE_MOCK_DATA", "true").toBoolean().toString())
-            resValue("string", "app_name", "Читалище Яворец (dev)")
         }
         create("prod") {
             dimension = "env"
@@ -73,7 +72,6 @@ android {
             // Production НИКОГА не използва демо данни: флагът е твърдо false,
             // а демо реализациите не съществуват в prod source set-а (src/dev).
             buildConfigField("boolean", "USE_MOCK_DATA", "false")
-            resValue("string", "app_name", "Читалище Яворец")
         }
     }
 
@@ -144,6 +142,13 @@ android {
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        // Стабилните по поведение, но още маркирани като експериментални Compose API
+        // (TopAppBar scroll behavior, PullToRefreshBox, FlowRow, Pager).
+        optIn.addAll(
+            "androidx.compose.material3.ExperimentalMaterial3Api",
+            "androidx.compose.foundation.ExperimentalFoundationApi",
+            "androidx.compose.foundation.layout.ExperimentalLayoutApi",
+        )
     }
 }
 
