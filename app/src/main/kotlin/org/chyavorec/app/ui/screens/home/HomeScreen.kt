@@ -82,6 +82,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
@@ -95,7 +96,6 @@ import org.chyavorec.app.ui.components.SkeletonBox
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.shimmer
 import org.chyavorec.app.ui.navigation.Routes
-import org.chyavorec.app.ui.screens.events.EventCard
 import org.chyavorec.app.ui.screens.news.NewsRow
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.util.Formatters
@@ -119,6 +119,10 @@ private val quickActions = listOf(
 @Composable
 fun HomeScreen(navigate: (String) -> Unit) {
     val vm = appViewModel { HomeViewModel(it.newsRepository, it.eventsRepository, it.catalogRepository, it.siteRepository, it.clock) }
+    LifecycleResumeEffect(vm) {
+        vm.onResume()
+        onPauseOrDispose { }
+    }
     val state by vm.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
 
@@ -139,21 +143,15 @@ fun HomeScreen(navigate: (String) -> Unit) {
             }
             item("actions") { QuickActionsGrid(navigate) }
             item("stats") { StatsRow(state) }
-            if (state.upcoming.isNotEmpty()) {
-                item("events-h") {
+            state.month?.let { month ->
+                item("month-h") {
                     SectionHeader(
-                        stringResource(R.string.home_upcoming), label = stringResource(R.string.label_calendar),
-                        actionLabel = stringResource(R.string.action_all), onAction = { navigate(Routes.EVENTS) },
+                        monthTitle(month.month), label = stringResource(R.string.label_calendar),
+                        actionLabel = stringResource(R.string.home_month_all), onAction = { navigate(Routes.EVENTS) },
                         modifier = Modifier.padding(top = 20.dp, bottom = 8.dp),
                     )
                 }
-                item("events") {
-                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        items(state.upcoming, key = { it.id }) { e ->
-                            EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.width(280.dp))
-                        }
-                    }
-                }
+                item("month") { MonthCalendarCard(month, onOpen = { navigate(Routes.event(it.id)) }) }
             }
             if (state.newBooks.isNotEmpty()) {
                 item("new-h") {
