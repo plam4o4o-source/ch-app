@@ -188,6 +188,8 @@ room {
 }
 
 tasks.withType<Test>().configureEach {
+    // Снимките от ScreenshotTest са изход на теста — връщат се и от кеша на Gradle.
+    outputs.dir(layout.buildDirectory.dir("reports/screenshots"))
     // Robolectric (SDK 36) на JDK 25 чете jdk.internal.access чрез reflection.
     jvmArgs("--add-exports=java.base/jdk.internal.access=ALL-UNNAMED", "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED")
     testLogging {
