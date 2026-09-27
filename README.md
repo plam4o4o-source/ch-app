@@ -56,7 +56,7 @@ app/      Android: Compose UI (MVVM), навигация, Room/DataStore/фай�
 shared/   чист Kotlin: домейн модели, интерфейси на услугите, репозитории,
           парсери за chyavorec.org (Vercel) и katalog.json (InvLib), клиент за
           бъдещия InvLib API — компилира се и се тества без Android SDK
-docs/     API.md, ARCHITECTURE.md
+docs/     API.md, ARCHITECTURE.md, ROADMAP.md (план за развитие)
 store/    Google Play метаданни, графики, политика за поверителност
 ```
 
@@ -270,6 +270,8 @@ push и качва APK/AAB като artifacts.
   появява едва когато се добави телефон в страницата „Контакти“.
 
 ## Оставащи зависимости
+
+План за следващата стъпка (заеманията на читателя): **[docs/ROADMAP.md](docs/ROADMAP.md)**.
 
 | Зависимост | От кого | Какво отключва |
 |---|---|---|
