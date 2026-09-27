@@ -48,6 +48,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.Emblem
+import org.chyavorec.app.ui.components.IconPlate
+import org.chyavorec.app.ui.components.PagerDots
 import org.chyavorec.app.ui.theme.Brand
 import kotlin.math.absoluteValue
 
@@ -80,9 +82,7 @@ fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
                     verticalArrangement = Arrangement.Center,
                 ) {
                     if (s.icon == null) Emblem(128.dp)
-                    else Box(Modifier.size(120.dp).clip(CircleShape).background(Brand.Gold.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
-                        Icon(s.icon, null, tint = Brand.Gold, modifier = Modifier.size(56.dp))
-                    }
+                    else IconPlate(s.icon, size = 120.dp, container = Brand.Gold, content = Brand.Ink)
                     Spacer(Modifier.height(36.dp))
                     Text(stringResource(s.title), style = MaterialTheme.typography.displaySmall, color = Brand.Parchment,
                         textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
@@ -95,13 +95,10 @@ fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
                         textAlign = TextAlign.Center, modifier = Modifier.widthIn(max = 480.dp))
                 }
             }
-            Row(Modifier.fillMaxWidth().padding(bottom = 16.dp), horizontalArrangement = Arrangement.Center) {
-                repeat(slides.size) { i ->
-                    val w by animateDpAsState(if (pager.currentPage == i) 22.dp else 8.dp, label = "dot")
-                    Box(Modifier.padding(4.dp).height(8.dp).width(w).clip(RoundedCornerShape(50))
-                        .background(if (pager.currentPage == i) Brand.Gold else Brand.Parchment.copy(alpha = 0.35f)))
-                }
-            }
+            PagerDots(
+                slides.size, pager.currentPage, Modifier.padding(bottom = 16.dp),
+                activeColor = Brand.Gold, inactiveColor = Brand.Parchment.copy(alpha = 0.35f),
+            )
             Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 if (pager.currentPage < slides.lastIndex) {
                     Button(onClick = { scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } }, modifier = Modifier.fillMaxWidth().height(52.dp)) {

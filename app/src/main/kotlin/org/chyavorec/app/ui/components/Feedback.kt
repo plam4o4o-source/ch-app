@@ -88,11 +88,21 @@ fun MessageView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Box(
-            Modifier.size(72.dp).background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f), CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(34.dp))
+        // Илюстрация: отворена книга (в стила на логото) + значка според ситуацията.
+        Box(Modifier.size(160.dp, 120.dp)) {
+            androidx.compose.foundation.Image(
+                painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.ill_open_book),
+                contentDescription = null,
+                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(LocalExtendedColors.current.gold),
+                modifier = Modifier.fillMaxSize(),
+            )
+            Box(
+                Modifier.align(Alignment.BottomEnd).padding(end = 8.dp).size(44.dp)
+                    .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer, modifier = Modifier.size(24.dp))
+            }
         }
         Spacer(Modifier.height(20.dp))
         Text(

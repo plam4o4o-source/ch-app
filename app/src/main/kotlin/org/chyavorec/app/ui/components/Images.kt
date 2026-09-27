@@ -1,6 +1,9 @@
 package org.chyavorec.app.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -99,24 +102,35 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
             .clearAndSetSemantics { contentDescription = book.title },
     ) {
         val scale = (width.value / 72f).coerceIn(0.6f, 3f)
-        Column(Modifier.fillMaxSize().padding(start = (10 * scale).dp, end = (7 * scale).dp, top = (9 * scale).dp, bottom = (8 * scale).dp)) {
+        // вътрешна „релефна“ рамка като на твърда корица
+        Box(
+            Modifier.fillMaxSize().padding(start = (9 * scale).dp, end = (4 * scale).dp, top = (4 * scale).dp, bottom = (4 * scale).dp)
+                .border(0.75.dp, Color.White.copy(alpha = 0.22f), RoundedCornerShape(2.dp)),
+        )
+        // по-тъмно дъно — авторът се чете и върху светлите раздели
+        Box(
+            Modifier.fillMaxSize().background(
+                Brush.verticalGradient(0.55f to Color.Transparent, 1f to Color.Black.copy(alpha = 0.35f)),
+            ),
+        )
+        Column(Modifier.fillMaxSize().padding(start = (12 * scale).dp, end = (7 * scale).dp, top = (9 * scale).dp, bottom = (10 * scale).dp)) {
             Text(
                 book.title,
                 color = Color.White,
-                fontFamily = Cormorant,
+                fontFamily = Raleway,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = (11 * scale).sp,
-                lineHeight = (12.5f * scale).sp,
-                maxLines = 5,
+                fontSize = maxOf(12f, 11.5f * scale).sp,
+                lineHeight = maxOf(14f, 13.5f * scale).sp,
+                maxLines = 4,
                 overflow = TextOverflow.Ellipsis,
             )
             Box(Modifier.weight(1f))
             Text(
                 book.author,
-                color = Color.White.copy(alpha = 0.86f),
+                color = Color.White.copy(alpha = 0.92f),
                 fontFamily = Raleway,
-                fontSize = (7.5f * scale).sp,
-                lineHeight = (9 * scale).sp,
+                fontSize = maxOf(9f, 8.5f * scale).sp,
+                lineHeight = maxOf(11f, 10f * scale).sp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -130,15 +144,13 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
             )
         }
         if (showStatusDot) {
-            val dot = when (book.status) {
+            // лента в долния край: зелено — налична, жълто — не е на рафта, червено — недостъпна
+            val color = when (book.status) {
                 BookStatus.AVAILABLE -> ext.ok
                 BookStatus.ON_LOAN, BookStatus.NOT_ON_SHELF -> ext.warn
                 BookStatus.UNAVAILABLE -> ext.bad
             }
-            Box(
-                Modifier.align(Alignment.TopEnd).padding((5 * scale).dp).size((9 * scale).dp)
-                    .background(Color.White, CircleShape).padding(1.5.dp).background(dot, CircleShape),
-            )
+            Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height((4 * scale).dp).background(color))
         }
     }
 }

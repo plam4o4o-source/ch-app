@@ -97,7 +97,7 @@ import java.time.LocalDate
 @Composable
 private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier) {
     Column(
-        modifier.size(58.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.secondaryContainer),
+        modifier.size(58.dp).clip(MaterialTheme.shapes.small).background(MaterialTheme.colorScheme.secondaryContainer),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {

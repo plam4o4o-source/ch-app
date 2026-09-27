@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -91,6 +92,45 @@ fun BackTopBar(
             }
         },
         actions = actions,
+        scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        ),
+    )
+}
+
+/**
+ * Заглавка на основните раздели: логото + името на раздела + търсене вдясно —
+ * еднаква за „Новини“, „Моето“ и „Още“ (както заглавката на началния екран).
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppTopBar(
+    title: String,
+    onSearch: (() -> Unit)? = null,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
+) {
+    TopAppBar(
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Emblem(34.dp)
+                Spacer(Modifier.width(12.dp))
+                Text(
+                    title, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.semantics { heading() },
+                )
+            }
+        },
+        actions = {
+            actions()
+            if (onSearch != null) {
+                IconButton(onClick = onSearch) {
+                    Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.action_search))
+                }
+            }
+        },
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,

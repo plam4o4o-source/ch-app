@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.ContentBlocksView
 import org.chyavorec.app.ui.components.EmptyView
@@ -82,11 +83,7 @@ fun NewsListScreen(navigate: (String) -> Unit) {
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.tab_news), style = MaterialTheme.typography.headlineMedium) },
-                scrollBehavior = scroll,
-                colors = TopAppBarDefaults.topAppBarColors(scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer),
-            )
+            AppTopBar(stringResource(R.string.tab_news), onSearch = { navigate(Routes.SEARCH) }, scrollBehavior = scroll)
         },
     ) { padding ->
         PullToRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
@@ -186,7 +183,7 @@ fun NewsRow(
         modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        RemoteImage(a.imageUrl, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").size(84.dp).clip(RoundedCornerShape(14.dp)))
+        RemoteImage(a.imageUrl, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").size(84.dp).clip(MaterialTheme.shapes.small))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
@@ -292,7 +289,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             itemsIndexed(extra) { i, url ->
                                 RemoteImage(url, contentDescription = stringResource(R.string.photo_n, i + 1),
-                                    modifier = Modifier.size(150.dp, 112.dp).clip(RoundedCornerShape(14.dp)).clickable { navigate(Routes.viewerUrls(gallery, gallery.indexOf(url))) })
+                                    modifier = Modifier.size(150.dp, 112.dp).clip(MaterialTheme.shapes.small).clickable { navigate(Routes.viewerUrls(gallery, gallery.indexOf(url))) })
                             }
                         }
                     }

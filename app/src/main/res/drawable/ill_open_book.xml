@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Илюстрация за празни състояния и грешки: отворена книга (линеен стил като логото).
+     Оцветява се от темата (ColorFilter.tint), затова цветовете тук са само бели с различна плътност. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="120dp"
+    android:viewportWidth="160"
+    android:viewportHeight="120">
+    <!-- мек ореол -->
+    <path android:fillColor="#1FFFFFFF"
+        android:pathData="M80,60m-58,0a58,50 0,1 1,116 0a58,50 0,1 1,-116 0" />
+    <!-- страници (лек пълнеж) -->
+    <path android:fillColor="#40FFFFFF"
+        android:pathData="M80,30C66,21 46,18 26,20L26,86C46,84 66,87 80,96Z" />
+    <path android:fillColor="#40FFFFFF"
+        android:pathData="M80,30C94,21 114,18 134,20L134,86C114,84 94,87 80,96Z" />
+    <!-- контури -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M80,30C66,21 46,18 26,20L26,86C46,84 66,87 80,96C94,87 114,84 134,86L134,20C114,18 94,21 80,30Z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round"
+        android:pathData="M80,30L80,96" />
+    <!-- корица отдолу -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M18,28L18,94C42,91 64,94 80,104C96,94 118,91 142,94L142,28" />
+    <!-- редове -->
+    <path android:strokeColor="#B3FFFFFF" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:pathData="M38,38L66,41M38,50L66,53M38,62L60,64M94,41L122,38M94,53L122,50M100,64L122,62" />
+</vector>

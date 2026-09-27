@@ -11,6 +11,9 @@ import androidx.compose.ui.semantics.contentDescription
 import kotlinx.coroutines.delay
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AnimatedCounter
+import org.chyavorec.app.ui.components.IconPlate
+import org.chyavorec.app.ui.components.PagerDots
+import org.chyavorec.app.ui.components.SearchPill
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.boldMarkdown
 import org.chyavorec.app.ui.components.rememberReducedMotion
@@ -104,14 +107,11 @@ import org.chyavorec.domain.model.NewsArticle
 
 private data class QuickAction(val labelRes: Int, val icon: ImageVector, val route: String)
 
+/** Четири основни действия — останалите са в долната лента или в „Още“. */
 private val quickActions = listOf(
     QuickAction(R.string.qa_catalog, Icons.AutoMirrored.Outlined.MenuBook, Routes.CATALOG),
-    QuickAction(R.string.qa_my_library, Icons.Outlined.CollectionsBookmark, Routes.LOANS),
     QuickAction(R.string.qa_card, Icons.Outlined.Badge, Routes.CARD),
-    QuickAction(R.string.qa_news, Icons.Outlined.Newspaper, Routes.NEWS),
     QuickAction(R.string.qa_events, Icons.Outlined.Event, Routes.EVENTS),
-    QuickAction(R.string.qa_activities, Icons.Outlined.TheaterComedy, Routes.ACTIVITIES),
-    QuickAction(R.string.qa_about, Icons.Outlined.AccountBalance, Routes.ABOUT_CHITALISHTE),
     QuickAction(R.string.qa_contacts, Icons.Outlined.Place, Routes.CONTACTS),
 )
 
@@ -124,21 +124,26 @@ fun HomeScreen(navigate: (String) -> Unit) {
 
     PullToRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp), modifier = Modifier.fillMaxSize()) {
-            item("header") { HomeHeader(onSearch = { navigate(Routes.SEARCH) }, onMessages = { navigate(Routes.MESSAGES) }) }
+            item("header") { HomeHeader(onMessages = { navigate(Routes.MESSAGES) }) }
+            item("search") {
+                SearchPill(
+                    stringResource(R.string.home_search_hint), onClick = { navigate(Routes.SEARCH) },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                )
+            }
+            state.feast?.let { f -> item("feast") { FeastLine(f) } }
             item("sync") { SyncBanner(state.news.fromCache, state.news.syncedAt, state.news.refreshError) }
-            state.feast?.let { f -> item("feast") { FeastCard(f) } }
             item("hero") {
                 val top = state.news.data?.take(5).orEmpty()
                 when {
                     top.isNotEmpty() -> HeroCarousel(top, onOpen = { navigate(Routes.article(it.id)) })
                     state.news.showSkeleton -> Box(
-                        Modifier.padding(16.dp).fillMaxWidth().height(300.dp).clip(RoundedCornerShape(28.dp)).shimmer(),
+                        Modifier.padding(16.dp).fillMaxWidth().aspectRatio(1.6f).clip(MaterialTheme.shapes.large).shimmer(),
                     )
                     state.news.error != null -> ErrorView(state.news.error!!, onRetry = { vm.refresh() }, subject = stringResource(R.string.subject_news))
                 }
             }
             item("actions") { QuickActionsGrid(navigate) }
-            item("stats") { StatsRow(state) }
             if (state.upcoming.isNotEmpty()) {
                 item("events-h") {
                     SectionHeader(
@@ -184,6 +189,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     NewsRow(a, onClick = { navigate(Routes.article(a.id)) }, modifier = Modifier.animateEntrance(i))
                 }
             }
+            item("stats") { StatsRow(state) }
             if (state.catalogCount != null) {
                 item("footer") {
                     Text(
@@ -199,7 +205,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
 }
 
 @Composable
-private fun HomeHeader(onSearch: () -> Unit, onMessages: () -> Unit) {
+private fun HomeHeader(onMessages: () -> Unit) {
     val center = LocalAppContainer.current.messages
     val unread by center.unreadCount.collectAsStateWithLifecycle(initialValue = 0)
     LaunchedEffect(Unit) { runCatching { center.refresh(force = false) } }
@@ -218,9 +224,6 @@ private fun HomeHeader(onSearch: () -> Unit, onMessages: () -> Unit) {
             BadgedBox(badge = { if (unread > 0) CountBadge { Text(if (unread > 9) "9+" else unread.toString()) } }) {
                 Icon(Icons.Outlined.NotificationsNone, contentDescription = label)
             }
-        }
-        IconButton(onClick = onSearch, modifier = Modifier.size(48.dp)) {
-            Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.action_search))
         }
     }
 }
@@ -254,9 +257,9 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
             val offset = (pager.currentPage - page) + pager.currentPageOffsetFraction
             Surface(
                 onClick = { onOpen(a) },
-                shape = RoundedCornerShape(28.dp),
+                shape = MaterialTheme.shapes.large,
                 shadowElevation = 6.dp,
-                modifier = Modifier.fillMaxWidth().aspectRatio(0.92f).widthIn(max = 720.dp)
+                modifier = Modifier.fillMaxWidth().aspectRatio(1.6f).widthIn(max = 720.dp)
                     .graphicsLayer {
                         val scale = 1f - 0.06f * kotlin.math.abs(offset).coerceIn(0f, 1f)
                         scaleX = scale; scaleY = scale
@@ -273,16 +276,19 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                     )
                     Box(
                         Modifier.fillMaxSize().background(
-                            Brush.verticalGradient(0f to Color.Transparent, 0.4f to Color.Transparent, 1f to Brand.Ink.copy(alpha = 0.94f)),
+                            Brush.verticalGradient(
+                                0f to Color.Transparent, 0.3f to Color.Transparent,
+                                0.65f to Brand.Ink.copy(alpha = 0.6f), 1f to Brand.Ink.copy(alpha = 0.96f),
+                            ),
                         ),
                     )
-                    Column(Modifier.align(Alignment.BottomStart).padding(22.dp)) {
+                    Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
                         Text(
                             (a.category ?: stringResource(R.string.label_news)).uppercase(),
                             style = MaterialTheme.typography.labelSmall, color = Brand.GoldLight,
                         )
-                        Spacer(Modifier.height(8.dp))
-                        Text(a.title, style = MaterialTheme.typography.headlineMedium, color = Brand.Parchment, maxLines = 3, overflow = TextOverflow.Ellipsis)
+                        Spacer(Modifier.height(6.dp))
+                        Text(a.title, style = MaterialTheme.typography.headlineSmall, color = Brand.Parchment, maxLines = 2, overflow = TextOverflow.Ellipsis)
                         Formatters.millisDate(context, a.publishedAtMillis)?.let {
                             Spacer(Modifier.height(6.dp))
                             Text(it, style = MaterialTheme.typography.labelMedium, color = Brand.Parchment.copy(alpha = 0.78f))
@@ -291,41 +297,27 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                 }
             }
         }
-        if (items.size > 1) {
-            Row(Modifier.fillMaxWidth().padding(top = 10.dp), horizontalArrangement = Arrangement.Center) {
-                repeat(items.size) { i ->
-                    val w by animateDpAsState(if (pager.currentPage == i) 22.dp else 7.dp, label = "dot")
-                    Box(
-                        Modifier.padding(3.dp).height(7.dp).width(w).clip(RoundedCornerShape(50))
-                            .background(if (pager.currentPage == i) LocalExtendedColors.current.gold else MaterialTheme.colorScheme.outlineVariant),
-                    )
-                }
-            }
-        }
+        PagerDots(items.size, pager.currentPage, Modifier.padding(top = 8.dp))
     }
 }
 
-/** Православният празник за деня — от календара на сайта (/api/calendar). */
+/** Православният празник за деня — един ред под търсенето (от /api/calendar на сайта). */
 @Composable
-private fun FeastCard(feast: DailyFeast) {
+private fun FeastLine(feast: DailyFeast) {
     val context = LocalContext.current
-    Surface(
-        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.55f),
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp).animateEntrance(0),
+    val date = Formatters.date(context, LocalAppContainer.current.clock.today())
+    Row(
+        Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 6.dp).animateEntrance(0),
+        verticalAlignment = Alignment.Top,
     ) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
-            Icon(Icons.Outlined.AutoAwesome, null, tint = LocalExtendedColors.current.gold, modifier = Modifier.size(22.dp))
-            Spacer(Modifier.width(12.dp))
-            Column {
-                Text(
-                    stringResource(R.string.home_today, Formatters.date(context, LocalAppContainer.current.clock.today())).uppercase(),
-                    style = MaterialTheme.typography.labelSmall, color = LocalExtendedColors.current.gold,
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(boldMarkdown(feast.line), style = MaterialTheme.typography.bodyMedium, maxLines = 4, overflow = TextOverflow.Ellipsis)
-            }
-        }
+        Icon(Icons.Outlined.AutoAwesome, null, tint = LocalExtendedColors.current.gold, modifier = Modifier.padding(top = 2.dp).size(16.dp))
+        Spacer(Modifier.width(8.dp))
+        Text(
+            boldMarkdown("$date · ${feast.line}"),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 2, overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -334,8 +326,8 @@ private fun FeastCard(feast: DailyFeast) {
 private fun StatsRow(state: HomeUiState) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainer,
-        shape = RoundedCornerShape(24.dp),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(top = 24.dp),
     ) {
         Row(Modifier.padding(vertical = 18.dp, horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
             AnimatedCounter(state.yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f))
@@ -347,34 +339,19 @@ private fun StatsRow(state: HomeUiState) {
 
 @Composable
 private fun QuickActionsGrid(navigate: (String) -> Unit) {
-    Column(Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
-        quickActions.chunked(4).forEachIndexed { r, row ->
-            Row(Modifier.fillMaxWidth()) {
-                row.forEachIndexed { c, action ->
-                    val label = stringResource(action.labelRes)
-                    Column(
-                        Modifier.weight(1f).animateEntrance(r * 4 + c).clip(RoundedCornerShape(18.dp))
-                            .clickable { navigate(action.route) }
-                            .semantics { role = Role.Button }
-                            .padding(vertical = 10.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Box(
-                            Modifier.size(56.dp).clip(RoundedCornerShape(18.dp))
-                                .background(
-                                    Brush.linearGradient(
-                                        listOf(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)),
-                                    ),
-                                ),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Icon(action.icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
-                        }
-                        Spacer(Modifier.height(6.dp))
-                        Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis,
-                            textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-                    }
-                }
+    Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp)) {
+        quickActions.forEachIndexed { i, action ->
+            Column(
+                Modifier.weight(1f).animateEntrance(i).clip(MaterialTheme.shapes.medium)
+                    .clickable { navigate(action.route) }
+                    .semantics { role = Role.Button }
+                    .padding(vertical = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                IconPlate(action.icon)
+                Spacer(Modifier.height(6.dp))
+                Text(stringResource(action.labelRes), style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center)
             }
         }
     }

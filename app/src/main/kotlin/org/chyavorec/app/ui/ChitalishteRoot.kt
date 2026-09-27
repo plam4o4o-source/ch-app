@@ -109,7 +109,8 @@ private object IntroState { var shown = false }
 @Composable
 fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: MutableStateFlow<String?>, showIntro: Boolean = true) {
     val scope = rememberCoroutineScope()
-    var intro by remember { mutableStateOf(showIntro && !IntroState.shown) }
+    // Въведението с логото — само при първото стартиране (после splash екранът е достатъчен).
+    var intro by remember { mutableStateOf(showIntro && !IntroState.shown && !settings.introShown) }
     CompositionLocalProvider(LocalAppContainer provides container) {
         Box(Modifier.fillMaxSize()) {
             if (!settings.onboardingDone) {
@@ -122,7 +123,11 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
             } else {
                 MainScaffold(container, deepLink)
             }
-            if (intro) BrandIntro(onFinished = { IntroState.shown = true; intro = false })
+            if (intro) BrandIntro(onFinished = {
+                IntroState.shown = true
+                intro = false
+                scope.launch { container.settings.setIntroShown() }
+            })
         }
     }
 }

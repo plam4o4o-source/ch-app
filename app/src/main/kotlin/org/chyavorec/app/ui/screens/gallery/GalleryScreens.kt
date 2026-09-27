@@ -91,7 +91,7 @@ fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     items(albums, key = { it.name }) { album ->
                         Column(Modifier.clickable { navigate(Routes.album(album.name)) }.animateItem()) {
                             Box {
-                                RemoteImage(album.cover?.thumbUrl, null, Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(18.dp)))
+                                RemoteImage(album.cover?.thumbUrl, null, Modifier.fillMaxWidth().aspectRatio(1f).clip(MaterialTheme.shapes.medium))
                                 Text(
                                     pluralStringResource(R.plurals.photos_count, album.photos.size, album.photos.size),
                                     style = MaterialTheme.typography.labelMedium, color = Color.White,

@@ -53,7 +53,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.DemoBanner
+import org.chyavorec.app.ui.components.SectionLabel
+import org.chyavorec.app.ui.components.TileGrid
+import org.chyavorec.app.ui.components.TileItem
 import org.chyavorec.app.ui.components.MembershipPill
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.Brand
@@ -74,7 +78,7 @@ fun MyHubScreen(navigate: (String) -> Unit) {
     val signedIn = auth is AuthState.SignedIn
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text(stringResource(R.string.tab_my), style = MaterialTheme.typography.headlineMedium) })
+        AppTopBar(stringResource(R.string.tab_my), onSearch = { navigate(Routes.SEARCH) })
     }) { padding ->
         Column(Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState())) {
             DemoBanner(vm.isDemo)
@@ -103,16 +107,19 @@ fun MyHubScreen(navigate: (String) -> Unit) {
                 GuestCard(loginSupported = caps?.login == true, onLogin = { navigate(Routes.LOGIN) })
             }
 
-            Text(stringResource(R.string.my_section_library), style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(start = 20.dp, top = 8.dp, bottom = 4.dp).semantics { heading() })
-            HubItem(Icons.Outlined.Badge, stringResource(R.string.my_card),
-                if (signedIn) stringResource(R.string.my_card_desc) else if (selfCard != null) stringResource(R.string.my_card_self_desc) else stringResource(R.string.my_card_add_desc)) {
-                navigate(Routes.CARD)
+            SectionLabel(stringResource(R.string.my_section_library), Modifier.padding(start = 20.dp, top = 8.dp, bottom = 12.dp))
+            val tiles = buildList {
+                add(TileItem(Icons.Outlined.Badge, stringResource(R.string.my_card),
+                    if (signedIn) stringResource(R.string.my_card_desc) else if (selfCard != null) stringResource(R.string.my_card_self_desc) else stringResource(R.string.my_card_add_desc)) {
+                    navigate(Routes.CARD)
+                })
+                add(TileItem(Icons.Outlined.CollectionsBookmark, stringResource(R.string.my_books), stringResource(R.string.my_books_desc)) { navigate(Routes.LOANS) })
+                add(TileItem(Icons.Outlined.CardMembership, stringResource(R.string.my_membership), stringResource(R.string.my_membership_desc)) { navigate(Routes.MEMBERSHIP) })
+                if (signedIn) add(TileItem(Icons.Outlined.Person, stringResource(R.string.my_profile), stringResource(R.string.my_profile_desc)) { navigate(Routes.PROFILE) })
+                add(TileItem(Icons.Outlined.NotificationsNone, stringResource(R.string.my_notifications), stringResource(R.string.my_notifications_desc)) { navigate(Routes.NOTIFICATIONS) })
             }
-            HubItem(Icons.Outlined.CollectionsBookmark, stringResource(R.string.my_books), stringResource(R.string.my_books_desc)) { navigate(Routes.LOANS) }
-            HubItem(Icons.Outlined.CardMembership, stringResource(R.string.my_membership), stringResource(R.string.my_membership_desc)) { navigate(Routes.MEMBERSHIP) }
-            if (signedIn) HubItem(Icons.Outlined.Person, stringResource(R.string.my_profile), stringResource(R.string.my_profile_desc)) { navigate(Routes.PROFILE) }
-            HubItem(Icons.Outlined.NotificationsNone, stringResource(R.string.my_notifications), stringResource(R.string.my_notifications_desc)) { navigate(Routes.NOTIFICATIONS) }
+            TileGrid(tiles)
+            Spacer(Modifier.height(8.dp))
 
             if (signedIn) {
                 OutlinedButton(onClick = { confirmLogout = true }, modifier = Modifier.fillMaxWidth().padding(20.dp)) {
@@ -158,15 +165,4 @@ private fun GuestCard(loginSupported: Boolean, onLogin: () -> Unit) {
             }
         }
     }
-}
-
-@Composable
-private fun HubItem(icon: ImageVector, title: String, subtitle: String, onClick: () -> Unit) {
-    ListItem(
-        headlineContent = { Text(title, style = MaterialTheme.typography.titleMedium) },
-        supportingContent = { Text(subtitle) },
-        leadingContent = { Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
-        trailingContent = { Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, contentDescription = null) },
-        modifier = Modifier.clickable(onClick = onClick).padding(horizontal = 4.dp),
-    )
 }

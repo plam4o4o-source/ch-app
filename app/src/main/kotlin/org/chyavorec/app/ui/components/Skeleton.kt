@@ -71,7 +71,7 @@ fun SkeletonList(rows: Int = 6, withImage: Boolean = true, modifier: Modifier = 
         repeat(rows) {
             Row {
                 if (withImage) {
-                    Box(Modifier.size(72.dp, 96.dp).clip(RoundedCornerShape(10.dp)).shimmer())
+                    Box(Modifier.size(72.dp, 96.dp).clip(MaterialTheme.shapes.small).shimmer())
                     Spacer(Modifier.width(14.dp))
                 }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -88,7 +88,7 @@ fun SkeletonList(rows: Int = 6, withImage: Boolean = true, modifier: Modifier = 
 fun SkeletonCards(modifier: Modifier = Modifier) {
     val desc = stringResource(R.string.loading)
     Column(modifier.fillMaxWidth().padding(16.dp).semantics { contentDescription = desc }, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Box(Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(24.dp)).shimmer())
+        Box(Modifier.fillMaxWidth().height(220.dp).clip(MaterialTheme.shapes.large).shimmer())
         SkeletonBox(height = 22.dp, width = 200.dp)
         SkeletonBox(height = 14.dp)
         SkeletonBox(height = 14.dp)

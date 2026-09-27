@@ -160,7 +160,7 @@
     <string name="home_catalog_footer">Каталогът съдържа %1$d документа · данни към %2$s</string>
     <string name="home_latest_news">Още новини</string>
     <string name="home_new_books">Нови постъпления</string>
-    <string name="home_today">Днес · %1$s</string>
+    <string name="home_search_hint">Търси книга, новина, събитие…</string>
     <string name="home_upcoming">Предстоящи събития</string>
     <string name="label_calendar">Календар</string>
     <string name="label_library">Библиотека</string>
@@ -211,6 +211,8 @@
     <string name="more_documents_desc">Устав, отчети, юбилейният вестник</string>
     <string name="more_events_desc">Календар на читалището</string>
     <string name="more_gallery_desc">Снимки от сайта</string>
+    <string name="more_group_app">Приложението</string>
+    <string name="more_group_chitalishte">Читалището</string>
     <string name="more_messages_desc">Съобщения и покани от читалището</string>
     <string name="my_books">Моите книги</string>
     <string name="my_books_desc">Заети книги и срокове за връщане</string>
@@ -284,13 +286,10 @@
     <string name="profile_reader_number">Читателски номер</string>
     <string name="profile_registered">Регистриран на</string>
     <string name="qa_about">За читалището</string>
-    <string name="qa_activities">Дейности</string>
     <string name="qa_card">Членска карта</string>
     <string name="qa_catalog">Каталог</string>
     <string name="qa_contacts">Контакти</string>
     <string name="qa_events">Събития</string>
-    <string name="qa_my_library">Моята библиотека</string>
-    <string name="qa_news">Новини</string>
     <string name="reader_number">Читателски № %1$s</string>
     <string name="reminder_past">Събитието е минало — не може да се зададе напомняне.</string>
     <string name="reminder_removed">Напомнянето е премахнато.</string>

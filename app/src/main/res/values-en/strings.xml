@@ -160,7 +160,7 @@
     <string name="home_catalog_footer">The catalogue lists %1$d items · data as of %2$s</string>
     <string name="home_latest_news">More news</string>
     <string name="home_new_books">New arrivals</string>
-    <string name="home_today">Today · %1$s</string>
+    <string name="home_search_hint">Search books, news, events…</string>
     <string name="home_upcoming">Upcoming events</string>
     <string name="label_calendar">Calendar</string>
     <string name="label_library">Library</string>
@@ -211,6 +211,8 @@
     <string name="more_documents_desc">Statute, reports, jubilee newspaper</string>
     <string name="more_events_desc">Community centre calendar</string>
     <string name="more_gallery_desc">Photos from the website</string>
+    <string name="more_group_app">The app</string>
+    <string name="more_group_chitalishte">The centre</string>
     <string name="more_messages_desc">Announcements and invitations from the centre</string>
     <string name="my_books">My books</string>
     <string name="my_books_desc">Borrowed books and due dates</string>
@@ -284,13 +286,10 @@
     <string name="profile_reader_number">Reader number</string>
     <string name="profile_registered">Registered on</string>
     <string name="qa_about">About us</string>
-    <string name="qa_activities">Activities</string>
     <string name="qa_card">Member card</string>
     <string name="qa_catalog">Catalogue</string>
     <string name="qa_contacts">Contacts</string>
     <string name="qa_events">Events</string>
-    <string name="qa_my_library">My library</string>
-    <string name="qa_news">News</string>
     <string name="reader_number">Reader no. %1$s</string>
     <string name="reminder_past">The event has passed — a reminder can’t be set.</string>
     <string name="reminder_removed">Reminder removed.</string>
