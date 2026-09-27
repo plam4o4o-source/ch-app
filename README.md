@@ -240,6 +240,7 @@ push и качва APK/AAB като artifacts.
 | Логото на InvLib | `drawable-nodpi/logo_invlib.png` |
 | Логото на създателя | `drawable-nodpi/logo_creator.webp` |
 | Икона и feature graphic за Google Play | `store/graphics/` |
+| Иконата на приложението (адаптивна, монохромна, splash, Play) — генерира се от логото | `python3 tools/generate_icons.py` |
 
 Текстовете на двата езика се генерират от един файл: `python3 tools/generate_strings.py`.
 

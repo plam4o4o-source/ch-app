@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Читалище Яворец</string>
+    <!-- Кратко име под иконата (лаунчерът реже дългите имена). -->
+    <string name="launcher_name">НЧ Яворец</string>
 </resources>

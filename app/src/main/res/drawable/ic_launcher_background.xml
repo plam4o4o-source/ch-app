@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Фон на иконата: топъл пергамент с лек златист ореол зад логото. -->
+<!-- Фон на иконата: бордо (brand_burgundy) с лек светъл ореол зад медальона. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
@@ -11,11 +11,11 @@
             <gradient
                 android:type="radial"
                 android:centerX="54"
-                android:centerY="50"
-                android:gradientRadius="76">
-                <item android:offset="0" android:color="#FFFFFFFF" />
-                <item android:offset="0.62" android:color="#FFFAF7F2" />
-                <item android:offset="1" android:color="#FFE8D5A3" />
+                android:centerY="48"
+                android:gradientRadius="72">
+                <item android:offset="0" android:color="#FF963440" />
+                <item android:offset="0.55" android:color="#FF7A2733" />
+                <item android:offset="1" android:color="#FF4E141D" />
             </gradient>
         </aapt:attr>
     </path>
