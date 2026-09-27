@@ -20,12 +20,11 @@ import org.chyavorec.data.repository.SiteRepository
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.DailyFeast
 import org.chyavorec.domain.model.Event
-import org.chyavorec.domain.model.MonthCalendar
-import java.time.LocalDate
 import org.chyavorec.domain.model.NewsArticle
 
 data class HomeUiState(
     val news: ScreenState<List<NewsArticle>> = ScreenState(),
+    val upcoming: List<Event> = emptyList(),
     val newBooks: List<CatalogBook> = emptyList(),
     val shelves: List<Pair<String, List<CatalogBook>>> = emptyList(),
     val catalogCount: Int? = null,
@@ -33,8 +32,6 @@ data class HomeUiState(
     val feast: DailyFeast? = null,
     val yearsSinceFounding: Int = 0,
     val eventsThisMonth: Int? = null,
-    /** Датите от календара на сайта за текущия месец — сменя се сам с настъпването на новия месец. */
-    val month: MonthCalendar? = null,
 )
 
 class HomeViewModel(
@@ -71,36 +68,14 @@ class HomeViewModel(
         }
     }
 
-    private var lastEvents: List<Event> = emptyList()
-    private var computedFor: LocalDate? = null
-
     private fun applyEvents(list: List<Event>) {
-        lastEvents = list
         val today = clock.today()
-        computedFor = today
-        val month = MonthCalendar.of(list, today)
+        val horizon = today.plusDays(30).toString()
         _state.update {
             it.copy(
-                month = month,
-                eventsThisMonth = month.items.size,
+                upcoming = events.upcoming(list).take(8),
+                eventsThisMonth = list.count { e -> (e.date ?: "") in today.toString()..horizon },
             )
-        }
-    }
-
-    /**
-     * При връщане в приложението: нов ден → „днес“ се мести; нов месец → показва
-     * се календарът на новия месец и данните се опресняват от сайта.
-     */
-    fun onResume() {
-        val today = clock.today()
-        val last = computedFor ?: return
-        if (today == last) return
-        if (today.monthValue != last.monthValue || today.year != last.year) {
-            viewModelScope.launch {
-                (events.events(force = true) as? Outcome.Success)?.value?.data?.let { applyEvents(it) } ?: applyEvents(lastEvents)
-            }
-        } else {
-            applyEvents(lastEvents)
         }
     }
 

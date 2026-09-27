@@ -159,14 +159,9 @@
     <string name="home_carousel">Последни новини</string>
     <string name="home_catalog_footer">Каталогът съдържа %1$d документа · данни към %2$s</string>
     <string name="home_latest_news">Още новини</string>
-    <string name="home_month_all">Целият календар</string>
-    <string name="home_month_empty">През този месец в календара няма отбелязани дати.</string>
-    <string name="home_month_next">Следва: %1$s — %2$s</string>
-    <string name="home_month_past">Отминало</string>
-    <string name="home_month_title">Календар · %1$s %2$d</string>
-    <string name="home_month_today">Днес</string>
     <string name="home_new_books">Нови постъпления</string>
     <string name="home_today">Днес · %1$s</string>
+    <string name="home_upcoming">Предстоящи събития</string>
     <string name="label_calendar">Календар</string>
     <string name="label_library">Библиотека</string>
     <string name="label_news">Новини</string>

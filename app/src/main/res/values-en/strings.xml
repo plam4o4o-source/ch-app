@@ -159,14 +159,9 @@
     <string name="home_carousel">Latest news</string>
     <string name="home_catalog_footer">The catalogue lists %1$d items · data as of %2$s</string>
     <string name="home_latest_news">More news</string>
-    <string name="home_month_all">Full calendar</string>
-    <string name="home_month_empty">There are no dates in the calendar this month.</string>
-    <string name="home_month_next">Next: %1$s — %2$s</string>
-    <string name="home_month_past">Past</string>
-    <string name="home_month_title">Calendar · %1$s %2$d</string>
-    <string name="home_month_today">Today</string>
     <string name="home_new_books">New arrivals</string>
     <string name="home_today">Today · %1$s</string>
+    <string name="home_upcoming">Upcoming events</string>
     <string name="label_calendar">Calendar</string>
     <string name="label_library">Library</string>
     <string name="label_news">News</string>
