@@ -7,7 +7,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # write — само за клона „screenshots“ (снимки на екраните при push)
+  contents: write
 
 concurrency:
   group: android-${{ github.ref }}
@@ -33,6 +34,30 @@ jobs:
 
       - name: Unit, ViewModel, repository and UI (Robolectric) tests
         run: ./gradlew --no-daemon testDevDebugUnitTest testProdDebugUnitTest
+
+      # Снимките на екраните (ScreenshotTest) → клон „screenshots“, за да се виждат
+      # директно в GitHub: https://github.com/<repo>/tree/screenshots
+      - name: Publish screenshots
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -d app/build/reports/screenshots ] || exit 0
+          D=$(mktemp -d)
+          cp app/build/reports/screenshots/*.png "$D"/
+          {
+            echo "# Снимки на екраните"
+            echo
+            echo "Commit \`${GITHUB_SHA::7}\` (\`${GITHUB_REF_NAME}\`), генерирани от \`ScreenshotTest\` (Robolectric, примерни данни)."
+            echo
+            for f in "$D"/*.png; do n=$(basename "$f"); echo "### $n"; echo; echo "<img src=\"$n\" width=\"360\">"; echo; done
+          } > "$D/README.md"
+          cd "$D"
+          git init -q -b screenshots
+          git add .
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -qm "Screenshots: ${GITHUB_SHA::7} (${GITHUB_REF_NAME})"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" screenshots
 
       - name: Lint
         run: ./gradlew --no-daemon lintDevDebug lintProdRelease
