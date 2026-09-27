@@ -3,7 +3,6 @@
     <string name="about_body">The official mobile app of the “Vasil Levski – 1922” Community Centre in Yavorets — founded on 17 December 1922.\n\n# Where the data comes from\n\nNews, events, photos, documents and pages — straight from the data published by chyavorec.org. The library catalogue — from the public catalogue of the InvLib system the library uses. Nothing is entered twice: staff maintain content only on the website and in InvLib.\n\n# Privacy\n\nNo ads, no tracking, no behavioural analytics. Personal data on the device is stored encrypted.</string>
     <string name="about_catalog_desc">The library’s books with current availability — search by title, author, keyword.</string>
     <string name="about_creator">Created by</string>
-    <string name="about_creator_name">Plamen Hristov</string>
     <string name="about_env">Environment: %1$s · demo data: %2$s</string>
     <string name="about_invlib">The InvLib library system</string>
     <string name="about_invlib_desc">The free, open-source library system the library uses. The catalogue comes from it.</string>

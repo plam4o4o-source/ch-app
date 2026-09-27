@@ -372,7 +372,6 @@ S = {
 "about_invlib_desc": ("Безплатната библиотечна система с отворен код, с която работи библиотеката. Оттук идва каталогът.", "The free, open-source library system the library uses. The catalogue comes from it."),
 "about_catalog_desc": ("Книгите на библиотеката с актуална наличност — търсене по заглавие, автор, ключова дума.", "The library’s books with current availability — search by title, author, keyword."),
 "about_creator": ("Създател", "Created by"),
-"about_creator_name": ("Пламен Христов", "Plamen Hristov"),
 "privacy_title": ("Политика за поверителност", "Privacy policy"),
 "terms_title": ("Условия за използване", "Terms of use"),
 "legal_site_version": ("Виж и: %1$s", "See also: %1$s"),

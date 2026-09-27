@@ -136,8 +136,8 @@ fun AboutAppScreen(onBack: () -> Unit) {
             Spacer(Modifier.height(20.dp))
             // Създателят на приложението.
             Text(stringResource(R.string.about_creator).uppercase(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            BrandImage(R.drawable.logo_creator, stringResource(R.string.about_creator_name), Modifier.fillMaxWidth(0.55f).aspectRatio(2f))
-            Text(stringResource(R.string.about_creator_name), style = MaterialTheme.typography.titleLarge)
+            // Само логото на създателя — без изписано име.
+            BrandImage(R.drawable.logo_creator, stringResource(R.string.about_creator), Modifier.fillMaxWidth(0.55f).aspectRatio(2f))
         }
     }
 }
