@@ -142,7 +142,7 @@ class MainFlowsUiTest {
         waitForText("45-ти общински фолклорен събор", substring = true)
         clickTab("Моето")
         waitForText("Добре дошъл!")
-        waitForText("Онлайн вход все още не се поддържа", substring = true)
+        waitForText("Онлайн входът още не е включен", substring = true)
     }
 
     @Test fun demoLoginShowsLoansWithDueIndicators() {

@@ -61,12 +61,12 @@ S = {
 "subject_loans": ("заеманията", "your loans"),
 "subject_membership": ("членството", "your membership"),
 "na_title": ("Все още не е достъпно", "Not available yet"),
-"na_login": ("Онлайн вход все още не се поддържа: библиотечната система InvLib засега работи само на компютъра в библиотеката и не предоставя онлайн достъп до читателските данни. Щом такъв бъде добавен, функцията ще се включи автоматично.", "Online sign-in isn’t supported yet: the InvLib library system currently runs only on the library’s computer and offers no online access to reader data. It will switch on automatically once available."),
+"na_login": ("Онлайн входът още не е включен от библиотеката. Когато бъде включен, функцията ще се появи тук автоматично. За достъп ще ти трябва ПИН, който се издава в библиотеката.", "Online sign-in hasn’t been switched on by the library yet. It will appear here automatically once it is. You will need a PIN issued at the library."),
 "na_loans": ("Заетите книги и сроковете ще се показват тук, когато библиотечната система предостави онлайн достъп.", "Borrowed books and due dates will appear here once the library system offers online access."),
 "na_membership": ("Данните за членството ще се показват тук, когато библиотечната система предостави онлайн достъп.", "Membership details will appear here once the library system offers online access."),
 "na_holds": ("Заявяването на книги онлайн още не се поддържа. Попитай в библиотеката.", "Online holds aren’t supported yet. Please ask at the library."),
 "na_renew": ("Онлайн подновяване още не се поддържа. Попитай в библиотеката.", "Online renewals aren’t supported yet. Please ask at the library."),
-"na_password_reset": ("Възстановяване на парола онлайн не се поддържа. Обърни се към библиотекаря.", "Online password reset isn’t supported. Please contact the librarian."),
+"na_password_reset": ("Нов ПИН се издава само в библиотеката — обърни се към библиотекаря.", "A new PIN is issued only at the library — please contact the librarian."),
 "na_account_deletion": ("Искане за изтриване на данни се подава в библиотеката или по имейл.", "Data deletion requests are made at the library or by email."),
 "na_push": ("Сървърни известия още не се поддържат.", "Server notifications aren’t supported yet."),
 "status_available": ("Налична", "Available"),
@@ -181,13 +181,13 @@ S = {
 "login_title": ("Вход", "Sign in"),
 "login_heading": ("Вход за читатели", "Reader sign-in"),
 "login_card": ("Читателски номер", "Reader number"),
-"login_password": ("Парола", "Password"),
-"login_show_password": ("Покажи паролата", "Show password"),
-"login_hide_password": ("Скрий паролата", "Hide password"),
+"login_password": ("ПИН (от библиотеката)", "PIN (from the library)"),
+"login_show_password": ("Покажи ПИН-а", "Show PIN"),
+"login_hide_password": ("Скрий ПИН-а", "Hide PIN"),
 "login_remember": ("Запомни ме на това устройство", "Keep me signed in on this device"),
-"login_forgot": ("Забравена парола", "Forgot password"),
+"login_forgot": ("Забравен ПИН", "Forgot PIN"),
 "login_reset_sent": ("Ако номерът е регистриран, ще получиш инструкции.", "If the number is registered, you’ll receive instructions."),
-"login_wrong": ("Грешен читателски номер или парола.", "Wrong reader number or password."),
+"login_wrong": ("Грешен читателски номер или ПИН.", "Wrong reader number or PIN."),
 "login_privacy_note": ("Паролата не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore.", "Your password is never stored on the device. The session is kept encrypted with an Android Keystore key."),
 "login_demo_hint": ("Демо вход: DEMO-0001 / demo", "Demo sign-in: DEMO-0001 / demo"),
 "card_add_manual": ("Добави номера на картата си", "Add your card number"),
@@ -401,7 +401,7 @@ PRIVACY_BG = """# Кой обработва данните
 
 Читателска карта: ако въведеш номера на своята карта, той (и името, ако го въведеш) се пази шифрован с ключ от Android Keystore само на това устройство.
 
-Вход (когато библиотечната система предостави онлайн достъп): паролата се изпраща само по HTTPS към сървъра на библиотеката и никога не се записва. Пази се само шифрован токен за сесията. Заетите книги, сроковете и членството се показват от сървъра на библиотеката и се кешират шифровано.
+Вход (само ако си дал съгласие в библиотеката и имаш издаден ПИН): читателският номер и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и никога не се записват. Пази се само шифрован токен за сесията. Заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес, телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните се изтриват от сървъра при следващото обновяване.
 
 # Известия
 

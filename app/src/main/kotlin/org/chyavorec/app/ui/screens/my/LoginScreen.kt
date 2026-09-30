@@ -124,7 +124,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                         singleLine = true,
                         isError = err != null,
                         supportingText = errText?.let { { Text(it) } },
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password, autoCorrectEnabled = false),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.NumberPassword, autoCorrectEnabled = false),
                         keyboardActions = KeyboardActions(onDone = { vm.submit() }),
                         modifier = Modifier.fillMaxWidth().semantics {
                             contentType = ContentType.Password

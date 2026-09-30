@@ -116,7 +116,7 @@ cp .env.example .env          # по желание — стойностите �
 |---|---|---|
 | `API_BASE_URL` | `https://chyavorec.org` | сайтът на читалището |
 | `CATALOG_URLS` | raw.githubusercontent … `\|` cdn.jsdelivr … | основен и резервен адрес на `katalog.json` |
-| `INFLIB_API_URL` | *(празно)* | онлайн API на InvLib (само `https://`); празно = функцията е „недостъпна“ |
+| `INFLIB_API_URL` | `https://chyavorec.org/api/invlib/yavorec` | мостът за онлайн достъп на читатели (само `https://`); празно = функцията е „недостъпна“ |
 | `UPDATE_MANIFEST_URL` | `…/releases/latest/download/update.json` | откъде APK-то извън Google Play проверява за нова версия; празно = без самообновяване |
 | `APP_ENV` | `development` | само за dev; prod е винаги `production` |
 | `USE_MOCK_DATA` | `true` | само за dev flavor — демо читателски данни |

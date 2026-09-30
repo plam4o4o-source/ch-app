@@ -36,7 +36,9 @@ val catalogUrls = config(
     "https://raw.githubusercontent.com/plam4o4o-source/yavorec-katalog/main/katalog.json|" +
         "https://cdn.jsdelivr.net/gh/plam4o4o-source/yavorec-katalog@main/katalog.json",
 )
-val inflibApiUrl = config("INFLIB_API_URL", "")
+// Мостът за онлайн достъп на читатели (сайтът на читалището, Vercel). Приложението
+// е само за библиотеката в Яворец — кодът „yavorec“ е фиксиран тук.
+val inflibApiUrl = config("INFLIB_API_URL", "https://chyavorec.org/api/invlib/yavorec")
 // Автоматично обновяване извън Google Play: update.json към последното GitHub Release.
 val updateManifestUrl = config(
     "UPDATE_MANIFEST_URL",
