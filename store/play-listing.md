@@ -1,5 +1,7 @@
 # Google Play — метаданни
 
+Стъпките за публикуване с личен акаунт (потвърждение, затворен тест 12 тестери × 14 дни, Production) са в `store/google-play.md`.
+
 ## Основни
 
 | Поле | Стойност |
@@ -10,7 +12,7 @@
 | Цена | Безплатно, без реклами, без покупки в приложението |
 | Имейл за контакт | chitalishte_yavorets@abv.bg |
 | Уебсайт | https://chyavorec.org/ |
-| Политика за поверителност (URL) | публикувайте текста от `store/privacy-policy.md` като страница в chyavorec.org (напр. `/index/politika_za_poveritelnost/0-NN`) и въведете адреса ѝ |
+| Политика за поверителност (URL) | https://chyavorec.org/app-privacy (текстът е в `store/privacy-policy.md`; страницата в site-yavorec е `app-privacy/index.html`) |
 | Съдържание (rating) | Всички възрасти — няма потребителско съдържание, реклами, покупки |
 
 ## Кратко описание (до 80 знака)
