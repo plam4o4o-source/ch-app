@@ -10,7 +10,7 @@
 | Application ID | `org.chyavorec.app` |
 | Категория | Образование (алтернатива: Книги и справочна литература) |
 | Цена | Безплатно, без реклами, без покупки в приложението |
-| Имейл за контакт | chitalishte_yavorets@abv.bg |
+| Имейл за контакт | chitalishte_yavorec@abv.bg |
 | Уебсайт | https://chyavorec.org/ |
 | Политика за поверителност (URL) | https://chyavorec.org/app-privacy (текстът е в `store/privacy-policy.md`; страницата в site-yavorec е `app-privacy/index.html`) |
 | Съдържание (rating) | Всички възрасти — няма потребителско съдържание, реклами, покупки |

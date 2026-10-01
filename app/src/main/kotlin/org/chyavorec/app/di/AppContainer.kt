@@ -82,7 +82,7 @@ class AppContainer(
         organization = "НЧ „Васил Левски – 1922“",
         address = "пл. 9-ти Септември 3, с. Яворец, общ. Габрово, ПК 5334",
         phones = emptyList(),
-        emails = listOf("chitalishte_yavorets@abv.bg"),
+        emails = listOf("chitalishte_yavorec@abv.bg"),
         website = config.siteBaseUrl,
         facebook = "https://www.facebook.com/nchvasillevski1922/",
         workingHours = emptyList(),
