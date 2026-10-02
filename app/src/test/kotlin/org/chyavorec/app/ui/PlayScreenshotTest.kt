@@ -20,6 +20,8 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import okhttp3.tls.HandshakeCertificates
+import okhttp3.tls.HeldCertificate
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.TestResources
 import org.chyavorec.app.XorTestCipher
@@ -52,6 +54,15 @@ import java.time.Instant
 class PlayScreenshotTest {
     @get:Rule val compose = createComposeRule()
     private val server = MockWebServer()
+
+    // Приложението включва читателския вход само за https:// адрес, затова тестовият
+    // сървър е с локален TLS сертификат, на който доверява само този OkHttpClient.
+    private val cert = HeldCertificate.Builder().addSubjectAlternativeName("localhost").build()
+    private val serverTls = HandshakeCertificates.Builder().heldCertificate(cert).build()
+    private val clientTls = HandshakeCertificates.Builder().addTrustedCertificate(cert.certificate).build()
+    private val client = OkHttpClient.Builder()
+        .sslSocketFactory(clientTls.sslSocketFactory(), clientTls.trustManager)
+        .build()
     private val outDir = File("build/reports/screenshots").apply { mkdirs() }
 
     @Before fun start() {
@@ -69,6 +80,7 @@ class PlayScreenshotTest {
                 else -> MockResponse().setResponseCode(404)
             }
         }
+        server.useHttps(serverTls.sslSocketFactory())
         server.start()
         // В магазина снимките не бива да показват лентата „Няма интернет връзка“.
         val cm = ApplicationProvider.getApplicationContext<Application>().getSystemService(ConnectivityManager::class.java)
@@ -81,14 +93,14 @@ class PlayScreenshotTest {
     @After fun stop() = server.shutdown()
 
     private fun launch(mode: ThemeMode = ThemeMode.LIGHT, settings: AppSettings = AppSettings(onboardingDone = true, introShown = true)) {
-        val base = server.url("/").toString().trimEnd('/')
+        val base = server.url("/").newBuilder().host("localhost").build().toString().trimEnd('/')
         val config = AppConfig(
             siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = "$base/api/invlib/yavorec",
             environment = "test", useMockData = false, versionName = "test", versionCode = 1,
         )
         val container = AppContainer(
             ApplicationProvider.getApplicationContext(), config,
-            FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), OkHttpClient(),
+            FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), client,
         )
         compose.setContent {
             ChitalishteTheme(mode = mode) {
