@@ -2,6 +2,8 @@ package org.chyavorec.app.ui
 
 import android.app.Application
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasText
@@ -33,6 +35,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.io.File
 import java.time.Instant
 
@@ -59,10 +63,19 @@ class PlayScreenshotTest {
                 "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json"))
                 "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Въздвижение на Светия Кръст Господен. **Кръстовден**"}""")
                 "/data/app-messages.json" -> MockResponse().setBody("[]")
+                "/api/invlib/yavorec/v1/capabilities" -> MockResponse().setBody(
+                    """{"apiVersion":1,"login":true,"profile":true,"loans":true,"membership":true,"holds":false,"renew":false,"passwordReset":false,"accountDeletion":false,"push":false,"availability":false}""",
+                )
                 else -> MockResponse().setResponseCode(404)
             }
         }
         server.start()
+        // В магазина снимките не бива да показват лентата „Няма интернет връзка“.
+        val cm = ApplicationProvider.getApplicationContext<Application>().getSystemService(ConnectivityManager::class.java)
+        val caps = ShadowNetworkCapabilities.newInstance()
+        shadowOf(caps).addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        shadowOf(caps).addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        shadowOf(cm).setNetworkCapabilities(cm.activeNetwork, caps)
     }
 
     @After fun stop() = server.shutdown()
@@ -70,7 +83,7 @@ class PlayScreenshotTest {
     private fun launch(mode: ThemeMode = ThemeMode.LIGHT, settings: AppSettings = AppSettings(onboardingDone = true, introShown = true)) {
         val base = server.url("/").toString().trimEnd('/')
         val config = AppConfig(
-            siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = "",
+            siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = "$base/api/invlib/yavorec",
             environment = "test", useMockData = false, versionName = "test", versionCode = 1,
         )
         val container = AppContainer(
