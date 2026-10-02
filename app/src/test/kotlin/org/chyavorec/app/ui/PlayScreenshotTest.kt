@@ -80,7 +80,7 @@ class PlayScreenshotTest {
                 else -> MockResponse().setResponseCode(404)
             }
         }
-        server.useHttps(serverTls.sslSocketFactory())
+        server.useHttps(serverTls.sslSocketFactory(), false)
         server.start()
         // В магазина снимките не бива да показват лентата „Няма интернет връзка“.
         val cm = ApplicationProvider.getApplicationContext<Application>().getSystemService(ConnectivityManager::class.java)
