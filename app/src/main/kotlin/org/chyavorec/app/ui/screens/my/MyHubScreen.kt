@@ -91,13 +91,21 @@ fun MyHubScreen(navigate: (String) -> Unit) {
                     Row(Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
                         Surface(shape = CircleShape, color = Brand.Gold, contentColor = Brand.Ink, modifier = Modifier.size(56.dp)) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                                Text(p?.fullName?.split(' ')?.mapNotNull { it.firstOrNull() }?.take(2)?.joinToString("") ?: "·",
+                                Text(p?.fullName?.takeIf { it.isNotBlank() }?.split(' ')?.mapNotNull { it.firstOrNull() }?.take(2)?.joinToString("") ?: "·",
                                     style = MaterialTheme.typography.headlineSmall)
                             }
                         }
                         Spacer(Modifier.width(16.dp))
                         Column(Modifier.weight(1f)) {
-                            Text(p?.fullName ?: stringResource(R.string.loading), style = MaterialTheme.typography.headlineSmall)
+                            val name = p?.fullName?.takeIf { it.isNotBlank() }
+                            when {
+                                name != null -> Text(name, style = MaterialTheme.typography.headlineSmall)
+                                p != null -> Text(stringResource(R.string.my_profile), style = MaterialTheme.typography.headlineSmall)
+                                profile.error != null -> TextButton(onClick = { vm.loadProfile() }) {
+                                    Text(stringResource(R.string.action_retry), color = Brand.GoldLight)
+                                }
+                                else -> Text(stringResource(R.string.loading), style = MaterialTheme.typography.headlineSmall)
+                            }
                             p?.let { Text(stringResource(R.string.reader_number, it.cardNumber), style = MaterialTheme.typography.bodyMedium, color = Brand.GoldLight) }
                             p?.membership?.let { MembershipPill(it.status, Modifier.padding(top = 6.dp)) }
                         }

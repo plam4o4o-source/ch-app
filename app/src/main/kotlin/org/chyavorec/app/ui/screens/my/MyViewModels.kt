@@ -35,7 +35,15 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
             c.authRepository.restore()
             c.selfCardRepository.load()
             _caps.value = c.authRepository.capabilities()
-            if (authState.value is AuthState.SignedIn) loadProfile()
+            // Профилът следва входа: зарежда се и при нов вход (не само при старт),
+            // и се изчиства при изход.
+            authState.collect { s ->
+                if (s is AuthState.SignedIn) {
+                    if (_profile.value.data == null) loadProfile()
+                } else {
+                    _profile.value = ScreenState(loading = false)
+                }
+            }
         }
     }
 
