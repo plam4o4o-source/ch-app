@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
@@ -46,7 +47,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -65,6 +68,7 @@ import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
+import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.ui.navigation.Routes
@@ -79,6 +83,10 @@ fun NewsListScreen(navigate: (String) -> Unit) {
     val vm = appViewModel { NewsListViewModel(it.newsRepository, it.database.favorites(), it.clock) }
     val ui by vm.ui.collectAsStateWithLifecycle()
     val scroll = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val listState = rememberLazyListState()
+    val haptic = LocalHapticFeedback.current
+    val tick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick) }
+    TabReselectEffect(Routes.NEWS) { listState.animateScrollToItem(0) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
@@ -99,16 +107,16 @@ fun NewsListScreen(navigate: (String) -> Unit) {
                 )
                 LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     item {
-                        FilterChip(ui.filter.category == null && !ui.filter.favoritesOnly, onClick = { vm.setCategory(null); vm.setFavoritesOnly(false) },
+                        FilterChip(ui.filter.category == null && !ui.filter.favoritesOnly, onClick = { tick(); vm.setCategory(null); vm.setFavoritesOnly(false) },
                             label = { Text(stringResource(R.string.filter_all)) })
                     }
                     item {
-                        FilterChip(ui.filter.favoritesOnly, onClick = { vm.setFavoritesOnly(!ui.filter.favoritesOnly) },
+                        FilterChip(ui.filter.favoritesOnly, onClick = { tick(); vm.setFavoritesOnly(!ui.filter.favoritesOnly) },
                             label = { Text(stringResource(R.string.news_saved)) },
                             leadingIcon = { Icon(Icons.Filled.Bookmark, contentDescription = null, modifier = Modifier.size(18.dp)) })
                     }
                     items(ui.categories) { c ->
-                        FilterChip(ui.filter.category == c, onClick = { vm.setCategory(if (ui.filter.category == c) null else c) }, label = { Text(c) })
+                        FilterChip(ui.filter.category == c, onClick = { tick(); vm.setCategory(if (ui.filter.category == c) null else c) }, label = { Text(c) })
                     }
                 }
                 SyncBanner(ui.state.fromCache, ui.state.syncedAt, ui.state.refreshError)
@@ -125,7 +133,7 @@ fun NewsListScreen(navigate: (String) -> Unit) {
                     },
                     errorSubject = stringResource(R.string.subject_news),
                 ) { list ->
-                    LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
+                    LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
                         itemsIndexed(list, key = { _, a -> a.id }) { index, a ->
                             if (index == 0 && ui.filter.query.isBlank() && !ui.filter.favoritesOnly) {
                                 FeaturedNews(a, onClick = { navigate(Routes.article(a.id)) })

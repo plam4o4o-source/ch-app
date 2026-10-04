@@ -1,6 +1,9 @@
 package org.chyavorec.app.ui.components
 
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -48,9 +51,11 @@ fun PagerDots(
     inactiveColor: Color = MaterialTheme.colorScheme.outlineVariant,
 ) {
     if (count < 2) return
+    val reduced = rememberReducedMotion()
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         repeat(count) { i ->
-            val w by animateDpAsState(if (current == i) 22.dp else 8.dp, label = "dot")
+            val dotSpec: AnimationSpec<Dp> = if (reduced) snap() else spring()
+            val w by animateDpAsState(if (current == i) 22.dp else 8.dp, dotSpec, label = "dot")
             Box(
                 Modifier.padding(4.dp).height(8.dp).width(w).clip(RoundedCornerShape(50))
                     .background(if (current == i) activeColor else inactiveColor),

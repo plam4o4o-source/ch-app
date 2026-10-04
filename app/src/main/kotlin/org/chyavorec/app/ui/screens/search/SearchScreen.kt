@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -167,7 +168,7 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
                                 modifier = Modifier.clickable { vm.setQuery(q) })
                         }
                     } else {
-                        item { EmptyView(stringResource(R.string.search_start), stringResource(R.string.search_start_hint)) }
+                        item { EmptyView(stringResource(R.string.search_start), stringResource(R.string.search_start_hint), icon = Icons.Outlined.Search) }
                     }
                 }
             } else {

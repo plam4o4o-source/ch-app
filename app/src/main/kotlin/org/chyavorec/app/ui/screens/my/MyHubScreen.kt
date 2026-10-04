@@ -56,6 +56,7 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.SectionLabel
+import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
 import org.chyavorec.app.ui.components.MembershipPill
@@ -76,11 +77,13 @@ fun MyHubScreen(navigate: (String) -> Unit) {
     val selfCard by vm.selfCard.collectAsStateWithLifecycle()
     var confirmLogout by remember { mutableStateOf(false) }
     val signedIn = auth is AuthState.SignedIn
+    val scrollState = rememberScrollState()
+    TabReselectEffect(Routes.MY) { scrollState.animateScrollTo(0) }
 
     Scaffold(topBar = {
         AppTopBar(stringResource(R.string.tab_my), onSearch = { navigate(Routes.SEARCH) })
     }) { padding ->
-        Column(Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState())) {
+        Column(Modifier.padding(padding).fillMaxSize().verticalScroll(scrollState)) {
             DemoBanner(vm.isDemo)
             if (signedIn) {
                 val p = profile.data

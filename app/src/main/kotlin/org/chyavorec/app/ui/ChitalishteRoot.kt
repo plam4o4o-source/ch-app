@@ -2,6 +2,10 @@ package org.chyavorec.app.ui
 
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -32,7 +36,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -60,6 +66,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import org.chyavorec.app.ui.components.BrandIntro
 import org.chyavorec.app.ui.components.LocalNavAnimatedScope
 import org.chyavorec.app.ui.components.LocalSharedScope
+import org.chyavorec.app.ui.components.LocalTabReselect
+import org.chyavorec.app.ui.components.TabReselectBus
+import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.theme.LocalExtendedColors
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
@@ -142,6 +152,9 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     val context = LocalContext.current
     val online by container.connectivity.online.collectAsStateWithLifecycle(initialValue = true)
     val link by deepLink.collectAsState()
+    val reselect = remember { TabReselectBus() }
+    val haptic = LocalHapticFeedback.current
+    val reduced = rememberReducedMotion()
 
     LaunchedEffect(link) {
         if (link == null) return@LaunchedEffect
@@ -209,17 +222,30 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
                     enter = slideInVertically { it } + fadeIn(),
                     exit = slideOutVertically { it } + fadeOut(),
                 ) {
+                    // Избраният раздел — в златно/мастило от фирмената палитра (не розово в тъмна тема).
+                    val navColors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        selectedTextColor = if (LocalExtendedColors.current.isDark) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.secondary,
+                        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                    )
                     NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
                         TopTab.entries.forEach { tab ->
                             val selected = route == tab.route
-                            val iconScale by animateFloatAsState(
-                                if (selected) 1.15f else 1f,
-                                spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium),
-                                label = "tab-icon",
-                            )
+                            val iconSpec: AnimationSpec<Float> = if (reduced) snap()
+                            else spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium)
+                            val iconScale by animateFloatAsState(if (selected) 1.15f else 1f, iconSpec, label = "tab-icon")
                             NavigationBarItem(
                                 selected = selected,
-                                onClick = { nav.navigateTab(tab.route) },
+                                onClick = {
+                                    if (selected) {
+                                        // Повторно докосване на текущия раздел — към началото на списъка.
+                                        haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                                        reselect.emit(tab.route)
+                                    } else {
+                                        nav.navigateTab(tab.route)
+                                    }
+                                },
                                 icon = {
                                     Icon(
                                         if (selected) tab.selectedIcon else tab.icon, contentDescription = null,
@@ -227,7 +253,7 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
                                     )
                                 },
                                 label = { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                                colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colorScheme.primaryContainer),
+                                colors = navColors,
                             )
                         }
                     }
@@ -237,7 +263,9 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
         contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0),
     ) { padding ->
         Box(Modifier.padding(padding).fillMaxSize()) {
-            AppNavHost(nav, ::navigate, back, ::openLink, openExternal)
+            CompositionLocalProvider(LocalTabReselect provides reselect) {
+                AppNavHost(nav, ::navigate, back, ::openLink, openExternal)
+            }
         }
     }
 }
@@ -257,19 +285,23 @@ private fun AppNavHost(
     openExternal: (String) -> Unit,
 ) {
     val dur = 280
+    // При изключени анимации (Достъпност) екраните се сменят без преход.
+    val reduced = rememberReducedMotion()
     SharedTransitionLayout {
     CompositionLocalProvider(LocalSharedScope provides this) {
     NavHost(
         navController = nav,
         startDestination = Routes.HOME,
         enterTransition = {
-            if (targetState.destination.route in topLevelRoutes) fadeIn(tween(dur)) + scaleIn(tween(dur), initialScale = 0.98f)
+            if (reduced) EnterTransition.None
+            else if (targetState.destination.route in topLevelRoutes) fadeIn(tween(dur)) + scaleIn(tween(dur), initialScale = 0.98f)
             else slideInHorizontally(tween(dur)) { it / 5 } + fadeIn(tween(dur))
         },
-        exitTransition = { fadeOut(tween(dur / 2)) },
-        popEnterTransition = { fadeIn(tween(dur)) },
+        exitTransition = { if (reduced) ExitTransition.None else fadeOut(tween(dur / 2)) },
+        popEnterTransition = { if (reduced) EnterTransition.None else fadeIn(tween(dur)) },
         popExitTransition = {
-            if (initialState.destination.route in topLevelRoutes) fadeOut(tween(dur / 2)) + scaleOut(targetScale = 0.98f)
+            if (reduced) ExitTransition.None
+            else if (initialState.destination.route in topLevelRoutes) fadeOut(tween(dur / 2)) + scaleOut(targetScale = 0.98f)
             else slideOutHorizontally(tween(dur)) { it / 5 } + fadeOut(tween(dur))
         },
     ) {

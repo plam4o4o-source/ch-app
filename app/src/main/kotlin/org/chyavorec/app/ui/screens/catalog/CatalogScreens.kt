@@ -20,6 +20,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.BrandImage
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.sharedElementKey
@@ -30,10 +32,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
-import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.SwapVert
+import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.Share
@@ -68,7 +70,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.pluralStringResource
@@ -138,7 +142,10 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     var showFilters by rememberSaveable { mutableStateOf(false) }
     var sortMenu by remember { mutableStateOf(false) }
     val keyboard = LocalSoftwareKeyboardController.current
+    val haptic = LocalHapticFeedback.current
+    val listState = rememberLazyListState()
     val q = state.query
+    TabReselectEffect(Routes.CATALOG) { listState.animateScrollToItem(0) }
 
     Scaffold(topBar = {
         TopAppBar(
@@ -160,7 +167,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
             actions = {
                 Box {
                     IconButton(onClick = { sortMenu = true }) {
-                        Icon(Icons.AutoMirrored.Outlined.Sort, contentDescription = stringResource(R.string.catalog_sort))
+                        Icon(Icons.Outlined.SwapVert, contentDescription = stringResource(R.string.catalog_sort))
                     }
                     DropdownMenu(sortMenu, onDismissRequest = { sortMenu = false }) {
                         CatalogSort.entries.forEach { s ->
@@ -173,7 +180,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                 }
                 IconButton(onClick = { showFilters = true }) {
                     BadgedBox(badge = { if (q.hasFilters) Badge() }) {
-                        Icon(Icons.Outlined.FilterList, contentDescription = stringResource(R.string.catalog_filters))
+                        Icon(Icons.Outlined.Tune, contentDescription = stringResource(R.string.catalog_filters))
                     }
                 }
             },
@@ -202,7 +209,14 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                 )
                 LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(SearchField.entries) { f ->
-                        FilterChip(q.field == f, onClick = { vm.setField(f) }, label = { Text(fieldLabel(f)) })
+                        FilterChip(
+                            q.field == f,
+                            onClick = {
+                                if (q.field != f) haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                                vm.setField(f)
+                            },
+                            label = { Text(fieldLabel(f)) },
+                        )
                     }
                 }
                 AnimatedVisibility(state.suggestions.isNotEmpty() && q.text.length >= 2) {
@@ -224,7 +238,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                     if (state.results.isEmpty() && !state.searching) {
                         EmptyView(stringResource(R.string.catalog_no_results), stringResource(R.string.catalog_no_results_hint), icon = Icons.Outlined.SearchOff)
                     } else {
-                        LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
+                        LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
                             item {
                                 Text(
                                     pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults) + "  ·  " +
@@ -327,10 +341,18 @@ private fun FiltersSheet(state: CatalogUiState, onDismiss: () -> Unit, onChange:
 @Composable
 private fun FacetGroup(title: String, values: List<String>, selected: String?, label: (String) -> String = { it }, onSelect: (String?) -> Unit) {
     if (values.isEmpty()) return
+    val haptic = LocalHapticFeedback.current
     Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp, bottom = 6.dp))
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         values.take(24).forEach { v ->
-            FilterChip(selected == v, onClick = { onSelect(if (selected == v) null else v) }, label = { Text(label(v)) })
+            FilterChip(
+                selected == v,
+                onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                    onSelect(if (selected == v) null else v)
+                },
+                label = { Text(label(v)) },
+            )
         }
     }
 }

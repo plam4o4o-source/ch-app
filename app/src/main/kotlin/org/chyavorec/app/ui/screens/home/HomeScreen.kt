@@ -1,6 +1,9 @@
 package org.chyavorec.app.ui.screens.home
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.pager.HorizontalPager
@@ -67,8 +70,10 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,12 +88,17 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BookCover
+import org.chyavorec.app.ui.components.BrandedImageFallback
+import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.ui.components.Emblem
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.PressableCard
@@ -121,6 +131,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
     val vm = appViewModel { HomeViewModel(it.newsRepository, it.eventsRepository, it.catalogRepository, it.siteRepository, it.clock) }
     val state by vm.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
+    TabReselectEffect(Routes.HOME) { listState.animateScrollToItem(0) }
 
     PullToRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp), modifier = Modifier.fillMaxSize()) {
@@ -209,6 +220,20 @@ private fun HomeHeader(onMessages: () -> Unit) {
     val center = LocalAppContainer.current.messages
     val unread by center.unreadCount.collectAsStateWithLifecycle(initialValue = 0)
     LaunchedEffect(Unit) { runCatching { center.refresh(force = false) } }
+    // Значката „подскача“ при поява или нов брой непрочетени (без анимация при намалено движение).
+    val reduced = rememberReducedMotion()
+    val badgeScale = remember { Animatable(1f) }
+    var lastUnread by rememberSaveable { mutableIntStateOf(0) }
+    LaunchedEffect(unread) {
+        val grew = unread > lastUnread
+        lastUnread = unread
+        if (grew && !reduced) {
+            badgeScale.snapTo(0.3f)
+            badgeScale.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium))
+        } else {
+            badgeScale.snapTo(1f)
+        }
+    }
     Row(
         Modifier.fillMaxWidth().statusBarsPadding().padding(start = 20.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -216,12 +241,25 @@ private fun HomeHeader(onMessages: () -> Unit) {
         Emblem(50.dp)
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }) {
-            Text(stringResource(R.string.org_short), style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            // Пълното име трябва да се чете: до два реда, малко по-дребен шрифт.
+            Text(
+                stringResource(R.string.org_short),
+                style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp, lineHeight = 23.sp, lineBreak = LineBreak.Heading),
+                maxLines = 2, overflow = TextOverflow.Ellipsis,
+            )
             Text(stringResource(R.string.org_place), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         IconButton(onClick = onMessages, modifier = Modifier.size(48.dp)) {
             val label = if (unread > 0) pluralStringResource(R.plurals.messages_unread, unread, unread) else stringResource(R.string.messages_title)
-            BadgedBox(badge = { if (unread > 0) CountBadge { Text(if (unread > 9) "9+" else unread.toString()) } }) {
+            BadgedBox(
+                badge = {
+                    if (unread > 0) {
+                        CountBadge(Modifier.graphicsLayer { scaleX = badgeScale.value; scaleY = badgeScale.value }) {
+                            Text(if (unread > 9) "9+" else unread.toString())
+                        }
+                    }
+                },
+            ) {
                 Icon(Icons.Outlined.NotificationsNone, contentDescription = label)
             }
         }
@@ -265,23 +303,32 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                         scaleX = scale; scaleY = scale
                     },
             ) {
+                // Без снимка (или при грешка) — фирмен фон с воден знак, без тъмния воал.
+                var imageFailed by remember(a.imageUrl) { mutableStateOf(false) }
+                val branded = a.imageUrl.isNullOrBlank() || imageFailed
                 Box {
-                    RemoteImage(
-                        url = a.imageUrl,
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize().graphicsLayer {
-                            translationX = offset * size.width * 0.35f
-                            scaleX = 1.15f; scaleY = 1.15f
-                        },
-                    )
-                    Box(
-                        Modifier.fillMaxSize().background(
-                            Brush.verticalGradient(
-                                0f to Color.Transparent, 0.3f to Color.Transparent,
-                                0.65f to Brand.Ink.copy(alpha = 0.6f), 1f to Brand.Ink.copy(alpha = 0.96f),
+                    if (branded) {
+                        BrandedImageFallback(Modifier.fillMaxSize())
+                    } else {
+                        RemoteImage(
+                            url = a.imageUrl,
+                            contentDescription = null,
+                            containerColor = Brand.InkSoft,
+                            onFailure = { imageFailed = true },
+                            modifier = Modifier.sharedElementKey("news-${a.id}").fillMaxSize().graphicsLayer {
+                                translationX = offset * size.width * 0.35f
+                                scaleX = 1.15f; scaleY = 1.15f
+                            },
+                        )
+                        Box(
+                            Modifier.fillMaxSize().background(
+                                Brush.verticalGradient(
+                                    0f to Color.Transparent, 0.3f to Color.Transparent,
+                                    0.65f to Brand.Ink.copy(alpha = 0.6f), 1f to Brand.Ink.copy(alpha = 0.96f),
+                                ),
                             ),
-                        ),
-                    )
+                        )
+                    }
                     Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
                         Text(
                             (a.category ?: stringResource(R.string.label_news)).uppercase(),

@@ -41,6 +41,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.SectionLabel
+import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
 import org.chyavorec.app.ui.navigation.Routes
@@ -62,12 +63,14 @@ private fun AppItem(icon: ImageVector, title: String, onClick: () -> Unit) = Lis
 fun MoreScreen(navigate: (String) -> Unit) {
     val c = LocalAppContainer.current
     var digitalClub by remember { mutableStateOf<SiteLink?>(null) }
+    val scrollState = rememberScrollState()
+    TabReselectEffect(Routes.MORE) { scrollState.animateScrollTo(0) }
     LaunchedEffect(Unit) {
         // „Дигитален клуб“ се показва само ако страницата съществува на сайта.
         digitalClub = (c.siteRepository.links(false) as? Outcome.Success)?.value?.data?.firstOrNull { it.kind == SiteSection.DIGITAL_CLUB }
     }
     Scaffold(topBar = { AppTopBar(stringResource(R.string.tab_more), onSearch = { navigate(Routes.SEARCH) }) }) { padding ->
-        Column(Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState())) {
+        Column(Modifier.padding(padding).fillMaxSize().verticalScroll(scrollState)) {
             SectionLabel(stringResource(R.string.more_group_chitalishte), Modifier.padding(start = 20.dp, top = 8.dp, bottom = 12.dp))
             val tiles = buildList {
                 add(TileItem(Icons.Outlined.Campaign, stringResource(R.string.messages_title), stringResource(R.string.more_messages_desc)) { navigate(Routes.MESSAGES) })
