@@ -129,7 +129,7 @@ class MainFlowsUiTest {
 
     @Test fun guestSeesHonestLoginMessageAndCanAddCard() {
         launch(useMock = false)
-        clickText("Членска карта")
+        clickText("Читателска карта")
         waitForText("Дигитална карта")
         compose.onAllNodes(hasSetTextAction()).onFirst().performTextInput("r-0042")
         clickText("Запази")
@@ -148,7 +148,7 @@ class MainFlowsUiTest {
     @Test fun demoLoginShowsLoansWithDueIndicators() {
         assumeTrue("демо данните съществуват само в dev flavor", BuildConfig.FLAVOR == "dev")
         launch(useMock = true)
-        clickText("Членска карта")
+        clickText("Читателска карта")
         clickText("Вход с библиотечни данни")
         waitForText("Читателски номер")
         compose.onAllNodes(hasSetTextAction())[0].performTextInput("DEMO-0001")
