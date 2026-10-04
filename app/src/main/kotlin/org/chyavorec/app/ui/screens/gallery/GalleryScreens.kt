@@ -87,8 +87,8 @@ fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    item(span = { GridItemSpan(maxLineSpan) }) { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
-                    items(albums, key = { it.name }) { album ->
+                    item(span = { GridItemSpan(maxLineSpan) }, contentType = "banner") { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
+                    items(albums, key = { it.name }, contentType = { "album" }) { album ->
                         Column(Modifier.clickable { navigate(Routes.album(album.name)) }.animateItem()) {
                             Box {
                                 RemoteImage(album.cover?.thumbUrl, null, Modifier.fillMaxWidth().aspectRatio(1f).clip(MaterialTheme.shapes.medium))
@@ -120,7 +120,7 @@ fun AlbumScreen(name: String, onBack: () -> Unit, navigate: (String) -> Unit) {
             modifier = Modifier.padding(padding),
         ) { photos ->
             LazyVerticalGrid(GridCells.Adaptive(110.dp), contentPadding = PaddingValues(4.dp)) {
-                itemsIndexed(photos, key = { _, p -> p.id }) { i, p ->
+                itemsIndexed(photos, key = { _, p -> p.id }, contentType = { _, _ -> "photo" }) { i, p ->
                     RemoteImage(
                         p.thumbUrl, p.title.ifBlank { stringResource(R.string.photo_n, i + 1) },
                         Modifier.aspectRatio(1f).padding(2.dp).clip(RoundedCornerShape(6.dp)).clickable { navigate(Routes.viewer(name, i)) },

@@ -48,7 +48,7 @@ class ViewModelTest {
     }
 
     @Test fun catalogSearchIsDebouncedAndFiltered() = runTest(dispatcher) {
-        val vm = CatalogViewModel(CatalogRepository(catalogService, InMemoryPayloadCache(), clock), dispatcher)
+        val vm = CatalogViewModel(CatalogRepository(catalogService, InMemoryPayloadCache(), clock, dispatcher), dispatcher)
         advanceUntilIdle()
         val initial = vm.state.value
         assertEquals(60, initial.totalResults)
@@ -65,7 +65,7 @@ class ViewModelTest {
 
     @Test fun catalogOfflineWithoutCacheShowsError() = runTest(dispatcher) {
         catalogService.fail = true
-        val vm = CatalogViewModel(CatalogRepository(catalogService, InMemoryPayloadCache(), clock), dispatcher)
+        val vm = CatalogViewModel(CatalogRepository(catalogService, InMemoryPayloadCache(), clock, dispatcher), dispatcher)
         advanceUntilIdle()
         assertEquals(AppError.Network, vm.state.value.engine.error)
         catalogService.fail = false
@@ -82,7 +82,7 @@ class ViewModelTest {
             override suspend fun fetchArticle(article: NewsArticle) = Outcome.Success(ArticleDetail(article, emptyList(), emptyList()))
         }
         val favs = InMemoryFavoritesDao()
-        val vm = NewsListViewModel(NewsRepository(service, InMemoryPayloadCache(), clock), favs, clock)
+        val vm = NewsListViewModel(NewsRepository(service, InMemoryPayloadCache(), clock, dispatcher), favs, clock)
         val job = launch { vm.ui.collect {} }
         advanceUntilIdle()
         assertEquals(2, vm.ui.value.visible.size)

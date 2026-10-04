@@ -85,4 +85,46 @@ class RepositoryTest {
         assertEquals(60, r.data.snapshot.books.size)
         assertEquals("2026-09-19", r.data.snapshot.generatedOn)
     }
+
+    private class CountingCatalog(val raw: String) : CatalogService {
+        var fetches = 0
+        var parses = 0
+        override suspend fun fetchCatalog(): Outcome<Pair<String, CatalogSnapshot>> {
+            fetches++; parses++
+            return Outcome.Success(raw to KatalogParser.parse(raw))
+        }
+        override suspend fun fetchCatalogIfChanged(knownHash: String?): Outcome<Pair<String, CatalogSnapshot>?> {
+            fetches++
+            // Имитира GitHubCatalogService: същото съдържание не се разчита.
+            if (knownHash != null) return Outcome.Success(null)
+            parses++
+            return Outcome.Success(raw to KatalogParser.parse(raw))
+        }
+    }
+
+    @Test fun catalogDiskCopyStaysFreshAcrossRestart() = runTest {
+        val svc = CountingCatalog(TestUtil.resource("katalog-sample.json"))
+        CatalogRepository(svc, cache, clock).catalog(force = false)
+        assertEquals(1, svc.fetches)
+        clock.advanceSeconds(600)
+        // Нов процес: дисковото копие е на 10 минути — без мрежа.
+        val restarted = CatalogRepository(svc, cache, clock)
+        assertTrue(restarted.cached()!!.fromCache)
+        val r = (restarted.catalog(force = false) as Outcome.Success).value
+        assertFalse(r.fromCache)
+        assertEquals(1, svc.fetches)
+        assertEquals(60, r.data.snapshot.books.size)
+    }
+
+    @Test fun catalogUnchangedContentIsNotReparsed() = runTest {
+        val svc = CountingCatalog(TestUtil.resource("katalog-sample.json"))
+        val repo = CatalogRepository(svc, cache, clock)
+        val first = (repo.catalog(force = true) as Outcome.Success).value
+        clock.advanceSeconds(3600)
+        val second = (repo.catalog(force = false) as Outcome.Success).value
+        assertEquals(2, svc.fetches)
+        assertEquals(1, svc.parses)
+        assertTrue(first.data === second.data, "същият индекс се преизползва")
+        assertEquals(clock.now(), second.syncedAt)
+    }
 }

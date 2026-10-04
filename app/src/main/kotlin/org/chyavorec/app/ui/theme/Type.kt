@@ -20,7 +20,6 @@ val Cormorant = FontFamily(
 
 /** Raleway — основен текст и етикети. */
 val Raleway = FontFamily(
-    Font(R.font.raleway_light, FontWeight.Light),
     Font(R.font.raleway_regular, FontWeight.Normal),
     Font(R.font.raleway_semibold, FontWeight.SemiBold),
     Font(R.font.raleway_bold, FontWeight.Bold),

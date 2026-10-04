@@ -126,8 +126,12 @@ fun NewsListScreen(navigate: (String) -> Unit) {
                     errorSubject = stringResource(R.string.subject_news),
                 ) { list ->
                     LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
-                        itemsIndexed(list, key = { _, a -> a.id }) { index, a ->
-                            if (index == 0 && ui.filter.query.isBlank() && !ui.filter.favoritesOnly) {
+                        val featured = ui.filter.query.isBlank() && !ui.filter.favoritesOnly
+                        itemsIndexed(
+                            list, key = { _, a -> a.id },
+                            contentType = { index, _ -> if (index == 0 && featured) "featured" else "row" },
+                        ) { index, a ->
+                            if (index == 0 && featured) {
                                 FeaturedNews(a, onClick = { navigate(Routes.article(a.id)) })
                             } else {
                                 NewsRow(

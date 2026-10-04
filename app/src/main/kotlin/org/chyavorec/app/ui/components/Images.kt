@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
-import coil3.request.crossfade
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -62,8 +61,11 @@ fun RemoteImage(
     Box(modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
         val target = if (failed) fallbackUrl else url
         if (target != null) {
+            val context = LocalContext.current
+            // Заявката се създава веднъж за адрес (не при всяка рекомпозиция); crossfade идва от ImageLoader-а.
+            val request = remember(context, target) { ImageRequest.Builder(context).data(target).build() }
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(target).crossfade(250).build(),
+                model = request,
                 contentDescription = contentDescription,
                 contentScale = contentScale,
                 onError = { if (!failed && fallbackUrl != null) failed = true },
@@ -136,8 +138,10 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
             )
         }
         if (book.coverUrl.isNotBlank()) {
+            val context = LocalContext.current
+            val request = remember(context, book.coverUrl) { ImageRequest.Builder(context).data(book.coverUrl).build() }
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(book.coverUrl).crossfade(200).build(),
+                model = request,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),

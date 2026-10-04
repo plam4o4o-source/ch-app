@@ -60,10 +60,12 @@ class MessageWorker(context: Context, params: WorkerParameters) : CoroutineWorke
         private const val RECENT_SECONDS = 7 * 24 * 60 * 60L
 
         fun schedule(context: Context) {
-            val request = PeriodicWorkRequestBuilder<MessageWorker>(1, TimeUnit.HOURS, 20, TimeUnit.MINUTES)
-                .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
+            val request = PeriodicWorkRequestBuilder<MessageWorker>(3, TimeUnit.HOURS, 20, TimeUnit.MINUTES)
+                .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).setRequiresBatteryNotLow(true).build())
                 .build()
-            WorkManager.getInstance(context).enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.KEEP, request)
+            // UPDATE (а не KEEP): вече инсталираните копия също минават на новия период/ограничения,
+            // без да се нулира графикът на задачата.
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.UPDATE, request)
         }
     }
 }
