@@ -57,6 +57,7 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.SectionLabel
+import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
 import org.chyavorec.app.ui.components.MembershipPill
@@ -80,11 +81,13 @@ fun MyHubScreen(navigate: (String) -> Unit) {
     // Ако при първото зареждане сървърът не е отговорил, входът би останал скрит —
     // при всяко показване на „Моето“ питаме отново (без мрежа, ако вече е известно).
     LaunchedEffect(Unit) { vm.refreshCapabilities() }
+    val scrollState = rememberScrollState()
+    TabReselectEffect(Routes.MY) { scrollState.animateScrollTo(0) }
 
     Scaffold(topBar = {
         AppTopBar(stringResource(R.string.tab_my), onSearch = { navigate(Routes.SEARCH) })
     }) { padding ->
-        Column(Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState())) {
+        Column(Modifier.padding(padding).fillMaxSize().verticalScroll(scrollState)) {
             DemoBanner(vm.isDemo)
             if (signedIn) {
                 val p = profile.data

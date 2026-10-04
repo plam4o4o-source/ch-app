@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -53,7 +54,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -155,6 +158,7 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
     val profile by vm.profile.collectAsStateWithLifecycle()
     var editing by rememberSaveable { mutableStateOf(false) }
     var confirmRemove by remember { mutableStateOf(false) }
+    val haptic = LocalHapticFeedback.current
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.my_card), onBack) }) { padding ->
         Column(
@@ -166,7 +170,15 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
                 SelfCardForm(
                     initialNumber = data?.takeIf { !it.verified }?.number.orEmpty(),
                     initialName = data?.takeIf { !it.verified }?.holder.orEmpty(),
-                    onSave = { n, name, done -> vm.saveSelfCard(n, name) { ok -> done(ok); if (ok) editing = false } },
+                    onSave = { n, name, done ->
+                        vm.saveSelfCard(n, name) { ok ->
+                            done(ok)
+                            if (ok) {
+                                haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                                editing = false
+                            }
+                        }
+                    },
                     onCancel = if (data != null) ({ editing = false }) else null,
                 )
                 if (caps?.login == true && auth !is AuthState.SignedIn) {
@@ -270,7 +282,7 @@ fun CardFullscreen(onClose: () -> Unit) {
         }
     }
     Box(Modifier.fillMaxSize().background(Color.White)) {
-        IconButton(onClick = onClose, modifier = Modifier.align(Alignment.TopEnd).padding(top = 32.dp, end = 12.dp)) {
+        IconButton(onClick = onClose, modifier = Modifier.align(Alignment.TopEnd).statusBarsPadding().padding(top = 8.dp, end = 12.dp)) {
             Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.action_close), tint = Color.Black)
         }
         if (data == null) return@Box

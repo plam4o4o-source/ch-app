@@ -127,7 +127,7 @@ fun ActivitiesScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExterna
                 onRetry = { vm.refresh() },
                 isEmpty = { it.isEmpty() },
                 skeleton = { SkeletonList(withImage = false) },
-                empty = { EmptyView(stringResource(R.string.activities_empty)) },
+                empty = { EmptyView(stringResource(R.string.activities_empty), icon = Icons.Outlined.Diversity3) },
             ) { links ->
                 LazyColumn(contentPadding = PaddingValues(vertical = 8.dp)) {
                     item {
@@ -164,7 +164,7 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
             StateContent(
                 state = state, onRetry = { vm.refresh() }, isEmpty = { it.blocks.isEmpty() },
                 skeleton = { SkeletonCards() },
-                empty = { EmptyView(stringResource(R.string.page_empty)) },
+                empty = { EmptyView(stringResource(R.string.page_empty), icon = Icons.AutoMirrored.Outlined.Article) },
                 errorSubject = title.ifBlank { null },
             ) { page ->
                 LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {

@@ -14,7 +14,7 @@ S = {
 "tab_news": ("Новини", "News"),
 "tab_more": ("Още", "More"),
 "qa_catalog": ("Каталог", "Catalogue"),
-"qa_card": ("Членска карта", "Member card"),
+"qa_card": ("Читателска карта", "Library card"),
 "qa_events": ("Събития", "Events"),
 "qa_about": ("За читалището", "About us"),
 "qa_contacts": ("Контакти", "Contacts"),

@@ -116,7 +116,7 @@ fun AlbumScreen(name: String, onBack: () -> Unit, navigate: (String) -> Unit) {
         StateContent(
             state = state.map { albums -> albums.firstOrNull { it.name == name }?.photos.orEmpty() },
             onRetry = { vm.refresh() }, isEmpty = { it.isEmpty() },
-            skeleton = { SkeletonCards() }, empty = { EmptyView(stringResource(R.string.gallery_empty)) },
+            skeleton = { SkeletonCards() }, empty = { EmptyView(stringResource(R.string.gallery_empty), icon = Icons.Outlined.PhotoLibrary) },
             modifier = Modifier.padding(padding),
         ) { photos ->
             LazyVerticalGrid(GridCells.Adaptive(110.dp), contentPadding = PaddingValues(4.dp)) {

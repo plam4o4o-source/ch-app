@@ -1,7 +1,9 @@
 package org.chyavorec.app.ui.components
 
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -148,7 +150,9 @@ fun PressableCard(
 ) {
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
-    val scale by animateFloatAsState(if (pressed) 0.97f else 1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy), label = "press")
+    val reduced = rememberReducedMotion()
+    val pressSpec: AnimationSpec<Float> = if (reduced) snap() else spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+    val scale by animateFloatAsState(if (pressed && !reduced) 0.97f else 1f, pressSpec, label = "press")
     ElevatedCard(
         onClick = onClick,
         interactionSource = interaction,

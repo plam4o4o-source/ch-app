@@ -76,7 +76,7 @@ fun MembershipPill(status: MembershipStatus, modifier: Modifier = Modifier) {
         MembershipStatus.ACTIVE -> stringResource(R.string.membership_active) to ext.ok
         MembershipStatus.EXPIRED -> stringResource(R.string.membership_expired) to ext.bad
         MembershipStatus.SUSPENDED -> stringResource(R.string.membership_suspended) to ext.warn
-        MembershipStatus.UNKNOWN -> stringResource(R.string.membership_unknown) to MaterialTheme.colorScheme.outline
+        MembershipStatus.UNKNOWN -> stringResource(R.string.membership_unknown) to MaterialTheme.colorScheme.onSurfaceVariant
     }
     StatusPill(text, color, modifier)
 }

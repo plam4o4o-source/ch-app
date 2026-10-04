@@ -63,7 +63,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -136,6 +138,7 @@ fun EventCard(e: Event, onClick: () -> Unit, modifier: Modifier = Modifier) {
 fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     val vm = appViewModel { EventsViewModel(it.eventsRepository, it.reminders, it.clock) }
     val ui by vm.ui.collectAsStateWithLifecycle()
+    val haptic = LocalHapticFeedback.current
     Scaffold(topBar = {
         BackTopBar(stringResource(R.string.events_title), onBack, actions = {
             IconButton(onClick = { vm.setCalendarMode(!ui.calendarMode) }) {
@@ -155,10 +158,10 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     } else {
                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             item {
-                                FilterChip(ui.category == null, onClick = { vm.setCategory(null) }, label = { Text(stringResource(R.string.filter_all)) })
+                                FilterChip(ui.category == null, onClick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick); vm.setCategory(null) }, label = { Text(stringResource(R.string.filter_all)) })
                             }
                             items(ui.categories) { c ->
-                                FilterChip(ui.category == c, onClick = { vm.setCategory(c) }, label = { Text(c) })
+                                FilterChip(ui.category == c, onClick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick); vm.setCategory(c) }, label = { Text(c) })
                             }
                         }
                     }

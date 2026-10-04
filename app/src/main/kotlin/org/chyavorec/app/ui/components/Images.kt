@@ -2,6 +2,8 @@ package org.chyavorec.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Box
@@ -14,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,11 +32,16 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -57,16 +65,20 @@ fun RemoteImage(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop,
     fallbackUrl: String? = null,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
+    onFailure: (() -> Unit)? = null,
 ) {
     var failed by remember(url) { mutableStateOf(false) }
-    Box(modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
+    Box(modifier.background(containerColor)) {
         val target = if (failed) fallbackUrl else url
         if (target != null) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current).data(target).crossfade(250).build(),
                 contentDescription = contentDescription,
                 contentScale = contentScale,
-                onError = { if (!failed && fallbackUrl != null) failed = true },
+                onError = {
+                    if (!failed && fallbackUrl != null) failed = true else onFailure?.invoke()
+                },
                 modifier = Modifier.fillMaxSize(),
             )
         } else {
@@ -79,13 +91,39 @@ fun RemoteImage(
 }
 
 /**
+ * Фирмен фон вместо липсваща снимка: диагонален градиент бордо → мастило и
+ * едва забележим воден знак с логото, изместен надясно. Текст върху него —
+ * в Parchment/GoldLight (контраст над 4.5:1).
+ */
+@Composable
+fun BrandedImageFallback(modifier: Modifier = Modifier) {
+    Box(modifier.background(Brush.linearGradient(listOf(Brand.Burgundy, Color(0xFF3A1A18), Brand.Ink)))) {
+        androidx.compose.foundation.Image(
+            painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.logo_chitalishte),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            alpha = 0.09f,
+            colorFilter = ColorFilter.tint(Brand.Parchment),
+            modifier = Modifier.align(Alignment.CenterEnd)
+                .fillMaxHeight()
+                .aspectRatio(1f, matchHeightConstraintsFirst = true)
+                .graphicsLayer {
+                    translationX = size.width * 0.22f
+                    scaleX = 1.15f
+                    scaleY = 1.15f
+                },
+        )
+    }
+}
+
+/**
  * Корица на книга. Почти няма сканирани корици в каталога, затова (както на
  * уеб страницата на каталога) се рисува „издателска“ корица с цвета на раздела
  * по УДК, заглавието и автора; сканираната корица, ако има, ляга отгоре.
  */
 @Composable
 fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.dp, showStatusDot: Boolean = true) {
-    val base = UdcCoverColors[book.udcSection] ?: Color(0xFF5A4D3D)
+    val base = coverShade(UdcCoverColors[book.udcSection] ?: Color(0xFF5A4D3D), book.title)
     val height = width * 1.42f
     val ext = LocalExtendedColors.current
     Box(
@@ -114,15 +152,18 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
             ),
         )
         Column(Modifier.fillMaxSize().padding(start = (12 * scale).dp, end = (7 * scale).dp, top = (9 * scale).dp, bottom = (10 * scale).dp)) {
+            // Малките корици (в списъци) получават по-дребен шрифт; думите се пренасят
+            // със сричкопренасяне, а не се режат по средата.
             Text(
                 book.title,
                 color = Color.White,
                 fontFamily = Raleway,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = maxOf(12f, 11.5f * scale).sp,
-                lineHeight = maxOf(14f, 13.5f * scale).sp,
-                maxLines = 4,
+                fontSize = (11.5f * scale).coerceAtLeast(9f).sp,
+                lineHeight = (13.5f * scale).coerceAtLeast(11f).sp,
+                maxLines = if (width < 72.dp) 3 else 4,
                 overflow = TextOverflow.Ellipsis,
+                style = LocalTextStyle.current.copy(hyphens = Hyphens.Auto, lineBreak = LineBreak.Heading),
             )
             Box(Modifier.weight(1f))
             Text(
@@ -156,6 +197,21 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
 }
 
 private fun Color.darken(f: Float = 0.78f) = Color(red * f, green * f, blue * f, alpha)
+
+/**
+ * Вариация в рамките на цвета на раздела по УДК според заглавието, за да не е
+ * списък от еднакви корици. Само затъмнява (контрастът на белия текст не пада)
+ * и леко „затопля“ или „охлажда“ тона.
+ */
+private fun coverShade(base: Color, title: String): Color {
+    val h = title.hashCode() and Int.MAX_VALUE
+    val darkened = base.darken(floatArrayOf(1f, 0.92f, 0.85f, 0.78f)[h % 4])
+    return when ((h / 4) % 3) {
+        0 -> lerp(darkened, Brand.Burgundy, 0.12f)
+        1 -> lerp(darkened, Brand.Ink, 0.12f)
+        else -> darkened
+    }
+}
 
 /**
  * Логото на НЧ „Васил Левски – 1922“ върху бял кръг — четимо и в тъмна тема
