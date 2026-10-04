@@ -19,6 +19,7 @@ import org.chyavorec.app.network.ConnectivityObserver
 import org.chyavorec.app.network.NetworkModule
 import org.chyavorec.app.notifications.ReminderScheduler
 import org.chyavorec.app.update.AppUpdater
+import org.chyavorec.app.widget.ChitalishteWidget
 import org.chyavorec.app.messages.MessageCenter
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.SystemClock
@@ -146,10 +147,13 @@ class AppContainer(
             var wasSignedIn = false
             authRepository.state.collect { s ->
                 if (s is AuthState.SignedIn) {
+                    if (!wasSignedIn) ChitalishteWidget.refresh(context)
                     wasSignedIn = true
                 } else if (s is AuthState.SignedOut && wasSignedIn) {
                     wasSignedIn = false
                     runCatching { settings.clearPersonal() }
+                    // Уиджетът не бива да показва заглавия на книги след изход.
+                    ChitalishteWidget.refresh(context)
                 }
             }
         }

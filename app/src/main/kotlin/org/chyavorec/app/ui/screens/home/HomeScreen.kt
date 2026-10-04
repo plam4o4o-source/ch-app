@@ -18,6 +18,7 @@ import org.chyavorec.app.ui.components.IconPlate
 import org.chyavorec.app.ui.components.PagerDots
 import org.chyavorec.app.ui.components.SearchPill
 import org.chyavorec.app.ui.components.animateEntrance
+import org.chyavorec.app.ui.components.darkTopHighlight
 import org.chyavorec.app.ui.components.boldMarkdown
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -134,7 +135,12 @@ fun HomeScreen(navigate: (String) -> Unit) {
     TabReselectEffect(Routes.HOME) { listState.animateScrollToItem(0) }
 
     PullToRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
-        LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp), modifier = Modifier.fillMaxSize()) {
+        // На таблет/хоризонтално съдържанието е центрирано и не по-широко от 840 dp.
+        LazyColumn(
+            state = listState,
+            contentPadding = PaddingValues(bottom = 24.dp),
+            modifier = Modifier.align(Alignment.TopCenter).widthIn(max = 840.dp).fillMaxSize(),
+        ) {
             item("header") { HomeHeader(onMessages = { navigate(Routes.MESSAGES) }) }
             item("search") {
                 SearchPill(
@@ -301,7 +307,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                     .graphicsLayer {
                         val scale = 1f - 0.06f * kotlin.math.abs(offset).coerceIn(0f, 1f)
                         scaleX = scale; scaleY = scale
-                    },
+                    }
+                    .darkTopHighlight(MaterialTheme.shapes.large),
             ) {
                 // Без снимка (или при грешка) — фирмен фон с воден знак, без тъмния воал.
                 var imageFailed by remember(a.imageUrl) { mutableStateOf(false) }
@@ -374,7 +381,8 @@ private fun StatsRow(state: HomeUiState) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainer,
         shape = MaterialTheme.shapes.medium,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(top = 24.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(top = 24.dp)
+            .darkTopHighlight(MaterialTheme.shapes.medium),
     ) {
         Row(Modifier.padding(vertical = 18.dp, horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
             AnimatedCounter(state.yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f))

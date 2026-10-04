@@ -62,6 +62,19 @@
             </intent-filter>
         </activity>
 
+        <!-- Уиджет за началния екран: следващо събитие и срок за връщане. -->
+        <receiver
+            android:name=".widget.ChitalishteWidgetReceiver"
+            android:exported="true"
+            android:label="@string/widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
         <!-- Резултат от инсталирането на обновление (само от системата). -->
         <receiver
             android:name=".update.UpdateInstallReceiver"

@@ -70,11 +70,13 @@ private val DarkColors = darkColorScheme(
     onSurface = Brand.Parchment,
     surfaceVariant = Brand.InkRaised,
     onSurfaceVariant = Color(0xFFD7CBB6),
+    // На тъмен фон сенките не се виждат — дълбочината идва от тона: контейнерите са
+    // малко по-светли и по-топли от фона (мастило → кафяво-златисто), за да не се сливат.
     surfaceContainerLowest = Color(0xFF120C05),
-    surfaceContainerLow = Color(0xFF1F160C),
-    surfaceContainer = Brand.InkSoft,
-    surfaceContainerHigh = Brand.InkRaised,
-    surfaceContainerHighest = Color(0xFF3D2F21),
+    surfaceContainerLow = Color(0xFF261B10),
+    surfaceContainer = Color(0xFF2E2216),
+    surfaceContainerHigh = Color(0xFF392B1D),
+    surfaceContainerHighest = Color(0xFF443424),
     outline = Color(0xFF8C7C63),
     outlineVariant = Color(0xFF4A3C2B),
     error = StatusColors.BadDark,

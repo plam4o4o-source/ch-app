@@ -61,6 +61,8 @@
     <string name="card_add_text">Въведи номера от своята читателска карта. Приложението ще покаже баркод в същия формат (Code 39), в който библиотеката печата картите.</string>
     <string name="card_add_title">Дигитална карта</string>
     <string name="card_barcode_desc">Баркод на карта %1$s</string>
+    <string name="card_flip">Обърни картата</string>
+    <string name="card_flip_hint">Докосни картата, за да видиш номера едро</string>
     <string name="card_library_line">ЧИТАТЕЛСКА КАРТА</string>
     <string name="card_login_instead">Вход с библиотечни данни</string>
     <string name="card_name_label">Име (по желание)</string>
@@ -379,6 +381,11 @@
     <string name="update_status_current">Имате последната версия (%1$s)</string>
     <string name="update_status_downloading">Изтегляне на новата версия…</string>
     <string name="update_status_ready">Версия %1$s е готова за инсталиране</string>
+    <string name="widget_description">Следващо събитие и срок за връщане</string>
+    <string name="widget_due">Срок: %1$s — %2$s</string>
+    <string name="widget_label">Читалище Яворец</string>
+    <string name="widget_next_event">Следващо събитие</string>
+    <string name="widget_no_events">Няма предстоящи събития</string>
     <plurals name="book_available_copies">
         <item quantity="one">%1$d наличен</item>
         <item quantity="other">%1$d налични</item>

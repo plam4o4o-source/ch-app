@@ -61,6 +61,8 @@
     <string name="card_add_text">Enter the number from your library card. The app shows a barcode in the same format (Code 39) the library prints on cards.</string>
     <string name="card_add_title">Digital card</string>
     <string name="card_barcode_desc">Barcode for card %1$s</string>
+    <string name="card_flip">Flip the card</string>
+    <string name="card_flip_hint">Tap the card to see the number in large print</string>
     <string name="card_library_line">LIBRARY CARD</string>
     <string name="card_login_instead">Sign in with library credentials</string>
     <string name="card_name_label">Name (optional)</string>
@@ -379,6 +381,11 @@
     <string name="update_status_current">You have the latest version (%1$s)</string>
     <string name="update_status_downloading">Downloading the new version…</string>
     <string name="update_status_ready">Version %1$s is ready to install</string>
+    <string name="widget_description">Next event and return due date</string>
+    <string name="widget_due">Due: %1$s — %2$s</string>
+    <string name="widget_label">Chitalishte Yavorets</string>
+    <string name="widget_next_event">Next event</string>
+    <string name="widget_no_events">No upcoming events</string>
     <plurals name="book_available_copies">
         <item quantity="one">%1$d available</item>
         <item quantity="other">%1$d available</item>

@@ -16,6 +16,15 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationRailItemDefaults
+import androidx.compose.ui.graphics.Color
+import org.chyavorec.app.ui.components.Emblem
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -204,71 +213,134 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     val openExternal: (String) -> Unit = { Intents.openUrl(context, it) }
     val back: () -> Unit = { if (!nav.popBackStack()) nav.navigateTab(Routes.HOME) }
 
-    Scaffold(
-        bottomBar = {
-            Column {
-                val topLevel = route in topLevelRoutes
-                AnimatedVisibility(!online) {
-                    Surface(color = MaterialTheme.colorScheme.inverseSurface, contentColor = MaterialTheme.colorScheme.inverseOnSurface) {
-                        Text(
-                            stringResource(R.string.offline_global),
-                            style = MaterialTheme.typography.labelMedium,
-                            modifier = Modifier.fillMaxWidth()
-                                .then(if (topLevel) Modifier else Modifier.navigationBarsPadding())
-                                .padding(horizontal = 16.dp, vertical = 6.dp),
-                        )
-                    }
-                }
+    val topLevel = route in topLevelRoutes
+    val onTab: (TopTab, Boolean) -> Unit = { tab, selected ->
+        if (selected) {
+            // Повторно докосване на текущия раздел — към началото на списъка.
+            haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+            reselect.emit(tab.route)
+        } else {
+            nav.navigateTab(tab.route)
+        }
+    }
+
+    // Телефон (изправен): долна лента. От 600 dp ширина (таблет, хоризонтално) —
+    // странична навигационна лента (rail), а съдържанието заема останалата ширина.
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val wide = maxWidth >= 600.dp
+        Row(Modifier.fillMaxSize()) {
+            if (wide) {
                 AnimatedVisibility(
                     visible = topLevel,
-                    enter = slideInVertically { it } + fadeIn(),
-                    exit = slideOutVertically { it } + fadeOut(),
+                    enter = if (reduced) EnterTransition.None else slideInHorizontally { -it } + fadeIn(),
+                    exit = if (reduced) ExitTransition.None else slideOutHorizontally { -it } + fadeOut(),
                 ) {
-                    // Избраният раздел — в златно/мастило от фирмената палитра (не розово в тъмна тема).
-                    val navColors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        selectedTextColor = if (LocalExtendedColors.current.isDark) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.secondary,
-                        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                    )
-                    NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
-                        TopTab.entries.forEach { tab ->
-                            val selected = route == tab.route
-                            val iconSpec: AnimationSpec<Float> = if (reduced) snap()
-                            else spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium)
-                            val iconScale by animateFloatAsState(if (selected) 1.15f else 1f, iconSpec, label = "tab-icon")
-                            NavigationBarItem(
-                                selected = selected,
-                                onClick = {
-                                    if (selected) {
-                                        // Повторно докосване на текущия раздел — към началото на списъка.
-                                        haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                                        reselect.emit(tab.route)
-                                    } else {
-                                        nav.navigateTab(tab.route)
-                                    }
-                                },
-                                icon = {
-                                    Icon(
-                                        if (selected) tab.selectedIcon else tab.icon, contentDescription = null,
-                                        modifier = Modifier.graphicsLayer { scaleX = iconScale; scaleY = iconScale },
-                                    )
-                                },
-                                label = { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                                colors = navColors,
-                            )
+                    AppNavigationRail(route, reduced, onTab)
+                }
+            }
+            Scaffold(
+                modifier = Modifier.weight(1f).fillMaxHeight(),
+                bottomBar = {
+                    Column {
+                        // Без долна лента под нея лентата „няма връзка“ сама отстъпва от системната навигация.
+                        val barBelow = topLevel && !wide
+                        AnimatedVisibility(!online) {
+                            Surface(color = MaterialTheme.colorScheme.inverseSurface, contentColor = MaterialTheme.colorScheme.inverseOnSurface) {
+                                Text(
+                                    stringResource(R.string.offline_global),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    modifier = Modifier.fillMaxWidth()
+                                        .then(if (barBelow) Modifier else Modifier.navigationBarsPadding())
+                                        .padding(horizontal = 16.dp, vertical = 6.dp),
+                                )
+                            }
                         }
+                        if (!wide) {
+                            AnimatedVisibility(
+                                visible = topLevel,
+                                enter = if (reduced) EnterTransition.None else slideInVertically { it } + fadeIn(),
+                                exit = if (reduced) ExitTransition.None else slideOutVertically { it } + fadeOut(),
+                            ) {
+                                AppNavigationBar(route, reduced, onTab)
+                            }
+                        }
+                    }
+                },
+                contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0),
+            ) { padding ->
+                Box(Modifier.padding(padding).fillMaxSize()) {
+                    CompositionLocalProvider(LocalTabReselect provides reselect) {
+                        AppNavHost(nav, ::navigate, back, ::openLink, openExternal)
                     }
                 }
             }
-        },
-        contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0),
-    ) { padding ->
-        Box(Modifier.padding(padding).fillMaxSize()) {
-            CompositionLocalProvider(LocalTabReselect provides reselect) {
-                AppNavHost(nav, ::navigate, back, ::openLink, openExternal)
-            }
         }
+    }
+}
+
+/** Иконата на раздела — „подскача“ при избор (без анимация при намалено движение). */
+@Composable
+private fun TabIcon(tab: TopTab, selected: Boolean, reduced: Boolean) {
+    val iconSpec: AnimationSpec<Float> = if (reduced) snap()
+    else spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium)
+    val iconScale by animateFloatAsState(if (selected) 1.15f else 1f, iconSpec, label = "tab-icon")
+    Icon(
+        if (selected) tab.selectedIcon else tab.icon, contentDescription = null,
+        modifier = Modifier.graphicsLayer { scaleX = iconScale; scaleY = iconScale },
+    )
+}
+
+/** Цветът на текста на избрания раздел — златно в тъмна тема, бордо в светла (не розово). */
+@Composable
+private fun selectedTabTextColor(): Color =
+    if (LocalExtendedColors.current.isDark) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+
+@Composable
+private fun AppNavigationBar(route: String?, reduced: Boolean, onTab: (TopTab, Boolean) -> Unit) {
+    // Избраният раздел — в златно/мастило от фирмената палитра (не розово в тъмна тема).
+    val navColors = NavigationBarItemDefaults.colors(
+        selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        selectedTextColor = selectedTabTextColor(),
+        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+    )
+    NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
+        TopTab.entries.forEach { tab ->
+            val selected = route == tab.route
+            NavigationBarItem(
+                selected = selected,
+                onClick = { onTab(tab, selected) },
+                icon = { TabIcon(tab, selected, reduced) },
+                label = { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                colors = navColors,
+            )
+        }
+    }
+}
+
+@Composable
+private fun AppNavigationRail(route: String?, reduced: Boolean, onTab: (TopTab, Boolean) -> Unit) {
+    val railColors = NavigationRailItemDefaults.colors(
+        selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        selectedTextColor = selectedTabTextColor(),
+        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+    )
+    NavigationRail(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        header = { Emblem(40.dp, Modifier.padding(vertical = 8.dp)) },
+    ) {
+        Spacer(Modifier.weight(1f))
+        TopTab.entries.forEach { tab ->
+            val selected = route == tab.route
+            NavigationRailItem(
+                selected = selected,
+                onClick = { onTab(tab, selected) },
+                icon = { TabIcon(tab, selected, reduced) },
+                label = { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                colors = railColors,
+                modifier = Modifier.padding(vertical = 4.dp),
+            )
+        }
+        Spacer(Modifier.weight(1f))
     }
 }
 

@@ -156,7 +156,7 @@ fun PressableCard(
     ElevatedCard(
         onClick = onClick,
         interactionSource = interaction,
-        modifier = modifier.scale(scale),
+        modifier = modifier.scale(scale).darkTopHighlight(MaterialTheme.shapes.medium),
         colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp, pressedElevation = 4.dp),
         shape = MaterialTheme.shapes.medium,

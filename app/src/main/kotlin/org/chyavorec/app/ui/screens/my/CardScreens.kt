@@ -2,6 +2,23 @@ package org.chyavorec.app.ui.screens.my
 
 import android.app.Activity
 import android.view.WindowManager
+import android.content.Context
+import android.provider.Settings
+import android.view.Window
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.semantics.Role
+import kotlinx.coroutines.launch
+import org.chyavorec.app.ui.components.rememberReducedMotion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -106,9 +123,9 @@ private fun rememberCardData(vm: AccountViewModel): CardData? {
     }
 }
 
-/** Дигитална читателска карта — оформена като истинска библиотечна карта. */
+/** Рамката на картата (размер ID-1, мастилено-бордо градиент, златен кант) — обща за двете страни. */
 @Composable
-fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = false) {
+private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable ColumnScope.() -> Unit) {
     Box(
         modifier
             .fillMaxWidth()
@@ -118,34 +135,74 @@ fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = 
             .background(Brush.linearGradient(listOf(Brand.Ink, Color(0xFF3A1A18), Brand.Burgundy))),
     ) {
         Box(Modifier.fillMaxSize().padding(2.dp).border(1.dp, Brand.Gold.copy(alpha = 0.45f), RoundedCornerShape(18.dp)))
-        Column(Modifier.fillMaxSize().padding(if (large) 24.dp else 18.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Emblem(if (large) 44.dp else 34.dp)
-                Spacer(Modifier.width(10.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(stringResource(R.string.card_library_line), color = Brand.GoldLight, style = MaterialTheme.typography.labelSmall)
-                    Text(stringResource(R.string.org_short), color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 20.sp else 17.sp)
-                }
-            }
-            Spacer(Modifier.weight(1f))
-            Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp, maxLines = 1)
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    stringResource(R.string.reader_number, data.number),
-                    color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f),
-                )
-                data.status?.let { MembershipPill(it) }
-            }
-            Spacer(Modifier.height(8.dp))
-            Surface(color = Color.White, shape = RoundedCornerShape(8.dp)) {
-                LinearBarcode(
-                    data.barcode,
-                    description = stringResource(R.string.card_barcode_desc, data.number),
-                    height = if (large) 70.dp else 44.dp,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
-                )
+        Column(Modifier.fillMaxSize().padding(if (large) 24.dp else 18.dp), content = content)
+    }
+}
+
+/** Дигитална читателска карта — оформена като истинска библиотечна карта (лице с баркод). */
+@Composable
+fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = false) {
+    CardFrame(modifier, large) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Emblem(if (large) 44.dp else 34.dp)
+            Spacer(Modifier.width(10.dp))
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(R.string.card_library_line), color = Brand.GoldLight, style = MaterialTheme.typography.labelSmall)
+                Text(stringResource(R.string.org_short), color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 20.sp else 17.sp)
             }
         }
+        Spacer(Modifier.weight(1f))
+        Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp, maxLines = 1)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                stringResource(R.string.reader_number, data.number),
+                color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f),
+            )
+            data.status?.let { MembershipPill(it) }
+        }
+        Spacer(Modifier.height(8.dp))
+        Surface(color = Color.White, shape = RoundedCornerShape(8.dp)) {
+            LinearBarcode(
+                data.barcode,
+                description = stringResource(R.string.card_barcode_desc, data.number),
+                height = if (large) 70.dp else 44.dp,
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+            )
+        }
+    }
+}
+
+/**
+ * Гърбът на картата: номерът едро (за диктуване или ръчно въвеждане на гишето),
+ * името на читателя и библиотеката.
+ */
+@Composable
+fun LibraryCardBack(data: CardData, modifier: Modifier = Modifier, large: Boolean = false) {
+    CardFrame(modifier, large) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Emblem(if (large) 32.dp else 26.dp)
+            Spacer(Modifier.width(10.dp))
+            Text(stringResource(R.string.card_library_line), color = Brand.GoldLight, style = MaterialTheme.typography.labelSmall)
+        }
+        Spacer(Modifier.weight(1f))
+        Text(stringResource(R.string.profile_reader_number), color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium)
+        // Дългите номера (до 32 знака) се смаляват, за да останат на един ред.
+        val numberSize = when {
+            data.number.length > 18 -> if (large) 22.sp else 18.sp
+            data.number.length > 11 -> if (large) 30.sp else 24.sp
+            else -> if (large) 44.sp else 34.sp
+        }
+        Text(
+            data.number, color = Brand.Parchment, fontFamily = FontFamily.Monospace, fontSize = numberSize,
+            letterSpacing = 2.sp, maxLines = 1,
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 24.sp else 20.sp, maxLines = 1)
+        Spacer(Modifier.weight(1f))
+        Text(
+            stringResource(R.string.org_library_name), color = Brand.Parchment.copy(alpha = 0.8f),
+            style = MaterialTheme.typography.bodySmall, maxLines = 2,
+        )
     }
 }
 
@@ -259,21 +316,25 @@ private fun SelfCardForm(
 }
 
 /**
- * Карта на цял екран за сканиране на гишето: максимална яркост, екранът не
- * заспива, баркод + QR.
+ * Карта на цял екран за сканиране на гишето: яркостта плавно се вдига до
+ * максимум, екранът не заспива, баркод + QR. Картата „влиза“ с 3D обръщане, а
+ * докосване я обръща към гърба (номерът едро). При намалено движение — без анимации.
  */
 @Composable
 fun CardFullscreen(onClose: () -> Unit) {
     val vm = accountViewModel()
     val data = rememberCardData(vm)
     val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val window = (context as? Activity)?.window
+    val reduced = rememberReducedMotion()
+    val haptic = LocalHapticFeedback.current
+    val scope = rememberCoroutineScope()
+    val window = remember(context) { (context as? Activity)?.window }
+
+    // Яркост: от текущата към максимална за ~300 ms вместо рязък скок.
+    val brightness = remember { Animatable(initialBrightness(context, window)) }
+    DisposableEffect(window) {
         val old = window?.attributes?.screenBrightness
-        window?.let {
-            it.attributes = it.attributes.apply { screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL }
-            it.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
+        window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         onDispose {
             window?.let {
                 it.attributes = it.attributes.apply { screenBrightness = old ?: WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE }
@@ -281,6 +342,36 @@ fun CardFullscreen(onClose: () -> Unit) {
             }
         }
     }
+    LaunchedEffect(window) {
+        val w = window ?: return@LaunchedEffect
+        launch {
+            snapshotFlow { brightness.value }.collect { v ->
+                w.attributes = w.attributes.apply { screenBrightness = v }
+            }
+        }
+        if (reduced) {
+            brightness.snapTo(WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL)
+        } else {
+            brightness.animateTo(WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL, tween(300, easing = LinearEasing))
+        }
+    }
+
+    // Влизане (90° → 0°) веднъж; обръщане 0° ↔ 180° при докосване. Оцеляват при завъртане.
+    var entered by rememberSaveable { mutableStateOf(false) }
+    var showBack by rememberSaveable { mutableStateOf(false) }
+    val entry = remember { Animatable(if (entered || reduced) 0f else 90f) }
+    val flip = remember { Animatable(if (showBack) 180f else 0f) }
+    val backVisible by remember { derivedStateOf { entry.value + flip.value > 90f } }
+    val hasCard = data != null
+    LaunchedEffect(hasCard) {
+        if (!hasCard || entered) return@LaunchedEffect
+        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+        if (reduced) entry.snapTo(0f) else entry.animateTo(0f, tween(350, easing = FastOutSlowInEasing))
+        entered = true
+    }
+    val flipLabel = stringResource(R.string.card_flip)
+    val flipInteraction = remember { MutableInteractionSource() }
+
     Box(Modifier.fillMaxSize().background(Color.White)) {
         IconButton(onClick = onClose, modifier = Modifier.align(Alignment.TopEnd).statusBarsPadding().padding(top = 8.dp, end = 12.dp)) {
             Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.action_close), tint = Color.Black)
@@ -289,7 +380,34 @@ fun CardFullscreen(onClose: () -> Unit) {
         BoxWithConstraints(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
             val landscape = maxWidth > maxHeight
             val content: @Composable () -> Unit = {
-                LibraryCard(data, Modifier.widthIn(max = 520.dp), large = true)
+                Box(
+                    Modifier
+                        .widthIn(max = 520.dp)
+                        .graphicsLayer {
+                            rotationY = entry.value + flip.value
+                            cameraDistance = 12f * density
+                        }
+                        .clickable(
+                            interactionSource = flipInteraction,
+                            indication = null,
+                            onClickLabel = flipLabel,
+                            role = Role.Button,
+                        ) {
+                            showBack = !showBack
+                            haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                            val target = if (showBack) 180f else 0f
+                            scope.launch {
+                                if (reduced) flip.snapTo(target) else flip.animateTo(target, tween(450, easing = FastOutSlowInEasing))
+                            }
+                        },
+                ) {
+                    if (backVisible) {
+                        // Гърбът е завъртян още 180°, за да не се чете огледално.
+                        LibraryCardBack(data, Modifier.graphicsLayer { rotationY = 180f }, large = true)
+                    } else {
+                        LibraryCard(data, large = true)
+                    }
+                }
             }
             if (landscape) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(24.dp)) {
@@ -298,11 +416,22 @@ fun CardFullscreen(onClose: () -> Unit) {
                 }
             } else {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(28.dp)) {
-                    content()
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        content()
+                        Text(stringResource(R.string.card_flip_hint), style = MaterialTheme.typography.bodySmall, color = Color(0xFF5A4D3D))
+                    }
                     QrCodeView(data.barcode, stringResource(R.string.card_qr_desc), Modifier.size(200.dp))
                     Text(data.number, fontFamily = FontFamily.Monospace, fontSize = 22.sp, color = Color.Black)
                 }
             }
         }
     }
+}
+
+/** Текущата яркост (0..1): тази на прозореца, ако е зададена, иначе системната. */
+private fun initialBrightness(context: Context, window: Window?): Float {
+    val own = window?.attributes?.screenBrightness ?: -1f
+    if (own >= 0f) return own.coerceIn(0f, 1f)
+    val system = runCatching { Settings.System.getInt(context.contentResolver, Settings.System.SCREEN_BRIGHTNESS) }.getOrNull()
+    return ((system ?: 128) / 255f).coerceIn(0.05f, 1f)
 }

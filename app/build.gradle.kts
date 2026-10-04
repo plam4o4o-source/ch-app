@@ -217,6 +217,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.browser)
+    // Уиджет за началния екран.
+    implementation(libs.androidx.glance.appwidget)
+    // Инсталира src/main/baseline-prof.txt при инсталиране от извън Google Play (по-бърз старт).
+    implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.room.runtime)

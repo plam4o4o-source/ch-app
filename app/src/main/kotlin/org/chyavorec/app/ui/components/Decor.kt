@@ -6,6 +6,8 @@ import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -32,6 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
@@ -39,6 +43,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 
 /** Индикатор на страниците (лентата с новини, въведението) — един стил навсякъде. */
@@ -105,43 +110,67 @@ fun SearchPill(hint: String, onClick: () -> Unit, modifier: Modifier = Modifier)
 /** Елемент от мрежата с плочки („Още“, „Моето“). */
 data class TileItem(val icon: ImageVector, val title: String, val subtitle: String?, val onClick: () -> Unit)
 
-/** Мрежа от плочки в 2 колони с еднаква височина на реда. */
+/**
+ * Мрежа от плочки с еднаква височина на реда: 2 колони на телефон, 3 при ширина
+ * от 600 dp и 4 от 840 dp (таблет, хоризонтално).
+ */
 @Composable
 fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
-    Column(
-        modifier.fillMaxWidth().padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        items.chunked(2).forEachIndexed { r, row ->
-            Row(
-                Modifier.fillMaxWidth().height(IntrinsicSize.Min),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                row.forEachIndexed { c, item ->
-                    Surface(
-                        onClick = item.onClick,
-                        shape = MaterialTheme.shapes.medium,
-                        color = MaterialTheme.colorScheme.surfaceContainerLow,
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)),
-                        modifier = Modifier.weight(1f).fillMaxHeight().animateEntrance(r * 2 + c),
-                    ) {
-                        Column(Modifier.padding(14.dp)) {
-                            IconPlate(item.icon, size = 44.dp)
-                            Spacer(Modifier.height(10.dp))
-                            Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                            item.subtitle?.let {
-                                Spacer(Modifier.height(2.dp))
-                                Text(
-                                    it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    maxLines = 2, overflow = TextOverflow.Ellipsis,
-                                )
+    BoxWithConstraints(modifier.fillMaxWidth()) {
+        val columns = when {
+            maxWidth >= 840.dp -> 4
+            maxWidth >= 600.dp -> 3
+            else -> 2
+        }
+        Column(
+            Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            items.chunked(columns).forEachIndexed { r, row ->
+                Row(
+                    Modifier.fillMaxWidth().height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    row.forEachIndexed { c, item ->
+                        Surface(
+                            onClick = item.onClick,
+                            shape = MaterialTheme.shapes.medium,
+                            color = MaterialTheme.colorScheme.surfaceContainerLow,
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)),
+                            modifier = Modifier.weight(1f).fillMaxHeight().animateEntrance(r * columns + c)
+                                .darkTopHighlight(MaterialTheme.shapes.medium),
+                        ) {
+                            Column(Modifier.padding(14.dp)) {
+                                IconPlate(item.icon, size = 44.dp)
+                                Spacer(Modifier.height(10.dp))
+                                Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                                item.subtitle?.let {
+                                    Spacer(Modifier.height(2.dp))
+                                    Text(
+                                        it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 2, overflow = TextOverflow.Ellipsis,
+                                    )
+                                }
                             }
                         }
                     }
+                    repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
                 }
-                if (row.size == 1) Spacer(Modifier.weight(1f))
             }
         }
     }
 }
 
+/**
+ * Тънка златиста светлина по горния ръб на карта — само в тъмна тема, където
+ * сенките не се виждат върху мастиления фон. В светла тема не прави нищо.
+ */
+@Composable
+fun Modifier.darkTopHighlight(shape: Shape): Modifier {
+    if (MaterialTheme.colorScheme.background.luminance() >= 0.5f) return this
+    return this.border(
+        width = 1.dp,
+        brush = Brush.verticalGradient(0f to Brand.Gold.copy(alpha = 0.12f), 0.35f to Color.Transparent),
+        shape = shape,
+    )
+}

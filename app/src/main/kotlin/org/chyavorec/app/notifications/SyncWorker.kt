@@ -10,6 +10,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import org.chyavorec.app.ChitalishteApp
 import org.chyavorec.app.R
+import org.chyavorec.app.widget.ChitalishteWidget
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.DueStatus
@@ -73,6 +74,9 @@ class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
                 }
             }
         }
+        // Събитията за уиджета (кеш до 5 минути — без излишни заявки), после опресняване на уиджета.
+        runCatching { c.eventsRepository.events(force = false) }
+        ChitalishteWidget.refresh(applicationContext)
         c.settings.setLastBackgroundSync(c.clock.now().toEpochMilli())
         return Result.success()
     }

@@ -1,0 +1,8 @@
+HSPLorg/chyavorec/app/**->**(**)**
+Lorg/chyavorec/app/**;
+HSPLorg/chyavorec/core/**->**(**)**
+Lorg/chyavorec/core/**;
+HSPLorg/chyavorec/data/**->**(**)**
+Lorg/chyavorec/data/**;
+HSPLorg/chyavorec/domain/**->**(**)**
+Lorg/chyavorec/domain/**;
