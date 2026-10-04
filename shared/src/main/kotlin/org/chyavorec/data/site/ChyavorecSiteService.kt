@@ -1,10 +1,13 @@
 package org.chyavorec.data.site
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -44,12 +47,15 @@ import java.io.ByteArrayInputStream
  * | документи | `/data/files.json` |
  * | съдържание на страница | `/<страница>` → `#hp .hp-inner` |
  * | празник на деня | `/api/calendar?d=Г-М-Д` (Vercel функция) |
+ *
+ * Разчитането (JSON, RSS, Jsoup) върви на [work], не на извикващата (главна) нишка.
  */
 class ChyavorecSiteService(
     private val http: HttpFetcher,
     private val baseUrl: String,
     private val clock: AppClock,
     private val fallbackContacts: Contacts,
+    private val work: CoroutineDispatcher = Dispatchers.Default,
 ) : NewsService, EventsService, SiteContentService {
 
     private val parser = SiteJsonParser(baseUrl)
@@ -60,8 +66,9 @@ class ChyavorecSiteService(
 
     private fun HttpBody.html(): Document = Jsoup.parse(ByteArrayInputStream(bytes), charset, finalUrl)
 
-    private inline fun <T> parse(what: String, block: () -> T): Outcome<T> =
+    private suspend fun <T> parse(what: String, block: () -> T): Outcome<T> = withContext(work) {
         runCatching(block).fold({ Outcome.Success(it) }, { Outcome.Failure(AppError.Parse(what)) })
+    }
 
     // --- търсещият индекс се ползва от няколко функции; държим го кратко в паметта ---
     private val indexMutex = Mutex()
@@ -82,8 +89,11 @@ class ChyavorecSiteService(
         when (val r = http.get(url("/data/news.json"))) {
             is Outcome.Failure -> r
             is Outcome.Success -> {
-                val links = (rss.await() as? Outcome.Success)?.value?.let { runCatching { parser.parseRssLinks(it.text()) }.getOrNull() }.orEmpty()
-                parse("news.json") { parser.parseNews(r.value.text(), links) }
+                val rssBody = (rss.await() as? Outcome.Success)?.value
+                parse("news.json") {
+                    val links = rssBody?.let { runCatching { parser.parseRssLinks(it.text()) }.getOrNull() }.orEmpty()
+                    parser.parseNews(r.value.text(), links)
+                }
             }
         }
     }
@@ -139,8 +149,10 @@ class ChyavorecSiteService(
         return when (val r = http.get(contactsUrl)) {
             is Outcome.Failure -> r
             is Outcome.Success -> Outcome.Success(
-                runCatching { ContactsExtractor(baseUrl, fallbackContacts).extract(r.value.html(), contactsUrl) }
-                    .getOrDefault(fallbackContacts),
+                withContext(work) {
+                    runCatching { ContactsExtractor(baseUrl, fallbackContacts).extract(r.value.html(), contactsUrl) }
+                        .getOrDefault(fallbackContacts)
+                },
             )
         }
     }
@@ -159,9 +171,10 @@ class ChyavorecSiteService(
         "Клубове и кръжоци" to "/klubove-i-krzhoci",
     )
 
-    override suspend fun fetchGallery(): Outcome<List<GalleryPhoto>> = coroutineScope {
+    override suspend fun fetchGallery(news: List<NewsArticle>?): Outcome<List<GalleryPhoto>> = coroutineScope {
         val newsPhotos = async {
-            (fetchLatest() as? Outcome.Success)?.value.orEmpty().mapNotNull { a ->
+            // Новините обикновено вече са свалени (кеш на хранилището) — не ги тегли повторно.
+            (news ?: (fetchLatest() as? Outcome.Success)?.value).orEmpty().mapNotNull { a ->
                 a.imageUrl?.let { GalleryPhoto("news:" + a.id, a.title, it, it, "Новини", a.url, a.publishedAtMillis) }
             }
         }
@@ -169,7 +182,9 @@ class ChyavorecSiteService(
             async {
                 when (val r = http.get(url(path))) {
                     is Outcome.Failure -> emptyList()
-                    is Outcome.Success -> runCatching { photosFrom(r.value.html(), album, url(path)) }.getOrDefault(emptyList())
+                    is Outcome.Success -> withContext(work) {
+                        runCatching { photosFrom(r.value.html(), album, url(path)) }.getOrDefault(emptyList())
+                    }
                 }
             }
         }
@@ -190,7 +205,7 @@ class ChyavorecSiteService(
     override suspend fun fetchDocuments(): Outcome<List<SiteDocument>> = coroutineScope {
         val index = async { fetchSearchIndex() }
         val files = when (val r = http.get(url("/data/files.json"))) {
-            is Outcome.Success -> runCatching { parser.parseFiles(r.value.text()) }.getOrDefault(emptyList())
+            is Outcome.Success -> withContext(work) { runCatching { parser.parseFiles(r.value.text()) }.getOrDefault(emptyList()) }
             is Outcome.Failure -> emptyList()
         }
         val publications = (index.await() as? Outcome.Success)?.value?.let { parser.publications(it) }.orEmpty()
@@ -212,7 +227,7 @@ class ChyavorecSiteService(
     override suspend fun fetchMessages(): Outcome<List<org.chyavorec.domain.model.AppMessage>> =
         when (val r = http.get(url("/data/app-messages.json"), mapOf("Cache-Control" to "no-cache"))) {
             is Outcome.Failure -> if (r.error == org.chyavorec.core.AppError.NotFound) Outcome.Success(emptyList()) else r
-            is Outcome.Success -> AppMessagesParser.parse(r.value.text())?.let { Outcome.Success(it) }
+            is Outcome.Success -> withContext(work) { AppMessagesParser.parse(r.value.text()) }?.let { Outcome.Success(it) }
                 ?: Outcome.Failure(org.chyavorec.core.AppError.Parse("app-messages.json"))
         }
 }

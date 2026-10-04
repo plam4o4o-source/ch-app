@@ -134,6 +134,9 @@ android {
     androidResources {
         @Suppress("UnstableApiUsage")
         generateLocaleConfig = false
+        // Само езиците на приложението: махат се преводите на библиотеките (AppCompat,
+        // Material, Play Services…) за десетки други езици — по-малък APK/AAB.
+        localeFilters += listOf("bg", "en")
     }
 
     testOptions {

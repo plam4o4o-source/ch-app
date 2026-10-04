@@ -9,6 +9,10 @@ import coil3.disk.DiskCache
 import coil3.memory.MemoryCache
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.crossfade
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import okio.Path.Companion.toOkioPath
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.notifications.Notifier
@@ -21,19 +25,28 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
     lateinit var container: AppContainer
         private set
 
+    /** Фонови задачи на ниво процес (напр. планиране на WorkManager извън главната нишка). */
+    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    /** OkHttp без HTTP кеш за изображенията — Coil има собствен дисков кеш (иначе всяка снимка се пази двойно). */
+    private val imageHttp by lazy { container.okHttp.newBuilder().cache(null).build() }
+
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
         container.watchSignOut()
         Notifier.createChannels(this)
-        SyncWorker.schedule(this)
-        MessageWorker.schedule(this)
-        UpdateWorker.schedule(this, container.updater.enabled)
+        // Инициализацията на WorkManager (база данни) не бива да бави първия кадър.
+        appScope.launch {
+            runCatching { SyncWorker.schedule(this@ChitalishteApp) }
+            runCatching { MessageWorker.schedule(this@ChitalishteApp) }
+            runCatching { UpdateWorker.schedule(this@ChitalishteApp, container.updater.enabled) }
+        }
     }
 
     /** Изображенията се кешират на диска — работят и офлайн (Coil 3 не зачита Cache-Control по подразбиране). */
     override fun newImageLoader(context: PlatformContext): ImageLoader = ImageLoader.Builder(context)
-        .components { add(OkHttpNetworkFetcherFactory(callFactory = { container.okHttp })) }
+        .components { add(OkHttpNetworkFetcherFactory(callFactory = { imageHttp })) }
         .memoryCache { MemoryCache.Builder().maxSizePercent(context, 0.2).build() }
         .diskCache { DiskCache.Builder().directory(cacheDir.resolve("image_cache").toOkioPath()).maxSizeBytes(80L * 1024 * 1024).build() }
         .crossfade(true)

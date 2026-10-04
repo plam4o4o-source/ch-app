@@ -1,7 +1,10 @@
 package org.chyavorec.data.repository
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.builtins.ListSerializer
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
@@ -10,6 +13,7 @@ import org.chyavorec.core.map
 import org.chyavorec.core.Synced
 import org.chyavorec.data.catalog.CatalogSearchEngine
 import org.chyavorec.data.catalog.KatalogParser
+import org.chyavorec.data.catalog.katalogHash
 import org.chyavorec.domain.model.ArticleDetail
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.DailyFeast
@@ -32,6 +36,8 @@ import java.time.Instant
 private const val FIVE_MINUTES = 5 * 60 * 1000L
 private const val ONE_HOUR = 60 * 60 * 1000L
 private const val TEN_MINUTES = 10 * 60 * 1000L
+/** Каталогът се обновява рядко (няколко пъти седмично) и е голям — по-дълъг прозорец. */
+private const val CATALOG_FRESH = 30 * 60 * 1000L
 
 internal fun cacheKey(prefix: String, value: String): String {
     val digest = MessageDigest.getInstance("SHA-256").digest(value.toByteArray())
@@ -42,8 +48,9 @@ class NewsRepository(
     private val service: NewsService,
     private val cache: PayloadCache,
     private val clock: AppClock,
+    private val work: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    private val list = CachedResource(cache, "news:list", ListSerializer(NewsArticle.serializer()), clock, FIVE_MINUTES)
+    private val list = CachedResource(cache, "news:list", ListSerializer(NewsArticle.serializer()), clock, FIVE_MINUTES, work)
 
     suspend fun cached(): Synced<List<NewsArticle>>? = list.cached()
 
@@ -51,7 +58,7 @@ class NewsRepository(
         list.load(force) { service.fetchLatest() }
 
     suspend fun article(article: NewsArticle, force: Boolean = false): Outcome<Synced<ArticleDetail>> =
-        CachedResource(cache, cacheKey("news:article:", article.url), ArticleDetail.serializer(), clock, ONE_HOUR)
+        CachedResource(cache, cacheKey("news:article:", article.url), ArticleDetail.serializer(), clock, ONE_HOUR, work)
             .load(force) { service.fetchArticle(article) }
 
     /** По идентификатор или по публичния адрес (/news/<slug>) — за вътрешните връзки. */
@@ -62,8 +69,9 @@ class EventsRepository(
     private val service: EventsService,
     cache: PayloadCache,
     private val clock: AppClock,
+    work: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    private val list = CachedResource(cache, "events:list", ListSerializer(Event.serializer()), clock, FIVE_MINUTES)
+    private val list = CachedResource(cache, "events:list", ListSerializer(Event.serializer()), clock, FIVE_MINUTES, work)
 
     suspend fun cached(): Synced<List<Event>>? = list.cached()
 
@@ -99,52 +107,90 @@ class EventsRepository(
 /**
  * Каталогът се държи в паметта като [CatalogSearchEngine]; суровият JSON се
  * кешира на диска, за да работи търсенето и офлайн (с ясна дата на данните).
+ *
+ * Моментът на последното успешно сваляне се пази до файла ([FETCHED_AT_KEY]), така че
+ * прозорецът [CATALOG_FRESH] важи и след рестарт: по-пресен дисков кеш не се сваля
+ * отново. Ако свалeното съдържание е същото (SHA-256), не се разчита, индексира и
+ * презаписва повторно. Разчитането и индексът се строят на [work], не на главната нишка.
  */
 class CatalogRepository(
     private val service: CatalogService,
     private val cache: PayloadCache,
     private val clock: AppClock,
+    private val work: CoroutineDispatcher = Dispatchers.Default,
 ) {
     private val mutex = Mutex()
     @Volatile private var current: Synced<CatalogSearchEngine>? = null
+    /** SHA-256 на суровия JSON зад [current]. */
+    private var currentHash: String? = null
+    /** Кога [current] е потвърден от мрежата за последно (epoch ms). */
+    private var lastFetchMillis: Long = 0L
 
     fun inMemory(): Synced<CatalogSearchEngine>? = current
 
     suspend fun cached(): Synced<CatalogSearchEngine>? = mutex.withLock {
-        current ?: loadFromDisk()?.also { current = it }
+        current ?: loadFromDisk()
     }
 
+    /** Зарежда дисковия кеш в паметта (извиква се само под [mutex]). */
     private suspend fun loadFromDisk(): Synced<CatalogSearchEngine>? {
         val payload = cache.read(KEY) ?: return null
-        val snapshot = runCatching { KatalogParser.parse(payload.text) }.getOrNull() ?: return null
-        return Synced(CatalogSearchEngine(snapshot), Instant.ofEpochMilli(payload.savedAtMillis), fromCache = true)
+        val fetchedAt = runCatching { cache.read(FETCHED_AT_KEY)?.text?.trim()?.toLongOrNull() }.getOrNull()
+            ?: payload.savedAtMillis
+        val loaded = withContext(work) {
+            runCatching { CatalogSearchEngine(KatalogParser.parse(payload.text)) to katalogHash(payload.text) }.getOrNull()
+        } ?: return null
+        val synced = Synced(loaded.first, Instant.ofEpochMilli(fetchedAt), fromCache = true)
+        current = synced
+        currentHash = loaded.second
+        lastFetchMillis = fetchedAt
+        return synced
     }
 
-    suspend fun catalog(force: Boolean = false): Outcome<Synced<CatalogSearchEngine>> = mutex.withLock {
-        val existing = current ?: loadFromDisk()
-        if (!force && existing != null && !existing.fromCache &&
-            clock.now().toEpochMilli() - existing.syncedAt.toEpochMilli() < FIVE_MINUTES
-        ) return Outcome.Success(existing)
-        when (val r = service.fetchCatalog()) {
-            is Outcome.Success -> {
-                val (raw, snapshot) = r.value
-                runCatching { cache.write(KEY, raw) }
-                val fresh = Synced(CatalogSearchEngine(snapshot), clock.now())
+    suspend fun catalog(force: Boolean = false): Outcome<Synced<CatalogSearchEngine>> {
+        return mutex.withLock {
+            val existing = current ?: loadFromDisk()
+            val now = clock.now().toEpochMilli()
+            if (!force && existing != null && now - lastFetchMillis in 0 until CATALOG_FRESH) {
+                val fresh = existing.copy(fromCache = false, refreshError = null)
                 current = fresh
-                Outcome.Success(fresh)
+                return@withLock Outcome.Success(fresh)
             }
-            is Outcome.Failure -> {
-                if (existing != null) {
-                    val stale = existing.copy(fromCache = true, refreshError = r.error)
-                    current = stale
-                    Outcome.Success(stale)
-                } else r
+            when (val r = service.fetchCatalogIfChanged(if (existing != null) currentHash else null)) {
+                is Outcome.Success -> {
+                    val fetched = r.value
+                    val newHash = fetched?.let { withContext(work) { katalogHash(it.first) } }
+                    val engine = if (existing != null && (fetched == null || newHash == currentHash)) {
+                        // Същото съдържание — пазим готовия индекс и не презаписваме файла.
+                        existing.data
+                    } else {
+                        if (fetched == null) return@withLock Outcome.Failure(AppError.Parse("katalog.json"))
+                        val (raw, snapshot) = fetched
+                        runCatching { cache.write(KEY, raw) }
+                        currentHash = newHash
+                        withContext(work) { CatalogSearchEngine(snapshot) }
+                    }
+                    val syncedAt = clock.now()
+                    runCatching { cache.write(FETCHED_AT_KEY, syncedAt.toEpochMilli().toString()) }
+                    lastFetchMillis = syncedAt.toEpochMilli()
+                    val fresh = Synced(engine, syncedAt)
+                    current = fresh
+                    Outcome.Success(fresh)
+                }
+                is Outcome.Failure -> {
+                    if (existing != null) {
+                        val stale = existing.copy(fromCache = true, refreshError = r.error)
+                        current = stale
+                        Outcome.Success(stale)
+                    } else r
+                }
             }
         }
     }
 
     companion object {
         const val KEY = "catalog:katalog.json"
+        const val FETCHED_AT_KEY = "catalog:fetchedAt"
     }
 }
 
@@ -152,6 +198,8 @@ class SiteRepository(
     private val service: SiteContentService,
     private val cache: PayloadCache,
     private val clock: AppClock,
+    /** Източник на вече свалените новини за албума „Новини“ (без повторно теглене). */
+    private val news: NewsRepository? = null,
 ) {
     private val links = CachedResource(cache, "site:links", ListSerializer(SiteLink.serializer()), clock, ONE_HOUR)
     private val gallery = CachedResource(cache, "site:gallery", ListSerializer(GalleryPhoto.serializer()), clock, FIVE_MINUTES)
@@ -176,10 +224,16 @@ class SiteRepository(
     }
 
     suspend fun gallery(force: Boolean = false): Outcome<Synced<List<GalleryAlbum>>> =
-        when (val r = gallery.load(force) { service.fetchGallery() }) {
+        when (val r = gallery.load(force) { service.fetchGallery(newsForGallery()) }) {
             is Outcome.Failure -> r
             is Outcome.Success -> Outcome.Success(r.value.map { photos -> albums(photos) })
         }
+
+    /** Новините от кеша/мрежата на [news] (с неговия прозорец на свежест) или `null`. */
+    private suspend fun newsForGallery(): List<NewsArticle>? {
+        val repo = news ?: return null
+        return (repo.latest(false) as? Outcome.Success)?.value?.data ?: repo.cached()?.data ?: emptyList()
+    }
 
     suspend fun documents(force: Boolean = false): Outcome<Synced<List<SiteDocument>>> = documents.load(force) { service.fetchDocuments() }
 

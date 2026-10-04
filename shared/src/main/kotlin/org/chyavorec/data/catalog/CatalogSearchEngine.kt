@@ -7,6 +7,7 @@ import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.CatalogSnapshot
 import org.chyavorec.domain.model.CatalogSort
 import org.chyavorec.domain.model.SearchField
+import java.text.CollationKey
 import java.text.Collator
 
 /**
@@ -22,6 +23,9 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
         val keywords: String,
         val all: String,
         val isbnDigits: String,
+        /** Ключове за подреждане по български — изчислени веднъж, не при всяко търсене. */
+        val titleKey: CollationKey,
+        val authorKey: CollationKey,
     )
 
     private val collator: Collator = Collator.getInstance(java.util.Locale.forLanguageTag("bg-BG"))
@@ -43,6 +47,9 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
                 b.callNumber.lowercase(), b.inv.toString(), b.isbn,
             ).joinToString(" "),
             isbnDigits = TextNormalizer.digits(b.isbn),
+            titleKey = collator.getCollationKey(b.title),
+            // Без автор — накрая.
+            authorKey = collator.getCollationKey(b.author.ifBlank { "\uFFFF" }),
         )
     }
 
@@ -88,11 +95,11 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
         }
         val comparator: Comparator<Pair<Indexed, Int>> = when (query.sort) {
             CatalogSort.RELEVANCE ->
-                if (tokens.isEmpty()) compareBy(collator) { it.first.book.title }
-                else compareByDescending<Pair<Indexed, Int>> { it.second }.thenBy(collator) { it.first.book.title }
-            CatalogSort.TITLE -> compareBy(collator) { it.first.book.title }
-            CatalogSort.AUTHOR -> compareBy<Pair<Indexed, Int>, String>(collator) { it.first.book.author.ifBlank { "￿" } }
-                .thenBy(collator) { it.first.book.title }
+                if (tokens.isEmpty()) compareBy { it.first.titleKey }
+                else compareByDescending<Pair<Indexed, Int>> { it.second }.thenBy { it.first.titleKey }
+            CatalogSort.TITLE -> compareBy { it.first.titleKey }
+            CatalogSort.AUTHOR -> compareBy<Pair<Indexed, Int>> { it.first.authorKey }
+                .thenBy { it.first.titleKey }
             CatalogSort.YEAR_DESC -> compareByDescending<Pair<Indexed, Int>> { it.first.book.yearNumber ?: Int.MIN_VALUE }
             CatalogSort.YEAR_ASC -> compareBy { it.first.book.yearNumber ?: Int.MAX_VALUE }
             CatalogSort.NEWEST -> compareByDescending<Pair<Indexed, Int>> { it.first.book.registeredOn }

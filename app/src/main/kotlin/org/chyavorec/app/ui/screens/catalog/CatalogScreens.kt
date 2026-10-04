@@ -239,7 +239,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                         EmptyView(stringResource(R.string.catalog_no_results), stringResource(R.string.catalog_no_results_hint), icon = Icons.Outlined.SearchOff)
                     } else {
                         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
-                            item {
+                            item(contentType = "header") {
                                 Text(
                                     pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults) + "  ·  " +
                                         stringResource(R.string.catalog_data_as_of, Formatters.shortDate(engine.snapshot.generatedOn) ?: "—"),
@@ -247,11 +247,11 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                                 )
                             }
-                            itemsIndexed(state.page, key = { _, b -> b.inv }) { i, b ->
+                            itemsIndexed(state.page, key = { _, b -> b.inv }, contentType = { _, _ -> "book" }) { i, b ->
                                 BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i))
                             }
                             if (state.canLoadMore) {
-                                item {
+                                item(contentType = "more") {
                                     OutlinedButton(onClick = vm::loadMore, modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                                         Text(stringResource(R.string.action_load_more))
                                     }

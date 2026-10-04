@@ -29,6 +29,12 @@ import org.chyavorec.domain.model.SiteSearchDoc
 interface CatalogService {
     /** Връща суровия JSON текст (за кеширане) и разчетения каталог. */
     suspend fun fetchCatalog(): Outcome<Pair<String, CatalogSnapshot>>
+
+    /**
+     * Като [fetchCatalog], но ако сваленото съдържание има SHA-256 [knownHash]
+     * (т.е. е същото като кешираното), не се разчита повторно и се връща `null`.
+     */
+    suspend fun fetchCatalogIfChanged(knownHash: String?): Outcome<Pair<String, CatalogSnapshot>?> = fetchCatalog()
 }
 
 /** Новини от chyavorec.org (/data/news.json). */
@@ -47,7 +53,8 @@ interface SiteContentService {
     suspend fun discoverLinks(): Outcome<List<SiteLink>>
     suspend fun fetchPage(url: String): Outcome<SitePage>
     suspend fun fetchContacts(links: List<SiteLink>): Outcome<Contacts>
-    suspend fun fetchGallery(): Outcome<List<GalleryPhoto>>
+    /** [news] — вече свалените новини (за албума „Новини“); `null` = свали ги сам. */
+    suspend fun fetchGallery(news: List<NewsArticle>? = null): Outcome<List<GalleryPhoto>>
     suspend fun fetchDocuments(): Outcome<List<SiteDocument>>
     suspend fun fetchSearchIndex(): Outcome<List<SiteSearchDoc>>
     /** [date] във формат Г-М-Д без водещи нули (както очаква сайтът). */

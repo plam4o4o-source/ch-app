@@ -88,14 +88,19 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
     val ui = MutableStateFlow(SearchUi())
     val recent = c.settings.recentSearches.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     private val query = MutableStateFlow("")
-    private var siteDocs: List<SiteSearchDoc> = emptyList()
+    @Volatile private var siteDocs: List<SiteSearchDoc> = emptyList()
+    // Новините и събитията се четат/декодират от диска веднъж, а не при всеки клавиш.
+    @Volatile private var news: List<org.chyavorec.domain.model.NewsArticle> = emptyList()
+    @Volatile private var events: List<org.chyavorec.domain.model.Event> = emptyList()
 
     init {
         viewModelScope.launch {
             // Зареждаме данните за търсене (от кеша, при нужда — от мрежата).
             c.catalogRepository.cached() ?: c.catalogRepository.catalog(false)
-            if (c.newsRepository.cached() == null) c.newsRepository.latest(false)
-            if (c.eventsRepository.cachedRolled() == null) c.eventsRepository.events(false)
+            news = c.newsRepository.cached()?.data
+                ?: (c.newsRepository.latest(false) as? Outcome.Success)?.value?.data.orEmpty()
+            events = c.eventsRepository.cachedRolled()?.data
+                ?: (c.eventsRepository.events(false) as? Outcome.Success)?.value?.data.orEmpty()
             siteDocs = c.siteRepository.cachedSearchIndex()
                 ?: (c.siteRepository.searchIndex(false) as? Outcome.Success)?.value?.data.orEmpty()
             run(query.value)
@@ -110,8 +115,6 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
 
     private suspend fun run(q: String) {
         val engine = c.catalogRepository.inMemory()?.data
-        val news = c.newsRepository.cached()?.data.orEmpty()
-        val events = c.eventsRepository.cachedRolled()?.data.orEmpty()
         val r = withContext(Dispatchers.Default) { SearchAggregator.search(q, engine, news, events, siteDocs) }
         ui.update { if (it.query == q) it.copy(results = r, searching = false) else it }
     }

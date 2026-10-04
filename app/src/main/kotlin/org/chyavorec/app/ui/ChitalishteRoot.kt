@@ -65,6 +65,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.graphicsLayer
 import org.chyavorec.app.ui.components.BrandIntro
 import org.chyavorec.app.ui.components.LocalNavAnimatedScope
+import org.chyavorec.app.ui.components.LocalReducedMotion
+import org.chyavorec.app.ui.components.observeReducedMotion
 import org.chyavorec.app.ui.components.LocalSharedScope
 import org.chyavorec.app.ui.components.LocalTabReselect
 import org.chyavorec.app.ui.components.TabReselectBus
@@ -121,7 +123,7 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
     val scope = rememberCoroutineScope()
     // Въведението с логото — само при първото стартиране (после splash екранът е достатъчен).
     var intro by remember { mutableStateOf(showIntro && !IntroState.shown && !settings.introShown) }
-    CompositionLocalProvider(LocalAppContainer provides container) {
+    CompositionLocalProvider(LocalAppContainer provides container, LocalReducedMotion provides observeReducedMotion()) {
         Box(Modifier.fillMaxSize()) {
             if (!settings.onboardingDone) {
                 OnboardingScreen(onFinish = { login ->

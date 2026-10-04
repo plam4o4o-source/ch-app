@@ -1,5 +1,8 @@
 package org.chyavorec.data.repository
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import org.chyavorec.core.AppClock
@@ -24,6 +27,7 @@ internal val cacheJson = Json {
  * - ако няма и кеш — грешката.
  * [minRefreshMillis] пази от излишни заявки (основна защита срещу злоупотреба с API):
  * по-пресен кеш се връща без мрежа, освен при изрично опресняване.
+ * JSON (де)кодирането върви на [work], не на извикващата (главна) нишка.
  */
 internal class CachedResource<T>(
     private val cache: PayloadCache,
@@ -31,10 +35,11 @@ internal class CachedResource<T>(
     private val serializer: KSerializer<T>,
     private val clock: AppClock,
     private val minRefreshMillis: Long,
+    private val work: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend fun cached(): Synced<T>? {
         val payload = cache.read(key) ?: return null
-        val value = runCatching { cacheJson.decodeFromString(serializer, payload.text) }.getOrNull() ?: return null
+        val value = withContext(work) { runCatching { cacheJson.decodeFromString(serializer, payload.text) }.getOrNull() } ?: return null
         return Synced(value, Instant.ofEpochMilli(payload.savedAtMillis), fromCache = true)
     }
 
@@ -46,7 +51,7 @@ internal class CachedResource<T>(
         }
         return when (val r = fetch()) {
             is Outcome.Success -> {
-                runCatching { cache.write(key, cacheJson.encodeToString(serializer, r.value)) }
+                runCatching { cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, r.value) }) }
                 Outcome.Success(Synced(r.value, clock.now(), fromCache = false))
             }
             is Outcome.Failure -> {

@@ -10,6 +10,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,15 +20,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import kotlinx.coroutines.delay
+
+/**
+ * Флагът „намалено движение“, прочетен веднъж в корена ([observeReducedMotion]) и
+ * подаден надолу — елементите на списъците не четат системните настройки поотделно.
+ * `null` = не е подаден (preview, екран извън корена) → чете се на място.
+ */
+val LocalReducedMotion = staticCompositionLocalOf<Boolean?> { null }
+
+private fun readReducedMotion(context: android.content.Context): Boolean =
+    Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+
+/**
+ * Чете системната настройка и я опреснява при всяко връщане към приложението
+ * (ON_RESUME) — за подаване в [LocalReducedMotion] веднъж близо до корена.
+ */
+@Composable
+fun observeReducedMotion(): Boolean {
+    val context = LocalContext.current
+    var reduced by remember { mutableStateOf(readReducedMotion(context)) }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { reduced = readReducedMotion(context) }
+    return reduced
+}
 
 /** Дали потребителят е изключил анимациите (Достъпност → „Премахване на анимациите“). */
 @Composable
 fun rememberReducedMotion(): Boolean {
+    val provided = LocalReducedMotion.current
+    if (provided != null) return provided
     val context = LocalContext.current
-    return remember {
-        Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
-    }
+    return remember { readReducedMotion(context) }
 }
 
 /**

@@ -33,7 +33,8 @@ data class CatalogUiState(
     val suggestions: List<String> = emptyList(),
     val searching: Boolean = false,
 ) {
-    val page: List<CatalogBook> get() = results.take(shown)
+    /** Изчислява се веднъж за състояние (не при всяка рекомпозиция). */
+    val page: List<CatalogBook> = results.take(shown)
     val canLoadMore: Boolean get() = shown < results.size
 
     companion object { const val PAGE = 40 }

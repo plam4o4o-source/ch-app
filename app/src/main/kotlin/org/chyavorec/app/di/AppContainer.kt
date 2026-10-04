@@ -117,7 +117,7 @@ class AppContainer(
     val newsRepository by lazy { NewsRepository(siteService, publicCache, clock) }
     val eventsRepository by lazy { EventsRepository(siteService, publicCache, clock) }
     val catalogRepository by lazy { CatalogRepository(catalogService, publicCache, clock) }
-    val siteRepository by lazy { SiteRepository(siteService, publicCache, clock) }
+    val siteRepository by lazy { SiteRepository(siteService, publicCache, clock, newsRepository) }
 
     val authRepository by lazy {
         AuthRepository(readerServices.auth, SecureSessionStore(File(context.noBackupFilesDir, "secure/session.bin"), cipher), clock, readerCache)
