@@ -40,6 +40,9 @@ class SecureSessionStore(private val file: File, private val cipher: BytesCipher
         }
     }
 
+    /** Файлът съществува само ако при вход е избрано „запомни ме“. */
+    override suspend fun isPersisted(): Boolean = withContext(Dispatchers.IO) { file.exists() }
+
     override suspend fun clear() {
         memory = null
         withContext(Dispatchers.IO) { file.delete() }

@@ -68,6 +68,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
     val caps by vm.capabilities.collectAsStateWithLifecycle()
     var showPassword by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(ui.success) { if (ui.success) onLoggedIn() }
+    LaunchedEffect(Unit) { vm.refreshCapabilities() }
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.login_title), onBack) }) { padding ->
         Column(

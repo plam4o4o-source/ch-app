@@ -113,7 +113,8 @@ fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
                     empty = { EmptyView(stringResource(R.string.loans_empty), stringResource(R.string.loans_empty_hint), icon = Icons.Outlined.CollectionsBookmark) },
                     errorSubject = stringResource(R.string.subject_loans),
                 ) { loans ->
-                    val sorted = loans.sortedBy { it.dueOn }
+                    // Без краен срок — най-отдолу.
+                    val sorted = loans.sortedWith(compareBy(nullsLast<String>()) { it.dueOn })
                     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         items(sorted, key = { it.loanId }) { loan ->
                             LoanCard(loan, calc, today, stale = state.fromCache, canRenew = canRenew && loan.canRenew, onRenew = { vm.renew(loan) })
@@ -127,7 +128,7 @@ fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
         AlertDialog(
             onDismissRequest = { vm.renewResult.value = null },
             confirmButton = { TextButton(onClick = { vm.renewResult.value = null }) { Text(stringResource(R.string.action_ok)) } },
-            text = { Text(if (r is Outcome.Success) stringResource(R.string.renew_ok, Formatters.shortDate(r.value.dueOn) ?: "") else errorMessage((r as Outcome.Failure).error)) },
+            text = { Text(if (r is Outcome.Success) stringResource(R.string.renew_ok, Formatters.shortDate(r.value.dueOn) ?: "—") else errorMessage((r as Outcome.Failure).error)) },
         )
     }
 }
@@ -230,7 +231,7 @@ fun ProfileScreen(onBack: () -> Unit) {
                     RemoteImage(p.photoUrl, stringResource(R.string.profile_photo), Modifier.size(96.dp).clip(RoundedCornerShape(50)))
                     Spacer(Modifier.height(12.dp))
                 }
-                Text(p.fullName, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
+                Text(p.fullName.ifBlank { stringResource(R.string.my_profile) }, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
                 Spacer(Modifier.height(8.dp))
                 InfoRow(stringResource(R.string.profile_reader_number), p.cardNumber)
                 InfoRow(stringResource(R.string.profile_category), p.category)

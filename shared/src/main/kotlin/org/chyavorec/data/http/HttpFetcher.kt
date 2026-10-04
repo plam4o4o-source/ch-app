@@ -52,7 +52,9 @@ class HttpFetcher(private val client: OkHttpClient, private val userAgent: Strin
 
     companion object {
         fun mapHttpError(code: Int, retryAfter: String?): AppError = when (code) {
-            401, 403 -> AppError.Unauthorized
+            // 403 = „нямаш право на това“, а не невалидна сесия/парола: не води до
+            // изход и не се брои като грешен опит за вход.
+            401 -> AppError.Unauthorized
             404, 410 -> AppError.NotFound
             429 -> AppError.RateLimited(retryAfter?.toLongOrNull() ?: 60)
             else -> AppError.Server(code)

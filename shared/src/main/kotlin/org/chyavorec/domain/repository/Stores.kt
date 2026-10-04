@@ -23,6 +23,11 @@ interface SessionStore {
     suspend fun load(): AuthSession?
     /** [persist] = false → само в паметта („не ме помни“). */
     suspend fun save(session: AuthSession, persist: Boolean)
+    /**
+     * Дали текущата сесия е запазена трайно (т.е. при вход е избрано „запомни ме“).
+     * Използва се при подновяване на токена, за да се запази изборът на потребителя.
+     */
+    suspend fun isPersisted(): Boolean
     suspend fun clear()
 }
 

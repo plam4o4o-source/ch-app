@@ -27,7 +27,9 @@ class MainActivity : AppCompatActivity() {
         // Кратък splash: държим го само докато настройките се заредят (милисекунди).
         splash.setKeepOnScreenCondition { !ready }
         enableEdgeToEdge()
-        deepLink.value = intent?.getStringExtra(Notifier.EXTRA_DEEP_LINK)
+        // Само при истинско стартиране — не и при пресъздаване (напр. завъртане),
+        // иначе същото известие би отваряло екрана отново и отново.
+        if (savedInstanceState == null) consumeDeepLink(intent)
         val container = (application as ChitalishteApp).container
 
         setContent {
@@ -44,6 +46,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        deepLink.value = intent.getStringExtra(Notifier.EXTRA_DEEP_LINK)
+        setIntent(intent)
+        consumeDeepLink(intent)
+    }
+
+    /** Прочита deep link-а от известието и го премахва от intent-а (еднократен). */
+    private fun consumeDeepLink(intent: Intent?) {
+        deepLink.value = intent?.getStringExtra(Notifier.EXTRA_DEEP_LINK)
+        intent?.removeExtra(Notifier.EXTRA_DEEP_LINK)
     }
 }

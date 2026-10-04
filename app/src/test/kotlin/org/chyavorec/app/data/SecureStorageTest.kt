@@ -53,9 +53,11 @@ class SecureStorageTest {
         val s = AuthSession("token-123", "refresh", 99, "R1")
         store.save(s, persist = false)
         assertFalse(file.exists())
+        assertFalse(store.isPersisted())
         assertEquals(s, store.load())
         store.save(s, persist = true)
         assertTrue(file.exists())
+        assertTrue(store.isPersisted())
         assertFalse(file.readBytes().toString(Charsets.UTF_8).contains("token-123"))
         // Нов процес: четене от диска.
         assertEquals(s, SecureSessionStore(file, XorTestCipher()).load())

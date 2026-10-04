@@ -136,6 +136,15 @@ class HttpServicesTest {
         assertEquals("Bearer AT", server.takeRequest().getHeader("Authorization"))
     }
 
+    @Test fun invlibLoansWithoutDatesStillDecode() = runTest {
+        server.enqueue(MockResponse().setBody(caps))
+        server.enqueue(MockResponse().setBody("""{"loans":[{"loanId":"1","title":"А","dateOut":null,"dateDue":null},{"loanId":"2","title":"Б"}]}"""))
+        val loans = (client().loans(AuthSession("AT", null, 0, "R")) as Outcome.Success).value
+        assertEquals(2, loans.size)
+        assertEquals(null, loans[0].dueOn)
+        assertEquals(null, loans[1].borrowedOn)
+    }
+
     @Test fun invlibUnsupportedFeatureIsNotFaked() = runTest {
         server.enqueue(MockResponse().setBody(caps))
         val c = client()

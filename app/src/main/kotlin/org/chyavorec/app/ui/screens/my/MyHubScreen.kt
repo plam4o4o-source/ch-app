@@ -39,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -76,6 +77,9 @@ fun MyHubScreen(navigate: (String) -> Unit) {
     val selfCard by vm.selfCard.collectAsStateWithLifecycle()
     var confirmLogout by remember { mutableStateOf(false) }
     val signedIn = auth is AuthState.SignedIn
+    // Ако при първото зареждане сървърът не е отговорил, входът би останал скрит —
+    // при всяко показване на „Моето“ питаме отново (без мрежа, ако вече е известно).
+    LaunchedEffect(Unit) { vm.refreshCapabilities() }
 
     Scaffold(topBar = {
         AppTopBar(stringResource(R.string.tab_my), onSearch = { navigate(Routes.SEARCH) })

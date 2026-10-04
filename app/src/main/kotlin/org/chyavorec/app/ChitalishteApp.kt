@@ -24,6 +24,7 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
+        container.watchSignOut()
         Notifier.createChannels(this)
         SyncWorker.schedule(this)
         MessageWorker.schedule(this)

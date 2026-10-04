@@ -60,8 +60,8 @@ data class LoanDto(
     val title: String,
     val author: String = "",
     val coverUrl: String? = null,
-    val dateOut: String,
-    val dateDue: String,
+    val dateOut: String? = null,
+    val dateDue: String? = null,
     val renewals: Int = 0,
     val canRenew: Boolean = false,
 )

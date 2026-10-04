@@ -59,9 +59,13 @@ class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
                         val key = "${loan.loanId}:$status"
                         current += key
                         if (key in already) continue
-                        val (titleRes, id) = if (status == DueStatus.OVERDUE) R.string.notif_overdue to 2000 else R.string.notif_due_soon to 1000
+                        val (titleRes, id) = if (status == DueStatus.OVERDUE) {
+                            R.string.notif_overdue to NotificationIds.overdue(loan.loanId)
+                        } else {
+                            R.string.notif_due_soon to NotificationIds.dueSoon(loan.loanId)
+                        }
                         Notifier.show(
-                            applicationContext, Channel.LOANS, id + (loan.loanId.hashCode() and 0x3FF),
+                            applicationContext, Channel.LOANS, id,
                             applicationContext.getString(titleRes), loan.title, "my/loans",
                         )
                     }
@@ -75,7 +79,7 @@ class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
 
     companion object {
         private const val NAME = "background-sync"
-        private const val NEWS_ID = 500
+        private const val NEWS_ID = NotificationIds.NEWS
 
         fun schedule(context: Context) {
             val request = PeriodicWorkRequestBuilder<SyncWorker>(12, TimeUnit.HOURS, 2, TimeUnit.HOURS)

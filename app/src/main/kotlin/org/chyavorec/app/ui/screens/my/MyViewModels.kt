@@ -31,10 +31,11 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
     val profile: StateFlow<ScreenState<ReaderProfile>> = _profile.asStateFlow()
 
     init {
+        // Възможностите идват от мрежата — отделно, за да не чака профилът бавната връзка.
+        viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
         viewModelScope.launch {
             c.authRepository.restore()
             c.selfCardRepository.load()
-            _caps.value = c.authRepository.capabilities()
             // Профилът следва входа: зарежда се и при нов вход (не само при старт),
             // и се изчиства при изход.
             authState.collect { s ->
@@ -47,7 +48,19 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
         }
     }
 
+    /**
+     * Повторно питане за възможностите, ако първия път сървърът не е отговорил
+     * (тогава те идват като „нищо не се поддържа“ и входът би останал скрит).
+     * Ако първото зареждане още тече — нищо не прави.
+     */
+    fun refreshCapabilities() {
+        val current = _caps.value ?: return
+        if (current.login) return
+        viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
+    }
+
     fun loadProfile() = viewModelScope.launch {
+        refreshCapabilities()
         _profile.update { it.startRefresh() }
         _profile.update { it.with(c.profileRepository.profile()) }
     }
@@ -87,6 +100,13 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
 
     init { viewModelScope.launch { _caps.value = c.authRepository.capabilities() } }
 
+    /** Повторен опит, ако при първото зареждане сървърът не е отговорил. */
+    fun refreshCapabilities() {
+        val current = _caps.value ?: return
+        if (current.login) return
+        viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
+    }
+
     fun setCard(v: String) = _ui.update { it.copy(cardNumber = v.take(32), error = null) }
     fun setPassword(v: String) = _ui.update { it.copy(password = v.take(128), error = null) }
     fun setRemember(v: Boolean) = _ui.update { it.copy(remember = v) }
@@ -123,13 +143,22 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
     val isDemo = c.readerServices.isDemo
 
     init {
+        viewModelScope.launch { canRenew.value = c.authRepository.capabilities().renew }
+        // Следва входа: зарежда при вход (и при нов вход), изчиства при изход.
         viewModelScope.launch {
-            canRenew.value = c.authRepository.capabilities().renew
-            refresh()
+            if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
+            c.authRepository.state.collect { s ->
+                if (s is AuthState.SignedIn) {
+                    if (_state.value.data == null) refresh()
+                } else if (s is AuthState.SignedOut) {
+                    _state.value = ScreenState(loading = false, error = AppError.Unauthorized)
+                }
+            }
         }
     }
 
     fun refresh() = viewModelScope.launch {
+        if (!canRenew.value) canRenew.value = c.authRepository.capabilities().renew
         _state.update { it.startRefresh() }
         _state.update { it.with(c.libraryRepository.loans(force = true)) }
     }
@@ -146,7 +175,19 @@ class MembershipViewModel(private val c: AppContainer) : ViewModel() {
     val state: StateFlow<ScreenState<Membership>> = _state.asStateFlow()
     val isDemo = c.readerServices.isDemo
 
-    init { refresh() }
+    init {
+        // Следва входа: зарежда при вход (и при нов вход), изчиства при изход.
+        viewModelScope.launch {
+            if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
+            c.authRepository.state.collect { s ->
+                if (s is AuthState.SignedIn) {
+                    if (_state.value.data == null) refresh()
+                } else if (s is AuthState.SignedOut) {
+                    _state.value = ScreenState(loading = false, error = AppError.Unauthorized)
+                }
+            }
+        }
+    }
 
     fun refresh() = viewModelScope.launch {
         _state.update { it.startRefresh() }

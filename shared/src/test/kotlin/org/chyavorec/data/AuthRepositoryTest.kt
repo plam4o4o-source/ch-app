@@ -5,6 +5,7 @@ import org.chyavorec.core.AppError
 import org.chyavorec.core.Feature
 import org.chyavorec.core.FixedClock
 import org.chyavorec.core.Outcome
+import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.data.invlib.UnavailableInvLibServices
 import org.chyavorec.data.repository.AuthRepository
 import org.chyavorec.data.repository.AuthState
@@ -37,7 +38,8 @@ class AuthRepositoryTest {
         var persisted = false
         override suspend fun load() = s
         override suspend fun save(session: AuthSession, persist: Boolean) { s = session; persisted = persist }
-        override suspend fun clear() { s = null }
+        override suspend fun isPersisted() = s != null && persisted
+        override suspend fun clear() { s = null; persisted = false }
     }
 
     private inner class FakeAuth : AuthenticationService {
@@ -119,6 +121,75 @@ class AuthRepositoryTest {
         assertEquals(AppError.Unauthorized, (lib.loans() as Outcome.Failure).error)
         auth.login("1", "secret".toCharArray(), true)
         assertEquals("Под игото", (lib.loans() as Outcome.Success).value.data.single().title)
+    }
+
+    private class LoansReader(private val onLoans: suspend (AuthSession) -> Outcome<List<Loan>>) : ReaderService {
+        override suspend fun profile(session: AuthSession) = Outcome.Success(ReaderProfile("R1", "1", "Читател"))
+        override suspend fun loans(session: AuthSession) = onLoans(session)
+        override suspend fun placeHold(session: AuthSession, inv: Long) = Outcome.Success(Unit)
+        override suspend fun renew(session: AuthSession, loanId: String) = Outcome.Failure(AppError.NotFound)
+        override suspend fun requestAccountDeletion(session: AuthSession) = Outcome.Success(Unit)
+        override suspend fun availability(inv: Long) = Outcome.Success(BookStatus.AVAILABLE)
+    }
+
+    @Test fun refreshKeepsRememberChoiceAndOldRefreshToken() = runTest {
+        val store = MemStore(); val auth = FakeAuth()
+        val repo = AuthRepository(auth, store, clock, InMemoryPayloadCache())
+        repo.login("123", "secret".toCharArray(), remember = false)
+        auth.refreshResult = Outcome.Success(AuthSession("a3", null, clock.now().toEpochMilli() + 3_600_000, "R1"))
+        val s = (repo.validSession() as Outcome.Success).value
+        assertEquals("a3", s.accessToken)
+        assertEquals("r", s.refreshToken)
+        assertFalse(store.persisted)
+    }
+
+    @Test fun unauthorizedDataCallRefreshesOnceAndRetries() = runTest {
+        val store = MemStore()
+        store.s = AuthSession("old", "r", clock.now().toEpochMilli() + 3_600_000, "R1"); store.persisted = true
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
+        repo.restore()
+        var calls = 0
+        val reader = LoansReader { session ->
+            calls++
+            if (session.accessToken == "old") Outcome.Failure(AppError.Unauthorized)
+            else Outcome.Success(listOf(Loan("L1", 1, "Под игото", "Иван Вазов", null, null, null)))
+        }
+        val lib = LibraryRepository(reader, repo, InMemoryPayloadCache(), clock)
+        assertEquals("Под игото", (lib.loans() as Outcome.Success).value.data.single().title)
+        assertEquals(2, calls)
+        assertEquals("a2", store.s?.accessToken)
+        assertTrue(store.persisted)
+        assertEquals(AuthState.SignedIn("R1"), repo.state.value)
+    }
+
+    @Test fun repeatedUnauthorizedAfterRefreshSignsOut() = runTest {
+        val store = MemStore()
+        store.s = AuthSession("old", "r", clock.now().toEpochMilli() + 3_600_000, "R1"); store.persisted = true
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
+        repo.restore()
+        val lib = LibraryRepository(LoansReader { Outcome.Failure(AppError.Unauthorized) }, repo, InMemoryPayloadCache(), clock)
+        assertEquals(AppError.Unauthorized, (lib.loans() as Outcome.Failure).error)
+        assertNull(store.s)
+        assertEquals(AuthState.SignedOut, repo.state.value)
+    }
+
+    @Test fun resultForSignedOutUserIsNotCached() = runTest {
+        val store = MemStore()
+        store.s = AuthSession("a", "r", clock.now().toEpochMilli() + 3_600_000, "R1")
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
+        repo.restore()
+        val reader = LoansReader {
+            store.s = null // изход по време на заявката
+            Outcome.Success(listOf(Loan("L1", 1, "Под игото", "Иван Вазов")))
+        }
+        val lib = LibraryRepository(reader, repo, InMemoryPayloadCache(), clock)
+        assertEquals(AppError.Unauthorized, (lib.loans() as Outcome.Failure).error)
+        assertNull(lib.cachedLoans())
+    }
+
+    @Test fun forbiddenIsNotUnauthorized() {
+        assertEquals(AppError.Unauthorized, HttpFetcher.mapHttpError(401, null))
+        assertEquals(AppError.Server(403), HttpFetcher.mapHttpError(403, null))
     }
 
     @Test fun selfCardValidation() = runTest {

@@ -44,10 +44,10 @@ data class Loan(
     val title: String,
     val author: String,
     val coverUrl: String? = null,
-    /** ISO дата на заемане. */
-    val borrowedOn: String,
-    /** ISO краен срок. */
-    val dueOn: String,
+    /** ISO дата на заемане (може да липсва в отговора на сървъра). */
+    val borrowedOn: String? = null,
+    /** ISO краен срок (може да липсва в отговора на сървъра). */
+    val dueOn: String? = null,
     val renewals: Int = 0,
     val canRenew: Boolean = false,
 )

@@ -10,6 +10,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import org.chyavorec.app.ChitalishteApp
 import org.chyavorec.app.notifications.Channel
+import org.chyavorec.app.notifications.NotificationIds
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.site.AppMessagesParser
@@ -42,7 +43,7 @@ class MessageWorker(context: Context, params: WorkerParameters) : CoroutineWorke
                 Notifier.show(
                     applicationContext,
                     if (m.priority == MessagePriority.HIGH) Channel.MESSAGES_IMPORTANT else Channel.MESSAGES,
-                    MESSAGE_ID_BASE + (m.id.hashCode() and 0x3FF),
+                    NotificationIds.message(m.id),
                     m.title, m.body.ifBlank { m.title }, DEEP_LINK,
                 )
             }
@@ -54,7 +55,6 @@ class MessageWorker(context: Context, params: WorkerParameters) : CoroutineWorke
     companion object {
         private const val NAME = "app-messages"
         const val DEEP_LINK = "messages"
-        private const val MESSAGE_ID_BASE = 3000
         private const val MAX_PER_RUN = 3
         /** Известие само за съобщения от последните 7 дни. */
         private const val RECENT_SECONDS = 7 * 24 * 60 * 60L

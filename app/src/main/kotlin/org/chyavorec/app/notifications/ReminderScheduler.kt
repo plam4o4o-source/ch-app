@@ -71,7 +71,7 @@ class EventReminderWorker(context: Context, params: WorkerParameters) : Coroutin
         val title = inputData.getString(ReminderScheduler.KEY_TITLE) ?: return Result.success()
         val id = inputData.getString(ReminderScheduler.KEY_ID).orEmpty()
         Notifier.show(
-            applicationContext, Channel.EVENTS, 3000 + (id.hashCode() and 0x3FF),
+            applicationContext, Channel.EVENTS, NotificationIds.event(id),
             applicationContext.getString(R.string.notif_event_reminder), title, "events",
         )
         return Result.success()

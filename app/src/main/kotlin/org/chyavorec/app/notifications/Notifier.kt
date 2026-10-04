@@ -25,6 +25,27 @@ enum class Channel(val id: String, val nameRes: Int, val descRes: Int, val impor
     UPDATES("updates", R.string.channel_updates, R.string.channel_updates_desc, NotificationManager.IMPORTANCE_DEFAULT),
 }
 
+/**
+ * ID-та на известията. Всеки вид има собствен, непрепокриващ се диапазон
+ * (база + 13 бита от хеша), затова известие за срок не може да замени
+ * известие за събитие или съобщение. ID-то служи и за requestCode на
+ * PendingIntent-а, така че и той е уникален за вида.
+ */
+object NotificationIds {
+    const val NEWS = 500
+    const val UPDATE = 700
+    private const val DUE_SOON_BASE = 10_000
+    private const val OVERDUE_BASE = 20_000
+    private const val EVENT_BASE = 30_000
+    private const val MESSAGE_BASE = 40_000
+    private const val MASK = 0x1FFF
+
+    fun dueSoon(loanId: String): Int = DUE_SOON_BASE + (loanId.hashCode() and MASK)
+    fun overdue(loanId: String): Int = OVERDUE_BASE + (loanId.hashCode() and MASK)
+    fun event(eventId: String): Int = EVENT_BASE + (eventId.hashCode() and MASK)
+    fun message(messageId: String): Int = MESSAGE_BASE + (messageId.hashCode() and MASK)
+}
+
 object Notifier {
     const val EXTRA_DEEP_LINK = "deep_link"
 

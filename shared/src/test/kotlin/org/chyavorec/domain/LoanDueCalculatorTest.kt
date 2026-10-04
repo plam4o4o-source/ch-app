@@ -31,6 +31,11 @@ class LoanDueCalculatorTest {
         assertNull(calc.status(loan, today))
     }
 
+    @Test fun missingDueDate() {
+        val loan = Loan("1", 1, "x", "y", null, borrowedOn = null, dueOn = null)
+        assertNull(calc.status(loan, today))
+    }
+
     @Test fun elapsedFraction() {
         assertEquals(0.5f, calc.elapsedFraction(LocalDate.of(2026, 9, 16), LocalDate.of(2026, 10, 6), today))
     }

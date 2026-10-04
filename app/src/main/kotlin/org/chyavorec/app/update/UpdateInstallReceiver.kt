@@ -8,6 +8,7 @@ import androidx.core.content.IntentCompat
 import org.chyavorec.app.ChitalishteApp
 import org.chyavorec.app.R
 import org.chyavorec.app.notifications.Channel
+import org.chyavorec.app.notifications.NotificationIds
 import org.chyavorec.app.notifications.Notifier
 
 /**
@@ -46,7 +47,7 @@ class UpdateInstallReceiver : BroadcastReceiver() {
 
     companion object {
         const val EXTRA_BACKGROUND = "org.chyavorec.app.update.BACKGROUND"
-        const val NOTIFICATION_ID = 700
+        const val NOTIFICATION_ID = NotificationIds.UPDATE
         const val DEEP_LINK = "update"
     }
 }

@@ -10,6 +10,7 @@ import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
+import org.chyavorec.core.getOrNull
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
@@ -103,17 +104,38 @@ class AuthRepository(
     suspend fun validSession(): Outcome<AuthSession> = mutex.withLock {
         val session = store.load() ?: return Outcome.Failure(AppError.Unauthorized)
         if (session.expiresAtMillis - clock.now().toEpochMilli() > 60_000) return Outcome.Success(session)
+        refreshLocked(session)
+    }
+
+    /**
+     * Принудително подновяване, без проверка на срока — когато сървърът е
+     * отхвърлил [rejected] (401), въпреки че по часовника тя е още валидна.
+     */
+    internal suspend fun forceRefresh(rejected: AuthSession): Outcome<AuthSession> = mutex.withLock {
+        val session = store.load() ?: return Outcome.Failure(AppError.Unauthorized)
+        // Друга заявка вече е подновила токена — ползваме новия.
+        if (session.accessToken != rejected.accessToken) return Outcome.Success(session)
+        refreshLocked(session)
+    }
+
+    /** Дали [session] все още е текущата (не е излязъл/сменен потребителят междувременно). */
+    internal suspend fun isCurrent(session: AuthSession): Boolean = store.load()?.readerId == session.readerId
+
+    /** Извиква се САМО под [mutex]. */
+    private suspend fun refreshLocked(session: AuthSession): Outcome<AuthSession> =
         when (val r = service.refresh(session)) {
             is Outcome.Success -> {
-                store.save(r.value, persist = true)
-                Outcome.Success(r.value)
+                // Сървърът може да не върне нов refresh токен — тогава старият остава.
+                val renewed = r.value.copy(refreshToken = r.value.refreshToken ?: session.refreshToken)
+                // Запазва избора „запомни ме“ от входа.
+                store.save(renewed, persist = store.isPersisted())
+                Outcome.Success(renewed)
             }
             is Outcome.Failure -> {
                 if (r.error is AppError.Unauthorized || r.error is AppError.NotAvailable) signOutLocally()
                 r
             }
         }
-    }
 
     suspend fun logout() {
         store.load()?.let { runCatching { service.logout(it) } }
@@ -130,14 +152,34 @@ class AuthRepository(
     suspend fun requestPasswordReset(cardNumber: String): Outcome<Unit> = service.requestPasswordReset(cardNumber)
 }
 
-/** Изпълнява заявка с валидна сесия; при 401 → изход. */
+/**
+ * Изпълнява заявка с валидна сесия. При 401 подновява токена веднъж (без
+ * оглед на срока) и повтаря заявката; изход само ако подновяването бъде
+ * отказано или повторната заявка пак е 401. Ако междувременно потребителят е
+ * излязъл (или е сменен), резултатът се отхвърля, за да не попадне в кеша.
+ */
 internal suspend fun <T> AuthRepository.withSession(block: suspend (AuthSession) -> Outcome<T>): Outcome<T> {
     val session = when (val s = validSession()) {
         is Outcome.Failure -> return s
         is Outcome.Success -> s.value
     }
-    val r = block(session)
-    if (r is Outcome.Failure && r.error is AppError.Unauthorized) signOutLocally()
+    val first = block(session)
+    val r = if (first is Outcome.Failure && first.error is AppError.Unauthorized) {
+        // Отказан refresh вече е извикал signOutLocally() в refreshLocked().
+        val renewed = when (val s = forceRefresh(session)) {
+            is Outcome.Failure -> return s
+            is Outcome.Success -> s.value
+        }
+        val retry = block(renewed)
+        if (retry is Outcome.Failure && retry.error is AppError.Unauthorized) {
+            signOutLocally()
+            return retry
+        }
+        retry
+    } else {
+        first
+    }
+    if (r is Outcome.Success && !isCurrent(session)) return Outcome.Failure(AppError.Unauthorized)
     return r
 }
 
@@ -146,10 +188,27 @@ class ProfileRepository(
     private val auth: AuthRepository,
     secureCache: PayloadCache,
     clock: AppClock,
+    /** Ако е зададен, членството се добавя към профила (/v1/me не го връща). */
+    private val membershipService: MembershipService? = null,
 ) {
     private val res = CachedResource(secureCache, "reader:profile", ReaderProfile.serializer(), clock, 0)
     suspend fun profile(force: Boolean = true): Outcome<Synced<ReaderProfile>> =
-        res.load(force) { auth.withSession { service.profile(it) } }
+        res.load(force) {
+            auth.withSession<ReaderProfile> { session ->
+                when (val p = service.profile(session)) {
+                    is Outcome.Failure -> p
+                    is Outcome.Success -> {
+                        val ms = membershipService
+                        if (p.value.membership != null || ms == null) {
+                            p
+                        } else {
+                            // Неуспех при членството не проваля профила — просто без него.
+                            Outcome.Success(p.value.copy(membership = ms.membership(session).getOrNull()))
+                        }
+                    }
+                }
+            }
+        }
 
     suspend fun requestAccountDeletion(): Outcome<Unit> = auth.withSession { service.requestAccountDeletion(it) }
 }

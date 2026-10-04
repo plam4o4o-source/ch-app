@@ -3,6 +3,10 @@ package org.chyavorec.app.di
 import android.content.Context
 import android.os.Build
 import androidx.room.Room
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.data.local.AppDatabase
 import org.chyavorec.app.data.local.FilePayloadCache
@@ -23,6 +27,7 @@ import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.data.invlib.RemoteInvLibClient
 import org.chyavorec.data.invlib.UnavailableInvLibServices
 import org.chyavorec.data.repository.AuthRepository
+import org.chyavorec.data.repository.AuthState
 import org.chyavorec.data.repository.CatalogRepository
 import org.chyavorec.data.repository.EventsRepository
 import org.chyavorec.data.repository.LibraryRepository
@@ -117,7 +122,7 @@ class AppContainer(
     val authRepository by lazy {
         AuthRepository(readerServices.auth, SecureSessionStore(File(context.noBackupFilesDir, "secure/session.bin"), cipher), clock, readerCache)
     }
-    val profileRepository by lazy { ProfileRepository(readerServices.reader, authRepository, readerCache, clock) }
+    val profileRepository by lazy { ProfileRepository(readerServices.reader, authRepository, readerCache, clock, readerServices.membership) }
     val libraryRepository by lazy { LibraryRepository(readerServices.reader, authRepository, readerCache, clock) }
     val membershipRepository by lazy { MembershipRepository(readerServices.membership, authRepository, readerCache, clock) }
     val selfCardRepository by lazy { SelfCardRepository(SecureSelfCardStore(File(context.noBackupFilesDir, "secure/card.bin"), cipher)) }
@@ -128,6 +133,27 @@ class AppContainer(
     val updater by lazy { AppUpdater(context, okHttp, http, config, settings, clock) }
 
     val reminders by lazy { ReminderScheduler(context, database.reminders(), clock) }
+
+    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    /**
+     * При ВСЕКИ преход от вход към изход — ръчен изход или принудителен (отказано
+     * подновяване на сесията) — изчиства личните следи (история на търсенето,
+     * известия за заемания). Извиква се веднъж от Application.
+     */
+    fun watchSignOut() {
+        appScope.launch {
+            var wasSignedIn = false
+            authRepository.state.collect { s ->
+                if (s is AuthState.SignedIn) {
+                    wasSignedIn = true
+                } else if (s is AuthState.SignedOut && wasSignedIn) {
+                    wasSignedIn = false
+                    runCatching { settings.clearPersonal() }
+                }
+            }
+        }
+    }
 
     /** „Изчисти кеша“ — само публичните данни и изображенията; сесията остава. */
     suspend fun clearPublicCache() {
