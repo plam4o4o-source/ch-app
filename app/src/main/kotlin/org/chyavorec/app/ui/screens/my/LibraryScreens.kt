@@ -241,9 +241,14 @@ fun ProfileScreen(onBack: () -> Unit) {
                 SyncStamp(profile.syncedAt)
                 Spacer(Modifier.height(12.dp))
                 Text(stringResource(R.string.profile_edit_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Spacer(Modifier.height(16.dp))
                 if (caps?.accountDeletion == true) {
-                    Spacer(Modifier.height(16.dp))
                     OutlinedButton(onClick = { confirmDelete = true }) { Text(stringResource(R.string.profile_delete_request)) }
+                } else {
+                    // Сървърът не поддържа искане от приложението → публичната страница за изтриване.
+                    OutlinedButton(onClick = { org.chyavorec.app.util.Intents.openUrl(context, org.chyavorec.app.util.Intents.ACCOUNT_DELETION_URL) }) {
+                        Text(stringResource(R.string.account_delete_web))
+                    }
                 }
             }
         }

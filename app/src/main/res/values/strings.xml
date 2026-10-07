@@ -9,6 +9,8 @@
     <string name="about_title">За приложението</string>
     <string name="about_version">Версия %1$s</string>
     <string name="about_version_full">Версия %1$s (%2$d)</string>
+    <string name="account_delete_web">Изтриване на акаунта и данните</string>
+    <string name="account_delete_web_desc">Искане за изтриване на читателския акаунт и свързаните с него данни (chyavorec.org)</string>
     <string name="action_all">Всички</string>
     <string name="action_back">Назад</string>
     <string name="action_cancel">Отказ</string>
@@ -382,7 +384,6 @@
     <string name="update_status_downloading">Изтегляне на новата версия…</string>
     <string name="update_status_ready">Версия %1$s е готова за инсталиране</string>
     <string name="widget_description">Следващо събитие и срок за връщане</string>
-    <string name="widget_due">Срок: %1$s — %2$s</string>
     <string name="widget_label">Читалище Яворец</string>
     <string name="widget_next_event">Следващо събитие</string>
     <string name="widget_no_events">Няма предстоящи събития</string>
@@ -417,5 +418,9 @@
     <plurals name="photos_count">
         <item quantity="one">%1$d снимка</item>
         <item quantity="other">%1$d снимки</item>
+    </plurals>
+    <plurals name="widget_loans_due">
+        <item quantity="one">%1$d книга за връщане · най-близък срок %2$s</item>
+        <item quantity="other">%1$d книги за връщане · най-близък срок %2$s</item>
     </plurals>
 </resources>

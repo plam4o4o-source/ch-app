@@ -211,7 +211,6 @@ S = {
 "widget_description": ("Следващо събитие и срок за връщане", "Next event and return due date"),
 "widget_next_event": ("Следващо събитие", "Next event"),
 "widget_no_events": ("Няма предстоящи събития", "No upcoming events"),
-"widget_due": ("Срок: %1$s — %2$s", "Due: %1$s — %2$s"),
 "loans_empty": ("Нямаш заети книги", "You have no borrowed books"),
 "loans_empty_hint": ("Разгледай каталога — може би нещо ще те заинтригува.", "Browse the catalogue — something might catch your eye."),
 "loan_borrowed": ("Заета: %1$s", "Borrowed: %1$s"),
@@ -230,6 +229,8 @@ S = {
 "profile_edit_note": ("Личните данни се поддържат от библиотеката. За промяна се обърни към библиотекаря.", "Personal details are managed by the library. Please ask the librarian to change them."),
 "profile_delete_request": ("Искане за изтриване на данните", "Request data deletion"),
 "profile_delete_text": ("Библиотеката ще получи искане да изтрие читателските ти данни съгласно ОРЗД. Заетите книги трябва да бъдат върнати.", "The library will receive a request to delete your reader data under the GDPR. Borrowed items must be returned first."),
+"account_delete_web": ("Изтриване на акаунта и данните", "Delete account and data"),
+"account_delete_web_desc": ("Искане за изтриване на читателския акаунт и свързаните с него данни (chyavorec.org)", "Request deletion of your reader account and its data (chyavorec.org)"),
 "profile_delete_sent": ("Искането е изпратено.", "Request sent."),
 "activities_title": ("Дейности", "Activities"),
 "activities_intro": ("Дейностите, групите, проектите и историята на читалището — съдържанието идва директно от сайта chyavorec.org.", "The centre’s activities, groups, projects and history — content comes straight from chyavorec.org."),
@@ -536,6 +537,7 @@ P = {
 "due_days_left": (("остава %1$d ден", "остават %1$d дни"), ("%1$d day left", "%1$d days left")),
 "due_overdue_days": (("просрочена с %1$d ден", "просрочена с %1$d дни"), ("%1$d day overdue", "%1$d days overdue")),
 "messages_unread": (("%1$d непрочетено съобщение", "%1$d непрочетени съобщения"), ("%1$d unread message", "%1$d unread messages")),
+"widget_loans_due": (("%1$d книга за връщане · най-близък срок %2$s", "%1$d книги за връщане · най-близък срок %2$s"), ("%1$d book to return · next due %2$s", "%1$d books to return · next due %2$s")),
 "photos_count": (("%1$d снимка", "%1$d снимки"), ("%1$d photo", "%1$d photos")),
 }
 

@@ -3,26 +3,34 @@ package org.chyavorec.app.widget
 import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.ImageProvider
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
-import androidx.glance.appwidget.updateAll
+import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.background
+import androidx.glance.currentState
 import androidx.glance.layout.Column
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.state.GlanceStateDefinition
+import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -35,29 +43,54 @@ import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.AuthState
 
-/** Какво показва уиджетът — изчислено веднъж в [ChitalishteWidget.provideGlance]. */
+/** Какво показва уиджетът — презарежда се при всяко [ChitalishteWidget.refresh]. */
 private data class WidgetState(
     val eventTitle: String?,
     val eventDate: String?,
-    /** „Срок: <заглавие> — <дата>“ или null (няма вход / няма заемания). */
+    /**
+     * „N книги за връщане · най-близък срок <дата>“ или null (няма вход / няма
+     * заемания). Заглавия на книги НЕ се показват — началният екран се вижда от всеки.
+     */
     val loanLine: String?,
 )
 
+private val EmptyWidgetState = WidgetState(null, null, null)
+
+/**
+ * Версия на данните в Glance състоянието на всяко копие. [ChitalishteWidget.refresh]
+ * я сменя, а съдържанието я ползва като ключ за презареждане — така и докато
+ * сесията на уиджета е жива (когато update само прекомпозира) се четат нови данни,
+ * напр. след изход от профила.
+ */
+private val DataVersionKey = longPreferencesKey("data_version")
+
 /**
  * Уиджет „Читалище Яворец“ за началния екран: следващото събитие и (за влезли
- * читатели) най-близкият срок за връщане. Чете само кешираните данни на
- * приложението — мрежа се ползва единствено ако за събитията няма никакъв кеш.
+ * читатели) колко книги са за връщане и най-близкият срок. Чете само кешираните
+ * данни на приложението — мрежа се ползва единствено ако за събитията няма кеш.
  */
 class ChitalishteWidget : GlanceAppWidget() {
 
+    override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val state = runCatching { load(context) }.getOrNull() ?: WidgetState(null, null, null)
         val labels = Labels(
             title = context.getString(R.string.widget_label),
             nextEvent = context.getString(R.string.widget_next_event),
             noEvents = context.getString(R.string.widget_no_events),
         )
-        provideContent { WidgetContent(context, state, labels) }
+        // Първото зареждане — преди съдържанието, за да не се покаже празен уиджет.
+        val initial = runCatching { load(context) }.getOrNull() ?: EmptyWidgetState
+        provideContent {
+            val version = currentState(DataVersionKey) ?: 0L
+            // Версията, с която е заредено [initial] — за нея не се чете повторно.
+            val loadedVersion = remember { version }
+            val state by produceState(initial, version) {
+                // При нова версия (refresh) — прочитане наново; при грешка остава предишното.
+                if (version != loadedVersion) runCatching { load(context) }.getOrNull()?.let { value = it }
+            }
+            WidgetContent(context, state, labels)
+        }
     }
 
     private suspend fun load(context: Context): WidgetState {
@@ -76,12 +109,11 @@ class ChitalishteWidget : GlanceAppWidget() {
         val loanLine = runCatching {
             if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
             if (c.authRepository.state.value !is AuthState.SignedIn) return@runCatching null
-            val loan = c.libraryRepository.cachedLoans()?.data
-                ?.filter { !it.dueOn.isNullOrBlank() }
-                ?.minByOrNull { it.dueOn.orEmpty() }
-                ?: return@runCatching null
-            val date = Formatters.date(context, loan.dueOn) ?: loan.dueOn.orEmpty()
-            context.getString(R.string.widget_due, loan.title, date)
+            val loans = c.libraryRepository.cachedLoans()?.data.orEmpty()
+            if (loans.isEmpty()) return@runCatching null
+            val nearest = loans.mapNotNull { it.dueOn?.takeIf(String::isNotBlank) }.minOrNull()
+            val date = nearest?.let { Formatters.date(context, it) ?: it } ?: "—"
+            context.resources.getQuantityString(R.plurals.widget_loans_due, loans.size, loans.size, date)
         }.getOrNull()
 
         return WidgetState(next?.title, eventDate, loanLine)
@@ -90,7 +122,16 @@ class ChitalishteWidget : GlanceAppWidget() {
     companion object {
         /** Опреснява всички копия на уиджета; грешките се пренебрегват (уиджетът е допълнение). */
         suspend fun refresh(context: Context) {
-            runCatching { ChitalishteWidget().updateAll(context) }
+            runCatching {
+                val widget = ChitalishteWidget()
+                val version = System.currentTimeMillis()
+                GlanceAppWidgetManager(context).getGlanceIds(ChitalishteWidget::class.java).forEach { glanceId ->
+                    runCatching {
+                        updateAppWidgetState(context, glanceId) { prefs -> prefs[DataVersionKey] = version }
+                        widget.update(context, glanceId)
+                    }
+                }
+            }
         }
     }
 }

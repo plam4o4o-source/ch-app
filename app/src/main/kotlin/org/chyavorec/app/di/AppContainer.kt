@@ -159,6 +159,14 @@ class AppContainer(
         }
     }
 
+    /**
+     * Опреснява уиджета във фон (на ниво приложение, не на екрана) — напр. след
+     * успешно зареждане на заеманията. Грешките се пренебрегват.
+     */
+    fun refreshWidget() {
+        appScope.launch { runCatching { ChitalishteWidget.refresh(context) } }
+    }
+
     /** „Изчисти кеша“ — само публичните данни и изображенията; сесията остава. */
     suspend fun clearPublicCache() {
         publicCache.clear()

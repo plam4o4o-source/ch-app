@@ -1,5 +1,9 @@
 package org.chyavorec.data
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Feature
@@ -185,6 +189,89 @@ class AuthRepositoryTest {
         val lib = LibraryRepository(reader, repo, InMemoryPayloadCache(), clock)
         assertEquals(AppError.Unauthorized, (lib.loans() as Outcome.Failure).error)
         assertNull(lib.cachedLoans())
+    }
+
+    /** Подновяването виси, докато тестът не отвори [gate]. */
+    private inner class SlowRefreshAuth : AuthenticationService by FakeAuth() {
+        val gate = CompletableDeferred<Unit>()
+        override suspend fun refresh(session: AuthSession): Outcome<AuthSession> {
+            gate.await()
+            return Outcome.Success(session.copy(accessToken = "late", expiresAtMillis = clock.now().toEpochMilli() + 3_600_000))
+        }
+    }
+
+    @Test fun lateRefreshDoesNotResurrectSignedOutSession() = runTest {
+        val store = MemStore(); val readerCache = InMemoryPayloadCache()
+        val svc = SlowRefreshAuth()
+        val repo = AuthRepository(svc, store, clock, readerCache)
+        repo.login("123", "secret".toCharArray(), remember = true) // изтича до 30 s → ще се подновява
+        val pending = async { repo.validSession() }
+        runCurrent() // подновяването е започнало и чака
+        repo.logout() // не бива да чака висящото подновяване
+        assertEquals(AuthState.SignedOut, repo.state.value)
+        svc.gate.complete(Unit)
+        assertEquals(AppError.Unauthorized, (pending.await() as Outcome.Failure).error)
+        assertNull(store.s)
+        assertEquals(AuthState.SignedOut, repo.state.value)
+    }
+
+    @Test fun lateRefreshForOldSessionDoesNotOverwriteNewLogin() = runTest {
+        val store = MemStore()
+        val svc = SlowRefreshAuth()
+        val repo = AuthRepository(svc, store, clock, InMemoryPayloadCache())
+        repo.login("123", "secret".toCharArray(), remember = true)
+        val pending = async { repo.validSession() }
+        runCurrent()
+        repo.signOutLocally()
+        store.s = AuthSession("fresh", "r2", clock.now().toEpochMilli() + 3_600_000, "R2") // нов вход междувременно
+        svc.gate.complete(Unit)
+        assertIs<Outcome.Failure>(pending.await())
+        assertEquals("fresh", store.s?.accessToken)
+    }
+
+    /** load() чака [gate] само при първото извикване. */
+    private class SlowLoadStore(private val first: AuthSession?) : SessionStore {
+        val gate = CompletableDeferred<Unit>()
+        var s: AuthSession? = null
+        private var calls = 0
+        override suspend fun load(): AuthSession? {
+            if (calls++ == 0) { gate.await(); return first }
+            return s
+        }
+        override suspend fun save(session: AuthSession, persist: Boolean) { s = session }
+        override suspend fun isPersisted() = true
+        override suspend fun clear() { s = null }
+    }
+
+    @Test fun slowRestoreDoesNotOverrideSignOut() = runTest {
+        val store = SlowLoadStore(AuthSession("a", "r", clock.now().toEpochMilli() + 3_600_000, "R1"))
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
+        val job = launch { repo.restore() }
+        runCurrent()
+        repo.signOutLocally()
+        store.gate.complete(Unit)
+        job.join()
+        assertEquals(AuthState.SignedOut, repo.state.value)
+    }
+
+    @Test fun slowRestoreDoesNotOverrideNewLogin() = runTest {
+        val store = SlowLoadStore(null)
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
+        val job = launch { repo.restore() }
+        runCurrent()
+        repo.login("123", "secret".toCharArray(), true)
+        store.gate.complete(Unit)
+        job.join()
+        assertEquals(AuthState.SignedIn("R1"), repo.state.value)
+    }
+
+    @Test fun validSessionWithEmptyStoreMarksSignedOut() = runTest {
+        val store = MemStore()
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
+        repo.login("123", "secret".toCharArray(), true)
+        store.s = null // напр. изтрито от системата
+        assertEquals(AppError.Unauthorized, (repo.validSession() as Outcome.Failure).error)
+        assertEquals(AuthState.SignedOut, repo.state.value)
     }
 
     @Test fun forbiddenIsNotUnauthorized() {

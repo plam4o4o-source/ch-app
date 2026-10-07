@@ -99,7 +99,6 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.components.BrandedImageFallback
 import org.chyavorec.app.ui.components.TabReselectEffect
-import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.ui.components.Emblem
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.PressableCard
@@ -322,7 +321,9 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                             contentDescription = null,
                             containerColor = Brand.InkSoft,
                             onFailure = { imageFailed = true },
-                            modifier = Modifier.sharedElementKey("news-${a.id}").fillMaxSize().graphicsLayer {
+                            // Без shared element: същият ключ има и списъкът „Новини“, а при смяна на
+                            // таб двата източника биха се засекли (въртележката е и с паралакс/мащаб).
+                            modifier = Modifier.fillMaxSize().graphicsLayer {
                                 translationX = offset * size.width * 0.35f
                                 scaleX = 1.15f; scaleY = 1.15f
                             },

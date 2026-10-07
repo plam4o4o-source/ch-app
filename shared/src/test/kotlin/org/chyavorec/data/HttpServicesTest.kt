@@ -172,6 +172,19 @@ class HttpServicesTest {
         assertEquals(AppError.RateLimited(30), (c.login("1", "x".toCharArray()) as Outcome.Failure).error)
     }
 
+    @Test fun invlibRefresh403IsUnauthorizedButElsewhereStaysServer403() = runTest {
+        val c = client()
+        server.enqueue(MockResponse().setResponseCode(403).setBody("""{"error":"revoked"}"""))
+        val refreshed = c.refresh(AuthSession("AT", "RT", 0, "R"))
+        assertEquals(AppError.Unauthorized, (refreshed as Outcome.Failure).error)
+        assertEquals("/api/v1/auth/refresh", server.takeRequest().path)
+
+        server.enqueue(MockResponse().setBody(caps))
+        server.enqueue(MockResponse().setResponseCode(403))
+        val loans = c.loans(AuthSession("AT", "RT", 0, "R"))
+        assertEquals(AppError.Server(403), (loans as Outcome.Failure).error)
+    }
+
     @Test fun networkDownIsNetworkError() = runTest {
         server.shutdown()
         val r = http.get("http://127.0.0.1:1/none")

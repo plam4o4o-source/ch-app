@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.PersonRemove
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.AlertDialog
@@ -97,6 +98,7 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     var langDialog by remember { mutableStateOf(false) }
     var clearDialog by remember { mutableStateOf(false) }
     val clearedMsg = stringResource(R.string.settings_cache_cleared)
+    val context = LocalContext.current
     val s = settings ?: return
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.settings_title), onBack) }, snackbarHost = { SnackbarHost(snackbar) }) { padding ->
@@ -141,6 +143,9 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
 
             GroupTitle(stringResource(R.string.settings_legal))
             NavItem(Icons.Outlined.PrivacyTip, stringResource(R.string.privacy_title)) { navigate(Routes.PRIVACY) }
+            NavItem(Icons.Outlined.PersonRemove, stringResource(R.string.account_delete_web), stringResource(R.string.account_delete_web_desc)) {
+                Intents.openUrl(context, Intents.ACCOUNT_DELETION_URL)
+            }
             NavItem(Icons.Outlined.Description, stringResource(R.string.terms_title)) { navigate(Routes.TERMS) }
             NavItem(Icons.Outlined.Info, stringResource(R.string.about_title), stringResource(R.string.about_version, c.config.versionName)) { navigate(Routes.ABOUT) }
             Spacer(Modifier.height(24.dp))

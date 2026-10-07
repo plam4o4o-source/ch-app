@@ -82,7 +82,10 @@ class RemoteInvLibClient(
     override suspend fun refresh(session: AuthSession): Outcome<AuthSession> {
         val token = session.refreshToken ?: return Outcome.Failure(AppError.Unauthorized)
         val body = json.encodeToString(RefreshRequestDto.serializer(), RefreshRequestDto(token)).toRequestBody(jsonType)
-        return send(post("/v1/auth/refresh", null, body), TokenResponseDto.serializer()).toSession()
+        val r = send(post("/v1/auth/refresh", null, body), TokenResponseDto.serializer())
+        // 403 тук значи отнет/анулиран refresh токен → същото като 401 (нов вход).
+        // Извън /v1/auth/refresh 403 остава Server(403) — „нямаш право“, не изход.
+        return r.refreshForbiddenAsUnauthorized().toSession()
     }
 
     override suspend fun logout(session: AuthSession): Outcome<Unit> =
@@ -174,6 +177,9 @@ class RemoteInvLibClient(
     // --- помощни ---
 
     private fun LoanDto.toLoan() = Loan(loanId, inv, title, author, coverUrl, dateOut, dateDue, renewals, canRenew)
+
+    private fun <T> Outcome<T>.refreshForbiddenAsUnauthorized(): Outcome<T> =
+        if (this is Outcome.Failure && error == AppError.Server(403)) Outcome.Failure(AppError.Unauthorized) else this
 
     private fun Outcome<TokenResponseDto>.toSession(): Outcome<AuthSession> = when (this) {
         is Outcome.Failure -> this

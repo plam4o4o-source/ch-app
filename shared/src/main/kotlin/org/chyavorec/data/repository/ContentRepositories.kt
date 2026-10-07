@@ -93,14 +93,25 @@ class EventsRepository(
                 while (next!!.isBefore(today)) next = next.plusYears(1)
                 e.copy(date = next.toString())
             } else e
-        }.sortedBy { it.date }
+        }.sortedWith(EVENT_ORDER)
     }
 
     suspend fun find(id: String): Event? = cachedRolled()?.data?.firstOrNull { it.id == id }
 
+    /** Предстоящите (от днес нататък), подредени по дата и час — независимо от реда на входа. */
     fun upcoming(events: List<Event>): List<Event> {
         val today = clock.today().toString()
-        return events.filter { (it.date ?: "") >= today }
+        return events.filter { (it.date ?: "") >= today }.sortedWith(EVENT_ORDER)
+    }
+
+    private companion object {
+        /**
+         * Хронологичен ред след „превъртането“: повтарящо се събитие, преместено в
+         * следващата година, отива на мястото си, а не остава преди по-близките.
+         * Без дата — най-накрая; при равна дата — по час (без час — след часовите).
+         */
+        val EVENT_ORDER: Comparator<Event> =
+            compareBy<Event, String?>(nullsLast()) { it.date }.thenBy(nullsLast()) { it.time }
     }
 }
 

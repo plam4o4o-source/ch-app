@@ -67,11 +67,23 @@ class AuthRepository(
     private val _state = MutableStateFlow<AuthState>(AuthState.Unknown)
     val state: StateFlow<AuthState> = _state.asStateFlow()
     private val mutex = Mutex()
+    /**
+     * Кратко заключване само около записите в [store] (сверка + запис/изтриване).
+     * Изходът не чака [mutex] (подновяване по мрежата може да е бавно), но закъснял
+     * refresh не може да запише сесия между проверката си и изхода.
+     * Ред на заключване: [mutex] → [storeLock], никога обратно.
+     */
+    private val storeLock = Mutex()
     val throttle = LoginThrottle(clock)
 
+    /**
+     * Първоначално четене на запазената сесия. Сменя състоянието САМО ако то още е
+     * [AuthState.Unknown] — вход или изход, станали докато store.load() е траело,
+     * имат предимство и не се презаписват със стария резултат.
+     */
     suspend fun restore() {
         val s = store.load()
-        _state.value = if (s != null) AuthState.SignedIn(s.readerId) else AuthState.SignedOut
+        _state.compareAndSet(AuthState.Unknown, if (s != null) AuthState.SignedIn(s.readerId) else AuthState.SignedOut)
     }
 
     suspend fun capabilities(): ServiceCapabilities =
@@ -102,7 +114,11 @@ class AuthRepository(
      * refresh сесията се изтрива (изход), за да не остават невалидни данни.
      */
     suspend fun validSession(): Outcome<AuthSession> = mutex.withLock {
-        val session = store.load() ?: return Outcome.Failure(AppError.Unauthorized)
+        val session = store.load() ?: run {
+            // Няма сесия → състоянието не бива да остава „влязъл“ (или „неизвестно“).
+            storeLock.withLock { if (store.load() == null) _state.value = AuthState.SignedOut }
+            return Outcome.Failure(AppError.Unauthorized)
+        }
         if (session.expiresAtMillis - clock.now().toEpochMilli() > 60_000) return Outcome.Success(session)
         refreshLocked(session)
     }
@@ -121,18 +137,29 @@ class AuthRepository(
     /** Дали [session] все още е текущата (не е излязъл/сменен потребителят междувременно). */
     internal suspend fun isCurrent(session: AuthSession): Boolean = store.load()?.readerId == session.readerId
 
-    /** Извиква се САМО под [mutex]. */
+    /**
+     * Извиква се САМО под [mutex]. Резултатът се записва само ако в [store] все още
+     * е същата сесия: ако междувременно потребителят е излязъл (или е влязъл друг),
+     * закъснелият отговор се отхвърля — иначе би „възкресил“ прекратената сесия.
+     */
     private suspend fun refreshLocked(session: AuthSession): Outcome<AuthSession> =
         when (val r = service.refresh(session)) {
             is Outcome.Success -> {
                 // Сървърът може да не върне нов refresh токен — тогава старият остава.
                 val renewed = r.value.copy(refreshToken = r.value.refreshToken ?: session.refreshToken)
-                // Запазва избора „запомни ме“ от входа.
-                store.save(renewed, persist = store.isPersisted())
-                Outcome.Success(renewed)
+                val saved = storeLock.withLock {
+                    if (store.load()?.accessToken != session.accessToken) {
+                        false
+                    } else {
+                        // Запазва избора „запомни ме“ от входа.
+                        store.save(renewed, persist = store.isPersisted())
+                        true
+                    }
+                }
+                if (saved) Outcome.Success(renewed) else Outcome.Failure(AppError.Unauthorized)
             }
             is Outcome.Failure -> {
-                if (r.error is AppError.Unauthorized || r.error is AppError.NotAvailable) signOutLocally()
+                if (r.error is AppError.Unauthorized || r.error is AppError.NotAvailable) signOutIfCurrent(session)
                 r
             }
         }
@@ -142,8 +169,24 @@ class AuthRepository(
         signOutLocally()
     }
 
-    /** Изтрива сесията и всички кеширани лични данни. */
+    /**
+     * Изтрива сесията и всички кеширани лични данни. Не чака текущо подновяване
+     * (то само ще установи, че сесията вече я няма, и няма да я запише отново).
+     */
     suspend fun signOutLocally() {
+        storeLock.withLock { clearLocked() }
+    }
+
+    /** Изход само ако [session] е още текущата — отказ за стара сесия не изхвърля нов вход. */
+    internal suspend fun signOutIfCurrent(session: AuthSession) {
+        storeLock.withLock {
+            val current = store.load()
+            if (current == null || current.accessToken == session.accessToken) clearLocked()
+        }
+    }
+
+    /** Извиква се САМО под [storeLock]. */
+    private suspend fun clearLocked() {
         store.clear()
         readerCache.clear()
         _state.value = AuthState.SignedOut
@@ -165,14 +208,14 @@ internal suspend fun <T> AuthRepository.withSession(block: suspend (AuthSession)
     }
     val first = block(session)
     val r = if (first is Outcome.Failure && first.error is AppError.Unauthorized) {
-        // Отказан refresh вече е извикал signOutLocally() в refreshLocked().
+        // Отказан refresh вече е извикал signOutIfCurrent() в refreshLocked().
         val renewed = when (val s = forceRefresh(session)) {
             is Outcome.Failure -> return s
             is Outcome.Success -> s.value
         }
         val retry = block(renewed)
         if (retry is Outcome.Failure && retry.error is AppError.Unauthorized) {
-            signOutLocally()
+            signOutIfCurrent(renewed)
             return retry
         }
         retry

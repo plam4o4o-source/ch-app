@@ -9,6 +9,8 @@
     <string name="about_title">About the app</string>
     <string name="about_version">Version %1$s</string>
     <string name="about_version_full">Version %1$s (%2$d)</string>
+    <string name="account_delete_web">Delete account and data</string>
+    <string name="account_delete_web_desc">Request deletion of your reader account and its data (chyavorec.org)</string>
     <string name="action_all">All</string>
     <string name="action_back">Back</string>
     <string name="action_cancel">Cancel</string>
@@ -382,7 +384,6 @@
     <string name="update_status_downloading">Downloading the new version…</string>
     <string name="update_status_ready">Version %1$s is ready to install</string>
     <string name="widget_description">Next event and return due date</string>
-    <string name="widget_due">Due: %1$s — %2$s</string>
     <string name="widget_label">Chitalishte Yavorets</string>
     <string name="widget_next_event">Next event</string>
     <string name="widget_no_events">No upcoming events</string>
@@ -417,5 +418,9 @@
     <plurals name="photos_count">
         <item quantity="one">%1$d photo</item>
         <item quantity="other">%1$d photos</item>
+    </plurals>
+    <plurals name="widget_loans_due">
+        <item quantity="one">%1$d book to return · next due %2$s</item>
+        <item quantity="other">%1$d books to return · next due %2$s</item>
     </plurals>
 </resources>

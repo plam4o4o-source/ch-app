@@ -17,6 +17,9 @@ import java.time.ZoneId
 /** Външни действия: браузър, телефон, имейл, карта, споделяне, календар. */
 object Intents {
 
+    /** Публична страница за искане на изтриване на акаунта и данните (изискване на Google Play). */
+    const val ACCOUNT_DELETION_URL = "https://chyavorec.org/app-delete"
+
     private fun Context.safeStart(intent: Intent) {
         try {
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))

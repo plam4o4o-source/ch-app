@@ -160,7 +160,10 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
     fun refresh() = viewModelScope.launch {
         if (!canRenew.value) canRenew.value = c.authRepository.capabilities().renew
         _state.update { it.startRefresh() }
-        _state.update { it.with(c.libraryRepository.loans(force = true)) }
+        val r = c.libraryRepository.loans(force = true)
+        _state.update { it.with(r) }
+        // Уиджетът показва броя и най-близкия срок — да не остава със стари данни.
+        if (r is Outcome.Success) runCatching { c.refreshWidget() }
     }
 
     fun renew(loan: Loan) = viewModelScope.launch {
