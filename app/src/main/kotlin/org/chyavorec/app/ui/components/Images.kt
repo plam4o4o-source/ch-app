@@ -24,7 +24,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
@@ -122,13 +124,31 @@ fun BrandedImageFallback(modifier: Modifier = Modifier) {
 }
 
 /**
+ * Дали кориците може да се теглят от covers.openlibrary.org (настройка „Корици от
+ * интернет“). Подава се от корена; по подразбиране включено.
+ */
+val LocalOnlineCovers = staticCompositionLocalOf { true }
+
+/** Адрес на корица в Open Library по ISBN (само HTTPS; `default=false` → 404 вместо празен GIF, когато липсва). */
+fun openLibraryCoverUrl(isbn: String, large: Boolean): String? {
+    val clean = isbn.filter { it.isDigit() || it == 'X' || it == 'x' }.uppercase()
+    if (clean.length != 10 && clean.length != 13) return null
+    return "https://covers.openlibrary.org/b/isbn/$clean-${if (large) "L" else "M"}.jpg?default=false"
+}
+
+/** Цветът на „издателската“ корица — по раздела по УДК със засенчване според заглавието (общ за корици и гръбчета). */
+fun coverColor(book: CatalogBook): Color = coverShade(UdcCoverColors[book.udcSection] ?: Color(0xFF5A4D3D), book.title)
+
+/**
  * Корица на книга. Почти няма сканирани корици в каталога, затова (както на
  * уеб страницата на каталога) се рисува „издателска“ корица с цвета на раздела
- * по УДК, заглавието и автора; сканираната корица, ако има, ляга отгоре.
+ * по УДК, заглавието и автора; сканираната корица, ако има, ляга отгоре. Ако
+ * книгата има ISBN и настройката позволява, се опитва корица от Open Library
+ * (кешира се от Coil на диска); при липса/грешка остава рисуваната.
  */
 @Composable
 fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.dp, showStatusDot: Boolean = true) {
-    val base = coverShade(UdcCoverColors[book.udcSection] ?: Color(0xFF5A4D3D), book.title)
+    val base = coverColor(book)
     val height = width * 1.42f
     val ext = LocalExtendedColors.current
     // Цветната лента сама не е достъпна за екранни четци и при цветна слепота —
@@ -194,13 +214,29 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if (book.coverUrl.isNotBlank()) {
+        val online = LocalOnlineCovers.current
+        val onlineUrl = remember(book.isbn, online, width) {
+            if (online && book.coverUrl.isBlank()) openLibraryCoverUrl(book.isbn, large = width >= 100.dp) else null
+        }
+        var onlineFailed by remember(onlineUrl) { mutableStateOf(false) }
+        val url = when {
+            book.coverUrl.isNotBlank() -> book.coverUrl
+            onlineUrl != null && !onlineFailed -> onlineUrl
+            else -> null
+        }
+        if (url != null) {
             val context = LocalContext.current
-            val request = remember(context, book.coverUrl) { ImageRequest.Builder(context).data(book.coverUrl).build() }
+            val request = remember(context, url) { ImageRequest.Builder(context).data(url).build() }
             AsyncImage(
                 model = request,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                onError = { if (url == onlineUrl) onlineFailed = true },
+                onSuccess = { state ->
+                    // Open Library връща 1×1 GIF за липсваща корица (ако `default=false` бъде подминато).
+                    val s = state.painter.intrinsicSize
+                    if (url == onlineUrl && s.isSpecified && (s.width < 10f || s.height < 10f)) onlineFailed = true
+                },
                 modifier = Modifier.fillMaxSize(),
             )
         }

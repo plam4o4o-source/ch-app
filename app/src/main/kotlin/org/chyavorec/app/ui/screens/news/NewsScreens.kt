@@ -43,6 +43,9 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,6 +66,9 @@ import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.ContentBlocksView
 import org.chyavorec.app.ui.components.EmptyView
+import org.chyavorec.app.ui.components.ReaderContent
+import org.chyavorec.app.ui.components.ReaderModeButton
+import org.chyavorec.app.ui.components.ReaderSettingsSheet
 import org.chyavorec.app.ui.components.RemoteImage
 import org.chyavorec.app.ui.components.SkeletonBox
 import org.chyavorec.app.ui.components.SkeletonCards
@@ -222,6 +228,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
     val fav by vm.isFavorite.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val scroll = TopAppBarDefaults.pinnedScrollBehavior()
+    var readerSheet by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
@@ -231,6 +238,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                 onBack = onBack,
                 scrollBehavior = scroll,
                 actions = {
+                    ReaderModeButton(onClick = { readerSheet = true })
                     state.data?.article?.let { a ->
                         IconButton(onClick = { vm.toggleFavorite() }) {
                             Icon(
@@ -277,20 +285,25 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                         Spacer(Modifier.height(6.dp))
                         Text(a.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
                         Spacer(Modifier.height(16.dp))
-                        if (state.loading && detail.blocks.isEmpty()) {
-                            Text(a.summary, style = MaterialTheme.typography.bodyLarge)
-                            Spacer(Modifier.height(12.dp))
-                            SkeletonBox(height = 14.dp); Spacer(Modifier.height(8.dp)); SkeletonBox(height = 14.dp)
-                        } else if (detail.blocks.isEmpty()) {
-                            Text(a.summary, style = MaterialTheme.typography.bodyLarge)
-                        } else {
-                            ContentBlocksView(
-                                detail.blocks.filterNot { it is org.chyavorec.domain.model.ContentBlock.Image && it.url == a.imageUrl },
-                                onLink = openLink,
-                                onImage = { url -> navigate(Routes.viewerUrls(listOf(url), 0)) },
-                                modifier = Modifier.animateContentSize(),
-                                skipImages = true,
-                            )
+                        // Режим за четене: размерът на шрифта и ширината на колоната са от настройките.
+                        ReaderContent {
+                            if (state.loading && detail.blocks.isEmpty()) {
+                                Column {
+                                    Text(a.summary, style = MaterialTheme.typography.bodyLarge)
+                                    Spacer(Modifier.height(12.dp))
+                                    SkeletonBox(height = 14.dp); Spacer(Modifier.height(8.dp)); SkeletonBox(height = 14.dp)
+                                }
+                            } else if (detail.blocks.isEmpty()) {
+                                Text(a.summary, style = MaterialTheme.typography.bodyLarge)
+                            } else {
+                                ContentBlocksView(
+                                    detail.blocks.filterNot { it is org.chyavorec.domain.model.ContentBlock.Image && it.url == a.imageUrl },
+                                    onLink = openLink,
+                                    onImage = { url -> navigate(Routes.viewerUrls(listOf(url), 0)) },
+                                    modifier = Modifier.animateContentSize(),
+                                    skipImages = true,
+                                )
+                            }
                         }
                     }
                 }
@@ -310,4 +323,5 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
             }
         }
     }
+    if (readerSheet) ReaderSettingsSheet(onDismiss = { readerSheet = false })
 }

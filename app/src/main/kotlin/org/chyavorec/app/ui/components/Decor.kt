@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -159,6 +160,22 @@ fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+/**
+ * Тънка златна рамка с шевица по ъглите (drawable/ornament_frame) върху карта —
+ * злато при ~35 % плътност, за да е ненатрапчива. Поставя се като последно дете на
+ * Box с `Modifier.matchParentSize()`; не носи семантика.
+ */
+@Composable
+fun OrnamentFrame(modifier: Modifier = Modifier, alpha: Float = 0.35f) {
+    androidx.compose.foundation.Image(
+        painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.ornament_frame),
+        contentDescription = null,
+        contentScale = androidx.compose.ui.layout.ContentScale.FillBounds,
+        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Brand.Gold.copy(alpha = alpha)),
+        modifier = modifier.clearAndSetSemantics { },
+    )
 }
 
 /**

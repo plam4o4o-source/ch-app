@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -39,7 +38,8 @@ import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.Rocket
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.TheaterComedy
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -49,6 +49,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -63,6 +66,9 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.ContentBlocksView
 import org.chyavorec.app.ui.components.EmptyView
+import org.chyavorec.app.ui.components.ReaderContent
+import org.chyavorec.app.ui.components.ReaderModeButton
+import org.chyavorec.app.ui.components.ReaderSettingsSheet
 import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
@@ -153,8 +159,10 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
     val vm = appViewModel(key = "page-$url") { PageViewModel(url, it.siteRepository) }
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    var readerSheet by rememberSaveable { mutableStateOf(false) }
     Scaffold(topBar = {
         BackTopBar(title.ifBlank { state.data?.title.orEmpty() }, onBack, actions = {
+            ReaderModeButton(onClick = { readerSheet = true })
             IconButton(onClick = { Intents.openUrl(context, url) }) {
                 Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = stringResource(R.string.action_open_site))
             }
@@ -170,13 +178,14 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
                 LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
                     item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
                     item {
-                        ContentBlocksView(
-                            page.blocks,
-                            onLink = openLink,
-                            onImage = { img -> navigate(Routes.viewerUrls(page.images, page.images.indexOf(img))) },
-                            imageFallbackDescription = title.ifBlank { page.title }.ifBlank { null },
-                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp).widthIn(max = 760.dp),
-                        )
+                        ReaderContent(Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+                            ContentBlocksView(
+                                page.blocks,
+                                onLink = openLink,
+                                onImage = { img -> navigate(Routes.viewerUrls(page.images, page.images.indexOf(img))) },
+                                imageFallbackDescription = title.ifBlank { page.title }.ifBlank { null },
+                            )
+                        }
                     }
                     item {
                         Text(stringResource(R.string.page_source, url), style = MaterialTheme.typography.labelMedium,
@@ -186,8 +195,10 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
             }
         }
     }
+    if (readerSheet) ReaderSettingsSheet(onDismiss = { readerSheet = false })
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AboutChitalishteScreen(onBack: () -> Unit, navigate: (String) -> Unit, openLink: (String) -> Unit) {
     val vm = appViewModel { AboutChitalishteViewModel(it.siteRepository) }
@@ -201,6 +212,6 @@ fun AboutChitalishteScreen(onBack: () -> Unit, navigate: (String) -> Unit, openL
                 org.chyavorec.app.ui.components.ErrorView(AppError.NotFound, onRetry = null)
             }
         }
-        else -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+        else -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { LoadingIndicator() }
     }
 }

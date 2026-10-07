@@ -35,7 +35,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -145,8 +148,9 @@ fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: (
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         if (photos.isNotEmpty()) {
             val pager = rememberPagerState(initialPage = index.coerceIn(0, photos.lastIndex)) { photos.size }
-            HorizontalPager(pager, modifier = Modifier.fillMaxSize(), key = { photos[it].id }) { page ->
-                ZoomableImage(photos[page])
+            HorizontalPager(pager, modifier = Modifier.fillMaxSize(), key = { photos[it].id }, beyondViewportPageCount = 1) { page ->
+                // Увеличението се нулира, когато страницата излезе от фокус (смяна на снимка).
+                ZoomableImage(photos[page], active = pager.settledPage == page)
             }
             val current = photos[pager.currentPage.coerceIn(0, photos.lastIndex)]
             Row(
@@ -160,7 +164,12 @@ fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: (
                     color = Color.White, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f),
                 )
-                IconButton(onClick = { Intents.share(context, current.title.ifBlank { resources.getString(R.string.gallery_title) }, current.pageUrl) }) {
+                // Споделя се адресът (няма FileProvider в приложението — не се тегли файл).
+                IconButton(onClick = {
+                    val title = current.title.ifBlank { resources.getString(R.string.gallery_title) }
+                    val link = current.pageUrl.ifBlank { current.fullUrl }
+                    Intents.share(context, title, if (current.title.isNotBlank()) current.title + "\n" + link else link)
+                }) {
                     Icon(Icons.Outlined.Share, stringResource(R.string.action_share), tint = Color.White)
                 }
             }
@@ -168,13 +177,24 @@ fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: (
     }
 }
 
+/** Снимка с pinch-to-zoom и местене; двоен тап — 2× / обратно; [active] = false нулира увеличението. */
 @Composable
-private fun ZoomableImage(photo: GalleryPhoto) {
+private fun ZoomableImage(photo: GalleryPhoto, active: Boolean) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
+    var bounds by remember { mutableStateOf(IntSize.Zero) }
+    // Местенето не извежда снимката извън екрана.
+    fun clamp(o: Offset, s: Float): Offset {
+        val maxX = (bounds.width * (s - 1f) / 2f).coerceAtLeast(0f)
+        val maxY = (bounds.height * (s - 1f) / 2f).coerceAtLeast(0f)
+        return Offset(o.x.coerceIn(-maxX, maxX), o.y.coerceIn(-maxY, maxY))
+    }
     val transform = rememberTransformableState { zoom, pan, _ ->
         scale = (scale * zoom).coerceIn(1f, 5f)
-        offset = if (scale > 1f) offset + pan else Offset.Zero
+        offset = if (scale > 1f) clamp(offset + pan, scale) else Offset.Zero
+    }
+    LaunchedEffect(active) {
+        if (!active) { scale = 1f; offset = Offset.Zero }
     }
     RemoteImage(
         url = photo.fullUrl,
@@ -182,8 +202,18 @@ private fun ZoomableImage(photo: GalleryPhoto) {
         contentDescription = photo.title.ifBlank { null },
         contentScale = ContentScale.Fit,
         modifier = Modifier.fillMaxSize().background(Color.Black)
+            .onSizeChanged { bounds = it }
             .pointerInput(Unit) {
-                detectTapGestures(onDoubleTap = { if (scale > 1f) { scale = 1f; offset = Offset.Zero } else scale = 2.5f })
+                detectTapGestures(onDoubleTap = { tap ->
+                    if (scale > 1f) {
+                        scale = 1f; offset = Offset.Zero
+                    } else {
+                        scale = 2f
+                        // Увеличава се около докоснатото място.
+                        val center = Offset(bounds.width / 2f, bounds.height / 2f)
+                        offset = clamp((center - tap) * (scale - 1f), scale)
+                    }
+                })
             }
             // Жестът за мащабиране е активен само при увеличение, за да не пречи на swipe.
             .transformable(transform, lockRotationOnZoomPan = true, canPan = { scale > 1f })
