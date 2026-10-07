@@ -1,7 +1,8 @@
 name: Dependabot auto-merge
 
 # Слива PR на Dependabot в main, след като „Android CI“ е минал успешно за него
-# (тестове, lint, release build), и пуска автоматичното издание.
+# (тестове, lint, release build), и пуска автоматичното издание. Само patch/minor —
+# major обновяванията остават отворени PR за ръчен преглед.
 # (workflow_run работи с правата на хранилището — PR-ите на Dependabot сами
 # по себе си имат само права за четене.)
 on:
@@ -34,6 +35,19 @@ jobs:
                  --jq ".[] | select(.author.login == \"app/dependabot\" and .headRefOid == \"$HEAD_SHA\" and .baseRefName == \"main\") | .number")
           if [ -z "$PR" ]; then
             echo "Няма отворен PR на Dependabot към main за $BRANCH@$HEAD_SHA (или има нов commit) — пропускам."
+            exit 0
+          fi
+          # Само patch и minor обновявания се сливат автоматично; major остават като
+          # отворени PR за преглед. Типът е в метаданните, които Dependabot записва в
+          # съобщението на commit-а (същото, което чете dependabot/fetch-metadata —
+          # то работи само при pull_request събития, не при workflow_run).
+          MSG=$(gh api "repos/$REPO/commits/$HEAD_SHA" --jq .commit.message)
+          if ! printf '%s\n' "$MSG" | grep -q 'update-type: version-update:semver-'; then
+            echo "Не открих update-type в commit-а на PR #$PR — оставям го за ръчен преглед."
+            exit 0
+          fi
+          if printf '%s\n' "$MSG" | grep -q 'update-type: version-update:semver-major'; then
+            echo "PR #$PR съдържа major обновяване — оставям го отворен за ръчен преглед."
             exit 0
           fi
           gh pr merge "$PR" --repo "$REPO" --squash --delete-branch

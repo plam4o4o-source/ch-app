@@ -12,7 +12,7 @@
 
 Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели.
 
-**Съобщения от читалището:** приложението проверява на около час публичния файл със съобщения на chyavorec.org. Съобщенията „само за членове“ се показват, ако сте въвели членска карта или сте влезли — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
+**Съобщения от читалището:** приложението проверява на около час публичния файл със съобщения на chyavorec.org. Съобщенията „само за членове“ се показват, ако си въвел читателска карта или си влязъл — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
 
 **Обновления:** версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от Настройки → Обновления. Версията от Google Play се обновява от Google Play.
 
@@ -20,7 +20,11 @@
 
 Читателска карта: ако въведеш номера на своята карта, той (и името, ако го въведеш) се пази шифрован с ключ от Android Keystore само на това устройство.
 
-Вход (само ако си дал съгласие в библиотеката и имаш издаден ПИН): читателският номер и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и никога не се записват. Пази се само шифрован токен за сесията. Заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес, телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните се изтриват от сървъра при следващото обновяване.
+Вход (само ако си дал съгласие в библиотеката и имаш издаден ПИН): номерът на читателската карта и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и ПИН-ът никога не се записва. При вход се изпраща и моделът на телефона (напр. „Pixel 8“), за да се разпознава сесията. Пази се само шифрован токен за сесията. Името ти, заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес и телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните ти се изтриват от сървъра при следващото обновяване.
+
+Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
+
+Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и най-близкия срок — без заглавия и без име.
 
 ## Известия
 
@@ -28,11 +32,11 @@
 
 ## Твоите права
 
-Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията и читателските данни; „Премахни“ изтрива въведената карта; „Изчисти кеша“ изтрива публичното съдържание; деинсталирането премахва всичко. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
+Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията и читателските данни; „Премахни“ изтрива въведената карта; „Изчисти кеша“ изтрива публичното съдържание; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
 
 ## Деца
 
-Приложението може да се използва без вход и без никакви лични данни.
+Приложението не е насочено към деца под 13 години. То може да се използва без вход и без никакви лични данни.
 
 ## Промени
 
@@ -54,7 +58,7 @@ The app collects as little data as possible. It has no ads, no behavioural analy
 
 Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data.
 
-**Messages from the centre:** about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered a member card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
+**Messages from the centre:** about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered your library card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
 
 **Updates:** the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 
@@ -62,7 +66,11 @@ Data kept only on the device: settings (theme, language, notifications), saved n
 
 Library card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.
 
-Sign-in (once the library system offers online access): your password is sent only over HTTPS to the library’s server and is never stored. Only an encrypted session token is kept. Borrowed items, due dates and membership come from the library’s server and are cached encrypted.
+Sign-in (only if you have given consent at the library and have been issued a PIN): your library card number and PIN are sent only over HTTPS to the centre’s server (chyavorec.org), and the PIN is never stored. The phone’s model name (e.g. “Pixel 8”) is also sent at sign-in so that the session can be recognised. Only an encrypted session token is kept. Your name, borrowed items, due dates and membership come from this server, which receives from the library software only the data of readers who have consented (no personal ID number (EGN), address or phone number), and are cached encrypted on the device. Consent is withdrawn at the library — your data is then deleted from the server at the next sync.
+
+Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
+
+Home-screen widget: if you add it, it shows only the number of books due and the nearest due date — no titles and no name.
 
 ## Notifications
 
@@ -70,11 +78,11 @@ Notifications are prepared on the device (periodic checks for new posts and due 
 
 ## Your rights
 
-You can delete the data on the device at any time: “Sign out” deletes the session and reader data; “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. For the data the library keeps about you as a reader, you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
+You can delete the data on the device at any time: “Sign out” deletes the session and reader data; “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
 
 ## Children
 
-The app can be used without signing in and without any personal data.
+The app is not directed at children under 13. It can be used without signing in and without any personal data.
 
 ## Changes
 

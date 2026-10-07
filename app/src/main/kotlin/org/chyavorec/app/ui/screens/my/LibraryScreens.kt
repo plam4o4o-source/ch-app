@@ -38,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -128,7 +129,7 @@ fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
         AlertDialog(
             onDismissRequest = { vm.renewResult.value = null },
             confirmButton = { TextButton(onClick = { vm.renewResult.value = null }) { Text(stringResource(R.string.action_ok)) } },
-            text = { Text(if (r is Outcome.Success) stringResource(R.string.renew_ok, Formatters.shortDate(r.value.dueOn) ?: "—") else errorMessage((r as Outcome.Failure).error)) },
+            text = { Text(if (r is Outcome.Success) stringResource(R.string.renew_ok, Formatters.shortDate(LocalContext.current, r.value.dueOn) ?: "—") else errorMessage((r as Outcome.Failure).error)) },
         )
     }
 }
@@ -145,8 +146,8 @@ private fun LoanCard(loan: Loan, calc: LoanDueCalculator, today: java.time.Local
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(loan.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 Text(loan.author, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(stringResource(R.string.loan_borrowed, Formatters.shortDate(loan.borrowedOn) ?: "—"), style = MaterialTheme.typography.bodySmall)
-                Text(stringResource(R.string.loan_due, Formatters.shortDate(loan.dueOn) ?: "—"), style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(R.string.loan_borrowed, Formatters.shortDate(LocalContext.current, loan.borrowedOn) ?: "—"), style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(R.string.loan_due, Formatters.shortDate(LocalContext.current, loan.dueOn) ?: "—"), style = MaterialTheme.typography.bodySmall)
                 if (status != null && due != null) {
                     Spacer(Modifier.height(4.dp))
                     DuePill(status, calc.daysLeft(due, today))

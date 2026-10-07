@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -188,11 +189,14 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
 @Composable
 private fun MonthCalendar(ui: EventsUiState, onPrev: () -> Unit, onNext: () -> Unit, onSelect: (LocalDate) -> Unit) {
     val month = ui.month
+    val context = LocalContext.current
+    val monthTitle = if (Formatters.isBulgarian(context)) BulgarianDates.monthName(month.monthValue)
+    else month.month.getDisplayName(java.time.format.TextStyle.FULL_STANDALONE, java.util.Locale.ENGLISH)
     Column(Modifier.padding(horizontal = 12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onPrev) { Icon(Icons.Outlined.ChevronLeft, contentDescription = stringResource(R.string.calendar_prev)) }
             Text(
-                BulgarianDates.monthName(month.monthValue).replaceFirstChar { it.uppercase() } + " " + month.year,
+                monthTitle.replaceFirstChar { it.uppercase() } + " " + month.year,
                 style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, modifier = Modifier.weight(1f).semantics { heading() },
             )
             IconButton(onClick = onNext) { Icon(Icons.Outlined.ChevronRight, contentDescription = stringResource(R.string.calendar_next)) }
@@ -209,25 +213,37 @@ private fun MonthCalendar(ui: EventsUiState, onPrev: () -> Unit, onNext: () -> U
         val cells = offset + month.lengthOfMonth()
         val rows = (cells + 6) / 7
         val eventLabel = stringResource(R.string.calendar_has_events)
+        val todayLabel = stringResource(R.string.calendar_today)
+        val selectLabel = stringResource(R.string.calendar_show_day)
         for (r in 0 until rows) {
             Row(Modifier.fillMaxWidth()) {
                 for (c in 0 until 7) {
                     val dayNum = r * 7 + c - offset + 1
-                    Box(Modifier.weight(1f).aspectRatio(1f).padding(2.dp), contentAlignment = Alignment.Center) {
-                        if (dayNum in 1..month.lengthOfMonth()) {
-                            val date = month.atDay(dayNum)
-                            val has = date in ui.daysWithEvents
-                            val isSel = date == ui.selectedDate
-                            val isToday = date == ui.today
+                    val inMonth = dayNum in 1..month.lengthOfMonth()
+                    val date = if (inMonth) month.atDay(dayNum) else null
+                    val has = date != null && date in ui.daysWithEvents
+                    val isSel = date != null && date == ui.selectedDate
+                    val isToday = date != null && date == ui.today
+                    // Клетката (цялата колона, поне 48dp висока) е зоната за докосване;
+                    // кръгът вътре е само визуален.
+                    val cellModifier = if (date != null) {
+                        Modifier.clip(CircleShape)
+                            .clickable(enabled = has, onClickLabel = selectLabel) { onSelect(date) }
+                            .semantics {
+                                selected = isSel
+                                contentDescription = listOfNotNull(
+                                    Formatters.date(context, date),
+                                    todayLabel.takeIf { isToday },
+                                    eventLabel.takeIf { has },
+                                ).joinToString(", ")
+                            }
+                    } else Modifier
+                    Box(Modifier.weight(1f).heightIn(min = 48.dp).aspectRatio(1f).then(cellModifier), contentAlignment = Alignment.Center) {
+                        if (date != null) {
                             Box(
-                                Modifier.fillMaxSize().clip(CircleShape)
+                                Modifier.fillMaxSize().padding(2.dp).clip(CircleShape)
                                     .background(if (isSel) MaterialTheme.colorScheme.primary else androidx.compose.ui.graphics.Color.Transparent)
-                                    .then(if (isToday && !isSel) Modifier.border(1.dp, MaterialTheme.colorScheme.primary, CircleShape) else Modifier)
-                                    .clickable(enabled = has) { onSelect(date) }
-                                    .semantics {
-                                        selected = isSel
-                                        contentDescription = date.dayOfMonth.toString() + (if (has) ", $eventLabel" else "")
-                                    },
+                                    .then(if (isToday && !isSel) Modifier.border(1.dp, MaterialTheme.colorScheme.primary, CircleShape) else Modifier),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(

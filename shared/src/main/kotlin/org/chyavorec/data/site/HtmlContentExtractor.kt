@@ -122,7 +122,8 @@ class HtmlContentExtractor(private val baseUrl: String) {
                         tag == "a" && isFileLink(child) -> {
                             flush()
                             val url = Urls.absolutize(child.attr("href"), baseUrl)
-                            val text = child.text().trim().ifBlank { "Отвори файла" }
+                            // Празен текст — интерфейсът показва преведен надпис („Отвори файла“ / „Open file“).
+                            val text = child.text().trim()
                             if (url != null) out += ContentBlock.LinkButton(text, url)
                         }
                         tag == "br" -> inline += TextRun("\n")

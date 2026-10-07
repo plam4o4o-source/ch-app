@@ -242,7 +242,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                             item(contentType = "header") {
                                 Text(
                                     pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults) + "  ·  " +
-                                        stringResource(R.string.catalog_data_as_of, Formatters.shortDate(engine.snapshot.generatedOn) ?: "—"),
+                                        stringResource(R.string.catalog_data_as_of, Formatters.shortDate(LocalContext.current, engine.snapshot.generatedOn) ?: "—"),
                                     style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                                 )
@@ -399,7 +399,7 @@ fun BookScreen(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit) {
                     Spacer(Modifier.height(12.dp))
                     BookStatusPill(ui.liveStatus ?: b.status)
                     Text(
-                        stringResource(R.string.book_status_as_of, Formatters.shortDate(ui.generatedOn) ?: "—"),
+                        stringResource(R.string.book_status_as_of, Formatters.shortDate(LocalContext.current, ui.generatedOn) ?: "—"),
                         style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 6.dp),
                     )

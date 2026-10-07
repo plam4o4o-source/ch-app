@@ -26,8 +26,13 @@ object Formatters {
         if (isBulgarian(context)) BulgarianDates.formatLong(d)
         else d.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.ENGLISH))
 
-    fun shortDate(iso: String?): String? =
-        iso?.let { runCatching { LocalDate.parse(it.take(10)) }.getOrNull() }?.let { BulgarianDates.formatShort(it) }
+    /** Кратка дата: „07.10.2026“ на български, „Oct 7, 2026“ на английски. */
+    fun shortDate(context: Context, iso: String?): String? =
+        iso?.let { runCatching { LocalDate.parse(it.take(10)) }.getOrNull() }?.let { shortDate(context, it) }
+
+    fun shortDate(context: Context, d: LocalDate): String =
+        if (isBulgarian(context)) BulgarianDates.formatShort(d)
+        else d.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.ENGLISH))
 
     fun millisDate(context: Context, millis: Long?): String? =
         millis?.let { date(context, Instant.ofEpochMilli(it).atZone(sofia).toLocalDate()) }

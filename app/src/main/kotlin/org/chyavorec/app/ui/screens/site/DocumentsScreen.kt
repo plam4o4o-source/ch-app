@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -72,7 +73,7 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                         item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
                         itemsIndexed(docs, key = { _, d -> d.id + tab }) { i, d ->
                             ListItem(
-                                overlineContent = listOfNotNull(d.category, Formatters.shortDate(d.date), d.size)
+                                overlineContent = listOfNotNull(d.category, Formatters.shortDate(LocalContext.current, d.date), d.size)
                                     .joinToString(" · ").ifBlank { null }?.let { { Text(it) } },
                                 headlineContent = { Text(d.title, style = MaterialTheme.typography.titleMedium) },
                                 supportingContent = d.description.takeIf { it.isNotBlank() }?.let {
