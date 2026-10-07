@@ -17,6 +17,7 @@ import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.MembershipStatus
+import org.chyavorec.domain.model.RenewResult
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import kotlin.test.AfterTest
@@ -143,6 +144,69 @@ class HttpServicesTest {
         assertEquals(2, loans.size)
         assertEquals(null, loans[0].dueOn)
         assertEquals(null, loans[1].borrowedOn)
+    }
+
+    @Test fun invlibLoansDecodeRenewFields() = runTest {
+        server.enqueue(MockResponse().setBody(caps))
+        server.enqueue(MockResponse().setBody("""{"loans":[
+            {"loanId":"1","title":"А","dateDue":"2026-10-03","canRenew":true,"renewPending":true},
+            {"loanId":"2","title":"Б","renewResult":{"status":"rejected","reason":"Има заявка от друг читател.","at":"2026-09-25T10:00:00Z"}},
+            {"loanId":"3","title":"В","renewResult":null}]}"""))
+        val loans = (client().loans(AuthSession("AT", null, 0, "R")) as Outcome.Success).value
+        assertTrue(loans[0].renewPending)
+        assertEquals(null, loans[0].renewResult)
+        assertFalse(loans[1].renewPending)
+        assertEquals(RenewResult("rejected", "Има заявка от друг читател.", "2026-09-25T10:00:00Z"), loans[1].renewResult)
+        assertTrue(loans[1].renewResult!!.isRejected)
+        assertEquals(null, loans[2].renewResult)
+        // Кешът (kotlinx JSON) връща същото.
+        val json = kotlinx.serialization.json.Json { encodeDefaults = false }
+        val ser = kotlinx.serialization.builtins.ListSerializer(org.chyavorec.domain.model.Loan.serializer())
+        assertEquals(loans, json.decodeFromString(ser, json.encodeToString(ser, loans)))
+    }
+
+    @Test fun invlibRenewAccepted202AndConflicts() = runTest {
+        val renewCaps = """{"apiVersion":1,"login":true,"loans":true,"renew":true,"history":true}"""
+        server.enqueue(MockResponse().setBody(renewCaps))
+        server.enqueue(MockResponse().setResponseCode(202).setBody("""{"loanId":"9","title":"Под игото","dateDue":"2026-10-03","canRenew":true,"renewPending":true}"""))
+        server.enqueue(MockResponse().setResponseCode(409).setBody("""{"error":"pending"}"""))
+        server.enqueue(MockResponse().setResponseCode(409).setBody("""{"error":"not_allowed"}"""))
+        server.enqueue(MockResponse().setResponseCode(404))
+        server.enqueue(MockResponse().setResponseCode(429).setHeader("Retry-After", "10"))
+        val c = client()
+        val s = AuthSession("AT", null, 0, "R")
+        val ok = (c.renew(s, "9") as Outcome.Success).value
+        assertTrue(ok.renewPending)
+        server.takeRequest() // capabilities
+        val req = server.takeRequest()
+        assertEquals("/api/v1/me/loans/9/renew", req.path)
+        assertEquals("POST", req.method)
+        assertEquals(0L, req.bodySize)
+        assertEquals(AppError.Conflict(AppError.Conflict.PENDING), (c.renew(s, "9") as Outcome.Failure).error)
+        assertEquals(AppError.Conflict(AppError.Conflict.NOT_ALLOWED), (c.renew(s, "9") as Outcome.Failure).error)
+        assertEquals(AppError.NotFound, (c.renew(s, "x") as Outcome.Failure).error)
+        assertEquals(AppError.RateLimited(10), (c.renew(s, "9") as Outcome.Failure).error)
+    }
+
+    @Test fun invlibHistory() = runTest {
+        server.enqueue(MockResponse().setBody("""{"apiVersion":1,"login":true,"loans":true,"history":true}"""))
+        server.enqueue(MockResponse().setBody("""{"items":[{"loanId":"h1","inv":156,"title":"Под игото","author":"Иван Вазов","dateOut":"2025-03-01","dateIn":"2025-03-20"},{"loanId":"h2","inv":null,"title":"Б","author":"","dateOut":null,"dateIn":null}],"generated":"2026-09-26T10:00:00Z"}"""))
+        val c = client()
+        assertTrue((c.capabilities() as Outcome.Success).value.history)
+        val items = (c.history(AuthSession("AT", null, 0, "R")) as Outcome.Success).value
+        assertEquals(2, items.size)
+        assertEquals(156L, items[0].inv)
+        assertEquals(2025, items[0].year)
+        assertEquals(null, items[1].inv)
+        assertEquals(null, items[1].year)
+        server.takeRequest()
+        assertEquals("/api/v1/me/history", server.takeRequest().path)
+    }
+
+    @Test fun invlibHistoryNotAvailableWithoutCapability() = runTest {
+        server.enqueue(MockResponse().setBody(caps))
+        val r = client().history(AuthSession("AT", null, 0, "R"))
+        assertEquals(AppError.NotAvailable(Feature.HISTORY), (r as Outcome.Failure).error)
     }
 
     @Test fun invlibUnsupportedFeatureIsNotFaked() = runTest {

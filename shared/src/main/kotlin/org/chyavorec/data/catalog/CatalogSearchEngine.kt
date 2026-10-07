@@ -1,5 +1,6 @@
 package org.chyavorec.data.catalog
 
+import org.chyavorec.core.Isbn
 import org.chyavorec.core.TextNormalizer
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogFacets
@@ -56,6 +57,27 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
     private val byInv: Map<Long, CatalogBook> = snapshot.books.associateBy { it.inv }
 
     fun book(inv: Long): CatalogBook? = byInv[inv]
+
+    /** Екземпляр по инвентарен номер (етикетът/баркодът на библиотеката). */
+    fun findByInv(inv: Long): CatalogBook? = byInv[inv]
+
+    /**
+     * Книга по ISBN: нормализира тирета/интервали и търси и двете форми
+     * (ISBN-10 ↔ ISBN-13). Наличните екземпляри са с предимство.
+     */
+    fun findByIsbn(raw: String?): CatalogBook? {
+        val wanted = Isbn.candidates(raw).filter { it.length >= 10 }
+        if (wanted.isEmpty()) return null
+        val hits = index.filter { it.isbnDigits.isNotEmpty() && it.isbnDigits in wanted }
+        return hits.firstOrNull { it.book.available }?.book ?: hits.firstOrNull()?.book
+    }
+
+    /** Всички екземпляри с този ISBN (за броя налични в резултата от сканиране). */
+    fun allByIsbn(raw: String?): List<CatalogBook> {
+        val wanted = Isbn.candidates(raw).filter { it.length >= 10 }
+        if (wanted.isEmpty()) return emptyList()
+        return index.filter { it.isbnDigits.isNotEmpty() && it.isbnDigits in wanted }.map { it.book }
+    }
 
     val facets: CatalogFacets by lazy {
         val years = snapshot.books.mapNotNull { it.yearNumber }.filter { it in 1500..2100 }

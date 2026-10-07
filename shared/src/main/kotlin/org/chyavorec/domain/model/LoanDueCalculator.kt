@@ -21,6 +21,14 @@ class LoanDueCalculator(private val dueSoonDays: Int = 3) {
     fun status(loan: Loan, today: LocalDate): DueStatus? =
         parse(loan.dueOn)?.let { status(it, today) }
 
+    /**
+     * Статус за напомняне (известие): като [status], но `null` при заявено и още
+     * непотвърдено удължаване — срокът вероятно ще се промени, не бива да се
+     * досажда с „наближава срок“, докато библиотеката не отговори.
+     */
+    fun reminderStatus(loan: Loan, today: LocalDate): DueStatus? =
+        if (loan.renewPending) null else status(loan, today)
+
     /** Отрицателно число = дни просрочие. */
     fun daysLeft(dueOn: LocalDate, today: LocalDate): Long = ChronoUnit.DAYS.between(today, dueOn)
 

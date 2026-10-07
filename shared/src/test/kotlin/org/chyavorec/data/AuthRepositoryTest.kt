@@ -118,6 +118,7 @@ class AuthRepositoryTest {
             override suspend fun renew(session: AuthSession, loanId: String) = Outcome.Failure(AppError.NotFound)
             override suspend fun requestAccountDeletion(session: AuthSession) = Outcome.Success(Unit)
             override suspend fun availability(inv: Long) = Outcome.Success(BookStatus.AVAILABLE)
+            override suspend fun history(session: AuthSession) = Outcome.Success(emptyList<org.chyavorec.domain.model.HistoryItem>())
         }
         val store = MemStore()
         val auth = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
@@ -134,6 +135,7 @@ class AuthRepositoryTest {
         override suspend fun renew(session: AuthSession, loanId: String) = Outcome.Failure(AppError.NotFound)
         override suspend fun requestAccountDeletion(session: AuthSession) = Outcome.Success(Unit)
         override suspend fun availability(inv: Long) = Outcome.Success(BookStatus.AVAILABLE)
+        override suspend fun history(session: AuthSession) = Outcome.Success(emptyList<org.chyavorec.domain.model.HistoryItem>())
     }
 
     @Test fun refreshKeepsRememberChoiceAndOldRefreshToken() = runTest {
@@ -277,6 +279,8 @@ class AuthRepositoryTest {
     @Test fun forbiddenIsNotUnauthorized() {
         assertEquals(AppError.Unauthorized, HttpFetcher.mapHttpError(401, null))
         assertEquals(AppError.Server(403), HttpFetcher.mapHttpError(403, null))
+        assertEquals(AppError.Conflict("pending"), HttpFetcher.mapHttpError(409, null, HttpFetcher.errorCode("""{"error":"pending","message":"x"}""")))
+        assertEquals(AppError.Conflict("conflict"), HttpFetcher.mapHttpError(409, null, HttpFetcher.errorCode("<html>")))
     }
 
     @Test fun selfCardValidation() = runTest {

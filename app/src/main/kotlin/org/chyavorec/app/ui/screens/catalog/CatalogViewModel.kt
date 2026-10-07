@@ -40,6 +40,13 @@ data class CatalogUiState(
     companion object { const val PAGE = 40 }
 }
 
+/** Търсене, поискано от друг екран (скенера на баркодове) — каталогът го поема при показване. */
+data class CatalogSearchRequest(val text: String, val field: SearchField = SearchField.ALL)
+
+object CatalogSearchRequests {
+    val pending = MutableStateFlow<CatalogSearchRequest?>(null)
+}
+
 @OptIn(FlowPreview::class)
 class CatalogViewModel(
     private val repo: CatalogRepository,

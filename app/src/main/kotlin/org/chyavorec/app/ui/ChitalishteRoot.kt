@@ -99,6 +99,7 @@ import org.chyavorec.app.ui.screens.home.HomeScreen
 import org.chyavorec.app.ui.screens.more.MoreScreen
 import org.chyavorec.app.ui.screens.my.CardFullscreen
 import org.chyavorec.app.ui.screens.my.CardScreen
+import org.chyavorec.app.ui.screens.my.HistoryScreen
 import org.chyavorec.app.ui.screens.my.LoansScreen
 import org.chyavorec.app.ui.screens.my.LoginScreen
 import org.chyavorec.app.ui.screens.my.MembershipScreen
@@ -108,6 +109,7 @@ import org.chyavorec.app.ui.screens.news.ArticleScreen
 import org.chyavorec.app.ui.screens.news.NewsListScreen
 import org.chyavorec.app.ui.screens.onboarding.OnboardingScreen
 import org.chyavorec.app.ui.screens.search.SearchScreen
+import org.chyavorec.app.ui.screens.scan.ScanScreen
 import org.chyavorec.app.ui.screens.settings.AboutAppScreen
 import org.chyavorec.app.ui.screens.settings.NotificationSettingsScreen
 import org.chyavorec.app.ui.screens.settings.PrivacyScreen
@@ -176,6 +178,8 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
             link == null -> Unit
             link == "login" -> nav.navigate(Routes.LOGIN)
             link == "my/loans" -> nav.navigate(Routes.LOANS)
+            link == "my/history" -> nav.navigate(Routes.HISTORY)
+            link == "scan" -> nav.navigate(Routes.SCAN)
             link == "events" -> nav.navigate(Routes.EVENTS)
             link == "update" -> container.updater.showPrompt()
             link == "messages" -> nav.navigate(Routes.MESSAGES)
@@ -396,6 +400,7 @@ private fun AppNavHost(
             BookScreen(it.arguments?.getLong("inv") ?: 0L, back, navigate)
         }
         screen(Routes.SEARCH) { SearchScreen(back, navigate, openExternal, openLink) }
+        screen(Routes.SCAN) { ScanScreen(back, navigate) }
         screen(Routes.LOGIN) {
             LoginScreen(back, onLoggedIn = { nav.popBackStack(); nav.navigateTab(Routes.MY) }, onAddCard = { nav.popBackStack(); nav.navigate(Routes.CARD) })
         }
@@ -403,6 +408,7 @@ private fun AppNavHost(
         screen(Routes.CARD) { CardScreen(back, onFullscreen = { nav.navigate(Routes.CARD_FULL) }, onLogin = { nav.navigate(Routes.LOGIN) }) }
         screen(Routes.CARD_FULL) { CardFullscreen(onClose = back) }
         screen(Routes.LOANS) { LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
+        screen(Routes.HISTORY) { HistoryScreen(back, navigate, onLogin = { nav.navigate(Routes.LOGIN) }) }
         screen(Routes.MEMBERSHIP) { MembershipScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
         screen(Routes.NOTIFICATIONS) { NotificationSettingsScreen(back) }
         screen(Routes.ACTIVITIES) { ActivitiesScreen(back, navigate, openExternal) }

@@ -50,7 +50,49 @@ data class Loan(
     val dueOn: String? = null,
     val renewals: Int = 0,
     val canRenew: Boolean = false,
+    /**
+     * Заявено удължаване, което библиотечната програма още не е потвърдила
+     * (InvLib го обработва при следващата си синхронизация).
+     */
+    val renewPending: Boolean = false,
+    /** Последният резултат от заявка за удължаване (сървърът го пази до 7 дни). */
+    val renewResult: RenewResult? = null,
 )
+
+/** Резултат от обработено от библиотеката искане за удължаване. */
+@Serializable
+data class RenewResult(
+    /** `done` | `rejected` */
+    val status: String,
+    /** Причина за отказ (на български, от библиотеката). */
+    val reason: String? = null,
+    /** ISO момент на обработката. */
+    val at: String? = null,
+) {
+    val isRejected: Boolean get() = status.equals(STATUS_REJECTED, ignoreCase = true)
+    val isDone: Boolean get() = status.equals(STATUS_DONE, ignoreCase = true)
+
+    companion object {
+        const val STATUS_DONE = "done"
+        const val STATUS_REJECTED = "rejected"
+    }
+}
+
+/** Запис от историята на четенето („Какво съм чел“) — само за съгласили се читатели. */
+@Serializable
+data class HistoryItem(
+    val loanId: String,
+    val inv: Long? = null,
+    val title: String,
+    val author: String = "",
+    /** ISO дата на заемане. */
+    val dateOut: String? = null,
+    /** ISO дата на връщане (`null` = още не е върната). */
+    val dateIn: String? = null,
+) {
+    /** Годината на заемане (за групиране); без дата → `null`. */
+    val year: Int? get() = (dateOut ?: dateIn)?.take(4)?.toIntOrNull()
+}
 
 /** Индикатор на срока — изчислява се от реалните дати ([LoanDueCalculator]). */
 enum class DueStatus { PLENTY_OF_TIME, DUE_SOON, OVERDUE }
@@ -68,6 +110,8 @@ data class ServiceCapabilities(
     val accountDeletion: Boolean = false,
     val push: Boolean = false,
     val availability: Boolean = false,
+    /** История на четенето (`GET /v1/me/history`). */
+    val history: Boolean = false,
 ) {
     companion object {
         val NONE = ServiceCapabilities()

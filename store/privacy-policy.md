@@ -26,6 +26,12 @@
 
 Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и най-близкия срок — без заглавия и без име.
 
+Скенер на баркодове: камерата се включва само когато отвориш скенера и разрешиш достъп; кадрите се разчитат на телефона и не се записват и не се изпращат.
+
+История на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.
+
+Удължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
+
 ## Известия
 
 Известията се подготвят на устройството (периодична проверка за нови публикации и срокове). Не се използват сървъри за push известия.
@@ -71,6 +77,12 @@ Sign-in (only if you have given consent at the library and have been issued a PI
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
 
 Home-screen widget: if you add it, it shows only the number of books due and the nearest due date — no titles and no name.
+
+Barcode scanner: the camera turns on only when you open the scanner and allow access; frames are read on the phone and are never stored or sent.
+
+Reading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.
+
+Renewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
 ## Notifications
 

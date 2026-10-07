@@ -57,6 +57,7 @@ import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material.icons.outlined.Place
+import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.TheaterComedy
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -147,6 +148,12 @@ fun HomeScreen(navigate: (String) -> Unit) {
                 SearchPill(
                     stringResource(R.string.home_search_hint), onClick = { navigate(Routes.SEARCH) },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                    trailing = {
+                        // Скенер на баркодове: ISBN на книга или етикет с инвентарен номер.
+                        IconButton(onClick = { navigate(Routes.SCAN) }, modifier = Modifier.size(40.dp)) {
+                            Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    },
                 )
             }
             state.feast?.let { f -> item("feast") { FeastLine(f) } }

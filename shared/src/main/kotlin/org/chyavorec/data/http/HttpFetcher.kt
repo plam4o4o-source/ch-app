@@ -42,7 +42,9 @@ class HttpFetcher(private val client: OkHttpClient, private val userAgent: Strin
 
     private fun toOutcome(response: Response): Outcome<HttpBody> {
         if (!response.isSuccessful) {
-            return Outcome.Failure(mapHttpError(response.code, response.header("Retry-After")))
+            // При 409 тялото носи кода на конфликта ({"error":"pending"}) — четем само него.
+            val errorCode = if (response.code == 409) runCatching { response.body?.string()?.take(4096) }.getOrNull()?.let(::errorCode) else null
+            return Outcome.Failure(mapHttpError(response.code, response.header("Retry-After"), errorCode))
         }
         val body = response.body ?: return Outcome.Failure(AppError.Parse("empty body"))
         val bytes = body.bytes()
@@ -51,11 +53,17 @@ class HttpFetcher(private val client: OkHttpClient, private val userAgent: Strin
     }
 
     companion object {
-        fun mapHttpError(code: Int, retryAfter: String?): AppError = when (code) {
+        private val errorField = Regex("\"error\"\\s*:\\s*\"([A-Za-z0-9_.-]{1,64})\"")
+
+        /** Кодът от `{"error":"…"}` (или `null`, ако тялото не е в този вид). */
+        fun errorCode(body: String?): String? = body?.let { errorField.find(it)?.groupValues?.get(1) }
+
+        fun mapHttpError(code: Int, retryAfter: String?, errorCode: String? = null): AppError = when (code) {
             // 403 = „нямаш право на това“, а не невалидна сесия/парола: не води до
             // изход и не се брои като грешен опит за вход.
             401 -> AppError.Unauthorized
             404, 410 -> AppError.NotFound
+            409 -> AppError.Conflict(errorCode ?: "conflict")
             429 -> AppError.RateLimited(retryAfter?.toLongOrNull() ?: 60)
             else -> AppError.Server(code)
         }

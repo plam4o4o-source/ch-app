@@ -55,7 +55,8 @@ class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
                     val already = c.settings.notifiedLoans()
                     val current = mutableSetOf<String>()
                     for (loan in synced.data) {
-                        val status = calc.status(loan, today) ?: continue
+                        // Заявено (непотвърдено) удължаване → без „наближава срок“, докато библиотеката не отговори.
+                        val status = calc.reminderStatus(loan, today) ?: continue
                         if (status == DueStatus.PLENTY_OF_TIME) continue
                         val key = "${loan.loanId}:$status"
                         current += key
