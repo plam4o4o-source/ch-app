@@ -58,6 +58,43 @@ S = {
 "subject_catalog": ("каталога", "the catalogue"),
 "subject_events": ("събитията", "the events"),
 "subject_loans": ("заеманията", "your loans"),
+"subject_history": ("историята на четенето", "your reading history"),
+"renew_requested": ("Заявката е изпратена. Библиотеката ще удължи срока при следващото обновяване на програмата си.", "Request sent. The library will extend the due date at its program’s next update."),
+"loan_renew_pending": ("Заявено удължаване · чака библиотеката", "Renewal requested · waiting for the library"),
+"loan_renew_rejected": ("Удължаването е отказано: %1$s", "Renewal declined: %1$s"),
+"loan_renew_rejected_noreason": ("Удължаването е отказано.", "Renewal declined."),
+"loan_renew_done": ("Удължено ✓", "Renewed ✓"),
+"na_history": ("Историята на четенето още не е включена от библиотеката.", "Reading history isn’t switched on by the library yet."),
+"renew_conflict_pending": ("Удължаването вече е заявено и чака библиотеката.", "A renewal is already requested and waiting for the library."),
+"renew_conflict_not_allowed": ("Тази книга не може да се удължи онлайн. Попитай в библиотеката.", "This book can’t be renewed online. Please ask at the library."),
+"renew_conflict_other": ("Удължаването не беше прието. Опитай пак по-късно.", "The renewal wasn’t accepted. Please try again later."),
+"history_title": ("Какво съм чел", "My reading history"),
+"my_history_desc": ("Прочетени книги и подобни", "Books read and similar ones"),
+"history_empty": ("Още няма прочетени книги", "No books read yet"),
+"history_empty_hint": ("Върнатите книги ще се появят тук след следващото обновяване от библиотеката.", "Returned books will appear here after the library’s next update."),
+"history_year_all": ("Всички години", "All years"),
+"history_source_note": ("Историята идва от библиотеката само за читатели, дали съгласие.", "History comes from the library only for readers who gave consent."),
+"history_similar": ("Подобни книги", "Similar books"),
+"history_similar_note": ("Подбрани на телефона по раздел и автор — нищо не се изпраща.", "Picked on your phone by section and author — nothing is sent anywhere."),
+"history_range": ("взета %1$s · върната %2$s", "borrowed %1$s · returned %2$s"),
+"history_not_returned": ("не е върната", "not returned"),
+"scan_action": ("Сканирай баркод", "Scan barcode"),
+"scan_title": ("Сканиране", "Scan"),
+"scan_hint": ("Насочи камерата към баркода на книгата (ISBN) или към инвентарния номер.", "Point the camera at the book’s barcode (ISBN) or inventory label."),
+"scan_camera_error": ("Камерата не може да се отвори.", "The camera can’t be opened."),
+"scan_catalog_loading": ("Зареждам каталога…", "Loading the catalogue…"),
+"scan_permission_title": ("Нужен е достъп до камерата", "Camera access needed"),
+"scan_permission_text": ("Камерата се използва само за четене на баркода на телефона. Нищо не се снима и не се изпраща.", "The camera is only used to read the barcode on your phone. Nothing is recorded or sent."),
+"scan_permission_grant": ("Разреши камерата", "Allow camera"),
+"scan_permission_settings": ("Отвори настройките", "Open settings"),
+"scan_open_book": ("Отвори книгата", "Open book"),
+"scan_not_found_title": ("Няма я в библиотеката", "Not in the library"),
+"scan_not_found_text": ("Не намерих книга с %1$s в каталога.", "No book with %1$s in the catalogue."),
+"scan_search_catalog": ("Търси в каталога", "Search the catalogue"),
+"scan_code_isbn": ("ISBN %1$s", "ISBN %1$s"),
+"scan_code_inv": ("инв. № %1$s", "inv. no. %1$s"),
+"scan_torch_on": ("Включи фенерчето", "Turn on torch"),
+"scan_torch_off": ("Изключи фенерчето", "Turn off torch"),
 "subject_membership": ("членството", "your membership"),
 "na_title": ("Все още не е достъпно", "Not available yet"),
 "na_login": ("Онлайн входът още не е включен от библиотеката. Когато бъде включен, функцията ще се появи тук автоматично. За достъп ще ти трябва ПИН, който се издава в библиотеката.", "Online sign-in hasn’t been switched on by the library yet. It will appear here automatically once it is. You will need a PIN issued at the library."),
@@ -221,7 +258,7 @@ S = {
 "loans_empty_hint": ("Разгледай каталога — може би нещо ще те заинтригува.", "Browse the catalogue — something might catch your eye."),
 "loan_borrowed": ("Заета: %1$s", "Borrowed: %1$s"),
 "loan_due": ("Връщане: %1$s", "Due: %1$s"),
-"loan_renew": ("Поднови", "Renew"),
+"loan_renew": ("Удължи срока", "Renew"),
 "loan_stale_note": ("Последно синхронизирани данни — може да не са актуални.", "Last synced data — may be out of date."),
 "renew_ok": ("Подновено до %1$s.", "Renewed until %1$s."),
 "membership_number": ("Членски номер", "Member number"),
@@ -419,7 +456,7 @@ PRIVACY_BG = """# Кой обработва данните
 
 Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
 
-Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и най-близкия срок — без заглавия и без име.
+Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и най-близкия срок — без заглавия и без име.\n\nСкенер на баркодове: камерата се включва само когато отвориш скенера и разрешиш достъп; кадрите се разчитат на телефона и не се записват и не се изпращат.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
 # Известия
 
@@ -461,7 +498,7 @@ Sign-in (only if you have given consent at the library and have been issued a PI
 
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
 
-Home-screen widget: if you add it, it shows only the number of books due and the nearest due date — no titles and no name.
+Home-screen widget: if you add it, it shows only the number of books due and the nearest due date — no titles and no name.\n\nBarcode scanner: the camera turns on only when you open the scanner and allow access; frames are read on the phone and are never stored or sent.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
 # Notifications
 
@@ -544,6 +581,7 @@ S["terms_body"] = (TERMS_BG, TERMS_EN)
 S["about_body"] = (ABOUT_BG, ABOUT_EN)
 
 P = {
+"history_year_count": (("%1$d книга", "%1$d книги"), ("%1$d book", "%1$d books")),
 "book_available_copies": (("%1$d наличен", "%1$d налични"), ("%1$d available", "%1$d available")),
 "book_copies": (("%1$d екземпляр", "%1$d екземпляра"), ("%1$d copy", "%1$d copies")),
 "catalog_count": (("%1$d резултат", "%1$d резултата"), ("%1$d result", "%1$d results")),

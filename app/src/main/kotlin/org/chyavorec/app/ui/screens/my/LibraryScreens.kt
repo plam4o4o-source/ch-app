@@ -16,6 +16,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import org.chyavorec.app.ui.theme.LocalExtendedColors
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.Surface
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Login
@@ -124,7 +128,7 @@ fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
                     val sorted = loans.sortedWith(compareBy(nullsLast<String>()) { it.dueOn })
                     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         items(sorted, key = { it.loanId }) { loan ->
-                            LoanCard(loan, calc, today, stale = state.fromCache, canRenew = canRenew && loan.canRenew, onRenew = { vm.renew(loan) })
+                            LoanCard(loan, calc, today, stale = state.fromCache, canRenew = canRenew && loan.canRenew && !loan.renewPending, onRenew = { vm.renew(loan) })
                         }
                     }
                 }
@@ -135,7 +139,15 @@ fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
         AlertDialog(
             onDismissRequest = { vm.renewResult.value = null },
             confirmButton = { TextButton(onClick = { vm.renewResult.value = null }) { Text(stringResource(R.string.action_ok)) } },
-            text = { Text(if (r is Outcome.Success) stringResource(R.string.renew_ok, Formatters.shortDate(LocalContext.current, r.value.dueOn) ?: "—") else errorMessage((r as Outcome.Failure).error)) },
+            text = {
+                Text(
+                    when {
+                        r is Outcome.Success && r.value.renewPending -> stringResource(R.string.renew_requested)
+                        r is Outcome.Success -> stringResource(R.string.renew_ok, Formatters.shortDate(LocalContext.current, r.value.dueOn) ?: "—")
+                        else -> errorMessage((r as Outcome.Failure).error)
+                    },
+                )
+            },
         )
     }
 }
@@ -166,11 +178,46 @@ private fun LoanCard(loan: Loan, calc: LoanDueCalculator, today: java.time.Local
                     }
                 }
                 if (stale) Text(stringResource(R.string.loan_stale_note), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.error)
+                RenewState(loan)
                 if (canRenew && !stale) {
                     TextButton(onClick = onRenew, contentPadding = PaddingValues(0.dp)) { Text(stringResource(R.string.loan_renew)) }
                 }
             }
         }
+    }
+}
+
+/** Чакащо удължаване или последният отговор на библиотеката (до 7 дни). */
+@Composable
+private fun RenewState(loan: Loan) {
+    val result = loan.renewResult
+    when {
+        loan.renewPending -> Surface(
+            shape = RoundedCornerShape(50),
+            color = Color.Transparent,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+            modifier = Modifier.padding(top = 6.dp),
+        ) {
+            Text(
+                stringResource(R.string.loan_renew_pending),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+            )
+        }
+        result?.status == "rejected" -> Text(
+            result.reason?.takeIf { it.isNotBlank() }?.let { stringResource(R.string.loan_renew_rejected, it) }
+                ?: stringResource(R.string.loan_renew_rejected_noreason),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.error,
+            modifier = Modifier.padding(top = 6.dp),
+        )
+        result?.status == "done" -> Text(
+            stringResource(R.string.loan_renew_done),
+            style = MaterialTheme.typography.labelMedium,
+            color = LocalExtendedColors.current.ok,
+            modifier = Modifier.padding(top = 6.dp),
+        )
     }
 }
 

@@ -36,6 +36,7 @@ import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.Share
@@ -63,6 +64,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -146,6 +148,16 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     val listState = rememberLazyListState()
     val q = state.query
     TabReselectEffect(Routes.CATALOG) { listState.animateScrollToItem(0) }
+    // Заявка от друг екран (скенера): „Търси в каталога“ с предварително попълнен ISBN/заглавие.
+    LaunchedEffect(Unit) {
+        CatalogSearchRequests.pending.collect { r ->
+            if (r != null) {
+                CatalogSearchRequests.pending.value = null
+                vm.update { CatalogQuery(text = r.text, field = r.field, sort = it.sort) }
+                listState.scrollToItem(0)
+            }
+        }
+    }
 
     Scaffold(topBar = {
         TopAppBar(
@@ -165,6 +177,9 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                 }
             },
             actions = {
+                IconButton(onClick = { navigate(Routes.SCAN) }) {
+                    Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action))
+                }
                 Box {
                     IconButton(onClick = { sortMenu = true }) {
                         Icon(Icons.Outlined.SwapVert, contentDescription = stringResource(R.string.catalog_sort))

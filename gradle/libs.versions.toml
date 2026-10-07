@@ -21,6 +21,8 @@ splashscreen = "1.2.0"
 browser = "1.10.0"
 coil = "3.6.3"
 zxing = "3.5.4"
+camerax = "1.5.1"
+mlkitBarcode = "17.3.0"
 glance = "1.1.1"
 profileinstaller = "1.4.1"
 robolectric = "4.17"
@@ -70,6 +72,12 @@ compose-animation = { module = "androidx.compose.animation:animation" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
+# Скенер на баркодове (ISBN/инвентарен номер): CameraX + ML Kit (вграден модел, без Play Services).
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
+mlkit-barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "mlkitBarcode" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidxTestCore" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxTestExtJunit" }

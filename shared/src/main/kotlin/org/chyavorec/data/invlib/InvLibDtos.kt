@@ -22,6 +22,7 @@ data class CapabilitiesDto(
     val accountDeletion: Boolean = false,
     val push: Boolean = false,
     val availability: Boolean = false,
+    val history: Boolean = false,
 )
 
 @Serializable
@@ -64,10 +65,35 @@ data class LoanDto(
     val dateDue: String? = null,
     val renewals: Int = 0,
     val canRenew: Boolean = false,
+    /** Заявено удължаване, което InvLib още не е обработил. */
+    val renewPending: Boolean = false,
+    /** Последен резултат от удължаване (до 7 дни назад). */
+    val renewResult: RenewResultDto? = null,
+)
+
+@Serializable
+data class RenewResultDto(
+    /** done | rejected */
+    val status: String = "",
+    val reason: String? = null,
+    val at: String? = null,
 )
 
 @Serializable
 data class LoansResponseDto(val loans: List<LoanDto>)
+
+@Serializable
+data class HistoryItemDto(
+    val loanId: String,
+    val inv: Long? = null,
+    val title: String = "",
+    val author: String = "",
+    val dateOut: String? = null,
+    val dateIn: String? = null,
+)
+
+@Serializable
+data class HistoryResponseDto(val items: List<HistoryItemDto> = emptyList(), val generated: String? = null)
 
 @Serializable
 data class MembershipDto(

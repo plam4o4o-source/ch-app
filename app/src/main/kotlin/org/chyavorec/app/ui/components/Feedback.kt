@@ -67,6 +67,11 @@ fun errorMessage(error: AppError, subject: String? = null): String = when (error
     AppError.NotFound -> stringResource(R.string.error_not_found)
     is AppError.RateLimited -> error.retryAfterSeconds.coerceIn(0, Int.MAX_VALUE.toLong()).toInt().let { pluralStringResource(R.plurals.error_rate_limited, it, it) }
     is AppError.NotAvailable -> notAvailableMessage(error.feature)
+    is AppError.Conflict -> when (error.code) {
+        AppError.Conflict.PENDING -> stringResource(R.string.renew_conflict_pending)
+        AppError.Conflict.NOT_ALLOWED -> stringResource(R.string.renew_conflict_not_allowed)
+        else -> stringResource(R.string.renew_conflict_other)
+    }
 }
 
 @Composable
@@ -79,6 +84,7 @@ fun notAvailableMessage(feature: Feature): String = when (feature) {
     Feature.PASSWORD_RESET -> stringResource(R.string.na_password_reset)
     Feature.ACCOUNT_DELETION -> stringResource(R.string.na_account_deletion)
     Feature.PUSH -> stringResource(R.string.na_push)
+    Feature.HISTORY -> stringResource(R.string.na_history)
 }
 
 @Composable

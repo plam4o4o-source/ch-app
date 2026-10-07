@@ -5,10 +5,12 @@ import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
+import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.MembershipStatus
 import org.chyavorec.domain.model.ReaderProfile
+import org.chyavorec.domain.model.RenewResult
 import org.chyavorec.domain.model.ServiceCapabilities
 import org.chyavorec.domain.service.AuthenticationService
 import org.chyavorec.domain.service.MembershipService
@@ -28,7 +30,7 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
     private fun today() = clock.today()
 
     override suspend fun capabilities() = Outcome.Success(
-        ServiceCapabilities(login = true, profile = true, loans = true, membership = true, holds = true, renew = true),
+        ServiceCapabilities(login = true, profile = true, loans = true, membership = true, holds = true, renew = true, history = true),
     )
 
     override suspend fun login(cardNumber: String, password: CharArray): Outcome<AuthSession> {
@@ -59,15 +61,37 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
         return Outcome.Success(
             listOf(
                 Loan("demo-1", null, "Под игото", "Иван Вазов", null, t.minusDays(14).toString(), t.plusDays(7).toString(), 0, true),
-                Loan("demo-2", null, "Демо заглавие (наближава срок)", "Демо автор", null, t.minusDays(28).toString(), t.plusDays(2).toString(), 1, true),
-                Loan("demo-3", null, "Демо заглавие (просрочено)", "Демо автор", null, t.minusDays(40).toString(), t.minusDays(3).toString(), 2, false),
+                Loan("demo-2", null, "Демо заглавие (наближава срок)", "Демо автор", null, t.minusDays(28).toString(), t.plusDays(2).toString(), 1, true,
+                    renewPending = pendingRenew.contains("demo-2")),
+                Loan("demo-3", null, "Демо заглавие (просрочено)", "Демо автор", null, t.minusDays(40).toString(), t.minusDays(3).toString(), 2, false,
+                    renewResult = RenewResult(RenewResult.STATUS_REJECTED, "Книгата е заявена от друг читател.", clock.now().toString())),
             ),
         )
     }
 
+    /** Заявените удължавания в демо режим — остават „чакащи“ (както при истинския мост до синхронизацията на InvLib). */
+    private val pendingRenew = java.util.concurrent.CopyOnWriteArraySet<String>()
+
     override suspend fun placeHold(session: AuthSession, inv: Long) = Outcome.Success(Unit)
-    override suspend fun renew(session: AuthSession, loanId: String): Outcome<Loan> =
-        Outcome.Failure(AppError.Server(409))
+    override suspend fun renew(session: AuthSession, loanId: String): Outcome<Loan> {
+        if (loanId in pendingRenew) return Outcome.Failure(AppError.Conflict(AppError.Conflict.PENDING))
+        val loan = (loans(session) as Outcome.Success).value.firstOrNull { it.loanId == loanId }
+            ?: return Outcome.Failure(AppError.NotFound)
+        if (!loan.canRenew) return Outcome.Failure(AppError.Conflict(AppError.Conflict.NOT_ALLOWED))
+        pendingRenew += loanId
+        return Outcome.Success(loan.copy(renewPending = true))
+    }
+
+    override suspend fun history(session: AuthSession): Outcome<List<HistoryItem>> {
+        val t = today()
+        return Outcome.Success(
+            listOf(
+                HistoryItem("demo-h1", 1, "Под игото", "Иван Вазов", t.minusDays(60).toString(), t.minusDays(30).toString()),
+                HistoryItem("demo-h2", 2, "Демо заглавие (прочетено)", "Демо автор", t.minusMonths(8).toString(), t.minusMonths(7).toString()),
+                HistoryItem("demo-h3", null, "Демо заглавие (миналата година)", "Друг автор", t.minusYears(1).toString(), t.minusYears(1).plusDays(20).toString()),
+            ),
+        )
+    }
     override suspend fun requestAccountDeletion(session: AuthSession) = Outcome.Success(Unit)
     override suspend fun availability(inv: Long): Outcome<BookStatus> = Outcome.Failure(AppError.NotFound)
 

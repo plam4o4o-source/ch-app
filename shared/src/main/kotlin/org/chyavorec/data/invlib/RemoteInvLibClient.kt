@@ -13,10 +13,12 @@ import org.chyavorec.core.Outcome
 import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
+import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.MembershipStatus
 import org.chyavorec.domain.model.ReaderProfile
+import org.chyavorec.domain.model.RenewResult
 import org.chyavorec.domain.model.ServiceCapabilities
 import org.chyavorec.domain.service.AuthenticationService
 import org.chyavorec.domain.service.MembershipService
@@ -53,6 +55,7 @@ class RemoteInvLibClient(
                     login = d.login, profile = d.profile, loans = d.loans, membership = d.membership,
                     holds = d.holds, renew = d.renew, passwordReset = d.passwordReset,
                     accountDeletion = d.accountDeletion, push = d.push, availability = d.availability,
+                    history = d.history,
                 )
                 cachedCaps = caps
                 Outcome.Success(caps)
@@ -122,12 +125,28 @@ class RemoteInvLibClient(
         return sendUnit(post("/v1/me/holds", session, body))
     }
 
+    /**
+     * Заявка за удължаване. Сървърът отговаря с `202` и заемането с
+     * `renewPending = true` (самото удължаване става при следващата
+     * синхронизация на InvLib); `409 {"error":"pending"|"not_allowed"}` →
+     * [AppError.Conflict] със същия код; `404` → [AppError.NotFound]; `429` → [AppError.RateLimited].
+     */
     override suspend fun renew(session: AuthSession, loanId: String): Outcome<Loan> {
         requireCap(Feature.RENEW) { it.renew }?.let { return Outcome.Failure(it) }
         val path = "/v1/me/loans/" + java.net.URLEncoder.encode(loanId, "UTF-8") + "/renew"
-        return when (val r = send(post(path, session, "{}".toRequestBody(jsonType)), LoanDto.serializer())) {
+        return when (val r = send(post(path, session, ByteArray(0).toRequestBody(null)), LoanDto.serializer())) {
             is Outcome.Failure -> r
             is Outcome.Success -> Outcome.Success(r.value.toLoan())
+        }
+    }
+
+    override suspend fun history(session: AuthSession): Outcome<List<HistoryItem>> {
+        requireCap(Feature.HISTORY) { it.history }?.let { return Outcome.Failure(it) }
+        return when (val r = send(get("/v1/me/history", session), HistoryResponseDto.serializer())) {
+            is Outcome.Failure -> r
+            is Outcome.Success -> Outcome.Success(
+                r.value.items.map { HistoryItem(it.loanId, it.inv, it.title, it.author, it.dateOut, it.dateIn) },
+            )
         }
     }
 
@@ -176,7 +195,11 @@ class RemoteInvLibClient(
 
     // --- помощни ---
 
-    private fun LoanDto.toLoan() = Loan(loanId, inv, title, author, coverUrl, dateOut, dateDue, renewals, canRenew)
+    private fun LoanDto.toLoan() = Loan(
+        loanId, inv, title, author, coverUrl, dateOut, dateDue, renewals, canRenew,
+        renewPending = renewPending,
+        renewResult = renewResult?.takeIf { it.status.isNotBlank() }?.let { RenewResult(it.status, it.reason, it.at) },
+    )
 
     private fun <T> Outcome<T>.refreshForbiddenAsUnauthorized(): Outcome<T> =
         if (this is Outcome.Failure && error == AppError.Server(403)) Outcome.Failure(AppError.Unauthorized) else this

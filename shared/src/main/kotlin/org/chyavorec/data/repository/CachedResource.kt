@@ -43,6 +43,14 @@ internal class CachedResource<T>(
         return Synced(value, Instant.ofEpochMilli(payload.savedAtMillis), fromCache = true)
     }
 
+    /** Променя кешираната стойност на място (ако има такава), без да пипа времето на синхронизация. */
+    suspend fun updateCached(transform: (T) -> T) {
+        val payload = cache.read(key) ?: return
+        val value = withContext(work) { runCatching { cacheJson.decodeFromString(serializer, payload.text) }.getOrNull() } ?: return
+        val updated = transform(value)
+        runCatching { cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, updated) }) }
+    }
+
     suspend fun load(force: Boolean, fetch: suspend () -> Outcome<T>): Outcome<Synced<T>> {
         val cached = cached()
         if (!force && cached != null) {

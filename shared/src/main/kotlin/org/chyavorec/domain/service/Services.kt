@@ -9,6 +9,7 @@ import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.DailyFeast
 import org.chyavorec.domain.model.Event
 import org.chyavorec.domain.model.GalleryPhoto
+import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.NewsArticle
@@ -81,6 +82,8 @@ interface ReaderService {
     suspend fun requestAccountDeletion(session: AuthSession): Outcome<Unit>
     /** Актуален статус на конкретен екземпляр (по-точен от katalog.json). */
     suspend fun availability(inv: Long): Outcome<BookStatus>
+    /** История на четенето (най-новите първо, до 200) — само ако сървърът я поддържа. */
+    suspend fun history(session: AuthSession): Outcome<List<HistoryItem>>
 }
 
 /** Членство/регистрация (InvLib — бъдещ онлайн API). */

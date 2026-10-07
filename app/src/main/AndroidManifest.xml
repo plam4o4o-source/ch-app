@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Известия (Android 13+): искат се едва когато потребителят включи известие. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Скенер на баркодове (ISBN / инвентарен номер): иска се едва при отваряне на скенера;
+         кадрите се обработват само на устройството. Камерата не е задължителна. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <!-- Самообновяване от GitHub Releases (APK извън Google Play). Play build-ът
          премахва тези разрешения — виж src/play/AndroidManifest.xml. -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />

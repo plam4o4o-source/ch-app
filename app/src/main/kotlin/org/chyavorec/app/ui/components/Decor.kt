@@ -87,22 +87,30 @@ fun IconPlate(
     }
 }
 
-/** Поле за търсене (като на сайта); отваря глобалното търсене. */
+/**
+ * Поле за търсене (като на сайта); отваря глобалното търсене.
+ * [trailing] — незадължителен елемент вдясно (напр. икона за скенера на баркодове).
+ */
 @Composable
-fun SearchPill(hint: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun SearchPill(hint: String, onClick: () -> Unit, modifier: Modifier = Modifier, trailing: (@Composable () -> Unit)? = null) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         modifier = modifier.fillMaxWidth().height(52.dp).semantics { role = Role.Button },
     ) {
-        Row(Modifier.padding(horizontal = 18.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.padding(start = 18.dp, end = if (trailing != null) 6.dp else 18.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.width(12.dp))
             Text(
                 hint, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f),
             )
+            if (trailing != null) {
+                Spacer(Modifier.width(8.dp))
+                trailing()
+            }
         }
     }
 }

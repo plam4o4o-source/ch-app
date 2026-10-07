@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.material.icons.automirrored.outlined.Logout
+import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.CardMembership
 import androidx.compose.material.icons.outlined.CollectionsBookmark
@@ -130,6 +131,7 @@ fun MyHubScreen(navigate: (String) -> Unit) {
                 })
                 add(TileItem(Icons.Outlined.CollectionsBookmark, stringResource(R.string.my_books), stringResource(R.string.my_books_desc)) { navigate(Routes.LOANS) })
                 add(TileItem(Icons.Outlined.CardMembership, stringResource(R.string.my_membership), stringResource(R.string.my_membership_desc)) { navigate(Routes.MEMBERSHIP) })
+                if (signedIn) add(TileItem(Icons.Outlined.AutoStories, stringResource(R.string.history_title), stringResource(R.string.my_history_desc)) { navigate(Routes.HISTORY) })
                 if (signedIn) add(TileItem(Icons.Outlined.Person, stringResource(R.string.my_profile), stringResource(R.string.my_profile_desc)) { navigate(Routes.PROFILE) })
                 add(TileItem(Icons.Outlined.NotificationsNone, stringResource(R.string.my_notifications), stringResource(R.string.my_notifications_desc)) { navigate(Routes.NOTIFICATIONS) })
             }

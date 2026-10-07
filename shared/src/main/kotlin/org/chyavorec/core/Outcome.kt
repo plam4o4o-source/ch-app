@@ -42,6 +42,17 @@ sealed interface AppError {
     data object NotFound : AppError
 
     /**
+     * Сървърът отказа действието заради текущото състояние (HTTP 409), напр.
+     * `pending` — вече има чакаща заявка, `not_allowed` — не е позволено.
+     */
+    data class Conflict(val code: String) : AppError {
+        companion object {
+            const val PENDING = "pending"
+            const val NOT_ALLOWED = "not_allowed"
+        }
+    }
+
+    /**
      * Функцията зависи от услуга, която библиотечната система (InvLib) още НЕ
      * предоставя онлайн. Това не е грешка на потребителя — UI показва обяснение.
      */
@@ -52,5 +63,5 @@ sealed interface AppError {
 
 /** Функции, които изискват онлайн достъп до библиотечната система. */
 enum class Feature {
-    LOGIN, PROFILE, LOANS, MEMBERSHIP, HOLDS, RENEW, PASSWORD_RESET, ACCOUNT_DELETION, PUSH
+    LOGIN, PROFILE, LOANS, MEMBERSHIP, HOLDS, RENEW, PASSWORD_RESET, ACCOUNT_DELETION, PUSH, HISTORY
 }

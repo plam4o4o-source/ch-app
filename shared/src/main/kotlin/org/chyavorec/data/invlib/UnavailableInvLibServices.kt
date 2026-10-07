@@ -5,6 +5,7 @@ import org.chyavorec.core.Feature
 import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
+import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.ReaderProfile
@@ -41,5 +42,6 @@ class UnavailableInvLibServices : AuthenticationService, ReaderService, Membersh
     override suspend fun renew(session: AuthSession, loanId: String): Outcome<Loan> = na(Feature.RENEW)
     override suspend fun requestAccountDeletion(session: AuthSession): Outcome<Unit> = na(Feature.ACCOUNT_DELETION)
     override suspend fun availability(inv: Long): Outcome<BookStatus> = Outcome.Failure(AppError.NotAvailable(Feature.LOANS))
+    override suspend fun history(session: AuthSession): Outcome<List<HistoryItem>> = na(Feature.HISTORY)
     override suspend fun membership(session: AuthSession): Outcome<Membership> = na(Feature.MEMBERSHIP)
 }

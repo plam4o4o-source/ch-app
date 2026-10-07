@@ -159,6 +159,15 @@
     <string name="gallery_title">Gallery</string>
     <string name="guest_text">News, events, the catalogue and information about the centre are available without signing in.</string>
     <string name="guest_title">Welcome!</string>
+    <string name="history_empty">No books read yet</string>
+    <string name="history_empty_hint">Returned books will appear here after the library’s next update.</string>
+    <string name="history_not_returned">not returned</string>
+    <string name="history_range">borrowed %1$s · returned %2$s</string>
+    <string name="history_similar">Similar books</string>
+    <string name="history_similar_note">Picked on your phone by section and author — nothing is sent anywhere.</string>
+    <string name="history_source_note">History comes from the library only for readers who gave consent.</string>
+    <string name="history_title">My reading history</string>
+    <string name="history_year_all">All years</string>
     <string name="hold_error_title">Hold not placed</string>
     <string name="hold_login_needed">Sign in to place a hold.</string>
     <string name="hold_ok_text">The library will set the book aside for you.</string>
@@ -179,6 +188,10 @@
     <string name="loan_borrowed">Borrowed: %1$s</string>
     <string name="loan_due">Due: %1$s</string>
     <string name="loan_renew">Renew</string>
+    <string name="loan_renew_done">Renewed ✓</string>
+    <string name="loan_renew_pending">Renewal requested · waiting for the library</string>
+    <string name="loan_renew_rejected">Renewal declined: %1$s</string>
+    <string name="loan_renew_rejected_noreason">Renewal declined.</string>
     <string name="loan_stale_note">Last synced data — may be out of date.</string>
     <string name="loans_empty">You have no borrowed books</string>
     <string name="loans_empty_hint">Browse the catalogue — something might catch your eye.</string>
@@ -226,6 +239,7 @@
     <string name="my_card_add_desc">Add the number from your card</string>
     <string name="my_card_desc">Show your card at the desk</string>
     <string name="my_card_self_desc">Card you entered</string>
+    <string name="my_history_desc">Books read and similar ones</string>
     <string name="my_membership">My membership</string>
     <string name="my_membership_desc">Status and validity</string>
     <string name="my_notifications">Notifications</string>
@@ -234,6 +248,7 @@
     <string name="my_profile_desc">Reader details</string>
     <string name="my_section_library">Library</string>
     <string name="na_account_deletion">Data deletion requests are made at the library or by email.</string>
+    <string name="na_history">Reading history isn’t switched on by the library yet.</string>
     <string name="na_holds">Online holds aren’t supported yet. Please ask at the library.</string>
     <string name="na_loans">Borrowed books and due dates will appear here once the library system offers online access.</string>
     <string name="na_login">Online sign-in hasn’t been switched on by the library yet. It will appear here automatically once it is. You will need a PIN issued at the library.</string>
@@ -280,7 +295,7 @@
     <string name="page_empty">This page has no content to show.</string>
     <string name="page_source">Source: %1$s</string>
     <string name="photo_n">Photo %1$d</string>
-    <string name="privacy_body"># Who processes the data\n\n“Chitalishte Yavorets” is the official mobile app of the “Vasil Levski – 1922” Community Centre (chitalishte), Yavorets village, Gabrovo municipality, Bulgaria (“the centre”). Contact: chitalishte_yavorec@abv.bg.\n\n# Principle\n\nThe app collects as little data as possible. It has no ads, no behavioural analytics, no tracking services and does not send crash reports to third parties.\n\n# What data is processed\n\nPublic content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data.\n\nMessages from the centre: about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered your library card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.\n\nUpdates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.\n\nData kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud.\n\nLibrary card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.\n\nSign-in (only if you have given consent at the library and have been issued a PIN): your library card number and PIN are sent only over HTTPS to the centre’s server (chyavorec.org), and the PIN is never stored. The phone’s model name (e.g. “Pixel 8”) is also sent at sign-in so that the session can be recognised. Only an encrypted session token is kept. Your name, borrowed items, due dates and membership come from this server, which receives from the library software only the data of readers who have consented (no personal ID number (EGN), address or phone number), and are cached encrypted on the device. Consent is withdrawn at the library — your data is then deleted from the server at the next sync.\n\nSign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.\n\nHome-screen widget: if you add it, it shows only the number of books due and the nearest due date — no titles and no name.\n\n# Notifications\n\nNotifications are prepared on the device (periodic checks for new posts and due dates). No push notification servers are used.\n\n# Your rights\n\nYou can delete the data on the device at any time: “Sign out” deletes the session and reader data; “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).\n\n# Children\n\nThe app is not directed at children under 13. It can be used without signing in and without any personal data.\n\n# Changes\n\nIf this policy changes, the new version is published in the app and on the centre’s website.</string>
+    <string name="privacy_body"># Who processes the data\n\n“Chitalishte Yavorets” is the official mobile app of the “Vasil Levski – 1922” Community Centre (chitalishte), Yavorets village, Gabrovo municipality, Bulgaria (“the centre”). Contact: chitalishte_yavorec@abv.bg.\n\n# Principle\n\nThe app collects as little data as possible. It has no ads, no behavioural analytics, no tracking services and does not send crash reports to third parties.\n\n# What data is processed\n\nPublic content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data.\n\nMessages from the centre: about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered your library card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.\n\nUpdates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.\n\nData kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud.\n\nLibrary card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.\n\nSign-in (only if you have given consent at the library and have been issued a PIN): your library card number and PIN are sent only over HTTPS to the centre’s server (chyavorec.org), and the PIN is never stored. The phone’s model name (e.g. “Pixel 8”) is also sent at sign-in so that the session can be recognised. Only an encrypted session token is kept. Your name, borrowed items, due dates and membership come from this server, which receives from the library software only the data of readers who have consented (no personal ID number (EGN), address or phone number), and are cached encrypted on the device. Consent is withdrawn at the library — your data is then deleted from the server at the next sync.\n\nSign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.\n\nHome-screen widget: if you add it, it shows only the number of books due and the nearest due date — no titles and no name.\n\nBarcode scanner: the camera turns on only when you open the scanner and allow access; frames are read on the phone and are never stored or sent.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.\n\n# Notifications\n\nNotifications are prepared on the device (periodic checks for new posts and due dates). No push notification servers are used.\n\n# Your rights\n\nYou can delete the data on the device at any time: “Sign out” deletes the session and reader data; “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).\n\n# Children\n\nThe app is not directed at children under 13. It can be used without signing in and without any personal data.\n\n# Changes\n\nIf this policy changes, the new version is published in the app and on the centre’s website.</string>
     <string name="privacy_title">Privacy policy</string>
     <string name="profile_category">Category</string>
     <string name="profile_delete_request">Request data deletion</string>
@@ -300,7 +315,28 @@
     <string name="reminder_past">The event has passed — a reminder can’t be set.</string>
     <string name="reminder_removed">Reminder removed.</string>
     <string name="reminder_set">You’ll get a reminder before the event.</string>
+    <string name="renew_conflict_not_allowed">This book can’t be renewed online. Please ask at the library.</string>
+    <string name="renew_conflict_other">The renewal wasn’t accepted. Please try again later.</string>
+    <string name="renew_conflict_pending">A renewal is already requested and waiting for the library.</string>
     <string name="renew_ok">Renewed until %1$s.</string>
+    <string name="renew_requested">Request sent. The library will extend the due date at its program’s next update.</string>
+    <string name="scan_action">Scan barcode</string>
+    <string name="scan_camera_error">The camera can’t be opened.</string>
+    <string name="scan_catalog_loading">Loading the catalogue…</string>
+    <string name="scan_code_inv">inv. no. %1$s</string>
+    <string name="scan_code_isbn">ISBN %1$s</string>
+    <string name="scan_hint">Point the camera at the book’s barcode (ISBN) or inventory label.</string>
+    <string name="scan_not_found_text">No book with %1$s in the catalogue.</string>
+    <string name="scan_not_found_title">Not in the library</string>
+    <string name="scan_open_book">Open book</string>
+    <string name="scan_permission_grant">Allow camera</string>
+    <string name="scan_permission_settings">Open settings</string>
+    <string name="scan_permission_text">The camera is only used to read the barcode on your phone. Nothing is recorded or sent.</string>
+    <string name="scan_permission_title">Camera access needed</string>
+    <string name="scan_search_catalog">Search the catalogue</string>
+    <string name="scan_title">Scan</string>
+    <string name="scan_torch_off">Turn off torch</string>
+    <string name="scan_torch_on">Turn on torch</string>
     <string name="search_authors">Authors</string>
     <string name="search_books">Books</string>
     <string name="search_hint">Books, authors, news, events…</string>
@@ -346,6 +382,7 @@
     <string name="subject_article">the article</string>
     <string name="subject_catalog">the catalogue</string>
     <string name="subject_events">the events</string>
+    <string name="subject_history">your reading history</string>
     <string name="subject_loans">your loans</string>
     <string name="subject_membership">your membership</string>
     <string name="subject_news">the news</string>
@@ -420,6 +457,10 @@
     <plurals name="error_rate_limited">
         <item quantity="one">Too many attempts. Try again in %1$d second.</item>
         <item quantity="other">Too many attempts. Try again in %1$d seconds.</item>
+    </plurals>
+    <plurals name="history_year_count">
+        <item quantity="one">%1$d book</item>
+        <item quantity="other">%1$d books</item>
     </plurals>
     <plurals name="home_catalog_footer">
         <item quantity="one">The catalogue lists %1$d item · data as of %2$s</item>

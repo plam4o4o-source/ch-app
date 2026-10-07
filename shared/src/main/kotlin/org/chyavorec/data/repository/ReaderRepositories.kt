@@ -12,6 +12,7 @@ import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
 import org.chyavorec.core.getOrNull
 import org.chyavorec.domain.model.AuthSession
+import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.ReaderProfile
@@ -264,15 +265,32 @@ class LibraryRepository(
     clock: AppClock,
 ) {
     private val res = CachedResource(secureCache, "reader:loans", ListSerializer(Loan.serializer()), clock, 0)
+    /** Историята се сменя рядко — без мрежа, ако кешът е по-пресен от 10 минути (освен при изрично опресняване). */
+    private val historyRes = CachedResource(secureCache, "reader:history", ListSerializer(HistoryItem.serializer()), clock, 10 * 60_000L)
 
     suspend fun cachedLoans(): Synced<List<Loan>>? = res.cached()
 
     suspend fun loans(force: Boolean = true): Outcome<Synced<List<Loan>>> =
         res.load(force) { auth.withSession { service.loans(it) } }
 
-    suspend fun renew(loanId: String): Outcome<Loan> = auth.withSession { service.renew(it, loanId) }
+    /**
+     * Заявка за удължаване. При успех (202) сървърът връща заемането с
+     * `renewPending = true`; кешираният списък се обновява веднага, за да не
+     * „изчезне“ чакащото състояние при следващо показване от кеша.
+     */
+    suspend fun renew(loanId: String): Outcome<Loan> {
+        val r = auth.withSession { service.renew(it, loanId) }
+        if (r is Outcome.Success) res.updateCached { list -> list.map { if (it.loanId == loanId) r.value else it } }
+        return r
+    }
 
     suspend fun placeHold(inv: Long): Outcome<Unit> = auth.withSession { service.placeHold(it, inv) }
+
+    /** История на четенето — шифрован кеш, изтрива се при изход заедно с останалите читателски данни. */
+    suspend fun history(force: Boolean = true): Outcome<Synced<List<HistoryItem>>> =
+        historyRes.load(force) { auth.withSession { service.history(it) } }
+
+    suspend fun cachedHistory(): Synced<List<HistoryItem>>? = historyRes.cached()
 }
 
 class MembershipRepository(

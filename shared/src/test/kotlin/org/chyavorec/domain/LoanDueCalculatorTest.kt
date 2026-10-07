@@ -36,6 +36,13 @@ class LoanDueCalculatorTest {
         assertNull(calc.status(loan, today))
     }
 
+    @Test fun reminderSkipsPendingRenewal() {
+        val loan = Loan("1", 1, "x", "y", null, "2026-09-12", "2026-09-27", canRenew = true, renewPending = true)
+        assertEquals(DueStatus.DUE_SOON, calc.status(loan, today))
+        assertNull(calc.reminderStatus(loan, today))
+        assertEquals(DueStatus.DUE_SOON, calc.reminderStatus(loan.copy(renewPending = false), today))
+    }
+
     @Test fun elapsedFraction() {
         assertEquals(0.5f, calc.elapsedFraction(LocalDate.of(2026, 9, 16), LocalDate.of(2026, 10, 6), today))
     }
