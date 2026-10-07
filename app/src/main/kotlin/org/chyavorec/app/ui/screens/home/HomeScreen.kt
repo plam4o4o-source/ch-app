@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.contentDescription
 import kotlinx.coroutines.delay
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AnimatedCounter
+import org.chyavorec.app.ui.components.rememberCountUpToday
 import org.chyavorec.app.ui.components.IconPlate
 import org.chyavorec.app.ui.components.PagerDots
 import org.chyavorec.app.ui.components.SearchPill
@@ -395,10 +396,12 @@ private fun StatsRow(state: HomeUiState) {
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(top = 24.dp)
             .darkTopHighlight(MaterialTheme.shapes.medium),
     ) {
+        // Отброяване от 0 само при първото показване за деня; после — направо крайните стойности.
+        val countUp = rememberCountUpToday()
         Row(Modifier.padding(vertical = 18.dp, horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
-            AnimatedCounter(state.yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f))
-            state.catalogCount?.let { AnimatedCounter(it, stringResource(R.string.stat_books), Modifier.weight(1f)) }
-            state.eventsThisMonth?.let { AnimatedCounter(it, stringResource(R.string.stat_events), Modifier.weight(1f)) }
+            AnimatedCounter(state.yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f), animate = countUp)
+            state.catalogCount?.let { AnimatedCounter(it, stringResource(R.string.stat_books), Modifier.weight(1f), animate = countUp) }
+            state.eventsThisMonth?.let { AnimatedCounter(it, stringResource(R.string.stat_events), Modifier.weight(1f), animate = countUp) }
         }
     }
 }

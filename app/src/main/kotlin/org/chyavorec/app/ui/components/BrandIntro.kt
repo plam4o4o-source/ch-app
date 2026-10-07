@@ -89,6 +89,9 @@ fun BrandIntro(onFinished: () -> Unit) {
             ) {
                 Text(stringResource(R.string.app_title), style = MaterialTheme.typography.displaySmall, color = Brand.Ink, textAlign = TextAlign.Center)
                 Text(stringResource(R.string.app_subtitle), style = MaterialTheme.typography.titleMedium, color = Brand.Burgundy, textAlign = TextAlign.Center)
+                Spacer(Modifier.height(20.dp))
+                // Малка отваряща се книга под името (векторна анимация, без външни файлове).
+                OpeningBook(Modifier.size(96.dp, 64.dp))
             }
         }
     }

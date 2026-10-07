@@ -325,6 +325,10 @@
     <string name="settings_title">Настройки</string>
     <string name="settings_updates">Обновления</string>
     <string name="share_book_footer">Електронен каталог: %1$s</string>
+    <string name="shortcut_card">Читателска карта</string>
+    <string name="shortcut_catalog">Каталог</string>
+    <string name="shortcut_events">Събития</string>
+    <string name="shortcut_scan">Сканирай</string>
     <string name="sort_author">Автор (А–Я)</string>
     <string name="sort_newest">Нови постъпления</string>
     <string name="sort_relevance">Най-подходящи</string>

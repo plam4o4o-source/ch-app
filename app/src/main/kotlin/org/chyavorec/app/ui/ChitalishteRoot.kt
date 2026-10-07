@@ -176,10 +176,15 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
             link == null -> Unit
             link == "login" -> nav.navigate(Routes.LOGIN)
             link == "my/loans" -> nav.navigate(Routes.LOANS)
+            link == "my/card" -> nav.navigate(Routes.CARD)
+            link == "catalog" -> nav.navigateTab(Routes.CATALOG)
             link == "events" -> nav.navigate(Routes.EVENTS)
             link == "update" -> container.updater.showPrompt()
             link == "messages" -> nav.navigate(Routes.MESSAGES)
             link!!.startsWith("news") -> nav.navigateTab(Routes.NEWS)
+            // Пряк път „Сканирай“: ако екранът за сканиране съществува в графа — към него,
+            // иначе към каталога. Непознати връзки се пренебрегват (без срив).
+            link == "scan" -> if (nav.graph.findNode("scan") != null) nav.navigate("scan") else nav.navigateTab(Routes.CATALOG)
         }
         deepLink.value = null
     }
@@ -361,6 +366,10 @@ private fun AppNavHost(
     val dur = 280
     // При изключени анимации (Достъпност) екраните се сменят без преход.
     val reduced = rememberReducedMotion()
+    // Детайлните екрани с shared element (корица/снимка) влизат с пружина — в
+    // синхрон с „прелитащия“ елемент (виж Modifier.sharedElementKey).
+    val detailRoutes = setOf(Routes.BOOK, Routes.ARTICLE, Routes.EVENT)
+    val detailSpring = spring<Float>(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessMediumLow)
     SharedTransitionLayout {
     CompositionLocalProvider(LocalSharedScope provides this) {
     NavHost(
@@ -369,14 +378,22 @@ private fun AppNavHost(
         enterTransition = {
             if (reduced) EnterTransition.None
             else if (targetState.destination.route in topLevelRoutes) fadeIn(tween(dur)) + scaleIn(tween(dur), initialScale = 0.98f)
+            else if (targetState.destination.route in detailRoutes) fadeIn(detailSpring) + scaleIn(detailSpring, initialScale = 0.96f)
             else slideInHorizontally(tween(dur)) { it / 5 } + fadeIn(tween(dur))
         },
         exitTransition = { if (reduced) ExitTransition.None else fadeOut(tween(dur / 2)) },
-        popEnterTransition = { if (reduced) EnterTransition.None else fadeIn(tween(dur)) },
+        // Връщане (вкл. предсказуемо „назад“ с жест — NavHost го следва с прогреса на
+        // жеста): предишният екран „израства“ от 0.9 с леко плъзгане, а текущият се
+        // смалява и излиза надясно. Смяната на раздели запазва досегашния кратък fade.
+        popEnterTransition = {
+            if (reduced) EnterTransition.None
+            else if (initialState.destination.route in topLevelRoutes) fadeIn(tween(dur))
+            else fadeIn(tween(dur)) + scaleIn(tween(dur), initialScale = 0.9f) + slideInHorizontally(tween(dur)) { -it / 10 }
+        },
         popExitTransition = {
             if (reduced) ExitTransition.None
             else if (initialState.destination.route in topLevelRoutes) fadeOut(tween(dur / 2)) + scaleOut(targetScale = 0.98f)
-            else slideOutHorizontally(tween(dur)) { it / 5 } + fadeOut(tween(dur))
+            else slideOutHorizontally(tween(dur)) { it / 10 } + scaleOut(tween(dur), targetScale = 0.9f) + fadeOut(tween(dur))
         },
     ) {
         screen(Routes.HOME) { HomeScreen(navigate) }

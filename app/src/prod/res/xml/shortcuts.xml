@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Статични преки пътища (задържане на иконата). Flavor „prod“: applicationId org.chyavorec.app.
+     Връзката е в data (chyavorec://app/<deep link>) и MainActivity я подава като deep link. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="catalog"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_catalog"
+        android:shortcutShortLabel="@string/shortcut_catalog"
+        android:shortcutLongLabel="@string/shortcut_catalog">
+        <intent
+            android:action="org.chyavorec.app.SHORTCUT"
+            android:data="chyavorec://app/catalog"
+            android:targetPackage="org.chyavorec.app"
+            android:targetClass="org.chyavorec.app.MainActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="card"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_card"
+        android:shortcutShortLabel="@string/shortcut_card"
+        android:shortcutLongLabel="@string/shortcut_card">
+        <intent
+            android:action="org.chyavorec.app.SHORTCUT"
+            android:data="chyavorec://app/my/card"
+            android:targetPackage="org.chyavorec.app"
+            android:targetClass="org.chyavorec.app.MainActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="events"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_events"
+        android:shortcutShortLabel="@string/shortcut_events"
+        android:shortcutLongLabel="@string/shortcut_events">
+        <intent
+            android:action="org.chyavorec.app.SHORTCUT"
+            android:data="chyavorec://app/events"
+            android:targetPackage="org.chyavorec.app"
+            android:targetClass="org.chyavorec.app.MainActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="scan"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_scan"
+        android:shortcutShortLabel="@string/shortcut_scan"
+        android:shortcutLongLabel="@string/shortcut_scan">
+        <intent
+            android:action="org.chyavorec.app.SHORTCUT"
+            android:data="chyavorec://app/scan"
+            android:targetPackage="org.chyavorec.app"
+            android:targetClass="org.chyavorec.app.MainActivity" />
+    </shortcut>
+</shortcuts>

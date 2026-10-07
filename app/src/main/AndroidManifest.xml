@@ -60,6 +60,11 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Статични преки пътища при задържане на иконата (отделен файл за всеки flavor
+                 заради различния applicationId). -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
 
         <!-- Уиджет за началния екран: следващо събитие и срок за връщане. -->

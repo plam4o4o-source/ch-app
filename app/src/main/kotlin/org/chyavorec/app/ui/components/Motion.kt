@@ -2,11 +2,16 @@ package org.chyavorec.app.ui.components
 
 import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
@@ -89,6 +94,15 @@ val LocalNavAnimatedScope = compositionLocalOf<AnimatedVisibilityScope?> { null 
  * списъка и в детайлите), така че да „прелети“ при навигация. Извън навигация
  * (preview, тестове) е no-op.
  */
+/**
+ * Пружинен преход на границите на shared element-а (леко „подскачане“ в края) —
+ * при прекъснат жест „назад“ пружината естествено се връща без скок.
+ */
+@OptIn(ExperimentalSharedTransitionApi::class)
+private val SpringBounds = BoundsTransform { _: Rect, _: Rect ->
+    spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessMediumLow, visibilityThreshold = Rect.VisibilityThreshold)
+}
+
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Modifier.sharedElementKey(key: String): Modifier {
@@ -96,6 +110,6 @@ fun Modifier.sharedElementKey(key: String): Modifier {
     val nav = LocalNavAnimatedScope.current ?: return this
     if (rememberReducedMotion()) return this
     return with(shared) {
-        this@sharedElementKey.sharedElement(rememberSharedContentState(key), animatedVisibilityScope = nav)
+        this@sharedElementKey.sharedElement(rememberSharedContentState(key), animatedVisibilityScope = nav, boundsTransform = SpringBounds)
     }
 }

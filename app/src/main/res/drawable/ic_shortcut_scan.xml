@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Икона на пряк път: пергаментен диск + бордо глиф (Material символ в 24-единична мрежа). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path android:fillColor="@color/brand_parchment"
+        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0" />
+    <group android:translateX="12" android:translateY="12">
+        <path android:fillColor="@color/brand_burgundy" android:pathData="M9.5,6.5v3h-3v-3h3M11,5H5v6h6V5zM9.5,14.5v3h-3v-3h3M11,13H5v6h6v-6zM17.5,6.5v3h-3v-3h3M19,5h-6v6h6V5zM13,13h1.5v1.5H13zM14.5,14.5H16V16h-1.5zM16,13h1.5v1.5H16zM13,16h1.5v1.5H13zM14.5,17.5H16V19h-1.5zM16,16h1.5v1.5H16zM17.5,14.5H19V16h-1.5zM17.5,17.5H19V19h-1.5zM22,7h-2V4h-3V2h5v5zM22,22v-5h-2v3h-3v2h5zM2,22h5v-2H4v-3H2v5zM2,2v5h2V4h3V2H2z" />
+    </group>
+</vector>

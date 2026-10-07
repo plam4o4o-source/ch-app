@@ -53,6 +53,7 @@ import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.DuePill
 import org.chyavorec.app.ui.components.EmptyView
+import org.chyavorec.app.ui.components.OpeningBook
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.InfoRow
 import org.chyavorec.app.ui.components.MembershipPill
@@ -111,7 +112,12 @@ fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
                     onRetry = { vm.refresh() },
                     isEmpty = { it.isEmpty() },
                     skeleton = { SkeletonList() },
-                    empty = { EmptyView(stringResource(R.string.loans_empty), stringResource(R.string.loans_empty_hint), icon = Icons.Outlined.CollectionsBookmark) },
+                    empty = {
+                        EmptyView(
+                            stringResource(R.string.loans_empty), stringResource(R.string.loans_empty_hint),
+                            icon = Icons.Outlined.CollectionsBookmark, illustration = { OpeningBook(Modifier.fillMaxSize()) },
+                        )
+                    },
                     errorSubject = stringResource(R.string.subject_loans),
                 ) { loans ->
                     // Без краен срок — най-отдолу.

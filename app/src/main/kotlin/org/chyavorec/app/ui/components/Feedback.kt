@@ -1,10 +1,16 @@
 package org.chyavorec.app.ui.components
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -83,6 +89,8 @@ fun MessageView(
     modifier: Modifier = Modifier,
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null,
+    /** Анимирана илюстрация вместо статичната отворена книга (виж Illustrations.kt). */
+    illustration: (@Composable () -> Unit)? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 40.dp),
@@ -91,7 +99,9 @@ fun MessageView(
     ) {
         // Илюстрация: отворена книга (в стила на логото) + значка според ситуацията.
         Box(Modifier.size(160.dp, 120.dp)) {
-            androidx.compose.foundation.Image(
+            if (illustration != null) {
+                Box(Modifier.fillMaxSize()) { illustration() }
+            } else androidx.compose.foundation.Image(
                 painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.ill_open_book),
                 contentDescription = null,
                 colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(LocalExtendedColors.current.gold),
@@ -148,8 +158,13 @@ fun ErrorView(error: AppError, onRetry: (() -> Unit)?, modifier: Modifier = Modi
 }
 
 @Composable
-fun EmptyView(title: String, message: String? = null, modifier: Modifier = Modifier, icon: ImageVector = Icons.Outlined.Info) =
-    MessageView(icon, title, message, modifier)
+fun EmptyView(
+    title: String,
+    message: String? = null,
+    modifier: Modifier = Modifier,
+    icon: ImageVector = Icons.Outlined.Info,
+    illustration: (@Composable () -> Unit)? = null,
+) = MessageView(icon, title, message, modifier, illustration = illustration)
 
 /**
  * Лента „Няма интернет връзка. Показваме последно наличните данни.“ + кога е
@@ -223,7 +238,13 @@ fun DemoBanner(visible: Boolean, modifier: Modifier = Modifier) {
     }
 }
 
-/** Контейнер: skeleton → грешка → празно → съдържание. */
+private enum class StatePhase { SKELETON, ERROR, EMPTY, CONTENT }
+
+/**
+ * Контейнер: skeleton → грешка → празно → съдържание. Смяната между фазите е
+ * плавна (skeleton-ът избледнява, а съдържанието „израства“ на мястото му), за
+ * да не „изскача“; при намалено движение — мигновена.
+ */
 @Composable
 fun <T> StateContent(
     state: ScreenState<T>,
@@ -235,13 +256,36 @@ fun <T> StateContent(
     errorSubject: String? = null,
     content: @Composable (T) -> Unit,
 ) {
-    Box(modifier.fillMaxSize()) {
-        val data = state.data
-        when {
-            state.showSkeleton -> skeleton()
-            data == null && state.error != null -> ErrorView(state.error, onRetry, Modifier.align(Alignment.Center), errorSubject)
-            data != null && isEmpty(data) -> empty()
-            data != null -> content(data)
+    val reduced = rememberReducedMotion()
+    val data = state.data
+    val phase = when {
+        state.showSkeleton -> StatePhase.SKELETON
+        data == null && state.error != null -> StatePhase.ERROR
+        data != null && isEmpty(data) -> StatePhase.EMPTY
+        data != null -> StatePhase.CONTENT
+        else -> StatePhase.SKELETON
+    }
+    AnimatedContent(
+        targetState = phase,
+        modifier = modifier.fillMaxSize(),
+        transitionSpec = {
+            if (reduced) {
+                (fadeIn(snap()) togetherWith fadeOut(snap())).using(SizeTransform(clip = false) { _, _ -> snap() })
+            } else {
+                (fadeIn(tween(320, delayMillis = 40)) + scaleIn(tween(320), initialScale = 0.985f))
+                    .togetherWith(fadeOut(tween(180)))
+                    .using(SizeTransform(clip = false) { _, _ -> tween(320) })
+            }
+        },
+        label = "state",
+    ) { target ->
+        Box(Modifier.fillMaxSize()) {
+            when (target) {
+                StatePhase.SKELETON -> skeleton()
+                StatePhase.ERROR -> state.error?.let { ErrorView(it, onRetry, Modifier.align(Alignment.Center), errorSubject) }
+                StatePhase.EMPTY -> empty()
+                StatePhase.CONTENT -> data?.let { content(it) }
+            }
         }
     }
 }

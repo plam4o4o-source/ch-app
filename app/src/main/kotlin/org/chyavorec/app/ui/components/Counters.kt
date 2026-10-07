@@ -1,8 +1,11 @@
 package org.chyavorec.app.ui.components
 
+import android.content.Context
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.ui.platform.LocalContext
+import java.time.LocalDate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,12 +24,46 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 
-/** Число, което „отброява“ до стойността си (като броячите на сайта). */
+/** Отброяването на „Читалището в числа“ — веднъж на процес се решава дали е за днес. */
+private object CounterDay {
+    private const val PREFS = "stats_anim"
+    private const val KEY = "stats_anim_day"
+    private var consumed = false
+
+    /** true само при първото показване за деня (и само веднъж на процес). */
+    fun shouldAnimate(context: Context): Boolean {
+        if (consumed) return false
+        consumed = true
+        return runCatching {
+            val today = LocalDate.now().toString()
+            val prefs = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            val first = prefs.getString(KEY, null) != today
+            if (first) prefs.edit().putString(KEY, today).apply()
+            first
+        }.getOrDefault(false)
+    }
+}
+
+/**
+ * Дали броячите да „отброят“ от 0: само при първото показване за календарния ден
+ * (запомня се в SharedPreferences), иначе крайните стойности се показват веднага.
+ */
 @Composable
-fun AnimatedCounter(value: Int, label: String, modifier: Modifier = Modifier) {
+fun rememberCountUpToday(): Boolean {
+    val context = LocalContext.current
+    return remember { CounterDay.shouldAnimate(context) }
+}
+
+/** Число, което „отброява“ до стойността си (като броячите на сайта); [animate] = false → веднага. */
+@Composable
+fun AnimatedCounter(value: Int, label: String, modifier: Modifier = Modifier, animate: Boolean = true) {
     val reduced = rememberReducedMotion()
-    val anim = remember { Animatable(if (reduced) value.toFloat() else 0f) }
-    LaunchedEffect(value) { anim.animateTo(value.toFloat(), tween(if (reduced) 0 else 1400, easing = FastOutSlowInEasing)) }
+    val instant = reduced || !animate
+    val anim = remember { Animatable(if (instant) value.toFloat() else 0f) }
+    LaunchedEffect(value) {
+        if (instant) anim.snapTo(value.toFloat())
+        else anim.animateTo(value.toFloat(), tween(900, easing = LinearOutSlowInEasing))
+    }
     Column(
         modifier.clearAndSetSemantics { contentDescription = "$value $label" },
         horizontalAlignment = Alignment.CenterHorizontally,

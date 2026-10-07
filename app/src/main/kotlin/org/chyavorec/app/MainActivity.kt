@@ -50,9 +50,23 @@ class MainActivity : AppCompatActivity() {
         consumeDeepLink(intent)
     }
 
-    /** Прочита deep link-а от известието и го премахва от intent-а (еднократен). */
+    /**
+     * Прочита deep link-а от известието (extra) или от пряк път на иконата
+     * (`chyavorec://app/<връзка>`) и го премахва от intent-а (еднократен).
+     */
     private fun consumeDeepLink(intent: Intent?) {
-        deepLink.value = intent?.getStringExtra(Notifier.EXTRA_DEEP_LINK)
+        val data = intent?.data
+        val fromShortcut = if (intent?.action == ACTION_SHORTCUT && data?.scheme == SHORTCUT_SCHEME) {
+            data.path.orEmpty().trim('/').ifBlank { null }
+        } else null
+        deepLink.value = fromShortcut ?: intent?.getStringExtra(Notifier.EXTRA_DEEP_LINK)
         intent?.removeExtra(Notifier.EXTRA_DEEP_LINK)
+        if (fromShortcut != null) intent?.data = null
+    }
+
+    companion object {
+        /** Действие на статичните преки пътища (res/xml/shortcuts.xml); връзката е в `data`. */
+        const val ACTION_SHORTCUT = "org.chyavorec.app.SHORTCUT"
+        const val SHORTCUT_SCHEME = "chyavorec"
     }
 }

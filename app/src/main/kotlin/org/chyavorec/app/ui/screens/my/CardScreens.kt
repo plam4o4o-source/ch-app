@@ -1,10 +1,17 @@
 package org.chyavorec.app.ui.screens.my
 
 import android.app.Activity
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.view.WindowManager
 import android.content.Context
 import android.provider.Settings
 import android.view.Window
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -127,16 +134,86 @@ private fun rememberCardData(vm: AccountViewModel): CardData? {
     }
 }
 
+/** Наклон на устройството (−1..1 по двете оси), нискочестотно филтриран; (0, 0) без сензор. */
+private class Tilt {
+    var x by mutableFloatStateOf(0f)
+    var y by mutableFloatStateOf(0f)
+}
+
+/**
+ * Чете вектора на завъртане (≈30 Hz) и го изглажда — за „живия“ отблясък на
+ * картата. Не прави нищо без сензор или при намалено движение; спира при напускане.
+ */
+@Composable
+private fun rememberTilt(): Tilt {
+    val context = LocalContext.current
+    val reduced = rememberReducedMotion()
+    val tilt = remember { Tilt() }
+    DisposableEffect(reduced) {
+        if (reduced) return@DisposableEffect onDispose {}
+        val manager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
+        val sensor = manager?.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) ?: manager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        if (manager == null || sensor == null) return@DisposableEffect onDispose {}
+        val rotation = FloatArray(9)
+        val orientation = FloatArray(3)
+        val listener = object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent) {
+                runCatching {
+                    SensorManager.getRotationMatrixFromVector(rotation, event.values)
+                    SensorManager.getOrientation(rotation, orientation)
+                    // pitch (напред/назад) и roll (наляво/надясно) в радиани → ±1 при ≈ ±45°.
+                    val ty = (orientation[1] / 0.8f).coerceIn(-1f, 1f)
+                    val tx = (orientation[2] / 0.8f).coerceIn(-1f, 1f)
+                    tilt.x += (tx - tilt.x) * 0.18f
+                    tilt.y += (ty - tilt.y) * 0.18f
+                }
+            }
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
+        }
+        val registered = runCatching { manager.registerListener(listener, sensor, 33_000) }.getOrDefault(false)
+        onDispose { if (registered) manager.unregisterListener(listener) }
+    }
+    return tilt
+}
+
+/** Диагонален отблясък (бяло 12 % → прозрачно), който се мести с наклона на телефона. */
+private fun Modifier.tiltGloss(tilt: Tilt): Modifier = drawWithContent {
+    drawContent()
+    val w = size.width
+    val h = size.height
+    val tx = tilt.x
+    val ty = tilt.y
+    if (tx == 0f && ty == 0f) return@drawWithContent
+    // Центърът на ивицата върви по диагонала според наклона; краищата остават прозрачни.
+    val center = (0.5f + 0.35f * tx - 0.2f * ty).coerceIn(0.12f, 0.88f)
+    drawRect(
+        Brush.linearGradient(
+            colorStops = arrayOf(
+                0f to Color.Transparent,
+                (center - 0.12f).coerceAtLeast(0f) to Color.Transparent,
+                center to Color.White.copy(alpha = 0.12f),
+                (center + 0.12f).coerceAtMost(1f) to Color.Transparent,
+                1f to Color.Transparent,
+            ),
+            start = Offset(0f, h * 0.25f * ty),
+            end = Offset(w, h + h * 0.25f * ty),
+        ),
+    )
+}
+
 /** Рамката на картата (размер ID-1, мастилено-бордо градиент, златен кант) — обща за двете страни. */
 @Composable
 private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable ColumnScope.() -> Unit) {
+    val tilt = rememberTilt()
     Box(
         modifier
             .fillMaxWidth()
             .aspectRatio(1.586f) // стандартен размер ID-1 (85.6 × 54 мм)
             .shadow(12.dp, RoundedCornerShape(20.dp))
             .clip(RoundedCornerShape(20.dp))
-            .background(Brush.linearGradient(listOf(Brand.Ink, Color(0xFF3A1A18), Brand.Burgundy))),
+            .background(Brush.linearGradient(listOf(Brand.Ink, Color(0xFF3A1A18), Brand.Burgundy)))
+            // „Жив“ отблясък по наклона на телефона; баркодът отдолу остава неподвижен.
+            .tiltGloss(tilt),
     ) {
         Box(Modifier.fillMaxSize().padding(2.dp).border(1.dp, Brand.Gold.copy(alpha = 0.45f), RoundedCornerShape(18.dp)))
         // Картата е с фиксирани пропорции: при много едър системен шрифт текстът би

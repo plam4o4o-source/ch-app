@@ -80,6 +80,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
+import org.chyavorec.app.ui.components.DancingFigures
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.PressableCard
@@ -172,7 +173,12 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     onRetry = { vm.refresh() },
                     isEmpty = { it.isEmpty() },
                     skeleton = { SkeletonList(withImage = false) },
-                    empty = { EmptyView(stringResource(R.string.events_empty), stringResource(R.string.events_empty_hint), icon = Icons.Outlined.EventAvailable) },
+                    empty = {
+                        EmptyView(
+                            stringResource(R.string.events_empty), stringResource(R.string.events_empty_hint),
+                            icon = Icons.Outlined.EventAvailable, illustration = { DancingFigures(Modifier.fillMaxSize()) },
+                        )
+                    },
                     errorSubject = stringResource(R.string.subject_events),
                 ) { list ->
                     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {

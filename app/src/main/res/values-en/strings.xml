@@ -325,6 +325,10 @@
     <string name="settings_title">Settings</string>
     <string name="settings_updates">Updates</string>
     <string name="share_book_footer">Online catalogue: %1$s</string>
+    <string name="shortcut_card">Library card</string>
+    <string name="shortcut_catalog">Catalogue</string>
+    <string name="shortcut_events">Events</string>
+    <string name="shortcut_scan">Scan</string>
     <string name="sort_author">Author (A–Z)</string>
     <string name="sort_newest">Recently added</string>
     <string name="sort_relevance">Best match</string>
