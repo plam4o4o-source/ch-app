@@ -187,9 +187,6 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                 }
             },
             actions = {
-                IconButton(onClick = { navigate(Routes.SCAN) }) {
-                    Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action))
-                }
                 IconButton(onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
                     scope.launch { container.settings.setCatalogShelf(!shelf) }
@@ -229,8 +226,12 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                     placeholder = { Text(stringResource(R.string.catalog_search_hint, fieldLabel(q.field).lowercase())) },
                     leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
                     trailingIcon = {
+                        // Празно поле → скенер на баркодове (както в търсачката на началния екран);
+                        // с текст → „Изчисти“. Така горната лента не реже заглавието.
                         if (q.text.isNotEmpty()) IconButton(onClick = { vm.setText("") }) {
                             Icon(Icons.Outlined.Clear, contentDescription = stringResource(R.string.action_clear))
+                        } else IconButton(onClick = { navigate(Routes.SCAN) }) {
+                            Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action))
                         }
                     },
                     singleLine = true,

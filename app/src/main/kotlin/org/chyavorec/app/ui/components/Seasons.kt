@@ -152,7 +152,7 @@ fun WheatEdge(modifier: Modifier = Modifier) {
         contentDescription = null,
         contentScale = ContentScale.FillWidth,
         alignment = Alignment.BottomCenter,
-        colorFilter = ColorFilter.tint(Brand.Gold.copy(alpha = 0.7f)),
-        modifier = modifier.fillMaxWidth().height(26.dp).clearAndSetSemantics { },
+        colorFilter = ColorFilter.tint(Brand.Gold.copy(alpha = 0.55f)),
+        modifier = modifier.fillMaxWidth().height(22.dp).clearAndSetSemantics { },
     )
 }

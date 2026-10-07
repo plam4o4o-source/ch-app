@@ -383,8 +383,9 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                             Text(it, style = MaterialTheme.typography.labelMedium, color = Brand.Parchment.copy(alpha = 0.78f))
                         }
                     }
-                    // Житни класове по долния ръб (септември, Кръстовден) и златна шевица по ъглите.
-                    if (season == Season.HARVEST) WheatEdge(Modifier.align(Alignment.BottomCenter))
+                    // Житни класове по горния ръб (септември, Кръстовден) — текстът е долу и
+                    // не се застъпва с тях; златна шевица по ъглите.
+                    if (season == Season.HARVEST) WheatEdge(Modifier.align(Alignment.TopCenter).padding(top = 10.dp))
                     OrnamentFrame(Modifier.matchParentSize())
                 }
             }
