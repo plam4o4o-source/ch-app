@@ -119,7 +119,7 @@ fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
                     empty = {
                         EmptyView(
                             stringResource(R.string.loans_empty), stringResource(R.string.loans_empty_hint),
-                            icon = Icons.Outlined.CollectionsBookmark, illustration = { OpeningBook(Modifier.fillMaxSize()) },
+                            icon = Icons.Outlined.CollectionsBookmark, animation = { OpeningBook(Modifier.fillMaxSize()) },
                         )
                     },
                     errorSubject = stringResource(R.string.subject_loans),

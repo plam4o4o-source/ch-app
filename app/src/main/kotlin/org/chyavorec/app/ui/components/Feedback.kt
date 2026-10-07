@@ -26,7 +26,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CloudOff
+import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.EventAvailable
+import androidx.compose.material.icons.outlined.EventBusy
+import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Refresh
@@ -87,6 +92,23 @@ fun notAvailableMessage(feature: Feature): String = when (feature) {
     Feature.HISTORY -> stringResource(R.string.na_history)
 }
 
+/** Илюстрация на празно състояние/грешка (всички в линейния стил на логото). */
+enum class Illustration(val res: Int) {
+    BOOK(R.drawable.ill_open_book),
+    CALENDAR(R.drawable.ill_calendar_empty),
+    SHELF(R.drawable.ill_shelf_empty),
+}
+
+/**
+ * Илюстрацията според значката: календар за събития, празна полица за „няма
+ * резултати“/„няма заемания“, иначе отворената книга.
+ */
+fun illustrationFor(icon: ImageVector): Illustration = when (icon) {
+    Icons.Outlined.Event, Icons.Outlined.EventAvailable, Icons.Outlined.EventBusy -> Illustration.CALENDAR
+    Icons.Outlined.SearchOff, Icons.Outlined.CollectionsBookmark -> Illustration.SHELF
+    else -> Illustration.BOOK
+}
+
 @Composable
 fun MessageView(
     icon: ImageVector,
@@ -95,20 +117,21 @@ fun MessageView(
     modifier: Modifier = Modifier,
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null,
-    /** Анимирана илюстрация вместо статичната отворена книга (виж Illustrations.kt). */
-    illustration: (@Composable () -> Unit)? = null,
+    illustration: Illustration = illustrationFor(icon),
+    /** Анимирана илюстрация вместо статичната картинка (виж Illustrations.kt). */
+    animation: (@Composable () -> Unit)? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        // Илюстрация: отворена книга (в стила на логото) + значка според ситуацията.
+        // Илюстрация (в стила на логото) + значка според ситуацията.
         Box(Modifier.size(160.dp, 120.dp)) {
-            if (illustration != null) {
-                Box(Modifier.fillMaxSize()) { illustration() }
+            if (animation != null) {
+                Box(Modifier.fillMaxSize()) { animation() }
             } else androidx.compose.foundation.Image(
-                painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.ill_open_book),
+                painter = androidx.compose.ui.res.painterResource(illustration.res),
                 contentDescription = null,
                 colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(LocalExtendedColors.current.gold),
                 modifier = Modifier.fillMaxSize(),
@@ -169,8 +192,9 @@ fun EmptyView(
     message: String? = null,
     modifier: Modifier = Modifier,
     icon: ImageVector = Icons.Outlined.Info,
-    illustration: (@Composable () -> Unit)? = null,
-) = MessageView(icon, title, message, modifier, illustration = illustration)
+    illustration: Illustration = illustrationFor(icon),
+    animation: (@Composable () -> Unit)? = null,
+) = MessageView(icon, title, message, modifier, illustration = illustration, animation = animation)
 
 /**
  * Лента „Няма интернет връзка. Показваме последно наличните данни.“ + кога е

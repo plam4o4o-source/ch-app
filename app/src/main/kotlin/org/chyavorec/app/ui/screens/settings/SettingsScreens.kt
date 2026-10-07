@@ -111,6 +111,9 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 }
             }
             NavItem(Icons.Outlined.Language, stringResource(R.string.settings_language), currentLanguageLabel()) { langDialog = true }
+            SwitchItem(stringResource(R.string.settings_seasonal), stringResource(R.string.settings_seasonal_desc), s.seasonal) {
+                scope.launch { c.settings.setSeasonal(it) }
+            }
 
             GroupTitle(stringResource(R.string.settings_notifications))
             NavItem(Icons.Outlined.NotificationsNone, stringResource(R.string.my_notifications), stringResource(R.string.settings_notifications_desc)) {
@@ -139,6 +142,9 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             }
 
             GroupTitle(stringResource(R.string.settings_data))
+            SwitchItem(stringResource(R.string.settings_covers_online), stringResource(R.string.settings_covers_online_desc), s.coversOnline) {
+                scope.launch { c.settings.setCoversOnline(it) }
+            }
             NavItem(Icons.Outlined.DeleteSweep, stringResource(R.string.settings_clear_cache), stringResource(R.string.settings_clear_cache_desc)) { clearDialog = true }
 
             GroupTitle(stringResource(R.string.settings_legal))

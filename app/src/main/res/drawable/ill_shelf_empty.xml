@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Илюстрация за „няма резултати“/„няма заемания“: празна полица с една облегната книга
+     (линеен стил като логото). Оцветява се от темата, затова цветовете са бели с различна плътност. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="120dp"
+    android:viewportWidth="160"
+    android:viewportHeight="120">
+    <!-- мек ореол -->
+    <path android:fillColor="#1FFFFFFF"
+        android:pathData="M80,60m-58,0a58,50 0,1 1,116 0a58,50 0,1 1,-116 0" />
+    <!-- дъска на полицата (пълнеж + контур) -->
+    <path android:fillColor="#40FFFFFF"
+        android:pathData="M22,86L138,86L138,96L22,96Z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M22,86L138,86L138,96L22,96Z" />
+    <!-- конзоли под полицата -->
+    <path android:strokeColor="#B3FFFFFF" android:strokeWidth="3" android:strokeLineCap="round"
+        android:pathData="M36,96L36,106M124,96L124,106" />
+    <!-- стена: тънка линия отгоре -->
+    <path android:strokeColor="#40FFFFFF" android:strokeWidth="2" android:strokeLineCap="round"
+        android:pathData="M30,30L130,30" />
+    <!-- облегната книга (наклонена вдясно) -->
+    <path android:fillColor="#40FFFFFF"
+        android:pathData="M58,86L70,40L88,44L76,86Z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M58,86L70,40L88,44L76,86Z" />
+    <!-- гръбче и етикет -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:pathData="M74,42L62,84" />
+    <path android:strokeColor="#B3FFFFFF" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:pathData="M76,56L84,58M74,64L82,66" />
+    <!-- прашинки -->
+    <path android:fillColor="#80FFFFFF"
+        android:pathData="M108,66m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0M116,74m-1.5,0a1.5,1.5 0,1 1,3 0a1.5,1.5 0,1 1,-3 0M44,70m-1.5,0a1.5,1.5 0,1 1,3 0a1.5,1.5 0,1 1,-3 0" />
+</vector>

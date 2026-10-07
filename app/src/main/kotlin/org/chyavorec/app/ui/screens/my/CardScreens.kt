@@ -100,6 +100,7 @@ import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.Emblem
 import org.chyavorec.app.ui.components.LinearBarcode
 import org.chyavorec.app.ui.components.MembershipPill
+import org.chyavorec.app.ui.components.OrnamentFrame
 import org.chyavorec.app.ui.components.QrCodeView
 import org.chyavorec.app.ui.components.SyncStamp
 import org.chyavorec.app.ui.theme.Brand
@@ -216,6 +217,8 @@ private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable C
             .tiltGloss(tilt),
     ) {
         Box(Modifier.fillMaxSize().padding(2.dp).border(1.dp, Brand.Gold.copy(alpha = 0.45f), RoundedCornerShape(18.dp)))
+        // На цял екран — и шевица по ъглите (ненатрапчива златна рамка).
+        if (large) OrnamentFrame(Modifier.fillMaxSize().padding(6.dp))
         // Картата е с фиксирани пропорции: при много едър системен шрифт текстът би
         // излязъл извън нея, затова мащабът на шрифта вътре е ограничен до 1.3×.
         val density = LocalDensity.current

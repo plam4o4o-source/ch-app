@@ -176,7 +176,7 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     empty = {
                         EmptyView(
                             stringResource(R.string.events_empty), stringResource(R.string.events_empty_hint),
-                            icon = Icons.Outlined.EventAvailable, illustration = { DancingFigures(Modifier.fillMaxSize()) },
+                            icon = Icons.Outlined.EventAvailable, animation = { DancingFigures(Modifier.fillMaxSize()) },
                         )
                     },
                     errorSubject = stringResource(R.string.subject_events),

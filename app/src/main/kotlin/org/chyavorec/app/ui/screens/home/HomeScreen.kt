@@ -15,7 +15,13 @@ import kotlinx.coroutines.delay
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AnimatedCounter
 import org.chyavorec.app.ui.components.rememberCountUpToday
+import org.chyavorec.app.ui.components.EasterEggs
 import org.chyavorec.app.ui.components.IconPlate
+import org.chyavorec.app.ui.components.OrnamentFrame
+import org.chyavorec.app.ui.components.Season
+import org.chyavorec.app.ui.components.Snowfall
+import org.chyavorec.app.ui.components.WheatEdge
+import org.chyavorec.app.ui.components.rememberSeason
 import org.chyavorec.app.ui.components.PagerDots
 import org.chyavorec.app.ui.components.SearchPill
 import org.chyavorec.app.ui.components.animateEntrance
@@ -144,7 +150,16 @@ fun HomeScreen(navigate: (String) -> Unit) {
             contentPadding = PaddingValues(bottom = 24.dp),
             modifier = Modifier.align(Alignment.TopCenter).widthIn(max = 840.dp).fillMaxSize(),
         ) {
-            item("header") { HomeHeader(onMessages = { navigate(Routes.MESSAGES) }) }
+            item("header") {
+                val season = rememberSeason()
+                Box {
+                    HomeHeader(onMessages = { navigate(Routes.MESSAGES) }, season = season)
+                    // Снежинки само върху заглавката (не върху целия екран).
+                    if (season == Season.CHRISTMAS) {
+                        Snowfall(Modifier.matchParentSize(), color = if (LocalExtendedColors.current.isDark) Color.White else Color(0xFF7A93AB))
+                    }
+                }
+            }
             item("search") {
                 SearchPill(
                     stringResource(R.string.home_search_hint), onClick = { navigate(Routes.SEARCH) },
@@ -231,7 +246,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
 }
 
 @Composable
-private fun HomeHeader(onMessages: () -> Unit) {
+private fun HomeHeader(onMessages: () -> Unit, season: Season = Season.NONE) {
     val center = LocalAppContainer.current.messages
     val unread by center.unreadCount.collectAsStateWithLifecycle(initialValue = 0)
     LaunchedEffect(Unit) { runCatching { center.refresh(force = false) } }
@@ -264,6 +279,7 @@ private fun HomeHeader(onMessages: () -> Unit) {
             )
             Text(stringResource(R.string.org_place), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+        if (season == Season.EASTER) EasterEggs(Modifier.padding(end = 6.dp))
         IconButton(onClick = onMessages, modifier = Modifier.size(48.dp)) {
             val label = if (unread > 0) pluralStringResource(R.plurals.messages_unread, unread, unread) else stringResource(R.string.messages_title)
             BadgedBox(
@@ -299,6 +315,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
     }
     val context = LocalContext.current
     val carouselLabel = stringResource(R.string.home_carousel)
+    val season = rememberSeason()
     Column {
         HorizontalPager(
             state = pager,
@@ -366,6 +383,9 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                             Text(it, style = MaterialTheme.typography.labelMedium, color = Brand.Parchment.copy(alpha = 0.78f))
                         }
                     }
+                    // Житни класове по долния ръб (септември, Кръстовден) и златна шевица по ъглите.
+                    if (season == Season.HARVEST) WheatEdge(Modifier.align(Alignment.BottomCenter))
+                    OrnamentFrame(Modifier.matchParentSize())
                 }
             }
             }

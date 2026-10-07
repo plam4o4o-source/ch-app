@@ -33,7 +33,20 @@ data class AppSettings(
     val notifyMessages: Boolean = true,
     /** Анимираното въведение с логото е показано (показва се само при първото стартиране). */
     val introShown: Boolean = false,
+    /** Корици от covers.openlibrary.org по ISBN (изкл. = никакви заявки към този сървър). */
+    val coversOnline: Boolean = true,
+    /** Сезонни украси на началния екран (снежинки, яйца, житни класове). */
+    val seasonal: Boolean = true,
+    /** Каталогът като „полица“ (гръбчета на книги) вместо списък. */
+    val catalogShelf: Boolean = false,
+    /** Режим за четене: размер на шрифта в статиите. */
+    val readerFontSize: ReaderFontSize = ReaderFontSize.M,
+    /** Режим за четене: по-тясна колона за текста. */
+    val readerNarrow: Boolean = false,
 )
+
+/** Размер на шрифта в режим за четене (S/M/L/XL → мащаб на шрифта). */
+enum class ReaderFontSize(val scale: Float) { S(0.9f), M(1f), L(1.15f), XL(1.3f) }
 
 private const val MAX_MESSAGE_IDS = 300
 
@@ -60,6 +73,11 @@ class SettingsStore(private val context: Context) {
         val notifiedMessages = stringSetPreferencesKey("notified_messages")
         val messagesInitialized = booleanPreferencesKey("messages_initialized")
         val introShown = booleanPreferencesKey("intro_shown")
+        val coversOnline = booleanPreferencesKey("covers_online")
+        val seasonal = booleanPreferencesKey("seasonal_decor")
+        val catalogShelf = booleanPreferencesKey("catalog_shelf")
+        val readerFontSize = stringPreferencesKey("reader_font_size")
+        val readerNarrow = booleanPreferencesKey("reader_narrow")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -75,6 +93,11 @@ class SettingsStore(private val context: Context) {
             autoUpdate = p[Keys.autoUpdate] ?: true,
             notifyMessages = p[Keys.notifyMessages] ?: true,
             introShown = p[Keys.introShown] ?: false,
+            coversOnline = p[Keys.coversOnline] ?: true,
+            seasonal = p[Keys.seasonal] ?: true,
+            catalogShelf = p[Keys.catalogShelf] ?: false,
+            readerFontSize = p[Keys.readerFontSize]?.let { runCatching { ReaderFontSize.valueOf(it) }.getOrNull() } ?: ReaderFontSize.M,
+            readerNarrow = p[Keys.readerNarrow] ?: false,
         )
     }
 
@@ -105,6 +128,11 @@ class SettingsStore(private val context: Context) {
     }
 
     suspend fun setIntroShown() = context.dataStore.edit { it[Keys.introShown] = true }
+    suspend fun setCoversOnline(on: Boolean) = context.dataStore.edit { it[Keys.coversOnline] = on }
+    suspend fun setSeasonal(on: Boolean) = context.dataStore.edit { it[Keys.seasonal] = on }
+    suspend fun setCatalogShelf(on: Boolean) = context.dataStore.edit { it[Keys.catalogShelf] = on }
+    suspend fun setReaderFontSize(size: ReaderFontSize) = context.dataStore.edit { it[Keys.readerFontSize] = size.name }
+    suspend fun setReaderNarrow(on: Boolean) = context.dataStore.edit { it[Keys.readerNarrow] = on }
     suspend fun setNotifyMessages(on: Boolean) = context.dataStore.edit { it[Keys.notifyMessages] = on }
     val readMessageIds: Flow<Set<String>> = context.dataStore.data.map { it[Keys.readMessages].orEmpty() }
     suspend fun readMessageIdsNow(): Set<String> = readMessageIds.first()

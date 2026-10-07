@@ -320,6 +320,17 @@ S = {
 "settings_notifications_desc": ("Какви известия да получаваш", "Choose which notifications you get"),
 "settings_data": ("Данни", "Data"),
 "settings_clear_cache": ("Изчисти кеша", "Clear cache"),
+"settings_covers_online": ("Корици от интернет", "Covers from the internet"),
+"settings_covers_online_desc": ("Корици по ISBN от covers.openlibrary.org (сървърът вижда IP адреса)", "Covers by ISBN from covers.openlibrary.org (the server sees your IP address)"),
+"settings_seasonal": ("Сезонни украси", "Seasonal decorations"),
+"settings_seasonal_desc": ("Снежинки по Коледа, яйца по Великден, класове по Кръстовден", "Snowflakes at Christmas, eggs at Easter, wheat ears in September"),
+"catalog_view_list": ("Списък", "List"),
+"catalog_view_shelf": ("Полица", "Shelf"),
+"reader_mode": ("Режим за четене", "Reading mode"),
+"reader_font_size": ("Размер на шрифта", "Font size"),
+"reader_width": ("Ширина на текста", "Text width"),
+"reader_width_normal": ("Нормална", "Normal"),
+"reader_width_narrow": ("Тясна", "Narrow"),
 "settings_clear_cache_desc": ("Изтрива запазените новини, каталог и снимки", "Deletes cached news, catalogue and images"),
 "settings_clear_cache_confirm": ("Запазените офлайн данни ще бъдат изтрити и заредени отново при следваща връзка. Входът и картата остават.", "Offline data will be deleted and reloaded next time you’re online. Your sign-in and card stay."),
 "settings_cache_cleared": ("Кешът е изчистен.", "Cache cleared."),
@@ -442,7 +453,7 @@ PRIVACY_BG = """# Кой обработва данните
 
 # Какви данни се обработват
 
-Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели.
+Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели. Кориците на книгите се зареждат по ISBN от covers.openlibrary.org (Internet Archive) — този сървър вижда IP адреса и ISBN-а, нищо друго; изключва се от Настройки → Данни → „Корици от интернет“.
 
 Съобщения от читалището: приложението проверява на около час публичния файл със съобщения на chyavorec.org. Съобщенията „само за членове“ се показват, ако си въвел читателска карта или си влязъл — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
 
@@ -484,7 +495,7 @@ The app collects as little data as possible. It has no ads, no behavioural analy
 
 # What data is processed
 
-Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data.
+Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data. Book covers are fetched by ISBN from covers.openlibrary.org (Internet Archive) — that server sees the IP address and the ISBN, nothing else; turn it off in Settings → Data → “Covers from the internet”.
 
 Messages from the centre: about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered your library card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
 

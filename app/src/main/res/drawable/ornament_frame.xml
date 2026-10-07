@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Тънка златна рамка с мотив по ъглите, вдъхновен от българската шевица (ромбче + зигзаг).
+     Рисува се с FillBounds върху карта; цветовете са бели — тонират се от темата (злато ~35 %).
+     Страните са прави линии — при разтягане ъгловият мотив остава в 9-patch-подобна пропорция
+     само приблизително, затова се ползва върху карти с близки пропорции (1.4–1.8:1). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="200dp"
+    android:viewportWidth="320"
+    android:viewportHeight="200">
+    <!-- рамка -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5"
+        android:pathData="M22,8L298,8M22,192L298,192M8,22L8,178M312,22L312,178" />
+    <!-- ъглов мотив (горе-ляво): зигзаг + ромбче -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5" android:strokeLineJoin="round"
+        android:pathData="M8,22L12,16L16,22L22,8M22,8L16,12L22,16" />
+    <path android:fillColor="#FFFFFFFF"
+        android:pathData="M15,15L19,11L23,15L19,19Z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1" android:fillColor="#00000000"
+        android:pathData="M11,11L19,3L27,11L19,19Z" />
+    <!-- горе-дясно -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5" android:strokeLineJoin="round"
+        android:pathData="M312,22L308,16L304,22L298,8M298,8L304,12L298,16" />
+    <path android:fillColor="#FFFFFFFF"
+        android:pathData="M305,15L301,11L297,15L301,19Z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1" android:fillColor="#00000000"
+        android:pathData="M309,11L301,3L293,11L301,19Z" />
+    <!-- долу-ляво -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5" android:strokeLineJoin="round"
+        android:pathData="M8,178L12,184L16,178L22,192M22,192L16,188L22,184" />
+    <path android:fillColor="#FFFFFFFF"
+        android:pathData="M15,185L19,189L23,185L19,181Z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1" android:fillColor="#00000000"
+        android:pathData="M11,189L19,197L27,189L19,181Z" />
+    <!-- долу-дясно -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5" android:strokeLineJoin="round"
+        android:pathData="M312,178L308,184L304,178L298,192M298,192L304,188L298,184" />
+    <path android:fillColor="#FFFFFFFF"
+        android:pathData="M305,185L301,189L297,185L301,181Z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1" android:fillColor="#00000000"
+        android:pathData="M309,189L301,197L293,189L301,181Z" />
+</vector>

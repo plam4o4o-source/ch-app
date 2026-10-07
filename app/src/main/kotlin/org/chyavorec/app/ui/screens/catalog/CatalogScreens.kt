@@ -32,7 +32,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
+import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.BookmarkAdd
+import androidx.compose.material.icons.outlined.ViewModule
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material.icons.outlined.Tune
@@ -68,8 +70,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -146,8 +150,8 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     val keyboard = LocalSoftwareKeyboardController.current
     val haptic = LocalHapticFeedback.current
     val listState = rememberLazyListState()
+    val shelfState = rememberLazyListState()
     val q = state.query
-    TabReselectEffect(Routes.CATALOG) { listState.animateScrollToItem(0) }
     // Заявка от друг екран (скенера): „Търси в каталога“ с предварително попълнен ISBN/заглавие.
     LaunchedEffect(Unit) {
         CatalogSearchRequests.pending.collect { r ->
@@ -158,6 +162,12 @@ fun CatalogScreen(navigate: (String) -> Unit) {
             }
         }
     }
+    // Изглед „списък“/„полица“ — пази се в настройките.
+    val container = LocalAppContainer.current
+    val settings by container.settings.settings.collectAsStateWithLifecycle(initialValue = null)
+    val shelf = settings?.catalogShelf ?: false
+    val scope = rememberCoroutineScope()
+    TabReselectEffect(Routes.CATALOG) { (if (shelf) shelfState else listState).animateScrollToItem(0) }
 
     Scaffold(topBar = {
         TopAppBar(
@@ -179,6 +189,16 @@ fun CatalogScreen(navigate: (String) -> Unit) {
             actions = {
                 IconButton(onClick = { navigate(Routes.SCAN) }) {
                     Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action))
+                }
+                IconButton(onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                    scope.launch { container.settings.setCatalogShelf(!shelf) }
+                }) {
+                    if (shelf) {
+                        Icon(Icons.AutoMirrored.Outlined.ViewList, contentDescription = stringResource(R.string.catalog_view_list))
+                    } else {
+                        Icon(Icons.Outlined.ViewModule, contentDescription = stringResource(R.string.catalog_view_shelf))
+                    }
                 }
                 Box {
                     IconButton(onClick = { sortMenu = true }) {
@@ -250,18 +270,28 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                     empty = {},
                     errorSubject = stringResource(R.string.subject_catalog),
                 ) { engine ->
+                    val header: @Composable () -> Unit = {
+                        Text(
+                            pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults) + "  ·  " +
+                                stringResource(R.string.catalog_data_as_of, Formatters.shortDate(LocalContext.current, engine.snapshot.generatedOn) ?: "—"),
+                            style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                        )
+                    }
                     if (state.results.isEmpty() && !state.searching) {
                         EmptyView(stringResource(R.string.catalog_no_results), stringResource(R.string.catalog_no_results_hint), icon = Icons.Outlined.SearchOff)
+                    } else if (shelf) {
+                        CatalogShelfView(
+                            books = state.page,
+                            listState = shelfState,
+                            header = header,
+                            canLoadMore = state.canLoadMore,
+                            onLoadMore = vm::loadMore,
+                            onOpen = { navigate(Routes.book(it.inv)) },
+                        )
                     } else {
                         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
-                            item(contentType = "header") {
-                                Text(
-                                    pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults) + "  ·  " +
-                                        stringResource(R.string.catalog_data_as_of, Formatters.shortDate(LocalContext.current, engine.snapshot.generatedOn) ?: "—"),
-                                    style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                                )
-                            }
+                            item(contentType = "header") { header() }
                             itemsIndexed(state.page, key = { _, b -> b.inv }, contentType = { _, _ -> "book" }) { i, b ->
                                 BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i))
                             }

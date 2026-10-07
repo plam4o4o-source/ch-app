@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Илюстрация за „няма събития“: лист от календар с клонче (линеен стил като логото).
+     Оцветява се от темата (ColorFilter.tint), затова цветовете са бели с различна плътност. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="120dp"
+    android:viewportWidth="160"
+    android:viewportHeight="120">
+    <!-- мек ореол -->
+    <path android:fillColor="#1FFFFFFF"
+        android:pathData="M80,60m-58,0a58,50 0,1 1,116 0a58,50 0,1 1,-116 0" />
+    <!-- лист на календара (пълнеж) -->
+    <path android:fillColor="#40FFFFFF"
+        android:pathData="M40,30L120,30L120,100L40,100Z" />
+    <!-- горна лента (дните от седмицата) -->
+    <path android:fillColor="#66FFFFFF"
+        android:pathData="M40,30L120,30L120,44L40,44Z" />
+    <!-- контур на листа -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M40,30L120,30L120,100L40,100ZM40,44L120,44" />
+    <!-- халки отгоре -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round"
+        android:pathData="M58,22L58,36M102,22L102,36" />
+    <!-- мрежа на дните (празна) -->
+    <path android:strokeColor="#80FFFFFF" android:strokeWidth="2" android:strokeLineCap="round"
+        android:pathData="M52,58L68,58M76,58L92,58M100,58L110,58M52,72L68,72M76,72L92,72M100,72L110,72M52,86L68,86" />
+    <!-- клонче с листа, облегнато на листа -->
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round"
+        android:pathData="M118,98C124,84 130,74 142,66" />
+    <path android:fillColor="#B3FFFFFF"
+        android:pathData="M126,84C122,76 126,70 134,70C134,78 130,84 126,84ZM131,76C128,66 134,60 142,60C142,68 137,76 131,76ZM120,92C114,88 114,80 120,76C124,82 124,88 120,92Z" />
+</vector>
