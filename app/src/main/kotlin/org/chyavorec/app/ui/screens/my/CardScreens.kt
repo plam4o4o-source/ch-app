@@ -78,8 +78,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -135,7 +139,12 @@ private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable C
             .background(Brush.linearGradient(listOf(Brand.Ink, Color(0xFF3A1A18), Brand.Burgundy))),
     ) {
         Box(Modifier.fillMaxSize().padding(2.dp).border(1.dp, Brand.Gold.copy(alpha = 0.45f), RoundedCornerShape(18.dp)))
-        Column(Modifier.fillMaxSize().padding(if (large) 24.dp else 18.dp), content = content)
+        // Картата е с фиксирани пропорции: при много едър системен шрифт текстът би
+        // излязъл извън нея, затова мащабът на шрифта вътре е ограничен до 1.3×.
+        val density = LocalDensity.current
+        CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale = density.fontScale.coerceAtMost(1.3f))) {
+            Column(Modifier.fillMaxSize().padding(if (large) 24.dp else 18.dp), content = content)
+        }
     }
 }
 
@@ -147,16 +156,17 @@ fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = 
             Emblem(if (large) 44.dp else 34.dp)
             Spacer(Modifier.width(10.dp))
             Column(Modifier.weight(1f)) {
-                Text(stringResource(R.string.card_library_line), color = Brand.GoldLight, style = MaterialTheme.typography.labelSmall)
-                Text(stringResource(R.string.org_short), color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 20.sp else 17.sp)
+                Text(stringResource(R.string.card_library_line), color = Brand.GoldLight, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(stringResource(R.string.org_short), color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 20.sp else 17.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
         Spacer(Modifier.weight(1f))
-        Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp, maxLines = 1)
+        Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 stringResource(R.string.reader_number, data.number),
                 color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f),
+                maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
             data.status?.let { MembershipPill(it) }
         }
@@ -182,7 +192,7 @@ fun LibraryCardBack(data: CardData, modifier: Modifier = Modifier, large: Boolea
         Row(verticalAlignment = Alignment.CenterVertically) {
             Emblem(if (large) 32.dp else 26.dp)
             Spacer(Modifier.width(10.dp))
-            Text(stringResource(R.string.card_library_line), color = Brand.GoldLight, style = MaterialTheme.typography.labelSmall)
+            Text(stringResource(R.string.card_library_line), color = Brand.GoldLight, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         Spacer(Modifier.weight(1f))
         Text(stringResource(R.string.profile_reader_number), color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium)
@@ -194,14 +204,14 @@ fun LibraryCardBack(data: CardData, modifier: Modifier = Modifier, large: Boolea
         }
         Text(
             data.number, color = Brand.Parchment, fontFamily = FontFamily.Monospace, fontSize = numberSize,
-            letterSpacing = 2.sp, maxLines = 1,
+            letterSpacing = 2.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
         )
         Spacer(Modifier.height(6.dp))
-        Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 24.sp else 20.sp, maxLines = 1)
+        Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 24.sp else 20.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Spacer(Modifier.weight(1f))
         Text(
             stringResource(R.string.org_library_name), color = Brand.Parchment.copy(alpha = 0.8f),
-            style = MaterialTheme.typography.bodySmall, maxLines = 2,
+            style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis,
         )
     }
 }

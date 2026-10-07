@@ -22,6 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
@@ -35,6 +37,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.domain.model.ContentBlock
 import org.chyavorec.domain.model.TextRun
@@ -50,7 +53,11 @@ fun ContentBlocksView(
     onImage: (String) -> Unit,
     modifier: Modifier = Modifier,
     skipImages: Boolean = false,
+    /** Описание за екранни четци на снимки без надпис (напр. заглавието на страницата). */
+    imageFallbackDescription: String? = null,
 ) {
+    val openPhotoLabel = stringResource(R.string.a11y_open_photo)
+    val openFileLabel = stringResource(R.string.content_open_file)
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         blocks.forEach { block ->
             when (block) {
@@ -93,9 +100,9 @@ fun ContentBlocksView(
                 is ContentBlock.Image -> if (!skipImages) Column {
                     RemoteImage(
                         url = block.url,
-                        contentDescription = block.caption,
+                        contentDescription = block.caption ?: imageFallbackDescription,
                         modifier = Modifier.fillMaxWidth().aspectRatio(4f / 3f).clip(MaterialTheme.shapes.medium)
-                            .clickable { onImage(block.url) },
+                            .clickable(onClickLabel = openPhotoLabel, role = Role.Image) { onImage(block.url) },
                     )
                     block.caption?.let {
                         Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp))
@@ -104,7 +111,7 @@ fun ContentBlocksView(
                 is ContentBlock.LinkButton -> OutlinedButton(onClick = { onLink(block.url) }) {
                     Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text(block.text)
+                    Text(block.text.ifBlank { openFileLabel })
                 }
             }
         }

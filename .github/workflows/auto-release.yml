@@ -4,6 +4,11 @@ name: Auto release
 # влезе промяна по приложението и CI е зелен — след сливане на Dependabot PR
 # (dependabot-automerge.yml) или след push в main. Версия: +1 на последната
 # (patch), напр. v1.1.0 → v1.1.1. Инсталираните APK-та се обновяват сами.
+# Ако след последния tag има САМО обновени зависимости (всички commit-и са от
+# dependabot[bot] или се пипат само файлове за build/зависимости/CI), изданието
+# се създава като ЧЕРНОВА: човек го проверява и публикува с „Publish release“.
+# Черновите не се връщат от /releases/latest, т.е. update.json не стига до
+# инсталираните приложения преди публикуването.
 on:
   workflow_run:
     workflows: ["Android CI"]
@@ -30,6 +35,7 @@ jobs:
       version: ${{ steps.plan.outputs.version }}
       ref: ${{ steps.plan.outputs.ref }}
       notes: ${{ steps.plan.outputs.notes }}
+      draft: ${{ steps.plan.outputs.draft }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -52,6 +58,19 @@ jobs:
           IFS=. read -r MA MI PA <<< "${LAST#v}"
           V="$MA.$MI.$((PA + 1))"
           echo "Ново издание: v$V (след $LAST)"
+          # Само зависимости? (1) всички commit-и са от Dependabot, или
+          # (2) променени са само файлове за зависимости/build/CI.
+          DRAFT=false
+          if git rev-parse -q --verify "refs/tags/$LAST" >/dev/null; then
+            AUTHORS=$(git log --no-merges --format='%an' "$LAST..$REF" | sort -u)
+            OTHER_FILES=$(git diff --name-only "$LAST" "$REF" | \
+              grep -Ev '^(gradle/libs\.versions\.toml|gradle/wrapper/.*|gradlew|gradlew\.bat|gradle\.properties|settings\.gradle\.kts|build\.gradle\.kts|app/build\.gradle\.kts|shared/build\.gradle\.kts|shared/settings\.gradle\.kts|shared/gradle/.*|\.github/.*)$' || true)
+            if [ "$AUTHORS" = "dependabot[bot]" ] || [ -z "$OTHER_FILES" ]; then
+              DRAFT=true
+              echo "Само обновени зависимости — изданието ще е чернова за ръчно публикуване."
+            fi
+          fi
+          echo "draft=$DRAFT" >> "$GITHUB_OUTPUT"
           echo "release=true" >> "$GITHUB_OUTPUT"
           echo "version=$V" >> "$GITHUB_OUTPUT"
           {
@@ -70,4 +89,5 @@ jobs:
       version: ${{ needs.plan.outputs.version }}
       ref: ${{ needs.plan.outputs.ref }}
       notes: ${{ needs.plan.outputs.notes }}
+      draft: ${{ needs.plan.outputs.draft == 'true' }}
     secrets: inherit

@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
@@ -58,7 +59,7 @@ fun errorMessage(error: AppError, subject: String? = null): String = when (error
         if (subject != null) stringResource(R.string.error_temporary_subject, subject) else stringResource(R.string.error_temporary)
     AppError.Unauthorized -> stringResource(R.string.error_unauthorized)
     AppError.NotFound -> stringResource(R.string.error_not_found)
-    is AppError.RateLimited -> stringResource(R.string.error_rate_limited, error.retryAfterSeconds)
+    is AppError.RateLimited -> error.retryAfterSeconds.coerceIn(0, Int.MAX_VALUE.toLong()).toInt().let { pluralStringResource(R.plurals.error_rate_limited, it, it) }
     is AppError.NotAvailable -> notAvailableMessage(error.feature)
 }
 

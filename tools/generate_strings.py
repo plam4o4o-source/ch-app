@@ -52,7 +52,6 @@ S = {
 "error_temporary_subject": ("Временно не можем да заредим %1$s. Опитай отново.", "We can’t load %1$s right now. Please try again."),
 "error_unauthorized": ("Сесията е изтекла. Моля, влез отново.", "Your session has expired. Please sign in again."),
 "error_not_found": ("Не открихме търсеното съдържание.", "We couldn’t find this content."),
-"error_rate_limited": ("Твърде много опити. Опитай отново след %1$d секунди.", "Too many attempts. Try again in %1$d seconds."),
 "error_no_app": ("Няма приложение, което да отвори това.", "No app available to open this."),
 "subject_news": ("новините", "the news"),
 "subject_article": ("статията", "the article"),
@@ -70,6 +69,8 @@ S = {
 "na_account_deletion": ("Искане за изтриване на данни се подава в библиотеката или по имейл.", "Data deletion requests are made at the library or by email."),
 "na_push": ("Сървърни известия още не се поддържат.", "Server notifications aren’t supported yet."),
 "status_available": ("Налична", "Available"),
+"a11y_open_photo": ("Отвори снимката в цял екран", "Open photo full screen"),
+"content_open_file": ("Отвори файла", "Open file"),
 "status_on_loan": ("Заета", "On loan"),
 "status_not_on_shelf": ("Не е на рафта", "Not on the shelf"),
 "status_unavailable": ("Недостъпна", "Unavailable"),
@@ -88,7 +89,6 @@ S = {
 "home_upcoming": ("Предстоящи събития", "Upcoming events"),
 "home_new_books": ("Нови постъпления", "New arrivals"),
 "home_latest_news": ("Още новини", "More news"),
-"home_catalog_footer": ("Каталогът съдържа %1$d документа · данни към %2$s", "The catalogue lists %1$d items · data as of %2$s"),
 "news_search_hint": ("Търси в новините", "Search news"),
 "news_saved": ("Запазени", "Saved"),
 "news_empty": ("Няма новини по този критерий.", "No news match this filter."),
@@ -112,6 +112,8 @@ S = {
 "calendar_next": ("Следващ месец", "Next month"),
 "calendar_weekdays": ("Пн,Вт,Ср,Чт,Пт,Сб,Нд", "Mo,Tu,We,Th,Fr,Sa,Su"),
 "calendar_has_events": ("има събития", "has events"),
+"calendar_today": ("днес", "today"),
+"calendar_show_day": ("покажи събитията за деня", "show events for this day"),
 "catalog_sort": ("Подреждане", "Sort"),
 "catalog_filters": ("Филтри", "Filters"),
 "catalog_search_hint": ("Търси по %1$s", "Search by %1$s"),
@@ -188,7 +190,7 @@ S = {
 "login_forgot": ("Забравен ПИН", "Forgot PIN"),
 "login_reset_sent": ("Ако номерът е регистриран, ще получиш инструкции.", "If the number is registered, you’ll receive instructions."),
 "login_wrong": ("Грешен читателски номер или ПИН.", "Wrong reader number or PIN."),
-"login_privacy_note": ("Паролата не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore.", "Your password is never stored on the device. The session is kept encrypted with an Android Keystore key."),
+"login_privacy_note": ("ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore.", "Your PIN is never stored on the device. The session is kept encrypted with an Android Keystore key."),
 "login_demo_hint": ("Демо вход: DEMO-0001 / demo", "Demo sign-in: DEMO-0001 / demo"),
 "card_add_manual": ("Добави номера на картата си", "Add your card number"),
 "card_add_title": ("Дигитална карта", "Digital card"),
@@ -305,7 +307,7 @@ S = {
 "update_auto_desc": ("Проверка при отваряне и два пъти дневно; изтегляне по Wi-Fi; инсталиране, докато приложението не се използва (Android 12+), или с едно докосване", "Checked on launch and twice a day; downloaded over Wi-Fi; installed while the app isn’t in use (Android 12+) or with a single tap"),
 "update_check_now": ("Провери за нова версия", "Check for updates"),
 "update_status_checking": ("Проверка за нова версия…", "Checking for updates…"),
-"update_status_current": ("Имате последната версия (%1$s)", "You have the latest version (%1$s)"),
+"update_status_current": ("Имаш последната версия (%1$s)", "You have the latest version (%1$s)"),
 "update_status_available": ("Налична е версия %1$s", "Version %1$s is available"),
 "update_status_downloading": ("Изтегляне на новата версия…", "Downloading the new version…"),
 "update_status_ready": ("Версия %1$s е готова за инсталиране", "Version %1$s is ready to install"),
@@ -321,25 +323,25 @@ S = {
 "update_hide": ("Скрий", "Hide"),
 "update_progress": ("%1$d%%", "%1$d%%"),
 "update_ready": ("Новата версия е изтеглена и проверена (контролна сума и подпис).", "The new version has been downloaded and verified (checksum and signature)."),
-"update_permission": ("За да се обнови, разрешете на „Читалище Яворец“ да инсталира приложения, след което се върнете тук.", "To update, allow “Chitalishte Yavorets” to install apps, then come back here."),
+"update_permission": ("За да се обнови, разреши на „Читалище Яворец“ да инсталира приложения, след което се върни тук.", "To update, allow “Chitalishte Yavorets” to install apps, then come back here."),
 "update_permission_action": ("Към настройките", "Open settings"),
 "update_installing": ("Инсталиране… Приложението ще се затвори за момент.", "Installing… The app will close for a moment."),
-"update_error_check": ("Проверката за нова версия не успя. Опитайте отново по-късно.", "Couldn’t check for updates. Please try again later."),
-"update_error_network": ("Изтеглянето не успя. Проверете връзката и опитайте отново.", "The download failed. Check your connection and try again."),
-"update_error_checksum": ("Изтегленият файл не премина проверката и беше изтрит. Опитайте отново.", "The downloaded file failed verification and was deleted. Please try again."),
-"update_error_signature": ("Новата версия е подписана с различен ключ и не може да замени инсталираната. Изтеглете я ръчно от страницата на версията (след деинсталиране на текущата).", "The new version is signed with a different key and can’t replace the installed one. Download it manually from the release page (after uninstalling the current one)."),
+"update_error_check": ("Проверката за нова версия не успя. Опитай отново по-късно.", "Couldn’t check for updates. Please try again later."),
+"update_error_network": ("Изтеглянето не успя. Провери връзката и опитай отново.", "The download failed. Check your connection and try again."),
+"update_error_checksum": ("Изтегленият файл не премина проверката и беше изтрит. Опитай отново.", "The downloaded file failed verification and was deleted. Please try again."),
+"update_error_signature": ("Новата версия е подписана с различен ключ и не може да замени инсталираната. Изтегли я ръчно от страницата на версията (след деинсталиране на текущата).", "The new version is signed with a different key and can’t replace the installed one. Download it manually from the release page (after uninstalling the current one)."),
 "update_error_install": ("Инсталирането не беше завършено.", "The installation wasn’t completed."),
 "update_open_release": ("Страница на версията", "Release page"),
 "notif_update_available": ("Налична е нова версия %1$s", "New version %1$s available"),
 "notif_update_ready": ("Версия %1$s е готова за инсталиране", "Version %1$s is ready to install"),
-"notif_update_text": ("Докоснете, за да обновите приложението.", "Tap to update the app."),
+"notif_update_text": ("Докосни, за да обновиш приложението.", "Tap to update the app."),
 "channel_messages": ("Съобщения от читалището", "Messages from the centre"),
 "channel_messages_desc": ("Съобщения, изпратени от читалището до потребителите на приложението", "Messages the centre sends to app users"),
 "channel_messages_important": ("Важни съобщения", "Important messages"),
 "channel_messages_important_desc": ("Съобщения, отбелязани от читалището като важни", "Messages the centre marks as important"),
 "messages_title": ("Съобщения", "Messages"),
 "messages_empty": ("Няма съобщения от читалището", "No messages from the centre"),
-"messages_members_hint": ("Някои съобщения са само за членове. Въведете членската си карта (или влезте) в „Моето“, за да ги виждате.", "Some messages are for members only. Enter your member card (or sign in) under “My” to see them."),
+"messages_members_hint": ("Някои съобщения са само за членове. Въведи читателската си карта (или влез) в „Моето“, за да ги виждаш.", "Some messages are for members only. Enter your library card (or sign in) under “My” to see them."),
 "messages_members_only": ("За членове", "Members"),
 "messages_new": ("Ново", "New"),
 "messages_valid_until": ("Валидно до %1$s", "Valid until %1$s"),
@@ -401,7 +403,7 @@ PRIVACY_BG = """# Кой обработва данните
 
 Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели.
 
-Съобщения от читалището: приложението проверява на около час публичния файл със съобщения на chyavorec.org. Съобщенията „само за членове“ се показват, ако сте въвели членска карта или сте влезли — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
+Съобщения от читалището: приложението проверява на около час публичния файл със съобщения на chyavorec.org. Съобщенията „само за членове“ се показват, ако си въвел читателска карта или си влязъл — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
 
 Обновления: версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от Настройки → Обновления. Версията от Google Play се обновява от Google Play.
 
@@ -409,7 +411,11 @@ PRIVACY_BG = """# Кой обработва данните
 
 Читателска карта: ако въведеш номера на своята карта, той (и името, ако го въведеш) се пази шифрован с ключ от Android Keystore само на това устройство.
 
-Вход (само ако си дал съгласие в библиотеката и имаш издаден ПИН): читателският номер и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и никога не се записват. Пази се само шифрован токен за сесията. Заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес, телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните се изтриват от сървъра при следващото обновяване.
+Вход (само ако си дал съгласие в библиотеката и имаш издаден ПИН): номерът на читателската карта и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и ПИН-ът никога не се записва. При вход се изпраща и моделът на телефона (напр. „Pixel 8“), за да се разпознава сесията. Пази се само шифрован токен за сесията. Името ти, заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес и телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните ти се изтриват от сървъра при следващото обновяване.
+
+Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
+
+Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и най-близкия срок — без заглавия и без име.
 
 # Известия
 
@@ -417,11 +423,11 @@ PRIVACY_BG = """# Кой обработва данните
 
 # Твоите права
 
-Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията и читателските данни; „Премахни“ изтрива въведената карта; „Изчисти кеша“ изтрива публичното съдържание; деинсталирането премахва всичко. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
+Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията и читателските данни; „Премахни“ изтрива въведената карта; „Изчисти кеша“ изтрива публичното съдържание; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
 
 # Деца
 
-Приложението може да се използва без вход и без никакви лични данни.
+Приложението не е насочено към деца под 13 години. То може да се използва без вход и без никакви лични данни.
 
 # Промени
 
@@ -439,7 +445,7 @@ The app collects as little data as possible. It has no ads, no behavioural analy
 
 Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data.
 
-Messages from the centre: about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered a member card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
+Messages from the centre: about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered your library card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
 
 Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 
@@ -447,7 +453,11 @@ Data kept only on the device: settings (theme, language, notifications), saved n
 
 Library card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.
 
-Sign-in (once the library system offers online access): your password is sent only over HTTPS to the library’s server and is never stored. Only an encrypted session token is kept. Borrowed items, due dates and membership come from the library’s server and are cached encrypted.
+Sign-in (only if you have given consent at the library and have been issued a PIN): your library card number and PIN are sent only over HTTPS to the centre’s server (chyavorec.org), and the PIN is never stored. The phone’s model name (e.g. “Pixel 8”) is also sent at sign-in so that the session can be recognised. Only an encrypted session token is kept. Your name, borrowed items, due dates and membership come from this server, which receives from the library software only the data of readers who have consented (no personal ID number (EGN), address or phone number), and are cached encrypted on the device. Consent is withdrawn at the library — your data is then deleted from the server at the next sync.
+
+Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
+
+Home-screen widget: if you add it, it shows only the number of books due and the nearest due date — no titles and no name.
 
 # Notifications
 
@@ -455,11 +465,11 @@ Notifications are prepared on the device (periodic checks for new posts and due 
 
 # Your rights
 
-You can delete the data on the device at any time: “Sign out” deletes the session and reader data; “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. For the data the library keeps about you as a reader, you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
+You can delete the data on the device at any time: “Sign out” deletes the session and reader data; “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
 
 # Children
 
-The app can be used without signing in and without any personal data.
+The app is not directed at children under 13. It can be used without signing in and without any personal data.
 
 # Changes
 
@@ -539,6 +549,8 @@ P = {
 "messages_unread": (("%1$d непрочетено съобщение", "%1$d непрочетени съобщения"), ("%1$d unread message", "%1$d unread messages")),
 "widget_loans_due": (("%1$d книга за връщане · най-близък срок %2$s", "%1$d книги за връщане · най-близък срок %2$s"), ("%1$d book to return · next due %2$s", "%1$d books to return · next due %2$s")),
 "photos_count": (("%1$d снимка", "%1$d снимки"), ("%1$d photo", "%1$d photos")),
+"error_rate_limited": (("Твърде много опити. Опитай отново след %1$d секунда.", "Твърде много опити. Опитай отново след %1$d секунди."), ("Too many attempts. Try again in %1$d second.", "Too many attempts. Try again in %1$d seconds.")),
+"home_catalog_footer": (("Каталогът съдържа %1$d документ · данни към %2$s", "Каталогът съдържа %1$d документа · данни към %2$s"), ("The catalogue lists %1$d item · data as of %2$s", "The catalogue lists %1$d items · data as of %2$s")),
 }
 
 def esc(s):

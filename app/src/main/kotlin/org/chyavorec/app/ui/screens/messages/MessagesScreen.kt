@@ -163,7 +163,7 @@ private fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Uni
                 }
                 m.expiresOn?.let {
                     Text(
-                        stringResource(R.string.messages_valid_until, Formatters.shortDate(it) ?: it),
+                        stringResource(R.string.messages_valid_until, Formatters.shortDate(LocalContext.current, it) ?: it),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.weight(1f),

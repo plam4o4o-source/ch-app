@@ -11,6 +11,16 @@ on:
         description: "Какво ново (показва се в приложението при обновяване)"
         required: false
         default: ""
+      allow_debug_key:
+        description: "Само за тест: без signing secrets подписва с временен CI ключ (без update.json)"
+        type: boolean
+        required: false
+        default: false
+      draft:
+        description: "Създай изданието като чернова (публикува се ръчно)"
+        type: boolean
+        required: false
+        default: false
   push:
     tags: ["v*"]
   # Извиква се от auto-release.yml (автоматично издание след сливане в main).
@@ -28,6 +38,11 @@ on:
         type: string
         required: false
         default: ""
+      draft:
+        description: "Чернова: изданието се публикува ръчно (напр. само обновени зависимости)"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: write
@@ -37,7 +52,31 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Публикуването на чернова от уеб интерфейса създава tag-а и може да пусне това
+  # събитие (push на v*) — тогава изданието вече съществува и не се строи наново.
+  guard:
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          SKIP=false
+          if [ "$EVENT" = "push" ] && \
+             [ "$(gh release view "$TAG" --repo "$REPO" --json isDraft --jq .isDraft 2>/dev/null)" = "false" ]; then
+            echo "Изданието $TAG вече е публикувано — без нов build."
+            SKIP=true
+          fi
+          echo "skip=$SKIP" >> "$GITHUB_OUTPUT"
+
   release:
+    needs: guard
+    if: needs.guard.outputs.skip != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -71,6 +110,7 @@ jobs:
           UPLOAD_STORE_PASSWORD: ${{ secrets.UPLOAD_STORE_PASSWORD }}
           UPLOAD_KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
           UPLOAD_KEY_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
+          ALLOW_DEBUG_KEY: ${{ inputs.allow_debug_key }}
         run: |
           if [ -n "$UPLOAD_KEYSTORE_BASE64" ]; then
             echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
@@ -78,7 +118,8 @@ jobs:
             echo "SIGNING_KEY_ALIAS=$UPLOAD_KEY_ALIAS" >> "$GITHUB_ENV"
             echo "SIGNING_KEY_PASSWORD=$UPLOAD_KEY_PASSWORD" >> "$GITHUB_ENV"
             echo "SIGNING_KIND=upload-key" >> "$GITHUB_ENV"
-          else
+          elif [ "$ALLOW_DEBUG_KEY" = "true" ]; then
+            # Само при изрично ръчно пускане с allow_debug_key: true (тест на pipeline-а).
             PASS=$(openssl rand -hex 16)
             keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/upload.jks" -storepass "$PASS" -keypass "$PASS" \
               -alias ci-test -keyalg RSA -keysize 2048 -validity 3650 -dname "CN=CI test key, O=not for Google Play"
@@ -86,6 +127,9 @@ jobs:
             echo "SIGNING_KEY_ALIAS=ci-test" >> "$GITHUB_ENV"
             echo "SIGNING_KEY_PASSWORD=$PASS" >> "$GITHUB_ENV"
             echo "SIGNING_KIND=ci-test-key" >> "$GITHUB_ENV"
+          else
+            echo "::error::Липсват signing secrets (UPLOAD_KEYSTORE_BASE64, UPLOAD_STORE_PASSWORD, UPLOAD_KEY_ALIAS, UPLOAD_KEY_PASSWORD). Издание с временен ключ не може да обнови инсталираните приложения и не става за Google Play. За тест пуснете ръчно с allow_debug_key: true."
+            exit 1
           fi
           echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
 
@@ -96,8 +140,16 @@ jobs:
           mkdir -p dist
           cp app/build/outputs/bundle/prodPlay/app-prod-play.aab "dist/chitalishte-yavorets-$VERSION.aab"
           cp app/build/outputs/apk/prod/release/app-prod-release.apk "dist/chitalishte-yavorets-$VERSION.apk"
-          cp app/build/outputs/apk/dev/debug/app-dev-debug.apk "dist/chitalishte-yavorets-$VERSION-dev-debug.apk"
           (cd dist && sha256sum * > SHA256SUMS.txt)
+          # Dev debug APK (с ДЕМО данни) — само като CI артефакт, не в публичното издание.
+          mkdir -p dev-dist
+          cp app/build/outputs/apk/dev/debug/app-dev-debug.apk "dev-dist/chitalishte-yavorets-$VERSION-dev-debug.apk"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dev-debug-apk-${{ env.VERSION }}
+          path: dev-dist/*.apk
+          retention-days: 30
 
       # update.json — по него инсталираните APK-та откриват новата версия
       # (https://github.com/<repo>/releases/latest/download/update.json).
@@ -138,7 +190,7 @@ jobs:
           Файлове:
           - chitalishte-yavorets-$VERSION.apk — инсталиране директно на телефон (Android 8.0+); обновява се автоматично
           - chitalishte-yavorets-$VERSION.aab — за Google Play (обновява се от Google Play)
-          - chitalishte-yavorets-$VERSION-dev-debug.apk — за разработка (с ДЕМО читателски данни, вход DEMO-0001 / demo)
+          - SHA256SUMS.txt — контролни суми
 
           Подпис: $SIGNING_KIND
           NOTES
@@ -149,13 +201,26 @@ jobs:
           fi
           sed -i 's/^          //' notes.md
 
+      # Чернова (draft) не се връща от /releases/latest, така че update.json не стига
+      # до инсталираните приложения, докато човек не натисне „Publish release“.
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          DRAFT: ${{ inputs.draft }}
         run: |
           TAG="v$VERSION"
+          TARGET="$(git rev-parse HEAD)"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" dist/* --clobber
+            if [ "$(gh release view "$TAG" --json isDraft --jq .isDraft)" = "true" ]; then
+              # Съществуваща чернова (напр. от предишно издание само със зависимости):
+              # обнови бележките и commit-а; публикувай я, ако вече има и други промени.
+              if [ "$DRAFT" = "true" ]; then KEEP_DRAFT=true; else KEEP_DRAFT=false; fi
+              gh release edit "$TAG" --notes-file notes.md --target "$TARGET" --draft="$KEEP_DRAFT"
+            fi
+          elif [ "$DRAFT" = "true" ]; then
+            gh release create "$TAG" dist/* --draft --title "Читалище Яворец $VERSION" --notes-file notes.md --target "$TARGET"
+            echo "::notice::Създадена чернова $TAG (само обновени зависимости) — публикувайте я ръчно от Releases."
           else
-            gh release create "$TAG" dist/* --title "Читалище Яворец $VERSION" --notes-file notes.md --target "$(git rev-parse HEAD)"
+            gh release create "$TAG" dist/* --title "Читалище Яворец $VERSION" --notes-file notes.md --target "$TARGET"
           fi

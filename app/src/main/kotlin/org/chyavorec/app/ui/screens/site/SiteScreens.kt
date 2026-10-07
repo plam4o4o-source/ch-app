@@ -174,6 +174,7 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
                             page.blocks,
                             onLink = openLink,
                             onImage = { img -> navigate(Routes.viewerUrls(page.images, page.images.indexOf(img))) },
+                            imageFallbackDescription = title.ifBlank { page.title }.ifBlank { null },
                             modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp).widthIn(max = 760.dp),
                         )
                     }

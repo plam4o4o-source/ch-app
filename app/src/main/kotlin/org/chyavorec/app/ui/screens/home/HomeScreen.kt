@@ -29,6 +29,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -209,7 +211,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
             if (state.catalogCount != null) {
                 item("footer") {
                     Text(
-                        stringResource(R.string.home_catalog_footer, state.catalogCount ?: 0, Formatters.shortDate(state.catalogGenerated) ?: "—"),
+                        pluralStringResource(R.plurals.home_catalog_footer, state.catalogCount ?: 0, state.catalogCount ?: 0, Formatters.shortDate(LocalContext.current, state.catalogGenerated) ?: "—"),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
@@ -298,11 +300,15 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
         ) { page ->
             val a = items[page]
             val offset = (pager.currentPage - page) + pager.currentPageOffsetFraction
+            // Пропорция 1.6:1 като минимум — при едър шрифт картата расте на височина,
+            // вместо заглавието да се отреже.
+            BoxWithConstraints {
+            val minHeight = maxWidth.coerceAtMost(720.dp) / 1.6f
             Surface(
                 onClick = { onOpen(a) },
                 shape = MaterialTheme.shapes.large,
                 shadowElevation = 6.dp,
-                modifier = Modifier.fillMaxWidth().aspectRatio(1.6f).widthIn(max = 720.dp)
+                modifier = Modifier.fillMaxWidth().widthIn(max = 720.dp).heightIn(min = minHeight)
                     .graphicsLayer {
                         val scale = 1f - 0.06f * kotlin.math.abs(offset).coerceIn(0f, 1f)
                         scaleX = scale; scaleY = scale
@@ -313,6 +319,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                 var imageFailed by remember(a.imageUrl) { mutableStateOf(false) }
                 val branded = a.imageUrl.isNullOrBlank() || imageFailed
                 Box {
+                    Box(Modifier.matchParentSize()) {
                     if (branded) {
                         BrandedImageFallback(Modifier.fillMaxSize())
                     } else {
@@ -337,10 +344,12 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                             ),
                         )
                     }
+                    }
                     Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
                         Text(
                             (a.category ?: stringResource(R.string.label_news)).uppercase(),
                             style = MaterialTheme.typography.labelSmall, color = Brand.GoldLight,
+                            maxLines = 1, overflow = TextOverflow.Ellipsis,
                         )
                         Spacer(Modifier.height(6.dp))
                         Text(a.title, style = MaterialTheme.typography.headlineSmall, color = Brand.Parchment, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -350,6 +359,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                         }
                     }
                 }
+            }
             }
         }
         PagerDots(items.size, pager.currentPage, Modifier.padding(top = 8.dp))

@@ -39,6 +39,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
@@ -48,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -128,6 +131,16 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
     val base = coverShade(UdcCoverColors[book.udcSection] ?: Color(0xFF5A4D3D), book.title)
     val height = width * 1.42f
     val ext = LocalExtendedColors.current
+    // Цветната лента сама не е достъпна за екранни четци и при цветна слепота —
+    // наличността се казва и с текст.
+    val statusText = if (showStatusDot) {
+        when (book.status) {
+            BookStatus.AVAILABLE -> stringResource(R.string.status_available)
+            BookStatus.ON_LOAN -> stringResource(R.string.status_on_loan)
+            BookStatus.NOT_ON_SHELF -> stringResource(R.string.status_not_on_shelf)
+            BookStatus.UNAVAILABLE -> stringResource(R.string.status_unavailable)
+        }
+    } else null
     Box(
         modifier
             .size(width, height)
@@ -139,7 +152,10 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
                 // гръбче
                 drawRect(Brush.horizontalGradient(listOf(Color.Black.copy(alpha = 0.28f), Color.Transparent), 0f, 7.dp.toPx()), size = size.copy(width = 7.dp.toPx()))
             }
-            .clearAndSetSemantics { contentDescription = book.title },
+            .clearAndSetSemantics {
+                contentDescription = book.title
+                if (statusText != null) stateDescription = statusText
+            },
     ) {
         val scale = (width.value / 72f).coerceIn(0.6f, 3f)
         // вътрешна „релефна“ рамка като на твърда корица
