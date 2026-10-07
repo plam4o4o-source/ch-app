@@ -78,7 +78,7 @@ import org.chyavorec.domain.model.MembershipEvaluator
 
 /** Когато няма вход — обяснение и бутон, вместо празни/фиктивни данни. */
 @Composable
-private fun NeedsLogin(error: AppError, onLogin: () -> Unit) {
+internal fun NeedsLogin(error: AppError, onLogin: () -> Unit) {
     if (error == AppError.Unauthorized) {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             ErrorView(error, onRetry = null)

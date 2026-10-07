@@ -38,8 +38,7 @@ import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.Rocket
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.TheaterComedy
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -198,7 +197,6 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
     if (readerSheet) ReaderSettingsSheet(onDismiss = { readerSheet = false })
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AboutChitalishteScreen(onBack: () -> Unit, navigate: (String) -> Unit, openLink: (String) -> Unit) {
     val vm = appViewModel { AboutChitalishteViewModel(it.siteRepository) }
@@ -212,6 +210,6 @@ fun AboutChitalishteScreen(onBack: () -> Unit, navigate: (String) -> Unit, openL
                 org.chyavorec.app.ui.components.ErrorView(AppError.NotFound, onRetry = null)
             }
         }
-        else -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { LoadingIndicator() }
+        else -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
     }
 }

@@ -23,8 +23,6 @@ import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -65,7 +63,6 @@ import org.chyavorec.app.ui.components.notAvailableMessage
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Feature
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Unit) {
     val vm = appViewModel(key = "login") { LoginViewModel(it) }
@@ -92,7 +89,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
             Text(stringResource(R.string.login_heading), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
             val c = caps
             when {
-                c == null -> LoadingIndicator()
+                c == null -> CircularProgressIndicator()
                 !c.login -> {
                     // Няма онлайн вход в InvLib — НЕ показваме фиктивна форма.
                     Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
