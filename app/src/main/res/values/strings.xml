@@ -270,6 +270,8 @@
     <string name="notif_update_available">Налична е нова версия %1$s</string>
     <string name="notif_update_ready">Версия %1$s е готова за инсталиране</string>
     <string name="notif_update_text">Докосни, за да обновиш приложението.</string>
+    <string name="notif_updated">Обновено до версия %1$s</string>
+    <string name="notif_updated_text">Докосни, за да отвориш приложението.</string>
     <string name="notifications_intro">Известията се подготвят на самото устройство — без рекламни или проследяващи услуги.</string>
     <string name="notifications_library_desc">Съобщения от библиотеката и промени в членството</string>
     <string name="notifications_loans_na">Ще работи, когато библиотечната система предостави онлайн достъп.</string>

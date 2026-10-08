@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInstaller
 import androidx.core.content.IntentCompat
+import org.chyavorec.app.BuildConfig
 import org.chyavorec.app.ChitalishteApp
 import org.chyavorec.app.R
 import org.chyavorec.app.notifications.Channel
@@ -40,6 +41,16 @@ class UpdateInstallReceiver : BroadcastReceiver() {
                     runCatching { context.startActivity(confirm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
                         .onFailure { updater.onInstallResult(PackageInstaller.STATUS_FAILURE) }
                 }
+            }
+            // След успешно самообновяване системата затваря приложението; това
+            // съобщение идва вече в новата версия — известие, за да е ясно, че е готово.
+            PackageInstaller.STATUS_SUCCESS -> {
+                updater.onInstallResult(status)
+                Notifier.show(
+                    context, Channel.UPDATES, NOTIFICATION_ID,
+                    context.getString(R.string.notif_updated, BuildConfig.VERSION_NAME),
+                    context.getString(R.string.notif_updated_text), null,
+                )
             }
             else -> updater.onInstallResult(status)
         }

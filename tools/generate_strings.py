@@ -387,6 +387,8 @@ S = {
 "notif_update_available": ("Налична е нова версия %1$s", "New version %1$s available"),
 "notif_update_ready": ("Версия %1$s е готова за инсталиране", "Version %1$s is ready to install"),
 "notif_update_text": ("Докосни, за да обновиш приложението.", "Tap to update the app."),
+"notif_updated": ("Обновено до версия %1$s", "Updated to version %1$s"),
+"notif_updated_text": ("Докосни, за да отвориш приложението.", "Tap to open the app."),
 "channel_messages": ("Съобщения от читалището", "Messages from the centre"),
 "channel_messages_desc": ("Съобщения, изпратени от читалището до потребителите на приложението", "Messages the centre sends to app users"),
 "channel_messages_important": ("Важни съобщения", "Important messages"),

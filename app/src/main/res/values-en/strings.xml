@@ -270,6 +270,8 @@
     <string name="notif_update_available">New version %1$s available</string>
     <string name="notif_update_ready">Version %1$s is ready to install</string>
     <string name="notif_update_text">Tap to update the app.</string>
+    <string name="notif_updated">Updated to version %1$s</string>
+    <string name="notif_updated_text">Tap to open the app.</string>
     <string name="notifications_intro">Notifications are prepared on the device itself — no advertising or tracking services.</string>
     <string name="notifications_library_desc">Library messages and membership changes</string>
     <string name="notifications_loans_na">Will work once the library system offers online access.</string>
