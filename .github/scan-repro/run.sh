@@ -8,6 +8,7 @@ tap() {  # $1 = атрибут (text|content-desc), $2 = стойност (по�
   adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
   adb pull /sdcard/ui.xml $OUT/ui.xml >/dev/null 2>&1
   xy=$(python3 .github/scan-repro/find.py $OUT/ui.xml "$1" "$2")
+  echo "--- screen texts:"; grep -o 'text="[^"]*"\|content-desc="[^"]*"' $OUT/ui.xml | grep -v '=""' | head -25 | tr '\n' ' '; echo
   if [ -n "$xy" ]; then echo "tap $1=$2 at $xy"; adb shell input tap $xy; return 0; fi
   echo "not found: $1=$2"; return 1
 }
@@ -29,4 +30,9 @@ grep -n -A60 "FATAL EXCEPTION" $OUT/logcat.txt || echo "NO FATAL EXCEPTION"
 echo "===== process ====="
 adb shell pidof $PKG || echo "process not running"
 grep -nE "AndroidRuntime|ScanScreen|CameraX|MlKit|mlkit|camera" $OUT/logcat.txt | grep -iE " E |FATAL|Exception" | head -60
-exit 0
+FAIL=0
+if grep -q "NoSuchMethodException.*Registrar" $OUT/logcat.txt; then echo "RESULT: ML Kit registrars still stripped"; FAIL=1; fi
+if grep -q "FATAL EXCEPTION" $OUT/logcat.txt; then echo "RESULT: crash"; FAIL=1; fi
+adb shell dumpsys activity activities | grep -m3 "mResumedActivity\|topResumedActivity" || true
+[ $FAIL = 0 ] && echo "RESULT: OK — no crash, ML Kit registrars present"
+exit $FAIL

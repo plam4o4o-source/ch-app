@@ -10,10 +10,19 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
-      - name: Download release APK
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release download v1.2.10 -R ${{ github.repository }} -p 'chitalishte-yavorets-1.2.10.apk' -O app.apk && ls -l app.apk
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Build minified prodRelease APK (throwaway key)
+        run: |
+          PASS=$(openssl rand -hex 16)
+          keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/t.jks" -storepass "$PASS" -keypass "$PASS" \
+            -alias t -keyalg RSA -keysize 2048 -validity 1 -dname "CN=repro"
+          export SIGNING_STORE_FILE="$RUNNER_TEMP/t.jks" SIGNING_STORE_PASSWORD="$PASS" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$PASS"
+          ./gradlew --no-daemon assembleProdRelease
+          cp "$(ls app/build/outputs/apk/prod/release/*.apk | head -1)" app.apk && ls -l app.apk
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
