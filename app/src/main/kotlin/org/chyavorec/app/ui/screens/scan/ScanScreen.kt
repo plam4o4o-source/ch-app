@@ -358,15 +358,23 @@ private fun CameraPreview(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val previewView = remember { PreviewView(context).apply { implementationMode = PreviewView.ImplementationMode.COMPATIBLE } }
-    val scanner: BarcodeScanner = remember {
-        BarcodeScanning.getClient(
-            BarcodeScannerOptions.Builder()
-                .setBarcodeFormats(
-                    Barcode.FORMAT_EAN_13, Barcode.FORMAT_EAN_8, Barcode.FORMAT_CODE_128,
-                    Barcode.FORMAT_CODE_39, Barcode.FORMAT_QR_CODE,
-                )
-                .build(),
-        )
+    // Ако разпознаването не може да се създаде (липсващ компонент, стар телефон),
+    // показваме „камерата не е достъпна“ вместо срив на приложението.
+    val scanner: BarcodeScanner? = remember {
+        runCatching {
+            BarcodeScanning.getClient(
+                BarcodeScannerOptions.Builder()
+                    .setBarcodeFormats(
+                        Barcode.FORMAT_EAN_13, Barcode.FORMAT_EAN_8, Barcode.FORMAT_CODE_128,
+                        Barcode.FORMAT_CODE_39, Barcode.FORMAT_QR_CODE,
+                    )
+                    .build(),
+            )
+        }.getOrNull()
+    }
+    if (scanner == null) {
+        LaunchedEffect(Unit) { onError() }
+        return
     }
     val executor = remember { Executors.newSingleThreadExecutor() }
     // Най-новите стойности за анализатора (той е създаден веднъж).
@@ -377,9 +385,9 @@ private fun CameraPreview(
     var camera by remember { mutableStateOf<Camera?>(null) }
 
     DisposableEffect(lifecycleOwner) {
-        val future = ProcessCameraProvider.getInstance(context)
         var provider: ProcessCameraProvider? = null
-        future.addListener({
+        val future = runCatching { ProcessCameraProvider.getInstance(context) }.getOrNull()
+        if (future == null) onError() else future.addListener({
             try {
                 val p = future.get()
                 provider = p
@@ -392,7 +400,7 @@ private fun CameraPreview(
                 val cam = p.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, analysis)
                 camera = cam
                 onCamera(cam)
-            } catch (_: Exception) {
+            } catch (_: Throwable) {
                 onError()
             }
         }, ContextCompat.getMainExecutor(context))
@@ -414,8 +422,15 @@ private fun analyze(proxy: ImageProxy, scanner: BarcodeScanner, pausedRef: Array
         proxy.close()
         return
     }
-    val image = InputImage.fromMediaImage(media, proxy.imageInfo.rotationDegrees)
-    scanner.process(image)
+    val image = runCatching { InputImage.fromMediaImage(media, proxy.imageInfo.rotationDegrees) }.getOrNull()
+    if (image == null) {
+        proxy.close()
+        return
+    }
+    runCatching { scanner.process(image) }.getOrElse {
+        proxy.close()
+        return
+    }
         .addOnSuccessListener { codes ->
             if (pausedRef[0]) return@addOnSuccessListener
             // Най-голямото (най-близкото до центъра/най-четливото) първо.
