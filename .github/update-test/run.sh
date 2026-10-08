@@ -21,6 +21,7 @@ shot() { timeout 20 adb shell screencap -p /sdcard/s.png; timeout 20 adb pull /s
 ver() { timeout 15 adb shell dumpsys package $PKG | grep -m2 -E "versionName|versionCode"; }
 
 adb install -r old.apk
+adb shell pm grant org.chyavorec.app android.permission.POST_NOTIFICATIONS || true
 ver
 adb logcat -c
 adb shell am start -n $PKG/.MainActivity
@@ -43,7 +44,7 @@ echo "===== installed version ====="
 ver
 timeout 30 adb logcat -d > $OUT/logcat.txt
 echo "===== notifications ====="
-timeout 20 adb shell dumpsys notification --noredact | grep -A3 "pkg=org.chyavorec.app" | grep -E "pkg=|android.title|android.text" | head -20
+timeout 20 adb shell dumpsys notification --noredact > $OUT/notif.txt; grep -n "chyavorec" $OUT/notif.txt | head -10; grep -E "android.title=|android.text=" $OUT/notif.txt | head -20
 echo "===== installer / update log ====="
 grep -nE "PackageInstaller|PackageManager|INSTALL_FAILED|AppUpdater|update-|chyavorec.*(Exception|Error)|FATAL" $OUT/logcat.txt | grep -v "dexopt" | head -80
 grep -n -A40 "FATAL EXCEPTION" $OUT/logcat.txt | head -80
