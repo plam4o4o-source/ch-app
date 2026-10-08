@@ -42,6 +42,8 @@ done
 echo "===== installed version ====="
 ver
 timeout 30 adb logcat -d > $OUT/logcat.txt
+echo "===== notifications ====="
+timeout 20 adb shell dumpsys notification --noredact | grep -A3 "pkg=org.chyavorec.app" | grep -E "pkg=|android.title|android.text" | head -20
 echo "===== installer / update log ====="
 grep -nE "PackageInstaller|PackageManager|INSTALL_FAILED|AppUpdater|update-|chyavorec.*(Exception|Error)|FATAL" $OUT/logcat.txt | grep -v "dexopt" | head -80
 grep -n -A40 "FATAL EXCEPTION" $OUT/logcat.txt | head -80
