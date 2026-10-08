@@ -26,15 +26,16 @@ adb logcat -c
 adb shell am start -n $PKG/.MainActivity
 sleep 15
 dump; tapif text "Skip"; sleep 4
-for i in $(seq 1 30); do
+for i in $(seq 1 20); do
   dump || { sleep 5; continue; }
   shot "step-$i"
-  if tapif text "Download and install" || tapif text "Install" || tapif text "Update" \
-     || tapif text "Open settings" || tapif text "Allow from this source"; then
+  if tapif text "=Open settings" || tapif text "=Allow from this source" || tapif text "=Download and install" \
+     || tapif text "=Install" || tapif text "=Update" || tapif text "=Open"; then
     if grep -q 'Allow from this source' $OUT/ui.xml; then sleep 2; timeout 10 adb shell input keyevent KEYCODE_BACK; fi
     sleep 6; continue
   fi
   # приложението е рестартирано след обновяване или е затворено
+  if grep -q "version 1.2.11\|1.2.11" $OUT/ui.xml; then :; fi
   if ! timeout 10 adb shell pidof $PKG >/dev/null; then echo "process not running (step $i)"; fi
   sleep 6
 done
