@@ -45,7 +45,7 @@ val updateManifestUrl = config(
     "https://github.com/plam4o4o-source/ch-app/releases/latest/download/update.json",
 )
 // ABI-та на release/play build-овете (виж buildTypes); debug пази всички — за емулаторите.
-val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")
+val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО само за проверката на емулатор
 
 android {
     namespace = "org.chyavorec.app"
