@@ -16,9 +16,7 @@ import kotlinx.coroutines.launch
 import okio.Path.Companion.toOkioPath
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.notifications.Notifier
-import org.chyavorec.app.messages.MessageWorker
-import org.chyavorec.app.notifications.SyncWorker
-import org.chyavorec.app.update.UpdateWorker
+import org.chyavorec.app.notifications.PeriodicSyncWorker
 
 class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuration.Provider {
 
@@ -35,12 +33,11 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         super.onCreate()
         container = AppContainer(this)
         container.watchSignOut()
-        Notifier.createChannels(this)
-        // Инициализацията на WorkManager (база данни) не бива да бави първия кадър.
+        // Каналите за известия и инициализацията на WorkManager (база данни) не бива да бавят първия кадър.
         appScope.launch {
-            runCatching { SyncWorker.schedule(this@ChitalishteApp) }
-            runCatching { MessageWorker.schedule(this@ChitalishteApp) }
-            runCatching { UpdateWorker.schedule(this@ChitalishteApp, container.updater.enabled) }
+            runCatching { Notifier.createChannels(this@ChitalishteApp) }
+            // Една обща периодична задача (съобщения, новини, заемания, уиджет, обновяване).
+            runCatching { PeriodicSyncWorker.schedule(this@ChitalishteApp) }
         }
     }
 

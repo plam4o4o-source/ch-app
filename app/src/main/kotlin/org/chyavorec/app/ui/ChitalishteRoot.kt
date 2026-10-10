@@ -87,6 +87,7 @@ import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.messages.MessagesOnLaunch
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.navigation.TopTab
 import org.chyavorec.app.ui.screens.catalog.BookScreen
@@ -198,6 +199,8 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     }
 
     LaunchedEffect(Unit) { container.updater.checkOnLaunch() }
+    // Съобщенията (и известие за нови лични) — веднъж на процес, не при всяко показване на „Начало“.
+    LaunchedEffect(Unit) { MessagesOnLaunch.run(context, container) }
     UpdateDialog(container.updater)
 
     fun navigate(target: String) = if (target in topLevelRoutes) nav.navigateTab(target) else nav.navigate(target)

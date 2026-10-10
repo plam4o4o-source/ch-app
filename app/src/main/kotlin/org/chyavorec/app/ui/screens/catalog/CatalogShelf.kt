@@ -105,6 +105,8 @@ fun CatalogShelfView(
     onLoadMore: () -> Unit,
     onOpen: (CatalogBook) -> Unit,
     modifier: Modifier = Modifier,
+    /** Колко от първите рафтове „влизат“ с анимация (0 — без анимация, напр. след ново търсене). */
+    staggered: Int = 10,
 ) {
     BoxWithConstraints(modifier.fillMaxSize()) {
         val rowWidth = maxWidth - SHELF_PADDING * 2
@@ -113,7 +115,7 @@ fun CatalogShelfView(
             item(contentType = "header") { header() }
             rows.forEachIndexed { r, row ->
                 item(key = "shelf-" + row.first().inv, contentType = "shelf") {
-                    Column(Modifier.fillMaxWidth().padding(horizontal = SHELF_PADDING).animateEntrance(r)) {
+                    Column(Modifier.fillMaxWidth().padding(horizontal = SHELF_PADDING).animateEntrance(r, maxStaggered = staggered)) {
                         Row(
                             Modifier.fillMaxWidth().height(MAX_HEIGHT.dp),
                             verticalAlignment = Alignment.Bottom,

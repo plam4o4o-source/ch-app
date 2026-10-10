@@ -12,9 +12,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.ui.semantics.contentDescription
 import kotlinx.coroutines.delay
-import org.chyavorec.app.messages.MessageWorker
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AnimatedCounter
+import org.chyavorec.app.ui.components.prepareCountUpToday
 import org.chyavorec.app.ui.components.rememberCountUpToday
 import org.chyavorec.app.ui.components.EasterEggs
 import org.chyavorec.app.ui.components.IconPlate
@@ -82,6 +82,7 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -143,6 +144,9 @@ fun HomeScreen(navigate: (String) -> Unit) {
     val state by vm.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     TabReselectEffect(Routes.HOME) { listState.animateScrollToItem(0) }
+    // Дали броячите „отброяват“ днес — прочита се отрано и извън главната нишка.
+    val appContext = LocalContext.current.applicationContext
+    LaunchedEffect(Unit) { prepareCountUpToday(appContext) }
 
     PullToRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         // На таблет/хоризонтално съдържанието е центрирано и не по-широко от 840 dp.
@@ -157,7 +161,12 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     HomeHeader(onMessages = { navigate(Routes.MESSAGES) }, season = season)
                     // Снежинки само върху заглавката (не върху целия екран).
                     if (season == Season.CHRISTMAS) {
-                        Snowfall(Modifier.matchParentSize(), color = if (LocalExtendedColors.current.isDark) Color.White else Color(0xFF7A93AB))
+                        Snowfall(
+                            Modifier.matchParentSize(),
+                            color = if (LocalExtendedColors.current.isDark) Color.White else Color(0xFF7A93AB),
+                            // Първото превъртане спира снеговалежа (чете се в анимацията, не в композицията).
+                            stopWhen = { listState.isScrollInProgress || listState.firstVisibleItemIndex > 0 },
+                        )
                     }
                 }
             }
@@ -248,17 +257,10 @@ fun HomeScreen(navigate: (String) -> Unit) {
 
 @Composable
 private fun HomeHeader(onMessages: () -> Unit, season: Season = Season.NONE) {
-    val container = LocalAppContainer.current
-    val center = container.messages
-    val appContext = LocalContext.current.applicationContext
+    val center = LocalAppContainer.current.messages
+    // Самото опресняване на съобщенията е веднъж на процес (MessagesOnLaunch в корена), не тук:
+    // заглавката се показва наново при всяко връщане към „Начало“ и превъртане нагоре.
     val unread by center.unreadCount.collectAsStateWithLifecycle(initialValue = 0)
-    LaunchedEffect(Unit) {
-        runCatching {
-            center.refresh(force = false)
-            // Нови лични съобщения от библиотеката → известие и при отваряне (всяко само веднъж).
-            MessageWorker.notifyPersonal(appContext, container)
-        }
-    }
     // Значката „подскача“ при поява или нов брой непрочетени (без анимация при намалено движение).
     val reduced = rememberReducedMotion()
     val badgeScale = remember { Animatable(1f) }
@@ -306,6 +308,12 @@ private fun HomeHeader(onMessages: () -> Unit, season: Season = Season.NONE) {
     }
 }
 
+/** Тъмен воал под текста на въртележката — еднакъв за всички страници, създава се веднъж. */
+private val HeroScrim = Brush.verticalGradient(
+    0f to Color.Transparent, 0.3f to Color.Transparent,
+    0.65f to Brand.Ink.copy(alpha = 0.6f), 1f to Brand.Ink.copy(alpha = 0.96f),
+)
+
 /**
  * Въртяща се лента с последните новини: автоматично превъртане на 6 s (спира,
  * докато потребителят плъзга), parallax на снимката и индикатор на страниците.
@@ -333,7 +341,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
             modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = carouselLabel },
         ) { page ->
             val a = items[page]
-            val offset = (pager.currentPage - page) + pager.currentPageOffsetFraction
+            // Отместването се чете само в graphicsLayer — при плъзгане страницата не се прекомпозира на всеки кадър.
+            val offset = { (pager.currentPage - page) + pager.currentPageOffsetFraction }
             // Пропорция 1.6:1 като минимум — при едър шрифт картата расте на височина,
             // вместо заглавието да се отреже.
             BoxWithConstraints {
@@ -344,7 +353,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                 shadowElevation = 6.dp,
                 modifier = Modifier.fillMaxWidth().widthIn(max = 720.dp).heightIn(min = minHeight)
                     .graphicsLayer {
-                        val scale = 1f - 0.06f * kotlin.math.abs(offset).coerceIn(0f, 1f)
+                        val scale = 1f - 0.06f * kotlin.math.abs(offset()).coerceIn(0f, 1f)
                         scaleX = scale; scaleY = scale
                     }
                     .darkTopHighlight(MaterialTheme.shapes.large),
@@ -365,18 +374,11 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                             // Без shared element: същият ключ има и списъкът „Новини“, а при смяна на
                             // таб двата източника биха се засекли (въртележката е и с паралакс/мащаб).
                             modifier = Modifier.fillMaxSize().graphicsLayer {
-                                translationX = offset * size.width * 0.35f
+                                translationX = offset() * size.width * 0.35f
                                 scaleX = 1.15f; scaleY = 1.15f
                             },
                         )
-                        Box(
-                            Modifier.fillMaxSize().background(
-                                Brush.verticalGradient(
-                                    0f to Color.Transparent, 0.3f to Color.Transparent,
-                                    0.65f to Brand.Ink.copy(alpha = 0.6f), 1f to Brand.Ink.copy(alpha = 0.96f),
-                                ),
-                            ),
-                        )
+                        Box(Modifier.fillMaxSize().background(HeroScrim))
                     }
                     }
                     Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
@@ -387,7 +389,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                         )
                         Spacer(Modifier.height(6.dp))
                         Text(a.title, style = MaterialTheme.typography.headlineSmall, color = Brand.Parchment, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                        Formatters.millisDate(context, a.publishedAtMillis)?.let {
+                        val date = remember(a.publishedAtMillis) { Formatters.millisDate(context, a.publishedAtMillis) }
+                        date?.let {
                             Spacer(Modifier.height(6.dp))
                             Text(it, style = MaterialTheme.typography.labelMedium, color = Brand.Parchment.copy(alpha = 0.78f))
                         }
@@ -408,7 +411,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
 @Composable
 private fun FeastLine(feast: DailyFeast) {
     val context = LocalContext.current
-    val date = Formatters.date(context, LocalAppContainer.current.clock.today())
+    val today = LocalAppContainer.current.clock.today()
+    val date = remember(today) { Formatters.date(context, today) }
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 6.dp).animateEntrance(0),
         verticalAlignment = Alignment.Top,
@@ -434,11 +438,18 @@ private fun StatsRow(state: HomeUiState) {
             .darkTopHighlight(MaterialTheme.shapes.medium),
     ) {
         // Отброяване от 0 само при първото показване за деня; после — направо крайните стойности.
+        // Докато настройката се чете (обикновено вече е прочетена), редът заема мястото си, но е невидим.
         val countUp = rememberCountUpToday()
-        Row(Modifier.padding(vertical = 18.dp, horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
-            AnimatedCounter(state.yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f), animate = countUp)
-            state.catalogCount?.let { AnimatedCounter(it, stringResource(R.string.stat_books), Modifier.weight(1f), animate = countUp) }
-            state.eventsThisMonth?.let { AnimatedCounter(it, stringResource(R.string.stat_events), Modifier.weight(1f), animate = countUp) }
+        key(countUp) {
+            Row(
+                Modifier.padding(vertical = 18.dp, horizontal = 8.dp).graphicsLayer { alpha = if (countUp == null) 0f else 1f },
+                horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                val animate = countUp == true
+                AnimatedCounter(state.yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f), animate = animate)
+                state.catalogCount?.let { AnimatedCounter(it, stringResource(R.string.stat_books), Modifier.weight(1f), animate = animate) }
+                state.eventsThisMonth?.let { AnimatedCounter(it, stringResource(R.string.stat_events), Modifier.weight(1f), animate = animate) }
+            }
         }
     }
 }

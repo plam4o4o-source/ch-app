@@ -138,6 +138,11 @@ class ChitalishteWidget : GlanceAppWidget() {
     }
 
     companion object {
+        /** Има ли поне едно копие на уиджета на началния екран (иначе фоновата задача не тегли данни за него). */
+        suspend fun hasInstances(context: Context): Boolean = runCatching {
+            GlanceAppWidgetManager(context).getGlanceIds(ChitalishteWidget::class.java).isNotEmpty()
+        }.getOrDefault(false)
+
         /** Опреснява всички копия на уиджета; грешките се пренебрегват (уиджетът е допълнение). */
         suspend fun refresh(context: Context) {
             runCatching {

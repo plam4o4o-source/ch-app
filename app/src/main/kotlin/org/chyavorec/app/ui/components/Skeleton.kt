@@ -20,13 +20,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -35,22 +38,43 @@ import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
 
 /**
+ * Позицията на отблясъка, обща за всички skeleton елементи на един екран
+ * ([ShimmerHost]) — една безкрайна анимация вместо по една на всяко правоъгълниче.
+ */
+private val LocalShimmerX = staticCompositionLocalOf<State<Float>?> { null }
+
+@Composable
+private fun rememberShimmerX(): State<Float> = rememberInfiniteTransition(label = "shimmer").animateFloat(
+    initialValue = -600f, targetValue = 1400f,
+    animationSpec = infiniteRepeatable(tween(1300, easing = LinearEasing), RepeatMode.Restart), label = "x",
+)
+
+/** Обща анимация за всички [shimmer] вътре в [content]; при намалено движение — без анимация. */
+@Composable
+private fun ShimmerHost(content: @Composable () -> Unit) {
+    if (rememberReducedMotion()) {
+        content()
+    } else {
+        CompositionLocalProvider(LocalShimmerX provides rememberShimmerX(), content = content)
+    }
+}
+
+/**
  * Shimmer ефект за skeleton зареждане. Уважава системната настройка
- * „Премахване на анимациите“ — тогава е статичен.
+ * „Премахване на анимациите“ — тогава е статичен. Позицията се чете само при
+ * рисуване (без рекомпозиция на всеки кадър); вътре в [SkeletonList]/[SkeletonCards]
+ * всички елементи ползват една обща анимация.
  */
 fun Modifier.shimmer(): Modifier = composed {
     val base = MaterialTheme.colorScheme.surfaceContainerHigh
     val highlight = MaterialTheme.colorScheme.surfaceContainerLowest
-    val animationsOn = android.provider.Settings.Global.getFloat(
-        LocalContext.current.contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f,
-    ) > 0f
-    if (!animationsOn) return@composed background(base)
-    val transition = rememberInfiniteTransition(label = "shimmer")
-    val x by transition.animateFloat(
-        initialValue = -600f, targetValue = 1400f,
-        animationSpec = infiniteRepeatable(tween(1300, easing = LinearEasing), RepeatMode.Restart), label = "x",
-    )
-    background(Brush.linearGradient(listOf(base, highlight, base), start = Offset(x, 0f), end = Offset(x + 500f, 300f)))
+    if (rememberReducedMotion()) return@composed background(base)
+    val x = LocalShimmerX.current ?: rememberShimmerX()
+    val colors = remember(base, highlight) { listOf(base, highlight, base) }
+    drawBehind {
+        val start = x.value
+        drawRect(Brush.linearGradient(colors, start = Offset(start, 0f), end = Offset(start + 500f, 300f)))
+    }
 }
 
 @Composable
@@ -62,7 +86,7 @@ fun SkeletonBox(modifier: Modifier = Modifier, height: Dp = 16.dp, width: Dp? = 
 }
 
 @Composable
-fun SkeletonList(rows: Int = 6, withImage: Boolean = true, modifier: Modifier = Modifier) {
+fun SkeletonList(rows: Int = 6, withImage: Boolean = true, modifier: Modifier = Modifier) = ShimmerHost {
     val desc = stringResource(R.string.loading)
     Column(
         modifier.fillMaxWidth().padding(16.dp).semantics { contentDescription = desc },
@@ -85,7 +109,7 @@ fun SkeletonList(rows: Int = 6, withImage: Boolean = true, modifier: Modifier = 
 }
 
 @Composable
-fun SkeletonCards(modifier: Modifier = Modifier) {
+fun SkeletonCards(modifier: Modifier = Modifier) = ShimmerHost {
     val desc = stringResource(R.string.loading)
     Column(modifier.fillMaxWidth().padding(16.dp).semantics { contentDescription = desc }, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Box(Modifier.fillMaxWidth().height(220.dp).clip(MaterialTheme.shapes.large).shimmer())

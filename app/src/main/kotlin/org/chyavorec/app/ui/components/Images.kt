@@ -29,7 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import coil3.network.HttpException
 import coil3.request.ImageRequest
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.Brand
@@ -130,12 +131,23 @@ fun BrandedImageFallback(modifier: Modifier = Modifier) {
  */
 val LocalOnlineCovers = staticCompositionLocalOf { true }
 
+/** ISBN само с цифри (и X) или `null`, ако не е 10- или 13-знаков. */
+private fun cleanIsbn(isbn: String): String? {
+    val clean = isbn.filter { it.isDigit() || it == 'X' || it == 'x' }.uppercase()
+    return clean.takeIf { it.length == 10 || it.length == 13 }
+}
+
 /** Адрес на корица в Open Library по ISBN (само HTTPS; `default=false` → 404 вместо празен GIF, когато липсва). */
 fun openLibraryCoverUrl(isbn: String, large: Boolean): String? {
-    val clean = isbn.filter { it.isDigit() || it == 'X' || it == 'x' }.uppercase()
-    if (clean.length != 10 && clean.length != 13) return null
+    val clean = cleanIsbn(isbn) ?: return null
     return "https://covers.openlibrary.org/b/isbn/$clean-${if (large) "L" else "M"}.jpg?default=false"
 }
+
+/** Голяма (-L) корица само за детайлите на книгата; списъците и редовете ползват една и съща -M. */
+private val LargeCoverWidth = 120.dp
+
+/** Потъмняване към долния край на корицата — еднакво за всички, създава се веднъж. */
+private val CoverBottomShade = Brush.verticalGradient(0.55f to Color.Transparent, 1f to Color.Black.copy(alpha = 0.35f))
 
 /** Цветът на „издателската“ корица — по раздела по УДК със засенчване според заглавието (общ за корици и гръбчета). */
 fun coverColor(book: CatalogBook): Color = coverShade(UdcCoverColors[book.udcSection] ?: Color(0xFF5A4D3D), book.title)
@@ -162,16 +174,45 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
             BookStatus.UNAVAILABLE -> stringResource(R.string.status_unavailable)
         }
     } else null
+    // Градиентът зависи само от цвета — не се създава наново при всяка рекомпозиция.
+    val background = remember(base) {
+        Brush.linearGradient(listOf(base.copy(alpha = 0.85f), base, base.darken()), Offset.Zero, Offset(0f, Float.POSITIVE_INFINITY))
+    }
+
+    val context = LocalContext.current
+    val online = LocalOnlineCovers.current
+    val large = width >= LargeCoverWidth
+    val isbn = remember(book.isbn) { cleanIsbn(book.isbn) }
+    val wantsOnline = online && book.coverUrl.isBlank() && isbn != null
+    // ISBN без корица в Open Library (запомнени за 30 дни) не се питат отново.
+    if (wantsOnline) CoverMisses.ensureLoaded(context)
+    val missesReady = wantsOnline && CoverMisses.ready.value
+    val onlineUrl = remember(isbn, wantsOnline, missesReady, large) {
+        if (isbn != null && missesReady && !CoverMisses.isMiss(isbn)) openLibraryCoverUrl(isbn, large) else null
+    }
+    var onlineFailed by remember(onlineUrl) { mutableStateOf(false) }
+    val url = when {
+        book.coverUrl.isNotBlank() -> book.coverUrl
+        onlineUrl != null && !onlineFailed -> onlineUrl
+        else -> null
+    }
+    // Истинската корица е заредена → рисуваното заглавие/автор под нея не се изчертава.
+    var imageShown by remember(url) { mutableStateOf(false) }
+
     Box(
         modifier
             .size(width, height)
             .shadow(6.dp, RoundedCornerShape(topStart = 3.dp, bottomStart = 3.dp, topEnd = 8.dp, bottomEnd = 8.dp))
             .clip(RoundedCornerShape(topStart = 3.dp, bottomStart = 3.dp, topEnd = 8.dp, bottomEnd = 8.dp))
-            .background(Brush.linearGradient(listOf(base.copy(alpha = 0.85f), base, base.darken()), Offset.Zero, Offset(0f, Float.POSITIVE_INFINITY)))
-            .drawWithContent {
-                drawContent()
+            .background(background)
+            .drawWithCache {
                 // гръбче
-                drawRect(Brush.horizontalGradient(listOf(Color.Black.copy(alpha = 0.28f), Color.Transparent), 0f, 7.dp.toPx()), size = size.copy(width = 7.dp.toPx()))
+                val spineWidth = 7.dp.toPx()
+                val spine = Brush.horizontalGradient(listOf(Color.Black.copy(alpha = 0.28f), Color.Transparent), 0f, spineWidth)
+                onDrawWithContent {
+                    drawContent()
+                    drawRect(spine, size = size.copy(width = spineWidth))
+                }
             }
             .clearAndSetSemantics {
                 contentDescription = book.title
@@ -179,64 +220,71 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
             },
     ) {
         val scale = (width.value / 72f).coerceIn(0.6f, 3f)
-        // вътрешна „релефна“ рамка като на твърда корица
-        Box(
-            Modifier.fillMaxSize().padding(start = (9 * scale).dp, end = (4 * scale).dp, top = (4 * scale).dp, bottom = (4 * scale).dp)
-                .border(0.75.dp, Color.White.copy(alpha = 0.22f), RoundedCornerShape(2.dp)),
-        )
-        // по-тъмно дъно — авторът се чете и върху светлите раздели
-        Box(
-            Modifier.fillMaxSize().background(
-                Brush.verticalGradient(0.55f to Color.Transparent, 1f to Color.Black.copy(alpha = 0.35f)),
-            ),
-        )
-        Column(Modifier.fillMaxSize().padding(start = (12 * scale).dp, end = (7 * scale).dp, top = (9 * scale).dp, bottom = (10 * scale).dp)) {
-            // Малките корици (в списъци) получават по-дребен шрифт; думите се пренасят
-            // със сричкопренасяне, а не се режат по средата.
-            Text(
-                book.title,
-                color = Color.White,
-                fontFamily = Raleway,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = (11.5f * scale).coerceAtLeast(9f).sp,
-                lineHeight = (13.5f * scale).coerceAtLeast(11f).sp,
-                maxLines = if (width < 72.dp) 3 else 4,
-                overflow = TextOverflow.Ellipsis,
-                style = LocalTextStyle.current.copy(hyphens = Hyphens.Auto, lineBreak = LineBreak.Heading),
+        if (!imageShown) {
+            // вътрешна „релефна“ рамка като на твърда корица
+            Box(
+                Modifier.fillMaxSize().padding(start = (9 * scale).dp, end = (4 * scale).dp, top = (4 * scale).dp, bottom = (4 * scale).dp)
+                    .border(0.75.dp, Color.White.copy(alpha = 0.22f), RoundedCornerShape(2.dp)),
             )
-            Box(Modifier.weight(1f))
-            Text(
-                book.author,
-                color = Color.White.copy(alpha = 0.92f),
-                fontFamily = Raleway,
-                fontSize = maxOf(9f, 8.5f * scale).sp,
-                lineHeight = maxOf(11f, 10f * scale).sp,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-        val online = LocalOnlineCovers.current
-        val onlineUrl = remember(book.isbn, online, width) {
-            if (online && book.coverUrl.isBlank()) openLibraryCoverUrl(book.isbn, large = width >= 100.dp) else null
-        }
-        var onlineFailed by remember(onlineUrl) { mutableStateOf(false) }
-        val url = when {
-            book.coverUrl.isNotBlank() -> book.coverUrl
-            onlineUrl != null && !onlineFailed -> onlineUrl
-            else -> null
+            // по-тъмно дъно — авторът се чете и върху светлите раздели
+            Box(Modifier.fillMaxSize().background(CoverBottomShade))
+            Column(Modifier.fillMaxSize().padding(start = (12 * scale).dp, end = (7 * scale).dp, top = (9 * scale).dp, bottom = (10 * scale).dp)) {
+                // Малките корици (в списъци) получават по-дребен шрифт. Сричкопренасяне — само
+                // при големите: в малките то само оскъпява подреждането на текста в списъка.
+                Text(
+                    book.title,
+                    color = Color.White,
+                    fontFamily = Raleway,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = (11.5f * scale).coerceAtLeast(9f).sp,
+                    lineHeight = (13.5f * scale).coerceAtLeast(11f).sp,
+                    maxLines = if (width < 72.dp) 3 else 4,
+                    overflow = TextOverflow.Ellipsis,
+                    style = LocalTextStyle.current.copy(
+                        hyphens = if (width >= 100.dp) Hyphens.Auto else Hyphens.None,
+                        lineBreak = LineBreak.Heading,
+                    ),
+                )
+                Box(Modifier.weight(1f))
+                Text(
+                    book.author,
+                    color = Color.White.copy(alpha = 0.92f),
+                    fontFamily = Raleway,
+                    fontSize = maxOf(9f, 8.5f * scale).sp,
+                    lineHeight = maxOf(11f, 10f * scale).sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
         if (url != null) {
-            val context = LocalContext.current
-            val request = remember(context, url) { ImageRequest.Builder(context).data(url).build() }
+            val request = remember(context, url) {
+                ImageRequest.Builder(context).data(url).apply {
+                    // В детайлите: докато се тегли голямата корица, се показва вече заредената средна от списъка.
+                    if (url == onlineUrl && large && isbn != null) placeholderMemoryCacheKey(openLibraryCoverUrl(isbn, large = false))
+                }.build()
+            }
             AsyncImage(
                 model = request,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                onError = { if (url == onlineUrl) onlineFailed = true },
+                onError = { state ->
+                    if (url == onlineUrl) {
+                        onlineFailed = true
+                        // Само „няма такава корица“ се помни; без мрежа/грешка на сървъра — нов опит следващия път.
+                        val error = state.result.throwable
+                        if (isbn != null && error is HttpException && error.response.code == 404) CoverMisses.record(isbn)
+                    }
+                },
                 onSuccess = { state ->
                     // Open Library връща 1×1 GIF за липсваща корица (ако `default=false` бъде подминато).
                     val s = state.painter.intrinsicSize
-                    if (url == onlineUrl && s.isSpecified && (s.width < 10f || s.height < 10f)) onlineFailed = true
+                    if (url == onlineUrl && s.isSpecified && (s.width < 10f || s.height < 10f)) {
+                        onlineFailed = true
+                        if (isbn != null) CoverMisses.record(isbn)
+                    } else {
+                        imageShown = true
+                    }
                 },
                 modifier = Modifier.fillMaxSize(),
             )

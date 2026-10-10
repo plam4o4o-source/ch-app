@@ -17,7 +17,15 @@ class KeystoreCipher(private val alias: String = "chyavorec_secure_store_v1") {
 
     private val keyStore: KeyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
 
+    /** Ключът се взима от Keystore веднъж (всяко четене е IPC към системната услуга). */
+    @Volatile private var cachedKey: SecretKey? = null
+
     private fun key(): SecretKey {
+        cachedKey?.let { return it }
+        return synchronized(this) { cachedKey ?: loadOrCreateKey().also { cachedKey = it } }
+    }
+
+    private fun loadOrCreateKey(): SecretKey {
         (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)?.let { return it.secretKey }
         val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE)
         generator.init(
@@ -50,7 +58,10 @@ class KeystoreCipher(private val alias: String = "chyavorec_secure_store_v1") {
 
     /** При logout/изтриване на данни — ключът се унищожава. */
     fun destroyKey() {
-        runCatching { keyStore.deleteEntry(alias) }
+        synchronized(this) {
+            cachedKey = null
+            runCatching { keyStore.deleteEntry(alias) }
+        }
     }
 
     private companion object {

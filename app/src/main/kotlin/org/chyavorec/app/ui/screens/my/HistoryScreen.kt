@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -167,9 +168,10 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
                     errorSubject = stringResource(R.string.subject_history),
                 ) { items ->
                     // Групиране по година на заемане (най-новите първо); без дата — най-отдолу.
-                    val byYear = items.groupBy { it.year }.toSortedMap(compareByDescending<Int?> { it ?: Int.MIN_VALUE })
-                    val years = byYear.keys.toList()
-                    val shown = if (year == null) byYear else byYear.filterKeys { it == year }
+                    // Пресмята се наново само при нови данни или друга избрана година (не при всяка рекомпозиция).
+                    val byYear = remember(items) { items.groupBy { it.year }.toSortedMap(compareByDescending<Int?> { it ?: Int.MIN_VALUE }) }
+                    val years = remember(byYear) { byYear.keys.toList() }
+                    val shown = remember(byYear, year) { if (year == null) byYear else byYear.filterKeys { it == year } }
                     LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
                         if (years.size > 1) {
                             item("years") {
