@@ -111,8 +111,9 @@ android {
             // Debug пази всички ABI — за емулаторите.
             ndk {
                 abiFilters += releaseAbis
-                // Символите на native библиотеките (CameraX, DataStore, graphics) влизат в AAB-а
-                // (BUNDLE-METADATA) — Google Play ги взема сам за отчетите за сривове и ANR.
+                // Символите на native библиотеките влизат в AAB-а (BUNDLE-METADATA), ако ги има —
+                // Google Play ги взема сам за отчетите за сривове и ANR. Сегашните .so от AndroidX
+                // (graphics-path, DataStore, CameraX) идват вече без символи.
                 debugSymbolLevel = "SYMBOL_TABLE"
             }
         }

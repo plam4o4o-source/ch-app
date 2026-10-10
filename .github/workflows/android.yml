@@ -107,11 +107,13 @@ jobs:
             echo "::error::Play build must not contain self-update"; exit 1
           fi
           echo "Play manifest OK ($M)"
-          # Символите на native библиотеките за Google Play (иначе Play Console предупреждава).
+          # Символите на native библиотеките за Google Play. Сегашните .so (Compose graphics-path,
+          # DataStore, CameraX) идват от AAR-и вече без символи — тогава няма какво да се вгради
+          # и Play Console само информира; не е грешка на изданието.
           if unzip -l app/build/outputs/bundle/prodPlay/app-prod-play.aab | grep "BUNDLE-METADATA/com.android.tools.build.debugsymbols/"; then
-            echo "Native debug symbols OK"
+            echo "Native debug symbols included"
           else
-            echo "::error::AAB has no native debug symbols (BUNDLE-METADATA/com.android.tools.build.debugsymbols)"; exit 1
+            echo "::notice::No native debug symbols in the AAB (prebuilt stripped .so from AndroidX)"
           fi
 
       - uses: actions/upload-artifact@v7
