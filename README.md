@@ -235,14 +235,16 @@ push и качва APK/AAB като artifacts.
 
 | Ресурс | Файл |
 |---|---|
-| Логото на читалището (икона, splash, заглавна лента) | `app/src/main/res/drawable-nodpi/logo_chitalishte.webp`, `mipmap-*/ic_launcher_*.png` |
-| Логото на електронния каталог | `drawable-nodpi/logo_catalog.png` |
-| Логото на InvLib | `drawable-nodpi/logo_invlib.png` |
+| Логото на читалището (икона, splash, заглавна лента) | `app/src/main/res/drawable-nodpi/logo_chitalishte.webp` (+ `logo_chitalishte_small.webp`, 256 px — за емблеми до 64dp), `mipmap-*/ic_launcher_*.webp` |
+| Логото на електронния каталог | `drawable-nodpi/logo_catalog.webp` |
+| Логото на InvLib | `drawable-nodpi/logo_invlib.webp` |
 | Логото на създателя | `drawable-nodpi/logo_creator.webp` |
 | Икона и feature graphic за Google Play | `store/graphics/` |
 | Иконата на приложението (адаптивна, монохромна, splash, Play) — генерира се от логото | `python3 tools/generate_icons.py` |
 
 Текстовете на двата езика се генерират от един файл: `python3 tools/generate_strings.py`.
+
+Шрифтовете в `res/font` са подмножества (латиница, кирилица, пунктуация, € №) — при нов шрифт или нови знаци в текстовете: `python3 tools/subset_fonts.py` (проверява и покритието на strings.xml).
 
 ## Поверителност
 

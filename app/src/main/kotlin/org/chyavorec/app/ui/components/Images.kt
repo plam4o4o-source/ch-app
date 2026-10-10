@@ -105,8 +105,9 @@ fun RemoteImage(
 @Composable
 fun BrandedImageFallback(modifier: Modifier = Modifier) {
     Box(modifier.background(Brush.linearGradient(listOf(Brand.Burgundy, Color(0xFF3A1A18), Brand.Ink)))) {
+        // Воден знак с 9% непрозрачност — малкият вариант (256 px) е достатъчен.
         androidx.compose.foundation.Image(
-            painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.logo_chitalishte),
+            painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.logo_chitalishte_small),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             alpha = 0.09f,
@@ -271,7 +272,9 @@ private fun coverShade(base: Color, title: String): Color {
 
 /**
  * Логото на НЧ „Васил Левски – 1922“ върху бял кръг — четимо и в тъмна тема
- * (самото лого е в сиви тонове върху прозрачен фон).
+ * (самото лого е в сиви тонове върху прозрачен фон). До 64dp (заглавни ленти,
+ * карта, меню) се ползва малкият вариант (256 px) — по-малко памет и по-бързо
+ * декодиране; пълният (679×720) — само за големите емблеми.
  */
 @Composable
 fun Emblem(size: Dp, modifier: Modifier = Modifier, description: String? = null) {
@@ -280,7 +283,9 @@ fun Emblem(size: Dp, modifier: Modifier = Modifier, description: String? = null)
         contentAlignment = Alignment.Center,
     ) {
         androidx.compose.foundation.Image(
-            painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.logo_chitalishte),
+            painter = androidx.compose.ui.res.painterResource(
+                if (size <= 64.dp) org.chyavorec.app.R.drawable.logo_chitalishte_small else org.chyavorec.app.R.drawable.logo_chitalishte,
+            ),
             contentDescription = description,
             modifier = Modifier.fillMaxSize(),
         )

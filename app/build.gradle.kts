@@ -44,6 +44,8 @@ val updateManifestUrl = config(
     "UPDATE_MANIFEST_URL",
     "https://github.com/plam4o4o-source/ch-app/releases/latest/download/update.json",
 )
+// ABI-та на release/play build-овете (виж buildTypes); debug пази всички — за емулаторите.
+val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")
 
 android {
     namespace = "org.chyavorec.app"
@@ -56,7 +58,6 @@ android {
         versionCode = config("VERSION_CODE", "1").toInt()
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
 
         buildConfigField("String", "SITE_BASE_URL", siteBaseUrl.quoted())
         buildConfigField("String", "CATALOG_URLS", catalogUrls.quoted())
@@ -106,6 +107,9 @@ android {
             if (config("SIGNING_STORE_FILE").isNotEmpty()) {
                 signingConfig = signingConfigs.getByName("release")
             }
+            // Само ARM (реалните телефони): без x86/x86_64 native библиотеки в APK-а.
+            // Debug пази всички ABI — за емулаторите.
+            ndk { abiFilters += releaseAbis }
         }
         // Същото като release, но за Google Play: без самообновяване и без
         // разрешението REQUEST_INSTALL_PACKAGES (правилата на Play го забраняват —
@@ -113,6 +117,8 @@ android {
         create("play") {
             initWith(getByName("release"))
             matchingFallbacks += "release"
+            // initWith копира и ndk.abiFilters; повторено изрично за яснота (множество — без дубликати).
+            ndk { abiFilters += releaseAbis }
         }
     }
 
@@ -128,15 +134,33 @@ android {
     }
 
     packaging {
-        resources.excludes += setOf("/META-INF/{AL2.0,LGPL2.1}", "META-INF/versions/9/previous-compilation-data.bin")
+        resources.excludes += setOf(
+            "/META-INF/{AL2.0,LGPL2.1}",
+            "META-INF/versions/9/previous-compilation-data.bin",
+            // Метаданни, ненужни по време на работа (kotlin-reflect не се ползва;
+            // META-INF/services/** и *.kotlin_module остават).
+            "kotlin/**",
+            "DebugProbesKt.bin",
+            "META-INF/*.version",
+            "META-INF/androidx/**",
+            "/*.properties",
+        )
     }
 
     androidResources {
         @Suppress("UnstableApiUsage")
         generateLocaleConfig = false
-        // Само езиците на приложението: махат се преводите на библиотеките (AppCompat,
-        // Material, Play Services…) за десетки други езици — по-малък APK/AAB.
+        // Само езиците на приложението: махат се преводите на библиотеките (Material,
+        // CameraX…) за десетки други езици — по-малък APK/AAB.
         localeFilters += listOf("bg", "en")
+    }
+
+    // Езикът се сменя и в самото приложение (Android 8–12: util/AppLanguage) —
+    // и двата езика трябва да са в базовия APK, не в отделни езикови части на AAB.
+    bundle {
+        language {
+            enableSplit = false
+        }
     }
 
     testOptions {
@@ -209,7 +233,6 @@ dependencies {
     implementation("org.chyavorec:shared")
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -230,11 +253,11 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
-    implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.animation)
     debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.tooling.preview)
     debugImplementation(libs.compose.ui.test.manifest)
 
     implementation(libs.kotlinx.coroutines.android)
@@ -242,13 +265,13 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    // ZXing: генериране на баркодове (карта) и разчитане при сканиране.
     implementation(libs.zxing.core)
-    // Скенер на баркодове (ISBN / инвентарен номер) — камера + разпознаване само на устройството.
+    // Скенер на баркодове (ISBN / инвентарен номер) — камера + разпознаване (ZXing) само на устройството.
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
-    implementation(libs.mlkit.barcode.scanning)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)

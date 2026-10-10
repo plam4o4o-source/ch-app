@@ -2,7 +2,6 @@ package org.chyavorec.app.ui.screens.settings
 
 import android.content.Intent
 import android.provider.Settings
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -54,7 +53,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
@@ -63,6 +61,7 @@ import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.updateStatusText
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.ThemeMode
+import org.chyavorec.app.util.AppLanguage
 import org.chyavorec.app.util.Intents
 
 @Composable
@@ -168,14 +167,14 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
         )
     }
     if (langDialog) {
-        val current = AppCompatDelegate.getApplicationLocales().toLanguageTags().ifBlank { "" }
+        val current = AppLanguage.current(context)
         ChoiceDialog(
             title = stringResource(R.string.settings_language),
             options = listOf("" to stringResource(R.string.language_system), "bg" to "Български", "en" to "English"),
             selected = current.substringBefore('-'),
             onSelect = { tag ->
                 langDialog = false
-                AppCompatDelegate.setApplicationLocales(if (tag.isEmpty()) LocaleListCompat.getEmptyLocaleList() else LocaleListCompat.forLanguageTags(tag))
+                AppLanguage.set(context, tag)
             },
             onDismiss = { langDialog = false },
         )
@@ -198,7 +197,7 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
 
 @Composable
 private fun currentLanguageLabel(): String {
-    val tags = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    val tags = AppLanguage.current(LocalContext.current)
     return when {
         tags.startsWith("bg") -> "Български"
         tags.startsWith("en") -> "English"

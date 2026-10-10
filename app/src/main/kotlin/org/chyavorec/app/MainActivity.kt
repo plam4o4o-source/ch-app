@@ -1,10 +1,11 @@
 package org.chyavorec.app
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,11 +16,17 @@ import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.ChitalishteRoot
 import org.chyavorec.app.ui.theme.ChitalishteTheme
+import org.chyavorec.app.util.AppLanguage
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     private val deepLink = MutableStateFlow<String?>(null)
     private var ready by mutableStateOf(false)
+
+    /** Избраният в настройките език (Android 8–12; на 13+ го прилага системата). */
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(AppLanguage.wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()

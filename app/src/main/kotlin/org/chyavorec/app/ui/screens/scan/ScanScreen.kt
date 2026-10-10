@@ -82,11 +82,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.google.mlkit.vision.barcode.BarcodeScanner
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.common.InputImage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -342,10 +337,10 @@ private fun PermissionMessage(
 }
 
 /**
- * CameraX преглед + анализ на кадрите с ML Kit. Анализаторът подава всеки
- * разчетен баркод към [onCode]; докато [paused] е истина (отворен лист с
- * резултат), кадрите се пропускат. Скенерът и изпълнителят се затварят при
- * напускане на екрана.
+ * CameraX преглед + анализ на кадрите със ZXing ([BarcodeDecoder]). Анализаторът
+ * подава всеки разчетен баркод към [onCode]; докато [paused] е истина (отворен
+ * лист с резултат), кадрите се пропускат. Изпълнителят се спира при напускане
+ * на екрана.
  */
 @Composable
 private fun CameraPreview(
@@ -358,30 +353,16 @@ private fun CameraPreview(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val previewView = remember { PreviewView(context).apply { implementationMode = PreviewView.ImplementationMode.COMPATIBLE } }
-    // Ако разпознаването не може да се създаде (липсващ компонент, стар телефон),
-    // показваме „камерата не е достъпна“ вместо срив на приложението.
-    val scanner: BarcodeScanner? = remember {
-        runCatching {
-            BarcodeScanning.getClient(
-                BarcodeScannerOptions.Builder()
-                    .setBarcodeFormats(
-                        Barcode.FORMAT_EAN_13, Barcode.FORMAT_EAN_8, Barcode.FORMAT_CODE_128,
-                        Barcode.FORMAT_CODE_39, Barcode.FORMAT_QR_CODE,
-                    )
-                    .build(),
-            )
-        }.getOrNull()
-    }
-    if (scanner == null) {
-        LaunchedEffect(Unit) { onError() }
-        return
-    }
+    // Разпознаването е чист Kotlin/Java (ZXing) — без native библиотеки и модели.
+    val decoder = remember { BarcodeDecoder() }
     val executor = remember { Executors.newSingleThreadExecutor() }
     // Най-новите стойности за анализатора (той е създаден веднъж).
     val pausedRef = remember { arrayOf(paused) }
     pausedRef[0] = paused
     val onCodeRef = remember { arrayOf(onCode) }
     onCodeRef[0] = onCode
+    // Преизползван буфер за яркостния канал (без нов масив за всеки кадър).
+    val frameRef = remember { arrayOf(ByteArray(0)) }
     var camera by remember { mutableStateOf<Camera?>(null) }
 
     DisposableEffect(lifecycleOwner) {
@@ -395,7 +376,7 @@ private fun CameraPreview(
                 val analysis = ImageAnalysis.Builder()
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
-                analysis.setAnalyzer(executor) { proxy -> analyze(proxy, scanner, pausedRef, onCodeRef) }
+                analysis.setAnalyzer(executor) { proxy -> analyze(proxy, decoder, frameRef, pausedRef, onCodeRef) }
                 p.unbindAll()
                 val cam = p.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, analysis)
                 camera = cam
@@ -406,7 +387,6 @@ private fun CameraPreview(
         }, ContextCompat.getMainExecutor(context))
         onDispose {
             runCatching { provider?.unbindAll() }
-            runCatching { scanner.close() }
             executor.shutdown()
         }
     }
@@ -415,30 +395,35 @@ private fun CameraPreview(
     AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
 }
 
-@androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
-private fun analyze(proxy: ImageProxy, scanner: BarcodeScanner, pausedRef: Array<Boolean>, onCodeRef: Array<(String) -> Unit>) {
-    val media = proxy.image
-    if (media == null || pausedRef[0]) {
+/**
+ * Разчита един кадър: копира яркостния (Y) канал и го подава на [decoder].
+ * Кадърът винаги се затваря (иначе CameraX спира да подава нови), а всяка
+ * грешка при разчитането само пропуска кадъра.
+ */
+private fun analyze(
+    proxy: ImageProxy,
+    decoder: BarcodeDecoder,
+    frameRef: Array<ByteArray>,
+    pausedRef: Array<Boolean>,
+    onCodeRef: Array<(String) -> Unit>,
+) {
+    try {
+        if (pausedRef[0]) return
+        // YUV_420_888 (по подразбиране за ImageAnalysis): равнина 0 е Y, по 1 байт на пиксел.
+        val plane = proxy.planes.firstOrNull() ?: return
+        val buffer = plane.buffer
+        buffer.rewind()
+        val size = buffer.remaining()
+        if (frameRef[0].size < size) frameRef[0] = ByteArray(size)
+        val frame = frameRef[0]
+        buffer.get(frame, 0, size)
+        val value = decoder.decode(frame, proxy.width, proxy.height, plane.rowStride, proxy.imageInfo.rotationDegrees)
+        if (value != null && !pausedRef[0]) onCodeRef[0](value)
+    } catch (_: Throwable) {
+        // Повреден/непълен кадър — пропуска се; следващият идва веднага.
+    } finally {
         proxy.close()
-        return
     }
-    val image = runCatching { InputImage.fromMediaImage(media, proxy.imageInfo.rotationDegrees) }.getOrNull()
-    if (image == null) {
-        proxy.close()
-        return
-    }
-    runCatching { scanner.process(image) }.getOrElse {
-        proxy.close()
-        return
-    }
-        .addOnSuccessListener { codes ->
-            if (pausedRef[0]) return@addOnSuccessListener
-            // Най-голямото (най-близкото до центъра/най-четливото) първо.
-            val value = codes.sortedByDescending { it.boundingBox?.let { b -> b.width() * b.height() } ?: 0 }
-                .firstNotNullOfOrNull { it.rawValue?.takeIf { v -> v.isNotBlank() } }
-            if (value != null) onCodeRef[0](value)
-        }
-        .addOnCompleteListener { proxy.close() }
 }
 
 /** Затъмнен фон с прозорец със заоблени ъгли и златни „скоби“ по ъглите. */

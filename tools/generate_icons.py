@@ -6,6 +6,9 @@
 с диаметър 66dp (61,1%). Цялата емблема (с надписа по ръба) трябва да е вътре
 в безопасната зона — иначе маската реже буквите.
 
+Иконите и splash логото се записват като WebP без загуби (по-малки от PNG;
+Android 8+ ги поддържа с прозрачност).
+
 Изпълнение от корена: python3 tools/generate_icons.py
 """
 import math
@@ -14,6 +17,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageOps
 LOGO = "app/src/main/res/drawable-nodpi/logo_chitalishte.webp"
 RES = "app/src/main/res"
 DENSITIES = {"mdpi": 1, "hdpi": 1.5, "xhdpi": 2, "xxhdpi": 3, "xxxhdpi": 4}
+SPLASH = 480     # px; splash иконата е 240dp платно, видимият кръг е 160dp
 
 WHITE = (255, 255, 255, 255)
 GOLD = (201, 168, 76, 255)        # brand_gold #C9A84C
@@ -108,18 +112,23 @@ def background(canvas):
     return im
 
 
+def save_webp(im, path):
+    """WebP без загуби (точни пиксели, вкл. прозрачност), максимално компресиран."""
+    im.save(path, "WEBP", lossless=True, quality=100, method=6)
+
+
 def main():
     logo = load_logo()
     circle = enclosing_circle(logo)
     for name, k in DENSITIES.items():
         c = round(108 * k)
-        foreground(logo, circle, c).save(f"{RES}/mipmap-{name}/ic_launcher_foreground.png", optimize=True)
-        monochrome(logo, circle, c).save(f"{RES}/mipmap-{name}/ic_launcher_monochrome.png", optimize=True)
+        save_webp(foreground(logo, circle, c), f"{RES}/mipmap-{name}/ic_launcher_foreground.webp")
+        save_webp(monochrome(logo, circle, c), f"{RES}/mipmap-{name}/ic_launcher_monochrome.webp")
 
     # Splash (Android 12+): 240dp платно, видим кръг 160dp (66,7%); отдолу е белият iconBackground.
-    splash = Image.new("RGBA", (720, 720), (0, 0, 0, 0))
-    splash.alpha_composite(place_emblem(logo, circle, 720, 0.58))
-    splash.save(f"{RES}/drawable-nodpi/splash_logo.png", optimize=True)
+    splash = Image.new("RGBA", (SPLASH, SPLASH), (0, 0, 0, 0))
+    splash.alpha_composite(place_emblem(logo, circle, SPLASH, 0.58))
+    save_webp(splash, f"{RES}/drawable-nodpi/splash_logo.webp")
 
     # Google Play: 512×512, Play сам заобля ъглите (без кръгла маска).
     play = background(512)
