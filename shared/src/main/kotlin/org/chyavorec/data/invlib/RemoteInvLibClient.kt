@@ -17,10 +17,12 @@ import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.MembershipStatus
+import org.chyavorec.domain.model.ReaderBundle
 import org.chyavorec.domain.model.ReaderMessage
 import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.RenewResult
 import org.chyavorec.domain.model.ServiceCapabilities
+import org.chyavorec.domain.repository.PayloadCache
 import org.chyavorec.domain.service.AuthenticationService
 import org.chyavorec.domain.service.MembershipService
 import org.chyavorec.domain.service.ReaderService
@@ -32,35 +34,70 @@ import org.chyavorec.domain.service.ReaderService
  * никога не пази паролата и я зачиства от паметта веднага след заявката.
  * Всяка функция първо проверява /v1/capabilities — ако сървърът не я
  * поддържа, връща [AppError.NotAvailable], а не симулира отговор.
+ *
+ * Възможностите се питат най-много веднъж едновременно и се помнят [CAPS_TTL_MILLIS]
+ * (в паметта и, ако е подаден [capsCache], в публичния кеш — те не са лични данни).
+ * Неуспешно питане не се помни.
  */
 class RemoteInvLibClient(
     private val http: HttpFetcher,
     baseUrl: String,
     private val clock: AppClock,
     private val deviceName: String,
+    /** Публичен (нешифрован) кеш за възможностите; `null` = само в паметта. */
+    private val capsCache: PayloadCache? = null,
 ) : AuthenticationService, ReaderService, MembershipService {
 
     private val api = baseUrl.trimEnd('/')
     private val json = Json { ignoreUnknownKeys = true; explicitNulls = false }
     private val jsonType = "application/json; charset=utf-8".toMediaType()
 
-    @Volatile private var cachedCaps: ServiceCapabilities? = null
+    private class CapsEntry(val caps: ServiceCapabilities, val savedAtMillis: Long)
+
+    @Volatile private var cachedCaps: CapsEntry? = null
+    private val capsFlight = SingleFlight<Outcome<ServiceCapabilities>>()
 
     override suspend fun capabilities(): Outcome<ServiceCapabilities> {
-        cachedCaps?.let { return Outcome.Success(it) }
-        return when (val r = send(get("/v1/capabilities", null), CapabilitiesDto.serializer())) {
-            is Outcome.Failure -> r
-            is Outcome.Success -> {
-                val d = r.value
-                val caps = ServiceCapabilities(
-                    login = d.login, profile = d.profile, loans = d.loans, membership = d.membership,
-                    holds = d.holds, renew = d.renew, passwordReset = d.passwordReset,
-                    accountDeletion = d.accountDeletion, push = d.push, availability = d.availability,
-                    history = d.history, messages = d.messages,
-                )
-                cachedCaps = caps
-                Outcome.Success(caps)
+        freshCaps(cachedCaps)?.let { return Outcome.Success(it) }
+        return capsFlight.run {
+            freshCaps(cachedCaps)?.let { return@run Outcome.Success(it) }
+            readPersistedCaps()?.let { entry ->
+                cachedCaps = entry
+                return@run Outcome.Success(entry.caps)
             }
+            when (val r = send(get("/v1/capabilities", null), CapabilitiesDto.serializer())) {
+                // Неуспехът не се помни — следващото питане опитва отново (AuthRepository → NONE).
+                is Outcome.Failure -> r
+                is Outcome.Success -> {
+                    val caps = r.value.toCapabilities()
+                    cachedCaps = CapsEntry(caps, clock.now().toEpochMilli())
+                    persistCaps(r.value)
+                    Outcome.Success(caps)
+                }
+            }
+        }
+    }
+
+    private fun freshCaps(entry: CapsEntry?): ServiceCapabilities? {
+        entry ?: return null
+        val age = clock.now().toEpochMilli() - entry.savedAtMillis
+        return if (age in 0 until CAPS_TTL_MILLIS) entry.caps else null
+    }
+
+    private suspend fun readPersistedCaps(): CapsEntry? {
+        val cache = capsCache ?: return null
+        val payload = runCatching { cache.read(CAPS_CACHE_KEY) }.getOrNull() ?: return null
+        val dto = runCatching { json.decodeFromString(CapabilitiesCacheDto.serializer(), payload.text) }.getOrNull() ?: return null
+        // Запис за друг адрес на API (сменена настройка) не важи.
+        if (dto.api != api) return null
+        val entry = CapsEntry(dto.caps.toCapabilities(), payload.savedAtMillis)
+        return if (freshCaps(entry) != null) entry else null
+    }
+
+    private suspend fun persistCaps(dto: CapabilitiesDto) {
+        val cache = capsCache ?: return
+        runCatching {
+            cache.write(CAPS_CACHE_KEY, json.encodeToString(CapabilitiesCacheDto.serializer(), CapabilitiesCacheDto(api, dto)))
         }
     }
 
@@ -102,12 +139,34 @@ class RemoteInvLibClient(
         return sendUnit(post("/v1/auth/password-reset", null, body))
     }
 
+    /** Профилът; новите мостове слагат в него и `membership` (тогава втора заявка не трябва). */
     override suspend fun profile(session: AuthSession): Outcome<ReaderProfile> {
         requireCap(Feature.PROFILE) { it.profile }?.let { return Outcome.Failure(it) }
         return when (val r = send(get("/v1/me", session), ReaderDto.serializer())) {
             is Outcome.Failure -> r
-            is Outcome.Success -> r.value.let {
-                Outcome.Success(ReaderProfile(it.readerId, it.cardNumber, it.fullName, it.photoUrl, it.category, it.email, it.registeredOn))
+            is Outcome.Success -> Outcome.Success(r.value.toProfile())
+        }
+    }
+
+    /**
+     * Всички читателски данни с една заявка (`GET /v1/me/all`, capability `all`).
+     * Членството се слага и в профила (както при `/v1/me` с `membership`).
+     */
+    override suspend fun meAll(session: AuthSession): Outcome<ReaderBundle> {
+        requireCap(Feature.PROFILE) { it.all }?.let { return Outcome.Failure(it) }
+        return when (val r = send(get("/v1/me/all", session), MeAllResponseDto.serializer())) {
+            is Outcome.Failure -> r
+            is Outcome.Success -> r.value.let { d ->
+                val membership = d.membership?.toMembership()
+                Outcome.Success(
+                    ReaderBundle(
+                        profile = d.profile?.toProfile()?.let { p -> if (p.membership == null) p.copy(membership = membership) else p },
+                        membership = membership,
+                        loans = d.loans?.loans?.map { it.toLoan() },
+                        history = d.history?.toHistory(),
+                        messages = d.messages?.toMessages(),
+                    ),
+                )
             }
         }
     }
@@ -145,9 +204,7 @@ class RemoteInvLibClient(
         requireCap(Feature.HISTORY) { it.history }?.let { return Outcome.Failure(it) }
         return when (val r = send(get("/v1/me/history", session), HistoryResponseDto.serializer())) {
             is Outcome.Failure -> r
-            is Outcome.Success -> Outcome.Success(
-                r.value.items.map { HistoryItem(it.loanId, it.inv, it.title, it.author, it.dateOut, it.dateIn) },
-            )
+            is Outcome.Success -> Outcome.Success(r.value.toHistory())
         }
     }
 
@@ -156,13 +213,7 @@ class RemoteInvLibClient(
         requireCap(Feature.MESSAGES) { it.messages }?.let { return Outcome.Failure(it) }
         return when (val r = send(get("/v1/me/messages", session), ReaderMessagesResponseDto.serializer())) {
             is Outcome.Failure -> r
-            is Outcome.Success -> Outcome.Success(
-                r.value.items
-                    .filter { it.id.isNotBlank() }
-                    .distinctBy { it.id }
-                    .map { ReaderMessage(it.id, it.title.orEmpty().trim(), it.text.orEmpty(), it.at.orEmpty(), it.read) }
-                    .sortedByDescending { m -> runCatching { java.time.Instant.parse(m.at) }.getOrDefault(java.time.Instant.EPOCH) },
-            )
+            is Outcome.Success -> Outcome.Success(r.value.toMessages())
         }
     }
 
@@ -174,6 +225,22 @@ class RemoteInvLibClient(
         requireCap(Feature.MESSAGES) { it.messages }?.let { return Outcome.Failure(it) }
         val path = "/v1/me/messages/" + java.net.URLEncoder.encode(messageId, "UTF-8") + "/read"
         return sendUnit(post(path, session, ByteArray(0).toRequestBody(null)))
+    }
+
+    /**
+     * „Прочетено“ на пакет (`POST /v1/me/messages/read` с `{"ids":[…]}` → 202, capability
+     * `messagesBatchRead`). Повече от [MessagesReadRequestDto.MAX_IDS] се пращат на части;
+     * при първия неуспех се спира (идемпотентно е — повторният опит праща всичко пак).
+     */
+    override suspend fun markMessagesRead(session: AuthSession, messageIds: List<String>): Outcome<Unit> {
+        requireCap(Feature.MESSAGES) { it.messages && it.messagesBatchRead }?.let { return Outcome.Failure(it) }
+        val ids = messageIds.filter { it.isNotBlank() }.distinct()
+        for (chunk in ids.chunked(MessagesReadRequestDto.MAX_IDS)) {
+            val body = json.encodeToString(MessagesReadRequestDto.serializer(), MessagesReadRequestDto(chunk)).toRequestBody(jsonType)
+            val r = sendUnit(post("/v1/me/messages/read", session, body))
+            if (r is Outcome.Failure) return r
+        }
+        return Outcome.Success(Unit)
     }
 
     override suspend fun requestAccountDeletion(session: AuthSession): Outcome<Unit> {
@@ -199,27 +266,45 @@ class RemoteInvLibClient(
         requireCap(Feature.MEMBERSHIP) { it.membership }?.let { return Outcome.Failure(it) }
         return when (val r = send(get("/v1/me/membership", session), MembershipDto.serializer())) {
             is Outcome.Failure -> r
-            is Outcome.Success -> r.value.let {
-                Outcome.Success(
-                    Membership(
-                        memberNumber = it.memberNumber,
-                        holderName = it.holderName,
-                        since = it.since,
-                        validUntil = it.validUntil,
-                        status = when (it.status.lowercase()) {
-                            "active" -> MembershipStatus.ACTIVE
-                            "expired" -> MembershipStatus.EXPIRED
-                            "suspended" -> MembershipStatus.SUSPENDED
-                            else -> MembershipStatus.UNKNOWN
-                        },
-                        barcodePayload = it.barcode,
-                    ),
-                )
-            }
+            is Outcome.Success -> Outcome.Success(r.value.toMembership())
         }
     }
 
     // --- помощни ---
+
+    private fun CapabilitiesDto.toCapabilities() = ServiceCapabilities(
+        login = login, profile = profile, loans = loans, membership = membership,
+        holds = holds, renew = renew, passwordReset = passwordReset,
+        accountDeletion = accountDeletion, push = push, availability = availability,
+        history = history, messages = messages, all = all, messagesBatchRead = messagesBatchRead,
+    )
+
+    private fun ReaderDto.toProfile() =
+        ReaderProfile(readerId, cardNumber, fullName, photoUrl, category, email, registeredOn, membership?.toMembership())
+
+    private fun MembershipDto.toMembership() = Membership(
+        memberNumber = memberNumber,
+        holderName = holderName,
+        since = since,
+        validUntil = validUntil,
+        status = when (status.lowercase()) {
+            "active" -> MembershipStatus.ACTIVE
+            "expired" -> MembershipStatus.EXPIRED
+            "suspended" -> MembershipStatus.SUSPENDED
+            else -> MembershipStatus.UNKNOWN
+        },
+        barcodePayload = barcode,
+    )
+
+    private fun HistoryResponseDto.toHistory() =
+        items.map { HistoryItem(it.loanId, it.inv, it.title, it.author, it.dateOut, it.dateIn) }
+
+    /** Без празни/повтарящи се id, най-новите първо. */
+    private fun ReaderMessagesResponseDto.toMessages() = items
+        .filter { it.id.isNotBlank() }
+        .distinctBy { it.id }
+        .map { ReaderMessage(it.id, it.title.orEmpty().trim(), it.text.orEmpty(), it.at.orEmpty(), it.read) }
+        .sortedByDescending { m -> runCatching { java.time.Instant.parse(m.at) }.getOrDefault(java.time.Instant.EPOCH) }
 
     private fun LoanDto.toLoan() = Loan(
         loanId, inv, title, author, coverUrl, dateOut, dateDue, renewals, canRenew,
@@ -264,4 +349,10 @@ class RemoteInvLibClient(
             is Outcome.Failure -> r
             is Outcome.Success -> Outcome.Success(Unit)
         }
+
+    companion object {
+        /** Колко дълго важат запомнените възможности (после — пак от мрежата). */
+        const val CAPS_TTL_MILLIS = 24 * 60 * 60 * 1000L
+        internal const val CAPS_CACHE_KEY = "invlib:capabilities"
+    }
 }

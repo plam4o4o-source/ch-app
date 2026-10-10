@@ -161,24 +161,34 @@ class MessageCenter(
             val pending = settings.pendingPersonalReads()
             if (pending.isNotEmpty()) {
                 val alreadyRead = _personal.value.filter { it.read }.map { it.id }.toSet()
-                val done = mutableSetOf<String>()
-                var stop = false
-                for (id in pending) {
-                    if (stop) break
-                    if (id in alreadyRead) {
-                        done += id
-                        continue
+                val done = pending.filter { it in alreadyRead }.toMutableSet()
+                val toSend = pending.filter { it !in alreadyRead }
+                if (toSend.size > 1 && personalRepository.supportsBatchRead()) {
+                    // Сървър с „прочетено“ на пакет — една заявка за всички.
+                    when (val r = personalRepository.markRead(toSend)) {
+                        is Outcome.Success -> {
+                            done += toSend
+                        }
+                        is Outcome.Failure -> {
+                            // По-стар мост без съобщения — няма къде да се праща. Иначе (без мрежа/сесия,
+                            // твърде много заявки) — опит при следващото опресняване.
+                            if (r.error is AppError.NotAvailable) done += pending
+                        }
                     }
-                    val r = personalRepository.markRead(id)
-                    if (r is Outcome.Success) {
-                        done += id
-                    } else if (r is Outcome.Failure && r.error is AppError.NotAvailable) {
-                        // По-стар мост без съобщения — няма къде да се праща.
-                        done += pending
-                        stop = true
-                    } else {
-                        // Без мрежа/сесия или твърде много заявки — опит при следващото опресняване.
-                        stop = true
+                } else {
+                    // Едно по едно, както преди.
+                    for (id in toSend) {
+                        val r = personalRepository.markRead(id)
+                        if (r is Outcome.Success) {
+                            done += id
+                        } else if (r is Outcome.Failure && r.error is AppError.NotAvailable) {
+                            // По-стар мост без съобщения — няма къде да се праща.
+                            done += pending
+                            break
+                        } else {
+                            // Без мрежа/сесия или твърде много заявки — опит при следващото опресняване.
+                            break
+                        }
                     }
                 }
                 if (done.isNotEmpty()) {
