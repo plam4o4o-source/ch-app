@@ -204,6 +204,18 @@ class HtmlContentExtractor(private val baseUrl: String) {
         return url
     }
 
+    /**
+     * Адрес за миниатюра: най-малкият кандидат от `srcset` (или `data-srcset`), ако има
+     * такъв; иначе `null` (тогава миниатюрата е самото изображение). Цялото изображение
+     * остава за прегледа на цял екран.
+     */
+    fun thumbnailUrl(img: Element): String? {
+        val srcset = img.attr("data-srcset").ifBlank { img.attr("srcset") }
+        if (srcset.isBlank()) return null
+        val best = smallestSrcsetCandidate(srcset) ?: return null
+        return Urls.absolutize(best, baseUrl)?.takeIf { it.startsWith("https://") || it.startsWith("http://") }
+    }
+
     private fun List<TextRun>.normalizeRuns(): List<TextRun> = normalizeRunsRaw().let { runs ->
         if (runs.joinToString("") { it.text }.any { it.isLetterOrDigit() }) runs else emptyList()
     }
@@ -247,5 +259,38 @@ class HtmlContentExtractor(private val baseUrl: String) {
             "logo-256", "logo.", "signature", "emoji", "pixel", "spacer", "/icons/", "facebook.com/tr",
         )
         private val IMAGE_EXT = listOf(".webp", ".jpg", ".jpeg", ".png", ".gif", ".avif")
+
+        /**
+         * Най-малкият кандидат в `srcset` („a.jpg 320w, b.jpg 1280w“ или „a.jpg 1x, b.jpg 2x“).
+         * Предпочитат се дескрипторите по ширина (`w`); кандидат без дескриптор е `1x`.
+         */
+        internal fun smallestSrcsetCandidate(srcset: String): String? {
+            val byWidth = ArrayList<Pair<String, Double>>()
+            val byDensity = ArrayList<Pair<String, Double>>()
+            var i = 0
+            val s = srcset
+            while (i < s.length) {
+                while (i < s.length && (s[i].isWhitespace() || s[i] == ',')) i++
+                if (i >= s.length) break
+                val start = i
+                while (i < s.length && !s[i].isWhitespace()) i++
+                var url = s.substring(start, i)
+                var descriptor = ""
+                if (url.endsWith(',')) {
+                    url = url.trimEnd(',')
+                } else {
+                    val dStart = i
+                    while (i < s.length && s[i] != ',') i++
+                    descriptor = s.substring(dStart, i).trim().lowercase()
+                }
+                if (url.isEmpty()) continue
+                when {
+                    descriptor.endsWith("w") -> descriptor.dropLast(1).toDoubleOrNull()?.let { byWidth += url to it }
+                    descriptor.endsWith("x") -> descriptor.dropLast(1).toDoubleOrNull()?.let { byDensity += url to it }
+                    descriptor.isEmpty() -> byDensity += url to 1.0
+                }
+            }
+            return (byWidth.minByOrNull { it.second } ?: byDensity.minByOrNull { it.second })?.first
+        }
     }
 }

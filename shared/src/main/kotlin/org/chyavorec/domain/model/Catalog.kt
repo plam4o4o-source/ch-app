@@ -39,11 +39,30 @@ data class CatalogBook(
     /** Първата цифра на УДК — основен раздел (0–9). */
     val udcSection: Int? get() = udc.firstOrNull { it.isDigit() }?.digitToInt()
 
-    val yearNumber: Int? get() = Regex("\\d{4}").find(year)?.value?.toIntOrNull()
+    /** Първата четирицифрена година в полето (напр. „[1998]“, „2016 г.“). */
+    val yearNumber: Int? get() = parseYear(year)
 
     /** Отделни автори („Иванов, Иван и др.“ остава както е). */
     val authors: List<String>
         get() = author.split(';').map { it.trim() }.filter { it.isNotEmpty() }
+}
+
+/**
+ * Първите четири последователни цифри в [year] като година (без Regex — вика се за
+ * всеки запис при търсене и филтриране).
+ */
+internal fun parseYear(year: String): Int? {
+    var run = 0
+    for (i in year.indices) {
+        if (year[i] in '0'..'9') {
+            run++
+            if (run == 4) {
+                val s = i - 3
+                return (year[s] - '0') * 1000 + (year[s + 1] - '0') * 100 + (year[s + 2] - '0') * 10 + (year[i] - '0')
+            }
+        } else run = 0
+    }
+    return null
 }
 
 /**
@@ -66,6 +85,22 @@ data class CatalogSnapshot(
     val books: List<CatalogBook>,
     val shelves: List<CatalogShelf>,
 )
+
+/**
+ * Малкото, което началният екран показва от каталога. Записва се до katalog.json при
+ * всяко ново съдържание, за да не се разчита и индексира целият каталог при старт.
+ */
+@Serializable
+data class CatalogHomeSummary(
+    val count: Int,
+    val generatedOn: String,
+    /** Нови постъпления — най-новите първо. */
+    val newest: List<CatalogBook>,
+    val shelves: List<CatalogHomeShelf>,
+)
+
+@Serializable
+data class CatalogHomeShelf(val name: String, val books: List<CatalogBook>)
 
 enum class SearchField { ALL, TITLE, AUTHOR, ISBN, KEYWORD, INVENTORY }
 

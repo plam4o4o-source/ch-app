@@ -44,6 +44,17 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         }
     }
 
+    /**
+     * Приложението е скрито (или системата иска памет във фонов режим): освобождаваме
+     * индекса за търсене в каталога — при следващо търсене се зарежда отново от диска.
+     */
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (level >= android.content.ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN && ::container.isInitialized) {
+            container.catalogRepository.trimMemory()
+        }
+    }
+
     /** Изображенията се кешират на диска — работят и офлайн (Coil 3 не зачита Cache-Control по подразбиране). */
     override fun newImageLoader(context: PlatformContext): ImageLoader = ImageLoader.Builder(context)
         .components { add(OkHttpNetworkFetcherFactory(callFactory = { imageHttp })) }

@@ -138,7 +138,8 @@ fun AlbumScreen(name: String, onBack: () -> Unit, navigate: (String) -> Unit) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: () -> Unit) {
-    val vm = appViewModel { GalleryViewModel(it.siteRepository) }
+    // Отделни снимки по адрес (от статия/страница) не изискват зареждане на галерията.
+    val vm = appViewModel { GalleryViewModel(it.siteRepository, load = !album.isNullOrBlank()) }
     val state by vm.state.collectAsStateWithLifecycle()
     val photos: List<GalleryPhoto> = if (!album.isNullOrBlank()) {
         state.data?.firstOrNull { it.name == album }?.photos.orEmpty()
