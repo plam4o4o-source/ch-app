@@ -62,9 +62,12 @@ object ReadingRecommender {
         return digits.takeIf { it.length >= n }?.substring(0, n)
     }
 
+    /** Всичко освен букви и цифри (компилира се веднъж, не при всеки запис). */
+    private val nonAlnum = Regex("[^\\p{L}\\p{N}]+")
+
     private fun authorKey(a: String): String? =
-        a.lowercase().replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim().takeIf { it.length >= 3 && it != "и др" }
+        a.lowercase().replace(nonAlnum, " ").trim().takeIf { it.length >= 3 && it != "и др" }
 
     private fun titleKey(title: String, author: String): String =
-        (title + "|" + author).lowercase().replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim()
+        (title + "|" + author).lowercase().replace(nonAlnum, " ").trim()
 }

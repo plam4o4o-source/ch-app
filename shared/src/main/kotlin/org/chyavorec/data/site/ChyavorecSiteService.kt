@@ -58,6 +58,10 @@ class ChyavorecSiteService(
     private val work: CoroutineDispatcher = Dispatchers.Default,
 ) : NewsService, EventsService, SiteContentService {
 
+    private companion object {
+        const val RSS_FRESH = 24 * 60 * 60 * 1000L
+    }
+
     private val parser = SiteJsonParser(baseUrl)
     private val extractor = HtmlContentExtractor(baseUrl)
     private val json = Json { ignoreUnknownKeys = true }
@@ -84,15 +88,48 @@ class ChyavorecSiteService(
         }
     }
 
+    // --- rss.xml служи само за публичните адреси на новините: държим го до 24 ч. и го ---
+    // --- теглим отново само ако се появи новина, която липсва в него.                  ---
+    private val rssMutex = Mutex()
+    private var rssLinks: Map<String, String>? = null
+    private var rssAt = 0L
+    /** Новините (заглавия), които липсваха в rss.xml при последното му сваляне — напр. по-старите. */
+    private var rssMissing: Set<String> = emptySet()
+
+    private suspend fun rssLinksFrom(result: Outcome<HttpBody>?): Map<String, String>? {
+        val body = (result as? Outcome.Success)?.value ?: return null
+        return withContext(work) { runCatching { parser.parseRssLinks(body.text()) }.getOrNull() }
+    }
+
+    private suspend fun rememberRss(links: Map<String, String>, articles: List<NewsArticle>, at: Long) = rssMutex.withLock {
+        rssLinks = links
+        rssAt = at
+        rssMissing = articles.filter { parser.rssLinkFor(links, it.title) == null }.mapTo(HashSet()) { it.title }
+    }
+
     override suspend fun fetchLatest(): Outcome<List<NewsArticle>> = coroutineScope {
-        val rss = async { http.get(url("/rss.xml")) }
+        val now = clock.now().toEpochMilli()
+        val known = rssMutex.withLock { rssLinks?.takeIf { now - rssAt in 0 until RSS_FRESH }?.let { it to rssMissing } }
+        val rss = if (known == null) async { http.get(url("/rss.xml")) } else null
         when (val r = http.get(url("/data/news.json"))) {
-            is Outcome.Failure -> r
+            is Outcome.Failure -> { rss?.cancel(); r }
             is Outcome.Success -> {
-                val rssBody = (rss.await() as? Outcome.Success)?.value
-                parse("news.json") {
-                    val links = rssBody?.let { runCatching { parser.parseRssLinks(it.text()) }.getOrNull() }.orEmpty()
-                    parser.parseNews(r.value.text(), links)
+                val links = known?.first ?: rssLinksFrom(rss?.await())
+                when (val parsed = parse("news.json") { parser.parseNews(r.value.text(), links.orEmpty()) }) {
+                    is Outcome.Failure -> parsed
+                    is Outcome.Success -> {
+                        var articles = parsed.value
+                        if (known == null) {
+                            links?.let { rememberRss(it, articles, now) }
+                        } else if (articles.any { parser.rssLinkFor(known.first, it.title) == null && it.title !in known.second }) {
+                            // Нова новина, която я няма в запомнения rss.xml — опресняваме го.
+                            rssLinksFrom(http.get(url("/rss.xml")))?.let { fresh ->
+                                articles = articles.map { a -> parser.rssLinkFor(fresh, a.title)?.let { a.copy(url = it) } ?: a }
+                                rememberRss(fresh, articles, now)
+                            }
+                        }
+                        Outcome.Success(articles)
+                    }
                 }
             }
         }
@@ -198,7 +235,9 @@ class ChyavorecSiteService(
             val src = extractor.imageUrl(img) ?: return@mapNotNull null
             // Подписът под експоната (фотодокументалната изложба) е по-точен от alt текста.
             val caption = img.closest(".exh-card, figure")?.selectFirst(".exh-caption-title, figcaption")?.text()
-            GalleryPhoto(album + ":" + src, (caption ?: img.attr("alt")).trim(), src, src, album, pageUrl)
+            // Мрежата от миниатюри — с най-малкия вариант от srcset; оригиналът — за прегледа.
+            val thumb = extractor.thumbnailUrl(img) ?: src
+            GalleryPhoto(album + ":" + src, (caption ?: img.attr("alt")).trim(), thumb, src, album, pageUrl)
         }
     }
 

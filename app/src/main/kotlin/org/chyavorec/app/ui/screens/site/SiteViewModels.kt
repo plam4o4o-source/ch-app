@@ -60,10 +60,15 @@ class ContactsViewModel(private val repo: SiteRepository) : ViewModel() {
     }
 }
 
-class GalleryViewModel(private val repo: SiteRepository) : ViewModel() {
+/**
+ * Албумите на галерията. Хранилището слива едновременните заявки и връща една и съща
+ * (вече групирана) стойност на всички екрани. [load] = false — екранът не ползва албумите
+ * (напр. преглед на отделни снимки по адрес) и галерията не се зарежда.
+ */
+class GalleryViewModel(private val repo: SiteRepository, load: Boolean = true) : ViewModel() {
     private val _state = MutableStateFlow(ScreenState<List<GalleryAlbum>>())
     val state: StateFlow<ScreenState<List<GalleryAlbum>>> = _state.asStateFlow()
-    init { refresh(false) }
+    init { if (load) refresh(false) }
     fun refresh(force: Boolean = true) = viewModelScope.launch {
         _state.update { it.startRefresh() }
         _state.update { it.with(repo.gallery(force)) }

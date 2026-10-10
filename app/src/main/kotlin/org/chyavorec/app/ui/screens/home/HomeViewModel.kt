@@ -12,12 +12,12 @@ import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.Outcome
-import org.chyavorec.data.catalog.CatalogSearchEngine
 import org.chyavorec.data.repository.CatalogRepository
 import org.chyavorec.data.repository.EventsRepository
 import org.chyavorec.data.repository.NewsRepository
 import org.chyavorec.data.repository.SiteRepository
 import org.chyavorec.domain.model.CatalogBook
+import org.chyavorec.domain.model.CatalogHomeSummary
 import org.chyavorec.domain.model.DailyFeast
 import org.chyavorec.domain.model.Event
 import org.chyavorec.domain.model.NewsArticle
@@ -50,7 +50,8 @@ class HomeViewModel(
             // Първо мигновено от кеша, после опресняване от мрежата.
             news.cached()?.let { c -> _state.update { it.copy(news = c.toState().copy(loading = true)) } }
             events.cachedRolled()?.let { c -> applyEvents(c.data) }
-            catalog.cached()?.let { applyCatalog(it.data) }
+            // Само малкото обобщение — индексът за търсене се строи едва в каталога/търсенето.
+            catalog.homeSummary()?.let { applyCatalog(it.data) }
             refresh(force = false)
         }
         viewModelScope.launch { site.feastToday()?.let { f -> _state.update { it.copy(feast = f) } } }
@@ -60,7 +61,7 @@ class HomeViewModel(
         viewModelScope.launch {
             _state.update { it.copy(news = it.news.startRefresh()) }
             val n = async { news.latest(force) }
-            val c = async { catalog.catalog(force) }
+            val c = async { catalog.refreshHomeSummary(force) }
             val e = async { events.events(force) }
             _state.update { it.copy(news = it.news.with(n.await())) }
             (c.await() as? Outcome.Success)?.value?.data?.let { applyCatalog(it) }
@@ -79,13 +80,13 @@ class HomeViewModel(
         }
     }
 
-    private fun applyCatalog(engine: CatalogSearchEngine) {
+    private fun applyCatalog(summary: CatalogHomeSummary) {
         _state.update {
             it.copy(
-                newBooks = engine.newest(12),
-                shelves = engine.shelfBooks(),
-                catalogCount = engine.snapshot.books.size,
-                catalogGenerated = engine.snapshot.generatedOn,
+                newBooks = summary.newest,
+                shelves = summary.shelves.map { shelf -> shelf.name to shelf.books },
+                catalogCount = summary.count,
+                catalogGenerated = summary.generatedOn,
             )
         }
     }

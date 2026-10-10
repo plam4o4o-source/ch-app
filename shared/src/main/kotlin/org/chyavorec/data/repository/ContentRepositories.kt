@@ -2,18 +2,13 @@ package org.chyavorec.data.repository
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.builtins.ListSerializer
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
+import org.chyavorec.core.Hashing
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.map
 import org.chyavorec.core.Synced
-import org.chyavorec.data.catalog.CatalogSearchEngine
-import org.chyavorec.data.catalog.KatalogParser
-import org.chyavorec.data.catalog.katalogHash
 import org.chyavorec.domain.model.ArticleDetail
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.DailyFeast
@@ -26,23 +21,19 @@ import org.chyavorec.domain.model.NewsArticle
 import org.chyavorec.domain.model.SiteLink
 import org.chyavorec.domain.model.SitePage
 import org.chyavorec.domain.repository.PayloadCache
-import org.chyavorec.domain.service.CatalogService
 import org.chyavorec.domain.service.EventsService
 import org.chyavorec.domain.service.NewsService
 import org.chyavorec.domain.service.SiteContentService
-import java.security.MessageDigest
-import java.time.Instant
 
 private const val FIVE_MINUTES = 5 * 60 * 1000L
 private const val ONE_HOUR = 60 * 60 * 1000L
 private const val TEN_MINUTES = 10 * 60 * 1000L
-/** Каталогът се обновява рядко (няколко пъти седмично) и е голям — по-дълъг прозорец. */
-private const val CATALOG_FRESH = 30 * 60 * 1000L
+private const val SIX_HOURS = 6 * ONE_HOUR
+private const val TWELVE_HOURS = 12 * ONE_HOUR
+private const val ONE_DAY = 24 * ONE_HOUR
 
-internal fun cacheKey(prefix: String, value: String): String {
-    val digest = MessageDigest.getInstance("SHA-256").digest(value.toByteArray())
-    return prefix + digest.take(12).joinToString("") { "%02x".format(it) }
-}
+internal fun cacheKey(prefix: String, value: String): String =
+    prefix + Hashing.hex(Hashing.sha256(value.toByteArray()), 12)
 
 class NewsRepository(
     private val service: NewsService,
@@ -115,95 +106,6 @@ class EventsRepository(
     }
 }
 
-/**
- * Каталогът се държи в паметта като [CatalogSearchEngine]; суровият JSON се
- * кешира на диска, за да работи търсенето и офлайн (с ясна дата на данните).
- *
- * Моментът на последното успешно сваляне се пази до файла ([FETCHED_AT_KEY]), така че
- * прозорецът [CATALOG_FRESH] важи и след рестарт: по-пресен дисков кеш не се сваля
- * отново. Ако свалeното съдържание е същото (SHA-256), не се разчита, индексира и
- * презаписва повторно. Разчитането и индексът се строят на [work], не на главната нишка.
- */
-class CatalogRepository(
-    private val service: CatalogService,
-    private val cache: PayloadCache,
-    private val clock: AppClock,
-    private val work: CoroutineDispatcher = Dispatchers.Default,
-) {
-    private val mutex = Mutex()
-    @Volatile private var current: Synced<CatalogSearchEngine>? = null
-    /** SHA-256 на суровия JSON зад [current]. */
-    private var currentHash: String? = null
-    /** Кога [current] е потвърден от мрежата за последно (epoch ms). */
-    private var lastFetchMillis: Long = 0L
-
-    fun inMemory(): Synced<CatalogSearchEngine>? = current
-
-    suspend fun cached(): Synced<CatalogSearchEngine>? = mutex.withLock {
-        current ?: loadFromDisk()
-    }
-
-    /** Зарежда дисковия кеш в паметта (извиква се само под [mutex]). */
-    private suspend fun loadFromDisk(): Synced<CatalogSearchEngine>? {
-        val payload = cache.read(KEY) ?: return null
-        val fetchedAt = runCatching { cache.read(FETCHED_AT_KEY)?.text?.trim()?.toLongOrNull() }.getOrNull()
-            ?: payload.savedAtMillis
-        val loaded = withContext(work) {
-            runCatching { CatalogSearchEngine(KatalogParser.parse(payload.text)) to katalogHash(payload.text) }.getOrNull()
-        } ?: return null
-        val synced = Synced(loaded.first, Instant.ofEpochMilli(fetchedAt), fromCache = true)
-        current = synced
-        currentHash = loaded.second
-        lastFetchMillis = fetchedAt
-        return synced
-    }
-
-    suspend fun catalog(force: Boolean = false): Outcome<Synced<CatalogSearchEngine>> {
-        return mutex.withLock {
-            val existing = current ?: loadFromDisk()
-            val now = clock.now().toEpochMilli()
-            if (!force && existing != null && now - lastFetchMillis in 0 until CATALOG_FRESH) {
-                val fresh = existing.copy(fromCache = false, refreshError = null)
-                current = fresh
-                return@withLock Outcome.Success(fresh)
-            }
-            when (val r = service.fetchCatalogIfChanged(if (existing != null) currentHash else null)) {
-                is Outcome.Success -> {
-                    val fetched = r.value
-                    val newHash = fetched?.let { withContext(work) { katalogHash(it.first) } }
-                    val engine = if (existing != null && (fetched == null || newHash == currentHash)) {
-                        // Същото съдържание — пазим готовия индекс и не презаписваме файла.
-                        existing.data
-                    } else {
-                        if (fetched == null) return@withLock Outcome.Failure(AppError.Parse("katalog.json"))
-                        val (raw, snapshot) = fetched
-                        runCatching { cache.write(KEY, raw) }
-                        currentHash = newHash
-                        withContext(work) { CatalogSearchEngine(snapshot) }
-                    }
-                    val syncedAt = clock.now()
-                    runCatching { cache.write(FETCHED_AT_KEY, syncedAt.toEpochMilli().toString()) }
-                    lastFetchMillis = syncedAt.toEpochMilli()
-                    val fresh = Synced(engine, syncedAt)
-                    current = fresh
-                    Outcome.Success(fresh)
-                }
-                is Outcome.Failure -> {
-                    if (existing != null) {
-                        val stale = existing.copy(fromCache = true, refreshError = r.error)
-                        current = stale
-                        Outcome.Success(stale)
-                    } else r
-                }
-            }
-        }
-    }
-
-    companion object {
-        const val KEY = "catalog:katalog.json"
-        const val FETCHED_AT_KEY = "catalog:fetchedAt"
-    }
-}
 
 class SiteRepository(
     private val service: SiteContentService,
@@ -212,33 +114,58 @@ class SiteRepository(
     /** Източник на вече свалените новини за албума „Новини“ (без повторно теглене). */
     private val news: NewsRepository? = null,
 ) {
-    private val links = CachedResource(cache, "site:links", ListSerializer(SiteLink.serializer()), clock, ONE_HOUR)
-    private val gallery = CachedResource(cache, "site:gallery", ListSerializer(GalleryPhoto.serializer()), clock, FIVE_MINUTES)
-    private val contacts = CachedResource(cache, "site:contacts", Contacts.serializer(), clock, ONE_HOUR)
-    private val documents = CachedResource(cache, "site:documents", ListSerializer(SiteDocument.serializer()), clock, ONE_HOUR)
+    // Навигацията, контактите, документите и страниците се менят рядко — 6 ч.; галерията (10+ страници) — 12 ч.
+    private val links = CachedResource(cache, "site:links", ListSerializer(SiteLink.serializer()), clock, SIX_HOURS)
+    private val gallery = CachedResource(cache, "site:gallery", ListSerializer(GalleryPhoto.serializer()), clock, TWELVE_HOURS)
+    private val contacts = CachedResource(cache, "site:contacts", Contacts.serializer(), clock, SIX_HOURS)
+    private val documents = CachedResource(cache, "site:documents", ListSerializer(SiteDocument.serializer()), clock, SIX_HOURS)
     private val index = CachedResource(cache, "site:index", ListSerializer(SiteSearchDoc.serializer()), clock, ONE_HOUR)
+
+    /** Последно отворените страници — за да остане стойността им в паметта (вж. [CachedResource]). */
+    private val pages = object : LinkedHashMap<String, CachedResource<SitePage>>(16, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, CachedResource<SitePage>>?) = size > RECENT_PAGES
+    }
+
+    private fun pageResource(url: String): CachedResource<SitePage> = synchronized(pages) {
+        pages.getOrPut(url) { CachedResource(cache, cacheKey("site:page:", url), SitePage.serializer(), clock, SIX_HOURS) }
+    }
+
+    /** Албумите на последно върнатия списък снимки — общи за всички екрани на галерията. */
+    @Volatile private var albumsMemo: Pair<List<GalleryPhoto>, List<GalleryAlbum>>? = null
+
+    @Volatile private var oldFeastsCleared = false
 
     suspend fun links(force: Boolean = false): Outcome<Synced<List<SiteLink>>> = links.load(force) { service.discoverLinks() }
 
     suspend fun cachedLinks(): List<SiteLink>? = links.cached()?.data
 
     suspend fun page(url: String, force: Boolean = false): Outcome<Synced<SitePage>> =
-        CachedResource(cache, cacheKey("site:page:", url), SitePage.serializer(), clock, ONE_HOUR)
-            .load(force) { service.fetchPage(url) }
+        pageResource(url).load(force) { service.fetchPage(url) }
 
-    suspend fun cachedPage(url: String): SitePage? =
-        CachedResource(cache, cacheKey("site:page:", url), SitePage.serializer(), clock, ONE_HOUR).cached()?.data
+    suspend fun cachedPage(url: String): SitePage? = pageResource(url).cached()?.data
 
     suspend fun contacts(force: Boolean = false): Outcome<Synced<Contacts>> = contacts.load(force) {
         val l = (links(false) as? Outcome.Success)?.value?.data.orEmpty()
         service.fetchContacts(l)
     }
 
+    /**
+     * Албумите. Едновременните заявки (няколко екрана на галерията) се сливат в една, а
+     * при непроменен списък снимки всички получават една и съща, вече групирана стойност.
+     */
     suspend fun gallery(force: Boolean = false): Outcome<Synced<List<GalleryAlbum>>> =
         when (val r = gallery.load(force) { service.fetchGallery(newsForGallery()) }) {
             is Outcome.Failure -> r
-            is Outcome.Success -> Outcome.Success(r.value.map { photos -> albums(photos) })
+            is Outcome.Success -> Outcome.Success(r.value.map { photos -> albumsOf(photos) })
         }
+
+    /** Албумите от кеша (без мрежа) — за мигновено показване. */
+    suspend fun cachedGallery(): Synced<List<GalleryAlbum>>? = gallery.cached()?.map { albumsOf(it) }
+
+    private fun albumsOf(photos: List<GalleryPhoto>): List<GalleryAlbum> {
+        albumsMemo?.let { (p, a) -> if (p === photos) return a }
+        return albums(photos).also { albumsMemo = photos to it }
+    }
 
     /** Новините от кеша/мрежата на [news] (с неговия прозорец на свежест) или `null`. */
     private suspend fun newsForGallery(): List<NewsArticle>? {
@@ -252,17 +179,30 @@ class SiteRepository(
 
     suspend fun cachedSearchIndex(): List<SiteSearchDoc>? = index.cached()?.data
 
-    /** Празникът за днес (не се кешира на диска — важи само за деня). */
+    /**
+     * Празникът за днес — кешира се за датата (`feast:ГГГГ-ММ-ДД`, 24 ч.), така че не се
+     * тегли при всяко отваряне на началния екран и се показва и офлайн.
+     */
     suspend fun feastToday(): DailyFeast? {
         val d = clock.today()
-        return (service.fetchFeast("${d.year}-${d.monthValue}-${d.dayOfMonth}") as? Outcome.Success)?.value
+        if (!oldFeastsCleared) {
+            oldFeastsCleared = true
+            // Записите от предишните дни вече не трябват.
+            for (back in 1L..7L) runCatching { cache.remove(feastKey(d.minusDays(back))) }
+        }
+        val res = CachedResource(cache, feastKey(d), DailyFeast.serializer(), clock, ONE_DAY)
+        return (res.load(false) { service.fetchFeast("${d.year}-${d.monthValue}-${d.dayOfMonth}") } as? Outcome.Success)?.value?.data
     }
+
+    private fun feastKey(date: java.time.LocalDate) = "feast:$date"
 
     fun albums(photos: List<GalleryPhoto>): List<GalleryAlbum> =
         photos.groupBy { it.album }.map { (name, list) -> GalleryAlbum(name, list) }
             .sortedBy { if (it.name == "Новини") 1 else 0 }
 
     companion object {
+        private const val RECENT_PAGES = 8
+
         fun describe(error: AppError): String = error.toString()
     }
 }

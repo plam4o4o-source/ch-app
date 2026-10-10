@@ -28,8 +28,33 @@ data class SearchResults(
     val total get() = books.size + authors.size + news.size + events.size + pages.size
 }
 
+/**
+ * Новините, събитията и документите от сайта с предварително нормализиран текст —
+ * подготвя се веднъж ([SearchAggregator.prepare]), а не при всеки натиснат клавиш.
+ */
+class SearchCorpus internal constructor(
+    internal val news: List<Pair<NewsArticle, String>>,
+    internal val events: List<Pair<Event, String>>,
+    internal val pages: List<Pair<SiteSearchDoc, String>>,
+) {
+    companion object {
+        val EMPTY = SearchCorpus(emptyList(), emptyList(), emptyList())
+    }
+}
+
 /** Глобално търсене в каталога, новините, събитията и индекса на сайта. */
 object SearchAggregator {
+
+    /** Новините и събитията се търсят отделно — от индекса на сайта остават страниците. */
+    private val SKIPPED_PAGE_TYPES = setOf("news", "event")
+
+    private fun haystack(vararg fields: String?): String = TextNormalizer.normalize(fields.filterNotNull().joinToString(" "))
+
+    fun prepare(news: List<NewsArticle>, events: List<Event>, siteDocs: List<SiteSearchDoc>): SearchCorpus = SearchCorpus(
+        news = news.map { it to haystack(it.title, it.summary, it.category) },
+        events = events.map { it to haystack(it.title, it.description, it.place) },
+        pages = siteDocs.filter { it.type !in SKIPPED_PAGE_TYPES }.map { it to haystack(it.title, it.text, it.category) },
+    )
 
     fun search(
         query: String,
@@ -39,26 +64,26 @@ object SearchAggregator {
         siteDocs: List<SiteSearchDoc>,
         limitPerType: Int = 20,
     ): SearchResults {
+        if (TextNormalizer.tokens(query).isEmpty()) return SearchResults()
+        return search(query, catalog, prepare(news, events, siteDocs), limitPerType)
+    }
+
+    fun search(query: String, catalog: CatalogSearchEngine?, corpus: SearchCorpus, limitPerType: Int = 20): SearchResults {
         val tokens = TextNormalizer.tokens(query)
         if (tokens.isEmpty()) return SearchResults()
-        fun matches(vararg fields: String?): Boolean {
-            val hay = TextNormalizer.normalize(fields.filterNotNull().joinToString(" "))
-            return tokens.all { hay.contains(it) }
-        }
+        fun matches(hay: String): Boolean = tokens.all { hay.contains(it) }
         val books = catalog?.search(CatalogQuery(text = query))?.take(limitPerType).orEmpty()
-        val authors = catalog?.snapshot?.books?.asSequence()
-            ?.map { it.author }?.filter { it.isNotBlank() && matches(it) }?.distinct()?.take(8)?.toList().orEmpty()
+        val authors = catalog?.authorIndex?.asSequence()
+            ?.filter { (_, normalized) -> matches(normalized) }?.map { it.first }?.take(8)?.toList().orEmpty()
         return SearchResults(
             books = books.map { SearchHit.Book(it) },
             authors = authors,
-            news = news.filter { matches(it.title, it.summary, it.category) }.take(limitPerType).map { SearchHit.News(it) },
-            events = events.filter { matches(it.title, it.description, it.place) }.take(limitPerType).map { SearchHit.EventHit(it) },
-            // Страници, архив, публикации и документи от търсещия индекс на сайта
-            // (новините и събитията вече са търсени по-горе).
-            pages = siteDocs.filter { it.type !in setOf("news", "event") }.mapNotNull { d ->
-                if (!matches(d.title, d.text, d.category)) return@mapNotNull null
+            news = corpus.news.asSequence().filter { matches(it.second) }.take(limitPerType).map { SearchHit.News(it.first) }.toList(),
+            events = corpus.events.asSequence().filter { matches(it.second) }.take(limitPerType).map { SearchHit.EventHit(it.first) }.toList(),
+            // Страници, архив, публикации и документи от търсещия индекс на сайта.
+            pages = corpus.pages.asSequence().filter { matches(it.second) }.take(limitPerType).map { (d, _) ->
                 SearchHit.Page(d, snippet(d.text.ifBlank { d.excerpt }, tokens.first()))
-            }.take(limitPerType),
+            }.toList(),
         )
     }
 

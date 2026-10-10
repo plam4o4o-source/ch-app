@@ -2,6 +2,7 @@ package org.chyavorec.domain.service
 
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Feature
+import org.chyavorec.core.Hashing
 import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.ArticleDetail
 import org.chyavorec.domain.model.AuthSession
@@ -40,6 +41,47 @@ interface CatalogService {
      * (т.е. е същото като кешираното), не се разчита повторно и се връща `null`.
      */
     suspend fun fetchCatalogIfChanged(knownHash: String?): Outcome<Pair<String, CatalogSnapshot>?> = fetchCatalog()
+
+    /**
+     * Условно сваляне спрямо копието на диска ([known] = `null` — няма копие).
+     * Непромененото съдържание (304 по ETag или същия SHA-256) не се разчита.
+     * По подразбиране — чрез [fetchCatalogIfChanged] (за по-прости реализации).
+     */
+    suspend fun fetchCatalogConditional(known: CatalogValidators?): Outcome<CatalogFetch> =
+        when (val r = fetchCatalogIfChanged(known?.hash)) {
+            is Outcome.Failure -> r
+            is Outcome.Success -> {
+                val fetched = r.value
+                if (fetched == null) Outcome.Success(CatalogFetch.Unchanged(known?.etag, known?.etagUrl))
+                else {
+                    val raw = fetched.first.toByteArray(Charsets.UTF_8)
+                    Outcome.Success(CatalogFetch.Changed(raw, fetched.second, Hashing.sha256Hex(raw), null, null))
+                }
+            }
+        }
+}
+
+/** Какво се знае за кешираното копие на каталога — за условна заявка. */
+data class CatalogValidators(
+    /** SHA-256 (hex) на суровите байтове. */
+    val hash: String?,
+    val etag: String? = null,
+    /** Адресът, от който е [etag] (ETag-ът на една CDN не важи за друга). */
+    val etagUrl: String? = null,
+)
+
+sealed interface CatalogFetch {
+    /** Съдържанието е същото като кешираното (тялото не е четено/разчитано). */
+    data class Unchanged(val etag: String?, val etagUrl: String?) : CatalogFetch
+
+    /** Ново съдържание: суровите байтове (за диска), разчетеният каталог и SHA-256 на байтовете. */
+    class Changed(
+        val raw: ByteArray,
+        val snapshot: CatalogSnapshot,
+        val hash: String,
+        val etag: String?,
+        val etagUrl: String?,
+    ) : CatalogFetch
 }
 
 /** Новини от chyavorec.org (/data/news.json). */

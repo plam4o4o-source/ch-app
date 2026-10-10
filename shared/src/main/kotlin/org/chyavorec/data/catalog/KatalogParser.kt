@@ -1,5 +1,6 @@
 package org.chyavorec.data.catalog
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -7,11 +8,13 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.longOrNull
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogShelf
 import org.chyavorec.domain.model.CatalogSnapshot
+import java.io.ByteArrayInputStream
 
 /**
  * Разчита `katalog.json`, публикуван от InvLib (buildCatalogPayload/publicBookFields
@@ -72,8 +75,17 @@ object KatalogParser {
     @Serializable
     private data class Shelf(val name: String = "", val items: List<JsonElement> = emptyList())
 
-    fun parse(text: String): CatalogSnapshot {
-        val payload = json.decodeFromString(Payload.serializer(), text)
+    fun parse(text: String): CatalogSnapshot = build(json.decodeFromString(Payload.serializer(), text))
+
+    /** Направо от суровите байтове (UTF-8) — без междинен низ от няколко MB. */
+    @OptIn(ExperimentalSerializationApi::class)
+    fun parse(bytes: ByteArray): CatalogSnapshot {
+        // UTF-8 BOM (ако файлът е записан с него) не е валиден JSON.
+        val skip = if (bytes.size >= 3 && bytes[0] == 0xEF.toByte() && bytes[1] == 0xBB.toByte() && bytes[2] == 0xBF.toByte()) 3 else 0
+        return build(json.decodeFromStream(Payload.serializer(), ByteArrayInputStream(bytes, skip, bytes.size - skip)))
+    }
+
+    private fun build(payload: Payload): CatalogSnapshot {
         val books = payload.items.mapNotNull { it.toBook() }
         return CatalogSnapshot(
             library = payload.library.cleanLibraryName(),

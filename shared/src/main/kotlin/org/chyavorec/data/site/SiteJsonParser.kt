@@ -86,7 +86,12 @@ class SiteJsonParser(private val baseUrl: String) {
             if (title.isEmpty() || link.isEmpty()) null else normalizeTitle(title) to (abs(link) ?: link)
         }.toMap()
 
-    private fun normalizeTitle(t: String) = t.replace(Regex("\\s+"), " ").trim()
+    /** Публичният адрес на новината [title] според разчетения rss.xml ([parseRssLinks]). */
+    fun rssLinkFor(links: Map<String, String>, title: String): String? = links[normalizeTitle(title)]
+
+    private val whitespace = Regex("\\s+")
+
+    private fun normalizeTitle(t: String) = t.replace(whitespace, " ").trim()
 
     fun parseNews(text: String, links: Map<String, String>): List<NewsArticle> =
         json.decodeFromString(ListSerializer(NewsDto.serializer()), text)

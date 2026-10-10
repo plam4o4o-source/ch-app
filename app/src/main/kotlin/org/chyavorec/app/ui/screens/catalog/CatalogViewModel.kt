@@ -57,13 +57,16 @@ class CatalogViewModel(
     private val _state = MutableStateFlow(CatalogUiState())
     val state: StateFlow<CatalogUiState> = _state.asStateFlow()
     private val queryFlow = MutableStateFlow(CatalogQuery())
+    /** Последното изпълнено търсене: същият индекс със същата заявка не се търси повторно. */
+    @Volatile private var lastSearch: Pair<CatalogSearchEngine, CatalogQuery>? = null
 
     init {
         viewModelScope.launch {
             repo.cached()?.let { c -> _state.update { it.copy(engine = c.toState().copy(loading = true), facets = c.data.facets) }; runSearch() }
             refresh(force = false)
         }
-        // Instant search: търсим 200 ms след последния натиснат клавиш.
+        // Instant search: търсим 200 ms след последния натиснат клавиш. Началната заявка,
+        // вече изпълнена при зареждането, не се търси повторно (вж. [lastSearch]).
         viewModelScope.launch(searchDispatcher) { queryFlow.debounce(200).collect { runSearch() } }
     }
 
@@ -89,13 +92,24 @@ class CatalogViewModel(
     private suspend fun runSearch() {
         val engine = _state.value.engine.data ?: return
         val q = _state.value.query
+        val last = lastSearch
+        if (last != null && last.first === engine && last.second == q) {
+            // Напр. опресняване без нови данни — резултатите (и страницирането) остават.
+            _state.update { if (it.query == q) it.copy(searching = false) else it }
+            return
+        }
         val (results, suggestions) = withContext(searchDispatcher) {
             engine.search(q) to (if (q.text.length >= 2 && q.field != SearchField.INVENTORY && q.field != SearchField.ISBN) engine.suggestions(q.text, 6) else emptyList())
         }
+        var applied = false
         _state.update {
             if (it.query != q) it // по-нова заявка вече е в ход
-            else it.copy(results = results, totalResults = results.size, shown = CatalogUiState.PAGE, suggestions = suggestions, searching = false)
+            else {
+                applied = true
+                it.copy(results = results, totalResults = results.size, shown = CatalogUiState.PAGE, suggestions = suggestions, searching = false)
+            }
         }
+        if (applied) lastSearch = engine to q
     }
 }
 

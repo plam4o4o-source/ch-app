@@ -82,7 +82,7 @@ class ViewModelTest {
             override suspend fun fetchArticle(article: NewsArticle) = Outcome.Success(ArticleDetail(article, emptyList(), emptyList()))
         }
         val favs = InMemoryFavoritesDao()
-        val vm = NewsListViewModel(NewsRepository(service, InMemoryPayloadCache(), clock, dispatcher), favs, clock)
+        val vm = NewsListViewModel(NewsRepository(service, InMemoryPayloadCache(), clock, dispatcher), favs, clock, dispatcher)
         val job = launch { vm.ui.collect {} }
         advanceUntilIdle()
         assertEquals(2, vm.ui.value.visible.size)

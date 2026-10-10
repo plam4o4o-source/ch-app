@@ -2,12 +2,17 @@ package org.chyavorec.app.ui.screens.news
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -33,33 +38,66 @@ data class NewsUiState(
     val visible: List<NewsArticle> = emptyList(),
 )
 
+@OptIn(FlowPreview::class)
 class NewsListViewModel(
     private val repo: NewsRepository,
     private val favorites: FavoritesDao,
     private val clock: AppClock,
+    /** Филтрирането върви извън главната нишка (тестовете подават свой диспечер). */
+    private val work: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
 
     private val load = MutableStateFlow(ScreenState<List<NewsArticle>>())
     private val filter = MutableStateFlow(NewsFilter())
 
-    val ui: StateFlow<NewsUiState> = combine(load, filter, favorites.observeAll()) { s, f, favs ->
-        val favIds = favs.map { it.id }.toSet()
-        val source: List<NewsArticle> = if (f.favoritesOnly) {
+    /** Нормализираният текст (заглавие + резюме) на новините — веднъж на списък, не при всеки клавиш. */
+    private var normalized: Pair<List<NewsArticle>, List<String>>? = null
+
+    private fun haystacks(list: List<NewsArticle>): List<String> {
+        normalized?.let { (l, h) -> if (l === list) return h }
+        return list.map { TextNormalizer.normalize(it.title + " " + it.summary) }.also { normalized = list to it }
+    }
+
+    // Списъкът се филтрира извън главната нишка, 150 ms след последния клавиш (категориите —
+    // веднага). Самият филтър (текстът в полето за търсене) влиза в състоянието веднага.
+    private val appliedFilter = filter.debounce { if (it.query.isBlank()) 0L else QUERY_DEBOUNCE_MS }
+
+    private class Filtered(val visible: List<NewsArticle>, val favoriteIds: Set<String>)
+
+    private val filtered = combine(load, appliedFilter, favorites.observeAll()) { s, applied, favs ->
+        val source: List<NewsArticle>
+        val texts: List<String>?
+        if (applied.favoritesOnly) {
             // Любимите работят и офлайн — пазят се в Room.
-            favs.map { NewsArticle(it.id, it.title, it.url, it.publishedAtMillis, it.summary, it.imageUrl, it.category) }
-        } else s.data.orEmpty()
-        val tokens = TextNormalizer.tokens(f.query)
+            source = favs.map { NewsArticle(it.id, it.title, it.url, it.publishedAtMillis, it.summary, it.imageUrl, it.category) }
+            texts = null
+        } else {
+            source = s.data.orEmpty()
+            texts = haystacks(source)
+        }
+        val tokens = TextNormalizer.tokens(applied.query)
+        Filtered(
+            visible = source.filterIndexed { i, a ->
+                (applied.category == null || a.category == applied.category) &&
+                    (tokens.isEmpty() || (texts?.get(i) ?: TextNormalizer.normalize(a.title + " " + a.summary)).let { t -> tokens.all { t.contains(it) } })
+            },
+            favoriteIds = favs.mapTo(HashSet()) { it.id },
+        )
+    }.flowOn(work)
+
+    val ui: StateFlow<NewsUiState> = combine(load, filter, filtered) { s, f, r ->
         NewsUiState(
             state = s,
             filter = f,
             categories = s.data.orEmpty().mapNotNull { it.category }.distinct(),
-            favoriteIds = favIds,
-            visible = source.filter { a ->
-                (f.category == null || a.category == f.category) &&
-                    (tokens.isEmpty() || TextNormalizer.normalize(a.title + " " + a.summary).let { t -> tokens.all { t.contains(it) } })
-            },
+            favoriteIds = r.favoriteIds,
+            visible = r.visible,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), NewsUiState())
+
+    private companion object {
+        const val QUERY_DEBOUNCE_MS = 150L
+    }
 
     init {
         viewModelScope.launch {

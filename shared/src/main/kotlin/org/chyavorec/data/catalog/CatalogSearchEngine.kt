@@ -4,6 +4,8 @@ import org.chyavorec.core.Isbn
 import org.chyavorec.core.TextNormalizer
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogFacets
+import org.chyavorec.domain.model.CatalogHomeShelf
+import org.chyavorec.domain.model.CatalogHomeSummary
 import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.CatalogSnapshot
 import org.chyavorec.domain.model.CatalogSort
@@ -14,6 +16,10 @@ import java.text.Collator
 /**
  * Търсене в каталога в паметта. Индексът (нормализираните полета) се изгражда
  * веднъж на снимка; при 15 000 записа едно търсене отнема няколко милисекунди.
+ *
+ * Памет: всяко поле се пази нормализирано само веднъж (заглавие, автор, ключови думи
+ * и „останалото“ — без повторение в общ низ), а българското азбучно подреждане е
+ * предварително изчислено като цели числа (ранг) вместо CollationKey на запис.
  */
 class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
 
@@ -22,36 +28,39 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
         val title: String,
         val author: String,
         val keywords: String,
-        val all: String,
+        /** Анотация, издател, вид, сигнатура, инв. №, ISBN — нормализирани, без горните три. */
+        val rest: String,
         val isbnDigits: String,
-        /** Ключове за подреждане по български — изчислени веднъж, не при всяко търсене. */
-        val titleKey: CollationKey,
-        val authorKey: CollationKey,
-    )
-
-    private val collator: Collator = Collator.getInstance(java.util.Locale.forLanguageTag("bg-BG"))
+        /** Годината, разчетена веднъж. */
+        val year: Int?,
+    ) {
+        /** Място в азбучния ред (български) — равни заглавия/автори имат равен ранг. */
+        var titleRank: Int = 0
+        var authorRank: Int = 0
+    }
 
     private val index: List<Indexed> = snapshot.books.map { b ->
-        val title = TextNormalizer.normalize(b.title + " " + b.subtitle)
-        val author = TextNormalizer.normalize(b.author)
-        val keywords = TextNormalizer.normalize(b.keywords)
         Indexed(
             book = b,
-            title = title,
-            author = author,
-            keywords = keywords,
-            all = listOf(
-                title, author, keywords,
+            title = TextNormalizer.normalize(b.title + " " + b.subtitle),
+            author = TextNormalizer.normalize(b.author),
+            keywords = TextNormalizer.normalize(b.keywords),
+            rest = listOf(
                 TextNormalizer.normalize(b.annotation),
                 TextNormalizer.normalize(b.publisher),
                 TextNormalizer.normalize(b.docType),
                 b.callNumber.lowercase(), b.inv.toString(), b.isbn,
             ).joinToString(" "),
             isbnDigits = TextNormalizer.digits(b.isbn),
-            titleKey = collator.getCollationKey(b.title),
-            // Без автор — накрая.
-            authorKey = collator.getCollationKey(b.author.ifBlank { "\uFFFF" }),
+            year = b.yearNumber,
         )
+    }
+
+    init {
+        val collator: Collator = Collator.getInstance(java.util.Locale.forLanguageTag("bg-BG"))
+        assignRanks(index.map { collator.getCollationKey(it.book.title) }) { i, r -> index[i].titleRank = r }
+        // Без автор — накрая.
+        assignRanks(index.map { collator.getCollationKey(it.book.author.ifBlank { "￿" }) }) { i, r -> index[i].authorRank = r }
     }
 
     private val byInv: Map<Long, CatalogBook> = snapshot.books.associateBy { it.inv }
@@ -80,7 +89,7 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
     }
 
     val facets: CatalogFacets by lazy {
-        val years = snapshot.books.mapNotNull { it.yearNumber }.filter { it in 1500..2100 }
+        val years = index.mapNotNull { it.year }.filter { it in 1500..2100 }
         CatalogFacets(
             docTypes = snapshot.books.map { it.docType }.countedDistinct(),
             departments = snapshot.books.map { it.department }.countedDistinct(),
@@ -91,6 +100,18 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
         )
     }
 
+    /**
+     * Различните автори (в реда на каталога) с нормализирания им вид — за глобалното
+     * търсене; изчислява се веднъж, при първа нужда.
+     */
+    val authorIndex: List<Pair<String, String>> by lazy {
+        val seen = HashSet<String>()
+        index.mapNotNull { item ->
+            val a = item.book.author
+            if (a.isBlank() || !seen.add(a)) null else a to item.author
+        }
+    }
+
     /** Най-често срещаните стойности първо. */
     private fun List<String>.countedDistinct(): List<String> =
         filter { it.isNotBlank() }.groupingBy { it }.eachCount().entries
@@ -99,7 +120,7 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
     fun search(query: CatalogQuery): List<CatalogBook> {
         val tokens = TextNormalizer.tokens(query.text)
         val digits = TextNormalizer.digits(query.text)
-        val scored = ArrayList<Pair<Indexed, Int>>()
+        val scored = ArrayList<Scored>()
         for (item in index) {
             val b = item.book
             if (query.onlyAvailable && !b.available) continue
@@ -108,27 +129,29 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
             if (query.language != null && b.language != query.language) continue
             if (query.udcSection != null && b.udcSection != query.udcSection) continue
             if (query.yearFrom != null || query.yearTo != null) {
-                val y = b.yearNumber ?: continue
+                val y = item.year ?: continue
                 if (query.yearFrom != null && y < query.yearFrom) continue
                 if (query.yearTo != null && y > query.yearTo) continue
             }
             val score = if (tokens.isEmpty()) 0 else score(item, query.field, tokens, digits) ?: continue
-            scored += item to score
+            scored += Scored(item, score)
         }
-        val comparator: Comparator<Pair<Indexed, Int>> = when (query.sort) {
+        val comparator: Comparator<Scored> = when (query.sort) {
             CatalogSort.RELEVANCE ->
-                if (tokens.isEmpty()) compareBy { it.first.titleKey }
-                else compareByDescending<Pair<Indexed, Int>> { it.second }.thenBy { it.first.titleKey }
-            CatalogSort.TITLE -> compareBy { it.first.titleKey }
-            CatalogSort.AUTHOR -> compareBy<Pair<Indexed, Int>> { it.first.authorKey }
-                .thenBy { it.first.titleKey }
-            CatalogSort.YEAR_DESC -> compareByDescending<Pair<Indexed, Int>> { it.first.book.yearNumber ?: Int.MIN_VALUE }
-            CatalogSort.YEAR_ASC -> compareBy { it.first.book.yearNumber ?: Int.MAX_VALUE }
-            CatalogSort.NEWEST -> compareByDescending<Pair<Indexed, Int>> { it.first.book.registeredOn }
-                .thenByDescending { it.first.book.inv }
+                if (tokens.isEmpty()) BY_TITLE
+                else compareByDescending<Scored> { it.score }.then(BY_TITLE)
+            CatalogSort.TITLE -> BY_TITLE
+            CatalogSort.AUTHOR -> BY_AUTHOR.then(BY_TITLE)
+            CatalogSort.YEAR_DESC -> compareByDescending { it.item.year ?: Int.MIN_VALUE }
+            CatalogSort.YEAR_ASC -> compareBy { it.item.year ?: Int.MAX_VALUE }
+            CatalogSort.NEWEST -> compareByDescending<Scored> { it.item.book.registeredOn }
+                .thenByDescending { it.item.book.inv }
         }
-        return scored.sortedWith(comparator).map { it.first.book }
+        scored.sortWith(comparator)
+        return scored.map { it.item.book }
     }
+
+    private class Scored(val item: Indexed, val score: Int)
 
     /** null = не съвпада; по-голямо число = по-добро съвпадение. */
     private fun score(item: Indexed, field: SearchField, tokens: List<String>, digits: String): Int? {
@@ -140,7 +163,11 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
             SearchField.INVENTORY -> if (digits.isNotEmpty() && item.book.inv.toString() == digits.trimStart('0')) 100
             else if (digits.isNotEmpty() && item.book.inv.toString().startsWith(digits)) 10 else null
             SearchField.ALL -> {
-                matchAll(item.all, tokens) ?: return null
+                // Думите не съдържат интервали, затова „поне едно поле съдържа думата“ е
+                // същото като търсене в слепените с интервал полета.
+                for (t in tokens) {
+                    if (!item.title.contains(t) && !item.author.contains(t) && !item.keywords.contains(t) && !item.rest.contains(t)) return null
+                }
                 var s = 1
                 if (matchAll(item.title, tokens) != null) s += 20 + prefixBonus(item.title, tokens)
                 if (matchAll(item.author, tokens) != null) s += 15 + prefixBonus(item.author, tokens)
@@ -180,14 +207,9 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
     }
 
     /** Нови постъпления — по дата на постъпване (ключ `d`). */
-    fun newest(limit: Int): List<CatalogBook> =
-        snapshot.books.filter { it.registeredOn.isNotBlank() }
-            .sortedWith(compareByDescending<CatalogBook> { it.registeredOn }.thenByDescending { it.inv })
-            .take(limit)
+    fun newest(limit: Int): List<CatalogBook> = newest(snapshot.books, limit)
 
-    fun shelfBooks(): List<Pair<String, List<CatalogBook>>> =
-        snapshot.shelves.map { shelf -> shelf.name to shelf.invNumbers.mapNotNull { byInv[it] } }
-            .filter { it.second.isNotEmpty() }
+    fun shelfBooks(): List<Pair<String, List<CatalogBook>>> = shelfBooks(snapshot, byInv)
 
     fun byAuthor(author: String, excludeInv: Long, limit: Int = 10): List<CatalogBook> {
         if (author.isBlank()) return emptyList()
@@ -198,4 +220,42 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
     /** Другите екземпляри от същото заглавие (еднакво заглавие + автор). */
     fun copiesOf(book: CatalogBook): List<CatalogBook> =
         snapshot.books.filter { it.title == book.title && it.author == book.author && it.inv != book.inv }
+
+    companion object {
+        /** Брой нови постъпления на началния екран. */
+        const val HOME_NEWEST = 12
+
+        private val BY_TITLE: Comparator<Scored> = Comparator { a, b -> a.item.titleRank.compareTo(b.item.titleRank) }
+        private val BY_AUTHOR: Comparator<Scored> = Comparator { a, b -> a.item.authorRank.compareTo(b.item.authorRank) }
+
+        /**
+         * Ранг по ключовете: подрежда ги веднъж и дава на равните ключове еднакъв ранг,
+         * така че сравнението на ранговете дава същия ред като на ключовете.
+         */
+        private fun assignRanks(keys: List<CollationKey>, set: (Int, Int) -> Unit) {
+            val order = keys.indices.sortedWith { a, b -> keys[a].compareTo(keys[b]) }
+            var rank = 0
+            for (pos in order.indices) {
+                if (pos > 0 && keys[order[pos]].compareTo(keys[order[pos - 1]]) != 0) rank++
+                set(order[pos], rank)
+            }
+        }
+
+        fun newest(books: List<CatalogBook>, limit: Int): List<CatalogBook> =
+            books.filter { it.registeredOn.isNotBlank() }
+                .sortedWith(compareByDescending<CatalogBook> { it.registeredOn }.thenByDescending { it.inv })
+                .take(limit)
+
+        fun shelfBooks(snapshot: CatalogSnapshot, byInv: Map<Long, CatalogBook> = snapshot.books.associateBy { it.inv }): List<Pair<String, List<CatalogBook>>> =
+            snapshot.shelves.map { shelf -> shelf.name to shelf.invNumbers.mapNotNull { byInv[it] } }
+                .filter { it.second.isNotEmpty() }
+
+        /** Обобщението за началния екран — без да се строи индексът за търсене. */
+        fun homeSummary(snapshot: CatalogSnapshot): CatalogHomeSummary = CatalogHomeSummary(
+            count = snapshot.books.size,
+            generatedOn = snapshot.generatedOn,
+            newest = newest(snapshot.books, HOME_NEWEST),
+            shelves = shelfBooks(snapshot).map { (name, books) -> CatalogHomeShelf(name, books) },
+        )
+    }
 }

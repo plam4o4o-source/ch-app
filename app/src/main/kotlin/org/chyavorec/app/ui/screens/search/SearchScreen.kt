@@ -71,8 +71,8 @@ import org.chyavorec.app.ui.screens.news.NewsRow
 import org.chyavorec.app.ui.screens.site.sectionIcon
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.SearchAggregator
+import org.chyavorec.data.SearchCorpus
 import org.chyavorec.data.SearchResults
-import org.chyavorec.domain.model.SiteSearchDoc
 import org.chyavorec.data.site.SiteLinkClassifier
 
 enum class SearchScope { ALL, BOOKS, NEWS, EVENTS, PAGES }
@@ -88,21 +88,20 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
     val ui = MutableStateFlow(SearchUi())
     val recent = c.settings.recentSearches.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     private val query = MutableStateFlow("")
-    @Volatile private var siteDocs: List<SiteSearchDoc> = emptyList()
-    // Новините и събитията се четат/декодират от диска веднъж, а не при всеки клавиш.
-    @Volatile private var news: List<org.chyavorec.domain.model.NewsArticle> = emptyList()
-    @Volatile private var events: List<org.chyavorec.domain.model.Event> = emptyList()
+    // Новините, събитията и страниците се четат/декодират и нормализират веднъж, а не при всеки клавиш.
+    @Volatile private var corpus: SearchCorpus = SearchCorpus.EMPTY
 
     init {
         viewModelScope.launch {
             // Зареждаме данните за търсене (от кеша, при нужда — от мрежата).
             c.catalogRepository.cached() ?: c.catalogRepository.catalog(false)
-            news = c.newsRepository.cached()?.data
+            val news = c.newsRepository.cached()?.data
                 ?: (c.newsRepository.latest(false) as? Outcome.Success)?.value?.data.orEmpty()
-            events = c.eventsRepository.cachedRolled()?.data
+            val events = c.eventsRepository.cachedRolled()?.data
                 ?: (c.eventsRepository.events(false) as? Outcome.Success)?.value?.data.orEmpty()
-            siteDocs = c.siteRepository.cachedSearchIndex()
+            val siteDocs = c.siteRepository.cachedSearchIndex()
                 ?: (c.siteRepository.searchIndex(false) as? Outcome.Success)?.value?.data.orEmpty()
+            corpus = withContext(Dispatchers.Default) { SearchAggregator.prepare(news, events, siteDocs) }
             run(query.value)
         }
         viewModelScope.launch(Dispatchers.Default) { query.debounce(180).collect { run(it) } }
@@ -114,8 +113,13 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
     fun clearRecent() = viewModelScope.launch { c.settings.clearRecentSearches() }
 
     private suspend fun run(q: String) {
-        val engine = c.catalogRepository.inMemory()?.data
-        val r = withContext(Dispatchers.Default) { SearchAggregator.search(q, engine, news, events, siteDocs) }
+        if (q.isBlank()) {
+            ui.update { if (it.query == q) it.copy(results = SearchResults(), searching = false) else it }
+            return
+        }
+        // Индексът може да е освободен при недостиг на памет — тогава се зарежда пак от диска.
+        val engine = c.catalogRepository.inMemory()?.data ?: c.catalogRepository.cached()?.data
+        val r = withContext(Dispatchers.Default) { SearchAggregator.search(q, engine, corpus) }
         ui.update { if (it.query == q) it.copy(results = r, searching = false) else it }
     }
 }
