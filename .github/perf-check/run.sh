@@ -18,6 +18,7 @@ echo "APK size: $(stat -c %s app.apk) bytes"
 unzip -l app.apk | grep -E "lib/|\.so$" | head; unzip -l app.apk | tail -1
 adb install -r app.apk || { echo "RESULT: install failed"; exit 1; }
 adb logcat -c
+(adb logcat -v time > $OUT/logcat-live.txt 2>&1 &)
 for i in 1 2 3; do
   timeout 10 adb shell am force-stop $PKG; sleep 2
   timeout 60 adb shell am start -W -n $PKG/.MainActivity | grep -E "TotalTime|WaitTime"
@@ -34,11 +35,13 @@ timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 3
 tap text "=My"; sleep 4; shot 06-my
 tap text "=More"; sleep 3; shot 07-more
 timeout 20 adb shell dumpsys meminfo $PKG | grep -E "TOTAL PSS|TOTAL:|Java Heap|Native Heap" | head -5
-timeout 30 adb logcat -d > $OUT/logcat.txt
-echo "===== FATAL ====="; grep -n -A40 "FATAL EXCEPTION" $OUT/logcat.txt | head -80 || true
+timeout 30 adb logcat -d > $OUT/logcat.txt || cp $OUT/logcat-live.txt $OUT/logcat.txt
+echo "===== emulator alive? ====="; timeout 10 adb get-state || echo "EMULATOR GONE"
+echo "===== tail of live logcat ====="; tail -60 $OUT/logcat-live.txt | cut -c1-220
+echo "===== FATAL ====="; grep -n -A40 "FATAL EXCEPTION" $OUT/logcat-live.txt | head -80 || true
 echo "===== StrictMode/ANR ====="; grep -nE "ANR in|Application Not Responding" $OUT/logcat.txt | head
 FAIL=0
-grep -q "FATAL EXCEPTION" $OUT/logcat.txt && FAIL=1
+grep -q "FATAL EXCEPTION" $OUT/logcat-live.txt && FAIL=1
 timeout 10 adb shell pidof $PKG >/dev/null || { echo "process not running"; }
 [ $FAIL = 0 ] && echo "RESULT: OK" || echo "RESULT: crash"
 exit $FAIL
