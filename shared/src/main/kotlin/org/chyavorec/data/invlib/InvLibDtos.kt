@@ -24,6 +24,10 @@ data class CapabilitiesDto(
     val availability: Boolean = false,
     val history: Boolean = false,
     val messages: Boolean = false,
+    /** `GET /v1/me/all` — всички читателски данни с една заявка. */
+    val all: Boolean = false,
+    /** `POST /v1/me/messages/read` с `{ids}` — „прочетено“ на пакет. */
+    val messagesBatchRead: Boolean = false,
 )
 
 @Serializable
@@ -53,6 +57,8 @@ data class ReaderDto(
     val category: String? = null,
     val email: String? = null,
     val registeredOn: String? = null,
+    /** Новите мостове връщат членството направо в `/v1/me` (тогава втора заявка не трябва). */
+    val membership: MembershipDto? = null,
 )
 
 @Serializable
@@ -107,6 +113,29 @@ data class ReaderMessageDto(
 
 @Serializable
 data class ReaderMessagesResponseDto(val items: List<ReaderMessageDto> = emptyList(), val generated: String? = null)
+
+/** Отговор на `GET /v1/me/all`. Всяка част може да липсва (тогава се иска поотделно). */
+@Serializable
+data class MeAllResponseDto(
+    val profile: ReaderDto? = null,
+    val membership: MembershipDto? = null,
+    val loans: LoansResponseDto? = null,
+    val history: HistoryResponseDto? = null,
+    val messages: ReaderMessagesResponseDto? = null,
+    val generated: String? = null,
+)
+
+/** Тяло на `POST /v1/me/messages/read` (до [MAX_IDS] идентификатора). */
+@Serializable
+data class MessagesReadRequestDto(val ids: List<String>) {
+    companion object {
+        const val MAX_IDS = 50
+    }
+}
+
+/** Възможностите, запазени в публичния кеш (за кой адрес на API са). */
+@Serializable
+data class CapabilitiesCacheDto(val api: String, val caps: CapabilitiesDto)
 
 @Serializable
 data class MembershipDto(

@@ -105,8 +105,20 @@ class HistoryViewModel(private val c: AppContainer) : ViewModel() {
 
     fun refresh() = load(force = true)
 
+    /** Cache-first: кешираната история веднага, от мрежата — само ако е по-стара от 10 минути (или при [force]). */
     private fun load(force: Boolean) = viewModelScope.launch {
-        _state.update { it.startRefresh() }
+        if (force || _state.value.data != null) {
+            _state.update { it.startRefresh() }
+        } else {
+            val cached = c.libraryRepository.cachedHistory()
+            _state.update { cur ->
+                when {
+                    cur.data != null -> cur
+                    cached != null -> cached.asQuietState()
+                    else -> cur.startRefresh()
+                }
+            }
+        }
         val r = c.libraryRepository.history(force)
         _state.update { it.with(r) }
         (r as? Outcome.Success)?.value?.data?.let { recommend(it) }

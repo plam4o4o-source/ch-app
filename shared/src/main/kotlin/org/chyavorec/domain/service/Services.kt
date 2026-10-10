@@ -15,6 +15,7 @@ import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.NewsArticle
+import org.chyavorec.domain.model.ReaderBundle
 import org.chyavorec.domain.model.ReaderMessage
 import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.ServiceCapabilities
@@ -98,6 +99,20 @@ interface ReaderService {
     /** Отбелязва лично съобщение като прочетено (идемпотентно; сървърът отговаря 202). */
     suspend fun markMessageRead(session: AuthSession, messageId: String): Outcome<Unit> =
         Outcome.Failure(AppError.NotAvailable(Feature.MESSAGES))
+
+    /**
+     * „Прочетено“ за няколко лични съобщения наведнъж (capability `messagesBatchRead`).
+     * По подразбиране: няма такава услуга — тогава се праща поотделно с [markMessageRead].
+     */
+    suspend fun markMessagesRead(session: AuthSession, messageIds: List<String>): Outcome<Unit> =
+        Outcome.Failure(AppError.NotAvailable(Feature.MESSAGES))
+
+    /**
+     * Всички читателски данни с една заявка (capability `all`): профил, членство, заемания,
+     * история и лични съобщения. По подразбиране: няма такава услуга (поотделни заявки).
+     */
+    suspend fun meAll(session: AuthSession): Outcome<ReaderBundle> =
+        Outcome.Failure(AppError.NotAvailable(Feature.PROFILE))
 }
 
 /** Членство/регистрация (InvLib — бъдещ онлайн API). */

@@ -9,6 +9,7 @@ import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.MembershipStatus
+import org.chyavorec.domain.model.ReaderBundle
 import org.chyavorec.domain.model.ReaderMessage
 import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.RenewResult
@@ -31,7 +32,10 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
     private fun today() = clock.today()
 
     override suspend fun capabilities() = Outcome.Success(
-        ServiceCapabilities(login = true, profile = true, loans = true, membership = true, holds = true, renew = true, history = true, messages = true),
+        ServiceCapabilities(
+            login = true, profile = true, loans = true, membership = true, holds = true, renew = true, history = true, messages = true,
+            all = true, messagesBatchRead = true,
+        ),
     )
 
     override suspend fun login(cardNumber: String, password: CharArray): Outcome<AuthSession> {
@@ -112,6 +116,25 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
     override suspend fun markMessageRead(session: AuthSession, messageId: String): Outcome<Unit> {
         readMessages += messageId
         return Outcome.Success(Unit)
+    }
+
+    override suspend fun markMessagesRead(session: AuthSession, messageIds: List<String>): Outcome<Unit> {
+        readMessages += messageIds
+        return Outcome.Success(Unit)
+    }
+
+    /** Като `GET /v1/me/all`: всичко с едно извикване (членството — и в профила). */
+    override suspend fun meAll(session: AuthSession): Outcome<ReaderBundle> {
+        val membership = membership(session).value
+        return Outcome.Success(
+            ReaderBundle(
+                profile = profile(session).value.copy(membership = membership),
+                membership = membership,
+                loans = (loans(session) as Outcome.Success).value,
+                history = (history(session) as Outcome.Success).value,
+                messages = (messages(session) as Outcome.Success).value,
+            ),
+        )
     }
 
     override suspend fun requestAccountDeletion(session: AuthSession) = Outcome.Success(Unit)

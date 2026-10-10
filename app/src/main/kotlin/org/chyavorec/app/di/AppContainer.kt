@@ -36,6 +36,7 @@ import org.chyavorec.data.repository.MembershipRepository
 import org.chyavorec.data.repository.MessagesRepository
 import org.chyavorec.data.repository.NewsRepository
 import org.chyavorec.data.repository.ProfileRepository
+import org.chyavorec.data.repository.ReaderDataRepository
 import org.chyavorec.data.repository.ReaderMessagesRepository
 import org.chyavorec.data.repository.SelfCardRepository
 import org.chyavorec.data.repository.SiteRepository
@@ -106,7 +107,8 @@ class AppContainer(
         when {
             demo != null -> demo
             config.inflibConfigured -> {
-                val remote = RemoteInvLibClient(http, config.inflibApiUrl, clock, Build.MODEL ?: "Android")
+                // Възможностите (не са лични) се помнят 24 ч в публичния кеш.
+                val remote = RemoteInvLibClient(http, config.inflibApiUrl, clock, Build.MODEL ?: "Android", publicCache)
                 ReaderServices(remote, remote, remote, isDemo = false)
             }
             else -> {
@@ -124,14 +126,27 @@ class AppContainer(
     val authRepository by lazy {
         AuthRepository(readerServices.auth, SecureSessionStore(File(context.noBackupFilesDir, "secure/session.bin"), cipher), clock, readerCache)
     }
-    val profileRepository by lazy { ProfileRepository(readerServices.reader, authRepository, readerCache, clock, readerServices.membership) }
-    val libraryRepository by lazy { LibraryRepository(readerServices.reader, authRepository, readerCache, clock) }
-    val membershipRepository by lazy { MembershipRepository(readerServices.membership, authRepository, readerCache, clock) }
+    /**
+     * Едно общо хранилище за читателските данни (един кеш на вид, `/v1/me/all` при наличие,
+     * профилът на ниво приложение) — всички читателски репозиторита го споделят.
+     */
+    val readerDataRepository by lazy {
+        ReaderDataRepository(readerServices.reader, authRepository, readerCache, clock, readerServices.membership)
+    }
+    val profileRepository by lazy {
+        ProfileRepository(readerServices.reader, authRepository, readerCache, clock, readerServices.membership, readerDataRepository)
+    }
+    val libraryRepository by lazy { LibraryRepository(readerServices.reader, authRepository, readerCache, clock, readerDataRepository) }
+    val membershipRepository by lazy {
+        MembershipRepository(readerServices.membership, authRepository, readerCache, clock, readerDataRepository)
+    }
     val selfCardRepository by lazy { SelfCardRepository(SecureSelfCardStore(File(context.noBackupFilesDir, "secure/card.bin"), cipher)) }
 
     val messagesRepository by lazy { MessagesRepository(siteService, publicCache, clock) }
     /** Лични съобщения от библиотеката — в шифрования читателски кеш (изтрива се при изход). */
-    val readerMessagesRepository by lazy { ReaderMessagesRepository(readerServices.reader, authRepository, readerCache, clock) }
+    val readerMessagesRepository by lazy {
+        ReaderMessagesRepository(readerServices.reader, authRepository, readerCache, clock, readerDataRepository)
+    }
     val messages by lazy {
         MessageCenter(messagesRepository, authRepository, selfCardRepository, settings, readerMessagesRepository, clock)
     }

@@ -112,6 +112,23 @@ data class ReaderMessage(
     override fun toString(): String = "ReaderMessage(id=$id, read=$read)"
 }
 
+/**
+ * Всички читателски данни от една заявка (`GET /v1/me/all`). Липсваща част (`null`) =
+ * сървърът не я е върнал — тогава тя се иска поотделно, ако изобщо се поддържа.
+ */
+data class ReaderBundle(
+    val profile: ReaderProfile? = null,
+    val membership: Membership? = null,
+    val loans: List<Loan>? = null,
+    val history: List<HistoryItem>? = null,
+    val messages: List<ReaderMessage>? = null,
+) {
+    /** Без лични данни — да не изтекат в логове/грешки. */
+    override fun toString(): String =
+        "ReaderBundle(profile=${profile != null}, membership=${membership != null}, loans=${loans?.size}, " +
+            "history=${history?.size}, messages=${messages?.size})"
+}
+
 /** Индикатор на срока — изчислява се от реалните дати ([LoanDueCalculator]). */
 enum class DueStatus { PLENTY_OF_TIME, DUE_SOON, OVERDUE }
 
@@ -132,6 +149,10 @@ data class ServiceCapabilities(
     val history: Boolean = false,
     /** Лични съобщения от библиотеката до читателя (`GET /v1/me/messages`). */
     val messages: Boolean = false,
+    /** Всички читателски данни с една заявка (`GET /v1/me/all`). */
+    val all: Boolean = false,
+    /** „Прочетено“ на пакет (`POST /v1/me/messages/read` с `{ids}`). */
+    val messagesBatchRead: Boolean = false,
 ) {
     companion object {
         val NONE = ServiceCapabilities()

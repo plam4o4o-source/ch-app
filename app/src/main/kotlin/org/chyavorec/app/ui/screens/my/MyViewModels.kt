@@ -3,14 +3,18 @@ package org.chyavorec.app.ui.screens.my
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.Synced
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
@@ -18,7 +22,19 @@ import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.SelfDeclaredCard
 import org.chyavorec.domain.model.ServiceCapabilities
 
-/** Общо състояние на „Моето“: вход, възможности на сървъра, ръчна карта, профил. */
+/**
+ * Кешът веднага (cache-first), без лента „няма връзка“ и без индикатор: опресняването
+ * тече тихо във фон и ако не успее, резултатът ([ScreenState.with]) показва причината.
+ */
+internal fun <T> Synced<T>.asQuietState(): ScreenState<T> = ScreenState(data = data, loading = false, syncedAt = syncedAt)
+
+/**
+ * Общо състояние на „Моето“: вход, възможности на сървъра, ръчна карта, профил.
+ *
+ * Самият профил е общ за приложението ([org.chyavorec.data.repository.ProfileRepository.state]) —
+ * „Моето“, картата (и на цял екран) и „Профил“ го споделят, вместо всеки екран да го тегли;
+ * тук е само състоянието на зареждането за този екран.
+ */
 class AccountViewModel(private val c: AppContainer) : ViewModel() {
     val authState: StateFlow<AuthState> = c.authRepository.state
     val selfCard: StateFlow<SelfDeclaredCard?> = c.selfCardRepository.card
@@ -27,8 +43,16 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
     private val _caps = MutableStateFlow<ServiceCapabilities?>(null)
     val capabilities: StateFlow<ServiceCapabilities?> = _caps.asStateFlow()
 
-    private val _profile = MutableStateFlow(ScreenState<ReaderProfile>(loading = false))
-    val profile: StateFlow<ScreenState<ReaderProfile>> = _profile.asStateFlow()
+    /** С каква грешка е приключил последният опит за профила на този екран (`null` = без грешка/тече). */
+    private val _loadError = MutableStateFlow<AppError?>(null)
+
+    val profile: StateFlow<ScreenState<ReaderProfile>> =
+        combine(c.profileRepository.state, _loadError, authState) { p, e, a -> profileState(p, e, a) }
+            .stateIn(
+                viewModelScope, SharingStarted.Eagerly,
+                // Вече зареден (от друг екран) профил се вижда веднага, без „Зареждане…“.
+                profileState(c.profileRepository.state.value, null, authState.value),
+            )
 
     init {
         // Възможностите идват от мрежата — отделно, за да не чака профилът бавната връзка.
@@ -36,13 +60,13 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
         viewModelScope.launch {
             c.authRepository.restore()
             c.selfCardRepository.load()
-            // Профилът следва входа: зарежда се и при нов вход (не само при старт),
-            // и се изчиства при изход.
+            // Профилът следва входа: зарежда се и при нов вход (не само при старт).
+            // Cache-first: от паметта/кеша веднага, от мрежата — само ако е по-стар от 12 часа.
             authState.collect { s ->
                 if (s is AuthState.SignedIn) {
-                    if (_profile.value.data == null) loadProfile()
+                    loadProfile()
                 } else {
-                    _profile.value = ScreenState(loading = false)
+                    _loadError.value = null
                 }
             }
         }
@@ -59,16 +83,20 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
         viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
     }
 
-    fun loadProfile() = viewModelScope.launch {
+    /** [force] = true — от мрежата независимо от свежестта на кеша. */
+    fun loadProfile(force: Boolean = false) = viewModelScope.launch {
         refreshCapabilities()
-        _profile.update { it.startRefresh() }
-        _profile.update { it.with(c.profileRepository.profile()) }
+        _loadError.value = null
+        // Кешираният профил (може и остарял) се показва веднага, докато тече опресняването.
+        c.profileRepository.cachedProfile()
+        val r = c.profileRepository.profile(force)
+        _loadError.value = (r as? Outcome.Failure)?.error
     }
 
     fun logout() = viewModelScope.launch {
         c.authRepository.logout()
         c.settings.clearPersonal()
-        _profile.value = ScreenState(loading = false)
+        _loadError.value = null
     }
 
     fun saveSelfCard(number: String, name: String, onResult: (Boolean) -> Unit) = viewModelScope.launch {
@@ -79,6 +107,21 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
 
     val deletion = MutableStateFlow<Outcome<Unit>?>(null)
     fun requestDeletion() = viewModelScope.launch { deletion.value = c.profileRepository.requestAccountDeletion() }
+
+    private companion object {
+        fun profileState(p: Synced<ReaderProfile>?, error: AppError?, a: AuthState): ScreenState<ReaderProfile> = when {
+            a !is AuthState.SignedIn -> ScreenState(loading = false)
+            // Още няма профил: зарежда се (и преди първия опит), освен ако опитът е завършил с грешка.
+            p == null -> if (error != null) ScreenState(loading = false, error = error) else ScreenState(loading = true)
+            else -> ScreenState(
+                data = p.data,
+                loading = false,
+                syncedAt = p.syncedAt,
+                fromCache = p.fromCache && (p.refreshError != null || error != null),
+                refreshError = p.refreshError ?: error,
+            )
+        }
+    }
 }
 
 data class LoginUi(
@@ -149,7 +192,7 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
             if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
             c.authRepository.state.collect { s ->
                 if (s is AuthState.SignedIn) {
-                    if (_state.value.data == null) refresh()
+                    if (_state.value.data == null) load(force = false)
                 } else if (s is AuthState.SignedOut) {
                     _state.value = ScreenState(loading = false, error = AppError.Unauthorized)
                 }
@@ -157,19 +200,45 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
         }
     }
 
-    fun refresh() = viewModelScope.launch {
+    /** Дръпване за опресняване / „Опитай пак“ — винаги от мрежата. */
+    fun refresh() = load(force = true)
+
+    /**
+     * Cache-first: кешираните заемания се показват веднага, а от мрежата се теглят само
+     * ако са по-стари от 3 минути (или при [force]).
+     */
+    private fun load(force: Boolean) = viewModelScope.launch {
         if (!canRenew.value) canRenew.value = c.authRepository.capabilities().renew
-        _state.update { it.startRefresh() }
-        val r = c.libraryRepository.loans(force = true)
+        if (force) {
+            _state.update { it.startRefresh() }
+        } else if (_state.value.data == null) {
+            val cached = c.libraryRepository.cachedLoans()
+            _state.update { cur ->
+                when {
+                    cur.data != null -> cur
+                    cached != null -> cached.asQuietState()
+                    else -> cur.startRefresh()
+                }
+            }
+        }
+        val before = _state.value.data
+        val r = c.libraryRepository.loans(force)
         _state.update { it.with(r) }
         // Уиджетът показва броя и най-близкия срок — да не остава със стари данни.
-        if (r is Outcome.Success) runCatching { c.refreshWidget() }
+        if (r is Outcome.Success && r.value.data != before) runCatching { c.refreshWidget() }
     }
 
+    /**
+     * Заявка за удължаване. Отговорът (202) вече съдържа заемането с `renewPending` —
+     * то се сменя на място (и в кеша, от репозиторито), без ново теглене на целия списък.
+     */
     fun renew(loan: Loan) = viewModelScope.launch {
         val r = c.libraryRepository.renew(loan.loanId)
         renewResult.value = r
-        if (r is Outcome.Success) refresh()
+        if (r is Outcome.Success) {
+            val updated = r.value
+            _state.update { s -> s.copy(data = s.data?.map { if (it.loanId == loan.loanId) updated else it }) }
+        }
     }
 }
 
@@ -184,7 +253,7 @@ class MembershipViewModel(private val c: AppContainer) : ViewModel() {
             if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
             c.authRepository.state.collect { s ->
                 if (s is AuthState.SignedIn) {
-                    if (_state.value.data == null) refresh()
+                    if (_state.value.data == null) load(force = false)
                 } else if (s is AuthState.SignedOut) {
                     _state.value = ScreenState(loading = false, error = AppError.Unauthorized)
                 }
@@ -192,8 +261,23 @@ class MembershipViewModel(private val c: AppContainer) : ViewModel() {
         }
     }
 
-    fun refresh() = viewModelScope.launch {
-        _state.update { it.startRefresh() }
-        _state.update { it.with(c.membershipRepository.membership(force = true)) }
+    /** Дръпване за опресняване / „Опитай пак“ — винаги от мрежата. */
+    fun refresh() = load(force = true)
+
+    /** Cache-first: кешът веднага, от мрежата — само ако е по-стар от 6 часа (или при [force]). */
+    private fun load(force: Boolean) = viewModelScope.launch {
+        if (force) {
+            _state.update { it.startRefresh() }
+        } else if (_state.value.data == null) {
+            val cached = c.membershipRepository.cached()
+            _state.update { cur ->
+                when {
+                    cur.data != null -> cur
+                    cached != null -> cached.asQuietState()
+                    else -> cur.startRefresh()
+                }
+            }
+        }
+        _state.update { it.with(c.membershipRepository.membership(force)) }
     }
 }
