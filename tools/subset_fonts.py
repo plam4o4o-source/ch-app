@@ -31,6 +31,7 @@ KOTLIN = ["app/src/main/kotlin", "app/src/prod/kotlin", "app/src/dev/kotlin", "s
 UNICODES = (
     list(range(0x0020, 0x007F))      # Basic Latin
     + list(range(0x00A0, 0x0100))    # Latin-1 Supplement (« » € няма, но © ° · × и т.н.)
+    + list(range(0x0100, 0x0180))    # Latin Extended-A (Č, Ł, Ő … — имена на чужди автори в каталога)
     + list(range(0x0400, 0x0500))    # Cyrillic
     + list(range(0x2000, 0x2070))    # General Punctuation („ “ — – … ’ • ‰ ′ ″)
     + list(range(0x20A0, 0x20D0))    # Currency Symbols (€)
