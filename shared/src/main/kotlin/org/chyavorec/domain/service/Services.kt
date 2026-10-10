@@ -1,5 +1,7 @@
 package org.chyavorec.domain.service
 
+import org.chyavorec.core.AppError
+import org.chyavorec.core.Feature
 import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.ArticleDetail
 import org.chyavorec.domain.model.AuthSession
@@ -13,6 +15,7 @@ import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.NewsArticle
+import org.chyavorec.domain.model.ReaderMessage
 import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.ServiceCapabilities
 import org.chyavorec.domain.model.SiteDocument
@@ -84,6 +87,17 @@ interface ReaderService {
     suspend fun availability(inv: Long): Outcome<BookStatus>
     /** История на четенето (най-новите първо, до 200) — само ако сървърът я поддържа. */
     suspend fun history(session: AuthSession): Outcome<List<HistoryItem>>
+
+    /**
+     * Лични съобщения от библиотеката (най-новите първо) — само ако сървърът ги поддържа.
+     * По подразбиране: няма такава услуга (по-стари/демо реализации).
+     */
+    suspend fun messages(session: AuthSession): Outcome<List<ReaderMessage>> =
+        Outcome.Failure(AppError.NotAvailable(Feature.MESSAGES))
+
+    /** Отбелязва лично съобщение като прочетено (идемпотентно; сървърът отговаря 202). */
+    suspend fun markMessageRead(session: AuthSession, messageId: String): Outcome<Unit> =
+        Outcome.Failure(AppError.NotAvailable(Feature.MESSAGES))
 }
 
 /** Членство/регистрация (InvLib — бъдещ онлайн API). */

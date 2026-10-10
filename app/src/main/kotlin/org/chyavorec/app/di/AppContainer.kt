@@ -36,6 +36,7 @@ import org.chyavorec.data.repository.MembershipRepository
 import org.chyavorec.data.repository.MessagesRepository
 import org.chyavorec.data.repository.NewsRepository
 import org.chyavorec.data.repository.ProfileRepository
+import org.chyavorec.data.repository.ReaderMessagesRepository
 import org.chyavorec.data.repository.SelfCardRepository
 import org.chyavorec.data.repository.SiteRepository
 import org.chyavorec.data.site.ChyavorecSiteService
@@ -129,7 +130,11 @@ class AppContainer(
     val selfCardRepository by lazy { SelfCardRepository(SecureSelfCardStore(File(context.noBackupFilesDir, "secure/card.bin"), cipher)) }
 
     val messagesRepository by lazy { MessagesRepository(siteService, publicCache, clock) }
-    val messages by lazy { MessageCenter(messagesRepository, authRepository, selfCardRepository, settings) }
+    /** Лични съобщения от библиотеката — в шифрования читателски кеш (изтрива се при изход). */
+    val readerMessagesRepository by lazy { ReaderMessagesRepository(readerServices.reader, authRepository, readerCache, clock) }
+    val messages by lazy {
+        MessageCenter(messagesRepository, authRepository, selfCardRepository, settings, readerMessagesRepository, clock)
+    }
 
     val updater by lazy { AppUpdater(context, okHttp, http, config, settings, clock) }
 
@@ -140,7 +145,7 @@ class AppContainer(
     /**
      * При ВСЕКИ преход от вход към изход — ръчен изход или принудителен (отказано
      * подновяване на сесията) — изчиства личните следи (история на търсенето,
-     * известия за заемания). Извиква се веднъж от Application.
+     * известия за заемания, следите от личните съобщения). Извиква се веднъж от Application.
      */
     fun watchSignOut() {
         appScope.launch {
@@ -151,6 +156,8 @@ class AppContainer(
                     wasSignedIn = true
                 } else if (s is AuthState.SignedOut && wasSignedIn) {
                     wasSignedIn = false
+                    // Личните съобщения изчезват веднага и от паметта (кешът им е в readerCache).
+                    runCatching { messages.clearPersonal() }
                     runCatching { settings.clearPersonal() }
                     // Уиджетът не бива да показва заглавия на книги след изход.
                     ChitalishteWidget.refresh(context)

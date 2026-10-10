@@ -94,6 +94,24 @@ data class HistoryItem(
     val year: Int? get() = (dateOut ?: dateIn)?.take(4)?.toIntOrNull()
 }
 
+/**
+ * Лично съобщение от библиотеката до влезлия читател (пише се в InvLib).
+ * Лични данни: пази се само в шифрования читателски кеш и НИКОГА не се логва.
+ */
+@Serializable
+data class ReaderMessage(
+    val id: String,
+    /** Може да е празно — тогава UI показва общо заглавие. */
+    val title: String = "",
+    val text: String = "",
+    /** ISO-8601 момент на изпращане. */
+    val at: String = "",
+    /** Прочетено (в InvLib или чакащо „прочетено“ при моста). */
+    val read: Boolean = false,
+) {
+    override fun toString(): String = "ReaderMessage(id=$id, read=$read)"
+}
+
 /** Индикатор на срока — изчислява се от реалните дати ([LoanDueCalculator]). */
 enum class DueStatus { PLENTY_OF_TIME, DUE_SOON, OVERDUE }
 
@@ -112,6 +130,8 @@ data class ServiceCapabilities(
     val availability: Boolean = false,
     /** История на четенето (`GET /v1/me/history`). */
     val history: Boolean = false,
+    /** Лични съобщения от библиотеката до читателя (`GET /v1/me/messages`). */
+    val messages: Boolean = false,
 ) {
     companion object {
         val NONE = ServiceCapabilities()

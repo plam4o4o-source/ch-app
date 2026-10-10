@@ -63,5 +63,5 @@ sealed interface AppError {
 
 /** Функции, които изискват онлайн достъп до библиотечната система. */
 enum class Feature {
-    LOGIN, PROFILE, LOANS, MEMBERSHIP, HOLDS, RENEW, PASSWORD_RESET, ACCOUNT_DELETION, PUSH, HISTORY
+    LOGIN, PROFILE, LOANS, MEMBERSHIP, HOLDS, RENEW, PASSWORD_RESET, ACCOUNT_DELETION, PUSH, HISTORY, MESSAGES
 }

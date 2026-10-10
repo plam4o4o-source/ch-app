@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PriorityHigh
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
@@ -80,6 +81,7 @@ class MessagesViewModel(private val center: MessageCenter) : ViewModel() {
         val list = _state.value.data.orEmpty()
         val read = center.readIds.first()
         _fresh.update { it + list.map { m -> m.id }.filter { id -> id !in read } }
+        // Показаните са прочетени: локално веднага, личните — и към библиотеката (повторен опит при неуспех).
         center.markRead(list.map { it.id })
     }
 }
@@ -132,24 +134,43 @@ fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
 private fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val high = m.priority == MessagePriority.HIGH
+    val personalFallback = stringResource(R.string.messages_personal_title)
+    val title = if (m.personal && m.title.isBlank()) personalFallback else m.title
     ElevatedCard(modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(
-                    if (high) Icons.Outlined.PriorityHigh else Icons.Outlined.Campaign, null,
+                    when {
+                        high -> Icons.Outlined.PriorityHigh
+                        m.personal -> Icons.Outlined.Person
+                        else -> Icons.Outlined.Campaign
+                    },
+                    null,
                     tint = if (high) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                 )
                 Text(
-                    Formatters.dateTime(context, AppMessagesParser.createdAt(m)),
+                    if (m.createdAt.isBlank()) "" else Formatters.dateTime(context, AppMessagesParser.createdAt(m)),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f),
                 )
                 if (isNew) Badge { Text(stringResource(R.string.messages_new)) }
             }
-            Text(m.title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+            Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
             if (m.body.isNotBlank()) SelectionContainer { Text(m.body, style = MaterialTheme.typography.bodyMedium) }
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (m.personal) {
+                    // „Лично“ — съобщение само до този читател (от библиотеката, не от сайта).
+                    AssistChip(
+                        onClick = {}, enabled = false,
+                        label = { Text(stringResource(R.string.messages_personal)) },
+                        leadingIcon = { Icon(Icons.Outlined.Person, null, Modifier.padding(0.dp)) },
+                        colors = AssistChipDefaults.assistChipColors(
+                            disabledLabelColor = MaterialTheme.colorScheme.primary,
+                            disabledLeadingIconContentColor = MaterialTheme.colorScheme.primary,
+                        ),
+                    )
+                }
                 if (m.audience == MessageAudience.MEMBERS) {
                     AssistChip(
                         onClick = {}, enabled = false,

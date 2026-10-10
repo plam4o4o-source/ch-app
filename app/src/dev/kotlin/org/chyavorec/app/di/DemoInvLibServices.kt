@@ -9,6 +9,7 @@ import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.MembershipStatus
+import org.chyavorec.domain.model.ReaderMessage
 import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.RenewResult
 import org.chyavorec.domain.model.ServiceCapabilities
@@ -30,7 +31,7 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
     private fun today() = clock.today()
 
     override suspend fun capabilities() = Outcome.Success(
-        ServiceCapabilities(login = true, profile = true, loans = true, membership = true, holds = true, renew = true, history = true),
+        ServiceCapabilities(login = true, profile = true, loans = true, membership = true, holds = true, renew = true, history = true, messages = true),
     )
 
     override suspend fun login(cardNumber: String, password: CharArray): Outcome<AuthSession> {
@@ -92,6 +93,27 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
             ),
         )
     }
+
+    /** Прочетените в демо режим лични съобщения (до рестарт на приложението). */
+    private val readMessages = java.util.concurrent.CopyOnWriteArraySet<String>()
+
+    override suspend fun messages(session: AuthSession): Outcome<List<ReaderMessage>> {
+        val now = clock.now()
+        return Outcome.Success(
+            listOf(
+                ReaderMessage("demo-m2", "Запазената книга пристигна", "Демо: книгата, която запазихте, ви чака на гишето до петък.",
+                    now.minusSeconds(2 * 3600).toString(), read = "demo-m2" in readMessages),
+                ReaderMessage("demo-m1", "", "Демо: лично съобщение без заглавие.",
+                    now.minusSeconds(5 * 24 * 3600).toString(), read = true),
+            ),
+        )
+    }
+
+    override suspend fun markMessageRead(session: AuthSession, messageId: String): Outcome<Unit> {
+        readMessages += messageId
+        return Outcome.Success(Unit)
+    }
+
     override suspend fun requestAccountDeletion(session: AuthSession) = Outcome.Success(Unit)
     override suspend fun availability(inv: Long): Outcome<BookStatus> = Outcome.Failure(AppError.NotFound)
 

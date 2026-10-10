@@ -69,7 +69,16 @@ object Notifier {
      * Показва известие. Текстът е кратък и НЕ съдържа лични данни извън
      * заглавието на книгата (видимо само на заключения екран според системните настройки).
      */
-    fun show(context: Context, channel: Channel, id: Int, title: String, text: String, deepLink: String?) {
+    fun show(
+        context: Context,
+        channel: Channel,
+        id: Int,
+        title: String,
+        text: String,
+        deepLink: String?,
+        /** Лично съдържание (напр. лично съобщение от библиотеката) — скрито на заключен екран. */
+        sensitive: Boolean = false,
+    ) {
         if (!canNotify(context)) return
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -87,7 +96,7 @@ object Notifier {
             .setContentIntent(pending)
             .setAutoCancel(true)
             // Заглавията на заети книги са лична информация — скрити на заключен екран.
-            .setVisibility(if (channel == Channel.LOANS) NotificationCompat.VISIBILITY_PRIVATE else NotificationCompat.VISIBILITY_PUBLIC)
+            .setVisibility(if (channel == Channel.LOANS || sensitive) NotificationCompat.VISIBILITY_PRIVATE else NotificationCompat.VISIBILITY_PUBLIC)
             .build()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED

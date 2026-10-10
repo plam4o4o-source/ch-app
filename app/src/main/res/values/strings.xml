@@ -223,6 +223,9 @@
     <string name="messages_members_only">За членове</string>
     <string name="messages_new">Ново</string>
     <string name="messages_open_link">Отвори връзката</string>
+    <string name="messages_personal">Лично</string>
+    <string name="messages_personal_notification_title">Лично съобщение от библиотеката</string>
+    <string name="messages_personal_title">Лично съобщение от библиотеката</string>
     <string name="messages_title">Съобщения</string>
     <string name="messages_valid_until">Валидно до %1$s</string>
     <string name="more_about_desc">История и мисия</string>
@@ -255,6 +258,7 @@
     <string name="na_loans">Заетите книги и сроковете ще се показват тук, когато библиотечната система предостави онлайн достъп.</string>
     <string name="na_login">Онлайн входът още не е включен от библиотеката. Когато бъде включен, функцията ще се появи тук автоматично. За достъп ще ти трябва ПИН, който се издава в библиотеката.</string>
     <string name="na_membership">Данните за членството ще се показват тук, когато библиотечната система предостави онлайн достъп.</string>
+    <string name="na_messages">Личните съобщения още не са включени от библиотеката.</string>
     <string name="na_password_reset">Нов ПИН се издава само в библиотеката — обърни се към библиотекаря.</string>
     <string name="na_push">Сървърни известия още не се поддържат.</string>
     <string name="na_renew">Онлайн подновяване още не се поддържа. Попитай в библиотеката.</string>

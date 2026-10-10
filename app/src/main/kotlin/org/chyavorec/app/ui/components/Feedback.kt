@@ -90,6 +90,7 @@ fun notAvailableMessage(feature: Feature): String = when (feature) {
     Feature.ACCOUNT_DELETION -> stringResource(R.string.na_account_deletion)
     Feature.PUSH -> stringResource(R.string.na_push)
     Feature.HISTORY -> stringResource(R.string.na_history)
+    Feature.MESSAGES -> stringResource(R.string.na_messages)
 }
 
 /** Илюстрация на празно състояние/грешка (всички в линейния стил на логото). */

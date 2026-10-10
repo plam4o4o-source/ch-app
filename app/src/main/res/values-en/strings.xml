@@ -223,6 +223,9 @@
     <string name="messages_members_only">Members</string>
     <string name="messages_new">New</string>
     <string name="messages_open_link">Open link</string>
+    <string name="messages_personal">Personal</string>
+    <string name="messages_personal_notification_title">Personal message from the library</string>
+    <string name="messages_personal_title">Personal message from the library</string>
     <string name="messages_title">Messages</string>
     <string name="messages_valid_until">Valid until %1$s</string>
     <string name="more_about_desc">History and mission</string>
@@ -255,6 +258,7 @@
     <string name="na_loans">Borrowed books and due dates will appear here once the library system offers online access.</string>
     <string name="na_login">Online sign-in hasn’t been switched on by the library yet. It will appear here automatically once it is. You will need a PIN issued at the library.</string>
     <string name="na_membership">Membership details will appear here once the library system offers online access.</string>
+    <string name="na_messages">Personal messages aren’t switched on by the library yet.</string>
     <string name="na_password_reset">A new PIN is issued only at the library — please contact the librarian.</string>
     <string name="na_push">Server notifications aren’t supported yet.</string>
     <string name="na_renew">Online renewals aren’t supported yet. Please ask at the library.</string>

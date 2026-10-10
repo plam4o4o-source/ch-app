@@ -49,6 +49,9 @@ data class AppSettings(
 enum class ReaderFontSize(val scale: Float) { S(0.9f), M(1f), L(1.15f), XL(1.3f) }
 
 private const val MAX_MESSAGE_IDS = 300
+private const val MAX_PENDING_READS = 100
+/** Същият като [org.chyavorec.domain.model.Inbox.PERSONAL_PREFIX]. */
+private const val PERSONAL_ID_PREFIX = org.chyavorec.domain.model.Inbox.PERSONAL_PREFIX
 
 class SettingsStore(private val context: Context) {
     private object Keys {
@@ -72,6 +75,8 @@ class SettingsStore(private val context: Context) {
         val readMessages = stringSetPreferencesKey("read_messages")
         val notifiedMessages = stringSetPreferencesKey("notified_messages")
         val messagesInitialized = booleanPreferencesKey("messages_initialized")
+        val personalMessagesInitialized = booleanPreferencesKey("personal_messages_initialized")
+        val personalReadPending = stringSetPreferencesKey("personal_read_pending")
         val introShown = booleanPreferencesKey("intro_shown")
         val coversOnline = booleanPreferencesKey("covers_online")
         val seasonal = booleanPreferencesKey("seasonal_decor")
@@ -147,6 +152,19 @@ class SettingsStore(private val context: Context) {
     suspend fun messagesInitialized(): Boolean = context.dataStore.data.first()[Keys.messagesInitialized] ?: false
     suspend fun setMessagesInitialized() = context.dataStore.edit { it[Keys.messagesInitialized] = true }
 
+    /** Личните съобщения (от библиотеката) вече са били проверени поне веднъж след входа. */
+    suspend fun personalMessagesInitialized(): Boolean = context.dataStore.data.first()[Keys.personalMessagesInitialized] ?: false
+    suspend fun setPersonalMessagesInitialized() = context.dataStore.edit { it[Keys.personalMessagesInitialized] = true }
+
+    /** Id-та (в InvLib) на лични съобщения, чието „прочетено“ още не е стигнало до сървъра. */
+    suspend fun pendingPersonalReads(): Set<String> = context.dataStore.data.first()[Keys.personalReadPending].orEmpty()
+    suspend fun addPendingPersonalReads(ids: Collection<String>) = context.dataStore.edit {
+        it[Keys.personalReadPending] = (it[Keys.personalReadPending].orEmpty() + ids).toList().takeLast(MAX_PENDING_READS).toSet()
+    }
+    suspend fun removePendingPersonalReads(ids: Collection<String>) = context.dataStore.edit {
+        it[Keys.personalReadPending] = it[Keys.personalReadPending].orEmpty() - ids.toSet()
+    }
+
     /** Кои заемания вече са получили известие за даден статус (ключ „loanId:STATUS“). */
     suspend fun notifiedLoans(): Set<String> = context.dataStore.data.first()[Keys.notifiedLoans].orEmpty()
     suspend fun setNotifiedLoans(keys: Set<String>) = context.dataStore.edit { it[Keys.notifiedLoans] = keys }
@@ -166,9 +184,16 @@ class SettingsStore(private val context: Context) {
 
     suspend fun clearRecentSearches() = context.dataStore.edit { it.remove(Keys.recentSearches) }
 
-    /** Изчистване на личните следи (история на търсенето, известия за заемания). */
+    /**
+     * Изчистване на личните следи (история на търсенето, известия за заемания,
+     * следите от личните съобщения: прочетени/известени „p:“ id-та и чакащите „прочетено“).
+     */
     suspend fun clearPersonal() = context.dataStore.edit {
         it.remove(Keys.recentSearches)
         it.remove(Keys.notifiedLoans)
+        it.remove(Keys.personalReadPending)
+        it.remove(Keys.personalMessagesInitialized)
+        it[Keys.readMessages] = it[Keys.readMessages].orEmpty().filterNot { id -> id.startsWith(PERSONAL_ID_PREFIX) }.toSet()
+        it[Keys.notifiedMessages] = it[Keys.notifiedMessages].orEmpty().filterNot { id -> id.startsWith(PERSONAL_ID_PREFIX) }.toSet()
     }
 }

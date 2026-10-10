@@ -17,6 +17,7 @@ import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.MembershipStatus
+import org.chyavorec.domain.model.ReaderMessage
 import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.RenewResult
 import org.chyavorec.domain.model.ServiceCapabilities
@@ -55,7 +56,7 @@ class RemoteInvLibClient(
                     login = d.login, profile = d.profile, loans = d.loans, membership = d.membership,
                     holds = d.holds, renew = d.renew, passwordReset = d.passwordReset,
                     accountDeletion = d.accountDeletion, push = d.push, availability = d.availability,
-                    history = d.history,
+                    history = d.history, messages = d.messages,
                 )
                 cachedCaps = caps
                 Outcome.Success(caps)
@@ -148,6 +149,31 @@ class RemoteInvLibClient(
                 r.value.items.map { HistoryItem(it.loanId, it.inv, it.title, it.author, it.dateOut, it.dateIn) },
             )
         }
+    }
+
+    /** Лични съобщения (`GET /v1/me/messages`), най-новите първо. Съдържанието не се логва. */
+    override suspend fun messages(session: AuthSession): Outcome<List<ReaderMessage>> {
+        requireCap(Feature.MESSAGES) { it.messages }?.let { return Outcome.Failure(it) }
+        return when (val r = send(get("/v1/me/messages", session), ReaderMessagesResponseDto.serializer())) {
+            is Outcome.Failure -> r
+            is Outcome.Success -> Outcome.Success(
+                r.value.items
+                    .filter { it.id.isNotBlank() }
+                    .distinctBy { it.id }
+                    .map { ReaderMessage(it.id, it.title.orEmpty().trim(), it.text.orEmpty(), it.at.orEmpty(), it.read) }
+                    .sortedByDescending { m -> runCatching { java.time.Instant.parse(m.at) }.getOrDefault(java.time.Instant.EPOCH) },
+            )
+        }
+    }
+
+    /**
+     * „Прочетено“ (`POST /v1/me/messages/{id}/read`, празно тяло → 202). Идемпотентно на сървъра;
+     * `404` → [AppError.NotFound] (репозиторият го приема като „няма какво да се прати“).
+     */
+    override suspend fun markMessageRead(session: AuthSession, messageId: String): Outcome<Unit> {
+        requireCap(Feature.MESSAGES) { it.messages }?.let { return Outcome.Failure(it) }
+        val path = "/v1/me/messages/" + java.net.URLEncoder.encode(messageId, "UTF-8") + "/read"
+        return sendUnit(post(path, session, ByteArray(0).toRequestBody(null)))
     }
 
     override suspend fun requestAccountDeletion(session: AuthSession): Outcome<Unit> {

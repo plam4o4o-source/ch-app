@@ -15,6 +15,7 @@ import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
+import org.chyavorec.domain.model.ReaderMessage
 import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.SelfDeclaredCard
 import org.chyavorec.domain.model.ServiceCapabilities
@@ -291,6 +292,36 @@ class LibraryRepository(
         historyRes.load(force) { auth.withSession { service.history(it) } }
 
     suspend fun cachedHistory(): Synced<List<HistoryItem>>? = historyRes.cached()
+}
+
+/**
+ * Лични съобщения от библиотеката до читателя. Шифрован кеш ([secureCache] = читателският),
+ * който се изтрива при изход заедно със заеманията и историята. Съдържанието не се логва.
+ */
+class ReaderMessagesRepository(
+    private val service: ReaderService,
+    private val auth: AuthRepository,
+    secureCache: PayloadCache,
+    clock: AppClock,
+) {
+    /** Кратък кеш: без мрежа, ако е по-пресен от 5 минути (освен при изрично опресняване). */
+    private val res = CachedResource(secureCache, "reader:messages", ListSerializer(ReaderMessage.serializer()), clock, 5 * 60_000L)
+
+    suspend fun cached(): Synced<List<ReaderMessage>>? = res.cached()
+
+    suspend fun messages(force: Boolean = true): Outcome<Synced<List<ReaderMessage>>> =
+        res.load(force) { auth.withSession { service.messages(it) } }
+
+    /**
+     * Праща „прочетено“. `404` (няма такова съобщение при читателя) се приема за успех —
+     * няма смисъл от повторни опити. При успех кешираният списък се обновява веднага.
+     */
+    suspend fun markRead(messageId: String): Outcome<Unit> {
+        val r = auth.withSession { service.markMessageRead(it, messageId) }
+        if (r is Outcome.Failure && r.error !is AppError.NotFound) return r
+        res.updateCached { list -> list.map { if (it.id == messageId) it.copy(read = true) else it } }
+        return Outcome.Success(Unit)
+    }
 }
 
 class MembershipRepository(

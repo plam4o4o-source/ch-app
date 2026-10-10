@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.ui.semantics.contentDescription
 import kotlinx.coroutines.delay
+import org.chyavorec.app.messages.MessageWorker
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AnimatedCounter
 import org.chyavorec.app.ui.components.rememberCountUpToday
@@ -247,9 +248,17 @@ fun HomeScreen(navigate: (String) -> Unit) {
 
 @Composable
 private fun HomeHeader(onMessages: () -> Unit, season: Season = Season.NONE) {
-    val center = LocalAppContainer.current.messages
+    val container = LocalAppContainer.current
+    val center = container.messages
+    val appContext = LocalContext.current.applicationContext
     val unread by center.unreadCount.collectAsStateWithLifecycle(initialValue = 0)
-    LaunchedEffect(Unit) { runCatching { center.refresh(force = false) } }
+    LaunchedEffect(Unit) {
+        runCatching {
+            center.refresh(force = false)
+            // Нови лични съобщения от библиотеката → известие и при отваряне (всяко само веднъж).
+            MessageWorker.notifyPersonal(appContext, container)
+        }
+    }
     // Значката „подскача“ при поява или нов брой непрочетени (без анимация при намалено движение).
     val reduced = rememberReducedMotion()
     val badgeScale = remember { Animatable(1f) }

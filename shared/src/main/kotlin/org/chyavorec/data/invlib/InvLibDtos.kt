@@ -23,6 +23,7 @@ data class CapabilitiesDto(
     val push: Boolean = false,
     val availability: Boolean = false,
     val history: Boolean = false,
+    val messages: Boolean = false,
 )
 
 @Serializable
@@ -94,6 +95,18 @@ data class HistoryItemDto(
 
 @Serializable
 data class HistoryResponseDto(val items: List<HistoryItemDto> = emptyList(), val generated: String? = null)
+
+@Serializable
+data class ReaderMessageDto(
+    val id: String,
+    val title: String? = null,
+    val text: String? = null,
+    val at: String? = null,
+    val read: Boolean = false,
+)
+
+@Serializable
+data class ReaderMessagesResponseDto(val items: List<ReaderMessageDto> = emptyList(), val generated: String? = null)
 
 @Serializable
 data class MembershipDto(

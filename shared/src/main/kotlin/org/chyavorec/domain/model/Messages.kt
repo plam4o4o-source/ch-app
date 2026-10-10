@@ -20,7 +20,42 @@ data class AppMessage(
     /** Последен ден на валидност (yyyy-MM-dd, включително) или null. */
     val expiresOn: String? = null,
     val url: String? = null,
+    /**
+     * Лично съобщение от библиотеката до влезлия читател (от InvLib, не от сайта).
+     * Никога не идва от `/data/app-messages.json` — парсерът на сайта не чете това поле.
+     */
+    val personal: Boolean = false,
 )
+
+/**
+ * Обща входяща кутия: съобщенията от сайта + личните от библиотеката.
+ * Личните получават id с префикс [PERSONAL_PREFIX], за да не се бъркат с тези от сайта.
+ */
+object Inbox {
+    const val PERSONAL_PREFIX = "p:"
+
+    fun personalId(messageId: String): String = PERSONAL_PREFIX + messageId
+
+    /** Id-то в InvLib за id от кутията, или `null`, ако съобщението е от сайта. */
+    fun serverId(inboxId: String): String? =
+        if (inboxId.startsWith(PERSONAL_PREFIX)) inboxId.removePrefix(PERSONAL_PREFIX).takeIf { it.isNotEmpty() } else null
+
+    fun toAppMessage(m: ReaderMessage): AppMessage = AppMessage(
+        id = personalId(m.id),
+        title = m.title,
+        body = m.text,
+        createdAt = m.at,
+        personal = true,
+    )
+
+    /** Слива двата списъка, най-новите първо (без дата → най-отдолу). */
+    fun merge(site: List<AppMessage>, personal: List<ReaderMessage>): List<AppMessage> {
+        if (personal.isEmpty()) return site
+        return (site + personal.map(::toAppMessage))
+            .distinctBy { it.id }
+            .sortedByDescending { m -> runCatching { java.time.Instant.parse(m.createdAt) }.getOrDefault(java.time.Instant.EPOCH) }
+    }
+}
 
 @Serializable
 enum class MessageAudience {
