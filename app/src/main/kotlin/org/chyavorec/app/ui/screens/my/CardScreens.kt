@@ -93,6 +93,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.BackTopBar
@@ -135,6 +136,11 @@ private fun rememberCardData(vm: AccountViewModel): CardData? {
     }
 }
 
+/** ≈30 Hz — достатъчно за плавен отблясък. */
+private const val SENSOR_PERIOD_US = 33_000
+/** Най-много ~2 събития на порция: отблясъкът остава плавен, а системата може да ги групира. */
+private const val SENSOR_MAX_LATENCY_US = 66_000
+
 /** Наклон на устройството (−1..1 по двете оси), нискочестотно филтриран; (0, 0) без сензор. */
 private class Tilt {
     var x by mutableFloatStateOf(0f)
@@ -143,18 +149,21 @@ private class Tilt {
 
 /**
  * Чете вектора на завъртане (≈30 Hz) и го изглажда — за „живия“ отблясък на
- * картата. Не прави нищо без сензор или при намалено движение; спира при напускане.
+ * картата. Не прави нищо без сензор или при намалено движение. Сензорът е
+ * включен само докато екранът е на преден план (ON_RESUME … ON_PAUSE) — не и при
+ * заключен екран или приложение във фона, — а събитията се доставят на порции
+ * (maxReportLatencyUs), за да не се буди процесорът за всяко поотделно.
  */
 @Composable
 private fun rememberTilt(): Tilt {
     val context = LocalContext.current
     val reduced = rememberReducedMotion()
     val tilt = remember { Tilt() }
-    DisposableEffect(reduced) {
-        if (reduced) return@DisposableEffect onDispose {}
+    LifecycleResumeEffect(reduced) {
+        if (reduced) return@LifecycleResumeEffect onPauseOrDispose {}
         val manager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
         val sensor = manager?.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) ?: manager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
-        if (manager == null || sensor == null) return@DisposableEffect onDispose {}
+        if (manager == null || sensor == null) return@LifecycleResumeEffect onPauseOrDispose {}
         val rotation = FloatArray(9)
         val orientation = FloatArray(3)
         val listener = object : SensorEventListener {
@@ -171,8 +180,10 @@ private fun rememberTilt(): Tilt {
             }
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
         }
-        val registered = runCatching { manager.registerListener(listener, sensor, 33_000) }.getOrDefault(false)
-        onDispose { if (registered) manager.unregisterListener(listener) }
+        val registered = runCatching {
+            manager.registerListener(listener, sensor, SENSOR_PERIOD_US, SENSOR_MAX_LATENCY_US)
+        }.getOrDefault(false)
+        onPauseOrDispose { if (registered) manager.unregisterListener(listener) }
     }
     return tilt
 }

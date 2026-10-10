@@ -152,6 +152,12 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     val listState = rememberLazyListState()
     val shelfState = rememberLazyListState()
     val q = state.query
+    // Поява с анимация само при първото показване на резултатите — не при всяко ново търсене
+    // (вече започналата анимация на първите редове не се прекъсва, виж animateEntrance).
+    var rowsIntroduced by rememberSaveable { mutableStateOf(false) }
+    val hasResults = state.results.isNotEmpty()
+    LaunchedEffect(hasResults) { if (hasResults) rowsIntroduced = true }
+    val staggered = if (rowsIntroduced) 0 else 10
     // Заявка от друг екран (скенера): „Търси в каталога“ с предварително попълнен ISBN/заглавие.
     LaunchedEffect(Unit) {
         CatalogSearchRequests.pending.collect { r ->
@@ -289,12 +295,13 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                             canLoadMore = state.canLoadMore,
                             onLoadMore = vm::loadMore,
                             onOpen = { navigate(Routes.book(it.inv)) },
+                            staggered = staggered,
                         )
                     } else {
                         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
                             item(contentType = "header") { header() }
                             itemsIndexed(state.page, key = { _, b -> b.inv }, contentType = { _, _ -> "book" }) { i, b ->
-                                BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i))
+                                BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i, maxStaggered = staggered))
                             }
                             if (state.canLoadMore) {
                                 item(contentType = "more") {

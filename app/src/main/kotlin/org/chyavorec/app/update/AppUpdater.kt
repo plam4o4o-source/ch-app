@@ -15,10 +15,12 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -34,6 +36,7 @@ import org.chyavorec.data.update.Checksums
 import org.chyavorec.data.update.UpdateChecker
 import org.chyavorec.data.update.UpdateInfo
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.security.DigestOutputStream
 import java.security.MessageDigest
@@ -81,9 +84,12 @@ class AppUpdater(
     val installedVersionName: String get() = config.versionName
 
     private val checker = UpdateChecker(http, config.updateManifestUrl)
-    /** Изтеглянето може да трае повече от общия timeout на споделения клиент. */
+    /**
+     * Изтеглянето може да трае повече от общия timeout на споделения клиент.
+     * Без HTTP кеш: APK-то (десетки MB) иначе би изместило всичко друго от него.
+     */
     private val downloadClient by lazy {
-        okHttp.newBuilder().callTimeout(0, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).build()
+        okHttp.newBuilder().cache(null).callTimeout(0, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).build()
     }
     private val dir get() = File(context.noBackupFilesDir, "updates")
     /** Грешка в обновяването никога не бива да срине приложението. */
@@ -96,19 +102,38 @@ class AppUpdater(
     /** Молба към UI да покаже диалога (напр. след докосване на известие). */
     private val _prompt = MutableStateFlow(false)
     val prompt: StateFlow<Boolean> = _prompt.asStateFlow()
-    fun showPrompt() { if (enabled) _prompt.value = true }
+
+    /** Проверката, пусната от UI (диалог/настройки) — за да не тръгнат две едновременно. */
+    @Volatile private var uiCheck: Job? = null
+
+    /**
+     * Показва диалога. Ако още няма данни за версията (напр. докоснато известие в
+     * нов процес, а проверката при стартиране е пропусната, защото е правена
+     * скоро) — те се зареждат, за да има какво да покаже диалогът.
+     */
+    fun showPrompt() {
+        if (!enabled) return
+        _prompt.value = true
+        if (_state.value == UpdateState.Idle && uiCheck?.isActive != true) {
+            uiCheck = scope.launch { check(userInitiated = true) }
+        }
+    }
     fun hidePrompt() { _prompt.value = false }
 
     /**
-     * При стартиране на приложението: тиха проверка; по Wi-Fi новата версия се
+     * При стартиране на приложението: тиха проверка (най-много веднъж на
+     * [LAUNCH_CHECK_INTERVAL_MS], заедно с фоновите); по Wi-Fi новата версия се
      * изтегля веднага. Диалогът се показва, освен ако потребителят е отложил
-     * същата версия („По-късно“ — за [SNOOZE_MS]).
+     * същата версия („По-късно“ — за [SNOOZE_MS]). Ръчната проверка ([checkNow])
+     * не е ограничена.
      */
     fun checkOnLaunch() {
         if (!enabled) return
         scope.launch {
             cleanup()
             if (!settings.current().autoUpdate) return@launch
+            val sinceLast = clock.now().toEpochMilli() - settings.lastUpdateCheck.first()
+            if (sinceLast in 0L until LAUNCH_CHECK_INTERVAL_MS) return@launch
             val info = check(userInitiated = false) ?: return@launch
             if (isUnmetered()) download(info)
             val s = _state.value
@@ -130,7 +155,7 @@ class AppUpdater(
     /** „Провери за нова версия“ от настройките. */
     fun checkNow() {
         if (!enabled) return
-        scope.launch {
+        uiCheck = scope.launch {
             val info = check(userInitiated = true)
             if (info != null) _prompt.value = true
         }
@@ -182,79 +207,152 @@ class AppUpdater(
         }
     }
 
-    /** Изтегля и проверява APK файла. Повторно извикване за същата версия ползва вече изтегления файл. */
+    /**
+     * Изтегля и проверява APK файла. Повторно извикване за същата версия ползва вече
+     * изтегления файл; прекъснато изтегляне продължава оттам, докъдето е стигнало
+     * (HTTP Range), а контролната сума се проверява за целия файл.
+     */
     suspend fun download(info: UpdateInfo): File? = mutex.withLock {
         withContext(Dispatchers.IO) {
             verifiedFile(info)?.let { _state.value = UpdateState.Ready(info); return@withContext it }
             _state.value = UpdateState.Downloading(info, if (info.sizeBytes != null) 0f else null)
             dir.mkdirs()
             val part = File(dir, "update-${info.versionCode}.apk.part")
-            val target = apkFile(info)
-            val digest = MessageDigest.getInstance("SHA-256")
-            try {
-                val request = Request.Builder().url(info.apkUrl).header("User-Agent", "ChitalishteYavorec-Android/${config.versionName}").build()
-                downloadClient.newCall(request).execute().use { response ->
-                    val body = response.body
-                    if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
-                    val total = body.contentLength().takeIf { it > 0 } ?: info.sizeBytes
-                    if (total != null && total > MAX_APK_BYTES) throw IOException("too large")
-                    body.byteStream().use { input ->
-                        DigestOutputStream(part.outputStream(), digest).use { out ->
-                            val buf = ByteArray(64 * 1024)
-                            var read = 0L
-                            var lastReported = -1
-                            while (true) {
-                                val n = input.read(buf)
-                                if (n < 0) break
-                                out.write(buf, 0, n)
-                                read += n
-                                if (read > MAX_APK_BYTES) throw IOException("too large")
-                                if (total != null) {
-                                    val pct = (read * 100 / total).toInt()
-                                    if (pct != lastReported) {
-                                        lastReported = pct
-                                        _state.value = UpdateState.Downloading(info, (read.toFloat() / total).coerceIn(0f, 1f))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                if (e is CancellationException) { part.delete(); throw e }
+            // Валидаторът (ETag/Last-Modified) на частично изтегления файл — за If-Range.
+            val validator = File(dir, "update-${info.versionCode}.apk.part.tag")
+            val discard = {
                 part.delete()
+                validator.delete()
+            }
+            val target = apkFile(info)
+            val digest = try {
+                fetch(info, part, validator)
+            } catch (e: Exception) {
+                // Прекъсване (задачата е спряна) или грешка в мрежата: наличната част остава за продължаване.
+                if (e is CancellationException) throw e
+                if (e is TooLargeException) discard()
                 _state.value = UpdateState.Failed(UpdateFailure.DOWNLOAD, info)
                 return@withContext null
             }
+            validator.delete()
             val sha = digest.digest().joinToString("") { "%02x".format(it) }
             if (sha != info.sha256) {
-                part.delete()
+                discard()
                 _state.value = UpdateState.Failed(UpdateFailure.CHECKSUM, info)
                 return@withContext null
             }
             when (verifyApk(part, info)) {
                 ApkCheck.OK -> Unit
                 ApkCheck.WRONG_SIGNATURE -> {
-                    part.delete()
+                    discard()
                     _state.value = UpdateState.Failed(UpdateFailure.SIGNATURE, info)
                     return@withContext null
                 }
                 ApkCheck.INVALID -> {
-                    part.delete()
+                    discard()
                     _state.value = UpdateState.Failed(UpdateFailure.CHECKSUM, info)
                     return@withContext null
                 }
             }
             target.delete()
             if (!part.renameTo(target)) {
-                part.delete()
+                discard()
                 _state.value = UpdateState.Failed(UpdateFailure.DOWNLOAD, info)
                 return@withContext null
             }
+            // Сумата току-що е сметната — файлът не се хешира повторно (виж [sha256Of]).
+            verified = VerifiedApk(target.absolutePath, target.length(), target.lastModified(), sha)
             _state.value = UpdateState.Ready(info)
             target
         }
     }
+
+    /** Изтегля [part] докрай и връща SHA-256 на целия файл (заедно с вече наличната част). */
+    private fun fetch(info: UpdateInfo, part: File, validator: File): MessageDigest {
+        fetchOnce(info, part, validator)?.let { return it }
+        // Наличната част не пасва на файла на сървъра (416) — отначало.
+        part.delete()
+        validator.delete()
+        return fetchOnce(info, part, validator) ?: throw IOException("range not satisfiable")
+    }
+
+    /** @return сумата или `null`, ако сървърът отхвърли продължаването (416). */
+    private fun fetchOnce(info: UpdateInfo, part: File, validator: File): MessageDigest? {
+        val digest = MessageDigest.getInstance("SHA-256")
+        var existing = if (part.isFile) part.length() else 0L
+        val expected = info.sizeBytes
+        if (existing > MAX_APK_BYTES || (expected != null && existing > expected)) {
+            part.delete()
+            validator.delete()
+            existing = 0L
+        }
+        // Файлът е изтеглен целият, но не е бил проверен (напр. процесът е спрян) — без заявка.
+        if (expected != null && existing > 0L && existing == expected) {
+            digestFile(part, digest)
+            return digest
+        }
+        val builder = Request.Builder().url(info.apkUrl).header("User-Agent", "ChitalishteYavorec-Android/${config.versionName}")
+        if (existing > 0L) {
+            builder.header("Range", "bytes=$existing-")
+            // If-Range: ако файлът на сървъра е сменен, идва целият (200) вместо чуждо парче.
+            runCatching { validator.readText().trim() }.getOrNull()?.takeIf { it.isNotEmpty() }?.let { builder.header("If-Range", it) }
+        }
+        downloadClient.newCall(builder.build()).execute().use { response ->
+            if (response.code == 416 && existing > 0L) return null
+            if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
+            val body = response.body
+            val resume = existing > 0L && response.code == 206
+            if (resume) {
+                // „bytes <начало>-<край>/<общо>“ — парчето трябва да започва точно след наличното.
+                val range = response.header("Content-Range").orEmpty()
+                if (!range.startsWith("bytes $existing-")) throw IOException("bad Content-Range")
+                digestFile(part, digest)
+            } else {
+                if (response.code == 206) throw IOException("unexpected partial content")
+                // 200: сървърът праща целия файл (не поддържа Range или файлът е сменен) — отначало.
+                existing = 0L
+                val tag = response.header("ETag")?.takeUnless { it.startsWith("W/") } ?: response.header("Last-Modified")
+                if (tag.isNullOrBlank()) validator.delete() else runCatching { validator.writeText(tag) }
+            }
+            val total = body.contentLength().takeIf { it > 0 }?.let { it + existing } ?: expected
+            if (total != null && total > MAX_APK_BYTES) throw TooLargeException()
+            body.byteStream().use { input ->
+                DigestOutputStream(FileOutputStream(part, resume), digest).use { out ->
+                    val buf = ByteArray(64 * 1024)
+                    var read = existing
+                    var lastReported = -1
+                    while (true) {
+                        val n = input.read(buf)
+                        if (n < 0) break
+                        out.write(buf, 0, n)
+                        read += n
+                        if (read > MAX_APK_BYTES) throw TooLargeException()
+                        if (total != null) {
+                            val pct = (read * 100 / total).toInt()
+                            if (pct != lastReported) {
+                                lastReported = pct
+                                _state.value = UpdateState.Downloading(info, (read.toFloat() / total).coerceIn(0f, 1f))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return digest
+    }
+
+    private fun digestFile(file: File, digest: MessageDigest) {
+        file.inputStream().use { input ->
+            val buf = ByteArray(64 * 1024)
+            while (true) {
+                val n = input.read(buf)
+                if (n < 0) break
+                digest.update(buf, 0, n)
+            }
+        }
+    }
+
+    private class TooLargeException : IOException("too large")
 
     /**
      * Инсталиране на изтеглената версия. При [background] = true (фонова задача)
@@ -360,7 +458,21 @@ class AppUpdater(
     private fun verifiedFile(info: UpdateInfo): File? {
         val f = apkFile(info)
         if (!f.isFile) return null
-        return if (runCatching { Checksums.sha256(f) }.getOrNull() == info.sha256) f else { f.delete(); null }
+        return if (sha256Of(f) == info.sha256) f else { f.delete(); null }
+    }
+
+    /** Проверената сума на изтегления файл — за същия път, размер и време на промяна не се смята наново. */
+    private data class VerifiedApk(val path: String, val length: Long, val modified: Long, val sha256: String)
+    @Volatile private var verified: VerifiedApk? = null
+
+    /** SHA-256 на файла; APK-то (десетки MB) се хешира веднъж, а не при всяка проверка/инсталиране. */
+    private fun sha256Of(f: File): String? {
+        val length = f.length()
+        val modified = f.lastModified()
+        verified?.let { v -> if (v.path == f.absolutePath && v.length == length && v.modified == modified) return v.sha256 }
+        val sha = runCatching { Checksums.sha256(f) }.getOrNull() ?: return null
+        verified = VerifiedApk(f.absolutePath, length, modified, sha)
+        return sha
     }
 
     /** Изтрива изтеглени файлове за вече инсталирани (или по-стари) версии. */
@@ -404,6 +516,8 @@ class AppUpdater(
 
     companion object {
         private const val SNOOZE_MS = 24 * 60 * 60 * 1000L
+        /** Автоматичната проверка при стартиране — най-много веднъж на 12 часа. */
+        private const val LAUNCH_CHECK_INTERVAL_MS = 12 * 60 * 60 * 1000L
         private const val MAX_APK_BYTES = 200L * 1024 * 1024
     }
 }

@@ -116,7 +116,7 @@ UI показва `SyncBanner` („Няма интернет връзка. По�
 | `prodDebug` / `prodRelease` | `org.chyavorec.app` | **никога** |
 | `prodPlay` (AAB за Google Play) | `org.chyavorec.app` | **никога** |
 
-Самообновяване (`AppUpdater`, `UpdateWorker`, `UpdateInstallReceiver`) е
+Самообновяване (`AppUpdater`, стъпка в `PeriodicSyncWorker`, `UpdateInstallReceiver`) е
 включено само в `prodRelease` (`BuildConfig.SELF_UPDATE`). `prodPlay` е
 `release` + `src/play/AndroidManifest.xml`, който премахва
 `REQUEST_INSTALL_PACKAGES`, `UPDATE_PACKAGES_WITHOUT_USER_ACTION` и receiver-а;

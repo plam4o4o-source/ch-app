@@ -118,6 +118,10 @@ class SettingsStore(private val context: Context) {
     suspend fun setLastNewsId(id: String) = context.dataStore.edit { it[Keys.lastNewsId] = id }
     suspend fun setLastBackgroundSync(millis: Long) = context.dataStore.edit { it[Keys.lastBackgroundSync] = millis }
 
+    /** Кога за последно е минала успешно стъпка [step] на фоновата синхронизация (0 = никога). */
+    suspend fun lastSyncStep(step: String): Long = context.dataStore.data.first()[longPreferencesKey("bg_step_$step")] ?: 0L
+    suspend fun setLastSyncStep(step: String, millis: Long) = context.dataStore.edit { it[longPreferencesKey("bg_step_$step")] = millis }
+
     suspend fun setAutoUpdate(on: Boolean) = context.dataStore.edit { it[Keys.autoUpdate] = on }
     val lastUpdateCheck: Flow<Long> = context.dataStore.data.map { it[Keys.lastUpdateCheck] ?: 0L }
     suspend fun setLastUpdateCheck(millis: Long) = context.dataStore.edit { it[Keys.lastUpdateCheck] = millis }

@@ -80,6 +80,11 @@ object Notifier {
         sensitive: Boolean = false,
     ) {
         if (!canNotify(context)) return
+        // Каналите се създават във фон при старта на процеса — при много ранно известие
+        // (напр. от receiver веднага след старта) може още да ги няма.
+        context.getSystemService(NotificationManager::class.java)?.let { nm ->
+            if (nm.getNotificationChannel(channel.id) == null) createChannels(context)
+        }
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             deepLink?.let { putExtra(EXTRA_DEEP_LINK, it) }

@@ -7,6 +7,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import coil3.SingletonImageLoader
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.data.local.AppDatabase
 import org.chyavorec.app.data.local.FilePayloadCache
@@ -69,8 +71,8 @@ class AppContainer(
 ) {
     private val cipher: BytesCipher by lazy { cipherOverride ?: KeystoreBytesCipher() }
 
-    val okHttp by lazy { okHttpOverride ?: NetworkModule.okHttp(context) }
     private val userAgent = "ChitalishteYavorec-Android/${config.versionName} (Android ${Build.VERSION.RELEASE})"
+    val okHttp by lazy { okHttpOverride ?: NetworkModule.okHttp(context, userAgent) }
     val http by lazy { HttpFetcher(okHttp, userAgent) }
     val connectivity by lazy { ConnectivityObserver(context) }
 
@@ -150,9 +152,14 @@ class AppContainer(
     fun watchSignOut() {
         appScope.launch {
             var wasSignedIn = false
+            var previous: AuthState? = null
             authRepository.state.collect { s ->
+                val before = previous
+                previous = s
                 if (s is AuthState.SignedIn) {
-                    if (!wasSignedIn) ChitalishteWidget.refresh(context)
+                    // Само при истински вход (SignedOut → SignedIn). Възстановената сесия при
+                    // студен старт (Unknown → SignedIn) не променя показаното в уиджета.
+                    if (before is AuthState.SignedOut) ChitalishteWidget.refresh(context)
                     wasSignedIn = true
                 } else if (s is AuthState.SignedOut && wasSignedIn) {
                     wasSignedIn = false
@@ -175,9 +182,15 @@ class AppContainer(
     }
 
     /** „Изчисти кеша“ — само публичните данни и изображенията; сесията остава. */
-    suspend fun clearPublicCache() {
+    suspend fun clearPublicCache() = withContext(Dispatchers.IO) {
         publicCache.clear()
         runCatching { okHttp.cache?.evictAll() }
-        File(context.cacheDir, "image_cache").deleteRecursively()
+        // През Coil, а не с изтриване на папката: дисковият кеш е отворен (журнал, текущи записи).
+        runCatching {
+            val images = SingletonImageLoader.get(context)
+            images.memoryCache?.clear()
+            images.diskCache?.clear()
+        }
+        Unit
     }
 }

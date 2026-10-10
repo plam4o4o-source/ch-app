@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.components
 
+import android.os.PowerManager
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -11,8 +12,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
@@ -26,6 +29,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
@@ -36,6 +40,7 @@ import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.OrthodoxEaster
 import java.time.LocalDate
+import kotlinx.coroutines.delay
 import java.time.Month
 import kotlin.math.PI
 import kotlin.math.sin
@@ -71,14 +76,27 @@ fun rememberSeason(): Season {
 
 private class Flake(val x: Float, val speed: Float, val radius: Float, val phase: Float, val sway: Float, val offset: Float)
 
+/** ~30 кадъра в секунда: следващият кадър се иска ~25 ms след предишния (+ изчакване на vsync). */
+private const val SNOW_FRAME_DELAY_MS = 25L
+/** Снеговалежът е кратък поздрав, не постоянна анимация: ~20 s, после избледнява. */
+private const val SNOW_RUN_NANOS = 20_000_000_000L
+private const val SNOW_FADE_NANOS = 1_200_000_000L
+
+/** Снеговалежът е изигран в този процес — при връщане към „Начало“ не започва наново. */
+private object SnowSession { @Volatile var finished = false }
+
 /**
  * Бавно падащи снежинки (най-много [count]) върху областта на заглавката. Рисуват се
- * с Canvas по време от кадъра — без състояние за всяка снежинка; при намалено
- * движение са неподвижни.
+ * с Canvas по време от кадъра — без състояние за всяка снежинка. Пестят батерията:
+ * ~30 кадъра/s, спират (с избледняване) след ~20 s или щом [stopWhen] стане true
+ * (напр. потребителят е превъртял); при намалено движение или режим за пестене
+ * на батерията са неподвижни.
  */
 @Composable
-fun Snowfall(modifier: Modifier = Modifier, count: Int = 40, color: Color = Color.White) {
-    val reduced = rememberReducedMotion()
+fun Snowfall(modifier: Modifier = Modifier, count: Int = 40, color: Color = Color.White, stopWhen: () -> Boolean = { false }) {
+    val context = LocalContext.current
+    val powerSave = remember { context.getSystemService(PowerManager::class.java)?.isPowerSaveMode == true }
+    val still = rememberReducedMotion() || powerSave
     val flakes = remember {
         val r = Random(1922)
         List(count.coerceIn(1, 40)) {
@@ -93,12 +111,30 @@ fun Snowfall(modifier: Modifier = Modifier, count: Int = 40, color: Color = Colo
         }
     }
     var frame by remember { mutableLongStateOf(0L) }
-    LaunchedEffect(reduced) {
-        if (reduced) return@LaunchedEffect
+    // 1 → 0 при спиране; при 0 нищо не се рисува.
+    var fade by remember { mutableFloatStateOf(if (still || !SnowSession.finished) 1f else 0f) }
+    val stop by rememberUpdatedState(stopWhen)
+    LaunchedEffect(still) {
+        if (still || SnowSession.finished) return@LaunchedEffect
         val start = withFrameNanos { it }
-        while (true) withFrameNanos { frame = it - start }
+        var fadeStart = -1L
+        while (true) {
+            val t = withFrameNanos { it } - start
+            if (fadeStart < 0 && (t >= SNOW_RUN_NANOS || stop())) fadeStart = t
+            if (fadeStart >= 0) {
+                fade = (1f - (t - fadeStart).toFloat() / SNOW_FADE_NANOS).coerceAtLeast(0f)
+                if (fade == 0f) {
+                    SnowSession.finished = true
+                    break
+                }
+            }
+            frame = t
+            delay(SNOW_FRAME_DELAY_MS)
+        }
     }
     Canvas(modifier.clearAndSetSemantics { }) {
+        val alpha = if (still) 0.3f else 0.3f * fade
+        if (alpha <= 0f) return@Canvas
         val t = frame / 1_000_000_000f
         val h = size.height
         val w = size.width
@@ -106,7 +142,7 @@ fun Snowfall(modifier: Modifier = Modifier, count: Int = 40, color: Color = Colo
         flakes.forEach { f ->
             val y = ((f.offset + t * f.speed) % 1f) * (h + 8 * dp) - 4 * dp
             val x = f.x * w + sin(t * 0.9f + f.phase) * f.sway * dp
-            drawCircle(color.copy(alpha = 0.3f), radius = f.radius * dp, center = Offset(x, y))
+            drawCircle(color.copy(alpha = alpha), radius = f.radius * dp, center = Offset(x, y))
         }
     }
 }

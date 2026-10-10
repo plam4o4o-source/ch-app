@@ -13,7 +13,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.getValue
@@ -22,12 +21,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.GraphicsLayerScope
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.node.LayoutModifierNode
+import androidx.compose.ui.node.ModifierNodeElement
+import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * Флагът „намалено движение“, прочетен веднъж в корена ([observeReducedMotion]) и
@@ -63,23 +70,58 @@ fun rememberReducedMotion(): Boolean {
 /**
  * Плавно появяване на елемент от списък (fade + лек slide) с малко закъснение по
  * индекс. Изпълнява се веднъж за елемента (състоянието оцелява при скролиране) и
- * само за първите елементи — по-нататъшните се показват веднага.
+ * само за първите [maxStaggered] елемента — по-нататъшните се показват веднага.
+ *
+ * Евтино за списъците: при намалено движение не прави нищо; щом елементът се
+ * е появил (или е извън първите), не добавя нищо към модификатора. Самата
+ * анимация е [Modifier.Node] — стойността се чете само в слоя (без рекомпозиция
+ * на всеки кадър). Променен [maxStaggered] след началото не прекъсва вече
+ * започнала анимация.
  */
 @Composable
 fun Modifier.animateEntrance(index: Int, maxStaggered: Int = 10): Modifier {
-    val reduced = rememberReducedMotion()
-    var shown by rememberSaveable { mutableStateOf(reduced || index >= maxStaggered) }
-    val progress = remember { Animatable(if (shown) 1f else 0f) }
-    LaunchedEffect(Unit) {
-        if (!shown) {
-            delay(index * 45L)
+    if (rememberReducedMotion()) return this
+    var shown by rememberSaveable { mutableStateOf(index >= maxStaggered) }
+    if (shown) return this
+    return this then EntranceElement(delayMillis = index * 45L, onFinished = { shown = true })
+}
+
+private class EntranceElement(
+    private val delayMillis: Long,
+    private val onFinished: () -> Unit,
+) : ModifierNodeElement<EntranceNode>() {
+    override fun create() = EntranceNode(delayMillis, onFinished)
+    override fun update(node: EntranceNode) {
+        node.onFinished = onFinished
+    }
+    // Ламбдата пише в едно и също (запомнено) състояние — не участва в сравнението.
+    override fun equals(other: Any?) = other is EntranceElement && other.delayMillis == delayMillis
+    override fun hashCode() = delayMillis.hashCode()
+    override fun InspectorInfo.inspectableProperties() {
+        name = "animateEntrance"
+        properties["delayMillis"] = delayMillis
+    }
+}
+
+private class EntranceNode(private val delayMillis: Long, var onFinished: () -> Unit) : Modifier.Node(), LayoutModifierNode {
+    private val progress = Animatable(0f)
+    private val layer: GraphicsLayerScope.() -> Unit = {
+        val p = progress.value
+        alpha = p
+        translationY = (1f - p) * 22.dp.toPx()
+    }
+
+    override fun onAttach() {
+        coroutineScope.launch {
+            delay(delayMillis)
             progress.animateTo(1f, tween(420, easing = FastOutSlowInEasing))
-            shown = true
+            onFinished()
         }
     }
-    return this.graphicsLayer {
-        alpha = progress.value
-        translationY = (1f - progress.value) * 22.dp.toPx()
+
+    override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {
+        val placeable = measurable.measure(constraints)
+        return layout(placeable.width, placeable.height) { placeable.placeWithLayer(0, 0, layerBlock = layer) }
     }
 }
 
