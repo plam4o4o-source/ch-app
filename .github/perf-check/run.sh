@@ -32,9 +32,10 @@ dump && xy=$(python3 .github/perf-check/find.py $OUT/ui.xml content-desc "вят
 timeout 10 adb shell input swipe 160 220 160 560 600; sleep 5; shot 04b-refresh
 timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 1; timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 2
 tap text "=Home" ; sleep 3
-tap content-desc "Scan barcode"; sleep 5
-tap text "While using the app" || true; sleep 10; shot 05-scan
-timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 3
+# търсене (FTS): каталог → поле → „Вазов“
+tap text "=Catalogue" || tap content-desc "Catalogue"; sleep 5
+tap text "Search" ; sleep 2; timeout 10 adb shell input text "Vazov"; sleep 4; shot 05-search; dump
+timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 1; timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 2
 tap text "=My"; sleep 4; shot 06-my
 tap text "=More"; sleep 3; shot 07-more
 tap text "Settings" || tap text "Настройки"; sleep 4; dump; shot 08-settings
