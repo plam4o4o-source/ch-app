@@ -347,6 +347,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
             // вместо заглавието да се отреже.
             BoxWithConstraints {
             val minHeight = maxWidth.coerceAtMost(720.dp) / 1.6f
+            // Ширината за снимката (с мащаба 1.15 на паралакса) — maxWidth се чете тук, в обхвата на BoxWithConstraints.
+            val imageWidth = maxWidth.coerceAtMost(720.dp) * 1.15f
             Surface(
                 onClick = { onOpen(a) },
                 shape = MaterialTheme.shapes.large,
@@ -366,10 +368,9 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                     if (branded) {
                         BrandedImageFallback(Modifier.fillMaxSize())
                     } else {
-                        // Ширината с мащаба 1.15 на паралакса.
                         SiteImage(
                             url = a.imageUrl,
-                            width = maxWidth.coerceAtMost(720.dp) * 1.15f,
+                            width = imageWidth,
                             contentDescription = null,
                             containerColor = Brand.InkSoft,
                             onFailure = { imageFailed = true },
