@@ -35,6 +35,53 @@ jobs:
       - name: Unit, ViewModel, repository and UI (Robolectric) tests
         run: ./gradlew --no-daemon testDevDebugUnitTest testProdDebugUnitTest
 
+      # Отчет на Compose компилатора (стабилност, skippable/restartable) за prodRelease.
+      # Само информативно — не спира CI. Конфигурацията: compose-stability.conf.
+      - name: Compose compiler reports (prodRelease)
+        continue-on-error: true
+        run: |
+          ./gradlew --no-daemon :app:compileProdReleaseKotlin --rerun -PcomposeReports=true
+          python3 - <<'PY'
+          import glob, json, os, re
+          d = "app/build/compose_compiler"
+          out = ["## Compose compiler (prodRelease)", ""]
+          for f in sorted(glob.glob(f"{d}/*-module.json")):
+              m = json.load(open(f, encoding="utf-8"))
+              for k in ("totalComposables", "restartableComposables", "skippableComposables",
+                        "knownStableArguments", "knownUnstableArguments", "unknownStableArguments", "totalArguments"):
+                  if k in m:
+                      out.append(f"- {k}: {m[k]}")
+          for f in sorted(glob.glob(f"{d}/*-classes.txt")):
+              unstable = re.findall(r"^unstable class (\S+)", open(f, encoding="utf-8").read(), re.M)
+              out += ["", f"**Unstable classes ({len(unstable)})**", ""] + [f"- `{c}`" for c in unstable[:50]]
+          for f in sorted(glob.glob(f"{d}/*-composables.txt")):
+              fn, non_skippable, unstable_params = None, [], []
+              for line in open(f, encoding="utf-8"):
+                  m = None if line[:1].isspace() else re.match(r"^(.*?)\bfun (\S+?)\(", line)
+                  if m:
+                      head, fn = m.group(1), m.group(2)
+                      if head.startswith("restartable") and "skippable" not in head:
+                          non_skippable.append(fn)
+                  elif line.lstrip().startswith("unstable ") and fn:
+                      unstable_params.append(f"{fn}({line.split()[1].rstrip(':')})")
+              out += ["", f"**Restartable but not skippable ({len(non_skippable)})**", ""] + [f"- `{n}`" for n in non_skippable[:50]]
+              out += ["", f"**Unstable parameters ({len(unstable_params)})**", ""] + [f"- `{p}`" for p in unstable_params[:50]]
+          if len(out) == 2:
+              out.append("No reports found in app/build/compose_compiler.")
+          text = "\n".join(out) + "\n"
+          print(text)
+          if os.environ.get("GITHUB_STEP_SUMMARY"):
+              with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as s:
+                  s.write(text)
+          PY
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: compose-compiler-reports
+          path: app/build/compose_compiler/
+          if-no-files-found: ignore
+
       # Снимките на екраните (ScreenshotTest) → клон „screenshots“, за да се виждат
       # директно в GitHub: https://github.com/<repo>/tree/screenshots
       - name: Publish screenshots
@@ -64,6 +111,11 @@ jobs:
 
       - name: Debug APKs
         run: ./gradlew --no-daemon assembleDevDebug assembleProdDebug
+
+      # Генераторът на Baseline профила се компилира при всяка промяна; самото
+      # генериране (на емулатор) е в baseline-profile.yml.
+      - name: Baseline profile generator (compile)
+        run: ./gradlew --no-daemon :baselineprofile:assembleProdNonMinifiedRelease
 
       # Подписване: истинският upload ключ идва от GitHub Secrets. Ако липсва,
       # се генерира временен ключ само за да се провери, че подписаният build

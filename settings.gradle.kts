@@ -25,3 +25,6 @@ rootProject.name = "ChitalishteYavorec"
 // за да може да се компилира и тества и без Android SDK.
 includeBuild("shared")
 include(":app")
+// Генератор на Baseline/Startup профила (Macrobenchmark, com.android.test) — виж
+// baselineprofile/build.gradle.kts и .github/workflows/baseline-profile.yml.
+include(":baselineprofile")
