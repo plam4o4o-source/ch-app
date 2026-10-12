@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.Outcome
-import org.chyavorec.data.catalog.CatalogSearchEngine
+import org.chyavorec.data.catalog.CatalogSearcher
 import org.chyavorec.data.repository.CatalogRepository
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogFacets
@@ -24,7 +24,8 @@ import org.chyavorec.domain.model.CatalogSort
 import org.chyavorec.domain.model.SearchField
 
 data class CatalogUiState(
-    val engine: ScreenState<CatalogSearchEngine> = ScreenState(),
+    /** Търсачката (пълнотекстовият индекс в базата или индексът в паметта) и състоянието ѝ. */
+    val engine: ScreenState<CatalogSearcher> = ScreenState(),
     val query: CatalogQuery = CatalogQuery(),
     val results: List<CatalogBook> = emptyList(),
     val totalResults: Int = 0,
@@ -57,12 +58,12 @@ class CatalogViewModel(
     private val _state = MutableStateFlow(CatalogUiState())
     val state: StateFlow<CatalogUiState> = _state.asStateFlow()
     private val queryFlow = MutableStateFlow(CatalogQuery())
-    /** Последното изпълнено търсене: същият индекс със същата заявка не се търси повторно. */
-    @Volatile private var lastSearch: Pair<CatalogSearchEngine, CatalogQuery>? = null
+    /** Последното изпълнено търсене: същата търсачка със същата заявка не се търси повторно. */
+    @Volatile private var lastSearch: Pair<CatalogSearcher, CatalogQuery>? = null
 
     init {
         viewModelScope.launch {
-            repo.cached()?.let { c -> _state.update { it.copy(engine = c.toState().copy(loading = true), facets = c.data.facets) }; runSearch() }
+            repo.cachedSearcher()?.let { c -> _state.update { it.copy(engine = c.toState().copy(loading = true), facets = c.data.facets) }; runSearch() }
             refresh(force = false)
         }
         // Instant search: търсим 200 ms след последния натиснат клавиш. Началната заявка,
@@ -72,7 +73,7 @@ class CatalogViewModel(
 
     fun refresh(force: Boolean = true) = viewModelScope.launch {
         _state.update { it.copy(engine = it.engine.startRefresh()) }
-        val r = repo.catalog(force)
+        val r = repo.searcher(force)
         _state.update { s -> s.copy(engine = s.engine.with(r), facets = (r as? Outcome.Success)?.value?.data?.facets ?: s.facets) }
         runSearch()
     }

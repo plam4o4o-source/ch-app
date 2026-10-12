@@ -11,7 +11,9 @@ import kotlinx.coroutines.withContext
 import coil3.SingletonImageLoader
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.data.local.AppDatabase
+import org.chyavorec.app.data.local.CatalogDatabase
 import org.chyavorec.app.data.local.FilePayloadCache
+import org.chyavorec.app.data.local.RoomCatalogIndexStore
 import org.chyavorec.app.data.local.SecureSelfCardStore
 import org.chyavorec.app.data.local.SecureSessionStore
 import org.chyavorec.app.data.local.SettingsStore
@@ -81,6 +83,13 @@ class AppContainer(
     val database: AppDatabase by lazy {
         Room.databaseBuilder(context, AppDatabase::class.java, "chitalishte.db").fallbackToDestructiveMigration(true).build()
     }
+    /**
+     * Пълнотекстовият индекс на каталога (FTS4) — отделна база-кеш, която се попълва
+     * отново от katalog.json; отваря се едва при първото търсене в каталога.
+     */
+    val catalogDatabase: CatalogDatabase by lazy {
+        Room.databaseBuilder(context, CatalogDatabase::class.java, "catalog-index.db").fallbackToDestructiveMigration(true).build()
+    }
 
     /** Публичен кеш (новини, каталог, страници) — в noBackup папката. */
     val publicCache by lazy { FilePayloadCache(File(context.noBackupFilesDir, "cache/public")) }
@@ -122,7 +131,7 @@ class AppContainer(
 
     val newsRepository by lazy { NewsRepository(siteService, publicCache, clock) }
     val eventsRepository by lazy { EventsRepository(siteService, publicCache, clock) }
-    val catalogRepository by lazy { CatalogRepository(catalogService, publicCache, clock) }
+    val catalogRepository by lazy { CatalogRepository(catalogService, publicCache, clock, index = RoomCatalogIndexStore { catalogDatabase }) }
     val siteRepository by lazy { SiteRepository(siteService, publicCache, clock, newsRepository) }
 
     val authRepository by lazy {
