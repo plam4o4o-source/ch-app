@@ -25,7 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import org.chyavorec.app.ui.components.WheatRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -93,7 +93,7 @@ fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
     val fresh by vm.fresh.collectAsStateWithLifecycle()
     val member by vm.member.collectAsStateWithLifecycle()
     Scaffold(topBar = { BackTopBar(stringResource(R.string.messages_title), onBack) }) { padding ->
-        PullToRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+        WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             StateContent(
                 state = state,
                 onRetry = { vm.refresh() },

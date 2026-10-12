@@ -132,10 +132,12 @@ val LocalSharedScope = compositionLocalOf<SharedTransitionScope?> { null }
 val LocalNavAnimatedScope = compositionLocalOf<AnimatedVisibilityScope?> { null }
 
 /**
- * Свързва елемент с общ [key] между два екрана (напр. корицата на книга в
- * списъка и в детайлите), така че да „прелети“ при навигация. Извън навигация
- * (preview, тестове) е no-op.
+ * false по време на смяна на раздел от долната лента: тогава екраните се сменят
+ * по споделената ос X и „прелитащи“ корици/снимки между два раздела биха се
+ * засекли с плъзгането (напр. една и съща книга в „Начало“ и „Каталог“).
  */
+val LocalSharedTransitionsEnabled = compositionLocalOf { true }
+
 /**
  * Пружинен преход на границите на shared element-а (леко „подскачане“ в края) —
  * при прекъснат жест „назад“ пружината естествено се връща без скок.
@@ -145,13 +147,48 @@ private val SpringBounds = BoundsTransform { _: Rect, _: Rect ->
     spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessMediumLow, visibilityThreshold = Rect.VisibilityThreshold)
 }
 
+/**
+ * Дали shared element преходите са активни тук: в навигацията, без „намалено
+ * движение“ и не при смяна на раздел. Извън навигация (preview, тестове) — false.
+ */
+@Composable
+fun sharedTransitionsActive(): Boolean {
+    val reduced = rememberReducedMotion()
+    return LocalSharedScope.current != null && LocalNavAnimatedScope.current != null &&
+        LocalSharedTransitionsEnabled.current && !reduced
+}
+
+/**
+ * Свързва елемент с общ [key] между два екрана (напр. корицата на книга в
+ * списъка и в детайлите), така че да „прелети“ при навигация. Ключовете са
+ * стабилни идентификатори: `book-<инв. №>`, `news-<id>`, `event-title-<id>`…
+ * Извън навигация (preview, тестове) и при намалено движение е no-op.
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Modifier.sharedElementKey(key: String): Modifier {
     val shared = LocalSharedScope.current ?: return this
     val nav = LocalNavAnimatedScope.current ?: return this
-    if (rememberReducedMotion()) return this
+    val reduced = rememberReducedMotion()
+    if (reduced || !LocalSharedTransitionsEnabled.current) return this
     return with(shared) {
         this@sharedElementKey.sharedElement(rememberSharedContentState(key), animatedVisibilityScope = nav, boundsTransform = SpringBounds)
+    }
+}
+
+/**
+ * Като [sharedElementKey], но за елементи с различно съдържание в двата екрана
+ * (заглавие с различен размер на шрифта, картата в списъка и на цял екран):
+ * общи са само границите, а съдържанието се мащабира и преминава с fade.
+ */
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun Modifier.sharedBoundsKey(key: String): Modifier {
+    val shared = LocalSharedScope.current ?: return this
+    val nav = LocalNavAnimatedScope.current ?: return this
+    val reduced = rememberReducedMotion()
+    if (reduced || !LocalSharedTransitionsEnabled.current) return this
+    return with(shared) {
+        this@sharedBoundsKey.sharedBounds(rememberSharedContentState(key), animatedVisibilityScope = nav, boundsTransform = SpringBounds)
     }
 }

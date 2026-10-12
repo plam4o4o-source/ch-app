@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.events
 
+import org.chyavorec.app.ui.components.sharedBoundsKey
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -56,7 +57,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import org.chyavorec.app.ui.components.WheatRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -122,7 +123,7 @@ fun EventCard(e: Event, onClick: () -> Unit, modifier: Modifier = Modifier) {
             DateBadge(date)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text(e.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(e.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.sharedBoundsKey("event-title-${e.id}"))
                 val meta = listOfNotNull(e.time, e.place).joinToString(" · ").ifBlank { e.description }
                 if (meta.isNotBlank()) {
                     Text(meta, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -151,7 +152,7 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             }
         })
     }) { padding ->
-        PullToRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+        WheatRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             Column {
                 SyncBanner(ui.state.fromCache, ui.state.syncedAt, ui.state.refreshError)
                 AnimatedContent(ui.calendarMode, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "mode") { calendar ->
@@ -315,7 +316,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
                 RemoteImage(it, null, Modifier.fillMaxWidth().aspectRatio(16f / 9f).padding(horizontal = 16.dp).clip(MaterialTheme.shapes.large))
             }
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(e.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
+                Text(e.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.sharedBoundsKey("event-title-${e.id}").semantics { heading() })
                 DetailLine(Icons.Outlined.Event, Formatters.date(context, e.date) ?: stringResource(R.string.event_no_date))
                 if (e.recurring) {
                     Text(stringResource(R.string.event_recurring), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

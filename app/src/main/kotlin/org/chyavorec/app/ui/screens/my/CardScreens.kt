@@ -1,5 +1,7 @@
 package org.chyavorec.app.ui.screens.my
 
+import org.chyavorec.app.ui.components.sharedTransitionsActive
+import org.chyavorec.app.ui.components.sharedBoundsKey
 import android.app.Activity
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -213,6 +215,9 @@ private fun Modifier.tiltGloss(tilt: Tilt): Modifier = drawWithContent {
     )
 }
 
+/** Ключ на shared element прехода „карта → карта на цял екран“. */
+private const val LIBRARY_CARD_KEY = "library-card"
+
 /** Рамката на картата (размер ID-1, мастилено-бордо градиент, златен кант) — обща за двете страни. */
 @Composable
 private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable ColumnScope.() -> Unit) {
@@ -343,7 +348,8 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
                     OutlinedButton(onClick = onLogin, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.card_login_instead)) }
                 }
             } else {
-                LibraryCard(data, Modifier.clickable(onClick = onFullscreen))
+                // Картата „прелита“ към екрана на цял екран (общи граници, виж CardFullscreen).
+                LibraryCard(data, Modifier.sharedBoundsKey(LIBRARY_CARD_KEY).clickable(onClick = onFullscreen))
                 Button(onClick = onFullscreen, modifier = Modifier.fillMaxWidth()) {
                     Icon(Icons.Outlined.Fullscreen, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.card_show))
                 }
@@ -427,6 +433,8 @@ fun CardFullscreen(onClose: () -> Unit) {
     val data = rememberCardData(vm)
     val context = LocalContext.current
     val reduced = rememberReducedMotion()
+    // При shared element прехода картата „долита“ от предишния екран — без 3D влизане.
+    val shared = sharedTransitionsActive()
     val haptic = LocalHapticFeedback.current
     val scope = rememberCoroutineScope()
     val window = remember(context) { (context as? Activity)?.window }
@@ -460,14 +468,14 @@ fun CardFullscreen(onClose: () -> Unit) {
     // Влизане (90° → 0°) веднъж; обръщане 0° ↔ 180° при докосване. Оцеляват при завъртане.
     var entered by rememberSaveable { mutableStateOf(false) }
     var showBack by rememberSaveable { mutableStateOf(false) }
-    val entry = remember { Animatable(if (entered || reduced) 0f else 90f) }
+    val entry = remember { Animatable(if (entered || reduced || shared) 0f else 90f) }
     val flip = remember { Animatable(if (showBack) 180f else 0f) }
     val backVisible by remember { derivedStateOf { entry.value + flip.value > 90f } }
     val hasCard = data != null
     LaunchedEffect(hasCard) {
         if (!hasCard || entered) return@LaunchedEffect
         haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-        if (reduced) entry.snapTo(0f) else entry.animateTo(0f, tween(350, easing = FastOutSlowInEasing))
+        if (reduced || shared) entry.snapTo(0f) else entry.animateTo(0f, tween(350, easing = FastOutSlowInEasing))
         entered = true
     }
     val flipLabel = stringResource(R.string.card_flip)
@@ -484,6 +492,7 @@ fun CardFullscreen(onClose: () -> Unit) {
                 Box(
                     Modifier
                         .widthIn(max = 520.dp)
+                        .sharedBoundsKey(LIBRARY_CARD_KEY)
                         .graphicsLayer {
                             rotationY = entry.value + flip.value
                             cameraDistance = 12f * density
