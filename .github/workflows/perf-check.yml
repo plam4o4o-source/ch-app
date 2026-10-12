@@ -1,7 +1,7 @@
 name: Perf check (temporary)
 on:
   push:
-    branches: [debug/w3-theme]
+    branches: [debug/main-control]
 permissions:
   contents: read
 jobs:
