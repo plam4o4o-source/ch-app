@@ -5,7 +5,7 @@ import java.time.LocalDate
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
-/** Чистата логика зад анимациите: цифрите на брояча-„одометър“ и сезонните частици. */
+/** Чистата логика зад анимациите: цифрите на брояча-„одометър“ и сезоните (частиците — в HolidayCalendarTest). */
 class MotionLogicTest {
 
     @Test fun digitsAreMostSignificantFirst() {
@@ -37,29 +37,6 @@ class MotionLogicTest {
         assertEquals(12f, Odometer.introTarget(2, place = 1)) // десетици: 1 обиколка
         assertEquals(9f, Odometer.introTarget(9, place = 2))
         assertEquals(1f, Odometer.introTarget(1, place = 3))
-    }
-
-    @Test fun skyEffectByDate() {
-        fun on(m: Int, d: Int, y: Int = 2026) = skyEffect(LocalDate.of(y, m, d))
-        assertEquals(SkyEffect.NONE, on(10, 14))
-        assertEquals(SkyEffect.LEAVES, on(10, 15))
-        assertEquals(SkyEffect.LEAVES, on(11, 30))
-        assertEquals(SkyEffect.NONE, on(12, 1))
-        assertEquals(SkyEffect.NONE, on(12, 14))
-        assertEquals(SkyEffect.SNOW, on(12, 15))
-        assertEquals(SkyEffect.SNOW, on(12, 19))
-        assertEquals(SkyEffect.SNOW_STARS, on(12, 20))
-        assertEquals(SkyEffect.SNOW_STARS, on(12, 31))
-        assertEquals(SkyEffect.SNOW_STARS, on(1, 1, 2027))
-        assertEquals(SkyEffect.SNOW_STARS, on(1, 7, 2027))
-        assertEquals(SkyEffect.NONE, on(1, 8, 2027))
-        assertEquals(SkyEffect.NONE, on(4, 30))
-        assertEquals(SkyEffect.PETALS, on(5, 1))
-        assertEquals(SkyEffect.PETALS, on(5, 6)) // Гергьовден
-        assertEquals(SkyEffect.PETALS, on(5, 10))
-        assertEquals(SkyEffect.NONE, on(5, 11))
-        assertEquals(SkyEffect.NONE, on(9, 14))
-        assertEquals(SkyEffect.NONE, on(2, 29, 2028))
     }
 
     @Test fun ornamentSeasonsUnchanged() {

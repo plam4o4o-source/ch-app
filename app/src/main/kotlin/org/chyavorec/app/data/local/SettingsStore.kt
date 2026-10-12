@@ -38,7 +38,7 @@ data class AppSettings(
     val introShown: Boolean = false,
     /** Корици от covers.openlibrary.org по ISBN (изкл. = никакви заявки към този сървър). */
     val coversOnline: Boolean = true,
-    /** Сезонни украси на началния екран (снежинки, яйца, житни класове). */
+    /** Празнични и сезонни украси на началния екран (поздрави, орнаменти, сняг, листа). */
     val seasonal: Boolean = true,
     /** Каталогът като „полица“ (гръбчета на книги) вместо списък. */
     val catalogShelf: Boolean = false,
@@ -84,6 +84,7 @@ class SettingsStore(private val context: Context) {
         val introShown = booleanPreferencesKey("intro_shown")
         val coversOnline = booleanPreferencesKey("covers_online")
         val seasonal = booleanPreferencesKey("seasonal_decor")
+        val dismissedOccasion = stringPreferencesKey("dismissed_occasion")
         val catalogShelf = booleanPreferencesKey("catalog_shelf")
         val readerFontSize = stringPreferencesKey("reader_font_size")
         val readerNarrow = booleanPreferencesKey("reader_narrow")
@@ -145,6 +146,9 @@ class SettingsStore(private val context: Context) {
     suspend fun setIntroShown() = context.dataStore.edit { it[Keys.introShown] = true }
     suspend fun setCoversOnline(on: Boolean) = context.dataStore.edit { it[Keys.coversOnline] = on }
     suspend fun setSeasonal(on: Boolean) = context.dataStore.edit { it[Keys.seasonal] = on }
+    /** Скритият с „×“ празничен поздрав — `ГГГГ-ММ-ДД|id`; на следващия ден вече не важи. */
+    val dismissedOccasion: Flow<String?> = context.dataStore.data.map { it[Keys.dismissedOccasion] }
+    suspend fun setDismissedOccasion(key: String) = context.dataStore.edit { it[Keys.dismissedOccasion] = key }
     suspend fun setCatalogShelf(on: Boolean) = context.dataStore.edit { it[Keys.catalogShelf] = on }
     suspend fun setReaderFontSize(size: ReaderFontSize) = context.dataStore.edit { it[Keys.readerFontSize] = size.name }
     suspend fun setReaderNarrow(on: Boolean) = context.dataStore.edit { it[Keys.readerNarrow] = on }

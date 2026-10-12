@@ -17,13 +17,15 @@ import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AnimatedCounter
 import org.chyavorec.app.ui.components.prepareCountUpToday
 import org.chyavorec.app.ui.components.rememberCountUpToday
-import org.chyavorec.app.ui.components.EasterEggs
 import org.chyavorec.app.ui.components.IconPlate
 import org.chyavorec.app.ui.components.OrnamentFrame
 import org.chyavorec.app.ui.components.Season
-import org.chyavorec.app.ui.components.SeasonalSky
-import org.chyavorec.app.ui.components.SkyEffect
-import org.chyavorec.app.ui.components.rememberSkyEffect
+import org.chyavorec.app.ui.components.HolidayGreeting
+import org.chyavorec.app.ui.components.HolidayOrnament
+import org.chyavorec.app.ui.components.HolidaySky
+import org.chyavorec.app.ui.components.rememberDayDecor
+import org.chyavorec.domain.occasion.OccasionEffect
+import org.chyavorec.domain.occasion.OccasionOrnament
 import org.chyavorec.app.ui.components.WheatEdge
 import org.chyavorec.app.ui.components.rememberSeason
 import org.chyavorec.app.ui.components.PagerDots
@@ -150,6 +152,8 @@ fun HomeScreen(navigate: (String) -> Unit) {
     // Дали броячите „отброяват“ днес — прочита се отрано и извън главната нишка.
     val appContext = LocalContext.current.applicationContext
     LaunchedEffect(Unit) { prepareCountUpToday(appContext) }
+    // Празници, сезони и обичаи: ефект, орнамент и поздрав за днес.
+    val decor = rememberDayDecor()
 
     WheatRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         // На таблет/хоризонтално съдържанието е центрирано и не по-широко от 840 dp.
@@ -159,14 +163,12 @@ fun HomeScreen(navigate: (String) -> Unit) {
             modifier = Modifier.align(Alignment.TopCenter).widthIn(max = 840.dp).fillMaxSize(),
         ) {
             item("header") {
-                val season = rememberSeason()
-                val sky = rememberSkyEffect()
                 Box {
-                    HomeHeader(onMessages = { navigate(Routes.MESSAGES) }, season = season)
-                    // Сезонни частици (сняг/звезди, листа, цветчета) само върху заглавката.
-                    if (sky != SkyEffect.NONE) {
-                        SeasonalSky(
-                            sky,
+                    HomeHeader(onMessages = { navigate(Routes.MESSAGES) }, ornament = decor.ornament, quiet = decor.quiet)
+                    // Празничен/сезонен ефект (сняг, листа, фойерверки, букви…) само върху заглавката.
+                    if (decor.effect != OccasionEffect.NONE) {
+                        HolidaySky(
+                            decor.effect,
                             Modifier.matchParentSize(),
                             snowColor = if (LocalExtendedColors.current.isDark) Color.White else Color(0xFF7A93AB),
                             // Първото превъртане спира ефекта (чете се в анимацията, не в композицията).
@@ -175,6 +177,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     }
                 }
             }
+            if (decor.greeting != null) item("greeting") { HolidayGreeting(decor, navigate) }
             item("search") {
                 SearchPill(
                     stringResource(R.string.home_search_hint), onClick = { navigate(Routes.SEARCH) },
@@ -261,7 +264,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
 }
 
 @Composable
-private fun HomeHeader(onMessages: () -> Unit, season: Season = Season.NONE) {
+private fun HomeHeader(onMessages: () -> Unit, ornament: OccasionOrnament = OccasionOrnament.NONE, quiet: Boolean = false) {
     val center = LocalAppContainer.current.messages
     // Самото опресняване на съобщенията е веднъж на процес (MessagesOnLaunch в корена), не тук:
     // заглавката се показва наново при всяко връщане към „Начало“ и превъртане нагоре.
@@ -295,7 +298,7 @@ private fun HomeHeader(onMessages: () -> Unit, season: Season = Season.NONE) {
             )
             Text(stringResource(R.string.org_place), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        if (season == Season.EASTER) EasterEggs(Modifier.padding(end = 6.dp))
+        if (ornament != OccasionOrnament.NONE) HolidayOrnament(ornament, Modifier.padding(end = 6.dp), quiet = quiet)
         IconButton(onClick = onMessages, modifier = Modifier.size(48.dp)) {
             val label = if (unread > 0) pluralStringResource(R.plurals.messages_unread, unread, unread) else stringResource(R.string.messages_title)
             BadgedBox(

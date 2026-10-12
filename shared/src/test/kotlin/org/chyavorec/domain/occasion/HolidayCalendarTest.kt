@@ -118,6 +118,29 @@ class HolidayCalendarTest {
         assertNull(decor(2026, 10, 15).greeting)
     }
 
+    @Test fun seasonalEffectsByDate() {
+        fun on(m: Int, d: Int, y: Int = 2026) = decor(y, m, d).effect
+        assertEquals(E.NONE, on(10, 14))
+        assertEquals(E.LEAVES, on(10, 15))
+        assertEquals(E.LEAVES, on(11, 30))
+        assertEquals(E.NONE, on(12, 1))
+        assertEquals(E.NONE, on(12, 14))
+        assertEquals(E.SNOW, on(12, 15))
+        assertEquals(E.SNOW, on(12, 19))
+        assertEquals(E.SNOW_STARS, on(12, 20))
+        assertEquals(E.SNOW_STARS, on(12, 31))
+        assertEquals(E.FIREWORKS, on(1, 1, 2027)) // Нова година е по-важна от снега
+        assertEquals(E.SNOW_STARS, on(1, 2, 2027))
+        assertEquals(E.SNOW_STARS, on(1, 7, 2027))
+        assertEquals(E.NONE, on(1, 8, 2027))
+        assertEquals(E.NONE, on(4, 30))
+        assertEquals(E.PETALS, on(5, 1))
+        assertEquals(E.PETALS, on(5, 10))
+        assertEquals(E.NONE, on(5, 11))
+        assertEquals(E.NONE, on(9, 14))
+        assertEquals(E.NONE, on(2, 29, 2028))
+    }
+
     @Test fun everyGreetingIdIsKnown() {
         val ids = HashSet<String>()
         var d = LocalDate.of(2024, 1, 1)

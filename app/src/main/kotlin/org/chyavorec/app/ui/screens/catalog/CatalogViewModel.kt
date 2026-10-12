@@ -41,8 +41,17 @@ data class CatalogUiState(
     companion object { const val PAGE = 40 }
 }
 
-/** Търсене, поискано от друг екран (скенера на баркодове) — каталогът го поема при показване. */
-data class CatalogSearchRequest(val text: String, val field: SearchField = SearchField.ALL)
+/**
+ * Търсене, поискано от друг екран (скенера, празничния поздрав) — каталогът го поема
+ * при показване. [departmentHint] избира отдела, чието име го съдържа (напр. детския);
+ * [newest] подрежда най-новите книги първи.
+ */
+data class CatalogSearchRequest(
+    val text: String,
+    val field: SearchField = SearchField.ALL,
+    val departmentHint: String? = null,
+    val newest: Boolean = false,
+)
 
 object CatalogSearchRequests {
     val pending = MutableStateFlow<CatalogSearchRequest?>(null)

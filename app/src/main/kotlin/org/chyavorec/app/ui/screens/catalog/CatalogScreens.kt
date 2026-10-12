@@ -113,6 +113,7 @@ import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogQuery
+import kotlinx.coroutines.flow.first
 import org.chyavorec.domain.model.CatalogSort
 import org.chyavorec.domain.model.SearchField
 import org.chyavorec.domain.model.UdcSections
@@ -164,7 +165,15 @@ fun CatalogScreen(navigate: (String) -> Unit) {
         CatalogSearchRequests.pending.collect { r ->
             if (r != null) {
                 CatalogSearchRequests.pending.value = null
-                vm.update { CatalogQuery(text = r.text, field = r.field, sort = it.sort) }
+                val department = r.departmentHint?.let { hint ->
+                    // Отделите идват с данните на каталога — при студен старт ги чакаме малко.
+                    val facets = vm.state.value.facets
+                        ?: kotlinx.coroutines.withTimeoutOrNull(3_000) { vm.state.first { it.facets != null }.facets }
+                    facets?.departments?.firstOrNull { it.contains(hint, ignoreCase = true) }
+                }
+                // Без такъв отдел (или още без данни) — търсене по самата подсказка.
+                val text = if (r.departmentHint != null && department == null) r.departmentHint else r.text
+                vm.update { CatalogQuery(text = text, field = r.field, department = department, sort = if (r.newest) CatalogSort.NEWEST else it.sort) }
                 listState.scrollToItem(0)
             }
         }
