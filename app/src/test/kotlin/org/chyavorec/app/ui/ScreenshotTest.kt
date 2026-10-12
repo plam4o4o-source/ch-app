@@ -66,7 +66,11 @@ class ScreenshotTest {
 
     @After fun stop() = server.shutdown()
 
-    private fun launch(mode: ThemeMode = ThemeMode.LIGHT, settings: AppSettings = AppSettings(onboardingDone = true, introShown = true)) {
+    private fun launch(
+        mode: ThemeMode = ThemeMode.LIGHT,
+        settings: AppSettings = AppSettings(onboardingDone = true, introShown = true),
+        now: String = "2026-09-26T10:00:00Z",
+    ) {
         val base = server.url("/").toString().trimEnd('/')
         val config = AppConfig(
             siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = "",
@@ -74,7 +78,7 @@ class ScreenshotTest {
         )
         val container = AppContainer(
             ApplicationProvider.getApplicationContext(), config,
-            FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), OkHttpClient(),
+            FixedClock(Instant.parse(now)), XorTestCipher(), OkHttpClient(),
         )
         compose.setContent {
             ChitalishteTheme(mode = mode) {
@@ -104,6 +108,25 @@ class ScreenshotTest {
         launch()
         waitFor("45-ти")
         shot("01-home-light")
+    }
+
+    // Празнични дни: поздрав под заглавката, орнамент и ефект (вж. HolidayCalendar).
+    @Test fun homeMay24() {
+        launch(now = "2026-05-24T09:00:00Z")
+        waitFor("Кирил и Методий")
+        shot("20-home-may24")
+    }
+
+    @Test fun homeLevskiQuietDark() {
+        launch(ThemeMode.DARK, now = "2026-02-19T09:00:00Z")
+        waitFor("Поклон пред Апостола")
+        shot("21-home-levski-quiet")
+    }
+
+    @Test fun homeBabaMarta() {
+        launch(now = "2026-03-01T09:00:00Z")
+        waitFor("Баба Марта")
+        shot("22-home-baba-marta")
     }
 
     @Test fun homeDark() {
