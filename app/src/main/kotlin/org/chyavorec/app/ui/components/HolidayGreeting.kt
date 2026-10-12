@@ -68,7 +68,8 @@ fun rememberDayDecor(): DayDecor {
 private fun greetingTexts(o: Occasion): Pair<String, String>? {
     o.custom?.let { c ->
         val bg = Formatters.isBulgarian(LocalContext.current)
-        return if (bg || c.titleEn == null) c.titleBg to c.textBg else c.titleEn to (c.textEn ?: "")
+        val en = c.titleEn
+        return if (bg || en == null) c.titleBg to c.textBg else en to (c.textEn ?: "")
     }
     val (title, text) = greetingRes(o.id) ?: return null
     return stringResource(title) to stringResource(text)
