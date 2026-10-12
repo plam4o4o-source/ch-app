@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    // Baseline/Startup профил, генериран от :baselineprofile (виж блока baselineProfile по-долу).
+    alias(libs.plugins.baselineprofile)
 }
 
 /*
@@ -207,6 +209,52 @@ kotlin {
             "androidx.compose.foundation.layout.ExperimentalLayoutApi",
             "androidx.compose.animation.ExperimentalSharedTransitionApi",
         )
+    }
+}
+
+/*
+ * Compose компилатор: стабилни типове извън модула (домейн моделите от :shared, java.time,
+ * колекциите) — виж compose-stability.conf. Отчети за стабилност/skippability:
+ *     ./gradlew :app:compileProdReleaseKotlin -PcomposeReports=true --rerun
+ * → app/build/compose_compiler/ (в CI: стъпката „Compose compiler reports“ в android.yml).
+ */
+composeCompiler {
+    stabilityConfigurationFiles.add(rootProject.layout.projectDirectory.file("compose-stability.conf"))
+    if (providers.gradleProperty("composeReports").orNull == "true") {
+        reportsDestination.set(layout.buildDirectory.dir("compose_compiler"))
+        metricsDestination.set(layout.buildDirectory.dir("compose_compiler"))
+    }
+}
+
+/*
+ * Baseline + Startup профил (androidx.baselineprofile). Генерира се ръчно/в CI, не при
+ * всеки build:
+ *     ./gradlew :app:generateBaselineProfile        (нужен е емулатор/устройство, API 33+)
+ * С mergeIntoMain плъгинът създава само общата задача (без generateProdRelease…).
+ * Пише app/src/main/generated/baselineProfiles/{baseline-prof,startup-prof}.txt; профилът
+ * важи за всички release варианти (prodRelease, prodPlay, devRelease), а се генерира само
+ * от prodRelease (реални данни, без демо) чрез build типа nonMinifiedRelease, който
+ * плъгинът създава. Ръчно написаният src/main/baseline-prof.txt остава, докато генерираният
+ * не бъде добавен в хранилището (виж .github/workflows/baseline-profile.yml).
+ */
+baselineProfile {
+    mergeIntoMain = true
+    automaticGenerationDuringBuild = false
+    saveInSrc = true
+    // R8 подрежда DEX-а по Startup профила (startup-prof.txt) — по-малко page fault-и при старт.
+    dexLayoutOptimization = true
+    // Само prodRelease има генератор (зависимост); сливането в main покрива и prodPlay/devRelease.
+    variants.create("prodRelease") { from(project(":baselineprofile")) }
+}
+
+androidComponents {
+    // Build типовете за генериране/измерване (nonMinifiedRelease, benchmarkRelease, … — създава
+    // ги плъгинът с initWith(release)) са само за емулатор/устройство и не се публикуват: без
+    // ограничението до ARM, за да вървят на x86_64 емулатора в CI без превод на ARM код.
+    finalizeDsl { ext ->
+        ext.buildTypes
+            .filter { it.name.startsWith("nonMinified") || it.name.startsWith("benchmark") }
+            .forEach { it.ndk.abiFilters.clear() }
     }
 }
 

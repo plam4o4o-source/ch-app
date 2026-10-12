@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Видимост на целевото приложение (Android 11+) за стартиране и наблюдение. -->
+    <queries>
+        <package android:name="org.chyavorec.app" />
+    </queries>
+</manifest>
