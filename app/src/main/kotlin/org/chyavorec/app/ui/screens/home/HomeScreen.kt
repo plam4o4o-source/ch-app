@@ -114,7 +114,7 @@ import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.Emblem
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.PressableCard
-import org.chyavorec.app.ui.components.RemoteImage
+import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.SectionHeader
 import org.chyavorec.app.ui.components.SkeletonBox
 import org.chyavorec.app.ui.components.SyncBanner
@@ -366,8 +366,10 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                     if (branded) {
                         BrandedImageFallback(Modifier.fillMaxSize())
                     } else {
-                        RemoteImage(
+                        // Ширината с мащаба 1.15 на паралакса.
+                        SiteImage(
                             url = a.imageUrl,
+                            width = maxWidth.coerceAtMost(720.dp) * 1.15f,
                             contentDescription = null,
                             containerColor = Brand.InkSoft,
                             onFailure = { imageFailed = true },

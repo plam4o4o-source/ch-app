@@ -69,13 +69,14 @@ import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ReaderContent
 import org.chyavorec.app.ui.components.ReaderModeButton
 import org.chyavorec.app.ui.components.ReaderSettingsSheet
-import org.chyavorec.app.ui.components.RemoteImage
+import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.SkeletonBox
 import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.windowWidth
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.ui.navigation.Routes
@@ -170,7 +171,7 @@ private fun FeaturedNews(a: NewsArticle, onClick: () -> Unit) {
     val context = LocalContext.current
     Column(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(16.dp)) {
         if (a.imageUrl != null) {
-            RemoteImage(a.imageUrl, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large))
+            SiteImage(a.imageUrl, width = windowWidth() - 32.dp, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large))
             Spacer(Modifier.height(12.dp))
         }
         MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
@@ -202,7 +203,7 @@ fun NewsRow(
         modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        RemoteImage(a.imageUrl, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").size(84.dp).clip(MaterialTheme.shapes.small))
+        SiteImage(a.imageUrl, width = 84.dp, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").size(84.dp).clip(MaterialTheme.shapes.small))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
@@ -272,8 +273,8 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                 item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
                 a.imageUrl?.let { hero ->
                     item {
-                        RemoteImage(
-                            hero, contentDescription = a.title,
+                        SiteImage(
+                            hero, width = windowWidth() - 32.dp, contentDescription = a.title,
                             modifier = Modifier.padding(horizontal = 16.dp).sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large)
                                 .clickable(onClickLabel = stringResource(R.string.a11y_open_photo), role = Role.Image) { navigate(Routes.viewerUrls(gallery, gallery.indexOf(hero))) },
                         )
@@ -314,7 +315,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp).semantics { heading() })
                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             itemsIndexed(extra) { i, url ->
-                                RemoteImage(url, contentDescription = stringResource(R.string.photo_n, i + 1),
+                                SiteImage(url, width = 150.dp, contentDescription = stringResource(R.string.photo_n, i + 1),
                                     modifier = Modifier.size(150.dp, 112.dp).clip(MaterialTheme.shapes.small).clickable { navigate(Routes.viewerUrls(gallery, gallery.indexOf(url))) })
                             }
                         }

@@ -64,6 +64,9 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.RemoteImage
+import org.chyavorec.app.ui.components.SiteImage
+import org.chyavorec.app.ui.components.adaptiveCellWidth
+import org.chyavorec.app.ui.components.windowWidth
 import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
@@ -84,6 +87,8 @@ fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 empty = { EmptyView(stringResource(R.string.gallery_empty), icon = Icons.Outlined.PhotoLibrary) },
                 errorSubject = stringResource(R.string.gallery_title),
             ) { albums ->
+                // Ширината на клетка (без отстъпите на мрежата) — за размера на миниатюрите.
+                val cell = adaptiveCellWidth(windowWidth() - 32.dp, minSize = 160.dp, spacing = 12.dp)
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(160.dp),
                     contentPadding = PaddingValues(16.dp),
@@ -94,7 +99,7 @@ fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     items(albums, key = { it.name }, contentType = { "album" }) { album ->
                         Column(Modifier.clickable { navigate(Routes.album(album.name)) }.animateItem()) {
                             Box {
-                                RemoteImage(album.cover?.thumbUrl, null, Modifier.fillMaxWidth().aspectRatio(1f).clip(MaterialTheme.shapes.medium))
+                                SiteImage(album.cover?.thumbUrl, width = cell, contentDescription = null, modifier = Modifier.fillMaxWidth().aspectRatio(1f).clip(MaterialTheme.shapes.medium))
                                 Text(
                                     pluralStringResource(R.plurals.photos_count, album.photos.size, album.photos.size),
                                     style = MaterialTheme.typography.labelMedium, color = Color.White,
@@ -122,11 +127,12 @@ fun AlbumScreen(name: String, onBack: () -> Unit, navigate: (String) -> Unit) {
             skeleton = { SkeletonCards() }, empty = { EmptyView(stringResource(R.string.gallery_empty), icon = Icons.Outlined.PhotoLibrary) },
             modifier = Modifier.padding(padding),
         ) { photos ->
+            val cell = adaptiveCellWidth(windowWidth() - 8.dp, minSize = 110.dp)
             LazyVerticalGrid(GridCells.Adaptive(110.dp), contentPadding = PaddingValues(4.dp)) {
                 itemsIndexed(photos, key = { _, p -> p.id }, contentType = { _, _ -> "photo" }) { i, p ->
-                    RemoteImage(
-                        p.thumbUrl, p.title.ifBlank { stringResource(R.string.photo_n, i + 1) },
-                        Modifier.aspectRatio(1f).padding(2.dp).clip(RoundedCornerShape(6.dp)).clickable { navigate(Routes.viewer(name, i)) },
+                    SiteImage(
+                        p.thumbUrl, width = cell, contentDescription = p.title.ifBlank { stringResource(R.string.photo_n, i + 1) },
+                        modifier = Modifier.aspectRatio(1f).padding(2.dp).clip(RoundedCornerShape(6.dp)).clickable { navigate(Routes.viewer(name, i)) },
                     )
                 }
             }
