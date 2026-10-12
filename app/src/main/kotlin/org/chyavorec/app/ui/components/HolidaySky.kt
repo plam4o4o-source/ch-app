@@ -193,9 +193,9 @@ private fun skyBursts(): List<HolidayBurst> {
 /** Букви — tone е буквата, alt — цветът (златно/бордо); spin = амплитуда на люлеене (°). */
 private fun skyLetters(): List<HolidayParticle> {
     val r = Random(2405)
-    return List(18) {
+    return List(14) {
         HolidayParticle(
-            x = r.nextFloat(), speed = 0.03f + r.nextFloat() * 0.025f, size = 0.75f + r.nextFloat() * 0.5f,
+            x = r.nextFloat(), speed = 0.03f + r.nextFloat() * 0.025f, size = 0.7f + r.nextFloat() * 0.35f,
             phase = r.nextFloat() * HOLIDAY_TWO_PI, sway = 8f + r.nextFloat() * 10f, offset = r.nextFloat(),
             spin = 15f + r.nextFloat() * 20f, tone = r.nextInt(SKY_ALPHABET.length), alt = r.nextInt(2),
         )
@@ -219,7 +219,7 @@ private fun skyBalloons(): List<HolidayParticle> {
     val r = Random(601)
     return List(10) { i ->
         HolidayParticle(
-            x = (i + 0.2f + r.nextFloat() * 0.6f) / 10f, speed = 0.045f + r.nextFloat() * 0.03f, size = 14f + r.nextFloat() * 6f,
+            x = (i + 0.2f + r.nextFloat() * 0.6f) / 10f, speed = 0.045f + r.nextFloat() * 0.03f, size = 11f + r.nextFloat() * 5f,
             phase = r.nextFloat() * HOLIDAY_TWO_PI, sway = 6f + r.nextFloat() * 6f, offset = r.nextFloat(),
             spin = 0f, tone = r.nextInt(SkyBalloonColors.size),
         )
@@ -350,7 +350,7 @@ private val SkyKnotPath by lazy { Path().apply {
 
 /** Всяка буква се измерва веднъж — в рисуването само се рисува готовото оформление. */
 private fun measureSkyGlyphs(measurer: TextMeasurer): List<TextLayoutResult> {
-    val style = TextStyle(fontSize = 18.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold)
+    val style = TextStyle(fontSize = 14.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
     return List(SKY_ALPHABET.length) { measurer.measure(SKY_ALPHABET[it].toString(), style) }
 }
 
@@ -545,7 +545,7 @@ private fun DrawScope.drawSkyBurst(b: HolidayBurst, e: Float, k: Float, white: C
     val main = if (b.tone == 3) white else SkyFireworkColors[b.tone]
     val second = if (b.tone == 0) white else SkyFireworkColors[0]
     // Кратък блясък в центъра.
-    if (e < 0.15f) drawCircle(white.copy(alpha = 0.6f * (1f - e / 0.15f) * k), radius = radius * 0.25f, center = Offset(cx, cy))
+    if (e < 0.15f) drawCircle(white.copy(alpha = 0.35f * (1f - e / 0.15f) * k), radius = radius * 0.1f, center = Offset(cx, cy))
     for (j in 0 until FIREWORK_SPARKS) {
         // Към края искрите премигват.
         val twinkle = if (e > 0.6f) 0.6f + 0.4f * sin(j * 7f + e * 40f) else 1f
@@ -585,7 +585,8 @@ private fun DrawScope.drawSkyLetters(
             rotate(deg, pivot = Offset.Zero)
             scale(p.size, p.size, pivot = Offset.Zero)
         }) {
-            drawText(g, color = c.copy(alpha = 0.75f * k), topLeft = Offset(-gw / 2f, -gh / 2f))
+            // Полупрозрачни — като снега и листата, не закриват заглавието.
+            drawText(g, color = c.copy(alpha = 0.45f * k), topLeft = Offset(-gw / 2f, -gh / 2f))
         }
     }
 }
@@ -642,7 +643,8 @@ private fun DrawScope.drawSkyBalloons(list: List<HolidayParticle>, t: Float, k: 
         val y = h + bh * 0.5f - prog * (h + bh + len)
         val x = p.x * w + sin(t * 0.7f + p.phase) * p.sway * dp
         val tilt = sin(t * 0.7f + p.phase + 0.6f) * 6f
-        val c = SkyBalloonColors[p.tone].copy(alpha = 0.88f * k)
+        // Полупрозрачни, за да се чете заглавието под тях.
+        val c = SkyBalloonColors[p.tone].copy(alpha = 0.62f * k)
         withTransform({
             translate(x, y)
             rotate(tilt, pivot = Offset.Zero)
