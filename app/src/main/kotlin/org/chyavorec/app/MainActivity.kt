@@ -42,9 +42,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             val settings by container.settings.settings.collectAsStateWithLifecycle(initialValue = null)
             val s: AppSettings? = settings
-            if (s != null) ready = true
-            ChitalishteTheme(mode = s?.themeMode ?: org.chyavorec.app.ui.theme.ThemeMode.SYSTEM, dynamicColor = s?.dynamicColor ?: false) {
-                if (s != null) {
+            // Темата се създава едва с настройките — първият кадър е с избраната палитра
+            // (без преход от палитрата по подразбиране); дотогава е splash екранът.
+            if (s != null) {
+                ready = true
+                ChitalishteTheme(mode = s.themeMode, dynamicColor = s.dynamicColor, style = s.themeStyle) {
                     ChitalishteRoot(container = container, settings = s, deepLink = deepLink)
                 }
             }

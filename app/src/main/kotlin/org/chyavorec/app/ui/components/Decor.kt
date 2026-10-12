@@ -29,13 +29,20 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -44,8 +51,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
+import org.chyavorec.app.ui.theme.ShevitsaCalendar
+import org.chyavorec.app.ui.theme.ShevitsaMotif
 
 /** Индикатор на страниците (лентата с новини, въведението) — един стил навсякъде. */
 @Composable
@@ -171,19 +181,166 @@ fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
 }
 
 /**
- * Тънка златна рамка с шевица по ъглите (drawable/ornament_frame) върху карта —
- * злато при ~35 % плътност, за да е ненатрапчива. Поставя се като последно дете на
- * Box с `Modifier.matchParentSize()`; не носи семантика.
+ * Тънка златна рамка с шевица по ъглите върху карта — злато при ~35 % плътност,
+ * за да е ненатрапчива. Мотивът по ъглите следва празниците и сезона
+ * ([rememberShevitsaMotif]). Поставя се като последно дете на Box с
+ * `Modifier.matchParentSize()`; не носи семантика.
  */
 @Composable
 fun OrnamentFrame(modifier: Modifier = Modifier, alpha: Float = 0.35f) {
-    androidx.compose.foundation.Image(
-        painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.ornament_frame),
-        contentDescription = null,
-        contentScale = androidx.compose.ui.layout.ContentScale.FillBounds,
-        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Brand.Gold.copy(alpha = alpha)),
-        modifier = modifier.clearAndSetSemantics { },
-    )
+    val motif = rememberShevitsaMotif()
+    val draw = remember(motif, alpha) {
+        val color = Brand.Gold.copy(alpha = alpha)
+        Modifier.drawWithCache {
+            val inset = 8.dp.toPx()
+            val corner = 18.dp.toPx()
+            val origin = 2.dp.toPx()
+            val gap = origin + corner + 4.dp.toPx()
+            val w = size.width
+            val h = size.height
+            val frame = Path()
+            if (w > 2 * gap && h > 2 * gap) {
+                frame.moveTo(gap, inset); frame.lineTo(w - gap, inset)
+                frame.moveTo(gap, h - inset); frame.lineTo(w - gap, h - inset)
+                frame.moveTo(inset, gap); frame.lineTo(inset, h - gap)
+                frame.moveTo(w - inset, gap); frame.lineTo(w - inset, h - gap)
+            }
+            val motifs = Path().apply {
+                fillType = PathFillType.EvenOdd
+                addShevitsaMotif(motif, origin, origin, corner)
+                addShevitsaMotif(motif, w - origin - corner, origin, corner)
+                addShevitsaMotif(motif, origin, h - origin - corner, corner)
+                addShevitsaMotif(motif, w - origin - corner, h - origin - corner, corner)
+            }
+            val line = Stroke(width = 1.5.dp.toPx())
+            onDrawBehind {
+                drawPath(frame, color, style = line)
+                drawPath(motifs, color)
+            }
+        }
+    }
+    Spacer(modifier.clearAndSetSemantics { }.then(draw))
+}
+
+/**
+ * Мотивът на шевицата за днес — по празниците и сезона ([ShevitsaCalendar]);
+ * часовникът е този на приложението (в тестовете — фиксиран).
+ */
+@Composable
+fun rememberShevitsaMotif(): ShevitsaMotif {
+    val clock = LocalAppContainer.current.clock
+    return remember(clock) { ShevitsaCalendar.motifFor(clock.today()) }
+}
+
+/**
+ * Тънка лента с шевица: две тънки линии по краищата и повтарящ се [motif] между
+ * тях. Пътят се строи веднъж за размера (drawWithCache); цветът се чете при
+ * рисуване — анимираната тема не пресъздава пътя.
+ */
+@Composable
+fun ShevitsaStrip(motif: ShevitsaMotif, color: Color, modifier: Modifier = Modifier) {
+    val currentColor by rememberUpdatedState(color)
+    val draw = remember(motif) {
+        Modifier.drawWithCache {
+            val path = shevitsaStripPath(motif, size.width, size.height)
+            onDrawBehind { drawPath(path, currentColor) }
+        }
+    }
+    Spacer(modifier.clearAndSetSemantics { }.then(draw))
+}
+
+/** Пътят на лентата: линии отгоре и отдолу (8 % от височината) и мотивите в средата. */
+internal fun shevitsaStripPath(motif: ShevitsaMotif, width: Float, height: Float): Path {
+    val path = Path().apply { fillType = PathFillType.EvenOdd }
+    if (width <= 0f || height <= 0f) return path
+    val line = height * 0.08f
+    path.addRect(Rect(0f, 0f, width, line))
+    path.addRect(Rect(0f, height - line, width, height))
+    val tile = height * 0.68f
+    if (tile <= 0f) return path
+    // Кривулицата е непрекъсната (без разстояние); другите мотиви — с въздух между тях.
+    val step = if (motif == ShevitsaMotif.ZIGZAG) tile else tile * 1.35f
+    val count = ((width + step - tile) / step).toInt().coerceAtLeast(1)
+    val used = tile + step * (count - 1)
+    var x = (width - used) / 2f
+    val y = (height - tile) / 2f
+    repeat(count) {
+        path.addShevitsaMotif(motif, x, y, tile)
+        x += step
+    }
+    return path
+}
+
+/**
+ * Мотив от шевица в квадрат ([x], [y], страна [s]) — само прави линии, без
+ * застъпвания между отделните части (рисува се с EvenOdd: вложените ромбове
+ * дават „пръстен“ с точка).
+ */
+internal fun Path.addShevitsaMotif(motif: ShevitsaMotif, x: Float, y: Float, s: Float) {
+    fun poly(vararg p: Float) {
+        moveTo(x + p[0] * s, y + p[1] * s)
+        var i = 2
+        while (i < p.size) {
+            lineTo(x + p[i] * s, y + p[i + 1] * s)
+            i += 2
+        }
+        close()
+    }
+    fun rhomb(cx: Float, cy: Float, r: Float) = poly(cx, cy - r, cx + r, cy, cx, cy + r, cx - r, cy)
+    when (motif) {
+        ShevitsaMotif.RHOMBUS -> {
+            rhomb(0.5f, 0.5f, 0.5f)
+            rhomb(0.5f, 0.5f, 0.26f)
+            rhomb(0.5f, 0.5f, 0.1f)
+        }
+        ShevitsaMotif.ROSETTE -> {
+            // четири листенца по осите (допират се само по ръбовете) + точки по диагоналите
+            poly(0.5f, 0.02f, 0.6f, 0.4f, 0.5f, 0.5f, 0.4f, 0.4f)
+            poly(0.98f, 0.5f, 0.6f, 0.6f, 0.5f, 0.5f, 0.6f, 0.4f)
+            poly(0.5f, 0.98f, 0.4f, 0.6f, 0.5f, 0.5f, 0.6f, 0.6f)
+            poly(0.02f, 0.5f, 0.4f, 0.4f, 0.5f, 0.5f, 0.4f, 0.6f)
+            rhomb(0.18f, 0.18f, 0.07f)
+            rhomb(0.82f, 0.18f, 0.07f)
+            rhomb(0.18f, 0.82f, 0.07f)
+            rhomb(0.82f, 0.82f, 0.07f)
+        }
+        ShevitsaMotif.TREE_OF_LIFE -> {
+            poly(0.46f, 0.3f, 0.54f, 0.3f, 0.54f, 1f, 0.46f, 1f) // стъбло
+            rhomb(0.5f, 0.15f, 0.12f) // връх
+            for ((base, w, h) in TreeBranches) {
+                leaf(this, x, y, s, 0.46f, base, 0.46f - w, base - h)
+                leaf(this, x, y, s, 0.54f, base, 0.54f + w, base - h)
+            }
+        }
+        ShevitsaMotif.ZIGZAG -> {
+            poly(
+                0f, 0.62f, 0.25f, 0.22f, 0.5f, 0.62f, 0.75f, 0.22f, 1f, 0.62f,
+                1f, 0.84f, 0.75f, 0.44f, 0.5f, 0.84f, 0.25f, 0.44f, 0f, 0.84f,
+            )
+            rhomb(0.5f, 0.18f, 0.08f)
+            rhomb(0.25f, 0.84f, 0.08f)
+            rhomb(0.75f, 0.84f, 0.08f)
+        }
+    }
+}
+
+/** Клоните на дървото на живота: (основа по височина, разпереност, издигане) — в дялове от страната. */
+private val TreeBranches = listOf(Triple(0.45f, 0.30f, 0.16f), Triple(0.68f, 0.36f, 0.18f), Triple(0.9f, 0.40f, 0.18f))
+
+/** Листо-ромб от (ax, ay) до (cx, cy) с ширина 0.12 от страната. */
+private fun leaf(path: Path, x: Float, y: Float, s: Float, ax: Float, ay: Float, cx: Float, cy: Float) {
+    val dx = cx - ax
+    val dy = cy - ay
+    val len = kotlin.math.sqrt(dx * dx + dy * dy)
+    val nx = -dy / len * 0.06f
+    val ny = dx / len * 0.06f
+    val mx = (ax + cx) / 2f
+    val my = (ay + cy) / 2f
+    path.moveTo(x + ax * s, y + ay * s)
+    path.lineTo(x + (mx + nx) * s, y + (my + ny) * s)
+    path.lineTo(x + cx * s, y + cy * s)
+    path.lineTo(x + (mx - nx) * s, y + (my - ny) * s)
+    path.close()
 }
 
 /**

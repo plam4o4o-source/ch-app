@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Анимирана икона на splash екрана (Android 12+): три житни класа „израстват“ за ~600 ms.
+     Под Android 12 core-splashscreen показва статичната икона (drawable/splash_icon.xml).
+     Генерирано от геометрия: стъбла от (54,82), класове с двойки зърна, в безопасния кръг на иконата (до ~33 от центъра при радиус 36). -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="108dp"
+            android:height="108dp"
+            android:viewportWidth="108"
+            android:viewportHeight="108">
+            <group
+                android:name="wheat"
+                android:pivotX="54"
+                android:pivotY="82"
+                android:scaleX="0.6"
+                android:scaleY="0">
+                <path
+                    android:name="leaves"
+                    android:fillAlpha="0"
+                    android:fillColor="#FF8B6914"
+                    android:pathData="M54,70Q44,66 40,58Q48,60 54,66ZM54,74Q64,70 68,62Q60,64 54,70Z" />
+                <path
+                    android:name="stems"
+                    android:strokeColor="#FF8B6914"
+                    android:strokeLineCap="round"
+                    android:strokeWidth="1.8"
+                    android:trimPathEnd="0"
+                    android:pathData="M54,82L38,34M54,82L54,26M54,82L70,34" />
+                <path
+                    android:name="grains"
+                    android:fillAlpha="0"
+                    android:fillColor="#FFC9A84C"
+                    android:pathData="M36.39,29.16A2.2,3.6 -18.43 1 1 38.66,35.99A2.2,3.6 -18.43 1 1 36.39,29.16ZM42.66,34.86A2,3.3 9.57 1 1 41.56,41.37A2,3.3 9.57 1 1 42.66,34.86ZM34.79,37.48A2,3.3 -46.43 1 1 39.57,42.03A2,3.3 -46.43 1 1 34.79,37.48ZM44.3,39.79A2,3.3 9.57 1 1 43.21,46.3A2,3.3 9.57 1 1 44.3,39.79ZM36.43,42.41A2,3.3 -46.43 1 1 41.21,46.96A2,3.3 -46.43 1 1 36.43,42.41ZM45.95,44.72A2,3.3 9.57 1 1 44.85,51.23A2,3.3 9.57 1 1 45.95,44.72ZM38.08,47.35A2,3.3 -46.43 1 1 42.86,51.9A2,3.3 -46.43 1 1 38.08,47.35ZM47.59,49.66A2,3.3 9.57 1 1 46.5,56.16A2,3.3 9.57 1 1 47.59,49.66ZM39.72,52.28A2,3.3 -46.43 1 1 44.5,56.83A2,3.3 -46.43 1 1 39.72,52.28ZM54,20.9A2.2,3.6 0 1 1 54,28.1A2.2,3.6 0 1 1 54,20.9ZM58.15,28.29A2,3.3 28 1 1 55.05,34.11A2,3.3 28 1 1 58.15,28.29ZM49.85,28.29A2,3.3 -28 1 1 52.95,34.11A2,3.3 -28 1 1 49.85,28.29ZM58.15,33.49A2,3.3 28 1 1 55.05,39.31A2,3.3 28 1 1 58.15,33.49ZM49.85,33.49A2,3.3 -28 1 1 52.95,39.31A2,3.3 -28 1 1 49.85,33.49ZM58.15,38.69A2,3.3 28 1 1 55.05,44.51A2,3.3 28 1 1 58.15,38.69ZM49.85,38.69A2,3.3 -28 1 1 52.95,44.51A2,3.3 -28 1 1 49.85,38.69ZM58.15,43.89A2,3.3 28 1 1 55.05,49.71A2,3.3 28 1 1 58.15,43.89ZM49.85,43.89A2,3.3 -28 1 1 52.95,49.71A2,3.3 -28 1 1 49.85,43.89ZM71.61,29.16A2.2,3.6 18.43 1 1 69.34,35.99A2.2,3.6 18.43 1 1 71.61,29.16ZM73.21,37.48A2,3.3 46.43 1 1 68.43,42.03A2,3.3 46.43 1 1 73.21,37.48ZM65.34,34.86A2,3.3 -9.57 1 1 66.44,41.37A2,3.3 -9.57 1 1 65.34,34.86ZM71.57,42.41A2,3.3 46.43 1 1 66.79,46.96A2,3.3 46.43 1 1 71.57,42.41ZM63.7,39.79A2,3.3 -9.57 1 1 64.79,46.3A2,3.3 -9.57 1 1 63.7,39.79ZM69.92,47.35A2,3.3 46.43 1 1 65.14,51.9A2,3.3 46.43 1 1 69.92,47.35ZM62.05,44.72A2,3.3 -9.57 1 1 63.15,51.23A2,3.3 -9.57 1 1 62.05,44.72ZM68.28,52.28A2,3.3 46.43 1 1 63.5,56.83A2,3.3 46.43 1 1 68.28,52.28ZM60.41,49.66A2,3.3 -9.57 1 1 61.5,56.16A2,3.3 -9.57 1 1 60.41,49.66Z" />
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="wheat">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="600"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"
+                    android:propertyName="scaleY"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+                <objectAnimator
+                    android:duration="600"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"
+                    android:propertyName="scaleX"
+                    android:valueFrom="0.6"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="stems">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="450"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
+                android:propertyName="trimPathEnd"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:valueType="floatType" />
+        </aapt:attr>
+    </target>
+    <target android:name="leaves">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="300"
+                android:startOffset="150"
+                android:propertyName="fillAlpha"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:valueType="floatType" />
+        </aapt:attr>
+    </target>
+    <target android:name="grains">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="350"
+                android:startOffset="250"
+                android:interpolator="@android:interpolator/linear_out_slow_in"
+                android:propertyName="fillAlpha"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:valueType="floatType" />
+        </aapt:attr>
+    </target>
+</animated-vector>

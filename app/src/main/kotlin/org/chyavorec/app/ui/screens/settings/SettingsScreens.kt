@@ -61,6 +61,24 @@ import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.updateStatusText
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.ThemeMode
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Surface
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import org.chyavorec.app.ui.theme.LocalExtendedColors
+import org.chyavorec.app.ui.theme.ThemePalette
+import org.chyavorec.app.ui.theme.paletteAccent
+import org.chyavorec.app.ui.theme.paletteScheme
 import org.chyavorec.app.util.AppLanguage
 import org.chyavorec.app.util.Intents
 
@@ -104,6 +122,20 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
         Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).widthIn(max = 720.dp)) {
             GroupTitle(stringResource(R.string.settings_appearance))
             NavItem(Icons.Outlined.DarkMode, stringResource(R.string.settings_theme), themeLabel(s.themeMode)) { themeDialog = true }
+            val dynamicOn = s.dynamicColor && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_palette)) },
+                supportingContent = { Text(if (dynamicOn) stringResource(R.string.palette_dynamic_note) else paletteLabel(s.themeStyle.palette)) },
+                leadingContent = { Icon(Icons.Outlined.Palette, null) },
+            )
+            PalettePicker(selected = s.themeStyle.palette, enabled = !dynamicOn) { palette ->
+                scope.launch { c.settings.setThemeStyle(s.themeStyle.copy(palette = palette)) }
+            }
+            if (s.themeMode != ThemeMode.LIGHT) {
+                SwitchItem(stringResource(R.string.settings_oled), stringResource(R.string.settings_oled_desc), s.themeStyle.oledBlack) {
+                    scope.launch { c.settings.setThemeStyle(s.themeStyle.copy(oledBlack = it)) }
+                }
+            }
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
                 SwitchItem(stringResource(R.string.settings_dynamic), stringResource(R.string.settings_dynamic_desc), s.dynamicColor) {
                     scope.launch { c.settings.setDynamicColor(it) }
@@ -213,6 +245,83 @@ fun themeLabel(mode: ThemeMode): String = stringResource(
         ThemeMode.DARK -> R.string.theme_dark
     },
 )
+
+@Composable
+fun paletteLabel(palette: ThemePalette): String = stringResource(
+    when (palette) {
+        ThemePalette.YAVORETS -> R.string.palette_yavorets
+        ThemePalette.LEVSKI -> R.string.palette_levski
+        ThemePalette.SHEVITSA -> R.string.palette_shevitsa
+    },
+)
+
+@Composable
+private fun paletteDescription(palette: ThemePalette): String = stringResource(
+    when (palette) {
+        ThemePalette.YAVORETS -> R.string.palette_yavorets_desc
+        ThemePalette.LEVSKI -> R.string.palette_levski_desc
+        ThemePalette.SHEVITSA -> R.string.palette_shevitsa_desc
+    },
+)
+
+/**
+ * Избор на палитра: по една „мостра“ за всяка — фонът, основният, вторичният и
+ * акцентният цвят на палитрата в текущия режим (светъл/тъмен). Радио група.
+ */
+@Composable
+private fun PalettePicker(selected: ThemePalette, enabled: Boolean, onSelect: (ThemePalette) -> Unit) {
+    val dark = LocalExtendedColors.current.isDark
+    val shape = MaterialTheme.shapes.medium
+    Row(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).selectableGroup(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        ThemePalette.entries.forEach { palette ->
+            val scheme = paletteScheme(palette, dark)
+            val isSelected = palette == selected
+            Surface(
+                shape = shape,
+                color = scheme.background,
+                contentColor = scheme.onBackground,
+                border = BorderStroke(
+                    if (isSelected) 2.dp else 1.dp,
+                    if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
+                ),
+                modifier = Modifier.weight(1f).clip(shape)
+                    .selectable(selected = isSelected, enabled = enabled, role = Role.RadioButton) { onSelect(palette) }
+                    .alpha(if (enabled) 1f else 0.5f),
+            ) {
+                Column(Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        listOf(scheme.primary, scheme.secondary, paletteAccent(palette, dark), scheme.primaryContainer).forEach { color ->
+                            Box(
+                                Modifier.size(18.dp).clip(CircleShape).background(color)
+                                    .border(1.dp, scheme.onBackground.copy(alpha = 0.18f), CircleShape),
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    Text(paletteLabel(palette), style = MaterialTheme.typography.labelLarge, maxLines = 1)
+                    Text(
+                        paletteDescription(palette),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = scheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Icon(
+                        Icons.Filled.CheckCircle,
+                        contentDescription = null,
+                        tint = if (isSelected) scheme.primary else Color.Transparent,
+                        modifier = Modifier.size(18.dp),
+                    )
+                }
+            }
+        }
+    }
+}
 
 @Composable
 private fun <T> ChoiceDialog(title: String, options: List<Pair<T, String>>, selected: T, onSelect: (T) -> Unit, onDismiss: () -> Unit) {

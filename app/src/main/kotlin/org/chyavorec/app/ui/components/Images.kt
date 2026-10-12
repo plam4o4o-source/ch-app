@@ -35,6 +35,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
@@ -50,13 +51,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.BitmapImage
 import coil3.compose.AsyncImage
 import coil3.network.HttpException
 import coil3.request.ImageRequest
+import coil3.request.allowHardware
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
+import org.chyavorec.app.ui.theme.GeneratedCover
+import org.chyavorec.app.ui.theme.LocalCoverColorSink
 import org.chyavorec.app.ui.theme.LocalExtendedColors
+import org.chyavorec.app.ui.theme.LocalThemeStyle
 import org.chyavorec.app.ui.theme.Raleway
 import org.chyavorec.app.ui.theme.UdcCoverColors
 import org.chyavorec.domain.model.BookStatus
@@ -153,17 +159,27 @@ private val CoverBottomShade = Brush.verticalGradient(0.55f to Color.Transparent
 fun coverColor(book: CatalogBook): Color = coverShade(UdcCoverColors[book.udcSection] ?: Color(0xFF5A4D3D), book.title)
 
 /**
- * Корица на книга. Почти няма сканирани корици в каталога, затова (както на
- * уеб страницата на каталога) се рисува „издателска“ корица с цвета на раздела
- * по УДК, заглавието и автора; сканираната корица, ако има, ляга отгоре. Ако
- * книгата има ISBN и настройката позволява, се опитва корица от Open Library
- * (кешира се от Coil на диска); при липса/грешка остава рисуваната.
+ * Корица на книга. Почти няма сканирани корици в каталога, затова се рисува
+ * генерирана „типографска“ корица: фон по автора (стабилен хеш → тон от палитрата
+ * на темата), заглавие с Cormorant Garamond, автор с Raleway, тънка лента шевица с
+ * мотив според раздела/вида документ и лека „хартиена“ текстура (само градиенти,
+ * без bitmap-и). Сканираната корица, ако има, ляга отгоре. Ако книгата има ISBN и
+ * настройката позволява, се опитва корица от Open Library (кешира се от Coil на
+ * диска); при липса/грешка остава генерираната.
+ *
+ * На екрана с детайлите ([LocalCoverColorSink]) заредената корица се подава за
+ * цветовете на екрана — само тази заявка е без хардуерен bitmap (Palette чете пикселите).
  */
 @Composable
 fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.dp, showStatusDot: Boolean = true) {
-    val base = coverColor(book)
-    val height = width * 1.42f
+    val style = LocalThemeStyle.current
     val ext = LocalExtendedColors.current
+    val coverKey = book.author.ifBlank { book.title }
+    val base = remember(coverKey, style.palette, ext.isDark) {
+        Color(GeneratedCover.backgroundArgb(coverKey, style.palette.coverAnchors, ext.isDark))
+    }
+    val motif = remember(book.udcSection, book.docType) { GeneratedCover.motifFor(book.udcSection, book.docType) }
+    val height = width * 1.42f
     // Цветната лента сама не е достъпна за екранни четци и при цветна слепота —
     // наличността се казва и с текст.
     val statusText = if (showStatusDot) {
@@ -176,11 +192,12 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
     } else null
     // Градиентът зависи само от цвета — не се създава наново при всяка рекомпозиция.
     val background = remember(base) {
-        Brush.linearGradient(listOf(base.copy(alpha = 0.85f), base, base.darken()), Offset.Zero, Offset(0f, Float.POSITIVE_INFINITY))
+        Brush.linearGradient(listOf(lerp(base, Color.White, 0.08f), base, base.darken()), Offset.Zero, Offset(0f, Float.POSITIVE_INFINITY))
     }
 
     val context = LocalContext.current
     val online = LocalOnlineCovers.current
+    val sink = LocalCoverColorSink.current?.takeIf { it.inv == book.inv }
     val large = width >= LargeCoverWidth
     val isbn = remember(book.isbn) { cleanIsbn(book.isbn) }
     val wantsOnline = online && book.coverUrl.isBlank() && isbn != null
@@ -196,20 +213,36 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
         onlineUrl != null && !onlineFailed -> onlineUrl
         else -> null
     }
-    // Истинската корица е заредена → рисуваното заглавие/автор под нея не се изчертава.
+    // Истинската корица е заредена → генерираната под нея не се изчертава.
     var imageShown by remember(url) { mutableStateOf(false) }
 
     Box(
         modifier
             .size(width, height)
-            .shadow(6.dp, RoundedCornerShape(topStart = 3.dp, bottomStart = 3.dp, topEnd = 8.dp, bottomEnd = 8.dp))
-            .clip(RoundedCornerShape(topStart = 3.dp, bottomStart = 3.dp, topEnd = 8.dp, bottomEnd = 8.dp))
+            .shadow(6.dp, CoverShape)
+            .clip(CoverShape)
             .background(background)
             .drawWithCache {
-                // гръбче
+                // „хартия“: мека светлина горе вляво + едва видими хоризонтални влакна
+                // (повтарящ се градиент — шейдър, без bitmap); гръбче отляво.
+                val glow = Brush.radialGradient(
+                    listOf(Color.White.copy(alpha = 0.10f), Color.Transparent),
+                    center = Offset(size.width * 0.3f, size.height * 0.22f),
+                    radius = size.maxDimension * 0.8f,
+                )
+                val grain = Brush.linearGradient(
+                    0f to Color.White.copy(alpha = 0.035f),
+                    0.5f to Color.Transparent,
+                    1f to Color.Black.copy(alpha = 0.035f),
+                    start = Offset.Zero,
+                    end = Offset(0f, 2.5.dp.toPx()),
+                    tileMode = TileMode.Repeated,
+                )
                 val spineWidth = 7.dp.toPx()
                 val spine = Brush.horizontalGradient(listOf(Color.Black.copy(alpha = 0.28f), Color.Transparent), 0f, spineWidth)
                 onDrawWithContent {
+                    drawRect(glow)
+                    drawRect(grain)
                     drawContent()
                     drawRect(spine, size = size.copy(width = spineWidth))
                 }
@@ -226,18 +259,18 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
                 Modifier.fillMaxSize().padding(start = (9 * scale).dp, end = (4 * scale).dp, top = (4 * scale).dp, bottom = (4 * scale).dp)
                     .border(0.75.dp, Color.White.copy(alpha = 0.22f), RoundedCornerShape(2.dp)),
             )
-            // по-тъмно дъно — авторът се чете и върху светлите раздели
+            // по-тъмно дъно — авторът се чете и върху по-светлите тонове
             Box(Modifier.fillMaxSize().background(CoverBottomShade))
             Column(Modifier.fillMaxSize().padding(start = (12 * scale).dp, end = (7 * scale).dp, top = (9 * scale).dp, bottom = (10 * scale).dp)) {
                 // Малките корици (в списъци) получават по-дребен шрифт. Сричкопренасяне — само
                 // при големите: в малките то само оскъпява подреждането на текста в списъка.
                 Text(
                     book.title,
-                    color = Color.White,
-                    fontFamily = Raleway,
+                    color = CoverInk,
+                    fontFamily = Cormorant,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = (11.5f * scale).coerceAtLeast(9f).sp,
-                    lineHeight = (13.5f * scale).coerceAtLeast(11f).sp,
+                    fontSize = (13.5f * scale).coerceAtLeast(10.5f).sp,
+                    lineHeight = (14.5f * scale).coerceAtLeast(11.5f).sp,
                     maxLines = if (width < 72.dp) 3 else 4,
                     overflow = TextOverflow.Ellipsis,
                     style = LocalTextStyle.current.copy(
@@ -246,9 +279,14 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
                     ),
                 )
                 Box(Modifier.weight(1f))
+                ShevitsaStrip(
+                    motif,
+                    CoverStrip,
+                    Modifier.padding(bottom = (5 * scale).dp).fillMaxWidth().height((6 * scale).coerceAtLeast(4f).dp),
+                )
                 Text(
                     book.author,
-                    color = Color.White.copy(alpha = 0.92f),
+                    color = CoverInk.copy(alpha = 0.92f),
                     fontFamily = Raleway,
                     fontSize = maxOf(9f, 8.5f * scale).sp,
                     lineHeight = maxOf(11f, 10f * scale).sp,
@@ -258,10 +296,13 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
             }
         }
         if (url != null) {
-            val request = remember(context, url) {
+            val wantsBitmap = sink != null
+            val request = remember(context, url, wantsBitmap) {
                 ImageRequest.Builder(context).data(url).apply {
                     // В детайлите: докато се тегли голямата корица, се показва вече заредената средна от списъка.
                     if (url == onlineUrl && large && isbn != null) placeholderMemoryCacheKey(openLibraryCoverUrl(isbn, large = false))
+                    // Само за цветовете на екрана с детайлите: софтуерен bitmap, който Palette може да чете.
+                    if (wantsBitmap) allowHardware(false)
                 }.build()
             }
             AsyncImage(
@@ -284,6 +325,7 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
                         if (isbn != null) CoverMisses.record(isbn)
                     } else {
                         imageShown = true
+                        (state.result.image as? BitmapImage)?.bitmap?.let { sink?.offer(it) }
                     }
                 },
                 modifier = Modifier.fillMaxSize(),
@@ -300,6 +342,14 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
         }
     }
 }
+
+private val CoverShape = RoundedCornerShape(topStart = 3.dp, bottomStart = 3.dp, topEnd = 8.dp, bottomEnd = 8.dp)
+
+/** Текстът на генерираната корица — слонова кост (контраст ≥ 4.5:1 върху всеки фон от [GeneratedCover]). */
+private val CoverInk = Color(GeneratedCover.INK)
+
+/** Лентата шевица — светло злато, полупрозрачно. */
+private val CoverStrip = Brand.GoldLight.copy(alpha = 0.78f)
 
 private fun Color.darken(f: Float = 0.78f) = Color(red * f, green * f, blue * f, alpha)
 

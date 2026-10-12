@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.chyavorec.app.ui.theme.ThemeMode
+import org.chyavorec.app.ui.theme.ThemeStyle
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -21,6 +22,8 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 data class AppSettings(
     val onboardingDone: Boolean = false,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    /** Палитра („Яворец“, „Левски“, „Шевица“) и „черно (OLED)“ за тъмната тема. */
+    val themeStyle: ThemeStyle = ThemeStyle(),
     val dynamicColor: Boolean = false,
     val notifyNews: Boolean = false,
     val notifyEvents: Boolean = true,
@@ -57,6 +60,7 @@ class SettingsStore(private val context: Context) {
     private object Keys {
         val onboarding = booleanPreferencesKey("onboarding_done")
         val theme = stringPreferencesKey("theme_mode")
+        val themeStyle = stringPreferencesKey("theme_style")
         val dynamic = booleanPreferencesKey("dynamic_color")
         val notifyNews = booleanPreferencesKey("notify_news")
         val notifyEvents = booleanPreferencesKey("notify_events")
@@ -89,6 +93,7 @@ class SettingsStore(private val context: Context) {
         AppSettings(
             onboardingDone = p[Keys.onboarding] ?: false,
             themeMode = p[Keys.theme]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: ThemeMode.SYSTEM,
+            themeStyle = ThemeStyle.decode(p[Keys.themeStyle]),
             dynamicColor = p[Keys.dynamic] ?: false,
             notifyNews = p[Keys.notifyNews] ?: false,
             notifyEvents = p[Keys.notifyEvents] ?: true,
@@ -110,6 +115,7 @@ class SettingsStore(private val context: Context) {
 
     suspend fun setOnboardingDone() = context.dataStore.edit { it[Keys.onboarding] = true }
     suspend fun setTheme(mode: ThemeMode) = context.dataStore.edit { it[Keys.theme] = mode.name }
+    suspend fun setThemeStyle(style: ThemeStyle) = context.dataStore.edit { it[Keys.themeStyle] = style.encode() }
     suspend fun setDynamicColor(on: Boolean) = context.dataStore.edit { it[Keys.dynamic] = on }
     suspend fun setNotifyNews(on: Boolean) = context.dataStore.edit { it[Keys.notifyNews] = on }
     suspend fun setNotifyEvents(on: Boolean) = context.dataStore.edit { it[Keys.notifyEvents] = on }
