@@ -280,7 +280,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                     val header: @Composable () -> Unit = {
                         Text(
                             pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults) + "  ·  " +
-                                stringResource(R.string.catalog_data_as_of, Formatters.shortDate(LocalContext.current, engine.snapshot.generatedOn) ?: "—"),
+                                stringResource(R.string.catalog_data_as_of, Formatters.shortDate(LocalContext.current, engine.generatedOn) ?: "—"),
                             style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                         )

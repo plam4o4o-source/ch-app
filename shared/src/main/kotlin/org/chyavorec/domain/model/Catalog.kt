@@ -124,6 +124,7 @@ data class CatalogQuery(
 }
 
 /** Възможни стойности за филтрите — изчислени от реалните данни. */
+@Serializable
 data class CatalogFacets(
     val docTypes: List<String>,
     val departments: List<String>,
