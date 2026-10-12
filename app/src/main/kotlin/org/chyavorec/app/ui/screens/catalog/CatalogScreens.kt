@@ -95,6 +95,7 @@ import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
+import org.chyavorec.app.ui.theme.CoverTintedTheme
 import org.chyavorec.app.ui.components.BookStatusPill
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ErrorView
@@ -410,8 +411,17 @@ private fun FacetGroup(title: String, values: List<String>, selected: String?, l
     }
 }
 
+/**
+ * Детайли за книга. Цветовете на екрана следват истинската корица (ако е заредена) —
+ * виж [CoverTintedTheme]; без корица остават цветовете на приложението.
+ */
 @Composable
 fun BookScreen(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit) {
+    CoverTintedTheme(inv) { BookScreenContent(inv, onBack, navigate) }
+}
+
+@Composable
+private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit) {
     val container = LocalAppContainer.current
     val vm = appViewModel(key = "book-$inv") { BookViewModel(inv, it) }
     val ui by vm.ui.collectAsStateWithLifecycle()

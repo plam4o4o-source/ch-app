@@ -242,6 +242,8 @@ dependencies {
     implementation(libs.androidx.browser)
     // Уиджет за началния екран.
     implementation(libs.androidx.glance.appwidget)
+    // Цветове от корицата на книгата (Palette) за екрана с детайлите.
+    implementation(libs.androidx.palette.ktx)
     // Инсталира src/main/baseline-prof.txt при инсталиране от извън Google Play (по-бърз старт).
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.datastore.preferences)
