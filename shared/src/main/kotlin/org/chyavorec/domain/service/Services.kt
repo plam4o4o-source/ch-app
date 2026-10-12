@@ -108,6 +108,8 @@ interface SiteContentService {
     suspend fun fetchFeast(date: String): Outcome<DailyFeast>
     /** Съобщенията до приложението (`/data/app-messages.json`); няма файл = няма съобщения. */
     suspend fun fetchMessages(): Outcome<List<org.chyavorec.domain.model.AppMessage>>
+    /** Местните празници за украсите (`/data/app-occasions.json`); няма файл = няма празници. */
+    suspend fun fetchOccasions(): Outcome<List<org.chyavorec.data.site.SiteOccasionEntry>> = Outcome.Success(emptyList())
 }
 
 /** Вход в читателския профил (InvLib — бъдещ онлайн API). */

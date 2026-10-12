@@ -47,6 +47,7 @@ import java.io.ByteArrayInputStream
  * | документи | `/data/files.json` |
  * | съдържание на страница | `/<страница>` → `#hp .hp-inner` |
  * | празник на деня | `/api/calendar?d=Г-М-Д` (Vercel функция) |
+ * | местни празници за украсите | `/data/app-occasions.json` |
  *
  * Разчитането (JSON, RSS, Jsoup) върви на [work], не на извикващата (главна) нишка.
  */
@@ -268,5 +269,12 @@ class ChyavorecSiteService(
             is Outcome.Failure -> if (r.error == org.chyavorec.core.AppError.NotFound) Outcome.Success(emptyList()) else r
             is Outcome.Success -> withContext(work) { AppMessagesParser.parse(r.value.text()) }?.let { Outcome.Success(it) }
                 ?: Outcome.Failure(org.chyavorec.core.AppError.Parse("app-messages.json"))
+        }
+
+    override suspend fun fetchOccasions(): Outcome<List<SiteOccasionEntry>> =
+        when (val r = http.get(url("/data/app-occasions.json"))) {
+            is Outcome.Failure -> if (r.error == org.chyavorec.core.AppError.NotFound) Outcome.Success(emptyList()) else r
+            is Outcome.Success -> withContext(work) { SiteOccasionsParser.parse(r.value.text()) }?.let { Outcome.Success(it) }
+                ?: Outcome.Failure(org.chyavorec.core.AppError.Parse("app-occasions.json"))
         }
 }

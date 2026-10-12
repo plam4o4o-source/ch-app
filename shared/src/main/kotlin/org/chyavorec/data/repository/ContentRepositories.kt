@@ -12,6 +12,9 @@ import org.chyavorec.core.Synced
 import org.chyavorec.domain.model.ArticleDetail
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.DailyFeast
+import org.chyavorec.data.site.SiteOccasionEntry
+import org.chyavorec.data.site.SiteOccasionsParser
+import org.chyavorec.domain.occasion.SiteOccasion
 import org.chyavorec.domain.model.SiteDocument
 import org.chyavorec.domain.model.SiteSearchDoc
 import org.chyavorec.domain.model.Event
@@ -120,6 +123,7 @@ class SiteRepository(
     private val contacts = CachedResource(cache, "site:contacts", Contacts.serializer(), clock, SIX_HOURS)
     private val documents = CachedResource(cache, "site:documents", ListSerializer(SiteDocument.serializer()), clock, SIX_HOURS)
     private val index = CachedResource(cache, "site:index", ListSerializer(SiteSearchDoc.serializer()), clock, ONE_HOUR)
+    private val occasions = CachedResource(cache, "site:occasions", ListSerializer(SiteOccasionEntry.serializer()), clock, TWELVE_HOURS)
 
     /** Последно отворените страници — за да остане стойността им в паметта (вж. [CachedResource]). */
     private val pages = object : LinkedHashMap<String, CachedResource<SitePage>>(16, 0.75f, true) {
@@ -195,6 +199,17 @@ class SiteRepository(
     }
 
     private fun feastKey(date: java.time.LocalDate) = "feast:$date"
+
+    /**
+     * Местните празници от сайта за украсите (12 ч. кеш, офлайн — от кеша). Без
+     * мрежа и кеш — няма местни празници, само общите от [HolidayCalendar].
+     */
+    suspend fun occasions(): List<SiteOccasion> {
+        val entries = (occasions.load(false) { service.fetchOccasions() } as? Outcome.Success)?.value?.data
+            ?: occasions.cached()?.data
+            ?: return emptyList()
+        return entries.mapNotNull { SiteOccasionsParser.toSiteOccasion(it) }
+    }
 
     fun albums(photos: List<GalleryPhoto>): List<GalleryAlbum> =
         photos.groupBy { it.album }.map { (name, list) -> GalleryAlbum(name, list) }
