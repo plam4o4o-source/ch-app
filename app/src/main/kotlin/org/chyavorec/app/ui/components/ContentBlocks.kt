@@ -98,8 +98,10 @@ fun ContentBlocksView(
                     )
                 }
                 is ContentBlock.Image -> if (!skipImages) Column {
-                    RemoteImage(
+                    // Ширината на колоната е най-много тази на прозореца — горна граница за размера.
+                    SiteImage(
                         url = block.url,
+                        width = windowWidth(),
                         contentDescription = block.caption ?: imageFallbackDescription,
                         modifier = Modifier.fillMaxWidth().aspectRatio(4f / 3f).clip(MaterialTheme.shapes.medium)
                             .clickable(onClickLabel = openPhotoLabel, role = Role.Image) { onImage(block.url) },

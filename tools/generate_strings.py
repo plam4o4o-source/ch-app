@@ -248,9 +248,18 @@ S = {
 "card_flip": ("Обърни картата", "Flip the card"),
 "card_flip_hint": ("Докосни картата, за да видиш номера едро", "Tap the card to see the number in large print"),
 "widget_label": ("Читалище Яворец", "Chitalishte Yavorets"),
-"widget_description": ("Следващо събитие и срок за връщане", "Next event and return due date"),
+"widget_description": ("Срокове за връщане, следващо събитие и бързо сканиране", "Due dates, the next event and a quick scan"),
 "widget_next_event": ("Следващо събитие", "Next event"),
 "widget_no_events": ("Няма предстоящи събития", "No upcoming events"),
+"widget_next_due": ("Следващ срок", "Next due"),
+"widget_due_today": ("днес", "today"),
+"widget_due_tomorrow": ("утре", "tomorrow"),
+"widget_no_due_date": ("без срок", "no due date"),
+"widget_preview_due": ("след 3 дни", "in 3 days"),
+"widget_preview_books": ("2 книги за връщане", "2 books to return"),
+"widget_preview_date": ("15.10", "Oct 15"),
+"widget_preview_event": ("Литературна вечер", "Literary evening"),
+"widget_preview_event_date": ("18 октомври, 18:00", "October 18, 18:00"),
 "shortcut_catalog": ("Каталог", "Catalogue"),
 "shortcut_card": ("Читателска карта", "Library card"),
 "shortcut_events": ("Събития", "Events"),
@@ -483,7 +492,7 @@ PRIVACY_BG = """# Кой обработва данните
 
 Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
 
-Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и най-близкия срок — без заглавия и без име.\n\nСкенер на баркодове: камерата се включва само когато отвориш скенера и разрешиш достъп; кадрите се разчитат на телефона и не се записват и не се изпращат.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
+Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: камерата се включва само когато отвориш скенера и разрешиш достъп; кадрите се разчитат на телефона и не се записват и не се изпращат.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
 # Известия
 
@@ -525,7 +534,7 @@ Sign-in (only if you have given consent at the library and have been issued a PI
 
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
 
-Home-screen widget: if you add it, it shows only the number of books due and the nearest due date — no titles and no name.\n\nBarcode scanner: the camera turns on only when you open the scanner and allow access; frames are read on the phone and are never stored or sent.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
+Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: the camera turns on only when you open the scanner and allow access; frames are read on the phone and are never stored or sent.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
 # Notifications
 
@@ -616,7 +625,10 @@ P = {
 "due_days_left": (("остава %1$d ден", "остават %1$d дни"), ("%1$d day left", "%1$d days left")),
 "due_overdue_days": (("просрочена с %1$d ден", "просрочена с %1$d дни"), ("%1$d day overdue", "%1$d days overdue")),
 "messages_unread": (("%1$d непрочетено съобщение", "%1$d непрочетени съобщения"), ("%1$d unread message", "%1$d unread messages")),
-"widget_loans_due": (("%1$d книга за връщане · най-близък срок %2$s", "%1$d книги за връщане · най-близък срок %2$s"), ("%1$d book to return · next due %2$s", "%1$d books to return · next due %2$s")),
+"widget_books_to_return": (("%1$d книга за връщане", "%1$d книги за връщане"), ("%1$d book to return", "%1$d books to return")),
+"widget_books_count": (("%1$d книга", "%1$d книги"), ("%1$d book", "%1$d books")),
+"widget_due_in_days": (("след %1$d ден", "след %1$d дни"), ("in %1$d day", "in %1$d days")),
+"widget_due_overdue": (("просрочена", "просрочени"), ("overdue", "overdue")),
 "photos_count": (("%1$d снимка", "%1$d снимки"), ("%1$d photo", "%1$d photos")),
 "error_rate_limited": (("Твърде много опити. Опитай отново след %1$d секунда.", "Твърде много опити. Опитай отново след %1$d секунди."), ("Too many attempts. Try again in %1$d second.", "Too many attempts. Try again in %1$d seconds.")),
 "home_catalog_footer": (("Каталогът съдържа %1$d документ · данни към %2$s", "Каталогът съдържа %1$d документа · данни към %2$s"), ("The catalogue lists %1$d item · data as of %2$s", "The catalogue lists %1$d items · data as of %2$s")),

@@ -24,7 +24,7 @@
 
 Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
 
-Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и най-близкия срок — без заглавия и без име.
+Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.
 
 Скенер на баркодове: камерата се включва само когато отвориш скенера и разрешиш достъп; кадрите се разчитат на телефона и не се записват и не се изпращат.
 
@@ -76,7 +76,7 @@ Sign-in (only if you have given consent at the library and have been issued a PI
 
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
 
-Home-screen widget: if you add it, it shows only the number of books due and the nearest due date — no titles and no name.
+Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.
 
 Barcode scanner: the camera turns on only when you open the scanner and allow access; frames are read on the phone and are never stored or sent.
 

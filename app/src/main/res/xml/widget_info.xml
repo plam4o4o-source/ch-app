@@ -4,14 +4,19 @@
   събуждане от системата (досега на 3 часа). Уиджетът се опреснява от общата фонова
   задача (PeriodicSyncWorker, на ~6 часа — покрива и смяната на деня), след зареждане
   на заеманията в приложението и при вход/изход от профила.
+
+  Размери: малък (2×2) — следващ срок или следващо събитие; широк (4×2, по подразбиране) —
+  срокове, събитие и бутони „Сканирай“/„Каталог“. previewLayout — прегледът в избора на
+  уиджети (Android 12+, примерни данни).
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/widget_description"
     android:initialLayout="@layout/glance_default_loading_layout"
+    android:previewLayout="@layout/widget_preview"
     android:minWidth="250dp"
     android:minHeight="110dp"
-    android:minResizeWidth="180dp"
-    android:minResizeHeight="80dp"
+    android:minResizeWidth="110dp"
+    android:minResizeHeight="100dp"
     android:targetCellWidth="4"
     android:targetCellHeight="2"
     android:resizeMode="horizontal|vertical"

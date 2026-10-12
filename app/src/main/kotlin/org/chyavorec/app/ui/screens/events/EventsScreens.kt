@@ -85,7 +85,8 @@ import org.chyavorec.app.ui.components.DancingFigures
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.PressableCard
-import org.chyavorec.app.ui.components.RemoteImage
+import org.chyavorec.app.ui.components.SiteImage
+import org.chyavorec.app.ui.components.windowWidth
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
@@ -313,7 +314,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
         }
         Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 32.dp)) {
             e.imageUrl?.let {
-                RemoteImage(it, null, Modifier.fillMaxWidth().aspectRatio(16f / 9f).padding(horizontal = 16.dp).clip(MaterialTheme.shapes.large))
+                SiteImage(it, width = windowWidth() - 32.dp, contentDescription = null, modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f).padding(horizontal = 16.dp).clip(MaterialTheme.shapes.large))
             }
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(e.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.sharedBoundsKey("event-title-${e.id}").semantics { heading() })

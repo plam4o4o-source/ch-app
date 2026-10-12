@@ -117,7 +117,7 @@ import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.Emblem
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.PressableCard
-import org.chyavorec.app.ui.components.RemoteImage
+import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.SectionHeader
 import org.chyavorec.app.ui.components.SkeletonBox
 import org.chyavorec.app.ui.components.SyncBanner
@@ -352,6 +352,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
             // вместо заглавието да се отреже.
             BoxWithConstraints {
             val minHeight = maxWidth.coerceAtMost(720.dp) / 1.6f
+            // Ширината за снимката (с мащаба 1.15 на паралакса) — maxWidth се чете тук, в обхвата на BoxWithConstraints.
+            val imageWidth = maxWidth.coerceAtMost(720.dp) * 1.15f
             Surface(
                 onClick = { onOpen(a) },
                 shape = MaterialTheme.shapes.large,
@@ -371,8 +373,9 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                     if (branded) {
                         BrandedImageFallback(Modifier.fillMaxSize())
                     } else {
-                        RemoteImage(
+                        SiteImage(
                             url = a.imageUrl,
+                            width = imageWidth,
                             contentDescription = null,
                             containerColor = Brand.InkSoft,
                             onFailure = { imageFailed = true },
