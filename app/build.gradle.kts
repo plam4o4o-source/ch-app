@@ -109,7 +109,13 @@ android {
             }
             // Само ARM (реалните телефони): без x86/x86_64 native библиотеки в APK-а.
             // Debug пази всички ABI — за емулаторите.
-            ndk { abiFilters += releaseAbis }
+            ndk {
+                abiFilters += releaseAbis
+                // Символите на native библиотеките влизат в AAB-а (BUNDLE-METADATA), ако ги има —
+                // Google Play ги взема сам за отчетите за сривове и ANR. Сегашните .so от AndroidX
+                // (graphics-path, DataStore, CameraX) идват вече без символи.
+                debugSymbolLevel = "SYMBOL_TABLE"
+            }
         }
         // Същото като release, но за Google Play: без самообновяване и без
         // разрешението REQUEST_INSTALL_PACKAGES (правилата на Play го забраняват —
@@ -118,7 +124,10 @@ android {
             initWith(getByName("release"))
             matchingFallbacks += "release"
             // initWith копира и ndk.abiFilters; повторено изрично за яснота (множество — без дубликати).
-            ndk { abiFilters += releaseAbis }
+            ndk {
+                abiFilters += releaseAbis
+                debugSymbolLevel = "SYMBOL_TABLE"
+            }
         }
     }
 
