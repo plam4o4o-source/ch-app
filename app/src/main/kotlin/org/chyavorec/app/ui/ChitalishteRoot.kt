@@ -1,6 +1,22 @@
 package org.chyavorec.app.ui
 
 import android.net.Uri
+import androidx.activity.BackEventCompat
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateDp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.navigation.NavController
+import org.chyavorec.app.ui.components.LocalSharedTransitionsEnabled
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -366,6 +382,20 @@ private fun NavHostController.navigateTab(route: String) = navigate(route) {
     restoreState = true
 }
 
+/** Индексът на раздела от долната лента (−1 — не е раздел). */
+private fun tabIndex(route: String?): Int = TopTab.entries.indexOfFirst { it.route == route }
+
+/**
+ * Посоката при смяна на раздел (+1 — към раздел вдясно, −1 — вляво), или null,
+ * ако преходът не е между два раздела (тогава важат push/pop преходите).
+ */
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.tabDirection(): Int? {
+    val from = tabIndex(initialState.destination.route)
+    val to = tabIndex(targetState.destination.route)
+    if (from < 0 || to < 0 || from == to) return null
+    return if (to > from) 1 else -1
+}
+
 @Composable
 private fun AppNavHost(
     nav: NavHostController,
@@ -381,30 +411,79 @@ private fun AppNavHost(
     // синхрон с „прелитащия“ елемент (виж Modifier.sharedElementKey).
     val detailRoutes = setOf(Routes.BOOK, Routes.ARTICLE, Routes.EVENT)
     val detailSpring = spring<Float>(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessMediumLow)
+
+    // Material „споделена ос X“ между разделите: 30 dp плъзгане по посока на индекса
+    // на раздела; излизащият изчезва бързо, влизащият се появява след него.
+    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val axisPx = with(LocalDensity.current) { 30.dp.roundToPx() } * (if (rtl) -1 else 1)
+    val axisSlide = tween<IntOffset>(300, easing = FastOutSlowInEasing)
+    fun axisEnter(dir: Int): EnterTransition =
+        slideInHorizontally(axisSlide) { dir * axisPx } + fadeIn(tween(210, delayMillis = 90, easing = LinearOutSlowInEasing))
+    fun axisExit(dir: Int): ExitTransition =
+        slideOutHorizontally(axisSlide) { -dir * axisPx } + fadeOut(tween(90, easing = FastOutLinearInEasing))
+
+    // Смяна на раздел → без shared element (виж LocalSharedTransitionsEnabled).
+    var tabSwitch by remember { mutableStateOf(false) }
+    DisposableEffect(nav) {
+        var last: String? = null
+        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            tabSwitch = last in topLevelRoutes && destination.route in topLevelRoutes
+            last = destination.route
+        }
+        nav.addOnDestinationChangedListener(listener)
+        onDispose { nav.removeOnDestinationChangedListener(listener) }
+    }
+
     SharedTransitionLayout {
-    CompositionLocalProvider(LocalSharedScope provides this) {
+    CompositionLocalProvider(LocalSharedScope provides this, LocalSharedTransitionsEnabled provides !tabSwitch) {
     NavHost(
         navController = nav,
         startDestination = Routes.HOME,
         enterTransition = {
+            val dir = tabDirection()
             if (reduced) EnterTransition.None
+            else if (dir != null) axisEnter(dir)
             else if (targetState.destination.route in topLevelRoutes) fadeIn(tween(dur)) + scaleIn(tween(dur), initialScale = 0.98f)
             else if (targetState.destination.route in detailRoutes) fadeIn(detailSpring) + scaleIn(detailSpring, initialScale = 0.96f)
             else slideInHorizontally(tween(dur)) { it / 5 } + fadeIn(tween(dur))
         },
-        exitTransition = { if (reduced) ExitTransition.None else fadeOut(tween(dur / 2)) },
-        // Връщане (вкл. предсказуемо „назад“ с жест — NavHost го следва с прогреса на
-        // жеста): предишният екран „израства“ от 0.9 с леко плъзгане, а текущият се
-        // смалява и излиза надясно. Смяната на раздели запазва досегашния кратък fade.
+        exitTransition = {
+            val dir = tabDirection()
+            if (reduced) ExitTransition.None
+            else if (dir != null) axisExit(dir)
+            else fadeOut(tween(dur / 2))
+        },
+        // Връщане с бутон (без жест): предишният екран „израства“ от 0.9 с леко
+        // плъзгане, а текущият се смалява и излиза надясно. Между раздели — оста X.
         popEnterTransition = {
+            val dir = tabDirection()
             if (reduced) EnterTransition.None
+            else if (dir != null) axisEnter(dir)
             else if (initialState.destination.route in topLevelRoutes) fadeIn(tween(dur))
             else fadeIn(tween(dur)) + scaleIn(tween(dur), initialScale = 0.9f) + slideInHorizontally(tween(dur)) { -it / 10 }
         },
         popExitTransition = {
+            val dir = tabDirection()
             if (reduced) ExitTransition.None
+            else if (dir != null) axisExit(dir)
             else if (initialState.destination.route in topLevelRoutes) fadeOut(tween(dur / 2)) + scaleOut(targetScale = 0.98f)
             else slideOutHorizontally(tween(dur)) { it / 10 } + scaleOut(tween(dur), targetScale = 0.9f) + fadeOut(tween(dur))
+        },
+        // Предсказуемо „назад“ (жест, Android 14+): NavHost следва прогреса на жеста.
+        // Както в системата (Android 15): текущият екран се смалява до 90 % със
+        // заоблени ъгли (виж screen()) и леко се измества към посоката на жеста;
+        // предишният се плъзга отдолу. Избледняването е в края — след потвърждаване.
+        predictivePopEnterTransition = { edge ->
+            val dir = if (edge == BackEventCompat.EDGE_RIGHT) -1 else 1
+            if (reduced) EnterTransition.None
+            else slideInHorizontally(tween(dur, easing = LinearEasing)) { -dir * it / 8 } + fadeIn(tween(dur / 2, easing = LinearEasing), initialAlpha = 0.6f)
+        },
+        predictivePopExitTransition = { edge ->
+            val dir = if (edge == BackEventCompat.EDGE_RIGHT) -1 else 1
+            if (reduced) ExitTransition.None
+            else scaleOut(tween(dur, easing = LinearEasing), targetScale = 0.9f) +
+                slideOutHorizontally(tween(dur, easing = LinearEasing)) { dir * it / 20 } +
+                fadeOut(tween(dur / 3, delayMillis = dur * 2 / 3, easing = LinearEasing))
         },
     ) {
         screen(Routes.HOME) { HomeScreen(navigate) }
@@ -475,11 +554,33 @@ private fun AppNavHost(
     }
 }
 
-/** Пренася AnimatedContentScope на дестинацията към shared element преходите. */
+/**
+ * Пренася AnimatedContentScope на дестинацията към shared element преходите и
+ * заобля ъглите на екрана, докато той влиза/излиза (най-видимо при предсказуемо
+ * „назад“ — смаленият екран е „карта“ като в системната анимация). Радиусът е
+ * част от прехода на дестинацията — следва жеста и се чете само в слоя.
+ */
 private fun NavGraphBuilder.screen(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
 ) = composable(route, arguments) { entry ->
-    CompositionLocalProvider(LocalNavAnimatedScope provides this) { content(entry) }
+    val reduced = rememberReducedMotion()
+    val corner = transition.animateDp(
+        transitionSpec = { if (reduced) snap() else tween(280) },
+        label = "screen-corner",
+    ) { state -> if (state == EnterExitState.Visible || reduced) 0.dp else 28.dp }
+    Box(
+        Modifier.fillMaxSize().graphicsLayer {
+            val r = corner.value.toPx()
+            if (r > 0.5f) {
+                shape = RoundedCornerShape(r)
+                clip = true
+            } else {
+                clip = false
+            }
+        },
+    ) {
+        CompositionLocalProvider(LocalNavAnimatedScope provides this@composable) { content(entry) }
+    }
 }

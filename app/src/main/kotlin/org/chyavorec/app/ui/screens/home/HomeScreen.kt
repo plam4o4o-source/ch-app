@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.home
 
+import org.chyavorec.app.ui.components.sharedElementKey
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -20,7 +21,9 @@ import org.chyavorec.app.ui.components.EasterEggs
 import org.chyavorec.app.ui.components.IconPlate
 import org.chyavorec.app.ui.components.OrnamentFrame
 import org.chyavorec.app.ui.components.Season
-import org.chyavorec.app.ui.components.Snowfall
+import org.chyavorec.app.ui.components.SeasonalSky
+import org.chyavorec.app.ui.components.SkyEffect
+import org.chyavorec.app.ui.components.rememberSkyEffect
 import org.chyavorec.app.ui.components.WheatEdge
 import org.chyavorec.app.ui.components.rememberSeason
 import org.chyavorec.app.ui.components.PagerDots
@@ -74,7 +77,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import org.chyavorec.app.ui.components.WheatRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.Badge as CountBadge
@@ -148,7 +151,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
     val appContext = LocalContext.current.applicationContext
     LaunchedEffect(Unit) { prepareCountUpToday(appContext) }
 
-    PullToRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
+    WheatRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         // На таблет/хоризонтално съдържанието е центрирано и не по-широко от 840 dp.
         LazyColumn(
             state = listState,
@@ -157,14 +160,16 @@ fun HomeScreen(navigate: (String) -> Unit) {
         ) {
             item("header") {
                 val season = rememberSeason()
+                val sky = rememberSkyEffect()
                 Box {
                     HomeHeader(onMessages = { navigate(Routes.MESSAGES) }, season = season)
-                    // Снежинки само върху заглавката (не върху целия екран).
-                    if (season == Season.CHRISTMAS) {
-                        Snowfall(
+                    // Сезонни частици (сняг/звезди, листа, цветчета) само върху заглавката.
+                    if (sky != SkyEffect.NONE) {
+                        SeasonalSky(
+                            sky,
                             Modifier.matchParentSize(),
-                            color = if (LocalExtendedColors.current.isDark) Color.White else Color(0xFF7A93AB),
-                            // Първото превъртане спира снеговалежа (чете се в анимацията, не в композицията).
+                            snowColor = if (LocalExtendedColors.current.isDark) Color.White else Color(0xFF7A93AB),
+                            // Първото превъртане спира ефекта (чете се в анимацията, не в композицията).
                             stopWhen = { listState.isScrollInProgress || listState.firstVisibleItemIndex > 0 },
                         )
                     }
@@ -480,7 +485,7 @@ fun BookRow(books: List<CatalogBook>, onClick: (CatalogBook) -> Unit) {
         items(books, key = { it.inv }) { b ->
             PressableCard(onClick = { onClick(b) }, modifier = Modifier.width(128.dp)) {
                 Column(Modifier.padding(10.dp)) {
-                    BookCover(b, width = 108.dp)
+                    BookCover(b, width = 108.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"))
                     Spacer(Modifier.height(8.dp))
                     Text(b.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     Text(b.author, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)

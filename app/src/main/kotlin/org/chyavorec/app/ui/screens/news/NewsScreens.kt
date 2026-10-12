@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.news
 
+import org.chyavorec.app.ui.components.sharedBoundsKey
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +40,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import org.chyavorec.app.ui.components.WheatRefreshBox
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -101,7 +102,7 @@ fun NewsListScreen(navigate: (String) -> Unit) {
             AppTopBar(stringResource(R.string.tab_news), onSearch = { navigate(Routes.SEARCH) }, scrollBehavior = scroll)
         },
     ) { padding ->
-        PullToRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+        WheatRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
                 OutlinedTextField(
                     value = ui.filter.query,
@@ -174,7 +175,7 @@ private fun FeaturedNews(a: NewsArticle, onClick: () -> Unit) {
             Spacer(Modifier.height(12.dp))
         }
         MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
-        Text(a.title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(top = 4.dp))
+        Text(a.title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(top = 4.dp).sharedBoundsKey("news-title-${a.id}"))
         if (a.summary.isNotBlank()) {
             Text(a.summary, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 3,
                 overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 6.dp))
@@ -206,7 +207,7 @@ fun NewsRow(
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
-            Text(a.title, style = MaterialTheme.typography.titleMedium, maxLines = 3, overflow = TextOverflow.Ellipsis)
+            Text(a.title, style = MaterialTheme.typography.titleMedium, maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.sharedBoundsKey("news-title-${a.id}"))
         }
         if (isFavorite != null && onToggleFavorite != null) {
             IconButton(onClick = onToggleFavorite) {
@@ -283,7 +284,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                     Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp).widthIn(max = 720.dp)) {
                         MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
                         Spacer(Modifier.height(6.dp))
-                        Text(a.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
+                        Text(a.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.sharedBoundsKey("news-title-${a.id}").semantics { heading() })
                         Spacer(Modifier.height(16.dp))
                         // Режим за четене: размерът на шрифта и ширината на колоната са от настройките.
                         ReaderContent {
