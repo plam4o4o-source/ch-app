@@ -25,17 +25,23 @@ for i in 1 2 3; do
 done
 sleep 8; shot 01-start
 tap text "=Skip"; sleep 5; shot 02-home
-tap text "=Catalogue" || tap content-desc "Catalogue"; sleep 8; shot 03-catalog
-# книга от списъка (shared element + цветове от корицата), после жест „назад“ от ръба
-dump && xy=$(python3 .github/perf-check/find.py $OUT/ui.xml content-desc "вятъра") && [ -n "$xy" ] && { echo ">>> open book"; timeout 10 adb shell input tap $xy; sleep 5; shot 04-book; dump; timeout 10 adb shell input swipe 2 320 220 320 350; sleep 3; }
-# дърпане за обновяване (житният индикатор)
-timeout 10 adb shell input swipe 160 220 160 560 600; sleep 5; shot 04b-refresh
-timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 1; timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 2
-tap text "=Home" ; sleep 3
-# търсене (FTS): каталог → поле → „Вазов“
-tap text "=Catalogue" || tap content-desc "Catalogue"; sleep 5
-tap text "Search" ; sleep 2; timeout 10 adb shell input text "Vazov"; sleep 4; shot 05-search; dump
-timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 1; timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 2
+waitres() {  # чака текст „results“ до $1 секунди; печата колко е чакал
+  local t0=$(date +%s)
+  for i in $(seq 1 $(( $1 / 3 ))); do dump >/dev/null 2>&1; grep -q 'results' $OUT/ui.xml && { echo "=== results after $(( $(date +%s) - t0 )) s"; dump; return 0; }; sleep 3; done
+  echo "=== NO results after $1 s"; dump; return 1
+}
+tap text "=Catalogue" || tap content-desc "Catalogue"; waitres 90; shot 03-catalog
+# книга от списъка
+dump && xy=$(python3 .github/perf-check/find.py $OUT/ui.xml content-desc "вятъра") && [ -n "$xy" ] && { echo ">>> open book"; timeout 10 adb shell input tap $xy; sleep 5; shot 04-book; dump; timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 3; dump; }
+# търсене (FTS): поле → „12“
+tap text "Search by" ; sleep 2; timeout 10 adb shell input text "12"; sleep 4; shot 05-search; dump
+xy=$(python3 .github/perf-check/find.py $OUT/ui.xml content-desc "вятъра"); [ -n "$xy" ] && { echo ">>> open book from search"; timeout 10 adb shell input tap $xy; sleep 5; dump; shot 05b-book; timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 3; }
+timeout 10 adb shell input keyevent KEYCODE_BACK; sleep 2; dump
+tap text "=Home"; sleep 3
+# студен старт с готов индекс: колко бързо идват резултатите
+timeout 10 adb shell am force-stop $PKG; sleep 2; timeout 60 adb shell am start -W -n $PKG/.MainActivity | grep -E "TotalTime"; sleep 4
+tap text "=Catalogue" || tap content-desc "Catalogue"; waitres 60
+tap text "=Home"; sleep 3
 tap text "=My"; sleep 4; shot 06-my
 tap text "=More"; sleep 3; shot 07-more
 tap text "Settings" || tap text "Настройки"; sleep 4; dump; shot 08-settings
