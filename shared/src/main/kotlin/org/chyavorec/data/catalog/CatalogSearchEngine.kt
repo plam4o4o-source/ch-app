@@ -63,19 +63,17 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
      * Книга по ISBN: нормализира тирета/интервали и търси и двете форми
      * (ISBN-10 ↔ ISBN-13). Наличните екземпляри са с предимство.
      */
-    fun findByIsbn(raw: String?): CatalogBook? {
-        val wanted = Isbn.candidates(raw).filter { it.length >= 10 }
-        if (wanted.isEmpty()) return null
-        val hits = index.filter { it.isbnDigits.isNotEmpty() && it.isbnDigits in wanted }
-        return hits.firstOrNull { it.book.available }?.book ?: hits.firstOrNull()?.book
-    }
+    fun findByIsbn(raw: String?): CatalogBook? = preferAvailable(allByIsbn(raw))
 
     /** Всички екземпляри с този ISBN (за броя налични в резултата от сканиране). */
     fun allByIsbn(raw: String?): List<CatalogBook> {
-        val wanted = Isbn.candidates(raw).filter { it.length >= 10 }
+        val wanted = isbnKeys(raw)
         if (wanted.isEmpty()) return emptyList()
         return index.filter { it.isbnDigits.isNotEmpty() && it.isbnDigits in wanted }.map { it.book }
     }
+
+    /** Книгите с тези инвентарни номера (липсващите се пропускат). */
+    fun books(invs: Collection<Long>): Map<Long, CatalogBook> = invs.mapNotNull { inv -> byInv[inv]?.let { inv to it } }.toMap()
 
     val facets: CatalogFacets by lazy { facetsOf(snapshot) }
 
@@ -90,6 +88,9 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
             if (a.isBlank() || !seen.add(a)) null else a to item.author
         }
     }
+
+    /** Различните автори, които съдържат всички [tokens], в реда на каталога. */
+    fun authors(tokens: List<String>, limit: Int = 8): List<String> = matchingAuthors(authorIndex, tokens, limit)
 
     fun search(query: CatalogQuery): List<CatalogBook> {
         val tokens = TextNormalizer.tokens(query.text)
@@ -121,8 +122,7 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
 
     fun byAuthor(author: String, excludeInv: Long, limit: Int = 10): List<CatalogBook> {
         if (author.isBlank()) return emptyList()
-        return snapshot.books.filter { it.author == author && it.inv != excludeInv }
-            .distinctBy { it.title }.take(limit)
+        return sameAuthor(snapshot.books.filter { it.author == author }, excludeInv, limit)
     }
 
     /** Другите екземпляри от същото заглавие (еднакво заглавие + автор). */
@@ -132,6 +132,20 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
     companion object {
         /** Брой нови постъпления на началния екран. */
         const val HOME_NEWEST = 12
+
+        /** Формите на ISBN, по които се търси (само пълни — поне 10 знака). */
+        internal fun isbnKeys(raw: String?): Set<String> = Isbn.candidates(raw).filterTo(LinkedHashSet()) { it.length >= 10 }
+
+        /** Първият наличен екземпляр, иначе първият изобщо. */
+        internal fun preferAvailable(hits: List<CatalogBook>): CatalogBook? = hits.firstOrNull { it.available } ?: hits.firstOrNull()
+
+        /** От книгите на един автор (в реда на каталога): по едно заглавие, без [excludeInv]. */
+        internal fun sameAuthor(books: List<CatalogBook>, excludeInv: Long, limit: Int): List<CatalogBook> =
+            books.filter { it.inv != excludeInv }.distinctBy { it.title }.take(limit)
+
+        /** Авторите (автор → нормализиран вид), чийто нормализиран вид съдържа всички [tokens]. */
+        internal fun matchingAuthors(authors: List<Pair<String, String>>, tokens: List<String>, limit: Int): List<String> =
+            authors.asSequence().filter { (_, normalized) -> tokens.all { normalized.contains(it) } }.map { it.first }.take(limit).toList()
 
         /**
          * Добавя автора и заглавието на книгата към предложенията, ако съдържат всички думи.

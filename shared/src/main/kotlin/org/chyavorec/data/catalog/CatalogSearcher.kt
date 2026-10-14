@@ -8,15 +8,41 @@ import org.chyavorec.core.TextNormalizer
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogFacets
 import org.chyavorec.domain.model.CatalogQuery
+import org.chyavorec.domain.model.HistoryItem
 
-/** Търсенето на екрана „Каталог“ — през пълнотекстовия индекс или индекса в паметта. */
+/**
+ * Търсенето в каталога (екранът „Каталог“, глобалното търсене) и справките за отделни
+ * книги (книга, скенер, история) — през пълнотекстовия индекс или индекса в паметта.
+ */
 interface CatalogSearcher {
     /** Датата, на която InvLib е генерирал каталога (ISO). */
     val generatedOn: String
     val facets: CatalogFacets
+
+    /**
+     * Книгите по заявката. Без текст за търсене пълнотекстовият индекс не чете анотацията
+     * и ключовите думи (не се показват в списъка) — за тях се ползва [book].
+     */
     suspend fun search(query: CatalogQuery): List<CatalogBook>
     /** Предложения за автоматично допълване: автори и заглавия. */
     suspend fun suggestions(prefix: String, limit: Int = 8): List<String>
+
+    /** Книгата с инвентарния номер. */
+    suspend fun book(inv: Long): CatalogBook?
+    /** Книгите с тези инвентарни номера (липсващите се пропускат). */
+    suspend fun books(invs: Collection<Long>): Map<Long, CatalogBook>
+    /** Другите екземпляри от същото заглавие (еднакво заглавие + автор). */
+    suspend fun copiesOf(book: CatalogBook): List<CatalogBook>
+    /** Други заглавия от същия автор (по един екземпляр), без [excludeInv]. */
+    suspend fun byAuthor(author: String, excludeInv: Long, limit: Int = 10): List<CatalogBook>
+    /** Книга по ISBN (двете форми ISBN-10/13); наличните екземпляри са с предимство. */
+    suspend fun findByIsbn(raw: String?): CatalogBook?
+    /** Всички екземпляри с този ISBN. */
+    suspend fun allByIsbn(raw: String?): List<CatalogBook>
+    /** Различните автори, които съдържат всички [tokens] (нормализирани), в реда на каталога. */
+    suspend fun authors(tokens: List<String>, limit: Int = 8): List<String>
+    /** „Подобни книги“ по историята на четенето ([ReadingRecommender]). */
+    suspend fun recommend(history: List<HistoryItem>, limit: Int = 12): List<CatalogBook>
 }
 
 /** Търсене в индекса в паметта ([CatalogSearchEngine]). */
@@ -25,6 +51,15 @@ class EngineCatalogSearcher(val engine: CatalogSearchEngine) : CatalogSearcher {
     override val facets: CatalogFacets get() = engine.facets
     override suspend fun search(query: CatalogQuery): List<CatalogBook> = engine.search(query)
     override suspend fun suggestions(prefix: String, limit: Int): List<String> = engine.suggestions(prefix, limit)
+    override suspend fun book(inv: Long): CatalogBook? = engine.book(inv)
+    override suspend fun books(invs: Collection<Long>): Map<Long, CatalogBook> = engine.books(invs)
+    override suspend fun copiesOf(book: CatalogBook): List<CatalogBook> = engine.copiesOf(book)
+    override suspend fun byAuthor(author: String, excludeInv: Long, limit: Int): List<CatalogBook> = engine.byAuthor(author, excludeInv, limit)
+    override suspend fun findByIsbn(raw: String?): CatalogBook? = engine.findByIsbn(raw)
+    override suspend fun allByIsbn(raw: String?): List<CatalogBook> = engine.allByIsbn(raw)
+    override suspend fun authors(tokens: List<String>, limit: Int): List<String> = engine.authors(tokens, limit)
+    override suspend fun recommend(history: List<HistoryItem>, limit: Int): List<CatalogBook> =
+        ReadingRecommender.recommend(engine, history, limit)
 }
 
 /**
@@ -33,6 +68,9 @@ class EngineCatalogSearcher(val engine: CatalogSearchEngine) : CatalogSearcher {
  * точките и подреждането са същите като в [CatalogSearchEngine] ([CatalogMatcher]).
  * Ако FTS не намери нищо (напр. дума, търсена по средата), се търси като подниз
  * навсякъде — както в индекса в паметта.
+ *
+ * Справките за отделни книги са прости заявки по индексирани колони ([CatalogIndexStore]),
+ * със същата семантика като в [CatalogSearchEngine].
  *
  * Целият каталог не се държи в паметта. При грешка на базата се ползва [fallback]
  * (индексът в паметта).
@@ -72,6 +110,51 @@ class FtsCatalogSearcher(
                 offset += SUGGESTION_PAGE
             }
             out.toList()
+        }
+    }
+
+    override suspend fun book(inv: Long): CatalogBook? = guarded({ it.book(inv) }) { store.book(inv) }
+
+    override suspend fun books(invs: Collection<Long>): Map<Long, CatalogBook> {
+        if (invs.isEmpty()) return emptyMap()
+        return guarded({ it.books(invs) }) { store.books(invs.toSet()).associateBy { it.inv } }
+    }
+
+    override suspend fun copiesOf(book: CatalogBook): List<CatalogBook> =
+        guarded({ it.copiesOf(book) }) { store.byTitleAndAuthor(book.title, book.author).filter { it.inv != book.inv } }
+
+    override suspend fun byAuthor(author: String, excludeInv: Long, limit: Int): List<CatalogBook> {
+        if (author.isBlank()) return emptyList()
+        return guarded({ it.byAuthor(author, excludeInv, limit) }) { CatalogSearchEngine.sameAuthor(store.byAuthor(author), excludeInv, limit) }
+    }
+
+    override suspend fun findByIsbn(raw: String?): CatalogBook? = CatalogSearchEngine.preferAvailable(allByIsbn(raw))
+
+    override suspend fun allByIsbn(raw: String?): List<CatalogBook> {
+        val wanted = CatalogSearchEngine.isbnKeys(raw)
+        if (wanted.isEmpty()) return emptyList()
+        return guarded({ it.allByIsbn(raw) }) { store.byIsbn(wanted) }
+    }
+
+    /** Различните автори — четат се веднъж (малко данни), после се филтрират в паметта. */
+    @Volatile private var authorIndex: List<Pair<String, String>>? = null
+
+    override suspend fun authors(tokens: List<String>, limit: Int): List<String> {
+        if (tokens.isEmpty()) return emptyList()
+        return guarded({ it.authors(tokens, limit) }) {
+            val all = authorIndex ?: store.authors().filter { it.first.isNotBlank() }.also { authorIndex = it }
+            withContext(work) { CatalogSearchEngine.matchingAuthors(all, tokens, limit) }
+        }
+    }
+
+    override suspend fun recommend(history: List<HistoryItem>, limit: Int): List<CatalogBook> {
+        if (history.isEmpty()) return emptyList()
+        return guarded({ ReadingRecommender.recommend(it, history, limit) }) {
+            val read = books(history.mapNotNull { it.inv })
+            val pre = ReadingRecommender.prefilter(history, read::get) ?: return@guarded emptyList()
+            // Само наличните книги, които изобщо могат да получат точки — не целият каталог.
+            val candidates = store.recommendationCandidates(pre.udcSections, pre.authorWords)
+            withContext(work) { ReadingRecommender.recommend(candidates, history, read::get, limit) }
         }
     }
 

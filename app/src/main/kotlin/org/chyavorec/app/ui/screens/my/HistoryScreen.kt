@@ -68,8 +68,7 @@ import org.chyavorec.app.ui.screens.home.BookRow
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
-import org.chyavorec.data.catalog.CatalogSearchEngine
-import org.chyavorec.data.catalog.ReadingRecommender
+import org.chyavorec.data.catalog.CatalogSearcher
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.HistoryItem
@@ -89,7 +88,7 @@ class HistoryViewModel(private val c: AppContainer) : ViewModel() {
     val selectedYear = MutableStateFlow<Int?>(null)
     val isDemo = c.readerServices.isDemo
 
-    @Volatile private var engine: CatalogSearchEngine? = null
+    @Volatile private var catalog: CatalogSearcher? = null
 
     init {
         viewModelScope.launch {
@@ -127,14 +126,10 @@ class HistoryViewModel(private val c: AppContainer) : ViewModel() {
     }
 
     private suspend fun recommend(history: List<HistoryItem>) {
-        val eng = engine ?: run {
-            val synced = c.catalogRepository.inMemory() ?: c.catalogRepository.cached()
-                ?: (c.catalogRepository.catalog(false) as? Outcome.Success)?.value
-            synced?.data?.also { engine = it }
-        } ?: return
+        // През индекса в базата: само прочетените книги и кандидатите за препоръки, не целият каталог.
+        val cat = catalog ?: c.catalogRepository.lookupSearcher()?.data?.also { catalog = it } ?: return
         val (books, recs) = withContext(Dispatchers.Default) {
-            val byInv = history.mapNotNull { it.inv }.distinct().mapNotNull { inv -> eng.book(inv)?.let { inv to it } }.toMap()
-            byInv to ReadingRecommender.recommend(eng, history, limit = 12)
+            cat.books(history.mapNotNull { it.inv }.distinct()) to cat.recommend(history, limit = 12)
         }
         _catalog.value = books
         _recommendations.value = recs

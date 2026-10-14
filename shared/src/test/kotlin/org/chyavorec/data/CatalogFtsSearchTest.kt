@@ -11,10 +11,12 @@ import org.chyavorec.data.catalog.CatalogIndexState
 import org.chyavorec.data.catalog.CatalogSearchEngine
 import org.chyavorec.data.catalog.FtsCatalogSearcher
 import org.chyavorec.data.catalog.KatalogParser
+import org.chyavorec.data.catalog.ReadingRecommender
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.CatalogSnapshot
 import org.chyavorec.domain.model.CatalogSort
+import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.SearchField
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -184,6 +186,85 @@ class CatalogFtsSearchTest {
         val all = CatalogIndexQueries.scan(CatalogQuery("x"), listOf("x"))!!
         assertEquals(CatalogIndexColumns.FTS.size - 1, all.sql.split(" || ' ' || ").size - 1)
         assertEquals(1, all.args.size)
+    }
+
+    @Test fun bookLookupsMatchInMemoryEngineWithoutSearching() = runTest {
+        store.queries.clear()
+        for (b in snapshot.books) {
+            assertEquals(engine.book(b.inv), fts.book(b.inv))
+            assertEquals(engine.copiesOf(b), fts.copiesOf(b), "екземпляри на ${b.inv}")
+            for (limit in listOf(1, 10)) assertEquals(engine.byAuthor(b.author, b.inv, limit), fts.byAuthor(b.author, b.inv, limit), "автор на ${b.inv}")
+        }
+        assertEquals(listOf(11L), fts.copiesOf(extra[0]).map { it.inv }, "същото заглавие и автор")
+        assertEquals(listOf(2L, 11L), fts.byAuthor("Вазов, Иван", 1, 10).map { it.inv }, "без самата книга")
+        assertEquals(listOf(1L, 2L), fts.byAuthor("Вазов, Иван", 99, 10).map { it.inv }, "по едно заглавие")
+        assertNull(fts.book(-1))
+        val invs = listOf(1L, 11L, 5L, -1L, sample.books.first().inv)
+        assertEquals(engine.books(invs), fts.books(invs))
+        assertTrue(store.queries.isEmpty(), "справките не минават през търсенето")
+    }
+
+    @Test fun isbnLookupsMatchInMemoryEngine() = runTest {
+        for (raw in listOf("9789540901234", "978-954-09-0123-4", "9780000000002", "0000000002", "978-0-00", "", null, "x")) {
+            assertEquals(engine.findByIsbn(raw), fts.findByIsbn(raw), "ISBN $raw")
+            assertEquals(engine.allByIsbn(raw), fts.allByIsbn(raw), "ISBN $raw")
+        }
+        assertEquals(5L, fts.findByIsbn("9789540901234")?.inv)
+    }
+
+    @Test fun authorsMatchInMemoryEngine() = runTest {
+        for (text in listOf("вазов", "ва", "ив", "елин пелин", "ёлкин", "smith", "zzz", "а"))
+            for (limit in listOf(1, 8)) {
+                val tokens = org.chyavorec.core.TextNormalizer.tokens(text)
+                assertEquals(engine.authors(tokens, limit), fts.authors(tokens, limit), "автори за $text")
+            }
+    }
+
+    @Test fun globalSearchThroughTheIndexMatchesTheEngine() = runTest {
+        for (q in listOf("вазов", "под", "пелин", "ёлкин", "астир", "zzz", ""))
+            assertEquals(SearchAggregator.search(q, engine, SearchCorpus.EMPTY), SearchAggregator.search(q, fts, SearchCorpus.EMPTY), "„$q“")
+        // Както в екрана „Каталог“: книгите — думите като начало на дума (подниз по средата —
+        // само ако няма такива); авторите — като подниз, както досега.
+        val engineHits = SearchAggregator.search("ва", engine, SearchCorpus.EMPTY)
+        val ftsHits = SearchAggregator.search("ва", fts, SearchCorpus.EMPTY)
+        assertEquals(engineHits.authors, ftsHits.authors)
+        assertEquals(listOf(1L, 11L, 2L), ftsHits.books.map { it.book.inv })
+    }
+
+    @Test fun recommendationsMatchInMemoryEngineFromPrefilteredCandidates() = runTest {
+        val histories = listOf(
+            listOf(HistoryItem("h1", 1, "Под игото", "Вазов, Иван")),
+            listOf(HistoryItem("h1", 4, "Atlas of Europe", "Smith, John"), HistoryItem("h2", 9, "Ёжик в тумане", "Ёлкин, Пётр")),
+            listOf(HistoryItem("h1", null, "Нещо", "Йовков, Йордан")),
+            listOf(HistoryItem("h1", sample.books.first().inv, "", ""), HistoryItem("h2", 6, "Pâté", "Café, Émile")),
+            listOf(HistoryItem("h1", 1234, "Вестник Яворец", "")),
+            emptyList(),
+        )
+        for (h in histories) for (limit in listOf(1, 12))
+            assertEquals(ReadingRecommender.recommend(engine, h, limit), fts.recommend(h, limit), "история $h")
+        store.lookups.clear()
+        fts.recommend(histories[0], 12)
+        assertEquals(listOf("books", "recommendationCandidates"), store.lookups)
+    }
+
+    @Test fun recommendationPrefilterIsASupersetOfScoredBooks() {
+        val history = listOf(HistoryItem("h1", 1, "Под игото", "Вазов, Иван"), HistoryItem("h2", null, "", "Café, Émile"))
+        val pre = ReadingRecommender.prefilter(history, engine::book)!!
+        assertEquals(setOf(8), pre.udcSections)
+        assertEquals(setOf("вазов", "emile"), pre.authorWords)
+        assertNull(ReadingRecommender.prefilter(emptyList(), engine::book))
+    }
+
+    @Test fun listWithoutTextReadsOnlyTheListColumns() = runTest {
+        val q = CatalogIndexQueries.search(CatalogQuery(onlyAvailable = true), emptyList(), "")!!
+        assertTrue(q.textless)
+        assertTrue(q.sql.startsWith("SELECT b.ord, b.inv, b.author, b.title"), q.sql)
+        assertTrue(q.sql.contains("'' AS annotation") && q.sql.contains("'' AS n_annotation") && !q.sql.contains("b.*"), q.sql)
+        assertEquals(q.sql.count { it == '?' }, q.args.size)
+        val listed = fts.search(CatalogQuery()).first { it.inv == 3L }
+        assertEquals("", listed.annotation, "анотацията не се чете за списъка")
+        assertEquals("Разкази за живота в манастира.", fts.book(3)!!.annotation)
+        assertTrue(!CatalogIndexQueries.search(CatalogQuery("под"), listOf("под"), "")!!.textless)
     }
 
     @Test fun rowsKeepNormalisedFieldsAndRanks() {

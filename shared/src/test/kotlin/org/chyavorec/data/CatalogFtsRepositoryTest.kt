@@ -1,10 +1,22 @@
 package org.chyavorec.data
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeout
 import org.chyavorec.TestUtil
 import org.chyavorec.core.AppError
 import org.chyavorec.core.FixedClock
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.Synced
+import org.chyavorec.data.catalog.CatalogSearcher
 import org.chyavorec.data.catalog.EngineCatalogSearcher
 import org.chyavorec.data.catalog.FtsCatalogSearcher
 import org.chyavorec.data.catalog.KatalogParser
@@ -13,12 +25,15 @@ import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.CatalogSnapshot
 import org.chyavorec.domain.model.SearchField
 import org.chyavorec.domain.repository.InMemoryPayloadCache
+import org.chyavorec.domain.service.CatalogFetch
 import org.chyavorec.domain.service.CatalogService
+import org.chyavorec.domain.service.CatalogValidators
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -36,11 +51,31 @@ class CatalogFtsRepositoryTest {
             if (fail) Outcome.Failure(AppError.Network) else Outcome.Success(raw to KatalogParser.parse(raw))
     }
 
-    private fun repo(svc: CatalogService) = CatalogRepository(svc, cache, clock, index = store)
+    /** Мрежата „виси“, докато [gate] не се отвори; брои заявките. */
+    private class SlowService(raw: String) : CatalogService {
+        private val inner = Service(raw)
+        val gate = CompletableDeferred<Unit>()
+        var fetches = 0
+        override suspend fun fetchCatalog(): Outcome<Pair<String, CatalogSnapshot>> = inner.fetchCatalog()
+        override suspend fun fetchCatalogConditional(known: CatalogValidators?): Outcome<CatalogFetch> {
+            fetches++
+            gate.await()
+            return super.fetchCatalogConditional(known)
+        }
+    }
+
+    /**
+     * Всичко (и фоновата работа) върви на тестовия планировчик — детерминирано. Обхватът
+     * не е backgroundScope: advanceUntilIdle изпълнява само „предните“ задачи.
+     */
+    private fun TestScope.repo(svc: CatalogService, index: FakeFtsIndexStore? = store) = CatalogRepository(
+        svc, cache, clock, work = StandardTestDispatcher(testScheduler), index = index,
+        scope = CoroutineScope(SupervisorJob() + StandardTestDispatcher(testScheduler)),
+    )
 
     @Test fun searchGoesThroughTheIndexWithoutBuildingTheEngine() = runTest {
         val repo = repo(Service(sample))
-        val s = assertIs<Outcome.Success<*>>(repo.searcher()).value as org.chyavorec.core.Synced<*>
+        val s = assertIs<Outcome.Success<*>>(repo.searcher()).value as Synced<*>
         val searcher = assertIs<FtsCatalogSearcher>(s.data)
         assertFalse(s.fromCache)
         assertNull(repo.inMemory(), "индексът в паметта не се строи")
@@ -64,20 +99,101 @@ class CatalogFtsRepositoryTest {
         assertSame(cached.data, again.data, "същата търсачка при непроменен каталог")
         assertEquals(1, store.replaces)
         assertIs<FtsCatalogSearcher>(first)
-        // Променено съдържание → индексът се попълва отново.
+        // Променено съдържание → индексът се попълва отново (във фонов режим).
         svc.raw = sample.replace("Ох...", "Ах...")
-        val changed = (restarted.searcher(force = true) as Outcome.Success).value.data
+        restarted.searcher(force = true)
+        advanceUntilIdle()
         assertEquals(2, store.replaces)
+        val changed = restarted.cachedSearcher()!!.data
         assertEquals(listOf(399666L), changed.search(CatalogQuery("ах")).map { it.inv })
         assertTrue(changed.search(CatalogQuery("ох")).isEmpty())
     }
 
-    @Test fun homeRefreshDoesNotIndexButTheCatalogScreenDoes() = runTest {
+    @Test fun changedCatalogIsIndexedInTheBackgroundWhileTheOldIndexIsServed() = runTest {
+        val svc = Service(sample)
+        val old = (repo(svc).searcher(force = true) as Outcome.Success).value.data
+        val repo = repo(svc)
+        val updates = mutableListOf<Synced<CatalogSearcher>>()
+        backgroundScope.launch { repo.searcherUpdates.collect { updates += it } }
+        store.replaceGate = CompletableDeferred()
+        svc.raw = sample.replace("Ох...", "Ах...")
+
+        // Екранът „Каталог“ не чака попълването: старият индекс, отбелязан като кеширан.
+        val stale = withTimeout(1_000) { (repo.searcher(force = true) as Outcome.Success).value }
+        assertTrue(stale.fromCache)
+        assertIs<FtsCatalogSearcher>(stale.data)
+        assertEquals(listOf(399666L), stale.data.search(CatalogQuery("ох")).map { it.inv }, "старият индекс — цял, не празен")
+        assertEquals(old.facets, stale.data.facets)
+        assertEquals(1, store.replaces)
+        // Справката за книга изчаква новия индекс (старият може да няма книгата) — но не мрежата.
+        val lookup = async { repo.lookupSearcher()!!.data.book(399666L) }
+        runCurrent()
+        assertFalse(lookup.isCompleted)
+
+        store.replaceGate!!.complete(Unit)
+        advanceUntilIdle()
+        assertEquals(2, store.replaces)
+        assertTrue(lookup.await()!!.title.contains("Ах..."))
+        val fresh = repo.cachedSearcher()!!
+        assertFalse(fresh.fromCache)
+        assertSame(fresh.data, updates.last().data, "новата търсачка е обявена на екрана")
+        assertEquals(listOf(399666L), fresh.data.search(CatalogQuery("ах")).map { it.inv })
+        assertNull(repo.inMemory(), "индексът в паметта не се строи")
+    }
+
+    @Test fun homeRefreshIndexesInTheBackground() = runTest {
         val repo = repo(Service(sample))
         repo.refreshHomeSummary(force = true)
-        assertEquals(0, store.replaces)
+        advanceUntilIdle()
+        assertEquals(1, store.replaces, "новият каталог се индексира веднага, не при първото търсене")
         assertIs<FtsCatalogSearcher>(repo.cachedSearcher()!!.data)
         assertEquals(1, store.replaces)
+        assertNull(repo.inMemory())
+    }
+
+    @Test fun readersOfCachedDataDoNotWaitForTheNetwork() = runTest {
+        repo(Service(sample)).searcher(force = true)
+        val svc = SlowService(sample.replace("Ох...", "Ах..."))
+        val repo = repo(svc)
+        val refresh = async { repo.searcher(force = true) }
+        val engine = async { repo.catalog(force = true) }
+        runCurrent()
+        assertEquals(1, svc.fetches, "едно сваляне за двете опреснявания")
+        assertFalse(refresh.isCompleted)
+        withTimeout(1_000) {
+            assertNotNull(repo.cachedSearcher())
+            assertNotNull(repo.homeSummary())
+            assertTrue(repo.lookupSearcher()!!.data.book(399666L)!!.title.contains("Ох..."))
+            assertNotNull(repo.cached())
+        }
+        svc.gate.complete(Unit)
+        advanceUntilIdle()
+        assertEquals(1, svc.fetches)
+        assertIs<Outcome.Success<*>>(refresh.await())
+        assertIs<Outcome.Success<*>>(engine.await())
+        assertTrue(repo.lookupSearcher()!!.data.book(399666L)!!.title.contains("Ах..."))
+    }
+
+    @Test fun lookupsGoThroughTheIndexWithoutParsingTheCatalog() = runTest {
+        repo(Service(sample)).searcher(force = true)
+        val restarted = repo(Service(sample).apply { fail = true })
+        val s = restarted.lookupSearcher()!!
+        assertIs<FtsCatalogSearcher>(s.data)
+        assertTrue(s.fromCache)
+        assertNotNull(s.data.book(399666L))
+        assertNull(restarted.inMemory(), "индексът в паметта не се строи")
+        assertEquals(1, store.replaces)
+    }
+
+    @Test fun lookupsFallBackToTheEngineWithoutAnIndex() = runTest {
+        val repo = repo(Service(sample), index = null)
+        val s = repo.lookupSearcher()!!
+        assertIs<EngineCatalogSearcher>(s.data)
+        assertNotNull(s.data.book(399666L))
+        // С развалена база — пак индексът в паметта.
+        store.failing = true
+        val broken = repo(Service(sample))
+        assertIs<EngineCatalogSearcher>(broken.lookupSearcher()!!.data)
     }
 
     @Test fun diskCacheFromOlderVersionIsIndexedOnFirstSearch() = runTest {
@@ -115,5 +231,6 @@ class CatalogFtsRepositoryTest {
         val repo = repo(Service(sample).apply { fail = true })
         assertEquals(AppError.Network, (repo.searcher() as Outcome.Failure).error)
         assertNull(repo.cachedSearcher())
+        assertNull(repo.lookupSearcher())
     }
 }

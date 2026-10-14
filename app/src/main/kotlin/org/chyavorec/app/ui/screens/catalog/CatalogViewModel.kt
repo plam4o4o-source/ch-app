@@ -75,6 +75,21 @@ class CatalogViewModel(
             repo.cachedSearcher()?.let { c -> _state.update { it.copy(engine = c.toState().copy(loading = true), facets = c.data.facets) }; runSearch() }
             refresh(force = false)
         }
+        // Нова търсачка без опресняване от екрана (напр. индексът в базата е попълнен във
+        // фонов режим, докато се е търсило в стария) — поема се и търсенето се повтаря.
+        viewModelScope.launch {
+            repo.searcherUpdates.collect { s ->
+                val shown = _state.value.engine
+                if (shown.data == null || shown.data === s.data) return@collect
+                _state.update {
+                    it.copy(
+                        engine = it.engine.copy(data = s.data, syncedAt = s.syncedAt, fromCache = s.fromCache, refreshError = s.refreshError),
+                        facets = s.data.facets,
+                    )
+                }
+                runSearch()
+            }
+        }
         // Instant search: търсим 200 ms след последния натиснат клавиш. Началната заявка,
         // вече изпълнена при зареждането, не се търси повторно (вж. [lastSearch]).
         viewModelScope.launch(searchDispatcher) { queryFlow.debounce(200).collect { runSearch() } }
@@ -82,7 +97,9 @@ class CatalogViewModel(
 
     fun refresh(force: Boolean = true) = viewModelScope.launch {
         _state.update { it.copy(engine = it.engine.startRefresh()) }
-        val r = repo.searcher(force)
+        val searched = repo.searcher(force)
+        // Ако междувременно е публикувана по-нова търсачка (фоново попълване) — тя, не по-старата.
+        val r = if (searched is Outcome.Success) repo.publishedSearcher()?.let { Outcome.Success(it) } ?: searched else searched
         _state.update { s -> s.copy(engine = s.engine.with(r), facets = (r as? Outcome.Success)?.value?.data?.facets ?: s.facets) }
         runSearch()
     }
@@ -141,16 +158,16 @@ class BookViewModel(private val inv: Long, private val container: org.chyavorec.
 
     init {
         viewModelScope.launch {
-            val synced = container.catalogRepository.inMemory() ?: container.catalogRepository.cached()
-                ?: (container.catalogRepository.catalog(false) as? Outcome.Success)?.value
-            val engine = synced?.data
-            val book = engine?.book(inv)
+            // През индекса в базата (без мрежа и без да се разчита целият каталог).
+            val synced = container.catalogRepository.lookupSearcher()
+            val catalog = synced?.data
+            val book = catalog?.book(inv)
             ui.value = BookUi(
                 book = book,
                 loaded = true,
-                copies = book?.let { engine.copiesOf(it) }.orEmpty(),
-                sameAuthor = book?.let { engine.byAuthor(it.author, it.inv) }.orEmpty(),
-                generatedOn = engine?.snapshot?.generatedOn,
+                copies = book?.let { catalog.copiesOf(it) }.orEmpty(),
+                sameAuthor = book?.let { catalog.byAuthor(it.author, it.inv) }.orEmpty(),
+                generatedOn = catalog?.generatedOn,
                 syncedAt = synced?.syncedAt,
                 fromCache = synced?.fromCache ?: false,
             )
