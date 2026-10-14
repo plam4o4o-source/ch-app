@@ -6,6 +6,10 @@ import androidx.room.Room
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import coil3.SingletonImageLoader
@@ -21,6 +25,7 @@ import org.chyavorec.app.data.security.BytesCipher
 import org.chyavorec.app.data.security.KeystoreBytesCipher
 import org.chyavorec.app.network.ConnectivityObserver
 import org.chyavorec.app.network.NetworkModule
+import org.chyavorec.app.notifications.LoanReminderScheduler
 import org.chyavorec.app.notifications.ReminderScheduler
 import org.chyavorec.app.update.AppUpdater
 import org.chyavorec.app.widget.ChitalishteWidget
@@ -46,6 +51,7 @@ import org.chyavorec.data.repository.SelfCardRepository
 import org.chyavorec.data.repository.SiteRepository
 import org.chyavorec.data.site.ChyavorecSiteService
 import org.chyavorec.domain.model.Contacts
+import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.service.AuthenticationService
 import org.chyavorec.domain.service.MembershipService
 import org.chyavorec.domain.service.ReaderService
@@ -142,7 +148,9 @@ class AppContainer(
      * профилът на ниво приложение) — всички читателски репозиторита го споделят.
      */
     val readerDataRepository by lazy {
-        ReaderDataRepository(readerServices.reader, authRepository, readerCache, clock, readerServices.membership)
+        ReaderDataRepository(readerServices.reader, authRepository, readerCache, clock, readerServices.membership) { loans ->
+            storedLoans.value = loans
+        }
     }
     val profileRepository by lazy {
         ProfileRepository(readerServices.reader, authRepository, readerCache, clock, readerServices.membership, readerDataRepository)
@@ -165,13 +173,17 @@ class AppContainer(
     val updater by lazy { AppUpdater(context, okHttp, http, config, settings, clock) }
 
     val reminders by lazy { ReminderScheduler(context, database.reminders(), clock) }
+    val loanReminders by lazy { LoanReminderScheduler(context, clock) }
+
+    /** Последно записаните в кеша заемания (`null` = още няма запис в този процес). */
+    private val storedLoans = MutableStateFlow<List<Loan>?>(null)
 
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     /**
      * При ВСЕКИ преход от вход към изход — ръчен изход или принудителен (отказано
      * подновяване на сесията) — изчиства личните следи (история на търсенето,
-     * известия за заемания, следите от личните съобщения). Извиква се веднъж от Application.
+     * известия и напомняния за заемания, следите от личните съобщения). Извиква се веднъж от Application.
      */
     fun watchSignOut() {
         appScope.launch {
@@ -190,8 +202,41 @@ class AppContainer(
                     // Личните съобщения изчезват веднага и от паметта (кешът им е в readerCache).
                     runCatching { messages.clearPersonal() }
                     runCatching { settings.clearPersonal() }
+                    // Напомнянията за срок на предишния читател — отменени, списъкът му — забравен.
+                    storedLoans.value = null
+                    runCatching { loanReminders.cancelAll() }
                     // Уиджетът не бива да показва заглавия на книги след изход.
                     ChitalishteWidget.refresh(context)
+                }
+            }
+        }
+    }
+
+    /**
+     * Напомнянията за срок на заемане — едно място, едно след друго (без надпревара
+     * между стар и нов списък): при всеки запис на заеманията в кеша (екраните и фоновата
+     * задача), при старт (от кеша) и при включване на известията — пренасрочване;
+     * при изход или изключени известия за срокове — отмяна на всички.
+     * Извиква се веднъж от Application.
+     */
+    fun watchLoanReminders() {
+        appScope.launch {
+            val signedIn = authRepository.state.map {
+                when (it) {
+                    is AuthState.SignedIn -> true
+                    AuthState.SignedOut -> false
+                    AuthState.Unknown -> null
+                }
+            }.distinctUntilChanged()
+            val enabled = settings.settings.map { it.notifyLoans }.distinctUntilChanged()
+            combine(storedLoans, enabled, signedIn) { loans, on, inside -> Triple(loans, on, inside) }.collect { (loans, on, inside) ->
+                runCatching {
+                    when {
+                        // Сесията още не е проверена — нищо не се променя.
+                        inside == null -> Unit
+                        !on || !inside -> loanReminders.cancelAll()
+                        else -> (loans ?: libraryRepository.cachedLoans()?.data)?.let { loanReminders.schedule(it) }
+                    }
                 }
             }
         }

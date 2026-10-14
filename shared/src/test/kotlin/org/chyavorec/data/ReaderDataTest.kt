@@ -107,7 +107,9 @@ class ReaderDataTest {
         val c = client()
         val cache = InMemoryPayloadCache { clock.now().toEpochMilli() }
         val auth = AuthRepository(c, MemStore(if (signedIn) session else null), clock, cache)
-        val data = ReaderDataRepository(c, auth, cache, clock, c)
+        /** Всеки запис на заеманията в кеша (за напомнянията за срок). */
+        val storedLoans = CopyOnWriteArrayList<List<String>>()
+        val data = ReaderDataRepository(c, auth, cache, clock, c) { loans -> storedLoans += loans.map { it.loanId } }
         val profile = ProfileRepository(c, auth, cache, clock, c, data)
         val library = LibraryRepository(c, auth, cache, clock, data)
         val membership = MembershipRepository(c, auth, cache, clock, data)
@@ -331,6 +333,32 @@ class ReaderDataTest {
         assertTrue(r.library.cachedLoans()!!.data.single().renewPending)
         assertTrue(ok(r.library.loans(force = false)).data.single().renewPending)
         assertEquals(1, count("/v1/me/loans"))
+    }
+
+    @Test fun everyLoansWriteIsReported() = runTest {
+        routes["/v1/me/all"] = { MockResponse().setBody(meAll) }
+        val r = Repos(capsAll)
+        // Профилът пълни и заеманията (/v1/me/all) → слушателят ги вижда.
+        ok(r.profile.profile(force = false))
+        assertEquals(listOf(listOf("L1", "L2")), r.storedLoans.toList())
+        // Пресен кеш — без запис, без повторно уведомяване.
+        ok(r.library.loans(force = false))
+        assertEquals(1, r.storedLoans.size)
+        // Неуспешно опресняване (стар кеш) — също без уведомяване.
+        routes["/v1/me/all"] = { MockResponse().setResponseCode(503) }
+        ok(r.library.loans(force = true))
+        assertEquals(1, r.storedLoans.size)
+    }
+
+    @Test fun loansWriteReportedForSingleEndpointAndRenew() = runTest {
+        routes["/v1/me/loans"] = { MockResponse().setBody("""{"loans":[{"loanId":"L1","title":"Под игото","canRenew":true}]}""") }
+        routes["/v1/me/loans/L1/renew"] = {
+            MockResponse().setResponseCode(202).setBody("""{"loanId":"L1","title":"Под игото","canRenew":true,"renewPending":true}""")
+        }
+        val r = Repos(capsOld)
+        ok(r.library.loans(force = false))
+        ok(r.library.renew("L1"))
+        assertEquals(listOf(listOf("L1"), listOf("L1")), r.storedLoans.toList())
     }
 
     @Test fun sharedProfileIsClearedOnSignOut() = runTest {

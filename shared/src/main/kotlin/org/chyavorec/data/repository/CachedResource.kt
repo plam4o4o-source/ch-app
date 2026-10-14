@@ -38,6 +38,9 @@ internal val cacheJson = Json {
  * - едновременните [load] за един и същ ключ (и кеш) се изпълняват едно след друго, а
  *   чакащите получават резултата на току-що завършилото зареждане вместо втора заявка;
  * - непромененото съдържание не се презаписва — само се отбелязва новото време.
+ *
+ * [onStored] се вика след всеки успешен запис (от мрежата или промяна на място) —
+ * под заключването на ключа, затова трябва да е бърз и да не чете същия кеш.
  */
 internal class CachedResource<T>(
     private val cache: PayloadCache,
@@ -46,6 +49,7 @@ internal class CachedResource<T>(
     private val clock: AppClock,
     private val minRefreshMillis: Long,
     private val work: CoroutineDispatcher = Dispatchers.Default,
+    private val onStored: ((T) -> Unit)? = null,
 ) {
     private class Memo<T>(val value: T, val syncedAtMillis: Long, val version: Long)
 
@@ -79,7 +83,7 @@ internal class CachedResource<T>(
             runCatching {
                 cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, updated) })
                 remember(updated, current.syncedAt.toEpochMilli())
-            }.onFailure { memo = null }
+            }.onFailure { memo = null }.onSuccess { stored(updated) }
         }
     }
 
@@ -140,7 +144,12 @@ internal class CachedResource<T>(
             val touched = previous != null && previous == value && cache.touch(key)
             if (!touched) cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, value) })
             remember(value, nowMillis)
-        }.onFailure { memo = null }
+        }.onFailure { memo = null }.onSuccess { stored(value) }
+    }
+
+    /** Грешка в слушателя не проваля записа. */
+    private fun stored(value: T) {
+        onStored?.let { runCatching { it(value) } }
     }
 
     private suspend inline fun <R> withKeyLock(block: () -> R): R {

@@ -68,6 +68,7 @@ class SettingsStore(private val context: Context) {
         val notifyLibrary = booleanPreferencesKey("notify_library")
         val lastNewsId = stringPreferencesKey("last_news_id")
         val notifiedLoans = stringSetPreferencesKey("notified_loans")
+        val loanNotificationLog = stringSetPreferencesKey("loan_notification_log")
         val recentSearches = stringPreferencesKey("recent_searches")
         val lastBackgroundSync = longPreferencesKey("last_bg_sync")
         val autoUpdate = booleanPreferencesKey("auto_update")
@@ -183,6 +184,12 @@ class SettingsStore(private val context: Context) {
     suspend fun notifiedLoans(): Set<String> = context.dataStore.data.first()[Keys.notifiedLoans].orEmpty()
     suspend fun setNotifiedLoans(keys: Set<String>) = context.dataStore.edit { it[Keys.notifiedLoans] = keys }
 
+    /** Показани известия за заемания ([org.chyavorec.domain.model.LoanNotificationLog]). */
+    suspend fun loanNotificationLog(): Set<String> = context.dataStore.data.first()[Keys.loanNotificationLog].orEmpty()
+    suspend fun addLoanNotification(entry: String, today: java.time.LocalDate) = context.dataStore.edit {
+        it[Keys.loanNotificationLog] = org.chyavorec.domain.model.LoanNotificationLog.add(it[Keys.loanNotificationLog].orEmpty(), entry, today)
+    }
+
     val recentSearches: Flow<List<String>> = context.dataStore.data.map { p ->
         p[Keys.recentSearches]?.split('\u001F')?.filter { it.isNotBlank() }.orEmpty()
     }
@@ -205,6 +212,7 @@ class SettingsStore(private val context: Context) {
     suspend fun clearPersonal() = context.dataStore.edit {
         it.remove(Keys.recentSearches)
         it.remove(Keys.notifiedLoans)
+        it.remove(Keys.loanNotificationLog)
         it.remove(Keys.personalReadPending)
         it.remove(Keys.personalMessagesInitialized)
         it[Keys.readMessages] = it[Keys.readMessages].orEmpty().filterNot { id -> id.startsWith(PERSONAL_ID_PREFIX) }.toSet()
