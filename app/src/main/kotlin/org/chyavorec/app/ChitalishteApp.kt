@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import okio.Path.Companion.toOkioPath
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.notifications.Notifier
+import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.PeriodicSyncWorker
 
 class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuration.Provider {
@@ -39,6 +40,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
             runCatching { Notifier.createChannels(this@ChitalishteApp) }
             // Една обща периодична задача (съобщения, новини, заемания, уиджет, обновяване).
             runCatching { PeriodicSyncWorker.schedule(this@ChitalishteApp) }
+            // Съобщенията от читалището — по-често (~30 мин.), само статичният файл от сайта.
+            runCatching { MessagePollWorker.schedule(this@ChitalishteApp) }
         }
     }
 

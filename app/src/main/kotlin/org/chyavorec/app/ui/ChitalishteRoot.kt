@@ -181,6 +181,15 @@ private val topLevelRoutes = TopTab.entries.map { it.route }.toSet()
 
 @Composable
 private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<String?>) {
+    // Известията са включени по подразбиране, но на Android 13+ без разрешение не излизат —
+    // питаме веднъж след въведението (и веднъж при обновяване за старите инсталации).
+    val notificationPermission = org.chyavorec.app.ui.screens.settings.rememberNotificationPermission()
+    LaunchedEffect(Unit) {
+        if (container.config.environment != "test" && !container.settings.notificationPermissionAsked()) {
+            container.settings.setNotificationPermissionAsked()
+            notificationPermission.request { }
+        }
+    }
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
     val route = entry?.destination?.route

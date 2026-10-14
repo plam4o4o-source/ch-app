@@ -25,7 +25,7 @@ data class AppSettings(
     /** Палитра („Яворец“, „Левски“, „Шевица“) и „черно (OLED)“ за тъмната тема. */
     val themeStyle: ThemeStyle = ThemeStyle(),
     val dynamicColor: Boolean = false,
-    val notifyNews: Boolean = false,
+    val notifyNews: Boolean = true,
     val notifyEvents: Boolean = true,
     val notifyLoans: Boolean = true,
     val notifyLibrary: Boolean = true,
@@ -86,6 +86,7 @@ class SettingsStore(private val context: Context) {
         val coversOnline = booleanPreferencesKey("covers_online")
         val seasonal = booleanPreferencesKey("seasonal_decor")
         val dismissedOccasion = stringPreferencesKey("dismissed_occasion")
+        val notificationPermissionAsked = booleanPreferencesKey("notification_permission_asked")
         val catalogShelf = booleanPreferencesKey("catalog_shelf")
         val readerFontSize = stringPreferencesKey("reader_font_size")
         val readerNarrow = booleanPreferencesKey("reader_narrow")
@@ -97,7 +98,7 @@ class SettingsStore(private val context: Context) {
             themeMode = p[Keys.theme]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: ThemeMode.SYSTEM,
             themeStyle = ThemeStyle.decode(p[Keys.themeStyle]),
             dynamicColor = p[Keys.dynamic] ?: false,
-            notifyNews = p[Keys.notifyNews] ?: false,
+            notifyNews = p[Keys.notifyNews] ?: true,
             notifyEvents = p[Keys.notifyEvents] ?: true,
             notifyLoans = p[Keys.notifyLoans] ?: true,
             notifyLibrary = p[Keys.notifyLibrary] ?: true,
@@ -150,6 +151,9 @@ class SettingsStore(private val context: Context) {
     /** Скритият с „×“ празничен поздрав — `ГГГГ-ММ-ДД|id`; на следващия ден вече не важи. */
     val dismissedOccasion: Flow<String?> = context.dataStore.data.map { it[Keys.dismissedOccasion] }
     suspend fun setDismissedOccasion(key: String) = context.dataStore.edit { it[Keys.dismissedOccasion] = key }
+    /** Разрешението за известия (Android 13+) е поискано веднъж след въведението — не се пита отново. */
+    suspend fun notificationPermissionAsked(): Boolean = context.dataStore.data.first()[Keys.notificationPermissionAsked] ?: false
+    suspend fun setNotificationPermissionAsked() = context.dataStore.edit { it[Keys.notificationPermissionAsked] = true }
     suspend fun setCatalogShelf(on: Boolean) = context.dataStore.edit { it[Keys.catalogShelf] = on }
     suspend fun setReaderFontSize(size: ReaderFontSize) = context.dataStore.edit { it[Keys.readerFontSize] = size.name }
     suspend fun setReaderNarrow(on: Boolean) = context.dataStore.edit { it[Keys.readerNarrow] = on }

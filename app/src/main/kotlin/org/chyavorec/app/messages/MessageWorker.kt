@@ -14,9 +14,9 @@ import org.chyavorec.domain.model.MessagePriority
 
 /**
  * Известия за нови съобщения от читалището — общите от сайта и, при влязъл
- * читател, личните от библиотеката. Извиква се от общата фонова задача
- * ([PeriodicSyncWorker]; доскоро това беше отделна задача на ~3 часа) и при
- * отваряне на приложението (само личните). Push сървър няма (без
+ * читател, личните от библиотеката. Общите (важни и обикновени) се проверяват на
+ * ~30 мин. ([MessagePollWorker]); личните — от общата фонова задача
+ * ([PeriodicSyncWorker]) и при отваряне на приложението. Push сървър няма (без
  * Firebase/проследяване), затова приложението само пита сайта. Всяко съобщение
  * дава известие най-много веднъж; при първото пускане старите съобщения не се
  * показват като известия.
@@ -31,9 +31,9 @@ object MessageWorker {
      * Опреснява съобщенията (общите и, при вход, личните) и показва известия за
      * новите. Без включена настройка „Съобщения“ не прави нищо (и не пита сървъра).
      */
-    suspend fun refreshAndNotify(context: Context, c: AppContainer) {
+    suspend fun refreshAndNotify(context: Context, c: AppContainer, includePersonal: Boolean = true) {
         if (!c.settings.current().notifyMessages) return
-        val result = c.messages.refresh(force = true)
+        val result = c.messages.refresh(force = true, includePersonal = includePersonal)
         // Само съобщенията от сайта — личните имат собствено правило по-долу.
         val list = (result as? Outcome.Success)?.value?.takeIf { !it.fromCache }?.data?.filter { !it.personal }
         if (list != null) {
@@ -55,7 +55,7 @@ object MessageWorker {
             c.settings.setNotifiedMessages(list.map { it.id }.toSet())
             c.settings.setMessagesInitialized()
         }
-        notifyPersonal(context, c)
+        if (includePersonal) notifyPersonal(context, c)
     }
 
     /**

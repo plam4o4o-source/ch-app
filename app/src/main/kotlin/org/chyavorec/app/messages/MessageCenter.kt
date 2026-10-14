@@ -64,7 +64,11 @@ class MessageCenter(
         return selfCard.card.value != null
     }
 
-    suspend fun refresh(force: Boolean): Outcome<Synced<List<AppMessage>>> {
+    /**
+     * [includePersonal] = false — само съобщенията от сайта (статичен файл, евтино); личните
+     * минават през моста и се питат по-рядко (общата фонова задача и при отваряне).
+     */
+    suspend fun refresh(force: Boolean, includePersonal: Boolean = true): Outcome<Synced<List<AppMessage>>> {
         val member = isMember()
         val signedIn = auth.state.value is AuthState.SignedIn
         if (!signedIn) clearPersonal()
@@ -73,7 +77,7 @@ class MessageCenter(
         publish()
         val r = repository.messages(member, force)
         if (r is Outcome.Success) _site.value = r.value.data
-        if (signedIn) refreshPersonal(force)
+        if (signedIn && includePersonal) refreshPersonal(force)
         publish()
         val personal = _personal.value
         return when (r) {

@@ -54,7 +54,7 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         val canNotify = Notifier.canNotify(applicationContext)
         val widget = ChitalishteWidget.hasInstances(applicationContext)
 
-        // Съобщения — всеки път (общите от сайта; личните само при влязъл читател).
+        // Съобщения — всеки път (общите от сайта — и в MessagePollWorker на ~30 мин.; личните само при влязъл читател).
         if (settings.notifyMessages && canNotify) {
             step { MessageWorker.refreshAndNotify(applicationContext, c) }
         }
