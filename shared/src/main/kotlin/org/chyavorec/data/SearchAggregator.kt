@@ -2,6 +2,7 @@ package org.chyavorec.data
 
 import org.chyavorec.core.TextNormalizer
 import org.chyavorec.data.catalog.CatalogSearchEngine
+import org.chyavorec.data.catalog.CatalogSearcher
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.Event
@@ -71,10 +72,25 @@ object SearchAggregator {
     fun search(query: String, catalog: CatalogSearchEngine?, corpus: SearchCorpus, limitPerType: Int = 20): SearchResults {
         val tokens = TextNormalizer.tokens(query)
         if (tokens.isEmpty()) return SearchResults()
-        fun matches(hay: String): Boolean = tokens.all { hay.contains(it) }
         val books = catalog?.search(CatalogQuery(text = query))?.take(limitPerType).orEmpty()
-        val authors = catalog?.authorIndex?.asSequence()
-            ?.filter { (_, normalized) -> matches(normalized) }?.map { it.first }?.take(8)?.toList().orEmpty()
+        return assemble(tokens, books, catalog?.authors(tokens, AUTHORS).orEmpty(), corpus, limitPerType)
+    }
+
+    /**
+     * Като горното, но каталогът е през [CatalogSearcher] — книгите се търсят както в екрана
+     * „Каталог“ (през базата: думите като начало на дума), авторите — както досега.
+     */
+    suspend fun search(query: String, catalog: CatalogSearcher?, corpus: SearchCorpus, limitPerType: Int = 20): SearchResults {
+        val tokens = TextNormalizer.tokens(query)
+        if (tokens.isEmpty()) return SearchResults()
+        val books = catalog?.search(CatalogQuery(text = query))?.take(limitPerType).orEmpty()
+        return assemble(tokens, books, catalog?.authors(tokens, AUTHORS).orEmpty(), corpus, limitPerType)
+    }
+
+    private const val AUTHORS = 8
+
+    private fun assemble(tokens: List<String>, books: List<CatalogBook>, authors: List<String>, corpus: SearchCorpus, limitPerType: Int): SearchResults {
+        fun matches(hay: String): Boolean = tokens.all { hay.contains(it) }
         return SearchResults(
             books = books.map { SearchHit.Book(it) },
             authors = authors,

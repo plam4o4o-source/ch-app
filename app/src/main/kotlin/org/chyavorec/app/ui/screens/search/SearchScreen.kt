@@ -93,8 +93,8 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            // Зареждаме данните за търсене (от кеша, при нужда — от мрежата).
-            c.catalogRepository.cached() ?: c.catalogRepository.catalog(false)
+            // Зареждаме данните за търсене (каталогът — през индекса в базата; без него — от кеша, при нужда от мрежата).
+            c.catalogRepository.lookupSearcher()
             val news = c.newsRepository.cached()?.data
                 ?: (c.newsRepository.latest(false) as? Outcome.Success)?.value?.data.orEmpty()
             val events = c.eventsRepository.cachedRolled()?.data
@@ -117,9 +117,9 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
             ui.update { if (it.query == q) it.copy(results = SearchResults(), searching = false) else it }
             return
         }
-        // Индексът може да е освободен при недостиг на памет — тогава се зарежда пак от диска.
-        val engine = c.catalogRepository.inMemory()?.data ?: c.catalogRepository.cached()?.data
-        val r = withContext(Dispatchers.Default) { SearchAggregator.search(q, engine, corpus) }
+        // През индекса в базата; без него — индексът в паметта (освободен ли е — пак от диска), без мрежа.
+        val catalog = c.catalogRepository.lookupSearcher(network = false)?.data
+        val r = withContext(Dispatchers.Default) { SearchAggregator.search(q, catalog, corpus) }
         ui.update { if (it.query == q) it.copy(results = r, searching = false) else it }
     }
 }

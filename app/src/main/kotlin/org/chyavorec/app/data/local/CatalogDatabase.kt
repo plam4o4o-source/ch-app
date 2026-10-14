@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.Entity
 import androidx.room.Fts4
 import androidx.room.FtsOptions
+import androidx.room.Index
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
@@ -26,8 +27,12 @@ import org.chyavorec.domain.model.CatalogBook
  * Един запис от каталога: книгата, нормализираните полета за търсене (`n_*`, те са и
  * съдържанието на FTS таблицата) и българските азбучни рангове за подреждане.
  * [ord] е мястото в katalog.json и псевдоним на rowid (връзката с FTS таблицата).
+ * Индексите са за справките за отделни книги (инв. №, заглавие + автор, автор, ISBN).
  */
-@Entity(tableName = CatalogIndexColumns.TABLE)
+@Entity(
+    tableName = CatalogIndexColumns.TABLE,
+    indices = [Index("inv"), Index("title", "author"), Index("author"), Index("isbn_digits")],
+)
 data class CatalogBookEntity(
     @PrimaryKey val ord: Int,
     val inv: Long,
@@ -113,6 +118,12 @@ data class CatalogFtsEntity(
     @ColumnInfo(name = CatalogIndexColumns.ISBN) val nIsbn: String,
 )
 
+/** Един автор и нормализираният му вид (за глобалното търсене). */
+data class CatalogAuthorRow(
+    val author: String,
+    @ColumnInfo(name = CatalogIndexColumns.AUTHOR) val nAuthor: String,
+)
+
 /** Състоянието на индекса ([CatalogIndexState] като JSON) — един ред. */
 @Entity(tableName = CatalogIndexColumns.STATE_TABLE)
 data class CatalogIndexStateEntity(
@@ -128,6 +139,25 @@ abstract class CatalogIndexDao {
     @RawQuery
     abstract suspend fun rows(query: SupportSQLiteQuery): List<CatalogBookEntity>
 
+    @Query("SELECT * FROM catalog_books WHERE inv = :inv ORDER BY ord DESC LIMIT 1")
+    abstract suspend fun byInv(inv: Long): CatalogBookEntity?
+
+    @Query("SELECT * FROM catalog_books WHERE inv IN (:invs) ORDER BY ord")
+    abstract suspend fun byInvs(invs: List<Long>): List<CatalogBookEntity>
+
+    @Query("SELECT * FROM catalog_books WHERE title = :title AND author = :author ORDER BY ord")
+    abstract suspend fun byTitleAndAuthor(title: String, author: String): List<CatalogBookEntity>
+
+    @Query("SELECT * FROM catalog_books WHERE author = :author ORDER BY ord")
+    abstract suspend fun byAuthor(author: String): List<CatalogBookEntity>
+
+    @Query("SELECT * FROM catalog_books WHERE isbn_digits IN (:digits) ORDER BY ord")
+    abstract suspend fun byIsbn(digits: List<String>): List<CatalogBookEntity>
+
+    /** Различните автори по първата им поява (n_author зависи само от author). */
+    @Query("SELECT author, n_author FROM catalog_books WHERE author != '' GROUP BY author ORDER BY MIN(ord)")
+    abstract suspend fun authors(): List<CatalogAuthorRow>
+
     @Query("DELETE FROM catalog_books")
     abstract suspend fun clearBooks()
 
@@ -140,7 +170,12 @@ abstract class CatalogIndexDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun putState(state: CatalogIndexStateEntity)
 
-    /** Цялото съдържание наведнъж: прекъсване оставя стария индекс непокътнат. */
+    /**
+     * Цялото съдържание наведнъж, в една транзакция: прекъсване оставя стария индекс
+     * непокътнат. Тригерите на FTS таблицата (external content) вървят в същата
+     * транзакция, а четенето от други връзки (WAL) вижда стария индекс до края ѝ —
+     * никога празен или наполовина попълнен.
+     */
     @Transaction
     open suspend fun replaceAll(state: CatalogIndexStateEntity, rows: List<CatalogBookEntity>) {
         clearState()
@@ -153,17 +188,18 @@ abstract class CatalogIndexDao {
 /**
  * Отделна база само за каталога (кеш, който се възстановява от katalog.json) — без
  * миграции; потребителските данни в [AppDatabase] не се засягат от промени тук.
+ * Версия 2: индекси за справките (старата база се изтрива и се попълва отново).
  */
 @Database(
     entities = [CatalogBookEntity::class, CatalogFtsEntity::class, CatalogIndexStateEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class CatalogDatabase : RoomDatabase() {
     abstract fun index(): CatalogIndexDao
 }
 
-/** [CatalogIndexStore] върху Room. Заявките (SQL + аргументи) идват от shared ([CatalogIndexQuery]). */
+/** [CatalogIndexStore] върху Room. Заявките за търсене (SQL + аргументи) идват от shared ([CatalogIndexQuery]). */
 class RoomCatalogIndexStore(private val db: () -> CatalogDatabase) : CatalogIndexStore {
     private val dao by lazy { db().index() }
 
@@ -174,4 +210,39 @@ class RoomCatalogIndexStore(private val db: () -> CatalogDatabase) : CatalogInde
 
     override suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow> =
         dao.rows(SimpleSQLiteQuery(query.sql, query.args.toTypedArray())).map(CatalogBookEntity::toRow)
+
+    override suspend fun book(inv: Long): CatalogBook? = dao.byInv(inv)?.toRow()?.book
+
+    override suspend fun books(invs: Collection<Long>): List<CatalogBook> =
+        // На части — броят на параметрите в една заявка е ограничен (999 на по-старите версии).
+        invs.distinct().chunked(MAX_ARGS).flatMap { dao.byInvs(it) }.sortedBy { it.ord }.map { it.toRow().book }
+
+    override suspend fun byTitleAndAuthor(title: String, author: String): List<CatalogBook> =
+        dao.byTitleAndAuthor(title, author).map { it.toRow().book }
+
+    override suspend fun byAuthor(author: String): List<CatalogBook> = dao.byAuthor(author).map { it.toRow().book }
+
+    override suspend fun byIsbn(isbnDigits: Collection<String>): List<CatalogBook> =
+        if (isbnDigits.isEmpty()) emptyList() else dao.byIsbn(isbnDigits.toList()).map { it.toRow().book }
+
+    override suspend fun authors(): List<Pair<String, String>> = dao.authors().map { it.author to it.nAuthor }
+
+    override suspend fun recommendationCandidates(udcSections: Set<Int>, authorWords: Set<String>?): List<CatalogBook> {
+        val sql = StringBuilder("SELECT * FROM ").append(CatalogIndexColumns.TABLE).append(" WHERE available = 1")
+        val args = ArrayList<Any>()
+        if (authorWords != null) {
+            val any = buildList {
+                if (udcSections.isNotEmpty()) add("udc_section IN (" + udcSections.joinToString(",") + ")")
+                authorWords.forEach { add("instr(" + CatalogIndexColumns.AUTHOR + ", ?) > 0"); args += it }
+            }
+            if (any.isEmpty()) return emptyList()
+            sql.append(" AND (").append(any.joinToString(" OR ")).append(')')
+        }
+        sql.append(" ORDER BY ord")
+        return dao.rows(SimpleSQLiteQuery(sql.toString(), args.toTypedArray())).map { it.toRow().book }
+    }
+
+    private companion object {
+        const val MAX_ARGS = 500
+    }
 }

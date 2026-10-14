@@ -1,10 +1,12 @@
 package org.chyavorec.data
 
+import kotlinx.coroutines.CompletableDeferred
 import org.chyavorec.data.catalog.CatalogIndexColumns
 import org.chyavorec.data.catalog.CatalogIndexQuery
 import org.chyavorec.data.catalog.CatalogIndexRow
 import org.chyavorec.data.catalog.CatalogIndexState
 import org.chyavorec.data.catalog.CatalogIndexStore
+import org.chyavorec.domain.model.CatalogBook
 
 /**
  * [CatalogIndexStore] в паметта, който изпълнява [CatalogIndexQuery] със семантиката на
@@ -17,7 +19,11 @@ class FakeFtsIndexStore : CatalogIndexStore {
     var rows: List<CatalogIndexRow> = emptyList()
     var replaces = 0
     val queries = mutableListOf<CatalogIndexQuery>()
+    /** Справките за отделни книги (име на метода) — за проверка, че не минават през пълно търсене. */
+    val lookups = mutableListOf<String>()
     var failing = false
+    /** Ако е зададен — попълването чака отварянето му (новото съдържание се вижда едва след това, наведнъж). */
+    var replaceGate: CompletableDeferred<Unit>? = null
 
     override suspend fun state(): CatalogIndexState? {
         if (failing) error("db")
@@ -26,18 +32,51 @@ class FakeFtsIndexStore : CatalogIndexStore {
 
     override suspend fun replace(state: CatalogIndexState, rows: List<CatalogIndexRow>) {
         if (failing) error("db")
+        replaceGate?.await()
         replaces++
         this.state = state
         this.rows = rows
     }
 
+    private fun lookup(name: String): List<CatalogIndexRow> {
+        if (failing) error("db")
+        lookups += name
+        return rows.sortedBy { it.ord }
+    }
+
+    override suspend fun book(inv: Long): CatalogBook? = lookup("book").lastOrNull { it.book.inv == inv }?.book
+
+    override suspend fun books(invs: Collection<Long>): List<CatalogBook> = lookup("books").map { it.book }.filter { it.inv in invs }
+
+    override suspend fun byTitleAndAuthor(title: String, author: String): List<CatalogBook> =
+        lookup("byTitleAndAuthor").map { it.book }.filter { it.title == title && it.author == author }
+
+    override suspend fun byAuthor(author: String): List<CatalogBook> = lookup("byAuthor").map { it.book }.filter { it.author == author }
+
+    override suspend fun byIsbn(isbnDigits: Collection<String>): List<CatalogBook> =
+        lookup("byIsbn").filter { it.isbnDigits in isbnDigits }.map { it.book }
+
+    override suspend fun authors(): List<Pair<String, String>> =
+        lookup("authors").filter { it.book.author.isNotEmpty() }.distinctBy { it.book.author }.map { it.book.author to it.author }
+
+    override suspend fun recommendationCandidates(udcSections: Set<Int>, authorWords: Set<String>?): List<CatalogBook> =
+        lookup("recommendationCandidates").filter { r ->
+            r.book.available && (authorWords == null || r.udcSection in udcSections || authorWords.any { r.author.contains(it) })
+        }.map { it.book }
+
     override suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow> {
         if (failing) error("db")
         queries += query
-        val out = rows.sortedBy { it.ord }.filter { r -> matches(r, query) }
+        // Без текст — само колоните за списъка (останалите празни), както в SQL заявката.
+        val out = rows.sortedBy { it.ord }.filter { r -> matches(r, query) }.map { if (query.textless) listRow(it) else it }
         val from = query.offset.coerceAtMost(out.size)
         return query.limit?.let { out.subList(from, (from + it).coerceAtMost(out.size)) } ?: out.drop(from)
     }
+
+    private fun listRow(r: CatalogIndexRow) = r.copy(
+        book = r.book.copy(keywords = "", annotation = ""),
+        title = "", author = "", keywords = "", annotation = "", publisher = "", docType = "", callNumber = "", invText = "", isbn = "", isbnDigits = "",
+    )
 
     private fun matches(r: CatalogIndexRow, q: CatalogIndexQuery): Boolean {
         val b = r.book

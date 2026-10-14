@@ -64,6 +64,16 @@ object CatalogIndexColumns {
 
     /** Колоните на FTS таблицата (в този ред) — всички текстови полета, в които търси „Всички“. */
     val FTS = listOf(TITLE, AUTHOR, KEYWORDS, ANNOTATION, PUBLISHER, DOC_TYPE, CALL_NUMBER, INV, ISBN)
+
+    /** Колоните, нужни за списък без текст за търсене (показване, филтри, подреждане). */
+    val LIST = listOf(
+        "ord", "inv", "author", "title", "subtitle", "city", "publisher", "year", "doc_type", "language", "udc",
+        "call_number", "department", "cover_url", "available", "registered_on", "isbn", "year_num", "udc_section",
+        "title_rank", "author_rank",
+    )
+
+    /** Колоните, които списъкът без текст не чете — връщат се празни (анотацията и нормализираните полета са най-обемни). */
+    val LIST_BLANK = listOf("keywords", "annotation", "isbn_digits") + FTS
 }
 
 object CatalogIndexRows {
@@ -130,11 +140,41 @@ interface CatalogIndexStore {
     /** Състоянието на индекса или `null`, ако е празен. */
     suspend fun state(): CatalogIndexState?
 
-    /** Заменя цялото съдържание с [rows] — в една транзакция (или изобщо не). */
+    /**
+     * Заменя цялото съдържание с [rows] — в една транзакция (или изобщо не): през това
+     * време четящите виждат стария индекс, след нея — новия, никога празен или наполовина.
+     */
     suspend fun replace(state: CatalogIndexState, rows: List<CatalogIndexRow>)
 
     /** Записите по заявката, в реда на каталога. */
     suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow>
+
+    // Справки за отделни книги (по индексирани колони) — всички в реда на каталога.
+
+    /** Книгата с инвентарния номер (при повторение — последната, като в индекса в паметта). */
+    suspend fun book(inv: Long): CatalogBook?
+
+    /** Книгите с тези инвентарни номера. */
+    suspend fun books(invs: Collection<Long>): List<CatalogBook>
+
+    /** Книгите с точно това заглавие и автор (екземплярите на едно заглавие). */
+    suspend fun byTitleAndAuthor(title: String, author: String): List<CatalogBook>
+
+    /** Книгите с точно този автор. */
+    suspend fun byAuthor(author: String): List<CatalogBook>
+
+    /** Книгите, чийто ISBN (само цифрите) е някой от [isbnDigits]. */
+    suspend fun byIsbn(isbnDigits: Collection<String>): List<CatalogBook>
+
+    /** Различните автори (по първата им поява в каталога) с нормализирания им вид. */
+    suspend fun authors(): List<Pair<String, String>>
+
+    /**
+     * Наличните книги, които могат да получат точки при препоръките: от разделите на УДК
+     * [udcSections] или с някоя от думите [authorWords] в нормализирания автор
+     * (`null` — всички налични).
+     */
+    suspend fun recommendationCandidates(udcSections: Set<Int>, authorWords: Set<String>?): List<CatalogBook>
 }
 
 /**
@@ -162,13 +202,28 @@ data class CatalogIndexQuery(
     val limit: Int? = null,
     val offset: Int = 0,
 ) {
+    /**
+     * Без текст за търсене (само филтри): точките не се смятат, затова се четат само
+     * колоните за списъка ([CatalogIndexColumns.LIST]), а останалите идват празни.
+     * Без LIMIT/OFFSET: екранът „Каталог“ държи целия резултат и го показва на страници
+     * (`results.take(shown)`); страници от базата биха изисквали асинхронно „Още“.
+     */
+    val textless: Boolean get() = matchTokens.isEmpty() && contains.isEmpty() && isbnDigits == null && invDigits == null
+
     /** FTS4 MATCH изразът: всяка дума е фраза в кавички с `*` (префикс) — операторите са неактивни. */
     val match: String? get() = if (matchTokens.isEmpty()) null else matchTokens.joinToString(" ") { "\"$it*\"" }
 
     val sql: String
         get() = buildString {
             val c = CatalogIndexColumns
-            append("SELECT b.* FROM ").append(c.TABLE).append(" AS b")
+            append("SELECT ")
+            if (textless) {
+                c.LIST.joinTo(this) { "b.$it" }
+                c.LIST_BLANK.forEach { append(", '' AS ").append(it) }
+            } else {
+                append("b.*")
+            }
+            append(" FROM ").append(c.TABLE).append(" AS b")
             if (match != null) append(" JOIN ").append(c.FTS_TABLE).append(" ON ").append(c.FTS_TABLE).append(".rowid = b.ord")
             append(" WHERE 1")
             if (match != null) {

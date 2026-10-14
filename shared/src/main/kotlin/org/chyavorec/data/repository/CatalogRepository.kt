@@ -2,7 +2,15 @@ package org.chyavorec.data.repository
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -52,9 +60,16 @@ internal data class CatalogMeta(val hash: String, val etag: String? = null, val 
  * Разчитането и индексът се строят на [work], не на главната нишка.
  *
  * С [index] (Room FTS4 в приложението) екранът „Каталог“ търси през пълнотекстовия
- * индекс ([searcher], [cachedSearcher]) и не строи индекса в паметта. Индексът в базата
- * се попълва (в една транзакция, на [work]) само когато хешът на каталога се смени; при
- * грешка на базата търсенето минава през индекса в паметта.
+ * индекс ([searcher], [cachedSearcher]), а книгата, скенерът, глобалното търсене и
+ * историята правят справки през него ([lookupSearcher]) — без да строят индекса в
+ * паметта. Индексът в базата се попълва във фонов режим (в една транзакция) веднага
+ * щом се приеме нов каталог (и за началния екран); дотогава екранът „Каталог“ търси в
+ * стария индекс (отбелязан като кеширан), после търсачката се подменя
+ * ([searcherUpdates]). При грешка на базата търсенето минава през индекса в паметта.
+ *
+ * Свалянето от мрежата е най-много едно наведнъж (общо за всички чакащи) и е извън
+ * ключалката: четенето на кешираното никога не чака мрежата — ключалката се взима
+ * само за кратко, за да се приложи свален резултат.
  */
 class CatalogRepository(
     private val service: CatalogService,
@@ -62,15 +77,36 @@ class CatalogRepository(
     private val clock: AppClock,
     private val work: CoroutineDispatcher = Dispatchers.Default,
     private val index: CatalogIndexStore? = null,
+    /** Фоновата работа (общото сваляне, попълването на индекса); тестовете подават свой обхват. */
+    scope: CoroutineScope? = null,
 ) {
     private enum class Want { SUMMARY, ENGINE, SEARCH }
 
-    /** Търсачката за екрана на каталога и хешът на каталога, за който е. */
-    private class PublishedSearcher(val hash: String?, val synced: Synced<CatalogSearcher>)
+    /**
+     * Търсачката за екрана на каталога и хешът на каталога, за който е. [stale] — старият
+     * индекс в базата, докато новият се попълва; [synced] е свежестта на самите данни.
+     */
+    private class PublishedSearcher(val hash: String?, val synced: Synced<CatalogSearcher>, val stale: Boolean = false) {
+        /** Каквото вижда екранът: старият индекс — като кеширан. */
+        val view: Synced<CatalogSearcher> get() = if (stale) synced.copy(fromCache = true) else synced
+    }
 
+    /** Търсачката е готова или първото попълване на индекса още тече. */
+    private sealed interface Found {
+        class Ready(val synced: Synced<CatalogSearcher>) : Found
+        class Building(val job: Deferred<CatalogIndexState?>) : Found
+    }
+
+    /** Сваляне в ход (с какви условия е пуснато) — общо за всички, които го чакат. */
+    private class Fetch(val validators: CatalogValidators?, val result: Deferred<Outcome<CatalogFetch>>)
+
+    /** Попълване на индекса в ход — за каталога с хеш [hash]. */
+    private class Rebuild(val hash: String?, val job: Deferred<CatalogIndexState?>)
+
+    private val background = scope ?: CoroutineScope(SupervisorJob() + work)
     private val mutex = Mutex()
     @Volatile private var current: Synced<CatalogSearchEngine>? = null
-    @Volatile private var searcher: PublishedSearcher? = null
+    private val published = MutableStateFlow<PublishedSearcher?>(null)
     @Volatile private var summary: Synced<CatalogHomeSummary>? = null
     /** Последно разчетеният каталог (съответства на [meta]) — за да не се разчита пак скоро след това. */
     @Volatile private var lastSnapshot: SoftReference<CatalogSnapshot>? = null
@@ -81,6 +117,12 @@ class CatalogRepository(
     /** Кога каталогът е потвърден от мрежата за последно (epoch ms). */
     private var lastFetchMillis: Long? = null
     private var fetchedAtLoaded = false
+    /** Свежестта на каталога в този процес (последното опресняване) — за търсачките, публикувани след него. */
+    private var freshness: Synced<Unit>? = null
+    private var fetch: Fetch? = null
+    private var rebuild: Rebuild? = null
+    /** Хешът, за който попълването на индекса последно е пропаднало (справките не опитват пак). */
+    private var failedHash: String? = null
 
     fun inMemory(): Synced<CatalogSearchEngine>? = current
 
@@ -93,36 +135,49 @@ class CatalogRepository(
     suspend fun homeSummary(): Synced<CatalogHomeSummary>? = summary ?: mutex.withLock { summary ?: loadSummaryFromDisk() }
 
     /** Опреснява каталога (при нужда) за началния екран, без да строи индекса за търсене. */
-    suspend fun refreshHomeSummary(force: Boolean = false): Outcome<Synced<CatalogHomeSummary>> = mutex.withLock {
+    suspend fun refreshHomeSummary(force: Boolean = false): Outcome<Synced<CatalogHomeSummary>> =
         when (val r = sync(force, Want.SUMMARY)) {
             is Outcome.Failure -> r
-            is Outcome.Success -> (summary ?: loadSummaryFromDisk())?.let { Outcome.Success(it) }
+            is Outcome.Success -> (summary ?: mutex.withLock { summary ?: loadSummaryFromDisk() })?.let { Outcome.Success(it) }
                 ?: Outcome.Failure(AppError.Parse("katalog.json"))
         }
-    }
 
-    suspend fun catalog(force: Boolean = false): Outcome<Synced<CatalogSearchEngine>> = mutex.withLock {
+    suspend fun catalog(force: Boolean = false): Outcome<Synced<CatalogSearchEngine>> =
         when (val r = sync(force, Want.ENGINE)) {
             is Outcome.Failure -> r
-            is Outcome.Success -> (current ?: loadFromDisk())?.let { Outcome.Success(it) }
+            is Outcome.Success -> mutex.withLock { current ?: loadFromDisk() }?.let { Outcome.Success(it) }
                 ?: Outcome.Failure(AppError.Parse("katalog.json"))
         }
-    }
 
     /** Търсачката за екрана на каталога от паметта, базата или диска (без мрежа). */
-    suspend fun cachedSearcher(): Synced<CatalogSearcher>? = mutex.withLock { loadSearcher() }
+    suspend fun cachedSearcher(): Synced<CatalogSearcher>? = resolveSearcher()
 
     /**
      * Опреснява каталога (при нужда) и дава търсачката за екрана на каталога: през
      * пълнотекстовия индекс, ако има такъв, иначе — индекса в паметта.
      */
-    suspend fun searcher(force: Boolean = false): Outcome<Synced<CatalogSearcher>> = mutex.withLock {
+    suspend fun searcher(force: Boolean = false): Outcome<Synced<CatalogSearcher>> =
         when (val r = sync(force, Want.SEARCH)) {
             is Outcome.Failure -> r
-            is Outcome.Success -> loadSearcher()?.let { Outcome.Success(it) }
+            is Outcome.Success -> resolveSearcher()?.let { Outcome.Success(it) }
                 ?: Outcome.Failure(AppError.Parse("katalog.json"))
         }
-    }
+
+    /** Последно публикуваната търсачка (без чакане). */
+    fun publishedSearcher(): Synced<CatalogSearcher>? = published.value?.view
+
+    /** Всяка нова публикувана търсачка — напр. след фоновото попълване на индекса. */
+    val searcherUpdates: Flow<Synced<CatalogSearcher>> = published.filterNotNull().map { it.view }
+
+    /**
+     * Справки (книга, скенер, глобално търсене, история): през пълнотекстовия индекс за
+     * текущия каталог — без мрежа и без да разчита katalog.json (започнатото попълване на
+     * индекса се изчаква). Само ако индекс още няма — както досега: индексът в паметта,
+     * от диска и (без кеш, ако [network]) от мрежата.
+     */
+    suspend fun lookupSearcher(network: Boolean = true): Synced<CatalogSearcher>? =
+        indexed() ?: (inMemory() ?: cached() ?: if (network) (catalog(false) as? Outcome.Success)?.value else null)
+            ?.map { EngineCatalogSearcher(it) }
 
     /**
      * Освобождава индекса за търсене (напр. приложението е във фонов режим). При
@@ -132,43 +187,52 @@ class CatalogRepository(
         current = null
         lastSnapshot = null
         // Търсачката през базата е лека и остава; тази през индекса в паметта — не.
-        if (searcher?.synced?.data is EngineCatalogSearcher) searcher = null
+        if (published.value?.synced?.data is EngineCatalogSearcher) published.value = null
     }
 
-    /** Под [mutex]. При успех търсеното ([want]) е в паметта. */
+    /** Ключалката се взима само за проверка и за прилагане на резултата — мрежата е извън нея. */
     private suspend fun sync(force: Boolean, want: Want): Outcome<Unit> {
-        val m = loadMeta()
-        val last = loadFetchedAt()
-        val now = clock.now().toEpochMilli()
-        if (!force && m != null && last != null && now - last in 0 until CATALOG_FRESH && ensureLoaded(want)) {
-            markSynced(Instant.ofEpochMilli(last))
-            return Outcome.Success(Unit)
+        var validators: CatalogValidators? = null
+        var pending = mutex.withLock {
+            val m = loadMeta()
+            val last = loadFetchedAt()
+            val now = clock.now().toEpochMilli()
+            if (!force && m != null && last != null && now - last in 0 until CATALOG_FRESH && ensureLoaded(want)) {
+                markSynced(Instant.ofEpochMilli(last))
+                return Outcome.Success(Unit)
+            }
+            validators = m?.let { CatalogValidators(it.hash, it.etag, it.etagUrl) }
+            startFetch(validators)
         }
-        var validators = m?.let { CatalogValidators(it.hash, it.etag, it.etagUrl) }
         repeat(2) {
-            when (val r = service.fetchCatalogConditional(validators)) {
-                is Outcome.Failure -> {
-                    if (!ensureLoaded(want)) return r
-                    markStale(r.error)
-                    return Outcome.Success(Unit)
-                }
-                is Outcome.Success -> when (val f = r.value) {
-                    is CatalogFetch.Unchanged -> {
-                        if (validators != null && ensureLoaded(want)) {
-                            confirmUnchanged(f.etag, f.etagUrl)
+            val r = pending.await()
+            mutex.withLock {
+                when (r) {
+                    is Outcome.Failure -> {
+                        if (!ensureLoaded(want)) return r
+                        markStale(r.error)
+                        return Outcome.Success(Unit)
+                    }
+                    is Outcome.Success -> when (val f = r.value) {
+                        is CatalogFetch.Unchanged -> {
+                            val v = validators
+                            if (v != null && v.hash == meta?.hash && ensureLoaded(want)) {
+                                confirmUnchanged(f.etag, f.etagUrl)
+                                return Outcome.Success(Unit)
+                            }
+                            // Копието на диска липсва или е повредено — сваляме изцяло, безусловно.
+                            validators = null
+                            pending = startFetch(null)
+                        }
+                        is CatalogFetch.Changed -> {
+                            if (f.hash == meta?.hash && ensureLoaded(want)) {
+                                // Същото съдържание (напр. вече приложено за друг чакащ) — пазим готовия индекс.
+                                confirmUnchanged(f.etag, f.etagUrl)
+                            } else {
+                                applyChanged(f, want)
+                            }
                             return Outcome.Success(Unit)
                         }
-                        // Копието на диска липсва или е повредено — сваляме изцяло, безусловно.
-                        validators = null
-                    }
-                    is CatalogFetch.Changed -> {
-                        if (f.hash == meta?.hash && ensureLoaded(want)) {
-                            // Същото съдържание — пазим готовия индекс и не презаписваме файла.
-                            confirmUnchanged(f.etag, f.etagUrl)
-                        } else {
-                            applyChanged(f, want)
-                        }
-                        return Outcome.Success(Unit)
                     }
                 }
             }
@@ -176,22 +240,41 @@ class CatalogRepository(
         return Outcome.Failure(AppError.Parse("katalog.json"))
     }
 
+    /** Под [mutex]. Едно сваляне наведнъж: същата заявка, вече в ход, се споделя. */
+    private fun startFetch(validators: CatalogValidators?): Deferred<Outcome<CatalogFetch>> {
+        fetch?.let { if (it.validators == validators && it.result.isActive) return it.result }
+        val result = background.async { service.fetchCatalogConditional(validators) }
+        fetch = Fetch(validators, result)
+        return result
+    }
+
     private suspend fun ensureLoaded(want: Want): Boolean = when (want) {
         Want.ENGINE -> (current ?: loadFromDisk()) != null
         Want.SUMMARY -> (summary ?: loadSummaryFromDisk()) != null
-        Want.SEARCH -> loadSearcher() != null
+        Want.SEARCH -> searchAvailable()
+    }
+
+    /** Под [mutex]: има ли от какво да се търси — без да се попълва индексът. */
+    private suspend fun searchAvailable(): Boolean {
+        if (index == null) return (current ?: loadFromDisk()) != null
+        published.value?.let { if (!it.stale && it.hash == loadMeta()?.hash) return true }
+        if (guarded { index.state() } != null) return true
+        return (inMemorySnapshot() ?: loadSnapshotFromDisk()) != null
     }
 
     private fun markSynced(at: Instant) {
         current = current?.let { Synced(it.data, at) }
         summary = summary?.let { Synced(it.data, at) }
-        searcher = searcher?.let { PublishedSearcher(it.hash, Synced(it.synced.data, at)) }
+        freshness = Synced(Unit, at)
+        published.value = published.value?.let { PublishedSearcher(it.hash, Synced(it.synced.data, at), it.stale) }
     }
 
     private fun markStale(error: AppError) {
         current = current?.copy(fromCache = true, refreshError = error)
         summary = summary?.copy(fromCache = true, refreshError = error)
-        searcher = searcher?.let { PublishedSearcher(it.hash, it.synced.copy(fromCache = true, refreshError = error)) }
+        val at = freshness?.syncedAt ?: Instant.ofEpochMilli(lastFetchMillis ?: clock.now().toEpochMilli())
+        freshness = Synced(Unit, at, fromCache = true, refreshError = error)
+        published.value = published.value?.let { PublishedSearcher(it.hash, it.synced.copy(fromCache = true, refreshError = error), it.stale) }
     }
 
     private suspend fun confirmUnchanged(etag: String?, etagUrl: String?) {
@@ -214,46 +297,131 @@ class CatalogRepository(
         }
         val at = clock.now()
         saveFetchedAt(at.toEpochMilli())
+        freshness = Synced(Unit, at)
         lastSnapshot = SoftReference(f.snapshot)
         summary = Synced(s, at)
+        // Пълнотекстовият индекс се попълва веднага, във фонов режим — за който и екран да е свален каталогът.
+        if (index != null && rawSaved) rebuildIndex(f.snapshot, f.hash)
         // Индексът в паметта се строи само ако е поискан или вече е бил в паметта (екранът
         // на каталога без база); търсачката — ако е поискана или вече е била в ход.
-        val hadSearcher = searcher != null
-        searcher = null
+        val hadSearcher = published.value != null
+        published.value = null
         val engineNeeded = want == Want.ENGINE || current != null || (want == Want.SEARCH && index == null)
         current = if (engineNeeded) Synced(withContext(work) { CatalogSearchEngine(f.snapshot) }, at) else null
-        if (want == Want.SEARCH || hadSearcher) loadSearcher(fresh = f.snapshot, freshAt = at)
+        if (want == Want.SEARCH || hadSearcher) findSearcher(build = true)
+    }
+
+    /** Търсачката за екрана на каталога; първото попълване на индекса се чака извън ключалката. */
+    private suspend fun resolveSearcher(): Synced<CatalogSearcher>? {
+        val job = mutex.withLock {
+            when (val f = findSearcher(build = true)) {
+                is Found.Ready -> return f.synced
+                is Found.Building -> f.job
+                null -> return null
+            }
+        }
+        job.await()
+        return mutex.withLock { (findSearcher(build = false) as? Found.Ready)?.synced }
     }
 
     /**
-     * Търсачката за текущия каталог (под [mutex]): от паметта; през пълнотекстовия индекс,
-     * ако е за същия хеш; иначе индексът се (пре)попълва от разчетения каталог; ако базата
-     * не работи — през индекса в паметта. [fresh] — току-що свален каталог.
+     * Търсачката за текущия каталог (под [mutex]): публикуваната; през пълнотекстовия
+     * индекс, ако е за същия хеш; ако индексът е за стар каталог — пак той, докато новият
+     * се попълва във фонов режим (пуска се при [build]); ако индекс няма — попълването му
+     * ([Found.Building], при [build]); иначе (или ако базата не работи) — индексът в паметта.
      */
-    private suspend fun loadSearcher(fresh: CatalogSnapshot? = null, freshAt: Instant? = null): Synced<CatalogSearcher>? {
+    private suspend fun findSearcher(build: Boolean): Found? {
         val m = loadMeta()
-        searcher?.let { if (it.hash == m?.hash) return it.synced }
+        published.value?.let { if (!it.stale && it.hash == m?.hash) return Found.Ready(it.view) }
         if (index != null) {
-            val ready = m?.let { meta -> guarded { index.state() }?.takeIf { it.hash == meta.hash } }
-                ?: run {
-                    val snapshot = fresh ?: lastSnapshot?.get() ?: current?.data?.snapshot ?: loadSnapshotFromDisk() ?: return null
-                    // Хешът може да е записан едва при разчитането на диска (кеш от по-стара версия).
-                    loadMeta()?.hash?.let { hash -> populate(snapshot, hash) }
-                }
-            if (ready != null) {
-                val fts = FtsCatalogSearcher(index, ready, fallback = { mutex.withLock { (current ?: loadFromDisk())?.data } }, work = work)
-                return publish(fts, ready.hash, freshAt)
+            val st = guarded { index.state() }
+            if (st != null && m != null && st.hash == m.hash) return Found.Ready(publishIndex(st, stale = false))
+            if (st != null) {
+                if (build) rebuildIndex(inMemorySnapshot(), m?.hash)
+                // Същата търсачка за стария индекс, ако вече е публикувана (екранът не търси пак напразно).
+                val old = published.value?.takeIf { it.stale && it.hash == st.hash }
+                return Found.Ready(old?.view ?: publishIndex(st, stale = true))
+            }
+            if (build) {
+                val snapshot = inMemorySnapshot() ?: loadSnapshotFromDisk() ?: return null
+                // Хешът може да е записан едва при разчитането на диска (кеш от по-стара версия).
+                val hash = loadMeta()?.hash ?: return null
+                return Found.Building(rebuildIndex(snapshot, hash))
             }
         }
         val engine = current ?: loadFromDisk() ?: return null
-        return publish(EngineCatalogSearcher(engine.data), loadMeta()?.hash, freshAt ?: engine.syncedAt, freshAt == null && engine.fromCache)
+        return Found.Ready(publish(EngineCatalogSearcher(engine.data), loadMeta()?.hash, stale = false))
     }
 
-    private suspend fun publish(s: CatalogSearcher, hash: String?, at: Instant?, fromCache: Boolean = at == null): Synced<CatalogSearcher> {
-        val time = at ?: Instant.ofEpochMilli(loadFetchedAt() ?: clock.now().toEpochMilli())
-        val synced = Synced(s, time, fromCache = fromCache)
-        searcher = PublishedSearcher(hash, synced)
-        return synced
+    /**
+     * Справките през индекса в базата за текущия каталог; `null` — индекс няма (и не може
+     * да се попълни) или е грешка на базата. Попълването се чака извън ключалката.
+     */
+    private suspend fun indexed(): Synced<CatalogSearcher>? {
+        val store = index ?: return null
+        val job = mutex.withLock {
+            val m = loadMeta() ?: return null
+            published.value?.let { if (!it.stale && it.hash == m.hash) return it.view }
+            val st = guarded { store.state() }
+            if (st != null && st.hash == m.hash) return publishIndex(st, stale = false)
+            if (failedHash == m.hash) return null
+            // Старият индекс може да няма книгата — изчакваме новия (обикновено вече е в ход).
+            rebuildIndex(inMemorySnapshot(), m.hash)
+        }
+        job.await() ?: return null
+        return mutex.withLock {
+            published.value?.takeIf { !it.stale && it.hash == meta?.hash }?.view
+                ?: guarded { store.state() }?.takeIf { it.hash == meta?.hash }?.let { publishIndex(it, stale = false) }
+        }
+    }
+
+    /** Под [mutex]. Каталогът в паметта (ако е разчетен) — съответства на [meta]. */
+    private fun inMemorySnapshot(): CatalogSnapshot? = lastSnapshot?.get() ?: current?.data?.snapshot
+
+    /**
+     * Под [mutex]. Пуска попълването на индекса в базата във фонов режим (ако вече не тече
+     * за [hash]): от [snapshot] или — без него — от диска, извън ключалката. Попълванията
+     * вървят едно след друго (последното записано е за последния каталог); при успех
+     * търсачката се публикува, ако каталогът междувременно не е сменен.
+     */
+    private fun rebuildIndex(snapshot: CatalogSnapshot?, hash: String?): Deferred<CatalogIndexState?> {
+        rebuild?.let { if (it.hash == hash && it.job.isActive) return it.job }
+        val previous = rebuild?.job
+        val job = background.async {
+            previous?.join()
+            val source = if (snapshot != null && hash != null) snapshot to hash else readSnapshot()
+            val state = source?.let { (snap, h) -> populate(snap, h) }
+            mutex.withLock {
+                if (state == null) {
+                    failedHash = hash ?: meta?.hash
+                } else {
+                    // Кеш от по-стара версия без хеш — хешът е на прочетените байтове.
+                    if (meta == null) saveMeta(CatalogMeta(state.hash))
+                    if (meta?.hash == state.hash) {
+                        failedHash = null
+                        publishIndex(state, stale = false)
+                    }
+                }
+            }
+            state
+        }
+        rebuild = Rebuild(hash, job)
+        return job
+    }
+
+    /** Под [mutex]. Публикува търсачката през индекса в базата за [state]. */
+    private suspend fun publishIndex(state: CatalogIndexState, stale: Boolean): Synced<CatalogSearcher> {
+        val store = checkNotNull(index)
+        val fts = FtsCatalogSearcher(store, state, fallback = { mutex.withLock { (current ?: loadFromDisk())?.data } }, work = work)
+        return publish(fts, state.hash, stale)
+    }
+
+    /** Под [mutex]. Свежестта е тази на последното опресняване (без такова — кешът от диска). */
+    private suspend fun publish(s: CatalogSearcher, hash: String?, stale: Boolean): Synced<CatalogSearcher> {
+        val f = freshness ?: Synced(Unit, Instant.ofEpochMilli(loadFetchedAt() ?: clock.now().toEpochMilli()), fromCache = true)
+        val p = PublishedSearcher(hash, Synced(s, f.syncedAt, f.fromCache, f.refreshError), stale)
+        published.value = p
+        return p.view
     }
 
     /** Попълва пълнотекстовия индекс от [snapshot] (една транзакция); `null` — неуспех. */
@@ -267,6 +435,12 @@ class CatalogRepository(
             store.replace(state, rows)
             state
         }
+    }
+
+    /** Разчита каталога от диска без ключалката (за фоновото попълване) — с хеша на прочетените байтове. */
+    private suspend fun readSnapshot(): Pair<CatalogSnapshot, String>? {
+        val payload = runCatching { cache.readBytes(KEY) }.getOrNull() ?: return null
+        return withContext(work) { runCatching { KatalogParser.parse(payload.bytes) to katalogHash(payload.bytes) }.getOrNull() }
     }
 
     /** Грешка на базата не спира каталога — връща `null` (без да поглъща отмяната). */

@@ -113,10 +113,9 @@ import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequest
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
 import org.chyavorec.app.ui.theme.Brand
-import org.chyavorec.core.Outcome
 import org.chyavorec.core.ScanCodes
 import org.chyavorec.core.ScanTarget
-import org.chyavorec.data.catalog.CatalogSearchEngine
+import org.chyavorec.data.catalog.CatalogSearcher
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.SearchField
 import java.util.concurrent.Executors
@@ -130,7 +129,8 @@ sealed interface ScanResult {
 /**
  * Скенер на баркодове: разчита ISBN (EAN-13 с 978/979), инвентарен номер
  * (Code 39/128 етикет на библиотеката) или QR с адрес на каталога и търси в
- * каталога в паметта. Всичко става на устройството — кадрите не се записват.
+ * каталога (индекса в базата; без него — в паметта). Всичко става на устройството —
+ * кадрите не се записват.
  */
 class ScanViewModel(private val c: AppContainer) : ViewModel() {
     private val _result = MutableStateFlow<ScanResult?>(null)
@@ -138,17 +138,15 @@ class ScanViewModel(private val c: AppContainer) : ViewModel() {
     private val _catalogReady = MutableStateFlow(false)
     val catalogReady: StateFlow<Boolean> = _catalogReady.asStateFlow()
 
-    @Volatile private var engine: CatalogSearchEngine? = null
+    @Volatile private var catalog: CatalogSearcher? = null
     @Volatile private var lastCode: String? = null
     @Volatile private var lastAt: Long = 0L
     @Volatile private var busy = false
 
     init {
         viewModelScope.launch {
-            val synced = c.catalogRepository.inMemory() ?: c.catalogRepository.cached()
-                ?: (c.catalogRepository.catalog(false) as? Outcome.Success)?.value
-            engine = synced?.data
-            _catalogReady.value = engine != null
+            catalog = c.catalogRepository.lookupSearcher()?.data
+            _catalogReady.value = catalog != null
         }
     }
 
@@ -158,26 +156,29 @@ class ScanViewModel(private val c: AppContainer) : ViewModel() {
         val now = c.clock.now().toEpochMilli()
         if (raw == lastCode && now - lastAt < DEBOUNCE_MS) return
         lastCode = raw; lastAt = now
-        val eng = engine ?: return
+        val cat = catalog ?: return
         busy = true
-        try {
-            val target = ScanCodes.resolve(raw)
-            val book = when (target) {
-                is ScanTarget.Isbn -> eng.findByIsbn(target.isbn)
-                is ScanTarget.Inventory -> eng.findByInv(target.inv)
-                is ScanTarget.Unknown -> null
-            }
-            _result.value = if (book != null) {
-                val copies = when (target) {
-                    is ScanTarget.Isbn -> eng.allByIsbn(target.isbn).ifEmpty { listOf(book) }
-                    else -> listOf(book) + eng.copiesOf(book)
+        // Справката е заявка към базата — извън нишката на анализатора.
+        viewModelScope.launch {
+            try {
+                val target = ScanCodes.resolve(raw)
+                val book = when (target) {
+                    is ScanTarget.Isbn -> cat.findByIsbn(target.isbn)
+                    is ScanTarget.Inventory -> cat.book(target.inv)
+                    is ScanTarget.Unknown -> null
                 }
-                ScanResult.Hit(book, copies, target)
-            } else {
-                ScanResult.Miss(target)
+                _result.value = if (book != null) {
+                    val copies = when (target) {
+                        is ScanTarget.Isbn -> cat.allByIsbn(target.isbn).ifEmpty { listOf(book) }
+                        else -> listOf(book) + cat.copiesOf(book)
+                    }
+                    ScanResult.Hit(book, copies, target)
+                } else {
+                    ScanResult.Miss(target)
+                }
+            } finally {
+                busy = false
             }
-        } finally {
-            busy = false
         }
     }
 
