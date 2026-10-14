@@ -267,7 +267,9 @@
     <string name="news_no_saved">You have no saved news yet.</string>
     <string name="news_saved">Saved</string>
     <string name="news_search_hint">Search news</string>
+    <string name="notif_due_on">%1$s — due %2$s</string>
     <string name="notif_due_soon">Due date approaching</string>
+    <string name="notif_due_today">Due back today</string>
     <string name="notif_event_reminder">Event reminder</string>
     <string name="notif_new_article">New post</string>
     <string name="notif_overdue">Overdue book</string>

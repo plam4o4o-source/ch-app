@@ -267,7 +267,9 @@
     <string name="news_no_saved">Все още нямаш запазени новини.</string>
     <string name="news_saved">Запазени</string>
     <string name="news_search_hint">Търси в новините</string>
+    <string name="notif_due_on">%1$s — до %2$s</string>
     <string name="notif_due_soon">Наближава срок за връщане</string>
+    <string name="notif_due_today">Днес е срокът за връщане</string>
     <string name="notif_event_reminder">Напомняне за събитие</string>
     <string name="notif_new_article">Нова публикация</string>
     <string name="notif_overdue">Просрочена книга</string>

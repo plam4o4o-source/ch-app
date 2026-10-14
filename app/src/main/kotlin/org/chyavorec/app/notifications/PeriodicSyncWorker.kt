@@ -21,6 +21,8 @@ import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.DueStatus
 import org.chyavorec.domain.model.LoanDueCalculator
+import org.chyavorec.domain.model.LoanNotificationLog
+import org.chyavorec.domain.model.LoanReminderPlan
 import java.util.concurrent.TimeUnit
 
 /**
@@ -33,8 +35,9 @@ import java.util.concurrent.TimeUnit
  * - съобщения от сайта и лични (при вход) — при всяко пускане, ако известията
  *   за съобщения са включени и разрешени;
  * - нова новина → известие — на 12 часа, ако е включено и известията са разрешени;
- * - заемания със срок → известие — на 12 часа, ако е включено и разрешено,
- *   или ако има уиджет (той показва броя книги за връщане);
+ * - заемания → известие за просрочие — на 12 часа, ако е включено и разрешено,
+ *   или ако има уиджет (той показва броя книги за връщане); напомнянията за
+ *   наближаващ срок са локални ([LoanReminderScheduler]) и не зависят от мрежата;
  * - събития — на 12 часа, само ако има уиджет (напомнянията за събития са
  *   локални аларми и не зависят от тази задача);
  * - проверка за нова версия — веднъж на 24 часа (само APK извън Google Play).
@@ -116,9 +119,12 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
     }
 
     /**
-     * Заеманията (само при вход и наличен API). При [notify] — известие за
-     * наближаващ/изтекъл срок, веднъж на статус; иначе само за кеша на уиджета.
-     * @return true, ако няма какво да се тегли (без вход) или данните са свежи.
+     * Заеманията (само при вход и наличен API). Записът в кеша сам пренасрочва
+     * локалните напомняния за срок ([LoanReminderScheduler]). При [notify] — известие
+     * за ПРОСРОЧЕНА книга, веднъж на заемане: само от свежи данни (кешът може да не знае,
+     * че книгата е върната), само през деня и не в ден, в който за нея вече е имало известие.
+     * „Наближава срок“ вече идва от напомнянията (2 дни преди и в деня на срока).
+     * @return true, ако няма какво да се тегли (без вход) или данните са свежи и всичко е показано.
      */
     private suspend fun syncLoans(c: AppContainer, notify: Boolean): Boolean {
         c.authRepository.restore()
@@ -127,28 +133,35 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         if (synced.fromCache) return false
         if (!notify) return true
         val calc = LoanDueCalculator()
+        val now = c.clock.now()
         val today = c.clock.today()
         val already = c.settings.notifiedLoans()
         val current = mutableSetOf<String>()
+        var deferred = false
         for (loan in synced.data) {
-            // Заявено (непотвърдено) удължаване → без „наближава срок“, докато библиотеката не отговори.
-            val status = calc.reminderStatus(loan, today) ?: continue
-            if (status == DueStatus.PLENTY_OF_TIME) continue
-            val key = "${loan.loanId}:$status"
-            current += key
-            if (key in already) continue
-            val (titleRes, id) = if (status == DueStatus.OVERDUE) {
-                R.string.notif_overdue to NotificationIds.overdue(loan.loanId)
-            } else {
-                R.string.notif_due_soon to NotificationIds.dueSoon(loan.loanId)
+            if (calc.reminderStatus(loan, today) != DueStatus.OVERDUE) continue
+            val dueOn = LoanDueCalculator.parse(loan.dueOn) ?: continue
+            val key = "${loan.loanId}:${DueStatus.OVERDUE}"
+            if (key in already) {
+                current += key
+                continue
             }
+            // Нощем — не; стъпката остава дължима и се опитва при следващото пускане.
+            if (LoanReminderPlan.isQuiet(now)) {
+                deferred = true
+                continue
+            }
+            // Днес вече е имало известие за тази книга → утре.
+            if (LoanNotificationLog.sentOn(c.settings.loanNotificationLog(), loan.loanId, today)) continue
+            current += key
             Notifier.show(
-                applicationContext, Channel.LOANS, id,
-                applicationContext.getString(titleRes), loan.title, "my/loans",
+                applicationContext, Channel.LOANS, NotificationIds.overdue(loan.loanId),
+                applicationContext.getString(R.string.notif_overdue), loan.title, "my/loans",
             )
+            c.settings.addLoanNotification(LoanNotificationLog.entry(loan.loanId, dueOn, LoanNotificationLog.OVERDUE, today), today)
         }
         c.settings.setNotifiedLoans(current)
-        return true
+        return !deferred
     }
 
     /**

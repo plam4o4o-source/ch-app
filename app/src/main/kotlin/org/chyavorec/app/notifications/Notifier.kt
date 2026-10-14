@@ -16,6 +16,11 @@ import org.chyavorec.app.R
 
 /** Канали за известия — потребителят ги управлява и от системните настройки. */
 enum class Channel(val id: String, val nameRes: Int, val descRes: Int, val importance: Int) {
+    /*
+     * HIGH остава: всички известия за срокове вече са само през деня — напомнянията
+     * в 10:00 (и наваксване до 20:00), просрочието от фоновата задача не и в 21:00–08:00
+     * (LoanReminderPlan.isQuiet/deliverable), затова звукът не може да събуди нощем.
+     */
     LOANS("loans", R.string.channel_loans, R.string.channel_loans_desc, NotificationManager.IMPORTANCE_HIGH),
     EVENTS("events", R.string.channel_events, R.string.channel_events_desc, NotificationManager.IMPORTANCE_DEFAULT),
     NEWS("news", R.string.channel_news, R.string.channel_news_desc, NotificationManager.IMPORTANCE_LOW),

@@ -33,6 +33,7 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         super.onCreate()
         container = AppContainer(this)
         container.watchSignOut()
+        container.watchLoanReminders()
         // Каналите за известия и инициализацията на WorkManager (база данни) не бива да бавят първия кадър.
         appScope.launch {
             runCatching { Notifier.createChannels(this@ChitalishteApp) }

@@ -266,6 +266,11 @@ class ReaderDataRepository(
     private val clock: AppClock,
     /** Ако е зададен, членството се добавя към профила, когато `/v1/me` не го връща. */
     private val membershipService: MembershipService? = null,
+    /**
+     * Вика се след ВСЕКИ запис на заеманията в кеша — от екраните, от фоновата задача,
+     * от `/v1/me/all` и след удължаване (напр. за локалните напомняния за срок).
+     */
+    onLoansStored: ((List<Loan>) -> Unit)? = null,
 ) {
     private class Part<T>(
         val res: CachedResource<T>,
@@ -300,7 +305,7 @@ class ReaderDataRepository(
     ) { session -> membershipService?.membership(session) ?: Outcome.Failure(AppError.NotAvailable(Feature.MEMBERSHIP)) }
 
     private val loansPart = Part<List<Loan>>(
-        CachedResource(secureCache, KEY_LOANS, ListSerializer(Loan.serializer()), clock, LOANS_FRESH_MILLIS),
+        CachedResource(secureCache, KEY_LOANS, ListSerializer(Loan.serializer()), clock, LOANS_FRESH_MILLIS, onStored = onLoansStored),
         LOANS_FRESH_MILLIS, { it.loans },
     ) { session -> service.loans(session) }
 

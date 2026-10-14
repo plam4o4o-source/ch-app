@@ -500,6 +500,8 @@ S = {
 "more_messages_desc": ("Съобщения и покани от читалището", "Announcements and invitations from the centre"),
 "notif_new_article": ("Нова публикация", "New post"),
 "notif_due_soon": ("Наближава срок за връщане", "Due date approaching"),
+"notif_due_today": ("Днес е срокът за връщане", "Due back today"),
+"notif_due_on": ("%1$s — до %2$s", "%1$s — due %2$s"),
 "notif_overdue": ("Просрочена книга", "Overdue book"),
 "notif_event_reminder": ("Напомняне за събитие", "Event reminder"),
 "onb_skip": ("Пропусни", "Skip"),
