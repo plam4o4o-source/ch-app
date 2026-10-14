@@ -88,7 +88,7 @@ class HistoryViewModel(private val c: AppContainer) : ViewModel() {
     val selectedYear = MutableStateFlow<Int?>(null)
     val isDemo = c.readerServices.isDemo
 
-    @Volatile private var catalog: CatalogSearcher? = null
+    @Volatile private var searcher: CatalogSearcher? = null
 
     init {
         viewModelScope.launch {
@@ -127,7 +127,7 @@ class HistoryViewModel(private val c: AppContainer) : ViewModel() {
 
     private suspend fun recommend(history: List<HistoryItem>) {
         // През индекса в базата: само прочетените книги и кандидатите за препоръки, не целият каталог.
-        val cat = catalog ?: c.catalogRepository.lookupSearcher()?.data?.also { catalog = it } ?: return
+        val cat = searcher ?: c.catalogRepository.lookupSearcher()?.data?.also { searcher = it } ?: return
         val (books, recs) = withContext(Dispatchers.Default) {
             cat.books(history.mapNotNull { it.inv }.distinct()) to cat.recommend(history, limit = 12)
         }
