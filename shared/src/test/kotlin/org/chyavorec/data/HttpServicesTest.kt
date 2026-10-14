@@ -48,6 +48,26 @@ class HttpServicesTest {
         assertEquals("/cdn/katalog.json", server.takeRequest().path)
     }
 
+    @Test fun catalogUsesLegacyMainOnlyWhenBranchIsMissing() = runTest {
+        // Клонът `katalog` още липсва (404 и от двата адреса) → старото място в `main`.
+        server.enqueue(MockResponse().setResponseCode(404))
+        server.enqueue(MockResponse().setResponseCode(404))
+        server.enqueue(MockResponse().setBody(TestUtil.resource("katalog-sample.json")))
+        val svc = GitHubCatalogService(http, listOf(url("/k/raw"), url("/k/cdn")), legacyUrls = listOf(url("/main/raw")))
+        val (_, snap) = (svc.fetchCatalog() as Outcome.Success).value
+        assertEquals(60, snap.books.size)
+        assertEquals(listOf("/k/raw", "/k/cdn", "/main/raw"), List(3) { server.takeRequest().path })
+    }
+
+    @Test fun catalogNetworkErrorDoesNotFallBackToStaleMain() = runTest {
+        // Мрежова грешка (не 404): `main` може да е по-стар — не се ползва.
+        server.enqueue(MockResponse().setResponseCode(503))
+        server.enqueue(MockResponse().setResponseCode(503))
+        val svc = GitHubCatalogService(http, listOf(url("/k/raw"), url("/k/cdn")), legacyUrls = listOf(url("/main/raw")))
+        assertTrue(svc.fetchCatalog() is Outcome.Failure)
+        assertEquals(2, server.requestCount)
+    }
+
     @Test fun catalogBothSourcesFail() = runTest {
         server.enqueue(MockResponse().setBody("<html>captive portal</html>"))
         server.enqueue(MockResponse().setResponseCode(404))

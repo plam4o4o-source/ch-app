@@ -33,8 +33,15 @@ fun config(name: String, default: String = ""): String =
 fun String.quoted() = "\"" + replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
 val siteBaseUrl = config("API_BASE_URL", "https://chyavorec.org")
+// Каталогът: клонът `katalog` (InvLib 2.4.85+ го обновява с един-единствен commit), а
+// `main` — само резервно, докато клонът не съществува (вж. GitHubCatalogService).
 val catalogUrls = config(
     "CATALOG_URLS",
+    "https://raw.githubusercontent.com/plam4o4o-source/yavorec-katalog/katalog/katalog.json|" +
+        "https://cdn.jsdelivr.net/gh/plam4o4o-source/yavorec-katalog@katalog/katalog.json",
+)
+val catalogLegacyUrls = config(
+    "CATALOG_LEGACY_URLS",
     "https://raw.githubusercontent.com/plam4o4o-source/yavorec-katalog/main/katalog.json|" +
         "https://cdn.jsdelivr.net/gh/plam4o4o-source/yavorec-katalog@main/katalog.json",
 )
@@ -63,6 +70,7 @@ android {
 
         buildConfigField("String", "SITE_BASE_URL", siteBaseUrl.quoted())
         buildConfigField("String", "CATALOG_URLS", catalogUrls.quoted())
+        buildConfigField("String", "CATALOG_LEGACY_URLS", catalogLegacyUrls.quoted())
         buildConfigField("String", "INFLIB_API_URL", inflibApiUrl.quoted())
         buildConfigField("String", "UPDATE_MANIFEST_URL", updateManifestUrl.quoted())
     }

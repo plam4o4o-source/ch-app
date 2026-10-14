@@ -111,7 +111,7 @@ class AppContainer(
     )
 
     val siteService by lazy { ChyavorecSiteService(http, config.siteBaseUrl, clock, fallbackContacts) }
-    val catalogService by lazy { GitHubCatalogService(http, config.catalogUrls) }
+    val catalogService by lazy { GitHubCatalogService(http, config.catalogUrls, legacyUrls = config.catalogLegacyUrls) }
 
     val readerServices: ReaderServices by lazy {
         val demo = FlavorServices.demoReaderServices(config, clock)

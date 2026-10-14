@@ -7,6 +7,8 @@ package org.chyavorec.app
 data class AppConfig(
     val siteBaseUrl: String,
     val catalogUrls: List<String>,
+    /** Старото място на каталога (клон `main`) — само ако основното липсва (404). */
+    val catalogLegacyUrls: List<String> = emptyList(),
     /** Празно = InvLib няма онлайн API → читателските функции са „недостъпни“. */
     val inflibApiUrl: String,
     val environment: String,
@@ -28,6 +30,7 @@ data class AppConfig(
         fun fromBuildConfig() = AppConfig(
             siteBaseUrl = BuildConfig.SITE_BASE_URL.trimEnd('/'),
             catalogUrls = BuildConfig.CATALOG_URLS.split('|').map { it.trim() }.filter { it.startsWith("https://") },
+            catalogLegacyUrls = BuildConfig.CATALOG_LEGACY_URLS.split('|').map { it.trim() }.filter { it.startsWith("https://") },
             inflibApiUrl = BuildConfig.INFLIB_API_URL.trim(),
             environment = BuildConfig.APP_ENV,
             useMockData = BuildConfig.USE_MOCK_DATA,

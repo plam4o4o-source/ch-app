@@ -33,6 +33,12 @@ class GitHubCatalogService(
     private val http: HttpFetcher,
     private val urls: List<String>,
     private val work: CoroutineDispatcher = Dispatchers.Default,
+    /**
+     * Старото място (клон `main`), където InvLib обновява файла най-много веднъж на ден.
+     * Ползва се САМО ако основният адрес отговори 404 (клонът `katalog` още не е създаден
+     * от по-стар InvLib) — иначе мрежова грешка би върнала по-стар каталог върху по-новия.
+     */
+    private val legacyUrls: List<String> = emptyList(),
 ) : CatalogService {
 
     /** Копията от по-старите версии (в HTTP кеша на OkHttp) се изтриват веднъж на процес. */
@@ -59,10 +65,17 @@ class GitHubCatalogService(
     override suspend fun fetchCatalogConditional(known: CatalogValidators?): Outcome<CatalogFetch> {
         if (!httpCacheEvicted) {
             httpCacheEvicted = true
-            urls.forEach { http.evictFromHttpCache(it) }
+            (urls + legacyUrls).forEach { http.evictFromHttpCache(it) }
         }
+        val (primary, notFound) = fetchFrom(urls, known)
+        return if (primary is Outcome.Failure && notFound && legacyUrls.isNotEmpty()) fetchFrom(legacyUrls, known).first else primary
+    }
+
+    /** Резултатът и дали някой от адресите е отговорил 404 (клонът/файлът липсва). */
+    private suspend fun fetchFrom(list: List<String>, known: CatalogValidators?): Pair<Outcome<CatalogFetch>, Boolean> {
+        var notFound = false
         var lastError: AppError = AppError.Network
-        for (url in urls) {
+        for (url in list) {
             val headers = buildMap {
                 // no-store: без копие в HTTP кеша (файлът вече е на диска); заявката отива до сървъра.
                 put("Cache-Control", "no-store")
@@ -73,7 +86,7 @@ class GitHubCatalogService(
                 is Outcome.Success -> {
                     val body = result.value
                     if (body.notModified) {
-                        if (known?.hash != null) return Outcome.Success(CatalogFetch.Unchanged(body.etag ?: known.etag, url))
+                        if (known?.hash != null) return Outcome.Success(CatalogFetch.Unchanged(body.etag ?: known.etag, url)) to false
                         lastError = AppError.Parse("katalog.json")
                         continue
                     }
@@ -84,12 +97,15 @@ class GitHubCatalogService(
                             else CatalogFetch.Changed(body.bytes, KatalogParser.parse(body.bytes), hash, body.etag, url)
                         }
                     }
-                    parsed.onSuccess { return Outcome.Success(it) }
+                    parsed.onSuccess { return Outcome.Success(it) to false }
                     lastError = AppError.Parse("katalog.json")
                 }
-                is Outcome.Failure -> lastError = result.error
+                is Outcome.Failure -> {
+                    lastError = result.error
+                    if (result.error == AppError.NotFound) notFound = true
+                }
             }
         }
-        return Outcome.Failure(lastError)
+        return Outcome.Failure(lastError) to notFound
     }
 }
