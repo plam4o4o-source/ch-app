@@ -105,9 +105,11 @@ object ReadingRecommender {
     /** Всичко освен букви и цифри (компилира се веднъж, не при всеки запис). */
     private val nonAlnum = Regex("[^\\p{L}\\p{N}]+")
 
-    private fun authorKey(a: String): String? =
+    /** Ключ на автора (малки букви, без препинателни знаци); `null` — твърде кратък или „и др.“. */
+    internal fun authorKey(a: String): String? =
         a.lowercase().replace(nonAlnum, " ").trim().takeIf { it.length >= 3 && it != "и др" }
 
-    private fun titleKey(title: String, author: String): String =
+    /** Ключ на заглавието (заглавие + автор, без препинателни знаци) — екземплярите на една книга са с еднакъв ключ. */
+    internal fun titleKey(title: String, author: String): String =
         (title + "|" + author).lowercase().replace(nonAlnum, " ").trim()
 }

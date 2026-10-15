@@ -211,6 +211,10 @@ class SiteRepository(
         return entries.mapNotNull { SiteOccasionsParser.toSiteOccasion(it) }
     }
 
+    /** Местните празници само от кеша (без мрежа; `null` — няма кеш) — за първия кадър на началния екран. */
+    suspend fun cachedOccasions(): List<SiteOccasion>? =
+        occasions.cached()?.data?.mapNotNull { SiteOccasionsParser.toSiteOccasion(it) }
+
     fun albums(photos: List<GalleryPhoto>): List<GalleryAlbum> =
         photos.groupBy { it.album }.map { (name, list) -> GalleryAlbum(name, list) }
             .sortedBy { if (it.name == "Новини") 1 else 0 }

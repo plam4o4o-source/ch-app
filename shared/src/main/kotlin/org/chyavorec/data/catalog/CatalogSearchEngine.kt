@@ -187,11 +187,16 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
                 .filter { it.second.isNotEmpty() }
 
         /** Обобщението за началния екран — без да се строи индексът за търсене. */
-        fun homeSummary(snapshot: CatalogSnapshot): CatalogHomeSummary = CatalogHomeSummary(
-            count = snapshot.books.size,
-            generatedOn = snapshot.generatedOn,
-            newest = newest(snapshot.books, HOME_NEWEST),
-            shelves = shelfBooks(snapshot).map { (name, books) -> CatalogHomeShelf(name, books) },
-        )
+        fun homeSummary(snapshot: CatalogSnapshot): CatalogHomeSummary {
+            val newest = newest(snapshot.books, HOME_NEWEST)
+            return CatalogHomeSummary(
+                count = snapshot.books.size,
+                generatedOn = snapshot.generatedOn,
+                newest = newest,
+                shelves = shelfBooks(snapshot).map { (name, books) -> CatalogHomeShelf(name, books) },
+                // Подборът за „За теб“ — веднъж за каталога, не при всяко показване на началния екран.
+                picks = ForYouPicks.popularAndNew(snapshot.books, skip = newest.mapTo(HashSet()) { it.inv }),
+            )
+        }
     }
 }

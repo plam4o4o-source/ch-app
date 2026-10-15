@@ -3,6 +3,7 @@ package org.chyavorec.data.repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.builtins.ListSerializer
@@ -309,8 +310,18 @@ class ReaderDataRepository(
         LOANS_FRESH_MILLIS, { it.loans },
     ) { session -> service.loans(session) }
 
+    private val _historyVersion = MutableStateFlow(0L)
+    /**
+     * Сменя се при всеки запис на историята в кеша (от „Какво съм чел“, `/v1/me/all`) и при
+     * изход/нов вход — за да се преизчислят „За теб“ и „Моето четене“ без собствени заявки.
+     */
+    val historyVersion: StateFlow<Long> = _historyVersion.asStateFlow()
+
     private val historyPart = Part<List<HistoryItem>>(
-        CachedResource(secureCache, KEY_HISTORY, ListSerializer(HistoryItem.serializer()), clock, HISTORY_FRESH_MILLIS),
+        CachedResource(
+            secureCache, KEY_HISTORY, ListSerializer(HistoryItem.serializer()), clock, HISTORY_FRESH_MILLIS,
+            onStored = { _historyVersion.update { it + 1 } },
+        ),
         HISTORY_FRESH_MILLIS, { it.history },
     ) { session -> service.history(session) }
 
@@ -332,6 +343,7 @@ class ReaderDataRepository(
         auth.addReaderResetListener {
             generation++
             _profile.value = null
+            _historyVersion.update { it + 1 }
         }
     }
 
@@ -519,6 +531,9 @@ class LibraryRepository(
     suspend fun history(force: Boolean = true): Outcome<Synced<List<HistoryItem>>> = data.history(force)
 
     suspend fun cachedHistory(): Synced<List<HistoryItem>>? = data.cachedHistory()
+
+    /** Сменя се при всяка промяна на кешираната история ([ReaderDataRepository.historyVersion]). */
+    val historyVersion: StateFlow<Long> get() = data.historyVersion
 }
 
 /**

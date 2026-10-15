@@ -1,5 +1,11 @@
 package org.chyavorec.app.ui.screens.my
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -58,6 +64,7 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.SectionLabel
+import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
@@ -138,6 +145,9 @@ fun MyHubScreen(navigate: (String) -> Unit) {
             TileGrid(tiles)
             Spacer(Modifier.height(8.dp))
 
+            // „Моето четене“ — само за влязъл читател с история (иначе нищо, без празно място).
+            if (signedIn) ReadingSection(onOpenHistory = { navigate(Routes.HISTORY) })
+
             if (signedIn) {
                 OutlinedButton(onClick = { confirmLogout = true }, modifier = Modifier.fillMaxWidth().padding(20.dp)) {
                     Icon(Icons.AutoMirrored.Outlined.Logout, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.action_logout))
@@ -179,6 +189,25 @@ private fun GuestCard(loginSupported: Boolean, onLogin: () -> Unit) {
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.na_login), style = MaterialTheme.typography.bodySmall)
                 }
+            }
+        }
+    }
+}
+
+/** Графиките за четенето ([ReadingStatsCard]) под плочките; изчезват при изход. */
+@Composable
+private fun ReadingSection(onOpenHistory: () -> Unit) {
+    val vm = appViewModel(key = "reading-stats") { ReadingStatsViewModel(it) }
+    val stats by vm.stats.collectAsStateWithLifecycle()
+    AnimatedVisibility(
+        visible = stats != null,
+        enter = if (rememberReducedMotion()) EnterTransition.None else fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically(),
+    ) {
+        stats?.let { s ->
+            Column {
+                SectionLabel(stringResource(R.string.reading_title), Modifier.padding(start = 20.dp, top = 12.dp, bottom = 12.dp))
+                ReadingStatsCard(s, onOpenHistory)
             }
         }
     }

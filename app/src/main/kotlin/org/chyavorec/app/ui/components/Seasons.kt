@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -25,12 +29,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.delay
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.OrthodoxEaster
+import java.time.Duration
 import java.time.LocalDate
 import java.time.Month
 
@@ -53,13 +61,48 @@ fun currentSeason(today: LocalDate): Season {
 
 fun currentSeason(clock: AppClock): Season = currentSeason(clock.today())
 
-/** Текущият сезон, ако украсите са включени в настройките (иначе [Season.NONE]). */
+/**
+ * Дали украсите (празници, сезони) са включени — подава се от корена от вече прочетените
+ * настройки, за да е вярно още в първия кадър (без „скок“, когато украсата се появи).
+ * `null` = не е подаден (preview, екран извън корена) → настройките се четат на място.
+ */
+val LocalSeasonalDecor = staticCompositionLocalOf<Boolean?> { null }
+
+/** Включени ли са украсите в настройките (вж. [LocalSeasonalDecor]). */
 @Composable
-fun rememberSeason(): Season {
+fun rememberSeasonalEnabled(): Boolean {
+    val provided = LocalSeasonalDecor.current
+    if (provided != null) return provided
     val container = LocalAppContainer.current
     val settings by container.settings.settings.collectAsStateWithLifecycle(initialValue = null)
-    val enabled = settings?.seasonal ?: false
-    return remember(enabled) { if (enabled) currentSeason(container.clock) else Season.NONE }
+    return settings?.seasonal ?: false
+}
+
+/**
+ * Днешната дата по часовника на приложението. Опреснява се при всяко връщане към
+ * приложението (ON_RESUME) и в полунощ, ако екранът остане отворен — украсата и
+ * поздравът не остават от вчера.
+ */
+@Composable
+fun rememberToday(): LocalDate {
+    val clock = LocalAppContainer.current.clock
+    var today by remember(clock) { mutableStateOf(clock.today()) }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { today = clock.today() }
+    LaunchedEffect(clock, today) {
+        // До следващата полунощ в часовата зона на приложението (+1 s запас). Сменен
+        // часовник/зона междувременно се хваща при следващото ON_RESUME.
+        val midnight = today.plusDays(1).atStartOfDay(clock.zone()).toInstant()
+        delay(Duration.between(clock.now(), midnight).toMillis().coerceAtLeast(0L) + 1_000L)
+        today = clock.today()
+    }
+    return today
+}
+
+/** Текущият сезон, ако украсите са включени в настройките (иначе [Season.NONE]). */
+@Composable
+fun rememberSeason(today: LocalDate = rememberToday()): Season {
+    val enabled = rememberSeasonalEnabled()
+    return remember(enabled, today) { if (enabled) currentSeason(today) else Season.NONE }
 }
 
 /** Две писани яйца (великденска украса) — малък орнамент за заглавката. */

@@ -97,6 +97,11 @@ data class CatalogHomeSummary(
     /** Нови постъпления — най-новите първо. */
     val newest: List<CatalogBook>,
     val shelves: List<CatalogHomeShelf>,
+    /**
+     * „Най-четени и нови“ за полицата „За теб“ (без книгите от [newest]); `null` — обобщение
+     * от по-стара версия (тогава полицата се сглобява от рафтовете).
+     */
+    val picks: List<CatalogBook>? = null,
 )
 
 @Serializable
