@@ -11,6 +11,7 @@ import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
+import org.chyavorec.domain.service.Fetched
 import org.chyavorec.domain.repository.PayloadCache
 import java.time.Instant
 
@@ -37,7 +38,9 @@ internal val cacheJson = Json {
  *   [cached] не чете и не декодира файла;
  * - едновременните [load] за един и същ ключ (и кеш) се изпълняват едно след друго, а
  *   чакащите получават резултата на току-що завършилото зареждане вместо втора заявка;
- * - непромененото съдържание не се презаписва — само се отбелязва новото време.
+ * - непромененото съдържание не се презаписва — само се отбелязва новото време;
+ * - при [loadIfChanged] до стойността се пази SHA-256 на суровия файл ([hashKey]), така че
+ *   непромененият файл изобщо не се разчита (само се отбелязва новото време).
  *
  * [onStored] се вика след всеки успешен запис (от мрежата или промяна на място) —
  * под заключването на ключа, затова трябва да е бърз и да не чете същия кеш.
@@ -54,6 +57,9 @@ internal class CachedResource<T>(
     private class Memo<T>(val value: T, val syncedAtMillis: Long, val version: Long)
 
     @Volatile private var memo: Memo<T>? = null
+
+    /** До стойността: SHA-256 на суровия файл, от който е разчетена (вж. [loadIfChanged]). */
+    private val hashKey = "$key#sha256"
 
     private fun validMemo(): Memo<T>? {
         val m = memo ?: return null
@@ -81,6 +87,8 @@ internal class CachedResource<T>(
             val updated = transform(current.data)
             if (updated == current.data) return@withKeyLock
             runCatching {
+                // Стойността вече не е разчетеното съдържание на файла — хешът не важи.
+                cache.remove(hashKey)
                 cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, updated) })
                 remember(updated, current.syncedAt.toEpochMilli())
             }.onFailure { memo = null }.onSuccess { stored(updated) }
@@ -91,11 +99,38 @@ internal class CachedResource<T>(
     suspend fun clear() {
         withKeyLock {
             memo = null
+            runCatching { cache.remove(hashKey) }
             runCatching { cache.remove(key) }
         }
     }
 
-    suspend fun load(force: Boolean, fetch: suspend () -> Outcome<T>): Outcome<Synced<T>> {
+    suspend fun load(force: Boolean, fetch: suspend () -> Outcome<T>): Outcome<Synced<T>> = inFlight(force) { cached ->
+        when (val r = fetch()) {
+            is Outcome.Success -> fresh(r.value, cached, hashed = false, hash = null)
+            is Outcome.Failure -> fallback(r, cached)
+        }
+    }
+
+    /**
+     * Като [load], но [fetch] получава SHA-256 на суровия файл, от който е разчетена
+     * кешираната стойност (`null` — няма такава или е непозната), и може да отговори
+     * [Fetched.Unchanged]: тогава кешът само се „докосва“ (ново време на синхронизация),
+     * без разчитане и без презаписване.
+     */
+    suspend fun loadIfChanged(force: Boolean, fetch: suspend (knownHash: String?) -> Outcome<Fetched<T>>): Outcome<Synced<T>> =
+        inFlight(force) { cached ->
+            val known = if (cached != null) runCatching { cache.read(hashKey)?.text }.getOrNull() else null
+            when (val r = fetch(known)) {
+                is Outcome.Failure -> fallback(r, cached)
+                is Outcome.Success -> when (val f = r.value) {
+                    is Fetched.Changed -> fresh(f.value, cached, hashed = true, hash = f.hash)
+                    Fetched.Unchanged ->
+                        if (cached != null) unchanged(cached) else Outcome.Failure(AppError.Unexpected("unchanged without cache"))
+                }
+            }
+        }
+
+    private suspend fun inFlight(force: Boolean, fetch: suspend (cached: Synced<T>?) -> Outcome<Synced<T>>): Outcome<Synced<T>> {
         val flight = Flights.acquire(cache, key)
         val ticket = flight.completed
         try {
@@ -108,7 +143,7 @@ internal class CachedResource<T>(
                     if (last != null && (!force || flight.lastFromNetwork)) return@withLock last
                 }
                 var fromNetwork = false
-                val result = loadLocked(force) { fromNetwork = true; fetch() }
+                val result = loadLocked(force) { cached -> fromNetwork = true; fetch(cached) }
                 flight.last = result
                 flight.lastFromNetwork = fromNetwork
                 flight.completed++
@@ -119,30 +154,50 @@ internal class CachedResource<T>(
         }
     }
 
-    private suspend fun loadLocked(force: Boolean, fetch: suspend () -> Outcome<T>): Outcome<Synced<T>> {
+    private suspend fun loadLocked(force: Boolean, fetch: suspend (cached: Synced<T>?) -> Outcome<Synced<T>>): Outcome<Synced<T>> {
         val cached = cached()
         if (!force && cached != null) {
             val age = clock.now().toEpochMilli() - cached.syncedAt.toEpochMilli()
             if (age in 0 until minRefreshMillis) return Outcome.Success(cached.copy(fromCache = false))
         }
-        return when (val r = fetch()) {
-            is Outcome.Success -> {
-                val now = clock.now()
-                store(r.value, cached?.data, now.toEpochMilli())
-                Outcome.Success(Synced(r.value, now, fromCache = false))
-            }
-            is Outcome.Failure -> {
-                if (r.error is AppError.Unauthorized || r.error is AppError.NotAvailable) return r
-                if (cached != null) Outcome.Success(cached.copy(refreshError = r.error)) else r
-            }
-        }
+        return fetch(cached)
     }
 
-    /** Записва [value]; ако е същото като [previous] — само опреснява времето на файла. */
-    private suspend fun store(value: T, previous: T?, nowMillis: Long) {
+    /** [hashed] — ресурсът пази хеша на суровия файл ([loadIfChanged]); [hash] — хешът на [value]. */
+    private suspend fun fresh(value: T, cached: Synced<T>?, hashed: Boolean, hash: String?): Outcome<Synced<T>> {
+        val now = clock.now()
+        store(value, cached?.data, now.toEpochMilli(), hashed, hash)
+        return Outcome.Success(Synced(value, now, fromCache = false))
+    }
+
+    private fun fallback(r: Outcome.Failure, cached: Synced<T>?): Outcome<Synced<T>> {
+        if (r.error is AppError.Unauthorized || r.error is AppError.NotAvailable) return r
+        return if (cached != null) Outcome.Success(cached.copy(refreshError = r.error)) else r
+    }
+
+    /** Файлът е същият като разчетения: стойността остава, отбелязва се само новото време. */
+    private suspend fun unchanged(cached: Synced<T>): Outcome<Synced<T>> {
+        val now = clock.now()
+        runCatching {
+            if (!cache.touch(key)) cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, cached.data) })
+            remember(cached.data, now.toEpochMilli())
+        }.onFailure { memo = null }.onSuccess { stored(cached.data) }
+        return Outcome.Success(Synced(cached.data, now, fromCache = false))
+    }
+
+    /**
+     * Записва [value]; ако е същото като [previous] — само опреснява времето на файла.
+     * [hash] (SHA-256 на суровия файл) се записва след стойността, а старият се трие преди
+     * нея — прекъснат запис оставя „без хеш“ (следващото сваляне разчита отново), не грешен хеш.
+     */
+    private suspend fun store(value: T, previous: T?, nowMillis: Long, hashed: Boolean = false, hash: String? = null) {
         runCatching {
             val touched = previous != null && previous == value && cache.touch(key)
-            if (!touched) cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, value) })
+            if (!touched) {
+                if (hashed) cache.remove(hashKey)
+                cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, value) })
+            }
+            if (hash != null) cache.write(hashKey, hash) else if (hashed && touched) cache.remove(hashKey)
             remember(value, nowMillis)
         }.onFailure { memo = null }.onSuccess { stored(value) }
     }

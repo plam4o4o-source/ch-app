@@ -4,6 +4,7 @@ import org.chyavorec.core.AppError
 import org.chyavorec.core.Feature
 import org.chyavorec.core.Hashing
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.map
 import org.chyavorec.domain.model.ArticleDetail
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
@@ -84,15 +85,38 @@ sealed interface CatalogFetch {
     ) : CatalogFetch
 }
 
+/**
+ * Резултат от условно сваляне на файл с данни (news.json, index.json): суровото
+ * съдържание е същото като вече разчетеното ([Unchanged] — не се разчита отново) или
+ * е ново ([Changed] — разчетената стойност и SHA-256 на суровия текст).
+ */
+sealed interface Fetched<out T> {
+    data object Unchanged : Fetched<Nothing>
+
+    /** [hash] = `null` — стойността не бива да се помни като „същата“ (напр. непълни данни). */
+    data class Changed<T>(val value: T, val hash: String?) : Fetched<T>
+}
+
 /** Новини от chyavorec.org (/data/news.json). */
 interface NewsService {
     suspend fun fetchLatest(): Outcome<List<NewsArticle>>
     suspend fun fetchArticle(article: NewsArticle): Outcome<ArticleDetail>
+
+    /**
+     * Като [fetchLatest], но ако суровият news.json има SHA-256 [knownHash] (т.е. е
+     * същият като вече разчетения), не се разчита и се връща [Fetched.Unchanged].
+     */
+    suspend fun fetchLatestIfChanged(knownHash: String?): Outcome<Fetched<List<NewsArticle>>> =
+        fetchLatest().map { Fetched.Changed(it, null) }
 }
 
 /** Събития от календара на chyavorec.org. */
 interface EventsService {
     suspend fun fetchEvents(): Outcome<List<Event>>
+
+    /** Като [fetchEvents], но непромененият index.json ([knownHash]) не се разчита. */
+    suspend fun fetchEventsIfChanged(knownHash: String?): Outcome<Fetched<List<Event>>> =
+        fetchEvents().map { Fetched.Changed(it, null) }
 }
 
 /** Страници, навигация, контакти и галерия на chyavorec.org. */
@@ -104,6 +128,9 @@ interface SiteContentService {
     suspend fun fetchGallery(news: List<NewsArticle>? = null): Outcome<List<GalleryPhoto>>
     suspend fun fetchDocuments(): Outcome<List<SiteDocument>>
     suspend fun fetchSearchIndex(): Outcome<List<SiteSearchDoc>>
+    /** Като [fetchSearchIndex], но непромененият index.json ([knownHash]) не се разчита. */
+    suspend fun fetchSearchIndexIfChanged(knownHash: String?): Outcome<Fetched<List<SiteSearchDoc>>> =
+        fetchSearchIndex().map { Fetched.Changed(it, null) }
     /** [date] във формат Г-М-Д без водещи нули (както очаква сайтът). */
     suspend fun fetchFeast(date: String): Outcome<DailyFeast>
     /** Съобщенията до приложението (`/data/app-messages.json`); няма файл = няма съобщения. */

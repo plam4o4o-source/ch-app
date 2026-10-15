@@ -48,8 +48,9 @@ class NewsRepository(
 
     suspend fun cached(): Synced<List<NewsArticle>>? = list.cached()
 
+    /** Непромененият news.json (същият SHA-256) не се разчита — само се отбелязва времето. */
     suspend fun latest(force: Boolean = false): Outcome<Synced<List<NewsArticle>>> =
-        list.load(force) { service.fetchLatest() }
+        list.loadIfChanged(force) { service.fetchLatestIfChanged(it) }
 
     suspend fun article(article: NewsArticle, force: Boolean = false): Outcome<Synced<ArticleDetail>> =
         CachedResource(cache, cacheKey("news:article:", article.url), ArticleDetail.serializer(), clock, ONE_HOUR, work)
@@ -70,7 +71,7 @@ class EventsRepository(
     suspend fun cached(): Synced<List<Event>>? = list.cached()
 
     suspend fun events(force: Boolean = false): Outcome<Synced<List<Event>>> =
-        when (val r = list.load(force) { service.fetchEvents() }) {
+        when (val r = list.loadIfChanged(force) { service.fetchEventsIfChanged(it) }) {
             is Outcome.Failure -> r
             // Кешираният годишен календар се „превърта“ към следващото настъпване днес.
             is Outcome.Success -> Outcome.Success(r.value.map { rollForward(it) })
@@ -179,7 +180,7 @@ class SiteRepository(
 
     suspend fun documents(force: Boolean = false): Outcome<Synced<List<SiteDocument>>> = documents.load(force) { service.fetchDocuments() }
 
-    suspend fun searchIndex(force: Boolean = false): Outcome<Synced<List<SiteSearchDoc>>> = index.load(force) { service.fetchSearchIndex() }
+    suspend fun searchIndex(force: Boolean = false): Outcome<Synced<List<SiteSearchDoc>>> = index.loadIfChanged(force) { service.fetchSearchIndexIfChanged(it) }
 
     suspend fun cachedSearchIndex(): List<SiteSearchDoc>? = index.cached()?.data
 

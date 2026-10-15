@@ -13,7 +13,9 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
+import org.chyavorec.core.Hashing
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.map
 import org.chyavorec.data.http.HttpBody
 import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.domain.model.ArticleDetail
@@ -29,6 +31,7 @@ import org.chyavorec.domain.model.SitePage
 import org.chyavorec.domain.model.SiteSearchDoc
 import org.chyavorec.domain.model.SiteSection
 import org.chyavorec.domain.service.EventsService
+import org.chyavorec.domain.service.Fetched
 import org.chyavorec.domain.service.NewsService
 import org.chyavorec.domain.service.SiteContentService
 import org.jsoup.Jsoup
@@ -75,19 +78,41 @@ class ChyavorecSiteService(
         runCatching(block).fold({ Outcome.Success(it) }, { Outcome.Failure(AppError.Parse(what)) })
     }
 
+    /** Брой разчитания на news.json / index.json (за тестовете: непромененото не се разчита). */
+    @Volatile internal var newsParses = 0
+        private set
+    @Volatile internal var indexParses = 0
+        private set
+
+    /** Суровият текст на файл с данни и SHA-256 на байтовете му (за [Fetched]). */
+    private class RawJson(val text: String, val hash: String)
+
+    private suspend fun raw(body: HttpBody): RawJson = withContext(work) { RawJson(body.text(), Hashing.sha256Hex(body.bytes)) }
+
     // --- търсещият индекс се ползва от няколко функции; държим го кратко в паметта ---
     private val indexMutex = Mutex()
-    private var indexText: String? = null
+    private var index: RawJson? = null
     private var indexAt = 0L
 
-    private suspend fun indexJson(): Outcome<String> = indexMutex.withLock {
+    private suspend fun indexJson(): Outcome<RawJson> = indexMutex.withLock {
         val now = clock.now().toEpochMilli()
-        indexText?.takeIf { now - indexAt < 5 * 60_000 }?.let { return Outcome.Success(it) }
+        index?.takeIf { now - indexAt < 5 * 60_000 }?.let { return Outcome.Success(it) }
         when (val r = http.get(url("/javora/index.json"))) {
             is Outcome.Failure -> r
-            is Outcome.Success -> r.value.text().also { indexText = it; indexAt = now }.let { Outcome.Success(it) }
+            is Outcome.Success -> raw(r.value).also { index = it; indexAt = now }.let { Outcome.Success(it) }
         }
     }
+
+    /** Разчита index.json, само ако е различен от вече разчетения ([knownHash]). */
+    private suspend fun <T> fromIndex(what: String, knownHash: String?, block: (String) -> T): Outcome<Fetched<T>> =
+        when (val r = indexJson()) {
+            is Outcome.Failure -> r
+            is Outcome.Success -> {
+                val raw = r.value
+                if (knownHash != null && raw.hash == knownHash) Outcome.Success(Fetched.Unchanged)
+                else parse(what) { indexParses++; block(raw.text) }.map { Fetched.Changed(it, raw.hash) }
+            }
+        }
 
     // --- rss.xml служи само за публичните адреси на новините: държим го до 24 ч. и го ---
     // --- теглим отново само ако се появи новина, която липсва в него.                  ---
@@ -108,15 +133,30 @@ class ChyavorecSiteService(
         rssMissing = articles.filter { parser.rssLinkFor(links, it.title) == null }.mapTo(HashSet()) { it.title }
     }
 
-    override suspend fun fetchLatest(): Outcome<List<NewsArticle>> = coroutineScope {
+    // Без известен хеш съдържанието винаги е „ново“ (Fetched.Changed).
+    override suspend fun fetchLatest(): Outcome<List<NewsArticle>> = fetchLatestIfChanged(null).changedOrError("news.json")
+
+    /**
+     * news.json се разчита (JSON + Jsoup за всяка новина) само ако SHA-256 на суровите
+     * байтове се различава от [knownHash]; иначе — [Fetched.Unchanged], без разчитане и без rss.xml.
+     * Хешът се връща само при пълни данни: ако rss.xml не е наличен и някоя новина е без
+     * публичен адрес, следващото сваляне пак разчита файла (и опитва rss.xml отново).
+     */
+    override suspend fun fetchLatestIfChanged(knownHash: String?): Outcome<Fetched<List<NewsArticle>>> = coroutineScope {
         val now = clock.now().toEpochMilli()
         val known = rssMutex.withLock { rssLinks?.takeIf { now - rssAt in 0 until RSS_FRESH }?.let { it to rssMissing } }
         val rss = if (known == null) async { http.get(url("/rss.xml")) } else null
         when (val r = http.get(url("/data/news.json"))) {
             is Outcome.Failure -> { rss?.cancel(); r }
             is Outcome.Success -> {
+                val raw = raw(r.value)
+                if (knownHash != null && raw.hash == knownHash) {
+                    rss?.cancel()
+                    return@coroutineScope Outcome.Success(Fetched.Unchanged)
+                }
                 val links = known?.first ?: rssLinksFrom(rss?.await())
-                when (val parsed = parse("news.json") { parser.parseNews(r.value.text(), links.orEmpty()) }) {
+                var complete = links != null
+                when (val parsed = parse("news.json") { newsParses++; parser.parseNews(raw.text, links.orEmpty()) }) {
                     is Outcome.Failure -> parsed
                     is Outcome.Success -> {
                         var articles = parsed.value
@@ -124,12 +164,15 @@ class ChyavorecSiteService(
                             links?.let { rememberRss(it, articles, now) }
                         } else if (articles.any { parser.rssLinkFor(known.first, it.title) == null && it.title !in known.second }) {
                             // Нова новина, която я няма в запомнения rss.xml — опресняваме го.
-                            rssLinksFrom(http.get(url("/rss.xml")))?.let { fresh ->
+                            val fresh = rssLinksFrom(http.get(url("/rss.xml")))
+                            if (fresh != null) {
                                 articles = articles.map { a -> parser.rssLinkFor(fresh, a.title)?.let { a.copy(url = it) } ?: a }
                                 rememberRss(fresh, articles, now)
+                            } else {
+                                complete = false
                             }
                         }
-                        Outcome.Success(articles)
+                        Outcome.Success(Fetched.Changed(articles, raw.hash.takeIf { complete }))
                     }
                 }
             }
@@ -142,14 +185,27 @@ class ChyavorecSiteService(
         return Outcome.Success(ArticleDetail(article, article.contentBlocks, images))
     }
 
-    override suspend fun fetchEvents(): Outcome<List<Event>> = when (val r = indexJson()) {
-        is Outcome.Failure -> r
-        is Outcome.Success -> parse("events") { parser.parseEvents(r.value, clock.today()) }
-    }
+    override suspend fun fetchEvents(): Outcome<List<Event>> = fetchEventsIfChanged(null).changedOrError("events")
 
-    override suspend fun fetchSearchIndex(): Outcome<List<SiteSearchDoc>> = when (val r = indexJson()) {
-        is Outcome.Failure -> r
-        is Outcome.Success -> parse("index") { parser.parseIndex(r.value) }
+    /**
+     * Датите на събитията са следващото настъпване спрямо днес, но всички са годишни
+     * (`recurring`) — кешираният списък се „превърта“ от хранилището, затова и
+     * непромененият index.json не се разчита отново.
+     */
+    override suspend fun fetchEventsIfChanged(knownHash: String?): Outcome<Fetched<List<Event>>> =
+        fromIndex("events", knownHash) { parser.parseEvents(it, clock.today()) }
+
+    override suspend fun fetchSearchIndex(): Outcome<List<SiteSearchDoc>> = fetchSearchIndexIfChanged(null).changedOrError("index")
+
+    override suspend fun fetchSearchIndexIfChanged(knownHash: String?): Outcome<Fetched<List<SiteSearchDoc>>> =
+        fromIndex("index", knownHash) { parser.parseIndex(it) }
+
+    private fun <T> Outcome<Fetched<T>>.changedOrError(what: String): Outcome<T> = when (this) {
+        is Outcome.Failure -> this
+        is Outcome.Success -> when (val f = value) {
+            is Fetched.Changed -> Outcome.Success(f.value)
+            Fetched.Unchanged -> Outcome.Failure(AppError.Parse(what))
+        }
     }
 
     override suspend fun discoverLinks(): Outcome<List<SiteLink>> = when (val r = fetchSearchIndex()) {
