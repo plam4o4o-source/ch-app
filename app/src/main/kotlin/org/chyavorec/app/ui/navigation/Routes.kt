@@ -44,6 +44,8 @@ object Routes {
     const val CONTACTS = "contacts"
     const val DOCUMENTS = "documents"
     const val MESSAGES = "messages"
+    /** Съобщенията, превъртени до едно от тях (от известие). */
+    const val MESSAGE = "messages/{id}"
     const val SETTINGS = "settings"
     const val PRIVACY = "privacy"
     const val TERMS = "terms"
@@ -53,6 +55,7 @@ object Routes {
     fun article(id: String) = "article/" + Uri.encode(id)
     fun event(id: String) = "event/" + Uri.encode(id)
     fun book(inv: Long) = "book/$inv"
+    fun message(id: String) = "messages/" + Uri.encode(id)
     fun page(url: String, title: String) = "page?url=" + Uri.encode(url) + "&title=" + Uri.encode(title)
     fun album(name: String) = "album/" + Uri.encode(name)
     fun viewer(album: String?, index: Int, url: String? = null) =

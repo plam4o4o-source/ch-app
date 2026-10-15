@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.chyavorec.app.data.local.FavoriteNewsEntity
 import org.chyavorec.app.data.local.FavoritesDao
+import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.AppClock
@@ -45,7 +46,7 @@ class NewsListViewModel(
     private val clock: AppClock,
     /** Филтрирането върви извън главната нишка (тестовете подават свой диспечер). */
     private val work: CoroutineDispatcher = Dispatchers.Default,
-) : ViewModel() {
+) : ViewModel(), RefreshOnReconnect {
 
     private val load = MutableStateFlow(ScreenState<List<NewsArticle>>())
     private val filter = MutableStateFlow(NewsFilter())
@@ -112,6 +113,9 @@ class NewsListViewModel(
         load.update { it.with(r) }
     }
 
+    override val reconnectState: ScreenState<*> get() = load.value
+    override fun refreshOnReconnect() { refresh(false) }
+
     fun setQuery(q: String) = filter.update { it.copy(query = q) }
     fun setCategory(c: String?) = filter.update { it.copy(category = c) }
     fun setFavoritesOnly(on: Boolean) = filter.update { it.copy(favoritesOnly = on) }
@@ -141,7 +145,8 @@ class ArticleViewModel(
 
     fun load(force: Boolean = true) = viewModelScope.launch {
         _state.update { it.startRefresh() }
-        val a = article ?: repo.find(id) ?: favoriteFallback()
+        // От известие/адрес при празен кеш (напр. първо пускане) — първо списъкът с новини.
+        val a = article ?: repo.find(id) ?: favoriteFallback() ?: repo.latest(false).let { repo.find(id) }
         if (a == null) {
             _state.value = ScreenState(loading = false, error = AppError.NotFound)
             return@launch

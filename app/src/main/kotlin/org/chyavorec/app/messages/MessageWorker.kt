@@ -7,6 +7,7 @@ import org.chyavorec.app.notifications.Channel
 import org.chyavorec.app.notifications.NotificationIds
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.notifications.PeriodicSyncWorker
+import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.site.AppMessagesParser
 import org.chyavorec.domain.model.Inbox
@@ -19,10 +20,10 @@ import org.chyavorec.domain.model.MessagePriority
  * ([PeriodicSyncWorker]) и при отваряне на приложението. Push сървър няма (без
  * Firebase/проследяване), затова приложението само пита сайта. Всяко съобщение
  * дава известие най-много веднъж; при първото пускане старите съобщения не се
- * показват като известия.
+ * показват като известия. Докосването на известие отваря съобщенията, превъртени до
+ * самото съобщение ([DeepLinks.message]).
  */
 object MessageWorker {
-    const val DEEP_LINK = "messages"
     private const val MAX_PER_RUN = 3
     /** Известие само за съобщения от последните 7 дни. */
     private const val RECENT_SECONDS = 7 * 24 * 60 * 60L
@@ -49,7 +50,7 @@ object MessageWorker {
                         context,
                         if (m.priority == MessagePriority.HIGH) Channel.MESSAGES_IMPORTANT else Channel.MESSAGES,
                         NotificationIds.message(m.id),
-                        m.title, m.body.ifBlank { m.title }, DEEP_LINK,
+                        m.title, m.body.ifBlank { m.title }, DeepLinks.message(m.id),
                     )
                 }
             c.settings.setNotifiedMessages(list.map { it.id }.toSet())
@@ -73,7 +74,7 @@ object MessageWorker {
                 context,
                 Channel.MESSAGES,
                 NotificationIds.message(Inbox.personalId(m.id)),
-                title, m.text.ifBlank { title }, DEEP_LINK,
+                title, m.text.ifBlank { title }, DeepLinks.message(Inbox.personalId(m.id)),
                 sensitive = true,
             )
         }

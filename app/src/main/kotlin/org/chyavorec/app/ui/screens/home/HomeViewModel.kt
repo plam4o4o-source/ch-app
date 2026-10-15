@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.AppClock
@@ -40,7 +41,7 @@ class HomeViewModel(
     private val catalog: CatalogRepository,
     private val site: SiteRepository,
     private val clock: AppClock,
-) : ViewModel() {
+) : ViewModel(), RefreshOnReconnect {
 
     private val _state = MutableStateFlow(HomeUiState(yearsSinceFounding = clock.today().year - FOUNDED))
     val state: StateFlow<HomeUiState> = _state.asStateFlow()
@@ -68,6 +69,9 @@ class HomeViewModel(
             (e.await() as? Outcome.Success)?.value?.data?.let { applyEvents(it) }
         }
     }
+
+    override val reconnectState: ScreenState<*> get() = _state.value.news
+    override fun refreshOnReconnect() = refresh(force = false)
 
     private fun applyEvents(list: List<Event>) {
         val today = clock.today()

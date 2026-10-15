@@ -26,7 +26,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import org.chyavorec.app.ui.components.WheatRefreshBox
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +51,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.messages.MessageCenter
+import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.EmptyView
@@ -60,7 +66,7 @@ import org.chyavorec.domain.model.AppMessage
 import org.chyavorec.domain.model.MessageAudience
 import org.chyavorec.domain.model.MessagePriority
 
-class MessagesViewModel(private val center: MessageCenter) : ViewModel() {
+class MessagesViewModel(private val center: MessageCenter) : ViewModel(), RefreshOnReconnect {
     private val _state = MutableStateFlow(ScreenState<List<AppMessage>>())
     val state: StateFlow<ScreenState<List<AppMessage>>> = _state.asStateFlow()
 
@@ -72,6 +78,9 @@ class MessagesViewModel(private val center: MessageCenter) : ViewModel() {
     val member: StateFlow<Boolean> = _member.asStateFlow()
 
     init { refresh(false) }
+
+    override val reconnectState: ScreenState<*> get() = _state.value
+    override fun refreshOnReconnect() { refresh(false) }
 
     fun refresh(force: Boolean = true) = viewModelScope.launch {
         _state.update { it.startRefresh() }
@@ -86,8 +95,9 @@ class MessagesViewModel(private val center: MessageCenter) : ViewModel() {
     }
 }
 
+/** [focusId] — съобщението, до което се превърта списъкът (от известие за него). */
 @Composable
-fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
+fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit, focusId: String? = null) {
     val vm = appViewModel { MessagesViewModel(it.messages) }
     val state by vm.state.collectAsStateWithLifecycle()
     val fresh by vm.fresh.collectAsStateWithLifecycle()
@@ -108,7 +118,19 @@ fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                 },
                 errorSubject = stringResource(R.string.messages_title),
             ) { list ->
+                val listState = rememberLazyListState()
+                var focused by rememberSaveable { mutableStateOf(false) }
+                LaunchedEffect(list, focusId) {
+                    if (focused || focusId == null) return@LaunchedEffect
+                    val index = list.indexOfFirst { it.id == focusId }
+                    // +1 — първият елемент е лентата за синхронизацията.
+                    if (index >= 0) {
+                        listState.animateScrollToItem(index + 1)
+                        focused = true
+                    }
+                }
                 LazyColumn(
+                    state = listState,
                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {

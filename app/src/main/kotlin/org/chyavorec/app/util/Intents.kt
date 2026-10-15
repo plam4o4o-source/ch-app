@@ -3,6 +3,7 @@ package org.chyavorec.app.util
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.CalendarContract
 import android.widget.Toast
@@ -37,15 +38,39 @@ object Intents {
             "https" -> Unit
             else -> return
         }
+        // Адресите на сайта са App Links на самото приложение — без изричен браузър
+        // „Отвори в сайта“ би отворило пак приложението (и екрана, от който е натиснато).
+        val browser = if (isOwnAppLink(uri)) browserPackage(context) else null
         try {
             CustomTabsIntent.Builder()
                 .setShowTitle(true)
                 .setDefaultColorSchemeParams(CustomTabColorSchemeParams.Builder().setToolbarColor(0xFF1A1208.toInt()).build())
                 .build()
+                .apply { browser?.let { intent.setPackage(it) } }
                 .launchUrl(context, uri)
         } catch (_: ActivityNotFoundException) {
-            context.safeStart(Intent(Intent.ACTION_VIEW, uri))
+            context.safeStart(Intent(Intent.ACTION_VIEW, uri).apply { browser?.let { setPackage(it) } })
         }
+    }
+
+    /** Домейнът от App Links филтъра в AndroidManifest.xml. */
+    private const val APP_LINK_HOST = "chyavorec.org"
+
+    private fun isOwnAppLink(uri: Uri): Boolean = uri.host.equals(APP_LINK_HOST, ignoreCase = true)
+
+    /**
+     * Браузърът за адресите на сайта: този по подразбиране (ако не е самото приложение),
+     * иначе първият инсталиран. `null` — няма браузър (тогава системата избира).
+     */
+    private fun browserPackage(context: Context): String? {
+        val pm = context.packageManager
+        val probe = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.org/")).addCategory(Intent.CATEGORY_BROWSABLE)
+        val own = context.packageName
+        val default = pm.resolveActivity(probe, PackageManager.MATCH_DEFAULT_ONLY)?.activityInfo?.packageName
+        if (default != null && default != own && default != "android") return default
+        return pm.queryIntentActivities(probe, PackageManager.MATCH_DEFAULT_ONLY)
+            .map { it.activityInfo.packageName }
+            .firstOrNull { it != own }
     }
 
     fun dial(context: Context, phone: String) =

@@ -60,17 +60,21 @@ class MainActivity : ComponentActivity() {
     }
 
     /**
-     * Прочита deep link-а от известието (extra) или от пряк път на иконата
-     * (`chyavorec://app/<връзка>`) и го премахва от intent-а (еднократен).
+     * Прочита deep link-а от известието (extra), от пряк път на иконата
+     * (`chyavorec://app/<връзка>`) или от адрес на сайта (App Links, `https://chyavorec.org/...`)
+     * и го премахва от intent-а (еднократен).
      */
     private fun consumeDeepLink(intent: Intent?) {
         val data = intent?.data
         val fromShortcut = if (intent?.action == ACTION_SHORTCUT && data?.scheme == SHORTCUT_SCHEME) {
             data.path.orEmpty().trim('/').ifBlank { null }
         } else null
-        deepLink.value = fromShortcut ?: intent?.getStringExtra(Notifier.EXTRA_DEEP_LINK)
+        // Адресът минава през същото разпознаване като връзките в съдържанието (DeepLinks.forUrl).
+        val fromWeb = if (intent?.action == Intent.ACTION_VIEW && data?.scheme == "https") data.toString() else null
+        val link = fromShortcut ?: fromWeb
+        deepLink.value = link ?: intent?.getStringExtra(Notifier.EXTRA_DEEP_LINK)
         intent?.removeExtra(Notifier.EXTRA_DEEP_LINK)
-        if (fromShortcut != null) intent?.data = null
+        if (link != null) intent?.data = null
     }
 
     companion object {

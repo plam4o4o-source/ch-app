@@ -7,6 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -31,6 +34,7 @@ import org.chyavorec.app.update.AppUpdater
 import org.chyavorec.app.widget.ChitalishteWidget
 import org.chyavorec.app.messages.MessageCenter
 import org.chyavorec.core.AppClock
+import org.chyavorec.core.reconnections
 import org.chyavorec.core.SystemClock
 import org.chyavorec.data.catalog.GitHubCatalogService
 import org.chyavorec.data.http.HttpFetcher
@@ -179,6 +183,15 @@ class AppContainer(
     private val storedLoans = MutableStateFlow<List<Loan>?>(null)
 
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    /**
+     * „Връзката се върна“ — по едно събитие при преход офлайн → онлайн, стабилен 2 s
+     * ([reconnections]). Екраните с кеширани данни или грешка се опресняват сами (вж.
+     * org.chyavorec.app.ui.watchReconnect). Мрежата се наблюдава само докато има слушател.
+     */
+    val reconnected: SharedFlow<Unit> by lazy {
+        connectivity.online.reconnections().shareIn(appScope, SharingStarted.WhileSubscribed(), replay = 0)
+    }
 
     /**
      * При ВСЕКИ преход от вход към изход — ръчен изход или принудителен (отказано

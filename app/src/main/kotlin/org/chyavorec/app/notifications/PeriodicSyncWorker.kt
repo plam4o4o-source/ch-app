@@ -15,6 +15,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.messages.MessageWorker
+import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.update.UpdateInstallReceiver
 import org.chyavorec.app.widget.ChitalishteWidget
 import org.chyavorec.core.Outcome
@@ -111,7 +112,7 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         if (last != null && last != newest.id) {
             Notifier.show(
                 applicationContext, Channel.NEWS, NotificationIds.NEWS,
-                applicationContext.getString(R.string.notif_new_article), newest.title, "news/${newest.id.hashCode()}",
+                applicationContext.getString(R.string.notif_new_article), newest.title, DeepLinks.article(newest.id),
             )
         }
         c.settings.setLastNewsId(newest.id)

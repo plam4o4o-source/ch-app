@@ -161,8 +161,11 @@ cd shared && ../gradlew test && cd ..                 # ядро: парсери
 ./gradlew assembleProdRelease                          # APK за директно инсталиране (със самообновяване)
 ```
 
-GitHub Actions (`.github/workflows/android.yml`) пуска всичко това при всеки
-push и качва APK/AAB като artifacts.
+GitHub Actions (`.github/workflows/android.yml`) пуска всичко това при push в `main`,
+`claude/**` и `wave*/**`, при pull request (без повторение за commit, проверен вече при push)
+и ръчно, и качва APK/AAB като artifacts. Тестовете на приложението вървят за prod (само
+`MainFlowsUiTest` — и за dev, заради демо входа); проверките и release build-ът са две
+паралелни задачи. Отчетът на Compose компилатора е само при ръчно пускане.
 
 ## Release и Google Play
 

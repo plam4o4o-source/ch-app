@@ -1,0 +1,98 @@
+package org.chyavorec.app.ui.navigation
+
+import android.net.Uri
+import org.chyavorec.core.Urls
+
+/** Къде води една връзка — от известие, пряк път на иконата или адрес от сайта. */
+sealed interface LinkTarget {
+    /**
+     * [tab] — разделът от долната лента под екрана (за да води „Назад“ към него, а не
+     * извън приложението); [stack] — екраните над раздела (празно — самият раздел).
+     */
+    data class Screen(val tab: String, val stack: List<String> = emptyList()) : LinkTarget
+
+    /** Диалогът за нова версия (без навигация). */
+    data object UpdatePrompt : LinkTarget
+}
+
+/**
+ * Вътрешните връзки на приложението. Известията носят в extra „deep_link“ (а преките
+ * пътища — в `chyavorec://app/<връзка>`) низ от вида:
+ * - `article/<id>` — новина по идентификатора ѝ от news.json (или по публичния ѝ адрес);
+ * - `event/<id>` — събитие по идентификатора му от index.json;
+ * - `message/<id>` — съобщенията, превъртени до това съобщение;
+ * - `events`, `messages`, `catalog`, `scan`, `login`, `my/loans`, `my/card`, `my/history`, `update`;
+ * - `https://chyavorec.org/...` — адрес от сайта (App Links), виж [forUrl].
+ * Идентификаторите се кодират ([Uri.encode]), както в [Routes].
+ */
+object DeepLinks {
+    const val EVENTS = "events"
+    const val MESSAGES = "messages"
+    const val UPDATE = "update"
+
+    private const val ARTICLE_PREFIX = "article/"
+    private const val EVENT_PREFIX = "event/"
+    private const val MESSAGE_PREFIX = "message/"
+
+    fun article(id: String) = ARTICLE_PREFIX + Uri.encode(id)
+    fun event(id: String) = EVENT_PREFIX + Uri.encode(id)
+    fun message(id: String) = MESSAGE_PREFIX + Uri.encode(id)
+
+    /** Целта на връзката [link] или `null` — непозната връзка (пренебрегва се, без срив). */
+    fun target(link: String, siteBaseUrl: String): LinkTarget? {
+        if (link.startsWith("https://", ignoreCase = true) || link.startsWith("http://", ignoreCase = true)) {
+            return forUrl(link, siteBaseUrl)
+        }
+        return when {
+            link == "login" -> LinkTarget.Screen(Routes.MY, listOf(Routes.LOGIN))
+            link == "my/loans" -> LinkTarget.Screen(Routes.MY, listOf(Routes.LOANS))
+            link == "my/card" -> LinkTarget.Screen(Routes.MY, listOf(Routes.CARD))
+            link == "my/history" -> LinkTarget.Screen(Routes.MY, listOf(Routes.HISTORY))
+            link == "catalog" -> LinkTarget.Screen(Routes.CATALOG)
+            link == "scan" -> LinkTarget.Screen(Routes.CATALOG, listOf(Routes.SCAN))
+            link == EVENTS -> LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS))
+            link == MESSAGES -> LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES))
+            link == UPDATE -> LinkTarget.UpdatePrompt
+            link.startsWith(ARTICLE_PREFIX) -> idOf(link, ARTICLE_PREFIX)
+                ?.let { LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(it))) }
+                ?: LinkTarget.Screen(Routes.NEWS)
+            // Под събитието — списъкът със събития, после началото.
+            link.startsWith(EVENT_PREFIX) -> idOf(link, EVENT_PREFIX)
+                ?.let { LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS, Routes.event(it))) }
+                ?: LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS))
+            link.startsWith(MESSAGE_PREFIX) -> idOf(link, MESSAGE_PREFIX)
+                ?.let { LinkTarget.Screen(Routes.HOME, listOf(Routes.message(it))) }
+                ?: LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES))
+            // Известия от по-стари версии („news/<хеш>“) — разделът „Новини“.
+            link == "news" || link.startsWith("news/") -> LinkTarget.Screen(Routes.NEWS)
+            else -> null
+        }
+    }
+
+    private fun idOf(link: String, prefix: String): String? =
+        Uri.decode(link.removePrefix(prefix)).takeIf { it.isNotBlank() }
+
+    /**
+     * Адрес от сайта → native екран; `null` — файл, външен или непознат адрес (отваря се в
+     * браузъра). Пътищата, заявени като App Links в AndroidManifest.xml, трябва всички да
+     * водят до екран тук (проверява го DeepLinksTest).
+     */
+    fun forUrl(url: String, siteBaseUrl: String): LinkTarget.Screen? {
+        if (!Urls.sameSite(url, siteBaseUrl)) return null
+        val path = Uri.parse(url).path.orEmpty().trimEnd('/').ifEmpty { "/" }
+        if (path.substringAfterLast('/').contains('.')) return null
+        return when {
+            path == "/" -> LinkTarget.Screen(Routes.HOME)
+            path == "/elektronen-katalog" -> LinkTarget.Screen(Routes.CATALOG)
+            path == "/news" -> LinkTarget.Screen(Routes.NEWS)
+            // По публичния адрес без заявка/котва (така е и в кеша на новините).
+            path.startsWith("/news/") -> LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(siteBaseUrl.trimEnd('/') + path)))
+            path == "/events" -> LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS))
+            path == "/kontakti" -> LinkTarget.Screen(Routes.HOME, listOf(Routes.CONTACTS))
+            path == "/load" || path == "/istoricheski-publikacii" -> LinkTarget.Screen(Routes.MORE, listOf(Routes.DOCUMENTS))
+            path == "/policy" -> LinkTarget.Screen(Routes.MORE, listOf(Routes.PRIVACY))
+            path.count { it == '/' } == 1 -> LinkTarget.Screen(Routes.MORE, listOf(Routes.page(url, "")))
+            else -> null
+        }
+    }
+}

@@ -35,6 +35,12 @@
         <intent>
             <action android:name="android.support.customtabs.action.CustomTabsService" />
         </intent>
+        <!-- Браузърът за адресите на сайта: те са App Links на приложението (виж Intents.openUrl). -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
     </queries>
 
     <application
@@ -63,6 +69,40 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- App Links: адресите от chyavorec.org, за които приложението има екран (виж
+                 DeepLinks.forUrl), се отварят направо в него. Сайтът публикува
+                 /.well-known/assetlinks.json за org.chyavorec.app. Само каноничният адрес без
+                 www (така са sitemap.xml и canonical на сайта); всички останали пътища
+                 (търсене, javora, изтриване на акаунт, файлове) остават в браузъра. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+                <data android:host="chyavorec.org" />
+                <data android:path="/" />
+                <data android:path="/news" />
+                <data android:path="/elektronen-katalog" />
+                <data android:path="/events" />
+                <data android:path="/kontakti" />
+                <data android:path="/load" />
+                <data android:path="/istoricheski-publikacii" />
+                <data android:path="/policy" />
+                <data android:path="/about" />
+                <data android:path="/history" />
+                <data android:path="/library" />
+                <data android:path="/folklorna-grupa" />
+                <data android:path="/yavorski-hlapeta" />
+                <data android:path="/tancov-klub" />
+                <data android:path="/klubove-i-krzhoci" />
+                <data android:path="/proekti" />
+                <data android:path="/darenija" />
+                <data android:path="/fotodokumentalna-izlozhba" />
+                <data android:path="/selo-yavorec" />
+                <data android:path="/nature" />
+                <data android:path="/dostapnost" />
+                <data android:pathPrefix="/news/" />
             </intent-filter>
             <!-- Статични преки пътища при задържане на иконата (отделен файл за всеки flavor
                  заради различния applicationId). -->

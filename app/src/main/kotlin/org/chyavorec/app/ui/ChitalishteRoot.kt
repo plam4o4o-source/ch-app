@@ -104,6 +104,8 @@ import org.chyavorec.app.R
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.messages.MessagesOnLaunch
+import org.chyavorec.app.ui.navigation.DeepLinks
+import org.chyavorec.app.ui.navigation.LinkTarget
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.navigation.TopTab
 import org.chyavorec.app.ui.screens.catalog.BookScreen
@@ -141,7 +143,6 @@ import org.chyavorec.app.ui.screens.site.SitePageScreen
 import org.chyavorec.app.util.Intents
 import org.chyavorec.app.ui.components.UpdateDialog
 import org.chyavorec.app.ui.screens.messages.MessagesScreen
-import org.chyavorec.core.Urls
 import kotlinx.coroutines.flow.first
 
 /** Анимираното въведение се показва веднъж на процес (студен старт), не при всяко завъртане. */
@@ -201,24 +202,20 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     val reduced = rememberReducedMotion()
 
     LaunchedEffect(link) {
-        if (link == null) return@LaunchedEffect
+        val target = link ?: return@LaunchedEffect
         // При студен старт (докосване на известие) графът на навигацията още не е
         // зададен в първия кадър — изчакваме първия екран, преди да навигираме.
         nav.currentBackStackEntryFlow.first()
-        when {
-            link == null -> Unit
-            link == "login" -> nav.navigate(Routes.LOGIN)
-            link == "my/loans" -> nav.navigate(Routes.LOANS)
-            link == "my/card" -> nav.navigate(Routes.CARD)
-            link == "catalog" -> nav.navigateTab(Routes.CATALOG)
-            link == "my/history" -> nav.navigate(Routes.HISTORY)
-            link == "scan" -> nav.navigate(Routes.SCAN)
-            link == "events" -> nav.navigate(Routes.EVENTS)
-            link == "update" -> container.updater.showPrompt()
-            link == "messages" -> nav.navigate(Routes.MESSAGES)
-            link!!.startsWith("news") -> nav.navigateTab(Routes.NEWS)
-            // Пряк път „Сканирай“: ако екранът за сканиране съществува в графа — към него,
-            // иначе към каталога. Непознати връзки се пренебрегват (без срив).
+        // Известие, пряк път или адрес от сайта (App Links): първо разделът отдолу, после
+        // екранът над него — „Назад“ води към раздела, а не извън приложението.
+        when (val t = DeepLinks.target(target, container.config.siteBaseUrl)) {
+            is LinkTarget.Screen -> {
+                nav.navigateTab(t.tab)
+                t.stack.forEach { nav.navigate(it) }
+            }
+            LinkTarget.UpdatePrompt -> container.updater.showPrompt()
+            // Адрес от сайта без native екран — в браузъра; непознатите връзки се пренебрегват.
+            null -> if (target.startsWith("https://")) Intents.openUrl(context, target)
         }
         deepLink.value = null
     }
@@ -230,26 +227,13 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
 
     fun navigate(target: String) = if (target in topLevelRoutes) nav.navigateTab(target) else nav.navigate(target)
 
-    /** Връзка от съдържанието на сайта: вътрешна страница → native екран; файл/външен адрес → Custom Tab. */
+    /**
+     * Връзка от съдържанието на сайта: вътрешна страница → native екран (над текущия,
+     * а раздел — като смяна на раздела); файл/външен адрес → Custom Tab.
+     */
     fun openLink(url: String) {
-        val base = container.config.siteBaseUrl
-        if (Urls.sameSite(url, base)) {
-            val path = Uri.parse(url).path.orEmpty().trimEnd('/').ifEmpty { "/" }
-            val isFile = path.substringAfterLast('/').contains('.')
-            when {
-                isFile -> Unit
-                path == "/" -> return nav.navigateTab(Routes.HOME)
-                path == "/elektronen-katalog" -> return nav.navigateTab(Routes.CATALOG)
-                path == "/news" -> return nav.navigateTab(Routes.NEWS)
-                path.startsWith("/news/") -> return nav.navigate(Routes.article(url))
-                path == "/events" -> return nav.navigate(Routes.EVENTS)
-                path == "/kontakti" -> return nav.navigate(Routes.CONTACTS)
-                path == "/load" || path == "/istoricheski-publikacii" -> return nav.navigate(Routes.DOCUMENTS)
-                path == "/policy" -> return nav.navigate(Routes.PRIVACY)
-                path.count { it == '/' } == 1 -> return nav.navigate(Routes.page(url, ""))
-            }
-        }
-        Intents.openUrl(context, url)
+        val t = DeepLinks.forUrl(url, container.config.siteBaseUrl) ?: return Intents.openUrl(context, url)
+        if (t.stack.isEmpty()) nav.navigateTab(t.tab) else t.stack.forEach { nav.navigate(it) }
     }
     val openExternal: (String) -> Unit = { Intents.openUrl(context, it) }
     val back: () -> Unit = { if (!nav.popBackStack()) nav.navigateTab(Routes.HOME) }
@@ -554,6 +538,9 @@ private fun AppNavHost(
         screen(Routes.CONTACTS) { ContactsScreen(back) }
         screen(Routes.DOCUMENTS) { DocumentsScreen(back, openLink) }
         screen(Routes.MESSAGES) { MessagesScreen(back, openLink) }
+        screen(Routes.MESSAGE, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
+            MessagesScreen(back, openLink, focusId = Uri.decode(it.arguments?.getString("id").orEmpty()).ifBlank { null })
+        }
         screen(Routes.SETTINGS) { SettingsScreen(back, navigate) }
         screen(Routes.PRIVACY) { PrivacyScreen(back, navigate) }
         screen(Routes.TERMS) { TermsScreen(back, navigate) }

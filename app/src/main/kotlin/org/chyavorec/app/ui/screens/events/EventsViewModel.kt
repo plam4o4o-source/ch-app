@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.chyavorec.app.notifications.ReminderScheduler
+import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.AppClock
@@ -35,7 +36,7 @@ class EventsViewModel(
     private val repo: EventsRepository,
     private val reminders: ReminderScheduler,
     private val clock: AppClock,
-) : ViewModel() {
+) : ViewModel(), RefreshOnReconnect {
 
     private val load = MutableStateFlow(ScreenState<List<Event>>())
     private val category = MutableStateFlow<String?>(null)
@@ -76,6 +77,9 @@ class EventsViewModel(
         load.update { it.with(repo.events(force)) }
     }
 
+    override val reconnectState: ScreenState<*> get() = load.value
+    override fun refreshOnReconnect() { refresh(false) }
+
     fun setCategory(c: String?) { category.value = if (category.value == c) null else c }
     fun setCalendarMode(on: Boolean) { calendarMode.value = on; selected.value = null }
     fun shiftMonth(delta: Long) { month.update { it.plusMonths(delta) }; selected.value = null }
@@ -97,7 +101,8 @@ class EventDetailViewModel(
 
     init {
         viewModelScope.launch {
-            event.value = repo.find(id)
+            // От известие при празен кеш — първо списъкът със събития.
+            event.value = repo.find(id) ?: repo.events(false).let { repo.find(id) }
             loaded.value = true
         }
     }

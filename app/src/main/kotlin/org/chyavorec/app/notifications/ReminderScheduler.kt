@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import org.chyavorec.app.R
 import org.chyavorec.app.data.local.EventReminderEntity
 import org.chyavorec.app.data.local.RemindersDao
+import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.core.AppClock
 import org.chyavorec.domain.model.Event
 import java.time.LocalDate
@@ -70,9 +71,11 @@ class EventReminderWorker(context: Context, params: WorkerParameters) : Coroutin
     override suspend fun doWork(): Result {
         val title = inputData.getString(ReminderScheduler.KEY_TITLE) ?: return Result.success()
         val id = inputData.getString(ReminderScheduler.KEY_ID).orEmpty()
+        // Докосването отваря самото събитие (под него — списъкът със събития).
         Notifier.show(
             applicationContext, Channel.EVENTS, NotificationIds.event(id),
-            applicationContext.getString(R.string.notif_event_reminder), title, "events",
+            applicationContext.getString(R.string.notif_event_reminder), title,
+            if (id.isNotBlank()) DeepLinks.event(id) else DeepLinks.EVENTS,
         )
         return Result.success()
     }

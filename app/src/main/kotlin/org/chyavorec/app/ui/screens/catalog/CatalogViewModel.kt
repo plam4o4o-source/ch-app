@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.Outcome
@@ -62,7 +63,7 @@ class CatalogViewModel(
     private val repo: CatalogRepository,
     /** Търсенето и debounce-ът вървят извън главната нишка (тестовете подават свой диспечер). */
     private val searchDispatcher: CoroutineDispatcher = Dispatchers.Default,
-) : ViewModel() {
+) : ViewModel(), RefreshOnReconnect {
 
     private val _state = MutableStateFlow(CatalogUiState())
     val state: StateFlow<CatalogUiState> = _state.asStateFlow()
@@ -103,6 +104,9 @@ class CatalogViewModel(
         _state.update { s -> s.copy(engine = s.engine.with(r), facets = (r as? Outcome.Success)?.value?.data?.facets ?: s.facets) }
         runSearch()
     }
+
+    override val reconnectState: ScreenState<*> get() = _state.value.engine
+    override fun refreshOnReconnect() { refresh(false) }
 
     fun update(transform: (CatalogQuery) -> CatalogQuery) {
         val q = transform(_state.value.query)
