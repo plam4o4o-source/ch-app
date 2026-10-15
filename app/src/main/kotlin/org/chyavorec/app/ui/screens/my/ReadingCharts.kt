@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -188,8 +190,7 @@ fun ReadingStatsCard(stats: ReadingStats.Summary, onOpenHistory: () -> Unit, mod
 /** Стълбчета за последните 12 месеца; текущият месец е в златно, броят — над стълбчето. */
 @Composable
 private fun MonthBars(stats: ReadingStats.Summary, progress: () -> Float) {
-    val context = LocalContext.current
-    val locale = context.resources.configuration.locales[0]
+    val locale = LocalConfiguration.current.locales[0]
     val months = stats.months
     val peak = stats.peakMonth
     val description = if (peak == null) {
@@ -339,7 +340,8 @@ private fun SectionRing(slices: List<Slice>, total: Int, progress: () -> Float) 
 /** Три малки числа: тази година, любим автор, най-дълга поредица от месеци. */
 @Composable
 private fun StatTiles(stats: ReadingStats.Summary) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    // Еднаква височина на трите плочки (по най-високата).
+    Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         StatTile(stats.thisYear.toString(), stringResource(R.string.reading_this_year), Modifier.weight(1f))
         StatTile(
             stats.favouriteAuthor?.let(::shortAuthor) ?: "—",
@@ -360,7 +362,7 @@ private fun StatTile(value: String, label: String, modifier: Modifier = Modifier
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.semantics(mergeDescendants = true) {},
+        modifier = modifier.fillMaxHeight().semantics(mergeDescendants = true) {},
     ) {
         Column(Modifier.heightIn(min = 68.dp).padding(horizontal = 10.dp, vertical = 10.dp), verticalArrangement = Arrangement.Center) {
             Text(
