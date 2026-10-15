@@ -3,7 +3,16 @@ package org.chyavorec.app.ui
 import android.app.Application
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -23,9 +32,12 @@ import org.chyavorec.app.TestResources
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.ui.components.SectionLabel
+import org.chyavorec.app.ui.screens.my.ReadingStatsCard
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.ThemeMode
 import org.chyavorec.core.FixedClock
+import org.chyavorec.data.catalog.ReadingStats
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -35,6 +47,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.time.Instant
+import java.time.YearMonth
 
 /**
  * Снимки на основните екрани (светла и тъмна тема) за визуален преглед.
@@ -164,6 +177,43 @@ class ScreenshotTest {
         waitFor("Няма съобщения")
         shot("06-messages-empty")
     }
+
+    // „За теб“ за читател без вход: „Най-четени и нови“ от примерния каталог.
+    @Test fun homeForYou() {
+        launch()
+        waitFor("45-ти")
+        // Полицата е под първия екран (LazyColumn не я композира, докато не се превърти до нея)
+        // и се изчислява след първия кадър — превърта се, щом се появи в списъка.
+        compose.waitUntil(15_000) {
+            runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) }.isSuccess
+        }
+        shot("08-home-for-you")
+    }
+
+    /** „Моето четене“ с примерна история (графиките, както са в „Моето“ за влязъл читател). */
+    private fun readingCard(mode: ThemeMode, name: String) {
+        val months = listOf(1, 2, 0, 3, 4, 2, 1, 0, 2, 3, 5, 2).mapIndexed { i, n ->
+            ReadingStats.MonthCount(YearMonth.of(2025, 11).plusMonths(i.toLong()), n)
+        }
+        val stats = ReadingStats.Summary(
+            months = months,
+            sections = listOf(8 to 14, 9 to 5, 3 to 3, 1 to 2, 7 to 1, null to 2).map { (s, n) -> ReadingStats.SectionCount(s, n) },
+            thisYear = 22, favouriteAuthor = "Вазов, Иван", favouriteAuthorCount = 5, longestStreak = 6, total = 27,
+        )
+        compose.setContent {
+            ChitalishteTheme(mode = mode) {
+                Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface).padding(vertical = 16.dp)) {
+                    SectionLabel("Моето четене", Modifier.padding(start = 20.dp, bottom = 12.dp))
+                    ReadingStatsCard(stats, onOpenHistory = {})
+                }
+            }
+        }
+        shot(name)
+    }
+
+    @Test fun myReadingLight() = readingCard(ThemeMode.LIGHT, "09-my-reading-light")
+
+    @Test fun myReadingDark() = readingCard(ThemeMode.DARK, "10-my-reading-dark")
 
     @Test fun onboarding() {
         launch(settings = AppSettings(onboardingDone = false, introShown = true))

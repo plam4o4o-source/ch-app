@@ -1,6 +1,10 @@
 package org.chyavorec.app.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
@@ -21,7 +25,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,21 +48,19 @@ import org.chyavorec.domain.occasion.HolidayCalendar
 import org.chyavorec.domain.occasion.Occasion
 import org.chyavorec.domain.occasion.OccasionLink
 import org.chyavorec.domain.occasion.SiteOccasion
+import java.time.LocalDate
 
 /**
  * Украсата за днес (празници, сезони, обичаи и местните празници от сайта) или
  * [DayDecor.NONE], ако украсите са изключени в настройките.
+ *
+ * Настройката идва от корена ([LocalSeasonalDecor]) — вярна още в първия кадър; местните
+ * празници [site] се зареждат от екрана (ViewModel-а му — кешът, после сайтът), а не тук
+ * след първия кадър. [today] се опреснява при връщане към приложението и в полунощ.
  */
 @Composable
-fun rememberDayDecor(): DayDecor {
-    val container = LocalAppContainer.current
-    val settings by container.settings.settings.collectAsStateWithLifecycle(initialValue = null)
-    val enabled = settings?.seasonal ?: false
-    val today = remember { container.clock.today() }
-    // Местните празници идват от кеша/сайта; докато ги няма — само общите.
-    val site by produceState(emptyList<SiteOccasion>(), enabled) {
-        if (enabled) value = runCatching { container.siteRepository.occasions() }.getOrDefault(emptyList())
-    }
+fun rememberDayDecor(site: List<SiteOccasion>, today: LocalDate = rememberToday()): DayDecor {
+    val enabled = rememberSeasonalEnabled()
     return remember(enabled, today, site) { if (enabled) HolidayCalendar.decorFor(today, site) else DayDecor.NONE }
 }
 
@@ -115,31 +116,44 @@ private fun greetingRes(id: String): Pair<Int, Int>? = when (id) {
     else -> null
 }
 
+/** Скритият с „×“ поздрав от настройките: `null` = още се чете; "" = нищо не е скрито. */
+@Composable
+fun rememberDismissedOccasion(): String? {
+    val container = LocalAppContainer.current
+    val flow = remember(container) { container.settings.dismissedOccasion.map { it.orEmpty() } }
+    val dismissed by flow.collectAsStateWithLifecycle(initialValue = null)
+    return dismissed
+}
+
 /**
  * Празничен поздрав под заглавката: затваря се с „×“ за деня; ако има връзка —
  * натискането отваря подходящите книги. В паметни дни ([quiet]) е в приглушени цветове.
+ *
+ * [dismissed] — скритият днес поздрав (`null` = още не е прочетен); началният екран го
+ * държи в своя ViewModel, за да е известен още в първия кадър. Ако стане известен по-късно,
+ * поздравът се разгъва плавно, вместо съдържанието под него да „скочи“.
  */
 @Composable
 fun HolidayGreeting(
     decor: DayDecor,
     navigate: (String) -> Unit,
     modifier: Modifier = Modifier,
+    dismissed: String? = rememberDismissedOccasion(),
+    today: LocalDate = rememberToday(),
 ) {
     val occasion = decor.greeting ?: return
     val container = LocalAppContainer.current
-    // null = още се чете; "" = нищо не е скрито.
-    val dismissedFlow = remember(container) { container.settings.dismissedOccasion.map { it.orEmpty() } }
-    val dismissed by dismissedFlow.collectAsStateWithLifecycle(initialValue = null)
-    val today = remember { container.clock.today() }
     val key = "$today|${occasion.id}"
     val (title, text) = greetingTexts(occasion) ?: return
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     val link = occasion.link
     val gold = LocalExtendedColors.current.gold
     val accent = if (decor.quiet) MaterialTheme.colorScheme.onSurfaceVariant else gold
+    val reduced = rememberReducedMotion()
     AnimatedVisibility(
         visible = dismissed != null && dismissed != key,
-        exit = fadeOut() + shrinkVertically(),
+        enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(expandFrom = Alignment.Top),
+        exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
         modifier = modifier,
     ) {
         Surface(

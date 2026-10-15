@@ -24,6 +24,8 @@ import org.chyavorec.app.ui.components.HolidayGreeting
 import org.chyavorec.app.ui.components.HolidayOrnament
 import org.chyavorec.app.ui.components.HolidaySky
 import org.chyavorec.app.ui.components.rememberDayDecor
+import org.chyavorec.app.ui.components.rememberToday
+import kotlinx.coroutines.flow.map
 import org.chyavorec.domain.occasion.OccasionEffect
 import org.chyavorec.domain.occasion.OccasionOrnament
 import org.chyavorec.app.ui.components.WheatEdge
@@ -145,15 +147,25 @@ private val quickActions = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navigate: (String) -> Unit) {
-    val vm = appViewModel { HomeViewModel(it.newsRepository, it.eventsRepository, it.catalogRepository, it.siteRepository, it.clock) }
+    val vm = appViewModel {
+        HomeViewModel(
+            it.newsRepository, it.eventsRepository, it.catalogRepository, it.siteRepository, it.clock,
+            it.libraryRepository, it.authRepository,
+            seasonal = it.settings.settings.map { s -> s.seasonal }, dismissedOccasion = it.settings.dismissedOccasion,
+        )
+    }
     val state by vm.state.collectAsStateWithLifecycle()
+    val dismissedGreeting by vm.dismissed.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     TabReselectEffect(Routes.HOME) { listState.animateScrollToItem(0) }
     // Дали броячите „отброяват“ днес — прочита се отрано и извън главната нишка.
     val appContext = LocalContext.current.applicationContext
     LaunchedEffect(Unit) { prepareCountUpToday(appContext) }
-    // Празници, сезони и обичаи: ефект, орнамент и поздрав за днес.
-    val decor = rememberDayDecor()
+    // Празници, сезони и обичаи: ефект, орнамент и поздрав за днес. Денят се опреснява при
+    // връщане към приложението и в полунощ; местните празници са в ViewModel-а (без „скок“).
+    val today = rememberToday()
+    LaunchedEffect(today) { vm.onDay(today) }
+    val decor = rememberDayDecor(state.occasions, today)
 
     WheatRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         // На таблет/хоризонтално съдържанието е центрирано и не по-широко от 840 dp.
@@ -177,7 +189,10 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     }
                 }
             }
-            if (decor.greeting != null) item("greeting") { HolidayGreeting(decor, navigate) }
+            // Ако поздравът дойде след първия кадър (местен празник от сайта), се появява плавно.
+            if (decor.greeting != null) {
+                item("greeting") { HolidayGreeting(decor, navigate, Modifier.animateItem(), dismissed = dismissedGreeting, today = today) }
+            }
             item("search") {
                 SearchPill(
                     stringResource(R.string.home_search_hint), onClick = { navigate(Routes.SEARCH) },
@@ -228,6 +243,18 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     )
                 }
                 item("new") { BookRow(state.newBooks) { navigate(Routes.book(it.inv)) } }
+            }
+            // „За теб“: по историята на влезлия читател, иначе „Най-четени и нови“. Изчислява се
+            // във ViewModel-а след първия кадър — затова се появява плавно (animateItem).
+            if (state.forYou.isNotEmpty()) {
+                item("for-you-h") {
+                    SectionHeader(
+                        stringResource(R.string.home_for_you),
+                        label = stringResource(if (state.forYouPersonal) R.string.home_for_you_personal else R.string.home_for_you_popular),
+                        modifier = Modifier.animateItem().padding(top = 24.dp, bottom = 8.dp),
+                    )
+                }
+                item("for-you") { BookRow(state.forYou, Modifier.animateItem()) { navigate(Routes.book(it.inv)) } }
             }
             state.shelves.forEach { (name, books) ->
                 item("shelf-$name") {
@@ -486,8 +513,8 @@ private fun QuickActionsGrid(navigate: (String) -> Unit) {
 }
 
 @Composable
-fun BookRow(books: List<CatalogBook>, onClick: (CatalogBook) -> Unit) {
-    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+fun BookRow(books: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (CatalogBook) -> Unit) {
+    LazyRow(modifier = modifier, contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         items(books, key = { it.inv }) { b ->
             PressableCard(onClick = { onClick(b) }, modifier = Modifier.width(128.dp)) {
                 Column(Modifier.padding(10.dp)) {

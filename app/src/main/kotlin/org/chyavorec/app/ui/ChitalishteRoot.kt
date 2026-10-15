@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavController
+import org.chyavorec.app.ui.components.LocalSeasonalDecor
 import org.chyavorec.app.ui.components.LocalSharedTransitionsEnabled
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -157,6 +158,8 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
         LocalAppContainer provides container,
         LocalReducedMotion provides observeReducedMotion(),
         LocalOnlineCovers provides settings.coversOnline,
+        // Украсите — от вече прочетените настройки: вярни още в първия кадър на началния екран.
+        LocalSeasonalDecor provides settings.seasonal,
     ) {
         Box(Modifier.fillMaxSize()) {
             if (!settings.onboardingDone) {

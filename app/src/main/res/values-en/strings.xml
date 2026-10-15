@@ -175,6 +175,9 @@
     <string name="hold_ok_text">The library will set the book aside for you.</string>
     <string name="hold_ok_title">Hold placed</string>
     <string name="home_carousel">Latest news</string>
+    <string name="home_for_you">For you</string>
+    <string name="home_for_you_personal">Based on your reading</string>
+    <string name="home_for_you_popular">Popular and new</string>
     <string name="home_latest_news">More news</string>
     <string name="home_new_books">New arrivals</string>
     <string name="home_search_hint">Search books, news, events…</string>
@@ -408,6 +411,18 @@
     <string name="reader_width">Text width</string>
     <string name="reader_width_narrow">Narrow</string>
     <string name="reader_width_normal">Normal</string>
+    <string name="reading_favourite_author">favourite author</string>
+    <string name="reading_months_label">Books per month</string>
+    <string name="reading_months_none_cd">No books borrowed in the last 12 months</string>
+    <string name="reading_note">Worked out on your phone from your history — nothing is sent anywhere.</string>
+    <string name="reading_open_history">Full history</string>
+    <string name="reading_sections_cd">Books by section: %1$s</string>
+    <string name="reading_sections_label">By section</string>
+    <string name="reading_sections_other">Other</string>
+    <string name="reading_streak">longest streak</string>
+    <string name="reading_this_year">this year</string>
+    <string name="reading_title">My reading</string>
+    <string name="reading_total">in total</string>
     <string name="reminder_past">The event has passed — a reminder can’t be set.</string>
     <string name="reminder_removed">Reminder removed.</string>
     <string name="reminder_set">You’ll get a reminder before the event.</string>
@@ -585,6 +600,14 @@
     <plurals name="photos_count">
         <item quantity="one">%1$d photo</item>
         <item quantity="other">%1$d photos</item>
+    </plurals>
+    <plurals name="reading_months_cd">
+        <item quantity="one">%1$d book in the last 12 months, most in %2$s</item>
+        <item quantity="other">%1$d books in the last 12 months, most in %2$s</item>
+    </plurals>
+    <plurals name="reading_streak_months">
+        <item quantity="one">%1$d month</item>
+        <item quantity="other">%1$d months</item>
     </plurals>
     <plurals name="widget_books_count">
         <item quantity="one">%1$d book</item>
