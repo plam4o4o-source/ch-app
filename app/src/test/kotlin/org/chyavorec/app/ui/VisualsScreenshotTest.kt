@@ -167,12 +167,12 @@ class VisualsScreenshotTest {
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     themes.forEach { (bg, fg) ->
                         // 108 dp слой, видимата част е кръг 72 dp; безопасната зона — 66 dp (червеният кръг).
-                        Box(Modifier.size(144.dp).clip(CircleShape).background(bg), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(120.dp).clip(CircleShape).background(bg), contentAlignment = Alignment.Center) {
                             Image(
                                 painterResource(R.drawable.ic_launcher_monochrome), null,
-                                colorFilter = ColorFilter.tint(fg), modifier = Modifier.size(216.dp),
+                                colorFilter = ColorFilter.tint(fg), modifier = Modifier.size(180.dp),
                             )
-                            Box(Modifier.size(132.dp).border(1.dp, Color.Red.copy(alpha = 0.4f), CircleShape))
+                            Box(Modifier.size(110.dp).border(1.dp, Color.Red.copy(alpha = 0.4f), CircleShape))
                         }
                     }
                 }
