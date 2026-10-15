@@ -38,7 +38,7 @@ import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.Rocket
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.TheaterComedy
-import androidx.compose.material3.CircularProgressIndicator
+import org.chyavorec.app.ui.components.ChLoadingIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -210,6 +210,6 @@ fun AboutChitalishteScreen(onBack: () -> Unit, navigate: (String) -> Unit, openL
                 org.chyavorec.app.ui.components.ErrorView(AppError.NotFound, onRetry = null)
             }
         }
-        else -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+        else -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ChLoadingIndicator() }
     }
 }

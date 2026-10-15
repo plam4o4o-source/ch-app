@@ -22,7 +22,7 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CircularProgressIndicator
+import org.chyavorec.app.ui.components.ChLoadingIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -89,7 +89,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
             Text(stringResource(R.string.login_heading), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
             val c = caps
             when {
-                c == null -> CircularProgressIndicator()
+                c == null -> ChLoadingIndicator()
                 !c.login -> {
                     // Няма онлайн вход в InvLib — НЕ показваме фиктивна форма.
                     Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
@@ -149,7 +149,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                         enabled = !ui.submitting && ui.cardNumber.isNotBlank() && ui.password.isNotEmpty(),
                         modifier = Modifier.fillMaxWidth().height(52.dp),
                     ) {
-                        if (ui.submitting) CircularProgressIndicator(Modifier.size(22.dp), strokeWidth = 2.dp)
+                        if (ui.submitting) ChLoadingIndicator(Modifier.size(28.dp))
                         else Text(stringResource(R.string.action_login))
                     }
                     // „Забравена парола“ — само ако сървърът поддържа възстановяване.

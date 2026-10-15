@@ -137,7 +137,7 @@ fun NewsListScreen(navigate: (String) -> Unit) {
                     empty = {
                         EmptyView(
                             if (ui.filter.favoritesOnly) stringResource(R.string.news_no_saved) else stringResource(R.string.news_empty),
-                            icon = Icons.Outlined.Newspaper,
+                            icon = if (ui.filter.favoritesOnly) Icons.Outlined.BookmarkBorder else Icons.Outlined.Newspaper,
                         )
                     },
                     errorSubject = stringResource(R.string.subject_news),
