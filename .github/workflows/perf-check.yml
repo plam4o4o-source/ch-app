@@ -1,7 +1,7 @@
 name: Perf check (temporary)
 on:
   push:
-    branches: [debug/wave5-check]
+    branches: [debug/wave6-check]
 permissions:
   contents: read
 jobs:

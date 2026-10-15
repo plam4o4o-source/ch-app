@@ -17,6 +17,7 @@ shot() { timeout 20 adb shell screencap -p /sdcard/s.png; timeout 20 adb pull /s
 echo "APK size: $(stat -c %s app.apk) bytes"
 unzip -l app.apk | grep -E "lib/|\.so$" | head; unzip -l app.apk | tail -1
 adb install -r app.apk || { echo "RESULT: install failed"; exit 1; }
+adb shell pm grant org.chyavorec.app android.permission.POST_NOTIFICATIONS || true
 adb logcat -c
 (adb logcat -v time > $OUT/logcat-live.txt 2>&1 &)
 for i in 1 2 3; do
