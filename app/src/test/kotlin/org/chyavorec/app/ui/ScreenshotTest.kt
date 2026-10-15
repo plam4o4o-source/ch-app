@@ -182,8 +182,11 @@ class ScreenshotTest {
     @Test fun homeForYou() {
         launch()
         waitFor("45-ти")
-        waitFor("За теб")
-        compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб"))
+        // Полицата е под първия екран (LazyColumn не я композира, докато не се превърти до нея)
+        // и се изчислява след първия кадър — превърта се, щом се появи в списъка.
+        compose.waitUntil(15_000) {
+            runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) }.isSuccess
+        }
         shot("08-home-for-you")
     }
 
