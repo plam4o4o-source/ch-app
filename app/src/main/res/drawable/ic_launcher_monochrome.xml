@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Монохромен слой на адаптивната икона (тематични икони, Android 13+): силуетът на
+     медальона — пръстен и отворената книга с редове. Без надписи: при размера на иконата
+     не се четат. Всичко е в безопасната зона (радиус 33 от центъра 54,54); системата
+     оцветява само по алфа, затова цветът е бял. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- пръстенът на медальона (външен радиус 30, вътрешен 27) -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M54,24a30,30 0,1 1,0 60a30,30 0,1 1,0 -60zM54,27a27,27 0,1 0,0 54a27,27 0,1 0,0 -54z" />
+    <!-- отворената книга (геометрията на иконата за известия, ×1.65) -->
+    <group
+        android:scaleX="1.65"
+        android:scaleY="1.65"
+        android:translateX="34.2"
+        android:translateY="32">
+        <!-- страници с изрязани редове -->
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="M3,6.2C5.3,5 8.2,4.6 11.2,5.4V19.2C8.4,18.4 5.6,18.6 3,19.6ZM4.8,8.6h4.8v0.9h-4.8zM4.8,10.9h4.8v0.9h-4.8zM4.8,13.2h4.8v0.9h-4.8zM4.8,15.5h3.6v0.9h-3.6zM12.8,5.4C15.8,4.6 18.7,5 21,6.2V19.6C18.4,18.6 15.6,18.4 12.8,19.2ZM14.4,8.6h4.8v0.9h-4.8zM14.4,10.9h4.8v0.9h-4.8zM14.4,13.2h4.8v0.9h-4.8zM15.6,15.5h3.6v0.9h-3.6z" />
+        <!-- корицата отдолу -->
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M1.5,8.2H2.3V20.8C5.6,19.6 8.9,19.6 12,20.9C15.1,19.6 18.4,19.6 21.7,20.8V8.2H22.5V21.9C19,20.6 15.4,20.6 12,22.1C8.6,20.6 5,20.6 1.5,21.9Z" />
+    </group>
+</vector>

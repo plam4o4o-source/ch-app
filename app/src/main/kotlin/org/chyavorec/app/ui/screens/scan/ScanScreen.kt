@@ -53,7 +53,7 @@ import androidx.compose.material.icons.outlined.FlashlightOn
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
+import org.chyavorec.app.ui.components.ChLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -281,7 +281,7 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     ) {
                         if (!catalogReady) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                CircularProgressIndicator(Modifier.size(16.dp), color = Brand.GoldLight, strokeWidth = 2.dp)
+                                ChLoadingIndicator(Modifier.size(22.dp), contentDescription = null, color = Brand.GoldLight)
                                 Spacer(Modifier.width(8.dp))
                                 Text(stringResource(R.string.scan_catalog_loading), color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium)
                             }

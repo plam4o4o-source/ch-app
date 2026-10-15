@@ -121,6 +121,8 @@ fun MessageView(
     illustration: Illustration = illustrationFor(icon),
     /** Анимирана илюстрация вместо статичната картинка (виж Illustrations.kt). */
     animation: (@Composable () -> Unit)? = null,
+    /** Лека анимация по значката (EmptyAnimations.kt), ако няма [animation]; `null` — статично. */
+    motion: EmptyMotion? = emptyMotionFor(icon),
 ) {
     Column(
         modifier = modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 40.dp),
@@ -131,6 +133,8 @@ fun MessageView(
         Box(Modifier.size(160.dp, 120.dp)) {
             if (animation != null) {
                 Box(Modifier.fillMaxSize()) { animation() }
+            } else if (motion != null) {
+                EmptyAnimation(motion, Modifier.fillMaxSize())
             } else androidx.compose.foundation.Image(
                 painter = androidx.compose.ui.res.painterResource(illustration.res),
                 contentDescription = null,
@@ -195,7 +199,8 @@ fun EmptyView(
     icon: ImageVector = Icons.Outlined.Info,
     illustration: Illustration = illustrationFor(icon),
     animation: (@Composable () -> Unit)? = null,
-) = MessageView(icon, title, message, modifier, illustration = illustration, animation = animation)
+    motion: EmptyMotion? = emptyMotionFor(icon),
+) = MessageView(icon, title, message, modifier, illustration = illustration, animation = animation, motion = motion)
 
 /**
  * Лента „Няма интернет връзка. Показваме последно наличните данни.“ + кога е
