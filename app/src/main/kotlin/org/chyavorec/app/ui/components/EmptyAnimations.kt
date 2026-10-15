@@ -121,8 +121,8 @@ private class EmptyArt(motion: EmptyMotion) {
             EmptyMotion.BOOKMARK -> {
                 a = path("M58,14H102A4,4 0 0 1 106,18V80A4,4 0 0 1 102,84H58A4,4 0 0 1 54,80V18A4,4 0 0 1 58,14Z")
                 b = path("M62,16V82M72,32L96,32M72,40L90,40")
-                // Лентичката виси от (92,82) — оттам се люлее.
-                c = path("M87,78L97,78L97,108L92,102L87,108Z")
+                // Лентичката виси от (72,82) — оттам се люлее (вляво, далеч от значката).
+                c = path("M67,78L77,78L77,108L72,102L67,108Z")
                 d = Path()
             }
             EmptyMotion.OFFLINE -> {
@@ -198,8 +198,8 @@ private fun DrawScope.drawPages(art: EmptyArt, color: Color, p: Float) {
             translate(0f, -sin(angle) * 4f)
             scale(sx, 1f, Offset(80f, 63f))
         }) {
-            drawPath(art.d, color, alpha = 0.35f)
-            drawPath(art.d, color, style = Line)
+            drawPath(art.d, color, alpha = 0.2f)
+            drawPath(art.d, color, style = Thin)
         }
     }
 }
@@ -254,7 +254,7 @@ private fun DrawScope.drawStack(art: EmptyArt, color: Color, p: Float) {
 private fun DrawScope.drawBookmark(art: EmptyArt, color: Color, p: Float) {
     // Махало: най-силно в средата на цикъла, в покой — отвесно.
     val angle = 13f * sin(2f * PI.toFloat() * p) * (0.35f + 0.65f * bump(p))
-    withTransform({ rotate(angle, Offset(92f, 82f)) }) {
+    withTransform({ rotate(angle, Offset(72f, 82f)) }) {
         drawPath(art.c, color, alpha = 0.85f)
     }
     drawPath(art.a, color, alpha = FILL)

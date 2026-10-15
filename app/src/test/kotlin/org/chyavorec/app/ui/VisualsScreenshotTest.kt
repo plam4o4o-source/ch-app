@@ -21,6 +21,7 @@ import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -132,18 +133,20 @@ class VisualsScreenshotTest {
         compose.setContent {
             CompositionLocalProvider(LocalReducedMotion provides true) {
                 ChitalishteTheme(mode = if (dark) ThemeMode.DARK else ThemeMode.LIGHT) {
-                    Column(Modifier.background(MaterialTheme.colorScheme.background)) {
-                        Row {
-                            EmptyView("Няма резултати", icon = Icons.Outlined.SearchOff, modifier = Modifier.width(205.dp))
-                            EmptyView("Няма съобщения", icon = Icons.Outlined.Campaign, modifier = Modifier.width(205.dp))
-                        }
-                        Row {
-                            EmptyView("Няма история", icon = Icons.Outlined.AutoStories, modifier = Modifier.width(205.dp))
-                            EmptyView("Няма запазени", icon = Icons.Outlined.BookmarkBorder, modifier = Modifier.width(205.dp))
-                        }
-                        Row {
-                            Box(Modifier.width(205.dp)) { ErrorView(AppError.Network, onRetry = {}) }
-                            EmptyView("Статично (новини)", icon = Icons.Outlined.Newspaper, modifier = Modifier.width(205.dp))
+                    Surface(color = MaterialTheme.colorScheme.background) {
+                        Column {
+                            Row {
+                                EmptyView("Няма резултати", icon = Icons.Outlined.SearchOff, modifier = Modifier.width(205.dp))
+                                EmptyView("Няма съобщения", icon = Icons.Outlined.Campaign, modifier = Modifier.width(205.dp))
+                            }
+                            Row {
+                                EmptyView("Няма история", icon = Icons.Outlined.AutoStories, modifier = Modifier.width(205.dp))
+                                EmptyView("Няма запазени", icon = Icons.Outlined.BookmarkBorder, modifier = Modifier.width(205.dp))
+                            }
+                            Row {
+                                Box(Modifier.width(205.dp)) { ErrorView(AppError.Network, onRetry = {}) }
+                                EmptyView("Статично (новини)", icon = Icons.Outlined.Newspaper, modifier = Modifier.width(205.dp))
+                            }
                         }
                     }
                 }
@@ -160,20 +163,23 @@ class VisualsScreenshotTest {
     @Test fun themedLauncherIcon() {
         val themes = listOf(Color(0xFFD8E2F7) to Color(0xFF26446E), Color(0xFF1E2A38) to Color(0xFFC3D6F0), Color(0xFFEFE3CF) to Color(0xFF5B4314))
         compose.setContent {
-            Row(Modifier.background(Color.White).padding(12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                themes.forEach { (bg, fg) ->
-                    // 108 dp слой, видимата част е кръг 72 dp; безопасната зона — 66 dp.
-                    Box(Modifier.size(144.dp).clip(CircleShape).background(bg), contentAlignment = Alignment.Center) {
-                        Image(
-                            painterResource(R.drawable.ic_launcher_monochrome), null,
-                            colorFilter = ColorFilter.tint(fg), modifier = Modifier.size(216.dp),
-                        )
-                        Box(Modifier.size(132.dp).border(1.dp, Color.Red.copy(alpha = 0.4f), CircleShape))
+            Column(Modifier.background(Color.White).padding(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    themes.forEach { (bg, fg) ->
+                        // 108 dp слой, видимата част е кръг 72 dp; безопасната зона — 66 dp (червеният кръг).
+                        Box(Modifier.size(144.dp).clip(CircleShape).background(bg), contentAlignment = Alignment.Center) {
+                            Image(
+                                painterResource(R.drawable.ic_launcher_monochrome), null,
+                                colorFilter = ColorFilter.tint(fg), modifier = Modifier.size(216.dp),
+                            )
+                            Box(Modifier.size(132.dp).border(1.dp, Color.Red.copy(alpha = 0.4f), CircleShape))
+                        }
                     }
                 }
-                Column {
+                // В реален размер (48 dp).
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     themes.forEach { (bg, fg) ->
-                        Box(Modifier.padding(2.dp).size(48.dp).clip(CircleShape).background(bg), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(48.dp).clip(CircleShape).background(bg), contentAlignment = Alignment.Center) {
                             Image(painterResource(R.drawable.ic_launcher_monochrome), null, colorFilter = ColorFilter.tint(fg), modifier = Modifier.size(72.dp))
                         }
                     }
