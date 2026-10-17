@@ -117,7 +117,8 @@ fun LoanDueCard(summary: LoanSummary, onClick: () -> Unit, modifier: Modifier = 
     val overdue = summary is LoanSummary.Overdue
     val container = if (overdue) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceContainerHigh
     val onContainer = if (overdue) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSurface
-    val accent = if (overdue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+    // Върху errorContainer етикетът и знакът са в onErrorContainer: „error“ в тъмната тема е твърде блед там.
+    val accent = if (overdue) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.primary
     val shape = MaterialTheme.shapes.medium
     val openLabel = stringResource(R.string.home_loans_open)
     Surface(
