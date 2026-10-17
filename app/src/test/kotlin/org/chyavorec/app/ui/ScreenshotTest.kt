@@ -124,7 +124,11 @@ class ScreenshotTest {
     private fun shown(text: String, substring: Boolean = false) {
         // След преходите (иначе първият намерен може да е от излизащия екран).
         compose.waitForIdle()
-        compose.onAllNodes(hasText(text, substring = substring)).onFirst().assertIsDisplayed()
+        val nodes = compose.onAllNodes(hasText(text, substring = substring))
+        val count = nodes.fetchSemanticsNodes().size
+        // Някой от съвпадащите (напр. скрито описание за екранния четец не се брои).
+        val visible = (0 until count).any { runCatching { nodes[it].assertIsDisplayed() }.isSuccess }
+        if (!visible) throw AssertionError("„$text“ не се вижда на екрана ($count съвпадения в дървото)")
     }
 
     /** Разделът [label] в долната лента е избран. */
