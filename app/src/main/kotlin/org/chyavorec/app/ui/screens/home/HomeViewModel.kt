@@ -93,9 +93,6 @@ class HomeViewModel(
     private var feastDay: LocalDate? = null
 
     init {
-        // Празникът за деня (обикновено от кеша) — в първата промяна, ако е готов дотогава.
-        feastDay = clock.today()
-        val feast = viewModelScope.async { site.feastToday() }
         viewModelScope.launch {
             // Първо мигновено от кеша (трите едновременно и с ЕДНА промяна на състоянието —
             // една прекомпозиция вместо по една за всеки източник), после — мрежата.
@@ -110,18 +107,15 @@ class HomeViewModel(
             batch.add { s -> (n?.let { s.copy(news = it.toState().copy(loading = true)) } ?: s).withEvents(e?.data).let { it.copy(news = it.news.startRefresh()) } }
             // Обобщението (от диска) обикновено идва миг след новините — изчаква се за кратко
             // ([COALESCE_MS]), за да влезе в същата промяна; ако закъснее (строи се от стар кеш),
-            // новините и събитията не го чакат. Празникът — само ако вече е готов (може да е от
-            // мрежата, а опресняването не бива да чака нея).
+            // новините и събитията не го чакат.
             withTimeoutOrNull(COALESCE_MS) { cachedSummary.join() }
-            val feastNow = feast.isCompleted
-            if (feastNow) feast.await().let { f -> batch.add { it.copy(feast = f) } }
             if (!cachedSummary.isCompleted) batch.flush()
             cachedSummary.await()?.let { c -> batch.add(summary = c.data) { it.withCatalog(c.data) } }
             batch.flush()
             refresh(force = false, started = true)
-            // Празникът, ако е закъснял за първата промяна — отделно, щом дойде.
-            if (!feastNow) launch { feast.await().let { f -> _state.update { it.copy(feast = f) } } }
         }
+        // Празникът — веднага щом е готов (от кеша или от сайта), независимо от останалото.
+        loadFeast(clock.today())
         viewModelScope.launch {
             seasonal.distinctUntilChanged().collectLatest { on -> if (on) loadOccasions() }
         }

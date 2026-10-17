@@ -107,9 +107,9 @@ class HomeViewModelTest {
 
         // Ново пускане на процеса (нов контейнер, същите файлове): кешът наведнъж, после мрежата.
         val warm = open(container())
-        val first = warm.drop(1).first()
-        assertTrue(first.news.data != null && first.newBooks.isNotEmpty() && first.catalogCount != null,
-            "кешираните новини и книги — в една промяна: $first")
+        // Първото състояние с новини има и книгите от обобщението (не идват поотделно).
+        val first = warm.first { it.news.data != null }
+        assertTrue(first.newBooks.isNotEmpty() && first.catalogCount != null, "кешираните новини и книги — в една промяна: $first")
         assertTrue(warm.size <= 5, "с кеш: ${warm.size} състояния")
     }
 }
