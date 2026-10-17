@@ -205,13 +205,16 @@ androidComponents {
     beforeVariants { v ->
         if (v.buildType == "play" && v.productFlavors.any { it.second == "dev" }) v.enable = false
     }
-    // Самообновяване от GitHub Releases: само в prodRelease (APK за директно инсталиране).
     onVariants { v ->
+        // Самообновяване от GitHub Releases: само в prodRelease (APK за директно инсталиране).
         val selfUpdate = v.buildType == "release" && v.flavorName == "prod"
         v.buildConfigFields?.put(
             "SELF_UPDATE",
             com.android.build.api.variant.BuildConfigField("boolean", selfUpdate.toString(), "Обновяване от GitHub Releases"),
         )
+        // Схемите на Room като assets само в debug — за MigrationTestHelper в тестовете с
+        // Robolectric (Room Gradle плъгинът ги добавя само към androidTest). Не са в release.
+        if (v.buildType == "debug") v.sources.assets?.addStaticSourceDirectory("$projectDir/schemas")
     }
 }
 
@@ -349,6 +352,7 @@ dependencies {
     testImplementation(platform(libs.compose.bom))
     testImplementation(libs.compose.ui.test.junit4)
     testImplementation(libs.androidx.work.testing)
+    testImplementation(libs.androidx.room.testing)
     testImplementation(libs.okhttp.mockwebserver)
     testImplementation(libs.okhttp.tls)
 

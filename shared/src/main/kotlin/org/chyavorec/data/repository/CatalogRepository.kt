@@ -42,7 +42,13 @@ private const val CATALOG_FRESH = 30 * 60 * 1000L
 
 /** Какво е записано до katalog.json: SHA-256 на байтовете и ETag-ът (за условна заявка). */
 @Serializable
-internal data class CatalogMeta(val hash: String, val etag: String? = null, val etagUrl: String? = null)
+internal data class CatalogMeta(
+    val hash: String,
+    val etag: String? = null,
+    val etagUrl: String? = null,
+    /** Датата `generated` на записания каталог (за сверка с копие от по-старото място). */
+    val generatedOn: String? = null,
+)
 
 /**
  * Каталогът се държи в паметта като [CatalogSearchEngine]; суровият JSON се
@@ -201,7 +207,7 @@ class CatalogRepository(
                 markSynced(Instant.ofEpochMilli(last))
                 return Outcome.Success(Unit)
             }
-            validators = m?.let { CatalogValidators(it.hash, it.etag, it.etagUrl) }
+            validators = m?.let { CatalogValidators(it.hash, it.etag, it.etagUrl, it.generatedOn ?: knownGeneratedOn(it)) }
             startFetch(validators)
         }
         repeat(2) {
@@ -238,6 +244,16 @@ class CatalogRepository(
             }
         }
         return Outcome.Failure(AppError.Parse("katalog.json"))
+    }
+
+    /**
+     * Под [mutex]. Датата на кеширания каталог за запис от по-стара версия (без нея в [meta]) —
+     * от обобщението; записва се, за да не се търси отново.
+     */
+    private suspend fun knownGeneratedOn(m: CatalogMeta): String? {
+        val generated = (summary ?: loadSummaryFromDisk())?.data?.generatedOn?.takeIf { it.isNotBlank() } ?: return null
+        if (meta?.hash == m.hash) saveMeta(m.copy(generatedOn = generated))
+        return generated
     }
 
     /** Под [mutex]. Едно сваляне наведнъж: същата заявка, вече в ход, се споделя. */
@@ -291,7 +307,7 @@ class CatalogRepository(
         val rawSaved = runCatching { cache.writeBytes(KEY, f.raw) }.isSuccess
         val s = withContext(work) { CatalogSearchEngine.homeSummary(f.snapshot) }
         saveSummary(s)
-        if (rawSaved) saveMeta(CatalogMeta(f.hash, f.etag, f.etagUrl)) else {
+        if (rawSaved) saveMeta(CatalogMeta(f.hash, f.etag, f.etagUrl, f.snapshot.generatedOn)) else {
             meta = null
             runCatching { cache.remove(META_KEY) }
         }

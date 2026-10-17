@@ -90,6 +90,8 @@ class SettingsStore(private val context: Context) {
         val catalogShelf = booleanPreferencesKey("catalog_shelf")
         val readerFontSize = stringPreferencesKey("reader_font_size")
         val readerNarrow = booleanPreferencesKey("reader_narrow")
+        val readerTraces = booleanPreferencesKey("reader_traces")
+        val readerHttpCacheEvicted = booleanPreferencesKey("reader_http_cache_evicted")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -208,6 +210,18 @@ class SettingsStore(private val context: Context) {
     }
 
     suspend fun clearRecentSearches() = context.dataStore.edit { it.remove(Keys.recentSearches) }
+
+    /**
+     * Имало е вход, чиито следи (известия, напомняния, настройките по-долу) още не са изчистени.
+     * Пази се на диска: при „не ме помни“ и спрян процес следващият старт е без сесия, но
+     * следите на предишния читател трябва да се изчистят.
+     */
+    suspend fun readerTraces(): Boolean = context.dataStore.data.first()[Keys.readerTraces] ?: false
+    suspend fun setReaderTraces(on: Boolean) = context.dataStore.edit { it[Keys.readerTraces] = on }
+
+    /** Еднократно: старите отговори на моста са изтрити от HTTP кеша (преди него нямаше `no-store`). */
+    suspend fun readerHttpCacheEvicted(): Boolean = context.dataStore.data.first()[Keys.readerHttpCacheEvicted] ?: false
+    suspend fun setReaderHttpCacheEvicted() = context.dataStore.edit { it[Keys.readerHttpCacheEvicted] = true }
 
     /**
      * Изчистване на личните следи (история на търсенето, известия за заемания,

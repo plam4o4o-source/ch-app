@@ -24,6 +24,8 @@ import org.chyavorec.domain.model.ReaderMessage
 import org.chyavorec.domain.model.ReaderProfile
 import org.chyavorec.domain.model.SelfDeclaredCard
 import org.chyavorec.domain.model.ServiceCapabilities
+import org.chyavorec.domain.repository.CachedBytes
+import org.chyavorec.domain.repository.CachedPayload
 import org.chyavorec.domain.repository.PayloadCache
 import org.chyavorec.domain.repository.SelfCardStore
 import org.chyavorec.domain.repository.SessionStore
@@ -86,7 +88,10 @@ class AuthRepository(
     /** Слушатели за „смяна на читателя“ (изход или нов вход) — чистят личните данни в паметта. */
     private val resetListeners = java.util.concurrent.CopyOnWriteArrayList<() -> Unit>()
 
-    /** [listener] се вика при всеки изход и при всеки успешен вход (синхронно, бързо). */
+    /**
+     * [listener] се вика при всеки изход, при всеки успешен вход и при старт без запазена
+     * сесия (синхронно, бързо).
+     */
     fun addReaderResetListener(listener: () -> Unit) {
         resetListeners += listener
     }
@@ -102,7 +107,15 @@ class AuthRepository(
      */
     suspend fun restore() {
         val s = store.load()
-        _state.compareAndSet(AuthState.Unknown, if (s != null) AuthState.SignedIn(s.readerId) else AuthState.SignedOut)
+        if (s != null) {
+            _state.compareAndSet(AuthState.Unknown, AuthState.SignedIn(s.readerId))
+            return
+        }
+        // Няма сесия — напр. „не ме помни“ и процесът е бил спрян. Кешираното за предишния
+        // читател не бива да остане за следващия на същия телефон: изтрива се както при изход.
+        storeLock.withLock {
+            if (_state.value == AuthState.Unknown && store.load() == null) clearLocked()
+        }
     }
 
     suspend fun capabilities(): ServiceCapabilities =
@@ -117,9 +130,15 @@ class AuthRepository(
         return when (val r = service.login(cardNumber, password)) {
             is Outcome.Success -> {
                 throttle.onSuccess()
-                notifyReaderReset()
-                store.save(r.value, persist = remember)
-                _state.value = AuthState.SignedIn(r.value.readerId)
+                storeLock.withLock {
+                    // Нов вход = възможно друг читател: всичко кеширано досега се изтрива ПРЕДИ
+                    // записа на новата сесия (след това ключовете вече са на новия читател).
+                    readerCache.clear()
+                    notifyReaderReset()
+                    lastScope = r.value.readerId to readerScopeOf(r.value.readerId)
+                    store.save(r.value, persist = remember)
+                    _state.value = AuthState.SignedIn(r.value.readerId)
+                }
                 Outcome.Success(Unit)
             }
             is Outcome.Failure -> {
@@ -135,8 +154,9 @@ class AuthRepository(
      */
     suspend fun validSession(): Outcome<AuthSession> = mutex.withLock {
         val session = store.load() ?: run {
-            // Няма сесия → състоянието не бива да остава „влязъл“ (или „неизвестно“).
-            storeLock.withLock { if (store.load() == null) _state.value = AuthState.SignedOut }
+            // Няма сесия → състоянието не бива да остава „влязъл“ (или „неизвестно“), а
+            // кешираното за предишния читател се изтрива (както при изход).
+            storeLock.withLock { if (store.load() == null && _state.value != AuthState.SignedOut) clearLocked() }
             return Outcome.Failure(AppError.Unauthorized)
         }
         if (session.expiresAtMillis - clock.now().toEpochMilli() > 60_000) return Outcome.Success(session)
@@ -208,9 +228,34 @@ class AuthRepository(
     /** Извиква се САМО под [storeLock]. */
     private suspend fun clearLocked() {
         store.clear()
+        lastScope = null
         readerCache.clear()
         notifyReaderReset()
         _state.value = AuthState.SignedOut
+    }
+
+    /** Последно изчисленото пространство: (id на читателя, хеш) — за [readerScopeNow]. */
+    @Volatile private var lastScope: Pair<String, String>? = null
+
+    /**
+     * Пространството на текущия читател в читателския кеш — по сесията в [store] (единственият
+     * източник на истина), `null` без вход. Ключовете в кеша са обвързани с него
+     * ([ReaderScopedCache]), така че данни на един читател не могат да се покажат на друг.
+     */
+    internal suspend fun readerScope(): String? {
+        val id = store.load()?.readerId ?: return null
+        lastScope?.let { (known, scope) -> if (known == id) return scope }
+        return readerScopeOf(id).also { lastScope = id to it }
+    }
+
+    /** Без четене на [store] (за [PayloadCache.version], която не е suspend) — последно известното. */
+    internal fun readerScopeNow(): String? = lastScope?.second
+
+    private val scopedCaches = java.util.IdentityHashMap<PayloadCache, PayloadCache>()
+
+    /** Една обвивка на кеш (общи заключвания в [CachedResource] за всички репозиторита върху него). */
+    internal fun scopedCache(base: PayloadCache): PayloadCache = synchronized(scopedCaches) {
+        scopedCaches.getOrPut(base) { ReaderScopedCache(base, this) }
     }
 
     suspend fun requestPasswordReset(cardNumber: String): Outcome<Unit> = service.requestPasswordReset(cardNumber)
@@ -245,6 +290,28 @@ internal suspend fun <T> AuthRepository.withSession(block: suspend (AuthSession)
     }
     if (r is Outcome.Success && !isCurrent(session)) return Outcome.Failure(AppError.Unauthorized)
     return r
+}
+
+/** Пространството в читателския кеш за читател [readerId]: кратък SHA-256 (id-то не се вижда в ключа). */
+internal fun readerScopeOf(readerId: String): String =
+    "r" + org.chyavorec.core.Hashing.sha256Hex(("reader:" + readerId).toByteArray(Charsets.UTF_8)).take(24)
+
+/**
+ * Читателският кеш с ключове на текущия читател (`<пространство>/<ключ>`). Без вход нищо не
+ * се чете и не се записва. Дори ако изчистването при смяна на читателя се провали, данните
+ * на предишния остават под неговото пространство и не се показват на следващия.
+ */
+internal class ReaderScopedCache(private val base: PayloadCache, private val auth: AuthRepository) : PayloadCache {
+    private suspend fun scoped(key: String): String? = auth.readerScope()?.let { "$it/$key" }
+
+    override suspend fun read(key: String): CachedPayload? = scoped(key)?.let { base.read(it) }
+    override suspend fun readBytes(key: String): CachedBytes? = scoped(key)?.let { base.readBytes(it) }
+    override suspend fun write(key: String, text: String) { scoped(key)?.let { base.write(it, text) } }
+    override suspend fun writeBytes(key: String, bytes: ByteArray) { scoped(key)?.let { base.writeBytes(it, bytes) } }
+    override suspend fun remove(key: String) { scoped(key)?.let { base.remove(it) } }
+    override suspend fun clear() = base.clear()
+    override suspend fun touch(key: String): Boolean = scoped(key)?.let { base.touch(it) } ?: false
+    override fun version(key: String): Long? = auth.readerScopeNow()?.let { base.version("$it/$key") }
 }
 
 /**
@@ -282,8 +349,11 @@ class ReaderDataRepository(
         val flight = SingleFlight<Outcome<Synced<T>>>()
     }
 
+    /** Ключовете са в пространството на текущия читател ([ReaderScopedCache]). */
+    private val cache: PayloadCache = auth.scopedCache(secureCache)
+
     private val profilePart = Part<ReaderProfile>(
-        CachedResource(secureCache, KEY_PROFILE, ReaderProfile.serializer(), clock, PROFILE_FRESH_MILLIS),
+        CachedResource(cache, KEY_PROFILE, ReaderProfile.serializer(), clock, PROFILE_FRESH_MILLIS),
         PROFILE_FRESH_MILLIS, { it.profile },
     ) { session ->
         when (val p = service.profile(session)) {
@@ -301,12 +371,12 @@ class ReaderDataRepository(
     }
 
     private val membershipPart = Part<Membership>(
-        CachedResource(secureCache, KEY_MEMBERSHIP, Membership.serializer(), clock, MEMBERSHIP_FRESH_MILLIS),
+        CachedResource(cache, KEY_MEMBERSHIP, Membership.serializer(), clock, MEMBERSHIP_FRESH_MILLIS),
         MEMBERSHIP_FRESH_MILLIS, { it.membership },
     ) { session -> membershipService?.membership(session) ?: Outcome.Failure(AppError.NotAvailable(Feature.MEMBERSHIP)) }
 
     private val loansPart = Part<List<Loan>>(
-        CachedResource(secureCache, KEY_LOANS, ListSerializer(Loan.serializer()), clock, LOANS_FRESH_MILLIS, onStored = onLoansStored),
+        CachedResource(cache, KEY_LOANS, ListSerializer(Loan.serializer()), clock, LOANS_FRESH_MILLIS, onStored = onLoansStored),
         LOANS_FRESH_MILLIS, { it.loans },
     ) { session -> service.loans(session) }
 
@@ -319,14 +389,14 @@ class ReaderDataRepository(
 
     private val historyPart = Part<List<HistoryItem>>(
         CachedResource(
-            secureCache, KEY_HISTORY, ListSerializer(HistoryItem.serializer()), clock, HISTORY_FRESH_MILLIS,
+            cache, KEY_HISTORY, ListSerializer(HistoryItem.serializer()), clock, HISTORY_FRESH_MILLIS,
             onStored = { _historyVersion.update { it + 1 } },
         ),
         HISTORY_FRESH_MILLIS, { it.history },
     ) { session -> service.history(session) }
 
     private val messagesPart = Part<List<ReaderMessage>>(
-        CachedResource(secureCache, KEY_MESSAGES, ListSerializer(ReaderMessage.serializer()), clock, MESSAGES_FRESH_MILLIS),
+        CachedResource(cache, KEY_MESSAGES, ListSerializer(ReaderMessage.serializer()), clock, MESSAGES_FRESH_MILLIS),
         MESSAGES_FRESH_MILLIS, { it.messages },
     ) { session -> service.messages(session) }
 

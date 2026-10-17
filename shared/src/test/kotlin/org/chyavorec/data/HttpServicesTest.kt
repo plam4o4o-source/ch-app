@@ -13,6 +13,8 @@ import org.chyavorec.data.catalog.GitHubCatalogService
 import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.data.invlib.RemoteInvLibClient
 import org.chyavorec.data.site.ChyavorecSiteService
+import org.chyavorec.domain.service.CatalogFetch
+import org.chyavorec.domain.service.CatalogValidators
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
 import org.chyavorec.domain.model.Contacts
@@ -66,6 +68,41 @@ class HttpServicesTest {
         val svc = GitHubCatalogService(http, listOf(url("/k/raw"), url("/k/cdn")), legacyUrls = listOf(url("/main/raw")))
         assertTrue(svc.fetchCatalog() is Outcome.Failure)
         assertEquals(2, server.requestCount)
+    }
+
+    @Test fun catalogLegacyNotUsedWhenOnlyOneSourceIsMissing() = runTest {
+        // 404 само от едната CDN (другата не отговаря) — клонът `katalog` съществува; `main` е по-стар.
+        server.enqueue(MockResponse().setResponseCode(404))
+        server.enqueue(MockResponse().setResponseCode(503))
+        val svc = GitHubCatalogService(http, listOf(url("/k/raw"), url("/k/cdn")), legacyUrls = listOf(url("/main/raw")))
+        assertTrue(svc.fetchCatalog() is Outcome.Failure)
+        assertEquals(2, server.requestCount)
+    }
+
+    @Test fun catalogOlderLegacyDoesNotReplaceNewerCache() = runTest {
+        // Кешираният каталог е от 01.10, а в `main` е от 19.09 → остава кешът.
+        server.enqueue(MockResponse().setResponseCode(404))
+        server.enqueue(MockResponse().setResponseCode(404))
+        server.enqueue(MockResponse().setBody(TestUtil.resource("katalog-sample.json")))
+        val svc = GitHubCatalogService(http, listOf(url("/k/raw"), url("/k/cdn")), legacyUrls = listOf(url("/main/raw")))
+        val r = svc.fetchCatalogConditional(CatalogValidators(hash = "cached", generatedOn = "2026-10-01"))
+        assertEquals(AppError.NotFound, (r as Outcome.Failure).error)
+        assertEquals(3, server.requestCount)
+    }
+
+    @Test fun catalogLegacyNotOlderThanCacheIsAccepted() = runTest {
+        repeat(2) {
+            server.enqueue(MockResponse().setResponseCode(404))
+            server.enqueue(MockResponse().setResponseCode(404))
+            server.enqueue(MockResponse().setBody(TestUtil.resource("katalog-sample.json")))
+        }
+        val svc = GitHubCatalogService(http, listOf(url("/k/raw"), url("/k/cdn")), legacyUrls = listOf(url("/main/raw")))
+        // Същата дата (и с час) — приема се.
+        val same = svc.fetchCatalogConditional(CatalogValidators(hash = "cached", generatedOn = "2026-09-19T08:00:00Z"))
+        assertIs<CatalogFetch.Changed>((same as Outcome.Success).value)
+        // Без известна дата (кеш от по-стара версия) — както досега.
+        val unknown = svc.fetchCatalogConditional(CatalogValidators(hash = "cached"))
+        assertIs<CatalogFetch.Changed>((unknown as Outcome.Success).value)
     }
 
     @Test fun catalogBothSourcesFail() = runTest {
@@ -154,7 +191,11 @@ class HttpServicesTest {
         assertTrue(loginReq.body.readUtf8().contains("\"cardNumber\":\"R-7\""))
         val loans = (c.loans(session) as Outcome.Success).value
         assertEquals("2026-10-03", loans.single().dueOn)
-        assertEquals("Bearer AT", server.takeRequest().getHeader("Authorization"))
+        val loansReq = server.takeRequest()
+        assertEquals("Bearer AT", loansReq.getHeader("Authorization"))
+        // Личните отговори не се пазят в HTTP кеш (нито на OkHttp, нито по пътя).
+        assertEquals("no-store", loansReq.getHeader("Cache-Control"))
+        assertEquals("no-store", loginReq.getHeader("Cache-Control"))
     }
 
     @Test fun invlibLoansWithoutDatesStillDecode() = runTest {

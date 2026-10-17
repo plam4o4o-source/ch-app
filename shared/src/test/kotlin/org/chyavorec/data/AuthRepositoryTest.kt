@@ -92,6 +92,51 @@ class AuthRepositoryTest {
         assertEquals(AuthState.SignedOut, repo.state.value)
     }
 
+    @Test fun restoreWithoutSessionClearsPreviousReaderCache() = runTest {
+        // „Не ме помни“ и спрян процес: сесията я няма, но кешът на предишния читател е на диска.
+        val readerCache = InMemoryPayloadCache()
+        readerCache.write("r123/reader:profile", "{}")
+        var resets = 0
+        val repo = AuthRepository(FakeAuth(), MemStore(), clock, readerCache)
+        repo.addReaderResetListener { resets++ }
+        repo.restore()
+        assertEquals(AuthState.SignedOut, repo.state.value)
+        assertNull(readerCache.read("r123/reader:profile"))
+        assertEquals(1, resets)
+        // Повторно извикване (вече изход) — без ново изчистване.
+        repo.restore()
+        assertEquals(1, resets)
+    }
+
+    @Test fun restoreWithSessionKeepsCache() = runTest {
+        val store = MemStore()
+        store.s = AuthSession("a", "r", clock.now().toEpochMilli() + 3_600_000, "R1"); store.persisted = true
+        val readerCache = InMemoryPayloadCache()
+        readerCache.write("k", "v")
+        val repo = AuthRepository(FakeAuth(), store, clock, readerCache)
+        repo.restore()
+        assertEquals(AuthState.SignedIn("R1"), repo.state.value)
+        assertEquals("v", readerCache.read("k")?.text)
+    }
+
+    @Test fun loginWipesPreviousReaderCacheBeforeSavingSession() = runTest {
+        val readerCache = InMemoryPayloadCache()
+        val store = object : SessionStore {
+            var s: AuthSession? = null
+            var cacheAtSave: String? = "unset"
+            override suspend fun load() = s
+            override suspend fun save(session: AuthSession, persist: Boolean) { cacheAtSave = readerCache.read("old")?.text; s = session }
+            override suspend fun isPersisted() = true
+            override suspend fun clear() { s = null }
+        }
+        readerCache.write("old", "данни на предишния читател")
+        val repo = AuthRepository(FakeAuth(), store, clock, readerCache)
+        repo.login("123", "secret".toCharArray(), remember = false)
+        assertNull(store.cacheAtSave)
+        assertNull(readerCache.read("old"))
+        assertEquals(AuthState.SignedIn("R1"), repo.state.value)
+    }
+
     @Test fun bruteForceIsThrottled() = runTest {
         val repo = AuthRepository(FakeAuth(), MemStore(), clock, InMemoryPayloadCache())
         repeat(5) { repo.login("1", "bad".toCharArray(), true) }

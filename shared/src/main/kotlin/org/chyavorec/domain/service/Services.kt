@@ -69,6 +69,11 @@ data class CatalogValidators(
     val etag: String? = null,
     /** Адресът, от който е [etag] (ETag-ът на една CDN не важи за друга). */
     val etagUrl: String? = null,
+    /**
+     * Датата `generated` на кешираното копие (ISO) — копие от по-старото място (`main`) се
+     * приема само ако не е по-старо от нея. `null` — неизвестна.
+     */
+    val generatedOn: String? = null,
 )
 
 sealed interface CatalogFetch {

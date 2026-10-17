@@ -52,6 +52,17 @@ jobs:
       - name: Unit, ViewModel, repository and UI (Robolectric) tests
         run: ./gradlew testProdDebugUnitTest testDevDebugUnitTest --tests 'org.chyavorec.app.ui.MainFlowsUiTest'
 
+      # Схемите на Room (app/schemas) се пазят в Git: компилацията по-горе изнася схемата на
+      # текущия код; ако тя се различава от записаната (или липсва), проверката спира с diff-а —
+      # новата схема се добавя в commit-а заедно с миграцията (виж AppDatabaseMigrationTest).
+      - name: Room schemas are committed
+        run: |
+          git add --intent-to-add app/schemas
+          if ! git diff --exit-code -- app/schemas; then
+            echo "::error::Room schema in app/schemas differs from the code - commit the exported schema (and a migration)"
+            exit 1
+          fi
+
       # Снимките на екраните (ScreenshotTest) → клон „screenshots“, за да се виждат
       # директно в GitHub: https://github.com/<repo>/tree/screenshots
       # Само при push в main и в клоните за разработка — не от pull request.
