@@ -4,8 +4,12 @@
 # правила (-keep на всички $$serializer, Companion на всеки клас в org.chyavorec.**,
 # *Annotation*/Signature навсякъде) пречеха на R8 да съкращава и оптимизира.
 
-# Обфускираните класове — в един пакет: по-къси имена в DEX-а (запазените с -keep не се местят).
--repackageclasses
+# Проверките на Kotlin за null параметри: без извикванията и без имената на параметрите
+# като низове в DEX-а. Те хващат само null, подаден от Java код; останалите проверки
+# (!!, платформени типове) остават.
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    public static void checkNotNullParameter(java.lang.Object, java.lang.String);
+}
 
 # Jsoup — незадължителни зависимости.
 -dontwarn org.jspecify.annotations.**
