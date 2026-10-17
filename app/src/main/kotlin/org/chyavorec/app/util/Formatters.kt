@@ -39,6 +39,11 @@ object Formatters {
         if (isBulgarian(context)) "${d.dayOfMonth} ${BulgarianDates.monthName(d.monthValue)}"
         else d.format(DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH))
 
+    /** Кратък месец с главни букви за календарни значки: „ОКТ“ / „OCT“. */
+    fun monthShort(context: Context, d: LocalDate): String =
+        if (isBulgarian(context)) BulgarianDates.monthName(d.monthValue).take(3).uppercase()
+        else d.format(DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)).uppercase(Locale.ENGLISH)
+
     fun millisDate(context: Context, millis: Long?): String? =
         millis?.let { date(context, Instant.ofEpochMilli(it).atZone(sofia).toLocalDate()) }
 

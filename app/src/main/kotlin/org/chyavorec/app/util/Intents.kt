@@ -1,10 +1,13 @@
 package org.chyavorec.app.util
 
 import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.CalendarContract
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
@@ -15,7 +18,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 
-/** Външни действия: браузър, телефон, имейл, карта, споделяне, календар. */
+/** Външни действия: браузър, телефон, имейл, карта, споделяне, календар, клипборд. */
 object Intents {
 
     /** Публична страница за искане на изтриване на акаунта и данните (изискване на Google Play). */
@@ -76,13 +79,26 @@ object Intents {
     fun dial(context: Context, phone: String) =
         context.safeStart(Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone.filter { it.isDigit() || it == '+' })))
 
-    fun email(context: Context, address: String, subject: String? = null) =
+    fun email(context: Context, address: String, subject: String? = null, body: String? = null) =
         context.safeStart(
             Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:")).apply {
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(address))
                 subject?.let { putExtra(Intent.EXTRA_SUBJECT, it) }
+                body?.let { putExtra(Intent.EXTRA_TEXT, it) }
             },
         )
+
+    /**
+     * Копира [text] в клипборда. От Android 13 системата сама показва какво е копирано —
+     * собственото потвърждение (Toast) е само за по-старите версии, за да не се дублира.
+     */
+    fun copy(context: Context, label: String, text: String) {
+        val clipboard = context.getSystemService(ClipboardManager::class.java) ?: return
+        clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            Toast.makeText(context, context.getString(R.string.copied, text), Toast.LENGTH_SHORT).show()
+        }
+    }
 
     fun map(context: Context, query: String) =
         context.safeStart(Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))))

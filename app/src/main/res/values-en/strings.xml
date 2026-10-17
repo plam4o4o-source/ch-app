@@ -19,6 +19,7 @@
     <string name="action_clear">Clear</string>
     <string name="action_clear_filters">Reset filters</string>
     <string name="action_close">Close</string>
+    <string name="action_copy">Copy</string>
     <string name="action_edit">Edit</string>
     <string name="action_load_more">Show more</string>
     <string name="action_login">Sign in</string>
@@ -38,6 +39,10 @@
     <string name="app_subtitle">Community Centre “Vasil Levski – 1922”</string>
     <string name="app_title">Chitalishte Yavorets</string>
     <string name="article_gallery">Gallery</string>
+    <string name="book_ask_body">Hello,\n\nI’d like to ask about this book:\n\nTitle: %1$s\nAuthor: %2$s\nCall number: %3$s\nInventory number: %4$s\n\n</string>
+    <string name="book_ask_library">Ask the library</string>
+    <string name="book_ask_subject">Book: %1$s</string>
+    <string name="book_ask_text">This book isn’t on the shelf right now. Call or email the library to find out when it will be available.</string>
     <string name="book_availability_note">Availability comes from the library’s public catalogue (InvLib) and updates when the librarian saves changes. “Not on the shelf” means the item is on loan or temporarily unavailable.</string>
     <string name="book_call_number">Call number</string>
     <string name="book_department">Department</string>
@@ -54,6 +59,7 @@
     <string name="book_other_authors">Other authors</string>
     <string name="book_publisher">Publisher</string>
     <string name="book_same_author">By the same author</string>
+    <string name="book_search_author">Find books by this author</string>
     <string name="book_status_as_of">Availability as of %1$s</string>
     <string name="book_status_now">Availability right now</string>
     <string name="book_year">Year</string>
@@ -120,6 +126,7 @@
     <string name="contacts_title">Contacts</string>
     <string name="contacts_web">Online</string>
     <string name="content_open_file">Open file</string>
+    <string name="copied">Copied: %1$s</string>
     <string name="demo_banner">DEMO DATA — development only, not real</string>
     <string name="documents_empty">No documents to show.</string>
     <string name="documents_tab_docs">Documents</string>
@@ -502,7 +509,7 @@
     <string name="settings_theme">Theme</string>
     <string name="settings_title">Settings</string>
     <string name="settings_updates">Updates</string>
-    <string name="share_book_footer">Online catalogue: %1$s</string>
+    <string name="share_book_footer">In the online catalogue: %1$s</string>
     <string name="shortcut_card">Library card</string>
     <string name="shortcut_catalog">Catalogue</string>
     <string name="shortcut_events">Events</string>

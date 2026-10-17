@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -44,6 +45,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.role
@@ -108,9 +110,9 @@ fun SearchPill(hint: String, onClick: () -> Unit, modifier: Modifier = Modifier,
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        modifier = modifier.fillMaxWidth().height(52.dp).semantics { role = Role.Button },
+        modifier = modifier.fillMaxWidth().heightIn(min = 52.dp).semantics { role = Role.Button },
     ) {
-        Row(Modifier.padding(start = 18.dp, end = if (trailing != null) 6.dp else 18.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.heightIn(min = 52.dp).padding(start = 18.dp, end = if (trailing != null) 6.dp else 18.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.width(12.dp))
             Text(
@@ -131,15 +133,19 @@ data class TileItem(val icon: ImageVector, val title: String, val subtitle: Stri
 
 /**
  * Мрежа от плочки с еднаква височина на реда: 2 колони на телефон, 3 при ширина
- * от 600 dp и 4 от 840 dp (таблет, хоризонтално).
+ * от 600 dp и 4 от 840 dp (таблет, хоризонтално). Ширината се мери спрямо мащаба на
+ * шрифта: при много едър системен шрифт на телефон плочките са в една колона (иконата
+ * вляво от текста), за да не се пренасят думите по букви.
  */
 @Composable
 fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier.fillMaxWidth()) {
+        val textWidth = maxWidth / LocalDensity.current.fontScale.coerceAtLeast(1f)
         val columns = when {
-            maxWidth >= 840.dp -> 4
-            maxWidth >= 600.dp -> 3
-            else -> 2
+            textWidth >= 840.dp -> 4
+            textWidth >= 600.dp -> 3
+            textWidth >= 300.dp -> 2
+            else -> 1
         }
         Column(
             Modifier.fillMaxWidth().padding(horizontal = 16.dp),
@@ -159,16 +165,27 @@ fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
                             modifier = Modifier.weight(1f).fillMaxHeight().animateEntrance(r * columns + c)
                                 .darkTopHighlight(MaterialTheme.shapes.medium),
                         ) {
-                            Column(Modifier.padding(14.dp)) {
-                                IconPlate(item.icon, size = 44.dp)
-                                Spacer(Modifier.height(10.dp))
+                            val texts: @Composable () -> Unit = {
                                 Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
                                 item.subtitle?.let {
                                     Spacer(Modifier.height(2.dp))
                                     Text(
                                         it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        maxLines = 2, overflow = TextOverflow.Ellipsis,
+                                        maxLines = if (columns == 1) 3 else 2, overflow = TextOverflow.Ellipsis,
                                     )
+                                }
+                            }
+                            if (columns == 1) {
+                                Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    IconPlate(item.icon, size = 44.dp)
+                                    Spacer(Modifier.width(14.dp))
+                                    Column(Modifier.weight(1f)) { texts() }
+                                }
+                            } else {
+                                Column(Modifier.padding(14.dp)) {
+                                    IconPlate(item.icon, size = 44.dp)
+                                    Spacer(Modifier.height(10.dp))
+                                    texts()
                                 }
                             }
                         }

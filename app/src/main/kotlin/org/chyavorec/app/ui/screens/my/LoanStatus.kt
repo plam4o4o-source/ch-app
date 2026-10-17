@@ -150,7 +150,8 @@ fun LoanDueCard(summary: LoanSummary, onClick: () -> Unit, modifier: Modifier = 
                         // При една книга — коя е и с колко дни; при няколко — само броят (подробно в „Моите книги“).
                         if (summary.count == 1) {
                             Text(summary.first.title, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            DuePill(DueStatus.OVERDUE, -summary.daysOverdue, Modifier.padding(top = 4.dp))
+                            // Върху червения фон на картата — в цвета на текста ѝ (BadDark там е под 4.5:1).
+                            DuePill(DueStatus.OVERDUE, -summary.daysOverdue, Modifier.padding(top = 4.dp), color = accent)
                         }
                     }
                     is LoanSummary.NextDue -> {

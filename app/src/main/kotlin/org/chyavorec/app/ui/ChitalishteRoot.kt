@@ -97,6 +97,7 @@ import org.chyavorec.app.ui.components.LocalOnlineCovers
 import org.chyavorec.app.ui.components.LocalReducedMotion
 import org.chyavorec.app.ui.components.observeReducedMotion
 import org.chyavorec.app.ui.components.LocalSharedScope
+import org.chyavorec.app.ui.components.LimitFontScale
 import org.chyavorec.app.ui.components.LocalTabReselect
 import org.chyavorec.app.ui.components.TabReselectBus
 import org.chyavorec.app.ui.components.rememberReducedMotion
@@ -115,6 +116,7 @@ import org.chyavorec.app.ui.navigation.navigateTab
 import org.chyavorec.app.ui.navigation.openLinkTarget
 import org.chyavorec.app.ui.screens.catalog.BookScreen
 import org.chyavorec.app.ui.screens.catalog.CatalogScreen
+import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
 import org.chyavorec.app.ui.screens.events.EventDetailScreen
 import org.chyavorec.app.ui.screens.events.EventsScreen
 import org.chyavorec.app.ui.screens.gallery.AlbumScreen
@@ -188,6 +190,9 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
 
 private val topLevelRoutes = TopTab.entries.map { it.route }.toSet()
 
+/** Лентата е с фиксирана височина: над 1.3× етикетите на разделите биха се рязали („Нача…“). */
+private const val NAV_LABEL_MAX_FONT_SCALE = 1.3f
+
 @Composable
 private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<String?>, canAskNotifications: Boolean = true) {
     // Известията са включени по подразбиране, но на Android 13+ без разрешение не излизат —
@@ -246,7 +251,13 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     LaunchedEffect(Unit) { MessagesOnLaunch.run(context, container) }
     UpdateDialog(container.updater)
 
-    fun navigate(target: String) = if (target in topLevelRoutes) nav.navigateTab(target) else nav.navigate(target)
+    fun navigate(target: String) = when {
+        // Търсене, поискано от друг екран: каталогът без стария си подстек (иначе би се
+        // възстановил напр. екранът на книга над него, а не резултатите от търсенето).
+        target == Routes.CATALOG && CatalogSearchRequests.pending.value != null -> nav.openLinkTarget(LinkTarget.Screen(Routes.CATALOG))
+        target in topLevelRoutes -> nav.navigateTab(target)
+        else -> nav.navigate(target)
+    }
 
     /**
      * Връзка от съдържанието на сайта: вътрешна страница → native екран (над текущия,
@@ -356,7 +367,7 @@ private fun AppNavigationBar(route: String?, reduced: Boolean, onTab: (TopTab, B
                 selected = selected,
                 onClick = { onTab(tab, selected) },
                 icon = { TabIcon(tab, selected, reduced) },
-                label = { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                label = { LimitFontScale(NAV_LABEL_MAX_FONT_SCALE) { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                 colors = navColors,
             )
         }
@@ -381,7 +392,7 @@ private fun AppNavigationRail(route: String?, reduced: Boolean, onTab: (TopTab, 
                 selected = selected,
                 onClick = { onTab(tab, selected) },
                 icon = { TabIcon(tab, selected, reduced) },
-                label = { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                label = { LimitFontScale(NAV_LABEL_MAX_FONT_SCALE) { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                 colors = railColors,
                 modifier = Modifier.padding(vertical = 4.dp),
             )

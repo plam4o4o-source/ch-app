@@ -301,20 +301,20 @@ private fun dynamicWidgetColors(): WidgetColors {
  */
 private val BrandWidgetColors = WidgetColors(
     background = null,
-    title = DayNightColor(day = Color(0xFF8B6914), night = Color(0xFFC9A84C)),
+    title = DayNightColor(day = Color(0xFF785A10), night = Color(0xFFC9A84C)),
     text = DayNightColor(day = Color(0xFF1A1208), night = Color(0xFFF5F0E8)),
     muted = DayNightColor(day = Color(0xFF5A4D3D), night = Color(0xFFD7CBB6)),
     eventDate = DayNightColor(day = Color(0xFF6B1F2A), night = Color(0xFFE6A8B1)),
-    buttonBg = DayNightColor(day = Color(0xFF8B6914), night = Color(0xFFC9A84C)),
+    buttonBg = DayNightColor(day = Color(0xFF785A10), night = Color(0xFFC9A84C)),
     buttonText = DayNightColor(day = Color(0xFFFFFFFF), night = Color(0xFF1A1208)),
     tonalBg = DayNightColor(day = Color(0xFFE8D5A3), night = Color(0xFF4A3A12)),
     tonalText = DayNightColor(day = Color(0xFF1A1208), night = Color(0xFFF5F0E8)),
     overdueBg = DayNightColor(day = Color(0xFFF9DEDC), night = Color(0xFF5C1A1F)),
     overdueText = DayNightColor(day = Color(0xFFA3262F), night = Color(0xFFFF9C9C)),
     soonBg = DayNightColor(day = Color(0xFFF6E3C2), night = Color(0xFF4A3A12)),
-    soonText = DayNightColor(day = Color(0xFF9A5B00), night = Color(0xFFF2C06B)),
+    soonText = DayNightColor(day = Color(0xFF824C00), night = Color(0xFFF2C06B)),
     okBg = DayNightColor(day = Color(0xFFD5E8D9), night = Color(0xFF26432F)),
-    okText = DayNightColor(day = Color(0xFF2F6B4A), night = Color(0xFF8FD1A8)),
+    okText = DayNightColor(day = Color(0xFF2A6343), night = Color(0xFF8FD1A8)),
 )
 
 private fun WidgetColors.chipBg(status: DueStatus?): ColorProvider = when (status) {

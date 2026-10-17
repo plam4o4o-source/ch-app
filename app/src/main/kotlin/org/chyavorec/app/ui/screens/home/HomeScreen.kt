@@ -46,6 +46,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -104,6 +105,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
@@ -505,21 +507,32 @@ private fun StatsRow(state: HomeUiState) {
 
 @Composable
 private fun QuickActionsGrid(navigate: (String) -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp)) {
-        quickActions.forEachIndexed { i, action ->
-            Column(
-                Modifier.weight(1f).animateEntrance(i).clip(MaterialTheme.shapes.medium)
-                    .clickable { navigate(action.route) }
-                    .semantics { role = Role.Button }
-                    .padding(vertical = 10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                IconPlate(action.icon)
-                Spacer(Modifier.height(6.dp))
-                Text(stringResource(action.labelRes), style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis,
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+    // При много едър шрифт четирите в ред не се събират (думите се пренасят по букви) — 2 × 2.
+    BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp)) {
+        val perRow = if (maxWidth / 4 / LocalDensity.current.fontScale.coerceAtLeast(1f) < 72.dp) 2 else 4
+        Column {
+            quickActions.chunked(perRow).forEachIndexed { r, row ->
+                Row(Modifier.fillMaxWidth()) {
+                    row.forEachIndexed { c, action -> QuickActionCell(action, r * perRow + c, navigate) }
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun RowScope.QuickActionCell(action: QuickAction, i: Int, navigate: (String) -> Unit) {
+    Column(
+        Modifier.weight(1f).animateEntrance(i).clip(MaterialTheme.shapes.medium)
+            .clickable { navigate(action.route) }
+            .semantics { role = Role.Button }
+            .padding(vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        IconPlate(action.icon)
+        Spacer(Modifier.height(6.dp))
+        Text(stringResource(action.labelRes), style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center)
     }
 }
 

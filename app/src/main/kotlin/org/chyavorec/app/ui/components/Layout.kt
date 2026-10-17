@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -31,18 +32,27 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.LocalExtendedColors
+import org.chyavorec.app.util.Intents
 
 /** Етикет над заглавие (както на сайта: малки главни букви + златна линия). */
 @Composable
@@ -163,10 +173,34 @@ fun PressableCard(
     ) { content() }
 }
 
+/**
+ * Ограничава мащаба на системния шрифт до [max] за елементи с фиксирана височина по
+ * спецификация (етикетите на долната лента) — над него текстът би се рязал.
+ */
 @Composable
-fun InfoRow(label: String, value: String?, modifier: Modifier = Modifier) {
+fun LimitFontScale(max: Float, content: @Composable () -> Unit) {
+    val d = LocalDensity.current
+    if (d.fontScale <= max) content()
+    else CompositionLocalProvider(LocalDensity provides Density(d.density, fontScale = max), content = content)
+}
+
+/** Ред „етикет — стойност“. [copyable] — дълго натискане копира стойността (сигнатура, инв. №). */
+@Composable
+fun InfoRow(label: String, value: String?, modifier: Modifier = Modifier, copyable: Boolean = false) {
     if (value.isNullOrBlank()) return
-    Row(modifier.fillMaxWidth().padding(vertical = 7.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+    val copy = if (copyable) {
+        val context = LocalContext.current
+        val haptic = LocalHapticFeedback.current
+        val copyLabel = stringResource(R.string.action_copy)
+        val doCopy = {
+            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            Intents.copy(context, label, value)
+        }
+        Modifier
+            .pointerInput(value) { detectTapGestures(onLongPress = { doCopy() }) }
+            .semantics { onLongClick(copyLabel) { doCopy(); true } }
+    } else Modifier
+    Row(modifier.fillMaxWidth().then(copy).padding(vertical = 7.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(0.42f))
         Text(value, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(0.58f))
     }

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -107,14 +108,16 @@ import java.time.LocalDate
 
 @Composable
 private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier) {
+    // Минимален, а не фиксиран размер: при едър системен шрифт значката расте с текста, вместо да го реже.
     Column(
-        modifier.size(58.dp).clip(MaterialTheme.shapes.small).background(MaterialTheme.colorScheme.secondaryContainer),
+        modifier.widthIn(min = 58.dp).heightIn(min = 58.dp).clip(MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.secondaryContainer).padding(horizontal = 6.dp, vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         if (date != null) {
-            Text(date.dayOfMonth.toString(), style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
-            Text(BulgarianDates.monthName(date.monthValue).take(3).uppercase(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
+            Text(date.dayOfMonth.toString(), style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSecondaryContainer, maxLines = 1)
+            Text(Formatters.monthShort(LocalContext.current, date), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSecondaryContainer, maxLines = 1)
         } else {
             Icon(Icons.Outlined.Event, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer)
         }

@@ -106,6 +106,13 @@ import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.SyncStamp
 import org.chyavorec.app.ui.components.errorMessage
 import org.chyavorec.app.ui.navigation.Routes
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material.icons.outlined.Call
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
+import org.chyavorec.app.ui.components.LibraryContactSheet
+import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.ui.screens.home.BookRow
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.app.util.Intents
@@ -438,6 +445,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
     val context = LocalContext.current
     val resources = LocalResources.current
     val b = ui.book
+    var askLibrary by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(topBar = {
         BackTopBar("", onBack, actions = {
@@ -445,7 +453,8 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 IconButton(onClick = {
                     Intents.share(
                         context, b.title,
-                        listOf(b.title, b.author, resources.getString(R.string.share_book_footer, container.config.siteBaseUrl + "/elektronen-katalog"))
+                        // Връзката води до самата книга — в сайта или (App Link) в приложението.
+                        listOf(b.title, b.author, resources.getString(R.string.share_book_footer, DeepLinks.bookUrl(container.config.siteBaseUrl, b.inv)))
                             .filter { it.isNotBlank() }.joinToString("\n"),
                     )
                 }) { Icon(Icons.Outlined.Share, contentDescription = stringResource(R.string.action_share)) }
@@ -474,8 +483,8 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                     Text(b.title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
                     if (b.subtitle.isNotBlank()) Text(b.subtitle, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (b.author.isNotBlank()) {
-                        Spacer(Modifier.height(6.dp))
-                        Text(b.author, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary)
+                        Spacer(Modifier.height(2.dp))
+                        AuthorLink(b.author, style = MaterialTheme.typography.titleMedium) { CatalogSearchRequests.byAuthor(it, navigate) }
                     }
                     Spacer(Modifier.height(12.dp))
                     BookStatusPill(ui.liveStatus ?: b.status)
@@ -489,9 +498,19 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 }
             }
             // Заявка — според живата наличност, ако я има (каталогът може да е от вчера).
-            if (ui.canHold && (ui.liveStatus?.let { it == org.chyavorec.domain.model.BookStatus.AVAILABLE } ?: b.available)) {
+            val onShelf = ui.liveStatus?.let { it == org.chyavorec.domain.model.BookStatus.AVAILABLE } ?: b.available
+            if (ui.canHold && onShelf) {
                 Button(onClick = { vm.placeHold() }, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
                     Icon(Icons.Outlined.BookmarkAdd, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.book_hold))
+                }
+            }
+            // Заета / не е на рафта — не задънена улица: обаждане или имейл до библиотеката.
+            if (!onShelf) {
+                OutlinedButton(
+                    onClick = { vm.loadContacts(); askLibrary = true },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).heightIn(min = 48.dp),
+                ) {
+                    Icon(Icons.Outlined.Call, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.book_ask_library))
                 }
             }
             if (b.annotation.isNotBlank()) {
@@ -501,7 +520,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
             Column(Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
                 Text(stringResource(R.string.book_details), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(vertical = 8.dp).semantics { heading() })
                 val authors = b.authors
-                if (authors.size > 1) InfoRow(stringResource(R.string.book_other_authors), authors.drop(1).joinToString("; "))
+                if (authors.size > 1) OtherAuthorsRow(authors.drop(1)) { CatalogSearchRequests.byAuthor(it, navigate) }
                 InfoRow(stringResource(R.string.book_publisher), listOf(b.publisher, b.city).filter { it.isNotBlank() }.joinToString(", "))
                 InfoRow(stringResource(R.string.book_year), b.year)
                 InfoRow(stringResource(R.string.book_isbn), b.isbn)
@@ -509,8 +528,9 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 InfoRow(stringResource(R.string.book_doc_type), b.docType)
                 InfoRow(stringResource(R.string.book_genre), b.udcSection?.let { UdcSections.name(it) + " (УДК " + b.udc + ")" })
                 InfoRow(stringResource(R.string.book_keywords), b.keywords)
-                InfoRow(stringResource(R.string.book_call_number), b.callNumber)
-                InfoRow(stringResource(R.string.book_inventory), b.inv.toString())
+                // Дълго натискане копира сигнатурата / инвентарния номер (за имейл, бележка, гишето).
+                InfoRow(stringResource(R.string.book_call_number), b.callNumber, copyable = true)
+                InfoRow(stringResource(R.string.book_inventory), b.inv.toString(), copyable = true)
                 InfoRow(stringResource(R.string.book_department), b.department)
                 InfoRow(stringResource(R.string.book_library), stringResource(R.string.org_library_name))
                 HorizontalDivider(Modifier.padding(vertical = 8.dp))
@@ -525,14 +545,32 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 )
             }
             if (ui.sameAuthor.isNotEmpty()) {
-                Row(Modifier.padding(start = 20.dp, top = 16.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.padding(start = 20.dp, end = 8.dp, top = 16.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.AutoMirrored.Outlined.LibraryBooks, null, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.book_same_author), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                    Text(stringResource(R.string.book_same_author), style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() })
+                    // Всички книги на автора — търсене в каталога по автор.
+                    TextButton(onClick = { CatalogSearchRequests.byAuthor(b.author, navigate) }) { Text(stringResource(R.string.action_all)) }
                 }
                 BookRow(ui.sameAuthor) { navigate(Routes.book(it.inv)) }
             }
         }
+    }
+
+    if (askLibrary && b != null) {
+        val contacts by vm.contacts.collectAsStateWithLifecycle()
+        val dash = "—"
+        LibraryContactSheet(
+            title = stringResource(R.string.book_ask_library),
+            text = stringResource(R.string.book_ask_text),
+            contacts = contacts,
+            onDismiss = { askLibrary = false },
+            emailSubject = stringResource(R.string.book_ask_subject, b.title),
+            emailBody = stringResource(
+                R.string.book_ask_body,
+                b.title, b.author.ifBlank { dash }, b.callNumber.ifBlank { dash }, b.inv.toString(),
+            ),
+        )
     }
 
     hold?.let { result ->
@@ -549,5 +587,40 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 )
             },
         )
+    }
+}
+
+/**
+ * Името на автора като връзка: търсене в каталога с филтър „Автор“. Поне 48 dp висока
+ * зона за докосване; цветът (бордо) и иконата с лупа показват, че е действие.
+ */
+@Composable
+private fun AuthorLink(author: String, style: TextStyle, onClick: (String) -> Unit) {
+    val label = stringResource(R.string.book_search_author)
+    Row(
+        Modifier
+            .clip(MaterialTheme.shapes.small)
+            .clickable(onClickLabel = label, role = Role.Button) { onClick(author) }
+            .heightIn(min = 48.dp)
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(author, style = style, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.weight(1f, fill = false))
+        Spacer(Modifier.width(6.dp))
+        Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.secondary, modifier = Modifier.size(18.dp))
+    }
+}
+
+/** „Други автори“ — всеки е връзка към книгите си в каталога (като [AuthorLink]). */
+@Composable
+private fun OtherAuthorsRow(authors: List<String>, onClick: (String) -> Unit) {
+    Row(Modifier.fillMaxWidth().padding(vertical = 3.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            stringResource(R.string.book_other_authors), style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(0.42f).padding(top = 4.dp),
+        )
+        Column(Modifier.weight(0.58f)) {
+            authors.forEach { AuthorLink(it, style = MaterialTheme.typography.bodyMedium, onClick = onClick) }
+        }
     }
 }

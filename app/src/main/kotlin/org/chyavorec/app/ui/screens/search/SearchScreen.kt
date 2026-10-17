@@ -67,6 +67,9 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.BookListItem
+import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
+import org.chyavorec.app.util.Formatters
+import androidx.compose.ui.platform.LocalContext
 import org.chyavorec.app.ui.screens.news.NewsRow
 import org.chyavorec.app.ui.screens.site.sectionIcon
 import org.chyavorec.core.Outcome
@@ -190,6 +193,7 @@ private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (Str
     val r = ui.results
     val show = { s: SearchScope -> ui.scope == SearchScope.ALL || ui.scope == s }
     val limit = if (ui.scope == SearchScope.ALL) 5 else Int.MAX_VALUE
+    val context = LocalContext.current
     if (r.isEmpty && !ui.searching) {
         EmptyView(stringResource(R.string.search_no_results), stringResource(R.string.catalog_no_results_hint), icon = Icons.Outlined.SearchOff)
         return
@@ -199,7 +203,8 @@ private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (Str
             item { Header(stringResource(R.string.search_authors)) }
             items(r.authors.take(limit), key = { "a-$it" }) { a ->
                 ListItem(headlineContent = { Text(a) }, leadingContent = { Icon(Icons.Outlined.Person, null) },
-                    modifier = Modifier.clickable { onOpen(); navigate(Routes.CATALOG) }.animateItem())
+                    // Книгите на автора — каталогът с филтър „Автор“.
+                    modifier = Modifier.clickable { onOpen(); CatalogSearchRequests.byAuthor(a, navigate) }.animateItem())
             }
         }
         if (show(SearchScope.BOOKS) && r.books.isNotEmpty()) {
@@ -219,7 +224,8 @@ private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (Str
             items(r.events.take(limit), key = { "e-" + it.event.id }) { hit ->
                 ListItem(
                     headlineContent = { Text(hit.event.title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
-                    supportingContent = hit.event.date?.let { { Text(it) } },
+                    // Датата в езика на приложението („17 октомври 2026 г.“ / „October 17, 2026“), не ISO.
+                    supportingContent = Formatters.date(context, hit.event.date)?.let { d -> { Text(listOfNotNull(d, hit.event.time).joinToString(" · ")) } },
                     leadingContent = { Icon(Icons.Outlined.Event, null) },
                     modifier = Modifier.clickable { onOpen(); navigate(Routes.event(hit.event.id)) }.animateItem(),
                 )

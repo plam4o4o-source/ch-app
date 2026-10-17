@@ -1,6 +1,8 @@
 package org.chyavorec.app.ui.navigation
 
 import android.net.Uri
+import org.chyavorec.core.ScanCodes
+import org.chyavorec.core.ScanTarget
 import org.chyavorec.core.Urls
 
 /** Къде води една връзка — от известие, пряк път на иконата или адрес от сайта. */
@@ -34,9 +36,19 @@ object DeepLinks {
     private const val EVENT_PREFIX = "event/"
     private const val MESSAGE_PREFIX = "message/"
 
+    /** Страницата на електронния каталог на сайта (App Link към раздела „Каталог“). */
+    private const val CATALOG_PATH = "/elektronen-katalog"
+
     fun article(id: String) = ARTICLE_PREFIX + Uri.encode(id)
     fun event(id: String) = EVENT_PREFIX + Uri.encode(id)
     fun message(id: String) = MESSAGE_PREFIX + Uri.encode(id)
+
+    /**
+     * Публичният адрес на книга — същият, който споделя каталогът на сайта
+     * (`/elektronen-katalog#zapis=<инв. №>`). В браузър отваря книгата в сайта, а на
+     * телефон с приложението — екрана на книгата (App Link, виж [forUrl]).
+     */
+    fun bookUrl(siteBaseUrl: String, inv: Long) = siteBaseUrl.trimEnd('/') + CATALOG_PATH + "#zapis=" + inv
 
     /** Целта на връзката [link] или `null` — непозната връзка (пренебрегва се, без срив). */
     fun target(link: String, siteBaseUrl: String): LinkTarget? {
@@ -83,7 +95,10 @@ object DeepLinks {
         if (path.substringAfterLast('/').contains('.')) return null
         return when {
             path == "/" -> LinkTarget.Screen(Routes.HOME)
-            path == "/elektronen-katalog" -> LinkTarget.Screen(Routes.CATALOG)
+            // Връзка към книга (`#zapis=`/`?inv=`) — книгата над каталога; иначе самият каталог.
+            path == CATALOG_PATH -> (ScanCodes.resolve(url) as? ScanTarget.Inventory)
+                ?.let { LinkTarget.Screen(Routes.CATALOG, listOf(Routes.book(it.inv))) }
+                ?: LinkTarget.Screen(Routes.CATALOG)
             path == "/news" -> LinkTarget.Screen(Routes.NEWS)
             // По публичния адрес без заявка/котва (така е и в кеша на новините).
             path.startsWith("/news/") -> LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(siteBaseUrl.trimEnd('/') + path)))

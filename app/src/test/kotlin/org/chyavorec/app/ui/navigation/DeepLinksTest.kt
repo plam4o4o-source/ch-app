@@ -87,6 +87,18 @@ class DeepLinksTest {
         assertEquals(LinkTarget.Screen(Routes.MORE, listOf(Routes.page("$base/history", ""))), DeepLinks.forUrl("$base/history", base))
     }
 
+    @Test fun bookUrlOpensTheBookOverTheCatalog() {
+        val url = DeepLinks.bookUrl("$base/", 399666)
+        // Същият адрес като споделената от каталога на сайта връзка.
+        assertEquals("$base/elektronen-katalog#zapis=399666", url)
+        val book = LinkTarget.Screen(Routes.CATALOG, listOf(Routes.book(399666)))
+        assertEquals(book, DeepLinks.forUrl(url, base))
+        assertEquals(book, target(url))
+        assertEquals(book, DeepLinks.forUrl("$base/elektronen-katalog?inv=399666", base))
+        // Търсене (без книга) — каталогът.
+        assertEquals(LinkTarget.Screen(Routes.CATALOG), DeepLinks.forUrl("$base/elektronen-katalog#q=вазов", base))
+    }
+
     @Test fun articleUrlIsNormalizedToThePublicAddress() {
         val expected = LinkTarget.Screen(Routes.NEWS, listOf(Routes.article("$base/news/s-horo-i-pesen-vav-voditsa")))
         assertEquals(expected, DeepLinks.forUrl("$base/news/s-horo-i-pesen-vav-voditsa", base))

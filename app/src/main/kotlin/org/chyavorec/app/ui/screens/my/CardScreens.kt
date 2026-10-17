@@ -20,6 +20,9 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import org.chyavorec.app.ui.components.OnDarkSurfaceStatuses
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,6 +41,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.unit.Constraints
+import kotlin.math.roundToInt
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -226,26 +232,54 @@ private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable C
     Box(
         modifier
             .fillMaxWidth()
-            .aspectRatio(1.586f) // стандартен размер ID-1 (85.6 × 54 мм)
+            .cardProportions()
             .shadow(12.dp, RoundedCornerShape(20.dp))
             .clip(RoundedCornerShape(20.dp))
             .background(Brush.linearGradient(listOf(Brand.Ink, Color(0xFF3A1A18), Brand.Burgundy)))
             // „Жив“ отблясък по наклона на телефона; баркодът отдолу остава неподвижен.
             .tiltGloss(tilt),
+        // Минималната височина (пропорциите) стига и до съдържанието — за разтягащите Spacer-и.
+        propagateMinConstraints = true,
     ) {
-        Box(Modifier.fillMaxSize().padding(2.dp).border(1.dp, Brand.Gold.copy(alpha = 0.45f), RoundedCornerShape(18.dp)))
+        Box(Modifier.matchParentSize().padding(2.dp).border(1.dp, Brand.Gold.copy(alpha = 0.45f), RoundedCornerShape(18.dp)))
         // На цял екран — и шевица по ъглите (ненатрапчива златна рамка).
-        if (large) OrnamentFrame(Modifier.fillMaxSize().padding(6.dp))
-        // Картата е с фиксирани пропорции: при много едър системен шрифт текстът би
-        // излязъл извън нея, затова мащабът на шрифта вътре е ограничен до 1.3×.
+        if (large) OrnamentFrame(Modifier.matchParentSize().padding(6.dp))
+        // Пропорциите на картата се пазят: мащабът на шрифта вътре е ограничен до 1.3×.
+        // Ако и така текстът не се събира (тесен екран), картата расте надолу — не реже текста.
         val density = LocalDensity.current
         CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale = density.fontScale.coerceAtMost(1.3f))) {
-            Column(Modifier.fillMaxSize().padding(if (large) 24.dp else 18.dp), content = content)
+            Column(Modifier.fillMaxWidth().padding(if (large) 24.dp else 18.dp), content = content)
         }
     }
 }
 
+/**
+ * Пропорциите на ID-1 (85.6 × 54 мм) като МИНИМАЛНА височина спрямо ширината: картата
+ * изглежда като истинска, но ако съдържанието е по-високо, расте с него (без рязане).
+ */
+private fun Modifier.cardProportions() = layout { measurable, constraints ->
+    if (!constraints.hasBoundedWidth) {
+        val p = measurable.measure(constraints)
+        return@layout layout(p.width, p.height) { p.place(0, 0) }
+    }
+    var width = constraints.maxWidth
+    var minHeight = (width / CARD_RATIO).roundToInt()
+    // Ниско място (хоризонтално, на цял екран) — пропорциите по височината, както aspectRatio.
+    if (constraints.hasBoundedHeight && minHeight > constraints.maxHeight) {
+        minHeight = constraints.maxHeight
+        width = (minHeight * CARD_RATIO).roundToInt().coerceAtMost(constraints.maxWidth)
+    }
+    // Без горна граница: разтягащите Spacer-и вътре делят само пропорционалната височина.
+    val placeable = measurable.measure(Constraints(minWidth = width, maxWidth = width, minHeight = minHeight))
+    val w = width.coerceIn(constraints.minWidth, constraints.maxWidth)
+    layout(w, placeable.height.coerceIn(constraints.minHeight, constraints.maxHeight)) { placeable.place((w - width) / 2, 0) }
+}
+
+/** Размерът ID-1 на банковите и библиотечните карти: 85.6 × 54 мм. */
+private const val CARD_RATIO = 1.586f
+
 /** Дигитална читателска карта — оформена като истинска библиотечна карта (лице с баркод). */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = false) {
     CardFrame(modifier, large) {
@@ -259,13 +293,14 @@ fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = 
         }
         Spacer(Modifier.weight(1f))
         Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        // Номерът не се съкращава: ако до него няма място за статуса, той минава на нов ред.
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 stringResource(R.string.reader_number, data.number),
-                color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f),
-                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium,
+                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.CenterVertically),
             )
-            data.status?.let { MembershipPill(it) }
+            data.status?.let { OnDarkSurfaceStatuses { MembershipPill(it) } }
         }
         Spacer(Modifier.height(8.dp))
         Surface(color = Color.White, shape = RoundedCornerShape(8.dp)) {
