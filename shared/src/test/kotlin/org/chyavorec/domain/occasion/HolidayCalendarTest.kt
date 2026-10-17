@@ -1,5 +1,6 @@
 package org.chyavorec.domain.occasion
 
+import org.chyavorec.data.site.SiteOccasionEntry
 import org.chyavorec.data.site.SiteOccasionsParser
 import org.chyavorec.domain.occasion.OccasionEffect as E
 import org.chyavorec.domain.occasion.OccasionOrnament as O
@@ -176,6 +177,44 @@ class HolidayCalendarTest {
         assertEquals("site_zima", decor(2027, 1, 2, site).greeting?.id)
         // Новата година остава по-важна от местния празник.
         assertEquals("new_year", decor(2027, 1, 1, site).greeting?.id)
+    }
+
+    @Test fun oneYearSiteOccasionAcrossNewYearMatchesOnlyItsOwnDays() {
+        val entry = SiteOccasionsParser.parse(
+            """[{"id":"zima26","date":"2026-12-30","until":"2027-01-02","title":"Зимни празници 2026"}]""",
+        )!!.single()
+        val site = SiteOccasionsParser.toSiteOccasion(entry)!!
+        assertEquals(2026, site.year)
+        // Януари на същата година е преди периода — не бива да съвпада.
+        assertFalse(site.matches(LocalDate.of(2026, 1, 1)))
+        assertFalse(site.matches(LocalDate.of(2026, 1, 2)))
+        assertFalse(site.matches(LocalDate.of(2026, 12, 29)))
+        assertTrue(site.matches(LocalDate.of(2026, 12, 30)))
+        assertTrue(site.matches(LocalDate.of(2026, 12, 31)))
+        assertTrue(site.matches(LocalDate.of(2027, 1, 1)))
+        assertTrue(site.matches(LocalDate.of(2027, 1, 2)))
+        assertFalse(site.matches(LocalDate.of(2027, 1, 3)))
+        // Декември на следващата година вече е извън периода.
+        assertFalse(site.matches(LocalDate.of(2027, 12, 31)))
+        assertFalse(site.matches(LocalDate.of(2028, 1, 1)))
+        assertEquals("site_zima26", decor(2026, 12, 31, listOf(site)).greeting?.id)
+        assertTrue(HolidayCalendar.occasionsOn(LocalDate.of(2026, 1, 2), listOf(site)).none { it.id == "site_zima26" })
+    }
+
+    @Test fun oneYearSiteOccasionWithEndBeforeStartIsRejected() {
+        // Краят е преди началото в същата година; периодът над две години също е невалиден.
+        val entries = listOf(
+            SiteOccasionEntry(id = "a", date = "2026-12-30", until = "2026-01-02", title = "x"),
+            SiteOccasionEntry(id = "b", date = "2026-12-30", until = "2028-01-02", title = "x"),
+            SiteOccasionEntry(id = "c", date = "2026-03-01", until = "2027-03-05", title = "x"),
+            SiteOccasionEntry(id = "d", date = "2026-12-30", until = "01-02", title = "x"),
+        )
+        entries.forEach { assertNull(SiteOccasionsParser.toSiteOccasion(it), it.id) }
+        // Едногодишен период в рамките на годината съвпада само в нея.
+        val summer = SiteOccasionsParser.toSiteOccasion(SiteOccasionEntry(id = "s", date = "2026-07-01", until = "2026-07-03", title = "x"))!!
+        assertTrue(summer.matches(LocalDate.of(2026, 7, 2)))
+        assertFalse(summer.matches(LocalDate.of(2027, 7, 2)))
+        assertFalse(summer.matches(LocalDate.of(2025, 7, 2)))
     }
 
     companion object {

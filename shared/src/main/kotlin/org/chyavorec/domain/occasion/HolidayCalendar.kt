@@ -163,7 +163,9 @@ data class SiteOccasion(val from: MonthDay, val to: MonthDay, val year: Int?, va
         val inRange = if (!to.isBefore(from)) !md.isBefore(from) && !md.isAfter(to) else !md.isBefore(from) || !md.isAfter(to)
         if (!inRange) return false
         if (year == null) return true
-        // Период през Нова година: краят е в следващата година.
-        return date.year == year || (to.isBefore(from) && md.isBefore(from) && date.year == year + 1)
+        if (!to.isBefore(from)) return date.year == year
+        // Период през Нова година: декемврийската част е в [year], януарската — в следващата.
+        // Иначе 1 януари на [year] би съвпаднал, макар периодът да започва чак в края ѝ.
+        return if (!md.isBefore(from)) date.year == year else date.year == year + 1
     }
 }

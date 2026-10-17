@@ -83,6 +83,8 @@ object SiteOccasionsParser {
         val (to, toYear) = e.until?.let { parseDate(it) ?: return null } ?: (from to fromYear)
         // Еднократен период е в една година или минава през Нова година.
         if (fromYear != null && toYear != null && toYear != fromYear && !(toYear == fromYear + 1 && to.isBefore(from))) return null
+        // „2026-12-30“ до „2026-01-02“ — краят е преди началото в същата година.
+        if (fromYear != null && toYear == fromYear && to.isBefore(from)) return null
         if ((fromYear == null) != (toYear == null)) return null
         val quiet = e.quiet
         val occasion = Occasion(
