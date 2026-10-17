@@ -63,6 +63,20 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           script: ./gradlew --no-daemon :app:generateBaselineProfile
 
+      # При неуспех — причината направо в лога (артефактите не винаги са удобни за преглед):
+      # резултатите от инструментацията и краят на logcat за всеки тест.
+      - name: Show test failures
+        if: failure()
+        run: |
+          R=baselineprofile/build/outputs/androidTest-results
+          [ -d "$R" ] || { echo "no test results"; exit 0; }
+          find "$R" -name '*.xml' -print -exec grep -h -A40 '<failure' {} + || true
+          find "$R" -name 'logcat-*.txt' | while read -r f; do
+            echo "::group::$f"
+            grep -E 'AndroidRuntime|FATAL|BaselineProfile|TestRunner|Benchmark|lowmemorykiller|am_crash|ANR' "$f" | tail -n 200 || true
+            echo "::endgroup::"
+          done
+
       - name: Check generated profile
         run: |
           D=app/src/main/generated/baselineProfiles
