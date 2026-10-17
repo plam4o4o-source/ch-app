@@ -108,10 +108,11 @@ class HomeViewModel(
             val batch = Batch()
             // Началото на опресняването е в същата промяна (иначе още една веднага след нея).
             batch.add { s -> (n?.let { s.copy(news = it.toState().copy(loading = true)) } ?: s).withEvents(e?.data).let { it.copy(news = it.news.startRefresh()) } }
-            // Обобщението и празникът обикновено идват миг след новините — изчакват се за
-            // кратко ([COALESCE_MS]), за да влязат в същата промяна. Ако закъснеят (обобщение
-            // от стар кеш, празник от мрежата) — новините и събитията не ги чакат.
-            withTimeoutOrNull(COALESCE_MS) { cachedSummary.join(); feast.join() }
+            // Обобщението (от диска) обикновено идва миг след новините — изчаква се за кратко
+            // ([COALESCE_MS]), за да влезе в същата промяна; ако закъснее (строи се от стар кеш),
+            // новините и събитията не го чакат. Празникът — само ако вече е готов (може да е от
+            // мрежата, а опресняването не бива да чака нея).
+            withTimeoutOrNull(COALESCE_MS) { cachedSummary.join() }
             val feastNow = feast.isCompleted
             if (feastNow) feast.await().let { f -> batch.add { it.copy(feast = f) } }
             if (!cachedSummary.isCompleted) batch.flush()
