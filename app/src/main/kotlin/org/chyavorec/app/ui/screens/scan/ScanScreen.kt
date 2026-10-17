@@ -7,38 +7,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import android.os.Build
-import android.os.SystemClock
-import android.hardware.display.DisplayManager
-import android.view.View
 import android.view.HapticFeedbackConstants
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.ui.geometry.RoundRect
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalView
-import kotlinx.coroutines.delay
-import org.chyavorec.app.ui.components.rememberReducedMotion
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.Camera
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
-import androidx.camera.core.resolutionselector.AspectRatioStrategy
-import androidx.camera.core.resolutionselector.ResolutionSelector
-import androidx.camera.core.resolutionselector.ResolutionStrategy
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,7 +18,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -72,7 +43,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -80,21 +50,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.compose.currentStateAsState
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -102,17 +61,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
-import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
@@ -121,83 +73,8 @@ import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequest
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
 import org.chyavorec.app.ui.theme.Brand
-import org.chyavorec.core.ScanCodes
 import org.chyavorec.core.ScanTarget
-import org.chyavorec.data.catalog.CatalogSearcher
-import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.SearchField
-import java.util.concurrent.Executors
-
-/** Резултат от сканиране: книга от каталога или „няма я“. */
-sealed interface ScanResult {
-    data class Hit(val book: CatalogBook, val copies: List<CatalogBook>, val target: ScanTarget) : ScanResult
-    data class Miss(val target: ScanTarget) : ScanResult
-}
-
-/**
- * Скенер на баркодове: разчита ISBN (EAN-13 с 978/979), инвентарен номер
- * (Code 39/128 етикет на библиотеката) или QR с адрес на каталога и търси в
- * каталога (индекса в базата; без него — в паметта). Всичко става на устройството —
- * кадрите не се записват.
- */
-class ScanViewModel(private val c: AppContainer) : ViewModel() {
-    private val _result = MutableStateFlow<ScanResult?>(null)
-    val result: StateFlow<ScanResult?> = _result.asStateFlow()
-    private val _catalogReady = MutableStateFlow(false)
-    val catalogReady: StateFlow<Boolean> = _catalogReady.asStateFlow()
-
-    @Volatile private var catalog: CatalogSearcher? = null
-    @Volatile private var lastCode: String? = null
-    @Volatile private var lastAt: Long = 0L
-    @Volatile private var busy = false
-
-    init {
-        viewModelScope.launch {
-            catalog = c.catalogRepository.lookupSearcher()?.data
-            _catalogReady.value = catalog != null
-        }
-    }
-
-    /** Извиква се от анализатора (фонова нишка). Еднакъв код се приема най-много веднъж на 3 s. */
-    fun onCode(raw: String) {
-        if (raw.isBlank() || busy || _result.value != null) return
-        val now = c.clock.now().toEpochMilli()
-        if (raw == lastCode && now - lastAt < DEBOUNCE_MS) return
-        lastCode = raw; lastAt = now
-        val cat = catalog ?: return
-        busy = true
-        // Справката е заявка към базата — извън нишката на анализатора.
-        viewModelScope.launch {
-            try {
-                val target = ScanCodes.resolve(raw)
-                val book = when (target) {
-                    is ScanTarget.Isbn -> cat.findByIsbn(target.isbn)
-                    is ScanTarget.Inventory -> cat.book(target.inv)
-                    is ScanTarget.Unknown -> null
-                }
-                _result.value = if (book != null) {
-                    val copies = when (target) {
-                        is ScanTarget.Isbn -> cat.allByIsbn(target.isbn).ifEmpty { listOf(book) }
-                        else -> listOf(book) + cat.copiesOf(book)
-                    }
-                    ScanResult.Hit(book, copies, target)
-                } else {
-                    ScanResult.Miss(target)
-                }
-            } finally {
-                busy = false
-            }
-        }
-    }
-
-    fun dismiss() {
-        _result.value = null
-        // Същият код може да се сканира отново след кратка пауза (не веднага, докато листът се затваря).
-        lastAt = c.clock.now().toEpochMilli()
-    }
-
-    companion object { const val DEBOUNCE_MS = 3_000L }
-}
 
 private fun hasCameraPermission(context: Context) =
     ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -372,297 +249,6 @@ private fun PermissionMessage(
         }
     }
 }
-
-/**
- * CameraX преглед + анализ на кадрите със ZXing ([BarcodeAnalyzer]). Анализаторът
- * подава всеки разчетен баркод към [onCode]. Докато [paused] е истина (отворен лист
- * с резултат) или екранът не е на преден план, анализаторът е откачен — камерата
- * само показва образа. Изпълнителят се спира при напускане на екрана.
- *
- * Прегледът и анализът са 4:3 (едно и също зрително поле — нужно за изрязването до
- * прозореца на визьора); анализът е около 1280×960 вместо най-голямата резолюция.
- */
-@Composable
-private fun CameraPreview(
-    torch: Boolean,
-    paused: Boolean,
-    onCode: (String) -> Unit,
-    onCamera: (Camera) -> Unit,
-    onError: () -> Unit,
-) {
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val previewView = remember { PreviewView(context).apply { implementationMode = PreviewView.ImplementationMode.COMPATIBLE } }
-    val executor = remember { Executors.newSingleThreadExecutor() }
-    // Най-новите стойности за анализатора (той е създаден веднъж).
-    val pausedRef = remember { arrayOf(paused) }
-    pausedRef[0] = paused
-    val onCodeRef = remember { arrayOf(onCode) }
-    onCodeRef[0] = onCode
-    // Разпознаването е чист Kotlin/Java (ZXing) — без native библиотеки и модели.
-    val analyzer = remember { BarcodeAnalyzer(BarcodeDecoder(), previewView, { pausedRef[0] }, { onCodeRef[0](it) }) }
-    var camera by remember { mutableStateOf<Camera?>(null) }
-    var analysis by remember { mutableStateOf<ImageAnalysis?>(null) }
-
-    DisposableEffect(lifecycleOwner) {
-        var provider: ProcessCameraProvider? = null
-        var useCase: ImageAnalysis? = null
-        // Екранът сам обработва завъртането (configChanges): завъртането на анализа се
-        // обновява ръчно — по него кадърът се изрязва до прозореца на визьора.
-        val displays = context.getSystemService(DisplayManager::class.java)
-        val displayListener = object : DisplayManager.DisplayListener {
-            override fun onDisplayAdded(displayId: Int) = Unit
-            override fun onDisplayRemoved(displayId: Int) = Unit
-            override fun onDisplayChanged(displayId: Int) {
-                val display = previewView.display ?: return
-                if (display.displayId == displayId) useCase?.targetRotation = display.rotation
-            }
-        }
-        val future = runCatching { ProcessCameraProvider.getInstance(context) }.getOrNull()
-        if (future == null) onError() else future.addListener({
-            try {
-                val p = future.get()
-                provider = p
-                val ratio = AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY
-                val preview = Preview.Builder()
-                    .setResolutionSelector(ResolutionSelector.Builder().setAspectRatioStrategy(ratio).build())
-                    .build()
-                    .also { it.surfaceProvider = previewView.surfaceProvider }
-                val imageAnalysis = ImageAnalysis.Builder()
-                    .setResolutionSelector(
-                        ResolutionSelector.Builder()
-                            .setAspectRatioStrategy(ratio)
-                            .setResolutionStrategy(
-                                ResolutionStrategy(
-                                    android.util.Size(1280, 960),
-                                    ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER,
-                                ),
-                            )
-                            .build(),
-                    )
-                    // Докато се разчита кадър, идващите се изхвърлят (остава само последният).
-                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                    .build()
-                previewView.display?.let { imageAnalysis.targetRotation = it.rotation }
-                useCase = imageAnalysis
-                p.unbindAll()
-                val cam = p.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageAnalysis)
-                camera = cam
-                analysis = imageAnalysis
-                displays?.registerDisplayListener(displayListener, null)
-                onCamera(cam)
-            } catch (_: Throwable) {
-                onError()
-            }
-        }, ContextCompat.getMainExecutor(context))
-        onDispose {
-            runCatching { displays?.unregisterDisplayListener(displayListener) }
-            runCatching { useCase?.clearAnalyzer() }
-            runCatching { provider?.unbindAll() }
-            executor.shutdown()
-        }
-    }
-    LaunchedEffect(torch, camera) { camera?.let { runCatching { it.cameraControl.enableTorch(torch) } } }
-    // Анализ само докато се търси и екранът е на преден план (не при отворен резултат,
-    // диалог или друго приложение отгоре) — иначе кадрите не стигат до анализатора.
-    val lifecycleState by lifecycleOwner.lifecycle.currentStateAsState()
-    val active = !paused && lifecycleState.isAtLeast(Lifecycle.State.RESUMED)
-    LaunchedEffect(analysis, active) {
-        val a = analysis ?: return@LaunchedEffect
-        runCatching { if (active) a.setAnalyzer(executor, analyzer) else a.clearAnalyzer() }
-    }
-
-    AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
-}
-
-/**
- * Разчита кадрите: не повече от ~6 в секунда ([DecodeThrottle]), само областта на
- * прозореца на визьора ([cropForWindow]) — копира се само нейната част от яркостния
- * (Y) канал. Кадърът винаги се затваря (иначе CameraX спира да подава нови), а всяка
- * грешка при разчитането само пропуска кадъра.
- */
-private class BarcodeAnalyzer(
-    private val decoder: BarcodeDecoder,
-    private val previewView: View,
-    private val paused: () -> Boolean,
-    private val onCode: (String) -> Unit,
-) : ImageAnalysis.Analyzer {
-    private val throttle = DecodeThrottle(intervalMs = 150, minGapMs = 50)
-    // Преизползван буфер за яркостния канал (без нов масив за всеки кадър).
-    private var frame = ByteArray(0)
-
-    override fun analyze(proxy: ImageProxy) {
-        try {
-            if (paused() || !throttle.tryStart(SystemClock.elapsedRealtime())) return
-            try {
-                val value = decode(proxy)
-                if (value != null && !paused()) onCode(value)
-            } finally {
-                throttle.finish(SystemClock.elapsedRealtime())
-            }
-        } catch (_: Throwable) {
-            // Повреден/непълен кадър — пропуска се; следващият идва веднага.
-        } finally {
-            proxy.close()
-        }
-    }
-
-    private fun decode(proxy: ImageProxy): String? {
-        // YUV_420_888 (по подразбиране за ImageAnalysis): равнина 0 е Y, по 1 байт на пиксел.
-        val plane = proxy.planes.firstOrNull() ?: return null
-        val width = proxy.width
-        val height = proxy.height
-        val rowStride = plane.rowStride
-        val rotation = proxy.imageInfo.rotationDegrees
-        // Размерът на изгледа (прост int, четенето от тази нишка е безопасно).
-        val area = cropForWindow(width, height, rotation, previewView.width, previewView.height)
-            ?: CropRect(0, 0, width, height)
-        // Само редовете на областта; последният — до десния ѝ край.
-        val buffer = plane.buffer
-        val start = area.top * rowStride
-        val length = (area.height - 1) * rowStride + area.left + area.width
-        if (start + length > buffer.limit()) return null
-        buffer.position(start)
-        if (frame.size < length) frame = ByteArray(length)
-        buffer.get(frame, 0, length)
-        return decoder.decode(frame, width, area.height, rowStride, rotation, area.copy(top = 0))
-    }
-}
-
-/** Какво показва визьорът: търсене, намерена книга или „няма я“. */
-private enum class ViewfinderMode { SCANNING, HIT, MISS }
-
-/**
- * Затъмнен фон с прозорец със заоблени ъгли и златни „скоби“ по ъглите.
- *
- * Докато се търси, скобите леко „дишат“. При разчетен код (ZXing не дава удобно
- * положението му, а потребителят държи кода в центъра) скобите се „захващат“ —
- * свиват се към центъра на прозореца, от него излиза златна вълна и се изписва
- * отметка; при „няма я“ скобите се разклащат. Всички стойности се четат само
- * при рисуване. При намалено движение — без дишане и разклащане, а захващането
- * е мигновено.
- */
-@Composable
-private fun ViewfinderOverlay(mode: ViewfinderMode, modifier: Modifier = Modifier) {
-    val reduced = rememberReducedMotion()
-    val lock = remember { Animatable(0f) } // 0 — свободни скоби, 1 — захванати
-    val pulse = remember { Animatable(0f) } // вълна 0 → 1
-    val check = remember { Animatable(0f) } // изписване на отметката
-    val shake = remember { Animatable(0f) } // хоризонтално отместване (dp)
-    LaunchedEffect(mode, reduced) {
-        when (mode) {
-            ViewfinderMode.SCANNING -> {
-                check.snapTo(0f); pulse.snapTo(0f); shake.snapTo(0f)
-                if (reduced) lock.snapTo(0f) else lock.animateTo(0f, tween(250))
-            }
-            ViewfinderMode.HIT -> {
-                if (reduced) {
-                    lock.snapTo(1f); check.snapTo(1f)
-                } else {
-                    launch { lock.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMediumLow)) }
-                    launch { pulse.snapTo(0f); pulse.animateTo(1f, tween(650, easing = FastOutSlowInEasing)) }
-                    delay(120)
-                    check.animateTo(1f, tween(320, easing = FastOutSlowInEasing))
-                }
-            }
-            ViewfinderMode.MISS -> {
-                if (!reduced) {
-                    shake.animateTo(0f, keyframes {
-                        durationMillis = 420
-                        -10f at 60
-                        9f at 140
-                        -6f at 220
-                        4f at 300
-                        0f at 420
-                    })
-                }
-            }
-        }
-    }
-    val breathing = if (mode == ViewfinderMode.SCANNING && !reduced) {
-        rememberInfiniteTransition(label = "viewfinder").animateFloat(
-            initialValue = 0f,
-            targetValue = 1f,
-            animationSpec = infiniteRepeatable(tween(1400, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-            label = "breath",
-        )
-    } else {
-        null
-    }
-
-    Canvas(modifier) {
-        // Същият прозорец, до който анализаторът изрязва кадъра (scanWindow).
-        val area = scanWindow(size.width, size.height)
-        val w = area.width
-        val h = area.height
-        val left = area.left
-        val top = area.top
-        val radius = 22.dp.toPx()
-        val window = Path().apply { addRoundRect(RoundRect(left, top, left + w, top + h, CornerRadius(radius))) }
-        clipPath(window, ClipOp.Difference) { drawRect(Color.Black.copy(alpha = 0.55f)) }
-        drawRoundRect(
-            Brand.Gold.copy(alpha = 0.35f), Offset(left, top), Size(w, h), CornerRadius(radius),
-            style = Stroke(1.5.dp.toPx()),
-        )
-
-        // Скобите: дишане (±2 %), захващане (до 62 % от прозореца, към квадрат около центъра), разклащане.
-        val l = lock.value
-        val breath = breathing?.value ?: 0f
-        val cx = size.width / 2f + shake.value.dp.toPx()
-        val cy = top + h / 2f
-        val target = minOf(w, h) * 0.62f
-        val bw = (w + (target - w) * l) * (1f - 0.02f * breath)
-        val bh = (h + (target - h) * l) * (1f - 0.02f * breath)
-        val bl = cx - bw / 2f
-        val bt = cy - bh / 2f
-        val armR = radius * (1f - 0.3f * l)
-        val len = 28.dp.toPx()
-        val stroke = Stroke((4f + 1.5f * l).dp.toPx(), cap = StrokeCap.Round)
-        val armColor = lerp(Brand.Gold, Brand.GoldLight, l.coerceIn(0f, 1f))
-        val corner = Path()
-        fun arm(x0: Float, y0: Float, dx: Float, dy: Float) {
-            corner.reset()
-            corner.moveTo(x0 + dx * len, y0)
-            corner.lineTo(x0 + dx * armR, y0)
-            corner.quadraticTo(x0, y0, x0, y0 + dy * armR)
-            corner.lineTo(x0, y0 + dy * len)
-            drawPath(corner, armColor, style = stroke)
-        }
-        arm(bl, bt, 1f, 1f)
-        arm(bl + bw, bt, -1f, 1f)
-        arm(bl, bt + bh, 1f, -1f)
-        arm(bl + bw, bt + bh, -1f, -1f)
-
-        // Вълна от захванатия код.
-        val p = pulse.value
-        if (p > 0f && p < 1f) {
-            val grow = 1f + 0.5f * p
-            drawRoundRect(
-                Brand.GoldLight.copy(alpha = 0.6f * (1f - p)),
-                topLeft = Offset(cx - bw * grow / 2f, cy - bh * grow / 2f),
-                size = Size(bw * grow, bh * grow),
-                cornerRadius = CornerRadius(armR * grow),
-                style = Stroke(3.dp.toPx()),
-            )
-        }
-
-        // Отметка в златен кръг: първо кръгът, после двете рамена на отметката.
-        val c = check.value
-        if (c > 0f) {
-            val r = 26.dp.toPx()
-            drawCircle(Brand.Gold.copy(alpha = 0.92f * c.coerceAtMost(1f)), radius = r * (0.6f + 0.4f * c), center = Offset(cx, cy))
-            val a = Offset(cx - r * 0.42f, cy + r * 0.02f)
-            val b = Offset(cx - r * 0.1f, cy + r * 0.34f)
-            val e = Offset(cx + r * 0.45f, cy - r * 0.3f)
-            val first = (c / 0.4f).coerceIn(0f, 1f)
-            val second = ((c - 0.4f) / 0.6f).coerceIn(0f, 1f)
-            val tickStroke = 4.dp.toPx()
-            drawLine(Brand.Ink, a, androidx.compose.ui.geometry.lerp(a, b, first), strokeWidth = tickStroke, cap = StrokeCap.Round)
-            if (second > 0f) drawLine(Brand.Ink, b, androidx.compose.ui.geometry.lerp(b, e, second), strokeWidth = tickStroke, cap = StrokeCap.Round)
-        }
-    }
-}
-
 @Composable
 private fun HitSheet(hit: ScanResult.Hit, onOpen: () -> Unit, onClose: () -> Unit) {
     val b = hit.book
