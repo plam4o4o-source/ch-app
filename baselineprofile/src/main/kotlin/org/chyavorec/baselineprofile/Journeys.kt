@@ -36,6 +36,10 @@ private fun containing(vararg parts: String): Pattern = Pattern.compile(
 
 // Текстовете са от res/values (bg) и res/values-en (en).
 private val SKIP = exactly("Пропусни", "Skip")
+/** Обяснението за известията (Android 13+) при първо стартиране — „Не сега“. */
+private val NOT_NOW = exactly("Не сега", "Not now")
+/** Системният прозорец за разрешение (ако все пак се покаже) — „Не разрешавай“. */
+private val DONT_ALLOW = exactly("Не разрешавам", "Не разрешавай", "Don’t allow", "Don't allow", "Deny")
 private val HOME_SEARCH = containing("Търси книга", "Search books")
 /** Заредено съдържание: каруселът с новини (contentDescription) или секция от списъка. */
 private val HOME_CONTENT: List<BySelector> = listOf(
@@ -95,10 +99,25 @@ private fun MacrobenchmarkScope.backUntil(target: BySelector, maxPresses: Int = 
 }
 
 /**
+ * Затваря диалозите, които може да покрият екрана: обяснението за известията на
+ * приложението и системния прозорец за разрешение. Без грешка, ако няма такива.
+ */
+private fun MacrobenchmarkScope.dismissDialogsIfShown(timeout: Long = 0) {
+    if (timeout > 0) device.wait(Until.hasObject(By.text(NOT_NOW)), timeout)
+    for (selector in listOf(By.text(NOT_NOW), By.text(DONT_ALLOW))) {
+        val button = device.findObject(selector) ?: continue
+        button.click()
+        device.wait(Until.gone(selector), TIMEOUT)
+        device.waitForIdle()
+    }
+}
+
+/**
  * Докосва раздел от долната навигация. Етикетът може да се среща и другаде на екрана —
  * избира се най-долният (лентата е в дъното).
  */
 private fun MacrobenchmarkScope.openTab(label: Pattern): Boolean {
+    dismissDialogsIfShown()
     if (device.wait(Until.hasObject(By.text(label)), TIMEOUT) != true) {
         note("tab not found: $label")
         return false
@@ -114,6 +133,8 @@ fun MacrobenchmarkScope.coldStartToHome() {
     device.pressHome()
     startActivityAndWait()
     skipOnboardingIfShown()
+    // Обяснението за известията се показва веднъж, след въведението.
+    dismissDialogsIfShown(timeout = 3_000)
     if (waitFor(By.text(HOME_SEARCH), CONTENT_TIMEOUT) == null) {
         note("home screen not shown")
         return
