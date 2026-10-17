@@ -206,7 +206,9 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
             when (val r = c.authRepository.login(s.cardNumber, pwd, s.remember)) {
                 is Outcome.Success -> _ui.update { it.copy(submitting = false, success = true, attemptsLeft = null) }
                 is Outcome.Failure -> _ui.update {
-                    val lock = (r.error as? AppError.RateLimited)?.retryAfterSeconds ?: 0
+                    // Петият грешен ПИН заключва веднага (LoginThrottle) — броячът тръгва още сега.
+                    val lock = (r.error as? AppError.RateLimited)?.retryAfterSeconds
+                        ?: c.authRepository.throttle.remainingLockSeconds()
                     it.copy(submitting = false, error = r.error).withThrottle(lockSeconds = lock)
                 }
             }
