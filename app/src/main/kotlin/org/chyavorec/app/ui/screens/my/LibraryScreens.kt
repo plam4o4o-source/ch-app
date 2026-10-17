@@ -214,7 +214,7 @@ internal fun LoanCard(
                     style = MaterialTheme.typography.titleSmall,
                     color = if (overdue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
                 )
-                if (status != null && due != null) {
+                if (status != null) {
                     Spacer(Modifier.height(4.dp))
                     DuePill(status, calc.daysLeft(due, today))
                     if (out != null) {

@@ -35,7 +35,7 @@ class HtmlContentExtractor(private val baseUrl: String) {
             val best = candidates.maxByOrNull { it.text().length }
             if (best != null && best.text().length > 40) return best
         }
-        return doc.body() ?: doc
+        return doc.body()
     }
 
     /** Заглавието на страницата: `<title>` до „ | “ (сайтът го поддържа чисто), иначе h1. */
