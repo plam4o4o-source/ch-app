@@ -1,15 +1,15 @@
 # API документация
 
-Приложението работи с три източника. Първите два **съществуват** и се
-използват в production. Третият е **предложен договор** — такъв сървър още
-няма; това е спецификацията, която трябва да реализира InvLib (или мост към
-базата му), за да се включат читателските функции.
+Приложението работи с три източника, и трите в production. Третият — онлайн
+достъпът на читателите — е договорът по-долу; реализира го мостът на
+chyavorec.org (раздел 3), а функциите извън него (заявяване, подновяване,
+наличност, забравен ПИН, изтриване) остават предложение.
 
 | # | Източник | Статус | Код |
 |---|---|---|---|
 | 1 | chyavorec.org (статичен сайт във Vercel): JSON данни + страници | ✅ съществува | `shared/.../data/site/` |
 | 2 | Публичен каталог на InvLib (`katalog.json` в GitHub) | ✅ съществува | `shared/.../data/catalog/` |
-| 3 | Онлайн API на InvLib за читатели | ❌ **не съществува — предложение** | `shared/.../data/invlib/RemoteInvLibClient.kt` |
+| 3 | Онлайн достъп за читатели — мостът на chyavorec.org (данни от InvLib) | ✅ основните маршрути; ⚠️ останалото — предложение | `shared/.../data/invlib/RemoteInvLibClient.kt` |
 
 ---
 
@@ -182,9 +182,16 @@ http(s) адрес. Ключ `i` (ISBN) се чете, ако InvLib започ�
   "passwordReset": false,
   "accountDeletion": false,
   "push": false,
-  "availability": true
+  "availability": true,
+  "history": false,
+  "messages": false,
+  "all": false,
+  "messagesBatchRead": false
 }
 ```
+
+Липсващ ключ = `false` (по-стар мост). `history`, `messages`, `all` и
+`messagesBatchRead` отключват маршрутите в 3.10a.
 
 Бутоните „Заяви книгата“, „Поднови“, „Забравена парола“ и „Искане за
 изтриване на данните“ се показват **само** при `true`.
@@ -282,6 +289,19 @@ http(s) адрес. Ключ `i` (ISBN) се чете, ако InvLib започ�
 | `GET /v1/books/{inv}/availability` | `{ "inv":156, "status":"available|on_loan|unavailable", "dueOn": "2026-10-03" }` | `books.status`, `inventory`, `loans` |
 | `DELETE /v1/me` | → `202` (искане за изтриване по чл. 17 ОРЗД) | обработва се от библиотекаря |
 | `POST /v1/me/devices` | `{ "fcmToken": "…" }` (бъдещи push известия) | нова таблица |
+
+### 3.10a Допълнителни маршрути (само при съответния ключ в capabilities)
+
+| Метод | Ключ | Отговор |
+|---|---|---|
+| `GET /v1/me/history` | `history` | `{ "items": [{ "loanId", "inv", "title", "author", "dateOut", "dateIn" }], "generated" }` — „Какво съм чел“ |
+| `GET /v1/me/messages` | `messages` | `{ "items": [{ "id", "title", "text", "at", "read" }], "generated" }` — лични съобщения, най-новите първо |
+| `POST /v1/me/messages/{id}/read` | `messages` | празно тяло → `202` (идемпотентно) |
+| `POST /v1/me/messages/read` | `messagesBatchRead` | `{ "ids": [ … ] }` (до 50) → `202` |
+| `GET /v1/me/all` | `all` | `{ "profile", "membership", "loans", "history", "messages", "generated" }` — всичко с една заявка; липсваща част се иска поотделно |
+
+Кодът: `ReaderDataRepository` (една заявка `all` за всички кешове) и
+`RemoteInvLibClient`; DTO — `shared/.../data/invlib/InvLibDtos.kt`.
 
 ### 3.11 Архитектура на моста (препоръка)
 

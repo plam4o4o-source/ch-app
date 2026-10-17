@@ -5,10 +5,14 @@
 ```
 ┌──────────────────────────── :app (Android) ────────────────────────────┐
 │  ui/          Compose екрани, ViewModel-и, навигация, тема, компоненти  │
-│  notifications/  WorkManager: фонова синхронизация, напомняния         │
-│  data/local/  файлов кеш, Room (любими, напомняния), DataStore          │
+│  notifications/  WorkManager: обща фонова задача, напомняния, известия  │
+│  messages/    съобщенията от читалището: MessageCenter, проверка 1–6 ч. │
+│  data/local/  файлов кеш, Room (любими, напомняния; FTS индекс на       │
+│               каталога), DataStore                                      │
 │  data/security/  Android Keystore (AES-256-GCM)                         │
 │  network/     OkHttp (само TLS), наблюдение на връзката                 │
+│  update/      самообновяване от GitHub Releases (само prodRelease)      │
+│  widget/      Glance уиджет; diagnostics/ — файлът на дневника          │
 │  di/          AppContainer (ръчно DI) + FlavorServices (dev/prod)       │
 └──────────────────────────────┬──────────────────────────────────────────┘
                                │ зависи от
@@ -18,12 +22,16 @@
 │  domain/repository  PayloadCache, SessionStore, SelfCardStore          │
 │  data/site          chyavorec.org (Vercel): news.json, index.json, …   │
 │  data/catalog       katalog.json: парсер, търсачка в паметта           │
-│  data/invlib        InvLib: RemoteInvLibClient (предложен API),        │
-│                     UnavailableInvLibServices (production по подразб.) │
+│  data/invlib        мостът към InvLib: RemoteInvLibClient,             │
+│                     UnavailableInvLibServices (без INFLIB_API_URL)     │
 │  data/repository    репозитори: мрежа → кеш, сесии, заемания           │
-│  core               Outcome/AppError, Synced, часовник, дати, текст    │
+│  core               Outcome/AppError, Synced, часовник, дати, текст,   │
+│                     локален дневник на грешките (Diagnostics)          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
+
+`:baselineprofile` — Macrobenchmark генератор на Baseline/Startup профила
+(`Journeys.kt`); резултатът е в `app/src/main/generated/baselineProfiles/`.
 
 `shared` е отделен Gradle build (`includeBuild("shared")`), затова може да се
 компилира и тества **без Android SDK** (`cd shared && ../gradlew test`).
@@ -40,7 +48,7 @@
 |---|---|---|
 | `CatalogService` | `GitHubCatalogService` (raw.githubusercontent → jsDelivr) | онлайн API на InvLib |
 | `NewsService`, `EventsService`, `SiteContentService` | `ChyavorecSiteService` (JSON данните на сайта във Vercel + страници) | динамичен API на сайта, ако бъде добавен |
-| `AuthenticationService`, `ReaderService`, `MembershipService` | `UnavailableInvLibServices` (prod) / `DemoInvLibServices` (само dev) | `RemoteInvLibClient` — вече готов, включва се с `INFLIB_API_URL` |
+| `AuthenticationService`, `ReaderService`, `MembershipService` | `RemoteInvLibClient` (мостът, `INFLIB_API_URL`); без адрес — `UnavailableInvLibServices`; `DemoInvLibServices` (само dev) | същият договор директно от InvLib |
 
 Смяната става само в `AppContainer` — репозиториите и UI не се променят.
 
@@ -50,10 +58,11 @@
 |---|---|
 | `NewsRepository` | новини + пълни статии, кеш, ограничение на честотата (5 мин.) |
 | `EventsRepository` | годишният календар на сайта (превърта се към следващото настъпване) |
-| `CatalogRepository` | каталогът в паметта + суровият JSON на диска (офлайн търсене) |
+| `CatalogRepository` | `katalog.json` (суровият JSON на диска за офлайн) + пълнотекстов индекс в Room (FTS4); при грешка на базата — индекс в паметта |
 | `SiteRepository` | раздели, страници, контакти, галерия, документи, индекс за търсене, празник на деня |
-| `AuthRepository` | вход, подновяване на токена, изход (изтрива личния кеш), защита от налучкване |
-| `ProfileRepository`, `LibraryRepository`, `MembershipRepository` | читателски данни през валидна сесия; шифрован кеш |
+| `AuthRepository` | вход, подновяване на токена, изход (изтрива личния кеш), защита от налучкване (`AuthRepository.kt`) |
+| `ReaderDataRepository` | общото хранилище на читателските данни: една заявка `/v1/me/all` (ако мостът я има), свежест по вид, шифрован кеш по читател |
+| `ProfileRepository`, `LibraryRepository`, `MembershipRepository`, `ReaderMessagesRepository` | тънки репозиторита по екрани върху `ReaderDataRepository` (`ReaderRepositories.kt`) |
 | `SelfCardRepository` | ръчно въведената карта (Code 39 валидиране) |
 
 ### Кеш и офлайн режим
@@ -91,6 +100,17 @@ UI показва `SyncBanner` („Няма интернет връзка. По�
   грешки/офлайн, статусите имат текст (не само цвят), мащабируем текст (sp),
   touch targets ≥ 48 dp, shimmer уважава „Премахване на анимациите“.
 
+## Фонова работа
+
+| Задача | Период | Какво |
+|---|---|---|
+| `PeriodicSyncWorker` | ~6 ч. | лични съобщения; новини и заемания на ~12 ч. (ако са включени); събития — само за уиджета; нова версия на ~24 ч. |
+| `MessagePollWorker` | буди се ~1 ч., пита на 1–6 ч. (`MessagePollPolicy`) | общите съобщения от `/data/app-messages.json` |
+| `LoanReminderWorker`, `EventReminderWorker` | еднократно | локални напомняния (без мрежа) |
+
+Всички периодични задачи искат интернет и „батерията не е изтощена“ и не питат мрежата,
+ако резултатът не трябва на никого (изключени известия, няма уиджет, няма вход).
+
 ## Сигурност
 
 | Мярка | Къде |
@@ -126,12 +146,15 @@ CI проверява, че ги няма в слетия манифест. По
 
 | Вид | Къде | Какво покрива |
 |---|---|---|
-| Unit | `shared/src/test` | дати, нормализиране на текст, URL, сроковете, членство |
+| Unit | `shared/src/test` | дати, празници, нормализиране на текст, URL, ISBN, сроковете, членство, фоновите правила, дневника |
 | Парсери | `SiteParsingTest`, `KatalogParserTest` | реалните news.json, rss.xml, index.json, files.json, страниците „За нас“ и „Контакти“, реален katalog.json |
-| Търсене | `CatalogSearchEngineTest` | всички полета, филтри, сортиране, 15 000 записа < 200 ms |
-| Repository | `RepositoryTest`, `AuthRepositoryTest` | офлайн fallback, ограничение на честотата, сесии, refresh, изход, brute-force |
+| Търсене | `CatalogSearchEngineTest`, `CatalogFtsSearchTest`, `CatalogFtsRepositoryTest` | всички полета, филтри, сортиране, FTS индексът срещу търсачката в паметта, 15 000 записа < 200 ms |
+| Repository | `RepositoryTest`, `CachingTest`, `AuthRepositoryTest`, `LoginFlowsTest`, `ReaderDataTest`, `LoanRenewTest`, `ReaderMessagesTest` | офлайн fallback, ограничение на честотата, сесии, refresh, изход, brute-force, читателските данни |
 | Обновяване | `UpdateCheckerTest`, `app/.../AppUpdaterTest` | update.json (строга проверка на адреса и SHA-256), по-нова версия/minSdk, отхвърляне на повреден или чужд файл, изключено извън prodRelease |
 | API | `HttpServicesTest` (MockWebServer) | резервен източник на каталога, данните на сайта, предложеният InvLib API, грешки |
 | Сигурно съхранение | `app/.../SecureStorageTest` | шифроване на диска, повреден кеш, сесия без запомняне |
-| ViewModel | `app/.../ViewModelTest` | debounce търсене, филтри на новини, любими, офлайн грешка |
-| UI (Compose + Robolectric) | `app/.../MainFlowsUiTest` | начален екран от сайта, търсене в каталога → книга, гост → ръчна карта, демо вход → „Моите книги“ |
+| ViewModel | `app/.../ViewModelTest`, `HomeViewModelTest`, `LoansViewModelTest`, `MessagesViewModelTest` | debounce търсене, филтри на новини, любими, офлайн грешка, заемания, съобщения |
+| Фонова работа | `app/.../PeriodicSyncWorkerTest`, `MessagePollWorkerTest`, `LoanReminderWorkerTest` … | стъпките на задачите, известията, напомнянията |
+| База | `app/.../AppDatabaseMigrationTest`, `CatalogIndexStoreTest` | миграциите срещу `app/schemas/`, FTS индексът |
+| UI (Compose + Robolectric) | `app/.../MainFlowsUiTest`, `TabNavigationTest`, `DeepLinksTest` | начален екран от сайта, търсене в каталога → книга, гост → ръчна карта, демо вход → „Моите книги“, навигация, връзки |
+| Снимки на екраните | `app/.../ScreenshotTest`, `LargeFontScreenshotTest`, `VisualsScreenshotTest`, `HolidayDecorScreenshotTest`, `PlayScreenshotTest` | PNG в клона `screenshots` при всеки push; за Play — `store/screenshots/` |
