@@ -154,7 +154,6 @@ class HomeViewModel(
             val batch = Batch()
             val newsResult = n.await()
             batch.add { it.copy(news = it.news.with(newsResult)) }
-            withTimeoutOrNull(COALESCE_MS) { c.join(); e.join() }
             if (!c.isCompleted) batch.flush()
             (c.await() as? Outcome.Success)?.value?.data?.let { fresh -> batch.add(summary = fresh) { it.withCatalog(fresh) } }
             if (!e.isCompleted) batch.flush()
