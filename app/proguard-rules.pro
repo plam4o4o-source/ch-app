@@ -4,6 +4,9 @@
 # правила (-keep на всички $$serializer, Companion на всеки клас в org.chyavorec.**,
 # *Annotation*/Signature навсякъде) пречеха на R8 да съкращава и оптимизира.
 
+# Обфускираните класове — в един пакет: по-къси имена в DEX-а (запазените с -keep не се местят).
+-repackageclasses
+
 # Jsoup — незадължителни зависимости.
 -dontwarn org.jspecify.annotations.**
 -dontwarn com.google.re2j.**
