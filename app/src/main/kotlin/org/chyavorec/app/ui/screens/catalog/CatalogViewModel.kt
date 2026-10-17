@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,6 +30,10 @@ data class CatalogUiState(
     /** Търсачката (пълнотекстовият индекс в базата или индексът в паметта) и състоянието ѝ. */
     val engine: ScreenState<CatalogSearcher> = ScreenState(),
     val query: CatalogQuery = CatalogQuery(),
+    /**
+     * Прочетените резултати: с текст — всички; без текст (през индекса в базата) — само
+     * страниците дотук, останалите се четат при „Още“ ([totalResults] е броят на всички).
+     */
     val results: List<CatalogBook> = emptyList(),
     val totalResults: Int = 0,
     val shown: Int = PAGE,
@@ -38,7 +43,7 @@ data class CatalogUiState(
 ) {
     /** Изчислява се веднъж за състояние (не при всяка рекомпозиция). */
     val page: List<CatalogBook> = results.take(shown)
-    val canLoadMore: Boolean get() = shown < results.size
+    val canLoadMore: Boolean get() = shown < totalResults
 
     companion object { const val PAGE = 40 }
 }
@@ -119,7 +124,32 @@ class CatalogViewModel(
     fun setField(field: SearchField) = update { it.copy(field = field) }
     fun setSort(sort: CatalogSort) = update { it.copy(sort = sort) }
     fun clearFilters() = update { CatalogQuery(text = it.text, field = it.field, sort = it.sort) }
-    fun loadMore() = _state.update { it.copy(shown = it.shown + CatalogUiState.PAGE) }
+    /** Четенето на следващата страница от базата (само едно наведнъж). */
+    private var more: Job? = null
+
+    fun loadMore() {
+        val s = _state.value
+        val next = s.shown + CatalogUiState.PAGE
+        // Вече прочетено (търсене с текст или прочетена страница) — само се показва.
+        if (s.results.size >= minOf(next, s.totalResults)) {
+            _state.update { it.copy(shown = it.shown + CatalogUiState.PAGE) }
+            return
+        }
+        if (more?.isActive == true) return
+        val engine = s.engine.data ?: return
+        val q = s.query
+        val offset = s.results.size
+        more = viewModelScope.launch {
+            val page = withContext(searchDispatcher) { engine.searchMore(q, offset, next - offset) }
+            _state.update {
+                // Междувременно нова заявка или търсачка — страницата е за стария списък.
+                if (it.query != q || it.engine.data !== engine || it.results.size != offset) it
+                // Празна страница (данните са се сменили) — списъкът свършва тук.
+                else if (page.isEmpty()) it.copy(totalResults = offset)
+                else it.copy(results = it.results + page, shown = next)
+            }
+        }
+    }
 
     private suspend fun runSearch() {
         val engine = _state.value.engine.data ?: return
@@ -130,15 +160,16 @@ class CatalogViewModel(
             _state.update { if (it.query == q) it.copy(searching = false) else it }
             return
         }
-        val (results, suggestions) = withContext(searchDispatcher) {
-            engine.search(q) to (if (q.text.length >= 2 && q.field != SearchField.INVENTORY && q.field != SearchField.ISBN) engine.suggestions(q.text, 6) else emptyList())
+        // Без текст — само първата страница и броят (индексът в базата не чете целия каталог).
+        val (found, suggestions) = withContext(searchDispatcher) {
+            engine.searchFirst(q, CatalogUiState.PAGE) to (if (q.text.length >= 2 && q.field != SearchField.INVENTORY && q.field != SearchField.ISBN) engine.suggestions(q.text, 6) else emptyList())
         }
         var applied = false
         _state.update {
             if (it.query != q) it // по-нова заявка вече е в ход
             else {
                 applied = true
-                it.copy(results = results, totalResults = results.size, shown = CatalogUiState.PAGE, suggestions = suggestions, searching = false)
+                it.copy(results = found.books, totalResults = found.total, shown = CatalogUiState.PAGE, suggestions = suggestions, searching = false)
             }
         }
         if (applied) lastSearch = engine to q

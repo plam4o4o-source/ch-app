@@ -186,17 +186,26 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
             snapshot.shelves.map { shelf -> shelf.name to shelf.invNumbers.mapNotNull { byInv[it] } }
                 .filter { it.second.isNotEmpty() }
 
-        /** Обобщението за началния екран — без да се строи индексът за търсене. */
+        /**
+         * Обобщението за началния екран — без да се строи индексът за търсене. Книгите в него
+         * са без анотацията и ключовите думи ([forShelf]): редовете показват само корица,
+         * заглавие и автор, а книгата се отваря от каталога — обобщението се чете при всеки
+         * старт, затова е колкото може по-малко.
+         */
         fun homeSummary(snapshot: CatalogSnapshot): CatalogHomeSummary {
             val newest = newest(snapshot.books, HOME_NEWEST)
             return CatalogHomeSummary(
                 count = snapshot.books.size,
                 generatedOn = snapshot.generatedOn,
-                newest = newest,
-                shelves = shelfBooks(snapshot).map { (name, books) -> CatalogHomeShelf(name, books) },
+                newest = newest.map(::forShelf),
+                shelves = shelfBooks(snapshot).map { (name, books) -> CatalogHomeShelf(name, books.map(::forShelf)) },
                 // Подборът за „За теб“ — веднъж за каталога, не при всяко показване на началния екран.
-                picks = ForYouPicks.popularAndNew(snapshot.books, skip = newest.mapTo(HashSet()) { it.inv }),
+                picks = ForYouPicks.popularAndNew(snapshot.books, skip = newest.mapTo(HashSet()) { it.inv }).map(::forShelf),
             )
         }
+
+        /** Книгата за ред на началния екран: без най-обемните полета, които редът не показва. */
+        internal fun forShelf(b: CatalogBook): CatalogBook =
+            if (b.annotation.isEmpty() && b.keywords.isEmpty()) b else b.copy(annotation = "", keywords = "")
     }
 }

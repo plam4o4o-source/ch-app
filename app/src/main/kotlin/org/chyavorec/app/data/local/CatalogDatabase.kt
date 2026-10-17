@@ -139,6 +139,9 @@ abstract class CatalogIndexDao {
     @RawQuery
     abstract suspend fun rows(query: SupportSQLiteQuery): List<CatalogBookEntity>
 
+    @RawQuery
+    abstract suspend fun count(query: SupportSQLiteQuery): Int
+
     @Query("SELECT * FROM catalog_books WHERE inv = :inv ORDER BY ord DESC LIMIT 1")
     abstract suspend fun byInv(inv: Long): CatalogBookEntity?
 
@@ -211,6 +214,9 @@ class RoomCatalogIndexStore(private val db: () -> CatalogDatabase) : CatalogInde
     override suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow> =
         dao.rows(SimpleSQLiteQuery(query.sql, query.args.toTypedArray())).map(CatalogBookEntity::toRow)
 
+    override suspend fun count(query: CatalogIndexQuery): Int =
+        dao.count(SimpleSQLiteQuery(query.countSql, query.args.toTypedArray()))
+
     override suspend fun book(inv: Long): CatalogBook? = dao.byInv(inv)?.toRow()?.book
 
     override suspend fun books(invs: Collection<Long>): List<CatalogBook> =
@@ -228,7 +234,9 @@ class RoomCatalogIndexStore(private val db: () -> CatalogDatabase) : CatalogInde
     override suspend fun authors(): List<Pair<String, String>> = dao.authors().map { it.author to it.nAuthor }
 
     override suspend fun recommendationCandidates(udcSections: Set<Int>, authorWords: Set<String>?): List<CatalogBook> {
-        val sql = StringBuilder("SELECT * FROM ").append(CatalogIndexColumns.TABLE).append(" WHERE available = 1")
+        // Само колоните за списъка — без анотацията и нормализираните полета (най-обемните).
+        val sql = StringBuilder("SELECT ").append(CatalogIndexColumns.LIST_SELECT)
+            .append(" FROM ").append(CatalogIndexColumns.TABLE).append(" AS b WHERE available = 1")
         val args = ArrayList<Any>()
         if (authorWords != null) {
             val any = buildList {

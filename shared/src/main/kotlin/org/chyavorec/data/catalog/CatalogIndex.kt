@@ -7,6 +7,7 @@ import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogFacets
 import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.CatalogSnapshot
+import org.chyavorec.domain.model.CatalogSort
 import org.chyavorec.domain.model.SearchField
 
 /**
@@ -74,6 +75,9 @@ object CatalogIndexColumns {
 
     /** Колоните, които списъкът без текст не чете — връщат се празни (анотацията и нормализираните полета са най-обемни). */
     val LIST_BLANK = listOf("keywords", "annotation", "isbn_digits") + FTS
+
+    /** Изборът на колоните за списък от таблицата с псевдоним `b` (нечетените — празни). */
+    val LIST_SELECT: String = LIST.joinToString(", ") { "b.$it" } + LIST_BLANK.joinToString("") { ", '' AS $it" }
 }
 
 object CatalogIndexRows {
@@ -146,8 +150,11 @@ interface CatalogIndexStore {
      */
     suspend fun replace(state: CatalogIndexState, rows: List<CatalogIndexRow>)
 
-    /** Записите по заявката, в реда на каталога. */
+    /** Записите по заявката, в реда на каталога (или по [CatalogIndexQuery.sort]). */
     suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow>
+
+    /** Колко записа отговарят на заявката (без [CatalogIndexQuery.limit]/[CatalogIndexQuery.offset]). */
+    suspend fun count(query: CatalogIndexQuery): Int
 
     // Справки за отделни книги (по индексирани колони) — всички в реда на каталога.
 
@@ -172,7 +179,8 @@ interface CatalogIndexStore {
     /**
      * Наличните книги, които могат да получат точки при препоръките: от разделите на УДК
      * [udcSections] или с някоя от думите [authorWords] в нормализирания автор
-     * (`null` — всички налични).
+     * (`null` — всички налични). Само колоните за списъка ([CatalogIndexColumns.LIST_SELECT]):
+     * анотацията и ключовите думи не трябват за точкуването и полицата „За теб“.
      */
     suspend fun recommendationCandidates(udcSections: Set<Int>, authorWords: Set<String>?): List<CatalogBook>
 }
@@ -199,14 +207,19 @@ data class CatalogIndexQuery(
     val yearFrom: Int? = null,
     val yearTo: Int? = null,
     val onlyAvailable: Boolean = false,
+    /**
+     * Подреждането в самата база — само без текст за търсене (тогава няма точки и редът
+     * зависи само от ранговете/годината/датата, както в [CatalogMatcher.sort]); `null` —
+     * в реда на каталога. Позволява страница с LIMIT/OFFSET вместо целия резултат.
+     */
+    val sort: CatalogSort? = null,
     val limit: Int? = null,
     val offset: Int = 0,
 ) {
     /**
      * Без текст за търсене (само филтри): точките не се смятат, затова се четат само
      * колоните за списъка ([CatalogIndexColumns.LIST]), а останалите идват празни.
-     * Без LIMIT/OFFSET: екранът „Каталог“ държи целия резултат и го показва на страници
-     * (`results.take(shown)`); страници от базата биха изисквали асинхронно „Още“.
+     * Екранът „Каталог“ без текст чете на страници ([sort] + [limit]/[offset], броят — с [countSql]).
      */
     val textless: Boolean get() = matchTokens.isEmpty() && contains.isEmpty() && isbnDigits == null && invDigits == null
 
@@ -217,36 +230,58 @@ data class CatalogIndexQuery(
         get() = buildString {
             val c = CatalogIndexColumns
             append("SELECT ")
-            if (textless) {
-                c.LIST.joinTo(this) { "b.$it" }
-                c.LIST_BLANK.forEach { append(", '' AS ").append(it) }
-            } else {
-                append("b.*")
-            }
-            append(" FROM ").append(c.TABLE).append(" AS b")
-            if (match != null) append(" JOIN ").append(c.FTS_TABLE).append(" ON ").append(c.FTS_TABLE).append(".rowid = b.ord")
-            append(" WHERE 1")
-            if (match != null) {
-                append(" AND ").append(c.FTS_TABLE)
-                if (matchColumn != null) append('.').append(matchColumn)
-                append(" MATCH ?")
-            }
-            if (contains.isNotEmpty()) {
-                val haystack = containsColumns.joinToString(" || ' ' || ") { "b.$it" }
-                repeat(contains.size) { append(" AND instr(").append(haystack).append(", ?) > 0") }
-            }
-            if (isbnDigits != null) append(" AND instr(b.isbn_digits, ?) > 0")
-            if (invDigits != null) append(" AND (b.").append(c.INV).append(" = ? OR substr(b.").append(c.INV).append(", 1, ?) = ?)")
-            if (onlyAvailable) append(" AND b.available = 1")
-            if (docType != null) append(" AND b.doc_type = ?")
-            if (department != null) append(" AND b.department = ?")
-            if (language != null) append(" AND b.language = ?")
-            if (udcSection != null) append(" AND b.udc_section = ?")
-            if (yearFrom != null) append(" AND b.year_num >= ?")
-            if (yearTo != null) append(" AND b.year_num <= ?")
-            append(" ORDER BY b.ord")
+            append(if (textless) c.LIST_SELECT else "b.*")
+            appendFromWhere()
+            append(" ORDER BY ").append(orderBy)
             if (limit != null) append(" LIMIT ").append(limit).append(" OFFSET ").append(offset)
         }
+
+    /** Броят на записите по заявката (със същите [args]). */
+    val countSql: String
+        get() = buildString {
+            append("SELECT COUNT(*)")
+            appendFromWhere()
+        }
+
+    /**
+     * Редът като в [CatalogMatcher.sort] без текст (стабилно — при равенство редът в
+     * каталога): RELEVANCE/TITLE — по заглавие; AUTHOR — автор, заглавие; годините — без
+     * година накрая; NEWEST — дата на постъпване, после инвентарен номер (низходящо).
+     */
+    private val orderBy: String
+        get() = when (sort) {
+            null -> "b.ord"
+            CatalogSort.RELEVANCE, CatalogSort.TITLE -> "b.title_rank, b.ord"
+            CatalogSort.AUTHOR -> "b.author_rank, b.title_rank, b.ord"
+            CatalogSort.YEAR_DESC -> "b.year_num IS NULL, b.year_num DESC, b.ord"
+            CatalogSort.YEAR_ASC -> "b.year_num IS NULL, b.year_num, b.ord"
+            CatalogSort.NEWEST -> "b.registered_on DESC, b.inv DESC, b.ord"
+        }
+
+    private fun StringBuilder.appendFromWhere() {
+        val c = CatalogIndexColumns
+        append(" FROM ").append(c.TABLE).append(" AS b")
+        if (match != null) append(" JOIN ").append(c.FTS_TABLE).append(" ON ").append(c.FTS_TABLE).append(".rowid = b.ord")
+        append(" WHERE 1")
+        if (match != null) {
+            append(" AND ").append(c.FTS_TABLE)
+            if (matchColumn != null) append('.').append(matchColumn)
+            append(" MATCH ?")
+        }
+        if (contains.isNotEmpty()) {
+            val haystack = containsColumns.joinToString(" || ' ' || ") { "b.$it" }
+            repeat(contains.size) { append(" AND instr(").append(haystack).append(", ?) > 0") }
+        }
+        if (isbnDigits != null) append(" AND instr(b.isbn_digits, ?) > 0")
+        if (invDigits != null) append(" AND (b.").append(c.INV).append(" = ? OR substr(b.").append(c.INV).append(", 1, ?) = ?)")
+        if (onlyAvailable) append(" AND b.available = 1")
+        if (docType != null) append(" AND b.doc_type = ?")
+        if (department != null) append(" AND b.department = ?")
+        if (language != null) append(" AND b.language = ?")
+        if (udcSection != null) append(" AND b.udc_section = ?")
+        if (yearFrom != null) append(" AND b.year_num >= ?")
+        if (yearTo != null) append(" AND b.year_num <= ?")
+    }
 
     /** Стойностите за `?` в [sql] (в същия ред). */
     val args: List<Any>
@@ -310,6 +345,13 @@ object CatalogIndexQueries {
             }
         }
     }
+
+    /**
+     * Страница от списъка без текст за търсене (само филтрите), подредена в базата като
+     * [CatalogMatcher.sort]. Броят на всички — със същата заявка ([CatalogIndexQuery.countSql]).
+     */
+    fun page(q: CatalogQuery, offset: Int, limit: Int): CatalogIndexQuery =
+        filtered(q).copy(sort = q.sort, limit = limit, offset = offset)
 
     /**
      * Резервната заявка — думите като подниз навсякъде в полето (както индекса в паметта);
