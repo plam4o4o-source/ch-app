@@ -1,11 +1,8 @@
-# kotlinx.serialization — пазим генерираните сериализатори.
--keepattributes *Annotation*, InnerClasses, Signature, EnclosingMethod
--dontnote kotlinx.serialization.**
--keepclassmembers class kotlinx.serialization.json.** { *** Companion; }
--keepclasseswithmembers class kotlinx.serialization.json.** { kotlinx.serialization.KSerializer serializer(...); }
--keep,includedescriptorclasses class org.chyavorec.**$$serializer { *; }
--keepclassmembers class org.chyavorec.** { *** Companion; }
--keepclasseswithmembers class org.chyavorec.** { kotlinx.serialization.KSerializer serializer(...); }
+# kotlinx.serialization: без собствени правила. Библиотеката носи официалните си
+# (META-INF/com.android.tools/r8/*.pro: Companion/serializer() на @Serializable класовете),
+# а кодът ни ползва само явни Foo.serializer() — R8 ги проследява сам. Старите широки
+# правила (-keep на всички $$serializer, Companion на всеки клас в org.chyavorec.**,
+# *Annotation*/Signature навсякъде) пречеха на R8 да съкращава и оптимизира.
 
 # Jsoup — незадължителни зависимости.
 -dontwarn org.jspecify.annotations.**
