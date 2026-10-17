@@ -85,11 +85,24 @@ class CatalogIndexStoreTest {
             listOf(HistoryItem("h1", 4, "Atlas of Europe", "Smith, John"), HistoryItem("h2", sample.books.first().inv, "", "")),
             listOf(HistoryItem("h1", null, "Нещо", "Елин Пелин")),
         )
-        for (h in histories) assertEquals(ReadingRecommender.recommend(engine, h), fts.recommend(h), "история $h")
+        // Кандидатите за препоръките се четат без анотацията — сравняват се книгите (инв. №) и редът.
+        for (h in histories) assertEquals(ReadingRecommender.recommend(engine, h).map { it.inv }, fts.recommend(h).map { it.inv }, "история $h")
+        assertTrue(fts.recommend(histories[0]).all { it.annotation.isEmpty() })
 
         for (text in listOf("", "под", "вазов игото", "джиан", "астир")) for (sort in CatalogSort.entries)
             assertEquals(engine.search(CatalogQuery(text, sort = sort)).map { it.inv }, fts.search(CatalogQuery(text, sort = sort)).map { it.inv }, "„$text“ $sort")
         assertEquals(engine.search(CatalogQuery("11", SearchField.INVENTORY)).map { it.inv }, fts.search(CatalogQuery("11", SearchField.INVENTORY)).map { it.inv })
+        // Без текст — на страници от базата (ORDER BY/LIMIT), в същия ред като в паметта.
+        for (q in listOf(CatalogQuery(), CatalogQuery(onlyAvailable = true), CatalogQuery(docType = "книга", yearFrom = 1900)))
+            for (sort in CatalogSort.entries) {
+                val query = q.copy(sort = sort)
+                val expected = engine.search(query).map { it.inv }
+                val first = fts.searchFirst(query, 7)
+                assertEquals(expected.size, first.total, "брой $query")
+                val all = first.books.map { it.inv }.toMutableList()
+                while (all.size < first.total) all += fts.searchMore(query, all.size, 7).also { assertTrue(it.isNotEmpty()) }.map { it.inv }
+                assertEquals(expected, all, "страници $query")
+            }
         // Списъкът без текст не чете анотацията; книгата — да.
         assertEquals("", fts.search(CatalogQuery()).first { it.inv == 1L }.annotation)
         assertEquals("Роман.", fts.book(1)!!.annotation)

@@ -12,6 +12,12 @@ import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.HistoryItem
 
 /**
+ * Началото на резултатите по заявка: [books] е префикс на всички резултати с поне
+ * `min(limit, total)` книги (търсачката може да даде и всички наведнъж), [total] — броят на всички.
+ */
+data class CatalogResults(val books: List<CatalogBook>, val total: Int)
+
+/**
  * Търсенето в каталога (екранът „Каталог“, глобалното търсене) и справките за отделни
  * книги (книга, скенер, история) — през пълнотекстовия индекс или индекса в паметта.
  */
@@ -25,6 +31,19 @@ interface CatalogSearcher {
      * и ключовите думи (не се показват в списъка) — за тях се ползва [book].
      */
     suspend fun search(query: CatalogQuery): List<CatalogBook>
+
+    /**
+     * Първите [limit] резултата и броят на всички — за списъка на страници. По
+     * подразбиране (и с текст за търсене, където точките изискват всички кандидати) —
+     * целият резултат наведнъж.
+     */
+    suspend fun searchFirst(query: CatalogQuery, limit: Int): CatalogResults =
+        search(query).let { CatalogResults(it, it.size) }
+
+    /** Следващата страница: [limit] резултата от [offset] нататък (в същия ред като [searchFirst]). */
+    suspend fun searchMore(query: CatalogQuery, offset: Int, limit: Int): List<CatalogBook> =
+        search(query).drop(offset).take(limit)
+
     /** Предложения за автоматично допълване: автори и заглавия. */
     suspend fun suggestions(prefix: String, limit: Int = 8): List<String>
 
@@ -94,6 +113,25 @@ class FtsCatalogSearcher(
             if (found.isNotEmpty() || plan.matchTokens.isEmpty()) return@guarded found
             val scan = CatalogIndexQueries.scan(query, tokens) ?: return@guarded found
             rank(store.rows(scan), query, tokens, digits)
+        }
+    }
+
+    /**
+     * Без текст за търсене (празното търсене при отваряне на „Каталог“) — само страницата
+     * и броят от базата (подредени там), не целият каталог; с текст — както [search].
+     */
+    override suspend fun searchFirst(query: CatalogQuery, limit: Int): CatalogResults {
+        if (TextNormalizer.tokens(query.text).isNotEmpty()) return search(query).let { CatalogResults(it, it.size) }
+        return guarded({ e -> e.search(query).let { CatalogResults(it.take(limit), it.size) } }) {
+            val plan = CatalogIndexQueries.page(query, offset = 0, limit = limit)
+            CatalogResults(store.rows(plan).map { it.book }, store.count(plan))
+        }
+    }
+
+    override suspend fun searchMore(query: CatalogQuery, offset: Int, limit: Int): List<CatalogBook> {
+        if (TextNormalizer.tokens(query.text).isNotEmpty()) return search(query).drop(offset).take(limit)
+        return guarded({ it.search(query).drop(offset).take(limit) }) {
+            store.rows(CatalogIndexQueries.page(query, offset, limit)).map { it.book }
         }
     }
 

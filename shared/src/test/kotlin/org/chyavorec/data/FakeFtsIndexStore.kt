@@ -7,6 +7,7 @@ import org.chyavorec.data.catalog.CatalogIndexRow
 import org.chyavorec.data.catalog.CatalogIndexState
 import org.chyavorec.data.catalog.CatalogIndexStore
 import org.chyavorec.domain.model.CatalogBook
+import org.chyavorec.domain.model.CatalogSort
 
 /**
  * [CatalogIndexStore] в паметта, който изпълнява [CatalogIndexQuery] със семантиката на
@@ -62,15 +63,31 @@ class FakeFtsIndexStore : CatalogIndexStore {
     override suspend fun recommendationCandidates(udcSections: Set<Int>, authorWords: Set<String>?): List<CatalogBook> =
         lookup("recommendationCandidates").filter { r ->
             r.book.available && (authorWords == null || r.udcSection in udcSections || authorWords.any { r.author.contains(it) })
-        }.map { it.book }
+        }.map { listRow(it).book }
 
     override suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow> {
         if (failing) error("db")
         queries += query
         // Без текст — само колоните за списъка (останалите празни), както в SQL заявката.
-        val out = rows.sortedBy { it.ord }.filter { r -> matches(r, query) }.map { if (query.textless) listRow(it) else it }
+        val out = rows.sortedBy { it.ord }.filter { r -> matches(r, query) }.sortedWith(order(query.sort)).map { if (query.textless) listRow(it) else it }
         val from = query.offset.coerceAtMost(out.size)
         return query.limit?.let { out.subList(from, (from + it).coerceAtMost(out.size)) } ?: out.drop(from)
+    }
+
+    override suspend fun count(query: CatalogIndexQuery): Int {
+        if (failing) error("db")
+        queries += query
+        return rows.count { r -> matches(r, query) }
+    }
+
+    /** Като ORDER BY в [CatalogIndexQuery.sql] (сортирането е стабилно — при равенство редът в каталога). */
+    private fun order(sort: CatalogSort?): Comparator<CatalogIndexRow> = when (sort) {
+        null -> compareBy { 0 }
+        CatalogSort.RELEVANCE, CatalogSort.TITLE -> compareBy { it.titleRank }
+        CatalogSort.AUTHOR -> compareBy<CatalogIndexRow> { it.authorRank }.thenBy { it.titleRank }
+        CatalogSort.YEAR_DESC -> compareBy<CatalogIndexRow> { it.year == null }.thenByDescending { it.year }
+        CatalogSort.YEAR_ASC -> compareBy<CatalogIndexRow> { it.year == null }.thenBy { it.year }
+        CatalogSort.NEWEST -> compareByDescending<CatalogIndexRow> { it.book.registeredOn }.thenByDescending { it.book.inv }
     }
 
     private fun listRow(r: CatalogIndexRow) = r.copy(

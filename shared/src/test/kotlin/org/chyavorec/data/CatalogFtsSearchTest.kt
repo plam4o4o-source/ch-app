@@ -240,11 +240,13 @@ class CatalogFtsSearchTest {
             listOf(HistoryItem("h1", 1234, "Вестник Яворец", "")),
             emptyList(),
         )
+        // Кандидатите идват само с колоните за списъка — сравняват се книгите (инв. №) и редът.
         for (h in histories) for (limit in listOf(1, 12))
-            assertEquals(ReadingRecommender.recommend(engine, h, limit), fts.recommend(h, limit), "история $h")
+            assertEquals(ReadingRecommender.recommend(engine, h, limit).map { it.inv }, fts.recommend(h, limit).map { it.inv }, "история $h")
         store.lookups.clear()
-        fts.recommend(histories[0], 12)
+        val recs = fts.recommend(histories[0], 12)
         assertEquals(listOf("books", "recommendationCandidates"), store.lookups)
+        assertTrue(recs.isNotEmpty() && recs.all { it.annotation.isEmpty() && it.keywords.isEmpty() }, "анотацията не се чете за препоръките")
     }
 
     @Test fun recommendationPrefilterIsASupersetOfScoredBooks() {
@@ -265,6 +267,59 @@ class CatalogFtsSearchTest {
         assertEquals("", listed.annotation, "анотацията не се чете за списъка")
         assertEquals("Разкази за живота в манастира.", fts.book(3)!!.annotation)
         assertTrue(!CatalogIndexQueries.search(CatalogQuery("под"), listOf("под"), "")!!.textless)
+    }
+
+    @Test fun emptySearchIsPagedFromTheIndexInTheEngineOrder() = runTest {
+        for (base in filters) for (sort in CatalogSort.entries) for (text in listOf("", "  ", "„“")) for (page in listOf(1, 3, 40)) {
+            val q = base.copy(text = text, sort = sort)
+            val expected = engine.search(q).map { it.inv }
+            store.queries.clear()
+            val first = fts.searchFirst(q, page)
+            assertEquals(expected.size, first.total, "брой $q")
+            assertEquals(expected.take(page), first.books.map { it.inv }, "първа страница $q / $page")
+            // Само две заявки: страницата (с LIMIT) и броят — не целият списък.
+            assertEquals(2, store.queries.size, "$q")
+            assertTrue(store.queries.all { it.textless && it.limit == page && it.sort == sort }, "$q")
+            val all = first.books.map { it.inv }.toMutableList()
+            while (all.size < first.total) {
+                val more = fts.searchMore(q, all.size, page)
+                assertTrue(more.isNotEmpty() && more.size <= page)
+                all += more.map { it.inv }
+            }
+            assertEquals(expected, all, "всички страници $q / $page")
+            assertTrue(fts.searchMore(q, all.size, page).isEmpty())
+        }
+    }
+
+    @Test fun searchWithTextReturnsAllResultsAtOnce() = runTest {
+        for (text in listOf("под", "вазов", "астир")) {
+            val q = CatalogQuery(text)
+            val r = fts.searchFirst(q, 1)
+            assertEquals(engine.search(q).map { it.inv }, r.books.map { it.inv })
+            assertEquals(r.books.size, r.total)
+            assertEquals(r.books.drop(1).take(1), fts.searchMore(q, 1, 1))
+        }
+    }
+
+    @Test fun emptySearchPagingFallsBackToEngineOnDatabaseError() = runTest {
+        store.failing = true
+        val q = CatalogQuery(sort = CatalogSort.AUTHOR)
+        val expected = engine.search(q)
+        val first = fts.searchFirst(q, 5)
+        assertEquals(expected.size, first.total)
+        assertEquals(expected.take(5), first.books)
+        assertEquals(expected.drop(5).take(5), fts.searchMore(q, 5, 5))
+    }
+
+    @Test fun pageQueryOrdersAndLimitsInTheDatabase() {
+        val q = CatalogIndexQueries.page(CatalogQuery(onlyAvailable = true, yearFrom = 1900, sort = CatalogSort.YEAR_DESC), offset = 40, limit = 20)
+        assertTrue(q.textless)
+        assertTrue(q.sql.endsWith(" ORDER BY b.year_num IS NULL, b.year_num DESC, b.ord LIMIT 20 OFFSET 40"), q.sql)
+        assertTrue(q.sql.startsWith("SELECT " + CatalogIndexColumns.LIST_SELECT + " FROM"), q.sql)
+        assertEquals("SELECT COUNT(*) FROM catalog_books AS b WHERE 1 AND b.available = 1 AND b.year_num >= ?", q.countSql)
+        assertEquals(q.sql.count { it == '?' }, q.args.size)
+        assertEquals(q.countSql.count { it == '?' }, q.args.size)
+        for (sort in CatalogSort.entries) assertTrue(CatalogIndexQueries.page(CatalogQuery(sort = sort), 0, 1).sql.contains(" ORDER BY b."))
     }
 
     @Test fun rowsKeepNormalisedFieldsAndRanks() {

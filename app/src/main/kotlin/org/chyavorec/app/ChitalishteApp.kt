@@ -1,6 +1,8 @@
 package org.chyavorec.app
 
 import android.app.Application
+import androidx.compose.ui.text.font.FontListFontFamily
+import androidx.compose.ui.text.font.ResourceFont
 import androidx.work.Configuration
 import coil3.ImageLoader
 import coil3.PlatformContext
@@ -21,6 +23,8 @@ import org.chyavorec.core.logFailure
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.PeriodicSyncWorker
+import org.chyavorec.app.ui.theme.Cormorant
+import org.chyavorec.app.ui.theme.Raleway
 
 class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuration.Provider, AppContainerOwner {
 
@@ -40,10 +44,31 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         // Локалният дневник на грешките (само на устройството) — и за сривовете.
         AppDiagnostics.install(this)
         container = AppContainer(this)
+        // Преди наблюдателите — те също стигат до мрежовия клиент, но по-късно.
+        appScope.launch { warmUp() }
         container.watchSignOut()
         container.watchLoanReminders()
         // Каналите за известия и инициализацията на WorkManager (база данни) не бива да бавят първия кадър.
         appScope.launch { setUpBackground() }
+    }
+
+    /**
+     * Подготовка за първия кадър извън главната нишка (паралелно със създаването на
+     * Activity). Нищо не се променя — само се изпълнява по-рано и на друга нишка:
+     * - OkHttp клиентът (`by lazy` в AppContainer): изграждането му зарежда TLS
+     *   (доверените сертификати на системата, SSLSocketFactory) — иначе това става на
+     *   главната нишка при създаването на ViewModel-а на началния екран;
+     * - шрифтовете (Cormorant, Raleway): Compose ги зарежда блокиращо при първото
+     *   измерване на текст през Resources.getFont — системата пази заредения Typeface в
+     *   свой кеш, така че първият кадър го взема наготово, без да разчита файла.
+     */
+    private fun warmUp() {
+        runCatching { container.http }
+        for (family in listOf(Cormorant, Raleway)) {
+            (family as? FontListFontFamily)?.fonts?.forEach { font ->
+                if (font is ResourceFont) runCatching { resources.getFont(font.resId) }
+            }
+        }
     }
 
     /**

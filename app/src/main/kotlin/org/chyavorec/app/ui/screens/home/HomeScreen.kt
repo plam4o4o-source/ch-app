@@ -288,7 +288,8 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     NewsRow(a, onClick = { navigate(Routes.article(a.id)) }, modifier = Modifier.animateEntrance(i))
                 }
             }
-            item("stats") { StatsRow(state) }
+            // Само числата — новини/рафтове не прекомпозират реда с броячите.
+            item("stats") { StatsRow(state.yearsSinceFounding, state.catalogCount, state.eventsThisMonth) }
             if (state.catalogCount != null) {
                 item("footer") {
                     Text(
@@ -481,7 +482,7 @@ private fun FeastLine(feast: DailyFeast) {
 
 /** „Читалището в числа“ — анимирани броячи (като на сайта). */
 @Composable
-private fun StatsRow(state: HomeUiState) {
+private fun StatsRow(yearsSinceFounding: Int, catalogCount: Int?, eventsThisMonth: Int?) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainer,
         shape = MaterialTheme.shapes.medium,
@@ -497,9 +498,9 @@ private fun StatsRow(state: HomeUiState) {
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 val animate = countUp == true
-                AnimatedCounter(state.yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f), animate = animate)
-                state.catalogCount?.let { AnimatedCounter(it, stringResource(R.string.stat_books), Modifier.weight(1f), animate = animate) }
-                state.eventsThisMonth?.let { AnimatedCounter(it, stringResource(R.string.stat_events), Modifier.weight(1f), animate = animate) }
+                AnimatedCounter(yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f), animate = animate)
+                catalogCount?.let { AnimatedCounter(it, stringResource(R.string.stat_books), Modifier.weight(1f), animate = animate) }
+                eventsThisMonth?.let { AnimatedCounter(it, stringResource(R.string.stat_events), Modifier.weight(1f), animate = animate) }
             }
         }
     }

@@ -79,4 +79,17 @@ class ForYouPicksTest {
         assertTrue(picks.isNotEmpty())
         assertTrue(picks.none { p -> s.newest.any { it.inv == p.inv } })
     }
+
+    @Test fun homeSummaryBooksCarryOnlyWhatTheShelvesShow() {
+        val withText = books.map { it.copy(annotation = "Дълга анотация " + it.inv, keywords = "роман; " + it.inv) }
+        val fresh = (1..15).map { b(100L + it, "Нова $it", "8", "2026-10-%02d".format(it)).copy(annotation = "Нова анотация") }
+        val shelf = org.chyavorec.domain.model.CatalogShelf("Препоръчани", withText.take(2).map { it.inv })
+        val s = CatalogSearchEngine.homeSummary(CatalogSnapshot("Б", "Яворец", "2026-09-19", withText + fresh, listOf(shelf)))
+        val all = s.newest + s.shelves.flatMap { it.books } + s.picks!!
+        assertTrue(s.shelves.single().books.size == 2 && all.size > 2)
+        assertTrue(all.all { it.annotation.isEmpty() && it.keywords.isEmpty() })
+        // Всичко останало (корица, заглавие, автор, наличност, дата) е непокътнато.
+        val byInv = (withText + fresh).associateBy { it.inv }
+        for (x in all) assertEquals(byInv.getValue(x.inv).copy(annotation = "", keywords = ""), x)
+    }
 }

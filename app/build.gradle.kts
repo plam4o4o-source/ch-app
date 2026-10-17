@@ -258,8 +258,8 @@ composeCompiler {
  * Пише app/src/main/generated/baselineProfiles/{baseline-prof,startup-prof}.txt; профилът
  * важи за всички release варианти (prodRelease, prodPlay, devRelease), а се генерира само
  * от prodRelease (реални данни, без демо) чрез build типа nonMinifiedRelease, който
- * плъгинът създава. Ръчно написаният src/main/baseline-prof.txt остава, докато генерираният
- * не бъде добавен в хранилището (виж .github/workflows/baseline-profile.yml).
+ * плъгинът създава. Генерираният профил е в хранилището (замени ръчния с wildcard правила);
+ * обновява се седмично от .github/workflows/baseline-profile.yml (клон baseline-profile/update).
  */
 baselineProfile {
     mergeIntoMain = true
@@ -316,7 +316,7 @@ dependencies {
     implementation(libs.androidx.glance.appwidget)
     // Цветове от корицата на книгата (Palette) за екрана с детайлите.
     implementation(libs.androidx.palette.ktx)
-    // Инсталира src/main/baseline-prof.txt при инсталиране от извън Google Play (по-бърз старт).
+    // Инсталира Baseline профила при инсталиране от извън Google Play (по-бърз старт).
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime)
