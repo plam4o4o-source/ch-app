@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -175,10 +176,11 @@ suspend fun SnackbarHostState.showNotificationsBlocked(context: Context, access:
 fun NotificationsBlockedBanner(status: NotificationStatus, modifier: Modifier = Modifier) {
     if (!status.anyBlocked) return
     val context = LocalContext.current
+    val resources = LocalResources.current
     val text = if (status.appBlocked) {
         stringResource(R.string.notifications_blocked_app)
     } else {
-        stringResource(R.string.notifications_blocked_channels, status.blockedChannels.joinToString(", ") { context.getString(it.nameRes) })
+        stringResource(R.string.notifications_blocked_channels, status.blockedChannels.joinToString(", ") { resources.getString(it.nameRes) })
     }
     Surface(
         color = MaterialTheme.colorScheme.errorContainer,

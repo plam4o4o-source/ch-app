@@ -291,12 +291,13 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
     val msgPast = stringResource(R.string.reminder_past)
     val msgBlocked = stringResource(R.string.reminder_blocked)
     val scope = rememberCoroutineScope()
+    val resources = androidx.compose.ui.platform.LocalResources.current
     LaunchedEffect(result) {
         when (result) {
             // Кога точно ще дойде напомнянето.
             true -> snackbar.showSnackbar(
                 vm.event.value?.let { vm.remindAt(it) }
-                    ?.let { context.getString(R.string.reminder_set_at, Formatters.dateTime(context, java.time.Instant.ofEpochMilli(it))) }
+                    ?.let { resources.getString(R.string.reminder_set_at, Formatters.dateTime(context, java.time.Instant.ofEpochMilli(it))) }
                     ?: msgOn,
             )
             false -> snackbar.showSnackbar(if (vm.event.value?.let { vm.canRemind(it) } == false) msgPast else msgOff)
