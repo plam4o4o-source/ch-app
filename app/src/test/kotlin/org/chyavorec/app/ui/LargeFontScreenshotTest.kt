@@ -148,31 +148,31 @@ class LargeFontScreenshotTest {
     @Test fun homeLarge() {
         launch()
         waitFor("45-ти")
-        shot("30-font2-home")
+        shot("50-font2-home")
     }
 
     @Test fun homeLargeDark() {
         launch(ThemeMode.DARK)
         waitFor("45-ти")
-        shot("31-font2-home-dark")
+        shot("51-font2-home-dark")
     }
 
     @Test fun eventsLarge() {
         launch(deepLink = "events")
         waitFor("Световен ден")
-        shot("32-font2-events")
+        shot("52-font2-events")
     }
 
     @Test fun eventsLargeDark() {
         launch(ThemeMode.DARK, deepLink = "events")
         waitFor("Световен ден")
-        shot("33-font2-events-dark")
+        shot("53-font2-events-dark")
     }
 
     @Test fun onboardingLarge() {
         launch(settings = AppSettings(onboardingDone = false, introShown = true))
         waitFor("Напред")
-        shot("34-font2-onboarding")
+        shot("54-font2-onboarding")
     }
 
     @Test fun onboardingLargeLastSlide() {
@@ -183,14 +183,14 @@ class LargeFontScreenshotTest {
             compose.waitForIdle()
         }
         waitFor("Продължи без вход")
-        shot("35-font2-onboarding-last")
+        shot("55-font2-onboarding-last")
     }
 
     @Test fun myHubLarge() {
         launch()
         tab("Моето")
         waitFor("Добре дошъл!")
-        shot("36-font2-my")
+        shot("56-font2-my")
     }
 
     private fun cards(name: String) {
@@ -215,11 +215,11 @@ class LargeFontScreenshotTest {
         shot(name)
     }
 
-    @Test fun libraryCardLarge() = cards("37-font2-card")
+    @Test fun libraryCardLarge() = cards("57-font2-card")
 
     // Тесен телефон: при 2× шрифт съдържанието не се събира в пропорциите — картата расте.
     @Config(qualifiers = "bg-w360dp-h1100dp-xhdpi")
-    @Test fun libraryCardLargeNarrow() = cards("38-font2-card-narrow")
+    @Test fun libraryCardLargeNarrow() = cards("58-font2-card-narrow")
 
     // --- Заета книга, търсене по автор, дати на събития (обикновен шрифт) ---
 
@@ -228,27 +228,27 @@ class LargeFontScreenshotTest {
     @Test fun bookOnLoan() {
         launch(fontScale = 1f, deepLink = bookOnLoan)
         waitFor("Попитай библиотеката")
-        shot("40-book-on-loan")
+        shot("60-book-on-loan")
     }
 
     @Test fun bookOnLoanDark() {
         launch(ThemeMode.DARK, fontScale = 1f, deepLink = bookOnLoan)
         waitFor("Попитай библиотеката")
-        shot("41-book-on-loan-dark")
+        shot("61-book-on-loan-dark")
     }
 
     @Test fun bookAskLibrarySheet() {
         launch(fontScale = 1f, deepLink = bookOnLoan)
         click("Попитай библиотеката")
         waitFor("Обади се")
-        shot("42-book-ask-library")
+        shot("62-book-ask-library")
     }
 
     @Test fun bookAuthorOpensCatalogByAuthor() {
         launch(fontScale = 1f, deepLink = bookOnLoan)
         click("Симеон Колев")
         waitFor("данни към")
-        shot("43-catalog-by-author")
+        shot("63-catalog-by-author")
     }
 
     @Test fun searchShowsFormattedEventDates() {
@@ -257,13 +257,13 @@ class LargeFontScreenshotTest {
         compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodes(hasSetTextAction()).onFirst().performTextInput("ден")
         waitFor("декември")
-        shot("44-search-event-dates")
+        shot("64-search-event-dates")
     }
 
     @Config(qualifiers = "en-w411dp-h1100dp-xhdpi")
     @Test fun eventsEnglish() {
         launch(fontScale = 1f, deepLink = "events")
         waitFor("DEC")
-        shot("45-events-en")
+        shot("65-events-en")
     }
 }
