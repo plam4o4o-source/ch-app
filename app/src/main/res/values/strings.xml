@@ -55,6 +55,7 @@
     <string name="book_publisher">Издателство</string>
     <string name="book_same_author">От същия автор</string>
     <string name="book_status_as_of">Наличност към %1$s</string>
+    <string name="book_status_now">Наличност в момента</string>
     <string name="book_year">Година</string>
     <string name="calendar_has_events">има събития</string>
     <string name="calendar_next">Следващ месец</string>
@@ -129,6 +130,7 @@
     <string name="error_no_app">Няма приложение, което да отвори това.</string>
     <string name="error_not_found">Не открихме търсеното съдържание.</string>
     <string name="error_offline_title">Няма връзка</string>
+    <string name="error_rate_limited_wait">Твърде много опити. Опитай отново след %1$s.</string>
     <string name="error_temporary">Временно не можем да заредим данните. Опитай отново след малко.</string>
     <string name="error_temporary_subject">Временно не можем да заредим %1$s. Опитай отново.</string>
     <string name="error_title">Нещо се обърка</string>
@@ -179,6 +181,10 @@
     <string name="home_for_you_personal">По твоето четене</string>
     <string name="home_for_you_popular">Най-четени и нови</string>
     <string name="home_latest_news">Още новини</string>
+    <string name="home_loans_label_next">Следващ срок</string>
+    <string name="home_loans_label_overdue">Просрочено</string>
+    <string name="home_loans_open">Отвори „Моите книги“</string>
+    <string name="home_loans_return_by">Върни до %1$s: %2$s</string>
     <string name="home_new_books">Нови постъпления</string>
     <string name="home_search_hint">Търси книга, новина, събитие…</string>
     <string name="home_upcoming">Предстоящи събития</string>
@@ -191,20 +197,27 @@
     <string name="legal_site_version">Виж и: %1$s</string>
     <string name="loading">Зареждане…</string>
     <string name="loan_borrowed">Заета: %1$s</string>
+    <string name="loan_cannot_renew">Не може да се удължи онлайн — попитайте в библиотеката</string>
     <string name="loan_due">Връщане: %1$s</string>
+    <string name="loan_due_overdue">Срокът изтече на %1$s</string>
+    <string name="loan_open_book">Отвори книгата в каталога</string>
     <string name="loan_renew">Удължи срока</string>
     <string name="loan_renew_done">Удължено ✓</string>
     <string name="loan_renew_pending">Заявено удължаване · чака библиотеката</string>
     <string name="loan_renew_rejected">Удължаването е отказано: %1$s</string>
     <string name="loan_renew_rejected_noreason">Удължаването е отказано.</string>
+    <string name="loan_renewing">Изпраща се заявка за удължаване</string>
     <string name="loan_stale_note">Последно синхронизирани данни — може да не са актуални.</string>
     <string name="loans_empty">Нямаш заети книги</string>
     <string name="loans_empty_hint">Разгледай каталога — може би нещо ще те заинтригува.</string>
     <string name="login_card">Читателски номер</string>
     <string name="login_demo_hint">Демо вход: DEMO-0001 / demo</string>
-    <string name="login_forgot">Забравен ПИН</string>
+    <string name="login_forgot">Забравен ПИН?</string>
+    <string name="login_forgot_no_contacts">Телефона и имейла на библиотеката ще намериш в „Още“ → „Контакти“.</string>
+    <string name="login_forgot_title">Забравен ПИН</string>
     <string name="login_heading">Вход за читатели</string>
     <string name="login_hide_password">Скрий ПИН-а</string>
+    <string name="login_locked">Входът е временно заключен. Опитай отново след %1$s.</string>
     <string name="login_password">ПИН (от библиотеката)</string>
     <string name="login_privacy_note">ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore.</string>
     <string name="login_remember">Запомни ме на това устройство</string>
@@ -243,6 +256,7 @@
     <string name="more_messages_desc">Съобщения и покани от читалището</string>
     <string name="my_books">Моите книги</string>
     <string name="my_books_desc">Заети книги и срокове за връщане</string>
+    <string name="my_books_next_due">Следващ срок: %1$s</string>
     <string name="my_card">Читателска карта</string>
     <string name="my_card_add_desc">Добави номера от своята карта</string>
     <string name="my_card_desc">Покажи картата на гишето</string>
@@ -554,6 +568,7 @@
     <string name="update_status_current">Имаш последната версия (%1$s)</string>
     <string name="update_status_downloading">Изтегляне на новата версия…</string>
     <string name="update_status_ready">Версия %1$s е готова за инсталиране</string>
+    <string name="wait_about">около %1$s</string>
     <string name="widget_description">Срокове за връщане, следващо събитие и бързо сканиране</string>
     <string name="widget_due_today">днес</string>
     <string name="widget_due_tomorrow">утре</string>
@@ -591,10 +606,6 @@
         <item quantity="one">просрочена с %1$d ден</item>
         <item quantity="other">просрочена с %1$d дни</item>
     </plurals>
-    <plurals name="error_rate_limited">
-        <item quantity="one">Твърде много опити. Опитай отново след %1$d секунда.</item>
-        <item quantity="other">Твърде много опити. Опитай отново след %1$d секунди.</item>
-    </plurals>
     <plurals name="history_year_count">
         <item quantity="one">%1$d книга</item>
         <item quantity="other">%1$d книги</item>
@@ -602,6 +613,22 @@
     <plurals name="home_catalog_footer">
         <item quantity="one">Каталогът съдържа %1$d документ · данни към %2$s</item>
         <item quantity="other">Каталогът съдържа %1$d документа · данни към %2$s</item>
+    </plurals>
+    <plurals name="home_loans_overdue">
+        <item quantity="one">%1$d книга е просрочена</item>
+        <item quantity="other">%1$d книги са просрочени</item>
+    </plurals>
+    <plurals name="home_loans_total">
+        <item quantity="one">%1$d заета книга</item>
+        <item quantity="other">%1$d заети книги</item>
+    </plurals>
+    <plurals name="loan_renewed_times">
+        <item quantity="one">Удължавана %1$d път</item>
+        <item quantity="other">Удължавана %1$d пъти</item>
+    </plurals>
+    <plurals name="login_attempts_left">
+        <item quantity="one">Остава %1$d опит преди временно заключване</item>
+        <item quantity="other">Остават %1$d опита преди временно заключване</item>
     </plurals>
     <plurals name="messages_unread">
         <item quantity="one">%1$d непрочетено съобщение</item>
@@ -618,6 +645,18 @@
     <plurals name="reading_streak_months">
         <item quantity="one">%1$d месец</item>
         <item quantity="other">%1$d месеца</item>
+    </plurals>
+    <plurals name="wait_hours">
+        <item quantity="one">%1$d час</item>
+        <item quantity="other">%1$d часа</item>
+    </plurals>
+    <plurals name="wait_minutes">
+        <item quantity="one">%1$d минута</item>
+        <item quantity="other">%1$d минути</item>
+    </plurals>
+    <plurals name="wait_seconds">
+        <item quantity="one">%1$d секунда</item>
+        <item quantity="other">%1$d секунди</item>
     </plurals>
     <plurals name="widget_books_count">
         <item quantity="one">%1$d книга</item>

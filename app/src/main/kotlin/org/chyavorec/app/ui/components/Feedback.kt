@@ -60,6 +60,7 @@ import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Feature
+import org.chyavorec.core.WaitDuration
 import java.time.Instant
 
 /** Ясно, нетехническо съобщение за всяка грешка — без stack traces. */
@@ -70,13 +71,25 @@ fun errorMessage(error: AppError, subject: String? = null): String = when (error
         if (subject != null) stringResource(R.string.error_temporary_subject, subject) else stringResource(R.string.error_temporary)
     AppError.Unauthorized -> stringResource(R.string.error_unauthorized)
     AppError.NotFound -> stringResource(R.string.error_not_found)
-    is AppError.RateLimited -> error.retryAfterSeconds.coerceIn(0, Int.MAX_VALUE.toLong()).toInt().let { pluralStringResource(R.plurals.error_rate_limited, it, it) }
+    is AppError.RateLimited -> stringResource(R.string.error_rate_limited_wait, waitText(error.retryAfterSeconds))
     is AppError.NotAvailable -> notAvailableMessage(error.feature)
     is AppError.Conflict -> when (error.code) {
         AppError.Conflict.PENDING -> stringResource(R.string.renew_conflict_pending)
         AppError.Conflict.NOT_ALLOWED -> stringResource(R.string.renew_conflict_not_allowed)
         else -> stringResource(R.string.renew_conflict_other)
     }
+}
+
+/** „5 минути“, „около 1 час“ — оставащото време по човешки, а не в секунди ([WaitDuration]). */
+@Composable
+fun waitText(seconds: Long): String {
+    val w = WaitDuration.of(seconds)
+    val text = when (w.unit) {
+        WaitDuration.Unit.SECONDS -> pluralStringResource(R.plurals.wait_seconds, w.amount, w.amount)
+        WaitDuration.Unit.MINUTES -> pluralStringResource(R.plurals.wait_minutes, w.amount, w.amount)
+        WaitDuration.Unit.HOURS -> pluralStringResource(R.plurals.wait_hours, w.amount, w.amount)
+    }
+    return if (w.approximate) stringResource(R.string.wait_about, text) else text
 }
 
 @Composable

@@ -8,6 +8,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.semantics.stateDescription
+import org.chyavorec.domain.model.DueStatus
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -92,10 +99,12 @@ internal fun NeedsLogin(error: AppError, onLogin: () -> Unit) {
 }
 
 @Composable
-fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
+fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((Long) -> Unit)? = null) {
     val vm = appViewModel(key = "loans") { LoansViewModel(it) }
     val state by vm.state.collectAsStateWithLifecycle()
     val canRenew by vm.canRenew.collectAsStateWithLifecycle()
+    val renewing by vm.renewing.collectAsStateWithLifecycle()
+    val inCatalog by vm.inCatalog.collectAsStateWithLifecycle()
     val renew by vm.renewResult.collectAsStateWithLifecycle()
     val today = LocalAppContainer.current.clock.today()
     val calc = LoanDueCalculator()
@@ -128,7 +137,15 @@ fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
                     val sorted = loans.sortedWith(compareBy(nullsLast<String>()) { it.dueOn })
                     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         items(sorted, key = { it.loanId }) { loan ->
-                            LoanCard(loan, calc, today, stale = state.fromCache, canRenew = canRenew && loan.canRenew && !loan.renewPending, onRenew = { vm.renew(loan) })
+                            // Към страницата на книгата — само ако я има в каталога (иначе „не е намерена“).
+                            val open = loan.inv?.takeIf { it in inCatalog && onOpenBook != null }?.let { inv -> { onOpenBook?.invoke(inv); Unit } }
+                            LoanCard(
+                                loan, calc, today, stale = state.fromCache,
+                                serverRenews = canRenew,
+                                renewing = loan.loanId in renewing,
+                                onRenew = { vm.renew(loan) },
+                                onOpen = open,
+                            )
                         }
                     }
                 }
@@ -152,20 +169,51 @@ fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit) {
     }
 }
 
+/**
+ * Една заета книга. [serverRenews] — дали сървърът изобщо приема удължаване; ако тази книга
+ * не може да се удължи, картата казва защо, вместо просто да няма бутон. [onOpen] (`null` —
+ * книгата я няма в каталога) отваря страницата на книгата.
+ */
 @Composable
-private fun LoanCard(loan: Loan, calc: LoanDueCalculator, today: java.time.LocalDate, stale: Boolean, canRenew: Boolean, onRenew: () -> Unit) {
+internal fun LoanCard(
+    loan: Loan,
+    calc: LoanDueCalculator,
+    today: java.time.LocalDate,
+    stale: Boolean,
+    serverRenews: Boolean,
+    renewing: Boolean,
+    onRenew: () -> Unit,
+    onOpen: (() -> Unit)?,
+) {
+    val context = LocalContext.current
     val due = LoanDueCalculator.parse(loan.dueOn)
     val out = LoanDueCalculator.parse(loan.borrowedOn)
     val status = due?.let { calc.status(it, today) }
+    val overdue = status == DueStatus.OVERDUE
+    val openLabel = stringResource(R.string.loan_open_book)
     ElevatedCard(Modifier.fillMaxWidth()) {
-        Row(Modifier.padding(14.dp)) {
+        // Цялата карта води към книгата (ако я има в каталога); бутонът за удължаване е отделна цел.
+        val open = if (onOpen != null) Modifier.clickable(onClickLabel = openLabel, role = Role.Button, onClick = onOpen) else Modifier
+        Row(open.fillMaxWidth().padding(14.dp)) {
             RemoteImage(loan.coverUrl, null, Modifier.size(64.dp, 90.dp).clip(RoundedCornerShape(8.dp)))
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(loan.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                Text(loan.author, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(stringResource(R.string.loan_borrowed, Formatters.shortDate(LocalContext.current, loan.borrowedOn) ?: "—"), style = MaterialTheme.typography.bodySmall)
-                Text(stringResource(R.string.loan_due, Formatters.shortDate(LocalContext.current, loan.dueOn) ?: "—"), style = MaterialTheme.typography.bodySmall)
+                if (loan.author.isNotBlank()) {
+                    Text(loan.author, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Text(
+                    stringResource(R.string.loan_borrowed, Formatters.shortDate(context, loan.borrowedOn) ?: "—"),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                // Срокът е най-важното на картата: по-едър и удебелен; просрочен — в цвета за грешка.
+                val dueText = Formatters.shortDate(context, loan.dueOn) ?: "—"
+                Text(
+                    if (overdue) stringResource(R.string.loan_due_overdue, dueText) else stringResource(R.string.loan_due, dueText),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = if (overdue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                )
                 if (status != null && due != null) {
                     Spacer(Modifier.height(4.dp))
                     DuePill(status, calc.daysLeft(due, today))
@@ -177,13 +225,52 @@ private fun LoanCard(loan: Loan, calc: LoanDueCalculator, today: java.time.Local
                         )
                     }
                 }
+                if (loan.renewals > 0) {
+                    Text(
+                        pluralStringResource(R.plurals.loan_renewed_times, loan.renewals, loan.renewals),
+                        style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
                 if (stale) Text(stringResource(R.string.loan_stale_note), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.error)
                 RenewState(loan)
-                if (canRenew && !stale) {
-                    TextButton(onClick = onRenew, contentPadding = PaddingValues(0.dp)) { Text(stringResource(R.string.loan_renew)) }
-                }
+                RenewAction(loan, serverRenews = serverRenews, stale = stale, renewing = renewing, onRenew = onRenew)
             }
         }
+    }
+}
+
+/**
+ * Бутонът „Удължи срока“ (с индикатор, докато заявката тече) или — ако тази книга
+ * не може да се удължи онлайн — обяснение защо. Чакащо/отказано удължаване вече е
+ * показано от [RenewState]; при остарели данни бутон няма (може вече да е върната).
+ */
+@Composable
+private fun RenewAction(loan: Loan, serverRenews: Boolean, stale: Boolean, renewing: Boolean, onRenew: () -> Unit) {
+    when {
+        loan.renewPending || stale -> Unit
+        serverRenews && loan.canRenew -> {
+            val busy = stringResource(R.string.loan_renewing)
+            TextButton(
+                onClick = onRenew,
+                enabled = !renewing,
+                contentPadding = PaddingValues(horizontal = 0.dp),
+                modifier = Modifier.heightIn(min = 48.dp).semantics { if (renewing) stateDescription = busy },
+            ) {
+                if (renewing) {
+                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
+                    Spacer(Modifier.width(10.dp))
+                }
+                Text(stringResource(R.string.loan_renew))
+            }
+        }
+        // Отказът от библиотеката вече казва причината — не я повтаряме.
+        loan.renewResult?.isRejected == true -> Unit
+        else -> Text(
+            stringResource(R.string.loan_cannot_renew),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 4.dp),
+        )
     }
 }
 

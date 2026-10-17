@@ -65,6 +65,7 @@ import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.components.rememberToday
 import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
@@ -72,6 +73,7 @@ import org.chyavorec.app.ui.components.MembershipPill
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.data.repository.AuthState
+import org.chyavorec.domain.model.LoanSummary
 
 @Composable
 fun accountViewModel(): AccountViewModel = appViewModel(key = "account") { AccountViewModel(it) }
@@ -131,12 +133,16 @@ fun MyHubScreen(navigate: (String) -> Unit) {
             }
 
             SectionLabel(stringResource(R.string.my_section_library), Modifier.padding(start = 20.dp, top = 8.dp, bottom = 12.dp))
+            val cachedLoans = rememberCachedLoans()
+            val today = rememberToday()
+            val booksLine = loanSummaryLine(remember(cachedLoans, today) { LoanSummary.of(cachedLoans, today) }, cachedLoans)
             val tiles = buildList {
                 add(TileItem(Icons.Outlined.Badge, stringResource(R.string.my_card),
                     if (signedIn) stringResource(R.string.my_card_desc) else if (selfCard != null) stringResource(R.string.my_card_self_desc) else stringResource(R.string.my_card_add_desc)) {
                     navigate(Routes.CARD)
                 })
-                add(TileItem(Icons.Outlined.CollectionsBookmark, stringResource(R.string.my_books), stringResource(R.string.my_books_desc)) { navigate(Routes.LOANS) })
+                // Влязъл читател — следващият срок / просрочените (от кеша); иначе общото описание.
+                add(TileItem(Icons.Outlined.CollectionsBookmark, stringResource(R.string.my_books), booksLine ?: stringResource(R.string.my_books_desc)) { navigate(Routes.LOANS) })
                 add(TileItem(Icons.Outlined.CardMembership, stringResource(R.string.my_membership), stringResource(R.string.my_membership_desc)) { navigate(Routes.MEMBERSHIP) })
                 if (signedIn) add(TileItem(Icons.Outlined.AutoStories, stringResource(R.string.history_title), stringResource(R.string.my_history_desc)) { navigate(Routes.HISTORY) })
                 if (signedIn) add(TileItem(Icons.Outlined.Person, stringResource(R.string.my_profile), stringResource(R.string.my_profile_desc)) { navigate(Routes.PROFILE) })

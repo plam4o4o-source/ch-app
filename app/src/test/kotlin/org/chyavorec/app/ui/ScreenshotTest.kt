@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -33,11 +34,16 @@ import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.components.SectionLabel
+import org.chyavorec.app.ui.screens.my.LoanCard
+import org.chyavorec.app.ui.screens.my.LoanDueCard
 import org.chyavorec.app.ui.screens.my.ReadingStatsCard
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.ThemeMode
 import org.chyavorec.core.FixedClock
 import org.chyavorec.data.catalog.ReadingStats
+import org.chyavorec.domain.model.Loan
+import org.chyavorec.domain.model.LoanDueCalculator
+import org.chyavorec.domain.model.LoanSummary
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -47,6 +53,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.time.Instant
+import java.time.LocalDate
 import java.time.YearMonth
 
 /**
@@ -214,6 +221,46 @@ class ScreenshotTest {
     @Test fun myReadingLight() = readingCard(ThemeMode.LIGHT, "09-my-reading-light")
 
     @Test fun myReadingDark() = readingCard(ThemeMode.DARK, "10-my-reading-dark")
+
+    /**
+     * Картата „Следващ срок / Просрочено“ от „Начало“ и картите в „Моите книги“ с примерни
+     * заемания (production няма демо вход, затова — самите компоненти, както на екраните).
+     */
+    private fun loans(mode: ThemeMode, name: String) {
+        val today = LocalDate.of(2026, 10, 17)
+        val list = listOf(
+            Loan("1", 101, "Под игото", "Иван Вазов", borrowedOn = "2026-09-23", dueOn = "2026-10-21", renewals = 1, canRenew = true),
+            Loan("2", 102, "Тютюн", "Димитър Димов", borrowedOn = "2026-09-01", dueOn = "2026-10-12", renewals = 2, canRenew = false),
+            Loan("3", 103, "Бай Ганьо", "Алеко Константинов", borrowedOn = "2026-10-10", dueOn = "2026-11-07", canRenew = true),
+        )
+        val calc = LoanDueCalculator()
+        compose.setContent {
+            ChitalishteTheme(mode = mode) {
+                Column(
+                    Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface).padding(vertical = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    SectionLabel("Начало", Modifier.padding(start = 20.dp))
+                    LoanDueCard(LoanSummary.of(list.drop(2) + list.first(), today)!!, onClick = {}, modifier = Modifier.padding(horizontal = 16.dp))
+                    LoanDueCard(LoanSummary.of(list, today)!!, onClick = {}, modifier = Modifier.padding(horizontal = 16.dp))
+                    SectionLabel("Моите книги", Modifier.padding(start = 20.dp, top = 8.dp))
+                    Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        list.forEachIndexed { i, loan ->
+                            LoanCard(
+                                loan, calc, today, stale = false, serverRenews = true,
+                                renewing = i == 2, onRenew = {}, onOpen = {},
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        shot(name)
+    }
+
+    @Test fun loansLight() = loans(ThemeMode.LIGHT, "11-loans-light")
+
+    @Test fun loansDark() = loans(ThemeMode.DARK, "12-loans-dark")
 
     @Test fun onboarding() {
         launch(settings = AppSettings(onboardingDone = false, introShown = true))

@@ -84,6 +84,7 @@ import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.DancingFigures
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ErrorView
+import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.PressableCard
 import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.windowWidth
@@ -281,6 +282,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
     val vm = appViewModel(key = "event-$id") { EventDetailViewModel(id, it.eventsRepository, it.reminders) }
     val event by vm.event.collectAsStateWithLifecycle()
     val loaded by vm.loaded.collectAsStateWithLifecycle()
+    val loadError by vm.error.collectAsStateWithLifecycle()
     val hasReminder by vm.hasReminder.collectAsStateWithLifecycle()
     val result by vm.reminderResult.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -321,7 +323,14 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
     ) { padding ->
         val e = event
         if (e == null) {
-            if (loaded) ErrorView(AppError.NotFound, onRetry = null, modifier = Modifier.padding(padding))
+            val error = loadError
+            when {
+                // „Няма го“ — само когато списъкът е зареден и събитието наистина липсва.
+                loaded -> ErrorView(AppError.NotFound, onRetry = null, modifier = Modifier.padding(padding))
+                // Без данни (без връзка, празен кеш) — „Опитай отново“; при връзка се опитва сам.
+                error != null -> ErrorView(error, onRetry = { vm.retry() }, modifier = Modifier.padding(padding), subject = stringResource(R.string.subject_events))
+                else -> SkeletonCards(Modifier.padding(padding))
+            }
             return@Scaffold
         }
         Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 32.dp)) {

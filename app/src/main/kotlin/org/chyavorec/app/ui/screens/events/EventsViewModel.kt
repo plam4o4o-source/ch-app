@@ -14,6 +14,8 @@ import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.AppClock
+import org.chyavorec.core.AppError
+import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.EventsRepository
 import org.chyavorec.domain.model.Event
 import java.time.LocalDate
@@ -90,20 +92,47 @@ class EventDetailViewModel(
     private val id: String,
     private val repo: EventsRepository,
     private val reminders: ReminderScheduler,
-) : ViewModel() {
+) : ViewModel(), RefreshOnReconnect {
     val event = MutableStateFlow<Event?>(null)
+    /** Списъкът със събития е зареден и събитието е потърсено в него (`event == null` — наистина го няма). */
     val loaded = MutableStateFlow(false)
+    /** Списъкът не е наличен (няма кеш и мрежата не е отговорила) — екранът предлага „Опитай отново“. */
+    val error = MutableStateFlow<AppError?>(null)
     val hasReminder: StateFlow<Boolean> = combine(reminders.reminderIds, event) { ids, _ -> id in ids }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     /** null — няма резултат; true/false — напомнянето е включено/изключено. */
     val reminderResult = MutableStateFlow<Boolean?>(null)
 
-    init {
+    init { load() }
+
+    /** „Опитай отново“ и връщане на връзката — само ако списъкът не е бил наличен. */
+    fun retry() {
+        if (loaded.value || (error.value == null && event.value == null)) return
+        load()
+    }
+
+    override val reconnectState: ScreenState<*>
+        get() = ScreenState(data = event.value, loading = !loaded.value && error.value == null, error = error.value)
+
+    override fun refreshOnReconnect() = retry()
+
+    private fun load() {
+        error.value = null
         viewModelScope.launch {
-            // От известие при празен кеш — първо списъкът със събития.
-            event.value = repo.find(id) ?: repo.events(false).let { repo.find(id) }
-            loaded.value = true
+            repo.find(id)?.let { e ->
+                event.value = e
+                loaded.value = true
+                return@launch
+            }
+            // От известие/връзка при празен кеш — първо списъкът със събития.
+            when (val r = repo.events(false)) {
+                is Outcome.Success -> {
+                    event.value = r.value.data.firstOrNull { it.id == id }
+                    loaded.value = true
+                }
+                is Outcome.Failure -> error.value = r.error
+            }
         }
     }
 

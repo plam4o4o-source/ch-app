@@ -34,6 +34,11 @@ object Formatters {
         if (isBulgarian(context)) BulgarianDates.formatShort(d)
         else d.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.ENGLISH))
 
+    /** Ден и месец без година: „21 октомври“ / „Oct 21“ — за близки срокове. */
+    fun dayMonth(context: Context, d: LocalDate): String =
+        if (isBulgarian(context)) "${d.dayOfMonth} ${BulgarianDates.monthName(d.monthValue)}"
+        else d.format(DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH))
+
     fun millisDate(context: Context, millis: Long?): String? =
         millis?.let { date(context, Instant.ofEpochMilli(it).atZone(sofia).toLocalDate()) }
 
