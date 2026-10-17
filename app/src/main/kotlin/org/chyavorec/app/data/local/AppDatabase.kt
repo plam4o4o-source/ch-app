@@ -1,6 +1,7 @@
 package org.chyavorec.app.data.local
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity
@@ -11,7 +12,9 @@ import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 
 /** Запазена (любима) новина — достатъчно за показване и офлайн. */
 @Entity(tableName = "favorite_news")
@@ -87,6 +90,9 @@ abstract class AppDatabase : RoomDatabase() {
         /**
          * Само при връщане към по-стара версия на приложението (по-нова схема на диска, за която
          * тази версия няма миграция) базата се създава наново — иначе приложението не би тръгнало.
+         * Файл, който SQLite обяви за повреден (не се чете изобщо), се изтрива от стандартния
+         * обработчик на Android/Room и базата започва празна. Всяка друга грешка при отваряне не
+         * трие нищо: четенията минават през [orOnDbError], а записите — през [dbWrite].
          */
         fun create(context: Context): AppDatabase =
             Room.databaseBuilder(context, AppDatabase::class.java, NAME)
@@ -95,3 +101,26 @@ abstract class AppDatabase : RoomDatabase() {
                 .build()
     }
 }
+
+/**
+ * Грешка на базата (не се отваря, пълна памет…) не бива да срива екрана при всяко отваряне:
+ * потокът дава [fallback] (напр. празен списък), а грешката отива в лога. Данните не се трият.
+ */
+fun <T> Flow<T>.orOnDbError(fallback: T): Flow<T> = catch { e ->
+    Log.w(DB_LOG_TAG, "Базата с потребителските данни не се чете", e)
+    emit(fallback)
+}
+
+/** Запис в базата, чиято грешка само се записва в лога (без отмяната); `false` — неуспех. */
+suspend fun dbWrite(block: suspend () -> Unit): Boolean =
+    try {
+        block()
+        true
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Log.w(DB_LOG_TAG, "Неуспешен запис в базата с потребителските данни", e)
+        false
+    }
+
+private const val DB_LOG_TAG = "AppDatabase"

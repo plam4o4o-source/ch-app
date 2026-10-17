@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.chyavorec.app.data.local.FavoriteNewsEntity
 import org.chyavorec.app.data.local.FavoritesDao
+import org.chyavorec.app.data.local.dbWrite
+import org.chyavorec.app.data.local.orOnDbError
 import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
@@ -65,7 +67,7 @@ class NewsListViewModel(
 
     private class Filtered(val visible: List<NewsArticle>, val favoriteIds: Set<String>)
 
-    private val filtered = combine(load, appliedFilter, favorites.observeAll()) { s, applied, favs ->
+    private val filtered = combine(load, appliedFilter, favorites.observeAll().orOnDbError(emptyList())) { s, applied, favs ->
         val source: List<NewsArticle>
         val texts: List<String>?
         if (applied.favoritesOnly) {
@@ -121,10 +123,12 @@ class NewsListViewModel(
     fun setFavoritesOnly(on: Boolean) = filter.update { it.copy(favoritesOnly = on) }
 
     fun toggleFavorite(a: NewsArticle, isFavorite: Boolean) = viewModelScope.launch {
-        if (isFavorite) favorites.delete(a.id)
-        else favorites.upsert(
-            FavoriteNewsEntity(a.id, a.title, a.url, a.imageUrl, a.summary, a.category, a.publishedAtMillis, clock.now().toEpochMilli()),
-        )
+        dbWrite {
+            if (isFavorite) favorites.delete(a.id)
+            else favorites.upsert(
+                FavoriteNewsEntity(a.id, a.title, a.url, a.imageUrl, a.summary, a.category, a.publishedAtMillis, clock.now().toEpochMilli()),
+            )
+        }
     }
 }
 
@@ -136,7 +140,7 @@ class ArticleViewModel(
 ) : ViewModel() {
     private val _state = MutableStateFlow(ScreenState<ArticleDetail>())
     val state: StateFlow<ScreenState<ArticleDetail>> = _state.asStateFlow()
-    val isFavorite: StateFlow<Boolean> = favorites.observeIds().map { ids -> id in ids }
+    val isFavorite: StateFlow<Boolean> = favorites.observeIds().orOnDbError(emptyList()).map { ids -> id in ids }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     private var article: NewsArticle? = null
@@ -160,12 +164,14 @@ class ArticleViewModel(
     }
 
     private suspend fun favoriteFallback(): NewsArticle? =
-        favorites.observeAll().first().firstOrNull { it.id == id }
+        favorites.observeAll().orOnDbError(emptyList()).first().firstOrNull { it.id == id }
             ?.let { NewsArticle(it.id, it.title, it.url, it.publishedAtMillis, it.summary, it.imageUrl, it.category) }
 
     fun toggleFavorite() = viewModelScope.launch {
         val a = article ?: return@launch
-        if (isFavorite.value) favorites.delete(a.id)
-        else favorites.upsert(FavoriteNewsEntity(a.id, a.title, a.url, a.imageUrl, a.summary, a.category, a.publishedAtMillis, clock.now().toEpochMilli()))
+        dbWrite {
+            if (isFavorite.value) favorites.delete(a.id)
+            else favorites.upsert(FavoriteNewsEntity(a.id, a.title, a.url, a.imageUrl, a.summary, a.category, a.publishedAtMillis, clock.now().toEpochMilli()))
+        }
     }
 }

@@ -1,18 +1,25 @@
 package org.chyavorec.app.data
 
 import android.app.Application
+import android.database.sqlite.SQLiteCantOpenDatabaseException
+import android.database.sqlite.SQLiteFullException
 import androidx.room.testing.MigrationTestHelper
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.chyavorec.app.data.local.AppDatabase
+import org.chyavorec.app.data.local.dbWrite
+import org.chyavorec.app.data.local.orOnDbError
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 /**
  * Потребителската база ([AppDatabase]) срещу изнесените схеми в app/schemas (MigrationTestHelper).
@@ -54,5 +61,13 @@ class AppDatabaseMigrationTest {
         } finally {
             db.close()
         }
+    }
+
+    @Test fun databaseErrorsDoNotCrashTheScreens() = runBlocking {
+        // Грешка при отваряне/четене: потокът дава резервната стойност, записът връща false.
+        val broken = flow<List<String>> { throw SQLiteCantOpenDatabaseException("unable to open database file") }
+        assertEquals(emptyList<String>(), broken.orOnDbError(emptyList()).first())
+        assertFalse(dbWrite { throw SQLiteFullException("database or disk is full") })
+        assertTrue(dbWrite { })
     }
 }

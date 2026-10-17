@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import org.chyavorec.app.R
 import org.chyavorec.app.data.local.EventReminderEntity
 import org.chyavorec.app.data.local.RemindersDao
+import org.chyavorec.app.data.local.dbWrite
+import org.chyavorec.app.data.local.orOnDbError
 import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.core.AppClock
 import org.chyavorec.domain.model.Event
@@ -26,7 +28,7 @@ class ReminderScheduler(
     private val dao: RemindersDao,
     private val clock: AppClock,
 ) {
-    val reminderIds: Flow<List<String>> = dao.observeIds()
+    val reminderIds: Flow<List<String>> = dao.observeIds().orOnDbError(emptyList())
 
     fun remindAt(event: Event): Long? {
         val date = event.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: return null
@@ -50,13 +52,14 @@ class ReminderScheduler(
             .addTag(tag(event.id))
             .build()
         WorkManager.getInstance(context).enqueue(request)
-        dao.upsert(EventReminderEntity(event.id, event.title, at))
+        // Известието е планирано и без записа — той само отбелязва звънчето на събитието.
+        dbWrite { dao.upsert(EventReminderEntity(event.id, event.title, at)) }
         return true
     }
 
     suspend fun cancel(eventId: String) {
         WorkManager.getInstance(context).cancelAllWorkByTag(tag(eventId))
-        dao.delete(eventId)
+        dbWrite { dao.delete(eventId) }
     }
 
     private fun tag(id: String) = "event-reminder:" + id.hashCode()

@@ -12,7 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -42,7 +46,6 @@ import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
 import androidx.glance.state.GlanceStateDefinition
-import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -50,6 +53,7 @@ import androidx.glance.unit.ColorProvider
 import org.chyavorec.app.ChitalishteApp
 import org.chyavorec.app.MainActivity
 import org.chyavorec.app.R
+import org.chyavorec.app.data.local.resetOnCorruption
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.AuthState
@@ -57,6 +61,7 @@ import org.chyavorec.domain.model.DueStatus
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.LoanDueCalculator
 import java.time.LocalDate
+import java.io.File
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import androidx.glance.color.ColorProvider as DayNightColor
@@ -96,6 +101,18 @@ private val EmptyWidgetState = WidgetState(null, null, 0, emptyList())
 private val DataVersionKey = longPreferencesKey("data_version")
 
 /**
+ * Като PreferencesGlanceStateDefinition (същият файл), но повреден файл се заменя с празен,
+ * вместо уиджетът да гърми при всяко опресняване. Ползва се навсякъде (и в
+ * [updateAppWidgetState]) — Glance пази по едно хранилище за файл.
+ */
+private object WidgetStateDefinition : GlanceStateDefinition<Preferences> {
+    override fun getLocation(context: Context, fileKey: String): File = context.preferencesDataStoreFile(fileKey)
+
+    override suspend fun getDataStore(context: Context, fileKey: String): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(corruptionHandler = resetOnCorruption("widget")) { getLocation(context, fileKey) }
+}
+
+/**
  * Размери (SizeMode.Responsive): малък 2×2 — един главен ред (следващ срок или събитие);
  * широк 4×2 — срокове + събитие + бутони; широк и висок — до 3 реда срокове.
  * [LocalSize] в съдържанието е избраният от тези размери, не действителният.
@@ -113,7 +130,7 @@ private val WideTallSize = DpSize(250.dp, 150.dp)
  */
 class ChitalishteWidget : GlanceAppWidget() {
 
-    override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
+    override val stateDefinition: GlanceStateDefinition<*> = WidgetStateDefinition
     override val sizeMode: SizeMode = SizeMode.Responsive(setOf(SmallSize, WideSize, WideTallSize))
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -182,7 +199,9 @@ class ChitalishteWidget : GlanceAppWidget() {
                 val version = System.currentTimeMillis()
                 GlanceAppWidgetManager(context).getGlanceIds(ChitalishteWidget::class.java).forEach { glanceId ->
                     runCatching {
-                        updateAppWidgetState(context, glanceId) { prefs -> prefs[DataVersionKey] = version }
+                        updateAppWidgetState(context, WidgetStateDefinition, glanceId) { prefs ->
+                            prefs.toMutablePreferences().apply { this[DataVersionKey] = version }
+                        }
                         widget.update(context, glanceId)
                     }
                 }

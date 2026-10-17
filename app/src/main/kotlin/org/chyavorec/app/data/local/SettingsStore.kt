@@ -1,10 +1,13 @@
 package org.chyavorec.app.data.local
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -16,7 +19,20 @@ import kotlinx.coroutines.flow.map
 import org.chyavorec.app.ui.theme.ThemeMode
 import org.chyavorec.app.ui.theme.ThemeStyle
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+/**
+ * Повреден файл с настройки (прекъснат запис, пълна памет…) не бива да спира приложението
+ * при всяко пускане: заменя се с празни настройки — всичко се връща към подразбиращото се.
+ */
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "settings",
+    corruptionHandler = resetOnCorruption("settings"),
+)
+
+/** За всеки DataStore с Preferences в приложението (настройките, състоянието на уиджета). */
+internal fun resetOnCorruption(name: String): ReplaceFileCorruptionHandler<Preferences> = ReplaceFileCorruptionHandler { e ->
+    Log.w("DataStore", "Повреден файл „$name“ — заменя се с празен", e)
+    emptyPreferences()
+}
 
 /** Несекретни настройки (DataStore). Лични данни тук НЕ се пазят. */
 data class AppSettings(

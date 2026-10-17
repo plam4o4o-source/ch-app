@@ -1,6 +1,7 @@
 package org.chyavorec.app.data
 
 import android.app.Application
+import android.database.sqlite.SQLiteException
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -28,6 +29,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -105,5 +107,45 @@ class CatalogIndexStoreTest {
         assertEquals(listOf(1L), fts.search(CatalogQuery("игото")).map { it.inv })
         assertTrue(fts.search(CatalogQuery("джиан")).isEmpty(), "старите записи (и FTS) са изтрити")
         assertNull(fts.book(11))
+    }
+
+    @Test fun brokenDatabaseIsRecreatedOnceAndTheIndexRebuilt() = runBlocking {
+        var recreated = 0
+        val store = RoomCatalogIndexStore(recreate = { recreated++; db }) { throw SQLiteException("file is not a database") }
+        // Счупената база не стига до каталога — новата е празна и индексът се попълва отново.
+        assertNull(store.state())
+        assertEquals(1, recreated)
+        store.replace(state, CatalogIndexRows.build(snapshot))
+        assertEquals(state, store.state())
+        assertEquals(1, recreated)
+    }
+
+    @Test fun secondFailureReachesTheRepository() = runBlocking {
+        var recreated = 0
+        val store = RoomCatalogIndexStore(recreate = { recreated++; throw SQLiteException("пак") }) { throw SQLiteException("първо") }
+        assertFailsWith<SQLiteException> { store.state() }
+        // Само веднъж в процеса — иначе всяко търсене би изтривало базата наново.
+        assertFailsWith<SQLiteException> { store.state() }
+        assertEquals(1, recreated)
+    }
+
+    @Test fun corruptFileOnDiskDoesNotCrashAndIsRebuilt() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Application>()
+        val file = context.getDatabasePath(CatalogDatabase.NAME)
+        file.parentFile?.mkdirs()
+        file.writeBytes(ByteArray(8192) { (it * 31 + 7).toByte() })
+        val opened = ArrayList<CatalogDatabase>()
+        val store = RoomCatalogIndexStore(recreate = { CatalogDatabase.recreate(context).also { opened += it } }) {
+            CatalogDatabase.create(context).also { opened += it }
+        }
+        try {
+            assertNull(store.state())
+            store.replace(state, CatalogIndexRows.build(snapshot))
+            assertEquals(state, store.state())
+            assertEquals("Под игото", store.book(1)?.title)
+        } finally {
+            opened.forEach { runCatching { it.close() } }
+            context.deleteDatabase(CatalogDatabase.NAME)
+        }
     }
 }

@@ -2,7 +2,6 @@ package org.chyavorec.app.di
 
 import android.content.Context
 import android.os.Build
-import androidx.room.Room
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -105,11 +104,10 @@ class AppContainer(
     val database: AppDatabase by lazy { AppDatabase.create(context) }
     /**
      * Пълнотекстовият индекс на каталога (FTS4) — отделна база-кеш, която се попълва
-     * отново от katalog.json; отваря се едва при първото търсене в каталога.
+     * отново от katalog.json; отваря се едва при първото търсене в каталога. Ако не се
+     * чете (повреден файл), индексът я създава наново ([RoomCatalogIndexStore]).
      */
-    val catalogDatabase: CatalogDatabase by lazy {
-        Room.databaseBuilder(context, CatalogDatabase::class.java, "catalog-index.db").fallbackToDestructiveMigration(true).build()
-    }
+    val catalogDatabase: CatalogDatabase by lazy { CatalogDatabase.create(context) }
 
     /** Публичен кеш (новини, каталог, страници) — в noBackup папката. */
     val publicCache by lazy { FilePayloadCache(File(context.noBackupFilesDir, "cache/public")) }
@@ -151,7 +149,7 @@ class AppContainer(
 
     val newsRepository by lazy { NewsRepository(siteService, publicCache, clock) }
     val eventsRepository by lazy { EventsRepository(siteService, publicCache, clock) }
-    val catalogRepository by lazy { CatalogRepository(catalogService, publicCache, clock, index = RoomCatalogIndexStore { catalogDatabase }) }
+    val catalogRepository by lazy { CatalogRepository(catalogService, publicCache, clock, index = RoomCatalogIndexStore(recreate = { CatalogDatabase.recreate(context) }) { catalogDatabase }) }
     val siteRepository by lazy { SiteRepository(siteService, publicCache, clock, newsRepository) }
 
     val authRepository by lazy {
