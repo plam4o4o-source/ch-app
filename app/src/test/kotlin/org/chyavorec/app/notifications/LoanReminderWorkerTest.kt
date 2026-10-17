@@ -39,7 +39,7 @@ class LoanReminderWorkerTest {
     /** Уникално за теста — дневникът на известията (DataStore) се споделя между тестовете. */
     private val loanId = "L-" + UUID.randomUUID()
 
-    @Before fun setUp() = runBlocking {
+    @Before fun setUp() = runBlocking<Unit> {
         backend.start()
         TestBackend.allowNotificationsAndNetwork(app)
         backend.reader()
@@ -52,7 +52,7 @@ class LoanReminderWorkerTest {
     private fun loan(due: String = "2026-10-20", pending: Boolean = false) =
         """{"loanId":"$loanId","inv":7,"title":"Под игото","author":"Иван Вазов","dateOut":"2026-09-20","dateDue":"$due","renewPending":$pending}"""
 
-    private fun signIn() = runBlocking {
+    private fun signIn() = runBlocking<Unit> {
         assertIs<Outcome.Success<Unit>>(app.container.authRepository.login("0042", "1234".toCharArray(), remember = false))
     }
 
@@ -148,7 +148,7 @@ class LoanReminderWorkerTest {
         assertEquals("Под игото", n.notification.extras.getCharSequence(android.app.Notification.EXTRA_TEXT).toString())
     }
 
-    @Test fun disabledLoanNotificationsShowNothing() = runBlocking {
+    @Test fun disabledLoanNotificationsShowNothing() = runBlocking<Unit> {
         app.container.settings.setNotifyLoans(false)
         try {
             signIn()

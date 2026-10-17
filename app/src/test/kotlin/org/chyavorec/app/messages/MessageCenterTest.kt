@@ -60,11 +60,11 @@ class MessageCenterTest {
 
     private fun ids(r: Outcome<Synced<List<AppMessage>>>) = (r as Outcome.Success).value.data.map { it.id }
 
-    private fun signIn() = runBlocking {
+    private fun signIn() = runBlocking<Unit> {
         assertTrue(c.authRepository.login("0042", "1234".toCharArray(), remember = false) is Outcome.Success)
     }
 
-    @Test fun membersOnlyNeedCardOrSignIn() = runBlocking {
+    @Test fun membersOnlyNeedCardOrSignIn() = runBlocking<Unit> {
         assertFalse(c.messages.isMember())
         assertEquals(listOf(forAll), ids(c.messages.refresh(force = true)))
         // Въведена читателска карта — проверката е на телефона, нищо не се праща към сайта.
@@ -79,7 +79,7 @@ class MessageCenterTest {
         assertTrue(c.messages.isMember())
     }
 
-    @Test fun unreadCountFollowsReadState() = runBlocking {
+    @Test fun unreadCountFollowsReadState() = runBlocking<Unit> {
         c.selfCardRepository.save("A-0042", "")
         c.messages.refresh(force = true)
         assertEquals(2, c.messages.unreadCount.first())
@@ -92,7 +92,7 @@ class MessageCenterTest {
         assertEquals(0, backend.requests.count { it.method == "POST" })
     }
 
-    @Test fun personalMessagesOnlyWhenSignedInAndReadIsSent() = runBlocking {
+    @Test fun personalMessagesOnlyWhenSignedInAndReadIsSent() = runBlocking<Unit> {
         val pm = "pm-$run"
         backend.json(
             "${TestBackend.API}/v1/me/messages",
@@ -119,7 +119,7 @@ class MessageCenterTest {
         assertTrue(c.messages.messages.value.none { it.personal })
     }
 
-    @Test fun failedReadIsRetriedOnNextRefresh() = runBlocking {
+    @Test fun failedReadIsRetriedOnNextRefresh() = runBlocking<Unit> {
         val pm = "pm-$run"
         backend.json(
             "${TestBackend.API}/v1/me/messages",
@@ -141,7 +141,7 @@ class MessageCenterTest {
         assertTrue(c.settings.pendingPersonalReads().isEmpty())
     }
 
-    @Test fun readOnAnotherDeviceCountsAsRead() = runBlocking {
+    @Test fun readOnAnotherDeviceCountsAsRead() = runBlocking<Unit> {
         val pm = "pm-$run"
         backend.json(
             "${TestBackend.API}/v1/me/messages",

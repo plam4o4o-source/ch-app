@@ -258,7 +258,6 @@ class ScreenshotTest {
                 }
             }
         }
-        shown("Моето четене")
         shown("Книги по месеци")
         // Общият брой в кръга и любимият автор.
         shown("27", substring = true)

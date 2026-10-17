@@ -39,7 +39,7 @@ class MessagePollWorkerTest {
     private val id = "poll-" + UUID.randomUUID()
     private val now get() = clock.now().toEpochMilli()
 
-    @Before fun setUp() = runBlocking {
+    @Before fun setUp() = runBlocking<Unit> {
         backend.start()
         TestBackend.allowNotificationsAndNetwork(app)
         backend.json(
@@ -61,7 +61,7 @@ class MessagePollWorkerTest {
 
     private fun ours() = nm.activeNotifications.filter { it.id == NotificationIds.message(id) }
 
-    @Test fun newMessageNotifiesAndStartsTheAdaptiveInterval() = runBlocking {
+    @Test fun newMessageNotifiesAndStartsTheAdaptiveInterval() = runBlocking<Unit> {
         assertIs<ListenableWorker.Result.Success>(run())
         val shown = ours().single()
         assertEquals(Channel.MESSAGES_IMPORTANT.id, shown.notification.channelId)
@@ -73,7 +73,7 @@ class MessagePollWorkerTest {
         assertTrue(!poll.signature.isNullOrEmpty())
     }
 
-    @Test fun unchangedFileDoublesIntervalAndEarlyWakeSkipsNetwork() = runBlocking {
+    @Test fun unchangedFileDoublesIntervalAndEarlyWakeSkipsNetwork() = runBlocking<Unit> {
         run()
         clock.advanceSeconds(61 * 60)
         run()
@@ -91,14 +91,14 @@ class MessagePollWorkerTest {
         assertTrue(ours().isEmpty())
     }
 
-    @Test fun dormantAfterFourteenDaysWithoutOpening() = runBlocking {
+    @Test fun dormantAfterFourteenDaysWithoutOpening() = runBlocking<Unit> {
         app.container.settings.markAppOpened(now - 15 * 24 * 60 * 60 * 1000L, MessagePollPolicy.BASE_MILLIS, 0)
         assertIs<ListenableWorker.Result.Success>(run())
         assertEquals(0, backend.count("/data/app-messages.json"))
         assertTrue(ours().isEmpty())
     }
 
-    @Test fun disabledMessagesNeverAskTheSite() = runBlocking {
+    @Test fun disabledMessagesNeverAskTheSite() = runBlocking<Unit> {
         app.container.settings.setNotifyMessages(false)
         try {
             run()
@@ -108,7 +108,7 @@ class MessagePollWorkerTest {
         }
     }
 
-    @Test fun siteErrorKeepsScheduleForNextWake() = runBlocking {
+    @Test fun siteErrorKeepsScheduleForNextWake() = runBlocking<Unit> {
         backend.json("/data/app-messages.json", "boom", code = 503)
         assertIs<ListenableWorker.Result.Success>(run())
         assertEquals(1, backend.count("/data/app-messages.json"))

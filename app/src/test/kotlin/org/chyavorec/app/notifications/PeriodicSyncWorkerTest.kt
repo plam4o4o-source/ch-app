@@ -40,7 +40,7 @@ class PeriodicSyncWorkerTest {
     /** Уникално за теста — настройките (DataStore) се споделят между тестовете в процеса. */
     private val loanId = "L-" + UUID.randomUUID()
 
-    @Before fun setUp() = runBlocking {
+    @Before fun setUp() = runBlocking<Unit> {
         backend.start()
         TestBackend.allowNotificationsAndNetwork(app)
         backend.reader()
@@ -59,7 +59,7 @@ class PeriodicSyncWorkerTest {
 
     private fun run(): ListenableWorker.Result = runBlocking { TestListenableWorkerBuilder<PeriodicSyncWorker>(app).build().doWork() }
 
-    private fun signIn() = runBlocking {
+    private fun signIn() = runBlocking<Unit> {
         assertIs<Outcome.Success<Unit>>(app.container.authRepository.login("0042", "1234".toCharArray(), remember = false))
     }
 
@@ -67,7 +67,7 @@ class PeriodicSyncWorkerTest {
 
     private val overdueLoan get() = """{"loanId":"$loanId","inv":7,"title":"Под игото","author":"Иван Вазов","dateOut":"2026-09-01","dateDue":"2026-10-10"}"""
 
-    @Test fun overdueLoanNotifiesOnceAndMarksStepDone() = runBlocking {
+    @Test fun overdueLoanNotifiesOnceAndMarksStepDone() = runBlocking<Unit> {
         signIn()
         backend.loans(overdueLoan)
         assertIs<ListenableWorker.Result.Success>(run())
@@ -87,7 +87,7 @@ class PeriodicSyncWorkerTest {
         assertTrue(overdue().isEmpty())
     }
 
-    @Test fun quietHoursDeferTheStep() = runBlocking {
+    @Test fun quietHoursDeferTheStep() = runBlocking<Unit> {
         clock.advanceSeconds(10 * 3600) // 23:00 в София
         signIn()
         backend.loans(overdueLoan)
@@ -98,7 +98,7 @@ class PeriodicSyncWorkerTest {
         assertTrue("$loanId:OVERDUE" !in app.container.settings.notifiedLoans())
     }
 
-    @Test fun signedOutReaderMeansNoLoanRequests() = runBlocking {
+    @Test fun signedOutReaderMeansNoLoanRequests() = runBlocking<Unit> {
         backend.loans(overdueLoan)
         run()
         assertEquals(0, backend.count("$API/v1/me/loans"))
@@ -107,7 +107,7 @@ class PeriodicSyncWorkerTest {
         assertEquals(clock.now().toEpochMilli(), app.container.settings.lastSyncStep("loans"))
     }
 
-    @Test fun loanNotificationsOffStillSkipNetworkWithoutWidget() = runBlocking {
+    @Test fun loanNotificationsOffStillSkipNetworkWithoutWidget() = runBlocking<Unit> {
         app.container.settings.setNotifyLoans(false)
         try {
             signIn()
@@ -119,7 +119,7 @@ class PeriodicSyncWorkerTest {
         }
     }
 
-    @Test fun newArticleNotifies() = runBlocking {
+    @Test fun newArticleNotifies() = runBlocking<Unit> {
         backend.json("/data/news.json", TestResources.text("site-news.json"))
         backend.json("/rss.xml", TestResources.text("site-rss.xml"))
         val s = app.container.settings
@@ -133,7 +133,7 @@ class PeriodicSyncWorkerTest {
         assertEquals(clock.now().toEpochMilli(), s.lastSyncStep("news"))
     }
 
-    @Test fun personalMessageNotifiesWithHiddenContent() = runBlocking {
+    @Test fun personalMessageNotifiesWithHiddenContent() = runBlocking<Unit> {
         val s = app.container.settings
         s.setNotifyMessages(true)
         signIn()

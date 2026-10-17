@@ -40,7 +40,7 @@ class LoansViewModelTest {
     private lateinit var c: AppContainer
     private val api = TestBackend.API
 
-    @Before fun setUp() = runBlocking {
+    @Before fun setUp() = runBlocking<Unit> {
         backend.start()
         TestBackend.allowNotificationsAndNetwork(app)
         backend.reader()
@@ -55,7 +55,7 @@ class LoansViewModelTest {
     @After fun tearDown() = backend.shutdown()
 
     /** Изчаква [done] (заявките вървят в мрежовите нишки). */
-    private fun until(done: () -> Boolean) = runBlocking {
+    private fun until(done: () -> Boolean) = runBlocking<Unit> {
         withTimeout(10_000) { while (!done()) { yield(); Thread.sleep(10) } }
     }
 
