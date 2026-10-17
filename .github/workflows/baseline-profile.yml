@@ -48,34 +48,53 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      # Компилаторът на Kotlin (демон от стъпката за сглобяване) повече не трябва — паметта
+      # на runner-а остава за емулатора.
+      - name: Free memory for the emulator
+        run: |
+          pkill -f KotlinCompileDaemon || true
+          free -m
+
       # BaselineProfileRule: API 33+ (без root). Анимациите остават включени — кодът им
-      # също трябва да влезе в профила.
+      # също трябва да влезе в профила. Емулаторът в CI понякога „изчезва“ по средата
+      # (adb: device offline/not found) — тогава още един опит с нов емулатор.
       - name: Generate baseline + startup profile on emulator
+        id: generate
+        continue-on-error: true
         timeout-minutes: 75
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           target: google_apis
           arch: x86_64
-          ram-size: 4096M
+          ram-size: 3072M
           disk-size: 6000M
           disable-animations: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          emulator-options: -no-window -no-snapshot -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           script: ./gradlew --no-daemon :app:generateBaselineProfile
 
-      # При неуспех — причината направо в лога (артефактите не винаги са удобни за преглед):
-      # резултатите от инструментацията и краят на logcat за всеки тест.
+      # При неуспех — причината направо в лога (виж скрипта).
+      - name: Show test failures (first attempt)
+        if: steps.generate.outcome == 'failure'
+        run: bash .github/scripts/baseline-profile-diagnostics.sh
+
+      - name: Generate baseline + startup profile on emulator (retry)
+        if: steps.generate.outcome == 'failure'
+        timeout-minutes: 75
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          ram-size: 3072M
+          disk-size: 6000M
+          disable-animations: false
+          emulator-options: -no-window -no-snapshot -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: ./gradlew --no-daemon :app:generateBaselineProfile
+
       - name: Show test failures
         if: failure()
-        run: |
-          R=baselineprofile/build/outputs/androidTest-results
-          [ -d "$R" ] || { echo "no test results"; exit 0; }
-          find "$R" -name '*.xml' -print -exec grep -h -A40 '<failure' {} + || true
-          find "$R" -name 'logcat-*.txt' | while read -r f; do
-            echo "::group::$f"
-            grep -E 'AndroidRuntime|FATAL|BaselineProfile|TestRunner|Benchmark|lowmemorykiller|am_crash|ANR' "$f" | tail -n 200 || true
-            echo "::endgroup::"
-          done
+        run: bash .github/scripts/baseline-profile-diagnostics.sh
 
       - name: Check generated profile
         run: |
