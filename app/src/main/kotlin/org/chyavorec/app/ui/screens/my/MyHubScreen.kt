@@ -70,6 +70,7 @@ import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
 import org.chyavorec.app.ui.components.MembershipPill
+import org.chyavorec.app.ui.components.OnDarkSurfaceStatuses
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.data.repository.AuthState
@@ -124,7 +125,7 @@ fun MyHubScreen(navigate: (String) -> Unit) {
                                 else -> Text(stringResource(R.string.loading), style = MaterialTheme.typography.headlineSmall)
                             }
                             p?.let { Text(stringResource(R.string.reader_number, it.cardNumber), style = MaterialTheme.typography.bodyMedium, color = Brand.GoldLight) }
-                            p?.membership?.let { MembershipPill(it.status, Modifier.padding(top = 6.dp)) }
+                            p?.membership?.let { OnDarkSurfaceStatuses { MembershipPill(it.status, Modifier.padding(top = 6.dp)) } }
                         }
                     }
                 }

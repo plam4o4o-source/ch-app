@@ -97,6 +97,7 @@ import org.chyavorec.app.ui.components.LocalOnlineCovers
 import org.chyavorec.app.ui.components.LocalReducedMotion
 import org.chyavorec.app.ui.components.observeReducedMotion
 import org.chyavorec.app.ui.components.LocalSharedScope
+import org.chyavorec.app.ui.components.LimitFontScale
 import org.chyavorec.app.ui.components.LocalTabReselect
 import org.chyavorec.app.ui.components.TabReselectBus
 import org.chyavorec.app.ui.components.rememberReducedMotion
@@ -188,6 +189,9 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
 }
 
 private val topLevelRoutes = TopTab.entries.map { it.route }.toSet()
+
+/** Лентата е с фиксирана височина: над 1.3× етикетите на разделите биха се рязали („Нача…“). */
+private const val NAV_LABEL_MAX_FONT_SCALE = 1.3f
 
 @Composable
 private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<String?>, canAskNotifications: Boolean = true) {
@@ -363,7 +367,7 @@ private fun AppNavigationBar(route: String?, reduced: Boolean, onTab: (TopTab, B
                 selected = selected,
                 onClick = { onTab(tab, selected) },
                 icon = { TabIcon(tab, selected, reduced) },
-                label = { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                label = { LimitFontScale(NAV_LABEL_MAX_FONT_SCALE) { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                 colors = navColors,
             )
         }
@@ -388,7 +392,7 @@ private fun AppNavigationRail(route: String?, reduced: Boolean, onTab: (TopTab, 
                 selected = selected,
                 onClick = { onTab(tab, selected) },
                 icon = { TabIcon(tab, selected, reduced) },
-                label = { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                label = { LimitFontScale(NAV_LABEL_MAX_FONT_SCALE) { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                 colors = railColors,
                 modifier = Modifier.padding(vertical = 4.dp),
             )

@@ -20,6 +20,9 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import org.chyavorec.app.ui.components.OnDarkSurfaceStatuses
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -275,6 +278,7 @@ private fun Modifier.cardProportions() = layout { measurable, constraints ->
 private const val CARD_RATIO = 1.586f
 
 /** Дигитална читателска карта — оформена като истинска библиотечна карта (лице с баркод). */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = false) {
     CardFrame(modifier, large) {
@@ -288,13 +292,14 @@ fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = 
         }
         Spacer(Modifier.weight(1f))
         Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        // Номерът не се съкращава: ако до него няма място за статуса, той минава на нов ред.
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 stringResource(R.string.reader_number, data.number),
-                color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f),
-                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium,
+                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.CenterVertically),
             )
-            data.status?.let { MembershipPill(it) }
+            data.status?.let { OnDarkSurfaceStatuses { MembershipPill(it) } }
         }
         Spacer(Modifier.height(8.dp))
         Surface(color = Color.White, shape = RoundedCornerShape(8.dp)) {

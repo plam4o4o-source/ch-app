@@ -119,12 +119,12 @@ fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
             Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 if (pager.currentPage < slides.lastIndex) {
                     Button(onClick = { scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
-                        Text(stringResource(R.string.onb_next))
+                        Text(stringResource(R.string.onb_next), textAlign = TextAlign.Center)
                     }
                 } else {
-                    Button(onClick = { onFinish(true) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.onb_login)) }
+                    Button(onClick = { onFinish(true) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.onb_login), textAlign = TextAlign.Center) }
                     OutlinedButton(onClick = { onFinish(false) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
-                        Text(stringResource(R.string.onb_guest), color = Brand.Parchment)
+                        Text(stringResource(R.string.onb_guest), color = Brand.Parchment, textAlign = TextAlign.Center)
                     }
                 }
             }

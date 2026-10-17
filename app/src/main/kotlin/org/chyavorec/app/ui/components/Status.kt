@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.LocalExtendedColors
+import org.chyavorec.app.ui.theme.StatusColors
 import org.chyavorec.domain.model.BookStatus
 import org.chyavorec.domain.model.DueStatus
 import org.chyavorec.domain.model.MembershipStatus
@@ -42,6 +44,16 @@ fun StatusPill(text: String, color: Color, modifier: Modifier = Modifier) {
         Text(text, style = MaterialTheme.typography.labelMedium, color = color)
     }
 }
+
+/**
+ * Статусите върху винаги тъмна повърхност (читателската карта, заглавката в „Моето“)
+ * и в светла тема: светлите им варианти — тъмнозеленото „Активно“ там е нечетимо.
+ */
+@Composable
+fun OnDarkSurfaceStatuses(content: @Composable () -> Unit) = CompositionLocalProvider(
+    LocalExtendedColors provides LocalExtendedColors.current.copy(ok = StatusColors.OkDark, warn = StatusColors.WarnDark, bad = StatusColors.BadDark),
+    content = content,
+)
 
 @Composable
 fun BookStatusPill(status: BookStatus, modifier: Modifier = Modifier) {

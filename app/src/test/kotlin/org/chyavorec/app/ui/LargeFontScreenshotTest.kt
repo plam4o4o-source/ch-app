@@ -240,7 +240,8 @@ class LargeFontScreenshotTest {
     @Test fun bookAskLibrarySheet() {
         launch(fontScale = 1f, deepLink = bookOnLoan)
         click("Попитай библиотеката")
-        waitFor("Обади се")
+        // Бутоните се появяват, щом контактите се заредят (тук — резервните, сайтът връща 404).
+        waitFor("Изпрати имейл")
         shot("62-book-ask-library")
     }
 

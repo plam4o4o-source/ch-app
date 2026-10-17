@@ -32,6 +32,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,12 +41,14 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -168,6 +171,17 @@ fun PressableCard(
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp, pressedElevation = 4.dp),
         shape = MaterialTheme.shapes.medium,
     ) { content() }
+}
+
+/**
+ * Ограничава мащаба на системния шрифт до [max] за елементи с фиксирана височина по
+ * спецификация (етикетите на долната лента) — над него текстът би се рязал.
+ */
+@Composable
+fun LimitFontScale(max: Float, content: @Composable () -> Unit) {
+    val d = LocalDensity.current
+    if (d.fontScale <= max) content()
+    else CompositionLocalProvider(LocalDensity provides Density(d.density, fontScale = max), content = content)
 }
 
 /** Ред „етикет — стойност“. [copyable] — дълго натискане копира стойността (сигнатура, инв. №). */
