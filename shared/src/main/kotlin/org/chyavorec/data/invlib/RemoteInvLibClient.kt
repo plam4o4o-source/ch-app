@@ -10,6 +10,7 @@ import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Feature
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.logFailure
 import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
@@ -350,7 +351,9 @@ class RemoteInvLibClient(
     private suspend fun <T> send(request: Request, serializer: KSerializer<T>): Outcome<T> =
         when (val r = http.execute(request)) {
             is Outcome.Failure -> r
+            // Неразчетен отговор на моста (сменен API) — в локалния дневник; съдържанието не се пази.
             is Outcome.Success -> runCatching { json.decodeFromString(serializer, r.value.text()) }
+                .logFailure("api.decode")
                 .fold({ Outcome.Success(it) }, { Outcome.Failure(AppError.Parse("invlib api")) })
         }
 

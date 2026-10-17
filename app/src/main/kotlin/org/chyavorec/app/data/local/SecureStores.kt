@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import org.chyavorec.app.data.security.BytesCipher
+import org.chyavorec.core.logFailure
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.SelfDeclaredCard
 import org.chyavorec.domain.repository.SelfCardStore
@@ -24,7 +25,9 @@ class SecureSessionStore(private val file: File, private val cipher: BytesCipher
         memory?.let { return it }
         return withContext(Dispatchers.IO) {
             if (!file.exists()) return@withContext null
+            // Нечетима сесия (напр. сменен ключ) = изход; причината остава в локалния дневник.
             runCatching { json.decodeFromString(AuthSession.serializer(), String(cipher.decrypt(file.readBytes()))) }
+                .logFailure("auth.session-store")
                 .getOrElse { file.delete(); null }
                 ?.also { memory = it }
         }
@@ -53,6 +56,7 @@ class SecureSelfCardStore(private val file: File, private val cipher: BytesCiphe
     override suspend fun load(): SelfDeclaredCard? = withContext(Dispatchers.IO) {
         if (!file.exists()) return@withContext null
         runCatching { json.decodeFromString(SelfDeclaredCard.serializer(), String(cipher.decrypt(file.readBytes()))) }
+            .logFailure("card-store")
             .getOrElse { file.delete(); null }
     }
 

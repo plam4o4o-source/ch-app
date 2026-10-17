@@ -17,8 +17,10 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
+import org.chyavorec.core.logFailure
 import org.chyavorec.data.catalog.CatalogIndexRows
 import org.chyavorec.data.catalog.CatalogIndexState
 import org.chyavorec.data.catalog.CatalogIndexStore
@@ -304,7 +306,7 @@ class CatalogRepository(
     private suspend fun applyChanged(f: CatalogFetch.Changed, want: Want) {
         // Редът на записите е важен: суровият файл, обобщението, после хешът/ETag-ът —
         // прекъсване по средата води само до повторно (безусловно) сваляне.
-        val rawSaved = runCatching { cache.writeBytes(KEY, f.raw) }.isSuccess
+        val rawSaved = runCatching { cache.writeBytes(KEY, f.raw) }.logFailure("catalog.save").isSuccess
         val s = withContext(work) { CatalogSearchEngine.homeSummary(f.snapshot) }
         saveSummary(s)
         if (rawSaved) saveMeta(CatalogMeta(f.hash, f.etag, f.etagUrl, f.snapshot.generatedOn)) else {
@@ -456,16 +458,20 @@ class CatalogRepository(
     /** Разчита каталога от диска без ключалката (за фоновото попълване) — с хеша на прочетените байтове. */
     private suspend fun readSnapshot(): Pair<CatalogSnapshot, String>? {
         val payload = runCatching { cache.readBytes(KEY) }.getOrNull() ?: return null
-        return withContext(work) { runCatching { KatalogParser.parse(payload.bytes) to katalogHash(payload.bytes) }.getOrNull() }
+        return withContext(work) { runCatching { KatalogParser.parse(payload.bytes) to katalogHash(payload.bytes) }.logFailure("catalog.disk").getOrNull() }
     }
 
-    /** Грешка на базата не спира каталога — връща `null` (без да поглъща отмяната). */
+    /**
+     * Грешка на базата не спира каталога — връща `null` (без да поглъща отмяната).
+     * Причината остава в локалния дневник (индексът се попълва отново при следващия опит).
+     */
     private suspend fun <T> guarded(block: suspend () -> T): T? =
         try {
             block()
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
+            Diagnostics.record("catalog.index", e)
             null
         }
 
@@ -474,7 +480,7 @@ class CatalogRepository(
         val payload = runCatching { cache.readBytes(KEY) }.getOrNull() ?: return null
         val m = loadMeta()
         val parsed = withContext(work) {
-            runCatching { KatalogParser.parse(payload.bytes) to (if (m == null) katalogHash(payload.bytes) else null) }.getOrNull()
+            runCatching { KatalogParser.parse(payload.bytes) to (if (m == null) katalogHash(payload.bytes) else null) }.logFailure("catalog.disk").getOrNull()
         } ?: return null
         parsed.second?.let { saveMeta(CatalogMeta(it)) }
         lastSnapshot = SoftReference(parsed.first)
@@ -498,7 +504,7 @@ class CatalogRepository(
                     val snapshot = KatalogParser.parse(payload.bytes)
                     // Хешът се смята само веднъж — ако липсва (кеш от по-стара версия).
                     Triple(snapshot, CatalogSearchEngine(snapshot), if (m == null) katalogHash(payload.bytes) else null)
-                }.getOrNull()
+                }.logFailure("catalog.disk").getOrNull()
             } ?: return null
             loaded.third?.let { saveMeta(CatalogMeta(it)) }
             lastSnapshot = SoftReference(loaded.first)

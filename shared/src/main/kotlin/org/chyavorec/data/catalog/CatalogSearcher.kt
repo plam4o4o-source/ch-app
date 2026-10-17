@@ -4,6 +4,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.TextNormalizer
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogFacets
@@ -177,6 +178,8 @@ class FtsCatalogSearcher(
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
+            // Базата на индекса не отговаря — търсене в паметта; причината — в локалния дневник.
+            Diagnostics.record("catalog.search", e)
             val engine = fallback() ?: throw e
             withContext(work) { onEngine(engine) }
         }

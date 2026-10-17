@@ -38,6 +38,8 @@ import org.chyavorec.app.update.AppUpdater
 import org.chyavorec.app.widget.ChitalishteWidget
 import org.chyavorec.app.messages.MessageCenter
 import org.chyavorec.core.AppClock
+import org.chyavorec.core.Diagnostics
+import org.chyavorec.core.logFailure
 import org.chyavorec.core.reconnections
 import org.chyavorec.core.SystemClock
 import org.chyavorec.data.catalog.GitHubCatalogService
@@ -211,7 +213,7 @@ class AppContainer(
      * Извиква се веднъж от Application.
      */
     fun watchSignOut() {
-        appScope.launch { runCatching { evictLegacyReaderHttpCache() } }
+        appScope.launch { runCatching { evictLegacyReaderHttpCache() }.logFailure("signout.http-cache") }
         appScope.launch {
             var wasSignedIn = false
             var previous: AuthState? = null
@@ -242,15 +244,17 @@ class AppContainer(
      */
     private suspend fun clearReaderTraces() {
         // Личните съобщения изчезват веднага и от паметта (кешът им е в readerCache).
-        runCatching { messages.clearPersonal() }
-        runCatching { settings.clearPersonal() }
+        runCatching { messages.clearPersonal() }.logFailure("signout.messages")
+        runCatching { settings.clearPersonal() }.logFailure("signout.settings")
         // Напомнянията за срок на предишния читател — отменени, списъкът му — забравен.
         storedLoans.value = null
-        runCatching { loanReminders.cancelAll() }
+        runCatching { loanReminders.cancelAll() }.logFailure("signout.reminders")
         // Вече показаните известия за заемания и лични съобщения.
-        runCatching { Notifier.cancelPersonal(context) }
+        runCatching { Notifier.cancelPersonal(context) }.logFailure("signout.notifications")
         clearImageCaches()
-        runCatching { evictReaderApiFromHttpCache() }
+        runCatching { evictReaderApiFromHttpCache() }.logFailure("signout.http-cache")
+        // Локалният дневник на грешките не съдържа лични данни, но се изчиства и той — за всеки случай.
+        Diagnostics.clear()
         runCatching { settings.setReaderTraces(false) }
         // Уиджетът не бива да показва заглавия на книги след изход.
         runCatching { ChitalishteWidget.refresh(context) }
@@ -316,6 +320,7 @@ class AppContainer(
                     throw e
                 } catch (e: Exception) {
                     // Следващата промяна (или старт) опитва отново — планът не е записан.
+                    Diagnostics.record("loans.reminders", e)
                 }
             }
         }

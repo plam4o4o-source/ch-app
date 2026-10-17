@@ -15,14 +15,19 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import okio.Path.Companion.toOkioPath
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.di.AppContainerOwner
+import org.chyavorec.app.diagnostics.AppDiagnostics
+import org.chyavorec.core.logFailure
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.PeriodicSyncWorker
 
-class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuration.Provider {
+class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuration.Provider, AppContainerOwner {
 
     lateinit var container: AppContainer
         private set
+
+    override val appContainer: AppContainer get() = container
 
     /** Фонови задачи на ниво процес (напр. планиране на WorkManager извън главната нишка). */
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -32,6 +37,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
 
     override fun onCreate() {
         super.onCreate()
+        // Локалният дневник на грешките (само на устройството) — и за сривовете.
+        AppDiagnostics.install(this)
         container = AppContainer(this)
         container.watchSignOut()
         container.watchLoanReminders()
@@ -50,9 +57,9 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         val fresh = runCatching { container.settings.backgroundSetup() != stamp }.getOrDefault(true)
         if (fresh) runCatching { Notifier.createChannels(this) }
         // Една обща периодична задача (съобщения, новини, заемания, уиджет, обновяване).
-        val sync = runCatching { PeriodicSyncWorker.schedule(this, update = fresh) }
+        val sync = runCatching { PeriodicSyncWorker.schedule(this, update = fresh) }.logFailure("startup.schedule-sync")
         // Съобщенията от читалището — по-често (адаптивно 1–6 ч.), само статичният файл от сайта.
-        val poll = runCatching { MessagePollWorker.schedule(this, update = fresh) }
+        val poll = runCatching { MessagePollWorker.schedule(this, update = fresh) }.logFailure("startup.schedule-poll")
         if (fresh && sync.isSuccess && poll.isSuccess) runCatching { container.settings.setBackgroundSetup(stamp) }
     }
 

@@ -15,6 +15,7 @@ import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Hashing
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.logFailure
 import org.chyavorec.core.map
 import org.chyavorec.data.http.HttpBody
 import org.chyavorec.data.http.HttpFetcher
@@ -75,7 +76,8 @@ class ChyavorecSiteService(
     private fun HttpBody.html(): Document = Jsoup.parse(ByteArrayInputStream(bytes), charset, finalUrl)
 
     private suspend fun <T> parse(what: String, block: () -> T): Outcome<T> = withContext(work) {
-        runCatching(block).fold({ Outcome.Success(it) }, { Outcome.Failure(AppError.Parse(what)) })
+        // Сменен формат на сайта — причината остава в локалния дневник (без съдържанието).
+        runCatching(block).logFailure("site.parse:$what").fold({ Outcome.Success(it) }, { Outcome.Failure(AppError.Parse(what)) })
     }
 
     /** Брой разчитания на news.json / index.json (за тестовете: непромененото не се разчита). */

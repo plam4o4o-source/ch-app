@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.chyavorec.app.data.security.BytesCipher
 import org.chyavorec.core.Hashing
+import org.chyavorec.core.logFailure
 import org.chyavorec.domain.repository.CachedBytes
 import org.chyavorec.domain.repository.CachedPayload
 import org.chyavorec.domain.repository.PayloadCache
@@ -43,7 +44,7 @@ class FilePayloadCache(
             val savedAt = f.lastModified()
             val bytes = f.readBytes()
             CachedBytes(cipher?.decrypt(bytes) ?: bytes, savedAt)
-        }.getOrElse {
+        }.logFailure("cache.read").getOrElse {
             // Повреден или нечетим (напр. след смяна на ключа) — изтриваме го.
             f.delete()
             versions.bump(key)

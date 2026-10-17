@@ -30,6 +30,7 @@ import okhttp3.Request
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.data.local.SettingsStore
 import org.chyavorec.core.AppClock
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.data.update.Checksums
@@ -230,6 +231,7 @@ class AppUpdater(
             } catch (e: Exception) {
                 // Прекъсване (задачата е спряна) или грешка в мрежата: наличната част остава за продължаване.
                 if (e is CancellationException) throw e
+                Diagnostics.record("update.download", e)
                 if (e is TooLargeException) discard()
                 _state.value = UpdateState.Failed(UpdateFailure.DOWNLOAD, info)
                 return@withContext null
@@ -237,6 +239,7 @@ class AppUpdater(
             validator.delete()
             val sha = digest.digest().joinToString("") { "%02x".format(it) }
             if (sha != info.sha256) {
+                Diagnostics.note("update.download", "checksum mismatch")
                 discard()
                 _state.value = UpdateState.Failed(UpdateFailure.CHECKSUM, info)
                 return@withContext null
@@ -398,6 +401,7 @@ class AppUpdater(
             true
         } catch (e: Exception) {
             if (e is CancellationException) throw e
+            Diagnostics.record("update.install", e)
             _state.value = UpdateState.Failed(UpdateFailure.INSTALL, info)
             false
         }
