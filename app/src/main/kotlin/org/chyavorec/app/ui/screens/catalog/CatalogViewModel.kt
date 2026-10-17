@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
+import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.catalog.CatalogSearcher
 import org.chyavorec.data.repository.CatalogRepository
@@ -144,37 +145,75 @@ class CatalogViewModel(
     }
 }
 
-class BookViewModel(private val inv: Long, private val container: org.chyavorec.app.di.AppContainer) : ViewModel() {
+class BookViewModel(private val inv: Long, private val container: org.chyavorec.app.di.AppContainer) : ViewModel(), RefreshOnReconnect {
     data class BookUi(
         val book: CatalogBook? = null,
+        /** Каталогът е прочетен и книгата е потърсена в него (`book == null` — наистина я няма). */
         val loaded: Boolean = false,
+        /** Каталогът не е наличен (първо пускане без връзка, уиджет/връзка преди зареждане). */
+        val error: AppError? = null,
         val copies: List<CatalogBook> = emptyList(),
         val sameAuthor: List<CatalogBook> = emptyList(),
         val generatedOn: String? = null,
         val syncedAt: java.time.Instant? = null,
         val fromCache: Boolean = false,
+        /** Защо последното опресняване на каталога не е успяло (за лентата — без лъжливо „няма интернет“). */
+        val refreshError: AppError? = null,
         val canHold: Boolean = false,
         val liveStatus: org.chyavorec.domain.model.BookStatus? = null,
-    )
+    ) {
+        val loading: Boolean get() = !loaded && error == null
+    }
 
     val ui = MutableStateFlow(BookUi())
     val holdResult = MutableStateFlow<Outcome<Unit>?>(null)
 
-    init {
+    init { load() }
+
+    /** „Опитай отново“ и връщане на връзката — само ако каталогът не е бил наличен. */
+    fun retry() {
+        if (ui.value.loading || ui.value.loaded) return
+        load()
+    }
+
+    override val reconnectState: ScreenState<*>
+        get() = ui.value.let { ScreenState(data = it.book, loading = it.loading, error = it.error) }
+
+    override fun refreshOnReconnect() = retry()
+
+    private fun load() {
+        ui.update { it.copy(error = null) }
         viewModelScope.launch {
-            // През индекса в базата (без мрежа и без да се разчита целият каталог).
-            val synced = container.catalogRepository.lookupSearcher()
-            val catalog = synced?.data
-            val book = catalog?.book(inv)
+            // През индекса в базата (без мрежа и без да се разчита целият каталог). Без
+            // никакъв кеш — каталогът от мрежата; неуспехът е „няма данни“, а не „няма книга“.
+            var synced = container.catalogRepository.lookupSearcher(network = false)
+            if (synced == null) {
+                when (val r = container.catalogRepository.catalog(false)) {
+                    is Outcome.Failure -> {
+                        ui.update { it.copy(error = r.error) }
+                        return@launch
+                    }
+                    is Outcome.Success -> synced = container.catalogRepository.lookupSearcher(network = false)
+                }
+            }
+            val found = synced
+            if (found == null) {
+                ui.update { it.copy(error = AppError.Parse("katalog.json")) }
+                return@launch
+            }
+            val catalog = found.data
+            val book = catalog.book(inv)
             ui.value = BookUi(
                 book = book,
                 loaded = true,
                 copies = book?.let { catalog.copiesOf(it) }.orEmpty(),
                 sameAuthor = book?.let { catalog.byAuthor(it.author, it.inv) }.orEmpty(),
-                generatedOn = catalog?.generatedOn,
-                syncedAt = synced?.syncedAt,
-                fromCache = synced?.fromCache ?: false,
+                generatedOn = catalog.generatedOn,
+                syncedAt = found.syncedAt,
+                fromCache = found.fromCache,
+                refreshError = found.refreshError,
             )
+            if (book == null) return@launch
             val caps = container.authRepository.capabilities()
             // „Заяви книгата“ се показва САМО ако библиотечният сървър го поддържа.
             ui.update { it.copy(canHold = caps.holds) }

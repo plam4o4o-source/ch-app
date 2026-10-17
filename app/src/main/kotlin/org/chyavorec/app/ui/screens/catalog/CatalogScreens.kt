@@ -453,11 +453,20 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
         })
     }) { padding ->
         if (b == null) {
-            if (ui.loaded) ErrorView(AppError.NotFound, onRetry = null, modifier = Modifier.padding(padding))
+            val error = ui.error
+            when {
+                // „Няма я“ — само когато каталогът е прочетен и книгата наистина липсва в него.
+                ui.loaded -> ErrorView(AppError.NotFound, onRetry = null, modifier = Modifier.padding(padding))
+                // Каталогът не е наличен (без връзка, още незареден) — с „Опитай отново“;
+                // при връщане на връзката се опитва сам (RefreshOnReconnect).
+                error != null -> ErrorView(error, onRetry = { vm.retry() }, modifier = Modifier.padding(padding), subject = stringResource(R.string.subject_catalog))
+                else -> SkeletonList(rows = 1, modifier = Modifier.padding(padding))
+            }
             return@Scaffold
         }
         Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 32.dp)) {
-            SyncBanner(ui.fromCache, ui.syncedAt, null)
+            // Лентата — само при неуспешно опресняване: кешът от диска сам по себе си не е „без интернет“.
+            SyncBanner(ui.fromCache && ui.refreshError != null, ui.syncedAt, ui.refreshError)
             Row(Modifier.padding(20.dp), verticalAlignment = Alignment.Top) {
                 BookCover(b, width = 124.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"))
                 Spacer(Modifier.width(18.dp))
@@ -470,14 +479,17 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                     }
                     Spacer(Modifier.height(12.dp))
                     BookStatusPill(ui.liveStatus ?: b.status)
+                    // Живата наличност (от библиотечния сървър) е „в момента“; иначе — към датата на каталога.
                     Text(
-                        stringResource(R.string.book_status_as_of, Formatters.shortDate(LocalContext.current, ui.generatedOn) ?: "—"),
+                        if (ui.liveStatus != null) stringResource(R.string.book_status_now)
+                        else stringResource(R.string.book_status_as_of, Formatters.shortDate(LocalContext.current, ui.generatedOn) ?: "—"),
                         style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 6.dp),
                     )
                 }
             }
-            if (ui.canHold && b.available) {
+            // Заявка — според живата наличност, ако я има (каталогът може да е от вчера).
+            if (ui.canHold && (ui.liveStatus?.let { it == org.chyavorec.domain.model.BookStatus.AVAILABLE } ?: b.available)) {
                 Button(onClick = { vm.placeHold() }, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
                     Icon(Icons.Outlined.BookmarkAdd, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.book_hold))
                 }

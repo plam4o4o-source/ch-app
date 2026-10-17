@@ -129,6 +129,8 @@ import org.chyavorec.app.ui.components.shimmer
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.events.EventCard
 import org.chyavorec.app.ui.screens.news.NewsRow
+import org.chyavorec.app.ui.screens.my.LoanDueCard
+import org.chyavorec.app.ui.screens.my.rememberLoanSummary
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.domain.model.CatalogBook
@@ -166,6 +168,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
     val today = rememberToday()
     LaunchedEffect(today) { vm.onDay(today) }
     val decor = rememberDayDecor(state.occasions, today)
+    val loanSummary = rememberLoanSummary()
 
     WheatRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         // На таблет/хоризонтално съдържанието е центрирано и не по-широко от 840 dp.
@@ -204,6 +207,12 @@ fun HomeScreen(navigate: (String) -> Unit) {
                         }
                     },
                 )
+            }
+            // „Следващ срок / Просрочено“ — само за влязъл читател със заети книги (от кеша, без мрежа).
+            loanSummary?.let { s ->
+                item("loans") {
+                    LoanDueCard(s, onClick = { navigate(Routes.LOANS) }, modifier = Modifier.animateItem().padding(horizontal = 16.dp, vertical = 6.dp))
+                }
             }
             state.feast?.let { f -> item("feast") { FeastLine(f) } }
             item("sync") { SyncBanner(state.news.fromCache, state.news.syncedAt, state.news.refreshError) }

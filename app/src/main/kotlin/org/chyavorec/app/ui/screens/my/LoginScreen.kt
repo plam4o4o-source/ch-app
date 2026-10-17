@@ -6,6 +6,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material.icons.outlined.Call
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import kotlinx.coroutines.delay
+import org.chyavorec.app.ui.LocalAppContainer
+import org.chyavorec.app.ui.components.waitText
+import org.chyavorec.app.util.Intents
+import org.chyavorec.domain.model.Contacts
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -77,6 +94,22 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
         }
     }
     LaunchedEffect(Unit) { vm.refreshCapabilities() }
+    // Временно заключен вход: обратно броене всяка секунда; при нула бутонът се отключва.
+    val clock = LocalAppContainer.current.clock
+    var lockLeft by remember { mutableLongStateOf(0L) }
+    LaunchedEffect(ui.lockedUntilMillis) {
+        while (true) {
+            val left = ((ui.lockedUntilMillis - clock.now().toEpochMilli()) + 999) / 1000
+            lockLeft = left.coerceAtLeast(0)
+            if (left <= 0) {
+                vm.lockEnded()
+                break
+            }
+            delay(1_000)
+        }
+    }
+    val locked = lockLeft > 0
+    var showForgot by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.login_title), onBack) }) { padding ->
         Column(
@@ -114,8 +147,11 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                         modifier = Modifier.fillMaxWidth().semantics { contentType = ContentType.Username },
                     )
                     val err = ui.error
-                    val errText = err?.let {
-                        if (it == AppError.Unauthorized) stringResource(R.string.login_wrong) else errorMessage(it)
+                    val errText = when {
+                        locked -> stringResource(R.string.login_locked, waitText(lockLeft))
+                        err == null -> null
+                        err == AppError.Unauthorized -> stringResource(R.string.login_wrong)
+                        else -> errorMessage(err)
                     }
                     OutlinedTextField(
                         value = ui.password, onValueChange = vm::setPassword,
@@ -131,7 +167,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                         },
                         visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                         singleLine = true,
-                        isError = err != null,
+                        isError = errText != null,
                         supportingText = errText?.let { { Text(it) } },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.NumberPassword, autoCorrectEnabled = false),
                         keyboardActions = KeyboardActions(onDone = { vm.submit() }),
@@ -144,20 +180,82 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                         Checkbox(ui.remember, onCheckedChange = vm::setRemember)
                         Text(stringResource(R.string.login_remember), style = MaterialTheme.typography.bodyMedium)
                     }
+                    // След 3 грешни опита — колко остават до временното заключване.
+                    ui.attemptsLeft?.takeIf { !locked }?.let { n ->
+                        Text(
+                            pluralStringResource(R.plurals.login_attempts_left, n, n),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Polite },
+                        )
+                    }
                     Button(
                         onClick = vm::submit,
-                        enabled = !ui.submitting && ui.cardNumber.isNotBlank() && ui.password.isNotEmpty(),
+                        enabled = !ui.submitting && !locked && ui.cardNumber.isNotBlank() && ui.password.isNotEmpty(),
                         modifier = Modifier.fillMaxWidth().height(52.dp),
                     ) {
                         if (ui.submitting) ChLoadingIndicator(Modifier.size(28.dp))
                         else Text(stringResource(R.string.action_login))
                     }
-                    // „Забравена парола“ — само ако сървърът поддържа възстановяване.
+                    // „Забравен ПИН?“ винаги се вижда: възстановяване от сървъра, ако го поддържа,
+                    // иначе — как се взима нов ПИН от библиотеката (с бутони за обаждане/имейл).
                     if (c.passwordReset) {
-                        TextButton(onClick = vm::forgotPassword, enabled = ui.cardNumber.isNotBlank()) { Text(stringResource(R.string.login_forgot)) }
+                        TextButton(onClick = vm::forgotPassword, enabled = ui.cardNumber.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp)) {
+                            Text(stringResource(R.string.login_forgot))
+                        }
                         if (ui.resetSent) Text(stringResource(R.string.login_reset_sent), style = MaterialTheme.typography.bodySmall)
+                    } else {
+                        TextButton(onClick = { vm.loadContacts(); showForgot = true }, modifier = Modifier.heightIn(min = 48.dp)) {
+                            Text(stringResource(R.string.login_forgot))
+                        }
                     }
                     Text(stringResource(R.string.login_privacy_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+        }
+    }
+    if (showForgot) {
+        val contacts by vm.contacts.collectAsStateWithLifecycle()
+        ForgotPinSheet(contacts, onDismiss = { showForgot = false })
+    }
+}
+
+/**
+ * „Забравен ПИН?“, когато сървърът не издава нов ПИН: обяснение и бутони за обаждане
+ * и имейл до библиотеката. Без известен телефон/имейл — къде да ги потърси.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ForgotPinSheet(contacts: Contacts?, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val subject = stringResource(R.string.login_forgot_title)
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(
+            Modifier.fillMaxWidth().padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Text(stringResource(R.string.login_forgot_title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+            Text(notAvailableMessage(Feature.PASSWORD_RESET), style = MaterialTheme.typography.bodyLarge)
+            when {
+                contacts == null -> ChLoadingIndicator(Modifier.align(Alignment.CenterHorizontally))
+                contacts.phones.isEmpty() && contacts.emails.isEmpty() -> Text(
+                    stringResource(R.string.login_forgot_no_contacts),
+                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                else -> {
+                    contacts.phones.firstOrNull()?.let { phone ->
+                        Button(onClick = { Intents.dial(context, phone) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                            Icon(Icons.Outlined.Call, null); Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.contacts_call) + " · " + phone)
+                        }
+                    }
+                    contacts.emails.firstOrNull()?.let { email ->
+                        OutlinedButton(
+                            onClick = { Intents.email(context, email, subject = subject) },
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                        ) {
+                            Icon(Icons.Outlined.Email, null); Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.contacts_email))
+                        }
+                    }
                 }
             }
         }

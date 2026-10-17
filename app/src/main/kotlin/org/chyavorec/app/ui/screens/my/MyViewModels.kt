@@ -16,6 +16,7 @@ import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
 import org.chyavorec.data.repository.AuthState
+import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.ReaderProfile
@@ -132,6 +133,10 @@ data class LoginUi(
     val error: AppError? = null,
     val success: Boolean = false,
     val resetSent: Boolean = false,
+    /** Входът е временно заключен до този момент (епоха, ms); 0 — не е заключен. */
+    val lockedUntilMillis: Long = 0,
+    /** Колко опита остават до заключване — само след 3 неуспешни (иначе `null`, без предупреждение). */
+    val attemptsLeft: Int? = null,
 )
 
 class LoginViewModel(private val c: AppContainer) : ViewModel() {
@@ -141,7 +146,43 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
     val capabilities: StateFlow<ServiceCapabilities?> = _caps.asStateFlow()
     val isDemo = c.readerServices.isDemo
 
-    init { viewModelScope.launch { _caps.value = c.authRepository.capabilities() } }
+    /** Контактите на библиотеката за „Забравен ПИН?“ (`null` — още не са поискани). */
+    private val _contacts = MutableStateFlow<Contacts?>(null)
+    val contacts: StateFlow<Contacts?> = _contacts.asStateFlow()
+
+    init {
+        viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
+        // Заключване от по-ранен опит (екранът е отворен наново) — броячът продължава.
+        _ui.update { it.withThrottle(lockSeconds = c.authRepository.throttle.remainingLockSeconds()) }
+    }
+
+    /**
+     * Заключването и предупреждението „остават N опита“ — от LoginThrottle (без да
+     * се променя логиката му). [lockSeconds] > 0 — заключено за толкова секунди.
+     */
+    private fun LoginUi.withThrottle(lockSeconds: Long): LoginUi {
+        val t = c.authRepository.throttle
+        val until = if (lockSeconds > 0) c.clock.now().toEpochMilli() + lockSeconds * 1000 else lockedUntilMillis
+        return copy(
+            lockedUntilMillis = until,
+            attemptsLeft = t.attemptsLeft().takeIf { t.failedAttempts() >= WARN_AFTER_FAILURES && it > 0 },
+        )
+    }
+
+    /** Броячът на екрана е стигнал нулата — бутонът се отключва, съобщението изчезва. */
+    fun lockEnded() = _ui.update {
+        if (it.lockedUntilMillis == 0L) it
+        else it.copy(lockedUntilMillis = 0, error = if (it.error is AppError.RateLimited) null else it.error)
+    }
+
+    /** За „Забравен ПИН?“: контактите от сайта (кеша), иначе вградените резервни. */
+    fun loadContacts() {
+        if (_contacts.value != null) return
+        viewModelScope.launch {
+            val fromSite = (c.siteRepository.contacts(false) as? Outcome.Success)?.value?.data
+            _contacts.value = fromSite ?: c.fallbackContacts
+        }
+    }
 
     /** Повторен опит, ако при първото зареждане сървърът не е отговорил. */
     fun refreshCapabilities() {
@@ -157,13 +198,17 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
     fun submit() {
         val s = _ui.value
         if (s.cardNumber.isBlank() || s.password.isEmpty() || s.submitting) return
+        if (s.lockedUntilMillis > c.clock.now().toEpochMilli()) return
         // Паролата се предава като CharArray и се зачиства веднага след заявката.
         val pwd = s.password.toCharArray()
         _ui.update { it.copy(submitting = true, error = null, password = "") }
         viewModelScope.launch {
             when (val r = c.authRepository.login(s.cardNumber, pwd, s.remember)) {
-                is Outcome.Success -> _ui.update { it.copy(submitting = false, success = true) }
-                is Outcome.Failure -> _ui.update { it.copy(submitting = false, error = r.error) }
+                is Outcome.Success -> _ui.update { it.copy(submitting = false, success = true, attemptsLeft = null) }
+                is Outcome.Failure -> _ui.update {
+                    val lock = (r.error as? AppError.RateLimited)?.retryAfterSeconds ?: 0
+                    it.copy(submitting = false, error = r.error).withThrottle(lockSeconds = lock)
+                }
             }
         }
     }
@@ -176,6 +221,11 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
             is Outcome.Failure -> _ui.update { it.copy(error = r.error) }
         }
     }
+
+    private companion object {
+        /** След толкова грешни опита се показва „остават N опита“. */
+        const val WARN_AFTER_FAILURES = 3
+    }
 }
 
 class LoansViewModel(private val c: AppContainer) : ViewModel() {
@@ -184,6 +234,14 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
     val renewResult = MutableStateFlow<Outcome<Loan>?>(null)
     val canRenew = MutableStateFlow(false)
     val isDemo = c.readerServices.isDemo
+
+    private val _renewing = MutableStateFlow<Set<String>>(emptySet())
+    /** Заемания, за които заявката за удължаване още тече (бутонът е с индикатор и неактивен). */
+    val renewing: StateFlow<Set<String>> = _renewing.asStateFlow()
+
+    private val _inCatalog = MutableStateFlow<Set<Long>>(emptySet())
+    /** Инвентарните номера на заетите книги, които ги има в каталога (само те водят към страницата на книгата). */
+    val inCatalog: StateFlow<Set<Long>> = _inCatalog.asStateFlow()
 
     init {
         viewModelScope.launch { canRenew.value = c.authRepository.capabilities().renew }
@@ -224,6 +282,7 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
         val before = _state.value.data
         val r = c.libraryRepository.loans(force)
         _state.update { it.with(r) }
+        _state.value.data?.let { resolveCatalog(it) }
         // Уиджетът показва броя и най-близкия срок — да не остава със стари данни.
         if (r is Outcome.Success && r.value.data != before) runCatching { c.refreshWidget() }
     }
@@ -232,13 +291,38 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
      * Заявка за удължаване. Отговорът (202) вече съдържа заемането с `renewPending` —
      * то се сменя на място (и в кеша, от репозиторито), без ново теглене на целия списък.
      */
-    fun renew(loan: Loan) = viewModelScope.launch {
-        val r = c.libraryRepository.renew(loan.loanId)
-        renewResult.value = r
-        if (r is Outcome.Success) {
-            val updated = r.value
-            _state.update { s -> s.copy(data = s.data?.map { if (it.loanId == loan.loanId) updated else it }) }
+    fun renew(loan: Loan) {
+        // Двойно натискане (или второ, докато първата заявка тече) не праща втора заявка.
+        var started = false
+        _renewing.update { cur ->
+            started = loan.loanId !in cur
+            if (started) cur + loan.loanId else cur
         }
+        if (!started) return
+        viewModelScope.launch {
+            try {
+                val r = c.libraryRepository.renew(loan.loanId)
+                renewResult.value = r
+                if (r is Outcome.Success) {
+                    val updated = r.value
+                    _state.update { s -> s.copy(data = s.data?.map { if (it.loanId == loan.loanId) updated else it }) }
+                }
+            } finally {
+                _renewing.update { it - loan.loanId }
+            }
+        }
+    }
+
+    /**
+     * Кои от заетите книги ги има в каталога — през индекса в базата/кеша, без мрежа.
+     * Без каталог (първо пускане без връзка) картите просто не водят към книгата.
+     */
+    private suspend fun resolveCatalog(loans: List<Loan>) {
+        val invs = loans.mapNotNull { it.inv }.toSet()
+        if (invs.isEmpty() || invs.all { it in _inCatalog.value }) return
+        val searcher = runCatching { c.catalogRepository.lookupSearcher(network = false)?.data }.getOrNull() ?: return
+        val found = invs.filterTo(HashSet()) { inv -> runCatching { searcher.book(inv) }.getOrNull() != null }
+        _inCatalog.update { it + found }
     }
 }
 

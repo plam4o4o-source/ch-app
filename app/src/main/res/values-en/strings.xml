@@ -55,6 +55,7 @@
     <string name="book_publisher">Publisher</string>
     <string name="book_same_author">By the same author</string>
     <string name="book_status_as_of">Availability as of %1$s</string>
+    <string name="book_status_now">Availability right now</string>
     <string name="book_year">Year</string>
     <string name="calendar_has_events">has events</string>
     <string name="calendar_next">Next month</string>
@@ -129,6 +130,7 @@
     <string name="error_no_app">No app available to open this.</string>
     <string name="error_not_found">We couldn’t find this content.</string>
     <string name="error_offline_title">You’re offline</string>
+    <string name="error_rate_limited_wait">Too many attempts. Try again in %1$s.</string>
     <string name="error_temporary">We can’t load the data right now. Please try again shortly.</string>
     <string name="error_temporary_subject">We can’t load %1$s right now. Please try again.</string>
     <string name="error_title">Something went wrong</string>
@@ -179,6 +181,10 @@
     <string name="home_for_you_personal">Based on your reading</string>
     <string name="home_for_you_popular">Popular and new</string>
     <string name="home_latest_news">More news</string>
+    <string name="home_loans_label_next">Next due date</string>
+    <string name="home_loans_label_overdue">Overdue</string>
+    <string name="home_loans_open">Open “My books”</string>
+    <string name="home_loans_return_by">Return by %1$s: %2$s</string>
     <string name="home_new_books">New arrivals</string>
     <string name="home_search_hint">Search books, news, events…</string>
     <string name="home_upcoming">Upcoming events</string>
@@ -191,20 +197,27 @@
     <string name="legal_site_version">See also: %1$s</string>
     <string name="loading">Loading…</string>
     <string name="loan_borrowed">Borrowed: %1$s</string>
+    <string name="loan_cannot_renew">Can’t be renewed online — please ask at the library</string>
     <string name="loan_due">Due: %1$s</string>
+    <string name="loan_due_overdue">Was due on %1$s</string>
+    <string name="loan_open_book">Open the book in the catalogue</string>
     <string name="loan_renew">Renew</string>
     <string name="loan_renew_done">Renewed ✓</string>
     <string name="loan_renew_pending">Renewal requested · waiting for the library</string>
     <string name="loan_renew_rejected">Renewal declined: %1$s</string>
     <string name="loan_renew_rejected_noreason">Renewal declined.</string>
+    <string name="loan_renewing">Sending the renewal request</string>
     <string name="loan_stale_note">Last synced data — may be out of date.</string>
     <string name="loans_empty">You have no borrowed books</string>
     <string name="loans_empty_hint">Browse the catalogue — something might catch your eye.</string>
     <string name="login_card">Reader number</string>
     <string name="login_demo_hint">Demo sign-in: DEMO-0001 / demo</string>
-    <string name="login_forgot">Forgot PIN</string>
+    <string name="login_forgot">Forgot your PIN?</string>
+    <string name="login_forgot_no_contacts">You’ll find the library’s phone and email under “More” → “Contacts”.</string>
+    <string name="login_forgot_title">Forgot your PIN</string>
     <string name="login_heading">Reader sign-in</string>
     <string name="login_hide_password">Hide PIN</string>
+    <string name="login_locked">Sign-in is temporarily locked. Try again in %1$s.</string>
     <string name="login_password">PIN (from the library)</string>
     <string name="login_privacy_note">Your PIN is never stored on the device. The session is kept encrypted with an Android Keystore key.</string>
     <string name="login_remember">Keep me signed in on this device</string>
@@ -243,6 +256,7 @@
     <string name="more_messages_desc">Announcements and invitations from the centre</string>
     <string name="my_books">My books</string>
     <string name="my_books_desc">Borrowed books and due dates</string>
+    <string name="my_books_next_due">Next due: %1$s</string>
     <string name="my_card">Library card</string>
     <string name="my_card_add_desc">Add the number from your card</string>
     <string name="my_card_desc">Show your card at the desk</string>
@@ -544,6 +558,7 @@
     <string name="update_status_current">You have the latest version (%1$s)</string>
     <string name="update_status_downloading">Downloading the new version…</string>
     <string name="update_status_ready">Version %1$s is ready to install</string>
+    <string name="wait_about">about %1$s</string>
     <string name="widget_description">Due dates, the next event and a quick scan</string>
     <string name="widget_due_today">today</string>
     <string name="widget_due_tomorrow">tomorrow</string>
@@ -581,10 +596,6 @@
         <item quantity="one">%1$d day overdue</item>
         <item quantity="other">%1$d days overdue</item>
     </plurals>
-    <plurals name="error_rate_limited">
-        <item quantity="one">Too many attempts. Try again in %1$d second.</item>
-        <item quantity="other">Too many attempts. Try again in %1$d seconds.</item>
-    </plurals>
     <plurals name="history_year_count">
         <item quantity="one">%1$d book</item>
         <item quantity="other">%1$d books</item>
@@ -592,6 +603,22 @@
     <plurals name="home_catalog_footer">
         <item quantity="one">The catalogue lists %1$d item · data as of %2$s</item>
         <item quantity="other">The catalogue lists %1$d items · data as of %2$s</item>
+    </plurals>
+    <plurals name="home_loans_overdue">
+        <item quantity="one">%1$d book is overdue</item>
+        <item quantity="other">%1$d books are overdue</item>
+    </plurals>
+    <plurals name="home_loans_total">
+        <item quantity="one">%1$d book borrowed</item>
+        <item quantity="other">%1$d books borrowed</item>
+    </plurals>
+    <plurals name="loan_renewed_times">
+        <item quantity="one">Renewed %1$d time</item>
+        <item quantity="other">Renewed %1$d times</item>
+    </plurals>
+    <plurals name="login_attempts_left">
+        <item quantity="one">%1$d attempt left before a temporary lock</item>
+        <item quantity="other">%1$d attempts left before a temporary lock</item>
     </plurals>
     <plurals name="messages_unread">
         <item quantity="one">%1$d unread message</item>
@@ -608,6 +635,18 @@
     <plurals name="reading_streak_months">
         <item quantity="one">%1$d month</item>
         <item quantity="other">%1$d months</item>
+    </plurals>
+    <plurals name="wait_hours">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="wait_minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <plurals name="wait_seconds">
+        <item quantity="one">%1$d second</item>
+        <item quantity="other">%1$d seconds</item>
     </plurals>
     <plurals name="widget_books_count">
         <item quantity="one">%1$d book</item>

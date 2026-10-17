@@ -52,6 +52,12 @@ class LoginThrottle(private val clock: AppClock, private val maxAttempts: Int = 
         return if (left > 0) left + 1 else 0
     }
 
+    /** Неуспешни опити след последното заключване/успешен вход (само за показване). */
+    fun failedAttempts(): Int = failures
+
+    /** Колко още грешни опита остават до следващото заключване. */
+    fun attemptsLeft(): Int = (maxAttempts - failures).coerceAtLeast(0)
+
     fun onFailure() {
         failures++
         if (failures >= maxAttempts) {
