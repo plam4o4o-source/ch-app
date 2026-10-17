@@ -121,7 +121,6 @@ private class OrnamentInk(private val quiet: Boolean) {
     // Общи
     val gold = c(Brand.Gold)
     val goldDark = c(Brand.GoldDark)
-    val goldLight = c(Brand.GoldLight)
     val red = c(0xFFC62828)
     val redDark = c(0xFF8E1B1B)
     val white = c(0xFFFFFFFF)

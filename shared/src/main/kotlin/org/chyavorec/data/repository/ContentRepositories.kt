@@ -142,12 +142,8 @@ class SiteRepository(
 
     suspend fun links(force: Boolean = false): Outcome<Synced<List<SiteLink>>> = links.load(force) { service.discoverLinks() }
 
-    suspend fun cachedLinks(): List<SiteLink>? = links.cached()?.data
-
     suspend fun page(url: String, force: Boolean = false): Outcome<Synced<SitePage>> =
         pageResource(url).load(force) { service.fetchPage(url) }
-
-    suspend fun cachedPage(url: String): SitePage? = pageResource(url).cached()?.data
 
     suspend fun contacts(force: Boolean = false): Outcome<Synced<Contacts>> = contacts.load(force) {
         val l = (links(false) as? Outcome.Success)?.value?.data.orEmpty()
@@ -163,9 +159,6 @@ class SiteRepository(
             is Outcome.Failure -> r
             is Outcome.Success -> Outcome.Success(r.value.map { photos -> albumsOf(photos) })
         }
-
-    /** Албумите от кеша (без мрежа) — за мигновено показване. */
-    suspend fun cachedGallery(): Synced<List<GalleryAlbum>>? = gallery.cached()?.map { albumsOf(it) }
 
     private fun albumsOf(photos: List<GalleryPhoto>): List<GalleryAlbum> {
         albumsMemo?.let { (p, a) -> if (p === photos) return a }

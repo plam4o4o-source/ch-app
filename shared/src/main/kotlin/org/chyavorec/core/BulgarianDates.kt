@@ -61,7 +61,6 @@ object BulgarianDates {
         return runCatching { LocalTime.of(m.groupValues[1].toInt(), m.groupValues[2].toInt()) }.getOrNull()
     }
 
-    private val longFormat = DateTimeFormatter.ofPattern("d MMMM yyyy", locale)
     private val shortFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy", locale)
 
     fun formatLong(date: LocalDate): String = "${date.dayOfMonth} ${months[date.monthValue - 1]} ${date.year}"

@@ -12,6 +12,10 @@ import javax.crypto.spec.GCMParameterSpec
  * AES-256-GCM с ключ, генериран и пазен в Android Keystore. Ключът не може да
  * бъде изваден от устройството; шифрованите данни са безполезни другаде.
  * Формат: [1 байт дължина на IV][IV][шифротекст+tag].
+ *
+ * Ключът НЕ се унищожава при изход: с него е шифрована и ръчно въведената карта
+ * (secure/card.bin), която остава след изход от профила. Изтрива се заедно с данните
+ * на приложението (при деинсталиране или „Изчисти данните“ от системата).
  */
 class KeystoreCipher(private val alias: String = "chyavorec_secure_store_v1") {
 
@@ -54,21 +58,6 @@ class KeystoreCipher(private val alias: String = "chyavorec_secure_store_v1") {
         val cipher = Cipher.getInstance(TRANSFORMATION)
         cipher.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, iv))
         return cipher.doFinal(data, 1 + ivLen, data.size - 1 - ivLen)
-    }
-
-    /**
-     * Унищожава ключа — всичко, шифровано с него, става нечетимо (и се изтрива при следващо четене).
-     *
-     * НЕ се вика при изход: с ключа е шифрована и ръчно въведената карта (secure/card.bin),
-     * която остава след изход от профила, а шифрованите файлове на читателя (сесия, кеш) се
-     * изтриват при изход и без това. Ключът не напуска устройството; изтрива се заедно с
-     * данните на приложението (при деинсталиране или „Изчисти данните“ от системата).
-     */
-    fun destroyKey() {
-        synchronized(this) {
-            cachedKey = null
-            runCatching { keyStore.deleteEntry(alias) }
-        }
     }
 
     private companion object {

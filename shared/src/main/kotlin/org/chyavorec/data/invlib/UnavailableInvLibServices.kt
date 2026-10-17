@@ -22,8 +22,8 @@ import org.chyavorec.domain.service.ReaderService
  * (в `katalog.json` нарочно няма лични данни). Затова тук НЕ се симулира нищо:
  * всяка функция връща [AppError.NotAvailable], а UI обяснява защо.
  *
- * TODO(invlib-api): заменя се от [RemoteInvLibClient], щом бъде настроен
- *  INFLIB_API_URL и сървърът реализира договора в docs/API.md.
+ * Щом е настроен INFLIB_API_URL, AppContainer избира [RemoteInvLibClient] (договорът е
+ * в docs/API.md).
  */
 class UnavailableInvLibServices : AuthenticationService, ReaderService, MembershipService {
     private fun <T> na(feature: Feature): Outcome<T> = Outcome.Failure(AppError.NotAvailable(feature))

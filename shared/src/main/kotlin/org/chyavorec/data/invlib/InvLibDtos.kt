@@ -158,6 +158,3 @@ data class AvailabilityDto(
     val status: String,
     val dueOn: String? = null,
 )
-
-@Serializable
-data class ErrorDto(val error: String, val message: String? = null)

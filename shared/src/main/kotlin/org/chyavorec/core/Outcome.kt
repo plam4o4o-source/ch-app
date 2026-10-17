@@ -19,8 +19,6 @@ inline fun <T, R> Outcome<T>.map(transform: (T) -> R): Outcome<R> = when (this) 
 
 fun <T> Outcome<T>.getOrNull(): T? = (this as? Outcome.Success)?.value
 
-fun <T> Outcome<T>.errorOrNull(): AppError? = (this as? Outcome.Failure)?.error
-
 /** Видове грешки, които приложението различава. */
 sealed interface AppError {
     /** Няма връзка със сървъра (DNS, timeout, липса на интернет). */

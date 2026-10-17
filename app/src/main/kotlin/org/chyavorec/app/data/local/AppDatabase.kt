@@ -65,9 +65,6 @@ interface RemindersDao {
 
     @Query("DELETE FROM event_reminders WHERE eventId = :id")
     suspend fun delete(id: String)
-
-    @Query("DELETE FROM event_reminders WHERE remindAtMillis < :now")
-    suspend fun deleteOlderThan(now: Long)
 }
 
 /**

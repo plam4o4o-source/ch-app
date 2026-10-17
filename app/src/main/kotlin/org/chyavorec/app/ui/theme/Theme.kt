@@ -284,13 +284,12 @@ data class ExtendedColors(
     val ok: Color,
     val warn: Color,
     val bad: Color,
-    val heroScrim: Color,
     val gold: Color,
     val isDark: Boolean,
 )
 
 val LocalExtendedColors = staticCompositionLocalOf {
-    ExtendedColors(StatusColors.OkLight, StatusColors.WarnLight, StatusColors.BadLight, Brand.Ink, Brand.Gold, false)
+    ExtendedColors(StatusColors.OkLight, StatusColors.WarnLight, StatusColors.BadLight, Brand.Gold, false)
 }
 
 /** Избраната палитра (за генерираните корици и мострите в настройките). */
@@ -327,9 +326,9 @@ fun ChitalishteTheme(
     }
     val accent = paletteAccent(style.palette, dark)
     val extended = if (dark) {
-        ExtendedColors(StatusColors.OkDark, StatusColors.WarnDark, StatusColors.BadDark, Color.Black, accent, true)
+        ExtendedColors(StatusColors.OkDark, StatusColors.WarnDark, StatusColors.BadDark, accent, true)
     } else {
-        ExtendedColors(StatusColors.OkLight, StatusColors.WarnLight, StatusColors.BadLight, Brand.Ink, accent, false)
+        ExtendedColors(StatusColors.OkLight, StatusColors.WarnLight, StatusColors.BadLight, accent, false)
     }
     val colors = animateColorScheme(scheme)
     CompositionLocalProvider(LocalExtendedColors provides extended, LocalThemeStyle provides style) {

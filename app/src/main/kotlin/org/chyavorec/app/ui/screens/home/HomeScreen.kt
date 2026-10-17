@@ -126,7 +126,6 @@ import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.PressableCard
 import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.SectionHeader
-import org.chyavorec.app.ui.components.SkeletonBox
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.shimmer
 import org.chyavorec.app.ui.navigation.Routes
@@ -552,7 +551,3 @@ fun BookRow(books: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (C
         }
     }
 }
-
-@Suppress("unused")
-@Composable
-private fun HeroSkeleton() = SkeletonBox(height = 200.dp)

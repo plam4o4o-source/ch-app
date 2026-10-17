@@ -399,9 +399,3 @@ fun NotificationSettingsScreen(onBack: () -> Unit) {
         }
     }
 }
-
-@Suppress("unused")
-private val arrangement = Arrangement.Top
-
-@Suppress("unused")
-private fun openSite(context: android.content.Context, url: String) = Intents.openUrl(context, url)
