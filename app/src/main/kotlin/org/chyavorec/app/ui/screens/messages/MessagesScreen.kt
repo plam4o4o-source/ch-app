@@ -41,6 +41,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +51,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
-import org.chyavorec.app.messages.MessageCenter
+import org.chyavorec.app.messages.MessageInbox
 import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
@@ -66,16 +67,23 @@ import org.chyavorec.domain.model.AppMessage
 import org.chyavorec.domain.model.MessageAudience
 import org.chyavorec.domain.model.MessagePriority
 
-class MessagesViewModel(private val center: MessageCenter) : ViewModel(), RefreshOnReconnect {
+class MessagesViewModel(private val center: MessageInbox) : ViewModel(), RefreshOnReconnect {
     private val _state = MutableStateFlow(ScreenState<List<AppMessage>>())
     val state: StateFlow<ScreenState<List<AppMessage>>> = _state.asStateFlow()
 
-    /** Непрочетените към момента на отваряне — остават отбелязани „Ново“, докато екранът е отворен. */
+    /** Непрочетените към момента на зареждане — остават отбелязани „Ново“, докато екранът е отворен. */
     private val _fresh = MutableStateFlow<Set<String>>(emptySet())
     val fresh: StateFlow<Set<String>> = _fresh.asStateFlow()
 
     private val _member = MutableStateFlow(true)
     val member: StateFlow<Boolean> = _member.asStateFlow()
+
+    /**
+     * Екранът е пред очите на читателя (RESUMED). Опресняване при върната връзка идва и
+     * за екрана, оставен под друг в стека или при приложение във фона — тогава новите
+     * съобщения НЕ са прочетени (иначе значката и известията биха изчезнали, без да са видени).
+     */
+    private var visible = false
 
     init { refresh(false) }
 
@@ -90,8 +98,21 @@ class MessagesViewModel(private val center: MessageCenter) : ViewModel(), Refres
         val list = _state.value.data.orEmpty()
         val read = center.readIds.first()
         _fresh.update { it + list.map { m -> m.id }.filter { id -> id !in read } }
-        // Показаните са прочетени: локално веднага, личните — и към библиотеката (повторен опит при неуспех).
-        center.markRead(list.map { it.id })
+        // Заредените, докато екранът се вижда, са прочетени; иначе — едва при показването му.
+        if (visible) markShownRead()
+    }
+
+    /** От екрана: при ON_RESUME — true, при ON_PAUSE / излизане — false. */
+    fun setVisible(value: Boolean) {
+        visible = value
+        if (value) markShownRead()
+    }
+
+    /** Показаните са прочетени: локално веднага, личните — и към библиотеката (повторен опит при неуспех). */
+    private fun markShownRead() {
+        val ids = _state.value.data.orEmpty().map { it.id }
+        if (ids.isEmpty()) return
+        viewModelScope.launch { center.markRead(ids) }
     }
 }
 
@@ -102,6 +123,11 @@ fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit, focusId: Stri
     val state by vm.state.collectAsStateWithLifecycle()
     val fresh by vm.fresh.collectAsStateWithLifecycle()
     val member by vm.member.collectAsStateWithLifecycle()
+    // Прочетени — само докато екранът е на преден план (не под друг екран и не във фона).
+    LifecycleResumeEffect(vm) {
+        vm.setVisible(true)
+        onPauseOrDispose { vm.setVisible(false) }
+    }
     Scaffold(topBar = { BackTopBar(stringResource(R.string.messages_title), onBack) }) { padding ->
         WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             StateContent(

@@ -93,6 +93,10 @@ import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Formatters
+import org.chyavorec.app.ui.screens.settings.NotificationAccess
+import org.chyavorec.app.ui.screens.settings.showNotificationsBlocked
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import org.chyavorec.app.util.Intents
 import org.chyavorec.core.AppError
 import org.chyavorec.core.BulgarianDates
@@ -285,9 +289,16 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
     val msgOn = stringResource(R.string.reminder_set)
     val msgOff = stringResource(R.string.reminder_removed)
     val msgPast = stringResource(R.string.reminder_past)
+    val msgBlocked = stringResource(R.string.reminder_blocked)
+    val scope = rememberCoroutineScope()
     LaunchedEffect(result) {
         when (result) {
-            true -> snackbar.showSnackbar(if (hasReminder) msgOn else msgOn)
+            // Кога точно ще дойде напомнянето.
+            true -> snackbar.showSnackbar(
+                vm.event.value?.let { vm.remindAt(it) }
+                    ?.let { context.getString(R.string.reminder_set_at, Formatters.dateTime(context, java.time.Instant.ofEpochMilli(it))) }
+                    ?: msgOn,
+            )
             false -> snackbar.showSnackbar(if (vm.event.value?.let { vm.canRemind(it) } == false) msgPast else msgOff)
             null -> Unit
         }
@@ -336,7 +347,24 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
                     }
                 }
                 if (vm.canRemind(e) || hasReminder) {
-                    OutlinedButton(onClick = { permission.request { vm.toggleReminder() } }, modifier = Modifier.fillMaxWidth()) {
+                    OutlinedButton(onClick = {
+                        if (hasReminder) vm.toggleReminder()
+                        // Без разрешение (или с изключени известия за събития) напомнянето не би се показало —
+                        // не се задава, а се казва защо (с бутон към настройките).
+                        else permission.requestWithResult { access ->
+                            val events = org.chyavorec.app.notifications.Channel.EVENTS
+                            val status = org.chyavorec.app.ui.screens.settings.notificationStatus(context, listOf(events))
+                            if (access == NotificationAccess.GRANTED && status.allows(events)) vm.toggleReminder()
+                            else scope.launch {
+                                snackbar.showNotificationsBlocked(
+                                    context,
+                                    if (access == NotificationAccess.GRANTED) NotificationAccess.BLOCKED else access,
+                                    msgBlocked,
+                                    events.takeIf { !status.appBlocked },
+                                )
+                            }
+                        }
+                    }, modifier = Modifier.fillMaxWidth()) {
                         Icon(if (hasReminder) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsNone, null)
                         Spacer(Modifier.width(8.dp))
                         Text(stringResource(if (hasReminder) R.string.event_remove_reminder else R.string.event_remind))

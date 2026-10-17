@@ -1,6 +1,9 @@
 package org.chyavorec.app.ui
 
 import android.net.Uri
+import android.os.Build
+import androidx.compose.runtime.saveable.rememberSaveable
+import org.chyavorec.app.notifications.Notifier
 import androidx.activity.BackEventCompat
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterExitState
@@ -69,7 +72,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -109,6 +111,8 @@ import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.ui.navigation.LinkTarget
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.navigation.TopTab
+import org.chyavorec.app.ui.navigation.navigateTab
+import org.chyavorec.app.ui.navigation.openLinkTarget
 import org.chyavorec.app.ui.screens.catalog.BookScreen
 import org.chyavorec.app.ui.screens.catalog.CatalogScreen
 import org.chyavorec.app.ui.screens.events.EventDetailScreen
@@ -170,7 +174,8 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
                     }
                 })
             } else {
-                MainScaffold(container, deepLink)
+                // Въпросът за известията — едва след въведението с логото.
+                MainScaffold(container, deepLink, canAskNotifications = !intro)
             }
             if (intro) BrandIntro(onFinished = {
                 IntroState.shown = true
@@ -184,15 +189,30 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
 private val topLevelRoutes = TopTab.entries.map { it.route }.toSet()
 
 @Composable
-private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<String?>) {
+private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<String?>, canAskNotifications: Boolean = true) {
     // Известията са включени по подразбиране, но на Android 13+ без разрешение не излизат —
-    // питаме веднъж след въведението (и веднъж при обновяване за старите инсталации).
+    // питаме веднъж след въведението (и веднъж при обновяване за старите инсталации): първо
+    // кратко обяснение в приложението, а системният прозорец — само при „Да“.
     val notificationPermission = org.chyavorec.app.ui.screens.settings.rememberNotificationPermission()
-    LaunchedEffect(Unit) {
-        if (container.config.environment != "test" && !container.settings.notificationPermissionAsked()) {
-            container.settings.setNotificationPermissionAsked()
-            notificationPermission.request { }
+    val permissionContext = LocalContext.current
+    val askScope = rememberCoroutineScope()
+    var askNotifications by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(canAskNotifications) {
+        if (!canAskNotifications || container.config.environment == "test" || container.settings.notificationPermissionAsked()) return@LaunchedEffect
+        val needed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !Notifier.canNotify(permissionContext)
+        // Под Android 13 (или вече разрешени) — няма какво да се пита.
+        if (needed) askNotifications = true else container.settings.setNotificationPermissionAsked()
+    }
+    if (askNotifications) {
+        // Отговорът се помни (и „Не сега“) — по-късно известията се включват от Настройки › Известия.
+        fun answered() {
+            askNotifications = false
+            askScope.launch { container.settings.setNotificationPermissionAsked() }
         }
+        org.chyavorec.app.ui.screens.settings.NotificationRationaleDialog(
+            onYes = { answered(); notificationPermission.requestWithResult { } },
+            onLater = { answered() },
+        )
     }
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
@@ -212,10 +232,8 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
         // Известие, пряк път или адрес от сайта (App Links): първо разделът отдолу, после
         // екранът над него — „Назад“ води към раздела, а не извън приложението.
         when (val t = DeepLinks.target(target, container.config.siteBaseUrl)) {
-            is LinkTarget.Screen -> {
-                nav.navigateTab(t.tab)
-                t.stack.forEach { nav.navigate(it) }
-            }
+            // Без стария подстек на раздела (иначе екранът би се повторил) — виж openLinkTarget.
+            is LinkTarget.Screen -> nav.openLinkTarget(t)
             LinkTarget.UpdatePrompt -> container.updater.showPrompt()
             // Адрес от сайта без native екран — в браузъра; непознатите връзки се пренебрегват.
             null -> if (target.startsWith("https://")) Intents.openUrl(context, target)
@@ -370,12 +388,6 @@ private fun AppNavigationRail(route: String?, reduced: Boolean, onTab: (TopTab, 
         }
         Spacer(Modifier.weight(1f))
     }
-}
-
-private fun NavHostController.navigateTab(route: String) = navigate(route) {
-    popUpTo(graph.findStartDestination().id) { saveState = true }
-    launchSingleTop = true
-    restoreState = true
 }
 
 /** Индексът на раздела от долната лента (−1 — не е раздел). */

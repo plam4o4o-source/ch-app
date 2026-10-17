@@ -109,6 +109,9 @@ class EventDetailViewModel(
 
     fun canRemind(e: Event): Boolean = reminders.remindAt(e) != null
 
+    /** Кога ще дойде напомнянето (мс от епохата) или null — събитието е минало. */
+    fun remindAt(e: Event): Long? = reminders.remindAt(e)
+
     fun toggleReminder() = viewModelScope.launch {
         val e = event.value ?: return@launch
         if (hasReminder.value) {
