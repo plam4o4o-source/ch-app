@@ -107,8 +107,15 @@ jobs:
       # Истинският upload ключ — само за издания от main (автоматичните през auto-release.yml,
       # ръчните от main) и от tag-ове v*. Ръчно пускане от друг клон не получава secrets
       # (стъпката не се изпълнява) и без allow_debug_key спира с грешка по-долу.
+      # При auto-release (workflow_run) github.ref не е надежден — гледа се клонът на
+      # проверката, след която тръгва изданието (auto-release.yml проверява и че commit-ът
+      # е последният в main). Файлът на workflow_run винаги е от main, клон не може да го смени.
       - name: Prepare signing key (upload key)
-        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+        if: >-
+          github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') ||
+          (github.event_name == 'workflow_run' &&
+           github.event.workflow_run.event == 'push' &&
+           github.event.workflow_run.head_branch == 'main')
         env:
           UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
           UPLOAD_STORE_PASSWORD: ${{ secrets.UPLOAD_STORE_PASSWORD }}
@@ -140,7 +147,7 @@ jobs:
             echo "SIGNING_KEY_PASSWORD=$PASS" >> "$GITHUB_ENV"
             echo "SIGNING_KIND=ci-test-key" >> "$GITHUB_ENV"
           else
-            echo "::error::Липсват signing secrets (UPLOAD_KEYSTORE_BASE64, UPLOAD_STORE_PASSWORD, UPLOAD_KEY_ALIAS, UPLOAD_KEY_PASSWORD) или изданието не е от main / tag v*. Издание с временен ключ не може да обнови инсталираните приложения и не става за Google Play. За тест пуснете ръчно с allow_debug_key: true."
+            echo "::error::Липсват signing secrets (UPLOAD_KEYSTORE_BASE64, UPLOAD_STORE_PASSWORD, UPLOAD_KEY_ALIAS, UPLOAD_KEY_PASSWORD) или изданието не е от main / tag v* (ref: ${{ github.ref }}, събитие: ${{ github.event_name }}). Издание с временен ключ не може да обнови инсталираните приложения и не става за Google Play. За тест пуснете ръчно с allow_debug_key: true."
             exit 1
           fi
 
