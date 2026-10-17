@@ -112,17 +112,14 @@ class HomeViewModel(
             // кратко ([COALESCE_MS]), за да влязат в същата промяна. Ако закъснеят (обобщение
             // от стар кеш, празник от мрежата) — новините и събитията не ги чакат.
             withTimeoutOrNull(COALESCE_MS) { cachedSummary.join(); feast.join() }
-            if (feast.isCompleted) feast.await().let { f -> batch.add { it.copy(feast = f) } }
+            val feastNow = feast.isCompleted
+            if (feastNow) feast.await().let { f -> batch.add { it.copy(feast = f) } }
             if (!cachedSummary.isCompleted) batch.flush()
             cachedSummary.await()?.let { c -> batch.add(summary = c.data) { it.withCatalog(c.data) } }
             batch.flush()
             refresh(force = false, started = true)
-        }
-        viewModelScope.launch {
-            // Празникът дошъл след първата промяна — отделно (ако вече е в нея, същата
-            // стойност не е промяна и StateFlow не я излъчва).
-            val f = feast.await()
-            _state.update { it.copy(feast = f) }
+            // Празникът, ако е закъснял за първата промяна — отделно, щом дойде.
+            if (!feastNow) launch { feast.await().let { f -> _state.update { it.copy(feast = f) } } }
         }
         viewModelScope.launch {
             seasonal.distinctUntilChanged().collectLatest { on -> if (on) loadOccasions() }
