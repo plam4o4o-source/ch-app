@@ -4,9 +4,9 @@ name: Baseline profile
 # модулът :baselineprofile) и го предлага за сливане:
 #   1) артефакт „baseline-profile“ с baseline-prof.txt и startup-prof.txt;
 #   2) commit в клона baseline-profile/update (презаписва се при всяко пускане).
-# Клонът се слива в main ръчно (PR от уеб интерфейса): той добавя
-# app/src/main/generated/baselineProfiles/ и премахва ръчния app/src/main/baseline-prof.txt
-# (wildcard правилата), който остава в main, докато няма генериран профил.
+# Клонът се слива в main ръчно (PR от уеб интерфейса): той обновява
+# app/src/main/generated/baselineProfiles/ (и премахва стария ръчен app/src/main/baseline-prof.txt
+# с wildcard правилата, ако още го има).
 # Push с GITHUB_TOKEN не пуска други workflow-и — Android CI тръгва при отварянето на PR-а.
 
 on:
