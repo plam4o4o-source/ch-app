@@ -26,6 +26,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import java.time.Duration
 import java.time.Instant
 import java.util.Collections
 import kotlin.test.assertNotNull
@@ -84,7 +85,8 @@ class HomeViewModelTest {
         var quietSince = System.currentTimeMillis()
         var seen = 0
         while (System.currentTimeMillis() < end) {
-            main.idle()
+            // Часовникът на Robolectric напредва само така (кратките изчаквания във ViewModel-а).
+            main.idleFor(Duration.ofMillis(20))
             val s = vm.state.value
             if (states.size != seen) { seen = states.size; quietSince = System.currentTimeMillis() }
             val loaded = s.news.data != null && !s.news.refreshing && s.newBooks.isNotEmpty() && s.forYou.isNotEmpty() && s.feast != null

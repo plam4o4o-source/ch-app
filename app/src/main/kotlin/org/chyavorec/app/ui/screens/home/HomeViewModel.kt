@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
@@ -107,9 +108,11 @@ class HomeViewModel(
             val batch = Batch()
             // Началото на опресняването е в същата промяна (иначе още една веднага след нея).
             batch.add { s -> (n?.let { s.copy(news = it.toState().copy(loading = true)) } ?: s).withEvents(e?.data).let { it.copy(news = it.news.startRefresh()) } }
+            // Обобщението и празникът обикновено идват миг след новините — изчакват се за
+            // кратко ([COALESCE_MS]), за да влязат в същата промяна. Ако закъснеят (обобщение
+            // от стар кеш, празник от мрежата) — новините и събитията не ги чакат.
+            withTimeoutOrNull(COALESCE_MS) { cachedSummary.join(); feast.join() }
             if (feast.isCompleted) feast.await().let { f -> batch.add { it.copy(feast = f) } }
-            // Обобщението обикновено е вече прочетено; ако не е (напр. строи се от стар кеш) —
-            // новините и събитията не го чакат.
             if (!cachedSummary.isCompleted) batch.flush()
             cachedSummary.await()?.let { c -> batch.add(summary = c.data) { it.withCatalog(c.data) } }
             batch.flush()
@@ -153,6 +156,7 @@ class HomeViewModel(
             val batch = Batch()
             val newsResult = n.await()
             batch.add { it.copy(news = it.news.with(newsResult)) }
+            withTimeoutOrNull(COALESCE_MS) { c.join(); e.join() }
             if (!c.isCompleted) batch.flush()
             (c.await() as? Outcome.Success)?.value?.data?.let { fresh -> batch.add(summary = fresh) { it.withCatalog(fresh) } }
             if (!e.isCompleted) batch.flush()
@@ -270,5 +274,10 @@ class HomeViewModel(
         null
     }
 
-    private companion object { const val FOUNDED = 1922 }
+    private companion object {
+        const val FOUNDED = 1922
+
+        /** Колко най-много се чака закъснял източник, за да влезе в същата промяна (≈ 6 кадъра). */
+        const val COALESCE_MS = 100L
+    }
 }
