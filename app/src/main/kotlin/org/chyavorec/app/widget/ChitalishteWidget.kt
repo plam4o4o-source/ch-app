@@ -56,6 +56,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.data.local.resetOnCorruption
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.logFailure
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.DueStatus
 import org.chyavorec.domain.model.Loan
@@ -143,14 +144,14 @@ class ChitalishteWidget : GlanceAppWidget() {
             catalog = context.getString(R.string.shortcut_catalog),
         )
         // Първото зареждане — преди съдържанието, за да не се покаже празен уиджет.
-        val initial = runCatching { load(context) }.getOrNull() ?: EmptyWidgetState
+        val initial = runCatching { load(context) }.logFailure("widget.load").getOrNull() ?: EmptyWidgetState
         provideContent {
             val version = currentState(DataVersionKey) ?: 0L
             // Версията, с която е заредено [initial] — за нея не се чете повторно.
             val loadedVersion = remember { version }
             val state by produceState(initial, version) {
                 // При нова версия (refresh) — прочитане наново; при грешка остава предишното.
-                if (version != loadedVersion) runCatching { load(context) }.getOrNull()?.let { value = it }
+                if (version != loadedVersion) runCatching { load(context) }.logFailure("widget.load").getOrNull()?.let { value = it }
             }
             GlanceTheme {
                 val colors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) dynamicWidgetColors() else BrandWidgetColors
@@ -203,9 +204,9 @@ class ChitalishteWidget : GlanceAppWidget() {
                             prefs.toMutablePreferences().apply { this[DataVersionKey] = version }
                         }
                         widget.update(context, glanceId)
-                    }
+                    }.logFailure("widget.refresh")
                 }
-            }
+            }.logFailure("widget.refresh")
         }
     }
 }

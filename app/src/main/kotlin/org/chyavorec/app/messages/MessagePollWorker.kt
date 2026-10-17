@@ -9,8 +9,9 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.CancellationException
-import org.chyavorec.app.ChitalishteApp
+import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.notifications.Notifier
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.domain.model.MessagePollPolicy
 import java.util.concurrent.TimeUnit
 
@@ -26,8 +27,7 @@ import java.util.concurrent.TimeUnit
 class MessagePollWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        val app = applicationContext as? ChitalishteApp ?: return Result.success()
-        val c = app.container
+        val c = (applicationContext as? AppContainerOwner)?.appContainer ?: return Result.success()
         if (!c.settings.current().notifyMessages || !Notifier.canNotify(applicationContext)) return Result.success()
         val now = c.clock.now().toEpochMilli()
         val state = c.settings.messagePoll()
@@ -49,6 +49,7 @@ class MessagePollWorker(context: Context, params: WorkerParameters) : CoroutineW
             throw e
         } catch (e: Exception) {
             // Следващият опит е при следващото събуждане.
+            Diagnostics.record("worker.poll", e)
         }
         return Result.success()
     }

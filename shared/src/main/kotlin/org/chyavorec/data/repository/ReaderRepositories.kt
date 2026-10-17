@@ -9,10 +9,12 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.builtins.ListSerializer
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Feature
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
 import org.chyavorec.core.getOrNull
+import org.chyavorec.core.logFailure
 import org.chyavorec.data.invlib.SingleFlight
 import org.chyavorec.data.invlib.UnavailableInvLibServices
 import org.chyavorec.domain.model.AuthSession
@@ -103,7 +105,7 @@ class AuthRepository(
     }
 
     private fun notifyReaderReset() {
-        resetListeners.forEach { runCatching { it() } }
+        resetListeners.forEach { runCatching { it() }.logFailure("auth.reset") }
     }
 
     /**
@@ -149,6 +151,7 @@ class AuthRepository(
             }
             is Outcome.Failure -> {
                 if (r.error is AppError.Unauthorized) throttle.onFailure()
+                noteUnexpected("auth.login", r.error)
                 r
             }
         }
@@ -206,12 +209,13 @@ class AuthRepository(
             }
             is Outcome.Failure -> {
                 if (r.error is AppError.Unauthorized || r.error is AppError.NotAvailable) signOutIfCurrent(session)
+                noteUnexpected("auth.refresh", r.error)
                 r
             }
         }
 
     suspend fun logout() {
-        store.load()?.let { runCatching { service.logout(it) } }
+        store.load()?.let { runCatching { service.logout(it) }.logFailure("auth.logout") }
         signOutLocally()
     }
 
@@ -296,6 +300,14 @@ internal suspend fun <T> AuthRepository.withSession(block: suspend (AuthSession)
     }
     if (r is Outcome.Success && !isCurrent(session)) return Outcome.Failure(AppError.Unauthorized)
     return r
+}
+
+/**
+ * Неочакваните откази (грешка на сървъра, неразчетен отговор) — в локалния дневник; само
+ * видът и HTTP кодът. Грешен ПИН, заключване, отказ и липса на мрежа са нормални и не се пишат.
+ */
+internal fun noteUnexpected(tag: String, error: AppError) {
+    if (error is AppError.Server || error is AppError.Parse || error is AppError.Unexpected) Diagnostics.note(tag, error.toString())
 }
 
 /** Пространството в читателския кеш за читател [readerId]: кратък SHA-256 (id-то не се вижда в ключа). */
@@ -598,6 +610,7 @@ class LibraryRepository(
     suspend fun renew(loanId: String): Outcome<Loan> {
         val r = auth.withSession { service.renew(it, loanId) }
         if (r is Outcome.Success) data.updateCachedLoans { list -> list.map { if (it.loanId == loanId) r.value else it } }
+        if (r is Outcome.Failure) noteUnexpected("loans.renew", r.error)
         return r
     }
 

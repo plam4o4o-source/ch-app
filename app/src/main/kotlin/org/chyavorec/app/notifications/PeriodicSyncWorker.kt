@@ -10,14 +10,15 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.first
-import org.chyavorec.app.ChitalishteApp
 import org.chyavorec.app.R
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.messages.MessageWorker
 import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.update.UpdateInstallReceiver
 import org.chyavorec.app.widget.ChitalishteWidget
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.DueStatus
@@ -48,8 +49,7 @@ import java.util.concurrent.TimeUnit
 class PeriodicSyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        val app = applicationContext as? ChitalishteApp ?: return Result.success()
-        val c = app.container
+        val c = (applicationContext as? AppContainerOwner)?.appContainer ?: return Result.success()
         val settings = c.settings.current()
         val now = c.clock.now().toEpochMilli()
         val canNotify = Notifier.canNotify(applicationContext)
@@ -58,27 +58,27 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         // Съобщения — всеки път (общите от сайта — и в MessagePollWorker, адаптивно 1–6 ч.; личните само
         // при влязъл читател). Без force: току-що свалените (до 10 мин.) съобщения от сайта не се теглят отново.
         if (settings.notifyMessages && canNotify) {
-            step { MessageWorker.refreshAndNotify(applicationContext, c, force = false) }
+            step("sync.messages") { MessageWorker.refreshAndNotify(applicationContext, c, force = false) }
         }
 
         if (settings.notifyNews && canNotify && due(c, STEP_NEWS, now, SYNC_INTERVAL_MS)) {
-            step { if (syncNews(c, settings)) c.settings.setLastSyncStep(STEP_NEWS, now) }
+            step("sync.news") { if (syncNews(c, settings)) c.settings.setLastSyncStep(STEP_NEWS, now) }
         }
 
         val notifyLoans = settings.notifyLoans && canNotify
         if ((notifyLoans || widget) && due(c, STEP_LOANS, now, SYNC_INTERVAL_MS)) {
-            step { if (syncLoans(c, notifyLoans)) c.settings.setLastSyncStep(STEP_LOANS, now) }
+            step("sync.loans") { if (syncLoans(c, notifyLoans)) c.settings.setLastSyncStep(STEP_LOANS, now) }
         }
 
         // Събитията трябват само на уиджета (кеш до 5 минути — без излишни заявки).
         if (widget && due(c, STEP_EVENTS, now, SYNC_INTERVAL_MS)) {
-            step {
+            step("sync.events") {
                 if (c.eventsRepository.events(force = false) is Outcome.Success) c.settings.setLastSyncStep(STEP_EVENTS, now)
             }
         }
 
         if (c.updater.enabled && settings.autoUpdate && now - c.settings.lastUpdateCheck.first() >= UPDATE_INTERVAL_MS) {
-            step { checkForUpdate(c) }
+            step("sync.update") { checkForUpdate(c) }
         }
 
         // Опресняване и при смяна на деня (следващото събитие), но само ако има уиджет.
@@ -87,14 +87,18 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         return Result.success()
     }
 
-    /** Грешка в една стъпка не спира останалите; прекратяването на задачата се зачита. */
-    private inline fun step(block: () -> Unit) {
+    /**
+     * Грешка в една стъпка не спира останалите; прекратяването на задачата се зачита.
+     * Грешката остава в локалния дневник под етикета [tag].
+     */
+    private inline fun step(tag: String, block: () -> Unit) {
         try {
             block()
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
             // Следващият опит е при следващото пускане.
+            Diagnostics.record(tag, e)
         }
     }
 

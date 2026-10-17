@@ -12,11 +12,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withTimeoutOrNull
-import org.chyavorec.app.ChitalishteApp
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.Loan
@@ -113,13 +114,17 @@ class LoanReminderWorker(context: Context, params: WorkerParameters) : Coroutine
         LoanReminderScheduler.workerStarted()
         try {
             return remind()
+        } catch (e: Exception) {
+            // Грешката остава в локалния дневник; WorkManager я отчита както досега.
+            Diagnostics.record("worker.loan-reminder", e)
+            throw e
         } finally {
             LoanReminderScheduler.workerFinished()
         }
     }
 
     private suspend fun remind(): Result {
-        val c = (applicationContext as? ChitalishteApp)?.container ?: return Result.success()
+        val c = (applicationContext as? AppContainerOwner)?.appContainer ?: return Result.success()
         val loanId = inputData.getString(LoanReminderScheduler.KEY_LOAN) ?: return Result.success()
         val dueOn = inputData.getString(LoanReminderScheduler.KEY_DUE)?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
             ?: return Result.success()
@@ -167,6 +172,7 @@ class LoanReminderWorker(context: Context, params: WorkerParameters) : Coroutine
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
+                Diagnostics.record("worker.loan-reminder.fetch", e)
                 null
             }
             (fresh as? Outcome.Success)?.value?.let { return it.data }

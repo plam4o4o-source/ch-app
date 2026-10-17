@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.performScrollToNode
@@ -20,6 +22,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,7 +62,8 @@ import java.time.YearMonth
 /**
  * Снимки на основните екрани (светла и тъмна тема) за визуален преглед.
  * Записват се в app/build/reports/screenshots/ — CI ги качва в артефакта „reports“.
- * Тестът не сравнява пиксели; проверява само, че екраните се рисуват без грешка.
+ * Тестът не сравнява пиксели; проверява, че екраните се рисуват и показват основното си
+ * съдържание ([shown]) — счупен екран проваля теста, а не остава само като снимка.
  */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
@@ -116,6 +120,20 @@ class ScreenshotTest {
         compose.onAllNodes(m).onFirst().performClick()
     }
 
+    /** Поне един възел с [text] е на екрана (видим, не само в дървото). */
+    private fun shown(text: String, substring: Boolean = false) {
+        // След преходите (иначе първият намерен може да е от излизащия екран).
+        compose.waitForIdle()
+        val nodes = compose.onAllNodes(hasText(text, substring = substring))
+        val count = nodes.fetchSemanticsNodes().size
+        // Някой от съвпадащите (напр. скрито описание за екранния четец не се брои).
+        val visible = (0 until count).any { runCatching { nodes[it].assertIsDisplayed() }.isSuccess }
+        if (!visible) throw AssertionError("„$text“ не се вижда на екрана ($count съвпадения в дървото)")
+    }
+
+    /** Разделът [label] в долната лента е избран. */
+    private fun tabSelected(label: String) = compose.onAllNodes(hasText(label) and isSelectable()).onFirst().assertIsSelected()
+
     private fun shot(name: String) {
         compose.waitForIdle()
         compose.mainClock.advanceTimeBy(1_500)
@@ -127,31 +145,45 @@ class ScreenshotTest {
     @Test fun homeLight() {
         launch()
         waitFor("45-ти")
+        homeContent()
         shot("01-home-light")
+    }
+
+    /** „Начало“: заглавката с името на читалището, новината от сайта, днешният ден, лентата. */
+    private fun homeContent() {
+        shown("Васил Левски – 1922", substring = true)
+        shown("45-ти", substring = true)
+        waitFor("Кръстовден")
+        shown("Кръстовден", substring = true)
+        tabSelected("Начало")
     }
 
     // Празнични дни: поздрав под заглавката, орнамент и ефект (вж. HolidayCalendar).
     @Test fun homeMay24() {
         launch(now = "2026-05-24T09:00:00Z")
         waitFor("Кирил и Методий")
+        shown("Кирил и Методий", substring = true)
         shot("20-home-may24")
     }
 
     @Test fun homeLevskiQuietDark() {
         launch(ThemeMode.DARK, now = "2026-02-19T09:00:00Z")
         waitFor("Поклон пред Апостола")
+        shown("Поклон пред Апостола", substring = true)
         shot("21-home-levski-quiet")
     }
 
     @Test fun homeBabaMarta() {
         launch(now = "2026-03-01T09:00:00Z")
         waitFor("Баба Марта")
+        shown("Баба Марта", substring = true)
         shot("22-home-baba-marta")
     }
 
     @Test fun homeDark() {
         launch(ThemeMode.DARK)
         waitFor("45-ти")
+        homeContent()
         shot("02-home-dark")
     }
 
@@ -159,6 +191,10 @@ class ScreenshotTest {
         launch()
         tab("Каталог")
         waitFor("резултата")
+        tabSelected("Каталог")
+        shown("60 резултата", substring = true)
+        // Първата книга от примерния каталог (по заглавие).
+        shown("Джиан, Филип", substring = true)
         shot("03-catalog")
     }
 
@@ -166,6 +202,10 @@ class ScreenshotTest {
         launch()
         tab("Моето")
         waitFor("Добре дошъл!")
+        tabSelected("Моето")
+        shown("Добре дошъл!")
+        shown("Читателска карта")
+        shown("Моите книги")
         shot("04-my")
     }
 
@@ -173,6 +213,10 @@ class ScreenshotTest {
         launch()
         tab("Още")
         waitFor("Настройки")
+        tabSelected("Още")
+        shown("Съобщения")
+        shown("Настройки")
+        shown("Политика за поверителност")
         shot("05-more")
     }
 
@@ -182,6 +226,8 @@ class ScreenshotTest {
         waitFor("Съобщения")
         compose.onAllNodes(hasText("Съобщения")).onFirst().performClick()
         waitFor("Няма съобщения")
+        shown("Няма съобщения", substring = true)
+        shown("само за членове", substring = true)
         shot("06-messages-empty")
     }
 
@@ -194,6 +240,7 @@ class ScreenshotTest {
         compose.waitUntil(15_000) {
             runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) }.isSuccess
         }
+        shown("За теб")
         shot("08-home-for-you")
     }
 
@@ -215,6 +262,10 @@ class ScreenshotTest {
                 }
             }
         }
+        shown("Книги по месеци")
+        // Връзката към цялата история и любимият автор (графиките са за екранния четец с описание).
+        shown("Цялата история")
+        shown("Вазов", substring = true)
         shot(name)
     }
 
@@ -255,6 +306,9 @@ class ScreenshotTest {
                 }
             }
         }
+        listOf("Под игото", "Тютюн", "Бай Ганьо").forEach { shown(it) }
+        // Просрочената книга е отбелязана (картата на „Начало“ и картата на заемането).
+        shown("просрочена", substring = true)
         shot(name)
     }
 
@@ -265,6 +319,25 @@ class ScreenshotTest {
     @Test fun onboarding() {
         launch(settings = AppSettings(onboardingDone = false, introShown = true))
         waitFor("Напред")
+        shown("Напред")
+        shown("Пропусни")
+        shown("Читалище Яворец")
         shot("07-onboarding")
+    }
+
+    /** Настройки → Информация → „Диагностика“ (локалният дневник на грешките). */
+    @Test fun diagnostics() {
+        launch()
+        tab("Още")
+        waitFor("Настройки")
+        compose.onAllNodes(hasText("Настройки")).onFirst().performClick()
+        waitFor("Диагностика")
+        compose.onAllNodes(hasText("Диагностика")).onFirst().performScrollTo().performClick()
+        waitFor("Сподели")
+        shown("Диагностика")
+        shown("само на устройството", substring = true)
+        shown("Сподели")
+        shown("Изчисти")
+        shot("13-diagnostics")
     }
 }

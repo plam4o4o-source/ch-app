@@ -11,6 +11,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.notifications.Channel
 import org.chyavorec.app.notifications.NotificationIds
 import org.chyavorec.app.notifications.Notifier
+import org.chyavorec.core.Diagnostics
 
 /**
  * Резултатът от [PackageInstaller] за самообновяването. Не е експортиран —
@@ -52,7 +53,11 @@ class UpdateInstallReceiver : BroadcastReceiver() {
                     context.getString(R.string.notif_updated_text), null,
                 )
             }
-            else -> updater.onInstallResult(status)
+            else -> {
+                // Само кодът на системата (напр. несъвместим подпис) — без пакет и пътища.
+                Diagnostics.note("update.install-status", "PackageInstaller status $status")
+                updater.onInstallResult(status)
+            }
         }
     }
 

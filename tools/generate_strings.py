@@ -586,6 +586,13 @@ S = {
 "terms_title": ("Условия за използване", "Terms of use"),
 "legal_site_version": ("Виж и: %1$s", "See also: %1$s"),
 "about_title": ("За приложението", "About the app"),
+"settings_diagnostics": ("Диагностика", "Diagnostics"),
+"settings_diagnostics_desc": ("Дневник на грешките — само на това устройство", "Error log — kept on this device only"),
+"diagnostics_intro": ("Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако го споделиш сам.", "The app records technical errors here (time, place in the code and type of error) so they can be found and fixed. No personal data: numbers, PINs, names and addresses are removed. The log stays on this device only — it leaves it only if you share it yourself."),
+"diagnostics_empty": ("Няма записани грешки.", "No errors recorded."),
+"diagnostics_count": ("Записи: %1$d", "Entries: %1$d"),
+"diagnostics_cleared": ("Дневникът е изчистен", "The log has been cleared"),
+"diagnostics_share_subject": ("Диагностика — Читалище Яворец", "Diagnostics — Chitalishte Yavorets"),
 "about_version": ("Версия %1$s", "Version %1$s"),
 "about_version_full": ("Версия %1$s (%2$d)", "Version %1$s (%2$d)"),
 "about_env": ("Среда: %1$s · демо данни: %2$s", "Environment: %1$s · demo data: %2$s"),
@@ -610,7 +617,7 @@ PRIVACY_BG = """# Кой обработва данните
 
 Обновления: версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от Настройки → Обновления. Версията от Google Play се обновява от Google Play.
 
-Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака.
+Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака. Приложението пази и локален дневник на грешките само на устройството, без лични данни; той напуска устройството единствено ако сам го споделиш (Настройки → Информация → „Диагностика“).
 
 Читателска карта: ако въведеш номера на своята карта, той (и името, ако го въведеш) се пази шифрован с ключ от Android Keystore само на това устройство.
 
@@ -654,7 +661,7 @@ Personal messages from the library: if you are signed in and the centre’s serv
 
 Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 
-Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud.
+Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud. The app also keeps a local error log on the device only, without personal data; it leaves the device only if you share it yourself (Settings → Information → “Diagnostics”).
 
 Library card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.
 

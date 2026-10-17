@@ -50,6 +50,8 @@ object Routes {
     const val PRIVACY = "privacy"
     const val TERMS = "terms"
     const val ABOUT = "about"
+    /** Локалният дневник на грешките (Настройки → Информация). */
+    const val DIAGNOSTICS = "diagnostics"
     const val ABOUT_CHITALISHTE = "chitalishte"
 
     fun article(id: String) = "article/" + Uri.encode(id)

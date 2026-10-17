@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.chyavorec.core.AppError
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Hashing
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.http.HttpFetcher
@@ -114,6 +115,8 @@ class GitHubCatalogService(
                         }
                     }
                     parsed.onSuccess { return Outcome.Success(it) to false }
+                    // Повреден/сменен katalog.json — причината остава в локалния дневник.
+                    parsed.onFailure { Diagnostics.record("catalog.download", it) }
                     lastError = AppError.Parse("katalog.json")
                 }
                 is Outcome.Failure -> {

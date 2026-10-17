@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.core.logFailure
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -27,7 +28,7 @@ object MessagesOnLaunch {
                 c.messages.refresh(force = false)
                 // Нови лични съобщения от библиотеката → известие и при отваряне (всяко само веднъж).
                 MessageWorker.notifyPersonal(app, c)
-            }
+            }.logFailure("messages.launch")
         }
     }
 }

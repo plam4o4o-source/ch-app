@@ -14,6 +14,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.Description
@@ -184,6 +185,10 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             }
             NavItem(Icons.Outlined.Description, stringResource(R.string.terms_title)) { navigate(Routes.TERMS) }
             NavItem(Icons.Outlined.Info, stringResource(R.string.about_title), stringResource(R.string.about_version, c.config.versionName)) { navigate(Routes.ABOUT) }
+            // Локалният дневник на грешките — вижда се и се споделя само по избор на читателя.
+            NavItem(Icons.Outlined.BugReport, stringResource(R.string.settings_diagnostics), stringResource(R.string.settings_diagnostics_desc)) {
+                navigate(Routes.DIAGNOSTICS)
+            }
             Spacer(Modifier.height(24.dp))
         }
     }

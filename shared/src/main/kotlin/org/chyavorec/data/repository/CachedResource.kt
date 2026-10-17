@@ -11,6 +11,7 @@ import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
+import org.chyavorec.core.logFailure
 import org.chyavorec.domain.service.Fetched
 import org.chyavorec.domain.repository.PayloadCache
 import java.time.Instant
@@ -75,7 +76,7 @@ internal class CachedResource<T>(
         // Версията се взема ПРЕДИ четенето: запис между двете прави паметта невалидна, не грешна.
         val version = cache.version(key)
         val payload = cache.read(key) ?: return null
-        val value = withContext(work) { runCatching { cacheJson.decodeFromString(serializer, payload.text) }.getOrNull() } ?: return null
+        val value = withContext(work) { runCatching { cacheJson.decodeFromString(serializer, payload.text) }.logFailure("cache.decode").getOrNull() } ?: return null
         memo = version?.let { Memo(value, payload.savedAtMillis, it) }
         return Synced(value, Instant.ofEpochMilli(payload.savedAtMillis), fromCache = true)
     }
@@ -91,7 +92,7 @@ internal class CachedResource<T>(
                 cache.remove(hashKey)
                 cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, updated) })
                 remember(updated, current.syncedAt.toEpochMilli())
-            }.onFailure { memo = null }.onSuccess { stored(updated) }
+            }.logFailure("cache.write").onFailure { memo = null }.onSuccess { stored(updated) }
         }
     }
 
@@ -181,7 +182,7 @@ internal class CachedResource<T>(
         runCatching {
             if (!cache.touch(key)) cache.write(key, withContext(work) { cacheJson.encodeToString(serializer, cached.data) })
             remember(cached.data, now.toEpochMilli())
-        }.onFailure { memo = null }.onSuccess { stored(cached.data) }
+        }.logFailure("cache.write").onFailure { memo = null }.onSuccess { stored(cached.data) }
         return Outcome.Success(Synced(cached.data, now, fromCache = false))
     }
 
@@ -199,12 +200,12 @@ internal class CachedResource<T>(
             }
             if (hash != null) cache.write(hashKey, hash) else if (hashed && touched) cache.remove(hashKey)
             remember(value, nowMillis)
-        }.onFailure { memo = null }.onSuccess { stored(value) }
+        }.logFailure("cache.write").onFailure { memo = null }.onSuccess { stored(value) }
     }
 
     /** Грешка в слушателя не проваля записа. */
     private fun stored(value: T) {
-        onStored?.let { runCatching { it(value) } }
+        onStored?.let { runCatching { it(value) }.logFailure("cache.on-stored") }
     }
 
     private suspend inline fun <R> withKeyLock(block: () -> R): R {

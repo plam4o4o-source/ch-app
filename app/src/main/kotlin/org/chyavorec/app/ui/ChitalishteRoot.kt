@@ -138,10 +138,13 @@ import org.chyavorec.app.ui.screens.onboarding.OnboardingScreen
 import org.chyavorec.app.ui.screens.search.SearchScreen
 import org.chyavorec.app.ui.screens.scan.ScanScreen
 import org.chyavorec.app.ui.screens.settings.AboutAppScreen
+import org.chyavorec.app.ui.screens.settings.DiagnosticsScreen
 import org.chyavorec.app.ui.screens.settings.NotificationSettingsScreen
 import org.chyavorec.app.ui.screens.settings.PrivacyScreen
 import org.chyavorec.app.ui.screens.settings.SettingsScreen
 import org.chyavorec.app.ui.screens.settings.TermsScreen
+import org.chyavorec.core.Diagnostics
+import org.chyavorec.core.logFailure
 import org.chyavorec.app.ui.screens.site.AboutChitalishteScreen
 import org.chyavorec.app.ui.screens.site.ActivitiesScreen
 import org.chyavorec.app.ui.screens.site.ContactsScreen
@@ -238,10 +241,11 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
         // екранът над него — „Назад“ води към раздела, а не извън приложението.
         when (val t = DeepLinks.target(target, container.config.siteBaseUrl)) {
             // Без стария подстек на раздела (иначе екранът би се повторил) — виж openLinkTarget.
-            is LinkTarget.Screen -> nav.openLinkTarget(t)
+            // Неуспешна навигация не срива приложението — причината остава в локалния дневник.
+            is LinkTarget.Screen -> runCatching { nav.openLinkTarget(t) }.logFailure("deeplink")
             LinkTarget.UpdatePrompt -> container.updater.showPrompt()
-            // Адрес от сайта без native екран — в браузъра; непознатите връзки се пренебрегват.
-            null -> if (target.startsWith("https://")) Intents.openUrl(context, target)
+            // Адрес от сайта без native екран — в браузъра; непознатите връзки се пренебрегват (без самата връзка в дневника).
+            null -> if (target.startsWith("https://")) Intents.openUrl(context, target) else Diagnostics.note("deeplink", "unknown link")
         }
         deepLink.value = null
     }
@@ -571,6 +575,7 @@ private fun AppNavHost(
         screen(Routes.PRIVACY) { PrivacyScreen(back, navigate) }
         screen(Routes.TERMS) { TermsScreen(back, navigate) }
         screen(Routes.ABOUT) { AboutAppScreen(back) }
+        screen(Routes.DIAGNOSTICS) { DiagnosticsScreen(back) }
     }
     }
     }
