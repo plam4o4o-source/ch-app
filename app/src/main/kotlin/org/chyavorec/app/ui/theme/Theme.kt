@@ -37,7 +37,7 @@ import org.chyavorec.app.ui.components.rememberReducedMotion
 /* ---- „Яворец“ — злато и жито (цветовете на сайта; по подразбиране) ---- */
 
 private val YavoretsLight = lightColorScheme(
-    primary = Brand.GoldDark,
+    primary = Brand.GoldText,
     onPrimary = Color.White,
     primaryContainer = Brand.GoldLight,
     onPrimaryContainer = Brand.Ink,
@@ -101,7 +101,7 @@ private val YavoretsDark = darkColorScheme(
     onError = Color(0xFF4A0008),
     inverseSurface = Brand.Parchment,
     inverseOnSurface = Brand.Ink,
-    inversePrimary = Brand.GoldDark,
+    inversePrimary = Brand.GoldText,
 )
 
 /* ---- „Левски“ — тъмнозелено и сребро ---- */
@@ -261,7 +261,7 @@ fun paletteScheme(palette: ThemePalette, dark: Boolean): ColorScheme = when (pal
 
 /** Акцентът на палитрата (етикети, икони, точки): злато, сребро или червено — проверен за 4.5:1 върху фона. */
 fun paletteAccent(palette: ThemePalette, dark: Boolean): Color = when (palette) {
-    ThemePalette.YAVORETS -> if (dark) Brand.Gold else Brand.GoldDark
+    ThemePalette.YAVORETS -> if (dark) Brand.Gold else Brand.GoldText
     ThemePalette.LEVSKI -> if (dark) Color(0xFFC3CCD4) else Color(0xFF56616B)
     ThemePalette.SHEVITSA -> if (dark) Color(0xFFFFB3AD) else Color(0xFF9C1C24)
 }

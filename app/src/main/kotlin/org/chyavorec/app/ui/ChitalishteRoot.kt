@@ -115,6 +115,7 @@ import org.chyavorec.app.ui.navigation.navigateTab
 import org.chyavorec.app.ui.navigation.openLinkTarget
 import org.chyavorec.app.ui.screens.catalog.BookScreen
 import org.chyavorec.app.ui.screens.catalog.CatalogScreen
+import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
 import org.chyavorec.app.ui.screens.events.EventDetailScreen
 import org.chyavorec.app.ui.screens.events.EventsScreen
 import org.chyavorec.app.ui.screens.gallery.AlbumScreen
@@ -246,7 +247,13 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     LaunchedEffect(Unit) { MessagesOnLaunch.run(context, container) }
     UpdateDialog(container.updater)
 
-    fun navigate(target: String) = if (target in topLevelRoutes) nav.navigateTab(target) else nav.navigate(target)
+    fun navigate(target: String) = when {
+        // Търсене, поискано от друг екран: каталогът без стария си подстек (иначе би се
+        // възстановил напр. екранът на книга над него, а не резултатите от търсенето).
+        target == Routes.CATALOG && CatalogSearchRequests.pending.value != null -> nav.openLinkTarget(LinkTarget.Screen(Routes.CATALOG))
+        target in topLevelRoutes -> nav.navigateTab(target)
+        else -> nav.navigate(target)
+    }
 
     /**
      * Връзка от съдържанието на сайта: вътрешна страница → native екран (над текущия,

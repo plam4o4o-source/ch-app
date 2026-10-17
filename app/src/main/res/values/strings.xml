@@ -19,6 +19,7 @@
     <string name="action_clear">Изчисти</string>
     <string name="action_clear_filters">Без филтри</string>
     <string name="action_close">Затвори</string>
+    <string name="action_copy">Копирай</string>
     <string name="action_edit">Промени</string>
     <string name="action_load_more">Покажи още</string>
     <string name="action_login">Вход</string>
@@ -38,6 +39,10 @@
     <string name="app_subtitle">НЧ „Васил Левски – 1922“</string>
     <string name="app_title">Читалище Яворец</string>
     <string name="article_gallery">Галерия</string>
+    <string name="book_ask_body">Здравейте,\n\nИскам да попитам за книгата:\n\nЗаглавие: %1$s\nАвтор: %2$s\nСигнатура: %3$s\nИнвентарен номер: %4$s\n\n</string>
+    <string name="book_ask_library">Попитай библиотеката</string>
+    <string name="book_ask_subject">Книга: %1$s</string>
+    <string name="book_ask_text">Книгата сега не е на рафта. Обади се или пиши на библиотеката, за да разбереш кога ще е налична.</string>
     <string name="book_availability_note">Наличността идва от публичния каталог на библиотеката (InvLib) и се обновява, когато библиотекарят запише промени. „Не е на рафта“ означава, че книгата е заета или временно недостъпна.</string>
     <string name="book_call_number">Сигнатура</string>
     <string name="book_department">Отдел</string>
@@ -54,6 +59,7 @@
     <string name="book_other_authors">Други автори</string>
     <string name="book_publisher">Издателство</string>
     <string name="book_same_author">От същия автор</string>
+    <string name="book_search_author">Търси книги от автора</string>
     <string name="book_status_as_of">Наличност към %1$s</string>
     <string name="book_status_now">Наличност в момента</string>
     <string name="book_year">Година</string>
@@ -120,6 +126,7 @@
     <string name="contacts_title">Контакти</string>
     <string name="contacts_web">В интернет</string>
     <string name="content_open_file">Отвори файла</string>
+    <string name="copied">Копирано: %1$s</string>
     <string name="demo_banner">ДЕМО ДАННИ — само за разработка, не са реални</string>
     <string name="documents_empty">Няма документи за показване.</string>
     <string name="documents_tab_docs">Документи</string>
@@ -502,7 +509,7 @@
     <string name="settings_theme">Тема</string>
     <string name="settings_title">Настройки</string>
     <string name="settings_updates">Обновления</string>
-    <string name="share_book_footer">Електронен каталог: %1$s</string>
+    <string name="share_book_footer">В електронния каталог: %1$s</string>
     <string name="shortcut_card">Читателска карта</string>
     <string name="shortcut_catalog">Каталог</string>
     <string name="shortcut_events">Събития</string>

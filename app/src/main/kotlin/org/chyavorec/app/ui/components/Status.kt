@@ -24,11 +24,17 @@ import org.chyavorec.domain.model.BookStatus
 import org.chyavorec.domain.model.DueStatus
 import org.chyavorec.domain.model.MembershipStatus
 
+/**
+ * Плътността на фона на етикета за статус (от цвета му). Цветовете в StatusColors са
+ * проверени за 4.5:1 върху този фон над всеки контейнер (SmallTextContrastTest).
+ */
+const val STATUS_PILL_ALPHA = 0.12f
+
 /** Статус с цветна точка + текст (цветът никога не е единственият носител на смисъл). */
 @Composable
 fun StatusPill(text: String, color: Color, modifier: Modifier = Modifier) {
     Row(
-        modifier.clip(RoundedCornerShape(50)).background(color.copy(alpha = 0.14f)).padding(horizontal = 10.dp, vertical = 5.dp),
+        modifier.clip(RoundedCornerShape(50)).background(color.copy(alpha = STATUS_PILL_ALPHA)).padding(horizontal = 10.dp, vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(Modifier.size(8.dp).background(color, CircleShape))
@@ -60,13 +66,13 @@ fun dueColor(status: DueStatus): Color {
 }
 
 @Composable
-fun DuePill(status: DueStatus, daysLeft: Long, modifier: Modifier = Modifier) {
+fun DuePill(status: DueStatus, daysLeft: Long, modifier: Modifier = Modifier, color: Color = dueColor(status)) {
     val text = when (status) {
         DueStatus.OVERDUE -> pluralStringResource(R.plurals.due_overdue_days, (-daysLeft).toInt(), (-daysLeft).toInt())
         else -> if (daysLeft == 0L) stringResource(R.string.due_today)
         else pluralStringResource(R.plurals.due_days_left, daysLeft.toInt(), daysLeft.toInt())
     }
-    StatusPill(text, dueColor(status), modifier)
+    StatusPill(text, color, modifier)
 }
 
 @Composable

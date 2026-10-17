@@ -4,12 +4,14 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,6 +19,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -68,6 +73,15 @@ private val slides = listOf(
 fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
     val pager = rememberPagerState { slides.size }
     val scope = rememberCoroutineScope()
+    // Едър системен шрифт (1.3× и повече): по-малки емблема и заглавие, за да не се
+    // пренасят думите по букви; текстът на слайда се превърта, вместо да се реже.
+    val fontScale = LocalDensity.current.fontScale
+    val large = fontScale >= 1.3f
+    val titleStyle = when {
+        fontScale >= 1.7f -> MaterialTheme.typography.headlineSmall
+        large -> MaterialTheme.typography.headlineMedium
+        else -> MaterialTheme.typography.displaySmall
+    }
     Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Brand.Ink, androidx.compose.ui.graphics.Color(0xFF2E1612), Brand.Burgundy)))) {
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
             Row(Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.End) {
@@ -76,23 +90,26 @@ fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
             HorizontalPager(pager, modifier = Modifier.weight(1f)) { page ->
                 val s = slides[page]
                 val offset = ((pager.currentPage - page) + pager.currentPageOffsetFraction).absoluteValue
-                Column(
-                    Modifier.fillMaxSize().padding(32.dp).graphicsLayer { alpha = 1f - offset.coerceIn(0f, 1f) * 0.6f; translationX = offset * 60f },
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    if (s.icon == null) Emblem(128.dp)
-                    else IconPlate(s.icon, size = 120.dp, container = Brand.Gold, content = Brand.Ink)
-                    Spacer(Modifier.height(36.dp))
-                    Text(stringResource(s.title), style = MaterialTheme.typography.displaySmall, color = Brand.Parchment,
-                        textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
-                    if (page == 0) {
-                        Text(stringResource(R.string.app_subtitle), style = MaterialTheme.typography.titleMedium, color = Brand.GoldLight,
-                            textAlign = TextAlign.Center, modifier = Modifier.padding(top = 8.dp))
+                BoxWithConstraints(Modifier.fillMaxSize().graphicsLayer { alpha = 1f - offset.coerceIn(0f, 1f) * 0.6f; translationX = offset * 60f }) {
+                    Column(
+                        // Поне височината на страницата (съдържанието е центрирано), а ако не се събира — превърта се.
+                        Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).heightIn(min = maxHeight).padding(if (large) 24.dp else 32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        if (s.icon == null) Emblem(if (large) 88.dp else 128.dp)
+                        else IconPlate(s.icon, size = if (large) 84.dp else 120.dp, container = Brand.Gold, content = Brand.Ink)
+                        Spacer(Modifier.height(if (large) 20.dp else 36.dp))
+                        Text(stringResource(s.title), style = titleStyle, color = Brand.Parchment,
+                            textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
+                        if (page == 0) {
+                            Text(stringResource(R.string.app_subtitle), style = MaterialTheme.typography.titleMedium, color = Brand.GoldLight,
+                                textAlign = TextAlign.Center, modifier = Modifier.padding(top = 8.dp))
+                        }
+                        Spacer(Modifier.height(16.dp))
+                        Text(stringResource(s.text), style = MaterialTheme.typography.bodyLarge, color = Brand.Parchment.copy(alpha = 0.82f),
+                            textAlign = TextAlign.Center, modifier = Modifier.widthIn(max = 480.dp))
                     }
-                    Spacer(Modifier.height(16.dp))
-                    Text(stringResource(s.text), style = MaterialTheme.typography.bodyLarge, color = Brand.Parchment.copy(alpha = 0.82f),
-                        textAlign = TextAlign.Center, modifier = Modifier.widthIn(max = 480.dp))
                 }
             }
             PagerDots(
@@ -101,12 +118,12 @@ fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
             )
             Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 if (pager.currentPage < slides.lastIndex) {
-                    Button(onClick = { scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } }, modifier = Modifier.fillMaxWidth().height(52.dp)) {
+                    Button(onClick = { scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
                         Text(stringResource(R.string.onb_next))
                     }
                 } else {
-                    Button(onClick = { onFinish(true) }, modifier = Modifier.fillMaxWidth().height(52.dp)) { Text(stringResource(R.string.onb_login)) }
-                    OutlinedButton(onClick = { onFinish(false) }, modifier = Modifier.fillMaxWidth().height(52.dp)) {
+                    Button(onClick = { onFinish(true) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.onb_login)) }
+                    OutlinedButton(onClick = { onFinish(false) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
                         Text(stringResource(R.string.onb_guest), color = Brand.Parchment)
                     }
                 }

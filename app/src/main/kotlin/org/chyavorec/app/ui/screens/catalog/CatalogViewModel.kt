@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.chyavorec.app.ui.RefreshOnReconnect
+import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.AppError
@@ -23,6 +24,7 @@ import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogFacets
 import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.CatalogSort
+import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.SearchField
 
 data class CatalogUiState(
@@ -57,6 +59,12 @@ data class CatalogSearchRequest(
 
 object CatalogSearchRequests {
     val pending = MutableStateFlow<CatalogSearchRequest?>(null)
+
+    /** Книгите на автора — каталогът с избран филтър „Автор“ (от книга, от глобалното търсене). */
+    fun byAuthor(author: String, navigate: (String) -> Unit) {
+        pending.value = CatalogSearchRequest(author.trim(), SearchField.AUTHOR)
+        navigate(Routes.CATALOG)
+    }
 }
 
 @OptIn(FlowPreview::class)
@@ -167,6 +175,8 @@ class BookViewModel(private val inv: Long, private val container: org.chyavorec.
 
     val ui = MutableStateFlow(BookUi())
     val holdResult = MutableStateFlow<Outcome<Unit>?>(null)
+    /** За „Попитай библиотеката“: контактите от сайта (кеша), иначе вградените резервни. */
+    val contacts = MutableStateFlow<Contacts?>(null)
 
     init { load() }
 
@@ -224,4 +234,12 @@ class BookViewModel(private val inv: Long, private val container: org.chyavorec.
     }
 
     fun placeHold() = viewModelScope.launch { holdResult.value = container.libraryRepository.placeHold(inv) }
+
+    fun loadContacts() {
+        if (contacts.value != null) return
+        viewModelScope.launch {
+            val fromSite = (container.siteRepository.contacts(false) as? Outcome.Success)?.value?.data
+            contacts.value = fromSite ?: container.fallbackContacts
+        }
+    }
 }

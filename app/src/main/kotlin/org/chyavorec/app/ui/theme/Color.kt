@@ -7,6 +7,12 @@ object Brand {
     val Ink = Color(0xFF1A1208)
     val Gold = Color(0xFFC9A84C)
     val GoldDark = Color(0xFF8B6914)
+    /**
+     * Златото за текст и бутони върху светъл фон: GoldDark, леко потъмнено, за да държи
+     * дребния текст (етикети, дати, „Следващ срок“) на поне 4.5:1 и върху най-тъмния
+     * контейнер (#E9E0D1 → 4.91:1; GoldDark там е 3.89:1). GoldDark остава за орнаментите.
+     */
+    val GoldText = Color(0xFF785A10)
     val GoldLight = Color(0xFFE8D5A3)
     val Burgundy = Color(0xFF6B1F2A)
     val Cream = Color(0xFFFAF7F2)
@@ -16,11 +22,15 @@ object Brand {
     val InkRaised = Color(0xFF33261A)
 }
 
-/** Семантични цветове за статуси — проверени за контраст WCAG AA върху фоновете. */
+/**
+ * Семантични цветове за статуси — проверени за контраст WCAG AA (4.5:1) като текст върху
+ * всички фонове и в етикетите „На заем“/„Скоро срок“ (собственият им фон е 12 % от цвета),
+ * виж SmallTextContrastTest.
+ */
 object StatusColors {
-    val OkLight = Color(0xFF2F6B4A)
+    val OkLight = Color(0xFF2A6343)
     val OkDark = Color(0xFF8FD1A8)
-    val WarnLight = Color(0xFF9A5B00)
+    val WarnLight = Color(0xFF824C00)
     val WarnDark = Color(0xFFF2C06B)
     val BadLight = Color(0xFFA3262F)
     val BadDark = Color(0xFFFF9C9C)

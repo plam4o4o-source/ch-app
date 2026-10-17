@@ -82,11 +82,12 @@ sealed interface ScanTarget {
  * - EAN-13 с префикс 978/979 → ISBN;
  * - само цифри (до 9) → инвентарен номер (етикетът на библиотеката);
  * - адрес на електронния каталог (chyavorec.org) с `inv=`/`isbn=`/`q=` в
- *   заявката или фрагмента → извлича стойността;
+ *   заявката или фрагмента → извлича стойността; `#zapis=<инв. №>` — споделената от
+ *   сайта (и от приложението) връзка към книга;
  * - друго → [ScanTarget.Unknown].
  */
 object ScanCodes {
-    private val param = Regex("(?:^|[?#&;])(inv|isbn|q|book)=([^&#;]+)", RegexOption.IGNORE_CASE)
+    private val param = Regex("(?:^|[?#&;])(inv|isbn|q|book|zapis)=([^&#;]+)", RegexOption.IGNORE_CASE)
 
     fun resolve(raw: String): ScanTarget {
         val value = raw.trim()
@@ -105,7 +106,7 @@ object ScanCodes {
                 val key = m.groupValues[1].lowercase()
                 val v = decode(m.groupValues[2])
                 when (key) {
-                    "inv", "book" -> v.filter { it.isDigit() }.trimStart('0').toLongOrNull()?.takeIf { it > 0 }?.let { return ScanTarget.Inventory(it) }
+                    "inv", "book", "zapis" -> v.filter { it.isDigit() }.trimStart('0').toLongOrNull()?.takeIf { it > 0 }?.let { return ScanTarget.Inventory(it) }
                     "isbn" -> if (Isbn.normalize(v).length >= 10) return ScanTarget.Isbn(Isbn.normalize(v))
                     "q" -> return resolve(v).let { if (it is ScanTarget.Unknown) ScanTarget.Unknown(v) else it }
                 }

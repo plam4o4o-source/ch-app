@@ -61,6 +61,8 @@ class IsbnTest {
     @Test fun scanCatalogUrl() {
         assertEquals(ScanTarget.Inventory(156), ScanCodes.resolve("https://chyavorec.org/elektronen-katalog?inv=156"))
         assertEquals(ScanTarget.Inventory(157), ScanCodes.resolve("https://chyavorec.org/elektronen-katalog#inv=157"))
+        // Връзката към книга, която сайтът (и приложението) споделя.
+        assertEquals(ScanTarget.Inventory(158), ScanCodes.resolve("https://chyavorec.org/elektronen-katalog#zapis=158"))
         assertEquals(ScanTarget.Isbn("9789540907055"), ScanCodes.resolve("https://chyavorec.org/elektronen-katalog?isbn=978-954-09-0705-5"))
         assertEquals(ScanTarget.Isbn("9789540907055"), ScanCodes.resolve("https://chyavorec.org/elektronen-katalog?q=9789540907055"))
         assertEquals(ScanTarget.Unknown("https://example.org/x"), ScanCodes.resolve("https://example.org/x"))
