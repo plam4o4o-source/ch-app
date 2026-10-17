@@ -571,7 +571,7 @@ PRIVACY_BG = """# Кой обработва данните
 
 Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели. Кориците на книгите се зареждат по ISBN от covers.openlibrary.org (Internet Archive) — този сървър вижда IP адреса и ISBN-а, нищо друго; изключва се от Настройки → Данни → „Корици от интернет“.
 
-Съобщения от читалището: приложението проверява на около час публичния файл със съобщения на chyavorec.org. Съобщенията „само за членове“ се показват, ако си въвел читателска карта или си влязъл — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
+Съобщения от читалището: приложението проверява публичния файл със съобщения на chyavorec.org най-често веднъж на час (по-рядко — до веднъж на 6 часа, докато няма нови съобщения) и спира проверките, ако не е отваряно 14 дни. Съобщенията „само за членове“ се показват, ако си въвел читателска карта или си влязъл — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
 
 Обновления: версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от Настройки → Обновления. Версията от Google Play се обновява от Google Play.
 
@@ -613,7 +613,7 @@ The app collects as little data as possible. It has no ads, no behavioural analy
 
 Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data. Book covers are fetched by ISBN from covers.openlibrary.org (Internet Archive) — that server sees the IP address and the ISBN, nothing else; turn it off in Settings → Data → “Covers from the internet”.
 
-Messages from the centre: about once an hour the app checks the public messages file on chyavorec.org. Members-only messages are shown if you have entered your library card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
+Messages from the centre: the app checks the public messages file on chyavorec.org at most once an hour (less often — down to once every 6 hours — while there are no new messages) and stops checking if it has not been opened for 14 days. Members-only messages are shown if you have entered your library card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
 
 Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 

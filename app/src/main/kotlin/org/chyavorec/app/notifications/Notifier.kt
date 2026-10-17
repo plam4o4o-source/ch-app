@@ -85,8 +85,8 @@ object Notifier {
         sensitive: Boolean = false,
     ) {
         if (!canNotify(context)) return
-        // Каналите се създават във фон при старта на процеса — при много ранно известие
-        // (напр. от receiver веднага след старта) може още да ги няма.
+        // Каналите се създават във фон веднъж за версия (ChitalishteApp) — при много ранно
+        // известие или изтрит от системата канал може още да ги няма.
         context.getSystemService(NotificationManager::class.java)?.let { nm ->
             if (nm.getNotificationChannel(channel.id) == null) createChannels(context)
         }
@@ -105,6 +105,9 @@ object Notifier {
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setContentIntent(pending)
             .setAutoCancel(true)
+            // Съобщенията: повторно показване със същото ID (напр. две проверки една след друга)
+            // само подменя известието — без втори звук/вибрация.
+            .setOnlyAlertOnce(channel == Channel.MESSAGES || channel == Channel.MESSAGES_IMPORTANT)
             // Заглавията на заети книги са лична информация — скрити на заключен екран.
             .setVisibility(if (channel == Channel.LOANS || sensitive) NotificationCompat.VISIBILITY_PRIVATE else NotificationCompat.VISIBILITY_PUBLIC)
             .build()

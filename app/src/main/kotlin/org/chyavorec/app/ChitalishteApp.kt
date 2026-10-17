@@ -36,13 +36,24 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         container.watchSignOut()
         container.watchLoanReminders()
         // Каналите за известия и инициализацията на WorkManager (база данни) не бива да бавят първия кадър.
-        appScope.launch {
-            runCatching { Notifier.createChannels(this@ChitalishteApp) }
-            // Една обща периодична задача (съобщения, новини, заемания, уиджет, обновяване).
-            runCatching { PeriodicSyncWorker.schedule(this@ChitalishteApp) }
-            // Съобщенията от читалището — по-често (~30 мин.), само статичният файл от сайта.
-            runCatching { MessagePollWorker.schedule(this@ChitalishteApp) }
-        }
+        appScope.launch { setUpBackground() }
+    }
+
+    /**
+     * Процесът се стартира и при всяко събуждане на фонова задача — затова пълната настройка
+     * (канали, отмяна на старите задачи, UPDATE на периодичните) е само веднъж за версия и
+     * език (имената на каналите са преведени). Иначе — само KEEP: задачите се добавят
+     * отново единствено ако WorkManager ги е загубил. Notifier.show сам създава липсващ канал.
+     */
+    private suspend fun setUpBackground() {
+        val stamp = "${BuildConfig.VERSION_CODE}:${resources.configuration.locales[0].toLanguageTag()}"
+        val fresh = runCatching { container.settings.backgroundSetup() != stamp }.getOrDefault(true)
+        if (fresh) runCatching { Notifier.createChannels(this) }
+        // Една обща периодична задача (съобщения, новини, заемания, уиджет, обновяване).
+        val sync = runCatching { PeriodicSyncWorker.schedule(this, update = fresh) }
+        // Съобщенията от читалището — по-често (адаптивно 1–6 ч.), само статичният файл от сайта.
+        val poll = runCatching { MessagePollWorker.schedule(this, update = fresh) }
+        if (fresh && sync.isSuccess && poll.isSuccess) runCatching { container.settings.setBackgroundSetup(stamp) }
     }
 
     /**

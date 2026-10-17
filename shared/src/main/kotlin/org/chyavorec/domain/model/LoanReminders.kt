@@ -1,5 +1,6 @@
 package org.chyavorec.domain.model
 
+import org.chyavorec.core.Hashing
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -109,5 +110,51 @@ object LoanNotificationLog {
     fun add(log: Set<String>, entry: String, today: LocalDate): Set<String> {
         val oldest = today.minusDays(KEEP_DAYS)
         return log.filterTo(mutableSetOf()) { s -> parse(s)?.sentOn?.isBefore(oldest) == false } + entry
+    }
+}
+
+/**
+ * Кога напомнянията за срок наистина трябва да се пренасрочат — чисти изчисления.
+ *
+ * Планът се помни като отпечатък по заемане: „loanId|хеш(срок, чакащо удължаване)“.
+ * Пренасрочват се само новите и променените заемания, а изчезналите (върнати) се
+ * отменят; при непроменен списък — нищо (без REPLACE, който би прекъснал вече
+ * вървящо напомняне, и без работа при всеки старт на процеса).
+ *
+ * Запомненият план е:
+ * - `null` — неизвестен (първо пускане на тази логика) → всички се планират отново;
+ * - празен — нищо не е планирано (изход или изключени известия за срокове);
+ *   при включване всички се планират отново.
+ */
+object LoanReminderSync {
+    /** Сменя се при промяна на правилата за планиране ([LoanReminderPlan]) — тогава всичко се пренасрочва. */
+    private const val FORMAT = 1
+    private const val SEP = '|'
+
+    /** Какво да се направи: да се (пре)планират [schedule] и да се отменят [cancel] (loanId). */
+    data class Changes(val schedule: List<Loan>, val cancel: Set<String>) {
+        val isEmpty: Boolean get() = schedule.isEmpty() && cancel.isEmpty()
+    }
+
+    /** Отпечатъкът на едно заемане — от него зависят моментите на напомнянията. */
+    fun entry(loan: Loan): String {
+        val plan = "$FORMAT$SEP${loan.dueOn.orEmpty()}$SEP${loan.renewPending}"
+        return loan.loanId + SEP + Hashing.hex(Hashing.sha256(plan.toByteArray()), 6)
+    }
+
+    /** Отпечатъкът на целия план (записва се след успешно планиране). */
+    fun entries(loans: List<Loan>): Set<String> = loans.distinctBy { it.loanId }.mapTo(linkedSetOf()) { entry(it) }
+
+    /** loanId от запис (loanId може да съдържа разделителя — хешът е след последния). */
+    private fun loanIdOf(entry: String): String? = entry.lastIndexOf(SEP).takeIf { it > 0 }?.let { entry.substring(0, it) }
+
+    /** Разликата между запомнения план [previous] и текущите заемания [loans]. */
+    fun diff(previous: Set<String>?, loans: List<Loan>): Changes {
+        val unique = loans.distinctBy { it.loanId }
+        if (previous == null) return Changes(unique, emptySet())
+        val schedule = unique.filter { entry(it) !in previous }
+        val current = unique.mapTo(hashSetOf()) { it.loanId }
+        val cancel = previous.mapNotNullTo(linkedSetOf()) { loanIdOf(it) }.filterTo(linkedSetOf()) { it !in current }
+        return Changes(schedule, cancel)
     }
 }

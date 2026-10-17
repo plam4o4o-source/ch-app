@@ -3,6 +3,7 @@ package org.chyavorec.app.di
 import android.content.Context
 import android.os.Build
 import androidx.room.Room
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -56,6 +58,7 @@ import org.chyavorec.data.repository.SiteRepository
 import org.chyavorec.data.site.ChyavorecSiteService
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.Loan
+import org.chyavorec.domain.model.LoanReminderSync
 import org.chyavorec.domain.service.AuthenticationService
 import org.chyavorec.domain.service.MembershipService
 import org.chyavorec.domain.service.ReaderService
@@ -230,6 +233,11 @@ class AppContainer(
      * между стар и нов списък): при всеки запис на заеманията в кеша (екраните и фоновата
      * задача), при старт (от кеша) и при включване на известията — пренасрочване;
      * при изход или изключени известия за срокове — отмяна на всички.
+     *
+     * Пренасрочва се САМО разликата спрямо запомнения план ([LoanReminderSync]): при
+     * непроменени заемания (обикновеният старт на процеса, вкл. всяко фоново събуждане)
+     * нищо не се пипа. Докато върви напомняне (LoanReminderWorker) — изчакване: неговото
+     * restore()/опресняване не бива да подменя (REPLACE) самото него.
      * Извиква се веднъж от Application.
      */
     fun watchLoanReminders() {
@@ -242,15 +250,38 @@ class AppContainer(
                 }
             }.distinctUntilChanged()
             val enabled = settings.settings.map { it.notifyLoans }.distinctUntilChanged()
-            combine(storedLoans, enabled, signedIn) { loans, on, inside -> Triple(loans, on, inside) }.collect { (loans, on, inside) ->
-                runCatching {
-                    when {
-                        // Сесията още не е проверена — нищо не се променя.
-                        inside == null -> Unit
-                        !on || !inside -> loanReminders.cancelAll()
-                        else -> (loans ?: libraryRepository.cachedLoans()?.data)?.let { loanReminders.schedule(it) }
-                    }
+            // collectLatest: по-нов списък отменя още чакащото прилагане на стария.
+            combine(storedLoans, enabled, signedIn) { loans, on, inside -> Triple(loans, on, inside) }.collectLatest { (loans, on, inside) ->
+                try {
+                    syncLoanReminders(loans, on, inside)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    // Следващата промяна (или старт) опитва отново — планът не е записан.
                 }
+            }
+        }
+    }
+
+    private suspend fun syncLoanReminders(loans: List<Loan>?, on: Boolean, inside: Boolean?) {
+        when {
+            // Сесията още не е проверена — нищо не се променя.
+            inside == null -> Unit
+            !on || !inside -> {
+                // Празен план = нищо не е планирано; отмяна само ако може да има нещо.
+                if (settings.loanReminderPlan()?.isEmpty() != true) {
+                    loanReminders.cancelAll()
+                    settings.setLoanReminderPlan(emptySet())
+                }
+            }
+            else -> {
+                val list = loans ?: libraryRepository.cachedLoans()?.data ?: return
+                LoanReminderScheduler.awaitIdle()
+                val previous = settings.loanReminderPlan()
+                val changes = LoanReminderSync.diff(previous, list)
+                if (changes.isEmpty && previous != null) return
+                loanReminders.applyChanges(changes)
+                settings.setLoanReminderPlan(LoanReminderSync.entries(list))
             }
         }
     }

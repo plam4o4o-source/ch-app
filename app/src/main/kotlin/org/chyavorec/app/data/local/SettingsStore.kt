@@ -90,6 +90,12 @@ class SettingsStore(private val context: Context) {
         val catalogShelf = booleanPreferencesKey("catalog_shelf")
         val readerFontSize = stringPreferencesKey("reader_font_size")
         val readerNarrow = booleanPreferencesKey("reader_narrow")
+        val loanReminderPlan = stringSetPreferencesKey("loan_reminder_plan")
+        val backgroundSetup = stringPreferencesKey("background_setup")
+        val lastAppOpen = longPreferencesKey("last_app_open")
+        val messagePollAt = longPreferencesKey("message_poll_at")
+        val messagePollInterval = longPreferencesKey("message_poll_interval")
+        val messagesSignature = stringPreferencesKey("messages_signature")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -192,6 +198,46 @@ class SettingsStore(private val context: Context) {
     suspend fun loanNotificationLog(): Set<String> = context.dataStore.data.first()[Keys.loanNotificationLog].orEmpty()
     suspend fun addLoanNotification(entry: String, today: java.time.LocalDate) = context.dataStore.edit {
         it[Keys.loanNotificationLog] = org.chyavorec.domain.model.LoanNotificationLog.add(it[Keys.loanNotificationLog].orEmpty(), entry, today)
+    }
+
+    /**
+     * Запомненият план на напомнянията за срок ([org.chyavorec.domain.model.LoanReminderSync]):
+     * `null` — неизвестен, празен — нищо не е планирано.
+     */
+    suspend fun loanReminderPlan(): Set<String>? = context.dataStore.data.first()[Keys.loanReminderPlan]
+    suspend fun setLoanReminderPlan(plan: Set<String>) = context.dataStore.edit { it[Keys.loanReminderPlan] = plan }
+
+    /** „версия:език“, за която периодичните задачи и каналите за известия вече са настроени. */
+    suspend fun backgroundSetup(): String? = context.dataStore.data.first()[Keys.backgroundSetup]
+    suspend fun setBackgroundSetup(stamp: String) = context.dataStore.edit { it[Keys.backgroundSetup] = stamp }
+
+    /** Състоянието на фоновата проверка за съобщения ([org.chyavorec.domain.model.MessagePollPolicy]). */
+    data class MessagePoll(val lastOpen: Long, val lastPoll: Long, val interval: Long, val signature: String?)
+
+    suspend fun messagePoll(): MessagePoll = context.dataStore.data.first().let { p ->
+        MessagePoll(p[Keys.lastAppOpen] ?: 0L, p[Keys.messagePollAt] ?: 0L, p[Keys.messagePollInterval] ?: 0L, p[Keys.messagesSignature])
+    }
+
+    /** След успешна проверка: кога, следващият интервал и отпечатъкът на съобщенията. */
+    suspend fun setMessagePoll(at: Long, interval: Long, signature: String) = context.dataStore.edit {
+        it[Keys.messagePollAt] = at
+        it[Keys.messagePollInterval] = interval
+        it[Keys.messagesSignature] = signature
+    }
+
+    /** Без запомнено отваряне (напр. след обновяване) — 14-дневният срок започва оттук. */
+    suspend fun setLastAppOpenIfMissing(millis: Long) = context.dataStore.edit {
+        if (it[Keys.lastAppOpen] == null) it[Keys.lastAppOpen] = millis
+    }
+
+    /**
+     * Приложението е отворено: проверките за съобщения отново на най-краткия интервал.
+     * Записва се най-много веднъж на [minGapMillis] (DataStore не пише непроменени данни).
+     */
+    suspend fun markAppOpened(millis: Long, baseInterval: Long, minGapMillis: Long) = context.dataStore.edit {
+        val last = it[Keys.lastAppOpen] ?: 0L
+        if (last > millis || millis - last >= minGapMillis) it[Keys.lastAppOpen] = millis
+        if ((it[Keys.messagePollInterval] ?: baseInterval) != baseInterval) it[Keys.messagePollInterval] = baseInterval
     }
 
     val recentSearches: Flow<List<String>> = context.dataStore.data.map { p ->

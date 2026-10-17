@@ -11,12 +11,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.ChitalishteRoot
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.util.AppLanguage
+import org.chyavorec.domain.model.MessagePollPolicy
 
 class MainActivity : ComponentActivity() {
 
@@ -53,6 +56,20 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Приложението е отворено: фоновата проверка за съобщения отново е на най-краткия
+     * интервал, а 14-дневният срок без отваряне ([MessagePollPolicy]) започва отначало.
+     */
+    override fun onStart() {
+        super.onStart()
+        val container = (application as ChitalishteApp).container
+        lifecycleScope.launch {
+            runCatching {
+                container.settings.markAppOpened(container.clock.now().toEpochMilli(), MessagePollPolicy.BASE_MILLIS, OPEN_RECORD_GAP_MS)
+            }
+        }
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -81,5 +98,7 @@ class MainActivity : ComponentActivity() {
         /** Действие на статичните преки пътища (res/xml/shortcuts.xml); връзката е в `data`. */
         const val ACTION_SHORTCUT = "org.chyavorec.app.SHORTCUT"
         const val SHORTCUT_SCHEME = "chyavorec"
+        /** Времето на отваряне се записва най-много веднъж на час (стига за 14-дневния срок). */
+        private const val OPEN_RECORD_GAP_MS = 60 * 60 * 1000L
     }
 }

@@ -55,9 +55,10 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         val canNotify = Notifier.canNotify(applicationContext)
         val widget = ChitalishteWidget.hasInstances(applicationContext)
 
-        // Съобщения — всеки път (общите от сайта — и в MessagePollWorker на ~30 мин.; личните само при влязъл читател).
+        // Съобщения — всеки път (общите от сайта — и в MessagePollWorker, адаптивно 1–6 ч.; личните само
+        // при влязъл читател). Без force: току-що свалените (до 10 мин.) съобщения от сайта не се теглят отново.
         if (settings.notifyMessages && canNotify) {
-            step { MessageWorker.refreshAndNotify(applicationContext, c) }
+            step { MessageWorker.refreshAndNotify(applicationContext, c, force = false) }
         }
 
         if (settings.notifyNews && canNotify && due(c, STEP_NEWS, now, SYNC_INTERVAL_MS)) {
@@ -191,7 +192,7 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
 
     companion object {
         private const val NAME = "periodic-sync"
-        /** Предишните отделни задачи — отменят се, за да не се будят паралелно с тази. */
+        /** Предишните отделни задачи — отменят се (веднъж за версия), за да не се будят паралелно с тази. */
         private val LEGACY_NAMES = listOf("app-messages", "background-sync", "app-update")
 
         private const val STEP_NEWS = "news"
@@ -201,15 +202,19 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         private const val SYNC_INTERVAL_MS = 11 * 60 * 60 * 1000L
         private const val UPDATE_INTERVAL_MS = 23 * 60 * 60 * 1000L
 
-        fun schedule(context: Context) {
+        /**
+         * [update] = true — само веднъж за версия (вж. ChitalishteApp): отмяна на старите задачи и
+         * UPDATE, за да минат и вече инсталираните копия на новия период/ограничения, без да се
+         * нулира графикът. Иначе — KEEP: задачата се добавя само ако WorkManager я няма.
+         */
+        fun schedule(context: Context, update: Boolean) {
             val wm = WorkManager.getInstance(context)
-            LEGACY_NAMES.forEach { wm.cancelUniqueWork(it) }
+            if (update) LEGACY_NAMES.forEach { wm.cancelUniqueWork(it) }
             val request = PeriodicWorkRequestBuilder<PeriodicSyncWorker>(6, TimeUnit.HOURS, 2, TimeUnit.HOURS)
                 .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).setRequiresBatteryNotLow(true).build())
                 .build()
-            // UPDATE (а не KEEP): вече инсталираните копия също минават на новия период/ограничения,
-            // без да се нулира графикът на задачата.
-            wm.enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.UPDATE, request)
+            val policy = if (update) ExistingPeriodicWorkPolicy.UPDATE else ExistingPeriodicWorkPolicy.KEEP
+            wm.enqueueUniquePeriodicWork(NAME, policy, request)
         }
     }
 }

@@ -11,6 +11,10 @@ import androidx.work.testing.WorkManagerTestInitHelper
 import org.chyavorec.core.FixedClock
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.LoanReminderKind
+import org.chyavorec.domain.model.LoanReminderSync
+import kotlinx.coroutines.async
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,6 +22,7 @@ import org.robolectric.annotation.Config
 import java.time.Duration
 import java.time.Instant
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /** Уникалните задачи за напомняне: имена, закъснения, REPLACE при удължаване, отмяна. */
@@ -78,6 +83,33 @@ class LoanReminderSchedulerTest {
         scheduler.schedule(listOf(loan("L1", "2026-10-15")))
         assertEquals(Duration.ofMinutes(1).toMillis(), enqueued("L1", LoanReminderKind.DUE_DAY).single().initialDelayMillis)
         assertTrue(enqueued("L1", LoanReminderKind.BEFORE).isEmpty())
+    }
+
+    @Test fun applyTouchesOnlyChangedLoans() {
+        val l1 = loan("L1", "2026-10-20")
+        val l2 = loan("L2", "2026-10-25")
+        scheduler.applyChanges(LoanReminderSync.diff(null, listOf(l1, l2)))
+        val plan = LoanReminderSync.entries(listOf(l1, l2))
+        val l2Work = enqueued("L2", LoanReminderKind.DUE_DAY).single().id
+
+        // Непроменен списък (напр. нов старт на процеса) — нищо не се пренасрочва.
+        assertTrue(LoanReminderSync.diff(plan, listOf(l1, l2)).isEmpty)
+
+        // L1 е върната, L2 е същата, L3 е нова.
+        scheduler.applyChanges(LoanReminderSync.diff(plan, listOf(l2, loan("L3", "2026-11-01"))))
+        assertTrue(enqueued("L1", LoanReminderKind.BEFORE).isEmpty())
+        assertTrue(enqueued("L1", LoanReminderKind.DUE_DAY).isEmpty())
+        assertEquals(l2Work, enqueued("L2", LoanReminderKind.DUE_DAY).single().id)
+        assertEquals(1, enqueued("L3", LoanReminderKind.DUE_DAY).size)
+    }
+
+    @Test fun reschedulingWaitsForRunningReminder() = runTest {
+        LoanReminderScheduler.workerStarted()
+        val waiting = async { LoanReminderScheduler.awaitIdle() }
+        runCurrent()
+        assertFalse(waiting.isCompleted)
+        LoanReminderScheduler.workerFinished()
+        waiting.await()
     }
 
     @Test fun cancelAllRemovesEveryReminder() {
