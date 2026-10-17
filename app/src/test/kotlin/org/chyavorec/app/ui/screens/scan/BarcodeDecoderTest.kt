@@ -61,6 +61,21 @@ class BarcodeDecoderTest {
         assertNull(decoder.decode(ByteArray(100), 320, 240))
         assertNull(decoder.decode(gray, 0, 240))
         assertNull(decoder.decode(gray, 320, 240, rowStride = 100))
+        // Област извън кадъра или празна — също null.
+        assertNull(decoder.decode(gray, 320, 240, crop = CropRect(300, 0, 40, 240)))
+        assertNull(decoder.decode(gray, 320, 240, crop = CropRect(0, 0, 0, 240)))
+        assertNull(decoder.decode(gray, 320, 240, crop = CropRect(-1, 0, 100, 100)))
+    }
+
+    /** Само редовете на областта (както ги копира анализаторът): последният — до десния ѝ край. */
+    @Test fun decodesCroppedRowsOnly() {
+        val decoder = BarcodeDecoder()
+        val frame = Frame.render(encode(BarcodeFormat.EAN_13, "9780306406157"), scale = 3.0, noise = 8, rowPadding = 16)
+        val crop = CropRect(left = 100, top = 140, width = 440, height = 200)
+        val length = (crop.height - 1) * frame.rowStride + crop.left + crop.width
+        val rows = frame.y.copyOfRange(crop.top * frame.rowStride, crop.top * frame.rowStride + length)
+        assertEquals("9780306406157", decoder.decode(rows, frame.width, crop.height, frame.rowStride, crop = crop.copy(top = 0)))
+        assertEquals("9780306406157", decoder.decode(frame.y, frame.width, frame.height, frame.rowStride, crop = crop))
     }
 
     /** Последният ред на равнината от камерата може да е без отстъп (по-къс от rowStride). */
