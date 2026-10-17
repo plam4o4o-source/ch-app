@@ -92,15 +92,35 @@ class HomeViewModel(
     private var feastDay: LocalDate? = null
 
     init {
+        // Празникът за деня (обикновено от кеша) — в първата промяна, ако е готов дотогава.
+        feastDay = clock.today()
+        val feast = viewModelScope.async { site.feastToday() }
         viewModelScope.launch {
-            // Първо мигновено от кеша, после опресняване от мрежата.
-            news.cached()?.let { c -> _state.update { it.copy(news = c.toState().copy(loading = true)) } }
-            events.cachedRolled()?.let { c -> applyEvents(c.data) }
+            // Първо мигновено от кеша (трите едновременно и с ЕДНА промяна на състоянието —
+            // една прекомпозиция вместо по една за всеки източник), после — мрежата.
+            val cachedNews = async { news.cached() }
+            val cachedEvents = async { events.cachedRolled() }
             // Само малкото обобщение — индексът за търсене се строи едва в каталога/търсенето.
-            catalog.homeSummary()?.let { applyCatalog(it.data) }
-            refresh(force = false)
+            val cachedSummary = async { catalog.homeSummary() }
+            val n = cachedNews.await()
+            val e = cachedEvents.await()
+            val batch = Batch()
+            // Началото на опресняването е в същата промяна (иначе още една веднага след нея).
+            batch.add { s -> (n?.let { s.copy(news = it.toState().copy(loading = true)) } ?: s).withEvents(e?.data).let { it.copy(news = it.news.startRefresh()) } }
+            if (feast.isCompleted) feast.await().let { f -> batch.add { it.copy(feast = f) } }
+            // Обобщението обикновено е вече прочетено; ако не е (напр. строи се от стар кеш) —
+            // новините и събитията не го чакат.
+            if (!cachedSummary.isCompleted) batch.flush()
+            cachedSummary.await()?.let { c -> batch.add(summary = c.data) { it.withCatalog(c.data) } }
+            batch.flush()
+            refresh(force = false, started = true)
         }
-        loadFeast(clock.today())
+        viewModelScope.launch {
+            // Празникът дошъл след първата промяна — отделно (ако вече е в нея, същата
+            // стойност не е промяна и StateFlow не я излъчва).
+            val f = feast.await()
+            _state.update { it.copy(feast = f) }
+        }
         viewModelScope.launch {
             seasonal.distinctUntilChanged().collectLatest { on -> if (on) loadOccasions() }
         }
@@ -121,15 +141,46 @@ class HomeViewModel(
         }
     }
 
-    fun refresh(force: Boolean = true) {
+    /** [started] — началото на опресняването вече е в състоянието (първото зареждане). */
+    fun refresh(force: Boolean = true, started: Boolean = false) {
         viewModelScope.launch {
-            _state.update { it.copy(news = it.news.startRefresh()) }
+            if (!started) _state.update { it.copy(news = it.news.startRefresh()) }
             val n = async { news.latest(force) }
             val c = async { catalog.refreshHomeSummary(force) }
             val e = async { events.events(force) }
-            _state.update { it.copy(news = it.news.with(n.await())) }
-            (c.await() as? Outcome.Success)?.value?.data?.let { applyCatalog(it) }
-            (e.await() as? Outcome.Success)?.value?.data?.let { applyEvents(it) }
+            // В реда както досега (новините, каталогът, събитията), но готовото към момента
+            // влиза в същата промяна на състоянието; нищо не чака по-бавния източник.
+            val batch = Batch()
+            val newsResult = n.await()
+            batch.add { it.copy(news = it.news.with(newsResult)) }
+            if (!c.isCompleted) batch.flush()
+            (c.await() as? Outcome.Success)?.value?.data?.let { fresh -> batch.add(summary = fresh) { it.withCatalog(fresh) } }
+            if (!e.isCompleted) batch.flush()
+            (e.await() as? Outcome.Success)?.value?.data?.let { fresh -> batch.add { it.withEvents(fresh) } }
+            batch.flush()
+        }
+    }
+
+    /**
+     * Натрупани промени на състоянието, приложени наведнъж ([flush]) — една емисия (и една
+     * прекомпозиция на началния екран) вместо по една за всеки източник. Новото обобщение
+     * на каталога се подава за „За теб“ едва след като редовете му са в състоянието.
+     */
+    private inner class Batch {
+        private var change: ((HomeUiState) -> HomeUiState)? = null
+        private var newSummary: CatalogHomeSummary? = null
+
+        fun add(summary: CatalogHomeSummary? = null, transform: (HomeUiState) -> HomeUiState) {
+            val previous = change
+            change = if (previous == null) transform else { s -> transform(previous(s)) }
+            if (summary != null) newSummary = summary
+        }
+
+        fun flush() {
+            change?.let { c -> _state.update(c) }
+            change = null
+            newSummary?.let { this@HomeViewModel.summary.value = it }
+            newSummary = null
         }
     }
 
@@ -160,27 +211,26 @@ class HomeViewModel(
         }
     }
 
-    private fun applyEvents(list: List<Event>) {
+    /** Събитията в състоянието (`null` — без промяна). */
+    private fun HomeUiState.withEvents(list: List<Event>?): HomeUiState {
+        if (list == null) return this
         val today = clock.today()
         val horizon = today.plusDays(30).toString()
-        _state.update {
-            it.copy(
-                upcoming = events.upcoming(list).take(8),
-                eventsThisMonth = list.count { e -> (e.date ?: "") in today.toString()..horizon },
-            )
-        }
+        return copy(
+            upcoming = events.upcoming(list).take(8),
+            eventsThisMonth = list.count { e -> (e.date ?: "") in today.toString()..horizon },
+        )
     }
 
-    private fun applyCatalog(summary: CatalogHomeSummary) {
-        _state.update {
-            it.copy(
-                newBooks = summary.newest,
-                shelves = summary.shelves.map { shelf -> shelf.name to shelf.books },
-                catalogCount = summary.count,
-                catalogGenerated = summary.generatedOn,
-            )
-        }
-        this.summary.value = summary
+    /** Обобщението на каталога в състоянието (`null` — без промяна); „За теб“ — след него ([summary]). */
+    private fun HomeUiState.withCatalog(summary: CatalogHomeSummary?): HomeUiState {
+        if (summary == null) return this
+        return copy(
+            newBooks = summary.newest,
+            shelves = summary.shelves.map { shelf -> shelf.name to shelf.books },
+            catalogCount = summary.count,
+            catalogGenerated = summary.generatedOn,
+        )
     }
 
     /**
