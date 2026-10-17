@@ -449,14 +449,14 @@ private fun CameraPreview(
                 val cam = p.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageAnalysis)
                 camera = cam
                 analysis = imageAnalysis
-                displays?.registerListener(displayListener, null)
+                displays?.registerDisplayListener(displayListener, null)
                 onCamera(cam)
             } catch (_: Throwable) {
                 onError()
             }
         }, ContextCompat.getMainExecutor(context))
         onDispose {
-            runCatching { displays?.unregisterListener(displayListener) }
+            runCatching { displays?.unregisterDisplayListener(displayListener) }
             runCatching { useCase?.clearAnalyzer() }
             runCatching { provider?.unbindAll() }
             executor.shutdown()
