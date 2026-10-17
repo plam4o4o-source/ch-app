@@ -1,7 +1,5 @@
 package org.chyavorec.app.ui.screens.settings
 
-import android.content.Intent
-import android.provider.Settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -56,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
+import org.chyavorec.app.notifications.Channel
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.updateStatusText
@@ -345,6 +344,9 @@ private fun <T> ChoiceDialog(title: String, options: List<Pair<T, String>>, sele
     )
 }
 
+/** Каналите, които се управляват от превключвателите на [NotificationSettingsScreen]. */
+private val settingsChannels = listOf(Channel.LOANS, Channel.EVENTS, Channel.MESSAGES, Channel.MESSAGES_IMPORTANT, Channel.NEWS, Channel.LIBRARY)
+
 @Composable
 fun NotificationSettingsScreen(onBack: () -> Unit) {
     val c = LocalAppContainer.current
@@ -352,16 +354,29 @@ fun NotificationSettingsScreen(onBack: () -> Unit) {
     val scope = rememberCoroutineScope()
     val permission = rememberNotificationPermission()
     val context = LocalContext.current
+    val snackbar = remember { SnackbarHostState() }
+    // Проверява се при всяко връщане (напр. от системните настройки).
+    val status = rememberNotificationStatus(settingsChannels)
     val s = settings ?: return
     val loansSupported = remember { mutableStateOf<Boolean?>(null) }
     androidx.compose.runtime.LaunchedEffect(Unit) { loansSupported.value = c.authRepository.capabilities().loans }
+    val deniedMsg = stringResource(R.string.notifications_denied)
 
-    Scaffold(topBar = { BackTopBar(stringResource(R.string.my_notifications), onBack) }) { padding ->
+    Scaffold(topBar = { BackTopBar(stringResource(R.string.my_notifications), onBack) }, snackbarHost = { SnackbarHost(snackbar) }) { padding ->
         Column(Modifier.padding(padding).verticalScroll(rememberScrollState())) {
+            NotificationsBlockedBanner(status, Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp))
             Text(stringResource(R.string.notifications_intro), style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(20.dp))
+            // Включване — само с разрешение: при отказ превключвателят остава изключен.
             fun enable(on: Boolean, save: suspend (Boolean) -> Unit) {
-                if (on) permission.request { scope.launch { save(true) } } else scope.launch { save(false) }
+                if (!on) {
+                    scope.launch { save(false) }
+                    return
+                }
+                permission.requestWithResult { access ->
+                    if (access == NotificationAccess.GRANTED) scope.launch { save(true) }
+                    else scope.launch { snackbar.showNotificationsBlocked(context, access, deniedMsg) }
+                }
             }
             SwitchItem(stringResource(R.string.channel_messages), stringResource(R.string.channel_messages_desc), s.notifyMessages) { enable(it, { v -> c.settings.setNotifyMessages(v) }) }
             SwitchItem(stringResource(R.string.channel_news), stringResource(R.string.channel_news_desc), s.notifyNews) { enable(it, { v -> c.settings.setNotifyNews(v) }) }
@@ -373,12 +388,7 @@ fun NotificationSettingsScreen(onBack: () -> Unit) {
             ) { enable(it, { v -> c.settings.setNotifyLoans(v) }) }
             SwitchItem(stringResource(R.string.channel_library), stringResource(R.string.notifications_library_desc), s.notifyLibrary) { enable(it, { v -> c.settings.setNotifyLibrary(v) }) }
             HorizontalDivider(Modifier.padding(vertical = 8.dp))
-            NavItem(Icons.Outlined.Palette, stringResource(R.string.notifications_system)) {
-                context.startActivity(
-                    Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-                )
-            }
+            NavItem(Icons.Outlined.Palette, stringResource(R.string.notifications_system)) { openNotificationSettings(context) }
             Text(stringResource(R.string.notifications_push_note), style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(20.dp))
         }

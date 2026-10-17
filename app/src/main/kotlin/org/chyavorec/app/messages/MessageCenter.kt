@@ -24,6 +24,14 @@ import org.chyavorec.domain.model.ReaderMessage
 import org.chyavorec.domain.model.ServiceCapabilities
 import java.time.Instant
 
+/** Каквото екранът „Съобщения“ ползва от [MessageCenter] (подменимо в тестовете). */
+interface MessageInbox {
+    val readIds: Flow<Set<String>>
+    suspend fun isMember(): Boolean
+    suspend fun refresh(force: Boolean, includePersonal: Boolean = true): Outcome<Synced<List<AppMessage>>>
+    suspend fun markRead(ids: Collection<String>)
+}
+
 /**
  * Съобщенията от читалището в приложението: кой е „член“ (влязъл в профила
  * си или въвел читателска карта), кои съобщения са прочетени, брой непрочетени.
@@ -40,7 +48,7 @@ class MessageCenter(
     private val settings: SettingsStore,
     private val personalRepository: ReaderMessagesRepository,
     private val clock: AppClock,
-) {
+) : MessageInbox {
     private val _site = MutableStateFlow<List<AppMessage>>(emptyList())
     private val _personal = MutableStateFlow<List<ReaderMessage>>(emptyList())
     private val _messages = MutableStateFlow<List<AppMessage>>(emptyList())
@@ -55,9 +63,9 @@ class MessageCenter(
         val signedIn = state is AuthState.SignedIn
         list.count { it.id !in read && (signedIn || !it.personal) }
     }
-    val readIds: Flow<Set<String>> = settings.readMessageIds
+    override val readIds: Flow<Set<String>> = settings.readMessageIds
 
-    suspend fun isMember(): Boolean {
+    override suspend fun isMember(): Boolean {
         if (auth.state.value is AuthState.Unknown) auth.restore()
         if (auth.state.value is AuthState.SignedIn) return true
         if (selfCard.card.value == null) selfCard.load()
@@ -68,7 +76,7 @@ class MessageCenter(
      * [includePersonal] = false — само съобщенията от сайта (статичен файл, евтино); личните
      * минават през моста и се питат по-рядко (общата фонова задача и при отваряне).
      */
-    suspend fun refresh(force: Boolean, includePersonal: Boolean = true): Outcome<Synced<List<AppMessage>>> {
+    override suspend fun refresh(force: Boolean, includePersonal: Boolean): Outcome<Synced<List<AppMessage>>> {
         val member = isMember()
         val signedIn = auth.state.value is AuthState.SignedIn
         if (!signedIn) clearPersonal()
@@ -89,8 +97,11 @@ class MessageCenter(
         }
     }
 
-    /** Отбелязва показаните съобщения като прочетени; личните — и на сървъра (с повторен опит при неуспех). */
-    suspend fun markRead(ids: Collection<String>) {
+    /**
+     * Отбелязва съобщенията като прочетени; личните — и на сървъра (с повторен опит при
+     * неуспех). Само за видени от читателя (екранът е на преден план), не от фоново опресняване.
+     */
+    override suspend fun markRead(ids: Collection<String>) {
         settings.addReadMessages(ids)
         val unreadOnServer = _personal.value.filter { !it.read }.map { it.id }.toSet()
         val toSend = ids.mapNotNull { Inbox.serverId(it) }.filter { it in unreadOnServer }
