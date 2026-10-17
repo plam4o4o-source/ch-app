@@ -132,10 +132,16 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v6
 
-      # Подписване: истинският upload ключ идва от GitHub Secrets. Ако липсва,
-      # се генерира временен ключ само за да се провери, че подписаният build
-      # работи — такъв AAB НЕ се качва в Google Play.
-      - name: Prepare signing key
+      # Подписване. Истинският upload ключ (GitHub Secrets) се ползва САМО в main — при push
+      # и при ръчно пускане от main. Работните клонове (claude/**, wave*/**) и pull request-ите
+      # винаги подписват с временен ключ ci-test: стъпката с ключа там дори не се изпълнява,
+      # т.е. променливите със secrets не се задават и код от непроверен клон (Gradle скрипт,
+      # тест, плъгин) не може да ги прочете или изнесе. Изданията (release.yml през
+      # auto-release.yml) вървят от main и също ползват истинския ключ.
+      - name: Prepare signing key (upload key, main only)
+        if: >-
+          github.ref == 'refs/heads/main' &&
+          (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         env:
           UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
           UPLOAD_STORE_PASSWORD: ${{ secrets.UPLOAD_STORE_PASSWORD }}
@@ -144,20 +150,26 @@ jobs:
         run: |
           if [ -n "$UPLOAD_KEYSTORE_BASE64" ]; then
             echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+            echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
             echo "SIGNING_STORE_PASSWORD=$UPLOAD_STORE_PASSWORD" >> "$GITHUB_ENV"
             echo "SIGNING_KEY_ALIAS=$UPLOAD_KEY_ALIAS" >> "$GITHUB_ENV"
             echo "SIGNING_KEY_PASSWORD=$UPLOAD_KEY_PASSWORD" >> "$GITHUB_ENV"
             echo "SIGNING_KIND=upload" >> "$GITHUB_ENV"
-          else
-            PASS=$(openssl rand -hex 16)
-            keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/upload.jks" -storepass "$PASS" -keypass "$PASS" \
-              -alias ci-test -keyalg RSA -keysize 2048 -validity 1 -dname "CN=CI test key, O=not for release"
-            echo "SIGNING_STORE_PASSWORD=$PASS" >> "$GITHUB_ENV"
-            echo "SIGNING_KEY_ALIAS=ci-test" >> "$GITHUB_ENV"
-            echo "SIGNING_KEY_PASSWORD=$PASS" >> "$GITHUB_ENV"
-            echo "SIGNING_KIND=ci-test-only" >> "$GITHUB_ENV"
           fi
+
+      # Временен ключ (валиден 1 ден) — извън main или ако secrets липсват; проверява само,
+      # че подписаният build работи. Такъв AAB НЕ се качва в Google Play.
+      - name: Prepare signing key (temporary ci-test key)
+        if: env.SIGNING_KIND != 'upload'
+        run: |
+          PASS=$(openssl rand -hex 16)
+          keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/upload.jks" -storepass "$PASS" -keypass "$PASS" \
+            -alias ci-test -keyalg RSA -keysize 2048 -validity 1 -dname "CN=CI test key, O=not for release"
           echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
+          echo "SIGNING_STORE_PASSWORD=$PASS" >> "$GITHUB_ENV"
+          echo "SIGNING_KEY_ALIAS=ci-test" >> "$GITHUB_ENV"
+          echo "SIGNING_KEY_PASSWORD=$PASS" >> "$GITHUB_ENV"
+          echo "SIGNING_KIND=ci-test-only" >> "$GITHUB_ENV"
 
       # AAB за Google Play = prodPlay (без самообновяване); APK за директно
       # инсталиране = prodRelease (със самообновяване от GitHub Releases).

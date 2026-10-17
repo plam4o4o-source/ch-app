@@ -104,34 +104,45 @@ jobs:
           (cd shared && ../gradlew --no-daemon test)
           ./gradlew --no-daemon testProdDebugUnitTest lintProdRelease
 
-      - name: Prepare signing key
+      # Истинският upload ключ — само за издания от main (автоматичните през auto-release.yml,
+      # ръчните от main) и от tag-ове v*. Ръчно пускане от друг клон не получава secrets
+      # (стъпката не се изпълнява) и без allow_debug_key спира с грешка по-долу.
+      - name: Prepare signing key (upload key)
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
         env:
           UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
           UPLOAD_STORE_PASSWORD: ${{ secrets.UPLOAD_STORE_PASSWORD }}
           UPLOAD_KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
           UPLOAD_KEY_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
-          ALLOW_DEBUG_KEY: ${{ inputs.allow_debug_key }}
         run: |
           if [ -n "$UPLOAD_KEYSTORE_BASE64" ]; then
             echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+            echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
             echo "SIGNING_STORE_PASSWORD=$UPLOAD_STORE_PASSWORD" >> "$GITHUB_ENV"
             echo "SIGNING_KEY_ALIAS=$UPLOAD_KEY_ALIAS" >> "$GITHUB_ENV"
             echo "SIGNING_KEY_PASSWORD=$UPLOAD_KEY_PASSWORD" >> "$GITHUB_ENV"
             echo "SIGNING_KIND=upload-key" >> "$GITHUB_ENV"
-          elif [ "$ALLOW_DEBUG_KEY" = "true" ]; then
+          fi
+
+      - name: Prepare signing key (temporary key or stop)
+        if: env.SIGNING_KIND != 'upload-key'
+        env:
+          ALLOW_DEBUG_KEY: ${{ inputs.allow_debug_key }}
+        run: |
+          if [ "$ALLOW_DEBUG_KEY" = "true" ]; then
             # Само при изрично ръчно пускане с allow_debug_key: true (тест на pipeline-а).
             PASS=$(openssl rand -hex 16)
             keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/upload.jks" -storepass "$PASS" -keypass "$PASS" \
               -alias ci-test -keyalg RSA -keysize 2048 -validity 3650 -dname "CN=CI test key, O=not for Google Play"
+            echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
             echo "SIGNING_STORE_PASSWORD=$PASS" >> "$GITHUB_ENV"
             echo "SIGNING_KEY_ALIAS=ci-test" >> "$GITHUB_ENV"
             echo "SIGNING_KEY_PASSWORD=$PASS" >> "$GITHUB_ENV"
             echo "SIGNING_KIND=ci-test-key" >> "$GITHUB_ENV"
           else
-            echo "::error::Липсват signing secrets (UPLOAD_KEYSTORE_BASE64, UPLOAD_STORE_PASSWORD, UPLOAD_KEY_ALIAS, UPLOAD_KEY_PASSWORD). Издание с временен ключ не може да обнови инсталираните приложения и не става за Google Play. За тест пуснете ръчно с allow_debug_key: true."
+            echo "::error::Липсват signing secrets (UPLOAD_KEYSTORE_BASE64, UPLOAD_STORE_PASSWORD, UPLOAD_KEY_ALIAS, UPLOAD_KEY_PASSWORD) или изданието не е от main / tag v*. Издание с временен ключ не може да обнови инсталираните приложения и не става за Google Play. За тест пуснете ръчно с allow_debug_key: true."
             exit 1
           fi
-          echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
 
       - name: Build release
         run: |
