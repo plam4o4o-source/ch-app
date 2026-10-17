@@ -15,22 +15,26 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
-import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
+import com.google.zxing.oned.Code39Writer
+import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 
-/** Генериране на баркодове с ZXing (само кодиране, без камера и без мрежа). */
+/**
+ * Генериране на баркодове с ZXing (само кодиране, без камера и без мрежа). Пишещите
+ * класове са конкретните (не MultiFormatWriter) — R8 маха останалите формати от APK-а.
+ */
 object Barcodes {
     /**
      * InvLib печата читателските карти в Code 39 (виж barcode-labels.js) —
      * затова дигиталната карта ползва същия формат, за да я чете същият четец.
      */
     fun code39(value: String): BitMatrix? = runCatching {
-        MultiFormatWriter().encode(value.uppercase(), BarcodeFormat.CODE_39, 0, 1, mapOf(EncodeHintType.MARGIN to 0))
+        Code39Writer().encode(value.uppercase(), BarcodeFormat.CODE_39, 0, 1, mapOf(EncodeHintType.MARGIN to 0))
     }.getOrNull()
 
     fun qr(value: String): BitMatrix? = runCatching {
-        MultiFormatWriter().encode(
+        QRCodeWriter().encode(
             value, BarcodeFormat.QR_CODE, 0, 0,
             mapOf(EncodeHintType.MARGIN to 1, EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.M, EncodeHintType.CHARACTER_SET to "UTF-8"),
         )

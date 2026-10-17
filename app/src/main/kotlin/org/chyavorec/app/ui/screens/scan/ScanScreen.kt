@@ -7,6 +7,9 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import android.os.Build
+import android.os.SystemClock
+import android.hardware.display.DisplayManager
+import android.view.View
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -30,6 +33,9 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Canvas
@@ -86,7 +92,9 @@ import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.currentStateAsState
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -366,10 +374,13 @@ private fun PermissionMessage(
 }
 
 /**
- * CameraX преглед + анализ на кадрите със ZXing ([BarcodeDecoder]). Анализаторът
- * подава всеки разчетен баркод към [onCode]; докато [paused] е истина (отворен
- * лист с резултат), кадрите се пропускат. Изпълнителят се спира при напускане
- * на екрана.
+ * CameraX преглед + анализ на кадрите със ZXing ([BarcodeAnalyzer]). Анализаторът
+ * подава всеки разчетен баркод към [onCode]. Докато [paused] е истина (отворен лист
+ * с резултат) или екранът не е на преден план, анализаторът е откачен — камерата
+ * само показва образа. Изпълнителят се спира при напускане на екрана.
+ *
+ * Прегледът и анализът са 4:3 (едно и също зрително поле — нужно за изрязването до
+ * прозореца на визьора); анализът е около 1280×960 вместо най-голямата резолюция.
  */
 @Composable
 private fun CameraPreview(
@@ -382,76 +393,139 @@ private fun CameraPreview(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val previewView = remember { PreviewView(context).apply { implementationMode = PreviewView.ImplementationMode.COMPATIBLE } }
-    // Разпознаването е чист Kotlin/Java (ZXing) — без native библиотеки и модели.
-    val decoder = remember { BarcodeDecoder() }
     val executor = remember { Executors.newSingleThreadExecutor() }
     // Най-новите стойности за анализатора (той е създаден веднъж).
     val pausedRef = remember { arrayOf(paused) }
     pausedRef[0] = paused
     val onCodeRef = remember { arrayOf(onCode) }
     onCodeRef[0] = onCode
-    // Преизползван буфер за яркостния канал (без нов масив за всеки кадър).
-    val frameRef = remember { arrayOf(ByteArray(0)) }
+    // Разпознаването е чист Kotlin/Java (ZXing) — без native библиотеки и модели.
+    val analyzer = remember { BarcodeAnalyzer(BarcodeDecoder(), previewView, { pausedRef[0] }, { onCodeRef[0](it) }) }
     var camera by remember { mutableStateOf<Camera?>(null) }
+    var analysis by remember { mutableStateOf<ImageAnalysis?>(null) }
 
     DisposableEffect(lifecycleOwner) {
         var provider: ProcessCameraProvider? = null
+        var useCase: ImageAnalysis? = null
+        // Екранът сам обработва завъртането (configChanges): завъртането на анализа се
+        // обновява ръчно — по него кадърът се изрязва до прозореца на визьора.
+        val displays = context.getSystemService(DisplayManager::class.java)
+        val displayListener = object : DisplayManager.DisplayListener {
+            override fun onDisplayAdded(displayId: Int) = Unit
+            override fun onDisplayRemoved(displayId: Int) = Unit
+            override fun onDisplayChanged(displayId: Int) {
+                val display = previewView.display ?: return
+                if (display.displayId == displayId) useCase?.targetRotation = display.rotation
+            }
+        }
         val future = runCatching { ProcessCameraProvider.getInstance(context) }.getOrNull()
         if (future == null) onError() else future.addListener({
             try {
                 val p = future.get()
                 provider = p
-                val preview = Preview.Builder().build().also { it.surfaceProvider = previewView.surfaceProvider }
-                val analysis = ImageAnalysis.Builder()
+                val ratio = AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY
+                val preview = Preview.Builder()
+                    .setResolutionSelector(ResolutionSelector.Builder().setAspectRatioStrategy(ratio).build())
+                    .build()
+                    .also { it.surfaceProvider = previewView.surfaceProvider }
+                val imageAnalysis = ImageAnalysis.Builder()
+                    .setResolutionSelector(
+                        ResolutionSelector.Builder()
+                            .setAspectRatioStrategy(ratio)
+                            .setResolutionStrategy(
+                                ResolutionStrategy(
+                                    android.util.Size(1280, 960),
+                                    ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER,
+                                ),
+                            )
+                            .build(),
+                    )
+                    // Докато се разчита кадър, идващите се изхвърлят (остава само последният).
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
-                analysis.setAnalyzer(executor) { proxy -> analyze(proxy, decoder, frameRef, pausedRef, onCodeRef) }
+                previewView.display?.let { imageAnalysis.targetRotation = it.rotation }
+                useCase = imageAnalysis
                 p.unbindAll()
-                val cam = p.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, analysis)
+                val cam = p.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageAnalysis)
                 camera = cam
+                analysis = imageAnalysis
+                displays?.registerDisplayListener(displayListener, null)
                 onCamera(cam)
             } catch (_: Throwable) {
                 onError()
             }
         }, ContextCompat.getMainExecutor(context))
         onDispose {
+            runCatching { displays?.unregisterDisplayListener(displayListener) }
+            runCatching { useCase?.clearAnalyzer() }
             runCatching { provider?.unbindAll() }
             executor.shutdown()
         }
     }
     LaunchedEffect(torch, camera) { camera?.let { runCatching { it.cameraControl.enableTorch(torch) } } }
+    // Анализ само докато се търси и екранът е на преден план (не при отворен резултат,
+    // диалог или друго приложение отгоре) — иначе кадрите не стигат до анализатора.
+    val lifecycleState by lifecycleOwner.lifecycle.currentStateAsState()
+    val active = !paused && lifecycleState.isAtLeast(Lifecycle.State.RESUMED)
+    LaunchedEffect(analysis, active) {
+        val a = analysis ?: return@LaunchedEffect
+        runCatching { if (active) a.setAnalyzer(executor, analyzer) else a.clearAnalyzer() }
+    }
 
     AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
 }
 
 /**
- * Разчита един кадър: копира яркостния (Y) канал и го подава на [decoder].
- * Кадърът винаги се затваря (иначе CameraX спира да подава нови), а всяка
+ * Разчита кадрите: не повече от ~6 в секунда ([DecodeThrottle]), само областта на
+ * прозореца на визьора ([cropForWindow]) — копира се само нейната част от яркостния
+ * (Y) канал. Кадърът винаги се затваря (иначе CameraX спира да подава нови), а всяка
  * грешка при разчитането само пропуска кадъра.
  */
-private fun analyze(
-    proxy: ImageProxy,
-    decoder: BarcodeDecoder,
-    frameRef: Array<ByteArray>,
-    pausedRef: Array<Boolean>,
-    onCodeRef: Array<(String) -> Unit>,
-) {
-    try {
-        if (pausedRef[0]) return
+private class BarcodeAnalyzer(
+    private val decoder: BarcodeDecoder,
+    private val previewView: View,
+    private val paused: () -> Boolean,
+    private val onCode: (String) -> Unit,
+) : ImageAnalysis.Analyzer {
+    private val throttle = DecodeThrottle(intervalMs = 150, minGapMs = 50)
+    // Преизползван буфер за яркостния канал (без нов масив за всеки кадър).
+    private var frame = ByteArray(0)
+
+    override fun analyze(proxy: ImageProxy) {
+        try {
+            if (paused() || !throttle.tryStart(SystemClock.elapsedRealtime())) return
+            try {
+                val value = decode(proxy)
+                if (value != null && !paused()) onCode(value)
+            } finally {
+                throttle.finish(SystemClock.elapsedRealtime())
+            }
+        } catch (_: Throwable) {
+            // Повреден/непълен кадър — пропуска се; следващият идва веднага.
+        } finally {
+            proxy.close()
+        }
+    }
+
+    private fun decode(proxy: ImageProxy): String? {
         // YUV_420_888 (по подразбиране за ImageAnalysis): равнина 0 е Y, по 1 байт на пиксел.
-        val plane = proxy.planes.firstOrNull() ?: return
+        val plane = proxy.planes.firstOrNull() ?: return null
+        val width = proxy.width
+        val height = proxy.height
+        val rowStride = plane.rowStride
+        val rotation = proxy.imageInfo.rotationDegrees
+        // Размерът на изгледа (прост int, четенето от тази нишка е безопасно).
+        val area = cropForWindow(width, height, rotation, previewView.width, previewView.height)
+            ?: CropRect(0, 0, width, height)
+        // Само редовете на областта; последният — до десния ѝ край.
         val buffer = plane.buffer
-        buffer.rewind()
-        val size = buffer.remaining()
-        if (frameRef[0].size < size) frameRef[0] = ByteArray(size)
-        val frame = frameRef[0]
-        buffer.get(frame, 0, size)
-        val value = decoder.decode(frame, proxy.width, proxy.height, plane.rowStride, proxy.imageInfo.rotationDegrees)
-        if (value != null && !pausedRef[0]) onCodeRef[0](value)
-    } catch (_: Throwable) {
-        // Повреден/непълен кадър — пропуска се; следващият идва веднага.
-    } finally {
-        proxy.close()
+        val start = area.top * rowStride
+        val length = (area.height - 1) * rowStride + area.left + area.width
+        if (start + length > buffer.limit()) return null
+        buffer.position(start)
+        if (frame.size < length) frame = ByteArray(length)
+        buffer.get(frame, 0, length)
+        return decoder.decode(frame, width, area.height, rowStride, rotation, area.copy(top = 0))
     }
 }
 
@@ -517,10 +591,12 @@ private fun ViewfinderOverlay(mode: ViewfinderMode, modifier: Modifier = Modifie
     }
 
     Canvas(modifier) {
-        val w = size.width * 0.78f
-        val h = (w * 0.62f).coerceAtMost(size.height * 0.5f)
-        val left = (size.width - w) / 2f
-        val top = (size.height - h) / 2f - size.height * 0.06f
+        // Същият прозорец, до който анализаторът изрязва кадъра (scanWindow).
+        val area = scanWindow(size.width, size.height)
+        val w = area.width
+        val h = area.height
+        val left = area.left
+        val top = area.top
         val radius = 22.dp.toPx()
         val window = Path().apply { addRoundRect(RoundRect(left, top, left + w, top + h, CornerRadius(radius))) }
         clipPath(window, ClipOp.Difference) { drawRect(Color.Black.copy(alpha = 0.55f)) }

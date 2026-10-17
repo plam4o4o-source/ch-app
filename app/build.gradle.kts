@@ -172,6 +172,10 @@ android {
         // Само езиците на приложението: махат се преводите на библиотеките (Material,
         // CameraX…) за десетки други езици — по-малък APK/AAB.
         localeFilters += listOf("bg", "en")
+        // Списъкът с публични суфикси на OkHttp (~130 KB) трябва само за бисквитки и
+        // HttpUrl.topPrivateDomain() — приложението не ползва нито едното (няма CookieJar).
+        @Suppress("UnstableApiUsage")
+        ignoreAssetsPatterns += "!PublicSuffixDatabase.list"
     }
 
     // Езикът се сменя и в самото приложение (Android 8–12: util/AppLanguage) —
