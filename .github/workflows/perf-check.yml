@@ -33,9 +33,13 @@ jobs:
           echo "=== zxing classes kept"; grep -E '^com\.google\.zxing\.[^ ]* -> ' $M | awk '{print $1}' | sort | head -150
           echo "=== keep rules (merged config, without -keepattributes)"
           grep -nE '^-keep[a-z,]* ' out/r8-config.txt | grep -v -- '-keepattributes' | cut -c1-200 | head -400
-          echo "=== who pulls appcompat / camera-video"
-          ./gradlew --no-daemon -q :app:dependencyInsight --configuration prodReleaseRuntimeClasspath --dependency androidx.appcompat:appcompat | grep -vE '^\s*$' | head -40 || true
-          ./gradlew --no-daemon -q :app:dependencyInsight --configuration prodReleaseRuntimeClasspath --dependency androidx.camera:camera-video | grep -vE '^\s*$' | head -20 || true
+          echo "=== mapping: publicsuffix / appcompat / camera.video classes"
+          grep -ciE '^okhttp3\.internal\.publicsuffix' $M || true
+          grep -cE '^androidx\.appcompat\.[^ ]* -> ' $M || true
+          grep -cE '^androidx\.camera\.video\.[^ ]* -> ' $M || true
+          echo "=== total classes in mapping"; grep -cE '^[^ #].* -> .*:$' $M
+          echo "=== config: repackage/optimizations"; grep -nE '^-(repackageclasses|flattenpackagehierarchy|allowaccessmodification|optimizations|dontoptimize|dontobfuscate|keepattributes)' out/r8-config.txt | cut -c1-200
+          unzip -l app.apk | grep -i publicsuffix || echo "no PublicSuffix asset"
           echo "=== config sources"; grep -nE '^# The proguard configuration file for the following section is ' out/r8-config.txt | cut -c1-220 | head -80
       - name: Enable KVM
         run: |
