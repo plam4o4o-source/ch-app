@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.home
 
+import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.sharedElementKey
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -263,7 +264,8 @@ fun HomeScreen(navigate: (String) -> Unit) {
                         modifier = Modifier.animateItem().padding(top = 24.dp, bottom = 8.dp),
                     )
                 }
-                item("for-you") { BookRow(state.forYou, Modifier.animateItem()) { navigate(Routes.book(it.inv)) } }
+                // Подбрано по историята на читателя — без корици от Open Library (PersonalCovers).
+                item("for-you") { PersonalCovers { BookRow(state.forYou, Modifier.animateItem()) { navigate(Routes.book(it.inv)) } } }
             }
             state.shelves.forEach { (name, books) ->
                 item("shelf-$name") {

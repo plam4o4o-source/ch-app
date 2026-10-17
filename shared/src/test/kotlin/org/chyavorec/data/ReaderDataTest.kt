@@ -389,6 +389,76 @@ class ReaderDataTest {
         assertEquals(before, server.requestCount)
     }
 
+    // --- общ телефон: следващият читател не вижда данните на предишния ---
+
+    /** `/v1/me` според токена: AT → R1 (Иван), BT → R2 (Мария). */
+    private fun profilesByToken() {
+        routes["/v1/me"] = { MockResponse().setBody("""{"readerId":"R1","cardNumber":"0001","fullName":"Иван Петров"}""") }
+        routes["/v1/me/membership"] = { MockResponse().setResponseCode(404) }
+        routes["/v1/auth/login"] = {
+            MockResponse().setBody("""{"accessToken":"BT","refreshToken":"RT2","expiresIn":3600,"readerId":"R2"}""")
+        }
+    }
+
+    @Test fun processDeathWithoutRememberMeLeavesNothingForNextReader() = runTest {
+        profilesByToken()
+        routes["/v1/capabilities"] = { MockResponse().setBody(capsOld) }
+        val cache = InMemoryPayloadCache { clock.now().toEpochMilli() }
+        val c = client()
+        // Читател R1 без „запомни ме“: сесията е само в паметта, кешът — на диска.
+        val first = AuthRepository(c, MemStore(session), clock, cache)
+        assertEquals("Иван Петров", ok(ProfileRepository(c, first, cache, clock, c).profile(force = false)).data.fullName)
+
+        // Процесът е спрян → при старт няма сесия; restore() трие кеша на предишния читател.
+        val store = MemStore(null)
+        val auth = AuthRepository(c, store, clock, cache)
+        auth.restore()
+        val profile = ProfileRepository(c, auth, cache, clock, c)
+        assertNull(profile.cachedProfile())
+
+        // Следващият читател влиза: профилът е от мрежата (неговият), а не 12-часовият кеш.
+        routes["/v1/me"] = { MockResponse().setBody("""{"readerId":"R2","cardNumber":"0002","fullName":"Мария Иванова"}""") }
+        val before = count("/v1/me")
+        ok(auth.login("0002", "pass".toCharArray(), remember = false))
+        assertNull(profile.cachedProfile())
+        assertEquals("Мария Иванова", ok(profile.profile(force = false)).data.fullName)
+        assertEquals(before + 1, count("/v1/me"))
+    }
+
+    @Test fun loginClearsCacheOfPreviousReaderBeforeNewSession() = runTest {
+        profilesByToken()
+        routes["/v1/capabilities"] = { MockResponse().setBody(capsOld) }
+        val r = Repos(capsOld)
+        assertEquals("Иван Петров", ok(r.profile.profile(force = false)).data.fullName)
+        // Вход на друг читател без изход (напр. сесията е изтекла на сървъра).
+        routes["/v1/me"] = { MockResponse().setBody("""{"readerId":"R2","cardNumber":"0002","fullName":"Мария Иванова"}""") }
+        ok(r.auth.login("0002", "pass".toCharArray(), remember = true))
+        assertNull(r.profile.state.value)
+        assertNull(r.profile.cachedProfile())
+        assertEquals("Мария Иванова", ok(r.profile.profile(force = false)).data.fullName)
+    }
+
+    @Test fun cacheKeysAreBoundToTheReader() = runTest {
+        routes["/v1/me/all"] = { MockResponse().setBody(meAll) }
+        val cache = InMemoryPayloadCache { clock.now().toEpochMilli() }
+        routes["/v1/capabilities"] = { MockResponse().setBody(capsAll) }
+        val c = client()
+        val store = MemStore(session)
+        val auth = AuthRepository(c, store, clock, cache)
+        ok(ProfileRepository(c, auth, cache, clock, c).profile(force = false))
+        // Дори без изчистване (напр. неуспешно изтриване на файловете) друг читател не вижда кеша.
+        store.s = session.copy(accessToken = "BT", readerId = "R2")
+        val other = ProfileRepository(c, auth, cache, clock, c)
+        assertNull(other.cachedProfile())
+        assertNull(LibraryRepository(c, auth, cache, clock).cachedLoans())
+        // Без вход — нищо.
+        store.s = null
+        assertNull(ProfileRepository(c, auth, cache, clock, c).cachedProfile())
+        // Същият читател отново — кешът му е там.
+        store.s = session
+        assertEquals("Иван Петров", ProfileRepository(c, auth, cache, clock, c).cachedProfile()?.data?.fullName)
+    }
+
     // --- възможности ---
 
     @Test fun capabilitiesSingleInFlight() = runTest {

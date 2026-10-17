@@ -57,6 +57,7 @@ import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ScreenState
+import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.SectionHeader
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
@@ -145,84 +146,87 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
     val year by vm.selectedYear.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
 
-    Scaffold(topBar = { BackTopBar(stringResource(R.string.history_title), onBack) }) { padding ->
-        WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
-            Column {
-                DemoBanner(vm.isDemo)
-                val err = state.error
-                if (state.data == null && err != null && (err == AppError.Unauthorized || err is AppError.NotAvailable)) {
-                    NeedsLogin(err, onLogin)
-                    return@Column
-                }
-                SyncBanner(state.fromCache, state.syncedAt, state.refreshError)
-                StateContent(
-                    state = state,
-                    onRetry = { vm.refresh() },
-                    isEmpty = { it.isEmpty() },
-                    skeleton = { SkeletonList() },
-                    empty = { EmptyView(stringResource(R.string.history_empty), stringResource(R.string.history_empty_hint), icon = Icons.Outlined.AutoStories) },
-                    errorSubject = stringResource(R.string.subject_history),
-                ) { items ->
-                    // Групиране по година на заемане (най-новите първо); без дата — най-отдолу.
-                    // Пресмята се наново само при нови данни или друга избрана година (не при всяка рекомпозиция).
-                    val byYear = remember(items) { items.groupBy { it.year }.toSortedMap(compareByDescending<Int?> { it ?: Int.MIN_VALUE }) }
-                    val years = remember(byYear) { byYear.keys.toList() }
-                    val shown = remember(byYear, year) { if (year == null) byYear else byYear.filterKeys { it == year } }
-                    LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
-                        if (years.size > 1) {
-                            item("years") {
-                                LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    item {
-                                        FilterChip(year == null, onClick = { vm.selectedYear.value = null }, label = { Text(stringResource(R.string.history_year_all)) })
+    // Личен екран: корици само генерирани — заявки до Open Library по ISBN биха издали прочетеното.
+    PersonalCovers {
+        Scaffold(topBar = { BackTopBar(stringResource(R.string.history_title), onBack) }) { padding ->
+            WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+                Column {
+                    DemoBanner(vm.isDemo)
+                    val err = state.error
+                    if (state.data == null && err != null && (err == AppError.Unauthorized || err is AppError.NotAvailable)) {
+                        NeedsLogin(err, onLogin)
+                        return@Column
+                    }
+                    SyncBanner(state.fromCache, state.syncedAt, state.refreshError)
+                    StateContent(
+                        state = state,
+                        onRetry = { vm.refresh() },
+                        isEmpty = { it.isEmpty() },
+                        skeleton = { SkeletonList() },
+                        empty = { EmptyView(stringResource(R.string.history_empty), stringResource(R.string.history_empty_hint), icon = Icons.Outlined.AutoStories) },
+                        errorSubject = stringResource(R.string.subject_history),
+                    ) { items ->
+                        // Групиране по година на заемане (най-новите първо); без дата — най-отдолу.
+                        // Пресмята се наново само при нови данни или друга избрана година (не при всяка рекомпозиция).
+                        val byYear = remember(items) { items.groupBy { it.year }.toSortedMap(compareByDescending<Int?> { it ?: Int.MIN_VALUE }) }
+                        val years = remember(byYear) { byYear.keys.toList() }
+                        val shown = remember(byYear, year) { if (year == null) byYear else byYear.filterKeys { it == year } }
+                        LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
+                            if (years.size > 1) {
+                                item("years") {
+                                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        item {
+                                            FilterChip(year == null, onClick = { vm.selectedYear.value = null }, label = { Text(stringResource(R.string.history_year_all)) })
+                                        }
+                                        items(years) { y ->
+                                            FilterChip(
+                                                year == y,
+                                                onClick = {
+                                                    haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                                                    vm.selectedYear.value = if (year == y) null else y
+                                                },
+                                                label = { Text(y?.toString() ?: "—") },
+                                            )
+                                        }
                                     }
-                                    items(years) { y ->
-                                        FilterChip(
-                                            year == y,
-                                            onClick = {
-                                                haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                                                vm.selectedYear.value = if (year == y) null else y
-                                            },
-                                            label = { Text(y?.toString() ?: "—") },
+                                }
+                            }
+                            shown.forEach { (y, list) ->
+                                item("year-$y") {
+                                    Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp), verticalAlignment = Alignment.Bottom) {
+                                        Text(y?.toString() ?: "—", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f).semantics { heading() })
+                                        Text(
+                                            pluralStringResource(R.plurals.history_year_count, list.size, list.size),
+                                            style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
                                 }
-                            }
-                        }
-                        shown.forEach { (y, list) ->
-                            item("year-$y") {
-                                Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp), verticalAlignment = Alignment.Bottom) {
-                                    Text(y?.toString() ?: "—", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f).semantics { heading() })
-                                    Text(
-                                        pluralStringResource(R.plurals.history_year_count, list.size, list.size),
-                                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
+                                itemsIndexedKeyed(list) { i, item ->
+                                    HistoryRow(item, catalog[item.inv], onOpen = { inv -> navigate(Routes.book(inv)) }, modifier = Modifier.animateEntrance(i))
                                 }
                             }
-                            itemsIndexedKeyed(list) { i, item ->
-                                HistoryRow(item, catalog[item.inv], onOpen = { inv -> navigate(Routes.book(inv)) }, modifier = Modifier.animateEntrance(i))
-                            }
-                        }
-                        item("source") {
-                            if (!state.fromCache) SyncStamp(state.syncedAt)
-                            Text(
-                                stringResource(R.string.history_source_note),
-                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp),
-                            )
-                        }
-                        if (recs.isNotEmpty()) {
-                            item("similar-h") {
-                                SectionHeader(
-                                    stringResource(R.string.history_similar), label = stringResource(R.string.label_library),
-                                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+                            item("source") {
+                                if (!state.fromCache) SyncStamp(state.syncedAt)
+                                Text(
+                                    stringResource(R.string.history_source_note),
+                                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp),
                                 )
                             }
-                            item("similar") { BookRow(recs) { navigate(Routes.book(it.inv)) } }
-                            item("similar-note") {
-                                Row(Modifier.padding(horizontal = 20.dp, vertical = 10.dp), verticalAlignment = Alignment.Top) {
-                                    Icon(Icons.Outlined.Info, null, modifier = Modifier.size(16.dp).padding(top = 1.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                                    Spacer(Modifier.width(8.dp))
-                                    Text(stringResource(R.string.history_similar_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            if (recs.isNotEmpty()) {
+                                item("similar-h") {
+                                    SectionHeader(
+                                        stringResource(R.string.history_similar), label = stringResource(R.string.label_library),
+                                        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+                                    )
+                                }
+                                item("similar") { BookRow(recs) { navigate(Routes.book(it.inv)) } }
+                                item("similar-note") {
+                                    Row(Modifier.padding(horizontal = 20.dp, vertical = 10.dp), verticalAlignment = Alignment.Top) {
+                                        Icon(Icons.Outlined.Info, null, modifier = Modifier.size(16.dp).padding(top = 1.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        Spacer(Modifier.width(8.dp))
+                                        Text(stringResource(R.string.history_similar_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    }
                                 }
                             }
                         }

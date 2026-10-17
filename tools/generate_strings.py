@@ -595,9 +595,11 @@ PRIVACY_BG = """# Кой обработва данните
 
 # Какви данни се обработват
 
-Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели. Кориците на книгите се зареждат по ISBN от covers.openlibrary.org (Internet Archive) — този сървър вижда IP адреса и ISBN-а, нищо друго; изключва се от Настройки → Данни → „Корици от интернет“.
+Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели. Кориците на книгите в публичния каталог се зареждат по ISBN от covers.openlibrary.org (Internet Archive) — този сървър вижда IP адреса и ISBN-а, нищо друго; изключва се от Настройки → Данни → „Корици от интернет“. В личните екрани (история на четенето, заети книги, „За теб“, картата) корици от интернет не се зареждат никога — там кориците се рисуват на телефона.
 
 Съобщения от читалището: приложението проверява публичния файл със съобщения на chyavorec.org най-често веднъж на час (по-рядко — до веднъж на 6 часа, докато няма нови съобщения) и спира проверките, ако не е отваряно 14 дни. Съобщенията „само за членове“ се показват, ако си въвел читателска карта или си влязъл — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
+
+Лични съобщения от библиотеката: ако си влязъл и сървърът на читалището го поддържа, библиотеката може да ти изпрати лично съобщение (напр. за запазена книга). То идва по HTTPS от сървъра на читалището, пази се шифровано на телефона и се изтрива при изход; отбелязването „прочетено“ се изпраща към същия сървър. Известието за ново лично съобщение се подготвя на телефона и съдържанието му е скрито на заключен екран.
 
 Обновления: версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от Настройки → Обновления. Версията от Google Play се обновява от Google Play.
 
@@ -613,11 +615,11 @@ PRIVACY_BG = """# Кой обработва данните
 
 # Известия
 
-Известията се подготвят на устройството (периодична проверка за нови публикации и срокове). Не се използват сървъри за push известия.
+Известията се подготвят на устройството (периодична проверка за нови публикации, съобщения и срокове). Не се използват сървъри за push известия.
 
 # Твоите права
 
-Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията и читателските данни; „Премахни“ изтрива въведената карта; „Изчисти кеша“ изтрива публичното съдържание; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
+Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията, читателските данни, известията за заемания и лични съобщения, напомнянията за срокове и кешираните изображения (без „Запомни ме на това устройство“ същото става и при следващото стартиране, ако приложението е било затворено); „Премахни“ изтрива въведената карта; „Изчисти кеша“ изтрива публичното съдържание; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
 
 # Деца
 
@@ -637,9 +639,11 @@ The app collects as little data as possible. It has no ads, no behavioural analy
 
 # What data is processed
 
-Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data. Book covers are fetched by ISBN from covers.openlibrary.org (Internet Archive) — that server sees the IP address and the ISBN, nothing else; turn it off in Settings → Data → “Covers from the internet”.
+Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data. Book covers in the public catalogue are fetched by ISBN from covers.openlibrary.org (Internet Archive) — that server sees the IP address and the ISBN, nothing else; turn it off in Settings → Data → “Covers from the internet”. Personal screens (reading history, borrowed books, “For you”, the card) never load covers from the internet — there covers are drawn on the phone.
 
 Messages from the centre: the app checks the public messages file on chyavorec.org at most once an hour (less often — down to once every 6 hours — while there are no new messages) and stops checking if it has not been opened for 14 days. Members-only messages are shown if you have entered your library card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
+
+Personal messages from the library: if you are signed in and the centre’s server supports it, the library can send you a personal message (e.g. about a reserved book). It comes over HTTPS from the centre’s server, is kept encrypted on the phone and is deleted when you sign out; marking it as read is sent to the same server. The notification for a new personal message is prepared on the phone and its content is hidden on the lock screen.
 
 Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 
@@ -655,11 +659,11 @@ Home-screen widget: if you add it, it shows only the number of books due and the
 
 # Notifications
 
-Notifications are prepared on the device (periodic checks for new posts and due dates). No push notification servers are used.
+Notifications are prepared on the device (periodic checks for new posts, messages and due dates). No push notification servers are used.
 
 # Your rights
 
-You can delete the data on the device at any time: “Sign out” deletes the session and reader data; “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
+You can delete the data on the device at any time: “Sign out” deletes the session, reader data, loan and personal-message notifications, due-date reminders and cached images (without “Keep me signed in on this device” the same happens at the next start if the app was closed); “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
 
 # Children
 

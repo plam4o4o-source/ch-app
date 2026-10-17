@@ -11,6 +11,7 @@ import org.chyavorec.domain.model.CatalogSnapshot
 import org.chyavorec.domain.service.CatalogFetch
 import org.chyavorec.domain.service.CatalogService
 import org.chyavorec.domain.service.CatalogValidators
+import java.time.LocalDate
 
 /** SHA-256 (hex) на суровия текст на каталога (UTF-8) — за откриване на непроменено съдържание. */
 internal fun katalogHash(text: String): String = katalogHash(text.toByteArray(Charsets.UTF_8))
@@ -35,8 +36,10 @@ class GitHubCatalogService(
     private val work: CoroutineDispatcher = Dispatchers.Default,
     /**
      * Старото място (клон `main`), където InvLib обновява файла най-много веднъж на ден.
-     * Ползва се САМО ако основният адрес отговори 404 (клонът `katalog` още не е създаден
-     * от по-стар InvLib) — иначе мрежова грешка би върнала по-стар каталог върху по-новия.
+     * Ползва се САМО ако ВСИЧКИ основни адреси отговорят 404 (клонът `katalog` още не е
+     * създаден от по-стар InvLib) — иначе мрежова грешка (или 404 само от едната CDN) би
+     * върнала по-стар каталог върху по-новия. И тогава копие, по-старо от кешираното
+     * ([CatalogValidators.generatedOn]), не се приема.
      */
     private val legacyUrls: List<String> = emptyList(),
 ) : CatalogService {
@@ -67,13 +70,26 @@ class GitHubCatalogService(
             httpCacheEvicted = true
             (urls + legacyUrls).forEach { http.evictFromHttpCache(it) }
         }
-        val (primary, notFound) = fetchFrom(urls, known)
-        return if (primary is Outcome.Failure && notFound && legacyUrls.isNotEmpty()) fetchFrom(legacyUrls, known).first else primary
+        val (primary, allNotFound) = fetchFrom(urls, known)
+        if (primary !is Outcome.Failure || !allNotFound || legacyUrls.isEmpty()) return primary
+        val legacy = fetchFrom(legacyUrls, known).first
+        val changed = (legacy as? Outcome.Success)?.value as? CatalogFetch.Changed ?: return legacy
+        // По-старо копие от `main` не заменя по-новото кеширано — остава кешът (с грешката на основния адрес).
+        return if (isOlder(changed.snapshot.generatedOn, known?.generatedOn)) primary else legacy
     }
 
-    /** Резултатът и дали някой от адресите е отговорил 404 (клонът/файлът липсва). */
+    /** [candidate] е по-стара дата от [cached] (или неразчетима при известна [cached]). */
+    private fun isOlder(candidate: String, cached: String?): Boolean {
+        val known = cached?.let(::isoDate) ?: return false
+        val date = isoDate(candidate) ?: return true
+        return date.isBefore(known)
+    }
+
+    private fun isoDate(text: String): LocalDate? = runCatching { LocalDate.parse(text.trim().take(10)) }.getOrNull()
+
+    /** Резултатът и дали ВСИЧКИ адреси са отговорили 404 (клонът/файлът липсва навсякъде). */
     private suspend fun fetchFrom(list: List<String>, known: CatalogValidators?): Pair<Outcome<CatalogFetch>, Boolean> {
-        var notFound = false
+        var notFound = 0
         var lastError: AppError = AppError.Network
         for (url in list) {
             val headers = buildMap {
@@ -102,10 +118,10 @@ class GitHubCatalogService(
                 }
                 is Outcome.Failure -> {
                     lastError = result.error
-                    if (result.error == AppError.NotFound) notFound = true
+                    if (result.error == AppError.NotFound) notFound++
                 }
             }
         }
-        return Outcome.Failure(lastError) to notFound
+        return Outcome.Failure(lastError) to (list.isNotEmpty() && notFound == list.size)
     }
 }

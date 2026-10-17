@@ -1,6 +1,7 @@
 package org.chyavorec.app.notifications
 
 import android.Manifest
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -53,6 +54,8 @@ object NotificationIds {
 
 object Notifier {
     const val EXTRA_DEEP_LINK = "deep_link"
+    /** В известието: лично съдържание на влезлия читател (срок на заемане, лично съобщение). */
+    private const val EXTRA_PERSONAL = "org.chyavorec.personal"
 
     fun createChannels(context: Context) {
         val nm = context.getSystemService(NotificationManager::class.java) ?: return
@@ -90,6 +93,7 @@ object Notifier {
         context.getSystemService(NotificationManager::class.java)?.let { nm ->
             if (nm.getNotificationChannel(channel.id) == null) createChannels(context)
         }
+        val personal = channel == Channel.LOANS || sensitive
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             deepLink?.let { putExtra(EXTRA_DEEP_LINK, it) }
@@ -109,11 +113,33 @@ object Notifier {
             // само подменя известието — без втори звук/вибрация.
             .setOnlyAlertOnce(channel == Channel.MESSAGES || channel == Channel.MESSAGES_IMPORTANT)
             // Заглавията на заети книги са лична информация — скрити на заключен екран.
-            .setVisibility(if (channel == Channel.LOANS || sensitive) NotificationCompat.VISIBILITY_PRIVATE else NotificationCompat.VISIBILITY_PUBLIC)
+            .setVisibility(if (personal) NotificationCompat.VISIBILITY_PRIVATE else NotificationCompat.VISIBILITY_PUBLIC)
+            // По този белег известията на читателя се махат при изход ([cancelPersonal]).
+            .apply { if (personal) addExtras(android.os.Bundle().apply { putBoolean(EXTRA_PERSONAL, true) }) }
             .build()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
         ) return
         runCatching { NotificationManagerCompat.from(context).notify(id, notification) }
     }
+
+    /**
+     * При изход (или смяна на читателя): премахва показаните известия с лично съдържание —
+     * за заемания (каналът LOANS) и личните съобщения от библиотеката. Общите (новини,
+     * събития, съобщения от сайта, обновяване) остават.
+     */
+    fun cancelPersonal(context: Context) {
+        val nm = context.getSystemService(NotificationManager::class.java) ?: return
+        runCatching {
+            nm.activeNotifications.filter { isPersonal(it.notification) }.forEach { nm.cancel(it.tag, it.id) }
+        }
+    }
+
+    /** Личните съобщения отпреди белега [EXTRA_PERSONAL] се познават по скритото съдържание (VISIBILITY_PRIVATE). */
+    internal fun isPersonal(n: Notification): Boolean =
+        n.channelId == Channel.LOANS.id ||
+            n.extras?.getBoolean(EXTRA_PERSONAL) == true ||
+            (n.channelId in MESSAGE_CHANNELS && n.visibility == Notification.VISIBILITY_PRIVATE)
+
+    private val MESSAGE_CHANNELS = setOf(Channel.MESSAGES.id, Channel.MESSAGES_IMPORTANT.id)
 }

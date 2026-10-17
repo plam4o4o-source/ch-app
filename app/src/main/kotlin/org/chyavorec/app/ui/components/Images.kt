@@ -20,6 +20,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -133,9 +134,20 @@ fun BrandedImageFallback(modifier: Modifier = Modifier) {
 
 /**
  * Дали кориците може да се теглят от covers.openlibrary.org (настройка „Корици от
- * интернет“). Подава се от корена; по подразбиране включено.
+ * интернет“). Подава се от корена; по подразбиране включено. Личните екрани го изключват
+ * ([PersonalCovers]).
  */
 val LocalOnlineCovers = staticCompositionLocalOf { true }
+
+/**
+ * Личен екран (история, заемания, „За теб“, „Моето четене“, картата): корици само генерирани,
+ * без нито една заявка до Open Library — иначе по ISBN-ите в заявките външен сървър би видял
+ * какво чете читателят. Важи независимо от настройката; публичният каталог не се променя.
+ */
+@Composable
+fun PersonalCovers(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalOnlineCovers provides false, content = content)
+}
 
 /** ISBN само с цифри (и X) или `null`, ако не е 10- или 13-знаков. */
 private fun cleanIsbn(isbn: String): String? {

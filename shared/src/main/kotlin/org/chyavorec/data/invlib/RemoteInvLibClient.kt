@@ -327,15 +327,25 @@ class RemoteInvLibClient(
         )
     }
 
+    /**
+     * С [session] — Bearer токен и `Cache-Control: no-store`: личните отговори (профил,
+     * заемания, история, съобщения) не бива да попадат в нешифрован HTTP кеш по пътя
+     * (нито в този на OkHttp, ако клиентът има такъв).
+     */
     private fun Request.Builder.auth(session: AuthSession?): Request.Builder =
-        apply { if (session != null) header("Authorization", "Bearer " + session.accessToken) }
-            .header("Accept", "application/json")
+        apply {
+            if (session != null) {
+                header("Authorization", "Bearer " + session.accessToken)
+                header("Cache-Control", "no-store")
+            }
+        }.header("Accept", "application/json")
 
     private fun get(path: String, session: AuthSession?): Request =
         Request.Builder().url(api + path).get().auth(session).build()
 
+    /** POST-овете (и входът, и подновяването — отговорът им съдържа токени) също са `no-store`. */
     private fun post(path: String, session: AuthSession?, body: RequestBody): Request =
-        Request.Builder().url(api + path).post(body).auth(session).build()
+        Request.Builder().url(api + path).post(body).auth(session).header("Cache-Control", "no-store").build()
 
     private suspend fun <T> send(request: Request, serializer: KSerializer<T>): Outcome<T> =
         when (val r = http.execute(request)) {

@@ -148,9 +148,23 @@ class CachingTest {
         assertEquals(Hashing.sha256Hex(raw.toByteArray()), svc.lastKnown?.hash)
         assertEquals("\"e1\"", svc.lastKnown?.etag)
         assertEquals("u", svc.lastKnown?.etagUrl)
+        // Датата на кеширания каталог — за да не го замени по-старо копие от `main`.
+        assertEquals("2026-09-19", svc.lastKnown?.generatedOn)
         assertFalse(r.fromCache)
         assertEquals(clock.now(), r.syncedAt)
         assertNull(restarted.inMemory(), "началният екран не строи индекса за търсене")
+    }
+
+    @Test fun metaWithoutDateFromOlderVersionUsesSummaryDate() = runTest {
+        val cache = InMemoryPayloadCache { clock.now().toEpochMilli() }
+        val svc = ConditionalCatalog()
+        CatalogRepository(svc, cache, clock).catalog(force = true)
+        // Запис от по-стара версия: хеш и ETag, без дата.
+        cache.write(CatalogRepository.META_KEY, """{"hash":"${Hashing.sha256Hex(raw.toByteArray())}","etag":"\"e1\"","etagUrl":"u"}""")
+        clock.advanceSeconds(3600)
+        CatalogRepository(svc, cache, clock).refreshHomeSummary(force = false)
+        assertEquals("2026-09-19", svc.lastKnown?.generatedOn)
+        assertTrue(cache.read(CatalogRepository.META_KEY)!!.text.contains("2026-09-19"))
     }
 
     @Test fun homeSummaryRoundTripWithoutEngine() = runTest {

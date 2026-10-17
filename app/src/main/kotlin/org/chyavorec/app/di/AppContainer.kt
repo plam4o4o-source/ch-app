@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import coil3.SingletonImageLoader
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.data.local.AppDatabase
 import org.chyavorec.app.data.local.CatalogDatabase
@@ -31,6 +32,7 @@ import org.chyavorec.app.data.security.KeystoreBytesCipher
 import org.chyavorec.app.network.ConnectivityObserver
 import org.chyavorec.app.network.NetworkModule
 import org.chyavorec.app.notifications.LoanReminderScheduler
+import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.notifications.ReminderScheduler
 import org.chyavorec.app.update.AppUpdater
 import org.chyavorec.app.widget.ChitalishteWidget
@@ -90,12 +92,17 @@ class AppContainer(
     private val userAgent = "ChitalishteYavorec-Android/${config.versionName} (Android ${Build.VERSION.RELEASE})"
     val okHttp by lazy { okHttpOverride ?: NetworkModule.okHttp(context, userAgent) }
     val http by lazy { HttpFetcher(okHttp, userAgent) }
+    /**
+     * Читателският API (мостът към InvLib) — собствен клиент без HTTP кеш: личните отговори
+     * (профил, заемания, история, съобщения) не се пазят нешифровани в cacheDir/http.
+     * Връзките и настройките се споделят с [okHttp].
+     */
+    private val readerHttp by lazy { HttpFetcher(okHttp.newBuilder().cache(null).build(), userAgent) }
     val connectivity by lazy { ConnectivityObserver(context) }
 
     val settings by lazy { SettingsStore(context) }
-    val database: AppDatabase by lazy {
-        Room.databaseBuilder(context, AppDatabase::class.java, "chitalishte.db").fallbackToDestructiveMigration(true).build()
-    }
+    /** Потребителските данни (любими, напомняния) — с миграции, никога с изтриване ([AppDatabase.create]). */
+    val database: AppDatabase by lazy { AppDatabase.create(context) }
     /**
      * Пълнотекстовият индекс на каталога (FTS4) — отделна база-кеш, която се попълва
      * отново от katalog.json; отваря се едва при първото търсене в каталога.
@@ -132,7 +139,7 @@ class AppContainer(
             demo != null -> demo
             config.inflibConfigured -> {
                 // Възможностите (не са лични) се помнят 24 ч в публичния кеш.
-                val remote = RemoteInvLibClient(http, config.inflibApiUrl, clock, Build.MODEL ?: "Android", publicCache)
+                val remote = RemoteInvLibClient(readerHttp, config.inflibApiUrl, clock, Build.MODEL ?: "Android", publicCache)
                 ReaderServices(remote, remote, remote, isDemo = false)
             }
             else -> {
@@ -198,10 +205,13 @@ class AppContainer(
 
     /**
      * При ВСЕКИ преход от вход към изход — ръчен изход или принудителен (отказано
-     * подновяване на сесията) — изчиства личните следи (история на търсенето,
-     * известия и напомняния за заемания, следите от личните съобщения). Извиква се веднъж от Application.
+     * подновяване на сесията) — изчиства личните следи ([clearReaderTraces]). Също при старт
+     * без сесия, ако предишният процес е имал вход („не ме помни“ и спрян процес — следващият
+     * на същия телефон не бива да види нищо), и при вход на друг читател без изход между двата.
+     * Извиква се веднъж от Application.
      */
     fun watchSignOut() {
+        appScope.launch { runCatching { evictLegacyReaderHttpCache() } }
         appScope.launch {
             var wasSignedIn = false
             var previous: AuthState? = null
@@ -209,23 +219,71 @@ class AppContainer(
                 val before = previous
                 previous = s
                 if (s is AuthState.SignedIn) {
+                    if (before is AuthState.SignedIn && before.readerId != s.readerId) clearReaderTraces()
                     // Само при истински вход (SignedOut → SignedIn). Възстановената сесия при
                     // студен старт (Unknown → SignedIn) не променя показаното в уиджета.
                     if (before is AuthState.SignedOut) ChitalishteWidget.refresh(context)
                     wasSignedIn = true
-                } else if (s is AuthState.SignedOut && wasSignedIn) {
+                    runCatching { settings.setReaderTraces(true) }
+                } else if (s is AuthState.SignedOut) {
+                    val traces = wasSignedIn || runCatching { settings.readerTraces() }.getOrDefault(false)
                     wasSignedIn = false
-                    // Личните съобщения изчезват веднага и от паметта (кешът им е в readerCache).
-                    runCatching { messages.clearPersonal() }
-                    runCatching { settings.clearPersonal() }
-                    // Напомнянията за срок на предишния читател — отменени, списъкът му — забравен.
-                    storedLoans.value = null
-                    runCatching { loanReminders.cancelAll() }
-                    // Уиджетът не бива да показва заглавия на книги след изход.
-                    ChitalishteWidget.refresh(context)
+                    if (traces) clearReaderTraces()
                 }
             }
         }
+    }
+
+    /**
+     * Личните следи на излезлия читател: съобщенията в паметта, историята на търсенето и
+     * следите от известията (DataStore), напомнянията за срок, показаните лични известия,
+     * изображенията (снимка в профила, корици на заети книги) и отговорите на моста в HTTP
+     * кеша. Шифрованият читателски кеш и сесията се трият в [AuthRepository].
+     */
+    private suspend fun clearReaderTraces() {
+        // Личните съобщения изчезват веднага и от паметта (кешът им е в readerCache).
+        runCatching { messages.clearPersonal() }
+        runCatching { settings.clearPersonal() }
+        // Напомнянията за срок на предишния читател — отменени, списъкът му — забравен.
+        storedLoans.value = null
+        runCatching { loanReminders.cancelAll() }
+        // Вече показаните известия за заемания и лични съобщения.
+        runCatching { Notifier.cancelPersonal(context) }
+        clearImageCaches()
+        runCatching { evictReaderApiFromHttpCache() }
+        runCatching { settings.setReaderTraces(false) }
+        // Уиджетът не бива да показва заглавия на книги след изход.
+        runCatching { ChitalishteWidget.refresh(context) }
+    }
+
+    /**
+     * Еднократно: отговорите на моста, кеширани от по-стари версии (преди собствения клиент без
+     * кеш и `no-store`), се изтриват от HTTP кеша на [okHttp].
+     */
+    private suspend fun evictLegacyReaderHttpCache() {
+        if (settings.readerHttpCacheEvicted()) return
+        evictReaderApiFromHttpCache()
+        settings.setReaderHttpCacheEvicted()
+    }
+
+    /** Изтрива от HTTP кеша на [okHttp] всички записи за адреса на моста (InvLib API). */
+    private suspend fun evictReaderApiFromHttpCache() = withContext(Dispatchers.IO) {
+        val host = config.inflibApiUrl.toHttpUrlOrNull()?.host ?: return@withContext
+        val cache = okHttp.cache ?: return@withContext
+        val urls = cache.urls()
+        while (urls.hasNext()) {
+            if (urls.next().toHttpUrlOrNull()?.host == host) urls.remove()
+        }
+    }
+
+    /** Кешът на изображенията (Coil) — паметта и дискът. През Coil, а не с изтриване на папката: дисковият кеш е отворен. */
+    private suspend fun clearImageCaches() = withContext(Dispatchers.IO) {
+        runCatching {
+            val images = SingletonImageLoader.get(context)
+            images.memoryCache?.clear()
+            images.diskCache?.clear()
+        }
+        Unit
     }
 
     /**
@@ -298,12 +356,6 @@ class AppContainer(
     suspend fun clearPublicCache() = withContext(Dispatchers.IO) {
         publicCache.clear()
         runCatching { okHttp.cache?.evictAll() }
-        // През Coil, а не с изтриване на папката: дисковият кеш е отворен (журнал, текущи записи).
-        runCatching {
-            val images = SingletonImageLoader.get(context)
-            images.memoryCache?.clear()
-            images.diskCache?.clear()
-        }
-        Unit
+        clearImageCaches()
     }
 }
