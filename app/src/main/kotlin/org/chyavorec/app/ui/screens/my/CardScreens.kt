@@ -105,6 +105,7 @@ import org.chyavorec.app.ui.components.LinearBarcode
 import org.chyavorec.app.ui.components.MembershipPill
 import org.chyavorec.app.ui.components.OrnamentFrame
 import org.chyavorec.app.ui.components.QrCodeView
+import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.SyncStamp
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
@@ -314,6 +315,8 @@ fun LibraryCardBack(data: CardData, modifier: Modifier = Modifier, large: Boolea
 
 @Composable
 fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit) {
+    // Баркодът на картата не бива да остава в „Скорошни“ и в снимки на екрана.
+    SecureScreen()
     val vm = accountViewModel()
     val data = rememberCardData(vm)
     val auth by vm.authState.collectAsStateWithLifecycle()
@@ -429,6 +432,7 @@ private fun SelfCardForm(
  */
 @Composable
 fun CardFullscreen(onClose: () -> Unit) {
+    SecureScreen()
     val vm = accountViewModel()
     val data = rememberCardData(vm)
     val context = LocalContext.current
