@@ -24,9 +24,15 @@ class UpdateCheckerTest {
     private val manifestUrl = "https://github.com/plam4o4o-source/ch-app/releases/latest/download/update.json"
     private val sha = "a".repeat(64)
 
-    private fun manifest(code: Int = 5, apk: String = "https://github.com/plam4o4o-source/ch-app/releases/download/v1.1.0/app.apk", minSdk: Int = 26, hash: String = sha) = """
+    private fun manifest(
+        code: Int = 5,
+        apk: String = "https://github.com/plam4o4o-source/ch-app/releases/download/v1.1.0/app.apk",
+        minSdk: Int = 26,
+        hash: String = sha,
+        extra: String = "",
+    ) = """
         {"versionCode": $code, "versionName": "1.1.0", "apkUrl": "$apk", "sha256": "$hash",
-         "size": 12345, "minSdk": $minSdk, "notes": "Нова версия", "releaseUrl": "https://github.com/plam4o4o-source/ch-app/releases/tag/v1.1.0", "extra": 1}
+         "size": 12345, "minSdk": $minSdk, "notes": "Нова версия", "releaseUrl": "https://github.com/plam4o4o-source/ch-app/releases/tag/v1.1.0", "extra": 1$extra}
     """.trimIndent()
 
     @Test fun parsesValidManifest() {
@@ -68,6 +74,26 @@ class UpdateCheckerTest {
         assertFalse(UpdateChecker.isNewer(info, installedVersionCode = 4, sdkInt = 29))
     }
 
+    @Test fun pausedFlagIsTolerant() {
+        fun paused(extra: String) = (UpdateManifestParser.parse(manifest(extra = extra), manifestUrl) as Outcome.Success).value.paused
+        // Липсва → не е спряно (всички досегашни update.json).
+        assertFalse(paused(""))
+        assertTrue(paused(""", "paused": true"""))
+        assertTrue(paused(""", "paused": "true""""))
+        assertTrue(paused(""", "paused": 1"""))
+        assertFalse(paused(""", "paused": false"""))
+        assertFalse(paused(""", "paused": null"""))
+        assertFalse(paused(""", "paused": "no""""))
+        // Непознати полета (бележка към спирането, обект) не пречат.
+        assertTrue(paused(""", "paused": true, "pausedReason": "срив при вход", "future": {"a": [1]}"""))
+    }
+
+    @Test fun pausedVersionIsNotOffered() {
+        val info = (UpdateManifestParser.parse(manifest(code = 9, extra = ""","paused":true"""), manifestUrl) as Outcome.Success).value
+        assertFalse(UpdateChecker.isNewer(info, installedVersionCode = 4, sdkInt = 34))
+        assertTrue(UpdateChecker.isNewer(info.copy(paused = false), installedVersionCode = 4, sdkInt = 34))
+    }
+
     @Test fun checksum() {
         assertEquals(
             "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -92,6 +118,12 @@ class UpdateCheckerTest {
         val info = (UpdateChecker(http, url).check(installedVersionCode = 3, sdkInt = 34) as Outcome.Success).value
         assertEquals(7, info?.versionCode)
         assertEquals("no-cache", server.takeRequest().getHeader("Cache-Control"))
+    }
+
+    @Test fun checkerPausedReportsNoUpdate() = runTest {
+        val url = server.url("/update.json").toString()
+        server.enqueue(MockResponse().setBody(manifest(code = 7, apk = server.url("/a.apk").toString(), extra = ""","paused":true""")))
+        assertNull((UpdateChecker(http, url).check(3, 34) as Outcome.Success).value)
     }
 
     @Test fun checkerUpToDate() = runTest {

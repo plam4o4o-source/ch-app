@@ -1,0 +1,108 @@
+name: Update control
+
+# Аварийно спиране / пускане на самообновяването на APK-тата извън Google Play.
+# Сваля update.json от изданието, слага (pause) или маха (resume) "paused": true и
+# го качва обратно (gh release upload --clobber). Приложението чете
+# /releases/latest/download/update.json и при "paused": true не предлага и не
+# тегли версията. С dry_run само показва резултата. Подробно: docs/RELEASE.md.
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "pause = спри обновяванията, resume = пусни ги отново"
+        type: choice
+        options: [pause, resume]
+        required: true
+      tag:
+        description: "Издание (напр. v1.2.7); latest = последното публикувано (него чете приложението)"
+        required: false
+        default: latest
+      reason:
+        description: "Защо (само за хората; записва се като pausedReason, приложението не го чете)"
+        required: false
+        default: ""
+      dry_run:
+        description: "Само покажи новия update.json, без да го качваш"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-control
+  cancel-in-progress: false
+
+jobs:
+  update-control:
+    # Само от main: изданията и update.json се управляват оттам.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      ACTION: ${{ inputs.action }}
+      TAG_INPUT: ${{ inputs.tag }}
+      REASON: ${{ inputs.reason }}
+      DRY_RUN: ${{ inputs.dry_run }}
+    steps:
+      - name: Resolve release
+        run: |
+          LATEST=$(gh api "repos/$REPO/releases/latest" --jq .tag_name)
+          TAG="${TAG_INPUT:-latest}"
+          if [ "$TAG" = "latest" ]; then TAG="$LATEST"; fi
+          if ! printf '%s' "$TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Невалиден tag: $TAG (очаква се vX.Y.Z или latest)"
+            exit 1
+          fi
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "Издание: $TAG (последното публикувано: $LATEST)"
+          if [ "$TAG" != "$LATEST" ]; then
+            echo "::warning::$TAG не е последното публикувано издание ($LATEST) — приложението чете само update.json на $LATEST."
+          fi
+
+      - name: Download update.json
+        run: |
+          mkdir -p work
+          gh release download "$TAG" --repo "$REPO" --pattern update.json --dir work --clobber
+          echo "Сега:"
+          cat work/update.json; echo
+
+      - name: Edit update.json
+        run: |
+          python3 - <<'PY'
+          import json, os, datetime
+          path = "work/update.json"
+          data = json.load(open(path, encoding="utf-8"))
+          if not isinstance(data, dict) or "versionCode" not in data or "apkUrl" not in data:
+              raise SystemExit("update.json не прилича на манифест на обновяване")
+          action = os.environ["ACTION"]
+          if action == "pause":
+              data["paused"] = True
+              data["pausedAt"] = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+              reason = os.environ.get("REASON", "").strip()
+              if reason:
+                  data["pausedReason"] = reason
+              else:
+                  data.pop("pausedReason", None)
+          elif action == "resume":
+              for key in ("paused", "pausedAt", "pausedReason"):
+                  data.pop(key, None)
+          else:
+              raise SystemExit(f"Непознато действие: {action}")
+          json.dump(data, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+          PY
+          echo "Ново ($ACTION):"
+          cat work/update.json; echo
+
+      - name: Upload update.json
+        if: inputs.dry_run != true
+        run: |
+          gh release upload "$TAG" work/update.json --repo "$REPO" --clobber
+          echo "::notice::update.json на $TAG е обновен ($ACTION). Приложенията го виждат при следващата проверка (до ~12 ч. при отваряне, ~24 ч. във фона; ръчната проверка — веднага)."
+
+      - name: Dry run
+        if: inputs.dry_run == true
+        run: echo "::notice::Dry run — нищо не е качено. Пуснете отново без dry_run, за да приложите ($ACTION на $TAG)."

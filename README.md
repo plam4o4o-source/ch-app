@@ -64,7 +64,7 @@ shared/          чист Kotlin: домейн модели, интерфейс�
 baselineprofile/ Macrobenchmark генератор на Baseline/Startup профила
                  (резултатът: app/src/main/generated/baselineProfiles/)
 tools/           генератори: текстове (generate_strings.py), икони, шрифтове, отчет за зависимостите
-docs/            API.md, ARCHITECTURE.md, ROADMAP.md (план за развитие)
+docs/            API.md, ARCHITECTURE.md, RELEASE.md (лоша версия), ROADMAP.md (план за развитие)
 store/           Google Play метаданни, графики, политика за поверителност
 .github/         CI, издания, Dependabot, Baseline profile
 ```
@@ -102,6 +102,8 @@ AGP 9.4 (вграден Kotlin) · Gradle 9.8 · Java 21 (build с JDK 25) · mi
 емулатор и го предлага в клона `baseline-profile/update` (слива се ръчно).
 
 Ръчно: Actions → Release (конкретна версия, напр. `1.2.0`) или tag `v1.2.0`.
+Лоша версия — спиране на обновяванията (`update-control.yml`) и връщане назад:
+**[docs/RELEASE.md](docs/RELEASE.md)**.
 Текущото състояние спрямо последните версии: Actions → „Dependency report“.
 
 Шрифтове: Cormorant Garamond и Raleway (SIL Open Font License, с кирилица) —
@@ -229,7 +231,8 @@ Robolectric снимките на екраните (`ScreenshotTest` и др.) �
 1. При отваряне (най-много веднъж на 12 часа; ръчната проверка от настройките —
    винаги) и веднъж на ~24 часа във фона (общата задача на WorkManager) приложението чете
    `update.json` от последното GitHub Release: `versionCode`, `versionName`,
-   `apkUrl`, `sha256`, `size`, `minSdk`, `notes`.
+   `apkUrl`, `sha256`, `size`, `minSdk`, `notes` (и `paused` — спряна версия не
+   се предлага, виж [docs/RELEASE.md](docs/RELEASE.md)).
 2. Ако `versionCode` е по-висок, по Wi-Fi новата версия се изтегля веднага
    (по мобилни данни — след „Изтегли и инсталирай“).
 3. Файлът се проверява: SHA-256 от манифеста, същият пакет и версия, **същият

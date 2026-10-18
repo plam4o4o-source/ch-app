@@ -1,7 +1,10 @@
 package org.chyavorec.data.update
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonObject
@@ -29,6 +32,11 @@ data class UpdateInfo(
     val minSdk: Int,
     val notes: String,
     val releaseUrl: String?,
+    /**
+     * Обновяванията до тази версия са спрени (`"paused": true` — workflow-ът
+     * update-control.yml, виж docs/RELEASE.md): приложението не я предлага и не я тегли.
+     */
+    val paused: Boolean = false,
 )
 
 object UpdateManifestParser {
@@ -64,8 +72,15 @@ object UpdateManifestParser {
                 minSdk = runCatching { o["minSdk"]?.jsonPrimitive?.intOrNull }.getOrNull() ?: 1,
                 notes = str("notes").orEmpty(),
                 releaseUrl = str("releaseUrl")?.takeIf { it.startsWith("https://") },
+                paused = flag(o["paused"]),
             ),
         )
+    }
+
+    /** `true`, `"true"` или `1` → да; липсващо, `null` или каквото и да е друго → не. */
+    private fun flag(e: JsonElement?): Boolean {
+        val p = e as? JsonPrimitive ?: return false
+        return p.booleanOrNull ?: (p.content.trim().lowercase() in setOf("true", "1"))
     }
 
     fun trustedApkUrl(apkUrl: String, manifestUrl: String): Boolean {
@@ -82,7 +97,7 @@ class UpdateChecker(private val http: HttpFetcher, private val manifestUrl: Stri
 
     /**
      * @return новата версия, или `null`, ако инсталираната е последна
-     * (или новата изисква по-нов Android от [sdkInt]).
+     * (или новата изисква по-нов Android от [sdkInt], или обновяванията са спрени).
      */
     suspend fun check(installedVersionCode: Int, sdkInt: Int): Outcome<UpdateInfo?> {
         if (manifestUrl.isBlank()) return Outcome.Success(null)
@@ -97,8 +112,9 @@ class UpdateChecker(private val http: HttpFetcher, private val manifestUrl: Stri
     }
 
     companion object {
+        /** Спряната ([UpdateInfo.paused]) версия не се брои за нова — до „resume“ приложението е „актуално“. */
         fun isNewer(info: UpdateInfo, installedVersionCode: Int, sdkInt: Int): Boolean =
-            info.versionCode > installedVersionCode && info.minSdk <= sdkInt
+            !info.paused && info.versionCode > installedVersionCode && info.minSdk <= sdkInt
     }
 }
 
