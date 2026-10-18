@@ -25,7 +25,10 @@ for i in 1 2 3; do
   timeout 60 adb shell am start -W -n $PKG/.MainActivity | grep -E "TotalTime|WaitTime"
 done
 sleep 8; shot 01-start
-tap text "=Skip"; sleep 5; shot 02-home
+tap text "=Skip"; sleep 5
+tap text "=Later" && sleep 3
+tap text "=Not now" && sleep 3
+shot 02-home
 waitres() {  # чака текст „results“ до $1 секунди; печата колко е чакал
   local t0=$(date +%s)
   for i in $(seq 1 $(( $1 / 3 ))); do dump >/dev/null 2>&1; grep -q 'results' $OUT/ui.xml && { echo "=== results after $(( $(date +%s) - t0 )) s"; dump; return 0; }; sleep 3; done
