@@ -64,7 +64,7 @@ class ClearCacheTest {
         )
     }
 
-    @Test fun clearsTheWholeCatalogButKeepsPersonalData() = runBlocking {
+    @Test fun clearsTheWholeCatalogButKeepsPersonalData(): Unit = runBlocking {
         val c = container()
         val catalog = c.catalogRepository
         assertIs<Outcome.Success<*>>(catalog.searcher())
