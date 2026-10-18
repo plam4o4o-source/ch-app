@@ -495,8 +495,8 @@
     <string name="settings_appearance">Appearance</string>
     <string name="settings_cache_cleared">Cache cleared.</string>
     <string name="settings_clear_cache">Clear cache</string>
-    <string name="settings_clear_cache_confirm">Offline data will be deleted and reloaded next time you’re online. Your sign-in and card stay.</string>
-    <string name="settings_clear_cache_desc">Deletes cached news, catalogue and images</string>
+    <string name="settings_clear_cache_confirm">Offline data (news, events, catalogue, covers and images) will be deleted and reloaded next time you’re online. Your sign-in, card, favourites, reminders and history stay.</string>
+    <string name="settings_clear_cache_desc">Deletes cached news, events, catalogue and images</string>
     <string name="settings_covers_online">Covers from the internet</string>
     <string name="settings_covers_online_desc">Covers by ISBN from covers.openlibrary.org (the server sees your IP address)</string>
     <string name="settings_covers_wifi_only">Covers on Wi-Fi only</string>

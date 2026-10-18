@@ -150,6 +150,9 @@ interface CatalogIndexStore {
      */
     suspend fun replace(state: CatalogIndexState, rows: List<CatalogIndexRow>)
 
+    /** Изпразва индекса („Изчисти кеша“) — после [state] е `null`, докато не се попълни наново. */
+    suspend fun clear()
+
     /** Записите по заявката, в реда на каталога (или по [CatalogIndexQuery.sort]). */
     suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow>
 

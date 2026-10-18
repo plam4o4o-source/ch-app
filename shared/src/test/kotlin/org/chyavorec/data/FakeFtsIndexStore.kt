@@ -39,6 +39,12 @@ class FakeFtsIndexStore : CatalogIndexStore {
         this.rows = rows
     }
 
+    override suspend fun clear() {
+        if (failing) error("db")
+        state = null
+        rows = emptyList()
+    }
+
     private fun lookup(name: String): List<CatalogIndexRow> {
         if (failing) error("db")
         lookups += name

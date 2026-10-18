@@ -233,4 +233,60 @@ class CatalogFtsRepositoryTest {
         assertNull(repo.cachedSearcher())
         assertNull(repo.lookupSearcher())
     }
+
+    /** „Изчисти кеша“: файлът, записаното до него, обобщението и индексът — после всичко наново. */
+    @Test fun clearRemovesTheCatalogTheIndexAndTheSummary() = runTest {
+        val svc = SlowService(sample).also { it.gate.complete(Unit) }
+        val repo = repo(svc)
+        assertIs<Outcome.Success<*>>(repo.searcher())
+        assertIs<Outcome.Success<*>>(repo.refreshHomeSummary())
+        assertNotNull(store.state)
+        assertNotNull(cache.read(CatalogRepository.KEY))
+        val fetches = svc.fetches
+        var cleared = 0
+        val watcher = launch { repo.cleared.collect { cleared++ } }
+        runCurrent()
+
+        repo.clear()
+        runCurrent()
+        assertEquals(1, cleared, "екранът на каталога научава за изчистването")
+        listOf(CatalogRepository.KEY, CatalogRepository.META_KEY, CatalogRepository.FETCHED_AT_KEY, CatalogRepository.SUMMARY_KEY)
+            .forEach { assertNull(cache.read(it), it) }
+        assertNull(store.state, "индексът в базата е празен")
+        assertTrue(store.rows.isEmpty())
+        assertNull(repo.inMemory())
+        assertNull(repo.publishedSearcher())
+        assertNull(repo.homeSummary(), "без обобщение (и „За теб“) от стария каталог")
+        assertNull(repo.cachedSearcher(), "без стара търсачка")
+        assertNull(repo.lookupSearcher(network = false))
+
+        // Следващото отваряне сваля каталога наново (без условна заявка — копие няма) и попълва индекса.
+        val s = assertIs<Outcome.Success<*>>(repo.searcher()).value as Synced<*>
+        advanceUntilIdle()
+        assertEquals(fetches + 1, svc.fetches)
+        assertIs<FtsCatalogSearcher>(s.data)
+        assertEquals(60, store.rows.size)
+        assertNotNull(cache.read(CatalogRepository.KEY))
+        assertEquals(60, (s.data as CatalogSearcher).search(CatalogQuery()).size)
+        assertNotNull(repo.homeSummary())
+        watcher.cancel()
+    }
+
+    /** Изчистване по време на попълването на индекса: спряното попълване не връща стария каталог. */
+    @Test fun clearDuringIndexPopulationLeavesNoStaleRows() = runTest {
+        val gate = CompletableDeferred<Unit>()
+        store.replaceGate = gate
+        val repo = repo(Service(sample))
+        // Само обобщението — индексът се попълва във фонов режим и чака [gate].
+        assertIs<Outcome.Success<*>>(repo.refreshHomeSummary())
+        runCurrent()
+        assertNull(store.state)
+        repo.clear()
+        gate.complete(Unit)
+        advanceUntilIdle()
+        assertNull(store.state, "спряното попълване не записва")
+        assertTrue(store.rows.isEmpty())
+        assertNull(cache.read(CatalogRepository.META_KEY))
+        assertNull(repo.lookupSearcher(network = false))
+    }
 }

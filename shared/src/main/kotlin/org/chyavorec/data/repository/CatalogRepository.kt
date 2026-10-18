@@ -7,7 +7,9 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -196,6 +198,45 @@ class CatalogRepository(
         lastSnapshot = null
         // Търсачката през базата е лека и остава; тази през индекса в паметта — не.
         if (published.value?.synced?.data is EngineCatalogSearcher) published.value = null
+    }
+
+    /** Всяко изчистване ([clear]) — екранът на каталога забравя търсачката и резултатите си. */
+    val cleared: Flow<Unit> get() = clears
+
+    private val clears = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+
+    /**
+     * „Изчисти кеша“: katalog.json и записаното до него (хеш/ETag, времето на сваляне,
+     * обобщението за началния екран и „За теб“), индексът в базата и всичко в паметта.
+     * Започнатото попълване на индекса се спира (не бива да върне стария каталог след
+     * изчистването). Следващото търсене/отваряне сваля каталога наново — от нулата.
+     */
+    suspend fun clear() {
+        val running = mutex.withLock {
+            val job = rebuild?.job
+            rebuild = null
+            fetch = null
+            job
+        }
+        running?.cancelAndJoin()
+        mutex.withLock {
+            // И на по-ранно запланувано попълване (верижно след спряното).
+            rebuild?.job?.cancel()
+            rebuild = null
+            listOf(KEY, META_KEY, FETCHED_AT_KEY, SUMMARY_KEY).forEach { runCatching { cache.remove(it) }.logFailure("catalog.clear") }
+            index?.let { store -> guarded { store.clear() } }
+            meta = null
+            metaLoaded = true
+            lastFetchMillis = null
+            fetchedAtLoaded = true
+            freshness = null
+            failedHash = null
+            current = null
+            summary = null
+            lastSnapshot = null
+            published.value = null
+        }
+        clears.tryEmit(Unit)
     }
 
     /** Ключалката се взима само за проверка и за прилагане на резултата — мрежата е извън нея. */

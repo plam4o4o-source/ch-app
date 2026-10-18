@@ -21,6 +21,8 @@ import androidx.room.Transaction
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.chyavorec.data.catalog.CatalogIndexColumns
 import org.chyavorec.data.catalog.CatalogIndexQuery
 import org.chyavorec.data.catalog.CatalogIndexRow
@@ -191,6 +193,13 @@ abstract class CatalogIndexDao {
         insertBooks(rows)
         putState(state)
     }
+
+    /** „Изчисти кеша“: индексът става празен (FTS таблицата се изпразва от тригерите си). */
+    @Transaction
+    open suspend fun clearAll() {
+        clearState()
+        clearBooks()
+    }
 }
 
 /**
@@ -266,6 +275,15 @@ class RoomCatalogIndexStore(
 
     override suspend fun replace(state: CatalogIndexState, rows: List<CatalogIndexRow>) = healing { dao ->
         dao.replaceAll(CatalogIndexStateEntity(json = state.toJson()), rows.map { CatalogBookEntity.of(it) })
+    }
+
+    override suspend fun clear() {
+        healing { dao -> dao.clearAll() }
+        // Освободеното място се връща на системата — иначе файлът на базата остава със същия размер.
+        withContext(Dispatchers.IO) {
+            runCatching { synchronized(lock) { db }?.openHelper?.writableDatabase?.execSQL("VACUUM") }
+                .onFailure { Log.w(TAG, "Базата на каталога не е свита след изчистването", it) }
+        }
     }
 
     override suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow> = healing { dao ->

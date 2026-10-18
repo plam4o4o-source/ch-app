@@ -68,6 +68,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -191,6 +192,15 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     val shelf = settings?.catalogShelf ?: false
     val scope = rememberCoroutineScope()
     TabReselectEffect(Routes.CATALOG) { (if (shelf) shelfState else listState).animateScrollToItem(0) }
+    // В началото — само при резултати за нова заявка или филтър. Опресненият във фонов режим
+    // индекс (същата заявка) пази мястото в списъка; връщането от книга — също (помни се).
+    var scrolledFor by rememberSaveable { mutableIntStateOf(state.searchId) }
+    LaunchedEffect(state.searchId) {
+        if (state.searchId == scrolledFor) return@LaunchedEffect
+        scrolledFor = state.searchId
+        listState.scrollToItem(0)
+        shelfState.scrollToItem(0)
+    }
 
     Scaffold(topBar = {
         TopAppBar(

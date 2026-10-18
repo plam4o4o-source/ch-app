@@ -42,6 +42,11 @@ data class CatalogUiState(
     val facets: CatalogFacets? = null,
     val suggestions: List<String> = emptyList(),
     val searching: Boolean = false,
+    /**
+     * Брояч на търсенията с нова заявка (текст, поле, филтър, подредба) — само при него
+     * списъкът се връща в началото; опресненият индекс със същата заявка не го сменя.
+     */
+    val searchId: Int = 0,
 ) {
     /** Изчислява се веднъж за състояние (не при всяка рекомпозиция). */
     val page: List<CatalogBook> = results.take(shown)
@@ -105,6 +110,16 @@ class CatalogViewModel(
                 runSearch()
             }
         }
+        // „Изчисти кеша“: старата търсачка (изпразненият индекс) и резултатите ѝ се забравят,
+        // каталогът се зарежда наново — както при първо отваряне, със същата заявка.
+        viewModelScope.launch {
+            repo.cleared.collect {
+                more?.cancel()
+                lastSearch = null
+                _state.update { CatalogUiState(query = it.query, searching = true, searchId = it.searchId) }
+                refresh(force = false)
+            }
+        }
         // Instant search: търсим 200 ms след последния натиснат клавиш. Началната заявка,
         // вече изпълнена при зареждането, не се търси повторно (вж. [lastSearch]).
         viewModelScope.launch(searchDispatcher) { queryFlow.debounce(200).collect { runSearch() } }
@@ -163,21 +178,28 @@ class CatalogViewModel(
         val engine = _state.value.engine.data ?: return
         val q = _state.value.query
         val last = lastSearch
-        if (last != null && last.first === engine && last.second == q) {
+        val sameQuery = last?.second == q
+        if (sameQuery && last?.first === engine) {
             // Напр. опресняване без нови данни — резултатите (и страницирането) остават.
             _state.update { if (it.query == q) it.copy(searching = false) else it }
             return
         }
+        // Същата заявка в нова търсачка (опреснен индекс/katalog.json) — толкова страници,
+        // колкото вече са показани, за да не скочи списъкът в началото; нова заявка — първата.
+        val limit = if (sameQuery) maxOf(_state.value.shown, CatalogUiState.PAGE) else CatalogUiState.PAGE
         // Без текст — само първата страница и броят (индексът в базата не чете целия каталог).
         val (found, suggestions) = withContext(searchDispatcher) {
-            engine.searchFirst(q, CatalogUiState.PAGE) to (if (q.text.length >= 2 && q.field != SearchField.INVENTORY && q.field != SearchField.ISBN) engine.suggestions(q.text, 6) else emptyList())
+            engine.searchFirst(q, limit) to (if (q.text.length >= 2 && q.field != SearchField.INVENTORY && q.field != SearchField.ISBN) engine.suggestions(q.text, 6) else emptyList())
         }
         var applied = false
         _state.update {
             if (it.query != q) it // по-нова заявка вече е в ход
             else {
                 applied = true
-                it.copy(results = found.books, totalResults = found.total, shown = CatalogUiState.PAGE, suggestions = suggestions, searching = false)
+                it.copy(
+                    results = found.books, totalResults = found.total, shown = limit, suggestions = suggestions, searching = false,
+                    searchId = if (sameQuery) it.searchId else it.searchId + 1,
+                )
             }
         }
         if (applied) lastSearch = engine to q

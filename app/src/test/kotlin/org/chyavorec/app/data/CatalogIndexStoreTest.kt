@@ -122,6 +122,24 @@ class CatalogIndexStoreTest {
         assertNull(fts.book(11))
     }
 
+    /** „Изчисти кеша“: празен индекс (и FTS таблицата), после се попълва наново без грешка. */
+    @Test fun clearEmptiesTheIndexAndItCanBeRefilled() = runBlocking {
+        val store = RoomCatalogIndexStore { db }
+        store.replace(state, CatalogIndexRows.build(snapshot))
+        store.clear()
+        assertNull(store.state())
+        val fts = FtsCatalogSearcher(store, state, fallback = { null }, work = Dispatchers.Default)
+        assertTrue(fts.search(CatalogQuery()).isEmpty())
+        assertTrue(fts.search(CatalogQuery("вазов")).isEmpty(), "и FTS таблицата е празна")
+        assertNull(store.book(1))
+        assertTrue(store.authors().isEmpty())
+
+        store.replace(state, CatalogIndexRows.build(snapshot))
+        assertEquals(state, store.state())
+        assertEquals("Под игото", store.book(1)?.title)
+        assertEquals(engine.search(CatalogQuery("вазов")).map { it.inv }.sorted(), fts.search(CatalogQuery("вазов")).map { it.inv }.sorted())
+    }
+
     @Test fun brokenDatabaseIsRecreatedOnceAndTheIndexRebuilt() = runBlocking {
         var recreated = 0
         val store = RoomCatalogIndexStore(recreate = { recreated++; db }) { throw SQLiteException("file is not a database") }
