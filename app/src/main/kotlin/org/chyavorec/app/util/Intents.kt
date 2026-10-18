@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import org.chyavorec.app.R
+import org.chyavorec.core.TrustedLinks
 import org.chyavorec.domain.model.Event
 import java.time.LocalDate
 import java.time.LocalTime
@@ -43,7 +44,7 @@ object Intents {
         }
         // Адресите на сайта са App Links на самото приложение — без изричен браузър
         // „Отвори в сайта“ би отворило пак приложението (и екрана, от който е натиснато).
-        val browser = if (isOwnAppLink(uri)) browserPackage(context) else null
+        val browser = if (isOwnAppLink(uri, url)) browserPackage(context) else null
         try {
             CustomTabsIntent.Builder()
                 .setShowTitle(true)
@@ -56,10 +57,14 @@ object Intents {
         }
     }
 
-    /** Домейнът от App Links филтъра в AndroidManifest.xml. */
-    private const val APP_LINK_HOST = "chyavorec.org"
-
-    private fun isOwnAppLink(uri: Uri): Boolean = uri.host.equals(APP_LINK_HOST, ignoreCase = true)
+    /**
+     * Адресът би стигнал пак до приложението (App Link за chyavorec.org). Проверява се и как
+     * го чете Android ([Uri.getHost] взима хоста след последното `@`, напр. в
+     * `https://evil.com\@chyavorec.org/`), и строгото [TrustedLinks] — при което и да е от
+     * двете се отваря изрично в браузъра, без да се върне в приложението.
+     */
+    private fun isOwnAppLink(uri: Uri, url: String): Boolean =
+        uri.host.equals(TrustedLinks.SITE_HOST, ignoreCase = true) || TrustedLinks.hostOf(url) == TrustedLinks.SITE_HOST
 
     /**
      * Браузърът за адресите на сайта: този по подразбиране (ако не е самото приложение),

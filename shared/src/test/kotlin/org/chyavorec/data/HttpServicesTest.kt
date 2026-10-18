@@ -155,6 +155,24 @@ class HttpServicesTest {
         assertEquals("**Св. ап. и ев. Йоан Богослов**", svc.fetchFeast("2026-9-26").let { it as? Outcome.Success ?: error("feast: $it") }.value.line)
     }
 
+    @Test fun sitePageRefusesForeignUrlsAndRedirectsOffSite() = runTest {
+        // Чужд адрес (вкл. трикове с „@“) — без заявка изобщо, не се показва като наша страница.
+        val svc = site()
+        listOf("https://evil.com/about", "https://chyavorec.org:443@evil.com/about", "javascript:alert(1)").forEach {
+            assertEquals(AppError.NotFound, (svc.fetchPage(it) as Outcome.Failure).error, it)
+        }
+        assertEquals(0, server.requestCount)
+        // Страница от сайта, пренасочена към друг хост — също не.
+        val other = MockWebServer().apply { start() }
+        try {
+            other.enqueue(MockResponse().setBody("<html><body><main><h1>Чужда</h1><p>текст</p></main></body></html>"))
+            server.enqueue(MockResponse().setResponseCode(302).setHeader("Location", other.url("/x").toString()))
+            assertEquals(AppError.NotFound, (svc.fetchPage(url("/about")) as Outcome.Failure).error)
+        } finally {
+            other.shutdown()
+        }
+    }
+
     @Test fun siteGalleryUsesExhibitionCaptionsAndNewsCovers() = runTest {
         server.dispatcher = siteDispatcher()
         val photos = (site().fetchGallery() as Outcome.Success).value

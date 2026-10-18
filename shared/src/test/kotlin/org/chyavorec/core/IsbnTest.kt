@@ -67,5 +67,21 @@ class IsbnTest {
         assertEquals(ScanTarget.Isbn("9789540907055"), ScanCodes.resolve("https://chyavorec.org/elektronen-katalog?q=9789540907055"))
         assertEquals(ScanTarget.Unknown("https://example.org/x"), ScanCodes.resolve("https://example.org/x"))
     }
+    @Test fun scanUrlOnlyFromTheExactSiteHost() {
+        // По точния хост, а не по „съдържа chyavorec.org/katalog“.
+        listOf(
+            "https://evilchyavorec.org/elektronen-katalog?inv=156",
+            "https://chyavorec.org.evil.com/elektronen-katalog?inv=156",
+            "https://chyavorec.org@evil.com/elektronen-katalog?inv=156",
+            "https://evil.com/katalog?inv=156",
+            "https://evil.com/?u=chyavorec.org&inv=156",
+            "javascript:alert(1)//chyavorec.org?inv=156",
+        ).forEach { assertIs<ScanTarget.Unknown>(ScanCodes.resolve(it), it) }
+        assertEquals(ScanTarget.Inventory(156), ScanCodes.resolve("HTTPS://WWW.CHYAVOREC.ORG/elektronen-katalog?inv=156"))
+        // Стар етикет с http:// — от адреса се взима само номерът.
+        assertEquals(ScanTarget.Inventory(156), ScanCodes.resolve("http://chyavorec.org/elektronen-katalog?inv=156"))
+        // Базов адрес от конфигурацията (напр. тестов сървър).
+        assertEquals(ScanTarget.Inventory(7), ScanCodes.resolve("http://127.0.0.1:8080/elektronen-katalog#zapis=7", "http://127.0.0.1:8080"))
+    }
     @Test fun scanTextIsUnknown() = assertEquals(ScanTarget.Unknown("ABC-1"), ScanCodes.resolve("ABC-1"))
 }

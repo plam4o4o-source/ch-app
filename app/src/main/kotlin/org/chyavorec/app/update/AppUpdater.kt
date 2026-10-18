@@ -6,8 +6,10 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
 import android.content.pm.PackageManager
+import android.content.pm.Signature
 import android.net.ConnectivityManager
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -32,8 +34,11 @@ import org.chyavorec.app.data.local.SettingsStore
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.logFailure
 import org.chyavorec.data.http.HttpFetcher
+import org.chyavorec.data.update.ApkSigners
 import org.chyavorec.data.update.Checksums
+import org.chyavorec.data.update.SigningCheck
 import org.chyavorec.data.update.UpdateChecker
 import org.chyavorec.data.update.UpdateInfo
 import java.io.File
@@ -244,6 +249,7 @@ class AppUpdater(
                 _state.value = UpdateState.Failed(UpdateFailure.CHECKSUM, info)
                 return@withContext null
             }
+            // Подписът — едва след като сумата от update.json е потвърдена (по-горе).
             when (verifyApk(part, info)) {
                 ApkCheck.OK -> Unit
                 ApkCheck.WRONG_SIGNATURE -> {
@@ -251,6 +257,7 @@ class AppUpdater(
                     _state.value = UpdateState.Failed(UpdateFailure.SIGNATURE, info)
                     return@withContext null
                 }
+                // Неразчетен подпис = неуспешна проверка (не „по-добре инсталирай“): файлът се изтрива.
                 ApkCheck.INVALID -> {
                     discard()
                     _state.value = UpdateState.Failed(UpdateFailure.CHECKSUM, info)
@@ -489,34 +496,75 @@ class AppUpdater(
 
     private enum class ApkCheck { OK, WRONG_SIGNATURE, INVALID }
 
+    /**
+     * Пакетът, версията и подписът на изтегления APK. Подписите се сравняват изцяло
+     * ([SigningCheck]); ако не могат да се разчетат (от APK-то или от инсталираното
+     * приложение) — отказ, а причината остава в локалния дневник.
+     */
     private fun verifyApk(file: File, info: UpdateInfo): ApkCheck {
         val pm = context.packageManager
-        val archive = packageInfo { flags -> pm.getPackageArchiveInfo(file.absolutePath, flags) } ?: return ApkCheck.INVALID
-        if (archive.packageName != context.packageName) return ApkCheck.INVALID
-        if (PackageInfoCompat.getLongVersionCode(archive) != info.versionCode.toLong()) return ApkCheck.INVALID
-        val installed = packageInfo { flags -> pm.getPackageInfo(context.packageName, flags) } ?: return ApkCheck.OK
-        val a = certificates(archive)
-        val b = certificates(installed)
-        // Ако системата не върне подписите, последната дума е на инсталатора (той също сравнява ключа).
-        if (a.isEmpty() || b.isEmpty()) return ApkCheck.OK
-        return if (a.intersect(b).isNotEmpty()) ApkCheck.OK else ApkCheck.WRONG_SIGNATURE
-    }
-
-    @Suppress("DEPRECATION")
-    private fun packageInfo(get: (Int) -> PackageInfo?): PackageInfo? = runCatching {
-        get(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES else PackageManager.GET_SIGNATURES)
-    }.getOrNull()
-
-    @Suppress("DEPRECATION")
-    private fun certificates(info: PackageInfo): Set<String> {
-        val sigs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val s = info.signingInfo ?: return emptySet()
-            if (s.hasMultipleSigners()) s.apkContentsSigners.toList() else s.signingCertificateHistory.orEmpty().toList()
-        } else {
-            info.signatures.orEmpty().toList()
+        val archive = packageInfo("archive") { flags -> pm.getPackageArchiveInfo(file.absolutePath, flags) }
+        if (archive == null) {
+            Diagnostics.note("update.verify", "archive unreadable")
+            return ApkCheck.INVALID
         }
-        return sigs.map { Checksums.sha256(it.toByteArray().inputStream()) }.toSet()
+        if (archive.packageName != context.packageName) {
+            Diagnostics.note("update.verify", "wrong package")
+            return ApkCheck.INVALID
+        }
+        if (PackageInfoCompat.getLongVersionCode(archive) != info.versionCode.toLong()) {
+            Diagnostics.note("update.verify", "wrong version")
+            return ApkCheck.INVALID
+        }
+        val installed = packageInfo("installed") { flags -> pm.getPackageInfo(context.packageName, flags) }
+        // Двете страни се сравняват по един и същи начин: ако едната няма signingInfo — и двете по signatures.
+        val legacy = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) archive.signingInfo == null || installed?.signingInfo == null else true
+        return when (SigningCheck.decide(signers(archive, legacy, "archive"), installed?.let { signers(it, legacy, "installed") })) {
+            SigningCheck.Result.MATCH -> ApkCheck.OK
+            SigningCheck.Result.MISMATCH -> {
+                Diagnostics.note("update.verify", "signature mismatch")
+                ApkCheck.WRONG_SIGNATURE
+            }
+            SigningCheck.Result.UNREADABLE -> {
+                Diagnostics.note("update.verify", "signatures unreadable")
+                ApkCheck.INVALID
+            }
+        }
     }
+
+    /**
+     * Android 9+ — `GET_SIGNING_CERTIFICATES` (с веригата на смяна на ключа), по-старите —
+     * `GET_SIGNATURES`. На Android 9 getPackageArchiveInfo разчита подписите на файл само при
+     * `GET_SIGNATURES` (иначе signingInfo е null) — затова там се искат и двете.
+     */
+    @Suppress("DEPRECATION")
+    private fun packageInfo(what: String, get: (Int) -> PackageInfo?): PackageInfo? = runCatching {
+        get(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES or PackageManager.GET_SIGNATURES
+            else PackageManager.GET_SIGNATURES,
+        )
+    }.logFailure("update.verify.$what").getOrNull()
+
+    /** Подписите като SHA-256 на сертификатите; `null` — системата не ги е върнала. */
+    @Suppress("DEPRECATION")
+    private fun signers(info: PackageInfo, legacy: Boolean, what: String): ApkSigners? = runCatching {
+        if (!legacy && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            signingCertificates(info)
+        } else {
+            // Старият начин (и резерва, ако signingInfo липсва): целият набор подписи.
+            info.signatures.hashes()?.let { ApkSigners(it) }
+        }
+    }.logFailure("update.verify.$what").getOrNull()
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun signingCertificates(info: PackageInfo): ApkSigners? {
+        val s = info.signingInfo ?: return null
+        val current = s.apkContentsSigners.hashes() ?: return null
+        val multiple = s.hasMultipleSigners()
+        return ApkSigners(current, history = if (multiple) emptySet() else s.signingCertificateHistory.hashes().orEmpty(), multipleSigners = multiple)
+    }
+
+    private fun Array<out Signature>?.hashes(): Set<String>? = this?.map { Checksums.sha256(it.toByteArray().inputStream()) }?.toSet()
 
     companion object {
         private const val SNOOZE_MS = 24 * 60 * 60 * 1000L

@@ -25,17 +25,43 @@ sealed interface AuthState {
 }
 
 /**
+ * Трайното състояние на [LoginThrottle] — пази се на устройството, за да не започва
+ * защитата отначало при рестарт на приложението (иначе спиране от „Последни“ = нови 5 опита).
+ */
+data class ThrottleState(val failures: Int = 0, val lockouts: Int = 0, val lockedUntilMillis: Long = 0)
+
+/** Къде се пази [ThrottleState] (в Android — малък DataStore). Изходът НЕ го изтрива. */
+interface ThrottleStore {
+    suspend fun load(): ThrottleState?
+    suspend fun save(state: ThrottleState)
+}
+
+/**
  * Защита от налучкване на пароли от страна на клиента: след [maxAttempts]
  * неуспешни опита входът се заключва, като всяко следващо заключване е двойно
  * по-дълго (60 s, 120 s, …). Истинската защита трябва да е и на сървъра.
+ *
+ * Със [store] броячите оцеляват при рестарт: [restore] ги зарежда (веднъж), а [persist]
+ * ги записва след всеки опит. Часовникът е стенният — ако е върнат назад и заключването
+ * изглежда по-дълго от възможното, то се скъсява до дължината на последното заключване
+ * (а не остава „завинаги“).
  */
-class LoginThrottle(private val clock: AppClock, private val maxAttempts: Int = 5, private val baseLockSeconds: Long = 60) {
-    private var failures = 0
-    private var lockouts = 0
-    private var lockedUntil = 0L
+class LoginThrottle(
+    private val clock: AppClock,
+    private val maxAttempts: Int = 5,
+    private val baseLockSeconds: Long = 60,
+    private val store: ThrottleStore? = null,
+) {
+    @Volatile private var failures = 0
+    @Volatile private var lockouts = 0
+    @Volatile private var lockedUntil = 0L
+    @Volatile private var restored = store == null
+    private val restoreLock = Mutex()
 
     fun remainingLockSeconds(): Long {
-        val left = (lockedUntil - clock.now().toEpochMilli()) / 1000
+        val now = clock.now().toEpochMilli()
+        capLock(now)
+        val left = (lockedUntil - now) / 1000
         return if (left > 0) left + 1 else 0
     }
 
@@ -48,7 +74,7 @@ class LoginThrottle(private val clock: AppClock, private val maxAttempts: Int = 
     fun onFailure() {
         failures++
         if (failures >= maxAttempts) {
-            val seconds = baseLockSeconds shl lockouts.coerceAtMost(6)
+            val seconds = lockSeconds(lockouts)
             lockedUntil = clock.now().toEpochMilli() + seconds * 1000
             lockouts++
             failures = 0
@@ -56,6 +82,51 @@ class LoginThrottle(private val clock: AppClock, private val maxAttempts: Int = 
     }
 
     fun onSuccess() { failures = 0; lockouts = 0; lockedUntil = 0 }
+
+    /**
+     * Зарежда запазеното състояние (само първия път). Опитите в паметта отпреди
+     * зареждането не се губят — взима се по-строгото от двете.
+     */
+    suspend fun restore() {
+        if (restored) return
+        restoreLock.withLock {
+            if (restored) return
+            val saved = runCatching { store?.load() }.logFailure("auth.throttle").getOrNull()
+            if (saved != null) {
+                lockouts = maxOf(lockouts, saved.lockouts.coerceIn(0, MAX_LOCKOUTS))
+                failures = maxOf(failures, saved.failures.coerceIn(0, maxAttempts - 1))
+                lockedUntil = maxOf(lockedUntil, saved.lockedUntilMillis.coerceAtLeast(0))
+                capLock(clock.now().toEpochMilli())
+            }
+            restored = true
+        }
+    }
+
+    /** Записва текущото състояние (след опит за вход). Грешка при запис не спира входа. */
+    suspend fun persist() {
+        val s = store ?: return
+        runCatching { s.save(ThrottleState(failures, lockouts, lockedUntil)) }.logFailure("auth.throttle")
+    }
+
+    /** Дължината на заключване № [index] (0 — първото): 60 s × 2ⁿ, най-много × 2⁶. */
+    private fun lockSeconds(index: Int): Long = baseLockSeconds shl index.coerceIn(0, MAX_SHIFT)
+
+    /**
+     * Часовникът е върнат назад (или записът е повреден): оставащото е повече от
+     * последното заключване (+ малко време за разлики) → броим го от сега.
+     */
+    private fun capLock(now: Long) {
+        if (lockedUntil <= now) return
+        val longest = lockSeconds((lockouts - 1).coerceAtLeast(0)) * 1000
+        if (lockedUntil - now > longest + CLOCK_MARGIN_MS) lockedUntil = now + longest
+    }
+
+    private companion object {
+        const val MAX_SHIFT = 6
+        /** Броят заключвания над този не удължава нищо (таванът е 2⁶) — колкото да не прелее. */
+        const val MAX_LOCKOUTS = 64
+        const val CLOCK_MARGIN_MS = 60_000L
+    }
 }
 
 class AuthRepository(
@@ -63,6 +134,8 @@ class AuthRepository(
     private val store: SessionStore,
     private val clock: AppClock,
     private val readerCache: PayloadCache,
+    /** Броячите на защитата от налучкване — трайно (оцеляват при рестарт); `null` — само в паметта. */
+    throttleStore: ThrottleStore? = null,
 ) {
     private val _state = MutableStateFlow<AuthState>(AuthState.Unknown)
     val state: StateFlow<AuthState> = _state.asStateFlow()
@@ -74,7 +147,7 @@ class AuthRepository(
      * Ред на заключване: [mutex] → [storeLock], никога обратно.
      */
     private val storeLock = Mutex()
-    val throttle = LoginThrottle(clock)
+    val throttle = LoginThrottle(clock, store = throttleStore)
 
     /** Слушатели за „смяна на читателя“ (изход или нов вход) — чистят личните данни в паметта. */
     private val resetListeners = java.util.concurrent.CopyOnWriteArrayList<() -> Unit>()
@@ -112,7 +185,12 @@ class AuthRepository(
     suspend fun capabilities(): ServiceCapabilities =
         (service.capabilities() as? Outcome.Success)?.value ?: ServiceCapabilities.NONE
 
+    /** Зарежда запазените броячи на защитата от налучкване (екранът за вход — преди първия опит). */
+    suspend fun restoreThrottle() = throttle.restore()
+
     suspend fun login(cardNumber: String, password: CharArray, remember: Boolean): Outcome<Unit> {
+        // Заключване отпреди рестарта важи, дори екранът да е изпратил опита преди зареждането.
+        throttle.restore()
         val lock = throttle.remainingLockSeconds()
         if (lock > 0) {
             password.fill('\u0000')
@@ -121,6 +199,7 @@ class AuthRepository(
         return when (val r = service.login(cardNumber, password)) {
             is Outcome.Success -> {
                 throttle.onSuccess()
+                throttle.persist()
                 storeLock.withLock {
                     // Нов вход = възможно друг читател: всичко кеширано досега се изтрива ПРЕДИ
                     // записа на новата сесия (след това ключовете вече са на новия читател).
@@ -133,7 +212,10 @@ class AuthRepository(
                 Outcome.Success(Unit)
             }
             is Outcome.Failure -> {
-                if (r.error is AppError.Unauthorized) throttle.onFailure()
+                if (r.error is AppError.Unauthorized) {
+                    throttle.onFailure()
+                    throttle.persist()
+                }
                 noteUnexpected("auth.login", r.error)
                 r
             }

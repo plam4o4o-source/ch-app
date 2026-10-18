@@ -13,8 +13,10 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Hashing
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.TrustedLinks
 import org.chyavorec.core.logFailure
 import org.chyavorec.core.map
 import org.chyavorec.data.http.HttpBody
@@ -221,10 +223,21 @@ class ChyavorecSiteService(
         }
     }
 
-    override suspend fun fetchPage(url: String): Outcome<SitePage> =
-        when (val r = http.get(url)) {
+    /**
+     * Страница от сайта. Чужд адрес (или пренасочване към чужд хост) не се зарежда и не се
+     * показва като страница на читалището — виж [TrustedLinks].
+     */
+    override suspend fun fetchPage(url: String): Outcome<SitePage> {
+        if (!TrustedLinks.isSiteUrl(url, baseUrl)) {
+            Diagnostics.note("site.page", "untrusted url")
+            return Outcome.Failure(AppError.NotFound)
+        }
+        return when (val r = http.get(url)) {
             is Outcome.Failure -> r
-            is Outcome.Success -> parse("page") {
+            is Outcome.Success -> if (!TrustedLinks.isSiteUrl(r.value.finalUrl, baseUrl)) {
+                Diagnostics.note("site.page", "redirect off site")
+                Outcome.Failure(AppError.NotFound)
+            } else parse("page") {
                 val doc = r.value.html()
                 val container = extractor.findContainer(doc)
                 val blocks = extractor.extract(container)
@@ -239,6 +252,7 @@ class ChyavorecSiteService(
                 )
             }
         }
+    }
 
     override suspend fun fetchContacts(links: List<SiteLink>): Outcome<Contacts> {
         val contactsUrl = links.firstOrNull { it.kind == SiteSection.CONTACTS }?.url ?: url("/kontakti")
