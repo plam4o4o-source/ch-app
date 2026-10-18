@@ -68,6 +68,35 @@ fun rememberReducedMotion(): Boolean {
 }
 
 /**
+ * Колко дълго вървят декоративните анимации (въртележката, анимациите в празните
+ * екрани): ~30 s, после спират — иначе екранът, оставен отворен, рисува кадри без край
+ * и харчи батерията. При намалено движение изобщо не тръгват.
+ */
+object MotionBudget {
+    const val DECOR_MS = 30_000L
+    /** Смяна на страницата във въртележката на „Начало“. */
+    const val CAROUSEL_INTERVAL_MS = 6_000L
+
+    /** Времето за [periodMs]-цикъл: цели цикли (поне един), колкото се побират в [budgetMs] — спира в края на цикъл. */
+    fun loopMs(periodMs: Int, budgetMs: Long = DECOR_MS): Long {
+        if (periodMs <= 0) return 0L
+        return (budgetMs / periodMs).coerceAtLeast(1L) * periodMs
+    }
+
+    /** Колко пъти въртележката сменя страницата сама (5 по 6 s ≈ 30 s); с по-малко от 2 страници — нито веднъж. */
+    fun carouselAdvances(itemCount: Int, intervalMs: Long = CAROUSEL_INTERVAL_MS, budgetMs: Long = DECOR_MS): Int =
+        if (itemCount < 2 || intervalMs <= 0) 0 else (budgetMs / intervalMs).toInt()
+
+    /**
+     * Дали въртележката да превърти сама следващата страница: не при намалено движение,
+     * докато потребителят я докосва/плъзга, когато приложението не е на преден план
+     * (не е RESUMED), и не след като бюджетът ([carouselAdvances]) е изчерпан.
+     */
+    fun carouselAutoAdvance(reduced: Boolean, touched: Boolean, resumed: Boolean, advancesDone: Int, itemCount: Int): Boolean =
+        !reduced && !touched && resumed && advancesDone < carouselAdvances(itemCount)
+}
+
+/**
  * Плавно появяване на елемент от списък (fade + лек slide) с малко закъснение по
  * индекс. Изпълнява се веднъж за елемента (състоянието оцелява при скролиране) и
  * само за първите [maxStaggered] елемента — по-нататъшните се показват веднага.

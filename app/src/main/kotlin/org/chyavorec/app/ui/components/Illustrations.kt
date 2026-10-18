@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.components
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -9,10 +10,14 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -23,6 +28,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import org.chyavorec.app.ui.theme.Brand
+import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
@@ -30,13 +36,31 @@ import kotlin.math.sin
 
 /*
  * Векторни анимации (Canvas) вместо Lottie: без външни файлове, с цветовете на марката.
- * При намалено движение показват статичен краен кадър.
+ * Вървят ~30 s и застават на статичен кадър; при намалено движение — статичен от началото.
  */
 
-/** 0→1 за [halfPeriodMs] и обратно (нежен цикъл); при намалено движение — постоянно [staticValue]. */
+/**
+ * 0→1 за [halfPeriodMs] и обратно (нежен цикъл); при намалено движение — постоянно [staticValue].
+ * Цикълът върви ~30 s ([MotionBudget.loopMs] — цели цикли, т.е. спира близо до 0), после
+ * плавно застава на [staticValue] и повече не рисува кадри. Застаналата анимация остава
+ * такава и при връщане към екрана (rememberSaveable).
+ */
 @Composable
 private fun loopProgress(halfPeriodMs: Int, staticValue: Float, reverse: Boolean = true): State<Float> {
     if (rememberReducedMotion()) return remember { mutableFloatStateOf(staticValue) }
+    var settled by rememberSaveable { mutableStateOf(false) }
+    // Застанала още при показването (връщане към екрана) — направо статичният кадър.
+    val settledOnEntry = remember { settled }
+    if (settled) {
+        // От началото на цикъла към статичния кадър — веднъж, без повторение.
+        val settle = remember { Animatable(if (settledOnEntry) staticValue else 0f) }
+        LaunchedEffect(Unit) { settle.animateTo(staticValue, tween(halfPeriodMs, easing = FastOutSlowInEasing)) }
+        return settle.asState()
+    }
+    LaunchedEffect(Unit) {
+        delay(MotionBudget.loopMs(if (reverse) 2 * halfPeriodMs else halfPeriodMs))
+        settled = true
+    }
     val transition = rememberInfiniteTransition(label = "illustration")
     return transition.animateFloat(
         initialValue = 0f, targetValue = 1f,

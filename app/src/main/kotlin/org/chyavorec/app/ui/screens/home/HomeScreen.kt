@@ -37,6 +37,7 @@ import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.darkTopHighlight
 import org.chyavorec.app.ui.components.boldMarkdown
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.components.MotionBudget
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.domain.model.DailyFeast
 import androidx.compose.animation.fadeIn
@@ -116,6 +117,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.currentStateAsState
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BookCover
@@ -363,20 +371,32 @@ private val HeroScrim = Brush.verticalGradient(
 )
 
 /**
- * Въртяща се лента с последните новини: автоматично превъртане на 6 s (спира,
- * докато потребителят плъзга), parallax на снимката и индикатор на страниците.
+ * Въртяща се лента с последните новини: автоматично превъртане на 6 s, parallax на
+ * снимката и индикатор на страниците. Само превъртане спира след ~30 s
+ * ([MotionBudget.carouselAdvances]), изчаква, докато потребителят я докосва/плъзга или
+ * приложението не е на преден план, и изобщо не тръгва при намалено движение.
  */
 @Composable
 private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit) {
     val pager = rememberPagerState { items.size }
     val reduced = rememberReducedMotion()
     val dragged by pager.interactionSource.collectIsDraggedAsState()
-    LaunchedEffect(dragged, items.size) {
-        if (reduced || dragged || items.size < 2) return@LaunchedEffect
-        while (true) {
-            delay(6_000)
-            pager.animateScrollToPage((pager.currentPage + 1) % items.size, animationSpec = tween(700))
-        }
+    // Пръст върху лентата (и без плъзгане) — следващата смяна изчаква пускането.
+    var touched by remember { mutableStateOf(false) }
+    val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+    // Колко пъти е превъртяла сама — пази се и при връщане към „Начало“.
+    var advances by rememberSaveable { mutableIntStateOf(0) }
+    val auto = MotionBudget.carouselAutoAdvance(
+        reduced = reduced, touched = dragged || touched,
+        resumed = lifecycleState.isAtLeast(Lifecycle.State.RESUMED),
+        advancesDone = advances, itemCount = items.size,
+    )
+    // Всяка пауза (докосване, фон) започва интервала отначало.
+    LaunchedEffect(auto, advances, items.size) {
+        if (!auto) return@LaunchedEffect
+        delay(MotionBudget.CAROUSEL_INTERVAL_MS)
+        pager.animateScrollToPage((pager.currentPage + 1) % items.size, animationSpec = tween(700))
+        advances++
     }
     val context = LocalContext.current
     val carouselLabel = stringResource(R.string.home_carousel)
@@ -386,7 +406,21 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
             state = pager,
             contentPadding = PaddingValues(horizontal = 16.dp),
             pageSpacing = 12.dp,
-            modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = carouselLabel },
+            modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = carouselLabel }
+                .pointerInput(Unit) {
+                    // Само наблюдава (Initial, без consume) — докосването и плъзгането стигат до страниците.
+                    awaitEachGesture {
+                        awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                        touched = true
+                        try {
+                            do {
+                                val event = awaitPointerEvent(PointerEventPass.Initial)
+                            } while (event.changes.any { it.pressed })
+                        } finally {
+                            touched = false
+                        }
+                    }
+                },
         ) { page ->
             val a = items[page]
             // Отместването се чете само в graphicsLayer — при плъзгане страницата не се прекомпозира на всеки кадър.

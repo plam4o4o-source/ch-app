@@ -4,6 +4,8 @@ import org.junit.Test
 import java.time.LocalDate
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 /** Чистата логика зад анимациите: цифрите на брояча-„одометър“ и сезоните (частиците — в HolidayCalendarTest). */
 class MotionLogicTest {
@@ -43,5 +45,31 @@ class MotionLogicTest {
         assertEquals(Season.CHRISTMAS, currentSeason(LocalDate.of(2026, 12, 15)))
         assertEquals(Season.HARVEST, currentSeason(LocalDate.of(2026, 9, 14)))
         assertEquals(Season.NONE, currentSeason(LocalDate.of(2026, 10, 20)))
+    }
+
+    @Test fun decorLoopsStopAfterAboutThirtySecondsOnWholeCycles() {
+        assertEquals(30_000L, MotionBudget.loopMs(3_000)) // 10 цикъла
+        assertEquals(28_000L, MotionBudget.loopMs(7_000)) // 4 цели цикъла, не 30 s посред цикъл
+        assertEquals(45_000L, MotionBudget.loopMs(45_000)) // поне един цикъл
+        assertEquals(0L, MotionBudget.loopMs(0))
+    }
+
+    @Test fun carouselAdvancesAboutThirtySeconds() {
+        assertEquals(5, MotionBudget.carouselAdvances(itemCount = 5))
+        assertEquals(5, MotionBudget.carouselAdvances(itemCount = 2))
+        assertEquals(0, MotionBudget.carouselAdvances(itemCount = 1))
+        assertEquals(0, MotionBudget.carouselAdvances(itemCount = 0))
+    }
+
+    @Test fun carouselPausesAndStops() {
+        fun auto(reduced: Boolean = false, touched: Boolean = false, resumed: Boolean = true, done: Int = 0, items: Int = 4) =
+            MotionBudget.carouselAutoAdvance(reduced, touched, resumed, done, items)
+        assertTrue(auto())
+        assertTrue(auto(done = 4))
+        assertFalse(auto(done = 5)) // бюджетът е изчерпан
+        assertFalse(auto(reduced = true)) // намалено движение — изобщо не тръгва
+        assertFalse(auto(touched = true)) // пръст върху лентата
+        assertFalse(auto(resumed = false)) // приложението не е на преден план
+        assertFalse(auto(items = 1))
     }
 }
