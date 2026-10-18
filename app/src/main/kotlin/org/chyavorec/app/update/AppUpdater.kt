@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.net.ConnectivityManager
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -547,17 +548,23 @@ class AppUpdater(
     /** Подписите като SHA-256 на сертификатите; `null` — системата не ги е върнала. */
     @Suppress("DEPRECATION")
     private fun signers(info: PackageInfo, legacy: Boolean, what: String): ApkSigners? = runCatching {
-        fun Array<out Signature>?.hashes(): Set<String>? = this?.map { Checksums.sha256(it.toByteArray().inputStream()) }?.toSet()
-        val s = if (!legacy && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) info.signingInfo else null
-        if (s != null) {
-            val current = s.apkContentsSigners.hashes() ?: return@runCatching null
-            val multiple = s.hasMultipleSigners()
-            ApkSigners(current, history = if (multiple) emptySet() else s.signingCertificateHistory.hashes().orEmpty(), multipleSigners = multiple)
+        if (!legacy && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            signingCertificates(info)
         } else {
             // Старият начин (и резерва, ако signingInfo липсва): целият набор подписи.
             info.signatures.hashes()?.let { ApkSigners(it) }
         }
     }.logFailure("update.verify.$what").getOrNull()
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun signingCertificates(info: PackageInfo): ApkSigners? {
+        val s = info.signingInfo ?: return null
+        val current = s.apkContentsSigners.hashes() ?: return null
+        val multiple = s.hasMultipleSigners()
+        return ApkSigners(current, history = if (multiple) emptySet() else s.signingCertificateHistory.hashes().orEmpty(), multipleSigners = multiple)
+    }
+
+    private fun Array<out Signature>?.hashes(): Set<String>? = this?.map { Checksums.sha256(it.toByteArray().inputStream()) }?.toSet()
 
     companion object {
         private const val SNOOZE_MS = 24 * 60 * 60 * 1000L
