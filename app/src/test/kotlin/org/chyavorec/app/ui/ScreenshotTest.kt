@@ -240,6 +240,13 @@ class ScreenshotTest {
         compose.waitUntil(15_000) {
             runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) }.isSuccess
         }
+        // Началото може още да се допълни над полицата (поздрав, новини от мрежата) и да я
+        // избута надолу — превърта се отново, докато след покой остане на екрана.
+        for (attempt in 1..5) {
+            compose.waitForIdle()
+            if (runCatching { compose.onAllNodes(hasText("За теб")).onFirst().assertIsDisplayed() }.isSuccess) break
+            runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) }
+        }
         shown("За теб")
         shot("08-home-for-you")
     }
