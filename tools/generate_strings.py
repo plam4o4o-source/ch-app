@@ -369,6 +369,8 @@ S = {
 "settings_clear_cache": ("Изчисти кеша", "Clear cache"),
 "settings_covers_online": ("Корици от интернет", "Covers from the internet"),
 "settings_covers_online_desc": ("Корици по ISBN от covers.openlibrary.org (сървърът вижда IP адреса)", "Covers by ISBN from covers.openlibrary.org (the server sees your IP address)"),
+"settings_covers_wifi_only": ("Корици само по Wi-Fi", "Covers on Wi-Fi only"),
+"settings_covers_wifi_only_desc": ("По мобилни данни — само вече заредените корици, без нови заявки", "On mobile data, only covers already loaded — no new downloads"),
 "settings_seasonal": ("Сезонни украси", "Seasonal decorations"),
 "settings_seasonal_desc": ("Празници, сезони и обичаи: поздрави, орнаменти, сняг и листа", "Holidays, seasons and traditions: greetings, ornaments, snow and leaves"),
 "occ_spring_title": ("Честита пролет!", "Happy spring!"),

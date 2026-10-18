@@ -195,7 +195,7 @@ internal fun LoanCard(
         // Цялата карта води към книгата (ако я има в каталога); бутонът за удължаване е отделна цел.
         val open = if (onOpen != null) Modifier.clickable(onClickLabel = openLabel, role = Role.Button, onClick = onOpen) else Modifier
         Row(open.fillMaxWidth().padding(14.dp)) {
-            RemoteImage(loan.coverUrl, null, Modifier.size(64.dp, 90.dp).clip(RoundedCornerShape(8.dp)))
+            RemoteImage(loan.coverUrl, null, Modifier.size(64.dp, 90.dp).clip(RoundedCornerShape(8.dp)), cover = true)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(loan.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)

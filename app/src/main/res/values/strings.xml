@@ -499,6 +499,8 @@
     <string name="settings_clear_cache_desc">Изтрива запазените новини, каталог и снимки</string>
     <string name="settings_covers_online">Корици от интернет</string>
     <string name="settings_covers_online_desc">Корици по ISBN от covers.openlibrary.org (сървърът вижда IP адреса)</string>
+    <string name="settings_covers_wifi_only">Корици само по Wi-Fi</string>
+    <string name="settings_covers_wifi_only_desc">По мобилни данни — само вече заредените корици, без нови заявки</string>
     <string name="settings_data">Данни</string>
     <string name="settings_diagnostics">Диагностика</string>
     <string name="settings_diagnostics_desc">Дневник на грешките — само на това устройство</string>

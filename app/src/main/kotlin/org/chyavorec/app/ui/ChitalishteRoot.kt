@@ -94,6 +94,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import org.chyavorec.app.ui.components.BrandIntro
 import org.chyavorec.app.ui.components.LocalNavAnimatedScope
 import org.chyavorec.app.ui.components.LocalOnlineCovers
+import org.chyavorec.app.ui.components.LocalCoverNetwork
+import org.chyavorec.app.ui.components.observeCoverNetwork
 import org.chyavorec.app.ui.components.LocalReducedMotion
 import org.chyavorec.app.ui.components.observeReducedMotion
 import org.chyavorec.app.ui.components.LocalSharedScope
@@ -167,6 +169,7 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
         LocalAppContainer provides container,
         LocalReducedMotion provides observeReducedMotion(),
         LocalOnlineCovers provides settings.coversOnline,
+        LocalCoverNetwork provides observeCoverNetwork(container.connectivity, settings.coversWifiOnly),
         // Украсите — от вече прочетените настройки: вярни още в първия кадър на началния екран.
         LocalSeasonalDecor provides settings.seasonal,
     ) {

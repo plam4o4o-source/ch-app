@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.Modifier
@@ -55,9 +56,12 @@ import androidx.compose.ui.unit.sp
 import coil3.BitmapImage
 import coil3.compose.AsyncImage
 import coil3.network.HttpException
+import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import org.chyavorec.app.R
+import org.chyavorec.app.network.ConnectivityObserver
+import org.chyavorec.app.network.CoverNetworkPolicy
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.GeneratedCover
@@ -69,7 +73,10 @@ import org.chyavorec.app.ui.theme.UdcCoverColors
 import org.chyavorec.domain.model.BookStatus
 import org.chyavorec.domain.model.CatalogBook
 
-/** Изображение от мрежата с кеш, плавно появяване и неутрален фон при грешка. */
+/**
+ * Изображение от мрежата с кеш, плавно появяване и неутрален фон при грешка.
+ * [cover] = корица на книга: важи „Корици само по Wi-Fi“ ([LocalCoverNetwork]).
+ */
 @Composable
 fun RemoteImage(
     url: String?,
@@ -79,6 +86,7 @@ fun RemoteImage(
     fallbackUrl: String? = null,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     onFailure: (() -> Unit)? = null,
+    cover: Boolean = false,
 ) {
     var failed by remember(url) { mutableStateOf(false) }
     Box(modifier.background(containerColor)) {
@@ -86,7 +94,8 @@ fun RemoteImage(
         if (target != null) {
             val context = LocalContext.current
             // Заявката се създава веднъж за адрес (не при всяка рекомпозиция); crossfade идва от ImageLoader-а.
-            val request = remember(context, target) { ImageRequest.Builder(context).data(target).build() }
+            val network = !cover || LocalCoverNetwork.current
+            val request = remember(context, target, network) { ImageRequest.Builder(context).data(target).coverNetwork(network).build() }
             AsyncImage(
                 model = request,
                 contentDescription = contentDescription,
@@ -138,6 +147,29 @@ fun BrandedImageFallback(modifier: Modifier = Modifier) {
  * ([PersonalCovers]).
  */
 val LocalOnlineCovers = staticCompositionLocalOf { true }
+
+/**
+ * Дали кориците (от Open Library и сканираните на библиотеката) може да се теглят от мрежата
+ * сега — false при „Корици само по Wi-Fi“ и мрежа с отчитане на трафика
+ * ([org.chyavorec.app.network.CoverNetworkPolicy]). Тогава Coil чете само от своя кеш
+ * (без заявка), а книгите без кеширана корица остават с генерираната.
+ */
+val LocalCoverNetwork = staticCompositionLocalOf { true }
+
+/**
+ * Стойността за [LocalCoverNetwork] — веднъж в корена. Мрежата се наблюдава само докато
+ * настройката е включена (смяната Wi-Fi ↔ мобилни данни важи веднага).
+ */
+@Composable
+fun observeCoverNetwork(connectivity: ConnectivityObserver, wifiOnly: Boolean): Boolean {
+    if (!wifiOnly) return true
+    val metered by connectivity.metered.collectAsStateWithLifecycle(initialValue = remember(connectivity) { connectivity.isMetered() })
+    return CoverNetworkPolicy.networkAllowed(wifiOnly, metered)
+}
+
+/** Заявка за корица: без мрежа, ако [network] е false — само от кеша в паметта/на диска. */
+private fun ImageRequest.Builder.coverNetwork(network: Boolean): ImageRequest.Builder =
+    if (network) this else networkCachePolicy(CachePolicy.DISABLED)
 
 /**
  * Личен екран (история, заемания, „За теб“, „Моето четене“, картата): корици само генерирани,
@@ -219,14 +251,16 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
     val onlineUrl = remember(isbn, wantsOnline, missesReady, large) {
         if (isbn != null && missesReady && !CoverMisses.isMiss(isbn)) openLibraryCoverUrl(isbn, large) else null
     }
-    var onlineFailed by remember(onlineUrl) { mutableStateOf(false) }
+    val network = LocalCoverNetwork.current
+    // При смяна на мрежата (мобилни данни → Wi-Fi) корицата се опитва отново.
+    var onlineFailed by remember(onlineUrl, network) { mutableStateOf(false) }
     val url = when {
         book.coverUrl.isNotBlank() -> book.coverUrl
         onlineUrl != null && !onlineFailed -> onlineUrl
         else -> null
     }
     // Истинската корица е заредена → генерираната под нея не се изчертава.
-    var imageShown by remember(url) { mutableStateOf(false) }
+    var imageShown by remember(url, network) { mutableStateOf(false) }
 
     Box(
         modifier
@@ -309,8 +343,8 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
         }
         if (url != null) {
             val wantsBitmap = sink != null
-            val request = remember(context, url, wantsBitmap) {
-                ImageRequest.Builder(context).data(url).apply {
+            val request = remember(context, url, wantsBitmap, network) {
+                ImageRequest.Builder(context).data(url).coverNetwork(network).apply {
                     // В детайлите: докато се тегли голямата корица, се показва вече заредената средна от списъка.
                     if (url == onlineUrl && large && isbn != null) placeholderMemoryCacheKey(openLibraryCoverUrl(isbn, large = false))
                     // Само за цветовете на екрана с детайлите: софтуерен bitmap, който Palette може да чете.

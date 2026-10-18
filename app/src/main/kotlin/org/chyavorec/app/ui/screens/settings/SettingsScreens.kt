@@ -176,6 +176,9 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             SwitchItem(stringResource(R.string.settings_covers_online), stringResource(R.string.settings_covers_online_desc), s.coversOnline) {
                 scope.launch { c.settings.setCoversOnline(it) }
             }
+            SwitchItem(stringResource(R.string.settings_covers_wifi_only), stringResource(R.string.settings_covers_wifi_only_desc), s.coversWifiOnly) {
+                scope.launch { c.settings.setCoversWifiOnly(it) }
+            }
             NavItem(Icons.Outlined.DeleteSweep, stringResource(R.string.settings_clear_cache), stringResource(R.string.settings_clear_cache_desc)) { clearDialog = true }
 
             GroupTitle(stringResource(R.string.settings_legal))

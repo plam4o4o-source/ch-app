@@ -499,6 +499,8 @@
     <string name="settings_clear_cache_desc">Deletes cached news, catalogue and images</string>
     <string name="settings_covers_online">Covers from the internet</string>
     <string name="settings_covers_online_desc">Covers by ISBN from covers.openlibrary.org (the server sees your IP address)</string>
+    <string name="settings_covers_wifi_only">Covers on Wi-Fi only</string>
+    <string name="settings_covers_wifi_only_desc">On mobile data, only covers already loaded — no new downloads</string>
     <string name="settings_data">Data</string>
     <string name="settings_diagnostics">Diagnostics</string>
     <string name="settings_diagnostics_desc">Error log — kept on this device only</string>

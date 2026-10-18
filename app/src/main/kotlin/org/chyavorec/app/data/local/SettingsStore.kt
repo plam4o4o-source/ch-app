@@ -54,6 +54,8 @@ data class AppSettings(
     val introShown: Boolean = false,
     /** Корици от covers.openlibrary.org по ISBN (изкл. = никакви заявки към този сървър). */
     val coversOnline: Boolean = true,
+    /** Корици от мрежата (Open Library и на библиотеката) само без отчитане на трафика — по мобилни данни само от кеша. */
+    val coversWifiOnly: Boolean = false,
     /** Празнични и сезонни украси на началния екран (поздрави, орнаменти, сняг, листа). */
     val seasonal: Boolean = true,
     /** Каталогът като „полица“ (гръбчета на книги) вместо списък. */
@@ -100,6 +102,7 @@ class SettingsStore(private val context: Context) {
         val personalReadPending = stringSetPreferencesKey("personal_read_pending")
         val introShown = booleanPreferencesKey("intro_shown")
         val coversOnline = booleanPreferencesKey("covers_online")
+        val coversWifiOnly = booleanPreferencesKey("covers_wifi_only")
         val seasonal = booleanPreferencesKey("seasonal_decor")
         val dismissedOccasion = stringPreferencesKey("dismissed_occasion")
         val notificationPermissionAsked = booleanPreferencesKey("notification_permission_asked")
@@ -131,6 +134,7 @@ class SettingsStore(private val context: Context) {
             notifyMessages = p[Keys.notifyMessages] ?: true,
             introShown = p[Keys.introShown] ?: false,
             coversOnline = p[Keys.coversOnline] ?: true,
+            coversWifiOnly = p[Keys.coversWifiOnly] ?: false,
             seasonal = p[Keys.seasonal] ?: true,
             catalogShelf = p[Keys.catalogShelf] ?: false,
             readerFontSize = p[Keys.readerFontSize]?.let { runCatching { ReaderFontSize.valueOf(it) }.getOrNull() } ?: ReaderFontSize.M,
@@ -171,6 +175,7 @@ class SettingsStore(private val context: Context) {
 
     suspend fun setIntroShown() = context.dataStore.edit { it[Keys.introShown] = true }
     suspend fun setCoversOnline(on: Boolean) = context.dataStore.edit { it[Keys.coversOnline] = on }
+    suspend fun setCoversWifiOnly(on: Boolean) = context.dataStore.edit { it[Keys.coversWifiOnly] = on }
     suspend fun setSeasonal(on: Boolean) = context.dataStore.edit { it[Keys.seasonal] = on }
     /** Скритият с „×“ празничен поздрав — `ГГГГ-ММ-ДД|id`; на следващия ден вече не важи. */
     val dismissedOccasion: Flow<String?> = context.dataStore.data.map { it[Keys.dismissedOccasion] }
