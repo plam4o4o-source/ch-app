@@ -120,7 +120,9 @@ UI показва `SyncBanner` („Няма интернет връзка. По�
 | Паролата никога не се пази; `CharArray` се зачиства след заявката | `LoginViewModel`, `RemoteInvLibClient.login` |
 | „Не ме помни“ → сесия само в паметта | `SecureSessionStore.save(persist = false)` |
 | Изтичане на токена → refresh; отказ → изход и изтриване на личния кеш | `AuthRepository.validSession` |
-| Защита от налучкване (5 опита → 60 s, удвояване) | `LoginThrottle` |
+| Защита от налучкване (5 опита → 60 s, удвояване); оцелява при рестарт, не се нулира при изход | `LoginThrottle`, `DataStoreThrottleStore` |
+| „Наш ли е адресът“ — точен хост на разчетения адрес, само `https`; чуждото — във външния браузър | `TrustedLinks` (`DeepLinks.forUrl`, `SitePageScreen`, `fetchPage`, `ScanCodes`) |
+| Обновление само с проверена сума и същия подпис; неразчетен подпис = отказ | `AppUpdater.verifyApk`, `SigningCheck` |
 | Ограничение на честотата на заявките към сайта/каталога | `CachedResource.minRefreshMillis` |
 | Без архивиране в облака/прехвърляне на данни | `allowBackup=false`, `data_extraction_rules.xml` |
 | Без логове с лични данни; R8 премахва `Log.d/i/v` в release | `proguard-rules.pro` |

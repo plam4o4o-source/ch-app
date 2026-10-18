@@ -154,6 +154,11 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
         viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
         // Заключване от по-ранен опит (екранът е отворен наново) — броячът продължава.
         _ui.update { it.withThrottle(lockSeconds = c.authRepository.throttle.remainingLockSeconds()) }
+        // …и от преди рестарта на приложението: броячите се зареждат от диска (веднъж).
+        viewModelScope.launch {
+            c.authRepository.restoreThrottle()
+            _ui.update { it.withThrottle(lockSeconds = c.authRepository.throttle.remainingLockSeconds()) }
+        }
     }
 
     /**

@@ -81,7 +81,7 @@ sealed interface ScanTarget {
  * Превод на стойността от баркод/QR към цел за търсене в каталога:
  * - EAN-13 с префикс 978/979 → ISBN;
  * - само цифри (до 9) → инвентарен номер (етикетът на библиотеката);
- * - адрес на електронния каталог (chyavorec.org) с `inv=`/`isbn=`/`q=` в
+ * - адрес на електронния каталог (точно chyavorec.org / www.chyavorec.org) с `inv=`/`isbn=`/`q=` в
  *   заявката или фрагмента → извлича стойността; `#zapis=<инв. №>` — споделената от
  *   сайта (и от приложението) връзка към книга;
  * - друго → [ScanTarget.Unknown].
@@ -89,7 +89,11 @@ sealed interface ScanTarget {
 object ScanCodes {
     private val param = Regex("(?:^|[?#&;])(inv|isbn|q|book|zapis)=([^&#;]+)", RegexOption.IGNORE_CASE)
 
-    fun resolve(raw: String): ScanTarget {
+    /**
+     * [siteBaseUrl] — базовият адрес на сайта от конфигурацията (ако е различен от
+     * chyavorec.org, напр. в тестовете); адресите на други хостове са [ScanTarget.Unknown].
+     */
+    fun resolve(raw: String, siteBaseUrl: String? = null): ScanTarget {
         val value = raw.trim()
         if (value.isEmpty()) return ScanTarget.Unknown(value)
         val digits = Isbn.normalize(value)
@@ -101,7 +105,7 @@ object ScanCodes {
             }
             return ScanTarget.Unknown(value)
         }
-        if (isCatalogUrl(value)) {
+        if (isCatalogUrl(value, siteBaseUrl)) {
             for (m in param.findAll(value)) {
                 val key = m.groupValues[1].lowercase()
                 val v = decode(m.groupValues[2])
@@ -117,10 +121,14 @@ object ScanCodes {
         return ScanTarget.Unknown(value)
     }
 
-    private fun isCatalogUrl(value: String): Boolean {
-        val lower = value.lowercase()
-        return (lower.startsWith("http://") || lower.startsWith("https://")) &&
-            (lower.contains("chyavorec.org") || lower.contains("katalog") || lower.contains("catalog"))
+    /**
+     * Адрес от сайта на читалището — по точния хост на разчетения адрес (TrustedLinks), а не
+     * по `contains`. Етикетите може да са отпечатани и с `http://` — от адреса се взима само
+     * номерът, страница не се отваря.
+     */
+    private fun isCatalogUrl(value: String, siteBaseUrl: String?): Boolean {
+        val link = TrustedLinks.parse(value) ?: return false
+        return link.host in TrustedLinks.SITE_HOSTS || (siteBaseUrl != null && TrustedLinks.isSiteUrl(value, siteBaseUrl))
     }
 
     private fun decode(s: String): String = runCatching { java.net.URLDecoder.decode(s, "UTF-8") }.getOrDefault(s)

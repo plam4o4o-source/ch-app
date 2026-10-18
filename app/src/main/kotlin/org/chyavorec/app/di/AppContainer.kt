@@ -21,6 +21,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.data.local.AppDatabase
 import org.chyavorec.app.data.local.CatalogDatabase
+import org.chyavorec.app.data.local.DataStoreThrottleStore
 import org.chyavorec.app.data.local.FilePayloadCache
 import org.chyavorec.app.data.local.RoomCatalogIndexStore
 import org.chyavorec.app.data.local.SecureSelfCardStore
@@ -155,7 +156,11 @@ class AppContainer(
     val siteRepository by lazy { SiteRepository(siteService, publicCache, clock, newsRepository) }
 
     val authRepository by lazy {
-        AuthRepository(readerServices.auth, SecureSessionStore(File(context.noBackupFilesDir, "secure/session.bin"), cipher), clock, readerCache)
+        AuthRepository(
+            readerServices.auth, SecureSessionStore(File(context.noBackupFilesDir, "secure/session.bin"), cipher), clock, readerCache,
+            // Защитата от налучкване на ПИН-а оцелява при рестарт (не се нулира при изход).
+            throttleStore = DataStoreThrottleStore(context),
+        )
     }
     /**
      * Едно общо хранилище за читателските данни (един кеш на вид, `/v1/me/all` при наличие,

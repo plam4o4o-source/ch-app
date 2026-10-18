@@ -115,6 +115,38 @@ class DeepLinksTest {
         assertNull(DeepLinks.forUrl("https://example.org/news/x", base))
     }
 
+    /**
+     * Друго приложение може да изпрати изричен intent с какъвто и да е адрес (или extra
+     * „deep_link“) — чуждата страница не бива да се покаже като страница на читалището.
+     */
+    @Test fun spoofedSiteUrlsAreNotOpenedAsOurPages() {
+        listOf(
+            "https://chyavorec.org:443@evil.com/about",
+            "https://chyavorec.org@evil.com/about",
+            "https://evil.com\\@chyavorec.org/about",
+            "https://evilchyavorec.org/about",
+            "https://chyavorec.org.evil.com/about",
+            "https://chyavorec%2Eorg/about",
+            "http://chyavorec.org/about",
+            "HTTP://chyavorec.org/about",
+            "https://chyavorec.org:8443/about",
+            "javascript:alert(1)//https://chyavorec.org/about",
+            "intent://chyavorec.org/about#Intent;scheme=https;end",
+            "content://chyavorec.org/about",
+            "file:///chyavorec.org/about",
+        ).forEach { url ->
+            assertNull(DeepLinks.forUrl(url, base), url)
+            assertNull(target(url), url)
+        }
+    }
+
+    @Test fun sitePageIsLoadedFromTheConfiguredOrigin() {
+        // www, главни букви и котва не сменят адреса, от който се зарежда страницата.
+        val page = LinkTarget.Screen(Routes.MORE, listOf(Routes.page("$base/history", "")))
+        assertEquals(page, DeepLinks.forUrl("https://WWW.chyavorec.org/history#top", base))
+        assertEquals(page, DeepLinks.forUrl("HTTPS://chyavorec.org:443/history", base))
+    }
+
     @Test fun webLinksGoThroughTheUrlMapping() {
         assertEquals(DeepLinks.forUrl("$base/events", base), target("$base/events"))
         assertNull(target("$base/files/ustav.pdf"))

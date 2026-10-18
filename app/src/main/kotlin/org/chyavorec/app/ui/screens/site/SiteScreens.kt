@@ -47,6 +47,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import org.chyavorec.app.ui.components.WheatRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -61,6 +62,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
+import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.ContentBlocksView
@@ -75,6 +77,7 @@ import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.util.Intents
 import org.chyavorec.core.AppError
+import org.chyavorec.core.TrustedLinks
 import org.chyavorec.domain.model.SiteLink
 import org.chyavorec.domain.model.SiteSection
 
@@ -155,6 +158,16 @@ fun ActivitiesScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExterna
 
 @Composable
 fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (String) -> Unit, openLink: (String) -> Unit) {
+    // Само страници от сайта се показват тук като „наши“; чужд адрес — във външния браузър.
+    val siteBaseUrl = LocalAppContainer.current.config.siteBaseUrl
+    if (!TrustedLinks.isSiteUrl(url, siteBaseUrl)) {
+        val context = LocalContext.current
+        LaunchedEffect(url) {
+            Intents.openUrl(context, url)
+            onBack()
+        }
+        return
+    }
     val vm = appViewModel(key = "page-$url") { PageViewModel(url, it.siteRepository) }
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current

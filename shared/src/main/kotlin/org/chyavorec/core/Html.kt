@@ -23,12 +23,6 @@ object Urls {
     fun upgradeToHttps(url: String): String =
         if (url.startsWith("http://")) "https://" + url.removePrefix("http://") else url
 
-    fun sameSite(url: String, base: String): Boolean {
-        val host = hostOf(url) ?: return false
-        val baseHost = hostOf(base) ?: return false
-        return host.removePrefix("www.") == baseHost.removePrefix("www.")
-    }
-
-    fun hostOf(url: String): String? =
-        Regex("^https?://([^/:?#]+)", RegexOption.IGNORE_CASE).find(url)?.groupValues?.get(1)?.lowercase()
+    /** Адресът е от сайта (с или без www) — строгата проверка е в [TrustedLinks.siteLink]. */
+    fun sameSite(url: String, base: String): Boolean = TrustedLinks.isSiteUrl(url, base)
 }

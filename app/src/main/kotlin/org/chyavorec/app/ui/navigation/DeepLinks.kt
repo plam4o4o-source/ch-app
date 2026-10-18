@@ -3,7 +3,7 @@ package org.chyavorec.app.ui.navigation
 import android.net.Uri
 import org.chyavorec.core.ScanCodes
 import org.chyavorec.core.ScanTarget
-import org.chyavorec.core.Urls
+import org.chyavorec.core.TrustedLinks
 
 /** Къде води една връзка — от известие, пряк път на иконата или адрес от сайта. */
 sealed interface LinkTarget {
@@ -90,13 +90,14 @@ object DeepLinks {
      * водят до екран тук (проверява го DeepLinksTest).
      */
     fun forUrl(url: String, siteBaseUrl: String): LinkTarget.Screen? {
-        if (!Urls.sameSite(url, siteBaseUrl)) return null
-        val path = Uri.parse(url).path.orEmpty().trimEnd('/').ifEmpty { "/" }
+        // Само строго разчетен https адрес от сайта (TrustedLinks) — иначе браузърът.
+        val link = TrustedLinks.siteLink(url, siteBaseUrl) ?: return null
+        val path = link.path.trimEnd('/').ifEmpty { "/" }
         if (path.substringAfterLast('/').contains('.')) return null
         return when {
             path == "/" -> LinkTarget.Screen(Routes.HOME)
             // Връзка към книга (`#zapis=`/`?inv=`) — книгата над каталога; иначе самият каталог.
-            path == CATALOG_PATH -> (ScanCodes.resolve(url) as? ScanTarget.Inventory)
+            path == CATALOG_PATH -> (ScanCodes.resolve(url, siteBaseUrl) as? ScanTarget.Inventory)
                 ?.let { LinkTarget.Screen(Routes.CATALOG, listOf(Routes.book(it.inv))) }
                 ?: LinkTarget.Screen(Routes.CATALOG)
             path == "/news" -> LinkTarget.Screen(Routes.NEWS)
@@ -106,7 +107,9 @@ object DeepLinks {
             path == "/kontakti" -> LinkTarget.Screen(Routes.HOME, listOf(Routes.CONTACTS))
             path == "/load" || path == "/istoricheski-publikacii" -> LinkTarget.Screen(Routes.MORE, listOf(Routes.DOCUMENTS))
             path == "/policy" -> LinkTarget.Screen(Routes.MORE, listOf(Routes.PRIVACY))
-            path.count { it == '/' } == 1 -> LinkTarget.Screen(Routes.MORE, listOf(Routes.page(url, "")))
+            // Страницата се зарежда от адреса на сайта (произходът е от конфигурацията, не от връзката).
+            path.count { it == '/' } == 1 -> TrustedLinks.canonicalSiteUrl(url, siteBaseUrl)
+                ?.let { LinkTarget.Screen(Routes.MORE, listOf(Routes.page(it, ""))) }
             else -> null
         }
     }
