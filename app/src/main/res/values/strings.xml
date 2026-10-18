@@ -495,8 +495,8 @@
     <string name="settings_appearance">Изглед</string>
     <string name="settings_cache_cleared">Кешът е изчистен.</string>
     <string name="settings_clear_cache">Изчисти кеша</string>
-    <string name="settings_clear_cache_confirm">Запазените офлайн данни ще бъдат изтрити и заредени отново при следваща връзка. Входът и картата остават.</string>
-    <string name="settings_clear_cache_desc">Изтрива запазените новини, каталог и снимки</string>
+    <string name="settings_clear_cache_confirm">Запазените офлайн данни (новини, събития, каталог, корици и снимки) ще бъдат изтрити и заредени отново при следваща връзка. Входът, картата, любимите, напомнянията и историята остават.</string>
+    <string name="settings_clear_cache_desc">Изтрива запазените новини, събития, каталог и снимки</string>
     <string name="settings_covers_online">Корици от интернет</string>
     <string name="settings_covers_online_desc">Корици по ISBN от covers.openlibrary.org (сървърът вижда IP адреса)</string>
     <string name="settings_data">Данни</string>

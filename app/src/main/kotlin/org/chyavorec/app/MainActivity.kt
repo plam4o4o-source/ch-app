@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.ChitalishteRoot
+import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.util.AppLanguage
 import org.chyavorec.domain.model.MessagePollPolicy
@@ -37,9 +38,13 @@ class MainActivity : ComponentActivity() {
         // Кратък splash: държим го само докато настройките се заредят (милисекунди).
         splash.setKeepOnScreenCondition { !ready }
         enableEdgeToEdge()
-        // Само при истинско стартиране — не и при пресъздаване (напр. завъртане),
-        // иначе същото известие би отваряло екрана отново и отново.
-        if (savedInstanceState == null) consumeDeepLink(intent)
+        // Само при истинско стартиране — не и при пресъздаване (напр. завъртане) или при
+        // отваряне от „Последни“ (Android 8–11 подава отново стария intent), иначе същото
+        // известие би отваряло екрана отново и отново. Връзка, която не е била отворена
+        // преди пресъздаването, идва от запазеното състояние.
+        deepLink.value = savedInstanceState?.getString(LaunchIntents.KEY_PENDING_LINK)
+        if (LaunchIntents.shouldHandle(intent?.flags ?: 0, restored = savedInstanceState != null)) consumeDeepLink(intent)
+        else intent?.let { setIntent(LaunchIntents.consumed(it)) }
         val container = (application as ChitalishteApp).container
 
         setContent {
@@ -73,7 +78,12 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        consumeDeepLink(intent)
+        if (LaunchIntents.shouldHandle(intent.flags, restored = false)) consumeDeepLink(intent)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        deepLink.value?.let { outState.putString(LaunchIntents.KEY_PENDING_LINK, it) }
     }
 
     /**
@@ -92,6 +102,8 @@ class MainActivity : ComponentActivity() {
         deepLink.value = link ?: intent?.getStringExtra(Notifier.EXTRA_DEEP_LINK)
         intent?.removeExtra(Notifier.EXTRA_DEEP_LINK)
         if (link != null) intent?.data = null
+        // Обработеният intent се заменя с обикновен — повторно четене не отваря нищо.
+        if (intent != null) setIntent(LaunchIntents.consumed(intent))
     }
 
     companion object {

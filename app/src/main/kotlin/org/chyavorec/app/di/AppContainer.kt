@@ -355,8 +355,15 @@ class AppContainer(
         appScope.launch { runCatching { ChitalishteWidget.refresh(context) } }
     }
 
-    /** „Изчисти кеша“ — само публичните данни и изображенията; сесията остава. */
+    /**
+     * „Изчисти кеша“ — само публичните данни: новините, събитията, страниците, каталогът
+     * (katalog.json с хеша/ETag-а, обобщението и „За теб“, индексът в базата), HTTP кешът
+     * и изображенията (и кориците). Сесията, картата, любимите, напомнянията, историята и
+     * настройките остават.
+     */
     suspend fun clearPublicCache() = withContext(Dispatchers.IO) {
+        // Първо каталогът: спира попълването на индекса и забравя състоянието в паметта.
+        runCatching { catalogRepository.clear() }.logFailure("cache.catalog")
         publicCache.clear()
         runCatching { okHttp.cache?.evictAll() }
         clearImageCaches()

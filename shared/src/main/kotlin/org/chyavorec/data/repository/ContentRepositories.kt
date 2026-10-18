@@ -10,6 +10,7 @@ import org.chyavorec.core.Outcome
 import org.chyavorec.core.map
 import org.chyavorec.core.Synced
 import org.chyavorec.domain.model.ArticleDetail
+import org.chyavorec.domain.model.ArticleKeys
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.DailyFeast
 import org.chyavorec.data.site.SiteOccasionEntry
@@ -56,8 +57,10 @@ class NewsRepository(
         CachedResource(cache, cacheKey("news:article:", article.url), ArticleDetail.serializer(), clock, ONE_HOUR, work)
             .load(force) { service.fetchArticle(article) }
 
-    /** По идентификатор или по публичния адрес (/news/<slug>) — за вътрешните връзки. */
-    suspend fun find(id: String): NewsArticle? = list.cached()?.data?.firstOrNull { it.id == id || it.url.trimEnd('/') == id.trimEnd('/') }
+    /** По идентификатор или по публичния адрес (/news/<slug>, нормализиран — [ArticleKeys]) — за вътрешните връзки. */
+    suspend fun find(id: String): NewsArticle? = list.cached()?.data?.let { l ->
+        l.firstOrNull { it.id == id } ?: l.firstOrNull { ArticleKeys.matches(it.id, it.url, id) }
+    }
 }
 
 class EventsRepository(

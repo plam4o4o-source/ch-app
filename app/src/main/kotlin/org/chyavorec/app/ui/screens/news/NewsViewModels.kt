@@ -29,6 +29,7 @@ import org.chyavorec.core.AppError
 import org.chyavorec.core.TextNormalizer
 import org.chyavorec.data.repository.NewsRepository
 import org.chyavorec.domain.model.ArticleDetail
+import org.chyavorec.domain.model.ArticleKeys
 import org.chyavorec.domain.model.NewsArticle
 
 data class NewsFilter(val query: String = "", val category: String? = null, val favoritesOnly: Boolean = false)
@@ -140,10 +141,19 @@ class ArticleViewModel(
 ) : ViewModel() {
     private val _state = MutableStateFlow(ScreenState<ArticleDetail>())
     val state: StateFlow<ScreenState<ArticleDetail>> = _state.asStateFlow()
-    val isFavorite: StateFlow<Boolean> = favorites.observeIds().orOnDbError(emptyList()).map { ids -> id in ids }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+    /** Новината, щом е намерена — до нея [id] може да е и публичният ѝ адрес (App Link). */
+    private val resolved = MutableStateFlow<NewsArticle?>(null)
+    private var article: NewsArticle?
+        get() = resolved.value
+        set(value) { resolved.value = value }
 
-    private var article: NewsArticle? = null
+    /** Любимите, които са тази новина — по идентификатор или по адрес, както и да е отворена. */
+    private val matching = combine(favorites.observeAll().orOnDbError(emptyList()), resolved) { favs, a ->
+        val keys = listOfNotNull(id, a?.id, a?.url)
+        favs.filter { f -> keys.any { k -> ArticleKeys.matches(f.id, f.url, k) } }
+    }
+    val isFavorite: StateFlow<Boolean> = matching.map { it.isNotEmpty() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     init { load(false) }
 
@@ -164,13 +174,15 @@ class ArticleViewModel(
     }
 
     private suspend fun favoriteFallback(): NewsArticle? =
-        favorites.observeAll().orOnDbError(emptyList()).first().firstOrNull { it.id == id }
+        favorites.observeAll().orOnDbError(emptyList()).first().firstOrNull { ArticleKeys.matches(it.id, it.url, id) }
             ?.let { NewsArticle(it.id, it.title, it.url, it.publishedAtMillis, it.summary, it.imageUrl, it.category) }
 
     fun toggleFavorite() = viewModelScope.launch {
         val a = article ?: return@launch
+        // Текущите любими (не кешираната звезда — тя може още да не е абонирана).
+        val existing = matching.first()
         dbWrite {
-            if (isFavorite.value) favorites.delete(a.id)
+            if (existing.isNotEmpty()) existing.forEach { favorites.delete(it.id) }
             else favorites.upsert(FavoriteNewsEntity(a.id, a.title, a.url, a.imageUrl, a.summary, a.category, a.publishedAtMillis, clock.now().toEpochMilli()))
         }
     }
