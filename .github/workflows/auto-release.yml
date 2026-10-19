@@ -12,8 +12,8 @@ name: Auto release
 # приложения преди публикуването.
 # Ръчно: Actions → Auto release → Run workflow — от клона main (виж docs/RELEASE.md).
 #
-# workflow_run винаги пуска този файл от клона по подразбиране на хранилището (сега
-# claude/charming-rubin-3lzor2, после main) — промяна тук действа едва след сливане там.
+# workflow_run винаги пуска този файл от клона по подразбиране на хранилището (main) —
+# промяна тук действа едва след сливане в main.
 on:
   workflow_run:
     workflows: ["Android CI"]

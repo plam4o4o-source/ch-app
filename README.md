@@ -107,7 +107,8 @@ AGP 9.4 (вграден Kotlin) · Gradle 9.8 · Java 21 (build с JDK 25) · mi
 
 Ръчно: Actions → Release (конкретна версия, напр. `1.2.0`) или tag `v1.2.0`.
 При ръчно пускане (Release, Auto release, Update control) в „Run workflow“ избери
-**Use workflow from: `main`** — GitHub предлага клона по подразбиране; от друг клон
+**Use workflow from: `main`** (клонът по подразбиране; `main` е защитен — нужен е зелен
+„checks“). От друг клон
 Auto release и Update control спират с грешка, а Release подписва с истинския ключ само от `main`.
 Лоша версия — спиране на обновяванията (`update-control.yml`) и връщане назад:
 **[docs/RELEASE.md](docs/RELEASE.md)**.

@@ -7,9 +7,8 @@ Google Play) четат `releases/latest/download/update.json` и се обно�
 обновява само от Play Console (AAB се качва там ръчно).
 
 > Ръчно пусканите workflow-и (Update control, Auto release, Release): в „Run workflow“
-> избери **Use workflow from: `main`**. GitHub предлага клона по подразбиране, който може
-> да не е `main`; от друг клон Update control и Auto release спират с грешка, а Release
-> не получава истинския ключ за подписване.
+> остави **Use workflow from: `main`** (клонът по подразбиране). От друг клон Update control
+> и Auto release спират с грешка, а Release не получава истинския ключ за подписване.
 
 ## Ако излезе лоша версия
 
