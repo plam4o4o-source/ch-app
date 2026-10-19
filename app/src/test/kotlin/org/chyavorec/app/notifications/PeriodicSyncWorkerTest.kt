@@ -13,6 +13,7 @@ import org.chyavorec.app.WorkerTestApp
 import org.chyavorec.core.FixedClock
 import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.Inbox
+import org.chyavorec.domain.model.MessagePollPolicy
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -53,6 +54,8 @@ class PeriodicSyncWorkerTest {
         s.setNotifyNews(false)
         s.setNotifyLoans(true)
         listOf("news", "loans", "events").forEach { s.setLastSyncStep(it, 0) }
+        // Приложението е отворено току-що (не „спи“ — вж. 14-дневното правило).
+        s.markAppOpened(clock.now().toEpochMilli(), MessagePollPolicy.BASE_MILLIS, 0)
     }
 
     @After fun tearDown() = backend.shutdown()
@@ -155,7 +158,43 @@ class PeriodicSyncWorkerTest {
         assertTrue(nm.activeNotifications.none { it.id == NotificationIds.message(Inbox.personalId(messageId)) })
     }
 
+    @Test fun dormantAppStopsSiteMessagesButKeepsPersonalOnes() = runBlocking<Unit> {
+        val s = app.container.settings
+        s.setNotifyMessages(true)
+        signIn()
+        // Не е отваряно 15 дни: съобщенията от сайта не се проверяват (политиката за поверителност).
+        s.markAppOpened(clock.now().toEpochMilli() - 15 * DAY_MS, MessagePollPolicy.BASE_MILLIS, 0)
+        run()
+        assertEquals(0, backend.count("/data/app-messages.json"))
+        // Личните съобщения на влезлия читател — да.
+        assertEquals(1, backend.count("$API/v1/me/messages"))
+        // Отворено отново — и сайтът.
+        s.markAppOpened(clock.now().toEpochMilli(), MessagePollPolicy.BASE_MILLIS, 0)
+        clock.advanceSeconds(6 * 60)
+        run()
+        assertEquals(1, backend.count("/data/app-messages.json"))
+        assertEquals(2, backend.count("$API/v1/me/messages"))
+    }
+
+    @Test fun loansJustFetchedWithMeAllAreNotRequestedAgain() = runBlocking<Unit> {
+        backend.json(
+            "$API/v1/capabilities",
+            """{"apiVersion":1,"login":true,"profile":true,"loans":true,"membership":false,"renew":true,"history":false,"messages":true,"all":true}""",
+        )
+        backend.json("$API/v1/me/all", """{"loans":{"loans":[$overdueLoan]},"messages":{"items":[]}}""")
+        backend.loans(overdueLoan)
+        app.container.settings.setNotifyMessages(true)
+        signIn()
+        run()
+        // Стъпката „съобщения“ е взела всичко с една заявка — заеманията са от нея, без втора.
+        assertEquals(1, backend.count("$API/v1/me/all"))
+        assertEquals(0, backend.count("$API/v1/me/loans"))
+        assertEquals(Channel.LOANS.id, overdue().single().notification.channelId)
+        assertEquals(clock.now().toEpochMilli(), app.container.settings.lastSyncStep("loans"))
+    }
+
     private companion object {
         const val API = TestBackend.API
+        const val DAY_MS = 24 * 60 * 60 * 1000L
     }
 }

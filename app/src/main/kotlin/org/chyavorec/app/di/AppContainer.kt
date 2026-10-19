@@ -6,6 +6,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,6 +17,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
 import coil3.SingletonImageLoader
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.chyavorec.app.AppConfig
@@ -54,6 +57,7 @@ import org.chyavorec.data.repository.LibraryRepository
 import org.chyavorec.data.repository.MembershipRepository
 import org.chyavorec.data.repository.MessagesRepository
 import org.chyavorec.data.repository.NewsRepository
+import org.chyavorec.data.repository.PersonalImageTrackingCache
 import org.chyavorec.data.repository.ProfileRepository
 import org.chyavorec.data.repository.ReaderDataRepository
 import org.chyavorec.data.repository.ReaderMessagesRepository
@@ -63,6 +67,7 @@ import org.chyavorec.data.site.ChyavorecSiteService
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.LoanReminderSync
+import org.chyavorec.domain.repository.PayloadCache
 import org.chyavorec.domain.service.AuthenticationService
 import org.chyavorec.domain.service.MembershipService
 import org.chyavorec.domain.service.ReaderService
@@ -114,8 +119,14 @@ class AppContainer(
 
     /** Публичен кеш (новини, каталог, страници) — в noBackup папката. */
     val publicCache by lazy { FilePayloadCache(File(context.noBackupFilesDir, "cache/public")) }
-    /** Шифрован кеш за читателските данни. */
-    val readerCache by lazy { FilePayloadCache(File(context.noBackupFilesDir, "cache/reader"), cipher) }
+    /**
+     * Шифрован кеш за читателските данни. Помни адресите на личните изображения (корици на
+     * заетите книги, снимката в профила): при изчистването му (изход, нов читател, старт без
+     * сесия) от кеша на изображенията се махат само те ([evictPersonalImages]).
+     */
+    val readerCache: PayloadCache by lazy {
+        PersonalImageTrackingCache(FilePayloadCache(File(context.noBackupFilesDir, "cache/reader"), cipher), ::evictPersonalImages)
+    }
 
     /** Показва се само ако страницата „Контакти“ не се зареди (данни от сайта към 09.2026). */
     val fallbackContacts = Contacts(
@@ -160,7 +171,7 @@ class AppContainer(
             readerServices.auth, SecureSessionStore(File(context.noBackupFilesDir, "secure/session.bin"), cipher), clock, readerCache,
             // Защитата от налучкване на ПИН-а оцелява при рестарт (не се нулира при изход).
             throttleStore = DataStoreThrottleStore(context),
-        )
+        ).also(::onAuthCreated)
     }
     /**
      * Едно общо хранилище за читателските данни (един кеш на вид, `/v1/me/all` при наличие,
@@ -202,10 +213,51 @@ class AppContainer(
     /**
      * „Връзката се върна“ — по едно събитие при преход офлайн → онлайн, стабилен 2 s
      * ([reconnections]). Екраните с кеширани данни или грешка се опресняват сами (вж.
-     * org.chyavorec.app.ui.watchReconnect). Мрежата се наблюдава само докато има слушател.
+     * org.chyavorec.app.ui.watchReconnect). Мрежата се наблюдава само докато има слушател И
+     * приложението е на преден план (ViewModel-ите на разделите живеят и във фонов режим):
+     * скрито приложение не тегли нищо при връщане на Wi-Fi-то, а при следващото показване —
+     * едно опресняване, ако междувременно връзката е била изгубена.
      */
     val reconnected: SharedFlow<Unit> by lazy {
-        connectivity.online.reconnections().shareIn(appScope, SharingStarted.WhileSubscribed(), replay = 0)
+        connectivity.online.reconnections(foreground = processForeground()).shareIn(appScope, SharingStarted.WhileSubscribed(), replay = 0)
+    }
+
+    /** Дали процесът е на преден план (има видима Activity) — ProcessLifecycleOwner, STARTED. */
+    private fun processForeground(): Flow<Boolean> =
+        ProcessLifecycleOwner.get().lifecycle.currentStateFlow.map { it.isAtLeast(Lifecycle.State.STARTED) }
+
+    /** Application е включило наблюдателите ([watchReader]); тестовите контейнери — не. */
+    private var readerWatchArmed = false
+    /** Вече създаденото [authRepository] (под [readerWatchLock]). */
+    private var createdAuth: AuthRepository? = null
+    private var readerWatchStarted = false
+    private val readerWatchLock = Any()
+
+    /** Вика се от инициализацията на [authRepository]. */
+    private fun onAuthCreated(auth: AuthRepository) = synchronized(readerWatchLock) {
+        createdAuth = auth
+        if (readerWatchArmed) startReaderWatchers(auth)
+    }
+
+    /**
+     * Наблюдателите на входа/изхода ([watchSignOut], [watchLoanReminders]) — включва ги
+     * Application веднъж, но те тръгват едва със създаването на [authRepository]. Фоново
+     * събуждане, което не стига до читателските данни (напр. проверката за съобщения от
+     * сайта), не създава хранилището на сесията и не пипа Keystore-а. Състоянието на входа
+     * не може да се промени без [authRepository], така че нищо не се пропуска; при старт на
+     * интерфейса то се създава веднага (ChitalishteApp.onUiStart).
+     */
+    fun watchReader() = synchronized(readerWatchLock) {
+        readerWatchArmed = true
+        createdAuth?.let { startReaderWatchers(it) }
+    }
+
+    /** Само под [readerWatchLock]. */
+    private fun startReaderWatchers(auth: AuthRepository) {
+        if (readerWatchStarted) return
+        readerWatchStarted = true
+        watchSignOut(auth)
+        watchLoanReminders(auth)
     }
 
     /**
@@ -213,14 +265,13 @@ class AppContainer(
      * подновяване на сесията) — изчиства личните следи ([clearReaderTraces]). Също при старт
      * без сесия, ако предишният процес е имал вход („не ме помни“ и спрян процес — следващият
      * на същия телефон не бива да види нищо), и при вход на друг читател без изход между двата.
-     * Извиква се веднъж от Application.
      */
-    fun watchSignOut() {
+    private fun watchSignOut(auth: AuthRepository) {
         appScope.launch { runCatching { evictLegacyReaderHttpCache() }.logFailure("signout.http-cache") }
         appScope.launch {
             var wasSignedIn = false
             var previous: AuthState? = null
-            authRepository.state.collect { s ->
+            auth.state.collect { s ->
                 val before = previous
                 previous = s
                 if (s is AuthState.SignedIn) {
@@ -241,9 +292,10 @@ class AppContainer(
 
     /**
      * Личните следи на излезлия читател: съобщенията в паметта, историята на търсенето и
-     * следите от известията (DataStore), напомнянията за срок, показаните лични известия,
-     * изображенията (снимка в профила, корици на заети книги) и отговорите на моста в HTTP
-     * кеша. Шифрованият читателски кеш и сесията се трият в [AuthRepository].
+     * следите от известията (DataStore), напомнянията за срок, показаните лични известия
+     * и отговорите на моста в HTTP кеша. Шифрованият читателски кеш и сесията се трият в
+     * [AuthRepository] — заедно с личните изображения (снимка в профила, корици на заети
+     * книги; [readerCache], [evictPersonalImages]); останалите изображения остават.
      */
     private suspend fun clearReaderTraces() {
         // Личните съобщения изчезват веднага и от паметта (кешът им е в readerCache).
@@ -254,7 +306,6 @@ class AppContainer(
         runCatching { loanReminders.cancelAll() }.logFailure("signout.reminders")
         // Вече показаните известия за заемания и лични съобщения.
         runCatching { Notifier.cancelPersonal(context) }.logFailure("signout.notifications")
-        clearImageCaches()
         runCatching { evictReaderApiFromHttpCache() }.logFailure("signout.http-cache")
         // Локалният дневник на грешките не съдържа лични данни, но се изчиства и той — за всеки случай.
         Diagnostics.clear()
@@ -294,6 +345,18 @@ class AppContainer(
     }
 
     /**
+     * Само личните изображения ([urls]) — от паметта и от диска на Coil. Ключът и в двата е
+     * самият адрес (Coil 3: UriKeyer / NetworkFetcher без собствен ключ); в паметта има по
+     * запис за всеки размер, затова се махат всички ключове с този адрес.
+     */
+    private suspend fun evictPersonalImages(urls: Set<String>) = withContext(Dispatchers.IO) {
+        val images = SingletonImageLoader.get(context)
+        images.memoryCache?.let { memory -> memory.keys.filter { it.key in urls }.forEach { memory.remove(it) } }
+        images.diskCache?.let { disk -> urls.forEach { disk.remove(it) } }
+        Unit
+    }
+
+    /**
      * Напомнянията за срок на заемане — едно място, едно след друго (без надпревара
      * между стар и нов списък): при всеки запис на заеманията в кеша (екраните и фоновата
      * задача), при старт (от кеша) и при включване на известията — пренасрочване;
@@ -303,11 +366,11 @@ class AppContainer(
      * непроменени заемания (обикновеният старт на процеса, вкл. всяко фоново събуждане)
      * нищо не се пипа. Докато върви напомняне (LoanReminderWorker) — изчакване: неговото
      * restore()/опресняване не бива да подменя (REPLACE) самото него.
-     * Извиква се веднъж от Application.
+     * Тръгва веднъж, със създаването на [authRepository] ([watchReader]).
      */
-    fun watchLoanReminders() {
+    private fun watchLoanReminders(auth: AuthRepository) {
         appScope.launch {
-            val signedIn = authRepository.state.map {
+            val signedIn = auth.state.map {
                 when (it) {
                     is AuthState.SignedIn -> true
                     AuthState.SignedOut -> false

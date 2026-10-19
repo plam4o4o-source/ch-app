@@ -25,6 +25,7 @@ import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.PeriodicSyncWorker
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.Raleway
+import java.util.concurrent.atomic.AtomicBoolean
 
 class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuration.Provider, AppContainerOwner {
 
@@ -44,12 +45,26 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         // Локалният дневник на грешките (само на устройството) — и за сривовете.
         AppDiagnostics.install(this)
         container = AppContainer(this)
-        // Преди наблюдателите — те също стигат до мрежовия клиент, но по-късно.
-        appScope.launch { warmUp() }
-        container.watchSignOut()
-        container.watchLoanReminders()
+        // Наблюдателите на входа/изхода тръгват едва със създаването на AuthRepository — фоново
+        // събуждане, което не стига до читателските данни, не пипа Keystore-а.
+        container.watchReader()
         // Каналите за известия и инициализацията на WorkManager (база данни) не бива да бавят първия кадър.
         appScope.launch { setUpBackground() }
+    }
+
+    private val uiStarted = AtomicBoolean(false)
+
+    /**
+     * Стартира интерфейсът (MainActivity.onCreate), а не само фонова задача — веднъж за процес:
+     * - подготовка за първия кадър ([warmUp]) — във фоновите събуждания не трябва;
+     * - проверка на сесията: при старт без сесия („не ме помни“ и спрян процес) следите на
+     *   предишния читател се изчистват веднага (AppContainer.watchReader), а не едва при първия
+     *   екран, който стигне до читателските данни.
+     */
+    fun onUiStart() {
+        if (!uiStarted.compareAndSet(false, true)) return
+        appScope.launch { warmUp() }
+        appScope.launch { runCatching { container.authRepository.restore() }.logFailure("startup.restore") }
     }
 
     /**
@@ -83,8 +98,11 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         if (fresh) runCatching { Notifier.createChannels(this) }
         // Една обща периодична задача (съобщения, новини, заемания, уиджет, обновяване).
         val sync = runCatching { PeriodicSyncWorker.schedule(this, update = fresh) }.logFailure("startup.schedule-sync")
-        // Съобщенията от читалището — по-често (адаптивно 1–6 ч.), само статичният файл от сайта.
-        val poll = runCatching { MessagePollWorker.schedule(this, update = fresh) }.logFailure("startup.schedule-poll")
+        // Съобщенията от читалището — по-често (адаптивно 1–6 ч.), само статичният файл от сайта:
+        // еднократна задача за следващата дължима проверка (вж. MessagePollWorker). Старата
+        // периодична (на всеки час) се отменя; KEEP — само ако веригата е изгубена.
+        if (fresh) runCatching { MessagePollWorker.cancelLegacy(this) }.logFailure("startup.cancel-poll")
+        val poll = runCatching { MessagePollWorker.schedule(this, container, keep = true) }.logFailure("startup.schedule-poll")
         if (fresh && sync.isSuccess && poll.isSuccess) runCatching { container.settings.setBackgroundSetup(stamp) }
     }
 

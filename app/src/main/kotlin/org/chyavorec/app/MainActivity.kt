@@ -15,11 +15,13 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.chyavorec.app.data.local.AppSettings
+import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.ChitalishteRoot
 import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.util.AppLanguage
+import org.chyavorec.core.logFailure
 import org.chyavorec.domain.model.MessagePollPolicy
 
 class MainActivity : ComponentActivity() {
@@ -45,7 +47,10 @@ class MainActivity : ComponentActivity() {
         deepLink.value = savedInstanceState?.getString(LaunchIntents.KEY_PENDING_LINK)
         if (LaunchIntents.shouldHandle(intent?.flags ?: 0, restored = savedInstanceState != null)) consumeDeepLink(intent)
         else intent?.let { setIntent(LaunchIntents.consumed(it)) }
-        val container = (application as ChitalishteApp).container
+        val app = application as ChitalishteApp
+        // Шрифтовете, мрежовият клиент и проверката на сесията — само при интерфейс, не при фонова задача.
+        app.onUiStart()
+        val container = app.container
 
         setContent {
             val settings by container.settings.settings.collectAsStateWithLifecycle(initialValue = null)
@@ -63,7 +68,9 @@ class MainActivity : ComponentActivity() {
 
     /**
      * Приложението е отворено: фоновата проверка за съобщения отново е на най-краткия
-     * интервал, а 14-дневният срок без отваряне ([MessagePollPolicy]) започва отначало.
+     * интервал, а 14-дневният срок без отваряне ([MessagePollPolicy]) започва отначало —
+     * и следващата проверка се планира наново (или се отменя, ако известията са изключени
+     * или забранени — напр. от системните настройки).
      */
     override fun onStart() {
         super.onStart()
@@ -72,6 +79,7 @@ class MainActivity : ComponentActivity() {
             runCatching {
                 container.settings.markAppOpened(container.clock.now().toEpochMilli(), MessagePollPolicy.BASE_MILLIS, OPEN_RECORD_GAP_MS)
             }
+            runCatching { MessagePollWorker.schedule(applicationContext, container) }.logFailure("startup.schedule-poll")
         }
     }
 

@@ -25,6 +25,7 @@ import org.chyavorec.domain.model.DueStatus
 import org.chyavorec.domain.model.LoanDueCalculator
 import org.chyavorec.domain.model.LoanNotificationLog
 import org.chyavorec.domain.model.LoanReminderPlan
+import org.chyavorec.domain.model.MessagePollPolicy
 import java.util.concurrent.TimeUnit
 
 /**
@@ -35,7 +36,8 @@ import java.util.concurrent.TimeUnit
  * пита мрежата, ако резултатът не трябва на никого:
  *
  * - съобщения от сайта и лични (при вход) — при всяко пускане, ако известията
- *   за съобщения са включени и разрешени;
+ *   за съобщения са включени и разрешени; тези от сайта — само ако приложението е
+ *   отваряно през последните 14 дни ([MessagePollPolicy.isDormant]);
  * - нова новина → известие — на 12 часа, ако е включено и известията са разрешени;
  * - заемания → известие за просрочие — на 12 часа, ако е включено и разрешено,
  *   или ако има уиджет (той показва броя книги за връщане); напомнянията за
@@ -57,8 +59,11 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
 
         // Съобщения — всеки път (общите от сайта — и в MessagePollWorker, адаптивно 1–6 ч.; личните само
         // при влязъл читател). Без force: току-що свалените (до 10 мин.) съобщения от сайта не се теглят отново.
+        // Приложението не е отваряно 14 дни — файлът от сайта не се пита (както в MessagePollWorker и
+        // според политиката за поверителност); личните съобщения на влезлия читател — да.
         if (settings.notifyMessages && canNotify) {
-            step("sync.messages") { MessageWorker.refreshAndNotify(applicationContext, c, force = false) }
+            val dormant = MessagePollPolicy.isDormant(now, c.settings.messagePoll().lastOpen)
+            step("sync.messages") { MessageWorker.refreshAndNotify(applicationContext, c, force = false, includeSite = !dormant) }
         }
 
         if (settings.notifyNews && canNotify && due(c, STEP_NEWS, now, SYNC_INTERVAL_MS)) {
@@ -135,7 +140,9 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
     private suspend fun syncLoans(c: AppContainer, notify: Boolean): Boolean {
         c.authRepository.restore()
         if (c.authRepository.state.value !is AuthState.SignedIn) return true
-        val synced = (c.libraryRepository.loans(force = true) as? Outcome.Success)?.value ?: return false
+        // Без force: ако стъпката „съобщения“ преди секунди е минала през `/v1/me/all`, заеманията
+        // вече са свежи в кеша (до 3 мин.) — без втора заявка. Иначе — от мрежата, както досега.
+        val synced = (c.libraryRepository.loans(force = false) as? Outcome.Success)?.value ?: return false
         if (synced.fromCache) return false
         if (!notify) return true
         val calc = LoanDueCalculator()

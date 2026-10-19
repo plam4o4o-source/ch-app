@@ -55,7 +55,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
+import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.Channel
+import org.chyavorec.core.logFailure
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.updateStatusText
@@ -386,7 +388,13 @@ fun NotificationSettingsScreen(onBack: () -> Unit) {
                     else scope.launch { snackbar.showNotificationsBlocked(context, access, deniedMsg) }
                 }
             }
-            SwitchItem(stringResource(R.string.channel_messages), stringResource(R.string.channel_messages_desc), s.notifyMessages) { enable(it, { v -> c.settings.setNotifyMessages(v) }) }
+            // Фоновата проверка за съобщения се планира (или отменя) веднага с настройката.
+            SwitchItem(stringResource(R.string.channel_messages), stringResource(R.string.channel_messages_desc), s.notifyMessages) {
+                enable(it, { v ->
+                    c.settings.setNotifyMessages(v)
+                    runCatching { MessagePollWorker.schedule(context.applicationContext, c) }.logFailure("settings.schedule-poll")
+                })
+            }
             SwitchItem(stringResource(R.string.channel_news), stringResource(R.string.channel_news_desc), s.notifyNews) { enable(it, { v -> c.settings.setNotifyNews(v) }) }
             SwitchItem(stringResource(R.string.channel_events), stringResource(R.string.channel_events_desc), s.notifyEvents) { enable(it, { v -> c.settings.setNotifyEvents(v) }) }
             SwitchItem(
