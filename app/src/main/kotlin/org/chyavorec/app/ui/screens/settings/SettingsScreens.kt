@@ -367,7 +367,10 @@ fun NotificationSettingsScreen(onBack: () -> Unit) {
     val status = rememberNotificationStatus(settingsChannels)
     val s = settings ?: return
     val loansSupported = remember { mutableStateOf<Boolean?>(null) }
-    androidx.compose.runtime.LaunchedEffect(Unit) { loansSupported.value = c.authRepository.capabilities().loans }
+    // Без връзка не е известно (`null` — обичайното описание), а не „не се поддържа“.
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        loansSupported.value = (c.authRepository.capabilitiesResult() as? org.chyavorec.core.Outcome.Success)?.value?.loans
+    }
     val deniedMsg = stringResource(R.string.notifications_denied)
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.my_notifications), onBack) }, snackbarHost = { SnackbarHost(snackbar) }) { padding ->

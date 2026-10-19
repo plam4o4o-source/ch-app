@@ -74,8 +74,9 @@ object Notifier {
             NotificationManagerCompat.from(context).areNotificationsEnabled()
 
     /**
-     * Показва известие. Текстът е кратък и НЕ съдържа лични данни извън
-     * заглавието на книгата (видимо само на заключения екран според системните настройки).
+     * Показва известие. Текстът е кратък и НЕ съдържа лични данни извън заглавието на книгата
+     * или личното съобщение — а те на заключен екран не се виждат: там личните известия
+     * показват само общ текст ([lockScreenTitle]), независимо от системната настройка.
      */
     fun show(
         context: Context,
@@ -86,6 +87,8 @@ object Notifier {
         deepLink: String?,
         /** Лично съдържание (напр. лично съобщение от библиотеката) — скрито на заключен екран. */
         sensitive: Boolean = false,
+        /** Общият текст на заключен екран за лично известие; `null` — според канала (срок / лично съобщение). */
+        lockScreenTitle: String? = null,
     ) {
         if (!canNotify(context)) return
         // Каналите се създават във фон веднъж за версия (ChitalishteApp) — при много ранно
@@ -101,6 +104,17 @@ object Notifier {
         val pending = PendingIntent.getActivity(
             context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
+        // Без отделна публична версия Android по подразбиране („Показване на цялото съдържание“)
+        // показва и личното на заключен екран — VISIBILITY_PRIVATE само избира коя версия.
+        val publicVersion = if (personal) {
+            val generic = lockScreenTitle
+                ?: context.getString(if (channel == Channel.LOANS) R.string.notif_public_loan else R.string.notif_public_message)
+            NotificationCompat.Builder(context, channel.id)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(ContextCompat.getColor(context, R.color.brand_gold_dark))
+                .setContentTitle(generic)
+                .build()
+        } else null
         val notification = NotificationCompat.Builder(context, channel.id)
             .setSmallIcon(R.drawable.ic_notification)
             .setColor(ContextCompat.getColor(context, R.color.brand_gold_dark))
@@ -112,8 +126,9 @@ object Notifier {
             // Съобщенията: повторно показване със същото ID (напр. две проверки една след друга)
             // само подменя известието — без втори звук/вибрация.
             .setOnlyAlertOnce(channel == Channel.MESSAGES || channel == Channel.MESSAGES_IMPORTANT)
-            // Заглавията на заети книги са лична информация — скрити на заключен екран.
+            // Заглавията на заети книги и личните съобщения — скрити на заключен екран (вместо тях — publicVersion).
             .setVisibility(if (personal) NotificationCompat.VISIBILITY_PRIVATE else NotificationCompat.VISIBILITY_PUBLIC)
+            .apply { publicVersion?.let { setPublicVersion(it) } }
             // По този белег известията на читателя се махат при изход ([cancelPersonal]).
             .apply { if (personal) addExtras(android.os.Bundle().apply { putBoolean(EXTRA_PERSONAL, true) }) }
             .build()

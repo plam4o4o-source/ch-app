@@ -101,6 +101,7 @@ import org.chyavorec.app.ui.components.BookStatusPill
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.InfoRow
+import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
@@ -440,14 +441,21 @@ private fun FacetGroup(title: String, values: List<String>, selected: String?, l
 /**
  * Детайли за книга. Цветовете на екрана следват истинската корица (ако е заредена) —
  * виж [CoverTintedTheme]; без корица остават цветовете на приложението.
+ * [personal] — отворена от личен списък (история, заемания, „За теб“): корицата остава
+ * генерираната ([PersonalCovers]), иначе голямата корица по ISBN би издала избора на читателя;
+ * същото важи и за книгите на автора, отворени оттук.
  */
 @Composable
-fun BookScreen(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit) {
-    CoverTintedTheme(inv) { BookScreenContent(inv, onBack, navigate) }
+fun BookScreen(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit, personal: Boolean = false) {
+    if (personal) {
+        PersonalCovers { CoverTintedTheme(inv) { BookScreenContent(inv, onBack, navigate, personal = true) } }
+    } else {
+        CoverTintedTheme(inv) { BookScreenContent(inv, onBack, navigate, personal = false) }
+    }
 }
 
 @Composable
-private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit) {
+private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) -> Unit, personal: Boolean) {
     val container = LocalAppContainer.current
     val vm = appViewModel(key = "book-$inv") { BookViewModel(inv, it) }
     val ui by vm.ui.collectAsStateWithLifecycle()
@@ -562,7 +570,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                     // Всички книги на автора — търсене в каталога по автор.
                     TextButton(onClick = { CatalogSearchRequests.byAuthor(b.author, navigate) }) { Text(stringResource(R.string.action_all)) }
                 }
-                BookRow(ui.sameAuthor) { navigate(Routes.book(it.inv)) }
+                BookRow(ui.sameAuthor) { navigate(Routes.book(it.inv, personal)) }
             }
         }
     }

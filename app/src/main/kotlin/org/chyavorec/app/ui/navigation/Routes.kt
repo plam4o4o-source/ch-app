@@ -25,7 +25,8 @@ object Routes {
     const val ARTICLE = "article/{id}"
     const val EVENTS = "events"
     const val EVENT = "event/{id}"
-    const val BOOK = "book/{inv}"
+    /** `personal` — отворена от личен списък (история, заемания, „За теб“): без корици от интернет. */
+    const val BOOK = "book/{inv}?personal={personal}"
     const val SEARCH = "search"
     const val SCAN = "scan"
     const val LOGIN = "login"
@@ -56,7 +57,7 @@ object Routes {
 
     fun article(id: String) = "article/" + Uri.encode(id)
     fun event(id: String) = "event/" + Uri.encode(id)
-    fun book(inv: Long) = "book/$inv"
+    fun book(inv: Long, personal: Boolean = false) = if (personal) "book/$inv?personal=true" else "book/$inv"
     fun message(id: String) = "messages/" + Uri.encode(id)
     fun page(url: String, title: String) = "page?url=" + Uri.encode(url) + "&title=" + Uri.encode(title)
     fun album(name: String) = "album/" + Uri.encode(name)

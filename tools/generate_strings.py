@@ -252,6 +252,7 @@ S = {
 "login_forgot": ("Забравен ПИН?", "Forgot your PIN?"),
 "login_reset_sent": ("Ако номерът е регистриран, ще получиш инструкции.", "If the number is registered, you’ll receive instructions."),
 "login_wrong": ("Грешен читателски номер или ПИН.", "Wrong reader number or PIN."),
+"login_caps_failed": ("Няма връзка със сървъра на библиотеката, затова не можем да проверим дали онлайн входът е включен. Провери интернет връзката и опитай отново.", "We can’t reach the library’s server, so we can’t check whether online sign-in is available. Check your internet connection and try again."),
 "login_privacy_note": ("ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore.", "Your PIN is never stored on the device. The session is kept encrypted with an Android Keystore key."),
 "login_demo_hint": ("Демо вход: DEMO-0001 / demo", "Demo sign-in: DEMO-0001 / demo"),
 "card_add_manual": ("Добави номера на картата си", "Add your card number"),
@@ -370,7 +371,7 @@ S = {
 "settings_data": ("Данни", "Data"),
 "settings_clear_cache": ("Изчисти кеша", "Clear cache"),
 "settings_covers_online": ("Корици от интернет", "Covers from the internet"),
-"settings_covers_online_desc": ("Корици по ISBN от covers.openlibrary.org (сървърът вижда IP адреса)", "Covers by ISBN from covers.openlibrary.org (the server sees your IP address)"),
+"settings_covers_online_desc": ("Корици по ISBN от covers.openlibrary.org и сканираните корици от каталога (сървърите виждат IP адреса). В личните екрани — никога", "Covers by ISBN from covers.openlibrary.org and scanned covers from the catalogue (the servers see your IP address). Never on personal screens"),
 "settings_covers_wifi_only": ("Корици само по Wi-Fi", "Covers on Wi-Fi only"),
 "settings_covers_wifi_only_desc": ("По мобилни данни — само вече заредените корици, без нови заявки", "On mobile data, only covers already loaded — no new downloads"),
 "settings_seasonal": ("Сезонни украси", "Seasonal decorations"),
@@ -555,6 +556,9 @@ S = {
 "notif_due_today": ("Днес е срокът за връщане", "Due back today"),
 "notif_due_on": ("%1$s — до %2$s", "%1$s — due %2$s"),
 "notif_overdue": ("Просрочена книга", "Overdue book"),
+"notif_public_loan": ("Наближава срок за връщане на книга", "A library book is due soon"),
+"notif_public_overdue": ("Изтекъл е срокът за връщане на книга", "A library book is overdue"),
+"notif_public_message": ("Имаш лично съобщение от библиотеката", "You have a personal message from the library"),
 "notif_event_reminder": ("Напомняне за събитие", "Event reminder"),
 "onb_skip": ("Пропусни", "Skip"),
 "onb_next": ("Напред", "Next"),
@@ -613,11 +617,11 @@ PRIVACY_BG = """# Кой обработва данните
 
 # Какви данни се обработват
 
-Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели. Кориците на книгите в публичния каталог се зареждат по ISBN от covers.openlibrary.org (Internet Archive) — този сървър вижда IP адреса и ISBN-а, нищо друго; изключва се от Настройки → Данни → „Корици от интернет“. В личните екрани (история на четенето, заети книги, „За теб“, картата) корици от интернет не се зареждат никога — там кориците се рисуват на телефона.
+Публично съдържание: новините, събитията, снимките и страниците се зареждат от сайта chyavorec.org, а библиотечният каталог — от публичния файл katalog.json на системата InvLib, хостван в GitHub (raw.githubusercontent.com и cdn.jsdelivr.net). При всяка такава заявка съответният сървър вижда IP адреса на устройството, както при посещение на обикновен уебсайт. Каталогът не съдържа лични данни на читатели. Кориците на книгите в публичния каталог се зареждат по ISBN от covers.openlibrary.org (Internet Archive) — този сървър вижда IP адреса и ISBN-а, нищо друго; ако в каталога е посочена сканирана корица, тя се зарежда от адреса, записан в каталога, и съответният сървър вижда IP адреса. И двете се изключват от Настройки → Данни → „Корици от интернет“. В личните екрани (история на четенето, заети книги, „За теб“, картата, както и страницата на книга, отворена от тях) корици от интернет не се зареждат никога — там кориците се рисуват на телефона.
 
 Съобщения от читалището: приложението проверява публичния файл със съобщения на chyavorec.org най-често веднъж на час (по-рядко — до веднъж на 6 часа, докато няма нови съобщения) и спира проверките, ако не е отваряно 14 дни. Съобщенията „само за членове“ се показват, ако си въвел читателска карта или си влязъл — тази проверка е на устройството и нищо не се изпраща към сайта. Прочетените съобщения се помнят само на устройството.
 
-Лични съобщения от библиотеката: ако си влязъл и сървърът на читалището го поддържа, библиотеката може да ти изпрати лично съобщение (напр. за запазена книга). То идва по HTTPS от сървъра на читалището, пази се шифровано на телефона и се изтрива при изход; отбелязването „прочетено“ се изпраща към същия сървър. Известието за ново лично съобщение се подготвя на телефона и съдържанието му е скрито на заключен екран.
+Лични съобщения от библиотеката: ако си влязъл и сървърът на читалището го поддържа, библиотеката може да ти изпрати лично съобщение (напр. за запазена книга). То идва по HTTPS от сървъра на читалището, пази се шифровано на телефона и се изтрива при изход; отбелязването „прочетено“ се изпраща към същия сървър. Известието за ново лично съобщение се подготвя на телефона; на заключен екран то показва само „Имаш лично съобщение от библиотеката“, без съдържанието.
 
 Обновления: версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от Настройки → Обновления. Версията от Google Play се обновява от Google Play.
 
@@ -633,7 +637,7 @@ PRIVACY_BG = """# Кой обработва данните
 
 # Известия
 
-Известията се подготвят на устройството (периодична проверка за нови публикации, съобщения и срокове). Не се използват сървъри за push известия.
+Известията се подготвят на устройството (периодична проверка за нови публикации, съобщения и срокове). Не се използват сървъри за push известия. Известията за срокове на заети книги и за лични съобщения показват на заключен екран само общ текст (напр. „Наближава срок за връщане на книга“) — без заглавия и съдържание, независимо от системната настройка.
 
 # Твоите права
 
@@ -657,11 +661,11 @@ The app collects as little data as possible. It has no ads, no behavioural analy
 
 # What data is processed
 
-Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data. Book covers in the public catalogue are fetched by ISBN from covers.openlibrary.org (Internet Archive) — that server sees the IP address and the ISBN, nothing else; turn it off in Settings → Data → “Covers from the internet”. Personal screens (reading history, borrowed books, “For you”, the card) never load covers from the internet — there covers are drawn on the phone.
+Public content: news, events, photos and pages are loaded from chyavorec.org, and the library catalogue from the public katalog.json file of the InvLib system hosted on GitHub (raw.githubusercontent.com and cdn.jsdelivr.net). Each such server sees the device’s IP address, as with any website visit. The catalogue contains no reader data. Book covers in the public catalogue are fetched by ISBN from covers.openlibrary.org (Internet Archive) — that server sees the IP address and the ISBN, nothing else; if the catalogue lists a scanned cover, it is loaded from the address given in the catalogue, and that server sees the IP address. Both are turned off in Settings → Data → “Covers from the internet”. Personal screens (reading history, borrowed books, “For you”, the card, and a book’s page opened from them) never load covers from the internet — there covers are drawn on the phone.
 
 Messages from the centre: the app checks the public messages file on chyavorec.org at most once an hour (less often — down to once every 6 hours — while there are no new messages) and stops checking if it has not been opened for 14 days. Members-only messages are shown if you have entered your library card or signed in — this check happens on the device and nothing is sent to the website. Read messages are remembered only on the device.
 
-Personal messages from the library: if you are signed in and the centre’s server supports it, the library can send you a personal message (e.g. about a reserved book). It comes over HTTPS from the centre’s server, is kept encrypted on the phone and is deleted when you sign out; marking it as read is sent to the same server. The notification for a new personal message is prepared on the phone and its content is hidden on the lock screen.
+Personal messages from the library: if you are signed in and the centre’s server supports it, the library can send you a personal message (e.g. about a reserved book). It comes over HTTPS from the centre’s server, is kept encrypted on the phone and is deleted when you sign out; marking it as read is sent to the same server. The notification for a new personal message is prepared on the phone; on the lock screen it shows only “You have a personal message from the library”, without the content.
 
 Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 
@@ -677,7 +681,7 @@ Home-screen widget: if you add it, it shows only the number of books due and the
 
 # Notifications
 
-Notifications are prepared on the device (periodic checks for new posts, messages and due dates). No push notification servers are used.
+Notifications are prepared on the device (periodic checks for new posts, messages and due dates). No push notification servers are used. On the lock screen, notifications about due dates and personal messages show only a generic text (e.g. “A library book is due soon”) — no titles or content, whatever the system setting.
 
 # Your rights
 

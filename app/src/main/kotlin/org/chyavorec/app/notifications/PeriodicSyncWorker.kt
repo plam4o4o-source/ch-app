@@ -163,6 +163,7 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
             Notifier.show(
                 applicationContext, Channel.LOANS, NotificationIds.overdue(loan.loanId),
                 applicationContext.getString(R.string.notif_overdue), loan.title, "my/loans",
+                lockScreenTitle = applicationContext.getString(R.string.notif_public_overdue),
             )
             c.settings.addLoanNotification(LoanNotificationLog.entry(loan.loanId, dueOn, LoanNotificationLog.OVERDUE, today), today)
         }

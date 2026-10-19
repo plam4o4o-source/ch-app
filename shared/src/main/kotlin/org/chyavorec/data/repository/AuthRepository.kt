@@ -182,8 +182,17 @@ class AuthRepository(
         }
     }
 
+    /**
+     * Възможностите на сървъра; неуспешното питане (без мрежа, грешка на сървъра) е [ServiceCapabilities.NONE].
+     * Само за решения „да пробвам ли функцията“ — екраните, които казват на читателя дали
+     * входът е включен, ползват [capabilitiesResult] ([CapabilitiesTracker]), за да не
+     * представят „няма връзка“ като „библиотеката не го е включила“.
+     */
     suspend fun capabilities(): ServiceCapabilities =
         (service.capabilities() as? Outcome.Success)?.value ?: ServiceCapabilities.NONE
+
+    /** Възможностите или причината да не са известни (неуспехът не се помни — вж. RemoteInvLibClient). */
+    suspend fun capabilitiesResult(): Outcome<ServiceCapabilities> = service.capabilities()
 
     /** Зарежда запазените броячи на защитата от налучкване (екранът за вход — преди първия опит). */
     suspend fun restoreThrottle() = throttle.restore()

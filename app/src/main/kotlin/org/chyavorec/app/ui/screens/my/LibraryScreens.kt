@@ -69,7 +69,9 @@ import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.InfoRow
 import org.chyavorec.app.ui.components.MembershipPill
 import org.chyavorec.app.ui.components.QrCodeView
+import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.RemoteImage
+import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
@@ -100,6 +102,14 @@ internal fun NeedsLogin(error: AppError, onLogin: () -> Unit) {
 
 @Composable
 fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((Long) -> Unit)? = null) {
+    // Заетите книги са лични — не в „Скорошни“ и в снимки на екрана.
+    SecureScreen()
+    // …и без корици от интернет (адресът на корицата би издал коя книга е заета).
+    PersonalCovers { LoansContent(onBack, onLogin, onOpenBook) }
+}
+
+@Composable
+private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((Long) -> Unit)?) {
     val vm = appViewModel(key = "loans") { LoansViewModel(it) }
     val state by vm.state.collectAsStateWithLifecycle()
     val canRenew by vm.canRenew.collectAsStateWithLifecycle()
@@ -310,6 +320,8 @@ private fun RenewState(loan: Loan) {
 
 @Composable
 fun MembershipScreen(onBack: () -> Unit, onLogin: () -> Unit) {
+    // QR кодът на членството е като картата — не в „Скорошни“ и в снимки на екрана.
+    SecureScreen()
     val vm = appViewModel(key = "membership") { MembershipViewModel(it) }
     val state by vm.state.collectAsStateWithLifecycle()
     val today = LocalAppContainer.current.clock.today()
@@ -353,6 +365,8 @@ fun MembershipScreen(onBack: () -> Unit, onLogin: () -> Unit) {
 
 @Composable
 fun ProfileScreen(onBack: () -> Unit) {
+    // Име, читателски номер, имейл — не в „Скорошни“ и в снимки на екрана.
+    SecureScreen()
     val vm = accountViewModel()
     val profile by vm.profile.collectAsStateWithLifecycle()
     val caps by vm.capabilities.collectAsStateWithLifecycle()

@@ -58,6 +58,7 @@ import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.PersonalCovers
+import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.SectionHeader
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
@@ -145,6 +146,8 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
     val catalog by vm.catalog.collectAsStateWithLifecycle()
     val year by vm.selectedYear.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
+    // Прочетените книги са лични — не в „Скорошни“ и в снимки на екрана.
+    SecureScreen()
 
     // Личен екран: корици само генерирани — заявки до Open Library по ISBN биха издали прочетеното.
     PersonalCovers {
@@ -202,7 +205,7 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
                                     }
                                 }
                                 itemsIndexedKeyed(list) { i, item ->
-                                    HistoryRow(item, catalog[item.inv], onOpen = { inv -> navigate(Routes.book(inv)) }, modifier = Modifier.animateEntrance(i))
+                                    HistoryRow(item, catalog[item.inv], onOpen = { inv -> navigate(Routes.book(inv, personal = true)) }, modifier = Modifier.animateEntrance(i))
                                 }
                             }
                             item("source") {
@@ -220,7 +223,7 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
                                         modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
                                     )
                                 }
-                                item("similar") { BookRow(recs) { navigate(Routes.book(it.inv)) } }
+                                item("similar") { BookRow(recs) { navigate(Routes.book(it.inv, personal = true)) } }
                                 item("similar-note") {
                                     Row(Modifier.padding(horizontal = 20.dp, vertical = 10.dp), verticalAlignment = Alignment.Top) {
                                         Icon(Icons.Outlined.Info, null, modifier = Modifier.size(16.dp).padding(top = 1.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)

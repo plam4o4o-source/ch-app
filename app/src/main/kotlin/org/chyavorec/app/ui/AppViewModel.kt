@@ -12,7 +12,9 @@ import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.screens.my.AccountViewModel
 import org.chyavorec.app.ui.screens.my.LoansViewModel
+import org.chyavorec.app.ui.screens.my.LoginViewModel
 import org.chyavorec.core.AppError
+import org.chyavorec.data.repository.CapabilitiesStatus
 
 val LocalAppContainer = staticCompositionLocalOf<AppContainer> { error("AppContainer не е подаден") }
 
@@ -47,13 +49,18 @@ fun ScreenState<*>.wantsReconnectRefresh(): Boolean =
 /**
  * Свързва създадения ViewModel със събитието „връзката се върна“ (по едно на връщане,
  * вж. org.chyavorec.core.reconnections). Читателските екрани на „Моето“ — през публичния
- * им API: профилът (неизрично, както при отваряне) и заеманията (единственото им
- * опресняване е от мрежата).
+ * им API: профилът (неизрично, както при отваряне), заеманията (единственото им
+ * опресняване е от мрежата) и неразчетените без връзка възможности (дали входът е включен).
  */
 fun watchReconnect(vm: ViewModel, container: AppContainer) {
     val action: (() -> Unit) = when (vm) {
         is RefreshOnReconnect -> { { if (vm.reconnectState.wantsReconnectRefresh()) vm.refreshOnReconnect() } }
-        is AccountViewModel -> { { if (vm.profile.value.wantsReconnectRefresh()) vm.loadProfile(force = false) } }
+        is AccountViewModel -> { {
+            // Възможностите, ако без връзка не са били разчетени („Опитай отново“ в „Моето“).
+            if (vm.capabilitiesStatus.value is CapabilitiesStatus.Failed) vm.refreshCapabilities()
+            if (vm.profile.value.wantsReconnectRefresh()) vm.loadProfile(force = false)
+        } }
+        is LoginViewModel -> { { if (vm.capabilitiesStatus.value is CapabilitiesStatus.Failed) vm.refreshCapabilities() } }
         is LoansViewModel -> { { if (vm.state.value.wantsReconnectRefresh()) vm.refresh() } }
         else -> return
     }

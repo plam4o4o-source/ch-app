@@ -75,7 +75,8 @@ import org.chyavorec.domain.model.CatalogBook
 
 /**
  * Изображение от мрежата с кеш, плавно появяване и неутрален фон при грешка.
- * [cover] = корица на книга: важи „Корици само по Wi-Fi“ ([LocalCoverNetwork]).
+ * [cover] = корица на книга: важи „Корици само по Wi-Fi“ ([LocalCoverNetwork]), а без
+ * [LocalOnlineCovers] (личен екран или изключена настройка) — без никаква заявка.
  */
 @Composable
 fun RemoteImage(
@@ -89,8 +90,9 @@ fun RemoteImage(
     cover: Boolean = false,
 ) {
     var failed by remember(url) { mutableStateOf(false) }
+    val coversAllowed = !cover || LocalOnlineCovers.current
     Box(modifier.background(containerColor)) {
-        val target = if (failed) fallbackUrl else url
+        val target = (if (failed) fallbackUrl else url)?.takeIf { coversAllowed }
         if (target != null) {
             val context = LocalContext.current
             // Заявката се създава веднъж за адрес (не при всяка рекомпозиция); crossfade идва от ImageLoader-а.
@@ -142,9 +144,9 @@ fun BrandedImageFallback(modifier: Modifier = Modifier) {
 }
 
 /**
- * Дали кориците може да се теглят от covers.openlibrary.org (настройка „Корици от
- * интернет“). Подава се от корена; по подразбиране включено. Личните екрани го изключват
- * ([PersonalCovers]).
+ * Дали кориците може да се теглят от мрежата — от covers.openlibrary.org и сканираните от
+ * каталога (настройка „Корици от интернет“). Подава се от корена; по подразбиране включено.
+ * Личните екрани го изключват ([PersonalCovers]) — тогава корицата е само генерираната.
  */
 val LocalOnlineCovers = staticCompositionLocalOf { true }
 
@@ -172,9 +174,10 @@ private fun ImageRequest.Builder.coverNetwork(network: Boolean): ImageRequest.Bu
     if (network) this else networkCachePolicy(CachePolicy.DISABLED)
 
 /**
- * Личен екран (история, заемания, „За теб“, „Моето четене“, картата): корици само генерирани,
- * без нито една заявка до Open Library — иначе по ISBN-ите в заявките външен сървър би видял
- * какво чете читателят. Важи независимо от настройката; публичният каталог не се променя.
+ * Личен екран (история, заемания, „За теб“, „Моето четене“, картата и книгата, отворена от
+ * тях): корици само генерирани, без нито една заявка за корица — нито до Open Library (по
+ * ISBN), нито до адреса на сканираната корица — иначе външен сървър би видял какво чете
+ * читателят. Важи независимо от настройката; публичният каталог не се променя.
  */
 @Composable
 fun PersonalCovers(content: @Composable () -> Unit) {
@@ -244,18 +247,22 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
     val sink = LocalCoverColorSink.current?.takeIf { it.inv == book.inv }
     val large = width >= LargeCoverWidth
     val isbn = remember(book.isbn) { cleanIsbn(book.isbn) }
+    // Без онлайн корици — и сканираната от каталога не се тегли (адресът ѝ може да е на всеки сървър).
+    val scannedUrl = book.coverUrl.takeIf { online && it.isNotBlank() }
     val wantsOnline = online && book.coverUrl.isBlank() && isbn != null
     // ISBN без корица в Open Library (запомнени за 30 дни) не се питат отново.
     if (wantsOnline) CoverMisses.ensureLoaded(context)
     val missesReady = wantsOnline && CoverMisses.ready.value
-    val onlineUrl = remember(isbn, wantsOnline, missesReady, large) {
-        if (isbn != null && missesReady && !CoverMisses.isMiss(isbn)) openLibraryCoverUrl(isbn, large) else null
+    // Open Library е ограничил заявките (403/429) — до края на паузата само генерирани корици.
+    val rateLimited = wantsOnline && CoverMisses.rateLimited()
+    val onlineUrl = remember(isbn, wantsOnline, missesReady, large, rateLimited) {
+        if (isbn != null && missesReady && !rateLimited && !CoverMisses.isMiss(isbn)) openLibraryCoverUrl(isbn, large) else null
     }
     val network = LocalCoverNetwork.current
     // При смяна на мрежата (мобилни данни → Wi-Fi) корицата се опитва отново.
     var onlineFailed by remember(onlineUrl, network) { mutableStateOf(false) }
     val url = when {
-        book.coverUrl.isNotBlank() -> book.coverUrl
+        scannedUrl != null -> scannedUrl
         onlineUrl != null && !onlineFailed -> onlineUrl
         else -> null
     }
@@ -358,9 +365,14 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
                 onError = { state ->
                     if (url == onlineUrl) {
                         onlineFailed = true
-                        // Само „няма такава корица“ се помни; без мрежа/грешка на сървъра — нов опит следващия път.
+                        // „Няма такава корица“ се помни за ISBN-а; 403/429 (ограничение на заявките) — пауза
+                        // за всички корици. Без мрежа/друга грешка (вкл. 504 от „само от кеша“ при
+                        // „Корици само по Wi-Fi“) — нов опит следващия път.
                         val error = state.result.throwable
-                        if (isbn != null && error is HttpException && error.response.code == 404) CoverMisses.record(isbn)
+                        if (error is HttpException) {
+                            val code = error.response.code
+                            if (isbn != null && code == 404) CoverMisses.record(isbn) else CoverMisses.onHttpError(code)
+                        }
                     }
                 },
                 onSuccess = { state ->

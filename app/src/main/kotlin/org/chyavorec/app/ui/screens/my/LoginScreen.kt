@@ -26,8 +26,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Badge
+import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
@@ -68,16 +70,20 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.Emblem
+import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.errorMessage
 import org.chyavorec.app.ui.components.notAvailableMessage
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Feature
+import org.chyavorec.data.repository.CapabilitiesStatus
 
 @Composable
 fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Unit) {
+    // Въведеният (или показан с „окото“) ПИН не бива да остава в „Скорошни“ и в снимки на екрана.
+    SecureScreen()
     val vm = appViewModel(key = "login") { LoginViewModel(it) }
     val ui by vm.ui.collectAsStateWithLifecycle()
-    val caps by vm.capabilities.collectAsStateWithLifecycle()
+    val capsStatus by vm.capabilitiesStatus.collectAsStateWithLifecycle()
     var showPassword by rememberSaveable { mutableStateOf(false) }
     val haptic = LocalHapticFeedback.current
     LaunchedEffect(ui.success) {
@@ -113,8 +119,25 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
             DemoBanner(vm.isDemo)
             Emblem(84.dp)
             Text(stringResource(R.string.login_heading), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
-            val c = caps
+            val status = capsStatus
+            val c = (status as? CapabilitiesStatus.Known)?.caps
             when {
+                // Без връзка (или сървърът не отговаря) — не е ясно дали входът е включен:
+                // „Опитай отново“, а при връщане на връзката се пита само (watchReconnect).
+                status is CapabilitiesStatus.Failed -> {
+                    Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
+                        Row(Modifier.padding(16.dp)) {
+                            Icon(Icons.Outlined.CloudOff, null)
+                            Spacer(Modifier.size(12.dp))
+                            Text(stringResource(R.string.login_caps_failed), style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                    Button(onClick = vm::refreshCapabilities, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
+                        Icon(Icons.Outlined.Refresh, null); Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.action_retry))
+                    }
+                    // Картата може да се въведе и без връзка.
+                    TextButton(onClick = onAddCard, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.card_add_manual)) }
+                }
                 c == null -> ChLoadingIndicator()
                 !c.login -> {
                     // Няма онлайн вход в InvLib — НЕ показваме фиктивна форма.
