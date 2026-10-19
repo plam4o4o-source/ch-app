@@ -274,7 +274,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     )
                 }
                 // Подбрано по историята на читателя — без корици от Open Library (PersonalCovers).
-                item("for-you") { PersonalCovers { BookRow(state.forYou, Modifier.animateItem()) { navigate(Routes.book(it.inv)) } } }
+                item("for-you") { PersonalCovers { BookRow(state.forYou, Modifier.animateItem()) { navigate(Routes.book(it.inv, personal = true)) } } }
             }
             state.shelves.forEach { (name, books) ->
                 item("shelf-$name") {

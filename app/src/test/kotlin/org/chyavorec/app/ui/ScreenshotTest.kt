@@ -94,10 +94,12 @@ class ScreenshotTest {
         mode: ThemeMode = ThemeMode.LIGHT,
         settings: AppSettings = AppSettings(onboardingDone = true, introShown = true),
         now: String = "2026-09-26T10:00:00Z",
+        inflibApiUrl: String = "",
+        deepLink: String? = null,
     ) {
         val base = server.url("/").toString().trimEnd('/')
         val config = AppConfig(
-            siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = "",
+            siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = inflibApiUrl,
             environment = "test", useMockData = false, versionName = "test", versionCode = 1,
         )
         val container = AppContainer(
@@ -106,7 +108,7 @@ class ScreenshotTest {
         )
         compose.setContent {
             ChitalishteTheme(mode = mode) {
-                ChitalishteRoot(container, settings, MutableStateFlow(null), showIntro = false)
+                ChitalishteRoot(container, settings, MutableStateFlow(deepLink), showIntro = false)
             }
         }
     }
@@ -207,6 +209,29 @@ class ScreenshotTest {
         shown("Читателска карта")
         shown("Моите книги")
         shot("04-my")
+    }
+
+    /** Мостът (InvLib API) е недостъпен — без връзка: „Опитай отново“, а не „входът не е включен“. */
+    private val unreachableApi = "https://127.0.0.1:1/api/invlib/yavorec"
+
+    @Test fun loginOffline() {
+        launch(inflibApiUrl = unreachableApi, deepLink = "login")
+        waitFor("Няма връзка със сървъра на библиотеката")
+        shown("Няма връзка със сървъра на библиотеката", substring = true)
+        shown("Опитай отново")
+        if (compose.onAllNodes(hasText("Онлайн входът още не е включен", substring = true)).fetchSemanticsNodes().isNotEmpty()) {
+            throw AssertionError("без връзка входът е показан като „не е включен“")
+        }
+        shot("13-login-offline")
+    }
+
+    @Test fun myOffline() {
+        launch(inflibApiUrl = unreachableApi)
+        tab("Моето")
+        waitFor("Няма връзка със сървъра на библиотеката")
+        shown("Добре дошъл!")
+        shown("Опитай отново")
+        shot("14-my-offline")
     }
 
     @Test fun more() {

@@ -525,8 +525,14 @@ private fun AppNavHost(
         screen(Routes.EVENT, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
             EventDetailScreen(Uri.decode(it.arguments?.getString("id").orEmpty()), back, openLink)
         }
-        screen(Routes.BOOK, arguments = listOf(navArgument("inv") { type = NavType.LongType })) {
-            BookScreen(it.arguments?.getLong("inv") ?: 0L, back, navigate)
+        screen(
+            Routes.BOOK,
+            arguments = listOf(
+                navArgument("inv") { type = NavType.LongType },
+                navArgument("personal") { type = NavType.BoolType; defaultValue = false },
+            ),
+        ) {
+            BookScreen(it.arguments?.getLong("inv") ?: 0L, back, navigate, personal = it.arguments?.getBoolean("personal") == true)
         }
         screen(Routes.SEARCH) { SearchScreen(back, navigate, openExternal, openLink) }
         screen(Routes.SCAN) { ScanScreen(back, navigate) }
@@ -536,7 +542,7 @@ private fun AppNavHost(
         screen(Routes.PROFILE) { ProfileScreen(back) }
         screen(Routes.CARD) { CardScreen(back, onFullscreen = { nav.navigate(Routes.CARD_FULL) }, onLogin = { nav.navigate(Routes.LOGIN) }) }
         screen(Routes.CARD_FULL) { CardFullscreen(onClose = back) }
-        screen(Routes.LOANS) { LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }, onOpenBook = { navigate(Routes.book(it)) }) }
+        screen(Routes.LOANS) { LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }, onOpenBook = { navigate(Routes.book(it, personal = true)) }) }
         screen(Routes.HISTORY) { HistoryScreen(back, navigate, onLogin = { nav.navigate(Routes.LOGIN) }) }
         screen(Routes.MEMBERSHIP) { MembershipScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
         screen(Routes.NOTIFICATIONS) { NotificationSettingsScreen(back) }

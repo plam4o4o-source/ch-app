@@ -2,11 +2,13 @@ package org.chyavorec.app.ui.screens.my
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -16,6 +18,8 @@ import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
 import org.chyavorec.data.repository.AuthState
+import org.chyavorec.data.repository.CapabilitiesStatus
+import org.chyavorec.data.repository.CapabilitiesTracker
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
@@ -29,6 +33,11 @@ import org.chyavorec.domain.model.ServiceCapabilities
  */
 internal fun <T> Synced<T>.asQuietState(): ScreenState<T> = ScreenState(data = data, loading = false, syncedAt = syncedAt)
 
+/** Само известните възможности (`null` — още се питат или без връзка) за екраните, на които стига „да/не“. */
+private fun StateFlow<CapabilitiesStatus>.knownCaps(scope: CoroutineScope): StateFlow<ServiceCapabilities?> =
+    map { (it as? CapabilitiesStatus.Known)?.caps }
+        .stateIn(scope, SharingStarted.Eagerly, (value as? CapabilitiesStatus.Known)?.caps)
+
 /**
  * Общо състояние на „Моето“: вход, възможности на сървъра, ръчна карта, профил.
  *
@@ -41,8 +50,11 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
     val selfCard: StateFlow<SelfDeclaredCard?> = c.selfCardRepository.card
     val isDemo: Boolean = c.readerServices.isDemo
 
-    private val _caps = MutableStateFlow<ServiceCapabilities?>(null)
-    val capabilities: StateFlow<ServiceCapabilities?> = _caps.asStateFlow()
+    private val capsTracker = CapabilitiesTracker(c.authRepository)
+    /** Известно ли е дали входът е включен — или връзката/сървърът не са отговорили (тогава „Опитай отново“). */
+    val capabilitiesStatus: StateFlow<CapabilitiesStatus> = capsTracker.status
+    /** Известните възможности; `null` — още се питат или питането не е успяло ([capabilitiesStatus]). */
+    val capabilities: StateFlow<ServiceCapabilities?> = capsTracker.status.knownCaps(viewModelScope)
 
     /** С каква грешка е приключил последният опит за профила на този екран (`null` = без грешка/тече). */
     private val _loadError = MutableStateFlow<AppError?>(null)
@@ -57,7 +69,7 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
 
     init {
         // Възможностите идват от мрежата — отделно, за да не чака профилът бавната връзка.
-        viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
+        viewModelScope.launch { capsTracker.refresh() }
         viewModelScope.launch {
             c.authRepository.restore()
             c.selfCardRepository.load()
@@ -74,14 +86,12 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
     }
 
     /**
-     * Повторно питане за възможностите, ако първия път сървърът не е отговорил
-     * (тогава те идват като „нищо не се поддържа“ и входът би останал скрит).
-     * Ако първото зареждане още тече — нищо не прави.
+     * Повторно питане за възможностите: след неуспех (без връзка — „Опитай отново“, връщане
+     * на връзката, ново показване на „Моето“) или ако входът още не е включен. Ако питане
+     * вече тече или входът е известен като включен — нищо не прави.
      */
     fun refreshCapabilities() {
-        val current = _caps.value ?: return
-        if (current.login) return
-        viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
+        viewModelScope.launch { capsTracker.refresh() }
     }
 
     /** [force] = true — от мрежата независимо от свежестта на кеша. */
@@ -142,8 +152,9 @@ data class LoginUi(
 class LoginViewModel(private val c: AppContainer) : ViewModel() {
     private val _ui = MutableStateFlow(LoginUi())
     val ui: StateFlow<LoginUi> = _ui.asStateFlow()
-    private val _caps = MutableStateFlow<ServiceCapabilities?>(null)
-    val capabilities: StateFlow<ServiceCapabilities?> = _caps.asStateFlow()
+    private val capsTracker = CapabilitiesTracker(c.authRepository)
+    /** Зарежда се / известни / без връзка — „без връзка“ не е „входът не е включен“. */
+    val capabilitiesStatus: StateFlow<CapabilitiesStatus> = capsTracker.status
     val isDemo = c.readerServices.isDemo
 
     /** Контактите на библиотеката за „Забравен ПИН?“ (`null` — още не са поискани). */
@@ -151,7 +162,7 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
     val contacts: StateFlow<Contacts?> = _contacts.asStateFlow()
 
     init {
-        viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
+        viewModelScope.launch { capsTracker.refresh() }
         // Заключване от по-ранен опит (екранът е отворен наново) — броячът продължава.
         _ui.update { it.withThrottle(lockSeconds = c.authRepository.throttle.remainingLockSeconds()) }
         // …и от преди рестарта на приложението: броячите се зареждат от диска (веднъж).
@@ -189,11 +200,12 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
         }
     }
 
-    /** Повторен опит, ако при първото зареждане сървърът не е отговорил. */
+    /**
+     * Повторен опит, ако сървърът не е отговорил („Опитай отново“, връщане на връзката) или
+     * входът още не е включен. Тече ли вече питане — нищо не прави.
+     */
     fun refreshCapabilities() {
-        val current = _caps.value ?: return
-        if (current.login) return
-        viewModelScope.launch { _caps.value = c.authRepository.capabilities() }
+        viewModelScope.launch { capsTracker.refresh() }
     }
 
     fun setCard(v: String) = _ui.update { it.copy(cardNumber = v.take(32), error = null) }

@@ -3,6 +3,7 @@ package org.chyavorec.app.ui.components
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +22,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * Списъкът се чете от SharedPreferences веднъж, извън главната нишка; дотогава
  * ([ready] = false) онлайн корици не се теглят. В паметта е за целия процес.
+ *
+ * Отделно — пауза за целия процес, ако Open Library ограничи заявките ([CoverRateLimit]).
  */
 internal object CoverMisses {
     private const val PREFS = "cover_misses"
@@ -61,6 +64,16 @@ internal object CoverMisses {
         }
     }
 
+    private val rateLimit = CoverRateLimit()
+
+    /** Open Library е ограничил заявките — засега без нови (чете се в композицията). */
+    fun rateLimited(): Boolean = rateLimit.active(System.currentTimeMillis())
+
+    /** HTTP грешка от covers.openlibrary.org: 403/429 започват пауза за всички корици. */
+    fun onHttpError(code: Int) {
+        rateLimit.onHttpError(code, System.currentTimeMillis())
+    }
+
     // containsKey, а не „in“: ConcurrentHashMap.contains() търси сред стойностите.
     fun isMiss(isbn: String): Boolean = misses.containsKey(isbn)
 
@@ -71,5 +84,29 @@ internal object CoverMisses {
         if (misses.size > MAX_ENTRIES) return
         val p = prefs ?: return
         scope.launch { p.edit().putLong(isbn, now).apply() }
+    }
+}
+
+/**
+ * Open Library допуска около 100 корици на 5 минути от един IP адрес, после връща 403 (или 429).
+ * Тогава всяко превъртане би питало наново за всяка корица — затова след такъв отговор
+ * [durationMs] (10 минути) нови заявки не се пращат и се показва генерираната корица.
+ * 504 („няма в кеша“ при „Корици само по Wi-Fi“) и другите грешки НЕ са ограничение.
+ * Краят на паузата е в Compose състояние — кориците на екрана се прекомпозират при началото ѝ.
+ */
+internal class CoverRateLimit(private val durationMs: Long = 10 * 60 * 1000L) {
+    private val until = mutableLongStateOf(0L)
+
+    /** Тече ли пауза. Върнат назад часовник не я удължава над [durationMs]. */
+    fun active(now: Long): Boolean {
+        val left = until.longValue - now
+        return left > 0 && left <= durationMs
+    }
+
+    /** @return true, ако [code] е ограничение на заявките (и паузата започва от [now]). */
+    fun onHttpError(code: Int, now: Long): Boolean {
+        if (code != 403 && code != 429) return false
+        until.longValue = now + durationMs
+        return true
     }
 }

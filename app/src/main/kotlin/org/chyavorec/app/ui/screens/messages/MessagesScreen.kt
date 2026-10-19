@@ -57,6 +57,7 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ScreenState
+import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
@@ -123,6 +124,8 @@ fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit, focusId: Stri
     val state by vm.state.collectAsStateWithLifecycle()
     val fresh by vm.fresh.collectAsStateWithLifecycle()
     val member by vm.member.collectAsStateWithLifecycle()
+    // Лични съобщения от библиотеката — не в „Скорошни“ и в снимки на екрана (общите от сайта — може).
+    if (state.data.orEmpty().any { it.personal }) SecureScreen()
     // Прочетени — само докато екранът е на преден план (не под друг екран и не във фона).
     LifecycleResumeEffect(vm) {
         vm.setVisible(true)

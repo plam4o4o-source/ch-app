@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.CardMembership
+import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.NotificationsNone
@@ -63,6 +65,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.DemoBanner
+import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.rememberToday
@@ -74,6 +77,7 @@ import org.chyavorec.app.ui.components.OnDarkSurfaceStatuses
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.data.repository.AuthState
+import org.chyavorec.data.repository.CapabilitiesStatus
 import org.chyavorec.domain.model.LoanSummary
 
 @Composable
@@ -84,11 +88,13 @@ fun accountViewModel(): AccountViewModel = appViewModel(key = "account") { Accou
 fun MyHubScreen(navigate: (String) -> Unit) {
     val vm = accountViewModel()
     val auth by vm.authState.collectAsStateWithLifecycle()
-    val caps by vm.capabilities.collectAsStateWithLifecycle()
+    val capsStatus by vm.capabilitiesStatus.collectAsStateWithLifecycle()
     val profile by vm.profile.collectAsStateWithLifecycle()
     val selfCard by vm.selfCard.collectAsStateWithLifecycle()
     var confirmLogout by remember { mutableStateOf(false) }
     val signedIn = auth is AuthState.SignedIn
+    // Номерът на картата (влязъл читател или въведена карта) не бива да остава в „Скорошни“ и в снимки.
+    if (signedIn || selfCard != null) SecureScreen()
     // Ако при първото зареждане сървърът не е отговорил, входът би останал скрит —
     // при всяко показване на „Моето“ питаме отново (без мрежа, ако вече е известно).
     LaunchedEffect(Unit) { vm.refreshCapabilities() }
@@ -130,7 +136,7 @@ fun MyHubScreen(navigate: (String) -> Unit) {
                     }
                 }
             } else {
-                GuestCard(loginSupported = caps?.login == true, onLogin = { navigate(Routes.LOGIN) })
+                GuestCard(capsStatus, onLogin = { navigate(Routes.LOGIN) }, onRetry = vm::refreshCapabilities)
             }
 
             SectionLabel(stringResource(R.string.my_section_library), Modifier.padding(start = 20.dp, top = 8.dp, bottom = 12.dp))
@@ -176,7 +182,7 @@ fun MyHubScreen(navigate: (String) -> Unit) {
 }
 
 @Composable
-private fun GuestCard(loginSupported: Boolean, onLogin: () -> Unit) {
+private fun GuestCard(caps: CapabilitiesStatus, onLogin: () -> Unit, onRetry: () -> Unit) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
@@ -186,16 +192,26 @@ private fun GuestCard(loginSupported: Boolean, onLogin: () -> Unit) {
             Spacer(Modifier.height(6.dp))
             Text(stringResource(R.string.guest_text), style = MaterialTheme.typography.bodyMedium)
             Spacer(Modifier.height(14.dp))
-            if (loginSupported) {
-                Button(onClick = onLogin) {
+            when {
+                caps is CapabilitiesStatus.Known && caps.caps.login -> Button(onClick = onLogin) {
                     Icon(Icons.AutoMirrored.Outlined.Login, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.action_login))
                 }
-            } else {
-                Row(verticalAlignment = Alignment.Top) {
+                // Без връзка не знаем дали входът е включен — не казваме „не е включен“.
+                caps is CapabilitiesStatus.Failed -> {
+                    Row(verticalAlignment = Alignment.Top) {
+                        Icon(Icons.Outlined.CloudOff, null, modifier = Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.login_caps_failed), style = MaterialTheme.typography.bodySmall)
+                    }
+                    TextButton(onClick = onRetry, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.action_retry)) }
+                }
+                caps is CapabilitiesStatus.Known -> Row(verticalAlignment = Alignment.Top) {
                     Icon(Icons.Outlined.Info, null, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.na_login), style = MaterialTheme.typography.bodySmall)
                 }
+                // Още се пита (обикновено от кеша — за миг): без съобщение, вместо грешното „не е включен“.
+                else -> Unit
             }
         }
     }
