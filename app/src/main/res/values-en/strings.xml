@@ -470,8 +470,10 @@
     <string name="scan_action">Scan barcode</string>
     <string name="scan_camera_error">The camera can’t be opened.</string>
     <string name="scan_catalog_loading">Loading the catalogue…</string>
+    <string name="scan_catalog_unavailable">The catalogue didn’t load — no connection. I’ll try again once you’re online.</string>
     <string name="scan_code_inv">inv. no. %1$s</string>
     <string name="scan_code_isbn">ISBN %1$s</string>
+    <string name="scan_code_waiting">Saved %1$s — I’ll look it up once the catalogue loads.</string>
     <string name="scan_hint">Point the camera at the book’s barcode (ISBN) or inventory label.</string>
     <string name="scan_not_found_text">No book with %1$s in the catalogue.</string>
     <string name="scan_not_found_title">Not in the library</string>

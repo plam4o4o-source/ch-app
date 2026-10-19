@@ -11,6 +11,7 @@ import org.chyavorec.app.TestResources
 import org.chyavorec.app.data.local.CatalogDatabase
 import org.chyavorec.app.data.local.RoomCatalogIndexStore
 import org.chyavorec.core.TextNormalizer
+import org.chyavorec.data.catalog.CatalogIndexLostException
 import org.chyavorec.data.catalog.CatalogIndexRows
 import org.chyavorec.data.catalog.CatalogIndexState
 import org.chyavorec.data.catalog.CatalogSearchEngine
@@ -148,6 +149,29 @@ class CatalogIndexStoreTest {
         assertEquals(1, recreated)
         store.replace(state, CatalogIndexRows.build(snapshot))
         assertEquals(state, store.state())
+        assertEquals(1, recreated)
+    }
+
+    /**
+     * Повредена база при справка: новата (празна) база не е празен каталог — справките
+     * хвърлят, докато индексът не се попълни отново, а търсачката минава през индекса в паметта.
+     */
+    @Test fun lookupsOnTheRecreatedDatabaseReportTheLostIndex() = runBlocking {
+        var recreated = 0
+        val store = RoomCatalogIndexStore(recreate = { recreated++; db }) { throw SQLiteException("file is not a database") }
+        assertFailsWith<CatalogIndexLostException> { store.book(1) }
+        assertEquals(1, recreated)
+        assertFailsWith<CatalogIndexLostException> { store.authors() }
+        assertNull(store.state(), "индекс няма — попълва се наново")
+
+        var lost = 0
+        val fts = FtsCatalogSearcher(store, state, fallback = { engine }, work = Dispatchers.Default, onIndexLost = { lost++ })
+        assertEquals(engine.search(CatalogQuery("вазов")).map { it.inv }, fts.search(CatalogQuery("вазов")).map { it.inv })
+        assertEquals("Под игото", fts.book(1)?.title)
+        assertEquals(2, lost)
+
+        store.replace(state, CatalogIndexRows.build(snapshot))
+        assertEquals("Под игото", store.book(1)?.title)
         assertEquals(1, recreated)
     }
 

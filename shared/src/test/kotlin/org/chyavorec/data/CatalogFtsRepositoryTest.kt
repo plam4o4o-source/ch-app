@@ -289,4 +289,90 @@ class CatalogFtsRepositoryTest {
         assertNull(cache.read(CatalogRepository.META_KEY))
         assertNull(repo.lookupSearcher(network = false))
     }
+
+    /**
+     * Изчистването, прекъснато по средата (излизане от „Настройки“, докато базата се свива):
+     * то пак стига до края — без търсачка и хеш в паметта към изтрития индекс, а екранът на
+     * каталога научава за него. Следващото отваряне сваля каталога наново.
+     */
+    @Test fun clearCancelledMidwayStillForgetsTheCatalog() = runTest {
+        val svc = SlowService(sample).also { it.gate.complete(Unit) }
+        val repo = repo(svc)
+        assertIs<Outcome.Success<*>>(repo.searcher())
+        assertIs<Outcome.Success<*>>(repo.refreshHomeSummary())
+        assertNotNull(repo.publishedSearcher())
+        val fetches = svc.fetches
+        var cleared = 0
+        val watcher = launch { repo.cleared.collect { cleared++ } }
+        runCurrent()
+        val gate = CompletableDeferred<Unit>()
+        store.clearGate = gate
+
+        val clearing = launch { repo.clear() }
+        runCurrent()
+        assertNull(store.state, "индексът е изпразнен, изчистването още тече")
+        clearing.cancel()
+        runCurrent()
+        gate.complete(Unit)
+        advanceUntilIdle()
+        assertTrue(clearing.isCancelled)
+        assertEquals(1, cleared, "екранът на каталога научава за изчистването")
+        listOf(CatalogRepository.KEY, CatalogRepository.META_KEY, CatalogRepository.FETCHED_AT_KEY, CatalogRepository.SUMMARY_KEY)
+            .forEach { assertNull(cache.read(it), it) }
+        assertNull(repo.publishedSearcher(), "без търсачка към изтрития индекс")
+        assertNull(repo.inMemory())
+        assertNull(repo.homeSummary())
+        assertNull(repo.cachedSearcher())
+        assertNull(repo.lookupSearcher(network = false))
+
+        // Следващото търсене сваля каталога наново (не „потвърждава“ изчистения със 304).
+        val s = assertIs<Outcome.Success<*>>(repo.searcher()).value as Synced<*>
+        advanceUntilIdle()
+        assertEquals(fetches + 1, svc.fetches)
+        assertEquals(60, (s.data as CatalogSearcher).search(CatalogQuery()).size)
+        assertNotNull(repo.lookupSearcher(network = false)!!.data.book(399666L))
+        watcher.cancel()
+    }
+
+    /**
+     * Базата на индекса е създадена наново (празна) под публикуваната търсачка: търсенето
+     * и справките не връщат празно като вярно — минават през индекса в паметта веднага, а
+     * индексът се попълва отново във фонов режим от кеширания katalog.json (без мрежа).
+     */
+    @Test fun lostIndexFallsBackToTheEngineAndIsRebuilt() = runTest {
+        val svc = SlowService(sample).also { it.gate.complete(Unit) }
+        val repo = repo(svc)
+        val fts = assertIs<FtsCatalogSearcher>((repo.searcher() as Outcome.Success).value.data)
+        val updates = mutableListOf<Synced<CatalogSearcher>>()
+        backgroundScope.launch { repo.searcherUpdates.collect { updates += it } }
+        runCurrent()
+        assertEquals(1, store.replaces)
+        val fetches = svc.fetches
+
+        store.lose()
+        // Попълването чака — дотогава всичко минава през индекса в паметта.
+        val gate = CompletableDeferred<Unit>()
+        store.replaceGate = gate
+        assertEquals(listOf(399666L), fts.search(CatalogQuery("Джиан", SearchField.AUTHOR)).map { it.inv })
+        assertEquals(399666L, fts.book(399666L)?.inv)
+        assertEquals(60, fts.searchFirst(CatalogQuery(), 20).total)
+        runCurrent()
+        assertTrue(store.lost)
+        assertNull(repo.publishedSearcher(), "търсачката към изгубения индекс е забравена")
+
+        gate.complete(Unit)
+        advanceUntilIdle()
+        assertFalse(store.lost, "индексът е попълнен отново")
+        assertEquals(2, store.replaces)
+        assertEquals(60, store.rows.size)
+        assertEquals(fetches, svc.fetches, "от кеширания katalog.json — без мрежа")
+        val fresh = assertIs<FtsCatalogSearcher>(repo.cachedSearcher()!!.data)
+        // Наблюдателят е в backgroundScope — advanceUntilIdle не чака фоновите задачи.
+        runCurrent()
+        assertTrue(fresh !== fts, "нова търсачка вместо тази към изгубения индекс")
+        assertSame(fresh, updates.last().data, "новата търсачка е обявена на екрана")
+        store.lookups.clear()
+        assertEquals(399666L, repo.lookupSearcher(network = false)!!.data.book(399666L)?.inv)
+        assertEquals(listOf("book"), store.lookups, "справката — пак през индекса в базата")
+    }
 }

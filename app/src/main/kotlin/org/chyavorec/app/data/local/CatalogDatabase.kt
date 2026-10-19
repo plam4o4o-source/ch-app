@@ -22,8 +22,10 @@ import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import org.chyavorec.data.catalog.CatalogIndexColumns
+import org.chyavorec.data.catalog.CatalogIndexLostException
 import org.chyavorec.data.catalog.CatalogIndexQuery
 import org.chyavorec.data.catalog.CatalogIndexRow
 import org.chyavorec.data.catalog.CatalogIndexState
@@ -233,9 +235,12 @@ abstract class CatalogDatabase : RoomDatabase() {
  * [CatalogIndexStore] върху Room. Заявките за търсене (SQL + аргументи) идват от shared ([CatalogIndexQuery]).
  *
  * Базата е само кеш: ако не се отваря или чете (повреден файл, който SQLite не е изтрил сам,
- * схема, която Room не приема…), [recreate] веднъж в процеса я създава наново — празна, а
- * операцията се повтаря; индексът после се попълва отново от katalog.json. Втора грешка
- * стига до CatalogRepository, който тогава търси през индекса в паметта — без срив.
+ * схема, която Room не приема…), [recreate] веднъж в процеса я създава наново — празна.
+ * Записът ([replace], [clear]) и [state] се повтарят върху новата база ([state] е `null` —
+ * индекс няма). Справките не се повтарят: празната база не е празен каталог, затова до
+ * следващото попълване ([replace]) или изчистване ([clear]) хвърлят [CatalogIndexLostException] —
+ * търсенето минава през индекса в паметта, а CatalogRepository попълва индекса отново от
+ * кеширания katalog.json. Втора грешка на базата също стига до CatalogRepository — без срив.
  */
 class RoomCatalogIndexStore(
     private val recreate: (() -> CatalogDatabase)? = null,
@@ -244,18 +249,36 @@ class RoomCatalogIndexStore(
     private val lock = Any()
     private var db: CatalogDatabase? = null
     private var recreated = false
+    /** Съдържанието е изгубено при [reset] и още не е попълнено отново (или изчистено). */
+    @Volatile private var lost = false
 
     private fun dao(): CatalogIndexDao = synchronized(lock) { db ?: open().also { db = it } }.index()
 
+    private fun isDatabaseError(e: Exception) = e is SQLException || e is IllegalStateException
+
+    /** Запис или състоянието: при повредена база операцията се повтаря върху новата (празна). */
     private suspend fun <T> healing(block: suspend (CatalogIndexDao) -> T): T =
         try {
             block(dao())
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
-            if ((e !is SQLException && e !is IllegalStateException) || !reset(e)) throw e
+            if (!isDatabaseError(e) || !reset(e)) throw e
             block(dao())
         }
+
+    /** Справка: при повредена или вече пресъздадена база — [CatalogIndexLostException], не празен резултат. */
+    private suspend fun <T> reading(block: suspend (CatalogIndexDao) -> T): T {
+        if (lost) throw CatalogIndexLostException()
+        return try {
+            block(dao())
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            if (!isDatabaseError(e) || !reset(e)) throw e
+            throw CatalogIndexLostException(e)
+        }
+    }
 
     /** Затваря счупената база и отваря нова (само веднъж в процеса); `false` — не е пресъздадена. */
     private fun reset(cause: Exception): Boolean {
@@ -263,6 +286,7 @@ class RoomCatalogIndexStore(
         synchronized(lock) {
             if (recreated) return false
             recreated = true
+            lost = true
             Log.w(TAG, "Индексът на каталога не се чете — базата се създава наново", cause)
             runCatching { db?.close() }
             db = null
@@ -273,42 +297,45 @@ class RoomCatalogIndexStore(
 
     override suspend fun state(): CatalogIndexState? = healing { dao -> dao.stateJson()?.let { CatalogIndexState.fromJson(it) } }
 
-    override suspend fun replace(state: CatalogIndexState, rows: List<CatalogIndexRow>) = healing { dao ->
-        dao.replaceAll(CatalogIndexStateEntity(json = state.toJson()), rows.map { CatalogBookEntity.of(it) })
+    override suspend fun replace(state: CatalogIndexState, rows: List<CatalogIndexRow>) {
+        healing { dao -> dao.replaceAll(CatalogIndexStateEntity(json = state.toJson()), rows.map { CatalogBookEntity.of(it) }) }
+        lost = false
     }
 
     override suspend fun clear() {
         healing { dao -> dao.clearAll() }
+        lost = false
         // Освободеното място се връща на системата — иначе файлът на базата остава със същия размер.
-        withContext(Dispatchers.IO) {
+        // Индексът вече е празен: свиването не се прекъсва по средата (и отмяната не стига дотук).
+        withContext(NonCancellable + Dispatchers.IO) {
             runCatching { synchronized(lock) { db }?.openHelper?.writableDatabase?.execSQL("VACUUM") }
                 .onFailure { Log.w(TAG, "Базата на каталога не е свита след изчистването", it) }
         }
     }
 
-    override suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow> = healing { dao ->
+    override suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow> = reading { dao ->
         dao.rows(SimpleSQLiteQuery(query.sql, query.args.toTypedArray())).map(CatalogBookEntity::toRow)
     }
 
     override suspend fun count(query: CatalogIndexQuery): Int =
-        healing { dao -> dao.count(SimpleSQLiteQuery(query.countSql, query.args.toTypedArray())) }
+        reading { dao -> dao.count(SimpleSQLiteQuery(query.countSql, query.args.toTypedArray())) }
 
-    override suspend fun book(inv: Long): CatalogBook? = healing { dao -> dao.byInv(inv)?.toRow()?.book }
+    override suspend fun book(inv: Long): CatalogBook? = reading { dao -> dao.byInv(inv)?.toRow()?.book }
 
-    override suspend fun books(invs: Collection<Long>): List<CatalogBook> = healing { dao ->
+    override suspend fun books(invs: Collection<Long>): List<CatalogBook> = reading { dao ->
         // На части — броят на параметрите в една заявка е ограничен (999 на по-старите версии).
         invs.distinct().chunked(MAX_ARGS).flatMap { dao.byInvs(it) }.sortedBy { it.ord }.map { it.toRow().book }
     }
 
     override suspend fun byTitleAndAuthor(title: String, author: String): List<CatalogBook> =
-        healing { dao -> dao.byTitleAndAuthor(title, author).map { it.toRow().book } }
+        reading { dao -> dao.byTitleAndAuthor(title, author).map { it.toRow().book } }
 
-    override suspend fun byAuthor(author: String): List<CatalogBook> = healing { dao -> dao.byAuthor(author).map { it.toRow().book } }
+    override suspend fun byAuthor(author: String): List<CatalogBook> = reading { dao -> dao.byAuthor(author).map { it.toRow().book } }
 
     override suspend fun byIsbn(isbnDigits: Collection<String>): List<CatalogBook> =
-        if (isbnDigits.isEmpty()) emptyList() else healing { dao -> dao.byIsbn(isbnDigits.toList()).map { it.toRow().book } }
+        if (isbnDigits.isEmpty()) emptyList() else reading { dao -> dao.byIsbn(isbnDigits.toList()).map { it.toRow().book } }
 
-    override suspend fun authors(): List<Pair<String, String>> = healing { dao -> dao.authors().map { it.author to it.nAuthor } }
+    override suspend fun authors(): List<Pair<String, String>> = reading { dao -> dao.authors().map { it.author to it.nAuthor } }
 
     override suspend fun recommendationCandidates(udcSections: Set<Int>, authorWords: Set<String>?): List<CatalogBook> {
         // Само колоните за списъка — без анотацията и нормализираните полета (най-обемните).
@@ -324,7 +351,7 @@ class RoomCatalogIndexStore(
             sql.append(" AND (").append(any.joinToString(" OR ")).append(')')
         }
         sql.append(" ORDER BY ord")
-        return healing { dao -> dao.rows(SimpleSQLiteQuery(sql.toString(), args.toTypedArray())).map { it.toRow().book } }
+        return reading { dao -> dao.rows(SimpleSQLiteQuery(sql.toString(), args.toTypedArray())).map { it.toRow().book } }
     }
 
     private companion object {

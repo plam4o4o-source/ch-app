@@ -470,8 +470,10 @@
     <string name="scan_action">Сканирай баркод</string>
     <string name="scan_camera_error">Камерата не може да се отвори.</string>
     <string name="scan_catalog_loading">Зареждам каталога…</string>
+    <string name="scan_catalog_unavailable">Каталогът не се зареди — няма връзка. Ще опитам пак, щом се свържеш.</string>
     <string name="scan_code_inv">инв. № %1$s</string>
     <string name="scan_code_isbn">ISBN %1$s</string>
+    <string name="scan_code_waiting">Запазих %1$s — ще го потърся, щом каталогът се зареди.</string>
     <string name="scan_hint">Насочи камерата към баркода на книгата (ISBN) или към инвентарния номер.</string>
     <string name="scan_not_found_text">Не намерих книга с %1$s в каталога.</string>
     <string name="scan_not_found_title">Няма я в библиотеката</string>

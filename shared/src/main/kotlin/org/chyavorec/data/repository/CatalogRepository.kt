@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
@@ -75,7 +76,9 @@ internal data class CatalogMeta(
  * паметта. Индексът в базата се попълва във фонов режим (в една транзакция) веднага
  * щом се приеме нов каталог (и за началния екран); дотогава екранът „Каталог“ търси в
  * стария индекс (отбелязан като кеширан), после търсачката се подменя
- * ([searcherUpdates]). При грешка на базата търсенето минава през индекса в паметта.
+ * ([searcherUpdates]). При грешка на базата търсенето минава през индекса в паметта;
+ * ако базата е създадена наново празна (индексът е изгубен), търсачката към нея се
+ * забравя и индексът се попълва отново от кеширания katalog.json.
  *
  * Свалянето от мрежата е най-много едно наведнъж (общо за всички чакащи) и е извън
  * ключалката: четенето на кешираното никога не чака мрежата — ключалката се взима
@@ -210,33 +213,50 @@ class CatalogRepository(
      * обобщението за началния екран и „За теб“), индексът в базата и всичко в паметта.
      * Започнатото попълване на индекса се спира (не бива да върне стария каталог след
      * изчистването). Следващото търсене/отваряне сваля каталога наново — от нулата.
+     *
+     * Веднъж започнато, изчистването стига до края, дори извикващият да е отменен (напр.
+     * излизане от „Настройки“): паметта се забравя преди диска, а [cleared] се обявява
+     * винаги — никога търсачка и хеш в паметта към вече изтрития индекс.
      */
-    suspend fun clear() {
-        val running = mutex.withLock {
-            val job = rebuild?.job
-            rebuild = null
-            fetch = null
-            job
+    suspend fun clear(): Unit = withContext(NonCancellable) {
+        try {
+            val running = mutex.withLock {
+                val job = rebuild?.job
+                rebuild = null
+                fetch = null
+                job
+            }
+            running?.cancelAndJoin()
+            mutex.withLock {
+                // И на по-ранно запланувано попълване (верижно след спряното).
+                rebuild?.job?.cancel()
+                rebuild = null
+                fetch = null
+                // Първо паметта: каквото и да се случи с диска по-долу, не остава стара търсачка.
+                forget()
+                listOf(KEY, META_KEY, FETCHED_AT_KEY, SUMMARY_KEY).forEach { runCatching { cache.remove(it) }.logFailure("catalog.clear") }
+                index?.let { store -> guarded { store.clear() } }
+            }
+        } finally {
+            clears.tryEmit(Unit)
         }
-        running?.cancelAndJoin()
-        mutex.withLock {
-            // И на по-ранно запланувано попълване (верижно след спряното).
-            rebuild?.job?.cancel()
-            rebuild = null
-            listOf(KEY, META_KEY, FETCHED_AT_KEY, SUMMARY_KEY).forEach { runCatching { cache.remove(it) }.logFailure("catalog.clear") }
-            index?.let { store -> guarded { store.clear() } }
-            meta = null
-            metaLoaded = true
-            lastFetchMillis = null
-            fetchedAtLoaded = true
-            freshness = null
-            failedHash = null
-            current = null
-            summary = null
-            lastSnapshot = null
-            published.value = null
-        }
-        clears.tryEmit(Unit)
+    }
+
+    /**
+     * Под [mutex]. Забравя каталога в паметта. Хешът и времето на сваляне се четат отново
+     * от диска при нужда — така паметта отговаря на диска, каквото и да е останало на него.
+     */
+    private fun forget() {
+        meta = null
+        metaLoaded = false
+        lastFetchMillis = null
+        fetchedAtLoaded = false
+        freshness = null
+        failedHash = null
+        current = null
+        summary = null
+        lastSnapshot = null
+        published.value = null
     }
 
     /** Ключалката се взима само за проверка и за прилагане на резултата — мрежата е извън нея. */
@@ -471,8 +491,27 @@ class CatalogRepository(
     /** Под [mutex]. Публикува търсачката през индекса в базата за [state]. */
     private suspend fun publishIndex(state: CatalogIndexState, stale: Boolean): Synced<CatalogSearcher> {
         val store = checkNotNull(index)
-        val fts = FtsCatalogSearcher(store, state, fallback = { mutex.withLock { (current ?: loadFromDisk())?.data } }, work = work)
+        val fts = FtsCatalogSearcher(
+            store, state, fallback = { mutex.withLock { (current ?: loadFromDisk())?.data } }, work = work,
+            onIndexLost = { indexLost(state.hash) },
+        )
         return publish(fts, state.hash, stale)
+    }
+
+    /**
+     * Базата на индекса е създадена наново (празна) под публикуваната търсачка за [hash]:
+     * тя се забравя, а индексът се попълва отново от кеширания katalog.json — във фонов
+     * режим. Дотогава справките минават през индекса в паметта (резервата на търсачката).
+     */
+    private suspend fun indexLost(hash: String) {
+        mutex.withLock {
+            val p = published.value
+            if (p != null && p.hash == hash && p.synced.data is FtsCatalogSearcher) published.value = null
+            val m = loadMeta() ?: return
+            // Попълването вече е пропаднало за този каталог — не се опитва при всяка справка.
+            if (failedHash == m.hash) return
+            rebuildIndex(inMemorySnapshot(), m.hash)
+        }
     }
 
     /** Под [mutex]. Свежестта е тази на последното опресняване (без такова — кешът от диска). */

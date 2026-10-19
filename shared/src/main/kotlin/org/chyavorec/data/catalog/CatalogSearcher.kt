@@ -93,13 +93,15 @@ class EngineCatalogSearcher(val engine: CatalogSearchEngine) : CatalogSearcher {
  * със същата семантика като в [CatalogSearchEngine].
  *
  * Целият каталог не се държи в паметта. При грешка на базата се ползва [fallback]
- * (индексът в паметта).
+ * (индексът в паметта); ако индексът е изгубен ([CatalogIndexLostException] — базата е
+ * създадена наново, празна), преди това се вика [onIndexLost], за да се попълни отново.
  */
 class FtsCatalogSearcher(
     private val store: CatalogIndexStore,
     val state: CatalogIndexState,
     private val fallback: suspend () -> CatalogSearchEngine?,
     private val work: CoroutineDispatcher = Dispatchers.Default,
+    private val onIndexLost: suspend () -> Unit = {},
 ) : CatalogSearcher {
     override val generatedOn: String get() = state.generatedOn
     override val facets: CatalogFacets get() = state.facets
@@ -218,6 +220,7 @@ class FtsCatalogSearcher(
         } catch (e: Exception) {
             // Базата на индекса не отговаря — търсене в паметта; причината — в локалния дневник.
             Diagnostics.record("catalog.search", e)
+            if (e is CatalogIndexLostException) onIndexLost()
             val engine = fallback() ?: throw e
             withContext(work) { onEngine(engine) }
         }

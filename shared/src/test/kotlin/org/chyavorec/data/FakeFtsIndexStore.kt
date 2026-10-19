@@ -2,6 +2,7 @@ package org.chyavorec.data
 
 import kotlinx.coroutines.CompletableDeferred
 import org.chyavorec.data.catalog.CatalogIndexColumns
+import org.chyavorec.data.catalog.CatalogIndexLostException
 import org.chyavorec.data.catalog.CatalogIndexQuery
 import org.chyavorec.data.catalog.CatalogIndexRow
 import org.chyavorec.data.catalog.CatalogIndexState
@@ -25,6 +26,18 @@ class FakeFtsIndexStore : CatalogIndexStore {
     var failing = false
     /** Ако е зададен — попълването чака отварянето му (новото съдържание се вижда едва след това, наведнъж). */
     var replaceGate: CompletableDeferred<Unit>? = null
+    /** Ако е зададен — изчистването изпразва индекса и после чака отварянето му (като VACUUM след DELETE). */
+    var clearGate: CompletableDeferred<Unit>? = null
+    /** Съдържанието е изгубено (като пресъздадената празна база) — справките хвърлят, докато не се попълни. */
+    var lost = false
+        private set
+
+    /** Като RoomCatalogIndexStore при повредена база: създадена наново, празна. */
+    fun lose() {
+        state = null
+        rows = emptyList()
+        lost = true
+    }
 
     override suspend fun state(): CatalogIndexState? {
         if (failing) error("db")
@@ -37,16 +50,24 @@ class FakeFtsIndexStore : CatalogIndexStore {
         replaces++
         this.state = state
         this.rows = rows
+        lost = false
     }
 
     override suspend fun clear() {
         if (failing) error("db")
         state = null
         rows = emptyList()
+        lost = false
+        clearGate?.await()
+    }
+
+    private fun read() {
+        if (failing) error("db")
+        if (lost) throw CatalogIndexLostException()
     }
 
     private fun lookup(name: String): List<CatalogIndexRow> {
-        if (failing) error("db")
+        read()
         lookups += name
         return rows.sortedBy { it.ord }
     }
@@ -72,7 +93,7 @@ class FakeFtsIndexStore : CatalogIndexStore {
         }.map { listRow(it).book }
 
     override suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow> {
-        if (failing) error("db")
+        read()
         queries += query
         // Без текст — само колоните за списъка (останалите празни), както в SQL заявката.
         val out = rows.sortedBy { it.ord }.filter { r -> matches(r, query) }.sortedWith(order(query.sort)).map { if (query.textless) listRow(it) else it }
@@ -81,7 +102,7 @@ class FakeFtsIndexStore : CatalogIndexStore {
     }
 
     override suspend fun count(query: CatalogIndexQuery): Int {
-        if (failing) error("db")
+        read()
         queries += query
         return rows.count { r -> matches(r, query) }
     }

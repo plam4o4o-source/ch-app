@@ -93,9 +93,10 @@ private fun openAppSettings(context: Context) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
-    val vm = appViewModel(key = "scan") { ScanViewModel(it) }
+    val vm = appViewModel(key = "scan") { ScanViewModel(it.catalogRepository, it.clock) }
     val result by vm.result.collectAsStateWithLifecycle()
-    val catalogReady by vm.catalogReady.collectAsStateWithLifecycle()
+    val catalogStatus by vm.catalogStatus.collectAsStateWithLifecycle()
+    val waiting by vm.waiting.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
 
@@ -164,14 +165,7 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                         Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        if (!catalogReady) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                ChLoadingIndicator(Modifier.size(22.dp), contentDescription = null, color = Brand.GoldLight)
-                                Spacer(Modifier.width(8.dp))
-                                Text(stringResource(R.string.scan_catalog_loading), color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium)
-                            }
-                            Spacer(Modifier.height(8.dp))
-                        }
+                        CatalogStatusNote(catalogStatus, waiting, onRetry = vm::retry)
                         Surface(color = Color.Black.copy(alpha = 0.55f), contentColor = Brand.Parchment, shape = RoundedCornerShape(14.dp)) {
                             Text(
                                 stringResource(R.string.scan_hint),
@@ -219,6 +213,45 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 )
             }
         }
+    }
+}
+
+/**
+ * Над подсказката: каталогът се зарежда; не е достъпен (без връзка и без кеш) — с
+ * „Опитай отново“ (при връщане на връзката се опитва и сам); запазеният код, който чака каталога.
+ */
+@Composable
+private fun CatalogStatusNote(status: ScanCatalogStatus, waiting: ScanTarget?, onRetry: () -> Unit) {
+    when (status) {
+        ScanCatalogStatus.READY -> Unit
+        ScanCatalogStatus.LOADING -> {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ChLoadingIndicator(Modifier.size(22.dp), contentDescription = null, color = Brand.GoldLight)
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.scan_catalog_loading), color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium)
+            }
+            Spacer(Modifier.height(8.dp))
+        }
+        ScanCatalogStatus.UNAVAILABLE -> {
+            Surface(color = Color.Black.copy(alpha = 0.7f), contentColor = Brand.Parchment, shape = RoundedCornerShape(14.dp)) {
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        stringResource(R.string.scan_catalog_unavailable),
+                        style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center,
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    OutlinedButton(onClick = onRetry) { Text(stringResource(R.string.action_retry), color = Brand.GoldLight) }
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+        }
+    }
+    if (waiting != null && status != ScanCatalogStatus.READY) {
+        Text(
+            stringResource(R.string.scan_code_waiting, codeLabel(waiting)),
+            color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(8.dp))
     }
 }
 

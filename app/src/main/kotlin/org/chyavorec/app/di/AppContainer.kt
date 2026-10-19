@@ -4,7 +4,10 @@ import android.content.Context
 import android.os.Build
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.async
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -365,12 +368,25 @@ class AppContainer(
      * (katalog.json с хеша/ETag-а, обобщението и „За теб“, индексът в базата), HTTP кешът
      * и изображенията (и кориците). Сесията, картата, любимите, напомнянията, историята и
      * настройките остават.
+     *
+     * Върви на ниво приложение и без отмяна: излизането от „Настройки“ по средата не оставя
+     * наполовина изчистен кеш (напр. празен индекс с търсачка към него до рестарт) —
+     * екранът само чака края, за да покаже резултата. Второ натискане, докато тече, чака същото.
      */
-    suspend fun clearPublicCache() = withContext(Dispatchers.IO) {
-        // Първо каталогът: спира попълването на индекса и забравя състоянието в паметта.
-        runCatching { catalogRepository.clear() }.logFailure("cache.catalog")
-        publicCache.clear()
-        runCatching { okHttp.cache?.evictAll() }
-        clearImageCaches()
+    suspend fun clearPublicCache() {
+        val job = synchronized(this) {
+            clearing?.takeIf { it.isActive } ?: appScope.async(Dispatchers.IO) {
+                withContext(NonCancellable) {
+                    // Първо каталогът: спира попълването на индекса и забравя състоянието в паметта.
+                    runCatching { catalogRepository.clear() }.logFailure("cache.catalog")
+                    runCatching { publicCache.clear() }.logFailure("cache.public")
+                    runCatching { okHttp.cache?.evictAll() }
+                    clearImageCaches()
+                }
+            }.also { clearing = it }
+        }
+        job.await()
     }
+
+    @Volatile private var clearing: Deferred<Unit>? = null
 }

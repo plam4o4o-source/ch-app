@@ -96,6 +96,8 @@ S = {
 "scan_hint": ("Насочи камерата към баркода на книгата (ISBN) или към инвентарния номер.", "Point the camera at the book’s barcode (ISBN) or inventory label."),
 "scan_camera_error": ("Камерата не може да се отвори.", "The camera can’t be opened."),
 "scan_catalog_loading": ("Зареждам каталога…", "Loading the catalogue…"),
+"scan_catalog_unavailable": ("Каталогът не се зареди — няма връзка. Ще опитам пак, щом се свържеш.", "The catalogue didn’t load — no connection. I’ll try again once you’re online."),
+"scan_code_waiting": ("Запазих %1$s — ще го потърся, щом каталогът се зареди.", "Saved %1$s — I’ll look it up once the catalogue loads."),
 "scan_permission_title": ("Нужен е достъп до камерата", "Camera access needed"),
 "scan_permission_text": ("Камерата се използва само за четене на баркода на телефона. Нищо не се снима и не се изпраща.", "The camera is only used to read the barcode on your phone. Nothing is recorded or sent."),
 "scan_permission_grant": ("Разреши камерата", "Allow camera"),

@@ -3,8 +3,12 @@ package org.chyavorec.app.data
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -93,5 +97,36 @@ class ClearCacheTest {
         val searcher = assertNotNull(catalog.lookupSearcher(network = false)).data
         assertEquals(60, searcher.search(CatalogQuery()).size)
         assertNotNull(c.catalogDatabase.index().stateJson())
+    }
+
+    /**
+     * Излизане от „Настройки“ по средата на изчистването (екранът е отменен): кешът пак се
+     * изчиства докрай, а каталогът не остава с търсачка към изтрития индекс — следващото
+     * отваряне го сваля наново и търсенето намира книгите.
+     */
+    @Test fun leavingSettingsMidwayStillClearsTheCatalog(): Unit = runBlocking {
+        val c = container()
+        val catalog = c.catalogRepository
+        assertIs<Outcome.Success<*>>(catalog.searcher())
+        assertNotNull(catalog.lookupSearcher(network = false))
+        val requests = catalogRequests
+
+        val screen = launch(start = CoroutineStart.UNDISPATCHED) { c.clearPublicCache() }
+        screen.cancel()
+        screen.join()
+        // Изчистването продължава на ниво приложение; второ извикване изчаква същото (или е безвредно).
+        withTimeout(10_000) {
+            while (c.publicCache.read(CatalogRepository.KEY) != null || c.catalogDatabase.index().stateJson() != null) delay(20)
+        }
+        assertNull(catalog.homeSummary())
+        assertNull(catalog.cachedSearcher(), "без търсачка към изтрития индекс")
+        assertNull(catalog.lookupSearcher(network = false))
+        c.clearPublicCache()
+
+        assertIs<Outcome.Success<*>>(catalog.searcher())
+        assertEquals(requests + 1, catalogRequests, "каталогът е свален наново, не „потвърден“")
+        val searcher = assertNotNull(catalog.lookupSearcher(network = false)).data
+        assertEquals(60, searcher.search(CatalogQuery()).size)
+        assertNotNull(searcher.book(searcher.search(CatalogQuery()).first().inv))
     }
 }
