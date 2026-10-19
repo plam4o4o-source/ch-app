@@ -19,7 +19,11 @@ import javax.crypto.spec.GCMParameterSpec
  */
 class KeystoreCipher(private val alias: String = "chyavorec_secure_store_v1") {
 
-    private val keyStore: KeyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
+    /**
+     * Keystore-ът се отваря едва при първото шифроване/дешифроване — създаването на обекта
+     * (напр. с хранилищата на сесията при фоново събуждане) не стига до системната услуга.
+     */
+    private val keyStore: KeyStore by lazy { KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) } }
 
     /** Ключът се взима от Keystore веднъж (всяко четене е IPC към системната услуга). */
     @Volatile private var cachedKey: SecretKey? = null

@@ -237,14 +237,26 @@ class SettingsStore(private val context: Context) {
     /** Състоянието на фоновата проверка за съобщения ([org.chyavorec.domain.model.MessagePollPolicy]). */
     data class MessagePoll(val lastOpen: Long, val lastPoll: Long, val interval: Long, val signature: String?)
 
-    suspend fun messagePoll(): MessagePoll = context.dataStore.data.first().let { p ->
+    suspend fun messagePoll(): MessagePoll = context.dataStore.data.first().let(::messagePollOf)
+
+    private fun messagePollOf(p: Preferences) =
         MessagePoll(p[Keys.lastAppOpen] ?: 0L, p[Keys.messagePollAt] ?: 0L, p[Keys.messagePollInterval] ?: 0L, p[Keys.messagesSignature])
-    }
 
     /** След успешна проверка: кога, следващият интервал и отпечатъкът на съобщенията. */
     suspend fun setMessagePoll(at: Long, interval: Long, signature: String) = context.dataStore.edit {
         it[Keys.messagePollAt] = at
         it[Keys.messagePollInterval] = interval
+        it[Keys.messagesSignature] = signature
+    }
+
+    /**
+     * Като [setMessagePoll], но интервалът се смята в същата транзакция от ЗАПИСАНОТО в момента
+     * ([interval] получава него) — отваряне на приложението по време на заявката не се презаписва.
+     */
+    suspend fun recordMessagePoll(at: Long, signature: String, interval: (stored: MessagePoll) -> Long) = context.dataStore.edit {
+        val next = interval(messagePollOf(it))
+        it[Keys.messagePollAt] = at
+        it[Keys.messagePollInterval] = next
         it[Keys.messagesSignature] = signature
     }
 

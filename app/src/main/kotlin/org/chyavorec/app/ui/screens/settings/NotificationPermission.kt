@@ -45,9 +45,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import org.chyavorec.app.R
+import org.chyavorec.app.di.AppContainerOwner
+import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.Channel
 import org.chyavorec.app.notifications.Notifier
+import org.chyavorec.core.logFailure
 
 /** Отговорът при искане на разрешение за известия. */
 enum class NotificationAccess {
@@ -75,6 +80,7 @@ fun rememberNotificationPermission(): NotificationPermissionRequester {
     val context = LocalContext.current
     val activity = LocalActivity.current
     val pending = remember { arrayOfNulls<(NotificationAccess) -> Unit>(1) }
+    val scope = rememberCoroutineScope()
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         val access = when {
             Notifier.canNotify(context) -> NotificationAccess.GRANTED
@@ -84,6 +90,12 @@ fun rememberNotificationPermission(): NotificationPermissionRequester {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                 activity?.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) == true -> NotificationAccess.DENIED
             else -> NotificationAccess.BLOCKED
+        }
+        // Току-що разрешени — фоновата проверка за съобщения (ако е включена) се планира веднага.
+        val app = context.applicationContext
+        val container = (app as? AppContainerOwner)?.appContainer
+        if (access == NotificationAccess.GRANTED && container != null) {
+            scope.launch { runCatching { MessagePollWorker.schedule(app, container) }.logFailure("permission.schedule-poll") }
         }
         pending[0]?.invoke(access)
         pending[0] = null

@@ -11,6 +11,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /** Пренасрочване на напомнянията само при промяна и адаптивната проверка за съобщения. */
@@ -101,5 +102,33 @@ class BackgroundPoliciesTest {
         assertEquals(MessagePollPolicy.signature(listOf(a, b)), MessagePollPolicy.signature(listOf(b, a)))
         assertNotEquals(MessagePollPolicy.signature(listOf(a, b)), MessagePollPolicy.signature(listOf(a, b.copy(body = "Поправен"))))
         assertNotEquals(MessagePollPolicy.signature(listOf(a)), MessagePollPolicy.signature(listOf(a, b)))
+    }
+
+    @Test fun nextRunIsScheduledForTheDueTimeOrNotAtAll() {
+        val day = 24 * BASE_MILLIS
+        val now = 1000 * day
+        // Изключени/забранени известия или „заспало“ приложение — без задача.
+        assertNull(MessagePollPolicy.nextRunDelay(false, now, now, 0L, BASE_MILLIS))
+        assertNull(MessagePollPolicy.nextRunDelay(true, now, now - 14 * day, 0L, BASE_MILLIS))
+        // Без предишна проверка — веднага; иначе — точно когато стане дължима.
+        assertEquals(0L, MessagePollPolicy.nextRunDelay(true, now, now, 0L, BASE_MILLIS))
+        assertEquals(4 * BASE_MILLIS, MessagePollPolicy.nextRunDelay(true, now, now, now - 2 * BASE_MILLIS, 6 * BASE_MILLIS))
+        // В отклонението (почти дължима) — веднага.
+        assertEquals(0L, MessagePollPolicy.nextRunDelay(true, now, now, now - 55 * 60_000L, BASE_MILLIS))
+        // След неуспешна проверка — не веднага, а след най-краткия интервал.
+        assertEquals(BASE_MILLIS, MessagePollPolicy.nextRunDelay(true, now, now, 0L, BASE_MILLIS, minDelayMillis = BASE_MILLIS))
+        // Неизвестно отваряне (0) не е „заспиване“.
+        assertEquals(0L, MessagePollPolicy.nextRunDelay(true, now, 0L, 0L, BASE_MILLIS))
+    }
+
+    @Test fun openingTheAppDuringAPollWinsOverDoubling() {
+        val open = 500 * BASE_MILLIS
+        // Нищо не се е случило междувременно — обичайното удвояване / връщане при промяна.
+        assertEquals(4 * BASE_MILLIS, MessagePollPolicy.intervalAfterPoll(2 * BASE_MILLIS, open, 2 * BASE_MILLIS, open, changed = false))
+        assertEquals(BASE_MILLIS, MessagePollPolicy.intervalAfterPoll(2 * BASE_MILLIS, open, 2 * BASE_MILLIS, open, changed = true))
+        // Отворено по време на заявката: markAppOpened е върнал интервала на 1 ч.
+        assertEquals(BASE_MILLIS, MessagePollPolicy.intervalAfterPoll(4 * BASE_MILLIS, open, BASE_MILLIS, open, changed = false))
+        // Записано е по-ново отваряне (интервалът вече е бил 1 ч.) — пак без удвояване.
+        assertEquals(BASE_MILLIS, MessagePollPolicy.intervalAfterPoll(BASE_MILLIS, open, BASE_MILLIS, open + 1, changed = false))
     }
 }

@@ -42,6 +42,7 @@ object MessageWorker {
      * Опреснява съобщенията (общите и, при вход, личните) и показва известия за
      * новите. Без включена настройка „Съобщения“ не прави нищо (и не пита сървъра).
      * [force] = false — пресният кеш (до 10 мин.) не се тегли отново.
+     * [includeSite] = false — само личните (14 дни без отваряне: файлът от сайта не се пита).
      * @return свежите съобщения от сайта (за отпечатъка на [MessagePollWorker]) или `null`.
      */
     suspend fun refreshAndNotify(
@@ -49,8 +50,16 @@ object MessageWorker {
         c: AppContainer,
         includePersonal: Boolean = true,
         force: Boolean = true,
+        includeSite: Boolean = true,
     ): List<AppMessage>? = lock.withLock {
         if (!c.settings.current().notifyMessages) return@withLock null
+        if (!includeSite) {
+            if (includePersonal) {
+                c.messages.refreshPersonalOnly(force)
+                notifyPersonalLocked(context, c)
+            }
+            return@withLock null
+        }
         val result = c.messages.refresh(force = force, includePersonal = includePersonal)
         // Само съобщенията от сайта — личните имат собствено правило по-долу.
         val list = (result as? Outcome.Success)?.value?.takeIf { !it.fromCache }?.data?.filter { !it.personal }

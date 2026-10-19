@@ -98,6 +98,21 @@ class MessageCenter(
     }
 
     /**
+     * Само личните съобщения (при влязъл читател) — без файла от сайта: фоновата задача, когато
+     * приложението не е отваряно 14 дни и общите съобщения вече не се проверяват.
+     */
+    suspend fun refreshPersonalOnly(force: Boolean) {
+        if (auth.state.value is AuthState.Unknown) auth.restore()
+        if (auth.state.value !is AuthState.SignedIn) {
+            clearPersonal()
+            return
+        }
+        if (_personal.value.isEmpty()) _personal.value = personalRepository.cached()?.data.orEmpty()
+        refreshPersonal(force)
+        publish()
+    }
+
+    /**
      * Отбелязва съобщенията като прочетени; личните — и на сървъра (с повторен опит при
      * неуспех). Само за видени от читателя (екранът е на преден план), не от фоново опресняване.
      */
