@@ -47,8 +47,11 @@ on:
 permissions:
   contents: write
 
+# Едно издание наведнъж. GitHub пази само едно чакащо пускане на група (при ново отменя
+# чакащото), затова push на tag (напр. от публикувана чернова — guard-ът тогава не прави
+# нищо) е в собствена група и не може да измести чакащо издание от auto-release.yml.
 concurrency:
-  group: release
+  group: ${{ github.event_name == 'push' && format('release-{0}', github.ref) || 'release' }}
   cancel-in-progress: false
 
 jobs:
@@ -83,6 +86,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
+          persist-credentials: false
 
       - uses: actions/setup-java@v6
         with:
@@ -99,60 +103,58 @@ jobs:
           # versionCode расте монотонно независимо кой workflow издава: минути от 01.01.2024.
           echo "VERSION_CODE=$(( ($(date -u +%s) - 1704067200) / 60 ))" >> "$GITHUB_ENV"
 
-      - name: Tests and lint
-        run: |
-          (cd shared && ../gradlew --no-daemon test)
-          ./gradlew --no-daemon testProdDebugUnitTest lintProdRelease
-
       # Истинският upload ключ — само за издания от main (автоматичните през auto-release.yml,
-      # ръчните от main) и от tag-ове v*. Ръчно пускане от друг клон не получава secrets
-      # (стъпката не се изпълнява) и без allow_debug_key спира с грешка по-долу.
-      # При auto-release (workflow_run) github.ref не е надежден — гледа се клонът на
-      # проверката, след която тръгва изданието (auto-release.yml проверява и че commit-ът
-      # е последният в main). Файлът на workflow_run винаги е от main, клон не може да го смени.
-      - name: Prepare signing key (upload key)
-        if: >-
-          github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') ||
-          (github.event_name == 'workflow_run' &&
-           github.event.workflow_run.event == 'push' &&
-           github.event.workflow_run.head_branch == 'main')
+      # ръчните от main) и от tag-ове v*. Ръчно пускане от друг клон не получава secrets и без
+      # allow_debug_key спира тук с грешка.
+      # При auto-release (workflow_run) github.ref е клонът по подразбиране на хранилището (сега
+      # claude/charming-rubin-3lzor2, после main), не клонът на кода — затова се гледа клонът на
+      # проверката, след която тръгва изданието (auto-release.yml проверява и че commit-ът е
+      # последният в main). При workflow_run GitHub пуска файловете (auto-release.yml и този) от
+      # клона по подразбиране: работен клон не може да ги смени, без да е слят в него.
+      # Тук secrets не влизат в средата — само дали ги има; паролите получава единствено
+      # стъпката „Build release“.
+      - name: Signing key
         env:
-          UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
-          UPLOAD_STORE_PASSWORD: ${{ secrets.UPLOAD_STORE_PASSWORD }}
-          UPLOAD_KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
-          UPLOAD_KEY_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
-        run: |
-          if [ -n "$UPLOAD_KEYSTORE_BASE64" ]; then
-            echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
-            echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
-            echo "SIGNING_STORE_PASSWORD=$UPLOAD_STORE_PASSWORD" >> "$GITHUB_ENV"
-            echo "SIGNING_KEY_ALIAS=$UPLOAD_KEY_ALIAS" >> "$GITHUB_ENV"
-            echo "SIGNING_KEY_PASSWORD=$UPLOAD_KEY_PASSWORD" >> "$GITHUB_ENV"
-            echo "SIGNING_KIND=upload-key" >> "$GITHUB_ENV"
-          fi
-
-      - name: Prepare signing key (temporary key or stop)
-        if: env.SIGNING_KIND != 'upload-key'
-        env:
+          TRUSTED: ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main') }}
+          HAS_UPLOAD_KEY: ${{ secrets.UPLOAD_KEYSTORE_BASE64 != '' && secrets.UPLOAD_STORE_PASSWORD != '' }}
           ALLOW_DEBUG_KEY: ${{ inputs.allow_debug_key }}
         run: |
-          if [ "$ALLOW_DEBUG_KEY" = "true" ]; then
+          if [ "$TRUSTED" = "true" ] && [ "$HAS_UPLOAD_KEY" = "true" ]; then
+            echo "SIGNING_KIND=upload-key" >> "$GITHUB_ENV"
+          elif [ "$ALLOW_DEBUG_KEY" = "true" ]; then
             # Само при изрично ръчно пускане с allow_debug_key: true (тест на pipeline-а).
-            PASS=$(openssl rand -hex 16)
-            keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/upload.jks" -storepass "$PASS" -keypass "$PASS" \
-              -alias ci-test -keyalg RSA -keysize 2048 -validity 3650 -dname "CN=CI test key, O=not for Google Play"
-            echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
-            echo "SIGNING_STORE_PASSWORD=$PASS" >> "$GITHUB_ENV"
-            echo "SIGNING_KEY_ALIAS=ci-test" >> "$GITHUB_ENV"
-            echo "SIGNING_KEY_PASSWORD=$PASS" >> "$GITHUB_ENV"
             echo "SIGNING_KIND=ci-test-key" >> "$GITHUB_ENV"
           else
             echo "::error::Липсват signing secrets (UPLOAD_KEYSTORE_BASE64, UPLOAD_STORE_PASSWORD, UPLOAD_KEY_ALIAS, UPLOAD_KEY_PASSWORD) или изданието не е от main / tag v* (ref: ${{ github.ref }}, събитие: ${{ github.event_name }}). Издание с временен ключ не може да обнови инсталираните приложения и не става за Google Play. За тест пуснете ръчно с allow_debug_key: true."
             exit 1
           fi
 
-      - name: Build release
+      - name: Tests and lint
         run: |
+          (cd shared && ../gradlew --no-daemon test)
+          ./gradlew --no-daemon testProdDebugUnitTest lintProdRelease
+
+      # Паролите — само в средата на тази стъпка (не в GITHUB_ENV), keystore файлът се изтрива
+      # след build-а. Извън доверените издания изразите дават празен низ (без secrets).
+      - name: Build release
+        env:
+          UPLOAD_KEYSTORE_BASE64: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main')) && secrets.UPLOAD_KEYSTORE_BASE64 || '' }}
+          UPLOAD_STORE_PASSWORD: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main')) && secrets.UPLOAD_STORE_PASSWORD || '' }}
+          UPLOAD_KEY_ALIAS: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main')) && secrets.UPLOAD_KEY_ALIAS || '' }}
+          UPLOAD_KEY_PASSWORD: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main')) && secrets.UPLOAD_KEY_PASSWORD || '' }}
+        run: |
+          export SIGNING_STORE_FILE="$RUNNER_TEMP/upload.jks"
+          trap 'rm -f "$SIGNING_STORE_FILE"' EXIT
+          if [ "$SIGNING_KIND" = "upload-key" ]; then
+            echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$SIGNING_STORE_FILE"
+            export SIGNING_STORE_PASSWORD="$UPLOAD_STORE_PASSWORD" SIGNING_KEY_ALIAS="$UPLOAD_KEY_ALIAS" SIGNING_KEY_PASSWORD="$UPLOAD_KEY_PASSWORD"
+          else
+            PASS=$(openssl rand -hex 16)
+            keytool -genkeypair -noprompt -keystore "$SIGNING_STORE_FILE" -storepass "$PASS" -keypass "$PASS" \
+              -alias ci-test -keyalg RSA -keysize 2048 -validity 3650 -dname "CN=CI test key, O=not for Google Play"
+            export SIGNING_STORE_PASSWORD="$PASS" SIGNING_KEY_ALIAS=ci-test SIGNING_KEY_PASSWORD="$PASS"
+          fi
+          unset UPLOAD_KEYSTORE_BASE64 UPLOAD_STORE_PASSWORD UPLOAD_KEY_ALIAS UPLOAD_KEY_PASSWORD
           sed -i "s/versionName = \".*\"/versionName = \"$VERSION\"/" app/build.gradle.kts
           ./gradlew --no-daemon bundleProdPlay assembleProdRelease assembleDevDebug
           mkdir -p dist

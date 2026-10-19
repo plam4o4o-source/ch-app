@@ -6,6 +6,11 @@ Google Play) четат `releases/latest/download/update.json` и се обно�
 отваряне — най-много веднъж на 12 ч., във фона — ~веднъж на 24 ч.). Google Play
 обновява само от Play Console (AAB се качва там ръчно).
 
+> Ръчно пусканите workflow-и (Update control, Auto release, Release): в „Run workflow“
+> избери **Use workflow from: `main`**. GitHub предлага клона по подразбиране, който може
+> да не е `main`; от друг клон Update control и Auto release спират с грешка, а Release
+> не получава истинския ключ за подписване.
+
 ## Ако излезе лоша версия
 
 ### 1. Спри обновяванията

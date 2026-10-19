@@ -5,21 +5,37 @@ name: Auto release
 # (dependabot-automerge.yml) или след push в main. Версия: +1 на последната
 # (patch), напр. v1.1.0 → v1.1.1. Инсталираните APK-та се обновяват сами.
 # Ако след последния tag има САМО обновени зависимости (всички commit-и са от
-# dependabot[bot] или се пипат само файлове за build/зависимости/CI), изданието
-# се създава като ЧЕРНОВА: човек го проверява и публикува с „Publish release“.
-# Черновите не се връщат от /releases/latest, т.е. update.json не стига до
-# инсталираните приложения преди публикуването.
+# dependabot[bot] или от файловете на приложението са пипнати само
+# gradle/libs.versions.toml и Gradle wrapper-ът), изданието се създава като
+# ЧЕРНОВА: човек го проверява и публикува с „Publish release“. Черновите не се
+# връщат от /releases/latest, т.е. update.json не стига до инсталираните
+# приложения преди публикуването.
+# Ръчно: Actions → Auto release → Run workflow — от клона main (виж docs/RELEASE.md).
+#
+# workflow_run винаги пуска този файл от клона по подразбиране на хранилището (сега
+# claude/charming-rubin-3lzor2, после main) — промяна тук действа едва след сливане там.
 on:
   workflow_run:
     workflows: ["Android CI"]
     types: [completed]
+    # Само проверките на main (клонът на кода, не на workflow-а): проверките на
+    # работните клонове и на Dependabot изобщо не пускат този workflow.
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: write
 
+# Изданията вървят едно по едно (планът чете последния tag — паралелен план би дал
+# същата версия). GitHub пази само ЕДНО чакащо пускане на група и при ново отменя
+# чакащото (cancel-in-progress: false пази само вървящото). Затова в общата група влизат
+# само пусканията, които могат да издадат нещо: успешна проверка на push в main или ръчно
+# пускане от main. Всички останали (паднала проверка, pull request с клон „main“ от fork,
+# ръчно пусната проверка, ръчно пускане от друг клон) са в собствена група и не изместват
+# чакащо издание. Всяко пускане в общата група издава най-новия commit на main, така че
+# замененото чакащо не губи нищо: новото покрива и неговите промени.
 concurrency:
-  group: auto-release
+  group: ${{ ((github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main')) && 'auto-release' || format('auto-release-skip-{0}', github.run_id) }}
   cancel-in-progress: false
 
 jobs:
@@ -43,6 +59,11 @@ jobs:
           fetch-depth: 0
       - id: plan
         run: |
+          # Ръчно — само от main: оттам са този workflow и release.yml (и upload ключът).
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] && [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "::error::Пуснете Auto release от клона main (Run workflow → Use workflow from: main), не от $GITHUB_REF_NAME."
+            exit 1
+          fi
           git fetch --tags --force --quiet
           REF=$(git rev-parse HEAD)
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
@@ -62,9 +83,12 @@ jobs:
             echo "release=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          # Само промени по приложението водят до ново издание (не документация/CI).
+          # Само промени по приложението водят до ново издание (не документация/CI): всичко,
+          # което влиза в build-а — кодът, Gradle скриптовете и настройките, зависимостите,
+          # wrapper-ът и конфигурацията на Compose компилатора (app/proguard-rules.pro е в app).
+          APP_PATHS="app shared gradle gradlew gradlew.bat build.gradle.kts settings.gradle.kts gradle.properties compose-stability.conf"
           if git rev-parse -q --verify "refs/tags/$LAST" >/dev/null && \
-             git diff --quiet "$LAST" "$REF" -- app shared gradle build.gradle.kts settings.gradle.kts gradle.properties; then
+             git diff --quiet "$LAST" "$REF" -- $APP_PATHS; then
             echo "Няма промени по приложението след $LAST — без издание."
             echo "release=false" >> "$GITHUB_OUTPUT"
             exit 0
@@ -72,13 +96,15 @@ jobs:
           IFS=. read -r MA MI PA <<< "${LAST#v}"
           V="$MA.$MI.$((PA + 1))"
           echo "Ново издание: v$V (след $LAST)"
-          # Само зависимости? (1) всички commit-и са от Dependabot, или
-          # (2) променени са само файлове за зависимости/build/CI.
+          # Само зависимости? (1) всички commit-и са от Dependabot, или (2) от файловете на
+          # приложението (APP_PATHS) са пипнати само каталогът на версиите и Gradle wrapper-ът.
+          # Всичко друго — вкл. app/build.gradle.kts (адреси, minSdk, R8), gradle.properties,
+          # settings.gradle.kts — е истинска промяна и изданието се публикува веднага.
           DRAFT=false
           if git rev-parse -q --verify "refs/tags/$LAST" >/dev/null; then
             AUTHORS=$(git log --no-merges --format='%an' "$LAST..$REF" | sort -u)
-            OTHER_FILES=$(git diff --name-only "$LAST" "$REF" | \
-              grep -Ev '^(gradle/libs\.versions\.toml|gradle/wrapper/.*|gradlew|gradlew\.bat|gradle\.properties|settings\.gradle\.kts|build\.gradle\.kts|app/build\.gradle\.kts|shared/build\.gradle\.kts|shared/settings\.gradle\.kts|shared/gradle/.*|\.github/.*)$' || true)
+            OTHER_FILES=$(git diff --name-only "$LAST" "$REF" -- $APP_PATHS | \
+              grep -Ev '^(gradle/libs\.versions\.toml|gradle/wrapper/[^/]+|gradlew|gradlew\.bat)$' || true)
             if [ "$AUTHORS" = "dependabot[bot]" ] || [ -z "$OTHER_FILES" ]; then
               DRAFT=true
               echo "Само обновени зависимости — изданието ще е чернова за ръчно публикуване."
