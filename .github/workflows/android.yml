@@ -18,8 +18,9 @@ concurrency:
   group: android-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-# Двете задачи вървят паралелно: проверките (тестове, lint, debug) и подписаният release build
-# (R8 за prodPlay и prodRelease — най-бавната част). Gradle daemon-ът остава жив между стъпките.
+# Първо проверките (тестове, lint, debug) — само с права за четене; след тях, ако са минали:
+# подписаният release build (R8 за prodPlay и prodRelease) и публикуването на снимките на
+# екраните (единствената задача с право за запис). Gradle daemon-ът остава жив между стъпките.
 jobs:
   checks:
     if: >-
@@ -29,11 +30,14 @@ jobs:
         (startsWith(github.head_ref, 'wave') && contains(github.head_ref, '/')))
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    # Само четене, и токенът не остава в .git/config: тестовете, lint и плъгините (вкл. слети
+    # от Dependabot) не могат да пишат в хранилището. Снимките публикува publish-screenshots.
     permissions:
-      # write — само за клона „screenshots“ (снимки на екраните при push)
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-java@v6
         with:
@@ -63,32 +67,14 @@ jobs:
             exit 1
           fi
 
-      # Снимките на екраните (ScreenshotTest) → клон „screenshots“, за да се виждат
-      # директно в GitHub: https://github.com/<repo>/tree/screenshots
-      # Само при push в main и в клоните за разработка — не от pull request.
-      - name: Publish screenshots
-        if: >-
-          github.event_name == 'push' &&
-          (github.ref_name == 'main' || startsWith(github.ref_name, 'claude/') || startsWith(github.ref_name, 'wave'))
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          [ -d app/build/reports/screenshots ] || exit 0
-          D=$(mktemp -d)
-          cp app/build/reports/screenshots/*.png "$D"/
-          {
-            echo "# Снимки на екраните"
-            echo
-            echo "Commit \`${GITHUB_SHA::7}\` (\`${GITHUB_REF_NAME}\`), генерирани от \`ScreenshotTest\` (Robolectric, примерни данни)."
-            echo
-            for f in "$D"/*.png; do n=$(basename "$f"); echo "### $n"; echo; echo "<img src=\"$n\" width=\"360\">"; echo; done
-          } > "$D/README.md"
-          cd "$D"
-          git init -q -b screenshots
-          git add .
-          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-            commit -qm "Screenshots: ${GITHUB_SHA::7} (${GITHUB_REF_NAME})"
-          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" screenshots
+      # Снимките на екраните (ScreenshotTest) — artifact; в клона „screenshots“ ги качва
+      # publish-screenshots, след като всички проверки са минали.
+      - uses: actions/upload-artifact@v7
+        with:
+          name: screenshots
+          path: app/build/reports/screenshots/*.png
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Lint
         run: ./gradlew lintDevDebug lintProdRelease
@@ -114,16 +100,66 @@ jobs:
             app/build/reports/
             shared/build/reports/
 
-  release:
+  # Снимките на екраните → клон „screenshots“, за да се виждат директно в GitHub:
+  # https://github.com/<repo>/tree/screenshots. Само при push в main и в клоните за разработка
+  # (не от pull request) и само ако всички проверки са минали. Не изпълнява нищо от кода на
+  # клона — сваля само PNG файловете (artifact-а от checks). Един клон за всички: всеки push
+  # го презаписва изцяло (commit-ът назовава sha и клона; push -f е атомарен — печели
+  # последният). Групата е за клона на кода: обща група за всички клонове би отменяла
+  # чакащите публикувания, а отменена задача прави цялата проверка „cancelled“ (за main —
+  # без автоматично издание).
+  publish-screenshots:
+    needs: checks
     if: >-
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name != github.repository ||
-      !(github.head_ref == 'main' || startsWith(github.head_ref, 'claude/') ||
-        (startsWith(github.head_ref, 'wave') && contains(github.head_ref, '/')))
+      github.event_name == 'push' &&
+      (github.ref_name == 'main' || startsWith(github.ref_name, 'claude/') || startsWith(github.ref_name, 'wave'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: publish-screenshots-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@v8
+        id: shots
+        continue-on-error: true
+        with:
+          name: screenshots
+          path: ${{ runner.temp }}/screenshots
+
+      - name: Publish screenshots
+        if: steps.shots.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          D: ${{ runner.temp }}/screenshots
+        run: |
+          if ! ls "$D"/*.png >/dev/null 2>&1; then echo "Няма снимки."; exit 0; fi
+          {
+            echo "# Снимки на екраните"
+            echo
+            echo "Commit \`${GITHUB_SHA::7}\` (\`${GITHUB_REF_NAME}\`), генерирани от \`ScreenshotTest\` (Robolectric, примерни данни)."
+            echo
+            for f in "$D"/*.png; do n=$(basename "$f"); echo "### $n"; echo; echo "<img src=\"$n\" width=\"360\">"; echo; done
+          } > "$D/README.md"
+          cd "$D"
+          git init -q -b screenshots
+          git add .
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -qm "Screenshots: ${GITHUB_SHA::7} (${GITHUB_REF_NAME})"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" screenshots
+
+  # Подписаният build — едва след като проверките са минали: истинският ключ (в main) не
+  # подписва commit с паднали тестове. (Условието на checks важи и тук: пропусната ли е,
+  # пропуска се и release.)
+  release:
+    needs: checks
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-java@v6
         with:
@@ -134,47 +170,38 @@ jobs:
 
       # Подписване. Истинският upload ключ (GitHub Secrets) се ползва САМО в main — при push
       # и при ръчно пускане от main. Работните клонове (claude/**, wave*/**) и pull request-ите
-      # винаги подписват с временен ключ ci-test: стъпката с ключа там дори не се изпълнява,
-      # т.е. променливите със secrets не се задават и код от непроверен клон (Gradle скрипт,
-      # тест, плъгин) не може да ги прочете или изнесе. Изданията (release.yml през
+      # винаги подписват с временен ключ ci-test (валиден 1 ден; проверява само, че подписаният
+      # build работи — такъв AAB НЕ се качва в Google Play): изразите по-долу там дават празен
+      # низ, т.е. secrets не стигат до средата и код от непроверен клон (Gradle скрипт, тест,
+      # плъгин) не може да ги прочете или изнесе. Паролите са само в средата на тази стъпка (не
+      # в GITHUB_ENV), а keystore файлът се изтрива след build-а. Изданията (release.yml през
       # auto-release.yml) вървят от main и също ползват истинския ключ.
-      - name: Prepare signing key (upload key, main only)
-        if: >-
-          github.ref == 'refs/heads/main' &&
-          (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-        env:
-          UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
-          UPLOAD_STORE_PASSWORD: ${{ secrets.UPLOAD_STORE_PASSWORD }}
-          UPLOAD_KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
-          UPLOAD_KEY_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
-        run: |
-          if [ -n "$UPLOAD_KEYSTORE_BASE64" ]; then
-            echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
-            echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
-            echo "SIGNING_STORE_PASSWORD=$UPLOAD_STORE_PASSWORD" >> "$GITHUB_ENV"
-            echo "SIGNING_KEY_ALIAS=$UPLOAD_KEY_ALIAS" >> "$GITHUB_ENV"
-            echo "SIGNING_KEY_PASSWORD=$UPLOAD_KEY_PASSWORD" >> "$GITHUB_ENV"
-            echo "SIGNING_KIND=upload" >> "$GITHUB_ENV"
-          fi
-
-      # Временен ключ (валиден 1 ден) — извън main или ако secrets липсват; проверява само,
-      # че подписаният build работи. Такъв AAB НЕ се качва в Google Play.
-      - name: Prepare signing key (temporary ci-test key)
-        if: env.SIGNING_KIND != 'upload'
-        run: |
-          PASS=$(openssl rand -hex 16)
-          keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/upload.jks" -storepass "$PASS" -keypass "$PASS" \
-            -alias ci-test -keyalg RSA -keysize 2048 -validity 1 -dname "CN=CI test key, O=not for release"
-          echo "SIGNING_STORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
-          echo "SIGNING_STORE_PASSWORD=$PASS" >> "$GITHUB_ENV"
-          echo "SIGNING_KEY_ALIAS=ci-test" >> "$GITHUB_ENV"
-          echo "SIGNING_KEY_PASSWORD=$PASS" >> "$GITHUB_ENV"
-          echo "SIGNING_KIND=ci-test-only" >> "$GITHUB_ENV"
-
       # AAB за Google Play = prodPlay (без самообновяване); APK за директно
       # инсталиране = prodRelease (със самообновяване от GitHub Releases).
       - name: Release AAB (Play) + APK (prod)
-        run: ./gradlew bundleProdPlay assembleProdRelease
+        env:
+          UPLOAD_KEYSTORE_BASE64: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && secrets.UPLOAD_KEYSTORE_BASE64 || '' }}
+          UPLOAD_STORE_PASSWORD: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && secrets.UPLOAD_STORE_PASSWORD || '' }}
+          UPLOAD_KEY_ALIAS: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && secrets.UPLOAD_KEY_ALIAS || '' }}
+          UPLOAD_KEY_PASSWORD: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && secrets.UPLOAD_KEY_PASSWORD || '' }}
+        run: |
+          export SIGNING_STORE_FILE="$RUNNER_TEMP/upload.jks"
+          trap 'rm -f "$SIGNING_STORE_FILE"' EXIT
+          if [ -n "$UPLOAD_KEYSTORE_BASE64" ]; then
+            echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$SIGNING_STORE_FILE"
+            export SIGNING_STORE_PASSWORD="$UPLOAD_STORE_PASSWORD" SIGNING_KEY_ALIAS="$UPLOAD_KEY_ALIAS" SIGNING_KEY_PASSWORD="$UPLOAD_KEY_PASSWORD"
+            KIND=upload
+          else
+            PASS=$(openssl rand -hex 16)
+            keytool -genkeypair -noprompt -keystore "$SIGNING_STORE_FILE" -storepass "$PASS" -keypass "$PASS" \
+              -alias ci-test -keyalg RSA -keysize 2048 -validity 1 -dname "CN=CI test key, O=not for release"
+            export SIGNING_STORE_PASSWORD="$PASS" SIGNING_KEY_ALIAS=ci-test SIGNING_KEY_PASSWORD="$PASS"
+            KIND=ci-test-only
+          fi
+          unset UPLOAD_KEYSTORE_BASE64 UPLOAD_STORE_PASSWORD UPLOAD_KEY_ALIAS UPLOAD_KEY_PASSWORD
+          echo "SIGNING_KIND=$KIND" >> "$GITHUB_ENV"
+          # Без daemon: паролите не остават в процес, който живее след стъпката.
+          ./gradlew --no-daemon bundleProdPlay assembleProdRelease
 
       - name: Verify release signature and Play manifest
         run: |

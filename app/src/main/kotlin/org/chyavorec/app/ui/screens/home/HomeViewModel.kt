@@ -73,6 +73,11 @@ class HomeViewModel(
     seasonal: Flow<Boolean>,
     /** Скритият с „×“ поздрав (вж. SettingsStore.dismissedOccasion). */
     dismissedOccasion: Flow<String?>,
+    /**
+     * Колко най-много новините от кеша чакат обобщението на каталога, за да влязат в една
+     * промяна. Тестовете подават минута — иначе резултатът им зависи от скоростта на диска.
+     */
+    private val coalesceMs: Long = COALESCE_MS,
 ) : ViewModel(), RefreshOnReconnect {
 
     private val _state = MutableStateFlow(HomeUiState(yearsSinceFounding = clock.today().year - FOUNDED))
@@ -106,9 +111,9 @@ class HomeViewModel(
             // Началото на опресняването е в същата промяна (иначе още една веднага след нея).
             batch.add { s -> (n?.let { s.copy(news = it.toState().copy(loading = true)) } ?: s).withEvents(e?.data).let { it.copy(news = it.news.startRefresh()) } }
             // Обобщението (от диска) обикновено идва миг след новините — изчаква се за кратко
-            // ([COALESCE_MS]), за да влезе в същата промяна; ако закъснее (строи се от стар кеш),
+            // ([coalesceMs]), за да влезе в същата промяна; ако закъснее (строи се от стар кеш),
             // новините и събитията не го чакат.
-            withTimeoutOrNull(COALESCE_MS) { cachedSummary.join() }
+            withTimeoutOrNull(coalesceMs) { cachedSummary.join() }
             if (!cachedSummary.isCompleted) batch.flush()
             cachedSummary.await()?.let { c -> batch.add(summary = c.data) { it.withCatalog(c.data) } }
             batch.flush()

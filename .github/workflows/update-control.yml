@@ -5,6 +5,7 @@ name: Update control
 # го качва обратно (gh release upload --clobber). Приложението чете
 # /releases/latest/download/update.json и при "paused": true не предлага и не
 # тегли версията. С dry_run само показва резултата. Подробно: docs/RELEASE.md.
+# Пуска се от main (Run workflow → Use workflow from: main); от друг клон спира с грешка.
 on:
   workflow_dispatch:
     inputs:
@@ -36,8 +37,6 @@ concurrency:
 
 jobs:
   update-control:
-    # Само от main: изданията и update.json се управляват оттам.
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
@@ -48,6 +47,14 @@ jobs:
       REASON: ${{ inputs.reason }}
       DRY_RUN: ${{ inputs.dry_run }}
     steps:
+      # Само от main: изданията и update.json се управляват оттам. „Run workflow“ предлага
+      # клона по подразбиране — от друг клон спира с ясна грешка (не се пропуска тихо).
+      - name: Run from main only
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Update control се пуска само от клона main: Run workflow → Use workflow from: main (сега: ${GITHUB_REF_NAME}). Нищо не е променено."
+          exit 1
+
       - name: Resolve release
         run: |
           LATEST=$(gh api "repos/$REPO/releases/latest" --jq .tag_name)

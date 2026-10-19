@@ -9,6 +9,8 @@ on:
   workflow_run:
     workflows: ["Android CI"]
     types: [completed]
+    # Само проверките на клоновете на Dependabot — другите изобщо не пускат workflow-а.
+    branches: ["dependabot/**"]
 
 permissions:
   contents: write

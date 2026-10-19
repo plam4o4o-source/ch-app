@@ -93,15 +93,22 @@ AGP 9.4 (вграден Kotlin) · Gradle 9.8 · Java 21 (build с JDK 25) · mi
 3. Ако е зелен, `dependabot-automerge.yml` слива PR-а в `main` (само patch/minor;
    major обновяванията остават отворени за ръчен преглед).
 4. `auto-release.yml` издава нова версия (patch +1, напр. v1.1.0 → v1.1.1) —
-   също и след всеки push в `main`, който променя приложението (не само
-   документация/CI). Release-ът съдържа APK, AAB и `update.json`, а
-   инсталираните приложения се обновяват сами. Ако след последното издание има
-   само обновени зависимости, изданието е **чернова** — публикува се ръчно.
+   също и след всеки push в `main`, който променя приложението (`app/`, `shared/`,
+   `gradle/`, Gradle скриптовете и `gradle.properties`, `compose-stability.conf`;
+   не документация/CI). Release-ът съдържа APK, AAB и `update.json`, а
+   инсталираните приложения се обновяват сами. Изданието е **чернова** (публикува
+   се ръчно) само ако след последното издание всички commit-и са от Dependabot или
+   от файловете на приложението са пипнати само `gradle/libs.versions.toml` и Gradle
+   wrapper-ът. Промяна напр. само в `app/build.gradle.kts` (адреси, `minSdk`, R8) е
+   истинско издание.
 
 Всяка неделя `baseline-profile.yml` генерира наново Baseline/Startup профила на
 емулатор и го предлага в клона `baseline-profile/update` (слива се ръчно).
 
 Ръчно: Actions → Release (конкретна версия, напр. `1.2.0`) или tag `v1.2.0`.
+При ръчно пускане (Release, Auto release, Update control) в „Run workflow“ избери
+**Use workflow from: `main`** — GitHub предлага клона по подразбиране; от друг клон
+Auto release и Update control спират с грешка, а Release подписва с истинския ключ само от `main`.
 Лоша версия — спиране на обновяванията (`update-control.yml`) и връщане назад:
 **[docs/RELEASE.md](docs/RELEASE.md)**.
 Текущото състояние спрямо последните версии: Actions → „Dependency report“.
@@ -181,12 +188,13 @@ cd shared && ../gradlew test && cd ..                 # ядро: парсери
 
 GitHub Actions (`.github/workflows/android.yml`) пуска всичко това при push в `main`,
 `claude/**` и `wave*/**`, при pull request (без повторение за commit, проверен вече при push)
-и ръчно, и качва APK/AAB като artifacts. Две паралелни задачи: `checks` (тестове на `shared`,
-тестовете на приложението за prod и `MainFlowsUiTest` за dev — заради демо входа,
+и ръчно, и качва APK/AAB като artifacts. Първо `checks` — само с права за четене (тестове на
+`shared`, тестовете на приложението за prod и `MainFlowsUiTest` за dev — заради демо входа,
 проверка, че Room схемите в `app/schemas/` са commit-нати, lint, debug APK-та, компилиране на
-генератора на профила) и `release` (подписаните AAB/APK и проверка на манифеста за Play).
-Robolectric снимките на екраните (`ScreenshotTest` и др.) се публикуват при push в клона
-`screenshots`. Отчетът на Compose компилатора е само при ръчно пускане.
+генератора на профила); след като мине — `release` (подписаните AAB/APK и проверка на
+манифеста за Play) и `publish-screenshots`: Robolectric снимките на екраните (`ScreenshotTest`
+и др.) от artifact-а на `checks` се публикуват при push в клона `screenshots`. Отчетът на
+Compose компилатора е само при ръчно пускане.
 
 ## Release и Google Play
 
@@ -247,7 +255,7 @@ Robolectric снимките на екраните (`ScreenshotTest` и др.) �
 5. Настройки → Обновления: вкл./изкл. и „Провери за нова версия“.
    „По-късно“ отлага същата версия с 24 часа.
 
-**Издаване на нова версия:** Actions → Release → Run workflow (версия, напр.
+**Издаване на нова версия:** Actions → Release → Run workflow от `main` (версия, напр.
 `1.2.0`, и по желание „Какво ново“). Workflow-ът качва APK, AAB и `update.json`;
 инсталираните приложения го откриват сами.
 
