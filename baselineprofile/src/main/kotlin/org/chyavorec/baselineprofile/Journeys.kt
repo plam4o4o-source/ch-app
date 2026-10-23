@@ -51,7 +51,7 @@ private val TAB_CATALOG = exactly("Каталог", "Catalogue")
 private val TAB_MY = exactly("Моето", "My")
 private val TAB_MORE = exactly("Още", "More")
 private val MESSAGES = containing("Съобщения", "съобщени", "Messages", "message")
-/** Заглавката над резултатите в каталога: „12 резултата · данни към …“ / „12 results · data as of …“. */
+/** Заглавката над резултатите в каталога: „12 резултата · данни от InvLib към …“ / „12 results · InvLib data as of …“. */
 private val CATALOG_RESULTS = Pattern.compile("^[1-9][0-9]*\\s+(резултат|result).*", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE or Pattern.DOTALL)
 private val EDIT_TEXT: BySelector = By.clazz("android.widget.EditText")
 

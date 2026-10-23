@@ -22,7 +22,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import org.chyavorec.app.ui.components.TabReselectEffect
-import org.chyavorec.app.ui.components.BrandImage
+import org.chyavorec.app.ui.components.AppTopBar
+import org.chyavorec.app.ui.components.windowHeight
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.sharedElementKey
 import androidx.compose.foundation.rememberScrollState
@@ -62,7 +63,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import org.chyavorec.app.ui.components.WheatRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -195,99 +197,112 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     TabReselectEffect(Routes.CATALOG) { (if (shelf) shelfState else listState).animateScrollToItem(0) }
     // В началото — само при резултати за нова заявка или филтър. Опресненият във фонов режим
     // индекс (същата заявка) пази мястото в списъка; връщането от книга — също (помни се).
+    // Ниска височина (телефон хоризонтално, разделен екран): горната лента се скрива при
+    // превъртане и се връща при обратно превъртане — иначе за резултатите остава малко място.
+    val compactHeight = windowHeight() < 480.dp
+    val barScroll = TopAppBarDefaults.enterAlwaysScrollBehavior()
     var scrolledFor by rememberSaveable { mutableIntStateOf(state.searchId) }
     LaunchedEffect(state.searchId) {
         if (state.searchId == scrolledFor) return@LaunchedEffect
         scrolledFor = state.searchId
         listState.scrollToItem(0)
         shelfState.scrollToItem(0)
+        // Списъкът е в началото — лентата също се показва отново.
+        barScroll.state.heightOffset = 0f
     }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    BrandImage(R.drawable.logo_catalog, null, Modifier.size(40.dp))
-                    Spacer(Modifier.width(10.dp))
-                    Column {
-                        Text(stringResource(R.string.catalog_title), style = MaterialTheme.typography.titleLarge, maxLines = 1)
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            BrandImage(R.drawable.logo_invlib, null, Modifier.size(width = 20.dp, height = 13.dp))
-                            Spacer(Modifier.width(4.dp))
-                            Text(stringResource(R.string.catalog_powered_by), style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Scaffold(
+        modifier = if (compactHeight) Modifier.nestedScroll(barScroll.nestedScrollConnection) else Modifier,
+        topBar = {
+            // Като останалите основни раздели: емблемата + „Каталог“. Източникът (InvLib) е в реда
+            // с броя резултати, а логата на каталога и InvLib — в „За приложението“.
+            AppTopBar(
+                stringResource(R.string.tab_catalog),
+                scrollBehavior = if (compactHeight) barScroll else null,
+                expandedHeight = if (compactHeight) 56.dp else TopAppBarDefaults.TopAppBarExpandedHeight,
+                actions = {
+                    IconButton(onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                        scope.launch { container.settings.setCatalogShelf(!shelf) }
+                    }) {
+                        if (shelf) {
+                            Icon(Icons.AutoMirrored.Outlined.ViewList, contentDescription = stringResource(R.string.catalog_view_list))
+                        } else {
+                            Icon(Icons.Outlined.ViewModule, contentDescription = stringResource(R.string.catalog_view_shelf))
                         }
                     }
-                }
-            },
-            actions = {
-                IconButton(onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                    scope.launch { container.settings.setCatalogShelf(!shelf) }
-                }) {
-                    if (shelf) {
-                        Icon(Icons.AutoMirrored.Outlined.ViewList, contentDescription = stringResource(R.string.catalog_view_list))
-                    } else {
-                        Icon(Icons.Outlined.ViewModule, contentDescription = stringResource(R.string.catalog_view_shelf))
+                    Box {
+                        IconButton(onClick = { sortMenu = true }) {
+                            Icon(Icons.Outlined.SwapVert, contentDescription = stringResource(R.string.catalog_sort))
+                        }
+                        DropdownMenu(sortMenu, onDismissRequest = { sortMenu = false }) {
+                            CatalogSort.entries.forEach { s ->
+                                DropdownMenuItem(
+                                    text = { Text(sortLabel(s) + if (q.sort == s) "  ✓" else "") },
+                                    onClick = { vm.setSort(s); sortMenu = false },
+                                )
+                            }
+                        }
                     }
-                }
-                Box {
-                    IconButton(onClick = { sortMenu = true }) {
-                        Icon(Icons.Outlined.SwapVert, contentDescription = stringResource(R.string.catalog_sort))
+                    IconButton(onClick = { showFilters = true }) {
+                        BadgedBox(badge = { if (q.hasFilters) Badge() }) {
+                            Icon(Icons.Outlined.Tune, contentDescription = stringResource(R.string.catalog_filters))
+                        }
                     }
-                    DropdownMenu(sortMenu, onDismissRequest = { sortMenu = false }) {
-                        CatalogSort.entries.forEach { s ->
-                            DropdownMenuItem(
-                                text = { Text(sortLabel(s) + if (q.sort == s) "  ✓" else "") },
-                                onClick = { vm.setSort(s); sortMenu = false },
+                },
+            )
+        },
+    ) { padding ->
+        WheatRefreshBox(state.engine.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+            Column(Modifier.fillMaxSize()) {
+                val searchField: @Composable (Modifier) -> Unit = { m ->
+                    OutlinedTextField(
+                        value = q.text,
+                        onValueChange = vm::setText,
+                        placeholder = { Text(stringResource(R.string.catalog_search_hint, fieldLabel(q.field).lowercase())) },
+                        leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
+                        trailingIcon = {
+                            // Празно поле → скенер на баркодове (както в търсачката на началния екран);
+                            // с текст → „Изчисти“. Така горната лента не реже заглавието.
+                            if (q.text.isNotEmpty()) IconButton(onClick = { vm.setText("") }) {
+                                Icon(Icons.Outlined.Clear, contentDescription = stringResource(R.string.action_clear))
+                            } else IconButton(onClick = { navigate(Routes.SCAN) }) {
+                                Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action))
+                            }
+                        },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Search,
+                            keyboardType = if (q.field == SearchField.INVENTORY || q.field == SearchField.ISBN) KeyboardType.Number else KeyboardType.Text,
+                        ),
+                        keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
+                        shape = RoundedCornerShape(50),
+                        modifier = m,
+                    )
+                }
+                val fieldChips: @Composable (Modifier) -> Unit = { m ->
+                    LazyRow(m, contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(SearchField.entries) { f ->
+                            FilterChip(
+                                q.field == f,
+                                onClick = {
+                                    if (q.field != f) haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                                    vm.setField(f)
+                                },
+                                label = { Text(fieldLabel(f)) },
                             )
                         }
                     }
                 }
-                IconButton(onClick = { showFilters = true }) {
-                    BadgedBox(badge = { if (q.hasFilters) Badge() }) {
-                        Icon(Icons.Outlined.Tune, contentDescription = stringResource(R.string.catalog_filters))
+                if (compactHeight) {
+                    // Ниско (хоризонтално): търсенето и полетата — на един ред, за да остане място за резултатите.
+                    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                        searchField(Modifier.weight(1f).padding(start = 16.dp))
+                        fieldChips(Modifier.weight(1f))
                     }
-                }
-            },
-        )
-    }) { padding ->
-        WheatRefreshBox(state.engine.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
-            Column(Modifier.fillMaxSize()) {
-                OutlinedTextField(
-                    value = q.text,
-                    onValueChange = vm::setText,
-                    placeholder = { Text(stringResource(R.string.catalog_search_hint, fieldLabel(q.field).lowercase())) },
-                    leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
-                    trailingIcon = {
-                        // Празно поле → скенер на баркодове (както в търсачката на началния екран);
-                        // с текст → „Изчисти“. Така горната лента не реже заглавието.
-                        if (q.text.isNotEmpty()) IconButton(onClick = { vm.setText("") }) {
-                            Icon(Icons.Outlined.Clear, contentDescription = stringResource(R.string.action_clear))
-                        } else IconButton(onClick = { navigate(Routes.SCAN) }) {
-                            Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action))
-                        }
-                    },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Search,
-                        keyboardType = if (q.field == SearchField.INVENTORY || q.field == SearchField.ISBN) KeyboardType.Number else KeyboardType.Text,
-                    ),
-                    keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
-                )
-                LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(SearchField.entries) { f ->
-                        FilterChip(
-                            q.field == f,
-                            onClick = {
-                                if (q.field != f) haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                                vm.setField(f)
-                            },
-                            label = { Text(fieldLabel(f)) },
-                        )
-                    }
+                } else {
+                    searchField(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp))
+                    fieldChips(Modifier)
                 }
                 AnimatedVisibility(state.suggestions.isNotEmpty() && q.text.length >= 2) {
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {

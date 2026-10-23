@@ -248,7 +248,7 @@ class LargeFontScreenshotTest {
     @Test fun bookAuthorOpensCatalogByAuthor() {
         launch(fontScale = 1f, deepLink = bookOnLoan)
         click("Симеон Колев")
-        waitFor("данни към")
+        waitFor("данни от InvLib към")
         shot("63-catalog-by-author")
     }
 

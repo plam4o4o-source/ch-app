@@ -86,11 +86,10 @@
     <string name="card_self_note">You entered this number; it hasn’t been verified by the library. It is stored encrypted on this device only.</string>
     <string name="card_show">Show card</string>
     <string name="card_usage_note">Show the card to the librarian; the barcode can be scanned at the desk.</string>
-    <string name="catalog_data_as_of">data as of %1$s</string>
+    <string name="catalog_data_as_of">InvLib data as of %1$s</string>
     <string name="catalog_filters">Filters</string>
     <string name="catalog_no_results">No books match this search.</string>
     <string name="catalog_no_results_hint">Try another word, check the spelling or remove filters.</string>
-    <string name="catalog_powered_by">powered by InvLib</string>
     <string name="catalog_search_hint">Search by %1$s</string>
     <string name="catalog_sort">Sort</string>
     <string name="catalog_title">Online catalogue</string>
