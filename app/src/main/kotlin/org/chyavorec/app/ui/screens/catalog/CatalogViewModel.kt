@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.catalog
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.components.ScreenState
@@ -82,11 +84,19 @@ class CatalogViewModel(
     private val repo: CatalogRepository,
     /** Търсенето и debounce-ът вървят извън главната нишка (тестовете подават свой диспечер). */
     private val searchDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    /**
+     * Търсенето (текст, поле, филтри, подредба) се пази тук: след спиране на процеса във
+     * фонов режим каталогът се връща със същата заявка и я търси наново, не с празно поле.
+     */
+    private val savedState: SavedStateHandle = SavedStateHandle(),
 ) : ViewModel(), RefreshOnReconnect {
 
-    private val _state = MutableStateFlow(CatalogUiState())
+    private val restored: CatalogQuery = savedState.get<String>(QUERY_KEY)
+        ?.let { runCatching { Json.decodeFromString(CatalogQuery.serializer(), it) }.getOrNull() }
+        ?: CatalogQuery()
+    private val _state = MutableStateFlow(CatalogUiState(query = restored))
     val state: StateFlow<CatalogUiState> = _state.asStateFlow()
-    private val queryFlow = MutableStateFlow(CatalogQuery())
+    private val queryFlow = MutableStateFlow(restored)
     /** Последното изпълнено търсене: същата търсачка със същата заявка не се търси повторно. */
     @Volatile private var lastSearch: Pair<CatalogSearcher, CatalogQuery>? = null
 
@@ -141,6 +151,7 @@ class CatalogViewModel(
         val q = transform(_state.value.query)
         _state.update { it.copy(query = q, searching = true) }
         queryFlow.value = q
+        savedState[QUERY_KEY] = Json.encodeToString(CatalogQuery.serializer(), q)
     }
 
     fun setText(text: String) = update { it.copy(text = text) }
@@ -203,6 +214,10 @@ class CatalogViewModel(
             }
         }
         if (applied) lastSearch = engine to q
+    }
+
+    private companion object {
+        const val QUERY_KEY = "catalog.query"
     }
 }
 

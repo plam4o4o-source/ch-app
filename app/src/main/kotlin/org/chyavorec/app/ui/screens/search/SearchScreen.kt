@@ -48,6 +48,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
@@ -62,7 +63,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
-import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.appViewModelWithState
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.BookListItem
@@ -86,10 +87,19 @@ data class SearchUi(val query: String = "", val scope: SearchScope = SearchScope
  * Работи върху вече заредените (и кеширани) данни — мигновено и офлайн.
  */
 @OptIn(FlowPreview::class)
-class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
-    val ui = MutableStateFlow(SearchUi())
+class GlobalSearchViewModel(
+    private val c: AppContainer,
+    /** Текстът и обхватът — оцеляват след спиране на процеса във фонов режим (търси се наново). */
+    private val savedState: SavedStateHandle = SavedStateHandle(),
+) : ViewModel() {
+    val ui = MutableStateFlow(
+        savedState.get<String>(QUERY_KEY).orEmpty().let { q ->
+            val scope = savedState.get<String>(SCOPE_KEY)?.let { s -> SearchScope.entries.firstOrNull { it.name == s } } ?: SearchScope.ALL
+            SearchUi(query = q, scope = scope, searching = q.isNotBlank())
+        },
+    )
     val recent = c.settings.recentSearches.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-    private val query = MutableStateFlow("")
+    private val query = MutableStateFlow(ui.value.query)
     // Новините, събитията и страниците се четат/декодират и нормализират веднъж, а не при всеки клавиш.
     @Volatile private var corpus: SearchCorpus = SearchCorpus.EMPTY
 
@@ -109,8 +119,16 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
         viewModelScope.launch(Dispatchers.Default) { query.debounce(180).collect { run(it) } }
     }
 
-    fun setQuery(q: String) { ui.update { it.copy(query = q, searching = q.isNotBlank()) }; query.value = q }
-    fun setScope(s: SearchScope) = ui.update { it.copy(scope = s) }
+    fun setQuery(q: String) {
+        ui.update { it.copy(query = q, searching = q.isNotBlank()) }
+        query.value = q
+        savedState[QUERY_KEY] = q
+    }
+
+    fun setScope(s: SearchScope) {
+        ui.update { it.copy(scope = s) }
+        savedState[SCOPE_KEY] = s.name
+    }
     fun commit() = viewModelScope.launch { c.settings.addRecentSearch(ui.value.query) }
     fun clearRecent() = viewModelScope.launch { c.settings.clearRecentSearches() }
 
@@ -124,11 +142,16 @@ class GlobalSearchViewModel(private val c: AppContainer) : ViewModel() {
         val r = withContext(Dispatchers.Default) { SearchAggregator.search(q, catalog, corpus) }
         ui.update { if (it.query == q) it.copy(results = r, searching = false) else it }
     }
+
+    private companion object {
+        const val QUERY_KEY = "search.query"
+        const val SCOPE_KEY = "search.scope"
+    }
 }
 
 @Composable
 fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (String) -> Unit, openLink: (String) -> Unit) {
-    val vm = appViewModel { GlobalSearchViewModel(it) }
+    val vm = appViewModelWithState { c, saved -> GlobalSearchViewModel(c, saved) }
     val ui by vm.ui.collectAsStateWithLifecycle()
     val recent by vm.recent.collectAsStateWithLifecycle()
     val focus = remember { FocusRequester() }

@@ -38,13 +38,25 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.ui.graphics.Color
 import org.chyavorec.app.ui.components.Emblem
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.isSpecified
+import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -292,6 +304,9 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     // странична навигационна лента (rail), а съдържанието заема останалата ширина.
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val wide = maxWidth >= 600.dp
+        // Телефон, хоризонтално (височина под 480 dp — WindowHeightSizeClass.COMPACT):
+        // лентата е без емблемата (тя е и в заглавието на екрана), за да се съберат петте раздела.
+        val compactHeight = maxHeight < 480.dp
         Row(Modifier.fillMaxSize()) {
             if (wide) {
                 AnimatedVisibility(
@@ -299,7 +314,7 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
                     enter = if (reduced) EnterTransition.None else slideInHorizontally { -it } + fadeIn(),
                     exit = if (reduced) ExitTransition.None else slideOutHorizontally { -it } + fadeOut(),
                 ) {
-                    AppNavigationRail(route, reduced, onTab)
+                    AppNavigationRail(route, reduced, onTab, compactHeight)
                 }
             }
             Scaffold(
@@ -374,7 +389,7 @@ private fun AppNavigationBar(route: String?, reduced: Boolean, onTab: (TopTab, B
                 selected = selected,
                 onClick = { onTab(tab, selected) },
                 icon = { TabIcon(tab, selected, reduced) },
-                label = { LimitFontScale(NAV_LABEL_MAX_FONT_SCALE) { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) } },
+                label = { TabLabel(stringResource(tab.labelRes)) },
                 colors = navColors,
             )
         }
@@ -382,29 +397,57 @@ private fun AppNavigationBar(route: String?, reduced: Boolean, onTab: (TopTab, B
 }
 
 @Composable
-private fun AppNavigationRail(route: String?, reduced: Boolean, onTab: (TopTab, Boolean) -> Unit) {
+private fun AppNavigationRail(route: String?, reduced: Boolean, onTab: (TopTab, Boolean) -> Unit, compactHeight: Boolean) {
     val railColors = NavigationRailItemDefaults.colors(
         selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
         selectedTextColor = selectedTabTextColor(),
         indicatorColor = MaterialTheme.colorScheme.primaryContainer,
     )
-    NavigationRail(
-        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-        header = { Emblem(40.dp, Modifier.padding(vertical = 8.dp)) },
-    ) {
-        Spacer(Modifier.weight(1f))
-        TopTab.entries.forEach { tab ->
-            val selected = route == tab.route
-            NavigationRailItem(
-                selected = selected,
-                onClick = { onTab(tab, selected) },
-                icon = { TabIcon(tab, selected, reduced) },
-                label = { LimitFontScale(NAV_LABEL_MAX_FONT_SCALE) { Text(stringResource(tab.labelRes), maxLines = 1, overflow = TextOverflow.Ellipsis) } },
-                colors = railColors,
-                modifier = Modifier.padding(vertical = 4.dp),
-            )
+    // Нисък екран — без емблемата: тя е и в заглавието на екрана, а мястото е за разделите.
+    val header: (@Composable ColumnScope.() -> Unit)? =
+        if (compactHeight) null else ({ Emblem(40.dp, Modifier.padding(vertical = 8.dp)) })
+    NavigationRail(containerColor = MaterialTheme.colorScheme.surfaceContainer, header = header) {
+        // Разделите — по средата на лентата; ако пак не се съберат (напр. едър шрифт на нисък
+        // екран), лентата се превърта, вместо „Още“ да остане извън екрана.
+        BoxWithConstraints(Modifier.weight(1f)) {
+            Column(
+                Modifier.verticalScroll(rememberScrollState()).heightIn(min = maxHeight).selectableGroup(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(if (compactHeight) 4.dp else 12.dp, Alignment.CenterVertically),
+            ) {
+                TopTab.entries.forEach { tab ->
+                    val selected = route == tab.route
+                    NavigationRailItem(
+                        selected = selected,
+                        onClick = { onTab(tab, selected) },
+                        icon = { TabIcon(tab, selected, reduced) },
+                        label = { TabLabel(stringResource(tab.labelRes)) },
+                        colors = railColors,
+                    )
+                }
+            }
         }
-        Spacer(Modifier.weight(1f))
+    }
+}
+
+/**
+ * Етикетът на раздела — на един ред. При едър шрифт (до [NAV_LABEL_MAX_FONT_SCALE]) по-дългият
+ * етикет („Catalogue“, „Каталог“, „Новини“) се смалява до 3/4, за да се събере, вместо да се реже
+ * („Catalog…“); многоточие — само ако и така не стига.
+ */
+@Composable
+private fun TabLabel(text: String) {
+    val style = LocalTextStyle.current
+    val max = if (style.fontSize.isSpecified) style.fontSize else 12.sp
+    val color = LocalContentColor.current
+    LimitFontScale(NAV_LABEL_MAX_FONT_SCALE) {
+        BasicText(
+            text,
+            style = style.copy(color = color),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            autoSize = TextAutoSize.StepBased(minFontSize = max * 0.75f, maxFontSize = max, stepSize = 0.25.sp),
+        )
     }
 }
 

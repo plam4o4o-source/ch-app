@@ -94,6 +94,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.appViewModelWithState
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.theme.CoverTintedTheme
@@ -154,7 +155,7 @@ fun sortLabel(s: CatalogSort): String = stringResource(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogScreen(navigate: (String) -> Unit) {
-    val vm = appViewModel { CatalogViewModel(it.catalogRepository) }
+    val vm = appViewModelWithState { c, saved -> CatalogViewModel(c.catalogRepository, savedState = saved) }
     val state by vm.state.collectAsStateWithLifecycle()
     var showFilters by rememberSaveable { mutableStateOf(false) }
     var sortMenu by remember { mutableStateOf(false) }

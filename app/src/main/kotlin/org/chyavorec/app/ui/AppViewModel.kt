@@ -2,11 +2,14 @@ package org.chyavorec.app.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.components.ScreenState
@@ -23,6 +26,18 @@ val LocalAppContainer = staticCompositionLocalOf<AppContainer> { error("AppConta
 inline fun <reified VM : ViewModel> appViewModel(key: String? = null, crossinline create: (AppContainer) -> VM): VM {
     val container = LocalAppContainer.current
     return viewModel(key = key, factory = viewModelFactory { initializer { create(container).also { watchReconnect(it, container) } } })
+}
+
+/**
+ * Като [appViewModel], но с [SavedStateHandle] (от CreationExtras на екрана в навигацията):
+ * въведеното (напр. търсенето) оцелява и след като системата спре процеса във фонов режим.
+ */
+@Composable
+inline fun <reified VM : ViewModel> appViewModelWithState(key: String? = null, crossinline create: (AppContainer, SavedStateHandle) -> VM): VM {
+    val container = LocalAppContainer.current
+    return viewModel(key = key, factory = viewModelFactory {
+        initializer { create(container, createSavedStateHandle()).also { watchReconnect(it, container) } }
+    })
 }
 
 /**
@@ -52,7 +67,10 @@ fun ScreenState<*>.wantsReconnectRefresh(): Boolean =
  * им API: профилът (неизрично, както при отваряне), заеманията (единственото им
  * опресняване е от мрежата) и неразчетените без връзка възможности (дали входът е включен).
  */
-fun watchReconnect(vm: ViewModel, container: AppContainer) {
+fun watchReconnect(vm: ViewModel, container: AppContainer) = watchReconnect(vm, container.reconnected)
+
+/** Като горното, но със самото събитие „връзката се върна“ (тестовете подават свое). */
+fun watchReconnect(vm: ViewModel, reconnected: Flow<Unit>) {
     val action: (() -> Unit) = when (vm) {
         is RefreshOnReconnect -> { { if (vm.reconnectState.wantsReconnectRefresh()) vm.refreshOnReconnect() } }
         is AccountViewModel -> { {
@@ -64,5 +82,5 @@ fun watchReconnect(vm: ViewModel, container: AppContainer) {
         is LoansViewModel -> { { if (vm.state.value.wantsReconnectRefresh()) vm.refresh() } }
         else -> return
     }
-    vm.viewModelScope.launch { container.reconnected.collect { action() } }
+    vm.viewModelScope.launch { reconnected.collect { action() } }
 }

@@ -165,13 +165,15 @@ fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
                             modifier = Modifier.weight(1f).fillMaxHeight().animateEntrance(r * columns + c)
                                 .darkTopHighlight(MaterialTheme.shapes.medium),
                         ) {
+                            // При едър шрифт (1.3×) текстът се пренася на още ред, вместо да се реже —
+                            // редът от плочки е с височината на най-високата.
                             val texts: @Composable () -> Unit = {
-                                Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                                Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 3, overflow = TextOverflow.Ellipsis)
                                 item.subtitle?.let {
                                     Spacer(Modifier.height(2.dp))
                                     Text(
                                         it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        maxLines = if (columns == 1) 3 else 2, overflow = TextOverflow.Ellipsis,
+                                        maxLines = if (columns == 1) 4 else 3, overflow = TextOverflow.Ellipsis,
                                     )
                                 }
                             }

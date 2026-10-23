@@ -111,6 +111,8 @@ enum class SearchField { ALL, TITLE, AUTHOR, ISBN, KEYWORD, INVENTORY }
 
 enum class CatalogSort { RELEVANCE, TITLE, AUTHOR, YEAR_DESC, YEAR_ASC, NEWEST }
 
+/** Заявката към каталога; сериализира се, за да оцелее след спиране на процеса (SavedStateHandle). */
+@Serializable
 data class CatalogQuery(
     val text: String = "",
     val field: SearchField = SearchField.ALL,

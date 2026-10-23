@@ -214,13 +214,15 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
 fun AboutChitalishteScreen(onBack: () -> Unit, navigate: (String) -> Unit, openLink: (String) -> Unit) {
     val vm = appViewModel { AboutChitalishteViewModel(it.siteRepository) }
     val link by vm.link.collectAsStateWithLifecycle()
-    val failed by vm.failed.collectAsStateWithLifecycle()
+    val error by vm.error.collectAsStateWithLifecycle()
     val l = link
+    val e = error
     when {
         l != null -> SitePageScreen(l.url, l.title, onBack, navigate, openLink)
-        failed -> Scaffold(topBar = { BackTopBar(stringResource(R.string.qa_about), onBack) }) { p ->
+        // Без връзка — „Опитай отново“ (и сама при връщане на връзката); липсваща страница — не.
+        e != null -> Scaffold(topBar = { BackTopBar(stringResource(R.string.qa_about), onBack) }) { p ->
             Column(Modifier.padding(p)) {
-                org.chyavorec.app.ui.components.ErrorView(AppError.NotFound, onRetry = null)
+                org.chyavorec.app.ui.components.ErrorView(e, onRetry = if (e == AppError.NotFound) null else vm::retry)
             }
         }
         else -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ChLoadingIndicator() }
