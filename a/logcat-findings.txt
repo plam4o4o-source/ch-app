@@ -1,0 +1,43 @@
+app pids seen: ['3693', '4521', '4687', '4804', '4923', '5004', '5128', '5176', '5227', '5280', '5333', '5382', '5430', '5480', '5534', '5586', '5736', '5793', '5859', '5911', '5963', '6080', '7525', '8766', '10858', '11103', '11295', '11420']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 55
+   skipped-frames events=55 max=82 total=2713
+   10-23 16:47:44.200  3693  3693 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:02.390  3693  3693 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:03.619  3693  3693 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:17.235  4521  4521 I Choreographer: Skipped 82 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:18.599  4521  4521 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:26.757  4521  4521 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:31.640  4687  4687 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:40.876  4687  4687 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:45.807  4804  4804 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:54.525  4804  4804 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:55.212  4804  4804 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   10-23 16:49:00.114  4923  4923 I Choreographer: Skipped 68 frames!  The application may be doing too much work on its main thread.
+== Davey: 96
+   davey events=96 max=2224ms median=981ms
+   10-23 16:47:31.645  3693  3701 I HWUI    : Davey! duration=1329ms; Flags=1, FrameTimelineVsyncId=10489, IntendedVsync=78950886580, Vsync=78967553246, InputEventId=0, HandleInputStart=78976357298, AnimationStart=78976357569, PerformTraversal
+   10-23 16:47:44.185  3693  3702 I HWUI    : Davey! duration=975ms; Flags=0, FrameTimelineVsyncId=12029, IntendedVsync=91850886064, Vsync=91867552730, InputEventId=0, HandleInputStart=91872105376, AnimationStart=91872106097, PerformTraversals
+   10-23 16:47:46.282  3693  4085 I HWUI    : Davey! duration=1017ms; Flags=0, FrameTimelineVsyncId=12355, IntendedVsync=93867552650, Vsync=93867552650, InputEventId=0, HandleInputStart=93874255494, AnimationStart=93874256536, PerformTraversal
+   10-23 16:48:02.421  3693  3740 I HWUI    : Davey! duration=1172ms; Flags=0, FrameTimelineVsyncId=12892, IntendedVsync=109867552010, Vsync=109867552010, InputEventId=0, HandleInputStart=109871655387, AnimationStart=109871655798, PerformTrave
+   10-23 16:48:03.695  3693  3701 I HWUI    : Davey! duration=2224ms; Flags=0, FrameTimelineVsyncId=12914, IntendedVsync=110050885336, Vsync=111050885296, InputEventId=0, HandleInputStart=111056500882, AnimationStart=111056502134, PerformTrave
+   10-23 16:48:17.228  4521  4531 I HWUI    : Davey! duration=1416ms; Flags=1, FrameTimelineVsyncId=13964, IntendedVsync=124467551426, Vsync=124467551426, InputEventId=0, HandleInputStart=124479500716, AnimationStart=124479500987, PerformTrave
+   10-23 16:48:17.545  4521  4531 I HWUI    : Davey! duration=1664ms; Flags=0, FrameTimelineVsyncId=14001, IntendedVsync=124517551424, Vsync=125884218036, InputEventId=0, HandleInputStart=125897763009, AnimationStart=125897763469, PerformTrave
+   10-23 16:48:18.605  4521  4529 I HWUI    : Davey! duration=943ms; Flags=0, FrameTimelineVsyncId=14906, IntendedVsync=126300884686, Vsync=126300884686, InputEventId=0, HandleInputStart=126301121075, AnimationStart=126301121807, PerformTraver
+   10-23 16:48:18.756  4521  4529 I HWUI    : Davey! duration=718ms; Flags=0, FrameTimelineVsyncId=15055, IntendedVsync=126617551340, Vsync=127250884648, InputEventId=0, HandleInputStart=127268229439, AnimationStart=127268229880, PerformTraver
+   10-23 16:48:26.843  4521  4531 I HWUI    : Davey! duration=869ms; Flags=0, FrameTimelineVsyncId=18450, IntendedVsync=134184217704, Vsync=134184217704, InputEventId=0, HandleInputStart=134184745431, AnimationStart=134184745641, PerformTraver
+   10-23 16:48:31.630  4687  4695 I HWUI    : Davey! duration=1100ms; Flags=1, FrameTimelineVsyncId=19711, IntendedVsync=139184217504, Vsync=139417550828, InputEventId=0, HandleInputStart=139421866850, AnimationStart=139421867561, PerformTrave
+   10-23 16:48:31.941  4687  4695 I HWUI    : Davey! duration=1105ms; Flags=0, FrameTimelineVsyncId=19802, IntendedVsync=139434217494, Vsync=140300884126, InputEventId=0, HandleInputStart=140302705797, AnimationStart=140302706108, PerformTrave
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-23 16:47:27.523  3680  3680 I PERFCHECK: section: 1. First install: first launch, time to catalogue results
+   10-23 16:49:09.945  5073  5073 I PERFCHECK: section: 2. Startup
+   10-23 16:51:39.026  6034  6034 I PERFCHECK: section: 3. Jank (animations ON for this section)
+   10-23 16:56:03.194  8752  8752 I PERFCHECK: section: 4a. Memory over 30 tab/book cycles
+   10-23 16:59:00.020 10228 10228 I PERFCHECK: section: 4c. Rotation stress (10 toggles each)
+   10-23 17:00:33.135 10844 10844 I PERFCHECK: section: 4d. Process death and restore
+   10-23 17:01:07.949   573  1005 I ActivityManager: Killing 10858:org.chyavorec.app/u0a209 (adj 700): kill background
+   10-23 17:01:35.587   573  1603 I ActivityManager: Killing 11103:org.chyavorec.app/u0a209 (adj 700): kill background
+   10-23 17:01:51.574 11380 11380 I PERFCHECK: section: 4b. Monkey 4000 events
+   10-23 17:02:02.628 11513 11513 I PERFCHECK: monkey start

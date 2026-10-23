@@ -1,0 +1,22 @@
+APK size: 4890407 bytes
+APK entries:   8782305                     1038 files
+screen 1080x2400
+## 1. First launch and warm-up (online)
+first-install catalogue results after 4407 ms
+## 6. Collect: package, notifications, jobs
+    versionCode=1 minSdk=26 targetSdk=37
+notification channels: mId='events' mId='library' mId='loans' mId='messages' mId='messages_important' mId='news' mId='updates' 
+app jobs: 2; with 'Periodic/period' in JobInfo: 98; latencies: Minimum latency: +3h59m59s997ms Minimum latency: +59m59s102ms 
+## 5. Appearance matrix
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+## COMPLETE
+## logcat findings
+app pids seen: ['4206', '4790', '5449', '6049', '6634']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=35 total=163
+== Davey: 6
+   davey events=6 max=981ms median=810ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

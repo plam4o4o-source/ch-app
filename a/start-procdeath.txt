@@ -1,0 +1,5 @@
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: COLD
+TotalTime: 1005
+WaitTime: 1007

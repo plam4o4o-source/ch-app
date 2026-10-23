@@ -1,0 +1,80 @@
+APK size: 4890407 bytes
+APK entries:   8782305                     1038 files
+screen 1080x2400
+## 1. First install: first launch, time to catalogue results
+FIRST-INSTALL catalogue results after 5477 ms (tap→text, uiautomator polling ~1-2 s)
+polling floor (text already on screen): 2301 ms — subtract from the times below
+INDEX-READY #1 catalogue results after 2785 ms (cold start → tap Catalogue → text)
+INDEX-READY #2 catalogue results after 2811 ms (cold start → tap Catalogue → text)
+INDEX-READY #3 catalogue results after 2911 ms (cold start → tap Catalogue → text)
+INDEX-READY deep-link #1 results 4824 ms after am start
+INDEX-READY deep-link #2 results 4816 ms after am start
+## 2. Startup
+START cold(as installed) n=10 min=1548ms median=1694ms max=1772ms  all=[1719, 1742, 1772, 1668, 1716, 1677, 1584, 1711, 1609, 1548]  states=['COLD']
+START warm(HOME→relaunch) n=5 min=271ms median=374ms max=390ms  all=[381, 390, 374, 271, 314]  states=['HOT']
+compile: Success 
+START cold(speed-profile) n=5 min=1533ms median=1669ms max=1957ms  all=[1957, 1669, 1656, 1779, 1533]  states=['COLD']
+## 3. Jank (animations ON for this section)
+GFX catalog      frames=  274  janky=270 (98.54%)  p50=150ms p90=150ms p95=200ms p99=400ms  slowUI=147 slowDraw=270 highInput=8
+catalog: 'Show more' pages: 2, mis-taps recovered: 0; screen: --- screen: text="ISBN" text="9789549056746" text="Language" text="български" text="Type" text="книга" 
+jank home screen: --- screen: text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" text="October 23, 2026 · *Св. ап. �
+GFX home         frames=   40  janky=40 (100.00%)  p50=150ms p90=350ms p95=650ms p99=700ms  slowUI=23 slowDraw=40 highInput=0
+jank news screen: --- screen: text="Search news" text="All" text="Saved" text="Събитие" text="Състави" text="Проекти" 
+GFX news         frames=  171  janky=150 (87.72%)  p50=85ms p90=125ms p95=133ms p99=150ms  slowUI=71 slowDraw=150 highInput=33
+jank events screen: --- screen: text="All" text="Библиотека" text="Народен обичай" text="Читалище" text="26" text="OCT" 
+GFX events       frames=   36  janky=31 (86.11%)  p50=89ms p90=133ms p95=150ms p99=150ms  slowUI=16 slowDraw=31 highInput=9
+GFX catalog-lowres frames=  256  janky=210 (82.03%)  p50=69ms p90=97ms p95=113ms p99=200ms  slowUI=117 slowDraw=210 highInput=81
+catalog-lowres: 'Show more' pages: 4, mis-taps recovered: 0; screen: --- screen: text="Search by everything" content-desc="Scan barcode" text="Everything" text="Title" text="Author" text="ISBN" 
+jank home-lowres screen: --- screen: text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" text="October 23, 2026 · *Св. ап. �
+GFX home-lowres  frames=  200  janky=166 (83.00%)  p50=81ms p90=121ms p95=150ms p99=200ms  slowUI=94 slowDraw=166 highInput=61
+jank news-lowres screen: --- screen: text="Search news" text="All" text="Saved" text="Събитие" text="Състави" text="Проекти" 
+GFX news-lowres  frames=  294  janky=180 (61.22%)  p50=53ms p90=73ms p95=77ms p99=93ms  slowUI=91 slowDraw=179 highInput=216
+jank events-lowres screen: --- screen: text="All" text="Библиотека" text="Народен обичай" text="Читалище" text="26" text="OCT" 
+GFX events-lowres frames=  253  janky=170 (67.19%)  p50=61ms p90=81ms p95=85ms p99=105ms  slowUI=106 slowDraw=170 highInput=157
+## 4a. Memory over 30 tab/book cycles
+tab home @ 100 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=59161KB  Java=6412KB  Native=24740KB  Graphics=0KB  Views=11 Activities=1
+MEM c00 (trimmed)    PSS=65286KB  Java=7556KB  Native=24716KB  Graphics=0KB  Views=11 Activities=1
+cycle 1: book screen opened
+MEM c10 (raw)        PSS=87290KB  Java=10136KB  Native=40060KB  Graphics=0KB  Views=15 Activities=1
+MEM c10 (trimmed)    PSS=86506KB  Java=9672KB  Native=39744KB  Graphics=0KB  Views=15 Activities=1
+MEM c20 (raw)        PSS=93216KB  Java=14112KB  Native=41864KB  Graphics=0KB  Views=15 Activities=1
+MEM c20 (trimmed)    PSS=82412KB  Java=9736KB  Native=35436KB  Graphics=0KB  Views=15 Activities=1
+MEM c30 (raw)        PSS=93775KB  Java=17484KB  Native=38984KB  Graphics=0KB  Views=15 Activities=1
+MEM c30 (trimmed)    PSS=82971KB  Java=9800KB  Native=35864KB  Graphics=0KB  Views=15 Activities=1
+pid after cycles: 8766
+## 4c. Rotation stress (10 toggles each)
+ROTATION home: pid 8766 -> 8766 (same) 
+ROTATION catalog: pid 8766 -> 8766 (same) 
+ROTATION catalog: query '12' kept
+ROTATION book: pid 8766 -> 8766 (same) [back button visible]
+GFX rotation     frames=   97  janky=95 (97.94%)  p50=48ms p90=150ms p95=200ms p99=400ms  slowUI=23 slowDraw=95 highInput=3
+## 4d. Process death and restore
+PROCDEATH: after am kill pid='' (killed)
+PROCDEATH launcher: LaunchState: COLD first text before=text="" after=text="" → book screen restored
+PROCDEATH back → catalogue query kept: no
+PROCDEATH#2 pid after kill=''
+PROCDEATH from Recents: query not visible 
+## 4b. Monkey 4000 events
+statusbar disable: 
+monkey start pid=11420
+MONKEY exit=0 duration=93 s; Events injected: 4000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '11420'; airplane=0
+MEM after-monkey (raw) PSS=78415KB  Java=17288KB  Native=30048KB  Graphics=0KB  Views=25 Activities=1
+MEM after-monkey (trimmed) PSS=70464KB  Java=10340KB  Native=24268KB  Graphics=0KB  Views=19 Activities=1
+## COMPLETE
+## logcat findings
+app pids seen: ['3693', '4521', '4687', '4804', '4923', '5004', '5128', '5176', '5227', '5280', '5333', '5382', '5430', '5480', '5534', '5586', '5736', '5793', '5859', '5911', '5963', '6080', '7525', '8766', '10858', '11103', '11295', '11420']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 55
+   skipped-frames events=55 max=82 total=2713
+== Davey: 96
+   davey events=96 max=2224ms median=981ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
