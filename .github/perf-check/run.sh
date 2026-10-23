@@ -19,7 +19,7 @@ RX_BACK='content-desc="(Back|Назад)"'
 # ---------------------------------------------------------------- помощни
 a() { timeout ${T:-40} adb shell "$@"; }
 log() { echo "$*" | tee -a $SUM; }
-sec() { echo; echo "################ $* ################"; echo "## $*" >> $SUM; alive "$*"; a log -t PERFCHECK "section: $*"; }
+sec() { echo; echo "################ $* ################"; echo "## $*" >> $SUM; alive "$*"; a log -t PERFCHECK "'section: $*'"; }
 now_ms() { echo $(( $(date +%s%N) / 1000000 )); }
 alive() {
   timeout 15 adb get-state >/dev/null 2>&1 && return 0
@@ -354,12 +354,24 @@ part_b() {
   a settings put system font_scale 1.3; sleep 2
   matrix font130
   a settings put system font_scale 1.0; sleep 2
+}
+
+# ================================================================= ЧАСТ C
+part_c() {
+  sec "1. First launch and warm-up (online, fills the caches)"
+  launch; sleep 5; ready
+  tab catalog; waitfor "$RX_RESULTS" 150 && log "first-install catalogue results after ${WAITED} ms" || log "first-install: NO catalogue results"
+  link "$BOOK_URL"; sleep 4; back
+  tab news; sleep 6; dims; dump; p=$(xy --first-clickable $((H/6)) $((H*3/4)) 150); [ -n "$p" ] && { a input tap $p; sleep 5; back; }
+  link "$EVENTS_URL"; sleep 6; back
+  tab my; sleep 3; tab more; sleep 3; tab home; sleep 4
   echo "======== landscape"
   restart; a settings put system user_rotation 1; sleep 3; dims
   tab home; sleep 3; shot landscape/01-home
   tab catalog; waitfor "$RX_RESULTS" 60; sleep 2; shot landscape/02-catalog
   link "$BOOK_URL"; sleep 4; shot landscape/03-book; back
-  tab more; sleep 3; shot landscape/08-more
+  show 40; log "landscape rail labels found: $(for t in home catalog my news more; do [ -n "$(xy text "$(tablabel $t)" --last)" ] && printf '%s ' $t; done)"
+  if tab more; then sleep 3; shot landscape/08-more; else log "landscape: 'More' tab NOT reachable (not in the rail / UI tree)"; fi
   a settings put system user_rotation 0; sleep 3; dims
 
   sec "Launcher icon"
@@ -402,12 +414,12 @@ part_b() {
   log "secure flag on window: $(a dumpsys window windows | grep -E 'mCurrentFocus|FLAG_SECURE|SECURE' | head -3 | tr -s ' ' | tr '\n' ' ')"
   a input keyevent KEYCODE_HOME; sleep 2
 
-  mem part-b-end
+  mem part-c-end
 }
 
 # ================================================================= main
 setup
-case $PART in a) part_a;; b) part_b;; esac
+case $PART in a) part_a;; b) part_b;; c) part_c;; esac
 alive "end"
 finish
 FAIL=0
