@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -37,6 +38,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material.icons.outlined.Sync
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -156,10 +158,11 @@ fun MessageView(
             )
             Box(
                 Modifier.align(Alignment.BottomEnd).padding(end = 8.dp).size(44.dp)
-                    .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape),
+                    .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer, modifier = Modifier.size(24.dp))
+                // Златният контейнер (като индикатора в лентата), не розовият secondaryContainer.
+                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(24.dp))
             }
         }
         Spacer(Modifier.height(20.dp))
@@ -173,7 +176,13 @@ fun MessageView(
         }
         if (actionLabel != null && onAction != null) {
             Spacer(Modifier.height(20.dp))
-            FilledTonalButton(onClick = onAction) {
+            FilledTonalButton(
+                onClick = onAction,
+                colors = ButtonDefaults.filledTonalButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
+            ) {
                 Icon(Icons.Outlined.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
                 Text(actionLabel)
@@ -229,15 +238,16 @@ fun SyncBanner(fromCache: Boolean, syncedAt: Instant?, refreshError: AppError?, 
         exit = shrinkVertically() + fadeOut(),
         modifier = modifier,
     ) {
+        // Като лентата „Няма интернет връзка“ (OfflineBar): неутрален контейнер и златна икона.
         Surface(
-            color = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            contentColor = MaterialTheme.colorScheme.onSurface,
             shape = MaterialTheme.shapes.small,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp)
                 .semantics { liveRegion = LiveRegionMode.Polite },
         ) {
             Row(Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Outlined.CloudOff, contentDescription = null, modifier = Modifier.size(20.dp))
+                Icon(Icons.Outlined.CloudOff, contentDescription = null, tint = LocalExtendedColors.current.gold, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(10.dp))
                 Column {
                     Text(
@@ -251,6 +261,51 @@ fun SyncBanner(fromCache: Boolean, syncedAt: Instant?, refreshError: AppError?, 
                     )
                 }
             }
+        }
+    }
+}
+
+/**
+ * Информационна лента (вход без връзка, „картата е въведена ръчно“ …): неутрален
+ * контейнер и златна икона — без розовото на secondaryContainer.
+ */
+@Composable
+fun InfoBanner(icon: ImageVector, text: String, modifier: Modifier = Modifier) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        shape = MaterialTheme.shapes.medium,
+        modifier = modifier,
+    ) {
+        Row(Modifier.padding(16.dp)) {
+            Icon(icon, contentDescription = null, tint = LocalExtendedColors.current.gold)
+            Spacer(Modifier.width(12.dp))
+            Text(text, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
+
+/**
+ * Лентата „Няма интернет връзка“ над долната навигация: заоблена, отделена с 12 dp
+ * от краищата (като snackbar), в най-високия неутрален контейнер — а не ярка
+ * inverseSurface ивица (в тъмна тема тя ставаше светъл пергамент на всеки екран).
+ * [insetNavigation] — без долна лента под нея лентата сама отстъпва от системната навигация.
+ */
+@Composable
+fun OfflineBar(insetNavigation: Boolean, modifier: Modifier = Modifier) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        shape = MaterialTheme.shapes.small,
+        modifier = modifier.fillMaxWidth()
+            .then(if (insetNavigation) Modifier.navigationBarsPadding() else Modifier)
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+            .semantics { liveRegion = LiveRegionMode.Polite },
+    ) {
+        Row(Modifier.padding(horizontal = 14.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Outlined.CloudOff, contentDescription = null, tint = LocalExtendedColors.current.gold, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(10.dp))
+            Text(stringResource(R.string.offline_global), style = MaterialTheme.typography.labelMedium)
         }
     }
 }

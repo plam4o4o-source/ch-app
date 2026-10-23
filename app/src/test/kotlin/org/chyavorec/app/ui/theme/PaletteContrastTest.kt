@@ -1,8 +1,11 @@
 package org.chyavorec.app.ui.theme
 
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import org.junit.Test
+import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 /** Всяка палитра (светла и тъмна) държи текста на поне 4.5:1 спрямо фона си (WCAG AA). */
@@ -28,6 +31,9 @@ class PaletteContrastTest {
                 check("$p primary/background", s.primary, s.background, failures)
                 check("$p secondary/background", s.secondary, s.background, failures)
                 check("$p accent/background", paletteAccent(palette, dark), s.background, failures)
+                check("$p onErrorContainer", s.onErrorContainer, s.errorContainer, failures)
+                // Бутонът-текст („Отвори настройките“) върху лентата за спрени известия.
+                check("$p primary/errorContainer", s.primary, s.errorContainer, failures)
                 check("$p onSurfaceVariant/surface", s.onSurfaceVariant, s.surface, failures)
                 check("$p onSurfaceVariant/surfaceVariant", s.onSurfaceVariant, s.surfaceVariant, failures)
                 for ((n, bg) in listOf(
@@ -40,5 +46,15 @@ class PaletteContrastTest {
             }
         }
         assertTrue(failures.isEmpty(), failures.joinToString("\n"))
+    }
+
+    /** Червеният контейнер е от палитрата: не базовият на Material (#8C1D18 в тъмна тема — ярко червено). */
+    @Test fun errorContainerIsSetInEveryPalette() {
+        val baselineLight = lightColorScheme().errorContainer
+        val baselineDark = darkColorScheme().errorContainer
+        for (palette in ThemePalette.entries) {
+            assertNotEquals(baselineLight, paletteScheme(palette, false).errorContainer, "$palette/light")
+            assertNotEquals(baselineDark, paletteScheme(palette, true).errorContainer, "$palette/dark")
+        }
     }
 }

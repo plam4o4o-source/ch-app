@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.appFilterChipColors
 import org.chyavorec.app.ui.components.BrandImage
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.sharedElementKey
@@ -286,6 +287,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                                 vm.setField(f)
                             },
                             label = { Text(fieldLabel(f)) },
+                            colors = appFilterChipColors(),
                         )
                     }
                 }
@@ -433,6 +435,7 @@ private fun FacetGroup(title: String, values: List<String>, selected: String?, l
                     onSelect(if (selected == v) null else v)
                 },
                 label = { Text(label(v)) },
+                colors = appFilterChipColors(),
             )
         }
     }

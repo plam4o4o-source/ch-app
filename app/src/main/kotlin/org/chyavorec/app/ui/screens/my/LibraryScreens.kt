@@ -231,6 +231,8 @@ internal fun LoanCard(
                         LinearProgressIndicator(
                             progress = { calc.elapsedFraction(out, due, today) },
                             color = dueColor(status),
+                            // Неутрална писта, не розовият secondaryContainer по подразбиране.
+                            trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                             modifier = Modifier.fillMaxWidth().padding(top = 6.dp).clip(RoundedCornerShape(50)),
                         )
                     }

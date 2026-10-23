@@ -34,6 +34,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import org.chyavorec.app.ui.components.rememberReducedMotion
 
+/*
+ * Червеният контейнер (просрочена книга, спрени известия) — общ за всички палитри.
+ * Без него Material ползва базовото #8C1D18, което в тъмна тема крещи извън палитрата;
+ * тук е приглушено бордо (тъмна) и бледа роза-пергамент (светла).
+ */
+private val ErrorContainerLight = Color(0xFFF6DAD5)
+private val OnErrorContainerLight = Color(0xFF4E0F15)
+private val ErrorContainerDark = Color(0xFF5E1A20)
+private val OnErrorContainerDark = Color(0xFFFFDAD6)
+
 /* ---- „Яворец“ — злато и жито (цветовете на сайта; по подразбиране) ---- */
 
 private val YavoretsLight = lightColorScheme(
@@ -43,7 +53,9 @@ private val YavoretsLight = lightColorScheme(
     onPrimaryContainer = Brand.Ink,
     secondary = Brand.Burgundy,
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFF3DADD),
+    // Топъл пергамент, не розово: розовото не е в палитрата на сайта (избраните чипове,
+    // значките и лентите ползват злато/контейнери — това е само за останалите тонални бутони).
+    secondaryContainer = Color(0xFFEDE1CF),
     onSecondaryContainer = Color(0xFF3D0B13),
     tertiary = Color(0xFF3F5E4A),
     onTertiary = Color.White,
@@ -64,6 +76,8 @@ private val YavoretsLight = lightColorScheme(
     outlineVariant = Color(0xFFE2D6BC),
     error = StatusColors.BadLight,
     onError = Color.White,
+    errorContainer = ErrorContainerLight,
+    onErrorContainer = OnErrorContainerLight,
     inverseSurface = Brand.Ink,
     inverseOnSurface = Brand.Parchment,
     inversePrimary = Brand.Gold,
@@ -99,6 +113,8 @@ private val YavoretsDark = darkColorScheme(
     outlineVariant = Color(0xFF4A3C2B),
     error = StatusColors.BadDark,
     onError = Color(0xFF4A0008),
+    errorContainer = ErrorContainerDark,
+    onErrorContainer = OnErrorContainerDark,
     inverseSurface = Brand.Parchment,
     inverseOnSurface = Brand.Ink,
     inversePrimary = Brand.GoldText,
@@ -137,6 +153,8 @@ private val LevskiLight = lightColorScheme(
     outlineVariant = Color(0xFFC9D1CC),
     error = StatusColors.BadLight,
     onError = Color.White,
+    errorContainer = ErrorContainerLight,
+    onErrorContainer = OnErrorContainerLight,
     inverseSurface = Color(0xFF2A322D),
     inverseOnSurface = Color(0xFFEEF2EF),
     inversePrimary = Color(0xFF9ED3B2),
@@ -173,6 +191,8 @@ private val LevskiDark = darkColorScheme(
     outlineVariant = Color(0xFF3F4943),
     error = StatusColors.BadDark,
     onError = Color(0xFF4A0008),
+    errorContainer = ErrorContainerDark,
+    onErrorContainer = OnErrorContainerDark,
     inverseSurface = Color(0xFFDEE4DF),
     inverseOnSurface = Color(0xFF2C322E),
     inversePrimary = Color(0xFF1E5B3A),
@@ -211,6 +231,8 @@ private val ShevitsaLight = lightColorScheme(
     outlineVariant = Color(0xFFE0D3C6),
     error = Color(0xFF8C1D18),
     onError = Color.White,
+    errorContainer = ErrorContainerLight,
+    onErrorContainer = OnErrorContainerLight,
     inverseSurface = Color(0xFF1C1716),
     inverseOnSurface = Color(0xFFF7EFE6),
     inversePrimary = Color(0xFFFFB3AD),
@@ -247,6 +269,8 @@ private val ShevitsaDark = darkColorScheme(
     outlineVariant = Color(0xFF4E4340),
     error = StatusColors.BadDark,
     onError = Color(0xFF4A0008),
+    errorContainer = ErrorContainerDark,
+    onErrorContainer = OnErrorContainerDark,
     inverseSurface = Color(0xFFEFE6E1),
     inverseOnSurface = Color(0xFF2C2322),
     inversePrimary = Color(0xFF9C1C24),
@@ -264,6 +288,19 @@ fun paletteAccent(palette: ThemePalette, dark: Boolean): Color = when (palette) 
     ThemePalette.YAVORETS -> if (dark) Brand.Gold else Brand.GoldText
     ThemePalette.LEVSKI -> if (dark) Color(0xFFC3CCD4) else Color(0xFF56616B)
     ThemePalette.SHEVITSA -> if (dark) Color(0xFFFFB3AD) else Color(0xFF9C1C24)
+}
+
+/**
+ * Плътната значка за датата на събитие (фон to текст): в „Яворец“ — бордо с пергамент,
+ * както в уиджета; в другите палитри — основният им цвят (в тъмна тема — контейнерът му).
+ */
+fun paletteDateBadge(palette: ThemePalette, dark: Boolean): Pair<Color, Color> {
+    val s = paletteScheme(palette, dark)
+    return when {
+        palette == ThemePalette.YAVORETS -> Brand.Burgundy to Brand.Parchment
+        dark -> s.primaryContainer to s.onPrimaryContainer
+        else -> s.primary to s.onPrimary
+    }
 }
 
 /**
