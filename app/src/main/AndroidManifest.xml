@@ -129,6 +129,11 @@
             android:name=".update.UpdateInstallReceiver"
             android:exported="false" />
 
+        <!-- Бутонът „Удължи“ в известията за срок (само от собствения PendingIntent). -->
+        <receiver
+            android:name=".notifications.RenewActionReceiver"
+            android:exported="false" />
+
         <!-- WorkManager се инициализира от ChitalishteApp (Configuration.Provider). -->
         <provider
             android:name="androidx.startup.InitializationProvider"

@@ -87,6 +87,8 @@ class SettingsStore(private val context: Context) {
         val lastNewsId = stringPreferencesKey("last_news_id")
         val notifiedLoans = stringSetPreferencesKey("notified_loans")
         val loanNotificationLog = stringSetPreferencesKey("loan_notification_log")
+        val renewWatch = stringSetPreferencesKey("renew_watch")
+        val renewNotified = stringSetPreferencesKey("renew_notified")
         val recentSearches = stringPreferencesKey("recent_searches")
         val lastBackgroundSync = longPreferencesKey("last_bg_sync")
         val autoUpdate = booleanPreferencesKey("auto_update")
@@ -224,6 +226,17 @@ class SettingsStore(private val context: Context) {
     }
 
     /**
+     * Чакащите удължавания и показаните отговори на библиотеката
+     * ([org.chyavorec.domain.model.RenewOutcomes]); наблюдаваните `null` — още неизвестни.
+     */
+    suspend fun renewWatch(): Set<String>? = context.dataStore.data.first()[Keys.renewWatch]
+    suspend fun renewNotified(): Set<String> = context.dataStore.data.first()[Keys.renewNotified].orEmpty()
+    suspend fun setRenewState(watch: Set<String>, notified: Set<String>) = context.dataStore.edit {
+        it[Keys.renewWatch] = watch
+        it[Keys.renewNotified] = notified
+    }
+
+    /**
      * Запомненият план на напомнянията за срок ([org.chyavorec.domain.model.LoanReminderSync]):
      * `null` — неизвестен, празен — нищо не е планирано.
      */
@@ -310,6 +323,8 @@ class SettingsStore(private val context: Context) {
         it.remove(Keys.recentSearches)
         it.remove(Keys.notifiedLoans)
         it.remove(Keys.loanNotificationLog)
+        it.remove(Keys.renewWatch)
+        it.remove(Keys.renewNotified)
         it.remove(Keys.personalReadPending)
         it.remove(Keys.personalMessagesInitialized)
         it[Keys.readMessages] = it[Keys.readMessages].orEmpty().filterNot { id -> id.startsWith(PERSONAL_ID_PREFIX) }.toSet()

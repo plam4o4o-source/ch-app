@@ -7,9 +7,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.ListenableWorker
 import androidx.work.testing.TestListenableWorkerBuilder
 import kotlinx.coroutines.runBlocking
+import org.chyavorec.app.R
 import org.chyavorec.app.TestBackend
 import org.chyavorec.app.TestResources
 import org.chyavorec.app.WorkerTestApp
+import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.FixedClock
 import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.Inbox
@@ -191,6 +193,102 @@ class PeriodicSyncWorkerTest {
         assertEquals(0, backend.count("$API/v1/me/loans"))
         assertEquals(Channel.LOANS.id, overdue().single().notification.channelId)
         assertEquals(clock.now().toEpochMilli(), app.container.settings.lastSyncStep("loans"))
+    }
+
+    private fun renewLoan(due: String, pending: Boolean = false, result: String? = null): String {
+        val renewResult = if (result != null) ""","renewResult":$result""" else ""
+        return """{"loanId":"$loanId","inv":7,"title":"Под игото","author":"Иван Вазов","dateOut":"2026-09-20","dateDue":"$due",""" +
+            """"canRenew":true,"renewPending":$pending$renewResult}"""
+    }
+
+    private fun renewNotes() = nm.activeNotifications.filter { it.id == NotificationIds.renew(loanId) }
+
+    /** Следващото пускане след [hours] часа (стъпката за заеманията пак е дължима). */
+    private fun runLater(hours: Long = 1) = runBlocking {
+        app.container.settings.setLastSyncStep("loans", 0)
+        clock.advanceSeconds(hours * 3600)
+        run()
+    }
+
+    @Test fun approvedRenewalNotifiesOnceWithNewDueDate() = runBlocking<Unit> {
+        signIn()
+        backend.loans(renewLoan("2026-10-21", pending = true))
+        run()
+        assertTrue(renewNotes().isEmpty())
+
+        backend.loans(renewLoan("2026-11-12", result = """{"status":"done","at":"2026-10-17T10:30:00Z"}"""))
+        runLater()
+        val n = renewNotes().single().notification
+        assertEquals(Channel.LOANS.id, n.channelId)
+        val text = n.extras.getCharSequence(Notification.EXTRA_TEXT).toString()
+        assertEquals(app.getString(R.string.notif_renew_done, "Под игото", Formatters.shortDate(app, "2026-11-12")), text)
+        // Заглавието на книгата не се вижда на заключен екран.
+        assertEquals(Notification.VISIBILITY_PRIVATE, n.visibility)
+        assertEquals(
+            app.getString(R.string.notif_public_renew),
+            n.publicVersion!!.extras.getCharSequence(Notification.EXTRA_TITLE).toString(),
+        )
+
+        // Веднъж: следващото опресняване със същите данни не го повтаря.
+        nm.cancelAll()
+        runLater()
+        assertTrue(renewNotes().isEmpty())
+    }
+
+    @Test fun rejectedRenewalNotifiesWithReason() = runBlocking<Unit> {
+        signIn()
+        backend.loans(renewLoan("2026-10-21", pending = true))
+        run()
+        backend.loans(renewLoan("2026-10-21", result = """{"status":"rejected","reason":"Запазена е от друг читател.","at":"2026-10-17T10:30:00Z"}"""))
+        runLater()
+        val text = renewNotes().single().notification.extras.getCharSequence(Notification.EXTRA_TEXT).toString()
+        assertEquals(app.getString(R.string.notif_renew_rejected, "Под игото", "Запазена е от друг читател."), text)
+    }
+
+    @Test fun oldRenewalResultWithoutPendingRequestIsSilent() = runBlocking<Unit> {
+        signIn()
+        // Отговорът е отпреди (напр. видян на друг телефон) — заявката не е била „чакаща“ тук.
+        backend.loans(renewLoan("2026-10-21", result = """{"status":"rejected","reason":"Не","at":"2026-10-10T10:30:00Z"}"""))
+        run()
+        assertTrue(renewNotes().isEmpty())
+    }
+
+    @Test fun renewalOutcomeWaitsForDaytime() = runBlocking<Unit> {
+        signIn()
+        backend.loans(renewLoan("2026-10-21", pending = true))
+        run()
+        backend.loans(renewLoan("2026-11-12", result = """{"status":"done","at":"2026-10-17T19:30:00Z"}"""))
+        runLater(hours = 10) // 23:00 в София
+        assertTrue(renewNotes().isEmpty())
+        // Стъпката остава дължима; сутринта — известието.
+        assertEquals(0L, app.container.settings.lastSyncStep("loans"))
+        clock.advanceSeconds(10 * 3600) // 09:00
+        run()
+        assertEquals(1, renewNotes().size)
+    }
+
+    @Test fun disabledLoanNotificationsMeanNoRenewalNotification() = runBlocking<Unit> {
+        signIn()
+        backend.loans(renewLoan("2026-10-21", pending = true))
+        run()
+        app.container.settings.setNotifyLoans(false)
+        try {
+            backend.loans(renewLoan("2026-11-12", result = """{"status":"done","at":"2026-10-17T10:30:00Z"}"""))
+            // Без известия — заеманията се теглят само за уиджета (тук няма) → нищо.
+            runLater()
+            assertTrue(renewNotes().isEmpty())
+        } finally {
+            app.container.settings.setNotifyLoans(true)
+        }
+    }
+
+    @Test fun overdueRenewableLoanHasRenewAction() = runBlocking<Unit> {
+        signIn()
+        backend.loans(renewLoan("2026-10-10"))
+        run()
+        val n = overdue().single().notification
+        assertEquals(Notification.CATEGORY_REMINDER, n.category)
+        assertEquals(app.getString(R.string.notif_action_renew), n.actions.single().title.toString())
     }
 
     private companion object {
