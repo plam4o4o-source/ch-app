@@ -53,4 +53,44 @@ class ReadingRecommenderTest {
         assertEquals(null, ReadingRecommender.udcPrefix("", 2))
         assertEquals(null, ReadingRecommender.udcPrefix("9", 2))
     }
+
+    /** Ключовете без Regex съвпадат с досегашните (`lowercase().replace(Regex("[^\p{L}\p{N}]+"), " ").trim()`). */
+    @Test fun keysMatchTheRegexVersion() {
+        val regex = Regex("[^\\p{L}\\p{N}]+")
+        fun old(s: String) = s.lowercase().replace(regex, " ").trim()
+        val samples = mutableListOf(
+            "", " ", "Под игото | Вазов, Иван", "  --Café, Émile--  ", "Ёжик в тумане|Ёлкин, Пётр", "и др.", "И ДР",
+            "Том 2½ — ²³ Ⅻ", "\uD835\uDC00bc 😀 x", "a\tb\nc", "ǅemal", "İstanbul", "ß-straße", "١٢٣ عربى", "日本語のタイトル",
+        )
+        val alphabet = "aZ09 ,.-|;:!?()[]Ёйъ\u00A0\u2007\t½Ⅻ²İß😀\uD800"
+        val random = java.util.Random(7)
+        repeat(2000) { samples += String(CharArray(random.nextInt(16)) { alphabet[random.nextInt(alphabet.length)] }) }
+        for (s in samples) {
+            assertEquals(old(s), ReadingRecommender.alnumKey(s), "„$s“")
+            assertEquals(old("$s|$s"), ReadingRecommender.titleKey(s, s))
+            assertEquals(old(s).takeIf { it.length >= 3 && it != "и др" }, ReadingRecommender.authorKey(s))
+        }
+    }
+
+    @Test fun recommendCallsTheCheckpointSoItCanBeCancelled() {
+        val many = (1..1000L).map { CatalogBook(100 + it, "Вазов, Иван", "Книга $it", udc = "886.7-31", available = true) }
+        val history = listOf(HistoryItem("h1", 1, "Под игото", "Вазов, Иван"))
+        var calls = 0
+        ReadingRecommender.recommend(many, history, engine::book) { calls++ }
+        assertEquals(4, calls, "на всеки 256 записа")
+        val cancelled = runCatching { ReadingRecommender.recommend(many, history, engine::book) { throw java.util.concurrent.CancellationException() } }
+        assertTrue(cancelled.exceptionOrNull() is java.util.concurrent.CancellationException)
+    }
+
+    @Test fun prefilterIsDroppedWhenItsSectionsCoverMostBooks() {
+        val counts = mapOf(8 to 80, 9 to 10, 3 to 5, ReadingRecommender.NO_SECTION to 5)
+        assertTrue(ReadingRecommender.coversMost(setOf(8), counts, emptyList()))
+        assertFalse(ReadingRecommender.coversMost(setOf(9, 3), counts, emptyList()))
+        assertFalse(ReadingRecommender.coversMost(emptySet(), counts, emptyList()))
+        // Индекс от по-стара версия (без броя) — по броя на разделите.
+        assertTrue(ReadingRecommender.coversMost(setOf(1, 2, 3, 8, 9), emptyMap(), (0..9).toList()))
+        assertFalse(ReadingRecommender.coversMost(setOf(8, 9), emptyMap(), (0..9).toList()))
+        assertFalse(ReadingRecommender.coversMost(setOf(8), emptyMap(), emptyList()))
+        assertEquals(mapOf(8 to 5, 9 to 1), ReadingRecommender.availableBySection(books))
+    }
 }

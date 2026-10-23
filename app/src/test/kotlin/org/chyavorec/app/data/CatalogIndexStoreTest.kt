@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.chyavorec.app.TestResources
 import org.chyavorec.app.data.local.CatalogDatabase
+import org.chyavorec.app.data.local.FTS_SYNC_TRIGGERS
 import org.chyavorec.app.data.local.RoomCatalogIndexStore
 import org.chyavorec.core.TextNormalizer
 import org.chyavorec.data.catalog.CatalogIndexLostException
@@ -200,6 +201,79 @@ class CatalogIndexStoreTest {
             assertEquals("Под игото", store.book(1)?.title)
         } finally {
             opened.forEach { runCatching { it.close() } }
+            context.deleteDatabase(CatalogDatabase.NAME)
+        }
+    }
+
+    private fun CatalogDatabase.triggers(): Map<String, String> =
+        openHelper.writableDatabase.query("SELECT name, sql FROM sqlite_master WHERE type = 'trigger' ORDER BY name").use { c ->
+            buildMap { while (c.moveToNext()) put(c.getString(0), c.getString(1)) }
+        }
+
+    private fun CatalogDatabase.ftsCount(token: String): Int =
+        openHelper.writableDatabase.query("SELECT COUNT(*) FROM catalog_fts WHERE catalog_fts MATCH ?", arrayOf<Any>(token)).use { c ->
+            c.moveToFirst()
+            c.getInt(0)
+        }
+
+    /**
+     * Бързото попълване маха тригерите на Room за FTS таблицата само за времето на
+     * транзакцията: после те са същите (SQL като в схемата) и пак синхронизират индекса,
+     * а пълнотекстовият индекс (строен с 'rebuild') отговаря на съдържанието.
+     */
+    @Test fun replaceKeepsRoomTriggersAndTheFtsIndexConsistent() = runBlocking {
+        val schema = org.json.JSONObject(java.io.File("schemas/org.chyavorec.app.data.local.CatalogDatabase/2.json").readText())
+        val entities = schema.getJSONObject("database").getJSONArray("entities")
+        val expected = (0 until entities.length()).map { entities.getJSONObject(it) }
+            .first { it.getString("tableName") == "catalog_fts" }.getJSONArray("contentSyncTriggers")
+            .let { a -> (0 until a.length()).map { a.getString(it) } }
+        assertEquals(expected.sorted(), FTS_SYNC_TRIGGERS.values.sorted(), "тригерите — точно като в схемата на Room")
+
+        val before = db.triggers()
+        assertEquals(FTS_SYNC_TRIGGERS.keys.sorted(), before.keys.filter { it.startsWith("room_fts_") }.sorted())
+        val store = RoomCatalogIndexStore { db }
+        store.replace(state, CatalogIndexRows.build(snapshot))
+        assertEquals(before, db.triggers(), "тригерите са възстановени")
+        store.replace(state, CatalogIndexRows.build(snapshot))
+        assertEquals(before, db.triggers())
+        db.openHelper.writableDatabase.execSQL("INSERT INTO catalog_fts(catalog_fts) VALUES('integrity-check')")
+        assertEquals(2, db.ftsCount("игото*"), "„Под игото“ — инв. № 1 и 11")
+
+        // Тригерите пак работят: нов ред влиза в пълнотекстовия индекс, изтритият — излиза.
+        val extraRow = CatalogIndexRows.build(snapshot.copy(books = listOf(CatalogBook(777, "Тестов, Автор", "Уникалнозаглавие", available = true))))
+            .single().copy(ord = 100_000)
+        db.index().insertBooks(listOf(org.chyavorec.app.data.local.CatalogBookEntity.of(extraRow)))
+        assertEquals(1, db.ftsCount("уникалнозаглавие"))
+        db.openHelper.writableDatabase.execSQL("DELETE FROM catalog_books WHERE ord = 100000")
+        assertEquals(0, db.ftsCount("уникалнозаглавие"))
+
+        store.clear()
+        assertEquals(before, db.triggers())
+        assertEquals(0, db.ftsCount("игото*"), "изчистеният индекс е празен")
+    }
+
+    /** Базата на диска се отваря отново от Room (проверката на схемата/идентичността минава) — с целия индекс. */
+    @Test fun replacedIndexReopensCleanly() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Application>()
+        context.deleteDatabase(CatalogDatabase.NAME)
+        try {
+            val first = CatalogDatabase.create(context)
+            val triggers = first.triggers()
+            RoomCatalogIndexStore { first }.replace(state, CatalogIndexRows.build(snapshot))
+            first.close()
+
+            val reopened = CatalogDatabase.create(context)
+            try {
+                val store = RoomCatalogIndexStore { reopened }
+                assertEquals(state, store.state())
+                assertEquals(triggers, reopened.triggers())
+                val fts = FtsCatalogSearcher(store, state, fallback = { null }, work = Dispatchers.Default)
+                assertEquals(engine.search(CatalogQuery("вазов")).map { it.inv }, fts.search(CatalogQuery("вазов")).map { it.inv })
+                assertEquals("Под игото", fts.book(1)?.title)
+            } finally {
+                reopened.close()
+            }
+        } finally {
             context.deleteDatabase(CatalogDatabase.NAME)
         }
     }

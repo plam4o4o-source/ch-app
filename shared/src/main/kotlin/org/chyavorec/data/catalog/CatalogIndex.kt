@@ -126,6 +126,8 @@ data class CatalogIndexState(
     val generatedOn: String,
     val count: Int,
     val facets: CatalogFacets,
+    /** Наличните книги по раздели на УДК ([ReadingRecommender.availableBySection]); празно — индекс от по-стара версия. */
+    val availableBySection: Map<Int, Int> = emptyMap(),
 ) {
     fun toJson(): String = json.encodeToString(serializer(), this)
 
