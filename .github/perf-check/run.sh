@@ -417,10 +417,45 @@ part_c() {
   mem part-c-end
 }
 
+# ================================================================= ЧАСТ D
+# Първо стартиране без връзка (празен кеш): екраните с грешка — възстановяват ли се сами при връзка?
+part_d() {
+  sec "D1. Offline first launch; reconnect while on Home (positive control)"
+  a cmd connectivity airplane-mode enable; a svc wifi disable; a svc data disable; sleep 4
+  log "airplane=$(a settings get global airplane_mode_on | tr -d '\r')"
+  launch >/dev/null; sleep 6; ready
+  show 12; shot d1/01-home-offline; log "home offline (empty cache): $(texts 12)"
+  tab catalog; sleep 8; show 10; shot d1/02-catalog-offline; log "catalogue offline (empty cache): $(texts 10)"
+  tab news; sleep 4; show 10; shot d1/03-news-offline
+  tab home; sleep 3
+  a cmd connectivity airplane-mode disable; a svc wifi enable; a svc data enable
+  for t in 10 20 30; do sleep 10; dump; log "home +${t}s after reconnect (no touch): $(texts 10)"; shot d1/04-home-after-reconnect-${t}s; done
+  tab news; sleep 5; shot d1/05-news-after; log "news after reconnect: $(texts 8)"
+  tab catalog; waitfor "$RX_RESULTS" 90 && log "catalogue after reconnect: results in ${WAITED} ms" || log "catalogue after reconnect: NO results in 90 s"; shot d1/06-catalog-after
+
+  sec "D2. Offline first launch; reconnect while on Gallery / Contacts / Activities"
+  a am force-stop $PKG; a pm clear $PKG >/dev/null; a pm grant $PKG android.permission.POST_NOTIFICATIONS; no_camera >/dev/null
+  a cmd connectivity airplane-mode enable; a svc wifi disable; a svc data disable; sleep 4
+  launch >/dev/null; sleep 6; ready
+  tab more; sleep 3; tap text '=Gallery|=Галерия'; sleep 5; show 10; shot d2/01-gallery-offline; log "gallery offline (empty cache): $(texts 10)"
+  a cmd connectivity airplane-mode disable; a svc wifi enable; a svc data enable
+  for t in 10 20 30; do sleep 10; dump; log "gallery +${t}s after reconnect (no touch): $(texts 10)"; done
+  shot d2/02-gallery-after-reconnect-30s
+  back; for item in '=Contacts|=Контакти' '=Activities|=Дейности'; do
+    a cmd connectivity airplane-mode enable; a svc wifi disable; sleep 4
+    tap text "$item"; sleep 5; n=$(echo "$item" | cut -d'|' -f1 | tr -d '=' | tr 'A-Z' 'a-z')
+    show 8; shot d2/03-$n-offline; log "$n offline: $(texts 8)"
+    a cmd connectivity airplane-mode disable; a svc wifi enable; sleep 25
+    dump; shot d2/04-$n-after-reconnect-25s; log "$n +25s after reconnect (no touch): $(texts 8)"
+    back
+  done
+}
+
 # ================================================================= main
 setup
-case $PART in a) part_a;; b) part_b;; c) part_c;; esac
+case $PART in a) part_a;; b) part_b;; c) part_c;; d) part_d;; esac
 alive "end"
+echo "## COMPLETE" >> $SUM
 finish
 FAIL=0
 grep -q "FATAL EXCEPTION" $OUT/logcat-live.txt && grep -A3 "FATAL EXCEPTION" $OUT/logcat-live.txt | grep -q "$PKG" && FAIL=1

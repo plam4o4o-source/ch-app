@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [a, b, c]
+        part: [a, b, c, d]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -84,6 +84,15 @@ jobs:
         run: |
           set -e
           SRC=$(git rev-parse --short HEAD)
+          # Част, чийто job е паднал, остава от предишното публикуване (с отбелязване).
+          mkdir -p "$RUNNER_TEMP/old" results
+          if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/old"; fi
+          for p in a b c d; do
+            if ! grep -q '## COMPLETE' "results/$p/summary.txt" 2>/dev/null && grep -qE '## (COMPLETE|logcat findings)' "$RUNNER_TEMP/old/$p/summary.txt" 2>/dev/null; then
+              rm -rf "results/$p"; cp -r "$RUNNER_TEMP/old/$p" results/
+              grep -q CARRIED "results/$p/summary.txt" || sed -i "1i (CARRIED OVER from the previous publish: this run's part $p failed)" "results/$p/summary.txt"
+            fi
+          done
           mkdir -p "$RUNNER_TEMP/pub" && cp -r results/. "$RUNNER_TEMP/pub/"
           cd "$RUNNER_TEMP/pub"
           {
@@ -92,7 +101,7 @@ jobs:
             echo "Source: \`debug/full-test\` @ $SRC, run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ)."
             echo "Emulator: API 35 google_apis x86_64, pixel_6 profile, swiftshader (software rendering)."
             echo
-            for p in a b c; do
+            for p in a b c d; do
               [ -f "$p/summary.txt" ] || { echo "## Part $p: no summary (job failed?)"; continue; }
               echo "## Part $p summary"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
             done
