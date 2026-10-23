@@ -122,6 +122,8 @@ fun AppTopBar(
     title: String,
     onSearch: (() -> Unit)? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    /** По-ниска лента при малка височина на прозореца (телефон хоризонтално). */
+    expandedHeight: androidx.compose.ui.unit.Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
     actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
 ) {
     TopAppBar(
@@ -143,6 +145,7 @@ fun AppTopBar(
                 }
             }
         },
+        expandedHeight = expandedHeight,
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,

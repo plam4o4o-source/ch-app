@@ -2,6 +2,7 @@ package org.chyavorec.app.ui
 
 import android.app.Application
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -30,13 +32,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.ChLoadingIndicator
@@ -55,6 +60,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
+import kotlin.math.roundToInt
 
 /**
  * Индикаторът за зареждане, анимираните празни състояния и монохромната икона —
@@ -159,18 +165,48 @@ class VisualsScreenshotTest {
 
     @Test fun emptyStatesDark() = emptyStates("43-empty-states-dark", dark = true)
 
-    /** Монохромният слой на иконата, оцветен като тематична икона (с кръга на безопасната зона). */
+    /** Истинската адаптивна икона ([res] — mipmap), нарисувана от системата в [dp] (видимата част, с маската). */
+    private fun adaptiveIcon(res: Int, dp: Int): ImageBitmap {
+        val context = ApplicationProvider.getApplicationContext<Application>()
+        val px = (dp * context.resources.displayMetrics.density).roundToInt()
+        val bmp = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888)
+        context.getDrawable(res)!!.apply { setBounds(0, 0, px, px) }.draw(Canvas(bmp))
+        return bmp.asImageBitmap()
+    }
+
+    /**
+     * Иконата в цвят (адаптивната, кръгла и „обикновена“, в 72/48/36/24 dp), splash иконата
+     * (бордо кръг върху светлия и тъмния фон) и монохромният слой, оцветен като тематична
+     * икона (с кръга на безопасната зона).
+     */
     @Test fun themedLauncherIcon() {
         val themes = listOf(Color(0xFFD8E2F7) to Color(0xFF26446E), Color(0xFF1E2A38) to Color(0xFFC3D6F0), Color(0xFFEFE3CF) to Color(0xFF5B4314))
+        val sizes = listOf(72, 48, 36, 24)
+        val icons = sizes.map { adaptiveIcon(R.mipmap.ic_launcher, it) } + sizes.map { adaptiveIcon(R.mipmap.ic_launcher_round, it) }
         compose.setContent {
             Column(Modifier.background(Color.White).padding(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                icons.chunked(sizes.size).forEach { row ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        row.forEach { Image(it, null) }
+                    }
+                }
+                // Splash (Android 12+): видимият кръг е 2/3 от иконата — както в лаунчера.
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    listOf(Brand.Cream, Color(0xFF1A1208)).forEach { bg ->
+                        Box(Modifier.size(140.dp).background(bg), contentAlignment = Alignment.Center) {
+                            Box(Modifier.size(96.dp).clip(CircleShape).background(Brand.Burgundy), contentAlignment = Alignment.Center) {
+                                Image(painterResource(R.drawable.ic_launcher_foreground), null, modifier = Modifier.requiredSize(144.dp))
+                            }
+                        }
+                    }
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     themes.forEach { (bg, fg) ->
                         // 108 dp слой, видимата част е кръг 72 dp; безопасната зона — 66 dp (червеният кръг).
                         Box(Modifier.size(120.dp).clip(CircleShape).background(bg), contentAlignment = Alignment.Center) {
                             Image(
                                 painterResource(R.drawable.ic_launcher_monochrome), null,
-                                colorFilter = ColorFilter.tint(fg), modifier = Modifier.size(180.dp),
+                                colorFilter = ColorFilter.tint(fg), modifier = Modifier.requiredSize(180.dp),
                             )
                             Box(Modifier.size(110.dp).border(1.dp, Color.Red.copy(alpha = 0.4f), CircleShape))
                         }
@@ -180,7 +216,7 @@ class VisualsScreenshotTest {
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     themes.forEach { (bg, fg) ->
                         Box(Modifier.size(48.dp).clip(CircleShape).background(bg), contentAlignment = Alignment.Center) {
-                            Image(painterResource(R.drawable.ic_launcher_monochrome), null, colorFilter = ColorFilter.tint(fg), modifier = Modifier.size(72.dp))
+                            Image(painterResource(R.drawable.ic_launcher_monochrome), null, colorFilter = ColorFilter.tint(fg), modifier = Modifier.requiredSize(72.dp))
                         }
                     }
                 }

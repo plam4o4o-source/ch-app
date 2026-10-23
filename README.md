@@ -272,12 +272,13 @@ Compose компилатора е само при ръчно пускане.
 
 | Ресурс | Файл |
 |---|---|
-| Логото на читалището (икона, splash, заглавна лента) | `app/src/main/res/drawable-nodpi/logo_chitalishte.webp` (+ `logo_chitalishte_small.webp`, 256 px — за емблеми до 64dp), `mipmap-*/ic_launcher_*.webp` |
+| Логото на читалището (заглавна лента, Play икона) | `app/src/main/res/drawable-nodpi/logo_chitalishte.webp` (+ `logo_chitalishte_small.webp`, 256 px — за емблеми до 64dp) |
+| Иконата в лаунчера и splash — опростеният медальон (пръстен + книга), векторно | `drawable/ic_launcher_foreground.xml`, `ic_launcher_background.xml`, `ic_launcher_monochrome.xml`, `splash_icon.xml` (+ анимирана в `drawable-v31`) |
 | Логото на електронния каталог | `drawable-nodpi/logo_catalog.webp` |
 | Логото на InvLib | `drawable-nodpi/logo_invlib.webp` |
 | Логото на създателя | `drawable-nodpi/logo_creator.webp` |
 | Икона и feature graphic за Google Play | `store/graphics/` |
-| Иконата на приложението (адаптивна, монохромна, splash, Play) — генерира се от логото | `python3 tools/generate_icons.py` |
+| Иконата за Google Play — генерира се от логото | `python3 tools/generate_icons.py` |
 
 Текстовете на двата езика се генерират от един файл: `python3 tools/generate_strings.py`.
 

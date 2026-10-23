@@ -200,6 +200,26 @@ class ScreenshotTest {
         shot("03-catalog")
     }
 
+    /**
+     * Телефон хоризонтално (ниска височина): заглавката е ниска, търсенето и полетата са на един ред
+     * и под тях се виждат заглавията на поне три резултата (преди — около резултат и половина).
+     */
+    @Config(qualifiers = "bg-w891dp-h411dp-land-xxhdpi")
+    @Test fun catalogLandscape() {
+        launch()
+        tab("Каталог")
+        waitFor("резултата")
+        shown("60 резултата", substring = true)
+        compose.waitForIdle()
+        val bottom = compose.onRoot().fetchSemanticsNode().boundsInRoot.bottom
+        // Първите три книги от примерния каталог (по заглавие) — изцяло над долния ръб.
+        listOf("Ох...", "12 -те вятъра", "66 градуса Северна ширина").forEach { title ->
+            val nodes = compose.onAllNodes(hasText(title, substring = true), useUnmergedTree = true).fetchSemanticsNodes()
+            if (nodes.none { it.boundsInRoot.bottom <= bottom }) throw AssertionError("„$title“ не се вижда изцяло на екрана")
+        }
+        shot("70-catalog-landscape")
+    }
+
     @Test fun my() {
         launch()
         tab("Моето")

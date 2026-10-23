@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Преден слой на адаптивната икона: опростеният медальон на читалището — златен пръстен и
+     отворена книга (пергаментови страници с изрязани редове, златна корица) върху бордото на
+     фона (ic_launcher_background). Геометрията е тази на монохромния слой
+     (ic_launcher_monochrome): пръстен с външен радиус 30 — в безопасната зона (радиус 33),
+     затова и в 48 dp иконата е ясен знак, а не бял диск с нечетими букви.
+     Същият знак е и иконата на splash екрана (splash_icon). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- лека сянка под медальона -->
+    <path
+        android:fillColor="#38000000"
+        android:pathData="M54,24.4a30.6,30.6 0,1 1,0 61.2a30.6,30.6 0,1 1,0 -61.2z" />
+    <!-- по-тъмно бордо в пръстена — медальонът „изпъква“ от фона -->
+    <path
+        android:fillColor="#FF5C1A24"
+        android:pathData="M54,27.5a26.5,26.5 0,1 1,0 53a26.5,26.5 0,1 1,0 -53z" />
+    <!-- златният пръстен (външен радиус 30, вътрешен 26,5) -->
+    <path
+        android:strokeColor="#FFC9A84C"
+        android:strokeWidth="3.5"
+        android:pathData="M54,25.75a28.25,28.25 0,1 1,0 56.5a28.25,28.25 0,1 1,0 -56.5" />
+    <!-- отворената книга (геометрията на монохромния слой, ×1.75, центрирана) -->
+    <group
+        android:scaleX="1.75"
+        android:scaleY="1.75"
+        android:translateX="33"
+        android:translateY="30.64">
+        <!-- страници с изрязани редове -->
+        <path
+            android:fillColor="#FFFAF7F2"
+            android:fillType="evenOdd"
+            android:pathData="M3,6.2C5.3,5 8.2,4.6 11.2,5.4V19.2C8.4,18.4 5.6,18.6 3,19.6ZM4.8,8.6h4.8v0.9h-4.8zM4.8,10.9h4.8v0.9h-4.8zM4.8,13.2h4.8v0.9h-4.8zM4.8,15.5h3.6v0.9h-3.6zM12.8,5.4C15.8,4.6 18.7,5 21,6.2V19.6C18.4,18.6 15.6,18.4 12.8,19.2ZM14.4,8.6h4.8v0.9h-4.8zM14.4,10.9h4.8v0.9h-4.8zM14.4,13.2h4.8v0.9h-4.8zM15.6,15.5h3.6v0.9h-3.6z" />
+        <!-- корицата отдолу -->
+        <path
+            android:fillColor="#FFC9A84C"
+            android:pathData="M1.5,8.2H2.3V20.8C5.6,19.6 8.9,19.6 12,20.9C15.1,19.6 18.4,19.6 21.7,20.8V8.2H22.5V21.9C19,20.6 15.4,20.6 12,22.1C8.6,20.6 5,20.6 1.5,21.9Z" />
+    </group>
+</vector>

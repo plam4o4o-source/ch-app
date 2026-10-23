@@ -54,6 +54,14 @@ fun windowWidth(): Dp {
     return if (px > 0) with(LocalDensity.current) { px.toDp() } else LocalConfiguration.current.screenWidthDp.dp
 }
 
+/** Височината на прозореца в dp (преди първото измерване — от конфигурацията, както [windowWidth]). */
+@Suppress("ConfigurationScreenWidthHeight")
+@Composable
+fun windowHeight(): Dp {
+    val px = LocalWindowInfo.current.containerSize.height
+    return if (px > 0) with(LocalDensity.current) { px.toDp() } else LocalConfiguration.current.screenHeightDp.dp
+}
+
 /**
  * Ширина на клетка в `GridCells.Adaptive(minSize)` при налична ширина [available]
  * (без отстъпите на мрежата) и разстояние [spacing] между клетките — същата сметка

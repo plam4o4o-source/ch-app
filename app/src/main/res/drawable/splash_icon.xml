@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Статичната икона на splash екрана (под Android 12 core-splashscreen не анимира):
-     логото на читалището. От Android 12 нататък — drawable-v31/splash_icon.xml (житни класове). -->
+<!-- Статичната икона на splash екрана (под Android 12 core-splashscreen не анимира): същият
+     медальон като иконата в лаунчера (ic_launcher_foreground) върху бордото iconBackground.
+     От Android 12 нататък — drawable-v31/splash_icon.xml (пръстенът се „изрисува“). -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/splash_logo" />
+    <item android:drawable="@drawable/ic_launcher_foreground" />
 </layer-list>
