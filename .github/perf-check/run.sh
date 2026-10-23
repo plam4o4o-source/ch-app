@@ -19,7 +19,7 @@ RX_BACK='content-desc="(Back|Назад)"'
 # ---------------------------------------------------------------- помощни
 a() { timeout ${T:-40} adb shell "$@"; }
 log() { echo "$*" | tee -a $SUM; }
-sec() { echo; echo "################ $* ################"; echo "## $*" >> $SUM; alive "$*"; }
+sec() { echo; echo "################ $* ################"; echo "## $*" >> $SUM; alive "$*"; a log -t PERFCHECK "section: $*"; }
 now_ms() { echo $(( $(date +%s%N) / 1000000 )); }
 alive() {
   timeout 15 adb get-state >/dev/null 2>&1 && return 0
@@ -62,6 +62,8 @@ dismiss() {
   local i p l
   for i in 1 2 3; do
     dump || return 0; p=""
+    # системен диалог (напр. „Pixel Launcher isn't responding“) → „Wait“
+    if has "isn.t responding|не отговаря"; then p=$(xy text '=Wait|=Изчакване'); [ -n "$p" ] && { echo ">>> system ANR dialog: $(texts 3) → Wait"; a input tap $p; sleep 3; continue; }; fi
     for l in '=Later' '=По-късно' '=Not now' '=Не сега' '=Skip' '=Пропусни'; do
       p=$(xy text "$l"); [ -n "$p" ] && { echo ">>> dismiss '$l'"; a input tap $p; sleep 2; break; }
     done
@@ -76,7 +78,17 @@ waitfor() {  # regex, лимит (s) → WAITED (ms) или -1
     sleep 0.3
   done
 }
-restart() { a am force-stop $PKG; sleep 1; launch >/dev/null; sleep 4; dismiss; }
+restart() { a am force-stop $PKG; sleep 1; launch >/dev/null; sleep 4; ready; }
+# Главен екран с долна лента (или страничната в хоризонтално положение): затваря диалози и се връща назад.
+ready() {
+  local i
+  for i in 1 2 3 4 5; do
+    dismiss
+    dump && [ -n "$(xy text "$(tablabel home)" --last)" ] && [ -n "$(xy text "$(tablabel more)" --last)" ] && return 0
+    echo "(not on a tab screen: $(texts 6)) → back"; back 2
+  done
+  echo "WARN: tab bar not reached"; return 1
+}
 gfx_reset() { a dumpsys gfxinfo $PKG reset >/dev/null; }
 gfx_save() { a dumpsys gfxinfo $PKG > $OUT/gfx-$1.txt; python3 $H_/parse.py gfx $OUT/gfx-$1.txt "$1" | tee -a $SUM; }
 mem() {
@@ -96,7 +108,8 @@ no_camera() {
 finish() {
   [ -n "${LOGPID:-}" ] && kill $LOGPID 2>/dev/null
   timeout 60 adb logcat -d -v threadtime > $OUT/logcat-dump.txt 2>/dev/null
-  local L=$OUT/logcat-live.txt; [ -s $L ] || L=$OUT/logcat-dump.txt
+  local L=$OUT/logcat-all.txt
+  cat $OUT/logcat-live.txt $OUT/logcat-dump.txt 2>/dev/null | awk '!seen[$0]++' > $L
   python3 $H_/parse.py logcat $L $PKG > $OUT/logcat-findings.txt 2>&1
   echo "===== logcat findings ====="; cat $OUT/logcat-findings.txt | cut -c1-260
   { echo "## logcat findings"; grep -E '^== |^app pids|events=' $OUT/logcat-findings.txt; } >> $SUM
@@ -117,16 +130,19 @@ setup() {
   adb logcat -G 16M >/dev/null 2>&1; adb logcat -c
   adb logcat -v threadtime > $OUT/logcat-live.txt 2>&1 & LOGPID=$!
   dims; log "screen ${W}x${H}"
+  # системата още се успокоява след зареждането (Pixel Launcher понякога дава ANR диалог)
+  sleep 25; a input keyevent KEYCODE_HOME; sleep 2; dismiss
 }
 
 # ================================================================= ЧАСТ A
 part_a() {
   sec "1. First install: first launch, time to catalogue results"
-  launch | tee $OUT/start-first.txt; sleep 5; show; shot a/00-first-launch
-  dismiss; sleep 2; dismiss; show; shot a/01-home-first
+  launch | tee $OUT/start-first.txt; sleep 5; show; shot 00-first-launch
+  dismiss; sleep 2; dismiss; show; shot 01-home-first
   tab catalog; t0=$(now_ms)
   if waitfor "$RX_RESULTS" 150; then log "FIRST-INSTALL catalogue results after ${WAITED} ms (tap→text, uiautomator polling ~1-2 s)"; else log "FIRST-INSTALL: NO catalogue results in 150 s"; fi
-  show; shot a/02-catalog-first
+  show; shot 02-catalog-first
+  waitfor "$RX_RESULTS" 10; log "polling floor (text already on screen): ${WAITED} ms — subtract from the times below"
   for i in 1 2 3; do
     a am force-stop $PKG; sleep 2; launch >/dev/null; sleep 3; dismiss
     tab catalog
@@ -166,39 +182,43 @@ part_a() {
 
   sec "3. Jank (animations ON for this section)"
   anims 1
-  dims
-  # Каталог: 40 бързи плъзгания, „Покажи още“ на всеки 5
-  tab catalog; waitfor "$RX_RESULTS" 60; sleep 2
-  gfx_reset; pages=0
-  for i in $(seq 1 40); do
-    sw_up 60; sleep 0.25
-    if [ $((i % 5)) = 0 ]; then
-      if dump; then p=$(xy text '=Show more|=Покажи още'); [ -n "$p" ] && { a input tap $p; pages=$((pages+1)); sleep 1; }; fi
-    fi
-  done
-  gfx_save catalog; log "catalog: 'Show more' pages loaded during swipes: $pages"
-  show 12; shot a/jank-catalog-end
-  # Начало
-  tab home; sleep 1; tab home; sleep 3
-  gfx_reset
-  for i in $(seq 1 10); do sw_up 70; sleep 0.25; done
-  for i in $(seq 1 10); do sw_down 70; sleep 0.25; done
-  gfx_save home
-  # Новини
-  tab news; sleep 5
-  gfx_reset
-  for i in $(seq 1 10); do sw_up 70; sleep 0.25; done
-  for i in $(seq 1 10); do sw_down 70; sleep 0.25; done
-  gfx_save news; show 10
-  # Събития (списък)
-  link "$EVENTS_URL"; sleep 5
-  if dump && has 'content-desc="(List view|Изглед списък)"'; then tap content-desc '=List view|=Изглед списък'; sleep 2; fi
-  show 12; shot a/jank-events
-  gfx_reset
-  for i in $(seq 1 10); do sw_up 70; sleep 0.25; done
-  for i in $(seq 1 10); do sw_down 70; sleep 0.25; done
-  gfx_save events
-  back
+  jank_pass() {  # $1 — наставка за етикетите, $2 — плъзгания в каталога, $3 — на другите екрани (наполовина нагоре/надолу)
+    local sfx=$1 n=$2 m=$3 i p p2 pages=0 mis=0
+    dims
+    restart; link "$SITE/elektronen-katalog"; waitfor "$RX_RESULTS" 60; sleep 2
+    gfx_reset
+    for i in $(seq 1 $n); do
+      sw_up 60; sleep 0.25
+      if [ $((i % 5)) = 0 ] && dump; then
+        p=$(xy text '=Show more|=Покажи още')
+        if [ -n "$p" ]; then
+          sleep 1; dump; p2=$(xy text '=Show more|=Покажи още')
+          if [ -n "$p2" ] && [ "$p" = "$p2" ]; then
+            a input tap $p2; pages=$((pages+1)); sleep 1.5
+            dump && has "$RX_BACK" && { mis=$((mis+1)); back 1.5; }
+          fi
+        fi
+      fi
+    done
+    gfx_save catalog$sfx; log "catalog$sfx: 'Show more' pages: $pages, mis-taps recovered: $mis; screen: $(show 6 | cut -c1-200)"
+    shot jank/catalog$sfx-end
+    for scr in home news events; do
+      case $scr in home) link "$SITE/";; news) link "$SITE/news";; events) link "$EVENTS_URL";; esac
+      sleep 5; dismiss
+      if [ $scr = events ] && dump && has 'content-desc="(List view|Изглед списък)"'; then tap content-desc '=List view|=Изглед списък'; sleep 2; fi
+      log "jank $scr$sfx screen: $(show 6 | cut -c1-200)"
+      gfx_reset
+      for i in $(seq 1 $((m/2))); do sw_up 70; sleep 0.25; done
+      for i in $(seq 1 $((m/2))); do sw_down 70; sleep 0.25; done
+      gfx_save $scr$sfx
+      shot jank/$scr$sfx
+    done
+  }
+  jank_pass "" 40 20
+  # Второ минаване при 1/4 от пикселите (540x1200): софтуерното рендиране е по-малко тясно място.
+  a wm size 540x1200; a wm density 210; sleep 3
+  jank_pass "-lowres" 20 20
+  a wm size reset; a wm density reset; sleep 3; dims
   anims 0
 
   sec "4a. Memory over 30 tab/book cycles"
@@ -219,13 +239,13 @@ part_a() {
   dims
   rot() {
     local name=$1 pid0 pid1 i
-    pid0=$(a pidof $PKG | tr -d '\r'); shot a/rotation/$name-0-before
+    pid0=$(a pidof $PKG | tr -d '\r'); shot rotation/$name-0-before
     for i in $(seq 1 10); do
       a settings put system user_rotation $((i % 2)); sleep 1.5
-      [ $i = 9 ] && shot a/rotation/$name-1-landscape
+      [ $i = 9 ] && shot rotation/$name-1-landscape
     done
     a settings put system user_rotation 0; sleep 2
-    pid1=$(a pidof $PKG | tr -d '\r'); shot a/rotation/$name-2-after; show 15
+    pid1=$(a pidof $PKG | tr -d '\r'); shot rotation/$name-2-after; show 15
     log "ROTATION $name: pid $pid0 -> $pid1 ($([ "$pid0" = "$pid1" ] && echo same || echo CHANGED)) $(has "$RX_BACK" && echo '[back button visible]')"
   }
   gfx_reset
@@ -241,27 +261,31 @@ part_a() {
   tap text 'Search by|Търсене|Търси'; sleep 1; a input text 12; sleep 3
   a input keyevent 111; sleep 1   # ESC: скрива клавиатурата
   dump; p=$(xy content-desc "вятъра"); [ -z "$p" ] && p=$(xy --first-clickable $((H/4)) $((H*3/4)) 120)
-  echo ">>> open book @ $p"; a input tap $p; sleep 4; show 12; shot a/procdeath/1-before
+  echo ">>> open book @ $p"; a input tap $p; sleep 4; show 12; shot procdeath/1-before
   before_title=$(grep -o 'text="[^"]*"' $OUT/ui.xml | sed -n 1p)
   a input keyevent KEYCODE_HOME; sleep 3
   a am kill $PKG; sleep 3
   pid=$(a pidof $PKG | tr -d '\r'); [ -n "$pid" ] && { echo "still alive ($pid), retry kill"; sleep 5; a am kill $PKG; sleep 3; pid=$(a pidof $PKG | tr -d '\r'); }
   log "PROCDEATH: after am kill pid='${pid}' ($([ -z "$pid" ] && echo killed || echo 'NOT killed'))"
   launch | tee $OUT/start-procdeath.txt | tr '\n' ' '; echo; sleep 4
-  show 15; shot a/procdeath/2-after-launcher
+  show 15; shot procdeath/2-after-launcher
   log "PROCDEATH launcher: $(grep -E 'LaunchState' $OUT/start-procdeath.txt | tr -d '\r') first text before=$before_title after=$(grep -o 'text="[^"]*"' $OUT/ui.xml | sed -n 1p) $(has "$RX_BACK" && echo '→ book screen restored' || echo '→ NOT on book screen')"
-  back 2; show 10; shot a/procdeath/3-after-back
+  back 2; show 10; shot procdeath/3-after-back
   log "PROCDEATH back → catalogue query kept: $(grep -q 'text="12"' $OUT/ui.xml && echo yes || echo no)"
-  # Вариант 2: от екрана „Последни“
+  # Вариант 2: каталог с търсене „12“ → във фона → убит → от екрана „Последни“
+  tap text 'Search by|Търсене|Търси'; sleep 1; a input text 12; sleep 3; a input keyevent 111; sleep 1; show 8; shot procdeath/3b-before-kill-2
   a input keyevent KEYCODE_HOME; sleep 3; a am kill $PKG; sleep 3
   log "PROCDEATH#2 pid after kill='$(a pidof $PKG | tr -d '\r')'"
-  a input keyevent KEYCODE_APP_SWITCH; sleep 4; shot a/procdeath/4-recents
-  a input tap $((W/2)) $((H/2)); sleep 6; show 12; shot a/procdeath/5-from-recents
+  a input keyevent KEYCODE_APP_SWITCH; sleep 4; shot procdeath/4-recents
+  a input tap $((W/2)) $((H/2)); sleep 6; show 12; shot procdeath/5-from-recents
   log "PROCDEATH from Recents: $(has 'text="12"' && echo 'catalogue query restored' || echo 'query not visible') $(has "$RX_BACK" && echo '[back visible]')"
 
   sec "4b. Monkey 4000 events"
   no_camera
+  # без падащото меню/бързите настройки (иначе monkey включва самолетен режим, DND и т.н.)
+  log "statusbar disable: $(a cmd statusbar send-disable-flag statusbar-expansion notification-alerts 2>&1 | tr -d '\r' | head -2)"
   restart
+  log "monkey start pid=$(a pidof $PKG | tr -d '\r')"
   a log -t PERFCHECK "monkey start"
   t0=$(now_ms)
   timeout 1200 adb shell monkey -p $PKG --pct-syskeys 0 --pct-anyevent 0 --throttle 80 -s 1234 -v 4000 > $OUT/monkey.txt 2>&1
@@ -269,7 +293,7 @@ part_a() {
   log "MONKEY markers: CRASH=$(grep -c 'CRASH' $OUT/monkey.txt) ANR=$(grep -c 'ANR' $OUT/monkey.txt) FATAL=$(grep -c 'FATAL EXCEPTION' $OUT/monkey.txt)"
   grep -nE -A20 'CRASH|NOT RESPONDING|ANR' $OUT/monkey.txt | head -60
   alive "after monkey"
-  sleep 2; log "pid after monkey: '$(a pidof $PKG | tr -d '\r')'"; shot a/monkey-end; show 12
+  sleep 2; log "pid after monkey: '$(a pidof $PKG | tr -d '\r')'; airplane=$(a settings get global airplane_mode_on | tr -d '\r')"; shot monkey-end; show 12
   mem after-monkey
 }
 
@@ -278,24 +302,24 @@ matrix() {
   local v=$1 p i
   echo "======== matrix $v"
   restart; dims
-  tab home; sleep 1; tab home; sleep 3; shot b/$v/01-home
-  tab catalog; waitfor "$RX_RESULTS" 60; sleep 2; shot b/$v/02-catalog
-  link "$BOOK_URL"; sleep 4; show 8; shot b/$v/03-book; back
-  link "$EVENTS_URL"; sleep 5; show 8; shot b/$v/04-events; back
-  tab news; sleep 5; shot b/$v/05-news
+  tab home; sleep 1; tab home; sleep 3; shot $v/01-home
+  tab catalog; waitfor "$RX_RESULTS" 60; sleep 2; shot $v/02-catalog
+  link "$BOOK_URL"; sleep 4; show 8; shot $v/03-book; back
+  link "$EVENTS_URL"; sleep 5; show 8; shot $v/04-events; back
+  tab news; sleep 5; shot $v/05-news
   dump; p=$(xy --first-clickable $((H/6)) $((H*3/4)) 150)
-  if [ -n "$p" ]; then echo ">>> open article @ $p"; a input tap $p; sleep 5; show 8; shot b/$v/06-article; has "$RX_BACK" || echo "WARN: article screen not detected"; back; fi
-  tab my; sleep 3; shot b/$v/07-my
-  tab more; sleep 3; shot b/$v/08-more
+  if [ -n "$p" ]; then echo ">>> open article @ $p"; a input tap $p; sleep 5; show 8; shot $v/06-article; has "$RX_BACK" || echo "WARN: article screen not detected"; back; fi
+  tab my; sleep 3; shot $v/07-my
+  tab more; sleep 3; shot $v/08-more
   for i in 1 2 3 4; do dump; p=$(xy text '=Settings|=Настройки'); [ -n "$p" ] && break; sw_up 300; sleep 1; done
-  if [ -n "$p" ]; then a input tap $p; sleep 3; shot b/$v/09-settings; sw_up 300; sleep 1; shot b/$v/09b-settings-scrolled; back; else echo "WARN: Settings not found"; fi
+  if [ -n "$p" ]; then a input tap $p; sleep 3; shot $v/09-settings; sw_up 300; sleep 1; shot $v/09b-settings-scrolled; back; else echo "WARN: Settings not found"; fi
   tab home; sleep 1
 }
 
 part_b() {
   sec "1. First launch and warm-up (online)"
-  launch; sleep 5; dismiss; sleep 2; dismiss
-  tab catalog; waitfor "$RX_RESULTS" 150 && log "first-install catalogue results after ${WAITED} ms"
+  launch; sleep 5; ready; show 10
+  tab catalog; waitfor "$RX_RESULTS" 150 && log "first-install catalogue results after ${WAITED} ms" || log "first-install: NO catalogue results"
   tab news; sleep 6; link "$EVENTS_URL"; sleep 6; back; tab home; sleep 4
 
   sec "6. Collect: package, notifications, jobs"
@@ -313,13 +337,14 @@ part_b() {
   cat $OUT/notification-channels.txt | cut -c1-300
   log "notification channels: $(grep -o 'mId=[^,]*' $OUT/notification-channels.txt | sort -u | tr '\n' ' ')"
   a dumpsys jobscheduler $PKG > $OUT/dumpsys-jobscheduler.txt
-  grep -nE "JOB #|Periodic|periodic|Requires:|Minimum latency|Deadline|Service:|tag=|PERIODIC|Constraints|Satisfied|Unsatisfied" $OUT/dumpsys-jobscheduler.txt | grep -v "^\s*$" | head -40 | tee $OUT/jobs-summary.txt
-  log "jobs: $(grep -c 'JOB #' $OUT/dumpsys-jobscheduler.txt) job(s); periodic mentions: $(grep -ciE 'periodic' $OUT/dumpsys-jobscheduler.txt)"
+  awk '/^  JOB /{on=($0 ~ /chyavorec/)} on' $OUT/dumpsys-jobscheduler.txt > $OUT/jobs-app.txt
+  grep -E "^  JOB |Minimum latency|Periodic|period|Deadline|Requires:|Run time|Enqueue time" $OUT/jobs-app.txt | tee $OUT/jobs-summary.txt
+  log "app jobs: $(grep -c '^  JOB ' $OUT/jobs-app.txt); with 'Periodic/period' in JobInfo: $(grep -ciE 'periodic|period=' $OUT/jobs-app.txt); latencies: $(grep -o 'Minimum latency: [^ ]*' $OUT/jobs-app.txt | tr '\n' ' ')"
   a dumpsys activity service org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService > /dev/null 2>&1
 
   sec "5. Appearance matrix"
   matrix light-en
-  a cmd uimode night yes; sleep 3; show 5; shot b/dark-en/00-live-switch   # без рестарт: смяна на живо
+  a cmd uimode night yes; sleep 3; show 5; shot dark-en/00-live-switch   # без рестарт: смяна на живо
   matrix dark-en
   a cmd uimode night no; sleep 2
   a cmd locale set-app-locales $PKG --locales bg-BG; sleep 3
@@ -331,15 +356,15 @@ part_b() {
   a settings put system font_scale 1.0; sleep 2
   echo "======== landscape"
   restart; a settings put system user_rotation 1; sleep 3; dims
-  tab home; sleep 3; shot b/landscape/01-home
-  tab catalog; waitfor "$RX_RESULTS" 60; sleep 2; shot b/landscape/02-catalog
-  link "$BOOK_URL"; sleep 4; shot b/landscape/03-book; back
-  tab more; sleep 3; shot b/landscape/08-more
+  tab home; sleep 3; shot landscape/01-home
+  tab catalog; waitfor "$RX_RESULTS" 60; sleep 2; shot landscape/02-catalog
+  link "$BOOK_URL"; sleep 4; shot landscape/03-book; back
+  tab more; sleep 3; shot landscape/08-more
   a settings put system user_rotation 0; sleep 3; dims
 
   sec "Launcher icon"
-  a input keyevent KEYCODE_HOME; sleep 3; shot b/launcher/01-home-screen
-  a input swipe $((W/2)) $((H*9/10)) $((W/2)) $((H/5)) 300; sleep 3; shot b/launcher/02-app-drawer; show 40
+  a input keyevent KEYCODE_HOME; sleep 3; shot launcher/01-home-screen
+  a input swipe $((W/2)) $((H*9/10)) $((W/2)) $((H/5)) 300; sleep 3; shot launcher/02-app-drawer; show 40
   a input keyevent KEYCODE_HOME; sleep 2
 
   sec "4. Network: offline cold start"
@@ -347,33 +372,33 @@ part_b() {
   a cmd connectivity airplane-mode enable; a svc wifi disable; a svc data disable; sleep 4
   log "offline: airplane=$(a settings get global airplane_mode_on | tr -d '\r')"
   launch >/dev/null; sleep 6; dismiss
-  show 10; shot b/offline/01-home; log "offline home: $(texts 12)"
-  tab catalog; waitfor "$RX_RESULTS" 30 && log "offline catalogue: results shown (cached)" || log "offline catalogue: NO results"; shot b/offline/02-catalog
-  link "$BOOK_URL"; sleep 4; show 10; shot b/offline/03-book; back
-  link "$EVENTS_URL"; sleep 5; show 10; shot b/offline/04-events; log "offline events: $(texts 10)"; back
-  tab news; sleep 5; show 10; shot b/offline/05-news; log "offline news: $(texts 10)"
-  dump; p=$(xy --first-clickable $((H/6)) $((H*3/4)) 150); [ -n "$p" ] && { a input tap $p; sleep 5; show 10; shot b/offline/06-article; back; }
-  tab my; sleep 3; shot b/offline/07-my
-  tab more; sleep 3; shot b/offline/08-more
-  tap text '=Gallery|=Галерия'; sleep 5; show 10; shot b/offline/09-gallery; log "offline gallery: $(texts 10)"
+  show 10; shot offline/01-home; log "offline home: $(texts 12)"
+  tab catalog; waitfor "$RX_RESULTS" 30 && log "offline catalogue: results shown (cached)" || log "offline catalogue: NO results"; shot offline/02-catalog
+  link "$BOOK_URL"; sleep 4; show 10; shot offline/03-book; back
+  link "$EVENTS_URL"; sleep 5; show 10; shot offline/04-events; log "offline events: $(texts 10)"; back
+  tab news; sleep 5; show 10; shot offline/05-news; log "offline news: $(texts 10)"
+  dump; p=$(xy --first-clickable $((H/6)) $((H*3/4)) 150); [ -n "$p" ] && { a input tap $p; sleep 5; show 10; shot offline/06-article; back; }
+  tab my; sleep 3; shot offline/07-my
+  tab more; sleep 3; shot offline/08-more
+  tap text '=Gallery|=Галерия'; sleep 5; show 10; shot offline/09-gallery; log "offline gallery: $(texts 10)"
   sec "4. Network: re-enable, auto-recovery"
   a cmd connectivity airplane-mode disable; a svc wifi enable; a svc data enable
-  sleep 20; show 10; shot b/recovered/09-gallery-auto; log "after reconnect (stayed on gallery, no touch): $(texts 10)"
-  back; tab home; sleep 5; shot b/recovered/01-home
-  link "$EVENTS_URL"; sleep 5; show 10; shot b/recovered/04-events; log "recovered events: $(texts 10)"; back
-  tab news; sleep 5; shot b/recovered/05-news
+  sleep 20; show 10; shot recovered/09-gallery-auto; log "after reconnect (stayed on gallery, no touch): $(texts 10)"
+  back; tab home; sleep 5; shot recovered/01-home
+  link "$EVENTS_URL"; sleep 5; show 10; shot recovered/04-events; log "recovered events: $(texts 10)"; back
+  tab news; sleep 5; shot recovered/05-news
 
   sec "Recents thumbnail / FLAG_SECURE"
-  restart; tab my; sleep 3; shot b/recents/01-my-signed-out
-  a input keyevent KEYCODE_APP_SWITCH; sleep 4; shot b/recents/02-recents-from-my-signed-out
+  restart; tab my; sleep 3; shot recents/01-my-signed-out
+  a input keyevent KEYCODE_APP_SWITCH; sleep 4; shot recents/02-recents-from-my-signed-out
   a input keyevent KEYCODE_BACK; sleep 2; launch >/dev/null; sleep 3
-  tab my; sleep 2; tap text '=Library card|=Читателска карта'; sleep 3; show 15; shot b/recents/03-card-screen
-  a input keyevent KEYCODE_APP_SWITCH; sleep 4; shot b/recents/04-recents-from-card
+  tab my; sleep 2; tap text '=Library card|=Читателска карта'; sleep 3; show 15; shot recents/03-card-screen
+  a input keyevent KEYCODE_APP_SWITCH; sleep 4; shot recents/04-recents-from-card
   a input keyevent KEYCODE_BACK; sleep 2; launch >/dev/null; sleep 3; show 15
   # самостоятелна карта → „Моето“ става защитено
   if tap text '=Card number|=Номер на картата'; then sleep 1; a input text 12345; sleep 1; a input keyevent 111; sleep 1; tap text '=Save|=Запази'; sleep 3; show 12; fi
-  back; tab my; sleep 3; show 12; shot b/recents/05-my-with-card
-  a input keyevent KEYCODE_APP_SWITCH; sleep 4; shot b/recents/06-recents-from-my-with-card
+  back; tab my; sleep 3; show 12; shot recents/05-my-with-card
+  a input keyevent KEYCODE_APP_SWITCH; sleep 4; shot recents/06-recents-from-my-with-card
   log "secure flag on window: $(a dumpsys window windows | grep -E 'mCurrentFocus|FLAG_SECURE|SECURE' | head -3 | tr -s ' ' | tr '\n' ' ')"
   a input keyevent KEYCODE_HOME; sleep 2
 

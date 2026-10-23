@@ -93,6 +93,12 @@ elif cmd == 'logcat':
             shown += 1
             if shown >= (3 if name == 'FATAL' else 12):
                 break
+    # Хронология: маркерите на секциите и смъртта/убиването на процеса (без нашите force-stop)
+    print("== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)")
+    rx = re.compile(r'PERFCHECK|Process ' + re.escape(pkg) + r' \(pid \d+\) has died|Killing \d+:' + re.escape(pkg) + r'|lowmemorykiller.*' + re.escape(pkg))
+    for i, l in enumerate(lines):
+        if rx.search(l) and 'Force stopping' not in l and 'due to from pid' not in l:
+            print('   ' + l[:220])
 elif cmd == 'block':
     start, stop = sys.argv[3], sys.argv[4]
     lines = text.splitlines()
