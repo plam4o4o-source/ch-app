@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.clickable
@@ -34,7 +33,6 @@ import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -62,6 +60,8 @@ import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.DemoBanner
+import org.chyavorec.app.ui.components.BookCover
+import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.components.DuePill
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.OpeningBook
@@ -76,11 +76,11 @@ import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.SyncStamp
-import org.chyavorec.app.ui.components.dueColor
 import org.chyavorec.app.ui.components.errorMessage
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
+import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.LoanDueCalculator
 import org.chyavorec.domain.model.MembershipEvaluator
@@ -197,7 +197,6 @@ internal fun LoanCard(
 ) {
     val context = LocalContext.current
     val due = LoanDueCalculator.parse(loan.dueOn)
-    val out = LoanDueCalculator.parse(loan.borrowedOn)
     val status = due?.let { calc.status(it, today) }
     val overdue = status == DueStatus.OVERDUE
     val openLabel = stringResource(R.string.loan_open_book)
@@ -205,7 +204,11 @@ internal fun LoanCard(
         // Цялата карта води към книгата (ако я има в каталога); бутонът за удължаване е отделна цел.
         val open = if (onOpen != null) Modifier.clickable(onClickLabel = openLabel, role = Role.Button, onClick = onOpen) else Modifier
         Row(open.fillMaxWidth().padding(14.dp)) {
-            RemoteImage(loan.coverUrl, null, Modifier.size(64.dp, 90.dp).clip(RoundedCornerShape(8.dp)), cover = true)
+            // Същата „издателска“ корица като в каталога (на този личен екран — само генерирана, вж. PersonalCovers).
+            val cover = remember(loan.loanId, loan.title, loan.author, loan.coverUrl) {
+                CatalogBook(inv = loan.inv ?: 0L, author = loan.author, title = loan.title, coverUrl = loan.coverUrl.orEmpty())
+            }
+            BookCover(cover, width = 64.dp, showStatusDot = false)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(loan.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -224,17 +227,8 @@ internal fun LoanCard(
                     style = MaterialTheme.typography.titleSmall,
                     color = if (overdue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
                 )
-                if (status != null) {
-                    Spacer(Modifier.height(4.dp))
-                    DuePill(status, calc.daysLeft(due, today))
-                    if (out != null) {
-                        LinearProgressIndicator(
-                            progress = { calc.elapsedFraction(out, due, today) },
-                            color = dueColor(status),
-                            modifier = Modifier.fillMaxWidth().padding(top = 6.dp).clip(RoundedCornerShape(50)),
-                        )
-                    }
-                }
+                // Срокът с думи и колко остава — без отделна лента за изминалото време (същото трети път).
+                if (status != null) DuePill(status, calc.daysLeft(due, today), Modifier.padding(top = 4.dp))
                 if (loan.renewals > 0) {
                     Text(
                         pluralStringResource(R.plurals.loan_renewed_times, loan.renewals, loan.renewals),
@@ -267,8 +261,9 @@ private fun RenewAction(loan: Loan, serverRenews: Boolean, stale: Boolean, renew
                 modifier = Modifier.heightIn(min = 48.dp).semantics { if (renewing) stateDescription = busy },
             ) {
                 if (renewing) {
-                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
-                    Spacer(Modifier.width(10.dp))
+                    // Индикаторът на приложението; за екранните четци „изпраща се“ е в stateDescription на бутона.
+                    ChLoadingIndicator(Modifier.size(20.dp), contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
                 }
                 Text(stringResource(R.string.loan_renew))
             }

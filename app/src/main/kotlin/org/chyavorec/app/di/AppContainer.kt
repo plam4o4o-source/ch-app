@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,6 +41,7 @@ import org.chyavorec.app.network.NetworkModule
 import org.chyavorec.app.notifications.LoanReminderScheduler
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.notifications.ReminderScheduler
+import org.chyavorec.app.notifications.RenewOutcomeNotifier
 import org.chyavorec.app.update.AppUpdater
 import org.chyavorec.app.widget.ChitalishteWidget
 import org.chyavorec.app.messages.MessageCenter
@@ -261,6 +263,27 @@ class AppContainer(
         readerWatchStarted = true
         watchSignOut(auth)
         watchLoanReminders(auth)
+        watchRenewOutcomes(auth)
+    }
+
+    /**
+     * Отговорът на библиотеката на заявка за удължаване → известие ([RenewOutcomeNotifier]) —
+     * при всеки запис на заеманията в кеша (опресняване на екрана, `/v1/me/all`, фоновата задача).
+     * Една след друга (collect, не collectLatest): прекъсната проверка не бива да повтори известие.
+     */
+    private fun watchRenewOutcomes(auth: AuthRepository) {
+        appScope.launch {
+            storedLoans.filterNotNull().collect { loans ->
+                if (auth.state.value !is AuthState.SignedIn) return@collect
+                try {
+                    RenewOutcomeNotifier.check(context, this@AppContainer, loans)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    Diagnostics.record("loans.renew-outcomes", e)
+                }
+            }
+        }
     }
 
     /**

@@ -4,9 +4,12 @@ import android.Manifest
 import android.app.Application
 import android.app.Notification
 import android.app.NotificationManager
+import android.content.ComponentName
+import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.chyavorec.app.R
+import org.chyavorec.domain.model.Loan
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,9 +18,14 @@ import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
-/** Известията с лично съдържание: махат се при изход и са общи на заключен екран. */
+/**
+ * Известията с лично съдържание: махат се при изход и са общи на заключен екран. Известията за
+ * заемания: категория „напомняне“, обща група с обобщение при 2+, бутон „Удължи“.
+ */
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class NotifierTest {
@@ -79,5 +87,63 @@ class NotifierTest {
         val news = byId.getValue(NotificationIds.NEWS)
         assertEquals(Notification.VISIBILITY_PUBLIC, news.visibility)
         assertNull(news.publicVersion)
+    }
+
+    @Test fun loanNotificationsAreGroupedRemindersWithSummary() {
+        Notifier.show(context, Channel.LOANS, NotificationIds.dueSoon("L1"), "Наближава срок за връщане", "Под игото", "my/loans")
+        Notifier.show(context, Channel.NEWS, NotificationIds.NEWS, "Новина", "Текст", null)
+        // Едно известие — без обобщение.
+        assertNull(nm.activeNotifications.firstOrNull { it.id == NotificationIds.LOANS_SUMMARY })
+        val first = nm.activeNotifications.single { it.id == NotificationIds.dueSoon("L1") }.notification
+        assertEquals(Notification.CATEGORY_REMINDER, first.category)
+        assertEquals(Notifier.LOANS_GROUP, first.group)
+        assertNull(nm.activeNotifications.single { it.id == NotificationIds.NEWS }.notification.group)
+
+        Notifier.show(context, Channel.LOANS, NotificationIds.overdue("L2"), "Просрочена книга", "Тютюн", "my/loans")
+        val summary = nm.activeNotifications.single { it.id == NotificationIds.LOANS_SUMMARY }.notification
+        assertEquals(Notifier.LOANS_GROUP, summary.group)
+        assertTrue(summary.flags and Notification.FLAG_GROUP_SUMMARY != 0)
+        assertEquals(Channel.LOANS.id, summary.channelId)
+        // Обобщението е общо — без заглавия на книги — и се маха при изход.
+        val text = listOf(Notification.EXTRA_TITLE, Notification.EXTRA_TEXT).joinToString(" ") { summary.extras.getCharSequence(it)?.toString().orEmpty() }
+        assertFalse("Под игото" in text || "Тютюн" in text)
+        Notifier.cancelPersonal(context)
+        assertEquals(listOf(NotificationIds.NEWS), nm.activeNotifications.map { it.id })
+    }
+
+    @Test fun renewActionIsImmutableBroadcastToPrivateReceiver() {
+        val loan = Loan("L1", 7, "Под игото", "Иван Вазов", dueOn = "2026-10-20", canRenew = true)
+        val id = NotificationIds.dueSoon(loan.loanId)
+        Notifier.show(
+            context, Channel.LOANS, id, "Наближава срок за връщане", "Под игото", "my/loans",
+            actions = listOf(RenewActionReceiver.action(context, loan, id)),
+        )
+        val action = nm.activeNotifications.single { it.id == id }.notification.actions.single()
+        assertEquals(context.getString(R.string.notif_action_renew), action.title.toString())
+        val pending = shadowOf(action.actionIntent)
+        assertTrue(pending.isBroadcastIntent)
+        assertTrue(pending.isImmutable)
+        assertEquals(id, pending.requestCode)
+        val intent = pending.savedIntent
+        assertEquals(ComponentName(context, RenewActionReceiver::class.java), intent.component)
+        assertEquals(RenewActionReceiver.ACTION_RENEW, intent.action)
+        assertEquals("L1", intent.getStringExtra(RenewActionReceiver.EXTRA_LOAN))
+        assertEquals(id, intent.getIntExtra(RenewActionReceiver.EXTRA_NOTIFICATION, 0))
+        // Друга книга — друг requestCode (бутоните не се препокриват).
+        val other = RenewActionReceiver.action(context, loan.copy(loanId = "L2"), NotificationIds.dueSoon("L2"))
+        assertNotEquals(id, shadowOf(other.actionIntent).requestCode)
+        // Приемникът не е достъпен за други приложения.
+        val info = context.packageManager.getReceiverInfo(ComponentName(context, RenewActionReceiver::class.java), 0)
+        assertFalse(info.exported)
+    }
+
+    @Test fun statusCategoryAndSilentOverride() {
+        Notifier.show(
+            context, Channel.LOANS, NotificationIds.renew("L1"), "Срокът е удължен", "Под игото", "my/loans",
+            silent = true, category = NotificationCompat.CATEGORY_STATUS,
+        )
+        val n = nm.activeNotifications.single { it.id == NotificationIds.renew("L1") }.notification
+        assertEquals(Notification.CATEGORY_STATUS, n.category)
+        assertTrue(n.actions.isNullOrEmpty())
     }
 }

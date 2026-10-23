@@ -152,7 +152,11 @@ class LoanReminderWorker(context: Context, params: WorkerParameters) : Coroutine
             LoanReminderKind.DUE_DAY -> applicationContext.getString(R.string.notif_due_today) to loan.title
         }
         // Едно ID за двете напомняния: „днес“ заменя „наближава“ в лентата.
-        Notifier.show(applicationContext, Channel.LOANS, NotificationIds.dueSoon(loanId), title, text, "my/loans")
+        val id = NotificationIds.dueSoon(loanId)
+        Notifier.show(
+            applicationContext, Channel.LOANS, id, title, text, "my/loans",
+            actions = RenewActionReceiver.actionsFor(applicationContext, c, loan, id),
+        )
         c.settings.addLoanNotification(LoanNotificationLog.entry(loanId, dueOn, kind.name, today), today)
         return Result.success()
     }

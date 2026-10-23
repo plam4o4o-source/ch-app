@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit
  *   за съобщения са включени и разрешени; тези от сайта — само ако приложението е
  *   отваряно през последните 14 дни ([MessagePollPolicy.isDormant]);
  * - нова новина → известие — на 12 часа, ако е включено и известията са разрешени;
- * - заемания → известие за просрочие — на 12 часа, ако е включено и разрешено,
+ * - заемания → известие за просрочие и за отговора на заявка за удължаване — на 12 часа, ако е включено и разрешено,
  *   или ако има уиджет (той показва броя книги за връщане); напомнянията за
  *   наближаващ срок са локални ([LoanReminderScheduler]) и не зависят от мрежата;
  * - събития — на 12 часа, само ако има уиджет (напомнянията за събития са
@@ -144,6 +144,8 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         // вече са свежи в кеша (до 3 мин.) — без втора заявка. Иначе — от мрежата, както досега.
         val synced = (c.libraryRepository.loans(force = false) as? Outcome.Success)?.value ?: return false
         if (synced.fromCache) return false
+        // Отговор на заявка за удължаване („удължено до…“ / „отказано“) — нощем изчаква.
+        val renewOnTime = RenewOutcomeNotifier.check(applicationContext, c, synced.data)
         if (!notify) return true
         val calc = LoanDueCalculator()
         val now = c.clock.now()
@@ -167,15 +169,17 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
             // Днес вече е имало известие за тази книга → утре.
             if (LoanNotificationLog.sentOn(c.settings.loanNotificationLog(), loan.loanId, today)) continue
             current += key
+            val id = NotificationIds.overdue(loan.loanId)
             Notifier.show(
-                applicationContext, Channel.LOANS, NotificationIds.overdue(loan.loanId),
+                applicationContext, Channel.LOANS, id,
                 applicationContext.getString(R.string.notif_overdue), loan.title, "my/loans",
                 lockScreenTitle = applicationContext.getString(R.string.notif_public_overdue),
+                actions = RenewActionReceiver.actionsFor(applicationContext, c, loan, id),
             )
             c.settings.addLoanNotification(LoanNotificationLog.entry(loan.loanId, dueOn, LoanNotificationLog.OVERDUE, today), today)
         }
         c.settings.setNotifiedLoans(current)
-        return !deferred
+        return !deferred && renewOnTime
     }
 
     /**

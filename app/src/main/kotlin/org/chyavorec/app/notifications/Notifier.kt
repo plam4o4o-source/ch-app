@@ -44,16 +44,25 @@ object NotificationIds {
     private const val OVERDUE_BASE = 20_000
     private const val EVENT_BASE = 30_000
     private const val MESSAGE_BASE = 40_000
+    private const val RENEW_BASE = 50_000
     private const val MASK = 0x1FFF
+    /** Обобщението на групата известия за заемания ([Notifier.LOANS_GROUP]). */
+    const val LOANS_SUMMARY = 600
+    /** Краткото известие на бързата задача за удължаване (Android 8–11, [RenewActionWorker]). */
+    const val RENEW_PROGRESS = 601
 
     fun dueSoon(loanId: String): Int = DUE_SOON_BASE + (loanId.hashCode() and MASK)
     fun overdue(loanId: String): Int = OVERDUE_BASE + (loanId.hashCode() and MASK)
     fun event(eventId: String): Int = EVENT_BASE + (eventId.hashCode() and MASK)
     fun message(messageId: String): Int = MESSAGE_BASE + (messageId.hashCode() and MASK)
+    /** Отговорът на библиотеката на заявка за удължаване. */
+    fun renew(loanId: String): Int = RENEW_BASE + (loanId.hashCode() and MASK)
 }
 
 object Notifier {
     const val EXTRA_DEEP_LINK = "deep_link"
+    /** Групата на известията за заемания — при 2 и повече се показват под общо обобщение. */
+    const val LOANS_GROUP = "org.chyavorec.loans"
     /** В известието: лично съдържание на влезлия читател (срок на заемане, лично съобщение). */
     private const val EXTRA_PERSONAL = "org.chyavorec.personal"
 
@@ -89,6 +98,12 @@ object Notifier {
         sensitive: Boolean = false,
         /** Общият текст на заключен екран за лично известие; `null` — според канала (срок / лично съобщение). */
         lockScreenTitle: String? = null,
+        /** Бутони в известието (напр. „Удължи“ — [RenewActionReceiver]). */
+        actions: List<NotificationCompat.Action> = emptyList(),
+        /** Без звук и вибрация — напр. резултатът, който подменя вече показано известие. */
+        silent: Boolean = false,
+        /** Категорията за системата; известията за заемания по подразбиране са напомняния. */
+        category: String? = if (channel == Channel.LOANS) NotificationCompat.CATEGORY_REMINDER else null,
     ) {
         if (!canNotify(context)) return
         // Каналите се създават във фон веднъж за версия (ChitalishteApp) — при много ранно
@@ -131,11 +146,53 @@ object Notifier {
             .apply { publicVersion?.let { setPublicVersion(it) } }
             // По този белег известията на читателя се махат при изход ([cancelPersonal]).
             .apply { if (personal) addExtras(android.os.Bundle().apply { putBoolean(EXTRA_PERSONAL, true) }) }
+            .apply { category?.let { setCategory(it) } }
+            .apply { actions.forEach { addAction(it) } }
+            .apply { if (silent) setSilent(true) }
+            // Няколко книги за връщане — една група с обобщение, а не отделни редове в лентата.
+            .apply { if (channel == Channel.LOANS) setGroup(LOANS_GROUP) }
             .build()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
         ) return
         runCatching { NotificationManagerCompat.from(context).notify(id, notification) }
+        if (channel == Channel.LOANS) runCatching { updateLoansSummary(context) }
+    }
+
+    /**
+     * Обобщението на групата [LOANS_GROUP] — при 2 и повече показани известия за заемания.
+     * Само общ текст (без заглавия) и без собствен звук: алармират самите известия. Не се
+     * маха при по-малко: отмяната на обобщение маха и известията под него.
+     */
+    private fun updateLoansSummary(context: Context) {
+        val nm = context.getSystemService(NotificationManager::class.java) ?: return
+        val children = nm.activeNotifications.count { it.id != NotificationIds.LOANS_SUMMARY && it.notification.group == LOANS_GROUP }
+        if (children < 2) return
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(EXTRA_DEEP_LINK, "my/loans")
+        }
+        val pending = PendingIntent.getActivity(
+            context, NotificationIds.LOANS_SUMMARY, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        val summary = NotificationCompat.Builder(context, Channel.LOANS.id)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setColor(ContextCompat.getColor(context, R.color.brand_gold_dark))
+            .setContentTitle(context.getString(R.string.notif_loans_summary))
+            .setContentIntent(pending)
+            .setAutoCancel(true)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setGroup(LOANS_GROUP)
+            .setGroupSummary(true)
+            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
+            .setOnlyAlertOnce(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .addExtras(android.os.Bundle().apply { putBoolean(EXTRA_PERSONAL, true) })
+            .build()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) return
+        NotificationManagerCompat.from(context).notify(NotificationIds.LOANS_SUMMARY, summary)
     }
 
     /**

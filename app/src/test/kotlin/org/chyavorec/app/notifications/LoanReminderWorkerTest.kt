@@ -49,8 +49,8 @@ class LoanReminderWorkerTest {
 
     @After fun tearDown() = backend.shutdown()
 
-    private fun loan(due: String = "2026-10-20", pending: Boolean = false) =
-        """{"loanId":"$loanId","inv":7,"title":"Под игото","author":"Иван Вазов","dateOut":"2026-09-20","dateDue":"$due","renewPending":$pending}"""
+    private fun loan(due: String = "2026-10-20", pending: Boolean = false, canRenew: Boolean = false) =
+        """{"loanId":"$loanId","inv":7,"title":"Под игото","author":"Иван Вазов","dateOut":"2026-09-20","dateDue":"$due","renewPending":$pending,"canRenew":$canRenew}"""
 
     private fun signIn() = runBlocking<Unit> {
         assertIs<Outcome.Success<Unit>>(app.container.authRepository.login("0042", "1234".toCharArray(), remember = false))
@@ -83,6 +83,24 @@ class LoanReminderWorkerTest {
         nm.cancelAll()
         run()
         assertTrue(reminders().isEmpty())
+    }
+
+    /** „Удължи“ — само за заемане, което може да се удължи онлайн; напомнянето е в категория „напомняне“. */
+    @Test fun renewableLoanReminderHasRenewAction() {
+        signIn()
+        backend.loans(loan(canRenew = true))
+        run()
+        val n = reminders().single().notification
+        assertEquals(android.app.Notification.CATEGORY_REMINDER, n.category)
+        val action = n.actions.single()
+        assertEquals(app.getString(org.chyavorec.app.R.string.notif_action_renew), action.title.toString())
+    }
+
+    @Test fun nonRenewableLoanReminderHasNoAction() {
+        signIn()
+        backend.loans(loan())
+        run()
+        assertTrue(reminders().single().notification.actions.isNullOrEmpty())
     }
 
     @Test fun returnedBookIsNotReminded() {
