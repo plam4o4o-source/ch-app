@@ -12,6 +12,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
@@ -32,6 +33,7 @@ import org.chyavorec.data.catalog.CatalogSearcher
 import org.chyavorec.data.catalog.EngineCatalogSearcher
 import org.chyavorec.data.catalog.FtsCatalogSearcher
 import org.chyavorec.data.catalog.KatalogParser
+import org.chyavorec.data.catalog.ReadingRecommender
 import org.chyavorec.data.catalog.katalogHash
 import org.chyavorec.domain.model.CatalogHomeSummary
 import org.chyavorec.domain.model.CatalogSnapshot
@@ -179,14 +181,20 @@ class CatalogRepository(
     /** Последно публикуваната търсачка (без чакане). */
     fun publishedSearcher(): Synced<CatalogSearcher>? = published.value?.view
 
-    /** Всяка нова публикувана търсачка — напр. след фоновото попълване на индекса. */
-    val searcherUpdates: Flow<Synced<CatalogSearcher>> = published.filterNotNull().map { it.view }
+    /**
+     * Всяка нова публикувана търсачка — напр. след фоновото попълване на индекса. Само при
+     * смяна на самата търсачка (нов каталог/индекс), не при всяко потвърждение на свежестта
+     * (то сменя само датата — „За теб“ и екранът „Каталог“ не бива да търсят наново).
+     */
+    val searcherUpdates: Flow<Synced<CatalogSearcher>> =
+        published.filterNotNull().map { it.view }.distinctUntilChangedBy { it.data }
 
     /**
-     * Справки (книга, скенер, глобално търсене, история): през пълнотекстовия индекс за
-     * текущия каталог — без мрежа и без да разчита katalog.json (започнатото попълване на
-     * индекса се изчаква). Само ако индекс още няма — както досега: индексът в паметта,
-     * от диска и (без кеш, ако [network]) от мрежата.
+     * Справки (книга, скенер, глобално търсене, история): през пълнотекстовия индекс —
+     * без мрежа и без да разчита katalog.json. Докато индексът за нов каталог се попълва,
+     * отговаря старият (липсващо в него изчаква новия); първото попълване се изчаква.
+     * Само ако индекс още няма — както досега: индексът в паметта, от диска и (без кеш,
+     * ако [network]) от мрежата.
      */
     suspend fun lookupSearcher(network: Boolean = true): Synced<CatalogSearcher>? =
         indexed() ?: (inMemory() ?: cached() ?: if (network) (catalog(false) as? Outcome.Success)?.value else null)
@@ -434,7 +442,10 @@ class CatalogRepository(
 
     /**
      * Справките през индекса в базата за текущия каталог; `null` — индекс няма (и не може
-     * да се попълни) или е грешка на базата. Попълването се чака извън ключалката.
+     * да се попълни) или е грешка на базата. Ако индексът е за стар каталог, справките
+     * минават през него веднага, докато новият се попълва във фонов режим (книга или ISBN,
+     * които ги няма в стария, изчакват новия — [awaitNewerIndex]). Само ако индекс изобщо
+     * няма (първо пускане), попълването му се чака — извън ключалката.
      */
     private suspend fun indexed(): Synced<CatalogSearcher>? {
         val store = index ?: return null
@@ -443,8 +454,12 @@ class CatalogRepository(
             published.value?.let { if (!it.stale && it.hash == m.hash) return it.view }
             val st = guarded { store.state() }
             if (st != null && st.hash == m.hash) return publishIndex(st, stale = false)
+            if (st != null) {
+                if (failedHash != m.hash) rebuildIndex(inMemorySnapshot(), m.hash)
+                val old = published.value?.takeIf { it.stale && it.hash == st.hash }
+                return old?.view ?: publishIndex(st, stale = true)
+            }
             if (failedHash == m.hash) return null
-            // Старият индекс може да няма книгата — изчакваме новия (обикновено вече е в ход).
             rebuildIndex(inMemorySnapshot(), m.hash)
         }
         job.await() ?: return null
@@ -494,8 +509,18 @@ class CatalogRepository(
         val fts = FtsCatalogSearcher(
             store, state, fallback = { mutex.withLock { (current ?: loadFromDisk())?.data } }, work = work,
             onIndexLost = { indexLost(state.hash) },
+            awaitNewer = { awaitNewerIndex(state.hash) },
         )
         return publish(fts, state.hash, stale)
+    }
+
+    /**
+     * Попълването на индекса за друг каталог (не [hash]), ако тече — изчаква се извън
+     * ключалката; `true` — новият индекс е записан (справката може да се повтори).
+     */
+    private suspend fun awaitNewerIndex(hash: String): Boolean {
+        val job = mutex.withLock { rebuild?.takeIf { it.job.isActive && it.hash != hash }?.job } ?: return false
+        return job.await() != null
     }
 
     /**
@@ -527,7 +552,10 @@ class CatalogRepository(
         val store = index ?: return null
         return guarded {
             val (state, rows) = withContext(work) {
-                CatalogIndexState(hash, snapshot.generatedOn, snapshot.books.size, CatalogSearchEngine.facetsOf(snapshot)) to
+                CatalogIndexState(
+                    hash, snapshot.generatedOn, snapshot.books.size, CatalogSearchEngine.facetsOf(snapshot),
+                    ReadingRecommender.availableBySection(snapshot.books),
+                ) to
                     CatalogIndexRows.build(snapshot)
             }
             store.replace(state, rows)

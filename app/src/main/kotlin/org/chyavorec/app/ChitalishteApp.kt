@@ -20,6 +20,7 @@ import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.diagnostics.AppDiagnostics
 import org.chyavorec.core.logFailure
+import org.chyavorec.data.site.SiteImageAccept
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.PeriodicSyncWorker
@@ -37,8 +38,15 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
     /** Фонови задачи на ниво процес (напр. планиране на WorkManager извън главната нишка). */
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    /** OkHttp без HTTP кеш за изображенията — Coil има собствен дисков кеш (иначе всяка снимка се пази двойно). */
-    private val imageHttp by lazy { container.okHttp.newBuilder().cache(null).build() }
+    /**
+     * OkHttp без HTTP кеш за изображенията — Coil има собствен дисков кеш (иначе всяка снимка се пази двойно).
+     * Към chyavorec.org — `Accept` с WebP/AVIF, за да не връща оптимизаторът на Vercel JPEG.
+     */
+    private val imageHttp by lazy {
+        container.okHttp.newBuilder().cache(null)
+            .addInterceptor(SiteImageAccept.Interceptor(android.os.Build.VERSION.SDK_INT))
+            .build()
+    }
 
     override fun onCreate() {
         super.onCreate()

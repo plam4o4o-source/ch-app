@@ -116,7 +116,8 @@ class CatalogFtsRepositoryTest {
         val updates = mutableListOf<Synced<CatalogSearcher>>()
         backgroundScope.launch { repo.searcherUpdates.collect { updates += it } }
         store.replaceGate = CompletableDeferred()
-        svc.raw = sample.replace("Ох...", "Ах...")
+        // Новият каталог: сменено заглавие и нов инв. №.
+        svc.raw = sample.replace("Ох...", "Ах...").replace("\"inv\": 399666,", "\"inv\": 399667,")
 
         // Екранът „Каталог“ не чака попълването: старият индекс, отбелязан като кеширан.
         val stale = withTimeout(1_000) { (repo.searcher(force = true) as Outcome.Success).value }
@@ -125,20 +126,50 @@ class CatalogFtsRepositoryTest {
         assertEquals(listOf(399666L), stale.data.search(CatalogQuery("ох")).map { it.inv }, "старият индекс — цял, не празен")
         assertEquals(old.facets, stale.data.facets)
         assertEquals(1, store.replaces)
-        // Справката за книга изчаква новия индекс (старият може да няма книгата) — но не мрежата.
-        val lookup = async { repo.lookupSearcher()!!.data.book(399666L) }
+        // Справките (книга, скенер) не чакат попълването: книгата от стария индекс — веднага.
+        val lookups = withTimeout(1_000) { repo.lookupSearcher()!! }
+        assertTrue(lookups.fromCache)
+        assertEquals("Ох...", withTimeout(1_000) { lookups.data.book(399666L) }?.title?.trim('"'))
+        assertEquals(399560L, withTimeout(1_000) { lookups.data.book(399560L) }?.inv)
+        // Книгата, която я няма в стария индекс, изчаква новия — но не мрежата.
+        val added = async { lookups.data.book(399667L) }
         runCurrent()
-        assertFalse(lookup.isCompleted)
+        assertFalse(added.isCompleted)
+        assertEquals(1, store.replaces)
 
         store.replaceGate!!.complete(Unit)
         advanceUntilIdle()
         assertEquals(2, store.replaces)
-        assertTrue(lookup.await()!!.title.contains("Ах..."))
+        assertTrue(added.await()!!.title.contains("Ах..."))
         val fresh = repo.cachedSearcher()!!
         assertFalse(fresh.fromCache)
         assertSame(fresh.data, updates.last().data, "новата търсачка е обявена на екрана")
-        assertEquals(listOf(399666L), fresh.data.search(CatalogQuery("ах")).map { it.inv })
+        assertEquals(listOf(399667L), fresh.data.search(CatalogQuery("ах")).map { it.inv })
+        assertSame(fresh.data, repo.lookupSearcher()!!.data, "справките — вече през новия индекс")
         assertNull(repo.inMemory(), "индексът в паметта не се строи")
+    }
+
+    /**
+     * Потвърждението, че каталогът не е сменен (на всяко опресняване), сменя само датата:
+     * търсачката не се обявява наново — „За теб“ и екранът „Каталог“ не смятат напразно.
+     */
+    @Test fun unchangedCatalogDoesNotAnnounceANewSearcher() = runTest {
+        val repo = repo(Service(sample))
+        val first = (repo.searcher(force = true) as Outcome.Success).value.data
+        advanceUntilIdle()
+        val updates = mutableListOf<Synced<CatalogSearcher>>()
+        backgroundScope.launch { repo.searcherUpdates.collect { updates += it } }
+        runCurrent()
+        assertEquals(1, updates.size)
+        repeat(3) {
+            repo.refreshHomeSummary(force = true)
+            repo.searcher(force = true)
+            advanceUntilIdle()
+        }
+        runCurrent()
+        assertEquals(1, updates.size, "само датата е нова — търсачката е същата")
+        assertSame(first, repo.publishedSearcher()!!.data)
+        assertEquals(1, store.replaces)
     }
 
     @Test fun homeRefreshIndexesInTheBackground() = runTest {

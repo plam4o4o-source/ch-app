@@ -17,7 +17,7 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.Transaction
+import androidx.room.withTransaction
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import kotlinx.coroutines.CancellationException
@@ -181,26 +181,54 @@ abstract class CatalogIndexDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun putState(state: CatalogIndexStateEntity)
+}
 
-    /**
-     * Цялото съдържание наведнъж, в една транзакция: прекъсване оставя стария индекс
-     * непокътнат. Тригерите на FTS таблицата (external content) вървят в същата
-     * транзакция, а четенето от други връзки (WAL) вижда стария индекс до края ѝ —
-     * никога празен или наполовина попълнен.
-     */
-    @Transaction
-    open suspend fun replaceAll(state: CatalogIndexStateEntity, rows: List<CatalogBookEntity>) {
-        clearState()
-        clearBooks()
-        insertBooks(rows)
-        putState(state)
-    }
+/**
+ * Тригерите, с които Room синхронизира FTS таблицата със съдържанието (external content) —
+ * точно както в схемата (app/schemas/…CatalogDatabase/2.json, `contentSyncTriggers`).
+ */
+internal val FTS_SYNC_TRIGGERS: Map<String, String> = run {
+    val fts = "`${CatalogIndexColumns.FTS_TABLE}`"
+    val books = "`${CatalogIndexColumns.TABLE}`"
+    val cols = listOf(
+        CatalogIndexColumns.TITLE, CatalogIndexColumns.AUTHOR, CatalogIndexColumns.KEYWORDS, CatalogIndexColumns.ANNOTATION,
+        CatalogIndexColumns.PUBLISHER, CatalogIndexColumns.DOC_TYPE, CatalogIndexColumns.CALL_NUMBER, CatalogIndexColumns.INV,
+        CatalogIndexColumns.ISBN,
+    )
+    val insert = "INSERT INTO $fts(`docid`, ${cols.joinToString(", ") { "`$it`" }}) " +
+        "VALUES (NEW.`rowid`, ${cols.joinToString(", ") { "NEW.`$it`" }}); END"
+    val delete = "DELETE FROM $fts WHERE `docid`=OLD.`rowid`; END"
+    val prefix = "room_fts_content_sync_${CatalogIndexColumns.FTS_TABLE}_"
+    linkedMapOf(
+        "${prefix}BEFORE_UPDATE" to "BEFORE UPDATE ON $books BEGIN $delete",
+        "${prefix}BEFORE_DELETE" to "BEFORE DELETE ON $books BEGIN $delete",
+        "${prefix}AFTER_UPDATE" to "AFTER UPDATE ON $books BEGIN $insert",
+        "${prefix}AFTER_INSERT" to "AFTER INSERT ON $books BEGIN $insert",
+    ).mapValues { (name, body) -> "CREATE TRIGGER IF NOT EXISTS $name $body" }
+}
 
-    /** „Изчисти кеша“: индексът става празен (FTS таблицата се изпразва от тригерите си). */
-    @Transaction
-    open suspend fun clearAll() {
-        clearState()
-        clearBooks()
+/**
+ * Цялото съдържание наведнъж, в една транзакция: прекъсване (или грешка) оставя стария
+ * индекс непокътнат, а четенето от други връзки (WAL) вижда стария индекс до края ѝ —
+ * никога празен или наполовина попълнен. [state] `null` — празен индекс („Изчисти кеша“).
+ *
+ * Бързо: тригерите на FTS таблицата (по един INSERT в индекса за всеки ред) се махат за
+ * времето на транзакцията, съдържанието се изтрива и записва без тях, а пълнотекстовият
+ * индекс се строи наведнъж с командата 'rebuild' на FTS4 (≈ 3 пъти по-бързо при голям
+ * каталог). Тригерите се създават отново със същия SQL като в схемата на Room — в същата
+ * транзакция, така че никога не липсват извън нея.
+ */
+internal suspend fun CatalogDatabase.replaceIndex(state: CatalogIndexStateEntity?, rows: List<CatalogBookEntity>) {
+    val dao = index()
+    withTransaction {
+        val sql = openHelper.writableDatabase
+        FTS_SYNC_TRIGGERS.keys.forEach { sql.execSQL("DROP TRIGGER IF EXISTS `$it`") }
+        dao.clearState()
+        dao.clearBooks()
+        if (rows.isNotEmpty()) dao.insertBooks(rows)
+        sql.execSQL("INSERT INTO `${CatalogIndexColumns.FTS_TABLE}`(`${CatalogIndexColumns.FTS_TABLE}`) VALUES('rebuild')")
+        FTS_SYNC_TRIGGERS.values.forEach { sql.execSQL(it) }
+        if (state != null) dao.putState(state)
     }
 }
 
@@ -252,7 +280,9 @@ class RoomCatalogIndexStore(
     /** Съдържанието е изгубено при [reset] и още не е попълнено отново (или изчистено). */
     @Volatile private var lost = false
 
-    private fun dao(): CatalogIndexDao = synchronized(lock) { db ?: open().also { db = it } }.index()
+    private fun database(): CatalogDatabase = synchronized(lock) { db ?: open().also { db = it } }
+
+    private fun dao(): CatalogIndexDao = database().index()
 
     private fun isDatabaseError(e: Exception) = e is SQLException || e is IllegalStateException
 
@@ -298,12 +328,13 @@ class RoomCatalogIndexStore(
     override suspend fun state(): CatalogIndexState? = healing { dao -> dao.stateJson()?.let { CatalogIndexState.fromJson(it) } }
 
     override suspend fun replace(state: CatalogIndexState, rows: List<CatalogIndexRow>) {
-        healing { dao -> dao.replaceAll(CatalogIndexStateEntity(json = state.toJson()), rows.map { CatalogBookEntity.of(it) }) }
+        val entities = rows.map { CatalogBookEntity.of(it) }
+        healing { database().replaceIndex(CatalogIndexStateEntity(json = state.toJson()), entities) }
         lost = false
     }
 
     override suspend fun clear() {
-        healing { dao -> dao.clearAll() }
+        healing { database().replaceIndex(null, emptyList()) }
         lost = false
         // Освободеното място се връща на системата — иначе файлът на базата остава със същия размер.
         // Индексът вече е празен: свиването не се прекъсва по средата (и отмяната не стига дотук).

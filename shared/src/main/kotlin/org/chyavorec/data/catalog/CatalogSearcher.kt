@@ -3,6 +3,8 @@ package org.chyavorec.data.catalog
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.TextNormalizer
@@ -78,8 +80,10 @@ class EngineCatalogSearcher(val engine: CatalogSearchEngine) : CatalogSearcher {
     override suspend fun findByIsbn(raw: String?): CatalogBook? = engine.findByIsbn(raw)
     override suspend fun allByIsbn(raw: String?): List<CatalogBook> = engine.allByIsbn(raw)
     override suspend fun authors(tokens: List<String>, limit: Int): List<String> = engine.authors(tokens, limit)
-    override suspend fun recommend(history: List<HistoryItem>, limit: Int): List<CatalogBook> =
-        ReadingRecommender.recommend(engine, history, limit)
+    override suspend fun recommend(history: List<HistoryItem>, limit: Int): List<CatalogBook> {
+        val context = currentCoroutineContext()
+        return ReadingRecommender.recommend(engine.snapshot.books, history, engine::book, limit) { context.ensureActive() }
+    }
 }
 
 /**
@@ -95,6 +99,10 @@ class EngineCatalogSearcher(val engine: CatalogSearchEngine) : CatalogSearcher {
  * Целият каталог не се държи в паметта. При грешка на базата се ползва [fallback]
  * (индексът в паметта); ако индексът е изгубен ([CatalogIndexLostException] — базата е
  * създадена наново, празна), преди това се вика [onIndexLost], за да се попълни отново.
+ *
+ * Докато индексът се попълва за нов каталог, търсачката отговаря от стария (транзакцията
+ * още не е приключила). Книга или ISBN, които ги няма в него (напр. току-що добавена
+ * книга в скенера), изчакват новия индекс ([awaitNewer]) и се търсят още веднъж.
  */
 class FtsCatalogSearcher(
     private val store: CatalogIndexStore,
@@ -102,6 +110,8 @@ class FtsCatalogSearcher(
     private val fallback: suspend () -> CatalogSearchEngine?,
     private val work: CoroutineDispatcher = Dispatchers.Default,
     private val onIndexLost: suspend () -> Unit = {},
+    /** Изчаква попълването на по-нов индекс, ако тече; `true` — записан е (справката се повтаря). */
+    private val awaitNewer: suspend () -> Boolean = { false },
 ) : CatalogSearcher {
     override val generatedOn: String get() = state.generatedOn
     override val facets: CatalogFacets get() = state.facets
@@ -154,7 +164,8 @@ class FtsCatalogSearcher(
         }
     }
 
-    override suspend fun book(inv: Long): CatalogBook? = guarded({ it.book(inv) }) { store.book(inv) }
+    override suspend fun book(inv: Long): CatalogBook? =
+        guarded({ it.book(inv) }) { store.book(inv) ?: if (awaitNewer()) store.book(inv) else null }
 
     override suspend fun books(invs: Collection<Long>): Map<Long, CatalogBook> {
         if (invs.isEmpty()) return emptyMap()
@@ -174,7 +185,7 @@ class FtsCatalogSearcher(
     override suspend fun allByIsbn(raw: String?): List<CatalogBook> {
         val wanted = CatalogSearchEngine.isbnKeys(raw)
         if (wanted.isEmpty()) return emptyList()
-        return guarded({ it.allByIsbn(raw) }) { store.byIsbn(wanted) }
+        return guarded({ it.allByIsbn(raw) }) { store.byIsbn(wanted).ifEmpty { if (awaitNewer()) store.byIsbn(wanted) else emptyList() } }
     }
 
     /** Различните автори — четат се веднъж (малко данни), после се филтрират в паметта. */
@@ -194,8 +205,14 @@ class FtsCatalogSearcher(
             val read = books(history.mapNotNull { it.inv })
             val pre = ReadingRecommender.prefilter(history, read::get) ?: return@guarded emptyList()
             // Само наличните книги, които изобщо могат да получат точки — не целият каталог.
-            val candidates = store.recommendationCandidates(pre.udcSections, pre.authorWords)
-            withContext(work) { ReadingRecommender.recommend(candidates, history, read::get, limit) }
+            // Ако разделите на УДК и без това обхващат повечето книги — всички налични, без условия.
+            val broad = ReadingRecommender.coversMost(pre.udcSections, state.availableBySection, state.facets.udcSections)
+            val candidates = if (broad) store.recommendationCandidates(emptySet(), null)
+            else store.recommendationCandidates(pre.udcSections, pre.authorWords)
+            withContext(work) {
+                val context = currentCoroutineContext()
+                ReadingRecommender.recommend(candidates, history, read::get, limit) { context.ensureActive() }
+            }
         }
     }
 

@@ -28,6 +28,7 @@ import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.catalog.ForYouPicks
+import org.chyavorec.data.catalog.FtsCatalogSearcher
 import org.chyavorec.data.repository.AuthRepository
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.data.repository.CatalogRepository
@@ -39,6 +40,7 @@ import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogHomeSummary
 import org.chyavorec.domain.model.DailyFeast
 import org.chyavorec.domain.model.Event
+import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.NewsArticle
 import org.chyavorec.domain.occasion.SiteOccasion
 import java.time.LocalDate
@@ -244,12 +246,22 @@ class HomeViewModel(
             s.shelves.forEach { shelf -> shelf.books.forEach { add(it.inv) } }
         }
         val general = withContext(Dispatchers.Default) { ForYouPicks.general(s.picks, s.shelves.map { it.books }, exclude = onHome) }
-        val personal = if (a is AuthState.SignedIn) personalPicks(general, onHome)?.takeIf { it.isNotEmpty() } else null
+        val personal = if (a is AuthState.SignedIn) personalPicks(a.readerId, general, onHome)?.takeIf { it.isNotEmpty() } else null
         _state.update { it.copy(forYou = personal ?: general, forYouPersonal = personal != null) }
     }
 
+    /**
+     * Последните препоръки и за какво са: читателят, историята и каталогът (хешът на индекса;
+     * без него — самата търсачка). Историята се записва в кеша при всяко опресняване, а
+     * свежестта на каталога се потвърждава често — препоръките се смятат наново само ако
+     * нещо от тях наистина е различно.
+     */
+    private class Recommendations(val readerId: String, val history: List<HistoryItem>, val catalog: Any, val books: List<CatalogBook>)
+
+    @Volatile private var recommendations: Recommendations? = null
+
     /** `null` — няма история в кеша, няма търсачка или препоръки (тогава — общият подбор). */
-    private suspend fun personalPicks(general: List<CatalogBook>, onHome: Set<Long>): List<CatalogBook>? = try {
+    private suspend fun personalPicks(readerId: String, general: List<CatalogBook>, onHome: Set<Long>): List<CatalogBook>? = try {
         val history = library.cachedHistory()?.data.orEmpty()
         if (history.isEmpty()) {
             null
@@ -257,8 +269,11 @@ class HomeViewModel(
             // Публикуваната търсачка, иначе индексът в базата — без мрежа (network = false).
             val searcher = catalog.publishedSearcher()?.data ?: catalog.lookupSearcher(network = false)?.data
             searcher?.let {
+                val key: Any = (it as? FtsCatalogSearcher)?.state?.hash ?: it
+                val cached = recommendations?.takeIf { r -> r.readerId == readerId && r.catalog == key && r.history == history }
                 withContext(Dispatchers.Default) {
-                    val recs = it.recommend(history, limit = ForYouPicks.LIMIT * 2)
+                    val recs = cached?.books ?: it.recommend(history, limit = ForYouPicks.LIMIT * 2)
+                        .also { books -> recommendations = Recommendations(readerId, history, key, books) }
                     val read = history.mapNotNullTo(HashSet()) { h -> h.inv }
                     if (recs.isEmpty()) null else ForYouPicks.personal(recs, general, exclude = onHome + read)
                 }
