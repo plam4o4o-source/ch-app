@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.screens.my
 
 import org.chyavorec.app.ui.components.sharedElementKey
+import org.chyavorec.app.ui.components.appFilterChipColors
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -179,7 +180,7 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
                                 item("years") {
                                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                         item {
-                                            FilterChip(year == null, onClick = { vm.selectedYear.value = null }, label = { Text(stringResource(R.string.history_year_all)) })
+                                            FilterChip(year == null, onClick = { vm.selectedYear.value = null }, label = { Text(stringResource(R.string.history_year_all)) }, colors = appFilterChipColors())
                                         }
                                         items(years) { y ->
                                             FilterChip(
@@ -189,6 +190,7 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
                                                     vm.selectedYear.value = if (year == y) null else y
                                                 },
                                                 label = { Text(y?.toString() ?: "—") },
+                                                colors = appFilterChipColors(),
                                             )
                                         }
                                     }

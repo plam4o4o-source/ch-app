@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.screens.onboarding
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -85,7 +87,7 @@ fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
     Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Brand.Ink, androidx.compose.ui.graphics.Color(0xFF2E1612), Brand.Burgundy)))) {
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
             Row(Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = { onFinish(false) }) { Text(stringResource(R.string.onb_skip), color = Brand.GoldLight) }
+                TextButton(onClick = { onFinish(false) }, colors = ButtonDefaults.textButtonColors(contentColor = Brand.GoldLight)) { Text(stringResource(R.string.onb_skip)) }
             }
             HorizontalPager(pager, modifier = Modifier.weight(1f)) { page ->
                 val s = slides[page]
@@ -116,15 +118,20 @@ fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
                 slides.size, pager.currentPage, Modifier.padding(bottom = 16.dp),
                 activeColor = Brand.Gold, inactiveColor = Brand.Parchment.copy(alpha = 0.35f),
             )
+            // Фонът е винаги тъмен (мастило → бордо), независимо от темата: бутоните са в злато
+            // с мастило (8.1:1), а не основният цвят на темата (в светла — #785A10 върху бордо, 1.76:1).
+            val primaryColors = ButtonDefaults.buttonColors(containerColor = Brand.Gold, contentColor = Brand.Ink)
+            val outlinedColors = ButtonDefaults.outlinedButtonColors(contentColor = Brand.Parchment)
+            val outlinedBorder = BorderStroke(1.dp, Brand.Gold)
             Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 if (pager.currentPage < slides.lastIndex) {
-                    Button(onClick = { scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
+                    Button(onClick = { scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } }, colors = primaryColors, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
                         Text(stringResource(R.string.onb_next), textAlign = TextAlign.Center)
                     }
                 } else {
-                    Button(onClick = { onFinish(true) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.onb_login), textAlign = TextAlign.Center) }
-                    OutlinedButton(onClick = { onFinish(false) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
-                        Text(stringResource(R.string.onb_guest), color = Brand.Parchment, textAlign = TextAlign.Center)
+                    Button(onClick = { onFinish(true) }, colors = primaryColors, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.onb_login), textAlign = TextAlign.Center) }
+                    OutlinedButton(onClick = { onFinish(false) }, colors = outlinedColors, border = outlinedBorder, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
+                        Text(stringResource(R.string.onb_guest), textAlign = TextAlign.Center)
                     }
                 }
             }

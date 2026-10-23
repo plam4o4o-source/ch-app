@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.screens.my
 
 import org.chyavorec.app.ui.components.sharedTransitionsActive
+import org.chyavorec.app.ui.components.InfoBanner
 import org.chyavorec.app.ui.components.sharedBoundsKey
 import android.app.Activity
 import android.hardware.Sensor
@@ -394,13 +395,7 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
                 if (data.verified) {
                     SyncStamp(profile.syncedAt)
                 } else {
-                    Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
-                        Row(Modifier.padding(14.dp)) {
-                            Icon(Icons.Outlined.Info, null)
-                            Spacer(Modifier.width(10.dp))
-                            Text(stringResource(R.string.card_self_note), style = MaterialTheme.typography.bodySmall)
-                        }
-                    }
+                    InfoBanner(Icons.Outlined.Info, stringResource(R.string.card_self_note))
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         OutlinedButton(onClick = { editing = true }, modifier = Modifier.weight(1f)) {
                             Icon(Icons.Outlined.Edit, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.action_edit))

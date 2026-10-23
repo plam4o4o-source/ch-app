@@ -166,6 +166,7 @@ import org.chyavorec.app.ui.screens.site.DocumentsScreen
 import org.chyavorec.app.ui.screens.site.SitePageScreen
 import org.chyavorec.app.util.Intents
 import org.chyavorec.app.ui.components.UpdateDialog
+import org.chyavorec.app.ui.components.OfflineBar
 import org.chyavorec.app.ui.screens.messages.MessagesScreen
 import kotlinx.coroutines.flow.first
 
@@ -323,17 +324,7 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
                     Column {
                         // Без долна лента под нея лентата „няма връзка“ сама отстъпва от системната навигация.
                         val barBelow = topLevel && !wide
-                        AnimatedVisibility(!online) {
-                            Surface(color = MaterialTheme.colorScheme.inverseSurface, contentColor = MaterialTheme.colorScheme.inverseOnSurface) {
-                                Text(
-                                    stringResource(R.string.offline_global),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    modifier = Modifier.fillMaxWidth()
-                                        .then(if (barBelow) Modifier else Modifier.navigationBarsPadding())
-                                        .padding(horizontal = 16.dp, vertical = 6.dp),
-                                )
-                            }
-                        }
+                        AnimatedVisibility(!online) { OfflineBar(insetNavigation = !barBelow) }
                         if (!wide) {
                             AnimatedVisibility(
                                 visible = topLevel,

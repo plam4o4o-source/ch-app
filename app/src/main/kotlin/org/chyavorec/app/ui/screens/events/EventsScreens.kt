@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.screens.events
 
 import org.chyavorec.app.ui.components.sharedBoundsKey
+import org.chyavorec.app.ui.components.appFilterChipColors
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -94,6 +95,8 @@ import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.LocalExtendedColors
+import org.chyavorec.app.ui.theme.LocalThemeStyle
+import org.chyavorec.app.ui.theme.paletteDateBadge
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.app.ui.screens.settings.NotificationAccess
 import org.chyavorec.app.ui.screens.settings.showNotificationsBlocked
@@ -108,18 +111,20 @@ import java.time.LocalDate
 
 @Composable
 private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier) {
+    // Плътна значка (бордо с пергамент, като в уиджета), а не розовият secondaryContainer.
+    val (badge, onBadge) = paletteDateBadge(LocalThemeStyle.current.palette, LocalExtendedColors.current.isDark)
     // Минимален, а не фиксиран размер: при едър системен шрифт значката расте с текста, вместо да го реже.
     Column(
         modifier.widthIn(min = 58.dp).heightIn(min = 58.dp).clip(MaterialTheme.shapes.small)
-            .background(MaterialTheme.colorScheme.secondaryContainer).padding(horizontal = 6.dp, vertical = 4.dp),
+            .background(badge).padding(horizontal = 6.dp, vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         if (date != null) {
-            Text(date.dayOfMonth.toString(), style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSecondaryContainer, maxLines = 1)
-            Text(Formatters.monthShort(LocalContext.current, date), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSecondaryContainer, maxLines = 1)
+            Text(date.dayOfMonth.toString(), style = MaterialTheme.typography.headlineSmall, color = onBadge, maxLines = 1)
+            Text(Formatters.monthShort(LocalContext.current, date), style = MaterialTheme.typography.labelSmall, color = onBadge, maxLines = 1)
         } else {
-            Icon(Icons.Outlined.Event, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer)
+            Icon(Icons.Outlined.Event, contentDescription = null, tint = onBadge)
         }
     }
 }
@@ -170,10 +175,10 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     } else {
                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             item {
-                                FilterChip(ui.category == null, onClick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick); vm.setCategory(null) }, label = { Text(stringResource(R.string.filter_all)) })
+                                FilterChip(ui.category == null, onClick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick); vm.setCategory(null) }, label = { Text(stringResource(R.string.filter_all)) }, colors = appFilterChipColors())
                             }
                             items(ui.categories) { c ->
-                                FilterChip(ui.category == c, onClick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick); vm.setCategory(c) }, label = { Text(c) })
+                                FilterChip(ui.category == c, onClick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick); vm.setCategory(c) }, label = { Text(c) }, colors = appFilterChipColors())
                             }
                         }
                     }

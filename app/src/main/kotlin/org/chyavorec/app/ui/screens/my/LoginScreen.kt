@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.liveRegion
 import kotlinx.coroutines.delay
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.LibraryContactSheet
+import org.chyavorec.app.ui.components.InfoBanner
 import org.chyavorec.app.ui.components.waitText
 import org.chyavorec.domain.model.Contacts
 import androidx.compose.foundation.layout.imePadding
@@ -125,13 +126,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                 // Без връзка (или сървърът не отговаря) — не е ясно дали входът е включен:
                 // „Опитай отново“, а при връщане на връзката се пита само (watchReconnect).
                 status is CapabilitiesStatus.Failed -> {
-                    Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
-                        Row(Modifier.padding(16.dp)) {
-                            Icon(Icons.Outlined.CloudOff, null)
-                            Spacer(Modifier.size(12.dp))
-                            Text(stringResource(R.string.login_caps_failed), style = MaterialTheme.typography.bodyMedium)
-                        }
-                    }
+                    InfoBanner(Icons.Outlined.CloudOff, stringResource(R.string.login_caps_failed))
                     Button(onClick = vm::refreshCapabilities, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
                         Icon(Icons.Outlined.Refresh, null); Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.action_retry))
                     }
@@ -141,13 +136,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                 c == null -> ChLoadingIndicator()
                 !c.login -> {
                     // Няма онлайн вход в InvLib — НЕ показваме фиктивна форма.
-                    Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
-                        Row(Modifier.padding(16.dp)) {
-                            Icon(Icons.Outlined.Info, null)
-                            Spacer(Modifier.size(12.dp))
-                            Text(notAvailableMessage(Feature.LOGIN), style = MaterialTheme.typography.bodyMedium)
-                        }
-                    }
+                    InfoBanner(Icons.Outlined.Info, notAvailableMessage(Feature.LOGIN))
                     Button(onClick = onAddCard, modifier = Modifier.fillMaxWidth()) {
                         Icon(Icons.Outlined.Badge, null); Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.card_add_manual))
                     }

@@ -47,12 +47,34 @@ class SmallTextContrastTest {
                         failures.check("$p $n pill/$bgName", c, c.copy(alpha = STATUS_PILL_ALPHA).compositeOver(bg))
                     }
                 }
+                // Датата в значката на събитие (плътна — бордо с пергамент в „Яворец“).
+                val (badge, onBadge) = paletteDateBadge(palette, dark)
+                failures.check("$p date badge", onBadge, badge)
+                // Избраният филтър (FilterChip) — в златния контейнер, като индикатора в лентата.
+                failures.check("$p selected chip", s.onPrimaryContainer, s.primaryContainer)
                 // „Просрочено“ на червената карта в „Начало“ — етикетът е в цвета на текста ѝ.
                 val err = s.errorContainer
                 failures.check("$p overdue pill/errorContainer", s.onErrorContainer, s.onErrorContainer.copy(alpha = STATUS_PILL_ALPHA).compositeOver(err))
             }
         }
         assertTrue(failures.isEmpty(), failures.joinToString("\n"))
+    }
+
+    /**
+     * Въвеждането е винаги на тъмен фон (мастило → бордо): бутонът е злато с мастило, а не
+     * основният цвят на темата — в светла тема той беше #785A10 върху бордо (1.76:1).
+     */
+    @Test fun onboardingButtonsAreReadableOnTheDarkGradient() {
+        val failures = mutableListOf<String>()
+        failures.check("button text", Brand.Ink, Brand.Gold)
+        for ((n, bg) in listOf("ink" to Brand.Ink, "burgundy" to Brand.Burgundy)) {
+            failures.check("outlined text/$n", Brand.Parchment, bg)
+            failures.check("skip/$n", Brand.GoldLight, bg)
+            // Бутонът и рамката му се различават от фона (не-текстов контраст, 3:1).
+            if (ratio(Brand.Gold, bg) < 3.0) failures += "gold/$n = ${"%.2f".format(ratio(Brand.Gold, bg))}"
+        }
+        assertTrue(failures.isEmpty(), failures.joinToString("\n"))
+        assertTrue(ratio(Brand.GoldText, Brand.Burgundy) < 3.0)
     }
 
     /** Числата от анализа (за отчета): старите стойности не минаваха, новите — да. */

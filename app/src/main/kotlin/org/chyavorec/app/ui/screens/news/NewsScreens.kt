@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.screens.news
 
 import org.chyavorec.app.ui.components.sharedBoundsKey
+import org.chyavorec.app.ui.components.appFilterChipColors
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -117,15 +118,16 @@ fun NewsListScreen(navigate: (String) -> Unit) {
                 LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     item {
                         FilterChip(ui.filter.category == null && !ui.filter.favoritesOnly, onClick = { tick(); vm.setCategory(null); vm.setFavoritesOnly(false) },
-                            label = { Text(stringResource(R.string.filter_all)) })
+                            label = { Text(stringResource(R.string.filter_all)) }, colors = appFilterChipColors())
                     }
                     item {
                         FilterChip(ui.filter.favoritesOnly, onClick = { tick(); vm.setFavoritesOnly(!ui.filter.favoritesOnly) },
                             label = { Text(stringResource(R.string.news_saved)) },
-                            leadingIcon = { Icon(Icons.Filled.Bookmark, contentDescription = null, modifier = Modifier.size(18.dp)) })
+                            leadingIcon = { Icon(Icons.Filled.Bookmark, contentDescription = null, modifier = Modifier.size(18.dp)) },
+                            colors = appFilterChipColors())
                     }
                     items(ui.categories) { c ->
-                        FilterChip(ui.filter.category == c, onClick = { tick(); vm.setCategory(if (ui.filter.category == c) null else c) }, label = { Text(c) })
+                        FilterChip(ui.filter.category == c, onClick = { tick(); vm.setCategory(if (ui.filter.category == c) null else c) }, label = { Text(c) }, colors = appFilterChipColors())
                     }
                 }
                 SyncBanner(ui.state.fromCache, ui.state.syncedAt, ui.state.refreshError)

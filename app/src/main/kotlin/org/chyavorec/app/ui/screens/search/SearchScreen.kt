@@ -65,6 +65,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.appViewModelWithState
 import org.chyavorec.app.ui.components.EmptyView
+import org.chyavorec.app.ui.components.appFilterChipColors
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.BookListItem
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
@@ -180,7 +181,7 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
                             SearchScope.EVENTS -> R.string.events_title
                             SearchScope.PAGES -> R.string.search_pages
                         }))
-                    })
+                    }, colors = appFilterChipColors())
                 }
             }
         }
