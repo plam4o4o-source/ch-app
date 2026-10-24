@@ -32,6 +32,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.Brand
+import org.chyavorec.app.ui.theme.SystemBarIcons
 
 /**
  * Кратко анимирано въведение след системния splash (≈1,2 s, само при студен старт):
@@ -40,6 +41,8 @@ import org.chyavorec.app.ui.theme.Brand
  */
 @Composable
 fun BrandIntro(onFinished: () -> Unit) {
+    // Светъл фон (крем → бяло) — тъмни икони в лентите и при тъмна тема.
+    SystemBarIcons(darkStatusBackground = false, darkNavigationBackground = false)
     val reduced = rememberReducedMotion()
     val logo = remember { Animatable(0f) }
     val ring = remember { Animatable(0f) }

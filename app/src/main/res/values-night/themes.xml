@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Chitalishte" parent="android:Theme.Material.NoActionBar">
+    <style name="Base.Theme.Chitalishte" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/brand_ink</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Theme.Chitalishte" parent="Base.Theme.Chitalishte">
+        <item name="android:navigationBarColor">@color/system_bar_scrim_dark</item>
     </style>
 
     <style name="Theme.Chitalishte.Splash" parent="Theme.SplashScreen">

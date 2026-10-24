@@ -59,6 +59,7 @@ import org.chyavorec.app.ui.components.IconPlate
 import org.chyavorec.app.ui.components.PagerDots
 import org.chyavorec.app.ui.theme.Brand
 import kotlin.math.absoluteValue
+import org.chyavorec.app.ui.theme.SystemBarIcons
 
 private data class Slide(val icon: ImageVector?, val title: Int, val text: Int)
 
@@ -75,6 +76,8 @@ private val slides = listOf(
 fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
     val pager = rememberPagerState { slides.size }
     val scope = rememberCoroutineScope()
+    // Фонът е винаги тъмен (мастило → бордо) — светли икони в лентите и при светла тема.
+    SystemBarIcons(darkStatusBackground = true, darkNavigationBackground = true)
     // Едър системен шрифт (1.3× и повече): по-малки емблема и заглавие, за да не се
     // пренасят думите по букви; текстът на слайда се превърта, вместо да се реже.
     val fontScale = LocalDensity.current.fontScale

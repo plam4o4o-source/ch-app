@@ -116,6 +116,7 @@ import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.SyncStamp
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
+import org.chyavorec.app.ui.theme.SystemBarIcons
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.data.repository.SelfCardRepository
 import org.chyavorec.domain.model.MembershipStatus
@@ -463,6 +464,8 @@ private fun SelfCardForm(
 @Composable
 fun CardFullscreen(onClose: () -> Unit) {
     SecureScreen()
+    // Белият фон (за четеца на баркода) — тъмни икони в лентите и при тъмна тема.
+    SystemBarIcons(darkStatusBackground = false, darkNavigationBackground = false)
     val vm = accountViewModel()
     val data = rememberCardData(vm)
     val context = LocalContext.current

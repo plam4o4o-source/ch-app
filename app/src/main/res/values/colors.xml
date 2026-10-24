@@ -6,4 +6,7 @@
     <color name="brand_burgundy">#FF6B1F2A</color>
     <color name="brand_cream">#FFFAF7F2</color>
     <color name="brand_parchment">#FFF5F0E8</color>
+    <!-- Полупрозрачен фон на навигационната лента на Android 8–9 (както enableEdgeToEdge). -->
+    <color name="system_bar_scrim_light">#E6FFFFFF</color>
+    <color name="system_bar_scrim_dark">#801B1B1B</color>
 </resources>

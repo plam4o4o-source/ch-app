@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -20,6 +19,8 @@ import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.ChitalishteRoot
 import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.ui.theme.ChitalishteTheme
+import org.chyavorec.app.ui.theme.EdgeToEdge
+import org.chyavorec.app.ui.theme.SystemBarsAppearance
 import org.chyavorec.app.util.AppLanguage
 import org.chyavorec.core.logFailure
 import org.chyavorec.domain.model.MessagePollPolicy
@@ -39,7 +40,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Кратък splash: държим го само докато настройките се заредят (милисекунди).
         splash.setKeepOnScreenCondition { !ready }
-        enableEdgeToEdge()
+        // От край до край без оттеглените в Android 15 API (виж EdgeToEdge).
+        EdgeToEdge.setUp(window)
         // Само при истинско стартиране — не и при пресъздаване (напр. завъртане) или при
         // отваряне от „Последни“ (Android 8–11 подава отново стария intent), иначе същото
         // известие би отваряло екрана отново и отново. Връзка, която не е била отворена
@@ -60,7 +62,9 @@ class MainActivity : ComponentActivity() {
             if (s != null) {
                 ready = true
                 ChitalishteTheme(mode = s.themeMode, dynamicColor = s.dynamicColor, style = s.themeStyle) {
-                    ChitalishteRoot(container = container, settings = s, deepLink = deepLink)
+                    SystemBarsAppearance {
+                        ChitalishteRoot(container = container, settings = s, deepLink = deepLink)
+                    }
                 }
             }
         }

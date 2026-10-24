@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 8.1–9: тъмни икони и светъл полупрозрачен фон в навигационната лента. -->
+    <style name="Theme.Chitalishte" parent="Base.Theme.Chitalishte">
+        <item name="android:navigationBarColor">@color/system_bar_scrim_light</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>
