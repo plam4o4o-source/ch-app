@@ -1,0 +1,278 @@
+#!/usr/bin/env bash
+# Проверка „от край до край“ на release build-а на емулатор (ВРЕМЕННО, клон debug/e2e-check).
+#   run.sh api29|api35 — splash/въведение/onboarding, светла/тъмна тема (и смесени),
+#   3 бутона / жестове, хоризонтално положение с изрязване; dumpsys window за прозореца.
+set -u
+PART=${1:-api35}
+PKG=org.chyavorec.app
+ACT=$PKG/.MainActivity
+SITE=https://chyavorec.org
+BOOK_URL="$SITE/elektronen-katalog?inv=399560"
+EVENTS_URL="$SITE/events"
+H_=.github/perf-check
+OUT=out/$PART; mkdir -p $OUT/shots
+SUM=$OUT/summary.txt; : > $SUM
+RX_RESULTS='[0-9]+ (results?|резултата?)'
+RX_BACK='content-desc="(Back|Назад)"'
+
+# ---------------------------------------------------------------- помощни
+a() { timeout ${T:-40} adb shell "$@"; }
+log() { echo "$*" | tee -a $SUM; }
+sec() { echo; echo "################ $* ################"; echo "## $*" >> $SUM; alive "$*"; a log -t PERFCHECK "'section: $*'"; }
+now_ms() { echo $(( $(date +%s%N) / 1000000 )); }
+alive() {
+  timeout 15 adb get-state >/dev/null 2>&1 && return 0
+  log "!!! EMULATOR GONE (at: $1)"; finish; echo "RESULT: emulator lost"; exit 1
+}
+dump() {
+  rm -f $OUT/ui.xml; a rm -f /sdcard/ui.xml
+  T=30 a uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
+  timeout 15 adb pull /sdcard/ui.xml $OUT/ui.xml >/dev/null 2>&1
+  [ -s $OUT/ui.xml ]
+}
+texts() { grep -o 'text="[^"]*"\|content-desc="[^"]*"' $OUT/ui.xml 2>/dev/null | grep -v '=""' | head -${1:-30} | tr '\n' ' '; }
+show() { if dump; then echo "--- screen: $(texts ${1:-30})"; else echo "(ui dump failed)"; fi; }
+xy() { python3 $H_/find.py $OUT/ui.xml "$@"; }
+has() { grep -qE "$1" $OUT/ui.xml 2>/dev/null; }
+tap() { dump || return 1; local p; p=$(xy "$@"); [ -n "$p" ] || { echo "not found: $*"; return 1; }; echo ">>> tap $* @ $p"; a input tap $p; }
+back() { a input keyevent KEYCODE_BACK; sleep ${1:-2}; }
+shot() {
+  mkdir -p "$(dirname "$OUT/shots/$1")"
+  a screencap -p /sdcard/s.png && timeout 30 adb pull /sdcard/s.png "$OUT/shots/$1.png" >/dev/null 2>&1 && echo "[shot] $PART/$1.png"
+}
+dims() {
+  local s r t; s=$(a wm size | tail -1 | grep -oE '[0-9]+x[0-9]+'); W=${s%x*}; H=${s#*x}
+  r=$(a settings get system user_rotation | tr -d '\r')
+  if [ "$r" = 1 ] || [ "$r" = 3 ]; then t=$W; W=$H; H=$t; fi
+}
+sw_up() { a input swipe $((W/2)) $((H*3/4)) $((W/2)) $((H/4)) ${1:-80}; }
+sw_down() { a input swipe $((W/2)) $((H/4)) $((W/2)) $((H*3/4)) ${1:-80}; }
+tablabel() {
+  case $1 in
+    home) echo '=Home|=Начало';; catalog) echo '=Catalogue|=Каталог';; my) echo '=My|=Моето';;
+    news) echo '=News|=Новини';; more) echo '=More|=Още';;
+  esac
+}
+tab() { local p; dump || return 1; p=$(xy text "$(tablabel $1)" --last); [ -n "$p" ] || { echo "tab not found: $1"; return 1; }; echo ">>> tab $1 @ $p"; a input tap $p; }
+link() { echo ">>> link $1"; a am start -W -a android.intent.action.VIEW -d "\"$1\"" -n $ACT 2>&1 | grep -E "Status|LaunchState|TotalTime|Error" | tr '\n' ' '; echo; }
+launch() { a am start -W -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n $ACT 2>&1 | grep -E "Status|LaunchState|TotalTime|WaitTime|Warning|Error"; }
+# Диалози: ново издание („По-късно“), обяснение за известията („Не сега“), въведението („Пропусни“).
+dismiss() {
+  local i p l
+  for i in 1 2 3; do
+    dump || return 0; p=""
+    # системен диалог (напр. „Pixel Launcher isn't responding“) → „Wait“
+    if has "isn.t responding|не отговаря"; then p=$(xy text '=Wait|=Изчакване'); [ -n "$p" ] && { echo ">>> system ANR dialog: $(texts 3) → Wait"; a input tap $p; sleep 3; continue; }; fi
+    for l in '=Later' '=По-късно' '=Not now' '=Не сега' '=Skip' '=Пропусни'; do
+      p=$(xy text "$l"); [ -n "$p" ] && { echo ">>> dismiss '$l'"; a input tap $p; sleep 2; break; }
+    done
+    [ -n "$p" ] || return 0
+  done
+}
+waitfor() {  # regex, лимит (s) → WAITED (ms) или -1
+  local rx="$1" lim=$2 t0; t0=$(now_ms)
+  while :; do
+    if dump && has "$rx"; then WAITED=$(( $(now_ms) - t0 )); return 0; fi
+    [ $(( $(now_ms) - t0 )) -ge $((lim * 1000)) ] && { WAITED=-1; return 1; }
+    sleep 0.3
+  done
+}
+restart() { a am force-stop $PKG; sleep 1; launch >/dev/null; sleep 4; ready; }
+# Главен екран с долна лента (или страничната в хоризонтално положение): затваря диалози и се връща назад.
+ready() {
+  local i
+  for i in 1 2 3 4 5; do
+    dismiss
+    dump && [ -n "$(xy text "$(tablabel home)" --last)" ] && [ -n "$(xy text "$(tablabel more)" --last)" ] && return 0
+    echo "(not on a tab screen: $(texts 6)) → back"; back 2
+  done
+  echo "WARN: tab bar not reached"; return 1
+}
+gfx_reset() { a dumpsys gfxinfo $PKG reset >/dev/null; }
+gfx_save() { a dumpsys gfxinfo $PKG > $OUT/gfx-$1.txt; python3 $H_/parse.py gfx $OUT/gfx-$1.txt "$1" | tee -a $SUM; }
+mem() {
+  a dumpsys meminfo $PKG > $OUT/mem-$1-raw.txt
+  python3 $H_/parse.py mem $OUT/mem-$1-raw.txt "$1 (raw)" | tee -a $SUM
+  a am send-trim-memory $PKG RUNNING_CRITICAL >/dev/null 2>&1; sleep 8
+  a dumpsys meminfo $PKG > $OUT/mem-$1.txt
+  python3 $H_/parse.py mem $OUT/mem-$1.txt "$1 (trimmed)" | tee -a $SUM
+}
+anims() { for k in window_animation_scale transition_animation_scale animator_duration_scale; do a settings put global $k $1; done; }
+no_camera() {
+  a pm revoke $PKG android.permission.CAMERA 2>/dev/null
+  a pm set-permission-flags $PKG android.permission.CAMERA user-fixed 2>/dev/null
+  a appops set $PKG CAMERA deny 2>/dev/null
+  echo "camera: $(a dumpsys package $PKG | grep -m1 'android.permission.CAMERA' | tr -s ' ')"
+}
+finish() {
+  [ -n "${LOGPID:-}" ] && kill $LOGPID 2>/dev/null
+  timeout 60 adb logcat -d -v threadtime > $OUT/logcat-dump.txt 2>/dev/null
+  local L=$OUT/logcat-all.txt
+  cat $OUT/logcat-live.txt $OUT/logcat-dump.txt 2>/dev/null | awk '!seen[$0]++' > $L
+  python3 $H_/parse.py logcat $L $PKG > $OUT/logcat-findings.txt 2>&1
+  echo "===== logcat findings ====="; cat $OUT/logcat-findings.txt | cut -c1-260
+  { echo "## logcat findings"; grep -E '^== |^app pids|events=' $OUT/logcat-findings.txt; } >> $SUM
+  rm -f $OUT/ui.xml
+  echo "===== SUMMARY ($PART) ====="; cat $SUM
+}
+setup() {
+  log "APK size: $(stat -c %s app.apk) bytes"
+  unzip -l app.apk | grep -E "\.so$|classes.*\.dex|resources.arsc" | awk '{print $1, $4}' > $OUT/apk-contents.txt
+  unzip -l app.apk | tail -1 >> $OUT/apk-contents.txt
+  log "APK entries: $(tail -1 $OUT/apk-contents.txt)"
+  T=180 a getprop ro.build.version.release; a wm size; a wm density
+  timeout 180 adb install -r app.apk || { echo "RESULT: install failed"; exit 1; }
+  a pm grant $PKG android.permission.POST_NOTIFICATIONS || true
+  no_camera
+  a settings put system accelerometer_rotation 0; a settings put system user_rotation 0
+  a settings put system font_scale 1.0; a cmd uimode night no
+  adb logcat -G 16M >/dev/null 2>&1; adb logcat -c
+  adb logcat -v threadtime > $OUT/logcat-live.txt 2>&1 & LOGPID=$!
+  dims; log "screen ${W}x${H}"
+  # системата още се успокоява след зареждането (Pixel Launcher понякога дава ANR диалог)
+  sleep 25; a input keyevent KEYCODE_HOME; sleep 2; dismiss
+}
+
+
+# ================================================================= ОТ КРАЙ ДО КРАЙ
+NAVPFX=com.android.internal.systemui.navbar
+CUTPFX=com.android.internal.display.cutout.emulation
+ov() { a cmd overlay list | tr -d '\r' | grep -E "$1" | tr -s ' ' | tr '\n' ' '; }
+navmode() {  # gestural | threebutton
+  a cmd overlay enable-exclusive --category $NAVPFX.$1 >/dev/null 2>&1 || a cmd overlay enable $NAVPFX.$1
+  local o; for o in gestural threebutton twobutton; do [ $o = $1 ] || a cmd overlay disable $NAVPFX.$o >/dev/null 2>&1; done
+  sleep 8
+  log "NAV $1: navigation_mode=$(a settings get secure navigation_mode | tr -d '\r'); overlays: $(ov 'navbar')"
+  dismiss
+}
+cutout() {
+  log "cutout before: $(a dumpsys window displays | tr -d '\r' | grep -m2 -oiE 'cutout=[^ ]+( [^ ]+){0,6}' | tr '\n' ' ')"
+  log "cutout overlays: $(ov 'cutout')"
+  local c
+  for c in tall hole corner double; do a cmd overlay list | tr -d '\r' | grep -qE "$CUTPFX\.$c\$" && break; c=""; done
+  if [ -n "$c" ]; then
+    a cmd overlay enable-exclusive --category $CUTPFX.$c >/dev/null 2>&1 || a cmd overlay enable $CUTPFX.$c
+    sleep 8; log "CUTOUT enabled: $c; overlays: $(ov 'cutout')"
+  else log "CUTOUT: no emulation overlay"; fi
+  log "cutout after: $(a dumpsys window displays | tr -d '\r' | grep -m2 -oiE 'cutout=[^ ]+( [^ ]+){0,6}' | tr '\n' ' ')"
+  a input keyevent KEYCODE_HOME; sleep 3; dismiss
+}
+# Прозорецът на приложението: флагове, изрязване, светли/тъмни ленти.
+wdump() {
+  local d=$OUT/window; mkdir -p $d
+  a dumpsys window windows | tr -d '\r' > $d/raw-$1.txt
+  awk -v pkg="$PKG/" '/^  Window #/{on = index($0, pkg) > 0} on' $d/raw-$1.txt > $d/$1.txt
+  { echo "-- dumpsys window | grep -iE navigationBarColor|statusBarColor|layoutInDisplayCutoutMode|LIGHT_STATUS|APPEARANCE"
+    grep -iE "navigationBarColor|statusBarColor|layoutInDisplayCutoutMode|LIGHT_STATUS|APPEARANCE" $d/raw-$1.txt | cut -c1-400 | head -30
+    echo "-- dumpsys activity top (decor bar backgrounds)"
+    a dumpsys activity top | tr -d '\r' | grep -E "statusBarBackground|navigationBarBackground|DecorView" | head -8
+  } > $d/$1-grep.txt
+  rm -f $d/raw-$1.txt
+  log "WIN $1: $(python3 $H_/parse.py win $d/$1.txt)"
+}
+anr_wait() {
+  local p
+  dump && has "isn.t responding|не отговаря" && { p=$(xy text '=Wait|=Изчакване'); [ -n "$p" ] && { echo ">>> ANR dialog → Wait"; a input tap $p; sleep 3; }; }
+  return 0
+}
+open_settings() {
+  local i p=""
+  tab more || return 1; sleep 3
+  for i in 1 2 3 4; do dump; p=$(xy text '=Settings|=Настройки'); [ -n "$p" ] && break; sw_up 300; sleep 1; done
+  [ -n "$p" ] || { log "WARN: Settings not found"; return 1; }
+  a input tap $p; sleep 3
+}
+set_theme() {  # $1 — етикет ('=Light|=Светла'), $2 — име на снимката на настройките (по избор)
+  dims
+  open_settings || { ready; return 1; }
+  tap text '=Theme|=Тема' || { back; ready; return 1; }; sleep 2; show 8
+  tap text "$1" --last || { log "WARN: theme option $1 not found"; back; back; ready; return 1; }
+  sleep 4; anr_wait; show 12
+  log "THEME -> $1 (settings now shows: $(texts 14 | grep -oE '(System default|Light|Dark|Както системата|Светла|Тъмна)' | head -1))"
+  [ -n "${2:-}" ] && shot "$2"
+  back 2; ready
+}
+home() { tab home; sleep 1; tab home; sleep 3; }
+catalog() { tab catalog; waitfor "$RX_RESULTS" ${1:-90} || log "WARN: no catalogue results"; sleep 2; }
+
+part_e2e() {
+  sec "0. Device"
+  log "android $(a getprop ro.build.version.release | tr -d '\r') sdk $(a getprop ro.build.version.sdk | tr -d '\r'); $(a wm size | tr -d '\r' | tail -1); $(a wm density | tr -d '\r' | tail -1)"
+  navmode gestural
+  cutout
+  dims; log "screen ${W}x${H}"
+
+  sec "1. Fresh install: splash, intro, first onboarding page (animations ON)"
+  anims 1; sleep 1
+  a am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n $ACT >/dev/null
+  for i in 1 2 3 4 5 6 7 8; do timeout 20 adb exec-out screencap -p > $OUT/shots/01-intro-$i.png; sleep 0.1; done
+  ls -l $OUT/shots/01-intro-*.png | awk '{print $5, $9}'
+  anr_wait
+  waitfor 'text="(Skip|Пропусни)"' 40 || log "WARN: onboarding Skip not seen"
+  sleep 2; show 12; shot 02-onboarding-1; wdump onboarding
+  anims 0
+
+  sec "2. Skip onboarding; Home light"
+  tap text '=Skip|=Пропусни'; sleep 4
+  dismiss; ready; home; show 10; shot 03-home-light; wdump home-light
+  sw_up 300; sleep 2; shot 03b-home-light-scrolled; sw_down 300; sleep 1
+  catalog 150; shot 03c-catalog-light; wdump catalog-light
+
+  sec "3. System dark (app theme = System)"
+  a cmd uimode night yes; sleep 5; anr_wait; dismiss
+  home; shot 04-home-dark; wdump home-dark
+  catalog; shot 05-catalog-dark; wdump catalog-dark
+  sw_up 300; sleep 2; shot 05b-catalog-dark-scrolled
+
+  sec "4. App Light in a dark system"
+  set_theme '=Light|=Светла' 06a-settings-applight-sysdark
+  home; shot 06-home-applight-sysdark; wdump home-applight-sysdark
+  catalog; shot 06b-catalog-applight-sysdark
+
+  sec "4b. App Dark in a light system"
+  a cmd uimode night no; sleep 5; anr_wait; dismiss
+  set_theme '=Dark|=Тъмна' 07a-settings-appdark-syslight
+  home; shot 07-home-appdark-syslight; wdump home-appdark-syslight
+  set_theme '=System default|=Както системата'
+
+  sec "5. 3-button navigation"
+  navmode threebutton; dims
+  home; shot 08-home-3btn-light; wdump home-3btn-light
+  sw_up 300; sleep 2; shot 08b-home-3btn-light-scrolled; sw_down 300; sleep 1
+  a cmd uimode night yes; sleep 5; anr_wait; dismiss
+  home; shot 09-home-3btn-dark; wdump home-3btn-dark
+  sw_up 300; sleep 2; shot 09b-home-3btn-dark-scrolled; sw_down 300; sleep 1
+  catalog; shot 09c-catalog-3btn-dark
+  a cmd uimode night no; sleep 5; anr_wait; dismiss
+
+  sec "6. Back to gesture navigation"
+  navmode gestural; dims
+  home; shot 10-home-gesture-light; wdump home-gesture-light
+  sw_up 300; sleep 2; shot 10b-home-gesture-light-scrolled; sw_down 300; sleep 1
+
+  sec "7. Landscape with 3-button navigation (cutout)"
+  navmode threebutton
+  a settings put system user_rotation 1; sleep 4; dims; anr_wait
+  home; show 10; shot 11-land90-home; wdump land90-home
+  catalog; shot 12-land90-catalog
+  a settings put system user_rotation 3; sleep 4; dims; anr_wait
+  catalog 30; shot 13-land270-catalog; wdump land270-catalog
+  home; shot 14-land270-home
+  a cmd uimode night yes; sleep 5; anr_wait; dismiss
+  home; shot 15-land270-home-dark
+  a settings put system user_rotation 1; sleep 4; dims
+  home; shot 16-land90-home-dark
+  a cmd uimode night no; a settings put system user_rotation 0; sleep 4; dims
+  navmode gestural
+}
+
+# ================================================================= main
+setup
+part_e2e
+alive "end"
+echo "## COMPLETE" >> $SUM
+finish
+FAIL=0
+grep -q "FATAL EXCEPTION" $OUT/logcat-live.txt && grep -A3 "FATAL EXCEPTION" $OUT/logcat-live.txt | grep -q "$PKG" && FAIL=1
+[ $FAIL = 0 ] && echo "RESULT: OK" || echo "RESULT: crash in app"
+exit 0
