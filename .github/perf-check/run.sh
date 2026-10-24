@@ -212,15 +212,28 @@ set_theme() {  # $1 — етикет ('=Light|=Светла'), $2 — име н�
   [ -n "${2:-}" ] && shot "$2"
   back 2; ready
 }
-# Системната тъмна тема; на Android 10 смяната се прилага след изгасяне/светване на екрана.
+# Системната тъмна тема. На Android 10 `cmd uimode night` от shell не действа (заключено) —
+# там превключвателят „Dark theme“ в Настройки › Дисплей.
 night() {  # yes | no
-  a cmd uimode night $1 >/dev/null; sleep 4
   if [ "$SDK" -lt 30 ]; then
-    a input keyevent KEYCODE_SLEEP; sleep 3; a input keyevent KEYCODE_WAKEUP; sleep 2
-    a wm dismiss-keyguard >/dev/null 2>&1; a input keyevent 82; sleep 3
+    local cur; cur=$(a settings get secure ui_night_mode | tr -d '\r')
+    if { [ $1 = yes ] && [ "$cur" != 2 ]; } || { [ $1 = no ] && [ "$cur" = 2 ]; }; then
+      a am start -a android.settings.DISPLAY_SETTINGS >/dev/null; sleep 4
+      tap text '=Dark theme|=Тъмна тема' || debug_ui darktheme
+      sleep 3; launch >/dev/null; sleep 4
+    fi
+  else
+    a cmd uimode night $1 >/dev/null; sleep 4
   fi
   anr_wait; dismiss
-  log "NIGHT $1: $(a cmd uimode night | tr -d '\r' | tr '\n' ' '); global config: $(a dumpsys activity configuration 2>/dev/null | tr -d '\r' | grep -m1 -oE 'mGlobalConfig[^ ]*|config: \{[^}]*' | grep -oE '\bnight\b|nonight' | head -1)"
+  log "NIGHT $1: $(a cmd uimode night | tr -d '\r' | tr '\n' ' '); ui_night_mode=$(a settings get secure ui_night_mode | tr -d '\r')"
+}
+# Завъртане: `wm user-rotation lock` (Android 11+), иначе настройката user_rotation.
+rot() {
+  a settings put system user_rotation $1
+  a wm user-rotation lock $1 >/dev/null 2>&1
+  sleep 4; dims; anr_wait
+  log "ROTATION $1: $(a dumpsys window displays | tr -d '\r' | grep -m1 -oE 'mRotation=[^ ]+|mCurrentRotation=[^ ]+') $(a dumpsys window displays | tr -d '\r' | grep -m1 -oE 'cur=[0-9]+x[0-9]+')"
 }
 scrolled() {  # $1 — име; съдържанието под лентите
   sw_up 300; sleep 2; shot "$1"; sw_down 300; sleep 1
@@ -238,13 +251,13 @@ part_e2e() {
   anims 1; sleep 1
   # Видео на първите секунди (screenrecord), от което се вадят кадри; освен това — поредица снимки.
   a rm -f /sdcard/intro.mp4
-  timeout 30 adb shell screenrecord --time-limit 8 --size 540x1200 --bit-rate 6000000 /sdcard/intro.mp4 > $OUT/screenrecord.txt 2>&1 & REC=$!
+  timeout 30 adb shell screenrecord --time-limit 15 --size 540x1200 --bit-rate 6000000 /sdcard/intro.mp4 > $OUT/screenrecord.txt 2>&1 & REC=$!
   sleep 1.5
   a am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n $ACT >/dev/null
   wait $REC; sleep 1
   timeout 60 adb pull /sdcard/intro.mp4 $OUT/intro.mp4 >/dev/null 2>&1
   if [ -s $OUT/intro.mp4 ] && command -v ffmpeg >/dev/null; then
-    ffmpeg -loglevel error -i $OUT/intro.mp4 -vf fps=3 $OUT/shots/01-intro-%02d.png
+    ffmpeg -loglevel error -i $OUT/intro.mp4 -vf fps=2 $OUT/shots/01-intro-%02d.png
     log "intro video: $(stat -c %s $OUT/intro.mp4) bytes, frames: $(ls $OUT/shots/01-intro-*.png 2>/dev/null | wc -l)"
   else
     log "intro video: size=$(stat -c %s $OUT/intro.mp4 2>/dev/null) ffmpeg=$(command -v ffmpeg) ($(head -c 300 $OUT/screenrecord.txt))"
@@ -291,17 +304,17 @@ part_e2e() {
 
   sec "7. Landscape with 3-button navigation (cutout)"
   navmode threebutton
-  a settings put system user_rotation 1; sleep 4; dims; anr_wait
+  rot 1
   home; show 10; shot 11-land90-home; wdump land90-home
   catalog; shot 12-land90-catalog
-  a settings put system user_rotation 3; sleep 4; dims; anr_wait
+  rot 3
   catalog 30; shot 13-land270-catalog; wdump land270-catalog
   home; shot 14-land270-home
   night yes
   home; shot 15-land270-home-dark
-  a settings put system user_rotation 1; sleep 4; dims
+  rot 1
   home; shot 16-land90-home-dark
-  night no; a settings put system user_rotation 0; sleep 4; dims
+  night no; rot 0
 
   # Накрая: при първите два опита емулаторът с API 35 падна при плъзгане по „Начало“ — тук не губи нищо.
   sec "8. Scrolled content under the bars (3-button, then gestures)"
