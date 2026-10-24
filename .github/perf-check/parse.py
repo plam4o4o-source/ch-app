@@ -30,6 +30,10 @@ if cmd == 'win':
     m = re.search(r'Window #\d+ (Window\{[^}]*\})', text)
     if m:
         out.append(m.group(1))
+    m = re.search(r'mLastReportedConfiguration=\{([^}]*)', text)
+    if m:
+        out.append('config=' + ('night' if re.search(r'(?<![a-z])night(?![a-z])', m.group(1)) else 'notnight')
+                   + ' ' + ('land' if ' land ' in m.group(1) else 'port'))
     m = re.search(r'layoutInDisplayCutoutMode=(\w+)', text)
     out.append(f"cutoutMode={m.group(1) if m else '(default, not printed)'}")
     for key in ('apr', 'sysui', 'vsysui', 'sysuifl', 'bhv', 'fitTypes', 'fitSides', 'fl', 'pfl'):

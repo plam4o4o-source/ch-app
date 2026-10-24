@@ -87,7 +87,8 @@ ready() {
   local i
   for i in 1 2 3 4 5 6; do
     dismiss
-    dump && [ -n "$(xy text "$(tablabel home)" --last)" ] && [ -n "$(xy text "$(tablabel more)" --last)" ] && return 0
+    # Само наличието на етикетите: на Android 10 uiautomator дава на етикетите в лентата празни граници.
+    dump && has 'text="(Home|Начало)"' && has 'text="(More|Още)"' && return 0
     if ! has "package=\"$PKG\""; then
       echo "(app not in front: $(texts 6)) → relaunch"; launch >/dev/null; sleep 5; continue
     fi
@@ -188,11 +189,17 @@ anr_wait() {
   dump && has "isn.t responding|не отговаря" && { p=$(xy text '=Wait|=Изчакване'); [ -n "$p" ] && { echo ">>> ANR dialog → Wait"; a input tap $p; sleep 3; }; }
   return 0
 }
+# Разделите — по връзка (App Link с изричен компонент), не с докосване на лентата: на Android 10
+# uiautomator дава на етикетите в лентата празни/изместени граници, а в хоризонтално положение е rail.
+home() { link "$SITE/" >/dev/null; sleep 4; dismiss; }
+catalog() { link "$SITE/elektronen-katalog" >/dev/null; waitfor "$RX_RESULTS" ${1:-90} || log "WARN: no catalogue results"; sleep 2; }
+# „Още“: /policy отваря „Поверителност“ над раздела „Още“; „Назад“ оставя самия раздел.
+more() { link "$SITE/policy" >/dev/null; sleep 4; dismiss; back 2; }
 open_settings() {
   local i p=""
-  tab more || return 1; sleep 3
-  for i in 1 2 3 4; do dump; p=$(xy text '=Settings|=Настройки'); [ -n "$p" ] && break; sw_up 300; sleep 1; done
-  [ -n "$p" ] || { log "WARN: Settings not found"; return 1; }
+  more
+  for i in 1 2 3 4 5; do dump; p=$(xy text '=Settings|=Настройки'); [ -n "$p" ] && break; sw_up 300; sleep 1; done
+  [ -n "$p" ] || { log "WARN: Settings not found"; debug_ui settings; return 1; }
   a input tap $p; sleep 3
 }
 set_theme() {  # $1 — етикет ('=Light|=Светла'), $2 — име на снимката на настройките (по избор)
@@ -205,21 +212,33 @@ set_theme() {  # $1 — етикет ('=Light|=Светла'), $2 — име н�
   [ -n "${2:-}" ] && shot "$2"
   back 2; ready
 }
-home() { tab home; sleep 1; tab home; sleep 3; }
-catalog() { tab catalog; waitfor "$RX_RESULTS" ${1:-90} || log "WARN: no catalogue results"; sleep 2; }
+# Системната тъмна тема; на Android 10 смяната се прилага след изгасяне/светване на екрана.
+night() {  # yes | no
+  a cmd uimode night $1 >/dev/null; sleep 4
+  if [ "$SDK" -lt 30 ]; then
+    a input keyevent KEYCODE_SLEEP; sleep 3; a input keyevent KEYCODE_WAKEUP; sleep 2
+    a wm dismiss-keyguard >/dev/null 2>&1; a input keyevent 82; sleep 3
+  fi
+  anr_wait; dismiss
+  log "NIGHT $1: $(a cmd uimode night | tr -d '\r' | tr '\n' ' '); global config: $(a dumpsys activity configuration 2>/dev/null | tr -d '\r' | grep -m1 -oE 'mGlobalConfig[^ ]*|config: \{[^}]*' | grep -oE '\bnight\b|nonight' | head -1)"
+}
+scrolled() {  # $1 — име; съдържанието под лентите
+  sw_up 300; sleep 2; shot "$1"; sw_down 300; sleep 1
+}
 
 part_e2e() {
   sec "0. Device"
-  log "android $(a getprop ro.build.version.release | tr -d '\r') sdk $(a getprop ro.build.version.sdk | tr -d '\r'); $(a wm size | tr -d '\r' | tail -1); $(a wm density | tr -d '\r' | tail -1)"
+  SDK=$(a getprop ro.build.version.sdk | tr -d '\r')
+  log "android $(a getprop ro.build.version.release | tr -d '\r') sdk $SDK; $(a wm size | tr -d '\r' | tail -1); $(a wm density | tr -d '\r' | tail -1)"
   navmode gestural
   cutout
   dims; log "screen ${W}x${H}"
 
   sec "1. Fresh install: splash, intro, first onboarding page (animations ON)"
   anims 1; sleep 1
-  # Видео на първите секунди (screenrecord), от което се вадят кадри; иначе — поредица снимки.
+  # Видео на първите секунди (screenrecord), от което се вадят кадри; освен това — поредица снимки.
   a rm -f /sdcard/intro.mp4
-  timeout 30 adb shell screenrecord --time-limit 9 --size 540x1200 --bit-rate 6000000 /sdcard/intro.mp4 > $OUT/screenrecord.txt 2>&1 & REC=$!
+  timeout 30 adb shell screenrecord --time-limit 8 --size 540x1200 --bit-rate 6000000 /sdcard/intro.mp4 > $OUT/screenrecord.txt 2>&1 & REC=$!
   sleep 1.5
   a am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n $ACT >/dev/null
   wait $REC; sleep 1
@@ -228,8 +247,7 @@ part_e2e() {
     ffmpeg -loglevel error -i $OUT/intro.mp4 -vf fps=3 $OUT/shots/01-intro-%02d.png
     log "intro video: $(stat -c %s $OUT/intro.mp4) bytes, frames: $(ls $OUT/shots/01-intro-*.png 2>/dev/null | wc -l)"
   else
-    log "intro video failed ($(head -c 300 $OUT/screenrecord.txt)); burst screenshots instead"
-    for i in 1 2 3 4 5 6; do timeout 20 adb exec-out screencap -p > $OUT/shots/01-intro-burst-$i.png; done
+    log "intro video: size=$(stat -c %s $OUT/intro.mp4 2>/dev/null) ffmpeg=$(command -v ffmpeg) ($(head -c 300 $OUT/screenrecord.txt))"
   fi
   anr_wait
   waitfor 'text="(Skip|Пропусни)"' 40 || log "WARN: onboarding Skip not seen"
@@ -239,14 +257,12 @@ part_e2e() {
   sec "2. Skip onboarding; Home light"
   tap text '=Skip|=Пропусни'; sleep 4
   dismiss; ready; home; show 10; shot 03-home-light; wdump home-light
-  sw_up 300; sleep 2; shot 03b-home-light-scrolled; sw_down 300; sleep 1
   catalog 150; shot 03c-catalog-light; wdump catalog-light
 
   sec "3. System dark (app theme = System)"
-  a cmd uimode night yes; sleep 5; anr_wait; dismiss
+  night yes
   home; shot 04-home-dark; wdump home-dark
   catalog; shot 05-catalog-dark; wdump catalog-dark
-  sw_up 300; sleep 2; shot 05b-catalog-dark-scrolled
 
   sec "4. App Light in a dark system"
   set_theme '=Light|=Светла' 06a-settings-applight-sysdark
@@ -254,25 +270,24 @@ part_e2e() {
   catalog; shot 06b-catalog-applight-sysdark
 
   sec "4b. App Dark in a light system"
-  a cmd uimode night no; sleep 5; anr_wait; dismiss
+  night no
   set_theme '=Dark|=Тъмна' 07a-settings-appdark-syslight
   home; shot 07-home-appdark-syslight; wdump home-appdark-syslight
+  catalog; shot 07b-catalog-appdark-syslight
   set_theme '=System default|=Както системата'
 
   sec "5. 3-button navigation"
   navmode threebutton; dims
   home; shot 08-home-3btn-light; wdump home-3btn-light
-  sw_up 300; sleep 2; shot 08b-home-3btn-light-scrolled; sw_down 300; sleep 1
-  a cmd uimode night yes; sleep 5; anr_wait; dismiss
+  catalog; shot 08c-catalog-3btn-light
+  night yes
   home; shot 09-home-3btn-dark; wdump home-3btn-dark
-  sw_up 300; sleep 2; shot 09b-home-3btn-dark-scrolled; sw_down 300; sleep 1
   catalog; shot 09c-catalog-3btn-dark
-  a cmd uimode night no; sleep 5; anr_wait; dismiss
+  night no
 
   sec "6. Back to gesture navigation"
   navmode gestural; dims
   home; shot 10-home-gesture-light; wdump home-gesture-light
-  sw_up 300; sleep 2; shot 10b-home-gesture-light-scrolled; sw_down 300; sleep 1
 
   sec "7. Landscape with 3-button navigation (cutout)"
   navmode threebutton
@@ -282,13 +297,23 @@ part_e2e() {
   a settings put system user_rotation 3; sleep 4; dims; anr_wait
   catalog 30; shot 13-land270-catalog; wdump land270-catalog
   home; shot 14-land270-home
-  a cmd uimode night yes; sleep 5; anr_wait; dismiss
+  night yes
   home; shot 15-land270-home-dark
   a settings put system user_rotation 1; sleep 4; dims
   home; shot 16-land90-home-dark
-  a cmd uimode night no; a settings put system user_rotation 0; sleep 4; dims
-  navmode gestural
+  night no; a settings put system user_rotation 0; sleep 4; dims
+
+  # Накрая: при първите два опита емулаторът с API 35 падна при плъзгане по „Начало“ — тук не губи нищо.
+  sec "8. Scrolled content under the bars (3-button, then gestures)"
+  home; scrolled 17-home-3btn-light-scrolled
+  catalog 30; scrolled 18-catalog-3btn-light-scrolled
+  navmode gestural; dims
+  home; scrolled 19-home-gesture-light-scrolled
+  night yes
+  home; scrolled 20-home-gesture-dark-scrolled
+  night no
 }
+
 
 # ================================================================= main
 setup
