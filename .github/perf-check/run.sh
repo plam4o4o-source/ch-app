@@ -2,8 +2,11 @@
 # Проверка „от край до край“ на release build-а на емулатор (ВРЕМЕННО, клон debug/e2e-check).
 #   run.sh api29|api35 — splash/въведение/onboarding, светла/тъмна тема (и смесени),
 #   3 бутона / жестове, хоризонтално положение с изрязване; dumpsys window за прозореца.
+#   run.sh NAME swipe — само плъзгания („Още“, „Каталог“, „Начало“) с наблюдение на хоста:
+#   дали емулаторът с API 35 пада при плъзгане по „Начало“ (бисекция по версии на приложението).
 set -u
 PART=${1:-api35}
+MODE=${2:-e2e}
 PKG=org.chyavorec.app
 ACT=$PKG/.MainActivity
 SITE=https://chyavorec.org
@@ -22,7 +25,28 @@ sec() { echo; echo "################ $* ################"; echo "## $*" >> $SUM;
 now_ms() { echo $(( $(date +%s%N) / 1000000 )); }
 alive() {
   timeout 15 adb get-state >/dev/null 2>&1 && return 0
-  log "!!! EMULATOR GONE (at: $1)"; finish; echo "RESULT: emulator lost"; exit 1
+  log "!!! EMULATOR GONE (at: $1)"; host_evidence; finish; echo "RESULT: emulator lost"; exit 1
+}
+# Хостът (runner-ът): памет, процесът на емулатора, ядрото (OOM killer, KVM), сривове на emulator/qemu.
+host_mon() {
+  while :; do
+    echo "$(date +%T) used/avail_MB=$(free -m | awk 'NR==2{print $3"/"$7}') swap_MB=$(free -m | awk 'NR==3{print $3}') qemu_rss_MB=$(ps -eo rss=,comm= | awk '/qemu/{s+=$1} END{print int(s/1024)}') load=$(cut -d' ' -f1 /proc/loadavg)"
+    sleep 2
+  done > $OUT/host-mon.txt 2>&1 &
+  HOSTMON=$!
+}
+host_evidence() {
+  [ -n "${HOSTMON:-}" ] && kill $HOSTMON 2>/dev/null
+  { echo "== $(date +%T) free -m"; free -m
+    echo "== emulator / qemu processes"; ps -eo pid,etime,rss,stat,args | grep -iE "qemu|emulator|crashpad" | grep -v grep | cut -c1-300
+    echo "== last host-mon samples"; tail -15 $OUT/host-mon.txt
+    echo "== host dmesg (tail)"; sudo dmesg -T 2>&1 | tail -80
+    echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T 2>&1 | grep -iE "oom|killed process|kvm|segfault|qemu|emulator|general protection|trap" | tail -30
+    echo "== emulator temp dirs / crash dumps"; ls -la /tmp/android-${USER:-runner} /tmp/android-*/ ~/.android 2>&1 | head -60
+    find /tmp ~/.android -newer app.apk \( -name '*.dmp' -o -name '*crash*' -o -name '*.log' \) 2>/dev/null | head -20
+    for f in $(find /tmp ~/.android -newer app.apk -name '*.log' 2>/dev/null | head -5); do echo "== tail $f"; tail -40 "$f"; done
+  } > $OUT/host-evidence.txt 2>&1
+  log "host evidence: $(grep -ciE 'oom|killed process' $OUT/host-evidence.txt) oom lines; qemu procs: $(ps -eo comm= | grep -c qemu); last mon: $(tail -1 $OUT/host-mon.txt)"
 }
 dump() {
   rm -f $OUT/ui.xml; a rm -f /sdcard/ui.xml
@@ -126,7 +150,13 @@ finish() {
   echo "===== SUMMARY ($PART) ====="; cat $SUM
 }
 setup() {
-  log "APK size: $(stat -c %s app.apk) bytes"
+  host_mon
+  log "APK: $(cat apk-ref.txt 2>/dev/null) size $(stat -c %s app.apk) bytes; mode $MODE"
+  log "emulator: $(cat emu-opts.txt 2>/dev/null); host: $(nproc) cpu, $(free -m | awk 'NR==2{print $2}') MB RAM"
+  # Ядрото на госта (adb root на google_apis) — следи до последния ред преди евентуален срив.
+  timeout 30 adb root >/dev/null 2>&1; timeout 60 adb wait-for-device; sleep 3
+  (timeout 3000 adb shell dmesg -w > $OUT/guest-dmesg.txt 2>&1 &)
+  log "gles: $(a getprop ro.hardware.egl | tr -d '\r') $(a getprop ro.boot.hardware.egl | tr -d '\r') $(a dumpsys SurfaceFlinger 2>/dev/null | tr -d '\r' | grep -m1 -E 'GLES:' | cut -c1-160)"
   unzip -l app.apk | grep -E "\.so$|classes.*\.dex|resources.arsc" | awk '{print $1, $4}' > $OUT/apk-contents.txt
   unzip -l app.apk | tail -1 >> $OUT/apk-contents.txt
   log "APK entries: $(tail -1 $OUT/apk-contents.txt)"
@@ -324,22 +354,77 @@ part_e2e() {
   home; shot 16-land90-home-dark
   night no; rot 0
 
-  # Накрая: при първите два опита емулаторът с API 35 падна при плъзгане по „Начало“ — тук не губи нищо.
-  sec "8. Scrolled content under the bars (3-button, then gestures)"
+  # Накрая (плъзгане по „Начало“): в първия кръг емулаторът с API 35 падаше на първото плъзгане.
+  sec "8. Pull-to-refresh on Home (leaf indicator)"
+  ptr ptr-home-light
+  sec "9. Scrolled content under the bars (3-button, then gestures)"
   home; scrolled 17-home-3btn-light-scrolled
   catalog 30; scrolled 18-catalog-3btn-light-scrolled
   navmode gestural; dims
   home; scrolled 19-home-gesture-light-scrolled
   night yes
   home; scrolled 20-home-gesture-dark-scrolled
+  ptr ptr-home-dark
   night no
+}
+
+# Дърпане за опресняване: бавно частично дърпане отвъд прага и пускане; видео (кадри) и снимка по средата.
+ptr() {  # $1 — име
+  local d=$OUT/shots/$1; mkdir -p $d
+  home; anims 1; sleep 3
+  a rm -f /sdcard/ptr.mp4
+  timeout 40 adb shell screenrecord --time-limit 12 --size 540x1200 --bit-rate 6000000 /sdcard/ptr.mp4 > $OUT/screenrecord-$1.txt 2>&1 & local rec=$!
+  sleep 1.5
+  # около 1/3 от екрана за 4 s — с вложеното превъртане (×0.5) това е над прага от 80 dp
+  a input swipe $((W/2)) $((H*3/10)) $((W/2)) $((H*65/100)) 4000 & local sw=$!
+  sleep 2.5; timeout 20 adb exec-out screencap -p > $d/mid-pull.png
+  wait $sw; sleep 0.4; timeout 20 adb exec-out screencap -p > $d/after-release.png
+  sleep 1; timeout 20 adb exec-out screencap -p > $d/spinning.png
+  wait $rec; sleep 1
+  timeout 60 adb pull /sdcard/ptr.mp4 $OUT/$1.mp4 >/dev/null 2>&1
+  if [ -s $OUT/$1.mp4 ] && command -v ffmpeg >/dev/null; then
+    ffmpeg -loglevel error -i $OUT/$1.mp4 -vf fps=4 $d/f-%02d.png
+    log "PTR $1: video $(stat -c %s $OUT/$1.mp4) bytes, $(ls $d/f-*.png | wc -l) frames"
+  else log "PTR $1: no video ($(head -c 200 $OUT/screenrecord-$1.txt))"; fi
+  anims 0; sleep 3
+}
+
+# ================================================================= САМО ПЛЪЗГАНИЯ (API 35)
+swipes() {  # $1 — етикет, $2 — брой
+  local i
+  for i in $(seq 1 $2); do
+    if [ $((i % 2)) = 1 ]; then sw_up 300; else sw_down 300; fi
+    sleep 2; alive "$1 swipe $i"
+    log "SWIPE $1 #$i ok"
+    case $i in 1|2|6) shot swipe/$1-$i;; esac
+  done
+}
+part_swipe() {
+  sec "S0. Device"
+  SDK=$(a getprop ro.build.version.sdk | tr -d '\r')
+  log "android $(a getprop ro.build.version.release | tr -d '\r') sdk $SDK"
+  dims; log "screen ${W}x${H}"
+  sec "S1. First launch, skip onboarding, Home"
+  launch | tr '\n' ' '; echo; sleep 8; dismiss; ready; home; show 10; shot swipe/00-home
+  sec "S2. Swipes on More"
+  more; sleep 2; swipes more 3
+  sec "S3. Swipes on Catalogue"
+  catalog 120; swipes catalog 3
+  sec "S4. Swipes on Home"
+  home; sleep 20; swipes home 12
+  log "HOME SWIPES SURVIVED"
+  sec "S5. Scrolled Home light/dark and pull-to-refresh"
+  home; scrolled swipe/home-light-scrolled
+  night yes; home; scrolled swipe/home-dark-scrolled
+  ptr ptr-home-dark; night no
 }
 
 
 # ================================================================= main
 setup
-part_e2e
+case $MODE in swipe) part_swipe;; *) part_e2e;; esac
 alive "end"
+[ -n "${HOSTMON:-}" ] && kill $HOSTMON 2>/dev/null
 echo "## COMPLETE" >> $SUM
 finish
 FAIL=0

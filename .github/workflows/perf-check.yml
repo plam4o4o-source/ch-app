@@ -1,7 +1,8 @@
 name: Edge-to-edge emulator check (temporary)
-# ВРЕМЕННО: проверка „от край до край“ на release build-а на емулатор (API 29 и 35).
-# Резултатите (снимки, dumpsys window, logcat) се публикуват в клона emulator-results-e2e
-# (orphan, force-push).
+# ВРЕМЕННО: проверка „от край до край“ на release build-а на емулатор (API 29 и 35) и бисекция
+# на загубата на емулатора с API 35 при плъзгане по „Начало“ (по версии на приложението и GPU).
+# Резултатите се публикуват в клона emulator-results-e2e, папка run2/ (orphan, force-push;
+# останалото съдържание на клона се запазва).
 on:
   push:
     branches: [debug/e2e-check]
@@ -11,8 +12,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: head            # debug/e2e-check (= 09278c0 + проверката)
+            ref: ""
+          - name: v1.2.23         # ce4af47
+            ref: ce4af47
+          - name: v1.2.24         # f646270 (origin/main)
+            ref: f646270
+          - name: e2e-6278bd9     # първата версия без enableEdgeToEdge()
+            ref: 6278bd9
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check out the app version
+        if: matrix.ref != ''
+        run: |
+          git checkout -q ${{ matrix.ref }}
+          git log --oneline -1
+      - name: Temporary x86_64 ABI (emulator only)
+        run: |
+          sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО|' app/build.gradle.kts
+          grep -n "^val releaseAbis" app/build.gradle.kts
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
@@ -26,34 +50,48 @@ jobs:
           export SIGNING_STORE_FILE="$RUNNER_TEMP/t.jks" SIGNING_STORE_PASSWORD="$PASS" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$PASS"
           ./gradlew --no-daemon assembleProdRelease
           cp "$(ls app/build/outputs/apk/prod/release/*.apk | head -1)" app.apk && ls -l app.apk
+          echo "${{ matrix.name }} @ $(git rev-parse --short HEAD) ($(git log -1 --format=%s | cut -c1-80))" > apk-ref.txt
+          unzip -l app.apk | grep -c "lib/x86_64/" || true
       - uses: actions/upload-artifact@v7
         with:
-          name: apk
-          path: app.apk
+          name: apk-${{ matrix.name }}
+          path: |
+            app.apk
+            apk-ref.txt
 
   emulator:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 50
     strategy:
       fail-fast: false
       matrix:
-        # API 35 е проверен в run 40100568335 (резултатите му се пренасят при публикуването).
-        api: [29]
+        include:
+          - { name: e2e-api29, api: 29, apk: head, mode: e2e, gpu: swiftshader_indirect }
+          - { name: e2e-api35, api: 35, apk: head, mode: e2e, gpu: swiftshader_indirect }
+          - { name: swipe35-head, api: 35, apk: head, mode: swipe, gpu: swiftshader_indirect }
+          - { name: swipe35-head-gpu-guest, api: 35, apk: head, mode: swipe, gpu: guest }
+          - { name: swipe35-e2e-6278bd9, api: 35, apk: e2e-6278bd9, mode: swipe, gpu: swiftshader_indirect }
+          - { name: swipe35-v1.2.24, api: 35, apk: v1.2.24, mode: swipe, gpu: swiftshader_indirect }
+          - { name: swipe35-v1.2.23, api: 35, apk: v1.2.23, mode: swipe, gpu: swiftshader_indirect }
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
         with:
-          name: apk
-      - name: Install ffmpeg (frames from the intro video)
+          name: apk-${{ matrix.apk }}
+      - name: Install ffmpeg (frames from screenrecord)
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: Run on emulator (API ${{ matrix.api }})
-        timeout-minutes: 38
+      - name: Emulator options
+        run: |
+          echo "-gpu ${{ matrix.gpu }} -show-kernel" > emu-opts.txt
+          sudo dmesg -C || true
+      - name: Run on emulator (${{ matrix.name }})
+        timeout-minutes: 42
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api }}
@@ -61,13 +99,20 @@ jobs:
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          # Без камера: емулаторът пада при отваряне на камерата.
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
-          script: bash .github/perf-check/run.sh api${{ matrix.api }}
+          # Без камера: емулаторът пада при отваряне на камерата. -show-kernel: ядрото на госта в лога.
+          emulator-options: -no-window -gpu ${{ matrix.gpu }} -noaudio -no-boot-anim -camera-back none -camera-front none -show-kernel
+          script: bash .github/perf-check/run.sh ${{ matrix.name }} ${{ matrix.mode }}
+      - name: Host state after the run
+        if: always()
+        run: |
+          mkdir -p out/${{ matrix.name }}
+          { echo "== free"; free -m; echo "== dmesg"; sudo dmesg -T | tail -120; echo "== oom/kvm/segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
+            echo "== processes"; ps -eo pid,etime,rss,stat,args | grep -iE "qemu|emulator" | grep -v grep | cut -c1-300; } > out/${{ matrix.name }}/host-after-run.txt 2>&1
+          cat out/${{ matrix.name }}/host-after-run.txt | tail -60
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: out-api${{ matrix.api }}
+          name: out-${{ matrix.name }}
           path: out/
 
   publish:
@@ -84,30 +129,23 @@ jobs:
           pattern: out-*
           path: results
           merge-multiple: true
-      - name: Push results to emulator-results-e2e (orphan, force)
+      - name: Push results to emulator-results-e2e/run2 (orphan, force; the rest of the branch is kept)
         run: |
           set -e
           SRC=$(git rev-parse --short HEAD)
-          # Част, чийто job е паднал, остава от предишното публикуване (с отбелязване).
-          mkdir -p "$RUNNER_TEMP/old" results
-          if git fetch -q --depth 1 origin emulator-results-e2e; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/old"; fi
-          for p in api29 api35; do
-            if [ -f "$RUNNER_TEMP/old/$p/summary.txt" ] && { [ ! -d "results/$p" ] || { ! grep -q '## COMPLETE' "results/$p/summary.txt" 2>/dev/null && grep -q '## COMPLETE' "$RUNNER_TEMP/old/$p/summary.txt"; }; }; then
-              rm -rf "results/$p"; cp -r "$RUNNER_TEMP/old/$p" results/
-              grep -q CARRIED "results/$p/summary.txt" || sed -i "1i (CARRIED OVER from the previous publish ($(git -C "$GITHUB_WORKSPACE" log -1 --format=%s FETCH_HEAD 2>/dev/null)): $p was not run or failed in this run)" "results/$p/summary.txt"
-            fi
-          done
-          mkdir -p "$RUNNER_TEMP/pub" && cp -r results/. "$RUNNER_TEMP/pub/"
-          cd "$RUNNER_TEMP/pub"
+          mkdir -p "$RUNNER_TEMP/pub"
+          if git fetch -q --depth 1 origin emulator-results-e2e; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
+          rm -rf "$RUNNER_TEMP/pub/run2"; mkdir -p "$RUNNER_TEMP/pub/run2"; cp -r results/. "$RUNNER_TEMP/pub/run2/"
+          cd "$RUNNER_TEMP/pub/run2"
           {
-            echo "# Edge-to-edge emulator results"
+            echo "# Run 2: edge-to-edge fixes, pull-to-refresh, API 35 swipe bisection"
             echo
             echo "Source: \`debug/e2e-check\` @ $SRC, run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ)."
-            echo "Emulators: API 29 and API 35, google_apis x86_64, pixel_6 profile, swiftshader (software rendering)."
+            echo "Emulators: google_apis x86_64, pixel_6 profile. Jobs: e2e on API 29/35 (09278c0), swipe-only on API 35 per app version and GPU mode."
             echo
-            for p in api29 api35; do
+            for p in $(ls -d */ | tr -d /); do
               [ -f "$p/summary.txt" ] || { echo "## $p: no summary (job failed?)"; continue; }
-              echo "## $p summary"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
+              echo "## $p"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
             done
             echo "## Screenshots"
             for d in $(find . -name '*.png' -printf '%h\n' | sort -u); do
@@ -117,9 +155,13 @@ jobs:
             echo; echo "## Other files"; echo
             find . -type f ! -name '*.png' ! -name index.md | sort | sed 's|^\./||; s|.*|- [&](&)|'
           } > index.md
+          cd "$RUNNER_TEMP/pub"
+          if [ -f index.md ] && ! grep -q "run2/index.md" index.md; then
+            { head -1 index.md; echo; echo "Second round (fixes 09278c0, pull-to-refresh, API 35 swipe bisection): [run2/index.md](run2/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md
+          fi
           git init -q -b emulator-results-e2e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -qm "Edge-to-edge emulator results for $SRC (run ${{ github.run_id }})"
+          git commit -qm "Edge-to-edge emulator results, run2, for $SRC (run ${{ github.run_id }})"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/emulator-results-e2e
