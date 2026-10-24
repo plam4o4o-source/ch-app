@@ -45,7 +45,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import org.chyavorec.app.ui.components.WheatRefreshBox
+import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -129,7 +129,7 @@ fun ActivitiesScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExterna
     val vm = appViewModel { LinksViewModel(it.siteRepository) }
     val state by vm.state.collectAsStateWithLifecycle()
     Scaffold(topBar = { BackTopBar(stringResource(R.string.activities_title), onBack) }) { padding ->
-        WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+        LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             StateContent(
                 state = state.map { list -> list.filter { it.kind !in nativeSections } },
                 onRetry = { vm.refresh() },
@@ -180,7 +180,7 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
             }
         })
     }) { padding ->
-        WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+        LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             StateContent(
                 state = state, onRetry = { vm.refresh() }, isEmpty = { it.blocks.isEmpty() },
                 skeleton = { SkeletonCards() },

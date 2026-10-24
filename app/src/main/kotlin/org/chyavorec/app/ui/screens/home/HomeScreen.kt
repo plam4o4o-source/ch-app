@@ -84,7 +84,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import org.chyavorec.app.ui.components.WheatRefreshBox
+import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.Badge as CountBadge
@@ -180,7 +180,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
     val decor = rememberDayDecor(state.occasions, today)
     val loanSummary = rememberLoanSummary()
 
-    WheatRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
+    LeafRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         // На таблет/хоризонтално съдържанието е центрирано и не по-широко от 840 dp.
         LazyColumn(
             state = listState,
