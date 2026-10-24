@@ -53,7 +53,7 @@ tablabel() {
     news) echo '=News|=Новини';; more) echo '=More|=Още';;
   esac
 }
-tab() { local p; dump || return 1; p=$(xy text "$(tablabel $1)" --last); [ -n "$p" ] || { echo "tab not found: $1"; return 1; }; echo ">>> tab $1 @ $p"; a input tap $p; }
+tab() { local p; dump || return 1; p=$(xy text "$(tablabel $1)" --last); [ -n "$p" ] || { echo "tab not found: $1"; debug_ui tab-$1; return 1; }; echo ">>> tab $1 @ $p"; a input tap $p; }
 link() { echo ">>> link $1"; a am start -W -a android.intent.action.VIEW -d "\"$1\"" -n $ACT 2>&1 | grep -E "Status|LaunchState|TotalTime|Error" | tr '\n' ' '; echo; }
 launch() { a am start -W -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n $ACT 2>&1 | grep -E "Status|LaunchState|TotalTime|WaitTime|Warning|Error"; }
 # Диалози: ново издание („По-късно“), обяснение за известията („Не сега“), въведението („Пропусни“).
@@ -79,14 +79,23 @@ waitfor() {  # regex, лимит (s) → WAITED (ms) или -1
 }
 restart() { a am force-stop $PKG; sleep 1; launch >/dev/null; sleep 4; ready; }
 # Главен екран с долна лента (или страничната в хоризонтално положение): затваря диалози и се връща назад.
+# Не натиска „Назад“ на началния екран (иначе приложението се затваря), а връща приложението
+# отпред, ако е излязло; при неуспех пази дъмпа и снимка в debug/.
+NDBG=0
+debug_ui() { NDBG=$((NDBG+1)); [ $NDBG -gt 15 ] && return 0; mkdir -p $OUT/debug; cp $OUT/ui.xml $OUT/debug/$NDBG-$1.xml 2>/dev/null; shot debug/$NDBG-$1; }
 ready() {
   local i
-  for i in 1 2 3 4 5; do
+  for i in 1 2 3 4 5 6; do
     dismiss
     dump && [ -n "$(xy text "$(tablabel home)" --last)" ] && [ -n "$(xy text "$(tablabel more)" --last)" ] && return 0
-    echo "(not on a tab screen: $(texts 6)) → back"; back 2
+    if ! has "package=\"$PKG\""; then
+      echo "(app not in front: $(texts 6)) → relaunch"; launch >/dev/null; sleep 5; continue
+    fi
+    debug_ui ready
+    if has "$RX_BACK"; then echo "(not on a tab screen: $(texts 6)) → back"; back 2
+    else echo "(app in front, tab bar not found: $(texts 40))"; sleep 3; fi
   done
-  echo "WARN: tab bar not reached"; return 1
+  log "WARN: tab bar not reached"; return 1
 }
 gfx_reset() { a dumpsys gfxinfo $PKG reset >/dev/null; }
 gfx_save() { a dumpsys gfxinfo $PKG > $OUT/gfx-$1.txt; python3 $H_/parse.py gfx $OUT/gfx-$1.txt "$1" | tee -a $SUM; }
@@ -149,6 +158,10 @@ cutout() {
   log "cutout before: $(a dumpsys window displays | tr -d '\r' | grep -m2 -oiE 'cutout=[^ ]+( [^ ]+){0,6}' | tr '\n' ' ')"
   log "cutout overlays: $(ov 'cutout')"
   local c
+  # Профилът pixel_6 на новите образи вече има изрязване (отгоре) — тогава нищо не се емулира.
+  if a dumpsys window displays | tr -d '\r' | grep -m1 -oE 'DisplayCutout\{insets=Rect\([0-9]+, [0-9]+ - [0-9]+, [0-9]+\)' | grep -qvE 'Rect\(0, 0 - 0, 0\)'; then
+    log "CUTOUT: native cutout present, no emulation overlay"; return 0
+  fi
   for c in tall hole corner double; do a cmd overlay list | tr -d '\r' | grep -qE "$CUTPFX\.$c\$" && break; c=""; done
   if [ -n "$c" ]; then
     a cmd overlay enable-exclusive --category $CUTPFX.$c >/dev/null 2>&1 || a cmd overlay enable $CUTPFX.$c
@@ -204,9 +217,20 @@ part_e2e() {
 
   sec "1. Fresh install: splash, intro, first onboarding page (animations ON)"
   anims 1; sleep 1
+  # Видео на първите секунди (screenrecord), от което се вадят кадри; иначе — поредица снимки.
+  a rm -f /sdcard/intro.mp4
+  timeout 30 adb shell screenrecord --time-limit 9 --size 540x1200 --bit-rate 6000000 /sdcard/intro.mp4 > $OUT/screenrecord.txt 2>&1 & REC=$!
+  sleep 1.5
   a am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n $ACT >/dev/null
-  for i in 1 2 3 4 5 6 7 8; do timeout 20 adb exec-out screencap -p > $OUT/shots/01-intro-$i.png; sleep 0.1; done
-  ls -l $OUT/shots/01-intro-*.png | awk '{print $5, $9}'
+  wait $REC; sleep 1
+  timeout 60 adb pull /sdcard/intro.mp4 $OUT/intro.mp4 >/dev/null 2>&1
+  if [ -s $OUT/intro.mp4 ] && command -v ffmpeg >/dev/null; then
+    ffmpeg -loglevel error -i $OUT/intro.mp4 -vf fps=3 $OUT/shots/01-intro-%02d.png
+    log "intro video: $(stat -c %s $OUT/intro.mp4) bytes, frames: $(ls $OUT/shots/01-intro-*.png 2>/dev/null | wc -l)"
+  else
+    log "intro video failed ($(head -c 300 $OUT/screenrecord.txt)); burst screenshots instead"
+    for i in 1 2 3 4 5 6; do timeout 20 adb exec-out screencap -p > $OUT/shots/01-intro-burst-$i.png; done
+  fi
   anr_wait
   waitfor 'text="(Skip|Пропусни)"' 40 || log "WARN: onboarding Skip not seen"
   sleep 2; show 12; shot 02-onboarding-1; wdump onboarding
