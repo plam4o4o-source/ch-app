@@ -1,0 +1,22 @@
+app pids seen: ['3876']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=54 total=151
+   10-24 15:27:35.480  3876  3876 I Choreographer: Skipped 54 frames!  The application may be doing too much work on its main thread.
+   10-24 15:27:49.469  3876  3876 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-24 15:28:30.840  3876  3876 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-24 15:28:31.490  3876  3876 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+== Davey: 4
+   davey events=4 max=1399ms median=1034ms
+   10-24 15:27:36.890  3876  3885 I HWUI    : Davey! duration=1399ms; Flags=1, FrameTimelineVsyncId=10717, IntendedVsync=87545144356, Vsync=87761811014, InputEventId=0, HandleInputStart=87776203371, AnimationStart=87776203962, PerformTraversal
+   10-24 15:27:49.461  3876  3886 I HWUI    : Davey! duration=776ms; Flags=0, FrameTimelineVsyncId=12041, IntendedVsync=100695143830, Vsync=100711810496, InputEventId=0, HandleInputStart=100719157867, AnimationStart=100719158769, PerformTraver
+   10-24 15:27:52.191  3876  3930 I HWUI    : Davey! duration=902ms; Flags=0, FrameTimelineVsyncId=12514, IntendedVsync=103295143726, Vsync=103295143726, InputEventId=0, HandleInputStart=103296781466, AnimationStart=103296782047, PerformTraver
+   10-24 15:28:31.554  3876  3886 I HWUI    : Davey! duration=1167ms; Flags=0, FrameTimelineVsyncId=14175, IntendedVsync=142378475496, Vsync=142895142142, InputEventId=0, HandleInputStart=142899091812, AnimationStart=142899092382, PerformTrave
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-24 15:27:32.751  3843  3843 I PERFCHECK: section: S0. Device
+   10-24 15:27:32.946  3870  3870 I PERFCHECK: section: S1. First launch, skip onboarding, Home
+   10-24 15:28:11.749  4518  4518 I PERFCHECK: section: S2. Swipes on More
+   10-24 15:28:30.194  4642  4642 I PERFCHECK: section: S3. Swipes on Catalogue
+   10-24 15:28:44.385  4723  4723 I PERFCHECK: section: S4. Swipes on Home

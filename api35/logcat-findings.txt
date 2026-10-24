@@ -1,0 +1,25 @@
+app pids seen: ['4151']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=38 total=98
+   10-24 14:09:01.045  4151  4151 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-24 14:09:01.612  4151  4151 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-24 14:12:51.225  4151  4151 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=1084ms median=946ms
+   10-24 14:08:12.852  4151  4208 I HWUI    : Davey! duration=946ms; Flags=1, FrameTimelineVsyncId=11450, IntendedVsync=85404742422, Vsync=85404742422, InputEventId=0, HandleInputStart=85410409857, AnimationStart=85410410198, PerformTraversals
+   10-24 14:09:01.671  4151  4221 I HWUI    : Davey! duration=1084ms; Flags=0, FrameTimelineVsyncId=15743, IntendedVsync=134054740476, Vsync=134554740456, InputEventId=0, HandleInputStart=134587189316, AnimationStart=134587190948, PerformTrave
+   10-24 14:12:51.414  4151  4208 I HWUI    : Davey! duration=784ms; Flags=0, FrameTimelineVsyncId=22980, IntendedVsync=364104731274, Vsync=364738064582, InputEventId=0, HandleInputStart=364751371595, AnimationStart=364751371855, PerformTraver
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-24 14:07:55.592  3811  3811 I PERFCHECK: section: 0. Device
+   10-24 14:08:07.237  4091  4091 I PERFCHECK: section: 1. Fresh install: splash, intro, first onboarding page (animations ON)
+   10-24 14:08:34.786  4550  4550 I PERFCHECK: section: 2. Skip onboarding; Home light
+   10-24 14:09:05.856  4843  4843 I PERFCHECK: section: 3. System dark (app theme = System)
+   10-24 14:09:25.410  4985  4985 I PERFCHECK: section: 4. App Light in a dark system
+   10-24 14:10:12.501  5305  5305 I PERFCHECK: section: 4b. App Dark in a light system
+   10-24 14:11:43.507  5876  5876 I PERFCHECK: section: 5. 3-button navigation
+   10-24 14:12:33.247  6253  6253 I PERFCHECK: section: 6. Back to gesture navigation
+   10-24 14:12:50.414  6403  6403 I PERFCHECK: section: 7. Landscape with 3-button navigation (cutout)
+   10-24 14:14:19.523  7020  7020 I PERFCHECK: section: 8. Scrolled content under the bars (3-button, then gestures)

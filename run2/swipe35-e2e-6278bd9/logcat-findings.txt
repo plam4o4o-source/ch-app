@@ -1,0 +1,24 @@
+app pids seen: ['3928']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=36 total=106
+   10-24 15:27:39.007  3928  3928 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-24 15:28:20.859  3928  3928 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-24 15:28:21.530  3928  3928 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+== Davey: 7
+   davey events=7 max=1303ms median=833ms
+   10-24 15:27:26.486  3928  3939 I HWUI    : Davey! duration=1167ms; Flags=1, FrameTimelineVsyncId=11667, IntendedVsync=90507228582, Vsync=90507228582, InputEventId=0, HandleInputStart=90509203175, AnimationStart=90509203946, PerformTraversal
+   10-24 15:27:38.983  3928  3938 I HWUI    : Davey! duration=892ms; Flags=0, FrameTimelineVsyncId=12317, IntendedVsync=103257228072, Vsync=103273894738, InputEventId=0, HandleInputStart=103282016469, AnimationStart=103282017200, PerformTraver
+   10-24 15:27:39.226  3928  3955 I HWUI    : Davey! duration=806ms; Flags=0, FrameTimelineVsyncId=12325, IntendedVsync=103307228070, Vsync=103590561392, InputEventId=0, HandleInputStart=103596968793, AnimationStart=103596969965, PerformTraver
+   10-24 15:27:39.304  3928  4042 I HWUI    : Davey! duration=750ms; Flags=0, FrameTimelineVsyncId=12339, IntendedVsync=103607228058, Vsync=104207228034, InputEventId=0, HandleInputStart=104219092037, AnimationStart=104219092498, PerformTraver
+   10-24 15:27:41.161  3928  3939 I HWUI    : Davey! duration=833ms; Flags=0, FrameTimelineVsyncId=12707, IntendedVsync=105457227984, Vsync=105457227984, InputEventId=0, HandleInputStart=105458141284, AnimationStart=105458142156, PerformTraver
+   10-24 15:28:20.889  3928  3938 I HWUI    : Davey! duration=716ms; Flags=0, FrameTimelineVsyncId=14524, IntendedVsync=145357226388, Vsync=145357226388, InputEventId=0, HandleInputStart=145357434474, AnimationStart=145357434945, PerformTraver
+   10-24 15:28:21.601  3928  4323 I HWUI    : Davey! duration=1303ms; Flags=0, FrameTimelineVsyncId=14539, IntendedVsync=145457226384, Vsync=146057226360, InputEventId=0, HandleInputStart=146067439502, AnimationStart=146067440293, PerformTrave
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-24 15:27:23.180  3905  3905 I PERFCHECK: section: S0. Device
+   10-24 15:27:23.359  3922  3922 I PERFCHECK: section: S1. First launch, skip onboarding, Home
+   10-24 15:28:01.450  4548  4548 I PERFCHECK: section: S2. Swipes on More
+   10-24 15:28:20.074  4685  4685 I PERFCHECK: section: S3. Swipes on Catalogue
+   10-24 15:28:34.989  4766  4766 I PERFCHECK: section: S4. Swipes on Home

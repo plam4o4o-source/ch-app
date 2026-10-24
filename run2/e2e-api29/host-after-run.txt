@@ -1,0 +1,10 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15989        1066        6126          49        9191       14922
+Swap:           3071           0        3071
+== dmesg
+[Sat Oct 24 15:26:04 2026] kvm: kvm [4020]: vcpu0, guest rIP: 0xffffffff95048919 Unhandled WRMSR(0xc0010007) = 0xffff
+== oom/kvm/segfault
+[Sat Oct 24 15:26:04 2026] kvm: kvm [4020]: vcpu0, guest rIP: 0xffffffff95048919 Unhandled WRMSR(0xc0010007) = 0xffff
+== processes
+  11891       00:04 15188 S    /usr/local/lib/android/sdk/emulator/emulator -kill 4020 -sleep 20

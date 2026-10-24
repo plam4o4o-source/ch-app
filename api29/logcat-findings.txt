@@ -1,0 +1,24 @@
+app pids seen: ['6676']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=67 total=100
+   10-24 15:03:48.361  6676  6676 I Choreographer: Skipped 67 frames!  The application may be doing too much work on its main thread.
+   10-24 15:04:28.027  6676  6676 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=1255ms median=1186ms
+   10-24 15:03:48.351  6676  6704 I OpenGLRenderer: Davey! duration=1186ms; Flags=1, IntendedVsync=109351616157, Vsync=109368282823, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=109371413270, AnimationStart=109371
+   10-24 15:03:48.486  6676  6704 I OpenGLRenderer: Davey! duration=1255ms; Flags=1, IntendedVsync=109418292541, Vsync=110534959163, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=110548936790, AnimationStart=110548
+   10-24 15:04:28.011  6676  6704 I OpenGLRenderer: Davey! duration=863ms; Flags=0, IntendedVsync=149334966833, Vsync=149551633491, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=149558611240, AnimationStart=1495586
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-24 15:03:20.294  6348  6348 I PERFCHECK: section: 0. Device
+   10-24 15:03:43.116  6630  6630 I PERFCHECK: section: 1. Fresh install: splash, intro, first onboarding page (animations ON)
+   10-24 15:04:06.820  6913  6913 I PERFCHECK: section: 2. Skip onboarding; Home light
+   10-24 15:04:31.480  7171  7171 I PERFCHECK: section: 3. System dark (app theme = System)
+   10-24 15:05:02.858  7490  7490 I PERFCHECK: section: 4. App Light in a dark system
+   10-24 15:05:41.713  7827  7827 I PERFCHECK: section: 4b. App Dark in a light system
+   10-24 15:07:08.171  8659  8659 I PERFCHECK: section: 5. 3-button navigation
+   10-24 15:08:15.015  9244  9244 I PERFCHECK: section: 6. Back to gesture navigation
+   10-24 15:08:30.644  9357  9357 I PERFCHECK: section: 7. Landscape with 3-button navigation (cutout)
+   10-24 15:10:11.896 10215 10215 I PERFCHECK: section: 8. Scrolled content under the bars (3-button, then gestures)

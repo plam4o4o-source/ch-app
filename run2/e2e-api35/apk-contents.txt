@@ -1,0 +1,16 @@
+3160804 classes.dex
+3167700 classes2.dex
+10096 lib/arm64-v8a/libandroidx.graphics.path.so
+10360 lib/arm64-v8a/libdatastore_shared_counter.so
+32544 lib/arm64-v8a/libimage_processing_util_jni.so
+4896 lib/arm64-v8a/libsurface_util_jni.so
+7252 lib/armeabi-v7a/libandroidx.graphics.path.so
+8432 lib/armeabi-v7a/libdatastore_shared_counter.so
+24448 lib/armeabi-v7a/libimage_processing_util_jni.so
+3460 lib/armeabi-v7a/libsurface_util_jni.so
+10760 lib/x86_64/libandroidx.graphics.path.so
+9424 lib/x86_64/libdatastore_shared_counter.so
+49496 lib/x86_64/libimage_processing_util_jni.so
+4912 lib/x86_64/libsurface_util_jni.so
+294772 resources.arsc
+  8727066                     1031 files

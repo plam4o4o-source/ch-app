@@ -1,0 +1,31 @@
+APK: head @ 150553d (ВРЕМЕННО: втори кръг — дърпане за опреснява) size 4810093 bytes; mode swipe
+emulator: -gpu guest -show-kernel; host: 4 cpu, 15989 MB RAM
+gles: emulation  GLES: Google (Google Inc.), Android Emulator OpenGL ES Translator (Google SwiftShader), OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)
+APK entries:   8727066                     1031 files
+screen 1080x2400
+## S0. Device
+android 15 sdk 35
+screen 1080x2400
+## S1. First launch, skip onboarding, Home
+## S2. Swipes on More
+SWIPE more #1 ok
+SWIPE more #2 ok
+SWIPE more #3 ok
+## S3. Swipes on Catalogue
+SWIPE catalog #1 ok
+SWIPE catalog #2 ok
+SWIPE catalog #3 ok
+## S4. Swipes on Home
+SWIPE home #1 ok
+!!! EMULATOR GONE (at: home swipe 2)
+host evidence: 1 oom lines; qemu procs: 0; last mon: 15:29:41 used/avail_MB=1177/14812 swap_MB=0 qemu_rss_MB=0 load=2.03
+## logcat findings
+app pids seen: ['3778']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=71 total=215
+== Davey: 10
+   davey events=10 max=1350ms median=879ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

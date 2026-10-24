@@ -1,0 +1,35 @@
+APK: v1.2.24 @ f646270 (Merge remote-tracking branch 'origin/wave11/perf' into claude/charming-rubin-3lz) size 4806181 bytes; mode swipe
+emulator: -gpu swiftshader_indirect -show-kernel; host: 4 cpu, 15989 MB RAM
+gles: emulation  GLES: Google (Google Inc.), Android Emulator OpenGL ES Translator (Google SwiftShader), OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)
+APK entries:   8722619                     1031 files
+screen 1080x2400
+## S0. Device
+android 15 sdk 35
+screen 1080x2400
+## S1. First launch, skip onboarding, Home
+## S2. Swipes on More
+SWIPE more #1 ok
+SWIPE more #2 ok
+SWIPE more #3 ok
+## S3. Swipes on Catalogue
+SWIPE catalog #1 ok
+SWIPE catalog #2 ok
+SWIPE catalog #3 ok
+## S4. Swipes on Home
+SWIPE home #1 ok
+SWIPE home #2 ok
+SWIPE home #3 ok
+SWIPE home #4 ok
+SWIPE home #5 ok
+!!! EMULATOR GONE (at: home swipe 6)
+host evidence: 1 oom lines; qemu procs: 0; last mon: 15:29:57 used/avail_MB=1321/14668 swap_MB=0 qemu_rss_MB=0 load=1.51
+## logcat findings
+app pids seen: ['3876']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=54 total=151
+== Davey: 4
+   davey events=4 max=1399ms median=1034ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

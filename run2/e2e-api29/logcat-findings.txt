@@ -1,0 +1,27 @@
+app pids seen: ['6701']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=84 total=153
+   10-24 15:28:11.101  6701  6701 I Choreographer: Skipped 84 frames!  The application may be doing too much work on its main thread.
+   10-24 15:28:11.787  6701  6701 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   10-24 15:28:55.701  6701  6701 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 4
+   davey events=4 max=1545ms median=1240ms
+   10-24 15:28:11.078  6701  6726 I OpenGLRenderer: Davey! duration=1457ms; Flags=1, IntendedVsync=126264250536, Vsync=126264250536, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=126267748540, AnimationStart=126267
+   10-24 15:28:11.232  6701  6726 I OpenGLRenderer: Davey! duration=1545ms; Flags=1, IntendedVsync=126330951555, Vsync=127730951499, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=127746154100, AnimationStart=127746
+   10-24 15:28:11.877  6701  6726 I OpenGLRenderer: Davey! duration=703ms; Flags=0, IntendedVsync=127814437320, Vsync=128431103962, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=128432515110, AnimationStart=1284325
+   10-24 15:28:55.692  6701  6726 I OpenGLRenderer: Davey! duration=1022ms; Flags=0, IntendedVsync=171314417334, Vsync=171697750652, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=171702103190, AnimationStart=171702
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-24 15:27:40.947  6339  6339 I PERFCHECK: section: 0. Device
+   10-24 15:28:05.262  6646  6646 I PERFCHECK: section: 1. Fresh install: splash, intro, first onboarding page (animations ON)
+   10-24 15:28:29.716  6938  6938 I PERFCHECK: section: 2. Skip onboarding; Home light
+   10-24 15:28:59.257  7202  7202 I PERFCHECK: section: 3. System dark (app theme = System)
+   10-24 15:29:31.610  7519  7519 I PERFCHECK: section: 4. App Light in a dark system
+   10-24 15:30:11.363  7853  7853 I PERFCHECK: section: 4b. App Dark in a light system
+   10-24 15:31:40.540  8708  8708 I PERFCHECK: section: 5. 3-button navigation
+   10-24 15:32:49.304  9291  9291 I PERFCHECK: section: 6. Back to gesture navigation
+   10-24 15:33:05.259  9400  9400 I PERFCHECK: section: 7. Landscape with 3-button navigation (cutout)
+   10-24 15:34:49.047 10274 10274 I PERFCHECK: section: 8. Pull-to-refresh on Home (leaf indicator)
+   10-24 15:35:14.373 10428 10428 I PERFCHECK: section: 9. Scrolled content under the bars (3-button, then gestures)

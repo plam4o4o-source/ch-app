@@ -1,0 +1,34 @@
+  Window #7 Window{4dbae63 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}:
+    mDisplayId=0 stackId=1 mSession=Session{e9542f4 6701:u0a10146} mClient=android.os.BinderProxy@fc35492
+    mOwnerUid=10146 mShowToOwnerOnly=true package=org.chyavorec.app appop=NONE
+    mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} layoutInDisplayCutoutMode=always ty=BASE_APPLICATION wanim=0x10302fe
+      fl=LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS
+      pfl=FORCE_DRAW_STATUS_BAR_BACKGROUND
+      vsysui=LAYOUT_STABLE LAYOUT_HIDE_NAVIGATION LAYOUT_FULLSCREEN}
+    Requested w=1080 h=2400 mLayoutSeq=257
+    mBaseLayer=21000 mSubLayer=0    mToken=AppWindowToken{572ae85 token=Token{d0797fc ActivityRecord{616f0ef u0 org.chyavorec.app/.MainActivity t6}}}
+    mAppToken=AppWindowToken{572ae85 token=Token{d0797fc ActivityRecord{616f0ef u0 org.chyavorec.app/.MainActivity t6}}}
+    mAppDied=false    drawnStateEvaluated=true    mightAffectAllDrawn=true
+    mViewVisibility=0x0 mHaveFrame=true mObscured=false
+    mSeq=0 mSystemUiVisibility=0x700
+    mGivenContentInsets=[0,0][0,0] mGivenVisibleInsets=[0,0][0,0]
+    mFullConfiguration={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h850dp 420dpi nrml long port night finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 126 - 1080, 2358) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=undefined mRotation=ROTATION_0} s.3}
+    mLastReportedConfiguration={1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h850dp 420dpi nrml long port night finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 126 - 1080, 2358) mWindowingMode=fullscreen mDisplayWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=undefined mRotation=ROTATION_0} s.1}
+    mHasSurface=true isReadyForDisplay()=true mWindowRemovalAllowed=false
+    Frames: containing=[0,0][1080,2400] parent=[0,0][1080,2400]
+        display=[0,0][1080,2400] overscan=[0,0][1080,2400]
+        content=[0,126][1080,2358] visible=[0,126][1080,2358]
+        decor=[0,0][1080,2400]
+        outset=[0,0][0,0]
+    mFrame=[0,0][1080,2400] last=[0,0][1080,2400]
+     cutout=DisplayCutout{insets=Rect(0, 126 - 0, 0) boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(414, 0 - 666, 126), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]}} last=DisplayCutout{insets=Rect(0, 126 - 0, 0) boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(414, 0 - 666, 126), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]}}
+    Cur insets: overscan=[0,0][0,0] content=[0,126][0,42] visible=[0,126][0,42] stable=[0,126][0,42] outsets=[0,0][0,0]    Lst insets: overscan=[0,0][0,0] content=[0,126][0,42] visible=[0,126][0,42] stable=[0,126][0,42] outset=[0,0][0,0]
+     surface=[0,0][0,0]
+    WindowStateAnimator{686878 org.chyavorec.app/org.chyavorec.app.MainActivity}:
+      mSurface=Surface(name=org.chyavorec.app/org.chyavorec.app.MainActivity)/@0x233c5ce
+      Surface: shown=true layer=0 alpha=1.0 rect=(0.0,0.0) 1080 x 2400 transform=(1.0, 0.0, 1.0, 0.0)
+      mDrawState=HAS_DRAWN       mLastHidden=false
+      mSystemDecorRect=[0,0][1080,2400] mLastClipRect=[0,0][1080,2400]
+    mForceSeamlesslyRotate=false seamlesslyRotate: pending=null finishedFrameNumber=0
+    isOnScreen=true
+    isVisible=true

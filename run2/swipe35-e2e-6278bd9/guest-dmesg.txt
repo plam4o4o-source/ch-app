@@ -1,0 +1,1308 @@
+[   10.501092] init: ... started service 'apexd-snapshotde' has pid 341
+[   10.503079] init: SVC_EXEC service 'apexd-snapshotde' pid 341 (uid 0 gid 1000+0 context default) started; waiting...
+[   10.505682] init: Sending signal 9 to service 'odsign' (pid 338) process group...
+[   10.507911] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_338
+[   10.510078] init: Control message: Processed ctl.stop for 'odsign' from pid: 338 (/system/bin/odsign)
+[   10.512826] init: Service 'odsign' (pid 338) received signal 9
+[   10.513116] apexd: Started. subcommand = --snapshotde
+[   10.514394] init: Sending signal 9 to service 'odsign' (pid 338) process group...
+[   10.516536] apexd-snapshotde: Marking APEXd as ready
+[   10.518033] libprocessgroup: Failed to write 1 to /sys/fs/cgroup/uid_0/pid_338/cgroup.kill: No such file or directory
+[   10.523007] libprocessgroup: Failed to open /sys/fs/cgroup/uid_0/pid_338/cgroup.procs: No such file or directory
+[   10.525284] init: Service 'apexd-snapshotde' (pid 341) exited with status 0 waiting took 0.024000 seconds
+[   10.528376] init: Sending signal 9 to service 'apexd-snapshotde' (pid 341) process group...
+[   10.531364] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_341
+[   10.536868] init: processing action (post-fs-data) from (/system/etc/init/hw/init.usb.rc:6)
+[   10.539126] init: Encryption policy of /data/adb set to 0e7b397cbfa0595cb65e7239376d100d v2 modes 1/4 flags 0x2
+[   10.541450] init: processing action (post-fs-data) from (/vendor/etc/init/hw/init.ranchu.rc:61)
+[   10.545155] init: starting service 'qemu-device-state'...
+[   10.547504] init: ... started service 'qemu-device-state' has pid 342
+[   10.549495] init: starting service 'ranchu-adb-setup'...
+[   10.553409] init: ... started service 'ranchu-adb-setup' has pid 343
+[   10.555160] init: processing action (ro.boot.qemu.virtiowifi=1 && post-fs-data) from (/vendor/etc/init/hw/init.ranchu.rc:112)
+[   10.560648] init: starting service 'ranchu-net'...
+[   10.563053] init: ... started service 'ranchu-net' has pid 346
+[   10.564543] init: Service 'qemu-device-state' (pid 342) exited with status 0 oneshot service took 0.017000 seconds in background
+[   10.568148] init: Sending signal 9 to service 'qemu-device-state' (pid 342) process group...
+[   10.570819] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_342
+[   10.572863] init: processing action (post-fs-data) from (/system/etc/init/bootstat.rc:9)
+[   10.577581] init: processing action (ro.boot.dynamic_partitions=true && ro.debuggable=1 && post-fs-data) from (/system/etc/init/clean_scratch_files.rc:1)
+[   10.581512] init: starting service 'exec 11 (/system/bin/clean_scratch_files)'...
+[   10.584507] init: ... started service 'exec 11 (/system/bin/clean_scratch_files)' has pid 350
+[   10.587420] init: Service 'ranchu-adb-setup' (pid 343) exited with status 0 oneshot service took 0.036000 seconds in background
+[   10.590856] init: Sending signal 9 to service 'ranchu-adb-setup' (pid 343) process group...
+[   10.592981] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_343
+[   10.595456] init: processing action (post-fs-data) from (/system/etc/init/gsid.rc:17)
+[   10.599621] init: Not setting encryption policy on: /data/gsi
+[   10.601585] ieee80211 phy1: Selected rate control algorithm 'minstrel_ht'
+[   10.603809] init: processing action (post-fs-data) from (/system/etc/init/incidentd.rc:21)
+[   10.606906] init: processing action (post-fs-data) from (/system/etc/init/logtagd.rc:4)
+[   10.609912] init: processing action (post-fs-data) from (/system/etc/init/otapreopt.rc:3)
+[   10.612228] init: starting service 'exec 12 (/system/bin/otapreopt_slot)'...
+[   10.615520] init: ... started service 'exec 12 (/system/bin/otapreopt_slot)' has pid 353
+[   10.618294] init: SVC_EXEC service 'exec 12 (/system/bin/otapreopt_slot)' pid 353 (uid 0 gid 0+0 context default) started; waiting...
+[   10.622360] init: Service 'exec 11 (/system/bin/clean_scratch_files)' (pid 350) exited with status 0 oneshot service took 0.038000 seconds in background
+[   10.626217] init: Sending signal 9 to service 'exec 11 (/system/bin/clean_scratch_files)' (pid 350) process group...
+[   10.629094] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_350
+[   10.631500] init: starting service 'dhcpclient_wifi'...
+[   10.634169] init: ... started service 'dhcpclient_wifi' has pid 356
+[   10.636298] init: Control message: Processed ctl.start for 'dhcpclient_wifi' from pid: 352 (setprop ctl.start dhcpclient_wifi)
+[   10.639379] init: Service 'exec 12 (/system/bin/otapreopt_slot)' (pid 353) exited with status 1 waiting took 0.024000 seconds
+[   10.643215] init: Sending signal 9 to service 'exec 12 (/system/bin/otapreopt_slot)' (pid 353) process group...
+[   10.647164] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_353
+[   10.649480] init: Service 'ranchu-net' (pid 346) exited with status 0 oneshot service took 0.086000 seconds in background
+[   10.651738] init: Sending signal 9 to service 'ranchu-net' (pid 346) process group...
+[   10.653592] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_346
+[   10.655164] selinux: SELinux:  Could not stat /data/dalvik-cache/arm: No such file or directory.
+[   10.656880] selinux: SELinux:  Could not stat /data/dalvik-cache/arm64: No such file or directory.
+[   10.658811] selinux: SELinux:  Could not stat /data/dalvik-cache/riscv64: No such file or directory.
+[   10.660636] selinux: SELinux:  Could not stat /data/dalvik-cache/x86: No such file or directory.
+[   10.662492] selinux: SELinux:  Could not stat /data/dalvik-cache/x86_64: No such file or directory.
+[   10.664358] init: processing action (post-fs-data) from (/system/etc/init/perfetto.rc:76)
+[   10.666176] init: Command 'rm /data/misc/perfetto-traces/.guardraildata' action=post-fs-data (/system/etc/init/perfetto.rc:77) took 0ms and failed: unlink() failed: No such file or directory
+[   10.669449] init: processing action (post-fs-data) from (/system/etc/init/profcollectd.rc:9)
+[   10.671891] init: processing action (post-fs-data) from (/system/etc/init/recovery-persist.rc:1)
+[   10.673829] init: starting service 'exec 13 (/system/bin/recovery-persist)'...
+[   10.676359] init: ... started service 'exec 13 (/system/bin/recovery-persist)' has pid 358
+[   10.678855] init: processing action (post-fs-data) from (/system/etc/init/wifi.rc:18)
+[   10.681623] selinux: SELinux: Skipping restorecon on directory(/data/misc/apexdata/com.android.wifi)
+[   10.684213] init: Service 'exec 13 (/system/bin/recovery-persist)' (pid 358) exited with status 0 oneshot service took 0.008000 seconds in background
+[   10.688764] init: Sending signal 9 to service 'exec 13 (/system/bin/recovery-persist)' (pid 358) process group...
+[   10.692188] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_358
+[   10.694724] init: processing action (post-fs-data) from (/vendor/etc/init/hostapd.android.rc:9)
+[   10.698434] init: processing action (sys.init.perf_lsm_hooks=1 && load_bpf_programs) from (/system/etc/init/hw/init.rc:1258)
+[   10.702304] init: processing action (load_bpf_programs) from (/system/etc/init/netbpfload.rc:17)
+[   10.705455] init: starting service 'bpfloader'...
+[   10.708334] init: ... started service 'bpfloader' has pid 359
+[   10.710397] init: SVC_EXEC service 'bpfloader' pid 359 (uid 0 gid 0+7 context default) started; waiting...
+[   10.720366] NetBpfLoad: NetBpfLoad v0.46 (/apex/com.android.tethering/bin/netbpfload) api:35/35 kver:6060032 (64-on-x86-64) uid:0 rc:01
+[   10.724706] NetBpfLoad: Tethering APEX version 350820300
+[   10.726685] NetBpfLoad: Loading optional ELF object /apex/com.android.tethering/etc/bpf/test.o with license Apache 2.0
+[   10.726696] NetBpfLoad: Section bpfloader_min_ver value is 2 [0x2]
+[   10.728893] NetBpfLoad: Section bpfloader_max_ver value is 19 [0x13]
+[   10.731323] NetBpfLoad: Couldn't find section bpfloader_min_required_ver (defaulting to 0 [0x0]).
+[   10.731332] NetBpfLoad: Couldn't find section netbpfload_min_ver (defaulting to 0 [0x0]).
+[   10.731341] NetBpfLoad: Section size_of_bpf_map_def value is 120 [0x78]
+[   10.733625] NetBpfLoad: Section size_of_bpf_prog_def value is 92 [0x5c]
+[   10.735820] NetBpfLoad: BpfLoader version 0x0002e ignoring ELF object /apex/com.android.tethering/etc/bpf/test.o with max ver 0x00013
+[   10.739780] NetBpfLoad: Loaded object: /apex/com.android.tethering/etc/bpf/test.o
+[   10.740529] NetBpfLoad: Loading critical for Connectivity (Tethering) ELF object /apex/com.android.tethering/etc/bpf/offload.o with license Apache 2.0
+[   10.740548] NetBpfLoad: Section bpfloader_min_ver value is 2 [0x2]
+[   10.742735] NetBpfLoad: Section bpfloader_max_ver value is 25 [0x19]
+[   10.744896] NetBpfLoad: Couldn't find section bpfloader_min_required_ver (defaulting to 0 [0x0]).
+[   10.744916] NetBpfLoad: Section netbpfload_min_ver value is 45 [0x2d]
+[   10.747133] NetBpfLoad: Section size_of_bpf_map_def value is 120 [0x78]
+[   10.749495] NetBpfLoad: Section size_of_bpf_prog_def value is 92 [0x5c]
+[   10.751639] NetBpfLoad: BpfLoader version 0x0002e ignoring ELF object /apex/com.android.tethering/etc/bpf/offload.o with max ver 0x00019
+[   10.755686] NetBpfLoad: Loaded object: /apex/com.android.tethering/etc/bpf/offload.o
+[   10.756330] NetBpfLoad: Loading critical for Connectivity (Tethering) ELF object /apex/com.android.tethering/etc/bpf/offload@mainline.o with license Apache 2.0
+[   10.756343] NetBpfLoad: Section bpfloader_min_ver value is 25 [0x19]
+[   10.758550] NetBpfLoad: Section bpfloader_max_ver value is 65536 [0x10000]
+[   10.760820] NetBpfLoad: Couldn't find section bpfloader_min_required_ver (defaulting to 0 [0x0]).
+[   10.760838] NetBpfLoad: Section netbpfload_min_ver value is 45 [0x2d]
+[   10.763073] NetBpfLoad: Section size_of_bpf_map_def value is 120 [0x78]
+[   10.765326] NetBpfLoad: Section size_of_bpf_prog_def value is 92 [0x5c]
+[   10.767524] NetBpfLoad: BpfLoader version 0x0002e processing ELF object /apex/com.android.tethering/etc/bpf/offload@mainline.o with ver [0x00019,0x10000)
+[   10.778376] NetBpfLoad: bpf_create_map name tether_error_map, ret: 5
+[   10.778405] NetBpfLoad: map /sys/fs/bpf/tethering/map_offload_tether_error_map id 1
+[   10.780961] NetBpfLoad: bpf_create_map name tether_stats_map, ret: 6
+[   10.780990] NetBpfLoad: map /sys/fs/bpf/tethering/map_offload_tether_stats_map id 2
+[   10.783620] NetBpfLoad: bpf_create_map name tether_limit_map, ret: 7
+[   10.783642] NetBpfLoad: map /sys/fs/bpf/tethering/map_offload_tether_limit_map id 3
+[   10.786242] NetBpfLoad: bpf_create_map name tether_downstream6_map, ret: 8
+[   10.786294] NetBpfLoad: map /sys/fs/bpf/tethering/map_offload_tether_downstream6_map id 4
+[   10.788965] NetBpfLoad: bpf_create_map name tether_downstream64_map, ret: 9
+[   10.788986] NetBpfLoad: map /sys/fs/bpf/tethering/map_offload_tether_downstream64_map id 5
+[   10.791790] NetBpfLoad: bpf_create_map name tether_upstream6_map, ret: 10
+[   10.791811] NetBpfLoad: map /sys/fs/bpf/tethering/map_offload_tether_upstream6_map id 6
+[   10.794534] NetBpfLoad: bpf_create_map name tether_downstream4_map, ret: 11
+[   10.794555] NetBpfLoad: map /sys/fs/bpf/tethering/map_offload_tether_downstream4_map id 7
+[   10.797479] NetBpfLoad: bpf_create_map name tether_upstream4_map, ret: 12
+[   10.797496] NetBpfLoad: map /sys/fs/bpf/tethering/map_offload_tether_upstream4_map id 8
+[   10.800092] NetBpfLoad: bpf_create_map name tether_dev_map, ret: 13
+[   10.800113] NetBpfLoad: map /sys/fs/bpf/tethering/map_offload_tether_dev_map id 9
+[   10.805891] NetBpfLoad: cs[0].name:schedcls_tether_downstream6_ether min_kver:0 .max_kver:ffffffff (kvers:6060032)
+[   10.805895] NetBpfLoad: cs[0].name:schedcls_tether_downstream6_ether requires bpfloader version [0x00019,0x10000)
+[   10.807450] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (schedcls_tether_downstream6_ether) returned fd: 14 (no error)
+[   10.807494] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_schedcls_tether_downstream6_ether id 1
+[   10.810533] NetBpfLoad: cs[1].name:schedcls_tether_upstream6_ether min_kver:0 .max_kver:ffffffff (kvers:6060032)
+[   10.810538] NetBpfLoad: cs[1].name:schedcls_tether_upstream6_ether requires bpfloader version [0x00019,0x10000)
+[   10.812105] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (schedcls_tether_upstream6_ether) returned fd: 15 (no error)
+[   10.812149] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_schedcls_tether_upstream6_ether id 2
+[   10.815182] NetBpfLoad: cs[2].name:schedcls_tether_downstream6_rawip$4_14 min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   10.815187] NetBpfLoad: cs[2].name:schedcls_tether_downstream6_rawip$4_14 requires bpfloader version [0x00019,0x10000)
+[   10.816394] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (schedcls_tether_downstream6_rawip$4_14) returned fd: 16 (no error)
+[   10.816438] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_schedcls_tether_downstream6_rawip id 3
+[   10.818778] NetBpfLoad: cs[3].name:schedcls_tether_upstream6_rawip$4_14 min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   10.818783] NetBpfLoad: cs[3].name:schedcls_tether_upstream6_rawip$4_14 requires bpfloader version [0x00019,0x10000)
+[   10.820042] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (schedcls_tether_upstream6_rawip$4_14) returned fd: 17 (no error)
+[   10.820086] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_schedcls_tether_upstream6_rawip id 4
+[   10.821908] NetBpfLoad: cs[4].name:schedcls_tether_downstream6_rawip$stub min_kver:0 .max_kver:40e0000 (kvers:6060032)
+[   10.821913] NetBpfLoad: cs[5].name:schedcls_tether_upstream6_rawip$stub min_kver:0 .max_kver:40e0000 (kvers:6060032)
+[   10.821918] NetBpfLoad: cs[6].name:schedcls_tether_downstream4_rawip$5_8 min_kver:5080000 .max_kver:ffffffff (kvers:6060032)
+[   10.821921] NetBpfLoad: cs[6].name:schedcls_tether_downstream4_rawip$5_8 requires bpfloader version [0x00019,0x10000)
+[   10.824038] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (schedcls_tether_downstream4_rawip$5_8) returned fd: 18 (no error)
+[   10.824083] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_schedcls_tether_downstream4_rawip id 5
+[   10.825922] NetBpfLoad: cs[7].name:schedcls_tether_upstream4_rawip$5_8 min_kver:5080000 .max_kver:ffffffff (kvers:6060032)
+[   10.825926] NetBpfLoad: cs[7].name:schedcls_tether_upstream4_rawip$5_8 requires bpfloader version [0x00019,0x10000)
+[   10.828027] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (schedcls_tether_upstream4_rawip$5_8) returned fd: 19 (no error)
+[   10.828070] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_schedcls_tether_upstream4_rawip id 6
+[   10.829903] NetBpfLoad: cs[8].name:schedcls_tether_downstream4_ether$5_8 min_kver:5080000 .max_kver:ffffffff (kvers:6060032)
+[   10.829908] NetBpfLoad: cs[8].name:schedcls_tether_downstream4_ether$5_8 requires bpfloader version [0x00019,0x10000)
+[   10.832196] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (schedcls_tether_downstream4_ether$5_8) returned fd: 20 (no error)
+[   10.832240] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_schedcls_tether_downstream4_ether id 7
+[   10.834550] NetBpfLoad: cs[9].name:schedcls_tether_upstream4_ether$5_8 min_kver:5080000 .max_kver:ffffffff (kvers:6060032)
+[   10.834555] NetBpfLoad: cs[9].name:schedcls_tether_upstream4_ether$5_8 requires bpfloader version [0x00019,0x10000)
+[   10.836751] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (schedcls_tether_upstream4_ether$5_8) returned fd: 21 (no error)
+[   10.836795] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_schedcls_tether_upstream4_ether id 8
+[   10.839690] NetBpfLoad: cs[10].name:schedcls_tether_downstream4_rawip$opt min_kver:40e0000 .max_kver:5080000 (kvers:6060032)
+[   10.839696] NetBpfLoad: cs[11].name:schedcls_tether_upstream4_rawip$opt min_kver:40e0000 .max_kver:5080000 (kvers:6060032)
+[   10.839701] NetBpfLoad: cs[12].name:schedcls_tether_downstream4_ether$opt min_kver:40e0000 .max_kver:5080000 (kvers:6060032)
+[   10.839705] NetBpfLoad: cs[13].name:schedcls_tether_upstream4_ether$opt min_kver:40e0000 .max_kver:5080000 (kvers:6060032)
+[   10.839710] NetBpfLoad: cs[14].name:schedcls_tether_downstream4_rawip$5_4 min_kver:5040000 .max_kver:5080000 (kvers:6060032)
+[   10.839713] NetBpfLoad: cs[15].name:schedcls_tether_upstream4_rawip$5_4 min_kver:5040000 .max_kver:5080000 (kvers:6060032)
+[   10.839716] NetBpfLoad: cs[16].name:schedcls_tether_downstream4_rawip$4_14 min_kver:40e0000 .max_kver:5040000 (kvers:6060032)
+[   10.839719] NetBpfLoad: cs[17].name:schedcls_tether_upstream4_rawip$4_14 min_kver:40e0000 .max_kver:5040000 (kvers:6060032)
+[   10.839723] NetBpfLoad: cs[18].name:schedcls_tether_downstream4_ether$4_14 min_kver:40e0000 .max_kver:5080000 (kvers:6060032)
+[   10.839726] NetBpfLoad: cs[19].name:schedcls_tether_upstream4_ether$4_14 min_kver:40e0000 .max_kver:5080000 (kvers:6060032)
+[   10.839729] NetBpfLoad: cs[20].name:schedcls_tether_downstream4_rawip$stub min_kver:0 .max_kver:5040000 (kvers:6060032)
+[   10.839732] NetBpfLoad: cs[21].name:schedcls_tether_upstream4_rawip$stub min_kver:0 .max_kver:5040000 (kvers:6060032)
+[   10.839735] NetBpfLoad: cs[22].name:schedcls_tether_downstream4_ether$stub min_kver:0 .max_kver:40e0000 (kvers:6060032)
+[   10.839738] NetBpfLoad: cs[23].name:schedcls_tether_upstream4_ether$stub min_kver:0 .max_kver:40e0000 (kvers:6060032)
+[   10.839741] NetBpfLoad: cs[24].name:xdp_tether_downstream_ether min_kver:5090000 .max_kver:ffffffff (kvers:6060032)
+[   10.839745] NetBpfLoad: cs[24].name:xdp_tether_downstream_ether requires bpfloader version [0x00019,0x10000)
+[   10.840041] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (xdp_tether_downstream_ether) returned fd: 22 (no error)
+[   10.840083] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_xdp_tether_downstream_ether id 9
+[   10.842399] NetBpfLoad: cs[25].name:xdp_tether_downstream_rawip min_kver:5090000 .max_kver:ffffffff (kvers:6060032)
+[   10.842403] NetBpfLoad: cs[25].name:xdp_tether_downstream_rawip requires bpfloader version [0x00019,0x10000)
+[   10.842715] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (xdp_tether_downstream_rawip) returned fd: 23 (no error)
+[   10.842757] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_xdp_tether_downstream_rawip id 10
+[   10.844461] NetBpfLoad: cs[26].name:xdp_tether_upstream_ether min_kver:5090000 .max_kver:ffffffff (kvers:6060032)
+[   10.844464] NetBpfLoad: cs[26].name:xdp_tether_upstream_ether requires bpfloader version [0x00019,0x10000)
+[   10.844815] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (xdp_tether_upstream_ether) returned fd: 24 (no error)
+[   10.844857] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_xdp_tether_upstream_ether id 11
+[   10.846614] NetBpfLoad: cs[27].name:xdp_tether_upstream_rawip min_kver:5090000 .max_kver:ffffffff (kvers:6060032)
+[   10.846618] NetBpfLoad: cs[27].name:xdp_tether_upstream_rawip requires bpfloader version [0x00019,0x10000)
+[   10.846932] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/offload@mainline.o (xdp_tether_upstream_rawip) returned fd: 25 (no error)
+[   10.846974] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_offload_xdp_tether_upstream_rawip id 12
+[   10.848742] NetBpfLoad: Loaded object: /apex/com.android.tethering/etc/bpf/offload@mainline.o
+[   10.849011] NetBpfLoad: Loading optional ELF object /apex/com.android.tethering/etc/bpf/test@mainline.o with license Apache 2.0
+[   10.849022] NetBpfLoad: Section bpfloader_min_ver value is 43 [0x2b]
+[   10.850402] NetBpfLoad: Section bpfloader_max_ver value is 65536 [0x10000]
+[   10.852538] NetBpfLoad: Couldn't find section bpfloader_min_required_ver (defaulting to 0 [0x0]).
+[   10.852553] NetBpfLoad: Couldn't find section netbpfload_min_ver (defaulting to 0 [0x0]).
+[   10.852568] NetBpfLoad: Section size_of_bpf_map_def value is 120 [0x78]
+[   10.854832] NetBpfLoad: Section size_of_bpf_prog_def value is 92 [0x5c]
+[   10.856638] NetBpfLoad: BpfLoader version 0x0002e processing ELF object /apex/com.android.tethering/etc/bpf/test@mainline.o with ver [0x0002b,0x10000)
+[   10.860722] NetBpfLoad: bpf_create_map name tether_downstream6_map, ret: 5
+[   10.860740] NetBpfLoad: map /sys/fs/bpf/tethering/map_test_tether_downstream6_map id 10
+[   10.863080] NetBpfLoad: bpf_create_map name tether2_downstream6_map, ret: 6
+[   10.863106] NetBpfLoad: map /sys/fs/bpf/tethering/map_test_tether2_downstream6_map id 11
+[   10.864597] NetBpfLoad: bpf_create_map name tether3_downstream6_map, ret: 7
+[   10.864621] NetBpfLoad: map /sys/fs/bpf/tethering/map_test_tether3_downstream6_map id 12
+[   10.866927] NetBpfLoad: bpf_create_map name bitmap, ret: 8
+[   10.866949] NetBpfLoad: map /sys/fs/bpf/tethering/map_test_bitmap id 13
+[   10.868941] NetBpfLoad: cs[0].name:xdp_drop_ipv4_udp_ether min_kver:5090000 .max_kver:ffffffff (kvers:6060032)
+[   10.868944] NetBpfLoad: cs[0].name:xdp_drop_ipv4_udp_ether requires bpfloader version [0x0002b,0x10000)
+[   10.869378] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/test@mainline.o (xdp_drop_ipv4_udp_ether) returned fd: 9 (no error)
+[   10.869430] NetBpfLoad: prog /sys/fs/bpf/tethering/prog_test_xdp_drop_ipv4_udp_ether id 13
+[   10.871769] NetBpfLoad: Loaded object: /apex/com.android.tethering/etc/bpf/test@mainline.o
+[   10.872723] NetBpfLoad: Loading critical for Connectivity and netd ELF object /apex/com.android.tethering/etc/bpf/netd_shared/netd.o with license Apache 2.0
+[   10.872742] NetBpfLoad: Section bpfloader_min_ver value is 19 [0x13]
+[   10.874650] NetBpfLoad: Section bpfloader_max_ver value is 65536 [0x10000]
+[   10.876636] NetBpfLoad: Couldn't find section bpfloader_min_required_ver (defaulting to 0 [0x0]).
+[   10.876654] NetBpfLoad: Section netbpfload_min_ver value is 45 [0x2d]
+[   10.877821] NetBpfLoad: Section size_of_bpf_map_def value is 120 [0x78]
+[   10.878970] NetBpfLoad: Section size_of_bpf_prog_def value is 92 [0x5c]
+[   10.880135] NetBpfLoad: BpfLoader version 0x0002e processing ELF object /apex/com.android.tethering/etc/bpf/netd_shared/netd.o with ver [0x00013,0x10000)
+[   10.886991] NetBpfLoad: map configuration_map selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.889105] NetBpfLoad: bpf_create_map name configuration_map, ret: 5
+[   10.889157] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_configuration_map id 14
+[   10.890787] NetBpfLoad: bpf_create_map name cookie_tag_map, ret: 6
+[   10.890821] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_cookie_tag_map id 15
+[   10.892165] NetBpfLoad: map uid_counterset_map selinux_context [fs_bpf_net_shared               ] -> 3 -> 'fs_bpf_net_shared' (net_shared/)
+[   10.894538] NetBpfLoad: bpf_create_map name uid_counterset_map, ret: 7
+[   10.894580] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_uid_counterset_map id 16
+[   10.895897] NetBpfLoad: map app_uid_stats_map selinux_context [fs_bpf_net_shared               ] -> 3 -> 'fs_bpf_net_shared' (net_shared/)
+[   10.898294] NetBpfLoad: bpf_create_map name app_uid_stats_map, ret: 8
+[   10.898324] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_app_uid_stats_map id 17
+[   10.899624] NetBpfLoad: map stats_map_A selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.901989] NetBpfLoad: bpf_create_map name stats_map_A, ret: 9
+[   10.902012] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_stats_map_A id 18
+[   10.903970] NetBpfLoad: map stats_map_B selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.907738] NetBpfLoad: bpf_create_map name stats_map_B, ret: 10
+[   10.907762] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_stats_map_B id 19
+[   10.909829] NetBpfLoad: map iface_stats_map selinux_context [fs_bpf_net_shared               ] -> 3 -> 'fs_bpf_net_shared' (net_shared/)
+[   10.913110] NetBpfLoad: bpf_create_map name iface_stats_map, ret: 11
+[   10.913139] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_iface_stats_map id 20
+[   10.915435] NetBpfLoad: map uid_owner_map selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.918672] NetBpfLoad: bpf_create_map name uid_owner_map, ret: 12
+[   10.918695] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_uid_owner_map id 21
+[   10.920873] NetBpfLoad: map uid_permission_map selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.923183] NetBpfLoad: bpf_create_map name uid_permission_map, ret: 13
+[   10.923212] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_uid_permission_map id 22
+[   10.924602] NetBpfLoad: map ingress_discard_map selinux_context [fs_bpf_net_shared               ] -> 3 -> 'fs_bpf_net_shared' (net_shared/)
+[   10.926785] NetBpfLoad: bpf_create_map name ingress_discard_map, ret: 14
+[   10.926815] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_ingress_discard_map id 23
+[   10.928316] NetBpfLoad: bpf_create_map name lock_array_test_map, ret: 15
+[   10.928337] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_lock_array_test_map id 24
+[   10.929785] NetBpfLoad: bpf_create_map name lock_hash_test_map, ret: 16
+[   10.929806] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_lock_hash_test_map id 25
+[   10.931115] NetBpfLoad: map iface_index_name_map selinux_context [fs_bpf_net_shared               ] -> 3 -> 'fs_bpf_net_shared' (net_shared/)
+[   10.933402] NetBpfLoad: bpf_create_map name iface_index_name_map, ret: 17
+[   10.933434] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_iface_index_name_map id 26
+[   10.934858] NetBpfLoad: map packet_trace_enabled_map selinux_context [fs_bpf_net_shared               ] -> 3 -> 'fs_bpf_net_shared' (net_shared/)
+[   10.937044] NetBpfLoad: bpf_create_map name packet_trace_enabled_map, ret: 18
+[   10.937078] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_packet_trace_enabled_map id 27
+[   10.938601] NetBpfLoad: map packet_trace_ringbuf selinux_context [fs_bpf_net_shared               ] -> 3 -> 'fs_bpf_net_shared' (net_shared/)
+[   10.941543] NetBpfLoad: bpf_create_map name packet_trace_ringbuf, ret: 19
+[   10.941576] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_packet_trace_ringbuf id 28
+[   10.943138] NetBpfLoad: map data_saver_enabled_map selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.946009] NetBpfLoad: bpf_create_map name data_saver_enabled_map, ret: 20
+[   10.946039] NetBpfLoad: map /sys/fs/bpf/netd_shared/map_netd_data_saver_enabled_map id 29
+[   10.950184] NetBpfLoad: cs[0].name:cgroupskb_ingress_stats$trace_user min_kver:5080000 .max_kver:ffffffff (kvers:6060032)
+[   10.950188] NetBpfLoad: cs[0].name:cgroupskb_ingress_stats$trace_user requires bpfloader version [0x00026,0x10000)
+[   10.950191] NetBpfLoad: cs[0].name:cgroupskb_ingress_stats$trace_user is ignored on userdebug builds
+[   10.950193] NetBpfLoad: cs[1].name:cgroupskb_ingress_stats$trace min_kver:5080000 .max_kver:ffffffff (kvers:6060032)
+[   10.950194] NetBpfLoad: cs[1].name:cgroupskb_ingress_stats$trace requires bpfloader version [0x00026,0x10000)
+[   10.950196] NetBpfLoad: prog cgroupskb_ingress_stats$trace selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.956655] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (cgroupskb_ingress_stats$trace) returned fd: 21 (no error)
+[   10.956709] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_cgroupskb_ingress_stats id 14
+[   10.958464] NetBpfLoad: cs[2].name:cgroupskb_ingress_stats$4_19 min_kver:4130000 .max_kver:ffffffff (kvers:6060032)
+[   10.958469] NetBpfLoad: cs[2].name:cgroupskb_ingress_stats$4_19 requires bpfloader version [0x00013,0x10000)
+[   10.958473] NetBpfLoad: prog cgroupskb_ingress_stats$4_19 selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.961200] NetBpfLoad: New bpf prog load reusing prog /sys/fs/bpf/netd_shared/prog_netd_cgroupskb_ingress_stats, ret: 22 (no error)
+[   10.961206] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_cgroupskb_ingress_stats id 14
+[   10.962991] NetBpfLoad: cs[3].name:cgroupskb_ingress_stats$4_14 min_kver:0 .max_kver:4130000 (kvers:6060032)
+[   10.962996] NetBpfLoad: cs[4].name:cgroupskb_egress_stats$trace_user min_kver:5080000 .max_kver:ffffffff (kvers:6060032)
+[   10.963000] NetBpfLoad: cs[4].name:cgroupskb_egress_stats$trace_user requires bpfloader version [0x00026,0x10000)
+[   10.963002] NetBpfLoad: cs[4].name:cgroupskb_egress_stats$trace_user is ignored on userdebug builds
+[   10.963006] NetBpfLoad: cs[5].name:cgroupskb_egress_stats$trace min_kver:5080000 .max_kver:ffffffff (kvers:6060032)
+[   10.963009] NetBpfLoad: cs[5].name:cgroupskb_egress_stats$trace requires bpfloader version [0x00026,0x10000)
+[   10.963012] NetBpfLoad: prog cgroupskb_egress_stats$trace selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.968879] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (cgroupskb_egress_stats$trace) returned fd: 23 (no error)
+[   10.968929] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_cgroupskb_egress_stats id 15
+[   10.970644] NetBpfLoad: cs[6].name:cgroupskb_egress_stats$4_19 min_kver:4130000 .max_kver:ffffffff (kvers:6060032)
+[   10.970648] NetBpfLoad: cs[6].name:cgroupskb_egress_stats$4_19 requires bpfloader version [0x00013,0x10000)
+[   10.970652] NetBpfLoad: prog cgroupskb_egress_stats$4_19 selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.975311] NetBpfLoad: New bpf prog load reusing prog /sys/fs/bpf/netd_shared/prog_netd_cgroupskb_egress_stats, ret: 24 (no error)
+[   10.975317] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_cgroupskb_egress_stats id 15
+[   10.976971] NetBpfLoad: cs[7].name:cgroupskb_egress_stats$4_14 min_kver:0 .max_kver:4130000 (kvers:6060032)
+[   10.976976] NetBpfLoad: cs[8].name:skfilter_egress_xtbpf min_kver:0 .max_kver:ffffffff (kvers:6060032)
+[   10.976979] NetBpfLoad: cs[8].name:skfilter_egress_xtbpf requires bpfloader version [0x00013,0x10000)
+[   10.977592] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (skfilter_egress_xtbpf) returned fd: 25 (no error)
+[   10.977638] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_skfilter_egress_xtbpf id 16
+[   10.979301] NetBpfLoad: cs[9].name:skfilter_ingress_xtbpf min_kver:0 .max_kver:ffffffff (kvers:6060032)
+[   10.979305] NetBpfLoad: cs[9].name:skfilter_ingress_xtbpf requires bpfloader version [0x00013,0x10000)
+[   10.979784] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (skfilter_ingress_xtbpf) returned fd: 27 (no error)
+[   10.979851] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_skfilter_ingress_xtbpf id 17
+[   10.981659] NetBpfLoad: cs[10].name:schedact_ingress_account min_kver:0 .max_kver:ffffffff (kvers:6060032)
+[   10.981664] NetBpfLoad: cs[10].name:schedact_ingress_account requires bpfloader version [0x00013,0x10000)
+[   10.981667] NetBpfLoad: prog schedact_ingress_account selinux_context [fs_bpf_net_shared               ] -> 3 -> 'fs_bpf_net_shared' (net_shared/)
+[   10.985546] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (schedact_ingress_account) returned fd: 28 (no error)
+[   10.985599] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_schedact_ingress_account id 18
+[   10.987218] NetBpfLoad: cs[11].name:skfilter_allowlist_xtbpf min_kver:0 .max_kver:ffffffff (kvers:6060032)
+[   10.987222] NetBpfLoad: cs[11].name:skfilter_allowlist_xtbpf requires bpfloader version [0x00013,0x10000)
+[   10.987634] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (skfilter_allowlist_xtbpf) returned fd: 29 (no error)
+[   10.987676] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_skfilter_allowlist_xtbpf id 19
+[   10.989493] NetBpfLoad: cs[12].name:skfilter_denylist_xtbpf min_kver:0 .max_kver:ffffffff (kvers:6060032)
+[   10.989497] NetBpfLoad: cs[12].name:skfilter_denylist_xtbpf requires bpfloader version [0x00013,0x10000)
+[   10.989825] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (skfilter_denylist_xtbpf) returned fd: 30 (no error)
+[   10.989876] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_skfilter_denylist_xtbpf id 20
+[   10.991499] NetBpfLoad: cs[13].name:cgroupsock_inet_create min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   10.991501] NetBpfLoad: cs[13].name:cgroupsock_inet_create requires bpfloader version [0x00013,0x10000)
+[   10.991503] NetBpfLoad: prog cgroupsock_inet_create selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.994611] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (cgroupsock_inet_create) returned fd: 31 (no error)
+[   10.994663] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_cgroupsock_inet_create id 21
+[   10.996248] NetBpfLoad: cs[14].name:cgroupsockrelease_inet_release min_kver:50a0000 .max_kver:ffffffff (kvers:6060032)
+[   10.996253] NetBpfLoad: cs[14].name:cgroupsockrelease_inet_release requires bpfloader version [0x0002e,0x10000)
+[   10.996257] NetBpfLoad: prog cgroupsockrelease_inet_release selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   10.999512] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (cgroupsockrelease_inet_release) returned fd: 32 (no error)
+[   10.999563] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_cgroupsockrelease_inet_release id 22
+[   11.001369] NetBpfLoad: cs[15].name:connect4_inet4_connect min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   11.001374] NetBpfLoad: cs[15].name:connect4_inet4_connect requires bpfloader version [0x0002e,0x10000)
+[   11.001377] NetBpfLoad: prog connect4_inet4_connect selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   11.004325] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (connect4_inet4_connect) returned fd: 33 (no error)
+[   11.004375] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_connect4_inet4_connect id 23
+[   11.006019] NetBpfLoad: cs[16].name:connect6_inet6_connect min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   11.006023] NetBpfLoad: cs[16].name:connect6_inet6_connect requires bpfloader version [0x0002e,0x10000)
+[   11.006027] NetBpfLoad: prog connect6_inet6_connect selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   11.008994] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (connect6_inet6_connect) returned fd: 34 (no error)
+[   11.009044] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_connect6_inet6_connect id 24
+[   11.010746] NetBpfLoad: cs[17].name:recvmsg4_udp4_recvmsg min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   11.010750] NetBpfLoad: cs[17].name:recvmsg4_udp4_recvmsg requires bpfloader version [0x0002e,0x10000)
+[   11.010754] NetBpfLoad: prog recvmsg4_udp4_recvmsg selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   11.015436] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (recvmsg4_udp4_recvmsg) returned fd: 35 (no error)
+[   11.015484] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_recvmsg4_udp4_recvmsg id 25
+[   11.018346] NetBpfLoad: cs[18].name:recvmsg6_udp6_recvmsg min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   11.018351] NetBpfLoad: cs[18].name:recvmsg6_udp6_recvmsg requires bpfloader version [0x0002e,0x10000)
+[   11.018355] NetBpfLoad: prog recvmsg6_udp6_recvmsg selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   11.023102] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (recvmsg6_udp6_recvmsg) returned fd: 36 (no error)
+[   11.023148] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_recvmsg6_udp6_recvmsg id 26
+[   11.025926] NetBpfLoad: cs[19].name:sendmsg4_udp4_sendmsg min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   11.025931] NetBpfLoad: cs[19].name:sendmsg4_udp4_sendmsg requires bpfloader version [0x0002e,0x10000)
+[   11.025934] NetBpfLoad: prog sendmsg4_udp4_sendmsg selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   11.030423] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (sendmsg4_udp4_sendmsg) returned fd: 37 (no error)
+[   11.030469] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_sendmsg4_udp4_sendmsg id 27
+[   11.033139] NetBpfLoad: cs[20].name:sendmsg6_udp6_sendmsg min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   11.033144] NetBpfLoad: cs[20].name:sendmsg6_udp6_sendmsg requires bpfloader version [0x0002e,0x10000)
+[   11.033148] NetBpfLoad: prog sendmsg6_udp6_sendmsg selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   11.037754] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (sendmsg6_udp6_sendmsg) returned fd: 38 (no error)
+[   11.037801] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_sendmsg6_udp6_sendmsg id 28
+[   11.040467] NetBpfLoad: cs[21].name:getsockopt_prog min_kver:5040000 .max_kver:ffffffff (kvers:6060032)
+[   11.040472] NetBpfLoad: cs[21].name:getsockopt_prog requires bpfloader version [0x0002e,0x10000)
+[   11.040475] NetBpfLoad: prog getsockopt_prog selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   11.045050] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (getsockopt_prog) returned fd: 39 (no error)
+[   11.045097] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_getsockopt_prog id 29
+[   11.047198] NetBpfLoad: cs[22].name:setsockopt_prog min_kver:5040000 .max_kver:ffffffff (kvers:6060032)
+[   11.047203] NetBpfLoad: cs[22].name:setsockopt_prog requires bpfloader version [0x0002e,0x10000)
+[   11.047207] NetBpfLoad: prog setsockopt_prog selinux_context [fs_bpf_netd_readonly            ] -> 4 -> 'fs_bpf_netd_readonly' (netd_readonly/)
+[   11.050287] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/netd_shared/netd.o (setsockopt_prog) returned fd: 40 (no error)
+[   11.050334] NetBpfLoad: prog /sys/fs/bpf/netd_shared/prog_netd_setsockopt_prog id 30
+[   11.052784] NetBpfLoad: Loaded object: /apex/com.android.tethering/etc/bpf/netd_shared/netd.o
+[   11.053144] NetBpfLoad: Loading optional ELF object /apex/com.android.tethering/etc/bpf/net_shared/gentle.o with license Apache 2.0
+[   11.053154] NetBpfLoad: Section bpfloader_min_ver value is 43 [0x2b]
+[   11.055246] NetBpfLoad: Section bpfloader_max_ver value is 65536 [0x10000]
+[   11.056795] NetBpfLoad: Couldn't find section bpfloader_min_required_ver (defaulting to 0 [0x0]).
+[   11.056805] NetBpfLoad: Couldn't find section netbpfload_min_ver (defaulting to 0 [0x0]).
+[   11.056814] NetBpfLoad: Section size_of_bpf_map_def value is 120 [0x78]
+[   11.059136] NetBpfLoad: Section size_of_bpf_prog_def value is 92 [0x5c]
+[   11.061433] NetBpfLoad: BpfLoader version 0x0002e processing ELF object /apex/com.android.tethering/etc/bpf/net_shared/gentle.o with ver [0x0002b,0x10000)
+[   11.066180] NetBpfLoad: bpf_create_map name test, ret: 5
+[   11.066198] NetBpfLoad: map /sys/fs/bpf/net_shared/map_gentle_test id 30
+[   11.068453] NetBpfLoad: cs[0].name:skfilter_accept min_kver:0 .max_kver:ffffffff (kvers:6060032)
+[   11.068457] NetBpfLoad: cs[0].name:skfilter_accept requires bpfloader version [0x0002b,0x10000)
+[   11.068723] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/net_shared/gentle.o (skfilter_accept) returned fd: 6 (no error)
+[   11.068765] NetBpfLoad: prog /sys/fs/bpf/net_shared/prog_gentle_skfilter_accept id 31
+[   11.070642] NetBpfLoad: Loaded object: /apex/com.android.tethering/etc/bpf/net_shared/gentle.o
+[   11.070859] NetBpfLoad: Loading critical for Connectivity ELF object /apex/com.android.tethering/etc/bpf/net_shared/dscpPolicy.o with license Apache 2.0
+[   11.070870] NetBpfLoad: Section bpfloader_min_ver value is 19 [0x13]
+[   11.072098] NetBpfLoad: Section bpfloader_max_ver value is 65536 [0x10000]
+[   11.073632] NetBpfLoad: Couldn't find section bpfloader_min_required_ver (defaulting to 0 [0x0]).
+[   11.073650] NetBpfLoad: Section netbpfload_min_ver value is 45 [0x2d]
+[   11.075779] NetBpfLoad: Section size_of_bpf_map_def value is 120 [0x78]
+[   11.077782] NetBpfLoad: Section size_of_bpf_prog_def value is 92 [0x5c]
+[   11.079809] NetBpfLoad: BpfLoader version 0x0002e processing ELF object /apex/com.android.tethering/etc/bpf/net_shared/dscpPolicy.o with ver [0x00013,0x10000)
+[   11.084573] NetBpfLoad: bpf_create_map name socket_policy_cache_map, ret: 5
+[   11.084591] NetBpfLoad: map /sys/fs/bpf/net_shared/map_dscpPolicy_socket_policy_cache_map id 31
+[   11.086774] NetBpfLoad: bpf_create_map name ipv4_dscp_policies_map, ret: 6
+[   11.086801] NetBpfLoad: map /sys/fs/bpf/net_shared/map_dscpPolicy_ipv4_dscp_policies_map id 32
+[   11.088511] NetBpfLoad: bpf_create_map name ipv6_dscp_policies_map, ret: 7
+[   11.088534] NetBpfLoad: map /sys/fs/bpf/net_shared/map_dscpPolicy_ipv6_dscp_policies_map id 33
+[   11.090542] NetBpfLoad: cs[0].name:schedcls_set_dscp_ether min_kver:50f0000 .max_kver:ffffffff (kvers:6060032)
+[   11.090547] NetBpfLoad: cs[0].name:schedcls_set_dscp_ether requires bpfloader version [0x00013,0x10000)
+[   11.168951] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/net_shared/dscpPolicy.o (schedcls_set_dscp_ether) returned fd: 8 (no error)
+[   11.169034] NetBpfLoad: prog /sys/fs/bpf/net_shared/prog_dscpPolicy_schedcls_set_dscp_ether id 32
+[   11.171298] NetBpfLoad: Loaded object: /apex/com.android.tethering/etc/bpf/net_shared/dscpPolicy.o
+[   11.171464] NetBpfLoad: Loading critical for ConnectivityNative ELF object /apex/com.android.tethering/etc/bpf/net_shared/block.o with license Apache 2.0
+[   11.171473] NetBpfLoad: Section bpfloader_min_ver value is 19 [0x13]
+[   11.173692] NetBpfLoad: Section bpfloader_max_ver value is 65536 [0x10000]
+[   11.175501] NetBpfLoad: Couldn't find section bpfloader_min_required_ver (defaulting to 0 [0x0]).
+[   11.175519] NetBpfLoad: Section netbpfload_min_ver value is 45 [0x2d]
+[   11.177736] NetBpfLoad: Section size_of_bpf_map_def value is 120 [0x78]
+[   11.179046] NetBpfLoad: Section size_of_bpf_prog_def value is 92 [0x5c]
+[   11.180417] NetBpfLoad: BpfLoader version 0x0002e processing ELF object /apex/com.android.tethering/etc/bpf/net_shared/block.o with ver [0x00013,0x10000)
+[   11.183594] NetBpfLoad: bpf_create_map name blocked_ports_map, ret: 5
+[   11.183624] NetBpfLoad: map /sys/fs/bpf/net_shared/map_block_blocked_ports_map id 34
+[   11.185209] NetBpfLoad: cs[0].name:bind4_block_port min_kver:4130000 .max_kver:ffffffff (kvers:6060032)
+[   11.185214] NetBpfLoad: cs[0].name:bind4_block_port requires bpfloader version [0x00013,0x10000)
+[   11.185218] NetBpfLoad: prog bind4_block_port pin_subdir [netd_readonly/                  ] -> 4 -> 'netd_readonly/'
+[   11.187980] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/net_shared/block.o (bind4_block_port) returned fd: 6 (no error)
+[   11.188031] NetBpfLoad: prog /sys/fs/bpf/netd_readonly/prog_block_bind4_block_port id 33
+[   11.189673] NetBpfLoad: cs[1].name:bind6_block_port min_kver:4130000 .max_kver:ffffffff (kvers:6060032)
+[   11.189678] NetBpfLoad: cs[1].name:bind6_block_port requires bpfloader version [0x00013,0x10000)
+[   11.189683] NetBpfLoad: prog bind6_block_port pin_subdir [netd_readonly/                  ] -> 4 -> 'netd_readonly/'
+[   11.192118] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/net_shared/block.o (bind6_block_port) returned fd: 7 (no error)
+[   11.192161] NetBpfLoad: prog /sys/fs/bpf/netd_readonly/prog_block_bind6_block_port id 34
+[   11.194320] NetBpfLoad: Loaded object: /apex/com.android.tethering/etc/bpf/net_shared/block.o
+[   11.194780] NetBpfLoad: Loading critical for Connectivity ELF object /apex/com.android.tethering/etc/bpf/net_shared/clatd.o with license Apache 2.0
+[   11.194791] NetBpfLoad: Section bpfloader_min_ver value is 19 [0x13]
+[   11.196877] NetBpfLoad: Section bpfloader_max_ver value is 65536 [0x10000]
+[   11.199225] NetBpfLoad: Couldn't find section bpfloader_min_required_ver (defaulting to 0 [0x0]).
+[   11.199242] NetBpfLoad: Section netbpfload_min_ver value is 45 [0x2d]
+[   11.201447] NetBpfLoad: Section size_of_bpf_map_def value is 120 [0x78]
+[   11.203637] NetBpfLoad: Section size_of_bpf_prog_def value is 92 [0x5c]
+[   11.205878] NetBpfLoad: BpfLoader version 0x0002e processing ELF object /apex/com.android.tethering/etc/bpf/net_shared/clatd.o with ver [0x00013,0x10000)
+[   11.211198] NetBpfLoad: bpf_create_map name clat_ingress6_map, ret: 5
+[   11.211219] NetBpfLoad: map /sys/fs/bpf/net_shared/map_clatd_clat_ingress6_map id 35
+[   11.213878] NetBpfLoad: bpf_create_map name clat_egress4_map, ret: 6
+[   11.213901] NetBpfLoad: map /sys/fs/bpf/net_shared/map_clatd_clat_egress4_map id 36
+[   11.215570] NetBpfLoad: cs[0].name:schedcls_ingress6_clat_ether$4_14 min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   11.215574] NetBpfLoad: cs[0].name:schedcls_ingress6_clat_ether$4_14 requires bpfloader version [0x00013,0x10000)
+[   11.218432] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/net_shared/clatd.o (schedcls_ingress6_clat_ether$4_14) returned fd: 7 (no error)
+[   11.218479] NetBpfLoad: prog /sys/fs/bpf/net_shared/prog_clatd_schedcls_ingress6_clat_ether id 35
+[   11.220178] NetBpfLoad: cs[1].name:schedcls_ingress6_clat_ether$4_9 min_kver:0 .max_kver:40e0000 (kvers:6060032)
+[   11.220184] NetBpfLoad: cs[2].name:schedcls_ingress6_clat_rawip$4_14 min_kver:40e0000 .max_kver:ffffffff (kvers:6060032)
+[   11.220188] NetBpfLoad: cs[2].name:schedcls_ingress6_clat_rawip$4_14 requires bpfloader version [0x00013,0x10000)
+[   11.221946] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/net_shared/clatd.o (schedcls_ingress6_clat_rawip$4_14) returned fd: 8 (no error)
+[   11.221990] NetBpfLoad: prog /sys/fs/bpf/net_shared/prog_clatd_schedcls_ingress6_clat_rawip id 36
+[   11.223938] NetBpfLoad: cs[3].name:schedcls_ingress6_clat_rawip$4_9 min_kver:0 .max_kver:40e0000 (kvers:6060032)
+[   11.223942] NetBpfLoad: cs[4].name:schedcls_egress4_clat_rawip min_kver:0 .max_kver:ffffffff (kvers:6060032)
+[   11.223945] NetBpfLoad: cs[4].name:schedcls_egress4_clat_rawip requires bpfloader version [0x00013,0x10000)
+[   11.225005] NetBpfLoad: BPF_PROG_LOAD call for /apex/com.android.tethering/etc/bpf/net_shared/clatd.o (schedcls_egress4_clat_rawip) returned fd: 9 (no error)
+[   11.225048] NetBpfLoad: prog /sys/fs/bpf/net_shared/prog_clatd_schedcls_egress4_clat_rawip id 37
+[   11.228010] NetBpfLoad: Loaded object: /apex/com.android.tethering/etc/bpf/net_shared/clatd.o
+[   11.228057] NetBpfLoad: done, transferring control to platform bpfloader.
+[   11.235250] BpfLoader: Platform BpfLoader loading optional ELF object /system/etc/bpf/gpuWork.o with license Apache 2.0
+[   11.239158] BpfLoader: map /sys/fs/bpf/map_gpuWork_gpu_work_map id 38
+[   11.239175] BpfLoader: map /sys/fs/bpf/map_gpuWork_gpu_work_global_data id 39
+[   11.239800] BpfLoader: prog /sys/fs/bpf/prog_gpuWork_tracepoint_power_gpu_work_period id 38
+[   11.240435] BpfLoader: Platform BpfLoader loading optional ELF object /system/etc/bpf/timeInState.o with license GPL
+[   11.244949] BpfLoader: map /sys/fs/bpf/map_timeInState_total_time_in_state_map id 40
+[   11.245550] BpfLoader: map /sys/fs/bpf/map_timeInState_uid_time_in_state_map id 41
+[   11.245995] BpfLoader: map /sys/fs/bpf/map_timeInState_uid_concurrent_times_map id 42
+[   11.246028] BpfLoader: map /sys/fs/bpf/map_timeInState_uid_last_update_map id 43
+[   11.246041] BpfLoader: map /sys/fs/bpf/map_timeInState_cpu_last_update_map id 44
+[   11.246053] BpfLoader: map /sys/fs/bpf/map_timeInState_cpu_last_pid_map id 45
+[   11.246066] BpfLoader: map /sys/fs/bpf/map_timeInState_cpu_policy_map id 46
+[   11.246079] BpfLoader: map /sys/fs/bpf/map_timeInState_policy_freq_idx_map id 47
+[   11.246120] BpfLoader: map /sys/fs/bpf/map_timeInState_freq_to_idx_map id 48
+[   11.246131] BpfLoader: map /sys/fs/bpf/map_timeInState_nr_active_map id 49
+[   11.246144] BpfLoader: map /sys/fs/bpf/map_timeInState_policy_nr_active_map id 50
+[   11.246159] BpfLoader: map /sys/fs/bpf/map_timeInState_pid_tracked_hash_map id 51
+[   11.246171] BpfLoader: map /sys/fs/bpf/map_timeInState_pid_tracked_map id 52
+[   11.246196] BpfLoader: map /sys/fs/bpf/map_timeInState_pid_task_aggregation_map id 53
+[   11.246731] BpfLoader: map /sys/fs/bpf/map_timeInState_pid_time_in_state_map id 54
+[   11.250737] BpfLoader: prog /sys/fs/bpf/prog_timeInState_tracepoint_sched_sched_switch id 39
+[   11.251090] BpfLoader: prog /sys/fs/bpf/prog_timeInState_tracepoint_power_cpu_frequency id 40
+[   11.252098] BpfLoader: prog /sys/fs/bpf/prog_timeInState_tracepoint_sched_sched_process_free id 41
+[   11.252416] BpfLoader: Platform BpfLoader loading optional ELF object /system/etc/bpf/fuseMedia.o with license GPL
+[   11.256146] BpfLoader: No maps section could be found in elf object
+[   11.259540] BpfLoader: prog /sys/fs/bpf/prog_fuseMedia_fuse_media id 42
+[   11.259822] BpfLoader: Platform BpfLoader loading critical for BPF Ringbuf test ELF object /system/etc/bpf/bpfRingbufProg.o with license Apache 2.0
+[   11.264318] BpfLoader: map /sys/fs/bpf/map_bpfRingbufProg_test_ringbuf id 55
+[   11.264653] BpfLoader: prog /sys/fs/bpf/prog_bpfRingbufProg_skfilter_ringbuf_test id 43
+[   11.264990] BpfLoader: Platform BpfLoader loading optional ELF object /system/etc/bpf/bpfMemEventsTest.o with license GPL
+[   11.269204] BpfLoader: map /sys/fs/bpf/map_bpfMemEventsTest_rb id 56
+[   11.269778] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEventsTest_tracepoint_oom_mark_victim id 44
+[   11.270127] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEventsTest_skfilter_oom_kill id 45
+[   11.270441] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEventsTest_skfilter_direct_reclaim_begin id 46
+[   11.270717] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEventsTest_skfilter_direct_reclaim_end id 47
+[   11.270996] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEventsTest_skfilter_kswapd_wake id 48
+[   11.271303] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEventsTest_skfilter_kswapd_sleep id 49
+[   11.271588] BpfLoader: Platform BpfLoader loading optional ELF object /system/etc/bpf/gpuMem.o with license Apache 2.0
+[   11.273951] BpfLoader: map /sys/fs/bpf/map_gpuMem_gpu_mem_total_map id 57
+[   11.274379] BpfLoader: prog /sys/fs/bpf/prog_gpuMem_tracepoint_gpu_mem_gpu_mem_total id 50
+[   11.274634] BpfLoader: Platform BpfLoader loading optional ELF object /system/etc/bpf/bpfMemEvents.o with license GPL
+[   11.277321] BpfLoader: map /sys/fs/bpf/map_bpfMemEvents_ams_rb id 58
+[   11.277372] BpfLoader: map /sys/fs/bpf/map_bpfMemEvents_lmkd_rb id 59
+[   11.277832] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEvents_tracepoint_oom_mark_victim_ams id 51
+[   11.278116] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEvents_tracepoint_vmscan_mm_vmscan_direct_reclaim_begin_lmkd id 52
+[   11.278430] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEvents_tracepoint_vmscan_mm_vmscan_direct_reclaim_end_lmkd id 53
+[   11.278723] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEvents_tracepoint_vmscan_mm_vmscan_kswapd_wake_lmkd id 54
+[   11.279004] BpfLoader: prog /sys/fs/bpf/prog_bpfMemEvents_tracepoint_vmscan_mm_vmscan_kswapd_sleep_lmkd id 55
+[   11.279552] BpfLoader: Platform BpfLoader loading optional ELF object /system/etc/bpf/uprobestats/BitmapAllocation.o with license GPL
+[   11.283185] BpfLoader: map /sys/fs/bpf/uprobestats/map_BitmapAllocation_output_buf id 60
+[   11.283555] BpfLoader: prog /sys/fs/bpf/uprobestats/prog_BitmapAllocation_uprobe_bitmap_constructor_heap id 56
+[   11.286795] NetBpfLoad: success.
+[   11.288213] init: Service 'bpfloader' (pid 359) exited with status 0 waiting took 0.580000 seconds
+[   11.291074] init: Sending signal 9 to service 'bpfloader' (pid 359) process group...
+[   11.293792] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_359
+[   11.296241] init: processing action (zygote-start) from (/system/etc/init/hw/init.rc:1092)
+[   11.297988] init: start_waiting_for_property("odsign.verification.done", "1"): already set
+[   11.299724] init: starting service 'update_verifier'...
+[   11.302514] init: ... started service 'update_verifier' has pid 360
+[   11.304880] init: SVC_EXEC service 'update_verifier' pid 360 (uid 0 gid 2001+1 context default) started; waiting...
+[   11.312123] init: Service 'update_verifier' (pid 360) exited with status 0 waiting took 0.010000 seconds
+[   11.315176] init: Sending signal 9 to service 'update_verifier' (pid 360) process group...
+[   11.316660] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_360
+[   11.318270] init: starting service 'statsd'...
+[   11.319183] init: Created socket '/dev/socket/statsdw', mode 222, user 1066, group 1066
+[   11.321780] init: ... started service 'statsd' has pid 361
+[   11.323337] init: starting service 'netd'...
+[   11.324742] init: Created socket '/dev/socket/dnsproxyd', mode 660, user 0, group 3003
+[   11.327343] init: Created socket '/dev/socket/mdns', mode 660, user 0, group 1000
+[   11.329515] init: Created socket '/dev/socket/fwmarkd', mode 660, user 0, group 3003
+[   11.332863] init: ... started service 'netd' has pid 362
+[   11.335191] init: starting service 'zygote'...
+[   11.338392] init: Created socket '/dev/socket/zygote', mode 660, user 0, group 1000
+[   11.340721] init: Created socket '/dev/socket/usap_pool_primary', mode 660, user 0, group 1000
+[   11.344636] init: ... started service 'zygote' has pid 366
+[   11.346406] init: Command 'start zygote_secondary' action=zygote-start (/system/etc/init/hw/init.rc:1099) took 0ms and failed: service zygote_secondary not found
+[   11.350087] init: processing action (zygote-start) from (/vendor/etc/init/hw/init.ranchu.rc:68)
+[   11.354393] init: processing action (firmware_mounts_complete) from (/system/etc/init/hw/init.rc:522)
+[   11.357069] init: processing action (early-boot) from (/system/etc/init/installd.rc:7)
+[   11.363572] init: processing action (early-boot) from (/system/etc/init/kcmdlinectrl.rc:17)
+[   11.366363] init: starting service 'exec 14 (/system/bin/kcmdlinectrl update-props)'...
+[   11.369879] init: ... started service 'exec 14 (/system/bin/kcmdlinectrl update-props)' has pid 369
+[   11.372373] init: processing action (boot) from (/system/etc/init/hw/init.rc:1109)
+[   11.375208] init: Command 'symlink /sys/fs/f2fs/${dev.mnt.dev.data} /dev/sys/fs/by-name/userdata' action=boot (/system/etc/init/hw/init.rc:1132) took 0ms and failed: property 'dev.mnt.dev.data' doesn't exist while expanding '/sys/fs/f2fs/${dev.mnt.dev.data}'
+[   11.381524] init: Command 'symlink /sys/class/block/${dev.mnt.dev.data} /dev/sys/block/by-name/userdata' action=boot (/system/etc/init/hw/init.rc:1137) took 0ms and failed: property 'dev.mnt.dev.data' doesn't exist while expanding '/sys/class/block/${dev.mnt.dev.data}'
+[   11.387927] init: Command 'symlink /sys/class/block/${dev.mnt.rootdisk.data} /dev/sys/block/by-name/rootdisk' action=boot (/system/etc/init/hw/init.rc:1138) took 0ms and failed: property 'dev.mnt.rootdisk.data' doesn't exist while expanding '/sys/class/block/${dev.mnt.rootdisk.data}'
+[   11.395734] init: starting service 'hidl_memory'...
+[   11.400109] init: ... started service 'hidl_memory' has pid 370
+[   11.403698] init: starting service 'vendor.audio-hal'...
+[   11.406536] init: ... started service 'vendor.audio-hal' has pid 371
+[   11.408472] init: starting service 'vendor.camera-provider-ranchu'...
+[   11.417339] init: ... started service 'vendor.camera-provider-ranchu' has pid 372
+[   11.419567] init: starting service 'vendor.camera-provider-2-7-google'...
+[   11.422772] init: ... started service 'vendor.camera-provider-2-7-google' has pid 373
+[   11.432064] init: starting service 'vendor.gatekeeper-1-0'...
+[   11.437280] init: ... started service 'vendor.gatekeeper-1-0' has pid 376
+[   11.443228] init: starting service 'vendor.gralloc-3-0'...
+[   11.450587] init: ... started service 'vendor.gralloc-3-0' has pid 377
+[   11.455056] init: starting service 'vendor.health-default'...
+[   11.461489] init: ... started service 'vendor.health-default' has pid 378
+[   11.466596] init: starting service 'android-hardware-media-c2-goldfish-hal-1-0'...
+[   11.473181] init: ... started service 'android-hardware-media-c2-goldfish-hal-1-0' has pid 382
+[   11.482516] init: starting service 'vendor.sensors-hal-multihal'...
+[   11.487732] init: ... started service 'vendor.sensors-hal-multihal' has pid 383
+[   11.497579] init: starting service 'vendor.thermal-hal-2-0-mock'...
+[   11.499750] healthd: batteryCapacityLevelPath not found
+[   11.503990] healthd: batteryChargeTimeToFullNowPath. not found
+[   11.504938] init: ... started service 'vendor.thermal-hal-2-0-mock' has pid 384
+[   11.508859] healthd: batteryFullChargeDesignCapacityUahPath. not found
+[   11.510698] init: starting service 'vendor.usb_default'...
+[   11.511199] healthd: batteryStateOfHealthPath not found
+[   11.521867] init: ... started service 'vendor.usb_default' has pid 385
+[   11.523495] healthd: batteryHealthStatusPath not found
+[   11.528177] healthd: batteryManufacturingDatePath not found
+[   11.531024] init: starting service 'vendor.wifi_hal_legacy'...
+[   11.531100] healthd: batteryFirstUsageDatePath not found
+[   11.534311] healthd: chargingStatePath not found
+[   11.535983] healthd: chargingPolicyPath not found
+[   11.537801] init: ... started service 'vendor.wifi_hal_legacy' has pid 386
+[   11.538115] servicemanager: getDeviceHalManifest: Reloading VINTF information.
+[   11.539997] init: starting service 'vendor.bluetooth-default'...
+[   11.542374] servicemanager: getDeviceHalManifest: Reading VINTF information.
+[   11.550985] servicemanager: Loaded APEX Infos from /apex/apex-info-list.xml
+[   11.555783] servicemanager: getDeviceHalManifest: Successfully processed VINTF information
+[   11.558952] servicemanager: getFrameworkHalManifest: Reloading VINTF information.
+[   11.561885] servicemanager: getFrameworkHalManifest: Reading VINTF information.
+[   11.565668] servicemanager: Loaded APEX Infos from /apex/apex-info-list.xml
+[   11.566029] init: ... started service 'vendor.bluetooth-default' has pid 389
+[   11.568298] servicemanager: getFrameworkHalManifest: Successfully processed VINTF information
+[   11.573031] servicemanager: Caller(pid=378,uid=1000,sid=u:r:hal_health_default:s0) Found android.hardware.health.IHealth/default in device VINTF manifest.
+[   11.578365] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 c=900000 fc=3000000 cc=10 chg=a
+[   11.583160] servicemanager: Caller(pid=383,uid=1000,sid=u:r:hal_sensors_default:s0) Found android.hardware.sensors.ISensors/default in device VINTF manifest.
+[   11.586319] init: starting service 'vendor.contexthub-default'...
+[   11.590736] servicemanager: Caller(pid=385,uid=1000,sid=u:r:hal_usb_default:s0) Found android.hardware.usb.IUsb/default in device VINTF manifest.
+[   11.595468] init: ... started service 'vendor.contexthub-default' has pid 403
+[   11.599828] init: starting service 'vendor.hwcomposer-3'...
+[   11.603848] init: ... started service 'vendor.hwcomposer-3' has pid 405
+[   11.605178] init: starting service 'vendor.identity-default'...
+[   11.613332] servicemanager: Caller(pid=362,uid=0,sid=u:r:netd:s0) Found android.system.net.netd.INetd/default in framework VINTF manifest.
+[   11.615543] init: ... started service 'vendor.identity-default' has pid 406
+[   11.620922] init: starting service 'vendor.light-default'...
+[   11.631797] init: ... started service 'vendor.light-default' has pid 407
+[   11.634248] servicemanager: Caller(pid=386,uid=1010,sid=u:r:hal_wifi_default:s0) Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[   11.639203] init: starting service 'vendor.power-default'...
+[   11.653645] servicemanager: Caller(pid=403,uid=1080,sid=u:r:hal_contexthub_default:s0) Found android.hardware.contexthub.IContextHub/default in device VINTF manifest.
+[   11.660457] init: ... started service 'vendor.power-default' has pid 413
+[   11.670693] init: starting service 'vendor.power.stats-default'...
+[   11.671726] servicemanager: Caller(pid=389,uid=1002,sid=u:r:hal_bluetooth_default:s0) Found android.hardware.bluetooth.IBluetoothHci/default in device VINTF manifest.
+[   11.674923] init: ... started service 'vendor.power.stats-default' has pid 415
+[   11.678689] servicemanager: Caller(pid=372,uid=1000,sid=u:r:hal_camera_default:s0) Found android.hardware.camera.provider.ICameraProvider/internal/1 in device VINTF manifest.
+[   11.681119] init: starting service 'vendor.vibrator-default'...
+[   11.682514] servicemanager: Caller(pid=405,uid=1000,sid=u:r:hal_graphics_composer_default:s0) Found android.hardware.graphics.composer3.IComposer/default in device VINTF manifest.
+[   11.689004] servicemanager: Caller(pid=406,uid=9999,sid=u:r:hal_identity_default:s0) Found android.hardware.identity.IIdentityCredentialStore/default in device VINTF manifest.
+[   11.693514] init: ... started service 'vendor.vibrator-default' has pid 418
+[   11.694784] servicemanager: Caller(pid=371,uid=1041,sid=u:r:hal_audio_default:s0) Found android.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default in device VINTF manifest.
+[   11.702899] servicemanager: Caller(pid=413,uid=9999,sid=u:r:hal_power_default:s0) Found android.hardware.power.IPower/default in device VINTF manifest.
+[   11.703010] init: starting service 'vendor.authsecret_default'...
+[   11.712075] servicemanager: Caller(pid=407,uid=9999,sid=u:r:hal_light_default:s0) Found android.hardware.light.ILights/default in device VINTF manifest.
+[   11.718491] init: ... started service 'vendor.authsecret_default' has pid 420
+[   11.722613] servicemanager: Caller(pid=418,uid=9999,sid=u:r:hal_vibrator_default:s0) Found android.hardware.vibrator.IVibrator/default in device VINTF manifest.
+[   11.726833] init: starting service 'vendor.cas-default'...
+[   11.727036] servicemanager: Caller(pid=415,uid=1000,sid=u:r:hal_power_stats_default:s0) Found android.hardware.power.stats.IPowerStats/default in device VINTF manifest.
+[   11.731848] init: ... started service 'vendor.cas-default' has pid 421
+[   11.733475] servicemanager: Caller(pid=418,uid=9999,sid=u:r:hal_vibrator_default:s0) Found android.hardware.vibrator.IVibratorManager/default in device VINTF manifest.
+[   11.740355] servicemanager: Caller(pid=420,uid=1064,sid=u:r:hal_authsecret_default:s0) Found android.hardware.authsecret.IAuthSecret/default in device VINTF manifest.
+[   11.745089] init: starting service 'neuralnetworks_hal_service_aidl_sample_all'...
+[   11.748579] servicemanager: Caller(pid=373,uid=1000,sid=u:r:hal_camera_default:s0) Found android.hardware.camera.provider.ICameraProvider/internal/0 in device VINTF manifest.
+[   11.753873] init: ... started service 'neuralnetworks_hal_service_aidl_sample_all' has pid 424
+[   11.756590] servicemanager: Caller(pid=421,uid=1013,sid=u:r:hal_cas_default:s0) Found android.hardware.cas.IMediaCasService/default in device VINTF manifest.
+[   11.759369] init: starting service 'neuralnetworks_hal_service_aidl_sample_limited'...
+[   11.765810] init: ... started service 'neuralnetworks_hal_service_aidl_sample_limited' has pid 425
+[   11.768609] init: starting service 'neuralnetworks_hal_service_shim_sample'...
+[   11.771977] init: ... started service 'neuralnetworks_hal_service_shim_sample' has pid 426
+[   11.775414] init: starting service 'vendor.rebootescrow-default'...
+[   11.781458] init: ... started service 'vendor.rebootescrow-default' has pid 427
+[   11.784412] init: starting service 'vendor.drm-widevine-hal'...
+[   11.789919] init: ... started service 'vendor.drm-widevine-hal' has pid 428
+[   11.795697] init: Command 'class_start hal' action=boot (/system/etc/init/hw/init.rc:1215) took 398ms and succeeded
+[   11.801439] init: Service 'exec 14 (/system/bin/kcmdlinectrl update-props)' (pid 369) exited with status 1 oneshot service took 0.431000 seconds in background
+[   11.804205] init: Sending signal 9 to service 'exec 14 (/system/bin/kcmdlinectrl update-props)' (pid 369) process group...
+[   11.804834] servicemanager: Caller(pid=427,uid=1000,sid=u:r:hal_rebootescrow_default:s0) Found android.hardware.rebootescrow.IRebootEscrow/default in device VINTF manifest.
+[   11.808640] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_369
+[   11.813692] init: service 'ueventd' requested start, but it is already running (flags: 2084)
+[   11.815570] init: service 'console' requested start, but it is already running (flags: 2196)
+[   11.817955] init: service 'apexd' requested start, but it is already running (flags: 134)
+[   11.821053] init: starting service 'audioserver'...
+[   11.831874] servicemanager: Caller(pid=425,uid=1000,sid=u:r:hal_neuralnetworks_sample:s0) Found android.hardware.neuralnetworks.IDevice/nnapi-sample_quant in device VINTF manifest.
+[   11.837001] init: ... started service 'audioserver' has pid 429
+[   11.838855] init: starting service 'credstore'...
+[   11.841969] init: ... started service 'credstore' has pid 430
+[   11.843587] init: starting service 'gpu'...
+[   11.847129] init: ... started service 'gpu' has pid 431
+[   11.849962] init: service 'lmkd' requested start, but it is already running (flags: 36)
+[   11.853662] init: starting service 'misctrl'...
+[   11.859038] init: ... started service 'misctrl' has pid 432
+[   11.860688] init: service 'servicemanager' requested start, but it is already running (flags: 2084)
+[   11.864204] init: starting service 'surfaceflinger'...
+[   11.873090] init: Could not create socket 'pdx/system/vr/display/client': Failed to bind socket 'pdx/system/vr/display/client': No such file or directory
+[   11.877509] init: Could not create socket 'pdx/system/vr/display/manager': Failed to bind socket 'pdx/system/vr/display/manager': No such file or directory
+[   11.881658] servicemanager: Caller(pid=424,uid=1000,sid=u:r:hal_neuralnetworks_sample:s0) Found android.hardware.neuralnetworks.IDevice/nnapi-sample_all in device VINTF manifest.
+[   11.886785] init: Could not create socket 'pdx/system/vr/display/vsync': Failed to bind socket 'pdx/system/vr/display/vsync': No such file or directory
+[   11.896911] servicemanager: Caller(pid=426,uid=1000,sid=u:r:hal_neuralnetworks_sample:s0) Found android.hardware.neuralnetworks.IDevice/nnapi-sample_sl_shim in device VINTF manifest.
+[   11.902850] init: ... started service 'surfaceflinger' has pid 433
+[   11.905559] init: service 'vold' requested start, but it is already running (flags: 2052)
+[   11.908420] init: Command 'class_start core' action=boot (/system/etc/init/hw/init.rc:1217) took 95ms and succeeded
+[   11.913092] init: Service 'misctrl' (pid 432) exited with status 1 oneshot service took 0.055000 seconds in background
+[   11.915187] init: Sending signal 9 to service 'misctrl' (pid 432) process group...
+[   11.917186] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_432
+[   11.919643] init: processing action (persist.sys.usb.config=* && boot) from (/system/etc/init/hw/init.usb.rc:109)
+[   11.924008] init: processing action (boot) from (/vendor/etc/init/hw/init.ranchu.rc:74)
+[   11.929145] init: processing action (boot) from (/system/etc/init/dumpstate.rc:1)
+[   11.931724] init: processing action (boot) from (/system/etc/init/gsid.rc:25)
+[   11.934540] init: starting service 'exec 15 (/system/bin/gsid run-startup-tasks)'...
+[   11.938974] init: ... started service 'exec 15 (/system/bin/gsid run-startup-tasks)' has pid 440
+[   11.942612] init: processing action (persist.device_config.aconfig_flags.profcollect_native_boot.enabled= && boot) from (/system/etc/init/profcollectd.rc:19)
+[   11.946693] init: starting service 'exec 16 (/system/bin/profcollectctl reset)'...
+[   11.950573] init: ... started service 'exec 16 (/system/bin/profcollectctl reset)' has pid 441
+[   11.954283] init: processing action (enable_property_trigger) from (<Builtin Action>:0)
+[   11.959345] init: processing action (bootreceiver.enable=1 && ro.product.cpu.abilist64=*) from (/system/etc/init/hw/init.rc:666)
+[   11.964885] type=1400 audit(1792855566.732:5): avc:  denied  { write } for  comm="init" name="error_report_end" dev="tracefs" ino=7131 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_bootreceiver_tracing:s0 tclass=dir permissive=0
+[   11.969459] init: processing action (net.tcp_def_init_rwnd=*) from (/system/etc/init/hw/init.rc:1247)
+[   11.971443] init: processing action (security.perf_harden=1) from (/system/etc/init/hw/init.rc:1272)
+[   11.976029] init: processing action (ro.debuggable=1) from (/system/etc/init/hw/init.rc:1309)
+[   11.980086] init: processing action (sys.usb.config=adb && sys.usb.configfs=0) from (/system/etc/init/hw/init.usb.rc:41)
+[   11.982729] init: Command 'write /sys/class/android_usb/android0/enable 0' action=sys.usb.config=adb && sys.usb.configfs=0 (/system/etc/init/hw/init.usb.rc:42) took 0ms and failed: Unable to write to file '/sys/class/android_usb/android0/enable': open() failed: Permission denied
+[   11.989957] init: Command 'write /sys/class/android_usb/android0/idVendor 18d1' action=sys.usb.config=adb && sys.usb.configfs=0 (/system/etc/init/hw/init.usb.rc:43) took 0ms and failed: Unable to write to file '/sys/class/android_usb/android0/idVendor': open() failed: Permission denied
+[   11.995969] init: Command 'write /sys/class/android_usb/android0/idProduct 4EE7' action=sys.usb.config=adb && sys.usb.configfs=0 (/system/etc/init/hw/init.usb.rc:44) took 0ms and failed: Unable to write to file '/sys/class/android_usb/android0/idProduct': open() failed: Permission denied
+[   12.001092] init: Service 'exec 15 (/system/bin/gsid run-startup-tasks)' (pid 440) exited with status 0 oneshot service took 0.062000 seconds in background
+[   12.005866] init: Sending signal 9 to service 'exec 15 (/system/bin/gsid run-startup-tasks)' (pid 440) process group...
+[   12.006758] servicemanager: Caller(pid=428,uid=1013,sid=u:r:hal_drm_widevine:s0) Found android.hardware.drm.IDrmFactory/widevine in device VINTF manifest.
+[   12.011324] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_440
+[   12.017544] init: Command 'write /sys/class/android_usb/android0/functions ${sys.usb.config}' action=sys.usb.config=adb && sys.usb.configfs=0 (/system/etc/init/hw/init.usb.rc:45) took 0ms and failed: Unable to write to file '/sys/class/android_usb/android0/functions': open() failed: Permission denied
+[   12.025208] init: Command 'write /sys/class/android_usb/android0/enable 1' action=sys.usb.config=adb && sys.usb.configfs=0 (/system/etc/init/hw/init.usb.rc:46) took 0ms and failed: Unable to write to file '/sys/class/android_usb/android0/enable': open() failed: Permission denied
+[   12.032617] init: starting service 'adbd'...
+[   12.034246] init: Created socket '/dev/socket/adbd', mode 660, user 1000, group 1000
+[   12.041647] init: ... started service 'adbd' has pid 442
+[   12.047932] init: processing action (vendor.qemu.timezone=*) from (/vendor/etc/init/hw/init.ranchu.rc:104)
+[   12.063645] init: processing action (vendor.qemu.vport.bluetooth=*) from (/vendor/etc/init/hw/init.ranchu.rc:176)
+[   12.073848] init: processing action (apexd.status=ready && ro.product.cpu.abilist64=*) from (/system/etc/init/hw/init.boringssl.zygote64.rc:3)
+[   12.088932] init: starting service 'boringssl_self_test_apex64'...
+[   12.129319] init: ... started service 'boringssl_self_test_apex64' has pid 443
+[   12.134501] init: SVC_EXEC service 'boringssl_self_test_apex64' pid 443 (uid 9999 gid 0+0 context default) started; waiting...
+[   12.151148] init: Command 'exec_start boringssl_self_test_apex64' action=apexd.status=ready && ro.product.cpu.abilist64=* (/system/etc/init/hw/init.boringssl.zygote64.rc:4) took 64ms and succeeded
+[   12.160157] init: Service 'exec 16 (/system/bin/profcollectctl reset)' (pid 441) exited with status 0 oneshot service took 0.210000 seconds in background
+[   12.171474] init: Sending signal 9 to service 'exec 16 (/system/bin/profcollectctl reset)' (pid 441) process group...
+[   12.177484] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_441
+[   12.186922] init: starting service 'mdnsd'...
+[   12.191236] init: Created socket '/dev/socket/mdnsd', mode 660, user 1020, group 3003
+[   12.200374] init: ... started service 'mdnsd' has pid 460
+[   12.203906] init: Control message: Processed ctl.start for 'mdnsd' from pid: 442 (/apex/com.android.adbd/bin/adbd --root_seclabel=u:r:su:s0)
+[   12.209078] init: Service 'boringssl_self_test_apex64' (pid 443) exited with status 0 waiting took 0.107000 seconds
+[   12.213595] init: Sending signal 9 to service 'boringssl_self_test_apex64' (pid 443) process group...
+[   12.217787] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_9999/pid_443
+[   12.220129] init: processing action (ro.persistent_properties.ready=true) from (/system/etc/init/atrace.rc:407)
+[   12.223050] init: processing action (init.svc.audioserver=running) from (/system/etc/init/audioserver.rc:37)
+[   12.225045] init: service 'vendor.audio-hal' requested start, but it is already running (flags: 4)
+[   12.229516] init: Command 'start vendor.audio-hal-aidl' action=init.svc.audioserver=running (/system/etc/init/audioserver.rc:39) took 0ms and failed: service vendor.audio-hal-aidl not found
+[   12.237621] init: Command 'start vendor.audio-effect-hal-aidl' action=init.svc.audioserver=running (/system/etc/init/audioserver.rc:40) took 0ms and failed: service vendor.audio-effect-hal-aidl not found
+[   12.247064] init: Command 'start vendor.audio-hal-4-0-msd' action=init.svc.audioserver=running (/system/etc/init/audioserver.rc:41) took 0ms and failed: service vendor.audio-hal-4-0-msd not found
+[   12.252681] init: Command 'start audio_proxy_service' action=init.svc.audioserver=running (/system/etc/init/audioserver.rc:42) took 0ms and failed: service audio_proxy_service not found
+[   12.257486] init: processing action (ro.persistent_properties.ready=true) from (/system/etc/init/bootstat.rc:57)
+[   12.259855] init: processing action (ro.persistent_properties.ready=true) from (/system/etc/init/bootstat.rc:61)
+[   12.263539] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Could not find android.hardware.audio.core.IModule/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   12.269367] init: starting service 'exec 17 (/system/bin/bootstat --set_system_boot_reason)'...
+[   12.273511] init: ... started service 'exec 17 (/system/bin/bootstat --set_system_boot_reason)' has pid 465
+[   12.276425] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Could not find android.hardware.audio.effect.IFactory/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   12.276863] init: processing action (bootreceiver.enable=1 && ro.product.cpu.abilist64=*) from (/system/etc/init/dmesgd.rc:7)
+[   12.283605] servicemanager: Caller(pid=433,uid=1000,sid=u:r:surfaceflinger:s0) Found android.hardware.graphics.composer3.IComposer/default in device VINTF manifest.
+[   12.287735] init: Command 'rm /data/misc/dmesgd/sent_reports.txt' action=bootreceiver.enable=1 && ro.product.cpu.abilist64=* (/system/etc/init/dmesgd.rc:9) took 0ms and failed: unlink() failed: No such file or directory
+[   12.295349] servicemanager: Caller(pid=405,uid=1000,sid=u:r:hal_graphics_composer_default:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   12.295627] init: processing action (drm.service.enabled=true) from (/system/etc/init/drmserver.rc:8)
+[   12.307824] init: starting service 'drm'...
+[   12.331754] servicemanager: Caller(pid=433,uid=1000,sid=u:r:surfaceflinger:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   12.335424] init: ... started service 'drm' has pid 468
+[   12.336384] init: processing action (persist.heapprofd.enable= && traced.lazy.heapprofd=) from (/system/etc/init/heapprofd.rc:49)
+[   12.345633] init: Service 'exec 17 (/system/bin/bootstat --set_system_boot_reason)' (pid 465) exited with status 0 oneshot service took 0.073000 seconds in background
+[   12.348772] init: Sending signal 9 to service 'exec 17 (/system/bin/bootstat --set_system_boot_reason)' (pid 465) process group...
+[   12.353645] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Could not find android.hardware.audio.effect.IFactory/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   12.354647] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_465
+[   12.360019] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Could not find android.hardware.audio.core.IModule/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   12.367682] init: processing action (ro.debuggable=1) from (/system/etc/init/llkd-debuggable.rc:1)
+[   12.376498] init: starting service 'bootanim'...
+[   12.380624] init: ... started service 'bootanim' has pid 483
+[   12.382509] init: Control message: Processed ctl.start for 'bootanim' from pid: 433 (/system/bin/surfaceflinger)
+[   12.386051] init: processing action (ro.debuggable=*) from (/system/etc/init/llkd.rc:2)
+[   12.388741] init: processing action (ro.dalvik.vm.isa.arm=x86 && ro.enable.native.bridge.exec=1) from (/system/etc/init/ndk_translation.rc:5)
+[   12.397631] init: processing action (ro.dalvik.vm.isa.arm64=x86_64 && ro.enable.native.bridge.exec=1) from (/system/etc/init/ndk_translation.rc:9)
+[   12.409631] init: processing action (debug.atrace.user_initiated= && persist.traced.enable=1) from (/system/etc/init/perfetto.rc:47)
+[   12.415820] init: starting service 'traced_probes'...
+[   12.428432] init: ... started service 'traced_probes' has pid 486
+[   12.433329] init: processing action (persist.traced.enable=1) from (/system/etc/init/perfetto.rc:50)
+[   12.437488] init: starting service 'traced'...
+[   12.438720] init: Created socket '/dev/socket/traced_consumer', mode 666, user 0, group 0
+[   12.449472] init: Created socket '/dev/socket/traced_producer', mode 666, user 0, group 0
+[   12.458979] init: ... started service 'traced' has pid 489
+[   12.465395] init: service 'traced_probes' requested start, but it is already running (flags: 132)
+[   12.477397] init: processing action (ro.persistent_properties.ready=true) from (/system/etc/init/perfetto.rc:119)
+[   12.488669] init: processing action (persist.debug.perfetto.persistent_sysui_tracing_for_bugreport=) from (/system/etc/init/perfetto.rc:178)
+[   12.501184] init: processing action (persist.traced_perf.enable= && sys.init.perf_lsm_hooks=1 && traced.lazy.traced_perf=) from (/system/etc/init/traced_perf.rc:43)
+[   12.507655] init: processing action (init.svc.ranchu-adb-setup=stopped) from (/system_ext/etc/init/init.system_ext.rc:1)
+[   12.511424] init: service 'adbd' requested start, but it is already running (flags: 132)
+[   12.514986] init: processing action (apex.all.ready=true) from (/apex/com.google.android.widevine/etc/com.google.android.widevine.rc:1)
+[   12.525722] init: processing action (nonencrypted) from (/system/etc/init/hw/init.rc:1219)
+[   12.532321] init: starting service 'goldfish-logcat'...
+[   12.536589] init: ... started service 'goldfish-logcat' has pid 491
+[   12.541305] init: starting service 'bt_vhci_forwarder'...
+[   12.547214] init: ... started service 'bt_vhci_forwarder' has pid 492
+[   12.549997] init: service 'zygote' requested start, but it is already running (flags: 4)
+[   12.552747] init: starting service 'cameraserver'...
+[   12.559026] init: ... started service 'cameraserver' has pid 493
+[   12.560981] init: service 'drm' requested start, but it is already running (flags: 132)
+[   12.564410] init: starting service 'idmap2d'...
+[   12.566771] init: ... started service 'idmap2d' has pid 494
+[   12.568750] init: starting service 'incidentd'...
+[   12.571406] logd: logdr: UID=1036 GID=0 PID=491 b tail=0 logMask=99 pid=0 start=0ns deadline=0ns
+[   12.578343] init: ... started service 'incidentd' has pid 496
+[   12.579377] init: starting service 'installd'...
+[   12.590309] init: ... started service 'installd' has pid 497
+[   12.592942] init: service 'mdnsd' requested start, but it is already running (flags: 134)
+[   12.604151] init: starting service 'mediaextractor'...
+[   12.626841] init: ... started service 'mediaextractor' has pid 498
+[   12.633895] init: starting service 'mediametrics'...
+[   12.642220] init: ... started service 'mediametrics' has pid 500
+[   12.653690] init: starting service 'media'...
+[   12.667195] init: ... started service 'media' has pid 502
+[   12.691964] init: service 'netd' requested start, but it is already running (flags: 4)
+[   12.699577] init: starting service 'storaged'...
+[   12.709413] init: Could not open file '/d/mmc0/mmc0:0001/ext_csd': Failed to open file '/d/mmc0/mmc0:0001/ext_csd': No such file or directory
+[   12.728373] init: ... started service 'storaged' has pid 509
+[   12.741793] init: starting service 'wificond'...
+[   12.753750] init: ... started service 'wificond' has pid 511
+[   12.776146] servicemanager: Caller(pid=511,uid=1010,sid=u:r:wificond:s0) Could not find android.hardware.net.nlinterceptor.IInterceptor/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   12.778043] init: starting service 'vendor.ril-daemon'...
+[   12.806197] init: ... started service 'vendor.ril-daemon' has pid 515
+[   12.807549] init: starting service 'media.swcodec'...
+[   12.812957] init: ... started service 'media.swcodec' has pid 516
+[   12.825613] init: service 'statsd' requested start, but it is already running (flags: 4)
+[   12.831327] init: Command 'class_start main' action=nonencrypted (/system/etc/init/hw/init.rc:1220) took 299ms and succeeded
+[   12.890036] init: Service 'bootanim' (pid 483) exited with status 0 oneshot service took 0.510000 seconds in background
+[   12.911029] init: Sending signal 9 to service 'bootanim' (pid 483) process group...
+[   12.920975] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1003/pid_483
+[   12.949721] init: starting service 'gatekeeperd'...
+[   12.974574] init: ... started service 'gatekeeperd' has pid 520
+[   12.976449] init: service 'traced' requested start, but it is already running (flags: 132)
+[   12.982509] servicemanager: Caller(pid=516,uid=1046,sid=u:r:mediaswcodec:s0) Found android.hardware.media.c2.IComponentStore/software in framework VINTF manifest.
+[   13.002975] init: service 'traced_probes' requested start, but it is already running (flags: 132)
+[   13.018558] servicemanager: Caller(pid=516,uid=1046,sid=u:r:mediaswcodec:s0) Found android.hardware.media.c2.IComponentStore/software in framework VINTF manifest.
+[   13.024824] init: starting service 'usbd'...
+[   13.039299] init: ... started service 'usbd' has pid 525
+[   13.040412] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[   13.040697] init: Command 'class_start late_start' action=nonencrypted (/system/etc/init/hw/init.rc:1221) took 91ms and succeeded
+[   13.057305] init: processing action (load_persist_props_action) from (/system/etc/init/flags_health_check.rc:1)
+[   13.060899] init: Encryption policy of /data/server_configurable_flags set to 0e7b397cbfa0595cb65e7239376d100d v2 modes 1/4 flags 0x2
+[   13.070209] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.system.suspend.ISystemSuspend/default in framework VINTF manifest.
+[   13.085422] init: starting service 'exec 18 (/system/bin/flags_health_check BOOT_FAILURE)'...
+[   13.090750] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[   13.106459] init: ... started service 'exec 18 (/system/bin/flags_health_check BOOT_FAILURE)' has pid 527
+[   13.110851] servicemanager: Caller(pid=520,uid=1000,sid=u:r:gatekeeperd:s0) Could not find android.hardware.gatekeeper.IGatekeeper/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   13.117206] init: SVC_EXEC service 'exec 18 (/system/bin/flags_health_check BOOT_FAILURE)' pid 527 (uid 1000 gid 1000+0 context default) started; waiting...
+[   13.137660] init: Command 'exec - system system -- /system/bin/flags_health_check BOOT_FAILURE' action=load_persist_props_action (/system/etc/init/flags_health_check.rc:5) took 52ms and succeeded
+[   13.144196] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.messaging.IRadioMessaging/slot1 in device VINTF manifest.
+[   13.151294] servicemanager: Caller(pid=509,uid=0,sid=u:r:storaged:s0) Found android.hardware.health.IHealth/default in device VINTF manifest.
+[   13.165545] init: service 'adbd' requested start, but it is already running (flags: 132)
+[   13.167881] init: Control message: Processed ctl.start for 'adbd' from pid: 525 (/system/bin/usbd)
+[   13.175184] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.messaging.IRadioMessaging/slot1 in device VINTF manifest.
+[   13.185762] init: Service 'exec 18 (/system/bin/flags_health_check BOOT_FAILURE)' (pid 527) exited with status 0 waiting took 0.080000 seconds
+[   13.191108] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.
+[   13.196796] init: Sending signal 9 to service 'exec 18 (/system/bin/flags_health_check BOOT_FAILURE)' (pid 527) process group...
+[   13.201036] servicemanager: Caller(pid=525,uid=0,sid=u:r:usbd:s0) Could not find android.hardware.usb.gadget.IUsbGadget/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   13.204393] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_527
+[   13.210318] init: processing action (load_persist_props_action) from (/system/etc/init/logcatd.rc:29)
+[   13.212791] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.
+[   13.213325] init: processing action (llk.enable=0) from (/system/etc/init/llkd.rc:12)
+[   13.219151] init: Service 'usbd' (pid 525) exited with status 0 oneshot service took 0.186000 seconds in background
+[   13.221448] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Could not find android.hardware.audio.effect.IFactory/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   13.222755] init: Sending signal 9 to service 'usbd' (pid 525) process group...
+[   13.229349] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.network.IRadioNetwork/slot1 in device VINTF manifest.
+[   13.234426] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_525
+[   13.241492] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.network.IRadioNetwork/slot1 in device VINTF manifest.
+[   13.242103] init: processing action (khungtask.enable=1) from (/system/etc/init/llkd.rc:18)
+[   13.250868] init: processing action (llk.enable=0) from (/system/etc/init/llkd.rc:12)
+[   13.253039] init: processing action (khungtask.enable=0) from (/system/etc/init/llkd.rc:21)
+[   13.255420] init: processing action (init.svc.media=*) from (/system/etc/init/mediaserver.rc:1)
+[   13.257468] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Could not find android.hardware.audio.core.IModule/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   13.258167] init: processing action (khungtask.enable=true) from (/system/etc/init/llkd.rc:25)
+[   13.265351] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.
+[   13.267716] init: processing action (khungtask.enable=false) from (/system/etc/init/llkd.rc:31)
+[   13.283716] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.
+[   13.303615] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.
+[   13.306524] cameraserver[493]: memfd_create() called without MFD_EXEC or MFD_NOEXEC_SEAL set
+[   13.311095] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.
+[   13.337501] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[   13.345157] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[   13.351543] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.ims.media.IImsMedia/default in device VINTF manifest.
+[   13.355567] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.ims.media.IImsMedia/default in device VINTF manifest.
+[   13.362190] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.
+[   13.375628] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.
+[   13.380752] servicemanager: Service 'android.hardware.radio.modem.IRadioModem/slot1' originally registered from PID 515 but it is being registered again from PID 515. Bad state? Late death notification? Multiple instances installed?
+[   13.386102] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   13.388448] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.
+[   13.393448] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.
+[   13.397145] servicemanager: Service 'android.hardware.radio.sim.IRadioSim/slot1' originally registered from PID 515 but it is being registered again from PID 515. Bad state? Late death notification? Multiple instances installed?
+[   13.402788] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   13.405723] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Found android.hardware.radio.config.IRadioConfig/default in device VINTF manifest.
+[   13.409865] servicemanager: Caller(pid=515,uid=1001,sid=u:r:rild:s0) Could not find android.hardware.radio.sap.ISap/slot1 in the VINTF manifest. No alternative instances declared in VINTF.
+[   13.416272] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Found android.system.suspend.ISystemSuspend/default in framework VINTF manifest.
+[   13.421520] servicemanager: Caller(pid=493,uid=1047,sid=u:r:cameraserver:s0) Found android.frameworks.cameraservice.service.ICameraService/default in framework VINTF manifest.
+[   13.426210] servicemanager: Caller(pid=493,uid=1047,sid=u:r:cameraserver:s0) Found android.frameworks.cameraservice.service.ICameraService/default in framework VINTF manifest.
+[   13.601920] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Could not find android.hardware.audio.effect.IFactory/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   13.609616] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Could not find android.hardware.audio.core.IModule/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   13.616749] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   13.625607] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   13.649692] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   14.624813] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   14.630351] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   14.633539] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   15.125179] servicemanager: Notifying apexservice they do (previously: don't) have clients when service is guaranteed to be in use
+[   15.131179] apexd: getActivePackages received by ApexService
+[   15.133494] AidlLazyServiceRegistrar: Process has 1 (of 1 available) client(s) in use after notification apexservice has clients: 1
+[   15.153383] AidlLazyServiceRegistrar: Shutdown prevented by forcePersist override flag.
+[   15.220076] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.power.stats.IPowerStats/default in device VINTF manifest.
+[   15.228738] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.frameworks.stats.IStats/default in framework VINTF manifest.
+[   15.233446] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.memtrack.IMemtrack/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   15.341962] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.system.suspend.ISystemSuspend/default in framework VINTF manifest.
+[   15.348046] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.power.IPower/default in device VINTF manifest.
+[   15.356158] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.light.ILights/default in device VINTF manifest.
+[   15.491009] apexd: getAllPackages received by ApexService
+[   15.631020] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   15.637705] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   15.641293] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   16.653607] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   16.661589] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   16.665444] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   17.660678] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   17.681459] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   17.689548] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   18.680688] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   18.694511] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   18.701428] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   19.693878] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   19.705807] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   19.711096] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   20.705899] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   20.721548] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   20.725087] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   21.554406] servicemanager: Notifying apexservice they don't (previously: do) have clients when we now have no record of a client
+[   21.558395] AidlLazyServiceRegistrar: Process has 0 (of 1 available) client(s) in use after notification apexservice has clients: 0
+[   21.565325] AidlLazyServiceRegistrar: Shutdown prevented by forcePersist override flag.
+[   21.718267] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   21.729390] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   21.733181] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   22.728064] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'activity' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   22.741374] init: Control message: Could not find 'aidl/activity' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   22.749334] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service activity as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   23.021338] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   23.029506] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Since 'sensor_privacy' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   23.044590] init: Control message: Could not find 'aidl/sensor_privacy' for ctl.interface_start from pid: 151 (/system/bin/servicemanager)
+[   23.050854] servicemanager: Caller(pid=429,uid=1041,sid=u:r:audioserver:s0) Tried to start aidl service sensor_privacy as a lazy service, but was unable to. Usually this happens when a service is not installed, but if the service is intended to be used as a lazy service, then it may be configured incorrectly.
+[   23.086603] init: service 'idmap2d' requested start, but it is already running (flags: 4)
+[   23.090186] init: Control message: Processed ctl.start for 'idmap2d' from pid: 563 (system_server)
+[   23.473835] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   23.476493] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.sensors.ISensors/default in device VINTF manifest.
+[   23.480632] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.health.IHealth/default in device VINTF manifest.
+[   23.488980] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 c=900000 fc=3000000 cc=10 chg=a
+[   23.696148] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.power.IPower/default in device VINTF manifest.
+[   23.703854] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.vibrator.IVibratorManager/default in device VINTF manifest.
+[   23.710304] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.frameworks.vibrator.IVibratorControlService/default in framework VINTF manifest.
+[   23.716384] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.frameworks.vibrator.IVibratorControlService/default in framework VINTF manifest.
+[   23.795640] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.frameworks.sensorservice.ISensorManager/default in framework VINTF manifest.
+[   23.849922] init: processing action (sys.sysctl.extra_free_kbytes=*) from (/system/etc/init/hw/init.rc:1238)
+[   23.857843] init: starting service 'exec 19 (/system/bin/extra_free_kbytes.sh 30375)'...
+[   23.881431] init: ... started service 'exec 19 (/system/bin/extra_free_kbytes.sh 30375)' has pid 693
+[   23.884757] init: SVC_EXEC service 'exec 19 (/system/bin/extra_free_kbytes.sh 30375)' pid 693 (uid 0 gid 0+0 context default) started; waiting...
+[   23.906799] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Since 'artd' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   23.918888] init: starting service 'artd'...
+[   23.933801] init: ... started service 'artd' has pid 704
+[   23.935568] init: Control message: Processed ctl.interface_start for 'aidl/artd' from pid: 151 (/system/bin/servicemanager)
+[   23.970649] servicemanager: Notifying artd they do (previously: don't) have clients when service is guaranteed to be in use
+[   23.975395] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   23.997831] init: Service 'exec 19 (/system/bin/extra_free_kbytes.sh 30375)' (pid 693) exited with status 0 waiting took 0.132000 seconds
+[   24.000402] init: Sending signal 9 to service 'exec 19 (/system/bin/extra_free_kbytes.sh 30375)' (pid 693) process group...
+[   24.006040] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_693
+[   31.827958] servicemanager: Caller(pid=166,uid=0,sid=u:r:vold:s0) Found android.system.suspend.ISystemSuspend/default in framework VINTF manifest.
+[   31.841967] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.oemlock.IOemLock/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   31.903828] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[   31.909606] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.supplicant.ISupplicant/default in device VINTF manifest.
+[   31.915417] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.supplicant.ISupplicant/default in device VINTF manifest.
+[   31.981190] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.frameworks.location.altitude.IAltitudeService/default in framework VINTF manifest.
+[   32.030461] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.soundtrigger3.ISoundTriggerHw/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   32.042337] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.usb.gadget.IUsbGadget/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   32.050445] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.thermal.IThermal/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   32.062434] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.usb.IUsb/default in device VINTF manifest.
+[   32.119937] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.biometrics.face.IFace/virtual in device VINTF manifest.
+[   32.126734] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.biometrics.fingerprint.IFingerprint/default in device VINTF manifest.
+[   32.131158] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Since 'android.hardware.biometrics.face.IFace/virtual' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   32.138962] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Since 'android.hardware.biometrics.fingerprint.IFingerprint/default' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   32.145425] init: starting service 'vendor.face-example'...
+[   32.172318] init: ... started service 'vendor.face-example' has pid 874
+[   32.174047] init: Control message: Processed ctl.interface_start for 'aidl/android.hardware.biometrics.face.IFace/virtual' from pid: 151 (/system/bin/servicemanager)
+[   32.181548] init: starting service 'vendor.biometrics.fingerprint-service.ranchu'...
+[   32.187768] init: ... started service 'vendor.biometrics.fingerprint-service.ranchu' has pid 879
+[   32.195711] init: Control message: Processed ctl.interface_start for 'aidl/android.hardware.biometrics.fingerprint.IFingerprint/default' from pid: 151 (/system/bin/servicemanager)
+[   32.200937] servicemanager: Caller(pid=874,uid=9999,sid=u:r:hal_face_default:s0) Found android.hardware.biometrics.face.IFace/virtual in device VINTF manifest.
+[   32.206806] servicemanager: Notifying android.hardware.biometrics.face.IFace/virtual they do (previously: don't) have clients when service is guaranteed to be in use
+[   32.211620] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   32.218258] servicemanager: Caller(pid=879,uid=1000,sid=u:r:hal_fingerprint_default:s0) Found android.hardware.biometrics.fingerprint.IFingerprint/default in device VINTF manifest.
+[   32.224849] servicemanager: Notifying android.hardware.biometrics.fingerprint.IFingerprint/default they do (previously: don't) have clients when service is guaranteed to be in use
+[   32.232850] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   32.242132] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.biometrics.face.IFace/virtual in device VINTF manifest.
+[   32.261532] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.biometrics.fingerprint.IFingerprint/default in device VINTF manifest.
+[   32.317303] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.authsecret.IAuthSecret/default in device VINTF manifest.
+[   32.374134] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[   32.386831] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.health.IHealth/default in device VINTF manifest.
+[   32.489556] servicemanager: Notifying apexservice they do (previously: don't) have clients when service is guaranteed to be in use
+[   32.493436] apexd: getSessions() received by ApexService
+[   32.493591] AidlLazyServiceRegistrar: Process has 1 (of 1 available) client(s) in use after notification apexservice has clients: 1
+[   32.498715] AidlLazyServiceRegistrar: Shutdown prevented by forcePersist override flag.
+[   32.557511] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.thermal.IThermal/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   32.693473] servicemanager: Caller(pid=516,uid=1046,sid=u:r:mediaswcodec:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   33.055249] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.gnss.IGnss/default in device VINTF manifest.
+[   33.061634] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Since 'android.hardware.gnss.IGnss/default' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   33.073354] init: starting service 'vendor.gnss.ranchu'...
+[   33.094115] init: ... started service 'vendor.gnss.ranchu' has pid 985
+[   33.095628] init: Control message: Processed ctl.interface_start for 'aidl/android.hardware.gnss.IGnss/default' from pid: 151 (/system/bin/servicemanager)
+[   33.112738] servicemanager: Caller(pid=985,uid=1021,sid=u:r:hal_gnss_default:s0) Found android.hardware.gnss.IGnss/default in device VINTF manifest.
+[   33.121546] servicemanager: Notifying android.hardware.gnss.IGnss/default they do (previously: don't) have clients when service is guaranteed to be in use
+[   33.133032] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   33.325720] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.input.processor.IInputProcessor/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   33.462187] init: Sending signal 9 to service 'idmap2d' (pid 494) process group...
+[   33.466194] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_494
+[   33.468299] init: Control message: Processed ctl.stop for 'idmap2d' from pid: 563 (system_server)
+[   33.471152] init: Service 'idmap2d' (pid 494) received signal 9
+[   33.472783] init: Sending signal 9 to service 'idmap2d' (pid 494) process group...
+[   33.475373] libprocessgroup: Failed to write 1 to /sys/fs/cgroup/uid_1000/pid_494/cgroup.kill: No such file or directory
+[   33.479428] libprocessgroup: Failed to open /sys/fs/cgroup/uid_1000/pid_494/cgroup.procs: No such file or directory
+[   33.659707] type=1400 audit(1792855588.428:6): avc:  granted  { read } for  comm="rkstack.process" name="psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+[   33.669743] type=1400 audit(1792855588.436:7): avc:  granted  { read open } for  comm="rkstack.process" path="/proc/1028/net/psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+[   33.681445] type=1400 audit(1792855588.436:8): avc:  granted  { getattr } for  comm="rkstack.process" path="/proc/1028/net/psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+[   33.891356] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.weaver.IWeaver/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   33.932642] init: starting service 'idmap2d'...
+[   33.944622] init: ... started service 'idmap2d' has pid 1082
+[   33.951854] init: Control message: Processed ctl.start for 'idmap2d' from pid: 563 (system_server)
+[   34.242273] servicemanager: Caller(pid=1081,uid=1000,sid=u:r:system_app:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   34.266438] servicemanager: Caller(pid=1072,uid=1068,sid=u:r:secure_element:s0:c44,c260,c512,c768) Could not find android.hardware.secure_element.ISecureElement/eSE1 in the VINTF manifest. No alternative instances declared in VINTF.
+[   34.318737] servicemanager: Caller(pid=1072,uid=1068,sid=u:r:secure_element:s0:c44,c260,c512,c768) Could not find android.hardware.secure_element.ISecureElement/SIM1 in the VINTF manifest. No alternative instances declared in VINTF.
+[   34.924823] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.input.processor.IInputProcessor/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   35.029590] servicemanager: Caller(pid=1070,uid=1002,sid=u:r:bluetooth:s0) Found android.hardware.bluetooth.IBluetoothHci/default in device VINTF manifest.
+[   35.091417] servicemanager: Caller(pid=913,uid=10181,sid=u:r:platform_app:s0:c512,c768) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   35.129466] servicemanager: Caller(pid=1070,uid=1002,sid=u:r:bluetooth:s0) Could not find android.hardware.bluetooth.ranging.IBluetoothChannelSounding/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   35.141910] servicemanager: Caller(pid=1070,uid=1002,sid=u:r:bluetooth:s0) Could not find android.hardware.bluetooth.ranging.IBluetoothChannelSounding/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   35.415378] servicemanager: Caller(pid=1070,uid=1002,sid=u:r:bluetooth:s0) Found android.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default in device VINTF manifest.
+[   35.425530] servicemanager: Caller(pid=1070,uid=1002,sid=u:r:bluetooth:s0) Found android.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default in device VINTF manifest.
+[   35.454907] servicemanager: Caller(pid=1070,uid=1002,sid=u:r:bluetooth:s0) Found android.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default in device VINTF manifest.
+[   35.462695] servicemanager: Caller(pid=1070,uid=1002,sid=u:r:bluetooth:s0) Found android.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default in device VINTF manifest.
+[   35.588635] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[   35.606020] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[   35.614543] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.messaging.IRadioMessaging/slot1 in device VINTF manifest.
+[   35.624283] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.
+[   35.631505] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.network.IRadioNetwork/slot1 in device VINTF manifest.
+[   35.639562] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.
+[   35.646840] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.
+[   35.653511] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[   35.661401] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.
+[   35.672788] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.messaging.IRadioMessaging/slot1 in device VINTF manifest.
+[   35.679574] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[   35.693313] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.
+[   35.708507] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[   35.718360] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[   35.723679] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[   35.737317] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.messaging.IRadioMessaging/slot1 in device VINTF manifest.
+[   35.746002] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.messaging.IRadioMessaging/slot1 in device VINTF manifest.
+[   35.753562] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.
+[   35.759570] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.network.IRadioNetwork/slot1 in device VINTF manifest.
+[   35.765521] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.network.IRadioNetwork/slot1 in device VINTF manifest.
+[   35.772756] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.
+[   35.777826] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.
+[   35.785587] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.
+[   35.793524] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.
+[   35.801301] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[   35.807923] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[   35.813177] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[   35.928637] servicemanager: Caller(pid=1076,uid=1001,sid=u:r:radio:s0) Found android.hardware.radio.config.IRadioConfig/default in device VINTF manifest.
+[   36.262257] servicemanager: Caller(pid=433,uid=1000,sid=u:r:surfaceflinger:s0) Found android.hardware.power.IPower/default in device VINTF manifest.
+[   36.360454] apexd: markBootCompleted() received by ApexService
+[   36.376147] init: processing action (sys.boot_completed=1) from (/system/etc/init/hw/init.rc:1229)
+[   36.381489] init: starting service 'exec 20 (/bin/rm -rf /data/per_boot)'...
+[   36.404664] init: ... started service 'exec 20 (/bin/rm -rf /data/per_boot)' has pid 1344
+[   36.409148] init: SVC_EXEC service 'exec 20 (/bin/rm -rf /data/per_boot)' pid 1344 (uid 1000 gid 1000+0 context default) started; waiting...
+[   36.411712] init: Service 'exec 20 (/bin/rm -rf /data/per_boot)' (pid 1344) exited with status 0 waiting took 0.026000 seconds
+[   36.421438] init: Sending signal 9 to service 'exec 20 (/bin/rm -rf /data/per_boot)' (pid 1344) process group...
+[   36.426182] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_1344
+[   36.430559] init: Encryption policy of /data/per_boot set to 23c0bd22f84d08ee6fca89cf9d5f9882 v2 modes 1/4 flags 0x2
+[   36.436177] init: processing action (sys.boot_completed=1) from (/vendor/etc/init/hw/init.ranchu.rc:200)
+[   36.438717] init: processing action (sys.boot_completed=1 && sys.bootstat.first_boot_completed=0) from (/system/etc/init/bootstat.rc:67)
+[   36.443807] init: starting service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)'...
+[   36.453051] init: ... started service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)' has pid 1362
+[   36.461105] init: processing action (sys.boot_completed=1) from (/system/etc/init/dmesgd.rc:4)
+[   36.465480] init: processing action (sys.boot_completed=1) from (/system/etc/init/flags_health_check.rc:7)
+[   36.473689] init: processing action (persist.dbg.keep_debugfs_mounted= && ro.product.debugfs_restrictions.enabled=true && sys.boot_completed=1) from (/system/etc/init/init-debug.rc:15)
+[   36.478143] init: processing action (sys.boot_completed=1) from (/system/etc/init/lmkd.rc:13)
+[   36.481430] init: starting service 'exec 22 (/system/bin/lmkd --boot_completed)'...
+[   36.521535] init: ... started service 'exec 22 (/system/bin/lmkd --boot_completed)' has pid 1372
+[   36.523784] init: Service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)' (pid 1362) exited with status 0 oneshot service took 0.071000 seconds in background
+[   36.534232] init: Sending signal 9 to service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)' (pid 1362) process group...
+[   36.541455] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_1362
+[   36.545104] init: Service 'exec 22 (/system/bin/lmkd --boot_completed)' (pid 1372) exited with status 0 oneshot service took 0.057000 seconds in background
+[   36.553298] init: Sending signal 9 to service 'exec 22 (/system/bin/lmkd --boot_completed)' (pid 1372) process group...
+[   36.555485] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_1372
+[   36.557047] init: processing action (sys.boot_completed=1) from (/system/etc/init/logd.rc:34)
+[   36.566620] init: starting service 'logd-auditctl'...
+[   36.570900] init: ... started service 'logd-auditctl' has pid 1387
+[   36.574478] init: processing action (sys.boot_completed=1 && sys.wifitracing.started=0) from (/system/etc/init/wifi.rc:28)
+[   36.576832] selinux: SELinux: Could not get canonical path for /sys/kernel/debug/tracing/instances/wifi restorecon: No such file or directory.
+[   36.609811] init: Service 'logd-auditctl' (pid 1387) exited with status 0 oneshot service took 0.039000 seconds in background
+[   36.617289] init: Sending signal 9 to service 'logd-auditctl' (pid 1387) process group...
+[   36.619758] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1036/pid_1387
+[   36.627282] type=1400 audit(1792855591.396:9): avc:  denied  { write } for  comm="init" name="cfg80211_gtk_rekey_notify" dev="tracefs" ino=16065 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_wifi_tracing:s0 tclass=dir permissive=0
+[   36.647797] type=1400 audit(1792855591.404:10): avc:  denied  { write } for  comm="init" name="rdev_add_key" dev="tracefs" ino=16078 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_wifi_tracing:s0 tclass=dir permissive=0
+[   36.665669] audit: audit_lost=1 audit_rate_limit=5 audit_backlog_limit=64
+[   36.667712] type=1400 audit(1792855591.404:11): avc:  denied  { write } for  comm="init" name="rdev_assoc" dev="tracefs" ino=16081 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_wifi_tracing:s0 tclass=dir permissive=0
+[   36.676235] audit: rate limit exceeded
+[   36.682367] init: processing action (dev.bootcomplete=1 && vendor.qemu.dev.bootcomplete=0) from (/vendor/etc/init/hw/init.ranchu.rc:107)
+[   36.688300] type=1400 audit(1792855591.408:12): avc:  denied  { write } for  comm="init" name="rdev_auth" dev="tracefs" ino=16084 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_wifi_tracing:s0 tclass=dir permissive=0
+[   36.697636] init: starting service 'qemu-props-bootcomplete'...
+[   36.704763] type=1400 audit(1792855591.408:13): avc:  denied  { write } for  comm="init" name="rdev_connect" dev="tracefs" ino=16087 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_wifi_tracing:s0 tclass=dir permissive=0
+[   36.715569] init: ... started service 'qemu-props-bootcomplete' has pid 1396
+[   36.723392] init: starting service 'ranchu-setup'...
+[   36.726090] init: ... started service 'ranchu-setup' has pid 1399
+[   36.735191] type=1400 audit(1792855591.408:14): avc:  denied  { write } for  comm="init" name="rdev_set_default_key" dev="tracefs" ino=16090 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_wifi_tracing:s0 tclass=dir permissive=0
+[   36.745601] type=1400 audit(1792855591.408:15): avc:  denied  { write } for  comm="init" name="rdev_set_default_mgmt_key" dev="tracefs" ino=16093 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_wifi_tracing:s0 tclass=dir permissive=0
+[   36.755345] init: Service 'qemu-props-bootcomplete' (pid 1396) exited with status 0 oneshot service took 0.055000 seconds in background
+[   36.765613] type=1400 audit(1792855591.408:16): avc:  denied  { write } for  comm="init" name="rdev_set_rekey_data" dev="tracefs" ino=16096 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_wifi_tracing:s0 tclass=dir permissive=0
+[   36.775476] type=1400 audit(1792855591.408:17): avc:  denied  { write } for  comm="init" name="net" dev="tracefs" ino=16099 scontext=u:r:init:s0 tcontext=u:object_r:debugfs_wifi_tracing:s0 tclass=dir permissive=0
+[   36.783037] init: Sending signal 9 to service 'qemu-props-bootcomplete' (pid 1396) process group...
+[   36.784554] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_1396
+[   36.790994] init: Service 'ranchu-setup' (pid 1399) exited with status 0 oneshot service took 0.065000 seconds in background
+[   36.798687] apexd: destroyCeSnapshotsNotSpecified() received by ApexService user_id : 0 retain_rollback_ids : []
+[   36.803301] init: Sending signal 9 to service 'ranchu-setup' (pid 1399) process group...
+[   36.808782] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_1399
+[   36.817339] init: processing action (persist.sys.zram_enabled=1 && sys-boot-completed-set) from (/vendor/etc/init/hw/init.ranchu.rc:203)
+[   36.830128] zram0: detected capacity change from 0 to 3798624
+[   36.843091] mkswap: Swapspace size: 1899308k, UUID=02059487-30ec-4df5-81f9-68826cf24216
+[   36.846565] Adding 1899308k swap on /dev/block/zram0.  Priority:-2 extents:1 across:1899308k SS
+[   36.852487] init: processing action (sys.user.0.ce_available=true) from (/system/etc/init/wifi.rc:21)
+[   36.858034] init: processing action (bootreceiver.enable=1 && dmesgd.start=1 && ro.product.cpu.abilist64=*) from (/system/etc/init/dmesgd.rc:12)
+[   36.864967] init: starting service 'dmesgd'...
+[   36.868056] init: ... started service 'dmesgd' has pid 1423
+[   36.873498] init: processing action (sys.boot_completed=1 && sys.wifitracing.started=1 && wifi.interface=*) from (/system/etc/init/wifi.rc:98)
+[   37.002405] init: Command 'write /sys/kernel/tracing/instances/wifi/events/net/filter name==${wifi.interface}' action=sys.boot_completed=1 && sys.wifitracing.started=1 && wifi.interface=* (/system/etc/init/wifi.rc:101) took 117ms and succeeded
+[   37.013063] init: Service 'adbd' (pid 442) exited with status 0
+[   37.015059] init: Sending signal 9 to service 'adbd' (pid 442) process group...
+[   37.016818] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_442
+[   37.022528] init: Service 'dmesgd' (pid 1423) exited with status 0 oneshot service took 0.155000 seconds in background
+[   37.027654] init: Sending signal 9 to service 'dmesgd' (pid 1423) process group...
+[   37.044366] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1086/pid_1423
+[   37.047012] init: starting service 'adbd'...
+[   37.048417] init: Created socket '/dev/socket/adbd', mode 660, user 1000, group 1000
+[   37.058652] init: ... started service 'adbd' has pid 1458
+[   37.948367] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[   38.049188] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[   38.209360] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[   38.294543] servicemanager: Caller(pid=1170,uid=10180,sid=u:r:priv_app:s0:c512,c768) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   38.380818] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[   38.386352] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.supplicant.ISupplicant/default in device VINTF manifest.
+[   38.403993] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.supplicant.ISupplicant/default in device VINTF manifest.
+[   38.414701] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Since 'android.hardware.wifi.supplicant.ISupplicant/default' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   38.436713] init: starting service 'wpa_supplicant'...
+[   38.441660] init: Created socket '/dev/socket/wpa_wlan0', mode 660, user 1010, group 1010
+[   38.872151] init: ... started service 'wpa_supplicant' has pid 1664
+[   38.873771] init: Control message: Processed ctl.interface_start for 'aidl/android.hardware.wifi.supplicant.ISupplicant/default' from pid: 151 (/system/bin/servicemanager)
+[   38.904025] capability: warning: `wpa_supplicant' uses 32-bit capabilities (legacy support in use)
+[   38.911894] servicemanager: Caller(pid=1664,uid=1010,sid=u:r:hal_wifi_supplicant_default:s0) Found android.hardware.wifi.supplicant.ISupplicant/default in device VINTF manifest.
+[   38.921841] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   39.111812] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[   39.883643] apexd: Deleting unused dm device com.android.apex.cts.shim
+[   39.917733] apexd: Deleting unused dm device com.android.btservices
+[   39.945376] apexd: Deleting unused dm device com.android.compos
+[   40.145587] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[   40.169407] apexd: Deleting unused dm device com.android.devicelock
+[   40.197384] apexd: Deleting unused dm device com.android.hardware.authsecret
+[   40.257471] apexd: Deleting unused dm device com.android.hardware.cas
+[   40.288079] apexd: Deleting unused dm device com.android.hardware.neuralnetworks
+[   40.477413] apexd: Deleting unused dm device com.android.hardware.rebootescrow
+[   40.514004] apexd: Deleting unused dm device com.android.i18n
+[   40.537592] apexd: Deleting unused dm device com.android.nfcservices
+[   40.557372] apexd: Deleting unused dm device com.android.runtime
+[   40.621838] apexd: Deleting unused dm device com.android.tzdata
+[   40.650168] apexd: Deleting unused dm device com.android.virt
+[   40.681409] apexd: Deleting unused dm device com.google.android.widevine
+[   40.717380] apexd: Deleting unused dm device com.google.mainline.primary.libs
+[   41.555136] servicemanager: Notifying apexservice they don't (previously: do) have clients when we now have no record of a client
+[   41.621476] AidlLazyServiceRegistrar: Process has 0 (of 1 available) client(s) in use after notification apexservice has clients: 0
+[   41.701084] AidlLazyServiceRegistrar: Trying to shut down the service. No clients in use for any service in process.
+[   41.733649] servicemanager: Caller(pid=219,uid=0,sid=u:r:apexd:s0) Unregistering apexservice
+[   41.736226] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   41.744852] AidlLazyServiceRegistrar: Unregistered all clients and exiting
+[   41.761995] init: Service 'apexd' (pid 219) exited with status 0 oneshot service took 33.862999 seconds in background
+[   41.787196] init: Sending signal 9 to service 'apexd' (pid 219) process group...
+[   41.791894] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_219
+[   42.079417] servicemanager: Caller(pid=563,uid=1000,sid=u:r:system_server:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   44.503449] wlan0: authenticate with 02:15:b2:00:00:01
+[   44.515402] wlan0: No basic rates, using min rate instead
+[   44.516978] wlan0: send auth to 02:15:b2:00:00:01 (try 1/3)
+[   44.520013] wlan0: authenticated
+[   44.531996] wlan0: associate with 02:15:b2:00:00:01 (try 1/3)
+[   44.536014] wlan0: RX AssocResp from 02:15:b2:00:00:01 (capab=0x1 status=0 aid=1)
+[   44.538130] wlan0: No basic rates, using min rate instead
+[   44.540383] wlan0: associated
+[   48.142838] type=1400 audit(1792855602.912:22): avc:  granted  { read } for  comm="NetworkMonitor/" name="psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+[   48.150893] type=1400 audit(1792855602.920:23): avc:  granted  { read open } for  comm="NetworkMonitor/" path="/proc/1028/net/psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+[   48.168506] type=1400 audit(1792855602.920:24): avc:  granted  { getattr } for  comm="NetworkMonitor/" path="/proc/1028/net/psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+[   51.723633] type=1400 audit(1792855606.468:25): avc:  denied  { read } for  comm=424720546872656164202332 name="/" dev="vdd1" ino=2 scontext=u:r:priv_app:s0:c512,c768 tcontext=u:object_r:metadata_file:s0 tclass=dir permissive=0 app=com.google.android.googlequicksearchbox
+[   51.748082] logd: start watching /data/system/packages.list ...
+[   51.754889] logd: ReadPackageList, total packages: 217
+[   52.035174] logd: logdr: UID=0 GID=0 PID=2638 b tail=0 logMask=99 pid=0 start=0ns deadline=0ns
+[   55.755220] init: Sending signal 9 to service 'idmap2d' (pid 1082) process group...
+[   55.762092] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_1082
+[   55.766899] init: Control message: Processed ctl.stop for 'idmap2d' from pid: 563 (system_server)
+[   55.777436] init: Service 'idmap2d' (pid 1082) received signal 9
+[   55.779297] init: Sending signal 9 to service 'idmap2d' (pid 1082) process group...
+[   55.781549] libprocessgroup: Failed to write 1 to /sys/fs/cgroup/uid_1000/pid_1082/cgroup.kill: No such file or directory
+[   55.787906] libprocessgroup: Failed to open /sys/fs/cgroup/uid_1000/pid_1082/cgroup.procs: No such file or directory
+[   58.196437] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   58.640046] type=1400 audit(1792855613.396:26): avc:  denied  { read } for  comm=424720546872656164202333 name="/" dev="vdd1" ino=2 scontext=u:r:priv_app:s0:c512,c768 tcontext=u:object_r:metadata_file:s0 tclass=dir permissive=0 app=com.google.android.googlequicksearchbox
+[   59.118193] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   60.343721] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   65.833377] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   65.904321] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   65.923517] binder: 563:619 ioctl 400c620e 7be3779ff284 returned -11
+[   65.976768] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   66.168516] binder: undelivered transaction 100507, process died.
+[   66.171205] binder: undelivered transaction 100508, process died.
+[   66.470607] logd: start watching /data/system/packages.list ...
+[   66.473105] logd: ReadPackageList, total packages: 217
+[   67.051168] type=1400 audit(1792855621.820:27): avc:  denied  { read } for  comm="binder:2218_3" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   67.064279] type=1400 audit(1792855621.828:28): avc:  denied  { read } for  comm="binder:2218_3" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   67.325809] binder: 563:619 ioctl 400c620e 7be3779ff284 returned -11
+[   67.664149] binder: 563:619 ioctl 400c620e 7be3779ff284 returned -11
+[   67.722991] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   67.772009] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Since 'android.hardware.drm.IDrmFactory/clearkey' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+[   67.804477] init: starting service 'vendor.drm-clearkey-service'...
+[   67.809775] init: ... started service 'vendor.drm-clearkey-service' has pid 3279
+[   67.812272] init: Control message: Processed ctl.interface_start for 'aidl/android.hardware.drm.IDrmFactory/clearkey' from pid: 151 (/system/bin/servicemanager)
+[   67.869516] servicemanager: Caller(pid=3279,uid=1013,sid=u:r:hal_drm_clearkey_aidl:s0) Found android.hardware.drm.IDrmFactory/clearkey in device VINTF manifest.
+[   67.881893] servicemanager: Notifying android.hardware.drm.IDrmFactory/clearkey they do (previously: don't) have clients when service is guaranteed to be in use
+[   67.891339] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   68.989718] init: starting service 'idmap2d'...
+[   69.189246] init: ... started service 'idmap2d' has pid 3370
+[   69.197533] init: Control message: Processed ctl.start for 'idmap2d' from pid: 563 (system_server)
+[   69.844713] SELinux: avc:  denied  { find } for pid=1081 uid=1000 name=vendor.google.wireless_charger.IWirelessCharger/default scontext=u:r:system_app:s0 tcontext=u:object_r:default_android_service:s0 tclass=service_manager permissive=0
+[   71.554431] servicemanager: Notifying android.hardware.drm.IDrmFactory/clearkey they don't (previously: do) have clients when we now have no record of a client
+[   71.566248] servicemanager: Notifying artd they don't (previously: do) have clients when we now have no record of a client
+[   71.578708] servicemanager: Caller(pid=3279,uid=1013,sid=u:r:hal_drm_clearkey_aidl:s0) Unregistering android.hardware.drm.IDrmFactory/clearkey
+[   71.579249] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 c=900000 fc=3000000 cc=10 chg=a
+[   71.589565] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   71.600029] servicemanager: Caller(pid=704,uid=1082,sid=u:r:artd:s0) Unregistering artd
+[   71.606860] init: Service 'vendor.drm-clearkey-service' (pid 3279) exited with status 0 oneshot service took 3.796000 seconds in background
+[   71.611748] BpBinder: onLastStrongRef automatically unlinking death recipients: 
+[   71.619031] init: Sending signal 9 to service 'vendor.drm-clearkey-service' (pid 3279) process group...
+[   71.633857] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1013/pid_3279
+[   71.639743] init: Service 'artd' (pid 704) exited with status 0 oneshot service took 47.717999 seconds in background
+[   71.650692] init: Sending signal 9 to service 'artd' (pid 704) process group...
+[   71.654588] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1082/pid_704
+[   76.890337] logd: start watching /data/system/packages.list ...
+[   76.902169] logd: ReadPackageList, total packages: 217
+[   79.547149] init: Sending signal 9 to service 'idmap2d' (pid 3370) process group...
+[   79.556469] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_3370
+[   79.561160] init: Control message: Processed ctl.stop for 'idmap2d' from pid: 563 (system_server)
+[   79.571824] init: Service 'idmap2d' (pid 3370) received signal 9
+[   79.577505] init: Sending signal 9 to service 'idmap2d' (pid 3370) process group...
+[   79.582131] libprocessgroup: Failed to write 1 to /sys/fs/cgroup/uid_1000/pid_3370/cgroup.kill: No such file or directory
+[   79.604287] libprocessgroup: Failed to open /sys/fs/cgroup/uid_1000/pid_3370/cgroup.procs: No such file or directory
+[   79.766478] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   79.884349] init: starting service 'idmap2d'...
+[   79.904859] init: ... started service 'idmap2d' has pid 3650
+[   79.950821] init: Control message: Processed ctl.start for 'idmap2d' from pid: 563 (system_server)
+[   79.957836] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   80.508470] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   82.603164] servicemanager: Isolated app with UID 99000 requested 'network_management', but the service is not allowed for isolated apps.
+[   82.623822] servicemanager: Isolated app with UID 99000 requested 'connectivity', but the service is not allowed for isolated apps.
+[   83.199099] servicemanager: Isolated app with UID 99000 requested 'content_capture', but the service is not allowed for isolated apps.
+[   84.748023] type=1400 audit(1792855639.516:29): avc:  denied  { read } for  comm="binder:2218_4" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   84.767892] type=1400 audit(1792855639.516:30): avc:  denied  { read } for  comm="binder:2218_4" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   84.942110] type=1400 audit(1792855639.712:31): avc:  denied  { read } for  comm=424720546872656164202332 name="/" dev="vdd1" ino=2 scontext=u:r:priv_app:s0:c512,c768 tcontext=u:object_r:metadata_file:s0 tclass=dir permissive=0 app=com.google.android.googlequicksearchbox
+[   85.741569] type=1400 audit(1792855640.512:32): avc:  denied  { read } for  comm=424720546872656164202332 name="/" dev="vdd1" ino=2 scontext=u:r:priv_app:s0:c512,c768 tcontext=u:object_r:metadata_file:s0 tclass=dir permissive=0 app=com.google.android.googlequicksearchbox
+[   86.502261] binder_alloc: 1229: binder_alloc_buf size 1056768 failed, no address space
+[   86.510407] binder_alloc: allocated: 229896 (num: 6 largest: 226688), free: 810488 (num: 3 largest: 681280)
+[   86.653049] binder: cannot allocate buffer: no space left
+[   86.653056] binder: 1588:3663 transaction call to 1229:0 failed 173055/29201/-28, size 1056768-0 line 3544
+[   87.029431] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   87.059874] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   87.086838] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   90.284128] init: Sending signal 9 to service 'idmap2d' (pid 3650) process group...
+[   90.293173] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1000/pid_3650
+[   90.302895] init: Control message: Processed ctl.stop for 'idmap2d' from pid: 563 (system_server)
+[   90.309996] init: Service 'idmap2d' (pid 3650) received signal 9
+[   90.315673] init: Sending signal 9 to service 'idmap2d' (pid 3650) process group...
+[   90.319827] libprocessgroup: Failed to write 1 to /sys/fs/cgroup/uid_1000/pid_3650/cgroup.kill: No such file or directory
+[   90.323731] libprocessgroup: Failed to open /sys/fs/cgroup/uid_1000/pid_3650/cgroup.procs: No such file or directory
+[   90.413600] type=1400 audit(1792855645.180:33): avc:  denied  { read } for  comm="binder:2218_4" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   90.433881] type=1400 audit(1792855645.180:34): avc:  denied  { read } for  comm="binder:2218_4" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   90.587875] servicemanager: Caller(pid=3928,uid=10209,sid=u:r:untrusted_app:s0:c209,c256,c512,c768) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[   93.453779] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   93.484419] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   93.516830] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   93.564881] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   93.587665] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   93.606479] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   93.854955] type=1400 audit(1792855648.624:35): avc:  denied  { read } for  comm="binder:2218_2" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   93.870479] type=1400 audit(1792855648.632:36): avc:  denied  { read } for  comm="binder:2218_2" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   94.704092] type=1400 audit(1792855649.472:37): avc:  denied  { read } for  comm="binder:2218_5" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   94.720277] type=1400 audit(1792855649.480:38): avc:  denied  { read } for  comm="binder:2218_5" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   95.472024] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   95.485669] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   95.498067] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   96.018972] type=1400 audit(1792855650.788:39): avc:  denied  { read } for  comm="binder:2218_2" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   96.033585] type=1400 audit(1792855650.788:40): avc:  denied  { read } for  comm="binder:2218_2" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   99.040891] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   99.055904] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   99.073348] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[   99.443264] type=1400 audit(1792855654.212:41): avc:  denied  { read } for  comm="binder:2218_5" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   99.454910] type=1400 audit(1792855654.212:42): avc:  denied  { read } for  comm="binder:2218_5" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[   99.590018] binder: undelivered transaction 247384, process died.
+[   99.591585] binder: undelivered transaction 247179, process died.
+[   99.593812] binder: undelivered transaction 247337, process died.
+[  106.029517] servicemanager: Caller(pid=516,uid=1046,sid=u:r:mediaswcodec:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[  106.105591] servicemanager: Caller(pid=502,uid=1013,sid=u:r:mediaserver:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[  111.274533] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  111.384436] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  111.454909] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  111.863745] type=1400 audit(1792855666.632:43): avc:  denied  { read } for  comm="binder:2218_5" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[  111.882870] type=1400 audit(1792855666.644:44): avc:  denied  { read } for  comm="binder:2218_5" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[  114.794770] binder_alloc: 3434: pid 1229 spamming oneway? 1 buffers allocated for a total size of 414760
+[  119.685575] init: processing action (persist.device_config.lmkd_native.thrashing_limit_critical=*) from (/system/etc/init/lmkd.rc:47)
+[  119.702026] init: processing action (lmkd.reinit=1) from (/system/etc/init/lmkd.rc:10)
+[  119.709547] init: starting service 'exec 23 (/system/bin/lmkd --reinit)'...
+[  119.737767] init: ... started service 'exec 23 (/system/bin/lmkd --reinit)' has pid 4458
+[  119.808772] init: Service 'exec 23 (/system/bin/lmkd --reinit)' (pid 4458) exited with status 0 oneshot service took 0.091000 seconds in background
+[  119.825357] init: Sending signal 9 to service 'exec 23 (/system/bin/lmkd --reinit)' (pid 4458) process group...
+[  119.840115] libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_0/pid_4458
+[  122.925419] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  123.007880] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  123.028371] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  123.543745] type=1400 audit(1792855678.312:45): avc:  denied  { read } for  comm="IntentService[D" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[  123.566332] type=1400 audit(1792855678.312:46): avc:  denied  { read } for  comm="IntentService[D" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[  125.165656] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  125.187719] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  125.208301] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  125.706088] servicemanager: Caller(pid=4533,uid=0,sid=u:r:su:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+[  126.142393] type=1400 audit(1792855680.912:47): avc:  denied  { read } for  comm="binder:2218_2" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[  126.152826] type=1400 audit(1792855680.920:48): avc:  denied  { read } for  comm="binder:2218_2" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[  127.641663] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  127.655080] servicemanager: Caller(pid=2847,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  127.669992] servicemanager: Caller(pid=175,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+[  128.172704] type=1400 audit(1792855682.940:49): avc:  denied  { read } for  comm="binder:2218_4" name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[  128.217222] type=1400 audit(1792855682.940:50): avc:  denied  { read } for  comm="binder:2218_4" name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+[  131.579720] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 c=900000 fc=3000000 cc=10 chg=a
+[  134.420926] init: processing action (persist.device_config.lmkd_native.thrashing_limit_critical=*) from (/system/etc/init/lmkd.rc:47)
+[  134.427823] init: processing action (lmkd.reinit=1) from (/system/etc/init/lmkd.rc:10)
+[  134.430574] init: starting service 'exec 24 (/system/bin/lmkd --reinit)'...
+[  134.453347] init: ... started service 'exec 24 (/system/bin/lmkd --reinit)' has pid 4634
+[  134.502017] init: Service 'exec 24 (/system/bin/lmkd --reinit)' (pid 4634) exited with status 0 oneshot service took 0.066000 seconds in background
+[  134.508076] init: Sending signal 9 to service 'exec 24 (/system/bin/lmkd --reinit)' (pid 4634) process

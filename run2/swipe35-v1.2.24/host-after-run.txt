@@ -1,0 +1,9 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15989        1042        8906          48        6435       14947
+Swap:           3071           0        3071
+== dmesg
+[Sat Oct 24 15:26:09 2026] kvm: kvm [3931]: vcpu0, guest rIP: 0xffffffff8ee09cbd Unhandled WRMSR(0xc0010007) = 0xffff
+== oom/kvm/segfault
+[Sat Oct 24 15:26:09 2026] kvm: kvm [3931]: vcpu0, guest rIP: 0xffffffff8ee09cbd Unhandled WRMSR(0xc0010007) = 0xffff
+== processes

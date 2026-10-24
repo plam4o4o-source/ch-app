@@ -1,0 +1,16 @@
+-- dumpsys window | grep -iE navigationBarColor|statusBarColor|layoutInDisplayCutoutMode|LIGHT_STATUS|APPEARANCE
+    mAttrs={(0,0)(fillxwrap) gr=BOTTOM RIGHT CENTER sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR_PANEL fmt=TRANSLUCENT
+    mAttrs={(0,0)(fillxwrap) gr=TOP LEFT CENTER sim={adjust=pan} layoutInDisplayCutoutMode=always ty=NAVIGATION_BAR_PANEL fmt=TRANSLUCENT
+    mAttrs={(0,0)(fillx126) gr=TOP CENTER_VERTICAL sim={adjust=resize} layoutInDisplayCutoutMode=always ty=STATUS_BAR fmt=TRANSLUCENT
+    mAttrs={(0,0)(fillx126) sim={adjust=pan} layoutInDisplayCutoutMode=always ty=DOCK_DIVIDER fmt=TRANSLUCENT
+    mAttrs={(0,0)(fillxfill) sim={adjust=resize forwardNavigation} layoutInDisplayCutoutMode=always ty=BASE_APPLICATION wanim=0x10302fe
+    mAttrs={(0,0)(fillxfill) gr=LEFT CENTER_HORIZONTAL sim={adjust=pan} layoutInDisplayCutoutMode=always ty=DRAWN_APPLICATION fmt=TRANSPARENT wanim=0x10302f1 alpha=0.0
+    mAttrs={(0,0)(fillxfill) sim={adjust=pan forwardNavigation} layoutInDisplayCutoutMode=always ty=BASE_APPLICATION fmt=TRANSPARENT wanim=0x10302f1
+    mAttrs={(0,0)(2913x2400) gr=TOP START CENTER layoutInDisplayCutoutMode=always ty=WALLPAPER fmt=RGBX_8888 wanim=0x103030e
+-- dumpsys activity top (decor bar backgrounds)
+      DecorView@1d04fe[Settings$DisplaySettingsActivity]
+        android.view.View{bec75ec V.ED..... ......ID 0,2274-1080,2400 #1020030 android:id/navigationBarBackground}
+        android.view.View{244db5 V.ED..... ......ID 0,0-1080,126 #102002f android:id/statusBarBackground}
+      DecorView@3ee3790[]
+        android.view.View{b20102d V.ED..... ........ 0,2274-1080,2400 #1020030 android:id/navigationBarBackground}
+        android.view.View{8ed00c1 I.ED..... ......ID 0,0-1080,126 #102002f android:id/statusBarBackground}

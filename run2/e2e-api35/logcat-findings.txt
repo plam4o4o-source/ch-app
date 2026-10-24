@@ -1,0 +1,33 @@
+app pids seen: ['4340']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=65 total=229
+   10-24 15:27:44.985  4340  4340 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   10-24 15:27:49.544  4340  4340 I Choreographer: Skipped 65 frames!  The application may be doing too much work on its main thread.
+   10-24 15:28:36.413  4340  4340 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   10-24 15:28:37.122  4340  4340 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-24 15:32:31.390  4340  4340 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+== Davey: 8
+   davey events=8 max=1682ms median=1180ms
+   10-24 15:27:47.324  4340  4377 I HWUI    : Davey! duration=1682ms; Flags=1, FrameTimelineVsyncId=6813, IntendedVsync=108584280024, Vsync=108717613352, InputEventId=0, HandleInputStart=108731454046, AnimationStart=108731454827, PerformTraver
+   10-24 15:27:49.566  4340  4403 I HWUI    : Davey! duration=1297ms; Flags=0, FrameTimelineVsyncId=7026, IntendedVsync=110950946596, Vsync=111067613258, InputEventId=0, HandleInputStart=111077994240, AnimationStart=111077994951, PerformTraver
+   10-24 15:27:50.059  4340  4367 I HWUI    : Davey! duration=1062ms; Flags=0, FrameTimelineVsyncId=7042, IntendedVsync=111084279924, Vsync=111517613240, InputEventId=0, HandleInputStart=111536093613, AnimationStart=111536094365, PerformTraver
+   10-24 15:27:50.424  4340  4367 I HWUI    : Davey! duration=1429ms; Flags=0, FrameTimelineVsyncId=7057, IntendedVsync=111550946572, Vsync=112634279862, InputEventId=0, HandleInputStart=112637003516, AnimationStart=112637004308, PerformTraver
+   10-24 15:28:36.440  4340  4554 I HWUI    : Davey! duration=810ms; Flags=0, FrameTimelineVsyncId=11299, IntendedVsync=158700944686, Vsync=158700944686, InputEventId=0, HandleInputStart=158701306999, AnimationStart=158701307581, PerformTraver
+   10-24 15:28:37.182  4340  4554 I HWUI    : Davey! duration=1396ms; Flags=0, FrameTimelineVsyncId=11314, IntendedVsync=158817611348, Vsync=159500944654, InputEventId=0, HandleInputStart=159512549127, AnimationStart=159512549808, PerformTrave
+   10-24 15:32:31.405  4340  4554 I HWUI    : Davey! duration=882ms; Flags=1, FrameTimelineVsyncId=18829, IntendedVsync=393584268624, Vsync=393584268624, InputEventId=0, HandleInputStart=393597048124, AnimationStart=393597048564, PerformTraver
+   10-24 15:32:31.500  4340  4351 I HWUI    : Davey! duration=964ms; Flags=0, FrameTimelineVsyncId=18844, IntendedVsync=393600935290, Vsync=394467601922, InputEventId=0, HandleInputStart=394483653401, AnimationStart=394483654042, PerformTraver
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-24 15:27:28.336  4083  4083 I PERFCHECK: section: 0. Device
+   10-24 15:27:40.551  4281  4281 I PERFCHECK: section: 1. Fresh install: splash, intro, first onboarding page (animations ON)
+   10-24 15:28:08.309  4699  4699 I PERFCHECK: section: 2. Skip onboarding; Home light
+   10-24 15:28:42.470  4981  4981 I PERFCHECK: section: 3. System dark (app theme = System)
+   10-24 15:29:02.811  5190  5190 I PERFCHECK: section: 4. App Light in a dark system
+   10-24 15:29:50.468  5485  5485 I PERFCHECK: section: 4b. App Dark in a light system
+   10-24 15:31:22.255  6045  6045 I PERFCHECK: section: 5. 3-button navigation
+   10-24 15:32:12.933  6441  6441 I PERFCHECK: section: 6. Back to gesture navigation
+   10-24 15:32:30.301  6563  6563 I PERFCHECK: section: 7. Landscape with 3-button navigation (cutout)
+   10-24 15:34:00.687  7208  7208 I PERFCHECK: section: 8. Pull-to-refresh on Home (leaf indicator)
+   10-24 15:34:26.769  7381  7381 I PERFCHECK: section: 9. Scrolled content under the bars (3-button, then gestures)

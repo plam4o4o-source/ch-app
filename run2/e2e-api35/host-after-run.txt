@@ -1,0 +1,32 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15989        1464        4059          48       10860       14524
+Swap:           3071           0        3071
+== dmesg
+[Sat Oct 24 15:25:22 2026] hv_netvsc 7c1e5245-44f3-7c1e-5245-44f37c1e5245 eth0: VF slot 1 added
+[Sat Oct 24 15:25:22 2026] hv_pci dd61a074-3818-4dd5-9396-8fc6b9ea0998: PCI VMBus probing: Using version 0x10004
+[Sat Oct 24 15:25:22 2026] hv_pci dd61a074-3818-4dd5-9396-8fc6b9ea0998: PCI host bridge to bus 3818:00
+[Sat Oct 24 15:25:22 2026] pci_bus 3818:00: root bus resource [mem 0xfc0000000-0xfc00fffff window]
+[Sat Oct 24 15:25:22 2026] pci_bus 3818:00: No busn resource found for root bus, will use [bus 00-ff]
+[Sat Oct 24 15:25:22 2026] pci 3818:00:02.0: [15b3:1016] type 00 class 0x020000 PCIe Endpoint
+[Sat Oct 24 15:25:22 2026] pci 3818:00:02.0: BAR 0 [mem 0xfc0000000-0xfc00fffff 64bit pref]
+[Sat Oct 24 15:25:22 2026] pci 3818:00:02.0: enabling Extended Tags
+[Sat Oct 24 15:25:22 2026] pci 3818:00:02.0: 0.000 Gb/s available PCIe bandwidth, limited by Unknown x0 link at 3818:00:02.0 (capable of 63.008 Gb/s with 8.0 GT/s PCIe x8 link)
+[Sat Oct 24 15:25:22 2026] pci_bus 3818:00: busn_res: [bus 00-ff] end is updated to 00
+[Sat Oct 24 15:25:22 2026] pci 3818:00:02.0: BAR 0 [mem 0xfc0000000-0xfc00fffff 64bit pref]: assigned
+[Sat Oct 24 15:25:22 2026] mlx5_core 3818:00:02.0: enabling device (0000 -> 0002)
+[Sat Oct 24 15:25:22 2026] mlx5_core 3818:00:02.0: firmware version: 14.30.5026
+[Sat Oct 24 15:25:22 2026] mlx5_core 3818:00:02.0: Flow counters bulk query buffer size increased, bulk_query_len(8)
+[Sat Oct 24 15:25:22 2026] hv_netvsc 7c1e5245-44f3-7c1e-5245-44f37c1e5245 eth0: VF registering: eth1
+[Sat Oct 24 15:25:22 2026] mlx5_core 3818:00:02.0 eth1: joined to eth0
+[Sat Oct 24 15:25:22 2026] mlx5_core 3818:00:02.0: MLX5E: StrdRq(0) RqSz(1024) StrdSz(256) RxCqeCmprss(0 basic)
+[Sat Oct 24 15:25:23 2026] mlx5_core 3818:00:02.0 enP14360s1: renamed from eth1
+[Sat Oct 24 15:25:23 2026] MACsec IEEE 802.1AE
+[Sat Oct 24 15:25:23 2026] mlx5_core 3818:00:02.0 enP14360s1: Link up
+[Sat Oct 24 15:25:23 2026] hv_netvsc 7c1e5245-44f3-7c1e-5245-44f37c1e5245 eth0: Data path switched to VF: enP14360s1
+[Sat Oct 24 15:25:23 2026] mlx5_core 3818:00:02.0 mlx5_0: Port: 1 Link ACTIVE
+[Sat Oct 24 15:25:58 2026] kvm: kvm [3969]: vcpu0, guest rIP: 0xffffffff93a09cbd Unhandled WRMSR(0xc0010007) = 0xffff
+== oom/kvm/segfault
+[Sat Oct 24 15:25:58 2026] kvm: kvm [3969]: vcpu0, guest rIP: 0xffffffff93a09cbd Unhandled WRMSR(0xc0010007) = 0xffff
+== processes
+  10960       00:03 15276 S    /usr/local/lib/android/sdk/emulator/emulator -kill 3969 -sleep 20

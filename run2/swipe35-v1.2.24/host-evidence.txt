@@ -1,0 +1,148 @@
+== 15:29:57 free -m
+               total        used        free      shared  buff/cache   available
+Mem:           15989        1310        8645          48        6429       14679
+Swap:           3071           0        3071
+== emulator / qemu processes
+   3616       04:35 67068 Sl   /home/runner/actions-runner/cached/2.338.0/externals/node24/bin/node /home/runner/work/_actions/reactivecircus/android-emulator-runner/v2/lib/main.js
+== last host-mon samples
+15:29:28 used/avail_MB=4663/11326 swap_MB=0 qemu_rss_MB=3676 load=1.49
+15:29:30 used/avail_MB=4664/11325 swap_MB=0 qemu_rss_MB=3676 load=1.69
+15:29:32 used/avail_MB=4657/11331 swap_MB=0 qemu_rss_MB=3674 load=1.69
+15:29:34 used/avail_MB=4682/11307 swap_MB=0 qemu_rss_MB=3675 load=1.69
+15:29:36 used/avail_MB=4682/11307 swap_MB=0 qemu_rss_MB=3674 load=1.72
+15:29:38 used/avail_MB=4693/11296 swap_MB=0 qemu_rss_MB=3674 load=1.72
+15:29:40 used/avail_MB=4705/11284 swap_MB=0 qemu_rss_MB=3674 load=1.66
+15:29:42 used/avail_MB=4705/11284 swap_MB=0 qemu_rss_MB=3674 load=1.66
+15:29:44 used/avail_MB=4706/11283 swap_MB=0 qemu_rss_MB=3674 load=1.61
+15:29:46 used/avail_MB=4702/11286 swap_MB=0 qemu_rss_MB=3674 load=1.61
+15:29:48 used/avail_MB=4700/11288 swap_MB=0 qemu_rss_MB=3674 load=1.61
+15:29:50 used/avail_MB=4689/11300 swap_MB=0 qemu_rss_MB=3674 load=1.56
+15:29:52 used/avail_MB=4683/11306 swap_MB=0 qemu_rss_MB=3674 load=1.56
+15:29:54 used/avail_MB=4672/11317 swap_MB=0 qemu_rss_MB=3674 load=1.51
+15:29:57 used/avail_MB=1321/14668 swap_MB=0 qemu_rss_MB=0 load=1.51
+== host dmesg (tail)
+[Sat Oct 24 15:26:09 2026] kvm: kvm [3931]: vcpu0, guest rIP: 0xffffffff8ee09cbd Unhandled WRMSR(0xc0010007) = 0xffff
+== host kernel: oom / kvm / segfault
+[Sat Oct 24 15:26:09 2026] kvm: kvm [3931]: vcpu0, guest rIP: 0xffffffff8ee09cbd Unhandled WRMSR(0xc0010007) = 0xffff
+== emulator temp dirs / crash dumps
+/home/runner/.android:
+total 40
+drwxr-xr-x  3 runner runner 4096 Oct 24 15:26 .
+drwxr-x--- 12 runner runner 4096 Oct 24 15:26 ..
+-rw-r--r--  1 runner runner   45 Oct 24 15:26 adb.5037
+-rwxrwxrwx  1 runner runner 1704 Oct 24 15:26 adbkey
+drwxr-xr-x  3 runner runner 4096 Oct 24 15:26 avd
+-rw-r--r--  1 runner runner 5010 Oct 24 15:26 emu-last-feature-flags.protobuf
+-rw-r--r--  1 runner runner   67 Oct 24 15:26 emu-update-last-check.ini
+-rwxr-xr-x  1 runner runner  171 Oct 24 15:26 modem-nv-ram-5554
+-rw-r--r--  1 runner runner   36 Oct 24 15:26 userid
+
+/tmp/android-runner:
+total 16
+drwxr--r--  4 runner runner 4096 Oct 24 15:26 .
+drwxrwxrwt 15 root   root   4096 Oct 24 15:29 ..
+drwx------  6 runner runner 4096 Oct 24 15:26 emu-crash-37.2.12.db
+drwxr-xr-x  2 runner runner 4096 Oct 24 15:29 netsimd
+
+/tmp/android-runner/:
+total 16
+drwxr--r--  4 runner runner 4096 Oct 24 15:26 .
+drwxrwxrwt 15 root   root   4096 Oct 24 15:29 ..
+drwx------  6 runner runner 4096 Oct 24 15:26 emu-crash-37.2.12.db
+drwxr-xr-x  2 runner runner 4096 Oct 24 15:29 netsimd
+/tmp/android-runner/emu-crash-37.2.12.db
+/tmp/android-runner/netsimd/netsim_stderr.log
+/tmp/android-runner/netsimd/netsim_stdout.log
+/tmp/adb.1001.log
+== tail /tmp/android-runner/netsimd/netsim_stderr.log
+netsim I 10-24 15:26:07.272 service.rs:225 - SlirpActor: Registering client 4294967294
+netsim I 10-24 15:26:07.272 libslirp.rs:956 - libslirp: initialization completed.
+netsim I 10-24 15:26:08.268 netsimd.rs:941 - Accepted connection on netsim_grpc:
+netsim I 10-24 15:26:08.268 netsimd.rs:89 - Handling new connection for "test", device test
+netsim I 10-24 15:26:08.269 avd_config.rs:196 - Generated and assigned new MAC BB:BB:BB:00:00:01 to AVD /home/runner/.android/avd/test.ini
+netsim I 10-24 15:26:08.269 avd_config.rs:227 - Assigned persistent MAC BB:BB:BB:00:00:01 to AVD /home/runner/.android/avd/test.ini
+netsim I 10-24 15:26:08.269 service.rs:673 - DeviceActor: AddChipByGuid for device ipv6:%5B::1%5D:36858
+netsim I 10-24 15:26:08.269 service.rs:634 - DeviceActor: Create device test
+netsim I 10-24 15:26:08.269 service.rs:580 - DeviceActor: AddChip test (EMULATOR, test) to device test
+netsim I 10-24 15:26:08.269 core.rs:69 - Insert client 0
+netsim I 10-24 15:26:08.269 netsimd.rs:941 - Accepted connection on netsim_grpc:
+netsim I 10-24 15:26:08.269 netsimd.rs:89 - Handling new connection for "test", device test
+netsim I 10-24 15:26:08.269 avd_config.rs:227 - Assigned persistent MAC BB:BB:BB:00:00:01 to AVD /home/runner/.android/avd/test.ini
+netsim I 10-24 15:26:08.269 service.rs:673 - DeviceActor: AddChipByGuid for device ipv6:%5B::1%5D:36858
+netsim I 10-24 15:26:08.269 service.rs:580 - DeviceActor: AddChip test (EMULATOR, test) to device test
+netsim I 10-24 15:26:46.593 core.rs:120 - Insert station with client id 0, hwsimaddr: 02:15:B2:00:00:00, Ieee80211 addr: 7A:C3:54:B2:55:D3
+netsim I 10-24 15:26:47.621 core.rs:120 - Insert station with client id 0, hwsimaddr: 02:15:B2:00:00:00, Ieee80211 addr: 96:FE:83:E1:BA:6B
+netsim I 10-24 15:26:51.772 core.rs:120 - Insert station with client id 0, hwsimaddr: 02:15:B2:00:00:00, Ieee80211 addr: 02:15:B2:00:00:00
+netsim I 10-24 15:26:51.772 ieee802_11.rs:274 - ApActor: Received Auth from 02:15:B2:00:00:00 Alg=0 Seq=1 Status=0
+netsim I 10-24 15:26:51.783 ieee802_11.rs:472 - ApActor: Received Assoc Req from 02:15:B2:00:00:00
+netsim I 10-24 15:26:51.783 ieee802_11.rs:533 - ApActor: Associated 02:15:B2:00:00:00
+netsim I 10-24 15:29:55.898 lifecycle.rs:40 - Stream closed for chip 1
+netsim I 10-24 15:29:55.898 actor_service.rs:229 - Deleting chip 1
+netsim E 10-24 15:29:55.898 actor.rs:230 - Monitored task failed: task 27 was cancelled
+netsim I 10-24 15:29:55.898 lifecycle.rs:88 - Stream closed for chip 0
+netsim E 10-24 15:29:55.898 actor.rs:230 - Monitored task failed: task 23 was cancelled
+netsim I 10-24 15:29:55.898 service.rs:482 - DeviceActor: Device 1 is NOT empty after chip removal
+netsim I 10-24 15:29:55.898 service.rs:477 - DeviceActor: Device 1 is empty, auto-deleting
+netsim I 10-24 15:29:55.898 service.rs:80 - DeviceActor: Scheduling idle shutdown in 0ns
+netsim I 10-24 15:29:55.899 service.rs:755 - DeviceActor: Idle timeout reached, initiating shutdown
+netsim I 10-24 15:29:55.900 lifecycle.rs:49 - DeviceActor: Awaiting final stats write
+netsim I 10-24 15:29:55.900 netsimd.rs:877 - DeviceActor exited. Shutting down daemon.
+netsim I 10-24 15:29:55.900 netsimd.rs:853 - Graceful shutdown requested for all actors
+netsim I 10-24 15:29:55.900 slirp_actor.rs:228 - Shutting down Slirp backend instance
+netsim I 10-24 15:29:55.901 lifecycle.rs:28 - Shutting down Casimir scene task
+netsim I 10-24 15:29:55.901 lifecycle.rs:64 - WifiActor stopped
+netsim I 10-24 15:29:55.901 lifecycle.rs:158 - WIFI_STREAM_ID closed, stopping ApActor
+netsim W 10-24 15:29:55.901 netsimd.rs:871 - ChipActor shutdown error: Failed to send command: Actor dropped response channel
+netsim I 10-24 15:29:55.901 netsimd.rs:981 - NetsimDaemon main loop exited.
+netsim W 10-24 15:29:55.902 libslirp.rs:806 - Failed to send slirp PollResult cmd: sending on a closed channel
+== tail /tmp/android-runner/netsimd/netsim_stdout.log
+root-canal D 10-24 15:26:43.185 dual_mode_controller.cc:880         [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Page Scan Type[0m
+root-canal D 10-24 15:26:43.185 dual_mode_controller.cc:882         [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m   page_scan_type=INTERLACED[0m
+root-canal D 10-24 15:26:43.191 dual_mode_controller.cc:903         [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Inquiry Scan Type[0m
+root-canal D 10-24 15:26:43.191 dual_mode_controller.cc:905         [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m   inquiry_scan_type=INTERLACED[0m
+root-canal D 10-24 15:26:43.197 dual_mode_controller.cc:977         [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Class of Device[0m
+root-canal D 10-24 15:26:43.197 dual_mode_controller.cc:978         [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m   class_of_device=0x5a020c[0m
+root-canal D 10-24 15:26:43.199 dual_mode_controller.cc:2781        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< LE Rand[0m
+root-canal D 10-24 15:26:43.200 dual_mode_controller.cc:1000        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Page Timeout[0m
+root-canal D 10-24 15:26:43.200 dual_mode_controller.cc:1001        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m   page_timeout=8192[0m
+root-canal D 10-24 15:26:43.201 dual_mode_controller.cc:1198        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Read Local Name[0m
+root-canal D 10-24 15:26:43.203 dual_mode_controller.cc:2781        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< LE Rand[0m
+root-canal D 10-24 15:26:43.207 dual_mode_controller.cc:1932        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< LE Set Random Address[0m
+root-canal D 10-24 15:26:43.207 dual_mode_controller.cc:1933        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m   random_address=5c:d5:e0:e7:a9:f6[0m
+root-canal D 10-24 15:26:43.209 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.210 dual_mode_controller.cc:1208        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Local Name[0m
+root-canal D 10-24 15:26:43.210 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.211 dual_mode_controller.cc:2781        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< LE Rand[0m
+root-canal D 10-24 15:26:43.212 dual_mode_controller.cc:2781        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< LE Rand[0m
+root-canal D 10-24 15:26:43.213 dual_mode_controller.cc:1932        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< LE Set Random Address[0m
+root-canal D 10-24 15:26:43.213 dual_mode_controller.cc:1933        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m   random_address=61:d5:20:0f:d6:ca[0m
+root-canal D 10-24 15:26:43.248 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.277 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.278 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.293 dual_mode_controller.cc:1257        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Voice Setting[0m
+root-canal D 10-24 15:26:43.293 dual_mode_controller.cc:1258        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m   voice_setting=0x60[0m
+root-canal D 10-24 15:26:43.294 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.294 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.333 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.335 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.335 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.336 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.342 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.379 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+root-canal D 10-24 15:26:43.385 dual_mode_controller.cc:1335        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Inquiry Scan Activity[0m
+root-canal D 10-24 15:26:43.386 dual_mode_controller.cc:1359        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Scan Enable[0m
+root-canal D 10-24 15:26:43.386 dual_mode_controller.cc:1360        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m   scan_enable=NO_SCANS[0m
+root-canal D 10-24 15:26:43.389 dual_mode_controller.cc:1313        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Page Scan Activity[0m
+root-canal D 10-24 15:26:43.389 dual_mode_controller.cc:1359        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Scan Enable[0m
+root-canal D 10-24 15:26:43.389 dual_mode_controller.cc:1360        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m   scan_enable=PAGE_SCAN_ONLY[0m
+root-canal D 10-24 15:26:43.476 dual_mode_controller.cc:1219        [38;2;000;000;000m[48;2;095;158;160m  0 [0m [38;2;105;105;105m<< Write Extended Inquiry Response[0m
+== tail /tmp/adb.1001.log
+--- adb starting (pid 4033) ---
+10-24 15:26:16.627  4033  4033 I adb     : main.cpp:65 Android Debug Bridge version 1.0.41
+10-24 15:26:16.627  4033  4033 I adb     : main.cpp:65 Version 37.0.1-15733141
+10-24 15:26:16.627  4033  4033 I adb     : main.cpp:65 Installed as /usr/local/lib/android/sdk/platform-tools/adb
+10-24 15:26:16.627  4033  4033 I adb     : main.cpp:65 Running on Linux 6.17.0-1022-azure (x86_64)
+10-24 15:26:16.627  4033  4033 I adb     : main.cpp:65 
+10-24 15:26:45.425  4033  4041 I adb     : transport.cpp:1222 emulator-5554: connection terminated: read failed
+10-24 15:26:46.425  4033  4033 W adb     : sockets.cpp:315 timeout expired while flushing socket, closing
+10-24 15:29:55.887  4033  4168 I adb     : transport.cpp:1222 emulator-5554: connection terminated: read failed

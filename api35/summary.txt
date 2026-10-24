@@ -1,0 +1,64 @@
+(CARRIED OVER from the previous publish (Edge-to-edge emulator results for d8f241f (run 40100568335)): api35 was not run or failed in this run)
+APK size: 4810045 bytes
+APK entries:   8725896                     1031 files
+screen 1080x2400
+## 0. Device
+android 15 sdk 35; Physical size: 1080x2400; Physical density: 420
+NAV gestural: navigation_mode=2; overlays: [ ] com.android.internal.systemui.navbar.threebutton [ ] com.android.internal.systemui.navbar.twobutton [ ] com.android.internal.systemui.navbar.transparent [x] com.android.internal.systemui.navbar.gestural 
+cutout before: Cutout=DisplayCutout{insets=Rect(0, 128 - 0, 0) waterfall=Insets{left=0, top=0, 
+cutout overlays: [ ] com.android.internal.display.cutout.emulation.corner [ ] com.android.internal.display.cutout.emulation.double [ ] com.android.internal.display.cutout.emulation.hole [ ] com.android.internal.display.cutout.emulation.tall [ ] com.android.internal.display.cutout.emulation.emu01 [ ] com.android.internal.display.cutout.emulation.waterfall 
+CUTOUT: native cutout present, no emulation overlay
+screen 1080x2400
+## 1. Fresh install: splash, intro, first onboarding page (animations ON)
+intro video: 500016 bytes, frames: 18
+WIN onboarding: Window{3f78fd2 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=notnight port  cutoutMode=always  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+## 2. Skip onboarding; Home light
+WIN home-light: Window{3f78fd2 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=notnight port  cutoutMode=always  apr=[LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS]  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+WIN catalog-light: Window{3f78fd2 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=notnight port  cutoutMode=always  apr=[LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS]  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+## 3. System dark (app theme = System)
+NIGHT yes: Night mode: yes ; ui_night_mode=2
+WIN home-dark: Window{3f78fd2 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=night port  cutoutMode=always  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+WIN catalog-dark: Window{3f78fd2 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=night port  cutoutMode=always  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+## 4. App Light in a dark system
+THEME -> =Light|=Светла (settings now shows: Light)
+WIN home-applight-sysdark: Window{3f78fd2 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=night port  cutoutMode=always  apr=[LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS]  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+## 4b. App Dark in a light system
+NIGHT no: Night mode: no ; ui_night_mode=1
+THEME -> =Dark|=Тъмна (settings now shows: Dark)
+WIN home-appdark-syslight: Window{3f78fd2 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=notnight port  cutoutMode=always  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+THEME -> =System default|=Както системата (settings now shows: System default)
+## 5. 3-button navigation
+NAV threebutton: navigation_mode=0; overlays: [x] com.android.internal.systemui.navbar.threebutton [ ] com.android.internal.systemui.navbar.twobutton [ ] com.android.internal.systemui.navbar.transparent [ ] com.android.internal.systemui.navbar.gestural 
+WIN home-3btn-light: Window{b3dd1c1 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=notnight port  cutoutMode=always  apr=[LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS]  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+NIGHT yes: Night mode: yes ; ui_night_mode=2
+WIN home-3btn-dark: Window{b3dd1c1 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=night port  cutoutMode=always  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+NIGHT no: Night mode: no ; ui_night_mode=1
+## 6. Back to gesture navigation
+NAV gestural: navigation_mode=2; overlays: [ ] com.android.internal.systemui.navbar.threebutton [ ] com.android.internal.systemui.navbar.twobutton [ ] com.android.internal.systemui.navbar.transparent [x] com.android.internal.systemui.navbar.gestural 
+WIN home-gesture-light: Window{d079b5 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=notnight port  cutoutMode=always  apr=[LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS]  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+## 7. Landscape with 3-button navigation (cutout)
+NAV threebutton: navigation_mode=0; overlays: [x] com.android.internal.systemui.navbar.threebutton [ ] com.android.internal.systemui.navbar.twobutton [ ] com.android.internal.systemui.navbar.transparent [ ] com.android.internal.systemui.navbar.gestural 
+ROTATION 1: mRotation=ROTATION_90} cur=2400x1080
+WIN land90-home: Window{81b8943 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=notnight land  cutoutMode=always  apr=[LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS]  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+ROTATION 3: mRotation=ROTATION_270} cur=2400x1080
+WIN land270-catalog: Window{81b8943 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}  config=notnight land  cutoutMode=always  apr=[LIGHT_STATUS_BARS LIGHT_NAVIGATION_BARS]  vsysui=[LIGHT_STATUS_BAR LIGHT_NAVIGATION_BAR]  bhv=[DEFAULT]  fl=[LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS]  pfl=[NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FORCE_DRAW_STATUS_BAR_BACKGROUND FIT_INSETS_CONTROLLED]
+NIGHT yes: Night mode: yes ; ui_night_mode=2
+ROTATION 1: mRotation=ROTATION_90} cur=2400x1080
+NIGHT no: Night mode: no ; ui_night_mode=1
+ROTATION 0: mRotation=ROTATION_0} cur=1080x2400
+## 8. Scrolled content under the bars (3-button, then gestures)
+WARN: no catalogue results
+NAV gestural: navigation_mode=; overlays: 
+NIGHT yes: ; ui_night_mode=
+NIGHT no: ; ui_night_mode=
+!!! EMULATOR GONE (at: end)
+## logcat findings
+app pids seen: ['4151']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=38 total=98
+== Davey: 3
+   davey events=3 max=1084ms median=946ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
