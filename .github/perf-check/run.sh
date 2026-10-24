@@ -220,11 +220,12 @@ night() {  # yes | no
     if { [ $1 = yes ] && [ "$cur" != 2 ]; } || { [ $1 = no ] && [ "$cur" = 2 ]; }; then
       local i want; want=$([ $1 = yes ] && echo yes || echo no)
       a am start -a android.settings.DISPLAY_SETTINGS >/dev/null; sleep 5
-      shot debug/night-$1-$NDBG-a-before
+      # Обяснението „Dark theme … Got it“ (след първото включване) се затваря преди и след превключването.
+      gotit() { dump && { p=$(xy text '=Got it|=OK|=Разбрах'); [ -n "$p" ] && { echo ">>> dialog → $p"; a input tap $p; sleep 2; }; }; return 0; }
+      gotit; shot debug/night-$1-$NDBG-a-before
       tap text '=Dark theme|=Тъмна тема' || debug_ui darktheme
       sleep 3; shot debug/night-$1-$NDBG-b-after; NDBG=$((NDBG+1))
-      # възможен диалог за потвърждение
-      dump && { p=$(xy text '=OK|=Turn on|=Turn off|=Включване|=Изключване'); [ -n "$p" ] && { echo ">>> confirm $p"; a input tap $p; sleep 2; }; }
+      gotit
       for i in $(seq 1 15); do a cmd uimode night | grep -qi "night mode: $want" && break; sleep 2; done
       log "NIGHT $1 via Settings: after ${i} polls: $(a cmd uimode night | tr -d '\r')"
       launch >/dev/null; sleep 4
