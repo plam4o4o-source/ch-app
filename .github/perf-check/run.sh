@@ -218,9 +218,16 @@ night() {  # yes | no
   if [ "$SDK" -lt 30 ]; then
     local cur; cur=$(a settings get secure ui_night_mode | tr -d '\r')
     if { [ $1 = yes ] && [ "$cur" != 2 ]; } || { [ $1 = no ] && [ "$cur" = 2 ]; }; then
-      a am start -a android.settings.DISPLAY_SETTINGS >/dev/null; sleep 4
+      local i want; want=$([ $1 = yes ] && echo yes || echo no)
+      a am start -a android.settings.DISPLAY_SETTINGS >/dev/null; sleep 5
+      shot debug/night-$1-$NDBG-a-before
       tap text '=Dark theme|=Тъмна тема' || debug_ui darktheme
-      sleep 3; launch >/dev/null; sleep 4
+      sleep 3; shot debug/night-$1-$NDBG-b-after; NDBG=$((NDBG+1))
+      # възможен диалог за потвърждение
+      dump && { p=$(xy text '=OK|=Turn on|=Turn off|=Включване|=Изключване'); [ -n "$p" ] && { echo ">>> confirm $p"; a input tap $p; sleep 2; }; }
+      for i in $(seq 1 15); do a cmd uimode night | grep -qi "night mode: $want" && break; sleep 2; done
+      log "NIGHT $1 via Settings: after ${i} polls: $(a cmd uimode night | tr -d '\r')"
+      launch >/dev/null; sleep 4
     fi
   else
     a cmd uimode night $1 >/dev/null; sleep 4

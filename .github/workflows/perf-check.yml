@@ -38,7 +38,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api: [29, 35]
+        # API 35 е проверен в run 40100568335 (резултатите му се пренасят при публикуването).
+        api: [29]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -91,9 +92,9 @@ jobs:
           mkdir -p "$RUNNER_TEMP/old" results
           if git fetch -q --depth 1 origin emulator-results-e2e; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/old"; fi
           for p in api29 api35; do
-            if ! grep -q '## COMPLETE' "results/$p/summary.txt" 2>/dev/null && grep -q '## COMPLETE' "$RUNNER_TEMP/old/$p/summary.txt" 2>/dev/null; then
+            if [ -f "$RUNNER_TEMP/old/$p/summary.txt" ] && { [ ! -d "results/$p" ] || { ! grep -q '## COMPLETE' "results/$p/summary.txt" 2>/dev/null && grep -q '## COMPLETE' "$RUNNER_TEMP/old/$p/summary.txt"; }; }; then
               rm -rf "results/$p"; cp -r "$RUNNER_TEMP/old/$p" results/
-              grep -q CARRIED "results/$p/summary.txt" || sed -i "1i (CARRIED OVER from the previous publish: this run's $p job failed)" "results/$p/summary.txt"
+              grep -q CARRIED "results/$p/summary.txt" || sed -i "1i (CARRIED OVER from the previous publish ($(git -C "$GITHUB_WORKSPACE" log -1 --format=%s FETCH_HEAD 2>/dev/null)): $p was not run or failed in this run)" "results/$p/summary.txt"
             fi
           done
           mkdir -p "$RUNNER_TEMP/pub" && cp -r results/. "$RUNNER_TEMP/pub/"
