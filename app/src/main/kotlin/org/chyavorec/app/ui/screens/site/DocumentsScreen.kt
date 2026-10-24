@@ -18,7 +18,7 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import org.chyavorec.app.ui.components.WheatRefreshBox
+import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -59,7 +59,7 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                 Tab(tab == 1, onClick = { tab = 1 }, text = { Text(stringResource(R.string.documents_tab_publications)) },
                     icon = { Icon(Icons.Outlined.HistoryEdu, null) })
             }
-            WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
+            LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
                 val kind = if (tab == 0) DocumentKind.DOCUMENT else DocumentKind.PUBLICATION
                 StateContent(
                     state = state.map { list -> list.filter { it.kind == kind } },

@@ -59,7 +59,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import org.chyavorec.app.ui.components.WheatRefreshBox
+import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -166,7 +166,7 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             }
         })
     }) { padding ->
-        WheatRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+        LeafRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             Column {
                 SyncBanner(ui.state.fromCache, ui.state.syncedAt, ui.state.refreshError)
                 AnimatedContent(ui.calendarMode, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "mode") { calendar ->

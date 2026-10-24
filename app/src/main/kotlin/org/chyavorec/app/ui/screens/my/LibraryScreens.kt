@@ -39,7 +39,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Icon
-import org.chyavorec.app.ui.components.WheatRefreshBox
+import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -120,7 +120,7 @@ private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((
     val calc = LoanDueCalculator()
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.my_books), onBack) }) { padding ->
-        WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+        LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             Column {
                 DemoBanner(vm.isDemo)
                 val err = state.error
@@ -323,7 +323,7 @@ fun MembershipScreen(onBack: () -> Unit, onLogin: () -> Unit) {
     val context = androidx.compose.ui.platform.LocalContext.current
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.my_membership), onBack) }) { padding ->
-        WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+        LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 DemoBanner(vm.isDemo)
                 val err = state.error

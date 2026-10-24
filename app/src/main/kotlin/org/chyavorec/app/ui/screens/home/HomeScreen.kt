@@ -1,5 +1,14 @@
 package org.chyavorec.app.ui.screens.home
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.runtime.derivedStateOf
 import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.sharedElementKey
 import androidx.compose.animation.core.Animatable
@@ -84,7 +93,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import org.chyavorec.app.ui.components.WheatRefreshBox
+import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.Badge as CountBadge
@@ -180,12 +189,16 @@ fun HomeScreen(navigate: (String) -> Unit) {
     val decor = rememberDayDecor(state.occasions, today)
     val loanSummary = rememberLoanSummary()
 
-    WheatRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
+    LeafRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         // На таблет/хоризонтално съдържанието е центрирано и не по-широко от 840 dp.
         LazyColumn(
             state = listState,
             contentPadding = PaddingValues(bottom = 24.dp),
-            modifier = Modifier.align(Alignment.TopCenter).widthIn(max = 840.dp).fillMaxSize(),
+            // Хоризонтално: отдясно е системната навигация (3 бутона) или изрязването за камерата —
+            // отляво ги поема страничната лента.
+            modifier = Modifier.align(Alignment.TopCenter)
+                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.End))
+                .widthIn(max = 840.dp).fillMaxSize(),
         ) {
             item("header") {
                 Box {
@@ -308,6 +321,16 @@ fun HomeScreen(navigate: (String) -> Unit) {
                 }
             }
         }
+        // Началото няма горна лента: превъртяното съдържание минава под прозрачната лента на
+        // състоянието — щом е превъртяно, под часовника и иконите се появява фон, за да се четат.
+        val scrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0 } }
+        val scrim by animateFloatAsState(if (scrolled) 0.94f else 0f, label = "status-scrim")
+        Box(
+            Modifier.align(Alignment.TopCenter).fillMaxWidth()
+                .windowInsetsTopHeight(WindowInsets.statusBars)
+                .graphicsLayer { alpha = scrim }
+                .background(MaterialTheme.colorScheme.surface),
+        )
     }
 }
 

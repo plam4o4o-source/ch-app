@@ -25,7 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import org.chyavorec.app.ui.components.WheatRefreshBox
+import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -132,7 +132,7 @@ fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit, focusId: Stri
         onPauseOrDispose { vm.setVisible(false) }
     }
     Scaffold(topBar = { BackTopBar(stringResource(R.string.messages_title), onBack) }) { padding ->
-        WheatRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+        LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             StateContent(
                 state = state,
                 onRetry = { vm.refresh() },
