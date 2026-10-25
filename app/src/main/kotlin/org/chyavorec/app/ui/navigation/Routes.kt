@@ -35,6 +35,8 @@ object Routes {
     const val CARD_FULL = "card/full"
     const val LOANS = "loans"
     const val HISTORY = "history"
+    /** „Искам да прочета“ — списъкът само на устройството. */
+    const val WANT_TO_READ = "want-to-read"
     const val MEMBERSHIP = "membership"
     const val NOTIFICATIONS = "notifications"
     const val ACTIVITIES = "activities"

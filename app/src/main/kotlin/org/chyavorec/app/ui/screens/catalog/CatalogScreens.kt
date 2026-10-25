@@ -483,8 +483,10 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
     val resources = LocalResources.current
     val b = ui.book
     var askLibrary by rememberSaveable { mutableStateOf(false) }
+    // „Искам да прочета“ / „Кажи ми“ — потвърждение и „Отмени“.
+    val snackbar = remember { androidx.compose.material3.SnackbarHostState() }
 
-    Scaffold(topBar = {
+    Scaffold(snackbarHost = { androidx.compose.material3.SnackbarHost(snackbar) }, topBar = {
         BackTopBar("", onBack, actions = {
             if (b != null) {
                 IconButton(onClick = {
@@ -532,6 +534,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                         style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 6.dp),
                     )
+                    org.chyavorec.app.ui.screens.my.WantToReadToggle(b, snackbar, Modifier.padding(top = 8.dp))
                 }
             }
             // Заявка — според живата наличност, ако я има (каталогът може да е от вчера).
@@ -549,6 +552,8 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 ) {
                     Icon(Icons.Outlined.Call, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.book_ask_library))
                 }
+                // Мостът няма заявки за наличност — известието идва от каталога, на телефона.
+                org.chyavorec.app.ui.screens.my.NotifyWhenAvailableButton(b, snackbar, Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, top = 8.dp))
             }
             if (b.annotation.isNotBlank()) {
                 Text(stringResource(R.string.book_description), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(start = 20.dp, top = 16.dp).semantics { heading() })

@@ -578,6 +578,7 @@ private fun AppNavHost(
         screen(Routes.CARD_FULL) { CardFullscreen(onClose = back) }
         screen(Routes.LOANS) { LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }, onOpenBook = { navigate(Routes.book(it, personal = true)) }) }
         screen(Routes.HISTORY) { HistoryScreen(back, navigate, onLogin = { nav.navigate(Routes.LOGIN) }) }
+        screen(Routes.WANT_TO_READ) { org.chyavorec.app.ui.screens.my.WantToReadScreen(back, navigate) }
         screen(Routes.MEMBERSHIP) { MembershipScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
         screen(Routes.NOTIFICATIONS) { NotificationSettingsScreen(back) }
         screen(Routes.ACTIVITIES) { ActivitiesScreen(back, navigate, openExternal) }

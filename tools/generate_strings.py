@@ -231,6 +231,31 @@ S = {
 "my_card_add_desc": ("Добави номера от своята карта", "Add the number from your card"),
 "my_books": ("Моите книги", "My books"),
 "my_books_desc": ("Заети книги и срокове за връщане", "Borrowed books and due dates"),
+"want_title": ("Искам да прочета", "Want to read"),
+"my_want_desc": ("Книги, които искаш да вземеш", "Books you’d like to borrow"),
+"want_added": ("Добавена в „Искам да прочета“", "Added to “Want to read”"),
+"want_removed": ("„%1$s“ е махната от списъка", "“%1$s” removed from your list"),
+"want_undo": ("Отмени", "Undo"),
+"want_remove": ("Махни от списъка", "Remove from list"),
+"want_more": ("Още действия", "More actions"),
+"want_notify": ("Кажи ми, когато е на рафта", "Notify me when available"),
+"want_notify_on": ("Ще ти кажем, когато е на рафта", "We’ll tell you when it’s on the shelf"),
+"want_notify_stop": ("Не ми казвай", "Stop notifying me"),
+"want_notify_set": ("Ще получиш известие, когато книгата е на рафта.", "You’ll get a notification when the book is on the shelf."),
+"want_notify_unset": ("Няма да получаваш известие за тази книга.", "You won’t be notified about this book."),
+"want_notify_blocked": ("Известията са изключени — няма как да ти кажем, когато книгата е на рафта.", "Notifications are off — we can’t tell you when the book is on the shelf."),
+"want_library_off": ("Известията „Библиотека“ са изключени в приложението.", "“Library” notifications are turned off in the app."),
+"want_library_turn_on": ("Включи", "Turn on"),
+"want_missing": ("Няма я в каталога", "Not in the catalogue"),
+"want_empty": ("Списъкът е празен", "Your list is empty"),
+"want_empty_hint": ("Отбележи книга с „Искам да прочета“ на страницата ѝ в каталога — тук ще виждаш дали е на рафта.", "Mark a book with “Want to read” on its catalogue page — here you’ll see whether it’s on the shelf."),
+"want_clear": ("Изчисти списъка", "Clear list"),
+"want_clear_confirm": ("Всички книги от „Искам да прочета“ ще бъдат махнати от това устройство.", "All books in “Want to read” will be removed from this device."),
+"want_cleared": ("Списъкът е изчистен.", "List cleared."),
+"want_hint_swipe": ("Плъзни книга настрани, за да я махнеш.", "Swipe a book aside to remove it."),
+"notif_want_available": ("„%1$s“ вече е на рафта", "“%1$s” is now on the shelf"),
+"notif_want_available_text": ("От списъка ти „Искам да прочета“ · по последния каталог на библиотеката", "From your “Want to read” list · according to the library’s latest catalogue"),
+"notif_public_want": ("Книга от списъка ти е на рафта", "A book from your list is on the shelf"),
 "my_membership": ("Моето членство", "My membership"),
 "my_membership_desc": ("Статус и валидност", "Status and validity"),
 "my_profile": ("Моят профил", "My profile"),
@@ -477,7 +502,7 @@ S = {
 "language_system": ("Както системата", "System default"),
 "notifications_intro": ("Известията се подготвят на самото устройство — без рекламни или проследяващи услуги.", "Notifications are prepared on the device itself — no advertising or tracking services."),
 "notifications_loans_na": ("Ще работи, когато библиотечната система предостави онлайн достъп.", "Will work once the library system offers online access."),
-"notifications_library_desc": ("Съобщения от библиотеката и промени в членството", "Library messages and membership changes"),
+"notifications_library_desc": ("Книги от „Искам да прочета“, които са на рафта, и съобщения от библиотеката", "Books from “Want to read” back on the shelf and library messages"),
 "notifications_system": ("Системни настройки за известия", "System notification settings"),
 # Разрешение за известия: отказ, изключени в системата, обяснение при първото стартиране.
 "notifications_open_settings": ("Отвори настройките", "Open settings"),
@@ -498,7 +523,7 @@ S = {
 "channel_news": ("Новини", "News"),
 "channel_news_desc": ("Нова публикация в сайта", "A new post on the website"),
 "channel_library": ("Библиотека", "Library"),
-"channel_library_desc": ("Съобщения от библиотеката", "Messages from the library"),
+"channel_library_desc": ("Книги от „Искам да прочета“, които са на рафта, и съобщения от библиотеката", "Books from “Want to read” back on the shelf and messages from the library"),
 "channel_updates": ("Обновления", "Updates"),
 "channel_updates_desc": ("Нови версии на приложението", "New versions of the app"),
 "settings_updates": ("Обновления", "Updates"),
@@ -639,6 +664,8 @@ PRIVACY_BG = """# Кой обработва данните
 
 Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака. Приложението пази и локален дневник на грешките само на устройството, без лични данни; той напуска устройството единствено ако сам го споделиш (Настройки → Информация → „Диагностика“).
 
+„Искам да прочета“: списъкът с отбелязаните книги (и дали да ти кажем, когато някоя е на рафта) се пази само на устройството — наличността се сравнява с публичния каталог на телефона, без да се изпраща какво си отбелязал; изходът не го изтрива, а „Изчисти списъка“ (в самия списък) и деинсталирането — да.
+
 Читателска карта: ако въведеш номера на своята карта, той (и името, ако го въведеш) се пази шифрован с ключ от Android Keystore само на това устройство.
 
 Вход (само ако си дал съгласие в библиотеката и имаш издаден ПИН): номерът на читателската карта и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и ПИН-ът никога не се записва. При вход се изпраща и моделът на телефона (напр. „Pixel 8“), за да се разпознава сесията. Пази се само шифрован токен за сесията. Името ти, заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес и телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните ти се изтриват от сървъра при следващото обновяване.
@@ -682,6 +709,8 @@ Personal messages from the library: if you are signed in and the centre’s serv
 Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 
 Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud. The app also keeps a local error log on the device only, without personal data; it leaves the device only if you share it yourself (Settings → Information → “Diagnostics”).
+
+“Want to read”: the list of books you mark (and whether to tell you when one is on the shelf) is kept only on the device — availability is compared with the public catalogue on the phone, without sending what you marked; signing out does not delete it, while “Clear list” (in the list itself) and uninstalling do.
 
 Library card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.
 
@@ -773,6 +802,7 @@ S["about_body"] = (ABOUT_BG, ABOUT_EN)
 
 P = {
 "history_year_count": (("%1$d книга", "%1$d книги"), ("%1$d book", "%1$d books")),
+"my_want_count": (("%1$d книга в списъка", "%1$d книги в списъка"), ("%1$d book on your list", "%1$d books on your list")),
 "book_available_copies": (("%1$d наличен", "%1$d налични"), ("%1$d available", "%1$d available")),
 "book_copies": (("%1$d екземпляр", "%1$d екземпляра"), ("%1$d copy", "%1$d copies")),
 "catalog_count": (("%1$d резултат", "%1$d резултата"), ("%1$d result", "%1$d results")),

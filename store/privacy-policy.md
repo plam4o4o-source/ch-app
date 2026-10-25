@@ -20,6 +20,8 @@
 
 Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака. Приложението пази и локален дневник на грешките само на устройството, без лични данни; той напуска устройството единствено ако сам го споделиш (Настройки → Информация → „Диагностика“).
 
+„Искам да прочета“: списъкът с отбелязаните книги (и дали да ти кажем, когато някоя е на рафта) се пази само на устройството — наличността се сравнява с публичния каталог на телефона, без да се изпраща какво си отбелязал; изходът не го изтрива, а „Изчисти списъка“ (в самия списък) и деинсталирането — да.
+
 Читателска карта: ако въведеш номера на своята карта, той (и името, ако го въведеш) се пази шифрован с ключ от Android Keystore само на това устройство.
 
 Вход (само ако си дал съгласие в библиотеката и имаш издаден ПИН): номерът на читателската карта и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и ПИН-ът никога не се записва. При вход се изпраща и моделът на телефона (напр. „Pixel 8“), за да се разпознава сесията. Пази се само шифрован токен за сесията. Името ти, заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес и телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните ти се изтриват от сървъра при следващото обновяване.
@@ -73,6 +75,8 @@ Public content: news, events, photos and pages are loaded from chyavorec.org, an
 **Updates:** the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in Settings → Updates. The Google Play version is updated by Google Play.
 
 Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud. The app also keeps a local error log on the device only, without personal data; it leaves the device only if you share it yourself (Settings → Information → “Diagnostics”).
+
+“Want to read”: the list of books you mark (and whether to tell you when one is on the shelf) is kept only on the device — availability is compared with the public catalogue on the phone, without sending what you marked; signing out does not delete it, while “Clear list” (in the list itself) and uninstalling do.
 
 Library card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.
 

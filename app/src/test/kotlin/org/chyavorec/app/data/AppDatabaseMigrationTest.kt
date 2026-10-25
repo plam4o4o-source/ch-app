@@ -63,6 +63,56 @@ class AppDatabaseMigrationTest {
         }
     }
 
+    @Test fun migration1To2AddsTheWantToReadListAndKeepsData() {
+        helper.createDatabase(AppDatabase.NAME, 1).apply {
+            execSQL(
+                "INSERT INTO favorite_news (id, title, url, imageUrl, summary, category, publishedAtMillis, savedAtMillis) " +
+                    "VALUES ('n1', 'Празник', 'https://chyavorec.org/news/1', NULL, 'Кратко', NULL, NULL, 5)",
+            )
+            execSQL("INSERT INTO event_reminders (eventId, title, remindAtMillis) VALUES ('e1', 'Концерт', 10)")
+            close()
+        }
+        // Миграцията дава точно схемата от 2.json (новата таблица, колоните, ключа).
+        helper.runMigrationsAndValidate(AppDatabase.NAME, 2, true, *AppDatabase.MIGRATIONS).apply {
+            execSQL(
+                "INSERT INTO want_to_read (inv, title, author, addedAtMillis, notifyWhenAvailable, lastKnownAvailable) " +
+                    "VALUES (624, 'Белият дома', 'Николай Симеонов', 7, 1, 0)",
+            )
+            close()
+        }
+
+        // Приложението отваря мигрираната база; старите данни и новият списък са там.
+        val db = AppDatabase.create(context)
+        try {
+            runBlocking {
+                assertEquals(listOf("n1"), db.favorites().observeIds().first())
+                assertEquals(listOf("e1"), db.reminders().observeIds().first())
+                val saved = db.wantToRead().all().single()
+                assertEquals(624L, saved.inv)
+                assertTrue(saved.notifyWhenAvailable)
+                assertFalse(saved.lastKnownAvailable)
+            }
+        } finally {
+            db.close()
+        }
+    }
+
+    @Test fun version2SchemaMatchesTheCode() {
+        helper.createDatabase(AppDatabase.NAME, 2).apply {
+            execSQL(
+                "INSERT INTO want_to_read (inv, title, author, addedAtMillis, notifyWhenAvailable, lastKnownAvailable) " +
+                    "VALUES (399666, 'Ох...', 'Джиан, Филип', 3, 0, 1)",
+            )
+            close()
+        }
+        val db = AppDatabase.create(context)
+        try {
+            runBlocking { assertEquals(listOf(399666L), db.wantToRead().all().map { it.inv }) }
+        } finally {
+            db.close()
+        }
+    }
+
     @Test fun databaseErrorsDoNotCrashTheScreens() = runBlocking {
         // Грешка при отваряне/четене: потокът дава резервната стойност, записът връща false.
         val broken = flow<List<String>> { throw SQLiteCantOpenDatabaseException("unable to open database file") }

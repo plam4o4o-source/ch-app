@@ -45,6 +45,7 @@ object NotificationIds {
     private const val EVENT_BASE = 30_000
     private const val MESSAGE_BASE = 40_000
     private const val RENEW_BASE = 50_000
+    private const val WANT_TO_READ_BASE = 60_000
     private const val MASK = 0x1FFF
     /** Обобщението на групата известия за заемания ([Notifier.LOANS_GROUP]). */
     const val LOANS_SUMMARY = 600
@@ -57,6 +58,8 @@ object NotificationIds {
     fun message(messageId: String): Int = MESSAGE_BASE + (messageId.hashCode() and MASK)
     /** Отговорът на библиотеката на заявка за удължаване. */
     fun renew(loanId: String): Int = RENEW_BASE + (loanId.hashCode() and MASK)
+    /** „Вече е на рафта“ — книга от „Искам да прочета“. */
+    fun wantToRead(inv: Long): Int = WANT_TO_READ_BASE + (inv.hashCode() and MASK)
 }
 
 object Notifier {
