@@ -41,10 +41,44 @@ data class CatalogIndexRow(
     /** „Останалите“ полета, слепени като в [CatalogSearchEngine]. */
     val rest: String get() = restOf(annotation, publisher, docType, callNumber, invText, isbn)
 
+    /** Лекият изглед на записа (за точкуването на резултатите с текст). */
+    fun toHit(): CatalogIndexHit = CatalogIndexHit(
+        ord = ord, inv = book.inv, title = title, author = author, keywords = keywords, annotation = annotation,
+        publisher = publisher, docType = docType, callNumber = callNumber, invText = invText, isbn = isbn,
+        isbnDigits = isbnDigits, year = year, registeredOn = book.registeredOn, titleRank = titleRank, authorRank = authorRank,
+    )
+
     companion object {
         internal fun restOf(annotation: String, publisher: String, docType: String, callNumber: String, invText: String, isbn: String): String =
             "$annotation $publisher $docType $callNumber $invText $isbn"
     }
+}
+
+/**
+ * Лекият изглед на запис от индекса — само каквото трябва за точкуването и подреждането
+ * на резултатите с текст ([CatalogIndexColumns.HIT]): нормализираните полета, ранговете,
+ * годината и датата на постъпване. Самите книги (заглавие, корица, анотация…) се четат
+ * само за показаната страница ([CatalogIndexStore.booksAt]) — не за всички кандидати.
+ */
+data class CatalogIndexHit(
+    val ord: Int,
+    val inv: Long,
+    val title: String,
+    val author: String,
+    val keywords: String,
+    val annotation: String,
+    val publisher: String,
+    val docType: String,
+    val callNumber: String,
+    val invText: String,
+    val isbn: String,
+    val isbnDigits: String,
+    val year: Int?,
+    val registeredOn: String,
+    val titleRank: Int,
+    val authorRank: Int,
+) {
+    val rest: String get() = CatalogIndexRow.restOf(annotation, publisher, docType, callNumber, invText, isbn)
 }
 
 /** Имената на таблиците и колоните — едни и същи за Room и за SQL заявките. */
@@ -78,6 +112,14 @@ object CatalogIndexColumns {
 
     /** Изборът на колоните за списък от таблицата с псевдоним `b` (нечетените — празни). */
     val LIST_SELECT: String = LIST.joinToString(", ") { "b.$it" } + LIST_BLANK.joinToString("") { ", '' AS $it" }
+
+    /**
+     * Колоните за точкуването на резултатите с текст ([CatalogIndexHit]) — без самата книга:
+     * при „а*“ в 10 пъти по-голям каталог ≈ 3 пъти по-бързо от `b.*` (11 000 записа).
+     */
+    val HIT = listOf("ord", "inv", "registered_on", "year_num", "title_rank", "author_rank", "isbn_digits") + FTS
+
+    val HIT_SELECT: String = HIT.joinToString(", ") { "b.$it" }
 }
 
 object CatalogIndexRows {
@@ -170,6 +212,15 @@ interface CatalogIndexStore {
     /** Записите по заявката, в реда на каталога (или по [CatalogIndexQuery.sort]). */
     suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow>
 
+    /**
+     * Лекият изглед на записите по заявката ([CatalogIndexQuery.hitSql]) — за точкуването на
+     * резултатите с текст, без да се четат всички книги.
+     */
+    suspend fun hits(query: CatalogIndexQuery): List<CatalogIndexHit>
+
+    /** Книгите на тези места в каталога ([CatalogIndexRow.ord]) — в подадения ред (липсващите се пропускат). */
+    suspend fun booksAt(ords: List<Int>): List<CatalogBook>
+
     /** Колко записа отговарят на заявката (без [CatalogIndexQuery.limit]/[CatalogIndexQuery.offset]). */
     suspend fun count(query: CatalogIndexQuery): Int
 
@@ -248,6 +299,15 @@ data class CatalogIndexQuery(
             val c = CatalogIndexColumns
             append("SELECT ")
             append(if (textless) c.LIST_SELECT else "b.*")
+            appendFromWhere()
+            append(" ORDER BY ").append(orderBy)
+            if (limit != null) append(" LIMIT ").append(limit).append(" OFFSET ").append(offset)
+        }
+
+    /** Като [sql], но само колоните за точкуването ([CatalogIndexColumns.HIT_SELECT]). */
+    val hitSql: String
+        get() = buildString {
+            append("SELECT ").append(CatalogIndexColumns.HIT_SELECT)
             appendFromWhere()
             append(" ORDER BY ").append(orderBy)
             if (limit != null) append(" LIMIT ").append(limit).append(" OFFSET ").append(offset)
@@ -371,12 +431,19 @@ object CatalogIndexQueries {
         filtered(q).copy(sort = q.sort, limit = limit, offset = offset)
 
     /**
+     * Най-малко знаци в поне една дума, за да се търси като подниз: пълното обхождане
+     * на 9 колони струва 70–220 ms при 10 пъти по-голям каталог, а една буква по средата
+     * на дума съвпада почти с всичко.
+     */
+    const val MIN_SCAN_TOKEN = 2
+
+    /**
      * Резервната заявка — думите като подниз навсякъде в полето (както индекса в паметта);
      * ползва се, когато FTS не намери нищо (напр. търсене по средата на дума).
-     * `null` — няма смисъл (ISBN/инв. № вече търсят подниз).
+     * `null` — няма смисъл (ISBN/инв. № вече търсят подниз) или всички думи са по-къси от [MIN_SCAN_TOKEN].
      */
     fun scan(q: CatalogQuery, tokens: List<String>): CatalogIndexQuery? {
-        if (tokens.isEmpty()) return null
+        if (tokens.none { it.length >= MIN_SCAN_TOKEN }) return null
         val columns = when (q.field) {
             SearchField.ISBN, SearchField.INVENTORY -> return null
             SearchField.ALL -> CatalogIndexColumns.FTS

@@ -66,6 +66,52 @@ class SecureStorageTest {
         assertNull(store.load())
     }
 
+    /** Само грешка, след която файлът никога няма да се прочете, изтрива сесията (изход). */
+    @Test fun onlyPermanentDecryptErrorsDeleteTheSession() = runTest {
+        val s = AuthSession("token-123", "refresh", 99, "R1")
+        for ((error, deleted) in listOf<Pair<Exception, Boolean>>(
+            javax.crypto.AEADBadTagException("tag") to true,
+            java.security.UnrecoverableKeyException("key") to true,
+            IllegalArgumentException("corrupt") to true,
+            kotlinx.serialization.SerializationException("json") to true,
+            java.security.ProviderException("keystore busy") to false,
+            java.security.KeyStoreException("keystore") to false,
+            IllegalStateException("not ready") to false,
+        )) {
+            val file = File(tmp.root, "s-${error.javaClass.simpleName}.bin")
+            SecureSessionStore(file, XorTestCipher()).save(s, persist = true)
+            var attempts = 0
+            val failing = SecureSessionStore(file, object : org.chyavorec.app.data.security.BytesCipher {
+                override fun encrypt(plain: ByteArray) = plain
+                override fun decrypt(data: ByteArray): ByteArray { attempts++; throw error }
+            }, retryDelayMs = 0)
+            assertNull(failing.load(), "$error")
+            assertEquals(!deleted, file.exists(), "$error")
+            assertEquals(!deleted, failing.unreadableNow(), "$error")
+            // Временна грешка — още един опит веднага; трайна — без повторение.
+            assertEquals(if (deleted) 1 else 2, attempts, "$error")
+            // Keystore се е възстановил — същата сесия, без нов вход.
+            if (!deleted) assertEquals(s, SecureSessionStore(file, XorTestCipher()).load())
+        }
+    }
+
+    @Test fun transientErrorThenSuccessReadsTheSession() = runTest {
+        val file = File(tmp.root, "secure/session.bin")
+        val s = AuthSession("token-123", "refresh", 99, "R1")
+        SecureSessionStore(file, XorTestCipher()).save(s, persist = true)
+        val xor = XorTestCipher()
+        var first = true
+        val flaky = SecureSessionStore(file, object : org.chyavorec.app.data.security.BytesCipher {
+            override fun encrypt(plain: ByteArray) = xor.encrypt(plain)
+            override fun decrypt(data: ByteArray): ByteArray {
+                if (first) { first = false; throw java.security.ProviderException("busy") }
+                return xor.decrypt(data)
+            }
+        }, retryDelayMs = 0)
+        assertEquals(s, flaky.load())
+        assertFalse(flaky.unreadableNow())
+    }
+
     @Test fun selfCardStore() = runTest {
         val store = SecureSelfCardStore(File(tmp.root, "card.bin"), XorTestCipher())
         assertNull(store.load())

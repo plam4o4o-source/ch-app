@@ -99,29 +99,22 @@ class MainActivity : ComponentActivity() {
     }
 
     /**
-     * Прочита deep link-а от известието (extra), от пряк път на иконата
+     * Прочита deep link-а от собственото известие или уиджет (extra), от пряк път на иконата
      * (`chyavorec://app/<връзка>`) или от адрес на сайта (App Links, `https://chyavorec.org/...`)
-     * и го премахва от intent-а (еднократен).
+     * и го премахва от intent-а (еднократен). Чужди intent-и (MainActivity е exported) не
+     * отварят произволна връзка или страница — виж [LaunchIntents.linkOf].
      */
     private fun consumeDeepLink(intent: Intent?) {
-        val data = intent?.data
-        val fromShortcut = if (intent?.action == ACTION_SHORTCUT && data?.scheme == SHORTCUT_SCHEME) {
-            data.path.orEmpty().trim('/').ifBlank { null }
-        } else null
-        // Адресът минава през същото разпознаване като връзките в съдържанието (DeepLinks.forUrl).
-        val fromWeb = if (intent?.action == Intent.ACTION_VIEW && data?.scheme == "https") data.toString() else null
-        val link = fromShortcut ?: fromWeb
-        deepLink.value = link ?: intent?.getStringExtra(Notifier.EXTRA_DEEP_LINK)
-        intent?.removeExtra(Notifier.EXTRA_DEEP_LINK)
-        if (link != null) intent?.data = null
+        if (intent == null) return
+        val siteBaseUrl = (application as ChitalishteApp).container.config.siteBaseUrl
+        deepLink.value = LaunchIntents.linkOf(intent, siteBaseUrl)
+        intent.removeExtra(Notifier.EXTRA_DEEP_LINK)
+        intent.data = null
         // Обработеният intent се заменя с обикновен — повторно четене не отваря нищо.
-        if (intent != null) setIntent(LaunchIntents.consumed(intent))
+        setIntent(LaunchIntents.consumed(intent))
     }
 
     companion object {
-        /** Действие на статичните преки пътища (res/xml/shortcuts.xml); връзката е в `data`. */
-        const val ACTION_SHORTCUT = "org.chyavorec.app.SHORTCUT"
-        const val SHORTCUT_SCHEME = "chyavorec"
         /** Времето на отваряне се записва най-много веднъж на час (стига за 14-дневния срок). */
         private const val OPEN_RECORD_GAP_MS = 60 * 60 * 1000L
     }

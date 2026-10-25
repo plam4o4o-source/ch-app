@@ -63,4 +63,46 @@ class LaunchIntentsTest {
         // Оригиналът остава непокътнат (новият intent е отделен обект).
         assertEquals("events", original.getStringExtra(Notifier.EXTRA_DEEP_LINK))
     }
+
+    private val base = "https://chyavorec.org"
+    private val context get() = androidx.test.core.app.ApplicationProvider.getApplicationContext<Application>()
+    private val main = ComponentName("org.chyavorec.app", MainActivity::class.java.name)
+
+    /** Собствените известия и уиджетът — през неекспортирания вход, с връзката в extra. */
+    @Test fun ownNotificationLinksAreHonoured() {
+        val own = LaunchIntents.openLink(context, DeepLinks.article("42"))
+        assertEquals(LaunchIntents.OPEN_LINK_ALIAS, own.component?.className)
+        assertEquals(LaunchIntents.ACTION_OPEN_LINK, own.action)
+        assertEquals(DeepLinks.article("42"), LaunchIntents.linkOf(own, base))
+        assertEquals("my/loans", LaunchIntents.linkOf(LaunchIntents.openLink(context, "my/loans"), base))
+        // Различните връзки дават различни PendingIntent-и (filterEquals гледа и data).
+        assertFalse(own.filterEquals(LaunchIntents.openLink(context, "events")))
+        assertNull(LaunchIntents.linkOf(LaunchIntents.openLink(context, null), base))
+    }
+
+    /** MainActivity е exported: чужд intent с extra „deep_link“ не отваря нищо. */
+    @Test fun deepLinkExtraFromOtherAppsIsIgnored() {
+        for (action in listOf(null, Intent.ACTION_MAIN, Intent.ACTION_VIEW, LaunchIntents.ACTION_OPEN_LINK, LaunchIntents.ACTION_SHORTCUT)) {
+            for (link in listOf("my/card", "login", "update", "https://evil.example/phish")) {
+                val spoofed = Intent().setAction(action).setComponent(main).putExtra(Notifier.EXTRA_DEEP_LINK, link)
+                assertNull(LaunchIntents.linkOf(spoofed, base), "$action / $link")
+            }
+        }
+    }
+
+    @Test fun shortcutsOpenOnlyTheirOwnLinks() {
+        fun shortcut(link: String) = Intent(LaunchIntents.ACTION_SHORTCUT, Uri.parse("chyavorec://app/$link")).setComponent(main)
+        for (link in LaunchIntents.SHORTCUT_LINKS) assertEquals(link, LaunchIntents.linkOf(shortcut(link), base))
+        for (link in listOf("login", "update", "my/loans", "page?url=https://evil.example", "")) assertNull(LaunchIntents.linkOf(shortcut(link), base), link)
+        assertNull(LaunchIntents.linkOf(Intent(LaunchIntents.ACTION_SHORTCUT, Uri.parse("https://app/catalog")).setComponent(main), base))
+    }
+
+    /** Адрес отвън — само от сайта и само с native екран; чужд адрес не се отваря в Custom Tab с цветовете на приложението. */
+    @Test fun externalViewIntentsAcceptOnlyRecognisedSiteLinks() {
+        fun view(url: String) = Intent(Intent.ACTION_VIEW, Uri.parse(url)).setComponent(main)
+        for (url in listOf("$base/news/x", "$base/events", "$base/elektronen-katalog#zapis=12", "$base/about"))
+            assertEquals(url, LaunchIntents.linkOf(view(url), base), url)
+        for (url in listOf("https://evil.example/", "https://chyavorec.org@evil.com/about", "$base/files/ustav.pdf", "$base/api/x/y", "http://chyavorec.org/news", "chyavorec://app/login"))
+            assertNull(LaunchIntents.linkOf(view(url), base), url)
+    }
 }

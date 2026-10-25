@@ -2,7 +2,6 @@ package org.chyavorec.app.widget
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,6 +51,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import org.chyavorec.app.ChitalishteApp
 import org.chyavorec.app.MainActivity
+import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.R
 import org.chyavorec.app.data.local.resetOnCorruption
 import org.chyavorec.app.util.Formatters
@@ -330,13 +330,10 @@ private fun WidgetColors.chipText(status: DueStatus?): ColorProvider = when (sta
     else -> okText
 }
 
-/** Отваря приложението на дадена връзка — същият път като преките пътища (`chyavorec://app/<връзка>`). */
+/** Отваря приложението на дадена връзка — през собствения (неекспортиран) вход, като известията. */
 private fun linkAction(context: Context, link: String): Action =
     actionStartActivity(
-        Intent(context, MainActivity::class.java).apply {
-            action = MainActivity.ACTION_SHORTCUT
-            // Различният адрес прави и PendingIntent-ите различни (не се сливат).
-            data = Uri.parse("${MainActivity.SHORTCUT_SCHEME}://app/$link")
+        LaunchIntents.openLink(context, link).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         },
     )

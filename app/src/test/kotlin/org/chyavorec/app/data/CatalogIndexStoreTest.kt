@@ -105,9 +105,37 @@ class CatalogIndexStoreTest {
                 while (all.size < first.total) all += fts.searchMore(query, all.size, 7).also { assertTrue(it.isNotEmpty()) }.map { it.inv }
                 assertEquals(expected, all, "страници $query")
             }
+        // С текст — точкуват се леките записи, книгите се четат само за страницата (същият ред).
+        for (text in listOf("под", "вазов", "астир", "игото")) for (sort in CatalogSort.entries) {
+            val query = CatalogQuery(text, sort = sort)
+            val expected = engine.search(query)
+            val first = fts.searchFirst(query, 2)
+            assertEquals(expected.size, first.total, "брой $query")
+            assertEquals(expected.take(2), first.books, "първа страница $query")
+            assertEquals(expected.drop(2).take(2), fts.searchMore(query, 2, 2), "следваща страница $query")
+        }
+        assertEquals(listOf(11L, 1L), store.booksAt(listOf(2, 0, 99_999)).map { it.inv }, "в подадения ред, без липсващите")
+        val hit = store.hits(org.chyavorec.data.catalog.CatalogIndexQueries.search(CatalogQuery("игото"), listOf("игото"), "")!!).first()
+        assertEquals(CatalogIndexRows.build(snapshot)[hit.ord].toHit(), hit)
         // Списъкът без текст не чете анотацията; книгата — да.
         assertEquals("", fts.search(CatalogQuery()).first { it.inv == 1L }.annotation)
         assertEquals("Роман.", fts.book(1)!!.annotation)
+    }
+
+    private fun CatalogDatabase.plan(sql: String, args: List<Any>): String =
+        openHelper.writableDatabase.query("EXPLAIN QUERY PLAN $sql", args.toTypedArray()).use { c ->
+            buildList { while (c.moveToNext()) add(c.getString(c.getColumnIndexOrThrow("detail"))) }.joinToString(" | ")
+        }
+
+    /** Подредените страници без текст (заглавие, автор, „Най-нови“) четат индекс наред — без подреждане на целия каталог. */
+    @Test fun sortedPagesUseAnIndexInsteadOfSortingTheCatalogue() = runBlocking {
+        RoomCatalogIndexStore { db }.replace(state, CatalogIndexRows.build(snapshot))
+        for (sort in listOf(CatalogSort.RELEVANCE, CatalogSort.TITLE, CatalogSort.AUTHOR, CatalogSort.NEWEST))
+            for (q in listOf(CatalogQuery(sort = sort), CatalogQuery(sort = sort, onlyAvailable = true))) {
+                val page = org.chyavorec.data.catalog.CatalogIndexQueries.page(q, offset = 40, limit = 40)
+                val plan = db.plan(page.sql, page.args)
+                assertTrue("USING INDEX" in plan && "TEMP B-TREE" !in plan, "$sort: $plan")
+            }
     }
 
     @Test fun replaceSwapsTheWholeIndex() = runBlocking {
@@ -222,7 +250,7 @@ class CatalogIndexStoreTest {
      * а пълнотекстовият индекс (строен с 'rebuild') отговаря на съдържанието.
      */
     @Test fun replaceKeepsRoomTriggersAndTheFtsIndexConsistent() = runBlocking {
-        val schema = org.json.JSONObject(java.io.File("schemas/org.chyavorec.app.data.local.CatalogDatabase/2.json").readText())
+        val schema = org.json.JSONObject(java.io.File("schemas/org.chyavorec.app.data.local.CatalogDatabase/3.json").readText())
         val entities = schema.getJSONObject("database").getJSONArray("entities")
         val expected = (0 until entities.length()).map { entities.getJSONObject(it) }
             .first { it.getString("tableName") == "catalog_fts" }.getJSONArray("contentSyncTriggers")

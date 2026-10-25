@@ -2,6 +2,7 @@ package org.chyavorec.data
 
 import kotlinx.coroutines.CompletableDeferred
 import org.chyavorec.data.catalog.CatalogIndexColumns
+import org.chyavorec.data.catalog.CatalogIndexHit
 import org.chyavorec.data.catalog.CatalogIndexLostException
 import org.chyavorec.data.catalog.CatalogIndexQuery
 import org.chyavorec.data.catalog.CatalogIndexRow
@@ -99,6 +100,17 @@ class FakeFtsIndexStore : CatalogIndexStore {
         val out = rows.sortedBy { it.ord }.filter { r -> matches(r, query) }.sortedWith(order(query.sort)).map { if (query.textless) listRow(it) else it }
         val from = query.offset.coerceAtMost(out.size)
         return query.limit?.let { out.subList(from, (from + it).coerceAtMost(out.size)) } ?: out.drop(from)
+    }
+
+    override suspend fun hits(query: CatalogIndexQuery): List<CatalogIndexHit> {
+        read()
+        queries += query
+        return rows.sortedBy { it.ord }.filter { r -> matches(r, query) }.sortedWith(order(query.sort)).map { it.toHit() }
+    }
+
+    override suspend fun booksAt(ords: List<Int>): List<CatalogBook> {
+        val byOrd = lookup("booksAt").associateBy { it.ord }
+        return ords.mapNotNull { byOrd[it]?.book }
     }
 
     override suspend fun count(query: CatalogIndexQuery): Int {

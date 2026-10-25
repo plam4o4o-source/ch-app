@@ -72,12 +72,16 @@ class HttpFetcher(
     }
 
     /** Премахва адреса от HTTP кеша на OkHttp (ако има такъв) — за файлове, които се пазят другаде. */
-    suspend fun evictFromHttpCache(url: String) {
+    suspend fun evictFromHttpCache(url: String) = evictFromHttpCache(setOf(url))
+
+    /** Като горното за няколко адреса — с едно обхождане на кеша (всяко чете журнала на целия кеш). */
+    suspend fun evictFromHttpCache(urls: Set<String>) {
         val cache = client.cache ?: return
+        if (urls.isEmpty()) return
         withContext(io) {
             runCatching {
-                val urls = cache.urls()
-                while (urls.hasNext()) if (urls.next() == url) urls.remove()
+                val cached = cache.urls()
+                while (cached.hasNext()) if (cached.next() in urls) cached.remove()
             }
         }
     }

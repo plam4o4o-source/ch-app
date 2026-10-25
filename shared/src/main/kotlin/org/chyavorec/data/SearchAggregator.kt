@@ -78,12 +78,13 @@ object SearchAggregator {
 
     /**
      * Като горното, но каталогът е през [CatalogSearcher] — книгите се търсят както в екрана
-     * „Каталог“ (през базата: думите като начало на дума), авторите — както досега.
+     * „Каталог“ (през базата: думите като начало на дума), авторите — както досега. От базата
+     * се четат само първите [limitPerType] книги (точкуват се леките записи на всички кандидати).
      */
     suspend fun search(query: String, catalog: CatalogSearcher?, corpus: SearchCorpus, limitPerType: Int = 20): SearchResults {
         val tokens = TextNormalizer.tokens(query)
         if (tokens.isEmpty()) return SearchResults()
-        val books = catalog?.search(CatalogQuery(text = query))?.take(limitPerType).orEmpty()
+        val books = catalog?.searchFirst(CatalogQuery(text = query), limitPerType)?.books?.take(limitPerType).orEmpty()
         return assemble(tokens, books, catalog?.authors(tokens, AUTHORS).orEmpty(), corpus, limitPerType)
     }
 

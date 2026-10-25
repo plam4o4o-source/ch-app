@@ -148,7 +148,15 @@ class AppContainer(
     )
 
     val siteService by lazy { ChyavorecSiteService(http, config.siteBaseUrl, clock, fallbackContacts) }
-    val catalogService by lazy { GitHubCatalogService(http, config.catalogUrls, legacyUrls = config.catalogLegacyUrls) }
+    val catalogService by lazy {
+        GitHubCatalogService(
+            http, config.catalogUrls, legacyUrls = config.catalogLegacyUrls,
+            legacyCacheEvicted = object : GitHubCatalogService.LegacyCacheFlag {
+                override suspend fun isSet() = settings.catalogHttpCacheEvicted()
+                override suspend fun set() = settings.setCatalogHttpCacheEvicted()
+            },
+        )
+    }
 
     val readerServices: ReaderServices by lazy {
         val demo = FlavorServices.demoReaderServices(config, clock)
@@ -333,8 +341,8 @@ class AppContainer(
         // Вече показаните известия за заемания и лични съобщения.
         runCatching { Notifier.cancelPersonal(context) }.logFailure("signout.notifications")
         runCatching { evictReaderApiFromHttpCache() }.logFailure("signout.http-cache")
-        // Локалният дневник на грешките не съдържа лични данни, но се изчиства и той — за всеки случай.
-        Diagnostics.clear()
+        // Локалният дневник на грешките остава: без лични данни е (записите се изчистват при
+        // запис), а при принудителен изход в него е и причината — изтриването би я загубило.
         runCatching { settings.setReaderTraces(false) }
         // Уиджетът не бива да показва заглавия на книги след изход.
         runCatching { ChitalishteWidget.refresh(context) }

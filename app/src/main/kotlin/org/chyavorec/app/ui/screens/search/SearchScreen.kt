@@ -56,6 +56,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -117,7 +118,8 @@ class GlobalSearchViewModel(
             corpus = withContext(Dispatchers.Default) { SearchAggregator.prepare(news, events, siteDocs) }
             run(query.value)
         }
-        viewModelScope.launch(Dispatchers.Default) { query.debounce(180).collect { run(it) } }
+        // Нова заявка отменя още незавършеното търсене на старата.
+        viewModelScope.launch(Dispatchers.Default) { query.debounce(180).collectLatest { run(it) } }
     }
 
     fun setQuery(q: String) {

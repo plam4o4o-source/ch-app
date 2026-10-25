@@ -96,6 +96,43 @@ class CachingTest {
         dir.deleteRecursively()
     }
 
+    /** Копията на каталога от по-стари версии в HTTP кеша — изтрити веднъж изобщо (флагът), не при всяко пускане. */
+    @Test fun legacyHttpCacheCopiesAreEvictedOnceAcrossRestarts() = runTest {
+        val dir = Files.createTempDirectory("okcache").toFile()
+        val cache = Cache(dir, 1024 * 1024)
+        val fetcher = http(cache)
+        val url = server.url("/raw/katalog.json").toString()
+        val other = server.url("/other").toString()
+        fun cachedUrls() = buildList { val it = cache.urls(); while (it.hasNext()) add(it.next()) }
+        suspend fun cacheCopy(u: String) {
+            server.enqueue(MockResponse().setBody("x").setHeader("Cache-Control", "max-age=3600"))
+            fetcher.get(u)
+        }
+        cacheCopy(url)
+        cacheCopy(other)
+        assertEquals(setOf(url, other), cachedUrls().toSet())
+        var flag = false
+        var checks = 0
+        val stored = object : GitHubCatalogService.LegacyCacheFlag {
+            override suspend fun isSet(): Boolean { checks++; return flag }
+            override suspend fun set() { flag = true }
+        }
+        server.enqueue(MockResponse().setBody(raw))
+        GitHubCatalogService(fetcher, listOf(url), legacyCacheEvicted = stored).fetchCatalogConditional(null)
+        assertEquals(listOf(other), cachedUrls(), "само копието на каталога")
+        assertTrue(flag)
+        // Следващо пускане (нов процес): флагът е запазен — кешът не се обхожда отново.
+        cacheCopy(url)
+        val svc = GitHubCatalogService(fetcher, listOf(url), legacyCacheEvicted = stored)
+        repeat(2) {
+            server.enqueue(MockResponse().setBody(raw))
+            svc.fetchCatalogConditional(null)
+        }
+        assertTrue(url in cachedUrls(), "без второ изтриване")
+        assertEquals(2, checks, "флагът се чете веднъж на процес")
+        dir.deleteRecursively()
+    }
+
     @Test fun catalog304IsUnchangedWithoutParsing() = runTest {
         val url = server.url("/raw/katalog.json").toString()
         server.enqueue(MockResponse().setBody(raw).setHeader("ETag", "\"abc\""))

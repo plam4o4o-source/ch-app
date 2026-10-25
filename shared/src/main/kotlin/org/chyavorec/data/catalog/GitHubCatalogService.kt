@@ -43,9 +43,28 @@ class GitHubCatalogService(
      * ([CatalogValidators.generatedOn]), не се приема.
      */
     private val legacyUrls: List<String> = emptyList(),
+    /**
+     * Запазеният флаг „копията от по-старите версии вече са изтрити от HTTP кеша“ (в
+     * приложението — в настройките): изтриването е еднократно, не при всяко пускане.
+     */
+    private val legacyCacheEvicted: LegacyCacheFlag = LegacyCacheFlag.NONE,
 ) : CatalogService {
 
-    /** Копията от по-старите версии (в HTTP кеша на OkHttp) се изтриват веднъж на процес. */
+    /** Еднократният флаг за изтриването на старите копия — четене и запис. */
+    interface LegacyCacheFlag {
+        suspend fun isSet(): Boolean
+        suspend fun set()
+
+        companion object {
+            /** Без запазен флаг (тестове) — веднъж на процес. */
+            val NONE = object : LegacyCacheFlag {
+                override suspend fun isSet() = false
+                override suspend fun set() = Unit
+            }
+        }
+    }
+
+    /** Копията от по-старите версии (в HTTP кеша на OkHttp) — проверено/изтрито в този процес. */
     @Volatile private var httpCacheEvicted = false
 
     override suspend fun fetchCatalog(): Outcome<Pair<String, CatalogSnapshot>> =
@@ -69,7 +88,12 @@ class GitHubCatalogService(
     override suspend fun fetchCatalogConditional(known: CatalogValidators?): Outcome<CatalogFetch> {
         if (!httpCacheEvicted) {
             httpCacheEvicted = true
-            (urls + legacyUrls).forEach { http.evictFromHttpCache(it) }
+            // Файлът се тегли с no-store — копия в HTTP кеша има само от по-стари версии.
+            // Веднъж изобщо (флагът) и с едно обхождане на кеша (до 30 MB) за всички адреси.
+            if (!runCatching { legacyCacheEvicted.isSet() }.getOrDefault(false)) {
+                http.evictFromHttpCache((urls + legacyUrls).toSet())
+                runCatching { legacyCacheEvicted.set() }
+            }
         }
         val (primary, allNotFound) = fetchFrom(urls, known)
         if (primary !is Outcome.Failure || !allNotFound || legacyUrls.isEmpty()) return primary

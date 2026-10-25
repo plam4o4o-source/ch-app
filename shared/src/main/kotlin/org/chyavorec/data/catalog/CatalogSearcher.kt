@@ -71,7 +71,10 @@ interface CatalogSearcher {
 class EngineCatalogSearcher(val engine: CatalogSearchEngine) : CatalogSearcher {
     override val generatedOn: String get() = engine.snapshot.generatedOn
     override val facets: CatalogFacets get() = engine.facets
-    override suspend fun search(query: CatalogQuery): List<CatalogBook> = engine.search(query)
+    override suspend fun search(query: CatalogQuery): List<CatalogBook> {
+        val context = currentCoroutineContext()
+        return engine.search(query) { context.ensureActive() }
+    }
     override suspend fun suggestions(prefix: String, limit: Int): List<String> = engine.suggestions(prefix, limit)
     override suspend fun book(inv: Long): CatalogBook? = engine.book(inv)
     override suspend fun books(invs: Collection<Long>): Map<Long, CatalogBook> = engine.books(invs)
@@ -117,23 +120,25 @@ class FtsCatalogSearcher(
     override val facets: CatalogFacets get() = state.facets
 
     override suspend fun search(query: CatalogQuery): List<CatalogBook> {
-        val tokens = TextNormalizer.tokens(query.text)
-        val digits = TextNormalizer.digits(query.text)
-        return guarded({ it.search(query) }) {
-            val plan = CatalogIndexQueries.search(query, tokens, digits) ?: return@guarded emptyList()
-            val found = rank(store.rows(plan), query, tokens, digits)
-            if (found.isNotEmpty() || plan.matchTokens.isEmpty()) return@guarded found
-            val scan = CatalogIndexQueries.scan(query, tokens) ?: return@guarded found
-            rank(store.rows(scan), query, tokens, digits)
+        // Без текст — само филтрите, подредени в базата (като [CatalogMatcher.sort] без точки).
+        if (TextNormalizer.tokens(query.text).isEmpty()) return guarded({ it.search(query) }) {
+            store.rows(CatalogIndexQueries.search(query, emptyList(), "")!!.copy(sort = query.sort)).map { it.book }
         }
+        return guarded({ it.search(query) }) { store.booksAt(ranked(query).asList()) }
     }
 
     /**
      * Без текст за търсене (празното търсене при отваряне на „Каталог“) — само страницата
-     * и броят от базата (подредени там), не целият каталог; с текст — както [search].
+     * и броят от базата (подредени там), не целият каталог. С текст — точкуват се само
+     * леките записи ([CatalogIndexHit]), а книгите се четат само за страницата.
      */
     override suspend fun searchFirst(query: CatalogQuery, limit: Int): CatalogResults {
-        if (TextNormalizer.tokens(query.text).isNotEmpty()) return search(query).let { CatalogResults(it, it.size) }
+        if (TextNormalizer.tokens(query.text).isNotEmpty()) {
+            return guarded({ e -> e.search(query).let { CatalogResults(it.take(limit), it.size) } }) {
+                val ords = ranked(query)
+                CatalogResults(store.booksAt(ords.asList().take(limit)), ords.size)
+            }
+        }
         return guarded({ e -> e.search(query).let { CatalogResults(it.take(limit), it.size) } }) {
             val plan = CatalogIndexQueries.page(query, offset = 0, limit = limit)
             CatalogResults(store.rows(plan).map { it.book }, store.count(plan))
@@ -141,10 +146,39 @@ class FtsCatalogSearcher(
     }
 
     override suspend fun searchMore(query: CatalogQuery, offset: Int, limit: Int): List<CatalogBook> {
-        if (TextNormalizer.tokens(query.text).isNotEmpty()) return search(query).drop(offset).take(limit)
+        if (TextNormalizer.tokens(query.text).isNotEmpty()) {
+            return guarded({ it.search(query).drop(offset).take(limit) }) {
+                val ords = ranked(query, reuse = true).asList()
+                store.booksAt(ords.subList(offset.coerceAtMost(ords.size), (offset + limit).coerceAtMost(ords.size)))
+            }
+        }
         return guarded({ it.search(query).drop(offset).take(limit) }) {
             store.rows(CatalogIndexQueries.page(query, offset, limit)).map { it.book }
         }
+    }
+
+    /**
+     * Последната заявка с текст и подредените ѝ резултати (местата в каталога): „Още“
+     * чете само следващата страница книги, без да точкува кандидатите наново.
+     */
+    @Volatile private var lastRanked: Pair<CatalogQuery, IntArray>? = null
+
+    /**
+     * Резултатите с текст, подредени (местата в каталога): кандидатите от FTS (или резервното
+     * търсене като подниз), точкувани по лекия им изглед. [reuse] — „Още“ за същата заявка
+     * взима вече подредените (новото търсене винаги чете индекса наново — може да е попълнен междувременно).
+     */
+    private suspend fun ranked(query: CatalogQuery, reuse: Boolean = false): IntArray {
+        if (reuse) lastRanked?.let { (q, ords) -> if (q == query) return ords }
+        val tokens = TextNormalizer.tokens(query.text)
+        val digits = TextNormalizer.digits(query.text)
+        val plan = CatalogIndexQueries.search(query, tokens, digits) ?: return IntArray(0)
+        var found = rank(store.hits(plan), query, tokens, digits)
+        if (found.isEmpty() && plan.matchTokens.isNotEmpty()) {
+            CatalogIndexQueries.scan(query, tokens)?.let { found = rank(store.hits(it), query, tokens, digits) }
+        }
+        lastRanked = query to found
+        return found
     }
 
     override suspend fun suggestions(prefix: String, limit: Int): List<String> {
@@ -216,17 +250,23 @@ class FtsCatalogSearcher(
         }
     }
 
-    private suspend fun rank(rows: List<CatalogIndexRow>, q: CatalogQuery, tokens: List<String>, digits: String): List<CatalogBook> =
+    /**
+     * Точното съвпадение, точките и подреждането (като в [CatalogSearchEngine]); филтрите
+     * вече са в заявката. Прекъсва се (отмяна), щом заявката остарее — на всеки
+     * [CatalogSearchEngine.CHECK_EVERY] записа.
+     */
+    private suspend fun rank(rows: List<CatalogIndexHit>, q: CatalogQuery, tokens: List<String>, digits: String): IntArray =
         withContext(work) {
+            val context = currentCoroutineContext()
             val hits = ArrayList<CatalogMatcher.Hit>()
-            for (r in rows) {
-                if (!CatalogMatcher.passesFilters(r.book, r.year, q)) continue
-                val score = if (tokens.isEmpty()) 0
-                else CatalogMatcher.score(r.title, r.author, r.keywords, r.rest, r.isbnDigits, r.book.inv, q.field, tokens, digits) ?: continue
-                hits += CatalogMatcher.Hit(r.book, score, r.titleRank, r.authorRank, r.year)
+            for ((i, r) in rows.withIndex()) {
+                if (i % CatalogSearchEngine.CHECK_EVERY == 0) context.ensureActive()
+                val score = CatalogMatcher.score(r.title, r.author, r.keywords, r.rest, r.isbnDigits, r.inv, q.field, tokens, digits) ?: continue
+                hits += CatalogMatcher.Hit(r.ord, score, r.titleRank, r.authorRank, r.year, r.registeredOn, r.inv)
             }
-            CatalogMatcher.sort(hits, q.sort, hasText = tokens.isNotEmpty())
-            hits.map { it.book }
+            context.ensureActive()
+            CatalogMatcher.sort(hits, q.sort, hasText = true)
+            IntArray(hits.size) { hits[it].ord }
         }
 
     private suspend fun <T> guarded(onEngine: (CatalogSearchEngine) -> T, block: suspend () -> T): T =

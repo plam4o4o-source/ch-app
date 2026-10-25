@@ -111,6 +111,26 @@
                 android:resource="@xml/shortcuts" />
         </activity>
 
+        <!-- Вход само за собствените известия и уиджета (връзка в extra „deep_link“): не е
+             exported — друго приложение не може да отвори през него произволен екран или адрес
+             (виж LaunchIntents.linkOf). -->
+        <activity-alias
+            android:name=".OpenLink"
+            android:exported="false"
+            android:targetActivity=".MainActivity" />
+
+        <!-- PDF файловете от „Документи и архив“, свалени в кеша — за приложение за PDF
+             (само за четене, временно разрешение за конкретния файл). -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <!-- Уиджет за началния екран: следващо събитие и срок за връщане. -->
         <receiver
             android:name=".widget.ChitalishteWidgetReceiver"
