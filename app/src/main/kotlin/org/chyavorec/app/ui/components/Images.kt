@@ -20,6 +20,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -227,7 +228,14 @@ fun coverColor(book: CatalogBook): Color = coverShade(UdcCoverColors[book.udcSec
  * цветовете на екрана — само тази заявка е без хардуерен bitmap (Palette чете пикселите).
  */
 @Composable
-fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.dp, showStatusDot: Boolean = true) {
+fun BookCover(
+    book: CatalogBook,
+    modifier: Modifier = Modifier,
+    width: Dp = 72.dp,
+    showStatusDot: Boolean = true,
+    /** Дали се вижда истинска корица (а не генерираната със заглавието и автора). */
+    onRealCover: ((Boolean) -> Unit)? = null,
+) {
     val style = LocalThemeStyle.current
     val ext = LocalExtendedColors.current
     val coverKey = book.author.ifBlank { book.title }
@@ -277,6 +285,10 @@ fun BookCover(book: CatalogBook, modifier: Modifier = Modifier, width: Dp = 72.d
     }
     // Истинската корица е заредена → генерираната под нея не се изчертава.
     var imageShown by remember(url, network) { mutableStateOf(false) }
+    if (onRealCover != null) {
+        val shown = imageShown
+        LaunchedEffect(shown) { onRealCover(shown) }
+    }
 
     Box(
         modifier

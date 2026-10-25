@@ -730,10 +730,6 @@
         <item quantity="one">%1$d book</item>
         <item quantity="other">%1$d books</item>
     </plurals>
-    <plurals name="home_catalog_footer">
-        <item quantity="one">The catalogue lists %1$d item · data as of %2$s</item>
-        <item quantity="other">The catalogue lists %1$d items · data as of %2$s</item>
-    </plurals>
     <plurals name="home_loans_overdue">
         <item quantity="one">%1$d book is overdue</item>
         <item quantity="other">%1$d books are overdue</item>

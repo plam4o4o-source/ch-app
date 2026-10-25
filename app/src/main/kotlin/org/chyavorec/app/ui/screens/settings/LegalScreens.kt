@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.settings
 
+import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ElevatedCard
 import org.chyavorec.app.ui.components.BrandImage
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -113,7 +113,7 @@ fun AboutAppScreen(onBack: () -> Unit) {
             OutlinedButton(onClick = { Intents.openUrl(context, c.config.siteBaseUrl) }) { Text(stringResource(R.string.contacts_site)) }
             Spacer(Modifier.height(12.dp))
             // Библиотечната система, от която идва каталогът.
-            ElevatedCard(onClick = { Intents.openUrl(context, "https://invlib.com/") }, modifier = Modifier.fillMaxWidth()) {
+            AppCard(Modifier.fillMaxWidth(), onClick = { Intents.openUrl(context, "https://invlib.com/") }) {
                 Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     BrandImage(R.drawable.logo_invlib, null, Modifier.size(width = 72.dp, height = 44.dp))
                     Spacer(Modifier.width(14.dp))
@@ -123,7 +123,7 @@ fun AboutAppScreen(onBack: () -> Unit) {
                     }
                 }
             }
-            ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+            AppCard(Modifier.fillMaxWidth()) {
                 Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     BrandImage(R.drawable.logo_catalog, null, Modifier.size(48.dp))
                     Spacer(Modifier.width(14.dp))

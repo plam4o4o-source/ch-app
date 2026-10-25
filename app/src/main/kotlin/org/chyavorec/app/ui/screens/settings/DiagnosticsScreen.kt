@@ -13,11 +13,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.TaskAlt
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -38,7 +38,9 @@ import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.diagnostics.AppDiagnostics
 import org.chyavorec.app.ui.LocalAppContainer
+import org.chyavorec.app.ui.components.AppCard
 import org.chyavorec.app.ui.components.BackTopBar
+import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.util.Intents
 import org.chyavorec.core.DiagnosticEntry
 import java.time.Instant
@@ -103,13 +105,8 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
                 }
             }
             if (entries.isEmpty()) {
-                item {
-                    Text(
-                        stringResource(R.string.diagnostics_empty),
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(top = 24.dp),
-                    )
-                }
+                // Празното състояние — като на всички екрани (илюстрация + заглавие).
+                item { EmptyView(stringResource(R.string.diagnostics_empty), icon = Icons.Outlined.TaskAlt) }
             } else {
                 item {
                     Text(stringResource(R.string.diagnostics_count, entries.size), style = MaterialTheme.typography.labelLarge)
@@ -124,7 +121,7 @@ private val TIME: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH
 
 @Composable
 private fun EntryCard(e: DiagnosticEntry, zone: java.time.ZoneId) {
-    OutlinedCard(Modifier.fillMaxWidth()) {
+    AppCard(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             val repeated = if (e.count > 1) "  ×${e.count}" else ""
             Text(

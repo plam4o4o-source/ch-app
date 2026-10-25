@@ -15,6 +15,7 @@ import kotlinx.coroutines.delay
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.LibraryContactSheet
 import org.chyavorec.app.ui.components.InfoBanner
+import org.chyavorec.app.ui.components.InlineNotice
 import org.chyavorec.app.ui.components.waitText
 import org.chyavorec.domain.model.Contacts
 import androidx.compose.foundation.layout.imePadding
@@ -30,7 +31,6 @@ import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
@@ -126,10 +126,10 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                 // Без връзка (или сървърът не отговаря) — не е ясно дали входът е включен:
                 // „Опитай отново“, а при връщане на връзката се пита само (watchReconnect).
                 status is CapabilitiesStatus.Failed -> {
-                    InfoBanner(Icons.Outlined.CloudOff, stringResource(R.string.login_caps_failed))
-                    Button(onClick = vm::refreshCapabilities, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
-                        Icon(Icons.Outlined.Refresh, null); Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.action_retry))
-                    }
+                    InlineNotice(
+                        Icons.Outlined.CloudOff, stringResource(R.string.login_caps_failed),
+                        actionLabel = stringResource(R.string.action_retry), onAction = vm::refreshCapabilities,
+                    )
                     // Картата може да се въведе и без връзка.
                     TextButton(onClick = onAddCard, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.card_add_manual)) }
                 }

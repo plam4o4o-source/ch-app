@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.site
 
+import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -25,7 +26,6 @@ import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -111,7 +111,7 @@ private fun ActionContent(icon: ImageVector, text: String) {
 
 @Composable
 private fun ContactCard(icon: ImageVector, title: String, lines: List<String>, onClick: ((String) -> Unit)? = null) {
-    ElevatedCard(Modifier.fillMaxWidth()) {
+    AppCard(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
             Icon(icon, null, tint = LocalExtendedColors.current.gold)
             Spacer(Modifier.width(14.dp))

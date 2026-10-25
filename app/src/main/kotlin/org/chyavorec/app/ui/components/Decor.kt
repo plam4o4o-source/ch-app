@@ -4,7 +4,8 @@ import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -28,6 +29,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -50,6 +53,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -100,8 +104,12 @@ fun IconPlate(
     }
 }
 
+/** Височината на полетата за търсене (като Material 3 SearchBar). */
+private val SearchHeight = 56.dp
+
 /**
- * Поле за търсене (като на сайта); отваря глобалното търсене.
+ * Поле за търсене (като на сайта); отваря глобалното търсене. Изглежда като [SearchInput]:
+ * запълнено „хапче“ в surfaceContainerHigh, без рамка.
  * [trailing] — незадължителен елемент вдясно (напр. икона за скенера на баркодове).
  */
 @Composable
@@ -110,9 +118,9 @@ fun SearchPill(hint: String, onClick: () -> Unit, modifier: Modifier = Modifier,
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        modifier = modifier.fillMaxWidth().heightIn(min = 52.dp).semantics { role = Role.Button },
+        modifier = modifier.fillMaxWidth().heightIn(min = SearchHeight).semantics { role = Role.Button },
     ) {
-        Row(Modifier.heightIn(min = 52.dp).padding(start = 18.dp, end = if (trailing != null) 6.dp else 18.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.heightIn(min = SearchHeight).padding(start = 16.dp, end = if (trailing != null) 6.dp else 16.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.width(12.dp))
             Text(
@@ -126,6 +134,50 @@ fun SearchPill(hint: String, onClick: () -> Unit, modifier: Modifier = Modifier,
             }
         }
     }
+}
+
+/**
+ * Полето за писане при търсене (каталог, глобално търсене) — същото запълнено „хапче“
+ * като [SearchPill] на „Начало“: без рамка и без златен контур при фокус.
+ */
+@Composable
+fun SearchInput(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    modifier: Modifier = Modifier,
+    leadingIcon: @Composable () -> Unit = { Icon(Icons.Outlined.Search, contentDescription = null) },
+    trailingIcon: (@Composable () -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+) {
+    val cs = MaterialTheme.colorScheme
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = { Text(placeholder, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        singleLine = true,
+        shape = RoundedCornerShape(50),
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = cs.surfaceContainerHigh,
+            unfocusedContainerColor = cs.surfaceContainerHigh,
+            disabledContainerColor = cs.surfaceContainerHigh,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            focusedPlaceholderColor = cs.onSurfaceVariant,
+            unfocusedPlaceholderColor = cs.onSurfaceVariant,
+            focusedLeadingIconColor = cs.onSurfaceVariant,
+            unfocusedLeadingIconColor = cs.onSurfaceVariant,
+            focusedTrailingIconColor = cs.onSurfaceVariant,
+            unfocusedTrailingIconColor = cs.onSurfaceVariant,
+        ),
+        modifier = modifier.heightIn(min = SearchHeight),
+    )
 }
 
 /** Елемент от мрежата с плочки („Още“, „Моето“). */
@@ -161,7 +213,7 @@ fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
                             onClick = item.onClick,
                             shape = MaterialTheme.shapes.medium,
                             color = MaterialTheme.colorScheme.surfaceContainerLow,
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)),
+                            border = cardBorder(),
                             modifier = Modifier.weight(1f).fillMaxHeight().animateEntrance(r * columns + c)
                                 .darkTopHighlight(MaterialTheme.shapes.medium),
                         ) {

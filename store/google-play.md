@@ -36,8 +36,8 @@
    добавете превод EN; икона и feature graphic от `store/graphics/`; поне 2 екранни
    снимки на телефон от `store/screenshots/` (или нови от реално устройство).
    Play отхвърля PNG с алфа канал: снимките трябва да са 24-bit RGB (файловете в
-   `store/screenshots/` вече са такива). Нови снимки се конвертират с
-   `python3 -c "import sys;from PIL import Image;[Image.open(f).convert('RGB').save(f) for f in sys.argv[1:]]" store/screenshots/*.png`.
+   `store/screenshots/` вече са такива). Нови снимки се правят от последните в клона
+   `screenshots` с `python3 tools/play_screenshots.py` (рамка, надпис, RGB).
    Иконата 512×512 е 32-bit PNG (RGBA).
 3. **App content** (меню „Policy and programs“ → „App content“) — всички са задължителни:
    - Privacy policy: `https://chyavorec.org/app-privacy`

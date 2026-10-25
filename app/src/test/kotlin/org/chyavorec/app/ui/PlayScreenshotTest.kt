@@ -4,7 +4,16 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
@@ -27,9 +36,14 @@ import org.chyavorec.app.TestResources
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.ui.components.SectionLabel
+import org.chyavorec.app.ui.screens.my.CardData
+import org.chyavorec.app.ui.screens.my.LibraryCard
+import org.chyavorec.app.ui.screens.my.LibraryCardBack
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.ThemeMode
 import org.chyavorec.core.FixedClock
+import org.chyavorec.domain.model.MembershipStatus
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -92,8 +106,13 @@ class PlayScreenshotTest {
 
     @After fun stop() = server.shutdown()
 
-    private fun launch(mode: ThemeMode = ThemeMode.LIGHT, settings: AppSettings = AppSettings(onboardingDone = true, introShown = true)) {
-        val base = server.url("/").newBuilder().host("localhost").build().toString().trimEnd('/')
+    private val base get() = server.url("/").newBuilder().host("localhost").build().toString().trimEnd('/')
+
+    private fun launch(
+        mode: ThemeMode = ThemeMode.LIGHT,
+        settings: AppSettings = AppSettings(onboardingDone = true, introShown = true),
+        deepLink: String? = null,
+    ) {
         val config = AppConfig(
             siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = "$base/api/invlib/yavorec",
             environment = "test", useMockData = false, versionName = "test", versionCode = 1,
@@ -104,7 +123,7 @@ class PlayScreenshotTest {
         )
         compose.setContent {
             ChitalishteTheme(mode = mode) {
-                ChitalishteRoot(container, settings, MutableStateFlow(null), showIntro = false)
+                ChitalishteRoot(container, settings, MutableStateFlow(deepLink), showIntro = false)
             }
         }
     }
@@ -158,5 +177,39 @@ class PlayScreenshotTest {
         tab("Още")
         waitFor("Настройки")
         shot("play-05-more")
+    }
+
+    // --- Още снимки за магазина (tools/play_screenshots.py ги рамкира заедно с горните) ---
+
+    @Test fun book() {
+        launch(deepLink = "$base/elektronen-katalog#zapis=136")
+        waitFor("Попитай библиотеката")
+        shot("play-80-design-book")
+    }
+
+    @Test fun events() {
+        launch(deepLink = "events")
+        waitFor("Световен ден")
+        shot("play-81-design-events")
+    }
+
+    @Test fun card() {
+        val data = CardData(
+            holder = "Мария Иванова Петрова", number = "1024-5678", barcode = "10245678",
+            status = MembershipStatus.ACTIVE, verified = true,
+        )
+        compose.setContent {
+            ChitalishteTheme(mode = ThemeMode.LIGHT) {
+                Column(
+                    Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface).statusBarsPadding().padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                ) {
+                    SectionLabel("Читателска карта")
+                    LibraryCard(data)
+                    LibraryCardBack(data)
+                }
+            }
+        }
+        shot("play-82-design-card")
     }
 }

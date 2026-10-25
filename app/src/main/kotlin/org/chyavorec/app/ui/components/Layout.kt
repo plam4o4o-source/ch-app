@@ -5,12 +5,14 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,12 +22,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -47,22 +48,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.LocalExtendedColors
+import org.chyavorec.app.ui.theme.sectionTitle
 import org.chyavorec.app.util.Intents
+
+/** Едно поле отстрани за всички екрани (заглавки на раздели, ленти, карти). */
+val ScreenGutter = 16.dp
 
 /** Етикет над заглавие (както на сайта: малки главни букви + златна линия). */
 @Composable
 fun SectionLabel(text: String, modifier: Modifier = Modifier) {
+    // Златото на темата — следва и палитрите „Левски“/„Шевица“.
+    val gold = LocalExtendedColors.current.gold
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         androidx.compose.foundation.Canvas(Modifier.width(18.dp).height(1.dp)) {
-            drawRect(color = androidx.compose.ui.graphics.Color(0xFFC9A84C))
+            drawRect(color = gold)
         }
         Spacer(Modifier.width(8.dp))
-        Text(text.uppercase(), style = MaterialTheme.typography.labelSmall, color = LocalExtendedColors.current.gold)
+        Text(text.uppercase(), style = MaterialTheme.typography.labelSmall, color = gold)
     }
 }
 
@@ -74,16 +82,17 @@ fun SectionHeader(
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null,
 ) {
-    Row(modifier.fillMaxWidth().padding(horizontal = 20.dp), verticalAlignment = Alignment.Bottom) {
-        Column(Modifier.weight(1f)) {
+    // Бутонът вдясно стои на базовата линия на заглавието, а не на долния ръб на реда.
+    Row(modifier.fillMaxWidth().padding(start = ScreenGutter, end = ScreenGutter - 12.dp)) {
+        Column(Modifier.weight(1f).alignBy(LastBaseline)) {
             if (label != null) {
                 SectionLabel(label)
                 Spacer(Modifier.height(4.dp))
             }
-            Text(title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
+            Text(title, style = MaterialTheme.typography.sectionTitle, modifier = Modifier.semantics { heading() })
         }
         if (actionLabel != null && onAction != null) {
-            TextButton(onClick = onAction) { Text(actionLabel) }
+            TextButton(onClick = onAction, modifier = Modifier.alignBy(LastBaseline)) { Text(actionLabel) }
         }
     }
 }
@@ -131,8 +140,9 @@ fun AppTopBar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Emblem(34.dp)
                 Spacer(Modifier.width(12.dp))
+                // Заглавието на основен раздел — над заглавките на разделите под него.
                 Text(
-                    title, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    title, style = MaterialTheme.typography.headlineSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.semantics { heading() },
                 )
             }
@@ -154,7 +164,34 @@ fun AppTopBar(
     )
 }
 
-/** Карта с леко „натискане“ (micro-interaction) при докосване. */
+/** Тънката рамка на картите (outlineVariant, леко приглушена). */
+@Composable
+fun cardBorder(): BorderStroke = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f))
+
+/**
+ * Единственият вид карта в приложението: запълнена (surfaceContainerLow) с тънка рамка
+ * и без сянка — сянка има само въртележката на „Начало“. С [onClick] картата е бутон.
+ */
+@Composable
+fun AppCard(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    interactionSource: MutableInteractionSource? = null,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    val shape = MaterialTheme.shapes.medium
+    val color = MaterialTheme.colorScheme.surfaceContainerLow
+    val m = modifier.darkTopHighlight(shape)
+    if (onClick != null) {
+        Surface(onClick = onClick, shape = shape, color = color, border = cardBorder(), interactionSource = interactionSource, modifier = m) {
+            Column(content = content)
+        }
+    } else {
+        Surface(shape = shape, color = color, border = cardBorder(), modifier = m) { Column(content = content) }
+    }
+}
+
+/** Карта ([AppCard]) с леко „натискане“ (micro-interaction) при докосване. */
 @Composable
 fun PressableCard(
     onClick: () -> Unit,
@@ -166,14 +203,7 @@ fun PressableCard(
     val reduced = rememberReducedMotion()
     val pressSpec: AnimationSpec<Float> = if (reduced) snap() else spring(dampingRatio = Spring.DampingRatioMediumBouncy)
     val scale by animateFloatAsState(if (pressed && !reduced) 0.97f else 1f, pressSpec, label = "press")
-    ElevatedCard(
-        onClick = onClick,
-        interactionSource = interaction,
-        modifier = modifier.scale(scale).darkTopHighlight(MaterialTheme.shapes.medium),
-        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.dp, pressedElevation = 4.dp),
-        shape = MaterialTheme.shapes.medium,
-    ) { content() }
+    AppCard(modifier = modifier.scale(scale), onClick = onClick, interactionSource = interaction) { content() }
 }
 
 /**

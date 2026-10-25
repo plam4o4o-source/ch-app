@@ -36,8 +36,6 @@ import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -66,6 +64,8 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.DemoBanner
+import org.chyavorec.app.ui.components.InlineNotice
+import org.chyavorec.app.ui.components.ScreenGutter
 import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.rememberReducedMotion
@@ -143,7 +143,7 @@ fun MyHubScreen(navigate: (String) -> Unit) {
                 )
             }
 
-            SectionLabel(stringResource(R.string.my_section_library), Modifier.padding(start = 20.dp, top = 8.dp, bottom = 12.dp))
+            SectionLabel(stringResource(R.string.my_section_library), Modifier.padding(start = ScreenGutter, top = 8.dp, bottom = 12.dp))
             val cachedLoans = rememberCachedLoans()
             val today = rememberToday()
             val booksLine = loanSummaryLine(remember(cachedLoans, today) { LoanSummary.of(cachedLoans, today) }, cachedLoans)
@@ -189,9 +189,11 @@ fun MyHubScreen(navigate: (String) -> Unit) {
 
 @Composable
 private fun GuestCard(caps: CapabilitiesStatus, hasCard: Boolean, onLogin: () -> Unit, onAddCard: () -> Unit, onRetry: () -> Unit) {
-    ElevatedCard(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
-        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+    // Плоска (без сянка) — сянка има само въртележката на „Начало“.
+    Surface(
+        color = MaterialTheme.colorScheme.primaryContainer,
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier.fillMaxWidth().padding(ScreenGutter),
     ) {
         Column(Modifier.padding(20.dp)) {
             Text(stringResource(R.string.guest_title), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
@@ -203,16 +205,12 @@ private fun GuestCard(caps: CapabilitiesStatus, hasCard: Boolean, onLogin: () ->
                     Icon(Icons.AutoMirrored.Outlined.Login, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.action_login))
                 }
                 // Без връзка не знаем дали входът е включен — не казваме „не е включен“.
-                caps is CapabilitiesStatus.Failed -> {
-                    Row(verticalAlignment = Alignment.Top) {
-                        Icon(Icons.Outlined.CloudOff, null, modifier = Modifier.size(20.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.login_caps_failed), style = MaterialTheme.typography.bodySmall)
-                    }
-                    TextButton(onClick = onRetry, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.action_retry)) }
-                }
+                caps is CapabilitiesStatus.Failed -> InlineNotice(
+                    Icons.Outlined.CloudOff, stringResource(R.string.login_caps_failed),
+                    actionLabel = stringResource(R.string.action_retry), onAction = onRetry,
+                )
                 // Входът не е включен: вместо вход — дигиталната карта (ако още не е въведена).
-                caps is CapabilitiesStatus.Known -> {
+                caps is CapabilitiesStatus.Known -> Column {
                     if (!hasCard) {
                         Button(onClick = onAddCard) {
                             Icon(Icons.Outlined.Badge, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.action_add_card))
@@ -244,7 +242,7 @@ private fun ReadingSection(onOpenHistory: () -> Unit) {
     ) {
         stats?.let { s ->
             Column {
-                SectionLabel(stringResource(R.string.reading_title), Modifier.padding(start = 20.dp, top = 12.dp, bottom = 12.dp))
+                SectionLabel(stringResource(R.string.reading_title), Modifier.padding(start = ScreenGutter, top = 12.dp, bottom = 12.dp))
                 ReadingStatsCard(s, onOpenHistory)
             }
         }

@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -266,24 +267,57 @@ fun SyncBanner(fromCache: Boolean, syncedAt: Instant?, refreshError: AppError?, 
 }
 
 /**
- * Информационна лента (вход без връзка, „картата е въведена ръчно“ …): неутрален
- * контейнер и златна икона — без розовото на secondaryContainer.
+ * Единственият вид на проблем/бележка вътре в екран или карта (вход без връзка,
+ * „картата е въведена ръчно“ …): неутрален контейнер, златна икона и — ако има —
+ * тонален бутон (обикновено „Опитай отново“). Празните състояния и грешките на цял
+ * екран са [MessageView]/[ErrorView].
  */
 @Composable
-fun InfoBanner(icon: ImageVector, text: String, modifier: Modifier = Modifier) {
+fun InlineNotice(
+    icon: ImageVector,
+    text: String,
+    modifier: Modifier = Modifier,
+    actionLabel: String? = null,
+    actionIcon: ImageVector? = Icons.Outlined.Refresh,
+    onAction: (() -> Unit)? = null,
+) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         contentColor = MaterialTheme.colorScheme.onSurface,
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
     ) {
-        Row(Modifier.padding(16.dp)) {
-            Icon(icon, contentDescription = null, tint = LocalExtendedColors.current.gold)
-            Spacer(Modifier.width(12.dp))
-            Text(text, style = MaterialTheme.typography.bodyMedium)
+        Column(Modifier.padding(16.dp)) {
+            Row {
+                Icon(icon, contentDescription = null, tint = LocalExtendedColors.current.gold)
+                Spacer(Modifier.width(12.dp))
+                Text(text, style = MaterialTheme.typography.bodyMedium)
+            }
+            if (actionLabel != null && onAction != null) {
+                Spacer(Modifier.height(12.dp))
+                FilledTonalButton(
+                    onClick = onAction,
+                    // Подравнен с текста (след иконата), не с ръба на лентата.
+                    modifier = Modifier.padding(start = 36.dp).heightIn(min = 48.dp),
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    ),
+                ) {
+                    if (actionIcon != null) {
+                        Icon(actionIcon, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                    }
+                    Text(actionLabel)
+                }
+            }
         }
     }
 }
+
+/** Бележка без действие — [InlineNotice]. */
+@Composable
+fun InfoBanner(icon: ImageVector, text: String, modifier: Modifier = Modifier) = InlineNotice(icon, text, modifier)
 
 /**
  * Лентата „Няма интернет връзка“ над долната навигация: заоблена, отделена с 12 dp

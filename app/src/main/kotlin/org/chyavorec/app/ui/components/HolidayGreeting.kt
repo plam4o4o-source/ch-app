@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.map
@@ -116,6 +118,16 @@ private fun greetingRes(id: String): Pair<Int, Int>? = when (id) {
     else -> null
 }
 
+/**
+ * Дали поздравът за днес се вижда: има текст и не е скрит с „×“ ([dismissed] `null` — още
+ * не е прочетено, поздравът още не е показан).
+ */
+fun isGreetingShown(decor: DayDecor, dismissed: String?, today: LocalDate): Boolean {
+    val o = decor.greeting ?: return false
+    if (o.custom == null && greetingRes(o.id) == null) return false
+    return dismissed != null && dismissed != "$today|${o.id}"
+}
+
 /** Скритият с „×“ поздрав от настройките: `null` = още се чете; "" = нищо не е скрито. */
 @Composable
 fun rememberDismissedOccasion(): String? {
@@ -140,6 +152,8 @@ fun HolidayGreeting(
     modifier: Modifier = Modifier,
     dismissed: String? = rememberDismissedOccasion(),
     today: LocalDate = rememberToday(),
+    /** Празникът за деня (/api/calendar, „…**Празник**…“) — ред в поздрава вместо отделен ред на „Начало“. */
+    feast: String? = null,
 ) {
     val occasion = decor.greeting ?: return
     val container = LocalAppContainer.current
@@ -174,6 +188,13 @@ fun HolidayGreeting(
                     Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                     if (text.isNotEmpty()) {
                         Text(text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    if (feast != null) {
+                        Row(Modifier.padding(top = 4.dp)) {
+                            Icon(Icons.Outlined.AutoAwesome, null, tint = gold, modifier = Modifier.padding(top = 1.dp).size(14.dp))
+                            Spacer(Modifier.width(6.dp))
+                            Text(boldMarkdown(feast), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        }
                     }
                     if (link != null) {
                         Row(Modifier.padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {

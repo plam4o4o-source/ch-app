@@ -179,6 +179,9 @@ class ScreenshotTest {
         launch(now = "2026-03-01T09:00:00Z")
         waitFor("Баба Марта")
         shown("Баба Марта", substring = true)
+        // Празникът за деня е ред в поздрава (не отделен ред под търсенето); снимката — със заредената въртележка.
+        waitFor("Кръстовден")
+        waitFor("45-ти")
         shot("22-home-baba-marta")
     }
 

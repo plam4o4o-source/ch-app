@@ -890,7 +890,6 @@ P = {
 # Под брояча на „Начало“ (числото е отделно, над текста).
 "stat_books": (("документ в каталога", "документа в каталога"), ("catalogue item", "catalogue items")),
 "stat_events": (("събитие през следващите 30 дни", "събития през следващите 30 дни"), ("event in the next 30 days", "events in the next 30 days")),
-"home_catalog_footer": (("Каталогът съдържа %1$d документ · данни към %2$s", "Каталогът съдържа %1$d документа · данни към %2$s"), ("The catalogue lists %1$d item · data as of %2$s", "The catalogue lists %1$d items · data as of %2$s")),
 }
 
 def esc(s):
