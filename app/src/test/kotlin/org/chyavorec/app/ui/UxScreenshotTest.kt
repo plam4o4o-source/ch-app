@@ -96,7 +96,7 @@ class UxScreenshotTest {
 
     private fun click(text: String) {
         waitFor(text)
-        compose.onAllNodes(hasText(text, substring = true) and hasClickAction()).onFirst().performScrollTo().performClick()
+        compose.onAllNodes(hasText(text, substring = true) and hasClickAction()).onFirst().performClick()
     }
 
     private fun tab(label: String) {
@@ -129,7 +129,10 @@ class UxScreenshotTest {
         tab("Още")
         click("Настройки")
         waitFor("Размер на текста")
-        compose.onAllNodes(hasText("Много голям")).onFirst().assertIsDisplayed()
+        // След прехода към „Настройки“ — елементът е в първия екран, не само в дървото.
+        compose.waitForIdle()
+        compose.mainClock.advanceTimeBy(1_000)
+        compose.onAllNodes(hasText("Много голям")).onFirst().performScrollTo().assertIsDisplayed()
         shot("81-ux-text-xlarge-settings")
     }
 
