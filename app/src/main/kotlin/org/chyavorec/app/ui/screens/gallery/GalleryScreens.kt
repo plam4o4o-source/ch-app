@@ -63,7 +63,6 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.EmptyView
-import org.chyavorec.app.ui.components.RemoteImage
 import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.adaptiveCellWidth
 import org.chyavorec.app.ui.components.windowWidth
@@ -74,6 +73,17 @@ import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.site.GalleryViewModel
 import org.chyavorec.app.util.Intents
 import org.chyavorec.domain.model.GalleryPhoto
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.ui.platform.LocalDensity
+import coil3.SingletonImageLoader
+import coil3.compose.AsyncImage
+import coil3.memory.MemoryCache
+import coil3.request.ImageRequest
+import coil3.size.Precision
+import coil3.size.Size
+import org.chyavorec.app.ui.components.sitePhotoPlaceholderKey
+import org.chyavorec.app.ui.components.windowHeight
+import org.chyavorec.data.site.SiteImageUrls
 
 @Composable
 fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
@@ -140,16 +150,28 @@ fun AlbumScreen(name: String, onBack: () -> Unit, navigate: (String) -> Unit) {
     }
 }
 
-/** Преглед на снимки на цял екран: swipe между снимките, pinch/двоен тап за увеличение, споделяне. */
+/**
+ * Преглед на снимки на цял екран: swipe между снимките, pinch/двоен тап за увеличение, споделяне.
+ * Снимки по адрес (от статия/страница): [alts] — описанията им (в реда на [urls]), а
+ * [pageUrl]/[pageTitle] — статията или страницата, която се споделя.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: () -> Unit) {
+fun PhotoViewerScreen(
+    album: String?,
+    index: Int,
+    urls: List<String>,
+    onClose: () -> Unit,
+    alts: List<String> = emptyList(),
+    pageUrl: String = "",
+    pageTitle: String = "",
+) {
     // Отделни снимки по адрес (от статия/страница) не изискват зареждане на галерията.
     val vm = appViewModel { GalleryViewModel(it.siteRepository, load = !album.isNullOrBlank()) }
     val state by vm.state.collectAsStateWithLifecycle()
     val photos: List<GalleryPhoto> = if (!album.isNullOrBlank()) {
         state.data?.firstOrNull { it.name == album }?.photos.orEmpty()
-    } else urls.mapIndexed { i, u -> GalleryPhoto("u$i", "", u, u, "", u) }
+    } else remember(urls, alts, pageUrl) { viewerPhotos(urls, alts, pageUrl) }
     val context = LocalContext.current
     val resources = LocalResources.current
     Box(Modifier.fillMaxSize().background(Color.Black)) {
@@ -157,7 +179,8 @@ fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: (
             val pager = rememberPagerState(initialPage = index.coerceIn(0, photos.lastIndex)) { photos.size }
             HorizontalPager(pager, modifier = Modifier.fillMaxSize(), key = { photos[it].id }, beyondViewportPageCount = 1) { page ->
                 // Увеличението се нулира, когато страницата излезе от фокус (смяна на снимка).
-                ZoomableImage(photos[page], active = pager.settledPage == page)
+                val photo = photos[page]
+                ZoomableImage(photo, photoDescription(photo.title, page, photos.size, pageTitle), active = pager.settledPage == page)
             }
             val current = photos[pager.currentPage.coerceIn(0, photos.lastIndex)]
             Row(
@@ -171,11 +194,10 @@ fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: (
                     color = Color.White, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f),
                 )
-                // Споделя се адресът (няма FileProvider в приложението — не се тегли файл).
+                // Споделя се страницата (статията, албумът), а без нея — адресът на снимката.
                 IconButton(onClick = {
-                    val title = current.title.ifBlank { resources.getString(R.string.gallery_title) }
-                    val link = current.pageUrl.ifBlank { current.fullUrl }
-                    Intents.share(context, title, if (current.title.isNotBlank()) current.title + "\n" + link else link)
+                    val share = PhotoShare.of(current, pageTitle, resources.getString(R.string.gallery_title))
+                    Intents.share(context, share.subject, share.text)
                 }) {
                     Icon(Icons.Outlined.Share, stringResource(R.string.action_share), tint = Color.White)
                 }
@@ -184,12 +206,44 @@ fun PhotoViewerScreen(album: String?, index: Int, urls: List<String>, onClose: (
     }
 }
 
-/** Снимка с pinch-to-zoom и местене; двоен тап — 2× / обратно; [active] = false нулира увеличението. */
+/** Снимките по адрес: описанието е заглавието им, а страницата — статията, от която са. */
+internal fun viewerPhotos(urls: List<String>, alts: List<String>, pageUrl: String): List<GalleryPhoto> =
+    urls.mapIndexed { i, u -> GalleryPhoto("u$i", alts.getOrNull(i).orEmpty().trim(), u, u, "", pageUrl) }
+
+/** Какво се споделя от прегледа: темата и текстът (заглавие + адрес на страницата/снимката). */
+internal data class PhotoShare(val subject: String, val text: String) {
+    companion object {
+        fun of(photo: GalleryPhoto, pageTitle: String, fallbackTitle: String): PhotoShare {
+            val subject = pageTitle.ifBlank { photo.title }.ifBlank { photo.album }.ifBlank { fallbackTitle }
+            val link = photo.pageUrl.ifBlank { photo.fullUrl }
+            return PhotoShare(subject, if (subject == fallbackTitle) link else subject + "\n" + link)
+        }
+    }
+}
+
+/** Описанието за екранния четец: alt текстът, иначе „Снимка N от M“ (и статията, ако е известна). */
 @Composable
-private fun ZoomableImage(photo: GalleryPhoto, active: Boolean) {
+private fun photoDescription(alt: String, index: Int, count: Int, pageTitle: String): String {
+    if (alt.isNotBlank()) return alt
+    val n = stringResource(R.string.photo_n_of_m, index + 1, count)
+    return if (pageTitle.isBlank()) n else stringResource(R.string.photo_in, n, pageTitle)
+}
+
+/**
+ * Снимка с pinch-to-zoom и местене; двоен тап — 2× / обратно; [active] = false нулира увеличението.
+ *
+ * Зарежда се оптимизираният вариант от сайта в около 2× размера на екрана (рязка и при 2×
+ * увеличение); при по-голямо увеличение — оригиналът в пълния му размер (Coil го ограничава
+ * до maxBitmapSize). Докато идва, се вижда вече заредената миниатюра от мрежата/статията
+ * (заместител от кеша в паметта), а не черен екран.
+ */
+@Composable
+private fun ZoomableImage(photo: GalleryPhoto, description: String, active: Boolean) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     var bounds by remember { mutableStateOf(IntSize.Zero) }
+    // Увеличено над 2× размера на зареждането — оригиналът; остава до нулирането.
+    var original by remember { mutableStateOf(false) }
     // Местенето не извежда снимката извън екрана.
     fun clamp(o: Offset, s: Float): Offset {
         val maxX = (bounds.width * (s - 1f) / 2f).coerceAtLeast(0f)
@@ -199,15 +253,46 @@ private fun ZoomableImage(photo: GalleryPhoto, active: Boolean) {
     val transform = rememberTransformableState { zoom, pan, _ ->
         scale = (scale * zoom).coerceIn(1f, 5f)
         offset = if (scale > 1f) clamp(offset + pan, scale) else Offset.Zero
+        if (scale > ORIGINAL_ABOVE) original = true
     }
     LaunchedEffect(active) {
-        if (!active) { scale = 1f; offset = Offset.Zero }
+        if (!active) { scale = 1f; offset = Offset.Zero; original = false }
     }
-    RemoteImage(
-        url = photo.fullUrl,
-        fallbackUrl = photo.thumbUrl,
-        contentDescription = photo.title.ifBlank { null },
+    val context = LocalContext.current
+    val density = LocalDensity.current
+    val screenW = with(density) { windowWidth().roundToPx() }
+    val screenH = with(density) { windowHeight().roundToPx() }
+    // Вече заредената миниатюра (мрежата на албума, статията) — заместител, докато идва голямата.
+    val placeholder = remember(photo.thumbUrl, photo.fullUrl) {
+        val memory = SingletonImageLoader.get(context).memoryCache
+        sitePhotoPlaceholderKey({ key -> memory?.get(MemoryCache.Key(key)) != null }, listOf(photo.thumbUrl, photo.fullUrl))
+    }
+    val sources = remember(photo.fullUrl, photo.thumbUrl, screenW) { ViewerSources.of(photo.fullUrl, photo.thumbUrl, screenW * 2) }
+    var attempt by remember(sources) { mutableIntStateOf(0) }
+    val sized = sources.getOrElse(attempt) { photo.fullUrl }
+    // Двата размера имат свои ключове в паметта: голямата снимка е заместител на оригинала.
+    val request = remember(sized, original, placeholder, screenW, screenH) {
+        val data = if (original) photo.fullUrl else sized
+        ImageRequest.Builder(context)
+            .data(data)
+            .memoryCacheKey(data + if (original) ORIGINAL_KEY else VIEWER_KEY)
+            .apply {
+                if (original) {
+                    size(Size.ORIGINAL)
+                    placeholderMemoryCacheKey(sized + VIEWER_KEY)
+                } else {
+                    size(screenW * 2, screenH * 2)
+                    precision(Precision.INEXACT)
+                    placeholder?.let { placeholderMemoryCacheKey(it) }
+                }
+            }
+            .build()
+    }
+    AsyncImage(
+        model = request,
+        contentDescription = description,
         contentScale = ContentScale.Fit,
+        onError = { if (!original && attempt < sources.lastIndex) attempt++ },
         modifier = Modifier.fillMaxSize().background(Color.Black)
             .onSizeChanged { bounds = it }
             .pointerInput(Unit) {
@@ -226,4 +311,18 @@ private fun ZoomableImage(photo: GalleryPhoto, active: Boolean) {
             .transformable(transform, lockRotationOnZoomPan = true, canPan = { scale > 1f })
             .graphicsLayer { scaleX = scale; scaleY = scale; translationX = offset.x; translationY = offset.y },
     )
+}
+
+/** Над това увеличение се зарежда оригиналът (до 2× зареждането е рязко). */
+private const val ORIGINAL_ABOVE = 2.05f
+private const val VIEWER_KEY = "#viewer"
+private const val ORIGINAL_KEY = "#original"
+
+/**
+ * Адресите за прегледа по ред на опитване: оптимизираният от сайта вариант в ширина
+ * [widthPx] (≈ 2× екрана), после оригиналът, накрая миниатюрата (ако и той не се зареди).
+ */
+internal object ViewerSources {
+    fun of(fullUrl: String, thumbUrl: String, widthPx: Int): List<String> =
+        listOfNotNull(SiteImageUrls.optimized(fullUrl, widthPx), fullUrl, thumbUrl.takeIf { it.isNotBlank() }).distinct()
 }

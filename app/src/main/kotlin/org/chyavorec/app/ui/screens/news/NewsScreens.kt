@@ -272,6 +272,9 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
         ) { detail ->
             val a = detail.article
             val gallery = detail.gallery
+            // Прегледът на цял екран: с описанията на снимките, а споделянето — със статията.
+            val alts = detail.galleryAltList
+            fun viewer(index: Int) = Routes.viewerUrls(gallery, index, alts, a.url, a.title)
             LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 32.dp)) {
                 item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
                 a.imageUrl?.let { hero ->
@@ -279,7 +282,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                         SiteImage(
                             hero, width = windowWidth() - 32.dp, contentDescription = a.title,
                             modifier = Modifier.padding(horizontal = 16.dp).sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large)
-                                .clickable(onClickLabel = stringResource(R.string.a11y_open_photo), role = Role.Image) { navigate(Routes.viewerUrls(gallery, gallery.indexOf(hero))) },
+                                .clickable(onClickLabel = stringResource(R.string.a11y_open_photo), role = Role.Image) { navigate(viewer(gallery.indexOf(hero))) },
                         )
                     }
                 }
@@ -303,7 +306,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                                 ContentBlocksView(
                                     detail.blocks.filterNot { it is org.chyavorec.domain.model.ContentBlock.Image && it.url == a.imageUrl },
                                     onLink = openLink,
-                                    onImage = { url -> navigate(Routes.viewerUrls(listOf(url), 0)) },
+                                    onImage = { url -> navigate(gallery.indexOf(url).takeIf { it >= 0 }?.let(::viewer) ?: Routes.viewerUrls(listOf(url), 0, listOf(detail.galleryAlts[url].orEmpty()), a.url, a.title)) },
                                     modifier = Modifier.animateContentSize(),
                                     skipImages = true,
                                 )
@@ -318,8 +321,8 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp).semantics { heading() })
                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             itemsIndexed(extra) { i, url ->
-                                SiteImage(url, width = 150.dp, contentDescription = stringResource(R.string.photo_n, i + 1),
-                                    modifier = Modifier.size(150.dp, 112.dp).clip(MaterialTheme.shapes.small).clickable { navigate(Routes.viewerUrls(gallery, gallery.indexOf(url))) })
+                                SiteImage(url, width = 150.dp, contentDescription = detail.galleryAlts[url] ?: stringResource(R.string.photo_n, i + 1),
+                                    modifier = Modifier.size(150.dp, 112.dp).clip(MaterialTheme.shapes.small).clickable { navigate(viewer(gallery.indexOf(url))) })
                             }
                         }
                     }

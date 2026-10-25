@@ -35,6 +35,11 @@
         <intent>
             <action android:name="android.support.customtabs.action.CustomTabsService" />
         </intent>
+        <!-- „Отвори с приложение за PDF“ (Документи и архив): има ли такова приложение. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="application/pdf" />
+        </intent>
         <!-- Браузърът за адресите на сайта: те са App Links на приложението (виж Intents.openUrl). -->
         <intent>
             <action android:name="android.intent.action.VIEW" />

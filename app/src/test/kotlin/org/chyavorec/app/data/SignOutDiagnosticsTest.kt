@@ -41,8 +41,9 @@ class SignOutDiagnosticsTest {
             ApplicationProvider.getApplicationContext(), config,
             FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), OkHttpClient(),
         )
-        // Предишният процес е имал вход — следите му се изчистват при изхода.
+        // Предишният процес е имал вход — следите му се изчистват при изхода (наблюдателят — както в ChitalishteApp).
         c.settings.setReaderTraces(true)
+        c.watchReader()
         Diagnostics.note("auth.refresh", "подновяването на сесията е отказано")
         c.authRepository.signOutLocally()
         // Изчистването на следите е минало, когато флагът е свален.

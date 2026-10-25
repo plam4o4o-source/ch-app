@@ -41,7 +41,7 @@ object Routes {
     const val PAGE = "page?url={url}&title={title}"
     const val GALLERY = "gallery"
     const val ALBUM = "album/{name}"
-    const val VIEWER = "viewer?album={album}&index={index}&url={url}"
+    const val VIEWER = "viewer?album={album}&index={index}&url={url}&alt={alt}&page={page}&title={title}"
     const val CONTACTS = "contacts"
     const val DOCUMENTS = "documents"
     const val MESSAGES = "messages"
@@ -61,11 +61,20 @@ object Routes {
     fun message(id: String) = "messages/" + Uri.encode(id)
     fun page(url: String, title: String) = "page?url=" + Uri.encode(url) + "&title=" + Uri.encode(title)
     fun album(name: String) = "album/" + Uri.encode(name)
-    fun viewer(album: String?, index: Int, url: String? = null) =
-        "viewer?album=" + Uri.encode(album ?: "") + "&index=$index&url=" + Uri.encode(url ?: "")
+    fun viewer(album: String?, index: Int, url: String? = null, alt: String? = null, page: String? = null, title: String? = null) =
+        "viewer?album=" + Uri.encode(album ?: "") + "&index=$index&url=" + Uri.encode(url ?: "") +
+            "&alt=" + Uri.encode(alt ?: "") + "&page=" + Uri.encode(page ?: "") + "&title=" + Uri.encode(title ?: "")
 
-    /** Преглед на произволен списък снимки (напр. галерията на статия). */
-    fun viewerUrls(urls: List<String>, index: Int) = viewer(null, index.coerceAtLeast(0), urls.joinToString("\n"))
+    /**
+     * Преглед на произволен списък снимки (напр. галерията на статия). [alts] — описанията
+     * в същия ред (празно — без); [page]/[title] — статията или страницата, от която са
+     * (споделя се тя, не адресът на снимката).
+     */
+    fun viewerUrls(urls: List<String>, index: Int, alts: List<String> = emptyList(), page: String? = null, title: String? = null) =
+        viewer(
+            null, index.coerceAtLeast(0), urls.joinToString("\n"),
+            alts.takeIf { a -> a.any { it.isNotBlank() } }?.joinToString("\n") { it.replace('\n', ' ') }, page, title,
+        )
 }
 
 enum class TopTab(val route: String, val labelRes: Int, val icon: ImageVector, val selectedIcon: ImageVector) {

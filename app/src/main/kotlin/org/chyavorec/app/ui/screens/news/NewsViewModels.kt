@@ -168,7 +168,7 @@ class ArticleViewModel(
         article = a
         // Докато зарежда пълния текст — показваме заглавието и резюмето от RSS.
         if (_state.value.data == null) {
-            _state.value = ScreenState(ArticleDetail(a, a.contentBlocks, listOfNotNull(a.imageUrl)), loading = true)
+            _state.value = ScreenState(ArticleDetail(a, a.contentBlocks, listOfNotNull(a.imageUrl), ArticleDetail.altsOf(a.contentBlocks)), loading = true)
         }
         _state.update { it.with(repo.article(a, force)).let { s -> if (s.data == null) s.copy(data = it.data) else s } }
     }

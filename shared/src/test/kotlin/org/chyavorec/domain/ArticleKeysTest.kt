@@ -49,4 +49,19 @@ class ArticleKeysTest {
         assertEquals("guid-7", repo.find("http://www.chyavorec.org/news/2026-10-01-sabor/")?.id)
         assertEquals(null, repo.find("https://chyavorec.org/news/other"))
     }
+
+    @Test fun galleryAltTextComesFromImageCaptions() {
+        val blocks = listOf(
+            org.chyavorec.domain.model.ContentBlock.Image("https://chyavorec.org/pictures/a.jpg", "  Хорото на\n площада "),
+            org.chyavorec.domain.model.ContentBlock.Image("https://chyavorec.org/pictures/b.jpg", null),
+            org.chyavorec.domain.model.ContentBlock.Image("https://chyavorec.org/pictures/a.jpg", "второ описание"),
+        )
+        val alts = org.chyavorec.domain.model.ArticleDetail.altsOf(blocks)
+        assertEquals(mapOf("https://chyavorec.org/pictures/a.jpg" to "Хорото на площада"), alts)
+        val detail = org.chyavorec.domain.model.ArticleDetail(
+            NewsArticle("1", "Т", "https://chyavorec.org/news/t"), blocks,
+            listOf("https://chyavorec.org/pictures/hero.jpg", "https://chyavorec.org/pictures/a.jpg", "https://chyavorec.org/pictures/b.jpg"), alts,
+        )
+        assertEquals(listOf("", "Хорото на площада", ""), detail.galleryAltList)
+    }
 }
