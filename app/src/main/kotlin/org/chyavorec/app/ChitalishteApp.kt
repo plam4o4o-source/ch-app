@@ -87,12 +87,13 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
      * - шрифтовете (Cormorant, Raleway): Compose ги зарежда блокиращо при първото
      *   измерване на текст през Resources.getFont — системата пази заредения Typeface в
      *   свой кеш, така че първият кадър го взема наготово, без да разчита файла.
+     *   Без [LAZY_FONTS] — те се зареждат едва когато потрябват.
      */
     private fun warmUp() {
         runCatching { container.http }
         for (family in listOf(Cormorant, Raleway)) {
             (family as? FontListFontFamily)?.fonts?.forEach { font ->
-                if (font is ResourceFont) runCatching { resources.getFont(font.resId) }
+                if (font is ResourceFont && font.resId !in LAZY_FONTS) runCatching { resources.getFont(font.resId) }
             }
         }
     }
@@ -139,3 +140,9 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder().setMinimumLoggingLevel(android.util.Log.ERROR).build()
 }
+
+/**
+ * Шрифтовете, които не се зареждат предварително ([ChitalishteApp] warmUp): светлият Cormorant
+ * (152 KB) е само за displayLarge/displayMedium — Compose го зарежда при първия такъв текст.
+ */
+private val LAZY_FONTS = setOf(R.font.cormorant_garamond_light)

@@ -62,6 +62,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
+import org.chyavorec.domain.model.ArticleDetail
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
@@ -194,7 +195,10 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
                             ContentBlocksView(
                                 page.blocks,
                                 onLink = openLink,
-                                onImage = { img -> navigate(Routes.viewerUrls(page.images, page.images.indexOf(img))) },
+                                onImage = { img ->
+                                    val alts = ArticleDetail.altsOf(page.blocks)
+                                    navigate(Routes.viewerUrls(page.images, page.images.indexOf(img), page.images.map { alts[it].orEmpty() }, page.url, title.ifBlank { page.title }))
+                                },
                                 imageFallbackDescription = title.ifBlank { page.title }.ifBlank { null },
                             )
                         }

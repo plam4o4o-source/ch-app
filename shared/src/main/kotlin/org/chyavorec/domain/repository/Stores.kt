@@ -59,6 +59,12 @@ interface SessionStore {
      */
     suspend fun isPersisted(): Boolean
     suspend fun clear()
+
+    /**
+     * Запазена сесия има, но последното [load] не я е прочело заради временна грешка
+     * (напр. на Android Keystore) — това не е изход: сесията остава и се чете отново по-късно.
+     */
+    suspend fun unreadableNow(): Boolean = false
 }
 
 /** Ръчно въведената от читателя карта — също шифрована. */

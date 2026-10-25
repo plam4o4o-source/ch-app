@@ -454,8 +454,9 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
             // вместо заглавието да се отреже.
             BoxWithConstraints {
             val minHeight = maxWidth.coerceAtMost(720.dp) / 1.6f
-            // Ширината за снимката (с мащаба 1.15 на паралакса) — maxWidth се чете тук, в обхвата на BoxWithConstraints.
-            val imageWidth = maxWidth.coerceAtMost(720.dp) * 1.15f
+            // Ширината за снимката — maxWidth се чете тук, в обхвата на BoxWithConstraints. Без мащаба
+            // 1.15 на паралакса: същият адрес (ширина) като в статията — една заявка и един запис в кеша.
+            val imageWidth = maxWidth.coerceAtMost(720.dp)
             Surface(
                 onClick = { onOpen(a) },
                 shape = MaterialTheme.shapes.large,

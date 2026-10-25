@@ -610,10 +610,20 @@ private fun AppNavHost(
                 navArgument("album") { type = NavType.StringType; defaultValue = "" },
                 navArgument("index") { type = NavType.IntType; defaultValue = 0 },
                 navArgument("url") { type = NavType.StringType; defaultValue = "" },
+                navArgument("alt") { type = NavType.StringType; defaultValue = "" },
+                navArgument("page") { type = NavType.StringType; defaultValue = "" },
+                navArgument("title") { type = NavType.StringType; defaultValue = "" },
             ),
         ) {
-            val urls = Uri.decode(it.arguments?.getString("url").orEmpty()).split('\n').filter { u -> u.isNotBlank() }
-            PhotoViewerScreen(Uri.decode(it.arguments?.getString("album").orEmpty()), it.arguments?.getInt("index") ?: 0, urls, back)
+            fun arg(name: String) = Uri.decode(it.arguments?.getString(name).orEmpty())
+            val raw = arg("url").split('\n')
+            // Описанията вървят в реда на адресите (празните адреси се махат заедно с тях).
+            val alts = arg("alt").split('\n')
+            val keep = raw.indices.filter { i -> raw[i].isNotBlank() }
+            PhotoViewerScreen(
+                arg("album"), it.arguments?.getInt("index") ?: 0, keep.map { i -> raw[i] }, back,
+                alts = keep.map { i -> alts.getOrNull(i).orEmpty() }, pageUrl = arg("page"), pageTitle = arg("title"),
+            )
         }
         screen(Routes.CONTACTS) { ContactsScreen(back) }
         screen(Routes.DOCUMENTS) { DocumentsScreen(back, openLink) }

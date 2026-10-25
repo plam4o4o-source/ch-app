@@ -1,6 +1,7 @@
 package org.chyavorec.data
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.chyavorec.TestUtil
 import org.chyavorec.data.catalog.CatalogIndexColumns
@@ -20,6 +21,7 @@ import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.SearchField
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -96,11 +98,11 @@ class CatalogFtsSearchTest {
 
     @Test fun middleOfWordFallsBackToSubstringSearch() = runTest {
         // „астир“ не е начало на дума — FTS не намира нищо, търси се като подниз (както в паметта).
-        assertSame(CatalogQuery("астир"))
         store.queries.clear()
         assertEquals(listOf(3L), fts.search(CatalogQuery("астир")).map { it.inv })
         assertEquals(2, store.queries.size)
         assertEquals(listOf("астир"), store.queries.last().contains)
+        assertSame(CatalogQuery("астир"))
     }
 
     @Test fun middleOfWordIsNotAddedWhenWholeWordsMatch() = runTest {
@@ -118,7 +120,10 @@ class CatalogFtsSearchTest {
             val q = CatalogQuery(text, field, sort = sort)
             val expected = engine.search(q).map { it.inv }
             val actual = fts.search(q).map { it.inv }
-            assertTrue(expected.isEmpty() == actual.isEmpty(), "празен резултат само заедно: $q")
+            // Само думи от една буква не се търсят като подниз (резервното обхождане е скъпо).
+            val scanned = org.chyavorec.core.TextNormalizer.tokens(text).any { it.length >= CatalogIndexQueries.MIN_SCAN_TOKEN }
+            if (scanned || field == SearchField.ISBN || field == SearchField.INVENTORY)
+                assertTrue(expected.isEmpty() == actual.isEmpty(), "празен резултат само заедно: $q")
             var i = 0
             for (inv in expected) if (i < actual.size && actual[i] == inv) i++
             assertEquals(actual.size, i, "подредица на резултата в паметта: $q")
@@ -152,8 +157,9 @@ class CatalogFtsSearchTest {
         assertNull(CatalogIndexQueries.ftsToken("\"\""))
         // Дума без букви/цифри не влиза в MATCH (празна фраза в FTS4 не съвпада с нищо).
         assertEquals(listOf("под"), CatalogIndexQueries.search(CatalogQuery("под &"), listOf("под", "&"), "")!!.matchTokens)
-        // Само такива думи → търсене като подниз.
-        assertEquals(listOf("&"), CatalogIndexQueries.search(CatalogQuery("&"), listOf("&"), "")!!.contains)
+        // Само такива думи → търсене като подниз (поне 2 знака).
+        assertEquals(listOf("&&"), CatalogIndexQueries.search(CatalogQuery("&&"), listOf("&&"), "")!!.contains)
+        assertNull(CatalogIndexQueries.search(CatalogQuery("&"), listOf("&"), ""))
         assertNull(CatalogIndexQueries.search(CatalogQuery("12", SearchField.ISBN), listOf("12"), "12"))
         assertNull(CatalogIndexQueries.search(CatalogQuery("x", SearchField.INVENTORY), listOf("x"), ""))
     }
@@ -172,9 +178,9 @@ class CatalogFtsSearchTest {
         assertEquals(listOf<Any>("\"под*\" \"игото*\"", "кни'га", "д", "л", 8, 1900, 2000), q.args)
         assertEquals(q.sql.count { it == '?' }, q.args.size)
 
-        val scan = CatalogIndexQueries.scan(CatalogQuery("а б", SearchField.AUTHOR), listOf("а", "б"))!!
+        val scan = CatalogIndexQueries.scan(CatalogQuery("аб в", SearchField.AUTHOR), listOf("аб", "в"))!!
         assertEquals("SELECT b.* FROM catalog_books AS b WHERE 1 AND instr(b.n_author, ?) > 0 AND instr(b.n_author, ?) > 0 ORDER BY b.ord", scan.sql)
-        assertEquals(listOf<Any>("а", "б"), scan.args)
+        assertEquals(listOf<Any>("аб", "в"), scan.args)
 
         val inv = CatalogIndexQuery(invDigits = "0012", limit = 5, offset = 10)
         assertEquals("SELECT b.* FROM catalog_books AS b WHERE 1 AND (b.n_inv = ? OR substr(b.n_inv, 1, ?) = ?) ORDER BY b.ord LIMIT 5 OFFSET 10", inv.sql)
@@ -183,7 +189,7 @@ class CatalogFtsSearchTest {
         val isbn = CatalogIndexQuery(isbnDigits = "978")
         assertEquals("SELECT b.* FROM catalog_books AS b WHERE 1 AND instr(b.isbn_digits, ?) > 0 ORDER BY b.ord", isbn.sql)
 
-        val all = CatalogIndexQueries.scan(CatalogQuery("x"), listOf("x"))!!
+        val all = CatalogIndexQueries.scan(CatalogQuery("xy"), listOf("xy"))!!
         assertEquals(CatalogIndexColumns.FTS.size - 1, all.sql.split(" || ' ' || ").size - 1)
         assertEquals(1, all.args.size)
     }
@@ -291,14 +297,66 @@ class CatalogFtsSearchTest {
         }
     }
 
-    @Test fun searchWithTextReturnsAllResultsAtOnce() = runTest {
-        for (text in listOf("под", "вазов", "астир")) {
-            val q = CatalogQuery(text)
-            val r = fts.searchFirst(q, 1)
-            assertEquals(engine.search(q).map { it.inv }, r.books.map { it.inv })
-            assertEquals(r.books.size, r.total)
-            assertEquals(r.books.drop(1).take(1), fts.searchMore(q, 1, 1))
+    @Test fun searchWithTextScoresLightRowsAndReadsOnlyThePage() = runTest {
+        for (text in listOf("под", "вазов", "астир", "роман")) for (sort in CatalogSort.entries) for (page in listOf(1, 2, 40)) {
+            val q = CatalogQuery(text, sort = sort)
+            val expected = engine.search(q).map { it.inv }
+            store.queries.clear()
+            store.lookups.clear()
+            val first = fts.searchFirst(q, page)
+            assertEquals(expected.size, first.total, "брой $q")
+            assertEquals(expected.take(page), first.books.map { it.inv }, "първа страница $q / $page")
+            val all = first.books.map { it.inv }.toMutableList()
+            while (all.size < first.total) all += fts.searchMore(q, all.size, page).map { it.inv }
+            assertEquals(expected, all, "всички страници $q / $page")
+            assertTrue(fts.searchMore(q, all.size, page).isEmpty())
+            // Кандидатите се точкуват веднъж (лекият изглед); „Още“ чете само книгите на страницата.
+            assertTrue(store.queries.size <= 2 && store.queries.all { it.limit == null }, "$q: ${store.queries}")
+            assertTrue(store.lookups.all { it == "booksAt" }, "$q")
         }
+        // Пълните книги (с анотацията) — само за страницата.
+        assertEquals("Разкази за живота в манастира.", fts.searchFirst(CatalogQuery("манастирската"), 1).books.single().annotation)
+    }
+
+    @Test fun hitQueryReadsOnlyTheScoringColumns() {
+        val q = CatalogIndexQueries.search(CatalogQuery("под", onlyAvailable = true), listOf("под"), "")!!
+        assertTrue(q.hitSql.startsWith("SELECT b.ord, b.inv, b.registered_on"), q.hitSql)
+        assertTrue(!q.hitSql.contains("b.*") && !q.hitSql.contains("b.annotation") && !q.hitSql.contains("b.cover_url"), q.hitSql)
+        assertTrue(q.hitSql.contains("b.n_annotation") && q.hitSql.contains("b.title_rank"), q.hitSql)
+        assertEquals(q.sql.substringAfter(" FROM "), q.hitSql.substringAfter(" FROM "))
+        assertEquals(q.hitSql.count { it == '?' }, q.args.size)
+    }
+
+    @Test fun singleLetterMissDoesNotScanTheWholeCatalogue() = runTest {
+        // Една буква, с която не започва нито една дума в заглавията → без резервно обхождане.
+        var missed = 0
+        for (letter in "абвгдежзийклмнопрстуфхцчшщъьюя".map { it.toString() }) {
+            val q = CatalogQuery(letter, SearchField.TITLE)
+            store.queries.clear()
+            val found = fts.search(q)
+            assertEquals(1, store.queries.size, letter)
+            assertTrue(store.queries.single().contains.isEmpty(), letter)
+            if (found.isEmpty() && engine.search(q).isNotEmpty()) missed++
+            assertNull(CatalogIndexQueries.scan(q, listOf(letter)))
+        }
+        assertTrue(missed > 0, "буква само по средата на думи")
+        assertNull(CatalogIndexQueries.scan(CatalogQuery("а б"), listOf("а", "б")))
+        assertEquals(listOf("ж", "аб"), CatalogIndexQueries.scan(CatalogQuery("ж аб"), listOf("ж", "аб"))!!.contains)
+    }
+
+    @Test fun rankingStopsWhenTheSearchIsCancelled() = runTest {
+        var checks = 0
+        val all = engine.search(CatalogQuery("а")) { checks++ }
+        assertTrue(all.isNotEmpty() && checks >= 1)
+        assertFailsWith<kotlinx.coroutines.CancellationException> {
+            engine.search(CatalogQuery("а")) { throw kotlinx.coroutines.CancellationException("нова заявка") }
+        }
+        // Отмененото търсене през индекса не стига до базата за книгите.
+        store.lookups.clear()
+        val job = launch { fts.searchFirst(CatalogQuery("под"), 10) }
+        job.cancel()
+        job.join()
+        assertTrue(store.lookups.isEmpty())
     }
 
     @Test fun emptySearchPagingFallsBackToEngineOnDatabaseError() = runTest {

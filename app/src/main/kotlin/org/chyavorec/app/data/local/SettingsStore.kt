@@ -120,6 +120,7 @@ class SettingsStore(private val context: Context) {
         val messagesSignature = stringPreferencesKey("messages_signature")
         val readerTraces = booleanPreferencesKey("reader_traces")
         val readerHttpCacheEvicted = booleanPreferencesKey("reader_http_cache_evicted")
+        val catalogHttpCacheEvicted = booleanPreferencesKey("catalog_http_cache_evicted")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -321,6 +322,10 @@ class SettingsStore(private val context: Context) {
     /** Еднократно: старите отговори на моста са изтрити от HTTP кеша (преди него нямаше `no-store`). */
     suspend fun readerHttpCacheEvicted(): Boolean = context.dataStore.data.first()[Keys.readerHttpCacheEvicted] ?: false
     suspend fun setReaderHttpCacheEvicted() = context.dataStore.edit { it[Keys.readerHttpCacheEvicted] = true }
+
+    /** Еднократно: копията на katalog.json от по-старите версии са изтрити от HTTP кеша. */
+    suspend fun catalogHttpCacheEvicted(): Boolean = context.dataStore.data.first()[Keys.catalogHttpCacheEvicted] ?: false
+    suspend fun setCatalogHttpCacheEvicted() { context.dataStore.edit { it[Keys.catalogHttpCacheEvicted] = true } }
 
     /**
      * Изчистване на личните следи (история на търсенето, известия за заемания,

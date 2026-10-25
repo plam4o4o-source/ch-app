@@ -187,7 +187,7 @@ class ChyavorecSiteService(
     /** Пълният текст вече е в news.json — не е нужна втора заявка. */
     override suspend fun fetchArticle(article: NewsArticle): Outcome<ArticleDetail> {
         val images = (listOfNotNull(article.imageUrl) + article.contentBlocks.filterIsInstance<ContentBlock.Image>().map { it.url }).distinct()
-        return Outcome.Success(ArticleDetail(article, article.contentBlocks, images))
+        return Outcome.Success(ArticleDetail(article, article.contentBlocks, images, ArticleDetail.altsOf(article.contentBlocks)))
     }
 
     override suspend fun fetchEvents(): Outcome<List<Event>> = fetchEventsIfChanged(null).changedOrError("events")

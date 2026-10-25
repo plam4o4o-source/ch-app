@@ -88,6 +88,11 @@ fun RemoteImage(
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     onFailure: (() -> Unit)? = null,
     cover: Boolean = false,
+    /**
+     * Ключът в кеша в паметта е самият адрес (без размера) — за да може прегледът на цял
+     * екран да покаже веднага миниатюрата като заместител ([sitePhotoPlaceholderKey]).
+     */
+    urlMemoryKey: Boolean = false,
 ) {
     var failed by remember(url) { mutableStateOf(false) }
     val coversAllowed = !cover || LocalOnlineCovers.current
@@ -97,7 +102,11 @@ fun RemoteImage(
             val context = LocalContext.current
             // Заявката се създава веднъж за адрес (не при всяка рекомпозиция); crossfade идва от ImageLoader-а.
             val network = !cover || LocalCoverNetwork.current
-            val request = remember(context, target, network) { ImageRequest.Builder(context).data(target).coverNetwork(network).build() }
+            val request = remember(context, target, network, urlMemoryKey) {
+                ImageRequest.Builder(context).data(target).coverNetwork(network)
+                    .apply { if (urlMemoryKey) memoryCacheKey(target) }
+                    .build()
+            }
             AsyncImage(
                 model = request,
                 contentDescription = contentDescription,

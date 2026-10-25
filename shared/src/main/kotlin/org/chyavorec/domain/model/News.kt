@@ -25,7 +25,25 @@ data class ArticleDetail(
     val article: NewsArticle,
     val blocks: List<ContentBlock>,
     val gallery: List<String>,
-)
+    /**
+     * Описанието (alt/figcaption) на снимките от [gallery] по адрес — за прегледа на цял
+     * екран и екранния четец; липсващите нямат описание. Празно в кеша от по-стари версии.
+     */
+    val galleryAlts: Map<String, String> = emptyMap(),
+) {
+    /** Описанията в реда на [gallery] (празно — без описание). */
+    val galleryAltList: List<String> get() = gallery.map { galleryAlts[it].orEmpty() }
+
+    companion object {
+        /** Описанията на снимките от съдържанието (първото непразно за всеки адрес). */
+        fun altsOf(blocks: List<ContentBlock>): Map<String, String> = buildMap {
+            for (b in blocks) if (b is ContentBlock.Image) {
+                val alt = b.caption?.trim()?.replace(Regex("\\s+"), " ").orEmpty()
+                if (alt.isNotEmpty() && b.url !in this) put(b.url, alt)
+            }
+        }
+    }
+}
 
 /**
  * Ключът, по който се разпознава една и съща новина, независимо как е отворена: от

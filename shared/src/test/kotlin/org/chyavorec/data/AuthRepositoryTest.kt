@@ -137,6 +137,33 @@ class AuthRepositoryTest {
         assertEquals(AuthState.SignedIn("R1"), repo.state.value)
     }
 
+    /** Временно нечетима сесия (Keystore) не е изход: не се изтрива и при следващото пускане се възстановява. */
+    @Test fun transientlyUnreadableSessionIsNotClearedOnRestore() = runTest {
+        val readerCache = InMemoryPayloadCache()
+        readerCache.write("k", "v")
+        val saved = AuthSession("a", "r", clock.now().toEpochMilli() + 3_600_000, "R1")
+        var cleared = 0
+        var unreadable = true
+        val store = object : SessionStore {
+            override suspend fun load() = if (unreadable) null else saved
+            override suspend fun save(session: AuthSession, persist: Boolean) = Unit
+            override suspend fun isPersisted() = true
+            override suspend fun clear() { cleared++ }
+            override suspend fun unreadableNow() = unreadable
+        }
+        val repo = AuthRepository(FakeAuth(), store, clock, readerCache)
+        repo.restore()
+        assertEquals(AuthState.SignedOut, repo.state.value)
+        assertIs<Outcome.Failure>(repo.validSession())
+        assertEquals(0, cleared, "сесията не е изтрита")
+        assertEquals("v", readerCache.read("k")?.text, "кешът на читателя остава")
+        // Следващото пускане: Keystore отговаря — същият читател, без нов вход.
+        unreadable = false
+        val next = AuthRepository(FakeAuth(), store, clock, readerCache)
+        next.restore()
+        assertEquals(AuthState.SignedIn("R1"), next.state.value)
+    }
+
     @Test fun bruteForceIsThrottled() = runTest {
         val repo = AuthRepository(FakeAuth(), MemStore(), clock, InMemoryPayloadCache())
         repeat(5) { repo.login("1", "bad".toCharArray(), true) }

@@ -12,7 +12,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import org.chyavorec.app.MainActivity
+import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.R
 
 /** Канали за известия — потребителят ги управлява и от системните настройки. */
@@ -115,9 +115,9 @@ object Notifier {
             if (nm.getNotificationChannel(channel.id) == null) createChannels(context)
         }
         val personal = channel == Channel.LOANS || sensitive
-        val intent = Intent(context, MainActivity::class.java).apply {
+        // Връзката — само през собствения (неекспортиран) вход; виж LaunchIntents.linkOf.
+        val intent = LaunchIntents.openLink(context, deepLink).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            deepLink?.let { putExtra(EXTRA_DEEP_LINK, it) }
         }
         val pending = PendingIntent.getActivity(
             context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
@@ -171,9 +171,8 @@ object Notifier {
         val nm = context.getSystemService(NotificationManager::class.java) ?: return
         val children = nm.activeNotifications.count { it.id != NotificationIds.LOANS_SUMMARY && it.notification.group == LOANS_GROUP }
         if (children < 2) return
-        val intent = Intent(context, MainActivity::class.java).apply {
+        val intent = LaunchIntents.openLink(context, "my/loans").apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra(EXTRA_DEEP_LINK, "my/loans")
         }
         val pending = PendingIntent.getActivity(
             context, NotificationIds.LOANS_SUMMARY, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,

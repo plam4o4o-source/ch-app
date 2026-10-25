@@ -25,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import org.chyavorec.data.catalog.CatalogIndexColumns
+import org.chyavorec.data.catalog.CatalogIndexHit
 import org.chyavorec.data.catalog.CatalogIndexLostException
 import org.chyavorec.data.catalog.CatalogIndexQuery
 import org.chyavorec.data.catalog.CatalogIndexRow
@@ -36,11 +37,18 @@ import org.chyavorec.domain.model.CatalogBook
  * Един запис от каталога: книгата, нормализираните полета за търсене (`n_*`, те са и
  * съдържанието на FTS таблицата) и българските азбучни рангове за подреждане.
  * [ord] е мястото в katalog.json и псевдоним на rowid (връзката с FTS таблицата).
- * Индексите са за справките за отделни книги (инв. №, заглавие + автор, автор, ISBN).
+ * Индексите са за справките за отделни книги (инв. №, заглавие + автор, автор, ISBN) и за
+ * страниците на списъка без текст, подреден по заглавие, автор или „Най-нови“ (ORDER BY …
+ * LIMIT 40 чете индекса наред, вместо да подрежда целия каталог за всяка страница; rowid
+ * = [ord] е последната колона на всеки индекс).
  */
 @Entity(
     tableName = CatalogIndexColumns.TABLE,
-    indices = [Index("inv"), Index("title", "author"), Index("author"), Index("isbn_digits")],
+    indices = [
+        Index("inv"), Index("title", "author"), Index("author"), Index("isbn_digits"),
+        Index("title_rank"), Index("author_rank", "title_rank"),
+        Index(value = ["registered_on", "inv"], orders = [Index.Order.DESC, Index.Order.DESC]),
+    ],
 )
 data class CatalogBookEntity(
     @PrimaryKey val ord: Int,
@@ -127,6 +135,32 @@ data class CatalogFtsEntity(
     @ColumnInfo(name = CatalogIndexColumns.ISBN) val nIsbn: String,
 )
 
+/** Лекият изглед на запис ([CatalogIndexColumns.HIT]) — за точкуването на резултатите с текст. */
+data class CatalogHitRow(
+    val ord: Int,
+    val inv: Long,
+    @ColumnInfo(name = "registered_on") val registeredOn: String,
+    @ColumnInfo(name = "year_num") val yearNum: Int?,
+    @ColumnInfo(name = "title_rank") val titleRank: Int,
+    @ColumnInfo(name = "author_rank") val authorRank: Int,
+    @ColumnInfo(name = "isbn_digits") val isbnDigits: String,
+    @ColumnInfo(name = CatalogIndexColumns.TITLE) val nTitle: String,
+    @ColumnInfo(name = CatalogIndexColumns.AUTHOR) val nAuthor: String,
+    @ColumnInfo(name = CatalogIndexColumns.KEYWORDS) val nKeywords: String,
+    @ColumnInfo(name = CatalogIndexColumns.ANNOTATION) val nAnnotation: String,
+    @ColumnInfo(name = CatalogIndexColumns.PUBLISHER) val nPublisher: String,
+    @ColumnInfo(name = CatalogIndexColumns.DOC_TYPE) val nDocType: String,
+    @ColumnInfo(name = CatalogIndexColumns.CALL_NUMBER) val nCallNumber: String,
+    @ColumnInfo(name = CatalogIndexColumns.INV) val nInv: String,
+    @ColumnInfo(name = CatalogIndexColumns.ISBN) val nIsbn: String,
+) {
+    fun toHit(): CatalogIndexHit = CatalogIndexHit(
+        ord = ord, inv = inv, title = nTitle, author = nAuthor, keywords = nKeywords, annotation = nAnnotation,
+        publisher = nPublisher, docType = nDocType, callNumber = nCallNumber, invText = nInv, isbn = nIsbn,
+        isbnDigits = isbnDigits, year = yearNum, registeredOn = registeredOn, titleRank = titleRank, authorRank = authorRank,
+    )
+}
+
 /** Един автор и нормализираният му вид (за глобалното търсене). */
 data class CatalogAuthorRow(
     val author: String,
@@ -149,7 +183,13 @@ abstract class CatalogIndexDao {
     abstract suspend fun rows(query: SupportSQLiteQuery): List<CatalogBookEntity>
 
     @RawQuery
+    abstract suspend fun hits(query: SupportSQLiteQuery): List<CatalogHitRow>
+
+    @RawQuery
     abstract suspend fun count(query: SupportSQLiteQuery): Int
+
+    @Query("SELECT * FROM catalog_books WHERE ord IN (:ords)")
+    abstract suspend fun byOrds(ords: List<Int>): List<CatalogBookEntity>
 
     @Query("SELECT * FROM catalog_books WHERE inv = :inv ORDER BY ord DESC LIMIT 1")
     abstract suspend fun byInv(inv: Long): CatalogBookEntity?
@@ -185,7 +225,7 @@ abstract class CatalogIndexDao {
 
 /**
  * Тригерите, с които Room синхронизира FTS таблицата със съдържанието (external content) —
- * точно както в схемата (app/schemas/…CatalogDatabase/2.json, `contentSyncTriggers`).
+ * точно както в схемата (app/schemas/…CatalogDatabase/3.json, `contentSyncTriggers`).
  */
 internal val FTS_SYNC_TRIGGERS: Map<String, String> = run {
     val fts = "`${CatalogIndexColumns.FTS_TABLE}`"
@@ -236,10 +276,11 @@ internal suspend fun CatalogDatabase.replaceIndex(state: CatalogIndexStateEntity
  * Отделна база само за каталога (кеш, който се възстановява от katalog.json) — без
  * миграции; потребителските данни в [AppDatabase] не се засягат от промени тук.
  * Версия 2: индекси за справките (старата база се изтрива и се попълва отново).
+ * Версия 3: индекси за подредените страници (заглавие, автор, „Най-нови“).
  */
 @Database(
     entities = [CatalogBookEntity::class, CatalogFtsEntity::class, CatalogIndexStateEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 abstract class CatalogDatabase : RoomDatabase() {
@@ -346,6 +387,18 @@ class RoomCatalogIndexStore(
 
     override suspend fun rows(query: CatalogIndexQuery): List<CatalogIndexRow> = reading { dao ->
         dao.rows(SimpleSQLiteQuery(query.sql, query.args.toTypedArray())).map(CatalogBookEntity::toRow)
+    }
+
+    override suspend fun hits(query: CatalogIndexQuery): List<CatalogIndexHit> = reading { dao ->
+        dao.hits(SimpleSQLiteQuery(query.hitSql, query.args.toTypedArray())).map(CatalogHitRow::toHit)
+    }
+
+    override suspend fun booksAt(ords: List<Int>): List<CatalogBook> {
+        if (ords.isEmpty()) return emptyList()
+        return reading { dao ->
+            val byOrd = ords.distinct().chunked(MAX_ARGS).flatMap { dao.byOrds(it) }.associateBy { it.ord }
+            ords.mapNotNull { byOrd[it]?.toRow()?.book }
+        }
     }
 
     override suspend fun count(query: CatalogIndexQuery): Int =

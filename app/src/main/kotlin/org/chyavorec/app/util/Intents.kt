@@ -135,6 +135,29 @@ object Intents {
     fun map(context: Context, query: String) =
         context.safeStart(Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))))
 
+    /** Authority-то на FileProvider-а (AndroidManifest.xml, res/xml/file_paths.xml). */
+    fun fileProviderAuthority(context: Context): String = context.packageName + ".files"
+
+    /**
+     * Отваря свален PDF (в cacheDir/documents) с приложение за PDF на телефона — през
+     * FileProvider, с временно право само за четене на този файл. `false` — няма такова
+     * приложение (тогава документът се отваря в браузъра).
+     */
+    fun openPdf(context: Context, file: java.io.File): Boolean {
+        val uri = runCatching { androidx.core.content.FileProvider.getUriForFile(context, fileProviderAuthority(context), file) }
+            .getOrNull() ?: return false
+        val view = Intent(Intent.ACTION_VIEW)
+            .setDataAndType(uri, "application/pdf")
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+        if (context.packageManager.queryIntentActivities(view, 0).isEmpty()) return false
+        return try {
+            context.startActivity(view)
+            true
+        } catch (_: ActivityNotFoundException) {
+            false
+        }
+    }
+
     fun share(context: Context, title: String, text: String) {
         val send = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"

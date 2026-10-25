@@ -41,7 +41,21 @@ fun SiteImage(
         fallbackUrl = url.takeIf { it != optimized },
         containerColor = containerColor,
         onFailure = onFailure,
+        urlMemoryKey = true,
     )
+}
+
+/**
+ * Ключът в кеша в паметта на вече показана миниатюра на снимката (която и да е от
+ * адресите [urls], в която и да е ширина на [SiteImageUrls]) или `null` — за заместител в
+ * прегледа на цял екран, докато се зарежда голямата снимка. Предпочита се най-голямата.
+ */
+fun sitePhotoPlaceholderKey(cached: (String) -> Boolean, urls: List<String>): String? {
+    for (w in SiteImageUrls.WIDTHS.asReversed()) for (u in urls) {
+        val key = SiteImageUrls.optimized(u, w) ?: continue
+        if (key != u && cached(key)) return key
+    }
+    return urls.firstOrNull { cached(it) }
 }
 
 /** Ширината на прозореца в dp — за снимки на цяла ширина (без отстъпите). */

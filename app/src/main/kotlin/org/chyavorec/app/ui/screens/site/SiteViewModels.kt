@@ -11,6 +11,7 @@ import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
+import org.chyavorec.data.http.FileDownloader
 import org.chyavorec.data.repository.SiteRepository
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.GalleryAlbum
@@ -123,7 +124,11 @@ class GalleryViewModel(private val repo: SiteRepository, load: Boolean = true) :
     override fun refreshOnReconnect() { refresh(false) }
 }
 
-class DocumentsViewModel(private val repo: SiteRepository) : ViewModel(), RefreshOnReconnect {
+class DocumentsViewModel(
+    private val repo: SiteRepository,
+    /** Свалянето на PDF за приложение на телефона (`null` — само отваряне в браузъра). */
+    private val downloader: FileDownloader? = null,
+) : ViewModel(), RefreshOnReconnect {
     private val _state = MutableStateFlow(ScreenState<List<org.chyavorec.domain.model.SiteDocument>>())
     val state: StateFlow<ScreenState<List<org.chyavorec.domain.model.SiteDocument>>> = _state.asStateFlow()
     init { refresh(false) }
@@ -134,4 +139,48 @@ class DocumentsViewModel(private val repo: SiteRepository) : ViewModel(), Refres
 
     override val reconnectState: ScreenState<*> get() = _state.value
     override fun refreshOnReconnect() { refresh(false) }
+
+    /** Документът, който се сваля за приложение за PDF, и напредъкът (`null` — неизвестен размер). */
+    data class PdfDownload(val url: String, val progress: Float?)
+
+    /** Резултатът от свалянето: файлът за отваряне — или неуспех (тогава адресът се отваря в браузъра). */
+    sealed interface PdfResult {
+        val url: String
+        data class Ready(override val url: String, val file: java.io.File) : PdfResult
+        data class Failed(override val url: String) : PdfResult
+    }
+
+    private val _download = MutableStateFlow<PdfDownload?>(null)
+    val download: StateFlow<PdfDownload?> = _download.asStateFlow()
+    private val _results = kotlinx.coroutines.flow.MutableSharedFlow<PdfResult>(extraBufferCapacity = 1)
+    val results: kotlinx.coroutines.flow.SharedFlow<PdfResult> = _results
+    private var job: kotlinx.coroutines.Job? = null
+
+    /** „Отвори с приложение за PDF“: сваля файла в кеша (само един наведнъж), после — за отваряне. */
+    fun openInPdfApp(url: String) {
+        val d = downloader
+        if (d == null || !isPdf(url)) {
+            _results.tryEmit(PdfResult.Failed(url))
+            return
+        }
+        if (job?.isActive == true) return
+        _download.value = PdfDownload(url, null)
+        job = viewModelScope.launch {
+            try {
+                val r = d.download(url) { p -> _download.value = PdfDownload(url, p) }
+                _results.emit(if (r is Outcome.Success) PdfResult.Ready(url, r.value) else PdfResult.Failed(url))
+            } finally {
+                _download.value = null
+            }
+        }
+    }
+
+    /** Отказ по време на свалянето — нищо не остава в кеша. */
+    fun cancelDownload() { job?.cancel() }
+
+    companion object {
+        /** PDF по HTTPS (по разширението в адреса). */
+        fun isPdf(url: String): Boolean =
+            url.startsWith("https://", ignoreCase = true) && url.substringBefore('#').substringBefore('?').endsWith(".pdf", ignoreCase = true)
+    }
 }

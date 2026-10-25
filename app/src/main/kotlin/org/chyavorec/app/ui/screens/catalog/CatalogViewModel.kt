@@ -10,6 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -131,8 +132,9 @@ class CatalogViewModel(
             }
         }
         // Instant search: търсим 200 ms след последния натиснат клавиш. Началната заявка,
-        // вече изпълнена при зареждането, не се търси повторно (вж. [lastSearch]).
-        viewModelScope.launch(searchDispatcher) { queryFlow.debounce(200).collect { runSearch() } }
+        // вече изпълнена при зареждането, не се търси повторно (вж. [lastSearch]). Нова заявка
+        // отменя още незавършеното търсене на старата (collectLatest — точкуването спира).
+        viewModelScope.launch(searchDispatcher) { queryFlow.debounce(200).collectLatest { runSearch() } }
     }
 
     fun refresh(force: Boolean = true) = viewModelScope.launch {

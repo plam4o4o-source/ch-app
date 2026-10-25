@@ -177,8 +177,12 @@ class AuthRepository(
         }
         // Няма сесия — напр. „не ме помни“ и процесът е бил спрян. Кешираното за предишния
         // читател не бива да остане за следващия на същия телефон: изтрива се както при изход.
+        // Сесия има, но временно не се чете (Keystore) — без вход сега, без изтриване: при
+        // следващото пускане тя се възстановява.
         storeLock.withLock {
-            if (_state.value == AuthState.Unknown && store.load() == null) clearLocked()
+            if (_state.value == AuthState.Unknown && store.load() == null) {
+                if (store.unreadableNow()) _state.compareAndSet(AuthState.Unknown, AuthState.SignedOut) else clearLocked()
+            }
         }
     }
 
@@ -239,7 +243,7 @@ class AuthRepository(
         val session = store.load() ?: run {
             // Няма сесия → състоянието не бива да остава „влязъл“ (или „неизвестно“), а
             // кешираното за предишния читател се изтрива (както при изход).
-            storeLock.withLock { if (store.load() == null && _state.value != AuthState.SignedOut) clearLocked() }
+            storeLock.withLock { if (store.load() == null && _state.value != AuthState.SignedOut && !store.unreadableNow()) clearLocked() }
             return Outcome.Failure(AppError.Unauthorized)
         }
         if (session.expiresAtMillis - clock.now().toEpochMilli() > 60_000) return Outcome.Success(session)

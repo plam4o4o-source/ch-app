@@ -92,18 +92,21 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
     /** Различните автори, които съдържат всички [tokens], в реда на каталога. */
     fun authors(tokens: List<String>, limit: Int = 8): List<String> = matchingAuthors(authorIndex, tokens, limit)
 
-    fun search(query: CatalogQuery): List<CatalogBook> {
+    /** [check] се вика на всеки [CHECK_EVERY] записа — за прекъсване на остаряло търсене (нова заявка). */
+    fun search(query: CatalogQuery, check: () -> Unit = {}): List<CatalogBook> {
         val tokens = TextNormalizer.tokens(query.text)
         val digits = TextNormalizer.digits(query.text)
         val hits = ArrayList<CatalogMatcher.Hit>()
-        for (item in index) {
+        for ((i, item) in index.withIndex()) {
+            if (i % CHECK_EVERY == 0) check()
             if (!CatalogMatcher.passesFilters(item.book, item.year, query)) continue
             val score = if (tokens.isEmpty()) 0
             else CatalogMatcher.score(item.title, item.author, item.keywords, item.rest, item.isbnDigits, item.book.inv, query.field, tokens, digits) ?: continue
-            hits += CatalogMatcher.Hit(item.book, score, item.titleRank, item.authorRank, item.year)
+            hits += CatalogMatcher.Hit(i, score, item.titleRank, item.authorRank, item.year, item.book.registeredOn, item.book.inv)
         }
+        check()
         CatalogMatcher.sort(hits, query.sort, hasText = tokens.isNotEmpty())
-        return hits.map { it.book }
+        return hits.map { index[it.ord].book }
     }
 
     /** Предложения за автоматично допълване: заглавия и автори. */
@@ -130,6 +133,9 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
         snapshot.books.filter { it.title == book.title && it.author == book.author && it.inv != book.inv }
 
     companion object {
+        /** През колко записа търсенето проверява дали е отменено. */
+        internal const val CHECK_EVERY = 512
+
         /** Брой нови постъпления на началния екран. */
         const val HOME_NEWEST = 12
 

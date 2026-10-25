@@ -1,6 +1,20 @@
 package org.chyavorec.app.ui.screens.site
 
 import androidx.compose.foundation.clickable
+import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.FileOpen
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import org.chyavorec.app.util.Intents
+import org.chyavorec.data.http.FileDownloader
+import java.io.File
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,8 +62,20 @@ import org.chyavorec.domain.model.DocumentKind
  */
 @Composable
 fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
-    val vm = appViewModel { DocumentsViewModel(it.siteRepository) }
+    val context = LocalContext.current
+    val vm = appViewModel { DocumentsViewModel(it.siteRepository, FileDownloader(it.okHttp, File(context.cacheDir, "documents"))) }
     val state by vm.state.collectAsStateWithLifecycle()
+    val download by vm.download.collectAsStateWithLifecycle()
+    // Свален PDF — с приложение за PDF; без такова или при неуспешно сваляне — в браузъра (Custom Tab).
+    LaunchedEffect(vm) {
+        vm.results.collect { r ->
+            val opened = r is DocumentsViewModel.PdfResult.Ready && Intents.openPdf(context, r.file)
+            if (!opened) {
+                if (r is DocumentsViewModel.PdfResult.Failed) Toast.makeText(context, R.string.pdf_download_failed, Toast.LENGTH_SHORT).show()
+                openLink(r.url)
+            }
+        }
+    }
     var tab by rememberSaveable { mutableIntStateOf(0) }
     Scaffold(topBar = { BackTopBar(stringResource(R.string.documents_title), onBack) }) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
@@ -80,6 +106,9 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                                     { Text(it, maxLines = 3, overflow = TextOverflow.Ellipsis) }
                                 },
                                 leadingContent = { Icon(Icons.Outlined.PictureAsPdf, null, tint = MaterialTheme.colorScheme.secondary) },
+                                trailingContent = if (DocumentsViewModel.isPdf(d.url)) {
+                                    { PdfAppButton(download?.takeIf { it.url == d.url }, onOpen = { vm.openInPdfApp(d.url) }, onCancel = vm::cancelDownload) }
+                                } else null,
                                 modifier = Modifier.clickable { openLink(d.url) }.animateEntrance(i),
                             )
                         }
@@ -89,3 +118,25 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
         }
     }
 }
+
+/**
+ * „Отвори с приложение за PDF“: сваля файла и го подава на приложение на телефона (докосване на
+ * реда — в браузъра, както досега). Докато се сваля — напредъкът; докосване го отказва.
+ */
+@Composable
+private fun PdfAppButton(download: DocumentsViewModel.PdfDownload?, onOpen: () -> Unit, onCancel: () -> Unit) {
+    if (download == null) {
+        IconButton(onClick = onOpen) { Icon(Icons.Outlined.FileOpen, stringResource(R.string.pdf_open_with_app)) }
+        return
+    }
+    val label = stringResource(R.string.pdf_downloading)
+    IconButton(onClick = onCancel, modifier = Modifier.semantics { stateDescription = label }) {
+        Box(contentAlignment = Alignment.Center) {
+            val p = download.progress
+            if (p == null) CircularProgressIndicator(Modifier.size(28.dp), strokeWidth = 3.dp)
+            else CircularProgressIndicator(progress = { p }, modifier = Modifier.size(28.dp), strokeWidth = 3.dp)
+            Icon(Icons.Outlined.Close, stringResource(R.string.pdf_cancel_download), Modifier.size(16.dp))
+        }
+    }
+}
+

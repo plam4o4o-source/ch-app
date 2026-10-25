@@ -1,8 +1,11 @@
 package org.chyavorec.app.data.security
 
 import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import java.security.KeyStore
+import java.security.UnrecoverableKeyException
+import javax.crypto.AEADBadTagException
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -56,6 +59,7 @@ class KeystoreCipher(private val alias: String = "chyavorec_secure_store_v1") {
     }
 
     fun decrypt(data: ByteArray): ByteArray {
+        require(data.isNotEmpty()) { "corrupt" }
         val ivLen = data[0].toInt()
         require(ivLen in 12..16 && data.size > 1 + ivLen) { "corrupt" }
         val iv = data.copyOfRange(1, 1 + ivLen)
@@ -69,6 +73,16 @@ class KeystoreCipher(private val alias: String = "chyavorec_secure_store_v1") {
         const val TRANSFORMATION = "AES/GCM/NoPadding"
     }
 }
+
+/**
+ * Шифрованите данни никога няма да се прочетат: грешен или сменен ключ (AEAD tag), ключ,
+ * обезсилен или изгубен от Keystore, повреден файл или JSON (IllegalArgumentException, вкл.
+ * SerializationException). Всичко друго (напр. временно недостъпна услуга на Keystore,
+ * ProviderException, KeyStoreException) може да мине при следващия опит — файлът остава.
+ */
+fun isUnreadableForever(e: Throwable): Boolean =
+    e is AEADBadTagException || e is KeyPermanentlyInvalidatedException || e is UnrecoverableKeyException ||
+        e is IllegalArgumentException
 
 /** Абстракция за тестове (Robolectric няма Android Keystore). */
 interface BytesCipher {

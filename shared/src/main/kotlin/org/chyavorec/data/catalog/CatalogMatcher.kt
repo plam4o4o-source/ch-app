@@ -15,8 +15,11 @@ import java.util.Locale
  */
 internal object CatalogMatcher {
 
-    /** Съвпадение с точките му и всичко нужно за подреждането. */
-    class Hit(val book: CatalogBook, val score: Int, val titleRank: Int, val authorRank: Int, val year: Int?)
+    /**
+     * Съвпадение с точките му и всичко нужно за подреждането. [ord] е мястото в каталога —
+     * книгата се взима по него едва след подреждането (в базата — само за показаната страница).
+     */
+    class Hit(val ord: Int, val score: Int, val titleRank: Int, val authorRank: Int, val year: Int?, val registeredOn: String, val inv: Long)
 
     /** Филтрите на заявката (без текста). */
     fun passesFilters(b: CatalogBook, year: Int?, q: CatalogQuery): Boolean {
@@ -102,8 +105,8 @@ internal object CatalogMatcher {
             CatalogSort.AUTHOR -> BY_AUTHOR.then(BY_TITLE)
             CatalogSort.YEAR_DESC -> compareByDescending { it.year ?: Int.MIN_VALUE }
             CatalogSort.YEAR_ASC -> compareBy { it.year ?: Int.MAX_VALUE }
-            CatalogSort.NEWEST -> compareByDescending<Hit> { it.book.registeredOn }
-                .thenByDescending { it.book.inv }
+            CatalogSort.NEWEST -> compareByDescending<Hit> { it.registeredOn }
+                .thenByDescending { it.inv }
         }
         hits.sortWith(comparator)
     }
