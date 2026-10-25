@@ -40,7 +40,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -69,12 +70,13 @@ import org.chyavorec.app.ui.components.darkTopHighlight
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.UdcCoverColors
+import org.chyavorec.app.util.Formatters
+import org.chyavorec.app.util.UdcLabels
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.catalog.ReadingStats
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.HistoryItem
-import org.chyavorec.domain.model.UdcSections
 import java.time.format.TextStyle
 import kotlin.math.max
 
@@ -190,7 +192,7 @@ fun ReadingStatsCard(stats: ReadingStats.Summary, onOpenHistory: () -> Unit, mod
 /** Стълбчета за последните 12 месеца; текущият месец е в златно, броят — над стълбчето. */
 @Composable
 private fun MonthBars(stats: ReadingStats.Summary, progress: () -> Float) {
-    val locale = LocalConfiguration.current.locales[0]
+    val locale = Formatters.uiLocale(LocalContext.current)
     val months = stats.months
     val peak = stats.peakMonth
     val description = if (peak == null) {
@@ -271,12 +273,13 @@ private fun MonthBars(stats: ReadingStats.Summary, progress: () -> Float) {
 private fun rememberSlices(stats: ReadingStats.Summary): List<Slice>? {
     val dark = LocalExtendedColors.current.isDark
     val other = stringResource(R.string.reading_sections_other)
-    return remember(stats.sections, dark, other) {
+    val res = LocalResources.current
+    return remember(stats.sections, dark, other, res) {
         if (stats.sections.none { it.section != null }) return@remember null
         // В тъмна тема цветовете на кориците са малко изсветлени, за да се четат върху тъмния фон.
         fun tone(c: Color) = if (dark) lerp(c, Color.White, 0.22f) else c
         val all = stats.sections.map { s ->
-            Slice(UdcSections.name(s.section), s.count, tone(s.section?.let { UdcCoverColors[it] } ?: NoSectionColor))
+            Slice(res.getString(UdcLabels.res(s.section)), s.count, tone(s.section?.let { UdcCoverColors[it] } ?: NoSectionColor))
         }
         if (all.size <= LEGEND_MAX) all
         else all.take(LEGEND_MAX - 1) + Slice(other, all.drop(LEGEND_MAX - 1).sumOf { it.count }, tone(NoSectionColor))

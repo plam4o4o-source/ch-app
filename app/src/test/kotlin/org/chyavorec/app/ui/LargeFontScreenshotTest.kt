@@ -182,7 +182,8 @@ class LargeFontScreenshotTest {
             compose.mainClock.advanceTimeBy(1_000)
             compose.waitForIdle()
         }
-        waitFor("Продължи без вход")
+        // Онлайн входът не е включен (без адрес на InvLib) — дигиталната карта вместо вход.
+        waitFor("Добави читателска карта")
         shot("55-font2-onboarding-last")
     }
 

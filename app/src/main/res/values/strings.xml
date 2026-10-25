@@ -12,6 +12,7 @@
     <string name="about_version_full">Версия %1$s (%2$d)</string>
     <string name="account_delete_web">Изтриване на акаунта и данните</string>
     <string name="account_delete_web_desc">Искане за изтриване на читателския акаунт и свързаните с него данни (chyavorec.org)</string>
+    <string name="action_add_card">Добави читателска карта</string>
     <string name="action_all">Всички</string>
     <string name="action_back">Назад</string>
     <string name="action_cancel">Отказ</string>
@@ -50,6 +51,7 @@
     <string name="book_details">Библиографски данни</string>
     <string name="book_doc_type">Вид</string>
     <string name="book_genre">Раздел</string>
+    <string name="book_genre_udc">%1$s (УДК %2$s)</string>
     <string name="book_hold">Заяви книгата</string>
     <string name="book_inventory">Инвентарен номер</string>
     <string name="book_isbn">ISBN</string>
@@ -88,9 +90,14 @@
     <string name="card_usage_note">Покажи картата на библиотекаря; баркодът може да се сканира от четеца на гишето.</string>
     <string name="catalog_data_as_of">данни от InvLib към %1$s</string>
     <string name="catalog_filters">Филтри</string>
+    <string name="catalog_hint_all">Търси навсякъде</string>
+    <string name="catalog_hint_author">Търси по автор</string>
+    <string name="catalog_hint_inventory">Търси по инвентарен номер</string>
+    <string name="catalog_hint_isbn">Търси по ISBN</string>
+    <string name="catalog_hint_keyword">Търси по ключова дума</string>
+    <string name="catalog_hint_title">Търси по заглавие</string>
     <string name="catalog_no_results">Не открихме книги по това търсене.</string>
     <string name="catalog_no_results_hint">Опитай с друга дума, провери правописа или премахни филтрите.</string>
-    <string name="catalog_search_hint">Търси по %1$s</string>
     <string name="catalog_sort">Подреждане</string>
     <string name="catalog_title">Електронен каталог</string>
     <string name="catalog_view_list">Списък</string>
@@ -113,7 +120,7 @@
     <string name="contacts_call">Обади се</string>
     <string name="contacts_email">Изпрати имейл</string>
     <string name="contacts_email_label">Имейл</string>
-    <string name="contacts_fallback_note">Страницата „Контакти“ не беше заредена — показани са само основните данни. Опитай отново по-късно.</string>
+    <string name="contacts_fallback_note">Контактите от сайта не се заредиха — показваме основните данни, вградени в приложението. Може да не са актуални.</string>
     <string name="contacts_hours">Работно време</string>
     <string name="contacts_hours_unknown">Не е обявено в сайта</string>
     <string name="contacts_map">Отвори карта</string>
@@ -176,8 +183,8 @@
     <string name="guest_title">Добре дошъл!</string>
     <string name="history_empty">Още няма прочетени книги</string>
     <string name="history_empty_hint">Върнатите книги ще се появят тук след следващото обновяване от библиотеката.</string>
-    <string name="history_not_returned">не е върната</string>
     <string name="history_range">взета %1$s · върната %2$s</string>
+    <string name="history_range_open">взета %1$s · още не е върната</string>
     <string name="history_similar">Подобни книги</string>
     <string name="history_similar_note">Подбрани на телефона по раздел и автор — нищо не се изпраща.</string>
     <string name="history_source_note">Историята идва от библиотеката само за читатели, дали съгласие.</string>
@@ -208,7 +215,7 @@
     <string name="legal_site_version">Виж и: %1$s</string>
     <string name="loading">Зареждане…</string>
     <string name="loan_borrowed">Заета: %1$s</string>
-    <string name="loan_cannot_renew">Не може да се удължи онлайн — попитайте в библиотеката</string>
+    <string name="loan_cannot_renew">Не може да се удължи онлайн — попитай в библиотеката</string>
     <string name="loan_due">Връщане: %1$s</string>
     <string name="loan_due_overdue">Срокът изтече на %1$s</string>
     <string name="loan_open_book">Отвори книгата в каталога</string>
@@ -342,15 +349,15 @@
     <string name="occ_assumption_title">Голяма Богородица</string>
     <string name="occ_autumn_text">Започва астрономическата есен — време за книга и топъл чай.</string>
     <string name="occ_autumn_title">Есенно равноденствие</string>
-    <string name="occ_baba_marta_text">Първа пролет! Закичете се с мартеница за здраве и късмет.</string>
+    <string name="occ_baba_marta_text">Първа пролет! Закичи се с мартеница за здраве и късмет.</string>
     <string name="occ_baba_marta_title">Честита Баба Марта!</string>
     <string name="occ_babinden_text">Празник на бабите и на родилната помощ.</string>
     <string name="occ_babinden_title">Честит Бабинден!</string>
-    <string name="occ_book_day_text">Отбележете го с нова книга — вижте най-новите в библиотеката.</string>
+    <string name="occ_book_day_text">Отбележи го с нова книга — виж най-новите в библиотеката.</string>
     <string name="occ_book_day_title">Световен ден на книгата</string>
     <string name="occ_botev_text">Ден на Христо Ботев и на загиналите за свободата и независимостта на България. В 12 ч. — минута мълчание.</string>
     <string name="occ_botev_title">Ден на Ботев</string>
-    <string name="occ_children_book_text">Рожденият ден на Андерсен. Разгледайте детските книги в библиотеката.</string>
+    <string name="occ_children_book_text">Рожденият ден на Андерсен. Разгледай детските книги в библиотеката.</string>
     <string name="occ_children_book_title">Ден на детската книга</string>
     <string name="occ_children_day_text">Усмивки, игри и книжки за всички деца!</string>
     <string name="occ_children_day_title">Честит Ден на детето!</string>
@@ -418,6 +425,7 @@
     <string name="onb_card_title">Читателска карта</string>
     <string name="onb_catalog_text">Търси сред книгите на библиотеката по заглавие, автор, ключова дума или инвентарен номер и виж дали са налични.</string>
     <string name="onb_catalog_title">Библиотечен каталог</string>
+    <string name="onb_continue">Продължи</string>
     <string name="onb_guest">Продължи без вход</string>
     <string name="onb_login">Вход с читателски данни</string>
     <string name="onb_news_text">Концерти, празници, срещи и всичко, което се случва в читалището — с напомняне и добавяне в календара.</string>
@@ -457,7 +465,12 @@
     <string name="qa_events">Събития</string>
     <string name="reader_font_size">Размер на шрифта</string>
     <string name="reader_mode">Режим за четене</string>
+    <string name="reader_mode_glyph">Аа</string>
     <string name="reader_number">Читателски № %1$s</string>
+    <string name="reader_size_l">Голям шрифт</string>
+    <string name="reader_size_m">Нормален шрифт</string>
+    <string name="reader_size_s">Малък шрифт</string>
+    <string name="reader_size_xl">Много голям шрифт</string>
     <string name="reader_width">Ширина на текста</string>
     <string name="reader_width_narrow">Тясна</string>
     <string name="reader_width_normal">Нормална</string>
@@ -548,8 +561,6 @@
     <string name="sort_year_asc">Година (стари първо)</string>
     <string name="sort_year_desc">Година (нови първо)</string>
     <string name="stale_banner">Временно не можем да обновим данните. Показваме последно наличните.</string>
-    <string name="stat_books">документа в каталога</string>
-    <string name="stat_events">събития през месеца</string>
     <string name="stat_years">години история</string>
     <string name="status_available">Налична</string>
     <string name="status_not_on_shelf">Не е на рафта</string>
@@ -557,11 +568,16 @@
     <string name="status_unavailable">Недостъпна</string>
     <string name="subject_article">статията</string>
     <string name="subject_catalog">каталога</string>
+    <string name="subject_contacts">контактите</string>
+    <string name="subject_documents">документите</string>
     <string name="subject_events">събитията</string>
+    <string name="subject_gallery">галерията</string>
     <string name="subject_history">историята на четенето</string>
     <string name="subject_loans">заеманията</string>
     <string name="subject_membership">членството</string>
+    <string name="subject_messages">съобщенията</string>
     <string name="subject_news">новините</string>
+    <string name="subject_page">страницата</string>
     <string name="sync_never">никога</string>
     <string name="tab_catalog">Каталог</string>
     <string name="tab_home">Начало</string>
@@ -573,6 +589,17 @@
     <string name="theme_dark">Тъмна</string>
     <string name="theme_light">Светла</string>
     <string name="theme_system">Както системата</string>
+    <string name="udc_0">Общ отдел</string>
+    <string name="udc_1">Философия. Психология</string>
+    <string name="udc_2">Религия</string>
+    <string name="udc_3">Обществени науки</string>
+    <string name="udc_5">Природни науки</string>
+    <string name="udc_6">Приложни науки. Техника</string>
+    <string name="udc_7">Изкуство. Спорт</string>
+    <string name="udc_8">Език. Литература</string>
+    <string name="udc_9">География. История</string>
+    <string name="udc_none">Без раздел</string>
+    <string name="ui_language">bg</string>
     <string name="update_auto">Автоматично обновяване</string>
     <string name="update_auto_desc">Проверка при отваряне и два пъти дневно; изтегляне по Wi-Fi; инсталиране, докато приложението не се използва (Android 12+), или с едно докосване</string>
     <string name="update_check_now">Провери за нова версия</string>
@@ -603,6 +630,7 @@
     <string name="update_status_downloading">Изтегляне на новата версия…</string>
     <string name="update_status_ready">Версия %1$s е готова за инсталиране</string>
     <string name="wait_about">около %1$s</string>
+    <string name="whats_new_title">Какво ново във версия %1$s</string>
     <string name="widget_description">Срокове за връщане, следващо събитие и бързо сканиране</string>
     <string name="widget_due_today">днес</string>
     <string name="widget_due_tomorrow">утре</string>
@@ -679,6 +707,14 @@
     <plurals name="reading_streak_months">
         <item quantity="one">%1$d месец</item>
         <item quantity="other">%1$d месеца</item>
+    </plurals>
+    <plurals name="stat_books">
+        <item quantity="one">документ в каталога</item>
+        <item quantity="other">документа в каталога</item>
+    </plurals>
+    <plurals name="stat_events">
+        <item quantity="one">събитие през следващите 30 дни</item>
+        <item quantity="other">събития през следващите 30 дни</item>
     </plurals>
     <plurals name="wait_hours">
         <item quantity="one">%1$d час</item>

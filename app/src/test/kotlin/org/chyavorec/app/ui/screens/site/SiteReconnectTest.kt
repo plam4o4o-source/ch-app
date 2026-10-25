@@ -88,7 +88,11 @@ class SiteReconnectTest {
         val reconnected = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
         val gallery = GalleryViewModel(repo)
-        val contacts = ContactsViewModel(repo)
+        val fallback = Contacts(
+            organization = "НЧ", address = null, phones = emptyList(), emails = emptyList(), website = "https://example.org",
+            facebook = null, workingHours = listOf("Петък: 08:00 – 16:00"), mapQuery = "Яворец", fromSite = false, sourceUrl = null,
+        )
+        val contacts = ContactsViewModel(repo, fallback)
         val documents = DocumentsViewModel(repo)
         val links = LinksViewModel(repo)
         val page = PageViewModel(ABOUT_URL, repo)
@@ -97,10 +101,12 @@ class SiteReconnectTest {
         created += all
         all.forEach { watchReconnect(it, reconnected) }
 
-        // Без връзка и без кеш: всеки екран е с мрежова грешка и иска опресняване при връзка.
+        // Без връзка и без кеш: всеки екран е с мрежова грешка и иска опресняване при връзка;
+        // контактите — с вградените основни данни вместо грешка.
         waitUntil("грешките без връзка") {
-            listOf(gallery.state.value, contacts.state.value, documents.state.value, links.state.value, page.state.value)
-                .all { it.error == AppError.Network } && about.error.value == AppError.Network
+            listOf(gallery.state.value, documents.state.value, links.state.value, page.state.value)
+                .all { it.error == AppError.Network } && about.error.value == AppError.Network &&
+                contacts.state.value.data == fallback && contacts.state.value.refreshError == AppError.Network
         }
         all.forEach { vm ->
             vm as RefreshOnReconnect
@@ -114,6 +120,7 @@ class SiteReconnectTest {
                 links.state.value.data != null && page.state.value.data != null && about.link.value != null
         }
         assertEquals("Празници", gallery.state.value.data!!.single().name)
+        waitUntil("контактите от сайта") { contacts.state.value.data?.fromSite == true }
         assertEquals(ABOUT_URL, about.link.value?.url)
         assertEquals(null, about.error.value)
         all.forEach { vm ->

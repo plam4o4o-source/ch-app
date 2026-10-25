@@ -555,8 +555,9 @@ private fun StatsRow(yearsSinceFounding: Int, catalogCount: Int?, eventsThisMont
             ) {
                 val animate = countUp == true
                 AnimatedCounter(yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f), animate = animate)
-                catalogCount?.let { AnimatedCounter(it, stringResource(R.string.stat_books), Modifier.weight(1f), animate = animate) }
-                eventsThisMonth?.let { AnimatedCounter(it, stringResource(R.string.stat_events), Modifier.weight(1f), animate = animate) }
+                catalogCount?.let { AnimatedCounter(it, pluralStringResource(R.plurals.stat_books, it), Modifier.weight(1f), animate = animate) }
+                // Събитията в следващите 30 дни (виж HomeViewModel.withEvents); без такива — без брояч.
+                eventsThisMonth?.takeIf { it > 0 }?.let { AnimatedCounter(it, pluralStringResource(R.plurals.stat_events, it), Modifier.weight(1f), animate = animate) }
             }
         }
     }

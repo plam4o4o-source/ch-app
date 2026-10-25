@@ -8,7 +8,11 @@ on:
         required: true
         default: "1.0.0"
       notes:
-        description: "Какво ново (показва се в приложението при обновяване)"
+        description: "Какво ново (BG, по ред на точка). Празно — от store/whats-new.md или общият текст"
+        required: false
+        default: ""
+      notes_en:
+        description: "What's new (EN). Празно — от store/whats-new.md или общият текст"
         required: false
         default: ""
       allow_debug_key:
@@ -29,7 +33,17 @@ on:
       version:
         type: string
         required: true
+      # Текстът за читателите (BG/EN). Празно — от store/whats-new.md или общият текст.
       notes:
+        type: string
+        required: false
+        default: ""
+      notes_en:
+        type: string
+        required: false
+        default: ""
+      # Техническият списък с промени (commit-и) — само в описанието на GitHub Release.
+      changes:
         type: string
         required: false
         default: ""
@@ -102,6 +116,31 @@ jobs:
           echo "VERSION=$V" >> "$GITHUB_ENV"
           # versionCode расте монотонно независимо кой workflow издава: минути от 01.01.2024.
           echo "VERSION_CODE=$(( ($(date -u +%s) - 1704067200) / 60 ))" >> "$GITHUB_ENV"
+
+      # „Какво ново“ за читателите (update.json → диалогът за нова версия и листът след
+      # обновяване): ръчно въведеният текст, иначе най-горният раздел на store/whats-new.md
+      # (ако е за тази версия и още не е ползван — виж tools/whats_new.py), иначе общото
+      # „Подобрения и поправки.“. Никога списъкът с commit-и — той е само в описанието на изданието.
+      - name: What's new
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NOTES: ${{ inputs.notes }}
+          NOTES_EN: ${{ inputs.notes_en }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/whats-new"
+          # Издадените версии (и черновите) — раздел за вече издадена версия не се ползва пак.
+          # Без отговор от API файлът липсва и разделът важи само при точно съвпадение на версията.
+          if gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate --jq '.[].tag_name' > "$RUNNER_TEMP/released.part"; then
+            mv "$RUNNER_TEMP/released.part" "$RUNNER_TEMP/released.txt"
+          fi
+          # По-стар commit без скрипта (или грешка в него) — общият текст, изданието не спира.
+          if ! python3 tools/whats_new.py "$VERSION" store/whats-new.md "$RUNNER_TEMP/released.txt" "$RUNNER_TEMP/whats-new"; then
+            echo "Подобрения и поправки." > "$RUNNER_TEMP/whats-new/notes.bg.txt"
+            echo "Improvements and fixes." > "$RUNNER_TEMP/whats-new/notes.en.txt"
+          fi
+          if [ -n "${NOTES//[[:space:]]/}" ]; then printf '%s\n' "$NOTES" > "$RUNNER_TEMP/whats-new/notes.bg.txt"; fi
+          if [ -n "${NOTES_EN//[[:space:]]/}" ]; then printf '%s\n' "$NOTES_EN" > "$RUNNER_TEMP/whats-new/notes.en.txt"; fi
+          echo "WHATS_NEW_DIR=$RUNNER_TEMP/whats-new" >> "$GITHUB_ENV"
 
       # Истинският upload ключ — само за издания от main (автоматичните през auto-release.yml,
       # ръчните от main) и от tag-ове v*. Ръчно пускане от друг клон не получава secrets и без
@@ -176,15 +215,16 @@ jobs:
       # (https://github.com/<repo>/releases/latest/download/update.json).
       # Публикува се САМО при постоянен ключ: APK, подписан с различен (временен)
       # ключ, не може да замени инсталираното приложение.
+      # „notes“ е на български (старите версии на приложението четат само него), „notes_en“ —
+      # на английски; приложението избира по езика на интерфейса.
       - name: Update manifest
         if: env.SIGNING_KIND == 'upload-key'
-        env:
-          NOTES: ${{ inputs.notes }}
         run: |
           python3 - <<'PY'
           import json, os, hashlib
           v = os.environ["VERSION"]; apk = f"dist/chitalishte-yavorets-{v}.apk"
           repo = os.environ["GITHUB_REPOSITORY"]
+          notes = lambda lang: open(os.path.join(os.environ["WHATS_NEW_DIR"], f"notes.{lang}.txt"), encoding="utf-8").read().strip()
           data = {
               "versionCode": int(os.environ["VERSION_CODE"]),
               "versionName": v,
@@ -192,7 +232,8 @@ jobs:
               "sha256": hashlib.sha256(open(apk, "rb").read()).hexdigest(),
               "size": os.path.getsize(apk),
               "minSdk": 26,
-              "notes": os.environ.get("NOTES", "").strip(),
+              "notes": notes("bg"),
+              "notes_en": notes("en"),
               "releaseUrl": f"https://github.com/{repo}/releases/tag/v{v}",
           }
           json.dump(data, open("dist/update.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
@@ -201,12 +242,18 @@ jobs:
 
       - name: Release notes
         env:
-          NOTES: ${{ inputs.notes }}
+          CHANGES: ${{ inputs.changes }}
         run: |
+          NOTES=$(cat "$WHATS_NEW_DIR/notes.bg.txt")
+          NOTES_EN=$(cat "$WHATS_NEW_DIR/notes.en.txt")
           cat > notes.md <<NOTES
           Читалище Яворец — Android приложение v$VERSION (versionCode $VERSION_CODE)
 
+          Какво ново:
           $NOTES
+
+          What's new:
+          $NOTES_EN
 
           Файлове:
           - chitalishte-yavorets-$VERSION.apk — инсталиране директно на телефон (Android 8.0+); обновява се автоматично
@@ -219,6 +266,9 @@ jobs:
             echo "" >> notes.md
             echo "⚠ Без update.json: автоматичното обновяване изисква постоянен ключ за подписване (secrets по-долу)." >> notes.md
             echo "⚠ Подписано с временен CI ключ — годно за тестове, НЕ за качване в Google Play. За Play добавете secrets UPLOAD_KEYSTORE_BASE64, UPLOAD_STORE_PASSWORD, UPLOAD_KEY_ALIAS, UPLOAD_KEY_PASSWORD (виж README)." >> notes.md
+          fi
+          if [ -n "${CHANGES//[[:space:]]/}" ]; then
+            printf '\nПромени (технически):\n%s\n' "$CHANGES" >> notes.md
           fi
           sed -i 's/^          //' notes.md
 

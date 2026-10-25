@@ -54,6 +54,11 @@ data class GalleryPhoto(
 
 data class GalleryAlbum(val name: String, val photos: List<GalleryPhoto>) {
     val cover: GalleryPhoto? get() = photos.firstOrNull()
+
+    companion object {
+        /** Албумът със снимките от новините — името е от приложението (в UI — преведено), не от сайта. */
+        const val NEWS = "Новини"
+    }
 }
 
 /** Документ (устав, отчет, декларация) или историческа публикация (PDF). */

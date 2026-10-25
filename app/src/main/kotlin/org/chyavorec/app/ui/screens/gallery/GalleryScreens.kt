@@ -73,6 +73,7 @@ import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.site.GalleryViewModel
 import org.chyavorec.app.util.Intents
+import org.chyavorec.domain.model.GalleryAlbum
 import org.chyavorec.domain.model.GalleryPhoto
 
 @Composable
@@ -85,7 +86,7 @@ fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 state = state, onRetry = { vm.refresh() }, isEmpty = { it.isEmpty() },
                 skeleton = { SkeletonCards() },
                 empty = { EmptyView(stringResource(R.string.gallery_empty), icon = Icons.Outlined.PhotoLibrary) },
-                errorSubject = stringResource(R.string.gallery_title),
+                errorSubject = stringResource(R.string.subject_gallery),
             ) { albums ->
                 // Ширината на клетка (без отстъпите на мрежата) — за размера на миниатюрите.
                 val cell = adaptiveCellWidth(windowWidth() - 32.dp, minSize = 160.dp, spacing = 12.dp)
@@ -107,7 +108,7 @@ fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                                         .background(Color.Black.copy(alpha = 0.55f), RoundedCornerShape(50)).padding(horizontal = 8.dp, vertical = 3.dp),
                                 )
                             }
-                            Text(album.name, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 6.dp))
+                            Text(albumTitle(album.name), style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 6.dp))
                         }
                     }
                 }
@@ -116,11 +117,15 @@ fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     }
 }
 
+/** Името на албума: снимките от новините — на езика на интерфейса; другите са заглавия на страници от сайта. */
+@Composable
+private fun albumTitle(name: String): String = if (name == GalleryAlbum.NEWS) stringResource(R.string.tab_news) else name
+
 @Composable
 fun AlbumScreen(name: String, onBack: () -> Unit, navigate: (String) -> Unit) {
     val vm = appViewModel { GalleryViewModel(it.siteRepository) }
     val state by vm.state.collectAsStateWithLifecycle()
-    Scaffold(topBar = { BackTopBar(name, onBack) }) { padding ->
+    Scaffold(topBar = { BackTopBar(albumTitle(name), onBack) }) { padding ->
         StateContent(
             state = state.map { albums -> albums.firstOrNull { it.name == name }?.photos.orEmpty() },
             onRetry = { vm.refresh() }, isEmpty = { it.isEmpty() },

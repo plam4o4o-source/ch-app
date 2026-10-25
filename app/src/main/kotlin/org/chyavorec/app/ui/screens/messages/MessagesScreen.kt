@@ -145,7 +145,7 @@ fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit, focusId: Stri
                         icon = Icons.Outlined.Campaign,
                     )
                 },
-                errorSubject = stringResource(R.string.messages_title),
+                errorSubject = stringResource(R.string.subject_messages),
             ) { list ->
                 val listState = rememberLazyListState()
                 var focused by rememberSaveable { mutableStateOf(false) }

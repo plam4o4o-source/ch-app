@@ -26,6 +26,7 @@ import org.chyavorec.domain.model.ContentBlock
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.DailyFeast
 import org.chyavorec.domain.model.Event
+import org.chyavorec.domain.model.GalleryAlbum
 import org.chyavorec.domain.model.GalleryPhoto
 import org.chyavorec.domain.model.NewsArticle
 import org.chyavorec.domain.model.SiteDocument
@@ -285,7 +286,7 @@ class ChyavorecSiteService(
         val newsPhotos = async {
             // Новините обикновено вече са свалени (кеш на хранилището) — не ги тегли повторно.
             (news ?: (fetchLatest() as? Outcome.Success)?.value).orEmpty().mapNotNull { a ->
-                a.imageUrl?.let { GalleryPhoto("news:" + a.id, a.title, it, it, "Новини", a.url, a.publishedAtMillis) }
+                a.imageUrl?.let { GalleryPhoto("news:" + a.id, a.title, it, it, GalleryAlbum.NEWS, a.url, a.publishedAtMillis) }
             }
         }
         val pagePhotos = galleryPages.map { (album, path) ->

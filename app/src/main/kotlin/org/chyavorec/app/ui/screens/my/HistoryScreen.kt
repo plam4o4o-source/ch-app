@@ -270,7 +270,7 @@ private fun HistoryRow(item: HistoryItem, book: CatalogBook?, onOpen: (Long) -> 
             val back = Formatters.shortDate(context, item.dateIn)
             Text(
                 if (back != null) stringResource(R.string.history_range, out, back)
-                else stringResource(R.string.history_range, out, stringResource(R.string.history_not_returned)),
+                else stringResource(R.string.history_range_open, out),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

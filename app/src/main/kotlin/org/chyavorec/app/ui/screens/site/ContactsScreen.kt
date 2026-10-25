@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Call
+import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Language
@@ -45,6 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
+import org.chyavorec.app.ui.components.InfoBanner
 import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
@@ -54,15 +56,20 @@ import org.chyavorec.app.util.Intents
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ContactsScreen(onBack: () -> Unit) {
-    val vm = appViewModel { ContactsViewModel(it.siteRepository) }
+    val vm = appViewModel { ContactsViewModel(it.siteRepository, it.fallbackContacts) }
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     Scaffold(topBar = { BackTopBar(stringResource(R.string.contacts_title), onBack) }) { padding ->
         LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             StateContent(state = state, onRetry = { vm.refresh() }, isEmpty = { false }, skeleton = { SkeletonCards() }, empty = {},
-                errorSubject = stringResource(R.string.contacts_title)) { c ->
+                errorSubject = stringResource(R.string.subject_contacts)) { c ->
                 Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom = 32.dp)) {
                     SyncBanner(state.fromCache, state.syncedAt, state.refreshError)
+                    // Вградените основни данни (без връзка и без запазени от сайта) — бележката е най-отгоре.
+                    if (!c.fromSite) InfoBanner(
+                        Icons.Outlined.CloudOff, stringResource(R.string.contacts_fallback_note),
+                        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp),
+                    )
                     Column(Modifier.padding(20.dp).widthIn(max = 720.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                         Text(c.organization, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -85,9 +92,7 @@ fun ContactsScreen(onBack: () -> Unit) {
                         if (c.emails.isNotEmpty()) ContactCard(Icons.Outlined.Email, stringResource(R.string.contacts_email_label), c.emails) { Intents.email(context, it) }
                         ContactCard(Icons.Outlined.Schedule, stringResource(R.string.contacts_hours), c.workingHours.ifEmpty { listOf(stringResource(R.string.contacts_hours_unknown)) })
                         ContactCard(Icons.Outlined.Public, stringResource(R.string.contacts_web), listOfNotNull(c.website, c.facebook)) { Intents.openUrl(context, it) }
-                        if (!c.fromSite) {
-                            Text(stringResource(R.string.contacts_fallback_note), style = MaterialTheme.typography.bodySmall, color = LocalExtendedColors.current.warn)
-                        } else {
+                        if (c.fromSite) {
                             c.sourceUrl?.let { AssistChip(onClick = { Intents.openUrl(context, it) }, label = { Text(stringResource(R.string.contacts_source)) }) }
                         }
                     }

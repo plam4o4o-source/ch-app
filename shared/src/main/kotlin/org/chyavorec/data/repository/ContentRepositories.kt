@@ -150,7 +150,11 @@ class SiteRepository(
 
     suspend fun contacts(force: Boolean = false): Outcome<Synced<Contacts>> = contacts.load(force) {
         val l = (links(false) as? Outcome.Success)?.value?.data.orEmpty()
-        service.fetchContacts(l)
+        when (val r = service.fetchContacts(l)) {
+            // Неразчетена страница (вградените резервни данни) не заменя последно разчетените в кеша.
+            is Outcome.Success -> if (r.value.fromSite) r else Outcome.Failure(AppError.Parse("contacts: page not parsed"))
+            is Outcome.Failure -> r
+        }
     }
 
     /**
@@ -214,7 +218,7 @@ class SiteRepository(
 
     fun albums(photos: List<GalleryPhoto>): List<GalleryAlbum> =
         photos.groupBy { it.album }.map { (name, list) -> GalleryAlbum(name, list) }
-            .sortedBy { if (it.name == "Новини") 1 else 0 }
+            .sortedBy { if (it.name == GalleryAlbum.NEWS) 1 else 0 }
 
     companion object {
         private const val RECENT_PAGES = 8
