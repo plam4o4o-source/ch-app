@@ -219,6 +219,7 @@ S = {
 "catalog_no_results": ("Не открихме книги по това търсене.", "No books match this search."),
 "catalog_no_results_hint": ("Опитай с друга дума, провери правописа или премахни филтрите.", "Try another word, check the spelling or remove filters."),
 "catalog_data_as_of": ("данни от InvLib към %1$s", "InvLib data as of %1$s"),
+"catalog_searching": ("Търся…", "Searching…"),
 "field_all": ("Всичко", "Everything"),
 "field_title": ("Заглавие", "Title"),
 "field_author": ("Автор", "Author"),

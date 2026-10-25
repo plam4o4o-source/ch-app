@@ -342,7 +342,9 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                 ) { engine ->
                     val header: @Composable () -> Unit = {
                         Text(
-                            pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults) + "  ·  " +
+                            // Докато новото търсене тече, резултатите са изчистени — не „0 резултата“, а „Търся…“.
+                            (if (state.searching && state.results.isEmpty()) stringResource(R.string.catalog_searching)
+                            else pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults)) + "  ·  " +
                                 stringResource(R.string.catalog_data_as_of, Formatters.shortDate(LocalContext.current, engine.generatedOn) ?: "—"),
                             style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
