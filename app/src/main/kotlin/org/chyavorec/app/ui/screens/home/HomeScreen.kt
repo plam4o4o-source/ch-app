@@ -112,6 +112,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.ClipOp
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -205,19 +213,40 @@ fun HomeScreen(navigate: (String) -> Unit) {
                 .widthIn(max = 840.dp).fillMaxSize(),
         ) {
             item("header") {
+                // Къде е името в заглавката (в координатите на екрана) и къде е ефектът — четат се
+                // само при рисуване, без прекомпозиция.
+                var titleBounds by remember { mutableStateOf(Rect.Zero) }
+                var skyOrigin by remember { mutableStateOf(Offset.Zero) }
                 Box {
                     // Празничен/сезонен ефект (сняг, листа, фойерверки, букви…) само в заглавката —
-                    // рисува се ПОД нея, за да не минават буквите и листата през името.
+                    // под нея и без мястото на името: буквите и листата не минават през текста.
                     if (decor.effect != OccasionEffect.NONE) {
                         HolidaySky(
                             decor.effect,
-                            Modifier.matchParentSize(),
+                            Modifier.matchParentSize()
+                                .onGloballyPositioned { skyOrigin = it.positionInRoot() }
+                                .drawWithContent {
+                                    val r = titleBounds
+                                    if (r.isEmpty) {
+                                        drawContent()
+                                    } else {
+                                        val pad = 4.dp.toPx()
+                                        clipRect(
+                                            r.left - skyOrigin.x - pad, r.top - skyOrigin.y - pad,
+                                            r.right - skyOrigin.x + pad, r.bottom - skyOrigin.y + pad,
+                                            ClipOp.Difference,
+                                        ) { this@drawWithContent.drawContent() }
+                                    }
+                                },
                             snowColor = if (LocalExtendedColors.current.isDark) Color.White else Color(0xFF7A93AB),
                             // Първото превъртане спира ефекта (чете се в анимацията, не в композицията).
                             stopWhen = { listState.isScrollInProgress || listState.firstVisibleItemIndex > 0 },
                         )
                     }
-                    HomeHeader(onMessages = { navigate(Routes.MESSAGES) }, ornament = decor.ornament, quiet = decor.quiet)
+                    HomeHeader(
+                        onMessages = { navigate(Routes.MESSAGES) }, ornament = decor.ornament, quiet = decor.quiet,
+                        titleModifier = if (decor.effect != OccasionEffect.NONE) Modifier.onGloballyPositioned { titleBounds = it.boundsInRoot() } else Modifier,
+                    )
                 }
             }
             // Ако поздравът дойде след първия кадър (местен празник от сайта), се появява плавно.
@@ -336,7 +365,12 @@ fun HomeScreen(navigate: (String) -> Unit) {
 }
 
 @Composable
-private fun HomeHeader(onMessages: () -> Unit, ornament: OccasionOrnament = OccasionOrnament.NONE, quiet: Boolean = false) {
+private fun HomeHeader(
+    onMessages: () -> Unit,
+    ornament: OccasionOrnament = OccasionOrnament.NONE,
+    quiet: Boolean = false,
+    titleModifier: Modifier = Modifier,
+) {
     val center = LocalAppContainer.current.messages
     // Самото опресняване на съобщенията е веднъж на процес (MessagesOnLaunch в корена), не тук:
     // заглавката се показва наново при всяко връщане към „Начало“ и превъртане нагоре.
@@ -361,7 +395,7 @@ private fun HomeHeader(onMessages: () -> Unit, ornament: OccasionOrnament = Occa
     ) {
         Emblem(50.dp)
         Spacer(Modifier.width(12.dp))
-        Column(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }) {
+        Column(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }.then(titleModifier)) {
             // Пълното име трябва да се чете: до два реда, малко по-дребен шрифт.
             Text(
                 stringResource(R.string.org_short),
