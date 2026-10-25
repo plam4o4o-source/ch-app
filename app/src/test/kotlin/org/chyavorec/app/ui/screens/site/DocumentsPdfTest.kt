@@ -69,7 +69,7 @@ class DocumentsPdfTest {
         assertFalse(DocumentsViewModel.isPdf("https://chyavorec.org/load"))
     }
 
-    @Test fun downloadedPdfIsHandedOverAndFailureFallsBackToTheBrowser() = runBlocking {
+    @Test fun downloadedPdfIsHandedOverAndFailureFallsBackToTheBrowser(): Unit = runBlocking {
         // MockWebServer е по HTTP — свалянето се проверява направо през FileDownloader, а изгледът — с HTTPS адрес.
         server.enqueue(MockResponse().setBody("%PDF-1.4 тест"))
         val downloader = FileDownloader(OkHttpClient(), dir)
@@ -92,7 +92,7 @@ class DocumentsPdfTest {
         }
     }
 
-    @Test fun withoutDownloaderTheDocumentOpensInTheBrowser() = runBlocking {
+    @Test fun withoutDownloaderTheDocumentOpensInTheBrowser(): Unit = runBlocking {
         val model = vm(null)
         try {
             val result = async(start = CoroutineStart.UNDISPATCHED) { withTimeout(5_000) { model.results.first() } }
