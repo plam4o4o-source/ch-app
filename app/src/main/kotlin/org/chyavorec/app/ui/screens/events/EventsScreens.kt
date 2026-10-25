@@ -191,6 +191,7 @@ fun EventsActions(vm: EventsViewModel) {
 private fun CalendarSubscribeSheet(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val url = Intents.eventsFeedUrl(LocalAppContainer.current.config.siteBaseUrl)
+    val linkLabel = stringResource(R.string.ics_link_label)
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(
             Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp).padding(bottom = 24.dp),
@@ -202,7 +203,7 @@ private fun CalendarSubscribeSheet(onDismiss: () -> Unit) {
                 Icon(Icons.Outlined.EventRepeat, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.ics_subscribe_action))
             }
             Text(stringResource(R.string.ics_google_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            OutlinedButton(onClick = { Intents.copy(context, context.getString(R.string.ics_link_label), url) }, modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(onClick = { Intents.copy(context, linkLabel, url) }, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Outlined.ContentCopy, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.ics_copy_link))
             }
             Text(

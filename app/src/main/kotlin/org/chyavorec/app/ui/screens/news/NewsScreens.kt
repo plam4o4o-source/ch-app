@@ -119,7 +119,7 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
     LaunchedEffect(requested) {
         if (requested != null) {
             calendar = requested == Routes.SEGMENT_CALENDAR
-            segmentState?.set(SEGMENT_KEY, null)
+            segmentState.set(SEGMENT_KEY, null)
         }
     }
     val segments: @Composable () -> Unit = { NewsSegments(calendar, onSelect = { tick(); calendar = it }) }
