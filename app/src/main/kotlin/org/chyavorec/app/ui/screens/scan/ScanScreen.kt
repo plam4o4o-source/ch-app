@@ -385,12 +385,13 @@ private fun ManualEntryDialog(onSubmit: (String) -> Unit, onDismiss: () -> Unit)
                     keyboardActions = KeyboardActions(onSearch = { submit() }),
                     modifier = Modifier.fillMaxWidth().focusRequester(focus),
                 )
+                // Клавиатурата — веднага (полето е в прозореца на диалога, затова фокусът се иска оттук).
+                LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
             }
         },
         confirmButton = { TextButton(onClick = submit, enabled = text.isNotBlank()) { Text(stringResource(R.string.scan_manual_search)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
-    LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
 }
 @Composable
 private fun HitSheet(hit: ScanResult.Hit, onOpen: () -> Unit, onClose: () -> Unit) {

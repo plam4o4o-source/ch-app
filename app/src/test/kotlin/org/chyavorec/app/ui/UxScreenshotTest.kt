@@ -19,6 +19,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -84,6 +85,8 @@ class UxScreenshotTest {
             FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), OkHttpClient(),
         )
         val settings = AppSettings(onboardingDone = true, introShown = true, textScale = textScale)
+        // „Настройки“ четат хранилището (не подадените настройки) — същият размер и там.
+        runBlocking { container.settings.setTextScale(textScale) }
         compose.setContent {
             ChitalishteTheme(mode = ThemeMode.LIGHT) {
                 ChitalishteRoot(container, settings, MutableStateFlow(deepLink), showIntro = false)
