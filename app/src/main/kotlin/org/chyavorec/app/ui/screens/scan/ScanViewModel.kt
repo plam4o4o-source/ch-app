@@ -97,6 +97,19 @@ class ScanViewModel(private val repo: CatalogRepository, private val clock: AppC
         val now = clock.now().toEpochMilli()
         if (raw == lastCode && now - lastAt < DEBOUNCE_MS) return
         lastCode = raw; lastAt = now
+        handle(raw)
+    }
+
+    /**
+     * „Въведи номера на ръка“ (без камера или етикет, който не се чете): ISBN или инв. № —
+     * същата справка като при сканиране, без изчакването между еднакви кодове.
+     */
+    fun onManual(raw: String) {
+        if (raw.isBlank() || busy || _result.value != null) return
+        handle(raw)
+    }
+
+    private fun handle(raw: String) {
         busy = true
         // Справката е заявка към базата — извън нишката на анализатора; състоянието се пипа на главната.
         viewModelScope.launch {
@@ -115,21 +128,34 @@ class ScanViewModel(private val repo: CatalogRepository, private val clock: AppC
         }
     }
 
-    private suspend fun lookup(target: ScanTarget, cat: CatalogSearcher) {
-        val book = when (target) {
-            is ScanTarget.Isbn -> cat.findByIsbn(target.isbn)
-            is ScanTarget.Inventory -> cat.book(target.inv)
-            is ScanTarget.Unknown -> null
-        }
-        _result.value = if (book != null) {
-            val copies = when (target) {
-                is ScanTarget.Isbn -> cat.allByIsbn(target.isbn).ifEmpty { listOf(book) }
-                else -> listOf(book) + cat.copiesOf(book)
+    private suspend fun lookup(target: ScanTarget, searcher: CatalogSearcher) {
+        var cat = searcher
+        var book = find(target, cat)
+        // Книга, добавена след последното сваляне на каталога: той се опреснява (най-много
+        // веднъж за кратко време — поредните книги, които ги няма, не теглят мрежата) и се търси пак.
+        if (book == null && target !is ScanTarget.Unknown) {
+            repo.refreshForMissing()?.data?.let { fresh ->
+                if (catalog.data != null) setCatalog(ScreenState(fresh, loading = false))
+                cat = fresh
+                book = find(target, fresh)
             }
-            ScanResult.Hit(book, copies, target)
+        }
+        val found = book
+        _result.value = if (found != null) {
+            val copies = when (target) {
+                is ScanTarget.Isbn -> cat.allByIsbn(target.isbn).ifEmpty { listOf(found) }
+                else -> listOf(found) + cat.copiesOf(found)
+            }
+            ScanResult.Hit(found, copies, target)
         } else {
             ScanResult.Miss(target)
         }
+    }
+
+    private suspend fun find(target: ScanTarget, cat: CatalogSearcher): CatalogBook? = when (target) {
+        is ScanTarget.Isbn -> cat.findByIsbn(target.isbn)
+        is ScanTarget.Inventory -> cat.book(target.inv)
+        is ScanTarget.Unknown -> null
     }
 
     /** Запазеният код — щом каталогът е готов и няма отворен резултат. */

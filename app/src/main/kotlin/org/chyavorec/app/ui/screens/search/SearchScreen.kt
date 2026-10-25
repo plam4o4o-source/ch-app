@@ -33,12 +33,17 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -133,7 +138,14 @@ class GlobalSearchViewModel(
         savedState[SCOPE_KEY] = s.name
     }
     fun commit() = viewModelScope.launch { c.settings.addRecentSearch(ui.value.query) }
-    fun clearRecent() = viewModelScope.launch { c.settings.clearRecentSearches() }
+    /** Изчиства последните търсения; връща изчистените — за „Отмени“. */
+    fun clearRecent(): List<String> {
+        val cleared = recent.value
+        viewModelScope.launch { c.settings.clearRecentSearches() }
+        return cleared
+    }
+
+    fun restoreRecent(cleared: List<String>) = viewModelScope.launch { c.settings.restoreRecentSearches(cleared) }
 
     private suspend fun run(q: String) {
         if (q.isBlank()) {
@@ -159,8 +171,22 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
     val recent by vm.recent.collectAsStateWithLifecycle()
     val focus = remember { FocusRequester() }
     LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
+    val snackbar = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val clearedMsg = stringResource(R.string.search_recent_cleared)
+    val undoLabel = stringResource(R.string.action_undo)
+    // Изчистването е с „Отмени“ вместо потвърждение — списъкът се връща с едно докосване.
+    val clearRecent: () -> Unit = {
+        val cleared = vm.clearRecent()
+        scope.launch {
+            snackbar.currentSnackbarData?.dismiss()
+            if (snackbar.showSnackbar(clearedMsg, actionLabel = undoLabel, duration = SnackbarDuration.Short) == SnackbarResult.ActionPerformed) {
+                vm.restoreRecent(cleared)
+            }
+        }
+    }
 
-    Scaffold(topBar = {
+    Scaffold(snackbarHost = { SnackbarHost(snackbar) }, topBar = {
         Column(Modifier.statusBarsPadding().padding(horizontal = 8.dp, vertical = 6.dp)) {
             OutlinedTextField(
                 value = ui.query, onValueChange = vm::setQuery,
@@ -195,7 +221,7 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
                         item {
                             ListItem(
                                 headlineContent = { Text(stringResource(R.string.search_recent), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() }) },
-                                trailingContent = { TextButton(onClick = { vm.clearRecent() }) { Text(stringResource(R.string.action_clear)) } },
+                                trailingContent = { TextButton(onClick = clearRecent) { Text(stringResource(R.string.action_clear)) } },
                             )
                         }
                         items(recent) { q ->

@@ -38,6 +38,7 @@ S = {
 "action_search": ("Търсене", "Search"),
 "action_send": ("Изпрати", "Send"),
 "action_share": ("Сподели", "Share"),
+"action_undo": ("Отмени", "Undo"),
 "loading": ("Зареждане…", "Loading…"),
 "sync_never": ("никога", "never"),
 "last_sync": ("Последна синхронизация: %1$s", "Last synced: %1$s"),
@@ -102,6 +103,11 @@ S = {
 "scan_permission_text": ("Камерата се използва само за четене на баркода на телефона. Нищо не се снима и не се изпраща.", "The camera is only used to read the barcode on your phone. Nothing is recorded or sent."),
 "scan_permission_grant": ("Разреши камерата", "Allow camera"),
 "scan_permission_settings": ("Отвори настройките", "Open settings"),
+"scan_manual": ("Въведи номера на ръка", "Enter the number manually"),
+"scan_manual_text": ("ISBN-ът (10 или 13 цифри под баркода) или инвентарният номер от етикета на библиотеката.", "The ISBN (10 or 13 digits under the barcode) or the inventory number on the library label."),
+"scan_manual_label": ("ISBN или инвентарен номер", "ISBN or inventory number"),
+"scan_manual_invalid": ("Това не е ISBN или инвентарен номер — провери цифрите.", "That isn’t an ISBN or an inventory number — check the digits."),
+"scan_manual_search": ("Търси", "Search"),
 "scan_open_book": ("Отвори книгата", "Open book"),
 "scan_not_found_title": ("Няма я в библиотеката", "Not in the library"),
 "scan_not_found_text": ("Не намерих книга с %1$s в каталога.", "No book with %1$s in the catalogue."),
@@ -167,6 +173,7 @@ S = {
 "news_saved": ("Запазени", "Saved"),
 "news_empty": ("Няма новини по този критерий.", "No news match this filter."),
 "news_no_saved": ("Все още нямаш запазени новини.", "You have no saved news yet."),
+"news_unsaved": ("Новината е премахната от запазените.", "Removed from saved news."),
 "article_gallery": ("Галерия", "Gallery"),
 "photo_n": ("Снимка %1$d", "Photo %1$d"),
 "photo_n_of_m": ("Снимка %1$d от %2$d", "Photo %1$d of %2$d"),
@@ -420,19 +427,27 @@ S = {
 "search_authors": ("Автори", "Authors"),
 "search_pages": ("Страници", "Pages"),
 "search_recent": ("Скорошни търсения", "Recent searches"),
+"search_recent_cleared": ("Скорошните търсения са изчистени.", "Recent searches cleared."),
 "search_start": ("Какво търсиш?", "What are you looking for?"),
 "search_start_hint": ("Търсенето обхваща каталога, новините, събитията и страниците на читалището.", "Search covers the catalogue, news, events and the centre’s pages."),
 "search_no_results": ("Нищо не открихме", "No results"),
 "settings_title": ("Настройки", "Settings"),
 "settings_appearance": ("Изглед", "Appearance"),
 "settings_theme": ("Тема", "Theme"),
-"settings_dynamic": ("Цветове от тапета", "Wallpaper colours"),
-"settings_dynamic_desc": ("Material You вместо цветовете на читалището", "Material You instead of the centre’s colours"),
+"settings_dynamic": ("Цветове от тапета", "Colours from wallpaper"),
+"settings_dynamic_desc": ("Цветовете на телефона, взети от тапета, вместо тези на читалището", "Material You colours from your wallpaper instead of the centre’s"),
 "settings_language": ("Език", "Language"),
 "settings_notifications": ("Известия", "Notifications"),
-"settings_notifications_desc": ("Какви известия да получаваш", "Choose which notifications you get"),
+"settings_notifications_desc": ("Заемания, събития, съобщения и новини — кои да получаваш", "Loans, events, messages and news — which ones you get"),
+"settings_notifications_choose": ("Избери известията", "Choose notifications"),
+"settings_text_size": ("Размер на текста", "Text size"),
+"settings_text_size_note": ("Умножава размера на шрифта от настройките на телефона. В статиите бутонът „Аа“ го променя допълнително.", "Multiplies the font size set on your phone. In articles, the “Aa” button adjusts it further."),
+"text_size_small": ("Малък", "Small"),
+"text_size_standard": ("Стандартен", "Standard"),
+"text_size_large": ("Голям", "Large"),
+"text_size_xlarge": ("Много голям", "Extra large"),
 "settings_data": ("Данни", "Data"),
-"settings_clear_cache": ("Изчисти кеша", "Clear cache"),
+"settings_clear_cache": ("Изчисти временните данни", "Clear temporary data"),
 "settings_covers_online": ("Корици от интернет", "Covers from the internet"),
 "settings_covers_online_desc": ("Корици по ISBN от covers.openlibrary.org и сканираните корици от каталога (сървърите виждат IP адреса). В личните екрани — никога", "Covers by ISBN from covers.openlibrary.org and scanned covers from the catalogue (the servers see your IP address). Never on personal screens"),
 "settings_covers_wifi_only": ("Корици само по Wi-Fi", "Covers on Wi-Fi only"),
@@ -525,9 +540,9 @@ S = {
 "reader_width": ("Ширина на текста", "Text width"),
 "reader_width_normal": ("Нормална", "Normal"),
 "reader_width_narrow": ("Тясна", "Narrow"),
-"settings_clear_cache_desc": ("Изтрива запазените новини, събития, каталог и снимки", "Deletes cached news, events, catalogue and images"),
-"settings_clear_cache_confirm": ("Запазените офлайн данни (новини, събития, каталог, корици и снимки) ще бъдат изтрити и заредени отново при следваща връзка. Входът, картата, любимите, напомнянията и историята остават.", "Offline data (news, events, catalogue, covers and images) will be deleted and reloaded next time you’re online. Your sign-in, card, favourites, reminders and history stay."),
-"settings_cache_cleared": ("Кешът е изчистен.", "Cache cleared."),
+"settings_clear_cache_desc": ("Новините, събитията, каталогът и снимките, запазени за четене без интернет. Свалят се наново при нужда", "News, events, catalogue and images saved for reading offline. They’re downloaded again when needed"),
+"settings_clear_cache_confirm": ("Временните данни (новини, събития, каталог, корици и снимки, запазени за четене без интернет) ще бъдат изтрити и заредени отново при следваща връзка. Входът, картата, любимите, напомнянията и историята остават.", "Offline data (news, events, catalogue, covers and images) will be deleted and reloaded next time you’re online. Your sign-in, card, favourites, reminders and history stay."),
+"settings_cache_cleared": ("Временните данни са изтрити.", "Temporary data cleared."),
 "settings_legal": ("Информация", "Information"),
 "theme_system": ("Както системата", "System default"),
 "theme_light": ("Светла", "Light"),
@@ -539,7 +554,7 @@ S = {
 "palette_levski_desc": ("Зелено и сребро", "Green and silver"),
 "palette_shevitsa": ("Шевица", "Shevitsa"),
 "palette_shevitsa_desc": ("Червено, черно и слонова кост", "Red, black and ivory"),
-"palette_dynamic_note": ("Не се прилага, докато са включени цветовете от тапета", "Not applied while wallpaper colours are on"),
+"palette_dynamic_note": ("Не се прилага, докато са включени цветовете от тапета", "Not applied while colours from wallpaper are on"),
 "settings_oled": ("Черно (OLED)", "Black (OLED)"),
 "settings_oled_desc": ("Чисто черен фон в тъмната тема — пести батерия на OLED екрани", "Pure black background in the dark theme — saves battery on OLED screens"),
 "language_system": ("Както системата", "System default"),
@@ -728,7 +743,7 @@ PRIVACY_BG = """# Кой обработва данните
 
 # Твоите права
 
-Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията, читателските данни, известията за заемания и лични съобщения, напомнянията за срокове и кешираните изображения (без „Запомни ме на това устройство“ същото става и при следващото стартиране, ако приложението е било затворено); „Премахни“ изтрива въведената карта; „Изчисти кеша“ изтрива публичното съдържание; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
+Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията, читателските данни, известията за заемания и лични съобщения, напомнянията за срокове и кешираните изображения (без „Запомни ме на това устройство“ същото става и при следващото стартиране, ако приложението е било затворено); „Премахни“ изтрива въведената карта; „Изчисти временните данни“ изтрива публичното съдържание; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
 
 # Деца
 
@@ -774,7 +789,7 @@ Notifications are prepared on the device (periodic checks for new posts, message
 
 # Your rights
 
-You can delete the data on the device at any time: “Sign out” deletes the session, reader data, loan and personal-message notifications, due-date reminders and cached images (without “Keep me signed in on this device” the same happens at the next start if the app was closed); “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
+You can delete the data on the device at any time: “Sign out” deletes the session, reader data, loan and personal-message notifications, due-date reminders and cached images (without “Keep me signed in on this device” the same happens at the next start if the app was closed); “Remove” deletes the entered card; “Clear temporary data” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
 
 # Children
 

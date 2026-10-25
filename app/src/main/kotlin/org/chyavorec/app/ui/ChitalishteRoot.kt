@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavController
@@ -179,7 +180,13 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
     val scope = rememberCoroutineScope()
     // Въведението с логото — само при първото стартиране (после splash екранът е достатъчен).
     var intro by remember { mutableStateOf(showIntro && !IntroState.shown && !settings.introShown) }
+    // „Размер на текста“ (Настройки): множител върху системния мащаб. Ограниченията по-надолу
+    // (етикетите на лентата, картата) се смятат от този, ефективния мащаб.
+    val density = LocalDensity.current
+    val factor = settings.textScale.factor
+    val scaled = remember(density, factor) { Density(density.density, fontScale = density.fontScale * factor) }
     CompositionLocalProvider(
+        LocalDensity provides scaled,
         LocalAppContainer provides container,
         LocalReducedMotion provides observeReducedMotion(),
         LocalOnlineCovers provides settings.coversOnline,

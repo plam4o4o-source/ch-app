@@ -42,7 +42,7 @@
 
 ## Твоите права
 
-Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията, читателските данни, известията за заемания и лични съобщения, напомнянията за срокове и кешираните изображения (без „Запомни ме на това устройство“ същото става и при следващото стартиране, ако приложението е било затворено); „Премахни“ изтрива въведената карта; „Изчисти кеша“ изтрива публичното съдържание; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
+Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията, читателските данни, известията за заемания и лични съобщения, напомнянията за срокове и кешираните изображения (без „Запомни ме на това устройство“ същото става и при следващото стартиране, ако приложението е било затворено); „Премахни“ изтрива въведената карта; „Изчисти временните данни“ изтрива публичното съдържание; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
 
 ## Деца
 
@@ -98,7 +98,7 @@ Notifications are prepared on the device (periodic checks for new posts, message
 
 ## Your rights
 
-You can delete the data on the device at any time: “Sign out” deletes the session, reader data, loan and personal-message notifications, due-date reminders and cached images (without “Keep me signed in on this device” the same happens at the next start if the app was closed); “Remove” deletes the entered card; “Clear cache” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
+You can delete the data on the device at any time: “Sign out” deletes the session, reader data, loan and personal-message notifications, due-date reminders and cached images (without “Keep me signed in on this device” the same happens at the next start if the app was closed); “Remove” deletes the entered card; “Clear temporary data” deletes public content; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
 
 ## Children
 

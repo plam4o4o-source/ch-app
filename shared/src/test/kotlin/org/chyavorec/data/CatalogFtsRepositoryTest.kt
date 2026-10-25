@@ -47,8 +47,11 @@ class CatalogFtsRepositoryTest {
 
     private class Service(var raw: String) : CatalogService {
         var fail = false
-        override suspend fun fetchCatalog(): Outcome<Pair<String, CatalogSnapshot>> =
-            if (fail) Outcome.Failure(AppError.Network) else Outcome.Success(raw to KatalogParser.parse(raw))
+        var fetches = 0
+        override suspend fun fetchCatalog(): Outcome<Pair<String, CatalogSnapshot>> {
+            fetches++
+            return if (fail) Outcome.Failure(AppError.Network) else Outcome.Success(raw to KatalogParser.parse(raw))
+        }
     }
 
     /** Мрежата „виси“, докато [gate] не се отвори; брои заявките. */
@@ -170,6 +173,39 @@ class CatalogFtsRepositoryTest {
         assertEquals(1, updates.size, "само датата е нова — търсачката е същата")
         assertSame(first, repo.publishedSearcher()!!.data)
         assertEquals(1, store.replaces)
+    }
+
+    /**
+     * Споделена връзка/сканиран код към книга, добавена след последното сваляне: кешираният
+     * каталог (още „пресен“ по прозореца) я няма — опреснява се веднъж и справката се повтаря.
+     */
+    @Test fun missingRecordRefreshesTheCatalogOnce() = runTest {
+        val svc = Service(sample)
+        val repo = repo(svc)
+        repo.searcher(force = true)
+        advanceUntilIdle()
+        assertNull(repo.refreshForMissing(), "току-що свален каталог — без ново сваляне")
+        assertEquals(1, svc.fetches)
+
+        clock.advanceSeconds(10 * 60)
+        svc.raw = sample.replace("\"inv\": 399666,", "\"inv\": 399667,")
+        assertNull(repo.lookupSearcher(network = false)!!.data.book(399667L), "старият каталог я няма")
+        val fresh = assertNotNull(repo.refreshForMissing())
+        assertEquals(2, svc.fetches)
+        assertEquals(399667L, fresh.data.book(399667L)?.inv)
+        assertFalse(fresh.fromCache)
+
+        // Поредна липсваща книга веднага след това — без ново сваляне; „Опитай отново“ — с.
+        clock.advanceSeconds(60)
+        assertNull(repo.refreshForMissing())
+        assertEquals(2, svc.fetches)
+        clock.advanceSeconds(5 * 60)
+        svc.fail = true
+        val offline = assertNotNull(repo.refreshForMissing(always = true), "без връзка — кешираният каталог")
+        assertEquals(3, svc.fetches)
+        assertEquals(AppError.Network, offline.refreshError)
+        assertNull(repo.refreshForMissing(), "неуспешният опит също се брои")
+        assertEquals(3, svc.fetches)
     }
 
     @Test fun homeRefreshIndexesInTheBackground() = runTest {
