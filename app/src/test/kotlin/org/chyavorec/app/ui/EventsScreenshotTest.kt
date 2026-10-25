@@ -95,6 +95,11 @@ class EventsScreenshotTest {
         compose.waitUntil(15_000) { compose.onAllNodes(hasText(text, substring = true)).fetchSemanticsNodes().isNotEmpty() }
 
     private fun clickDescription(description: String) {
+        // Бутонът може да е в календара, превъртян нагоре — първо обратно до него.
+        val lists = compose.onAllNodes(hasScrollToNodeAction())
+        (0 until lists.fetchSemanticsNodes().size).forEach {
+            runCatching { lists[it].performScrollToNode(hasContentDescription(description)) }
+        }
         compose.waitUntil(15_000) { compose.onAllNodes(hasContentDescription(description)).fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodes(hasContentDescription(description)).onFirst().performClick()
         compose.waitForIdle()
@@ -108,6 +113,20 @@ class EventsScreenshotTest {
         if ((0 until count).none { runCatching { nodes[it].assertIsDisplayed() }.isSuccess }) {
             throw AssertionError("„$text“ не се вижда на екрана ($count съвпадения в дървото)")
         }
+    }
+
+    /**
+     * [text] е в превъртащ се списък — превърта се до него (LazyColumn композира само видимото:
+     * на нисък екран календарът сам заема почти цялата височина), после е видим.
+     */
+    private fun scrolledTo(text: String) {
+        compose.waitForIdle()
+        val lists = compose.onAllNodes(hasScrollToNodeAction())
+        val found = (0 until lists.fetchSemanticsNodes().size).any {
+            runCatching { lists[it].performScrollToNode(hasText(text, substring = true)) }.isSuccess
+        }
+        if (!found) throw AssertionError("„$text“ го няма в нито един списък")
+        shown(text)
     }
 
     private fun shot(name: String) {
@@ -125,7 +144,7 @@ class EventsScreenshotTest {
         clickDescription("Изглед календар")
         waitFor("Септември 2026")
         // Празен месец: календарът остава (за смяна на месеца), а под него — кратък ред.
-        shown("Няма прояви в този месец")
+        scrolledTo("Няма прояви в този месец")
         repeat(3) { clickDescription("Следващ месец") }
         waitFor("Декември 2026")
     }
@@ -160,8 +179,7 @@ class EventsScreenshotTest {
     @Config(qualifiers = "bg-w740dp-h360dp-land-xxhdpi")
     @Test fun calendarLandscapeNarrow() {
         openDecemberCalendar()
-        compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("Международен ден на инвалида", substring = true))
-        shown("Международен ден на инвалида")
+        scrolledTo("Международен ден на инвалида")
         shot("82-events-calendar-landscape-narrow")
     }
 

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -206,7 +207,11 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NewsSegments(calendar: Boolean, onSelect: (Boolean) -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+    // Поне 48 dp — колкото бутоните вдясно, за да не „подскача“ съдържанието при смяна на сегмента.
+    Row(
+        Modifier.fillMaxWidth().heightIn(min = 48.dp).padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         // На таблет сегментите не се разтягат през целия екран.
         SingleChoiceSegmentedButtonRow(Modifier.weight(1f).wrapContentWidth(Alignment.Start).widthIn(max = 480.dp)) {
             listOf(false to R.string.news_segment_news, true to R.string.news_segment_calendar).forEachIndexed { i, (isCalendar, label) ->
