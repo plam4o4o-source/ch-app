@@ -297,7 +297,7 @@ tasks.withType<Test>().configureEach {
         events("failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         showStackTraces = true
-        showStandardStreams = true
+        showStandardStreams = false
     }
 }
 
