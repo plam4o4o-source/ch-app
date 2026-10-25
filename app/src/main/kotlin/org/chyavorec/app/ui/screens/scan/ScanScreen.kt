@@ -18,6 +18,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -27,9 +34,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FlashlightOff
 import androidx.compose.material.icons.outlined.FlashlightOn
+import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.SearchOff
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import org.chyavorec.app.ui.components.ChLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
@@ -43,6 +56,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -73,6 +88,7 @@ import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequest
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
 import org.chyavorec.app.ui.theme.Brand
+import org.chyavorec.core.ScanCodes
 import org.chyavorec.core.ScanTarget
 import org.chyavorec.domain.model.SearchField
 
@@ -109,6 +125,9 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     LaunchedEffect(Unit) { if (!granted) launcher.launch(Manifest.permission.CAMERA) }
 
     var torch by remember { mutableStateOf(false) }
+    // „Въведи номера на ръка“ — без камера (отказано разрешение, няма камера) или етикет, който не се чете.
+    var manual by rememberSaveable { mutableStateOf(false) }
+    val openManual = { manual = true }
     var hasTorch by remember { mutableStateOf(false) }
     var cameraError by remember { mutableStateOf(false) }
 
@@ -144,6 +163,7 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 !hasCamera(context) || cameraError -> PermissionMessage(
                     title = stringResource(R.string.scan_camera_error), text = null,
                     primary = null, onPrimary = {}, secondary = null, onSecondary = {},
+                    onManual = openManual,
                 )
                 granted -> {
                     CameraPreview(
@@ -173,6 +193,11 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
                             )
                         }
+                        Spacer(Modifier.height(8.dp))
+                        // Вторично действие: етикет, който камерата не чете (смачкан, избелял).
+                        Surface(color = Color.Black.copy(alpha = 0.55f), contentColor = Brand.GoldLight, shape = RoundedCornerShape(50)) {
+                            ManualEntryButton(openManual)
+                        }
                     }
                 }
                 else -> PermissionMessage(
@@ -183,9 +208,26 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     // След отказ системата може да не покаже диалога отново — пътят е през настройките.
                     secondary = if (asked) stringResource(R.string.scan_permission_settings) else null,
                     onSecondary = { openAppSettings(context) },
+                    onManual = openManual,
                 )
             }
+            // Без камера: номерът, въведен на ръка, чака каталога (без връзка и без кеш) — както сканираният.
+            if (!granted || !hasCamera(context) || cameraError) {
+                if (waiting != null) {
+                    Column(
+                        Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) { CatalogStatusNote(catalogStatus, waiting, onRetry = vm::retry) }
+                }
+            }
         }
+    }
+
+    if (manual) {
+        ManualEntryDialog(
+            onSubmit = { code -> manual = false; vm.onManual(code) },
+            onDismiss = { manual = false },
+        )
     }
 
     result?.let { r ->
@@ -260,6 +302,7 @@ private fun PermissionMessage(
     title: String, text: String?,
     primary: String?, onPrimary: () -> Unit,
     secondary: String?, onSecondary: () -> Unit,
+    onManual: () -> Unit,
 ) {
     Column(
         Modifier.fillMaxSize().padding(32.dp),
@@ -280,7 +323,74 @@ private fun PermissionMessage(
             Spacer(Modifier.height(8.dp))
             OutlinedButton(onClick = onSecondary) { Text(secondary, color = Brand.GoldLight) }
         }
+        // Без камера — пак може да се потърси книга: номерът от етикета или ISBN-ът, на ръка.
+        Spacer(Modifier.height(if (primary == null) 20.dp else 8.dp))
+        if (primary == null) {
+            Button(onClick = onManual) {
+                Icon(Icons.Outlined.Keyboard, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.scan_manual))
+            }
+        } else {
+            CompositionLocalProvider(LocalContentColor provides Brand.GoldLight) { ManualEntryButton(onManual) }
+        }
     }
+}
+
+@Composable
+private fun ManualEntryButton(onClick: () -> Unit) {
+    TextButton(onClick = onClick, colors = ButtonDefaults.textButtonColors(contentColor = LocalContentColor.current)) {
+        Icon(Icons.Outlined.Keyboard, contentDescription = null, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(8.dp))
+        Text(stringResource(R.string.scan_manual))
+    }
+}
+
+/**
+ * „Въведи номера на ръка“: ISBN (под баркода) или инвентарният номер от етикета — със
+ * цифрова клавиатура; справката е същата като при сканиране. Нещо, което не е нито
+ * едното, нито другото, се казва още тук (без лист „няма я“).
+ */
+@Composable
+private fun ManualEntryDialog(onSubmit: (String) -> Unit, onDismiss: () -> Unit) {
+    var text by rememberSaveable { mutableStateOf("") }
+    var invalid by rememberSaveable { mutableStateOf(false) }
+    val focus = remember { FocusRequester() }
+    val submit: () -> Unit = {
+        if (ScanCodes.resolve(text) is ScanTarget.Unknown) {
+            invalid = true
+        } else {
+            onSubmit(text.trim())
+        }
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.scan_manual)) },
+        text = {
+            Column {
+                Text(stringResource(R.string.scan_manual_text), style = MaterialTheme.typography.bodyMedium)
+                Spacer(Modifier.height(12.dp))
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { v ->
+                        // Цифри, тирета и интервали (както е отпечатан ISBN-ът); X — последната цифра на стар ISBN.
+                        text = v.filter { it.isDigit() || it == '-' || it == ' ' || it == 'X' || it == 'x' }.take(24)
+                        invalid = false
+                    },
+                    label = { Text(stringResource(R.string.scan_manual_label)) },
+                    singleLine = true,
+                    isError = invalid,
+                    supportingText = if (invalid) { { Text(stringResource(R.string.scan_manual_invalid)) } } else null,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(onSearch = { submit() }),
+                    modifier = Modifier.fillMaxWidth().focusRequester(focus),
+                )
+            }
+        },
+        confirmButton = { TextButton(onClick = submit, enabled = text.isNotBlank()) { Text(stringResource(R.string.scan_manual_search)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+    )
+    LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
 }
 @Composable
 private fun HitSheet(hit: ScanResult.Hit, onOpen: () -> Unit, onClose: () -> Unit) {

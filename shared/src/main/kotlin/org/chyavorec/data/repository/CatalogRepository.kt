@@ -47,6 +47,12 @@ import java.time.Instant
 /** Каталогът се обновява рядко (няколко пъти седмично) и е голям — по-дълъг прозорец. */
 private const val CATALOG_FRESH = 30 * 60 * 1000L
 
+/**
+ * Липсващ запис при справка (споделена връзка, сканиран код) опреснява каталога най-много
+ * веднъж за толкова време — и не, ако каталогът е потвърден от мрежата съвсем скоро.
+ */
+private const val MISSING_REFRESH = 2 * 60 * 1000L
+
 /** Какво е записано до katalog.json: SHA-256 на байтовете и ETag-ът (за условна заявка). */
 @Serializable
 internal data class CatalogMeta(
@@ -138,6 +144,8 @@ class CatalogRepository(
     private var rebuild: Rebuild? = null
     /** Хешът, за който попълването на индекса последно е пропаднало (справките не опитват пак). */
     private var failedHash: String? = null
+    /** Кога справка за липсващ запис последно е опреснила каталога (epoch ms) — [refreshForMissing]. */
+    private var missingRefreshAt: Long? = null
 
     fun inMemory(): Synced<CatalogSearchEngine>? = current
 
@@ -201,6 +209,31 @@ class CatalogRepository(
             ?.map { EngineCatalogSearcher(it) }
 
     /**
+     * Справката не е намерила записа (книга по споделена връзка, сканиран ISBN/инв. №) в
+     * кеширания каталог — може книгата да е добавена след последното сваляне. Каталогът се
+     * опреснява веднъж (условна заявка — без промяна не се сваля нищо) и се връща търсачката
+     * за повторната справка; `null` — опресняване не е имало: каталогът е потвърден от
+     * мрежата преди по-малко от [MISSING_REFRESH] или вече е опресняван толкова скоро
+     * (напр. поредни сканирани книги, които ги няма). [always] („Опитай отново“) — без това
+     * ограничение. Без връзка търсачката е кешираната, с [Synced.refreshError].
+     */
+    suspend fun refreshForMissing(always: Boolean = false): Synced<CatalogSearcher>? {
+        val skip = mutex.withLock {
+            val now = clock.now().toEpochMilli()
+            val confirmed = loadFetchedAt()
+            val tried = missingRefreshAt
+            val recent = (confirmed != null && now - confirmed in 0 until MISSING_REFRESH) ||
+                (tried != null && now - tried in 0 until MISSING_REFRESH)
+            (!always && recent).also { if (!it) missingRefreshAt = now }
+        }
+        if (skip) return null
+        if (sync(force = true, Want.SEARCH) is Outcome.Failure) return null
+        // Новият каталог се индексира във фонов режим — справката чака него, не стария индекс.
+        mutex.withLock { rebuild?.job?.takeIf { it.isActive } }?.await()
+        return lookupSearcher(network = false)
+    }
+
+    /**
      * Освобождава индекса за търсене (напр. приложението е във фонов режим). При
      * следваща нужда се зарежда отново от диска; обобщението за началния екран остава.
      */
@@ -261,6 +294,7 @@ class CatalogRepository(
         fetchedAtLoaded = false
         freshness = null
         failedHash = null
+        missingRefreshAt = null
         current = null
         summary = null
         lastSnapshot = null

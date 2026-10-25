@@ -38,6 +38,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -46,6 +50,8 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -62,6 +68,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.AppTopBar
@@ -97,9 +104,24 @@ fun NewsListScreen(navigate: (String) -> Unit) {
     val haptic = LocalHapticFeedback.current
     val tick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick) }
     TabReselectEffect(Routes.NEWS) { listState.animateScrollToItem(0) }
+    val snackbar = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val removedMsg = stringResource(R.string.news_unsaved)
+    val undoLabel = stringResource(R.string.action_undo)
+    // Премахването от запазените е с „Отмени“ — грешно докосване на звездата не губи новината.
+    val toggleFavorite: (NewsArticle, Boolean) -> Unit = { a, saved ->
+        vm.toggleFavorite(a, saved)
+        if (saved) scope.launch {
+            snackbar.currentSnackbarData?.dismiss()
+            if (snackbar.showSnackbar(removedMsg, actionLabel = undoLabel, duration = SnackbarDuration.Short) == SnackbarResult.ActionPerformed) {
+                vm.undoRemove(a)
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
+        snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             AppTopBar(stringResource(R.string.tab_news), onSearch = { navigate(Routes.SEARCH) }, scrollBehavior = scroll)
         },
@@ -157,7 +179,7 @@ fun NewsListScreen(navigate: (String) -> Unit) {
                                     a,
                                     onClick = { navigate(Routes.article(a.id)) },
                                     isFavorite = a.id in ui.favoriteIds,
-                                    onToggleFavorite = { vm.toggleFavorite(a, a.id in ui.favoriteIds) },
+                                    onToggleFavorite = { toggleFavorite(a, a.id in ui.favoriteIds) },
                                     modifier = Modifier.animateItem().animateEntrance(index),
                                 )
                             }

@@ -39,10 +39,10 @@ class ScanViewModelTest {
     private class Service : CatalogService {
         var online = false
         var fetches = 0
+        var raw = TestResources.text("katalog-sample.json")
         override suspend fun fetchCatalog(): Outcome<Pair<String, CatalogSnapshot>> {
             fetches++
             if (!online) return Outcome.Failure(AppError.Network)
-            val raw = TestResources.text("katalog-sample.json")
             return Outcome.Success(raw to KatalogParser.parse(raw))
         }
     }
@@ -131,5 +131,44 @@ class ScanViewModelTest {
         vm.refreshOnReconnect()
         advanceUntilIdle()
         assertEquals(399666L, assertIs<ScanResult.Hit>(vm.result.value).book.inv)
+    }
+
+    /** „Въведи номера на ръка“: същата справка като при сканиране, без изчакването между еднакви кодове. */
+    @Test fun manualEntryLooksUpTheSameWayAsAScan() = runTest(dispatcher) {
+        val vm = ScanViewModel(repo(Service().apply { online = true }), clock)
+        advanceUntilIdle()
+        vm.onManual("399666")
+        advanceUntilIdle()
+        assertEquals(399666L, assertIs<ScanResult.Hit>(vm.result.value).book.inv)
+        vm.dismiss()
+        // Същият номер веднага пак — ръчното въвеждане не се „отскача“ като камерата.
+        vm.onManual(" 399666 ")
+        advanceUntilIdle()
+        assertEquals(399666L, assertIs<ScanResult.Hit>(vm.result.value).book.inv)
+        vm.dismiss()
+        vm.onManual("абв")
+        advanceUntilIdle()
+        assertIs<ScanTarget.Unknown>(assertIs<ScanResult.Miss>(vm.result.value).target)
+    }
+
+    /** Книга, добавена след последното сваляне на каталога: каталогът се опреснява веднъж и се намира. */
+    @Test fun missingCodeRefreshesAStaleCatalogOnce() = runTest(dispatcher) {
+        val service = Service().apply { online = true }
+        val vm = ScanViewModel(repo(service), clock)
+        advanceUntilIdle()
+        assertEquals(1, service.fetches)
+        clock.advanceSeconds(10 * 60)
+        service.raw = service.raw.replace("\"inv\": 399666,", "\"inv\": 399667,")
+
+        vm.onManual("399667")
+        advanceUntilIdle()
+        assertEquals(399667L, assertIs<ScanResult.Hit>(vm.result.value).book.inv)
+        assertEquals(2, service.fetches)
+        vm.dismiss()
+        // Следващата липсваща книга веднага след това — „няма я“ без ново сваляне.
+        vm.onManual("12345678")
+        advanceUntilIdle()
+        assertIs<ScanResult.Miss>(vm.result.value)
+        assertEquals(2, service.fetches)
     }
 }

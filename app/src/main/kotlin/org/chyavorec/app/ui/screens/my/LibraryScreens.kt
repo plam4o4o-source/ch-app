@@ -36,11 +36,20 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Icon
 import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalResources
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -118,8 +127,26 @@ private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((
     val renew by vm.renewResult.collectAsStateWithLifecycle()
     val today = LocalAppContainer.current.clock.today()
     val calc = LoanDueCalculator()
+    val snackbar = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val haptic = LocalHapticFeedback.current
+    val context = LocalContext.current
+    val resources = LocalResources.current
+    // Успешното удължаване — кратко съобщение и потвърждение с вибрация, без диалог за затваряне.
+    LaunchedEffect(renew) {
+        val r = renew as? Outcome.Success ?: return@LaunchedEffect
+        vm.renewResult.value = null
+        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+        val msg = if (r.value.renewPending) resources.getString(R.string.renew_requested)
+        else resources.getString(R.string.renew_ok, Formatters.shortDate(context, r.value.dueOn) ?: "—")
+        scope.launch {
+            snackbar.currentSnackbarData?.dismiss()
+            // Заявката (удължава се при следващото обновяване) е по-дълъг текст — показва се по-дълго.
+            snackbar.showSnackbar(msg, duration = if (r.value.renewPending) SnackbarDuration.Long else SnackbarDuration.Short)
+        }
+    }
 
-    Scaffold(topBar = { BackTopBar(stringResource(R.string.my_books), onBack) }) { padding ->
+    Scaffold(topBar = { BackTopBar(stringResource(R.string.my_books), onBack) }, snackbarHost = { SnackbarHost(snackbar) }) { padding ->
         LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             Column {
                 DemoBanner(vm.isDemo)
@@ -162,19 +189,12 @@ private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((
             }
         }
     }
-    renew?.let { r ->
+    // Отказът (напр. книгата е заявена от друг читател) се чете спокойно — в диалог.
+    (renew as? Outcome.Failure)?.let { r ->
         AlertDialog(
             onDismissRequest = { vm.renewResult.value = null },
             confirmButton = { TextButton(onClick = { vm.renewResult.value = null }) { Text(stringResource(R.string.action_ok)) } },
-            text = {
-                Text(
-                    when {
-                        r is Outcome.Success && r.value.renewPending -> stringResource(R.string.renew_requested)
-                        r is Outcome.Success -> stringResource(R.string.renew_ok, Formatters.shortDate(LocalContext.current, r.value.dueOn) ?: "—")
-                        else -> errorMessage((r as Outcome.Failure).error)
-                    },
-                )
-            },
+            text = { Text(errorMessage(r.error)) },
         )
     }
 }

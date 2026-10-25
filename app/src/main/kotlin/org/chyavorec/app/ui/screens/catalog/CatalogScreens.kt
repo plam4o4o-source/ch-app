@@ -501,8 +501,9 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
         if (b == null) {
             val error = ui.error
             when {
-                // „Няма я“ — само когато каталогът е прочетен и книгата наистина липсва в него.
-                ui.loaded -> ErrorView(AppError.NotFound, onRetry = null, modifier = Modifier.padding(padding))
+                // „Няма я“ — само когато каталогът е прочетен (и опреснен) и книгата наистина
+                // липсва в него; „Опитай отново“ опреснява каталога пак.
+                ui.loaded -> ErrorView(AppError.NotFound, onRetry = { vm.retry() }, modifier = Modifier.padding(padding))
                 // Каталогът не е наличен (без връзка, още незареден) — с „Опитай отново“;
                 // при връщане на връзката се опитва сам (RefreshOnReconnect).
                 error != null -> ErrorView(error, onRetry = { vm.retry() }, modifier = Modifier.padding(padding), subject = stringResource(R.string.subject_catalog))

@@ -21,6 +21,7 @@ import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.Synced
 import org.chyavorec.data.catalog.CatalogSearcher
 import org.chyavorec.data.repository.CatalogRepository
 import org.chyavorec.domain.model.CatalogBook
@@ -248,10 +249,14 @@ class BookViewModel(private val inv: Long, private val container: org.chyavorec.
 
     init { load() }
 
-    /** „Опитай отново“ и връщане на връзката — само ако каталогът не е бил наличен. */
+    /**
+     * „Опитай отново“ и връщане на връзката — ако каталогът не е бил наличен или книгата
+     * я няма в него (тогава каталогът се опреснява наново, без ограничението за честота).
+     */
     fun retry() {
-        if (ui.value.loading || ui.value.loaded) return
-        load()
+        val u = ui.value
+        if (u.loading || (u.loaded && u.book != null)) return
+        load(retrying = u.loaded)
     }
 
     override val reconnectState: ScreenState<*>
@@ -259,8 +264,8 @@ class BookViewModel(private val inv: Long, private val container: org.chyavorec.
 
     override fun refreshOnReconnect() = retry()
 
-    private fun load() {
-        ui.update { it.copy(error = null) }
+    private fun load(retrying: Boolean = false) {
+        ui.update { it.copy(error = null, loaded = false) }
         viewModelScope.launch {
             // През индекса в базата (без мрежа и без да се разчита целият каталог). Без
             // никакъв кеш — каталогът от мрежата; неуспехът е „няма данни“, а не „няма книга“.
@@ -274,13 +279,21 @@ class BookViewModel(private val inv: Long, private val container: org.chyavorec.
                     is Outcome.Success -> synced = container.catalogRepository.lookupSearcher(network = false)
                 }
             }
-            val found = synced
-            if (found == null) {
+            var found: Synced<CatalogSearcher> = synced ?: run {
                 ui.update { it.copy(error = AppError.Parse("katalog.json")) }
                 return@launch
             }
+            var book = found.data.book(inv)
+            // Споделена връзка към книга, добавена след последното сваляне на каталога: той се
+            // опреснява веднъж (условна заявка) и книгата се търси пак — едва тогава „няма я“.
+            if (book == null) {
+                val fresh = container.catalogRepository.refreshForMissing(always = retrying)
+                if (fresh != null) {
+                    found = fresh
+                    book = fresh.data.book(inv)
+                }
+            }
             val catalog = found.data
-            val book = catalog.book(inv)
             ui.value = BookUi(
                 book = book,
                 loaded = true,

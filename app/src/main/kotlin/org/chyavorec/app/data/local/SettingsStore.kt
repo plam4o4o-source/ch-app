@@ -64,10 +64,18 @@ data class AppSettings(
     val readerFontSize: ReaderFontSize = ReaderFontSize.M,
     /** Режим за четене: по-тясна колона за текста. */
     val readerNarrow: Boolean = false,
+    /** „Размер на текста“ в цялото приложение — умножава системния мащаб на шрифта. */
+    val textScale: TextScale = TextScale.STANDARD,
 )
 
 /** Размер на шрифта в режим за четене (S/M/L/XL → мащаб на шрифта). */
 enum class ReaderFontSize(val scale: Float) { S(0.9f), M(1f), L(1.15f), XL(1.3f) }
+
+/**
+ * „Размер на текста“ за цялото приложение: множител върху системния мащаб на шрифта
+ * (Настройки → Изглед). Режимът за четене ([ReaderFontSize]) се умножава върху него.
+ */
+enum class TextScale(val factor: Float) { SMALL(0.9f), STANDARD(1f), LARGE(1.15f), XLARGE(1.3f) }
 
 private const val MAX_MESSAGE_IDS = 300
 private const val MAX_PENDING_READS = 100
@@ -111,6 +119,7 @@ class SettingsStore(private val context: Context) {
         val catalogShelf = booleanPreferencesKey("catalog_shelf")
         val readerFontSize = stringPreferencesKey("reader_font_size")
         val readerNarrow = booleanPreferencesKey("reader_narrow")
+        val textScale = stringPreferencesKey("text_scale")
         val loanReminderPlan = stringSetPreferencesKey("loan_reminder_plan")
         val backgroundSetup = stringPreferencesKey("background_setup")
         val lastAppOpen = longPreferencesKey("last_app_open")
@@ -141,6 +150,7 @@ class SettingsStore(private val context: Context) {
             catalogShelf = p[Keys.catalogShelf] ?: false,
             readerFontSize = p[Keys.readerFontSize]?.let { runCatching { ReaderFontSize.valueOf(it) }.getOrNull() } ?: ReaderFontSize.M,
             readerNarrow = p[Keys.readerNarrow] ?: false,
+            textScale = p[Keys.textScale]?.let { runCatching { TextScale.valueOf(it) }.getOrNull() } ?: TextScale.STANDARD,
         )
     }
 
@@ -188,6 +198,7 @@ class SettingsStore(private val context: Context) {
     suspend fun setCatalogShelf(on: Boolean) = context.dataStore.edit { it[Keys.catalogShelf] = on }
     suspend fun setReaderFontSize(size: ReaderFontSize) = context.dataStore.edit { it[Keys.readerFontSize] = size.name }
     suspend fun setReaderNarrow(on: Boolean) = context.dataStore.edit { it[Keys.readerNarrow] = on }
+    suspend fun setTextScale(scale: TextScale) = context.dataStore.edit { it[Keys.textScale] = scale.name }
     suspend fun setNotifyMessages(on: Boolean) = context.dataStore.edit { it[Keys.notifyMessages] = on }
     val readMessageIds: Flow<Set<String>> = context.dataStore.data.map { it[Keys.readMessages].orEmpty() }
     suspend fun readMessageIdsNow(): Set<String> = readMessageIds.first()
@@ -302,6 +313,13 @@ class SettingsStore(private val context: Context) {
     }
 
     suspend fun clearRecentSearches() = context.dataStore.edit { it.remove(Keys.recentSearches) }
+
+    /** „Отмени“ след изчистването: изчистените търсения се връщат след добавените междувременно. */
+    suspend fun restoreRecentSearches(cleared: List<String>) = context.dataStore.edit { p ->
+        val now = p[Keys.recentSearches]?.split('\u001F')?.filter { it.isNotBlank() }.orEmpty()
+        val merged = (now + cleared.filterNot { q -> now.any { it.equals(q, ignoreCase = true) } }).take(10)
+        if (merged.isNotEmpty()) p[Keys.recentSearches] = merged.joinToString("\u001F")
+    }
 
     /**
      * Имало е вход, чиито следи (известия, напомняния, настройките по-долу) още не са изчистени.

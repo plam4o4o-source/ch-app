@@ -123,11 +123,29 @@ class NewsListViewModel(
     fun setCategory(c: String?) = filter.update { it.copy(category = c) }
     fun setFavoritesOnly(on: Boolean) = filter.update { it.copy(favoritesOnly = on) }
 
+    /** Последната премахната любима — „Отмени“ я връща със същата дата на запазване (и мястото в списъка). */
+    private var removed: FavoriteNewsEntity? = null
+
     fun toggleFavorite(a: NewsArticle, isFavorite: Boolean) = viewModelScope.launch {
         dbWrite {
-            if (isFavorite) favorites.delete(a.id)
-            else favorites.upsert(
-                FavoriteNewsEntity(a.id, a.title, a.url, a.imageUrl, a.summary, a.category, a.publishedAtMillis, clock.now().toEpochMilli()),
+            if (isFavorite) {
+                removed = favorites.observeAll().first().firstOrNull { it.id == a.id }
+                favorites.delete(a.id)
+            } else {
+                favorites.upsert(
+                    FavoriteNewsEntity(a.id, a.title, a.url, a.imageUrl, a.summary, a.category, a.publishedAtMillis, clock.now().toEpochMilli()),
+                )
+            }
+        }
+    }
+
+    /** „Отмени“ след премахване от запазените. */
+    fun undoRemove(a: NewsArticle) = viewModelScope.launch {
+        val previous = removed?.takeIf { it.id == a.id }
+        removed = null
+        dbWrite {
+            favorites.upsert(
+                previous ?: FavoriteNewsEntity(a.id, a.title, a.url, a.imageUrl, a.summary, a.category, a.publishedAtMillis, clock.now().toEpochMilli()),
             )
         }
     }

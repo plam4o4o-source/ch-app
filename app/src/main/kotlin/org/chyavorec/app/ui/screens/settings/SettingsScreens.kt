@@ -15,9 +15,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.BugReport
-import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.BrightnessMedium
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.NotificationsNone
@@ -55,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
+import org.chyavorec.app.data.local.TextScale
 import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.Channel
 import org.chyavorec.core.logFailure
@@ -115,6 +117,7 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     val snackbar = remember { SnackbarHostState() }
     var themeDialog by remember { mutableStateOf(false) }
     var langDialog by remember { mutableStateOf(false) }
+    var textSizeDialog by remember { mutableStateOf(false) }
     var clearDialog by remember { mutableStateOf(false) }
     val clearedMsg = stringResource(R.string.settings_cache_cleared)
     val context = LocalContext.current
@@ -123,7 +126,9 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     Scaffold(topBar = { BackTopBar(stringResource(R.string.settings_title), onBack) }, snackbarHost = { SnackbarHost(snackbar) }) { padding ->
         Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).widthIn(max = 720.dp)) {
             GroupTitle(stringResource(R.string.settings_appearance))
-            NavItem(Icons.Outlined.DarkMode, stringResource(R.string.settings_theme), themeLabel(s.themeMode)) { themeDialog = true }
+            // Изборът е светла/тъмна/както системата — иконата е „яркост“, не само луната на тъмната.
+            NavItem(Icons.Outlined.BrightnessMedium, stringResource(R.string.settings_theme), themeLabel(s.themeMode)) { themeDialog = true }
+            NavItem(Icons.Outlined.FormatSize, stringResource(R.string.settings_text_size), textScaleLabel(s.textScale)) { textSizeDialog = true }
             val dynamicOn = s.dynamicColor && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S
             ListItem(
                 headlineContent = { Text(stringResource(R.string.settings_palette)) },
@@ -149,7 +154,7 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             }
 
             GroupTitle(stringResource(R.string.settings_notifications))
-            NavItem(Icons.Outlined.NotificationsNone, stringResource(R.string.my_notifications), stringResource(R.string.settings_notifications_desc)) {
+            NavItem(Icons.Outlined.NotificationsNone, stringResource(R.string.settings_notifications_choose), stringResource(R.string.settings_notifications_desc)) {
                 navigate(Routes.NOTIFICATIONS)
             }
 
@@ -165,9 +170,9 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     updater.showPrompt()
                 }
             } else {
+                // Версията е в „За приложението“ по-долу — тук само как се обновява.
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.about_version, c.config.versionName)) },
-                    supportingContent = {
+                    headlineContent = {
                         Text(stringResource(if (c.config.buildType == "play") R.string.update_disabled_play else R.string.update_disabled_dev))
                     },
                     leadingContent = { Icon(Icons.Outlined.SystemUpdate, null) },
@@ -205,6 +210,16 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             selected = s.themeMode,
             onSelect = { mode -> themeDialog = false; scope.launch { c.settings.setTheme(mode) } },
             onDismiss = { themeDialog = false },
+        )
+    }
+    if (textSizeDialog) {
+        ChoiceDialog(
+            title = stringResource(R.string.settings_text_size),
+            note = stringResource(R.string.settings_text_size_note),
+            options = TextScale.entries.map { it to textScaleLabel(it) },
+            selected = s.textScale,
+            onSelect = { scale -> textSizeDialog = false; scope.launch { c.settings.setTextScale(scale) } },
+            onDismiss = { textSizeDialog = false },
         )
     }
     if (langDialog) {
@@ -245,6 +260,16 @@ private fun currentLanguageLabel(): String {
         else -> stringResource(R.string.language_system)
     }
 }
+
+@Composable
+fun textScaleLabel(scale: TextScale): String = stringResource(
+    when (scale) {
+        TextScale.SMALL -> R.string.text_size_small
+        TextScale.STANDARD -> R.string.text_size_standard
+        TextScale.LARGE -> R.string.text_size_large
+        TextScale.XLARGE -> R.string.text_size_xlarge
+    },
+)
 
 @Composable
 fun themeLabel(mode: ThemeMode): String = stringResource(
@@ -333,12 +358,17 @@ private fun PalettePicker(selected: ThemePalette, enabled: Boolean, onSelect: (T
 }
 
 @Composable
-private fun <T> ChoiceDialog(title: String, options: List<Pair<T, String>>, selected: T, onSelect: (T) -> Unit, onDismiss: () -> Unit) {
+private fun <T> ChoiceDialog(
+    title: String, options: List<Pair<T, String>>, selected: T, onSelect: (T) -> Unit, onDismiss: () -> Unit, note: String? = null,
+) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
             Column {
+                if (note != null) {
+                    Text(note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 8.dp))
+                }
                 options.forEach { (value, label) ->
                     Row(
                         Modifier.fillMaxWidth().selectable(value == selected, role = Role.RadioButton) { onSelect(value) }.padding(vertical = 10.dp),
