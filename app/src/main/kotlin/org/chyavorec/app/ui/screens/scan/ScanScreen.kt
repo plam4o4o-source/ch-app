@@ -19,6 +19,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.clickable
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.focus.FocusRequester
@@ -37,7 +42,6 @@ import androidx.compose.material.icons.outlined.FlashlightOn
 import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.SearchOff
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalContentColor
@@ -168,7 +172,7 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 granted -> {
                     CameraPreview(
                         torch = torch,
-                        paused = result != null,
+                        paused = result != null || manual,
                         onCode = vm::onCode,
                         onCamera = { cam -> hasTorch = cam.cameraInfo.hasFlashUnit() },
                         onError = { cameraError = true },
@@ -220,14 +224,15 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     ) { CatalogStatusNote(catalogStatus, waiting, onRetry = vm::retry) }
                 }
             }
+            // Панел над камерата/съобщението (не отделен прозорец) — „Назад“ го затваря.
+            if (manual) {
+                BackHandler { manual = false }
+                ManualEntryPanel(
+                    onSubmit = { code -> manual = false; vm.onManual(code) },
+                    onDismiss = { manual = false },
+                )
+            }
         }
-    }
-
-    if (manual) {
-        ManualEntryDialog(
-            onSubmit = { code -> manual = false; vm.onManual(code) },
-            onDismiss = { manual = false },
-        )
     }
 
     result?.let { r ->
@@ -349,10 +354,11 @@ private fun ManualEntryButton(onClick: () -> Unit) {
 /**
  * „Въведи номера на ръка“: ISBN (под баркода) или инвентарният номер от етикета — със
  * цифрова клавиатура; справката е същата като при сканиране. Нещо, което не е нито
- * едното, нито другото, се казва още тук (без лист „няма я“).
+ * едното, нито другото, се казва още тук (без лист „няма я“). Панел отдолу върху
+ * затъмнения екран; докосване извън него го затваря.
  */
 @Composable
-private fun ManualEntryDialog(onSubmit: (String) -> Unit, onDismiss: () -> Unit) {
+private fun BoxScope.ManualEntryPanel(onSubmit: (String) -> Unit, onDismiss: () -> Unit) {
     var text by rememberSaveable { mutableStateOf("") }
     var invalid by rememberSaveable { mutableStateOf(false) }
     val focus = remember { FocusRequester() }
@@ -363,36 +369,46 @@ private fun ManualEntryDialog(onSubmit: (String) -> Unit, onDismiss: () -> Unit)
             onSubmit(text.trim())
         }
     }
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.scan_manual)) },
-        text = {
-            Column {
-                Text(stringResource(R.string.scan_manual_text), style = MaterialTheme.typography.bodyMedium)
-                Spacer(Modifier.height(12.dp))
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { v ->
-                        // Цифри, тирета и интервали (както е отпечатан ISBN-ът); X — последната цифра на стар ISBN.
-                        text = v.filter { it.isDigit() || it == '-' || it == ' ' || it == 'X' || it == 'x' }.take(24)
-                        invalid = false
-                    },
-                    label = { Text(stringResource(R.string.scan_manual_label)) },
-                    singleLine = true,
-                    isError = invalid,
-                    supportingText = if (invalid) { { Text(stringResource(R.string.scan_manual_invalid)) } } else null,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(onSearch = { submit() }),
-                    modifier = Modifier.fillMaxWidth().focusRequester(focus),
-                )
-                // Клавиатурата — веднага (полето е в прозореца на диалога, затова фокусът се иска оттук).
-                LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
-            }
-        },
-        confirmButton = { TextButton(onClick = submit, enabled = text.isNotBlank()) { Text(stringResource(R.string.scan_manual_search)) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+    Box(
+        Modifier.matchParentSize().background(Color.Black.copy(alpha = 0.6f))
+            .clickable(interactionSource = null, indication = null, onClick = onDismiss),
     )
+    Surface(
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().widthIn(max = 640.dp),
+    ) {
+        Column(Modifier.navigationBarsPadding().imePadding().padding(horizontal = 24.dp, vertical = 20.dp)) {
+            Text(stringResource(R.string.scan_manual), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+            Spacer(Modifier.height(6.dp))
+            Text(stringResource(R.string.scan_manual_text), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.height(12.dp))
+            OutlinedTextField(
+                value = text,
+                onValueChange = { v ->
+                    // Цифри, тирета и интервали (както е отпечатан ISBN-ът); X — последната цифра на стар ISBN.
+                    text = v.filter { it.isDigit() || it == '-' || it == ' ' || it == 'X' || it == 'x' }.take(24)
+                    invalid = false
+                },
+                label = { Text(stringResource(R.string.scan_manual_label)) },
+                singleLine = true,
+                isError = invalid,
+                supportingText = if (invalid) { { Text(stringResource(R.string.scan_manual_invalid)) } } else null,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = { submit() }),
+                modifier = Modifier.fillMaxWidth().focusRequester(focus),
+            )
+            Spacer(Modifier.height(12.dp))
+            Row(Modifier.align(Alignment.End), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
+                Button(onClick = submit, enabled = text.isNotBlank()) { Text(stringResource(R.string.scan_manual_search)) }
+            }
+        }
+    }
+    // Клавиатурата — веднага.
+    LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
 }
+
 @Composable
 private fun HitSheet(hit: ScanResult.Hit, onOpen: () -> Unit, onClose: () -> Unit) {
     val b = hit.book
