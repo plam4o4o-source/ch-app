@@ -42,6 +42,7 @@ import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.ScreenGutter
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
 import org.chyavorec.app.ui.navigation.Routes
@@ -71,7 +72,7 @@ fun MoreScreen(navigate: (String) -> Unit) {
     }
     Scaffold(topBar = { AppTopBar(stringResource(R.string.tab_more), onSearch = { navigate(Routes.SEARCH) }) }) { padding ->
         Column(Modifier.padding(padding).fillMaxSize().verticalScroll(scrollState)) {
-            SectionLabel(stringResource(R.string.more_group_chitalishte), Modifier.padding(start = 20.dp, top = 8.dp, bottom = 12.dp))
+            SectionLabel(stringResource(R.string.more_group_chitalishte), Modifier.padding(start = ScreenGutter, top = 8.dp, bottom = 12.dp))
             val tiles = buildList {
                 add(TileItem(Icons.Outlined.Campaign, stringResource(R.string.messages_title), stringResource(R.string.more_messages_desc)) { navigate(Routes.MESSAGES) })
                 add(TileItem(Icons.Outlined.Event, stringResource(R.string.events_title), stringResource(R.string.more_events_desc)) { navigate(Routes.EVENTS) })
@@ -85,7 +86,7 @@ fun MoreScreen(navigate: (String) -> Unit) {
                 add(TileItem(Icons.Outlined.Place, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc)) { navigate(Routes.CONTACTS) })
             }
             TileGrid(tiles)
-            SectionLabel(stringResource(R.string.more_group_app), Modifier.padding(start = 20.dp, top = 28.dp, bottom = 4.dp))
+            SectionLabel(stringResource(R.string.more_group_app), Modifier.padding(start = ScreenGutter, top = 28.dp, bottom = 4.dp))
             AppItem(Icons.Outlined.Settings, stringResource(R.string.settings_title)) { navigate(Routes.SETTINGS) }
             AppItem(Icons.Outlined.PrivacyTip, stringResource(R.string.privacy_title)) { navigate(Routes.PRIVACY) }
             AppItem(Icons.Outlined.Info, stringResource(R.string.about_title)) { navigate(Routes.ABOUT) }

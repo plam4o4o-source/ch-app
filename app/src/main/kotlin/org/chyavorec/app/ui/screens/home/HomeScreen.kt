@@ -31,6 +31,8 @@ import org.chyavorec.app.ui.components.IconPlate
 import org.chyavorec.app.ui.components.OrnamentFrame
 import org.chyavorec.app.ui.components.Season
 import org.chyavorec.app.ui.components.HolidayGreeting
+import org.chyavorec.app.ui.components.ScreenGutter
+import org.chyavorec.app.ui.components.isGreetingShown
 import org.chyavorec.app.ui.components.HolidayOrnament
 import org.chyavorec.app.ui.components.HolidaySky
 import org.chyavorec.app.ui.components.rememberDayDecor
@@ -187,6 +189,8 @@ fun HomeScreen(navigate: (String) -> Unit) {
     val today = rememberToday()
     LaunchedEffect(today) { vm.onDay(today) }
     val decor = rememberDayDecor(state.occasions, today)
+    // При показан поздрав празникът за деня е ред в него, а не отделен ред под търсенето.
+    val greetingShown = isGreetingShown(decor, dismissedGreeting, today)
     val loanSummary = rememberLoanSummary()
 
     LeafRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
@@ -202,8 +206,8 @@ fun HomeScreen(navigate: (String) -> Unit) {
         ) {
             item("header") {
                 Box {
-                    HomeHeader(onMessages = { navigate(Routes.MESSAGES) }, ornament = decor.ornament, quiet = decor.quiet)
-                    // Празничен/сезонен ефект (сняг, листа, фойерверки, букви…) само върху заглавката.
+                    // Празничен/сезонен ефект (сняг, листа, фойерверки, букви…) само в заглавката —
+                    // рисува се ПОД нея, за да не минават буквите и листата през името.
                     if (decor.effect != OccasionEffect.NONE) {
                         HolidaySky(
                             decor.effect,
@@ -213,16 +217,22 @@ fun HomeScreen(navigate: (String) -> Unit) {
                             stopWhen = { listState.isScrollInProgress || listState.firstVisibleItemIndex > 0 },
                         )
                     }
+                    HomeHeader(onMessages = { navigate(Routes.MESSAGES) }, ornament = decor.ornament, quiet = decor.quiet)
                 }
             }
             // Ако поздравът дойде след първия кадър (местен празник от сайта), се появява плавно.
             if (decor.greeting != null) {
-                item("greeting") { HolidayGreeting(decor, navigate, Modifier.animateItem(), dismissed = dismissedGreeting, today = today) }
+                item("greeting") {
+                    HolidayGreeting(
+                        decor, navigate, Modifier.animateItem(), dismissed = dismissedGreeting, today = today,
+                        feast = state.feast?.takeIf { greetingShown }?.line,
+                    )
+                }
             }
             item("search") {
                 SearchPill(
                     stringResource(R.string.home_search_hint), onClick = { navigate(Routes.SEARCH) },
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                    modifier = Modifier.padding(horizontal = ScreenGutter, vertical = 6.dp),
                     trailing = {
                         // Скенер на баркодове: ISBN на книга или етикет с инвентарен номер.
                         IconButton(onClick = { navigate(Routes.SCAN) }, modifier = Modifier.size(40.dp)) {
@@ -237,7 +247,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     LoanDueCard(s, onClick = { navigate(Routes.LOANS) }, modifier = Modifier.animateItem().padding(horizontal = 16.dp, vertical = 6.dp))
                 }
             }
-            state.feast?.let { f -> item("feast") { FeastLine(f) } }
+            state.feast?.takeIf { !greetingShown }?.let { f -> item("feast") { FeastLine(f, Modifier.animateItem()) } }
             item("sync") { SyncBanner(state.news.fromCache, state.news.syncedAt, state.news.refreshError) }
             item("hero") {
                 val top = state.news.data?.take(5).orEmpty()
@@ -308,18 +318,9 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     NewsRow(a, onClick = { navigate(Routes.article(a.id)) }, modifier = Modifier.animateEntrance(i))
                 }
             }
-            // Само числата — новини/рафтове не прекомпозират реда с броячите.
+            // Само числата — новини/рафтове не прекомпозират реда с броячите. Броят в каталога
+            // е само тук (без повтарящ го ред отдолу).
             item("stats") { StatsRow(state.yearsSinceFounding, state.catalogCount, state.eventsThisMonth) }
-            if (state.catalogCount != null) {
-                item("footer") {
-                    Text(
-                        pluralStringResource(R.plurals.home_catalog_footer, state.catalogCount ?: 0, state.catalogCount ?: 0, Formatters.shortDate(LocalContext.current, state.catalogGenerated) ?: "—"),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-                    )
-                }
-            }
         }
         // Началото няма горна лента: превъртяното съдържание минава под прозрачната лента на
         // състоянието — щом е превъртяно, под часовника и иконите се появява фон, за да се четат.
@@ -355,7 +356,7 @@ private fun HomeHeader(onMessages: () -> Unit, ornament: OccasionOrnament = Occa
         }
     }
     Row(
-        Modifier.fillMaxWidth().statusBarsPadding().padding(start = 20.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
+        Modifier.fillMaxWidth().statusBarsPadding().padding(start = ScreenGutter, end = 8.dp, top = 12.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Emblem(50.dp)
@@ -496,7 +497,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                             maxLines = 1, overflow = TextOverflow.Ellipsis,
                         )
                         Spacer(Modifier.height(6.dp))
-                        Text(a.title, style = MaterialTheme.typography.headlineSmall, color = Brand.Parchment, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        // Най-едрото заглавие на екрана — над заглавките на разделите (sectionTitle).
+                        Text(a.title, style = MaterialTheme.typography.headlineMedium, color = Brand.Parchment, maxLines = 2, overflow = TextOverflow.Ellipsis)
                         val date = remember(a.publishedAtMillis) { Formatters.millisDate(context, a.publishedAtMillis) }
                         date?.let {
                             Spacer(Modifier.height(6.dp))
@@ -515,14 +517,17 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
     }
 }
 
-/** Православният празник за деня — един ред под търсенето (от /api/calendar на сайта). */
+/**
+ * Православният празник за деня — един ред под търсенето (от /api/calendar на сайта);
+ * при празничен поздрав е ред в него ([HolidayGreeting]).
+ */
 @Composable
-private fun FeastLine(feast: DailyFeast) {
+private fun FeastLine(feast: DailyFeast, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val today = LocalAppContainer.current.clock.today()
     val date = remember(today) { Formatters.date(context, today) }
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 6.dp).animateEntrance(0),
+        modifier.fillMaxWidth().padding(horizontal = ScreenGutter, vertical = 6.dp).animateEntrance(0),
         verticalAlignment = Alignment.Top,
     ) {
         Icon(Icons.Outlined.AutoAwesome, null, tint = LocalExtendedColors.current.gold, modifier = Modifier.padding(top = 2.dp).size(16.dp))
@@ -536,13 +541,13 @@ private fun FeastLine(feast: DailyFeast) {
     }
 }
 
-/** „Читалището в числа“ — анимирани броячи (като на сайта). */
+/** „Читалището в числа“ — анимирани броячи (като на сайта); нулите не се показват („0 събития“). */
 @Composable
 private fun StatsRow(yearsSinceFounding: Int, catalogCount: Int?, eventsThisMonth: Int?) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainer,
         shape = MaterialTheme.shapes.medium,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(top = 24.dp)
+        modifier = Modifier.fillMaxWidth().padding(horizontal = ScreenGutter).padding(top = 24.dp, bottom = 8.dp)
             .darkTopHighlight(MaterialTheme.shapes.medium),
     ) {
         // Отброяване от 0 само при първото показване за деня; после — направо крайните стойности.
@@ -555,8 +560,8 @@ private fun StatsRow(yearsSinceFounding: Int, catalogCount: Int?, eventsThisMont
             ) {
                 val animate = countUp == true
                 AnimatedCounter(yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f), animate = animate)
-                catalogCount?.let { AnimatedCounter(it, stringResource(R.string.stat_books), Modifier.weight(1f), animate = animate) }
-                eventsThisMonth?.let { AnimatedCounter(it, stringResource(R.string.stat_events), Modifier.weight(1f), animate = animate) }
+                catalogCount?.takeIf { it > 0 }?.let { AnimatedCounter(it, stringResource(R.string.stat_books), Modifier.weight(1f), animate = animate) }
+                eventsThisMonth?.takeIf { it > 0 }?.let { AnimatedCounter(it, stringResource(R.string.stat_events), Modifier.weight(1f), animate = animate) }
             }
         }
     }
@@ -565,7 +570,7 @@ private fun StatsRow(yearsSinceFounding: Int, catalogCount: Int?, eventsThisMont
 @Composable
 private fun QuickActionsGrid(navigate: (String) -> Unit) {
     // При много едър шрифт четирите в ред не се събират (думите се пренасят по букви) — 2 × 2.
-    BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp)) {
+    BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = ScreenGutter, vertical = 8.dp)) {
         val perRow = if (maxWidth / 4 / LocalDensity.current.fontScale.coerceAtLeast(1f) < 72.dp) 2 else 4
         Column {
             quickActions.chunked(perRow).forEachIndexed { r, row ->
@@ -595,14 +600,19 @@ private fun RowScope.QuickActionCell(action: QuickAction, i: Int, navigate: (Str
 
 @Composable
 fun BookRow(books: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (CatalogBook) -> Unit) {
-    LazyRow(modifier = modifier, contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+    LazyRow(modifier = modifier, contentPadding = PaddingValues(horizontal = ScreenGutter), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         items(books, key = { it.inv }) { b ->
             PressableCard(onClick = { onClick(b) }, modifier = Modifier.width(128.dp)) {
+                // Генерираната корица вече носи заглавието и автора — надписът под нея е само
+                // при истинска (сканирана/Open Library) корица.
+                var realCover by remember(b.inv) { mutableStateOf(false) }
                 Column(Modifier.padding(10.dp)) {
-                    BookCover(b, width = 108.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"))
-                    Spacer(Modifier.height(8.dp))
-                    Text(b.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                    Text(b.author, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    BookCover(b, width = 108.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"), onRealCover = { realCover = it })
+                    if (realCover) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(b.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(b.author, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
                 }
             }
         }

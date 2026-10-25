@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.my
 
+import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,7 +33,6 @@ import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -200,7 +200,7 @@ internal fun LoanCard(
     val status = due?.let { calc.status(it, today) }
     val overdue = status == DueStatus.OVERDUE
     val openLabel = stringResource(R.string.loan_open_book)
-    ElevatedCard(Modifier.fillMaxWidth()) {
+    AppCard(Modifier.fillMaxWidth()) {
         // Цялата карта води към книгата (ако я има в каталога); бутонът за удължаване е отделна цел.
         val open = if (onOpen != null) Modifier.clickable(onClickLabel = openLabel, role = Role.Button, onClick = onOpen) else Modifier
         Row(open.fillMaxWidth().padding(14.dp)) {

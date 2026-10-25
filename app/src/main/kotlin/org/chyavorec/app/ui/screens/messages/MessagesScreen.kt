@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.messages
 
+import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,7 +20,6 @@ import androidx.compose.material.icons.outlined.PriorityHigh
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Badge
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -187,7 +187,7 @@ private fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Uni
     val high = m.priority == MessagePriority.HIGH
     val personalFallback = stringResource(R.string.messages_personal_title)
     val title = if (m.personal && m.title.isBlank()) personalFallback else m.title
-    ElevatedCard(modifier.fillMaxWidth()) {
+    AppCard(modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(
@@ -236,7 +236,7 @@ private fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Uni
                 m.expiresOn?.let {
                     Text(
                         stringResource(R.string.messages_valid_until, Formatters.shortDate(LocalContext.current, it) ?: it),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.weight(1f),
                     )

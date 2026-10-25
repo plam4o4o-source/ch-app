@@ -1,5 +1,11 @@
 package org.chyavorec.app.ui.screens.catalog
 
+import org.chyavorec.domain.model.BookStatus
+import org.chyavorec.app.ui.theme.LocalExtendedColors
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.background
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +27,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import org.chyavorec.app.ui.components.SearchInput
 import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.windowHeight
@@ -28,7 +35,6 @@ import org.chyavorec.app.ui.components.appFilterChipColors
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.sharedElementKey
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -58,7 +64,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -258,11 +264,10 @@ fun CatalogScreen(navigate: (String) -> Unit) {
         LeafRefreshBox(state.engine.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
                 val searchField: @Composable (Modifier) -> Unit = { m ->
-                    OutlinedTextField(
+                    SearchInput(
                         value = q.text,
                         onValueChange = vm::setText,
-                        placeholder = { Text(stringResource(R.string.catalog_search_hint, fieldLabel(q.field).lowercase())) },
-                        leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
+                        placeholder = stringResource(R.string.catalog_search_hint, fieldLabel(q.field).lowercase()),
                         trailingIcon = {
                             // Празно поле → скенер на баркодове (както в търсачката на началния екран);
                             // с текст → „Изчисти“. Така горната лента не реже заглавието.
@@ -272,13 +277,11 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                                 Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action))
                             }
                         },
-                        singleLine = true,
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Search,
                             keyboardType = if (q.field == SearchField.INVENTORY || q.field == SearchField.ISBN) KeyboardType.Number else KeyboardType.Text,
                         ),
                         keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
-                        shape = RoundedCornerShape(50),
                         modifier = m,
                     )
                 }
@@ -310,7 +313,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                 AnimatedVisibility(state.suggestions.isNotEmpty() && q.text.length >= 2) {
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         items(state.suggestions) { s ->
-                            TextButton(onClick = { vm.setText(s) }) { Text(s, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                            SuggestionChip(onClick = { vm.setText(s) }, label = { Text(s, maxLines = 1, overflow = TextOverflow.Ellipsis) })
                         }
                     }
                 }
@@ -368,22 +371,37 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     }
 }
 
+/**
+ * Ред в каталога (~80 dp). Наличността е тиха: при налична книга — точка и „налична“
+ * в реда с данните; цветен етикет има само книга, която не е на рафта (жълт/червен).
+ * Статусът е и текст, затова цветната лента под корицата тук не е нужна.
+ */
 @Composable
 fun BookListItem(b: CatalogBook, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Row(modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 10.dp)) {
-        BookCover(b, width = 60.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"))
+    val available = b.status == BookStatus.AVAILABLE
+    Row(
+        modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        BookCover(b, width = 50.dp, showStatusDot = false, modifier = Modifier.sharedElementKey("book-${b.inv}"))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(b.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
             if (b.author.isNotBlank()) {
                 Text(b.author, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            Text(
-                listOf(b.year, b.docType, b.department).filter { it.isNotBlank() }.joinToString(" · "),
-                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1,
-            )
-            Spacer(Modifier.height(6.dp))
-            BookStatusPill(b.status)
+            val meta = listOf(b.year, b.docType, b.department).filter { it.isNotBlank() }.joinToString(" · ")
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (available) {
+                    val ok = LocalExtendedColors.current.ok
+                    Spacer(Modifier.size(6.dp).background(ok, CircleShape))
+                    Spacer(Modifier.width(5.dp))
+                    Text(stringResource(R.string.status_available).lowercase(), style = MaterialTheme.typography.bodySmall, color = ok, maxLines = 1)
+                    if (meta.isNotEmpty()) Text("  ·  ", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Text(meta, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+            if (!available) BookStatusPill(b.status, Modifier.padding(top = 4.dp))
         }
     }
 }
@@ -543,9 +561,13 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
             }
             // Заета / не е на рафта — не задънена улица: обаждане или имейл до библиотеката.
             if (!onShelf) {
-                OutlinedButton(
+                FilledTonalButton(
                     onClick = { vm.loadContacts(); askLibrary = true },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).heightIn(min = 48.dp),
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    ),
                 ) {
                     Icon(Icons.Outlined.Call, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.book_ask_library))
                 }
@@ -629,7 +651,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
 
 /**
  * Името на автора като връзка: търсене в каталога с филтър „Автор“. Поне 48 dp висока
- * зона за докосване; цветът (бордо) и иконата с лупа показват, че е действие.
+ * зона за докосване; цветът (златото на връзките, както навсякъде) и иконата с лупа показват, че е действие.
  */
 @Composable
 private fun AuthorLink(author: String, style: TextStyle, onClick: (String) -> Unit) {
@@ -642,9 +664,9 @@ private fun AuthorLink(author: String, style: TextStyle, onClick: (String) -> Un
             .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(author, style = style, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.weight(1f, fill = false))
+        Text(author, style = style, color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1f, fill = false))
         Spacer(Modifier.width(6.dp))
-        Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.secondary, modifier = Modifier.size(18.dp))
+        Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
     }
 }
 

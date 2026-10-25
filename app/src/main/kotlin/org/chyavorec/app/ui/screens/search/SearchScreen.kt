@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Clear
@@ -31,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -45,7 +42,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
@@ -65,6 +61,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.appViewModelWithState
 import org.chyavorec.app.ui.components.EmptyView
+import org.chyavorec.app.ui.components.SearchInput
 import org.chyavorec.app.ui.components.appFilterChipColors
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.BookListItem
@@ -160,14 +157,12 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
 
     Scaffold(topBar = {
         Column(Modifier.statusBarsPadding().padding(horizontal = 8.dp, vertical = 6.dp)) {
-            OutlinedTextField(
+            // Запълненото „хапче“ като на „Начало“ и в каталога (без златен контур).
+            SearchInput(
                 value = ui.query, onValueChange = vm::setQuery,
-                placeholder = { Text(stringResource(R.string.search_hint)) },
+                placeholder = stringResource(R.string.search_hint),
                 leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.action_back)) } },
                 trailingIcon = { if (ui.query.isNotEmpty()) IconButton(onClick = { vm.setQuery("") }) { Icon(Icons.Outlined.Clear, stringResource(R.string.action_clear)) } },
-                singleLine = true,
-                shape = RoundedCornerShape(50),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = { vm.commit() }),
                 modifier = Modifier.fillMaxWidth().focusRequester(focus),
             )

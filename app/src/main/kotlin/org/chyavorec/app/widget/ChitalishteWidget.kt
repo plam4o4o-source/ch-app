@@ -20,6 +20,7 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalSize
 import androidx.glance.action.Action
@@ -44,8 +45,10 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.layout.size
 import androidx.glance.layout.width
 import androidx.glance.state.GlanceStateDefinition
+import androidx.glance.text.FontFamily
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -360,14 +363,25 @@ private fun rootModifier(context: Context, colors: WidgetColors): GlanceModifier
         .clickable(openAppAction(context))
 }
 
+/**
+ * Заглавката: емблемата на читалището (18 dp, върху бял кръг — четима и в тъмна тема)
+ * и името със серифен шрифт (Cormorant не може в RemoteViews — системният serif).
+ */
 @Composable
 private fun Header(title: String, colors: WidgetColors, modifier: GlanceModifier = GlanceModifier) {
-    Text(
-        title,
-        modifier = modifier,
-        style = TextStyle(color = colors.title, fontSize = 12.sp, fontWeight = FontWeight.Bold),
-        maxLines = 1,
-    )
+    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+        Image(
+            provider = ImageProvider(R.drawable.logo_chitalishte_small),
+            contentDescription = null,
+            modifier = GlanceModifier.size(18.dp).background(ColorProvider(Color.White)).cornerRadius(9.dp).padding(1.dp),
+        )
+        Spacer(GlanceModifier.width(6.dp))
+        Text(
+            title,
+            style = TextStyle(color = colors.title, fontSize = 15.sp, fontWeight = FontWeight.Medium, fontFamily = FontFamily.Serif),
+            maxLines = 1,
+        )
+    }
 }
 
 /** Малкият вариант (2×2): следващият срок, а без заемания — следващото събитие. */

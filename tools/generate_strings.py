@@ -794,7 +794,6 @@ P = {
 "home_loans_total": (("%1$d заета книга", "%1$d заети книги"), ("%1$d book borrowed", "%1$d books borrowed")),
 "reading_months_cd": (("%1$d книга за последните 12 месеца, най-много през %2$s", "%1$d книги за последните 12 месеца, най-много през %2$s"), ("%1$d book in the last 12 months, most in %2$s", "%1$d books in the last 12 months, most in %2$s")),
 "reading_streak_months": (("%1$d месец", "%1$d месеца"), ("%1$d month", "%1$d months")),
-"home_catalog_footer": (("Каталогът съдържа %1$d документ · данни към %2$s", "Каталогът съдържа %1$d документа · данни към %2$s"), ("The catalogue lists %1$d item · data as of %2$s", "The catalogue lists %1$d items · data as of %2$s")),
 }
 
 def esc(s):

@@ -644,10 +644,6 @@
         <item quantity="one">%1$d книга</item>
         <item quantity="other">%1$d книги</item>
     </plurals>
-    <plurals name="home_catalog_footer">
-        <item quantity="one">Каталогът съдържа %1$d документ · данни към %2$s</item>
-        <item quantity="other">Каталогът съдържа %1$d документа · данни към %2$s</item>
-    </plurals>
     <plurals name="home_loans_overdue">
         <item quantity="one">%1$d книга е просрочена</item>
         <item quantity="other">%1$d книги са просрочени</item>

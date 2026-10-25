@@ -52,6 +52,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
@@ -316,7 +317,8 @@ private fun SectionRing(slices: List<Slice>, total: Int, progress: () -> Float) 
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(total.toString(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.reading_total), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                // Малки букви — labelMedium (разредката на labelSmall е само за ГЛАВНИ).
+                Text(stringResource(R.string.reading_total), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         Spacer(Modifier.width(16.dp))
@@ -365,14 +367,16 @@ private fun StatTile(value: String, label: String, modifier: Modifier = Modifier
         modifier = modifier.fillMaxHeight().semantics(mergeDescendants = true) {},
     ) {
         Column(Modifier.heightIn(min = 68.dp).padding(horizontal = 10.dp, vertical = 10.dp), verticalArrangement = Arrangement.Center) {
+            // Стойностите — все в Cormorant (числата и името на автора); името е по-дребно.
+            val valueStyle = MaterialTheme.typography.titleLarge
             Text(
                 value,
-                style = if (small) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleLarge,
+                style = if (small) valueStyle.copy(fontSize = 18.sp, lineHeight = 21.sp) else valueStyle,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 2, overflow = TextOverflow.Ellipsis,
             )
             Spacer(Modifier.height(2.dp))
-            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
+            Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
         }
     }
 }
