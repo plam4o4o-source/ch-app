@@ -52,7 +52,9 @@ class AppUpdaterTest {
 
     @After fun stop() = server.shutdown()
 
-    private fun updater(selfUpdate: Boolean = true): AppUpdater {
+    private fun updater(selfUpdate: Boolean = true): AppUpdater = container(selfUpdate).updater
+
+    private fun container(selfUpdate: Boolean = true): AppContainer {
         val config = AppConfig(
             siteBaseUrl = server.url("/").toString().trimEnd('/'),
             catalogUrls = emptyList(),
@@ -68,10 +70,32 @@ class AppUpdaterTest {
         return AppContainer(
             ApplicationProvider.getApplicationContext(), config,
             FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), OkHttpClient(),
-        ).updater
+        )
     }
 
     private fun updatesDir() = File(ApplicationProvider.getApplicationContext<Application>().noBackupFilesDir, "updates")
+
+    @Test fun whatsNewShownOnceAfterUpdate() = runTest {
+        val c = container()
+        val u = c.updater
+        // Записано при инсталирането на версията, която вече е инсталирана (versionCode 1).
+        c.settings.setPendingWhatsNew(WhatsNew(1, "1.0.0", "• Ново", "• New").encode())
+        u.loadWhatsNew()
+        assertEquals("• New", u.whatsNew.value?.notesFor(english = true))
+        assertEquals("• Ново", u.whatsNew.value?.notesFor(english = false))
+        assertNull(c.settings.pendingWhatsNew())
+        u.dismissWhatsNew()
+        u.loadWhatsNew()
+        assertNull(u.whatsNew.value)
+        // По-нова версия, която още не е инсталирана — записът остава за после.
+        c.settings.setPendingWhatsNew(WhatsNew(5, "1.1.0", "• Ново", "").encode())
+        u.loadWhatsNew()
+        assertNull(u.whatsNew.value)
+        assertTrue(c.settings.pendingWhatsNew() != null)
+        // Без английски текст — българският.
+        assertEquals("• Ново", WhatsNew.decode(WhatsNew(5, "1.1.0", "• Ново", "").encode())?.notesFor(english = true))
+        c.settings.setPendingWhatsNew(null)
+    }
 
     @Test fun disabledOutsideSelfUpdateBuild() = runTest {
         val u = updater(selfUpdate = false)

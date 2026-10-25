@@ -42,6 +42,16 @@ class UpdateCheckerTest {
         assertEquals(12345L, info.sizeBytes)
         assertEquals(26, info.minSdk)
         assertEquals("Нова версия", info.notes)
+        // Без notes_en (по-старите update.json) — българският текст и в английския интерфейс.
+        assertEquals("", info.notesEn)
+        assertEquals("Нова версия", info.notesFor(english = true))
+    }
+
+    @Test fun englishNotesByUiLanguage() {
+        val info = (UpdateManifestParser.parse(manifest(extra = ", \"notes_en\": \" New version \""), manifestUrl) as Outcome.Success).value
+        assertEquals("New version", info.notesEn)
+        assertEquals("New version", info.notesFor(english = true))
+        assertEquals("Нова версия", info.notesFor(english = false))
     }
 
     @Test fun rejectsApkFromAnotherHost() {

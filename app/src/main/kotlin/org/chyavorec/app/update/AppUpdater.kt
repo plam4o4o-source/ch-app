@@ -27,6 +27,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.chyavorec.app.AppConfig
@@ -64,6 +70,32 @@ sealed interface UpdateState {
 }
 
 enum class UpdateFailure { CHECK, DOWNLOAD, CHECKSUM, SIGNATURE, INSTALL }
+
+/** „Какво ново във версия X“ — показва се веднъж след обновяване до [versionName]. */
+data class WhatsNew(val versionCode: Int, val versionName: String, val notes: String, val notesEn: String) {
+    fun notesFor(english: Boolean): String = if (english && notesEn.isNotBlank()) notesEn else notes
+
+    fun encode(): String = buildJsonObject {
+        put("versionCode", versionCode)
+        put("versionName", versionName)
+        put("notes", notes)
+        put("notesEn", notesEn)
+    }.toString()
+
+    companion object {
+        fun of(info: UpdateInfo) = WhatsNew(info.versionCode, info.versionName, info.notes, info.notesEn)
+
+        fun decode(text: String): WhatsNew? = runCatching {
+            val o = Json.parseToJsonElement(text).jsonObject
+            WhatsNew(
+                versionCode = o.getValue("versionCode").jsonPrimitive.int,
+                versionName = o.getValue("versionName").jsonPrimitive.content,
+                notes = o["notes"]?.jsonPrimitive?.content.orEmpty(),
+                notesEn = o["notesEn"]?.jsonPrimitive?.content.orEmpty(),
+            )
+        }.getOrNull()
+    }
+}
 
 /**
  * Самообновяване на APK, инсталиран извън Google Play (от GitHub Releases).
@@ -109,6 +141,10 @@ class AppUpdater(
     private val _prompt = MutableStateFlow(false)
     val prompt: StateFlow<Boolean> = _prompt.asStateFlow()
 
+    /** „Какво ново“ след обновяване — докато не бъде затворено (виж [loadWhatsNew]). */
+    private val _whatsNew = MutableStateFlow<WhatsNew?>(null)
+    val whatsNew: StateFlow<WhatsNew?> = _whatsNew.asStateFlow()
+
     /** Проверката, пусната от UI (диалог/настройки) — за да не тръгнат две едновременно. */
     @Volatile private var uiCheck: Job? = null
 
@@ -137,6 +173,7 @@ class AppUpdater(
         if (!enabled) return
         scope.launch {
             cleanup()
+            loadWhatsNew()
             if (!settings.current().autoUpdate) return@launch
             val sinceLast = clock.now().toEpochMilli() - settings.lastUpdateCheck.first()
             if (sinceLast in 0L until LAUNCH_CHECK_INTERVAL_MS) return@launch
@@ -150,6 +187,21 @@ class AppUpdater(
             }
         }
     }
+
+    /**
+     * Бележките на току-що инсталираната версия (записани при [install]) — веднъж: записът се
+     * изтрива, щом се покажат. Запис за по-стара версия вече не важи; за по-нова — тя още не е
+     * инсталирана и записът остава.
+     */
+    internal suspend fun loadWhatsNew() {
+        val saved = settings.pendingWhatsNew() ?: return
+        val w = WhatsNew.decode(saved)
+        if (w != null && w.versionCode > config.versionCode) return
+        settings.setPendingWhatsNew(null)
+        if (w != null && w.versionCode == config.versionCode && w.notes.isNotBlank()) _whatsNew.value = w
+    }
+
+    fun dismissWhatsNew() { _whatsNew.value = null }
 
     /** „По-късно“ в диалога. */
     fun snooze() {
@@ -380,6 +432,16 @@ class AppUpdater(
             return@withContext false
         }
         _state.value = UpdateState.Installing(info)
+        // Бележките — за листа „Какво ново“ при първото отваряне на новата версия.
+        // Грешка в записа не спира инсталирането.
+        if (info.notes.isNotBlank()) {
+            try {
+                settings.setPendingWhatsNew(WhatsNew.of(info).encode())
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                Diagnostics.record("update.whatsNew", e)
+            }
+        }
         try {
             val installer = context.packageManager.packageInstaller
             val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL).apply {

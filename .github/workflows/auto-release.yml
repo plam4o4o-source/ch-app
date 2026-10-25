@@ -50,7 +50,7 @@ jobs:
       release: ${{ steps.plan.outputs.release }}
       version: ${{ steps.plan.outputs.version }}
       ref: ${{ steps.plan.outputs.ref }}
-      notes: ${{ steps.plan.outputs.notes }}
+      changes: ${{ steps.plan.outputs.changes }}
       draft: ${{ steps.plan.outputs.draft }}
     steps:
       - uses: actions/checkout@v7
@@ -113,8 +113,10 @@ jobs:
           echo "draft=$DRAFT" >> "$GITHUB_OUTPUT"
           echo "release=true" >> "$GITHUB_OUTPUT"
           echo "version=$V" >> "$GITHUB_OUTPUT"
+          # Техническият списък с commit-и — само за описанието на GitHub Release. Текстът за
+          # читателите в приложението идва от store/whats-new.md (виж release.yml, „What's new“).
           {
-            echo "notes<<NOTES_EOF"
+            echo "changes<<NOTES_EOF"
             git log --no-merges --format='• %s' "$LAST..$REF" 2>/dev/null | grep -v '^• ci' | head -15
             echo "NOTES_EOF"
           } >> "$GITHUB_OUTPUT"
@@ -128,6 +130,6 @@ jobs:
     with:
       version: ${{ needs.plan.outputs.version }}
       ref: ${{ needs.plan.outputs.ref }}
-      notes: ${{ needs.plan.outputs.notes }}
+      changes: ${{ needs.plan.outputs.changes }}
       draft: ${{ needs.plan.outputs.draft == 'true' }}
     secrets: inherit

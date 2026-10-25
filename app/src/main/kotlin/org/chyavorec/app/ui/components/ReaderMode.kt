@@ -44,7 +44,7 @@ import org.chyavorec.app.ui.LocalAppContainer
 fun ReaderModeButton(onClick: () -> Unit) {
     val label = stringResource(R.string.reader_mode)
     IconButton(onClick = onClick, modifier = Modifier.semantics { contentDescription = label }) {
-        Text("Аа", fontSize = 17.sp, fontWeight = FontWeight.SemiBold, maxLines = 1)
+        Text(stringResource(R.string.reader_mode_glyph), fontSize = 17.sp, fontWeight = FontWeight.SemiBold, maxLines = 1)
     }
 }
 
@@ -76,11 +76,25 @@ fun ReaderSettingsSheet(onDismiss: () -> Unit) {
             SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                 val sizes = ReaderFontSize.entries
                 sizes.forEachIndexed { i, size ->
+                    // „Аа“ в съответния размер; името на размера — за екранния четец.
+                    val sizeName = stringResource(
+                        when (size) {
+                            ReaderFontSize.S -> R.string.reader_size_s
+                            ReaderFontSize.M -> R.string.reader_size_m
+                            ReaderFontSize.L -> R.string.reader_size_l
+                            ReaderFontSize.XL -> R.string.reader_size_xl
+                        },
+                    )
                     SegmentedButton(
                         selected = s.readerFontSize == size,
                         onClick = { scope.launch { store.setReaderFontSize(size) } },
                         shape = SegmentedButtonDefaults.itemShape(i, sizes.size),
-                        label = { Text(size.name, fontSize = (13 * size.scale).sp, maxLines = 1) },
+                        label = {
+                            Text(
+                                stringResource(R.string.reader_mode_glyph), fontSize = (15 * size.scale).sp, maxLines = 1,
+                                modifier = Modifier.semantics { contentDescription = sizeName },
+                            )
+                        },
                     )
                 }
             }

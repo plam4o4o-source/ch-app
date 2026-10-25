@@ -30,6 +30,7 @@ data class UpdateInfo(
     val sha256: String,
     val sizeBytes: Long?,
     val minSdk: Int,
+    /** „Какво ново“ на български (`notes` — четат го и старите версии на приложението). */
     val notes: String,
     val releaseUrl: String?,
     /**
@@ -37,7 +38,12 @@ data class UpdateInfo(
      * update-control.yml, виж docs/RELEASE.md): приложението не я предлага и не я тегли.
      */
     val paused: Boolean = false,
-)
+    /** „Какво ново“ на английски (`notes_en`); празно — само българският текст. */
+    val notesEn: String = "",
+) {
+    /** Бележките на езика на интерфейса; без английски текст — българският. */
+    fun notesFor(english: Boolean): String = if (english && notesEn.isNotBlank()) notesEn else notes
+}
 
 object UpdateManifestParser {
     private val json = Json { ignoreUnknownKeys = true; isLenient = true }
@@ -73,6 +79,7 @@ object UpdateManifestParser {
                 notes = str("notes").orEmpty(),
                 releaseUrl = str("releaseUrl")?.takeIf { it.startsWith("https://") },
                 paused = flag(o["paused"]),
+                notesEn = str("notes_en").orEmpty(),
             ),
         )
     }

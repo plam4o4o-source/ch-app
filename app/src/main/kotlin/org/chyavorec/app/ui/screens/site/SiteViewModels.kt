@@ -83,13 +83,22 @@ class AboutChitalishteViewModel(private val repo: SiteRepository) : ViewModel(),
     }
 }
 
-class ContactsViewModel(private val repo: SiteRepository) : ViewModel(), RefreshOnReconnect {
+/**
+ * Контактите: от сайта, без връзка — последно заредените (с „Последна синхронизация“), а
+ * без кеш (напр. първо пускане без интернет) — вградените [fallback] вместо грешка.
+ */
+class ContactsViewModel(private val repo: SiteRepository, private val fallback: Contacts) : ViewModel(), RefreshOnReconnect {
     private val _state = MutableStateFlow(ScreenState<Contacts>())
     val state: StateFlow<ScreenState<Contacts>> = _state.asStateFlow()
     init { refresh(false) }
     fun refresh(force: Boolean = true) = viewModelScope.launch {
         _state.update { it.startRefresh() }
-        _state.update { it.with(repo.contacts(force)) }
+        val r = repo.contacts(force)
+        _state.update { s ->
+            // refreshError — за да се опита пак при връщане на връзката (wantsReconnectRefresh).
+            if (r is Outcome.Failure && s.data?.fromSite != true) ScreenState(data = fallback, loading = false, refreshError = r.error)
+            else s.with(r)
+        }
     }
 
     override val reconnectState: ScreenState<*> get() = _state.value

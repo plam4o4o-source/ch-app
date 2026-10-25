@@ -133,7 +133,10 @@ class AppContainer(
         PersonalImageTrackingCache(FilePayloadCache(File(context.noBackupFilesDir, "cache/reader"), cipher), ::evictPersonalImages)
     }
 
-    /** Показва се само ако страницата „Контакти“ не се зареди (данни от сайта към 09.2026). */
+    /**
+     * Показва се само ако страницата „Контакти“ не се зареди и няма запазени от нея (напр. първо
+     * пускане без интернет). Данни от сайта към 10.2026 — адресът е съдържание (на български, като сайта).
+     */
     val fallbackContacts = Contacts(
         organization = "НЧ „Васил Левски – 1922“",
         address = "пл. 9-ти Септември 3, с. Яворец, общ. Габрово, ПК 5334",
@@ -141,6 +144,7 @@ class AppContainer(
         emails = listOf("chitalishte_yavorec@abv.bg"),
         website = config.siteBaseUrl,
         facebook = "https://www.facebook.com/nchvasillevski1922/",
+        // Работното време — на езика на интерфейса от ресурсите (contacts_fallback_hours, виж ContactsScreen).
         workingHours = emptyList(),
         mapQuery = "пл. 9-ти Септември 3, 5334 Яворец, Габрово",
         fromSite = false,

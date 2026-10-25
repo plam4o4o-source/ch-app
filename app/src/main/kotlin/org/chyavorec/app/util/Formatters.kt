@@ -14,8 +14,16 @@ import java.util.Locale
 object Formatters {
     private val sofia = ZoneId.of("Europe/Sofia")
 
+    /**
+     * Езикът, на който реално е интерфейсът (според ресурсите, а не първия език на системата):
+     * при напр. немски телефон текстовете са българските по подразбиране — и датите с тях.
+     */
     fun isBulgarian(context: Context): Boolean =
-        context.resources.configuration.locales[0].language == "bg"
+        context.getString(R.string.ui_language) == "bg"
+
+    /** Езикът за имена на месеци и дни — същият като на текстовете (не непременно на системата). */
+    fun uiLocale(context: Context): Locale = if (isBulgarian(context)) BULGARIAN else Locale.ENGLISH
+    private val BULGARIAN: Locale = Locale.forLanguageTag("bg")
 
     fun date(context: Context, iso: String?): String? {
         val d = iso?.let { runCatching { LocalDate.parse(it.take(10)) }.getOrNull() } ?: return null

@@ -122,6 +122,8 @@ import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.ui.screens.home.BookRow
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.app.util.Intents
+import org.chyavorec.app.util.UdcLabels
+import org.chyavorec.app.util.udcSectionName
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.CatalogBook
@@ -129,7 +131,6 @@ import org.chyavorec.domain.model.CatalogQuery
 import kotlinx.coroutines.flow.first
 import org.chyavorec.domain.model.CatalogSort
 import org.chyavorec.domain.model.SearchField
-import org.chyavorec.domain.model.UdcSections
 
 @Composable
 fun fieldLabel(f: SearchField): String = stringResource(
@@ -140,6 +141,19 @@ fun fieldLabel(f: SearchField): String = stringResource(
         SearchField.ISBN -> R.string.field_isbn
         SearchField.KEYWORD -> R.string.field_keyword
         SearchField.INVENTORY -> R.string.field_inventory
+    },
+)
+
+/** Подсказката в полето за търсене — цял израз за всяко поле („Търси навсякъде“, „… по ISBN“). */
+@Composable
+private fun searchHint(f: SearchField): String = stringResource(
+    when (f) {
+        SearchField.ALL -> R.string.catalog_hint_all
+        SearchField.TITLE -> R.string.catalog_hint_title
+        SearchField.AUTHOR -> R.string.catalog_hint_author
+        SearchField.ISBN -> R.string.catalog_hint_isbn
+        SearchField.KEYWORD -> R.string.catalog_hint_keyword
+        SearchField.INVENTORY -> R.string.catalog_hint_inventory
     },
 )
 
@@ -261,7 +275,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                     OutlinedTextField(
                         value = q.text,
                         onValueChange = vm::setText,
-                        placeholder = { Text(stringResource(R.string.catalog_search_hint, fieldLabel(q.field).lowercase())) },
+                        placeholder = { Text(searchHint(q.field)) },
                         leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
                         trailingIcon = {
                             // Празно поле → скенер на баркодове (както в търсачката на началния екран);
@@ -404,8 +418,9 @@ private fun FiltersSheet(state: CatalogUiState, onDismiss: () -> Unit, onChange:
                 Switch(q.onlyAvailable, onCheckedChange = { v -> onChange { it.copy(onlyAvailable = v) } })
             }
             FacetGroup(stringResource(R.string.filter_doc_type), facets.docTypes, q.docType) { v -> onChange { it.copy(docType = v) } }
+            val res = LocalResources.current
             FacetGroup(stringResource(R.string.filter_genre), facets.udcSections.map { it.toString() }, q.udcSection?.toString(),
-                label = { UdcSections.name(it.toInt()) }) { v -> onChange { it.copy(udcSection = v?.toInt()) } }
+                label = { res.getString(UdcLabels.res(it.toInt())) }) { v -> onChange { it.copy(udcSection = v?.toInt()) } }
             FacetGroup(stringResource(R.string.filter_department), facets.departments, q.department) { v -> onChange { it.copy(department = v) } }
             FacetGroup(stringResource(R.string.filter_language), facets.languages, q.language) { v -> onChange { it.copy(language = v) } }
             val min = facets.minYear
@@ -568,7 +583,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 InfoRow(stringResource(R.string.book_isbn), b.isbn)
                 InfoRow(stringResource(R.string.book_language), b.language)
                 InfoRow(stringResource(R.string.book_doc_type), b.docType)
-                InfoRow(stringResource(R.string.book_genre), b.udcSection?.let { UdcSections.name(it) + " (УДК " + b.udc + ")" })
+                InfoRow(stringResource(R.string.book_genre), b.udcSection?.let { stringResource(R.string.book_genre_udc, udcSectionName(it), b.udc) })
                 InfoRow(stringResource(R.string.book_keywords), b.keywords)
                 // Дълго натискане копира сигнатурата / инвентарния номер (за имейл, бележка, гишето).
                 InfoRow(stringResource(R.string.book_call_number), b.callNumber, copyable = true)

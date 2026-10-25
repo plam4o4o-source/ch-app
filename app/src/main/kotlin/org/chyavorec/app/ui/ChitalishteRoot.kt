@@ -189,10 +189,10 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
     ) {
         Box(Modifier.fillMaxSize()) {
             if (!settings.onboardingDone) {
-                OnboardingScreen(onFinish = { login ->
+                OnboardingScreen(onFinish = { link ->
                     scope.launch {
                         container.settings.setOnboardingDone()
-                        if (login) deepLink.value = "login"
+                        if (link != null) deepLink.value = link
                     }
                 })
             } else {

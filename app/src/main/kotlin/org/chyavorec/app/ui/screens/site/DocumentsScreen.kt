@@ -67,7 +67,7 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                     isEmpty = { it.isEmpty() },
                     skeleton = { SkeletonList(withImage = false) },
                     empty = { EmptyView(stringResource(R.string.documents_empty), icon = Icons.Outlined.Description) },
-                    errorSubject = stringResource(R.string.documents_title),
+                    errorSubject = stringResource(R.string.subject_documents),
                 ) { docs ->
                     LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
                         item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }

@@ -12,6 +12,7 @@
     <string name="about_version_full">Version %1$s (%2$d)</string>
     <string name="account_delete_web">Delete account and data</string>
     <string name="account_delete_web_desc">Request deletion of your reader account and its data (chyavorec.org)</string>
+    <string name="action_add_card">Add library card</string>
     <string name="action_all">All</string>
     <string name="action_back">Back</string>
     <string name="action_cancel">Cancel</string>
@@ -50,6 +51,7 @@
     <string name="book_details">Bibliographic details</string>
     <string name="book_doc_type">Type</string>
     <string name="book_genre">Section</string>
+    <string name="book_genre_udc">%1$s (UDC %2$s)</string>
     <string name="book_hold">Place a hold</string>
     <string name="book_inventory">Inventory number</string>
     <string name="book_isbn">ISBN</string>
@@ -89,9 +91,14 @@
     <string name="card_usage_note">Show the card to the librarian; the barcode can be scanned at the desk.</string>
     <string name="catalog_data_as_of">InvLib data as of %1$s</string>
     <string name="catalog_filters">Filters</string>
+    <string name="catalog_hint_all">Search everything</string>
+    <string name="catalog_hint_author">Search by author</string>
+    <string name="catalog_hint_inventory">Search by inventory number</string>
+    <string name="catalog_hint_isbn">Search by ISBN</string>
+    <string name="catalog_hint_keyword">Search by keyword</string>
+    <string name="catalog_hint_title">Search by title</string>
     <string name="catalog_no_results">No books match this search.</string>
     <string name="catalog_no_results_hint">Try another word, check the spelling or remove filters.</string>
-    <string name="catalog_search_hint">Search by %1$s</string>
     <string name="catalog_sort">Sort</string>
     <string name="catalog_title">Online catalogue</string>
     <string name="catalog_view_list">List</string>
@@ -114,7 +121,8 @@
     <string name="contacts_call">Call</string>
     <string name="contacts_email">Send email</string>
     <string name="contacts_email_label">Email</string>
-    <string name="contacts_fallback_note">The Contacts page couldn’t be loaded — only basic details are shown. Please try again later.</string>
+    <string name="contacts_fallback_hours">Monday – Thursday: 08:00 – 16:30\nFriday: 08:00 – 16:00\nSaturday and Sunday: closed</string>
+    <string name="contacts_fallback_note">Contacts couldn’t be loaded from the website — showing the basic details built into the app. They may be out of date.</string>
     <string name="contacts_hours">Opening hours</string>
     <string name="contacts_hours_unknown">Not listed on the website</string>
     <string name="contacts_map">Open map</string>
@@ -178,8 +186,8 @@
     <string name="guest_title">Welcome!</string>
     <string name="history_empty">No books read yet</string>
     <string name="history_empty_hint">Returned books will appear here after the library’s next update.</string>
-    <string name="history_not_returned">not returned</string>
     <string name="history_range">borrowed %1$s · returned %2$s</string>
+    <string name="history_range_open">borrowed %1$s · not returned yet</string>
     <string name="history_similar">Similar books</string>
     <string name="history_similar_note">Picked on your phone by section and author — nothing is sent anywhere.</string>
     <string name="history_source_note">History comes from the library only for readers who gave consent.</string>
@@ -433,6 +441,7 @@
     <string name="onb_card_title">Library card</string>
     <string name="onb_catalog_text">Search the library’s books by title, author, keyword or inventory number and see if they’re available.</string>
     <string name="onb_catalog_title">Library catalogue</string>
+    <string name="onb_continue">Continue</string>
     <string name="onb_guest">Continue as guest</string>
     <string name="onb_login">Sign in as a reader</string>
     <string name="onb_news_text">Concerts, celebrations, meetings and everything happening at the centre — with reminders and calendar sync.</string>
@@ -472,7 +481,12 @@
     <string name="qa_scan">Scan</string>
     <string name="reader_font_size">Font size</string>
     <string name="reader_mode">Reading mode</string>
+    <string name="reader_mode_glyph">Aa</string>
     <string name="reader_number">Reader no. %1$s</string>
+    <string name="reader_size_l">Large text</string>
+    <string name="reader_size_m">Normal text</string>
+    <string name="reader_size_s">Small text</string>
+    <string name="reader_size_xl">Extra large text</string>
     <string name="reader_width">Text width</string>
     <string name="reader_width_narrow">Narrow</string>
     <string name="reader_width_normal">Normal</string>
@@ -563,8 +577,6 @@
     <string name="sort_year_asc">Year (oldest first)</string>
     <string name="sort_year_desc">Year (newest first)</string>
     <string name="stale_banner">We can’t refresh the data right now. Showing the last available data.</string>
-    <string name="stat_books">catalogue items</string>
-    <string name="stat_events">events this month</string>
     <string name="stat_years">years of history</string>
     <string name="status_available">Available</string>
     <string name="status_not_on_shelf">Not on the shelf</string>
@@ -572,11 +584,16 @@
     <string name="status_unavailable">Unavailable</string>
     <string name="subject_article">the article</string>
     <string name="subject_catalog">the catalogue</string>
+    <string name="subject_contacts">the contacts</string>
+    <string name="subject_documents">the documents</string>
     <string name="subject_events">the events</string>
+    <string name="subject_gallery">the gallery</string>
     <string name="subject_history">your reading history</string>
     <string name="subject_loans">your loans</string>
     <string name="subject_membership">your membership</string>
+    <string name="subject_messages">the messages</string>
     <string name="subject_news">the news</string>
+    <string name="subject_page">the page</string>
     <string name="sync_never">never</string>
     <string name="tab_catalog">Catalogue</string>
     <string name="tab_home">Home</string>
@@ -588,6 +605,17 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_light">Light</string>
     <string name="theme_system">System default</string>
+    <string name="udc_0">General works</string>
+    <string name="udc_1">Philosophy. Psychology</string>
+    <string name="udc_2">Religion</string>
+    <string name="udc_3">Social sciences</string>
+    <string name="udc_5">Natural sciences</string>
+    <string name="udc_6">Applied sciences. Technology</string>
+    <string name="udc_7">Arts. Sport</string>
+    <string name="udc_8">Language. Literature</string>
+    <string name="udc_9">Geography. History</string>
+    <string name="udc_none">No section</string>
+    <string name="ui_language">en</string>
     <string name="update_auto">Automatic updates</string>
     <string name="update_auto_desc">Checked on launch and twice a day; downloaded over Wi-Fi; installed while the app isn’t in use (Android 12+) or with a single tap</string>
     <string name="update_check_now">Check for updates</string>
@@ -639,6 +667,7 @@
     <string name="want_removed">“%1$s” removed from your list</string>
     <string name="want_title">Want to read</string>
     <string name="want_undo">Undo</string>
+    <string name="whats_new_title">What’s new in version %1$s</string>
     <string name="widget_description">Due dates, the next event and a quick scan</string>
     <string name="widget_due_today">today</string>
     <string name="widget_due_tomorrow">tomorrow</string>
@@ -719,6 +748,14 @@
     <plurals name="reading_streak_months">
         <item quantity="one">%1$d month</item>
         <item quantity="other">%1$d months</item>
+    </plurals>
+    <plurals name="stat_books">
+        <item quantity="one">catalogue item</item>
+        <item quantity="other">catalogue items</item>
+    </plurals>
+    <plurals name="stat_events">
+        <item quantity="one">event in the next 30 days</item>
+        <item quantity="other">events in the next 30 days</item>
     </plurals>
     <plurals name="wait_hours">
         <item quantity="one">%1$d hour</item>

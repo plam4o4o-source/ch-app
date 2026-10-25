@@ -96,6 +96,7 @@ class SettingsStore(private val context: Context) {
         val notifiedUpdate = intPreferencesKey("notified_update_code")
         val snoozedUpdate = intPreferencesKey("snoozed_update_code")
         val snoozedUntil = longPreferencesKey("snoozed_update_until")
+        val pendingWhatsNew = stringPreferencesKey("pending_whats_new")
         val notifyMessages = booleanPreferencesKey("notify_messages")
         val readMessages = stringSetPreferencesKey("read_messages")
         val notifiedMessages = stringSetPreferencesKey("notified_messages")
@@ -173,6 +174,12 @@ class SettingsStore(private val context: Context) {
     suspend fun updateSnoozed(code: Int, nowMillis: Long): Boolean {
         val p = context.dataStore.data.first()
         return p[Keys.snoozedUpdate] == code && (p[Keys.snoozedUntil] ?: 0L) > nowMillis
+    }
+
+    /** „Какво ново“ на инсталиращата се версия (JSON, виж AppUpdater) — показва се веднъж след обновяването. */
+    suspend fun pendingWhatsNew(): String? = context.dataStore.data.first()[Keys.pendingWhatsNew]
+    suspend fun setPendingWhatsNew(value: String?) = context.dataStore.edit {
+        if (value == null) it.remove(Keys.pendingWhatsNew) else it[Keys.pendingWhatsNew] = value
     }
 
     suspend fun setIntroShown() = context.dataStore.edit { it[Keys.introShown] = true }

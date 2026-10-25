@@ -38,7 +38,9 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,12 +54,16 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
+import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.Emblem
 import org.chyavorec.app.ui.components.IconPlate
 import org.chyavorec.app.ui.components.PagerDots
 import org.chyavorec.app.ui.theme.Brand
+import org.chyavorec.data.repository.CapabilitiesStatus
+import org.chyavorec.data.repository.CapabilitiesTracker
 import kotlin.math.absoluteValue
 import org.chyavorec.app.ui.theme.SystemBarIcons
 
@@ -71,9 +77,19 @@ private val slides = listOf(
     Slide(Icons.Outlined.Event, R.string.onb_news_title, R.string.onb_news_text),
 )
 
-/** Кратко представяне при първо стартиране (5 екрана), след това вход или гост. */
+/**
+ * Кратко представяне при първо стартиране (5 екрана), след това вход или гост.
+ * [onFinish] получава връзката, към която да продължи (`"login"`, `"my/card"`), или `null`.
+ */
 @Composable
-fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
+fun OnboardingScreen(onFinish: (link: String?) -> Unit) {
+    val container = LocalAppContainer.current
+    val caps = remember(container) { CapabilitiesTracker(container.authRepository) }
+    LaunchedEffect(caps) { caps.refresh() }
+    val capsStatus by caps.status.collectAsStateWithLifecycle()
+    // Известно, че онлайн входът не е включен → вместо „Вход“ — дигиталната карта.
+    // Докато не е известно (или без връзка) — обичайните бутони.
+    val loginOff = (capsStatus as? CapabilitiesStatus.Known)?.caps?.login == false
     val pager = rememberPagerState { slides.size }
     val scope = rememberCoroutineScope()
     // Фонът е винаги тъмен (мастило → бордо) — светли икони в лентите и при светла тема.
@@ -90,7 +106,7 @@ fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
     Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Brand.Ink, androidx.compose.ui.graphics.Color(0xFF2E1612), Brand.Burgundy)))) {
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
             Row(Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = { onFinish(false) }, colors = ButtonDefaults.textButtonColors(contentColor = Brand.GoldLight)) { Text(stringResource(R.string.onb_skip)) }
+                TextButton(onClick = { onFinish(null) }, colors = ButtonDefaults.textButtonColors(contentColor = Brand.GoldLight)) { Text(stringResource(R.string.onb_skip)) }
             }
             HorizontalPager(pager, modifier = Modifier.weight(1f)) { page ->
                 val s = slides[page]
@@ -132,9 +148,11 @@ fun OnboardingScreen(onFinish: (login: Boolean) -> Unit) {
                         Text(stringResource(R.string.onb_next), textAlign = TextAlign.Center)
                     }
                 } else {
-                    Button(onClick = { onFinish(true) }, colors = primaryColors, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.onb_login), textAlign = TextAlign.Center) }
-                    OutlinedButton(onClick = { onFinish(false) }, colors = outlinedColors, border = outlinedBorder, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
-                        Text(stringResource(R.string.onb_guest), textAlign = TextAlign.Center)
+                    Button(onClick = { onFinish(if (loginOff) "my/card" else "login") }, colors = primaryColors, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
+                        Text(stringResource(if (loginOff) R.string.action_add_card else R.string.onb_login), textAlign = TextAlign.Center)
+                    }
+                    OutlinedButton(onClick = { onFinish(null) }, colors = outlinedColors, border = outlinedBorder, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
+                        Text(stringResource(if (loginOff) R.string.onb_continue else R.string.onb_guest), textAlign = TextAlign.Center)
                     }
                 }
             }

@@ -185,7 +185,7 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
                 state = state, onRetry = { vm.refresh() }, isEmpty = { it.blocks.isEmpty() },
                 skeleton = { SkeletonCards() },
                 empty = { EmptyView(stringResource(R.string.page_empty), icon = Icons.AutoMirrored.Outlined.Article) },
-                errorSubject = title.ifBlank { null },
+                errorSubject = stringResource(R.string.subject_page),
             ) { page ->
                 LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
                     item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }

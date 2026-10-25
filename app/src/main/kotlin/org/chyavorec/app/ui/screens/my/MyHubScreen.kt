@@ -137,7 +137,10 @@ fun MyHubScreen(navigate: (String) -> Unit) {
                     }
                 }
             } else {
-                GuestCard(capsStatus, onLogin = { navigate(Routes.LOGIN) }, onRetry = vm::refreshCapabilities)
+                GuestCard(
+                    capsStatus, hasCard = selfCard != null,
+                    onLogin = { navigate(Routes.LOGIN) }, onAddCard = { navigate(Routes.CARD) }, onRetry = vm::refreshCapabilities,
+                )
             }
 
             SectionLabel(stringResource(R.string.my_section_library), Modifier.padding(start = 20.dp, top = 8.dp, bottom = 12.dp))
@@ -185,7 +188,7 @@ fun MyHubScreen(navigate: (String) -> Unit) {
 }
 
 @Composable
-private fun GuestCard(caps: CapabilitiesStatus, onLogin: () -> Unit, onRetry: () -> Unit) {
+private fun GuestCard(caps: CapabilitiesStatus, hasCard: Boolean, onLogin: () -> Unit, onAddCard: () -> Unit, onRetry: () -> Unit) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
@@ -208,10 +211,19 @@ private fun GuestCard(caps: CapabilitiesStatus, onLogin: () -> Unit, onRetry: ()
                     }
                     TextButton(onClick = onRetry, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.action_retry)) }
                 }
-                caps is CapabilitiesStatus.Known -> Row(verticalAlignment = Alignment.Top) {
-                    Icon(Icons.Outlined.Info, null, modifier = Modifier.size(20.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.na_login), style = MaterialTheme.typography.bodySmall)
+                // Входът не е включен: вместо вход — дигиталната карта (ако още не е въведена).
+                caps is CapabilitiesStatus.Known -> {
+                    if (!hasCard) {
+                        Button(onClick = onAddCard) {
+                            Icon(Icons.Outlined.Badge, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.action_add_card))
+                        }
+                        Spacer(Modifier.height(12.dp))
+                    }
+                    Row(verticalAlignment = Alignment.Top) {
+                        Icon(Icons.Outlined.Info, null, modifier = Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.na_login), style = MaterialTheme.typography.bodySmall)
+                    }
                 }
                 // Още се пита (обикновено от кеша — за миг): без съобщение, вместо грешното „не е включен“.
                 else -> Unit
