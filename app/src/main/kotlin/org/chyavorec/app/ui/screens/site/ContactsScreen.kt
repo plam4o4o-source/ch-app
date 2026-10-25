@@ -90,7 +90,9 @@ fun ContactsScreen(onBack: () -> Unit) {
                         }
                         if (c.phones.isNotEmpty()) ContactCard(Icons.Outlined.Call, stringResource(R.string.contacts_phone), c.phones) { Intents.dial(context, it) }
                         if (c.emails.isNotEmpty()) ContactCard(Icons.Outlined.Email, stringResource(R.string.contacts_email_label), c.emails) { Intents.email(context, it) }
-                        ContactCard(Icons.Outlined.Schedule, stringResource(R.string.contacts_hours), c.workingHours.ifEmpty { listOf(stringResource(R.string.contacts_hours_unknown)) })
+                        // Вградените данни — работното време от ресурсите (на езика на интерфейса).
+                        val hours = if (c.fromSite) c.workingHours else stringResource(R.string.contacts_fallback_hours).lines()
+                        ContactCard(Icons.Outlined.Schedule, stringResource(R.string.contacts_hours), hours.ifEmpty { listOf(stringResource(R.string.contacts_hours_unknown)) })
                         ContactCard(Icons.Outlined.Public, stringResource(R.string.contacts_web), listOfNotNull(c.website, c.facebook)) { Intents.openUrl(context, it) }
                         if (c.fromSite) {
                             c.sourceUrl?.let { AssistChip(onClick = { Intents.openUrl(context, it) }, label = { Text(stringResource(R.string.contacts_source)) }) }

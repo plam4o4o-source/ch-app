@@ -136,7 +136,7 @@ class TextsScreenshotTest {
         compose.onAllNodes(contacts).onFirst().performClick()
         waitFor("built into the app")
         shown("chitalishte_yavorec@abv.bg")
-        shown("08:00 – 16:30")
+        shown("Monday – Thursday: 08:00 – 16:30")
         absent("Something went wrong")
         shot("81-texts-contacts-fallback-en")
     }

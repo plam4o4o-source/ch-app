@@ -120,6 +120,7 @@
     <string name="contacts_call">Обади се</string>
     <string name="contacts_email">Изпрати имейл</string>
     <string name="contacts_email_label">Имейл</string>
+    <string name="contacts_fallback_hours">Понеделник – четвъртък: 08:00 – 16:30\nПетък: 08:00 – 16:00\nСъбота и неделя: почивни дни</string>
     <string name="contacts_fallback_note">Контактите от сайта не се заредиха — показваме основните данни, вградени в приложението. Може да не са актуални.</string>
     <string name="contacts_hours">Работно време</string>
     <string name="contacts_hours_unknown">Не е обявено в сайта</string>

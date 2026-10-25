@@ -120,6 +120,7 @@
     <string name="contacts_call">Call</string>
     <string name="contacts_email">Send email</string>
     <string name="contacts_email_label">Email</string>
+    <string name="contacts_fallback_hours">Monday – Thursday: 08:00 – 16:30\nFriday: 08:00 – 16:00\nSaturday and Sunday: closed</string>
     <string name="contacts_fallback_note">Contacts couldn’t be loaded from the website — showing the basic details built into the app. They may be out of date.</string>
     <string name="contacts_hours">Opening hours</string>
     <string name="contacts_hours_unknown">Not listed on the website</string>

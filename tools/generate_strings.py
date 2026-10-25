@@ -368,6 +368,7 @@ S = {
 "contacts_hours": ("Работно време", "Opening hours"),
 "contacts_hours_unknown": ("Не е обявено в сайта", "Not listed on the website"),
 "contacts_web": ("В интернет", "Online"),
+"contacts_fallback_hours": ("Понеделник – четвъртък: 08:00 – 16:30\nПетък: 08:00 – 16:00\nСъбота и неделя: почивни дни", "Monday – Thursday: 08:00 – 16:30\nFriday: 08:00 – 16:00\nSaturday and Sunday: closed"),
 "contacts_fallback_note": ("Контактите от сайта не се заредиха — показваме основните данни, вградени в приложението. Може да не са актуални.", "Contacts couldn’t be loaded from the website — showing the basic details built into the app. They may be out of date."),
 "contacts_source": ("Данни от chyavorec.org", "Data from chyavorec.org"),
 "more_events_desc": ("Календар на читалището", "Community centre calendar"),
