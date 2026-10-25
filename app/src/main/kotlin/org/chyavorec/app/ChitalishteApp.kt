@@ -65,6 +65,7 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
     /**
      * Стартира интерфейсът (MainActivity.onCreate), а не само фонова задача — веднъж за процес:
      * - подготовка за първия кадър ([warmUp]) — във фоновите събуждания не трябва;
+     * - наблюдението на каталога за „Искам да прочета“ ([org.chyavorec.app.notifications.WantToReadAlerts.watch]);
      * - проверка на сесията: при старт без сесия („не ме помни“ и спрян процес) следите на
      *   предишния читател се изчистват веднага (AppContainer.watchReader), а не едва при първия
      *   екран, който стигне до читателските данни.
@@ -73,6 +74,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         if (!uiStarted.compareAndSet(false, true)) return
         appScope.launch { warmUp() }
         appScope.launch { runCatching { container.authRepository.restore() }.logFailure("startup.restore") }
+        // „Кажи ми, когато е на рафта“ — при всеки нов каталог, приет на преден план (фоновият — PeriodicSyncWorker).
+        appScope.launch { org.chyavorec.app.notifications.WantToReadAlerts.watch(this@ChitalishteApp, container) }
     }
 
     /**

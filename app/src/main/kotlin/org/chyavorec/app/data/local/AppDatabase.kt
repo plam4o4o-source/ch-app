@@ -12,6 +12,7 @@ import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -35,6 +36,22 @@ data class EventReminderEntity(
     @PrimaryKey val eventId: String,
     val title: String,
     val remindAtMillis: Long,
+)
+
+/**
+ * Книга от „Искам да прочета“ (само на устройството). Заглавието и авторът — за показване и
+ * офлайн; [lastKnownAvailable] — наличността при последната проверка на каталога (за известието
+ * „вече е на рафта“ само при преход, [org.chyavorec.domain.model.WatchTransitions]).
+ */
+@Entity(tableName = "want_to_read")
+data class WantToReadEntity(
+    @PrimaryKey val inv: Long,
+    val title: String,
+    val author: String,
+    val addedAtMillis: Long,
+    /** „Кажи ми, когато е на рафта“. */
+    val notifyWhenAvailable: Boolean,
+    val lastKnownAvailable: Boolean,
 )
 
 @Dao
@@ -67,22 +84,72 @@ interface RemindersDao {
     suspend fun delete(id: String)
 }
 
+@Dao
+interface WantToReadDao {
+    @Query("SELECT * FROM want_to_read ORDER BY addedAtMillis DESC")
+    fun observeAll(): Flow<List<WantToReadEntity>>
+
+    @Query("SELECT COUNT(*) FROM want_to_read")
+    fun observeCount(): Flow<Int>
+
+    @Query("SELECT * FROM want_to_read WHERE inv = :inv")
+    fun observe(inv: Long): Flow<WantToReadEntity?>
+
+    @Query("SELECT * FROM want_to_read WHERE inv = :inv")
+    suspend fun get(inv: Long): WantToReadEntity?
+
+    @Query("SELECT * FROM want_to_read")
+    suspend fun all(): List<WantToReadEntity>
+
+    /** Има ли книга с „Кажи ми“ — само тогава фоновата задача проверява каталога. */
+    @Query("SELECT EXISTS(SELECT 1 FROM want_to_read WHERE notifyWhenAvailable = 1)")
+    suspend fun anyNotify(): Boolean
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(item: WantToReadEntity)
+
+    @Query("UPDATE want_to_read SET lastKnownAvailable = :available WHERE inv = :inv")
+    suspend fun setAvailable(inv: Long, available: Boolean)
+
+    @Query("DELETE FROM want_to_read WHERE inv = :inv")
+    suspend fun delete(inv: Long)
+
+    @Query("DELETE FROM want_to_read")
+    suspend fun clear()
+}
+
 /**
- * Данните на потребителя (любими новини, напомняния за събития) — за разлика от индекса на
+ * Данните на потребителя (любими новини, напомняния за събития, „Искам да прочета“) — за разлика от индекса на
  * каталога ([CatalogDatabase]) не могат да се попълнят отново, затова НЯМА изтриване при
  * смяна на схемата: всяка нова версия идва с миграция в [MIGRATIONS] и с изнесената схема
  * в app/schemas (проверява се в AppDatabaseMigrationTest с MigrationTestHelper).
  */
-@Database(entities = [FavoriteNewsEntity::class, EventReminderEntity::class], version = 1, exportSchema = true)
+@Database(
+    entities = [FavoriteNewsEntity::class, EventReminderEntity::class, WantToReadEntity::class],
+    version = 2,
+    exportSchema = true,
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun favorites(): FavoritesDao
     abstract fun reminders(): RemindersDao
+    abstract fun wantToRead(): WantToReadDao
 
     companion object {
         const val NAME = "chitalishte.db"
 
-        /** Миграциите между версиите на схемата (при версия 2: `Migration(1, 2) { … }`). */
-        val MIGRATIONS: Array<Migration> = emptyArray()
+        /** 1 → 2: списъкът „Искам да прочета“ (нова таблица; старите данни не се пипат). */
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `want_to_read` (`inv` INTEGER NOT NULL, `title` TEXT NOT NULL, " +
+                        "`author` TEXT NOT NULL, `addedAtMillis` INTEGER NOT NULL, `notifyWhenAvailable` INTEGER NOT NULL, " +
+                        "`lastKnownAvailable` INTEGER NOT NULL, PRIMARY KEY(`inv`))",
+                )
+            }
+        }
+
+        /** Миграциите между версиите на схемата (следващата: `Migration(2, 3) { … }`). */
+        val MIGRATIONS: Array<Migration> = arrayOf(MIGRATION_1_2)
 
         /**
          * Само при връщане към по-стара версия на приложението (по-нова схема на диска, за която

@@ -24,6 +24,7 @@ sealed interface LinkTarget {
  * - `article/<id>` — новина по идентификатора ѝ от news.json (или по публичния ѝ адрес);
  * - `event/<id>` — събитие по идентификатора му от index.json;
  * - `message/<id>` — съобщенията, превъртени до това съобщение;
+ * - `book/<инв. №>` — книга от „Искам да прочета“ (над списъка, отворена като лична);
  * - `events`, `messages`, `catalog`, `scan`, `login`, `my/loans`, `my/card`, `my/history`, `update`;
  * - `https://chyavorec.org/...` — адрес от сайта (App Links), виж [forUrl].
  * Идентификаторите се кодират ([Uri.encode]), както в [Routes].
@@ -36,6 +37,7 @@ object DeepLinks {
     private const val ARTICLE_PREFIX = "article/"
     private const val EVENT_PREFIX = "event/"
     private const val MESSAGE_PREFIX = "message/"
+    private const val BOOK_PREFIX = "book/"
 
     /** Страницата на електронния каталог на сайта (App Link към раздела „Каталог“). */
     private const val CATALOG_PATH = "/elektronen-katalog"
@@ -43,6 +45,7 @@ object DeepLinks {
     fun article(id: String) = ARTICLE_PREFIX + Uri.encode(id)
     fun event(id: String) = EVENT_PREFIX + Uri.encode(id)
     fun message(id: String) = MESSAGE_PREFIX + Uri.encode(id)
+    fun book(inv: Long) = BOOK_PREFIX + inv
 
     /**
      * Публичният адрес на книга — същият, който споделя каталогът на сайта
@@ -76,6 +79,10 @@ object DeepLinks {
             link.startsWith(MESSAGE_PREFIX) -> idOf(link, MESSAGE_PREFIX)
                 ?.let { LinkTarget.Screen(Routes.HOME, listOf(Routes.message(it))) }
                 ?: LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES))
+            // Известието „вече е на рафта“: книгата над „Искам да прочета“ („Назад“ води до списъка).
+            link.startsWith(BOOK_PREFIX) -> link.removePrefix(BOOK_PREFIX).toLongOrNull()
+                ?.let { LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ, Routes.book(it, personal = true))) }
+                ?: LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ))
             // Известия от по-стари версии („news/<хеш>“) — разделът „Новини“.
             link == "news" || link.startsWith("news/") -> LinkTarget.Screen(Routes.NEWS)
             else -> null

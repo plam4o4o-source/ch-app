@@ -49,6 +49,12 @@ class DeepLinksTest {
         assertEquals(LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES)), target("message/"))
     }
 
+    @Test fun wantToReadBookOpensAboveTheList() {
+        // Известието „вече е на рафта“: книгата (като лична) над списъка „Искам да прочета“.
+        assertEquals(LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ, Routes.book(399666, personal = true))), target(DeepLinks.book(399666)))
+        assertEquals(LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ)), target("book/x"))
+    }
+
     @Test fun legacyAndShortcutLinks() {
         // Известия от по-стари версии.
         assertEquals(LinkTarget.Screen(Routes.NEWS), target("news/12345"))
@@ -65,7 +71,7 @@ class DeepLinksTest {
     }
 
     @Test fun everyTargetHasATabUnderneath() {
-        val links = listOf("article/x", "event/x", "message/x", "events", "messages", "my/loans", "scan", "login", "news")
+        val links = listOf("article/x", "event/x", "message/x", "book/7", "events", "messages", "my/loans", "scan", "login", "news")
         val tabs = TopTab.entries.map { it.route }.toSet()
         links.forEach { l ->
             val t = target(l) as LinkTarget.Screen

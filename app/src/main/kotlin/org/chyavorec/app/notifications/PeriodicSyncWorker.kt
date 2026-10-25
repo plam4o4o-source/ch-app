@@ -42,6 +42,9 @@ import java.util.concurrent.TimeUnit
  * - заемания → известие за просрочие и за отговора на заявка за удължаване — на 12 часа, ако е включено и разрешено,
  *   или ако има уиджет (той показва броя книги за връщане); напомнянията за
  *   наближаващ срок са локални ([LoanReminderScheduler]) и не зависят от мрежата;
+ * - „Искам да прочета“ с „Кажи ми, когато е на рафта“ → известие — при всяко пускане, само ако има
+ *   такава книга и известията „Библиотека“ са включени; каталогът се пита условно (ETag, 304 без тяло)
+ *   и не по-често от веднъж на 30 минути ([WantToReadAlerts.refreshAndCheck]); не и ако приложението „спи“;
  * - събития — на 12 часа, само ако има уиджет (напомнянията за събития са
  *   локални аларми и не зависят от тази задача);
  * - проверка за нова версия — веднъж на 24 часа (само APK извън Google Play).
@@ -73,6 +76,12 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         val notifyLoans = settings.notifyLoans && canNotify
         if ((notifyLoans || widget) && due(c, STEP_LOANS, now, SYNC_INTERVAL_MS)) {
             step("sync.loans") { if (syncLoans(c, notifyLoans)) c.settings.setLastSyncStep(STEP_LOANS, now) }
+        }
+
+        // „Кажи ми, когато е на рафта“ — само ако има такава книга, известията „Библиотека“ са включени и
+        // приложението не „спи“ (14 дни неотваряно — както съобщенията от сайта). Каталогът — условна заявка (ETag).
+        if (settings.notifyLibrary && canNotify && !MessagePollPolicy.isDormant(now, c.settings.messagePoll().lastOpen)) {
+            step("sync.want-to-read") { WantToReadAlerts.refreshAndCheck(applicationContext, c) }
         }
 
         // Събитията трябват само на уиджета (кеш до 5 минути — без излишни заявки).
