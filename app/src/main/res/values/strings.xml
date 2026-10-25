@@ -64,6 +64,7 @@
     <string name="book_status_now">Наличност в момента</string>
     <string name="book_year">Година</string>
     <string name="calendar_has_events">има събития</string>
+    <string name="calendar_month_empty">Няма прояви в този месец.</string>
     <string name="calendar_next">Следващ месец</string>
     <string name="calendar_prev">Предишен месец</string>
     <string name="calendar_show_day">покажи събитията за деня</string>
@@ -148,6 +149,7 @@
     <string name="error_unauthorized">Сесията е изтекла. Моля, влез отново.</string>
     <string name="event_add_calendar">Добави в календара</string>
     <string name="event_no_date">Без обявена дата</string>
+    <string name="event_open_map">покажи мястото на картата</string>
     <string name="event_recurring">Събитие от годишния календар на читалището — повтаря се всяка година на тази дата.</string>
     <string name="event_remind">Напомни ми</string>
     <string name="event_remove_reminder">Премахни напомнянето</string>
@@ -199,6 +201,12 @@
     <string name="home_new_books">Нови постъпления</string>
     <string name="home_search_hint">Търси книга, новина, събитие…</string>
     <string name="home_upcoming">Предстоящи събития</string>
+    <string name="ics_copy_link">Копирай връзката</string>
+    <string name="ics_google_hint">Google Календар на Android не може да се абонира направо. Копирай връзката и я добави от calendar.google.com › „Други календари“ › „От URL адрес“ — после календарът се вижда и на телефона.</string>
+    <string name="ics_link_label">Календар на читалището</string>
+    <string name="ics_sheet_text">Добави събитията на читалището в календара на телефона си. Новите прояви ще се появяват там сами.</string>
+    <string name="ics_subscribe">Абонирай се за календара</string>
+    <string name="ics_subscribe_action">Абонирай се</string>
     <string name="label_calendar">Календар</string>
     <string name="label_library">Библиотека</string>
     <string name="label_news">Новини</string>
@@ -293,9 +301,12 @@
     <string name="na_renew">Онлайн подновяване още не се поддържа. Попитай в библиотеката.</string>
     <string name="na_title">Все още не е достъпно</string>
     <string name="news_empty">Няма новини по този критерий.</string>
+    <string name="news_events_title">Новини и събития</string>
     <string name="news_no_saved">Все още нямаш запазени новини.</string>
     <string name="news_saved">Запазени</string>
     <string name="news_search_hint">Търси в новините</string>
+    <string name="news_segment_calendar">Календар</string>
+    <string name="news_segment_news">Новини</string>
     <string name="notif_action_renew">Удължи</string>
     <string name="notif_due_on">%1$s — до %2$s</string>
     <string name="notif_due_soon">Наближава срок за връщане</string>
@@ -452,9 +463,9 @@
     <string name="profile_registered">Регистриран на</string>
     <string name="qa_about">За читалището</string>
     <string name="qa_card">Читателска карта</string>
-    <string name="qa_catalog">Каталог</string>
     <string name="qa_contacts">Контакти</string>
     <string name="qa_events">Събития</string>
+    <string name="qa_scan">Сканирай</string>
     <string name="reader_font_size">Размер на шрифта</string>
     <string name="reader_mode">Режим за четене</string>
     <string name="reader_number">Читателски № %1$s</string>

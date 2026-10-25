@@ -77,7 +77,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.CollectionsBookmark
@@ -152,14 +151,17 @@ import org.chyavorec.app.ui.screens.my.LoanDueCard
 import org.chyavorec.app.ui.screens.my.rememberLoanSummary
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.util.Formatters
+import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.NewsArticle
 
 private data class QuickAction(val labelRes: Int, val icon: ImageVector, val route: String)
 
-/** Четири основни действия — останалите са в долната лента или в „Още“. */
-private val quickActions = listOf(
-    QuickAction(R.string.qa_catalog, Icons.AutoMirrored.Outlined.MenuBook, Routes.CATALOG),
+/**
+ * Четири основни действия — останалите са в долната лента или в „Още“. Първото не е
+ * „Каталог“ (той е и в долната лента), а [rememberQuickActions] — „Моите книги“ или скенерът.
+ */
+private val quickActionsTail = listOf(
     QuickAction(R.string.qa_card, Icons.Outlined.Badge, Routes.CARD),
     QuickAction(R.string.qa_events, Icons.Outlined.Event, Routes.EVENTS),
     QuickAction(R.string.qa_contacts, Icons.Outlined.Place, Routes.CONTACTS),
@@ -249,7 +251,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     state.news.error != null -> ErrorView(state.news.error!!, onRetry = { vm.refresh() }, subject = stringResource(R.string.subject_news))
                 }
             }
-            item("actions") { QuickActionsGrid(navigate) }
+            item("actions") { QuickActionsGrid(rememberQuickActions(), navigate) }
             if (state.upcoming.isNotEmpty()) {
                 item("events-h") {
                     SectionHeader(
@@ -562,8 +564,27 @@ private fun StatsRow(yearsSinceFounding: Int, catalogCount: Int?, eventsThisMont
     }
 }
 
+/**
+ * „Моите книги“ — за читател (влязъл или с въведена карта); иначе „Сканирай“ (ISBN или
+ * етикет с инвентарен номер). И двете — от локалното състояние, без мрежа.
+ */
 @Composable
-private fun QuickActionsGrid(navigate: (String) -> Unit) {
+private fun rememberQuickActions(): List<QuickAction> {
+    val c = LocalAppContainer.current
+    val auth by c.authRepository.state.collectAsStateWithLifecycle()
+    val selfCard by c.selfCardRepository.card.collectAsStateWithLifecycle()
+    // Входът се възстановява от LoanSummaryViewModel („Следващ срок“); картата — тук.
+    LaunchedEffect(Unit) { c.selfCardRepository.load() }
+    val reader = auth is AuthState.SignedIn || selfCard != null
+    return remember(reader) {
+        val first = if (reader) QuickAction(R.string.my_books, Icons.Outlined.CollectionsBookmark, Routes.LOANS)
+        else QuickAction(R.string.qa_scan, Icons.Outlined.QrCodeScanner, Routes.SCAN)
+        listOf(first) + quickActionsTail
+    }
+}
+
+@Composable
+private fun QuickActionsGrid(quickActions: List<QuickAction>, navigate: (String) -> Unit) {
     // При много едър шрифт четирите в ред не се събират (думите се пренасят по букви) — 2 × 2.
     BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp)) {
         val perRow = if (maxWidth / 4 / LocalDensity.current.fontScale.coerceAtLeast(1f) < 72.dp) 2 else 4

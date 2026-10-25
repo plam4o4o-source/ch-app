@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -36,6 +37,9 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -44,6 +48,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -61,6 +66,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
@@ -82,14 +88,24 @@ import org.chyavorec.app.ui.components.windowWidth
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.ui.navigation.Routes
+import org.chyavorec.app.ui.navigation.SEGMENT_KEY
+import org.chyavorec.app.ui.screens.events.EventsActions
+import org.chyavorec.app.ui.screens.events.EventsContent
+import org.chyavorec.app.ui.screens.events.eventsViewModel
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.app.util.Intents
 import org.chyavorec.domain.model.NewsArticle
 
+/**
+ * Разделът „Новини и събития“: сегменти „Новини | Календар“ под заглавието. В долната
+ * лента остава краткото „Новини“ (по-дългото име се реже при едър шрифт). Връзките към
+ * събитията (`/events`, известие за събитие) отварят раздела на „Календар“ — искането
+ * идва през [segmentState] на раздела (виж requestSegment).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsListScreen(navigate: (String) -> Unit) {
+fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? = null) {
     val vm = appViewModel { NewsListViewModel(it.newsRepository, it.database.favorites(), it.clock) }
     val ui by vm.ui.collectAsStateWithLifecycle()
     val scroll = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -97,15 +113,29 @@ fun NewsListScreen(navigate: (String) -> Unit) {
     val haptic = LocalHapticFeedback.current
     val tick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick) }
     TabReselectEffect(Routes.NEWS) { listState.animateScrollToItem(0) }
+    var calendar by rememberSaveable { mutableStateOf(segmentState?.get<String>(SEGMENT_KEY) == Routes.SEGMENT_CALENDAR) }
+    val requested = segmentState?.getStateFlow<String?>(SEGMENT_KEY, null)?.collectAsStateWithLifecycle()?.value
+    LaunchedEffect(requested) {
+        if (requested != null) {
+            calendar = requested == Routes.SEGMENT_CALENDAR
+            segmentState?.set(SEGMENT_KEY, null)
+        }
+    }
+    val segments: @Composable () -> Unit = { NewsSegments(calendar, onSelect = { tick(); calendar = it }) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
         topBar = {
-            AppTopBar(stringResource(R.string.tab_news), onSearch = { navigate(Routes.SEARCH) }, scrollBehavior = scroll)
+            AppTopBar(stringResource(R.string.news_events_title), onSearch = { navigate(Routes.SEARCH) }, scrollBehavior = scroll)
         },
     ) { padding ->
+        if (calendar) {
+            EventsContent(eventsViewModel(), navigate, Modifier.padding(padding)) { segments() }
+            return@Scaffold
+        }
         LeafRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
+                segments()
                 OutlinedTextField(
                     value = ui.filter.query,
                     onValueChange = vm::setQuery,
@@ -166,6 +196,30 @@ fun NewsListScreen(navigate: (String) -> Unit) {
                 }
             }
         }
+    }
+}
+
+/**
+ * „Новини | Календар“. На сегмента „Календар“ вдясно са и действията на събитията
+ * (абонамент, изглед календар/списък) — в заглавната лента не биха оставили място за името.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun NewsSegments(calendar: Boolean, onSelect: (Boolean) -> Unit) {
+    Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        // На таблет сегментите не се разтягат през целия екран.
+        SingleChoiceSegmentedButtonRow(Modifier.weight(1f).wrapContentWidth(Alignment.Start).widthIn(max = 480.dp)) {
+            listOf(false to R.string.news_segment_news, true to R.string.news_segment_calendar).forEachIndexed { i, (isCalendar, label) ->
+                SegmentedButton(
+                    selected = calendar == isCalendar,
+                    onClick = { if (calendar != isCalendar) onSelect(isCalendar) },
+                    shape = SegmentedButtonDefaults.itemShape(i, 2),
+                    icon = {},
+                    label = { Text(stringResource(label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                )
+            }
+        }
+        if (calendar) EventsActions(eventsViewModel()) else Spacer(Modifier.width(8.dp))
     }
 }
 

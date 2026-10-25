@@ -105,6 +105,33 @@ object Intents {
         }
     }
 
+    /** Абонаментът за календара на сайта (iCalendar, сглобява се при всеки build на сайта). */
+    fun eventsFeedUrl(siteBaseUrl: String) = siteBaseUrl.trimEnd('/') + "/events.ics"
+
+    /**
+     * Абонира за календара [httpsUrl]: първо като `webcal://` (така го приемат приложенията за
+     * календар с абонаменти), после като `text/calendar` по https, накрая — в браузъра.
+     * По изключение, а не с resolveActivity: от Android 11 той не вижда чуждите приложения
+     * без <queries> в манифеста.
+     */
+    fun subscribeCalendar(context: Context, httpsUrl: String) {
+        val https = Uri.parse(httpsUrl)
+        val webcal = https.buildUpon().scheme("webcal").build()
+        val attempts = listOf(
+            Intent(Intent.ACTION_VIEW, webcal),
+            Intent(Intent.ACTION_VIEW).setDataAndType(https, "text/calendar"),
+        )
+        for (intent in attempts) {
+            try {
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                return
+            } catch (_: ActivityNotFoundException) {
+                // следващият начин
+            }
+        }
+        openUrl(context, httpsUrl)
+    }
+
     fun map(context: Context, query: String) =
         context.safeStart(Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))))
 

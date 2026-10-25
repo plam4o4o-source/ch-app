@@ -26,5 +26,18 @@ fun NavController.navigateTab(route: String) = navigate(route) {
 fun NavController.openLinkTarget(target: LinkTarget.Screen) {
     navigateTab(target.tab)
     popBackStack(target.tab, inclusive = false, saveState = false)
+    target.segment?.let { requestSegment(target.tab, it) }
     target.stack.forEach { navigate(it) { launchSingleTop = true } }
+}
+
+/** Ключът в SavedStateHandle на раздела, под който връзката оставя искания сегмент. */
+const val SEGMENT_KEY = "segment"
+
+/**
+ * Раздел със сегменти („Новини | Календар“) да покаже [segment]. Искането се оставя в
+ * състоянието на самия раздел (не в глобален обект) — разделът го взима и изчиства, както
+ * при първа композиция, така и ако вече е отворен. Разделът трябва да е в стека.
+ */
+fun NavController.requestSegment(tab: String, segment: String) {
+    runCatching { getBackStackEntry(tab).savedStateHandle[SEGMENT_KEY] = segment }
 }

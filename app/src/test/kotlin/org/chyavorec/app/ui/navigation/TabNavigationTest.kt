@@ -112,10 +112,21 @@ class TabNavigationTest {
 
     @Test fun eventNotificationOverAnotherOpenEvent() {
         start()
-        act { navigate(Routes.EVENTS); navigate(Routes.event("A")) }
+        link(DeepLinks.event("A"))
         link(DeepLinks.event("B"))
-        assertEquals(listOf("home", "events", "event/B"), stack())
-        assertEquals(listOf("event/B", "events", "home"), backOrder())
+        assertEquals(listOf("home", "news", "event/B"), stack())
+        assertEquals(listOf("event/B", "news", "home"), backOrder())
+    }
+
+    /** Връзка към събитията оставя на раздела искане за сегмента „Календар“ (в неговото състояние). */
+    @Test fun eventsLinkAsksTheNewsTabForTheCalendarSegment() {
+        start()
+        act { navigateTab(Routes.NEWS); navigate(Routes.article("A")) }
+        act { navigateTab(Routes.HOME) }
+        link(DeepLinks.EVENTS)
+        assertEquals(listOf("home", "news"), stack())
+        val segment = compose.runOnIdle { nav.getBackStackEntry(Routes.NEWS).savedStateHandle.get<String>(SEGMENT_KEY) }
+        assertEquals(Routes.SEGMENT_CALENDAR, segment)
     }
 
     @Test fun staleSavedStateDoesNotComeBackLater() {

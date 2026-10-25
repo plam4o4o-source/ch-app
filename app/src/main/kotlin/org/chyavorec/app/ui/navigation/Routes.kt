@@ -23,7 +23,14 @@ object Routes {
     const val MORE = "more"
 
     const val ARTICLE = "article/{id}"
+    /**
+     * Събитията. Не е отделен екран над раздел, а сегментът „Календар“ на раздела
+     * „Новини и събития“ — `navigate(EVENTS)` отваря раздела на този сегмент (виж
+     * ChitalishteRoot). Самият маршрут остава само за запазени стари стекове.
+     */
     const val EVENTS = "events"
+    /** Сегментът „Календар“ на раздела „Новини и събития“ (виж [LinkTarget.Screen.segment]). */
+    const val SEGMENT_CALENDAR = "calendar"
     const val EVENT = "event/{id}"
     /** `personal` — отворена от личен списък (история, заемания, „За теб“): без корици от интернет. */
     const val BOOK = "book/{inv}?personal={personal}"

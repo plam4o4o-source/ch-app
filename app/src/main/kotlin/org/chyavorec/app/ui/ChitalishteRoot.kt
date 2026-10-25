@@ -128,6 +128,7 @@ import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.navigation.TopTab
 import org.chyavorec.app.ui.navigation.navigateTab
 import org.chyavorec.app.ui.navigation.openLinkTarget
+import org.chyavorec.app.ui.navigation.requestSegment
 import org.chyavorec.app.ui.screens.catalog.BookScreen
 import org.chyavorec.app.ui.screens.catalog.CatalogScreen
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
@@ -275,6 +276,8 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
         // Търсене, поискано от друг екран: каталогът без стария си подстек (иначе би се
         // възстановил напр. екранът на книга над него, а не резултатите от търсенето).
         target == Routes.CATALOG && CatalogSearchRequests.pending.value != null -> nav.openLinkTarget(LinkTarget.Screen(Routes.CATALOG))
+        // Събитията са сегментът „Календар“ на раздела „Новини и събития“ (не екран над Начало).
+        target == Routes.EVENTS -> nav.openLinkTarget(DeepLinks.eventsTab())
         target in topLevelRoutes -> nav.navigateTab(target)
         else -> nav.navigate(target)
     }
@@ -285,7 +288,10 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
      */
     fun openLink(url: String) {
         val t = DeepLinks.forUrl(url, container.config.siteBaseUrl) ?: return Intents.openUrl(context, url)
-        if (t.stack.isEmpty()) nav.navigateTab(t.tab) else t.stack.forEach { nav.navigate(it) }
+        if (t.stack.isEmpty()) {
+            nav.navigateTab(t.tab)
+            t.segment?.let { nav.requestSegment(t.tab, it) }
+        } else t.stack.forEach { nav.navigate(it) }
     }
     val openExternal: (String) -> Unit = { Intents.openUrl(context, it) }
     val back: () -> Unit = { if (!nav.popBackStack()) nav.navigateTab(Routes.HOME) }
@@ -549,7 +555,7 @@ private fun AppNavHost(
         screen(Routes.HOME) { HomeScreen(navigate) }
         screen(Routes.CATALOG) { CatalogScreen(navigate) }
         screen(Routes.MY) { MyHubScreen(navigate) }
-        screen(Routes.NEWS) { NewsListScreen(navigate) }
+        screen(Routes.NEWS) { NewsListScreen(navigate, it.savedStateHandle) }
         screen(Routes.MORE) { MoreScreen(navigate) }
 
         screen(Routes.ARTICLE, arguments = listOf(navArgument("id") { type = NavType.StringType })) {

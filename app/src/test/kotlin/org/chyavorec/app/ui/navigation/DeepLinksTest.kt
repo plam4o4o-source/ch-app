@@ -28,10 +28,11 @@ class DeepLinksTest {
         assertEquals(LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(id))), target(link))
     }
 
-    @Test fun eventNotificationOpensTheEventOverEventsList() {
+    /** Под събитието — разделът „Новини и събития“ на сегмента „Календар“ (не отделен екран над Начало). */
+    @Test fun eventNotificationOpensTheEventOverTheCalendarSegment() {
         val id = "event-03-03"
         assertEquals(
-            LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS, Routes.event(id))),
+            LinkTarget.Screen(Routes.NEWS, listOf(Routes.event(id)), Routes.SEGMENT_CALENDAR),
             target(DeepLinks.event(id)),
         )
     }
@@ -44,14 +45,14 @@ class DeepLinksTest {
 
     @Test fun emptyIdsFallBackToTheList() {
         assertEquals(LinkTarget.Screen(Routes.NEWS), target("article/"))
-        assertEquals(LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS)), target("event/"))
+        assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_CALENDAR), target("event/"))
         assertEquals(LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES)), target("message/"))
     }
 
     @Test fun legacyAndShortcutLinks() {
         // Известия от по-стари версии.
         assertEquals(LinkTarget.Screen(Routes.NEWS), target("news/12345"))
-        assertEquals(LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS)), target("events"))
+        assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_CALENDAR), target("events"))
         assertEquals(LinkTarget.Screen(Routes.MY, listOf(Routes.LOANS)), target("my/loans"))
         assertEquals(LinkTarget.Screen(Routes.MY, listOf(Routes.CARD)), target("my/card"))
         assertEquals(LinkTarget.Screen(Routes.MY, listOf(Routes.HISTORY)), target("my/history"))
@@ -79,7 +80,7 @@ class DeepLinksTest {
         assertEquals(LinkTarget.Screen(Routes.HOME), DeepLinks.forUrl(base, base))
         assertEquals(LinkTarget.Screen(Routes.CATALOG), DeepLinks.forUrl("$base/elektronen-katalog", base))
         assertEquals(LinkTarget.Screen(Routes.NEWS), DeepLinks.forUrl("$base/news/", base))
-        assertEquals(LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS)), DeepLinks.forUrl("$base/events", base))
+        assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_CALENDAR), DeepLinks.forUrl("$base/events", base))
         assertEquals(LinkTarget.Screen(Routes.HOME, listOf(Routes.CONTACTS)), DeepLinks.forUrl("$base/kontakti", base))
         assertEquals(LinkTarget.Screen(Routes.MORE, listOf(Routes.DOCUMENTS)), DeepLinks.forUrl("$base/load", base))
         assertEquals(LinkTarget.Screen(Routes.MORE, listOf(Routes.DOCUMENTS)), DeepLinks.forUrl("$base/istoricheski-publikacii", base))

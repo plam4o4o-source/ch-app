@@ -9,9 +9,10 @@ import org.chyavorec.core.TrustedLinks
 sealed interface LinkTarget {
     /**
      * [tab] — разделът от долната лента под екрана (за да води „Назад“ към него, а не
-     * извън приложението); [stack] — екраните над раздела (празно — самият раздел).
+     * извън приложението); [stack] — екраните над раздела (празно — самият раздел);
+     * [segment] — сегментът вътре в раздела (напр. [Routes.SEGMENT_CALENDAR] в „Новини“).
      */
-    data class Screen(val tab: String, val stack: List<String> = emptyList()) : LinkTarget
+    data class Screen(val tab: String, val stack: List<String> = emptyList(), val segment: String? = null) : LinkTarget
 
     /** Диалогът за нова версия (без навигация). */
     data object UpdatePrompt : LinkTarget
@@ -62,16 +63,16 @@ object DeepLinks {
             link == "my/history" -> LinkTarget.Screen(Routes.MY, listOf(Routes.HISTORY))
             link == "catalog" -> LinkTarget.Screen(Routes.CATALOG)
             link == "scan" -> LinkTarget.Screen(Routes.CATALOG, listOf(Routes.SCAN))
-            link == EVENTS -> LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS))
+            link == EVENTS -> eventsTab()
             link == MESSAGES -> LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES))
             link == UPDATE -> LinkTarget.UpdatePrompt
             link.startsWith(ARTICLE_PREFIX) -> idOf(link, ARTICLE_PREFIX)
                 ?.let { LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(it))) }
                 ?: LinkTarget.Screen(Routes.NEWS)
-            // Под събитието — списъкът със събития, после началото.
+            // Под събитието — „Новини и събития“ на сегмента „Календар“.
             link.startsWith(EVENT_PREFIX) -> idOf(link, EVENT_PREFIX)
-                ?.let { LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS, Routes.event(it))) }
-                ?: LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS))
+                ?.let { eventsTab(listOf(Routes.event(it))) }
+                ?: eventsTab()
             link.startsWith(MESSAGE_PREFIX) -> idOf(link, MESSAGE_PREFIX)
                 ?.let { LinkTarget.Screen(Routes.HOME, listOf(Routes.message(it))) }
                 ?: LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES))
@@ -80,6 +81,9 @@ object DeepLinks {
             else -> null
         }
     }
+
+    /** Събитията — разделът „Новини и събития“ със сегмента „Календар“ (и [stack] над него). */
+    fun eventsTab(stack: List<String> = emptyList()) = LinkTarget.Screen(Routes.NEWS, stack, Routes.SEGMENT_CALENDAR)
 
     private fun idOf(link: String, prefix: String): String? =
         Uri.decode(link.removePrefix(prefix)).takeIf { it.isNotBlank() }
@@ -103,7 +107,7 @@ object DeepLinks {
             path == "/news" -> LinkTarget.Screen(Routes.NEWS)
             // По публичния адрес без заявка/котва (така е и в кеша на новините).
             path.startsWith("/news/") -> LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(siteBaseUrl.trimEnd('/') + path)))
-            path == "/events" -> LinkTarget.Screen(Routes.HOME, listOf(Routes.EVENTS))
+            path == "/events" -> eventsTab()
             path == "/kontakti" -> LinkTarget.Screen(Routes.HOME, listOf(Routes.CONTACTS))
             path == "/load" || path == "/istoricheski-publikacii" -> LinkTarget.Screen(Routes.MORE, listOf(Routes.DOCUMENTS))
             path == "/policy" -> LinkTarget.Screen(Routes.MORE, listOf(Routes.PRIVACY))
