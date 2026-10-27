@@ -1,0 +1,158 @@
+name: Wave 13 emulator check (temporary)
+# ВРЕМЕННО: проверка на сляната вълна 13 (305a487) на емулатор преди издание.
+# Резултатите (снимки, логове, числа) се публикуват в клона emulator-results, папка v127/
+# (orphan, force-push; останалото съдържание на клона се запазва).
+# Стъпките с емулатора са continue-on-error: паднал емулатор се записва в резултатите,
+# а изпълнението завършва зелено (без писма за неуспех).
+on:
+  push:
+    branches: [debug/wave13-check]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - name: Temporary x86_64 ABI (emulator only, not committed)
+        run: |
+          sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО|' app/build.gradle.kts
+          grep -n "^val releaseAbis" app/build.gradle.kts
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Build minified prodRelease APK (throwaway key)
+        run: |
+          PASS=$(openssl rand -hex 16)
+          keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/t.jks" -storepass "$PASS" -keypass "$PASS" \
+            -alias t -keyalg RSA -keysize 2048 -validity 1 -dname "CN=repro"
+          export SIGNING_STORE_FILE="$RUNNER_TEMP/t.jks" SIGNING_STORE_PASSWORD="$PASS" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$PASS"
+          ./gradlew --no-daemon assembleProdRelease
+          cp "$(ls app/build/outputs/apk/prod/release/*.apk | head -1)" app.apk && ls -l app.apk
+          echo "$(git rev-parse --short HEAD) ($(git log -1 --format=%s | cut -c1-80)); x86_64 libs: $(unzip -l app.apk | grep -c 'lib/x86_64/' || true)" > apk-ref.txt
+          cat apk-ref.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk
+          path: |
+            app.apk
+            apk-ref.txt
+
+  emulator:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Всички на API 33 със swangle_indirect (swiftshader_indirect срива емулатора).
+          - { part: perf, api: 33, gpu: swangle_indirect }
+          - { part: func1, api: 33, gpu: swangle_indirect }
+          - { part: func2, api: 33, gpu: swangle_indirect }
+          - { part: offline, api: 33, gpu: swangle_indirect }
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: apk
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Run on emulator (${{ matrix.part }}, API ${{ matrix.api }}, ${{ matrix.gpu }})
+        id: run
+        continue-on-error: true
+        timeout-minutes: 45
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          # Без камера: емулаторът пада при отваряне на камерата.
+          emulator-options: -no-window -gpu ${{ matrix.gpu }} -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: bash .github/perf-check/run.sh ${{ matrix.part }}
+      - name: Record the step outcome
+        if: always()
+        run: |
+          mkdir -p out/${{ matrix.part }}
+          echo "part=${{ matrix.part }} api=${{ matrix.api }} gpu=${{ matrix.gpu }} emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          cat out/${{ matrix.part }}/job-status.txt
+          { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
+            echo "== emulator processes"; ps -eo pid,etime,rss,stat,args | grep -iE "qemu|emulator" | grep -v grep | cut -c1-200
+            echo "== emulator crash dumps / logs"; find /tmp ~/.android -newer app.apk \( -name '*.dmp' -o -name '*crash*' \) 2>/dev/null | head -20; } > out/${{ matrix.part }}/host-after-run.txt 2>&1 || true
+      - uses: actions/upload-artifact@v7
+        if: always()
+        continue-on-error: true
+        with:
+          name: out-${{ matrix.part }}
+          path: out/
+
+  publish:
+    needs: emulator
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: out-*
+          path: results
+          merge-multiple: true
+      - name: Push results to emulator-results/v127 (orphan, force; the rest of the branch is kept)
+        run: |
+          set -e
+          SRC=$(git rev-parse --short HEAD)
+          mkdir -p "$RUNNER_TEMP/pub" results
+          if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
+          V="$RUNNER_TEMP/pub/v127"
+          rm -rf "$V"; mkdir -p "$V"
+          cp -r results/. "$V/"
+          cd "$V"
+          PARTS=$(ls -d */ 2>/dev/null | tr -d /)
+          {
+            echo "# Wave 13 emulator check before release (v127)"
+            echo
+            echo "Source: \`debug/wave13-check\` @ $SRC (app = wave 13 merge 305a487), run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ)."
+            echo "Emulators: google_apis x86_64 API 33, pixel_6 profile, -gpu swangle_indirect; app locale bg-BG."
+            echo "Previous full test (v1.2.26): [../v126/index.md](../v126/index.md)."
+            echo
+            echo "| part | status |"; echo "|---|---|"
+            for p in $PARTS; do
+              st=$(cat "$p/job-status.txt" 2>/dev/null || echo "no job status")
+              if grep -q '## COMPLETE' "$p/summary.txt" 2>/dev/null; then c=COMPLETE; elif [ -f "$p/summary.txt" ]; then c="INCOMPLETE ($(grep -m1 'EMULATOR GONE' "$p/summary.txt" || echo 'stopped early'))"; else c="no summary"; fi
+              echo "| $p | $c; $st |"
+            done
+            echo
+            for p in $PARTS; do
+              [ -f "$p/summary.txt" ] || { echo "## $p: no summary (job failed?)"; continue; }
+              echo "## $p"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
+            done
+            echo "## Screenshots"
+            for d in $(find . -name '*.png' -printf '%h\n' | sort -u); do
+              echo; echo "### ${d#./}"; echo
+              for f in $(ls "$d"/*.png | sort); do echo "- [${f#./}](${f#./})"; done
+            done
+            echo; echo "## Other files"; echo
+            find . -type f ! -name '*.png' ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
+          } > index.md
+          cd "$RUNNER_TEMP/pub"
+          if [ -f index.md ] && ! grep -q "v127/index.md" index.md; then
+            { head -1 index.md; echo; echo "Wave 13 check before release (305a487): [v127/index.md](v127/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md
+          fi
+          git init -q -b emulator-results
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -qm "Emulator results v127 for $SRC (run ${{ github.run_id }})"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/emulator-results
