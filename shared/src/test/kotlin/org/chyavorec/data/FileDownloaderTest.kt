@@ -23,18 +23,18 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
-/** Свалянето на PDF за приложение на телефона: напредък, повторно ползване, без половин файл. */
+/** Свалянето на PDF за приложение на телефона: напредък, повторно ползване, без половин файл, само PDF до границата, малка папка. */
 class FileDownloaderTest {
     private lateinit var server: MockWebServer
     private val dir = Files.createTempDirectory("docs").toFile()
     private var now = 1_000_000L
     private val client = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
-    private val downloader = FileDownloader(client, dir, now = { now }, io = Dispatchers.IO)
+    private val downloader = FileDownloader(client, dir, now = { now }, io = Dispatchers.IO, maxBytes = 1_000_000)
 
     @BeforeTest fun start() { server = MockWebServer().apply { start() } }
     @AfterTest fun stop() { server.shutdown(); dir.deleteRecursively() }
 
-    private val pdf = ByteArray(300_000) { (it % 251).toByte() }
+    private val pdf = "%PDF-1.7\n".toByteArray() + ByteArray(300_000) { (it % 251).toByte() }
 
     @Test fun downloadsWithProgressAndReusesTheFreshFile() = runBlocking {
         server.enqueue(MockResponse().setBody(Buffer().write(pdf)).setHeader("Content-Type", "application/pdf"))
@@ -55,12 +55,12 @@ class FileDownloaderTest {
 
     @Test fun staleFileIsDownloadedAgain() = runBlocking {
         val url = server.url("/a.pdf").toString()
-        server.enqueue(MockResponse().setBody("first"))
-        server.enqueue(MockResponse().setBody("second"))
+        server.enqueue(MockResponse().setBody("%PDF-1.4 first"))
+        server.enqueue(MockResponse().setBody("%PDF-1.4 second"))
         val file = (downloader.download(url) as Outcome.Success).value
         file.setLastModified(now)
         now += 2 * 24 * 60 * 60 * 1000L
-        assertEquals("second", (downloader.download(url) as Outcome.Success).value.readText())
+        assertEquals("%PDF-1.4 second", (downloader.download(url) as Outcome.Success).value.readText())
     }
 
     @Test fun failuresLeaveNoFile() = runBlocking {
@@ -78,5 +78,62 @@ class FileDownloaderTest {
         val job = async { downloader.download(url) { p -> if (p != null && p > 0.1f) throw CancellationException("назад") } }
         assertFailsWith<CancellationException> { job.await() }
         assertTrue(dir.listFiles().orEmpty().isEmpty())
+    }
+
+    /** Страница за вход в Wi-Fi мрежа (или друго не-PDF) не се пази като документ за 24 ч. */
+    @Test fun nonPdfResponsesAreRejected() = runBlocking {
+        val url = server.url("/ustav.pdf").toString()
+        server.enqueue(MockResponse().setBody("<html>Вход в мрежата</html>").setHeader("Content-Type", "text/html"))
+        assertEquals(AppError.Parse("not a pdf"), assertIs<Outcome.Failure>(downloader.download(url)).error)
+        // Без подсказващ Content-Type — по съдържанието.
+        server.enqueue(MockResponse().setBody("<html>Вход в мрежата</html>").setHeader("Content-Type", "application/octet-stream"))
+        assertEquals(AppError.Parse("not a pdf"), assertIs<Outcome.Failure>(downloader.download(url)).error)
+        assertTrue(dir.listFiles().orEmpty().isEmpty(), "нито файл, нито .part")
+        // Вече запазен не-PDF (от предишна версия) не се връща — тегли се наново.
+        dir.mkdirs()
+        downloader.fileFor(url).apply { writeText("<html>стар</html>"); setLastModified(now) }
+        server.enqueue(MockResponse().setBody(Buffer().write(pdf)))
+        assertContentEquals(pdf, assertIs<Outcome.Success<java.io.File>>(downloader.download(url)).value.readBytes())
+        assertEquals(3, server.requestCount)
+    }
+
+    @Test fun oversizedFilesAreAbortedByHeaderAndByBytesRead() = runBlocking {
+        val big = "%PDF-1.7\n".toByteArray() + ByteArray(1_200_000)
+        val url = server.url("/big.pdf").toString()
+        server.enqueue(MockResponse().setBody(Buffer().write(big)))
+        assertEquals(AppError.Parse("too large"), assertIs<Outcome.Failure>(downloader.download(url)).error)
+        // Без Content-Length (chunked) — по прочетеното.
+        server.enqueue(MockResponse().setChunkedBody(Buffer().write(big), 64 * 1024))
+        val seen = mutableListOf<Float?>()
+        assertEquals(AppError.Parse("too large"), assertIs<Outcome.Failure>(downloader.download(url) { seen += it }).error)
+        assertEquals(listOf<Float?>(null), seen)
+        assertTrue(dir.listFiles().orEmpty().isEmpty(), "нито файл, нито .part")
+    }
+
+    @Test fun pruneDropsOldFilesAndKeepsTheFolderSmall() = runBlocking {
+        // Истинското време: току-сваленият файл получава часа на системата.
+        now = System.currentTimeMillis()
+        dir.mkdirs()
+        val day = 24 * 60 * 60 * 1000L
+        fun file(name: String, size: Int, ageDays: Int) = java.io.File(dir, name).apply {
+            writeBytes(ByteArray(size)); setLastModified(now - ageDays * day)
+        }
+        val old = file("old.pdf", 10, 8)
+        val oldest = file("a.pdf", 400_000, 3)
+        val older = file("b.pdf", 400_000, 2)
+        val recent = file("c.pdf", 400_000, 1)
+        val part = file("d.pdf.part", 400_000, 0)
+        downloader.prune()
+        // Над седмица — изтрит; над 1 MB общо — най-старият; текущото сваляне (.part) — не.
+        assertEquals(listOf(older, recent, part).map { it.name }.sorted(), dir.listFiles()!!.map { it.name }.sorted())
+        assertTrue(!old.exists() && !oldest.exists())
+
+        // След сваляне: новият файл остава, по-старите отстъпват.
+        server.enqueue(MockResponse().setBody(Buffer().write(pdf)))
+        val fresh = assertIs<Outcome.Success<java.io.File>>(downloader.download(server.url("/new.pdf").toString())).value
+        assertTrue(fresh.exists() && !older.exists() && recent.exists())
+
+        downloader.clear()
+        assertTrue(!dir.exists())
     }
 }

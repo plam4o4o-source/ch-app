@@ -66,7 +66,7 @@ object Notifier {
     const val EXTRA_DEEP_LINK = "deep_link"
     /** Групата на известията за заемания — при 2 и повече се показват под общо обобщение. */
     const val LOANS_GROUP = "org.chyavorec.loans"
-    /** В известието: лично съдържание на влезлия читател (срок на заемане, лично съобщение). */
+    /** В известието: данни на влезлия читател (срок на заемане, лично съобщение) — махат се при изход. */
     private const val EXTRA_PERSONAL = "org.chyavorec.personal"
 
     fun createChannels(context: Context) {
@@ -87,8 +87,9 @@ object Notifier {
 
     /**
      * Показва известие. Текстът е кратък и НЕ съдържа лични данни извън заглавието на книгата
-     * или личното съобщение — а те на заключен екран не се виждат: там личните известия
-     * показват само общ текст ([lockScreenTitle]), независимо от системната настройка.
+     * или личното съобщение. За скритите известия има публична версия с общ текст
+     * ([lockScreenTitle]), но Android я показва на заключен екран само при системната настройка
+     * „скриване на чувствителното съдържание“; при „цялото съдържание“ се вижда и заглавието.
      */
     fun show(
         context: Context,
@@ -97,8 +98,10 @@ object Notifier {
         title: String,
         text: String,
         deepLink: String?,
-        /** Лично съдържание (напр. лично съобщение от библиотеката) — скрито на заключен екран. */
+        /** Лично съдържание (лично съобщение, списъкът „Искам да прочета“) — скрито на заключен екран (VISIBILITY_PRIVATE). */
         sensitive: Boolean = false,
+        /** Данни на влезлия читател — махат се при изход ([cancelPersonal]); списъкът „Искам да прочета“ остава. */
+        readerData: Boolean = sensitive,
         /** Общият текст на заключен екран за лично известие; `null` — според канала (срок / лично съобщение). */
         lockScreenTitle: String? = null,
         /** Бутони в известието (напр. „Удължи“ — [RenewActionReceiver]). */
@@ -114,7 +117,8 @@ object Notifier {
         context.getSystemService(NotificationManager::class.java)?.let { nm ->
             if (nm.getNotificationChannel(channel.id) == null) createChannels(context)
         }
-        val personal = channel == Channel.LOANS || sensitive
+        val hidden = channel == Channel.LOANS || sensitive
+        val personal = channel == Channel.LOANS || readerData
         // Връзката — само през собствения (неекспортиран) вход; виж LaunchIntents.linkOf.
         val intent = LaunchIntents.openLink(context, deepLink).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -122,9 +126,10 @@ object Notifier {
         val pending = PendingIntent.getActivity(
             context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
-        // Без отделна публична версия Android по подразбиране („Показване на цялото съдържание“)
-        // показва и личното на заключен екран — VISIBILITY_PRIVATE само избира коя версия.
-        val publicVersion = if (personal) {
+        // VISIBILITY_PRIVATE не скрива нищо само по себе си: при „скриване на чувствителното
+        // съдържание“ Android показва тази версия (без нея — само името на приложението), а при
+        // „цялото съдържание“ (често по подразбиране) — пълното известие. Приложението не може да го наложи.
+        val publicVersion = if (hidden) {
             val generic = lockScreenTitle
                 ?: context.getString(if (channel == Channel.LOANS) R.string.notif_public_loan else R.string.notif_public_message)
             NotificationCompat.Builder(context, channel.id)
@@ -144,8 +149,8 @@ object Notifier {
             // Съобщенията: повторно показване със същото ID (напр. две проверки една след друга)
             // само подменя известието — без втори звук/вибрация.
             .setOnlyAlertOnce(channel == Channel.MESSAGES || channel == Channel.MESSAGES_IMPORTANT)
-            // Заглавията на заети книги и личните съобщения — скрити на заключен екран (вместо тях — publicVersion).
-            .setVisibility(if (personal) NotificationCompat.VISIBILITY_PRIVATE else NotificationCompat.VISIBILITY_PUBLIC)
+            // Заглавията на книги и личните съобщения — чувствително съдържание (вместо тях — publicVersion).
+            .setVisibility(if (hidden) NotificationCompat.VISIBILITY_PRIVATE else NotificationCompat.VISIBILITY_PUBLIC)
             .apply { publicVersion?.let { setPublicVersion(it) } }
             // По този белег известията на читателя се махат при изход ([cancelPersonal]).
             .apply { if (personal) addExtras(android.os.Bundle().apply { putBoolean(EXTRA_PERSONAL, true) }) }
@@ -198,9 +203,10 @@ object Notifier {
     }
 
     /**
-     * При изход (или смяна на читателя): премахва показаните известия с лично съдържание —
+     * При изход (или смяна на читателя): премахва показаните известия с данни на читателя —
      * за заемания (каналът LOANS) и личните съобщения от библиотеката. Общите (новини,
-     * събития, съобщения от сайта, обновяване) остават.
+     * събития, съобщения от сайта, обновяване) и „вече е на рафта“ (списъкът „Искам да
+     * прочета“ е на устройството и остава след изход) остават.
      */
     fun cancelPersonal(context: Context) {
         val nm = context.getSystemService(NotificationManager::class.java) ?: return

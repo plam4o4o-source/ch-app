@@ -73,6 +73,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
     fun onUiStart() {
         if (!uiStarted.compareAndSet(false, true)) return
         appScope.launch { warmUp() }
+        // Свалените PDF-и: по-старите от седмица и над 50 MB общо — вън.
+        appScope.launch(Dispatchers.IO) { runCatching { container.documents.prune() }.logFailure("startup.documents") }
         appScope.launch { runCatching { container.authRepository.restore() }.logFailure("startup.restore") }
         // „Кажи ми, когато е на рафта“ — при всеки нов каталог, приет на преден план (фоновият — PeriodicSyncWorker).
         appScope.launch { org.chyavorec.app.notifications.WantToReadAlerts.watch(this@ChitalishteApp, container) }

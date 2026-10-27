@@ -61,12 +61,18 @@ class DocumentsPdfTest {
     private fun vm(downloader: FileDownloader?) =
         DocumentsViewModel(SiteRepository(NoSite, InMemoryPayloadCache(), FixedClock(Instant.parse("2026-09-26T10:00:00Z"))), downloader)
 
-    @Test fun onlyHttpsPdfLinksCanBeDownloaded() {
-        assertTrue(DocumentsViewModel.isPdf("https://chyavorec.org/files/ustav.pdf"))
-        assertTrue(DocumentsViewModel.isPdf("https://chyavorec.org/files/OTCHET.PDF?v=2#page=3"))
-        assertFalse(DocumentsViewModel.isPdf("http://chyavorec.org/files/ustav.pdf"))
-        assertFalse(DocumentsViewModel.isPdf("https://chyavorec.org/files/ustav.docx"))
-        assertFalse(DocumentsViewModel.isPdf("https://chyavorec.org/load"))
+    @Test fun onlyHttpsPdfLinksFromTheSiteCanBeDownloaded() {
+        val site = "https://chyavorec.org"
+        assertTrue(DocumentsViewModel.isPdf("https://chyavorec.org/files/ustav.pdf", site))
+        assertTrue(DocumentsViewModel.isPdf("https://www.chyavorec.org/files/OTCHET.PDF?v=2#page=3", site))
+        assertFalse(DocumentsViewModel.isPdf("http://chyavorec.org/files/ustav.pdf", site))
+        assertFalse(DocumentsViewModel.isPdf("https://chyavorec.org/files/ustav.docx", site))
+        assertFalse(DocumentsViewModel.isPdf("https://chyavorec.org/load", site))
+        // Чужд или подвеждащ хост — само в браузъра.
+        assertFalse(DocumentsViewModel.isPdf("https://example.org/ustav.pdf", site))
+        assertFalse(DocumentsViewModel.isPdf("https://evilchyavorec.org/ustav.pdf", site))
+        assertFalse(DocumentsViewModel.isPdf("https://chyavorec.org@evil.com/ustav.pdf", site))
+        assertFalse(vm(null).also { it.viewModelScope.cancel() }.canDownload("https://example.org/ustav.pdf"))
     }
 
     @Test fun downloadedPdfIsHandedOverAndFailureFallsBackToTheBrowser(): Unit = runBlocking {
@@ -76,10 +82,11 @@ class DocumentsPdfTest {
         val file = assertIs<Outcome.Success<java.io.File>>(downloader.download(server.url("/ustav.pdf").toString())).value
         assertEquals("%PDF-1.4 тест", file.readText())
 
-        val model = vm(downloader)
+        // Адрес от сайта, но недостъпен (без DNS) — неуспех: отваря се в браузъра (Custom Tab), както досега.
+        val offline = OkHttpClient.Builder().dns { throw java.net.UnknownHostException(it) }.build()
+        val model = vm(FileDownloader(offline, dir))
         try {
-            // Недостъпен адрес — неуспех: адресът се отваря в браузъра (Custom Tab), както досега.
-            val url = "https://127.0.0.1:1/ustav.pdf"
+            val url = "https://chyavorec.org/files/ustav.pdf"
             val result = async(start = CoroutineStart.UNDISPATCHED) { withTimeout(10_000) { model.results.first() } }
             model.openInPdfApp(url)
             val r = result.await()

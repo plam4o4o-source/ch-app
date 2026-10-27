@@ -30,13 +30,15 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import java.time.Instant
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 /**
  * „Изчисти кеша“ (Настройки): каталогът изчезва изцяло — файлът, записаното до него,
- * обобщението и индексът в базата — а личните данни (любими, читателският кеш) остават.
+ * обобщението и индексът в базата — и свалените PDF документи, а личните данни (любими,
+ * читателският кеш) остават.
  */
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
@@ -48,6 +50,7 @@ class ClearCacheTest {
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse = when (request.path?.substringBefore('?')) {
                 "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json")).also { catalogRequests++ }
+                "/files/ustav.pdf" -> MockResponse().setBody("%PDF-1.4 устав")
                 else -> MockResponse().setResponseCode(404)
             }
         }
@@ -77,9 +80,12 @@ class ClearCacheTest {
         assertNotNull(c.catalogDatabase.index().stateJson(), "индексът в базата е попълнен")
         c.database.favorites().upsert(FavoriteNewsEntity("n1", "Новина", "https://chyavorec.org/news/n1", null, "", null, null, 1))
         c.readerCache.write("reader:history", "[]")
+        val pdf = assertIs<Outcome.Success<java.io.File>>(c.documents.download(server.url("/files/ustav.pdf").toString())).value
         val requests = catalogRequests
 
         c.clearPublicCache()
+
+        assertFalse(pdf.exists(), "свален PDF в cacheDir/documents")
 
         listOf(CatalogRepository.KEY, CatalogRepository.META_KEY, CatalogRepository.FETCHED_AT_KEY, CatalogRepository.SUMMARY_KEY)
             .forEach { assertNull(c.publicCache.read(it), it) }
