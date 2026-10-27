@@ -86,6 +86,7 @@ import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.SyncStamp
 import org.chyavorec.app.ui.components.errorMessage
+import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
@@ -228,7 +229,9 @@ internal fun LoanCard(
             val cover = remember(loan.loanId, loan.title, loan.author, loan.coverUrl) {
                 CatalogBook(inv = loan.inv ?: 0L, author = loan.author, title = loan.title, coverUrl = loan.coverUrl.orEmpty())
             }
-            BookCover(cover, width = 64.dp, showStatusDot = false)
+            // „Прелита“ към страницата на книгата — само когато картата води до нея.
+            val shared = if (onOpen != null && loan.inv != null) Modifier.sharedElementKey("book-${loan.inv}") else Modifier
+            BookCover(cover, width = 64.dp, showStatusDot = false, modifier = shared)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(loan.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)

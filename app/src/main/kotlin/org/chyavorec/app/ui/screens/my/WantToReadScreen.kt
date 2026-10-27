@@ -1,7 +1,21 @@
 package org.chyavorec.app.ui.screens.my
 
+import android.content.res.Resources
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +40,8 @@ import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
@@ -34,7 +50,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -46,6 +61,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -57,11 +73,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -87,15 +108,19 @@ import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
+import org.chyavorec.app.ui.components.AvailableMark
 import org.chyavorec.app.ui.components.BookStatusPill
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.SkeletonList
+import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.settings.NotificationAccess
 import org.chyavorec.app.ui.screens.settings.notificationStatus
 import org.chyavorec.app.ui.screens.settings.rememberNotificationPermission
 import org.chyavorec.app.ui.screens.settings.showNotificationsBlocked
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.Synced
 import org.chyavorec.core.logFailure
@@ -172,22 +197,16 @@ fun WantToReadScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
 
     val remove: (WantToReadEntity) -> Unit = { item ->
         vm.remove(item)
-        scope.launch {
-            snackbar.currentSnackbarData?.dismiss()
-            val r = snackbar.showSnackbar(
-                resources.getString(R.string.want_removed, item.title),
-                actionLabel = resources.getString(R.string.want_undo),
-                duration = SnackbarDuration.Long,
-            )
-            if (r == SnackbarResult.ActionPerformed) vm.restore(item)
-        }
+        scope.launch { if (snackbar.showUndo(resources.getString(R.string.want_removed, item.title), resources)) vm.restore(item) }
     }
+    val haptic = LocalHapticFeedback.current
     val toggleNotify: (WantToReadEntity) -> Unit = { item ->
         if (item.notifyWhenAvailable) {
+            haptic.performHapticFeedback(HapticFeedbackType.ToggleOff)
             vm.setNotify(item, false)
-            scope.launch { snackbar.showSnackbar(resources.getString(R.string.want_notify_unset)) }
+            scope.launch { if (snackbar.showUndo(resources.getString(R.string.want_notify_unset), resources)) vm.restore(item) }
         } else {
-            requestNotify { vm.setNotify(item, true) }
+            requestNotify { haptic.performHapticFeedback(HapticFeedbackType.ToggleOn); vm.setNotify(item, true) }
         }
     }
 
@@ -268,6 +287,11 @@ fun WantToReadScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
 private fun SwipeToRemove(onRemove: () -> Unit, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val state = rememberSwipeToDismissBoxState()
     val remove by rememberUpdatedState(onRemove)
+    val haptic = LocalHapticFeedback.current
+    // Прагът е преминат (пуснат тук, редът ще се махне) — усеща се под пръста.
+    LaunchedEffect(state.targetValue) {
+        if (state.targetValue != SwipeToDismissBoxValue.Settled) haptic.performHapticFeedback(HapticFeedbackType.GestureThresholdActivate)
+    }
     // Редът се маха, щом плъзгането стигне докрай (със „Отмени“ се връща нов ред).
     LaunchedEffect(state.currentValue) {
         if (state.currentValue != SwipeToDismissBoxValue.Settled) remove()
@@ -295,6 +319,7 @@ private fun WantToReadItem(
     onRemove: () -> Unit,
 ) {
     val saved = row.saved
+    val reduced = rememberReducedMotion()
     var menu by remember { mutableStateOf(false) }
     val removeLabel = stringResource(R.string.want_remove)
     val notifyLabel = stringResource(if (saved.notifyWhenAvailable) R.string.want_notify_stop else R.string.want_notify)
@@ -314,7 +339,7 @@ private fun WantToReadItem(
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BookCover(row.shown, width = 56.dp, showStatusDot = false)
+        BookCover(row.shown, width = 56.dp, showStatusDot = false, modifier = Modifier.sharedElementKey("book-${saved.inv}"))
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
             Text(saved.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -325,12 +350,20 @@ private fun WantToReadItem(
                 )
             }
             Row(Modifier.padding(top = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                when {
-                    row.book != null -> BookStatusPill(row.book.status)
+                val status = when {
+                    row.book != null -> row.book.status
                     // Каталогът е прочетен, а книгата я няма в него (отписана).
-                    catalogRead -> Text(stringResource(R.string.want_missing), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    catalogRead -> null
                     // Каталогът още не е прочетен — последно известната наличност.
-                    else -> BookStatusPill(if (saved.lastKnownAvailable) BookStatus.AVAILABLE else BookStatus.NOT_ON_SHELF)
+                    else -> if (saved.lastKnownAvailable) BookStatus.AVAILABLE else BookStatus.NOT_ON_SHELF
+                }
+                AnimatedContent(status, transitionSpec = { stateChange(reduced) }, label = "want-status") { st ->
+                    when (st) {
+                        null -> Text(stringResource(R.string.want_missing), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        // Като в реда на каталога: точка и „налична“ с малки букви; етикет — само за другите.
+                        BookStatus.AVAILABLE -> AvailableMark()
+                        else -> BookStatusPill(st)
+                    }
                 }
                 if (saved.notifyWhenAvailable) {
                     Icon(
@@ -443,61 +476,100 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
     val saved by vm.saved.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val resources = LocalResources.current
+    val haptic = LocalHapticFeedback.current
+    val reduced = rememberReducedMotion()
     FilterChip(
         selected = saved != null,
         onClick = {
+            haptic.performHapticFeedback(if (saved != null) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn)
             vm.toggle(book) { removed ->
                 scope.launch {
                     snackbar.currentSnackbarData?.dismiss()
                     if (removed == null) {
                         snackbar.showSnackbar(resources.getString(R.string.want_added))
-                    } else {
-                        val r = snackbar.showSnackbar(
-                            resources.getString(R.string.want_removed, removed.title),
-                            actionLabel = resources.getString(R.string.want_undo),
-                            duration = SnackbarDuration.Long,
-                        )
-                        if (r == SnackbarResult.ActionPerformed) vm.restore(removed)
+                    } else if (snackbar.showUndo(resources.getString(R.string.want_removed, removed.title), resources)) {
+                        vm.restore(removed)
                     }
                 }
             }
         },
         label = { Text(stringResource(R.string.want_title)) },
         leadingIcon = {
-            Icon(
-                if (saved != null) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder, contentDescription = null,
-                modifier = Modifier.size(FilterChipDefaults.IconSize),
-            )
+            AnimatedContent(saved != null, transitionSpec = { stateChange(reduced) }, label = "want-chip") { inList ->
+                Icon(
+                    if (inList) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder, contentDescription = null,
+                    modifier = Modifier.size(FilterChipDefaults.IconSize),
+                )
+            }
         },
         modifier = modifier.heightIn(min = 48.dp),
     )
 }
 
-/** „Кажи ми, когато е на рафта“ — за книга, която не е на рафта (до „Попитай библиотеката“). */
+/**
+ * „Кажи ми, когато е на рафта“ — за книга, която не е на рафта (до „Попитай библиотеката“).
+ * Превключвател (за TalkBack — „включено/изключено“): изключен — с контур, включен — тонален,
+ * с „Ще ти кажем…“; изключването може да се отмени от снекбара.
+ */
 @Composable
 fun NotifyWhenAvailableButton(book: CatalogBook, snackbar: SnackbarHostState, modifier: Modifier = Modifier) {
     val vm = bookWantToReadViewModel(book.inv)
     val saved by vm.saved.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val resources = LocalResources.current
+    val haptic = LocalHapticFeedback.current
     val requestNotify = rememberNotifyRequest(snackbar)
     val on = saved?.notifyWhenAvailable == true
-    OutlinedButton(
-        onClick = {
-            if (on) {
-                vm.setNotify(book, false)
-                scope.launch { snackbar.showSnackbar(resources.getString(R.string.want_notify_unset)) }
-            } else {
-                requestNotify { vm.setNotify(book, true) }
+    val reduced = rememberReducedMotion()
+    val colors = MaterialTheme.colorScheme
+    val colorSpec: AnimationSpec<Color> = if (reduced) snap() else AppMotion.defaultEffects()
+    val container by animateColorAsState(if (on) colors.secondaryContainer else colors.secondaryContainer.copy(alpha = 0f), colorSpec, label = "notify-bg")
+    val content by animateColorAsState(if (on) colors.onSecondaryContainer else colors.primary, colorSpec, label = "notify-fg")
+    val border by animateColorAsState(if (on) colors.outline.copy(alpha = 0f) else colors.outline, colorSpec, label = "notify-border")
+    Row(
+        modifier
+            .heightIn(min = 48.dp)
+            .clip(CircleShape)
+            .background(container)
+            .border(1.dp, border, CircleShape)
+            .toggleable(value = on, role = Role.Switch) { turnOn ->
+                if (turnOn) {
+                    requestNotify { haptic.performHapticFeedback(HapticFeedbackType.ToggleOn); vm.setNotify(book, true) }
+                } else {
+                    haptic.performHapticFeedback(HapticFeedbackType.ToggleOff)
+                    val before = saved
+                    vm.setNotify(book, false)
+                    scope.launch {
+                        if (snackbar.showUndo(resources.getString(R.string.want_notify_unset), resources) && before != null) vm.restore(before)
+                    }
+                }
             }
-        },
-        modifier = modifier.heightIn(min = 48.dp),
+            .padding(ButtonDefaults.ContentPadding),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
     ) {
-        Icon(if (on) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsNone, null)
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(if (on) R.string.want_notify_on else R.string.want_notify))
+        CompositionLocalProvider(LocalContentColor provides content) {
+            AnimatedContent(on, transitionSpec = { stateChange(reduced) }, label = "notify") { isOn ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(if (isOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsNone, null, Modifier.size(ButtonDefaults.IconSize))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(if (isOn) R.string.want_notify_on else R.string.want_notify), style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        }
     }
 }
+
+/** Снекбар с „Отмени“ (както при махане от списъка); `true` — потребителят отмени. */
+private suspend fun SnackbarHostState.showUndo(message: String, resources: Resources): Boolean {
+    currentSnackbarData?.dismiss()
+    return showSnackbar(message, actionLabel = resources.getString(R.string.want_undo), duration = SnackbarDuration.Long) == SnackbarResult.ActionPerformed
+}
+
+/** Смяна на състояние (етикет, превключвател): кратко преливане; при намалено движение — веднага. */
+private fun stateChange(reduced: Boolean): ContentTransform =
+    if (reduced) EnterTransition.None togetherWith ExitTransition.None
+    else fadeIn(AppMotion.defaultEffects()) togetherWith fadeOut(AppMotion.fastEffects())
 
 /** Описанието на плочката в „Моето“: колко книги има в списъка. */
 @Composable

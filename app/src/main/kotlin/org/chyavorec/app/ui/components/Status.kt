@@ -67,6 +67,20 @@ fun BookStatusPill(status: BookStatus, modifier: Modifier = Modifier) {
     StatusPill(text, color, modifier)
 }
 
+/**
+ * „налична“ в ред от списък с книги — като в каталога: зелена точка и малки букви, без
+ * фон (етикетът [BookStatusPill] остава за „не е на рафта“ и другите, които искат внимание).
+ */
+@Composable
+fun AvailableMark(modifier: Modifier = Modifier) {
+    val ok = LocalExtendedColors.current.ok
+    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+        Spacer(Modifier.size(6.dp).background(ok, CircleShape))
+        Spacer(Modifier.width(5.dp))
+        Text(stringResource(R.string.status_available).lowercase(), style = MaterialTheme.typography.bodySmall, color = ok, maxLines = 1)
+    }
+}
+
 @Composable
 fun dueColor(status: DueStatus): Color {
     val ext = LocalExtendedColors.current

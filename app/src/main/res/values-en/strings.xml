@@ -240,6 +240,7 @@
     <string name="loans_empty">You have no borrowed books</string>
     <string name="loans_empty_hint">Browse the catalogue — something might catch your eye.</string>
     <string name="login_caps_failed">We can’t reach the library’s server, so we can’t check whether online sign-in is available. Check your internet connection and try again.</string>
+    <string name="login_caps_failed_short">We can’t check whether online sign-in is available.</string>
     <string name="login_card">Reader number</string>
     <string name="login_demo_hint">Demo sign-in: DEMO-0001 / demo</string>
     <string name="login_forgot">Forgot your PIN?</string>

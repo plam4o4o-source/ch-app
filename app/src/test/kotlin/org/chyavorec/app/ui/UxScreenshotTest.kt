@@ -3,6 +3,9 @@ package org.chyavorec.app.ui
 import android.app.Application
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasClickAction
@@ -154,6 +157,9 @@ class UxScreenshotTest {
         shot("83-ux-scan-no-camera")
         click("Въведи номера на ръка")
         compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isNotEmpty() }
+        // TalkBack: панелът е с име, а съдържанието под него (бутонът „Въведи…“ отзад) не е в дървото.
+        compose.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.PaneTitle, "Въведи номера на ръка")).assertCountEquals(1)
+        compose.onAllNodes(hasText("Въведи номера на ръка") and hasClickAction()).assertCountEquals(0)
         compose.onAllNodes(hasSetTextAction()).onFirst().performTextInput("399666")
         shot("84-ux-scan-manual")
         compose.onAllNodes(hasText("Търси") and hasClickAction()).onFirst().performClick()

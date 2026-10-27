@@ -3,6 +3,8 @@ package org.chyavorec.app.ui.screens.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -78,7 +80,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.ThemePalette
 import org.chyavorec.app.ui.theme.paletteAccent
@@ -306,8 +307,9 @@ private fun paletteDescription(palette: ThemePalette): String = stringResource(
 private fun PalettePicker(selected: ThemePalette, enabled: Boolean, onSelect: (ThemePalette) -> Unit) {
     val dark = LocalExtendedColors.current.isDark
     val shape = MaterialTheme.shapes.medium
+    // Еднаква височина на мострите — описанието се пренася на редове при едър шрифт.
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).selectableGroup(),
+        Modifier.fillMaxWidth().height(IntrinsicSize.Min).padding(horizontal = 16.dp, vertical = 4.dp).selectableGroup(),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         ThemePalette.entries.forEach { palette ->
@@ -321,7 +323,7 @@ private fun PalettePicker(selected: ThemePalette, enabled: Boolean, onSelect: (T
                     if (isSelected) 2.dp else 1.dp,
                     if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
                 ),
-                modifier = Modifier.weight(1f).clip(shape)
+                modifier = Modifier.weight(1f).fillMaxHeight().clip(shape)
                     .selectable(selected = isSelected, enabled = enabled, role = Role.RadioButton) { onSelect(palette) }
                     .alpha(if (enabled) 1f else 0.5f),
             ) {
@@ -341,9 +343,8 @@ private fun PalettePicker(selected: ThemePalette, enabled: Boolean, onSelect: (T
                         style = MaterialTheme.typography.bodySmall,
                         color = scheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
                     )
+                    Spacer(Modifier.weight(1f))
                     Spacer(Modifier.height(4.dp))
                     Icon(
                         Icons.Filled.CheckCircle,

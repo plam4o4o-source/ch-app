@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -119,9 +123,14 @@ private fun ContactCard(icon: ImageVector, title: String, lines: List<String>, o
                 Text(title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 lines.forEach { line ->
                     if (onClick != null) {
-                        androidx.compose.material3.TextButton(onClick = { onClick(line) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)) {
-                            Text(line, style = MaterialTheme.typography.titleMedium)
-                        }
+                        // Обикновен текст, а не TextButton: заобленият клип на бутона рязал
+                        // първите букви на пренесените на няколко реда връзки.
+                        Text(
+                            line, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                                .clickable(role = Role.Button) { onClick(line) }
+                                .wrapContentHeight(Alignment.CenterVertically).padding(vertical = 4.dp),
+                        )
                     } else {
                         Text(line, style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 2.dp))
                     }

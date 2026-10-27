@@ -3,12 +3,10 @@ package org.chyavorec.app.ui.screens.scan
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.lerp
@@ -31,6 +29,7 @@ import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.chyavorec.app.ui.theme.Brand
+import org.chyavorec.app.ui.theme.AppMotion
 
 /** Какво показва визьорът: търсене, намерена книга или „няма я“. */
 internal enum class ViewfinderMode { SCANNING, HIT, MISS }
@@ -62,7 +61,7 @@ internal fun ViewfinderOverlay(mode: ViewfinderMode, modifier: Modifier = Modifi
                 if (reduced) {
                     lock.snapTo(1f); check.snapTo(1f)
                 } else {
-                    launch { lock.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMediumLow)) }
+                    launch { lock.animateTo(1f, AppMotion.defaultSpatial()) }
                     launch { pulse.snapTo(0f); pulse.animateTo(1f, tween(650, easing = FastOutSlowInEasing)) }
                     delay(120)
                     check.animateTo(1f, tween(320, easing = FastOutSlowInEasing))

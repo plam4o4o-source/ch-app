@@ -204,30 +204,34 @@ private fun GuestCard(caps: CapabilitiesStatus, hasCard: Boolean, onLogin: () ->
                 caps is CapabilitiesStatus.Known && caps.caps.login -> Button(onClick = onLogin) {
                     Icon(Icons.AutoMirrored.Outlined.Login, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.action_login))
                 }
-                // Без връзка не знаем дали входът е включен — не казваме „не е включен“.
-                caps is CapabilitiesStatus.Failed -> InlineNotice(
-                    Icons.Outlined.CloudOff, stringResource(R.string.login_caps_failed),
-                    actionLabel = stringResource(R.string.action_retry), onAction = onRetry,
-                )
+                // Без връзка не знаем дали входът е включен — не казваме „не е включен“. Картата
+                // се добавя и без връзка, затова бутонът остава; бележката е кратка (лентата
+                // „Няма интернет връзка“ вече казва останалото).
+                caps is CapabilitiesStatus.Failed -> Column {
+                    if (!hasCard) AddCardButton(onAddCard)
+                    InlineNotice(
+                        Icons.Outlined.CloudOff, stringResource(R.string.login_caps_failed_short),
+                        actionLabel = stringResource(R.string.action_retry), onAction = onRetry,
+                    )
+                }
                 // Входът не е включен: вместо вход — дигиталната карта (ако още не е въведена).
                 caps is CapabilitiesStatus.Known -> Column {
-                    if (!hasCard) {
-                        Button(onClick = onAddCard) {
-                            Icon(Icons.Outlined.Badge, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.action_add_card))
-                        }
-                        Spacer(Modifier.height(12.dp))
-                    }
-                    Row(verticalAlignment = Alignment.Top) {
-                        Icon(Icons.Outlined.Info, null, modifier = Modifier.size(20.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.na_login), style = MaterialTheme.typography.bodySmall)
-                    }
+                    if (!hasCard) AddCardButton(onAddCard)
+                    InlineNotice(Icons.Outlined.Info, stringResource(R.string.na_login))
                 }
                 // Още се пита (обикновено от кеша — за миг): без съобщение, вместо грешното „не е включен“.
                 else -> Unit
             }
         }
     }
+}
+
+@Composable
+private fun AddCardButton(onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Icon(Icons.Outlined.Badge, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.action_add_card))
+    }
+    Spacer(Modifier.height(12.dp))
 }
 
 /** Графиките за четенето ([ReadingStatsCard]) под плочките; изчезват при изход. */
