@@ -76,10 +76,16 @@ elif mode == '--texts':
             if v:
                 print(v)
 elif mode == '--state':
+    # Състоянието е на кликаемия възел (сегмент, chip), а текстът често е в дете — търси се нагоре.
+    parent = {c: p for p in root.iter() for c in p}
     hits = matches(args[1], args[2])
     if hits:
         n, b = hits[0]
-        print(f"checked={n.get('checked')} selected={n.get('selected')} bounds={n.get('bounds')}")
+        m = n
+        while m is not None and m.get('clickable') != 'true' and m.get('checkable') != 'true':
+            m = parent.get(m)
+        m = m if m is not None else n
+        print(f"checked={m.get('checked')} selected={m.get('selected')} bounds={m.get('bounds')}")
 elif mode == '--tab':
     hits = matches('text', args[1])
     refs = matches('text', args[2])

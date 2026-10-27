@@ -50,12 +50,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { part: start35, api: 35 }
-          - { part: perf, api: 34 }
-          - { part: stress, api: 34 }
-          - { part: func, api: 34 }
-          - { part: look, api: 34 }
-          - { part: offline, api: 34 }
+          # Първият кръг (API 34) загуби емулатора в 4 от 5 части (виж v126/run1) — сега API 33,
+          # части по-малки, за да се губи по-малко при загуба; probe34 повтаря проверката на API 34.
+          - { part: perf, api: 33 }
+          - { part: stress1, api: 33 }
+          - { part: stress2, api: 33 }
+          - { part: stress3, api: 33 }
+          - { part: func1, api: 33 }
+          - { part: func2, api: 33 }
+          - { part: look1, api: 33 }
+          - { part: look2, api: 33 }
+          - { part: offline, api: 33 }
+          - { part: probe34, api: 34 }
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -86,6 +92,9 @@ jobs:
           mkdir -p out/${{ matrix.part }}
           echo "part=${{ matrix.part }} api=${{ matrix.api }} emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
           cat out/${{ matrix.part }}/job-status.txt
+          { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
+            echo "== emulator processes"; ps -eo pid,etime,rss,stat,args | grep -iE "qemu|emulator" | grep -v grep | cut -c1-200
+            echo "== emulator crash dumps / logs"; find /tmp ~/.android -newer app.apk \( -name '*.dmp' -o -name '*crash*' \) 2>/dev/null | head -20; } > out/${{ matrix.part }}/host-after-run.txt 2>&1 || true
       - uses: actions/upload-artifact@v7
         if: always()
         continue-on-error: true
@@ -113,32 +122,38 @@ jobs:
           SRC=$(git rev-parse --short HEAD)
           mkdir -p "$RUNNER_TEMP/pub" results
           if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
-          rm -rf "$RUNNER_TEMP/pub/v126"; mkdir -p "$RUNNER_TEMP/pub/v126"; cp -r results/. "$RUNNER_TEMP/pub/v126/"
-          cd "$RUNNER_TEMP/pub/v126"
+          # Първият кръг (папката v126 без run1/) се пази като v126/run1.
+          V="$RUNNER_TEMP/pub/v126"
+          if [ -d "$V" ] && [ ! -d "$V/run1" ]; then mv "$V" "$RUNNER_TEMP/run1"; mkdir -p "$V"; mv "$RUNNER_TEMP/run1" "$V/run1"; fi
+          mkdir -p "$V"; find "$V" -mindepth 1 -maxdepth 1 ! -name run1 -exec rm -rf {} +
+          cp -r results/. "$V/"
+          cd "$V"
+          PARTS=$(ls -d */ 2>/dev/null | tr -d / | grep -vx run1)
           {
-            echo "# v1.2.26 full emulator test"
+            echo "# v1.2.26 full emulator test (round 2)"
             echo
             echo "Source: \`debug/full-test-2\` @ $SRC (app = origin/main 3df7f37), run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ)."
-            echo "Emulators: google_apis x86_64, pixel_6 profile, swiftshader (software rendering); start35 on API 35, all other parts on API 34."
+            echo "Emulators: google_apis x86_64, pixel_6 profile, swiftshader (software rendering); API 33 except probe34 (API 34)."
+            echo "Round 1 (start35 on API 35, the rest on API 34): [run1/index.md](run1/index.md)."
             echo
             echo "| part | status |"; echo "|---|---|"
-            for p in start35 perf stress func look offline; do
+            for p in $PARTS; do
               st=$(cat "$p/job-status.txt" 2>/dev/null || echo "no job status")
               if grep -q '## COMPLETE' "$p/summary.txt" 2>/dev/null; then c=COMPLETE; elif [ -f "$p/summary.txt" ]; then c="INCOMPLETE ($(grep -m1 'EMULATOR GONE' "$p/summary.txt" || echo 'stopped early'))"; else c="no summary"; fi
               echo "| $p | $c; $st |"
             done
             echo
-            for p in start35 perf stress func look offline; do
+            for p in $PARTS; do
               [ -f "$p/summary.txt" ] || { echo "## $p: no summary (job failed?)"; continue; }
               echo "## $p"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
             done
             echo "## Screenshots"
-            for d in $(find . -name '*.png' -printf '%h\n' | sort -u); do
+            for d in $(find . -path ./run1 -prune -o -name '*.png' -printf '%h\n' | sort -u); do
               echo; echo "### ${d#./}"; echo
               for f in $(ls "$d"/*.png | sort); do echo "- [${f#./}](${f#./})"; done
             done
             echo; echo "## Other files"; echo
-            find . -type f ! -name '*.png' ! -name index.md | sort | sed 's|^\./||; s|.*|- [&](&)|'
+            find . -path ./run1 -prune -o -type f ! -name '*.png' ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
           } > index.md
           cd "$RUNNER_TEMP/pub"
           if [ -f index.md ] && ! grep -q "v126/index.md" index.md; then

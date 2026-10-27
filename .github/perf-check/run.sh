@@ -113,10 +113,9 @@ ready() {
   done
   log "WARN: tab bar not reached"; return 1
 }
-hide_ime() {
-  a input keyevent 111; sleep 1
-  if a dumpsys input_method | grep -qE 'mInputShown=true|mIsInputViewShown=true'; then echo "(IME still shown → back)"; back 1; fi
-}
+# Само ESC (не „Назад“: в първия кръг „Назад“ напускаше каталога). Клавиатурата може да остане —
+# резултатите горе пак се докосват.
+hide_ime() { a input keyevent 111; sleep 1; }
 # y на първия ред под заглавието „N резултата · …“ (за да не се докосват филтрите над него)
 results_top() { local p; p=$(xy text ' results|=1 result| резултат'); [ -n "$p" ] && echo $(( ${p#* } + 30 )) || echo $((H/4)); }
 rcount() { grep -oE 'text="[0-9]+ (results?|резултата?)' $OUT/ui.xml 2>/dev/null | grep -oE '[0-9]+' | head -1; }
@@ -297,12 +296,13 @@ part_perf() {
   done
   gfx_save catalog-lowres; log "catalog-lowres: 30 swipes, 'Show more' pages: $pages, mis-taps recovered: $mis; screen: $(show 6 | cut -c1-200)"
   shot jank/catalog-lowres-end
-  for scr in home news calendar want; do
+  # „Начало“ последно: там емулаторът най-често пада при плъзгане.
+  for scr in want news calendar home; do
     case $scr in
       home) link "$SITE/"; sleep 5;;
       news) link "$SITE/news"; sleep 5; segstate | grep -q 'News\[checked=true' || segment news;;
       calendar) link "$EVENTS_URL"; sleep 5; dump && has 'content-desc="(List view|Изглед списък)"' && { tap content-desc '=List view|=Изглед списък'; sleep 2; };;
-      want) open_want_list;;
+      want) open_want_list; dump; log "want list: $(grep -c 'content-desc="More actions"' $OUT/ui.xml) rows visible";;
     esac
     dismiss
     log "jank $scr-lowres screen: $(show 8 | cut -c1-220)"
@@ -318,12 +318,13 @@ part_perf() {
 }
 
 # ================================================================= STRESS
-part_stress() {
-  sec "S0. First launch and warm-up"
-  launch >/dev/null; sleep 6; ready
+warmup() {
+  sec "0. First launch and warm-up"
+  launch >/dev/null; sleep 6; ready; dims
   tab catalog; waitfor "$RX_RESULTS" 150 && log "first-install catalogue results after ${WAITED} ms" || log "first-install: NO catalogue results"
   tab news; sleep 5; tab home; sleep 5
-
+}
+s_swipes() {
   sec "S1. Home swipes (API stability probe: 20 swipes)"
   dims; restart; link "$SITE/"; sleep 8
   local i ok=0
@@ -334,7 +335,8 @@ part_stress() {
     ok=$i
   done
   log "HOME SWIPES SURVIVED: $ok/20"; shot swipe-home-end
-
+}
+s_cycles() {
   sec "S2. Memory over 30 tab/book cycles"
   restart; tab home; sleep 3; dump
   declare -A TXY
@@ -351,7 +353,8 @@ part_stress() {
     case $c in 10|20|30) mem c$c;; esac
   done
   log "pid after cycles: $(a pidof $PKG | tr -d '\r')"
-
+}
+s_rotation() {
   sec "S3. Rotation stress (10 toggles each)"
   rotx() {
     local name=$1 pid0 pid1 i
@@ -371,7 +374,8 @@ part_stress() {
   link "$BOOK_URL"; sleep 3; sw_up 300; sleep 1; rotx book
   gfx_save rotation
   back
-
+}
+s_procdeath() {
   sec "S4. Process death and restore (catalogue query + Calendar segment)"
   restart; tab catalog; waitfor "$RX_RESULTS" 30; search_catalog 12
   log "before: catalogue query '12': $(grep -q 'text="12"' $OUT/ui.xml && echo shown || echo missing), $(rcount) results"; shot procdeath/1-catalog-before
@@ -392,7 +396,8 @@ part_stress() {
   a input tap $((W/2)) $((H/2)); sleep 6; show 12; shot procdeath/6-from-recents
   log "PROCDEATH from Recents: $(segstate)"
   tab catalog; sleep 3; dump; log "PROCDEATH from Recents: catalogue query $(grep -q 'text="12"' $OUT/ui.xml && echo kept || echo 'not visible')"
-
+}
+s_monkey() {
   sec "S5. Monkey 4000 events (seed 1234, CAMERA revoked)"
   no_camera; log "camera permission before monkey: $CAMSTATE"
   log "statusbar disable: $(a cmd statusbar send-disable-flag statusbar-expansion notification-alerts 2>&1 | tr -d '\r' | head -2)"
@@ -410,14 +415,10 @@ part_stress() {
 }
 
 # ================================================================= FUNC
-part_func() {
+f_want() {
   local p title n i
-  sec "F0. First launch and warm-up"
-  launch >/dev/null; sleep 6; ready; dims
-  tab catalog; waitfor "$RX_RESULTS" 150 && log "first-install catalogue results after ${WAITED} ms" || log "first-install: NO catalogue results"
-
   sec "F1. Catalogue search '12'"
-  search_catalog 12; shot func/01-catalog-12
+  ready; tab catalog; waitfor "$RX_RESULTS" 60; search_catalog 12; shot func/01-catalog-12
   n=$(rcount); log "SEARCH '12': ${n:-?} results; header: $(grep -oE 'text="[0-9]+ (results?|резултата?)[^"]*"' $OUT/ui.xml | head -1)"
   p=$(xy --first-clickable $(results_top) $((H*3/4)) 120)
   echo ">>> open first result @ $p"; a input tap $p; sleep 4; show 25; shot func/02-book
@@ -444,6 +445,23 @@ part_func() {
     else log "WANT: 'More actions' not found"; fi
   fi
 
+  sec "F2b. A book that is not on the shelf ('Notify me when available')"
+  local found=0 pts px py
+  ready; tab catalog; sleep 3; dump
+  grep -q 'text="12"' $OUT/ui.xml || search_catalog 12
+  for k in 1 2 3; do
+    pts=$(xy --clickables $(results_top) $((H*4/5)) 120)
+    while read -r px py; do
+      [ -n "$px" ] || continue
+      a input tap $px $py; sleep 3; dump
+      if has "$L_NOTIFY"; then found=1; shot func/07b-book-not-on-shelf; log "NOTIFY: book not on the shelf: $(texts 8 | cut -c1-250)"; back 2; break 2; fi
+      has "$RX_BACK" && back 2
+    done <<< "$pts"
+    sw_up 400; sleep 2; dump
+  done
+  [ $found = 1 ] || log "NOTIFY: no book with 'Notify me when available' among the first results"
+}
+f_events() {
   sec "F3. News & events: segments and calendar subscription"
   ready; tab news; sleep 5; dump; shot func/08-news-segment
   log "NEWS tab: title='News & events' $(has 'text="News &amp; events"' && echo yes || echo NO); segments: $(segstate)"
@@ -455,7 +473,8 @@ part_func() {
   else log "SUBSCRIBE: action not found"; fi
   if tap content-desc '=Calendar view|=Изглед календар'; then sleep 3; shot func/11-calendar-month-view; log "calendar month view: $(show 12 | cut -c1-200)"; tap content-desc '=List view|=Изглед списък'; sleep 2; fi
   segment news; log "back to News: $(segstate)"
-
+}
+f_textsize() {
   sec "F4. Settings → Text size → Extra large"
   if open_settings && settings_item '=Text size|=Размер на текста'; then
     sleep 2; dump; shot func/12-text-size-dialog; log "text size options: $(texts 12 | cut -c1-250)"
@@ -467,7 +486,8 @@ part_func() {
     link "$SITE/news"; sleep 4; shot func/15b-news-xlarge
     open_settings && settings_item '=Text size|=Размер на текста' && { sleep 2; tap text '=Standard|=Стандартен' --last; sleep 3; dump; log "TEXT SIZE reset: $(grep -oE 'text="(Small|Standard|Large|Extra large)"' $OUT/ui.xml | tr '\n' ' ')"; shot func/16-settings-reset; }
   fi
-
+}
+f_scan() {
   sec "F5. Scanner with CAMERA revoked → manual entry"
   no_camera; log "camera permission: $CAMSTATE"
   if echo "$CAMSTATE" | grep -q 'granted=true'; then
@@ -491,7 +511,8 @@ part_func() {
     else log "SCAN: manual entry button NOT found"; fi
     log "emulator alive after scanner: $(timeout 20 adb shell echo yes 2>/dev/null | tr -d '\r')"
   fi
-
+}
+f_clear() {
   sec "F6. Settings → Clear temporary data → catalogue reloads"
   if open_settings && settings_item '=Clear temporary data|=Изчисти временните данни'; then
     sleep 2; shot func/22-clear-dialog
@@ -500,8 +521,8 @@ part_func() {
     t0=$(now_ms); link "$SITE/elektronen-katalog"
     if waitfor "$RX_RESULTS" 120; then log "CLEAR → catalogue results again after $(( $(now_ms) - t0 )) ms ($(rcount) results)"; else log "CLEAR → catalogue: NO results in 120 s: $(texts 8)"; fi
     shot func/24-catalog-after-clear
-    link "$SITE/"; sleep 6; dismiss; shot func/25-home-after-clear; log "home after clear: $(texts 10 | cut -c1-220)"
-    link "$SITE/news"; sleep 6; shot func/26-news-after-clear; log "news after clear: $(texts 10 | cut -c1-220)"
+    link "$SITE/"; sleep 6; dismiss; dump; shot func/25-home-after-clear; log "home after clear: $(texts 10 | cut -c1-220)"
+    link "$SITE/news"; sleep 6; dump; shot func/26-news-after-clear; log "news after clear: $(texts 10 | cut -c1-220)"
   fi
   mem func-end
 }
@@ -519,11 +540,13 @@ matrix() {
   segment news
   link "$BOOK_URL"; sleep 4; shot $v/05-book; back
 }
-part_look() {
+look_warm() {
   sec "L0. First launch and warm-up"
   launch >/dev/null; sleep 6; ready
   tab catalog; waitfor "$RX_RESULTS" 150 && log "first-install catalogue results after ${WAITED} ms" || log "first-install: NO catalogue results"
   link "$EVENTS_URL"; sleep 6; link "$SITE/news"; sleep 5
+}
+look1() {
   sec "L1. Light EN"; matrix light-en
   sec "L2. Dark"; a cmd uimode night yes; sleep 3; log "night: $(a cmd uimode night | tr -d '\r')"; matrix dark-en
   a cmd uimode night no; sleep 2
@@ -532,6 +555,8 @@ part_look() {
   log "app locale: $(a cmd locale get-app-locales $PKG | tr -d '\r')"
   matrix bg
   a cmd locale set-app-locales $PKG --locales en-US; sleep 2
+}
+look2() {
   sec "L4. Font scale 1.3"
   a settings put system font_scale 1.3; sleep 2; matrix font130
   a settings put system font_scale 1.0; sleep 2
@@ -570,10 +595,11 @@ part_offline() {
   online
   for t in 10 25; do sleep $((t == 10 ? 10 : 15)); dump; log "contacts +${t}s after reconnect (no touch): $(texts 10 | cut -c1-250)"; done
   shot offline/09-contacts-after-reconnect
-  back; link "$SITE/"; sleep 5; shot recovered/01-home; log "recovered home: $(texts 12 | cut -c1-250)"
-  link "$SITE/news"; sleep 5; shot recovered/02-news; log "recovered news: $(texts 10 | cut -c1-200)"
+  back; link "$SITE/"; sleep 5; dump; shot recovered/01-home; log "recovered home: $(texts 12 | cut -c1-250)"
+  link "$SITE/news"; sleep 5; dump; shot recovered/02-news; log "recovered news (link /news): $(segstate); $(texts 10 | cut -c1-200)"
   link "$EVENTS_URL"; sleep 5; shot recovered/03-calendar
   t0=$(now_ms); link "$SITE/elektronen-katalog"; waitfor "$RX_RESULTS" 60; shot recovered/04-catalog
+  tab more; sleep 3; tap text '=Gallery|=Галерия'; sleep 6; dump; shot recovered/05-gallery; log "recovered gallery: $(texts 8 | cut -c1-200)"; back
 
   sec "O4. Empty cache: offline first launch on Contacts and Gallery, then reconnect"
   a am force-stop $PKG; a pm clear $PKG >/dev/null; a pm grant $PKG android.permission.POST_NOTIFICATIONS; no_camera >/dev/null
@@ -586,14 +612,25 @@ part_offline() {
   if dump && [ -n "$(xy text '=Try again|=Опитай отново')" ]; then tap text '=Try again|=Опитай отново'; sleep 6; dump; shot offline-empty/03-contacts-after-retry; log "contacts after 'Try again': $(texts 10 | cut -c1-250)"; fi
   back; offline
   tab more; sleep 3; tap text '=Gallery|=Галерия'; sleep 5; show 10; shot offline-empty/04-gallery-offline; log "gallery offline (empty cache): $(texts 8 | cut -c1-200)"
+  sleep 20; dump; shot offline-empty/04b-gallery-offline-25s; log "gallery offline (empty cache) after 25 s: $(texts 8 | cut -c1-200)"
   online; sleep 25; dump; shot offline-empty/05-gallery-after-reconnect; log "gallery (empty cache) +25s after reconnect (no touch): $(texts 8 | cut -c1-200)"
+  sleep 35; dump; shot offline-empty/05b-gallery-after-reconnect-60s; log "gallery (empty cache) +60s after reconnect (no touch): $(texts 8 | cut -c1-200)"
   if [ -n "$(xy text '=Try again|=Опитай отново')" ]; then tap text '=Try again|=Опитай отново'; sleep 6; dump; shot offline-empty/06-gallery-after-retry; log "gallery after 'Try again': $(texts 8 | cut -c1-200)"; fi
+  back; sleep 2; tap text '=Gallery|=Галерия'; sleep 8; dump; shot offline-empty/07-gallery-reopened; log "gallery reopened (back + Gallery): $(texts 8 | cut -c1-200)"
 }
 
 # ================================================================= main
 setup
 case $PART in
-  start35) part_start35;; perf) part_perf;; stress) part_stress;; func) part_func;; look) part_look;; offline) part_offline;;
+  start35) part_start35;; perf) part_perf;; offline) part_offline;;
+  probe*) warmup; s_swipes;;
+  stress1) warmup; s_cycles; s_swipes;;
+  stress2) warmup; s_rotation; s_procdeath;;
+  stress3) warmup; s_monkey;;
+  func1) warmup; f_want; f_events;;
+  func2) warmup; f_textsize; f_scan; f_clear;;
+  look1) look_warm; look1;;
+  look2) look_warm; look2;;
   *) log "unknown part $PART";;
 esac
 alive "end"
