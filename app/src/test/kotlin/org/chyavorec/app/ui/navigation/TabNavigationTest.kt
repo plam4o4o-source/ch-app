@@ -17,6 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Навигацията по раздели и връзките от известия върху истински NavController (Robolectric):
@@ -127,6 +128,53 @@ class TabNavigationTest {
         assertEquals(listOf("home", "news"), stack())
         val segment = compose.runOnIdle { nav.getBackStackEntry(Routes.NEWS).savedStateHandle.get<String>(SEGMENT_KEY) }
         assertEquals(Routes.SEGMENT_CALENDAR, segment)
+    }
+
+    private fun segmentOf(tab: String): String? = compose.runOnIdle { nav.getBackStackEntry(tab).savedStateHandle.get<String>(SEGMENT_KEY) }
+
+    private fun siteLink(url: String) = act { openSiteLink(DeepLinks.forUrl(url, base)!!) }
+
+    /** `/events` от статия в „Новини“: календарът, не възстановеният стек НОВИНИ › СТАТИЯ. */
+    @Test fun eventsSiteLinkFromAnArticleOpensTheCalendar() {
+        start()
+        act { navigateTab(Routes.NEWS); navigate(Routes.article("A")) }
+        siteLink("$base/events")
+        assertEquals(listOf("home", "news"), stack())
+        assertEquals(Routes.SEGMENT_CALENDAR, segmentOf(Routes.NEWS))
+    }
+
+    /** `/events` от друг раздел: старата статия, оставена в „Новини“, не изскача вместо календара. */
+    @Test fun eventsSiteLinkFromAnotherTabDoesNotRestoreTheOldArticle() {
+        start()
+        act { navigateTab(Routes.NEWS); navigate(Routes.article("A")) }
+        act { navigateTab(Routes.MORE) }
+        siteLink("$base/events")
+        assertEquals(listOf("home", "news"), stack())
+        assertEquals(listOf("news", "home"), backOrder())
+    }
+
+    /** Новина от съдържанието — над текущия екран („Назад“ се връща към страницата с връзката). */
+    @Test fun articleSiteLinkOpensAboveTheCurrentScreen() {
+        start()
+        act { navigateTab(Routes.NEWS); navigate(Routes.article("A")) }
+        siteLink("$base/news/b")
+        val after = stack()
+        assertEquals(listOf("home", "news", "article/A"), after.take(3))
+        assertEquals(4, after.size)
+        assertTrue(after.last().startsWith("article/"), after.last())
+    }
+
+    /** Известие за новина при раздел, оставен на „Календар“ — искане за сегмента „Новини“. */
+    @Test fun newsLinkAsksTheNewsTabForTheNewsSegment() {
+        start()
+        link(DeepLinks.EVENTS)
+        act { navigateTab(Routes.HOME) }
+        link(DeepLinks.article("B"))
+        assertEquals(listOf("home", "news", "article/B"), stack())
+        assertEquals(Routes.SEGMENT_NEWS, segmentOf(Routes.NEWS))
+        siteLink("$base/news")
+        assertEquals(listOf("home", "news"), stack())
+        assertEquals(Routes.SEGMENT_NEWS, segmentOf(Routes.NEWS))
     }
 
     @Test fun staleSavedStateDoesNotComeBackLater() {

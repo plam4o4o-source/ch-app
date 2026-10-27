@@ -69,9 +69,10 @@ object DeepLinks {
             link == EVENTS -> eventsTab()
             link == MESSAGES -> LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES))
             link == UPDATE -> LinkTarget.UpdatePrompt
+            // Под новината — „Новини и събития“ на сегмента „Новини“ („Назад“ води към списъка).
             link.startsWith(ARTICLE_PREFIX) -> idOf(link, ARTICLE_PREFIX)
-                ?.let { LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(it))) }
-                ?: LinkTarget.Screen(Routes.NEWS)
+                ?.let { newsTab(listOf(Routes.article(it))) }
+                ?: newsTab()
             // Под събитието — „Новини и събития“ на сегмента „Календар“.
             link.startsWith(EVENT_PREFIX) -> idOf(link, EVENT_PREFIX)
                 ?.let { eventsTab(listOf(Routes.event(it))) }
@@ -84,13 +85,16 @@ object DeepLinks {
                 ?.let { LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ, Routes.book(it, personal = true))) }
                 ?: LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ))
             // Известия от по-стари версии („news/<хеш>“) — разделът „Новини“.
-            link == "news" || link.startsWith("news/") -> LinkTarget.Screen(Routes.NEWS)
+            link == "news" || link.startsWith("news/") -> newsTab()
             else -> null
         }
     }
 
     /** Събитията — разделът „Новини и събития“ със сегмента „Календар“ (и [stack] над него). */
     fun eventsTab(stack: List<String> = emptyList()) = LinkTarget.Screen(Routes.NEWS, stack, Routes.SEGMENT_CALENDAR)
+
+    /** Новините — същият раздел, но със сегмента „Новини“ (и [stack] над него). */
+    fun newsTab(stack: List<String> = emptyList()) = LinkTarget.Screen(Routes.NEWS, stack, Routes.SEGMENT_NEWS)
 
     private fun idOf(link: String, prefix: String): String? =
         Uri.decode(link.removePrefix(prefix)).takeIf { it.isNotBlank() }
@@ -111,9 +115,9 @@ object DeepLinks {
             path == CATALOG_PATH -> (ScanCodes.resolve(url, siteBaseUrl) as? ScanTarget.Inventory)
                 ?.let { LinkTarget.Screen(Routes.CATALOG, listOf(Routes.book(it.inv))) }
                 ?: LinkTarget.Screen(Routes.CATALOG)
-            path == "/news" -> LinkTarget.Screen(Routes.NEWS)
+            path == "/news" -> newsTab()
             // По публичния адрес без заявка/котва (така е и в кеша на новините).
-            path.startsWith("/news/") -> LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(siteBaseUrl.trimEnd('/') + path)))
+            path.startsWith("/news/") -> newsTab(listOf(Routes.article(siteBaseUrl.trimEnd('/') + path)))
             path == "/events" -> eventsTab()
             path == "/kontakti" -> LinkTarget.Screen(Routes.HOME, listOf(Routes.CONTACTS))
             path == "/load" || path == "/istoricheski-publikacii" -> LinkTarget.Screen(Routes.MORE, listOf(Routes.DOCUMENTS))

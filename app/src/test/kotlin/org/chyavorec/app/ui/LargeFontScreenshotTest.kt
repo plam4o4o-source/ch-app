@@ -15,7 +15,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
@@ -25,6 +31,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
@@ -39,6 +46,7 @@ import org.chyavorec.app.AppConfig
 import org.chyavorec.app.TestResources
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.AppSettings
+import org.chyavorec.app.data.local.TextScale
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.screens.my.CardData
@@ -167,6 +175,45 @@ class LargeFontScreenshotTest {
         launch(ThemeMode.DARK, deepLink = "events")
         waitFor("Световен ден")
         shot("53-font2-events-dark")
+    }
+
+    /**
+     * „Новини | Календар“ при 2× на тесен телефон, с „Размер на текста“ XL отгоре (общо пак 2×):
+     * „Календар“ не се реже („Календ…“), а действията на събитията са на втори ред.
+     */
+    @Config(qualifiers = "bg-w360dp-h800dp-xhdpi")
+    @Test fun newsSegmentsLargeNarrow() {
+        launch(settings = AppSettings(onboardingDone = true, introShown = true, textScale = TextScale.XLARGE), deepLink = "events")
+        waitFor("Световен ден")
+        compose.onAllNodes(hasText("Календар") and isSelectable()).onFirst().assertIsSelected()
+        assertNotCut("Календар")
+        compose.onAllNodes(hasContentDescription("Абонирай се за календара")).onFirst().assertIsDisplayed()
+        shot("57-font2-news-segments-narrow")
+    }
+
+    /** Връзката „news“ → сегментът „Новини“ (с общото поле за търсене), при 2× на тесен телефон. */
+    @Config(qualifiers = "bg-w360dp-h800dp-xhdpi")
+    @Test fun newsSegmentLargeNarrow() {
+        launch(deepLink = "news")
+        waitFor("45-ти")
+        assertNotCut("Календар")
+        compose.onAllNodes(hasText("Календар") and isSelectable()).onFirst().assertIsNotSelected()
+        shot("58-font2-news-segment-narrow")
+    }
+
+    /** Текстът [label] (етикет на сегмент) е на един ред и без многоточие. */
+    private fun assertNotCut(label: String) {
+        compose.waitForIdle()
+        val nodes = compose.onAllNodes(hasText(label), useUnmergedTree = true).fetchSemanticsNodes()
+        val layouts = nodes.mapNotNull { n ->
+            n.config.getOrNull(SemanticsActions.GetTextLayoutResult)?.action?.let { get ->
+                mutableListOf<TextLayoutResult>().also { get(it) }.firstOrNull()
+            }
+        }
+        if (layouts.isEmpty()) throw AssertionError("няма текст „$label“")
+        layouts.forEach { l ->
+            if (l.lineCount != 1 || l.isLineEllipsized(0) || l.hasVisualOverflow) throw AssertionError("„$label“ се реже: ${l.lineCount} реда")
+        }
     }
 
     @Test fun onboardingLarge() {

@@ -31,6 +31,8 @@ object Routes {
     const val EVENTS = "events"
     /** Сегментът „Календар“ на раздела „Новини и събития“ (виж [LinkTarget.Screen.segment]). */
     const val SEGMENT_CALENDAR = "calendar"
+    /** Сегментът „Новини“ — връзките към новините го искат изрично (иначе би останал „Календар“). */
+    const val SEGMENT_NEWS = "news"
     const val EVENT = "event/{id}"
     /** `personal` — отворена от личен списък (история, заемания, „За теб“): без корици от интернет. */
     const val BOOK = "book/{inv}?personal={personal}"
