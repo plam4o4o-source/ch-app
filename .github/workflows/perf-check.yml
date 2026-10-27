@@ -50,18 +50,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Първият кръг (API 34) загуби емулатора в 4 от 5 части (виж v126/run1) — сега API 33,
-          # части по-малки, за да се губи по-малко при загуба; probe34 повтаря проверката на API 34.
-          - { part: perf, api: 33 }
-          - { part: stress1, api: 33 }
-          - { part: stress2, api: 33 }
-          - { part: stress3, api: 33 }
-          - { part: func1, api: 33 }
-          - { part: func2, api: 33 }
-          - { part: look1, api: 33 }
-          - { part: look2, api: 33 }
-          - { part: offline, api: 33 }
-          - { part: probe34, api: 34 }
+          # Трети кръг: само липсващото от кръг 2 (v126/index.md), стъпките с голям текст накрая,
+          # и същото с -gpu swangle_indirect (емулаторът падаше със swiftshader_indirect).
+          - { part: func3, api: 33, gpu: swiftshader_indirect }
+          - { part: func3-swangle, api: 33, gpu: swangle_indirect }
+          - { part: look3, api: 33, gpu: swiftshader_indirect }
+          - { part: look3-swangle, api: 33, gpu: swangle_indirect }
+          - { part: stress3, api: 33, gpu: swiftshader_indirect }
+          - { part: stress3-swangle, api: 33, gpu: swangle_indirect }
+          - { part: probe33-swangle, api: 33, gpu: swangle_indirect }
+          - { part: wantjank, api: 33, gpu: swiftshader_indirect }
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -72,7 +70,7 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: Run on emulator (${{ matrix.part }}, API ${{ matrix.api }})
+      - name: Run on emulator (${{ matrix.part }}, API ${{ matrix.api }}, ${{ matrix.gpu }})
         id: run
         continue-on-error: true
         timeout-minutes: 45
@@ -84,13 +82,13 @@ jobs:
           profile: pixel_6
           disable-animations: true
           # Без камера: емулаторът пада при отваряне на камерата.
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          emulator-options: -no-window -gpu ${{ matrix.gpu }} -noaudio -no-boot-anim -camera-back none -camera-front none
           script: bash .github/perf-check/run.sh ${{ matrix.part }}
       - name: Record the step outcome
         if: always()
         run: |
           mkdir -p out/${{ matrix.part }}
-          echo "part=${{ matrix.part }} api=${{ matrix.api }} emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          echo "part=${{ matrix.part }} api=${{ matrix.api }} gpu=${{ matrix.gpu }} emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
           cat out/${{ matrix.part }}/job-status.txt
           { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
             echo "== emulator processes"; ps -eo pid,etime,rss,stat,args | grep -iE "qemu|emulator" | grep -v grep | cut -c1-200
@@ -122,19 +120,18 @@ jobs:
           SRC=$(git rev-parse --short HEAD)
           mkdir -p "$RUNNER_TEMP/pub" results
           if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
-          # Първият кръг (папката v126 без run1/) се пази като v126/run1.
-          V="$RUNNER_TEMP/pub/v126"
-          if [ -d "$V" ] && [ ! -d "$V/run1" ]; then mv "$V" "$RUNNER_TEMP/run1"; mkdir -p "$V"; mv "$RUNNER_TEMP/run1" "$V/run1"; fi
-          mkdir -p "$V"; find "$V" -mindepth 1 -maxdepth 1 ! -name run1 -exec rm -rf {} +
+          # Кръг 1 е във v126/run1, кръг 2 — в самата v126; този (кръг 3) — във v126/run3.
+          V="$RUNNER_TEMP/pub/v126/run3"
+          rm -rf "$V"; mkdir -p "$V"
           cp -r results/. "$V/"
           cd "$V"
-          PARTS=$(ls -d */ 2>/dev/null | tr -d / | grep -vx run1)
+          PARTS=$(ls -d */ 2>/dev/null | tr -d /)
           {
-            echo "# v1.2.26 full emulator test (round 2)"
+            echo "# v1.2.26 full emulator test (round 3: what round 2 lost, and -gpu swangle_indirect)"
             echo
             echo "Source: \`debug/full-test-2\` @ $SRC (app = origin/main 3df7f37), run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ)."
-            echo "Emulators: google_apis x86_64, pixel_6 profile, swiftshader (software rendering); API 33 except probe34 (API 34)."
-            echo "Round 1 (start35 on API 35, the rest on API 34): [run1/index.md](run1/index.md)."
+            echo "Emulators: google_apis x86_64 API 33, pixel_6 profile; parts named *-swangle use -gpu swangle_indirect, the rest swiftshader_indirect."
+            echo "Round 2: [../index.md](../index.md); round 1: [../run1/index.md](../run1/index.md)."
             echo
             echo "| part | status |"; echo "|---|---|"
             for p in $PARTS; do
@@ -155,6 +152,10 @@ jobs:
             echo; echo "## Other files"; echo
             find . -path ./run1 -prune -o -type f ! -name '*.png' ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
           } > index.md
+          R2="$RUNNER_TEMP/pub/v126/index.md"
+          if [ -f "$R2" ] && ! grep -q "run3/index.md" "$R2"; then
+            { head -1 "$R2"; echo; echo "Round 3 (what this round lost, and -gpu swangle_indirect): [run3/index.md](run3/index.md)"; tail -n +2 "$R2"; } > "$RUNNER_TEMP/idx2" && mv "$RUNNER_TEMP/idx2" "$R2"
+          fi
           cd "$RUNNER_TEMP/pub"
           if [ -f index.md ] && ! grep -q "v126/index.md" index.md; then
             { head -1 index.md; echo; echo "v1.2.26 full test (3df7f37): [v126/index.md](v126/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md

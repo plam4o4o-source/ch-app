@@ -255,15 +255,18 @@ part_start35() { startup; }
 fill_want() {
   local n=0 k p pts title
   restart; tab catalog; waitfor "$RX_RESULTS" 60; search_catalog 12; dims
-  for k in 1 2 3; do
+  for k in 1 2 3 4 5 6; do
     pts=$(xy --clickables $(results_top) $((H*4/5)) 120)
     while read -r px py; do
       [ -n "$px" ] || continue
-      a input tap $px $py; sleep 3
-      if dump && has "$RX_BACK" && [ -n "$(xy text "$L_WANT")" ]; then
+      a input tap $px $py; sleep 3; dump
+      # чипът може да е под гънката (дълго заглавие) — едно плъзгане
+      has "$RX_BACK" && [ -z "$(xy text "$L_WANT")" ] && { a input swipe $((W/2)) $((H*2/3)) $((W/2)) $((H/3)) 300; sleep 1.5; dump; }
+      if has "$RX_BACK" && [ -n "$(xy text "$L_WANT")" ]; then
         if xy --state text "$L_WANT" | grep -q 'checked=false'; then tap text "$L_WANT" >/dev/null; n=$((n+1)); sleep 1.5; fi
         back 2
       else
+        echo "(fill_want: tap @ $px $py → $(texts 4 | cut -c1-120))"
         has "$RX_BACK" && back 2
       fi
       [ $n -ge 12 ] && break 2
@@ -271,6 +274,19 @@ fill_want() {
     sw_up 400; sleep 2; dump
   done
   log "Want to read: added $n books for the list jank"
+}
+# Само jank на списъка „Искам да прочета“ (540x1200), след като в него има повече книги.
+part_wantjank() {
+  fill_want
+  sec "3w. Jank of the Want to read list at 540x1200 (animations ON)"
+  anims 1; a wm size 540x1200; a wm density 210; sleep 3; dims
+  local i
+  open_want_list; dump; log "want list: $(grep -c 'content-desc="More actions"' $OUT/ui.xml) rows visible; $(show 6 | cut -c1-200)"
+  gfx_reset
+  for i in $(seq 1 10); do sw_up 70; sleep 0.25; done
+  for i in $(seq 1 10); do sw_down 70; sleep 0.25; done
+  gfx_save want-lowres; shot jank/want-lowres
+  a wm size reset; a wm density reset; anims 0
 }
 part_perf() {
   startup
@@ -556,15 +572,18 @@ look1() {
   matrix bg
   a cmd locale set-app-locales $PKG --locales en-US; sleep 2
 }
-look2() {
+look_font() {
   sec "L4. Font scale 1.3"
   a settings put system font_scale 1.3; sleep 2; matrix font130
   a settings put system font_scale 1.0; sleep 2
+}
+look_land() {
   sec "L5. Landscape"
   rot 1; log "landscape: ${W}x${H}"; matrix landscape
   dump; log "landscape rail labels: $(for t in home catalog my news more; do [ -n "$(xy text "$(tablabel $t)")" ] && printf '%s ' $t; done)"
   rot 0
 }
+look2() { look_font; look_land; }
 
 # ================================================================= OFFLINE
 part_offline() {
@@ -621,8 +640,12 @@ part_offline() {
 
 # ================================================================= main
 setup
-case $PART in
-  start35) part_start35;; perf) part_perf;; offline) part_offline;;
+# Наставката след „-“ (напр. stress3-swangle) е само за режима на GPU в workflow-а.
+case ${PART%%-*} in
+  start35) part_start35;; perf) part_perf;; offline) part_offline;; wantjank) part_wantjank;;
+  # Трети кръг: стъпките, след които емулаторът падаше (голям текст), са последни.
+  func3) warmup; f_scan; f_clear; f_textsize;;
+  look3) look_warm; look_land; look_font;;
   probe*) warmup; s_swipes;;
   stress1) warmup; s_cycles; s_swipes;;
   stress2) warmup; s_rotation; s_procdeath;;
