@@ -11,6 +11,7 @@ import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
+import org.chyavorec.core.TrustedLinks
 import org.chyavorec.data.http.FileDownloader
 import org.chyavorec.data.repository.SiteRepository
 import org.chyavorec.domain.model.Contacts
@@ -128,6 +129,8 @@ class DocumentsViewModel(
     private val repo: SiteRepository,
     /** Свалянето на PDF за приложение на телефона (`null` — само отваряне в браузъра). */
     private val downloader: FileDownloader? = null,
+    /** Базовият адрес на сайта — свалят се само документи от него. */
+    private val siteBaseUrl: String = "https://" + TrustedLinks.SITE_HOST,
 ) : ViewModel(), RefreshOnReconnect {
     private val _state = MutableStateFlow(ScreenState<List<org.chyavorec.domain.model.SiteDocument>>())
     val state: StateFlow<ScreenState<List<org.chyavorec.domain.model.SiteDocument>>> = _state.asStateFlow()
@@ -159,7 +162,7 @@ class DocumentsViewModel(
     /** „Отвори с приложение за PDF“: сваля файла в кеша (само един наведнъж), после — за отваряне. */
     fun openInPdfApp(url: String) {
         val d = downloader
-        if (d == null || !isPdf(url)) {
+        if (d == null || !canDownload(url)) {
             _results.tryEmit(PdfResult.Failed(url))
             return
         }
@@ -178,9 +181,12 @@ class DocumentsViewModel(
     /** Отказ по време на свалянето — нищо не остава в кеша. */
     fun cancelDownload() { job?.cancel() }
 
+    /** Бутонът „Отвори с приложение за PDF“ — само за PDF от сайта ([isPdf]). */
+    fun canDownload(url: String): Boolean = isPdf(url, siteBaseUrl)
+
     companion object {
-        /** PDF по HTTPS (по разширението в адреса). */
-        fun isPdf(url: String): Boolean =
-            url.startsWith("https://", ignoreCase = true) && url.substringBefore('#').substringBefore('?').endsWith(".pdf", ignoreCase = true)
+        /** PDF от сайта на читалището (по разширението в адреса); чужд адрес — само в браузъра. */
+        fun isPdf(url: String, siteBaseUrl: String): Boolean =
+            TrustedLinks.isSiteUrl(url, siteBaseUrl) && url.substringBefore('#').substringBefore('?').endsWith(".pdf", ignoreCase = true)
     }
 }

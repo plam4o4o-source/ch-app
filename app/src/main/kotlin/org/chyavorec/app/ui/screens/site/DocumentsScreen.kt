@@ -13,8 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import org.chyavorec.app.util.Intents
-import org.chyavorec.data.http.FileDownloader
-import java.io.File
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -63,7 +61,7 @@ import org.chyavorec.domain.model.DocumentKind
 @Composable
 fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
     val context = LocalContext.current
-    val vm = appViewModel { DocumentsViewModel(it.siteRepository, FileDownloader(it.okHttp, File(context.cacheDir, "documents"))) }
+    val vm = appViewModel { DocumentsViewModel(it.siteRepository, it.documents, it.config.siteBaseUrl) }
     val state by vm.state.collectAsStateWithLifecycle()
     val download by vm.download.collectAsStateWithLifecycle()
     // Свален PDF — с приложение за PDF; без такова или при неуспешно сваляне — в браузъра (Custom Tab).
@@ -106,7 +104,7 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                                     { Text(it, maxLines = 3, overflow = TextOverflow.Ellipsis) }
                                 },
                                 leadingContent = { Icon(Icons.Outlined.PictureAsPdf, null, tint = MaterialTheme.colorScheme.secondary) },
-                                trailingContent = if (DocumentsViewModel.isPdf(d.url)) {
+                                trailingContent = if (vm.canDownload(d.url)) {
                                     { PdfAppButton(download?.takeIf { it.url == d.url }, onOpen = { vm.openInPdfApp(d.url) }, onCancel = vm::cancelDownload) }
                                 } else null,
                                 modifier = Modifier.clickable { openLink(d.url) }.animateEntrance(i),

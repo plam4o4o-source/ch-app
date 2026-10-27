@@ -42,19 +42,22 @@ class NotifierTest {
         Notifier.show(context, Channel.MESSAGES, NotificationIds.message("p:7"), "Лично", "Запазена книга", null, sensitive = true)
         Notifier.show(context, Channel.MESSAGES, NotificationIds.message("m1"), "Съобщение", "За всички", null)
         Notifier.show(context, Channel.NEWS, NotificationIds.NEWS, "Новина", "Текст", null)
-        assertEquals(4, nm.activeNotifications.size)
+        // Скрито на заключен екран, но не е на читателя от сесията — остава след изход.
+        Notifier.show(context, Channel.LIBRARY, NotificationIds.wantToRead(624), "На рафта", "Белият дома", null, sensitive = true, readerData = false)
+        assertEquals(5, nm.activeNotifications.size)
+        assertEquals(Notification.VISIBILITY_PRIVATE, nm.activeNotifications.single { it.id == NotificationIds.wantToRead(624) }.notification.visibility)
 
         Notifier.cancelPersonal(context)
 
         assertEquals(
-            setOf(NotificationIds.message("m1"), NotificationIds.NEWS),
+            setOf(NotificationIds.message("m1"), NotificationIds.NEWS, NotificationIds.wantToRead(624)),
             nm.activeNotifications.map { it.id }.toSet(),
         )
     }
 
     /**
      * Личните известия имат обща публична версия за заключения екран — без заглавието на
-     * книгата и без текста на съобщението (иначе Android по подразбиране показва всичко).
+     * книгата и без текста на съобщението (системата я показва, когато скрива чувствителното съдържание).
      */
     @Test fun personalNotificationsHaveGenericLockScreenVersion() {
         Notifier.show(context, Channel.LOANS, NotificationIds.dueSoon("L1"), "Наближава срок за връщане", "Под игото — до 21.10", "my/loans")

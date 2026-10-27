@@ -93,8 +93,10 @@ object WantToReadAlerts {
             context.getString(R.string.notif_want_available, book.title),
             context.getString(R.string.notif_want_available_text),
             DeepLinks.book(book.inv),
-            // Личният списък не се вижда на заключен екран — там само общ текст.
+            // Личният списък — чувствително съдържание (на заключен екран — общ текст, ако системата
+            // скрива такова). Не е на читателя от сесията: списъкът остава след изход, известието — също.
             sensitive = true,
+            readerData = false,
             lockScreenTitle = context.getString(R.string.notif_public_want),
         )
     }

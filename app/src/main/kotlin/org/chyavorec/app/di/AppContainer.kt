@@ -52,6 +52,7 @@ import org.chyavorec.core.logFailure
 import org.chyavorec.core.reconnections
 import org.chyavorec.core.SystemClock
 import org.chyavorec.data.catalog.GitHubCatalogService
+import org.chyavorec.data.http.FileDownloader
 import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.data.invlib.RemoteInvLibClient
 import org.chyavorec.data.invlib.UnavailableInvLibServices
@@ -111,6 +112,8 @@ class AppContainer(
      * Връзките и настройките се споделят с [okHttp].
      */
     private val readerHttp by lazy { HttpFetcher(okHttp.newBuilder().cache(null).build(), userAgent) }
+    /** PDF-ите от „Документи и архив“ за приложение на телефона — в cacheDir/documents (до 50 MB, до седмица). */
+    val documents by lazy { FileDownloader(okHttp, File(context.cacheDir, "documents")) }
     val connectivity by lazy { ConnectivityObserver(context) }
 
     val settings by lazy { SettingsStore(context) }
@@ -490,9 +493,9 @@ class AppContainer(
 
     /**
      * „Изчисти кеша“ — само публичните данни: новините, събитията, страниците, каталогът
-     * (katalog.json с хеша/ETag-а, обобщението и „За теб“, индексът в базата), HTTP кешът
-     * и изображенията (и кориците). Сесията, картата, любимите, напомнянията, историята и
-     * настройките остават.
+     * (katalog.json с хеша/ETag-а, обобщението и „За теб“, индексът в базата), HTTP кешът,
+     * изображенията (и кориците) и свалените PDF документи. Сесията, картата, любимите,
+     * напомнянията, историята и настройките остават.
      *
      * Върви на ниво приложение и без отмяна: излизането от „Настройки“ по средата не оставя
      * наполовина изчистен кеш (напр. празен индекс с търсачка към него до рестарт) —
@@ -506,6 +509,7 @@ class AppContainer(
                     runCatching { catalogRepository.clear() }.logFailure("cache.catalog")
                     runCatching { publicCache.clear() }.logFailure("cache.public")
                     runCatching { okHttp.cache?.evictAll() }
+                    runCatching { documents.clear() }.logFailure("cache.documents")
                     clearImageCaches()
                 }
             }.also { clearing = it }

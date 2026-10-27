@@ -90,7 +90,8 @@ object MessageWorker {
     /**
      * Известия за нови лични съобщения от библиотеката (само при влязъл читател и
      * сървър с възможност `messages`; [AppContainer.messages] трябва вече да е опреснен).
-     * Всяко съобщение — най-много едно известие; на заключен екран съдържанието е скрито.
+     * Всяко съобщение — най-много едно известие; съдържанието е чувствително (скрито на заключен
+     * екран, ако системата скрива такова — [Notifier.show]).
      */
     suspend fun notifyPersonal(context: Context, c: AppContainer) {
         lock.withLock { notifyPersonalLocked(context, c) }

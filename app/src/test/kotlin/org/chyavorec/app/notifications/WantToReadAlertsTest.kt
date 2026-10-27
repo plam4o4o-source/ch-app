@@ -98,6 +98,10 @@ class WantToReadAlertsTest {
         assertEquals(Notification.VISIBILITY_PRIVATE, n.visibility)
         assertEquals(app.getString(R.string.notif_public_want), n.publicVersion!!.extras.getCharSequence(Notification.EXTRA_TITLE).toString())
         assertTrue(dao.get(inv)!!.lastKnownAvailable)
+        // Списъкът остава след изход — известието също (не е на читателя от сесията).
+        assertFalse(Notifier.isPersonal(n))
+        Notifier.cancelPersonal(app)
+        assertEquals(1, shown().size)
 
         // Същата наличност — без второ известие.
         nm.cancelAll()
