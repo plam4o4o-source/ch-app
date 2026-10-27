@@ -127,6 +127,15 @@ class MainFlowsUiTest {
         compose.onAllNodesWithText("Налична").onFirst().assertExists()
     }
 
+    /** Този екземпляр не е на рафта, но 5 други от заглавието са (по каталога) — без „Попитай“/„Кажи ми“. */
+    @Test fun bookOutWithOtherCopiesOnShelfSaysSo() {
+        launch(deepLink = server.url("/").toString().trimEnd('/') + "/elektronen-katalog#zapis=624")
+        waitForText("Този екземпляр е зает · 5 други на рафта")
+        compose.onAllNodesWithText("Искам да прочета", substring = true).onFirst().assertExists()
+        check(compose.onAllNodesWithText("Попитай библиотеката").fetchSemanticsNodes().isEmpty()) { "ask shown while copies are on the shelf" }
+        check(compose.onAllNodesWithText("Кажи ми, когато е на рафта").fetchSemanticsNodes().isEmpty()) { "notify shown while copies are on the shelf" }
+    }
+
     @Test fun guestSeesHonestLoginMessageAndCanAddCard() {
         launch(useMock = false)
         clickText("Читателска карта")

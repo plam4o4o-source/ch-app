@@ -152,6 +152,9 @@ class CatalogViewModel(
 
     fun update(transform: (CatalogQuery) -> CatalogQuery) {
         val q = transform(_state.value.query)
+        // Същата заявка (пак избраната подредба, „Изчисти“ без филтри): queryFlow не я подава
+        // наново и търсене няма — „Търся…“ не бива да се включва.
+        if (q == _state.value.query) return
         _state.update { it.copy(query = q, searching = true) }
         queryFlow.value = q
         savedState[QUERY_KEY] = Json.encodeToString(CatalogQuery.serializer(), q)

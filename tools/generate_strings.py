@@ -882,6 +882,7 @@ P = {
 "my_want_count": (("%1$d книга в списъка", "%1$d книги в списъка"), ("%1$d book on your list", "%1$d books on your list")),
 "book_available_copies": (("%1$d наличен", "%1$d налични"), ("%1$d available", "%1$d available")),
 "book_copies": (("%1$d екземпляр", "%1$d екземпляра"), ("%1$d copy", "%1$d copies")),
+"book_this_copy_out_others_on_shelf": (("Този екземпляр е зает · %1$d друг на рафта", "Този екземпляр е зает · %1$d други на рафта"), ("This copy is out · %1$d other on the shelf", "This copy is out · %1$d others on the shelf")),
 "catalog_count": (("%1$d резултат", "%1$d резултата"), ("%1$d result", "%1$d results")),
 "catalog_show_results": (("Покажи %1$d резултат", "Покажи %1$d резултата"), ("Show %1$d result", "Show %1$d results")),
 "due_days_left": (("остава %1$d ден", "остават %1$d дни"), ("%1$d day left", "%1$d days left")),

@@ -712,6 +712,10 @@
         <item quantity="one">%1$d екземпляр</item>
         <item quantity="other">%1$d екземпляра</item>
     </plurals>
+    <plurals name="book_this_copy_out_others_on_shelf">
+        <item quantity="one">Този екземпляр е зает · %1$d друг на рафта</item>
+        <item quantity="other">Този екземпляр е зает · %1$d други на рафта</item>
+    </plurals>
     <plurals name="catalog_count">
         <item quantity="one">%1$d резултат</item>
         <item quantity="other">%1$d резултата</item>

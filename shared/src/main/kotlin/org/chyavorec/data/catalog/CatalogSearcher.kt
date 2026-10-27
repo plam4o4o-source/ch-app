@@ -124,7 +124,7 @@ class FtsCatalogSearcher(
         if (TextNormalizer.tokens(query.text).isEmpty()) return guarded({ it.search(query) }) {
             store.rows(CatalogIndexQueries.search(query, emptyList(), "")!!.copy(sort = query.sort)).map { it.book }
         }
-        return guarded({ it.search(query) }) { store.booksAt(ranked(query).asList()) }
+        return guarded({ it.search(query) }) { rankedPage(query, from = 0, limit = Int.MAX_VALUE).books }
     }
 
     /**
@@ -135,8 +135,7 @@ class FtsCatalogSearcher(
     override suspend fun searchFirst(query: CatalogQuery, limit: Int): CatalogResults {
         if (TextNormalizer.tokens(query.text).isNotEmpty()) {
             return guarded({ e -> e.search(query).let { CatalogResults(it.take(limit), it.size) } }) {
-                val ords = ranked(query)
-                CatalogResults(store.booksAt(ords.asList().take(limit)), ords.size)
+                rankedPage(query, from = 0, limit = limit)
             }
         }
         return guarded({ e -> e.search(query).let { CatalogResults(it.take(limit), it.size) } }) {
@@ -148,8 +147,7 @@ class FtsCatalogSearcher(
     override suspend fun searchMore(query: CatalogQuery, offset: Int, limit: Int): List<CatalogBook> {
         if (TextNormalizer.tokens(query.text).isNotEmpty()) {
             return guarded({ it.search(query).drop(offset).take(limit) }) {
-                val ords = ranked(query, reuse = true).asList()
-                store.booksAt(ords.subList(offset.coerceAtMost(ords.size), (offset + limit).coerceAtMost(ords.size)))
+                rankedPage(query, from = offset, limit = limit, reuse = true).books
             }
         }
         return guarded({ it.search(query).drop(offset).take(limit) }) {
@@ -158,27 +156,56 @@ class FtsCatalogSearcher(
     }
 
     /**
-     * Последната заявка с текст и подредените ѝ резултати (местата в каталога): „Още“
-     * чете само следващата страница книги, без да точкува кандидатите наново.
+     * Подредените резултати с текст: местата в каталога ([ords]), инвентарните номера на
+     * тези места ([invs]) и хешът на индекса, от който са прочетени ([hash]).
      */
-    @Volatile private var lastRanked: Pair<CatalogQuery, IntArray>? = null
+    private class Ranked(val query: CatalogQuery, val hash: String?, val ords: IntArray, val invs: LongArray)
 
     /**
-     * Резултатите с текст, подредени (местата в каталога): кандидатите от FTS (или резервното
-     * търсене като подниз), точкувани по лекия им изглед. [reuse] — „Още“ за същата заявка
-     * взима вече подредените (новото търсене винаги чете индекса наново — може да е попълнен междувременно).
+     * Последната заявка с текст и подредените ѝ резултати: „Още“ чете само следващата
+     * страница книги, без да точкува кандидатите наново — докато индексът е същият.
      */
-    private suspend fun ranked(query: CatalogQuery, reuse: Boolean = false): IntArray {
-        if (reuse) lastRanked?.let { (q, ords) -> if (q == query) return ords }
+    @Volatile private var lastRanked: Ranked? = null
+
+    /**
+     * Резултатите с текст, подредени: кандидатите от FTS (или резервното търсене като
+     * подниз), точкувани по лекия им изглед. [reuse] — „Още“ за същата заявка взима вече
+     * подредените, ако индексът не е сменен междувременно (новото търсене винаги чете
+     * индекса наново). Хешът се чете преди кандидатите: смяна между двете води най-много
+     * до излишно точкуване при „Още“, не до чужди места.
+     */
+    private suspend fun ranked(query: CatalogQuery, reuse: Boolean = false): Ranked {
+        val hash = store.state()?.hash
+        if (reuse) lastRanked?.let { if (it.query == query && it.hash == hash) return it }
         val tokens = TextNormalizer.tokens(query.text)
         val digits = TextNormalizer.digits(query.text)
-        val plan = CatalogIndexQueries.search(query, tokens, digits) ?: return IntArray(0)
-        var found = rank(store.hits(plan), query, tokens, digits)
-        if (found.isEmpty() && plan.matchTokens.isNotEmpty()) {
+        val plan = CatalogIndexQueries.search(query, tokens, digits)
+        var found = if (plan == null) emptyList<CatalogMatcher.Hit>() else rank(store.hits(plan), query, tokens, digits)
+        if (plan != null && found.isEmpty() && plan.matchTokens.isNotEmpty()) {
             CatalogIndexQueries.scan(query, tokens)?.let { found = rank(store.hits(it), query, tokens, digits) }
         }
-        lastRanked = query to found
-        return found
+        return Ranked(query, hash, IntArray(found.size) { found[it].ord }, LongArray(found.size) { found[it].inv })
+            .also { lastRanked = it }
+    }
+
+    /**
+     * Книгите на местата [from]…[from]+[limit] от подредените резултати и броят на всички.
+     * Точките и книгите са две отделни четения (обща транзакция в Room минава през връзката
+     * за запис и би чакала попълването на нов каталог), затова се проверява, че на всяко
+     * място е точкуваната книга (същият инв. №). Ако индексът е сменен междувременно —
+     * точкува се наново (до [PAGE_ATTEMPTS] пъти), вместо да се покажат чужди книги.
+     */
+    private suspend fun rankedPage(query: CatalogQuery, from: Int, limit: Int, reuse: Boolean = false): CatalogResults {
+        var r = ranked(query, reuse)
+        var attempt = 1
+        while (true) {
+            val start = from.coerceIn(0, r.ords.size)
+            val end = if (limit >= r.ords.size - start) r.ords.size else start + limit
+            val books = store.booksAt(r.ords.asList().subList(start, end))
+            val same = books.size == end - start && books.indices.all { books[it].inv == r.invs[start + it] }
+            if (same || attempt++ >= PAGE_ATTEMPTS) return CatalogResults(books, r.ords.size)
+            r = ranked(query)
+        }
     }
 
     override suspend fun suggestions(prefix: String, limit: Int): List<String> {
@@ -255,7 +282,7 @@ class FtsCatalogSearcher(
      * вече са в заявката. Прекъсва се (отмяна), щом заявката остарее — на всеки
      * [CatalogSearchEngine.CHECK_EVERY] записа.
      */
-    private suspend fun rank(rows: List<CatalogIndexHit>, q: CatalogQuery, tokens: List<String>, digits: String): IntArray =
+    private suspend fun rank(rows: List<CatalogIndexHit>, q: CatalogQuery, tokens: List<String>, digits: String): List<CatalogMatcher.Hit> =
         withContext(work) {
             val context = currentCoroutineContext()
             val hits = ArrayList<CatalogMatcher.Hit>()
@@ -266,7 +293,7 @@ class FtsCatalogSearcher(
             }
             context.ensureActive()
             CatalogMatcher.sort(hits, q.sort, hasText = true)
-            IntArray(hits.size) { hits[it].ord }
+            hits
         }
 
     private suspend fun <T> guarded(onEngine: (CatalogSearchEngine) -> T, block: suspend () -> T): T =
@@ -284,5 +311,6 @@ class FtsCatalogSearcher(
 
     private companion object {
         const val SUGGESTION_PAGE = 200
+        const val PAGE_ATTEMPTS = 3
     }
 }
