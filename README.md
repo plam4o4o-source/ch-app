@@ -104,7 +104,9 @@ AGP 9.4 (вграден Kotlin) · Gradle 9.8 · Java 21 (build с JDK 25) · mi
 
 `baseline-profile.yml` генерира наново Baseline/Startup профила на емулатор всяка
 неделя и след всяко издание. Новият профил минава през пълната проверка (Android CI в
-клона `baseline-profile/update`) и при успех влиза в `main` сам. Сам по себе си не прави
+клона `baseline-profile/update`) и при успех влиза в `main` сам — с тайната
+`PROFILE_PUSH_TOKEN` (fine-grained токен на администратор: само това хранилище, Contents —
+Read and write). Без нея проверен профил чака в клона за ръчно сливане. Сам по себе си не прави
 нова версия — влиза в следващото издание.
 
 Ръчно: Actions → Release (конкретна версия, напр. `1.2.0`) или tag `v1.2.0`.

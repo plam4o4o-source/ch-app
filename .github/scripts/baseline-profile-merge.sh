@@ -4,6 +4,10 @@
 # напред до него (fast-forward). Ако main е мръднал — commit-ът се пренася върху новия main
 # и проверката се повтаря веднъж. При какъвто и да е неуспех main не се пипа.
 # Изисква: GH_TOKEN, GITHUB_REPOSITORY, текущият клон е baseline-profile/update.
+# PUSH_TOKEN (тайната PROFILE_PUSH_TOKEN): токен на администратор с право за запис. С
+# GITHUB_TOKEN защитата на main не пуска push-а (проверка, пусната с workflow_dispatch, не
+# се зачита за задължителната „checks“) — тук проверките ги изисква самият скрипт. Без
+# токена профилът остава в baseline-profile/update за ръчно сливане (без грешка).
 set -euo pipefail
 
 BRANCH=baseline-profile/update
@@ -41,7 +45,14 @@ for attempt in 1 2; do
   fi
   git fetch -q origin main
   if git merge-base --is-ancestor origin/main HEAD; then
-    git push origin "HEAD:main"
+    if [ -z "${PUSH_TOKEN:-}" ]; then
+      echo "::notice::Профилът е проверен, но няма тайна PROFILE_PUSH_TOKEN — чака в $BRANCH за ръчно сливане (fast-forward на main)."
+      echo "- проверен; чака ръчно сливане от \`$BRANCH\` (няма PROFILE_PUSH_TOKEN)" >> "$GITHUB_STEP_SUMMARY"
+      exit 0
+    fi
+    # Празната стойност нулира заглавката с GITHUB_TOKEN от actions/checkout.
+    git -c http.https://github.com/.extraheader= \
+      push "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:main"
     echo "Профилът е в main ($(git rev-parse --short HEAD))."
     echo "- влязъл в \`main\`: $(git rev-parse --short HEAD)" >> "$GITHUB_STEP_SUMMARY"
     exit 0

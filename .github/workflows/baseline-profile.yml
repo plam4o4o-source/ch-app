@@ -6,9 +6,9 @@ name: Baseline profile
 #      емулаторът в CI замръзва при превъртане на „Начало“);
 #   2) commit в клона baseline-profile/update (от последния main);
 #   3) Android CI на този commit (workflow_dispatch — push с GITHUB_TOKEN не пуска workflow-и);
-#   4) ако „checks“ е зелен — main се придвижва напред до този commit (fast-forward; защитата на
-#      main изисква точно тази проверка). Ако междувременно main е мръднал — commit-ът се
-#      пренася върху новия main и стъпки 3–4 се повтарят веднъж.
+#   4) ако „checks“ е зелен — main се придвижва напред до този commit (fast-forward с тайната
+#      PROFILE_PUSH_TOKEN; без нея профилът чака в клона за ръчно сливане). Ако междувременно
+#      main е мръднал — commit-ът се пренася върху новия main и стъпки 3–4 се повтарят веднъж.
 # Неуспех на която и да е стъпка не пипа main — остава предишният профил.
 # Само профил не прави нова версия (виж auto-release.yml) — влиза в следващото издание.
 #
@@ -189,4 +189,5 @@ jobs:
         if: steps.commit.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          PUSH_TOKEN: ${{ secrets.PROFILE_PUSH_TOKEN }}
         run: bash .github/scripts/baseline-profile-merge.sh
