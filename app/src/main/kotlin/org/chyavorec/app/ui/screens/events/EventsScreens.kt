@@ -144,14 +144,14 @@ private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EventCard(e: Event, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun EventCard(e: Event, onClick: () -> Unit, modifier: Modifier = Modifier, titleMaxLines: Int = 2) {
     val date = e.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
     PressableCard(onClick = onClick, modifier = modifier) {
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             DateBadge(date)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text(e.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.sharedBoundsKey("event-title-${e.id}"))
+                Text(e.title, style = MaterialTheme.typography.titleMedium, maxLines = titleMaxLines, overflow = TextOverflow.Ellipsis, modifier = Modifier.sharedBoundsKey("event-title-${e.id}"))
                 val meta = listOfNotNull(e.time, e.place).joinToString(" · ").ifBlank { e.description }
                 if (meta.isNotBlank()) {
                     Text(meta, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)

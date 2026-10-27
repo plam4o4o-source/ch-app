@@ -12,7 +12,6 @@ import org.chyavorec.app.R
 
 /** Cormorant Garamond — заглавия (както на сайта). */
 val Cormorant = FontFamily(
-    Font(R.font.cormorant_garamond_light, FontWeight.Light),
     Font(R.font.cormorant_garamond_regular, FontWeight.Normal),
     Font(R.font.cormorant_garamond_semibold, FontWeight.SemiBold),
     Font(R.font.cormorant_garamond_italic, FontWeight.Normal, FontStyle.Italic),
@@ -26,14 +25,14 @@ val Raleway = FontFamily(
 )
 
 /**
- * Йерархия (както на сайта — Cormorant 300/400 за заглавията): лекият Cormorant е само за
- * едрите display стилове, където тънките щрихи се четат; заглавието на въртележката е
+ * Йерархия (както на сайта — Cormorant за заглавията): display стиловете не се ползват и са
+ * с обикновения Cormorant (без отделен лек шрифт в APK-то); заглавието на въртележката е
  * headlineMedium (28, Regular) над заглавките на разделите (22, Regular) и на лентите
  * (headlineSmall). labelSmall е с разредка за ГЛАВНИ БУКВИ — малките надписи са labelMedium.
  */
 val AppTypography = Typography(
-    displayLarge = TextStyle(fontFamily = Cormorant, fontWeight = FontWeight.Light, fontSize = 52.sp, lineHeight = 56.sp),
-    displayMedium = TextStyle(fontFamily = Cormorant, fontWeight = FontWeight.Light, fontSize = 42.sp, lineHeight = 46.sp),
+    displayLarge = TextStyle(fontFamily = Cormorant, fontWeight = FontWeight.Normal, fontSize = 52.sp, lineHeight = 56.sp),
+    displayMedium = TextStyle(fontFamily = Cormorant, fontWeight = FontWeight.Normal, fontSize = 42.sp, lineHeight = 46.sp),
     displaySmall = TextStyle(fontFamily = Cormorant, fontWeight = FontWeight.Normal, fontSize = 34.sp, lineHeight = 38.sp),
     headlineLarge = TextStyle(fontFamily = Cormorant, fontWeight = FontWeight.Normal, fontSize = 31.sp, lineHeight = 36.sp),
     headlineMedium = TextStyle(fontFamily = Cormorant, fontWeight = FontWeight.Normal, fontSize = 28.sp, lineHeight = 33.sp),

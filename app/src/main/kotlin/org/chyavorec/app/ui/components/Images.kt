@@ -200,6 +200,13 @@ private fun cleanIsbn(isbn: String): String? {
     return clean.takeIf { it.length == 10 || it.length == 13 }
 }
 
+/**
+ * Дали [BookCover] изобщо ще опита истинска корица (сканирана или от Open Library по ISBN):
+ * без такава остава генерираната — със заглавието и автора върху нея.
+ */
+fun mayHaveRealCover(book: CatalogBook, onlineCovers: Boolean): Boolean =
+    onlineCovers && (book.coverUrl.isNotBlank() || cleanIsbn(book.isbn) != null)
+
 /** Адрес на корица в Open Library по ISBN (само HTTPS; `default=false` → 404 вместо празен GIF, когато липсва). */
 fun openLibraryCoverUrl(isbn: String, large: Boolean): String? {
     val clean = cleanIsbn(isbn) ?: return null

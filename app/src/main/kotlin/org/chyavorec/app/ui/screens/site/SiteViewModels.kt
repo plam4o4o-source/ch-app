@@ -111,14 +111,24 @@ class ContactsViewModel(private val repo: SiteRepository, private val fallback: 
  * Албумите на галерията. Хранилището слива едновременните заявки и връща една и съща
  * (вече групирана) стойност на всички екрани. [load] = false — екранът не ползва албумите
  * (напр. преглед на отделни снимки по адрес) и галерията не се зарежда.
+ *
+ * Без връзка ([online] = false) не се чака мрежата (заявките висят до изтичане на timeout-а,
+ * а дотогава — скелет): веднага кешът или грешка с „Опитай отново“; при връщане на
+ * връзката екранът се опреснява сам ([RefreshOnReconnect]).
  */
-class GalleryViewModel(private val repo: SiteRepository, load: Boolean = true) : ViewModel(), RefreshOnReconnect {
+class GalleryViewModel(
+    private val repo: SiteRepository,
+    load: Boolean = true,
+    private val online: () -> Boolean = { true },
+) : ViewModel(), RefreshOnReconnect {
     private val _state = MutableStateFlow(ScreenState<List<GalleryAlbum>>())
     val state: StateFlow<ScreenState<List<GalleryAlbum>>> = _state.asStateFlow()
     init { if (load) refresh(false) }
     fun refresh(force: Boolean = true) = viewModelScope.launch {
         _state.update { it.startRefresh() }
-        _state.update { it.with(repo.gallery(force)) }
+        val result = if (online()) repo.gallery(force)
+        else repo.cachedGallery()?.let { Outcome.Success(it) } ?: Outcome.Failure(AppError.Network)
+        _state.update { it.with(result) }
     }
 
     override val reconnectState: ScreenState<*> get() = _state.value
