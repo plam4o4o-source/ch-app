@@ -161,8 +161,10 @@ class WantToReadScreenshotTest {
         shown("Този екземпляр е зает · 5 други на рафта")
         shown("Искам да прочета")
         compose.waitForIdle()
-        for (hidden in listOf("Попитай библиотеката", "Кажи ми, когато е на рафта", "Ще ти кажем, когато е на рафта"))
+        for (hidden in listOf("Попитай библиотеката", "Кажи ми, когато е на рафта"))
             check(compose.onAllNodes(hasText(hidden)).fetchSemanticsNodes().isEmpty()) { "„$hidden“ при други екземпляри на рафта" }
+        // Вече включеното известие остава, за да може да се изключи.
+        shown("Ще ти кажем, когато е на рафта")
         shot("82-watch-book-not-on-shelf")
     }
 

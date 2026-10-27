@@ -510,9 +510,16 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
  * „Кажи ми, когато е на рафта“ — за книга, която не е на рафта (до „Попитай библиотеката“).
  * Превключвател (за TalkBack — „включено/изключено“): изключен — с контур, включен — тонален,
  * с „Ще ти кажем…“; изключването може да се отмени от снекбара.
+ * [onlyWhileOn] — само ако известието вече е включено (друг екземпляр е на рафта, но
+ * включеното известие трябва да може да се изключи и оттук); след изключване остава до излизане.
  */
 @Composable
-fun NotifyWhenAvailableButton(book: CatalogBook, snackbar: SnackbarHostState, modifier: Modifier = Modifier) {
+fun NotifyWhenAvailableButton(
+    book: CatalogBook,
+    snackbar: SnackbarHostState,
+    modifier: Modifier = Modifier,
+    onlyWhileOn: Boolean = false,
+) {
     val vm = bookWantToReadViewModel(book.inv)
     val saved by vm.saved.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
@@ -520,6 +527,9 @@ fun NotifyWhenAvailableButton(book: CatalogBook, snackbar: SnackbarHostState, mo
     val haptic = LocalHapticFeedback.current
     val requestNotify = rememberNotifyRequest(snackbar)
     val on = saved?.notifyWhenAvailable == true
+    var wasOn by rememberSaveable(book.inv) { mutableStateOf(false) }
+    LaunchedEffect(on) { if (on) wasOn = true }
+    if (onlyWhileOn && !on && !wasOn) return
     val reduced = rememberReducedMotion()
     val colors = MaterialTheme.colorScheme
     val colorSpec: AnimationSpec<Color> = if (reduced) snap() else AppMotion.defaultEffects()

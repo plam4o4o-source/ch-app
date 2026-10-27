@@ -603,6 +603,11 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 }
                 // Мостът няма заявки за наличност — известието идва от каталога, на телефона.
                 org.chyavorec.app.ui.screens.my.NotifyWhenAvailableButton(b, snackbar, Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, top = 8.dp))
+            } else if (!onShelf) {
+                // Вече включено известие за този екземпляр — да може да се изключи и оттук.
+                org.chyavorec.app.ui.screens.my.NotifyWhenAvailableButton(
+                    b, snackbar, Modifier.fillMaxWidth().padding(horizontal = 20.dp), onlyWhileOn = true,
+                )
             }
             if (b.annotation.isNotBlank()) {
                 Text(stringResource(R.string.book_description), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(start = 20.dp, top = 16.dp).semantics { heading() })

@@ -666,7 +666,7 @@ private fun QuickActionsGrid(quickActions: List<QuickAction>, navigate: (String)
 internal fun quickActionsPerRow(width: Dp, fontScale: Float): Int =
     if (width / 4 / fontScale.coerceAtLeast(1f) < QuickActionMinWidth) 2 else 4
 
-private val QuickActionMinWidth = 84.dp
+private val QuickActionMinWidth = 80.dp
 
 @Composable
 private fun RowScope.QuickActionCell(action: QuickAction, i: Int, navigate: (String) -> Unit) {

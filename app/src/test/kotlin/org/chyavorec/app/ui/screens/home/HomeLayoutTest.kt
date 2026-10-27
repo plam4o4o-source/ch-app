@@ -27,6 +27,8 @@ class HomeLayoutTest {
     @Test fun quickActionsWrapToTwoColumnsBeforeWordsBreak() {
         // 411 dp без полетата (2 × 16): 4 в ред при обичаен и леко уголемен шрифт.
         assertEquals(4, quickActionsPerRow(379.dp, 1f))
+        // Телефон 360 dp при нормален шрифт — пак 4 в ред.
+        assertEquals(4, quickActionsPerRow(328.dp, 1f))
         assertEquals(4, quickActionsPerRow(379.dp, 1.1f))
         // „Много голям“ (×1.3): преди — 4 в ред и „Читателс/ка карта“.
         assertEquals(2, quickActionsPerRow(379.dp, 1.3f))
