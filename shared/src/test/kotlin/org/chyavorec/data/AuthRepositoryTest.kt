@@ -3,6 +3,7 @@ package org.chyavorec.data
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.chyavorec.core.AppError
@@ -15,6 +16,7 @@ import org.chyavorec.data.repository.AuthRepository
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.data.repository.LibraryRepository
 import org.chyavorec.data.repository.SelfCardRepository
+import org.chyavorec.data.repository.UnreadableSessionCounter
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
 import org.chyavorec.domain.model.Loan
@@ -153,8 +155,9 @@ class AuthRepositoryTest {
         }
         val repo = AuthRepository(FakeAuth(), store, clock, readerCache)
         repo.restore()
-        assertEquals(AuthState.SignedOut, repo.state.value)
+        assertEquals(AuthState.Unavailable, repo.state.value)
         assertIs<Outcome.Failure>(repo.validSession())
+        assertEquals(AuthState.Unavailable, repo.state.value, "не е изход")
         assertEquals(0, cleared, "сесията не е изтрита")
         assertEquals("v", readerCache.read("k")?.text, "кешът на читателя остава")
         // Следващото пускане: Keystore отговаря — същият читател, без нов вход.
@@ -162,6 +165,108 @@ class AuthRepositoryTest {
         val next = AuthRepository(FakeAuth(), store, clock, readerCache)
         next.restore()
         assertEquals(AuthState.SignedIn("R1"), next.state.value)
+    }
+
+    /** Сесия, която се чете само когато [unreadable] е false; брои изтриванията. */
+    private inner class FlakyStore(var unreadable: Boolean = true) : SessionStore {
+        var s: AuthSession? = AuthSession("a", "r", clock.now().toEpochMilli() + 3_600_000, "R1")
+        var cleared = 0
+        override suspend fun load() = if (unreadable) null else s
+        override suspend fun save(session: AuthSession, persist: Boolean) { s = session; unreadable = false }
+        override suspend fun isPersisted() = true
+        override suspend fun clear() { s = null; unreadable = false; cleared++ }
+        override suspend fun unreadableNow() = unreadable && s != null
+    }
+
+    private class MemCounter(var count: Int = 0) : UnreadableSessionCounter {
+        var saves = 0
+        override suspend fun load() = count
+        override suspend fun save(count: Int) { this.count = count; saves++ }
+    }
+
+    @Test fun retryRecoversUnavailableSessionToSignedIn() = runTest {
+        val store = FlakyStore(); val counter = MemCounter()
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter)
+        repo.restore()
+        assertEquals(AuthState.Unavailable, repo.state.value)
+        val retry = launch { repo.retryRestore(listOf(1_000, 10_000, 60_000)) }
+        advanceTimeBy(1_500)
+        assertEquals(AuthState.Unavailable, repo.state.value, "първият опит — Keystore още не отговаря")
+        store.unreadable = false
+        advanceTimeBy(10_000)
+        assertEquals(AuthState.SignedIn("R1"), repo.state.value)
+        retry.join()
+        assertEquals(0, store.cleared)
+        assertEquals(0, counter.count, "прочетената сесия нулира брояча")
+    }
+
+    @Test fun validSessionAgreesWithStateAfterUnavailable() = runTest {
+        val store = FlakyStore()
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
+        repo.restore()
+        assertEquals(AuthState.Unavailable, repo.state.value)
+        // Фонова заявка прочита сесията — интерфейсът вече не е „без вход“.
+        store.unreadable = false
+        assertIs<Outcome.Success<AuthSession>>(repo.validSession())
+        assertEquals(AuthState.SignedIn("R1"), repo.state.value)
+    }
+
+    @Test fun unreadableSessionIsDroppedAfterMaxLaunches() = runTest {
+        val store = FlakyStore(); val counter = MemCounter()
+        val cache = InMemoryPayloadCache()
+        cache.write("k", "v")
+        repeat(AuthRepository.MAX_UNREADABLE_LAUNCHES - 1) { launchNo ->
+            val repo = AuthRepository(FakeAuth(), store, clock, cache, unreadableCounter = counter)
+            repo.restore()
+            repo.restore() // повторен опит в същия процес не е ново пускане
+            assertIs<Outcome.Failure>(repo.validSession())
+            assertEquals(AuthState.Unavailable, repo.state.value)
+            assertEquals(launchNo + 1, counter.count)
+        }
+        assertEquals(0, store.cleared)
+        assertEquals("v", cache.read("k")?.text)
+        // Поредното нечетимо пускане — сесията е нечетима завинаги: изтрива се, изход с изчистване.
+        val last = AuthRepository(FakeAuth(), store, clock, cache, unreadableCounter = counter)
+        last.restore()
+        assertEquals(AuthState.SignedOut, last.state.value)
+        assertEquals(1, store.cleared)
+        assertNull(cache.read("k"))
+        assertEquals(0, counter.count)
+    }
+
+    @Test fun readableLaunchResetsUnreadableCount() = runTest {
+        val store = FlakyStore(); val counter = MemCounter(count = AuthRepository.MAX_UNREADABLE_LAUNCHES - 2)
+        store.unreadable = false
+        AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter).restore()
+        assertEquals(0, counter.count)
+        // Пак нечетима — броенето е отначало, без изход.
+        store.unreadable = true
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter)
+        repo.restore()
+        assertEquals(AuthState.Unavailable, repo.state.value)
+        assertEquals(1, counter.count)
+        // Без нечетими пускания броячът не се записва при всяко пускане.
+        val saves = counter.saves
+        store.unreadable = false
+        repeat(3) { AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter).restore() }
+        assertEquals(0, counter.count)
+        assertEquals(saves + 1, counter.saves)
+    }
+
+    @Test fun loginOverUnavailableSessionIsMarked() = runTest {
+        val store = FlakyStore()
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
+        repo.restore()
+        assertEquals(AuthState.Unavailable, repo.state.value)
+        assertFalse(repo.loginReplacedUnreadable)
+        repo.login("123", "secret".toCharArray(), remember = true)
+        assertEquals(AuthState.SignedIn("R1"), repo.state.value)
+        assertTrue(repo.loginReplacedUnreadable, "предишната (нечетима) сесия може да е на друг читател")
+        // Обикновен вход — без отметка.
+        val plain = AuthRepository(FakeAuth(), MemStore(), clock, InMemoryPayloadCache())
+        plain.restore()
+        plain.login("123", "secret".toCharArray(), remember = true)
+        assertFalse(plain.loginReplacedUnreadable)
     }
 
     @Test fun bruteForceIsThrottled() = runTest {

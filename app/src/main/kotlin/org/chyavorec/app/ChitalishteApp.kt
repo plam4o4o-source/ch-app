@@ -68,7 +68,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
      * - наблюдението на каталога за „Искам да прочета“ ([org.chyavorec.app.notifications.WantToReadAlerts.watch]);
      * - проверка на сесията: при старт без сесия („не ме помни“ и спрян процес) следите на
      *   предишния читател се изчистват веднага (AppContainer.watchReader), а не едва при първия
-     *   екран, който стигне до читателските данни.
+     *   екран, който стигне до читателските данни; временно нечетима сесия (фоново събуждане
+     *   преди това) се чете отново.
      */
     fun onUiStart() {
         if (!uiStarted.compareAndSet(false, true)) return

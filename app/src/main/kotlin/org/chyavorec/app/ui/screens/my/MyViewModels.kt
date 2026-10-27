@@ -270,7 +270,7 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
             c.authRepository.state.collect { s ->
                 if (s is AuthState.SignedIn) {
                     if (_state.value.data == null) load(force = false)
-                } else if (s is AuthState.SignedOut) {
+                } else if (s !is AuthState.Unknown) { // изход или временно нечетима сесия
                     _state.value = ScreenState(loading = false, error = AppError.Unauthorized)
                 }
             }
@@ -357,7 +357,7 @@ class MembershipViewModel(private val c: AppContainer) : ViewModel() {
             c.authRepository.state.collect { s ->
                 if (s is AuthState.SignedIn) {
                     if (_state.value.data == null) load(force = false)
-                } else if (s is AuthState.SignedOut) {
+                } else if (s !is AuthState.Unknown) { // изход или временно нечетима сесия
                     _state.value = ScreenState(loading = false, error = AppError.Unauthorized)
                 }
             }

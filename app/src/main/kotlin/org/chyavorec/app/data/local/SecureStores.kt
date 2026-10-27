@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 import org.chyavorec.app.data.security.BytesCipher
 import org.chyavorec.app.data.security.isUnreadableForever
 import org.chyavorec.core.logFailure
+import org.chyavorec.data.repository.UnreadableSessionCounter
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.SelfDeclaredCard
 import org.chyavorec.domain.repository.SelfCardStore
@@ -76,6 +77,27 @@ class SecureSessionStore(
         memory = null
         transientFailure = false
         withContext(Dispatchers.IO) { file.delete() }
+    }
+}
+
+/**
+ * Поредните пускания с временно нечетима сесия — малък файл до нея (само число, без шифроване:
+ * трябва да се чете и когато Keystore-ът не отговаря). Нула — без файл.
+ */
+class FileUnreadableSessionCounter(private val file: File) : UnreadableSessionCounter {
+    override suspend fun load(): Int = withContext(Dispatchers.IO) {
+        if (!file.exists()) 0 else file.readText().trim().toIntOrNull()?.coerceAtLeast(0) ?: 0
+    }
+
+    override suspend fun save(count: Int) {
+        withContext(Dispatchers.IO) {
+            if (count <= 0) {
+                file.delete()
+            } else {
+                file.parentFile?.mkdirs()
+                file.writeText(count.toString())
+            }
+        }
     }
 }
 

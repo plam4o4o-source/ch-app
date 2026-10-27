@@ -61,24 +61,30 @@ class KeystoreCipher(private val alias: String = "chyavorec_secure_store_v1") {
     fun decrypt(data: ByteArray): ByteArray {
         require(data.isNotEmpty()) { "corrupt" }
         val ivLen = data[0].toInt()
-        require(ivLen in 12..16 && data.size > 1 + ivLen) { "corrupt" }
+        // AndroidKeyStore дава (и приема) само 12-байтов IV; друга дължина или шифротекст, по-къс
+        // от tag-а, е повреден файл — нечетим завинаги ([isUnreadableForever]), а не временна грешка.
+        require(ivLen == GCM_IV_BYTES && data.size >= 1 + ivLen + GCM_TAG_BYTES) { "corrupt" }
         val iv = data.copyOfRange(1, 1 + ivLen)
         val cipher = Cipher.getInstance(TRANSFORMATION)
-        cipher.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, iv))
+        cipher.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(GCM_TAG_BYTES * 8, iv))
         return cipher.doFinal(data, 1 + ivLen, data.size - 1 - ivLen)
     }
 
     private companion object {
         const val ANDROID_KEYSTORE = "AndroidKeyStore"
         const val TRANSFORMATION = "AES/GCM/NoPadding"
+        const val GCM_IV_BYTES = 12
+        const val GCM_TAG_BYTES = 16
     }
 }
 
 /**
  * Шифрованите данни никога няма да се прочетат: грешен или сменен ключ (AEAD tag), ключ,
- * обезсилен или изгубен от Keystore, повреден файл или JSON (IllegalArgumentException, вкл.
- * SerializationException). Всичко друго (напр. временно недостъпна услуга на Keystore,
- * ProviderException, KeyStoreException) може да мине при следващия опит — файлът остава.
+ * обезсилен или изгубен от Keystore, повреден файл (вкл. IV, различен от 12 байта) или JSON
+ * (IllegalArgumentException, вкл. SerializationException). Всичко друго (напр. временно
+ * недостъпна услуга на Keystore, ProviderException, KeyStoreException, а и обвитите от нея
+ * InvalidKeyException/IllegalBlockSizeException) може да мине при следващия опит — файлът
+ * остава; сесия, нечетима няколко поредни пускания, се изтрива (AuthRepository.MAX_UNREADABLE_LAUNCHES).
  */
 fun isUnreadableForever(e: Throwable): Boolean =
     e is AEADBadTagException || e is KeyPermanentlyInvalidatedException || e is UnrecoverableKeyException ||
