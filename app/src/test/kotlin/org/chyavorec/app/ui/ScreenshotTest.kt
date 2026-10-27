@@ -22,6 +22,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -290,14 +291,26 @@ class ScreenshotTest {
         compose.waitUntil(15_000) {
             runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) }.isSuccess
         }
-        // Началото може още да се допълни над полицата (поздрав, новини от мрежата) и да я
-        // избута надолу — превърта се отново, докато след покой остане на екрана.
-        for (attempt in 1..5) {
-            compose.waitForIdle()
-            if (runCatching { compose.onAllNodes(hasText("За теб")).onFirst().assertIsDisplayed() }.isSuccess) break
-            // Вече композирана — превърта се точно до нея; иначе — през списъка.
-            runCatching { compose.onAllNodes(hasText("За теб")).onFirst().performScrollTo() }
-                .onFailure { runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) } }
+        // Началото може още да се допълни над полицата (поздрав, новини, корици — част от това
+        // идва извън Compose и waitForIdle не го чака) и да я избута надолу — превърта се
+        // отново, докато полицата не остане на екрана.
+        val forYou = hasText("За теб")
+        val onScreen = {
+            runCatching { compose.onAllNodes(forYou).onFirst().assertIsDisplayed() }.isSuccess
+        }
+        runCatching {
+            compose.waitUntil(15_000) {
+                onScreen() || run {
+                    runCatching { compose.onAllNodes(forYou).onFirst().performScrollTo() }
+                        .onFailure { runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(forYou) } }
+                    false
+                }
+            }
+        }.onFailure {
+            // За диагностика: къде е полицата спрямо екрана.
+            val node = compose.onAllNodes(forYou).fetchSemanticsNodes().firstOrNull()
+            val root = compose.onAllNodes(isRoot()).fetchSemanticsNodes().firstOrNull()
+            println("homeForYou: node=${node?.boundsInRoot} root=${root?.size}")
         }
         shown("За теб")
         shot("08-home-for-you")
