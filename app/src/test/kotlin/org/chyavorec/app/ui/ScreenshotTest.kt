@@ -80,7 +80,7 @@ class ScreenshotTest {
                 "/rss.xml" -> MockResponse().setBody(TestResources.text("site-rss.xml"))
                 "/javora/index.json" -> MockResponse().setBody(TestResources.text("site-index.json"))
                 "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json"))
-                "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Въздвижение на Светия Кръст Господен. **Кръстовден**"}""")
+                "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Преставяне на св. апостол и евангелист **Йоан Богослов**"}""")
                 "/data/app-messages.json" -> MockResponse().setBody("[]")
                 else -> MockResponse().setResponseCode(404)
             }
@@ -155,8 +155,8 @@ class ScreenshotTest {
     private fun homeContent() {
         shown("Васил Левски – 1922", substring = true)
         shown("45-ти", substring = true)
-        waitFor("Кръстовден")
-        shown("Кръстовден", substring = true)
+        waitFor("Йоан Богослов")
+        shown("Йоан Богослов", substring = true)
         tabSelected("Начало")
     }
 
@@ -180,7 +180,7 @@ class ScreenshotTest {
         waitFor("Баба Марта")
         shown("Баба Марта", substring = true)
         // Празникът за деня е ред в поздрава (не отделен ред под търсенето); снимката — със заредената въртележка.
-        waitFor("Кръстовден")
+        waitFor("Йоан Богослов")
         waitFor("45-ти")
         shot("22-home-baba-marta")
     }

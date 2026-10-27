@@ -29,10 +29,11 @@
 
 Официалното мобилно приложение на Народно читалище „Васил Левски – 1922“, с. Яворец.
 
-• Новини — всички публикации от сайта chyavorec.org, с търсене, категории, запазване и споделяне.
-• Събития — календар и списък на предстоящите събития, добавяне в календара на телефона и напомняне.
+• Новини и събития — всички публикации от сайта chyavorec.org, с търсене, категории, запазване и споделяне; календар на предстоящите събития с напомняне.
+• Абонамент за календара — събитията на читалището влизат в календара на телефона и се обновяват сами.
 • Съобщения от читалището — покани и важни известия направо на телефона, отделно за членове.
 • Библиотечен каталог — търсене в книгите на библиотеката по заглавие, автор, ключова дума или инвентарен номер; филтри по вид, раздел, отдел, език и година; актуална наличност.
+• „Искам да прочета“ — списък с книгите, които искаш да прочетеш; за заетата книга „Кажи ми“ изпраща известие, щом е отново на рафта.
 • Моите книги — читателите с ПИН от библиотеката виждат заетите книги и сроковете за връщане, с напомняне преди срока.
 • Дигитална читателска карта с баркод за гишето.
 • Дейности на читалището — фолклорни групи, клубове, проекти, история.
@@ -47,8 +48,9 @@
 The official mobile app of the “Vasil Levski – 1922” Community Centre (chitalishte) in Yavorets, Bulgaria.
 
 • News from chyavorec.org with search, categories, saving and sharing.
-• Events calendar with calendar sync and reminders.
+• Events calendar with reminders, and a calendar subscription that keeps the centre’s events in your phone’s calendar.
 • Library catalogue search by title, author, keyword or inventory number, with filters and availability.
+• “Want to read” list: get a notification as soon as a borrowed book is back on the shelf.
 • New arrivals and library showcases.
 • Digital library card with a barcode for the desk.
 • The centre’s activities, gallery and contacts.
@@ -65,10 +67,10 @@ Privacy: no ads, no tracking, no analytics.
 | Feature graphic | `store/graphics/feature-graphic-1024x500.png` | 1024×500 |
 | Екранни снимки | `store/screenshots/` | мин. 2, телефон 16:9 или 9:16, PNG/JPEG без алфа канал (24-bit RGB) |
 
-Екранни снимки се правят от `prodRelease` build на реално устройство или
-емулатор (Android Studio → Running Devices → Take screenshot), след като
-приложението зареди живите данни от chyavorec.org: Начало, Каталог, Книга,
-Новина, Събития (календар), Читателска карта.
+Екранните снимки се правят от `PlayScreenshotTest` (CI) и се рамкират с
+`tools/play_screenshots.py` — редът и надписите са в `store/screenshots/README.md`:
+Начало, Каталог, Книга („Искам да прочета“), Читателска карта, Събития (абонамент
+за календара), Моите книги, Още, Начало в тъмна тема.
 
 ## Data safety (формуляр в Play Console)
 

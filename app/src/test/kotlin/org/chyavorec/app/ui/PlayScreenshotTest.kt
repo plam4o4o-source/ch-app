@@ -12,18 +12,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
+import coil3.annotation.DelicateCoilApi
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -43,22 +46,24 @@ import org.chyavorec.app.ui.screens.my.LibraryCardBack
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.ThemeMode
 import org.chyavorec.core.FixedClock
+import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.MembershipStatus
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
-import org.robolectric.Shadows.shadowOf
 import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.io.File
 import java.time.Instant
 
 /**
  * Снимки за Google Play: 1080×1920 (9:16, телефон), записват се като play-*.png
- * до останалите снимки и CI ги публикува в клон „screenshots“.
+ * до останалите снимки и CI ги публикува в клон „screenshots“; tools/play_screenshots.py
+ * ги рамкира в store/screenshots (номерът е редът в магазина).
  * Очакванията са „меки“ — ако примерните данни не се покажат на малкия екран,
  * снимката пак се прави; тестът проверява само, че екранът се рисува.
  */
@@ -76,9 +81,17 @@ class PlayScreenshotTest {
     private val clientTls = HandshakeCertificates.Builder().addTrustedCertificate(cert.certificate).build()
     private val client = OkHttpClient.Builder()
         .sslSocketFactory(clientTls.sslSocketFactory(), clientTls.trustManager)
+        // В снимките е истинският адрес на сайта (напр. връзката за абонамент), а заявките
+        // към него отиват към тестовия сървър.
+        .addInterceptor { chain ->
+            val url = chain.request().url
+            val to = if (url.host == SITE_HOST) url.newBuilder().host("localhost").port(server.port).build() else url
+            chain.proceed(chain.request().newBuilder().url(to).build())
+        }
         .build()
     private val outDir = File("build/reports/screenshots").apply { mkdirs() }
 
+    @OptIn(DelicateCoilApi::class)
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse = when (request.path?.substringBefore('?')) {
@@ -86,16 +99,27 @@ class PlayScreenshotTest {
                 "/rss.xml" -> MockResponse().setBody(TestResources.text("site-rss.xml"))
                 "/javora/index.json" -> MockResponse().setBody(TestResources.text("site-index.json"))
                 "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json"))
-                "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Въздвижение на Светия Кръст Господен. **Кръстовден**"}""")
+                "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Преставяне на св. апостол и евангелист **Йоан Богослов**"}""")
                 "/data/app-messages.json" -> MockResponse().setBody("[]")
-                "/api/invlib/yavorec/v1/capabilities" -> MockResponse().setBody(
-                    """{"apiVersion":1,"login":true,"profile":true,"loans":true,"membership":true,"holds":false,"renew":false,"passwordReset":false,"accountDeletion":false,"push":false,"availability":false}""",
+                "$API/v1/capabilities" -> MockResponse().setBody(
+                    """{"apiVersion":1,"login":true,"profile":true,"loans":true,"membership":true,"holds":false,"renew":true,"passwordReset":false,"accountDeletion":false,"push":false,"availability":false}""",
                 )
+                // Примерният читател: вход, профил с членството, заети книги.
+                "$API/v1/auth/login" -> MockResponse().setBody("""{"accessToken":"AT-R1","refreshToken":"RT-R1","expiresIn":2592000,"readerId":"R1"}""")
+                "$API/v1/me" -> MockResponse().setBody("""{"readerId":"R1","cardNumber":"1024-5678","fullName":"$READER","membership":$MEMBERSHIP}""")
+                "$API/v1/me/membership" -> MockResponse().setBody(MEMBERSHIP)
+                "$API/v1/me/loans" -> MockResponse().setBody(LOANS)
                 else -> MockResponse().setResponseCode(404)
             }
         }
         server.useHttps(serverTls.sslSocketFactory(), false)
         server.start()
+        // Кориците — през същия клиент (към тестовия сървър), не от истинския сайт.
+        SingletonImageLoader.setUnsafe(
+            ImageLoader.Builder(ApplicationProvider.getApplicationContext<Application>())
+                .components { add(OkHttpNetworkFetcherFactory(callFactory = { client })) }
+                .build(),
+        )
         // В магазина снимките не бива да показват лентата „Няма интернет връзка“.
         val cm = ApplicationProvider.getApplicationContext<Application>().getSystemService(ConnectivityManager::class.java)
         val caps = ShadowNetworkCapabilities.newInstance()
@@ -104,23 +128,30 @@ class PlayScreenshotTest {
         shadowOf(cm).setNetworkCapabilities(cm.activeNetwork, caps)
     }
 
-    @After fun stop() = server.shutdown()
-
-    private val base get() = server.url("/").newBuilder().host("localhost").build().toString().trimEnd('/')
+    @OptIn(DelicateCoilApi::class)
+    @After fun stop() {
+        SingletonImageLoader.reset()
+        server.shutdown()
+    }
 
     private fun launch(
         mode: ThemeMode = ThemeMode.LIGHT,
         settings: AppSettings = AppSettings(onboardingDone = true, introShown = true),
         deepLink: String? = null,
+        signedIn: Boolean = false,
     ) {
         val config = AppConfig(
-            siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = "$base/api/invlib/yavorec",
+            siteBaseUrl = SITE, catalogUrls = listOf("$SITE/katalog.json"), inflibApiUrl = SITE + API,
             environment = "test", useMockData = false, versionName = "test", versionCode = 1,
         )
         val container = AppContainer(
             ApplicationProvider.getApplicationContext(), config,
             FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), client,
         )
+        if (signedIn) runBlocking {
+            val r = container.authRepository.login("1024-5678", "1234".toCharArray(), remember = false)
+            check(r is Outcome.Success) { "входът на примерния читател: $r" }
+        }
         compose.setContent {
             ChitalishteTheme(mode = mode) {
                 ChitalishteRoot(container, settings, MutableStateFlow(deepLink), showIntro = false)
@@ -142,62 +173,34 @@ class PlayScreenshotTest {
         compose.waitForIdle()
         compose.mainClock.advanceTimeBy(1_500)
         compose.waitForIdle()
-        val bmp = compose.onRoot().captureToImage().asAndroidBitmap()
+        // С отворен лист (отделен прозорец) — екранът заедно с него.
+        val bmp = compose.captureScreen()
         File(outDir, "$name.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
     @Test fun homeLight() {
         launch()
         waitFor("45-ти")
+        waitFor("Йоан Богослов")
         shot("play-01-home-light")
-    }
-
-    @Test fun homeDark() {
-        launch(ThemeMode.DARK)
-        waitFor("45-ти")
-        shot("play-02-home-dark")
     }
 
     @Test fun catalog() {
         launch()
         tab("Каталог")
         waitFor("резултата")
-        shot("play-03-catalog")
+        shot("play-02-catalog")
     }
 
-    @Test fun my() {
-        launch()
-        tab("Моето")
-        waitFor("Здравей!")
-        shot("play-04-my")
-    }
-
-    @Test fun more() {
-        launch()
-        tab("Още")
-        waitFor("Настройки")
-        shot("play-05-more")
-    }
-
-    // --- Още снимки за магазина (tools/play_screenshots.py ги рамкира заедно с горните) ---
-
+    /** Книга, която не е на рафта: „Искам да прочета“ и „Кажи ми, когато е на рафта“. */
     @Test fun book() {
-        launch(deepLink = "$base/elektronen-katalog#zapis=136")
-        waitFor("Попитай библиотеката")
-        shot("play-80-design-book")
-    }
-
-    @Test fun events() {
-        launch(deepLink = "events")
-        waitFor("Световен ден")
-        shot("play-81-design-events")
+        launch(deepLink = "$SITE/elektronen-katalog#zapis=136")
+        waitFor("Кажи ми, когато е на рафта")
+        shot("play-03-book")
     }
 
     @Test fun card() {
-        val data = CardData(
-            holder = "Мария Иванова Петрова", number = "1024-5678", barcode = "10245678",
-            status = MembershipStatus.ACTIVE, verified = true,
-        )
+        val data = CardData(holder = READER, number = "1024-5678", barcode = "10245678", status = MembershipStatus.ACTIVE, verified = true)
         compose.setContent {
             ChitalishteTheme(mode = ThemeMode.LIGHT) {
                 Column(
@@ -205,11 +208,58 @@ class PlayScreenshotTest {
                     verticalArrangement = Arrangement.spacedBy(20.dp),
                 ) {
                     SectionLabel("Читателска карта")
-                    LibraryCard(data)
-                    LibraryCardBack(data)
+                    LibraryCard(data, large = true)
+                    LibraryCardBack(data, large = true)
                 }
             }
         }
-        shot("play-82-design-card")
+        shot("play-04-card")
+    }
+
+    /** „Новини и събития“ на сегмента „Календар“ с отворения абонамент за календара. */
+    @Test fun events() {
+        launch(deepLink = "events")
+        waitFor("Световен ден")
+        val subscribe = hasContentDescription("Абонирай се за календара")
+        compose.waitUntil(10_000) { compose.onAllNodes(subscribe).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(subscribe).onFirst().performClick()
+        waitFor("Копирай връзката")
+        shot("play-05-events")
+    }
+
+    /** „Моите книги“ на влязъл читател: сроковете, просрочената книга, „Удължи“. */
+    @Test fun loans() {
+        launch(deepLink = "my/loans", signedIn = true)
+        waitFor("Бай Ганьо")
+        shot("play-06-loans")
+    }
+
+    @Test fun more() {
+        launch()
+        tab("Още")
+        waitFor("Настройки")
+        shot("play-07-more")
+    }
+
+    @Test fun homeDark() {
+        launch(ThemeMode.DARK)
+        waitFor("45-ти")
+        waitFor("Йоан Богослов")
+        shot("play-08-home-dark")
+    }
+
+    private companion object {
+        const val SITE_HOST = "chyavorec.org"
+        const val SITE = "https://$SITE_HOST"
+        const val API = "/api/invlib/yavorec"
+        const val READER = "Мария Иванова Петрова"
+        const val MEMBERSHIP = """{"memberNumber":"1024-5678","holderName":"$READER","validUntil":"2026-12-31","status":"active","barcode":"10245678"}"""
+
+        // Към 26.09.2026: срок след 4 дни, просрочена с 2 дни (без удължаване), срок след три седмици.
+        const val LOANS = """{"loans":[
+            {"loanId":"L1","inv":7,"title":"Под игото","author":"Иван Вазов","dateOut":"2026-09-05","dateDue":"2026-09-30","renewals":0,"canRenew":true},
+            {"loanId":"L2","inv":101,"title":"Тютюн","author":"Димитър Димов","dateOut":"2026-08-20","dateDue":"2026-09-24","renewals":2,"canRenew":false},
+            {"loanId":"L3","inv":102,"title":"Бай Ганьо","author":"Алеко Константинов","dateOut":"2026-09-19","dateDue":"2026-10-17","renewals":0,"canRenew":true}
+        ]}"""
     }
 }

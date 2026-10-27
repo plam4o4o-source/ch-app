@@ -5,8 +5,8 @@
 и ги подрежда в 1080×1920 (9:16, телефон): горе — лента с кратък надпис на
 български (Cormorant Garamond от app/src/main/res/font, в цвета на пергамента върху
 бордо, със златна чертичка), под нея — екранът със заоблени ъгли, тънка златна
-рамка и мека сянка; долният му край „излиза“ от кадъра. PNG без алфа канал (Play
-отхвърля прозрачност).
+рамка и мека сянка — цял, с долната лента и етикетите ѝ (снимките без долна лента
+се изрязват под съдържанието, виж TRIM). PNG без алфа канал (Play отхвърля прозрачност).
 
 Изпълнение от корена (нужен е Pillow: pip install pillow):
     git fetch origin screenshots
@@ -33,21 +33,24 @@ BURGUNDY_DEEP = (0x45, 0x11, 0x19)
 GOLD = (0xC9, 0xA8, 0x4C)
 PARCHMENT = (0xF5, 0xF0, 0xE8)
 
-# (сурова снимка от CI, файл в store/screenshots, надпис — 4–6 думи)
+# (сурова снимка от CI, файл в store/screenshots, надпис — кратък; редът е този в магазина)
 SHOTS = [
-    ("play-01-home-light.png", "01-home-light.png", "Читалището винаги в джоба ти"),
-    ("play-02-home-dark.png", "02-home-dark.png", "Удобно и в тъмна тема"),
-    ("play-03-catalog.png", "03-catalog.png", "Целият каталог на библиотеката тук"),
-    ("play-80-design-book.png", "04-book.png", "Виж дали книгата е на рафта"),
-    ("play-81-design-events.png", "05-events.png", "Не пропускай нито едно събитие"),
-    ("play-04-my.png", "06-my.png", "Твоите книги и срокове за връщане"),
-    ("play-82-design-card.png", "07-card.png", "Читателската карта винаги с теб"),
-    ("play-05-more.png", "08-more.png", "Новини, клубове, история и още"),
+    ("play-01-home-light.png", "01-home-light.png", "Всичко от читалището на едно място"),
+    ("play-02-catalog.png", "02-catalog.png", "Целият каталог, с наличността на рафта"),
+    ("play-03-book.png", "03-book.png", "Искам да прочета — разбери, щом книгата е на рафта"),
+    ("play-04-card.png", "04-card.png", "Читателската карта винаги с теб"),
+    ("play-05-events.png", "05-events.png", "Абонирай се за събитията в календара"),
+    ("play-06-loans.png", "06-my-books.png", "Твоите книги и сроковете за връщане"),
+    ("play-07-more.png", "07-more.png", "Дейности, галерия, история и архив"),
+    ("play-08-home-dark.png", "08-home-dark.png", "Читалището винаги в джоба ти"),
 ]
+# Снимки без долна лента: празното отдолу се изрязва (иначе половината кадър е празен).
+TRIM = {"play-04-card.png"}
 
-BAND = 400          # височина на лентата с надписа
-SHOT_W = 880        # ширина на екрана в кадъра
-SHOT_TOP = 430      # горен ръб на екрана
+BAND = 340          # височина на лентата с надписа
+SHOT_W = 880        # най-голямата ширина на екрана в кадъра
+SHOT_TOP = 360      # горен ръб на мястото за екрана
+BOTTOM = 56         # поле под екрана — целият екран (и етикетите на долната лента) е в кадъра
 RADIUS = 46
 BORDER = 3
 
@@ -117,16 +120,35 @@ def caption(img, text):
         draw.text(((W - w) / 2, top + i * line_h), line, font=fnt, fill=PARCHMENT)
 
 
-def frame(img, shot):
+def trim_bottom(shot, margin=72, tolerance=6):
+    """Реже еднаквия фон под съдържанието (цветът на най-долния ред), с поле [margin]."""
+    px = shot.load()
+    sw, sh = shot.size
+    bg = px[sw // 2, sh - 1]
+
+    def blank(y):
+        return all(max(abs(a - b) for a, b in zip(px[x, y], bg)) <= tolerance for x in range(0, sw, 4))
+
+    y = sh - 1
+    while y > 0 and blank(y):
+        y -= 1
+    return shot.crop((0, 0, sw, min(sh, y + 1 + margin)))
+
+
+def frame(img, shot, trim=False):
     # Суровите снимки на CI са 9:16; по-високите се режат отгоре надолу до 9:16.
     sw, sh = shot.size
     if sh / sw > 16 / 9 + 0.01:
         shot = shot.crop((0, 0, sw, round(sw * 16 / 9)))
-    scale = SHOT_W / shot.width
-    shot = shot.resize((SHOT_W, round(shot.height * scale)), Image.LANCZOS)
-    x = (W - SHOT_W) // 2
-    y = SHOT_TOP
-    box = (x - BORDER, y - BORDER, x + SHOT_W + BORDER, y + shot.height + BORDER)
+    if trim:
+        shot = trim_bottom(shot)
+    # Целият екран се събира под надписа; по-ниският (изрязан) е по средата на мястото.
+    room = H - SHOT_TOP - BOTTOM
+    scale = min(SHOT_W / shot.width, room / shot.height)
+    shot = shot.resize((round(shot.width * scale), round(shot.height * scale)), Image.LANCZOS)
+    x = (W - shot.width) // 2
+    y = SHOT_TOP + (room - shot.height) // 2
+    box = (x - BORDER, y - BORDER, x + shot.width + BORDER, y + shot.height + BORDER)
     # Мека сянка под екрана.
     shadow = Image.new("L", (W, H), 0)
     ImageDraw.Draw(shadow).rounded_rectangle((box[0], box[1] + 18, box[2], box[3] + 18), RADIUS + BORDER, fill=150)
@@ -139,10 +161,10 @@ def frame(img, shot):
     img.paste(shot, (x, y), mask)
 
 
-def compose(shot, text):
+def compose(shot, text, trim=False):
     img = background()
     caption(img, text)
-    frame(img, shot)
+    frame(img, shot, trim)
     return img
 
 
@@ -161,7 +183,7 @@ def main():
             missing.append(src_name)
             continue
         out = os.path.join(args.out, out_name)
-        compose(shot, text).save(out, optimize=True)
+        compose(shot, text, src_name in TRIM).save(out, optimize=True)
         print(f"{out_name}  ←  {src_name}  „{text}“")
     if missing:
         print("липсват:", ", ".join(missing), file=sys.stderr)

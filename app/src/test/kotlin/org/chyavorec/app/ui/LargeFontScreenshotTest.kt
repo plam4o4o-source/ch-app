@@ -87,7 +87,7 @@ class LargeFontScreenshotTest {
                 "/rss.xml" -> MockResponse().setBody(TestResources.text("site-rss.xml"))
                 "/javora/index.json" -> MockResponse().setBody(TestResources.text("site-index.json"))
                 "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json"))
-                "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Въздвижение на Светия Кръст Господен. **Кръстовден**"}""")
+                "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Преставяне на св. апостол и евангелист **Йоан Богослов**"}""")
                 "/data/app-messages.json" -> MockResponse().setBody("[]")
                 else -> MockResponse().setResponseCode(404)
             }

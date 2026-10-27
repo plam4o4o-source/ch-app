@@ -2,20 +2,17 @@ package org.chyavorec.app.ui
 
 import android.app.Application
 import android.graphics.Bitmap
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.isRoot
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
@@ -67,7 +64,7 @@ class UxScreenshotTest {
                 "/rss.xml" -> MockResponse().setBody(TestResources.text("site-rss.xml"))
                 "/javora/index.json" -> MockResponse().setBody(TestResources.text("site-index.json"))
                 "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json"))
-                "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Въздвижение на Светия Кръст Господен. **Кръстовден**"}""")
+                "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Преставяне на св. апостол и евангелист **Йоан Богослов**"}""")
                 "/data/app-messages.json" -> MockResponse().setBody("[]")
                 else -> MockResponse().setResponseCode(404)
             }
@@ -115,10 +112,8 @@ class UxScreenshotTest {
         compose.waitForIdle()
         compose.mainClock.advanceTimeBy(1_500)
         compose.waitForIdle()
-        // С отворен диалог (отделен прозорец) — снимката е на диалога, най-горния корен.
-        val roots = compose.onAllNodes(isRoot())
-        val count = roots.fetchSemanticsNodes().size
-        val bmp = (if (count <= 1) compose.onRoot() else roots[count - 1]).captureToImage().asAndroidBitmap()
+        // С отворен диалог или лист (отделен прозорец) — екранът заедно с него.
+        val bmp = compose.captureScreen()
         File(outDir, "$name.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
@@ -148,6 +143,7 @@ class UxScreenshotTest {
         click("Настройки")
         click("Размер на текста")
         waitFor("Много голям")
+        compose.onNode(isDialog()).assertExists()
         shot("82-ux-text-size-dialog")
     }
 
@@ -165,6 +161,7 @@ class UxScreenshotTest {
         compose.onAllNodes(hasText("Търси") and hasClickAction()).onFirst().performClick()
         // Същият лист като при сканиране.
         waitFor("Отвори книгата")
+        compose.onAllNodes(hasText("Отвори книгата")).onFirst().assertIsDisplayed()
         shot("85-ux-scan-manual-hit")
     }
 }
