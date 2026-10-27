@@ -2,8 +2,8 @@ name: Baseline profile
 
 # Генерира Baseline + Startup профила на приложението на емулатор (Macrobenchmark, модулът
 # :baselineprofile) и го слива в main САМ, ако пълната проверка мине:
-#   1) генериране на емулатор (Android 14 — на 15 емулаторът в CI замръзва при превъртане на
-#      „Начало“; при неуспех — още един опит с нов емулатор);
+#   1) генериране на емулатор (Android 13, при неуспех — още един опит на Android 14; на 15
+#      емулаторът в CI замръзва при превъртане на „Начало“);
 #   2) commit в клона baseline-profile/update (от последния main);
 #   3) Android CI на този commit (workflow_dispatch — push с GITHUB_TOKEN не пуска workflow-и);
 #   4) ако „checks“ е зелен — main се придвижва напред до този commit (fast-forward; защитата на
@@ -92,23 +92,25 @@ jobs:
           free -m
 
       # BaselineProfileRule: API 33+ (без root). Анимациите остават включени — кодът им
-      # също трябва да влезе в профила. API 34: на 35 емулаторът в CI замръзва при превъртане
+      # също трябва да влезе в профила. Не 35: там емулаторът в CI замръзва при превъртане
       # на „Начало“ (и при стари версии на приложението — проблем на емулатора), а генераторът
-      # превърта точно него. 4 ядра, а при неуспех — още един опит с нов емулатор.
+      # превърта точно него. GPU: swangle_indirect — със swiftshader_indirect емулаторът
+      # изчезва (adb: device not found) минута-две след старта на приложението. 4 ядра,
+      # а при неуспех — още един опит с нов емулатор на API 34.
       - name: Generate baseline + startup profile on emulator
         id: generate
         continue-on-error: true
         timeout-minutes: 75
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
+          api-level: 33
           target: google_apis
           arch: x86_64
           ram-size: 4096M
           cores: 4
           disk-size: 6000M
           disable-animations: false
-          emulator-options: -no-window -no-snapshot -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          emulator-options: -no-window -no-snapshot -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           script: ./gradlew --no-daemon :app:generateBaselineProfile
 
       # При неуспех — причината направо в лога (виж скрипта).
@@ -128,7 +130,7 @@ jobs:
           cores: 4
           disk-size: 6000M
           disable-animations: false
-          emulator-options: -no-window -no-snapshot -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          emulator-options: -no-window -no-snapshot -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           script: ./gradlew --no-daemon :app:generateBaselineProfile
 
       - name: Show test failures
