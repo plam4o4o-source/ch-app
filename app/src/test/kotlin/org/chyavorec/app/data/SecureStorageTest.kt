@@ -3,8 +3,12 @@ package org.chyavorec.app.data
 import kotlinx.coroutines.test.runTest
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.FilePayloadCache
+import org.chyavorec.app.data.local.FileUnreadableSessionCounter
 import org.chyavorec.app.data.local.SecureSelfCardStore
 import org.chyavorec.app.data.local.SecureSessionStore
+import org.chyavorec.app.data.security.KeystoreBytesCipher
+import org.chyavorec.app.data.security.KeystoreCipher
+import org.chyavorec.app.data.security.isUnreadableForever
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.SelfDeclaredCard
 import org.junit.Rule
@@ -12,6 +16,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -110,6 +115,37 @@ class SecureStorageTest {
         }, retryDelayMs = 0)
         assertEquals(s, flaky.load())
         assertFalse(flaky.unreadableNow())
+    }
+
+    /** AndroidKeyStore GCM приема само 12-байтов IV: друга дължина е повреден файл, а не временна грешка. */
+    @Test fun gcmIvOtherThan12BytesIsUnreadableForever() = runTest {
+        val cipher = KeystoreCipher("test-alias")
+        for (ivLen in listOf(0, 11, 13, 16, -1)) {
+            val e = assertFailsWith<IllegalArgumentException>("$ivLen") { cipher.decrypt(byteArrayOf(ivLen.toByte()) + ByteArray(48)) }
+            assertTrue(isUnreadableForever(e), "$ivLen")
+        }
+        // 12 байта IV, но шифротекстът е по-къс от tag-а (16 байта).
+        assertFailsWith<IllegalArgumentException> { cipher.decrypt(byteArrayOf(12) + ByteArray(12 + 15)) }
+        // Сесия с такъв файл се изтрива (изход), не остава „временно нечетима“ завинаги.
+        val file = File(tmp.root, "secure/session.bin")
+        file.parentFile!!.mkdirs()
+        file.writeBytes(byteArrayOf(13) + ByteArray(40))
+        val store = SecureSessionStore(file, KeystoreBytesCipher(cipher), retryDelayMs = 0)
+        assertNull(store.load())
+        assertFalse(file.exists())
+        assertFalse(store.unreadableNow())
+    }
+
+    @Test fun unreadableSessionCounterPersists() = runTest {
+        val file = File(tmp.root, "secure/session.unreadable")
+        val counter = FileUnreadableSessionCounter(file)
+        assertEquals(0, counter.load())
+        counter.save(3)
+        assertEquals(3, FileUnreadableSessionCounter(file).load(), "оцелява при рестарт")
+        counter.save(0)
+        assertFalse(file.exists())
+        file.writeText("повреден")
+        assertEquals(0, counter.load())
     }
 
     @Test fun selfCardStore() = runTest {

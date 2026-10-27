@@ -30,6 +30,7 @@ import org.chyavorec.app.data.local.AppDatabase
 import org.chyavorec.app.data.local.CatalogDatabase
 import org.chyavorec.app.data.local.DataStoreThrottleStore
 import org.chyavorec.app.data.local.FilePayloadCache
+import org.chyavorec.app.data.local.FileUnreadableSessionCounter
 import org.chyavorec.app.data.local.RoomCatalogIndexStore
 import org.chyavorec.app.data.local.SecureSelfCardStore
 import org.chyavorec.app.data.local.SecureSessionStore
@@ -188,6 +189,7 @@ class AppContainer(
             readerServices.auth, SecureSessionStore(File(context.noBackupFilesDir, "secure/session.bin"), cipher), clock, readerCache,
             // Защитата от налучкване на ПИН-а оцелява при рестарт (не се нулира при изход).
             throttleStore = DataStoreThrottleStore(context),
+            unreadableCounter = FileUnreadableSessionCounter(File(context.noBackupFilesDir, "secure/session.unreadable")),
         ).also(::onAuthCreated)
     }
     /**
@@ -276,6 +278,26 @@ class AppContainer(
         watchSignOut(auth)
         watchLoanReminders(auth)
         watchRenewOutcomes(auth)
+        watchUnavailableSession(auth)
+    }
+
+    /**
+     * Временно нечетима сесия ([AuthState.Unavailable], Keystore) — нови опити във фон през
+     * нарастващи паузи ([AuthRepository.retryRestore]); при успех — вход без нов вход от читателя.
+     */
+    private fun watchUnavailableSession(auth: AuthRepository) {
+        appScope.launch {
+            auth.state.collectLatest { s ->
+                if (s != AuthState.Unavailable) return@collectLatest
+                try {
+                    auth.retryRestore()
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    Diagnostics.record("auth.retry-restore", e)
+                }
+            }
+        }
     }
 
     /**
@@ -303,6 +325,8 @@ class AppContainer(
      * подновяване на сесията) — изчиства личните следи ([clearReaderTraces]). Също при старт
      * без сесия, ако предишният процес е имал вход („не ме помни“ и спрян процес — следващият
      * на същия телефон не бива да види нищо), и при вход на друг читател без изход между двата.
+     * Временно нечетима сесия ([AuthState.Unavailable]) НЕ е изход — нищо не се изчиства; нов вход
+     * на нейно място — да (чия е била, не се знае).
      */
     private fun watchSignOut(auth: AuthRepository) {
         appScope.launch { runCatching { evictLegacyReaderHttpCache() }.logFailure("signout.http-cache") }
@@ -313,10 +337,12 @@ class AppContainer(
                 val before = previous
                 previous = s
                 if (s is AuthState.SignedIn) {
-                    if (before is AuthState.SignedIn && before.readerId != s.readerId) clearReaderTraces()
-                    // Само при истински вход (SignedOut → SignedIn). Възстановената сесия при
-                    // студен старт (Unknown → SignedIn) не променя показаното в уиджета.
-                    if (before is AuthState.SignedOut) ChitalishteWidget.refresh(context)
+                    // Unavailable може и да не е видяно (StateFlow пропуска междинни стойности).
+                    val replaced = before !is AuthState.SignedIn && auth.loginReplacedUnreadable
+                    if ((before is AuthState.SignedIn && before.readerId != s.readerId) || replaced) clearReaderTraces()
+                    // Само при истински вход (SignedOut → SignedIn) или прочетена най-после сесия.
+                    // Възстановената при студен старт (Unknown → SignedIn) не променя уиджета.
+                    if (before is AuthState.SignedOut || before is AuthState.Unavailable) ChitalishteWidget.refresh(context)
                     wasSignedIn = true
                     runCatching { settings.setReaderTraces(true) }
                 } else if (s is AuthState.SignedOut) {
@@ -412,7 +438,8 @@ class AppContainer(
                 when (it) {
                     is AuthState.SignedIn -> true
                     AuthState.SignedOut -> false
-                    AuthState.Unknown -> null
+                    // Неизвестно или временно нечетима сесия — напомнянията остават.
+                    AuthState.Unknown, AuthState.Unavailable -> null
                 }
             }.distinctUntilChanged()
             val enabled = settings.settings.map { it.notifyLoans }.distinctUntilChanged()
