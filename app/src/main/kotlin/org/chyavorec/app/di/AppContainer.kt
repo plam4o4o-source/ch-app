@@ -482,8 +482,8 @@ class AppContainer(
                     runCatching { catalogRepository.clear() }.logFailure("cache.catalog")
                     runCatching { publicCache.clear() }.logFailure("cache.public")
                     runCatching { okHttp.cache?.evictAll() }
-                    clearImageCaches()
                     runCatching { documents.clear() }.logFailure("cache.documents")
+                    clearImageCaches()
                 }
             }.also { clearing = it }
         }
