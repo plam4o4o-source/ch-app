@@ -295,7 +295,9 @@ class ScreenshotTest {
         for (attempt in 1..5) {
             compose.waitForIdle()
             if (runCatching { compose.onAllNodes(hasText("За теб")).onFirst().assertIsDisplayed() }.isSuccess) break
-            runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) }
+            // Вече композирана — превърта се точно до нея; иначе — през списъка.
+            runCatching { compose.onAllNodes(hasText("За теб")).onFirst().performScrollTo() }
+                .onFailure { runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) } }
         }
         shown("За теб")
         shot("08-home-for-you")
