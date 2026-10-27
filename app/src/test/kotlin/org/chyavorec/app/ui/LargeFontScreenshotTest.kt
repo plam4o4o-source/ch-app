@@ -190,7 +190,7 @@ class LargeFontScreenshotTest {
     @Test fun myHubLarge() {
         launch()
         tab("Моето")
-        waitFor("Добре дошъл!")
+        waitFor("Здравей!")
         shot("56-font2-my")
     }
 

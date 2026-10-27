@@ -27,7 +27,7 @@ import kotlin.test.assertTrue
 
 /**
  * Скенерът без връзка и без кеш на каталога (напр. веднага след „Изчисти кеша“): не виси
- * на „Зареждам каталога…“, а показва грешка; сканираният код не се губи и се търси, щом
+ * на „Зареждаме каталога…“, а показва грешка; сканираният код не се губи и се търси, щом
  * каталогът се зареди — с „Опитай отново“ или сам, при връщане на връзката.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -54,7 +54,7 @@ class ScanViewModelTest {
         val vm = ScanViewModel(repo(service), clock)
         assertEquals(ScanCatalogStatus.LOADING, vm.catalogStatus.value)
         advanceUntilIdle()
-        assertEquals(ScanCatalogStatus.UNAVAILABLE, vm.catalogStatus.value, "грешка, не безкраен „Зареждам каталога…“")
+        assertEquals(ScanCatalogStatus.UNAVAILABLE, vm.catalogStatus.value, "грешка, не безкраен „Зареждаме каталога…“")
         assertIs<RefreshOnReconnect>(vm)
         assertTrue(vm.reconnectState.wantsReconnectRefresh(), "при връщане на връзката опитва сам")
 

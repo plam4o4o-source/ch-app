@@ -226,9 +226,9 @@ class ScreenshotTest {
     @Test fun my() {
         launch()
         tab("Моето")
-        waitFor("Добре дошъл!")
+        waitFor("Здравей!")
         tabSelected("Моето")
-        shown("Добре дошъл!")
+        shown("Здравей!")
         shown("Читателска карта")
         shown("Моите книги")
         shot("04-my")
@@ -252,7 +252,7 @@ class ScreenshotTest {
         launch(inflibApiUrl = unreachableApi)
         tab("Моето")
         waitFor("Няма връзка със сървъра на библиотеката")
-        shown("Добре дошъл!")
+        shown("Здравей!")
         shown("Опитай отново")
         shot("14-my-offline")
     }

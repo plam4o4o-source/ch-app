@@ -75,6 +75,9 @@ enum class UpdateFailure { CHECK, DOWNLOAD, CHECKSUM, SIGNATURE, INSTALL }
 data class WhatsNew(val versionCode: Int, val versionName: String, val notes: String, val notesEn: String) {
     fun notesFor(english: Boolean): String = if (english && notesEn.isNotBlank()) notesEn else notes
 
+    /** Само общият текст („Подобрения и поправки.“) — за такава версия листът не се показва. */
+    val isGeneric: Boolean get() = notes.isGenericNote() && (notesEn.isBlank() || notesEn.isGenericNote())
+
     fun encode(): String = buildJsonObject {
         put("versionCode", versionCode)
         put("versionName", versionName)
@@ -83,6 +86,10 @@ data class WhatsNew(val versionCode: Int, val versionName: String, val notes: St
     }.toString()
 
     companion object {
+        /** Общият текст от release.yml, когато в store/whats-new.md няма раздел за версията (tools/whats_new.py). */
+        private val GENERIC = setOf("Подобрения и поправки.", "Improvements and fixes.")
+        private fun String.isGenericNote() = trim().removePrefix("•").trim() in GENERIC
+
         fun of(info: UpdateInfo) = WhatsNew(info.versionCode, info.versionName, info.notes, info.notesEn)
 
         fun decode(text: String): WhatsNew? = runCatching {
@@ -191,14 +198,14 @@ class AppUpdater(
     /**
      * Бележките на току-що инсталираната версия (записани при [install]) — веднъж: записът се
      * изтрива, щом се покажат. Запис за по-стара версия вече не важи; за по-нова — тя още не е
-     * инсталирана и записът остава.
+     * инсталирана и записът остава. Само общият текст ([WhatsNew.isGeneric]) не се показва.
      */
     internal suspend fun loadWhatsNew() {
         val saved = settings.pendingWhatsNew() ?: return
         val w = WhatsNew.decode(saved)
         if (w != null && w.versionCode > config.versionCode) return
         settings.setPendingWhatsNew(null)
-        if (w != null && w.versionCode == config.versionCode && w.notes.isNotBlank()) _whatsNew.value = w
+        if (w != null && w.versionCode == config.versionCode && w.notes.isNotBlank() && !w.isGeneric) _whatsNew.value = w
     }
 
     fun dismissWhatsNew() { _whatsNew.value = null }
