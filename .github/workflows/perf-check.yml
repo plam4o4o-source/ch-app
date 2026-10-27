@@ -50,11 +50,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Четвърти кръг: последното липсващо („Много голям“ текст в каталога, jank на
-          # „Искам да прочета“) със swangle_indirect — в кръг 3 всички 4 части с него завършиха,
-          # а 3 от 4 със swiftshader_indirect загубиха емулатора.
-          - { part: func4-swangle, api: 33, gpu: swangle_indirect }
-          - { part: wantjank-swangle, api: 33, gpu: swangle_indirect }
+          # Пети кръг (swangle_indirect): хоризонталната матрица (в кръг 3 снимките останаха
+          # вертикални) и jank на „Искам да прочета“ с повече книги (6 се побират на екрана).
+          - { part: look5-swangle, api: 33, gpu: swangle_indirect }
+          - { part: wantjank5-swangle, api: 33, gpu: swangle_indirect }
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -115,18 +114,18 @@ jobs:
           SRC=$(git rev-parse --short HEAD)
           mkdir -p "$RUNNER_TEMP/pub" results
           if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
-          # Кръг 1 — v126/run1, кръг 2 — v126, кръг 3 — v126/run3; този (кръг 4) — v126/run4.
-          V="$RUNNER_TEMP/pub/v126/run4"
+          # Кръг 1 — v126/run1, кръг 2 — v126, кръг 3 — v126/run3; този (кръг 5) — v126/run5.
+          V="$RUNNER_TEMP/pub/v126/run5"
           rm -rf "$V"; mkdir -p "$V"
           cp -r results/. "$V/"
           cd "$V"
           PARTS=$(ls -d */ 2>/dev/null | tr -d /)
           {
-            echo "# v1.2.26 full emulator test (round 4: text size on the catalogue, Want to read jank, swangle_indirect)"
+            echo "# v1.2.26 full emulator test (round 5: landscape matrix, Want to read jank with more books, swangle_indirect)"
             echo
             echo "Source: \`debug/full-test-2\` @ $SRC (app = origin/main 3df7f37), run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ)."
             echo "Emulators: google_apis x86_64 API 33, pixel_6 profile; parts named *-swangle use -gpu swangle_indirect, the rest swiftshader_indirect."
-            echo "Round 3: [../run3/index.md](../run3/index.md); round 2: [../index.md](../index.md); round 1: [../run1/index.md](../run1/index.md)."
+            echo "Round 4: [../run4/index.md](../run4/index.md); round 3: [../run3/index.md](../run3/index.md); round 2: [../index.md](../index.md); round 1: [../run1/index.md](../run1/index.md)."
             echo
             echo "| part | status |"; echo "|---|---|"
             for p in $PARTS; do
@@ -148,8 +147,8 @@ jobs:
             find . -path ./run1 -prune -o -type f ! -name '*.png' ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
           } > index.md
           R2="$RUNNER_TEMP/pub/v126/index.md"
-          if [ -f "$R2" ] && ! grep -q "run4/index.md" "$R2"; then
-            { head -1 "$R2"; echo; echo "Round 4 (text size on the catalogue, Want to read jank): [run4/index.md](run4/index.md); round 3 (what this round lost, and -gpu swangle_indirect): [run3/index.md](run3/index.md)"; tail -n +2 "$R2"; } > "$RUNNER_TEMP/idx2" && mv "$RUNNER_TEMP/idx2" "$R2"
+          if [ -f "$R2" ] && ! grep -q "run5/index.md" "$R2"; then
+            { head -1 "$R2"; echo; echo "Round 5 (landscape, Want to read jank): [run5/index.md](run5/index.md); round 4 (text size on the catalogue): [run4/index.md](run4/index.md); round 3 (what this round lost, and -gpu swangle_indirect): [run3/index.md](run3/index.md)"; tail -n +2 "$R2"; } > "$RUNNER_TEMP/idx2" && mv "$RUNNER_TEMP/idx2" "$R2"
           fi
           cd "$RUNNER_TEMP/pub"
           if [ -f index.md ] && ! grep -q "v126/index.md" index.md; then

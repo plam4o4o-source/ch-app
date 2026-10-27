@@ -278,9 +278,21 @@ fill_want() {
   log "Want to read: added $n books for the list jank"
 }
 # Само jank на списъка „Искам да прочета“ (540x1200), след като в него има повече книги.
+# По връзка към книга с инвентарен номер (1, 2, 3…) — докато в списъка има 16 книги.
+fill_want_inv() {
+  local n=0 inv
+  for inv in $(seq 1 60); do
+    link "$SITE/elektronen-katalog?inv=$inv" >/dev/null; sleep 2.5; dump
+    has "$RX_BACK" && [ -z "$(xy text "$L_WANT")" ] && { a input swipe $((W/2)) $((H*2/3)) $((W/2)) $((H/3)) 300; sleep 1.5; dump; }
+    if [ -n "$(xy text "$L_WANT")" ] && xy --state text "$L_WANT" | grep -q 'checked=false'; then tap text "$L_WANT" >/dev/null; n=$((n+1)); sleep 1.5; fi
+    has "$RX_BACK" && back 1.5
+    [ $n -ge 16 ] && break
+  done
+  log "Want to read: added $n books by inventory-number links (inv 1..$inv)"
+}
 part_wantjank() {
   warmup
-  fill_want
+  if [ "${PART%%-*}" = wantjank5 ]; then fill_want_inv; else fill_want; fi
   sec "3w. Jank of the Want to read list at 540x1200 (animations ON)"
   anims 1; a wm size 540x1200; a wm density 210; sleep 3; dims
   local i
@@ -550,7 +562,14 @@ f_clear() {
 matrix() {
   local v=$1
   echo "======== matrix $v"
-  restart; dims
+  restart
+  # След force-stop + пускане завъртането не се прилага само (кръг 3: „хоризонталните“ снимки бяха
+  # вертикални) — превключва се наново, както при теста със завъртане, и се проверява.
+  if [ $v = landscape ]; then
+    rot 0; sleep 1; rot 1; sleep 2
+    log "landscape check: $(a dumpsys window displays | tr -d '\r' | grep -m1 -oE 'mCurrentRotation=[^ ]+|mRotation=[^ ]+') $(a dumpsys window displays | tr -d '\r' | grep -m1 -oE 'cur=[0-9]+x[0-9]+')"
+  fi
+  dims
   link "$SITE/"; sleep 5; dismiss; shot $v/01-home
   link "$SITE/elektronen-katalog"; waitfor "$RX_RESULTS" 60; sleep 2; shot $v/02-catalog
   link "$SITE/news"; sleep 5; segstate | grep -q 'News\[checked=true' || segment news; sleep 1; shot $v/03-news
@@ -645,10 +664,11 @@ part_offline() {
 setup
 # Наставката след „-“ (напр. stress3-swangle) е само за режима на GPU в workflow-а.
 case ${PART%%-*} in
-  start35) part_start35;; perf) part_perf;; offline) part_offline;; wantjank) part_wantjank;;
+  start35) part_start35;; perf) part_perf;; offline) part_offline;; wantjank|wantjank5) part_wantjank;;
   # Трети кръг: стъпките, след които емулаторът падаше (голям текст), са последни.
   func3) warmup; f_scan; f_clear; f_textsize;;
   func4) warmup; f_textsize;;
+  look5) look_warm; look_land;;
   look3) look_warm; look_land; look_font;;
   probe*) warmup; s_swipes;;
   stress1) warmup; s_cycles; s_swipes;;
