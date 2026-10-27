@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
@@ -140,14 +141,7 @@ class PlayScreenshotTest {
         deepLink: String? = null,
         signedIn: Boolean = false,
     ) {
-        val config = AppConfig(
-            siteBaseUrl = SITE, catalogUrls = listOf("$SITE/katalog.json"), inflibApiUrl = SITE + API,
-            environment = "test", useMockData = false, versionName = "test", versionCode = 1,
-        )
-        val container = AppContainer(
-            ApplicationProvider.getApplicationContext(), config,
-            FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), client,
-        )
+        val container = container()
         if (signedIn) runBlocking {
             val r = container.authRepository.login("1024-5678", "1234".toCharArray(), remember = false)
             check(r is Outcome.Success) { "входът на примерния читател: $r" }
@@ -157,6 +151,17 @@ class PlayScreenshotTest {
                 ChitalishteRoot(container, settings, MutableStateFlow(deepLink), showIntro = false)
             }
         }
+    }
+
+    private fun container(): AppContainer {
+        val config = AppConfig(
+            siteBaseUrl = SITE, catalogUrls = listOf("$SITE/katalog.json"), inflibApiUrl = SITE + API,
+            environment = "test", useMockData = false, versionName = "test", versionCode = 1,
+        )
+        return AppContainer(
+            ApplicationProvider.getApplicationContext(), config,
+            FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), client,
+        )
     }
 
     private fun waitFor(text: String, substring: Boolean = true) = runCatching {
@@ -201,15 +206,19 @@ class PlayScreenshotTest {
 
     @Test fun card() {
         val data = CardData(holder = READER, number = "1024-5678", barcode = "10245678", status = MembershipStatus.ACTIVE, verified = true)
+        val container = container()
         compose.setContent {
-            ChitalishteTheme(mode = ThemeMode.LIGHT) {
-                Column(
-                    Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface).statusBarsPadding().padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
-                ) {
-                    SectionLabel("Читателска карта")
-                    LibraryCard(data, large = true)
-                    LibraryCardBack(data, large = true)
+            // Шевицата по ъглите на голямата карта чете настройките от контейнера.
+            CompositionLocalProvider(LocalAppContainer provides container) {
+                ChitalishteTheme(mode = ThemeMode.LIGHT) {
+                    Column(
+                        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface).statusBarsPadding().padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
+                    ) {
+                        SectionLabel("Читателска карта")
+                        LibraryCard(data, large = true)
+                        LibraryCardBack(data, large = true)
+                    }
                 }
             }
         }
