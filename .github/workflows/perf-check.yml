@@ -41,8 +41,42 @@ jobs:
             app.apk
             apk-ref.txt
 
+  # Второ издание за сравнение на старта (A/B на един емулатор): приложението от v1.2.26.
+  build-base:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 3df7f373e5dfdef0511a3dcdfa8f573c2161b8ce
+      - name: Temporary x86_64 ABI (emulator only, not committed)
+        run: |
+          sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО|' app/build.gradle.kts
+          grep -n "^val releaseAbis" app/build.gradle.kts
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Build minified prodRelease APK (throwaway key)
+        run: |
+          PASS=$(openssl rand -hex 16)
+          keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/t.jks" -storepass "$PASS" -keypass "$PASS" \
+            -alias t -keyalg RSA -keysize 2048 -validity 1 -dname "CN=repro"
+          export SIGNING_STORE_FILE="$RUNNER_TEMP/t.jks" SIGNING_STORE_PASSWORD="$PASS" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$PASS"
+          ./gradlew --no-daemon assembleProdRelease
+          cp "$(ls app/build/outputs/apk/prod/release/*.apk | head -1)" app-base.apk && ls -l app-base.apk
+          echo "$(git rev-parse --short HEAD) ($(git log -1 --format=%s | cut -c1-80)); x86_64 libs: $(unzip -l app-base.apk | grep -c 'lib/x86_64/' || true)" > apk-base-ref.txt
+          cat apk-base-ref.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-base
+          path: |
+            app-base.apk
+            apk-base-ref.txt
+
   emulator:
-    needs: build
+    needs: [build, build-base]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     continue-on-error: true
@@ -51,15 +85,19 @@ jobs:
       matrix:
         include:
           # Всички на API 33 със swangle_indirect (swiftshader_indirect срива емулатора).
-          - { part: perf, api: 33, gpu: swangle_indirect }
-          - { part: func1, api: 33, gpu: swangle_indirect }
-          - { part: func2, api: 33, gpu: swangle_indirect }
-          - { part: offline, api: 33, gpu: swangle_indirect }
+          # Кръг 2: старт A/B (305a487 срещу 3df7f37) на един и същ емулатор, два пъти;
+          # /events от статия и едрият шрифт на „Начало“ (кръг 1 — v127/).
+          - { part: abstart-1, api: 33, gpu: swangle_indirect }
+          - { part: abstart-2, api: 33, gpu: swangle_indirect }
+          - { part: func3, api: 33, gpu: swangle_indirect }
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
         with:
           name: apk
+      - uses: actions/download-artifact@v8
+        with:
+          name: apk-base
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -115,17 +153,17 @@ jobs:
           SRC=$(git rev-parse --short HEAD)
           mkdir -p "$RUNNER_TEMP/pub" results
           if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
-          V="$RUNNER_TEMP/pub/v127"
+          V="$RUNNER_TEMP/pub/v127/run2"
           rm -rf "$V"; mkdir -p "$V"
           cp -r results/. "$V/"
           cd "$V"
           PARTS=$(ls -d */ 2>/dev/null | tr -d /)
           {
-            echo "# Wave 13 emulator check before release (v127)"
+            echo "# Wave 13 emulator check before release (v127), round 2: startup A/B and follow-ups"
             echo
             echo "Source: \`debug/wave13-check\` @ $SRC (app = wave 13 merge 305a487), run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ)."
             echo "Emulators: google_apis x86_64 API 33, pixel_6 profile, -gpu swangle_indirect; app locale bg-BG."
-            echo "Previous full test (v1.2.26): [../v126/index.md](../v126/index.md)."
+            echo "Round 1: [../index.md](../index.md). Previous full test (v1.2.26): [../../v126/index.md](../../v126/index.md)."
             echo
             echo "| part | status |"; echo "|---|---|"
             for p in $PARTS; do
@@ -146,6 +184,10 @@ jobs:
             echo; echo "## Other files"; echo
             find . -type f ! -name '*.png' ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
           } > index.md
+          R1="$RUNNER_TEMP/pub/v127/index.md"
+          if [ -f "$R1" ] && ! grep -q "run2/index.md" "$R1"; then
+            { head -1 "$R1"; echo; echo "Round 2 (startup A/B against v1.2.26 on the same emulator, /events from an article): [run2/index.md](run2/index.md)"; tail -n +2 "$R1"; } > "$RUNNER_TEMP/idx2" && mv "$RUNNER_TEMP/idx2" "$R1"
+          fi
           cd "$RUNNER_TEMP/pub"
           if [ -f index.md ] && ! grep -q "v127/index.md" index.md; then
             { head -1 index.md; echo; echo "Wave 13 check before release (305a487): [v127/index.md](v127/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md
@@ -154,5 +196,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -qm "Emulator results v127 for $SRC (run ${{ github.run_id }})"
+          git commit -qm "Emulator results v127/run2 for $SRC (run ${{ github.run_id }})"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/emulator-results

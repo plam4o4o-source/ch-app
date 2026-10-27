@@ -594,6 +594,67 @@ part_offline() {
   online
 }
 
+# ================================================================= ROUND 2
+# Старт A/B на един и същ емулатор: 305a487 (app.apk) и 3df7f37 от v1.2.26 (app-base.apk), ред ABBA.
+inst() {  # $1 — apk, $2 — етикет, $3 — файл с описанието
+  a am force-stop $PKG; timeout 60 adb uninstall $PKG >/dev/null 2>&1
+  timeout 180 adb install -r $1 || { log "install $1 failed"; return 1; }
+  a cmd locale set-app-locales $PKG --locales bg-BG
+  a pm grant $PKG android.permission.POST_NOTIFICATIONS; no_camera >/dev/null
+  log "installed $2: $(cat $3 2>/dev/null) size $(stat -c %s $1)"
+}
+ab_round() {  # $1 — apk, $2 — етикет, $3 — описание
+  sec "AB $2: fresh install, first launch, catalogue index, 10 cold starts"
+  inst $1 $2 $3 || return
+  a input keyevent KEYCODE_HOME; sleep 2
+  launch >/dev/null; sleep 6; dismiss; ready; dims
+  tab catalog; waitfor "$RX_RESULTS" 150 && log "$2 first-install catalogue results after ${WAITED} ms" || log "$2 first-install: NO results"
+  for i in 1 2; do a am force-stop $PKG; sleep 2; launch >/dev/null; sleep 3; dismiss; tab catalog; waitfor "$RX_RESULTS" 60; done
+  : > $OUT/start-$2.txt
+  for i in $(seq 1 10); do
+    a am force-stop $PKG; sleep 3
+    launch | tee -a $OUT/start-$2.txt | tr '\n' ' '; echo
+    sleep 3
+  done
+  python3 $H_/parse.py starts $OUT/start-$2.txt "cold $2" | tee -a $SUM
+  shot ab-$2
+}
+part_abstart() {
+  ab_round app.apk new-1 apk-ref.txt
+  ab_round app-base.apk base-1 apk-base-ref.txt
+  ab_round app-base.apk base-2 apk-base-ref.txt
+  ab_round app.apk new-2 apk-ref.txt
+  sec "AB totals"
+  cat $OUT/start-new-1.txt $OUT/start-new-2.txt > $OUT/start-new-all.txt
+  cat $OUT/start-base-1.txt $OUT/start-base-2.txt > $OUT/start-base-all.txt
+  python3 $H_/parse.py starts $OUT/start-new-all.txt "cold NEW 305a487" | tee -a $SUM
+  python3 $H_/parse.py starts $OUT/start-base-all.txt "cold BASE 3df7f37" | tee -a $SUM
+}
+f_article() {
+  sec "F4b. /events from an open article"
+  ready; link_pkg "$SITE/news"; sleep 5; dims
+  segstate | grep -q 'News\[checked=true' || segment news
+  dump; local p; p=$(xy --first-clickable $((H/5)) $((H*4/5)) 150)
+  if [ -z "$p" ]; then log "article: no card found: $(texts 10 | cut -c1-200)"; debug_ui article; return; fi
+  a input tap $p; sleep 5; dump; shot func3/01-article
+  log "article open: back=$(has "$RX_BACK" && echo yes || echo NO); $(texts 4 | cut -c1-160)"
+  link_pkg "$EVENTS_URL"; sleep 4; dump; shot func3/02-events-from-article
+  log "/events from an article: $(segstate); back-button $(has "$RX_BACK" && echo 'VISIBLE (still on the article)' || echo none)"
+  back 2; dump; log "Back after that: $(segstate); $(texts 4 | cut -c1-160)"
+}
+f_fontqa() {
+  sec "F11b. Home quick-action labels at font 1.3 + 'Много голям' (scrolled into view)"
+  set_text_size '=Extra large|=Много голям' || return
+  a settings put system font_scale 1.3; sleep 3
+  restart; link "$SITE/"; sleep 5; dismiss; dump
+  local p; p=$(xy text '=Контакти|=Contacts')
+  [ -n "$p" ] && { a input swipe $((W/2)) ${p#* } $((W/2)) $((H/2)) 800; sleep 2; }
+  qa_report "font 1.3 + Много голям, scrolled"; shot func3/03-home-font130-xlarge-qa
+  a settings put system font_scale 1.0; sleep 2
+  set_text_size '=Standard|=Стандартен'
+}
+part_func3() { warmup; f_article; f_fontqa; }
+
 # ================================================================= main
 setup
 case ${PART%%-*} in
@@ -601,6 +662,8 @@ case ${PART%%-*} in
   func1) part_func1;;
   func2) part_func2;;
   offline) part_offline;;
+  abstart) part_abstart;;
+  func3) part_func3;;
   *) log "unknown part $PART";;
 esac
 alive "end"
