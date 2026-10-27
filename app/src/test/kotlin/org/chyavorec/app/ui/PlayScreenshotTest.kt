@@ -261,7 +261,7 @@ class PlayScreenshotTest {
         const val SITE_HOST = "chyavorec.org"
         const val SITE = "https://$SITE_HOST"
         const val API = "/api/invlib/yavorec"
-        const val READER = "Мария Иванова Петрова"
+        const val READER = "Мария Петрова"
         const val MEMBERSHIP = """{"memberNumber":"1024-5678","holderName":"$READER","validUntil":"2026-12-31","status":"active","barcode":"10245678"}"""
 
         // Към 26.09.2026: срок след 4 дни, просрочена с 2 дни (без удължаване), срок след три седмици.

@@ -36,7 +36,7 @@ PARCHMENT = (0xF5, 0xF0, 0xE8)
 # (сурова снимка от CI, файл в store/screenshots, надпис — кратък; редът е този в магазина)
 SHOTS = [
     ("play-01-home-light.png", "01-home-light.png", "Всичко от читалището на едно място"),
-    ("play-02-catalog.png", "02-catalog.png", "Целият каталог, с наличността на рафта"),
+    ("play-02-catalog.png", "02-catalog.png", "Целият каталог и кое е на рафта сега"),
     ("play-03-book.png", "03-book.png", "Искам да прочета — разбери, щом книгата е на рафта"),
     ("play-04-card.png", "04-card.png", "Читателската карта винаги с теб"),
     ("play-05-events.png", "05-events.png", "Абонирай се за събитията в календара"),
