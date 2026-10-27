@@ -168,7 +168,7 @@ class PlayScreenshotTest {
     @Test fun my() {
         launch()
         tab("Моето")
-        waitFor("Добре дошъл!")
+        waitFor("Здравей!")
         shot("play-04-my")
     }
 

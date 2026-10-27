@@ -73,7 +73,7 @@
     <string name="calendar_show_day">покажи събитията за деня</string>
     <string name="calendar_today">днес</string>
     <string name="calendar_weekdays">Пн,Вт,Ср,Чт,Пт,Сб,Нд</string>
-    <string name="card_add_manual">Добави номера на картата си</string>
+    <string name="card_add_manual">Добави читателска карта</string>
     <string name="card_add_text">Въведи номера от своята читателска карта. Приложението ще покаже баркод в същия формат (Code 39), в който библиотеката печата картите.</string>
     <string name="card_add_title">Дигитална карта</string>
     <string name="card_barcode_desc">Баркод на карта %1$s</string>
@@ -86,7 +86,7 @@
     <string name="card_number_invalid">Номерът съдържа неразрешени знаци.</string>
     <string name="card_number_label">Номер на картата</string>
     <string name="card_qr_desc">QR код на картата</string>
-    <string name="card_remove_title">Да премахна ли картата от устройството?</string>
+    <string name="card_remove_title">Да премахнем ли картата от устройството?</string>
     <string name="card_self_note">Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устройство.</string>
     <string name="card_show">Покажи картата</string>
     <string name="card_usage_note">Покажи картата на библиотекаря; баркодът може да се сканира от четеца на гишето.</string>
@@ -100,9 +100,9 @@
     <string name="catalog_hint_title">Търси по заглавие</string>
     <string name="catalog_no_results">Не открихме книги по това търсене.</string>
     <string name="catalog_no_results_hint">Опитай с друга дума, провери правописа или премахни филтрите.</string>
-    <string name="catalog_searching">Търся…</string>
+    <string name="catalog_searching">Търсим…</string>
     <string name="catalog_sort">Подреждане</string>
-    <string name="catalog_title">Електронен каталог</string>
+    <string name="catalog_title">Каталог</string>
     <string name="catalog_view_list">Списък</string>
     <string name="catalog_view_shelf">Полица</string>
     <string name="channel_events">Събития</string>
@@ -141,7 +141,7 @@
     <string name="diagnostics_cleared">Дневникът е изчистен</string>
     <string name="diagnostics_count">Записи: %1$d</string>
     <string name="diagnostics_empty">Няма записани грешки.</string>
-    <string name="diagnostics_intro">Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако го споделиш сам.</string>
+    <string name="diagnostics_intro">Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш.</string>
     <string name="diagnostics_share_subject">Диагностика — Читалище Яворец</string>
     <string name="documents_empty">Няма документи за показване.</string>
     <string name="documents_tab_docs">Документи</string>
@@ -185,7 +185,7 @@
     <string name="gallery_empty">Няма снимки за показване.</string>
     <string name="gallery_title">Галерия</string>
     <string name="guest_text">Новините, събитията, каталогът и информацията за читалището са достъпни и без вход.</string>
-    <string name="guest_title">Добре дошъл!</string>
+    <string name="guest_title">Здравей!</string>
     <string name="history_empty">Още няма прочетени книги</string>
     <string name="history_empty_hint">Върнатите книги ще се появят тук след следващото обновяване от библиотеката.</string>
     <string name="history_range">взета %1$s · върната %2$s</string>
@@ -193,7 +193,7 @@
     <string name="history_similar">Подобни книги</string>
     <string name="history_similar_note">Подбрани на телефона по раздел и автор — нищо не се изпраща.</string>
     <string name="history_source_note">Историята идва от библиотеката само за читатели, дали съгласие.</string>
-    <string name="history_title">Какво съм чел</string>
+    <string name="history_title">Прочетени книги</string>
     <string name="history_year_all">Всички години</string>
     <string name="hold_error_title">Заявката не е изпратена</string>
     <string name="hold_login_needed">За да заявиш книга, влез в профила си.</string>
@@ -212,7 +212,7 @@
     <string name="home_search_hint">Търси книга, новина, събитие…</string>
     <string name="home_upcoming">Предстоящи събития</string>
     <string name="ics_copy_link">Копирай връзката</string>
-    <string name="ics_google_hint">Google Календар на Android не може да се абонира направо. Копирай връзката и я добави от calendar.google.com › „Други календари“ › „От URL адрес“ — после календарът се вижда и на телефона.</string>
+    <string name="ics_google_hint">Google Календар на Android не може да се абонира направо. Копирай връзката и я добави от calendar.google.com в „Други календари › От URL адрес“ — после календарът се вижда и на телефона.</string>
     <string name="ics_link_label">Календар на читалището</string>
     <string name="ics_sheet_text">Добави събитията на читалището в календара на телефона си. Новите прояви ще се появяват там сами.</string>
     <string name="ics_subscribe">Абонирай се за календара</string>
@@ -243,7 +243,7 @@
     <string name="login_card">Читателски номер</string>
     <string name="login_demo_hint">Демо вход: DEMO-0001 / demo</string>
     <string name="login_forgot">Забравен ПИН?</string>
-    <string name="login_forgot_no_contacts">Телефона и имейла на библиотеката ще намериш в „Още“ → „Контакти“.</string>
+    <string name="login_forgot_no_contacts">Телефона и имейла на библиотеката ще намериш в „Още › Контакти“.</string>
     <string name="login_forgot_title">Забравен ПИН</string>
     <string name="login_heading">Вход за читатели</string>
     <string name="login_hide_password">Скрий ПИН-а</string>
@@ -266,7 +266,7 @@
     <string name="membership_valid_until">Валидно до</string>
     <string name="messages_empty">Няма съобщения от читалището</string>
     <string name="messages_members_hint">Някои съобщения са само за членове. Въведи читателската си карта (или влез) в „Моето“, за да ги виждаш.</string>
-    <string name="messages_members_only">За членове</string>
+    <string name="messages_members_only">Само за членове</string>
     <string name="messages_new">Ново</string>
     <string name="messages_open_link">Отвори връзката</string>
     <string name="messages_personal">Лично</string>
@@ -276,7 +276,7 @@
     <string name="messages_valid_until">Валидно до %1$s</string>
     <string name="more_about_desc">История и мисия</string>
     <string name="more_activities_desc">Групи, клубове, проекти</string>
-    <string name="more_contacts_desc">Адрес, телефон, карта</string>
+    <string name="more_contacts_desc">Адрес, телефон, местоположение</string>
     <string name="more_digital_desc">Услуги, обучения, работно време</string>
     <string name="more_documents_desc">Устав, отчети, юбилейният вестник</string>
     <string name="more_events_desc">Календар на читалището</string>
@@ -291,7 +291,7 @@
     <string name="my_card_add_desc">Добави номера от своята карта</string>
     <string name="my_card_desc">Покажи картата на гишето</string>
     <string name="my_card_self_desc">Въведена от теб карта</string>
-    <string name="my_history_desc">Прочетени книги и подобни</string>
+    <string name="my_history_desc">Историята на четенето и подобни книги</string>
     <string name="my_membership">Моето членство</string>
     <string name="my_membership_desc">Статус и валидност</string>
     <string name="my_notifications">Известия</string>
@@ -309,7 +309,7 @@
     <string name="na_messages">Личните съобщения още не са включени от библиотеката.</string>
     <string name="na_password_reset">Нов ПИН се издава само в библиотеката — обърни се към библиотекаря.</string>
     <string name="na_push">Сървърни известия още не се поддържат.</string>
-    <string name="na_renew">Онлайн подновяване още не се поддържа. Попитай в библиотеката.</string>
+    <string name="na_renew">Онлайн удължаване още не се поддържа. Попитай в библиотеката.</string>
     <string name="na_title">Все още не е достъпно</string>
     <string name="news_empty">Няма новини по този критерий.</string>
     <string name="news_events_title">Новини и събития</string>
@@ -358,7 +358,7 @@
     <string name="notifications_open_settings">Отвори настройките</string>
     <string name="notifications_push_note">Сървърни (push) известия ще бъдат добавени, когато читалището въведе сървър за тях. Дотогава приложението проверява за новини и срокове периодично.</string>
     <string name="notifications_rationale_later">Не сега</string>
-    <string name="notifications_rationale_text">Искаш ли известия за сроковете на книгите, нови съобщения и събития? Можеш да ги промениш по всяко време от Настройки › Известия.</string>
+    <string name="notifications_rationale_text">Искаш ли известия за сроковете на книгите, нови съобщения и събития? Можеш да ги промениш по всяко време от „Настройки › Известия“.</string>
     <string name="notifications_rationale_title">Известия от читалището</string>
     <string name="notifications_rationale_yes">Да</string>
     <string name="notifications_system">Системни настройки за известия</string>
@@ -466,7 +466,7 @@
     <string name="palette_yavorets">Яворец</string>
     <string name="palette_yavorets_desc">Злато и жито</string>
     <string name="pdf_cancel_download">Откажи свалянето</string>
-    <string name="pdf_download_failed">Файлът не се свали — отварям го в браузъра</string>
+    <string name="pdf_download_failed">Файлът не се свали — отваряме го в браузъра</string>
     <string name="pdf_downloading">Сваля се…</string>
     <string name="pdf_open_with_app">Отвори с приложение за PDF</string>
     <string name="photo_in">%1$s – %2$s</string>
@@ -482,7 +482,7 @@
     <string name="profile_email">Имейл</string>
     <string name="profile_photo">Профилна снимка</string>
     <string name="profile_reader_number">Читателски номер</string>
-    <string name="profile_registered">Регистриран на</string>
+    <string name="profile_registered">Дата на регистрация</string>
     <string name="qa_about">За читалището</string>
     <string name="qa_card">Читателска карта</string>
     <string name="qa_contacts">Контакти</string>
@@ -519,22 +519,22 @@
     <string name="renew_conflict_not_allowed">Тази книга не може да се удължи онлайн. Попитай в библиотеката.</string>
     <string name="renew_conflict_other">Удължаването не беше прието. Опитай пак по-късно.</string>
     <string name="renew_conflict_pending">Удължаването вече е заявено и чака библиотеката.</string>
-    <string name="renew_ok">Подновено до %1$s.</string>
+    <string name="renew_ok">Удължено до %1$s.</string>
     <string name="renew_requested">Заявката е изпратена. Библиотеката ще удължи срока при следващото обновяване на програмата си.</string>
     <string name="scan_action">Сканирай баркод</string>
     <string name="scan_camera_error">Камерата не може да се отвори.</string>
-    <string name="scan_catalog_loading">Зареждам каталога…</string>
-    <string name="scan_catalog_unavailable">Каталогът не се зареди — няма връзка. Ще опитам пак, щом се свържеш.</string>
+    <string name="scan_catalog_loading">Зареждаме каталога…</string>
+    <string name="scan_catalog_unavailable">Каталогът не се зареди — няма връзка. Ще опитаме пак, щом се свържеш.</string>
     <string name="scan_code_inv">инв. № %1$s</string>
     <string name="scan_code_isbn">ISBN %1$s</string>
-    <string name="scan_code_waiting">Запазих %1$s — ще го потърся, щом каталогът се зареди.</string>
+    <string name="scan_code_waiting">Запазихме %1$s — ще го потърсим, щом каталогът се зареди.</string>
     <string name="scan_hint">Насочи камерата към баркода на книгата (ISBN) или към инвентарния номер.</string>
     <string name="scan_manual">Въведи номера на ръка</string>
     <string name="scan_manual_invalid">Това не е ISBN или инвентарен номер — провери цифрите.</string>
     <string name="scan_manual_label">ISBN или инвентарен номер</string>
     <string name="scan_manual_search">Търси</string>
     <string name="scan_manual_text">ISBN-ът (10 или 13 цифри под баркода) или инвентарният номер от етикета на библиотеката.</string>
-    <string name="scan_not_found_text">Не намерих книга с %1$s в каталога.</string>
+    <string name="scan_not_found_text">Не намерихме книга с %1$s в каталога.</string>
     <string name="scan_not_found_title">Няма я в библиотеката</string>
     <string name="scan_open_book">Отвори книгата</string>
     <string name="scan_permission_grant">Разреши камерата</string>

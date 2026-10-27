@@ -206,7 +206,7 @@ class EventsScreenshotTest {
     @Test fun calendarSegmentEnglishDark() {
         launch(ThemeMode.DARK, deepLink = "events")
         waitFor("DEC")
-        shown("News & events")
+        shown("News and events")
         compose.onAllNodes(hasText("Calendar") and isSelectable()).onFirst().assertIsSelected()
         shot("85-events-segment-en-dark")
     }

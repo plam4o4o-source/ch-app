@@ -174,7 +174,7 @@ object Intents {
         val intent = Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).apply {
             putExtra(CalendarContract.Events.TITLE, event.title)
             putExtra(CalendarContract.Events.DESCRIPTION, event.description + "\n\n" + event.sourceUrl)
-            event.place?.let { putExtra(CalendarContract.Events.EVENT_LOCATION, it + ", с. Яворец") }
+            event.place?.let { putExtra(CalendarContract.Events.EVENT_LOCATION, it + ", " + context.getString(R.string.org_place)) }
             if (time != null) {
                 val start = date.atTime(time).atZone(zone)
                 putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, start.toInstant().toEpochMilli())

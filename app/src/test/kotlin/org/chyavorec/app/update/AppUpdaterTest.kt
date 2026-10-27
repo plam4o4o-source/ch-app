@@ -97,6 +97,23 @@ class AppUpdaterTest {
         c.settings.setPendingWhatsNew(null)
     }
 
+    @Test fun genericWhatsNewNotShown() = runTest {
+        val c = container()
+        val u = c.updater
+        // Без раздел в store/whats-new.md release.yml записва само общия текст — листът не се показва.
+        c.settings.setPendingWhatsNew(WhatsNew(1, "1.0.0", "Подобрения и поправки.", "Improvements and fixes.").encode())
+        u.loadWhatsNew()
+        assertNull(u.whatsNew.value)
+        assertNull(c.settings.pendingWhatsNew())
+        assertTrue(WhatsNew(1, "1.0.0", "• Подобрения и поправки.", "").isGeneric)
+        // Истински бележки (дори само на български) — листът се показва.
+        assertFalse(WhatsNew(1, "1.0.0", "• Ново", "Improvements and fixes.").isGeneric)
+        c.settings.setPendingWhatsNew(WhatsNew(1, "1.0.0", "• Ново", "• New").encode())
+        u.loadWhatsNew()
+        assertEquals("• Ново", u.whatsNew.value?.notesFor(english = false))
+        u.dismissWhatsNew()
+    }
+
     @Test fun disabledOutsideSelfUpdateBuild() = runTest {
         val u = updater(selfUpdate = false)
         assertFalse(u.enabled)

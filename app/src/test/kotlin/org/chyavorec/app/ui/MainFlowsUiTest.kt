@@ -141,7 +141,7 @@ class MainFlowsUiTest {
         launch()
         waitForText("45-ти общински фолклорен събор", substring = true)
         clickTab("Моето")
-        waitForText("Добре дошъл!")
+        waitForText("Здравей!")
         waitForText("Онлайн входът още не е включен", substring = true)
     }
 

@@ -138,7 +138,7 @@ class AppContainer(
      * пускане без интернет). Данни от сайта към 10.2026 — адресът е съдържание (на български, като сайта).
      */
     val fallbackContacts = Contacts(
-        organization = "НЧ „Васил Левски – 1922“",
+        organization = context.getString(org.chyavorec.app.R.string.app_subtitle),
         address = "пл. 9-ти Септември 3, с. Яворец, общ. Габрово, ПК 5334",
         phones = emptyList(),
         emails = listOf("chitalishte_yavorec@abv.bg"),
