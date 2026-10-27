@@ -711,6 +711,10 @@
         <item quantity="one">%1$d copy</item>
         <item quantity="other">%1$d copies</item>
     </plurals>
+    <plurals name="book_this_copy_out_others_on_shelf">
+        <item quantity="one">This copy is out · %1$d other on the shelf</item>
+        <item quantity="other">This copy is out · %1$d others on the shelf</item>
+    </plurals>
     <plurals name="catalog_count">
         <item quantity="one">%1$d result</item>
         <item quantity="other">%1$d results</item>

@@ -29,6 +29,8 @@ class FakeFtsIndexStore : CatalogIndexStore {
     var replaceGate: CompletableDeferred<Unit>? = null
     /** Ако е зададен — изчистването изпразва индекса и после чака отварянето му (като VACUUM след DELETE). */
     var clearGate: CompletableDeferred<Unit>? = null
+    /** Ако е зададен — изпълнява се веднъж преди следващото [booksAt] (напр. нов каталог между точките и книгите). */
+    var beforeBooksAt: (() -> Unit)? = null
     /** Съдържанието е изгубено (като пресъздадената празна база) — справките хвърлят, докато не се попълни. */
     var lost = false
         private set
@@ -109,6 +111,7 @@ class FakeFtsIndexStore : CatalogIndexStore {
     }
 
     override suspend fun booksAt(ords: List<Int>): List<CatalogBook> {
+        beforeBooksAt?.let { beforeBooksAt = null; it() }
         val byOrd = lookup("booksAt").associateBy { it.ord }
         return ords.mapNotNull { byOrd[it]?.book }
     }

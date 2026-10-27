@@ -318,6 +318,34 @@ class CatalogFtsSearchTest {
         assertEquals("Разкази за живота в манастира.", fts.searchFirst(CatalogQuery("манастирската"), 1).books.single().annotation)
     }
 
+    /** Същите книги в обратен ред (други места в каталога) — нов каталог в индекса. */
+    private fun replaceWithReversed(): CatalogSearchEngine {
+        val next = snapshot.copy(books = snapshot.books.reversed())
+        store.rows = CatalogIndexRows.build(next)
+        store.state = store.state!!.copy(hash = "h2")
+        return CatalogSearchEngine(next)
+    }
+
+    @Test fun newCatalogueBetweenScoringAndBooksIsScoredAgain() = runTest {
+        val q = CatalogQuery("вазов")
+        var next: CatalogSearchEngine? = null
+        store.beforeBooksAt = { next = replaceWithReversed() }
+        val first = fts.searchFirst(q, 2)
+        val expected = next!!.search(q).map { it.inv }
+        assertEquals(expected.take(2), first.books.map { it.inv })
+        assertEquals(expected.size, first.total)
+        store.beforeBooksAt = { replaceWithReversed() }
+        assertEquals(expected, fts.search(q).map { it.inv })
+    }
+
+    @Test fun loadMoreAfterNewCatalogueDoesNotReuseOldPositions() = runTest {
+        val q = CatalogQuery("под", sort = CatalogSort.TITLE)
+        val first = fts.searchFirst(q, 2)
+        assertEquals(engine.search(q).take(2).map { it.inv }, first.books.map { it.inv })
+        val next = replaceWithReversed()
+        assertEquals(next.search(q).drop(2).take(2).map { it.inv }, fts.searchMore(q, 2, 2).map { it.inv })
+    }
+
     @Test fun hitQueryReadsOnlyTheScoringColumns() {
         val q = CatalogIndexQueries.search(CatalogQuery("под", onlyAvailable = true), listOf("под"), "")!!
         assertTrue(q.hitSql.startsWith("SELECT b.ord, b.inv, b.registered_on"), q.hitSql)

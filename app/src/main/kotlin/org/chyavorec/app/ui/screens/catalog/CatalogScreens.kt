@@ -108,6 +108,7 @@ import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.theme.CoverTintedTheme
 import org.chyavorec.app.ui.components.BookStatusPill
+import org.chyavorec.app.ui.components.StatusPill
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.InfoRow
@@ -548,6 +549,10 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
             }
             return@Scaffold
         }
+        // Заявка — според живата наличност, ако я има (каталогът може да е от вчера).
+        val onShelf = ui.liveStatus?.let { it == org.chyavorec.domain.model.BookStatus.AVAILABLE } ?: b.available
+        // Другите екземпляри на рафта (по каталога) — само когато този не е.
+        val othersOnShelf = if (onShelf) 0 else ui.copies.count { it.available }
         Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 32.dp)) {
             // Лентата — само при неуспешно опресняване: кешът от диска сам по себе си не е „без интернет“.
             SyncBanner(ui.fromCache && ui.refreshError != null, ui.syncedAt, ui.refreshError)
@@ -562,7 +567,12 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                         AuthorLink(b.author, style = MaterialTheme.typography.titleMedium) { CatalogSearchRequests.byAuthor(it, navigate) }
                     }
                     Spacer(Modifier.height(12.dp))
-                    BookStatusPill(ui.liveStatus ?: b.status)
+                    // Този екземпляр не е на рафта, но други от заглавието са — това е важното, не „няма я“.
+                    if (othersOnShelf > 0) StatusPill(
+                        pluralStringResource(R.plurals.book_this_copy_out_others_on_shelf, othersOnShelf, othersOnShelf),
+                        LocalExtendedColors.current.ok,
+                    )
+                    else BookStatusPill(ui.liveStatus ?: b.status)
                     // Живата наличност (от библиотечния сървър) е „в момента“; иначе — към датата на каталога.
                     Text(
                         if (ui.liveStatus != null) stringResource(R.string.book_status_now)
@@ -573,15 +583,14 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                     org.chyavorec.app.ui.screens.my.WantToReadToggle(b, snackbar, Modifier.padding(top = 8.dp))
                 }
             }
-            // Заявка — според живата наличност, ако я има (каталогът може да е от вчера).
-            val onShelf = ui.liveStatus?.let { it == org.chyavorec.domain.model.BookStatus.AVAILABLE } ?: b.available
             if (ui.canHold && onShelf) {
                 Button(onClick = { vm.placeHold() }, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
                     Icon(Icons.Outlined.BookmarkAdd, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.book_hold))
                 }
             }
             // Заета / не е на рафта — не задънена улица: обаждане или имейл до библиотеката.
-            if (!onShelf) {
+            // Ако друг екземпляр е на рафта — не е нужно (известието е за този инв. №).
+            if (!onShelf && othersOnShelf == 0) {
                 FilledTonalButton(
                     onClick = { vm.loadContacts(); askLibrary = true },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).heightIn(min = 48.dp),
@@ -617,7 +626,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 InfoRow(stringResource(R.string.book_library), stringResource(R.string.org_library_name))
                 HorizontalDivider(Modifier.padding(vertical = 8.dp))
                 Text(stringResource(R.string.book_availability_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                SyncStamp(ui.syncedAt, Modifier.padding(top = 4.dp))
+                SyncStamp(ui.syncedAt, Modifier.padding(top = 4.dp), horizontalPadding = 0.dp)
             }
             if (ui.copies.isNotEmpty()) {
                 Text(

@@ -57,6 +57,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -344,11 +345,14 @@ fun OfflineBar(insetNavigation: Boolean, modifier: Modifier = Modifier) {
     }
 }
 
-/** Малък надпис „Последна синхронизация: …“ за критични библиотечни данни. */
+/**
+ * Малък надпис „Последна синхронизация: …“ за критични библиотечни данни. [horizontalPadding] —
+ * 0 в колона, която вече има собствен отстъп (иконата се подравнява с текста над нея).
+ */
 @Composable
-fun SyncStamp(syncedAt: Instant?, modifier: Modifier = Modifier) {
+fun SyncStamp(syncedAt: Instant?, modifier: Modifier = Modifier, horizontalPadding: Dp = 16.dp) {
     val context = LocalContext.current
-    Row(modifier.padding(horizontal = 16.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier.padding(horizontal = horizontalPadding, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Icon(Icons.Outlined.Sync, contentDescription = null, modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.width(6.dp))
         Text(

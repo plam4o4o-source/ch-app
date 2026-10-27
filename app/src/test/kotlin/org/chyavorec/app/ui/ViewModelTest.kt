@@ -68,6 +68,23 @@ class ViewModelTest {
         assertTrue(!s.searching)
     }
 
+    /** Пак избраната подредба или „Изчисти“ без филтри не оставят „Търся…“ завинаги. */
+    @Test fun catalogUnchangedQueryDoesNotStartSearching() = runTest(dispatcher) {
+        val vm = CatalogViewModel(CatalogRepository(catalogService, InMemoryPayloadCache(), clock, dispatcher), dispatcher)
+        advanceUntilIdle()
+        vm.setSort(CatalogSort.TITLE)
+        advanceUntilIdle()
+        val searchId = vm.state.value.searchId
+        vm.setSort(CatalogSort.TITLE)
+        assertTrue(!vm.state.value.searching, "същата подредба")
+        vm.clearFilters()
+        assertTrue(!vm.state.value.searching, "„Изчисти“ без филтри")
+        advanceUntilIdle()
+        assertTrue(!vm.state.value.searching)
+        assertEquals(searchId, vm.state.value.searchId)
+        assertEquals(60, vm.state.value.totalResults)
+    }
+
     /**
      * Опресненият във фонов режим каталог (нов katalog.json, нова търсачка) пази заявката и
      * заредените страници — списъкът не скача в началото; само новата заявка го връща там.
