@@ -162,6 +162,8 @@ open_settings() {
 }
 settings_item() {  # етикет: превърта настройките, докато го намери, и го докосва
   local i
+  # Настройките помнят превъртането — първо най-горе, после надолу.
+  for i in 1 2 3 4; do sw_down 200; sleep 0.5; done
   for i in 1 2 3 4 5 6 7 8; do dump; [ -n "$(xy text "$1")" ] && { tap text "$1"; return 0; }; sw_up 300; sleep 1; done
   log "WARN: settings item $1 not found"; debug_ui settings-item; return 1
 }
@@ -277,6 +279,7 @@ fill_want() {
 }
 # Само jank на списъка „Искам да прочета“ (540x1200), след като в него има повече книги.
 part_wantjank() {
+  warmup
   fill_want
   sec "3w. Jank of the Want to read list at 540x1200 (animations ON)"
   anims 1; a wm size 540x1200; a wm density 210; sleep 3; dims
@@ -645,6 +648,7 @@ case ${PART%%-*} in
   start35) part_start35;; perf) part_perf;; offline) part_offline;; wantjank) part_wantjank;;
   # Трети кръг: стъпките, след които емулаторът падаше (голям текст), са последни.
   func3) warmup; f_scan; f_clear; f_textsize;;
+  func4) warmup; f_textsize;;
   look3) look_warm; look_land; look_font;;
   probe*) warmup; s_swipes;;
   stress1) warmup; s_cycles; s_swipes;;
