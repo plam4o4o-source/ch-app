@@ -1,10 +1,8 @@
 package org.chyavorec.app.ui.components
 
 import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -56,6 +54,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.sectionTitle
 import org.chyavorec.app.util.Intents
+import org.chyavorec.app.ui.theme.AppMotion
 
 /** Едно поле отстрани за всички екрани (заглавки на раздели, ленти, карти). */
 val ScreenGutter = 16.dp
@@ -201,7 +200,7 @@ fun PressableCard(
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
     val reduced = rememberReducedMotion()
-    val pressSpec: AnimationSpec<Float> = if (reduced) snap() else spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+    val pressSpec: AnimationSpec<Float> = if (reduced) snap() else AppMotion.fastSpatial()
     val scale by animateFloatAsState(if (pressed && !reduced) 0.97f else 1f, pressSpec, label = "press")
     AppCard(modifier = modifier.scale(scale), onClick = onClick, interactionSource = interaction) { content() }
 }

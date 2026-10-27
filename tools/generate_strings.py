@@ -323,6 +323,7 @@ S = {
 "login_reset_sent": ("Ако номерът е регистриран, ще получиш инструкции.", "If the number is registered, you’ll receive instructions."),
 "login_wrong": ("Грешен читателски номер или ПИН.", "Wrong reader number or PIN."),
 "login_caps_failed": ("Няма връзка със сървъра на библиотеката, затова не можем да проверим дали онлайн входът е включен. Провери интернет връзката и опитай отново.", "We can’t reach the library’s server, so we can’t check whether online sign-in is available. Check your internet connection and try again."),
+"login_caps_failed_short": ("Не можем да проверим дали онлайн входът е включен.", "We can’t check whether online sign-in is available."),
 "login_privacy_note": ("ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore.", "Your PIN is never stored on the device. The session is kept encrypted with an Android Keystore key."),
 "login_demo_hint": ("Демо вход: DEMO-0001 / demo", "Demo sign-in: DEMO-0001 / demo"),
 "card_add_manual": ("Добави номера на картата си", "Add your card number"),

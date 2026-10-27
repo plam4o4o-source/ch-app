@@ -240,6 +240,7 @@
     <string name="loans_empty">Нямаш заети книги</string>
     <string name="loans_empty_hint">Разгледай каталога — може би нещо ще те заинтригува.</string>
     <string name="login_caps_failed">Няма връзка със сървъра на библиотеката, затова не можем да проверим дали онлайн входът е включен. Провери интернет връзката и опитай отново.</string>
+    <string name="login_caps_failed_short">Не можем да проверим дали онлайн входът е включен.</string>
     <string name="login_card">Читателски номер</string>
     <string name="login_demo_hint">Демо вход: DEMO-0001 / demo</string>
     <string name="login_forgot">Забравен ПИН?</string>

@@ -171,6 +171,7 @@ import org.chyavorec.app.ui.components.UpdateDialog
 import org.chyavorec.app.ui.components.OfflineBar
 import org.chyavorec.app.ui.screens.messages.MessagesScreen
 import kotlinx.coroutines.flow.first
+import org.chyavorec.app.ui.theme.AppMotion
 
 /** Анимираното въведение се показва веднъж на процес (студен старт), не при всяко завъртане. */
 private object IntroState { var shown = false }
@@ -364,8 +365,7 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
 /** Иконата на раздела — „подскача“ при избор (без анимация при намалено движение). */
 @Composable
 private fun TabIcon(tab: TopTab, selected: Boolean, reduced: Boolean) {
-    val iconSpec: AnimationSpec<Float> = if (reduced) snap()
-    else spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium)
+    val iconSpec: AnimationSpec<Float> = if (reduced) snap() else AppMotion.fastSpatial()
     val iconScale by animateFloatAsState(if (selected) 1.15f else 1f, iconSpec, label = "tab-icon")
     Icon(
         if (selected) tab.selectedIcon else tab.icon, contentDescription = null,

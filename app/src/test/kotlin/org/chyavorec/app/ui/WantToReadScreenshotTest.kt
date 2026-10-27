@@ -3,7 +3,14 @@ package org.chyavorec.app.ui
 import android.app.Application
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
@@ -128,7 +135,7 @@ class WantToReadScreenshotTest {
         waitFor("Няма я в каталога")
         shown("Белият дома")
         shown("Не е на рафта")
-        shown("Налична")
+        shown("налична")
         shown("Няма я в каталога")
         shown("Наличност към")
     }
@@ -154,5 +161,22 @@ class WantToReadScreenshotTest {
         shown("Ще ти кажем, когато е на рафта")
         shown("Искам да прочета")
         shot("82-watch-book-not-on-shelf")
+    }
+
+    /** „Кажи ми“ е превключвател (за TalkBack — Switch, включен); изключването се отменя от снекбара. */
+    @Test fun notifyToggleUndo() {
+        openList(ThemeMode.LIGHT)
+        click("Белият дома")
+        waitFor("Ще ти кажем, когато е на рафта")
+        val toggle = hasText("Ще ти кажем, когато е на рафта") and isToggleable() and
+            SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Switch)
+        compose.onAllNodes(toggle).onFirst().assertIsOn().performClick()
+        waitFor("Няма да получаваш известие")
+        val off = hasText("Кажи ми, когато е на рафта") and isToggleable()
+        compose.waitUntil(10_000) { compose.onAllNodes(off).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(off).onFirst().assertIsOff()
+        compose.onAllNodes(hasText("Отмени") and hasClickAction()).onFirst().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(toggle).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(toggle).onFirst().assertIsOn()
     }
 }

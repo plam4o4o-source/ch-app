@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.clickable
-import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.focus.FocusRequester
@@ -65,6 +65,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -75,7 +76,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.paneTitle
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -88,6 +94,7 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.components.BookStatusPill
+import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequest
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
@@ -163,71 +170,84 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
         },
     ) { padding ->
         Box(Modifier.padding(padding).fillMaxSize().background(Color.Black)) {
-            when {
-                !hasCamera(context) || cameraError -> PermissionMessage(
-                    title = stringResource(R.string.scan_camera_error), text = null,
-                    primary = null, onPrimary = {}, secondary = null, onSecondary = {},
-                    onManual = openManual,
-                )
-                granted -> {
-                    CameraPreview(
-                        torch = torch,
-                        paused = result != null || manual,
-                        onCode = vm::onCode,
-                        onCamera = { cam -> hasTorch = cam.cameraInfo.hasFlashUnit() },
-                        onError = { cameraError = true },
+            // Докато панелът „на ръка“ е отворен, съдържанието под него е скрито за TalkBack.
+            Box(Modifier.fillMaxSize().then(if (manual) Modifier.clearAndSetSemantics {} else Modifier)) {
+                when {
+                    !hasCamera(context) || cameraError -> PermissionMessage(
+                        title = stringResource(R.string.scan_camera_error), text = null,
+                        primary = null, onPrimary = {}, secondary = null, onSecondary = {},
+                        onManual = openManual,
                     )
-                    ViewfinderOverlay(
-                        when (result) {
-                            is ScanResult.Hit -> ViewfinderMode.HIT
-                            is ScanResult.Miss -> ViewfinderMode.MISS
-                            null -> ViewfinderMode.SCANNING
-                        },
-                        Modifier.fillMaxSize(),
-                    )
-                    Column(
-                        Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        CatalogStatusNote(catalogStatus, waiting, onRetry = vm::retry)
-                        Surface(color = Color.Black.copy(alpha = 0.55f), contentColor = Brand.Parchment, shape = RoundedCornerShape(14.dp)) {
-                            Text(
-                                stringResource(R.string.scan_hint),
-                                style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                            )
-                        }
-                        Spacer(Modifier.height(8.dp))
-                        // Вторично действие: етикет, който камерата не чете (смачкан, избелял).
-                        Surface(color = Color.Black.copy(alpha = 0.55f), contentColor = Brand.GoldLight, shape = RoundedCornerShape(50)) {
-                            ManualEntryButton(openManual)
+                    granted -> {
+                        CameraPreview(
+                            torch = torch,
+                            paused = result != null || manual,
+                            onCode = vm::onCode,
+                            onCamera = { cam -> hasTorch = cam.cameraInfo.hasFlashUnit() },
+                            onError = { cameraError = true },
+                        )
+                        ViewfinderOverlay(
+                            when (result) {
+                                is ScanResult.Hit -> ViewfinderMode.HIT
+                                is ScanResult.Miss -> ViewfinderMode.MISS
+                                null -> ViewfinderMode.SCANNING
+                            },
+                            Modifier.fillMaxSize(),
+                        )
+                        Column(
+                            Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            CatalogStatusNote(catalogStatus, waiting, onRetry = vm::retry)
+                            Surface(color = Color.Black.copy(alpha = 0.55f), contentColor = Brand.Parchment, shape = RoundedCornerShape(14.dp)) {
+                                Text(
+                                    stringResource(R.string.scan_hint),
+                                    style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                                )
+                            }
+                            Spacer(Modifier.height(8.dp))
+                            // Вторично действие: етикет, който камерата не чете (смачкан, избелял).
+                            Surface(color = Color.Black.copy(alpha = 0.55f), contentColor = Brand.GoldLight, shape = RoundedCornerShape(50)) {
+                                ManualEntryButton(openManual)
+                            }
                         }
                     }
+                    else -> PermissionMessage(
+                        title = stringResource(R.string.scan_permission_title),
+                        text = stringResource(R.string.scan_permission_text),
+                        primary = stringResource(R.string.scan_permission_grant),
+                        onPrimary = { launcher.launch(Manifest.permission.CAMERA) },
+                        // След отказ системата може да не покаже диалога отново — пътят е през настройките.
+                        secondary = if (asked) stringResource(R.string.scan_permission_settings) else null,
+                        onSecondary = { openAppSettings(context) },
+                        onManual = openManual,
+                    )
                 }
-                else -> PermissionMessage(
-                    title = stringResource(R.string.scan_permission_title),
-                    text = stringResource(R.string.scan_permission_text),
-                    primary = stringResource(R.string.scan_permission_grant),
-                    onPrimary = { launcher.launch(Manifest.permission.CAMERA) },
-                    // След отказ системата може да не покаже диалога отново — пътят е през настройките.
-                    secondary = if (asked) stringResource(R.string.scan_permission_settings) else null,
-                    onSecondary = { openAppSettings(context) },
-                    onManual = openManual,
-                )
-            }
-            // Без камера: номерът, въведен на ръка, чака каталога (без връзка и без кеш) — както сканираният.
-            if (!granted || !hasCamera(context) || cameraError) {
-                if (waiting != null) {
-                    Column(
-                        Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) { CatalogStatusNote(catalogStatus, waiting, onRetry = vm::retry) }
+                // Без камера: номерът, въведен на ръка, чака каталога (без връзка и без кеш) — както сканираният.
+                if (!granted || !hasCamera(context) || cameraError) {
+                    if (waiting != null) {
+                        Column(
+                            Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) { CatalogStatusNote(catalogStatus, waiting, onRetry = vm::retry) }
+                    }
                 }
             }
-            // Панел над камерата/съобщението (не отделен прозорец) — „Назад“ го затваря.
+            // Панел над камерата/съобщението (не отделен прозорец) — „Назад“ го затваря,
+            // с предварителен изглед на жеста (както системните листове).
+            var backProgress by remember { mutableFloatStateOf(0f) }
+            PredictiveBackHandler(enabled = manual) { events ->
+                try {
+                    events.collect { backProgress = it.progress }
+                    manual = false
+                } finally {
+                    backProgress = 0f
+                }
+            }
             if (manual) {
-                BackHandler { manual = false }
                 ManualEntryPanel(
+                    backProgress = backProgress,
                     onSubmit = { code -> manual = false; vm.onManual(code) },
                     onDismiss = { manual = false },
                 )
@@ -358,8 +378,10 @@ private fun ManualEntryButton(onClick: () -> Unit) {
  * затъмнения екран; докосване извън него го затваря.
  */
 @Composable
-private fun BoxScope.ManualEntryPanel(onSubmit: (String) -> Unit, onDismiss: () -> Unit) {
+private fun BoxScope.ManualEntryPanel(backProgress: Float, onSubmit: (String) -> Unit, onDismiss: () -> Unit) {
     var text by rememberSaveable { mutableStateOf("") }
+    // При намалено движение жестът „назад“ не мащабира панела — само го затваря.
+    val p = if (rememberReducedMotion()) 0f else backProgress
     var invalid by rememberSaveable { mutableStateOf(false) }
     val focus = remember { FocusRequester() }
     val submit: () -> Unit = {
@@ -369,17 +391,29 @@ private fun BoxScope.ManualEntryPanel(onSubmit: (String) -> Unit, onDismiss: () 
             onSubmit(text.trim())
         }
     }
+    // Затъмнението е само за докосване — TalkBack не го вижда (затваря се с „Отказ“).
     Box(
-        Modifier.matchParentSize().background(Color.Black.copy(alpha = 0.6f))
-            .clickable(interactionSource = null, indication = null, onClick = onDismiss),
+        Modifier.matchParentSize().background(Color.Black.copy(alpha = 0.6f * (1f - p * 0.5f)))
+            .clickable(interactionSource = null, indication = null, onClick = onDismiss)
+            .clearAndSetSemantics {},
     )
+    val title = stringResource(R.string.scan_manual)
     Surface(
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().widthIn(max = 640.dp),
+        modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().widthIn(max = 640.dp)
+            // Като ModalBottomSheet при жест „назад“: свива се леко към долния ръб.
+            .graphicsLayer {
+                if (p > 0f) {
+                    scaleX = 1f - p * (48.dp.toPx() / size.width).coerceAtMost(0.1f)
+                    scaleY = 1f - p * (24.dp.toPx() / size.height).coerceAtMost(0.1f)
+                    transformOrigin = TransformOrigin(0.5f, 1f)
+                }
+            }
+            .semantics { paneTitle = title; isTraversalGroup = true },
     ) {
         Column(Modifier.navigationBarsPadding().imePadding().padding(horizontal = 24.dp, vertical = 20.dp)) {
-            Text(stringResource(R.string.scan_manual), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+            Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
             Spacer(Modifier.height(6.dp))
             Text(stringResource(R.string.scan_manual_text), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(12.dp))
@@ -415,6 +449,8 @@ private fun HitSheet(hit: ScanResult.Hit, onOpen: () -> Unit, onClose: () -> Uni
     val availableCopies = hit.copies.count { it.available }
     Column(Modifier.padding(horizontal = 20.dp).padding(bottom = 28.dp)) {
         Row(verticalAlignment = Alignment.Top) {
+            // Без sharedElementKey: листът е отделен прозорец и се затваря преди прехода —
+            // корицата няма откъде да „прелети“.
             BookCover(b, width = 84.dp)
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f)) {
