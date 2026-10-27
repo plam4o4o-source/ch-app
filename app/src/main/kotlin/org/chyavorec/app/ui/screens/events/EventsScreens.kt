@@ -27,11 +27,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.outlined.Sell
 import org.chyavorec.app.ui.components.animateEntrance
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -103,6 +106,7 @@ import org.chyavorec.app.ui.components.windowWidth
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
+import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.LocalThemeStyle
@@ -229,18 +233,36 @@ fun EventsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     }
 }
 
-/** Събитията — списък или месечен календар; [header] стои над тях (сегментите на раздела). */
+/**
+ * Събитията — списък или месечен календар; [header] стои над тях (сегментите на раздела).
+ * [reselectTab] — разделът, чието повторно докосване превърта видимия изглед до началото.
+ */
 @Composable
-fun EventsContent(vm: EventsViewModel, navigate: (String) -> Unit, modifier: Modifier = Modifier, header: @Composable () -> Unit = {}) {
+fun EventsContent(
+    vm: EventsViewModel,
+    navigate: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    reselectTab: String? = null,
+    header: @Composable () -> Unit = {},
+) {
     val ui by vm.ui.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
+    val listState = rememberLazyListState()
+    val calendarState = rememberLazyListState()
+    val monthScroll = rememberScrollState()
+    if (reselectTab != null) TabReselectEffect(reselectTab) {
+        if (ui.calendarMode) {
+            monthScroll.animateScrollTo(0)
+            calendarState.animateScrollToItem(0)
+        } else listState.animateScrollToItem(0)
+    }
     LeafRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = modifier.fillMaxSize()) {
         Column {
             header()
             SyncBanner(ui.state.fromCache, ui.state.syncedAt, ui.state.refreshError)
             AnimatedContent(ui.calendarMode, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "mode") { calendar ->
                 if (calendar) {
-                    CalendarLayout(ui, vm, navigate)
+                    CalendarLayout(ui, vm, navigate, calendarState, monthScroll)
                 } else {
                     Column {
                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -252,7 +274,7 @@ fun EventsContent(vm: EventsViewModel, navigate: (String) -> Unit, modifier: Mod
                             }
                         }
                         EventsState(ui, vm) { list ->
-                            LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            LazyColumn(state = listState, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                 itemsIndexed(list, key = { _, e -> e.id }) { i, e ->
                                     EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.fillMaxWidth().animateItem().animateEntrance(i))
                                 }
@@ -294,17 +316,23 @@ private val CalendarMaxWidth = 480.dp
  * - широк прозорец (от 840 dp): календарът отляво, списъкът отдясно — всеки се превърта сам.
  */
 @Composable
-private fun CalendarLayout(ui: EventsUiState, vm: EventsViewModel, navigate: (String) -> Unit) {
+private fun CalendarLayout(
+    ui: EventsUiState,
+    vm: EventsViewModel,
+    navigate: (String) -> Unit,
+    listState: LazyListState = rememberLazyListState(),
+    monthScroll: ScrollState = rememberScrollState(),
+) {
     val onPrev = { vm.shiftMonth(-1) }
     val onNext = { vm.shiftMonth(1) }
     if (windowWidth() >= 840.dp) {
         Row(Modifier.fillMaxSize()) {
-            Column(Modifier.width(400.dp).fillMaxHeight().verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
+            Column(Modifier.width(400.dp).fillMaxHeight().verticalScroll(monthScroll).padding(bottom = 16.dp)) {
                 MonthCalendar(ui, onPrev, onNext, vm::select)
             }
             Box(Modifier.weight(1f).fillMaxHeight()) {
                 EventsState(ui, vm, emptyIsContent = true) { list ->
-                    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    LazyColumn(state = listState, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         if (list.isEmpty()) item("empty") { MonthEmpty() }
                         itemsIndexed(list, key = { _, e -> e.id }) { i, e ->
                             EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.fillMaxWidth().animateItem().animateEntrance(i))
@@ -316,6 +344,7 @@ private fun CalendarLayout(ui: EventsUiState, vm: EventsViewModel, navigate: (St
     } else {
         EventsState(ui, vm, emptyIsContent = true) { list ->
             LazyColumn(
+                state = listState,
                 contentPadding = PaddingValues(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {

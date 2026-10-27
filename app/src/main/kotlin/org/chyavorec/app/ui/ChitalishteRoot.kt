@@ -129,7 +129,7 @@ import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.navigation.TopTab
 import org.chyavorec.app.ui.navigation.navigateTab
 import org.chyavorec.app.ui.navigation.openLinkTarget
-import org.chyavorec.app.ui.navigation.requestSegment
+import org.chyavorec.app.ui.navigation.openSiteLink
 import org.chyavorec.app.ui.screens.catalog.BookScreen
 import org.chyavorec.app.ui.screens.catalog.CatalogScreen
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
@@ -185,7 +185,7 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
     // (етикетите на лентата, картата) се смятат от този, ефективния мащаб.
     val density = LocalDensity.current
     val factor = settings.textScale.factor
-    val scaled = remember(density, factor) { Density(density.density, fontScale = density.fontScale * factor) }
+    val scaled = remember(density, factor) { Density(density.density, fontScale = appFontScale(density.fontScale, factor)) }
     CompositionLocalProvider(
         LocalDensity provides scaled,
         LocalAppContainer provides container,
@@ -217,6 +217,16 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
 }
 
 private val topLevelRoutes = TopTab.entries.map { it.route }.toSet()
+
+/** Най-едрият мащаб на шрифта: нелинейните таблици на Android стигат до 2×, над него заглавията „избухват“. */
+internal const val MAX_FONT_SCALE = 2f
+
+/**
+ * Ефективният мащаб на шрифта: системният × „Размер на текста“, но не над [MAX_FONT_SCALE]
+ * (освен ако системният вече е по-едър — тогава остава той).
+ */
+internal fun appFontScale(system: Float, factor: Float): Float =
+    (system * factor).coerceAtMost(maxOf(MAX_FONT_SCALE, system))
 
 /** Лентата е с фиксирана височина: над 1.3× етикетите на разделите биха се рязали („Нача…“). */
 private const val NAV_LABEL_MAX_FONT_SCALE = 1.3f
@@ -286,20 +296,19 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
         target == Routes.CATALOG && CatalogSearchRequests.pending.value != null -> nav.openLinkTarget(LinkTarget.Screen(Routes.CATALOG))
         // Събитията са сегментът „Календар“ на раздела „Новини и събития“ (не екран над Начало).
         target == Routes.EVENTS -> nav.openLinkTarget(DeepLinks.eventsTab())
+        // „Всички новини“ — на сегмента „Новини“, дори ако разделът е оставен на „Календар“.
+        target == Routes.NEWS -> nav.openLinkTarget(DeepLinks.newsTab())
         target in topLevelRoutes -> nav.navigateTab(target)
         else -> nav.navigate(target)
     }
 
     /**
-     * Връзка от съдържанието на сайта: вътрешна страница → native екран (над текущия,
-     * а раздел — като смяна на раздела); файл/външен адрес → Custom Tab.
+     * Връзка от съдържанието на сайта: вътрешна страница → native екран (над текущия, а
+     * раздел — като от известие, виж openSiteLink); файл/външен адрес → Custom Tab.
      */
     fun openLink(url: String) {
         val t = DeepLinks.forUrl(url, container.config.siteBaseUrl) ?: return Intents.openUrl(context, url)
-        if (t.stack.isEmpty()) {
-            nav.navigateTab(t.tab)
-            t.segment?.let { nav.requestSegment(t.tab, it) }
-        } else t.stack.forEach { nav.navigate(it) }
+        nav.openSiteLink(t)
     }
     val openExternal: (String) -> Unit = { Intents.openUrl(context, it) }
     val back: () -> Unit = { if (!nav.popBackStack()) nav.navigateTab(Routes.HOME) }

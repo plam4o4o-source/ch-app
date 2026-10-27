@@ -21,11 +21,12 @@ class DeepLinksTest {
 
     // --- Връзки от известия и преки пътища ---
 
-    @Test fun articleNotificationOpensTheArticleOverNews() {
+    /** Под новината — сегментът „Новини“ (и ако разделът е оставен на „Календар“). */
+    @Test fun articleNotificationOpensTheArticleOverTheNewsSegment() {
         val id = "45-ти събор / Тимок"
         val link = DeepLinks.article(id)
         assertTrue(link.startsWith("article/"))
-        assertEquals(LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(id))), target(link))
+        assertEquals(LinkTarget.Screen(Routes.NEWS, listOf(Routes.article(id)), Routes.SEGMENT_NEWS), target(link))
     }
 
     /** Под събитието — разделът „Новини и събития“ на сегмента „Календар“ (не отделен екран над Начало). */
@@ -44,7 +45,7 @@ class DeepLinksTest {
     }
 
     @Test fun emptyIdsFallBackToTheList() {
-        assertEquals(LinkTarget.Screen(Routes.NEWS), target("article/"))
+        assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_NEWS), target("article/"))
         assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_CALENDAR), target("event/"))
         assertEquals(LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES)), target("message/"))
     }
@@ -57,7 +58,8 @@ class DeepLinksTest {
 
     @Test fun legacyAndShortcutLinks() {
         // Известия от по-стари версии.
-        assertEquals(LinkTarget.Screen(Routes.NEWS), target("news/12345"))
+        assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_NEWS), target("news/12345"))
+        assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_NEWS), target("news"))
         assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_CALENDAR), target("events"))
         assertEquals(LinkTarget.Screen(Routes.MY, listOf(Routes.LOANS)), target("my/loans"))
         assertEquals(LinkTarget.Screen(Routes.MY, listOf(Routes.CARD)), target("my/card"))
@@ -85,7 +87,8 @@ class DeepLinksTest {
         assertEquals(LinkTarget.Screen(Routes.HOME), DeepLinks.forUrl("$base/", base))
         assertEquals(LinkTarget.Screen(Routes.HOME), DeepLinks.forUrl(base, base))
         assertEquals(LinkTarget.Screen(Routes.CATALOG), DeepLinks.forUrl("$base/elektronen-katalog", base))
-        assertEquals(LinkTarget.Screen(Routes.NEWS), DeepLinks.forUrl("$base/news/", base))
+        assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_NEWS), DeepLinks.forUrl("$base/news/", base))
+        assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_NEWS), DeepLinks.forUrl("$base/news", base))
         assertEquals(LinkTarget.Screen(Routes.NEWS, segment = Routes.SEGMENT_CALENDAR), DeepLinks.forUrl("$base/events", base))
         assertEquals(LinkTarget.Screen(Routes.HOME, listOf(Routes.CONTACTS)), DeepLinks.forUrl("$base/kontakti", base))
         assertEquals(LinkTarget.Screen(Routes.MORE, listOf(Routes.DOCUMENTS)), DeepLinks.forUrl("$base/load", base))
@@ -107,7 +110,7 @@ class DeepLinksTest {
     }
 
     @Test fun articleUrlIsNormalizedToThePublicAddress() {
-        val expected = LinkTarget.Screen(Routes.NEWS, listOf(Routes.article("$base/news/s-horo-i-pesen-vav-voditsa")))
+        val expected = LinkTarget.Screen(Routes.NEWS, listOf(Routes.article("$base/news/s-horo-i-pesen-vav-voditsa")), Routes.SEGMENT_NEWS)
         assertEquals(expected, DeepLinks.forUrl("$base/news/s-horo-i-pesen-vav-voditsa", base))
         // Заявка, котва, наклонена черта накрая и www не променят новината.
         assertEquals(expected, DeepLinks.forUrl("$base/news/s-horo-i-pesen-vav-voditsa/?utm_source=fb#top", base))

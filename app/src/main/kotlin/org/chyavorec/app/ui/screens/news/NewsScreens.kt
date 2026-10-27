@@ -4,8 +4,12 @@ import org.chyavorec.app.ui.components.sharedBoundsKey
 import org.chyavorec.app.ui.components.appFilterChipColors
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,23 +29,22 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Newspaper
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -66,6 +69,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -73,6 +78,8 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isSpecified
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
@@ -85,6 +92,7 @@ import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ReaderContent
 import org.chyavorec.app.ui.components.ReaderModeButton
 import org.chyavorec.app.ui.components.ReaderSettingsSheet
+import org.chyavorec.app.ui.components.SearchInput
 import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.SkeletonBox
 import org.chyavorec.app.ui.components.SkeletonCards
@@ -120,16 +128,22 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
     val listState = rememberLazyListState()
     val haptic = LocalHapticFeedback.current
     val tick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick) }
-    TabReselectEffect(Routes.NEWS) { listState.animateScrollToItem(0) }
-    var calendar by rememberSaveable { mutableStateOf(segmentState?.get<String>(SEGMENT_KEY) == Routes.SEGMENT_CALENDAR) }
+    var selectedCalendar by rememberSaveable { mutableStateOf(segmentState?.get<String>(SEGMENT_KEY) == Routes.SEGMENT_CALENDAR) }
     val requested = segmentState?.getStateFlow<String?>(SEGMENT_KEY, null)?.collectAsStateWithLifecycle()?.value
+    // Сегментът, поискан от връзка („Календар“ или „Новини“), важи още в първия кадър — без
+    // да мигне запазеният; после става избран и искането се изчиства.
+    val calendar = requested?.let { it == Routes.SEGMENT_CALENDAR } ?: selectedCalendar
     LaunchedEffect(requested) {
         if (requested != null) {
-            calendar = requested == Routes.SEGMENT_CALENDAR
+            selectedCalendar = requested == Routes.SEGMENT_CALENDAR
             segmentState.set(SEGMENT_KEY, null)
         }
     }
-    val segments: @Composable () -> Unit = { NewsSegments(calendar, onSelect = { tick(); calendar = it }) }
+    // Повторно докосване на раздела — към началото на видимия сегмент („Календар“ превърта своя
+    // списък сам). Списъкът на новините не е в композицията, докато е избран „Календар“.
+    TabReselectEffect(Routes.NEWS) { if (!calendar) listState.animateScrollToItem(0) }
+    val segments: @Composable () -> Unit = { NewsSegments(calendar, onSelect = { tick(); selectedCalendar = it }) }
+    val keyboard = LocalSoftwareKeyboardController.current
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val removedMsg = stringResource(R.string.news_unsaved)
@@ -153,19 +167,18 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
         },
     ) { padding ->
         if (calendar) {
-            EventsContent(eventsViewModel(), navigate, Modifier.padding(padding)) { segments() }
+            EventsContent(eventsViewModel(), navigate, Modifier.padding(padding), reselectTab = Routes.NEWS) { segments() }
             return@Scaffold
         }
         LeafRefreshBox(ui.state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
                 segments()
-                OutlinedTextField(
+                // Същото поле като в каталога и търсенето (без златен контур); „Търси“ скрива клавиатурата.
+                SearchInput(
                     value = ui.filter.query,
                     onValueChange = vm::setQuery,
-                    placeholder = { Text(stringResource(R.string.news_search_hint)) },
-                    leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
-                    singleLine = true,
-                    shape = RoundedCornerShape(50),
+                    placeholder = stringResource(R.string.news_search_hint),
+                    keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
                 )
                 LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -197,8 +210,11 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
                     },
                     errorSubject = stringResource(R.string.subject_news),
                 ) { list ->
+                    // Редовете четат само своите стойности (не цялото състояние `ui`): писането в
+                    // търсенето или опресняването не прекомпозира видимите редове наново.
+                    val featured = ui.filter.query.isBlank() && !ui.filter.favoritesOnly
+                    val favoriteIds = ui.favoriteIds
                     LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
-                        val featured = ui.filter.query.isBlank() && !ui.filter.favoritesOnly
                         itemsIndexed(
                             list, key = { _, a -> a.id },
                             contentType = { index, _ -> if (index == 0 && featured) "featured" else "row" },
@@ -206,11 +222,12 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
                             if (index == 0 && featured) {
                                 FeaturedNews(a, onClick = { navigate(Routes.article(a.id)) })
                             } else {
+                                val saved = a.id in favoriteIds
                                 NewsRow(
                                     a,
                                     onClick = { navigate(Routes.article(a.id)) },
-                                    isFavorite = a.id in ui.favoriteIds,
-                                    onToggleFavorite = { toggleFavorite(a, a.id in ui.favoriteIds) },
+                                    isFavorite = saved,
+                                    onToggleFavorite = { toggleFavorite(a, saved) },
                                     modifier = Modifier.animateItem().animateEntrance(index),
                                 )
                             }
@@ -222,43 +239,74 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
     }
 }
 
+/** От този мащаб на шрифта действията на събитията слизат на втори ред под сегментите. */
+private const val SEGMENTS_STACK_FONT_SCALE = 1.5f
+
 /**
  * „Новини | Календар“. На сегмента „Календар“ вдясно са и действията на събитията
  * (абонамент, изглед календар/списък) — в заглавната лента не биха оставили място за името.
+ * При едър шрифт (от [SEGMENTS_STACK_FONT_SCALE]) или тесен екран действията са на втори ред,
+ * а сегментите — на цялата ширина; етикетът се смалява, вместо да се реже („Календ…“).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NewsSegments(calendar: Boolean, onSelect: (Boolean) -> Unit) {
-    // Поне 48 dp — колкото бутоните вдясно, за да не „подскача“ съдържанието при смяна на сегмента.
-    Row(
-        Modifier.fillMaxWidth().heightIn(min = 48.dp).padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        // На таблет сегментите не се разтягат през целия екран.
-        SingleChoiceSegmentedButtonRow(Modifier.weight(1f).wrapContentWidth(Alignment.Start).widthIn(max = 480.dp)) {
-            listOf(false to R.string.news_segment_news, true to R.string.news_segment_calendar).forEachIndexed { i, (isCalendar, label) ->
-                SegmentedButton(
-                    selected = calendar == isCalendar,
-                    onClick = { if (calendar != isCalendar) onSelect(isCalendar) },
-                    shape = SegmentedButtonDefaults.itemShape(i, 2),
-                    icon = {},
-                    label = { Text(stringResource(label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                )
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+        val stacked = LocalDensity.current.fontScale >= SEGMENTS_STACK_FONT_SCALE || maxWidth < 320.dp
+        Column {
+            // Поне 48 dp — колкото бутоните вдясно, за да не „подскача“ съдържанието при смяна на сегмента.
+            Row(
+                Modifier.fillMaxWidth().heightIn(min = 48.dp).padding(start = 16.dp, end = if (stacked) 16.dp else 8.dp, top = 4.dp, bottom = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                // На таблет сегментите не се разтягат през целия екран.
+                val width = if (stacked) Modifier.weight(1f) else Modifier.weight(1f).wrapContentWidth(Alignment.Start)
+                SingleChoiceSegmentedButtonRow(width.widthIn(max = 480.dp)) {
+                    listOf(false to R.string.news_segment_news, true to R.string.news_segment_calendar).forEachIndexed { i, (isCalendar, label) ->
+                        SegmentedButton(
+                            selected = calendar == isCalendar,
+                            onClick = { if (calendar != isCalendar) onSelect(isCalendar) },
+                            shape = SegmentedButtonDefaults.itemShape(i, 2),
+                            icon = {},
+                            label = { SegmentLabel(stringResource(label)) },
+                        )
+                    }
+                }
+                if (!stacked) {
+                    if (calendar) EventsActions(eventsViewModel()) else Spacer(Modifier.width(8.dp))
+                }
+            }
+            if (stacked && calendar) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), horizontalArrangement = Arrangement.End) {
+                    EventsActions(eventsViewModel())
+                }
             }
         }
-        if (calendar) EventsActions(eventsViewModel()) else Spacer(Modifier.width(8.dp))
     }
+}
+
+/** Етикетът на сегмента — на един ред: при недостиг на място се смалява (до 60%), не се реже. */
+@Composable
+private fun SegmentLabel(text: String) {
+    val style = LocalTextStyle.current
+    val max = if (style.fontSize.isSpecified) style.fontSize else 14.sp
+    BasicText(
+        text,
+        style = style.copy(color = LocalContentColor.current),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        autoSize = TextAutoSize.StepBased(minFontSize = max * 0.6f, maxFontSize = max, stepSize = 0.25.sp),
+    )
 }
 
 @Composable
 private fun FeaturedNews(a: NewsArticle, onClick: () -> Unit) {
-    val context = LocalContext.current
     Column(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(16.dp)) {
         if (a.imageUrl != null) {
             SiteImage(a.imageUrl, width = windowWidth() - 32.dp, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large))
             Spacer(Modifier.height(12.dp))
         }
-        MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
+        MetaLine(a.category, a.publishedAtMillis)
         Text(a.title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(top = 4.dp).sharedBoundsKey("news-title-${a.id}"))
         if (a.summary.isNotBlank()) {
             Text(a.summary, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 3,
@@ -267,11 +315,15 @@ private fun FeaturedNews(a: NewsArticle, onClick: () -> Unit) {
     }
 }
 
+/** Категория · дата. Текстът се запомня за новината — не се форматира наново при всяко превъртане. */
 @Composable
-private fun MetaLine(category: String?, date: String?) {
-    val parts = listOfNotNull(category?.uppercase(), date)
-    if (parts.isEmpty()) return
-    Text(parts.joinToString("  ·  "), style = MaterialTheme.typography.labelSmall, color = LocalExtendedColors.current.gold)
+private fun MetaLine(category: String?, publishedAtMillis: Long?) {
+    val context = LocalContext.current
+    val text = remember(category, publishedAtMillis, context) {
+        listOfNotNull(category?.uppercase(), Formatters.millisDate(context, publishedAtMillis)).joinToString("  ·  ")
+    }
+    if (text.isEmpty()) return
+    Text(text, style = MaterialTheme.typography.labelSmall, color = LocalExtendedColors.current.gold)
 }
 
 @Composable
@@ -282,7 +334,6 @@ fun NewsRow(
     isFavorite: Boolean? = null,
     onToggleFavorite: (() -> Unit)? = null,
 ) {
-    val context = LocalContext.current
     Row(
         modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -290,7 +341,7 @@ fun NewsRow(
         SiteImage(a.imageUrl, width = 84.dp, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").size(84.dp).clip(MaterialTheme.shapes.small))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
+            MetaLine(a.category, a.publishedAtMillis)
             Text(a.title, style = MaterialTheme.typography.titleMedium, maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.sharedBoundsKey("news-title-${a.id}"))
         }
         if (isFavorite != null && onToggleFavorite != null) {
@@ -369,7 +420,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                 }
                 item {
                     Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp).widthIn(max = 720.dp)) {
-                        MetaLine(a.category, Formatters.millisDate(context, a.publishedAtMillis))
+                        MetaLine(a.category, a.publishedAtMillis)
                         Spacer(Modifier.height(6.dp))
                         Text(a.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.sharedBoundsKey("news-title-${a.id}").semantics { heading() })
                         Spacer(Modifier.height(16.dp))

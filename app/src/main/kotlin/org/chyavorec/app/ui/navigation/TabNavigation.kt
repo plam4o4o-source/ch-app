@@ -30,6 +30,16 @@ fun NavController.openLinkTarget(target: LinkTarget.Screen) {
     target.stack.forEach { navigate(it) { launchSingleTop = true } }
 }
 
+/**
+ * Връзка от съдържанието на сайта към native екран: екраните ѝ — над текущия („Назад“ се
+ * връща към страницата с връзката); раздел без екрани над него (`/events`, `/news`,
+ * каталогът) — като от известие ([openLinkTarget]): без стария подстек на раздела и на
+ * искания сегмент. Иначе [navigateTab] би възстановил напр. оставена отворена статия.
+ */
+fun NavController.openSiteLink(target: LinkTarget.Screen) {
+    if (target.stack.isEmpty()) openLinkTarget(target) else target.stack.forEach { navigate(it) }
+}
+
 /** Ключът в SavedStateHandle на раздела, под който връзката оставя искания сегмент. */
 const val SEGMENT_KEY = "segment"
 

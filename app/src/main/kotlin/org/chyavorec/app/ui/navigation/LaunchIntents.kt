@@ -4,7 +4,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import org.chyavorec.app.MainActivity
 import org.chyavorec.app.notifications.Notifier
+import org.chyavorec.core.Diagnostics
 
 /**
  * Кога intent-ът, с който е отворен [org.chyavorec.app.MainActivity], носи *нова* връзка.
@@ -52,6 +54,19 @@ object LaunchIntents {
     val SHORTCUT_LINKS = setOf("catalog", "my/card", "events", "scan")
 
     /**
+     * Известията до v1.2.25 включително са с `Intent(context, MainActivity)` — без действие и
+     * без неекспортирания вход, само с extra „deep_link“. Вече показаните такива известия се
+     * отварят, но само с връзки, които те са носили (заемите, съобщенията, събитие, новина,
+     * книга) — чужд intent със същия вид не може да отвори произволна връзка (вход, обновяване).
+     */
+    fun isLegacyNotificationLink(link: String): Boolean = when {
+        link == "my/loans" || link == DeepLinks.MESSAGES -> true
+        link.startsWith("event/") || link.startsWith("article/") -> link.substringAfter('/').isNotBlank()
+        link.startsWith("book/") -> link.removePrefix("book/").toLongOrNull()?.let { it > 0 } == true
+        else -> false
+    }
+
+    /**
      * Intent към приложението, отварящ вътрешната връзка [link] (виж [DeepLinks]) — за
      * PendingIntent-ите на известията и уиджета. `data` е само за различни PendingIntent-и
      * (не се сливат); връзката се чете от extra-то.
@@ -70,6 +85,8 @@ object LaunchIntents {
      * Връзката, която [intent] иска да отвори, или `null` (обикновено отваряне или чужд
      * intent, който се пренебрегва):
      * - собствена връзка (extra „deep_link“) — само с [ACTION_OPEN_LINK] през [OPEN_LINK_ALIAS];
+     * - известие от стара версия (без действие, изрично към MainActivity) — само
+     *   [isLegacyNotificationLink];
      * - пряк път — само връзка от [SHORTCUT_LINKS];
      * - адрес (ACTION_VIEW) — само адрес от сайта с native екран ([DeepLinks.forUrl]); всичко
      *   друго (чужд сайт, файл, непознат път) не се отваря през приложението.
@@ -82,6 +99,9 @@ object LaunchIntents {
             ACTION_SHORTCUT -> data?.takeIf { it.scheme == SHORTCUT_SCHEME }?.path.orEmpty().trim('/').takeIf { it in SHORTCUT_LINKS }
             Intent.ACTION_VIEW -> data?.takeIf { it.scheme == "https" }?.toString()
                 ?.takeIf { DeepLinks.forUrl(it, siteBaseUrl) != null }
+            null -> intent.getStringExtra(Notifier.EXTRA_DEEP_LINK)
+                ?.takeIf { intent.component?.className == MainActivity::class.java.name && isLegacyNotificationLink(it) }
+                ?.also { Diagnostics.note("deeplink", "legacy link") }
             else -> null
         }
     }
