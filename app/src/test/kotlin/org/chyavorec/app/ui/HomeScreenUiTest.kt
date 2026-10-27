@@ -35,6 +35,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
 import java.time.Instant
 import kotlin.test.assertTrue
 
@@ -43,6 +44,8 @@ import kotlin.test.assertTrue
  * пренасяне по букви при едър шрифт, и въртележката хоризонтално — не на целия екран.
  */
 @RunWith(AndroidJUnit4::class)
+// Истинско разполагане на текста (редове, препълване) — както в NavLayoutScreenshotTest.
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = Application::class, qualifiers = "bg-w411dp-h891dp-xxhdpi")
 class HomeScreenUiTest {
     @get:Rule val compose = createComposeRule()
