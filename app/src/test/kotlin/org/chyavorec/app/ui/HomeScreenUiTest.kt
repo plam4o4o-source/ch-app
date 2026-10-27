@@ -117,7 +117,11 @@ class HomeScreenUiTest {
                     val end = layout.getLineEnd(line)
                     assertTrue(text[end - 1].isWhitespace(), "„$label“ е пренесен в дума: „${text.substring(0, end)}|${text.substring(end)}“")
                 }
-                assertTrue(!layout.hasVisualOverflow, "„$label“ е отрязан")
+                assertTrue(
+                    !layout.hasVisualOverflow,
+                    "„$label“ е отрязан: ${layout.lineCount} реда, ${layout.size} от ${layout.multiParagraph.width}×${layout.multiParagraph.height}, " +
+                        "maxLines=${layout.multiParagraph.didExceedMaxLines}, ${layout.layoutInput.constraints}, scale=${layout.layoutInput.density.fontScale}",
+                )
             }
         }
     }
