@@ -102,8 +102,10 @@ AGP 9.4 (вграден Kotlin) · Gradle 9.8 · Java 21 (build с JDK 25) · mi
    wrapper-ът. Промяна напр. само в `app/build.gradle.kts` (адреси, `minSdk`, R8) е
    истинско издание.
 
-Всяка неделя `baseline-profile.yml` генерира наново Baseline/Startup профила на
-емулатор и го предлага в клона `baseline-profile/update` (слива се ръчно).
+`baseline-profile.yml` генерира наново Baseline/Startup профила на емулатор всяка
+неделя и след всяко издание. Новият профил минава през пълната проверка (Android CI в
+клона `baseline-profile/update`) и при успех влиза в `main` сам. Сам по себе си не прави
+нова версия — влиза в следващото издание.
 
 Ръчно: Actions → Release (конкретна версия, напр. `1.2.0`) или tag `v1.2.0`.
 При ръчно пускане (Release, Auto release, Update control) в „Run workflow“ избери

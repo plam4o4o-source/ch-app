@@ -87,9 +87,12 @@ jobs:
           # което влиза в build-а — кодът, Gradle скриптовете и настройките, зависимостите,
           # wrapper-ът и конфигурацията на Compose компилатора (app/proguard-rules.pro е в app).
           APP_PATHS="app shared gradle gradlew gradlew.bat build.gradle.kts settings.gradle.kts gradle.properties compose-stability.conf"
+          # Само обновен профил за бързо стартиране (baseline-profile.yml го слива сам) не е
+          # причина за нова версия — влиза в следващото истинско издание.
+          NOT_PROFILE=":(exclude)app/src/main/generated/baselineProfiles"
           if git rev-parse -q --verify "refs/tags/$LAST" >/dev/null && \
-             git diff --quiet "$LAST" "$REF" -- $APP_PATHS; then
-            echo "Няма промени по приложението след $LAST — без издание."
+             git diff --quiet "$LAST" "$REF" -- $APP_PATHS "$NOT_PROFILE"; then
+            echo "Няма промени по приложението след $LAST (освен профила за бърз старт) — без издание."
             echo "release=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -103,7 +106,7 @@ jobs:
           DRAFT=false
           if git rev-parse -q --verify "refs/tags/$LAST" >/dev/null; then
             AUTHORS=$(git log --no-merges --format='%an' "$LAST..$REF" | sort -u)
-            OTHER_FILES=$(git diff --name-only "$LAST" "$REF" -- $APP_PATHS | \
+            OTHER_FILES=$(git diff --name-only "$LAST" "$REF" -- $APP_PATHS "$NOT_PROFILE" | \
               grep -Ev '^(gradle/libs\.versions\.toml|gradle/wrapper/[^/]+|gradlew|gradlew\.bat)$' || true)
             if [ "$AUTHORS" = "dependabot[bot]" ] || [ -z "$OTHER_FILES" ]; then
               DRAFT=true

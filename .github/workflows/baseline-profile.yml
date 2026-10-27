@@ -1,33 +1,69 @@
 name: Baseline profile
 
-# Генерира Baseline + Startup профила на приложението на емулатор (Macrobenchmark,
-# модулът :baselineprofile) и го предлага за сливане:
-#   1) артефакт „baseline-profile“ с baseline-prof.txt и startup-prof.txt;
-#   2) commit в клона baseline-profile/update (презаписва се при всяко пускане).
-# Клонът се слива в main ръчно (PR от уеб интерфейса): той обновява
-# app/src/main/generated/baselineProfiles/ (и премахва стария ръчен app/src/main/baseline-prof.txt
-# с wildcard правилата, ако още го има).
-# Push с GITHUB_TOKEN не пуска други workflow-и — Android CI тръгва при отварянето на PR-а.
+# Генерира Baseline + Startup профила на приложението на емулатор (Macrobenchmark, модулът
+# :baselineprofile) и го слива в main САМ, ако пълната проверка мине:
+#   1) генериране на емулатор (Android 14 — на 15 емулаторът в CI замръзва при превъртане на
+#      „Начало“; при неуспех — още един опит с нов емулатор);
+#   2) commit в клона baseline-profile/update (от последния main);
+#   3) Android CI на този commit (workflow_dispatch — push с GITHUB_TOKEN не пуска workflow-и);
+#   4) ако „checks“ е зелен — main се придвижва напред до този commit (fast-forward; защитата на
+#      main изисква точно тази проверка). Ако междувременно main е мръднал — commit-ът се
+#      пренася върху новия main и стъпки 3–4 се повтарят веднъж.
+# Неуспех на която и да е стъпка не пипа main — остава предишният профил.
+# Само профил не прави нова версия (виж auto-release.yml) — влиза в следващото издание.
+#
+# Кога: всяка неделя, ръчно и след всяко издание с промени по приложението (Auto release),
+# за да не изостава профилът след големи промени.
 
 on:
   workflow_dispatch:
   schedule:
     # Всяка неделя, 02:23 UTC (по-рано от седмичните Dependabot обновления в понеделник).
     - cron: "23 2 * * 0"
+  workflow_run:
+    workflows: ["Auto release"]
+    types: [completed]
+    branches: [main]
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: baseline-profile
   cancel-in-progress: false
 
 jobs:
-  generate:
+  # След Auto release — само ако наистина е излязла нова версия (tag на точно този commit).
+  should-run:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          if [ "$EVENT" != "workflow_run" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "$CONCLUSION" != "success" ]; then echo "run=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          # Tag-ове v*, които сочат към commit-а на изданието (чернова — без tag — не се брои).
+          TAGGED=$(gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/v" --jq '.[].object.sha' | grep -c "^$SHA$" || true)
+          echo "Tags at $SHA: $TAGGED"
+          if [ "$TAGGED" -gt 0 ]; then echo "run=true" >> "$GITHUB_OUTPUT"; else echo "run=false" >> "$GITHUB_OUTPUT"; fi
+
+  generate:
+    needs: should-run
+    if: needs.should-run.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
 
       - uses: actions/setup-java@v6
         with:
@@ -56,17 +92,16 @@ jobs:
           free -m
 
       # BaselineProfileRule: API 33+ (без root). Анимациите остават включени — кодът им
-      # също трябва да влезе в профила. Емулаторът в CI понякога „изчезва“ (adb: device
-      # offline/not found) скоро след началото на генератора (същото и с API 33) — вероятно
-      # претоварен (софтуерна графика + компилиране на dex): 4 ядра, а при неуспех — още
-      # един опит с нов емулатор.
+      # също трябва да влезе в профила. API 34: на 35 емулаторът в CI замръзва при превъртане
+      # на „Начало“ (и при стари версии на приложението — проблем на емулатора), а генераторът
+      # превърта точно него. 4 ядра, а при неуспех — още един опит с нов емулатор.
       - name: Generate baseline + startup profile on emulator
         id: generate
         continue-on-error: true
         timeout-minutes: 75
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 34
           target: google_apis
           arch: x86_64
           ram-size: 4096M
@@ -86,7 +121,7 @@ jobs:
         timeout-minutes: 75
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 34
           target: google_apis
           arch: x86_64
           ram-size: 4096M
@@ -129,6 +164,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Commit to branch baseline-profile/update
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -137,9 +173,18 @@ jobs:
           # Генерираният профил заменя ръчния с wildcard правила.
           if [ -f app/src/main/baseline-prof.txt ]; then git rm -q app/src/main/baseline-prof.txt; fi
           if git diff --cached --quiet; then
-            echo "Profile unchanged — nothing to commit."
+            echo "Profile unchanged — nothing to merge."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          git commit -q -m "Baseline profile: generated on emulator from ${GITHUB_SHA::7}"
+          git commit -q -m "Профил за бърз старт: генериран на емулатор от ${GITHUB_SHA::7}"
           git push -f origin baseline-profile/update
-          echo "Pushed: https://github.com/${GITHUB_REPOSITORY}/compare/${GITHUB_REF_NAME}...baseline-profile/update"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Пълната проверка на commit-а с профила; при зелен „checks“ — main напред до него.
+      # Ако main е мръднал, докато вървят проверките — пренасяне и още един опит.
+      - name: Check and merge into main
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/scripts/baseline-profile-merge.sh
