@@ -79,16 +79,16 @@ import androidx.compose.ui.platform.LocalDensity
 import coil3.SingletonImageLoader
 import coil3.compose.AsyncImage
 import coil3.memory.MemoryCache
+import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.size.Precision
-import coil3.size.Size
 import org.chyavorec.app.ui.components.sitePhotoPlaceholderKey
 import org.chyavorec.app.ui.components.windowHeight
 import org.chyavorec.data.site.SiteImageUrls
 
 @Composable
 fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
-    val vm = appViewModel { GalleryViewModel(it.siteRepository) }
+    val vm = appViewModel { GalleryViewModel(it.siteRepository, online = it.connectivity::isOnline) }
     val state by vm.state.collectAsStateWithLifecycle()
     Scaffold(topBar = { BackTopBar(stringResource(R.string.gallery_title), onBack) }) { padding ->
         LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
@@ -133,7 +133,7 @@ private fun albumTitle(name: String): String = if (name == GalleryAlbum.NEWS) st
 
 @Composable
 fun AlbumScreen(name: String, onBack: () -> Unit, navigate: (String) -> Unit) {
-    val vm = appViewModel { GalleryViewModel(it.siteRepository) }
+    val vm = appViewModel { GalleryViewModel(it.siteRepository, online = it.connectivity::isOnline) }
     val state by vm.state.collectAsStateWithLifecycle()
     Scaffold(topBar = { BackTopBar(albumTitle(name), onBack) }) { padding ->
         StateContent(
@@ -172,7 +172,7 @@ fun PhotoViewerScreen(
     pageTitle: String = "",
 ) {
     // Отделни снимки по адрес (от статия/страница) не изискват зареждане на галерията.
-    val vm = appViewModel { GalleryViewModel(it.siteRepository, load = !album.isNullOrBlank()) }
+    val vm = appViewModel { GalleryViewModel(it.siteRepository, load = !album.isNullOrBlank(), online = it.connectivity::isOnline) }
     val state by vm.state.collectAsStateWithLifecycle()
     val photos: List<GalleryPhoto> = if (!album.isNullOrBlank()) {
         state.data?.firstOrNull { it.name == album }?.photos.orEmpty()
@@ -238,8 +238,8 @@ private fun photoDescription(alt: String, index: Int, count: Int, pageTitle: Str
  * Снимка с pinch-to-zoom и местене; двоен тап — 2× / обратно; [active] = false нулира увеличението.
  *
  * Зарежда се оптимизираният вариант от сайта в около 2× размера на екрана (рязка и при 2×
- * увеличение); при по-голямо увеличение — оригиналът в пълния му размер (Coil го ограничава
- * до maxBitmapSize). Докато идва, се вижда вече заредената миниатюра от мрежата/статията
+ * увеличение); при по-голямо увеличение — оригиналът, но до 4× размера на екрана и без
+ * запис в кеша в паметта. Докато идва, се вижда вече заредената миниатюра от мрежата/статията
  * (заместител от кеша в паметта), а не черен екран.
  */
 @Composable
@@ -283,7 +283,11 @@ private fun ZoomableImage(photo: GalleryPhoto, description: String, active: Bool
             .memoryCacheKey(data + if (original) ORIGINAL_KEY else VIEWER_KEY)
             .apply {
                 if (original) {
-                    size(Size.ORIGINAL)
+                    // До 4× екрана (увеличението е до 5×) и без запис в паметта: голям bitmap
+                    // само за този преглед не изтласква миниатюрите и кориците от кеша.
+                    size(screenW * ORIGINAL_SCREENS, screenH * ORIGINAL_SCREENS)
+                    precision(Precision.INEXACT)
+                    memoryCachePolicy(CachePolicy.READ_ONLY)
                     placeholderMemoryCacheKey(sized + VIEWER_KEY)
                 } else {
                     size(screenW * 2, screenH * 2)
@@ -320,6 +324,8 @@ private fun ZoomableImage(photo: GalleryPhoto, description: String, active: Bool
 
 /** Над това увеличение се зарежда оригиналът (до 2× зареждането е рязко). */
 private const val ORIGINAL_ABOVE = 2.05f
+/** Оригиналът — най-много толкова пъти размера на екрана. */
+private const val ORIGINAL_SCREENS = 4
 private const val VIEWER_KEY = "#viewer"
 private const val ORIGINAL_KEY = "#original"
 

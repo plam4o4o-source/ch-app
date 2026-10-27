@@ -167,6 +167,9 @@ class SiteRepository(
             is Outcome.Success -> Outcome.Success(r.value.map { photos -> albumsOf(photos) })
         }
 
+    /** Албумите само от кеша (без мрежа) или `null`. */
+    suspend fun cachedGallery(): Synced<List<GalleryAlbum>>? = gallery.cached()?.map { albumsOf(it) }
+
     private fun albumsOf(photos: List<GalleryPhoto>): List<GalleryAlbum> {
         albumsMemo?.let { (p, a) -> if (p === photos) return a }
         return albums(photos).also { albumsMemo = photos to it }

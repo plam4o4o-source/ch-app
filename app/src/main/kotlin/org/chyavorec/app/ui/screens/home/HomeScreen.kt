@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.runtime.derivedStateOf
 import org.chyavorec.app.ui.components.PersonalCovers
+import org.chyavorec.app.ui.components.LocalOnlineCovers
+import org.chyavorec.app.ui.components.mayHaveRealCover
 import org.chyavorec.app.ui.components.sharedElementKey
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -32,6 +34,7 @@ import org.chyavorec.app.ui.components.OrnamentFrame
 import org.chyavorec.app.ui.components.Season
 import org.chyavorec.app.ui.components.HolidayGreeting
 import org.chyavorec.app.ui.components.ScreenGutter
+import org.chyavorec.app.ui.components.windowHeight
 import org.chyavorec.app.ui.components.isGreetingShown
 import org.chyavorec.app.ui.components.HolidayOrnament
 import org.chyavorec.app.ui.components.HolidaySky
@@ -82,7 +85,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.CollectionsBookmark
-import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.QrCodeScanner
@@ -105,6 +108,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -112,13 +116,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.drawscope.clipRect
-import androidx.compose.ui.layout.boundsInRoot
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -130,8 +131,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -170,10 +173,11 @@ private data class QuickAction(val labelRes: Int, val icon: ImageVector, val rou
 /**
  * Четири основни действия — останалите са в долната лента или в „Още“. Първото не е
  * „Каталог“ (той е и в долната лента), а [rememberQuickActions] — „Моите книги“ или скенерът.
+ * Без „Събития“: те са точно отдолу („Предстоящи събития · Всички“) и в „Новини“.
  */
 private val quickActionsTail = listOf(
     QuickAction(R.string.qa_card, Icons.Outlined.Badge, Routes.CARD),
-    QuickAction(R.string.qa_events, Icons.Outlined.Event, Routes.EVENTS),
+    QuickAction(R.string.want_title, Icons.Outlined.BookmarkBorder, Routes.WANT_TO_READ),
     QuickAction(R.string.qa_contacts, Icons.Outlined.Place, Routes.CONTACTS),
 )
 
@@ -215,10 +219,10 @@ fun HomeScreen(navigate: (String) -> Unit) {
                 .widthIn(max = 840.dp).fillMaxSize(),
         ) {
             item("header") {
-                // Къде е името в заглавката (в координатите на екрана) и къде е ефектът — четат се
-                // само при рисуване, без прекомпозиция.
-                var titleBounds by remember { mutableStateOf(Rect.Zero) }
-                var skyOrigin by remember { mutableStateOf(Offset.Zero) }
+                // Името в заглавката спрямо ефекта (неговия Box) — при превъртане не се променя;
+                // координатите са едни и същи обекти, четат се само при рисуване.
+                var titleCoords by remember { mutableStateOf<LayoutCoordinates?>(null) }
+                var skyCoords by remember { mutableStateOf<LayoutCoordinates?>(null) }
                 Box {
                     // Празничен/сезонен ефект (сняг, листа, фойерверки, букви…) само в заглавката —
                     // под нея и без мястото на името: буквите и листата не минават през текста.
@@ -226,18 +230,18 @@ fun HomeScreen(navigate: (String) -> Unit) {
                         HolidaySky(
                             decor.effect,
                             Modifier.matchParentSize()
-                                .onGloballyPositioned { skyOrigin = it.positionInRoot() }
+                                .onPlaced { skyCoords = it }
                                 .drawWithContent {
-                                    val r = titleBounds
-                                    if (r.isEmpty) {
+                                    val sky = skyCoords?.takeIf { it.isAttached }
+                                    val title = titleCoords?.takeIf { it.isAttached }
+                                    if (sky == null || title == null) {
                                         drawContent()
                                     } else {
+                                        val r = sky.localBoundingBoxOf(title)
                                         val pad = 4.dp.toPx()
-                                        clipRect(
-                                            r.left - skyOrigin.x - pad, r.top - skyOrigin.y - pad,
-                                            r.right - skyOrigin.x + pad, r.bottom - skyOrigin.y + pad,
-                                            ClipOp.Difference,
-                                        ) { this@drawWithContent.drawContent() }
+                                        clipRect(r.left - pad, r.top - pad, r.right + pad, r.bottom + pad, ClipOp.Difference) {
+                                            this@drawWithContent.drawContent()
+                                        }
                                     }
                                 },
                             snowColor = if (LocalExtendedColors.current.isDark) Color.White else Color(0xFF7A93AB),
@@ -247,7 +251,7 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     }
                     HomeHeader(
                         onMessages = { navigate(Routes.MESSAGES) }, ornament = decor.ornament, quiet = decor.quiet,
-                        titleModifier = if (decor.effect != OccasionEffect.NONE) Modifier.onGloballyPositioned { titleBounds = it.boundsInRoot() } else Modifier,
+                        titleModifier = if (decor.effect != OccasionEffect.NONE) Modifier.onPlaced { titleCoords = it } else Modifier,
                     )
                 }
             }
@@ -284,9 +288,12 @@ fun HomeScreen(navigate: (String) -> Unit) {
                 val top = state.news.data?.take(5).orEmpty()
                 when {
                     top.isNotEmpty() -> HeroCarousel(top, onOpen = { navigate(Routes.article(it.id)) })
-                    state.news.showSkeleton -> Box(
-                        Modifier.padding(16.dp).fillMaxWidth().aspectRatio(1.6f).clip(MaterialTheme.shapes.large).shimmer(),
-                    )
+                    state.news.showSkeleton -> {
+                        val windowH = windowHeight()
+                        BoxWithConstraints(Modifier.padding(16.dp).fillMaxWidth()) {
+                            Box(Modifier.fillMaxWidth().height(heroMinHeight(maxWidth, windowH)).clip(MaterialTheme.shapes.large).shimmer())
+                        }
+                    }
                     state.news.error != null -> ErrorView(state.news.error!!, onRetry = { vm.refresh() }, subject = stringResource(R.string.subject_news))
                 }
             }
@@ -300,9 +307,11 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     )
                 }
                 item("events") {
+                    // При едър шрифт картата е по-широка и заглавието — до 3 реда (не „Ден на народните буди…“).
+                    val cardWidth = 280.dp * LocalDensity.current.fontScale.coerceIn(1f, 1.3f)
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         items(state.upcoming, key = { it.id }) { e ->
-                            EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.width(280.dp))
+                            EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.width(cardWidth), titleMaxLines = 3)
                         }
                     }
                 }
@@ -459,6 +468,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
         advances++
     }
     val context = LocalContext.current
+    val windowH = windowHeight()
     val carouselLabel = stringResource(R.string.home_carousel)
     val season = rememberSeason()
     Column {
@@ -486,9 +496,9 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
             // Отместването се чете само в graphicsLayer — при плъзгане страницата не се прекомпозира на всеки кадър.
             val offset = { (pager.currentPage - page) + pager.currentPageOffsetFraction }
             // Пропорция 1.6:1 като минимум — при едър шрифт картата расте на височина,
-            // вместо заглавието да се отреже.
+            // вместо заглавието да се отреже ([heroMinHeight]: хоризонтално — по-ниска).
             BoxWithConstraints {
-            val minHeight = maxWidth.coerceAtMost(720.dp) / 1.6f
+            val minHeight = heroMinHeight(maxWidth, windowH)
             // Ширината за снимката — maxWidth се чете тук, в обхвата на BoxWithConstraints. Без мащаба
             // 1.15 на паралакса: същият адрес (ширина) като в статията — една заявка и един запис в кеша.
             val imageWidth = maxWidth.coerceAtMost(720.dp)
@@ -553,6 +563,16 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
         PagerDots(items.size, pager.currentPage, Modifier.padding(top = 8.dp))
     }
 }
+
+/**
+ * Най-малката височина на картата във въртележката: 1.6:1 по ширината (до 720 dp), но не
+ * повече от ~половината прозорец — хоризонтално или в нисък прозорец снимката не заема
+ * целия екран и под нея се виждат бързите действия.
+ */
+internal fun heroMinHeight(width: Dp, windowHeight: Dp): Dp =
+    minOf(width.coerceAtMost(720.dp) / 1.6f, windowHeight * HERO_MAX_WINDOW_FRACTION)
+
+private const val HERO_MAX_WINDOW_FRACTION = 0.48f
 
 /**
  * Православният празник за деня — един ред под търсенето (от /api/calendar на сайта);
@@ -626,9 +646,9 @@ private fun rememberQuickActions(): List<QuickAction> {
 
 @Composable
 private fun QuickActionsGrid(quickActions: List<QuickAction>, navigate: (String) -> Unit) {
-    // При много едър шрифт четирите в ред не се събират (думите се пренасят по букви) — 2 × 2.
+    // При едър шрифт четирите в ред не се събират („Читателс/ка“ — пренасяне по букви) — 2 × 2.
     BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = ScreenGutter, vertical = 8.dp)) {
-        val perRow = if (maxWidth / 4 / LocalDensity.current.fontScale.coerceAtLeast(1f) < 72.dp) 2 else 4
+        val perRow = quickActionsPerRow(maxWidth, LocalDensity.current.fontScale)
         Column {
             quickActions.chunked(perRow).forEachIndexed { r, row ->
                 Row(Modifier.fillMaxWidth()) {
@@ -638,6 +658,15 @@ private fun QuickActionsGrid(quickActions: List<QuickAction>, navigate: (String)
         }
     }
 }
+
+/**
+ * Колко бързи действия в ред: 4, ако на всяко се падат поне [QuickActionMinWidth] (при
+ * мащаб на шрифта 1) — „Читателска“ се събира на един ред; иначе 2.
+ */
+internal fun quickActionsPerRow(width: Dp, fontScale: Float): Int =
+    if (width / 4 / fontScale.coerceAtLeast(1f) < QuickActionMinWidth) 2 else 4
+
+private val QuickActionMinWidth = 84.dp
 
 @Composable
 private fun RowScope.QuickActionCell(action: QuickAction, i: Int, navigate: (String) -> Unit) {
@@ -657,18 +686,32 @@ private fun RowScope.QuickActionCell(action: QuickAction, i: Int, navigate: (Str
 
 @Composable
 fun BookRow(books: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (CatalogBook) -> Unit) {
+    // Генерираната корица вече носи заглавието и автора — надписът под нея се вижда само при
+    // истинска (сканирана/Open Library) корица. Мястото му е запазено в целия ред, щом някоя
+    // книга може да има такава: заредената корица не „бута“ съдържанието отдолу.
+    val online = LocalOnlineCovers.current
+    val captions = remember(books, online) { books.any { mayHaveRealCover(it, online) } }
+    // Заредените корици се помнят за реда — при превъртане надписът не мига.
+    val real = remember(books) { mutableStateMapOf<Long, Boolean>() }
     LazyRow(modifier = modifier, contentPadding = PaddingValues(horizontal = ScreenGutter), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         items(books, key = { it.inv }) { b ->
             PressableCard(onClick = { onClick(b) }, modifier = Modifier.width(128.dp)) {
-                // Генерираната корица вече носи заглавието и автора — надписът под нея е само
-                // при истинска (сканирана/Open Library) корица.
-                var realCover by remember(b.inv) { mutableStateOf(false) }
                 Column(Modifier.padding(10.dp)) {
-                    BookCover(b, width = 108.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"), onRealCover = { realCover = it })
-                    if (realCover) {
-                        Spacer(Modifier.height(8.dp))
-                        Text(b.title, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                        Text(b.author, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    BookCover(
+                        b, width = 108.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"),
+                        onRealCover = if (captions) { shown -> if (shown) real[b.inv] = true } else null,
+                    )
+                    if (captions) {
+                        val shown = real[b.inv] == true
+                        // Невидимият надпис само пази мястото (и не се чете от екранния четец).
+                        Column(
+                            Modifier.graphicsLayer { alpha = if (shown) 1f else 0f }
+                                .then(if (shown) Modifier else Modifier.clearAndSetSemantics { }),
+                        ) {
+                            Spacer(Modifier.height(8.dp))
+                            Text(b.title, style = MaterialTheme.typography.titleSmall, minLines = 2, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                            Text(b.author, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        }
                     }
                 }
             }
