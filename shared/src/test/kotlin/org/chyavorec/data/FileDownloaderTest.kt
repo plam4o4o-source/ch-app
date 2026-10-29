@@ -23,7 +23,10 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
-/** Свалянето на PDF за приложение на телефона: напредък, повторно ползване, без половин файл, само PDF до границата, малка папка. */
+/**
+ * Свалянето на PDF за приложение на телефона: напредък, повторно ползване, без половин файл,
+ * само PDF до границата, само от позволен адрес (и след пренасочване), четимо име, малка папка.
+ */
 class FileDownloaderTest {
     private lateinit var server: MockWebServer
     private val dir = Files.createTempDirectory("docs").toFile()
@@ -90,8 +93,7 @@ class FileDownloaderTest {
         assertEquals(AppError.Parse("not a pdf"), assertIs<Outcome.Failure>(downloader.download(url)).error)
         assertTrue(dir.listFiles().orEmpty().isEmpty(), "нито файл, нито .part")
         // Вече запазен не-PDF (от предишна версия) не се връща — тегли се наново.
-        dir.mkdirs()
-        downloader.fileFor(url).apply { writeText("<html>стар</html>"); setLastModified(now) }
+        downloader.fileFor(url).apply { parentFile.mkdirs(); writeText("<html>стар</html>"); setLastModified(now) }
         server.enqueue(MockResponse().setBody(Buffer().write(pdf)))
         assertContentEquals(pdf, assertIs<Outcome.Success<java.io.File>>(downloader.download(url)).value.readBytes())
         assertEquals(3, server.requestCount)
@@ -135,5 +137,64 @@ class FileDownloaderTest {
 
         downloader.clear()
         assertTrue(!dir.exists())
+    }
+
+    /** Документът е в папка по адреса, а името на файла е четимо (него вижда четецът на PDF). */
+    @Test fun fileNameIsReadableAndSafe() = runBlocking {
+        val url = server.url("/files/Otchet%202024.PDF").toString()
+        assertEquals("Otchet 2024.pdf", downloader.fileFor(url).name, "от адреса")
+        assertEquals("Устав 2024 проект.pdf", downloader.fileFor(url, "Устав / 2024: проект?").name)
+        assertEquals("hidden.pdf", downloader.fileFor(url, "..hidden").name, "без водеща точка")
+        assertEquals("document.pdf", downloader.fileFor(server.url("/").toString(), " ").name)
+        assertTrue(downloader.fileFor(url, "а".repeat(300)).name.length <= 84)
+        // Една и съща папка за адреса — каквото и да е името.
+        assertEquals(downloader.fileFor(url).parentFile, downloader.fileFor(url, "Отчет").parentFile)
+        assertEquals(dir, downloader.fileFor(url).parentFile.parentFile)
+
+        server.enqueue(MockResponse().setBody("%PDF-1.4 първи"))
+        val first = assertIs<Outcome.Success<java.io.File>>(downloader.download(url, "Отчет за 2024 г.")).value
+        assertEquals("Отчет за 2024 г.pdf", first.name, "без точка в края на името")
+        // Сменено заглавие — нов файл в същата папка, старият — вън.
+        server.enqueue(MockResponse().setBody("%PDF-1.4 втори"))
+        val second = assertIs<Outcome.Success<java.io.File>>(downloader.download(url, "Годишен отчет")).value
+        assertEquals("Годишен отчет.pdf", second.name)
+        assertEquals(listOf(second), second.parentFile.listFiles()!!.toList())
+    }
+
+    @Test fun redirectToAForeignHostIsRejected() = runBlocking {
+        val foreign = MockWebServer().apply { start() }
+        try {
+            val strict = FileDownloader(client, dir, now = { now }, io = Dispatchers.IO, allowedUrl = { it.port == server.port })
+            foreign.enqueue(MockResponse().setBody(Buffer().write(pdf)))
+            server.enqueue(MockResponse().setResponseCode(302).setHeader("Location", foreign.url("/evil.pdf")))
+            val url = server.url("/ustav.pdf").toString()
+            assertEquals(AppError.Unexpected("redirect"), assertIs<Outcome.Failure>(strict.download(url)).error)
+            assertTrue(dir.listFiles().orEmpty().isEmpty(), "нито файл, нито .part")
+            // Чужд адрес още преди заявката — без мрежа.
+            assertEquals(AppError.Unexpected("host"), assertIs<Outcome.Failure>(strict.download(foreign.url("/a.pdf").toString())).error)
+            assertEquals(1, foreign.requestCount)
+            // Пренасочване в рамките на позволения хост — свалено.
+            server.enqueue(MockResponse().setResponseCode(302).setHeader("Location", "/files/ustav.pdf"))
+            server.enqueue(MockResponse().setBody(Buffer().write(pdf)))
+            assertContentEquals(pdf, assertIs<Outcome.Success<java.io.File>>(strict.download(url)).value.readBytes())
+        } finally {
+            foreign.shutdown()
+        }
+    }
+
+    /** Прекъснато сваляне (спрян процес) оставя `.part` — при стартиране се трие веднага. */
+    @Test fun startupPruneDropsEveryPartialFile() = runBlocking {
+        now = System.currentTimeMillis()
+        val part = java.io.File(dir, "0123456789abcdef01234567/Устав.pdf.part").apply { parentFile.mkdirs(); writeBytes(ByteArray(10)); setLastModified(now) }
+        val done = java.io.File(dir, "fedcba9876543210fedcba98/Отчет.pdf").apply { parentFile.mkdirs(); writeBytes(ByteArray(10)); setLastModified(now) }
+        downloader.prune()
+        assertTrue(part.exists(), "обикновено — само по възраст (може да тече сваляне)")
+        downloader.prune(dropPartial = true)
+        assertTrue(!part.exists() && !part.parentFile.exists(), "файлът и празната му папка")
+        assertTrue(done.exists())
+        // Остарелият документ — и папката му.
+        done.setLastModified(now - 8 * 24 * 60 * 60 * 1000L)
+        downloader.prune()
+        assertTrue(!done.parentFile.exists())
     }
 }

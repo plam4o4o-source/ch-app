@@ -177,6 +177,8 @@ S = {
 "photo_n": ("Снимка %1$d", "Photo %1$d"),
 "photo_n_of_m": ("Снимка %1$d от %2$d", "Photo %1$d of %2$d"),
 "photo_in": ("%1$s – %2$s", "%1$s – %2$s"),
+"photo_unavailable": ("Снимката липсва", "Photo unavailable"),
+"photo_load_failed": ("Снимката не се зареди — може да липсва на сайта или да няма връзка.", "The photo didn’t load — it may be missing from the website, or there’s no connection."),
 "events_title": ("Събития", "Events"),
 "events_empty": ("Няма събития за показване", "No events to show"),
 "events_empty_hint": ("Събитията идват от годишния календар на сайта на читалището.", "Events come from the annual calendar on the centre’s website."),

@@ -21,6 +21,14 @@ class ConnectivityObserver(context: Context) {
             caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     }
 
+    /**
+     * Дали изобщо има мрежа с интернет — и непотвърдена (блокирана проверка на системата,
+     * VPN, частен DNS, първите секунди след свързване), на която заявките често минават.
+     * За „без мрежа — не чакай заявката“; [isOnline] е по-строгото „потвърден интернет“.
+     */
+    fun hasNetwork(): Boolean =
+        cm?.getNetworkCapabilities(cm.activeNetwork)?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+
     val online: Flow<Boolean> = callbackFlow {
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) { trySend(isOnline()) }
