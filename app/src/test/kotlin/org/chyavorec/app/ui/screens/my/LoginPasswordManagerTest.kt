@@ -24,6 +24,7 @@ import okhttp3.tls.HandshakeCertificates
 import okhttp3.tls.HeldCertificate
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.FakeSystemPasswords
+import org.chyavorec.app.MainDispatcherRule
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.di.AppContainer
@@ -44,7 +45,6 @@ import java.time.Instant
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kotlinx.coroutines.launch
 
 /**
  * Мениджърът на пароли на входа (с подменен [FakeSystemPasswords] вместо системния прозорец):
@@ -53,7 +53,10 @@ import kotlinx.coroutines.launch
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class, qualifiers = "bg-w411dp-h891dp-xxhdpi")
 class LoginPasswordManagerTest {
-    @get:Rule val compose = createComposeRule()
+    // ViewModel-ът (viewModelScope) — на UnconfinedTestDispatcher: в средата на Compose теста
+    // продълженията след мрежата/диска иначе не стигат до главната нишка.
+    @get:Rule(order = 0) val main = MainDispatcherRule()
+    @get:Rule(order = 1) val compose = createComposeRule()
     private val server = MockWebServer()
     private val logins = CopyOnWriteArrayList<String>()
     private val paths = CopyOnWriteArrayList<String>()
@@ -185,27 +188,5 @@ class LoginPasswordManagerTest {
         compose.waitForIdle()
         // Входът е от мениджъра — не се предлага да се запази отново.
         assertTrue(passwords.offered.isEmpty())
-    }
-
-    // ВРЕМЕННО: диагностика — стъпките на входа поотделно във фонова нишка (главната е свободна).
-    @Test fun diagDirectLogin() {
-        val container = launch(FakeSystemPasswords())
-        waitForForm()
-        val log = CopyOnWriteArrayList<String>()
-        val done = java.util.concurrent.atomic.AtomicBoolean(false)
-        @OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
-        kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.Default) {
-            suspend fun step(name: String, block: suspend () -> Any?) {
-                val t0 = System.nanoTime()
-                val r = runCatching { kotlinx.coroutines.withTimeoutOrNull(3_000) { block() ?: "null" } }
-                log += "$name: ${r.getOrNull() ?: r.exceptionOrNull() ?: "TIMEOUT"} (${(System.nanoTime() - t0) / 1_000_000} ms)"
-            }
-            step("caps") { container.authRepository.capabilities() }
-            step("persist") { container.authRepository.throttle.persist() }
-            step("login") { container.authRepository.login("1024-5678", "1234".toCharArray(), remember = true) }
-            done.set(true)
-        }
-        runCatching { compose.waitUntil(20_000) { done.get() } }
-        assertTrue(false, "log=$log state=${container.authRepository.state.value} paths=$paths")
     }
 }
