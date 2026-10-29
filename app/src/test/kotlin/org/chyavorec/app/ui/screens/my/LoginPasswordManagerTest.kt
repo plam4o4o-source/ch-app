@@ -22,7 +22,6 @@ import okhttp3.tls.HandshakeCertificates
 import okhttp3.tls.HeldCertificate
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.FakeSystemPasswords
-import org.chyavorec.app.MainDispatcherRule
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.di.AppContainer
@@ -40,6 +39,10 @@ import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.time.Instant
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -52,9 +55,9 @@ import kotlin.test.assertTrue
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class, qualifiers = "bg-w411dp-h891dp-xxhdpi")
 class LoginPasswordManagerTest {
-    // ViewModel-ът (viewModelScope) — на UnconfinedTestDispatcher: в средата на Compose теста
-    // продълженията след мрежата/диска иначе не стигат до главната нишка.
-    @get:Rule(order = 0) val main = MainDispatcherRule()
+    // ViewModel-ът (viewModelScope) — на собствена еднонишкова „главна“ нишка: в средата на
+    // Compose теста продълженията след мрежата/диска иначе не стигат до главната нишка.
+    @get:Rule(order = 0) val main = SingleThreadMainRule()
     @get:Rule(order = 1) val compose = createComposeRule()
     private val server = MockWebServer()
     private val logins = CopyOnWriteArrayList<String>()
@@ -166,5 +169,17 @@ class LoginPasswordManagerTest {
         compose.waitForIdle()
         // Входът е от мениджъра — не се предлага да се запази отново.
         assertTrue(passwords.offered.isEmpty())
+    }
+}
+
+/** Dispatchers.Main — отделна еднонишкова нишка (като главната: едно след друго, без надпревара). */
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+class SingleThreadMainRule : org.junit.rules.TestWatcher() {
+    private val executor = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "test-main") }
+    private val dispatcher = executor.asCoroutineDispatcher()
+    override fun starting(description: org.junit.runner.Description) = Dispatchers.setMain(dispatcher)
+    override fun finished(description: org.junit.runner.Description) {
+        Dispatchers.resetMain()
+        executor.shutdownNow()
     }
 }
