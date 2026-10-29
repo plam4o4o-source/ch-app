@@ -192,7 +192,7 @@ class LoginPasswordManagerTest {
         val container = launch(FakeSystemPasswords())
         waitForForm()
         val log = CopyOnWriteArrayList<String>()
-        @Volatile var done = false
+        val done = java.util.concurrent.atomic.AtomicBoolean(false)
         @OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
         kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.Default) {
             suspend fun step(name: String, block: suspend () -> Any?) {
@@ -203,9 +203,9 @@ class LoginPasswordManagerTest {
             step("caps") { container.authRepository.capabilities() }
             step("persist") { container.authRepository.throttle.persist() }
             step("login") { container.authRepository.login("1024-5678", "1234".toCharArray(), remember = true) }
-            done = true
+            done.set(true)
         }
-        runCatching { compose.waitUntil(20_000) { done } }
+        runCatching { compose.waitUntil(20_000) { done.get() } }
         assertTrue(false, "log=$log state=${container.authRepository.state.value} paths=$paths")
     }
 }
