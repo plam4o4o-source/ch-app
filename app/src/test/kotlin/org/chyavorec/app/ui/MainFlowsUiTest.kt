@@ -2,6 +2,9 @@ package org.chyavorec.app.ui
 
 import android.app.Application
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.onLast
+import androidx.compose.ui.test.isRoot
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
@@ -15,6 +18,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +33,9 @@ import org.chyavorec.app.TestResources
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.ui.navigation.AppShortcuts
+import org.chyavorec.app.ui.navigation.DeepLinks
+import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.core.FixedClock
 import org.junit.After
@@ -39,6 +46,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import java.time.Instant
+import kotlin.test.assertEquals
 
 /**
  * UI тестове на основните потоци върху истинския Compose UI (Robolectric), с
@@ -116,10 +124,17 @@ class MainFlowsUiTest {
         compose.onAllNodesWithText("45-ти общински фолклорен събор", substring = true).onFirst().assertExists()
     }
 
+    /** Преходът между екраните да свърши: дотогава и полето за търсене на „Начало“ е в дървото. */
+    private fun settle() {
+        compose.mainClock.advanceTimeBy(1_000)
+        compose.waitForIdle()
+    }
+
     @Test fun catalogSearchAndBookDetails() {
         launch()
         clickText("Каталог")
         waitForText("резултата", substring = true)
+        settle()
         compose.onNode(hasSetTextAction()).performTextInput("Джиан")
         waitForText("\"Ох...\"")
         clickText("\"Ох...\"")
@@ -139,10 +154,59 @@ class MainFlowsUiTest {
         check(compose.onAllNodesWithContentDescription("Кажи ми, когато е на рафта").fetchSemanticsNodes().isEmpty()) { "notify shown while copies are on the shelf" }
     }
 
+    private fun lastBookShortcut() = ShortcutManagerCompat.getDynamicShortcuts(ApplicationProvider.getApplicationContext())
+        .filter { it.id == AppShortcuts.ID_LAST_BOOK }
+
+    /** Книга от публичния каталог (тук — App Link от сайта) става динамичен пряк път. */
+    @Test fun publicBookBecomesTheLastBookShortcut() {
+        launch(deepLink = server.url("/").toString().trimEnd('/') + "/elektronen-katalog#zapis=624")
+        waitForText("Сигнатура")
+        compose.waitUntil(10_000) { lastBookShortcut().isNotEmpty() }
+        assertEquals(DeepLinks.catalogBook(624), LaunchIntents.linkOf(lastBookShortcut().single().intent, "https://chyavorec.org"))
+    }
+
+    /** Отворена като лична (известието за „Искам да прочета“) — книгата не става пряк път. */
+    @Test fun personalBookIsNotAShortcut() {
+        launch(deepLink = DeepLinks.book(624))
+        waitForText("Сигнатура")
+        compose.waitForIdle()
+        check(lastBookShortcut().isEmpty()) { "personal book published as a shortcut" }
+    }
+
+    /**
+     * Полето на „Начало“ се разгръща в търсенето (отделен прозорец над екрана, скенерът остава
+     * в полето); резултатът отваря книгата и прибира търсенето.
+     */
+    @Test fun homeSearchBarExpandsAndOpensResult() {
+        launch()
+        compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(hasContentDescription("Сканирай баркод")).onFirst().assertExists()
+        compose.onAllNodes(hasSetTextAction()).onFirst().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 2 }
+        compose.onAllNodes(hasSetTextAction()).onLast().performTextInput("Джиан")
+        compose.waitUntil(10_000) { compose.onAllNodes(hasText("\"Ох...\"") and hasClickAction()).fetchSemanticsNodes().isNotEmpty() }
+        // Последният — в прозореца на търсенето (под него „Начало“ може да показва същата книга).
+        compose.onAllNodes(hasText("\"Ох...\"") and hasClickAction()).onLast().performClick()
+        waitForText("Сигнатура")
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 1 }
+    }
+
+    /** „Назад“ в разгънатото поле го прибира обратно на „Начало“. */
+    @Test fun homeSearchBarCollapsesWithBack() {
+        launch()
+        compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(hasSetTextAction()).onFirst().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 2 }
+        compose.onAllNodes(hasContentDescription("Назад") and hasClickAction()).onLast().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 1 }
+        waitForText("45-ти общински фолклорен събор", substring = true)
+    }
+
     @Test fun guestSeesHonestLoginMessageAndCanAddCard() {
         launch(useMock = false)
         clickText("Читателска карта")
         waitForText("Дигитална карта")
+        settle()
         compose.onAllNodes(hasSetTextAction()).onFirst().performTextInput("r-0042")
         clickText("Запази")
         waitForText("Читателски № R-0042")

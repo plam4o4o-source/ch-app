@@ -49,9 +49,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -108,37 +106,8 @@ fun IconPlate(
 private val SearchHeight = 56.dp
 
 /**
- * Поле за търсене (като на сайта); отваря глобалното търсене. Изглежда като [SearchInput]:
- * запълнено „хапче“ в surfaceContainerHigh, без рамка.
- * [trailing] — незадължителен елемент вдясно (напр. икона за скенера на баркодове).
- */
-@Composable
-fun SearchPill(hint: String, onClick: () -> Unit, modifier: Modifier = Modifier, trailing: (@Composable () -> Unit)? = null) {
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(50),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        modifier = modifier.fillMaxWidth().heightIn(min = SearchHeight).semantics { role = Role.Button },
-    ) {
-        Row(Modifier.heightIn(min = SearchHeight).padding(start = 16.dp, end = if (trailing != null) 6.dp else 16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(Modifier.width(12.dp))
-            Text(
-                hint, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1, overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f),
-            )
-            if (trailing != null) {
-                Spacer(Modifier.width(8.dp))
-                trailing()
-            }
-        }
-    }
-}
-
-/**
  * Полето за писане при търсене (каталог, глобално търсене) — същото запълнено „хапче“
- * като [SearchPill] на „Начало“: без рамка и без златен контур при фокус.
+ * като полето на „Начало“ (Material 3 SearchBar): без рамка и без златен контур при фокус.
  */
 @Composable
 fun SearchInput(

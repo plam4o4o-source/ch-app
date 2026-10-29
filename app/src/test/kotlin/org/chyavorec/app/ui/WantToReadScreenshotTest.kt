@@ -184,7 +184,7 @@ class WantToReadScreenshotTest {
         assertEquals(listOf("Премахни от списъка"), actions("Ох..."), "налична книга")
         assertEquals(listOf("Премахни от списъка", "Не ми казвай"), actions("Белият дома"), "включено известие")
         assertEquals(listOf("Премахни от списъка", "Кажи ми, когато е на рафта"), actions("Под игото"))
-        // Менюто „Още действия“ на наличната книга — само „Махни“.
+        // Менюто „Още действия“ на наличната книга — само „Премахни“.
         compose.onAllNodes(hasContentDescription("Още действия") and hasAnyAncestor(hasText("Ох...", substring = true))).onFirst().performClick()
         waitFor("Премахни от списъка")
         check(compose.onAllNodes(hasText("Кажи ми, когато е на рафта")).fetchSemanticsNodes().isEmpty()) { "„Кажи ми“ за налична книга" }

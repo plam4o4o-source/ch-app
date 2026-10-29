@@ -361,6 +361,12 @@ S = {
 "shortcut_card": ("Читателска карта", "Library card"),
 "shortcut_events": ("Събития", "Events"),
 "shortcut_scan": ("Сканирай", "Scan"),
+"shortcut_catalog_long": ("Търсене в каталога", "Search the catalogue"),
+"shortcut_card_long": ("Моята читателска карта", "My library card"),
+"shortcut_events_long": ("Предстоящи събития", "Upcoming events"),
+"shortcut_scan_long": ("Сканирай баркод на книга", "Scan a book barcode"),
+"shortcut_want_to_read": ("Искам да прочета", "Want to read"),
+"shortcut_want_to_read_long": ("Списък „Искам да прочета“", "My want-to-read list"),
 "loans_empty": ("Нямаш заети книги", "You have no borrowed books"),
 "loans_empty_hint": ("Разгледай каталога — може би нещо ще те заинтригува.", "Browse the catalogue — something might catch your eye."),
 "loan_borrowed": ("Взета на %1$s", "Borrowed on %1$s"),
@@ -577,6 +583,9 @@ S = {
 "reminder_set_at": ("Ще получиш напомняне на %1$s.", "You’ll get a reminder on %1$s."),
 "reminder_blocked": ("Известията за събития са изключени — напомнянето няма да се покаже.", "Event notifications are turned off — the reminder wouldn’t be shown."),
 "notifications_push_note": ("Сървърни (push) известия ще бъдат добавени, когато читалището въведе сървър за тях. Дотогава приложението проверява за новини и срокове периодично.", "Server (push) notifications will be added once the centre sets up a server for them. Until then the app checks for news and due dates periodically."),
+"channel_group_my_library": ("Моята библиотека", "My library"),
+"channel_group_centre": ("Читалището", "The centre"),
+"channel_group_app": ("Приложението", "The app"),
 "channel_loans": ("Срокове за връщане", "Due dates"),
 "channel_loans_desc": ("Наближаващ или изтекъл срок на заета книга", "An upcoming or passed due date for a borrowed book"),
 "channel_events": ("Събития", "Events"),
@@ -739,6 +748,8 @@ PRIVACY_BG = """Последна актуализация: 29 октомври 2
 
 Вход (само при съгласие, дадено в библиотеката, и издаден ПИН): номерът на читателската карта и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и ПИН-ът никога не се записва. При вход се изпраща и моделът на телефона (напр. „Pixel 8“), за да се разпознава сесията. Пази се само шифрован токен за сесията. Името ти, заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес и телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните ти се изтриват от сървъра при следващото обновяване.
 
+Мениджър на пароли: запазването на номера на картата и ПИН-а в мениджъра на пароли на телефона е по желание — прави се само ако се съгласиш, и те се пазят от системния мениджър на пароли, а не от приложението.
+
 Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
 
 Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: камерата се включва само когато отвориш скенера и разрешиш достъп; кадрите се разчитат на телефона и не се записват и не се изпращат.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
@@ -790,6 +801,8 @@ Data kept only on the device: settings (theme, language, notifications), saved n
 Library card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.
 
 Sign-in (only with consent given at the library and an issued PIN): your library card number and PIN are sent only over HTTPS to the centre’s server (chyavorec.org), and the PIN is never stored. The phone’s model name (e.g. “Pixel 8”) is also sent at sign-in so that the session can be recognised. Only an encrypted session token is kept. Your name, borrowed items, due dates and membership come from this server, which receives from the library software only the data of readers who have consented (no personal ID number (EGN), address or phone number), and are cached encrypted on the device. Consent is withdrawn at the library — your data is then deleted from the server at the next sync.
+
+Password manager: saving your card number and PIN in the phone’s password manager is optional — it happens only if you agree, and they are kept by the system’s password manager, not by the app.
 
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
 

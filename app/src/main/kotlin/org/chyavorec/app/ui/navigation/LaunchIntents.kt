@@ -48,10 +48,16 @@ object LaunchIntents {
     const val SHORTCUT_SCHEME = "chyavorec"
 
     /**
-     * Връзките на статичните преки пътища (res/xml/shortcuts.xml) — пряк път се стартира от
+     * Връзките на преките пътища — статичните (res/xml/shortcuts.xml) и динамичния „Искам да
+     * прочета“ ([org.chyavorec.app.ui.navigation.AppShortcuts]). Пряк път се стартира от
      * launcher-а (друго приложение), затова се приемат само тези, не произволна връзка.
      */
-    val SHORTCUT_LINKS = setOf("catalog", "my/card", "events", "scan")
+    val SHORTCUT_LINKS = setOf("catalog", "my/card", "events", "scan", DeepLinks.WANT_TO_READ)
+
+    /** Динамичният пряк път към последната книга от публичния каталог — само положителен инв. №. */
+    private val SHORTCUT_BOOK = Regex("catalog/book/[1-9][0-9]{0,17}")
+
+    fun isShortcutLink(link: String): Boolean = link in SHORTCUT_LINKS || SHORTCUT_BOOK.matches(link)
 
     /**
      * Известията до v1.2.25 включително са с `Intent(context, MainActivity)` — без действие и
@@ -88,7 +94,7 @@ object LaunchIntents {
      * - собствена връзка (extra „deep_link“) — само с [ACTION_OPEN_LINK] през [OPEN_LINK_ALIAS];
      * - известие от стара версия (без действие, изрично към MainActivity) — само
      *   [isLegacyNotificationLink];
-     * - пряк път — само връзка от [SHORTCUT_LINKS];
+     * - пряк път — само връзка от [SHORTCUT_LINKS] или книга от каталога ([isShortcutLink]);
      * - адрес (ACTION_VIEW) — само адрес от сайта с native екран ([DeepLinks.forUrl]); всичко
      *   друго (чужд сайт, файл, непознат път) не се отваря през приложението.
      */
@@ -97,7 +103,7 @@ object LaunchIntents {
         return when (intent.action) {
             ACTION_OPEN_LINK -> intent.getStringExtra(Notifier.EXTRA_DEEP_LINK)
                 ?.takeIf { intent.component?.className == OPEN_LINK_ALIAS }
-            ACTION_SHORTCUT -> data?.takeIf { it.scheme == SHORTCUT_SCHEME }?.path.orEmpty().trim('/').takeIf { it in SHORTCUT_LINKS }
+            ACTION_SHORTCUT -> data?.takeIf { it.scheme == SHORTCUT_SCHEME }?.path.orEmpty().trim('/').takeIf { isShortcutLink(it) }
             Intent.ACTION_VIEW -> data?.takeIf { it.scheme == "https" }?.toString()
                 ?.takeIf { DeepLinks.forUrl(it, siteBaseUrl) != null }
             null -> intent.getStringExtra(Notifier.EXTRA_DEEP_LINK)

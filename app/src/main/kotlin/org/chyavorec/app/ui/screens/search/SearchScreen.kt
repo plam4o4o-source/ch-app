@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,6 +42,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -165,9 +167,42 @@ class GlobalSearchViewModel(
 fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (String) -> Unit, openLink: (String) -> Unit) {
     val vm = appViewModelWithState { c, saved -> GlobalSearchViewModel(c, saved) }
     val ui by vm.ui.collectAsStateWithLifecycle()
-    val recent by vm.recent.collectAsStateWithLifecycle()
     val focus = remember { FocusRequester() }
     LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
+
+    Scaffold(topBar = {
+        Column(Modifier.statusBarsPadding().padding(start = 8.dp, end = 8.dp, top = 6.dp)) {
+            // Запълненото „хапче“ като на „Начало“ и в каталога (без златен контур).
+            SearchInput(
+                value = ui.query, onValueChange = vm::setQuery,
+                placeholder = stringResource(R.string.search_hint),
+                leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.action_back)) } },
+                trailingIcon = { if (ui.query.isNotEmpty()) IconButton(onClick = { vm.setQuery("") }) { Icon(Icons.Outlined.Clear, stringResource(R.string.action_clear)) } },
+                keyboardActions = KeyboardActions(onSearch = { vm.commit() }),
+                modifier = Modifier.fillMaxWidth().focusRequester(focus),
+            )
+        }
+    }) { padding ->
+        GlobalSearchContent(vm, navigate, openExternal, openLink, onRecent = vm::setQuery, modifier = Modifier.padding(padding))
+    }
+}
+
+/**
+ * Обхватите и под тях последните търсения или резултатите — общи за екрана „Търсене“ и
+ * разгънатото поле за търсене на „Начало“ ([org.chyavorec.app.ui.screens.home.HomeSearchBar]).
+ * [onRecent] — избрано последно търсене (полето е на извикващия).
+ */
+@Composable
+internal fun GlobalSearchContent(
+    vm: GlobalSearchViewModel,
+    navigate: (String) -> Unit,
+    openExternal: (String) -> Unit,
+    openLink: (String) -> Unit,
+    onRecent: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val ui by vm.ui.collectAsStateWithLifecycle()
+    val recent by vm.recent.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val clearedMsg = stringResource(R.string.search_recent_cleared)
@@ -182,19 +217,9 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
             }
         }
     }
-
-    Scaffold(snackbarHost = { SnackbarHost(snackbar) }, topBar = {
-        Column(Modifier.statusBarsPadding().padding(horizontal = 8.dp, vertical = 6.dp)) {
-            // Запълненото „хапче“ като на „Начало“ и в каталога (без златен контур).
-            SearchInput(
-                value = ui.query, onValueChange = vm::setQuery,
-                placeholder = stringResource(R.string.search_hint),
-                leadingIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.action_back)) } },
-                trailingIcon = { if (ui.query.isNotEmpty()) IconButton(onClick = { vm.setQuery("") }) { Icon(Icons.Outlined.Clear, stringResource(R.string.action_clear)) } },
-                keyboardActions = KeyboardActions(onSearch = { vm.commit() }),
-                modifier = Modifier.fillMaxWidth().focusRequester(focus),
-            )
-            LazyRow(contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Box(modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize()) {
+            LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(SearchScope.entries) { s ->
                     FilterChip(ui.scope == s, onClick = { vm.setScope(s) }, label = {
                         Text(stringResource(when (s) {
@@ -207,30 +232,30 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
                     }, colors = appFilterChipColors())
                 }
             }
-        }
-    }) { padding ->
-        AnimatedContent(ui.query.isBlank(), transitionSpec = { fadeIn() togetherWith fadeOut() }, modifier = Modifier.padding(padding), label = "search") { blank ->
-            if (blank) {
-                LazyColumn(Modifier.fillMaxSize()) {
-                    if (recent.isNotEmpty()) {
-                        item {
-                            ListItem(
-                                headlineContent = { Text(stringResource(R.string.search_recent), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() }) },
-                                trailingContent = { TextButton(onClick = clearRecent) { Text(stringResource(R.string.action_clear)) } },
-                            )
+            AnimatedContent(ui.query.isBlank(), transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "search") { blank ->
+                if (blank) {
+                    LazyColumn(Modifier.fillMaxSize()) {
+                        if (recent.isNotEmpty()) {
+                            item {
+                                ListItem(
+                                    headlineContent = { Text(stringResource(R.string.search_recent), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() }) },
+                                    trailingContent = { TextButton(onClick = clearRecent) { Text(stringResource(R.string.action_clear)) } },
+                                )
+                            }
+                            items(recent) { q ->
+                                ListItem(headlineContent = { Text(q) }, leadingContent = { Icon(Icons.Outlined.History, null) },
+                                    modifier = Modifier.clickable { onRecent(q) })
+                            }
+                        } else {
+                            item { EmptyView(stringResource(R.string.search_start), stringResource(R.string.search_start_hint), icon = Icons.Outlined.Search) }
                         }
-                        items(recent) { q ->
-                            ListItem(headlineContent = { Text(q) }, leadingContent = { Icon(Icons.Outlined.History, null) },
-                                modifier = Modifier.clickable { vm.setQuery(q) })
-                        }
-                    } else {
-                        item { EmptyView(stringResource(R.string.search_start), stringResource(R.string.search_start_hint), icon = Icons.Outlined.Search) }
                     }
+                } else {
+                    Results(ui, navigate, openExternal, openLink, onOpen = { vm.commit() })
                 }
-            } else {
-                Results(ui, navigate, openExternal, openLink, onOpen = { vm.commit() })
             }
         }
+        SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
     }
 }
 

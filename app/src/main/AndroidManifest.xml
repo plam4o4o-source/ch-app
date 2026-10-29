@@ -48,6 +48,8 @@
         </intent>
     </queries>
 
+    <!-- CredManMissingDal: паролите (картата и ПИН-ът) не се споделят със сайт — входът е само в
+         приложението, затова няма asset_statements (Digital Asset Links) за Credential Manager. -->
     <application
         android:name=".ChitalishteApp"
         android:allowBackup="false"
@@ -61,6 +63,7 @@
         android:supportsRtl="true"
         android:enableOnBackInvokedCallback="true"
         android:theme="@style/Theme.Chitalishte"
+        tools:ignore="CredManMissingDal"
         tools:targetApi="37">
 
         <activity

@@ -320,6 +320,9 @@ dependencies {
     implementation(libs.androidx.palette.ktx)
     // Инсталира Baseline профила при инсталиране от извън Google Play (по-бърз старт).
     implementation(libs.androidx.profileinstaller)
+    // Мениджърът на пароли (вход с едно докосване); картата и ПИН-ът се пазят от системата.
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.room.runtime)

@@ -35,6 +35,8 @@ import org.chyavorec.app.data.local.RoomCatalogIndexStore
 import org.chyavorec.app.data.local.SecureSelfCardStore
 import org.chyavorec.app.data.local.SecureSessionStore
 import org.chyavorec.app.data.local.SettingsStore
+import org.chyavorec.app.data.security.CredentialManagerPasswords
+import org.chyavorec.app.data.security.SystemPasswords
 import org.chyavorec.app.data.security.BytesCipher
 import org.chyavorec.app.data.security.KeystoreBytesCipher
 import org.chyavorec.app.network.ConnectivityObserver
@@ -102,6 +104,8 @@ class AppContainer(
     cipherOverride: BytesCipher? = null,
     /** Само за тестове (MockWebServer по HTTP); production ползва [NetworkModule.okHttp]. */
     okHttpOverride: okhttp3.OkHttpClient? = null,
+    /** Само за тестове: мениджър на пароли без системния прозорец. */
+    passwordsOverride: SystemPasswords? = null,
 ) {
     private val cipher: BytesCipher by lazy { cipherOverride ?: KeystoreBytesCipher() }
 
@@ -220,6 +224,8 @@ class AppContainer(
     val membershipRepository by lazy {
         MembershipRepository(readerServices.membership, authRepository, readerCache, clock, readerDataRepository)
     }
+    /** Системният мениджър на пароли за входа (картата и ПИН-ът се пазят от системата, не от приложението). */
+    val passwords: SystemPasswords by lazy { passwordsOverride ?: CredentialManagerPasswords(context) }
     val selfCardRepository by lazy { SelfCardRepository(SecureSelfCardStore(File(context.noBackupFilesDir, "secure/card.bin"), cipher)) }
 
     val messagesRepository by lazy { MessagesRepository(siteService, publicCache, clock) }

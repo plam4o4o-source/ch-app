@@ -25,7 +25,9 @@ sealed interface LinkTarget {
  * - `event/<id>` — събитие по идентификатора му от index.json;
  * - `message/<id>` — съобщенията, превъртени до това съобщение;
  * - `book/<инв. №>` — книга от „Искам да прочета“ (над списъка, отворена като лична);
- * - `events`, `messages`, `catalog`, `scan`, `login`, `my/loans`, `my/card`, `my/history`, `update`;
+ * - `catalog/book/<инв. №>` — книга от публичния каталог (над каталога; динамичният пряк път);
+ * - `events`, `messages`, `catalog`, `scan`, `login`, `my/loans`, `my/card`, `my/history`,
+ *   `my/want-to-read`, `update`;
  * - `https://chyavorec.org/...` — адрес от сайта (App Links), виж [forUrl].
  * Идентификаторите се кодират ([Uri.encode]), както в [Routes].
  */
@@ -33,11 +35,13 @@ object DeepLinks {
     const val EVENTS = "events"
     const val MESSAGES = "messages"
     const val UPDATE = "update"
+    const val WANT_TO_READ = "my/want-to-read"
 
     private const val ARTICLE_PREFIX = "article/"
     private const val EVENT_PREFIX = "event/"
     private const val MESSAGE_PREFIX = "message/"
     private const val BOOK_PREFIX = "book/"
+    private const val CATALOG_BOOK_PREFIX = "catalog/book/"
 
     /** Страницата на електронния каталог на сайта (App Link към раздела „Каталог“). */
     private const val CATALOG_PATH = "/elektronen-katalog"
@@ -46,6 +50,7 @@ object DeepLinks {
     fun event(id: String) = EVENT_PREFIX + Uri.encode(id)
     fun message(id: String) = MESSAGE_PREFIX + Uri.encode(id)
     fun book(inv: Long) = BOOK_PREFIX + inv
+    fun catalogBook(inv: Long) = CATALOG_BOOK_PREFIX + inv
 
     /**
      * Публичният адрес на книга — същият, който споделя каталогът на сайта
@@ -64,8 +69,13 @@ object DeepLinks {
             link == "my/loans" -> LinkTarget.Screen(Routes.MY, listOf(Routes.LOANS))
             link == "my/card" -> LinkTarget.Screen(Routes.MY, listOf(Routes.CARD))
             link == "my/history" -> LinkTarget.Screen(Routes.MY, listOf(Routes.HISTORY))
+            link == WANT_TO_READ -> LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ))
             link == "catalog" -> LinkTarget.Screen(Routes.CATALOG)
             link == "scan" -> LinkTarget.Screen(Routes.CATALOG, listOf(Routes.SCAN))
+            // Книга от публичния каталог (не лична) — над каталога, както App Link-ът към нея.
+            link.startsWith(CATALOG_BOOK_PREFIX) -> link.removePrefix(CATALOG_BOOK_PREFIX).toLongOrNull()?.takeIf { it > 0 }
+                ?.let { LinkTarget.Screen(Routes.CATALOG, listOf(Routes.book(it))) }
+                ?: LinkTarget.Screen(Routes.CATALOG)
             link == EVENTS -> eventsTab()
             link == MESSAGES -> LinkTarget.Screen(Routes.HOME, listOf(Routes.MESSAGES))
             link == UPDATE -> LinkTarget.UpdatePrompt

@@ -116,6 +116,20 @@ class LaunchIntentsTest {
         assertNull(LaunchIntents.linkOf(Intent(LaunchIntents.ACTION_SHORTCUT, Uri.parse("https://app/catalog")).setComponent(main), base))
     }
 
+    /** Динамичните преки пътища: „Искам да прочета“ и книга от каталога — само с положителен инв. №, нищо друго. */
+    @Test fun dynamicShortcutLinksAreStrict() {
+        fun shortcut(link: String) = Intent(LaunchIntents.ACTION_SHORTCUT, Uri.parse("chyavorec://app/$link")).setComponent(main)
+        for (link in listOf(DeepLinks.WANT_TO_READ, DeepLinks.catalogBook(624), DeepLinks.catalogBook(399666)))
+            assertEquals(link, LaunchIntents.linkOf(shortcut(link), base), link)
+        for (link in listOf(
+            "catalog/book/", "catalog/book/0", "catalog/book/-1", "catalog/book/012", "catalog/book/12x", "catalog/book/1 2",
+            "catalog/book/12/x", "catalog/book/99999999999999999999", "book/624", "my/want", "my/want-to-read/x", "catalog/books/1",
+        )) assertNull(LaunchIntents.linkOf(shortcut(link), base), link)
+        // Intent-ът, който приложението публикува, минава през същия вход.
+        assertEquals(DeepLinks.catalogBook(7), LaunchIntents.linkOf(AppShortcuts.intent(context, DeepLinks.catalogBook(7)), base))
+        assertEquals(DeepLinks.WANT_TO_READ, LaunchIntents.linkOf(AppShortcuts.intent(context, DeepLinks.WANT_TO_READ), base))
+    }
+
     /** Адрес отвън — само от сайта и само с native екран; чужд адрес не се отваря в Custom Tab с цветовете на приложението. */
     @Test fun externalViewIntentsAcceptOnlyRecognisedSiteLinks() {
         fun view(url: String) = Intent(Intent.ACTION_VIEW, Uri.parse(url)).setComponent(main)

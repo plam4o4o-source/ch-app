@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.my
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -54,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
@@ -86,10 +88,16 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
     val ui by vm.ui.collectAsStateWithLifecycle()
     val capsStatus by vm.capabilitiesStatus.collectAsStateWithLifecycle()
     var showPassword by rememberSaveable { mutableStateOf(false) }
+    var askedSaved by rememberSaveable { mutableStateOf(false) }
     val haptic = LocalHapticFeedback.current
+    val passwords = LocalAppContainer.current.passwords
+    // Системният прозорец на мениджъра на пароли се показва над activity-то.
+    val activity = LocalActivity.current ?: LocalContext.current
     LaunchedEffect(ui.success) {
         if (ui.success) {
             haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+            // „Запази паролата?“ — системата пита; отказът е тих. Приложението не пази ПИН-а.
+            vm.takeSaveOffer()?.let { passwords.offerSave(activity, it) }
             onLoggedIn()
         }
     }
@@ -142,6 +150,13 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                     }
                 }
                 else -> {
+                    // Вход с едно докосване: запазеният в мениджъра на пароли вход попълва полетата и
+                    // се изпраща (веднъж на отваряне; без запазен вход системата не показва нищо).
+                    LaunchedEffect(Unit) {
+                        if (askedSaved || vm.isDemo || ui.cardNumber.isNotBlank() || ui.submitting) return@LaunchedEffect
+                        askedSaved = true
+                        passwords.savedLogin(activity)?.let(vm::signInWithSaved)
+                    }
                     if (vm.isDemo) Text(stringResource(R.string.login_demo_hint), style = MaterialTheme.typography.bodySmall)
                     OutlinedTextField(
                         value = ui.cardNumber, onValueChange = vm::setCard,

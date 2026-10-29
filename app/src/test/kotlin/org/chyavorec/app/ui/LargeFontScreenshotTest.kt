@@ -13,14 +13,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasSetTextAction
@@ -28,7 +26,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.text.TextLayoutResult
@@ -150,7 +148,8 @@ class LargeFontScreenshotTest {
         compose.waitForIdle()
         compose.mainClock.advanceTimeBy(1_500)
         compose.waitForIdle()
-        val bmp = compose.onRoot().captureToImage().asAndroidBitmap()
+        // Разгънатото търсене на „Начало“ е отделен прозорец — снимат се всички прозорци.
+        val bmp = compose.captureScreen()
         File(outDir, "$name.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
@@ -340,9 +339,11 @@ class LargeFontScreenshotTest {
 
     @Test fun searchShowsFormattedEventDates() {
         launch(fontScale = 1f)
-        click("Търси книга")
+        // Полето на „Начало“ се разгръща в търсенето (второ поле — в прозореца над екрана).
         compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isNotEmpty() }
-        compose.onAllNodes(hasSetTextAction()).onFirst().performTextInput("ден")
+        compose.onAllNodes(hasSetTextAction()).onFirst().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().size >= 2 }
+        compose.onAllNodes(hasSetTextAction()).onLast().performTextInput("ден")
         waitFor("декември")
         shot("64-search-event-dates")
     }
