@@ -8,7 +8,7 @@
  * В :app е `mergeIntoMain = true`, затова задачата е общата `generateBaselineProfile`
  * (плъгинът не създава `generateProdReleaseBaselineProfile` при сливане в main).
  * Резултатът е в app/src/main/generated/baselineProfiles/{baseline-prof,startup-prof}.txt.
- * В CI: .github/workflows/baseline-profile.yml (ръчно и всяка седмица).
+ * В CI: .github/workflows/baseline-profile.yml (ръчно, всяка седмица и преди издание).
  *
  * AGP 9: вграденият Kotlin компилира src/main/kotlin (без плъгина kotlin.android).
  */

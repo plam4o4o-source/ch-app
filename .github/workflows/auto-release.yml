@@ -10,6 +10,8 @@ name: Auto release
 # ЧЕРНОВА: човек го проверява и публикува с „Publish release“. Черновите не се
 # връщат от /releases/latest, т.е. update.json не стига до инсталираните
 # приложения преди публикуването.
+# Преди изданието профилът за бърз старт се генерира наново, ако кодът е променян след
+# сегашния (задачата „profile“ по-долу) — изданието съдържа профил от собствения си код.
 # Ръчно: Actions → Auto release → Run workflow — от клона main (виж docs/RELEASE.md).
 #
 # workflow_run винаги пуска този файл от клона по подразбиране на хранилището (main) —
@@ -124,15 +126,51 @@ jobs:
             echo "NOTES_EOF"
           } >> "$GITHUB_OUTPUT"
 
-  release:
+  # Свеж профил за бърз старт преди изданието (.github/scripts/release-profile.sh): ако кодът
+  # на приложението е променян след commit-а, от който е генериран сегашният профил, тук се
+  # пуска Baseline profile и изданието чака новия профил да влезе в main (до 2 ч) — после се
+  # издава новият връх на main (REF + commit-ът с профила, проверен от baseline-profile-merge.sh).
+  # Неуспех или изтекло време — издание с предишния профил и предупреждение: емулаторът
+  # никога не спира издание. Ако междувременно в main влезе друг commit — без издание тук
+  # (издава следващото, по-ново пускане). Без двойно издание и без цикъл: commit-ът с профила
+  # пуска Android CI → Auto release, но планът му вижда tag-а на същия commit или само профил
+  # след последния tag (NOT_PROFILE) — без издание; профилът вече е свеж, т.е. не се пуска пак.
+  # Докато тази задача чака, групата „auto-release“ е заета: новите пускания чакат (остава
+  # само последното) и после издават най-новото.
+  profile:
     needs: plan
     if: needs.plan.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 140
+    permissions:
+      contents: read
+      actions: write
+    outputs:
+      release: ${{ steps.profile.outputs.release }}
+      ref: ${{ steps.profile.outputs.ref }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
+          fetch-depth: 0
+      - id: profile
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REF: ${{ needs.plan.outputs.ref }}
+        run: bash .github/scripts/release-profile.sh
+
+  release:
+    needs: [plan, profile]
+    # И при грешка в „profile“ (без изход) — изданието от плана, със сегашния профил.
+    if: >-
+      !cancelled() && needs.plan.result == 'success' && needs.plan.outputs.release == 'true' &&
+      needs.profile.outputs.release != 'false'
     permissions:
       contents: write
     uses: ./.github/workflows/release.yml
     with:
       version: ${{ needs.plan.outputs.version }}
-      ref: ${{ needs.plan.outputs.ref }}
+      ref: ${{ needs.profile.outputs.ref || needs.plan.outputs.ref }}
       changes: ${{ needs.plan.outputs.changes }}
       draft: ${{ needs.plan.outputs.draft == 'true' }}
     secrets: inherit

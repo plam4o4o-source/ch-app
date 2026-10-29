@@ -216,6 +216,10 @@ androidComponents {
             "SELF_UPDATE",
             com.android.build.api.variant.BuildConfigField("boolean", selfUpdate.toString(), "Обновяване от GitHub Releases"),
         )
+        // APK-ът от GitHub (prodRelease): native библиотеките компресирани (useLegacyPackaging;
+        // при инсталиране се разархивират) — ~100 KB по-малко за изтегляне, без подравняването
+        // на некомпресираните .so. AAB-ът за Play (prodPlay) остава както е — Play сам решава.
+        if (selfUpdate) v.packaging.jniLibs.useLegacyPackaging.set(true)
         // Схемите на Room като assets само в debug — за MigrationTestHelper в тестовете с
         // Robolectric (Room Gradle плъгинът ги добавя само към androidTest). Не са в release.
         if (v.buildType == "debug") v.sources.assets?.addStaticSourceDirectory("$projectDir/schemas")
