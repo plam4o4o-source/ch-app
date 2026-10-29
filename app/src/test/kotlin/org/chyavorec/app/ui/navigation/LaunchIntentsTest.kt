@@ -92,15 +92,16 @@ class LaunchIntentsTest {
 
     /**
      * Известие, показано от v1.2.25 преди обновяването: `Intent(context, MainActivity)` без
-     * действие, с extra „deep_link“ — отваря се, но само с връзките, които такива известия носят.
+     * действие, с extra „deep_link“ — отваря се, но само с връзките, които такива известия носят
+     * (съобщенията са `message/<id>`; `messages` и `book/…` v1.2.25 не е изпращала).
      */
     @Test fun legacyNotificationIntentsOpenOnlyAllowListedLinks() {
         fun legacy(link: String) = Intent(context, MainActivity::class.java).putExtra(Notifier.EXTRA_DEEP_LINK, link)
-        for (link in listOf("my/loans", "messages", DeepLinks.event("event-03-03"), DeepLinks.article("45-ти събор / Тимок"), DeepLinks.book(399666))) {
+        for (link in listOf("my/loans", DeepLinks.event("event-03-03"), DeepLinks.article("45-ти събор / Тимок"), DeepLinks.message("m-17"), DeepLinks.message("p:42"))) {
             assertEquals(link, LaunchIntents.linkOf(legacy(link), base), link)
             assertTrue(DeepLinks.target(link, base) is LinkTarget.Screen, link)
         }
-        for (link in listOf("my/card", "login", "update", "catalog", "scan", "events", "event/", "article/ ", "book/x", "book/-1", "message/1", "$base/about", "https://evil.example/phish", ""))
+        for (link in listOf("my/card", "login", "update", "catalog", "scan", "events", "event/", "article/ ", "message/", "message/ ", "messages", DeepLinks.book(399666), "$base/about", "https://evil.example/phish", ""))
             assertNull(LaunchIntents.linkOf(legacy(link), base), link)
         // Без изричния компонент MainActivity — нищо (и неекспортираният вход иска своето действие).
         assertNull(LaunchIntents.linkOf(Intent().putExtra(Notifier.EXTRA_DEEP_LINK, "my/loans"), base))

@@ -56,13 +56,14 @@ object LaunchIntents {
     /**
      * Известията до v1.2.25 включително са с `Intent(context, MainActivity)` — без действие и
      * без неекспортирания вход, само с extra „deep_link“. Вече показаните такива известия се
-     * отварят, но само с връзки, които те са носили (заемите, съобщенията, събитие, новина,
-     * книга) — чужд intent със същия вид не може да отвори произволна връзка (вход, обновяване).
+     * отварят, но само с връзки, които те са носили (заемите, съобщение, събитие, новина) —
+     * чужд intent със същия вид не може да отвори произволна връзка (вход, обновяване).
+     * Пътят може да се махне от около 1.2.30, когато такива известия вече няма да има.
      */
     fun isLegacyNotificationLink(link: String): Boolean = when {
-        link == "my/loans" || link == DeepLinks.MESSAGES -> true
-        link.startsWith("event/") || link.startsWith("article/") -> link.substringAfter('/').isNotBlank()
-        link.startsWith("book/") -> link.removePrefix("book/").toLongOrNull()?.let { it > 0 } == true
+        link == "my/loans" -> true
+        link.startsWith("event/") || link.startsWith("article/") || link.startsWith("message/") ->
+            link.substringAfter('/').isNotBlank()
         else -> false
     }
 
