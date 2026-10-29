@@ -320,12 +320,14 @@ internal fun ZoomableImage(photo: GalleryPhoto, description: String, active: Boo
     }
     val sized = sources.getOrElse(attempt) { photo.fullUrl }
     // Двата размера имат свои ключове в паметта: голямата снимка е заместител на оригинала.
-    val request = remember(sized, original, placeholder, screenW, screenH) {
+    val request = remember(sized, original, placeholder, screenW, screenH, retry) {
         val data = if (original) photo.fullUrl else sized
         ImageRequest.Builder(context)
             .data(data)
             .memoryCacheKey(data + if (original) ORIGINAL_KEY else VIEWER_KEY)
             .apply {
+                // Повторният опит — от мрежата, не от диска.
+                if (retry > 0) diskCachePolicy(CachePolicy.WRITE_ONLY)
                 if (original) {
                     // До 4× екрана (увеличението е до 5×) и без запис в паметта: голям bitmap
                     // само за този преглед не изтласква миниатюрите и кориците от кеша.
