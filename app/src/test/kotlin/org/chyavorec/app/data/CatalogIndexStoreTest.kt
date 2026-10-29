@@ -102,7 +102,7 @@ class CatalogIndexStoreTest {
                 val first = fts.searchFirst(query, 7)
                 assertEquals(expected.size, first.total, "брой $query")
                 val all = first.books.map { it.inv }.toMutableList()
-                while (all.size < first.total) all += fts.searchMore(query, all.size, 7).also { assertTrue(it.isNotEmpty()) }.map { it.inv }
+                while (all.size < first.total) all += fts.searchMore(query, all.size, 7)!!.also { assertTrue(it.isNotEmpty()) }.map { it.inv }
                 assertEquals(expected, all, "страници $query")
             }
         // С текст — точкуват се леките записи, книгите се четат само за страницата (същият ред).

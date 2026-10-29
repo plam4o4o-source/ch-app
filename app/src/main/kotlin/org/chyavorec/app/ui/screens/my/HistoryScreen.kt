@@ -38,6 +38,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -55,6 +56,7 @@ import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
+import org.chyavorec.app.ui.components.bookStatusText
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ScreenState
@@ -253,13 +255,16 @@ private fun HistoryRow(item: HistoryItem, book: CatalogBook?, onOpen: (Long) -> 
     // Корица: от каталога, ако екземплярът е в него; иначе „издателска“ корица само със заглавието.
     val cover = book ?: CatalogBook(inv = item.inv ?: 0L, author = item.author, title = item.title)
     val inv = book?.inv
+    // Заглавието е текст в реда — корицата не се чете; наличността (лентата под нея) — от реда.
+    val status = book?.let { bookStatusText(it.status) }
     Row(
         modifier.fillMaxWidth()
             .then(if (inv != null) Modifier.clickable { onOpen(inv) } else Modifier)
+            .then(if (status != null) Modifier.semantics { stateDescription = status } else Modifier)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BookCover(cover, width = 48.dp, showStatusDot = book != null, modifier = if (inv != null) Modifier.sharedElementKey("book-$inv") else Modifier)
+        BookCover(cover, width = 48.dp, showStatusDot = book != null, modifier = if (inv != null) Modifier.sharedElementKey("book-$inv") else Modifier, decorative = true)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(item.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)

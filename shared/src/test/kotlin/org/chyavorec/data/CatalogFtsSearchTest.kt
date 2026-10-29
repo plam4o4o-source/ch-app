@@ -288,12 +288,12 @@ class CatalogFtsSearchTest {
             assertTrue(store.queries.all { it.textless && it.limit == page && it.sort == sort }, "$q")
             val all = first.books.map { it.inv }.toMutableList()
             while (all.size < first.total) {
-                val more = fts.searchMore(q, all.size, page)
+                val more = fts.searchMore(q, all.size, page)!!
                 assertTrue(more.isNotEmpty() && more.size <= page)
                 all += more.map { it.inv }
             }
             assertEquals(expected, all, "всички страници $q / $page")
-            assertTrue(fts.searchMore(q, all.size, page).isEmpty())
+            assertTrue(fts.searchMore(q, all.size, page)!!.isEmpty())
         }
     }
 
@@ -307,9 +307,9 @@ class CatalogFtsSearchTest {
             assertEquals(expected.size, first.total, "брой $q")
             assertEquals(expected.take(page), first.books.map { it.inv }, "първа страница $q / $page")
             val all = first.books.map { it.inv }.toMutableList()
-            while (all.size < first.total) all += fts.searchMore(q, all.size, page).map { it.inv }
+            while (all.size < first.total) all += fts.searchMore(q, all.size, page)!!.map { it.inv }
             assertEquals(expected, all, "всички страници $q / $page")
-            assertTrue(fts.searchMore(q, all.size, page).isEmpty())
+            assertTrue(fts.searchMore(q, all.size, page)!!.isEmpty())
             // Кандидатите се точкуват веднъж (лекият изглед); „Още“ чете само книгите на страницата.
             assertTrue(store.queries.size <= 2 && store.queries.all { it.limit == null }, "$q: ${store.queries}")
             assertTrue(store.lookups.all { it == "booksAt" }, "$q")
@@ -343,7 +343,34 @@ class CatalogFtsSearchTest {
         val first = fts.searchFirst(q, 2)
         assertEquals(engine.search(q).take(2).map { it.inv }, first.books.map { it.inv })
         val next = replaceWithReversed()
-        assertEquals(next.search(q).drop(2).take(2).map { it.inv }, fts.searchMore(q, 2, 2).map { it.inv })
+        // Местата от първата страница са от стария индекс — сигнал, не страница от новия.
+        assertNull(fts.searchMore(q, 2, 2))
+        assertEquals(next.search(q).take(4).map { it.inv }, fts.searchFirst(q, 4).books.map { it.inv })
+        assertEquals(next.search(q).drop(4).take(2).map { it.inv }, fts.searchMore(q, 4, 2)!!.map { it.inv })
+    }
+
+    @Test fun loadMoreWhenTheIndexChangesBeforeTheBooksIsAMismatch() = runTest {
+        val q = CatalogQuery("вазов")
+        fts.searchFirst(q, 1)
+        store.beforeBooksAt = { replaceWithReversed() }
+        assertNull(fts.searchMore(q, 1, 2))
+    }
+
+    @Test fun indexChangingOnEveryReadFallsBackToTheEngine() = runTest {
+        val q = CatalogQuery("вазов")
+        val reversed = CatalogIndexRows.build(snapshot.copy(books = snapshot.books.reversed()))
+        val original = store.rows
+        var n = 0
+        fun churn() {
+            n++
+            store.rows = if (n % 2 == 1) reversed else original
+            store.state = store.state!!.copy(hash = "h$n")
+            store.beforeBooksAt = ::churn
+        }
+        store.beforeBooksAt = ::churn
+        // Не чужди книги от смесените четения, а резултатът от индекса в паметта.
+        assertEquals(engine.search(q).take(2), fts.searchFirst(q, 2).books)
+        store.beforeBooksAt = null
     }
 
     @Test fun hitQueryReadsOnlyTheScoringColumns() {

@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -55,16 +56,45 @@ fun OnDarkSurfaceStatuses(content: @Composable () -> Unit) = CompositionLocalPro
     content = content,
 )
 
+/** Наличността с думи — за етикета и за екранния четец (корицата, редовете). */
+@Composable
+fun bookStatusText(status: BookStatus): String = stringResource(
+    when (status) {
+        BookStatus.AVAILABLE -> R.string.status_available
+        BookStatus.ON_LOAN -> R.string.status_on_loan
+        BookStatus.NOT_ON_SHELF -> R.string.status_not_on_shelf
+        BookStatus.UNAVAILABLE -> R.string.status_unavailable
+    },
+)
+
 @Composable
 fun BookStatusPill(status: BookStatus, modifier: Modifier = Modifier) {
     val ext = LocalExtendedColors.current
-    val (text, color) = when (status) {
-        BookStatus.AVAILABLE -> stringResource(R.string.status_available) to ext.ok
-        BookStatus.ON_LOAN -> stringResource(R.string.status_on_loan) to ext.warn
-        BookStatus.NOT_ON_SHELF -> stringResource(R.string.status_not_on_shelf) to ext.warn
-        BookStatus.UNAVAILABLE -> stringResource(R.string.status_unavailable) to ext.bad
+    val color = when (status) {
+        BookStatus.AVAILABLE -> ext.ok
+        BookStatus.ON_LOAN, BookStatus.NOT_ON_SHELF -> ext.warn
+        BookStatus.UNAVAILABLE -> ext.bad
     }
-    StatusPill(text, color, modifier)
+    StatusPill(bookStatusText(status), color, modifier)
+}
+
+/**
+ * Наличността на екземпляра: етикетът му и — ако той не е на рафта, а други от заглавието
+ * са — отделен зелен ред „Още N на рафта“ (страницата на книгата и скенерът).
+ */
+@Composable
+fun CopyStatus(status: BookStatus, othersOnShelf: Int, modifier: Modifier = Modifier) {
+    Column(modifier) {
+        BookStatusPill(status)
+        if (status != BookStatus.AVAILABLE && othersOnShelf > 0) {
+            val ok = LocalExtendedColors.current.ok
+            Row(Modifier.padding(top = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                Spacer(Modifier.size(6.dp).background(ok, CircleShape))
+                Spacer(Modifier.width(6.dp))
+                Text(pluralStringResource(R.plurals.book_more_on_shelf, othersOnShelf, othersOnShelf), style = MaterialTheme.typography.labelMedium, color = ok)
+            }
+        }
+    }
 }
 
 /**

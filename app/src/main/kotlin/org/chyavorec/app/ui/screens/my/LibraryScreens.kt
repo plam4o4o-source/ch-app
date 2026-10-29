@@ -231,7 +231,7 @@ internal fun LoanCard(
             }
             // „Прелита“ към страницата на книгата — само когато картата води до нея.
             val shared = if (onOpen != null && loan.inv != null) Modifier.sharedElementKey("book-${loan.inv}") else Modifier
-            BookCover(cover, width = 64.dp, showStatusDot = false, modifier = shared)
+            BookCover(cover, width = 64.dp, showStatusDot = false, modifier = shared, decorative = true)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(loan.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)

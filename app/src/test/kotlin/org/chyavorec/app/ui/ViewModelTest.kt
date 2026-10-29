@@ -18,10 +18,12 @@ import org.chyavorec.app.ui.screens.news.NewsListViewModel
 import org.chyavorec.core.AppError
 import org.chyavorec.core.FixedClock
 import org.chyavorec.core.Outcome
+import org.chyavorec.data.catalog.CatalogResults
 import org.chyavorec.data.catalog.KatalogParser
 import org.chyavorec.data.repository.CatalogRepository
 import org.chyavorec.data.repository.NewsRepository
 import org.chyavorec.domain.model.ArticleDetail
+import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogQuery
 import org.chyavorec.domain.model.CatalogSnapshot
 import org.chyavorec.domain.model.CatalogSort
@@ -125,6 +127,28 @@ class ViewModelTest {
         advanceUntilIdle()
         assertEquals(CatalogUiState.PAGE, vm.state.value.shown)
         assertEquals(searchId + 1, vm.state.value.searchId)
+    }
+
+    /**
+     * „Още“ след смяна на индекса: страница, която повтаря вече показани книги, не ги дублира
+     * (ключовете на списъка); сигналът „местата не съвпадат“ заменя списъка с прочетения наново.
+     */
+    @Test fun catalogLoadMoreNeverRepeatsABook() {
+        fun book(inv: Long) = CatalogBook(inv, "Автор", "Книга $inv")
+        val s = CatalogUiState(results = (1L..40L).map(::book), totalResults = 100, shown = CatalogUiState.PAGE)
+        val next = s.withMore(80, (35L..74L).map(::book))
+        assertEquals((1L..74L).toList(), next.results.map { it.inv })
+        assertEquals(next.page.map { it.inv }.distinct(), next.page.map { it.inv })
+        assertEquals(80, next.shown)
+        val reread = s.withMore(80, null, CatalogResults((101L..180L).map(::book), 120))
+        assertEquals((101L..180L).toList(), reread.results.map { it.inv })
+        assertEquals(120, reread.totalResults)
+        assertEquals(80, reread.page.size)
+        // Празна страница — списъкът свършва при прочетените.
+        assertEquals(40, s.withMore(80, emptyList()).totalResults)
+        // Повторен инв. № в самите резултати не стига до ключовете на списъка.
+        val dup = CatalogUiState(results = listOf(book(1), book(2), book(1)), totalResults = 3, shown = 40)
+        assertEquals(listOf(1L, 2L), dup.page.map { it.inv })
     }
 
     /** След „Изчисти кеша“ каталогът се зарежда наново — без старите резултати и без срив. */

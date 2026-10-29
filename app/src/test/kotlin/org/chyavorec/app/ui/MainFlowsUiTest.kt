@@ -6,6 +6,7 @@ import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
@@ -130,10 +131,12 @@ class MainFlowsUiTest {
     /** Този екземпляр не е на рафта, но 5 други от заглавието са (по каталога) — без „Попитай“/„Кажи ми“. */
     @Test fun bookOutWithOtherCopiesOnShelfSaysSo() {
         launch(deepLink = server.url("/").toString().trimEnd('/') + "/elektronen-katalog#zapis=624")
-        waitForText("Този екземпляр е зает · 5 други на рафта")
+        // Етикетът на екземпляра и отделен зелен ред за другите — на един ред всеки.
+        waitForText("Още 5 на рафта")
+        compose.onAllNodesWithText("Не е на рафта").onFirst().assertExists()
         compose.onAllNodesWithText("Искам да прочета", substring = true).onFirst().assertExists()
         check(compose.onAllNodesWithText("Попитай библиотеката").fetchSemanticsNodes().isEmpty()) { "ask shown while copies are on the shelf" }
-        check(compose.onAllNodesWithText("Кажи ми, когато е на рафта").fetchSemanticsNodes().isEmpty()) { "notify shown while copies are on the shelf" }
+        check(compose.onAllNodesWithContentDescription("Кажи ми, когато е на рафта").fetchSemanticsNodes().isEmpty()) { "notify shown while copies are on the shelf" }
     }
 
     @Test fun guestSeesHonestLoginMessageAndCanAddCard() {

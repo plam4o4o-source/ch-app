@@ -93,7 +93,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
-import org.chyavorec.app.ui.components.BookStatusPill
+import org.chyavorec.app.ui.components.CopyStatus
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequest
@@ -447,11 +447,13 @@ private fun BoxScope.ManualEntryPanel(backProgress: Float, onSubmit: (String) ->
 private fun HitSheet(hit: ScanResult.Hit, onOpen: () -> Unit, onClose: () -> Unit) {
     val b = hit.book
     val availableCopies = hit.copies.count { it.available }
+    // Този екземпляр не е на рафта, а други са — както на страницата на книгата.
+    val othersOnShelf = if (b.available) 0 else hit.copies.count { it.available && it.inv != b.inv }
     Column(Modifier.padding(horizontal = 20.dp).padding(bottom = 28.dp)) {
         Row(verticalAlignment = Alignment.Top) {
             // Без sharedElementKey: листът е отделен прозорец и се затваря преди прехода —
             // корицата няма откъде да „прелети“.
-            BookCover(b, width = 84.dp)
+            BookCover(b, width = 84.dp, decorative = true)
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f)) {
                 Text(b.title, style = MaterialTheme.typography.titleLarge, maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.semantics { heading() })
@@ -464,8 +466,8 @@ private fun HitSheet(hit: ScanResult.Hit, onOpen: () -> Unit, onClose: () -> Uni
                 )
                 Spacer(Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    BookStatusPill(b.status)
-                    if (hit.copies.size > 1) {
+                    CopyStatus(b.status, othersOnShelf)
+                    if (othersOnShelf == 0 && hit.copies.size > 1) {
                         Spacer(Modifier.width(8.dp))
                         Text(
                             pluralStringResource(R.plurals.book_copies, hit.copies.size, hit.copies.size) + ", " +
