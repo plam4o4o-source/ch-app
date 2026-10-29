@@ -18,7 +18,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
-import coil3.network.networkObserverEnabled
+import coil3.network.ConnectivityChecker
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
@@ -66,10 +66,10 @@ class BrokenPhotoTest {
         }
         server.start()
         SingletonImageLoader.setUnsafe(
-            ImageLoader.Builder(app).components { add(OkHttpNetworkFetcherFactory(callFactory = { OkHttpClient() })) }
-                // Без наблюдение на мрежата: Robolectric не съобщава промените ѝ на Coil.
-                .networkObserverEnabled(false)
-                .build(),
+            ImageLoader.Builder(app).components {
+                // Coil не пита мрежата на Robolectric без връзка — тук тя винаги „има“.
+                add(OkHttpNetworkFetcherFactory(callFactory = { OkHttpClient() }, connectivityChecker = { ConnectivityChecker.ONLINE }))
+            }.build(),
         )
         // Coil пита мрежата само при връзка.
         val cm = app.getSystemService(ConnectivityManager::class.java)
