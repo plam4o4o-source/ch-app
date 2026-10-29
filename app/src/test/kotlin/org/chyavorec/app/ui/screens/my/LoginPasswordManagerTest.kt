@@ -4,8 +4,6 @@ import android.app.Application
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.compose.ui.test.hasSetTextAction
-import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.performClick
@@ -47,8 +45,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- * Мениджърът на пароли на входа (с подменен [FakeSystemPasswords] вместо системния прозорец):
- * след успешен вход се предлага запазване, а запазеният вход попълва полетата и се изпраща.
+ * Мениджърът на пароли на екрана за вход (с подменен [FakeSystemPasswords] вместо системния
+ * прозорец): след успешен вход се предлага запазване, а запазеният вход попълва полетата и се
+ * изпраща. „Запомни ме“, грешен ПИН и заключването — в [LoginSaveOfferTest].
  */
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class, qualifiers = "bg-w411dp-h891dp-xxhdpi")
@@ -156,27 +155,6 @@ class LoginPasswordManagerTest {
         val offered = passwords.offered.single()
         assertEquals("1024-5678", offered.cardNumber)
         assertEquals("1234", offered.pin)
-    }
-
-    @Test fun withoutRememberMeSavingIsNotOffered() {
-        val passwords = FakeSystemPasswords()
-        val container = launch(passwords)
-        waitForForm()
-        compose.onNode(isToggleable()).performClick()
-        typeAndSubmit("1024-5678", "1234")
-        waitSignedIn(container, passwords)
-        compose.waitForIdle()
-        assertTrue(passwords.offered.isEmpty(), "save offered without „Запомни ме“")
-    }
-
-    @Test fun failedLoginOffersNothing() {
-        val passwords = FakeSystemPasswords()
-        launch(passwords)
-        waitForForm()
-        typeAndSubmit("1024-5678", "9999")
-        compose.waitUntil(15_000) { compose.onAllNodes(hasText("Грешен читателски номер или ПИН.")).fetchSemanticsNodes().isNotEmpty() }
-        assertEquals(1, logins.size)
-        assertTrue(passwords.offered.isEmpty())
     }
 
     @Test fun savedLoginFillsAndSignsInWithOneTap() {
