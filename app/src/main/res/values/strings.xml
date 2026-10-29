@@ -107,6 +107,9 @@
     <string name="catalog_view_shelf">Полица</string>
     <string name="channel_events">Събития</string>
     <string name="channel_events_desc">Напомняния за събития</string>
+    <string name="channel_group_app">Приложението</string>
+    <string name="channel_group_centre">Читалището</string>
+    <string name="channel_group_my_library">Моята библиотека</string>
     <string name="channel_library">Библиотека</string>
     <string name="channel_library_desc">Книги от „Искам да прочета“, които са на рафта, и съобщения от библиотеката</string>
     <string name="channel_loans">Срокове за връщане</string>

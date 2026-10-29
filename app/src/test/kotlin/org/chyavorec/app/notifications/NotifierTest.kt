@@ -149,4 +149,20 @@ class NotifierTest {
         assertEquals(Notification.CATEGORY_STATUS, n.category)
         assertTrue(n.actions.isNullOrEmpty())
     }
+
+    /** Каналите са в три групи в системните настройки; ID-тата им са старите (настройките остават). */
+    @Test fun channelsAreGroupedWithUnchangedIds() {
+        val selfUpdate = org.chyavorec.app.BuildConfig.SELF_UPDATE
+        val expected = mapOf(
+            "loans" to "group_my_library", "library" to "group_my_library",
+            "news" to "group_centre", "events" to "group_centre",
+            "messages" to "group_centre", "messages_important" to "group_centre",
+        ) + (if (selfUpdate) mapOf("updates" to "group_app") else emptyMap())
+        assertEquals(expected, nm.notificationChannels.associate { it.id to it.group })
+        val groups = nm.notificationChannelGroups.associate { it.id to it.name.toString() }
+        assertEquals(context.getString(R.string.channel_group_my_library), groups["group_my_library"])
+        assertEquals(context.getString(R.string.channel_group_centre), groups["group_centre"])
+        // Без обновяване от приложението (Play) — без празна група „Приложението“.
+        assertEquals(selfUpdate, "group_app" in groups)
+    }
 }

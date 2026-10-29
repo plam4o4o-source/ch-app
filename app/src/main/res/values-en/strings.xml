@@ -107,6 +107,9 @@
     <string name="catalog_view_shelf">Shelf</string>
     <string name="channel_events">Events</string>
     <string name="channel_events_desc">Event reminders</string>
+    <string name="channel_group_app">The app</string>
+    <string name="channel_group_centre">The centre</string>
+    <string name="channel_group_my_library">My library</string>
     <string name="channel_library">Library</string>
     <string name="channel_library_desc">Books from “Want to read” back on the shelf and messages from the library</string>
     <string name="channel_loans">Due dates</string>

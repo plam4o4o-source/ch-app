@@ -3,6 +3,7 @@ package org.chyavorec.app.notifications
 import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
+import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -15,20 +16,30 @@ import androidx.core.content.ContextCompat
 import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.R
 
+/**
+ * Групи на каналите в системните настройки. ID-тата на каналите не се променят — групата
+ * се задава на вече съществуващ канал без група, а настройките на потребителя остават.
+ */
+enum class ChannelGroup(val id: String, val nameRes: Int) {
+    MY_LIBRARY("group_my_library", R.string.channel_group_my_library),
+    CENTRE("group_centre", R.string.channel_group_centre),
+    APP("group_app", R.string.channel_group_app),
+}
+
 /** Канали за известия — потребителят ги управлява и от системните настройки. */
-enum class Channel(val id: String, val nameRes: Int, val descRes: Int, val importance: Int) {
+enum class Channel(val id: String, val nameRes: Int, val descRes: Int, val importance: Int, val group: ChannelGroup) {
     /*
      * HIGH остава: всички известия за срокове вече са само през деня — напомнянията
      * в 10:00 (и наваксване до 20:00), просрочието от фоновата задача не и в 21:00–08:00
      * (LoanReminderPlan.isQuiet/deliverable), затова звукът не може да събуди нощем.
      */
-    LOANS("loans", R.string.channel_loans, R.string.channel_loans_desc, NotificationManager.IMPORTANCE_HIGH),
-    EVENTS("events", R.string.channel_events, R.string.channel_events_desc, NotificationManager.IMPORTANCE_DEFAULT),
-    NEWS("news", R.string.channel_news, R.string.channel_news_desc, NotificationManager.IMPORTANCE_LOW),
-    LIBRARY("library", R.string.channel_library, R.string.channel_library_desc, NotificationManager.IMPORTANCE_DEFAULT),
-    MESSAGES("messages", R.string.channel_messages, R.string.channel_messages_desc, NotificationManager.IMPORTANCE_DEFAULT),
-    MESSAGES_IMPORTANT("messages_important", R.string.channel_messages_important, R.string.channel_messages_important_desc, NotificationManager.IMPORTANCE_HIGH),
-    UPDATES("updates", R.string.channel_updates, R.string.channel_updates_desc, NotificationManager.IMPORTANCE_DEFAULT),
+    LOANS("loans", R.string.channel_loans, R.string.channel_loans_desc, NotificationManager.IMPORTANCE_HIGH, ChannelGroup.MY_LIBRARY),
+    EVENTS("events", R.string.channel_events, R.string.channel_events_desc, NotificationManager.IMPORTANCE_DEFAULT, ChannelGroup.CENTRE),
+    NEWS("news", R.string.channel_news, R.string.channel_news_desc, NotificationManager.IMPORTANCE_LOW, ChannelGroup.CENTRE),
+    LIBRARY("library", R.string.channel_library, R.string.channel_library_desc, NotificationManager.IMPORTANCE_DEFAULT, ChannelGroup.MY_LIBRARY),
+    MESSAGES("messages", R.string.channel_messages, R.string.channel_messages_desc, NotificationManager.IMPORTANCE_DEFAULT, ChannelGroup.CENTRE),
+    MESSAGES_IMPORTANT("messages_important", R.string.channel_messages_important, R.string.channel_messages_important_desc, NotificationManager.IMPORTANCE_HIGH, ChannelGroup.CENTRE),
+    UPDATES("updates", R.string.channel_updates, R.string.channel_updates_desc, NotificationManager.IMPORTANCE_DEFAULT, ChannelGroup.APP),
 }
 
 /**
@@ -71,10 +82,16 @@ object Notifier {
 
     fun createChannels(context: Context) {
         val nm = context.getSystemService(NotificationManager::class.java) ?: return
-        Channel.entries.filter { it != Channel.UPDATES || org.chyavorec.app.BuildConfig.SELF_UPDATE }.forEach { c ->
+        val channels = Channel.entries.filter { it != Channel.UPDATES || org.chyavorec.app.BuildConfig.SELF_UPDATE }
+        // Групите — преди каналите; празна група (без обновяване в Play) не се създава.
+        nm.createNotificationChannelGroups(
+            channels.map { it.group }.distinct().map { NotificationChannelGroup(it.id, context.getString(it.nameRes)) },
+        )
+        channels.forEach { c ->
             nm.createNotificationChannel(
                 NotificationChannel(c.id, context.getString(c.nameRes), c.importance).apply {
                     description = context.getString(c.descRes)
+                    group = c.group.id
                 },
             )
         }
