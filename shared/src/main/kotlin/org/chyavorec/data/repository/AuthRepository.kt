@@ -24,7 +24,8 @@ sealed interface AuthState {
     /**
      * Запазена сесия има, но временно не се чете (Android Keystore). Не е изход: нищо не се
      * изтрива, интерфейсът е като без вход, а сесията се чете отново ([AuthRepository.retryRestore],
-     * следващото пускане). След [AuthRepository.MAX_UNREADABLE_LAUNCHES] поредни такива пускания — изход.
+     * следващото пускане). След [AuthRepository.MAX_UNREADABLE_LAUNCHES] поредни такива пускания на
+     * интерфейса, но не по-рано от [AuthRepository.MIN_UNREADABLE_SPAN_MS] след първото — изход.
      */
     data object Unavailable : AuthState
     data object SignedOut : AuthState
@@ -137,12 +138,15 @@ class LoginThrottle(
 }
 
 /**
- * Поредните пускания, в които запазената сесия не е прочетена заради временна грешка —
- * пази се на устройството (до сесията), за да не остане нечетим файл завинаги.
+ * Поредните пускания на интерфейса, в които запазената сесия не е прочетена заради временна
+ * грешка, и кога е било първото от тях (епоха, ms; 0 — неизвестно).
  */
+data class UnreadableLaunches(val count: Int = 0, val firstAtMillis: Long = 0)
+
+/** Къде се пазят [UnreadableLaunches] — на устройството (до сесията), за да не остане нечетим файл завинаги. */
 interface UnreadableSessionCounter {
-    suspend fun load(): Int
-    suspend fun save(count: Int)
+    suspend fun load(): UnreadableLaunches
+    suspend fun save(launches: UnreadableLaunches)
 }
 
 class AuthRepository(
@@ -186,8 +190,12 @@ class AuthRepository(
      * Четене на запазената сесия — при старт и наново, докато е [AuthState.Unavailable]. Сменя
      * състоянието САМО ако то още е [AuthState.Unknown]/[AuthState.Unavailable] — вход или изход,
      * станали докато store.load() е траело, имат предимство и не се презаписват със стария резултат.
+     *
+     * [countLaunch] = true — само при старт на интерфейса (ChitalishteApp.onUiStart): тогава
+     * нечетимата сесия се брои към изхода ([onUnreadableLocked]). Фоновите задачи, уиджетът и
+     * повторните опити не броят — иначе събужданията във фон биха изтрили сесията за ден.
      */
-    suspend fun restore() {
+    suspend fun restore(countLaunch: Boolean = false) {
         val s = store.load()
         if (s != null) {
             onSessionRead(s)
@@ -199,7 +207,7 @@ class AuthRepository(
         storeLock.withLock {
             val now = _state.value
             if ((now == AuthState.Unknown || now == AuthState.Unavailable) && store.load() == null) {
-                if (store.unreadableNow()) onUnreadableLocked() else clearLocked()
+                if (store.unreadableNow()) onUnreadableLocked(countLaunch) else clearLocked()
             }
         }
     }
@@ -229,23 +237,31 @@ class AuthRepository(
 
     /** Пускането вече е преброено ([onUnreadableLocked]); броячът в паметта (`null` — още не е четен). */
     @Volatile private var unreadableCounted = false
-    @Volatile private var unreadableLaunches: Int? = null
+    @Volatile private var unreadableLaunches: UnreadableLaunches? = null
 
     /**
-     * Извиква се САМО под [storeLock]: сесията временно не се чете. Пускането се брои (веднъж
-     * на процес); след [MAX_UNREADABLE_LAUNCHES] поредни — смята се за нечетима завинаги:
-     * изтрива се и следва изход с изчистване на личните следи, както при всеки друг изход.
+     * Извиква се САМО под [storeLock]: сесията временно не се чете. При [countLaunch] (старт на
+     * интерфейса) пускането се брои — веднъж на процес; след [MAX_UNREADABLE_LAUNCHES] поредни и
+     * поне [MIN_UNREADABLE_SPAN_MS] от първото — смята се за нечетима завинаги: изтрива се и следва
+     * изход с изчистване на личните следи, както при всеки друг изход. Сървърът не се уведомява:
+     * анулирането иска токена, а той е в нечетимия файл — refresh токенът изтича сам (срокът е на сървъра).
      */
-    private suspend fun onUnreadableLocked() {
+    private suspend fun onUnreadableLocked(countLaunch: Boolean) {
         val counter = unreadableCounter
-        if (counter != null && !unreadableCounted) {
+        if (countLaunch && counter != null && !unreadableCounted) {
             unreadableCounted = true
-            val launches = runCatching { (unreadableLaunches ?: counter.load()) + 1 }.logFailure("auth.unreadable").getOrNull()
+            val now = clock.now().toEpochMilli()
+            val launches = runCatching {
+                val before = unreadableLaunches ?: counter.load()
+                // Първо нечетимо пускане, стар запис без момент или върнат назад часовник — от сега.
+                val first = before.firstAtMillis.takeIf { before.count > 0 && it in 1..now } ?: now
+                UnreadableLaunches(before.count + 1, first)
+            }.logFailure("auth.unreadable").getOrNull()
             if (launches != null) {
                 unreadableLaunches = launches
                 runCatching { counter.save(launches) }.logFailure("auth.unreadable")
-                if (launches >= MAX_UNREADABLE_LAUNCHES) {
-                    Diagnostics.note("auth.unreadable", "session unreadable for $launches launches, signed out")
+                if (launches.count >= MAX_UNREADABLE_LAUNCHES && now - launches.firstAtMillis >= MIN_UNREADABLE_SPAN_MS) {
+                    Diagnostics.note("auth.unreadable", "session unreadable for ${launches.count} launches, signed out")
                     clearLocked()
                     return
                 }
@@ -257,10 +273,10 @@ class AuthRepository(
     /** Сесията е прочетена или сменена — броенето на нечетимите пускания започва отначало. */
     private suspend fun resetUnreadableLaunches() {
         val counter = unreadableCounter ?: return
-        if (unreadableLaunches == 0) return
+        if (unreadableLaunches?.count == 0) return
         runCatching {
-            if (unreadableLaunches != null || counter.load() != 0) counter.save(0)
-            unreadableLaunches = 0
+            if (unreadableLaunches != null || counter.load().count != 0) counter.save(UnreadableLaunches())
+            unreadableLaunches = UnreadableLaunches()
         }.logFailure("auth.unreadable")
     }
 
@@ -298,7 +314,11 @@ class AuthRepository(
             is Outcome.Success -> {
                 throttle.onSuccess()
                 throttle.persist()
-                storeLock.withLock {
+                val replaced = storeLock.withLock {
+                    // Сесията, която се презаписва; временно нечетимата — още един опит точно преди
+                    // записа: прочетена, тя се анулира на сървъра (иначе остава валидна до изтичане).
+                    val old = runCatching { store.load() }.logFailure("auth.login").getOrNull()
+                    val wasUnavailable = _state.value == AuthState.Unavailable
                     // Нов вход = възможно друг читател: всичко кеширано досега се изтрива ПРЕДИ
                     // записа на новата сесия (след това ключовете вече са на новия читател).
                     readerCache.clear()
@@ -306,9 +326,13 @@ class AuthRepository(
                     lastScope = r.value.readerId to readerScopeOf(r.value.readerId)
                     store.save(r.value, persist = remember)
                     resetUnreadableLaunches()
-                    loginReplacedUnreadable = _state.value == AuthState.Unavailable
+                    // Чия е била нечетимата сесия, се знае само ако е прочетена сега.
+                    loginReplacedUnreadable = wasUnavailable && old?.readerId != r.value.readerId
                     _state.value = AuthState.SignedIn(r.value.readerId)
+                    old?.takeIf { it.accessToken != r.value.accessToken }
                 }
+                // Извън заключването (мрежата може да е бавна); неуспехът не спира входа.
+                replaced?.let { revoke(it) }
                 Outcome.Success(Unit)
             }
             is Outcome.Failure -> {
@@ -333,7 +357,7 @@ class AuthRepository(
             // сесия не е изход ([AuthState.Unavailable]).
             storeLock.withLock {
                 if (store.load() == null && _state.value != AuthState.SignedOut) {
-                    if (store.unreadableNow()) onUnreadableLocked() else clearLocked()
+                    if (store.unreadableNow()) onUnreadableLocked(countLaunch = false) else clearLocked()
                 }
             }
             return Outcome.Failure(AppError.Unauthorized)
@@ -385,9 +409,27 @@ class AuthRepository(
             }
         }
 
+    /**
+     * Изход с анулиране на сесията на сървъра. Временно нечетима сесия ([AuthState.Unavailable])
+     * не може да се анулира — заявката иска токена ѝ, а той е в нечетимия файл; файлът се изтрива,
+     * а refresh токенът изтича сам (срокът е на сървъра).
+     */
     suspend fun logout() {
-        store.load()?.let { runCatching { service.logout(it) }.logFailure("auth.logout") }
+        store.load()?.let { revoke(it) }
         signOutLocally()
+    }
+
+    /**
+     * Анулира [session] на сървъра (`/v1/auth/logout` с Bearer токена ѝ). Изтекъл токен не се
+     * приема — тогава първо подновяване (без запис), за да се анулира и новият refresh токен.
+     * Грешките — само в дневника.
+     */
+    private suspend fun revoke(session: AuthSession) {
+        runCatching {
+            val live = if (session.expiresAtMillis > clock.now().toEpochMilli()) session
+            else (service.refresh(session) as? Outcome.Success)?.value ?: return
+            service.logout(live)
+        }.logFailure("auth.logout")
     }
 
     /**
@@ -444,8 +486,10 @@ class AuthRepository(
     suspend fun requestPasswordReset(cardNumber: String): Outcome<Unit> = service.requestPasswordReset(cardNumber)
 
     companion object {
-        /** Поредни пускания с временно нечетима сесия, след които тя се изтрива (изход). */
+        /** Поредни пускания на интерфейса с временно нечетима сесия, след които тя се изтрива (изход)… */
         const val MAX_UNREADABLE_LAUNCHES = 5
+        /** …но не по-рано от 3 дни след първото от тях — кратък проблем с Keystore не е изход. */
+        const val MIN_UNREADABLE_SPAN_MS = 3 * 24 * 60 * 60 * 1000L
         /** Паузите между фоновите опити при [AuthState.Unavailable]: 5 s, 30 s, 2 мин, 10 мин. */
         val RESTORE_RETRY_DELAYS_MS = listOf(5_000L, 30_000L, 120_000L, 600_000L)
     }

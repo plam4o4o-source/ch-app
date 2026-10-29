@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 import org.chyavorec.app.data.security.BytesCipher
 import org.chyavorec.app.data.security.isUnreadableForever
 import org.chyavorec.core.logFailure
+import org.chyavorec.data.repository.UnreadableLaunches
 import org.chyavorec.data.repository.UnreadableSessionCounter
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.SelfDeclaredCard
@@ -81,21 +82,26 @@ class SecureSessionStore(
 }
 
 /**
- * Поредните пускания с временно нечетима сесия — малък файл до нея (само число, без шифроване:
- * трябва да се чете и когато Keystore-ът не отговаря). Нула — без файл.
+ * Поредните пускания с временно нечетима сесия — малък файл до нея: броят и моментът на първото
+ * (два реда с числа, без шифроване и без нищо от сесията — трябва да се чете и когато Keystore-ът
+ * не отговаря). Нула — без файл; стар запис само с брой — моментът е неизвестен (0).
  */
 class FileUnreadableSessionCounter(private val file: File) : UnreadableSessionCounter {
-    override suspend fun load(): Int = withContext(Dispatchers.IO) {
-        if (!file.exists()) 0 else file.readText().trim().toIntOrNull()?.coerceAtLeast(0) ?: 0
+    override suspend fun load(): UnreadableLaunches = withContext(Dispatchers.IO) {
+        if (!file.exists()) return@withContext UnreadableLaunches()
+        val lines = runCatching { file.readLines() }.getOrDefault(emptyList()).map { it.trim() }
+        val count = lines.getOrNull(0)?.toIntOrNull()?.coerceAtLeast(0) ?: 0
+        if (count == 0) UnreadableLaunches()
+        else UnreadableLaunches(count, lines.getOrNull(1)?.toLongOrNull()?.coerceAtLeast(0) ?: 0)
     }
 
-    override suspend fun save(count: Int) {
+    override suspend fun save(launches: UnreadableLaunches) {
         withContext(Dispatchers.IO) {
-            if (count <= 0) {
+            if (launches.count <= 0) {
                 file.delete()
             } else {
                 file.parentFile?.mkdirs()
-                file.writeText(count.toString())
+                file.writeText("${launches.count}\n${launches.firstAtMillis}")
             }
         }
     }

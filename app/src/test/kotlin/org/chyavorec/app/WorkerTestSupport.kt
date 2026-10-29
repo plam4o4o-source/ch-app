@@ -12,9 +12,11 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import okhttp3.tls.HandshakeCertificates
 import okhttp3.tls.HeldCertificate
+import org.chyavorec.app.data.security.BytesCipher
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.core.AppClock
+import org.chyavorec.core.Outcome
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.util.concurrent.ConcurrentHashMap
@@ -28,6 +30,16 @@ import java.util.concurrent.TimeUnit
 class WorkerTestApp : Application(), AppContainerOwner {
     lateinit var container: AppContainer
     override val appContainer: AppContainer get() = container
+}
+
+/** Keystore „не отговаря“ (временна грешка), докато [broken]; иначе — тестовото шифроване. */
+class FlakyKeystoreCipher(@Volatile var broken: Boolean = true) : BytesCipher {
+    private val xor = XorTestCipher()
+    override fun encrypt(plain: ByteArray) = xor.encrypt(plain)
+    override fun decrypt(data: ByteArray): ByteArray {
+        if (broken) throw java.security.ProviderException("keystore busy")
+        return xor.decrypt(data)
+    }
 }
 
 /**
@@ -71,12 +83,25 @@ class TestBackend {
         routes[path] = { MockResponse().setResponseCode(code).setBody(body) }
     }
 
-    fun container(app: Application, clock: AppClock): AppContainer {
+    fun container(app: Application, clock: AppClock, cipher: BytesCipher = XorTestCipher()): AppContainer {
         val config = AppConfig(
             siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = base + API,
             environment = "test", useMockData = false, versionName = "test", versionCode = 1,
         )
-        return AppContainer(app, config, clock, XorTestCipher(), client)
+        return AppContainer(app, config, clock, cipher, client)
+    }
+
+    /**
+     * Нов процес със запазена („запомни ме“) сесия, която Keystore-ът временно не чете
+     * ([FlakyKeystoreCipher.broken]). Входът е с верния ПИН — [reader] трябва да е извикан.
+     */
+    suspend fun unreadableSession(app: WorkerTestApp, clock: AppClock): FlakyKeystoreCipher {
+        val cipher = FlakyKeystoreCipher(broken = false)
+        app.container = container(app, clock, cipher)
+        check(app.container.authRepository.login("0042", "1234".toCharArray(), remember = true) is Outcome.Success)
+        cipher.broken = true
+        app.container = container(app, clock, cipher)
+        return cipher
     }
 
     /** Мост с вход, заемания и лични съобщения; верният ПИН е „1234“. */

@@ -343,6 +343,7 @@
     <string name="notif_renew_sending">Sending the renewal request…</string>
     <string name="notif_renew_sent">Renewal request sent</string>
     <string name="notif_renew_sent_text">“%1$s”: the library will extend the due date at its program’s next update.</string>
+    <string name="notif_renew_session_unavailable">Your account can’t be opened on this device right now. Please try again later.</string>
     <string name="notif_update_available">New version %1$s available</string>
     <string name="notif_update_ready">Version %1$s is ready to install</string>
     <string name="notif_update_text">Tap to update the app.</string>

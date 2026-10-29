@@ -1,6 +1,7 @@
 package org.chyavorec.app.notifications
 
 import android.content.Context
+import androidx.work.BackoffPolicy
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -54,6 +55,8 @@ class LoanReminderScheduler(private val context: Context, private val clock: App
                 val request = OneTimeWorkRequestBuilder<LoanReminderWorker>()
                     // Без изискване за мрежа — без интернет работникът чете кеша.
                     .setInitialDelay((at.toEpochMilli() - now.toEpochMilli()).coerceAtLeast(0), TimeUnit.MILLISECONDS)
+                    // Повторен опит (временно нечетима сесия) — след 5 мин, после двойно по-дълго.
+                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 5, TimeUnit.MINUTES)
                     .setInputData(workDataOf(KEY_LOAN to loan.loanId, KEY_DUE to dueOn.toString(), KEY_KIND to kind.name))
                     .addTag(TAG)
                     .build()
@@ -136,7 +139,13 @@ class LoanReminderWorker(context: Context, params: WorkerParameters) : Coroutine
         val now = c.clock.now()
         if (!LoanReminderPlan.deliverable(kind, dueOn, now)) return Result.success()
         c.authRepository.restore()
-        if (c.authRepository.state.value !is AuthState.SignedIn) return Result.success()
+        when (c.authRepository.state.value) {
+            is AuthState.SignedIn -> Unit
+            // Сесията временно не се чете (Keystore) — не е изход: нов опит по-късно (докато е в своя
+            // ден). „Успех“ би изгубил напомнянето — планът го води за насрочено и не го пренасрочва.
+            AuthState.Unavailable -> return if (runAttemptCount < MAX_UNAVAILABLE_RETRIES) Result.retry() else Result.success()
+            else -> return Result.success()
+        }
         // Книгата още е заета, срокът е същият, няма чакащо удължаване — по възможно най-пресните данни.
         val loan = currentLoans(c)?.firstOrNull { it.loanId == loanId } ?: return Result.success()
         if (LoanDueCalculator.parse(loan.dueOn) != dueOn || loan.renewPending) return Result.success()
@@ -186,9 +195,11 @@ class LoanReminderWorker(context: Context, params: WorkerParameters) : Coroutine
         return cached?.data
     }
 
-    private companion object {
+    internal companion object {
         val DAY_MONTH: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM")
         const val FRESH_ENOUGH_MS = 30 * 60 * 1000L
         const val FETCH_TIMEOUT_MS = 15_000L
+        /** Опитите при временно нечетима сесия: през 5, 10, 20, 40, 80 мин ([LoanReminderScheduler.schedule]). */
+        const val MAX_UNAVAILABLE_RETRIES = 5
     }
 }

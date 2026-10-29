@@ -22,6 +22,7 @@ import org.robolectric.annotation.Config
 import java.io.File
 import java.time.Instant
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
@@ -61,8 +62,13 @@ class UnreadableSessionWatchTest {
         c.settings.setLoanReminderPlan(setOf("L1"))
         c.watchReader()
 
+        val counterFile = File(context.noBackupFilesDir, "secure/session.unreadable")
         c.authRepository.restore()
         assertEquals(AuthState.Unavailable, c.authRepository.state.value)
+        assertFalse(counterFile.exists(), "фоновото четене (задача, уиджет) не се брои към изхода")
+        // Стартът на интерфейса се брои — с момента на първото нечетимо пускане.
+        c.authRepository.restore(countLaunch = true)
+        assertEquals(listOf("1", clock.now().toEpochMilli().toString()), counterFile.readLines())
         delay(500) // наблюдателите са видели състоянието
         assertTrue(c.settings.readerTraces())
         assertEquals(listOf("Под игото"), c.settings.recentSearches.first())
@@ -74,6 +80,7 @@ class UnreadableSessionWatchTest {
         cipher.broken = false
         c.authRepository.restore()
         assertEquals(AuthState.SignedIn("R1"), c.authRepository.state.value)
+        assertFalse(counterFile.exists(), "прочетената сесия нулира броенето")
         delay(300)
         assertEquals(setOf("L1"), c.settings.notifiedLoans())
         assertEquals(listOf("Под игото"), c.settings.recentSearches.first())

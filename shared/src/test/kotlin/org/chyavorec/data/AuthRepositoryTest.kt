@@ -16,6 +16,7 @@ import org.chyavorec.data.repository.AuthRepository
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.data.repository.LibraryRepository
 import org.chyavorec.data.repository.SelfCardRepository
+import org.chyavorec.data.repository.UnreadableLaunches
 import org.chyavorec.data.repository.UnreadableSessionCounter
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.BookStatus
@@ -61,7 +62,9 @@ class AuthRepositoryTest {
         }
         override suspend fun refresh(session: AuthSession) =
             refreshResult ?: Outcome.Success(session.copy(accessToken = "a2", expiresAtMillis = clock.now().toEpochMilli() + 3_600_000))
-        override suspend fun logout(session: AuthSession) = Outcome.Success(Unit)
+        /** Анулираните на сървъра сесии (`/v1/auth/logout`). */
+        val revoked = mutableListOf<AuthSession>()
+        override suspend fun logout(session: AuthSession): Outcome<Unit> { revoked += session; return Outcome.Success(Unit) }
         override suspend fun requestPasswordReset(cardNumber: String) = Outcome.Success(Unit)
     }
 
@@ -178,10 +181,10 @@ class AuthRepositoryTest {
         override suspend fun unreadableNow() = unreadable && s != null
     }
 
-    private class MemCounter(var count: Int = 0) : UnreadableSessionCounter {
+    private class MemCounter(var count: Int = 0, var firstAt: Long = 0) : UnreadableSessionCounter {
         var saves = 0
-        override suspend fun load() = count
-        override suspend fun save(count: Int) { this.count = count; saves++ }
+        override suspend fun load() = UnreadableLaunches(count, firstAt)
+        override suspend fun save(launches: UnreadableLaunches) { count = launches.count; firstAt = launches.firstAtMillis; saves++ }
     }
 
     @Test fun retryRecoversUnavailableSessionToSignedIn() = runTest {
@@ -215,58 +218,158 @@ class AuthRepositoryTest {
         val store = FlakyStore(); val counter = MemCounter()
         val cache = InMemoryPayloadCache()
         cache.write("k", "v")
+        val start = clock.now().toEpochMilli()
         repeat(AuthRepository.MAX_UNREADABLE_LAUNCHES - 1) { launchNo ->
             val repo = AuthRepository(FakeAuth(), store, clock, cache, unreadableCounter = counter)
-            repo.restore()
-            repo.restore() // повторен опит в същия процес не е ново пускане
+            repo.restore(countLaunch = true)
+            repo.restore(countLaunch = true) // повторен опит в същия процес не е ново пускане
             assertIs<Outcome.Failure>(repo.validSession())
             assertEquals(AuthState.Unavailable, repo.state.value)
             assertEquals(launchNo + 1, counter.count)
+            assertEquals(start, counter.firstAt, "моментът на първото нечетимо пускане")
+            clock.advanceSeconds(DAY_SECONDS)
         }
         assertEquals(0, store.cleared)
         assertEquals("v", cache.read("k")?.text)
-        // Поредното нечетимо пускане — сесията е нечетима завинаги: изтрива се, изход с изчистване.
+        // Поредното нечетимо пускане (4 дни след първото) — сесията е нечетима завинаги: изтрива се, изход с изчистване.
         val last = AuthRepository(FakeAuth(), store, clock, cache, unreadableCounter = counter)
-        last.restore()
+        last.restore(countLaunch = true)
         assertEquals(AuthState.SignedOut, last.state.value)
         assertEquals(1, store.cleared)
         assertNull(cache.read("k"))
         assertEquals(0, counter.count)
     }
 
+    /** Пет пускания за по-малко от 3 дни (кратък проблем с Keystore) не са изход — чака се срокът. */
+    @Test fun unreadableSessionNeedsMinimumSpanBeforeDrop() = runTest {
+        val store = FlakyStore(); val counter = MemCounter()
+        repeat(AuthRepository.MAX_UNREADABLE_LAUNCHES + 2) {
+            val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter)
+            repo.restore(countLaunch = true)
+            assertEquals(AuthState.Unavailable, repo.state.value)
+            clock.advanceSeconds(3600)
+        }
+        assertEquals(0, store.cleared)
+        assertEquals(AuthRepository.MAX_UNREADABLE_LAUNCHES + 2, counter.count)
+        // Срокът от първото пускане е изтекъл — следващото нечетимо пускане е изход.
+        clock.advanceSeconds(3 * DAY_SECONDS)
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter)
+        repo.restore(countLaunch = true)
+        assertEquals(AuthState.SignedOut, repo.state.value)
+        assertEquals(1, store.cleared)
+    }
+
+    /** Стар запис само с брой (без момент) и върнат назад часовник — срокът започва отначало, а не „изтекъл“. */
+    @Test fun unknownOrFutureFirstFailureRestartsTheSpan() = runTest {
+        val store = FlakyStore()
+        for (firstAt in listOf(0L, clock.now().toEpochMilli() + 30 * DAY_SECONDS * 1000)) {
+            val counter = MemCounter(count = AuthRepository.MAX_UNREADABLE_LAUNCHES, firstAt = firstAt)
+            val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter)
+            repo.restore(countLaunch = true)
+            assertEquals(AuthState.Unavailable, repo.state.value)
+            assertEquals(clock.now().toEpochMilli(), counter.firstAt)
+        }
+        assertEquals(0, store.cleared)
+    }
+
+    /** Фоновите задачи, уиджетът и повторните опити не броят: седмица фонови събуждания не трият сесията. */
+    @Test fun backgroundRestoresDoNotCountTowardsDrop() = runTest {
+        val store = FlakyStore(); val counter = MemCounter()
+        repeat(4 * 7) { // на 6 часа, цяла седмица
+            val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter)
+            repo.restore()
+            assertIs<Outcome.Failure>(repo.validSession())
+            assertEquals(AuthState.Unavailable, repo.state.value)
+            clock.advanceSeconds(6 * 3600)
+        }
+        assertEquals(0, counter.count)
+        assertEquals(0, counter.saves)
+        assertEquals(0, store.cleared)
+        // Фоново събуждане преди отварянето на приложението в същия процес — стартът на интерфейса пак се брои.
+        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter)
+        repo.restore()
+        repo.restore(countLaunch = true)
+        assertEquals(1, counter.count)
+    }
+
     @Test fun readableLaunchResetsUnreadableCount() = runTest {
-        val store = FlakyStore(); val counter = MemCounter(count = AuthRepository.MAX_UNREADABLE_LAUNCHES - 2)
+        val store = FlakyStore(); val counter = MemCounter(count = AuthRepository.MAX_UNREADABLE_LAUNCHES - 2, firstAt = 1)
         store.unreadable = false
         AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter).restore()
         assertEquals(0, counter.count)
+        assertEquals(0, counter.firstAt)
         // Пак нечетима — броенето е отначало, без изход.
         store.unreadable = true
         val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter)
-        repo.restore()
+        repo.restore(countLaunch = true)
         assertEquals(AuthState.Unavailable, repo.state.value)
         assertEquals(1, counter.count)
         // Без нечетими пускания броячът не се записва при всяко пускане.
         val saves = counter.saves
         store.unreadable = false
-        repeat(3) { AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter).restore() }
+        repeat(3) { AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache(), unreadableCounter = counter).restore(countLaunch = true) }
         assertEquals(0, counter.count)
         assertEquals(saves + 1, counter.saves)
     }
 
     @Test fun loginOverUnavailableSessionIsMarked() = runTest {
         val store = FlakyStore()
-        val repo = AuthRepository(FakeAuth(), store, clock, InMemoryPayloadCache())
+        val auth = FakeAuth()
+        val repo = AuthRepository(auth, store, clock, InMemoryPayloadCache())
         repo.restore()
         assertEquals(AuthState.Unavailable, repo.state.value)
         assertFalse(repo.loginReplacedUnreadable)
         repo.login("123", "secret".toCharArray(), remember = true)
         assertEquals(AuthState.SignedIn("R1"), repo.state.value)
         assertTrue(repo.loginReplacedUnreadable, "предишната (нечетима) сесия може да е на друг читател")
+        assertTrue(auth.revoked.isEmpty(), "нечетимата сесия не може да се анулира")
         // Обикновен вход — без отметка.
         val plain = AuthRepository(FakeAuth(), MemStore(), clock, InMemoryPayloadCache())
         plain.restore()
         plain.login("123", "secret".toCharArray(), remember = true)
         assertFalse(plain.loginReplacedUnreadable)
+    }
+
+    /** Нечетимата сесия се чете още веднъж точно преди презаписа; прочетена — анулира се на сървъра. */
+    @Test fun loginOverUnavailableSessionRevokesItWhenReadableAgain() = runTest {
+        val store = FlakyStore()
+        val old = AuthSession("old-a", "old-r", clock.now().toEpochMilli() + 3_600_000, "R0")
+        store.s = old
+        val auth = FakeAuth()
+        val repo = AuthRepository(auth, store, clock, InMemoryPayloadCache())
+        repo.restore()
+        assertEquals(AuthState.Unavailable, repo.state.value)
+        store.unreadable = false // Keystore-ът отговаря точно при входа
+        assertIs<Outcome.Success<Unit>>(repo.login("123", "secret".toCharArray(), remember = true))
+        assertEquals(listOf(old), auth.revoked)
+        assertEquals("a", store.s?.accessToken, "новата сесия е записана")
+        assertTrue(repo.loginReplacedUnreadable, "старата сесия е на друг читател")
+
+        // Същият читател — следите му остават.
+        val same = FlakyStore().apply { s = old.copy(readerId = "R1") }
+        val sameRepo = AuthRepository(FakeAuth(), same, clock, InMemoryPayloadCache())
+        sameRepo.restore()
+        same.unreadable = false
+        sameRepo.login("123", "secret".toCharArray(), remember = true)
+        assertFalse(sameRepo.loginReplacedUnreadable)
+    }
+
+    /** Изход с изтекъл токен: първо подновяване, после анулиране — иначе refresh токенът остава валиден. */
+    @Test fun logoutWithExpiredTokenRefreshesThenRevokes() = runTest {
+        val store = MemStore()
+        store.s = AuthSession("a", "r", clock.now().toEpochMilli() - 1_000, "R1")
+        val auth = FakeAuth()
+        val repo = AuthRepository(auth, store, clock, InMemoryPayloadCache())
+        repo.logout()
+        assertEquals(listOf("a2"), auth.revoked.map { it.accessToken })
+        assertNull(store.s)
+        assertEquals(AuthState.SignedOut, repo.state.value)
+        // Отказано подновяване — само локален изход.
+        store.s = AuthSession("a", "r", clock.now().toEpochMilli() - 1_000, "R1")
+        val denied = FakeAuth().apply { refreshResult = Outcome.Failure(AppError.Unauthorized) }
+        AuthRepository(denied, store, clock, InMemoryPayloadCache()).logout()
+        assertTrue(denied.revoked.isEmpty())
+        assertNull(store.s)
     }
 
     @Test fun bruteForceIsThrottled() = runTest {
@@ -471,5 +574,9 @@ class AuthRepositoryTest {
         assertFalse(repo.save("Б-12", "Иван"))   // кирилица не е валидна за Code 39
         assertTrue(repo.save(" r-0042 ", "Иван"))
         assertEquals("R-0042", repo.card.value?.cardNumber)
+    }
+
+    private companion object {
+        const val DAY_SECONDS = 24 * 3600L
     }
 }

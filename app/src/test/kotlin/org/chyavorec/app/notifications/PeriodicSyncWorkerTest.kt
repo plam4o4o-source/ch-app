@@ -112,6 +112,20 @@ class PeriodicSyncWorkerTest {
         assertEquals(clock.now().toEpochMilli(), app.container.settings.lastSyncStep("loans"))
     }
 
+    /** Временно нечетима сесия не е изход: без заявки, но стъпката остава дължима за следващото пускане. */
+    @Test fun unreadableSessionKeepsLoanStepDue() = runBlocking<Unit> {
+        backend.loans(overdueLoan)
+        backend.unreadableSession(app, clock)
+        try {
+            assertIs<ListenableWorker.Result.Success>(run())
+            assertEquals(0, backend.count("$API/v1/me/loans"))
+            assertTrue(overdue().isEmpty())
+            assertEquals(0L, app.container.settings.lastSyncStep("loans"))
+        } finally {
+            app.container.authRepository.signOutLocally()
+        }
+    }
+
     @Test fun loanNotificationsOffStillSkipNetworkWithoutWidget() = runBlocking<Unit> {
         app.container.settings.setNotifyLoans(false)
         try {

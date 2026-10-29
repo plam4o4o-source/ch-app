@@ -343,6 +343,7 @@
     <string name="notif_renew_sending">Изпраща се заявка за удължаване…</string>
     <string name="notif_renew_sent">Заявката за удължаване е изпратена</string>
     <string name="notif_renew_sent_text">„%1$s“: библиотеката ще удължи срока при следващото обновяване на програмата си.</string>
+    <string name="notif_renew_session_unavailable">Профилът ти временно не се отваря на това устройство. Опитай пак по-късно.</string>
     <string name="notif_update_available">Налична е нова версия %1$s</string>
     <string name="notif_update_ready">Версия %1$s е готова за инсталиране</string>
     <string name="notif_update_text">Докосни, за да обновиш приложението.</string>

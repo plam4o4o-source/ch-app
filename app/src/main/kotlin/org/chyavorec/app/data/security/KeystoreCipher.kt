@@ -84,7 +84,8 @@ class KeystoreCipher(private val alias: String = "chyavorec_secure_store_v1") {
  * (IllegalArgumentException, вкл. SerializationException). Всичко друго (напр. временно
  * недостъпна услуга на Keystore, ProviderException, KeyStoreException, а и обвитите от нея
  * InvalidKeyException/IllegalBlockSizeException) може да мине при следващия опит — файлът
- * остава; сесия, нечетима няколко поредни пускания, се изтрива (AuthRepository.MAX_UNREADABLE_LAUNCHES).
+ * остава; сесия, нечетима няколко поредни пускания на интерфейса (и поне 3 дни), се изтрива
+ * (AuthRepository.MAX_UNREADABLE_LAUNCHES, MIN_UNREADABLE_SPAN_MS).
  */
 fun isUnreadableForever(e: Throwable): Boolean =
     e is AEADBadTagException || e is KeyPermanentlyInvalidatedException || e is UnrecoverableKeyException ||

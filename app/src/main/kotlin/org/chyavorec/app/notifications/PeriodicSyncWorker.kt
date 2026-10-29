@@ -144,11 +144,17 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
      * за ПРОСРОЧЕНА книга, веднъж на заемане: само от свежи данни (кешът може да не знае,
      * че книгата е върната), само през деня и не в ден, в който за нея вече е имало известие.
      * „Наближава срок“ вече идва от напомнянията (2 дни преди и в деня на срока).
-     * @return true, ако няма какво да се тегли (без вход) или данните са свежи и всичко е показано.
+     * @return true, ако няма какво да се тегли (без вход) или данните са свежи и всичко е показано;
+     *   false и при временно нечетима сесия.
      */
     private suspend fun syncLoans(c: AppContainer, notify: Boolean): Boolean {
         c.authRepository.restore()
-        if (c.authRepository.state.value !is AuthState.SignedIn) return true
+        when (c.authRepository.state.value) {
+            is AuthState.SignedIn -> Unit
+            // Сесията временно не се чете (Keystore) — не е изход: стъпката остава дължима (следващото пускане).
+            AuthState.Unavailable -> return false
+            else -> return true
+        }
         // Без force: ако стъпката „съобщения“ преди секунди е минала през `/v1/me/all`, заеманията
         // вече са свежи в кеша (до 3 мин.) — без втора заявка. Иначе — от мрежата, както досега.
         val synced = (c.libraryRepository.loans(force = false) as? Outcome.Success)?.value ?: return false

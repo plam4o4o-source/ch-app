@@ -172,9 +172,19 @@ class RenewActionWorker(context: Context, params: WorkerParameters) : CoroutineW
 
     private suspend fun renew(c: AppContainer, loanId: String, notificationId: Int, title: String): Result {
         c.authRepository.restore()
-        if (c.authRepository.state.value !is AuthState.SignedIn) {
-            showFailure(notificationId, title, AppError.Unauthorized)
-            return Result.success()
+        when (c.authRepository.state.value) {
+            is AuthState.SignedIn -> Unit
+            // Сесията временно не се чете (Keystore) — не е изход: още няколко опита, после
+            // „опитай пак по-късно“, а не „влез отново“.
+            AuthState.Unavailable -> {
+                if (runAttemptCount < MAX_RETRIES) return Result.retry()
+                showFailure(notificationId, title, applicationContext.getString(R.string.notif_renew_session_unavailable))
+                return Result.success()
+            }
+            else -> {
+                showFailure(notificationId, title, AppError.Unauthorized)
+                return Result.success()
+            }
         }
         when (val r = c.libraryRepository.renew(loanId)) {
             is Outcome.Success -> {
@@ -199,8 +209,9 @@ class RenewActionWorker(context: Context, params: WorkerParameters) : CoroutineW
         return Result.success()
     }
 
-    private fun showFailure(notificationId: Int, title: String, error: AppError) {
-        val reason = errorText(error)
+    private fun showFailure(notificationId: Int, title: String, error: AppError) = showFailure(notificationId, title, errorText(error))
+
+    private fun showFailure(notificationId: Int, title: String, reason: String) {
         result(
             notificationId, applicationContext.getString(R.string.notif_renew_failed),
             if (title.isBlank()) reason else applicationContext.getString(R.string.notif_renew_failed_text, title, reason),

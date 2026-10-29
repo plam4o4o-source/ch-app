@@ -9,6 +9,7 @@ import org.chyavorec.app.data.local.SecureSessionStore
 import org.chyavorec.app.data.security.KeystoreBytesCipher
 import org.chyavorec.app.data.security.KeystoreCipher
 import org.chyavorec.app.data.security.isUnreadableForever
+import org.chyavorec.data.repository.UnreadableLaunches
 import org.chyavorec.domain.model.AuthSession
 import org.chyavorec.domain.model.SelfDeclaredCard
 import org.junit.Rule
@@ -139,13 +140,16 @@ class SecureStorageTest {
     @Test fun unreadableSessionCounterPersists() = runTest {
         val file = File(tmp.root, "secure/session.unreadable")
         val counter = FileUnreadableSessionCounter(file)
-        assertEquals(0, counter.load())
-        counter.save(3)
-        assertEquals(3, FileUnreadableSessionCounter(file).load(), "оцелява при рестарт")
-        counter.save(0)
+        assertEquals(UnreadableLaunches(), counter.load())
+        counter.save(UnreadableLaunches(3, 1_700_000_000_000))
+        assertEquals(UnreadableLaunches(3, 1_700_000_000_000), FileUnreadableSessionCounter(file).load(), "оцелява при рестарт")
+        counter.save(UnreadableLaunches())
         assertFalse(file.exists())
         file.writeText("повреден")
-        assertEquals(0, counter.load())
+        assertEquals(UnreadableLaunches(), counter.load())
+        // Запис от по-стара версия — само броят; моментът е неизвестен.
+        file.writeText("2")
+        assertEquals(UnreadableLaunches(2, 0), counter.load())
     }
 
     @Test fun selfCardStore() = runTest {

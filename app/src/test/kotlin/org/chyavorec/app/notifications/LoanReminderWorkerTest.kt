@@ -56,8 +56,9 @@ class LoanReminderWorkerTest {
         assertIs<Outcome.Success<Unit>>(app.container.authRepository.login("0042", "1234".toCharArray(), remember = false))
     }
 
-    private fun run(kind: LoanReminderKind = LoanReminderKind.BEFORE, due: String = "2026-10-20"): ListenableWorker.Result = runBlocking {
+    private fun run(kind: LoanReminderKind = LoanReminderKind.BEFORE, due: String = "2026-10-20", attempt: Int = 0): ListenableWorker.Result = runBlocking {
         TestListenableWorkerBuilder<LoanReminderWorker>(app)
+            .setRunAttemptCount(attempt)
             .setInputData(
                 workDataOf(
                     LoanReminderScheduler.KEY_LOAN to loanId,
@@ -138,6 +139,31 @@ class LoanReminderWorkerTest {
         assertIs<ListenableWorker.Result.Success>(run())
         assertEquals(0, backend.count("${TestBackend.API}/v1/me/loans"))
         assertTrue(reminders().isEmpty())
+    }
+
+    /**
+     * Временно нечетима сесия (Keystore) не е изход: напомнянето не се „изразходва“ с успех
+     * (планът го води за насрочено и не би го пренасрочил), а се опитва пак — до краен брой опити.
+     */
+    @Test fun unreadableSessionRetriesInsteadOfConsuming() = runBlocking<Unit> {
+        backend.loans(loan())
+        val cipher = backend.unreadableSession(app, clock)
+        try {
+            app.container.settings.setNotifyLoans(true)
+            assertIs<ListenableWorker.Result.Retry>(run())
+            assertTrue(reminders().isEmpty())
+            assertEquals(0, backend.count("${TestBackend.API}/v1/me/loans"))
+            assertTrue(app.container.settings.loanNotificationLog().none { loanId in it }, "нищо не е записано като показано")
+            // Опитите са ограничени — последният приключва без известие.
+            assertIs<ListenableWorker.Result.Success>(run(attempt = LoanReminderWorker.MAX_UNAVAILABLE_RETRIES))
+            // Keystore-ът отговаря при поредния опит — напомнянето идва.
+            cipher.broken = false
+            app.container = backend.container(app, clock, cipher)
+            assertIs<ListenableWorker.Result.Success>(run(attempt = 1))
+            assertEquals(1, reminders().size)
+        } finally {
+            app.container.authRepository.signOutLocally()
+        }
     }
 
     @Test fun lateOrNightDeliveryIsDropped() {

@@ -65,8 +65,9 @@ class RenewActionWorkerTest {
         assertIs<Outcome.Success<Unit>>(app.container.authRepository.login("0042", "1234".toCharArray(), remember = true))
     }
 
-    private fun run(): ListenableWorker.Result = runBlocking {
+    private fun run(attempt: Int = 0): ListenableWorker.Result = runBlocking {
         TestListenableWorkerBuilder<RenewActionWorker>(app)
+            .setRunAttemptCount(attempt)
             .setInputData(
                 workDataOf(
                     RenewActionWorker.KEY_LOAN to loanId,
@@ -119,6 +120,25 @@ class RenewActionWorkerTest {
         run()
         assertEquals(0, backend.count(renewPath))
         assertTrue(app.getString(R.string.error_unauthorized) in shown().text())
+    }
+
+    /** Временно нечетима сесия не е „влез отново“: още опити, после „опитай пак по-късно“ — без заявка. */
+    @Test fun unreadableSessionRetriesThenAsksToTryLater() = runBlocking<Unit> {
+        backend.json(renewPath, loan(pending = true), code = 202)
+        backend.unreadableSession(app, clock)
+        try {
+            assertIs<ListenableWorker.Result.Retry>(run())
+            assertIs<ListenableWorker.Result.Retry>(run(attempt = 2))
+            assertTrue(nm.activeNotifications.none { it.id == notificationId }, "докато има опити — без известие за неуспех")
+            assertIs<ListenableWorker.Result.Success>(run(attempt = 3))
+            assertEquals(0, backend.count(renewPath))
+            val n = shown()
+            assertEquals(app.getString(R.string.notif_renew_failed), n.title())
+            assertTrue(app.getString(R.string.notif_renew_session_unavailable) in n.text(), n.text())
+            assertTrue(app.getString(R.string.error_unauthorized) !in n.text(), n.text())
+        } finally {
+            app.container.authRepository.signOutLocally()
+        }
     }
 
     @Test fun receiverShowsProgressAndEnqueuesExpeditedWork() {

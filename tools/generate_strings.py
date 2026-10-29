@@ -652,6 +652,7 @@ S = {
 "notif_renew_sent_text": ("„%1$s“: библиотеката ще удължи срока при следващото обновяване на програмата си.", "“%1$s”: the library will extend the due date at its program’s next update."),
 "notif_renew_failed": ("Удължаването не е заявено", "Renewal not requested"),
 "notif_renew_failed_text": ("„%1$s“: %2$s", "“%1$s”: %2$s"),
+"notif_renew_session_unavailable": ("Профилът ти временно не се отваря на това устройство. Опитай пак по-късно.", "Your account can’t be opened on this device right now. Please try again later."),
 "notif_renew_done_title": ("Срокът е удължен", "Due date extended"),
 "notif_renew_done": ("Срокът на „%1$s“ е удължен до %2$s", "“%1$s” is now due back on %2$s"),
 "notif_renew_rejected_title": ("Удължаването е отказано", "Renewal declined"),
