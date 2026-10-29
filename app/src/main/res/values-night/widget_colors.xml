@@ -11,6 +11,10 @@
     <color name="widget_button_text">#FF1A1208</color>
     <color name="widget_tonal_bg">#FF4A3A12</color>
     <color name="widget_tonal_text">#FFF5F0E8</color>
+    <color name="widget_overdue_bg">#FF5C1A1F</color>
+    <color name="widget_overdue_text">#FFFF9C9C</color>
     <color name="widget_soon_bg">#FF4A3A12</color>
     <color name="widget_soon_text">#FFF2C06B</color>
+    <color name="widget_ok_bg">#FF26432F</color>
+    <color name="widget_ok_text">#FF8FD1A8</color>
 </resources>

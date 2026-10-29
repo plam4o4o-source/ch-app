@@ -44,7 +44,7 @@ import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.notifications.ReminderScheduler
 import org.chyavorec.app.notifications.RenewOutcomeNotifier
 import org.chyavorec.app.update.AppUpdater
-import org.chyavorec.app.widget.ChitalishteWidget
+import org.chyavorec.app.widget.WidgetUpdater
 import org.chyavorec.app.messages.MessageCenter
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.Diagnostics
@@ -345,7 +345,7 @@ class AppContainer(
                     if ((before is AuthState.SignedIn && before.readerId != s.readerId) || replaced) clearReaderTraces()
                     // Само при истински вход (SignedOut → SignedIn) или прочетена най-после сесия.
                     // Възстановената при студен старт (Unknown → SignedIn) не променя уиджета.
-                    if (before is AuthState.SignedOut || before is AuthState.Unavailable) ChitalishteWidget.refresh(context)
+                    if (before is AuthState.SignedOut || before is AuthState.Unavailable) WidgetUpdater.refresh(context)
                     wasSignedIn = true
                     runCatching { settings.setReaderTraces(true) }
                 } else if (s is AuthState.SignedOut) {
@@ -378,7 +378,7 @@ class AppContainer(
         // запис), а при принудителен изход в него е и причината — изтриването би я загубило.
         runCatching { settings.setReaderTraces(false) }
         // Уиджетът не бива да показва заглавия на книги след изход.
-        runCatching { ChitalishteWidget.refresh(context) }
+        runCatching { WidgetUpdater.refresh(context) }
     }
 
     /**
@@ -488,7 +488,7 @@ class AppContainer(
      * успешно зареждане на заеманията. Грешките се пренебрегват.
      */
     fun refreshWidget() {
-        appScope.launch { runCatching { ChitalishteWidget.refresh(context) } }
+        appScope.launch { runCatching { WidgetUpdater.refresh(context) } }
     }
 
     /**

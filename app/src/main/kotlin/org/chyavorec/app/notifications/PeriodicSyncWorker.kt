@@ -17,7 +17,7 @@ import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.messages.MessageWorker
 import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.update.UpdateInstallReceiver
-import org.chyavorec.app.widget.ChitalishteWidget
+import org.chyavorec.app.widget.WidgetUpdater
 import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.AuthState
@@ -58,7 +58,7 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         val settings = c.settings.current()
         val now = c.clock.now().toEpochMilli()
         val canNotify = Notifier.canNotify(applicationContext)
-        val widget = ChitalishteWidget.hasInstances(applicationContext)
+        val widget = WidgetUpdater.hasInstances(applicationContext)
 
         // Съобщения — всеки път (общите от сайта — и в MessagePollWorker, адаптивно 1–6 ч.; личните само
         // при влязъл читател). Без force: току-що свалените (до 10 мин.) съобщения от сайта не се теглят отново.
@@ -96,7 +96,7 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         }
 
         // Опресняване и при смяна на деня (следващото събитие), но само ако има уиджет.
-        if (widget) ChitalishteWidget.refresh(applicationContext)
+        if (widget) WidgetUpdater.refresh(applicationContext)
         c.settings.setLastBackgroundSync(now)
         return Result.success()
     }

@@ -312,8 +312,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.browser)
-    // Уиджет за началния екран.
-    implementation(libs.androidx.glance.appwidget)
     // Цветове от корицата на книгата (Palette) за екрана с детайлите.
     implementation(libs.androidx.palette.ktx)
     // Инсталира Baseline профила при инсталиране от извън Google Play (по-бърз старт).

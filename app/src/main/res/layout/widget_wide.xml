@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Широкият уиджет (4×2 и по-висок): бутони „Сканирай“/„Каталог“, до 3 срока (брой книги
+  и дата, без заглавия) и следващото събитие. Само изгледи, разрешени в RemoteViews.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    style="@style/Widget.Chitalishte.Root">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <include
+            layout="@layout/widget_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/widget_scan"
+            style="@style/Widget.Chitalishte.Text.Button"
+            android:text="@string/shortcut_scan" />
+
+        <TextView
+            android:id="@+id/widget_catalog"
+            style="@style/Widget.Chitalishte.Text.Button.Tonal"
+            android:layout_marginStart="6dp"
+            android:text="@string/shortcut_catalog" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <!-- Отстъпът между двете колони (12 dp) е поравно: 6 dp тук и 6 dp в колоната на събитието. -->
+        <LinearLayout
+            android:id="@+id/widget_loans"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingEnd="6dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/widget_loans_total"
+                style="@style/Widget.Chitalishte.Text.Label" />
+
+            <LinearLayout
+                android:id="@+id/widget_group1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/widget_group1_chip"
+                    style="@style/Widget.Chitalishte.Text.Chip" />
+
+                <TextView
+                    android:id="@+id/widget_group1_text"
+                    style="@style/Widget.Chitalishte.Text"
+                    android:layout_marginStart="6dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_group2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/widget_group2_chip"
+                    style="@style/Widget.Chitalishte.Text.Chip" />
+
+                <TextView
+                    android:id="@+id/widget_group2_text"
+                    style="@style/Widget.Chitalishte.Text"
+                    android:layout_marginStart="6dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_group3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/widget_group3_chip"
+                    style="@style/Widget.Chitalishte.Text.Chip" />
+
+                <TextView
+                    android:id="@+id/widget_group3_text"
+                    style="@style/Widget.Chitalishte.Text"
+                    android:layout_marginStart="6dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <include
+            layout="@layout/widget_event"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>

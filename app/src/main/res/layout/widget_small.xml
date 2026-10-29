@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Малкият уиджет (2×2): следващият срок (брой книги и дата, без заглавия), а без
+  заемания — следващото събитие. Само изгледи, разрешени в RemoteViews.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    style="@style/Widget.Chitalishte.Root">
+
+    <include layout="@layout/widget_header" />
+
+    <LinearLayout
+        android:id="@+id/widget_loans"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/Widget.Chitalishte.Text.Label"
+            android:text="@string/widget_next_due" />
+
+        <TextView
+            android:id="@+id/widget_countdown"
+            style="@style/Widget.Chitalishte.Text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/widget_due_line"
+            style="@style/Widget.Chitalishte.Text" />
+
+        <TextView
+            android:id="@+id/widget_loans_total"
+            style="@style/Widget.Chitalishte.Text.Label"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/widget_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp" />
+</LinearLayout>

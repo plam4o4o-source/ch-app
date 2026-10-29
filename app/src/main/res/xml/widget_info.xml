@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Уиджет „Читалище Яворец“ (Glance). updatePeriodMillis = 0: без отделно периодично
-  събуждане от системата (досега на 3 часа). Уиджетът се опреснява от общата фонова
-  задача (PeriodicSyncWorker, на ~6 часа — покрива и смяната на деня), след зареждане
-  на заеманията в приложението и при вход/изход от профила.
+  Уиджет „Читалище Яворец“ (AppWidgetProvider с RemoteViews — ChitalishteWidgetReceiver).
+  updatePeriodMillis = 0: без отделно периодично събуждане от системата (досега на 3 часа).
+  Уиджетът се опреснява от общата фонова задача (PeriodicSyncWorker, на ~6 часа — покрива и
+  смяната на деня), след зареждане на заеманията в приложението, при вход/изход от профила
+  и при старт на приложението.
 
   Размери: малък (2×2) — следващ срок или следващо събитие; широк (4×2, по подразбиране) —
   срокове, събитие и бутони „Сканирай“/„Каталог“. previewLayout — прегледът в избора на
-  уиджети (Android 12+, примерни данни).
+  уиджети (Android 12–14, примерни данни); от Android 15 — генериран (WidgetUpdater.publishPreview).
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/widget_description"
-    android:initialLayout="@layout/glance_default_loading_layout"
+    android:initialLayout="@layout/widget_loading"
     android:previewLayout="@layout/widget_preview"
     android:minWidth="250dp"
     android:minHeight="110dp"
