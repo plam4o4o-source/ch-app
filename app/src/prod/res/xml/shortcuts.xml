@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Статични преки пътища (задържане на иконата). Flavor „prod“: applicationId org.chyavorec.app.
-     Връзката е в data (chyavorec://app/<deep link>) и MainActivity я подава като deep link. -->
+     Връзката е в data (chyavorec://app/<deep link>) и MainActivity я подава като deep link.
+     Динамичните („Искам да прочета“, последната книга) — в AppShortcuts. -->
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
         android:shortcutId="catalog"
         android:enabled="true"
         android:icon="@drawable/ic_shortcut_catalog"
         android:shortcutShortLabel="@string/shortcut_catalog"
-        android:shortcutLongLabel="@string/shortcut_catalog">
+        android:shortcutLongLabel="@string/shortcut_catalog_long">
         <intent
             android:action="org.chyavorec.app.SHORTCUT"
             android:data="chyavorec://app/catalog"
@@ -19,7 +20,7 @@
         android:enabled="true"
         android:icon="@drawable/ic_shortcut_card"
         android:shortcutShortLabel="@string/shortcut_card"
-        android:shortcutLongLabel="@string/shortcut_card">
+        android:shortcutLongLabel="@string/shortcut_card_long">
         <intent
             android:action="org.chyavorec.app.SHORTCUT"
             android:data="chyavorec://app/my/card"
@@ -31,7 +32,7 @@
         android:enabled="true"
         android:icon="@drawable/ic_shortcut_events"
         android:shortcutShortLabel="@string/shortcut_events"
-        android:shortcutLongLabel="@string/shortcut_events">
+        android:shortcutLongLabel="@string/shortcut_events_long">
         <intent
             android:action="org.chyavorec.app.SHORTCUT"
             android:data="chyavorec://app/events"
@@ -43,7 +44,7 @@
         android:enabled="true"
         android:icon="@drawable/ic_shortcut_scan"
         android:shortcutShortLabel="@string/shortcut_scan"
-        android:shortcutLongLabel="@string/shortcut_scan">
+        android:shortcutLongLabel="@string/shortcut_scan_long">
         <intent
             android:action="org.chyavorec.app.SHORTCUT"
             android:data="chyavorec://app/scan"

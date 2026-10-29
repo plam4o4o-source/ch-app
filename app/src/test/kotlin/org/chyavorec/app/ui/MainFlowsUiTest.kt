@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,9 @@ import org.chyavorec.app.TestResources
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.ui.navigation.AppShortcuts
+import org.chyavorec.app.ui.navigation.DeepLinks
+import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.core.FixedClock
 import org.junit.After
@@ -38,6 +42,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import java.time.Instant
+import kotlin.test.assertEquals
 
 /**
  * UI тестове на основните потоци върху истинския Compose UI (Robolectric), с
@@ -134,6 +139,25 @@ class MainFlowsUiTest {
         compose.onAllNodesWithText("Искам да прочета", substring = true).onFirst().assertExists()
         check(compose.onAllNodesWithText("Попитай библиотеката").fetchSemanticsNodes().isEmpty()) { "ask shown while copies are on the shelf" }
         check(compose.onAllNodesWithText("Кажи ми, когато е на рафта").fetchSemanticsNodes().isEmpty()) { "notify shown while copies are on the shelf" }
+    }
+
+    private fun lastBookShortcut() = ShortcutManagerCompat.getDynamicShortcuts(ApplicationProvider.getApplicationContext())
+        .filter { it.id == AppShortcuts.ID_LAST_BOOK }
+
+    /** Книга от публичния каталог (тук — App Link от сайта) става динамичен пряк път. */
+    @Test fun publicBookBecomesTheLastBookShortcut() {
+        launch(deepLink = server.url("/").toString().trimEnd('/') + "/elektronen-katalog#zapis=624")
+        waitForText("Сигнатура")
+        compose.waitUntil(10_000) { lastBookShortcut().isNotEmpty() }
+        assertEquals(DeepLinks.catalogBook(624), LaunchIntents.linkOf(lastBookShortcut().single().intent, "https://chyavorec.org"))
+    }
+
+    /** Отворена като лична (известието за „Искам да прочета“) — книгата не става пряк път. */
+    @Test fun personalBookIsNotAShortcut() {
+        launch(deepLink = DeepLinks.book(624))
+        waitForText("Сигнатура")
+        compose.waitForIdle()
+        check(lastBookShortcut().isEmpty()) { "personal book published as a shortcut" }
     }
 
     @Test fun guestSeesHonestLoginMessageAndCanAddCard() {

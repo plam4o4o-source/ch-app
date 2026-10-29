@@ -588,9 +588,15 @@
     <string name="settings_updates">Обновления</string>
     <string name="share_book_footer">В електронния каталог: %1$s</string>
     <string name="shortcut_card">Читателска карта</string>
+    <string name="shortcut_card_long">Моята читателска карта</string>
     <string name="shortcut_catalog">Каталог</string>
+    <string name="shortcut_catalog_long">Търсене в каталога</string>
     <string name="shortcut_events">Събития</string>
+    <string name="shortcut_events_long">Предстоящи събития</string>
     <string name="shortcut_scan">Сканирай</string>
+    <string name="shortcut_scan_long">Сканирай баркод на книга</string>
+    <string name="shortcut_want_to_read">Искам да прочета</string>
+    <string name="shortcut_want_to_read_long">Списък „Искам да прочета“</string>
     <string name="sort_author">Автор (А–Я)</string>
     <string name="sort_newest">Нови постъпления</string>
     <string name="sort_relevance">Най-подходящи</string>

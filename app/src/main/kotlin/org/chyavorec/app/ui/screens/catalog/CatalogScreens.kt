@@ -518,6 +518,8 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
     val context = LocalContext.current
     val resources = LocalResources.current
     val b = ui.book
+    // Пряк път „последната книга“ — само от публичния каталог и търсенето, не от личен списък.
+    if (!personal) org.chyavorec.app.ui.navigation.PublicBookShortcutEffect(b)
     var askLibrary by rememberSaveable { mutableStateOf(false) }
     // „Искам да прочета“ / „Кажи ми“ — потвърждение и „Отмени“.
     val snackbar = remember { androidx.compose.material3.SnackbarHostState() }

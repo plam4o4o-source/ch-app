@@ -67,13 +67,18 @@ class DeepLinksTest {
         assertEquals(LinkTarget.Screen(Routes.MY, listOf(Routes.LOGIN)), target("login"))
         assertEquals(LinkTarget.Screen(Routes.CATALOG), target("catalog"))
         assertEquals(LinkTarget.Screen(Routes.CATALOG, listOf(Routes.SCAN)), target("scan"))
+        // Динамичните преки пътища: списъкът и книга от публичния каталог (не като лична).
+        assertEquals(LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ)), target(DeepLinks.WANT_TO_READ))
+        assertEquals(LinkTarget.Screen(Routes.CATALOG, listOf(Routes.book(624))), target(DeepLinks.catalogBook(624)))
+        assertEquals(LinkTarget.Screen(Routes.CATALOG), target("catalog/book/x"))
+        assertEquals(LinkTarget.Screen(Routes.CATALOG), target("catalog/book/0"))
         assertEquals(LinkTarget.UpdatePrompt, target("update"))
         assertNull(target("nonsense"))
         assertNull(target(""))
     }
 
     @Test fun everyTargetHasATabUnderneath() {
-        val links = listOf("article/x", "event/x", "message/x", "book/7", "events", "messages", "my/loans", "scan", "login", "news")
+        val links = listOf("article/x", "event/x", "message/x", "book/7", "catalog/book/7", "events", "messages", "my/loans", "my/want-to-read", "scan", "login", "news")
         val tabs = TopTab.entries.map { it.route }.toSet()
         links.forEach { l ->
             val t = target(l) as LinkTarget.Screen

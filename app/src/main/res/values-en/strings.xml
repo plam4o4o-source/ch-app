@@ -588,9 +588,15 @@
     <string name="settings_updates">Updates</string>
     <string name="share_book_footer">In the online catalogue: %1$s</string>
     <string name="shortcut_card">Library card</string>
+    <string name="shortcut_card_long">My library card</string>
     <string name="shortcut_catalog">Catalogue</string>
+    <string name="shortcut_catalog_long">Search the catalogue</string>
     <string name="shortcut_events">Events</string>
+    <string name="shortcut_events_long">Upcoming events</string>
     <string name="shortcut_scan">Scan</string>
+    <string name="shortcut_scan_long">Scan a book barcode</string>
+    <string name="shortcut_want_to_read">Want to read</string>
+    <string name="shortcut_want_to_read_long">My want-to-read list</string>
     <string name="sort_author">Author (A–Z)</string>
     <string name="sort_newest">Recently added</string>
     <string name="sort_relevance">Best match</string>
