@@ -239,7 +239,7 @@ finish() {
 }
 setup() {
   # Корен — за сензорния екран (sendevent) и кеша на приложението (само в частта media).
-  if [ "$PART" = media ]; then timeout 30 adb root 2>&1 | head -2; sleep 4; timeout 60 adb wait-for-device; fi
+  if [ "$PART" = media ] || [ "$PART" = media2 ]; then timeout 30 adb root 2>&1 | head -2; sleep 4; timeout 60 adb wait-for-device; fi
   log "part $PART; APK: $(cat apk-ref.txt 2>/dev/null) size $(stat -c %s app.apk) bytes"
   log "base APK: $(cat apk-base-ref.txt 2>/dev/null); update-source APK: $(cat apk-base-upd-ref.txt 2>/dev/null)"
   log "host: $(nproc) cpu, $(free -m | awk 'NR==2{print $2}') MB RAM"
@@ -295,8 +295,10 @@ fill_want_inv() {
 # Сензорният екран на емулатора (протокол B). Координатите се мащабират към обхвата на устройството.
 mt_init() {
   [ -n "${TOUCH_DEV:-}" ] && return 0
-  a getevent -pl > $OUT/getevent.txt 2>&1
-  TOUCH_DEV=$(awk '/^add device/{d=$4} /ABS_MT_POSITION_X/{print d; exit}' $OUT/getevent.txt)
+  a getevent -pl 2>&1 | tr -d '\r' > $OUT/getevent.txt
+  # Основният дисплей е „virtio_input_multi_touch_1“ (останалите са за допълнителни дисплеи).
+  TOUCH_DEV=$(awk '/^add device/{d=$4} /name:/{ if ($2 == "\"virtio_input_multi_touch_1\"") { print d; exit } }' $OUT/getevent.txt)
+  [ -z "$TOUCH_DEV" ] && TOUCH_DEV=$(awk '/^add device/{d=$4} /ABS_MT_POSITION_X/{x=d} END{print x}' $OUT/getevent.txt)
   MTX=$(grep -m1 'ABS_MT_POSITION_X' $OUT/getevent.txt | grep -oE 'max [0-9]+' | grep -oE '[0-9]+')
   MTY=$(grep -m1 'ABS_MT_POSITION_Y' $OUT/getevent.txt | grep -oE 'max [0-9]+' | grep -oE '[0-9]+')
   MT_PRESS=$(grep -c 'ABS_MT_PRESSURE' $OUT/getevent.txt)
@@ -1065,6 +1067,70 @@ part_update() {
   log "app notifications: $(a dumpsys notification --noredact 2>/dev/null | tr -d '\r' | grep -A3 "pkg=$PKG" | grep -oE 'android.title=[^,]*' | head -4 | tr '\n' ' ')"
 }
 
+
+# ================================================================= MEDIA, кръг 2
+# Снимките в албум: кога се появяват; преглед: 2× и над 2× (верният сензорен екран); корици с
+# адрес от каталога; PDF без приложение за PDF и при неуспешно сваляне; имейлът в „Контакти“.
+part_media2() {
+  local i p cx cy d
+  sec "P. Host-side probe of the site photos (status, time, size of the optimizer variants)"
+  for d in /fotodokumentalna-izlozhba /folklorna-grupa; do
+    timeout 400 python3 $H_/probe_images.py $d 30 384,1600 > $OUT/probe$(echo $d | tr / _).txt 2>&1
+    grep -E '^(PAGE|img tags|PROBE)' $OUT/probe$(echo $d | tr / _).txt | tee -a $SUM
+    grep -E '^#' $OUT/probe$(echo $d | tr / _).txt | head -30 | cut -c1-230 | tee -a $SUM
+  done
+  log "cover URLs from katalog.json (cv): $(for u in 9780743273565 9780316769488 9780679601115 9780192834996 9780393312243; do curl -s -o /dev/null -w "%{http_code}/%{size_download}B " --max-time 20 "https://covers.openlibrary.org/b/isbn/$u-M.jpg"; done)"
+  log "Open Library by ISBN (default=false) for catalogue ISBNs: $(for u in 9789545997827 9789544762942 9789542251262 9789541824377 9789547374564; do curl -s -o /dev/null -w "%{http_code} " --max-time 20 "https://covers.openlibrary.org/b/isbn/$u-M.jpg?default=false"; done)"
+  warmup
+  sec "G1. Album 1: thumbnails over time (2, 5, 10, 20, 40 s) and after scrolling"
+  restart; open_gallery; waitfor "$RX_GALLERY_LOADED" 40
+  open_album 1; t0=$(now_ms)
+  for i in 2 5 10 20 40; do while [ $(( $(now_ms) - t0 )) -lt $((i * 1000)) ]; do sleep 0.3; done; shot media2/01-album-${i}s; done
+  dims; sw_up 300; sleep 5; shot media2/02-album-scrolled-5s; sleep 10; shot media2/03-album-scrolled-15s
+  sw_down 100; sw_down 100; sleep 2
+  sec "G2. Viewer: load time, double tap 2×, pinch beyond 2×, photo 5"
+  open_photo 1; t0=$(now_ms)
+  for i in 1 3 8; do while [ $(( $(now_ms) - t0 )) -lt $((i * 1000)) ]; do sleep 0.3; done; shot media2/10-viewer-${i}s; done
+  dims; cx=$((W/2)); cy=$((H/2)); log "VIEWER: $(viewer_page)"
+  if mt_init; then
+    dtap $cx $cy; sleep 2.5; shot media2/11-viewer-doubletap; log "after double tap: $(viewer_page)"
+    pinch $cx $cy 300 900 16; sleep 1; shot media2/12-viewer-pinch-1s
+    sleep 5; shot media2/13-viewer-pinch-6s
+    sw_left 300; sleep 1.5; shot media2/14-viewer-zoomed-swipe; log "swipe while zoomed: $(viewer_page) (page 1 = the swipe panned the zoomed photo)"
+    mem zoomed
+    dtap $cx $cy; sleep 2; shot media2/15-viewer-reset; log "after reset double tap: $(viewer_page)"
+    sw_left 150; sleep 2; log "swipe after reset: $(viewer_page)"
+  else log "PINCH: no multi-touch device"; fi
+  for i in 1 2 3 4 5; do p=$(viewer_page); echo "$p" | grep -q '"5 / ' && break; sw_left 150; sleep 1.2; done
+  log "VIEWER now: $(viewer_page)"; sleep 2; shot media2/16-viewer-photo5-2s; sleep 8; shot media2/17-viewer-photo5-10s
+  back 1.5; back 1.5; back 1.5
+  sec "C. Covers that have an address in the catalogue (cv) and a book with an ISBN"
+  for i in 2184 2091 259 958 1894; do link "$SITE/elektronen-katalog?inv=$i"; sleep 7; shot media2/20-book-$i; dump; log "book $i: $(texts 3 | cut -c1-120)"; back 1.5; done
+  link "$SITE/elektronen-katalog"; waitfor "$RX_RESULTS" 30; search_catalog "Gatsby"; sleep 6; shot media2/21-catalog-gatsby; log "search Gatsby: $(rcount) results"
+  sec "D1. PDF with the PDF app disabled (Drive PDF viewer)"
+  log "disable Drive: $(a pm disable-user --user 0 com.google.android.apps.docs 2>&1 | tr -d '\r')"
+  log "PDF handlers now: $(a cmd package query-activities --brief -a android.intent.action.VIEW -t application/pdf 2>&1 | tr -d '\r' | grep -v '^$' | tr '\n' ' ' | cut -c1-200)"
+  pdf_row() {  # $1 — етикет, $2 — поредният бутон за PDF
+    local p; dump; p=$(xy --all content-desc 'Отвори с приложение за PDF' | sed -n ${2}p)
+    [ -n "$p" ] || { log "PDF $1: button $2 not found"; return 1; }
+    a input tap $p; local t0; t0=$(now_ms)
+    for i in 1 2 3 4 5; do sleep 0.6; shot media2/pdf-$1-$i; log "PDF $1 +$(( $(now_ms) - t0 )) ms: fg $(fg)"; done
+    sleep 4; shot media2/pdf-$1-final; log "PDF $1 final: fg $(fg); $(dump && texts 5 | cut -c1-200)"
+    launch >/dev/null; sleep 3
+  }
+  link "$SITE/load"; sleep 6; pdf_row noapp 2
+  sec "D2. PDF download fails (offline while on Documents) → toast + browser"
+  link "$SITE/load"; sleep 5; offline; sleep 2
+  pdf_row failed 3
+  online; sleep 3
+  log "enable Drive: $(a pm enable com.google.android.apps.docs 2>&1 | tr -d '\r')"
+  sec "E. Contacts: the e-mail line in the card"
+  link "$SITE/kontakti"; sleep 6; dims; dump; cp $OUT/ui.xml $OUT/contacts-ui.xml
+  log "email nodes: $(grep -oE '<node[^>]*chitalishte_yavorec@abv.bg[^>]*>' $OUT/ui.xml | grep -oE '(clickable|bounds)="[^"]*"' | tr '\n' ' ')"
+  p=$(xy text 'chitalishte_yavorec@abv.bg')
+  if [ -n "$p" ]; then a input tap $p; sleep 4; shot media2/30-contacts-email-line; log "email line tap @ $p → fg $(fg)"; fi
+}
+
 # ================================================================= main
 setup
 case $PART in
@@ -1073,6 +1139,7 @@ case $PART in
   mem|mem-base) part_mem;;
   monkey) part_monkey;;
   media) part_media;;
+  media2) part_media2;;
   rot) part_rot;;
   offline) part_offline;;
   look*) part_look;;

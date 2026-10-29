@@ -87,55 +87,8 @@ jobs:
           name: apk-${{ matrix.app }}
           path: dist/
 
-  # v1.2.27 и update.json в emulator-results/v127b/update/ — за самообновяването в частта update.
-  stage-update:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@v8
-        with:
-          name: apk-new
-          path: dist
-      - name: Stage update.json + APK (orphan, force; the rest of the branch is kept)
-        continue-on-error: true
-        run: |
-          set -e
-          R="https://github.com/${{ github.repository }}.git"
-          mkdir -p "$RUNNER_TEMP/pub"; cd "$RUNNER_TEMP/pub"
-          git init -q -b emulator-results
-          if git fetch -q --depth 1 "$R" emulator-results; then git archive FETCH_HEAD | tar -x; fi
-          mkdir -p v127b/update; cp "$GITHUB_WORKSPACE/dist/app.apk" v127b/update/app.apk
-          curl -sSL --retry 3 -o "$RUNNER_TEMP/real.json" "https://github.com/${{ github.repository }}/releases/download/v1.2.27/update.json"
-          python3 - "$RUNNER_TEMP/real.json" <<'PY'
-          import hashlib, json, os, sys
-          real = json.load(open(sys.argv[1], encoding="utf-8"))
-          apk = "v127b/update/app.apk"
-          repo = os.environ["GITHUB_REPOSITORY"]
-          data = {
-              "versionCode": int(os.environ["VC"]),
-              "versionName": "1.2.27",
-              "apkUrl": f"https://raw.githubusercontent.com/{repo}/emulator-results/v127b/update/app.apk",
-              "sha256": hashlib.sha256(open(apk, "rb").read()).hexdigest(),
-              "size": os.path.getsize(apk),
-              "minSdk": 26,
-              "notes": real["notes"],
-              "notes_en": real.get("notes_en", ""),
-              "releaseUrl": real.get("releaseUrl", ""),
-          }
-          json.dump(data, open("v127b/update/update.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-          print(json.dumps(data, ensure_ascii=False, indent=2))
-          PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -qm "Stage the v1.2.27 test update for the v127b emulator run (run ${{ github.run_id }})"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/emulator-results
-
   emulator:
-    needs: [build, stage-update]
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 75
     continue-on-error: true
@@ -143,8 +96,11 @@ jobs:
       fail-fast: false
       matrix:
         # Всички на API 33 със swangle_indirect (swiftshader_indirect срива емулатора).
-        part: [abstart-1, abstart-2, jank-1, jank-2, mem, mem-base, monkey, media, rot, offline,
-               look1, look2, look3, func1, func2, update]
+        # Кръг 2 (v127b/run2): медия наново — верният сензорен екран за увеличението, снимките в
+        # албумите, корици с адрес, PDF без приложение и при неуспешно сваляне, имейлът в „Контакти“.
+        # Кръг 1 (v127b/): abstart-1, abstart-2, jank-1, jank-2, mem, mem-base, monkey, media, rot,
+        # offline, look1, look2, look3, func1, func2, update.
+        part: [media2]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -203,25 +159,24 @@ jobs:
           pattern: out-*
           path: results
           merge-multiple: true
-      - name: Push results to emulator-results/v127b (orphan, force; the rest of the branch is kept)
+      - name: Push results to emulator-results/v127b/run2 (orphan, force; the rest of the branch is kept)
         continue-on-error: true
         run: |
           set -e
           SRC=$(git rev-parse --short HEAD)
           mkdir -p "$RUNNER_TEMP/pub" results
           if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
-          V="$RUNNER_TEMP/pub/v127b"
-          # update.json остава за справка; самият APK — не.
-          mkdir -p "$V"; find "$V" -mindepth 1 -maxdepth 1 ! -name update -exec rm -rf {} +; rm -f "$V/update/app.apk"
+          V="$RUNNER_TEMP/pub/v127b/run2"
+          rm -rf "$V"; mkdir -p "$V"
           cp -r results/. "$V/"
           cd "$V"
-          PARTS=$(ls -d */ 2>/dev/null | tr -d / | grep -v '^update$' || true)
+          PARTS=$(ls -d */ 2>/dev/null | tr -d / || true)
           {
-            echo "# v1.2.27 full emulator test (released app, origin/main 8dc63c1)"
+            echo "# v1.2.27 full emulator test, round 2: media (zoom, album thumbnails, covers, PDF fallback)"
             echo
             echo "Source: \`debug/full-test-3\` @ $SRC (app = 8dc63c1, compared with v1.2.26 = 3df7f37), run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ)."
             echo "Emulators: google_apis x86_64 API 33, pixel_6 profile, -gpu swangle_indirect; app locale bg-BG (EN only in look1). APKs: minified prodRelease, x86_64 added, throwaway key, versionCode $VC."
-            echo "Wave 13 check: [../v127/index.md](../v127/index.md) and [../v127/run2/index.md](../v127/run2/index.md). v1.2.26 full test: [../v126/index.md](../v126/index.md)."
+            echo "Round 1 (all parts): [../index.md](../index.md)."
             echo
             echo "| part | status |"; echo "|---|---|"
             for p in $PARTS; do
@@ -242,13 +197,14 @@ jobs:
             echo; echo "## Other files"; echo
             find . -type f ! -name '*.png' ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
           } > index.md
-          cd "$RUNNER_TEMP/pub"
-          if [ -f index.md ] && ! grep -q "v127b/index.md" index.md; then
-            { head -1 index.md; echo; echo "v1.2.27 full test (released app, 8dc63c1): [v127b/index.md](v127b/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md
+          R1="$RUNNER_TEMP/pub/v127b/index.md"
+          if [ -f "$R1" ] && ! grep -q "run2/index.md" "$R1"; then
+            { head -1 "$R1"; echo; echo "Round 2 (media: zoom, album thumbnails, covers, PDF fallback): [run2/index.md](run2/index.md)"; tail -n +2 "$R1"; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" "$R1"
           fi
+          cd "$RUNNER_TEMP/pub"
           git init -q -b emulator-results
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -qm "Emulator results v127b for $SRC (run ${{ github.run_id }})"
+          git commit -qm "Emulator results v127b/run2 for $SRC (run ${{ github.run_id }})"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/emulator-results
