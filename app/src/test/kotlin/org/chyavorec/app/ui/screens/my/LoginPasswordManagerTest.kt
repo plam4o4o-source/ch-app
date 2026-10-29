@@ -1,6 +1,8 @@
 package org.chyavorec.app.ui.screens.my
 
 import android.app.Application
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isToggleable
@@ -13,7 +15,6 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToString
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.flow.MutableStateFlow
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -24,10 +25,10 @@ import okhttp3.tls.HeldCertificate
 import org.chyavorec.app.AppConfig
 import org.chyavorec.app.FakeSystemPasswords
 import org.chyavorec.app.XorTestCipher
-import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.di.AppContainer
-import org.chyavorec.app.ui.ChitalishteRoot
+import androidx.compose.runtime.CompositionLocalProvider
+import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.core.FixedClock
 import org.chyavorec.data.repository.AuthState
@@ -36,7 +37,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.time.Instant
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.test.assertEquals
@@ -53,6 +56,7 @@ class LoginPasswordManagerTest {
     private val server = MockWebServer()
     private val logins = CopyOnWriteArrayList<String>()
     private val paths = CopyOnWriteArrayList<String>()
+    @Volatile private var loggedIn = false
 
     // Читателският вход се включва само за https:// адрес — тестовият сървър е с локален сертификат.
     private val cert = HeldCertificate.Builder().addSubjectAlternativeName("localhost").build()
@@ -88,6 +92,12 @@ class LoginPasswordManagerTest {
         }
         server.useHttps(serverTls.sslSocketFactory(), false)
         server.start()
+        // С връзка (иначе приложението е „без интернет“ и входът чака мрежата).
+        val cm = ApplicationProvider.getApplicationContext<Application>().getSystemService(ConnectivityManager::class.java)
+        val caps = ShadowNetworkCapabilities.newInstance()
+        shadowOf(caps).addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        shadowOf(caps).addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        shadowOf(cm).setNetworkCapabilities(cm.activeNetwork, caps)
     }
 
     @After fun stop() = server.shutdown()
@@ -101,9 +111,12 @@ class LoginPasswordManagerTest {
             ApplicationProvider.getApplicationContext(), config,
             FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), client, passwords,
         )
+        // Само екранът за вход (без навигацията и останалите екрани с техните заявки).
         compose.setContent {
             ChitalishteTheme {
-                ChitalishteRoot(container, AppSettings(onboardingDone = true, introShown = true), MutableStateFlow("login"), showIntro = false)
+                CompositionLocalProvider(LocalAppContainer provides container) {
+                    LoginScreen(onBack = {}, onLoggedIn = { loggedIn = true }, onAddCard = {})
+                }
             }
         }
         return container
@@ -135,7 +148,7 @@ class LoginPasswordManagerTest {
         compose.waitUntil(5_000) { passwords.asked == 1 }
         typeAndSubmit("1024-5678 ", "1234")
         waitSignedIn(container, passwords)
-        compose.waitUntil(5_000) { passwords.offered.isNotEmpty() }
+        compose.waitUntil(5_000) { passwords.offered.isNotEmpty() && loggedIn }
         val offered = passwords.offered.single()
         assertEquals("1024-5678", offered.cardNumber)
         assertEquals("1234", offered.pin)
