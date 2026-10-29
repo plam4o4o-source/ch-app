@@ -159,8 +159,9 @@ class NavLayoutScreenshotTest {
     @Test fun landscapeRailShowsAllTabsEnglishLargeFont() {
         launch(fontScale = 1.3f, mode = ThemeMode.DARK)
         waitFor("45-ти")
-        listOf("Home", "Catalogue", "My", "News", "More").forEach(::tabShown)
+        listOf("Home", "Catalogue", "My library", "News", "More").forEach(::tabShown)
         notCut("Catalogue", inTab = true)
+        notCut("My library", inTab = true)
         shot("72-nav-landscape-font130-en-dark")
     }
 
@@ -170,7 +171,7 @@ class NavLayoutScreenshotTest {
     @Test fun font130BottomBarEnglish() {
         launch(fontScale = 1.3f)
         waitFor("45-ти")
-        listOf("Home", "Catalogue", "My", "News", "More").forEach { notCut(it, inTab = true) }
+        listOf("Home", "Catalogue", "My library", "News", "More").forEach { notCut(it, inTab = true) }
         shot("73-nav-font130-home-en")
     }
 

@@ -65,6 +65,8 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.time.Instant
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Снимки при много едър системен шрифт (2×) — текстът не бива да се реже (значката с
@@ -232,6 +234,24 @@ class LargeFontScreenshotTest {
         // Онлайн входът не е включен (без адрес на InvLib) — дигиталната карта вместо вход.
         waitFor("Добави читателска карта")
         shot("55-font2-onboarding-last")
+    }
+
+    /** „Контакти“ (вградените данни): бутоните — по два на ред, еднакво широки и високи; нечетният — на целия ред. */
+    @Test fun contactsLarge() {
+        launch(deepLink = "$base/kontakti")
+        waitFor("Отвори карта")
+        compose.waitForIdle()
+        fun bounds(label: String) = compose.onNode(hasText(label) and hasClickAction()).fetchSemanticsNode().boundsInRoot
+        val email = bounds("Изпрати имейл")
+        val map = bounds("Отвори карта")
+        val site = bounds("Отвори сайта")
+        assertEquals(email.top, map.top, 1f, "„Изпрати имейл“ и „Отвори карта“ — на един ред")
+        assertEquals(email.width, map.width, 1f, "еднаква ширина")
+        assertEquals(email.height, map.height, 1f, "еднаква височина")
+        assertTrue(site.top >= email.bottom, "„Отвори сайта“ — на следващия ред")
+        assertEquals(email.left, site.left, 1f, "„Отвори сайта“ — на целия ред")
+        assertEquals(map.right, site.right, 1f, "„Отвори сайта“ — на целия ред")
+        shot("59-font2-contacts")
     }
 
     @Test fun myHubLarge() {

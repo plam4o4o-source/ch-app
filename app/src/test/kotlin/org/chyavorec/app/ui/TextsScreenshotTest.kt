@@ -144,7 +144,7 @@ class TextsScreenshotTest {
     /** Входът не е включен (без адрес на InvLib) — „Моето“ предлага карта, не вход. */
     @Test fun myWithoutLogin() {
         launch()
-        val myTab = hasText("My") and isSelectable()
+        val myTab = hasText("My library") and isSelectable()
         compose.waitUntil(10_000) { compose.onAllNodes(myTab).fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodes(myTab).onFirst().performClick()
         waitFor("Add library card")
