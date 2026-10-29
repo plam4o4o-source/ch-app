@@ -722,7 +722,7 @@ fun BookRow(books: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (C
     val real = remember(books) { HashMap<Long, MutableState<Boolean>>() }
     LazyRow(modifier = modifier, contentPadding = PaddingValues(horizontal = ScreenGutter), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         items(books, key = { it.inv }) { b ->
-            val realCover = real.getOrPut(b.inv) { mutableStateOf(false) }
+            val realCover = remember(real, b.inv) { real.getOrPut(b.inv) { mutableStateOf(false) } }
             PressableCard(onClick = { onClick(b) }, modifier = Modifier.width(128.dp)) {
                 Column(Modifier.padding(10.dp)) {
                     BookCover(
