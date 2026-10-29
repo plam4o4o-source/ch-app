@@ -10,6 +10,12 @@
 # токена профилът остава в baseline-profile/update за ръчно сливане (без грешка).
 set -euo pipefail
 
+# Само профил, генериран от main (пускане от main или по график) — никога от друг клон.
+if [ "${GITHUB_REF:-}" != "refs/heads/main" ]; then
+  echo "::error::Профилът е генериран от ${GITHUB_REF:-неизвестен клон}, не от main — не се слива."
+  exit 1
+fi
+
 BRANCH=baseline-profile/update
 API="repos/$GITHUB_REPOSITORY/actions"
 
