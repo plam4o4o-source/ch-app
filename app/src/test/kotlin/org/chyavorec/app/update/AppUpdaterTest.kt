@@ -106,8 +106,17 @@ class AppUpdaterTest {
         assertNull(u.whatsNew.value)
         assertNull(c.settings.pendingWhatsNew())
         assertTrue(WhatsNew(1, "1.0.0", "• Подобрения и поправки.", "").isGeneric)
-        // Истински бележки (дори само на български) — листът се показва.
-        assertFalse(WhatsNew(1, "1.0.0", "• Ново", "Improvements and fixes.").isGeneric)
+        // Истински бележки (дори само на български) — записът се пази, а листът решава по езика.
+        val bgOnly = WhatsNew(1, "1.0.0", "• Ново", "Improvements and fixes.")
+        assertFalse(bgOnly.isGeneric)
+        assertFalse(bgOnly.isGenericFor(english = false))
+        // Раздел само с `### bg`: на английски е само общият текст — листът не се показва.
+        assertTrue(bgOnly.isGenericFor(english = true))
+        assertTrue(WhatsNew(1, "1.0.0", "Подобрения и поправки.", "• New").isGenericFor(english = false))
+        assertFalse(WhatsNew(1, "1.0.0", "Подобрения и поправки.", "• New").isGenericFor(english = true))
+        // Без английски текст английският вижда българските бележки.
+        assertFalse(WhatsNew(1, "1.0.0", "• Ново", "").isGenericFor(english = true))
+        assertTrue(WhatsNew(1, "1.0.0", "• Подобрения и поправки.", "").isGenericFor(english = true))
         c.settings.setPendingWhatsNew(WhatsNew(1, "1.0.0", "• Ново", "• New").encode())
         u.loadWhatsNew()
         assertEquals("• Ново", u.whatsNew.value?.notesFor(english = false))

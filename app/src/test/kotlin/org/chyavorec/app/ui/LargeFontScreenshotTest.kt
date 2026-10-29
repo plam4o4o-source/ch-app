@@ -201,6 +201,14 @@ class LargeFontScreenshotTest {
         shot("58-font2-news-segment-narrow")
     }
 
+    /** Заглавието „Новини и събития“ в горната лента при 2× се смалява, а не се реже („Новини и съби…“). */
+    @Test fun newsTitleLarge() {
+        launch(deepLink = "news")
+        waitFor("45-ти")
+        assertNotCut("Новини и събития")
+        shot("59-font2-news-title")
+    }
+
     /** Текстът [label] (етикет на сегмент) е на един ред и без многоточие. */
     private fun assertNotCut(label: String) {
         compose.waitForIdle()

@@ -75,8 +75,15 @@ enum class UpdateFailure { CHECK, DOWNLOAD, CHECKSUM, SIGNATURE, INSTALL }
 data class WhatsNew(val versionCode: Int, val versionName: String, val notes: String, val notesEn: String) {
     fun notesFor(english: Boolean): String = if (english && notesEn.isNotBlank()) notesEn else notes
 
-    /** Само общият текст („Подобрения и поправки.“) — за такава версия листът не се показва. */
-    val isGeneric: Boolean get() = notes.isGenericNote() && (notesEn.isBlank() || notesEn.isGenericNote())
+    /**
+     * Показаните на този език бележки ([notesFor]) са само общият текст („Подобрения и
+     * поправки.“) — тогава листът не се показва. Раздел само с `### bg` дава на английски
+     * общия текст (tools/whats_new.py), затова се решава поотделно за всеки език.
+     */
+    fun isGenericFor(english: Boolean): Boolean = notesFor(english).isGenericNote()
+
+    /** Общият текст и на двата езика — записът изобщо не се пази за показване. */
+    val isGeneric: Boolean get() = isGenericFor(english = false) && isGenericFor(english = true)
 
     fun encode(): String = buildJsonObject {
         put("versionCode", versionCode)
@@ -198,7 +205,8 @@ class AppUpdater(
     /**
      * Бележките на току-що инсталираната версия (записани при [install]) — веднъж: записът се
      * изтрива, щом се покажат. Запис за по-стара версия вече не важи; за по-нова — тя още не е
-     * инсталирана и записът остава. Само общият текст ([WhatsNew.isGeneric]) не се показва.
+     * инсталирана и записът остава. Само общият текст ([WhatsNew.isGeneric]) не се показва
+     * (а за единия език — [WhatsNew.isGenericFor] в листа).
      */
     internal suspend fun loadWhatsNew() {
         val saved = settings.pendingWhatsNew() ?: return

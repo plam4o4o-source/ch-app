@@ -141,7 +141,12 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
     }
     // Повторно докосване на раздела — към началото на видимия сегмент („Календар“ превърта своя
     // списък сам). Списъкът на новините не е в композицията, докато е избран „Календар“.
-    TabReselectEffect(Routes.NEWS) { if (!calendar) listState.animateScrollToItem(0) }
+    // Превъртането не минава през nestedScroll — лентата със заглавието се показва отново изрично.
+    TabReselectEffect(Routes.NEWS) {
+        scroll.state.heightOffset = 0f
+        scroll.state.contentOffset = 0f
+        if (!calendar) listState.animateScrollToItem(0)
+    }
     val segments: @Composable () -> Unit = { NewsSegments(calendar, onSelect = { tick(); selectedCalendar = it }) }
     val keyboard = LocalSoftwareKeyboardController.current
     val snackbar = remember { SnackbarHostState() }

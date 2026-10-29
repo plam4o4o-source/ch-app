@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.data.local.ReaderFontSize
 import org.chyavorec.app.ui.LocalAppContainer
+import org.chyavorec.app.ui.appFontScale
 
 /**
  * Режим за четене (статии и страници от сайта): размер на шрифта S/M/L/XL и
@@ -52,13 +53,16 @@ fun ReaderModeButton(onClick: () -> Unit) {
 @Composable
 fun ReaderContent(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val settings by LocalAppContainer.current.settings.settings.collectAsStateWithLifecycle(initialValue = null)
-    val scale = settings?.readerFontSize?.scale ?: 1f
+    val size = settings?.readerFontSize ?: ReaderFontSize.M
     val maxWidth = if (settings?.readerNarrow == true) 480.dp else 600.dp
     val density = LocalDensity.current
-    CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale = density.fontScale * scale)) {
+    CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale = readerFontScale(density.fontScale, size))) {
         androidx.compose.foundation.layout.Box(modifier.widthIn(max = maxWidth)) { content() }
     }
 }
+
+/** Мащабът в режима за четене: същото правило като „Размер на текста“ — не над 2× ([appFontScale]). */
+internal fun readerFontScale(appScale: Float, size: ReaderFontSize): Float = appFontScale(appScale, size.scale)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

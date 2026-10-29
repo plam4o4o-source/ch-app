@@ -176,9 +176,12 @@ private fun failureText(reason: UpdateFailure): Int = when (reason) {
 private fun PendingWhatsNew(updater: AppUpdater) {
     val whatsNew by updater.whatsNew.collectAsStateWithLifecycle()
     val w = whatsNew ?: return
+    val english = !Formatters.isBulgarian(LocalContext.current)
+    // На този език — само общият текст (напр. раздел само с `### bg`): листът не се показва.
+    if (w.isGenericFor(english)) return
     WhatsNewSheet(
         versionName = w.versionName,
-        notes = w.notesFor(english = !Formatters.isBulgarian(LocalContext.current)),
+        notes = w.notesFor(english),
         onDismiss = updater::dismissWhatsNew,
     )
 }

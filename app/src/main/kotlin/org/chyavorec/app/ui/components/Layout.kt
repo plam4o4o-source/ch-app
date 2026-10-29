@@ -139,9 +139,18 @@ fun AppTopBar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Emblem(34.dp)
                 Spacer(Modifier.width(12.dp))
-                // Заглавието на основен раздел — над заглавките на разделите под него.
-                Text(
-                    title, style = MaterialTheme.typography.headlineSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                // Заглавието на основен раздел — над заглавките на разделите под него. При едър шрифт
+                // по-дългото („Новини и събития“) се смалява до 3/4, вместо да се реже („Новини и съби…“);
+                // многоточие — само ако и така не стига (както етикетите на долната лента).
+                val style = MaterialTheme.typography.headlineSmall
+                androidx.compose.foundation.text.BasicText(
+                    title,
+                    style = style.copy(color = androidx.compose.material3.LocalContentColor.current),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(
+                        minFontSize = style.fontSize * 0.75f, maxFontSize = style.fontSize,
+                    ),
                     modifier = Modifier.semantics { heading() },
                 )
             }
