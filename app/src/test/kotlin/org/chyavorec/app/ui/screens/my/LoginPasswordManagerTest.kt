@@ -186,13 +186,23 @@ class LoginPasswordManagerTest {
         assertTrue(passwords.offered.isEmpty())
     }
 
-    // ВРЕМЕННО: диагностика — входът от тестовата нишка, без екрана.
+    // ВРЕМЕННО: диагностика — стъпките на входа поотделно, извън главната нишка.
     @Test fun diagDirectLogin() {
         val container = launch(FakeSystemPasswords())
-        val r = kotlinx.coroutines.runBlocking {
-            kotlinx.coroutines.withTimeoutOrNull(10_000) { container.authRepository.login("1024-5678", "1234".toCharArray(), remember = true) }
+        compose.waitForIdle()
+        val report = kotlinx.coroutines.runBlocking(kotlinx.coroutines.Dispatchers.Default) {
+            suspend fun step(name: String, block: suspend () -> Any?): String {
+                val t0 = System.nanoTime()
+                val r = runCatching { kotlinx.coroutines.withTimeoutOrNull(4_000) { block() ?: "null" } }
+                return "$name: ${r.getOrNull() ?: r.exceptionOrNull() ?: "TIMEOUT"} (${(System.nanoTime() - t0) / 1_000_000} ms)"
+            }
+            listOf(
+                step("restoreThrottle") { container.authRepository.restoreThrottle() },
+                step("readerCacheClear") { container.readerCache.clear() },
+                step("caps") { container.authRepository.capabilities() },
+                step("login") { container.authRepository.login("1024-5678", "1234".toCharArray(), remember = true) },
+            ).joinToString("; ")
         }
-        val dump = Thread.getAllStackTraces().entries.joinToString("\n\n") { (t, st) -> t.name + "\n" + st.take(40).joinToString("\n") { "  $it" } }
-        assertTrue(r is org.chyavorec.core.Outcome.Success, "r=$r state=${container.authRepository.state.value} paths=$paths\n$dump")
+        assertTrue(false, "report=$report state=${container.authRepository.state.value} paths=$paths")
     }
 }
