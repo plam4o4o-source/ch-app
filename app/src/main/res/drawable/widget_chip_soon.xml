@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Етикет за срок („след 3 дни“) в прегледа на уиджета (layout/widget_preview). -->
+<!-- Етикет за срок на уиджета („след 3 дни“) — наближава. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <solid android:color="@color/widget_soon_bg" />
     <corners android:radius="10dp" />

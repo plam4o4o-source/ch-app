@@ -12,7 +12,7 @@
 │  data/security/  Android Keystore (AES-256-GCM)                         │
 │  network/     OkHttp (само TLS), наблюдение на връзката                 │
 │  update/      самообновяване от GitHub Releases (само prodRelease)      │
-│  widget/      Glance уиджет; diagnostics/ — файлът на дневника          │
+│  widget/      уиджет (RemoteViews); diagnostics/ — файлът на дневника   │
 │  di/          AppContainer (ръчно DI) + FlavorServices (dev/prod)       │
 └──────────────────────────────┬──────────────────────────────────────────┘
                                │ зависи от

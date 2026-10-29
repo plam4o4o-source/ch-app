@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Общите стилове на оформленията на уиджета (layout/widget_*): истинските, прегледът в
+  избора на уиджети и началното (зареждане). Цветовете — от res/values*/widget_colors.xml.
+-->
+<resources>
+    <!-- Целият уиджет: фонът (заоблен; под Android 12 — със златен кант) и вътрешният отстъп. -->
+    <style name="Widget.Chitalishte.Root" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/widget_background</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingHorizontal">14dp</item>
+        <item name="android:paddingVertical">10dp</item>
+    </style>
+
+    <style name="Widget.Chitalishte.Text" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/widget_text</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- Името в заглавката — със системния serif (Cormorant не може в RemoteViews). -->
+    <style name="Widget.Chitalishte.Text.Title">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textColor">@color/widget_title</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <!-- „Следващо събитие“, „2 книги за връщане“ … -->
+    <style name="Widget.Chitalishte.Text.Label">
+        <item name="android:textColor">@color/widget_muted</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="Widget.Chitalishte.Text.EventTitle">
+        <item name="android:maxLines">2</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.Chitalishte.Text.EventDate">
+        <item name="android:textColor">@color/widget_event_date</item>
+    </style>
+
+    <!-- Етикетът за срок; фонът и цветът на текста — по срока (просрочен / наближава / има време). -->
+    <style name="Widget.Chitalishte.Text.Chip">
+        <item name="android:background">@drawable/widget_chip_ok</item>
+        <item name="android:paddingHorizontal">8dp</item>
+        <item name="android:paddingVertical">2dp</item>
+        <item name="android:textColor">@color/widget_ok_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Малките бутони „Сканирай“ и „Каталог“. -->
+    <style name="Widget.Chitalishte.Text.Button">
+        <item name="android:background">@drawable/widget_button_bg</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:paddingVertical">4dp</item>
+        <item name="android:textColor">@color/widget_button_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.Chitalishte.Text.Button.Tonal">
+        <item name="android:background">@drawable/widget_tonal_bg</item>
+        <item name="android:textColor">@color/widget_tonal_text</item>
+    </style>
+</resources>

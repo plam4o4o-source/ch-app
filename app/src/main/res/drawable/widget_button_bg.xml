@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Бутон „Сканирай“ в прегледа на уиджета (layout/widget_preview). -->
+<!-- Бутон „Сканирай“ на уиджета. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <solid android:color="@color/widget_button_bg" />
     <corners android:radius="14dp" />

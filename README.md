@@ -80,7 +80,7 @@ store/           Google Play метаданни, графики, политик�
 
 Kotlin 2.4 · Jetpack Compose (BOM 2026.09) · Material 3 · Navigation Compose ·
 Coroutines/Flow · kotlinx.serialization · OkHttp 5 · Jsoup · Room · DataStore ·
-WorkManager · Glance (уиджет) · Coil 3 · CameraX · ZXing (баркодовете на картата и
+WorkManager · RemoteViews (уиджет) · Coil 3 · CameraX · ZXing (баркодовете на картата и
 разчитане в скенера) · Android Keystore · Baseline Profiles ·
 AGP 9.4 (вграден Kotlin) · Gradle 9.8 · Java 21 (build с JDK 25) · minSdk 26 (Android 8.0) · target/compileSdk 37 (Android 17).
 

@@ -27,6 +27,7 @@ import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.PeriodicSyncWorker
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.Raleway
+import org.chyavorec.app.widget.WidgetUpdater
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuration.Provider, AppContainerOwner {
@@ -70,7 +71,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
      * - проверка на сесията: при старт без сесия („не ме помни“ и спрян процес) следите на
      *   предишния читател се изчистват веднага (AppContainer.watchReader), а не едва при първия
      *   екран, който стигне до читателските данни; временно нечетима сесия (фоново събуждане
-     *   преди това) се чете отново.
+     *   преди това) се чете отново;
+     * - уиджетът ([WidgetUpdater.onUiStart]).
      */
     fun onUiStart() {
         if (!uiStarted.compareAndSet(false, true)) return
@@ -81,6 +83,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         appScope.launch { runCatching { container.authRepository.restore(countLaunch = true) }.logFailure("startup.restore") }
         // „Кажи ми, когато е на рафта“ — при всеки нов каталог, приет на преден план (фоновият — PeriodicSyncWorker).
         appScope.launch { org.chyavorec.app.notifications.WantToReadAlerts.watch(this@ChitalishteApp, container) }
+        // Уиджетът: генерираният преглед в избора (Android 15+) и опресняване на копията — във фон.
+        WidgetUpdater.onUiStart(this)
     }
 
     /**

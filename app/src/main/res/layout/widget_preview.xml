@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Преглед на уиджета в избора на уиджети (android:previewLayout, Android 12+): широкият
-  вариант с примерни данни — срок, следващо събитие и бутоните „Сканирай“/„Каталог“.
-  Само изгледи, разрешени в RemoteViews (LinearLayout, TextView, ImageView). Без заглавия на книги.
+  Преглед на уиджета в избора на уиджети (android:previewLayout, Android 12–14): широкият
+  вариант (layout/widget_wide, същите стилове) с примерните данни — срок, следващо събитие
+  и бутоните „Сканирай“/„Каталог“. Без заглавия на книги. От Android 15 прегледът се
+  генерира от самото оформление (WidgetUpdater.publishPreview) със същите примерни текстове.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/widget_background"
-    android:orientation="vertical"
-    android:paddingHorizontal="14dp"
-    android:paddingVertical="10dp">
+    android:id="@android:id/background"
+    style="@style/Widget.Chitalishte.Root">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,47 +15,20 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginEnd="6dp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/logo_chitalishte_small" />
-
-        <TextView
+        <include
+            layout="@layout/widget_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="serif"
-            android:maxLines="1"
-            android:text="@string/widget_label"
-            android:textColor="@color/widget_title"
-            android:textSize="15sp" />
+            android:layout_weight="1" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/widget_preview_button"
-            android:maxLines="1"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            android:text="@string/shortcut_scan"
-            android:textColor="@color/widget_button_text"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            style="@style/Widget.Chitalishte.Text.Button"
+            android:text="@string/shortcut_scan" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.Chitalishte.Text.Button.Tonal"
             android:layout_marginStart="6dp"
-            android:background="@drawable/widget_preview_tonal"
-            android:maxLines="1"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            android:text="@string/shortcut_catalog"
-            android:textColor="@color/widget_tonal_text"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:text="@string/shortcut_catalog" />
     </LinearLayout>
 
     <LinearLayout
@@ -71,15 +41,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingEnd="6dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="@string/widget_preview_books"
-                android:textColor="@color/widget_muted"
-                android:textSize="11sp" />
+                style="@style/Widget.Chitalishte.Text.Label"
+                android:text="@string/widget_preview_books" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,59 +56,36 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/widget_preview_chip"
-                    android:maxLines="1"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp"
+                    style="@style/Widget.Chitalishte.Text.Chip"
+                    android:background="@drawable/widget_chip_soon"
                     android:text="@string/widget_preview_due"
-                    android:textColor="@color/widget_soon_text"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/widget_soon_text" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/Widget.Chitalishte.Text"
                     android:layout_marginStart="6dp"
-                    android:maxLines="1"
-                    android:text="@string/widget_preview_date"
-                    android:textColor="@color/widget_text"
-                    android:textSize="12sp" />
+                    android:text="@string/widget_preview_date" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="6dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="@string/widget_next_event"
-                android:textColor="@color/widget_muted"
-                android:textSize="11sp" />
+                style="@style/Widget.Chitalishte.Text.Label"
+                android:text="@string/widget_next_event" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:text="@string/widget_preview_event"
-                android:textColor="@color/widget_text"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                style="@style/Widget.Chitalishte.Text.EventTitle"
+                android:text="@string/widget_preview_event" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="@string/widget_preview_event_date"
-                android:textColor="@color/widget_event_date"
-                android:textSize="12sp" />
+                style="@style/Widget.Chitalishte.Text.EventDate"
+                android:text="@string/widget_preview_event_date" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

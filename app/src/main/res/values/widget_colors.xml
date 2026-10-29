@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Фирмената палитра на уиджета (светла; тъмната е във values-night). Ползва се от фона
-  (drawable/widget_background) и от прегледа в избора на уиджети (layout/widget_preview).
-  Същите стойности са и в ChitalishteWidget.kt (BrandWidgetColors) — при промяна и там.
+  Фирмената палитра на уиджета (светла; тъмната е във values-night). Ползва се от
+  оформленията на уиджета (layout/widget_*) и от фоновете им (drawable/widget_*).
+  От Android 12 — динамичните цветове на системата (values-v31, values-night-v31).
 -->
 <resources>
     <color name="widget_bg">#FFF5F0E8</color>
@@ -15,6 +15,10 @@
     <color name="widget_button_text">#FFFFFFFF</color>
     <color name="widget_tonal_bg">#FFE8D5A3</color>
     <color name="widget_tonal_text">#FF1A1208</color>
+    <color name="widget_overdue_bg">#FFF9DEDC</color>
+    <color name="widget_overdue_text">#FFA3262F</color>
     <color name="widget_soon_bg">#FFF6E3C2</color>
     <color name="widget_soon_text">#FF824C00</color>
+    <color name="widget_ok_bg">#FFD5E8D9</color>
+    <color name="widget_ok_text">#FF2A6343</color>
 </resources>
