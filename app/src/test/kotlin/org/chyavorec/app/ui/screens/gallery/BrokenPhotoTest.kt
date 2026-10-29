@@ -9,6 +9,8 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToString
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
@@ -50,12 +52,14 @@ class BrokenPhotoTest {
     private val app = ApplicationProvider.getApplicationContext<Application>()
     private val server = MockWebServer()
     private val requests = AtomicInteger()
+    private val paths = java.util.concurrent.CopyOnWriteArrayList<String>()
 
     @OptIn(DelicateCoilApi::class)
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {
                 requests.incrementAndGet()
+                paths += request.path.orEmpty()
                 return MockResponse().setResponseCode(404)
             }
         }
@@ -95,7 +99,8 @@ class BrokenPhotoTest {
         val before = requests.get()
         compose.onNodeWithText(retry).performClick()
         compose.waitUntil(10_000) { compose.onAllNodesWithText(retry).fetchSemanticsNodes().isEmpty() || requests.get() > before }
-        compose.waitUntil(10_000) { requests.get() > before }
+        val again = runCatching { compose.waitUntil(10_000) { requests.get() > before } }.isSuccess
+        assertTrue(again, "заявки: $before → ${requests.get()} $paths\n" + compose.onRoot().printToString())
         compose.waitUntil(10_000) { compose.onAllNodesWithText(retry).fetchSemanticsNodes().isNotEmpty() }
     }
 }
