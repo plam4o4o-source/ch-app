@@ -569,7 +569,7 @@ private fun AppNavHost(
                 fadeOut(tween(dur / 3, delayMillis = dur * 2 / 3, easing = LinearEasing))
         },
     ) {
-        screen(Routes.HOME) { HomeScreen(navigate) }
+        screen(Routes.HOME) { HomeScreen(navigate, openExternal, openLink) }
         screen(Routes.CATALOG) { CatalogScreen(navigate) }
         screen(Routes.MY) { MyHubScreen(navigate) }
         screen(Routes.NEWS) { NewsListScreen(navigate, it.savedStateHandle) }

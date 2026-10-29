@@ -46,7 +46,6 @@ import org.chyavorec.domain.occasion.OccasionOrnament
 import org.chyavorec.app.ui.components.WheatEdge
 import org.chyavorec.app.ui.components.rememberSeason
 import org.chyavorec.app.ui.components.PagerDots
-import org.chyavorec.app.ui.components.SearchPill
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.darkTopHighlight
 import org.chyavorec.app.ui.components.boldMarkdown
@@ -89,7 +88,6 @@ import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.QrCodeScanner
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.TheaterComedy
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -183,7 +181,7 @@ private val quickActionsTail = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navigate: (String) -> Unit) {
+fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, openLink: (String) -> Unit = {}) {
     val vm = appViewModel {
         HomeViewModel(
             it.newsRepository, it.eventsRepository, it.catalogRepository, it.siteRepository, it.clock,
@@ -265,16 +263,8 @@ fun HomeScreen(navigate: (String) -> Unit) {
                 }
             }
             item("search") {
-                SearchPill(
-                    stringResource(R.string.home_search_hint), onClick = { navigate(Routes.SEARCH) },
-                    modifier = Modifier.padding(horizontal = ScreenGutter, vertical = 6.dp),
-                    trailing = {
-                        // Скенер на баркодове: ISBN на книга или етикет с инвентарен номер.
-                        IconButton(onClick = { navigate(Routes.SCAN) }, modifier = Modifier.size(40.dp)) {
-                            Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                    },
-                )
+                // Полето се разгръща в цялото търсене (със скенера в него) — виж HomeSearchBar.
+                HomeSearchBar(navigate, openExternal, openLink, Modifier.padding(horizontal = ScreenGutter, vertical = 6.dp))
             }
             // „Следващ срок / Просрочено“ — само за влязъл читател със заети книги (от кеша, без мрежа).
             loanSummary?.let { s ->
