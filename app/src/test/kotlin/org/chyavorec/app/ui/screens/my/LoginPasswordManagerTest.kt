@@ -185,4 +185,14 @@ class LoginPasswordManagerTest {
         // Входът е от мениджъра — не се предлага да се запази отново.
         assertTrue(passwords.offered.isEmpty())
     }
+
+    // ВРЕМЕННО: диагностика — входът от тестовата нишка, без екрана.
+    @Test fun diagDirectLogin() {
+        val container = launch(FakeSystemPasswords())
+        val r = kotlinx.coroutines.runBlocking {
+            kotlinx.coroutines.withTimeoutOrNull(10_000) { container.authRepository.login("1024-5678", "1234".toCharArray(), remember = true) }
+        }
+        val dump = Thread.getAllStackTraces().entries.joinToString("\n\n") { (t, st) -> t.name + "\n" + st.take(40).joinToString("\n") { "  $it" } }
+        assertTrue(r is org.chyavorec.core.Outcome.Success, "r=$r state=${container.authRepository.state.value} paths=$paths\n$dump")
+    }
 }
