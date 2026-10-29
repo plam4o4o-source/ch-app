@@ -51,6 +51,7 @@ import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.logFailure
 import org.chyavorec.core.reconnections
 import org.chyavorec.core.SystemClock
+import org.chyavorec.core.TrustedLinks
 import org.chyavorec.data.catalog.GitHubCatalogService
 import org.chyavorec.data.http.FileDownloader
 import org.chyavorec.data.http.HttpFetcher
@@ -79,6 +80,7 @@ import org.chyavorec.domain.service.AuthenticationService
 import org.chyavorec.domain.service.MembershipService
 import org.chyavorec.domain.service.ReaderService
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 /** Трите читателски услуги — от една и съща реализация. */
 data class ReaderServices(
@@ -112,8 +114,15 @@ class AppContainer(
      * Връзките и настройките се споделят с [okHttp].
      */
     private val readerHttp by lazy { HttpFetcher(okHttp.newBuilder().cache(null).build(), userAgent) }
-    /** PDF-ите от „Документи и архив“ за приложение на телефона — в cacheDir/documents (до 50 MB, до седмица). */
-    val documents by lazy { FileDownloader(okHttp, File(context.cacheDir, "documents")) }
+    /**
+     * PDF-ите от „Документи и архив“ за приложение на телефона — в cacheDir/documents (до 50 MB,
+     * до седмица), само от сайта (и след пренасочванията). Без общия timeout на [okHttp]: той
+     * покрива и цялото тяло, а 50 MB по бавна мрежа траят повече (както при обновленията).
+     */
+    internal val documentsHttp by lazy { okHttp.newBuilder().callTimeout(0, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).build() }
+    val documents by lazy {
+        FileDownloader(documentsHttp, File(context.cacheDir, "documents"), allowedUrl = { TrustedLinks.isSiteUrl(it.toString(), config.siteBaseUrl) })
+    }
     val connectivity by lazy { ConnectivityObserver(context) }
 
     val settings by lazy { SettingsStore(context) }

@@ -105,7 +105,7 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                                 },
                                 leadingContent = { Icon(Icons.Outlined.PictureAsPdf, null, tint = MaterialTheme.colorScheme.secondary) },
                                 trailingContent = if (vm.canDownload(d.url)) {
-                                    { PdfAppButton(download?.takeIf { it.url == d.url }, onOpen = { vm.openInPdfApp(d.url) }, onCancel = vm::cancelDownload) }
+                                    { PdfAppButton(download?.takeIf { it.url == d.url }, onOpen = { vm.openInPdfApp(d.url, d.title) }, onCancel = vm::cancelDownload) }
                                 } else null,
                                 modifier = Modifier.clickable { openLink(d.url) }.animateEntrance(i),
                             )

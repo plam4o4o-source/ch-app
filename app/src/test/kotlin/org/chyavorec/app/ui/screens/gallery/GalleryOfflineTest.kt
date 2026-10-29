@@ -1,10 +1,16 @@
 package org.chyavorec.app.ui.screens.gallery
 
+import android.app.Application
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.viewModelScope
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import org.chyavorec.app.MainDispatcherRule
+import org.chyavorec.app.network.ConnectivityObserver
 import org.chyavorec.app.ui.screens.site.GalleryViewModel
 import org.chyavorec.app.ui.wantsReconnectRefresh
 import org.chyavorec.app.ui.watchReconnect
@@ -26,15 +32,23 @@ import org.chyavorec.domain.service.SiteContentService
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
  * Галерията без връзка и без кеш: веднага грешка с „Опитай отново“ (не скелет, докато
- * заявката „виси“ до timeout-а), а щом връзката се върне — зарежда се сама.
+ * заявката „виси“ до timeout-а), а щом връзката се върне — зарежда се сама. Мрежа, която
+ * системата не е потвърдила (VALIDATED), но работи — галерията се зарежда.
  */
+@RunWith(AndroidJUnit4::class)
+@Config(application = Application::class)
 class GalleryOfflineTest {
     @get:Rule val main = MainDispatcherRule()
     private val clock = FixedClock(Instant.parse("2026-09-26T10:00:00Z"))
@@ -73,7 +87,7 @@ class GalleryOfflineTest {
     @Test fun offlineWithEmptyCacheShowsErrorAndLoadsWhenTheConnectionReturns() {
         val site = HangingSite()
         val reconnected = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-        val gallery = GalleryViewModel(SiteRepository(site, InMemoryPayloadCache(), clock), online = { site.online }).also { vm = it }
+        val gallery = GalleryViewModel(SiteRepository(site, InMemoryPayloadCache(), clock), hasNetwork = { site.online }).also { vm = it }
         watchReconnect(gallery, reconnected)
 
         waitUntil("грешката без връзка") { gallery.state.value.error != null }
@@ -88,5 +102,40 @@ class GalleryOfflineTest {
         waitUntil("албумите след връщане на връзката") { gallery.state.value.data != null }
         assertEquals("Празници", gallery.state.value.data!!.single().name)
         assertEquals(null, gallery.state.value.error)
+    }
+
+    /** Системата казва „няма мрежа“, а тя работи: „Опитай отново“ пак пита мрежата. */
+    @Test fun retryAlwaysAsksTheNetwork() {
+        val site = HangingSite().apply { online = true }
+        val gallery = GalleryViewModel(SiteRepository(site, InMemoryPayloadCache(), clock), hasNetwork = { false }).also { vm = it }
+        waitUntil("грешката без връзка") { gallery.state.value.error != null }
+        assertEquals(0, site.galleryCalls.get())
+
+        gallery.refresh()
+        waitUntil("албумите след „Опитай отново“") { gallery.state.value.data != null }
+        assertEquals(1, site.galleryCalls.get())
+        assertEquals("Празници", gallery.state.value.data!!.single().name)
+    }
+
+    /** Мрежа с интернет, но непотвърдена (VPN, блокирана проверка) — галерията се зарежда сама. */
+    @Test fun unvalidatedNetworkThatServesLoadsTheGallery() {
+        val app = ApplicationProvider.getApplicationContext<Application>()
+        val cm = app.getSystemService(ConnectivityManager::class.java)
+        val caps = ShadowNetworkCapabilities.newInstance()
+        shadowOf(caps).addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        shadowOf(cm).setNetworkCapabilities(cm.activeNetwork, caps)
+        val observer = ConnectivityObserver(app)
+        assertFalse(observer.isOnline(), "без VALIDATED")
+        assertTrue(observer.hasNetwork())
+
+        val site = HangingSite().apply { online = true }
+        val gallery = GalleryViewModel(SiteRepository(site, InMemoryPayloadCache(), clock), hasNetwork = observer::hasNetwork).also { vm = it }
+        waitUntil("албумите на непотвърдена мрежа") { gallery.state.value.data != null }
+        assertEquals("Празници", gallery.state.value.data!!.single().name)
+        assertEquals(null, gallery.state.value.error)
+
+        // Без мрежа изобщо — както досега, веднага грешка.
+        shadowOf(cm).setNetworkCapabilities(cm.activeNetwork, ShadowNetworkCapabilities.newInstance())
+        assertFalse(observer.hasNetwork())
     }
 }

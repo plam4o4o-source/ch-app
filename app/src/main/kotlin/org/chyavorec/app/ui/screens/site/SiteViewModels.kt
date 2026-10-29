@@ -112,21 +112,23 @@ class ContactsViewModel(private val repo: SiteRepository, private val fallback: 
  * (вече групирана) стойност на всички екрани. [load] = false — екранът не ползва албумите
  * (напр. преглед на отделни снимки по адрес) и галерията не се зарежда.
  *
- * Без връзка ([online] = false) не се чака мрежата (заявките висят до изтичане на timeout-а,
- * а дотогава — скелет): веднага кешът или грешка с „Опитай отново“; при връщане на
- * връзката екранът се опреснява сам ([RefreshOnReconnect]).
+ * Без никаква мрежа ([hasNetwork] = false) автоматичното зареждане не чака заявката (тя
+ * виси до изтичане на timeout-а, а дотогава — скелет): веднага кешът или грешка с „Опитай
+ * отново“; при връщане на връзката екранът се опреснява сам ([RefreshOnReconnect]).
+ * Изричното опресняване („Опитай отново“, дърпане надолу) винаги пита мрежата — и на мрежа,
+ * която системата не е потвърдила, но работи; при неуспех хранилището връща кеша.
  */
 class GalleryViewModel(
     private val repo: SiteRepository,
     load: Boolean = true,
-    private val online: () -> Boolean = { true },
+    private val hasNetwork: () -> Boolean = { true },
 ) : ViewModel(), RefreshOnReconnect {
     private val _state = MutableStateFlow(ScreenState<List<GalleryAlbum>>())
     val state: StateFlow<ScreenState<List<GalleryAlbum>>> = _state.asStateFlow()
     init { if (load) refresh(false) }
     fun refresh(force: Boolean = true) = viewModelScope.launch {
         _state.update { it.startRefresh() }
-        val result = if (online()) repo.gallery(force)
+        val result = if (force || hasNetwork()) repo.gallery(force)
         else repo.cachedGallery()?.let { Outcome.Success(it) } ?: Outcome.Failure(AppError.Network)
         _state.update { it.with(result) }
     }
@@ -169,8 +171,11 @@ class DocumentsViewModel(
     val results: kotlinx.coroutines.flow.SharedFlow<PdfResult> = _results
     private var job: kotlinx.coroutines.Job? = null
 
-    /** „Отвори с приложение за PDF“: сваля файла в кеша (само един наведнъж), после — за отваряне. */
-    fun openInPdfApp(url: String) {
+    /**
+     * „Отвори с приложение за PDF“: сваля файла в кеша (само един наведнъж), после — за
+     * отваряне. [title] — името на файла, което вижда приложението (иначе — от адреса).
+     */
+    fun openInPdfApp(url: String, title: String? = null) {
         val d = downloader
         if (d == null || !canDownload(url)) {
             _results.tryEmit(PdfResult.Failed(url))
@@ -180,7 +185,7 @@ class DocumentsViewModel(
         _download.value = PdfDownload(url, null)
         job = viewModelScope.launch {
             try {
-                val r = d.download(url) { p -> _download.value = PdfDownload(url, p) }
+                val r = d.download(url, title) { p -> _download.value = PdfDownload(url, p) }
                 _results.emit(if (r is Outcome.Success) PdfResult.Ready(url, r.value) else PdfResult.Failed(url))
             } finally {
                 _download.value = null

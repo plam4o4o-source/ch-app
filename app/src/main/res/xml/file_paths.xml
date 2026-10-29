@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Какво може да се подаде на друго приложение през FileProvider: само свалените PDF файлове в кеша. -->
+<!-- Какво може да се подаде на друго приложение през FileProvider: само свалените PDF файлове в кеша
+     (documents/<хеш на адреса>/<четимо име>.pdf — името вижда приложението за PDF). -->
 <paths>
     <cache-path name="documents" path="documents/" />
 </paths>
