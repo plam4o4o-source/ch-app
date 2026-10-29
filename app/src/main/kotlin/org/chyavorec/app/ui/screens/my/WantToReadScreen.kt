@@ -12,7 +12,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
@@ -41,7 +40,6 @@ import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
@@ -61,7 +59,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -73,6 +70,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -323,6 +330,16 @@ private fun WantToReadItem(
     var menu by remember { mutableStateOf(false) }
     val removeLabel = stringResource(R.string.want_remove)
     val notifyLabel = stringResource(if (saved.notifyWhenAvailable) R.string.want_notify_stop else R.string.want_notify)
+    val status = when {
+        row.book != null -> row.book.status
+        // Каталогът е прочетен, а книгата я няма в него (отписана).
+        catalogRead -> null
+        // Каталогът още не е прочетен — последно известната наличност.
+        else -> if (saved.lastKnownAvailable) BookStatus.AVAILABLE else BookStatus.NOT_ON_SHELF
+    }
+    // „Кажи ми“ — само за книга, която не е на рафта (като на страницата ѝ); включеното
+    // известие може да се изключи и когато вече е там.
+    val canNotify = status != BookStatus.AVAILABLE || saved.notifyWhenAvailable
     Row(
         Modifier
             .fillMaxWidth()
@@ -332,14 +349,14 @@ private fun WantToReadItem(
             .padding(start = 20.dp, end = 4.dp, top = 10.dp, bottom = 10.dp)
             // Без жест: махането и „Кажи ми“ — и като действия за екранния четец.
             .semantics {
-                customActions = listOf(
+                customActions = listOfNotNull(
                     CustomAccessibilityAction(removeLabel) { onRemove(); true },
-                    CustomAccessibilityAction(notifyLabel) { onToggleNotify(); true },
+                    if (canNotify) CustomAccessibilityAction(notifyLabel) { onToggleNotify(); true } else null,
                 )
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BookCover(row.shown, width = 56.dp, showStatusDot = false, modifier = Modifier.sharedElementKey("book-${saved.inv}"))
+        BookCover(row.shown, width = 56.dp, showStatusDot = false, modifier = Modifier.sharedElementKey("book-${saved.inv}"), decorative = true)
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
             Text(saved.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -350,13 +367,6 @@ private fun WantToReadItem(
                 )
             }
             Row(Modifier.padding(top = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                val status = when {
-                    row.book != null -> row.book.status
-                    // Каталогът е прочетен, а книгата я няма в него (отписана).
-                    catalogRead -> null
-                    // Каталогът още не е прочетен — последно известната наличност.
-                    else -> if (saved.lastKnownAvailable) BookStatus.AVAILABLE else BookStatus.NOT_ON_SHELF
-                }
                 AnimatedContent(status, transitionSpec = { stateChange(reduced) }, label = "want-status") { st ->
                     when (st) {
                         null -> Text(stringResource(R.string.want_missing), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -376,7 +386,7 @@ private fun WantToReadItem(
         Box {
             IconButton(onClick = { menu = true }) { Icon(Icons.Outlined.MoreVert, contentDescription = stringResource(R.string.want_more)) }
             DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
-                DropdownMenuItem(
+                if (canNotify) DropdownMenuItem(
                     text = { Text(notifyLabel) },
                     leadingIcon = { Icon(if (saved.notifyWhenAvailable) Icons.Outlined.NotificationsOff else Icons.Outlined.NotificationsNone, null) },
                     onClick = { menu = false; onToggleNotify() },
@@ -509,7 +519,8 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
 /**
  * „Кажи ми, когато е на рафта“ — за книга, която не е на рафта (до „Попитай библиотеката“).
  * Превключвател (за TalkBack — „включено/изключено“): изключен — с контур, включен — тонален,
- * с „Ще ти кажем…“; изключването може да се отмени от снекбара.
+ * с „Ще ти кажем…“; изключването може да се отмени от снекбара. Името за екранния четец е
+ * едно и също („Кажи ми…“) — състоянието казва Switch, не смененият надпис.
  * [onlyWhileOn] — само ако известието вече е включено (друг екземпляр е на рафта, но
  * включеното известие трябва да може да се изключи и оттук); след изключване остава до излизане.
  */
@@ -533,15 +544,24 @@ fun NotifyWhenAvailableButton(
     val reduced = rememberReducedMotion()
     val colors = MaterialTheme.colorScheme
     val colorSpec: AnimationSpec<Color> = if (reduced) snap() else AppMotion.defaultEffects()
-    val container by animateColorAsState(if (on) colors.secondaryContainer else colors.secondaryContainer.copy(alpha = 0f), colorSpec, label = "notify-bg")
-    val content by animateColorAsState(if (on) colors.onSecondaryContainer else colors.primary, colorSpec, label = "notify-fg")
-    val border by animateColorAsState(if (on) colors.outline.copy(alpha = 0f) else colors.outline, colorSpec, label = "notify-border")
+    // Цветовете се четат само при рисуване — преходът не прекомпозира бутона.
+    val container = animateColorAsState(if (on) colors.secondaryContainer else colors.secondaryContainer.copy(alpha = 0f), colorSpec, label = "notify-bg")
+    val content = animateColorAsState(if (on) colors.onSecondaryContainer else colors.primary, colorSpec, label = "notify-fg")
+    val border = animateColorAsState(if (on) colors.outline.copy(alpha = 0f) else colors.outline, colorSpec, label = "notify-border")
+    val label = stringResource(R.string.want_notify)
     Row(
         modifier
             .heightIn(min = 48.dp)
             .clip(CircleShape)
-            .background(container)
-            .border(1.dp, border, CircleShape)
+            .drawBehind {
+                drawRect(container.value)
+                // Контур 1 dp по ръба (като border с CircleShape).
+                val w = 1.dp.toPx()
+                drawRoundRect(
+                    border.value, topLeft = Offset(w / 2, w / 2), size = Size(size.width - w, size.height - w),
+                    cornerRadius = CornerRadius((size.minDimension - w) / 2), style = Stroke(w),
+                )
+            }
             .toggleable(value = on, role = Role.Switch) { turnOn ->
                 if (turnOn) {
                     requestNotify { haptic.performHapticFeedback(HapticFeedbackType.ToggleOn); vm.setNotify(book, true) }
@@ -554,17 +574,22 @@ fun NotifyWhenAvailableButton(
                     }
                 }
             }
+            .semantics { contentDescription = label }
             .padding(ButtonDefaults.ContentPadding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
-        CompositionLocalProvider(LocalContentColor provides content) {
-            AnimatedContent(on, transitionSpec = { stateChange(reduced) }, label = "notify") { isOn ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(if (isOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsNone, null, Modifier.size(ButtonDefaults.IconSize))
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(if (isOn) R.string.want_notify_on else R.string.want_notify), style = MaterialTheme.typography.labelLarge)
-                }
+        val textStyle = MaterialTheme.typography.labelLarge
+        AnimatedContent(on, transitionSpec = { stateChange(reduced) }, label = "notify") { isOn ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                val icon = rememberVectorPainter(if (isOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsNone)
+                Spacer(Modifier.size(ButtonDefaults.IconSize).drawBehind { with(icon) { draw(size, colorFilter = ColorFilter.tint(content.value)) } })
+                Spacer(Modifier.width(8.dp))
+                // Видимият надпис се сменя; екранният четец казва [label] и състоянието.
+                BasicText(
+                    stringResource(if (isOn) R.string.want_notify_on else R.string.want_notify),
+                    Modifier.clearAndSetSemantics { }, style = textStyle, color = { content.value },
+                )
             }
         }
     }

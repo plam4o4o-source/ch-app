@@ -200,7 +200,8 @@ class PlayScreenshotTest {
     /** Книга, която не е на рафта: „Искам да прочета“ и „Кажи ми, когато е на рафта“. */
     @Test fun book() {
         launch(deepLink = "$SITE/elektronen-katalog#zapis=136")
-        waitFor("Кажи ми, когато е на рафта")
+        // „Кажи ми“ е превключвател с име (не текст) — до него е „Попитай библиотеката“.
+        waitFor("Попитай библиотеката")
         shot("play-03-book")
     }
 

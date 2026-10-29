@@ -4,12 +4,16 @@ import android.app.Application
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrElse
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasText
@@ -45,6 +49,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.time.Instant
+import kotlin.test.assertEquals
 
 /**
  * „Искам да прочета“: плочката в „Моето“, списъкът с наличността от каталога (налична, не е на
@@ -151,37 +156,62 @@ class WantToReadScreenshotTest {
     }
 
     /**
-     * Книга, която не е на рафта, но други 5 екземпляра от заглавието са: етикетът казва това,
-     * без „Попитай библиотеката“ и „Кажи ми“ (известието е за този инв. №); отметката остава.
+     * Книга, която не е на рафта, но други 5 екземпляра от заглавието са: етикетът ѝ и отделен
+     * ред „Още 5 на рафта“, без „Попитай библиотеката“ и без нов „Кажи ми“ (известието е за
+     * този инв. №); отметката остава.
      */
     @Test fun bookNotOnShelf() {
         openList(ThemeMode.LIGHT)
         click("Белият дома")
-        waitFor("Този екземпляр е зает · 5 други на рафта")
-        shown("Този екземпляр е зает · 5 други на рафта")
+        waitFor("Още 5 на рафта")
+        shown("Още 5 на рафта")
+        shown("Не е на рафта")
         shown("Искам да прочета")
         compose.waitForIdle()
-        for (hidden in listOf("Попитай библиотеката", "Кажи ми, когато е на рафта"))
-            check(compose.onAllNodes(hasText(hidden)).fetchSemanticsNodes().isEmpty()) { "„$hidden“ при други екземпляри на рафта" }
-        // Вече включеното известие остава, за да може да се изключи.
-        shown("Ще ти кажем, когато е на рафта")
+        check(compose.onAllNodes(hasText("Попитай библиотеката")).fetchSemanticsNodes().isEmpty()) { "„Попитай библиотеката“ при други екземпляри на рафта" }
+        // Вече включеното известие остава (само то, включено), за да може да се изключи.
+        val notify = compose.onAllNodes(notifyToggle)
+        compose.waitUntil(10_000) { notify.fetchSemanticsNodes().isNotEmpty() }
+        check(notify.fetchSemanticsNodes().size == 1) { "един превключвател „Кажи ми“" }
+        notify.onFirst().assertIsOn().assertIsDisplayed()
         shot("82-watch-book-not-on-shelf")
     }
 
-    /** „Кажи ми“ е превключвател (за TalkBack — Switch, включен); изключването се отменя от снекбара. */
+    /** „Кажи ми“ в списъка — само за книга, която не е на рафта; с включено известие — „Не ми казвай“. */
+    @Test fun listMenuOffersNotifyOnlyWhenNotOnShelf() {
+        openList(ThemeMode.LIGHT)
+        fun actions(title: String) = compose.onAllNodes(hasText(title, substring = true) and hasClickAction()).onFirst()
+            .fetchSemanticsNode().config.getOrElse(SemanticsActions.CustomActions) { emptyList() }.map { it.label }
+        assertEquals(listOf("Махни от списъка"), actions("Ох..."), "налична книга")
+        assertEquals(listOf("Махни от списъка", "Не ми казвай"), actions("Белият дома"), "включено известие")
+        assertEquals(listOf("Махни от списъка", "Кажи ми, когато е на рафта"), actions("Под игото"))
+        // Менюто „Още действия“ на наличната книга — само „Махни“.
+        compose.onAllNodes(hasContentDescription("Още действия") and hasAnyAncestor(hasText("Ох...", substring = true))).onFirst().performClick()
+        waitFor("Махни от списъка")
+        check(compose.onAllNodes(hasText("Кажи ми, когато е на рафта")).fetchSemanticsNodes().isEmpty()) { "„Кажи ми“ за налична книга" }
+    }
+
+    /**
+     * „Кажи ми“ е превключвател (за TalkBack — Switch с едно и също име, „включено/изключено“
+     * казва състоянието); видимият надпис се сменя. Изключването се отменя от снекбара.
+     */
     @Test fun notifyToggleUndo() {
         openList(ThemeMode.LIGHT)
         click("Белият дома")
-        waitFor("Ще ти кажем, когато е на рафта")
-        val toggle = hasText("Ще ти кажем, когато е на рафта") and isToggleable() and
-            SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Switch)
-        compose.onAllNodes(toggle).onFirst().assertIsOn().performClick()
+        val toggle = compose.onAllNodes(notifyToggle)
+        compose.waitUntil(15_000) { toggle.fetchSemanticsNodes().isNotEmpty() }
+        // Видимият надпис („Ще ти кажем…“ / „Кажи ми…“) не се чете отделно от името.
+        for (label in listOf("Ще ти кажем, когато е на рафта", "Кажи ми, когато е на рафта"))
+            check(compose.onAllNodes(hasText(label), useUnmergedTree = true).fetchSemanticsNodes().isEmpty()) { "„$label“ се чете като текст" }
+        toggle.onFirst().assertIsOn().performClick()
         waitFor("Няма да получаваш известие")
-        val off = hasText("Кажи ми, когато е на рафта") and isToggleable()
-        compose.waitUntil(10_000) { compose.onAllNodes(off).fetchSemanticsNodes().isNotEmpty() }
-        compose.onAllNodes(off).onFirst().assertIsOff()
+        compose.waitUntil(10_000) { runCatching { toggle.onFirst().assertIsOff() }.isSuccess }
+        check(toggle.fetchSemanticsNodes().size == 1) { "същото име и при изключено" }
         compose.onAllNodes(hasText("Отмени") and hasClickAction()).onFirst().performClick()
-        compose.waitUntil(10_000) { compose.onAllNodes(toggle).fetchSemanticsNodes().isNotEmpty() }
-        compose.onAllNodes(toggle).onFirst().assertIsOn()
+        compose.waitUntil(10_000) { runCatching { toggle.onFirst().assertIsOn() }.isSuccess }
     }
+
+    /** Превключвателят „Кажи ми“: едно и също име за TalkBack, роля Switch. */
+    private val notifyToggle = hasContentDescription("Кажи ми, когато е на рафта") and isToggleable() and
+        SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Switch)
 }

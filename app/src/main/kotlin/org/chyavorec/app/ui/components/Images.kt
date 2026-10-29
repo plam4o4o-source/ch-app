@@ -46,7 +46,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
@@ -60,7 +59,6 @@ import coil3.network.HttpException
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
-import org.chyavorec.app.R
 import org.chyavorec.app.network.ConnectivityObserver
 import org.chyavorec.app.network.CoverNetworkPolicy
 import org.chyavorec.app.ui.theme.Brand
@@ -242,6 +240,11 @@ fun BookCover(
     showStatusDot: Boolean = true,
     /** Дали се вижда истинска корица (а не генерираната със заглавието и автора). */
     onRealCover: ((Boolean) -> Unit)? = null,
+    /**
+     * Заглавието (и наличността, ако е отбелязана) се виждат като текст до корицата —
+     * екранният четец не чете корицата, за да не ги каже два пъти.
+     */
+    decorative: Boolean = false,
 ) {
     val style = LocalThemeStyle.current
     val ext = LocalExtendedColors.current
@@ -253,14 +256,7 @@ fun BookCover(
     val height = width * 1.42f
     // Цветната лента сама не е достъпна за екранни четци и при цветна слепота —
     // наличността се казва и с текст.
-    val statusText = if (showStatusDot) {
-        when (book.status) {
-            BookStatus.AVAILABLE -> stringResource(R.string.status_available)
-            BookStatus.ON_LOAN -> stringResource(R.string.status_on_loan)
-            BookStatus.NOT_ON_SHELF -> stringResource(R.string.status_not_on_shelf)
-            BookStatus.UNAVAILABLE -> stringResource(R.string.status_unavailable)
-        }
-    } else null
+    val statusText = if (showStatusDot && !decorative) bookStatusText(book.status) else null
     // Градиентът зависи само от цвета — не се създава наново при всяка рекомпозиция.
     val background = remember(base) {
         Brush.linearGradient(listOf(lerp(base, Color.White, 0.08f), base, base.darken()), Offset.Zero, Offset(0f, Float.POSITIVE_INFINITY))
@@ -329,7 +325,7 @@ fun BookCover(
                 }
             }
             .clearAndSetSemantics {
-                contentDescription = book.title
+                if (!decorative) contentDescription = book.title
                 if (statusText != null) stateDescription = statusText
             },
     ) {

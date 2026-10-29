@@ -23,6 +23,7 @@ import org.chyavorec.app.ui.components.toState
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
+import org.chyavorec.data.catalog.CatalogResults
 import org.chyavorec.data.catalog.CatalogSearcher
 import org.chyavorec.data.repository.CatalogRepository
 import org.chyavorec.domain.model.CatalogBook
@@ -52,9 +53,23 @@ data class CatalogUiState(
      */
     val searchId: Int = 0,
 ) {
-    /** Изчислява се веднъж за състояние (не при всяка рекомпозиция). */
-    val page: List<CatalogBook> = results.take(shown)
+    /**
+     * Изчислява се веднъж за състояние (не при всяка рекомпозиция). Без повторени инв. №
+     * (ключовете на списъка) — дори ако страница от сменен индекс повтори вече показана книга.
+     */
+    val page: List<CatalogBook> = results.take(shown).distinctBy { it.inv }
     val canLoadMore: Boolean get() = shown < totalResults
+
+    /**
+     * Състоянието след „Още“ до [next]: [reread] — списъкът е прочетен наново (индексът е
+     * сменен); иначе [more] се дописва без вече показаните книги (същият инв. №).
+     */
+    fun withMore(next: Int, more: List<CatalogBook>?, reread: CatalogResults? = null): CatalogUiState = when {
+        reread != null -> copy(results = reread.books, totalResults = reread.total, shown = next)
+        // Празна страница (данните са се сменили) — списъкът свършва тук.
+        more.isNullOrEmpty() -> copy(totalResults = results.size)
+        else -> copy(results = (results + more).distinctBy { it.inv }, shown = next)
+    }
 
     companion object { const val PAGE = 40 }
 }
@@ -181,12 +196,13 @@ class CatalogViewModel(
         val offset = s.results.size
         more = viewModelScope.launch {
             val page = withContext(searchDispatcher) { engine.searchMore(q, offset, next - offset) }
+            // Индексът е сменен след първата страница (старата и новата търсачка ползват една
+            // база) — списъкът се чете наново до същото място, вместо да се допише от друг ред.
+            val again = if (page == null) withContext(searchDispatcher) { engine.searchFirst(q, next) } else null
             _state.update {
                 // Междувременно нова заявка или търсачка — страницата е за стария списък.
                 if (it.query != q || it.engine.data !== engine || it.results.size != offset) it
-                // Празна страница (данните са се сменили) — списъкът свършва тук.
-                else if (page.isEmpty()) it.copy(totalResults = offset)
-                else it.copy(results = it.results + page, shown = next)
+                else it.withMore(next, page, again)
             }
         }
     }

@@ -42,8 +42,12 @@ interface CatalogSearcher {
     suspend fun searchFirst(query: CatalogQuery, limit: Int): CatalogResults =
         search(query).let { CatalogResults(it, it.size) }
 
-    /** Следващата страница: [limit] резултата от [offset] нататък (в същия ред като [searchFirst]). */
-    suspend fun searchMore(query: CatalogQuery, offset: Int, limit: Int): List<CatalogBook> =
+    /**
+     * Следващата страница: [limit] резултата от [offset] нататък (в същия ред като [searchFirst]).
+     * `null` — индексът е сменен след първата страница и местата вече не съвпадат: списъкът
+     * се чете наново със [searchFirst].
+     */
+    suspend fun searchMore(query: CatalogQuery, offset: Int, limit: Int): List<CatalogBook>? =
         search(query).drop(offset).take(limit)
 
     /** Предложения за автоматично допълване: автори и заглавия. */
@@ -124,7 +128,7 @@ class FtsCatalogSearcher(
         if (TextNormalizer.tokens(query.text).isEmpty()) return guarded({ it.search(query) }) {
             store.rows(CatalogIndexQueries.search(query, emptyList(), "")!!.copy(sort = query.sort)).map { it.book }
         }
-        return guarded({ it.search(query) }) { rankedPage(query, from = 0, limit = Int.MAX_VALUE).books }
+        return guarded({ it.search(query) }) { firstPage(query, Int.MAX_VALUE).books }
     }
 
     /**
@@ -135,7 +139,7 @@ class FtsCatalogSearcher(
     override suspend fun searchFirst(query: CatalogQuery, limit: Int): CatalogResults {
         if (TextNormalizer.tokens(query.text).isNotEmpty()) {
             return guarded({ e -> e.search(query).let { CatalogResults(it.take(limit), it.size) } }) {
-                rankedPage(query, from = 0, limit = limit)
+                firstPage(query, limit)
             }
         }
         return guarded({ e -> e.search(query).let { CatalogResults(it.take(limit), it.size) } }) {
@@ -144,10 +148,14 @@ class FtsCatalogSearcher(
         }
     }
 
-    override suspend fun searchMore(query: CatalogQuery, offset: Int, limit: Int): List<CatalogBook> {
+    override suspend fun searchMore(query: CatalogQuery, offset: Int, limit: Int): List<CatalogBook>? {
         if (TextNormalizer.tokens(query.text).isNotEmpty()) {
             return guarded({ it.search(query).drop(offset).take(limit) }) {
-                rankedPage(query, from = offset, limit = limit, reuse = true).books
+                // Точкувани наново (индексът е сменен след първата страница) — местата от
+                // [offset] нататък са от друг списък.
+                val last = lastRanked?.takeIf { it.query == query }
+                val r = ranked(query, reuse = true)
+                if (last != null && r !== last) null else rankedPage(r, offset, limit)?.books
             }
         }
         return guarded({ it.search(query).drop(offset).take(limit) }) {
@@ -189,23 +197,27 @@ class FtsCatalogSearcher(
     }
 
     /**
-     * Книгите на местата [from]…[from]+[limit] от подредените резултати и броят на всички.
+     * Книгите на местата [from]…[from]+[limit] от подредените [r] и броят на всички.
      * Точките и книгите са две отделни четения (обща транзакция в Room минава през връзката
      * за запис и би чакала попълването на нов каталог), затова се проверява, че на всяко
-     * място е точкуваната книга (същият инв. №). Ако индексът е сменен междувременно —
-     * точкува се наново (до [PAGE_ATTEMPTS] пъти), вместо да се покажат чужди книги.
+     * място е точкуваната книга (същият инв. №); `null` — индексът е сменен междувременно.
      */
-    private suspend fun rankedPage(query: CatalogQuery, from: Int, limit: Int, reuse: Boolean = false): CatalogResults {
-        var r = ranked(query, reuse)
-        var attempt = 1
-        while (true) {
-            val start = from.coerceIn(0, r.ords.size)
-            val end = if (limit >= r.ords.size - start) r.ords.size else start + limit
-            val books = store.booksAt(r.ords.asList().subList(start, end))
-            val same = books.size == end - start && books.indices.all { books[it].inv == r.invs[start + it] }
-            if (same || attempt++ >= PAGE_ATTEMPTS) return CatalogResults(books, r.ords.size)
-            r = ranked(query)
-        }
+    private suspend fun rankedPage(r: Ranked, from: Int, limit: Int): CatalogResults? {
+        val start = from.coerceIn(0, r.ords.size)
+        val end = if (limit >= r.ords.size - start) r.ords.size else start + limit
+        val books = store.booksAt(r.ords.asList().subList(start, end))
+        val same = books.size == end - start && books.indices.all { books[it].inv == r.invs[start + it] }
+        return if (same) CatalogResults(books, r.ords.size) else null
+    }
+
+    /**
+     * Първите [limit] резултата с текст. При смяна на индекса между точкуването и книгите —
+     * точкува се наново (до [PAGE_ATTEMPTS] пъти), вместо да се покажат чужди книги; ако
+     * индексът не се успокои — търси се в паметта ([guarded]).
+     */
+    private suspend fun firstPage(query: CatalogQuery, limit: Int): CatalogResults {
+        repeat(PAGE_ATTEMPTS) { rankedPage(ranked(query), 0, limit)?.let { return it } }
+        throw CatalogIndexChangingException()
     }
 
     override suspend fun suggestions(prefix: String, limit: Int): List<String> {
@@ -308,6 +320,9 @@ class FtsCatalogSearcher(
             val engine = fallback() ?: throw e
             withContext(work) { onEngine(engine) }
         }
+
+    /** Индексът се сменя по време на търсенето ([firstPage]) — търси се в паметта. */
+    private class CatalogIndexChangingException : IllegalStateException("catalog index changed during search")
 
     private companion object {
         const val SUGGESTION_PAGE = 200

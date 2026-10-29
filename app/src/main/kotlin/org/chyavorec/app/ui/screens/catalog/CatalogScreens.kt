@@ -108,7 +108,7 @@ import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.theme.CoverTintedTheme
 import org.chyavorec.app.ui.components.BookStatusPill
-import org.chyavorec.app.ui.components.StatusPill
+import org.chyavorec.app.ui.components.CopyStatus
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.InfoRow
@@ -400,7 +400,7 @@ fun BookListItem(b: CatalogBook, onClick: () -> Unit, modifier: Modifier = Modif
         modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BookCover(b, width = 50.dp, showStatusDot = false, modifier = Modifier.sharedElementKey("book-${b.inv}"))
+        BookCover(b, width = 50.dp, showStatusDot = false, modifier = Modifier.sharedElementKey("book-${b.inv}"), decorative = true)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(b.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -557,7 +557,8 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
             // Лентата — само при неуспешно опресняване: кешът от диска сам по себе си не е „без интернет“.
             SyncBanner(ui.fromCache && ui.refreshError != null, ui.syncedAt, ui.refreshError)
             Row(Modifier.padding(20.dp), verticalAlignment = Alignment.Top) {
-                BookCover(b, width = 124.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"))
+                // Заглавието и наличността са текст до корицата — четат се оттам.
+                BookCover(b, width = 124.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"), decorative = true)
                 Spacer(Modifier.width(18.dp))
                 Column(Modifier.weight(1f)) {
                     Text(b.title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
@@ -568,11 +569,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                     }
                     Spacer(Modifier.height(12.dp))
                     // Този екземпляр не е на рафта, но други от заглавието са — това е важното, не „няма я“.
-                    if (othersOnShelf > 0) StatusPill(
-                        pluralStringResource(R.plurals.book_this_copy_out_others_on_shelf, othersOnShelf, othersOnShelf),
-                        LocalExtendedColors.current.ok,
-                    )
-                    else BookStatusPill(ui.liveStatus ?: b.status)
+                    CopyStatus(ui.liveStatus ?: b.status, othersOnShelf)
                     // Живата наличност (от библиотечния сървър) е „в момента“; иначе — към датата на каталога.
                     Text(
                         if (ui.liveStatus != null) stringResource(R.string.book_status_now)
