@@ -76,17 +76,23 @@ fun ContactsScreen(onBack: () -> Unit) {
                     )
                     Column(Modifier.padding(20.dp).widthIn(max = 720.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                         Text(c.organization, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
-                        FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        // По два бутона на ред, с еднаква ширина (и височина в реда); нечетният последен —
+                        // на целия ред. Така са подредени при всеки размер на шрифта, не на „стъпала“.
+                        FlowRow(
+                            Modifier.fillMaxWidth(), maxItemsInEachRow = 2,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp),
+                        ) {
+                            val action = Modifier.weight(1f).fillMaxRowHeight()
                             c.phones.firstOrNull()?.let { ph ->
-                                FilledTonalButton(onClick = { Intents.dial(context, ph) }) { ActionContent(Icons.Outlined.Call, stringResource(R.string.contacts_call)) }
+                                FilledTonalButton(onClick = { Intents.dial(context, ph) }, modifier = action) { ActionContent(Icons.Outlined.Call, stringResource(R.string.contacts_call)) }
                             }
                             c.emails.firstOrNull()?.let { em ->
-                                FilledTonalButton(onClick = { Intents.email(context, em) }) { ActionContent(Icons.Outlined.Email, stringResource(R.string.contacts_email)) }
+                                FilledTonalButton(onClick = { Intents.email(context, em) }, modifier = action) { ActionContent(Icons.Outlined.Email, stringResource(R.string.contacts_email)) }
                             }
-                            FilledTonalButton(onClick = { Intents.map(context, c.address?.let { "$it, ${c.organization}" } ?: c.mapQuery) }) {
+                            FilledTonalButton(onClick = { Intents.map(context, c.address?.let { "$it, ${c.organization}" } ?: c.mapQuery) }, modifier = action) {
                                 ActionContent(Icons.Outlined.Map, stringResource(R.string.contacts_map))
                             }
-                            FilledTonalButton(onClick = { Intents.openUrl(context, c.website) }) { ActionContent(Icons.Outlined.Language, stringResource(R.string.contacts_site)) }
+                            FilledTonalButton(onClick = { Intents.openUrl(context, c.website) }, modifier = action) { ActionContent(Icons.Outlined.Language, stringResource(R.string.contacts_site)) }
                         }
                         ContactCard(Icons.Outlined.Place, stringResource(R.string.contacts_address), listOfNotNull(c.address).ifEmpty { listOf(stringResource(R.string.contacts_see_site)) })
                         if (c.persons.isNotEmpty()) {

@@ -65,6 +65,9 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.time.Instant
+import kotlin.math.roundToInt
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Снимки при много едър системен шрифт (2×) — текстът не бива да се реже (значката с
@@ -240,6 +243,31 @@ class LargeFontScreenshotTest {
         // Онлайн входът не е включен (без адрес на InvLib) — дигиталната карта вместо вход.
         waitFor("Добави читателска карта")
         shot("55-font2-onboarding-last")
+    }
+
+    /**
+     * „Контакти“ (вградените данни) при шрифт 2×: бутоните — подредени, не на „стъпала“. На всеки ред
+     * (до два) са еднакво широки и високи и заедно заемат целия ред; при 2× се пренасят по един.
+     */
+    @Test fun contactsLarge() {
+        launch(deepLink = "$base/kontakti")
+        waitFor("Отвори карта")
+        compose.waitForIdle()
+        val buttons = listOf("Изпрати имейл", "Отвори карта", "Отвори сайта").map { label ->
+            compose.onNode(hasText(label) and hasClickAction()).fetchSemanticsNode().boundsInRoot
+        }
+        val left = buttons.minOf { it.left }
+        val right = buttons.maxOf { it.right }
+        buttons.groupBy { it.top.roundToInt() }.values.forEach { row ->
+            assertTrue(row.size <= 2, "най-много два бутона на ред: $row")
+            assertEquals(left, row.minOf { it.left }, 1f, "редът започва от левия край: $row")
+            assertEquals(right, row.maxOf { it.right }, 1f, "редът стига до десния край: $row")
+            row.forEach {
+                assertEquals(row[0].width, it.width, 1f, "еднаква ширина: $row")
+                assertEquals(row[0].height, it.height, 1f, "еднаква височина: $row")
+            }
+        }
+        shot("59-font2-contacts")
     }
 
     @Test fun myHubLarge() {

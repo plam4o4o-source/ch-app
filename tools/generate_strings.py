@@ -10,7 +10,7 @@ S = {
 "org_library_name": ("Библиотека при НЧ „Васил Левски – 1922“, с. Яворец", "Library of the “Vasil Levski – 1922” Community Centre, Yavorets"),
 "tab_home": ("Начало", "Home"),
 "tab_catalog": ("Каталог", "Catalogue"),
-"tab_my": ("Моето", "My"),
+"tab_my": ("Моето", "My library"),
 "tab_news": ("Новини", "News"),
 "tab_more": ("Още", "More"),
 "qa_card": ("Читателска карта", "Library card"),
@@ -68,7 +68,7 @@ S = {
 "na_messages": ("Личните съобщения още не са включени от библиотеката.", "Personal messages aren’t switched on by the library yet."),
 "renew_conflict_pending": ("Удължаването вече е заявено и чака библиотеката.", "A renewal is already requested and waiting for the library."),
 "renew_conflict_not_allowed": ("Тази книга не може да се удължи онлайн. Попитай в библиотеката.", "This book can’t be renewed online. Please ask at the library."),
-"renew_conflict_other": ("Удължаването не беше прието. Опитай пак по-късно.", "The renewal wasn’t accepted. Please try again later."),
+"renew_conflict_other": ("Удължаването не беше прието. Опитай отново по-късно.", "The renewal wasn’t accepted. Please try again later."),
 "history_title": ("Прочетени книги", "Books read"),
 "my_history_desc": ("Историята на четенето и подобни книги", "Your reading history and similar books"),
 "history_empty": ("Още няма прочетени книги", "No books read yet"),
@@ -278,9 +278,9 @@ S = {
 "want_title": ("Искам да прочета", "Want to read"),
 "my_want_desc": ("Книги, които искаш да вземеш", "Books you’d like to borrow"),
 "want_added": ("Добавена в „Искам да прочета“", "Added to “Want to read”"),
-"want_removed": ("„%1$s“ е махната от списъка", "“%1$s” removed from your list"),
+"want_removed": ("„%1$s“ е премахната от списъка", "“%1$s” removed from your list"),
 "want_undo": ("Отмени", "Undo"),
-"want_remove": ("Махни от списъка", "Remove from list"),
+"want_remove": ("Премахни от списъка", "Remove from list"),
 "want_more": ("Още действия", "More actions"),
 "want_notify": ("Кажи ми, когато е на рафта", "Notify me when it’s on the shelf"),
 "want_notify_on": ("Ще ти кажем, когато е на рафта", "We’ll notify you when it’s on the shelf"),
@@ -294,9 +294,9 @@ S = {
 "want_empty": ("Списъкът е празен", "Your list is empty"),
 "want_empty_hint": ("Отбележи книга с „Искам да прочета“ на страницата ѝ в каталога — тук ще виждаш дали е на рафта.", "Mark a book with “Want to read” on its catalogue page — here you’ll see whether it’s on the shelf."),
 "want_clear": ("Изчисти списъка", "Clear list"),
-"want_clear_confirm": ("Всички книги от „Искам да прочета“ ще бъдат махнати от това устройство.", "All books in “Want to read” will be removed from this device."),
+"want_clear_confirm": ("Всички книги от „Искам да прочета“ ще бъдат премахнати от това устройство.", "All books in “Want to read” will be removed from this device."),
 "want_cleared": ("Списъкът е изчистен.", "List cleared."),
-"want_hint_swipe": ("Плъзни книга настрани, за да я махнеш.", "Swipe a book aside to remove it."),
+"want_hint_swipe": ("Плъзни книга настрани, за да я премахнеш.", "Swipe a book aside to remove it."),
 "notif_want_available": ("„%1$s“ вече е на рафта", "“%1$s” is now on the shelf"),
 "notif_want_available_text": ("От списъка ти „Искам да прочета“ · по последния каталог на библиотеката", "From your “Want to read” list · according to the library’s latest catalogue"),
 "notif_public_want": ("Книга от списъка ти е на рафта", "A book from your list is on the shelf"),
@@ -361,7 +361,7 @@ S = {
 "shortcut_scan": ("Сканирай", "Scan"),
 "loans_empty": ("Нямаш заети книги", "You have no borrowed books"),
 "loans_empty_hint": ("Разгледай каталога — може би нещо ще те заинтригува.", "Browse the catalogue — something might catch your eye."),
-"loan_borrowed": ("Заета: %1$s", "Borrowed: %1$s"),
+"loan_borrowed": ("Взета на %1$s", "Borrowed on %1$s"),
 "loan_due": ("Връщане: %1$s", "Due: %1$s"),
 "loan_renew": ("Удължи срока", "Renew"),
 "loan_stale_note": ("Последно синхронизирани данни — може да не са актуални.", "Last synced data — may be out of date."),
@@ -369,7 +369,7 @@ S = {
 "loan_due_overdue": ("Срокът изтече на %1$s", "Was due on %1$s"),
 "loan_renewing": ("Изпраща се заявка за удължаване", "Sending the renewal request"),
 "loan_open_book": ("Отвори книгата в каталога", "Open the book in the catalogue"),
-"home_loans_label_next": ("Следващ срок", "Next due date"),
+"home_loans_label_next": ("Следващ срок", "Next due"),
 "home_loans_label_overdue": ("Просрочено", "Overdue"),
 "home_loans_return_by": ("Върни до %1$s: %2$s", "Return by %1$s: %2$s"),
 "home_loans_open": ("Отвори „Моите книги“", "Open “My books”"),
@@ -541,8 +541,8 @@ S = {
 "reader_width": ("Ширина на текста", "Text width"),
 "reader_width_normal": ("Нормална", "Normal"),
 "reader_width_narrow": ("Тясна", "Narrow"),
-"settings_clear_cache_desc": ("Новините, събитията, каталогът и снимките, запазени за четене без интернет. Свалят се наново при нужда", "News, events, catalogue and images saved for reading offline. They’re downloaded again when needed"),
-"settings_clear_cache_confirm": ("Временните данни (новини, събития, каталог, корици и снимки, запазени за четене без интернет) ще бъдат изтрити и заредени отново при следваща връзка. Входът, картата, любимите, напомнянията и историята остават.", "Offline data (news, events, catalogue, covers and images) will be deleted and reloaded next time you’re online. Your sign-in, card, favourites, reminders and history stay."),
+"settings_clear_cache_desc": ("Новините, събитията, каталогът, кориците и снимките, запазени за четене без интернет, и свалените документи. Свалят се наново при нужда", "News, events, catalogue, covers and images saved for reading offline, and downloaded documents. They’re downloaded again when needed"),
+"settings_clear_cache_confirm": ("Временните данни (новини, събития, каталог, корици и снимки, запазени за четене без интернет, и свалените документи) ще бъдат изтрити и свалени отново при нужда. Входът, картата, запазените новини, „Искам да прочета“, напомнянията и историята остават.", "Temporary data (news, events, catalogue, covers and images saved for reading offline, and downloaded documents) will be deleted and downloaded again when needed. Your sign-in, card, saved news, “Want to read”, reminders and history stay."),
 "settings_cache_cleared": ("Временните данни са изтрити.", "Temporary data cleared."),
 "settings_legal": ("Информация", "Information"),
 "theme_system": ("Както системата", "System default"),
@@ -627,7 +627,7 @@ S = {
 "channel_messages_important_desc": ("Съобщения, отбелязани от читалището като важни", "Messages the centre marks as important"),
 "messages_title": ("Съобщения", "Messages"),
 "messages_empty": ("Няма съобщения от читалището", "No messages from the centre"),
-"messages_members_hint": ("Някои съобщения са само за членове. Въведи читателската си карта (или влез) в „Моето“, за да ги виждаш.", "Some messages are for members only. Enter your library card (or sign in) under “My” to see them."),
+"messages_members_hint": ("Някои съобщения са само за членове. Въведи читателската си карта (или влез) в „Моето“, за да ги виждаш.", "Some messages are for members only. Enter your library card (or sign in) under “My library” to see them."),
 "messages_members_only": ("Само за членове", "Members only"),
 "messages_new": ("Ново", "New"),
 "messages_valid_until": ("Валидно до %1$s", "Valid until %1$s"),
@@ -709,7 +709,7 @@ S = {
 "about_invlib": ("Библиотечната система InvLib", "The InvLib library system"),
 }
 
-PRIVACY_BG = """Последна актуализация: 27 октомври 2026 г.
+PRIVACY_BG = """Последна актуализация: 29 октомври 2026 г.
 
 # Кой обработва данните
 
@@ -751,7 +751,7 @@ PRIVACY_BG = """Последна актуализация: 27 октомври 2
 
 # Твоите права
 
-Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията, читателските данни, известията за заемания и лични съобщения, напомнянията за срокове и кешираните изображения (без „Запомни ме на това устройство“ същото става и при следващото стартиране, ако приложението е било затворено); „Премахни“ изтрива въведената карта; „Изчисти временните данни“ изтрива публичното съдържание и свалените документи; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
+Можеш по всяко време да изтриеш данните на устройството: „Изход“ изтрива сесията, читателските данни, известията за заемания и лични съобщения, напомнянията за срокове и личните изображения в кеша — снимката в профила и кориците на заетите книги (без „Запомни ме на това устройство“ същото става и при следващото стартиране, ако приложението е било затворено); „Премахни“ изтрива въведената карта; „Изчисти временните данни“ изтрива публичното съдържание и свалените документи; деинсталирането премахва всичко. Изтриване на профила за приложението и данните ти от сървъра можеш да поискаш на https://chyavorec.org/app-delete, в читалището или по имейл. За данните, които библиотеката поддържа за теб като читател (по Наредба № 3 и ОРЗД), можеш да поискаш достъп, корекция или изтриване в читалището или по имейл. Имаш право на жалба до Комисията за защита на личните данни (www.cpdp.bg).
 
 # Деца
 
@@ -761,7 +761,7 @@ PRIVACY_BG = """Последна актуализация: 27 октомври 2
 
 При промяна на тази политика новата версия се публикува в приложението и в сайта на читалището."""
 
-PRIVACY_EN = """Last updated: October 27, 2026
+PRIVACY_EN = """Last updated: October 29, 2026
 
 # Who processes the data
 
@@ -803,7 +803,7 @@ Notifications are prepared on the device (periodic checks for new posts, message
 
 # Your rights
 
-You can delete the data on the device at any time: “Sign out” deletes the session, reader data, loan and personal-message notifications, due-date reminders and cached images (without “Keep me signed in on this device” the same happens at the next start if the app was closed); “Remove” deletes the entered card; “Clear temporary data” deletes public content and downloaded documents; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
+You can delete the data on the device at any time: “Sign out” deletes the session, reader data, loan and personal-message notifications, due-date reminders and the personal images in the cache — your profile photo and the covers of books you borrowed (without “Keep me signed in on this device” the same happens at the next start if the app was closed); “Remove” deletes the entered card; “Clear temporary data” deletes public content and downloaded documents; uninstalling removes everything. You can request deletion of your app account and your data on the server at https://chyavorec.org/app-delete, at the centre or by email. For the data the library keeps about you as a reader (under Bulgarian Ordinance No. 3 and the GDPR), you can request access, correction or deletion at the centre or by email. You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (www.cpdp.bg).
 
 # Children
 

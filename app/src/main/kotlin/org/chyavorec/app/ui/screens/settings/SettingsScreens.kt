@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -358,21 +359,25 @@ private fun PalettePicker(selected: ThemePalette, enabled: Boolean, onSelect: (T
     }
 }
 
+/**
+ * Избор на една от няколко възможности. Редовете са поне 48 dp (мишена за докосване), а
+ * групата — `selectableGroup`, за да обяви TalkBack „1 от 4“.
+ */
 @Composable
-private fun <T> ChoiceDialog(
+internal fun <T> ChoiceDialog(
     title: String, options: List<Pair<T, String>>, selected: T, onSelect: (T) -> Unit, onDismiss: () -> Unit, note: String? = null,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            Column {
+            Column(Modifier.selectableGroup()) {
                 if (note != null) {
                     Text(note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 8.dp))
                 }
                 options.forEach { (value, label) ->
                     Row(
-                        Modifier.fillMaxWidth().selectable(value == selected, role = Role.RadioButton) { onSelect(value) }.padding(vertical = 10.dp),
+                        Modifier.fillMaxWidth().heightIn(min = 48.dp).selectable(value == selected, role = Role.RadioButton) { onSelect(value) }.padding(vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         RadioButton(value == selected, onClick = null)

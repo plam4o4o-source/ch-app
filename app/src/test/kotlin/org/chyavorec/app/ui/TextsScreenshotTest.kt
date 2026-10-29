@@ -37,6 +37,8 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.time.Instant
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Текстовете от вълна 12 на английски: „Какво ново във версия X“, контактите без връзка
@@ -138,13 +140,23 @@ class TextsScreenshotTest {
         shown("chitalishte_yavorec@abv.bg")
         shown("Monday – Thursday: 08:00 – 16:30")
         absent("Something went wrong")
+        // Бутоните — по два на ред, еднакво широки; нечетният „Open website“ — на целия ред.
+        fun bounds(label: String) = compose.onNode(hasText(label) and hasClickAction()).fetchSemanticsNode().boundsInRoot
+        val email = bounds("Send email")
+        val map = bounds("Open map")
+        val site = bounds("Open website")
+        assertEquals(email.top, map.top, 1f, "„Send email“ и „Open map“ — на един ред")
+        assertEquals(email.width, map.width, 1f, "еднаква ширина")
+        assertTrue(site.top >= email.bottom, "„Open website“ — на следващия ред")
+        assertEquals(email.left, site.left, 1f, "„Open website“ — на целия ред")
+        assertEquals(map.right, site.right, 1f, "„Open website“ — на целия ред")
         shot("81-texts-contacts-fallback-en")
     }
 
     /** Входът не е включен (без адрес на InvLib) — „Моето“ предлага карта, не вход. */
     @Test fun myWithoutLogin() {
         launch()
-        val myTab = hasText("My") and isSelectable()
+        val myTab = hasText("My library") and isSelectable()
         compose.waitUntil(10_000) { compose.onAllNodes(myTab).fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodes(myTab).onFirst().performClick()
         waitFor("Add library card")

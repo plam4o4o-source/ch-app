@@ -48,7 +48,7 @@ private val HOME_CONTENT: List<BySelector> = listOf(
 )
 private val TAB_HOME = exactly("Начало", "Home")
 private val TAB_CATALOG = exactly("Каталог", "Catalogue")
-private val TAB_MY = exactly("Моето", "My")
+private val TAB_MY = exactly("Моето", "My library", "My")
 private val TAB_MORE = exactly("Още", "More")
 private val MESSAGES = containing("Съобщения", "съобщени", "Messages", "message")
 /** Заглавката над резултатите в каталога: „12 резултата · данни от InvLib към …“ / „12 results · InvLib data as of …“. */
