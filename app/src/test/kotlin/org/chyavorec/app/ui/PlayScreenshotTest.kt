@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -39,6 +42,7 @@ import org.chyavorec.app.AppConfig
 import org.chyavorec.app.TestResources
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.AppSettings
+import org.chyavorec.app.data.local.WantToReadEntity
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.screens.my.CardData
@@ -65,8 +69,8 @@ import java.time.Instant
  * Снимки за Google Play: 1080×1920 (9:16, телефон), записват се като play-*.png
  * до останалите снимки и CI ги публикува в клон „screenshots“; tools/play_screenshots.py
  * ги рамкира в store/screenshots (номерът е редът в магазина).
- * Очакванията са „меки“ — ако примерните данни не се покажат на малкия екран,
- * снимката пак се прави; тестът проверява само, че екранът се рисува.
+ * Всяка снимка проверява, че основното ѝ съдържание е на екрана ([shown]) — снимка без
+ * него (празен екран, само skeleton) проваля теста, а не стига до магазина.
  */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
@@ -96,7 +100,8 @@ class PlayScreenshotTest {
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse = when (request.path?.substringBefore('?')) {
-                "/data/news.json" -> MockResponse().setBody(TestResources.text("site-news.json"))
+                // Заглавието на първата новина — кратко: във въртележката се събира в два реда, без „…“.
+                "/data/news.json" -> MockResponse().setBody(TestResources.text("site-news.json").replace("\"title\": \"$LONG_TITLE\"", "\"title\": \"$SHORT_TITLE\""))
                 "/rss.xml" -> MockResponse().setBody(TestResources.text("site-rss.xml"))
                 "/javora/index.json" -> MockResponse().setBody(TestResources.text("site-index.json"))
                 "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json"))
@@ -140,11 +145,17 @@ class PlayScreenshotTest {
         settings: AppSettings = AppSettings(onboardingDone = true, introShown = true),
         deepLink: String? = null,
         signedIn: Boolean = false,
+        wantToRead: List<WantToReadEntity> = emptyList(),
     ) {
         val container = container()
         if (signedIn) runBlocking {
             val r = container.authRepository.login("1024-5678", "1234".toCharArray(), remember = false)
             check(r is Outcome.Success) { "входът на примерния читател: $r" }
+        }
+        if (wantToRead.isNotEmpty()) runBlocking {
+            val dao = container.database.wantToRead()
+            dao.clear()
+            wantToRead.forEach { dao.upsert(it) }
         }
         compose.setContent {
             ChitalishteTheme(mode = mode) {
@@ -160,12 +171,31 @@ class PlayScreenshotTest {
         )
         return AppContainer(
             ApplicationProvider.getApplicationContext(), config,
-            FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), client,
+            FixedClock(Instant.parse(NOW)), XorTestCipher(), client,
         )
     }
 
-    private fun waitFor(text: String, substring: Boolean = true) = runCatching {
+    private fun waitFor(text: String, substring: Boolean = true) =
         compose.waitUntil(15_000) { compose.onAllNodes(hasText(text, substring = substring)).fetchSemanticsNodes().isNotEmpty() }
+
+    /** Поне един възел с [text] е на екрана (видим, не само в дървото). */
+    private fun shown(text: String, substring: Boolean = true) {
+        compose.waitForIdle()
+        val nodes = compose.onAllNodes(hasText(text, substring = substring))
+        val count = nodes.fetchSemanticsNodes().size
+        val visible = (0 until count).any { runCatching { nodes[it].assertIsDisplayed() }.isSuccess }
+        if (!visible) throw AssertionError("„$text“ не се вижда на екрана ($count съвпадения в дървото)")
+    }
+
+    /** Текстът [text] е в най-много [maxLines] реда и не е отрязан („…“). */
+    private fun fits(text: String, maxLines: Int) {
+        val node = compose.onAllNodes(hasText(text), useUnmergedTree = true).onFirst().fetchSemanticsNode()
+        val layouts = mutableListOf<TextLayoutResult>()
+        node.config[SemanticsActions.GetTextLayoutResult].action?.invoke(layouts)
+        val layout = layouts.firstOrNull() ?: throw AssertionError("„$text“ — без оформление на текста")
+        if (layout.lineCount > maxLines || layout.hasVisualOverflow) {
+            throw AssertionError("„$text“ — ${layout.lineCount} реда, отрязан: ${layout.hasVisualOverflow}")
+        }
     }
 
     private fun tab(label: String) {
@@ -185,8 +215,13 @@ class PlayScreenshotTest {
 
     @Test fun homeLight() {
         launch()
-        waitFor("45-ти")
+        waitFor(SHORT_TITLE)
         waitFor("Йоан Богослов")
+        shown("Васил Левски – 1922")
+        shown(SHORT_TITLE)
+        shown("Йоан Богослов")
+        // Заглавието във въртележката е цяло (без „…“ по средата на израза).
+        fits(SHORT_TITLE, maxLines = 2)
         shot("play-01-home-light")
     }
 
@@ -194,6 +229,8 @@ class PlayScreenshotTest {
         launch()
         tab("Каталог")
         waitFor("резултата")
+        shown("60 резултата")
+        shown("Джиан, Филип")
         shot("play-02-catalog")
     }
 
@@ -202,6 +239,12 @@ class PlayScreenshotTest {
         launch(deepLink = "$SITE/elektronen-katalog#zapis=136")
         // „Кажи ми“ е превключвател с име (не текст) — до него е „Попитай библиотеката“.
         waitFor("Попитай библиотеката")
+        shown("Белият детството")
+        shown("Не е на рафта")
+        shown("Искам да прочета")
+        compose.onAllNodes(hasContentDescription("Кажи ми, когато е на рафта")).onFirst().assertIsDisplayed()
+        // До корицата на 360 dp етикетът е на един ред (не „Искам да / прочета“).
+        fits("Искам да прочета", maxLines = 1)
         shot("play-03-book")
     }
 
@@ -223,6 +266,9 @@ class PlayScreenshotTest {
                 }
             }
         }
+        shown(READER)
+        shown("1024-5678")
+        shown("Активно")
         shot("play-04-card")
     }
 
@@ -234,6 +280,9 @@ class PlayScreenshotTest {
         compose.waitUntil(10_000) { compose.onAllNodes(subscribe).fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodes(subscribe).onFirst().performClick()
         waitFor("Копирай връзката")
+        shown("Календар")
+        shown("Световен ден")
+        shown("Абонирай се за календара")
         shot("play-05-events")
     }
 
@@ -241,6 +290,11 @@ class PlayScreenshotTest {
     @Test fun loans() {
         launch(deepLink = "my/loans", signedIn = true)
         waitFor("Бай Ганьо")
+        shown("Моите книги")
+        shown("Тютюн")
+        shown("просрочена")
+        shown("Под игото")
+        shown("Удължи")
         shot("play-06-loans")
     }
 
@@ -248,21 +302,45 @@ class PlayScreenshotTest {
         launch()
         tab("Още")
         waitFor("Настройки")
+        shown("Съобщения")
+        shown("Дейности")
+        shown("Галерия")
         shot("play-07-more")
     }
 
-    @Test fun homeDark() {
-        launch(ThemeMode.DARK)
-        waitFor("45-ти")
-        waitFor("Йоан Богослов")
-        shot("play-08-home-dark")
+    /** „Искам да прочета“ (тъмна тема): наличността от каталога и „Кажи ми“ за книгата, която не е на рафта. */
+    @Test fun wantToReadDark() {
+        val t = Instant.parse(NOW).toEpochMilli()
+        launch(
+            ThemeMode.DARK,
+            wantToRead = listOf(
+                WantToReadEntity(136, "Белият детството", "Симеон Колев", t - 1_000, notifyWhenAvailable = true, lastKnownAvailable = false),
+                WantToReadEntity(399581, "Ако останеш", "Коул, Кортни", t - 2_000, notifyWhenAvailable = false, lastKnownAvailable = true),
+                WantToReadEntity(399600, "Анатомът", "Андахази, Федерико", t - 3_000, notifyWhenAvailable = false, lastKnownAvailable = true),
+                WantToReadEntity(399570, "66 градуса Северна ширина", "Ридпат, Майкъл", t - 4_000, notifyWhenAvailable = false, lastKnownAvailable = true),
+                WantToReadEntity(399687, "Алтъна", "Никова, Ивелина", t - 5_000, notifyWhenAvailable = false, lastKnownAvailable = true),
+            ),
+        )
+        tab("Моето")
+        waitFor("5 книги в списъка")
+        compose.onAllNodes(hasText("Искам да прочета")).onFirst().performClick()
+        waitFor("Анатомът")
+        shown("Искам да прочета")
+        shown("Белият детството")
+        shown("Не е на рафта")
+        shown("налична")
+        shown("Анатомът")
+        shot("play-08-want-to-read-dark")
     }
 
     private companion object {
         const val SITE_HOST = "chyavorec.org"
         const val SITE = "https://$SITE_HOST"
         const val API = "/api/invlib/yavorec"
+        const val NOW = "2026-09-26T10:00:00Z"
         const val READER = "Мария Петрова"
+        const val LONG_TITLE = "45-ти общински фолклорен събор на народното творчество „От Тимок до Вита“, село Черни Вит."
+        const val SHORT_TITLE = "45-ти събор „От Тимок до Вита“"
         const val MEMBERSHIP = """{"memberNumber":"1024-5678","holderName":"$READER","validUntil":"2026-12-31","status":"active","barcode":"10245678"}"""
 
         // Към 26.09.2026: срок след 4 дни, просрочена с 2 дни (без удължаване), срок след три седмици.

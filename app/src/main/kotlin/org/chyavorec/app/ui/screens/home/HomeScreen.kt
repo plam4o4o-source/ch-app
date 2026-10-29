@@ -108,7 +108,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -132,6 +132,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -282,7 +283,8 @@ fun HomeScreen(navigate: (String) -> Unit) {
                     LoanDueCard(s, onClick = { navigate(Routes.LOANS) }, modifier = Modifier.animateItem().padding(horizontal = 16.dp, vertical = 6.dp))
                 }
             }
-            state.feast?.takeIf { !greetingShown }?.let { f -> item("feast") { FeastLine(f, Modifier.animateItem()) } }
+            // Докато празникът се зарежда, редът е запазен (с датата) — не се вмъква после над рафтовете.
+            if (!greetingShown && (state.feast != null || state.feastPending)) item("feast") { FeastLine(state.feast, Modifier.animateItem()) }
             item("sync") { SyncBanner(state.news.fromCache, state.news.syncedAt, state.news.refreshError) }
             item("hero") {
                 val top = state.news.data?.take(5).orEmpty()
@@ -298,7 +300,9 @@ fun HomeScreen(navigate: (String) -> Unit) {
                 }
             }
             item("actions") { QuickActionsGrid(rememberQuickActions(), navigate) }
-            if (state.upcoming.isNotEmpty()) {
+            // Докато събитията се зареждат — заглавката и skeleton с височината на картите: щом
+            // дойдат, заемат същото място, вместо да избутат надолу новите книги и „За теб“.
+            if (state.upcoming.isNotEmpty() || state.eventsPending) {
                 item("events-h") {
                     SectionHeader(
                         stringResource(R.string.home_upcoming), label = stringResource(R.string.label_calendar),
@@ -308,10 +312,15 @@ fun HomeScreen(navigate: (String) -> Unit) {
                 }
                 item("events") {
                     // При едър шрифт картата е по-широка и заглавието — до 3 реда (не „Ден на народните буди…“).
-                    val cardWidth = 280.dp * LocalDensity.current.fontScale.coerceIn(1f, 1.3f)
-                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        items(state.upcoming, key = { it.id }) { e ->
-                            EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.width(cardWidth), titleMaxLines = 3)
+                    val scale = LocalDensity.current.fontScale.coerceIn(1f, 1.3f)
+                    val cardWidth = 280.dp * scale
+                    if (state.upcoming.isEmpty()) {
+                        EventsSkeleton(cardWidth, EventSkeletonHeight * scale)
+                    } else {
+                        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            items(state.upcoming, key = { it.id }) { e ->
+                                EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.width(cardWidth), titleMaxLines = 3)
+                            }
                         }
                     }
                 }
@@ -365,7 +374,8 @@ fun HomeScreen(navigate: (String) -> Unit) {
         // Началото няма горна лента: превъртяното съдържание минава под прозрачната лента на
         // състоянието — щом е превъртяно, под часовника и иконите се появява фон, за да се четат.
         val scrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0 } }
-        val scrim by animateFloatAsState(if (scrolled) 0.94f else 0f, label = "status-scrim")
+        // Плътен (1f): през полупрозрачния фон съдържанието се виждаше под часовника.
+        val scrim by animateFloatAsState(if (scrolled) 1f else 0f, label = "status-scrim")
         Box(
             Modifier.align(Alignment.TopCenter).fillMaxWidth()
                 .windowInsetsTopHeight(WindowInsets.statusBars)
@@ -576,10 +586,11 @@ private const val HERO_MAX_WINDOW_FRACTION = 0.48f
 
 /**
  * Православният празник за деня — един ред под търсенето (от /api/calendar на сайта);
- * при празничен поздрав е ред в него ([HolidayGreeting]).
+ * при празничен поздрав е ред в него ([HolidayGreeting]). Без [feast] (още се зарежда) —
+ * само датата, с височината на два реда (колкото е обикновено празникът на телефон).
  */
 @Composable
-private fun FeastLine(feast: DailyFeast, modifier: Modifier = Modifier) {
+private fun FeastLine(feast: DailyFeast?, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val today = LocalAppContainer.current.clock.today()
     val date = remember(today) { Formatters.date(context, today) }
@@ -590,11 +601,26 @@ private fun FeastLine(feast: DailyFeast, modifier: Modifier = Modifier) {
         Icon(Icons.Outlined.AutoAwesome, null, tint = LocalExtendedColors.current.gold, modifier = Modifier.padding(top = 2.dp).size(16.dp))
         Spacer(Modifier.width(8.dp))
         Text(
-            boldMarkdown("$date · ${feast.line}"),
+            if (feast != null) boldMarkdown("$date · ${feast.line}") else AnnotatedString(date),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 2, overflow = TextOverflow.Ellipsis,
+            minLines = if (feast != null) 1 else 2, maxLines = 2, overflow = TextOverflow.Ellipsis,
         )
+    }
+}
+
+/** Приблизителната височина на картата на събитие ([EventCard]: заглавие и описание по два реда, раздел). */
+private val EventSkeletonHeight = 124.dp
+
+/** Мястото на предстоящите събития, докато се зареждат — като реда с картите, без превъртане. */
+@Composable
+private fun EventsSkeleton(cardWidth: Dp, height: Dp) {
+    val desc = stringResource(R.string.loading)
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp),
+        userScrollEnabled = false, modifier = Modifier.semantics { contentDescription = desc },
+    ) {
+        items(2) { Box(Modifier.width(cardWidth).height(height).clip(MaterialTheme.shapes.medium).shimmer()) }
     }
 }
 
@@ -691,18 +717,20 @@ fun BookRow(books: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (C
     // книга може да има такава: заредената корица не „бута“ съдържанието отдолу.
     val online = LocalOnlineCovers.current
     val captions = remember(books, online) { books.any { mayHaveRealCover(it, online) } }
-    // Заредените корици се помнят за реда — при превъртане надписът не мига.
-    val real = remember(books) { mutableStateMapOf<Long, Boolean>() }
+    // Заредените корици се помнят за реда — при превъртане надписът не мига. По състояние за
+    // книга: заредена корица прекомпозира само своята карта, не всички в реда.
+    val real = remember(books) { HashMap<Long, MutableState<Boolean>>() }
     LazyRow(modifier = modifier, contentPadding = PaddingValues(horizontal = ScreenGutter), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         items(books, key = { it.inv }) { b ->
+            val realCover = remember(real, b.inv) { real.getOrPut(b.inv) { mutableStateOf(false) } }
             PressableCard(onClick = { onClick(b) }, modifier = Modifier.width(128.dp)) {
                 Column(Modifier.padding(10.dp)) {
                     BookCover(
                         b, width = 108.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"),
-                        onRealCover = if (captions) { shown -> if (shown) real[b.inv] = true } else null,
+                        onRealCover = if (captions) { shown -> if (shown) realCover.value = true } else null,
                     )
                     if (captions) {
-                        val shown = real[b.inv] == true
+                        val shown = realCover.value
                         // Невидимият надпис само пази мястото (и не се чете от екранния четец).
                         Column(
                             Modifier.graphicsLayer { alpha = if (shown) 1f else 0f }

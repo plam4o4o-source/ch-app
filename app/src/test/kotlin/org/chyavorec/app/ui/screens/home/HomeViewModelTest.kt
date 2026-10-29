@@ -120,6 +120,21 @@ class HomeViewModelTest {
         assertTrue(withoutBooks.isEmpty(), "новини без книгите: $withoutBooks")
     }
 
+    /**
+     * Празникът и събитията идват по-късно от останалото, но мястото им е запазено от първото
+     * състояние — не се вмъкват после над вече показаните книги (началото не „скача“).
+     */
+    @Test fun feastAndEventsKeepTheirPlaceWhileLoading() {
+        val states = open(container())
+        states.forEach { s ->
+            assertTrue(s.eventsPending || s.upcoming.isNotEmpty(), "без място за събитията: $s")
+            assertTrue(s.feastPending || s.feast != null, "без място за празника: $s")
+        }
+        val last = states.last()
+        assertTrue(!last.eventsPending && last.upcoming.isNotEmpty(), "събитията: $last")
+        assertTrue(!last.feastPending && last.feast != null, "празникът: $last")
+    }
+
     private fun assertLoaded(s: HomeUiState, label: String) {
         assertNotNull(s.news.data, label)
         assertTrue(s.news.data!!.isNotEmpty() && !s.news.refreshing, "$label — новините: $s")

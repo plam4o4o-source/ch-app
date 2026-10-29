@@ -36,7 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -210,8 +210,12 @@ fun PressableCard(
     val pressed by interaction.collectIsPressedAsState()
     val reduced = rememberReducedMotion()
     val pressSpec: AnimationSpec<Float> = if (reduced) snap() else AppMotion.fastSpatial()
-    val scale by animateFloatAsState(if (pressed && !reduced) 0.97f else 1f, pressSpec, label = "press")
-    AppCard(modifier = modifier.scale(scale), onClick = onClick, interactionSource = interaction) { content() }
+    val scale = animateFloatAsState(if (pressed && !reduced) 0.97f else 1f, pressSpec, label = "press")
+    // Мащабът се чете само в graphicsLayer — пружината не прекомпозира картата на всеки кадър.
+    AppCard(
+        modifier = modifier.graphicsLayer { scaleX = scale.value; scaleY = scale.value },
+        onClick = onClick, interactionSource = interaction,
+    ) { content() }
 }
 
 /**
