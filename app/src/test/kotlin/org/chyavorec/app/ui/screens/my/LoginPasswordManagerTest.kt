@@ -50,6 +50,7 @@ class LoginPasswordManagerTest {
     @get:Rule val compose = createComposeRule()
     private val server = MockWebServer()
     private val logins = CopyOnWriteArrayList<String>()
+    private val paths = CopyOnWriteArrayList<String>()
 
     // Читателският вход се включва само за https:// адрес — тестовият сървър е с локален сертификат.
     private val cert = HeldCertificate.Builder().addSubjectAlternativeName("localhost").build()
@@ -66,7 +67,7 @@ class LoginPasswordManagerTest {
 
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse = when (request.path?.substringBefore('?')) {
+            override fun dispatch(request: RecordedRequest): MockResponse = when (request.path?.substringBefore('?').also { paths += it.orEmpty() }) {
                 "/api/v1/capabilities" -> MockResponse().setBody(
                     """{"apiVersion":1,"login":true,"profile":true,"loans":true,"membership":false,"holds":false,"renew":false,"passwordReset":false,"accountDeletion":false,"push":false,"availability":false}""",
                 )
@@ -76,6 +77,9 @@ class LoginPasswordManagerTest {
                     if ("\"1234\"" in body) MockResponse().setBody("""{"accessToken":"AT","refreshToken":"RT","expiresIn":2592000,"readerId":"R1"}""")
                     else MockResponse().setResponseCode(401)
                 }
+                // След входа — профилът и заеманията (иначе 404 би изглеждал като изтрит профил).
+                "/api/v1/me" -> MockResponse().setBody("""{"readerId":"R1","cardNumber":"1024-5678","fullName":"Мария Петрова"}""")
+                "/api/v1/me/loans" -> MockResponse().setBody("""{"loans":[]}""")
                 "/data/app-messages.json" -> MockResponse().setBody("[]")
                 else -> MockResponse().setResponseCode(404)
             }
@@ -114,8 +118,12 @@ class LoginPasswordManagerTest {
         compose.onAllNodes(hasSetTextAction())[1].performImeAction()
     }
 
-    private fun waitSignedIn(container: AppContainer) =
+    private fun waitSignedIn(container: AppContainer) = runCatching {
         compose.waitUntil(15_000) { container.authRepository.state.value is AuthState.SignedIn }
+    }.getOrElse {
+        // Диагностика: състоянието на входа и заявките (без ПИН-а).
+        throw AssertionError("state=${container.authRepository.state.value}, logins=${logins.map { b -> b.replace(Regex("\\d{4}\"(?=[,}])"), "****\"") }}, paths=$paths", it)
+    }
 
     @Test fun successfulLoginOffersToSaveCardAndPin() {
         val passwords = FakeSystemPasswords()
