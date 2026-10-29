@@ -2,6 +2,8 @@ package org.chyavorec.app.ui
 
 import android.app.Application
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +24,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -53,8 +54,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.io.File
 import java.time.Instant
 import java.time.LocalDate
@@ -97,7 +100,16 @@ class ScreenshotTest {
         now: String = "2026-09-26T10:00:00Z",
         inflibApiUrl: String = "",
         deepLink: String? = null,
+        online: Boolean = true,
     ) {
+        // С връзка — без лентата „Няма интернет връзка“ (тя стеснява екрана над долната лента).
+        if (online) {
+            val cm = ApplicationProvider.getApplicationContext<Application>().getSystemService(ConnectivityManager::class.java)
+            val caps = ShadowNetworkCapabilities.newInstance()
+            shadowOf(caps).addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            shadowOf(caps).addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+            shadowOf(cm).setNetworkCapabilities(cm.activeNetwork, caps)
+        }
         val base = server.url("/").toString().trimEnd('/')
         val config = AppConfig(
             siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = inflibApiUrl,
@@ -239,7 +251,7 @@ class ScreenshotTest {
     private val unreachableApi = "https://127.0.0.1:1/api/invlib/yavorec"
 
     @Test fun loginOffline() {
-        launch(inflibApiUrl = unreachableApi, deepLink = "login")
+        launch(inflibApiUrl = unreachableApi, deepLink = "login", online = false)
         waitFor("Няма връзка със сървъра на библиотеката")
         shown("Няма връзка със сървъра на библиотеката", substring = true)
         shown("Опитай отново")
@@ -250,7 +262,7 @@ class ScreenshotTest {
     }
 
     @Test fun myOffline() {
-        launch(inflibApiUrl = unreachableApi)
+        launch(inflibApiUrl = unreachableApi, online = false)
         tab("Моето")
         // Кратка бележка (лентата „Няма интернет връзка“ казва останалото), а картата се добавя и без връзка.
         waitFor("Не можем да проверим дали онлайн входът е включен")
@@ -286,31 +298,15 @@ class ScreenshotTest {
     @Test fun homeForYou() {
         launch()
         waitFor("45-ти")
+        // Всичко над полицата е заредено — първото събитие, празникът, новите книги (и без това
+        // мястото им е запазено, вж. HomeUiState.eventsPending) — превъртането не се разминава.
+        waitFor("Световен ден")
+        waitFor("Йоан Богослов")
+        waitFor("Нови постъпления")
         // Полицата е под първия екран (LazyColumn не я композира, докато не се превърти до нея)
         // и се изчислява след първия кадър — превърта се, щом се появи в списъка.
         compose.waitUntil(15_000) {
             runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("За теб")) }.isSuccess
-        }
-        // Началото може още да се допълни над полицата (поздрав, новини, корици — част от това
-        // идва извън Compose и waitForIdle не го чака) и да я избута надолу — превърта се
-        // отново, докато полицата не остане на екрана.
-        val forYou = hasText("За теб")
-        val onScreen = {
-            runCatching { compose.onAllNodes(forYou).onFirst().assertIsDisplayed() }.isSuccess
-        }
-        runCatching {
-            compose.waitUntil(15_000) {
-                onScreen() || run {
-                    runCatching { compose.onAllNodes(forYou).onFirst().performScrollTo() }
-                        .onFailure { runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(forYou) } }
-                    false
-                }
-            }
-        }.onFailure {
-            // За диагностика: къде е полицата спрямо екрана.
-            val node = compose.onAllNodes(forYou).fetchSemanticsNodes().firstOrNull()
-            val root = compose.onAllNodes(isRoot()).fetchSemanticsNodes().firstOrNull()
-            println("homeForYou: node=${node?.boundsInRoot} root=${root?.size}")
         }
         shown("За теб")
         shot("08-home-for-you")

@@ -87,6 +87,11 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isSpecified
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.LocalTextStyle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
@@ -493,7 +498,16 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
                 }
             }
         },
-        label = { Text(stringResource(R.string.want_title)) },
+        label = {
+            // На един ред: до корицата на тесен телефон (360 dp) „Искам да прочета“ иначе се пренася.
+            val style = LocalTextStyle.current
+            val max = if (style.fontSize.isSpecified) style.fontSize else 14.sp
+            BasicText(
+                stringResource(R.string.want_title), style = style.copy(color = LocalContentColor.current),
+                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                autoSize = TextAutoSize.StepBased(minFontSize = max * 0.8f, maxFontSize = max, stepSize = 0.25.sp),
+            )
+        },
         leadingIcon = {
             AnimatedContent(saved != null, transitionSpec = { stateChange(reduced) }, label = "want-chip") { inList ->
                 Icon(

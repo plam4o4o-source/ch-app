@@ -57,6 +57,12 @@ data class HomeUiState(
     val catalogCount: Int? = null,
     val catalogGenerated: String? = null,
     val feast: DailyFeast? = null,
+    /**
+     * Празникът и събитията още не са известни — мястото им е запазено (ред / skeleton), за да
+     * не избутат по-късно надолу вече показаното отдолу (новите книги, „За теб“).
+     */
+    val feastPending: Boolean = true,
+    val eventsPending: Boolean = true,
     val yearsSinceFounding: Int = 0,
     val eventsThisMonth: Int? = null,
     /** Местните празници от сайта (за украсата): кешът веднага, после — от сайта. */
@@ -157,8 +163,12 @@ class HomeViewModel(
             batch.add { it.copy(news = it.news.with(newsResult)) }
             if (!c.isCompleted) batch.flush()
             (c.await() as? Outcome.Success)?.value?.data?.let { fresh -> batch.add(summary = fresh) { it.withCatalog(fresh) } }
+            // Събитията обикновено идват миг след каталога — изчакват се за кратко, за да влязат
+            // в същата промяна (мястото им и без това е запазено — [HomeUiState.eventsPending]).
+            withTimeoutOrNull(coalesceMs) { e.join() }
             if (!e.isCompleted) batch.flush()
-            (e.await() as? Outcome.Success)?.value?.data?.let { fresh -> batch.add { it.withEvents(fresh) } }
+            val freshEvents = (e.await() as? Outcome.Success)?.value?.data
+            batch.add { it.withEvents(freshEvents, done = true) }
             batch.flush()
         }
     }
@@ -197,7 +207,7 @@ class HomeViewModel(
     private fun loadFeast(day: LocalDate) {
         feastDay = day
         // Без празник за новия ден (няма връзка/кеш) редът изчезва — вчерашният би бил грешен.
-        viewModelScope.launch { site.feastToday().let { f -> _state.update { it.copy(feast = f) } } }
+        viewModelScope.launch { site.feastToday().let { f -> _state.update { it.copy(feast = f, feastPending = false) } } }
     }
 
     /** Местните празници: кешът веднага (обикновено преди първия кадър), после сайтът (12 ч. кеш). */
@@ -213,14 +223,19 @@ class HomeViewModel(
         }
     }
 
-    /** Събитията в състоянието (`null` — без промяна). */
-    private fun HomeUiState.withEvents(list: List<Event>?): HomeUiState {
-        if (list == null) return this
+    /**
+     * Събитията в състоянието (`null` — без промяна). [done] — отговорът от мрежата (или грешка):
+     * запазеното място се освобождава; кешът го освобождава само ако има предстоящи.
+     */
+    private fun HomeUiState.withEvents(list: List<Event>?, done: Boolean = false): HomeUiState {
+        if (list == null) return if (done && eventsPending) copy(eventsPending = false) else this
         val today = clock.today()
         val horizon = today.plusDays(30).toString()
+        val upcoming = events.upcoming(list).take(8)
         return copy(
-            upcoming = events.upcoming(list).take(8),
+            upcoming = upcoming,
             eventsThisMonth = list.count { e -> (e.date ?: "") in today.toString()..horizon },
+            eventsPending = eventsPending && !done && upcoming.isEmpty(),
         )
     }
 
