@@ -9,6 +9,8 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToString
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -118,11 +120,12 @@ class LoginPasswordManagerTest {
         compose.onAllNodes(hasSetTextAction())[1].performImeAction()
     }
 
-    private fun waitSignedIn(container: AppContainer) = runCatching {
+    private fun waitSignedIn(container: AppContainer, passwords: FakeSystemPasswords) = runCatching {
         compose.waitUntil(15_000) { container.authRepository.state.value is AuthState.SignedIn }
     }.getOrElse {
         // Диагностика: състоянието на входа и заявките (без ПИН-а).
-        throw AssertionError("state=${container.authRepository.state.value}, logins=${logins.map { b -> b.replace(Regex("\\d{4}\"(?=[,}])"), "****\"") }}, paths=$paths", it)
+        throw AssertionError("state=${container.authRepository.state.value}, logins=${logins.map { b -> b.replace(Regex("\\d{4}\"(?=[,}])"), "****\"") }}, paths=$paths, asked=${passwords.asked}\n" +
+            compose.onRoot(useUnmergedTree = true).printToString(), it)
     }
 
     @Test fun successfulLoginOffersToSaveCardAndPin() {
@@ -131,7 +134,7 @@ class LoginPasswordManagerTest {
         waitForForm()
         compose.waitUntil(5_000) { passwords.asked == 1 }
         typeAndSubmit("1024-5678 ", "1234")
-        waitSignedIn(container)
+        waitSignedIn(container, passwords)
         compose.waitUntil(5_000) { passwords.offered.isNotEmpty() }
         val offered = passwords.offered.single()
         assertEquals("1024-5678", offered.cardNumber)
@@ -144,7 +147,7 @@ class LoginPasswordManagerTest {
         waitForForm()
         compose.onNode(isToggleable()).performClick()
         typeAndSubmit("1024-5678", "1234")
-        waitSignedIn(container)
+        waitSignedIn(container, passwords)
         compose.waitForIdle()
         assertTrue(passwords.offered.isEmpty(), "save offered without „Запомни ме“")
     }
@@ -162,7 +165,7 @@ class LoginPasswordManagerTest {
     @Test fun savedLoginFillsAndSignsInWithOneTap() {
         val passwords = FakeSystemPasswords(saved = SavedLogin("1024-5678", "1234"))
         val container = launch(passwords)
-        waitSignedIn(container)
+        waitSignedIn(container, passwords)
         assertEquals(1, passwords.asked)
         assertTrue(logins.single().contains("\"1024-5678\""), logins.single().replace("1234", "****"))
         compose.waitForIdle()
