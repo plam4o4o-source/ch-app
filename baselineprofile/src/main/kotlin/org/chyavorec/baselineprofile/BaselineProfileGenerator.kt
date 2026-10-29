@@ -29,15 +29,22 @@ class BaselineProfileGenerator {
         coldStartToHome()
     }
 
-    /** Основните пътища на потребителя (без старта — той е в [startup]). */
+    /**
+     * Основните пътища на потребителя (без старта — той е в [startup]). Всеки е [optional]:
+     * неуспешен път не проваля профила — остава всичко, до което другите са стигнали.
+     */
     @Test
     fun criticalUserJourneys() = rule.collect(packageName = targetPackage()) {
         coldStartToHome()
-        catalogJourney()
-        globalSearchJourney()
-        messagesJourney()
-        myGuestJourney()
-        moreJourney()
+        optional("home scroll") { homeScrollJourney() }
+        optional("catalog") { catalogJourney() }
+        optional("global search") { globalSearchJourney() }
+        optional("messages") { messagesJourney() }
+        optional("news") { newsJourney() }
+        optional("want to read") { wantToReadJourney() }
+        optional("my") { myGuestJourney() }
+        optional("more") { moreJourney() }
+        optional("gallery") { galleryJourney() }
     }
 
     /**
