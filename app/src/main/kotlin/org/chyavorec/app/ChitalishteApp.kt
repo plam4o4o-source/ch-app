@@ -2,6 +2,7 @@ package org.chyavorec.app
 
 import android.app.Application
 import androidx.compose.ui.text.font.FontListFontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.ResourceFont
 import androidx.work.Configuration
 import coil3.ImageLoader
@@ -90,12 +91,14 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
      * - шрифтовете (Cormorant, Raleway): Compose ги зарежда блокиращо при първото
      *   измерване на текст през Resources.getFont — системата пази заредения Typeface в
      *   свой кеш, така че първият кадър го взема наготово, без да разчита файла.
+     *   Без курсива: той е само за цитати и курсив в статиите (ContentBlocks) — не е нужен
+     *   за първия кадър, а би стоял в паметта и без да се отвори статия.
      */
     private fun warmUp() {
         runCatching { container.http }
         for (family in listOf(Cormorant, Raleway)) {
             (family as? FontListFontFamily)?.fonts?.forEach { font ->
-                if (font is ResourceFont) runCatching { resources.getFont(font.resId) }
+                if (font is ResourceFont && font.style != FontStyle.Italic) runCatching { resources.getFont(font.resId) }
             }
         }
     }

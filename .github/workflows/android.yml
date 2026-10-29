@@ -46,6 +46,14 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v6
 
+      # Подмножествата на шрифтовете (tools/subset_fonts.py) покриват всички букви от низовете
+      # на приложението — нов текст със знак извън тях спира тук, не на екрана.
+      - name: Fonts cover app strings
+        run: |
+          python3 -m venv "$RUNNER_TEMP/fonttools"
+          "$RUNNER_TEMP/fonttools/bin/pip" install --quiet fonttools==4.67.0
+          "$RUNNER_TEMP/fonttools/bin/python" tools/subset_fonts.py --check
+
       - name: Shared core tests (JVM)
         working-directory: shared
         run: ../gradlew test
