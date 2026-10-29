@@ -3,7 +3,6 @@ package org.chyavorec.app.ui.components
 import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrElse
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
