@@ -88,7 +88,7 @@ class BrokenPhotoTest {
         // „Опитай отново“ — нова заявка към сайта, и пак съобщението (снимката още липсва).
         val before = requests.get()
         compose.onNodeWithText(retry).performClick()
-        compose.waitUntil(10_000) { requests.get() > before }
-        compose.waitUntil(10_000) { compose.onAllNodesWithText(retry).fetchSemanticsNodes().isNotEmpty() }
+        // Условието чете и екрана — иначе Robolectric не прекомпозира, докато чакаме.
+        compose.waitUntil(10_000) { compose.onAllNodesWithText(retry).fetchSemanticsNodes().isNotEmpty() && requests.get() > before }
     }
 }
