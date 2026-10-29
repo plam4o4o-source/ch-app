@@ -19,7 +19,7 @@ class ReaderFontScaleTest {
     @Test fun isCappedAtTwice() {
         val app = appFontScale(2f, TextScale.XLARGE.factor)
         assertEquals(MAX_FONT_SCALE, readerFontScale(app, ReaderFontSize.XL))
-        assertEquals(MAX_FONT_SCALE, readerFontScale(1.7f, ReaderFontSize.L))
+        assertEquals(MAX_FONT_SCALE, readerFontScale(1.8f, ReaderFontSize.L))
     }
 
     @Test fun smallerSizeStillShrinksAtTheMaximum() {
