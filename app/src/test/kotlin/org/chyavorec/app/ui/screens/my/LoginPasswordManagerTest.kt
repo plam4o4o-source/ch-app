@@ -44,6 +44,7 @@ import java.time.Instant
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlinx.coroutines.launch
 
 /**
  * Мениджърът на пароли на входа (с подменен [FakeSystemPasswords] вместо системния прозорец):
@@ -186,23 +187,25 @@ class LoginPasswordManagerTest {
         assertTrue(passwords.offered.isEmpty())
     }
 
-    // ВРЕМЕННО: диагностика — стъпките на входа поотделно, извън главната нишка.
+    // ВРЕМЕННО: диагностика — стъпките на входа поотделно във фонова нишка (главната е свободна).
     @Test fun diagDirectLogin() {
         val container = launch(FakeSystemPasswords())
-        compose.waitForIdle()
-        val report = kotlinx.coroutines.runBlocking(kotlinx.coroutines.Dispatchers.Default) {
-            suspend fun step(name: String, block: suspend () -> Any?): String {
+        waitForForm()
+        val log = CopyOnWriteArrayList<String>()
+        @Volatile var done = false
+        @OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
+        kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.Default) {
+            suspend fun step(name: String, block: suspend () -> Any?) {
                 val t0 = System.nanoTime()
-                val r = runCatching { kotlinx.coroutines.withTimeoutOrNull(4_000) { block() ?: "null" } }
-                return "$name: ${r.getOrNull() ?: r.exceptionOrNull() ?: "TIMEOUT"} (${(System.nanoTime() - t0) / 1_000_000} ms)"
+                val r = runCatching { kotlinx.coroutines.withTimeoutOrNull(3_000) { block() ?: "null" } }
+                log += "$name: ${r.getOrNull() ?: r.exceptionOrNull() ?: "TIMEOUT"} (${(System.nanoTime() - t0) / 1_000_000} ms)"
             }
-            listOf(
-                step("restoreThrottle") { container.authRepository.restoreThrottle() },
-                step("readerCacheClear") { container.readerCache.clear() },
-                step("caps") { container.authRepository.capabilities() },
-                step("login") { container.authRepository.login("1024-5678", "1234".toCharArray(), remember = true) },
-            ).joinToString("; ")
+            step("caps") { container.authRepository.capabilities() }
+            step("persist") { container.authRepository.throttle.persist() }
+            step("login") { container.authRepository.login("1024-5678", "1234".toCharArray(), remember = true) }
+            done = true
         }
-        assertTrue(false, "report=$report state=${container.authRepository.state.value} paths=$paths")
+        runCatching { compose.waitUntil(20_000) { done } }
+        assertTrue(false, "log=$log state=${container.authRepository.state.value} paths=$paths")
     }
 }
