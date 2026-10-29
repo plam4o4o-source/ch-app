@@ -1,11 +1,14 @@
 package org.chyavorec.app.ui.screens.my
 
 import android.app.Application
+import android.os.Looper
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -25,6 +28,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.core.FixedClock
+import org.chyavorec.data.repository.AuthState
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -36,12 +40,14 @@ import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.time.Instant
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 /**
  * Мениджърът на пароли на екрана за вход (с подменен [FakeSystemPasswords] вместо системния
- * прозорец): при отваряне се пита веднъж, а запазеният вход попълва полетата и се изпраща.
- * Предложението за запазване, „Запомни ме“, грешен ПИН и заключването — в [LoginSaveOfferTest].
+ * прозорец): при отваряне се пита веднъж, след успешен вход се предлага запазване, а
+ * запазеният вход попълва полетата и се изпраща. „Запомни ме“, грешен ПИН и заключването —
+ * в [LoginSaveOfferTest].
  */
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class, qualifiers = "bg-w411dp-h891dp-xxhdpi")
@@ -120,11 +126,20 @@ class LoginPasswordManagerTest {
             compose.onAllNodesWithText("Читателски номер").fetchSemanticsNodes().isNotEmpty()
     }
 
+    /**
+     * Изчакване, при което се изпълнява и опашката на главната нишка (Robolectric, PAUSED):
+     * продълженията на viewModelScope (Dispatchers.Main) след мрежата/диска са там.
+     */
+    private fun pumpUntil(timeoutMs: Long = 15_000, condition: () -> Boolean) = compose.waitUntil(timeoutMs) {
+        shadowOf(Looper.getMainLooper()).idle()
+        condition()
+    }
+
     @Test fun openingTheFormAsksThePasswordManagerOnce() {
         val passwords = FakeSystemPasswords()
         launch(passwords)
         waitForForm()
-        compose.waitUntil(5_000) { passwords.asked == 1 }
+        pumpUntil(5_000) { passwords.asked == 1 }
         compose.waitForIdle()
         // Без запазен вход — нищо не се попълва и не се изпраща; пак се пита само веднъж.
         assertEquals(1, passwords.asked)
@@ -132,16 +147,30 @@ class LoginPasswordManagerTest {
         assertTrue(logins.isEmpty())
     }
 
-    @Test fun savedLoginFillsTheFormAndSubmitsIt() {
+    @Test fun successfulLoginOffersToSaveCardAndPin() {
+        val passwords = FakeSystemPasswords()
+        val container = launch(passwords)
+        waitForForm()
+        compose.onAllNodes(hasSetTextAction())[0].performTextInput("1024-5678 ")
+        compose.onAllNodes(hasSetTextAction())[1].performTextInput("1234")
+        compose.onAllNodes(hasSetTextAction())[1].performImeAction()
+        pumpUntil { passwords.offered.isNotEmpty() }
+        assertIs<AuthState.SignedIn>(container.authRepository.state.value)
+        val offered = passwords.offered.single()
+        assertEquals("1024-5678", offered.cardNumber)
+        assertEquals("1234", offered.pin)
+    }
+
+    @Test fun savedLoginFillsTheFormAndSignsIn() {
         val passwords = FakeSystemPasswords(saved = SavedLogin("1024-5678", "1234"))
-        launch(passwords)
-        compose.waitUntil(15_000) { logins.isNotEmpty() }
+        val container = launch(passwords)
+        pumpUntil { container.authRepository.state.value is AuthState.SignedIn }
         assertEquals(1, passwords.asked)
         val body = logins.single()
         assertTrue("\"1024-5678\"" in body && "\"1234\"" in body, body.replace("1234", "****"))
         assertEquals("1024-5678", compose.onAllNodes(hasSetTextAction())[0].fetchSemanticsNode().config[SemanticsProperties.EditableText].text)
-        // Предложението за запазване след успешен вход (и че не се прави за вход от мениджъра) —
-        // в LoginSaveOfferTest (ViewModel-ът; тук мрежовите продължения в Compose теста не са надеждни).
+        pumpUntil(2_000) { true }
+        // Входът е от мениджъра — не се предлага да се запази отново.
         assertTrue(passwords.offered.isEmpty())
     }
 }
