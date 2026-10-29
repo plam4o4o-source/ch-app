@@ -222,6 +222,22 @@ jobs:
             echo "::notice::No native debug symbols in the AAB (prebuilt stripped .so from AndroidX)"
           fi
 
+      # ВРЕМЕННО (wave14/widget): размерът на APK-то по части — за сравнение с v1.2.27.
+      - name: APK size (temporary)
+        run: |
+          python3 - <<'EOF'
+          import zipfile, os
+          p = "app/build/outputs/apk/prod/release/app-prod-release.apk"
+          z = zipfile.ZipFile(p)
+          tot = {}
+          for i in z.infolist():
+              n = i.filename
+              k = "dex" if n.endswith(".dex") else "res/" if n.startswith("res/") else n if n == "resources.arsc" else "other"
+              c = tot.setdefault(k, [0, 0, 0]); c[0] += 1; c[1] += i.compress_size; c[2] += i.file_size
+          print("APK", os.path.getsize(p), "entries", len(z.infolist()))
+          for k, v in tot.items(): print("APKPART", k, v)
+          EOF
+
       - uses: actions/upload-artifact@v7
         with:
           name: release-${{ env.SIGNING_KIND }}
