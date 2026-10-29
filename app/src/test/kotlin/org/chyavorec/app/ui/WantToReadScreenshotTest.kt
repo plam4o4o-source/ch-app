@@ -181,12 +181,12 @@ class WantToReadScreenshotTest {
         openList(ThemeMode.LIGHT)
         fun actions(title: String) = compose.onAllNodes(hasText(title, substring = true) and hasClickAction()).onFirst()
             .fetchSemanticsNode().config.getOrElse(SemanticsActions.CustomActions) { emptyList() }.map { it.label }
-        assertEquals(listOf("Махни от списъка"), actions("Ох..."), "налична книга")
-        assertEquals(listOf("Махни от списъка", "Не ми казвай"), actions("Белият дома"), "включено известие")
-        assertEquals(listOf("Махни от списъка", "Кажи ми, когато е на рафта"), actions("Под игото"))
+        assertEquals(listOf("Премахни от списъка"), actions("Ох..."), "налична книга")
+        assertEquals(listOf("Премахни от списъка", "Не ми казвай"), actions("Белият дома"), "включено известие")
+        assertEquals(listOf("Премахни от списъка", "Кажи ми, когато е на рафта"), actions("Под игото"))
         // Менюто „Още действия“ на наличната книга — само „Махни“.
         compose.onAllNodes(hasContentDescription("Още действия") and hasAnyAncestor(hasText("Ох...", substring = true))).onFirst().performClick()
-        waitFor("Махни от списъка")
+        waitFor("Премахни от списъка")
         check(compose.onAllNodes(hasText("Кажи ми, когато е на рафта")).fetchSemanticsNodes().isEmpty()) { "„Кажи ми“ за налична книга" }
     }
 
