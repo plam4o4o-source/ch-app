@@ -230,6 +230,23 @@ jobs:
             echo "::notice::No native debug symbols in the AAB (prebuilt stripped .so from AndroidX)"
           fi
 
+      # APK-ът от GitHub: native библиотеките са компресирани (useLegacyPackaging, виж
+      # app/build.gradle.kts) — тогава манифестът не бива да има extractNativeLibs=false,
+      # иначе инсталирането пропада.
+      - name: Verify GitHub APK native libraries
+        run: |
+          APK=$(ls app/build/outputs/apk/prod/release/*.apk | head -1)
+          ls -l "$APK"
+          unzip -v "$APK" 'lib/*' | grep -E '\.so$'
+          if unzip -v "$APK" 'lib/*' | grep -E '\.so$' | grep -q ' Stored '; then
+            echo "::error::Uncompressed .so in the GitHub APK (useLegacyPackaging)"; exit 1
+          fi
+          AAPT2=$(ls "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -1)
+          if "$AAPT2" dump xmltree --file AndroidManifest.xml "$APK" | grep -i 'extractNativeLibs.*=false'; then
+            echo "::error::extractNativeLibs=false with compressed .so — the APK would not install"; exit 1
+          fi
+          echo "Native libraries compressed; extractNativeLibs OK"
+
       - uses: actions/upload-artifact@v7
         with:
           name: release-${{ env.SIGNING_KIND }}
