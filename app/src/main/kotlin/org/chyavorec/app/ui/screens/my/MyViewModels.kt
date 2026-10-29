@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
@@ -208,9 +209,41 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
         viewModelScope.launch { capsTracker.refresh() }
     }
 
-    fun setCard(v: String) = _ui.update { it.copy(cardNumber = v.take(32), error = null) }
-    fun setPassword(v: String) = _ui.update { it.copy(password = v.take(128), error = null) }
+    fun setCard(v: String) {
+        fromPasswordManager = false
+        _ui.update { it.copy(cardNumber = v.take(32), error = null) }
+    }
+    fun setPassword(v: String) {
+        fromPasswordManager = false
+        _ui.update { it.copy(password = v.take(128), error = null) }
+    }
     fun setRemember(v: Boolean) = _ui.update { it.copy(remember = v) }
+
+    /** Попълнено от мениджъра на пароли — тогава след входа не се предлага запазване отново. */
+    private var fromPasswordManager = false
+    /** Входът за запазване в мениджъра на пароли — само до показването на предложението, само в паметта. */
+    private var saveOffer: SavedLogin? = null
+
+    /**
+     * Вход с едно докосване: запазеният вход попълва полетата и се изпраща през [submit] —
+     * със същото заключване след грешни опити и със „Запомни ме“ както е избрано.
+     */
+    fun signInWithSaved(login: SavedLogin) {
+        if (_ui.value.submitting || login.cardNumber.isBlank() || login.pin.isEmpty()) return
+        _ui.update { it.copy(cardNumber = login.cardNumber.take(32), password = login.pin.take(128), error = null) }
+        fromPasswordManager = true
+        submit()
+    }
+
+    /**
+     * След успешен вход: картата и ПИН-ът за предложението „Запази в мениджъра на пароли“
+     * (взимат се веднъж). Без „Запомни ме“ или от самия мениджър — `null`.
+     */
+    fun takeSaveOffer(): SavedLogin? = saveOffer.also { saveOffer = null }
+
+    override fun onCleared() {
+        saveOffer = null
+    }
 
     fun submit() {
         val s = _ui.value
@@ -218,11 +251,19 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
         if (s.lockedUntilMillis > c.clock.now().toEpochMilli()) return
         // Паролата се предава като CharArray и се зачиства веднага след заявката.
         val pwd = s.password.toCharArray()
+        // Предложение за запазване — само при „Запомни ме“ (на споделен телефон без него няма какво да остава)
+        // и ако входът не е дошъл от мениджъра. Не се записва никъде от приложението.
+        val offer = if (s.remember && !fromPasswordManager && !isDemo) SavedLogin(s.cardNumber.trim(), s.password) else null
         _ui.update { it.copy(submitting = true, error = null, password = "") }
         viewModelScope.launch {
             when (val r = c.authRepository.login(s.cardNumber, pwd, s.remember)) {
-                is Outcome.Success -> _ui.update { it.copy(submitting = false, success = true, attemptsLeft = null) }
+                is Outcome.Success -> {
+                    saveOffer = offer
+                    _ui.update { it.copy(submitting = false, success = true, attemptsLeft = null) }
+                }
                 is Outcome.Failure -> _ui.update {
+                    // Запазеният ПИН не е минал (напр. сменен): новият, въведен на ръка, може да го замени.
+                    fromPasswordManager = false
                     // Петият грешен ПИН заключва веднага (LoginThrottle) — броячът тръгва още сега.
                     val lock = (r.error as? AppError.RateLimited)?.retryAfterSeconds
                         ?: c.authRepository.throttle.remainingLockSeconds()

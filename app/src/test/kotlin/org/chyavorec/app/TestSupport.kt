@@ -12,6 +12,8 @@ import kotlinx.coroutines.test.setMain
 import org.chyavorec.app.data.local.FavoriteNewsEntity
 import org.chyavorec.app.data.local.FavoritesDao
 import org.chyavorec.app.data.security.BytesCipher
+import org.chyavorec.app.data.security.SavedLogin
+import org.chyavorec.app.data.security.SystemPasswords
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
@@ -29,6 +31,15 @@ class MainDispatcherRule(val dispatcher: TestDispatcher = UnconfinedTestDispatch
 class XorTestCipher : BytesCipher {
     override fun encrypt(plain: ByteArray) = ByteArray(plain.size) { (plain[it].toInt() xor 0x5A).toByte() }
     override fun decrypt(data: ByteArray) = encrypt(data)
+}
+
+/** Мениджър на пароли без системния прозорец: помни предложенията за запазване и връща [saved]. */
+class FakeSystemPasswords(private val saved: SavedLogin? = null) : SystemPasswords {
+    val offered = java.util.concurrent.CopyOnWriteArrayList<SavedLogin>()
+    @Volatile var asked = 0
+        private set
+    override suspend fun offerSave(activity: android.content.Context, login: SavedLogin) { offered += login }
+    override suspend fun savedLogin(activity: android.content.Context): SavedLogin? { asked++; return saved }
 }
 
 class InMemoryFavoritesDao : FavoritesDao {
