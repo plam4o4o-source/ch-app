@@ -1,0 +1,248 @@
+name: Wave 14 emulator check (temporary)
+# ВРЕМЕННО: проверка на сливането от вълна 14 (claude/charming-rubin-3lzor2 @ 52334a7) на
+# емулатор преди изданието, със сравнение с v1.2.27 (8dc63c1). Резултатите (снимки, логове,
+# числа) се публикуват в клона emulator-results, папка v128/ (orphan, force-push; останалото
+# съдържание на клона се запазва, а в v128/ се заменят само частите от това изпълнение).
+# Стъпките с емулатора са continue-on-error: паднал емулатор се записва в резултатите,
+# а изпълнението завършва зелено (без писма за неуспех).
+#
+# Двете издания се строят като в release.yml (assembleProdRelease, versionName на изданието),
+# с временен ключ, общ за двете APK-та: тестовото v1.2.28 — versionCode 1484480, v1.2.27 —
+# 1484479 (затова `adb install -r` от v1.2.27 към v1.2.28 е обновяване). Първо се строи APK-ът
+# точно като за изданието (без x86_64) — за размера; после с добавено x86_64 — за емулатора.
+on:
+  push:
+    branches: [debug/wave14-check]
+permissions:
+  contents: read
+env:
+  NEW_REF: 52334a7f93dd991dcc762dde884407dc31ef1ac0
+  BASE_REF: 8dc63c14cd5825e8fcad183492c873eb9cbb68de
+jobs:
+  key:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Throwaway signing key, shared by all test APKs
+        run: |
+          mkdir key; PASS=$(openssl rand -hex 16); echo "$PASS" > key/pass
+          keytool -genkeypair -noprompt -keystore key/t.jks -storepass "$PASS" -keypass "$PASS" \
+            -alias t -keyalg RSA -keysize 2048 -validity 3 -dname "CN=emulator test, O=not for release"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: key
+          path: key/
+          retention-days: 1
+
+  build:
+    needs: key
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { app: new, vname: "1.2.28", vc: "1484480" }
+          - { app: base, vname: "1.2.27", vc: "1484479" }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.app == 'new' && env.NEW_REF || env.BASE_REF }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: key
+          path: ${{ runner.temp }}/key
+      - name: versionName of the release (as release.yml does; not committed)
+        run: |
+          sed -i 's/versionName = ".*"/versionName = "${{ matrix.vname }}"/' app/build.gradle.kts
+          grep -nE '^val releaseAbis|versionName = |useLegacyPackaging' app/build.gradle.kts
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Build minified prodRelease APK exactly like the release (arm only) — for the size
+        run: |
+          K="$RUNNER_TEMP/key"; P=$(cat "$K/pass")
+          export SIGNING_STORE_FILE="$K/t.jks" SIGNING_STORE_PASSWORD="$P" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$P" VERSION_CODE=${{ matrix.vc }}
+          ./gradlew --no-daemon assembleProdRelease
+          mkdir -p dist
+          cp app/build/outputs/apk/prod/release/app-prod-release.apk "$RUNNER_TEMP/release-${{ matrix.app }}.apk"
+          A="$RUNNER_TEMP/release-${{ matrix.app }}.apk"
+          AAPT=$(ls -d $ANDROID_HOME/build-tools/*/ | sort -V | tail -1)aapt2
+          {
+            echo "== ${{ matrix.app }} ${{ matrix.vname }} $(git rev-parse --short HEAD): release-config APK (arm64-v8a + armeabi-v7a, minified, throwaway key)"
+            echo "APK size: $(stat -c %s "$A") bytes"
+            echo "manifest: $($AAPT dump xmltree --file AndroidManifest.xml "$A" | grep -E 'extractNativeLibs|versionCode|versionName' | tr -s ' ' | tr '\n' ' ')"
+            python3 - "$A" <<'EOF'
+          import zipfile, sys, collections
+          z = zipfile.ZipFile(sys.argv[1])
+          comp, unc, cnt = collections.Counter(), collections.Counter(), collections.Counter()
+          for i in z.infolist():
+              p = i.filename
+              if p.startswith('lib/'): k = '/'.join(p.split('/')[:2])
+              elif p.endswith('.dex'): k = 'classes*.dex'
+              elif p.startswith('res/font/'): k = 'res/font'
+              elif p.startswith('res/'): k = 'res (other)'
+              elif '/' in p: k = p.split('/')[0] + '/'
+              else: k = p
+              comp[k] += i.compress_size; unc[k] += i.file_size; cnt[k] += 1
+          print(f"{'part':<22}{'compressed':>12}{'uncompressed':>14}{'files':>7}")
+          for k, v in comp.most_common():
+              print(f"{k:<22}{v:>12}{unc[k]:>14}{cnt[k]:>7}")
+          print("native libraries (compress type 0 = stored, 8 = deflated):")
+          for i in z.infolist():
+              if i.filename.endswith('.so'):
+                  print(f"  {i.filename:<60} type={i.compress_type} {i.compress_size:>9} / {i.file_size:>9}")
+          print("fonts:")
+          for i in z.infolist():
+              if i.filename.startswith('res/font/'):
+                  print(f"  {i.filename:<50} {i.compress_size:>8} / {i.file_size:>8}")
+          EOF
+          } > dist/size-${{ matrix.app }}.txt
+          cat dist/size-${{ matrix.app }}.txt
+      - name: Temporary x86_64 ABI (emulator only, not committed) and rebuild
+        run: |
+          sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО|' app/build.gradle.kts
+          grep -nE '^val releaseAbis' app/build.gradle.kts
+          K="$RUNNER_TEMP/key"; P=$(cat "$K/pass")
+          export SIGNING_STORE_FILE="$K/t.jks" SIGNING_STORE_PASSWORD="$P" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$P" VERSION_CODE=${{ matrix.vc }}
+          ./gradlew --no-daemon assembleProdRelease
+          if [ ${{ matrix.app }} = new ]; then N=app; R=apk-ref; else N=app-base; R=apk-base-ref; fi
+          cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/$N.apk
+          echo "${{ matrix.vname }} $(git rev-parse --short HEAD) ($(git log -1 --format=%s | cut -c1-70)); versionCode ${{ matrix.vc }}; x86_64 libs: $(unzip -l dist/$N.apk | grep -c 'lib/x86_64/' || true)" > dist/$R.txt
+          cat dist/$R.txt; ls -l dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-${{ matrix.app }}
+          path: dist/
+
+  emulator:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        # Всички на API 33 със swangle_indirect (swiftshader_indirect срива емулатора).
+        part: [abstart-1, abstart-2, homey, widget, widgetupd, func14, sem, fonts, media, monkey, mem, mem-base, rot, offline, look1, look2, look3]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: apk-*
+          merge-multiple: true
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l *.apk; cat apk-*.txt
+      - name: Run on emulator (${{ matrix.part }}, API 33, swangle_indirect)
+        id: run
+        continue-on-error: true
+        timeout-minutes: 62
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          # Без камера: емулаторът пада при отваряне на камерата.
+          emulator-options: -no-window -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: bash .github/perf-check/run.sh ${{ matrix.part }}
+      - name: Record the step outcome
+        if: always()
+        continue-on-error: true
+        run: |
+          mkdir -p out/${{ matrix.part }}
+          echo "part=${{ matrix.part }} api=33 gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          cat out/${{ matrix.part }}/job-status.txt
+          { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
+            echo "== emulator processes"; ps -eo pid,etime,rss,stat,args | grep -iE "qemu|emulator" | grep -v grep | cut -c1-200
+            echo "== emulator crash dumps / logs"; find /tmp ~/.android -newer app.apk \( -name '*.dmp' -o -name '*crash*' \) 2>/dev/null | head -20; } > out/${{ matrix.part }}/host-after-run.txt 2>&1 || true
+      - uses: actions/upload-artifact@v7
+        if: always()
+        continue-on-error: true
+        with:
+          name: out-${{ matrix.part }}
+          path: out/
+
+  publish:
+    needs: [build, emulator]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          pattern: out-*
+          path: results
+          merge-multiple: true
+      - uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          pattern: apk-*
+          path: apks
+          merge-multiple: true
+      - name: Push results to emulator-results/v128 (orphan, force; the rest of the branch is kept)
+        continue-on-error: true
+        run: |
+          set -e
+          SRC=$(git rev-parse --short HEAD)
+          mkdir -p "$RUNNER_TEMP/pub" results
+          if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
+          V="$RUNNER_TEMP/pub/v128"
+          mkdir -p "$V"
+          # Заменят се само частите от това изпълнение (другите от предишни изпълнения остават).
+          for p in $(ls results); do rm -rf "$V/$p"; done
+          cp -r results/. "$V/"
+          mkdir -p "$V/size"; cp apks/size-*.txt apks/apk-*ref.txt "$V/size/" 2>/dev/null || true
+          echo "run ${{ github.run_id }} (attempt ${{ github.run_attempt }}) @ $SRC: $(ls results | tr '\n' ' ')" >> "$V/runs.txt"
+          cd "$V"
+          PARTS=$(ls -d */ 2>/dev/null | tr -d / | grep -v '^size$' || true)
+          {
+            echo "# Wave 14 emulator check before release (52334a7, test build v1.2.28 vs v1.2.27)"
+            echo
+            echo "Source: \`debug/wave14-check\` @ $SRC (app = 52334a7 \`claude/charming-rubin-3lzor2\`, compared with v1.2.27 = 8dc63c1), last run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ). Runs: [runs.txt](runs.txt)."
+            echo "Emulators: google_apis x86_64 API 33, pixel_6 profile, -gpu swangle_indirect; app locale bg-BG (EN in look1 and fonts). APKs: minified prodRelease, x86_64 added, throwaway key; v1.2.28 versionCode 1484480, v1.2.27 versionCode 1484479."
+            echo "Earlier: v1.2.27 full test [../v127b/index.md](../v127b/index.md)."
+            echo
+            echo "## APK size (release configuration: arm64-v8a + armeabi-v7a, no x86_64)"
+            echo; echo '```'; cat size/size-new.txt size/size-base.txt 2>/dev/null; echo '```'; echo
+            echo "| part | status |"; echo "|---|---|"
+            for p in $PARTS; do
+              st=$(cat "$p/job-status.txt" 2>/dev/null || echo "no job status")
+              if grep -q '## COMPLETE' "$p/summary.txt" 2>/dev/null; then c=COMPLETE; elif [ -f "$p/summary.txt" ]; then c="INCOMPLETE ($(grep -m1 'EMULATOR GONE' "$p/summary.txt" || echo 'stopped early'))"; else c="no summary"; fi
+              echo "| $p | $c; $st |"
+            done
+            echo
+            for p in $PARTS; do
+              [ -f "$p/summary.txt" ] || { echo "## $p: no summary (job failed?)"; continue; }
+              echo "## $p"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
+            done
+            echo "## Screenshots"
+            for d in $(find . -name '*.png' -printf '%h\n' | sort -u); do
+              echo; echo "### ${d#./}"; echo
+              for f in $(ls "$d"/*.png | sort); do echo "- [${f#./}](${f#./})"; done
+            done
+            echo; echo "## Other files"; echo
+            find . -type f ! -name '*.png' ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
+          } > index.md
+          R="$RUNNER_TEMP/pub/index.md"
+          if [ -f "$R" ] && ! grep -q "v128/index.md" "$R"; then
+            { head -1 "$R"; echo; echo "Wave 14 check before release (52334a7, test v1.2.28 vs v1.2.27): [v128/index.md](v128/index.md)"; tail -n +2 "$R"; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" "$R"
+          fi
+          cd "$RUNNER_TEMP/pub"
+          git init -q -b emulator-results
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -qm "Emulator results v128 for $SRC (run ${{ github.run_id }})"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/emulator-results
