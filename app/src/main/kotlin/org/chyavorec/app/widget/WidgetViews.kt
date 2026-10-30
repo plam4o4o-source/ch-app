@@ -16,6 +16,7 @@ import androidx.annotation.IdRes
 import org.chyavorec.app.MainActivity
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.navigation.LaunchIntents
+import org.chyavorec.app.util.AppLanguage
 import org.chyavorec.domain.model.DueStatus
 import kotlin.math.roundToInt
 
@@ -72,6 +73,8 @@ internal object WidgetViews {
     /** Малкият вариант (2×2): следващият срок, а без заемания — следващото събитие. */
     private fun small(context: Context, state: WidgetState): RemoteViews {
         val v = RemoteViews(context.packageName, R.layout.widget_small)
+        labels(context, v)
+        v.setTextViewText(R.id.widget_next_due_label, AppLanguage.wrap(context).getString(R.string.widget_next_due))
         v.setOnClickPendingIntent(android.R.id.background, openApp(context))
         val nearest = state.groups.firstOrNull()
         if (state.loansTotal != null && nearest != null) {
@@ -94,6 +97,10 @@ internal object WidgetViews {
     /** Широкият вариант (4×2): бутони, до [maxGroups] срока и следващото събитие. */
     private fun wide(context: Context, state: WidgetState, maxGroups: Int): RemoteViews {
         val v = RemoteViews(context.packageName, R.layout.widget_wide)
+        labels(context, v)
+        val text = AppLanguage.wrap(context)
+        v.setTextViewText(R.id.widget_scan, text.getString(R.string.shortcut_scan))
+        v.setTextViewText(R.id.widget_catalog, text.getString(R.string.shortcut_catalog))
         v.setOnClickPendingIntent(android.R.id.background, openApp(context))
         v.setOnClickPendingIntent(R.id.widget_scan, link(context, "scan"))
         v.setOnClickPendingIntent(R.id.widget_catalog, link(context, "catalog"))
@@ -119,6 +126,17 @@ internal object WidgetViews {
         }
         event(context, v, state, titleSp = 14f)
         return v
+    }
+
+    /**
+     * Постоянните надписи — от кода, на езика на приложението: от `@string` в оформлението
+     * ги разчита началният екран със своя (системния) език, а данните са на езика на приложението.
+     */
+    private fun labels(context: Context, v: RemoteViews) {
+        val text = AppLanguage.wrap(context)
+        v.setTextViewText(R.id.widget_title, text.getString(R.string.widget_label))
+        v.setTextViewText(R.id.widget_next_event_label, text.getString(R.string.widget_next_event))
+        v.setTextViewText(R.id.widget_no_events, text.getString(R.string.widget_no_events))
     }
 
     /** Следващото събитие (докосване — към „Събития“) или „Няма предстоящи събития“. */

@@ -18,6 +18,7 @@
         android:visibility="gone">
 
         <TextView
+            android:id="@+id/widget_next_due_label"
             style="@style/Widget.Chitalishte.Text.Label"
             android:text="@string/widget_next_due" />
 

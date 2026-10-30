@@ -15,6 +15,7 @@
         android:src="@drawable/logo_chitalishte_small" />
 
     <TextView
+        android:id="@+id/widget_title"
         style="@style/Widget.Chitalishte.Text.Title"
         android:layout_marginStart="6dp"
         android:text="@string/widget_label" />
