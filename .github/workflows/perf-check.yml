@@ -126,7 +126,9 @@ jobs:
       fail-fast: false
       matrix:
         # Всички на API 33 със swangle_indirect (swiftshader_indirect срива емулатора).
-        part: [abstart-1, abstart-2, homey, widget, widgetupd, func14, sem, fonts, media, monkey, mem, mem-base, rot, offline, look1, look2, look3]
+        # Кръг 1: abstart-1, abstart-2, homey, widget, widgetupd, func14, sem, fonts, media, monkey, mem, mem-base, rot, offline, look1, look2, look3.
+        # Кръг 2: уиджетът (избор на нашия ред), „Начало“ по кадри от screenrecord, „Кажи ми“ с XML, look2 (емулаторът не тръгна), monkey-base, abstart-3.
+        part: [homey, widget, widgetupd, sem, look2, monkey-base, abstart-3]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8

@@ -48,7 +48,7 @@ NEW_V=$(cut -d' ' -f1 apk-ref.txt 2>/dev/null); BASE_V=$(cut -d' ' -f1 apk-base-
 # ---------------------------------------------------------------- помощни
 a() { timeout ${T:-40} adb shell "$@"; }
 log() { echo "$*" | tee -a $SUM; }
-sec() { echo; echo "################ $* ################"; echo "## $*" >> $SUM; alive "$*"; a log -t PERFCHECK "'section: $*'"; }
+sec() { echo; echo "################ $* ################"; echo "## $*" >> $SUM; alive "$*"; a log -t PERFCHECK "'section: $(echo "$*" | tr -d "'()")'"; }
 now_ms() { echo $(( $(date +%s%N) / 1000000 )); }
 alive() {
   timeout 20 adb shell true >/dev/null 2>&1 && return 0
@@ -380,6 +380,7 @@ part_mem() {
 
 # ================================================================= MONKEY
 part_monkey() {
+  [ "$PART" = monkey-base ] && inst app-base.apk base apk-base-ref.txt
   warmup
   sec "K. Monkey 5000 events (seed 4321, CAMERA revoked)"
   no_camera; log "camera permission before monkey: $CAMSTATE"
@@ -645,7 +646,7 @@ nav_buttons() { a cmd overlay enable-exclusive --category com.android.internal.s
 # Каналите за известия на приложението: групите и групата на всеки канал
 channels() {  # $1 — етикет
   a dumpsys notification --noredact 2>/dev/null | tr -d '\r' > $OUT/notif-$1.txt
-  python3 $H_/parse.py block $OUT/notif-$1.txt "AppSettings: $PKG" "AppSettings:" > $OUT/channels-$1.txt
+  awk -v p="AppSettings: $PKG" 'index($0, p) {f=1; print; next} f && /AppSettings:/ {f=0} f' $OUT/notif-$1.txt > $OUT/channels-$1.txt
   python3 - $OUT/channels-$1.txt <<'EOF'
 import re, sys
 t = open(sys.argv[1], encoding='utf-8', errors='replace').read()
@@ -672,50 +673,56 @@ notif_settings_shots() {  # $1 — префикс на снимките
 LABEL_W='Chitalishte Yavorets|Читалище Яворец'
 wcount() {  # $1 — етикет; брой копия на уиджета ни в хостовете (dumpsys appwidget → файл)
   a dumpsys appwidget 2>/dev/null | tr -d '\r' > $OUT/appwidget-$1.txt
-  WIDS=$(awk '/^ *\[[0-9]+\] id=/{id=$2} /provider=.*org\.chyavorec\.app/{ if (id != "") { print id; id="" } }' $OUT/appwidget-$1.txt | sort -u | tr '\n' ' ')
-  echo $WIDS | wc -w
+  awk '/^ *\[[0-9]+\] id=/{id=$2} /provider=.*org\.chyavorec\.app/{ if (id != "") { print id; id="" } }' $OUT/appwidget-$1.txt | sort -u | tr '\n' ' ' > $OUT/wids.txt
+  wc -w < $OUT/wids.txt
 }
-wopts() { grep -A12 "$(echo $WIDS | awk '{print $NF}')" $OUT/appwidget-$1.txt 2>/dev/null | grep -oE 'appWidget(Min|Max)(Width|Height)=[0-9]+' | tr '\n' ' '; }
+wids() { cat $OUT/wids.txt 2>/dev/null; }
+wopts() { grep -A12 "$(wids | awk '{print $NF}')" $OUT/appwidget-$1.txt 2>/dev/null | grep -oE 'appWidget(Min|Max)(Width|Height)=[0-9]+' | tr '\n' ' '; }
 wstate() {  # уиджетът на началния екран (след dump)
   dump || { echo "(ui dump failed)"; return; }
   echo "views from $PKG: $(grep -c "resource-id=\"$PKG:id/" $OUT/ui.xml) [ids: $(grep -oE "resource-id=\"$PKG:id/[a-zA-Z0-9_]+\"" $OUT/ui.xml | sed -E 's/.*:id\///; s/"//' | sort -u | tr '\n' ' ' | cut -c1-200)]; bounds [$(xy --widget-bounds $PKG)]; texts: $(python3 $H_/find.py $OUT/ui.xml --widget-texts $PKG | tr '\n' '|' | cut -c1-300); error text: $(grep -oE 'text="[^"]*(load widget|loading widget|add widget|Unable to load|не може да се зареди)[^"]*"' $OUT/ui.xml | head -1)"
 }
 # Отваря избора на уиджети от началния екран; WPX/WPY — визуализацията на уиджета ни.
-widget_picker() {  # $1 — етикет
-  local p i
+widget_picker() {  # $1 — етикет; WPX/WPY — визуализацията на уиджета ни
+  local p i hp hy
   WPX=""; WPY=""
   go_home 2; dims; go_home 2; dump; shot widget/$1-00-home
   lpress $((W/2)) $((H*45/100)) 1500; sleep 2; dump; shot widget/$1-01-longpress
   log "WIDGET $1 long-press menu: $(texts 8 | cut -c1-200)"
   tap text '=Widgets|=Приспособления|=Уиджети' || { log "WIDGET $1: no 'Widgets' in the menu"; debug_ui widgets-menu; go_home; return 1; }
-  sleep 3; dump; shot widget/$1-02-picker
-  for i in 1 2 3 4 5 6 7 8; do dump; [ -n "$(xy text "$LABEL_W")" ] && break; sw_up 500; sleep 1.5; done
-  if [ -z "$(xy text "$LABEL_W")" ]; then
-    tap class EditText && { sleep 1; a input text Chitalishte; sleep 3; hide_ime; dump; }
-  fi
+  sleep 3; dims
+  # Редът на приложението ни (в горната половина на списъка, за да се види разгънат)
+  for i in 1 2 3 4 5 6 7 8 9 10; do
+    dump; hp=$(xy text "$LABEL_W"); hy=${hp#* }
+    [ -n "$hp" ] && [ "$hy" -lt $((H*45/100)) ] && break
+    if [ -n "$hp" ]; then a input swipe $((W/2)) $((H*70/100)) $((W/2)) $((H*35/100)) 600; else sw_up 500; fi
+    sleep 1.5
+  done
   shot widget/$1-03-list
-  p=$(xy text ' × ' --miny $((H/8)))
-  if [ -z "$p" ]; then tap text "$LABEL_W"; sleep 2.5; dump; p=$(xy text ' × ' --miny $((H/8))); fi
+  [ -n "$hp" ] || { log "WIDGET $1: our app not in the widget list"; debug_ui picker; go_home; return 1; }
+  hy=${hp#* }
+  p=$(xy text ' × ' --miny $hy)
+  if [ -z "$p" ]; then a input tap $hp; sleep 2.5; dump; hp=$(xy text "$LABEL_W"); hy=${hp#* }; p=$(xy text ' × ' --miny ${hy:-0}); fi
   shot widget/$1-04-app
-  log "WIDGET $1 picker texts: $(python3 $H_/find.py $OUT/ui.xml --texts | grep -E 'Chitalishte|Читалище|×' | tr '\n' '|' | cut -c1-200)"
-  [ -n "$p" ] || { log "WIDGET $1: preview not found in the picker"; debug_ui picker; go_home; return 1; }
-  WPX=${p% *}; WPY=$(( ${p#* } - 150 ))
+  log "WIDGET $1 picker: our row @ $hp; size label @ ${p:-none}; texts: $(python3 $H_/find.py $OUT/ui.xml --texts | grep -E 'Chitalishte|Читалище|×' | tr '\n' '|' | cut -c1-200)"
+  [ -n "$p" ] || { log "WIDGET $1: our preview not found"; debug_ui picker; go_home; return 1; }
+  WPX=${p% *}; WPY=$(( ${p#* } - 170 ))
 }
 widget_add() {  # $1 — етикет; 0 = копие на уиджета е добавено
   local before n
   before=$(wcount $1-before)
   widget_picker $1 || return 1
-  mdrag $WPX $WPY $((W/2)) $((H*42/100))
-  sleep 3; dump; shot widget/$1-05-dropped
+  a input draganddrop $WPX $WPY $((W/2)) $((H*42/100)) 3000 2>&1 | head -2
+  sleep 3; dump; shot widget/$1-05-dropped; log "WIDGET $1 after drop: fg $(fg); $(texts 6 | cut -c1-160)"
   n=$(wcount $1-after)
   if [ "$n" -le "$before" ]; then
-    log "WIDGET $1: drag with motionevent bound nothing ($n) — trying 'input draganddrop'"
+    log "WIDGET $1: draganddrop bound nothing ($n) — trying motionevent"
     widget_picker $1-retry || return 1
-    a input draganddrop $WPX $WPY $((W/2)) $((H*42/100)) 3000 2>&1 | head -2
+    mdrag $WPX $WPY $((W/2)) $((H*42/100))
     sleep 3; dump; shot widget/$1-06-dropped-retry
     n=$(wcount $1-after2)
   fi
-  log "WIDGET $1: widgets of ours bound: $before -> $n (ids $WIDS); options: $(wopts $1-after2 2>/dev/null)$(wopts $1-after)"
+  log "WIDGET $1: widgets of ours bound: $before -> $n (ids $(wids)); options: $(wopts $1-after2 2>/dev/null)$(wopts $1-after)"
   go_home 3
   [ "$n" -gt "$before" ]
 }
@@ -749,7 +756,7 @@ widget_resize_small() {
   read l t r b <<< "$wb"; cy=$(( (t + b) / 2 ))
   lpress $(( (l + r) / 2 )) $cy 1200; sleep 2; dump; shot widget/$K-29-resize-frame
   log "RESIZE frame: $(texts 8 | cut -c1-200)"
-  mdrag $((r - 6)) $cy $(( l + (r - l) * 45 / 100 )) $cy 0.3
+  a input draganddrop $((r - 6)) $cy $(( l + (r - l) * 45 / 100 )) $cy 1500 2>&1 | head -2
   sleep 2; shot widget/$K-29b-resized; go_home 3; go_home 3
   n=$(wcount $K-resized)
   log "RESIZE: right edge $r → $(( l + (r - l) * 45 / 100 )); options now: $(wopts $K-resized)"
@@ -787,7 +794,7 @@ part_widgetupd() {
   sec "U1. v1.2.27: add the widget"
   widget_add base || { log "WIDGET (base): NOT added — update check skipped"; return; }
   go_home 5; log "WIDGET v1.2.27: $(wstate)"; shot widget/upd-10-base-widget
-  local ids0=$WIDS
+  local ids0; ids0=$(wids)
   sec "U2. adb install -r v1.2.28 over v1.2.27 with the widget on the home screen (app not opened)"
   go_home 2
   timeout 180 adb install -r app.apk 2>&1 | tail -1
@@ -797,7 +804,7 @@ part_widgetupd() {
     while [ $(( $(now_ms) - t0 )) -lt $((t * 1000)) ]; do sleep 0.5; done
     go_home 1; log "WIDGET +${t}s after update: $(wstate)"; shot widget/upd-2$t-after-update-${t}s
   done
-  wcount upd-after >/dev/null; log "widget ids before/after the update: [$ids0] / [$WIDS]"
+  wcount upd-after >/dev/null; log "widget ids before/after the update: [$ids0] / [$(wids)]"
   sec "U3. The kept widget after the update: clicks"
   widget_clicks
   sec "U4. App opened after the update: channel groups; widget"
@@ -810,62 +817,25 @@ part_widgetupd() {
 
 # ================================================================= HOMEY (без скокове на „Начало“, лентата на състоянието)
 hy_run() {  # $1 — етикет; [$2 = clear — празен кеш на приложението, без въведението]
-  local L=$1 d=$OUT/homey/$1 nshots=0
-  mkdir -p $OUT/homey; rm -rf $d
-  case $L in *-1) nshots=4;; esac
+  local L=$1 d=$OUT/homey/$1 rp
+  mkdir -p $d/frames
   a am force-stop $PKG; sleep 2
   [ "${2:-}" = clear ] && a "rm -rf /data/data/$PKG/cache/*"
-  a "rm -rf /sdcard/hy; mkdir -p /sdcard/hy"
-  cat > $OUT/hy.sh <<EOF
-read t0 x < /proc/uptime
-(i=0; while [ \$i -lt $nshots ]; do screencap -p /sdcard/hy/s\$i.png; read t x < /proc/uptime; echo "\$i \$t" >> /sdcard/hy/stimes.txt; i=\$((i+1)); sleep 0.4; done) &
-am start -n $ACT -a android.intent.action.MAIN -c android.intent.category.LAUNCHER >/dev/null 2>&1
-i=0
-while [ \$i -lt 9 ]; do
-  uiautomator dump /sdcard/hy/\$i.xml >/dev/null 2>&1
-  read t x < /proc/uptime
-  echo "\$i \$t0 \$t" >> /sdcard/hy/times.txt
-  i=\$((i+1))
-done
-wait
-EOF
-  timeout 20 adb push $OUT/hy.sh /data/local/tmp/hy.sh >/dev/null 2>&1
-  T=150 a sh /data/local/tmp/hy.sh
-  timeout 120 adb pull /sdcard/hy $d >/dev/null 2>&1
-  # Снимките (1080x5600) — смалени, за да не тежат в резултатите
-  if command -v convert >/dev/null; then for f in $d/s*.png; do [ -f "$f" ] && convert "$f" -resize 30% "$f"; done; fi
-  python3 - $d "$L" <<'EOF' | tee -a $SUM
-import os, re, sys, xml.etree.ElementTree as ET
-d, label = sys.argv[1], sys.argv[2]
-anchors = {'NEW': ('Нови постъпления', 'New arrivals'), 'FORYOU': ('За теб', 'For you'),
-           'EVENTS': ('Предстоящи събития', 'Upcoming events'), 'QA': ('Контакти', 'Contacts')}
-rows = []
-for l in open(os.path.join(d, 'times.txt')) if os.path.exists(os.path.join(d, 'times.txt')) else []:
-    i, t0, t = l.split()
-    ys = {}
-    try:
-        root = ET.parse(os.path.join(d, f'{i}.xml')).getroot()
-        for k, names in anchors.items():
-            for n in root.iter('node'):
-                if (n.get('text') or '') in names:
-                    m = re.match(r'\[\d+,(\d+)\]', n.get('bounds', ''))
-                    ys[k] = int(m.group(1)); break
-    except Exception:
-        ys = None
-    rows.append((float(t) - float(t0), ys))
-out = []
-for t, ys in rows:
-    out.append(f"{t:4.1f}s " + ('(no dump)' if ys is None else ' '.join(f"{k}={ys.get(k, '-')}" for k in anchors)))
-moves = []
-for k in anchors:
-    seen = [ys[k] for t, ys in rows if ys and k in ys]
-    if seen:
-        moves.append(f"{k}: first y={seen[0]} moved={max(seen) - min(seen)}px over {len(seen)} samples")
-    else:
-        moves.append(f"{k}: never on screen")
-print(f"HOMEY {label}: " + ' | '.join(out))
-print(f"HOMEY {label} moves: " + '; '.join(moves))
-EOF
+  a "rm -f /sdcard/hy.mp4"
+  # Запис на екрана (1080x5600 → 270x1400), 1 s преди старта, 9 s общо
+  T=30 a screenrecord --size 270x1400 --bit-rate 4000000 --time-limit 9 /sdcard/hy.mp4 & rp=$!
+  sleep 1
+  a am start -n $ACT -a android.intent.action.MAIN -c android.intent.category.LAUNCHER >/dev/null 2>&1
+  wait $rp
+  sleep 1.5; dump; cp $OUT/ui.xml $d/final.xml 2>/dev/null
+  timeout 60 adb pull /sdcard/hy.mp4 $d/rec.mp4 >/dev/null 2>&1
+  if [ -s $d/rec.mp4 ] && command -v ffmpeg >/dev/null; then
+    ffmpeg -loglevel error -i $d/rec.mp4 -vf fps=10 $d/frames/f%04d.png
+    timeout 600 python3 $H_/homey_frames.py $d/frames $d/final.xml 0.25 10 1.0 "$L" 2>&1 | tee -a $SUM
+    # За снимките — кадрите около 1, 2, 3, 4, 6 и 8 s след старта
+    for f in 0021 0031 0041 0051 0071 0091; do [ -f $d/frames/f$f.png ] && cp $d/frames/f$f.png $d/t$(( (10#$f - 11) / 10 ))s.png; done
+    rm -rf $d/frames
+  else log "HOMEY $L: no recording ($(ls -l $d/rec.mp4 2>&1 | cut -c1-80)); ffmpeg $(command -v ffmpeg || echo missing)"; fi
 }
 homey_app() {  # $1 — new | base
   local K=$1
@@ -875,15 +845,18 @@ homey_app() {  # $1 — new | base
   tab catalog; waitfor "$RX_RESULTS" 150 && log "$K first-install catalogue after ${WAITED} ms"
   tab home; sleep 8
   a wm size 1080x5600; sleep 3
-  hy_run $K-cached-1; hy_run $K-cached-2
-  hy_run $K-clearcache-1 clear; sleep 10; hy_run $K-clearcache-2 clear
+  hy_run $K-cached-1; hy_run $K-cached-2; hy_run $K-cached-3
+  hy_run $K-clearcache-1 clear; sleep 10; hy_run $K-clearcache-2 clear; sleep 10; hy_run $K-clearcache-3 clear
   a wm size reset; sleep 3; dims
   sec "Y-$K. Status bar scrim on Home (scrolled), light and dark"
   restart; tab home; sleep 4; sw_up 300; sleep 2; shot homey/$K-scrim-light
   a cmd uimode night yes; sleep 3; restart; tab home; sleep 4; sw_up 300; sleep 2; shot homey/$K-scrim-dark
   a cmd uimode night no; sleep 3
 }
-part_homey() { homey_app new; homey_app base; }
+part_homey() {
+  log "host tools: $( (command -v ffmpeg >/dev/null && python3 -c 'import PIL' 2>/dev/null) || { sudo apt-get update -qq >/dev/null 2>&1; sudo apt-get install -y -qq ffmpeg python3-pil >/dev/null 2>&1; }; command -v ffmpeg; python3 -c 'import PIL; print("PIL", PIL.__version__)' 2>&1)"
+  homey_app new; homey_app base
+}
 
 # ================================================================= FUNC14 (търсене, скенер/native, вход, канали, преки пътища)
 sbstate() { dump; echo "expanded=$(has 'content-desc="(Назад|Back)"' && echo yes || echo no) query-12=$(grep -q 'text="12"' $OUT/ui.xml && echo yes || echo no) hint=$(has 'Търси книга|Search books' && echo yes || echo no) tabbar=$(has 'text="(Начало|Home)"' && echo yes || echo no) app-in-front=$(has "package=\"$PKG\"" && echo yes || echo NO) IME $(a dumpsys input_method | tr -d '\r' | grep -m1 -oE 'mInputShown=(true|false)')"; }
@@ -989,7 +962,7 @@ f_shortcuts() {
 part_func14() { warmup; f_search; f_scan_native; f_login; f_channels; f_shortcuts; }
 
 # ================================================================= SEM (TalkBack: двойни заглавия, редове 48 dp, „Кажи ми“)
-notify_nodes() { dump; echo "desc: $(xy --nodes content-desc 'Кажи ми|Ще ти кажем|Не ми казвай|Notify me|We’ll notify' | tr '\n' ';' | cut -c1-300) || text: $(xy --nodes text 'Кажи ми|Ще ти кажем|Notify me|We’ll notify' | tr '\n' ';' | cut -c1-300)"; }
+notify_nodes() { dump; cp $OUT/ui.xml $OUT/sem-$K-notify-$(date +%s).xml; echo "toggle: $(xy --toggle 'Кажи ми|Ще ти кажем|Notify me|We’ll notify' | tr '\n' ';' | cut -c1-400) || desc: $(xy --nodes content-desc 'Кажи ми|Ще ти кажем|Не ми казвай|Notify me|We’ll notify' | tr '\n' ';' | cut -c1-300) || text: $(xy --nodes text 'Кажи ми|Ще ти кажем|Notify me|We’ll notify' | tr '\n' ';' | cut -c1-300)"; }
 sem_run() {  # $1 — new | base
   local K=$1 item inv found=no i
   sec "T-$K. TalkBack semantics ($K)"
@@ -1125,7 +1098,7 @@ case $PART in
   fonts) part_fonts;;
   media) part_media;;
   mem|mem-base) part_mem;;
-  monkey) part_monkey;;
+  monkey|monkey-base) part_monkey;;
   rot) part_rot;;
   offline) part_offline;;
   look*) part_look;;

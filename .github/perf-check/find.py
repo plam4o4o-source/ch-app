@@ -109,6 +109,21 @@ if mode == '--nodes':
     for n, b in matches(args[1], args[2]):
         print(' '.join(f'{a}="{n.get(a)}"' for a in ('class', 'text', 'content-desc', 'checkable', 'checked', 'clickable', 'selected', 'bounds')))
     sys.exit(0)
+if mode == '--toggle':
+    # find.py ui.xml --toggle VALUE — за всяко съвпадение (text или content-desc): самият възел и
+    # най-близкият родител/дете с checkable/clickable (там е състоянието за TalkBack)
+    alts = [v.lower() for v in args[1].split('|')]
+    att = lambda n: ' '.join(f'{a}="{n.get(a)}"' for a in ('class', 'text', 'content-desc', 'checkable', 'checked', 'clickable', 'bounds'))
+    for n in root.iter('node'):
+        got = ((n.get('text') or '') + ' ' + (n.get('content-desc') or '')).lower()
+        if not any(w in got for w in alts):
+            continue
+        m = n
+        while m is not None and m.get('checkable') != 'true' and m.get('clickable') != 'true':
+            m = parent_of.get(m)
+        kids = [c for c in n.iter('node') if c is not n and (c.get('checkable') == 'true' or c.get('clickable') == 'true')]
+        print(f"MATCH {att(n)} | ACTIONABLE-ANCESTOR {att(m) if m is not None else 'none'} | ACTIONABLE-CHILD {att(kids[0]) if kids else 'none'}")
+    sys.exit(0)
 if mode == '--dupes':
     # find.py ui.xml --dupes — content-desc, който повтаря видим текст на същия екран
     # (TalkBack чете заглавието два пъти); брой и стойностите.
