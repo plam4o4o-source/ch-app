@@ -2,7 +2,9 @@ name: Update control
 
 # Аварийно спиране / пускане на самообновяването на APK-тата извън Google Play.
 # Сваля update.json от изданието, слага (pause) или маха (resume) "paused": true и
-# го качва обратно (gh release upload --clobber). Приложението чете
+# го качва обратно (gh release upload --clobber). „notes“ — „Какво ново“ на вече публикувано
+# издание наново от store/whats-new.md (разделът с точно тази версия): notes/notes_en в
+# update.json и в описанието на изданието; APK-ът и контролните суми не се пипат. Приложението чете
 # /releases/latest/download/update.json и при "paused": true не предлага и не
 # тегли версията. С dry_run само показва резултата. Подробно: docs/RELEASE.md.
 # Пуска се от main (Run workflow → Use workflow from: main); от друг клон спира с грешка.
@@ -10,9 +12,9 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: "pause = спри обновяванията, resume = пусни ги отново"
+        description: "pause = спри обновяванията, resume = пусни ги отново, notes = „Какво ново“ от store/whats-new.md"
         type: choice
-        options: [pause, resume]
+        options: [pause, resume, notes]
         required: true
       tag:
         description: "Издание (напр. v1.2.7); latest = последното публикувано (него чете приложението)"
@@ -70,6 +72,24 @@ jobs:
             echo "::warning::$TAG не е последното публикувано издание ($LATEST) — приложението чете само update.json на $LATEST."
           fi
 
+      # „Какво ново“ — от store/whats-new.md на main (разделът с точно тази версия).
+      - uses: actions/checkout@v7
+        if: inputs.action == 'notes'
+        with:
+          path: src
+
+      - name: What's new from store/whats-new.md
+        if: inputs.action == 'notes'
+        run: |
+          # Без списък с изданията: разделът се ползва само при точно съвпадение на версията.
+          mkdir -p notes
+          python3 src/tools/whats_new.py "${TAG#v}" src/store/whats-new.md /nonexistent notes
+          if grep -qx "Подобрения и поправки." notes/notes.bg.txt; then
+            echo "::error::В store/whats-new.md няма раздел „## ${TAG#v}“ — нищо не е променено."
+            exit 1
+          fi
+          echo "NOTES_DIR=$PWD/notes" >> "$GITHUB_ENV"
+
       - name: Download update.json
         run: |
           mkdir -p work
@@ -97,6 +117,10 @@ jobs:
           elif action == "resume":
               for key in ("paused", "pausedAt", "pausedReason"):
                   data.pop(key, None)
+          elif action == "notes":
+              d = os.environ["NOTES_DIR"]
+              data["notes"] = open(os.path.join(d, "notes.bg.txt"), encoding="utf-8").read().strip()
+              data["notes_en"] = open(os.path.join(d, "notes.en.txt"), encoding="utf-8").read().strip()
           else:
               raise SystemExit(f"Непознато действие: {action}")
           json.dump(data, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
@@ -109,6 +133,24 @@ jobs:
         run: |
           gh release upload "$TAG" work/update.json --repo "$REPO" --clobber
           echo "::notice::update.json на $TAG е обновен ($ACTION). Приложенията го виждат при следващата проверка (до ~12 ч. при отваряне, ~24 ч. във фона; ръчната проверка — веднага)."
+
+      # Описанието на изданието: блоковете „Какво ново:“ и „What's new:“ (както ги пише release.yml).
+      - name: Release notes
+        if: inputs.action == 'notes' && inputs.dry_run != true
+        run: |
+          gh release view "$TAG" --repo "$REPO" --json body --jq .body > body.md
+          python3 - <<'PY'
+          import os, re
+          d = os.environ["NOTES_DIR"]
+          bg = open(os.path.join(d, "notes.bg.txt"), encoding="utf-8").read().strip()
+          en = open(os.path.join(d, "notes.en.txt"), encoding="utf-8").read().strip()
+          body = open("body.md", encoding="utf-8").read()
+          new, n = re.subn(r"(Какво ново:\n).*?(\n\nWhat's new:\n).*?(\n\n)", lambda m: m.group(1) + bg + m.group(2) + en + m.group(3), body, count=1, flags=re.S)
+          if n != 1:
+              raise SystemExit("Описанието на изданието няма блоковете „Какво ново“/„What's new“")
+          open("body.md", "w", encoding="utf-8").write(new)
+          PY
+          gh release edit "$TAG" --repo "$REPO" --notes-file body.md
 
       - name: Dry run
         if: inputs.dry_run == true
