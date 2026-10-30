@@ -13,6 +13,24 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.28
+
+### bg
+- По-лек уиджет за началния екран — вече с истинския си вид в избора на уиджети; приложението е с около 0,5 MB по-малко.
+- Вход с едно докосване: номерът на картата и ПИН-ът може да се запазят в мениджъра на пароли на телефона.
+- Търсенето на „Начало“ се разгръща на място; преки пътища до „Искам да прочета“ и последната отворена книга.
+- „Начало“ не подскача при зареждане, а известията са подредени в групи в настройките на телефона.
+- Галерията показва липсващите снимки, а документите се отварят с истинското си име.
+- По-добра работа с TalkBack и едър шрифт; напомнянията за срок не се губят.
+
+### en
+- A lighter home screen widget — now shown as it really looks in the widget picker; the app is about 0.5 MB smaller.
+- One-tap sign-in: your card number and PIN can be saved in your phone’s password manager.
+- Search on “Home” expands in place; shortcuts to “Want to read” and the last book you opened.
+- “Home” no longer jumps while loading, and notifications are grouped in your phone’s settings.
+- The gallery marks missing photos, and documents open under their real names.
+- Better TalkBack and large-text support; due-date reminders are no longer lost.
+
 ## 1.2.27
 
 ### bg
