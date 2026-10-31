@@ -7,8 +7,7 @@
     <!-- Известия (Android 13+): искат се едва когато потребителят включи известие. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Скенерът на баркодове е на Google Play услугите (свой прозорец с камерата) —
-         приложението няма разрешение за камера, дори библиотека да го добави. -->
-    <uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
+         приложението няма разрешение за камера. -->
     <!-- Самообновяване от GitHub Releases (APK извън Google Play). Play build-ът
          премахва тези разрешения — виж src/play/AndroidManifest.xml. -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />

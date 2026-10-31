@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasSetTextAction
