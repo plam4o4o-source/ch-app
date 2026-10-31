@@ -177,7 +177,7 @@ class ChitalishteWidgetTest {
 
     @Test fun wideShowsGroupsByHeightEventAndButtons() {
         val state = signedInState()
-        val v = apply(WidgetViews.build(app, state, WidgetViews.WideSize))
+        val v = apply(WidgetViews.build(app, state, WidgetViews.FullWideSize))
         assertEquals("5 книги за връщане", v.text(R.id.widget_loans_total))
         assertEquals("просрочена", v.text(R.id.widget_group1_chip))
         assertEquals("10.10", v.text(R.id.widget_group1_text))
@@ -186,7 +186,7 @@ class ChitalishteWidgetTest {
         assertEquals("20.10 · 2 книги", v.text(R.id.widget_group2_text))
         // 4×2 — два срока; по-високият — три.
         assertFalse(v.visible(R.id.widget_group3))
-        val tall = apply(WidgetViews.build(app, state, WidgetViews.WideTallSize))
+        val tall = apply(WidgetViews.build(app, state, WidgetViews.FullWideTallSize))
         assertTrue(tall.visible(R.id.widget_group3))
         assertEquals("след 12 дни", tall.text(R.id.widget_group3_chip))
         assertEquals("Литературна вечер", v.text(R.id.widget_event_title))
@@ -435,7 +435,7 @@ class ChitalishteWidgetTest {
         WidgetUpdater.awaitIdle()
         val english = shown(id)
         assertTrue("in 3 days" in english, english.toString())
-        assertTrue("Next event" in english, english.toString())
+        assertTrue("1 book to return" in english && "Scan" in english, english.toString())
     }
 
     @Test fun previewIsPublishedOncePerVersionWithSampleTexts() {
