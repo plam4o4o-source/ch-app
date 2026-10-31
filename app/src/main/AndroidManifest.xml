@@ -10,6 +10,10 @@
          кадрите се обработват само на устройството. Камерата не е задължителна. -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- androidx.credentials (вход с Google) носи разрешенията за биометрия, а приложението
+         не ползва биометрия (R8 маха и кода ѝ) — без тях в манифеста. -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" tools:node="remove" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" tools:node="remove" />
     <!-- Самообновяване от GitHub Releases (APK извън Google Play). Play build-ът
          премахва тези разрешения — виж src/play/AndroidManifest.xml. -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />

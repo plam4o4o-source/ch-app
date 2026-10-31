@@ -221,6 +221,11 @@ jobs:
             echo "::error::Play build must not contain self-update"; exit 1
           fi
           echo "Play manifest OK ($M)"
+          # Разрешенията за биометрия идват с androidx.credentials, но не се ползват —
+          # AndroidManifest.xml ги маха (tools:node="remove"); APK-ът — в следващата стъпка.
+          if grep -q "USE_BIOMETRIC\|USE_FINGERPRINT" "$M"; then
+            echo "::error::Unused biometric permissions in the Play manifest"; exit 1
+          fi
           # Символите на native библиотеките за Google Play. Сегашните .so (Compose graphics-path,
           # DataStore, CameraX) идват от AAR-и вече без символи — тогава няма какво да се вгради
           # и Play Console само информира; не е грешка на изданието.
@@ -232,8 +237,8 @@ jobs:
 
       # APK-ът от GitHub: native библиотеките са компресирани (useLegacyPackaging, виж
       # app/build.gradle.kts) — тогава манифестът не бива да има extractNativeLibs=false,
-      # иначе инсталирането пропада.
-      - name: Verify GitHub APK native libraries
+      # иначе инсталирането пропада. И без неизползваните разрешения за биометрия.
+      - name: Verify GitHub APK native libraries and permissions
         run: |
           APK=$(ls app/build/outputs/apk/prod/release/*.apk | head -1)
           ls -l "$APK"
@@ -246,6 +251,11 @@ jobs:
             echo "::error::extractNativeLibs=false with compressed .so — the APK would not install"; exit 1
           fi
           echo "Native libraries compressed; extractNativeLibs OK"
+          PERMS=$("$AAPT2" dump permissions "$APK")
+          echo "$PERMS"
+          if grep -q "USE_BIOMETRIC\|USE_FINGERPRINT" <<< "$PERMS"; then
+            echo "::error::Unused biometric permissions in the GitHub APK"; exit 1
+          fi
 
       - uses: actions/upload-artifact@v7
         with:
