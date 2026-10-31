@@ -185,28 +185,6 @@ class NotifierTest {
         assertEquals(selfUpdate, nm.notificationChannelGroups.any { it.id == "3_app" })
         assertEquals(context.getString(R.string.channel_library), nm.getNotificationChannel("library").name.toString())
     }
-}
-
-/** Каналите от по-стара версия — без [NotifierTest.setUp], който вече ги е създал в новите групи. */
-@RunWith(AndroidJUnit4::class)
-@Config(application = Application::class)
-class NotifierLegacyGroupsTest {
-    private val context get() = ApplicationProvider.getApplicationContext<Application>()
-
-    /**
-     * Канал от по-стара версия, вече в старата група: Android не би го преместил, затова остава в нея
-     * (с новото ѝ име), вместо да стане невидим в настройките под изтрита група.
-     */
-    @Test fun channelInLegacyGroupStaysThere() {
-        val nm = context.getSystemService(NotificationManager::class.java)
-        nm.createNotificationChannelGroup(NotificationChannelGroup("group_my_library", "Стара"))
-        nm.createNotificationChannel(NotificationChannel("loans", "Стар", NotificationManager.IMPORTANCE_HIGH).apply { group = "group_my_library" })
-        Notifier.createChannels(context)
-        assertEquals("group_my_library", nm.getNotificationChannel("loans").group)
-        val groups = nm.notificationChannelGroups.associate { it.id to it.name.toString() }
-        assertEquals(context.getString(R.string.channel_group_my_library), groups["group_my_library"])
-        assertEquals("2_centre", nm.getNotificationChannel("events").group)
-    }
 
     private fun template(n: Notification) = n.extras.getString(Notification.EXTRA_TEMPLATE)
     private fun hasPicture(n: Notification) =
@@ -298,5 +276,27 @@ class NotifierLegacyGroupsTest {
         @Suppress("DEPRECATION")
         val send = pending.savedIntent.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)!!
         assertEquals("Изложба на шевици\nhttps://chyavorec.org/news/izlozhba", send.getStringExtra(Intent.EXTRA_TEXT))
+    }
+}
+
+/** Каналите от по-стара версия — без [NotifierTest.setUp], който вече ги е създал в новите групи. */
+@RunWith(AndroidJUnit4::class)
+@Config(application = Application::class)
+class NotifierLegacyGroupsTest {
+    private val context get() = ApplicationProvider.getApplicationContext<Application>()
+
+    /**
+     * Канал от по-стара версия, вече в старата група: Android не би го преместил, затова остава в нея
+     * (с новото ѝ име), вместо да стане невидим в настройките под изтрита група.
+     */
+    @Test fun channelInLegacyGroupStaysThere() {
+        val nm = context.getSystemService(NotificationManager::class.java)
+        nm.createNotificationChannelGroup(NotificationChannelGroup("group_my_library", "Стара"))
+        nm.createNotificationChannel(NotificationChannel("loans", "Стар", NotificationManager.IMPORTANCE_HIGH).apply { group = "group_my_library" })
+        Notifier.createChannels(context)
+        assertEquals("group_my_library", nm.getNotificationChannel("loans").group)
+        val groups = nm.notificationChannelGroups.associate { it.id to it.name.toString() }
+        assertEquals(context.getString(R.string.channel_group_my_library), groups["group_my_library"])
+        assertEquals("2_centre", nm.getNotificationChannel("events").group)
     }
 }
