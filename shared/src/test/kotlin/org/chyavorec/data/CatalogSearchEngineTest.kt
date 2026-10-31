@@ -74,6 +74,22 @@ class CatalogSearchEngineTest {
 
     @Test fun newestUsesRegistrationDate() = assertEquals(listOf(2L, 3L), engine.newest(2).map { it.inv })
 
+    @Test fun newestShowsEachTitleOnce() {
+        // Всеки екземпляр е отделен запис: „Бевъл-стоук“ ×2 и „Дъхът на спомените“ ×3 — по веднъж.
+        val copies = listOf(
+            CatalogBook(10, "Евънс, Ема", "Бевъл-стоук: Кн. 1-2", registeredOn = "2026-10-01"),
+            CatalogBook(11, "Евънс, Ема", "Бевъл-стоук: Кн. 1-2", registeredOn = "2026-10-01"),
+            CatalogBook(12, "Райли, Луси", "Дъхът на спомените — том 3", registeredOn = "2026-09-30"),
+            CatalogBook(13, "Райли, Луси", "Дъхът на спомените – том 3", registeredOn = "2026-09-30"),
+            CatalogBook(14, "Райли, Луси", "дъхът на спомените, том 3", registeredOn = "2026-09-29"),
+            // Същото заглавие, друг автор — друга книга.
+            CatalogBook(15, "Друг, Автор", "Бевъл-стоук: Кн. 1-2", registeredOn = "2026-09-28"),
+        )
+        val newest = CatalogSearchEngine.newest(books + copies, 5)
+        // Най-новият екземпляр от всяко заглавие (при еднаква дата — по-големият номер).
+        assertEquals(listOf(11L, 13L, 15L, 2L, 3L), newest.map { it.inv })
+    }
+
     @Test fun performanceAtRealisticScale() {
         val big = (1..15_000).map { i -> CatalogBook(i.toLong(), "Автор $i", "Заглавие номер $i", keywords = "ключ${i % 50}", available = i % 3 != 0) }
         val e = CatalogSearchEngine(CatalogSnapshot("Б", "Я", "2026-01-01", big, emptyList()))

@@ -183,10 +183,16 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
             filter { it.isNotBlank() }.groupingBy { it }.eachCount().entries
                 .sortedByDescending { it.value }.map { it.key }
 
+        /**
+         * Най-новите [limit] заглавия — по един (най-новия) екземпляр: всеки екземпляр е отделен
+         * запис, а еднакво заглавие + автор е една книга (както в [copiesOf]).
+         */
         fun newest(books: List<CatalogBook>, limit: Int): List<CatalogBook> =
-            books.filter { it.registeredOn.isNotBlank() }
+            books.asSequence().filter { it.registeredOn.isNotBlank() }
                 .sortedWith(compareByDescending<CatalogBook> { it.registeredOn }.thenByDescending { it.inv })
+                .distinctBy { ReadingRecommender.titleKey(it.title, it.author) }
                 .take(limit)
+                .toList()
 
         fun shelfBooks(snapshot: CatalogSnapshot, byInv: Map<Long, CatalogBook> = snapshot.books.associateBy { it.inv }): List<Pair<String, List<CatalogBook>>> =
             snapshot.shelves.map { shelf -> shelf.name to shelf.invNumbers.mapNotNull { byInv[it] } }
@@ -200,13 +206,16 @@ class CatalogSearchEngine(val snapshot: CatalogSnapshot) {
          */
         fun homeSummary(snapshot: CatalogSnapshot): CatalogHomeSummary {
             val newest = newest(snapshot.books, HOME_NEWEST)
+            // „За теб“ — без заглавията от „Нови книги“ (и без другите им екземпляри).
+            val newestTitles = newest.mapTo(HashSet()) { ReadingRecommender.titleKey(it.title, it.author) }
+            val onNewestRow = snapshot.books.filter { ReadingRecommender.titleKey(it.title, it.author) in newestTitles }.mapTo(HashSet()) { it.inv }
             return CatalogHomeSummary(
                 count = snapshot.books.size,
                 generatedOn = snapshot.generatedOn,
                 newest = newest.map(::forShelf),
                 shelves = shelfBooks(snapshot).map { (name, books) -> CatalogHomeShelf(name, books.map(::forShelf)) },
                 // Подборът за „За теб“ — веднъж за каталога, не при всяко показване на началния екран.
-                picks = ForYouPicks.popularAndNew(snapshot.books, skip = newest.mapTo(HashSet()) { it.inv }).map(::forShelf),
+                picks = ForYouPicks.popularAndNew(snapshot.books, skip = onNewestRow).map(::forShelf),
             )
         }
 
