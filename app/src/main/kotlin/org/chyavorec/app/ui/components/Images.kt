@@ -85,7 +85,8 @@ fun RemoteImage(
     contentScale: ContentScale = ContentScale.Crop,
     fallbackUrl: String? = null,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
-    onFailure: (() -> Unit)? = null,
+    /** Не се зареди (и резервният адрес): с грешката от Coil — напр. HTTP 404 или без връзка. */
+    onFailure: ((Throwable?) -> Unit)? = null,
     cover: Boolean = false,
     /**
      * Ключът в кеша в паметта е самият адрес (без размера) — за да може прегледът на цял
@@ -111,7 +112,7 @@ fun RemoteImage(
                 contentDescription = contentDescription,
                 contentScale = contentScale,
                 onError = {
-                    if (!failed && fallbackUrl != null) failed = true else onFailure?.invoke()
+                    if (!failed && fallbackUrl != null) failed = true else onFailure?.invoke(it.result.throwable)
                 },
                 modifier = Modifier.fillMaxSize(),
             )

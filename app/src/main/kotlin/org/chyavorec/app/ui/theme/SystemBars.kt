@@ -6,12 +6,15 @@ import android.view.Window
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 /**
  * Показване „от край до край“ без оттеглените в Android 15 API.
@@ -78,5 +81,29 @@ fun SystemBarIcons(darkStatusBackground: Boolean? = null, darkNavigationBackgrou
         val request = BarRequest(darkStatusBackground, darkNavigationBackground)
         state.requests.add(request)
         onDispose { state.requests.remove(request) }
+    }
+}
+
+/**
+ * Потапящ режим (прегледът на снимки): докато [hidden], системните ленти са скрити и се
+ * показват временно с плъзгане от ръба. При излизане — пак видими, с предишното поведение
+ * (иконите им — от [SystemBarIcons]/[SystemBarsAppearance]).
+ */
+@Composable
+fun ImmersiveSystemBars(hidden: Boolean) {
+    val view = LocalView.current
+    val window = (view.context as? Activity)?.window
+    if (view.isInEditMode || window == null) return
+    val controller = remember(window, view) { WindowCompat.getInsetsController(window, view) }
+    DisposableEffect(controller) {
+        val behavior = controller.systemBarsBehavior
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        onDispose {
+            controller.show(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior = behavior
+        }
+    }
+    LaunchedEffect(controller, hidden) {
+        if (hidden) controller.hide(WindowInsetsCompat.Type.systemBars()) else controller.show(WindowInsetsCompat.Type.systemBars())
     }
 }

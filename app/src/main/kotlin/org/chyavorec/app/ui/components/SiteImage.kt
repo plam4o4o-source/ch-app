@@ -28,7 +28,7 @@ fun SiteImage(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
-    onFailure: (() -> Unit)? = null,
+    onFailure: ((Throwable?) -> Unit)? = null,
 ) {
     val widthPx = with(LocalDensity.current) { width.roundToPx() }
     val optimized = remember(url, widthPx) { SiteImageUrls.optimized(url, widthPx) }
