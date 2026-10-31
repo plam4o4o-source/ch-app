@@ -5,13 +5,22 @@ import android.os.Looper
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isToggleable
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -45,9 +54,9 @@ import kotlin.test.assertTrue
 
 /**
  * Мениджърът на пароли на екрана за вход (с подменен [FakeSystemPasswords] вместо системния
- * прозорец): при отваряне се пита веднъж, след успешен вход се предлага запазване, а
- * запазеният вход попълва полетата и се изпраща. „Запомни ме“, грешен ПИН и заключването —
- * в [LoginSaveOfferTest].
+ * прозорец): при отваряне се пита веднъж — само ако от приложението е запазван вход; след
+ * успешен вход се предлага запазване, а запазеният вход попълва полетата и се изпраща.
+ * „Запомни ме“, грешен ПИН и заключването — в [LoginSaveOfferTest].
  */
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class, qualifiers = "bg-w411dp-h891dp-xxhdpi")
@@ -101,7 +110,8 @@ class LoginPasswordManagerTest {
 
     @After fun stop() = server.shutdown()
 
-    private fun launch(passwords: FakeSystemPasswords): AppContainer {
+    /** [savedBefore] — от приложението вече е запазван вход в мениджъра на пароли. */
+    private fun launch(passwords: FakeSystemPasswords, savedBefore: Boolean = true): AppContainer {
         val config = AppConfig(
             siteBaseUrl = "https://chyavorec.org", catalogUrls = emptyList(), inflibApiUrl = "https://chyavorec.org/api",
             environment = "test", useMockData = false, versionName = "test", versionCode = 1,
@@ -110,6 +120,7 @@ class LoginPasswordManagerTest {
             ApplicationProvider.getApplicationContext(), config,
             FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), client, passwords,
         )
+        runBlocking { container.settings.setPasswordManagerUsed(savedBefore) }
         // Само екранът за вход (без навигацията и останалите екрани с техните заявки).
         compose.setContent {
             ChitalishteTheme {
@@ -147,9 +158,20 @@ class LoginPasswordManagerTest {
         assertTrue(logins.isEmpty())
     }
 
+    /** Без запазван от приложението вход — без системния прозорец (под Android 14 — невидима activity). */
+    @Test fun withoutASavedLoginThePasswordManagerIsNotAsked() {
+        val passwords = FakeSystemPasswords(saved = SavedLogin("1024-5678", "1234"))
+        launch(passwords, savedBefore = false)
+        waitForForm()
+        pumpUntil(2_000) { true }
+        compose.waitForIdle()
+        assertEquals(0, passwords.asked)
+        assertTrue(logins.isEmpty())
+    }
+
     @Test fun successfulLoginOffersToSaveCardAndPin() {
         val passwords = FakeSystemPasswords()
-        val container = launch(passwords)
+        val container = launch(passwords, savedBefore = false)
         waitForForm()
         compose.onAllNodes(hasSetTextAction())[0].performTextInput("1024-5678 ")
         compose.onAllNodes(hasSetTextAction())[1].performTextInput("1234")
@@ -159,6 +181,21 @@ class LoginPasswordManagerTest {
         val offered = passwords.offered.single()
         assertEquals("1024-5678", offered.cardNumber)
         assertEquals("1234", offered.pin)
+        // Запазено — при следващото отваряне мениджърът ще бъде попитан.
+        pumpUntil { runBlocking { container.settings.passwordManagerUsed() } }
+    }
+
+    /** „Запомни ме“: целият ред е една отметка с име (TalkBack), докосване и по текста. */
+    @Test fun rememberMeIsOneLabelledCheckbox() {
+        launch(FakeSystemPasswords(), savedBefore = false)
+        waitForForm()
+        val row = compose.onNode(hasText("Запомни ме", substring = true) and isToggleable())
+        row.assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Checkbox))
+        row.assertIsOn()
+        row.performClick()
+        row.assertIsOff()
+        // Отделна безименна отметка няма.
+        assertEquals(1, compose.onAllNodes(isToggleable()).fetchSemanticsNodes().size)
     }
 
     @Test fun savedLoginFillsTheFormAndSignsIn() {

@@ -344,13 +344,11 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-    // ZXing: генериране на баркодове (карта) и разчитане при сканиране.
+    // ZXing: генериране на баркодовете на картата.
     implementation(libs.zxing.core)
-    // Скенер на баркодове (ISBN / инвентарен номер) — камера + разпознаване (ZXing) само на устройството.
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.view)
+    // Скенер на баркодове (ISBN / инвентарен номер): прозорецът и камерата са на Google Play
+    // услугите — приложението получава само разчетения код (без разрешение за камера).
+    implementation(libs.play.services.code.scanner)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)

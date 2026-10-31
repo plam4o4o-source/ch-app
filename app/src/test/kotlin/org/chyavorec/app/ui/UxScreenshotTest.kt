@@ -26,9 +26,11 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.chyavorec.app.AppConfig
+import org.chyavorec.app.FakeBarcodeScanner
 import org.chyavorec.app.TestResources
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.AppSettings
+import org.chyavorec.app.data.scan.ScanOutcome
 import org.chyavorec.app.data.local.TextScale
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.theme.ChitalishteTheme
@@ -46,7 +48,7 @@ import java.time.Instant
 
 /**
  * „Размер на текста“ (Настройки → Изглед) на „Много голям“ — „Начало“ и „Настройки“ не се
- * режат; скенерът без камера (Robolectric няма камера — нищо не се отваря) с „Въведи
+ * режат; скенерът без Google Play услуги (подменен — „недостъпен“) направо с „Въведи
  * номера на ръка“. Записват се до снимките на ScreenshotTest (app/build/reports/screenshots/).
  */
 @RunWith(AndroidJUnit4::class)
@@ -74,7 +76,7 @@ class UxScreenshotTest {
 
     @After fun stop() = server.shutdown()
 
-    private fun launch(textScale: TextScale = TextScale.XLARGE, deepLink: String? = null) {
+    private fun launch(textScale: TextScale = TextScale.XLARGE, deepLink: String? = null, scanner: FakeBarcodeScanner = FakeBarcodeScanner()) {
         val base = server.url("/").toString().trimEnd('/')
         val config = AppConfig(
             siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = "",
@@ -82,7 +84,7 @@ class UxScreenshotTest {
         )
         val container = AppContainer(
             ApplicationProvider.getApplicationContext(), config,
-            FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), OkHttpClient(),
+            FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), OkHttpClient(), scannerOverride = scanner,
         )
         val settings = AppSettings(onboardingDone = true, introShown = true, textScale = textScale)
         // „Настройки“ четат хранилището (не подадените настройки) — същият размер и там.
@@ -147,15 +149,21 @@ class UxScreenshotTest {
         shot("82-ux-text-size-dialog")
     }
 
-    @Test fun scannerWithoutCameraOffersManualEntry() {
-        launch(TextScale.STANDARD, deepLink = "scan")
-        waitFor("Въведи номера на ръка")
-        shot("83-ux-scan-no-camera")
-        click("Въведи номера на ръка")
+    @Test fun scannerUnavailableFallsBackToManualEntry() {
+        launch(TextScale.STANDARD, deepLink = "scan", scanner = FakeBarcodeScanner(ScanOutcome.Unavailable))
+        // Без скенер панелът „на ръка“ се отваря сам — с обяснението защо.
         compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isNotEmpty() }
+        waitFor("Google Play услугите")
+        shot("83-ux-scan-unavailable")
         // TalkBack: панелът е с име, а съдържанието под него (бутонът „Въведи…“ отзад) не е в дървото.
         compose.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.PaneTitle, "Въведи номера на ръка")).assertCountEquals(1)
         compose.onAllNodes(hasText("Въведи номера на ръка") and hasClickAction()).assertCountEquals(0)
+        // Затъмнението извън панела не е безименна област за докосване.
+        for (node in compose.onAllNodes(hasClickAction()).fetchSemanticsNodes()) {
+            val c = node.config
+            val named = c.contains(SemanticsProperties.Text) || c.contains(SemanticsProperties.ContentDescription) || c.contains(SemanticsProperties.EditableText)
+            check(named) { "безименно действие: $c" }
+        }
         compose.onAllNodes(hasSetTextAction()).onFirst().performTextInput("399666")
         shot("84-ux-scan-manual")
         compose.onAllNodes(hasText("Търси") and hasClickAction()).onFirst().performClick()

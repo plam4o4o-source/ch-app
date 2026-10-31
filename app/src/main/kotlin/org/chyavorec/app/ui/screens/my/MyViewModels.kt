@@ -1,5 +1,8 @@
 package org.chyavorec.app.ui.screens.my
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
@@ -12,9 +15,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.ui.components.ScreenState
+import org.chyavorec.app.ui.components.limitedInput
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
@@ -137,8 +142,6 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
 }
 
 data class LoginUi(
-    val cardNumber: String = "",
-    val password: String = "",
     val remember: Boolean = true,
     val submitting: Boolean = false,
     val error: AppError? = null,
@@ -157,6 +160,13 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
     /** Зарежда се / известни / без връзка — „без връзка“ не е „входът не е включен“. */
     val capabilitiesStatus: StateFlow<CapabilitiesStatus> = capsTracker.status
     val isDemo = c.readerServices.isDemo
+
+    /** Полетата на формата. ПИН-ът е само тук (в паметта) — изчиства се при изпращане и при заключване. */
+    val card = TextFieldState()
+    val pin = TextFieldState()
+    /** Въвеждането от потребителя: ограничена дължина; поправка маха грешката и „от мениджъра“. */
+    val cardInput = limitedInput(MAX_CARD, onEdit = ::onUserEdit)
+    val pinInput = limitedInput(MAX_PIN, onEdit = ::onUserEdit)
 
     /** Контактите на библиотеката за „Забравен ПИН?“ (`null` — още не са поискани). */
     private val _contacts = MutableStateFlow<Contacts?>(null)
@@ -209,13 +219,19 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
         viewModelScope.launch { capsTracker.refresh() }
     }
 
-    fun setCard(v: String) {
+    private fun onUserEdit() {
         fromPasswordManager = false
-        _ui.update { it.copy(cardNumber = v.take(32), error = null) }
+        if (_ui.value.error != null) _ui.update { it.copy(error = null) }
+    }
+
+    /** Като въведено от потребителя (тестовете). */
+    fun setCard(v: String) {
+        card.setTextAndPlaceCursorAtEnd(v.take(MAX_CARD))
+        onUserEdit()
     }
     fun setPassword(v: String) {
-        fromPasswordManager = false
-        _ui.update { it.copy(password = v.take(128), error = null) }
+        pin.setTextAndPlaceCursorAtEnd(v.take(MAX_PIN))
+        onUserEdit()
     }
     fun setRemember(v: Boolean) = _ui.update { it.copy(remember = v) }
 
@@ -224,15 +240,44 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
     /** Входът за запазване в мениджъра на пароли — само до показването на предложението, само в паметта. */
     private var saveOffer: SavedLogin? = null
 
+    /** Входът е временно заключен (броячът на екрана или LoginThrottle). */
+    private fun locked() =
+        _ui.value.lockedUntilMillis > c.clock.now().toEpochMilli() || c.authRepository.throttle.remainingLockSeconds() > 0
+
     /**
      * Вход с едно докосване: запазеният вход попълва полетата и се изпраща през [submit] —
-     * със същото заключване след грешни опити и със „Запомни ме“ както е избрано.
+     * със същото заключване след грешни опити и със „Запомни ме“ както е избрано. При
+     * заключване ПИН-ът изобщо не влиза в полето (иначе „окото“ би го показало).
      */
     fun signInWithSaved(login: SavedLogin) {
-        if (_ui.value.submitting || login.cardNumber.isBlank() || login.pin.isEmpty()) return
-        _ui.update { it.copy(cardNumber = login.cardNumber.take(32), password = login.pin.take(128), error = null) }
+        if (_ui.value.submitting || login.cardNumber.isBlank() || login.pin.isEmpty() || locked()) return
+        card.setTextAndPlaceCursorAtEnd(login.cardNumber.take(MAX_CARD))
+        pin.setTextAndPlaceCursorAtEnd(login.pin.take(MAX_PIN))
+        _ui.update { it.copy(error = null) }
         fromPasswordManager = true
         submit()
+    }
+
+    /**
+     * При отваряне на формата: запазеният вход от мениджъра на пароли ([ask]) — само ако от
+     * приложението вече е запазван вход (иначе системата се пита напразно, а под Android 14
+     * това е невидима activity при всяко отваряне), извън заключването и до 5 s.
+     */
+    suspend fun askSavedLogin(ask: suspend () -> SavedLogin?) {
+        if (isDemo || !c.settings.passwordManagerUsed()) return
+        c.authRepository.restoreThrottle()
+        if (locked() || card.text.isNotBlank() || _ui.value.submitting) return
+        withTimeoutOrNull(SAVED_LOGIN_TIMEOUT_MS) { ask() }?.let(::signInWithSaved)
+    }
+
+    /**
+     * След успешен вход: „Запази в мениджъра на пароли?“ ([save] — `true`, ако е запазено).
+     * Чака се отговорът на системния прозорец, но най-много [SAVE_TIMEOUT_MS] — после
+     * екранът продължава. Запазеното се отбелязва (без данните) за [askSavedLogin].
+     */
+    suspend fun offerSave(save: suspend (SavedLogin) -> Boolean) {
+        val offer = takeSaveOffer() ?: return
+        if (withTimeoutOrNull(SAVE_TIMEOUT_MS) { save(offer) } == true) c.settings.setPasswordManagerUsed(true)
     }
 
     /**
@@ -243,20 +288,28 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
 
     override fun onCleared() {
         saveOffer = null
+        pin.clearText()
     }
 
     fun submit() {
         val s = _ui.value
-        if (s.cardNumber.isBlank() || s.password.isEmpty() || s.submitting) return
-        if (s.lockedUntilMillis > c.clock.now().toEpochMilli()) return
+        val cardNumber = card.text.toString()
+        val password = pin.text.toString()
+        if (cardNumber.isBlank() || password.isEmpty() || s.submitting) return
+        // Заключено: опитът не тръгва, а ПИН-ът не остава в полето.
+        if (s.lockedUntilMillis > c.clock.now().toEpochMilli()) {
+            pin.clearText()
+            return
+        }
         // Паролата се предава като CharArray и се зачиства веднага след заявката.
-        val pwd = s.password.toCharArray()
+        val pwd = password.toCharArray()
         // Предложение за запазване — само при „Запомни ме“ (на споделен телефон без него няма какво да остава)
         // и ако входът не е дошъл от мениджъра. Не се записва никъде от приложението.
-        val offer = if (s.remember && !fromPasswordManager && !isDemo) SavedLogin(s.cardNumber.trim(), s.password) else null
-        _ui.update { it.copy(submitting = true, error = null, password = "") }
+        val offer = if (s.remember && !fromPasswordManager && !isDemo) SavedLogin(cardNumber.trim(), password) else null
+        pin.clearText()
+        _ui.update { it.copy(submitting = true, error = null) }
         viewModelScope.launch {
-            when (val r = c.authRepository.login(s.cardNumber, pwd, s.remember)) {
+            when (val r = c.authRepository.login(cardNumber, pwd, s.remember)) {
                 is Outcome.Success -> {
                     saveOffer = offer
                     _ui.update { it.copy(submitting = false, success = true, attemptsLeft = null) }
@@ -274,9 +327,9 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
     }
 
     fun forgotPassword() = viewModelScope.launch {
-        val card = _ui.value.cardNumber
-        if (card.isBlank()) return@launch
-        when (val r = c.authRepository.requestPasswordReset(card)) {
+        val number = card.text.toString()
+        if (number.isBlank()) return@launch
+        when (val r = c.authRepository.requestPasswordReset(number)) {
             is Outcome.Success -> _ui.update { it.copy(resetSent = true) }
             is Outcome.Failure -> _ui.update { it.copy(error = r.error) }
         }
@@ -285,6 +338,12 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
     private companion object {
         /** След толкова грешни опита се показва „остават N опита“. */
         const val WARN_AFTER_FAILURES = 3
+        const val MAX_CARD = 32
+        const val MAX_PIN = 128
+        /** Мениджърът на пароли при отваряне — не повече (иначе формата е ръчна). */
+        const val SAVED_LOGIN_TIMEOUT_MS = 5_000L
+        /** Време за отговор на „Запази паролата?“ — после екранът продължава. */
+        const val SAVE_TIMEOUT_MS = 60_000L
     }
 }
 

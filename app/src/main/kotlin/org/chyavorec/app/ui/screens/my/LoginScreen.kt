@@ -24,8 +24,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextObfuscationMode
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Badge
@@ -40,6 +43,7 @@ import org.chyavorec.app.ui.components.ChLoadingIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedSecureTextField
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -60,12 +64,11 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.error
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
@@ -97,7 +100,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
         if (ui.success) {
             haptic.performHapticFeedback(HapticFeedbackType.Confirm)
             // „Запази паролата?“ — системата пита; отказът е тих. Приложението не пази ПИН-а.
-            vm.takeSaveOffer()?.let { passwords.offerSave(activity, it) }
+            vm.offerSave { passwords.offerSave(activity, it) }
             onLoggedIn()
         }
     }
@@ -151,18 +154,19 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                 }
                 else -> {
                     // Вход с едно докосване: запазеният в мениджъра на пароли вход попълва полетата и
-                    // се изпраща (веднъж на отваряне; без запазен вход системата не показва нищо).
+                    // се изпраща (веднъж на отваряне; само ако от приложението е запазван вход).
                     LaunchedEffect(Unit) {
-                        if (askedSaved || vm.isDemo || ui.cardNumber.isNotBlank() || ui.submitting) return@LaunchedEffect
+                        if (askedSaved) return@LaunchedEffect
                         askedSaved = true
-                        passwords.savedLogin(activity)?.let(vm::signInWithSaved)
+                        vm.askSavedLogin { passwords.savedLogin(activity) }
                     }
                     if (vm.isDemo) Text(stringResource(R.string.login_demo_hint), style = MaterialTheme.typography.bodySmall)
                     OutlinedTextField(
-                        value = ui.cardNumber, onValueChange = vm::setCard,
+                        state = vm.card,
+                        inputTransformation = vm.cardInput,
                         label = { Text(stringResource(R.string.login_card)) },
                         leadingIcon = { Icon(Icons.Outlined.Badge, null) },
-                        singleLine = true,
+                        lineLimits = TextFieldLineLimits.SingleLine,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, keyboardType = KeyboardType.Ascii, autoCorrectEnabled = false),
                         modifier = Modifier.fillMaxWidth().semantics { contentType = ContentType.Username },
                     )
@@ -173,8 +177,11 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                         err == AppError.Unauthorized -> stringResource(R.string.login_wrong)
                         else -> errorMessage(err)
                     }
-                    OutlinedTextField(
-                        value = ui.password, onValueChange = vm::setPassword,
+                    // Скрит ПИН (последната цифра се вижда за миг) — „окото“ го показва целия.
+                    OutlinedSecureTextField(
+                        state = vm.pin,
+                        inputTransformation = vm.pinInput,
+                        textObfuscationMode = if (showPassword) TextObfuscationMode.Visible else TextObfuscationMode.RevealLastTyped,
                         label = { Text(stringResource(R.string.login_password)) },
                         leadingIcon = { Icon(Icons.Outlined.Lock, null) },
                         trailingIcon = {
@@ -185,19 +192,24 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                                 )
                             }
                         },
-                        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                        singleLine = true,
                         isError = errText != null,
                         supportingText = errText?.let { { Text(it) } },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.NumberPassword, autoCorrectEnabled = false),
-                        keyboardActions = KeyboardActions(onDone = { vm.submit() }),
+                        onKeyboardAction = { vm.submit() },
                         modifier = Modifier.fillMaxWidth().semantics {
                             contentType = ContentType.Password
                             if (errText != null) error(errText)
                         },
                     )
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(ui.remember, onCheckedChange = vm::setRemember)
+                    // Целият ред е едно поле за отметка (TalkBack чете текста, докосване и по текста).
+                    Row(
+                        Modifier.fillMaxWidth()
+                            .toggleable(value = ui.remember, role = Role.Checkbox, onValueChange = vm::setRemember)
+                            .heightIn(min = 48.dp).padding(horizontal = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Checkbox(ui.remember, onCheckedChange = null)
+                        Spacer(Modifier.width(14.dp))
                         Text(stringResource(R.string.login_remember), style = MaterialTheme.typography.bodyMedium)
                     }
                     // След 3 грешни опита — колко остават до временното заключване.
@@ -211,7 +223,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                     }
                     Button(
                         onClick = vm::submit,
-                        enabled = !ui.submitting && !locked && ui.cardNumber.isNotBlank() && ui.password.isNotEmpty(),
+                        enabled = !ui.submitting && !locked && vm.card.text.isNotBlank() && vm.pin.text.isNotEmpty(),
                         modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
                     ) {
                         if (ui.submitting) ChLoadingIndicator(Modifier.size(28.dp))
@@ -220,7 +232,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                     // „Забравен ПИН?“ винаги се вижда: възстановяване от сървъра, ако го поддържа,
                     // иначе — как се взима нов ПИН от библиотеката (с бутони за обаждане/имейл).
                     if (c.passwordReset) {
-                        TextButton(onClick = vm::forgotPassword, enabled = ui.cardNumber.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp)) {
+                        TextButton(onClick = vm::forgotPassword, enabled = vm.card.text.isNotBlank(), modifier = Modifier.heightIn(min = 48.dp)) {
                             Text(stringResource(R.string.login_forgot))
                         }
                         if (ui.resetSent) Text(stringResource(R.string.login_reset_sent), style = MaterialTheme.typography.bodySmall)

@@ -93,15 +93,13 @@ S = {
 "history_range_open": ("взета %1$s · още не е върната", "borrowed %1$s · not returned yet"),
 "scan_action": ("Сканирай баркод", "Scan barcode"),
 "scan_title": ("Сканиране", "Scan"),
-"scan_hint": ("Насочи камерата към баркода на книгата (ISBN) или към инвентарния номер.", "Point the camera at the book’s barcode (ISBN) or inventory label."),
-"scan_camera_error": ("Камерата не може да се отвори.", "The camera can’t be opened."),
+"scan_intro_title": ("Сканирай баркода на книгата", "Scan the book’s barcode"),
+"scan_intro_text": ("Баркодът с ISBN на корицата или етикетът с инвентарния номер. Скенерът на Google Play услугите се отваря над приложението — то получава само разчетения номер.", "The ISBN barcode on the cover or the inventory label. The Google Play services scanner opens on top of the app — the app only receives the number it reads."),
+"scan_unavailable_title": ("Скенерът не е достъпен", "The scanner isn’t available"),
+"scan_unavailable": ("Скенерът на баркодове идва с Google Play услугите — тук те липсват или скенерът още се изтегля. Въведи номера на ръка или опитай пак след малко.", "The barcode scanner comes with Google Play services — they’re missing here, or the scanner is still downloading. Enter the number manually or try again in a moment."),
 "scan_catalog_loading": ("Зареждаме каталога…", "Loading the catalogue…"),
 "scan_catalog_unavailable": ("Каталогът не се зареди — няма връзка. Ще опитаме пак, щом се свържеш.", "The catalogue didn’t load — no connection. We’ll try again once you’re online."),
 "scan_code_waiting": ("Запазихме %1$s — ще го потърсим, щом каталогът се зареди.", "Saved %1$s — we’ll look it up once the catalogue loads."),
-"scan_permission_title": ("Нужен е достъп до камерата", "Camera access needed"),
-"scan_permission_text": ("Камерата се използва само за четене на баркода на телефона. Нищо не се снима и не се изпраща.", "The camera is only used to read the barcode on your phone. Nothing is recorded or sent."),
-"scan_permission_grant": ("Разреши камерата", "Allow camera"),
-"scan_permission_settings": ("Отвори настройките", "Open settings"),
 "scan_manual": ("Въведи номера на ръка", "Enter the number manually"),
 "scan_manual_text": ("ISBN-ът (10 или 13 цифри под баркода) или инвентарният номер от етикета на библиотеката.", "The ISBN (10 or 13 digits under the barcode) or the inventory number on the library label."),
 "scan_manual_label": ("ISBN или инвентарен номер", "ISBN or inventory number"),
@@ -113,8 +111,6 @@ S = {
 "scan_search_catalog": ("Търси в каталога", "Search the catalogue"),
 "scan_code_isbn": ("ISBN %1$s", "ISBN %1$s"),
 "scan_code_inv": ("инв. № %1$s", "inv. no. %1$s"),
-"scan_torch_on": ("Включи фенерчето", "Turn on torch"),
-"scan_torch_off": ("Изключи фенерчето", "Turn off torch"),
 "subject_membership": ("членството", "your membership"),
 "subject_messages": ("съобщенията", "the messages"),
 "subject_gallery": ("галерията", "the gallery"),
@@ -765,7 +761,7 @@ PRIVACY_BG = """Последна актуализация: 31 октомври 2
 
 Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
 
-Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: камерата се включва само когато отвориш скенера и разрешиш достъп; кадрите се разчитат на телефона и не се записват и не се изпращат.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
+Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
 Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб.
 
@@ -821,7 +817,7 @@ Password manager: saving your card number and PIN in the phone’s password mana
 
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
 
-Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: the camera turns on only when you open the scanner and allow access; frames are read on the phone and are never stored or sent.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
+Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
 Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you.
 

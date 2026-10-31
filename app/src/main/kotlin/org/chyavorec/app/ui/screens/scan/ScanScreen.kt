@@ -1,146 +1,131 @@
 package org.chyavorec.app.ui.screens.scan
 
-import android.Manifest
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.Settings
 import android.os.Build
 import android.view.HapticFeedbackConstants
-import androidx.compose.ui.platform.LocalView
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.clickable
-import androidx.activity.compose.PredictiveBackHandler
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FlashlightOff
-import androidx.compose.material.icons.outlined.FlashlightOn
+import androidx.compose.material.icons.outlined.CloudOff
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Keyboard
-import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextButton
-import org.chyavorec.app.ui.components.ChLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.paneTitle
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
+import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.components.CopyStatus
+import org.chyavorec.app.ui.components.InlineNotice
+import org.chyavorec.app.ui.components.limitedInput
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequest
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
-import org.chyavorec.app.ui.theme.Brand
+import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.core.ScanCodes
 import org.chyavorec.core.ScanTarget
 import org.chyavorec.domain.model.SearchField
 
-private fun hasCameraPermission(context: Context) =
-    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-
-private fun hasCamera(context: Context) = context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
-
-private fun openAppSettings(context: Context) {
-    runCatching {
-        context.startActivity(
-            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", context.packageName, null))
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-        )
-    }
-}
-
+/**
+ * Скенер: скенерът на Google (Google Play услуги) се отваря веднага над приложението, а
+ * разчетеният код се търси тук — лист с книгата или „няма я“. След „Назад“ от скенера
+ * екранът остава с „Сканирай баркод“ и „Въведи номера на ръка“; без Play услуги (или
+ * докато модулът на скенера се изтегля) — направо ръчното въвеждане с обяснение.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
-    val vm = appViewModel(key = "scan") { ScanViewModel(it.catalogRepository, it.clock) }
+    val vm = appViewModel(key = "scan") { ScanViewModel(it.catalogRepository, it.scanner) }
     val result by vm.result.collectAsStateWithLifecycle()
     val catalogStatus by vm.catalogStatus.collectAsStateWithLifecycle()
     val waiting by vm.waiting.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+    val scanner by vm.scannerState.collectAsStateWithLifecycle()
+    // Прозорецът на скенера се показва над activity-то.
+    val activity = LocalActivity.current ?: LocalContext.current
     val haptic = LocalHapticFeedback.current
 
-    var granted by remember { mutableStateOf(hasCameraPermission(context)) }
-    var asked by remember { mutableStateOf(false) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
-        granted = ok
-        asked = true
-    }
-    LaunchedEffect(Unit) { if (!granted) launcher.launch(Manifest.permission.CAMERA) }
-
-    var torch by remember { mutableStateOf(false) }
-    // „Въведи номера на ръка“ — без камера (отказано разрешение, няма камера) или етикет, който не се чете.
+    // „Въведи номера на ръка“ — етикет, който скенерът не чете, или без скенер.
     var manual by rememberSaveable { mutableStateOf(false) }
     val openManual = { manual = true }
-    var hasTorch by remember { mutableStateOf(false) }
-    var cameraError by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { vm.scan(activity, auto = true) }
+    // Скенерът не е достъпен — ръчното въвеждане се отваря само (веднъж; затвореното остава затворено).
+    var offeredManual by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(scanner) {
+        if (scanner == ScannerState.UNAVAILABLE && !offeredManual) {
+            offeredManual = true
+            manual = true
+        }
+    }
 
     // Тактилен отговор: потвърждение при намерена книга (CONFIRM от Android 11, иначе
     // „дълго натискане“), отказ при „няма я“.
@@ -155,86 +140,21 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
         }
     }
 
-    Scaffold(
-        topBar = {
-            BackTopBar(stringResource(R.string.scan_title), onBack, actions = {
-                if (granted && hasTorch) {
-                    IconButton(onClick = { torch = !torch }) {
-                        Icon(
-                            if (torch) Icons.Outlined.FlashlightOff else Icons.Outlined.FlashlightOn,
-                            contentDescription = stringResource(if (torch) R.string.scan_torch_off else R.string.scan_torch_on),
-                        )
-                    }
-                }
-            })
-        },
-    ) { padding ->
-        Box(Modifier.padding(padding).fillMaxSize().background(Color.Black)) {
+    Scaffold(topBar = { BackTopBar(stringResource(R.string.scan_title), onBack) }) { padding ->
+        Box(Modifier.padding(padding).fillMaxSize()) {
             // Докато панелът „на ръка“ е отворен, съдържанието под него е скрито за TalkBack.
             Box(Modifier.fillMaxSize().then(if (manual) Modifier.clearAndSetSemantics {} else Modifier)) {
-                when {
-                    !hasCamera(context) || cameraError -> PermissionMessage(
-                        title = stringResource(R.string.scan_camera_error), text = null,
-                        primary = null, onPrimary = {}, secondary = null, onSecondary = {},
-                        onManual = openManual,
-                    )
-                    granted -> {
-                        CameraPreview(
-                            torch = torch,
-                            paused = result != null || manual,
-                            onCode = vm::onCode,
-                            onCamera = { cam -> hasTorch = cam.cameraInfo.hasFlashUnit() },
-                            onError = { cameraError = true },
-                        )
-                        ViewfinderOverlay(
-                            when (result) {
-                                is ScanResult.Hit -> ViewfinderMode.HIT
-                                is ScanResult.Miss -> ViewfinderMode.MISS
-                                null -> ViewfinderMode.SCANNING
-                            },
-                            Modifier.fillMaxSize(),
-                        )
-                        Column(
-                            Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            CatalogStatusNote(catalogStatus, waiting, onRetry = vm::retry)
-                            Surface(color = Color.Black.copy(alpha = 0.55f), contentColor = Brand.Parchment, shape = RoundedCornerShape(14.dp)) {
-                                Text(
-                                    stringResource(R.string.scan_hint),
-                                    style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center,
-                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                                )
-                            }
-                            Spacer(Modifier.height(8.dp))
-                            // Вторично действие: етикет, който камерата не чете (смачкан, избелял).
-                            Surface(color = Color.Black.copy(alpha = 0.55f), contentColor = Brand.GoldLight, shape = RoundedCornerShape(50)) {
-                                ManualEntryButton(openManual)
-                            }
-                        }
-                    }
-                    else -> PermissionMessage(
-                        title = stringResource(R.string.scan_permission_title),
-                        text = stringResource(R.string.scan_permission_text),
-                        primary = stringResource(R.string.scan_permission_grant),
-                        onPrimary = { launcher.launch(Manifest.permission.CAMERA) },
-                        // След отказ системата може да не покаже диалога отново — пътят е през настройките.
-                        secondary = if (asked) stringResource(R.string.scan_permission_settings) else null,
-                        onSecondary = { openAppSettings(context) },
-                        onManual = openManual,
-                    )
-                }
-                // Без камера: номерът, въведен на ръка, чака каталога (без връзка и без кеш) — както сканираният.
-                if (!granted || !hasCamera(context) || cameraError) {
-                    if (waiting != null) {
-                        Column(
-                            Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) { CatalogStatusNote(catalogStatus, waiting, onRetry = vm::retry) }
-                    }
-                }
+                ScanIntro(
+                    unavailable = scanner == ScannerState.UNAVAILABLE,
+                    opening = scanner == ScannerState.OPEN,
+                    catalogStatus = catalogStatus,
+                    waiting = waiting,
+                    onScan = { vm.scan(activity) },
+                    onManual = openManual,
+                    onRetryCatalog = vm::retry,
+                )
             }
-            // Панел над камерата/съобщението (не отделен прозорец) — „Назад“ го затваря,
+            // Панел над екрана (не отделен прозорец) — „Назад“ го затваря,
             // с предварителен изглед на жеста (както системните листове).
             var backProgress by remember { mutableFloatStateOf(0f) }
             PredictiveBackHandler(enabled = manual) { events ->
@@ -248,6 +168,7 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             if (manual) {
                 ManualEntryPanel(
                     backProgress = backProgress,
+                    note = if (scanner == ScannerState.UNAVAILABLE) stringResource(R.string.scan_unavailable) else null,
                     onSubmit = { code -> manual = false; vm.onManual(code) },
                     onDismiss = { manual = false },
                 )
@@ -284,8 +205,54 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
 }
 
 /**
- * Над подсказката: каталогът се зарежда; не е достъпен (без връзка и без кеш) — с
- * „Опитай отново“ (при връщане на връзката се опитва и сам); запазеният код, който чака каталога.
+ * Екранът под скенера: какво се сканира и бутон за нов опит (или защо скенерът не е
+ * достъпен), „Въведи номера на ръка“ и състоянието на каталога.
+ */
+@Composable
+private fun ScanIntro(
+    unavailable: Boolean,
+    opening: Boolean,
+    catalogStatus: ScanCatalogStatus,
+    waiting: ScanTarget?,
+    onScan: () -> Unit,
+    onManual: () -> Unit,
+    onRetryCatalog: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).navigationBarsPadding().padding(horizontal = 32.dp, vertical = 40.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(Icons.Outlined.QrCodeScanner, contentDescription = null, tint = LocalExtendedColors.current.gold, modifier = Modifier.size(56.dp))
+        Spacer(Modifier.height(16.dp))
+        Text(
+            stringResource(if (unavailable) R.string.scan_unavailable_title else R.string.scan_intro_title),
+            style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() },
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            stringResource(if (unavailable) R.string.scan_unavailable else R.string.scan_intro_text),
+            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(20.dp))
+        Button(onClick = onScan, enabled = !opening, modifier = Modifier.heightIn(min = 48.dp)) {
+            Icon(Icons.Outlined.QrCodeScanner, contentDescription = null)
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(if (unavailable) R.string.action_retry else R.string.scan_action))
+        }
+        Spacer(Modifier.height(8.dp))
+        TextButton(onClick = onManual, modifier = Modifier.heightIn(min = 48.dp)) {
+            Icon(Icons.Outlined.Keyboard, contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.scan_manual))
+        }
+        Spacer(Modifier.height(16.dp))
+        CatalogStatusNote(catalogStatus, waiting, onRetry = onRetryCatalog)
+    }
+}
+
+/**
+ * Каталогът се зарежда; не е достъпен (без връзка и без кеш) — с „Опитай отново“ (при
+ * връщане на връзката се опитва и сам); запазеният код, който чака каталога.
  */
 @Composable
 private fun CatalogStatusNote(status: ScanCatalogStatus, waiting: ScanTarget?, onRetry: () -> Unit) {
@@ -293,81 +260,25 @@ private fun CatalogStatusNote(status: ScanCatalogStatus, waiting: ScanTarget?, o
         ScanCatalogStatus.READY -> Unit
         ScanCatalogStatus.LOADING -> {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ChLoadingIndicator(Modifier.size(22.dp), contentDescription = null, color = Brand.GoldLight)
+                ChLoadingIndicator(Modifier.size(22.dp), contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.scan_catalog_loading), color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.scan_catalog_loading), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelMedium)
             }
             Spacer(Modifier.height(8.dp))
         }
         ScanCatalogStatus.UNAVAILABLE -> {
-            Surface(color = Color.Black.copy(alpha = 0.7f), contentColor = Brand.Parchment, shape = RoundedCornerShape(14.dp)) {
-                Column(Modifier.padding(horizontal = 16.dp, vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        stringResource(R.string.scan_catalog_unavailable),
-                        style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center,
-                    )
-                    Spacer(Modifier.height(6.dp))
-                    OutlinedButton(onClick = onRetry) { Text(stringResource(R.string.action_retry), color = Brand.GoldLight) }
-                }
-            }
+            InlineNotice(
+                Icons.Outlined.CloudOff, stringResource(R.string.scan_catalog_unavailable),
+                actionLabel = stringResource(R.string.action_retry), onAction = onRetry,
+            )
             Spacer(Modifier.height(8.dp))
         }
     }
     if (waiting != null && status != ScanCatalogStatus.READY) {
         Text(
             stringResource(R.string.scan_code_waiting, codeLabel(waiting)),
-            color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center,
         )
-        Spacer(Modifier.height(8.dp))
-    }
-}
-
-@Composable
-private fun PermissionMessage(
-    title: String, text: String?,
-    primary: String?, onPrimary: () -> Unit,
-    secondary: String?, onSecondary: () -> Unit,
-    onManual: () -> Unit,
-) {
-    Column(
-        Modifier.fillMaxSize().padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
-    ) {
-        Icon(Icons.Outlined.PhotoCamera, contentDescription = null, tint = Brand.GoldLight, modifier = Modifier.size(56.dp))
-        Spacer(Modifier.height(16.dp))
-        Text(title, style = MaterialTheme.typography.titleLarge, color = Brand.Parchment, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
-        if (text != null) {
-            Spacer(Modifier.height(8.dp))
-            Text(text, style = MaterialTheme.typography.bodyMedium, color = Brand.Parchment.copy(alpha = 0.85f), textAlign = TextAlign.Center)
-        }
-        if (primary != null) {
-            Spacer(Modifier.height(20.dp))
-            Button(onClick = onPrimary) { Text(primary) }
-        }
-        if (secondary != null) {
-            Spacer(Modifier.height(8.dp))
-            OutlinedButton(onClick = onSecondary) { Text(secondary, color = Brand.GoldLight) }
-        }
-        // Без камера — пак може да се потърси книга: номерът от етикета или ISBN-ът, на ръка.
-        Spacer(Modifier.height(if (primary == null) 20.dp else 8.dp))
-        if (primary == null) {
-            Button(onClick = onManual) {
-                Icon(Icons.Outlined.Keyboard, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.scan_manual))
-            }
-        } else {
-            CompositionLocalProvider(LocalContentColor provides Brand.GoldLight) { ManualEntryButton(onManual) }
-        }
-    }
-}
-
-@Composable
-private fun ManualEntryButton(onClick: () -> Unit) {
-    TextButton(onClick = onClick, colors = ButtonDefaults.textButtonColors(contentColor = LocalContentColor.current)) {
-        Icon(Icons.Outlined.Keyboard, contentDescription = null, modifier = Modifier.size(18.dp))
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(R.string.scan_manual))
     }
 }
 
@@ -375,27 +286,33 @@ private fun ManualEntryButton(onClick: () -> Unit) {
  * „Въведи номера на ръка“: ISBN (под баркода) или инвентарният номер от етикета — със
  * цифрова клавиатура; справката е същата като при сканиране. Нещо, което не е нито
  * едното, нито другото, се казва още тук (без лист „няма я“). Панел отдолу върху
- * затъмнения екран; докосване извън него го затваря.
+ * затъмнения екран; докосване извън него го затваря. [note] — защо скенерът не е достъпен.
  */
 @Composable
-private fun BoxScope.ManualEntryPanel(backProgress: Float, onSubmit: (String) -> Unit, onDismiss: () -> Unit) {
-    var text by rememberSaveable { mutableStateOf("") }
+private fun BoxScope.ManualEntryPanel(backProgress: Float, note: String?, onSubmit: (String) -> Unit, onDismiss: () -> Unit) {
+    val text = rememberTextFieldState()
+    // Цифри, тирета и интервали (както е отпечатан ISBN-ът); X — последната цифра на стар ISBN.
+    val input = remember { limitedInput(24, keep = { it.isDigit() || it == '-' || it == ' ' || it == 'X' || it == 'x' }) }
     // При намалено движение жестът „назад“ не мащабира панела — само го затваря.
     val p = if (rememberReducedMotion()) 0f else backProgress
-    var invalid by rememberSaveable { mutableStateOf(false) }
+    // Отхвърленият номер: грешката се вижда, докато не бъде поправен.
+    var invalidFor by rememberSaveable { mutableStateOf<String?>(null) }
+    val invalid = invalidFor != null && invalidFor == text.text.toString()
     val focus = remember { FocusRequester() }
     val submit: () -> Unit = {
-        if (ScanCodes.resolve(text) is ScanTarget.Unknown) {
-            invalid = true
+        val value = text.text.toString()
+        if (ScanCodes.resolve(value) is ScanTarget.Unknown) {
+            invalidFor = value
         } else {
-            onSubmit(text.trim())
+            onSubmit(value.trim())
         }
     }
-    // Затъмнението е само за докосване — TalkBack не го вижда (затваря се с „Отказ“).
+    // Затъмнението е само за докосване — TalkBack не го вижда (затваря се с „Отказ“): семантиката
+    // се изчиства ПРЕДИ clickable, иначе остава безименна област с действие „докосни“.
     Box(
         Modifier.matchParentSize().background(Color.Black.copy(alpha = 0.6f * (1f - p * 0.5f)))
-            .clickable(interactionSource = null, indication = null, onClick = onDismiss)
-            .clearAndSetSemantics {},
+            .clearAndSetSemantics {}
+            .clickable(interactionSource = null, indication = null, onClick = onDismiss),
     )
     val title = stringResource(R.string.scan_manual)
     Surface(
@@ -414,28 +331,32 @@ private fun BoxScope.ManualEntryPanel(backProgress: Float, onSubmit: (String) ->
     ) {
         Column(Modifier.navigationBarsPadding().imePadding().padding(horizontal = 24.dp, vertical = 20.dp)) {
             Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+            if (note != null) {
+                Spacer(Modifier.height(6.dp))
+                Row {
+                    Icon(Icons.Outlined.Info, contentDescription = null, tint = LocalExtendedColors.current.gold)
+                    Spacer(Modifier.width(12.dp))
+                    Text(note, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
             Spacer(Modifier.height(6.dp))
             Text(stringResource(R.string.scan_manual_text), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(12.dp))
             OutlinedTextField(
-                value = text,
-                onValueChange = { v ->
-                    // Цифри, тирета и интервали (както е отпечатан ISBN-ът); X — последната цифра на стар ISBN.
-                    text = v.filter { it.isDigit() || it == '-' || it == ' ' || it == 'X' || it == 'x' }.take(24)
-                    invalid = false
-                },
+                state = text,
+                inputTransformation = input,
                 label = { Text(stringResource(R.string.scan_manual_label)) },
-                singleLine = true,
+                lineLimits = TextFieldLineLimits.SingleLine,
                 isError = invalid,
                 supportingText = if (invalid) { { Text(stringResource(R.string.scan_manual_invalid)) } } else null,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = { submit() }),
+                onKeyboardAction = { submit() },
                 modifier = Modifier.fillMaxWidth().focusRequester(focus),
             )
             Spacer(Modifier.height(12.dp))
             Row(Modifier.align(Alignment.End), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
-                Button(onClick = submit, enabled = text.isNotBlank()) { Text(stringResource(R.string.scan_manual_search)) }
+                Button(onClick = submit, enabled = text.text.isNotBlank()) { Text(stringResource(R.string.scan_manual_search)) }
             }
         }
     }

@@ -4,7 +4,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import android.content.ContextWrapper
+import org.chyavorec.app.FakeBarcodeScanner
 import org.chyavorec.app.MainDispatcherRule
+import org.chyavorec.app.data.scan.ScanOutcome
 import org.chyavorec.app.TestResources
 import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.wantsReconnectRefresh
@@ -51,7 +54,7 @@ class ScanViewModelTest {
 
     @Test fun offlineWithoutCacheShowsAnErrorAndKeepsTheScannedCodeUntilReconnect() = runTest(dispatcher) {
         val service = Service()
-        val vm = ScanViewModel(repo(service), clock)
+        val vm = ScanViewModel(repo(service), FakeBarcodeScanner())
         assertEquals(ScanCatalogStatus.LOADING, vm.catalogStatus.value)
         advanceUntilIdle()
         assertEquals(ScanCatalogStatus.UNAVAILABLE, vm.catalogStatus.value, "грешка, не безкраен „Зареждаме каталога…“")
@@ -76,7 +79,7 @@ class ScanViewModelTest {
 
     @Test fun retryLoadsTheCatalogAndLaterCodesAreLookedUpDirectly() = runTest(dispatcher) {
         val service = Service()
-        val vm = ScanViewModel(repo(service), clock)
+        val vm = ScanViewModel(repo(service), FakeBarcodeScanner())
         advanceUntilIdle()
         assertEquals(ScanCatalogStatus.UNAVAILABLE, vm.catalogStatus.value)
         vm.retry()
@@ -105,7 +108,7 @@ class ScanViewModelTest {
 
     @Test fun codesThatAreNotBooksDoNotWaitForTheCatalog() = runTest(dispatcher) {
         val service = Service()
-        val vm = ScanViewModel(repo(service), clock)
+        val vm = ScanViewModel(repo(service), FakeBarcodeScanner())
         advanceUntilIdle()
         vm.onCode("https://example.com/x")
         advanceUntilIdle()
@@ -116,7 +119,7 @@ class ScanViewModelTest {
     @Test fun clearingTheCacheReloadsTheCatalog() = runTest(dispatcher) {
         val service = Service().apply { online = true }
         val repo = repo(service)
-        val vm = ScanViewModel(repo, clock)
+        val vm = ScanViewModel(repo, FakeBarcodeScanner())
         advanceUntilIdle()
         assertEquals(ScanCatalogStatus.READY, vm.catalogStatus.value)
 
@@ -135,7 +138,7 @@ class ScanViewModelTest {
 
     /** „Въведи номера на ръка“: същата справка като при сканиране, без изчакването между еднакви кодове. */
     @Test fun manualEntryLooksUpTheSameWayAsAScan() = runTest(dispatcher) {
-        val vm = ScanViewModel(repo(Service().apply { online = true }), clock)
+        val vm = ScanViewModel(repo(Service().apply { online = true }), FakeBarcodeScanner())
         advanceUntilIdle()
         vm.onManual("399666")
         advanceUntilIdle()
@@ -154,7 +157,7 @@ class ScanViewModelTest {
     /** Книга, добавена след последното сваляне на каталога: каталогът се опреснява веднъж и се намира. */
     @Test fun missingCodeRefreshesAStaleCatalogOnce() = runTest(dispatcher) {
         val service = Service().apply { online = true }
-        val vm = ScanViewModel(repo(service), clock)
+        val vm = ScanViewModel(repo(service), FakeBarcodeScanner())
         advanceUntilIdle()
         assertEquals(1, service.fetches)
         clock.advanceSeconds(10 * 60)
@@ -170,5 +173,47 @@ class ScanViewModelTest {
         advanceUntilIdle()
         assertIs<ScanResult.Miss>(vm.result.value)
         assertEquals(2, service.fetches)
+    }
+
+    private val activity = ContextWrapper(null)
+
+    /** Скенерът на Google се отваря сам веднъж; разчетеният код минава през същата справка. */
+    @Test fun scannedCodeIsLookedUpAndTheScannerOpensByItselfOnlyOnce() = runTest(dispatcher) {
+        val scanner = FakeBarcodeScanner(ScanOutcome.Code("399666"))
+        val vm = ScanViewModel(repo(Service().apply { online = true }), scanner)
+        advanceUntilIdle()
+        vm.scan(activity, auto = true)
+        advanceUntilIdle()
+        assertEquals(1, scanner.calls)
+        assertEquals(ScannerState.IDLE, vm.scannerState.value)
+        assertEquals(399666L, assertIs<ScanResult.Hit>(vm.result.value).book.inv)
+        vm.dismiss()
+        // Повторното показване на екрана (напр. след завъртане) не отваря скенера пак…
+        vm.scan(activity, auto = true)
+        advanceUntilIdle()
+        assertEquals(1, scanner.calls)
+        // …а „Сканирай баркод“ — да.
+        vm.scan(activity)
+        advanceUntilIdle()
+        assertEquals(2, scanner.calls)
+    }
+
+    /** „Назад“ от скенера: без резултат, екранът остава; без Play услуги — „недостъпен“ (ръчно въвеждане). */
+    @Test fun cancelledAndUnavailableScanner() = runTest(dispatcher) {
+        val scanner = FakeBarcodeScanner(ScanOutcome.Cancelled, ScanOutcome.Unavailable)
+        val vm = ScanViewModel(repo(Service().apply { online = true }), scanner)
+        advanceUntilIdle()
+        vm.scan(activity, auto = true)
+        advanceUntilIdle()
+        assertEquals(ScannerState.IDLE, vm.scannerState.value)
+        assertNull(vm.result.value)
+        vm.scan(activity)
+        advanceUntilIdle()
+        assertEquals(ScannerState.UNAVAILABLE, vm.scannerState.value)
+        assertNull(vm.result.value)
+        // Ръчното въвеждане работи и без скенер.
+        vm.onManual("399666")
+        advanceUntilIdle()
+        assertEquals(399666L, assertIs<ScanResult.Hit>(vm.result.value).book.inv)
     }
 }
