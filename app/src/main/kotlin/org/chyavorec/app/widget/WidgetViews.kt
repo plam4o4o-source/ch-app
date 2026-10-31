@@ -16,23 +16,38 @@ import androidx.annotation.IdRes
 import org.chyavorec.app.MainActivity
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.navigation.LaunchIntents
-import org.chyavorec.app.util.AppLanguage
 import org.chyavorec.domain.model.DueStatus
 import kotlin.math.roundToInt
 
 /**
  * RemoteViews на уиджета от оформленията layout/widget_small и layout/widget_wide.
  * Размери: малък 2×2 — един главен ред (следващ срок или събитие); широк 4×2 — срокове +
- * събитие + бутони; широк и висок — до 3 реда срокове. От Android 12 — карта „размер →
- * изглед“ (системата избира най-големия, който се побира); по-рано — по размера от
- * опциите на копието, отделно за хоризонтален и вертикален екран.
+ * събитие + бутони; високите — до 3 реда срокове, а без заемания — 2 събития. Името в
+ * заглавката — цяло само където се побира до бутоните; иначе кратко или само емблемата
+ * (най-тесният, 3×2, показва при заемания само сроковете — датите не се събират в половин ширина).
+ * От Android 12 — карта „размер → изглед“ (системата избира най-големия, който се побира);
+ * по-рано — по размера от опциите на копието, отделно за хоризонтален и вертикален екран.
  * Цветове: от ресурсите (Android 12+ — динамичните на системата, иначе фирмените; ден/нощ).
+ * Текстовете — от подадения контекст: той е с езика на приложението (WidgetUpdater).
  */
 internal object WidgetViews {
     val SmallSize = SizeF(110f, 100f)
+    val SmallTallSize = SizeF(110f, 150f)
     val WideSize = SizeF(250f, 100f)
     val WideTallSize = SizeF(250f, 150f)
-    private val Sizes = listOf(SmallSize, WideSize, WideTallSize)
+
+    /** Широк с място за краткото име до бутоните (по-тесният — само емблемата). */
+    private const val SHORT_TITLE_WIDTH = 300f
+
+    /** Широк с място за цялото име до бутоните — 4 клетки на повечето телефони. */
+    private const val FULL_TITLE_WIDTH = 345f
+    val FullWideSize = SizeF(FULL_TITLE_WIDTH, 100f)
+    val FullWideTallSize = SizeF(FULL_TITLE_WIDTH, 150f)
+
+    private const val TALL_HEIGHT = 150f
+
+    private val Sizes = listOf(SmallSize, SmallTallSize) +
+        listOf(WideSize.width, SHORT_TITLE_WIDTH, FULL_TITLE_WIDTH).flatMap { w -> listOf(SizeF(w, 100f), SizeF(w, TALL_HEIGHT)) }
 
     /** Един и същ код за всички PendingIntent-и на уиджета — различават се по intent-а (адрес/компонент). */
     private const val REQUEST_CODE = 900
@@ -65,16 +80,26 @@ internal object WidgetViews {
         Sizes.filter { it.width <= available.width && it.height <= available.height }.maxByOrNull { it.width * it.height }
             ?: Sizes.minBy { it.width * it.height }
 
-    /** Изгледът за един от размерите [SmallSize], [WideSize], [WideTallSize]. */
-    fun build(context: Context, state: WidgetState, size: SizeF): RemoteViews =
-        if (size.width >= WideSize.width) wide(context, state, maxGroups = if (size.height >= WideTallSize.height) 3 else 2)
-        else small(context, state)
+    /** Изгледът за размер [size] (един от [Sizes] или по-голям). */
+    fun build(context: Context, state: WidgetState, size: SizeF): RemoteViews {
+        val tall = size.height >= TALL_HEIGHT
+        if (size.width < WideSize.width) return small(context, state, tall)
+        val title = when {
+            size.width >= FULL_TITLE_WIDTH -> Title.FULL
+            size.width >= SHORT_TITLE_WIDTH -> Title.SHORT
+            else -> Title.LOGO
+        }
+        return wide(context, state, maxGroups = if (tall) 3 else 2, tall = tall, title = title)
+    }
 
-    /** Малкият вариант (2×2): следващият срок, а без заемания — следващото събитие. */
-    private fun small(context: Context, state: WidgetState): RemoteViews {
+    /** Името в заглавката: цяло, кратко („Читалище“) или само емблемата (с описание за TalkBack). */
+    private enum class Title { FULL, SHORT, LOGO }
+
+    /** Малкият вариант (2×2): следващият срок, а без заемания — следващото събитие (високият — две). */
+    private fun small(context: Context, state: WidgetState, tall: Boolean): RemoteViews {
         val v = RemoteViews(context.packageName, R.layout.widget_small)
-        labels(context, v)
-        v.setTextViewText(R.id.widget_next_due_label, AppLanguage.wrap(context).getString(R.string.widget_next_due))
+        labels(context, v, Title.SHORT)
+        v.setTextViewText(R.id.widget_next_due_label, context.getString(R.string.widget_next_due))
         v.setOnClickPendingIntent(android.R.id.background, openApp(context))
         val nearest = state.groups.firstOrNull()
         if (state.loansTotal != null && nearest != null) {
@@ -89,26 +114,29 @@ internal object WidgetViews {
         } else {
             v.setViewVisibility(R.id.widget_loans, View.GONE)
             v.setViewVisibility(R.id.widget_event_column, View.VISIBLE)
-            event(context, v, state, titleSp = 15f)
+            events(context, v, state, titleSp = 15f, max = if (tall) MAX_WIDGET_EVENTS else 1)
         }
         return v
     }
 
-    /** Широкият вариант (4×2): бутони, до [maxGroups] срока и следващото събитие. */
-    private fun wide(context: Context, state: WidgetState, maxGroups: Int): RemoteViews {
+    /** Широкият вариант (4×2): бутони, до [maxGroups] срока и следващото събитие (без заемания и висок — две). */
+    private fun wide(context: Context, state: WidgetState, maxGroups: Int, tall: Boolean, title: Title): RemoteViews {
         val v = RemoteViews(context.packageName, R.layout.widget_wide)
-        labels(context, v)
-        val text = AppLanguage.wrap(context)
-        v.setTextViewText(R.id.widget_scan, text.getString(R.string.shortcut_scan))
-        v.setTextViewText(R.id.widget_catalog, text.getString(R.string.shortcut_catalog))
+        labels(context, v, title)
+        v.setTextViewText(R.id.widget_scan, context.getString(R.string.shortcut_scan))
+        v.setTextViewText(R.id.widget_catalog, context.getString(R.string.shortcut_catalog))
         v.setOnClickPendingIntent(android.R.id.background, openApp(context))
         v.setOnClickPendingIntent(R.id.widget_scan, link(context, "scan"))
         v.setOnClickPendingIntent(R.id.widget_catalog, link(context, "catalog"))
         val loans = state.hasLoans
         v.setViewVisibility(R.id.widget_loans, if (loans) View.VISIBLE else View.GONE)
+        // Най-тесният (3×2) със заемания — само сроковете: в половин ширина датите не се събират до етикетите.
+        val event = !loans || title != Title.LOGO
+        v.setViewVisibility(R.id.widget_event_column, if (event) View.VISIBLE else View.GONE)
         // Половината от отстъпа между колоните (другата е в колоната на заеманията).
-        val gap = if (loans) (6 * context.resources.displayMetrics.density).roundToInt() else 0
+        val gap = if (loans && event) (6 * context.resources.displayMetrics.density).roundToInt() else 0
         v.setViewPadding(R.id.widget_event_column, gap, 0, 0, 0)
+        v.setViewPadding(R.id.widget_loans, 0, 0, gap, 0)
         if (loans) {
             v.setTextViewText(R.id.widget_loans_total, state.loansTotal)
             val shown = state.groups.take(maxGroups)
@@ -124,7 +152,7 @@ internal object WidgetViews {
             }
             v.setOnClickPendingIntent(R.id.widget_loans, link(context, "my/loans"))
         }
-        event(context, v, state, titleSp = 14f)
+        if (event) events(context, v, state, titleSp = 14f, max = if (tall && !loans) MAX_WIDGET_EVENTS else 1)
         return v
     }
 
@@ -132,24 +160,42 @@ internal object WidgetViews {
      * Постоянните надписи — от кода, на езика на приложението: от `@string` в оформлението
      * ги разчита началният екран със своя (системния) език, а данните са на езика на приложението.
      */
-    private fun labels(context: Context, v: RemoteViews) {
-        val text = AppLanguage.wrap(context)
-        v.setTextViewText(R.id.widget_title, text.getString(R.string.widget_label))
-        v.setTextViewText(R.id.widget_next_event_label, text.getString(R.string.widget_next_event))
-        v.setTextViewText(R.id.widget_no_events, text.getString(R.string.widget_no_events))
+    private fun labels(context: Context, v: RemoteViews, title: Title) {
+        val name = context.getString(R.string.widget_label)
+        v.setViewVisibility(R.id.widget_title, if (title == Title.LOGO) View.GONE else View.VISIBLE)
+        v.setTextViewText(R.id.widget_title, if (title == Title.FULL) name else context.getString(R.string.widget_label_short))
+        // Само емблемата — тя носи името за TalkBack; иначе името е в текста до нея.
+        v.setContentDescription(R.id.widget_logo, if (title == Title.LOGO) name else null)
+        v.setTextViewText(R.id.widget_no_events, context.getString(R.string.widget_no_events))
     }
 
-    /** Следващото събитие (докосване — към „Събития“) или „Няма предстоящи събития“. */
-    private fun event(context: Context, v: RemoteViews, state: WidgetState, titleSp: Float) {
-        val title = state.eventTitle
-        v.setViewVisibility(R.id.widget_event, if (title != null) View.VISIBLE else View.GONE)
-        v.setViewVisibility(R.id.widget_no_events, if (title == null) View.VISIBLE else View.GONE)
-        if (title == null) return
-        v.setTextViewText(R.id.widget_event_title, title)
+    /**
+     * До [max] предстоящи събития (докосване — към „Събития“) или „Няма предстоящи събития“;
+     * още неизвестни (без кеш, теглят се във фон) — нищо.
+     */
+    private fun events(context: Context, v: RemoteViews, state: WidgetState, titleSp: Float, max: Int) {
+        val shown = state.events?.take(max).orEmpty()
+        val first = shown.firstOrNull()
+        v.setViewVisibility(R.id.widget_event, if (first != null) View.VISIBLE else View.GONE)
+        v.setViewVisibility(R.id.widget_no_events, if (state.events?.isEmpty() == true) View.VISIBLE else View.GONE)
+        val second = shown.getOrNull(1)
+        v.setViewVisibility(R.id.widget_event2, if (second != null) View.VISIBLE else View.GONE)
+        if (first == null) return
+        val label = if (second != null) R.string.widget_upcoming_events else R.string.widget_next_event
+        v.setTextViewText(R.id.widget_next_event_label, context.getString(label))
+        v.setTextViewText(R.id.widget_event_title, first.title)
         v.setTextViewTextSize(R.id.widget_event_title, TypedValue.COMPLEX_UNIT_SP, titleSp)
-        v.setViewVisibility(R.id.widget_event_date, if (state.eventDate != null) View.VISIBLE else View.GONE)
-        v.setTextViewText(R.id.widget_event_date, state.eventDate.orEmpty())
+        v.date(R.id.widget_event_date, first.date)
         v.setOnClickPendingIntent(R.id.widget_event, link(context, "events"))
+        if (second == null) return
+        v.setTextViewText(R.id.widget_event2_title, second.title)
+        v.date(R.id.widget_event2_date, second.date)
+        v.setOnClickPendingIntent(R.id.widget_event2, link(context, "events"))
+    }
+
+    private fun RemoteViews.date(@IdRes id: Int, date: String?) {
+        setViewVisibility(id, if (date != null) View.VISIBLE else View.GONE)
+        setTextViewText(id, date.orEmpty())
     }
 
     @DrawableRes

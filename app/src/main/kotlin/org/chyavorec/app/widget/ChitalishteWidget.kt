@@ -7,11 +7,11 @@ import android.os.Build
 import android.os.Bundle
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
-import org.chyavorec.app.di.AppContainerOwner
+import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.util.Formatters
-import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.DueStatus
+import org.chyavorec.domain.model.Event
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.LoanDueCalculator
 import java.time.LocalDate
@@ -25,7 +25,7 @@ import java.util.Locale
 internal data class DueGroup(
     /** „утре“, „след 3 дни“, „просрочена“, „без срок“ … */
     val countdown: String,
-    /** „2 книги · 15.10“ (или само броя за заемания без срок) — малкият уиджет. */
+    /** „15.10 · 2 книги“ (или само броя за заемания без срок) — малкият уиджет. Датата е първа: „…“ реже броя, не нея. */
     val line: String,
     /** До етикета в широкия уиджет: само датата за една книга, иначе [line]. */
     val short: String,
@@ -33,10 +33,13 @@ internal data class DueGroup(
     val status: DueStatus?,
 )
 
+/** Събитие в уиджета: заглавие и дата (с часа). */
+internal data class WidgetEvent(val title: String, val date: String?)
+
 /** Какво показва уиджетът — чете се наново при всяко опресняване ([WidgetUpdater]). */
 internal data class WidgetState(
-    val eventTitle: String?,
-    val eventDate: String?,
+    /** Предстоящите събития, най-близкото първо; null — още не са известни (няма кеш), а не „няма събития“. */
+    val events: List<WidgetEvent>?,
     /** „2 книги за връщане“; null — няма вход или няма заемания. */
     val loansTotal: String?,
     /** Сроковете, най-близкият пръв (заеманията без срок — накрая). */
@@ -45,42 +48,52 @@ internal data class WidgetState(
     val hasLoans: Boolean get() = loansTotal != null && groups.isNotEmpty()
 }
 
-internal val EmptyWidgetState = WidgetState(null, null, null, emptyList())
+/** Без вход и без предстоящи събития. */
+internal val EmptyWidgetState = WidgetState(emptyList(), null, emptyList())
+
+/** Най-много толкова събития в уиджета (висок, без заемания). */
+internal const val MAX_WIDGET_EVENTS = 2
 
 /**
- * Данните за уиджета: за влезли читатели — сроковете за връщане (брой книги, дата,
- * „утре“/„след 3 дни“/„просрочена“; без заглавия), и следващото събитие. Чете само
- * кешираните данни на приложението — мрежа се ползва единствено ако за събитията няма кеш.
+ * Предстоящите събития от кеша на приложението (без мрежа — тя е във фон, [WidgetUpdater]);
+ * null — кеш няма.
  */
-internal suspend fun loadWidgetState(context: Context): WidgetState {
-    val c = (context.applicationContext as? AppContainerOwner)?.appContainer ?: return EmptyWidgetState
+internal suspend fun loadWidgetEvents(c: AppContainer): List<Event>? =
+    c.eventsRepository.cachedRolled()?.data?.let { c.eventsRepository.upcoming(it) }
 
-    val events = runCatching {
-        c.eventsRepository.cachedRolled()?.data
-            ?: (c.eventsRepository.events(force = false) as? Outcome.Success)?.value?.data
-    }.getOrNull().orEmpty()
-    val next = c.eventsRepository.upcoming(events).firstOrNull()
-    val eventDate = next?.let { e ->
-        listOfNotNull(Formatters.date(context, e.date), e.time).joinToString(", ").ifBlank { null }
+/**
+ * Заеманията на влезлия читател от кеша. Празен списък — без вход; null — неизвестно:
+ * сесията временно не се чете ([AuthState.Unavailable] не е изход) или заеманията още
+ * не са зареждани — тогава уиджетът запазва показаното досега.
+ */
+internal suspend fun loadWidgetLoans(c: AppContainer): List<Loan>? {
+    if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
+    return when (c.authRepository.state.value) {
+        is AuthState.SignedIn -> c.libraryRepository.cachedLoans()?.data
+        AuthState.SignedOut -> emptyList()
+        else -> null
     }
+}
 
-    val loans = runCatching {
-        if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
-        if (c.authRepository.state.value !is AuthState.SignedIn) return@runCatching emptyList<Loan>()
-        c.libraryRepository.cachedLoans()?.data.orEmpty()
-    }.getOrNull().orEmpty()
-
+/**
+ * Състоянието от прочетените данни: сроковете (брой книги, дата, „утре“/„след 3 дни“/
+ * „просрочена“; без заглавия) и предстоящите събития. [context] е с езика на приложението
+ * ([org.chyavorec.app.util.AppLanguage.localized]) — и надписите, и датите са на него.
+ */
+internal fun widgetState(context: Context, events: List<Event>?, loans: List<Loan>, today: LocalDate): WidgetState {
+    val shown = events?.take(MAX_WIDGET_EVENTS)?.map { e ->
+        WidgetEvent(e.title, listOfNotNull(Formatters.date(context, e.date), e.time).joinToString(", ").ifBlank { null })
+    }
     val total = loans.size.takeIf { it > 0 }
         ?.let { context.resources.getQuantityString(R.plurals.widget_books_to_return, it, it) }
-    return WidgetState(next?.title, eventDate, total, dueGroups(context, loans, c.clock.today()))
+    return WidgetState(shown, total, dueGroups(context, loans, today))
 }
 
 /** Примерните данни на прегледа в избора на уиджети — като layout/widget_preview. */
 internal fun previewWidgetState(context: Context): WidgetState {
     val date = context.getString(R.string.widget_preview_date)
     return WidgetState(
-        eventTitle = context.getString(R.string.widget_preview_event),
-        eventDate = context.getString(R.string.widget_preview_event_date),
+        events = listOf(WidgetEvent(context.getString(R.string.widget_preview_event), context.getString(R.string.widget_preview_event_date))),
         loansTotal = context.getString(R.string.widget_preview_books),
         groups = listOf(DueGroup(context.getString(R.string.widget_preview_due), date, date, DueStatus.DUE_SOON)),
     )
@@ -93,7 +106,7 @@ internal fun dueGroups(context: Context, loans: List<Loan>, today: LocalDate): L
     val byDate = loans.mapNotNull { LoanDueCalculator.parse(it.dueOn) }.groupingBy { it }.eachCount().toSortedMap()
     val dated = byDate.map { (date, books) ->
         val day = dayMonth(context, date)
-        val line = books(context, books) + " · " + day
+        val line = day + " · " + books(context, books)
         DueGroup(countdown(context, calc.daysLeft(date, today), books), line, if (books > 1) line else day, calc.status(date, today))
     }
     val undated = loans.size - byDate.values.sum()

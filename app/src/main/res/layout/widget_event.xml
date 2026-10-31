@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Следващото събитие (докосване — към „Събития“) или „Няма предстоящи събития“ —
-  в двата размера на уиджета. Кое се вижда, решава WidgetViews.
+  Следващото събитие (докосване — към „Събития“), във високите размери без заемания и
+  второто, или „Няма предстоящи събития“ — във всички размери на уиджета. Кое се вижда,
+  решава WidgetViews.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_event_column"
@@ -27,6 +28,24 @@
 
         <TextView
             android:id="@+id/widget_event_date"
+            style="@style/Widget.Chitalishte.Text.EventDate" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widget_event2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/widget_event2_title"
+            style="@style/Widget.Chitalishte.Text.EventTitle"
+            android:maxLines="1" />
+
+        <TextView
+            android:id="@+id/widget_event2_date"
             style="@style/Widget.Chitalishte.Text.EventDate" />
     </LinearLayout>
 
