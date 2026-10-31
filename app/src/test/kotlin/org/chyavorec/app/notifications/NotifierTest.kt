@@ -119,7 +119,7 @@ class NotifierTest {
         val id = NotificationIds.dueSoon(loan.loanId)
         Notifier.show(
             context, Channel.LOANS, id, "Наближава срок за връщане", "Под игото", "my/loans",
-            actions = listOf(RenewActionReceiver.action(context, loan, id)),
+            actions = listOf(RenewActionReceiver.action(context, loan, id, "R1")),
         )
         val action = nm.activeNotifications.single { it.id == id }.notification.actions.single()
         assertEquals(context.getString(R.string.notif_action_renew), action.title.toString())
@@ -132,8 +132,10 @@ class NotifierTest {
         assertEquals(RenewActionReceiver.ACTION_RENEW, intent.action)
         assertEquals("L1", intent.getStringExtra(RenewActionReceiver.EXTRA_LOAN))
         assertEquals(id, intent.getIntExtra(RenewActionReceiver.EXTRA_NOTIFICATION, 0))
+        // Заявката — само от името на читателя на известието.
+        assertEquals("R1", intent.getStringExtra(RenewActionReceiver.EXTRA_READER))
         // Друга книга — друг requestCode (бутоните не се препокриват).
-        val other = RenewActionReceiver.action(context, loan.copy(loanId = "L2"), NotificationIds.dueSoon("L2"))
+        val other = RenewActionReceiver.action(context, loan.copy(loanId = "L2"), NotificationIds.dueSoon("L2"), "R1")
         assertNotEquals(id, shadowOf(other.actionIntent).requestCode)
         // Приемникът не е достъпен за други приложения.
         val info = context.packageManager.getReceiverInfo(ComponentName(context, RenewActionReceiver::class.java), 0)

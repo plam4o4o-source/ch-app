@@ -44,7 +44,9 @@ import org.chyavorec.app.network.NetworkModule
 import org.chyavorec.app.notifications.LoanReminderScheduler
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.notifications.ReminderScheduler
+import org.chyavorec.app.notifications.RenewActionWorker
 import org.chyavorec.app.notifications.RenewOutcomeNotifier
+import org.chyavorec.app.ui.navigation.AppShortcuts
 import org.chyavorec.app.update.AppUpdater
 import org.chyavorec.app.widget.WidgetUpdater
 import org.chyavorec.app.messages.MessageCenter
@@ -374,8 +376,8 @@ class AppContainer(
 
     /**
      * Личните следи на излезлия читател: съобщенията в паметта, историята на търсенето и
-     * следите от известията (DataStore), напомнянията за срок, показаните лични известия
-     * и отговорите на моста в HTTP кеша. Шифрованият читателски кеш и сесията се трият в
+     * следите от известията (DataStore), напомнянията за срок и чакащите „Удължи“, показаните
+     * лични известия, прекият път „последната книга“ и отговорите на моста в HTTP кеша. Шифрованият читателски кеш и сесията се трият в
      * [AuthRepository] — заедно с личните изображения (снимка в профила, корици на заети
      * книги; [readerCache], [evictPersonalImages]); останалите изображения остават.
      */
@@ -386,6 +388,10 @@ class AppContainer(
         // Напомнянията за срок на предишния читател — отменени, списъкът му — забравен.
         storedLoans.value = null
         runCatching { loanReminders.cancelAll() }.logFailure("signout.reminders")
+        // Чакащите „Удължи“ от известията — нито заявка от чуждо име, нито известие след изхода.
+        runCatching { RenewActionWorker.cancelAll(context) }.logFailure("signout.renew-actions")
+        // „Последната книга“ на иконата — следа от разглеждането, като историята на търсенето.
+        runCatching { AppShortcuts.removeLastBook(context) }.logFailure("signout.shortcut")
         // Вече показаните известия за заемания и лични съобщения.
         runCatching { Notifier.cancelPersonal(context) }.logFailure("signout.notifications")
         runCatching { evictReaderApiFromHttpCache() }.logFailure("signout.http-cache")
@@ -446,7 +452,8 @@ class AppContainer(
      *
      * Пренасрочва се САМО разликата спрямо запомнения план ([LoanReminderSync]): при
      * непроменени заемания (обикновеният старт на процеса, вкл. всяко фоново събуждане)
-     * нищо не се пипа. Докато върви напомняне (LoanReminderWorker) — изчакване: неговото
+     * нищо не се пипа — освен веднъж след обновяване на приложението (планът е от друга
+     * версия: [SettingsStore.loanReminderPlanVersion]). Докато върви напомняне (LoanReminderWorker) — изчакване: неговото
      * restore()/опресняване не бива да подменя (REPLACE) самото него.
      * Тръгва веднъж, със създаването на [authRepository] ([watchReader]).
      */
@@ -483,17 +490,22 @@ class AppContainer(
                 // Празен план = нищо не е планирано; отмяна само ако може да има нещо.
                 if (settings.loanReminderPlan()?.isEmpty() != true) {
                     loanReminders.cancelAll()
-                    settings.setLoanReminderPlan(emptySet())
+                    settings.setLoanReminderPlan(emptySet(), config.versionCode)
                 }
             }
             else -> {
                 val list = loans ?: libraryRepository.cachedLoans()?.data ?: return
                 LoanReminderScheduler.awaitIdle()
                 val previous = settings.loanReminderPlan()
-                val changes = LoanReminderSync.diff(previous, list)
-                if (changes.isEmpty && previous != null) return
+                val diff = LoanReminderSync.diff(previous, list)
+                // След обновяване — всички наново: вече поставените задачи пазят настройките на
+                // старата версия (напр. паузата между опитите). Без двойни известия: вече
+                // показаното пази дневникът (LoanReminderWorker), вървящото — awaitIdle().
+                val sameVersion = settings.loanReminderPlanVersion() == config.versionCode
+                val changes = if (sameVersion) diff else diff.copy(schedule = list.distinctBy { it.loanId })
+                if (sameVersion && changes.isEmpty && previous != null) return
                 loanReminders.applyChanges(changes)
-                settings.setLoanReminderPlan(LoanReminderSync.entries(list))
+                settings.setLoanReminderPlan(LoanReminderSync.entries(list), config.versionCode)
             }
         }
     }
@@ -509,7 +521,7 @@ class AppContainer(
     /**
      * „Изчисти временните данни“ — само публичните данни: новините, събитията, страниците, каталогът
      * (katalog.json с хеша/ETag-а, обобщението и „За теб“, индексът в базата), HTTP кешът,
-     * изображенията (и кориците) и свалените PDF документи. Сесията, картата, запазените новини, „Искам да прочета“,
+     * изображенията (и кориците), свалените PDF документи и прекият път „последната книга“. Сесията, картата, запазените новини, „Искам да прочета“,
      * напомнянията, историята и настройките остават.
      *
      * Върви на ниво приложение и без отмяна: излизането от „Настройки“ по средата не оставя
@@ -525,6 +537,7 @@ class AppContainer(
                     runCatching { publicCache.clear() }.logFailure("cache.public")
                     runCatching { okHttp.cache?.evictAll() }
                     runCatching { documents.clear() }.logFailure("cache.documents")
+                    runCatching { AppShortcuts.removeLastBook(context) }.logFailure("cache.shortcut")
                     clearImageCaches()
                 }
             }.also { clearing = it }

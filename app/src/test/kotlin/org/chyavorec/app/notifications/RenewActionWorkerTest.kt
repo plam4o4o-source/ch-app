@@ -6,14 +6,18 @@ import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.Configuration
+import androidx.work.ExistingWorkPolicy
 import androidx.work.ListenableWorker
 import androidx.work.WorkInfo
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.TestListenableWorkerBuilder
 import androidx.work.testing.WorkManagerTestInitHelper
 import androidx.work.workDataOf
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.chyavorec.app.R
 import org.chyavorec.app.TestBackend
 import org.chyavorec.app.TestBackend.Companion.API
@@ -27,6 +31,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import java.time.Instant
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
@@ -34,7 +39,8 @@ import kotlin.test.assertTrue
 /**
  * „Удължи“ от известието: приемникът веднага сменя известието и пуска задачата; задачата
  * (и при спряно приложение — сесията от хранилището) праща заявката и подменя известието
- * с резултата — изпратена заявка или причината за неуспех.
+ * с резултата — изпратена заявка или причината за неуспех. Само от името на читателя на
+ * известието: след изход или при друг читател — тихо, без заявка.
  */
 @RunWith(AndroidJUnit4::class)
 @Config(application = WorkerTestApp::class)
@@ -65,7 +71,8 @@ class RenewActionWorkerTest {
         assertIs<Outcome.Success<Unit>>(app.container.authRepository.login("0042", "1234".toCharArray(), remember = true))
     }
 
-    private fun run(attempt: Int = 0): ListenableWorker.Result = runBlocking {
+    /** [reader] — читателят на известието (`null` — бутон от 1.2.28 и по-старите). */
+    private fun run(attempt: Int = 0, reader: String? = null): ListenableWorker.Result = runBlocking {
         TestListenableWorkerBuilder<RenewActionWorker>(app)
             .setRunAttemptCount(attempt)
             .setInputData(
@@ -73,6 +80,7 @@ class RenewActionWorkerTest {
                     RenewActionWorker.KEY_LOAN to loanId,
                     RenewActionWorker.KEY_NOTIFICATION to notificationId,
                     RenewActionWorker.KEY_TITLE to "Под игото",
+                    RenewActionWorker.KEY_READER to reader,
                 ),
             )
             .build()
@@ -91,7 +99,7 @@ class RenewActionWorkerTest {
         // Приложението е спряно: нов процес, сесията — от хранилището.
         app.container = backend.container(app, clock)
 
-        assertIs<ListenableWorker.Result.Success>(run())
+        assertIs<ListenableWorker.Result.Success>(run(reader = "R1"))
 
         assertEquals(1, backend.count(renewPath))
         val n = shown()
@@ -115,11 +123,45 @@ class RenewActionWorkerTest {
         assertTrue(app.getString(R.string.renew_conflict_not_allowed) in n.text(), n.text())
     }
 
-    @Test fun signedOutAsksToSignInWithoutRequest() {
+    /** „Изпраща се…“ със заглавието, както го оставя приемникът. */
+    private fun sending() = Notifier.show(app, Channel.LOANS, notificationId, app.getString(R.string.notif_renew_sending), "Под игото", "my/loans")
+
+    /** Изход между натискането и опита (напр. по време на паузата): без заявка и без известие със заглавието. */
+    @Test fun signedOutFinishesSilently() {
         backend.json(renewPath, loan(pending = true), code = 202)
-        run()
+        sending()
+        assertIs<ListenableWorker.Result.Success>(run(reader = "R1"))
         assertEquals(0, backend.count(renewPath))
-        assertTrue(app.getString(R.string.error_unauthorized) in shown().text())
+        assertTrue(nm.activeNotifications.none { it.id == notificationId }, "известие след изхода")
+    }
+
+    /** Вход на друг читател между двата опита — не от неговото име. */
+    @Test fun otherReaderIsNotRenewedFor() = runBlocking<Unit> {
+        signIn()
+        backend.json(renewPath, loan(pending = true), code = 202)
+        sending()
+        assertIs<ListenableWorker.Result.Success>(run(reader = "R0"))
+        assertEquals(0, backend.count(renewPath))
+        assertTrue(nm.activeNotifications.none { it.id == notificationId })
+    }
+
+    /** Изход: чакащият повтор на „Удължи“ (WorkManager, пауза между опитите) се отменя по етикета. */
+    @Test fun signOutCancelsPendingRenewals() = runBlocking<Unit> {
+        WorkManagerTestInitHelper.initializeTestWorkManager(
+            app, Configuration.Builder().setExecutor(SynchronousExecutor()).build(),
+        )
+        val wm = WorkManager.getInstance(app)
+        app.container.settings.setReaderTraces(true)
+        app.container.watchReader()
+        signIn()
+        val waiting = OneTimeWorkRequestBuilder<RenewActionWorker>()
+            .setInitialDelay(1, TimeUnit.HOURS)
+            .addTag(RenewActionWorker.TAG)
+            .build()
+        wm.enqueueUniqueWork(RenewActionWorker.uniqueName(loanId), ExistingWorkPolicy.KEEP, waiting).result.get()
+        app.container.authRepository.signOutLocally()
+        withTimeout(5_000) { while (wm.getWorkInfoById(waiting.id).get()?.state != WorkInfo.State.CANCELLED) delay(20) }
+        assertEquals(0, backend.count(renewPath))
     }
 
     /** Временно нечетима сесия не е „влез отново“: още опити, после „опитай пак по-късно“ — без заявка. */
@@ -150,6 +192,7 @@ class RenewActionWorkerTest {
             putExtra(RenewActionReceiver.EXTRA_LOAN, loanId)
             putExtra(RenewActionReceiver.EXTRA_NOTIFICATION, notificationId)
             putExtra(RenewActionReceiver.EXTRA_TITLE, "Под игото")
+            putExtra(RenewActionReceiver.EXTRA_READER, "R1")
         }
         RenewActionReceiver().onReceive(app, intent)
 
@@ -157,6 +200,8 @@ class RenewActionWorkerTest {
         val work = WorkManager.getInstance(app).getWorkInfosForUniqueWork(RenewActionWorker.uniqueName(loanId)).get()
         // Чака мрежа (тестовият WorkManager не я „вижда“) — задачата е поставена веднъж.
         assertEquals(1, work.size)
+        // С етикета — изходът го отменя (AppContainer.clearReaderTraces).
+        assertTrue(RenewActionWorker.TAG in work.single().tags)
         assertTrue(work.single().state == WorkInfo.State.ENQUEUED || work.single().state == WorkInfo.State.SUCCEEDED)
         // Второ натискане — без втора задача.
         RenewActionReceiver().onReceive(app, intent)

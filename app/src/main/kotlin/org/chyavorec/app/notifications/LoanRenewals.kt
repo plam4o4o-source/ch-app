@@ -102,11 +102,13 @@ class RenewActionReceiver : BroadcastReceiver() {
         val loanId = intent.getStringExtra(EXTRA_LOAN) ?: return
         val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION, 0).takeIf { it != 0 } ?: return
         val title = intent.getStringExtra(EXTRA_TITLE).orEmpty()
+        // Бутоните от 1.2.28 и по-старите са без читател — тогава важи влезлият в момента.
+        val reader = intent.getStringExtra(EXTRA_READER)
         Notifier.show(
             context, Channel.LOANS, notificationId, context.getString(R.string.notif_renew_sending), title, "my/loans",
             lockScreenTitle = context.getString(R.string.notif_public_renew), silent = true, category = NotificationCompat.CATEGORY_STATUS,
         )
-        RenewActionWorker.enqueue(context, loanId, notificationId, title)
+        RenewActionWorker.enqueue(context, loanId, notificationId, title, reader)
     }
 
     companion object {
@@ -114,6 +116,7 @@ class RenewActionReceiver : BroadcastReceiver() {
         const val EXTRA_LOAN = "loan"
         const val EXTRA_NOTIFICATION = "notification"
         const val EXTRA_TITLE = "title"
+        const val EXTRA_READER = "reader"
 
         /**
          * „Удължи“ за известието [notificationId] — само ако сървърът приема удължаване и
@@ -121,6 +124,7 @@ class RenewActionReceiver : BroadcastReceiver() {
          */
         suspend fun actionsFor(context: Context, c: AppContainer, loan: Loan, notificationId: Int): List<NotificationCompat.Action> {
             if (!loan.canRenew || loan.renewPending) return emptyList()
+            val reader = (c.authRepository.state.value as? AuthState.SignedIn)?.readerId ?: return emptyList()
             val supported = try {
                 c.authRepository.capabilities().renew
             } catch (e: CancellationException) {
@@ -129,15 +133,17 @@ class RenewActionReceiver : BroadcastReceiver() {
                 Diagnostics.record("renew.action.caps", e)
                 false
             }
-            return if (supported) listOf(action(context, loan, notificationId)) else emptyList()
+            return if (supported) listOf(action(context, loan, notificationId, reader)) else emptyList()
         }
 
-        internal fun action(context: Context, loan: Loan, notificationId: Int): NotificationCompat.Action {
+        /** [readerId] — читателят на известието: заявката е само от негово име. */
+        internal fun action(context: Context, loan: Loan, notificationId: Int, readerId: String): NotificationCompat.Action {
             val intent = Intent(context, RenewActionReceiver::class.java).apply {
                 action = ACTION_RENEW
                 putExtra(EXTRA_LOAN, loan.loanId)
                 putExtra(EXTRA_NOTIFICATION, notificationId)
                 putExtra(EXTRA_TITLE, loan.title)
+                putExtra(EXTRA_READER, readerId)
             }
             // requestCode = ID-то на известието: уникално за заемането (и вида) — бутоните не се препокриват.
             val pending = PendingIntent.getBroadcast(
@@ -151,14 +157,23 @@ class RenewActionReceiver : BroadcastReceiver() {
 /**
  * Заявката за удължаване от бутона в известието — и при неработещо приложение: сесията се
  * възстановява от хранилището. Резултатът подменя известието (без звук).
+ *
+ * Само от името на читателя на известието ([KEY_READER]): след изход или вход на друг читател
+ * задачата спира тихо — без заявка и без известие (заглавието не остава след изхода). При изход
+ * чакащите задачи се отменят и по етикета [TAG] (AppContainer.clearReaderTraces).
  */
 class RenewActionWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+
+    private var container: AppContainer? = null
+    private var readerId: String? = null
 
     override suspend fun doWork(): Result {
         val c = (applicationContext as? AppContainerOwner)?.appContainer ?: return Result.success()
         val loanId = inputData.getString(KEY_LOAN) ?: return Result.success()
         val notificationId = inputData.getInt(KEY_NOTIFICATION, 0).takeIf { it != 0 } ?: return Result.success()
         val title = inputData.getString(KEY_TITLE).orEmpty()
+        container = c
+        readerId = inputData.getString(KEY_READER)
         return try {
             renew(c, loanId, notificationId, title)
         } catch (e: CancellationException) {
@@ -172,8 +187,9 @@ class RenewActionWorker(context: Context, params: WorkerParameters) : CoroutineW
 
     private suspend fun renew(c: AppContainer, loanId: String, notificationId: Int, title: String): Result {
         c.authRepository.restore()
-        when (c.authRepository.state.value) {
-            is AuthState.SignedIn -> Unit
+        when (val s = c.authRepository.state.value) {
+            // Друг читател (вход между два опита) — не от неговото име.
+            is AuthState.SignedIn -> if (readerId != null && s.readerId != readerId) return dropped(notificationId)
             // Сесията временно не се чете (Keystore) — не е изход: още няколко опита, после
             // „опитай пак по-късно“, а не „влез отново“.
             AuthState.Unavailable -> {
@@ -181,10 +197,8 @@ class RenewActionWorker(context: Context, params: WorkerParameters) : CoroutineW
                 showFailure(notificationId, title, applicationContext.getString(R.string.notif_renew_session_unavailable))
                 return Result.success()
             }
-            else -> {
-                showFailure(notificationId, title, AppError.Unauthorized)
-                return Result.success()
-            }
+            // Читателят е излязъл (и между два опита) — тихо, без заявка.
+            else -> return dropped(notificationId)
         }
         when (val r = c.libraryRepository.renew(loanId)) {
             is Outcome.Success -> {
@@ -218,7 +232,27 @@ class RenewActionWorker(context: Context, params: WorkerParameters) : CoroutineW
         )
     }
 
+    /** Задачата вече не е на този читател: „изпраща се…“ (със заглавието) се маха, нищо ново не се показва. */
+    private fun dropped(notificationId: Int): Result {
+        NotificationManagerCompat.from(applicationContext).cancel(notificationId)
+        return Result.success()
+    }
+
+    /**
+     * Резултатът — само за читателя на заявката (или при временно нечетима сесия); изход по
+     * време на заявката (напр. отказан достъп) — без известие.
+     */
+    private fun stillReader(): Boolean = when (val s = container?.authRepository?.state?.value) {
+        is AuthState.SignedIn -> readerId == null || s.readerId == readerId
+        AuthState.Unavailable -> true
+        else -> false
+    }
+
     private fun result(notificationId: Int, title: String, text: String) {
+        if (!stillReader()) {
+            dropped(notificationId)
+            return
+        }
         Notifier.show(
             applicationContext, Channel.LOANS, notificationId, title, text, "my/loans",
             lockScreenTitle = applicationContext.getString(R.string.notif_public_renew), silent = true,
@@ -259,18 +293,26 @@ class RenewActionWorker(context: Context, params: WorkerParameters) : CoroutineW
         const val KEY_LOAN = "loan"
         const val KEY_NOTIFICATION = "notification"
         const val KEY_TITLE = "title"
+        const val KEY_READER = "reader"
+        const val TAG = "renew-action"
         private const val MAX_RETRIES = 3
 
-        fun uniqueName(loanId: String) = "renew-action:$loanId"
+        fun uniqueName(loanId: String) = "$TAG:$loanId"
 
-        fun enqueue(context: Context, loanId: String, notificationId: Int, title: String) {
+        fun enqueue(context: Context, loanId: String, notificationId: Int, title: String, readerId: String?) {
             val request = OneTimeWorkRequestBuilder<RenewActionWorker>()
                 .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
-                .setInputData(workDataOf(KEY_LOAN to loanId, KEY_NOTIFICATION to notificationId, KEY_TITLE to title))
+                .setInputData(workDataOf(KEY_LOAN to loanId, KEY_NOTIFICATION to notificationId, KEY_TITLE to title, KEY_READER to readerId))
+                .addTag(TAG)
                 .build()
             // Второ натискане, докато първото чака/тече — без втора заявка.
             WorkManager.getInstance(context).enqueueUniqueWork(uniqueName(loanId), ExistingWorkPolicy.KEEP, request)
+        }
+
+        /** При изход: чакащите (и повтарящите) заявки за удължаване на излезлия читател. */
+        fun cancelAll(context: Context) {
+            WorkManager.getInstance(context).cancelAllWorkByTag(TAG)
         }
     }
 }

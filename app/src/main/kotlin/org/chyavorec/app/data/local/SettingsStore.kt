@@ -122,6 +122,7 @@ class SettingsStore(private val context: Context) {
         val readerNarrow = booleanPreferencesKey("reader_narrow")
         val textScale = stringPreferencesKey("text_scale")
         val loanReminderPlan = stringSetPreferencesKey("loan_reminder_plan")
+        val loanReminderPlanVersion = intPreferencesKey("loan_reminder_plan_version")
         val backgroundSetup = stringPreferencesKey("background_setup")
         val lastAppOpen = longPreferencesKey("last_app_open")
         val messagePollAt = longPreferencesKey("message_poll_at")
@@ -260,7 +261,14 @@ class SettingsStore(private val context: Context) {
      * `null` — неизвестен, празен — нищо не е планирано.
      */
     suspend fun loanReminderPlan(): Set<String>? = context.dataStore.data.first()[Keys.loanReminderPlan]
-    suspend fun setLoanReminderPlan(plan: Set<String>) = context.dataStore.edit { it[Keys.loanReminderPlan] = plan }
+
+    /** Версията (versionCode), която е поставила задачите от плана; `null` — от 1.2.28 и по-старите. */
+    suspend fun loanReminderPlanVersion(): Int? = context.dataStore.data.first()[Keys.loanReminderPlanVersion]
+
+    suspend fun setLoanReminderPlan(plan: Set<String>, versionCode: Int? = null) = context.dataStore.edit {
+        it[Keys.loanReminderPlan] = plan
+        if (versionCode != null) it[Keys.loanReminderPlanVersion] = versionCode
+    }
 
     /** „версия:език“, за която периодичните задачи и каналите за известия вече са настроени. */
     suspend fun backgroundSetup(): String? = context.dataStore.data.first()[Keys.backgroundSetup]
