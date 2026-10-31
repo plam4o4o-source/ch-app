@@ -1,15 +1,18 @@
 package org.chyavorec.app.ui.screens.scan
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.chyavorec.app.data.scan.BarcodeScanner
+import org.chyavorec.app.data.scan.ScanOutcome
 import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
-import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
 import org.chyavorec.core.ScanCodes
 import org.chyavorec.core.ScanTarget
@@ -26,18 +29,21 @@ sealed interface ScanResult {
 /** Каталогът за скенера: зарежда се, готов е или не е достъпен (без мрежа и без кеш). */
 enum class ScanCatalogStatus { LOADING, READY, UNAVAILABLE }
 
+/** Скенерът на Google: затворен, отворен (над приложението) или недостъпен (без Play услуги/модул). */
+enum class ScannerState { IDLE, OPEN, UNAVAILABLE }
+
 /**
- * Скенер на баркодове: разчита ISBN (EAN-13 с 978/979), инвентарен номер
- * (Code 39/128 етикет на библиотеката) или QR с адрес на каталога и търси в
- * каталога (индекса в базата; без него — в паметта). Всичко става на устройството —
- * кадрите не се записват.
+ * Скенер на баркодове: скенерът на Google ([BarcodeScanner]) разчита ISBN (EAN-13 с
+ * 978/979), инвентарен номер (Code 39/128 етикет на библиотеката) или QR с адрес на
+ * каталога, а тук се търси в каталога (индекса в базата; без него — в паметта).
+ * Приложението получава само разчетения код — кадри няма.
  *
  * Ако каталогът не се зареди (няма връзка, а кешът е празен — напр. след „Изчисти кеша“),
  * екранът показва грешка с „Опитай отново“, а при връщане на връзката опитва сам
  * ([RefreshOnReconnect]). Сканираният междувременно код не се губи: последният се пази
  * ([waiting]) и се търси, щом каталогът се зареди. Код, който не е книга, не чака каталога.
  */
-class ScanViewModel(private val repo: CatalogRepository, private val clock: AppClock) : ViewModel(), RefreshOnReconnect {
+class ScanViewModel(private val repo: CatalogRepository, private val scanner: BarcodeScanner) : ViewModel(), RefreshOnReconnect {
     private val _result = MutableStateFlow<ScanResult?>(null)
     val result: StateFlow<ScanResult?> = _result.asStateFlow()
     private val _catalogStatus = MutableStateFlow(ScanCatalogStatus.LOADING)
@@ -45,13 +51,15 @@ class ScanViewModel(private val repo: CatalogRepository, private val clock: AppC
     private val _waiting = MutableStateFlow<ScanTarget?>(null)
     /** Последният код, сканиран без каталог — търси се, щом каталогът се зареди. */
     val waiting: StateFlow<ScanTarget?> = _waiting.asStateFlow()
+    private val _scannerState = MutableStateFlow(ScannerState.IDLE)
+    val scannerState: StateFlow<ScannerState> = _scannerState.asStateFlow()
+    /** Скенерът е отварян сам (при първото показване на екрана) — не се отваря сам пак. */
+    private var autoStarted = false
 
     /** Търсачката (data) и грешката при зареждането ѝ — само на главната нишка. */
     private var catalog = ScreenState<CatalogSearcher>()
     private var loading: Job? = null
-    @Volatile private var lastCode: String? = null
-    @Volatile private var lastAt: Long = 0L
-    @Volatile private var busy = false
+    private var busy = false
 
     override val reconnectState: ScreenState<*> get() = catalog
 
@@ -91,27 +99,42 @@ class ScanViewModel(private val repo: CatalogRepository, private val clock: AppC
         }
     }
 
-    /** Извиква се от анализатора (фонова нишка). Еднакъв код се приема най-много веднъж на 3 s. */
+    /**
+     * Отваря скенера на Google ([activity] — екранът, над който се показва). [auto] — при
+     * първото показване на екрана: тогава само веднъж (след „Назад“ от скенера екранът остава).
+     * Без Play услуги или модул — [ScannerState.UNAVAILABLE] (екранът предлага ръчно въвеждане).
+     */
+    fun scan(activity: Context, auto: Boolean = false) {
+        if (auto) {
+            if (autoStarted) return
+            autoStarted = true
+        }
+        if (_scannerState.value == ScannerState.OPEN || busy || _result.value != null) return
+        _scannerState.value = ScannerState.OPEN
+        viewModelScope.launch {
+            val outcome = try {
+                scanner.scan(activity)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                ScanOutcome.Unavailable
+            }
+            _scannerState.value = if (outcome == ScanOutcome.Unavailable) ScannerState.UNAVAILABLE else ScannerState.IDLE
+            if (outcome is ScanOutcome.Code) onCode(outcome.raw)
+        }
+    }
+
+    /** Разчетен код (от скенера). */
     fun onCode(raw: String) {
         if (raw.isBlank() || busy || _result.value != null) return
-        val now = clock.now().toEpochMilli()
-        if (raw == lastCode && now - lastAt < DEBOUNCE_MS) return
-        lastCode = raw; lastAt = now
         handle(raw)
     }
 
-    /**
-     * „Въведи номера на ръка“ (без камера или етикет, който не се чете): ISBN или инв. № —
-     * същата справка като при сканиране, без изчакването между еднакви кодове.
-     */
-    fun onManual(raw: String) {
-        if (raw.isBlank() || busy || _result.value != null) return
-        handle(raw)
-    }
+    /** „Въведи номера на ръка“ (етикет, който не се чете, или без скенер): същата справка като при сканиране. */
+    fun onManual(raw: String) = onCode(raw)
 
     private fun handle(raw: String) {
         busy = true
-        // Справката е заявка към базата — извън нишката на анализатора; състоянието се пипа на главната.
         viewModelScope.launch {
             try {
                 val target = ScanCodes.resolve(raw)
@@ -174,10 +197,6 @@ class ScanViewModel(private val repo: CatalogRepository, private val clock: AppC
 
     fun dismiss() {
         _result.value = null
-        // Същият код може да се сканира отново след кратка пауза (не веднага, докато листът се затваря).
-        lastAt = clock.now().toEpochMilli()
         if (_waiting.value != null) viewModelScope.launch { resolveWaiting() }
     }
-
-    companion object { const val DEBOUNCE_MS = 3_000L }
 }

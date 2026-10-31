@@ -11,6 +11,8 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.chyavorec.app.data.local.FavoriteNewsEntity
 import org.chyavorec.app.data.local.FavoritesDao
+import org.chyavorec.app.data.scan.BarcodeScanner
+import org.chyavorec.app.data.scan.ScanOutcome
 import org.chyavorec.app.data.security.BytesCipher
 import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.data.security.SystemPasswords
@@ -33,13 +35,28 @@ class XorTestCipher : BytesCipher {
     override fun decrypt(data: ByteArray) = encrypt(data)
 }
 
-/** Мениджър на пароли без системния прозорец: помни предложенията за запазване и връща [saved]. */
-class FakeSystemPasswords(private val saved: SavedLogin? = null) : SystemPasswords {
+/**
+ * Мениджър на пароли без системния прозорец: помни предложенията за запазване (и ги
+ * „запазва“ — [saves]) и връща [saved].
+ */
+class FakeSystemPasswords(private val saved: SavedLogin? = null, private val saves: Boolean = true) : SystemPasswords {
     val offered = java.util.concurrent.CopyOnWriteArrayList<SavedLogin>()
     @Volatile var asked = 0
         private set
-    override suspend fun offerSave(activity: android.content.Context, login: SavedLogin) { offered += login }
+    override suspend fun offerSave(activity: android.content.Context, login: SavedLogin): Boolean { offered += login; return saves }
     override suspend fun savedLogin(activity: android.content.Context): SavedLogin? { asked++; return saved }
+}
+
+/** Скенер на баркодове без Google Play услуги: връща поред [outcomes] (последният — за всички следващи). */
+class FakeBarcodeScanner(vararg outcomes: ScanOutcome) : BarcodeScanner {
+    private val queue = java.util.concurrent.ConcurrentLinkedQueue(outcomes.toList())
+    private val last: ScanOutcome = outcomes.lastOrNull() ?: ScanOutcome.Cancelled
+    @Volatile var calls = 0
+        private set
+    override suspend fun scan(activity: android.content.Context): ScanOutcome {
+        calls++
+        return queue.poll() ?: last
+    }
 }
 
 class InMemoryFavoritesDao : FavoritesDao {

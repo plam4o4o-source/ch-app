@@ -4,8 +4,12 @@ import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -32,7 +36,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
@@ -108,6 +114,10 @@ private val SearchHeight = 56.dp
 /**
  * Полето за писане при търсене (каталог, глобално търсене) — същото запълнено „хапче“
  * като полето на „Начало“ (Material 3 SearchBar): без рамка и без златен контур при фокус.
+ *
+ * Отвътре е с TextFieldState (както SearchBar — един вид текстови полета в приложението),
+ * а [value] остава у извикващия: въведеното отива в [onValueChange], а промяна отвън
+ * (изчистване, избрано последно търсене) — в полето.
  */
 @Composable
 fun SearchInput(
@@ -121,16 +131,48 @@ fun SearchInput(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     val cs = MaterialTheme.colorScheme
+    val state = rememberTextFieldState(value)
+    val sync = remember { InputSync(value) }
+    val onChange by rememberUpdatedState(onValueChange)
+    val actions by rememberUpdatedState(keyboardActions)
+    LaunchedEffect(state) {
+        snapshotFlow { state.text.toString() }.collect { t ->
+            if (t != sync.shown) {
+                sync.shown = t
+                sync.sent(t)
+                onChange(t)
+            }
+        }
+    }
+    LaunchedEffect(value) {
+        // Стойност, която полето само е изпратило (още „пътува“), не го връща назад.
+        if (!sync.echo(value) && value != state.text.toString()) {
+            sync.shown = value
+            state.setTextAndPlaceCursorAtEnd(value)
+        }
+    }
     TextField(
-        value = value,
-        onValueChange = onValueChange,
+        state = state,
         placeholder = { Text(placeholder, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
-        singleLine = true,
+        lineLimits = TextFieldLineLimits.SingleLine,
         shape = RoundedCornerShape(50),
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
+        onKeyboardAction = { performDefault ->
+            val a = actions
+            val action = when (keyboardOptions.imeAction) {
+                ImeAction.Search -> a.onSearch
+                ImeAction.Done -> a.onDone
+                ImeAction.Go -> a.onGo
+                ImeAction.Send -> a.onSend
+                ImeAction.Next -> a.onNext
+                ImeAction.Previous -> a.onPrevious
+                else -> null
+            }
+            if (action == null) performDefault()
+            else action(object : KeyboardActionScope { override fun defaultKeyboardAction(imeAction: ImeAction) = performDefault() })
+        },
         colors = TextFieldDefaults.colors(
             focusedContainerColor = cs.surfaceContainerHigh,
             unfocusedContainerColor = cs.surfaceContainerHigh,
@@ -147,6 +189,27 @@ fun SearchInput(
         ),
         modifier = modifier.heightIn(min = SearchHeight),
     )
+}
+
+/** [SearchInput]: показаното в полето и изпратените на извикващия стойности, които още не са се върнали. */
+private class InputSync(var shown: String) {
+    private val pending = ArrayDeque<String>()
+
+    fun sent(text: String) {
+        pending.addLast(text)
+        if (pending.size > 32) pending.removeFirst()
+    }
+
+    /** [value] е изпратена от полето — тя и изпратените преди нея вече са стигнали до извикващия. */
+    fun echo(value: String): Boolean {
+        val i = pending.indexOf(value)
+        if (i < 0) {
+            pending.clear()
+            return false
+        }
+        repeat(i + 1) { pending.removeFirst() }
+        return true
+    }
 }
 
 /** Елемент от мрежата с плочки („Още“, „Моето“). */

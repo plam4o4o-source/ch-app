@@ -35,6 +35,8 @@ import org.chyavorec.app.data.local.RoomCatalogIndexStore
 import org.chyavorec.app.data.local.SecureSelfCardStore
 import org.chyavorec.app.data.local.SecureSessionStore
 import org.chyavorec.app.data.local.SettingsStore
+import org.chyavorec.app.data.scan.BarcodeScanner
+import org.chyavorec.app.data.scan.PlayServicesBarcodeScanner
 import org.chyavorec.app.data.security.CredentialManagerPasswords
 import org.chyavorec.app.data.security.SystemPasswords
 import org.chyavorec.app.data.security.BytesCipher
@@ -106,6 +108,8 @@ class AppContainer(
     okHttpOverride: okhttp3.OkHttpClient? = null,
     /** Само за тестове: мениджър на пароли без системния прозорец. */
     passwordsOverride: SystemPasswords? = null,
+    /** Само за тестове: скенер на баркодове без Google Play услуги. */
+    scannerOverride: BarcodeScanner? = null,
 ) {
     private val cipher: BytesCipher by lazy { cipherOverride ?: KeystoreBytesCipher() }
 
@@ -226,6 +230,8 @@ class AppContainer(
     }
     /** Системният мениджър на пароли за входа (картата и ПИН-ът се пазят от системата, не от приложението). */
     val passwords: SystemPasswords by lazy { passwordsOverride ?: CredentialManagerPasswords(context) }
+    /** Скенерът на баркодове (на Google Play услугите). */
+    val scanner: BarcodeScanner by lazy { scannerOverride ?: PlayServicesBarcodeScanner() }
     val selfCardRepository by lazy { SelfCardRepository(SecureSelfCardStore(File(context.noBackupFilesDir, "secure/card.bin"), cipher)) }
 
     val messagesRepository by lazy { MessagesRepository(siteService, publicCache, clock) }

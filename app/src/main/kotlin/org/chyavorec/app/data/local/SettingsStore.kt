@@ -130,6 +130,7 @@ class SettingsStore(private val context: Context) {
         val readerTraces = booleanPreferencesKey("reader_traces")
         val readerHttpCacheEvicted = booleanPreferencesKey("reader_http_cache_evicted")
         val catalogHttpCacheEvicted = booleanPreferencesKey("catalog_http_cache_evicted")
+        val passwordManagerUsed = booleanPreferencesKey("password_manager_used")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -344,6 +345,13 @@ class SettingsStore(private val context: Context) {
     /** Еднократно: копията на katalog.json от по-старите версии са изтрити от HTTP кеша. */
     suspend fun catalogHttpCacheEvicted(): Boolean = context.dataStore.data.first()[Keys.catalogHttpCacheEvicted] ?: false
     suspend fun setCatalogHttpCacheEvicted() { context.dataStore.edit { it[Keys.catalogHttpCacheEvicted] = true } }
+
+    /**
+     * Вход от приложението е запазван в мениджъра на пароли (самите данни са в него, не тук) —
+     * само тогава екранът за вход го пита при отваряне (иначе без системен прозорец всеки път).
+     */
+    suspend fun passwordManagerUsed(): Boolean = context.dataStore.data.first()[Keys.passwordManagerUsed] ?: false
+    suspend fun setPasswordManagerUsed(on: Boolean) { context.dataStore.edit { it[Keys.passwordManagerUsed] = on } }
 
     /**
      * Изчистване на личните следи (история на търсенето, известия за заемания,

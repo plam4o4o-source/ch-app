@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.my
 
+import org.chyavorec.app.ui.components.limitedInput
 import org.chyavorec.app.ui.components.sharedTransitionsActive
 import org.chyavorec.app.ui.components.InfoBanner
 import org.chyavorec.app.ui.components.sharedBoundsKey
@@ -56,6 +57,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
@@ -427,29 +430,37 @@ private fun SelfCardForm(
     onSave: (String, String, (Boolean) -> Unit) -> Unit,
     onCancel: (() -> Unit)?,
 ) {
-    var number by rememberSaveable { mutableStateOf(initialNumber) }
-    var name by rememberSaveable { mutableStateOf(initialName) }
-    var invalid by remember { mutableStateOf(false) }
+    val number = rememberTextFieldState(initialNumber)
+    val name = rememberTextFieldState(initialName)
+    // Номерът, отхвърлен при запазване: грешката се вижда, докато не бъде поправен.
+    var invalidFor by rememberSaveable { mutableStateOf<String?>(null) }
+    val invalid = invalidFor != null && invalidFor == number.text.toString()
+    // Знаците на Code 39 (главни букви), до 32; името — до 80.
+    val numberInput = remember { limitedInput(32, map = Char::uppercaseChar, keep = { it in SelfCardRepository.CODE39_CHARS }) }
+    val nameInput = remember { limitedInput(80) }
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(stringResource(R.string.card_add_title), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
         Text(stringResource(R.string.card_add_text), style = MaterialTheme.typography.bodyMedium)
         OutlinedTextField(
-            value = number,
-            onValueChange = { v -> number = v.uppercase().filter { it in SelfCardRepository.CODE39_CHARS }.take(32); invalid = false },
+            state = number,
+            inputTransformation = numberInput,
             label = { Text(stringResource(R.string.card_number_label)) },
             supportingText = { Text(stringResource(if (invalid) R.string.card_number_invalid else R.string.card_number_hint)) },
             isError = invalid,
-            singleLine = true,
+            lineLimits = TextFieldLineLimits.SingleLine,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, keyboardType = KeyboardType.Ascii, autoCorrectEnabled = false),
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
-            value = name, onValueChange = { name = it.take(80) },
-            label = { Text(stringResource(R.string.card_name_label)) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
+            state = name, inputTransformation = nameInput,
+            label = { Text(stringResource(R.string.card_name_label)) }, lineLimits = TextFieldLineLimits.SingleLine, modifier = Modifier.fillMaxWidth(),
         )
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             if (onCancel != null) OutlinedButton(onClick = onCancel, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.action_cancel)) }
-            Button(onClick = { onSave(number, name) { ok -> invalid = !ok } }, enabled = number.isNotBlank(), modifier = Modifier.weight(1f)) {
+            Button(
+                onClick = { val n = number.text.toString(); onSave(n, name.text.toString()) { ok -> invalidFor = if (ok) null else n } },
+                enabled = number.text.isNotBlank(), modifier = Modifier.weight(1f),
+            ) {
                 Text(stringResource(R.string.action_save))
             }
         }

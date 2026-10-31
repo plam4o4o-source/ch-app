@@ -34,7 +34,7 @@
 
 Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.
 
-Скенер на баркодове: камерата се включва само когато отвориш скенера и разрешиш достъп; кадрите се разчитат на телефона и не се записват и не се изпращат.
+Скенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.
 
 История на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.
 
@@ -98,7 +98,7 @@ Sign-in protection: after several failed sign-in attempts, sign-in is temporaril
 
 Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.
 
-Barcode scanner: the camera turns on only when you open the scanner and allow access; frames are read on the phone and are never stored or sent.
+Barcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.
 
 Reading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.
 

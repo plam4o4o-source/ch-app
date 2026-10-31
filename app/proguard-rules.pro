@@ -28,9 +28,6 @@
     public static int i(...);
 }
 
-# CameraX: конфигурацията по подразбиране се зарежда по име от манифеста.
--keep class androidx.camera.camera2.Camera2Config$DefaultProvider { <init>(); }
-
 # Credential Manager: доставчикът през Google Play услугите се зарежда по име.
 -if class androidx.credentials.CredentialManager
 -keep class androidx.credentials.playservices.** {

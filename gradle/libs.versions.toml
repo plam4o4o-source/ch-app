@@ -20,7 +20,8 @@ splashscreen = "1.2.0"
 browser = "1.10.0"
 coil = "3.6.3"
 zxing = "3.5.4"
-camerax = "1.5.1"
+# Скенерът на баркодове на Google (Google Play услуги) — без камера и разпознаване в APK-а.
+codeScanner = "16.1.0"
 palette = "1.1.0"
 # Credential Manager: запазване на картата и ПИН-а в системния мениджър на пароли.
 credentials = "1.6.0"
@@ -81,11 +82,8 @@ compose-animation = { module = "androidx.compose.animation:animation" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
-# Скенер на баркодове (ISBN/инвентарен номер): CameraX + ZXing (zxing-core по-горе).
-androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
-androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
-androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
-androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
+# Скенер на баркодове (ISBN/инвентарен номер): скенерът на Google Play услугите.
+play-services-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "codeScanner" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidxTestCore" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxTestExtJunit" }
