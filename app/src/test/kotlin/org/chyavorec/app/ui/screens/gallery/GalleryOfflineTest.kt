@@ -6,6 +6,8 @@ import android.net.NetworkCapabilities
 import androidx.lifecycle.viewModelScope
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import coil3.network.HttpException
+import coil3.network.NetworkResponse
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -36,6 +38,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowNetworkCapabilities
+import java.io.IOException
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.assertEquals
@@ -45,7 +48,8 @@ import kotlin.test.assertTrue
 /**
  * Галерията без връзка и без кеш: веднага грешка с „Опитай отново“ (не скелет, докато
  * заявката „виси“ до timeout-а), а щом връзката се върне — зарежда се сама. Мрежа, която
- * системата не е потвърдила (VALIDATED), но работи — галерията се зарежда.
+ * системата не е потвърдила (VALIDATED), но работи — галерията се зарежда. Снимка, която не
+ * се зарежда без връзка, не е „липсва“ ([PhotoFailure]).
  */
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
@@ -115,6 +119,18 @@ class GalleryOfflineTest {
         waitUntil("албумите след „Опитай отново“") { gallery.state.value.data != null }
         assertEquals(1, site.galleryCalls.get())
         assertEquals("Празници", gallery.state.value.data!!.single().name)
+    }
+
+    /** „Снимката липсва“ — само когато сайтът го каже (404/410); без връзка и др. — нов опит по-късно. */
+    @Test fun onlyTheSiteSayingNotFoundMakesAPhotoMissing() {
+        fun http(code: Int) = HttpException(NetworkResponse(code = code))
+        assertEquals(PhotoFailure.Missing, PhotoFailure.of(http(404)))
+        assertEquals(PhotoFailure.Missing, PhotoFailure.of(http(410)))
+        // 504 — отговорът на „само от кеша“, когато Coil вижда, че няма мрежа.
+        assertEquals(PhotoFailure.Transient, PhotoFailure.of(http(504)))
+        assertEquals(PhotoFailure.Transient, PhotoFailure.of(http(500)))
+        assertEquals(PhotoFailure.Transient, PhotoFailure.of(IOException("Unable to resolve host")))
+        assertEquals(PhotoFailure.Transient, PhotoFailure.of(null))
     }
 
     /** Мрежа с интернет, но непотвърдена (VPN, блокирана проверка) — галерията се зарежда сама. */
