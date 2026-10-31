@@ -93,7 +93,7 @@ class AppShortcutsTest {
             }
         }
         assertEquals(listOf(AppShortcuts.ID_SCAN, AppShortcuts.ID_CARD, AppShortcuts.ID_CATALOG), ids)
-        assertEquals(listOf("scan", "my/card", "catalog"), links)
+        assertEquals(listOf<String?>("scan", "my/card", "catalog"), links)
         assertTrue(ids.size + 1 <= 4)
     }
 
