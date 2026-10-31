@@ -245,7 +245,7 @@ finish() {
 }
 setup() {
   # Корен — за сензорния екран (sendevent) и кеша на приложението (само в частта media).
-  case $PART in homey|func|search34|media|widgetlang) ROOT=1;; *) ROOT=0;; esac
+  case $PART in homey|func|search34|media|widgetlang|zoom) ROOT=1;; *) ROOT=0;; esac
   if [ $ROOT = 1 ]; then timeout 30 adb root 2>&1 | head -2; sleep 4; timeout 60 adb wait-for-device; fi
   log "part $PART; APK: $(cat apk-ref.txt 2>/dev/null) size $(stat -c %s app.apk) bytes"
   log "base APK: $(cat apk-base-ref.txt 2>/dev/null) size $(stat -c %s app-base.apk 2>/dev/null) bytes"
@@ -487,9 +487,12 @@ gallery_cycle() {  # от „Още“: галерия → албум → сни
 }
 search_cycle() {  # „Начало“: разгъване на търсенето, „12“, назад ×2
   local p
-  dump; p=$(xy text 'Търси книга|Search books')
+  # Сгънатото поле пази последната заявка („12“) вместо подсказката — търси се и по нея.
+  dump; p=$(xy text 'Търси книга|Search books'); [ -z "$p" ] && p=$(xy text '=12' --maxy $((H/3)))
   [ -n "$p" ] || return 1
-  a input tap $p; sleep 1.5; a input text 12; sleep 2.5
+  a input tap $p; sleep 1.5
+  dump; [ -n "$(xy content-desc '=Изчисти|=Clear')" ] && { tap content-desc '=Изчисти|=Clear' >/dev/null; sleep 0.8; }
+  a input text 12; sleep 2.5
   dump; local ok=1; grep -q 'text="12"' $OUT/ui.xml || ok=0
   back 1; back 1.2
   [ $ok = 1 ]
@@ -1406,6 +1409,57 @@ part_a11y() {
   grep -hE '^A11Y ' $SUM | awk '{for(i=1;i<=NF;i++){split($i,kv,"="); if(kv[1]~/^(MISSING|DOUBLE|SAME-LABEL|SMALL\(<48dp\))$/) s[kv[1]]+=kv[2]}} END{for(k in s) printf "%s=%d ", k, s[k]; print ""}' | sed 's/^/A11Y TOTAL: /' | tee -a $SUM
 }
 
+# ================================================================= КРЪГ 2: прегледът (jank) и нулиране на увеличението
+jankv_app() {  # $1 — new | base: jank в прегледа при 540x1200 (без превъртане на мрежата преди това)
+  local K=$1 i
+  sec "JV-$K. Viewer jank at 540x1200 (animations ON)"
+  inst $(apk_of $K) $K $(ref_of $K) || return
+  launch >/dev/null; sleep 6; ready; dims
+  anims 1; a wm size 540x1200; a wm density 210; sleep 3; dims
+  restart
+  if open_gallery && waitfor "$RX_GALLERY_LOADED" 40 && open_album 1 && wait_cells 20 && open_photo 1; then
+    sleep 3; log "$K viewer: $(viewer_page)"; shot jankv/$K-viewer-start
+    for i in 1 2; do
+      gfx_reset
+      for i in $(seq 1 20); do sw_left 150; sleep 0.6; done
+      gfx_save $K-viewer; log "$K viewer after 20 swipes: $(viewer_page)"
+      for i in $(seq 1 20); do a input swipe $((W*15/100)) $((H/2)) $((W*85/100)) $((H/2)) 150; sleep 0.3; done
+    done
+    shot jankv/$K-viewer-end; back 1.5
+  else log "$K viewer: not reached"; debug_ui viewer-$K; fi
+  a wm size reset; a wm density reset; sleep 3; dims; anims 0
+}
+part_jankv() { jankv_app new; jankv_app base; jankv_app new; jankv_app base; }
+part_zoom() {
+  local K cx cy r i
+  python3 -c "import PIL" 2>/dev/null || { sudo apt-get update -qq >/dev/null 2>&1; sudo apt-get install -y -qq python3-pil >/dev/null 2>&1; }
+  for K in new base; do
+    sec "Z-$K. Viewer: double tap at 2× resets? pinch beyond 2× then double tap resets?"
+    inst $(apk_of $K) $K $(ref_of $K) || continue
+    launch >/dev/null; sleep 6; ready; dims
+    restart; open_gallery && waitfor "$RX_GALLERY_LOADED" 40 && open_album 1 && wait_cells 20 && open_photo 1 || { log "$K: viewer not reached"; continue; }
+    sleep 4; dims; cx=$((W/2)); cy=$((H/2)); mt_init || { log "no multi-touch"; return; }
+    for r in 1 2 3; do
+      shot zoom/$K-$r-0-1x
+      dtap $cx $cy; sleep 2.5; shot zoom/$K-$r-1-2x
+      dtap $cx $cy; sleep 2.5; shot zoom/$K-$r-2-after-dtap-at-2x
+      dtap $cx $cy; sleep 2.5
+      pinch $cx $cy 300 900 16; sleep 4; shot zoom/$K-$r-3-pinched
+      dtap $cx $cy; sleep 2.5; shot zoom/$K-$r-4-after-dtap-pinched
+      sw_left 150; sleep 2; log "Z-$K round $r: after dtap on the pinched photo + swipe: $(viewer_page)"
+      python3 - $OUT/shots/zoom/$K-$r-0-1x.png $OUT/shots/zoom/$K-$r-2-after-dtap-at-2x.png $OUT/shots/zoom/$K-$r-3-pinched.png $OUT/shots/zoom/$K-$r-4-after-dtap-pinched.png <<'EOF' | tee -a $SUM
+import sys
+from PIL import Image, ImageChops, ImageStat
+ims = [Image.open(p).convert('L').crop((0, 300, 1080, 2100)) for p in sys.argv[1:5]]
+d = lambda a, b: ImageStat.Stat(ImageChops.difference(a, b)).mean[0]
+print(f"ZOOM diff vs 1x: after dtap at 2x={d(ims[0], ims[1]):.1f}  pinched={d(ims[0], ims[2]):.1f}  after dtap on pinched={d(ims[0], ims[3]):.1f}  (≈0 = back at 1x)")
+EOF
+      for i in 1 2 3; do sw_right 150; sleep 1.5; done; viewer_page
+    done
+    back 1.5; back 1.5; back 1.5
+  done
+}
+
 # ================================================================= main
 NEW_VC=1488541
 setup
@@ -1426,6 +1480,8 @@ case $PART in
   look*) part_look;;
   a11y) part_a11y;;
   update) part_update;;
+  jankv) part_jankv;;
+  zoom) part_zoom;;
   *) log "unknown part $PART";;
 esac
 alive "end"
