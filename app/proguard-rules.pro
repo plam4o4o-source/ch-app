@@ -33,3 +33,8 @@
 -keep class androidx.credentials.playservices.** {
   *;
 }
+
+# Скенерът на Google (ML Kit): компонентите се създават по име през рефлексия — без
+# конструкторите им при всеки старт излиза NoSuchMethodException и сканирането може да не тръгне.
+-keep class com.google.mlkit.** implements com.google.firebase.components.ComponentRegistrar { <init>(); }
+-keep class com.google.mlkit.**.*Registrar { <init>(); }
