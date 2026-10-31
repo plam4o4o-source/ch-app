@@ -2,8 +2,13 @@ package org.chyavorec.data.http
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.CacheControl
 import okhttp3.HttpUrl
@@ -59,12 +64,21 @@ class FileDownloader(
                 return@withContext Outcome.Success(target)
             }
             val folder = target.parentFile!!
-            folder.mkdirs()
-            val part = File(folder, target.name + PART)
+            var created: File? = null
+            val scope = this
+            var abort: Job? = null
             try {
                 val request = Request.Builder().url(url).cacheControl(CacheControl.Builder().noStore().build()).build()
                 if (!allowedUrl(request.url)) return@withContext Outcome.Failure(AppError.Unexpected("host"))
-                client.newCall(request).await().use { response ->
+                // Всеки опит — в свой временен файл: отказан опит, който още дочита, не пипа новия.
+                val part = newPart(folder, target.name).also { created = it }
+                val call = client.newCall(request)
+                // Отказът затваря и връзката — иначе блокиращото четене чака следващите байтове
+                // (до readTimeout), а отказаният опит продължава да тегли.
+                abort = launch(Dispatchers.Unconfined, start = CoroutineStart.UNDISPATCHED) {
+                    try { awaitCancellation() } finally { if (!scope.isActive) call.cancel() }
+                }
+                call.await().use { response ->
                     // Пренасочен към чужд адрес — без сваляне.
                     if (!allowedUrl(response.request.url)) return@withContext Outcome.Failure(AppError.Unexpected("redirect"))
                     if (!response.isSuccessful) {
@@ -104,23 +118,40 @@ class FileDownloader(
                     target.delete()
                     if (!part.renameTo(target)) return@withContext Outcome.Failure(AppError.Unexpected("rename"))
                 }
-                // Същият документ под старо име (сменено заглавие) — вън.
-                folder.listFiles()?.forEach { if (it != target && it != part) it.delete() }
+                // Същият документ под старо име (сменено заглавие) — вън; чужди `.part` (текущ опит) остават.
+                folder.listFiles()?.forEach { if (it != target && !it.name.endsWith(PART)) it.delete() }
                 runCatching { prune(keep = target) }
                 Outcome.Success(target)
             } catch (e: CancellationException) {
                 throw e
             } catch (_: IOException) {
+                // Прекъснато от отказа (затворената връзка) — отказ, не „няма връзка“.
+                coroutineContext.ensureActive()
                 Outcome.Failure(AppError.Network)
             } catch (e: IllegalArgumentException) {
                 // Неразчетим адрес.
                 Outcome.Failure(AppError.Unexpected(e.javaClass.simpleName))
             } finally {
-                part.delete()
-                // Празната папка на неуспешно сваляне (непразна — с предишния файл — остава).
+                abort?.cancel()
+                created?.delete()
+                // Празната папка на неуспешно сваляне (непразна — с предишния файл или с `.part` на нов опит — остава).
                 folder.delete()
             }
         }
+
+    /** Нов временен файл в [folder]; папката може да изчезне междувременно (празна — изтрита от приключващ опит). */
+    private fun newPart(folder: File, name: String): File {
+        var error: IOException? = null
+        repeat(3) {
+            folder.mkdirs()
+            try {
+                return File.createTempFile("$name.", PART, folder)
+            } catch (e: IOException) {
+                error = e
+            }
+        }
+        throw error!!
+    }
 
     /**
      * Изтрива файловете, по-стари от [maxAgeMillis], и после най-старите, докато общият размер

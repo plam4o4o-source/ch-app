@@ -1,8 +1,10 @@
 package org.chyavorec.data
 
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
@@ -81,6 +83,31 @@ class FileDownloaderTest {
         val job = async { downloader.download(url) { p -> if (p != null && p > 0.1f) throw CancellationException("назад") } }
         assertFailsWith<CancellationException> { job.await() }
         assertTrue(dir.listFiles().orEmpty().isEmpty())
+    }
+
+    /**
+     * Отказ, докато сървърът „мълчи“ насред тялото: връзката се затваря веднага (не след
+     * следващите байтове), а новото сваляне на същия документ — пуснато, преди старото да е
+     * приключило — не се пипа от почистването на отказания опит.
+     */
+    @Test fun cancelClosesTheConnectionAndARetryIsNotDisturbed() = runBlocking {
+        val url = server.url("/slow.pdf").toString()
+        // 16 KB, после 3 s тишина (≈ readTimeout за бавна мрежа).
+        server.enqueue(MockResponse().setBody(Buffer().write(pdf)).throttleBody(16 * 1024, 3, TimeUnit.SECONDS))
+        server.enqueue(MockResponse().setBody(Buffer().write(pdf)))
+        val started = CompletableDeferred<Unit>()
+        val first = launch(Dispatchers.IO) { downloader.download(url) { p -> if (p != null && p > 0f) started.complete(Unit) } }
+        started.await()
+        val cancelledAt = System.nanoTime()
+        first.cancel()
+        // Повторното докосване веднага — както след „Откажи“ в приложението.
+        val retry = async(Dispatchers.IO) { downloader.download(url) }
+        first.join()
+        val cancelMs = (System.nanoTime() - cancelledAt) / 1_000_000
+        assertTrue(cancelMs < 2_000, "отказът не чака следващите байтове: $cancelMs ms")
+        val file = assertIs<Outcome.Success<java.io.File>>(retry.await()).value
+        assertContentEquals(pdf, file.readBytes())
+        assertTrue(file.parentFile.listFiles()!!.none { it.name.endsWith(".part") }, "нито един .part")
     }
 
     /** Страница за вход в Wi-Fi мрежа (или друго не-PDF) не се пази като документ за 24 ч. */
