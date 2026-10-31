@@ -89,6 +89,8 @@
     <string name="card_remove_title">Remove the card from this device?</string>
     <string name="card_self_note">You entered this number; it hasn’t been verified by the library. It is stored encrypted on this device only.</string>
     <string name="card_show">Show card</string>
+    <string name="card_tile_add">Add to Quick Settings</string>
+    <string name="card_tile_dismiss">Don’t suggest again</string>
     <string name="card_usage_note">Show the card to the librarian; the barcode can be scanned at the desk.</string>
     <string name="catalog_data_as_of">InvLib data as of %1$s</string>
     <string name="catalog_filters">Filters</string>
@@ -329,6 +331,7 @@
     <string name="news_segment_news">News</string>
     <string name="news_unsaved">Removed from saved news.</string>
     <string name="notif_action_renew">Renew</string>
+    <string name="notif_action_route">Directions</string>
     <string name="notif_due_on">%1$s — due %2$s</string>
     <string name="notif_due_soon">Due date approaching</string>
     <string name="notif_due_today">Due back today</string>
@@ -645,6 +648,9 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_light">Light</string>
     <string name="theme_system">System default</string>
+    <string name="tile_card_label">Library card</string>
+    <string name="tile_card_subtitle">Show at the desk</string>
+    <string name="tile_card_subtitle_add">Add your card</string>
     <string name="udc_0">General works</string>
     <string name="udc_1">Philosophy. Psychology</string>
     <string name="udc_2">Religion</string>

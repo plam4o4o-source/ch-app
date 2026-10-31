@@ -157,6 +157,19 @@
             android:name=".update.UpdateInstallReceiver"
             android:exported="false" />
 
+        <!-- Плочка „Читателска карта“ в бързите настройки: само системата може да я свърже
+             (BIND_QUICK_SETTINGS_TILE); отваря картата през неекспортирания вход .OpenLink. -->
+        <service
+            android:name=".tile.CardTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_card"
+            android:label="@string/tile_card_label"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <!-- Бутонът „Удължи“ в известията за срок (само от собствения PendingIntent). -->
         <receiver
             android:name=".notifications.RenewActionReceiver"

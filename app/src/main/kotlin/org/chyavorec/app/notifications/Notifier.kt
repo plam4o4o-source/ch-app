@@ -9,6 +9,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -136,6 +137,8 @@ object Notifier {
         silent: Boolean = false,
         /** Категорията за системата; известията за заемания по подразбиране са напомняния. */
         category: String? = if (channel == Channel.LOANS) NotificationCompat.CATEGORY_REMINDER else null,
+        /** Снимката на новината/събитието ([RichNotifications.image]) — само в общите известия; иначе само текст. */
+        image: Bitmap? = null,
     ) {
         if (!canNotify(context)) return
         // Каналите се създават във фон веднъж за версия (ChitalishteApp) — при много ранно
@@ -164,12 +167,21 @@ object Notifier {
                 .setContentTitle(generic)
                 .build()
         } else null
+        // Снимка — никога в известие с данни на читателя (заемания, лични съобщения) или скрито съдържание.
+        val picture = image?.takeIf { !hidden && !personal }
+        val style = if (picture != null) {
+            // Разгънато — голямата снимка и текстът (без малката снимка вдясно); свито — малката снимка.
+            NotificationCompat.BigPictureStyle().bigPicture(picture).bigLargeIcon(null as Bitmap?).setSummaryText(text)
+        } else {
+            NotificationCompat.BigTextStyle().bigText(text)
+        }
         val notification = NotificationCompat.Builder(context, channel.id)
             .setSmallIcon(R.drawable.ic_notification)
             .setColor(ContextCompat.getColor(context, R.color.brand_gold_dark))
             .setContentTitle(title)
             .setContentText(text)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .setStyle(style)
+            .apply { picture?.let { setLargeIcon(it) } }
             .setContentIntent(pending)
             .setAutoCancel(true)
             // Съобщенията: повторно показване със същото ID (напр. две проверки една след друга)

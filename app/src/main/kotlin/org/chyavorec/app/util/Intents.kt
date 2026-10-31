@@ -132,8 +132,10 @@ object Intents {
         openUrl(context, httpsUrl)
     }
 
-    fun map(context: Context, query: String) =
-        context.safeStart(Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))))
+    fun map(context: Context, query: String) = context.safeStart(mapIntent(query))
+
+    /** Картата с търсене на [query] (и за бутона „Маршрут“ в известията за събития). */
+    fun mapIntent(query: String): Intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query)))
 
     /** Authority-то на FileProvider-а (AndroidManifest.xml, res/xml/file_paths.xml). */
     fun fileProviderAuthority(context: Context): String = context.packageName + ".files"
@@ -158,20 +160,28 @@ object Intents {
         }
     }
 
-    fun share(context: Context, title: String, text: String) {
+    fun share(context: Context, title: String, text: String) = context.safeStart(shareIntent(context, title, text))
+
+    /** Системният избор „Сподели“ за текст (и за бутона в известието за новина). */
+    fun shareIntent(context: Context, title: String, text: String): Intent {
         val send = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, title)
             putExtra(Intent.EXTRA_TEXT, text)
         }
-        context.safeStart(Intent.createChooser(send, context.getString(R.string.action_share)))
+        return Intent.createChooser(send, context.getString(R.string.action_share))
     }
 
     /** Добавя събитие в календара на Android (без разрешения — през системния екран). */
     fun addToCalendar(context: Context, event: Event, zone: ZoneId) {
-        val date = event.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: return
+        calendarIntent(context, event, zone)?.let { context.safeStart(it) }
+    }
+
+    /** Системният екран „ново събитие в календара“ за [event]; `null` — събитието е без дата. */
+    fun calendarIntent(context: Context, event: Event, zone: ZoneId): Intent? {
+        val date = event.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: return null
         val time = event.time?.let { runCatching { LocalTime.parse(it) }.getOrNull() }
-        val intent = Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).apply {
+        return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).apply {
             putExtra(CalendarContract.Events.TITLE, event.title)
             putExtra(CalendarContract.Events.DESCRIPTION, event.description + "\n\n" + event.sourceUrl)
             event.place?.let { putExtra(CalendarContract.Events.EVENT_LOCATION, it + ", " + context.getString(R.string.org_place)) }
@@ -185,6 +195,5 @@ object Intents {
                 putExtra(CalendarContract.EXTRA_EVENT_END_TIME, date.plusDays(1).atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli())
             }
         }
-        context.safeStart(intent)
     }
 }

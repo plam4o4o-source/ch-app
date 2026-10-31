@@ -117,6 +117,7 @@ class SettingsStore(private val context: Context) {
         val seasonal = booleanPreferencesKey("seasonal_decor")
         val dismissedOccasion = stringPreferencesKey("dismissed_occasion")
         val notificationPermissionAsked = booleanPreferencesKey("notification_permission_asked")
+        val cardTilePromptDone = booleanPreferencesKey("card_tile_prompt_done")
         val catalogShelf = booleanPreferencesKey("catalog_shelf")
         val readerFontSize = stringPreferencesKey("reader_font_size")
         val readerNarrow = booleanPreferencesKey("reader_narrow")
@@ -204,6 +205,9 @@ class SettingsStore(private val context: Context) {
     /** Разрешението за известия (Android 13+) е поискано веднъж след въведението — не се пита отново. */
     suspend fun notificationPermissionAsked(): Boolean = context.dataStore.data.first()[Keys.notificationPermissionAsked] ?: false
     suspend fun setNotificationPermissionAsked() = context.dataStore.edit { it[Keys.notificationPermissionAsked] = true }
+    /** „Добави в бързите настройки“ под картата — отговорено в системния диалог или скрито с „×“; не се предлага отново. */
+    val cardTilePromptDone: Flow<Boolean> = context.dataStore.data.map { it[Keys.cardTilePromptDone] ?: false }
+    suspend fun setCardTilePromptDone(done: Boolean = true) = context.dataStore.edit { it[Keys.cardTilePromptDone] = done }
     suspend fun setCatalogShelf(on: Boolean) = context.dataStore.edit { it[Keys.catalogShelf] = on }
     suspend fun setReaderFontSize(size: ReaderFontSize) = context.dataStore.edit { it[Keys.readerFontSize] = size.name }
     suspend fun setReaderNarrow(on: Boolean) = context.dataStore.edit { it[Keys.readerNarrow] = on }
