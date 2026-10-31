@@ -473,6 +473,11 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
     val season = rememberSeason()
     val shape = MaterialTheme.shapes.large
     Column {
+        // Пропорция 1.6:1 по ширината на лентата (без полетата), не по по-тясната голяма карта —
+        // височината е като досега; при едър шрифт картата расте, вместо заглавието да се отреже
+        // ([heroMinHeight]: хоризонтално — по-ниска).
+        BoxWithConstraints {
+        val minHeight = heroMinHeight(maxWidth - 32.dp, windowH)
         HorizontalCenteredHeroCarousel(
             state = carousel,
             contentPadding = PaddingValues(horizontal = 16.dp),
@@ -501,11 +506,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                 val range = info.maxSize - info.minSize
                 if (range <= 0f) 1f else ((info.size - info.minSize) / range * 2f - 1f).coerceIn(0f, 1f)
             }
-            // Пропорция 1.6:1 като минимум — при едър шрифт картата расте на височина,
-            // вместо заглавието да се отреже ([heroMinHeight]: хоризонтално — по-ниска).
             // Картата се разполага с ширината на голямата (и маскирана, когато е встрани).
             BoxWithConstraints {
-            val minHeight = heroMinHeight(maxWidth, windowH)
             // Ширината за снимката — същият адрес (ширина) като в статията: една заявка и един запис в кеша.
             val imageWidth = maxWidth.coerceAtMost(720.dp)
             Surface(
@@ -559,6 +561,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                 }
             }
             }
+        }
         }
         PagerDots(items.size, carousel.currentItem, Modifier.padding(top = 8.dp))
     }
