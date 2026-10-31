@@ -369,11 +369,11 @@ class ChitalishteWidgetTest {
         assertTrue("след 3 дни" in first, first.toString())
         assertTrue(first.none { "Няма предстоящи" in it }, first.toString())
 
+        // Изтеглени във фон — веднъж (опресняването след тях не тегли отново); сроковете остават.
         WidgetUpdater.awaitIdle()
-        val later = shown(id)
-        assertTrue("Литературна вечер" in later, later.toString())
-        assertTrue("след 3 дни" in later, later.toString())
+        assertEquals(listOf("Литературна вечер"), app.container.eventsRepository.cachedRolled()?.data?.map { it.title })
         assertEquals(1, backend!!.count("/javora/index.json"))
+        assertTrue("след 3 дни" in shown(id), shown(id).toString())
     }
 
     /** Android 8–12: езикът на приложението е в SharedPreferences (AppLanguage). */
