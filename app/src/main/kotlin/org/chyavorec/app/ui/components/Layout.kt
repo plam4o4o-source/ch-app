@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Search
@@ -91,7 +93,8 @@ fun SectionHeader(
             Text(title, style = MaterialTheme.typography.sectionTitle, modifier = Modifier.semantics { heading() })
         }
         if (actionLabel != null && onAction != null) {
-            TextButton(onClick = onAction, modifier = Modifier.alignBy(LastBaseline)) { Text(actionLabel) }
+            // Поне 48 dp за докосване и при едър шрифт (бутонът расте с текста, но не и минимумът).
+            TextButton(onClick = onAction, modifier = Modifier.alignBy(LastBaseline).heightIn(min = 48.dp)) { Text(actionLabel) }
         }
     }
 }
@@ -241,9 +244,12 @@ fun InfoRow(label: String, value: String?, modifier: Modifier = Modifier, copyab
             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             Intents.copy(context, label, value)
         }
+        // Целият ред, поне 48 dp висок — удобен за задържане; текстът е центриран по височина.
         Modifier
             .pointerInput(value) { detectTapGestures(onLongPress = { doCopy() }) }
             .semantics { onLongClick(copyLabel) { doCopy(); true } }
+            .heightIn(min = 48.dp)
+            .wrapContentHeight(Alignment.CenterVertically)
     } else Modifier
     Row(modifier.fillMaxWidth().then(copy).padding(vertical = 7.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(0.42f))

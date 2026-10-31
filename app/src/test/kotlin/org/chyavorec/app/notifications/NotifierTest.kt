@@ -3,6 +3,8 @@ package org.chyavorec.app.notifications
 import android.Manifest
 import android.app.Application
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import android.content.ComponentName
 import androidx.core.app.NotificationCompat
@@ -150,19 +152,48 @@ class NotifierTest {
         assertTrue(n.actions.isNullOrEmpty())
     }
 
-    /** Каналите са в три групи в системните настройки; ID-тата им са старите (настройките остават). */
+    /**
+     * Каналите са в три групи в системните настройки; ID-тата им са старите (настройките остават).
+     * Android подрежда групите по ID: „Моята библиотека“, „Читалището“, „Приложението“.
+     */
     @Test fun channelsAreGroupedWithUnchangedIds() {
         val selfUpdate = org.chyavorec.app.BuildConfig.SELF_UPDATE
         val expected = mapOf(
-            "loans" to "group_my_library", "library" to "group_my_library",
-            "news" to "group_centre", "events" to "group_centre",
-            "messages" to "group_centre", "messages_important" to "group_centre",
-        ) + (if (selfUpdate) mapOf("updates" to "group_app") else emptyMap())
+            "loans" to "1_my_library", "library" to "1_my_library",
+            "news" to "2_centre", "events" to "2_centre",
+            "messages" to "2_centre", "messages_important" to "2_centre",
+        ) + (if (selfUpdate) mapOf("updates" to "3_app") else emptyMap())
         assertEquals(expected, nm.notificationChannels.associate { it.id to it.group })
+        val names = nm.notificationChannelGroups.sortedBy { it.id }.map { it.name.toString() }
+        assertEquals(
+            listOf(R.string.channel_group_my_library, R.string.channel_group_centre).map { context.getString(it) } +
+                (if (selfUpdate) listOf(context.getString(R.string.channel_group_app)) else emptyList()),
+            names,
+        )
+        // Без обновяване от приложението (Play) — без празна група „Приложението“.
+        assertEquals(selfUpdate, nm.notificationChannelGroups.any { it.id == "3_app" })
+        assertEquals(context.getString(R.string.channel_library), nm.getNotificationChannel("library").name.toString())
+    }
+}
+
+/** Каналите от по-стара версия — без [NotifierTest.setUp], който вече ги е създал в новите групи. */
+@RunWith(AndroidJUnit4::class)
+@Config(application = Application::class)
+class NotifierLegacyGroupsTest {
+    private val context get() = ApplicationProvider.getApplicationContext<Application>()
+
+    /**
+     * Канал от по-стара версия, вече в старата група: Android не би го преместил, затова остава в нея
+     * (с новото ѝ име), вместо да стане невидим в настройките под изтрита група.
+     */
+    @Test fun channelInLegacyGroupStaysThere() {
+        val nm = context.getSystemService(NotificationManager::class.java)
+        nm.createNotificationChannelGroup(NotificationChannelGroup("group_my_library", "Стара"))
+        nm.createNotificationChannel(NotificationChannel("loans", "Стар", NotificationManager.IMPORTANCE_HIGH).apply { group = "group_my_library" })
+        Notifier.createChannels(context)
+        assertEquals("group_my_library", nm.getNotificationChannel("loans").group)
         val groups = nm.notificationChannelGroups.associate { it.id to it.name.toString() }
         assertEquals(context.getString(R.string.channel_group_my_library), groups["group_my_library"])
-        assertEquals(context.getString(R.string.channel_group_centre), groups["group_centre"])
-        // Без обновяване от приложението (Play) — без празна група „Приложението“.
-        assertEquals(selfUpdate, "group_app" in groups)
+        assertEquals("2_centre", nm.getNotificationChannel("events").group)
     }
 }

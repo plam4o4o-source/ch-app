@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -140,16 +141,20 @@ class TextsScreenshotTest {
         shown("chitalishte_yavorec@abv.bg")
         shown("Monday – Thursday: 08:00 – 16:30")
         absent("Something went wrong")
-        // Бутоните — по два на ред, еднакво широки; нечетният „Open website“ — на целия ред.
-        fun bounds(label: String) = compose.onNode(hasText(label) and hasClickAction()).fetchSemanticsNode().boundsInRoot
-        val email = bounds("Send email")
-        val map = bounds("Open map")
-        val site = bounds("Open website")
-        assertEquals(email.top, map.top, 1f, "„Send email“ и „Open map“ — на един ред")
-        assertEquals(email.width, map.width, 1f, "еднаква ширина")
-        assertTrue(site.top >= email.bottom, "„Open website“ — на следващия ред")
-        assertEquals(email.left, site.left, 1f, "„Open website“ — на целия ред")
-        assertEquals(map.right, site.right, 1f, "„Open website“ — на целия ред")
+        // Кратките бутони — на един ред, еднакво широки и високи, заедно на цялата ширина;
+        // TalkBack чете пълното описание („Email the centre“), не само „Email“.
+        fun bounds(description: String) = compose.onNode(hasContentDescription(description) and hasClickAction()).fetchSemanticsNode().boundsInRoot
+        val email = bounds("Email the centre")
+        val map = bounds("Show the centre on the map")
+        val site = bounds("Open the centre’s website")
+        listOf(map, site).forEach {
+            assertEquals(email.top, it.top, 1f, "един ред: $email, $it")
+            assertEquals(email.width, it.width, 1f, "еднаква ширина: $email, $it")
+            assertEquals(email.height, it.height, 1f, "еднаква височина: $email, $it")
+        }
+        assertTrue(email.right < map.left && map.right < site.left, "подред: $email, $map, $site")
+        val root = compose.onRoot().fetchSemanticsNode().boundsInRoot
+        assertTrue(site.right - email.left > root.width * 0.85f, "редът е на цялата ширина: $email, $site")
         shot("81-texts-contacts-fallback-en")
     }
 

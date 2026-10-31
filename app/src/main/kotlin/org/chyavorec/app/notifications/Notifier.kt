@@ -17,13 +17,17 @@ import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.R
 
 /**
- * Групи на каналите в системните настройки. ID-тата на каналите не се променят — групата
- * се задава на вече съществуващ канал без група, а настройките на потребителя остават.
+ * Групи на каналите в системните настройки. Android ги подрежда по ID, затова „1_“…„3_“:
+ * „Моята библиотека“, „Читалището“, „Приложението“. ID-тата на каналите не се променят.
+ *
+ * Android сменя групата само на канал без група, а изтриването на група изтрива и каналите ѝ
+ * (възстановен, каналът пак сочи старата група и изчезва от настройките). Затова канал от по-стара
+ * версия остава в старата си група ([legacyId]) — с новото ѝ име; новият ред е за новите инсталации.
  */
-enum class ChannelGroup(val id: String, val nameRes: Int) {
-    MY_LIBRARY("group_my_library", R.string.channel_group_my_library),
-    CENTRE("group_centre", R.string.channel_group_centre),
-    APP("group_app", R.string.channel_group_app),
+enum class ChannelGroup(val id: String, val legacyId: String, val nameRes: Int) {
+    MY_LIBRARY("1_my_library", "group_my_library", R.string.channel_group_my_library),
+    CENTRE("2_centre", "group_centre", R.string.channel_group_centre),
+    APP("3_app", "group_app", R.string.channel_group_app),
 }
 
 /** Канали за известия — потребителят ги управлява и от системните настройки. */
@@ -83,15 +87,20 @@ object Notifier {
     fun createChannels(context: Context) {
         val nm = context.getSystemService(NotificationManager::class.java) ?: return
         val channels = Channel.entries.filter { it != Channel.UPDATES || org.chyavorec.app.BuildConfig.SELF_UPDATE }
-        // Групите — преди каналите; празна група (без обновяване в Play) не се създава.
+        // Каналът от по-стара версия остава в групата, в която е (виж [ChannelGroup]).
+        val groupIds = channels.associateWith { c ->
+            nm.getNotificationChannel(c.id)?.group?.takeIf { it == c.group.legacyId } ?: c.group.id
+        }
+        // Групите — преди каналите и в реда на показване; празна група (без обновяване в Play) не се създава.
         nm.createNotificationChannelGroups(
-            channels.map { it.group }.distinct().map { NotificationChannelGroup(it.id, context.getString(it.nameRes)) },
+            ChannelGroup.entries.flatMap { g -> channels.filter { it.group == g }.map { groupIds.getValue(it) }.distinct().map { it to g } }
+                .map { (id, g) -> NotificationChannelGroup(id, context.getString(g.nameRes)) },
         )
         channels.forEach { c ->
             nm.createNotificationChannel(
                 NotificationChannel(c.id, context.getString(c.nameRes), c.importance).apply {
                     description = context.getString(c.descRes)
-                    group = c.group.id
+                    group = groupIds.getValue(c)
                 },
             )
         }

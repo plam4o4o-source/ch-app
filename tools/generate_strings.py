@@ -290,7 +290,7 @@ S = {
 "want_notify_set": ("Ще получиш известие, когато книгата е на рафта.", "You’ll get a notification when the book is on the shelf."),
 "want_notify_unset": ("Няма да получаваш известие за тази книга.", "You won’t be notified about this book."),
 "want_notify_blocked": ("Известията са изключени — няма как да ти кажем, когато книгата е на рафта.", "Notifications are off — we can’t tell you when the book is on the shelf."),
-"want_library_off": ("Известията „Библиотека“ са изключени в приложението.", "“Library” notifications are turned off in the app."),
+"want_library_off": ("Известията „Отново на рафта“ са изключени в приложението.", "“Back on the shelf” notifications are turned off in the app."),
 "want_library_turn_on": ("Включи", "Turn on"),
 "want_missing": ("Няма я в каталога", "Not in the catalogue"),
 "want_empty": ("Списъкът е празен", "Your list is empty"),
@@ -338,7 +338,7 @@ S = {
 "card_self_note": ("Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устройство.", "You entered this number; it hasn’t been verified by the library. It is stored encrypted on this device only."),
 "card_usage_note": ("Покажи картата на библиотекаря; баркодът може да се сканира от четеца на гишето.", "Show the card to the librarian; the barcode can be scanned at the desk."),
 "card_remove_title": ("Да премахнем ли картата от устройството?", "Remove the card from this device?"),
-"card_login_instead": ("Вход с библиотечни данни", "Sign in with library credentials"),
+"card_login_instead": ("Вход с читателски данни", "Sign in as a reader"),
 "card_library_line": ("ЧИТАТЕЛСКА КАРТА", "LIBRARY CARD"),
 "card_barcode_desc": ("Баркод на карта %1$s", "Barcode for card %1$s"),
 "card_qr_desc": ("QR код на картата", "Card QR code"),
@@ -413,8 +413,13 @@ S = {
 "contacts_title": ("Контакти", "Contacts"),
 "contacts_call": ("Обади се", "Call"),
 "contacts_email": ("Изпрати имейл", "Send email"),
-"contacts_map": ("Отвори карта", "Open map"),
+"contacts_map": ("Карта", "Map"),
 "contacts_site": ("Отвори сайта", "Open website"),
+"contacts_site_short": ("Сайт", "Website"),
+"contacts_call_cd": ("Обади се на читалището", "Call the centre"),
+"contacts_email_cd": ("Изпрати имейл на читалището", "Email the centre"),
+"contacts_map_cd": ("Покажи читалището на картата", "Show the centre on the map"),
+"contacts_site_cd": ("Отвори сайта на читалището", "Open the centre’s website"),
 "contacts_address": ("Адрес", "Address"),
 "contacts_see_site": ("Виж страницата „Контакти“ в сайта", "See the Contacts page on the website"),
 "contacts_phone": ("Телефон", "Phone"),
@@ -440,6 +445,7 @@ S = {
 "search_start": ("Какво търсиш?", "What are you looking for?"),
 "search_start_hint": ("Търсенето обхваща каталога, новините, събитията и страниците на читалището.", "Search covers the catalogue, news, events and the centre’s pages."),
 "search_no_results": ("Нищо не открихме", "No results"),
+"search_no_results_hint": ("Опитай с друга дума или по-кратко търсене.", "Try another word or a shorter search."),
 "settings_title": ("Настройки", "Settings"),
 "settings_appearance": ("Изглед", "Appearance"),
 "settings_theme": ("Тема", "Theme"),
@@ -569,7 +575,7 @@ S = {
 "language_system": ("Както системата", "System default"),
 "notifications_intro": ("Известията се подготвят на самото устройство — без рекламни или проследяващи услуги.", "Notifications are prepared on the device itself — no advertising or tracking services."),
 "notifications_loans_na": ("Ще работи, когато библиотечната система предостави онлайн достъп.", "Will work once the library system offers online access."),
-"notifications_library_desc": ("Книги от „Искам да прочета“, които са на рафта, и съобщения от библиотеката", "Books from “Want to read” back on the shelf and library messages"),
+"notifications_library_desc": ("Книги от „Искам да прочета“, които отново са на рафта", "Books from “Want to read” that are back on the shelf"),
 "notifications_system": ("Системни настройки за известия", "System notification settings"),
 # Разрешение за известия: отказ, изключени в системата, обяснение при първото стартиране.
 "notifications_open_settings": ("Отвори настройките", "Open settings"),
@@ -592,8 +598,8 @@ S = {
 "channel_events_desc": ("Напомняния за събития", "Event reminders"),
 "channel_news": ("Новини", "News"),
 "channel_news_desc": ("Нова публикация в сайта", "A new post on the website"),
-"channel_library": ("Библиотека", "Library"),
-"channel_library_desc": ("Книги от „Искам да прочета“, които са на рафта, и съобщения от библиотеката", "Books from “Want to read” back on the shelf and messages from the library"),
+"channel_library": ("Отново на рафта", "Back on the shelf"),
+"channel_library_desc": ("Книги от „Искам да прочета“, които отново са на рафта", "Books from “Want to read” that are back on the shelf"),
 "channel_updates": ("Обновления", "Updates"),
 "channel_updates_desc": ("Нови версии на приложението", "New versions of the app"),
 "settings_updates": ("Обновления", "Updates"),
@@ -632,7 +638,7 @@ S = {
 "notif_update_text": ("Докосни, за да обновиш приложението.", "Tap to update the app."),
 "notif_updated": ("Обновено до версия %1$s", "Updated to version %1$s"),
 "notif_updated_text": ("Докосни, за да отвориш приложението.", "Tap to open the app."),
-"channel_messages": ("Съобщения от читалището", "Messages from the centre"),
+"channel_messages": ("Съобщения", "Messages"),
 "channel_messages_desc": ("Съобщения, изпратени от читалището до потребителите на приложението", "Messages the centre sends to app users"),
 "channel_messages_important": ("Важни съобщения", "Important messages"),
 "channel_messages_important_desc": ("Съобщения, отбелязани от читалището като важни", "Messages the centre marks as important"),
@@ -720,7 +726,7 @@ S = {
 "about_invlib": ("Библиотечната система InvLib", "The InvLib library system"),
 }
 
-PRIVACY_BG = """Последна актуализация: 29 октомври 2026 г.
+PRIVACY_BG = """Последна актуализация: 31 октомври 2026 г.
 
 # Кой обработва данните
 
@@ -740,19 +746,21 @@ PRIVACY_BG = """Последна актуализация: 29 октомври 2
 
 Обновления: версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от „Настройки › Обновления“. Версията от Google Play се обновява от Google Play.
 
-Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака. Приложението пази и локален дневник на грешките само на устройството, без лични данни; той напуска устройството единствено ако го споделиш ти („Настройки › Информация › Диагностика“).
+Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака. Последната книга, отворена от публичния каталог, става пряк път към нея при задържане на иконата на приложението; той също е само на телефона и се маха при „Изход“ и „Изчисти временните данни“. Приложението пази и локален дневник на грешките само на устройството, без лични данни; той напуска устройството единствено ако го споделиш ти („Настройки › Информация › Диагностика“).
 
-„Искам да прочета“: списъкът с отбелязаните книги (и дали да ти кажем, когато някоя е на рафта) се пази само на устройството — наличността се сравнява с публичния каталог на телефона, без да се изпраща кои книги са отбелязани; изходът не го изтрива, а „Изчисти списъка“ (в самия списък) и деинсталирането — да. Ако за някоя книга е включено „Кажи ми, когато е на рафта“, наличността се проверява и във фонов режим: около веднъж на 6 часа приложението тегли публичния каталог katalog.json от GitHub (raw.githubusercontent.com или cdn.jsdelivr.net), без да изпраща списъка (само при включени известия „Библиотека“ и докато приложението е отваряно в последните 14 дни).
+„Искам да прочета“: списъкът с отбелязаните книги (и дали да ти кажем, когато някоя е на рафта) се пази само на устройството — наличността се сравнява с публичния каталог на телефона, без да се изпраща кои книги са отбелязани; изходът не го изтрива, а „Изчисти списъка“ (в самия списък) и деинсталирането — да. Ако за някоя книга е включено „Кажи ми, когато е на рафта“, наличността се проверява и във фонов режим: около веднъж на 6 часа приложението тегли публичния каталог katalog.json от GitHub (raw.githubusercontent.com или cdn.jsdelivr.net), без да изпраща списъка (само при включени известия „Отново на рафта“ и докато приложението е отваряно в последните 14 дни).
 
 Читателска карта: ако въведеш номера на своята карта, той (и името, ако го въведеш) се пази шифрован с ключ от Android Keystore само на това устройство.
 
 Вход (само при съгласие, дадено в библиотеката, и издаден ПИН): номерът на читателската карта и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и ПИН-ът никога не се записва. При вход се изпраща и моделът на телефона (напр. „Pixel 8“), за да се разпознава сесията. Пази се само шифрован токен за сесията. Името ти, заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес и телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните ти се изтриват от сървъра при следващото обновяване.
 
-Мениджър на пароли: запазването на номера на картата и ПИН-а в мениджъра на пароли на телефона е по желание — прави се само ако се съгласиш, и те се пазят от системния мениджър на пароли, а не от приложението.
+Мениджър на пароли: запазването на номера на картата и ПИН-а в мениджъра на пароли на телефона е по желание — прави се само ако се съгласиш, и те се пазят от системния мениджър на пароли, а не от приложението. Ако мениджърът на пароли (напр. Google Password Manager) синхронизира паролите, той може да синхронизира номера и ПИН-а и с профила ти в Google (или при съответния доставчик) — по неговите условия.
 
 Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
 
 Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: камерата се включва само когато отвориш скенера и разрешиш достъп; кадрите се разчитат на телефона и не се записват и не се изпращат.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
+
+Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб.
 
 Документи: „Отвори с приложение за PDF“ сваля документа от chyavorec.org във временните данни на приложението (пази се до седмица) и го отваря в избрано от теб приложение за PDF на телефона.
 
@@ -774,7 +782,7 @@ PRIVACY_BG = """Последна актуализация: 29 октомври 2
 
 При промяна на тази политика новата версия се публикува в приложението и в сайта на читалището."""
 
-PRIVACY_EN = """Last updated: October 29, 2026
+PRIVACY_EN = """Last updated: October 31, 2026
 
 # Who processes the data
 
@@ -794,19 +802,21 @@ Personal messages from the library: after signing in, if the centre’s server s
 
 Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in “Settings › Updates”. The Google Play version is updated by Google Play.
 
-Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud. The app also keeps a local error log on the device only, without personal data; it leaves the device only if you share it yourself (“Settings › Information › Diagnostics”).
+Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud. The last book you opened from the public catalogue becomes a shortcut to it when you long-press the app icon; it also stays on the phone and is removed by “Sign out” and “Clear temporary data”. The app also keeps a local error log on the device only, without personal data; it leaves the device only if you share it yourself (“Settings › Information › Diagnostics”).
 
-“Want to read”: the list of books you mark (and whether to tell you when one is on the shelf) is kept only on the device — availability is compared with the public catalogue on the phone, without sending which books are marked; signing out does not delete it, while “Clear list” (in the list itself) and uninstalling do. If “Notify me when available” is on for a book, availability is also checked in the background: about once every 6 hours the app downloads the public katalog.json from GitHub (raw.githubusercontent.com or cdn.jsdelivr.net), without sending the list (only while “Library” notifications are on and the app has been opened in the last 14 days).
+“Want to read”: the list of books you mark (and whether to tell you when one is on the shelf) is kept only on the device — availability is compared with the public catalogue on the phone, without sending which books are marked; signing out does not delete it, while “Clear list” (in the list itself) and uninstalling do. If “Notify me when it’s on the shelf” is on for a book, availability is also checked in the background: about once every 6 hours the app downloads the public katalog.json from GitHub (raw.githubusercontent.com or cdn.jsdelivr.net), without sending the list (only while “Back on the shelf” notifications are on and the app has been opened in the last 14 days).
 
 Library card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.
 
 Sign-in (only with consent given at the library and an issued PIN): your library card number and PIN are sent only over HTTPS to the centre’s server (chyavorec.org), and the PIN is never stored. The phone’s model name (e.g. “Pixel 8”) is also sent at sign-in so that the session can be recognised. Only an encrypted session token is kept. Your name, borrowed items, due dates and membership come from this server, which receives from the library software only the data of readers who have consented (no personal ID number (EGN), address or phone number), and are cached encrypted on the device. Consent is withdrawn at the library — your data is then deleted from the server at the next sync.
 
-Password manager: saving your card number and PIN in the phone’s password manager is optional — it happens only if you agree, and they are kept by the system’s password manager, not by the app.
+Password manager: saving your card number and PIN in the phone’s password manager is optional — it happens only if you agree, and they are kept by the system’s password manager, not by the app. If the password manager (e.g. Google Password Manager) syncs passwords, it may also sync the card number and PIN to your Google account (or the provider’s) — under the provider’s own terms.
 
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
 
 Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: the camera turns on only when you open the scanner and allow access; frames are read on the phone and are never stored or sent.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
+
+Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you.
 
 Documents: “Open with a PDF app” downloads the document from chyavorec.org into the app’s temporary data (kept for up to a week) and opens it in a PDF app of your choice on the phone.
 
@@ -897,7 +907,7 @@ P = {
 "my_want_count": (("%1$d книга в списъка", "%1$d книги в списъка"), ("%1$d book on your list", "%1$d books on your list")),
 "book_available_copies": (("%1$d наличен", "%1$d налични"), ("%1$d available", "%1$d available")),
 "book_copies": (("%1$d екземпляр", "%1$d екземпляра"), ("%1$d copy", "%1$d copies")),
-"book_more_on_shelf": (("Още %1$d на рафта", "Още %1$d на рафта"), ("%1$d more on the shelf", "%1$d more on the shelf")),
+"book_more_on_shelf": (("Друг екземпляр е на рафта", "Други %1$d екземпляра са на рафта"), ("Another copy is on the shelf", "%1$d other copies are on the shelf")),
 "catalog_count": (("%1$d резултат", "%1$d резултата"), ("%1$d result", "%1$d results")),
 "catalog_show_results": (("Покажи %1$d резултат", "Покажи %1$d резултата"), ("Show %1$d result", "Show %1$d results")),
 "due_days_left": (("остава %1$d ден", "остават %1$d дни"), ("%1$d day left", "%1$d days left")),

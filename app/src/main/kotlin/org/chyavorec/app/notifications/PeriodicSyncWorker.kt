@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit
  *   или ако има уиджет (той показва броя книги за връщане); напомнянията за
  *   наближаващ срок са локални ([LoanReminderScheduler]) и не зависят от мрежата;
  * - „Искам да прочета“ с „Кажи ми, когато е на рафта“ → известие — при всяко пускане, само ако има
- *   такава книга и известията „Библиотека“ са включени; каталогът се пита условно (ETag, 304 без тяло)
+ *   такава книга и известията „Отново на рафта“ са включени; каталогът се пита условно (ETag, 304 без тяло)
  *   и не по-често от веднъж на 30 минути ([WantToReadAlerts.refreshAndCheck]); не и ако приложението „спи“;
  * - събития — на 12 часа, само ако има уиджет (напомнянията за събития са
  *   локални аларми и не зависят от тази задача);
@@ -78,7 +78,7 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
             step("sync.loans") { if (syncLoans(c, notifyLoans)) c.settings.setLastSyncStep(STEP_LOANS, now) }
         }
 
-        // „Кажи ми, когато е на рафта“ — само ако има такава книга, известията „Библиотека“ са включени и
+        // „Кажи ми, когато е на рафта“ — само ако има такава книга, известията „Отново на рафта“ са включени и
         // приложението не „спи“ (14 дни неотваряно — както съобщенията от сайта). Каталогът — условна заявка (ETag).
         if (settings.notifyLibrary && canNotify && !MessagePollPolicy.isDormant(now, c.settings.messagePoll().lastOpen)) {
             step("sync.want-to-read") { WantToReadAlerts.refreshAndCheck(applicationContext, c) }

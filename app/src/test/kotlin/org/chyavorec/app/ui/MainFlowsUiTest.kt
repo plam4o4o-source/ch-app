@@ -147,7 +147,7 @@ class MainFlowsUiTest {
     @Test fun bookOutWithOtherCopiesOnShelfSaysSo() {
         launch(deepLink = server.url("/").toString().trimEnd('/') + "/elektronen-katalog#zapis=624")
         // Етикетът на екземпляра и отделен зелен ред за другите — на един ред всеки.
-        waitForText("Още 5 на рафта")
+        waitForText("Други 5 екземпляра са на рафта")
         compose.onAllNodesWithText("Не е на рафта").onFirst().assertExists()
         compose.onAllNodesWithText("Искам да прочета", substring = true).onFirst().assertExists()
         check(compose.onAllNodesWithText("Попитай библиотеката").fetchSemanticsNodes().isEmpty()) { "ask shown while copies are on the shelf" }
@@ -225,7 +225,7 @@ class MainFlowsUiTest {
         assumeTrue("демо данните съществуват само в dev flavor", BuildConfig.FLAVOR == "dev")
         launch(useMock = true)
         clickText("Читателска карта")
-        clickText("Вход с библиотечни данни")
+        clickText("Вход с читателски данни")
         waitForText("Читателски номер")
         compose.onAllNodes(hasSetTextAction())[0].performTextInput("DEMO-0001")
         compose.onAllNodes(hasSetTextAction())[1].performTextInput("demo")

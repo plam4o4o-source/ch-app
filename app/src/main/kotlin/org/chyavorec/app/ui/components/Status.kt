@@ -80,7 +80,7 @@ fun BookStatusPill(status: BookStatus, modifier: Modifier = Modifier) {
 
 /**
  * Наличността на екземпляра: етикетът му и — ако той не е на рафта, а други от заглавието
- * са — отделен зелен ред „Още N на рафта“ (страницата на книгата и скенерът).
+ * са — отделен зелен ред „Други N екземпляра са на рафта“ (страницата на книгата и скенерът).
  */
 @Composable
 fun CopyStatus(status: BookStatus, othersOnShelf: Int, modifier: Modifier = Modifier) {

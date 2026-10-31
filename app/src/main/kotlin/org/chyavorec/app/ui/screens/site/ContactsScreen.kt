@@ -3,8 +3,7 @@ package org.chyavorec.app.ui.screens.site
 import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,10 +40,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
@@ -57,7 +59,6 @@ import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Intents
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ContactsScreen(onBack: () -> Unit) {
     val vm = appViewModel { ContactsViewModel(it.siteRepository, it.fallbackContacts) }
@@ -76,23 +77,18 @@ fun ContactsScreen(onBack: () -> Unit) {
                     )
                     Column(Modifier.padding(20.dp).widthIn(max = 720.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                         Text(c.organization, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
-                        // По два бутона на ред, с еднаква ширина (и височина в реда); нечетният последен —
-                        // на целия ред. Така са подредени при всеки размер на шрифта, не на „стъпала“.
-                        FlowRow(
-                            Modifier.fillMaxWidth(), maxItemsInEachRow = 2,
-                            horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp),
-                        ) {
-                            val action = Modifier.weight(1f).fillMaxRowHeight()
+                        // Кратки надписи с икона; TalkBack чете пълното описание на действието.
+                        ActionButtons(Modifier.fillMaxWidth()) {
                             c.phones.firstOrNull()?.let { ph ->
-                                FilledTonalButton(onClick = { Intents.dial(context, ph) }, modifier = action) { ActionContent(Icons.Outlined.Call, stringResource(R.string.contacts_call)) }
+                                ActionButton(Icons.Outlined.Call, stringResource(R.string.contacts_call), stringResource(R.string.contacts_call_cd)) { Intents.dial(context, ph) }
                             }
                             c.emails.firstOrNull()?.let { em ->
-                                FilledTonalButton(onClick = { Intents.email(context, em) }, modifier = action) { ActionContent(Icons.Outlined.Email, stringResource(R.string.contacts_email)) }
+                                ActionButton(Icons.Outlined.Email, stringResource(R.string.contacts_email_label), stringResource(R.string.contacts_email_cd)) { Intents.email(context, em) }
                             }
-                            FilledTonalButton(onClick = { Intents.map(context, c.address?.let { "$it, ${c.organization}" } ?: c.mapQuery) }, modifier = action) {
-                                ActionContent(Icons.Outlined.Map, stringResource(R.string.contacts_map))
+                            ActionButton(Icons.Outlined.Map, stringResource(R.string.contacts_map), stringResource(R.string.contacts_map_cd)) {
+                                Intents.map(context, c.address?.let { "$it, ${c.organization}" } ?: c.mapQuery)
                             }
-                            FilledTonalButton(onClick = { Intents.openUrl(context, c.website) }, modifier = action) { ActionContent(Icons.Outlined.Language, stringResource(R.string.contacts_site)) }
+                            ActionButton(Icons.Outlined.Language, stringResource(R.string.contacts_site_short), stringResource(R.string.contacts_site_cd)) { Intents.openUrl(context, c.website) }
                         }
                         ContactCard(Icons.Outlined.Place, stringResource(R.string.contacts_address), listOfNotNull(c.address).ifEmpty { listOf(stringResource(R.string.contacts_see_site)) })
                         if (c.persons.isNotEmpty()) {
@@ -115,8 +111,44 @@ fun ContactsScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun ActionContent(icon: ImageVector, text: String) {
-    Icon(icon, null, modifier = Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(text)
+private fun ActionButton(icon: ImageVector, text: String, description: String, onClick: () -> Unit) {
+    FilledTonalButton(
+        onClick = onClick, modifier = Modifier.semantics { contentDescription = description },
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+    ) {
+        Icon(icon, null, modifier = Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(text)
+    }
+}
+
+/**
+ * Бутоните за действие — в мрежа с пълни редове: всички на един ред, ако надписите се събират на
+ * един ред; иначе по два (при 4); иначе един под друг на цялата ширина (едър шрифт). В реда са
+ * еднакво широки и високи — без „стъпала“ и без 2 + 1.
+ */
+@Composable
+private fun ActionButtons(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Layout(content, modifier) { measurables, constraints ->
+        val gap = 10.dp.roundToPx()
+        val width = constraints.maxWidth
+        val n = measurables.size
+        fun cell(cols: Int) = (width - gap * (cols - 1)) / cols
+        val cols = (n downTo 2).firstOrNull { c ->
+            n % c == 0 && measurables.all { it.maxIntrinsicWidth(Constraints.Infinity) <= cell(c) }
+        } ?: 1
+        val w = cell(cols)
+        val rows = measurables.chunked(cols).map { row ->
+            val h = row.maxOf { it.maxIntrinsicHeight(w) }
+            row.map { it.measure(Constraints.fixed(w, h)) }
+        }
+        val height = rows.sumOf { it.first().height } + gap * (rows.size - 1).coerceAtLeast(0)
+        layout(width, height) {
+            var y = 0
+            rows.forEach { row ->
+                row.forEachIndexed { i, p -> p.placeRelative(i * (w + gap), y) }
+                y += row.first().height + gap
+            }
+        }
+    }
 }
 
 @Composable

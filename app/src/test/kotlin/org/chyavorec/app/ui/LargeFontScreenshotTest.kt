@@ -63,7 +63,6 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.time.Instant
-import kotlin.math.roundToInt
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -245,26 +244,21 @@ class LargeFontScreenshotTest {
     }
 
     /**
-     * „Контакти“ (вградените данни) при шрифт 2×: бутоните — подредени, не на „стъпала“. На всеки ред
-     * (до два) са еднакво широки и високи и заедно заемат целия ред; при 2× се пренасят по един.
+     * „Контакти“ (вградените данни) при шрифт 2×: кратките бутони не се събират на един ред — един
+     * под друг, всеки на цялата ширина (не 2 + 1 и не на „стъпала“); TalkBack чете пълните описания.
      */
     @Test fun contactsLarge() {
         launch(deepLink = "$base/kontakti")
-        waitFor("Отвори карта")
+        val labels = listOf("Изпрати имейл на читалището", "Покажи читалището на картата", "Отвори сайта на читалището")
+        compose.waitUntil(15_000) { compose.onAllNodes(hasContentDescription(labels[1])).fetchSemanticsNodes().isNotEmpty() }
         compose.waitForIdle()
-        val buttons = listOf("Изпрати имейл", "Отвори карта", "Отвори сайта").map { label ->
-            compose.onNode(hasText(label) and hasClickAction()).fetchSemanticsNode().boundsInRoot
+        val buttons = labels.map { label ->
+            compose.onNode(hasContentDescription(label) and hasClickAction()).fetchSemanticsNode().boundsInRoot
         }
-        val left = buttons.minOf { it.left }
-        val right = buttons.maxOf { it.right }
-        buttons.groupBy { it.top.roundToInt() }.values.forEach { row ->
-            assertTrue(row.size <= 2, "най-много два бутона на ред: $row")
-            assertEquals(left, row.minOf { it.left }, 1f, "редът започва от левия край: $row")
-            assertEquals(right, row.maxOf { it.right }, 1f, "редът стига до десния край: $row")
-            row.forEach {
-                assertEquals(row[0].width, it.width, 1f, "еднаква ширина: $row")
-                assertEquals(row[0].height, it.height, 1f, "еднаква височина: $row")
-            }
+        buttons.zipWithNext().forEach { (a, b) ->
+            assertTrue(b.top >= a.bottom, "един под друг: $a, $b")
+            assertEquals(a.left, b.left, 1f, "на цялата ширина: $a, $b")
+            assertEquals(a.right, b.right, 1f, "на цялата ширина: $a, $b")
         }
         shot("59-font2-contacts")
     }

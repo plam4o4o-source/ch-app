@@ -1,6 +1,6 @@
 # Политика за поверителност — приложение „Читалище Яворец“
 
-Последна актуализация: 29 октомври 2026 г.
+Последна актуализация: 31 октомври 2026 г.
 
 ## Кой обработва данните
 
@@ -20,15 +20,15 @@
 
 **Обновления:** версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от „Настройки › Обновления“. Версията от Google Play се обновява от Google Play.
 
-Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака. Приложението пази и локален дневник на грешките само на устройството, без лични данни; той напуска устройството единствено ако го споделиш ти („Настройки › Информация › Диагностика“).
+Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака. Последната книга, отворена от публичния каталог, става пряк път към нея при задържане на иконата на приложението; той също е само на телефона и се маха при „Изход“ и „Изчисти временните данни“. Приложението пази и локален дневник на грешките само на устройството, без лични данни; той напуска устройството единствено ако го споделиш ти („Настройки › Информация › Диагностика“).
 
-„Искам да прочета“: списъкът с отбелязаните книги (и дали да ти кажем, когато някоя е на рафта) се пази само на устройството — наличността се сравнява с публичния каталог на телефона, без да се изпраща кои книги са отбелязани; изходът не го изтрива, а „Изчисти списъка“ (в самия списък) и деинсталирането — да. Ако за някоя книга е включено „Кажи ми, когато е на рафта“, наличността се проверява и във фонов режим: около веднъж на 6 часа приложението тегли публичния каталог katalog.json от GitHub (raw.githubusercontent.com или cdn.jsdelivr.net), без да изпраща списъка (само при включени известия „Библиотека“ и докато приложението е отваряно в последните 14 дни).
+„Искам да прочета“: списъкът с отбелязаните книги (и дали да ти кажем, когато някоя е на рафта) се пази само на устройството — наличността се сравнява с публичния каталог на телефона, без да се изпраща кои книги са отбелязани; изходът не го изтрива, а „Изчисти списъка“ (в самия списък) и деинсталирането — да. Ако за някоя книга е включено „Кажи ми, когато е на рафта“, наличността се проверява и във фонов режим: около веднъж на 6 часа приложението тегли публичния каталог katalog.json от GitHub (raw.githubusercontent.com или cdn.jsdelivr.net), без да изпраща списъка (само при включени известия „Отново на рафта“ и докато приложението е отваряно в последните 14 дни).
 
 Читателска карта: ако въведеш номера на своята карта, той (и името, ако го въведеш) се пази шифрован с ключ от Android Keystore само на това устройство.
 
 Вход (само при съгласие, дадено в библиотеката, и издаден ПИН): номерът на читателската карта и ПИН-ът се изпращат само по HTTPS към сървъра на читалището (chyavorec.org) и ПИН-ът никога не се записва. При вход се изпраща и моделът на телефона (напр. „Pixel 8“), за да се разпознава сесията. Пази се само шифрован токен за сесията. Името ти, заетите книги, сроковете и членството идват от този сървър, който получава от библиотечната програма само данните на съгласилите се читатели (без ЕГН, адрес и телефон), и се кешират шифровано на устройството. Съгласието се оттегля в библиотеката — тогава данните ти се изтриват от сървъра при следващото обновяване.
 
-Мениджър на пароли: запазването на номера на картата и ПИН-а в мениджъра на пароли на телефона е по желание — прави се само ако се съгласиш, и те се пазят от системния мениджър на пароли, а не от приложението.
+Мениджър на пароли: запазването на номера на картата и ПИН-а в мениджъра на пароли на телефона е по желание — прави се само ако се съгласиш, и те се пазят от системния мениджър на пароли, а не от приложението. Ако мениджърът на пароли (напр. Google Password Manager) синхронизира паролите, той може да синхронизира номера и ПИН-а и с профила ти в Google (или при съответния доставчик) — по неговите условия.
 
 Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
 
@@ -39,6 +39,8 @@
 История на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.
 
 Удължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
+
+Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб.
 
 Документи: „Отвори с приложение за PDF“ сваля документа от chyavorec.org във временните данни на приложението (пази се до седмица) и го отваря в избрано от теб приложение за PDF на телефона.
 
@@ -64,7 +66,7 @@
 
 # Privacy policy — “Chitalishte Yavorets” app
 
-Last updated: October 29, 2026
+Last updated: October 31, 2026
 
 ## Who processes the data
 
@@ -84,15 +86,15 @@ Public content: news, events, photos and pages are loaded from chyavorec.org, an
 
 **Updates:** the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in “Settings › Updates”. The Google Play version is updated by Google Play.
 
-Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud. The app also keeps a local error log on the device only, without personal data; it leaves the device only if you share it yourself (“Settings › Information › Diagnostics”).
+Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud. The last book you opened from the public catalogue becomes a shortcut to it when you long-press the app icon; it also stays on the phone and is removed by “Sign out” and “Clear temporary data”. The app also keeps a local error log on the device only, without personal data; it leaves the device only if you share it yourself (“Settings › Information › Diagnostics”).
 
-“Want to read”: the list of books you mark (and whether to tell you when one is on the shelf) is kept only on the device — availability is compared with the public catalogue on the phone, without sending which books are marked; signing out does not delete it, while “Clear list” (in the list itself) and uninstalling do. If “Notify me when available” is on for a book, availability is also checked in the background: about once every 6 hours the app downloads the public katalog.json from GitHub (raw.githubusercontent.com or cdn.jsdelivr.net), without sending the list (only while “Library” notifications are on and the app has been opened in the last 14 days).
+“Want to read”: the list of books you mark (and whether to tell you when one is on the shelf) is kept only on the device — availability is compared with the public catalogue on the phone, without sending which books are marked; signing out does not delete it, while “Clear list” (in the list itself) and uninstalling do. If “Notify me when it’s on the shelf” is on for a book, availability is also checked in the background: about once every 6 hours the app downloads the public katalog.json from GitHub (raw.githubusercontent.com or cdn.jsdelivr.net), without sending the list (only while “Back on the shelf” notifications are on and the app has been opened in the last 14 days).
 
 Library card: if you enter your card number, it (and your name, if entered) is stored encrypted with an Android Keystore key on this device only.
 
 Sign-in (only with consent given at the library and an issued PIN): your library card number and PIN are sent only over HTTPS to the centre’s server (chyavorec.org), and the PIN is never stored. The phone’s model name (e.g. “Pixel 8”) is also sent at sign-in so that the session can be recognised. Only an encrypted session token is kept. Your name, borrowed items, due dates and membership come from this server, which receives from the library software only the data of readers who have consented (no personal ID number (EGN), address or phone number), and are cached encrypted on the device. Consent is withdrawn at the library — your data is then deleted from the server at the next sync.
 
-Password manager: saving your card number and PIN in the phone’s password manager is optional — it happens only if you agree, and they are kept by the system’s password manager, not by the app.
+Password manager: saving your card number and PIN in the phone’s password manager is optional — it happens only if you agree, and they are kept by the system’s password manager, not by the app. If the password manager (e.g. Google Password Manager) syncs passwords, it may also sync the card number and PIN to your Google account (or the provider’s) — under the provider’s own terms.
 
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
 
@@ -103,6 +105,8 @@ Barcode scanner: the camera turns on only when you open the scanner and allow ac
 Reading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.
 
 Renewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
+
+Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you.
 
 Documents: “Open with a PDF app” downloads the document from chyavorec.org into the app’s temporary data (kept for up to a week) and opens it in a PDF app of your choice on the phone.
 

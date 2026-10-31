@@ -63,7 +63,12 @@ class BookCoverSemanticsTest {
     @Test fun copyOutWithOthersOnShelfHasASeparateLine() {
         show { CopyStatus(BookStatus.NOT_ON_SHELF, othersOnShelf = 5) }
         compose.onNodeWithText("Не е на рафта").assertExists()
-        compose.onNodeWithText("Още 5 на рафта").assertExists()
+        compose.onNodeWithText("Други 5 екземпляра са на рафта").assertExists()
+    }
+
+    @Test fun oneOtherCopyOnShelfIsSingular() {
+        show { CopyStatus(BookStatus.ON_LOAN, othersOnShelf = 1) }
+        compose.onNodeWithText("Друг екземпляр е на рафта").assertExists()
     }
 
     @Test fun copyStatusWithoutOthersIsOnlyTheLabel() {

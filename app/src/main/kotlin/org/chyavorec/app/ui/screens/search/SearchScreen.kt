@@ -266,7 +266,7 @@ private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (Str
     val limit = if (ui.scope == SearchScope.ALL) 5 else Int.MAX_VALUE
     val context = LocalContext.current
     if (r.isEmpty && !ui.searching) {
-        EmptyView(stringResource(R.string.search_no_results), stringResource(R.string.catalog_no_results_hint), icon = Icons.Outlined.SearchOff)
+        EmptyView(stringResource(R.string.search_no_results), stringResource(R.string.search_no_results_hint), icon = Icons.Outlined.SearchOff)
         return
     }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
