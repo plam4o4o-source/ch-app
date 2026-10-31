@@ -13,6 +13,24 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.29
+
+### bg
+- Скенерът използва скенера на Google — приложението вече не иска достъп до камерата и е по-леко.
+- Бутон „Читателска карта“ в бързите настройки — картата е на едно плъзгане разстояние.
+- Новините и събитията в известията — със снимка, а напомнянията — с „Добави в календара“ и „Маршрут“.
+- Снимките в галерията се отварят на цял екран и се затварят с плъзгане.
+- По-удобен уиджет — сроковете винаги се виждат, в повече размери и на езика на приложението.
+- „Нови постъпления“ без повторения, по-удобно търсене и нов карусел на „Начало“.
+
+### en
+- Scanning now uses Google’s scanner — the app no longer asks for camera access and is lighter.
+- A “Library card” button in Quick Settings — your card is one swipe away.
+- News and events in notifications now show a picture, and reminders offer “Add to calendar” and “Directions”.
+- Gallery photos open full screen and close with a swipe.
+- A better widget — due dates always visible, more sizes, and in the app’s language.
+- “New arrivals” without repeats, easier search and a new carousel on “Home”.
+
 ## 1.2.28
 
 ### bg
