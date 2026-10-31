@@ -171,6 +171,8 @@ RX_TILE='Читателска карта|Library card'
 qs_tile() {  # $1 — етикет: отваря бързите настройки и намира плочката; TP — центърът ѝ (без подчерупка!)
   local i
   a cmd statusbar expand-settings; sleep 3; dims; TP=""
+  # Панелът помни последната страница — първо назад до първата (плъзгане надясно).
+  for i in 1 2 3 4; do a input swipe $((W*15/100)) $((H*30/100)) $((W*85/100)) $((H*30/100)) 300; sleep 1; done
   for i in 1 2 3 4; do
     dump; cp $OUT/ui.xml $OUT/qs-$1-page$i.xml
     TP=$(xy content-desc "$RX_TILE"); [ -z "$TP" ] && TP=$(xy text "$RX_TILE")
@@ -231,6 +233,7 @@ part_tile() {
   sec "T4. With a card: active"
   log "after the prompt: ours in sysui_qs_tiles $(a settings get secure sysui_qs_tiles | grep -c chyavorec)"
   a settings get secure sysui_qs_tiles | grep -q chyavorec || { log "the tile is not in Quick Settings after the prompt — added for the next steps"; qs_add; }
+  go_home 2   # картата е FLAG_SECURE — без нея отдолу снимката на панела не е черна
   qs_tile with-card; shot tile/30-qs-with-card
   sec "T5. Tap (unlocked) → the card screen"
   if [ -n "$TP" ]; then a input tap $TP; else log "tile not on screen — click-tile: '$(a cmd statusbar click-tile $TILE 2>&1 | tr -d '\r' | head -1)'"; fi
