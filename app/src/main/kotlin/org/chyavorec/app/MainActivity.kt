@@ -11,12 +11,14 @@ import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.ChitalishteRoot
+import org.chyavorec.app.ui.navigation.AppShortcuts
 import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.EdgeToEdge
@@ -107,7 +109,12 @@ class MainActivity : ComponentActivity() {
     private fun consumeDeepLink(intent: Intent?) {
         if (intent == null) return
         val siteBaseUrl = (application as ChitalishteApp).container.config.siteBaseUrl
-        deepLink.value = LaunchIntents.linkOf(intent, siteBaseUrl)
+        val link = LaunchIntents.linkOf(intent, siteBaseUrl)
+        deepLink.value = link
+        // Отворено от пряк път — ползването му се отчита (извън главната нишка — IPC към системата).
+        if (link != null && intent.action == LaunchIntents.ACTION_SHORTCUT) {
+            lifecycleScope.launch(Dispatchers.IO) { AppShortcuts.launched(applicationContext, link) }
+        }
         intent.removeExtra(Notifier.EXTRA_DEEP_LINK)
         intent.data = null
         // Обработеният intent се заменя с обикновен — повторно четене не отваря нищо.

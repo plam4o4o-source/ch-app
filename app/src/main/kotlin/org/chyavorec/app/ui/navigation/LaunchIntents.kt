@@ -48,11 +48,11 @@ object LaunchIntents {
     const val SHORTCUT_SCHEME = "chyavorec"
 
     /**
-     * Връзките на преките пътища — статичните (res/xml/shortcuts.xml) и динамичния „Искам да
-     * прочета“ ([org.chyavorec.app.ui.navigation.AppShortcuts]). Пряк път се стартира от
-     * launcher-а (друго приложение), затова се приемат само тези, не произволна връзка.
+     * Връзките на преките пътища — статичните (res/xml/shortcuts.xml) и „Искам да прочета“
+     * (динамичен до 1.2.28 — закачените на началния екран копия още го отварят). Пряк път се
+     * стартира от launcher-а (друго приложение), затова се приемат само тези, не произволна връзка.
      */
-    val SHORTCUT_LINKS = setOf("catalog", "my/card", "events", "scan", DeepLinks.WANT_TO_READ)
+    val SHORTCUT_LINKS = setOf("catalog", "my/card", "scan", DeepLinks.WANT_TO_READ)
 
     /** Динамичният пряк път към последната книга от публичния каталог — само положителен инв. №. */
     private val SHORTCUT_BOOK = Regex("catalog/book/[1-9][0-9]{0,17}")

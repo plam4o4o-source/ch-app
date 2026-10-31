@@ -112,7 +112,8 @@ class LaunchIntentsTest {
     @Test fun shortcutsOpenOnlyTheirOwnLinks() {
         fun shortcut(link: String) = Intent(LaunchIntents.ACTION_SHORTCUT, Uri.parse("chyavorec://app/$link")).setComponent(main)
         for (link in LaunchIntents.SHORTCUT_LINKS) assertEquals(link, LaunchIntents.linkOf(shortcut(link), base))
-        for (link in listOf("login", "update", "my/loans", "page?url=https://evil.example", "")) assertNull(LaunchIntents.linkOf(shortcut(link), base), link)
+        // „Събития“ вече не е пряк път (премахнатият статичен се изключва от системата).
+        for (link in listOf("login", "update", "my/loans", "events", "page?url=https://evil.example", "")) assertNull(LaunchIntents.linkOf(shortcut(link), base), link)
         assertNull(LaunchIntents.linkOf(Intent(LaunchIntents.ACTION_SHORTCUT, Uri.parse("https://app/catalog")).setComponent(main), base))
     }
 

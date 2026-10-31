@@ -16,15 +16,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okio.Path.Companion.toOkioPath
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.diagnostics.AppDiagnostics
 import org.chyavorec.core.logFailure
 import org.chyavorec.data.site.SiteImageAccept
+import org.chyavorec.app.notifications.LegacyWork
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.PeriodicSyncWorker
+import org.chyavorec.app.ui.navigation.AppShortcuts
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.Raleway
 import org.chyavorec.app.widget.WidgetUpdater
@@ -125,6 +128,13 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         // периодична (на всеки час) се отменя; KEEP — само ако веригата е изгубена.
         if (fresh) runCatching { MessagePollWorker.cancelLegacy(this) }.logFailure("startup.cancel-poll")
         val poll = runCatching { MessagePollWorker.schedule(this, container, keep = true) }.logFailure("startup.schedule-poll")
+        if (fresh) {
+            // Остатъците от по-старите версии: задачите на уиджета с Glance и динамичният „Искам да прочета“.
+            withContext(Dispatchers.IO) {
+                runCatching { LegacyWork.cancelGlance(this@ChitalishteApp) }.logFailure("startup.legacy-work")
+                runCatching { AppShortcuts.removeLegacy(this@ChitalishteApp) }.logFailure("startup.legacy-shortcut")
+            }
+        }
         if (fresh && sync.isSuccess && poll.isSuccess) runCatching { container.settings.setBackgroundSetup(stamp) }
     }
 

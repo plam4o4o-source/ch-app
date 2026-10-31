@@ -1,6 +1,7 @@
 package org.chyavorec.app.data
 
 import android.app.Application
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.CoroutineStart
@@ -19,9 +20,11 @@ import org.chyavorec.app.TestResources
 import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.local.FavoriteNewsEntity
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.ui.navigation.AppShortcuts
 import org.chyavorec.core.FixedClock
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.CatalogRepository
+import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogQuery
 import org.junit.After
 import org.junit.Before
@@ -82,10 +85,15 @@ class ClearCacheTest {
         c.readerCache.write("reader:history", "[]")
         val pdf = assertIs<Outcome.Success<java.io.File>>(c.documents.download(server.url("/files/ustav.pdf").toString())).value
         val requests = catalogRequests
+        val context = ApplicationProvider.getApplicationContext<Application>()
+        AppShortcuts.publicBookOpened(context, CatalogBook(inv = 7, author = "Иван Вазов", title = "Под игото"))
+        fun lastBook() = ShortcutManagerCompat.getDynamicShortcuts(context).filter { it.id == AppShortcuts.ID_LAST_BOOK }
+        assertEquals(1, lastBook().size)
 
         c.clearPublicCache()
 
         assertFalse(pdf.exists(), "свален PDF в cacheDir/documents")
+        assertEquals(0, lastBook().size, "прекият път „последната книга“")
 
         listOf(CatalogRepository.KEY, CatalogRepository.META_KEY, CatalogRepository.FETCHED_AT_KEY, CatalogRepository.SUMMARY_KEY)
             .forEach { assertNull(c.publicCache.read(it), it) }

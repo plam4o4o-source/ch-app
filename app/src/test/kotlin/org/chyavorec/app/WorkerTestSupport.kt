@@ -83,10 +83,10 @@ class TestBackend {
         routes[path] = { MockResponse().setResponseCode(code).setBody(body) }
     }
 
-    fun container(app: Application, clock: AppClock, cipher: BytesCipher = XorTestCipher()): AppContainer {
+    fun container(app: Application, clock: AppClock, cipher: BytesCipher = XorTestCipher(), versionCode: Int = 1): AppContainer {
         val config = AppConfig(
             siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = base + API,
-            environment = "test", useMockData = false, versionName = "test", versionCode = 1,
+            environment = "test", useMockData = false, versionName = "test", versionCode = versionCode,
         )
         return AppContainer(app, config, clock, cipher, client)
     }
