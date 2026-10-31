@@ -4,12 +4,19 @@ name: Baseline profile
 # :baselineprofile) и го слива в main САМ, ако пълната проверка мине:
 #   1) генериране на емулатор (Android 13, при неуспех — още един опит на Android 14; на 15
 #      емулаторът в CI замръзва при превъртане на „Начало“);
-#   2) commit в клона baseline-profile/update (от последния main);
-#   3) Android CI на този commit (workflow_dispatch — push с GITHUB_TOKEN не пуска workflow-и);
-#   4) ако „checks“ е зелен — main се придвижва напред до този commit (fast-forward с тайната
+#   2) проверка на покритието (.github/scripts/baseline-profile-check.sh): всеки ключов екран
+#      има правила и общият брой не е паднал с над 15% спрямо профила в Git — иначе профилът
+#      се отхвърля (напр. път, който изкарва приложението на заден план, губи всички следващи);
+#   3) commit в клона baseline-profile/update (от последния main);
+#   4) Android CI на този commit (workflow_dispatch — push с GITHUB_TOKEN не пуска workflow-и);
+#   5) ако „checks“ е зелен — main се придвижва напред до този commit (fast-forward с тайната
 #      PROFILE_PUSH_TOKEN; без нея профилът чака в клона за ръчно сливане). Ако междувременно
-#      main е мръднал — commit-ът се пренася върху новия main и стъпки 3–4 се повтарят веднъж.
-# Неуспех на която и да е стъпка не пипа main — остава предишният профил.
+#      main е мръднал — commit-ът се пренася върху новия main и стъпки 4–5 се повтарят веднъж.
+# Неуспех на която и да е стъпка не пипа main — остава предишният профил (и изданието излиза
+# с него, с предупреждение — виж release-profile.sh).
+# Стъпки 3–5 са в отделна задача „merge“: чисто копие на хранилището и профилът от artifact-а
+# на „generate“. Задачата, която пуска Gradle и емулатора (т.е. код от хранилището), има само
+# право за четене и не вижда PROFILE_PUSH_TOKEN.
 # Само профил не прави нова версия (виж auto-release.yml).
 #
 # Кога: всяка неделя, ръчно и ПРЕДИ издание — Auto release го пуска (workflow_dispatch от
@@ -18,8 +25,9 @@ name: Baseline profile
 # профил от собствения си код, а не от предишното издание.
 #
 # Ръчно пускане от друг клон (напр. за проверка на нови пътища в Journeys.kt) само генерира
-# профила, показва броя правила за ключовите екрани и го качва като artifact — без commit
-# и без сливане в main (тогава се проверява и кодът, и генераторът от този клон).
+# профила, показва броя правила за ключовите екрани и резултата на всеки път (logcat) и го
+# качва като artifact — без commit и без сливане в main (тогава се проверява и кодът, и
+# генераторът от този клон).
 
 on:
   workflow_dispatch:
@@ -28,8 +36,7 @@ on:
     - cron: "23 2 * * 0"
 
 permissions:
-  contents: write
-  actions: write
+  contents: read
 
 # Пусканията от main — едно по едно; проверка от друг клон — в собствена група (не измества
 # чакащо пускане от main, напр. това, което Auto release чака).
@@ -41,16 +48,19 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     timeout-minutes: 150
+    # Само четене, и токенът не остава в .git/config: Gradle, тестовете и емулаторът изпълняват
+    # код от хранилището. Commit-ът и сливането са в задачата „merge“.
+    permissions:
+      contents: read
     env:
-      # Само от main профилът се commit-ва и слива (виж „Commit…“ и baseline-profile-merge.sh).
       FROM_MAIN: ${{ github.ref == 'refs/heads/main' }}
     steps:
       # Точно commit-ът на пускането (github.sha): при schedule — последният в main, при
-      # ръчно пускане — върхът на избрания клон. От него е и съобщението на commit-а с профила.
+      # ръчно пускане — върхът на избрания клон. Профилът в него е мярката за проверката.
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
-          fetch-depth: 0
+          persist-credentials: false
 
       - uses: actions/setup-java@v6
         with:
@@ -124,31 +134,36 @@ jobs:
         if: failure()
         run: bash .github/scripts/baseline-profile-diagnostics.sh
 
+      # Кои пътища са минали („journey <име>: ok / incomplete / failed“) и бележките им.
+      - name: Journeys (logcat)
+        if: always()
+        run: |
+          find baselineprofile/build/outputs -name 'logcat-*.txt' 2>/dev/null | sort | while read -r f; do
+            echo "::group::$f"
+            grep -E ' BaselineProfile *:' "$f" | sed -E 's/^.* BaselineProfile *: //' || true
+            echo "::endgroup::"
+            echo "$(basename "$f"): $(grep -cE 'BaselineProfile *: journey .*: ok ' "$f" || true) ok," \
+              "$(grep -cE 'BaselineProfile *: journey .*: (incomplete|failed) ' "$f" || true) incomplete/failed"
+          done
+
+      # Броят правила за ключовите екрани; профил без някой от тях (или с много по-малко
+      # правила от сегашния) се отхвърля — main остава с предишния.
       - name: Check generated profile
         run: |
-          D=app/src/main/generated/baselineProfiles
-          ls -la "$D"
-          test -s "$D/baseline-prof.txt" || { echo "::error::baseline-prof.txt was not generated"; exit 1; }
-          echo "baseline-prof.txt: $(wc -l < "$D/baseline-prof.txt") rules"
-          [ -f "$D/startup-prof.txt" ] && echo "startup-prof.txt: $(wc -l < "$D/startup-prof.txt") rules" || echo "::warning::startup-prof.txt missing"
-          # Правила за ключовите екрани — 0 значи, че пътят в Journeys.kt не е стигнал дотам.
-          {
-            echo "## Baseline profile"
-            echo "- baseline-prof.txt: $(wc -l < "$D/baseline-prof.txt") rules"
-            [ -f "$D/startup-prof.txt" ] && echo "- startup-prof.txt: $(wc -l < "$D/startup-prof.txt") rules"
-            for k in "HomeScreenKt;->BookRow" "NewsScreensKt;->NewsListScreen" "NewsScreensKt;->ArticleScreen" \
-                     "EventsScreensKt;->EventsContent" "EventsScreensKt;->EventCard" "GalleryScreensKt" \
-                     "WantToReadScreenKt;->WantToReadScreen" "WantToReadScreenKt;->WantToReadItem" \
-                     "WantToReadScreenKt;->NotifyWhenAvailableButton" "StatusKt;->AvailableMark"; do
-              echo "- \`$k\`: $(grep -cF "$k" "$D/baseline-prof.txt" || true)"
-            done
-            if [ "$FROM_MAIN" = "true" ]; then echo "- branch: \`baseline-profile/update\`"; else echo "- от \`$GITHUB_REF_NAME\` — само artifact, без commit"; fi
-          } | tee -a "$GITHUB_STEP_SUMMARY"
+          ls -la app/src/main/generated/baselineProfiles
+          bash .github/scripts/baseline-profile-check.sh
+          if [ "$FROM_MAIN" = "true" ]; then
+            echo "- към клона \`baseline-profile/update\`" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- от \`$GITHUB_REF_NAME\` — само artifact, без commit" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
+      # Профилът за задачата „merge“ (и за преглед) — само ако проверката е минала.
       - uses: actions/upload-artifact@v7
         with:
           name: baseline-profile
           path: app/src/main/generated/baselineProfiles/
+          if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         if: always()
@@ -159,11 +174,32 @@ jobs:
             baselineprofile/build/reports/
           if-no-files-found: ignore
 
-      # Само от main: профил, генериран от друг клон, никога не стига до main.
+  # Commit и сливане — само от main (профил, генериран от друг клон, никога не стига до main)
+  # и само с проверен профил. Без Gradle и без емулатор: чисто копие на commit-а на пускането,
+  # профилът — от artifact-а на „generate“, git hooks са изключени.
+  merge:
+    needs: generate
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: baseline-profile
+          path: app/src/main/generated/baselineProfiles
+
       - name: Commit to branch baseline-profile/update
         id: commit
-        if: env.FROM_MAIN == 'true'
         run: |
+          git config core.hooksPath /dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B baseline-profile/update
@@ -182,7 +218,7 @@ jobs:
       # Пълната проверка на commit-а с профила; при зелен „checks“ — main напред до него.
       # Ако main е мръднал, докато вървят проверките — пренасяне и още един опит.
       - name: Check and merge into main
-        if: env.FROM_MAIN == 'true' && steps.commit.outputs.changed == 'true'
+        if: steps.commit.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           PUSH_TOKEN: ${{ secrets.PROFILE_PUSH_TOKEN }}

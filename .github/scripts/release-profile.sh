@@ -79,12 +79,17 @@ for minute in $(seq 1 "$WAIT_MINUTES"); do
     done_with true "$HEAD"
   fi
   # Пусканията на Baseline profile от main след START (и нашето): още вървят ли?
+  # Неуспешно пускане — и генерирането, и отхвърлен профил (проверката на покритието).
   RUNS=$(gh api "$WORKFLOW/runs?branch=main&created=%3E%3D$START&per_page=20" \
-    --jq '[.workflow_runs[] | .status] | "\(length) \(map(select(. != "completed")) | length)"' || echo "0 0")
-  read -r TOTAL ACTIVE <<< "$RUNS"
+    --jq '[.workflow_runs[]] | "\(length) \(map(select(.status != "completed")) | length) \(map(select(.conclusion == "failure")) | length)"' || echo "0 0 0")
+  read -r TOTAL ACTIVE FAILED <<< "$RUNS"
   [ "$TOTAL" -gt 0 ] && SEEN=true
   if [ "$SEEN" = true ] && [ "$ACTIVE" -eq 0 ]; then
-    echo "Baseline profile завърши, без нов профил в main (непроменен, неуспешен или чака ръчно сливане)."
+    if [ "${FAILED:-0}" -gt 0 ]; then
+      echo "::warning::Baseline profile пропадна (генерирането или проверката на покритието отхвърли профила) — издание с предишния."
+    else
+      echo "Baseline profile завърши, без нов профил в main (непроменен или чака ръчно сливане)."
+    fi
     break
   fi
   if [ "$SEEN" = false ] && [ "$minute" -ge 5 ]; then

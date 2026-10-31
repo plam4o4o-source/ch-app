@@ -8,7 +8,12 @@
 # GITHUB_TOKEN защитата на main не пуска push-а (проверка, пусната с workflow_dispatch, не
 # се зачита за задължителната „checks“) — тук проверките ги изисква самият скрипт. Без
 # токена профилът остава в baseline-profile/update за ръчно сливане (без грешка).
+# Върви в отделна задача с чисто копие на хранилището (без Gradle и емулатора — виж
+# baseline-profile.yml); git hooks са изключени, а токенът не е в аргументите на процес.
 set -euo pipefail
+
+# git без hooks (нищо от работното копие не се изпълнява).
+g() { git -c core.hooksPath=/dev/null "$@"; }
 
 # Само профил, генериран от main (пускане от main или по график) — никога от друг клон.
 if [ "${GITHUB_REF:-}" != "refs/heads/main" ]; then
@@ -49,24 +54,29 @@ for attempt in 1 2; do
     echo "::error::Проверките на профила не минаха — main остава с предишния профил."
     exit 1
   fi
-  git fetch -q origin main
+  g fetch -q origin main
   if git merge-base --is-ancestor origin/main HEAD; then
     if [ -z "${PUSH_TOKEN:-}" ]; then
       echo "::notice::Профилът е проверен, но няма тайна PROFILE_PUSH_TOKEN — чака в $BRANCH за ръчно сливане (fast-forward на main)."
       echo "- проверен; чака ръчно сливане от \`$BRANCH\` (няма PROFILE_PUSH_TOKEN)" >> "$GITHUB_STEP_SUMMARY"
       exit 0
     fi
-    # Празната стойност нулира заглавката с GITHUB_TOKEN от actions/checkout.
-    git -c http.https://github.com/.extraheader= \
-      push "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:main"
+    # Токенът — в заглавка през средата (GIT_CONFIG_*), не в URL/аргументите на git.
+    # Първата (празна) стойност нулира заглавката с GITHUB_TOKEN от actions/checkout.
+    AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
+    echo "::add-mask::$AUTH"
+    GIT_CONFIG_COUNT=2 \
+      GIT_CONFIG_KEY_0=http.https://github.com/.extraheader GIT_CONFIG_VALUE_0= \
+      GIT_CONFIG_KEY_1=http.https://github.com/.extraheader GIT_CONFIG_VALUE_1="AUTHORIZATION: basic $AUTH" \
+      g push origin "HEAD:main"
     echo "Профилът е в main ($(git rev-parse --short HEAD))."
     echo "- влязъл в \`main\`: $(git rev-parse --short HEAD)" >> "$GITHUB_STEP_SUMMARY"
     exit 0
   fi
   if [ "$attempt" = 2 ]; then break; fi
   echo "main е мръднал — пренасяне на профила върху новия main."
-  git rebase -q origin/main
-  git push -f origin "HEAD:$BRANCH"
+  g rebase -q origin/main
+  g push -f origin "HEAD:$BRANCH"
 done
 
 echo "::error::main се промени и по време на втората проверка — профилът остава в $BRANCH (следващото пускане ще опита пак)."

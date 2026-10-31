@@ -70,20 +70,92 @@ private val MESSAGES = containing("Съобщения", "съобщени", "Mes
 private val CATALOG_RESULTS = Pattern.compile("^[1-9][0-9]*\\s+(резултат|result).*", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE or Pattern.DOTALL)
 private val EDIT_TEXT: BySelector = By.clazz("android.widget.EditText")
 
+/** Броят бележки досега — път с нови бележки е стигнал само донякъде. */
+private var notes = 0
+
 private fun note(message: String) {
+    notes++
     Log.w(TAG, message)
 }
 
 /**
  * Път, който не бива да проваля целия профил: грешка (напр. StaleObjectException, когато
  * екранът се смени под ръка) се отбелязва в logcat и генерирането продължава със следващия.
+ *
+ * Преди пътя приложението се връща на преден план, ако някой предишен е излязъл от него
+ * (напр. едно „назад“ повече от раздел) — иначе всички следващи пътища пропадат тихо.
+ * Резултатът на всеки път („journey …: ok / incomplete / failed“) е в logcat (CI го показва).
  */
 fun MacrobenchmarkScope.optional(name: String, journey: MacrobenchmarkScope.() -> Unit) {
-    try {
+    val start = System.currentTimeMillis()
+    val before = notes
+    val result = try {
+        ensureInApp(name)
         journey()
+        if (notes == before) "ok" else "incomplete"
     } catch (e: Exception) {
         note("$name failed: $e")
+        "failed"
     }
+    val left = if (inApp()) "" else ", app left the foreground"
+    Log.i(TAG, "journey $name: $result (${(System.currentTimeMillis() - start) / 1000} s$left)")
+}
+
+/** Приложението е на преден план (не началният екран на системата или друго приложение). */
+private fun MacrobenchmarkScope.inApp(): Boolean = device.currentPackageName == packageName
+
+/**
+ * Ако приложението вече не е на преден план — пуска го отново (задачата му, ако още е жива)
+ * и чака долната лента. Системен диалог за разрешение първо се затваря.
+ */
+private fun MacrobenchmarkScope.ensureInApp(name: String) {
+    if (inApp()) return
+    dismissDialogsIfShown()
+    if (inApp()) return
+    note("$name: app not in foreground (${device.currentPackageName}) — relaunching")
+    try {
+        startActivityAndWait()
+    } catch (e: Exception) {
+        note("relaunch failed: $e — via the launcher intent")
+        device.pressHome()
+        device.executeShellCommand("monkey -p $packageName -c android.intent.category.LAUNCHER 1")
+    }
+    dismissDialogsIfShown(timeout = 2_000)
+    if (waitFor(tabSelector(TAB_HOME), CONTENT_TIMEOUT) == null) note("$name: bottom bar not shown after relaunch")
+    device.waitForIdle()
+}
+
+/** Текст от самото приложение (не от системната лента или клавиатурата). */
+private fun MacrobenchmarkScope.tabSelector(label: Pattern): BySelector = By.text(label).pkg(packageName)
+
+/**
+ * На основен раздел: долната лента се вижда и няма стрелка „назад“ (вътрешен екран или
+ * разгънатото търсене на „Начало“). Тогава „назад“ вече би затворило приложението.
+ */
+private fun MacrobenchmarkScope.onTab(): Boolean =
+    inApp() && device.hasObject(tabSelector(TAB_HOME)) && !device.hasObject(By.desc(BACK).pkg(packageName))
+
+/** Клавиатурата е отворена (тогава първото „назад“ само я скрива). */
+private fun MacrobenchmarkScope.keyboardShown(): Boolean =
+    runCatching { device.executeShellCommand("dumpsys input_method").contains("mInputShown=true") }.getOrDefault(false)
+
+/**
+ * „Назад“, докато се стигне основен раздел ([onTab]) — и нито веднъж повече: на раздел
+ * „назад“ затваря приложението. Не разчита на конкретен текст на екрана (напр. подсказката
+ * в полето за търсене, която изчезва, ако полето пази последното търсене).
+ */
+private fun MacrobenchmarkScope.backToTab(maxPresses: Int = 4) {
+    repeat(maxPresses) {
+        if (onTab()) {
+            if (keyboardShown()) { device.pressBack(); device.waitForIdle() }
+            return
+        }
+        if (!inApp()) return note("backToTab: app left the foreground")
+        device.pressBack()
+        device.waitForIdle()
+        poll(2_000) { onTab().takeIf { it } }
+    }
+    if (!onTab()) note("backToTab: no tab after $maxPresses presses")
 }
 
 /** Повтаря [find] до [timeout] ms, докато върне нещо (изчезнал елемент — пак опит). */
@@ -177,10 +249,14 @@ private fun UiObject2.clickableAncestor(): UiObject2 {
     return this
 }
 
-/** Връщане назад, докато се появи [target] (първото „назад“ може само да скрие клавиатурата). */
+/**
+ * Връщане назад, докато се появи [target] (първото „назад“ може само да скрие клавиатурата).
+ * Спира и на основен раздел — следващото „назад“ би затворило приложението.
+ */
 private fun MacrobenchmarkScope.backUntil(target: BySelector, maxPresses: Int = 3) {
     repeat(maxPresses) {
         if (device.hasObject(target)) return
+        if (onTab() && !keyboardShown()) return note("backUntil: on a tab, target not shown")
         device.pressBack()
         device.waitForIdle()
         if (device.wait(Until.hasObject(target), 2_000) == true) return
@@ -208,6 +284,11 @@ private fun MacrobenchmarkScope.dismissDialogsIfShown(timeout: Long = 0) {
  */
 private fun MacrobenchmarkScope.openTab(label: Pattern): Boolean {
     dismissDialogsIfShown()
+    // Клавиатурата покрива долната лента — докосването би паднало върху нея.
+    if (keyboardShown()) {
+        device.pressBack()
+        device.waitForIdle()
+    }
     if (device.wait(Until.hasObject(By.text(label)), TIMEOUT) != true) {
         note("tab not found: $label")
         return false
@@ -225,7 +306,8 @@ fun MacrobenchmarkScope.coldStartToHome() {
     skipOnboardingIfShown()
     // Обяснението за известията се показва веднъж, след въведението.
     dismissDialogsIfShown(timeout = 3_000)
-    if (waitFor(By.text(HOME_SEARCH), CONTENT_TIMEOUT) == null) {
+    // Долната лента, не подсказката в полето за търсене (тя липсва, ако полето пази текст).
+    if (waitFor(tabSelector(TAB_HOME), CONTENT_TIMEOUT) == null) {
         note("home screen not shown")
         return
     }
@@ -236,8 +318,8 @@ fun MacrobenchmarkScope.coldStartToHome() {
 
 /** Първо стартиране: въведението (5 екрана) — „Пропусни“, както би направил потребителят. */
 private fun MacrobenchmarkScope.skipOnboardingIfShown() {
-    // Началният екран или въведението — което се покаже първо.
-    val first = By.text(Pattern.compile("${SKIP.pattern()}|${HOME_SEARCH.pattern()}", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE))
+    // Началният екран (долната лента) или въведението — което се покаже първо.
+    val first = By.text(Pattern.compile("${SKIP.pattern()}|${TAB_HOME.pattern()}", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE))
     device.wait(Until.hasObject(first), CONTENT_TIMEOUT)
     val skip = device.findObject(By.text(SKIP)) ?: return
     device.waitForIdle()
@@ -317,7 +399,8 @@ fun MacrobenchmarkScope.homeScrollJourney() {
 /** Глобално търсене от началния екран. */
 fun MacrobenchmarkScope.globalSearchJourney() {
     if (!openTab(TAB_HOME)) return
-    val pill = waitFor(By.text(HOME_SEARCH))
+    // Подсказката в полето; ако полето пази предишно търсене — самото поле.
+    val pill = waitFor(By.text(HOME_SEARCH)) ?: device.findObject(EDIT_TEXT)
     if (pill == null) {
         note("home search not found")
         return
@@ -335,7 +418,8 @@ fun MacrobenchmarkScope.globalSearchJourney() {
         device.waitForIdle()
         Thread.sleep(2_000)
     }
-    backUntil(By.text(HOME_SEARCH))
+    // Обратно към „Начало“ по долната лента: полето може да пази „Ботев“ вместо подсказката.
+    backToTab()
 }
 
 /** Съобщенията от читалището (звънчето в заглавката на началния екран). */
@@ -349,7 +433,7 @@ fun MacrobenchmarkScope.messagesJourney() {
     bell.click()
     device.waitForIdle()
     Thread.sleep(1_500)
-    backUntil(By.text(HOME_SEARCH))
+    backToTab()
 }
 
 /**
@@ -442,9 +526,8 @@ fun MacrobenchmarkScope.wantToReadJourney() {
     Thread.sleep(1_500)
     swipeUp()
     swipeDown()
-    // Едно „назад“ — към „Моето“ (на екрана няма поле, т.е. и клавиатура).
-    device.pressBack()
-    device.waitForIdle()
+    // Към „Моето“.
+    backToTab()
 }
 
 /** „Моето“ без вход (гост). */
@@ -463,13 +546,12 @@ fun MacrobenchmarkScope.moreJourney() {
     swipeDown()
 }
 
-/** „Още“ → „Галерия“ → албум → снимка (и следващата) → назад толкова пъти, колкото екрана са отворени. */
+/** „Още“ → „Галерия“ → албум → снимка (и следващата) → назад до „Още“. */
 fun MacrobenchmarkScope.galleryJourney() {
     if (!openTab(TAB_MORE)) return
     val tile = findScrolling(By.text(GALLERY)) ?: return note("gallery tile not found")
     tile.click()
     if (device.wait(Until.gone(By.text(GALLERY_DESC)), TIMEOUT) != true) return note("gallery not opened")
-    var depth = 1
     try {
         // Албумите идват от сайта — изчакваме броя снимки върху първия.
         if (device.wait(Until.hasObject(By.text(PHOTOS_COUNT)), CONTENT_TIMEOUT) != true) return note("gallery not loaded")
@@ -478,7 +560,6 @@ fun MacrobenchmarkScope.galleryJourney() {
         val album = largestClickableBelow(belowTopBar()) ?: return note("no album to open")
         album.click()
         if (device.wait(Until.gone(By.text(PHOTOS_COUNT)), TIMEOUT) != true) return note("album not opened")
-        depth++
         // Първата снимка — горе вляво.
         val photo = poll(CONTENT_TIMEOUT) {
             val top = belowTopBar()
@@ -489,16 +570,11 @@ fun MacrobenchmarkScope.galleryJourney() {
         Thread.sleep(1_000)
         photo.click()
         device.waitForIdle()
-        depth++
         Thread.sleep(1_500)
         // Следващата снимка (плъзгане настрани).
         device.findObject(By.scrollable(true))?.fling(Direction.RIGHT)
         Thread.sleep(1_000)
     } finally {
-        repeat(depth) {
-            device.pressBack()
-            device.waitForIdle()
-            Thread.sleep(300)
-        }
+        backToTab()
     }
 }
