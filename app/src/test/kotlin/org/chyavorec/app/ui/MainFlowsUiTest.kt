@@ -1,6 +1,10 @@
 package org.chyavorec.app.ui
 
 import android.app.Application
+import androidx.activity.ComponentDialog
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.assertIsNotFocused
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.isRoot
@@ -45,6 +49,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowDialog
 import java.time.Instant
 import kotlin.test.assertEquals
 
@@ -191,15 +196,80 @@ class MainFlowsUiTest {
         compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 1 }
     }
 
-    /** „Назад“ в разгънатото поле го прибира обратно на „Начало“. */
+    /** „Назад“ в разгънатото поле го прибира обратно на „Начало“ — без старото търсене (с подсказката). */
     @Test fun homeSearchBarCollapsesWithBack() {
         launch()
-        compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isNotEmpty() }
-        compose.onAllNodes(hasSetTextAction()).onFirst().performClick()
-        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 2 }
+        searchFor("Джиан")
         compose.onAllNodes(hasContentDescription("Назад") and hasClickAction()).onLast().performClick()
         compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 1 }
         waitForText("45-ти общински фолклорен събор", substring = true)
+        assertSearchBarCleared()
+        // Със системното „Назад“ (и жеста) — също.
+        searchFor("Джиан")
+        systemBackInSearch()
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 1 }
+        assertSearchBarCleared()
+    }
+
+    /**
+     * „Назад“ от отворен резултат връща разгънатото търсене с резултатите — без фокус в полето
+     * (иначе клавиатурата ги закрива), и едно „Назад“ го прибира.
+     */
+    @Test fun homeSearchBarReturnsToResultsWithoutKeyboard() {
+        launch()
+        searchFor("Джиан")
+        compose.onAllNodes(hasText("\"Ох...\"") and hasClickAction()).onLast().performClick()
+        waitForText("Сигнатура")
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 1 }
+        settle()
+        compose.onAllNodes(hasContentDescription("Назад") and hasClickAction()).onFirst().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 2 }
+        settle()
+        compose.waitUntil(10_000) { compose.onAllNodes(hasText("\"Ох...\"") and hasClickAction()).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(hasSetTextAction()).onLast().assertIsNotFocused()
+        systemBackInSearch()
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 1 }
+        assertSearchBarCleared()
+    }
+
+    /** Резултат → друг раздел → „Начало“: търсенето не се разгръща отново и полето е празно. */
+    @Test fun homeSearchBarDoesNotReopenAfterAnotherTab() {
+        launch()
+        searchFor("Джиан")
+        // Авторът (не книгата с него) — отваря каталога, т.е. друг раздел.
+        val author = hasText("Джиан, Филип") and hasClickAction() and !hasText("\"Ох...\"", substring = true)
+        compose.waitUntil(10_000) { compose.onAllNodes(author).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(author).onLast().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 1 }
+        settle()
+        clickTab("Начало")
+        settle()
+        waitForText("45-ти общински фолклорен събор", substring = true)
+        assertEquals(1, compose.onAllNodes(isRoot()).fetchSemanticsNodes().size, "търсенето не се разгръща")
+        assertSearchBarCleared()
+    }
+
+    /** Разгръща полето на „Начало“ и търси [query]. */
+    private fun searchFor(query: String) {
+        compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(hasSetTextAction()).onFirst().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(isRoot()).fetchSemanticsNodes().size == 2 }
+        compose.onAllNodes(hasSetTextAction()).onLast().performTextInput(query)
+        compose.waitUntil(10_000) { compose.onAllNodes(hasText("\"Ох...\"") and hasClickAction()).fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    /** Системното „Назад“ в прозореца на разгънатото търсене. */
+    private fun systemBackInSearch() {
+        compose.runOnUiThread { (ShadowDialog.getLatestDialog() as ComponentDialog).onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+    }
+
+    /** Прибраното поле е празно — с подсказката „Търси книга…“, не със старото търсене. */
+    private fun assertSearchBarCleared() {
+        settle()
+        val field = compose.onAllNodes(hasSetTextAction()).onFirst().fetchSemanticsNode()
+        assertEquals("", field.config.getOrNull(SemanticsProperties.EditableText)?.text.orEmpty(), "текстът в полето")
+        compose.onAllNodes(hasText("Търси книга", substring = true), useUnmergedTree = true).onFirst().assertExists()
     }
 
     @Test fun guestSeesHonestLoginMessageAndCanAddCard() {

@@ -21,6 +21,17 @@ class TabReselectBus {
     fun emit(route: String) {
         events.tryEmit(route)
     }
+
+    /** Колко пъти е показан всеки раздел (само на главната нишка) — виж [visitsElsewhere]. */
+    private val visits = HashMap<String, Int>()
+
+    /** Показан е разделът [route] (при всяка смяна на екрана към него). */
+    fun shown(route: String) {
+        visits[route] = (visits[route] ?: 0) + 1
+    }
+
+    /** Показванията на другите раздели — промяна значи, че потребителят е ходил извън [route]. */
+    fun visitsElsewhere(route: String): Int = visits.entries.sumOf { (r, n) -> if (r == route) 0 else n }
 }
 
 val LocalTabReselect = staticCompositionLocalOf<TabReselectBus?> { null }

@@ -507,11 +507,13 @@ private fun AppNavHost(
 
     // Смяна на раздел → без shared element (виж LocalSharedTransitionsEnabled).
     var tabSwitch by remember { mutableStateOf(false) }
+    val tabs = LocalTabReselect.current
     DisposableEffect(nav) {
         var last: String? = null
         val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
             tabSwitch = last in topLevelRoutes && destination.route in topLevelRoutes
             last = destination.route
+            destination.route?.takeIf { it in topLevelRoutes }?.let { tabs?.shown(it) }
         }
         nav.addOnDestinationChangedListener(listener)
         onDispose { nav.removeOnDestinationChangedListener(listener) }

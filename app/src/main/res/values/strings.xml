@@ -558,6 +558,7 @@
     <string name="search_pages">Страници</string>
     <string name="search_recent">Скорошни търсения</string>
     <string name="search_recent_cleared">Скорошните търсения са изчистени.</string>
+    <string name="search_show_all">Покажи всички (%1$d)</string>
     <string name="search_start">Какво търсиш?</string>
     <string name="search_start_hint">Търсенето обхваща каталога, новините, събитията и страниците на читалището.</string>
     <string name="settings_appearance">Изглед</string>
