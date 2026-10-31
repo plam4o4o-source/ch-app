@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -29,6 +31,8 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemColors
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -44,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
@@ -68,6 +73,7 @@ import kotlinx.coroutines.withContext
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.appViewModelWithState
+import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.SearchInput
 import org.chyavorec.app.ui.components.appFilterChipColors
@@ -217,6 +223,9 @@ internal fun GlobalSearchContent(
             }
         }
     }
+    // Редовете — върху фона на контейнера (в разгънатото поле на „Начало“ той е
+    // surfaceContainerHigh), а не със свой цвят surface (по-светли ивици).
+    val itemColors = ListItemDefaults.colors(containerColor = Color.Transparent)
     Box(modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize()) {
             LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -240,18 +249,19 @@ internal fun GlobalSearchContent(
                                 ListItem(
                                     headlineContent = { Text(stringResource(R.string.search_recent), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() }) },
                                     trailingContent = { TextButton(onClick = clearRecent) { Text(stringResource(R.string.action_clear)) } },
+                                    colors = itemColors,
                                 )
                             }
                             items(recent) { q ->
                                 ListItem(headlineContent = { Text(q) }, leadingContent = { Icon(Icons.Outlined.History, null) },
-                                    modifier = Modifier.clickable { onRecent(q) })
+                                    modifier = Modifier.clickable { onRecent(q) }, colors = itemColors)
                             }
                         } else {
                             item { EmptyView(stringResource(R.string.search_start), stringResource(R.string.search_start_hint), icon = Icons.Outlined.Search) }
                         }
                     }
                 } else {
-                    Results(ui, navigate, openExternal, openLink, onOpen = { vm.commit() })
+                    Results(ui, navigate, openExternal, openLink, onOpen = { vm.commit() }, onScope = vm::setScope, itemColors = itemColors)
                 }
             }
         }
@@ -260,38 +270,56 @@ internal fun GlobalSearchContent(
 }
 
 @Composable
-private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (String) -> Unit, openLink: (String) -> Unit, onOpen: () -> Unit) {
+private fun Results(
+    ui: SearchUi,
+    navigate: (String) -> Unit,
+    openExternal: (String) -> Unit,
+    openLink: (String) -> Unit,
+    onOpen: () -> Unit,
+    onScope: (SearchScope) -> Unit,
+    itemColors: ListItemColors,
+) {
     val r = ui.results
     val show = { s: SearchScope -> ui.scope == SearchScope.ALL || ui.scope == s }
-    val limit = if (ui.scope == SearchScope.ALL) 5 else Int.MAX_VALUE
+    val limit = if (ui.scope == SearchScope.ALL) ALL_SCOPE_LIMIT else Int.MAX_VALUE
+    // Скритите в „Всички“ — „Покажи всички (N)“ в заглавката на раздела отваря обхвата му.
+    val more = { total: Int, s: SearchScope -> if (total > limit) ({ onScope(s) } to total) else null }
     val context = LocalContext.current
-    if (r.isEmpty && !ui.searching) {
-        EmptyView(stringResource(R.string.search_no_results), stringResource(R.string.search_no_results_hint), icon = Icons.Outlined.SearchOff)
+    if (r.isEmpty) {
+        // Още се търси (напр. първото зареждане на каталога) — индикатор, не празен екран.
+        if (ui.searching) {
+            Box(Modifier.fillMaxSize().padding(top = 48.dp), contentAlignment = Alignment.TopCenter) { ChLoadingIndicator() }
+        } else {
+            EmptyView(stringResource(R.string.search_no_results), stringResource(R.string.search_no_results_hint), icon = Icons.Outlined.SearchOff)
+        }
         return
     }
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
+    val list = rememberLazyListState()
+    // Към друг обхват (чип или „Покажи всички“) — от началото на списъка.
+    LaunchedEffect(ui.scope) { list.scrollToItem(0) }
+    LazyColumn(Modifier.fillMaxSize(), state = list, contentPadding = PaddingValues(bottom = 24.dp)) {
         if (show(SearchScope.BOOKS) && r.authors.isNotEmpty()) {
-            item { Header(stringResource(R.string.search_authors)) }
+            item { Header(stringResource(R.string.search_authors), more(r.authors.size, SearchScope.BOOKS)) }
             items(r.authors.take(limit), key = { "a-$it" }) { a ->
                 ListItem(headlineContent = { Text(a) }, leadingContent = { Icon(Icons.Outlined.Person, null) },
                     // Книгите на автора — каталогът с филтър „Автор“.
-                    modifier = Modifier.clickable { onOpen(); CatalogSearchRequests.byAuthor(a, navigate) }.animateItem())
+                    modifier = Modifier.clickable { onOpen(); CatalogSearchRequests.byAuthor(a, navigate) }.animateItem(), colors = itemColors)
             }
         }
         if (show(SearchScope.BOOKS) && r.books.isNotEmpty()) {
-            item { Header(stringResource(R.string.search_books)) }
+            item { Header(stringResource(R.string.search_books), more(r.books.size, SearchScope.BOOKS)) }
             items(r.books.take(limit), key = { "b-" + it.book.inv }) { hit ->
                 BookListItem(hit.book, onClick = { onOpen(); navigate(Routes.book(hit.book.inv)) }, modifier = Modifier.animateItem())
             }
         }
         if (show(SearchScope.NEWS) && r.news.isNotEmpty()) {
-            item { Header(stringResource(R.string.tab_news)) }
+            item { Header(stringResource(R.string.tab_news), more(r.news.size, SearchScope.NEWS)) }
             items(r.news.take(limit), key = { "n-" + it.article.id }) { hit ->
                 NewsRow(hit.article, onClick = { onOpen(); navigate(Routes.article(hit.article.id)) }, modifier = Modifier.animateItem())
             }
         }
         if (show(SearchScope.EVENTS) && r.events.isNotEmpty()) {
-            item { Header(stringResource(R.string.events_title)) }
+            item { Header(stringResource(R.string.events_title), more(r.events.size, SearchScope.EVENTS)) }
             items(r.events.take(limit), key = { "e-" + it.event.id }) { hit ->
                 ListItem(
                     headlineContent = { Text(hit.event.title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
@@ -299,11 +327,12 @@ private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (Str
                     supportingContent = Formatters.date(context, hit.event.date)?.let { d -> { Text(listOfNotNull(d, hit.event.time).joinToString(" · ")) } },
                     leadingContent = { Icon(Icons.Outlined.Event, null) },
                     modifier = Modifier.clickable { onOpen(); navigate(Routes.event(hit.event.id)) }.animateItem(),
+                    colors = itemColors,
                 )
             }
         }
         if (show(SearchScope.PAGES) && r.pages.isNotEmpty()) {
-            item { Header(stringResource(R.string.search_pages)) }
+            item { Header(stringResource(R.string.search_pages), more(r.pages.size, SearchScope.PAGES)) }
             items(r.pages.take(limit), key = { "p-" + it.doc.id }) { hit ->
                 val link = SiteLinkClassifier.link(hit.doc.title, hit.doc.url, "")
                 ListItem(
@@ -317,14 +346,22 @@ private fun Results(ui: SearchUi, navigate: (String) -> Unit, openExternal: (Str
                         val file = hit.doc.fileUrl
                         if (file != null) openExternal(file) else openLink(hit.doc.url)
                     }.animateItem(),
+                    colors = itemColors,
                 )
             }
         }
     }
 }
 
+/** Колко резултата от раздел се показват в обхвата „Всички“. */
+internal const val ALL_SCOPE_LIMIT = 5
+
+/** Заглавката на раздел; [more] — („Покажи всички“, общият брой), ако не всички са показани. */
 @Composable
-private fun Header(text: String) = Text(
-    text, style = MaterialTheme.typography.titleLarge,
-    modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 4.dp).semantics { heading() },
-)
+private fun Header(text: String, more: Pair<() -> Unit, Int>? = null) = Row(
+    Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp, top = 16.dp, bottom = 4.dp),
+    verticalAlignment = Alignment.CenterVertically,
+) {
+    Text(text, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() })
+    more?.let { (open, total) -> TextButton(onClick = open) { Text(stringResource(R.string.search_show_all, total)) } }
+}

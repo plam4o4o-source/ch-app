@@ -18,9 +18,8 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.interaction.collectIsDraggedAsState
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.carousel.HorizontalCenteredHeroCarousel
+import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.ui.semantics.contentDescription
@@ -440,23 +439,24 @@ private val HeroScrim = Brush.verticalGradient(
 )
 
 /**
- * Въртяща се лента с последните новини: автоматично превъртане на 6 s, parallax на
- * снимката и индикатор на страниците. Само превъртане спира след ~30 s
- * ([MotionBudget.carouselAdvances]), изчаква, докато потребителят я докосва/плъзга или
- * приложението не е на преден план, и изобщо не тръгва при намалено движение.
+ * Въртяща се лента с последните новини — Material 3 „hero“ въртележка: голямата карта в
+ * средата, съседните „надничат“ отстрани (маскирани). Автоматично превъртане на 6 s и
+ * индикатор на страниците. Само превъртане спира след ~30 s ([MotionBudget.carouselAdvances]),
+ * изчаква, докато потребителят я докосва/плъзга или приложението не е на преден план, и
+ * изобщо не тръгва при намалено движение.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit) {
-    val pager = rememberPagerState { items.size }
+    val carousel = rememberCarouselState { items.size }
     val reduced = rememberReducedMotion()
-    val dragged by pager.interactionSource.collectIsDraggedAsState()
     // Пръст върху лентата (и без плъзгане) — следващата смяна изчаква пускането.
     var touched by remember { mutableStateOf(false) }
     val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
     // Колко пъти е превъртяла сама — пази се и при връщане към „Начало“.
     var advances by rememberSaveable { mutableIntStateOf(0) }
     val auto = MotionBudget.carouselAutoAdvance(
-        reduced = reduced, touched = dragged || touched,
+        reduced = reduced, touched = touched,
         resumed = lifecycleState.isAtLeast(Lifecycle.State.RESUMED),
         advancesDone = advances, itemCount = items.size,
     )
@@ -464,21 +464,27 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
     LaunchedEffect(auto, advances, items.size) {
         if (!auto) return@LaunchedEffect
         delay(MotionBudget.CAROUSEL_INTERVAL_MS)
-        pager.animateScrollToPage((pager.currentPage + 1) % items.size, animationSpec = tween(700))
+        carousel.animateScrollToItem((carousel.currentItem + 1) % items.size, animationSpec = tween(700))
         advances++
     }
     val context = LocalContext.current
     val windowH = windowHeight()
     val carouselLabel = stringResource(R.string.home_carousel)
     val season = rememberSeason()
+    val shape = MaterialTheme.shapes.large
     Column {
-        HorizontalPager(
-            state = pager,
+        // Пропорция 1.6:1 по ширината на лентата (без полетата), не по по-тясната голяма карта —
+        // височината е като досега; при едър шрифт картата расте, вместо заглавието да се отреже
+        // ([heroMinHeight]: хоризонтално — по-ниска).
+        BoxWithConstraints {
+        val minHeight = heroMinHeight(maxWidth - 32.dp, windowH)
+        HorizontalCenteredHeroCarousel(
+            state = carousel,
             contentPadding = PaddingValues(horizontal = 16.dp),
-            pageSpacing = 12.dp,
+            itemSpacing = 8.dp,
             modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = carouselLabel }
                 .pointerInput(Unit) {
-                    // Само наблюдава (Initial, без consume) — докосването и плъзгането стигат до страниците.
+                    // Само наблюдава (Initial, без consume) — докосването и плъзгането стигат до картите.
                     awaitEachGesture {
                         awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
                         touched = true
@@ -493,25 +499,22 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                 },
         ) { page ->
             val a = items[page]
-            // Отместването се чете само в graphicsLayer — при плъзгане страницата не се прекомпозира на всеки кадър.
-            val offset = { (pager.currentPage - page) + pager.currentPageOffsetFraction }
-            // Пропорция 1.6:1 като минимум — при едър шрифт картата расте на височина,
-            // вместо заглавието да се отреже ([heroMinHeight]: хоризонтално — по-ниска).
+            val info = carouselItemDrawInfo
+            // Текстът и украсата избледняват, докато картата се смалява встрани (маската я
+            // реже) — четат се само в graphicsLayer, без прекомпозиция при плъзгане.
+            val focal = {
+                val range = info.maxSize - info.minSize
+                if (range <= 0f) 1f else ((info.size - info.minSize) / range * 2f - 1f).coerceIn(0f, 1f)
+            }
+            // Картата се разполага с ширината на голямата (и маскирана, когато е встрани).
             BoxWithConstraints {
-            val minHeight = heroMinHeight(maxWidth, windowH)
-            // Ширината за снимката — maxWidth се чете тук, в обхвата на BoxWithConstraints. Без мащаба
-            // 1.15 на паралакса: същият адрес (ширина) като в статията — една заявка и един запис в кеша.
+            // Ширината за снимката — същият адрес (ширина) като в статията: една заявка и един запис в кеша.
             val imageWidth = maxWidth.coerceAtMost(720.dp)
             Surface(
                 onClick = { onOpen(a) },
-                shape = MaterialTheme.shapes.large,
-                shadowElevation = 6.dp,
-                modifier = Modifier.fillMaxWidth().widthIn(max = 720.dp).heightIn(min = minHeight)
-                    .graphicsLayer {
-                        val scale = 1f - 0.06f * kotlin.math.abs(offset()).coerceIn(0f, 1f)
-                        scaleX = scale; scaleY = scale
-                    }
-                    .darkTopHighlight(MaterialTheme.shapes.large),
+                shape = shape,
+                modifier = Modifier.fillMaxWidth().heightIn(min = minHeight).maskClip(shape)
+                    .darkTopHighlight(shape),
             ) {
                 // Без снимка (или при грешка) — фирмен фон с воден знак, без тъмния воал.
                 var imageFailed by remember(a.imageUrl) { mutableStateOf(false) }
@@ -528,16 +531,13 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                             containerColor = Brand.InkSoft,
                             onFailure = { imageFailed = true },
                             // Без shared element: същият ключ има и списъкът „Новини“, а при смяна на
-                            // таб двата източника биха се засекли (въртележката е и с паралакс/мащаб).
-                            modifier = Modifier.fillMaxSize().graphicsLayer {
-                                translationX = offset() * size.width * 0.35f
-                                scaleX = 1.15f; scaleY = 1.15f
-                            },
+                            // таб двата източника биха се засекли.
+                            modifier = Modifier.fillMaxSize(),
                         )
                         Box(Modifier.fillMaxSize().background(HeroScrim))
                     }
                     }
-                    Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
+                    Column(Modifier.align(Alignment.BottomStart).padding(18.dp).graphicsLayer { alpha = focal() }) {
                         Text(
                             (a.category ?: stringResource(R.string.label_news)).uppercase(),
                             style = MaterialTheme.typography.labelSmall, color = Brand.GoldLight,
@@ -554,13 +554,16 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                     }
                     // Житни класове по горния ръб (септември, Кръстовден) — текстът е долу и
                     // не се застъпва с тях; златна шевица по ъглите.
-                    if (season == Season.HARVEST) WheatEdge(Modifier.align(Alignment.TopCenter).padding(top = 10.dp))
-                    OrnamentFrame(Modifier.matchParentSize())
+                    Box(Modifier.matchParentSize().graphicsLayer { alpha = focal() }) {
+                        if (season == Season.HARVEST) WheatEdge(Modifier.align(Alignment.TopCenter).padding(top = 10.dp))
+                        OrnamentFrame(Modifier.matchParentSize())
+                    }
                 }
             }
             }
         }
-        PagerDots(items.size, pager.currentPage, Modifier.padding(top = 8.dp))
+        }
+        PagerDots(items.size, carousel.currentItem, Modifier.padding(top = 8.dp))
     }
 }
 

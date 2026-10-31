@@ -80,6 +80,14 @@ class ForYouPicksTest {
         assertTrue(picks.none { p -> s.newest.any { it.inv == p.inv } })
     }
 
+    @Test fun homeSummaryPicksSkipOtherCopiesOfNewestTitles() {
+        // Ново заглавие в три екземпляра — „популярно“, но вече е в „Нови книги“.
+        val copies = (1..3).map { b(200L + it, "Нова поредица", "8", "2026-10-20") }
+        val s = CatalogSearchEngine.homeSummary(CatalogSnapshot("Б", "Яворец", "2026-09-19", books + copies, emptyList()))
+        assertEquals(1, s.newest.count { it.title == "Нова поредица" })
+        assertTrue(s.picks!!.none { it.title == "Нова поредица" }, "други екземпляри в „За теб“: ${s.picks}")
+    }
+
     @Test fun homeSummaryBooksCarryOnlyWhatTheShelvesShow() {
         val withText = books.map { it.copy(annotation = "Дълга анотация " + it.inv, keywords = "роман; " + it.inv) }
         val fresh = (1..15).map { b(100L + it, "Нова $it", "8", "2026-10-%02d".format(it)).copy(annotation = "Нова анотация") }

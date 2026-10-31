@@ -3,6 +3,7 @@ package org.chyavorec.app.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -155,22 +156,46 @@ class HomeViewModel(
             if (!started) _state.update { it.copy(news = it.news.startRefresh()) }
             val n = async { news.latest(force) }
             val c = async { catalog.refreshHomeSummary(force) }
-            val e = async { events.events(force) }
-            // В реда както досега (новините, каталогът, събитията), но готовото към момента
-            // влиза в същата промяна на състоянието; нищо не чака по-бавния източник.
+            val e = async { orNull { (events.events(force) as? Outcome.Success)?.value?.data } }
+            // Събитията не чакат новините и каталога (първият каталог се тегли дълго) — влизат
+            // веднага щом са готови; само ако новините и каталогът са на път (до [coalesceMs]),
+            // всичко влиза в една промяна. Записват се веднъж — който стигне пръв.
+            var eventsIn = false
+            val rest = CompletableDeferred<Unit>()
+            launch {
+                val freshEvents = e.await()
+                withTimeoutOrNull(coalesceMs) { rest.await() }
+                if (!eventsIn) {
+                    eventsIn = true
+                    _state.update { it.withEvents(freshEvents, done = true) }
+                }
+            }
+            // В реда както досега (новините, каталогът), но готовото към момента влиза в същата
+            // промяна на състоянието; нищо не чака по-бавния източник.
             val batch = Batch()
             val newsResult = n.await()
             batch.add { it.copy(news = it.news.with(newsResult)) }
             if (!c.isCompleted) batch.flush()
             (c.await() as? Outcome.Success)?.value?.data?.let { fresh -> batch.add(summary = fresh) { it.withCatalog(fresh) } }
-            // Събитията обикновено идват миг след каталога — изчакват се за кратко, за да влязат
-            // в същата промяна (мястото им и без това е запазено — [HomeUiState.eventsPending]).
+            // Събитията, дошли малко след каталога, влизат в същата промяна.
             withTimeoutOrNull(coalesceMs) { e.join() }
-            if (!e.isCompleted) batch.flush()
-            val freshEvents = (e.await() as? Outcome.Success)?.value?.data
-            batch.add { it.withEvents(freshEvents, done = true) }
+            if (e.isCompleted && !eventsIn) {
+                eventsIn = true
+                val freshEvents = e.await()
+                batch.add { it.withEvents(freshEvents, done = true) }
+            }
             batch.flush()
+            rest.complete(Unit)
         }
+    }
+
+    /** Грешката (и изключение от хранилището) = `null`, за да не остане запазеното място завинаги. */
+    private suspend fun <T> orNull(block: suspend () -> T?): T? = try {
+        block()
+    } catch (e: CancellationException) {
+        throw e
+    } catch (_: Exception) {
+        null
     }
 
     /**
@@ -207,7 +232,7 @@ class HomeViewModel(
     private fun loadFeast(day: LocalDate) {
         feastDay = day
         // Без празник за новия ден (няма връзка/кеш) редът изчезва — вчерашният би бил грешен.
-        viewModelScope.launch { site.feastToday().let { f -> _state.update { it.copy(feast = f, feastPending = false) } } }
+        viewModelScope.launch { orNull { site.feastToday() }.let { f -> _state.update { it.copy(feast = f, feastPending = false) } } }
     }
 
     /** Местните празници: кешът веднага (обикновено преди първия кадър), после сайтът (12 ч. кеш). */

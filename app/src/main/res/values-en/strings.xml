@@ -571,6 +571,7 @@
     <string name="search_pages">Pages</string>
     <string name="search_recent">Recent searches</string>
     <string name="search_recent_cleared">Recent searches cleared.</string>
+    <string name="search_show_all">Show all (%1$d)</string>
     <string name="search_start">What are you looking for?</string>
     <string name="search_start_hint">Search covers the catalogue, news, events and the centre’s pages.</string>
     <string name="settings_appearance">Appearance</string>

@@ -445,6 +445,7 @@ S = {
 "search_books": ("Книги", "Books"),
 "search_authors": ("Автори", "Authors"),
 "search_pages": ("Страници", "Pages"),
+"search_show_all": ("Покажи всички (%1$d)", "Show all (%1$d)"),
 "search_recent": ("Скорошни търсения", "Recent searches"),
 "search_recent_cleared": ("Скорошните търсения са изчистени.", "Recent searches cleared."),
 "search_start": ("Какво търсиш?", "What are you looking for?"),

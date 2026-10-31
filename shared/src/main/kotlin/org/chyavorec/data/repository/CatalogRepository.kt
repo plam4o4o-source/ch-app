@@ -286,7 +286,7 @@ class CatalogRepository(
                 fetch = null
                 // Първо паметта: каквото и да се случи с диска по-долу, не остава стара търсачка.
                 forget()
-                listOf(KEY, META_KEY, FETCHED_AT_KEY, SUMMARY_KEY).forEach { runCatching { cache.remove(it) }.logFailure("catalog.clear") }
+                (listOf(KEY, META_KEY, FETCHED_AT_KEY, SUMMARY_KEY) + OLD_SUMMARY_KEYS).forEach { runCatching { cache.remove(it) }.logFailure("catalog.clear") }
                 index?.let { store -> guarded { store.clear() } }
             }
         } finally {
@@ -681,6 +681,7 @@ class CatalogRepository(
         val snapshot = current?.data?.snapshot ?: lastSnapshot?.get() ?: loadSnapshotFromDisk() ?: return null
         val s = withContext(work) { CatalogSearchEngine.homeSummary(snapshot) }
         saveSummary(s)
+        OLD_SUMMARY_KEYS.forEach { runCatching { cache.remove(it) } }
         return Synced(s, Instant.ofEpochMilli(fetchedAt ?: clock.now().toEpochMilli()), fromCache = true).also { summary = it }
     }
 
@@ -721,7 +722,13 @@ class CatalogRepository(
         const val FETCHED_AT_KEY = "catalog:fetchedAt"
         /** SHA-256 и ETag на [KEY]. */
         const val META_KEY = "catalog:meta"
-        /** Обобщението за началния екран ([CatalogHomeSummary]). */
-        const val SUMMARY_KEY = "catalog:home"
+        /**
+         * Обобщението за началния екран ([CatalogHomeSummary]). Нов ключ при промяна на
+         * съдържанието му (2 — „Нови книги“ по едно от заглавие) — старото се изгражда наново.
+         */
+        const val SUMMARY_KEY = "catalog:home:2"
+
+        /** Обобщенията от по-стари версии — изтриват се при изграждането на новото. */
+        private val OLD_SUMMARY_KEYS = listOf("catalog:home")
     }
 }
