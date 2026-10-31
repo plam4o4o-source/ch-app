@@ -222,7 +222,7 @@ jobs:
           fi
           echo "Play manifest OK ($M)"
           # Символите на native библиотеките за Google Play. Сегашните .so (Compose graphics-path,
-          # DataStore, CameraX) идват от AAR-и вече без символи — тогава няма какво да се вгради
+          # DataStore) идват от AAR-и вече без символи — тогава няма какво да се вгради
           # и Play Console само информира; не е грешка на изданието.
           if unzip -l app/build/outputs/bundle/prodPlay/app-prod-play.aab | grep "BUNDLE-METADATA/com.android.tools.build.debugsymbols/"; then
             echo "Native debug symbols included"
