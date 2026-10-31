@@ -1,5 +1,6 @@
 package org.chyavorec.app.tile
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.StatusBarManager
 import android.content.ComponentName
@@ -40,11 +41,14 @@ open class CardTileService : TileService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             startActivityAndCollapse(CardTile.pendingIntent(this))
         } else {
-            // До Android 13 — само с Intent (от Android 14 той е забранен за целевия API).
-            @Suppress("DEPRECATION")
-            startActivityAndCollapse(CardTile.openIntent(this))
+            launchBeforeU()
         }
     }
+
+    /** До Android 13 има само вариантът с Intent; от Android 14 (където е забранен) се ползва PendingIntent. */
+    @SuppressLint("StartActivityAndCollapseDeprecated")
+    @Suppress("DEPRECATION")
+    private fun launchBeforeU() = startActivityAndCollapse(CardTile.openIntent(this))
 }
 
 object CardTile {

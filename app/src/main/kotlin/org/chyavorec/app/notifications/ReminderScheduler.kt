@@ -79,7 +79,7 @@ class EventReminderWorker(context: Context, params: WorkerParameters) : Coroutin
         val notificationId = NotificationIds.event(id)
         // Събитието от кеша (без мрежа) — за снимката и бутоните; без него — само текст.
         val c = (applicationContext as? AppContainerOwner)?.appContainer
-        val event = if (c != null && id.isNotBlank()) {
+        val event = if (c != null && id.isNotBlank() && Notifier.canNotify(applicationContext)) {
             try {
                 c.eventsRepository.find(id)
             } catch (e: CancellationException) {
