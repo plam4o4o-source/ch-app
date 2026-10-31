@@ -29,6 +29,8 @@ import org.robolectric.annotation.Config
 import java.time.Duration
 import java.time.Instant
 import java.util.Collections
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -43,13 +45,22 @@ import kotlin.test.assertTrue
 class HomeViewModelTest {
     private val server = MockWebServer()
 
+    /** Докато е затворена, новините и каталогът „висят“ (бавна мрежа / първото теглене на каталога). */
+    @Volatile private var slow: CountDownLatch? = null
+
+    /** Пътищата, които сайтът няма (напр. без календар). */
+    @Volatile private var missing: Set<String> = emptySet()
+
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse = when (request.path?.substringBefore('?')) {
-                "/data/news.json" -> MockResponse().setBody(TestResources.text("site-news.json"))
+            override fun dispatch(request: RecordedRequest): MockResponse = when (val path = request.path?.substringBefore('?')) {
+                in missing -> MockResponse().setResponseCode(404)
+                "/data/news.json", "/katalog.json" -> {
+                    slow?.await(15, TimeUnit.SECONDS)
+                    MockResponse().setBody(TestResources.text(if (path == "/katalog.json") "katalog-sample.json" else "site-news.json"))
+                }
                 "/rss.xml" -> MockResponse().setBody(TestResources.text("site-rss.xml"))
                 "/javora/index.json" -> MockResponse().setBody(TestResources.text("site-index.json"))
-                "/katalog.json" -> MockResponse().setBody(TestResources.text("katalog-sample.json"))
                 "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Преставяне на св. апостол и евангелист **Йоан Богослов**"}""")
                 else -> MockResponse().setResponseCode(404)
             }
@@ -71,16 +82,28 @@ class HomeViewModelTest {
         )
     }
 
+    // Обобщението се чете на IO нишка, а изчакването му е по часовника на Robolectric,
+    // който цикълът по-долу върти — с кратко изчакване на бавна машина новините от
+    // кеша биха излезли сами. Минута (повече от целия цикъл) = винаги се изчаква.
+    private fun viewModel(c: AppContainer, coalesceMs: Long = 60_000) = HomeViewModel(
+        c.newsRepository, c.eventsRepository, c.catalogRepository, c.siteRepository, c.clock,
+        c.libraryRepository, c.authRepository, seasonal = flowOf(false), dismissedOccasion = flowOf(null),
+        coalesceMs = coalesceMs,
+    )
+
+    /** Върти главната нишка (и часовника на Robolectric), докато [done] или до 15 с. */
+    private fun spinUntil(done: () -> Boolean) {
+        val main = shadowOf(Looper.getMainLooper())
+        val end = System.currentTimeMillis() + 15_000
+        while (System.currentTimeMillis() < end && !done()) {
+            main.idleFor(Duration.ofMillis(20))
+            Thread.sleep(20)
+        }
+    }
+
     /** Отваря началния екран и връща всяко различно състояние, докато всичко се зареди и утихне. */
     private fun open(c: AppContainer): List<HomeUiState> {
-        val vm = HomeViewModel(
-            c.newsRepository, c.eventsRepository, c.catalogRepository, c.siteRepository, c.clock,
-            c.libraryRepository, c.authRepository, seasonal = flowOf(false), dismissedOccasion = flowOf(null),
-            // Обобщението се чете на IO нишка, а изчакването му е по часовника на Robolectric,
-            // който цикълът по-долу върти — с кратко изчакване на бавна машина новините от
-            // кеша биха излезли сами. Минута (повече от целия цикъл) = винаги се изчаква.
-            coalesceMs = 60_000,
-        )
+        val vm = viewModel(c)
         val states = Collections.synchronizedList(ArrayList<HomeUiState>())
         val scope = CoroutineScope(Dispatchers.Unconfined)
         vm.state.onEach { states += it }.launchIn(scope)
@@ -133,6 +156,33 @@ class HomeViewModelTest {
         val last = states.last()
         assertTrue(!last.eventsPending && last.upcoming.isNotEmpty(), "събитията: $last")
         assertTrue(!last.feastPending && last.feast != null, "празникът: $last")
+    }
+
+    /**
+     * Събитията не чакат новините и каталога (първото теглене на каталога е дълго) —
+     * запазеното им място се освобождава веднага щом календарът е готов.
+     */
+    @Test fun eventsDoNotWaitForNewsAndCatalog() {
+        val gate = CountDownLatch(1).also { slow = it }
+        try {
+            val vm = viewModel(container(), coalesceMs = 100)
+            spinUntil { !vm.state.value.eventsPending }
+            val s = vm.state.value
+            assertTrue(!s.eventsPending && s.upcoming.isNotEmpty(), "събитията: $s")
+            assertTrue(s.news.data == null && s.newBooks.isEmpty(), "новините и каталогът още се зареждат: $s")
+        } finally {
+            gate.countDown()
+        }
+    }
+
+    /** Сайт без календар и без празник: запазените места не остават завинаги. */
+    @Test fun missingCalendarReleasesThePlaceholders() {
+        missing = setOf("/javora/index.json", "/api/calendar")
+        val vm = viewModel(container(), coalesceMs = 100)
+        spinUntil { vm.state.value.let { !it.eventsPending && !it.feastPending } }
+        val s = vm.state.value
+        assertTrue(!s.eventsPending && s.upcoming.isEmpty(), "събитията: $s")
+        assertTrue(!s.feastPending && s.feast == null, "празникът: $s")
     }
 
     private fun assertLoaded(s: HomeUiState, label: String) {
