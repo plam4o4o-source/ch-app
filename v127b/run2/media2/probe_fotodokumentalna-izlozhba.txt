@@ -1,0 +1,63 @@
+PAGE /fotodokumentalna-izlozhba: 200 0.35s 112916 bytes
+img tags: 35
+#01 '' original 200 0.16s 126KB text/html; charset=utf-8 | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/  thumb=
+#02 'НЧ Васил Левски – 1922' original 200 0.29s 11KB image/webp | w384 200 0.42s 6KB image/jpeg | w1600 200 0.35s 6KB image/jpeg
+     src=https://chyavorec.org/assets/images/logo-256.webp  thumb=/assets/images/logo-256.webp
+#03 'НЧ Васил Левски – 1922' original 200 0.40s 11KB image/webp | w384 200 0.19s 6KB image/jpeg | w1600 200 0.09s 6KB image/jpeg
+     src=https://chyavorec.org/assets/images/logo-256.webp  thumb=/assets/images/logo-256.webp
+#04 'Сградата на читалището в Яворец' original 200 0.46s 114KB image/webp | w384 200 0.30s 15KB image/jpeg | w1600 200 0.49s 114KB image/webp
+     src=https://chyavorec.org/assets/images/Chitalishte.webp  thumb=/assets/images/Chitalishte.webp
+#05 'Фолклорен състав при читалището' original 200 0.18s 65KB image/webp | w384 200 0.40s 15KB image/jpeg | w1600 200 0.63s 65KB image/webp
+     src=https://chyavorec.org/pictures/folkloren-sastav-minaloto.webp  thumb=/pictures/folkloren-sastav-minaloto.webp
+#06 'Самодейци' original 200 0.33s 75KB image/webp | w384 200 0.25s 15KB image/jpeg | w1600 200 0.38s 75KB image/webp
+     src=https://chyavorec.org/pictures/hor-chitalishte.webp  thumb=/pictures/hor-chitalishte.webp
+#07 'Сградата през 70-те години' original 200 0.33s 139KB image/webp | w384 200 0.21s 14KB image/jpeg | w1600 200 0.47s 139KB image/webp
+     src=https://chyavorec.org/pictures/chitalishte-star-izgled.webp  thumb=/pictures/chitalishte-star-izgled.webp
+#08 'Сценичен ансамбъл Яворски хлапета' original 200 0.22s 50KB image/webp | w384 200 0.35s 16KB image/jpeg | w1600 200 0.40s 50KB image/webp
+     src=https://chyavorec.org/assets/images/ans-group.webp  thumb=/assets/images/ans-group.webp
+#09 'Фолклорна група Явор' original 200 0.41s 151KB image/webp | w384 200 0.25s 26KB image/jpeg | w1600 200 0.49s 145KB image/jpeg
+     src=https://chyavorec.org/assets/images/folk-grupa-s.webp  thumb=/assets/images/folk-grupa-s.webp
+#10 'Клуб за народни танци' original 200 0.30s 120KB image/webp | w384 200 0.31s 16KB image/jpeg | w1600 200 0.40s 92KB image/jpeg
+     src=https://chyavorec.org/assets/images/dance-festival.webp  thumb=/assets/images/dance-festival.webp
+#11 'Стопанският двор на ТКЗС в Яворец' original 404 0.08s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-05-stopanski-dvor.jpg  thumb=/files/exh-05-stopanski-dvor.jpg
+#12 'Селскостопанска техника' original 404 0.17s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-06-tehnika.jpg  thumb=/files/exh-06-tehnika.jpg
+#13 'Трудов ден' original 404 0.09s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-07-trudov-den.jpg  thumb=/files/exh-07-trudov-den.jpg
+#14 'Животновъдна ферма' original 404 0.08s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-08-ferma.jpg  thumb=/files/exh-08-ferma.jpg
+#15 'Овчари и стада' original 404 0.09s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-09-ovchari.jpg  thumb=/files/exh-09-ovchari.jpg
+#16 'Жътва' original 404 0.10s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-10-zhitva.jpg  thumb=/files/exh-10-zhitva.jpg
+#17 'Харман' original 404 0.08s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-11-harman.jpg  thumb=/files/exh-11-harman.jpg
+#18 'Бригада' original 404 0.10s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-12-brigada.jpg  thumb=/files/exh-12-brigada.jpg
+#19 'Складове' original 404 0.08s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-13-sklad.jpg  thumb=/files/exh-13-sklad.jpg
+#20 'Възпоменателна табела на основоположници' original 200 0.35s 137KB image/webp | w384 200 0.24s 22KB image/jpeg | w1600 200 0.55s 137KB image/webp
+     src=https://chyavorec.org/assets/images/exh-17-osnovopolozhnici.webp  thumb=/assets/images/exh-17-osnovopolozhnici.webp
+#21 'Панорама на село Яворец' original 404 0.09s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-08-yavorec-panorama.jpg  thumb=/files/exh-08-yavorec-panorama.jpg
+#22 'Улиците на Яворец' original 404 0.08s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-09-ulici.jpg  thumb=/files/exh-09-ulici.jpg
+#23 'Жителите на Яворец' original 404 0.10s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-10-hora.jpg  thumb=/files/exh-10-hora.jpg
+#24 'Селски празник' original 404 0.10s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-11-praznik.jpg  thumb=/files/exh-11-praznik.jpg
+#25 'Църквата в Яворец' original 404 0.07s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-12-cyrkva.jpg  thumb=/files/exh-12-cyrkva.jpg
+#26 'Площадът' original 404 0.08s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-13-ploshtad.jpg  thumb=/files/exh-13-ploshtad.jpg
+#27 'Чешмата' original 404 0.09s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-14-cheshma.jpg  thumb=/files/exh-14-cheshma.jpg
+#28 'Природата около Яворец' original 404 0.08s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-15-priroda.jpg  thumb=/files/exh-15-priroda.jpg
+#29 'Стари занаяти' original 404 0.08s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-16-zanayati.jpg  thumb=/files/exh-16-zanayati.jpg
+#30 'Училището в Яворец' original 404 0.09s 0KB  | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/files/exh-12-uchilishte.jpg  thumb=/files/exh-12-uchilishte.jpg
+PROBE /fotodokumentalna-izlozhba: 30 images, optimizer non-200: 0

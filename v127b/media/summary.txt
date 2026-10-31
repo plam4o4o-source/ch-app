@@ -1,0 +1,75 @@
+part media; APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+base APK: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4; update-source APK: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3060 ms
+## G1. Gallery: albums
+MEM gal-before (raw) PSS=53640KB  Java=6884KB  Native=26116KB  Graphics=0KB  Views=7 Activities=1
+MEM gal-before (trimmed) PSS=55740KB  Java=7988KB  Native=25564KB  Graphics=0KB  Views=7 Activities=1
+GALLERY albums after 1994 ms (tap → '… снимки')
+GALLERY albums: 29 снимки|Фотодокументална изложба|4 снимки|Фолклорна група „Явор“|6 снимки|Клуб за народни танци|7 снимки|Ансамбъл „Яворски хлапета“|5 снимки|Село Яворец|7 снимки|Природата край Яворец|
+ALBUM 1: content-desc="Сградата на читалището в Яворец" content-desc="Фолклорен състав при читалището" ; photos on screen 18 after 2033 ms
+## G2. Photo viewer: 2× (double tap), beyond 2× (pinch), 20 photos
+VIEWER: text="1 / 29  ·  Сградата на читалището в Яворец"; fg org.chyavorec.app/org.chyavorec.app.MainActivity
+MEM gal-viewer (raw) PSS=93283KB  Java=12300KB  Native=37320KB  Graphics=0KB  Views=10 Activities=1
+MEM gal-viewer (trimmed) PSS=92423KB  Java=7544KB  Native=36412KB  Graphics=0KB  Views=10 Activities=1
+touch device: /dev/input/event12 x-max=32767 y-max=32767 pressure=11
+VIEWER after double tap: text="1 / 29  ·  Сградата на читалището в Яворец"
+VIEWER after 2 pinches (from 2× → expected about 2× · 3 · 2.7, capped at 5×): text="1 / 29  ·  Сградата на читалището в Яворец"
+VIEWER swipe while zoomed: text="2 / 29  ·  Фолклорен състав при читалището" (same page = the swipe panned the photo)
+MEM gal-zoomed (raw) PSS=96231KB  Java=8268KB  Native=40620KB  Graphics=0KB  Views=10 Activities=1
+MEM gal-zoomed (trimmed) PSS=91364KB  Java=7532KB  Native=36504KB  Graphics=0KB  Views=10 Activities=1
+VIEWER after reset double tap: text="2 / 29  ·  Фолклорен състав при читалището"
+GFX viewer-20    frames=  221  janky=211 (95.48%)  p50=150ms p90=200ms p95=200ms p99=250ms  slowUI=88 slowDraw=211 highInput=11
+VIEWER after 20 swipes: text="22 / 29  ·  Църквата"
+MEM gal-after-20 (raw) PSS=67416KB  Java=11864KB  Native=16376KB  Graphics=0KB  Views=10 Activities=1
+MEM gal-after-20 (trimmed) PSS=63190KB  Java=7648KB  Native=16372KB  Graphics=0KB  Views=10 Activities=1
+MEM gal-back-home (raw) PSS=98187KB  Java=11568KB  Native=46764KB  Graphics=0KB  Views=10 Activities=1
+MEM gal-back-home (trimmed) PSS=91258KB  Java=9260KB  Native=42152KB  Graphics=0KB  Views=10 Activities=1
+## C. Covers in the catalogue (Open Library)
+CACHE before-covers: cache/catalog-index.db.lck=4KB cache/chitalishte.db.lck=4KB cache/data=44KB cache/http=744KB cache/image_cache=2636KB files=40KB 
+CACHE after-catalogue: cache/catalog-index.db.lck=4KB cache/chitalishte.db.lck=4KB cache/data=44KB cache/http=744KB cache/image_cache=2676KB files=40KB 
+book: text="12" content-desc="Изчисти" text="Всичко" text="Заглавие" text="Автор" 
+CACHE after-books: cache/catalog-index.db.lck=4KB cache/chitalishte.db.lck=4KB cache/data=44KB cache/http=744KB cache/image_cache=2760KB files=40KB 
+Open Library traffic in logcat: 0
+## D. Documents: PDF download (no PDF app?)
+PDF handlers: 1 activities found:   Activity #0:     priority=0 preferredOrder=0 match=0x608000 specificIndex=-1 isDefault=true     com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity 
+browsers (https): 1 activities found:   Activity #0:     priority=0 preferredOrder=0 match=0x208000 specificIndex=-1 isDefault=true     com.android.chrome/com.google.android.apps.chrome.IntentDispatcher 
+DOCUMENTS: text="Документи" text="Исторически публикации" text="Декларации · 14.05.2026 · 4.1 MB" text="Декларация за частни интереси" text="Декларацията за частни интереси по чл. 19а ЗНЧ е официален документ, който членовете на ръководните органи на читалището подават, за да обявят дали имат частни интереси, които могат да повлияят на тяхната безпристрастност при вземане на решения. Тя е аналог на деклараци; PDF buttons: 1
+PDF online +1559 ms: fg   mCurrentFocus=null
+PDF online +3381 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity
+PDF online +6223 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity
+PDF online +11561 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; content-desc="page 1" content-desc="page 2" content-desc="page 3" text="3bf689707cc697d836d6e3bf.pdf" content-desc="Find" content-desc="Add to Drive" 
+PDF online toasts in logcat: 
+PDF online back in app: text="Документи" text="Исторически публикации" text="Декларации · 14.05.2026 · 4.1 MB" 
+offline: airplane=1
+PDF offline +1130 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity
+PDF offline +2471 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity
+PDF offline +5305 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity
+PDF offline +10643 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; content-desc="page 1" content-desc="page 2" content-desc="page 3" text="3bf689707cc697d836d6e3bf.pdf" content-desc="Find" content-desc="Add to Drive" 
+PDF offline toasts in logcat: 
+PDF offline back in app: text="Документи" text="Исторически публикации" text="Декларации · 14.05.2026 · 4.1 MB" 
+PUBLICATIONS: text="Документи" text="Исторически публикации" text="Декларации · 14.05.2026 · 4.1 MB" text="Декларация за частни интереси" text="Декларацията за частни интереси по чл. 19а ЗНЧ е официален документ, който членовете на ръководните органи на читалището подават, за да обявят дали имат частни интереси, 
+PDF publication +662 ms: fg org.chyavorec.app/org.chyavorec.app.MainActivity
+PDF publication +2433 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity
+PDF publication +5236 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity
+PDF publication +10532 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; content-desc="page 1" text="a1fe4e661cc48879ad89589f.pdf" content-desc="Find" content-desc="Add to Drive" content-desc="More options" 
+PDF publication toasts in logcat: 
+PDF publication back in app: text="Документи" text="Исторически публикации" text="Статия 01 · Спомени" 
+## COMPLETE
+## logcat findings
+app pids seen: ['5380', '6803']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=51 total=122
+== Davey: 5
+   davey events=5 max=1090ms median=854ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

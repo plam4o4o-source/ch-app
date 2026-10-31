@@ -1,0 +1,47 @@
+part update; APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4 size 4323599 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## U0. Staged manifest (test v1.2.28 APK + the real 1.2.28 notes from the release's update.json)
+staged manifest: 1488541 1.2.28 c040af672558 4323599 6 note lines
+real release manifest (REST asset): 1488541 1.2.28 d9b68f681dbc
+notes identical to the release: True
+## U1. Install v1.2.27 (update source build), add a book to Want to read
+installed base-upd: 1.2.27 8dc63c1; versionCode 1484479; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v128b/update/41224152886/update.json size 4875530;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+install-unknown-apps: REQUEST_INSTALL_PACKAGES: allow
+## U2. The update dialog: the real list of 1.2.28 notes
+UPDATE dialog: dialog after 26654 ms: text="Нова версия 1.2.28" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• По-лек уиджет за началния екран — вече с истинския си вид в избора на уиджети; приложението е с около 0,5 MB по-малко.&#10;• Вход с едно докосване: номерът на картата и ПИН-ът може да се запазят в мениджъра на пароли на телефона.&#10;• Търсенето на „Начало“ се разгръща на място; преки пътища до „Искам да прочета“ и последната отворена книга.&#10;• „Начало“ не подскача при з
+NOTES dialog-top: 6/6 lines of the real 1.2.28 notes visible
+NOTES dialog-scrolled: 6/6 lines of the real 1.2.28 notes visible
+UPDATE: tap 'Инсталирай'
+## U3. Install through the system installer
+UPDATE after install:  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 ; fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity
+screen after install: text="Sat, Oct 31" content-desc="Sat, Oct 31" text="Gmail" content-desc="Gmail" text="Photos" content-desc="Photos" text="YouTube" content-desc="YouTube" 
+## U4. 'What's new' sheet once after the update
+WHATS-NEW 14-whats-new: SHOWN: text="Какво ново във версия 1.2.28"
+NOTES sheet-14-whats-new: 6/6 lines of the real 1.2.28 notes visible
+NOTES sheet-scrolled: 6/6 lines of the real 1.2.28 notes visible
+after closing the sheet: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" 
+WHATS-NEW 16-warm-relaunch: not shown; screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="31 октомври 2026 · С
+WHATS-NEW: not shown on a warm relaunch (once)
+WHATS-NEW 17-cold-relaunch: not shown; screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="31 октомври 2026 · С
+WHATS-NEW: not shown on a cold relaunch (once, as designed)
+## U5. Settings → update status after the update
+settings update line: 
+app notifications: 
+## COMPLETE
+## logcat findings
+app pids seen: ['5263', '6750', '8057']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 10
+   skipped-frames events=10 max=82 total=455
+== Davey: 16
+   davey events=16 max=2124ms median=940ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

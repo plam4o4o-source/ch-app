@@ -1,0 +1,21 @@
+app pids seen: ['5238', '6746']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=44 total=154
+   10-27 16:03:49.329  5238  5238 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   10-27 16:03:49.863  5238  5238 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-27 16:04:01.111  5238  5238 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   10-27 16:04:33.360  6746  6746 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+== Davey: 6
+   davey events=6 max=1119ms median=888ms
+   10-27 16:03:50.579  5238  5251 I OpenGLRenderer: Davey! duration=1119ms; Flags=1, FrameTimelineVsyncId=6138, IntendedVsync=79994843456, Vsync=80511510102, InputEventId=0, HandleInputStart=80517635071, AnimationStart=80517636226, PerformTrav
+   10-27 16:04:01.174  5238  5250 I OpenGLRenderer: Davey! duration=721ms; Flags=0, FrameTimelineVsyncId=6790, IntendedVsync=91028176348, Vsync=91044843014, InputEventId=0, HandleInputStart=91048232377, AnimationStart=91048232814, PerformTrave
+   10-27 16:04:01.399  5238  5524 I OpenGLRenderer: Davey! duration=982ms; Flags=0, FrameTimelineVsyncId=6797, IntendedVsync=91061509680, Vsync=91761509652, InputEventId=0, HandleInputStart=91765073685, AnimationStart=91765075226, PerformTrave
+   10-27 16:04:13.297  5238  5524 I OpenGLRenderer: Davey! duration=702ms; Flags=0, FrameTimelineVsyncId=7820, IntendedVsync=103228175860, Vsync=103328175856, InputEventId=0, HandleInputStart=103330065314, AnimationStart=103330065974, PerformT
+   10-27 16:04:13.991  5238  5524 I OpenGLRenderer: Davey! duration=1119ms; Flags=0, FrameTimelineVsyncId=7837, IntendedVsync=103344842522, Vsync=103678175842, InputEventId=0, HandleInputStart=103679633015, AnimationStart=103679634023, Perform
+   10-27 16:04:34.245  6746  6760 I OpenGLRenderer: Davey! duration=795ms; Flags=1, FrameTimelineVsyncId=9549, IntendedVsync=124028175028, Vsync=124478175010, InputEventId=0, HandleInputStart=124478910810, AnimationStart=124478911645, PerformT
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 16:03:47.682  5231  5231 I PERFCHECK: section: 0. First launch and warm-up
+   10-27 16:04:31.035  6720  6720 I PERFCHECK: section: S1. Home swipes (API stability probe: 20 swipes)

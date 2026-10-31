@@ -1,0 +1,47 @@
+part sem; APK: 1.2.28 52334a7 (Merge remote-tracking branch 'origin/wave14/modern' into claude/charmi); versionCode 1484480; x86_64 libs: 4 size 4311931 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484480 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3849 ms
+## T-new. TalkBack semantics (new)
+SEM new catalogue '12': content-desc repeating a visible text: 0 
+SEM new book page: content-desc repeating a visible text: 0 
+SEM new want list: content-desc repeating a visible text: 0 
+SEM new dialog 'Тема|=Theme': rows 126px=48dp clickable=false '';126px=48dp clickable=false '';126px=48dp clickable=false '';
+SEM new dialog 'Размер на текста|=Text size': rows 126px=48dp clickable=false '';126px=48dp clickable=false '';126px=48dp clickable=false '';126px=48dp clickable=false '';
+SEM new dialog 'Език|=Language': rows 126px=48dp clickable=false '';126px=48dp clickable=false '';126px=48dp clickable=false '';
+SEM new 'Кажи ми' book inv=136 found=yes: text="Белият детството" text="Симеон Колев" text="Не е на рафта" 
+SEM new 'Кажи ми' OFF: toggle: MATCH class="android.view.View" text="" content-desc="Кажи ми, когато е на рафта" checkable="false" checked="false" clickable="false" bounds="[53,1151][1027,1277]" | ACTIONABLE-ANCESTOR class="android.view.View" text="" content-desc="" checkable="true" checked="false" clickable="true" bounds="[53,1151][1027,1277]" | ACTIONABLE-CHILD none; || desc: class="android.view.View" text="" content-desc="Кажи ми, когато е на рафта" checkable="false" checked="false" clickable="false" selected="false" bounds="[53,1151][1027,1277]"; || text: 
+SEM new 'Кажи ми' after tap (ON): toggle: MATCH class="android.view.View" text="" content-desc="Кажи ми, когато е на рафта" checkable="false" checked="false" clickable="false" bounds="[53,1151][1027,1277]" | ACTIONABLE-ANCESTOR class="android.view.View" text="" content-desc="" checkable="true" checked="true" clickable="true" bounds="[53,1151][1027,1277]" | ACTIONABLE-CHILD none; || desc: class="android.view.View" text="" content-desc="Кажи ми, когато е на рафта" checkable="false" checked="false" clickable="false" selected="false" bounds="[53,1151][1027,1277]"; || text: 
+SEM new 'Кажи ми' after 2nd tap (OFF): toggle: MATCH class="android.view.View" text="" content-desc="Кажи ми, когато е на рафта" checkable="false" checked="false" clickable="false" bounds="[53,1151][1027,1277]" | ACTIONABLE-ANCESTOR class="android.view.View" text="" content-desc="" checkable="true" checked="false" clickable="true" bounds="[53,1151][1027,1277]" | ACTIONABLE-CHILD none; || desc: class="android.view.View" text="" content-desc="Кажи ми, когато е на рафта" checkable="false" checked="false" clickable="false" selected="false" bounds="[53,1151][1027,1277]"; || text: ; snackbar: text="Няма да получаваш известие за тази книга."
+installed base: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## T-base. TalkBack semantics (base)
+SEM base catalogue '12': content-desc repeating a visible text: 6 Спомен за здрача | 12 -те вятъра | Белият дома | Белият здрача | Белият пътя | Времето на войната
+SEM base book page: content-desc repeating a visible text: 1 12 -те вятъра
+SEM base want list: content-desc repeating a visible text: 1 12 -те вятъра
+SEM base dialog 'Тема|=Theme': rows 115px=44dp clickable=false '';115px=44dp clickable=false '';115px=44dp clickable=false '';
+SEM base dialog 'Размер на текста|=Text size': rows 115px=44dp clickable=false '';115px=44dp clickable=false '';115px=44dp clickable=false '';115px=44dp clickable=false '';
+SEM base dialog 'Език|=Language': rows 115px=44dp clickable=false '';115px=44dp clickable=false '';115px=44dp clickable=false '';
+SEM base 'Кажи ми' book inv=136 found=yes: content-desc="Белият детството" text="Белият детството" text="Симеон Колев" 
+SEM base 'Кажи ми' OFF: toggle: MATCH class="android.widget.TextView" text="Кажи ми, когато е на рафта" content-desc="" checkable="false" checked="false" clickable="false" bounds="[300,1193][848,1237]" | ACTIONABLE-ANCESTOR class="android.view.View" text="" content-desc="" checkable="true" checked="false" clickable="true" bounds="[53,1151][1027,1277]" | ACTIONABLE-CHILD none; || desc:  || text: class="android.widget.TextView" text="Кажи ми, когато е на рафта" content-desc="" checkable="false" checked="false" clickable="false" selected="false" bounds="[300,1193][848,1237]";
+SEM base 'Кажи ми' after tap (ON): toggle: MATCH class="android.widget.TextView" text="Ще ти кажем, когато е на рафта" content-desc="" checkable="false" checked="false" clickable="false" bounds="[250,1193][899,1237]" | ACTIONABLE-ANCESTOR class="android.view.View" text="" content-desc="" checkable="true" checked="true" clickable="true" bounds="[53,1151][1027,1277]" | ACTIONABLE-CHILD none; || desc:  || text: class="android.widget.TextView" text="Ще ти кажем, когато е на рафта" content-desc="" checkable="false" checked="false" clickable="false" selected="false" bounds="[250,1193][899,1237]";
+SEM base 'Кажи ми' after 2nd tap (OFF): toggle: MATCH class="android.widget.TextView" text="Кажи ми, когато е на рафта" content-desc="" checkable="false" checked="false" clickable="false" bounds="[300,1193][848,1237]" | ACTIONABLE-ANCESTOR class="android.view.View" text="" content-desc="" checkable="true" checked="false" clickable="true" bounds="[53,1151][1027,1277]" | ACTIONABLE-CHILD none; || desc:  || text: class="android.widget.TextView" text="Кажи ми, когато е на рафта" content-desc="" checkable="false" checked="false" clickable="false" selected="false" bounds="[300,1193][848,1237]";; snackbar: text="Няма да получаваш известие за тази книга."
+## COMPLETE
+## logcat findings
+app pids seen: ['5102', '9355']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 9
+   skipped-frames events=9 max=45 total=331
+== Davey: 15
+   davey events=15 max=1703ms median=958ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

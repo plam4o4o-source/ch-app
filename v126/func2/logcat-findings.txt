@@ -1,0 +1,14 @@
+app pids seen: ['6313']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=54 total=54
+   10-27 15:43:51.917  6313  6313 I Choreographer: Skipped 54 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=927ms median=842ms
+   10-27 15:44:02.665  6313  6325 I OpenGLRenderer: Davey! duration=758ms; Flags=0, FrameTimelineVsyncId=6479, IntendedVsync=88960605381, Vsync=89077272043, InputEventId=0, HandleInputStart=89089894339, AnimationStart=89089894540, PerformTrave
+   10-27 15:44:12.806  6313  6324 I OpenGLRenderer: Davey! duration=927ms; Flags=0, FrameTimelineVsyncId=7011, IntendedVsync=98943938315, Vsync=99360604965, InputEventId=0, HandleInputStart=99363806686, AnimationStart=99363806897, PerformTrave
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 15:43:50.842  6299  6299 I PERFCHECK: section: 0. First launch and warm-up
+   10-27 15:44:28.694  7237  7237 I PERFCHECK: section: F4. Settings → Text size → Extra large

@@ -1,0 +1,25 @@
+PAGE /folklorna-grupa: 200 0.11s 101762 bytes
+img tags: 11
+#01 '' original 200 0.11s 126KB text/html; charset=utf-8 | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/  thumb=
+#02 'НЧ Васил Левски – 1922' original 200 0.09s 11KB image/webp | w384 200 0.08s 6KB image/jpeg | w1600 200 0.08s 6KB image/jpeg
+     src=https://chyavorec.org/assets/images/logo-256.webp  thumb=/assets/images/logo-256.webp
+#03 'НЧ Васил Левски – 1922' original 200 0.08s 11KB image/webp | w384 200 0.08s 6KB image/jpeg | w1600 200 0.10s 6KB image/jpeg
+     src=https://chyavorec.org/assets/images/logo-256.webp  thumb=/assets/images/logo-256.webp
+#04 'Фолклорна група Явор — групова снимка' original 200 0.10s 151KB image/webp | w384 200 0.08s 26KB image/jpeg | w1600 200 0.12s 145KB image/jpeg
+     src=https://chyavorec.org/assets/images/folk-grupa-s.webp  thumb=/assets/images/folk-grupa-s.webp
+#05 'Станчо Кържин — ръководител' original 200 0.34s 128KB image/webp | w384 200 0.21s 22KB image/jpeg | w1600 200 0.51s 128KB image/webp
+     src=https://chyavorec.org/assets/images/stancho-kardjin-s.webp  thumb=/assets/images/stancho-kardjin-s.webp
+#06 'Концертно изпълнение' original 200 0.25s 178KB image/webp | w384 200 0.21s 21KB image/jpeg | w1600 200 0.51s 178KB image/webp
+     src=https://chyavorec.org/assets/images/folk-grupa-kp.webp  thumb=/assets/images/folk-grupa-kp.webp
+#07 'На сцената' original 200 0.32s 293KB image/jpeg | w384 200 0.21s 23KB image/jpeg | w1600 200 0.60s 271KB image/jpeg
+     src=https://chyavorec.org/assets/images/folk-grupa-scena.jpg  thumb=/assets/images/folk-grupa-scena.jpg
+#08 'Фестивал' original 200 0.35s 341KB image/jpeg | w384 200 0.21s 30KB image/jpeg | w1600 200 0.59s 305KB image/jpeg
+     src=https://chyavorec.org/assets/images/folk-grupa-fes.jpg  thumb=/assets/images/folk-grupa-fes.jpg
+#09 '' original 200 0.09s 126KB text/html; charset=utf-8 | w384: not optimizable | w1600: not optimizable
+     src=https://chyavorec.org/  thumb=
+#10 'НЧ Васил Левски – 1922' original 200 0.08s 11KB image/webp | w384 200 0.08s 6KB image/jpeg | w1600 200 0.12s 6KB image/jpeg
+     src=https://chyavorec.org/assets/images/logo-256.webp  thumb=/assets/images/logo-256.webp
+#11 '' original 200 0.20s 15KB image/webp | w384 200 0.32s 5KB image/jpeg | w1600 200 0.19s 5KB image/jpeg
+     src=https://chyavorec.org/assets/images/ph-signature.webp  thumb=/assets/images/ph-signature.webp
+PROBE /folklorna-grupa: 11 images, optimizer non-200: 0

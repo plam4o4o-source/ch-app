@@ -1,0 +1,49 @@
+part perf; APK: 6efbc80 (Проверка на вълна 13 на емулатор (v127): старт, памет, monkey, функционални пров); x86_64 libs: 4 size 4875530 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## 0. First launch, catalogue index
+FIRST-INSTALL catalogue results after 3530 ms
+INDEX-READY #1 catalogue results after 2725 ms (cold start → tap Catalogue → text)
+INDEX-READY #2 catalogue results after 3500 ms (cold start → tap Catalogue → text)
+INDEX-READY #3 catalogue results after 2835 ms (cold start → tap Catalogue → text)
+## 1. Cold start (10 runs, as installed)
+START cold(as installed) n=10 min=1796ms median=2160ms max=2988ms  all=[2833, 2988, 2159, 2191, 1951, 2161, 2131, 2195, 1867, 1796]  states=['COLD']
+START warm(HOME→relaunch) n=5 min=329ms median=586ms max=744ms  all=[461, 586, 744, 701, 329]  states=['HOT']
+## 2. Memory over 20 cycles (all tabs + a book)
+tab home @ 99 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=58188KB  Java=7328KB  Native=26252KB  Graphics=0KB  Views=9 Activities=1
+MEM c00 (trimmed)    PSS=64485KB  Java=8208KB  Native=26248KB  Graphics=0KB  Views=9 Activities=1
+cycle 1: book screen opened
+MEM c10 (raw)        PSS=99664KB  Java=21180KB  Native=43524KB  Graphics=0KB  Views=13 Activities=1
+MEM c10 (trimmed)    PSS=84944KB  Java=11108KB  Native=39152KB  Graphics=0KB  Views=13 Activities=1
+MEM c20 (raw)        PSS=97349KB  Java=19256KB  Native=42384KB  Graphics=0KB  Views=13 Activities=1
+MEM c20 (trimmed)    PSS=85154KB  Java=11104KB  Native=39152KB  Graphics=0KB  Views=13 Activities=1
+pid after cycles: 8403
+## 3. Monkey 4000 events (seed 1234, CAMERA revoked)
+camera permission before monkey:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+statusbar disable: 
+monkey start pid=9524
+MONKEY exit=0 duration=166 s; Events injected: 4000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '9524'; camera:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+MEM after-monkey (raw) PSS=93980KB  Java=13884KB  Native=45616KB  Graphics=0KB  Views=13 Activities=1
+MEM after-monkey (trimmed) PSS=94715KB  Java=10864KB  Native=42784KB  Graphics=0KB  Views=13 Activities=1
+## COMPLETE
+## logcat findings
+app pids seen: ['4507', '5874', '6527', '6888', '7251', '7482', '7628', '7703', '7863', '7984', '8049', '8100', '8152', '8202', '8403', '9524']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 35
+   skipped-frames events=35 max=74 total=1484
+== Davey: 67
+   davey events=67 max=1646ms median=843ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

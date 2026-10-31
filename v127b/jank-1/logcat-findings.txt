@@ -1,0 +1,32 @@
+app pids seen: ['5879', '8546', '11537', '13182']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=73 total=382
+   10-29 17:32:04.779  5879  5879 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   10-29 17:35:17.145  8546  8546 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   10-29 17:35:17.883  8546  8546 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   10-29 17:35:19.199  8546  8546 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
+   10-29 17:42:44.963 13182 13182 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+   10-29 17:46:49.609 13182 13182 I Choreographer: Skipped 55 frames!  The application may be doing too much work on its main thread.
+   10-29 17:46:50.905 13182 13182 I Choreographer: Skipped 73 frames!  The application may be doing too much work on its main thread.
+== Davey: 12
+   davey events=12 max=1949ms median=1226ms
+   10-29 17:32:05.914  5879  5939 I OpenGLRenderer: Davey! duration=944ms; Flags=1, FrameTimelineVsyncId=6280, IntendedVsync=78178770094, Vsync=78612103410, InputEventId=0, HandleInputStart=78628530009, AnimationStart=78628530740, PerformTrave
+   10-29 17:32:25.632  5879  5968 I OpenGLRenderer: Davey! duration=734ms; Flags=0, FrameTimelineVsyncId=7823, IntendedVsync=98112102630, Vsync=98295435956, InputEventId=0, HandleInputStart=98299654863, AnimationStart=98299655424, PerformTrave
+   10-29 17:35:19.191  8546  8558 I OpenGLRenderer: Davey! duration=1949ms; Flags=1, FrameTimelineVsyncId=15631, IntendedVsync=270545429066, Vsync=271262095704, InputEventId=0, HandleInputStart=271262698721, AnimationStart=271262699722, Perfor
+   10-29 17:35:19.544  8546  8559 I OpenGLRenderer: Davey! duration=1433ms; Flags=0, FrameTimelineVsyncId=15898, IntendedVsync=271395429032, Vsync=272562095652, InputEventId=0, HandleInputStart=272580344063, AnimationStart=272580344795, Perfor
+   10-29 17:35:20.463  8546  8558 I OpenGLRenderer: Davey! duration=1000ms; Flags=0, FrameTimelineVsyncId=16343, IntendedVsync=272595428984, Vsync=272978762302, InputEventId=0, HandleInputStart=272994031434, AnimationStart=272994032165, Perfor
+   10-29 17:35:20.513  8546  8558 I OpenGLRenderer: Davey! duration=823ms; Flags=0, FrameTimelineVsyncId=16384, IntendedVsync=272995428968, Vsync=273195428960, InputEventId=0, HandleInputStart=273208915097, AnimationStart=273208915808, Perform
+   10-29 17:42:45.028 13182 13195 I OpenGLRenderer: Davey! duration=1253ms; Flags=1, FrameTimelineVsyncId=60076, IntendedVsync=716828744548, Vsync=717228744532, InputEventId=0, HandleInputStart=717239906324, AnimationStart=717239907326, Perfor
+   10-29 17:42:45.432 13182 13194 I OpenGLRenderer: Davey! duration=1198ms; Flags=0, FrameTimelineVsyncId=60240, IntendedVsync=717262077864, Vsync=718328744488, InputEventId=0, HandleInputStart=718343077236, AnimationStart=718343077857, Perfor
+   10-29 17:42:46.277 13182 13194 I OpenGLRenderer: Davey! duration=804ms; Flags=0, FrameTimelineVsyncId=60791, IntendedVsync=718828744468, Vsync=719262077784, InputEventId=0, HandleInputStart=719265727865, AnimationStart=719265728736, Perform
+   10-29 17:46:50.119 13182 14505 I OpenGLRenderer: Davey! duration=1375ms; Flags=0, FrameTimelineVsyncId=95112, IntendedVsync=962062073621, Vsync=962978740196, InputEventId=0, HandleInputStart=962989318764, AnimationStart=962989319555, Perfor
+   10-29 17:46:50.900 13182 13196 I OpenGLRenderer: Davey! duration=1279ms; Flags=0, FrameTimelineVsyncId=95331, IntendedVsync=962995401368, Vsync=963012068034, InputEventId=0, HandleInputStart=963026620797, AnimationStart=963026621388, Perfor
+   10-29 17:46:51.170 13182 13316 I OpenGLRenderer: Davey! duration=1432ms; Flags=0, FrameTimelineVsyncId=95363, IntendedVsync=963062068032, Vsync=964278734650, InputEventId=0, HandleInputStart=964287099834, AnimationStart=964287100956, Perfor
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 17:32:01.572  5743  5743 I PERFCHECK: section: J-new. Install new, warm-up, 16 books in Want to read
+   10-29 17:35:11.159  8431  8431 I PERFCHECK: section: J-new. Jank at 540x1200 (animations ON)
+   10-29 17:39:33.640 11407 11407 I PERFCHECK: section: J-base. Install base, warm-up, 16 books in Want to read
+   10-29 17:42:38.459 13085 13085 I PERFCHECK: section: J-base. Jank at 540x1200 (animations ON)

@@ -1,0 +1,20 @@
+app pids seen: ['5668', '7073']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=41 total=146
+   10-30 15:30:35.225  5668  5668 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   10-30 15:31:15.683  7073  7073 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-30 15:31:58.699  7073  7073 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-30 15:32:42.684  7073  7073 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=870ms median=803ms
+   10-30 15:30:56.296  5668  5681 I OpenGLRenderer: Davey! duration=870ms; Flags=0, FrameTimelineVsyncId=7611, IntendedVsync=102402534091, Vsync=102719200745, InputEventId=0, HandleInputStart=102721265007, AnimationStart=102721266199, PerformT
+   10-30 15:31:58.734  7073  7085 I OpenGLRenderer: Davey! duration=803ms; Flags=0, FrameTimelineVsyncId=15006, IntendedVsync=164735864931, Vsync=164852531593, InputEventId=0, HandleInputStart=164865135790, AnimationStart=164865136201, Perform
+   10-30 15:31:58.922  7073  7085 I OpenGLRenderer: Davey! duration=725ms; Flags=0, FrameTimelineVsyncId=15050, IntendedVsync=165102531583, Vsync=165702531559, InputEventId=-622110510, HandleInputStart=165719054564, AnimationStart=165719055125
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-30 15:30:33.571  5647  5647 I PERFCHECK: section: W. First launch and warm-up
+   10-30 15:31:12.795  7031  7031 I PERFCHECK: section: K. Monkey 5000 events seed 4321, CAMERA revoked
+   10-30 15:31:25.005  7293  7293 I PERFCHECK: monkey start

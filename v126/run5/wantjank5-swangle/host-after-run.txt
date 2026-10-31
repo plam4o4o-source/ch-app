@@ -1,0 +1,12 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15982        1115        3400          95       11906       14866
+Swap:           3071           0        3071
+== host kernel: oom / kvm / segfault
+[Tue Oct 27 16:32:47 2026] x86/fpu: Supporting XSAVE feature 0x1000: 'Control-flow Kernel registers (KVM only)'
+[Tue Oct 27 16:32:50 2026] kvm_intel: Using Hyper-V Enlightened VMCS
+[Tue Oct 27 16:34:34 2026] kvm: kvm [2640]: vcpu0, guest rIP: 0xffffffff9fc64d95 Unhandled WRMSR(0xc2) = 0xffff
+== emulator processes
+   4474       00:04 15292 S    /usr/local/lib/android/sdk/emulator/emulator -kill 2640 -sleep 20
+== emulator crash dumps / logs
+/tmp/android-runner/emu-crash-37.2.12.db

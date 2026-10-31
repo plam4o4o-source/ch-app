@@ -1,0 +1,3 @@
+TotalTime: 3311
+TotalTime: 2682
+TotalTime: 2361

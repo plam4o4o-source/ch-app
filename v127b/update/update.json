@@ -1,0 +1,11 @@
+{
+  "versionCode": 1484479,
+  "versionName": "1.2.27",
+  "apkUrl": "https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/app.apk",
+  "sha256": "4a2351fc8bdf7e06c22532c39831993c0a22a5cd71a0283fb1793b232a8081e8",
+  "size": 4875530,
+  "minSdk": 26,
+  "notes": "• „Искам да прочета“: запази книга и избери „Кажи ми, когато е на рафта“ — ще получиш известие, щом се върне.\n• „Новини и събития“ с календар — абонирай се за събитията на читалището в календара на телефона си.\n• Настройка за размера на текста и по-добра работа с едър шрифт и TalkBack.\n• Скенерът приема и ръчно въведен ISBN или инвентарен номер.\n• По-ясна наличност, когато друг екземпляр на книгата е на рафта.\n• Надеждни връзки към новини и събития, поправки в галерията без интернет и в „Моето“, по-плавно „Начало“.",
+  "notes_en": "• “Want to read”: save a book and choose “Notify me when it’s on the shelf” to hear when it’s back.\n• “News and events” with a calendar — subscribe to the centre’s events in your phone’s calendar.\n• A text size setting and better support for large fonts and TalkBack.\n• The scanner also accepts a typed ISBN or inventory number.\n• Clearer availability when another copy of the book is on the shelf.\n• Reliable links to news and events, offline gallery and “My” fixes, and a smoother “Home”.",
+  "releaseUrl": "https://github.com/plam4o4o-source/ch-app/releases/tag/v1.2.27"
+}

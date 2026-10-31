@@ -1,0 +1,14 @@
+app pids seen: ['5388', '7136']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=51 total=99
+   10-27 16:35:52.632  5388  5388 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   10-27 16:36:31.941  7136  7136 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+== Davey: 1
+   davey events=1 max=1157ms median=1157ms
+   10-27 16:36:32.389  7136  7149 I OpenGLRenderer: Davey! duration=1157ms; Flags=1, FrameTimelineVsyncId=9880, IntendedVsync=117177134944, Vsync=117977134912, InputEventId=0, HandleInputStart=117991039725, AnimationStart=117991040396, Perform
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 16:35:50.747  5380  5380 I PERFCHECK: section: L0. First launch and warm-up
+   10-27 16:36:25.684  7089  7089 I PERFCHECK: section: L5. Landscape

@@ -1,0 +1,18 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15983        1010        3757          48       11608       14972
+Swap:           3071           0        3071
+== host kernel: oom / kvm / segfault
+[Fri Oct 30 15:27:31 2026] x86/fpu: Supporting XSAVE feature 0x1000: 'Control-flow Kernel registers (KVM only)'
+[Fri Oct 30 15:27:35 2026] kvm_amd: TSC scaling supported
+[Fri Oct 30 15:27:35 2026] kvm_amd: Nested Virtualization enabled
+[Fri Oct 30 15:27:35 2026] kvm_amd: Nested Paging enabled
+[Fri Oct 30 15:27:35 2026] kvm_amd: kvm_amd: Hyper-V enlightened NPT TLB flush enabled
+[Fri Oct 30 15:27:35 2026] kvm_amd: kvm_amd: Hyper-V Direct TLB Flush enabled
+[Fri Oct 30 15:27:35 2026] kvm_amd: Virtual VMLOAD VMSAVE supported
+[Fri Oct 30 15:27:35 2026] kvm_amd: PMU virtualization is disabled
+[Fri Oct 30 15:28:54 2026] kvm: kvm [2831]: vcpu0, guest rIP: 0xffffffffb0064d95 Unhandled WRMSR(0xc0010007) = 0xffff
+== emulator processes
+   6090       00:04 15320 S    /usr/local/lib/android/sdk/emulator/emulator -kill 2831 -sleep 20
+== emulator crash dumps / logs
+/tmp/android-runner/emu-crash-37.2.13.db

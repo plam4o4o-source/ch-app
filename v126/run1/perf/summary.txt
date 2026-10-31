@@ -1,0 +1,49 @@
+part perf; APK: 342758d (Проверка: пълен тест на v1.2.26 на емулатор (ВРЕМЕННО)); x86_64 libs: 4 size 4924210 bytes
+host: 4 cpu, 15983 MB RAM
+android 14 sdk 34; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## 1. First install: first launch, time to catalogue results
+home quick actions: Scan=yes MyBooks=no Contacts=yes; 'Catalogue' labels on screen: 1 (1 = only the tab)
+FIRST-INSTALL catalogue results after 2808 ms (tap→text, uiautomator polling)
+catalogue hint: 'Search everything' OK
+polling floor (text already on screen): 2224 ms — subtract from the times below
+INDEX-READY #1 catalogue results after 2594 ms (cold start → tap Catalogue → text)
+INDEX-READY #2 catalogue results after 2196 ms (cold start → tap Catalogue → text)
+INDEX-READY #3 catalogue results after 2841 ms (cold start → tap Catalogue → text)
+INDEX-READY deep-link #1 results 3333 ms after am start
+INDEX-READY deep-link #2 results 3389 ms after am start
+## 2. Startup
+START cold(as installed) n=10 min=856ms median=1000ms max=1254ms  all=[1121, 1201, 1020, 947, 981, 1254, 918, 980, 1164, 856]  states=['COLD']
+START warm(HOME→relaunch) n=5 min=149ms median=235ms max=263ms  all=[263, 223, 235, 247, 149]  states=['HOT']
+compile: Success 
+START cold(speed-profile) n=5 min=905ms median=997ms max=1059ms  all=[997, 1058, 1059, 967, 905]  states=['COLD']
+Want to read: added 1 books for the list jank
+## 3. Jank at 540x1200 (animations ON)
+jank screen 540x1200
+GFX catalog-lowres frames=  503  janky=334 (66.40%)  p50=57ms p90=77ms p95=85ms p99=121ms  slowUI=180 slowDraw=333 highInput=319
+catalog-lowres: 30 swipes, 'Show more' pages: 6, mis-taps recovered: 0; screen: --- screen: text="Search everything" content-desc="Scan barcode" text="Everything" text="Title" text="Author" text="ISBN" 
+jank home-lowres screen: --- screen: text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" text="October 27, 2026 · *Св. мчк Нестор. Преп. Димитрий Басарбовски
+GFX home-lowres  frames=    ?  janky=? (?%)  p50=?ms p90=?ms p95=?ms p99=?ms  slowUI=? slowDraw=? highInput=?
+jank news-lowres screen: (ui dump failed)
+GFX news-lowres  frames=    ?  janky=? (?%)  p50=?ms p90=?ms p95=?ms p99=?ms  slowUI=? slowDraw=? highInput=?
+jank calendar-lowres screen: (ui dump failed)
+GFX calendar-lowres frames=    ?  janky=? (?%)  p50=?ms p90=?ms p95=?ms p99=?ms  slowUI=? slowDraw=? highInput=?
+WARN: tab bar not reached
+WARN: 'Want to read' tile not found in My
+jank want-lowres screen: (ui dump failed)
+GFX want-lowres  frames=    ?  janky=? (?%)  p50=?ms p90=?ms p95=?ms p99=?ms  slowUI=? slowDraw=? highInput=?
+MEM perf-end (raw)   PSS=?KB  Java=?KB  Native=?KB  Graphics=?KB  Views=? Activities=?
+MEM perf-end (trimmed) PSS=?KB  Java=?KB  Native=?KB  Graphics=?KB  Views=? Activities=?
+!!! EMULATOR GONE / HUNG (at: end)
+## logcat findings
+app pids seen: ['5502', '6445', '6597', '6742', '6942', '7024', '7105', '7198', '7262', '7326', '7408', '7473', '7543', '7611', '7677', '7741', '7912', '7979', '8043', '8109', '8187', '8280', '8967']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 15
+   skipped-frames events=15 max=103 total=587
+== Davey: 21
+   davey events=21 max=1773ms median=777ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

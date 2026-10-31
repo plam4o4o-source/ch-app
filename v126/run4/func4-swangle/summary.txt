@@ -1,0 +1,24 @@
+part func4-swangle; APK: a8615e9 (Проверка v1.2.26: четвърти кръг — „Много голям“ текст в каталога, jank на „Искам); x86_64 libs: 4 size 4924210 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED]
+screen 1080x2400
+## 0. First launch and warm-up
+first-install catalogue results after 3469 ms
+## F4. Settings → Text size → Extra large
+text size options: text="Text size" text="Multiplies the font size set on your phone. In articles, the “Aa” button adjusts it further." text="Small" text="Standard" text="Large" text="Extra large" text="Close" 
+TEXT SIZE now: text="Extra large" 
+xlarge catalogue: text="Search everything" content-desc="Scan barcode" text="Everything" text="Title" text="Author" text="ISBN" text="2446 results  ·  InvLib data as of Oct 17, 2026" text="Джиан, Филип" 
+TEXT SIZE reset: text="Standard" 
+## COMPLETE
+## logcat findings
+app pids seen: ['4843']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=108 total=230
+== Davey: 16
+   davey events=16 max=2558ms median=840ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

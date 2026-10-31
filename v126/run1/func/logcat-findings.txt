@@ -1,0 +1,26 @@
+app pids seen: ['4945']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=67 total=199
+   10-27 15:21:23.349  4945  4945 I Choreographer: Skipped 67 frames!  The application may be doing too much work on its main thread.
+   10-27 15:21:33.628  4945  4945 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-27 15:21:45.379  4945  4945 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   10-27 15:21:46.241  4945  4945 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+== Davey: 8
+   davey events=8 max=1490ms median=1170ms
+   10-27 15:21:23.343  4945  4956 I OpenGLRenderer: Davey! duration=1466ms; Flags=1, FrameTimelineVsyncId=6150, IntendedVsync=92641364073, Vsync=92924697395, InputEventId=0, HandleInputStart=92927022338, AnimationStart=92927025272, PerformTrav
+   10-27 15:21:23.548  4945  4956 I OpenGLRenderer: Davey! duration=1311ms; Flags=0, FrameTimelineVsyncId=6204, IntendedVsync=92991369598, Vsync=94108036153, InputEventId=0, HandleInputStart=94132486608, AnimationStart=94132487088, PerformTrav
+   10-27 15:21:33.658  4945  5084 I OpenGLRenderer: Davey! duration=838ms; Flags=0, FrameTimelineVsyncId=6690, IntendedVsync=103524696971, Vsync=103524696971, InputEventId=-363348255, HandleInputStart=103524983554, AnimationStart=103524984135,
+   10-27 15:21:33.855  4945  5084 I OpenGLRenderer: Davey! duration=733ms; Flags=0, FrameTimelineVsyncId=6711, IntendedVsync=103841363625, Vsync=104391363603, InputEventId=0, HandleInputStart=104401891644, AnimationStart=104401892745, PerformT
+   10-27 15:21:35.928  4945  5258 I OpenGLRenderer: Davey! duration=1056ms; Flags=0, FrameTimelineVsyncId=7087, IntendedVsync=105624696887, Vsync=105624696887, InputEventId=0, HandleInputStart=105630744975, AnimationStart=105630745786, Perform
+   10-27 15:21:45.389  4945  5277 I OpenGLRenderer: Davey! duration=1283ms; Flags=0, FrameTimelineVsyncId=7582, IntendedVsync=114858029851, Vsync=114891363183, InputEventId=0, HandleInputStart=114903984783, AnimationStart=114903985434, Perform
+   10-27 15:21:46.299  4945  5277 I OpenGLRenderer: Davey! duration=1490ms; Flags=0, FrameTimelineVsyncId=7589, IntendedVsync=114908029849, Vsync=115258029835, InputEventId=0, HandleInputStart=115271646369, AnimationStart=115271647210, Perform
+   10-27 15:21:46.327  4945  5277 I OpenGLRenderer: Davey! duration=915ms; Flags=0, FrameTimelineVsyncId=7619, IntendedVsync=115324696499, Vsync=116141363133, InputEventId=0, HandleInputStart=116153397848, AnimationStart=116153398649, PerformT
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 15:21:20.270  4938  4938 I PERFCHECK: section: F0. First launch and warm-up
+   10-27 15:21:49.235  5856  5856 I PERFCHECK: section: F1. Catalogue search 12
+   10-27 15:22:12.037  6232  6232 I PERFCHECK: section: F2. Want to read: add, list, remove, undo
+   10-27 15:22:54.468  6694  6694 I PERFCHECK: section: F3. News & events: segments and calendar subscription
+   10-27 15:23:58.123  7191  7191 I PERFCHECK: section: F4. Settings → Text size → Extra large

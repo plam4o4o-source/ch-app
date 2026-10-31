@@ -1,0 +1,37 @@
+part stress1; APK: 4ca6dcb (Проверка v1.2.26: втори кръг на API 33, по-малки части, поправки в скрипта); x86_64 libs: 4 size 4924210 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## 0. First launch and warm-up
+first-install catalogue results after 2473 ms
+## S2. Memory over 30 tab/book cycles
+tab home @ 99 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=64279KB  Java=7600KB  Native=26072KB  Graphics=0KB  Views=9 Activities=1
+MEM c00 (trimmed)    PSS=68714KB  Java=8244KB  Native=26056KB  Graphics=0KB  Views=9 Activities=1
+cycle 1: book screen opened
+MEM c10 (raw)        PSS=87489KB  Java=16908KB  Native=33252KB  Graphics=0KB  Views=13 Activities=1
+MEM c10 (trimmed)    PSS=78284KB  Java=10812KB  Native=30440KB  Graphics=0KB  Views=13 Activities=1
+MEM c20 (raw)        PSS=94882KB  Java=17652KB  Native=40020KB  Graphics=0KB  Views=13 Activities=1
+MEM c20 (trimmed)    PSS=83799KB  Java=10880KB  Native=35884KB  Graphics=0KB  Views=13 Activities=1
+MEM c30 (raw)        PSS=84658KB  Java=11488KB  Native=35708KB  Graphics=0KB  Views=13 Activities=1
+MEM c30 (trimmed)    PSS=83423KB  Java=10808KB  Native=35180KB  Graphics=0KB  Views=13 Activities=1
+pid after cycles: 7174
+## S1. Home swipes (API stability probe: 20 swipes)
+HOME SWIPE #1: emulator not responding
+!!! EMULATOR GONE / HUNG (at: home swipe 1)
+## logcat findings
+app pids seen: ['6161', '7174', '8737']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=37 total=164
+== Davey: 9
+   davey events=9 max=1126ms median=783ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

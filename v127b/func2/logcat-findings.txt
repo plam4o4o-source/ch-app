@@ -1,0 +1,25 @@
+app pids seen: ['4966']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=77 total=182
+   10-29 17:32:08.532  4966  4966 I Choreographer: Skipped 77 frames!  The application may be doing too much work on its main thread.
+   10-29 17:32:32.175  4966  4966 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   10-29 17:32:32.994  4966  4966 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   10-29 17:33:45.274  4966  4966 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 8
+   davey events=8 max=2241ms median=952ms
+   10-29 17:32:09.614  4966  4979 I OpenGLRenderer: Davey! duration=2241ms; Flags=1, FrameTimelineVsyncId=5761, IntendedVsync=99730543467, Vsync=101013876749, InputEventId=0, HandleInputStart=101015339053, AnimationStart=101015339754, PerformT
+   10-29 17:32:22.387  4966  4979 I OpenGLRenderer: Davey! duration=791ms; Flags=0, FrameTimelineVsyncId=6755, IntendedVsync=113980542897, Vsync=114363876215, InputEventId=0, HandleInputStart=114365600412, AnimationStart=114365600904, PerformT
+   10-29 17:32:32.977  4966  4978 I OpenGLRenderer: Davey! duration=1254ms; Flags=0, FrameTimelineVsyncId=7176, IntendedVsync=123830542503, Vsync=123930542499, InputEventId=0, HandleInputStart=123940871649, AnimationStart=123940872090, Perform
+   10-29 17:32:33.453  4966  4978 I OpenGLRenderer: Davey! duration=1668ms; Flags=0, FrameTimelineVsyncId=7190, IntendedVsync=123947209165, Vsync=124647209137, InputEventId=0, HandleInputStart=124658308441, AnimationStart=124658309202, Perform
+   10-29 17:32:33.550  4966  4978 I OpenGLRenderer: Davey! duration=701ms; Flags=0, FrameTimelineVsyncId=7230, IntendedVsync=124680542469, Vsync=124897209127, InputEventId=0, HandleInputStart=124905215266, AnimationStart=124905215737, PerformT
+   10-29 17:33:45.316  4966  4978 I OpenGLRenderer: Davey! duration=965ms; Flags=0, FrameTimelineVsyncId=10851, IntendedVsync=196780539585, Vsync=197213872901, InputEventId=0, HandleInputStart=197217018949, AnimationStart=197217020041, Perform
+   10-29 17:33:45.772  4966  4980 I OpenGLRenderer: Davey! duration=940ms; Flags=0, FrameTimelineVsyncId=10925, IntendedVsync=197230539567, Vsync=197747206213, InputEventId=0, HandleInputStart=197757401189, AnimationStart=197757401851, Perform
+   10-29 17:33:46.387  4966  4980 I OpenGLRenderer: Davey! duration=821ms; Flags=0, FrameTimelineVsyncId=10959, IntendedVsync=197813872877, Vsync=198197206195, InputEventId=0, HandleInputStart=198213292186, AnimationStart=198213292707, Perform
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 17:32:05.216  4960  4960 I PERFCHECK: section: W. First launch and warm-up
+   10-29 17:32:50.477  6402  6402 I PERFCHECK: section: F6. Scanner (CAMERA revoked): manual panel, Back key
+   10-29 17:33:58.936  7908  7908 I PERFCHECK: section: F8. Contacts links (call, email, map, site, cards)
+   10-29 17:36:04.732  9685  9685 I PERFCHECK: section: F7. Scanner manual panel with the system back GESTURE (gesture navigation; predictive back)

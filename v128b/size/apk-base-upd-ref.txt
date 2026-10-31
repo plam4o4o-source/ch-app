@@ -1,0 +1,1 @@
+1.2.27 8dc63c1; versionCode 1484479; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v128b/update/41228034302/update.json

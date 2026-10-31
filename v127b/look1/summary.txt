@@ -1,0 +1,42 @@
+part look1; APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+base APK: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4; update-source APK: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## L0. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3242 ms
+## L bg-light
+matrix bg-light: 1080x2400 density 420, font_scale 1.0, night Night mode: no, locale [bg-BG]
+matrix bg-light: news title OK; segments News[checked=false selected=false bounds=[42,308][354,434]] Calendar[checked=true selected=false bounds=[354,308][669,434]] subscribe-action=visible
+matrix bg-light scanner: text="Нужен е достъп до камерата" text="Камерата се използва само за четене на баркода на телефона. Нищо не се снима и не се изпраща." text="Разреши камерата" text="Отвори настройките" text="Въведи но
+matrix bg-light tab labels: home catalog my news more 
+## L bg-dark
+matrix bg-dark: 1080x2400 density 420, font_scale 1.0, night Night mode: yes, locale [bg-BG]
+matrix bg-dark: news title OK; segments News[checked=false selected=false bounds=[42,308][354,434]] Calendar[checked=true selected=false bounds=[354,308][669,434]] subscribe-action=visible
+matrix bg-dark scanner: text="Нужен е достъп до камерата" text="Камерата се използва само за четене на баркода на телефона. Нищо не се снима и не се изпраща." text="Разреши камерата" text="Отвори настройките" text="Въведи но
+matrix bg-dark tab labels: home catalog my news more 
+## L en-dark
+matrix en-dark: 1080x2400 density 420, font_scale 1.0, night Night mode: yes, locale [en-US]
+matrix en-dark: news title MISSING; segments News[checked=false selected=false bounds=[42,308][336,434]] Calendar[checked=true selected=false bounds=[336,308][633,434]] subscribe-action=absent
+matrix en-dark scanner: text="Camera access needed" text="The camera is only used to read the barcode on your phone. Nothing is recorded or sent." text="Allow camera" text="Open settings" text="Enter the number manually" con
+matrix en-dark tab labels: home catalog my news more 
+## L en-light
+matrix en-light: 1080x2400 density 420, font_scale 1.0, night Night mode: no, locale [en-US]
+matrix en-light: news title MISSING; segments News[checked=false selected=false bounds=[42,308][336,434]] Calendar[checked=true selected=false bounds=[336,308][633,434]] subscribe-action=absent
+matrix en-light scanner: text="Camera access needed" text="The camera is only used to read the barcode on your phone. Nothing is recorded or sent." text="Allow camera" text="Open settings" text="Enter the number manually" con
+matrix en-light tab labels: home catalog my news more 
+## COMPLETE
+## logcat findings
+app pids seen: ['4547', '6498', '8929', '10459', '11782']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=57 total=270
+== Davey: 21
+   davey events=21 max=1921ms median=915ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

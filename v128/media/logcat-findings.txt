@@ -1,0 +1,23 @@
+app pids seen: ['5807', '7223']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=33 total=63
+   10-30 14:54:21.562  5807  5807 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:03.422  7223  7223 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+== Davey: 4
+   davey events=4 max=883ms median=774ms
+   10-30 14:54:22.556  5807  5824 I OpenGLRenderer: Davey! duration=797ms; Flags=1, FrameTimelineVsyncId=7076, IntendedVsync=85226107219, Vsync=85609440537, InputEventId=0, HandleInputStart=85620646376, AnimationStart=85620647247, PerformTrave
+   10-30 14:54:42.835  5807  5825 I OpenGLRenderer: Davey! duration=751ms; Flags=0, FrameTimelineVsyncId=8314, IntendedVsync=105559439739, Vsync=105642773069, InputEventId=0, HandleInputStart=105651719565, AnimationStart=105651720256, PerformT
+   10-30 14:55:03.436  7223  7260 I OpenGLRenderer: Davey! duration=746ms; Flags=1, FrameTimelineVsyncId=9776, IntendedVsync=126276105577, Vsync=126526105567, InputEventId=0, HandleInputStart=126532340070, AnimationStart=126532341151, PerformT
+   10-30 14:55:03.858  7223  7260 I OpenGLRenderer: Davey! duration=883ms; Flags=0, FrameTimelineVsyncId=9812, IntendedVsync=126559438899, Vsync=127059438879, InputEventId=0, HandleInputStart=127084240097, AnimationStart=127084241349, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-30 14:54:10.316  5285  5285 I PERFCHECK: section: P. Host probe: photos of album 1 (Фотодокументална изложба) on the site
+   10-30 14:54:19.660  5797  5797 I PERFCHECK: section: W. First launch and warm-up
+   10-30 14:54:59.555  7203  7203 I PERFCHECK: section: G1. Album with missing photos: the Снимката липсва placeholder
+   10-30 14:56:05.546  8012  8012 I PERFCHECK: section: G2. Viewer on a missing photo: message and Опитай отново
+   10-30 14:57:02.780  8400  8400 I PERFCHECK: section: D. Documents: PDF opens with its readable file name
+   10-30 14:57:13.106  8475  8475 I PERFCHECK: pdf document tap
+   10-30 14:57:44.432  8686  8686 I PERFCHECK: pdf publication tap

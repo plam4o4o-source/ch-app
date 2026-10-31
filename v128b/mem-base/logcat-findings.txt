@@ -1,0 +1,16 @@
+app pids seen: ['5324', '6907']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=52 total=86
+   10-31 18:27:03.069  5324  5324 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   10-31 18:27:46.158  6907  6907 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=942ms median=824ms
+   10-31 18:27:04.167  5324  5367 I OpenGLRenderer: Davey! duration=942ms; Flags=1, FrameTimelineVsyncId=8290, IntendedVsync=111516589118, Vsync=111899922436, InputEventId=0, HandleInputStart=111914299906, AnimationStart=111914301048, PerformT
+   10-31 18:27:46.981  6907  6931 I OpenGLRenderer: Davey! duration=706ms; Flags=1, FrameTimelineVsyncId=11134, IntendedVsync=154599920728, Vsync=154983254046, InputEventId=0, HandleInputStart=154989697590, AnimationStart=154989698561, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 18:27:01.576  5318  5318 I PERFCHECK: section: W. First launch and warm-up
+   10-31 18:27:42.963  6822  6822 I PERFCHECK: section: M. Memory over 30 cycles all tabs + a book + the gallery viewer + the expanded search, base

@@ -1,0 +1,26 @@
+app pids seen: ['5616', '9076', '12271', '15967']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=76 total=257
+   10-29 17:32:13.818  5616  5616 I Choreographer: Skipped 76 frames!  The application may be doing too much work on its main thread.
+   10-29 17:32:36.030  5616  5616 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   10-29 17:35:32.248  9076  9076 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   10-29 17:41:24.169 12271 12271 I Choreographer: Skipped 54 frames!  The application may be doing too much work on its main thread.
+   10-29 17:47:32.632 15967 15967 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+== Davey: 6
+   davey events=6 max=1280ms median=898ms
+   10-29 17:32:15.082  5616  5631 I OpenGLRenderer: Davey! duration=981ms; Flags=1, FrameTimelineVsyncId=6821, IntendedVsync=90696498902, Vsync=91146498884, InputEventId=0, HandleInputStart=91151495919, AnimationStart=91151496710, PerformTrave
+   10-29 17:32:24.718  5616  5642 I OpenGLRenderer: Davey! duration=730ms; Flags=0, FrameTimelineVsyncId=7423, IntendedVsync=100746498500, Vsync=100763165166, InputEventId=0, HandleInputStart=100777326825, AnimationStart=100777327266, PerformT
+   10-29 17:32:24.819  5616  5642 I OpenGLRenderer: Davey! duration=816ms; Flags=0, FrameTimelineVsyncId=7431, IntendedVsync=100779831832, Vsync=101246498480, InputEventId=0, HandleInputStart=101257747128, AnimationStart=101257747339, PerformT
+   10-29 17:32:36.197  5616  6427 I OpenGLRenderer: Davey! duration=1134ms; Flags=0, FrameTimelineVsyncId=8027, IntendedVsync=111696498062, Vsync=112013164716, InputEventId=0, HandleInputStart=112016169726, AnimationStart=112016170467, Perform
+   10-29 17:41:24.771 12271 12282 I OpenGLRenderer: Davey! duration=1280ms; Flags=1, FrameTimelineVsyncId=20270, IntendedVsync=640113143592, Vsync=641013143556, InputEventId=0, HandleInputStart=641015200744, AnimationStart=641015201435, Perfor
+   10-29 17:45:10.731 12271 12284 I OpenGLRenderer: Davey! duration=705ms; Flags=0, FrameTimelineVsyncId=25492, IntendedVsync=866679801196, Vsync=866996467850, InputEventId=0, HandleInputStart=867007405231, AnimationStart=867007405812, Perform
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 17:32:11.733  5590  5590 I PERFCHECK: section: O1. Online warm-up (fills the caches)
+   10-29 17:35:25.441  8978  8978 I PERFCHECK: section: O2. Offline cold start with caches: all tabs
+   10-29 17:38:11.220 10423 10423 I PERFCHECK: section: O3. Reconnect on Contacts (no touch), then the other screens
+   10-29 17:41:16.755 11984 11984 I PERFCHECK: section: O4. Empty cache, offline, guest: all tabs (MyHub)
+   10-29 17:44:27.991 14039 14039 I PERFCHECK: section: O5. Reconnect with the empty cache: Gallery (no touch), then all tabs
+   10-29 17:47:26.293 15865 15865 I PERFCHECK: section: O6. My offline as guest again (after the online start)

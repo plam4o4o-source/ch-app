@@ -1,0 +1,19 @@
+app pids seen: ['6054', '7331', '9621', '9780']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=55 total=98
+   10-29 17:31:48.395  6054  6054 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   10-29 17:32:26.590  7331  7331 I Choreographer: Skipped 55 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=1125ms median=970ms
+   10-29 17:31:49.286  6054  6067 I OpenGLRenderer: Davey! duration=815ms; Flags=1, FrameTimelineVsyncId=6420, IntendedVsync=72522438281, Vsync=72889104933, InputEventId=0, HandleInputStart=72901831507, AnimationStart=72901832399, PerformTrave
+   10-29 17:32:26.887  7331  7342 I OpenGLRenderer: Davey! duration=1125ms; Flags=1, FrameTimelineVsyncId=8686, IntendedVsync=109772436791, Vsync=110689103421, InputEventId=0, HandleInputStart=110700036699, AnimationStart=110700037971, Perform
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 17:31:47.133  6048  6048 I PERFCHECK: section: W. First launch and warm-up
+   10-29 17:32:24.135  7309  7309 I PERFCHECK: section: F1. Home quick actions; Искам да прочета quick action
+   10-29 17:32:53.715  7621  7621 I PERFCHECK: section: F2. Catalogue 12: other copies on the shelf; notify toggle with undo
+   10-29 17:33:55.804  8440  8440 I PERFCHECK: section: F3. Want to read: add, Кажи ми on/off, undo, remove with undo
+   10-29 17:35:19.513  9229  9229 I PERFCHECK: section: F4. /news and /events links
+   10-29 17:36:56.500 10050 10050 I PERFCHECK: section: F5. Reselecting the News tab on Calendar scrolls to the top

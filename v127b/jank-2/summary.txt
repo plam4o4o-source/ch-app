@@ -1,0 +1,69 @@
+part jank-2; APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+base APK: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4; update-source APK: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## J-base. Install base, warm-up, 16 books in Want to read
+installed base: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4 size 4924210;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.26 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base first-install catalogue results after 2935 ms
+Want to read: added 16 books by inventory-number links (inv 1..16)
+## J-base. Jank at 540x1200 (animations ON)
+jank screen 540x1200
+GFX base-catalog frames=  168  janky=166 (98.81%)  p50=200ms p90=350ms p95=400ms p99=450ms  slowUI=98 slowDraw=166 highInput=2
+base-catalog: 30 swipes, 'Покажи още' pages: 1, mis-taps recovered: 0
+base want list: 1 rows visible
+jank base-want screen: --- screen: text="Наличност към 28.10.2026" text="Плъзни книга настрани, за да я махнеш." content-desc="Дъхът на пролетта" text="Дъхът на пролетта" text="Пламен Иванов" text="Налична" content-desc="Ощ
+GFX base-want    frames=   97  janky=95 (97.94%)  p50=200ms p90=300ms p95=350ms p99=400ms  slowUI=49 slowDraw=95 highInput=3
+jank base-news screen: --- screen: text="Календар" text="Новини" text="Търси в новините" text="Всички" text="Запазени" text="Събитие" text="Състави" text="СЪБИТИЕ  ·  16 октомври 2026" 
+GFX base-news    frames=   77  janky=61 (79.22%)  p50=150ms p90=250ms p95=300ms p99=450ms  slowUI=33 slowDraw=61 highInput=28
+jank base-calendar screen: --- screen: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" text="Читалище" text="Народен обичай" 
+GFX base-calendar frames=  109  janky=85 (77.98%)  p50=125ms p90=200ms p95=250ms p99=300ms  slowUI=45 slowDraw=85 highInput=35
+base gallery albums shown after 3003 ms: 6 on screen
+GFX base-gallery frames=  110  janky=103 (93.64%)  p50=150ms p90=200ms p95=250ms p99=250ms  slowUI=56 slowDraw=103 highInput=14
+base album: content-desc="Сградата на читалището в Яворец" content-desc="Фолклорен състав при читалището" content-desc="Хорът на сце; photos on screen 15
+GFX base-album   frames=   35  janky=29 (82.86%)  p50=121ms p90=200ms p95=250ms p99=350ms  slowUI=13 slowDraw=29 highInput=11
+base viewer: no photo to open
+jank base-home screen: --- screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="29 октомври 2026 · Св. прпмчца Анастасия
+GFX base-home    frames=   69  janky=66 (95.65%)  p50=200ms p90=350ms p95=400ms p99=550ms  slowUI=36 slowDraw=66 highInput=5
+MEM base-jank-end (raw) PSS=117524KB  Java=22028KB  Native=58276KB  Graphics=0KB  Views=10 Activities=1
+MEM base-jank-end (trimmed) PSS=102587KB  Java=15356KB  Native=45212KB  Graphics=0KB  Views=10 Activities=1
+## J-new. Install new, warm-up, 16 books in Want to read
+installed new: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new first-install catalogue results after 2664 ms
+Want to read: added 16 books by inventory-number links (inv 1..16)
+## J-new. Jank at 540x1200 (animations ON)
+jank screen 540x1200
+GFX new-catalog  frames=  176  janky=175 (99.43%)  p50=150ms p90=250ms p95=300ms p99=350ms  slowUI=99 slowDraw=175 highInput=2
+new-catalog: 30 swipes, 'Покажи още' pages: 2, mis-taps recovered: 0
+new want list: 1 rows visible
+jank new-want screen: --- screen: text="Наличност към 28.10.2026" text="Плъзни книга настрани, за да я махнеш." content-desc="Дъхът на пролетта" text="Дъхът на пролетта" text="Пламен Иванов" text="налична" content-desc="Ощ
+GFX new-want     frames=  101  janky=91 (90.10%)  p50=150ms p90=300ms p95=350ms p99=450ms  slowUI=57 slowDraw=91 highInput=19
+jank new-news screen: --- screen: text="Календар" text="Новини" text="Търси в новините" text="Всички" text="Запазени" text="Събитие" text="Състави" text="СЪБИТИЕ  ·  16 октомври 2026" 
+GFX new-news     frames=  112  janky=102 (91.07%)  p50=150ms p90=200ms p95=250ms p99=300ms  slowUI=56 slowDraw=102 highInput=16
+jank new-calendar screen: --- screen: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" text="Читалище" text="Народен обичай" 
+GFX new-calendar frames=  119  janky=93 (78.15%)  p50=150ms p90=200ms p95=250ms p99=250ms  slowUI=56 slowDraw=93 highInput=45
+new gallery albums shown after 2828 ms: 6 on screen
+GFX new-gallery  frames=  115  janky=104 (90.43%)  p50=150ms p90=200ms p95=250ms p99=300ms  slowUI=41 slowDraw=104 highInput=20
+new album: content-desc="Сградата на читалището в Яворец" content-desc="Фолклорен състав при читалището" content-desc="Хорът на сце; photos on screen 15
+GFX new-album    frames=   46  janky=36 (78.26%)  p50=150ms p90=200ms p95=250ms p99=250ms  slowUI=13 slowDraw=36 highInput=15
+new viewer: no photo to open
+jank new-home screen: --- screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="29 октомври 2026 · Св. прпмчца Анастасия
+GFX new-home     frames=   73  janky=70 (95.89%)  p50=200ms p90=300ms p95=350ms p99=450ms  slowUI=37 slowDraw=70 highInput=5
+MEM new-jank-end (raw) PSS=125271KB  Java=19444KB  Native=71276KB  Graphics=0KB  Views=10 Activities=1
+MEM new-jank-end (trimmed) PSS=125008KB  Java=14564KB  Native=71004KB  Graphics=0KB  Views=10 Activities=1
+## COMPLETE
+## logcat findings
+app pids seen: ['4701', '8497', '11303', '13097']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 13
+   skipped-frames events=13 max=119 total=655
+== Davey: 22
+   davey events=22 max=2728ms median=936ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

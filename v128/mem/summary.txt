@@ -1,0 +1,39 @@
+part mem; APK: 1.2.28 52334a7 (Merge remote-tracking branch 'origin/wave14/modern' into claude/charmi); versionCode 1484480; x86_64 libs: 4 size 4311931 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484480 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3410 ms
+## M. Memory over 20 cycles (all tabs + a book + the gallery viewer), new
+tab home @ 99 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=52011KB  Java=7644KB  Native=26152KB  Graphics=0KB  Views=9 Activities=1
+MEM c00 (trimmed)    PSS=53501KB  Java=6948KB  Native=14816KB  Graphics=0KB  Views=9 Activities=1
+cycle 1: book screen opened
+cycles done: 10, gallery viewer reached in 10
+MEM c10 (raw)        PSS=99685KB  Java=18232KB  Native=38372KB  Graphics=0KB  Views=13 Activities=1
+MEM c10 (trimmed)    PSS=91899KB  Java=9488KB  Native=34144KB  Graphics=0KB  Views=13 Activities=1
+cycles done: 20, gallery viewer reached in 20
+MEM c20 (raw)        PSS=111768KB  Java=13364KB  Native=36860KB  Graphics=0KB  Views=13 Activities=1
+MEM c20 (trimmed)    PSS=104903KB  Java=8744KB  Native=35096KB  Graphics=0KB  Views=13 Activities=1
+pid after cycles: 6623; gallery viewer reached in 20/20 cycles
+## COMPLETE
+## logcat findings
+app pids seen: ['5096', '6623']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=51 total=212
+== Davey: 12
+   davey events=12 max=1664ms median=760ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

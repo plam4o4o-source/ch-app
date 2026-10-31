@@ -1,0 +1,37 @@
+part abstart-2; APK: 3274c6e (Проверка на вълна 13 (v127), кръг 2: старт A/B срещу v1.2.26 на един емулатор, /); x86_64 libs: 4 size 4875530 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## AB new-1: fresh install, first launch, catalogue index, 10 cold starts
+installed new-1: 3274c6e (Проверка на вълна 13 (v127), кръг 2: старт A/B срещу v1.2.26 на един емулатор, /); x86_64 libs: 4 size 4875530
+new-1 first-install catalogue results after 3456 ms
+START cold new-1         n=10 min=1936ms median=2658ms max=2934ms  all=[2822, 2690, 2934, 2774, 2321, 2694, 1936, 2059, 2405, 2625]  states=['COLD']
+## AB base-1: fresh install, first launch, catalogue index, 10 cold starts
+installed base-1: 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); x86_64 libs: 4 size 4924210
+base-1 first-install catalogue results after 2766 ms
+START cold base-1        n=10 min=1626ms median=1859ms max=2110ms  all=[2042, 2085, 1781, 1626, 1800, 1781, 1817, 1983, 1901, 2110]  states=['COLD']
+## AB base-2: fresh install, first launch, catalogue index, 10 cold starts
+installed base-2: 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); x86_64 libs: 4 size 4924210
+base-2 first-install catalogue results after 2725 ms
+START cold base-2        n=10 min=1692ms median=1776ms max=2043ms  all=[2025, 1827, 1779, 1774, 1760, 1936, 1692, 1767, 2043, 1725]  states=['COLD']
+## AB new-2: fresh install, first launch, catalogue index, 10 cold starts
+installed new-2: 3274c6e (Проверка на вълна 13 (v127), кръг 2: старт A/B срещу v1.2.26 на един емулатор, /); x86_64 libs: 4 size 4875530
+new-2 first-install catalogue results after 2710 ms
+START cold new-2         n=10 min=1457ms median=1814ms max=2113ms  all=[1638, 1876, 1551, 2069, 1941, 1753, 1457, 1654, 1930, 2113]  states=['COLD']
+## AB totals
+START cold NEW 305a487   n=20 min=1457ms median=2064ms max=2934ms  all=[2822, 2690, 2934, 2774, 2321, 2694, 1936, 2059, 2405, 2625, 1638, 1876, 1551, 2069, 1941, 1753, 1457, 1654, 1930, 2113]  states=['COLD']
+START cold BASE 3df7f37  n=20 min=1626ms median=1808ms max=2110ms  all=[2042, 2085, 1781, 1626, 1800, 1781, 1817, 1983, 1901, 2110, 2025, 1827, 1779, 1774, 1760, 1936, 1692, 1767, 2043, 1725]  states=['COLD']
+## COMPLETE
+## logcat findings
+app pids seen: ['4893', '5805', '6050', '6787', '6918', '7008', '7163', '7449', '7647', '7756', '7824', '7932', '8096', '8520', '8820', '8957', '9129', '9194', '9256', '9304', '9352', '9399', '9446', '9496', '9556', '9601', '9773', '10027', '10168', '10319', '10380', '10441', '10495', '10541', '10650', '10696', '10743', '10792', '10838', '11002', '11264', '11411', '11550', '11613', '11662', '11708', '11757', '11803', '11853', '11900', '11949', '11994']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 68
+   skipped-frames events=68 max=83 total=3127
+== Davey: 68
+   davey events=68 max=1683ms median=996ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

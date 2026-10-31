@@ -1,0 +1,11 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15982        1029        3516          48       11829       14952
+Swap:           3071           0        3071
+== host kernel: oom / kvm / segfault
+[Fri Oct 30 14:50:44 2026] kvm_intel: Using Hyper-V Enlightened VMCS
+[Fri Oct 30 14:53:06 2026] kvm: kvm [2833]: vcpu0, guest rIP: 0xffffffffb5c64d95 Unhandled WRMSR(0xc2) = 0xffff
+== emulator processes
+   3951       00:04 15348 S    /usr/local/lib/android/sdk/emulator/emulator -kill 2833 -sleep 20
+== emulator crash dumps / logs
+/tmp/android-runner/emu-crash-37.2.13.db

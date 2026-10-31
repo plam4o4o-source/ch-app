@@ -1,0 +1,40 @@
+part mem-base; APK: 1.2.28 52334a7 (Merge remote-tracking branch 'origin/wave14/modern' into claude/charmi); versionCode 1484480; x86_64 libs: 4 size 4311931 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484480 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+installed base: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2847 ms
+## M. Memory over 20 cycles (all tabs + a book + the gallery viewer), base
+tab home @ 99 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=61429KB  Java=7728KB  Native=25952KB  Graphics=0KB  Views=9 Activities=1
+MEM c00 (trimmed)    PSS=67541KB  Java=8308KB  Native=25948KB  Graphics=0KB  Views=9 Activities=1
+cycle 1: book screen opened
+cycles done: 10, gallery viewer reached in 10
+MEM c10 (raw)        PSS=118970KB  Java=19320KB  Native=54204KB  Graphics=0KB  Views=13 Activities=1
+MEM c10 (trimmed)    PSS=105781KB  Java=9684KB  Native=47892KB  Graphics=0KB  Views=13 Activities=1
+cycles done: 20, gallery viewer reached in 20
+MEM c20 (raw)        PSS=123050KB  Java=14900KB  Native=31884KB  Graphics=0KB  Views=13 Activities=1
+MEM c20 (trimmed)    PSS=115798KB  Java=9068KB  Native=29856KB  Graphics=0KB  Views=13 Activities=1
+pid after cycles: 7249; gallery viewer reached in 20/20 cycles
+## COMPLETE
+## logcat findings
+app pids seen: ['5857', '7249']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=34 total=130
+== Davey: 3
+   davey events=3 max=1414ms median=854ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

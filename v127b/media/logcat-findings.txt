@@ -1,0 +1,25 @@
+app pids seen: ['5380', '6803']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=51 total=122
+   10-29 17:32:40.142  5380  5380 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   10-29 17:32:51.134  5380  5380 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-29 17:33:22.700  6803  6803 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+== Davey: 5
+   davey events=5 max=1090ms median=854ms
+   10-29 17:32:41.203  5380  5393 I OpenGLRenderer: Davey! duration=833ms; Flags=1, FrameTimelineVsyncId=6259, IntendedVsync=94910480962, Vsync=95360480944, InputEventId=0, HandleInputStart=95369365409, AnimationStart=95369366230, PerformTrave
+   10-29 17:32:51.416  5380  5393 I OpenGLRenderer: Davey! duration=875ms; Flags=0, FrameTimelineVsyncId=6839, IntendedVsync=105293813880, Vsync=105893813856, InputEventId=0, HandleInputStart=105897607247, AnimationStart=105897608038, PerformT
+   10-29 17:33:02.975  5380  6238 I OpenGLRenderer: Davey! duration=1090ms; Flags=0, FrameTimelineVsyncId=7667, IntendedVsync=116577146762, Vsync=116827146752, InputEventId=0, HandleInputStart=116839783319, AnimationStart=116839783859, Perform
+   10-29 17:36:43.628  6803  6874 I OpenGLRenderer: Davey! duration=854ms; Flags=0, FrameTimelineVsyncId=17699, IntendedVsync=337377137930, Vsync=337727137916, InputEventId=0, HandleInputStart=337728290034, AnimationStart=337728290355, Perform
+   10-29 17:36:43.721  6803  6874 I OpenGLRenderer: Davey! duration=733ms; Flags=0, FrameTimelineVsyncId=17729, IntendedVsync=337743804582, Vsync=338093804568, InputEventId=0, HandleInputStart=338107235706, AnimationStart=338107236518, Perform
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 17:32:38.623  5372  5372 I PERFCHECK: section: W. First launch and warm-up
+   10-29 17:33:19.810  6773  6773 I PERFCHECK: section: G1. Gallery: albums
+   10-29 17:34:16.888  8038  8038 I PERFCHECK: section: G2. Photo viewer: 2× (double tap), beyond 2× (pinch), 20 photos
+   10-29 17:36:16.126  8919  8919 I PERFCHECK: section: C. Covers in the catalogue (Open Library)
+   10-29 17:37:12.791  9290  9290 I PERFCHECK: section: D. Documents: PDF download (no PDF app?)
+   10-29 17:37:23.069  9357  9357 I PERFCHECK: pdf online tap
+   10-29 17:37:52.729  9607  9607 I PERFCHECK: pdf offline tap
+   10-29 17:38:30.516 10017 10017 I PERFCHECK: pdf publication tap

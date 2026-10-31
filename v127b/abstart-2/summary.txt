@@ -1,0 +1,64 @@
+part abstart-2; APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+base APK: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4; update-source APK: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## AB base-1: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+installed base-1: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4 size 4924210;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.26 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-1 FIRST-INSTALL catalogue results after 4007 ms
+base-1 INDEX-READY #1 catalogue results after 3298 ms
+base-1 INDEX-READY #2 catalogue results after 2908 ms
+base-1 INDEX-READY #3 catalogue results after 3270 ms
+START cold base-1        n=10 min=1439ms median=1976ms max=4188ms  all=[4188, 2279, 2240, 2022, 2025, 1732, 1599, 1931, 1439, 1718]  states=['COLD']
+START warm base-1        n=10 min=196ms median=482ms max=624ms  all=[624, 417, 511, 445, 300, 517, 610, 496, 469, 196]  states=['HOT']
+## AB new-1: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+installed new-1: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-1 FIRST-INSTALL catalogue results after 2709 ms
+new-1 INDEX-READY #1 catalogue results after 3078 ms
+new-1 INDEX-READY #2 catalogue results after 2736 ms
+new-1 INDEX-READY #3 catalogue results after 2930 ms
+START cold new-1         n=10 min=1518ms median=1806ms max=2520ms  all=[1941, 1794, 1628, 1723, 1930, 2371, 1710, 2520, 1518, 1818]  states=['COLD']
+START warm new-1         n=10 min=256ms median=614ms max=793ms  all=[593, 621, 636, 558, 606, 403, 645, 793, 770, 256]  states=['HOT']
+## AB new-2: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+installed new-2: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-2 FIRST-INSTALL catalogue results after 2616 ms
+new-2 INDEX-READY #1 catalogue results after 2881 ms
+new-2 INDEX-READY #2 catalogue results after 2587 ms
+new-2 INDEX-READY #3 catalogue results after 2888 ms
+START cold new-2         n=10 min=1333ms median=1814ms max=2281ms  all=[2067, 1838, 2165, 1774, 1491, 1791, 1333, 1789, 2281, 1991]  states=['COLD']
+START warm new-2         n=10 min=218ms median=482ms max=896ms  all=[896, 218, 503, 409, 711, 460, 683, 335, 245, 553]  states=['HOT']
+## AB base-2: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+installed base-2: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4 size 4924210;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.26 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-2 FIRST-INSTALL catalogue results after 2595 ms
+base-2 INDEX-READY #1 catalogue results after 2691 ms
+base-2 INDEX-READY #2 catalogue results after 2719 ms
+base-2 INDEX-READY #3 catalogue results after 2688 ms
+START cold base-2        n=10 min=1445ms median=1823ms max=2125ms  all=[1859, 2016, 1665, 2125, 2012, 1787, 1525, 1445, 1954, 1728]  states=['COLD']
+START warm base-2        n=10 min=303ms median=490ms max=568ms  all=[546, 568, 566, 365, 509, 470, 303, 522, 341, 469]  states=['HOT']
+## AB totals
+START cold NEW 1.2.27    n=20 min=1333ms median=1806ms max=2520ms  all=[1941, 1794, 1628, 1723, 1930, 2371, 1710, 2520, 1518, 1818, 2067, 1838, 2165, 1774, 1491, 1791, 1333, 1789, 2281, 1991]  states=['COLD']
+START cold BASE 1.2.26   n=20 min=1439ms median=1895ms max=4188ms  all=[4188, 2279, 2240, 2022, 2025, 1732, 1599, 1931, 1439, 1718, 1859, 2016, 1665, 2125, 2012, 1787, 1525, 1445, 1954, 1728]  states=['COLD']
+START warm NEW 1.2.27    n=20 min=218ms median=576ms max=896ms  all=[593, 621, 636, 558, 606, 403, 645, 793, 770, 256, 896, 218, 503, 409, 711, 460, 683, 335, 245, 553]  states=['HOT']
+START warm BASE 1.2.26   n=20 min=196ms median=483ms max=624ms  all=[624, 417, 511, 445, 300, 517, 610, 496, 469, 196, 546, 568, 566, 365, 509, 470, 303, 522, 341, 469]  states=['HOT']
+START catalogue first-install new n=2 min=2616ms median=2662ms max=2709ms  all=[2709, 2616]  states=[]
+START catalogue index-ready new n=6 min=2587ms median=2884ms max=3078ms  all=[3078, 2736, 2930, 2881, 2587, 2888]  states=[]
+START catalogue first-install base n=2 min=2595ms median=3301ms max=4007ms  all=[4007, 2595]  states=[]
+START catalogue index-ready base n=6 min=2688ms median=2814ms max=3298ms  all=[3298, 2908, 3270, 2691, 2719, 2688]  states=[]
+## COMPLETE
+## logcat findings
+app pids seen: ['5093', '5935', '6560', '7164', '7738', '7833', '7940', '8050', '8164', '8355', '8406', '8471', '8519', '8565', '8979', '9235', '9372', '9514', '9657', '9716', '9769', '9832', '9879', '9927', '9974', '10160', '10214', '10268', '10653', '10930', '11085', '11223', '11362', '11421', '11472', '11521', '11568', '11617', '11663', '11710', '11800', '11848', '12310', '12639', '12773', '12911', '13098', '13158', '13285', '13350', '13398', '13462', '13520', '13568', '13615', '13663']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 75
+   skipped-frames events=75 max=130 total=3498
+== Davey: 65
+   davey events=65 max=2733ms median=904ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

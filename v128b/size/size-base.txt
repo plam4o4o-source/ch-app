@@ -1,0 +1,12 @@
+== base 1.2.27 8dc63c1: release-config APK (arm64-v8a + armeabi-v7a, minified, throwaway key)
+APK size: 4759051 bytes
+manifest:  A: http://schemas.android.com/apk/res/android:versionCode(0x0101021b)=1484479  A: http://schemas.android.com/apk/res/android:versionName(0x0101021c)="1.2.27" (Raw: "1.2.27")  A: http://schemas.android.com/apk/res/android:extractNativeLibs(0x010104ea)=false 
+part                    compressed  uncompressed  files
+classes*.dex               3318824       6510820      2
+res                         834675       1732326   1006
+resources.arsc              314344        314344      1
+lib/arm64-v8a                57912         57912      4
+lib/armeabi-v7a              41024         41024      4
+assets/                      18394         18394      2
+AndroidManifest.xml           4768         20304      1
+META-INF/                      846          1288      6

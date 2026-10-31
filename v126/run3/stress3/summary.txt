@@ -1,0 +1,25 @@
+part stress3; APK: ac5ea38 (Проверка v1.2.26: трети кръг — липсващото от втория, проба с -gpu swangle_indire); x86_64 libs: 4 size 4924210 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## 0. First launch and warm-up
+first-install catalogue results after 2760 ms
+## S5. Monkey 4000 events (seed 1234, CAMERA revoked)
+camera permission before monkey:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+statusbar disable: 
+monkey start pid=7187
+MONKEY exit=255 duration=82 s; 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+!!! EMULATOR GONE / HUNG (at: after monkey)
+## logcat findings
+app pids seen: ['5387', '7187']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=81 total=195
+== Davey: 5
+   davey events=5 max=1319ms median=1166ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

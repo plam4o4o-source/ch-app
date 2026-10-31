@@ -1,0 +1,12 @@
+app pids seen: ['5241', '7733', '9570']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 1
+   davey events=1 max=1099ms median=1099ms
+   10-29 17:32:15.599  5241  5362 I OpenGLRenderer: Davey! duration=1099ms; Flags=0, FrameTimelineVsyncId=7335, IntendedVsync=93198179444, Vsync=93514846060, InputEventId=0, HandleInputStart=93523125270, AnimationStart=93523125911, PerformTrav
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 17:31:52.924  5219  5219 I PERFCHECK: section: L0. First launch and warm-up
+   10-29 17:33:23.224  7719  7719 I PERFCHECK: section: L font130-xlarge
+   10-29 17:37:00.748  9557  9557 I PERFCHECK: section: L landscape

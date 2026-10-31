@@ -1,0 +1,39 @@
+app pids seen: ['5025', '6027', '6595', '6931', '7564', '7678', '7768', '7891', '8099', '8264', '8320', '8389', '8448', '8498', '8917', '9223', '9366', '9510', '9657', '9723', '9776', '9834', '9885', '9936', '10114', '10210', '10263', '10321', '10731', '11009', '11153', '11297', '11457', '11521', '11574', '11626', '11678', '11733', '11785', '11845', '11896', '11948', '12506', '12824', '12969', '13110', '13258', '13323', '13372', '13425', '13477', '13526', '13577', '13628', '13679', '13730']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 54
+   skipped-frames events=54 max=111 total=2418
+   10-30 14:54:24.979  5025  5025 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   10-30 14:54:26.305  5025  5025 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   10-30 14:54:58.902  6027  6027 I Choreographer: Skipped 73 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:00.191  6027  6027 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:16.629  6595  6595 I Choreographer: Skipped 68 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:51.196  7564  7564 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:59.839  7678  7678 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   10-30 14:56:08.145  7768  7768 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   10-30 14:56:16.131  7891  7891 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   10-30 14:56:24.803  8099  8099 I Choreographer: Skipped 63 frames!  The application may be doing too much work on its main thread.
+   10-30 14:56:25.484  8099  8099 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   10-30 14:56:41.243  8320  8320 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+== Davey: 54
+   davey events=54 max=2228ms median=794ms
+   10-30 14:54:26.502  5025  5040 I OpenGLRenderer: Davey! duration=1281ms; Flags=1, FrameTimelineVsyncId=6120, IntendedVsync=102002283822, Vsync=102235617146, InputEventId=0, HandleInputStart=102250412730, AnimationStart=102250413592, Perform
+   10-30 14:54:26.771  5025  5040 I OpenGLRenderer: Davey! duration=1434ms; Flags=0, FrameTimelineVsyncId=6188, IntendedVsync=102335617142, Vsync=103302283770, InputEventId=0, HandleInputStart=103313914719, AnimationStart=103313915360, Perform
+   10-30 14:54:51.294  5025  5860 I OpenGLRenderer: Davey! duration=760ms; Flags=0, FrameTimelineVsyncId=7319, IntendedVsync=127152282816, Vsync=127218949480, InputEventId=0, HandleInputStart=127229810179, AnimationStart=127229810790, PerformT
+   10-30 14:54:51.725  5025  5036 I OpenGLRenderer: Davey! duration=1235ms; Flags=0, FrameTimelineVsyncId=7326, IntendedVsync=127235616146, Vsync=127552282800, InputEventId=0, HandleInputStart=127564382800, AnimationStart=127564383130, Perform
+   10-30 14:54:52.072  5025  5039 I OpenGLRenderer: Davey! duration=1198ms; Flags=0, FrameTimelineVsyncId=7364, IntendedVsync=127568949466, Vsync=127985616116, InputEventId=0, HandleInputStart=127987498771, AnimationStart=127987499322, Perform
+   10-30 14:54:59.935  6027  6042 I OpenGLRenderer: Davey! duration=1004ms; Flags=1, FrameTimelineVsyncId=8248, IntendedVsync=135918949132, Vsync=136302282450, InputEventId=0, HandleInputStart=136305027326, AnimationStart=136305028278, Perform
+   10-30 14:55:00.566  6027  6115 I OpenGLRenderer: Davey! duration=1199ms; Flags=0, FrameTimelineVsyncId=8325, IntendedVsync=136368960185, Vsync=137185626721, InputEventId=0, HandleInputStart=137196723955, AnimationStart=137196724316, Perform
+   10-30 14:55:17.582  6595  6628 I OpenGLRenderer: Davey! duration=743ms; Flags=1, FrameTimelineVsyncId=10103, IntendedVsync=153668948422, Vsync=154085615072, InputEventId=0, HandleInputStart=154092446383, AnimationStart=154092447004, Perform
+   10-30 14:55:27.463  6595  6628 I OpenGLRenderer: Davey! duration=756ms; Flags=0, FrameTimelineVsyncId=10731, IntendedVsync=163685614688, Vsync=164085614672, InputEventId=0, HandleInputStart=164094725286, AnimationStart=164094725607, Perform
+   10-30 14:55:28.571  6595  6899 I OpenGLRenderer: Davey! duration=774ms; Flags=0, FrameTimelineVsyncId=10825, IntendedVsync=164785614644, Vsync=164868947974, InputEventId=0, HandleInputStart=164873803045, AnimationStart=164873803656, Perform
+   10-30 14:55:28.847  6595  6899 I OpenGLRenderer: Davey! duration=747ms; Flags=0, FrameTimelineVsyncId=10832, IntendedVsync=164885614640, Vsync=165085614632, InputEventId=0, HandleInputStart=165093412786, AnimationStart=165093413307, Perform
+   10-30 14:55:34.369  6931  6947 I OpenGLRenderer: Davey! duration=772ms; Flags=1, FrameTimelineVsyncId=11558, IntendedVsync=170585619958, Vsync=170985619918, InputEventId=0, HandleInputStart=170992332674, AnimationStart=170992333256, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-30 14:54:14.509  4659  4659 I PERFCHECK: section: AB base-1: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+   10-30 14:58:07.032  8774  8774 I PERFCHECK: section: AB new-1: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+   10-30 15:01:37.134 10602 10602 I PERFCHECK: section: AB new-2: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+   10-30 15:05:04.904 12264 12264 I PERFCHECK: section: AB base-2: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+   10-30 15:08:31.026 13991 13991 I PERFCHECK: section: AB totals

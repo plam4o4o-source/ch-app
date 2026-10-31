@@ -1,0 +1,33 @@
+app pids seen: ['5161']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=69 total=281
+   10-31 17:35:20.810  5161  5161 I Choreographer: Skipped 69 frames!  The application may be doing too much work on its main thread.
+   10-31 17:35:21.431  5161  5161 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-31 17:35:22.655  5161  5161 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-31 17:35:44.327  5161  5161 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-31 17:38:06.563  5161  5161 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-31 17:38:07.397  5161  5161 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   10-31 17:41:56.566  5161  5161 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+== Davey: 10
+   davey events=10 max=1405ms median=936ms
+   10-31 17:35:22.585  5161  5175 I OpenGLRenderer: Davey! duration=906ms; Flags=1, FrameTimelineVsyncId=6308, IntendedVsync=98914291225, Vsync=98930957891, InputEventId=0, HandleInputStart=98932267723, AnimationStart=98932268384, PerformTrave
+   10-31 17:35:32.976  5161  5245 I OpenGLRenderer: Davey! duration=843ms; Flags=0, FrameTimelineVsyncId=6782, IntendedVsync=109514290801, Vsync=109930957451, InputEventId=0, HandleInputStart=109940813993, AnimationStart=109940814654, PerformT
+   10-31 17:35:44.621  5161  5703 I OpenGLRenderer: Davey! duration=847ms; Flags=0, FrameTimelineVsyncId=7257, IntendedVsync=120764290351, Vsync=120847623681, InputEventId=0, HandleInputStart=120862182762, AnimationStart=120862183443, PerformT
+   10-31 17:35:44.849  5161  5174 I OpenGLRenderer: Davey! duration=1405ms; Flags=0, FrameTimelineVsyncId=7266, IntendedVsync=120880957013, Vsync=121164290335, InputEventId=0, HandleInputStart=121177816984, AnimationStart=121177817445, Perform
+   10-31 17:35:45.206  5161  5174 I OpenGLRenderer: Davey! duration=1168ms; Flags=0, FrameTimelineVsyncId=7280, IntendedVsync=121197623667, Vsync=121797623643, InputEventId=0, HandleInputStart=121802515784, AnimationStart=121802516236, Perform
+   10-31 17:37:55.254  5161  5174 I OpenGLRenderer: Davey! duration=946ms; Flags=0, FrameTimelineVsyncId=13069, IntendedVsync=251614285117, Vsync=252064285099, InputEventId=0, HandleInputStart=252064791066, AnimationStart=252064791516, Perform
+   10-31 17:37:55.776  5161  5245 I OpenGLRenderer: Davey! duration=926ms; Flags=0, FrameTimelineVsyncId=13175, IntendedVsync=252080951765, Vsync=252230951759, InputEventId=0, HandleInputStart=252242561599, AnimationStart=252242562169, Perform
+   10-31 17:37:55.923  5161  5245 I OpenGLRenderer: Davey! duration=1067ms; Flags=0, FrameTimelineVsyncId=13207, IntendedVsync=252264285091, Vsync=252730951739, InputEventId=0, HandleInputStart=252741635320, AnimationStart=252741636081, Perfor
+   10-31 17:38:07.301  5161  5245 I OpenGLRenderer: Davey! duration=1018ms; Flags=0, FrameTimelineVsyncId=13783, IntendedVsync=263430951311, Vsync=264030951287, InputEventId=0, HandleInputStart=264038638993, AnimationStart=264038639724, Perfor
+   10-31 17:38:07.658  5161  5245 I OpenGLRenderer: Davey! duration=850ms; Flags=0, FrameTimelineVsyncId=13923, IntendedVsync=264197617947, Vsync=264864284587, InputEventId=0, HandleInputStart=264871807868, AnimationStart=264871808660, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 17:35:19.135  5155  5155 I PERFCHECK: section: W. First launch and warm-up
+   10-31 17:36:02.704  6511  6511 I PERFCHECK: section: W1. Add the widget from the launchers widget picker default 4×2 = wide
+   10-31 17:37:13.927  7943  7943 I PERFCHECK: section: W2. Wide 4×2, signed out: content, light and dark
+   10-31 17:37:48.671  8114  8114 I PERFCHECK: section: W3. Wide widget: clicks
+   10-31 17:38:36.877  8433  8433 I PERFCHECK: section: W4. Sizes: 4×3, 3×2, 2×2, 2×3 resize handles, light and dark each
+   10-31 17:44:01.710 10213 10213 I PERFCHECK: section: W5. After force-stop of the app process

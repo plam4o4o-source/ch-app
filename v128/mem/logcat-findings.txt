@@ -1,0 +1,29 @@
+app pids seen: ['5096', '6623']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=51 total=212
+   10-30 14:54:44.862  5096  5096 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   10-30 14:54:45.912  5096  5096 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:08.496  5096  5096 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:30.147  6623  6623 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:31.257  6623  6623 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+== Davey: 12
+   davey events=12 max=1664ms median=760ms
+   10-30 14:54:47.142  5096  5115 I OpenGLRenderer: Davey! duration=1664ms; Flags=1, FrameTimelineVsyncId=6416, IntendedVsync=102669443058, Vsync=103436109694, InputEventId=0, HandleInputStart=103449111176, AnimationStart=103449111576, Perform
+   10-30 14:54:57.415  5096  5115 I OpenGLRenderer: Davey! duration=763ms; Flags=0, FrameTimelineVsyncId=6937, IntendedVsync=114102775934, Vsync=114569442582, InputEventId=0, HandleInputStart=114576299084, AnimationStart=114576299757, PerformT
+   10-30 14:55:08.282  5096  5111 I OpenGLRenderer: Davey! duration=740ms; Flags=0, FrameTimelineVsyncId=7392, IntendedVsync=125002775498, Vsync=125036108830, InputEventId=0, HandleInputStart=125043039781, AnimationStart=125043040375, PerformT
+   10-30 14:55:09.069  5096  5111 I OpenGLRenderer: Davey! duration=1321ms; Flags=0, FrameTimelineVsyncId=7401, IntendedVsync=125052775496, Vsync=125452775480, InputEventId=0, HandleInputStart=125453540336, AnimationStart=125453540988, Perform
+   10-30 14:55:09.151  5096  5117 I OpenGLRenderer: Davey! duration=962ms; Flags=0, FrameTimelineVsyncId=7415, IntendedVsync=125486108812, Vsync=126019442124, InputEventId=0, HandleInputStart=126058878712, AnimationStart=126058879513, PerformT
+   10-30 14:55:31.348  6623  6644 I OpenGLRenderer: Davey! duration=1031ms; Flags=1, FrameTimelineVsyncId=9455, IntendedVsync=147702774590, Vsync=148186107904, InputEventId=0, HandleInputStart=148196866970, AnimationStart=148196867512, Perform
+   10-30 14:55:31.746  6623  6644 I OpenGLRenderer: Davey! duration=884ms; Flags=0, FrameTimelineVsyncId=9610, IntendedVsync=148219441236, Vsync=148786107880, InputEventId=0, HandleInputStart=148795869299, AnimationStart=148795869865, PerformT
+   10-30 14:56:09.529  6623  6636 I OpenGLRenderer: Davey! duration=757ms; Flags=0, FrameTimelineVsyncId=10801, IntendedVsync=186052773056, Vsync=186419439708, InputEventId=0, HandleInputStart=186420183601, AnimationStart=186420184609, Perform
+   10-30 14:57:00.017  6623  6636 I OpenGLRenderer: Davey! duration=701ms; Flags=0, FrameTimelineVsyncId=13181, IntendedVsync=236669437698, Vsync=236969437686, InputEventId=-544172984, HandleInputStart=236982216957, AnimationStart=236982217491
+   10-30 15:00:01.374  6623  6644 I OpenGLRenderer: Davey! duration=727ms; Flags=0, FrameTimelineVsyncId=21785, IntendedVsync=417952763780, Vsync=418219430436, InputEventId=-826882241, HandleInputStart=418226061129, AnimationStart=418226061838
+   10-30 15:03:41.127  6623  6644 I OpenGLRenderer: Davey! duration=739ms; Flags=0, FrameTimelineVsyncId=32084, IntendedVsync=637869421650, Vsync=638102754974, InputEventId=0, HandleInputStart=638112531340, AnimationStart=638112531824, Perform
+   10-30 15:04:03.148  6623  6636 I OpenGLRenderer: Davey! duration=702ms; Flags=0, FrameTimelineVsyncId=32952, IntendedVsync=659702754110, Vsync=660036087430, InputEventId=-299535409, HandleInputStart=660048462598, AnimationStart=660048463084
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-30 14:54:42.344  5083  5083 I PERFCHECK: section: W. First launch and warm-up
+   10-30 14:55:26.744  6603  6603 I PERFCHECK: section: M. Memory over 20 cycles (all tabs + a book + the gallery viewer), new

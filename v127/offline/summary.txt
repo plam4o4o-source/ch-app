@@ -1,0 +1,31 @@
+part offline; APK: 6efbc80 (Проверка на вълна 13 на емулатор (v127): старт, памет, monkey, функционални пров); x86_64 libs: 4 size 4875530 bytes
+host: 4 cpu, 15987 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## O1. Empty cache, offline, guest: My
+offline: airplane=1
+MY offline guest: add-card shown; note shown; text="Здравей!" text="Новините, събитията, каталогът и информацията за читалището са достъпни и без вход." text="Добави читателска карта" text="Не можем да проверим дали онлайн входът е включен." text="Опитай отново" text="БИБЛИОТЕКА" text="Читателска карта" text="Добави номера от своята карта" text
+MY offline guest (+8 s): add-card shown; note shown
+## O2. Gallery offline with an empty cache
+gallery offline 3 s: text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" content-desc="Назад" text="Галерия" text="Няма интернет връзка" 
+GALLERY offline: 'Опитай отново' after 7585 ms; text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" content-desc="Назад" text="Галерия" text="Няма интернет връзка" 
+gallery offline (+15 s): text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" content-desc="Назад" text="Галерия" text="Няма интернет връзка" 
+## O3. Reconnect on the Gallery (no touch)
+GALLERY reconnect: default network back after 6748 ms; albums shown after 14064 ms (-1 = not within 60 s); text="29 снимки" text="Фотодокументална изложба" text="4 снимки" text="Фолклорна група „Явор“" text="6 снимки" text="Клуб за народни танци" text="7 снимки" text="Ансамбъл „Яворски хлапета“" 
+## O4. My offline as guest again (after the online start)
+offline: airplane=1
+MY offline guest #2: add-card MISSING; note absent; text="Здравей!" text="Новините, събитията, каталогът и информацията за читалището са достъпни и без вход." text="Вход" text="БИБЛИОТЕКА" text="Читателска карта" text="Добави номера от своята карта" text="Моите книги" text="Заети книги и срокове за връщане" text="Искам да прочета" text="Книги, които 
+## COMPLETE
+## logcat findings
+app pids seen: ['5114', '7895']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=82 total=163
+== Davey: 2
+   davey events=2 max=1222ms median=1134ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

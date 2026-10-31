@@ -1,0 +1,33 @@
+app pids seen: ['5187', '6956']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 10
+   skipped-frames events=10 max=78 total=516
+   10-27 15:43:27.894  5187  5187 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   10-27 15:43:28.476  5187  5187 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-27 15:43:29.853  5187  5187 I Choreographer: Skipped 78 frames!  The application may be doing too much work on its main thread.
+   10-27 15:43:30.588  5187  5187 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   10-27 15:43:52.395  5187  5187 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   10-27 15:43:53.360  5187  5187 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   10-27 15:44:14.867  6956  6956 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   10-27 15:44:16.250  6956  6956 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+   10-27 15:44:29.979  6956  6956 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   10-27 15:44:41.922  6956  6956 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+== Davey: 11
+   davey events=11 max=1906ms median=1200ms
+   10-27 15:43:29.840  5187  5199 I OpenGLRenderer: Davey! duration=1906ms; Flags=1, FrameTimelineVsyncId=6405, IntendedVsync=103263788462, Vsync=103813788440, InputEventId=0, HandleInputStart=103826018534, AnimationStart=103826019205, Perform
+   10-27 15:43:30.318  5187  5199 I OpenGLRenderer: Davey! duration=1746ms; Flags=0, FrameTimelineVsyncId=6532, IntendedVsync=103897127311, Vsync=105197127259, InputEventId=0, HandleInputStart=105203287144, AnimationStart=105203287755, Perform
+   10-27 15:43:40.780  5187  5198 I OpenGLRenderer: Davey! duration=716ms; Flags=0, FrameTimelineVsyncId=7202, IntendedVsync=115347121312, Vsync=115380454644, InputEventId=0, HandleInputStart=115390221302, AnimationStart=115390221533, PerformT
+   10-27 15:43:42.256  5187  5198 I OpenGLRenderer: Davey! duration=817ms; Flags=0, FrameTimelineVsyncId=7327, IntendedVsync=116780454588, Vsync=116780454588, InputEventId=0, HandleInputStart=116780670642, AnimationStart=116780671404, PerformT
+   10-27 15:43:52.386  5187  5198 I OpenGLRenderer: Davey! duration=1200ms; Flags=0, FrameTimelineVsyncId=7858, IntendedVsync=126513787532, Vsync=126547120864, InputEventId=0, HandleInputStart=126563123754, AnimationStart=126563124516, Perform
+   10-27 15:43:53.422  5187  5198 I OpenGLRenderer: Davey! duration=1462ms; Flags=0, FrameTimelineVsyncId=7866, IntendedVsync=126580454196, Vsync=126880454184, InputEventId=0, HandleInputStart=126893899760, AnimationStart=126893900522, Perform
+   10-27 15:43:53.454  5187  5198 I OpenGLRenderer: Davey! duration=919ms; Flags=0, FrameTimelineVsyncId=7873, IntendedVsync=126913787516, Vsync=127730454150, InputEventId=0, HandleInputStart=127745228944, AnimationStart=127745229606, PerformT
+   10-27 15:44:16.222  6956  6970 I OpenGLRenderer: Davey! duration=1306ms; Flags=1, FrameTimelineVsyncId=9291, IntendedVsync=150247119916, Vsync=150513786572, InputEventId=0, HandleInputStart=150515534225, AnimationStart=150515534847, Perform
+   10-27 15:44:16.703  6956  6968 I OpenGLRenderer: Davey! duration=1442ms; Flags=0, FrameTimelineVsyncId=9332, IntendedVsync=150530453238, Vsync=151597119862, InputEventId=0, HandleInputStart=151599990125, AnimationStart=151599990686, Perform
+   10-27 15:44:17.667  6956  6968 I OpenGLRenderer: Davey! duration=933ms; Flags=0, FrameTimelineVsyncId=9464, IntendedVsync=152030453178, Vsync=152063786510, InputEventId=0, HandleInputStart=152070399188, AnimationStart=152070399529, PerformT
+   10-27 15:44:30.128  6956  6970 I OpenGLRenderer: Davey! duration=773ms; Flags=1, FrameTimelineVsyncId=10182, IntendedVsync=164480452680, Vsync=164480452680, InputEventId=-33284063, HandleInputStart=164482297431, AnimationStart=164482297842,
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 15:43:26.612  5175  5175 I PERFCHECK: section: 0. First launch and warm-up
+   10-27 15:44:11.402  6917  6917 I PERFCHECK: section: S5. Monkey 4000 events (seed 1234, CAMERA revoked)
+   10-27 15:44:25.987  7207  7207 I PERFCHECK: monkey start

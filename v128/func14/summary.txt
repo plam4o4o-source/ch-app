@@ -1,0 +1,71 @@
+part func14; APK: 1.2.28 52334a7 (Merge remote-tracking branch 'origin/wave14/modern' into claude/charmi); versionCode 1484480; x86_64 libs: 4 size 4311931 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1484480 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2601 ms
+## H. Home SearchBar (Material 3): tap, '12', open a result, back, back gesture
+SEARCHBAR collapsed: field @ 503 393; scanner icon yes
+SEARCHBAR tapped: expanded=yes query-12=no hint=yes tabbar=no app-in-front=yes IME mInputShown=true
+SEARCHBAR '12': text="12" content-desc="Лента за търсене" content-desc="Назад" content-desc="Изчисти" text="Всички" text="Книги" text="Новини" text="Събития" text="Страници" text="Книги" text="Спомен за здрача" text="Веска Пенчева" text="1972 · графично издание · за възрастни" text="Не е на рафта" text="12 -те вятъ
+SEARCHBAR result opened: back=yes bar-gone=yes; text="12 -те вятъра" text="Гарфилд, Джудит и др." text="Налична" text="Наличност към 28.10.2026" text="Искам да прочета" 
+SEARCHBAR Back from the result: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=true
+SEARCHBAR Back key on the expanded bar: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=false
+## H2. Back GESTURE from the expanded bar (gesture navigation; API 33 — the predictive animation needs Android 14+)
+gesture nav:  navigation_mode=2
+SEARCHBAR expanded again: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=true
+SEARCHBAR IME hidden: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=false
+SEARCHBAR after back gesture #1: expanded=no query-12=yes hint=no tabbar=yes app-in-front=yes IME mInputShown=false
+SEARCHBAR back gesture on the collapsed Home: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity
+## N. Native libraries (compressed in the APK): APK entries, installed files, loaded libraries; scanner with CAMERA denied
+APK x86_64 libs: libandroidx.graphics.path.so type=deflated 4614/10760; libdatastore_shared_counter.so type=deflated 2812/7424; libimage_processing_util_jni.so type=deflated 22802/49496; libsurface_util_jni.so type=deflated 1794/4912
+installed: /data/app/~~lBPdsMhPORLLxEZcSzZehA==/org.chyavorec.app-W3_m5u0RSzmma1zYRwXX2w==; lib/x86_64: total 96 libandroidx.graphics.path.so(10760) libdatastore_shared_counter.so(7424) libimage_processing_util_jni.so(49496) libsurface_util_jni.so(4912) 
+package flags:  legacyNativeLibraryDir=/data/app/~~lBPdsMhPORLLxEZcSzZehA==/org.chyavorec.app-W3_m5u0RSzmma1zYRwXX2w==/lib  primaryCpuAbi=x86_64  pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ] 
+## F6. Scanner (CAMERA revoked): manual panel, Back key
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+manual panel: panel OPEN; IME mInputShown=true; scanner visible; app in front yes
+Back key #1: panel OPEN; IME mInputShown=false; scanner visible; app in front yes
+Back key #2: panel closed; IME mInputShown=false; scanner visible; app in front yes
+SCAN result: content-desc="Затваряне на таблицата" content-desc="Манипулатор за преместване с плъзгане" text="12 -те вятъра" text="Гарфилд, Джудит и др." text="2011" text="Налична" text="инв. № 399560" text="Затвори" text="Отвори книгата" 
+SCAN → book: opened
+loaded app .so (pid 8005): 
+UnsatisfiedLinkError / dlopen failed in logcat so far: 2
+## CM. Sign-in screen; the saved-credential query (Credential Manager) on opening
+autofill service: 'com.google.android.gms/.autofill.service.AutofillService'; credential service: 'null'; GMS: versionName=23.18.18(190800-535401451)
+LOGIN +1s: fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството.
+LOGIN +4s: fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството.
+LOGIN +8s: fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството.
+LOGIN logcat (credentials/crash): 10-30 14:58:06.319  9163  9163 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<< 10-30 14:58:06.321  9163  9163 I AndroidRuntime: Using default boot image 10-30 14:58:06.321  9163  9163 I AndroidRuntime: Leaving lock profiling enabled 10-30 14:58:06.371  9163  9163 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher 10-30 14:58:07.391  9163  9163 D AndroidRuntime: Shutting down VM 10-30 14:58:08.398  6676  6676 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.auth.api.identity.service.signin.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsApiService } 10-30 14:58:08.398  6676  6676 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.auth.api.identity.service.signin.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.Gm 10-30 14:58:09.333  9192  9192 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<< 
+LOGIN card field typed (not submitted: no reader test account): 1 field(s) show it; app in front yes
+LOGIN after Back: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="12" 
+## C. Notification channel groups (fresh install of v1.2.28)
+groups: group_app=Приложението; group_my_library=Моята библиотека; group_centre=Читалището
+channels: events(Събития)->?; messages(Съобщения от читалището)->?; updates(Обновления)->?; news(Новини)->?; loans(Срокове за връщане)->?; library(Библиотека)->?; messages_important(Важни съобщения)->?
+cmd notification list_channels: Unknown command: list_channels 
+SYSTEM notification settings: fg com.android.settings/com.android.settings.Settings$AppNotificationSettingsActivity; content-desc="Chitalishte Yavorets" content-desc="Navigate up" text="Chitalishte Yavorets" text="All Chitalishte Yavorets notifications" text="Приложението" text="Обновления" content-desc="Обновления" text="Читалището" text="Събития" content-desc="Събития" text="Съобщения от читалището" content-desc="Съобщения от читалището" content-desc="Важни съобщения" 
+SYSTEM notification settings (scrolled): content-desc="Chitalishte Yavorets" content-desc="Navigate up" text="Обновления" content-desc="Обновления" text="Читалището" text="Събития" content-desc="Събития" text="Съобщения от читалището" content-desc="Съобщения от читалището" text="Важни съобщения" content-desc="Важни съобщения" text="Новини" content-desc="Новини" text="Моята библиотека" text="Библиотека" content-desc="Библиотека" text="Срокове за връщане" content-desc="Срокове за връщане" text="Allow notification dot" 
+## S. App shortcuts: long-press the icon; dynamic 'Искам да прочета' and the last public book
+SHORTCUTS before: id=last-book, flags=0x85 [DynIc-rStr] id=catalog, flags=0x1a4 [ImManIc-rStr] id=scan, flags=0x1a4 [ImManIc-rStr] id=card, flags=0x1a4 [ImManIc-rStr] id=events, flags=0x1a4 [ImManIc-rStr] 
+SHORTCUTS before labels: shortLabel=12 -те вятъра|longLabel=12 -те вятъра — Гарфилд|shortLabel=Catalogue|longLabel=Search the catalogue|shortLabel=Scan|longLabel=Scan a book barcode|shortLabel=Library card|longLabel=My library card|shortLabel=Events|longLabel=Upcoming events|
+SHORTCUTS popup 01-before: content-desc="App info" content-desc="Pause app" text="Widgets" text="Catalogue" content-desc="Search the catalogue" text="My library card" content-desc="My library card" text="Upcoming events" content-desc="Upcoming events" text="12 -те вятъра" content-desc="12 -те вятъра — Гарфилд, Джудит и др." 
+public book opened: text="12 -те вятъра" text="Гарфилд, Джудит и др." text="Налична" 
+SHORTCUTS after: id=last-book, flags=0x85 [DynIc-rStr] id=catalog, flags=0x1a4 [ImManIc-rStr] id=want-to-read, flags=0x85 [DynIc-rStr] id=scan, flags=0x1a4 [ImManIc-rStr] id=card, flags=0x1a4 [ImManIc-rStr] id=events, flags=0x1a4 [ImManIc-rStr] 
+SHORTCUTS after labels: shortLabel=12 -те вятъра|longLabel=12 -те вятъра — Гарфилд|shortLabel=Catalogue|longLabel=Search the catalogue|shortLabel=Искам да прочета|longLabel=Списък „Искам да прочета“|shortLabel=Scan|longLabel=Scan a book barcode|shortLabel=Library card|longLabel=My library card|shortLabel=Events|longLabel=Upcoming events|
+SHORTCUTS popup 02-after: content-desc="App info" content-desc="Pause app" text="Widgets" text="Catalogue" content-desc="Search the catalogue" text="My library card" content-desc="My library card" text="Искам да прочета" content-desc="Списък „Искам да прочета“" text="12 -те вятъра" content-desc="12 -те вятъра — Гарфилд, Джудит и др." 
+SHORTCUT '12 -те вятъра' → fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="12 -те вятъра" text="Гарфилд, Джудит и др." text="Налична" text="Наличност към 28.10.2026" 
+## COMPLETE
+## logcat findings
+app pids seen: ['5836', '7341', '8005']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=36 total=36
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

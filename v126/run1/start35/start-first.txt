@@ -1,0 +1,4 @@
+Status: ok
+LaunchState: COLD
+TotalTime: 2661
+WaitTime: 2671

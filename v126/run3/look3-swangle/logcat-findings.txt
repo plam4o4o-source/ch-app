@@ -1,0 +1,19 @@
+app pids seen: ['5606', '6131', '8008']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=51 total=111
+   10-27 16:04:33.509  6131  6131 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   10-27 16:07:04.877  8008  8008 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-27 16:07:57.453  8008  8008 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+== Davey: 4
+   davey events=4 max=1145ms median=822ms
+   10-27 16:03:56.366  5606  5618 I OpenGLRenderer: Davey! duration=808ms; Flags=1, FrameTimelineVsyncId=5907, IntendedVsync=85939340216, Vsync=86372673532, InputEventId=0, HandleInputStart=86378856983, AnimationStart=86378857474, PerformTrave
+   10-27 16:04:33.868  6131  6147 I OpenGLRenderer: Davey! duration=1145ms; Flags=1, FrameTimelineVsyncId=8522, IntendedVsync=123156005394, Vsync=124006005360, InputEventId=0, HandleInputStart=124012494617, AnimationStart=124012495100, Perform
+   10-27 16:07:05.311  8008  8022 I OpenGLRenderer: Davey! duration=836ms; Flags=1, FrameTimelineVsyncId=12111, IntendedVsync=274872665992, Vsync=275372665972, InputEventId=0, HandleInputStart=275380198424, AnimationStart=275380199181, Perform
+   10-27 16:07:57.872  8008  8021 I OpenGLRenderer: Davey! duration=776ms; Flags=0, FrameTimelineVsyncId=13907, IntendedVsync=327439330556, Vsync=327939330536, InputEventId=0, HandleInputStart=327955477264, AnimationStart=327955477843, Perform
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 16:03:54.108  5600  5600 I PERFCHECK: section: L0. First launch and warm-up
+   10-27 16:04:27.469  6075  6075 I PERFCHECK: section: L5. Landscape
+   10-27 16:07:00.557  7961  7961 I PERFCHECK: section: L4. Font scale 1.3

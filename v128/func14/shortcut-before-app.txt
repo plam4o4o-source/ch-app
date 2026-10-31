@@ -1,0 +1,86 @@
+      Package: org.chyavorec.app  UID: 10174
+        Calls: 0
+        Last known FG: 358612
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 1484480
+          Backup Allowed: false
+          Last package update time: 1793372022237
+
+        Shortcuts:
+          ShortcutInfo {id=last-book, flags=0x85 [DynIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=12 -те вятъра, resId=0[null]
+            longLabel=12 -те вятъра — Гарфилд, Джудит и др., resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372257397
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230849[drawable/ic_shortcut_book], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=catalog, flags=0x1a4 [ImManIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=Catalogue, resId=2131755754[shortcut_catalog]
+            longLabel=Search the catalogue, resId=2131755755[shortcut_catalog_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372062490
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... flg=0x1000c000 cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230851[drawable/ic_shortcut_catalog], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=scan, flags=0x1a4 [ImManIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=Scan, resId=2131755758[shortcut_scan]
+            longLabel=Scan a book barcode, resId=2131755759[shortcut_scan_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=3, timestamp=1793372062490
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... flg=0x1000c000 cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230853[drawable/ic_shortcut_scan], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=card, flags=0x1a4 [ImManIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=Library card, resId=2131755752[shortcut_card]
+            longLabel=My library card, resId=2131755753[shortcut_card_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372062490
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... flg=0x1000c000 cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230850[drawable/ic_shortcut_card], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=events, flags=0x1a4 [ImManIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=Events, resId=2131755756[shortcut_events]
+            longLabel=Upcoming events, resId=2131755757[shortcut_events_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=2, timestamp=1793372062490
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... flg=0x1000c000 cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230852[drawable/ic_shortcut_events], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@5329565[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 4]
+

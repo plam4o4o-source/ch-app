@@ -1,0 +1,22 @@
+== new 1.2.28 52334a7: release-config APK (arm64-v8a + armeabi-v7a, minified, throwaway key)
+APK size: 4279296 bytes
+manifest:  A: http://schemas.android.com/apk/res/android:versionCode(0x0101021b)=1484480  A: http://schemas.android.com/apk/res/android:versionName(0x0101021c)="1.2.28" (Raw: "1.2.28")  A: http://schemas.android.com/apk/res/android:extractNativeLibs(0x010104ea)=true 
+part                    compressed  uncompressed  files
+classes*.dex               3499230       6870364      2
+res (other)                 468751        833148     58
+resources.arsc              213284        213284      1
+lib/arm64-v8a                26028         57912      4
+lib/armeabi-v7a              22503         41024      4
+assets/                      18984         18984      2
+AndroidManifest.xml           4889         20880      1
+META-INF/                      846          1288      6
+native libraries (compress type 0 = stored, 8 = deflated):
+  lib/arm64-v8a/libandroidx.graphics.path.so                   type=8      4386 /     10096
+  lib/arm64-v8a/libdatastore_shared_counter.so                 type=8      4256 /     10376
+  lib/arm64-v8a/libimage_processing_util_jni.so                type=8     15630 /     32544
+  lib/arm64-v8a/libsurface_util_jni.so                         type=8      1756 /      4896
+  lib/armeabi-v7a/libandroidx.graphics.path.so                 type=8      4064 /      7252
+  lib/armeabi-v7a/libdatastore_shared_counter.so               type=8      2537 /      5864
+  lib/armeabi-v7a/libimage_processing_util_jni.so              type=8     14296 /     24448
+  lib/armeabi-v7a/libsurface_util_jni.so                       type=8      1606 /      3460
+fonts:

@@ -1,0 +1,21 @@
+part probe33-swangle; APK: ac5ea38 (Проверка v1.2.26: трети кръг — липсващото от втория, проба с -gpu swangle_indire); x86_64 libs: 4 size 4924210 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED]
+screen 1080x2400
+## 0. First launch and warm-up
+first-install catalogue results after 3064 ms
+## S1. Home swipes (API stability probe: 20 swipes)
+HOME SWIPES SURVIVED: 20/20
+## COMPLETE
+## logcat findings
+app pids seen: ['5238', '6746']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=44 total=154
+== Davey: 6
+   davey events=6 max=1119ms median=888ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

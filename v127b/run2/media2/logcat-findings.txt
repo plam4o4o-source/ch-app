@@ -1,0 +1,17 @@
+app pids seen: ['6422', '7036']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=36 total=36
+   10-29 18:09:25.887  6422  6422 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 18:09:03.207  6036  6036 I PERFCHECK: section: P. Host-side probe of the site photos (status, time, size of the optimizer variants)
+   10-29 18:09:24.216  6416  6416 I PERFCHECK: section: W. First launch and warm-up
+   10-29 18:09:59.780  7017  7017 I PERFCHECK: section: G1. Album 1: thumbnails over time (2, 5, 10, 20, 40 s) and after scrolling
+   10-29 18:11:28.376  7471  7471 I PERFCHECK: section: G2. Viewer: load time, double tap 2×, pinch beyond 2×, photo 5
+   10-29 18:12:53.211  8076  8076 I PERFCHECK: section: C. Covers that have an address in the catalogue (cv) and a book with an ISBN
+   10-29 18:14:07.480  8557  8557 I PERFCHECK: section: D1. PDF with the PDF app disabled (Drive PDF viewer)
+   10-29 18:14:30.926  8925  8925 I PERFCHECK: section: D2. PDF download fails (offline while on Documents) → toast + browser
+   10-29 18:15:02.565  9357  9357 I PERFCHECK: section: E. Contacts: the e-mail line in the card

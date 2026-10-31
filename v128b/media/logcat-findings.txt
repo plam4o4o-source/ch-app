@@ -1,0 +1,23 @@
+app pids seen: ['6726', '7287']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=40 total=40
+   10-31 17:35:56.234  6726  6726 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 17:35:47.468  6448  6448 I PERFCHECK: section: P. Host probe: photos of album 1 Фотодокументална изложба on the site
+   10-31 17:35:54.979  6717  6717 I PERFCHECK: section: W. First launch and warm-up
+   10-31 17:36:31.769  7270  7270 I PERFCHECK: section: G1. Album with missing photos: the Снимката липсва placeholder
+   10-31 17:37:37.364  7839  7839 I PERFCHECK: section: G2. Viewer on a missing photo: message and Опитай отново
+   10-31 17:38:15.837  8072  8072 I PERFCHECK: section: G3. Viewer: double tap 2×, then pinch beyond 2×, pan while zoomed, reset
+   10-31 17:39:16.188  8638  8638 I PERFCHECK: section: C. Covers: catalogue list and books with an ISBN
+   10-31 17:40:26.803  9065  9065 I PERFCHECK: section: D1. Documents: PDF download opens with its readable file name Drive PDF viewer
+   10-31 17:40:37.026  9130  9130 I PERFCHECK: pdf online tap
+   10-31 17:41:19.208  9642  9642 I PERFCHECK: pdf publication tap
+   10-31 17:41:45.415  9858  9858 I PERFCHECK: section: D2. PDF download fails offline on Documents → message → browser
+   10-31 17:41:59.026  9960  9960 I PERFCHECK: pdf offline tap
+   10-31 17:42:34.602 10599 10599 I PERFCHECK: section: D3. PDF with no PDF app at all Drive disabled → browser
+   10-31 17:42:41.988 10644 10644 I PERFCHECK: pdf noapp tap

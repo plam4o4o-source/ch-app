@@ -1,0 +1,34 @@
+app pids seen: ['5102', '9355']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 9
+   skipped-frames events=9 max=45 total=331
+   10-30 15:30:49.763  5102  5102 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-30 15:30:50.548  5102  5102 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   10-30 15:31:01.628  5102  5102 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   10-30 15:31:12.667  5102  5102 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-30 15:31:13.235  5102  5102 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-30 15:31:51.658  5102  5102 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   10-30 15:31:52.279  5102  5102 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-30 15:31:52.932  5102  5102 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   10-30 15:35:00.832  9355  9355 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 15
+   davey events=15 max=1703ms median=958ms
+   10-30 15:30:51.618  5102  5113 I OpenGLRenderer: Davey! duration=1588ms; Flags=1, FrameTimelineVsyncId=6342, IntendedVsync=102797535540, Vsync=103530868844, InputEventId=0, HandleInputStart=103540436419, AnimationStart=103540437020, Perform
+   10-30 15:31:01.623  5102  5113 I OpenGLRenderer: Davey! duration=913ms; Flags=0, FrameTimelineVsyncId=7019, IntendedVsync=113614190676, Vsync=113814190668, InputEventId=0, HandleInputStart=113830546474, AnimationStart=113830547085, PerformT
+   10-30 15:31:01.842  5102  5113 I OpenGLRenderer: Davey! duration=958ms; Flags=0, FrameTimelineVsyncId=7037, IntendedVsync=113864190666, Vsync=114614190636, InputEventId=0, HandleInputStart=114623931800, AnimationStart=114623932752, PerformT
+   10-30 15:31:12.346  5102  5628 I OpenGLRenderer: Davey! duration=706ms; Flags=0, FrameTimelineVsyncId=7554, IntendedVsync=124597523570, Vsync=124647523568, InputEventId=0, HandleInputStart=124649065294, AnimationStart=124649065925, PerformT
+   10-30 15:31:13.643  5102  5114 I OpenGLRenderer: Davey! duration=1703ms; Flags=0, FrameTimelineVsyncId=7564, IntendedVsync=124664190234, Vsync=125014190220, InputEventId=0, HandleInputStart=125024271847, AnimationStart=125024272468, Perform
+   10-30 15:31:13.724  5102  5114 I OpenGLRenderer: Davey! duration=979ms; Flags=0, FrameTimelineVsyncId=7605, IntendedVsync=125130856882, Vsync=125647523528, InputEventId=0, HandleInputStart=125679099103, AnimationStart=125679099834, PerformT
+   10-30 15:31:40.211  5102  5269 I OpenGLRenderer: Davey! duration=814ms; Flags=0, FrameTimelineVsyncId=8991, IntendedVsync=152080855804, Vsync=152397522458, InputEventId=0, HandleInputStart=152405670139, AnimationStart=152405670791, PerformT
+   10-30 15:31:52.255  5102  5113 I OpenGLRenderer: Davey! duration=1456ms; Flags=0, FrameTimelineVsyncId=9719, IntendedVsync=163314188688, Vsync=163714188672, InputEventId=0, HandleInputStart=163724937943, AnimationStart=163724938284, Perform
+   10-30 15:31:52.643  5102  5113 I OpenGLRenderer: Davey! duration=982ms; Flags=0, FrameTimelineVsyncId=9743, IntendedVsync=163747522004, Vsync=163914188664, InputEventId=0, HandleInputStart=163923516380, AnimationStart=163923516881, PerformT
+   10-30 15:31:53.097  5102  5269 I OpenGLRenderer: Davey! duration=1401ms; Flags=0, FrameTimelineVsyncId=9756, IntendedVsync=163930855330, Vsync=164647521968, InputEventId=0, HandleInputStart=164650500712, AnimationStart=164650501183, Perform
+   10-30 15:31:53.424  5102  5269 I OpenGLRenderer: Davey! duration=841ms; Flags=0, FrameTimelineVsyncId=9816, IntendedVsync=164664199725, Vsync=165264199629, InputEventId=0, HandleInputStart=165271315996, AnimationStart=165271316336, PerformT
+   10-30 15:31:53.742  5102  5113 I OpenGLRenderer: Davey! duration=970ms; Flags=0, FrameTimelineVsyncId=9856, IntendedVsync=165280855276, Vsync=165914188584, InputEventId=0, HandleInputStart=165923910708, AnimationStart=165923911009, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-30 15:30:47.607  5095  5095 I PERFCHECK: section: W. First launch and warm-up
+   10-30 15:31:31.218  6235  6235 I PERFCHECK: section: T-new. TalkBack semantics new
+   10-30 15:35:22.060  9564  9564 I PERFCHECK: section: T-base. TalkBack semantics base

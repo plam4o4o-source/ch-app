@@ -1,0 +1,19 @@
+app pids seen: ['5836', '7341', '8005']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=36 total=36
+   10-30 14:54:21.477  5836  5836 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-30 14:54:19.750  5828  5828 I PERFCHECK: section: W. First launch and warm-up
+   10-30 14:54:57.277  7322  7322 I PERFCHECK: section: H. Home SearchBar (Material 3): tap, 12, open a result, back, back gesture
+   10-30 14:55:49.465  7965  7965 I PERFCHECK: section: H2. Back GESTURE from the expanded bar (gesture navigation; API 33 — the predictive animation needs Android 14+)
+   10-30 14:56:34.969  8423  8423 I PERFCHECK: section: N. Native libraries (compressed in the APK): APK entries, installed files, loaded libraries; scanner with CAMERA denied
+   10-30 14:56:35.085  8439  8439 I PERFCHECK: section: F6. Scanner (CAMERA revoked): manual panel, Back key
+   10-30 14:57:43.111  8961  8961 I PERFCHECK: section: CM. Sign-in screen; the saved-credential query (Credential Manager) on opening
+   10-30 14:58:06.272  9160  9160 I PERFCHECK: login open
+   10-30 14:58:41.315  9426  9426 I PERFCHECK: section: C. Notification channel groups (fresh install of v1.2.28)
+   10-30 14:58:59.732  9612  9612 I PERFCHECK: section: S. App shortcuts: long-press the icon; dynamic Искам да прочета and the last public book

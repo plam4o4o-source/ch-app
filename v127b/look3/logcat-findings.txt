@@ -1,0 +1,20 @@
+app pids seen: ['5319', '7369', '9034', '10507']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=42 total=83
+   10-29 17:31:54.017  5319  5319 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   10-29 17:36:00.926  7369  7369 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+== Davey: 5
+   davey events=5 max=1003ms median=820ms
+   10-29 17:31:55.020  5319  5335 I OpenGLRenderer: Davey! duration=881ms; Flags=1, FrameTimelineVsyncId=6090, IntendedVsync=80332351082, Vsync=80615684404, InputEventId=0, HandleInputStart=80627037057, AnimationStart=80627037889, PerformTrave
+   10-29 17:32:14.486  5319  5331 I OpenGLRenderer: Davey! duration=820ms; Flags=0, FrameTimelineVsyncId=7767, IntendedVsync=99782350304, Vsync=100065683626, InputEventId=0, HandleInputStart=100065692875, AnimationStart=100065693887, PerformTr
+   10-29 17:36:01.049  7369  7383 I OpenGLRenderer: Davey! duration=711ms; Flags=0, FrameTimelineVsyncId=16682, IntendedVsync=326415674572, Vsync=326465674570, InputEventId=0, HandleInputStart=326475850017, AnimationStart=326475850377, Perform
+   10-29 17:36:01.345  7369  7592 I OpenGLRenderer: Davey! duration=1003ms; Flags=0, FrameTimelineVsyncId=16722, IntendedVsync=326499007902, Vsync=327199007874, InputEventId=0, HandleInputStart=327211744933, AnimationStart=327211745474, Perfor
+   10-29 17:36:01.708  7369  7592 I OpenGLRenderer: Davey! duration=702ms; Flags=0, FrameTimelineVsyncId=16935, IntendedVsync=327249007872, Vsync=327632341190, InputEventId=0, HandleInputStart=327641307221, AnimationStart=327641307772, Perform
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 17:31:52.139  5288  5288 I PERFCHECK: section: L0. First launch and warm-up
+   10-29 17:32:52.639  7352  7352 I PERFCHECK: section: L small-320dp
+   10-29 17:36:04.301  9014  9014 I PERFCHECK: section: L tablet-800dp
+   10-29 17:39:03.894 10489 10489 I PERFCHECK: section: L tablet-land

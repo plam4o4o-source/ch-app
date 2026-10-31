@@ -1,0 +1,43 @@
+part update; APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+base APK: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4; update-source APK: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## U1. v1.2.26 (update source build) → adb install -r v1.2.27
+installed base-upd: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json size 4924210;  versionCode=1484478 minSdk=26 targetSdk=37  versionName=1.2.26 
+base first launch: text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" text="Официалното приложение на читалището — новини, събития, библиотека и дейности на едно място, винаги актуални от сайта chyav
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+(dismissed '=По-късно': text="Нова версия 1.2.27" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" )
+base catalogue after 3526 ms
+base: book 399560 added to Want to read
+after adb install -r:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+WHATS-NEW 01-after-adb-install: not shown; screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="29 октомври 2026 · Св. прпмчца Анастасия Римлянка. П
+(expected by design: the sheet only follows an in-app update, which saves the notes before installing)
+after adb update: Want to read keeps 399560: yes
+## U2. v1.2.26 → v1.2.27 through the in-app updater (staged update.json, same throwaway key)
+installed base-upd: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json size 4924210;  versionCode=1484478 minSdk=26 targetSdk=37  versionName=1.2.26 
+manifest: 1484479 1.2.27 4a2351fc8bdf 4875530
+install-unknown-apps: REQUEST_INSTALL_PACKAGES: allow
+UPDATE dialog: dialog after 11153 ms: text="Нова версия 1.2.27" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• „Искам да прочета“: запази книга и избери „Кажи ми, когато е на рафта“ — ще получиш известие, щом се върне.&#10;• „Новини и събития“ с календар — абонирай се за събитията на читалището в календара на телефона си.&#10;• Настройка за размера на текста и по-добра работа с едър ш
+UPDATE: tap 'Инсталирай'
+UPDATE after install:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 ; fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity
+screen after install: text="Thu, Oct 29" content-desc="Thu, Oct 29" text="Gmail" content-desc="Gmail" text="Photos" content-desc="Photos" text="YouTube" content-desc="YouTube" 
+WHATS-NEW 13-whats-new: SHOWN: text="Какво ново във версия 1.2.27"; content-desc="Затваряне на таблицата" content-desc="Манипулатор за преместване с плъзгане" text="Какво ново във версия 1.2.27" text="• „Искам да прочета“: запази книга и избери „Кажи ми, когато е на рафта“ — ще получиш известие, щом се върне.&#10;• „Новини и събития“ с календар — абонирай се за събитията на читалището в календара на телефона си.&#10;• Настройка за размера на текста и по-добра рабо
+WHATS-NEW 14-second-launch: not shown; screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="29 октомври 2026 · Св. прпмчца Анастасия Римлянка. П
+WHATS-NEW: not shown on the second launch (once, as designed)
+after in-app update: Want to read keeps 399560: NO
+app notifications: 
+## COMPLETE
+## logcat findings
+app pids seen: ['5269', '7376', '8391', '8616', '8875']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 12
+   skipped-frames events=12 max=132 total=624
+== Davey: 21
+   davey events=21 max=1554ms median=1016ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

@@ -1,0 +1,15 @@
+app pids seen: ['5197']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=35 total=66
+   10-27 16:04:34.780  5197  5197 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-27 16:04:45.112  5197  5197 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+== Davey: 4
+   davey events=4 max=1433ms median=1008ms
+   10-27 16:04:36.277  5197  5211 I OpenGLRenderer: Davey! duration=1433ms; Flags=1, FrameTimelineVsyncId=6495, IntendedVsync=105242041312, Vsync=105592041298, InputEventId=0, HandleInputStart=105606033057, AnimationStart=105606033998, Perform
+   10-27 16:04:45.479  5197  5209 I OpenGLRenderer: Davey! duration=1067ms; Flags=0, FrameTimelineVsyncId=6846, IntendedVsync=114458707610, Vsync=114458707610, InputEventId=0, HandleInputStart=114459045516, AnimationStart=114459046489, Perform
+   10-27 16:04:45.526  5197  5209 I OpenGLRenderer: Davey! duration=948ms; Flags=0, FrameTimelineVsyncId=6854, IntendedVsync=114508707608, Vsync=114925374258, InputEventId=0, HandleInputStart=114929437116, AnimationStart=114929437828, PerformT
+   10-27 16:04:45.574  5197  5329 I OpenGLRenderer: Davey! duration=715ms; Flags=0, FrameTimelineVsyncId=6876, IntendedVsync=114942046452, Vsync=115525379727, InputEventId=0, HandleInputStart=115538395686, AnimationStart=115538396998, PerformT
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

@@ -1,0 +1,17 @@
+app pids seen: ['5106']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=58 total=137
+   10-27 16:35:55.093  5106  5106 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   10-27 16:35:56.078  5106  5106 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   10-27 16:35:56.705  5106  5106 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=1429ms median=1016ms
+   10-27 16:35:56.657  5106  5141 I OpenGLRenderer: Davey! duration=1429ms; Flags=1, FrameTimelineVsyncId=5766, IntendedVsync=81606124580, Vsync=82572791208, InputEventId=0, HandleInputStart=82574274657, AnimationStart=82574275664, PerformTrav
+   10-27 16:36:17.060  5106  5270 I OpenGLRenderer: Davey! duration=1016ms; Flags=0, FrameTimelineVsyncId=7046, IntendedVsync=102439457080, Vsync=102672790404, InputEventId=0, HandleInputStart=102675338628, AnimationStart=102675339958, Perform
+   10-27 16:36:17.198  5106  5270 I OpenGLRenderer: Davey! duration=755ms; Flags=0, FrameTimelineVsyncId=7063, IntendedVsync=102722801499, Vsync=103056134779, InputEventId=0, HandleInputStart=103058926070, AnimationStart=103058926794, PerformT
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 16:35:53.656  5099  5099 I PERFCHECK: section: 0. First launch and warm-up
+   10-27 16:39:14.800  8611  8611 I PERFCHECK: section: 3w. Jank of the Want to read list at 540x1200 (animations ON)

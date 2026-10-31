@@ -1,0 +1,63 @@
+Applications Graphics Acceleration Info:
+Uptime: 1026875 Realtime: 1026875
+
+** Graphics info for pid 13097 [org.chyavorec.app] **
+
+Stats since: 1016668331539ns
+Total frames rendered: 73
+Janky frames: 70 (95.89%)
+Janky frames (legacy): 71 (97.26%)
+50th percentile: 200ms
+90th percentile: 300ms
+95th percentile: 350ms
+99th percentile: 450ms
+Number Missed Vsync: 50
+Number High input latency: 5
+Number Slow UI thread: 37
+Number Slow bitmap uploads: 4
+Number Slow issue draw commands: 70
+Number Frame deadline missed: 70
+Number Frame deadline missed (legacy): 69
+HISTOGRAM: 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 26ms=0 27ms=0 28ms=0 29ms=0 30ms=0 31ms=0 32ms=0 34ms=0 36ms=0 38ms=0 40ms=0 42ms=0 44ms=0 46ms=1 48ms=0 53ms=0 57ms=1 61ms=0 65ms=0 69ms=1 73ms=1 77ms=0 81ms=1 85ms=1 89ms=0 93ms=0 97ms=1 101ms=1 105ms=2 109ms=0 113ms=0 117ms=1 121ms=1 125ms=0 129ms=0 133ms=2 150ms=16 200ms=18 250ms=16 300ms=5 350ms=2 400ms=1 450ms=1 500ms=0 550ms=0 600ms=0 650ms=0 700ms=0 750ms=0 800ms=0 850ms=0 900ms=0 950ms=0 1000ms=0 1050ms=0 1100ms=0 1150ms=0 1200ms=0 1250ms=0 1300ms=0 1350ms=0 1400ms=0 1450ms=0 1500ms=0 1550ms=0 1600ms=0 1650ms=0 1700ms=0 1750ms=0 1800ms=0 1850ms=0 1900ms=0 1950ms=0 2000ms=0 2050ms=0 2100ms=0 2150ms=0 2200ms=0 2250ms=0 2300ms=0 2350ms=0 2400ms=0 2450ms=0 2500ms=0 2550ms=0 2600ms=0 2650ms=0 2700ms=0 2750ms=0 2800ms=0 2850ms=0 2900ms=0 2950ms=0 3000ms=0 3050ms=0 3100ms=0 3150ms=0 3200ms=0 3250ms=0 3300ms=0 3350ms=0 3400ms=0 3450ms=0 3500ms=0 3550ms=0 3600ms=0 3650ms=0 3700ms=0 3750ms=0 3800ms=0 3850ms=0 3900ms=0 3950ms=0 4000ms=0 4050ms=0 4100ms=0 4150ms=0 4200ms=0 4250ms=0 4300ms=0 4350ms=0 4400ms=0 4450ms=0 4500ms=0 4550ms=0 4600ms=0 4650ms=0 4700ms=0 4750ms=0 4800ms=0 4850ms=0 4900ms=0 4950ms=0
+50th gpu percentile: 4950ms
+90th gpu percentile: 4950ms
+95th gpu percentile: 4950ms
+99th gpu percentile: 4950ms
+GPU HISTOGRAM: 1ms=1 2ms=0 3ms=1 4ms=0 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=1 13ms=1 14ms=0 15ms=1 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=1 24ms=0 25ms=0 4950ms=67
+
+Pipeline=Skia (OpenGL)
+CPU Caches:
+  Glyph Cache: 592.85 KB (1 entry)
+  Shadows: 11.43 KB (3 entries)
+  Glyph Count: 141 
+Total CPU memory usage:
+  618781 bytes, 604.28 KB (0.00 bytes is purgeable)
+GPU Caches:
+  SW Path Mask:
+    Texture: 2.62 MB (19 entries)
+  Other:
+    Other: 23.64 KB (1 entry)
+    Buffer Object: 2.94 KB (6 entries)
+    StencilAttachment: 16.02 MB (11 entries)
+  Image:
+    Texture: 513.11 KB (67 entries)
+  Scratch:
+    RenderTarget: 26.52 MB (15 entries)
+    Buffer Object: 398.00 KB (8 entries)
+    Texture: 8.58 MB (14 entries)
+Total GPU memory usage:
+  57296224 bytes, 54.64 MB (35.03 MB is purgeable)
+
+Profile data in ms:
+
+	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@f9c0ac0 (visibility=0)
+View hierarchy:
+
+  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@f9c0ac0
+  10 views, 18,11 kB of render nodes
+
+
+Total ViewRootImpl   : 1
+Total attached Views : 10
+Total RenderNode     : 18,11 kB (used) / 42,18 kB (capacity)
+

@@ -1,0 +1,29 @@
+app pids seen: ['4734', '5985']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=77 total=299
+   10-27 15:43:29.245  4734  4734 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   10-27 15:43:40.555  4734  4734 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-27 15:43:42.132  4734  4734 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   10-27 15:43:52.035  4734  4734 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   10-27 15:43:52.896  4734  4734 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   10-27 15:44:15.534  5985  5985 I Choreographer: Skipped 77 frames!  The application may be doing too much work on its main thread.
+   10-27 15:44:16.995  5985  5985 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 11
+   davey events=11 max=1674ms median=1017ms
+   10-27 15:43:30.944  4734  4747 I OpenGLRenderer: Davey! duration=1549ms; Flags=1, FrameTimelineVsyncId=4964, IntendedVsync=81745194312, Vsync=82161860962, InputEventId=0, HandleInputStart=82187186772, AnimationStart=82187187042, PerformTrav
+   10-27 15:43:40.642  4734  4871 I OpenGLRenderer: Davey! duration=950ms; Flags=0, FrameTimelineVsyncId=5409, IntendedVsync=91978527236, Vsync=91978527236, InputEventId=0, HandleInputStart=91978827940, AnimationStart=91978828451, PerformTrave
+   10-27 15:43:40.742  4734  4871 I OpenGLRenderer: Davey! duration=700ms; Flags=0, FrameTimelineVsyncId=5416, IntendedVsync=91995193902, Vsync=92395193886, InputEventId=0, HandleInputStart=92406327493, AnimationStart=92406328064, PerformTrave
+   10-27 15:43:42.154  4734  4871 I OpenGLRenderer: Davey! duration=705ms; Flags=0, FrameTimelineVsyncId=5742, IntendedVsync=93795193830, Vsync=93795193830, InputEventId=0, HandleInputStart=93795473454, AnimationStart=93795473975, PerformTrave
+   10-27 15:43:52.763  4734  4746 I OpenGLRenderer: Davey! duration=1017ms; Flags=0, FrameTimelineVsyncId=6166, IntendedVsync=103378526780, Vsync=103411860112, InputEventId=0, HandleInputStart=103415155597, AnimationStart=103415155838, Perform
+   10-27 15:43:52.885  4734  4746 I OpenGLRenderer: Davey! duration=1231ms; Flags=0, FrameTimelineVsyncId=6173, IntendedVsync=103428526778, Vsync=103728526766, InputEventId=0, HandleInputStart=103733933126, AnimationStart=103733933727, Perform
+   10-27 15:43:52.983  4734  4746 I OpenGLRenderer: Davey! duration=742ms; Flags=0, FrameTimelineVsyncId=6188, IntendedVsync=103778526764, Vsync=104395193406, InputEventId=0, HandleInputStart=104423761126, AnimationStart=104423762028, PerformT
+   10-27 15:44:15.507  5985  6077 I OpenGLRenderer: Davey! duration=1458ms; Flags=1, FrameTimelineVsyncId=7471, IntendedVsync=126411859192, Vsync=126578525852, InputEventId=0, HandleInputStart=126590927823, AnimationStart=126590928795, Perform
+   10-27 15:44:15.991  5985  6077 I OpenGLRenderer: Davey! duration=1674ms; Flags=0, FrameTimelineVsyncId=7507, IntendedVsync=126611859184, Vsync=127895192466, InputEventId=0, HandleInputStart=127910661782, AnimationStart=127910662183, Perform
+   10-27 15:44:17.031  5985  6000 I OpenGLRenderer: Davey! duration=1018ms; Flags=0, FrameTimelineVsyncId=7738, IntendedVsync=128345192448, Vsync=128395192446, InputEventId=0, HandleInputStart=128401889063, AnimationStart=128401889604, Perform
+   10-27 15:44:17.181  5985  6109 I OpenGLRenderer: Davey! duration=749ms; Flags=0, FrameTimelineVsyncId=7761, IntendedVsync=128761859098, Vsync=129361859074, InputEventId=0, HandleInputStart=129378368798, AnimationStart=129378369128, PerformT
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 15:43:27.989  4728  4728 I PERFCHECK: section: 0. First launch and warm-up
+   10-27 15:44:11.319  5938  5938 I PERFCHECK: section: S1. Home swipes (API stability probe: 20 swipes)

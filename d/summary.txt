@@ -1,0 +1,32 @@
+APK size: 4890407 bytes
+APK entries:   8782305                     1038 files
+screen 1080x2400
+## D1. Offline first launch; reconnect while on Home (positive control)
+airplane=1
+home offline (empty cache): text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" text="You’re offline" text="Check your internet connection and try again." text="Try again" text="Catalogue" text="Library card" text="Events" text="Contacts" 
+catalogue offline (empty cache): text="Search by everything" content-desc="Scan barcode" text="Everything" text="Title" text="Author" text="ISBN" text="Keyword" text="You’re offline" text="Check your internet connection and try again." text="Try again" 
+home +10s after reconnect (no touch): text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" content-desc="Latest news" text="СЪБИТИЕ" text="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец." text="October 16, 2026" text="Catalogue" 
+home +20s after reconnect (no touch): text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" content-desc="Latest news" text="СЪБИТИЕ" text="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец." text="October 16, 2026" text="Catalogue" 
+home +30s after reconnect (no touch): text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" content-desc="Latest news" text="СЪБИТИЕ" text="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец." text="October 16, 2026" text="Catalogue" 
+news after reconnect: text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" content-desc="Latest news" text="СЪБИТИЕ" text="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец." 
+catalogue after reconnect: results in 2831 ms
+## D2. Offline first launch; reconnect while on Gallery / Contacts / Activities
+gallery offline (empty cache): text="You’re offline" text="Check your internet connection and try again." text="Try again" content-desc="Back" text="Gallery" text="No internet connection" 
+gallery +10s after reconnect (no touch): text="You’re offline" text="Check your internet connection and try again." text="Try again" content-desc="Back" text="Gallery" 
+gallery +20s after reconnect (no touch): text="You’re offline" text="Check your internet connection and try again." text="Try again" content-desc="Back" text="Gallery" 
+gallery +30s after reconnect (no touch): text="You’re offline" text="Check your internet connection and try again." text="Try again" content-desc="Back" text="Gallery" 
+contacts offline: text="You’re offline" text="Check your internet connection and try again." text="Try again" content-desc="Back" text="Contacts" text="No internet connection" 
+contacts +25s after reconnect (no touch): text="You’re offline" text="Check your internet connection and try again." text="Try again" content-desc="Back" text="Contacts" 
+activities offline: text="The centre’s activities, groups, projects and history — content comes straight from chyavorec.org." text="За нас" text="Клубове и Кръжоци" text="Клуб за народни танци" text="Дарение и дарителите" text="Ансамбъл „Яворски хлапета“" text="Фотодокументална изложба" text="Фолклорна група Явор" 
+activities +25s after reconnect (no touch): text="The centre’s activities, groups, projects and history — content comes straight from chyavorec.org." text="За нас" text="Клубове и Кръжоци" text="Клуб за народни танци" text="Дарение и дарителите" text="Ансамбъл „Яворски хлапета“" text="Фотодокументална изложба" text="Фолклорна група Явор" 
+## COMPLETE
+## logcat findings
+app pids seen: ['3904', '5128']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=41 total=113
+== Davey: 9
+   davey events=9 max=1287ms median=784ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

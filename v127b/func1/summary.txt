@@ -1,0 +1,57 @@
+part func1; APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+base APK: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4; update-source APK: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2653 ms
+## F1. Home quick actions; 'Искам да прочета' quick action
+QA standard text: Сканирай|=Scan@[167 1542] Читателска карта|=Library card@[415 1563] Искам да прочета|=Want to read@[664 1563] Контакти|=Contacts@[913 1542]; rows=1; quick action 'Събития': absent
+QA 'Искам да прочета' → screen: back=yes title=yes; text="Списъкът е празен" text="Отбележи книга с „Искам да прочета“ на страницата ѝ в каталога — тук ще виждаш дали е на рафта." content-desc="Назад" text="Искам да прочета" 
+## F2. Catalogue '12': other copies on the shelf; notify toggle with undo
+SEARCH '12': 108 results; header: text="108 резултата  ·  данни от InvLib към 28.10.2026"
+SOLE-OUT book: content-desc="Спомен за здрача" text="Спомен за здрача" text="Веска Пенчева" text="Не е на рафта" text="Наличност към 28.10.2026" text="Искам да прочета" ; AskLibrary=shown Notify=shown
+BOOK 'Кажи ми' ON: label now 'text="Ще ти кажем, когато е на рафта"'; snackbar: text="Ще получиш известие, когато книгата е на рафта."
+BOOK 'Кажи ми' OFF: snackbar 'text="Няма да получаваш известие за тази книга."' undo=present
+BOOK 'Кажи ми' undo → ON again (restored)
+COPY-OUT (from '12'): text="Този екземпляр е зает · 5 други на рафта"; title: Времето на горите; AskLibrary=hidden Notify=hidden
+COPY-OUT scrolled: copies line: text="7 екземпляра: 5 налични"; shelf marks: 
+COPY-OUT search: tried 2 unavailable rows from '12' (found copy-out=1, sole-out=1)
+## F3. Want to read: add, 'Кажи ми' on/off, undo, remove with undo
+BOOK 399560: content-desc="12 -те вятъра" text="12 -те вятъра" text="Гарфилд, Джудит и др." text="Налична" text="Наличност към 28.10.2026" ; WantToRead [checked=false selected=false bounds=[426,738][911,864]]
+WANT add: snackbar shown; chip [checked=true selected=false bounds=[426,738][911,864]]
+WANT list opened from the Home quick action
+WANT list: Наличност към 28.10.2026|Плъзни книга настрани, за да я махнеш.|12 -те вятъра|12 -те вятъра|Гарфилд, Джудит и др.|налична|Още действия|Спомен за здрача|Спомен за здрача|Веска Пенчева|Не е на рафта|Ще ти кажем, когато е на рафта|
+WANT 'Кажи ми' ON: snackbar 'text="Ще получиш известие, когато книгата е на рафта."'; bell icon shown
+WANT 'Кажи ми' OFF: snackbar 'text="Няма да получаваш известие за тази книга."'; undo present
+WANT 'Кажи ми' undo: bell back (ON restored)
+WANT remove: snackbar 'text="„12 -те вятъра“ е махната от списъка"'; undo present
+WANT remove undo: book back in list
+## F4. /news and /events links
+/news (first): News[checked=true selected=false bounds=[42,308][357,434]] Calendar[checked=false selected=false bounds=[357,308][669,434]] subscribe-action=absent
+Calendar segment chosen: News[checked=false selected=false bounds=[42,308][354,434]] Calendar[checked=true selected=false bounds=[354,308][669,434]] subscribe-action=visible
+/news while on Calendar: News[checked=true selected=false bounds=[42,308][357,434]] Calendar[checked=false selected=false bounds=[357,308][669,434]] subscribe-action=absent
+/news from Home (News tab left on Calendar): News[checked=true selected=false bounds=[42,308][357,434]] Calendar[checked=false selected=false bounds=[357,308][669,434]] subscribe-action=absent
+/news cold: News[checked=true selected=false bounds=[42,308][357,434]] Calendar[checked=false selected=false bounds=[357,308][669,434]] subscribe-action=absent
+/events: News[checked=false selected=false bounds=[42,308][354,434]] Calendar[checked=true selected=false bounds=[354,308][669,434]] subscribe-action=visible
+/events cold: News[checked=false selected=false bounds=[42,308][354,434]] Calendar[checked=true selected=false bounds=[354,308][669,434]] subscribe-action=visible
+article open: back=yes; content-desc="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец." text="СЪБИТИЕ  ·  16 октомври 2026" text="Фолклорно пътешествие из Пирин
+/events from an article: News[checked=false selected=false bounds=[42,308][354,434]] Calendar[checked=true selected=false bounds=[354,308][669,434]] subscribe-action=visible; back-button none
+## F5. Reselecting the News tab on Calendar scrolls to the top
+calendar scrolled: common with top: 18/40
+RESELECT: News[checked=false selected=false bounds=[42,140][354,266]] Calendar[checked=true selected=false bounds=[354,140][669,266]] subscribe-action=visible; common with top: 38/40
+## COMPLETE
+## logcat findings
+app pids seen: ['6054', '7331', '9621', '9780']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=55 total=98
+== Davey: 2
+   davey events=2 max=1125ms median=970ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

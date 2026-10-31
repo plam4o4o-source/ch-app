@@ -1,0 +1,106 @@
+Applications Graphics Acceleration Info:
+Uptime: 441043 Realtime: 441043
+
+** Graphics info for pid 6080 [org.chyavorec.app] **
+
+Stats since: 431769535301ns
+Total frames rendered: 171
+Janky frames: 150 (87.72%)
+Janky frames (legacy): 163 (95.32%)
+50th percentile: 85ms
+90th percentile: 125ms
+95th percentile: 133ms
+99th percentile: 150ms
+Number Missed Vsync: 107
+Number High input latency: 33
+Number Slow UI thread: 71
+Number Slow bitmap uploads: 6
+Number Slow issue draw commands: 150
+Number Frame deadline missed: 150
+Number Frame deadline missed (legacy): 150
+HISTOGRAM: 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=7 17ms=1 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 26ms=1 27ms=0 28ms=0 29ms=1 30ms=1 31ms=3 32ms=4 34ms=2 36ms=2 38ms=0 40ms=2 42ms=0 44ms=1 46ms=3 48ms=4 53ms=5 57ms=7 61ms=5 65ms=5 69ms=9 73ms=5 77ms=5 81ms=9 85ms=8 89ms=8 93ms=8 97ms=5 101ms=13 105ms=3 109ms=3 113ms=7 117ms=4 121ms=7 125ms=6 129ms=4 133ms=5 150ms=8 200ms=0 250ms=0 300ms=0 350ms=0 400ms=0 450ms=0 500ms=0 550ms=0 600ms=0 650ms=0 700ms=0 750ms=0 800ms=0 850ms=0 900ms=0 950ms=0 1000ms=0 1050ms=0 1100ms=0 1150ms=0 1200ms=0 1250ms=0 1300ms=0 1350ms=0 1400ms=0 1450ms=0 1500ms=0 1550ms=0 1600ms=0 1650ms=0 1700ms=0 1750ms=0 1800ms=0 1850ms=0 1900ms=0 1950ms=0 2000ms=0 2050ms=0 2100ms=0 2150ms=0 2200ms=0 2250ms=0 2300ms=0 2350ms=0 2400ms=0 2450ms=0 2500ms=0 2550ms=0 2600ms=0 2650ms=0 2700ms=0 2750ms=0 2800ms=0 2850ms=0 2900ms=0 2950ms=0 3000ms=0 3050ms=0 3100ms=0 3150ms=0 3200ms=0 3250ms=0 3300ms=0 3350ms=0 3400ms=0 3450ms=0 3500ms=0 3550ms=0 3600ms=0 3650ms=0 3700ms=0 3750ms=0 3800ms=0 3850ms=0 3900ms=0 3950ms=0 4000ms=0 4050ms=0 4100ms=0 4150ms=0 4200ms=0 4250ms=0 4300ms=0 4350ms=0 4400ms=0 4450ms=0 4500ms=0 4550ms=0 4600ms=0 4650ms=0 4700ms=0 4750ms=0 4800ms=0 4850ms=0 4900ms=0 4950ms=0
+50th gpu percentile: 4950ms
+90th gpu percentile: 4950ms
+95th gpu percentile: 4950ms
+99th gpu percentile: 4950ms
+GPU HISTOGRAM: 1ms=0 2ms=0 3ms=0 4ms=0 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=2 13ms=0 14ms=2 15ms=7 16ms=3 17ms=2 18ms=2 19ms=4 20ms=2 21ms=3 22ms=5 23ms=1 24ms=3 25ms=3 4950ms=132
+
+Pipeline=Skia (OpenGL)
+Memory policy:
+  Max surface area: 2592000
+  Max resource usage: 124.42MB (x48)
+  Background retention: 50% (altUiHidden = true)
+  GPU Context timeout: 10
+Contexts: 1 (stopped = 0)
+CPU Caches:
+  Glyph Cache: 1.54 MB (1 entry)
+  Glyph Count: 126 
+Total CPU memory usage:
+  1611758 bytes, 1.54 MB (0.00 bytes is purgeable)
+GPU Caches:
+  Other:
+    Other: 32.80 KB (1 entry)
+    Buffer Object: 2.50 KB (4 entries)
+    StencilAttachment: 20.98 MB (9 entries)
+  Image:
+    Texture: 320.74 KB (53 entries)
+  Scratch:
+    RenderTarget: 19.31 MB (7 entries)
+    Buffer Object: 174.00 KB (5 entries)
+    Texture: 18.04 MB (63 entries)
+Total GPU memory usage:
+  61713188 bytes, 58.85 MB (47.51 MB is purgeable)
+
+GraphicBufferAllocator buffers:
+        Handle |        Size |     W (Stride) x H | Layers |   Format |      Usage | Requestor
+0x7bf1e4d2d130 |     unknown | 1192 (   0) x  623 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d2eb10 |     unknown |  256 (   0) x  186 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d2f380 |     unknown |  256 (   0) x  153 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d30e80 |     unknown |  256 (   0) x  196 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d3ff40 |     unknown | 1080 (   0) x 2400 |      1 |        1 | 0x     b00 | VRI[MainActivity]#0(BLAST Consumer)0
+0x7bf1e4d45790 |     unknown | 1080 (   0) x 2400 |      1 |        1 | 0x     b00 | VRI[MainActivity]#0(BLAST Consumer)0
+0x7bf1e4d46480 |     unknown | 1080 (   0) x 2400 |      1 |        1 | 0x     b00 | VRI[MainActivity]#0(BLAST Consumer)0
+0x7bf1e4d48eb0 |     unknown |  996 (   0) x  711 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d52180 |     unknown | 1333 (   0) x  623 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d523c0 |     unknown |  996 (   0) x 1494 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d54c40 |     unknown |  256 (   0) x  141 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d57550 |     unknown |  996 (   0) x  690 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d5a1c0 |     unknown |  256 (   0) x  120 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d5a400 |     unknown |  256 (   0) x  120 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d5f620 |     unknown |  158 (   0) x  241 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d5f6b0 |     unknown |  158 (   0) x  259 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d6f3d0 |     unknown |  256 (   0) x  115 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d73510 |     unknown |  256 (   0) x  180 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d736c0 |     unknown |  256 (   0) x  181 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d737e0 |     unknown |  256 (   0) x  184 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d74a70 |     unknown |  256 (   0) x  134 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d755b0 |     unknown |  256 (   0) x  205 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d77b60 |     unknown |  238 (   0) x  221 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d79ae0 |     unknown | 1080 (   0) x  567 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d7a620 |     unknown | 1080 (   0) x  505 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d7a6b0 |     unknown |  256 (   0) x  177 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d7ace0 |     unknown |  256 (   0) x  175 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d7e640 |     unknown |  221 (   0) x  300 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d7e6d0 |     unknown |  256 (   0) x  134 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d7e760 |     unknown |  256 (   0) x  183 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d7fe70 |     unknown |  221 (   0) x  332 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d81340 |     unknown |  256 (   0) x  192 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d81850 |     unknown |  221 (   0) x  318 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d82300 |     unknown |  256 (   0) x  192 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d825d0 |     unknown |  256 (   0) x  115 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+0x7bf1e4d828a0 |     unknown |  256 (   0) x  181 |      1 |        1 | 0x     100 | AHardwareBuffer pid [6080]
+Total allocated by GraphicBufferAllocator (estimate): 0.00 KB
+GoldfishAllocator::dumpDebugInfo is not implemented
+Profile data in ms:
+
+	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@355ec11 (visibility=0)
+View hierarchy:
+
+  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@355ec11
+  11 views, 18.31 kB of render nodes
+
+
+Total ViewRootImpl   : 1
+Total attached Views : 11
+Total RenderNode     : 18.31 kB (used) / 42.38 kB (capacity)
+

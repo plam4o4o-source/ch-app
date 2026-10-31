@@ -1,0 +1,79 @@
+Applications Graphics Acceleration Info:
+Uptime: 859702 Realtime: 859702
+
+** Graphics info for pid 8766 [org.chyavorec.app] **
+
+Stats since: 768760888192ns
+Total frames rendered: 97
+Janky frames: 95 (97.94%)
+Janky frames (legacy): 97 (100.00%)
+50th percentile: 48ms
+90th percentile: 150ms
+95th percentile: 200ms
+99th percentile: 400ms
+Number Missed Vsync: 18
+Number High input latency: 3
+Number Slow UI thread: 23
+Number Slow bitmap uploads: 2
+Number Slow issue draw commands: 95
+Number Frame deadline missed: 95
+Number Frame deadline missed (legacy): 96
+HISTOGRAM: 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 26ms=0 27ms=0 28ms=0 29ms=0 30ms=0 31ms=2 32ms=13 34ms=5 36ms=2 38ms=0 40ms=0 42ms=3 44ms=0 46ms=0 48ms=28 53ms=0 57ms=7 61ms=0 65ms=4 69ms=0 73ms=2 77ms=1 81ms=0 85ms=1 89ms=0 93ms=3 97ms=0 101ms=2 105ms=1 109ms=1 113ms=1 117ms=1 121ms=2 125ms=3 129ms=0 133ms=0 150ms=9 200ms=2 250ms=2 300ms=0 350ms=1 400ms=1 450ms=0 500ms=0 550ms=0 600ms=0 650ms=0 700ms=0 750ms=0 800ms=0 850ms=0 900ms=0 950ms=0 1000ms=0 1050ms=0 1100ms=0 1150ms=0 1200ms=0 1250ms=0 1300ms=0 1350ms=0 1400ms=0 1450ms=0 1500ms=0 1550ms=0 1600ms=0 1650ms=0 1700ms=0 1750ms=0 1800ms=0 1850ms=0 1900ms=0 1950ms=0 2000ms=0 2050ms=0 2100ms=0 2150ms=0 2200ms=0 2250ms=0 2300ms=0 2350ms=0 2400ms=0 2450ms=0 2500ms=0 2550ms=0 2600ms=0 2650ms=0 2700ms=0 2750ms=0 2800ms=0 2850ms=0 2900ms=0 2950ms=0 3000ms=0 3050ms=0 3100ms=0 3150ms=0 3200ms=0 3250ms=0 3300ms=0 3350ms=0 3400ms=0 3450ms=0 3500ms=0 3550ms=0 3600ms=0 3650ms=0 3700ms=0 3750ms=0 3800ms=0 3850ms=0 3900ms=0 3950ms=0 4000ms=0 4050ms=0 4100ms=0 4150ms=0 4200ms=0 4250ms=0 4300ms=0 4350ms=0 4400ms=0 4450ms=0 4500ms=0 4550ms=0 4600ms=0 4650ms=0 4700ms=0 4750ms=0 4800ms=0 4850ms=0 4900ms=0 4950ms=0
+50th gpu percentile: 4950ms
+90th gpu percentile: 4950ms
+95th gpu percentile: 4950ms
+99th gpu percentile: 4950ms
+GPU HISTOGRAM: 1ms=0 2ms=0 3ms=0 4ms=0 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=1 22ms=0 23ms=0 24ms=0 25ms=0 4950ms=96
+
+Pipeline=Skia (OpenGL)
+Memory policy:
+  Max surface area: 2592000
+  Max resource usage: 124.42MB (x48)
+  Background retention: 50% (altUiHidden = true)
+  GPU Context timeout: 10
+Contexts: 1 (stopped = 0)
+CPU Caches:
+  Glyph Cache: 481.81 KB (1 entry)
+  Shadows: 7.57 KB (2 entries)
+  Glyph Count: 60 
+Total CPU memory usage:
+  501128 bytes, 489.38 KB (0.00 bytes is purgeable)
+GPU Caches:
+  Other:
+    Other: 21.94 KB (1 entry)
+    Buffer Object: 2.94 KB (6 entries)
+    StencilAttachment: 14.03 MB (3 entries)
+  Image:
+    Texture: 383.70 KB (23 entries)
+  Scratch:
+    RenderTarget: 17.54 MB (3 entries)
+    Buffer Object: 510.00 KB (9 entries)
+    Texture: 6.33 MB (62 entries)
+Total GPU memory usage:
+  40681048 bytes, 38.80 MB (20.66 MB is purgeable)
+
+GraphicBufferAllocator buffers:
+        Handle |        Size |     W (Stride) x H | Layers |   Format |      Usage | Requestor
+0x7bf1e4d2a0d0 |     unknown | 1080 (   0) x  505 |      1 |        1 | 0x     100 | AHardwareBuffer pid [8766]
+0x7bf1e4d2ab80 |     unknown |  256 (   0) x  183 |      1 |        1 | 0x     100 | AHardwareBuffer pid [8766]
+0x7bf1e4d2bb40 |     unknown |  996 (   0) x 1494 |      1 |        1 | 0x     100 | AHardwareBuffer pid [8766]
+0x7bf1e4d2dd00 |     unknown |  221 (   0) x  332 |      1 |        1 | 0x     100 | AHardwareBuffer pid [8766]
+0x7bf1e4d42610 |     unknown | 1080 (   0) x 2400 |      1 |        1 | 0x     b00 | VRI[MainActivity]#0(BLAST Consumer)0
+0x7bf1e4d430c0 |     unknown | 1080 (   0) x 2400 |      1 |        1 | 0x     b00 | VRI[MainActivity]#0(BLAST Consumer)0
+0x7bf1e4d438a0 |     unknown | 1080 (   0) x 2400 |      1 |        1 | 0x     b00 | VRI[MainActivity]#0(BLAST Consumer)0
+0x7bf1e4d51b50 |     unknown | 1333 (   0) x  623 |      1 |        1 | 0x     100 | AHardwareBuffer pid [8766]
+Total allocated by GraphicBufferAllocator (estimate): 0.00 KB
+GoldfishAllocator::dumpDebugInfo is not implemented
+Profile data in ms:
+
+	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@478c086 (visibility=0)
+View hierarchy:
+
+  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@478c086
+  15 views, 28.38 kB of render nodes
+
+
+Total ViewRootImpl   : 1
+Total attached Views : 15
+Total RenderNode     : 28.38 kB (used) / 52.45 kB (capacity)
+

@@ -1,0 +1,757 @@
+Now: [1793372389342] 2026-10-30 14:59:49  Raw last reset: [1793372002195] 2026-10-30 14:53:22  Last reset: [1793372002195] 2026-10-30 14:53:22  Next reset: [1793458402195] 2026-10-31 14:53:22
+
+  Config:    Max icon dim: 252
+    Icon format: PNG
+    Icon quality: 100
+    saveDelayMillis: 3000
+    resetInterval: 86400000
+    maxUpdatesPerInterval: 10
+    maxShortcutsPerActivity: 15
+
+  Stats:
+    getHomeActivities(): count=1, total=0.0ms, avg=0.022ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+    Launcher permission check: count=345, total=25.5ms, avg=0.074ms, max calls/s=228 max dur/s=2.4ms max time=17.1ms
+    getPackageInfo(): count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+    getPackageInfo(SIG): count=142, total=65.4ms, avg=0.461ms, max calls/s=20 max dur/s=38.6ms max time=38.6ms
+    getApplicationInfo: count=80, total=1279.2ms, avg=15.991ms, max calls/s=0 max dur/s=0.0ms max time=1195.2ms
+    cleanupDanglingBitmaps: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+    getActivity+metadata: count=106, total=2.6ms, avg=0.024ms, max calls/s=0 max dur/s=0.0ms max time=0.9ms
+    getInstalledPackages: count=1, total=0.6ms, avg=0.629ms, max calls/s=0 max dur/s=0.0ms max time=0.6ms
+    checkPackageChanges: count=1, total=915.5ms, avg=915.477ms, max calls/s=0 max dur/s=0.0ms max time=915.5ms
+    getApplicationResources: count=119, total=371.6ms, avg=3.123ms, max calls/s=0 max dur/s=0.0ms max time=102.6ms
+    resourceNameLookup: count=81, total=268.9ms, avg=3.319ms, max calls/s=0 max dur/s=0.0ms max time=75.9ms
+    getLauncherActivity: count=4, total=0.2ms, avg=0.062ms, max calls/s=0 max dur/s=0.0ms max time=0.1ms
+    checkLauncherActivity: count=298, total=249.5ms, avg=0.837ms, max calls/s=0 max dur/s=0.0ms max time=70.1ms
+    isActivityEnabled: count=63, total=3.9ms, avg=0.062ms, max calls/s=0 max dur/s=0.0ms max time=1.9ms
+    packageUpdateCheck: count=345, total=423.6ms, avg=1.228ms, max calls/s=0 max dur/s=0.0ms max time=382.3ms
+    asyncPreloadUserDelay: count=1, total=64.3ms, avg=64.319ms, max calls/s=0 max dur/s=0.0ms max time=64.3ms
+    getDefaultLauncher(): count=80, total=0.2ms, avg=0.003ms, max calls/s=15 max dur/s=0.0ms max time=0.0ms
+
+  #Failures: 0
+
+  User: 0  Known locales: en-US  Last app scan: [1793372006959] 2026-10-30 14:53:26
+      Last app scan FP: google/sdk_gphone64_x86_64/emu64x:13/TE1A.240213.009/12342917:userdebug/dev-keys
+      Restore from FP: null
+      Cached launcher: com.google.android.apps.nexuslauncher
+
+      Launcher: com.google.android.as  Package user: 0  Owner user: 0
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: -1
+          Last package update time: 0
+
+
+      Launcher: com.google.android.apps.nexuslauncher  Package user: 0  Owner user: 0
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: -1
+          Last package update time: 0
+
+
+      Launcher: com.android.systemui  Package user: 0  Owner user: 0
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: -1
+          Last package update time: 0
+
+
+      Package: com.google.android.youtube  UID: 10138
+        Calls: 0
+        Last known FG: 0
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 1545868784
+          Backup Allowed: true
+          Last package update time: 1725922973000
+
+        Shortcuts:
+          ShortcutInfo {id=subscriptions-shortcut, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.youtube
+            activity=ComponentInfo{com.google.android.youtube/com.google.android.youtube.app.honeycomb.Shell$HomeActivity}
+            shortLabel=Subscriptions, resId=2132020287[subscriptions]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=2, timestamp=1793372046047
+            intents=[Intent { act=com.google.android.youtube.action.open.subscriptions flg=0x1000c000 }/PersistableBundle[{source=shortcut}]]
+            extras=null
+            iconRes=2131232464[drawable/ic_shortcut_subscriptions], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=shorts-shortcut, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.youtube
+            activity=ComponentInfo{com.google.android.youtube/com.google.android.youtube.app.honeycomb.Shell$HomeActivity}
+            shortLabel=Shorts, resId=2132020017[shorts]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372046046
+            intents=[Intent { act=com.google.android.youtube.action.open.shorts flg=0x1000c000 }/PersistableBundle[{source=shortcut}]]
+            extras=null
+            iconRes=2131232462[drawable/ic_shortcut_shorts], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=search-shortcut, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.youtube
+            activity=ComponentInfo{com.google.android.youtube/com.google.android.youtube.app.honeycomb.Shell$HomeActivity}
+            shortLabel=Search, resId=2132019955[search]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372046046
+            intents=[Intent { act=com.google.android.youtube.action.open.search flg=0x1000c000 }/PersistableBundle[{source=shortcut}]]
+            extras=null
+            iconRes=2131232460[drawable/ic_shortcut_search], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=explore-shortcut, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.youtube
+            activity=ComponentInfo{com.google.android.youtube/com.google.android.youtube.app.honeycomb.Shell$HomeActivity}
+            shortLabel=Explore, resId=2132018210[explore]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=3, timestamp=1793372046047
+            intents=[Intent { act=com.google.android.youtube.action.open.explore flg=0x1000c000 }/PersistableBundle[{source=shortcut}]]
+            extras=null
+            iconRes=2131232458[drawable/ic_shortcut_explore], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@be52d56[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 8]
+
+      Package: com.google.android.googlequicksearchbox  UID: 10120
+        Calls: 0
+        Last known FG: 408201
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 301194889
+          Backup Allowed: true
+          Last package update time: 1725923046000
+
+        Shortcuts:
+          ShortcutInfo {id=voice_shortcut, flags=0x85 [DynIc-rStr]
+            packageName=com.google.android.googlequicksearchbox
+            activity=ComponentInfo{com.google.android.googlequicksearchbox/com.google.android.googlequicksearchbox.SearchActivity}
+            shortLabel=Voice search, resId=0[null]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372101724
+            intents=[Intent { act=com.google.android.googlequicksearchbox.action.CLASSIC_GSA_VOICE_SEARCH dat=agsa:/... flg=0x10008000 cmp=com.google.android.googlequicksearchbox/com.google.android.apps.gsa.searchnow.SearchNowActivity }/PersistableBundle[{lobby_initial_tab=8, source=and.gsa.launcher.shortcut.voice, dark-mode-setting=-1, dark-mode-enabled=true}]]
+            extras=null
+            iconRes=2131233010[drawable/ic_voice_search_shortcut], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=text_shortcut, flags=0x85 [DynIc-rStr]
+            packageName=com.google.android.googlequicksearchbox
+            activity=ComponentInfo{com.google.android.googlequicksearchbox/com.google.android.googlequicksearchbox.SearchActivity}
+            shortLabel=Search, resId=0[null]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372101725
+            intents=[Intent { act=android.search.action.GLOBAL_SEARCH dat=agsa:/... flg=0x10008000 cmp=com.google.android.googlequicksearchbox/com.google.android.apps.gsa.searchnow.SearchNowActivity }/PersistableBundle[{lobby_initial_tab=8, source=and.gsa.launcher.shortcut.text, dark-mode-setting=-1, dark-mode-enabled=true}]]
+            extras=null
+            iconRes=2131232994[drawable/ic_text_search_shortcut], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@ae8b1d7[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 6]
+
+      Package: com.google.android.apps.messaging  UID: 10112
+        Calls: 0
+        Last known FG: 408201
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 163204880
+          Backup Allowed: true
+          Last package update time: 1725922871000
+
+        Shortcuts:
+          ShortcutInfo {id=manifest-shortcut-new_message, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.apps.messaging
+            activity=ComponentInfo{com.google.android.apps.messaging/com.google.android.apps.messaging.ui.ConversationListActivity}
+            shortLabel=New conversation, resId=2132085312[shortcut_new_message_text]
+            longLabel=New conversation, resId=2132085312[shortcut_new_message_text]
+            disabledMessage=This shortcut no longer works because the conversation was deleted, resId=2132085311[shortcut_disabled_text]
+            disabledReason=[Not disabled]
+            categories={android.shortcut.media, android.shortcut.conversation}
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372067602
+            intents=[Intent { act=android.intent.action.VIEW flg=0x1000c000 cmp=com.google.android.apps.messaging/.main.MainActivity }/PersistableBundle[{via_shortcut=true, conversation_state=2}]]
+            extras=null
+            iconRes=2131231408[drawable/ic_new_message_shortcut], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@e8d6ac4[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 9]
+
+      Package: com.google.android.deskclock  UID: 10137
+        Calls: 1
+        Last known FG: 0
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 74001498
+          Backup Allowed: true
+          Last package update time: 1725922920000
+
+        Shortcuts:
+          ShortcutInfo {id=Timer_Create, flags=0x85 [DynIc-rStr]
+            packageName=com.google.android.deskclock
+            activity=ComponentInfo{com.google.android.deskclock/com.android.deskclock.DeskClock}
+            shortLabel=New timer, resId=0[null]
+            longLabel=Create new timer, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372038431
+            intents=[Intent { act=android.intent.action.SET_TIMER flg=0x10000000 cmp=com.google.android.deskclock/com.android.deskclock.HandleSetApiCalls }/PersistableBundle[{com.android.deskclock.extra.EVENT_LABEL=Shortcut}]]
+            extras=null
+            iconRes=2131231652[drawable/shortcut_new_timer], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=Screensaver_Show, flags=0x85 [DynIc-rStr]
+            packageName=com.google.android.deskclock
+            activity=ComponentInfo{com.google.android.deskclock/com.android.deskclock.DeskClock}
+            shortLabel=Screen saver, resId=0[null]
+            longLabel=Start screen saver, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=3, timestamp=1793372038432
+            intents=[Intent { act=android.intent.action.MAIN flg=0x10000000 cmp=com.google.android.deskclock/com.android.deskclock.ScreensaverActivity }/PersistableBundle[{com.android.deskclock.extra.EVENT_LABEL=Shortcut}]]
+            extras=null
+            iconRes=2131231653[drawable/shortcut_screensaver], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=Stopwatch, flags=0x85 [DynIc-rStr]
+            packageName=com.google.android.deskclock
+            activity=ComponentInfo{com.google.android.deskclock/com.android.deskclock.DeskClock}
+            shortLabel=Start, resId=0[null]
+            longLabel=Start stopwatch, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=2, timestamp=1793372038431
+            intents=[Intent { act=com.android.deskclock.action.START_STOPWATCH flg=0x10000000 cmp=com.google.android.deskclock/com.android.deskclock.HandleShortcuts }/null]
+            extras=null
+            iconRes=2131231654[drawable/shortcut_stopwatch], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=Alarm_Create, flags=0x85 [DynIc-rStr]
+            packageName=com.google.android.deskclock
+            activity=ComponentInfo{com.google.android.deskclock/com.android.deskclock.DeskClock}
+            shortLabel=New alarm, resId=0[null]
+            longLabel=Create new alarm, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372038431
+            intents=[Intent { act=android.intent.action.SET_ALARM flg=0x10000000 cmp=com.google.android.deskclock/com.android.deskclock.HandleSetApiCalls }/PersistableBundle[{com.android.deskclock.extra.EVENT_LABEL=Shortcut}]]
+            extras=null
+            iconRes=2131231651[drawable/shortcut_new_alarm], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@565dad[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 1]
+
+      Package: com.google.android.as  UID: 10117
+        Calls: 0
+        Last known FG: 408201
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 8460916
+          Backup Allowed: true
+          Last package update time: 1725922928000
+
+        Shortcuts:
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@61ec8e2[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 4]
+
+      Package: com.google.android.gm  UID: 10144
+        Calls: 0
+        Last known FG: 358612
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 63675156
+          Backup Allowed: true
+          Last package update time: 1725922968000
+
+        Shortcuts:
+          ShortcutInfo {id=manifest_compose_shortcut, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.gm
+            activity=ComponentInfo{com.google.android.gm/com.google.android.gm.ConversationListActivityGmail}
+            shortLabel=Compose, resId=2132083745[compose_title]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372069804
+            intents=[Intent { act=com.android.mail.intentutils.action.LAUNCH_COMPOSE flg=0x1000c000 cmp=com.google.android.gm/.ComposeActivityGmail }/PersistableBundle[{from-launcher-shortcut=true}]]
+            extras=null
+            iconRes=2131232167[drawable/compose_launcher_shortcut_icon], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@d1c9473[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 10]
+
+      Package: com.google.android.dialer  UID: 10109
+        Calls: 0
+        Last known FG: 0
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 11348630
+          Backup Allowed: true
+          Last package update time: 1725922936000
+
+        Shortcuts:
+          ShortcutInfo {id=dialer-shortcut-add-contact, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.dialer
+            activity=ComponentInfo{com.google.android.dialer/com.google.android.dialer.extensions.GoogleDialtactsActivity}
+            shortLabel=New contact, resId=2132083510[dialer_shortcut_add_contact_short]
+            longLabel=New contact, resId=2132083509[dialer_shortcut_add_contact_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372016237
+            intents=[Intent { act=android.intent.action.INSERT dat=content://com.android.contacts/... flg=0x1000c000 }/null]
+            extras=null
+            iconRes=2131231087[drawable/ic_shortcut_add_contact], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@e586f30[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 6]
+
+      Package: com.google.android.apps.docs  UID: 10133
+        Calls: 0
+        Last known FG: 0
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 212806151
+          Backup Allowed: true
+          Last package update time: 1725922947000
+
+        Shortcuts:
+          ShortcutInfo {id=launcher_shortcut_scan, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.apps.docs
+            activity=ComponentInfo{com.google.android.apps.docs/com.google.android.apps.docs.app.NewMainProxyActivity}
+            shortLabel=Scan, resId=2131953030[launcher_scan_short]
+            longLabel=Scan, resId=2131953030[launcher_scan_short]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372036545
+            intents=[Intent { act=android.intent.action.SEND dat=http://drive.google.com/... flg=0x1000c000 cmp=com.google.android.apps.docs/.drive.capture.DocScannerActivity }/null]
+            extras=null
+            iconRes=2131231374[drawable/launcher_shortcut_scan], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=launcher_shortcut_upload, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.apps.docs
+            activity=ComponentInfo{com.google.android.apps.docs/com.google.android.apps.docs.app.NewMainProxyActivity}
+            shortLabel=Upload, resId=2131953032[launcher_upload_short]
+            longLabel=Upload, resId=2131953032[launcher_upload_short]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372036545
+            intents=[Intent { act=com.google.android.apps.docs.CreateNewDocument.UPLOAD_FILE dat= flg=0x1000c000 cmp=com.google.android.apps.docs/.drive.filepicker.PickFilesToUploadActivity }/null]
+            extras=null
+            iconRes=2131231378[drawable/launcher_shortcut_upload], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=launcher_shortcut_search, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.apps.docs
+            activity=ComponentInfo{com.google.android.apps.docs/com.google.android.apps.docs.app.NewMainProxyActivity}
+            shortLabel=Search, resId=2131953031[launcher_search_short]
+            longLabel=Search, resId=2131953031[launcher_search_short]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=2, timestamp=1793372036545
+            intents=[Intent { act=com.google.android.apps.docs.actions.SEARCH_SHORTCUT_ACTION dat= flg=0x1000c000 cmp=com.google.android.apps.docs/.app.NewMainProxyActivity }/null]
+            extras=null
+            iconRes=2131231376[drawable/launcher_shortcut_search], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@ca827a9[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 7]
+
+      Package: com.google.android.apps.maps  UID: 10142
+        Calls: 0
+        Last known FG: 0
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 1067529190
+          Backup Allowed: true
+          Last package update time: 1725922990000
+
+        Shortcuts:
+          ShortcutInfo {id=manifest_work, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.apps.maps
+            activity=ComponentInfo{com.google.android.apps.maps/com.google.android.maps.MapsActivity}
+            shortLabel=Work, resId=2132025384[WORK_LOCATION]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372046884
+            intents=[Intent { act=android.intent.action.VIEW flg=0x1000c000 cmp=com.google.android.apps.maps/.LauncherShortcutActivity }/PersistableBundle[{extra_destination_work_key=true}]]
+            extras=null
+            iconRes=2131232553[drawable/ic_qu_work_launcher], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=manifest_home, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.apps.maps
+            activity=ComponentInfo{com.google.android.apps.maps/com.google.android.maps.MapsActivity}
+            shortLabel=Home, resId=2132020334[HOME_LOCATION]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372046884
+            intents=[Intent { act=android.intent.action.VIEW flg=0x1000c000 cmp=com.google.android.apps.maps/.LauncherShortcutActivity }/PersistableBundle[{extra_destination_home_key=true}]]
+            extras=null
+            iconRes=2131232411[drawable/ic_qu_home_launcher], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@564912e[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 7]
+
+      Package: com.google.android.contacts  UID: 10121
+        Calls: 10
+        Last known FG: 68880
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 2960682
+          Backup Allowed: true
+          Last package update time: 1725922932000
+
+        Shortcuts:
+          ShortcutInfo {id=shortcut-add-contact, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.contacts
+            activity=ComponentInfo{com.google.android.contacts/com.android.contacts.activities.PeopleActivity}
+            shortLabel=Add contact, resId=2132083971[shortcut_add_contact]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372032598
+            intents=[Intent { act=android.intent.action.INSERT dat=content://com.android.contacts/... flg=0x1000c000 cmp=com.google.android.contacts/com.google.android.apps.contacts.editor.ContactEditorActivity }/null]
+            extras=null
+            iconRes=2131230957[drawable/ic_add_contact_shortcut], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@7a204cf[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 14]
+
+      Package: com.android.chrome  UID: 10126
+        Calls: 0
+        Last known FG: 0
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 541412337
+          Backup Allowed: true
+          Last package update time: 1725922798000
+
+        Shortcuts:
+          ShortcutInfo {id=new-tab-shortcut, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.android.chrome
+            activity=ComponentInfo{com.android.chrome/com.google.android.apps.chrome.Main}
+            shortLabel=New tab, resId=2132018808[0_resource_name_obfuscated]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372016018
+            intents=[Intent { act=chromium.shortcut.action.OPEN_NEW_TAB flg=0x1000c000 cmp=com.android.chrome/org.chromium.chrome.browser.LauncherShortcutActivity }/null]
+            extras=null
+            iconRes=2131297502[drawable/0_resource_name_obfuscated], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@48d4e5c[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 6]
+
+      Package: org.chyavorec.app  UID: 10174
+        Calls: 0
+        Last known FG: 408202
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 1484480
+          Backup Allowed: false
+          Last package update time: 1793372022237
+
+        Shortcuts:
+          ShortcutInfo {id=last-book, flags=0x85 [DynIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=12 -те вятъра, resId=0[null]
+            longLabel=12 -те вятъра — Гарфилд, Джудит и др., resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372379353
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230849[drawable/ic_shortcut_book], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=catalog, flags=0x1a4 [ImManIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=Catalogue, resId=2131755754[shortcut_catalog]
+            longLabel=Search the catalogue, resId=2131755755[shortcut_catalog_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372062490
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... flg=0x1000c000 cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230851[drawable/ic_shortcut_catalog], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=want-to-read, flags=0x85 [DynIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=Искам да прочета, resId=0[null]
+            longLabel=Списък „Искам да прочета“, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372379352
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230854[drawable/ic_shortcut_want], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=scan, flags=0x1a4 [ImManIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=Scan, resId=2131755758[shortcut_scan]
+            longLabel=Scan a book barcode, resId=2131755759[shortcut_scan_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=3, timestamp=1793372062490
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... flg=0x1000c000 cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230853[drawable/ic_shortcut_scan], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=card, flags=0x1a4 [ImManIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=Library card, resId=2131755752[shortcut_card]
+            longLabel=My library card, resId=2131755753[shortcut_card_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372062490
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... flg=0x1000c000 cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230850[drawable/ic_shortcut_card], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=events, flags=0x1a4 [ImManIc-rStr]
+            packageName=org.chyavorec.app
+            activity=ComponentInfo{org.chyavorec.app/org.chyavorec.app.MainActivity}
+            shortLabel=Events, resId=2131755756[shortcut_events]
+            longLabel=Upcoming events, resId=2131755757[shortcut_events_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=2, timestamp=1793372062490
+            intents=[Intent { act=org.chyavorec.app.SHORTCUT dat=chyavorec://app/... flg=0x1000c000 cmp=org.chyavorec.app/.MainActivity }/null]
+            extras=null
+            iconRes=2131230852[drawable/ic_shortcut_events], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@5329565[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 6]
+
+      Package: com.google.android.calendar  UID: 10122
+        Calls: 0
+        Last known FG: 0
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 2017095958
+          Backup Allowed: true
+          Last package update time: 1725922949000
+
+        Shortcuts:
+          ShortcutInfo {id=launcher_shortcuts_shortcut_new_reminder, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.calendar
+            activity=ComponentInfo{com.google.android.calendar/com.android.calendar.AllInOneActivity}
+            shortLabel=New reminder, resId=2132018178[launcher_shortcut_reminder]
+            longLabel=New reminder, resId=2132018179[launcher_shortcut_reminder_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372036819
+            intents=[Intent { act=com.google.android.calendar.REMINDER_INSERT flg=0x1000c000 cmp=com.google.android.calendar/com.android.calendar.event.LaunchInfoActivity }/null]
+            extras=null
+            iconRes=2131231216[drawable/launcher_shortcut_new_reminder], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=launcher_shortcuts_shortcut_new_event, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.calendar
+            activity=ComponentInfo{com.google.android.calendar/com.android.calendar.AllInOneActivity}
+            shortLabel=New event, resId=2132018176[launcher_shortcut_event]
+            longLabel=New event, resId=2132018177[launcher_shortcut_event_long]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372036819
+            intents=[Intent { act=com.google.android.calendar.EVENT_INSERT flg=0x1000c000 cmp=com.google.android.calendar/com.android.calendar.event.LaunchInfoActivity }/null]
+            extras=null
+            iconRes=2131231215[drawable/launcher_shortcut_new_event], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@12c923a[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 7]
+
+      Package: com.google.android.documentsui  UID: 10085
+        Calls: 0
+        Last known FG: 0
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 330543000
+          Backup Allowed: true
+          Last package update time: 1725921723000
+
+        Shortcuts:
+          ShortcutInfo {id=content://com.android.providers.media.documents/root/images_root, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.google.android.documentsui
+            activity=ComponentInfo{com.google.android.documentsui/com.android.documentsui.LauncherActivity}
+            shortLabel=Images, resId=2131755119[images_shortcut_label]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372016018
+            intents=[Intent { act=android.intent.action.VIEW dat=content://com.android.providers.media.documents/... flg=0x1000c000 }/null]
+            extras=null
+            iconRes=2131165329[drawable/ic_images_shortcut], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@7641eeb[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 6]
+
+      Package: com.android.settings  UID: 1000
+        Calls: 0
+        Last known FG: 408202
+        Last reset: [1793372002195] 2026-10-30 14:53:22
+
+        PackageInfo:
+          IsShadow: false (installed)
+          Version: 33
+          Backup Allowed: true
+          Last package update time: 1725923193000
+
+        Shortcuts:
+          ShortcutInfo {id=manifest-shortcut-data-usage, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.android.settings
+            activity=ComponentInfo{com.android.settings/com.android.settings.Settings}
+            shortLabel=Data usage, resId=2130970602[data_usage_summary_title]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=1, timestamp=1793372323259
+            intents=[Intent { act=android.intent.action.MAIN flg=0x1000c000 cmp=com.android.settings/.Settings$DataUsageSummaryActivity }/null]
+            extras=null
+            iconRes=2130838497[drawable/ic_shortcut_data_usage], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=manifest-shortcut-battery, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.android.settings
+            activity=ComponentInfo{com.android.settings/com.android.settings.Settings}
+            shortLabel=Battery, resId=2130972765[power_usage_summary_title]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=2, timestamp=1793372323259
+            intents=[Intent { act=android.intent.action.POWER_USAGE_SUMMARY flg=0x1000c000 }/null]
+            extras=null
+            iconRes=2130838496[drawable/ic_shortcut_battery], bitmapPath=null, iconUri=null}
+          ShortcutInfo {id=manifest-shortcut-wifi, flags=0x1a4 [ImManIc-rStr]
+            packageName=com.android.settings
+            activity=ComponentInfo{com.android.settings/com.android.settings.Settings}
+            shortLabel=Wi‑Fi, resId=2130974898[wifi_settings]
+            longLabel=null, resId=0[null]
+            disabledMessage=null, resId=0[null]
+            disabledReason=[Not disabled]
+            categories=null
+            persons=null
+            icon=null
+            rank=0, timestamp=1793372323259
+            intents=[Intent { act=android.settings.WIFI_SETTINGS flg=0x1000c000 }/null]
+            extras=null
+            iconRes=2130838498[drawable/ic_shortcut_wireless], bitmapPath=null, iconUri=null}
+        Total bitmap size: 0 (0 B)
+
+  Pending saves: Num=0 Executor=java.util.concurrent.ThreadPoolExecutor@bcef448[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 10]
+
+      Bitmap directories: 
+        Path: bitmaps/ has 0 files, size=0 (0 B)
+
+  Non-persistent: user ID:0
+    Host packages:
+      VoiceInteractionManager: com.google.android.googlequicksearchbox
+
+
+

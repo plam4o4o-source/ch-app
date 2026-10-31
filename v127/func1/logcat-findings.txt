@@ -1,0 +1,19 @@
+app pids seen: ['5708', '7207', '9496']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=56 total=56
+   10-27 18:40:07.949  5708  5708 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=1652ms median=1217ms
+   10-27 18:40:08.801  5708  5723 I OpenGLRenderer: Davey! duration=1652ms; Flags=1, FrameTimelineVsyncId=5634, IntendedVsync=73709700880, Vsync=74643034120, InputEventId=0, HandleInputStart=74648808694, AnimationStart=74648809045, PerformTrav
+   10-27 18:40:08.883  5708  5720 I OpenGLRenderer: Davey! duration=782ms; Flags=0, FrameTimelineVsyncId=5994, IntendedVsync=74793023068, Vsync=75243023050, InputEventId=0, HandleInputStart=75249642314, AnimationStart=75249642754, PerformTrave
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 18:40:06.249  5701  5701 I PERFCHECK: section: W. First launch and warm-up
+   10-27 18:40:44.351  7191  7191 I PERFCHECK: section: F1. Home quick actions (Scan, Library card, Want to read, Contacts)
+   10-27 18:41:13.985  7503  7503 I PERFCHECK: section: F2. Catalogue: search 12, a copy that is out while others are on the shelf
+   10-27 18:42:16.435  8292  8292 I PERFCHECK: section: F3. Want to read: add, Кажи ми on/off, undo, remove with undo
+   10-27 18:43:40.670  9085  9085 I PERFCHECK: section: F4. Links: /news opens News after Calendar was used; /events opens Calendar (also from an article)
+   10-27 18:44:52.346  9704  9704 I PERFCHECK: section: F5. Reselecting the News tab on Calendar scrolls to the top
+   10-27 18:45:25.994 10017 10017 I PERFCHECK: section: F6. Settings → Clear temporary data → catalogue returns

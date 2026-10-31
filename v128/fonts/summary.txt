@@ -1,0 +1,56 @@
+part fonts; APK: 1.2.28 52334a7 (Merge remote-tracking branch 'origin/wave14/modern' into claude/charmi); versionCode 1484480; x86_64 libs: 4 size 4311931 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484480 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED]
+screen 1080x2400
+ARTICLE with italics/quotes (from news.json + rss.xml): https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026	Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026	0	4
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3057 ms
+## F-bg. Fonts: book pages with Latin names, News, an article with italics and quotes, Settings, №, ›
+FONTS bg book 399555: text="Sanktus" text="Тойн, Саймън" text="Налична" text="Наличност към 28.10.2026" ; chars: –×1 “×2 „×2 
+FONTS bg book 399637: text="Tour de Армения : Една обиколка на Армения с велосипед" text="Юреджиян, Рафи" text="Налична" text="Наличност към 28.10.2026" ; chars: –×1 “×2 „×2 
+FONTS bg book 399510: text="Изкуството на щастливия живот на работното място" text="Тензин Гяцо, Далай Лама XIV и др." text="Налична" text="Наличност към 28.10.20; chars: –×1 “×2 „×2 
+FONTS bg book 399580: text="Завинаги само твоя" text="О`Нийл, Луис" text="Налична" text="Наличност към 28.10.2026" ; chars: –×1 “×2 „×2 
+FONTS bg catalogue 'Sanktus': 1 result(s)
+FONTS bg news: chars: –×3 “×3 „×3 
+FONTS bg article: content-desc="Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026" text="СЪБИТИЕ  ·  25 юли 2026" text="Групата за народни та; chars: –×3 “×6 „×6 
+FONTS bg article page 2 chars: –×3 “×6 „×6 
+FONTS bg article page 3 chars: –×3 “×6 „×6 
+FONTS bg article page 4 chars: –×3 “×6 „×6 
+FONTS bg settings chars: —×1 
+FONTS bg settings (scrolled) chars: —×2 
+FONTS bg scan result chars: №×1 
+FONTS bg privacy policy: '›' on screen after 1 pages; chars: –×1 —×3 “×6 „×6 ›×2 
+FONTS bg contacts chars: –×6 “×1 „×1 
+## F-en. Fonts: book pages with Latin names, News, an article with italics and quotes, Settings, №, ›
+FONTS en book 399555: text="Sanktus" text="Тойн, Саймън" text="Available" text="Availability as of Oct 28, 2026" ; chars: –×1 “×2 
+FONTS en book 399637: text="Tour de Армения : Една обиколка на Армения с велосипед" text="Юреджиян, Рафи" text="Available" text="Availability as of Oct 28, 2026" ; chars: –×1 “×2 
+FONTS en book 399510: text="Изкуството на щастливия живот на работното място" text="Тензин Гяцо, Далай Лама XIV и др." text="Available" text="Availability as of O; chars: –×1 “×2 
+FONTS en book 399580: text="Завинаги само твоя" text="О`Нийл, Луис" text="Available" text="Availability as of Oct 28, 2026" ; chars: –×1 “×2 
+FONTS en catalogue 'Sanktus': 1 result(s)
+FONTS en news: chars: –×3 “×3 „×3 
+FONTS en article: content-desc="Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026" text="СЪБИТИЕ  ·  July 25, 2026" text="Групата за народни ; chars: –×3 “×6 „×6 
+FONTS en article page 2 chars: –×3 “×6 „×6 
+FONTS en article page 3 chars: –×3 “×6 „×6 
+FONTS en article page 4 chars: –×3 “×6 „×6 
+FONTS en settings chars: —×1 
+FONTS en settings (scrolled) chars: —×2 
+FONTS en scan result chars: 
+FONTS en privacy policy: '›' on screen after 1 pages; chars: –×1 —×2 “×6 ›×2 
+FONTS en contacts chars: –×6 “×1 „×1 
+## COMPLETE
+## logcat findings
+app pids seen: ['5333', '7073', '8832']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=52 total=164
+== Davey: 7
+   davey events=7 max=1300ms median=874ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

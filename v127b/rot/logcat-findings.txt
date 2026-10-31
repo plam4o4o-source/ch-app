@@ -1,0 +1,32 @@
+app pids seen: ['5442', '7977', '10235', '10511', '10889', '11228', '11437', '11677', '11860']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=38 total=138
+   10-29 17:33:50.838  7977  7977 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   10-29 17:34:15.103  7977  7977 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-29 17:39:49.681 11677 11677 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   10-29 17:40:17.013 11860 11860 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 8
+   davey events=8 max=1016ms median=756ms
+   10-29 17:32:47.117  5442  5453 I OpenGLRenderer: Davey! duration=998ms; Flags=1, FrameTimelineVsyncId=10565, IntendedVsync=126414203867, Vsync=126780870497, InputEventId=0, HandleInputStart=126783520960, AnimationStart=126783521601, Perform
+   10-29 17:33:08.081  5442  5453 I OpenGLRenderer: Davey! duration=761ms; Flags=0, FrameTimelineVsyncId=11925, IntendedVsync=147664202969, Vsync=147814202954, InputEventId=0, HandleInputStart=147828433639, AnimationStart=147828433879, Perform
+   10-29 17:33:08.473  5442  5453 I OpenGLRenderer: Davey! duration=1016ms; Flags=0, FrameTimelineVsyncId=11938, IntendedVsync=147847530793, Vsync=148197530779, InputEventId=0, HandleInputStart=148210573658, AnimationStart=148210574088, Perfor
+   10-29 17:34:58.321  7977  7989 I OpenGLRenderer: Davey! duration=716ms; Flags=0, FrameTimelineVsyncId=18923, IntendedVsync=258114193049, Vsync=258497526367, InputEventId=0, HandleInputStart=258501412678, AnimationStart=258501413149, Perform
+   10-29 17:34:59.747  7977  7991 I OpenGLRenderer: Davey! duration=715ms; Flags=0, FrameTimelineVsyncId=19286, IntendedVsync=259564192991, Vsync=259930859643, InputEventId=0, HandleInputStart=259938373211, AnimationStart=259938373562, Perform
+   10-29 17:37:37.027 10235 10247 I OpenGLRenderer: Davey! duration=703ms; Flags=0, FrameTimelineVsyncId=31891, IntendedVsync=416747520037, Vsync=417097519981, InputEventId=0, HandleInputStart=417099625442, AnimationStart=417099625892, Perform
+   10-29 17:39:49.940 11677 11692 I OpenGLRenderer: Davey! duration=819ms; Flags=1, FrameTimelineVsyncId=37554, IntendedVsync=549630848055, Vsync=550264181363, InputEventId=0, HandleInputStart=550271184984, AnimationStart=550271186016, Perform
+   10-29 17:40:17.210 11860 11887 I OpenGLRenderer: Davey! duration=750ms; Flags=0, FrameTimelineVsyncId=38780, IntendedVsync=577047513625, Vsync=577597513603, InputEventId=0, HandleInputStart=577602673002, AnimationStart=577602673333, Perform
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 17:32:43.828  5434  5434 I PERFCHECK: section: W. First launch and warm-up
+   10-29 17:33:48.353  7937  7937 I PERFCHECK: section: R1. Rotation (6 toggles each) on Home, Catalogue 12, a book, Want to read, Calendar
+   10-29 17:37:02.909 10077 10077 I PERFCHECK: section: R2. Process death (HOME → am kill → launcher) on the same screens
+   10-29 17:37:17.658   488  2557 I ActivityManager: Killing 7977:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-29 17:37:46.086   488  2617 I ActivityManager: Killing 10235:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-29 17:38:07.257   488  2617 I ActivityManager: Killing 10511:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-29 17:38:47.425   488  1554 I ActivityManager: Killing 10889:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-29 17:39:13.375   488  2147 I ActivityManager: Killing 11228:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-29 17:39:26.765 11534 11534 I PERFCHECK: section: R3. Process death, back from Recents (Calendar, book)
+   10-29 17:39:41.188   488   950 I ActivityManager: Killing 11437:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-29 17:40:08.342   488  2557 I ActivityManager: Killing 11677:org.chyavorec.app/u0a174 (adj 700): kill background

@@ -1,0 +1,33 @@
+app pids seen: ['5614', '8304', '10618', '12801', '12966', '14211']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=72 total=301
+   10-31 17:42:11.812  5614  5614 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   10-31 17:42:12.341  5614  5614 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-31 17:43:43.635  5614  5614 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-31 17:46:11.829 10618 10618 I Choreographer: Skipped 72 frames!  The application may be doing too much work on its main thread.
+   10-31 17:46:12.437 10618 10618 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   10-31 17:46:33.063 10618 10618 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   10-31 17:47:53.909 12966 12966 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+== Davey: 10
+   davey events=10 max=1816ms median=913ms
+   10-31 17:42:13.005  5614  5627 I OpenGLRenderer: Davey! duration=993ms; Flags=1, FrameTimelineVsyncId=5823, IntendedVsync=89967521267, Vsync=90467521247, InputEventId=0, HandleInputStart=90472243168, AnimationStart=90472243479, PerformTrave
+   10-31 17:42:23.189  5614  5627 I OpenGLRenderer: Davey! duration=727ms; Flags=0, FrameTimelineVsyncId=6820, IntendedVsync=100384198506, Vsync=100750865114, InputEventId=0, HandleInputStart=100752962391, AnimationStart=100752963173, PerformT
+   10-31 17:42:33.543  5614  6872 I OpenGLRenderer: Davey! duration=1003ms; Flags=0, FrameTimelineVsyncId=7308, IntendedVsync=110534187111, Vsync=110784187101, InputEventId=0, HandleInputStart=110787018139, AnimationStart=110787018970, Perform
+   10-31 17:42:33.994  5614  6872 I OpenGLRenderer: Davey! duration=803ms; Flags=0, FrameTimelineVsyncId=7334, IntendedVsync=111000853759, Vsync=111484187073, InputEventId=0, HandleInputStart=111485116337, AnimationStart=111485116768, PerformT
+   10-31 17:43:43.795  5614  5627 I OpenGLRenderer: Davey! duration=720ms; Flags=1, FrameTimelineVsyncId=10199, IntendedVsync=181117517621, Vsync=181217517617, InputEventId=0, HandleInputStart=181224973286, AnimationStart=181224973686, Perform
+   10-31 17:46:11.657 10618 10652 I OpenGLRenderer: Davey! duration=1449ms; Flags=1, FrameTimelineVsyncId=8674, IntendedVsync=328317511733, Vsync=328634178387, InputEventId=0, HandleInputStart=328643279313, AnimationStart=328643279894, Perform
+   10-31 17:46:12.439 10618 10663 I OpenGLRenderer: Davey! duration=1816ms; Flags=0, FrameTimelineVsyncId=8902, IntendedVsync=328750845049, Vsync=329950845001, InputEventId=0, HandleInputStart=329959788546, AnimationStart=329959789618, Perform
+   10-31 17:46:12.693 10618 10652 I OpenGLRenderer: Davey! duration=833ms; Flags=0, FrameTimelineVsyncId=9202, IntendedVsync=329984178333, Vsync=330550844977, InputEventId=0, HandleInputStart=330567383251, AnimationStart=330567383892, PerformT
+   10-31 17:46:33.214 10618 10663 I OpenGLRenderer: Davey! duration=775ms; Flags=1, FrameTimelineVsyncId=16415, IntendedVsync=350467510847, Vsync=350534177511, InputEventId=0, HandleInputStart=350549299137, AnimationStart=350549299617, Perform
+   10-31 17:47:54.580 12966 12980 I OpenGLRenderer: Davey! duration=1068ms; Flags=1, FrameTimelineVsyncId=51437, IntendedVsync=431367507611, Vsync=432034174251, InputEventId=0, HandleInputStart=432041050296, AnimationStart=432041050646, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 17:42:10.391  5608  5608 I PERFCHECK: section: W. First launch and warm-up
+   10-31 17:42:50.148  7349  7349 I PERFCHECK: section: WL1. System EN, app BG: add the widget
+   10-31 17:43:42.957  7837  7837 I PERFCHECK: section: WL2. System EN: the app switched to English in its Settings process kept
+   10-31 17:45:23.436  8397  8397 I PERFCHECK: section: WL3. System BG framework restart, app EN
+   10-31 17:46:32.275 12408 12408 I PERFCHECK: section: WL4. System BG, app switched to Български in Settings, then restart
+   10-31 17:47:40.543 12909 12909 I PERFCHECK: section: WL5. System BG, app EN set with cmd locale as from the systems per-app language screen, restart

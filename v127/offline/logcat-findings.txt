@@ -1,0 +1,18 @@
+app pids seen: ['5114', '7895']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=82 total=163
+   10-27 18:40:18.617  5114  5114 I Choreographer: Skipped 82 frames!  The application may be doing too much work on its main thread.
+   10-27 18:40:19.243  5114  5114 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-27 18:42:30.257  7895  7895 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=1222ms median=1134ms
+   10-27 18:40:20.195  5114  5133 I OpenGLRenderer: Davey! duration=1222ms; Flags=1, FrameTimelineVsyncId=6466, IntendedVsync=108815285363, Vsync=109415285339, InputEventId=0, HandleInputStart=109425213764, AnimationStart=109425214425, Perform
+   10-27 18:42:30.690  7895  7913 I OpenGLRenderer: Davey! duration=1045ms; Flags=1, FrameTimelineVsyncId=15525, IntendedVsync=239681946795, Vsync=240431946765, InputEventId=0, HandleInputStart=240438954191, AnimationStart=240438954832, Perfor
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 18:40:07.363  4684  4684 I PERFCHECK: section: O1. Empty cache, offline, guest: My
+   10-27 18:41:07.126  6206  6206 I PERFCHECK: section: O2. Gallery offline with an empty cache
+   10-27 18:41:40.308  6447  6447 I PERFCHECK: section: O3. Reconnect on the Gallery (no touch)
+   10-27 18:41:59.485  6990  6990 I PERFCHECK: section: O4. My offline as guest again (after the online start)

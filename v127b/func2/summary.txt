@@ -1,0 +1,48 @@
+part func2; APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+base APK: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4; update-source APK: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3608 ms
+## F6. Scanner (CAMERA revoked): manual panel, Back key
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+manual panel: panel OPEN; IME mInputShown=true; scanner visible; app in front yes
+Back key #1: panel OPEN; IME mInputShown=false; scanner visible; app in front yes
+Back key #2: panel closed; IME mInputShown=false; scanner visible; app in front yes
+SCAN result: content-desc="Затваряне на таблицата" content-desc="Манипулатор за преместване с плъзгане" content-desc="12 -те вятъра" text="12 -те вятъра" text="Гарфилд, Джудит и др." text="2011" text="Налична" text="инв. № 399560" text="Затвори" text="Отвори книг
+SCAN → book: opened
+## F8. Contacts links (call, email, map, site, cards)
+CONTACTS link 'Обади се|=Call': not on screen
+CONTACTS link 'Изпрати имейл|=Send email' → fg com.google.android.gm/com.google.android.gm.welcome.WelcomeTourActivity; text="Welcome to Gmail" text="One app for all of your email" text="SKIP" content-desc="Next" 
+CONTACTS link 'Отвори карта|=Open map' → fg com.google.android.apps.maps/com.google.android.maps.MapsActivity; text="Make it your map" text="Sign in for quick access to your favorite places and get better recommendations" text="Sign in" text="SKIP" 
+CONTACTS link 'Отвори сайта|=Open website' → fg com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity; text="Welcome to Chrome" text="Add account to device" text="Use without an account" text="By continuing, you agree to the Terms of Service. To help im
+CONTACTS link 'chitalishte_yavorec@abv.bg' → fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="НЧ „Васил Левски – 1922“" text="Изпрати имейл" text="Отвори карта" text="Отвори сайта" 
+CONTACTS link 'facebook.com' → fg com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity; text="Welcome to Chrome" text="Add account to device" text="Use without an account" text="By continuing, you agree to the Terms of Service. To help im
+CONTACTS link 'Данни от chyavorec.org|=Data from chyavorec.org' → fg com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity; text="Welcome to Chrome" text="Add account to device" text="Use without an account" text="By continuing, you agree to the Terms of Service. To help im
+CONTACTS clickables past the right edge: 0
+## F7. Scanner manual panel with the system back GESTURE (gesture navigation; predictive back)
+gesture nav: 
+navigation_mode=2 (2 = gestures); predictive-back animations need Android 14+, this is API 33
+panel before: panel OPEN; IME mInputShown=true; scanner visible; app in front yes
+back gesture #1: panel OPEN; IME mInputShown=false; scanner visible; app in front yes
+back gesture #2: panel closed; IME mInputShown=false; scanner visible; app in front yes
+panel reopened (IME hidden): panel OPEN; IME mInputShown=true; scanner visible; app in front yes
+back swipe (input swipe): panel OPEN; IME mInputShown=false; scanner visible; app in front yes
+back swipe #2 (from the scanner): fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Нужен е достъп до камерата" text="Камерата се използва само за четене на баркода на телефона. Нищо не се снима и н
+3-button nav: 
+## COMPLETE
+## logcat findings
+app pids seen: ['4966']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=77 total=182
+== Davey: 8
+   davey events=8 max=2241ms median=952ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

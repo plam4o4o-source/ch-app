@@ -1,0 +1,32 @@
+app pids seen: ['4547', '6498', '8929', '10459', '11782']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=57 total=270
+   10-29 17:32:04.823  4547  4547 I Choreographer: Skipped 55 frames!  The application may be doing too much work on its main thread.
+   10-29 17:32:05.671  4547  4547 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   10-29 17:32:29.448  4547  4547 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   10-29 17:33:09.891  6498  6498 I Choreographer: Skipped 57 frames!  The application may be doing too much work on its main thread.
+   10-29 17:39:36.794 10459 10459 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-29 17:39:37.433 10459 10459 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+== Davey: 21
+   davey events=21 max=1921ms median=915ms
+   10-29 17:32:06.788  4547  4561 I OpenGLRenderer: Davey! duration=1921ms; Flags=1, FrameTimelineVsyncId=5631, IntendedVsync=94092313347, Vsync=94892313219, InputEventId=0, HandleInputStart=94906744544, AnimationStart=94906745135, PerformTrav
+   10-29 17:32:17.433  4547  4634 I OpenGLRenderer: Davey! duration=920ms; Flags=0, FrameTimelineVsyncId=6492, IntendedVsync=105575640635, Vsync=106008973925, InputEventId=0, HandleInputStart=106023696212, AnimationStart=106023696874, PerformT
+   10-29 17:32:20.565  4547  4560 I OpenGLRenderer: Davey! duration=856ms; Flags=0, FrameTimelineVsyncId=6745, IntendedVsync=108475635028, Vsync=108692301686, InputEventId=0, HandleInputStart=108701148135, AnimationStart=108701148386, PerformT
+   10-29 17:32:29.669  4547  4635 I OpenGLRenderer: Davey! duration=1347ms; Flags=0, FrameTimelineVsyncId=7036, IntendedVsync=117458968002, Vsync=117742301324, InputEventId=0, HandleInputStart=117746210211, AnimationStart=117746210582, Perform
+   10-29 17:32:29.908  4547  4635 I OpenGLRenderer: Davey! duration=734ms; Flags=0, FrameTimelineVsyncId=7054, IntendedVsync=117775634656, Vsync=117992301314, InputEventId=0, HandleInputStart=118006732071, AnimationStart=118006732762, PerformT
+   10-29 17:32:42.854  4547  5496 I OpenGLRenderer: Davey! duration=739ms; Flags=0, FrameTimelineVsyncId=7577, IntendedVsync=131242306314, Vsync=131292306309, InputEventId=0, HandleInputStart=131303890231, AnimationStart=131303890632, PerformT
+   10-29 17:32:43.275  4547  5496 I OpenGLRenderer: Davey! duration=979ms; Flags=0, FrameTimelineVsyncId=7585, IntendedVsync=131308972974, Vsync=131625639609, InputEventId=0, HandleInputStart=131636517730, AnimationStart=131636518181, PerformT
+   10-29 17:33:10.900  6498  6511 I OpenGLRenderer: Davey! duration=953ms; Flags=1, FrameTimelineVsyncId=9776, IntendedVsync=159158966334, Vsync=159625632982, InputEventId=0, HandleInputStart=159634420587, AnimationStart=159634421209, PerformT
+   10-29 17:33:11.654  6498  6511 I OpenGLRenderer: Davey! duration=1166ms; Flags=0, FrameTimelineVsyncId=9818, IntendedVsync=159675632980, Vsync=160142299628, InputEventId=0, HandleInputStart=160155580010, AnimationStart=160155580661, Perform
+   10-29 17:33:11.911  6498  6511 I OpenGLRenderer: Davey! duration=915ms; Flags=0, FrameTimelineVsyncId=9838, IntendedVsync=160158966294, Vsync=160558966278, InputEventId=0, HandleInputStart=160573453904, AnimationStart=160573454324, PerformT
+   10-29 17:33:12.523  6498  6511 I OpenGLRenderer: Davey! duration=1059ms; Flags=0, FrameTimelineVsyncId=9976, IntendedVsync=160592299610, Vsync=160758966270, InputEventId=0, HandleInputStart=160762943048, AnimationStart=160762943499, Perform
+   10-29 17:33:12.736  6498  6511 I OpenGLRenderer: Davey! duration=810ms; Flags=0, FrameTimelineVsyncId=10012, IntendedVsync=160942299596, Vsync=161425632910, InputEventId=0, HandleInputStart=161433578783, AnimationStart=161433579424, Perform
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-29 17:32:02.971  4520  4520 I PERFCHECK: section: L0. First launch and warm-up
+   10-29 17:33:06.343  6470  6470 I PERFCHECK: section: L bg-light
+   10-29 17:36:27.614  8906  8906 I PERFCHECK: section: L bg-dark
+   10-29 17:39:34.945 10437 10437 I PERFCHECK: section: L en-dark
+   10-29 17:42:41.496 11765 11765 I PERFCHECK: section: L en-light

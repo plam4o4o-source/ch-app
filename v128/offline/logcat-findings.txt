@@ -1,0 +1,31 @@
+app pids seen: ['4962', '8954', '12117', '16027']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=38 total=178
+   10-30 14:55:09.265  4962  4962 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:09.843  4962  4962 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-30 15:04:41.099 12117 12117 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-30 15:04:41.787 12117 12117 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   10-30 15:10:58.997 16027 16027 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+== Davey: 10
+   davey events=10 max=1282ms median=830ms
+   10-30 14:55:10.679  4962  4974 I OpenGLRenderer: Davey! duration=1265ms; Flags=1, FrameTimelineVsyncId=5574, IntendedVsync=102349945925, Vsync=102899945903, InputEventId=0, HandleInputStart=102912851233, AnimationStart=102912852175, Perform
+   10-30 14:55:10.886  4962  4974 I OpenGLRenderer: Davey! duration=938ms; Flags=0, FrameTimelineVsyncId=5645, IntendedVsync=102999945899, Vsync=103366612551, InputEventId=0, HandleInputStart=103370223347, AnimationStart=103370224198, PerformT
+   10-30 14:55:21.065  4962  4974 I OpenGLRenderer: Davey! duration=814ms; Flags=0, FrameTimelineVsyncId=6104, IntendedVsync=113099945495, Vsync=113433278815, InputEventId=0, HandleInputStart=113446122788, AnimationStart=113446123599, PerformT
+   10-30 14:55:32.473  4962  5520 I OpenGLRenderer: Davey! duration=846ms; Flags=0, FrameTimelineVsyncId=6646, IntendedVsync=124599950535, Vsync=124849950510, InputEventId=0, HandleInputStart=124866565551, AnimationStart=124866566032, PerformT
+   10-30 14:55:32.536  4962  5520 I OpenGLRenderer: Davey! duration=708ms; Flags=0, FrameTimelineVsyncId=6667, IntendedVsync=124883278357, Vsync=125233278343, InputEventId=0, HandleInputStart=125241585367, AnimationStart=125241586198, PerformT
+   10-30 14:55:33.585  4962  4973 I OpenGLRenderer: Davey! duration=1282ms; Flags=0, FrameTimelineVsyncId=6675, IntendedVsync=125283278341, Vsync=125383278337, InputEventId=0, HandleInputStart=125389001148, AnimationStart=125389001579, Perform
+   10-30 14:55:33.862  4962  4973 I OpenGLRenderer: Davey! duration=991ms; Flags=0, FrameTimelineVsyncId=6691, IntendedVsync=125433278335, Vsync=125783278321, InputEventId=0, HandleInputStart=125786279727, AnimationStart=125786280218, PerformT
+   10-30 14:56:07.986  4962  4974 I OpenGLRenderer: Davey! duration=801ms; Flags=0, FrameTimelineVsyncId=8257, IntendedVsync=159999943619, Vsync=160383276937, InputEventId=0, HandleInputStart=160384084007, AnimationStart=160384084928, PerformT
+   10-30 15:02:14.875  8954 10267 I OpenGLRenderer: Davey! duration=766ms; Flags=0, FrameTimelineVsyncId=17443, IntendedVsync=526899928943, Vsync=527083262269, InputEventId=0, HandleInputStart=527096334216, AnimationStart=527096335067, Perform
+   10-30 15:02:15.041  8954 10267 I OpenGLRenderer: Davey! duration=727ms; Flags=0, FrameTimelineVsyncId=17465, IntendedVsync=527133262267, Vsync=527566595583, InputEventId=0, HandleInputStart=527579631629, AnimationStart=527579632139, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-30 14:55:05.955  4931  4931 I PERFCHECK: section: O1. Online warm-up (fills the caches)
+   10-30 14:58:33.599  8857  8857 I PERFCHECK: section: O2. Offline cold start with caches: all tabs
+   10-30 15:01:23.841 10309 10309 I PERFCHECK: section: O3. Reconnect on Contacts (no touch), then the other screens
+   10-30 15:04:33.417 11836 11836 I PERFCHECK: section: O4. Empty cache, offline, guest: all tabs (MyHub)
+   10-30 15:07:47.433 13881 13881 I PERFCHECK: section: O5. Reconnect with the empty cache: Gallery (no touch), then all tabs
+   10-30 15:10:51.910 15925 15925 I PERFCHECK: section: O6. My offline as guest again (after the online start)

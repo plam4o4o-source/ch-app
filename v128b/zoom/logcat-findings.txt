@@ -1,0 +1,27 @@
+app pids seen: ['5541', '6140', '9034', '9200']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 8
+   skipped-frames events=8 max=85 total=361
+   10-31 18:26:52.822  5541  5541 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   10-31 18:26:54.318  5541  5541 I Choreographer: Skipped 85 frames!  The application may be doing too much work on its main thread.
+   10-31 18:26:55.231  5541  5541 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-31 18:27:05.818  5541  5541 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   10-31 18:27:17.244  6140  6140 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   10-31 18:30:10.175  9034  9034 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   10-31 18:30:28.249  9200  9200 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-31 18:30:28.841  9200  9200 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+== Davey: 7
+   davey events=7 max=2005ms median=854ms
+   10-31 18:26:55.197  5541  5555 I OpenGLRenderer: Davey! duration=2005ms; Flags=1, FrameTimelineVsyncId=6556, IntendedVsync=121894681767, Vsync=123311348377, InputEventId=0, HandleInputStart=123322931847, AnimationStart=123322932699, Perform
+   10-31 18:26:55.199  5541  5555 I OpenGLRenderer: Davey! duration=726ms; Flags=0, FrameTimelineVsyncId=6856, IntendedVsync=123411348373, Vsync=123628015031, InputEventId=0, HandleInputStart=123635615871, AnimationStart=123635616322, PerformT
+   10-31 18:26:55.646  5541  5553 I OpenGLRenderer: Davey! duration=854ms; Flags=0, FrameTimelineVsyncId=6908, IntendedVsync=123711348361, Vsync=124228015007, InputEventId=0, HandleInputStart=124241834490, AnimationStart=124241835251, PerformT
+   10-31 18:27:06.159  5541  5816 I OpenGLRenderer: Davey! duration=1372ms; Flags=0, FrameTimelineVsyncId=7330, IntendedVsync=133778014625, Vsync=133861347955, InputEventId=0, HandleInputStart=133869315880, AnimationStart=133869316412, Perform
+   10-31 18:27:06.360  5541  5816 I OpenGLRenderer: Davey! duration=1326ms; Flags=0, FrameTimelineVsyncId=7352, IntendedVsync=133978014617, Vsync=134811347917, InputEventId=0, HandleInputStart=134824203563, AnimationStart=134824204344, Perform
+   10-31 18:27:18.167  6140  6153 I OpenGLRenderer: Davey! duration=737ms; Flags=1, FrameTimelineVsyncId=8675, IntendedVsync=146261353008, Vsync=146578019643, InputEventId=0, HandleInputStart=146578761225, AnimationStart=146578761847, PerformT
+   10-31 18:30:29.145  9200  9214 I OpenGLRenderer: Davey! duration=780ms; Flags=1, FrameTimelineVsyncId=17481, IntendedVsync=337278006485, Vsync=337844673129, InputEventId=0, HandleInputStart=337846874699, AnimationStart=337846875470, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 18:26:48.108  5445  5445 I PERFCHECK: section: Z-new. Viewer: double tap at 2× resets? pinch beyond 2× then double tap resets?
+   10-31 18:30:02.918  8910  8910 I PERFCHECK: section: Z-base. Viewer: double tap at 2× resets? pinch beyond 2× then double tap resets?

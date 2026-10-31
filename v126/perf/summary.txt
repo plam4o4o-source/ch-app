@@ -1,0 +1,48 @@
+part perf; APK: 4ca6dcb (Проверка v1.2.26: втори кръг на API 33, по-малки части, поправки в скрипта); x86_64 libs: 4 size 4924210 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## 1. First install: first launch, time to catalogue results
+home quick actions: Scan=yes MyBooks=no Contacts=yes; 'Catalogue' labels on screen: 1 (1 = only the tab)
+FIRST-INSTALL catalogue results after 5927 ms (tap→text, uiautomator polling)
+catalogue hint: 'Search everything' OK
+polling floor (text already on screen): 2496 ms — subtract from the times below
+INDEX-READY #1 catalogue results after 2927 ms (cold start → tap Catalogue → text)
+INDEX-READY #2 catalogue results after 2677 ms (cold start → tap Catalogue → text)
+INDEX-READY #3 catalogue results after 2470 ms (cold start → tap Catalogue → text)
+INDEX-READY deep-link #1 results 6710 ms after am start
+INDEX-READY deep-link #2 results 4807 ms after am start
+## 2. Startup
+START cold(as installed) n=10 min=1693ms median=1798ms max=1985ms  all=[1795, 1738, 1807, 1802, 1693, 1787, 1701, 1876, 1865, 1985]  states=['COLD']
+START warm(HOME→relaunch) n=5 min=285ms median=309ms max=366ms  all=[285, 292, 318, 366, 309]  states=['HOT']
+compile: Success 
+START cold(speed-profile) n=5 min=1630ms median=1735ms max=1814ms  all=[1713, 1814, 1735, 1742, 1630]  states=['COLD']
+Want to read: added 3 books for the list jank
+## 3. Jank at 540x1200 (animations ON)
+jank screen 540x1200
+GFX catalog-lowres frames=  372  janky=306 (82.26%)  p50=73ms p90=105ms p95=121ms p99=200ms  slowUI=168 slowDraw=306 highInput=126
+catalog-lowres: 30 swipes, 'Show more' pages: 6, mis-taps recovered: 0; screen: --- screen: text="Search everything" content-desc="Scan barcode" text="Everything" text="Title" text="Author" text="ISBN" 
+want list: 1 rows visible
+jank want-lowres screen: --- screen: text="Availability as of Oct 17, 2026" text="Swipe a book aside to remove it." content-desc="Гласът на горите" text="Гласът на горите" text="Катя Тонева" text="Available" content-desc="More actions" content-d
+GFX want-lowres  frames=    1  janky=1 (100.00%)  p50=16ms p90=16ms p95=16ms p99=16ms  slowUI=0 slowDraw=1 highInput=0
+jank news-lowres screen: --- screen: text="Calendar" text="News" text="Search news" text="All" text="Saved" text="Събитие" text="Състави" text="Проекти" 
+GFX news-lowres  frames=  176  janky=133 (75.57%)  p50=65ms p90=81ms p95=89ms p99=101ms  slowUI=79 slowDraw=133 highInput=86
+jank calendar-lowres screen: --- screen: text="News" text="Calendar" content-desc="Subscribe in calendar" content-desc="Calendar view" text="All" text="Библиотека" text="Читалище" text="Народен обичай" 
+GFX calendar-lowres frames=  254  janky=176 (69.29%)  p50=57ms p90=81ms p95=85ms p99=97ms  slowUI=98 slowDraw=176 highInput=153
+jank home-lowres screen: --- screen: text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" text="October 27, 2026 · *Св. мчк Нестор. Преп. Димитрий Басарбовски
+GFX home-lowres  frames=  199  janky=179 (89.95%)  p50=85ms p90=113ms p95=125ms p99=200ms  slowUI=109 slowDraw=179 highInput=40
+MEM perf-end (raw)   PSS=116609KB  Java=15116KB  Native=62184KB  Graphics=0KB  Views=10 Activities=1
+MEM perf-end (trimmed) PSS=118668KB  Java=15848KB  Native=58504KB  Graphics=0KB  Views=10 Activities=1
+## COMPLETE
+## logcat findings
+app pids seen: ['5116', '7098', '7475', '7621', '7768', '7901', '7987', '8052', '8103', '8161', '8217', '8269', '8319', '8372', '8423', '8474', '8674', '8734', '8786', '8839', '8893', '8976', '9780']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 54
+   skipped-frames events=54 max=120 total=2623
+== Davey: 83
+   davey events=83 max=2607ms median=1168ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

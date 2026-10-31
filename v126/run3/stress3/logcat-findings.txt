@@ -1,0 +1,20 @@
+app pids seen: ['5387', '7187']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=81 total=195
+   10-27 16:04:18.410  5387  5387 I Choreographer: Skipped 81 frames!  The application may be doing too much work on its main thread.
+   10-27 16:04:19.738  5387  5387 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   10-27 16:04:59.686  7187  7187 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+== Davey: 5
+   davey events=5 max=1319ms median=1166ms
+   10-27 16:04:19.735  5387  5399 I OpenGLRenderer: Davey! duration=1283ms; Flags=1, FrameTimelineVsyncId=8904, IntendedVsync=115712673412, Vsync=116029340066, InputEventId=0, HandleInputStart=116029757445, AnimationStart=116029758877, Perform
+   10-27 16:04:19.904  5387  5398 I OpenGLRenderer: Davey! duration=1048ms; Flags=0, FrameTimelineVsyncId=8952, IntendedVsync=116112673396, Vsync=116996006694, InputEventId=0, HandleInputStart=117007923681, AnimationStart=117007924382, Perform
+   10-27 16:04:39.315  5387  5400 I OpenGLRenderer: Davey! duration=900ms; Flags=0, FrameTimelineVsyncId=10034, IntendedVsync=135662672614, Vsync=135962672602, InputEventId=0, HandleInputStart=135978376212, AnimationStart=135978376782, Perform
+   10-27 16:04:59.664  7187  7201 I OpenGLRenderer: Davey! duration=1166ms; Flags=1, FrameTimelineVsyncId=11475, IntendedVsync=155762671810, Vsync=155896005138, InputEventId=0, HandleInputStart=155909408634, AnimationStart=155909409285, Perfor
+   10-27 16:05:00.030  7187  7202 I OpenGLRenderer: Davey! duration=1319ms; Flags=0, FrameTimelineVsyncId=11506, IntendedVsync=155929338470, Vsync=156946005096, InputEventId=0, HandleInputStart=156955543663, AnimationStart=156955544173, Perfor
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-27 16:04:16.695  5364  5364 I PERFCHECK: section: 0. First launch and warm-up
+   10-27 16:04:55.917  7084  7084 I PERFCHECK: section: S5. Monkey 4000 events (seed 1234, CAMERA revoked)
+   10-27 16:05:08.598  7428  7428 I PERFCHECK: monkey start

@@ -1,0 +1,31 @@
+part monkey; APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App interactio); versionCode 1484479; x86_64 libs: 4 size 4875530 bytes
+base APK: 1.2.26 3df7f37 (deps: bump the libraries group across 1 directory with 4 updates (#13)); versionCode 1484479; x86_64 libs: 4; update-source APK: 1.2.26 3df7f37; versionCode 1484478; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v127b/update/update.json
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3650 ms
+## K. Monkey 5000 events (seed 4321, CAMERA revoked)
+camera permission before monkey:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+statusbar disable: 
+monkey start pid=6539
+MONKEY exit=0 duration=229 s; Events injected: 5000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '6539'; airplane=0; camera:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+MEM after-monkey (raw) PSS=94320KB  Java=21468KB  Native=23600KB  Graphics=0KB  Views=17 Activities=1
+MEM after-monkey (trimmed) PSS=86161KB  Java=11608KB  Native=22088KB  Graphics=0KB  Views=15 Activities=1
+## COMPLETE
+## logcat findings
+app pids seen: ['5209', '6539']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 23
+   skipped-frames events=23 max=76 total=968
+== Davey: 74
+   davey events=74 max=1646ms median=814ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

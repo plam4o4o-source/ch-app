@@ -1,0 +1,18 @@
+  JOB androidx.work.systemjobscheduler:u0a209/0: a274ff2 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+      Requires: charging=false batteryNotLow=true deviceIdle=false
+      Minimum latency: +3h59m59s997ms
+    Enqueue time: -45s959ms
+    Run time: earliest=+3h59m14s38ms, latest=none, original latest=none
+  JOB androidx.work.systemjobscheduler:u0a209/3: 109f374 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+      Requires: charging=false batteryNotLow=true deviceIdle=false
+      Minimum latency: +59m59s102ms
+    Enqueue time: -43s791ms
+    Run time: earliest=+59m15s311ms, latest=none, original latest=none
+    JobStatus{f1dd675 #u0a137/30000 com.google.android.apps.messaging/com.google.android.ims.metrics.PeriodicMetricsJobService u=0 s=10137 TIME=+23h58m54s299ms:+1d23h58m54s299ms NET PERIODIC satisfied:0x13600000 unsatisfied:0x80000000}: 129651910
+    JobStatus{5e816a9 #u0a135/272538963 com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.PeriodicCleanupService u=0 s=10135 TIME=+23h58m30s256ms:+1d23h58m30s256ms PERIODIC PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 129627867
+  #androidx.work.systemjobscheduler:u0a209/3 from u0a209: Delay=+59m15s306ms, Deadline=N/A
+  #androidx.work.systemjobscheduler:u0a209/0 from u0a209: Delay=+3h59m14s33ms, Deadline=N/A
+    Cached top app grace period: {10179=132747}
+    Cached temp allowlist grace period: {1000=243551, 1001=244289, 1002=213357, 1027=241026, 2000=241586, 10091=230173, 10095=239579, 10096=235908, 10100=243911, 10101=239732, 10102=239552, 10126=237954, 10128=239459, 10131=244169, 10132=240346, 10135=240309, 10136=242464, 10138=239544, 10139=243822, 10142=251992, 10143=243248, 10144=242473, 10153=242473, 10157=240522, 10165=242767, 10176=239876, 10181=239519, 10184=243249, 10188=242768, 10190=242643, 10191=240395, 10195=242492, 10199=242641, 10200=240790, 10206=243194, 10207=242552}
+  0-ComponentInfo{com.google.android.apps.messaging/com.google.android.ims.metrics.PeriodicMetricsJobService}: com.google.android.apps.messaging:rcs
+  0-ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.PeriodicCleanupService}: com.google.android.as

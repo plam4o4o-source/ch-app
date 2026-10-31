@@ -1,0 +1,28 @@
+app pids seen: ['3820', '4623', '5103', '5933']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=44 total=258
+   10-23 16:47:30.840  3820  3820 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   10-23 16:47:49.624  3820  3820 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   10-23 16:48:41.974  4623  4623 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-23 16:49:36.261  5103  5103 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-23 16:49:49.980  5103  5103 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   10-23 16:49:52.129  5103  5103 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-23 16:51:39.869  5933  5933 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 7
+   davey events=7 max=1195ms median=781ms
+   10-23 16:47:30.853  3820  3831 I HWUI    : Davey! duration=883ms; Flags=1, FrameTimelineVsyncId=9668, IntendedVsync=61380781547, Vsync=61380781547, InputEventId=0, HandleInputStart=61381510970, AnimationStart=61381511221, PerformTraversalsS
+   10-23 16:47:30.941  3820  3831 I HWUI    : Davey! duration=832ms; Flags=0, FrameTimelineVsyncId=9725, IntendedVsync=61514114875, Vsync=62247448179, InputEventId=0, HandleInputStart=62268994276, AnimationStart=62268995168, PerformTraversalsS
+   10-23 16:47:49.664  3820  3878 I HWUI    : Davey! duration=750ms; Flags=0, FrameTimelineVsyncId=12877, IntendedVsync=80297447457, Vsync=80297447457, InputEventId=0, HandleInputStart=80298370887, AnimationStart=80298371448, PerformTraversals
+   10-23 16:47:50.247  3820  3878 I HWUI    : Davey! duration=1195ms; Flags=0, FrameTimelineVsyncId=12892, IntendedVsync=80414114119, Vsync=81047447427, InputEventId=0, HandleInputStart=81048753931, AnimationStart=81048754381, PerformTraversal
+   10-23 16:49:36.469  5103  5136 I HWUI    : Davey! duration=781ms; Flags=0, FrameTimelineVsyncId=23771, IntendedVsync=187080776519, Vsync=187680776495, InputEventId=0, HandleInputStart=187685315954, AnimationStart=187685316776, PerformTraver
+   10-23 16:49:50.021  5103  5115 I HWUI    : Davey! duration=766ms; Flags=0, FrameTimelineVsyncId=24265, IntendedVsync=200647442643, Vsync=200647442643, InputEventId=0, HandleInputStart=200649107532, AnimationStart=200649107902, PerformTraver
+   10-23 16:51:40.048  5933  5945 I HWUI    : Davey! duration=743ms; Flags=0, FrameTimelineVsyncId=27294, IntendedVsync=310680771575, Vsync=311280771551, InputEventId=0, HandleInputStart=311293884338, AnimationStart=311293884748, PerformTraver
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-23 16:47:28.439  3811  3811 I PERFCHECK: section: 1. First launch and warm-up (online, fills the caches)
+   10-23 16:49:18.577  4960  4960 I PERFCHECK: section: Launcher icon
+   10-23 16:49:30.671  5017  5017 I PERFCHECK: section: 4. Network: offline cold start
+   10-23 16:50:49.232  5559  5559 I PERFCHECK: section: 4. Network: re-enable, auto-recovery
+   10-23 16:51:37.565  5918  5918 I PERFCHECK: section: Recents thumbnail / FLAG_SECURE

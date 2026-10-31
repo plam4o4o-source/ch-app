@@ -1,0 +1,36 @@
+part func1; APK: 4ca6dcb (Проверка v1.2.26: втори кръг на API 33, по-малки части, поправки в скрипта); x86_64 libs: 4 size 4924210 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## 0. First launch and warm-up
+first-install catalogue results after 5010 ms
+## F1. Catalogue search '12'
+SEARCH '12': 108 results; header: text="108 results  ·  InvLib data as of Oct 17, 2026"
+BOOK opened: yes; texts: Спомен за здрача|Спомен за здрача|Веска Пенчева|Not on the shelf|Availability as of Oct 17, 2026|Want to read|
+BOOK chips: WantToRead=present [checked=false selected=false bounds=[426,738][793,864]] NotifyWhenAvailable=present AskLibrary=present
+## F2. Want to read: add, list, remove, undo
+WANT tap: snackbar added=yes; chip checked=true selected=false bounds=[426,738][793,864]
+WANT list: book title found in the list: Availability as of Oct 17, 2026 (list texts: Availability as of Oct 17, 2026|Swipe a book aside to remove it.|Спомен за здрача|Спомен за здрача|Веска Пенчева|Not on the shelf|More actions|Back|)
+WANT remove: snackbar 'text="“Спомен за здрача” removed from your list"' undo=present; title still listed: no
+WANT undo: title back in list: yes
+## F2b. A book that is not on the shelf ('Notify me when available')
+NOTIFY: book not on the shelf: content-desc="Спомен за здрача" text="Спомен за здрача" text="Веска Пенчева" text="Not on the shelf" text="Availability as of Oct 17, 2026" text="Want to read" text="Ask the library" text="Notify me when available" 
+## F3. News & events: segments and calendar subscription
+NEWS tab: title='News & events' yes; segments: News[checked=true selected=false bounds=[42,308][339,434]] Calendar[checked=false selected=false bounds=[339,308][633,434]] subscribe-action=absent
+CALENDAR segment: News[checked=false selected=false bounds=[42,308][336,434]] Calendar[checked=true selected=false bounds=[336,308][633,434]] subscribe-action=visible; screen: text="News" text="Calendar" content-desc="Subscribe in calendar" content-desc="Calendar view" text="All" text="Библиотека" text="Читалище" text="Народен обичай" text="1" text="NOV" text="Ден на народните будители" text="Тържество с ученически рецитал
+SUBSCRIBE sheet: content-desc="Close sheet" content-desc="Drag handle" text="Subscribe in calendar" text="Add the centre’s events to your phone’s calendar. New events will appear there on their own." text="Subscribe" text="Google Calendar on Android can’t subscribe directly. Copy the link and add it at calendar.goog
+calendar month view: --- screen: text="News" text="Calendar" content-desc="Subscribe in calendar" content-desc="List view" content-desc="Previous month" text="October 2026" content-desc="Next month" text="Mo" text="Tu" te
+back to News: News[checked=true selected=false bounds=[42,308][339,434]] Calendar[checked=false selected=false bounds=[339,308][633,434]] subscribe-action=absent
+## COMPLETE
+## logcat findings
+app pids seen: ['5711']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=57 total=209
+== Davey: 7
+   davey events=7 max=1471ms median=1000ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

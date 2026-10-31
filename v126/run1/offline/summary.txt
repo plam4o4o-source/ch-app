@@ -1,0 +1,43 @@
+part offline; APK: 342758d (Проверка: пълен тест на v1.2.26 на емулатор (ВРЕМЕННО)); x86_64 libs: 4 size 4924210 bytes
+host: 4 cpu, 15983 MB RAM
+android 14 sdk 34; Physical size: 1080x2400; Physical density: 420
+installed:  versionCode=1 minSdk=26 targetSdk=37  versionName=1.0.0 
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED]
+screen 1080x2400
+## O1. Online warm-up (fills the caches)
+first-install catalogue results after 6068 ms
+contacts online: text="НЧ „Васил Левски – 1922“" text="Send email" text="Open map" text="Open website" text="Address" text="пл. 9-ти Септември 3, с. Яворец, общ. Габрово, обл. Габрово · ПК 5334" text="Contact persons"
+## O2. Offline cold start with caches
+offline: airplane=1
+offline home: text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" text="Search books, news, events…" content-desc="Scan barcode" text="October 27, 2026 · *Св. мчк Нестор. Преп. Димитрий Басарбовски" content-desc="Latest news" text="СЪБИТИЕ" text="Фолклорно пътешествие из Пиринска, Родопск
+offline catalogue: results shown (cached, 2500 ms)
+offline book: content-desc="12 -те вятъра" text="12 -те вятъра" text="Гарфилд, Джудит и др." text="Available" text="Availability as of Oct 17, 2026" text="Want to read" 
+offline news: text="Calendar" text="News" text="Search news" text="All" text="Saved" text="Събитие" text="Състави" text="Проекти" text="СЪБИТИЕ  ·  October 16, 2026" text="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец." text="Днес в НЧ „В
+offline article: content-desc="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец." text="СЪБИТИЕ  ·  October 16, 2026" text="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворе
+offline calendar: text="News" text="Calendar" content-desc="Subscribe in calendar" content-desc="Calendar view" text="All" text="Библиотека" text="Читалище" text="Народен обичай" text="1" text="NOV" text="Ден на народните будители" text="Тържество с ученически рецитал
+offline gallery: text="29 photos" text="Фотодокументална изложба" text="4 photos" text="Фолклорна група „Явор“" text="6 photos" text="Клуб за народни танци" text="7 photos" text="Ансамбъл „Яворски хлапета“" text="5 ph
+offline contacts: text="НЧ „Васил Левски – 1922“" text="Send email" text="Open map" text="Open website" text="Address" text="пл. 9-ти Септември 3, с. Яворец, общ. Габрово, обл. Габрово · ПК 5334" text="Contact persons" text="Председател: Пламен Христов" text="Секретар: Даниела Цвяткова" text="Email" text="chitalishte
+## O3. Reconnect (staying on Contacts, no touch), then the other screens
+contacts +10s after reconnect (no touch): text="НЧ „Васил Левски – 1922“" text="Send email" text="Open map" text="Open website" text="Address" text="пл. 9-ти Септември 3, с. Яворец, общ. Габрово, обл. Габрово · ПК 5334" text="Contact persons" text="Председател: Пламен Христов" text="Секретар
+contacts +25s after reconnect (no touch): text="НЧ „Васил Левски – 1922“" text="Send email" text="Open map" text="Open website" text="Address" text="пл. 9-ти Септември 3, с. Яворец, общ. Габрово, обл. Габрово · ПК 5334" text="Contact persons" text="Председател: Пламен Христов" text="Секретар
+recovered home: text="НЧ „Васил Левски – 1922“" text="Send email" text="Open map" text="Open website" text="Address" text="пл. 9-ти Септември 3, с. Яворец, общ. Габрово, обл. Габрово · ПК 5334" text="Contact persons" text="Председател: Пламен Христов" text="Секретар
+recovered news: text="НЧ „Васил Левски – 1922“" text="Send email" text="Open map" text="Open website" text="Address" text="пл. 9-ти Септември 3, с. Яворец, общ. Габрово, обл. Габрово · ПК 5334" text="Contact persons"
+## O4. Empty cache: offline first launch on Contacts and Gallery, then reconnect
+offline: airplane=1
+contacts offline (empty cache): text="Contacts couldn’t be loaded from the website — showing the basic details built into the app. They may be out of date." text="НЧ „Васил Левски – 1922“" text="Send email" text="Open map" text="Open website" text="Address" text="пл. 9-ти Септември 3, с. Яворец, общ. Габрово, ПК 5334" text="Email"
+contacts (empty cache) +10s after reconnect (no touch): text="НЧ „Васил Левски – 1922“" text="Send email" text="Open map" text="Open website" text="Address" text="пл. 9-ти Септември 3, с. Яворец, общ. Габрово, обл. Габрово · ПК 5334" text="Contact persons" text="Председател: Пламен Христов" text="Секретар
+contacts (empty cache) +25s after reconnect (no touch): text="НЧ „Васил Левски – 1922“" text="Send email" text="Open map" text="Open website" text="Address" text="пл. 9-ти Септември 3, с. Яворец, общ. Габрово, обл. Габрово · ПК 5334" text="Contact persons" text="Председател: Пламен Христов" text="Секретар
+offline: airplane=1
+gallery offline (empty cache): content-desc="Loading…" content-desc="Back" text="Gallery" text="No internet connection" 
+gallery (empty cache) +25s after reconnect (no touch): content-desc="Loading…" content-desc="Back" text="Gallery" 
+## COMPLETE
+## logcat findings
+app pids seen: ['4844', '6554', '7625']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 8
+   skipped-frames events=8 max=64 total=331
+== Davey: 9
+   davey events=9 max=1732ms median=1127ms
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

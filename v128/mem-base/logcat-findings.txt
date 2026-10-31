@@ -1,0 +1,19 @@
+app pids seen: ['5857', '7249']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=34 total=130
+   10-30 14:54:55.135  5857  5857 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   10-30 14:54:55.711  5857  5857 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   10-30 14:54:56.393  5857  5857 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-30 14:55:37.188  7249  7249 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=1414ms median=854ms
+   10-30 14:54:56.771  5857  5868 I OpenGLRenderer: Davey! duration=1414ms; Flags=1, FrameTimelineVsyncId=7091, IntendedVsync=95089367016, Vsync=95656033660, InputEventId=0, HandleInputStart=95658777234, AnimationStart=95658777564, PerformTrav
+   10-30 14:54:56.807  5857  5870 I OpenGLRenderer: Davey! duration=854ms; Flags=0, FrameTimelineVsyncId=7337, IntendedVsync=95822700320, Vsync=96339366966, InputEventId=0, HandleInputStart=96341248709, AnimationStart=96341249560, PerformTrave
+   10-30 14:55:38.033  7249  7284 I OpenGLRenderer: Davey! duration=716ms; Flags=1, FrameTimelineVsyncId=9827, IntendedVsync=137156032000, Vsync=137506031986, InputEventId=0, HandleInputStart=137518749702, AnimationStart=137518753578, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-30 14:54:54.025  5850  5850 I PERFCHECK: section: W. First launch and warm-up
+   10-30 14:55:34.866  7229  7229 I PERFCHECK: section: M. Memory over 20 cycles (all tabs + a book + the gallery viewer), base

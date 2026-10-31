@@ -1,0 +1,1 @@
+part=func3 api=33 gpu=swiftshader_indirect emulator-step=success
