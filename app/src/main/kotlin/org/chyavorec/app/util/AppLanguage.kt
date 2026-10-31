@@ -69,6 +69,19 @@ object AppLanguage {
         return base.createConfigurationContext(delta)
     }
 
+    /**
+     * Контекст с избрания език без странични ефекти (за разлика от [wrap] не сменя езика по
+     * подразбиране на целия процес) — за уиджета: надписите и данните (дати, бройки) на един
+     * език. От Android 13 контекстът на приложението вече е с избрания език.
+     */
+    fun localized(base: Context): Context {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) return base
+        val tag = storedTag(base)
+        if (tag.isEmpty()) return base
+        val delta = Configuration().apply { setLocales(LocaleList(Locale.forLanguageTag(tag))) }
+        return base.createConfigurationContext(delta)
+    }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun systemTag(context: Context): String = try {
         context.getSystemService(LocaleManager::class.java)?.applicationLocales?.toLanguageTags().orEmpty()

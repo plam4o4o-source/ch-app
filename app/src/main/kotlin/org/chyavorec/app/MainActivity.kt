@@ -22,6 +22,7 @@ import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.EdgeToEdge
 import org.chyavorec.app.ui.theme.SystemBarsAppearance
 import org.chyavorec.app.util.AppLanguage
+import org.chyavorec.app.widget.WidgetUpdater
 import org.chyavorec.core.logFailure
 import org.chyavorec.domain.model.MessagePollPolicy
 
@@ -78,6 +79,8 @@ class MainActivity : ComponentActivity() {
      */
     override fun onStart() {
         super.onStart()
+        // Сменен език (активността се пресъздава за него) — уиджетът също, не едва при следващия процес.
+        WidgetUpdater.refreshIfLanguageChanged(this)
         val container = (application as ChitalishteApp).container
         lifecycleScope.launch {
             runCatching {

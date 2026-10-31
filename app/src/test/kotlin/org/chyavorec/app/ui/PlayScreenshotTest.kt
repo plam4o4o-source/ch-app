@@ -298,15 +298,7 @@ class PlayScreenshotTest {
         shot("play-06-loans")
     }
 
-    @Test fun more() {
-        launch()
-        tab("Още")
-        waitFor("Настройки")
-        shown("Съобщения")
-        shown("Дейности")
-        shown("Галерия")
-        shot("play-07-more")
-    }
+    // play-07-widget — уиджетите на началния екран: widget/PlayWidgetScreenshotTest.
 
     /** „Искам да прочета“ (тъмна тема): наличността от каталога и „Кажи ми“ за книгата, която не е на рафта. */
     @Test fun wantToReadDark() {

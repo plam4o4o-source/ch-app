@@ -11,6 +11,8 @@ import androidx.core.content.edit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -19,13 +21,19 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.chyavorec.app.BuildConfig
+import org.chyavorec.app.R
+import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.di.AppContainerOwner
+import org.chyavorec.app.util.AppLanguage
+import org.chyavorec.core.Outcome
 import org.chyavorec.core.logFailure
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Опресняването на уиджета (AppWidgetManager.updateAppWidget): след синхронизация
- * (PeriodicSyncWorker), след зареждане на заеманията, при вход/изход и при старт на
- * приложението. Грешките се пренебрегват — уиджетът е допълнение.
+ * (PeriodicSyncWorker), след зареждане на заеманията, при вход/изход, при старт на
+ * приложението и при смяна на езика му. Грешките се пренебрегват — уиджетът е допълнение.
  */
 object WidgetUpdater {
     /** Фоновата работа на уиджета (приемникът, стартът на приложението). */
@@ -34,8 +42,15 @@ object WidgetUpdater {
     /** Едно опресняване наведнъж — последното прочетено състояние е последното показано. */
     private val mutex = Mutex()
 
-    /** Под ~10-те секунди, които системата дава на приемника (goAsync). */
-    private const val LOAD_TIMEOUT_MS = 8_000L
+    /**
+     * Събитията (кеш) и заеманията се четат успоредно, всяко със свой срок — под ~10-те
+     * секунди, които системата дава на приемника (goAsync). Бавното едно не отнема другото.
+     */
+    private const val EVENTS_TIMEOUT_MS = 4_000L
+    private const val LOANS_TIMEOUT_MS = 7_000L
+
+    /** Събитията се теглят от мрежата във фон (без кеш) — едно теглене наведнъж. */
+    private val fetchingEvents = AtomicBoolean(false)
 
     private fun provider(context: Context) = ComponentName(context, ChitalishteWidgetReceiver::class.java)
 
@@ -54,22 +69,86 @@ object WidgetUpdater {
     }
 
     /**
-     * Чете данните и обновява копията [ids]. [fallback] — при грешка празно състояние
-     * (ново копие, обновено приложение: старият изглед може вече да не съществува).
+     * Чете данните и обновява копията [ids]. Ако заеманията не се прочетат (сесията временно
+     * не се чете, срокът изтече) — остава показаното досега; само при [fallback] (ново копие,
+     * обновено приложение, рестарт — старият изглед може да липсва или да не е валиден) се
+     * показва каквото е известно, без заемания. Без кеш на събитията те се теглят във фон
+     * ([fetchEvents]) и уиджетът се опреснява след това; дотогава вместо тях няма нищо, а не
+     * „Няма предстоящи събития“.
      */
-    internal suspend fun update(context: Context, ids: IntArray, fallback: Boolean) = withContext(Dispatchers.IO) {
+    internal suspend fun update(context: Context, ids: IntArray, fallback: Boolean, fetchEvents: Boolean = true) = withContext(Dispatchers.IO) {
         mutex.withLock {
             val manager = manager(context) ?: return@withLock
-            val state = withTimeoutOrNull(LOAD_TIMEOUT_MS) {
-                runCatching { loadWidgetState(context) }.logFailure("widget.load").getOrNull()
-            } ?: if (fallback) EmptyWidgetState else return@withLock
+            val c = (context.applicationContext as? AppContainerOwner)?.appContainer
+            // Един контекст с езика на приложението — за надписите и за данните (дати, бройки).
+            val text = AppLanguage.localized(context.applicationContext ?: context)
+            val state = if (c == null) {
+                if (fallback) EmptyWidgetState else return@withLock
+            } else {
+                val (events, loans) = coroutineScope {
+                    val e = async { load(EVENTS_TIMEOUT_MS, "widget.events") { loadWidgetEvents(c) } }
+                    val l = async { load(LOANS_TIMEOUT_MS, "widget.loans") { loadWidgetLoans(c) } }
+                    e.await() to l.await()
+                }
+                if (events == null && fetchEvents) fetchEventsInBackground(context.applicationContext ?: context, c)
+                val today = c.clock.today()
+                when {
+                    loans != null -> widgetState(text, events, loans, today)
+                    fallback -> widgetState(text, events, emptyList(), today)
+                    else -> return@withLock
+                }
+            }
+            var shown = false
             ids.forEach { id ->
                 runCatching {
-                    manager.updateAppWidget(id, WidgetViews.forWidget(context, state, manager.getAppWidgetOptions(id)))
+                    manager.updateAppWidget(id, WidgetViews.forWidget(text, state, manager.getAppWidgetOptions(id)))
+                    shown = true
                 }.logFailure("widget.refresh")
+            }
+            if (shown) runCatching { prefs(context).edit { putString(KEY_LANGUAGE, text.getString(R.string.ui_language)) } }
+        }
+    }
+
+    /** [block] до [timeoutMs]; грешка или изтекъл срок — null (неизвестно). */
+    private suspend fun <T> load(timeoutMs: Long, tag: String, block: suspend () -> T?): T? =
+        withTimeoutOrNull(timeoutMs) { runCatching { block() }.logFailure(tag).getOrNull() }
+
+    /** Събитията от мрежата (бавна заявка не бави уиджета); при успех — опресняване, без ново теглене. */
+    private fun fetchEventsInBackground(context: Context, c: AppContainer) {
+        if (!fetchingEvents.compareAndSet(false, true)) return
+        scope.launch {
+            try {
+                val ok = runCatching { c.eventsRepository.events(force = false) is Outcome.Success }
+                    .logFailure("widget.events-fetch").getOrDefault(false)
+                if (ok) {
+                    val ids = ids(context)
+                    if (ids.isNotEmpty()) update(context, ids, fallback = false, fetchEvents = false)
+                }
+            } finally {
+                fetchingEvents.set(false)
             }
         }
     }
+
+    /**
+     * Езикът на приложението е сменен (настройките; от Android 13 и системните настройки на
+     * приложението) — уиджетът и генерираният преглед се опресняват. Извиква се при всеки
+     * старт на активността (MainActivity.onStart — и след пресъздаването ѝ за новия език).
+     */
+    fun refreshIfLanguageChanged(context: Context) {
+        val app = context.applicationContext
+        scope.launch {
+            val shown = runCatching { prefs(app).getString(KEY_LANGUAGE, null) }.getOrNull() ?: return@launch
+            if (shown == AppLanguage.localized(app).getString(R.string.ui_language)) return@launch
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) publishPreview(app)
+            refresh(app)
+        }
+    }
+
+    private const val PREFS = "widget"
+    private const val KEY_LANGUAGE = "language"
+
+    private fun prefs(context: Context) = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
     /**
      * При старт на интерфейса (ChitalishteApp.onUiStart), във фон: остатъците от Glance,
@@ -84,10 +163,14 @@ object WidgetUpdater {
         }
     }
 
-    /** Изчаква фоновата работа на уиджета (за тестовете). */
+    /** Изчаква фоновата работа на уиджета, и започнатата междувременно (за тестовете). */
     @VisibleForTesting
     internal suspend fun awaitIdle() {
-        scope.coroutineContext.job.children.toList().joinAll()
+        while (true) {
+            val running = scope.coroutineContext.job.children.toList()
+            if (running.isEmpty()) return
+            running.joinAll()
+        }
     }
 
     /** Състоянието на копията от Glance (до v1.2.27) — files/datastore/appWidget-<id>…, вече не трябва. */
@@ -124,7 +207,7 @@ object WidgetUpdater {
         prefs.edit { putLong(KEY_ATTEMPT, now) }
         val ok = runCatching {
             val manager = manager(context) ?: return false
-            val views = WidgetViews.build(context, previewWidgetState(context), WidgetViews.WideSize)
+            val views = WidgetViews.build(context, previewWidgetState(context), WidgetViews.FullWideSize)
             manager.setWidgetPreview(provider(context), AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN, views)
         }.logFailure("widget.preview").getOrDefault(false)
         if (ok) prefs.edit { putString(KEY_STAMP, stamp) }

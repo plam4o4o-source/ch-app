@@ -706,6 +706,7 @@
     <string name="widget_due_today">днес</string>
     <string name="widget_due_tomorrow">утре</string>
     <string name="widget_label">Читалище Яворец</string>
+    <string name="widget_label_short">Читалище</string>
     <string name="widget_next_due">Следващ срок</string>
     <string name="widget_next_event">Следващо събитие</string>
     <string name="widget_no_due_date">без срок</string>
@@ -715,6 +716,7 @@
     <string name="widget_preview_due">след 3 дни</string>
     <string name="widget_preview_event">Литературна вечер</string>
     <string name="widget_preview_event_date">18 октомври, 18:00</string>
+    <string name="widget_upcoming_events">Предстоящи събития</string>
     <plurals name="book_available_copies">
         <item quantity="one">%1$d наличен</item>
         <item quantity="other">%1$d налични</item>
