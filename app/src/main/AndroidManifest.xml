@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Скенерът на баркодове е на Google Play услугите (свой прозорец с камерата) —
          приложението няма разрешение за камера. -->
+    <!-- androidx.credentials (вход с Google) носи разрешенията за биометрия, а приложението
+         не ползва биометрия (R8 маха и кода ѝ) — без тях в манифеста. -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" tools:node="remove" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" tools:node="remove" />
     <!-- Самообновяване от GitHub Releases (APK извън Google Play). Play build-ът
          премахва тези разрешения — виж src/play/AndroidManifest.xml. -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
