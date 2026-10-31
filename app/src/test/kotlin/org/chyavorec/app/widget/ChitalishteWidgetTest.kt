@@ -251,6 +251,23 @@ class ChitalishteWidgetTest {
         val full = apply(WidgetViews.build(app, EmptyWidgetState, WidgetViews.FullWideSize))
         assertEquals("Читалище Яворец", full.text(R.id.widget_title))
         assertEquals(null, full.findViewById<View>(R.id.widget_logo).contentDescription)
+        // Където е избрано, името се събира до бутоните (без „…“) — на най-тясната ширина на размера.
+        for ((size, wDp) in listOf(WidgetViews.FullWideSize to 345, SizeF(300f, 100f) to 300, WidgetViews.SmallSize to 150)) {
+            val title = layOut(WidgetViews.build(app, signedInState(), size), wDp, 130).findViewById<TextView>(R.id.widget_title)
+            assertEquals(0, title.layout.getEllipsisCount(0), "${title.text} в $wDp dp")
+        }
+    }
+
+    @Test fun narrowWithLoansShowsOnlyDueDates() {
+        // 3×2: в половин ширина датите не се събират до етикетите — само сроковете, на цяла ширина.
+        val narrow = layOut(WidgetViews.build(app, signedInState(), WidgetViews.WideSize), 270, 140)
+        assertFalse(narrow.visible(R.id.widget_event_column))
+        val date = narrow.findViewById<TextView>(R.id.widget_group1_text)
+        assertEquals("10.10", date.text.toString())
+        assertTrue(date.layout.getEllipsisCount(0) == 0, "датата е отрязана")
+        // Без заемания — събитието; по-широкият — и двете колони.
+        assertTrue(apply(WidgetViews.build(app, signedOutState(), WidgetViews.WideSize)).visible(R.id.widget_event))
+        assertTrue(apply(WidgetViews.build(app, signedInState(), SizeF(300f, 100f))).visible(R.id.widget_event_column))
     }
 
     @Test fun buttonsAreAtLeast48dpApart() {

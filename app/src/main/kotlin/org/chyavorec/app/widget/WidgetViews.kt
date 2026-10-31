@@ -23,7 +23,8 @@ import kotlin.math.roundToInt
  * RemoteViews на уиджета от оформленията layout/widget_small и layout/widget_wide.
  * Размери: малък 2×2 — един главен ред (следващ срок или събитие); широк 4×2 — срокове +
  * събитие + бутони; високите — до 3 реда срокове, а без заемания — 2 събития. Името в
- * заглавката — цяло само където се побира до бутоните; иначе кратко или само емблемата.
+ * заглавката — цяло само където се побира до бутоните; иначе кратко или само емблемата
+ * (най-тесният, 3×2, показва при заемания само сроковете — датите не се събират в половин ширина).
  * От Android 12 — карта „размер → изглед“ (системата избира най-големия, който се побира);
  * по-рано — по размера от опциите на копието, отделно за хоризонтален и вертикален екран.
  * Цветове: от ресурсите (Android 12+ — динамичните на системата, иначе фирмените; ден/нощ).
@@ -36,10 +37,10 @@ internal object WidgetViews {
     val WideTallSize = SizeF(250f, 150f)
 
     /** Широк с място за краткото име до бутоните (по-тесният — само емблемата). */
-    private const val SHORT_TITLE_WIDTH = 290f
+    private const val SHORT_TITLE_WIDTH = 300f
 
     /** Широк с място за цялото име до бутоните — 4 клетки на повечето телефони. */
-    private const val FULL_TITLE_WIDTH = 340f
+    private const val FULL_TITLE_WIDTH = 345f
     val FullWideSize = SizeF(FULL_TITLE_WIDTH, 100f)
     val FullWideTallSize = SizeF(FULL_TITLE_WIDTH, 150f)
 
@@ -129,9 +130,13 @@ internal object WidgetViews {
         v.setOnClickPendingIntent(R.id.widget_catalog, link(context, "catalog"))
         val loans = state.hasLoans
         v.setViewVisibility(R.id.widget_loans, if (loans) View.VISIBLE else View.GONE)
+        // Най-тесният (3×2) със заемания — само сроковете: в половин ширина датите не се събират до етикетите.
+        val event = !loans || title != Title.LOGO
+        v.setViewVisibility(R.id.widget_event_column, if (event) View.VISIBLE else View.GONE)
         // Половината от отстъпа между колоните (другата е в колоната на заеманията).
-        val gap = if (loans) (6 * context.resources.displayMetrics.density).roundToInt() else 0
+        val gap = if (loans && event) (6 * context.resources.displayMetrics.density).roundToInt() else 0
         v.setViewPadding(R.id.widget_event_column, gap, 0, 0, 0)
+        v.setViewPadding(R.id.widget_loans, 0, 0, gap, 0)
         if (loans) {
             v.setTextViewText(R.id.widget_loans_total, state.loansTotal)
             val shown = state.groups.take(maxGroups)
@@ -147,7 +152,7 @@ internal object WidgetViews {
             }
             v.setOnClickPendingIntent(R.id.widget_loans, link(context, "my/loans"))
         }
-        events(context, v, state, titleSp = 14f, max = if (tall && !loans) MAX_WIDGET_EVENTS else 1)
+        if (event) events(context, v, state, titleSp = 14f, max = if (tall && !loans) MAX_WIDGET_EVENTS else 1)
         return v
     }
 

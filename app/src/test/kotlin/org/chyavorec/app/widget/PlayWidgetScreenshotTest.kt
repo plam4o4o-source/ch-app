@@ -95,12 +95,12 @@ class PlayWidgetScreenshotTest {
         canvas.drawText("събота, 26 септември", dp(28f), dp(146f), white)
 
         val state = state()
-        val wide = draw(canvas, WidgetViews.build(app, state, WidgetViews.FullWideTallSize), 10, 176, 340, 196)
-        val small = draw(canvas, WidgetViews.build(app, state, WidgetViews.SmallSize), 10, 388, 164, 164)
+        val wide = draw(canvas, WidgetViews.build(app, state, WidgetViews.FullWideTallSize), 7, 176, 346, 168)
+        val small = draw(canvas, WidgetViews.build(app, state, WidgetViews.SmallSize), 7, 360, 166, 144)
 
         // Иконата на приложението вдясно от малкия уиджет: емблемата върху бял кръг и името.
         val cx = dp(268f)
-        val cy = dp(452f)
+        val cy = dp(424f)
         canvas.drawCircle(cx, cy, dp(30f), white)
         app.getDrawable(R.drawable.logo_chitalishte_small)!!.apply {
             setBounds((cx - dp(24f)).roundToInt(), (cy - dp(24f)).roundToInt(), (cx + dp(24f)).roundToInt(), (cy + dp(24f)).roundToInt())
