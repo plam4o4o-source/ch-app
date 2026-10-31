@@ -129,9 +129,12 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         val newest = synced.data.firstOrNull() ?: return true
         val last = settings.lastNewsId
         if (last != null && last != newest.id) {
+            // Със снимката на новината (ако се свали навреме) и „Сподели“; докосването я отваря.
             Notifier.show(
                 applicationContext, Channel.NEWS, NotificationIds.NEWS,
                 applicationContext.getString(R.string.notif_new_article), newest.title, DeepLinks.article(newest.id),
+                actions = listOfNotNull(RichNotifications.shareAction(applicationContext, newest, NotificationIds.NEWS)),
+                image = RichNotifications.image(applicationContext, c, newest.imageUrl),
             )
         }
         c.settings.setLastNewsId(newest.id)

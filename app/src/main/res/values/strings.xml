@@ -89,6 +89,8 @@
     <string name="card_remove_title">Да премахнем ли картата от устройството?</string>
     <string name="card_self_note">Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устройство.</string>
     <string name="card_show">Покажи картата</string>
+    <string name="card_tile_add">Добави в бързите настройки</string>
+    <string name="card_tile_dismiss">Не предлагай отново</string>
     <string name="card_usage_note">Покажи картата на библиотекаря; баркодът може да се сканира от четеца на гишето.</string>
     <string name="catalog_data_as_of">данни от InvLib към %1$s</string>
     <string name="catalog_filters">Филтри</string>
@@ -324,6 +326,7 @@
     <string name="news_segment_news">Новини</string>
     <string name="news_unsaved">Новината е премахната от запазените.</string>
     <string name="notif_action_renew">Удължи</string>
+    <string name="notif_action_route">Маршрут</string>
     <string name="notif_due_on">%1$s — до %2$s</string>
     <string name="notif_due_soon">Наближава срок за връщане</string>
     <string name="notif_due_today">Днес е срокът за връщане</string>
@@ -639,6 +642,9 @@
     <string name="theme_dark">Тъмна</string>
     <string name="theme_light">Светла</string>
     <string name="theme_system">Както системата</string>
+    <string name="tile_card_label">Читателска карта</string>
+    <string name="tile_card_subtitle">Покажи на гишето</string>
+    <string name="tile_card_subtitle_add">Добави картата</string>
     <string name="udc_0">Общ отдел</string>
     <string name="udc_1">Философия. Психология</string>
     <string name="udc_2">Религия</string>

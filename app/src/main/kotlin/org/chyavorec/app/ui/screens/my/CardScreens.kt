@@ -407,6 +407,8 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
                     }
                 }
                 Text(stringResource(R.string.card_usage_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                // Картата и от бързите настройки — веднъж, само когато вече има карта.
+                CardTilePrompt()
             }
         }
     }

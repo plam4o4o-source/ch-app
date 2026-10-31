@@ -6,12 +6,14 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import org.chyavorec.app.R
 import org.chyavorec.app.data.local.EventReminderEntity
 import org.chyavorec.app.data.local.RemindersDao
 import org.chyavorec.app.data.local.dbWrite
 import org.chyavorec.app.data.local.orOnDbError
+import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.core.AppClock
 import org.chyavorec.domain.model.Event
@@ -74,11 +76,25 @@ class EventReminderWorker(context: Context, params: WorkerParameters) : Coroutin
     override suspend fun doWork(): Result {
         val title = inputData.getString(ReminderScheduler.KEY_TITLE) ?: return Result.success()
         val id = inputData.getString(ReminderScheduler.KEY_ID).orEmpty()
+        val notificationId = NotificationIds.event(id)
+        // Събитието от кеша (без мрежа) — за снимката и бутоните; без него — само текст.
+        val c = (applicationContext as? AppContainerOwner)?.appContainer
+        val event = if (c != null && id.isNotBlank()) {
+            try {
+                c.eventsRepository.find(id)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                null
+            }
+        } else null
         // Докосването отваря самото събитие (под него — списъкът със събития).
         Notifier.show(
-            applicationContext, Channel.EVENTS, NotificationIds.event(id),
+            applicationContext, Channel.EVENTS, notificationId,
             applicationContext.getString(R.string.notif_event_reminder), title,
             if (id.isNotBlank()) DeepLinks.event(id) else DeepLinks.EVENTS,
+            actions = if (c != null && event != null) RichNotifications.eventActions(applicationContext, event, c.clock.zone(), notificationId) else emptyList(),
+            image = if (c != null && event != null) RichNotifications.image(applicationContext, c, event.imageUrl) else null,
         )
         return Result.success()
     }

@@ -5,16 +5,25 @@ import android.app.Application
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.ComponentName
+import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.pm.ResolveInfo
+import android.graphics.Bitmap
+import android.provider.CalendarContract
 import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.chyavorec.app.R
+import org.chyavorec.app.util.Intents
+import org.chyavorec.domain.model.Event
 import org.chyavorec.domain.model.Loan
+import org.chyavorec.domain.model.NewsArticle
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import java.time.ZoneId
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -164,5 +173,97 @@ class NotifierTest {
         assertEquals(context.getString(R.string.channel_group_centre), groups["group_centre"])
         // Без обновяване от приложението (Play) — без празна група „Приложението“.
         assertEquals(selfUpdate, "group_app" in groups)
+    }
+
+    private fun template(n: Notification) = n.extras.getString(Notification.EXTRA_TEMPLATE)
+    private fun hasPicture(n: Notification) =
+        n.extras.containsKey(Notification.EXTRA_PICTURE) || n.extras.containsKey(Notification.EXTRA_PICTURE_ICON)
+
+    /** Новина/събитие със снимка — BigPictureStyle с малката снимка и текста; без снимка — BigTextStyle. */
+    @Test fun generalNotificationWithImageIsBigPicture() {
+        val image = Bitmap.createBitmap(64, 36, Bitmap.Config.ARGB_8888)
+        Notifier.show(context, Channel.NEWS, NotificationIds.NEWS, "Нова публикация", "Изложба", "article/n1", image = image)
+        Notifier.show(context, Channel.EVENTS, NotificationIds.event("e1"), "Напомняне за събитие", "Концерт", "event/e1")
+        val news = nm.activeNotifications.single { it.id == NotificationIds.NEWS }.notification
+        assertEquals(Notification.BigPictureStyle::class.java.name, template(news))
+        assertTrue(hasPicture(news))
+        assertNotNull(news.getLargeIcon())
+        assertEquals("Изложба", news.extras.getCharSequence(Notification.EXTRA_SUMMARY_TEXT).toString())
+        val event = nm.activeNotifications.single { it.id == NotificationIds.event("e1") }.notification
+        assertEquals(Notification.BigTextStyle::class.java.name, template(event))
+        assertFalse(hasPicture(event))
+    }
+
+    /** Заемания и лични съобщения — никога снимка (дори подадена по погрешка): остават само с текст. */
+    @Test fun personalNotificationsNeverShowImages() {
+        val image = Bitmap.createBitmap(64, 36, Bitmap.Config.ARGB_8888)
+        Notifier.show(context, Channel.LOANS, NotificationIds.dueSoon("L1"), "Наближава срок", "Под игото", "my/loans", image = image)
+        Notifier.show(context, Channel.MESSAGES, NotificationIds.message("p:1"), "Лично", "Текст", null, sensitive = true, image = image)
+        Notifier.show(context, Channel.LIBRARY, NotificationIds.wantToRead(7), "На рафта", "Тютюн", null, sensitive = true, readerData = false, image = image)
+        listOf(NotificationIds.dueSoon("L1"), NotificationIds.message("p:1"), NotificationIds.wantToRead(7)).forEach { id ->
+            val n = nm.activeNotifications.single { it.id == id }.notification
+            assertEquals(Notification.BigTextStyle::class.java.name, template(n), "известие $id")
+            assertFalse(hasPicture(n))
+            assertNull(n.getLargeIcon())
+        }
+    }
+
+    private fun registerActivity(intent: Intent, pkg: String) {
+        shadowOf(context.packageManager).addResolveInfoForIntent(
+            intent,
+            // isDefault — заявката е с MATCH_DEFAULT_ONLY (както при startActivity).
+            ResolveInfo().apply { isDefault = true; activityInfo = ActivityInfo().apply { packageName = pkg; name = "$pkg.Main" } },
+        )
+    }
+
+    /**
+     * „Добави в календара“ и „Маршрут“ отварят направо чуждото activity (без трамплин през
+     * BroadcastReceiver), с неизменим PendingIntent; без място — без „Маршрут“.
+     */
+    @Test fun eventActionsOpenCalendarAndMapDirectly() {
+        registerActivity(Intent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI), "com.example.calendar")
+        registerActivity(Intents.mapIntent("Голям салон, с. Яворец"), "com.example.maps")
+        val event = Event("e1", "Концерт", "2026-10-20", time = "18:00", place = "Голям салон", sourceUrl = "https://chyavorec.org/events")
+        val id = NotificationIds.event(event.id)
+        val actions = RichNotifications.eventActions(context, event, ZoneId.of("Europe/Sofia"), id)
+        Notifier.show(context, Channel.EVENTS, id, "Напомняне за събитие", event.title, "event/e1", actions = actions)
+        val shown = nm.activeNotifications.single { it.id == id }.notification.actions
+        assertEquals(
+            listOf(context.getString(R.string.event_add_calendar), context.getString(R.string.notif_action_route)),
+            shown.map { it.title.toString() },
+        )
+        val calendar = shadowOf(shown[0].actionIntent)
+        assertTrue(calendar.isActivityIntent)
+        assertTrue(calendar.isImmutable)
+        assertEquals(Intent.ACTION_INSERT, calendar.savedIntent.action)
+        assertEquals("Концерт", calendar.savedIntent.getStringExtra(CalendarContract.Events.TITLE))
+        val map = shadowOf(shown[1].actionIntent)
+        assertTrue(map.isActivityIntent)
+        assertTrue(map.isImmutable)
+        assertEquals("geo", map.savedIntent.data?.scheme)
+        assertTrue("Голям салон" in map.savedIntent.data.toString().let(android.net.Uri::decode))
+        // Без място — само календарът; без дата — нищо.
+        assertEquals(1, RichNotifications.eventActions(context, event.copy(place = null), ZoneId.of("Europe/Sofia"), id).size)
+        assertTrue(RichNotifications.eventActions(context, event.copy(date = null, place = null), ZoneId.of("Europe/Sofia"), id).isEmpty())
+    }
+
+    /** Няма приложение за календар/карта — няма и бутон (иначе докосването не би направило нищо). */
+    @Test fun noHandlingAppMeansNoButton() {
+        val event = Event("e2", "Сбирка", "2026-10-20", place = "Читалището", sourceUrl = "https://chyavorec.org/events")
+        assertTrue(RichNotifications.eventActions(context, event, ZoneId.of("Europe/Sofia"), NotificationIds.event("e2")).isEmpty())
+    }
+
+    /** „Сподели“ на новина — системният избор със заглавието и адреса, неизменим. */
+    @Test fun newsShareActionIsImmutableChooser() {
+        val article = NewsArticle("n1", "Изложба на шевици", "https://chyavorec.org/news/izlozhba")
+        val action = assertNotNull(RichNotifications.shareAction(context, article, NotificationIds.NEWS))
+        assertEquals(context.getString(R.string.action_share), action.title.toString())
+        val pending = shadowOf(action.actionIntent)
+        assertTrue(pending.isActivityIntent)
+        assertTrue(pending.isImmutable)
+        assertEquals(Intent.ACTION_CHOOSER, pending.savedIntent.action)
+        @Suppress("DEPRECATION")
+        val send = pending.savedIntent.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)!!
+        assertEquals("Изложба на шевици\nhttps://chyavorec.org/news/izlozhba", send.getStringExtra(Intent.EXTRA_TEXT))
     }
 }
