@@ -6,7 +6,9 @@ name: Update control
 # издание наново от store/whats-new.md (разделът с точно тази версия): notes/notes_en в
 # update.json и в описанието на изданието; APK-ът и контролните суми не се пипат. Приложението чете
 # /releases/latest/download/update.json и при "paused": true не предлага и не
-# тегли версията. С dry_run само показва резултата. Подробно: docs/RELEASE.md.
+# тегли версията. Първо се подготвят и проверяват и двата нови текста (update.json и при
+# „notes“ — описанието), после се качват: грешка не оставя половин промяна. С dry_run само
+# показва резултата (и двата). Подробно: docs/RELEASE.md.
 # Пуска се от main (Run workflow → Use workflow from: main); от друг клон спира с грешка.
 on:
   workflow_dispatch:
@@ -72,23 +74,23 @@ jobs:
             echo "::warning::$TAG не е последното публикувано издание ($LATEST) — приложението чете само update.json на $LATEST."
           fi
 
-      # „Какво ново“ — от store/whats-new.md на main (разделът с точно тази версия).
+      # Скриптовете и store/whats-new.md — от main (без токен в .git/config: тук нищо не се
+      # commit-ва).
       - uses: actions/checkout@v7
-        if: inputs.action == 'notes'
         with:
           path: src
+          persist-credentials: false
 
+      # „Какво ново“ — разделът „## X.Y.Z“ с точно тази версия, където и да е във файла
+      # (и за по-старо издание); без такъв раздел — грешка, нищо не е променено.
       - name: What's new from store/whats-new.md
         if: inputs.action == 'notes'
         run: |
-          # Без списък с изданията: разделът се ползва само при точно съвпадение на версията.
           mkdir -p notes
-          python3 src/tools/whats_new.py "${TAG#v}" src/store/whats-new.md /nonexistent notes
-          if grep -qx "Подобрения и поправки." notes/notes.bg.txt; then
+          if ! python3 src/tools/whats_new.py --section "${TAG#v}" src/store/whats-new.md notes; then
             echo "::error::В store/whats-new.md няма раздел „## ${TAG#v}“ — нищо не е променено."
             exit 1
           fi
-          echo "NOTES_DIR=$PWD/notes" >> "$GITHUB_ENV"
 
       - name: Download update.json
         run: |
@@ -97,60 +99,34 @@ jobs:
           echo "Сега:"
           cat work/update.json; echo
 
-      - name: Edit update.json
+      # Новият update.json и (при „notes“) новото описание на изданието — само подготовка и
+      # проверка, без качване: ако описанието няма блоковете „Какво ново:“/„What's new:“ (както
+      # ги пише release.yml), спира тук и update.json на изданието остава непроменен.
+      - name: Prepare update.json and release notes
         run: |
-          python3 - <<'PY'
-          import json, os, datetime
-          path = "work/update.json"
-          data = json.load(open(path, encoding="utf-8"))
-          if not isinstance(data, dict) or "versionCode" not in data or "apkUrl" not in data:
-              raise SystemExit("update.json не прилича на манифест на обновяване")
-          action = os.environ["ACTION"]
-          if action == "pause":
-              data["paused"] = True
-              data["pausedAt"] = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-              reason = os.environ.get("REASON", "").strip()
-              if reason:
-                  data["pausedReason"] = reason
-              else:
-                  data.pop("pausedReason", None)
-          elif action == "resume":
-              for key in ("paused", "pausedAt", "pausedReason"):
-                  data.pop(key, None)
-          elif action == "notes":
-              d = os.environ["NOTES_DIR"]
-              data["notes"] = open(os.path.join(d, "notes.bg.txt"), encoding="utf-8").read().strip()
-              data["notes_en"] = open(os.path.join(d, "notes.en.txt"), encoding="utf-8").read().strip()
-          else:
-              raise SystemExit(f"Непознато действие: {action}")
-          json.dump(data, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-          PY
-          echo "Ново ($ACTION):"
+          if [ "$ACTION" = "notes" ]; then
+            gh release view "$TAG" --repo "$REPO" --json body --jq .body > work/body.md
+            python3 src/.github/scripts/update-control-prepare.py notes work/update.json work/body.md notes
+          else
+            python3 src/.github/scripts/update-control-prepare.py "$ACTION" work/update.json
+          fi
+          echo "Нов update.json ($ACTION):"
           cat work/update.json; echo
+          if [ "$ACTION" = "notes" ]; then
+            echo "Ново описание на $TAG:"
+            cat work/body.md; echo
+          fi
 
+      # Чак когато и двата текста са готови: update.json, после описанието.
       - name: Upload update.json
         if: inputs.dry_run != true
         run: |
           gh release upload "$TAG" work/update.json --repo "$REPO" --clobber
           echo "::notice::update.json на $TAG е обновен ($ACTION). Приложенията го виждат при следващата проверка (до ~12 ч. при отваряне, ~24 ч. във фона; ръчната проверка — веднага)."
 
-      # Описанието на изданието: блоковете „Какво ново:“ и „What's new:“ (както ги пише release.yml).
       - name: Release notes
         if: inputs.action == 'notes' && inputs.dry_run != true
-        run: |
-          gh release view "$TAG" --repo "$REPO" --json body --jq .body > body.md
-          python3 - <<'PY'
-          import os, re
-          d = os.environ["NOTES_DIR"]
-          bg = open(os.path.join(d, "notes.bg.txt"), encoding="utf-8").read().strip()
-          en = open(os.path.join(d, "notes.en.txt"), encoding="utf-8").read().strip()
-          body = open("body.md", encoding="utf-8").read()
-          new, n = re.subn(r"(Какво ново:\n).*?(\n\nWhat's new:\n).*?(\n\n)", lambda m: m.group(1) + bg + m.group(2) + en + m.group(3), body, count=1, flags=re.S)
-          if n != 1:
-              raise SystemExit("Описанието на изданието няма блоковете „Какво ново“/„What's new“")
-          open("body.md", "w", encoding="utf-8").write(new)
-          PY
-          gh release edit "$TAG" --repo "$REPO" --notes-file body.md
+        run: gh release edit "$TAG" --repo "$REPO" --notes-file work/body.md
 
       - name: Dry run
         if: inputs.dry_run == true
