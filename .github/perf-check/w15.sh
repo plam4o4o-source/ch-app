@@ -68,6 +68,8 @@ part_scan() {
   if tap text '=Сканирай баркод|=Опитай отново'; then scan_watch 50-again; scan_back; fi
   grep -iE 'ModuleInstall|codescanner|barcode|mlkit|vision|Chimera|GmsBarcode|optional.?module|dynamite' $OUT/logcat-live.txt | grep -v PERFCHECK > $OUT/logcat-scanner.txt
   log "logcat scanner/module lines: $(wc -l < $OUT/logcat-scanner.txt); first: $(head -12 $OUT/logcat-scanner.txt | cut -c1-200 | tr '\n' '~')"
+  log "ML Kit registrar errors in the app process: $(grep -c 'Could not instantiate com.google.mlkit' $OUT/logcat-live.txt) line(s): $(grep -m2 -oE 'NoSuchMethodException: com.google.mlkit[^ ]*' $OUT/logcat-live.txt | sort -u | tr '\n' ' ')"
+  log "Play services module/scanner calls after the first scan: $(since m-scan-home 'ModuleInstall|barcode\.ui|codescanner|GmsBarcode|mlkit\.barcode' | wc -l) line(s): $(since m-scan-home 'ModuleInstall|barcode\.ui|codescanner|GmsBarcode|mlkit\.barcode' | head -6 | cut -c1-200 | tr '\n' '~')"
   log "activities started since the first scan: $(since m-scan-home 'ActivityTaskManager: START' | grep -oE 'cmp=[^ }]+' | sort | uniq -c | tr -s ' ' | tr '\n' ' ')"
   case $PART in
     scan33) part_misc;;
@@ -166,15 +168,35 @@ part_login() { warmup; f_login15; }
 # ================================================================= ПЛОЧКА В БЪРЗИТЕ НАСТРОЙКИ
 TILE=$PKG/.tile.CardTileService
 RX_TILE='Читателска карта|Library card'
-qs_tile() {  # отваря бързите настройки и намира плочката; TP — центърът ѝ
+qs_tile() {  # $1 — етикет: отваря бързите настройки и намира плочката; TP — центърът ѝ (без подчерупка!)
   local i
   a cmd statusbar expand-settings; sleep 3; dims; TP=""
   for i in 1 2 3 4; do
-    dump; TP=$(xy content-desc "$RX_TILE"); [ -z "$TP" ] && TP=$(xy text "$RX_TILE")
+    dump; cp $OUT/ui.xml $OUT/qs-$1-page$i.xml
+    TP=$(xy content-desc "$RX_TILE"); [ -z "$TP" ] && TP=$(xy text "$RX_TILE")
     [ -n "$TP" ] && break
     a input swipe $((W*85/100)) $((H*30/100)) $((W*15/100)) $((H*30/100)) 300; sleep 1.5
   done
-  echo "tile @ ${TP:-NOT FOUND}: $(python3 $H_/find.py $OUT/ui.xml --toggle "$RX_TILE" | head -2 | cut -c1-600 | tr '\n' ' ') texts near: $(texts 40 | grep -oE '(text|content-desc)="(Читателска карта|Добави картата|Покажи на гишето)[^"]*"' | tr '\n' ' ')"
+  log "QS $1: tile @ ${TP:-NOT FOUND} (page $i): $(python3 $H_/find.py $OUT/ui.xml --toggle "$RX_TILE" | head -2 | cut -c1-600 | tr '\n' ' ') texts: $(grep -oE '(text|content-desc)="(Читателска карта|Library card|Добави картата|Покажи на гишето|Add card|Show at the desk)[^"]*"' $OUT/ui.xml | tr '\n' ' ')"
+  log "QS $1: ours in sysui_qs_tiles: $(a settings get secure sysui_qs_tiles | tr -d '\r' | grep -c 'chyavorec')"
+}
+qs_add() {  # плочката в бързите настройки: cmd statusbar add-tile, иначе в sysui_qs_tiles
+  log "sysui_qs_tiles before: $(a settings get secure sysui_qs_tiles | tr -d '\r')"
+  log "add-tile $TILE: '$(a cmd statusbar add-tile $TILE 2>&1 | tr -d '\r' | head -2 | tr '\n' ' ')'"; sleep 3
+  if ! a settings get secure sysui_qs_tiles | grep -q chyavorec; then
+    log "add-tile did not change sysui_qs_tiles — adding custom(...) to the setting (fallback)"
+    local v; v="custom($TILE),$(a settings get secure sysui_qs_tiles | tr -d '\r')"
+    a "settings put secure sysui_qs_tiles '$v'"; sleep 3
+  fi
+  log "sysui_qs_tiles after: $(a settings get secure sysui_qs_tiles | tr -d '\r')"
+}
+qs_remove() {
+  log "remove-tile: '$(a cmd statusbar remove-tile $TILE 2>&1 | tr -d '\r' | head -1)'; ours in sysui_qs_tiles: $(a settings get secure sysui_qs_tiles | grep -c chyavorec)"
+  if a settings get secure sysui_qs_tiles | grep -q chyavorec; then
+    local v; v=$(a settings get secure sysui_qs_tiles | tr -d '\r' | sed -E 's/custom\([^)]*chyavorec[^)]*\),?//; s/,$//')
+    a "settings put secure sysui_qs_tiles '$v'"; sleep 2
+    log "removed via the setting: ours now $(a settings get secure sysui_qs_tiles | grep -c chyavorec)"
+  fi
 }
 card_screen() { a am start -a org.chyavorec.app.SHORTCUT -d chyavorec://app/my/card -n $ACT >/dev/null 2>&1; sleep 4; }
 card_add() {  # $1 — номер на картата
@@ -191,13 +213,14 @@ part_tile() {
   sec "T0. The tile service"
   log "QS_TILE services: $(a cmd package query-services --brief -a android.service.quicksettings.action.QS_TILE 2>&1 | tr -d '\r' | grep -i chyavorec | tr '\n' ' ')"
   sec "T1. No card: added with 'cmd statusbar add-tile' → inactive"
-  log "add-tile $TILE: $(a cmd statusbar add-tile $TILE 2>&1 | tr -d '\r' | head -2 | tr '\n' ' ')"
-  sleep 2; log "QS (no card): $(qs_tile)"; shot tile/10-qs-no-card; cp $OUT/ui.xml $OUT/qs-no-card.xml
+  qs_add
+  qs_tile no-card; shot tile/10-qs-no-card
   sec "T2. Tap without a card (unlocked)"
-  if [ -n "$TP" ]; then a input tap $TP; sleep 4; dump; shot tile/11-after-tap-no-card; log "after tap (no card): fg $(fg); app $(has "package=\"$PKG\"" && echo IN FRONT || echo no); $(texts 8 | cut -c1-240)"; fi
+  if [ -n "$TP" ]; then a input tap $TP; else log "tile not on screen — 'cmd statusbar click-tile' instead: '$(a cmd statusbar click-tile $TILE 2>&1 | tr -d '\r' | head -1)'"; fi
+  sleep 4; dump; shot tile/11-after-tap-no-card; log "after tap (no card): fg $(fg); app $(has "package=\"$PKG\"" && echo IN FRONT || echo no); $(texts 8 | cut -c1-240)"
   back 2; a cmd statusbar collapse
   sec "T3. Card-screen prompt 'Добави в бързите настройки' (API $SDK; the tile removed first)"
-  log "remove-tile: $(a cmd statusbar remove-tile $TILE 2>&1 | tr -d '\r' | head -1)"
+  qs_remove
   card_add TEST-12345
   dump; shot tile/19-card-screen; log "CARD screen: card $(card_shown && echo shown || echo NO); prompt $(has 'text="Добави в бързите настройки"' && echo SHOWN || echo absent); dismiss X $(has 'content-desc="Не предлагай отново"' && echo yes || echo no)"
   if tap text '=Добави в бързите настройки'; then
@@ -206,17 +229,21 @@ part_tile() {
     dump; log "after 'Add tile': prompt $(has 'text="Добави в бързите настройки"' && echo 'STILL SHOWN' || echo gone); fg $(fg)"; shot tile/21-after-add
   fi
   sec "T4. With a card: active"
-  log "QS (with card): $(qs_tile)"; shot tile/30-qs-with-card; cp $OUT/ui.xml $OUT/qs-with-card.xml
+  log "after the prompt: ours in sysui_qs_tiles $(a settings get secure sysui_qs_tiles | grep -c chyavorec)"
+  a settings get secure sysui_qs_tiles | grep -q chyavorec || { log "the tile is not in Quick Settings after the prompt — added for the next steps"; qs_add; }
+  qs_tile with-card; shot tile/30-qs-with-card
   sec "T5. Tap (unlocked) → the card screen"
-  if [ -n "$TP" ]; then a input tap $TP; sleep 4; dump; shot tile/31-after-tap; log "after tap (card): fg $(fg); card screen $(card_shown && echo SHOWN || echo NO); $(texts 8 | cut -c1-240)"; fi
+  if [ -n "$TP" ]; then a input tap $TP; else log "tile not on screen — click-tile: '$(a cmd statusbar click-tile $TILE 2>&1 | tr -d '\r' | head -1)'"; fi
+  sleep 4; dump; shot tile/31-after-tap; log "after tap (card): fg $(fg); card screen $(card_shown && echo SHOWN || echo NO); $(texts 8 | cut -c1-240)"
   back 2; go_home 2
   sec "T6. Locked with a PIN: tap the tile → the unlock prompt first"
   log "set-pin: $(a locksettings set-pin 1234 2>&1 | tr -d '\r' | head -1)"
   a input keyevent KEYCODE_POWER; sleep 3; a input keyevent KEYCODE_WAKEUP; sleep 3
   dump; shot tile/40-lockscreen; log "lock screen: $(a dumpsys window 2>/dev/null | tr -d '\r' | grep -m2 -oE '(mKeyguardShowing|isKeyguardShowing|KeyguardShowing|mShowingLockscreen)=\w+' | tr '\n' ' '); $(texts 6 | cut -c1-200)"
-  log "QS (locked): $(qs_tile)"; shot tile/41-qs-locked
-  if [ -n "$TP" ]; then
-    a input tap $TP; sleep 3; dump; shot tile/42-after-tap-locked; cp $OUT/ui.xml $OUT/tile-locked-tap.xml
+  qs_tile locked; shot tile/41-qs-locked
+  if true; then
+    if [ -n "$TP" ]; then a input tap $TP; else log "tile not on screen — click-tile: '$(a cmd statusbar click-tile $TILE 2>&1 | tr -d '\r' | head -1)'"; fi
+    sleep 3; dump; shot tile/42-after-tap-locked; cp $OUT/ui.xml $OUT/tile-locked-tap.xml
     log "after tap while LOCKED: fg $(fg); PIN entry $(grep -qiE 'PIN' $OUT/ui.xml && echo SHOWN || echo absent); app in front $(has "package=\"$PKG\"" && echo YES || echo no); $(texts 8 | cut -c1-240)"
     a input text 1234; a input keyevent 66; sleep 5; dump; shot tile/43-after-unlock
     log "after entering the PIN: fg $(fg); card screen $(card_shown && echo SHOWN || echo NO); $(texts 6 | cut -c1-200)"
@@ -257,13 +284,37 @@ event_reminder_set() {
     a input tap $p; sleep 4; dump; log "EVENT candidate $i: $(texts 6 | cut -c1-200)"
     for j in 1 2 3; do [ -n "$(xy text '=Напомни ми')" ] && break; sw_up 400; sleep 1; dump; done
     if tap text '=Напомни ми'; then
-      sleep 1.5; dump; shot notif/31-reminder-set; ok=yes
-      log "REMINDER set on: $(texts 2 | cut -c1-120); snackbar: $(grep -oE 'text="Ще получиш напомняне[^"]*"' $OUT/ui.xml | head -1); bell now: $(has 'Премахни напомнянето' && echo on || echo '?')"
-      back 2; break
+      sleep 1.5; dump; shot notif/31-reminder-set-$i; ok=yes
+      log "REMINDER set on: $(texts 2 | cut -c1-120); snackbar: $(grep -oE 'text="Ще получиш напомняне[^"]*"' $OUT/ui.xml | head -1); bell now: $(has 'Премахни напомнянето' && echo on || echo '?'); image on the event screen: $(grep -cE 'class="android.widget.ImageView"' $OUT/ui.xml)"
     fi
     back 2
   done
   log "REMINDER: $ok"
+}
+work_rewind() {  # PeriodicSyncWorker: last_enqueue_time − 7 h (с flex 2 из 6 ч първото пускане е ~4 ч след добавянето)
+  local D uid f
+  D=/data/data/$PKG/no_backup; a ls $D/androidx.work.workdb >/dev/null 2>&1 || D=/data/data/$PKG/databases
+  a am force-stop $PKG; sleep 2
+  log "WorkManager db: $(a ls -l $D 2>&1 | tr -d '\r' | grep -E 'androidx.work' | tr -s ' ' | tr '\n' ' ')"
+  rm -f $OUT/androidx.work.workdb*
+  for f in androidx.work.workdb androidx.work.workdb-wal androidx.work.workdb-shm; do timeout 20 adb pull $D/$f $OUT/$f >/dev/null 2>&1; done
+  python3 - $OUT/androidx.work.workdb <<'EOF' | tee -a $SUM
+import sqlite3, sys
+c = sqlite3.connect(sys.argv[1])
+try:
+    for r in c.execute("select id, worker_class_name, state, period_count, last_enqueue_time, interval_duration, flex_duration from workspec"):
+        print('WORKSPEC', r[1].split('.')[-1], 'state', r[2], 'periods', r[3], 'last_enqueue', r[4], 'interval', r[5], 'flex', r[6])
+    n = c.execute("update workspec set last_enqueue_time = last_enqueue_time - 7*3600*1000 where worker_class_name like '%PeriodicSyncWorker'").rowcount
+    c.commit()
+    print('WORK REWIND: PeriodicSyncWorker rows moved 7 h back:', n)
+except Exception as e:
+    print('WORK REWIND failed:', e, [r[0] for r in c.execute("pragma table_info(workspec)")])
+c.execute('pragma wal_checkpoint(TRUNCATE)'); c.execute('pragma journal_mode=DELETE'); c.close()
+EOF
+  uid=$(a stat -c %u /data/data/$PKG | tr -d '\r')
+  a rm -f $D/androidx.work.workdb-wal $D/androidx.work.workdb-shm
+  timeout 30 adb push $OUT/androidx.work.workdb $D/androidx.work.workdb >/dev/null 2>&1
+  a chown $uid:$uid $D/androidx.work.workdb; a chmod 600 $D/androidx.work.workdb; a restorecon $D/androidx.work.workdb
 }
 part_notif() {
   local uid
@@ -281,6 +332,11 @@ part_notif() {
   sec "N1. New-article notification (PeriodicSyncWorker; the stored newest id is stale)"
   log "app jobs: $(app_jobs)"; sleep 20; notifs n1-natural | tee -a $SUM
   if ! grep -q 'Нова публикация' $OUT/notif-n1-natural.txt; then run_jobs; sleep 30; notifs n1-forced | tee -a $SUM; fi
+  if ! grep -q 'Нова публикация' $OUT/notif-n1-forced.txt 2>/dev/null && ! grep -q 'Нова публикация' $OUT/notif-n1-natural.txt; then
+    log "(the periodic work has a flex window: its first run is ~4 h after it is enqueued — moving it back in the WorkManager db)"
+    work_rewind
+    launch >/dev/null; sleep 8; dismiss; log "app jobs after the rewind: $(app_jobs)"; run_jobs; sleep 35; notifs n1-rewound | tee -a $SUM
+  fi
   timeout 20 adb pull /data/data/$PKG/files/datastore/settings.preferences_pb $OUT/settings-after.pb >/dev/null 2>&1
   log "settings after the sync: $(python3 $W15 prefs-dump $OUT/settings-after.pb 2>&1 | grep -E 'last_news_id|bg_step|notify_news|last_background' | tr '\n' ' ')"
   sec "N2. Shade: the new-article notification expanded"
@@ -307,6 +363,14 @@ vstate() {  # $1 — етикет: състоянието на прегледа
 }
 part_gallery() {
   local i p t prev cx cy y
+  if [ "$SDK" -ge 34 ]; then
+    sec "G0. API $SDK: predictive back animations on (developer option) before the framework (re)starts"
+    a settings put global enable_back_animation 1; a setprop persist.wm.debug.predictive_back 1
+    a stop; sleep 3; a start
+    for i in $(seq 1 60); do sleep 3; [ "$(a getprop init.svc.bootanim | tr -d '\r')" = stopped ] && a pm path android >/dev/null 2>&1 && break; done
+    sleep 25; a input keyevent KEYCODE_WAKEUP; a wm dismiss-keyguard 2>/dev/null; sleep 2; go_home 3
+    log "enable_back_animation=$(a settings get global enable_back_animation | tr -d '\r') persist.wm.debug.predictive_back=$(a getprop persist.wm.debug.predictive_back | tr -d '\r')"
+  fi
   warmup
   sec "G1. Album 1 online (the album data is cached); then the image caches are emptied"
   restart; open_gallery && waitfor "$RX_GALLERY_LOADED" 40; open_album 1; wait_cells 20; sleep 6; dims; dump; shot gallery/01-album-online
@@ -360,8 +424,10 @@ part_gallery() {
   [ $(photo_cells | wc -l) -gt 0 ] && { open_photo 1; sleep 3; }
   dims; y=$((H/2)); vstate 60-before-gesture
   a input motionevent DOWN 2 $y; a input motionevent MOVE 60 $y; a input motionevent MOVE 200 $y; a input motionevent MOVE $((W*30/100)) $y
-  sleep 0.6; shot gallery/61-gesture-30pct; log "mid-gesture 30%: $(python3 $W15 bbox $OUT/shots/gallery/61-gesture-30pct.png)"
-  a input motionevent MOVE $((W*50/100)) $y; sleep 0.6; shot gallery/62-gesture-50pct; log "mid-gesture 50%: $(python3 $W15 bbox $OUT/shots/gallery/62-gesture-50pct.png)"
+  sleep 0.6; shot gallery/61-gesture-30pct
+  a input motionevent MOVE $((W*50/100)) $y; sleep 0.6; shot gallery/62-gesture-50pct
+  a input motionevent MOVE $((W*70/100)) $y; sleep 0.6; shot gallery/62b-gesture-70pct
+  for f in 60-before-gesture 61-gesture-30pct 62-gesture-50pct 62b-gesture-70pct; do log "PHOTO EDGES $f (row y=$((H*62/100))): $(python3 $W15 hspan $OUT/shots/gallery/$f.png $((H*62/100)))"; done
   a input motionevent MOVE 80 $y; a input motionevent MOVE 10 $y; a input motionevent UP 10 $y; sleep 2; vstate 63-after-cancelled-gesture
   bgesture gallery/64-full-gesture-midway; log "full gesture midway: $(python3 $W15 bbox $OUT/shots/gallery/64-full-gesture-midway.png)"; vstate 65-after-full-gesture
   nav_buttons
@@ -461,15 +527,18 @@ hm_search() {
     if sb_open_result; then
       log "on the result: tab bar $(has 'text="(Каталог|Catalogue)"' && echo visible || echo hidden)"
       if has 'text="(Каталог|Catalogue)"'; then tab catalog; else link "$SITE/elektronen-katalog"; fi
-      sleep 3; ready; tab home; sleep 3; shot home/s-04-home-after-tab-switch
-      log "SEARCH after another tab, back on Home: $(sbstate)"
+      sleep 3; dump; log "on the other tab: $(texts 4 | cut -c1-120)"; tab home; sleep 3; shot home/s-04-home-tab-again
+      dump; log "Home tab again: $(texts 4 | cut -c1-120) (the book stays on top of the Home stack)"
+      if has 'text="12 -те вятъра"' && has "$RX_BACK"; then back 3; fi
+      shot home/s-05-back-from-book-after-tab-switch
+      log "SEARCH after another tab and Back from the book to Home (should be collapsed): $(sbstate)"
     fi
   fi
   sec "HS4. 'Покажи всички (N)'"
   if sb_expand; then hide_ime; dump
     log "show-all buttons: $(grep -oE 'text="(Покажи всички|Show all) \([0-9]+\)"' $OUT/ui.xml | tr '\n' ' ')"
     p=$(xy text 'Покажи всички (|Show all (')
-    if [ -n "$p" ]; then a input tap $p; sleep 3; dump; shot home/s-05-show-all
+    if [ -n "$p" ]; then a input tap $p; sleep 3; dump; shot home/s-06-show-all
       log "after 'Покажи всички': chip Книги $(xy --state text '=Книги'); show-all left $(grep -c 'Покажи всички (' $OUT/ui.xml); $(texts 12 | cut -c1-300)"
     else log "no 'Покажи всички' on the results"; fi
     back 2; back 2

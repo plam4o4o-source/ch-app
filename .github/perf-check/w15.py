@@ -135,6 +135,14 @@ def cmd_bbox(a, thr='40'):
     print(f"BBOX [{x0},{y0}][{x1},{y1}] {x1 - x0}x{y1 - y0} of {w}x{h} ({(x1 - x0) * (y1 - y0) / (w * h) * 100:.0f}% of the screen)")
 
 
+def cmd_hspan(a, y, thr='40'):
+    im = gray(a)
+    w, _ = im.size
+    row = [im.getpixel((x, int(y))) for x in range(w)]
+    xs = [x for x, v in enumerate(row) if v > int(thr)]
+    print(f"HSPAN x {xs[0]}..{xs[-1]} (width {xs[-1] - xs[0] + 1} of {w})" if xs else "HSPAN none")
+
+
 def cmd_big(ui, pkg):
     root = load(ui)
     hs = [b(n) for n in root.iter('node') if b(n)]
@@ -305,5 +313,5 @@ def cmd_prefs_dump(f):
 if __name__ == '__main__':
     c, a = sys.argv[1], sys.argv[2:]
     {'widget': cmd_widget, 'rows': cmd_rows, 'checkables': cmd_checkables, 'field': cmd_field, 'targets': cmd_targets, 'diff': cmd_diff,
-     'bbox': cmd_bbox, 'big': cmd_big, 'section': cmd_section, 'hsections': cmd_hsections, 'notif': cmd_notif,
+     'bbox': cmd_bbox, 'hspan': cmd_hspan, 'big': cmd_big, 'section': cmd_section, 'hsections': cmd_hsections, 'notif': cmd_notif,
      'prefs-write': cmd_prefs_write, 'prefs-dump': cmd_prefs_dump}[c](*a)

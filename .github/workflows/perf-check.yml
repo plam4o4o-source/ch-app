@@ -114,6 +114,14 @@ jobs:
             ./gradlew --no-daemon assembleProdRelease
             cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/app.apk
             echo "${{ matrix.vname }} $(git rev-parse --short HEAD) ($(git log -1 --format=%s | cut -c1-60)); versionCode $VC; x86_64 libs: $(unzip -l dist/app.apk | grep -c 'lib/x86_64/' || true)" > dist/apk-ref.txt
+            # ДИАГНОСТИКА (само тук, не се записва): същото + keep за конструкторите на регистраторите
+            # на ML Kit (в издаденото R8 ги маха: NoSuchMethodException …Registrar.<init>) — за
+            # отделяне на проблема в приложението от този на емулатора (частта scan33keep).
+            printf '\n# ВРЕМЕННО (диагностика)\n-keep class com.google.mlkit.** implements com.google.firebase.components.ComponentRegistrar { <init>(); }\n-keep class com.google.mlkit.**.*Registrar { <init>(); }\n' >> app/proguard-rules.pro
+            tail -3 app/proguard-rules.pro
+            ./gradlew --no-daemon assembleProdRelease
+            cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/app-keep.apk
+            echo "DIAGNOSTIC ${{ matrix.vname }} $(git rev-parse --short HEAD) + keep ML Kit registrar constructors; versionCode $VC" > dist/apk-keep-ref.txt
           else
             export UPDATE_MANIFEST_URL="$RAW/none.json"
             ./gradlew --no-daemon assembleProdRelease
@@ -152,7 +160,7 @@ jobs:
         continue-on-error: true
         run: |
           set -e
-          WN="$RUNNER_TEMP/whats-new"
+          WN="$RUNNER_TEMP/whats-new"; mkdir -p "$WN"
           python3 newsrc/tools/whats_new.py --section 1.2.29 newsrc/store/whats-new.md "$WN"
           cat "$WN"/notes.bg.txt "$WN"/notes.en.txt
           R="https://github.com/${{ github.repository }}.git"
@@ -194,10 +202,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # API 33 със swangle_indirect; частите, завършващи на 34 — API 34 (също swangle_indirect).
-        # scan33cam — скенерът с емулирана задна камера (останалите са без камера).
-        part: [abstart-1, abstart-2, mem, mem-base, monkey, scan33, scan33cam, scan34, login, tile33, tile34,
-               notif, widget, widgetlang, widgetupd, gallery, gallery34, home, rot, offline, look1, look2, look3, a11y, update]
+        # API 33 със swangle_indirect; частите с „34“ — API 34 (също swangle_indirect); „ps“ — образ
+        # google_apis_playstore. scan33cam — скенерът с емулирана задна камера (останалите са без камера).
+        # Кръг 1 (run 41242937566): abstart-1, abstart-2, mem, mem-base, monkey, scan33, scan33cam, scan34,
+        # login, tile33, tile34, notif, widget, widgetlang, widgetupd, gallery, gallery34, home, rot,
+        # offline, look1/2/3, a11y, update. Кръг 2: поправените части и диагностиката на скенера.
+        part: [update, tile33, tile34, notif, gallery34, home, scan33keep, scan34ps]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -212,7 +222,7 @@ jobs:
           ls -l *.apk; cat apk-*.txt
           python3 -c "import PIL" 2>/dev/null || { sudo apt-get update -qq >/dev/null 2>&1; sudo apt-get install -y -qq python3-pil >/dev/null 2>&1; }
           python3 -c "import PIL; print('PIL', PIL.__version__)" || true
-      - name: Run on emulator (${{ matrix.part }}, API ${{ endsWith(matrix.part, '34') && '34' || '33' }}, swangle_indirect)
+      - name: Run on emulator (${{ matrix.part }}, API ${{ contains(matrix.part, '34') && '34' || '33' }}, swangle_indirect)
         id: run
         continue-on-error: true
         timeout-minutes: 66
@@ -220,8 +230,8 @@ jobs:
         env:
           STAGE_URL: https://raw.githubusercontent.com/${{ github.repository }}/emulator-results/${{ env.STAGE }}
         with:
-          api-level: ${{ endsWith(matrix.part, '34') && 34 || 33 }}
-          target: google_apis
+          api-level: ${{ contains(matrix.part, '34') && 34 || 33 }}
+          target: ${{ endsWith(matrix.part, 'ps') && 'google_apis_playstore' || 'google_apis' }}
           arch: x86_64
           profile: pixel_6
           disable-animations: true
@@ -233,7 +243,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p out/${{ matrix.part }}
-          echo "part=${{ matrix.part }} api=${{ endsWith(matrix.part, '34') && '34' || '33' }} gpu=swangle_indirect camera-back=${{ matrix.part == 'scan33cam' && 'emulated' || 'none' }} emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          echo "part=${{ matrix.part }} target=${{ endsWith(matrix.part, 'ps') && 'google_apis_playstore' || 'google_apis' }} api=${{ contains(matrix.part, '34') && '34' || '33' }} gpu=swangle_indirect camera-back=${{ matrix.part == 'scan33cam' && 'emulated' || 'none' }} emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
           cat out/${{ matrix.part }}/job-status.txt
           { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
             echo "== emulator processes"; ps -eo pid,etime,rss,stat,args | grep -iE "qemu|emulator" | grep -v grep | cut -c1-200

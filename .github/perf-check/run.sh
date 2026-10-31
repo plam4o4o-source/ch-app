@@ -246,6 +246,8 @@ setup() {
   T=180 a getprop ro.build.version.release >/dev/null
   SDK=$(a getprop ro.build.version.sdk | tr -d '\r')
   log "android $(a getprop ro.build.version.release | tr -d '\r') sdk $SDK; $(a wm size | tr -d '\r' | tail -1); $(a wm density | tr -d '\r' | tail -1); adb uid $(a id -u | tr -d '\r')"
+  # scan33keep — диагностичният APK (keep за регистраторите на ML Kit), иначе тестовото издание
+  if [ "$PART" = scan33keep ]; then cp app-keep.apk app.apk; cp apk-keep-ref.txt apk-ref.txt; log "DIAGNOSTIC APK: $(cat apk-ref.txt)"; fi
   timeout 180 adb install -r app.apk || { log "RESULT: install failed"; exit 1; }
   log "installed: $(a dumpsys package $PKG | grep -m2 -E 'versionName|versionCode' | tr -s ' ' | tr -d '\r' | tr '\n' ' ')"
   a cmd locale set-app-locales $PKG --locales bg-BG; log "app locale: $(a cmd locale get-app-locales $PKG | tr -d '\r')"
@@ -1488,7 +1490,7 @@ case $PART in
   update) part_update;;
   jankv) part_jankv;;
   zoom) part_zoom;;
-  scan33|scan33cam|scan34) part_scan;;
+  scan33|scan33cam|scan34|scan33keep|scan34ps) part_scan;;
   login) part_login;;
   tile33|tile34) part_tile;;
   notif) part_notif;;
