@@ -142,6 +142,8 @@ fun UpdateDialog(updater: AppUpdater) {
                 is UpdateState.Available, is UpdateState.Ready, is UpdateState.NeedsPermission ->
                     TextButton(onClick = updater::snooze) { Text(stringResource(R.string.update_later)) }
                 is UpdateState.Failed -> if (s.info != null) TextButton(onClick = close) { Text(stringResource(R.string.action_close)) }
+                // Както „Отказ“ в известието: спира и изтрива изтеглената част.
+                is UpdateState.Downloading -> TextButton(onClick = updater::cancelDownload) { Text(stringResource(R.string.action_cancel)) }
                 else -> Unit
             }
         },

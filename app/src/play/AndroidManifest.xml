@@ -9,10 +9,17 @@
     <uses-permission
         android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION"
         tools:node="remove" />
+    <!-- FOREGROUND_SERVICE остава: WorkManager го носи сам (бързите задачи на Android 8–11). -->
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"
+        tools:node="remove" />
 
     <application>
         <receiver
             android:name="org.chyavorec.app.update.UpdateInstallReceiver"
             tools:node="remove" />
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            tools:remove="android:foregroundServiceType" />
     </application>
 </manifest>

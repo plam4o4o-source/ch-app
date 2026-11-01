@@ -90,6 +90,19 @@ jobs:
       - name: Debug APKs
         run: ./gradlew assembleDevDebug assembleProdDebug
 
+      # Сливането на манифестите: EmojiCompat не се зарежда при старт (AndroidManifest.xml го маха),
+      # а изтеглянето на нова версия има вида на услугата (dataSync) и разрешението за него.
+      - name: Merged manifest
+        run: |
+          M=$(find app/build/intermediates -path '*prodDebug*' -name AndroidManifest.xml | grep merged_manifest | head -1)
+          [ -f "$M" ] || { echo "::error::No merged prodDebug manifest"; exit 1; }
+          if grep -n '"androidx.emoji2.text.EmojiCompatInitializer"' "$M"; then
+            echo "::error::EmojiCompatInitializer is in the merged manifest"; exit 1
+          fi
+          grep -q 'permission.FOREGROUND_SERVICE_DATA_SYNC"' "$M" || { echo "::error::FOREGROUND_SERVICE_DATA_SYNC missing"; exit 1; }
+          grep -B8 -A8 'SystemForegroundService"' "$M" | grep -q 'foregroundServiceType="dataSync"' || { echo "::error::SystemForegroundService without dataSync"; exit 1; }
+          echo "Merged manifest OK ($M)"
+
       # Генераторът на Baseline профила се компилира при всяка промяна; самото
       # генериране (на емулатор) е в baseline-profile.yml.
       - name: Baseline profile generator (compile)
@@ -219,6 +232,11 @@ jobs:
           [ -f "$M" ] || M=$(find app/build/intermediates -path '*prodPlay*' -name AndroidManifest.xml | head -1)
           if grep -q "REQUEST_INSTALL_PACKAGES\|UpdateInstallReceiver" "$M"; then
             echo "::error::Play build must not contain self-update"; exit 1
+          fi
+          # Изтеглянето на нова версия (dataSync) — само в APK-а от GitHub. Атрибутите, не коментарите
+          # (сливането пази коментарите от AndroidManifest.xml).
+          if grep -n 'permission.FOREGROUND_SERVICE_DATA_SYNC"\|foregroundServiceType="dataSync"\|"androidx.emoji2.text.EmojiCompatInitializer"' "$M"; then
+            echo "::error::Play build must not contain the update download service type or EmojiCompatInitializer"; exit 1
           fi
           echo "Play manifest OK ($M)"
           # USE_BIOMETRIC — за отключването на личните екрани (по избор); старото USE_FINGERPRINT

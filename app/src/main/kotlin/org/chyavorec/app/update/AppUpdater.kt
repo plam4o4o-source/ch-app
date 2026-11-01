@@ -10,6 +10,7 @@ import android.content.pm.Signature
 import android.net.ConnectivityManager
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -234,10 +236,40 @@ class AppUpdater(
         }
     }
 
+    /**
+     * „Изтегли и инсталирай“: изтеглянето е задача на WorkManager ([UpdateDownloadWorker]) —
+     * продължава и след излизане от приложението, с известие за хода ѝ. Ако задачата не може
+     * да се пусне — както преди, в процеса (ходът се вижда само в диалога).
+     */
     fun startDownloadAndInstall() {
         val info = currentInfo() ?: return
+        cancelRequested = false
+        val queued = runCatching { UpdateDownloadWorker.enqueue(context) }.logFailure("update.enqueue").isSuccess
+        if (queued) {
+            // Задачата първо проверява версията наново (виж UpdateDownloadWorker) — в диалога веднага.
+            _state.value = UpdateState.Checking
+            return
+        }
         scope.launch {
             if (download(info) != null) install(background = false)
+        }
+    }
+
+    /** Поискан е отказ — изтеглянето спира при следващото парче ([fetchOnce]). */
+    @Volatile private var cancelRequested = false
+
+    /** „Отказ“ (известието или диалогът): изтеглянето спира, а частично изтегленият файл се изтрива. */
+    fun cancelDownload() {
+        cancelRequested = true
+        runCatching { UpdateDownloadWorker.cancel(context) }.logFailure("update.cancel")
+        scope.launch {
+            // Текущото изтегляне държи mutex-а — файловете се трият, едва след като то спре.
+            mutex.withLock {
+                cancelRequested = false
+                dir.listFiles()?.filter { it.name.endsWith(".part") || it.name.endsWith(".part.tag") }?.forEach { it.delete() }
+                val s = _state.value
+                if (s is UpdateState.Downloading) _state.value = UpdateState.Available(s.info)
+            }
         }
     }
 
@@ -299,10 +331,19 @@ class AppUpdater(
             }
             val target = apkFile(info)
             val digest = try {
-                fetch(info, part, validator)
+                fetch(info, part, validator) { isActive }
             } catch (e: Exception) {
                 // Прекъсване (задачата е спряна) или грешка в мрежата: наличната част остава за продължаване.
-                if (e is CancellationException) throw e
+                if (e is CancellationException) {
+                    _state.value = UpdateState.Available(info)
+                    throw e
+                }
+                // Отказ от потребителя: без продължаване по-късно — частта се изтрива.
+                if (e is CancelledException) {
+                    discard()
+                    _state.value = UpdateState.Available(info)
+                    return@withContext null
+                }
                 Diagnostics.record("update.download", e)
                 if (e is TooLargeException) discard()
                 _state.value = UpdateState.Failed(UpdateFailure.DOWNLOAD, info)
@@ -317,7 +358,7 @@ class AppUpdater(
                 return@withContext null
             }
             // Подписът — едва след като сумата от update.json е потвърдена (по-горе).
-            when (verifyApk(part, info)) {
+            when (apkCheck(part, info)) {
                 ApkCheck.OK -> Unit
                 ApkCheck.WRONG_SIGNATURE -> {
                     discard()
@@ -344,17 +385,20 @@ class AppUpdater(
         }
     }
 
-    /** Изтегля [part] докрай и връща SHA-256 на целия файл (заедно с вече наличната част). */
-    private fun fetch(info: UpdateInfo, part: File, validator: File): MessageDigest {
-        fetchOnce(info, part, validator)?.let { return it }
+    /**
+     * Изтегля [part] докрай и връща SHA-256 на целия файл (заедно с вече наличната част).
+     * [active] — задачата още тече (иначе спира между две парчета, а частта остава).
+     */
+    private fun fetch(info: UpdateInfo, part: File, validator: File, active: () -> Boolean): MessageDigest {
+        fetchOnce(info, part, validator, active)?.let { return it }
         // Наличната част не пасва на файла на сървъра (416) — отначало.
         part.delete()
         validator.delete()
-        return fetchOnce(info, part, validator) ?: throw IOException("range not satisfiable")
+        return fetchOnce(info, part, validator, active) ?: throw IOException("range not satisfiable")
     }
 
     /** @return сумата или `null`, ако сървърът отхвърли продължаването (416). */
-    private fun fetchOnce(info: UpdateInfo, part: File, validator: File): MessageDigest? {
+    private fun fetchOnce(info: UpdateInfo, part: File, validator: File, active: () -> Boolean): MessageDigest? {
         val digest = MessageDigest.getInstance("SHA-256")
         var existing = if (part.isFile) part.length() else 0L
         val expected = info.sizeBytes
@@ -399,6 +443,8 @@ class AppUpdater(
                     var read = existing
                     var lastReported = -1
                     while (true) {
+                        if (cancelRequested) throw CancelledException()
+                        if (!active()) throw CancellationException("update download stopped")
                         val n = input.read(buf)
                         if (n < 0) break
                         out.write(buf, 0, n)
@@ -430,6 +476,7 @@ class AppUpdater(
     }
 
     private class TooLargeException : IOException("too large")
+    private class CancelledException : IOException("cancelled")
 
     /**
      * Инсталиране на изтеглената версия. При [background] = true (фонова задача)
@@ -571,7 +618,11 @@ class AppUpdater(
         }
     }
 
-    private enum class ApkCheck { OK, WRONG_SIGNATURE, INVALID }
+    internal enum class ApkCheck { OK, WRONG_SIGNATURE, INVALID }
+
+    /** Проверката на изтегления APK ([verifyApk]); тестовете я подменят — Robolectric не чете APK файлове. */
+    @VisibleForTesting
+    internal var apkCheck: (File, UpdateInfo) -> ApkCheck = { file, info -> verifyApk(file, info) }
 
     /**
      * Пакетът, версията и подписът на изтегления APK. Подписите се сравняват изцяло

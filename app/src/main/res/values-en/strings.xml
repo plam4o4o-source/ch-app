@@ -311,7 +311,7 @@
     <string name="my_membership">My membership</string>
     <string name="my_membership_desc">Status and validity</string>
     <string name="my_notifications">Notifications</string>
-    <string name="my_notifications_desc">Due dates, events, news</string>
+    <string name="my_notifications_desc">Choose which: due dates, events, news</string>
     <string name="my_profile">My profile</string>
     <string name="my_profile_desc">Reader details</string>
     <string name="my_section_library">Library</string>
@@ -361,6 +361,11 @@
     <string name="notif_renew_sent_text">“%1$s”: the library will extend the due date at its program’s next update.</string>
     <string name="notif_renew_session_unavailable">Your account can’t be opened on this device right now. Please try again later.</string>
     <string name="notif_update_available">New version %1$s available</string>
+    <string name="notif_update_downloaded_text">Done — tap to install.</string>
+    <string name="notif_update_downloading">Downloading version %1$s — %2$d%%</string>
+    <string name="notif_update_downloading_unknown">Downloading version %1$s…</string>
+    <string name="notif_update_failed">Version %1$s wasn’t downloaded</string>
+    <string name="notif_update_failed_text">Tap to try again.</string>
     <string name="notif_update_ready">Version %1$s is ready to install</string>
     <string name="notif_update_text">Tap to update the app.</string>
     <string name="notif_updated">Updated to version %1$s</string>
@@ -794,8 +799,8 @@
         <item quantity="other">%1$d attempts left before a temporary block.</item>
     </plurals>
     <plurals name="messages_unread">
-        <item quantity="one">%1$d unread message</item>
-        <item quantity="other">%1$d unread messages</item>
+        <item quantity="one">Messages (%1$d unread)</item>
+        <item quantity="other">Messages (%1$d unread)</item>
     </plurals>
     <plurals name="my_want_count">
         <item quantity="one">%1$d book on your list</item>

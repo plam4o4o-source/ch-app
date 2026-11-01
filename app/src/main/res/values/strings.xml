@@ -311,7 +311,7 @@
     <string name="my_membership">Моето членство</string>
     <string name="my_membership_desc">Статус и валидност</string>
     <string name="my_notifications">Известия</string>
-    <string name="my_notifications_desc">Срокове, събития, новини</string>
+    <string name="my_notifications_desc">Кои да получаваш: срокове, събития, новини</string>
     <string name="my_profile">Моят профил</string>
     <string name="my_profile_desc">Читателски данни</string>
     <string name="my_section_library">Библиотека</string>
@@ -361,6 +361,11 @@
     <string name="notif_renew_sent_text">„%1$s“: библиотеката ще удължи срока при следващото обновяване на програмата си.</string>
     <string name="notif_renew_session_unavailable">Профилът ти временно не се отваря на това устройство. Опитай пак по-късно.</string>
     <string name="notif_update_available">Налична е нова версия %1$s</string>
+    <string name="notif_update_downloaded_text">Готово — докосни, за да инсталираш.</string>
+    <string name="notif_update_downloading">Изтегляне на версия %1$s — %2$d%%</string>
+    <string name="notif_update_downloading_unknown">Изтегляне на версия %1$s…</string>
+    <string name="notif_update_failed">Версия %1$s не беше изтеглена</string>
+    <string name="notif_update_failed_text">Докосни, за да опиташ отново.</string>
     <string name="notif_update_ready">Версия %1$s е готова за инсталиране</string>
     <string name="notif_update_text">Докосни, за да обновиш приложението.</string>
     <string name="notif_updated">Обновено до версия %1$s</string>
@@ -794,8 +799,8 @@
         <item quantity="other">Остават %1$d опита преди временно блокиране.</item>
     </plurals>
     <plurals name="messages_unread">
-        <item quantity="one">%1$d непрочетено съобщение</item>
-        <item quantity="other">%1$d непрочетени съобщения</item>
+        <item quantity="one">Съобщения (%1$d непрочетено)</item>
+        <item quantity="other">Съобщения (%1$d непрочетени)</item>
     </plurals>
     <plurals name="my_want_count">
         <item quantity="one">%1$d книга в списъка</item>
