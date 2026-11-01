@@ -225,7 +225,7 @@ class TabletLayoutTest {
     @Test fun newsArticleOpensBesideTheList() {
         launch()
         tab("Новини").performClick()
-        click("Участие в Деветия празник")
+        click("45-ти общински фолклорен събор")
         compose.waitUntil(15_000) { compose.onAllNodes(hasContentDescription("Отвори в сайта")).fetchSemanticsNodes().isNotEmpty() }
         // Списъкът (с полето за търсене в новините) остава отляво.
         compose.onAllNodes(hasSetTextAction()).onFirst().assertIsDisplayed()
