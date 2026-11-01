@@ -106,11 +106,15 @@ class MainActivity : ComponentActivity() {
         if (LaunchIntents.shouldHandle(intent.flags, restored = false)) consumeDeepLink(intent)
     }
 
-    /** Ctrl+F и „/“ — търсене, Ctrl+1…5 — разделите, Esc — „Назад“ (ако екранът не е обработил клавиша). */
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean =
-        KeyboardShortcuts.dispatch(event, { super.dispatchKeyEvent(it) }) { command ->
-            if (command == KeyCommand.Back) onBackPressedDispatcher.onBackPressed() else keyCommands.tryEmit(command)
-        }
+    /**
+     * Ctrl+F и „/“ — търсене, Ctrl+1…5 — разделите, Esc — „Назад“. Активността получава
+     * клавиша едва ако екранът не го е обработил (виж [KeyboardShortcuts.dispatch]).
+     */
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        val command = KeyboardShortcuts.command(event) ?: return super.onKeyDown(keyCode, event)
+        if (command == KeyCommand.Back) onBackPressedDispatcher.onBackPressed() else keyCommands.tryEmit(command)
+        return true
+    }
 
     /** Комбинациите — и в системния списък (Meta+/). */
     override fun onProvideKeyboardShortcuts(data: MutableList<KeyboardShortcutGroup>, menu: Menu?, deviceId: Int) {

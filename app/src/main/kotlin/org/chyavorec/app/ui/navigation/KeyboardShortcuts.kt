@@ -43,8 +43,8 @@ object KeyboardShortcuts {
     }
 
     /**
-     * Активността: [dispatched] — обичайната обработка (екранът); необработен клавиш с команда
-     * отива в [onCommand] и се счита за обработен.
+     * Пътят на клавиша в активността: [dispatched] — обичайната обработка (екранът); едва
+     * необработен клавиш с команда стига до Activity.onKeyDown → [onCommand] и е обработен.
      */
     fun dispatch(event: KeyEvent, dispatched: (KeyEvent) -> Boolean, onCommand: (KeyCommand) -> Unit): Boolean {
         if (dispatched(event)) return true
