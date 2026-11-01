@@ -5,6 +5,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -234,10 +236,11 @@ fun EmptyView(
 @Composable
 fun SyncBanner(fromCache: Boolean, syncedAt: Instant?, refreshError: AppError?, modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val reduced = rememberReducedMotion()
     AnimatedVisibility(
         visible = fromCache,
-        enter = expandVertically() + fadeIn(),
-        exit = shrinkVertically() + fadeOut(),
+        enter = if (reduced) EnterTransition.None else expandVertically() + fadeIn(),
+        exit = if (reduced) ExitTransition.None else shrinkVertically() + fadeOut(),
         modifier = modifier,
     ) {
         // Като лентата „Няма интернет връзка“ (OfflineBar): неутрален контейнер и златна икона.
@@ -271,7 +274,8 @@ fun SyncBanner(fromCache: Boolean, syncedAt: Instant?, refreshError: AppError?, 
  * Единственият вид на проблем/бележка вътре в екран или карта (вход без връзка,
  * „картата е въведена ръчно“ …): неутрален контейнер, златна икона и — ако има —
  * тонален бутон (обикновено „Опитай отново“). Празните състояния и грешките на цял
- * екран са [MessageView]/[ErrorView].
+ * екран са [MessageView]/[ErrorView]. [announce] — появява се след действие/проверка и
+ * TalkBack да я каже, без да се мести фокусът.
  */
 @Composable
 fun InlineNotice(
@@ -281,12 +285,13 @@ fun InlineNotice(
     actionLabel: String? = null,
     actionIcon: ImageVector? = Icons.Outlined.Refresh,
     onAction: (() -> Unit)? = null,
+    announce: Boolean = false,
 ) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         contentColor = MaterialTheme.colorScheme.onSurface,
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().then(if (announce) Modifier.semantics { liveRegion = LiveRegionMode.Polite } else Modifier),
     ) {
         Column(Modifier.padding(16.dp)) {
             Row {

@@ -2,6 +2,7 @@ package org.chyavorec.app.ui.screens.my
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -239,10 +240,11 @@ private fun AddCardButton(onClick: () -> Unit) {
 private fun ReadingSection(onOpenHistory: () -> Unit) {
     val vm = appViewModel(key = "reading-stats") { ReadingStatsViewModel(it) }
     val stats by vm.stats.collectAsStateWithLifecycle()
+    val reduced = rememberReducedMotion()
     AnimatedVisibility(
         visible = stats != null,
-        enter = if (rememberReducedMotion()) EnterTransition.None else fadeIn() + expandVertically(),
-        exit = fadeOut() + shrinkVertically(),
+        enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(),
+        exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
     ) {
         stats?.let { s ->
             Column {

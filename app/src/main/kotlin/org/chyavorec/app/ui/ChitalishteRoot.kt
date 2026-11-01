@@ -30,6 +30,8 @@ import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
@@ -347,7 +349,11 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
                     Column {
                         // Без долна лента под нея лентата „няма връзка“ сама отстъпва от системната навигация.
                         val barBelow = topLevel && !wide
-                        AnimatedVisibility(!online) { OfflineBar(insetNavigation = !barBelow) }
+                        AnimatedVisibility(
+                            !online,
+                            enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(),
+                            exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
+                        ) { OfflineBar(insetNavigation = !barBelow) }
                         if (!wide) {
                             AnimatedVisibility(
                                 visible = topLevel,

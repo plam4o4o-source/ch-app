@@ -210,6 +210,8 @@
     <string name="hold_ok_text">The library will set the book aside for you.</string>
     <string name="hold_ok_title">Hold placed</string>
     <string name="home_carousel">Latest news</string>
+    <string name="home_carousel_next">Next story</string>
+    <string name="home_carousel_prev">Previous story</string>
     <string name="home_for_you">For you</string>
     <string name="home_for_you_personal">Based on your reading</string>
     <string name="home_for_you_popular">Popular and new</string>

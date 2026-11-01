@@ -47,6 +47,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.onLongClick
+import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.text.style.TextOverflow
@@ -99,6 +100,10 @@ fun SectionHeader(
     }
 }
 
+/**
+ * Заглавката на вътрешен екран. [paneLabel] — какво TalkBack обявява при отварянето на екрана
+ * (обикновено заглавието; детайлите без заглавие в лентата подават името на книгата/събитието).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackTopBar(
@@ -106,8 +111,10 @@ fun BackTopBar(
     onBack: () -> Unit,
     actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    paneLabel: String = title,
 ) {
     TopAppBar(
+        modifier = Modifier.screenPane(paneLabel),
         title = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleLarge) },
         navigationIcon = {
             IconButton(onClick = onBack) {
@@ -138,6 +145,7 @@ fun AppTopBar(
     actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
 ) {
     TopAppBar(
+        modifier = Modifier.screenPane(title),
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Emblem(34.dp)
@@ -174,6 +182,10 @@ fun AppTopBar(
         ),
     )
 }
+
+/** Името на екрана за TalkBack (обявява се при поява на екрана); празно — нищо. */
+private fun Modifier.screenPane(label: String): Modifier =
+    if (label.isBlank()) this else semantics { paneTitle = label }
 
 /** Тънката рамка на картите (outlineVariant, леко приглушена). */
 @Composable

@@ -1,6 +1,5 @@
 package org.chyavorec.app.ui.screens.gallery
 
-import android.view.accessibility.AccessibilityManager
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -53,7 +52,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -90,6 +88,7 @@ import kotlinx.coroutines.CancellationException
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.theme.ImmersiveSystemBars
 import org.chyavorec.app.ui.theme.SystemBarIcons
@@ -306,7 +305,8 @@ internal fun PhotoViewer(photos: List<GalleryPhoto>, index: Int, onClose: () -> 
     val density = LocalDensity.current
     val reduced = rememberReducedMotion()
     var controls by rememberSaveable { mutableStateOf(true) }
-    val touchExploration = rememberTouchExploration()
+    // С екранен четец контролите на прегледа не се крият.
+    val touchExploration = rememberIsTouchExplorationEnabled()
     val showControls = controls || touchExploration
     var zoomed by remember { mutableStateOf(false) }
     var height by remember { mutableIntStateOf(0) }
@@ -387,20 +387,6 @@ internal fun PhotoViewer(photos: List<GalleryPhoto>, index: Int, onClose: () -> 
             }
         }
     }
-}
-
-/** Дали е включен екранен четец (изследване с докосване) — тогава контролите на прегледа не се крият. */
-@Composable
-private fun rememberTouchExploration(): Boolean {
-    val context = LocalContext.current
-    val am = remember(context) { context.getSystemService(AccessibilityManager::class.java) }
-    var enabled by remember(am) { mutableStateOf(am?.isTouchExplorationEnabled == true) }
-    DisposableEffect(am) {
-        val listener = AccessibilityManager.TouchExplorationStateChangeListener { enabled = it }
-        am?.addTouchExplorationStateChangeListener(listener)
-        onDispose { am?.removeTouchExplorationStateChangeListener(listener) }
-    }
-    return enabled
 }
 
 /** Снимките по адрес: описанието е заглавието им, а страницата — статията, от която са. */

@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.components
 
 import android.provider.Settings
+import android.view.accessibility.AccessibilityManager
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -13,6 +14,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.getValue
@@ -68,6 +70,23 @@ fun rememberReducedMotion(): Boolean {
 }
 
 /**
+ * Дали е включен екранен четец с изследване чрез докосване (TalkBack) — следи и промяната,
+ * докато екранът е отворен. Тогава нищо не се сменя само (въртележката), а контролите не се крият.
+ */
+@Composable
+fun rememberIsTouchExplorationEnabled(): Boolean {
+    val context = LocalContext.current
+    val am = remember(context) { context.getSystemService(AccessibilityManager::class.java) }
+    var enabled by remember(am) { mutableStateOf(am?.isTouchExplorationEnabled == true) }
+    DisposableEffect(am) {
+        val listener = AccessibilityManager.TouchExplorationStateChangeListener { enabled = it }
+        am?.addTouchExplorationStateChangeListener(listener)
+        onDispose { am?.removeTouchExplorationStateChangeListener(listener) }
+    }
+    return enabled
+}
+
+/**
  * Колко дълго вървят декоративните анимации (въртележката, анимациите в празните
  * екрани): ~30 s, после спират — иначе екранът, оставен отворен, рисува кадри без край
  * и харчи батерията. При намалено движение изобщо не тръгват.
@@ -89,11 +108,13 @@ object MotionBudget {
 
     /**
      * Дали въртележката да превърти сама следващата страница: не при намалено движение,
-     * докато потребителят я докосва/плъзга, когато приложението не е на преден план
-     * (не е RESUMED), и не след като бюджетът ([carouselAdvances]) е изчерпан.
+     * с екранен четец ([screenReader] — страницата не се сменя под фокуса му), докато
+     * потребителят я докосва/плъзга, когато приложението не е на преден план (не е
+     * RESUMED), и не след като бюджетът ([carouselAdvances]) е изчерпан.
      */
-    fun carouselAutoAdvance(reduced: Boolean, touched: Boolean, resumed: Boolean, advancesDone: Int, itemCount: Int): Boolean =
-        !reduced && !touched && resumed && advancesDone < carouselAdvances(itemCount)
+    fun carouselAutoAdvance(
+        reduced: Boolean, touched: Boolean, resumed: Boolean, advancesDone: Int, itemCount: Int, screenReader: Boolean = false,
+    ): Boolean = !reduced && !screenReader && !touched && resumed && advancesDone < carouselAdvances(itemCount)
 }
 
 /**

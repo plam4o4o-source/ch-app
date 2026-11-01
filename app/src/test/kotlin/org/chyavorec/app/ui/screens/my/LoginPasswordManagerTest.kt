@@ -34,6 +34,8 @@ import org.chyavorec.app.XorTestCipher
 import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.di.AppContainer
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalView
+import android.view.View
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.core.FixedClock
@@ -50,6 +52,7 @@ import java.time.Instant
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 /**
@@ -110,6 +113,9 @@ class LoginPasswordManagerTest {
 
     @After fun stop() = server.shutdown()
 
+    /** Изгледът на Compose — за възлите, които виждат TalkBack и uiautomator. */
+    private var view: View? = null
+
     /** [savedBefore] — от приложението вече е запазван вход в мениджъра на пароли. */
     private fun launch(passwords: FakeSystemPasswords, savedBefore: Boolean = true): AppContainer {
         val config = AppConfig(
@@ -123,6 +129,7 @@ class LoginPasswordManagerTest {
         runBlocking { container.settings.setPasswordManagerUsed(savedBefore) }
         // Само екранът за вход (без навигацията и останалите екрани с техните заявки).
         compose.setContent {
+            view = LocalView.current
             ChitalishteTheme {
                 CompositionLocalProvider(LocalAppContainer provides container) {
                     LoginScreen(onBack = {}, onLoggedIn = {}, onAddCard = {})
@@ -196,6 +203,13 @@ class LoginPasswordManagerTest {
         row.assertIsOff()
         // Отделна безименна отметка няма.
         assertEquals(1, compose.onAllNodes(isToggleable()).fetchSemanticsNodes().size)
+        // За TalkBack/uiautomator — CheckBox (с отметка), не обикновен View: ролята стига до класа
+        // само при възел без деца в дървото на достъпността.
+        val info = assertNotNull(view?.accessibilityNodeProvider?.createAccessibilityNodeInfo(row.fetchSemanticsNode().id))
+        assertEquals("android.widget.CheckBox", info.className?.toString())
+        assertTrue(info.isCheckable)
+        assertEquals(false, info.isChecked)
+        assertTrue("Запомни ме" in info.text?.toString().orEmpty(), "${info.text}")
     }
 
     @Test fun savedLoginFillsTheFormAndSignsIn() {

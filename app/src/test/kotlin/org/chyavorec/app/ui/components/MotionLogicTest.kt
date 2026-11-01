@@ -62,12 +62,13 @@ class MotionLogicTest {
     }
 
     @Test fun carouselPausesAndStops() {
-        fun auto(reduced: Boolean = false, touched: Boolean = false, resumed: Boolean = true, done: Int = 0, items: Int = 4) =
-            MotionBudget.carouselAutoAdvance(reduced, touched, resumed, done, items)
+        fun auto(reduced: Boolean = false, touched: Boolean = false, resumed: Boolean = true, done: Int = 0, items: Int = 4, reader: Boolean = false) =
+            MotionBudget.carouselAutoAdvance(reduced, touched, resumed, done, items, screenReader = reader)
         assertTrue(auto())
         assertTrue(auto(done = 4))
         assertFalse(auto(done = 5)) // бюджетът е изчерпан
         assertFalse(auto(reduced = true)) // намалено движение — изобщо не тръгва
+        assertFalse(auto(reader = true)) // TalkBack — страницата не се сменя под фокуса му
         assertFalse(auto(touched = true)) // пръст върху лентата
         assertFalse(auto(resumed = false)) // приложението не е на преден план
         assertFalse(auto(items = 1))

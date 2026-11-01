@@ -1,13 +1,18 @@
 package org.chyavorec.app.ui
 
 import android.app.Application
+import android.provider.Settings
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
@@ -37,6 +42,8 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.time.Instant
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
@@ -120,6 +127,62 @@ class HomeScreenUiTest {
                 // Без многоточие (hasVisualOverflow не става: центрираният текст е по-тесен от абзаца).
                 assertTrue((0 until layout.lineCount).none { layout.isLineEllipsized(it) }, "„$label“ е отрязан")
             }
+        }
+    }
+
+    /**
+     * TalkBack: във въртележката няма безименни бутони — страничните карти (маскирани, с
+     * прозрачен текст) са скрити, а голямата е с текста си и с „Следваща/Предишна новина“.
+     */
+    @Test fun carouselHasNoUnlabelledButtons() {
+        launch()
+        waitFor("45-ти")
+        compose.waitForIdle()
+        val cards = compose.onAllNodes(hasClickAction() and hasAnyAncestor(hasContentDescription("Последни новини"))).fetchSemanticsNodes()
+        assertTrue(cards.size >= 2, "очакват се голямата и поне една странична карта, а са ${cards.size}")
+        val forReader = cards.filter { it.config.getOrNull(SemanticsProperties.HideFromAccessibility) == null }
+        assertEquals(1, forReader.size, "за екранния четец е само голямата карта")
+        val main = forReader.single()
+        assertTrue(main.config.getOrNull(SemanticsProperties.Text).orEmpty().any { it.text.isNotBlank() }, "голямата карта е без текст")
+        val actions = main.config.getOrNull(SemanticsActions.CustomActions).orEmpty().map { it.label }
+        assertTrue("Следваща новина" in actions, "$actions")
+    }
+
+    /** TalkBack обявява раздела при отварянето му: „Начало“, после „Каталог“ (от заглавката). */
+    @Test fun tabRootsHavePaneTitles() {
+        launch()
+        waitFor("45-ти")
+        fun pane(title: String) = SemanticsMatcher.expectValue(SemanticsProperties.PaneTitle, title)
+        compose.waitUntil(5_000) { compose.onAllNodes(pane("Начало")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(hasText("Каталог") and isSelectable()).onFirst().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(pane("Каталог")).fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    /** Колко време след смяната на раздел „Начало“ (въртележката) още е в дървото. */
+    private fun homeShownAfterTabSwitch(ms: Long): Boolean {
+        waitFor("45-ти")
+        compose.waitForIdle()
+        compose.mainClock.autoAdvance = false
+        compose.onAllNodes(hasText("Каталог") and isSelectable()).onFirst().performClick()
+        compose.mainClock.advanceTimeBy(ms)
+        return compose.onAllNodes(hasContentDescription("Последни новини")).fetchSemanticsNodes().isNotEmpty()
+    }
+
+    /** Смяната на раздел е плъзгане по оста X (~300 ms) — след 100 ms „Начало“ още излиза. */
+    @Test fun tabSwitchSlides() {
+        launch()
+        assertTrue(homeShownAfterTabSwitch(100), "без намалено движение има преход")
+    }
+
+    /** „Премахване на анимациите“: екраните се сменят без преход — „Начало“ го няма веднага. */
+    @Test fun tabSwitchSnapsWithReducedMotion() {
+        val resolver = ApplicationProvider.getApplicationContext<Application>().contentResolver
+        Settings.Global.putFloat(resolver, Settings.Global.ANIMATOR_DURATION_SCALE, 0f)
+        try {
+            launch()
+            assertFalse(homeShownAfterTabSwitch(100), "при намалено движение екранът се сменя без преход")
+        } finally {
+            Settings.Global.putFloat(resolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f)
         }
     }
 

@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.news
 
+import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.sharedBoundsKey
 import org.chyavorec.app.ui.components.appFilterChipColors
 import androidx.compose.animation.animateContentSize
@@ -377,6 +378,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
             BackTopBar(
                 title = "",
                 onBack = onBack,
+                paneLabel = state.data?.article?.title.orEmpty(),
                 scrollBehavior = scroll,
                 actions = {
                     ReaderModeButton(onClick = { readerSheet = true })
@@ -444,7 +446,8 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                                     detail.blocks.filterNot { it is org.chyavorec.domain.model.ContentBlock.Image && it.url == a.imageUrl },
                                     onLink = openLink,
                                     onImage = { url -> navigate(gallery.indexOf(url).takeIf { it >= 0 }?.let(::viewer) ?: Routes.viewerUrls(listOf(url), 0, listOf(detail.galleryAlts[url].orEmpty()), a.url, a.title)) },
-                                    modifier = Modifier.animateContentSize(),
+                                    // Без „разтягане“ на текста при намалено движение.
+                                    modifier = if (rememberReducedMotion()) Modifier else Modifier.animateContentSize(),
                                     skipImages = true,
                                 )
                             }

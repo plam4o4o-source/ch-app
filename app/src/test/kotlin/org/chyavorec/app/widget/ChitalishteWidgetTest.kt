@@ -174,7 +174,7 @@ class ChitalishteWidgetTest {
         assertTrue(v.visible(R.id.widget_event))
         assertEquals("Литературна вечер", v.text(R.id.widget_event_title))
         assertEquals("18 октомври, 18:00", v.text(R.id.widget_event_date))
-        assertLink("events", v.click(R.id.widget_event))
+        assertLink("events", v.click(R.id.widget_event_column))
     }
 
     @Test fun wideShowsGroupsByHeightEventAndButtons() {
@@ -196,7 +196,7 @@ class ChitalishteWidgetTest {
         assertLink("scan", v.click(R.id.widget_scan))
         assertLink("catalog", v.click(R.id.widget_catalog))
         assertLink("my/loans", v.click(R.id.widget_loans))
-        assertLink("events", v.click(R.id.widget_event))
+        assertLink("events", v.click(R.id.widget_event_column))
     }
 
     @Test fun signedOutWithoutEventsShowsNoEvents() {
@@ -221,14 +221,18 @@ class ChitalishteWidgetTest {
 
     @Test fun tallSignedOutShowsTwoEvents() {
         val state = signedOutState()
+        val density = app.resources.displayMetrics.density
         for (size in listOf(WidgetViews.SmallTallSize, WidgetViews.WideTallSize, WidgetViews.FullWideTallSize)) {
-            val v = apply(WidgetViews.build(app, state, size))
+            val v = layOut(WidgetViews.build(app, state, size), size.width.roundToInt(), size.height.roundToInt())
             assertEquals("Предстоящи събития", v.text(R.id.widget_next_event_label))
             assertEquals("Литературна вечер", v.text(R.id.widget_event_title))
             assertTrue(v.visible(R.id.widget_event2))
             assertEquals("Бенджамин Франклин", v.text(R.id.widget_event2_title))
             assertEquals("17 януари 2027", v.text(R.id.widget_event2_date))
-            assertLink("events", v.click(R.id.widget_event2))
+            // Едно докосване за двете събития — колоната (поне 48 dp), не вторият ред сам (~36 dp).
+            assertFalse(v.findViewById<View>(R.id.widget_event2).isClickable)
+            assertTrue(v.findViewById<View>(R.id.widget_event_column).height >= 48 * density, "колоната е под 48 dp")
+            assertLink("events", v.click(R.id.widget_event_column))
         }
         // Ниските — едно; високият със заемания — също едно (колоната е половината).
         for (v in listOf(
