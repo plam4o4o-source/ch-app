@@ -96,10 +96,10 @@ jobs:
         run: |
           M=$(find app/build/intermediates -path '*prodDebug*' -name AndroidManifest.xml | grep merged_manifest | head -1)
           [ -f "$M" ] || { echo "::error::No merged prodDebug manifest"; exit 1; }
-          if grep -q "EmojiCompatInitializer" "$M"; then
+          if grep -n '"androidx.emoji2.text.EmojiCompatInitializer"' "$M"; then
             echo "::error::EmojiCompatInitializer is in the merged manifest"; exit 1
           fi
-          grep -q "FOREGROUND_SERVICE_DATA_SYNC" "$M" || { echo "::error::FOREGROUND_SERVICE_DATA_SYNC missing"; exit 1; }
+          grep -q 'permission.FOREGROUND_SERVICE_DATA_SYNC"' "$M" || { echo "::error::FOREGROUND_SERVICE_DATA_SYNC missing"; exit 1; }
           grep -B8 -A8 'SystemForegroundService"' "$M" | grep -q 'foregroundServiceType="dataSync"' || { echo "::error::SystemForegroundService without dataSync"; exit 1; }
           echo "Merged manifest OK ($M)"
 
@@ -230,8 +230,13 @@ jobs:
           echo "Signed with: $SIGNING_KIND"
           M=app/build/intermediates/merged_manifest/prodPlay/processProdPlayMainManifest/AndroidManifest.xml
           [ -f "$M" ] || M=$(find app/build/intermediates -path '*prodPlay*' -name AndroidManifest.xml | head -1)
-          if grep -q "REQUEST_INSTALL_PACKAGES\|UpdateInstallReceiver\|FOREGROUND_SERVICE_DATA_SYNC\|dataSync\|EmojiCompatInitializer" "$M"; then
+          if grep -q "REQUEST_INSTALL_PACKAGES\|UpdateInstallReceiver" "$M"; then
             echo "::error::Play build must not contain self-update"; exit 1
+          fi
+          # Изтеглянето на нова версия (dataSync) — само в APK-а от GitHub. Атрибутите, не коментарите
+          # (сливането пази коментарите от AndroidManifest.xml).
+          if grep -n 'permission.FOREGROUND_SERVICE_DATA_SYNC"\|foregroundServiceType="dataSync"\|"androidx.emoji2.text.EmojiCompatInitializer"' "$M"; then
+            echo "::error::Play build must not contain the update download service type or EmojiCompatInitializer"; exit 1
           fi
           echo "Play manifest OK ($M)"
           # Разрешенията за биометрия идват с androidx.credentials, но не се ползват —
