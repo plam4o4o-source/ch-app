@@ -863,7 +863,8 @@ part_upd2() {
 # ================================================================= КРЪГ c: отказ → повторно изтегляне, локален HTTPS сървър
 UPC_S=""
 upc_server() {  # CA в системните сертификати (корен, tmpfs), HTTPS сървър на runner-а на :8443
-  UPC_S=$OUT/srv; mkdir -p $UPC_S/www
+  # Извън out/ (там не бива да попада 400-MB файл): ключовете и файловете на сървъра.
+  UPC_S=$HOME/upc-srv; rm -rf $UPC_S; mkdir -p $UPC_S/www
   local S=$UPC_S h
   openssl req -x509 -newkey rsa:2048 -nodes -keyout $S/ca.key -out $S/ca.pem -days 2 -subj "/CN=perf-check test CA" \
     -addext "basicConstraints=critical,CA:TRUE" -addext "keyUsage=critical,keyCertSign,cRLSign" >/dev/null 2>&1
@@ -921,19 +922,21 @@ for r in c.execute(f"select id, state, run_attempt_count, worker_class_name, per
 for r in c.execute("select * from WorkName"):
     print(f"WN {r}")
 EOF
-  a dumpsys jobscheduler $PKG 2>/dev/null | tr -d '\r' > $d/jobscheduler.txt
-  a dumpsys activity services $PKG 2>/dev/null | tr -d '\r' > $d/services.txt
-  a dumpsys notification --noredact 2>/dev/null | tr -d '\r' | grep -A3 chyavorec > $d/notif.txt
+  local c0; c0=$(now_ms)
+  T=15 a dumpsys jobscheduler $PKG 2>/dev/null | tr -d '\r' > $d/jobscheduler.txt
+  # Без името на пакета: само записите в system_server (с пакета dumpsys вика и процеса на приложението).
+  T=15 a "dumpsys activity services | grep -B2 -A6 chyavorec" 2>/dev/null | tr -d '\r' > $d/services.txt
+  T=15 a "dumpsys notification --noredact | grep -A3 chyavorec" 2>/dev/null | tr -d '\r' > $d/notif.txt
   dump; cp $OUT/ui.xml $d/ui.xml 2>/dev/null; shot upc/$1
-  log "CAP $1 (+$(( $(now_ms) - t1 )) ms after the re-tap): WorkSpec: $(grep -E 'UpdateDownloadWorker' $d/workdb.txt | cut -c4- | tr '\n' ';') WorkName: $(grep -E 'update' $d/workdb.txt | tr '\n' ';' | cut -c1-160)"
+  log "CAP $1 (+$(( $(now_ms) - t1 )) ms after the tap; capture took $(( $(now_ms) - c0 )) ms): WorkSpec: $(grep -E 'UpdateDownloadWorker' $d/workdb.txt | cut -c4- | tr '\n' ';') WorkName: $(grep -E 'update' $d/workdb.txt | tr '\n' ';' | cut -c1-160)"
   log "CAP $1: jobs: $(grep -cE 'JOB #' $d/jobscheduler.txt) [$(grep -E 'JOB #|Ready:|Unsatisfied|Pending queue|Active jobs|Running|Slot #|Executing' $d/jobscheduler.txt | grep -vE 'Minimum latency' | cut -c1-80 | tr -s ' ' | head -10 | tr '\n' '~')]; SystemForegroundService: $(grep -c 'SystemForegroundService' $d/services.txt) [$(grep -m2 -E 'ServiceRecord.*SystemForeground|isForeground=' $d/services.txt | tr -s ' ' | cut -c1-120 | tr '\n' '~')]; notif: $(grep -oE 'android.title=[^\n]{0,60}' $d/notif.txt | head -1); dialog: $(grep -oE 'text="([0-9]+ ?%|Изтегляне на новата версия…|Проверка за нова версия…|Изтегли и инсталирай|Отказ|Инсталирай)"' $OUT/ui.xml | tr '\n' ' ')"
 }
 upc_run() {  # $1 — етикет, $2 — файлът, $3 — B/s, $4 — s изтегляне преди „Отказ“
   local L=$1 i
   sec "C-$L. Download ($2 at $3 B/s) → 'Отказ' from the notification → 'Изтегли и инсталирай' again, app kept in front"
   upc_files $2 $3
-  a am force-stop $PKG; a pm clear $PKG >/dev/null; a pm grant $PKG android.permission.POST_NOTIFICATIONS
-  a appops set $PKG REQUEST_INSTALL_PACKAGES allow; a cmd locale set-app-locales $PKG --locales bg-BG
+  inst app-new-upd-local.apk new-upd-local apk-new-upd-local-ref.txt || return
+  a appops set $PKG REQUEST_INSTALL_PACKAGES allow
   echo "=== $L: launch" >> $OUT/server.log
   launch >/dev/null; upd_dialog 'text="Изтегли и инсталирай"' || { log "$L: no dialog: $(texts 8 | cut -c1-200)"; return; }
   echo "=== $L: first tap" >> $OUT/server.log
@@ -956,13 +959,12 @@ upc_run() {  # $1 — етикет, $2 — файлът, $3 — B/s, $4 — s и
 part_upc() {
   sec "C0. Local HTTPS server (runner, 10.0.2.2:8443) with Range/ETag and a rate limit; no iptables"
   upc_server
-  inst app-new-upd-local.apk new-upd-local apk-new-upd-local-ref.txt || return
   a svc wifi disable; a svc data enable; sleep 5
   curl -sS --max-time 30 "$STAGE_URL/update.json" -o $OUT/update.json
-  head -c 400M /dev/urandom > $UPC_S/www/big.bin; cp app.apk $UPC_S/www/app.apk
-  upc_run t1 app.apk 65536 8
-  upc_run t2 app.apk 65536 8
-  upc_run big big.bin 0 3
+  head -c 700M /dev/urandom > $UPC_S/www/big.bin; cp app.apk $UPC_S/www/app.apk
+  upc_run t1 app.apk 32768 5
+  upc_run t2 app.apk 32768 5
+  upc_run big big.bin 0 2
   kill $SRVPID 2>/dev/null; a svc wifi enable
   cp $OUT/server.log $OUT/server-log.txt
 }
