@@ -144,7 +144,7 @@ catch_check() {  # $1 — етикет: имейлът стигна ли до PC
   local i
   for i in 1 2 3 4; do
     dump
-    if has 'ResolverActivity|Open with|Отваряне с' || [ "$(fg | grep -c Resolver)" = 1 ]; then tap text 'PC catcher'; sleep 1.5; tap text '=Just once|=Само веднъж' ; sleep 2; continue; fi
+    if has 'text="PC catcher"'; then shot login/$1-resolver; log "EMAIL $1: chooser: $(texts 8 | cut -c1-200)"; tap text '=PC catcher'; sleep 1.5; dump; has 'Just once|Само веднъж' && tap text '=Just once|=Само веднъж'; sleep 2; continue; fi
     break
   done
   shot login/$1-intent; log "EMAIL $1: fg $(fg); catcher: $(since m-email-$1 'PCCATCH' | tail -1 | sed 's/.*PCCATCH *: //' | cut -c1-400)"
@@ -159,7 +159,8 @@ login_try() {  # $1 — номер на опита: ПИН 1111 и „Вход�
   dump; p=$(xy --all class EditText | sed -n 2p)
   [ -n "$p" ] || { log "PIN field not found"; return 1; }
   a input tap $p; sleep 0.8; a input text 1111; sleep 0.5; hide_ime; sleep 0.5
-  tap text '=Вход' --last >/dev/null; sleep 4
+  # Първото точно „Вход“ е бутонът (последното — заглавието в горната лента).
+  tap text '=Вход' >/dev/null; sleep 4
   login_state 1$1-attempt-$1
 }
 forgot_sheet() {  # $1 — етикет
@@ -339,7 +340,15 @@ part_update16() {
   done
   log "jobs of the app after the 2nd tap: $(a dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -E "JOB #.*$PKG" | cut -c1-140 | head -4 | tr '\n' '~'); files: [$(upd_files)]"
   log "logcat since the 2nd tap: $(since m-dl-2 "$PKG|WM-|WorkManager|SystemForeground|update" | grep -vE 'Choreographer|OpenGLRenderer|uiautomator' | cut -c19-220 | head -10 | tr '\n' '~')"
-  if has 'text="Изтегли и инсталирай"'; then log "(still 'Изтегли и инсталирай' — tapping once more)"; tap text '=Изтегли и инсталирай'; sleep 3; log "after the 3rd tap: $(upd_notifs b4t-3rd | head -1 | cut -c1-160)"; fi
+  a dumpsys jobscheduler 2>/dev/null | tr -d '\r' > $OUT/jobscheduler-after-2nd-tap.txt
+  log "app jobs (state): $(grep -A30 -E "JOB #u0a[0-9]+/[0-9]+: [0-9a-f]+ $PKG/" $OUT/jobscheduler-after-2nd-tap.txt | grep -E "JOB #|Required constraints|Unsatisfied|Ready|Pending|Running|Enqueue time|Minimum latency|Satisfied" | cut -c1-120 | head -24 | tr -s ' ' | tr '\n' '~')"
+  log "app process: '$(a pidof $PKG | tr -d '\r')'; state shown: $(grep -oE 'text="(Проверка[^"]*|Изтегляне[^"]*)"' $OUT/ui.xml | head -2 | tr '\n' ' ')"
+  if ! upd_notifs b4-check | grep -q 'Изтегляне на версия'; then
+    sec "UB4b. Still no download after the 2nd tap: the app force-stopped and opened again, 'Изтегли и инсталирай' once more"
+    a am force-stop $PKG; sleep 2; launch >/dev/null; upd_dialog 'text="Изтегли и инсталирай"'; shot update/30c-dialog-new-process
+    mark m-dl-3; tap text '=Изтегли и инсталирай' && t0=$(now_ms)
+    for i in 1 2 3; do sleep 3; dump; log "new process +$(( $(now_ms) - t0 )) ms: $(grep -oE 'text="[0-9]+ ?%"' $OUT/ui.xml | head -1) 'Отказ' $(has 'text="Отказ"' && echo yes || echo no); notif: $(upd_notifs b4n-$i | head -1 | cut -c1-120)"; done
+  fi
   go_home 1
   st=none
   for i in $(seq 1 60); do
@@ -417,16 +426,26 @@ part_events16() {
 emoji_items() {
   local n=0 kind id url q
   [ -s $OUT/site/emoji.txt ] || python3 $W16 site $OUT/site > /dev/null 2>&1
-  while IFS='|' read -r kind id url <&3; do
+  local title w
+  while IFS='|' read -r kind id url title <&3; do
     n=$((n+1)); [ $n -gt 6 ] && break
     q=$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$id")
     case $kind in
       event) a am start -a org.chyavorec.app.SHORTCUT -d "chyavorec://app/event/$q" -n $ACT >/dev/null 2>&1 < /dev/null;;
-      news) a am start -a org.chyavorec.app.SHORTCUT -d "chyavorec://app/article/$q" -n $ACT >/dev/null 2>&1 < /dev/null;;
+      news)
+        if [ -n "$url" ] && [ "$url" != None ]; then link "$SITE$url" < /dev/null
+        else  # без адрес (news.json): търсене в „Новини“ по латинска дума от заглавието
+          w=$(echo "$title" | grep -oE '[A-Za-z]{2,}( [A-Za-z]{2,})?' | head -1)
+          [ -n "$w" ] || { log "EMOJI $n: '$title' — no URL and no Latin word to search for"; continue; }
+          link_pkg "$SITE/news" < /dev/null; sleep 4; segstate | grep -q 'News\[checked=true' || segment news
+          tap text 'Търси в новините' < /dev/null; sleep 1; a input text "${w// /%s}" < /dev/null; sleep 3; hide_ime < /dev/null
+          dump; p=$(python3 $H_/find.py $OUT/ui.xml --clickables $((H/4)) $((H*85/100)) 150 | head -1)
+          [ -n "$p" ] && a input tap $p < /dev/null
+        fi;;
       *) case $url in http*) link "$url" < /dev/null;; /*) link "$SITE$url" < /dev/null;; *) continue;; esac;;
     esac
     sleep 5; dump; shot emoji/$n-$kind
-    log "EMOJI $n ($kind $id): $(python3 $H_/find.py $OUT/ui.xml --texts | LC_ALL=C grep -E $'\xF0|\xE2\x9C|\xE2\x8F|\xE2\x98|\xE2\xAD' | head -3 | cut -c1-160 | tr '\n' '|')"
+    log "EMOJI $n ($kind $id '$title'): $(python3 $H_/find.py $OUT/ui.xml --texts | python3 -c 'import re,sys; print(" | ".join(l.strip()[:120] for l in sys.stdin if re.search("[\U0001F000-\U0001FAFF\u2600-\u27BF]", l))[:400])')"
     back 2 < /dev/null
   done 3< $OUT/site/emoji.txt
   [ $n = 0 ] && log "EMOJI: no site text with emoji found"

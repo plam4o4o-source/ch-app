@@ -107,7 +107,8 @@ def cmd_site(out):
     # Редовете за скрипта: вид|id|url
     with open(os.path.join(out, 'emoji.txt'), 'w', encoding='utf-8') as f:
         for e in emoji:
-            f.write(f"{e['kind']}|{e['id'] or ''}|{e['url'] or ''}\n")
+            t = re.sub(r'[|\n]', ' ', e['title'] or '')
+            f.write(f"{e['kind']}|{e['id'] or ''}|{e['url'] or ''}|{t}\n")
 
 
 # ---------------------------------------------------------------- превключвател, проверка

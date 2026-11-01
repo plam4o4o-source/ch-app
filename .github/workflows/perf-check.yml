@@ -238,7 +238,8 @@ jobs:
         # emoji26/28. Регресия: abstart-1/2, mem, mem-base, monkey, rot, offline, look1/2/3, a11y.
         # Кръг 1 (run 41338157812): всички части. Кръг 2: отказът на проверката с „Назад“, Esc в полето,
         # повторното изтегляне, TalkBack, таблетът (книгата от каталога), езикът на устройството, емоджи.
-        part: [unlock33, unlock34, login, update, a11y16, tablet, onboard, widgetlang, emoji26, emoji28, emoji33]
+        # Кръг 3: вход (бутонът, изборът на имейл приложение), повторното изтегляне, езикът, емоджи.
+        part: [login, update, widgetlang, emoji26, emoji33]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
