@@ -269,7 +269,7 @@ jobs:
         # повторното изтегляне, TalkBack, таблетът (книгата от каталога), езикът на устройството, емоджи.
         # Кръг 3: вход (бутонът, изборът на имейл приложение), повторното изтегляне, езикът, емоджи.
         # Кръг b (255fdc6): повторното изтегляне след „Отказ“ (API 33/34), емоджи на API 26/28, старт A/B.
-        part: [upd33, upd34, emoji26, emoji28, abstart-1, abstart-2]
+        part: [upd33, upd34, emoji26, emoji28]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8

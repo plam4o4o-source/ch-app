@@ -454,9 +454,14 @@ emoji_items() {
 part_emoji() {
   sec "M0. Site data (host): texts with emoji"
   python3 $W16 site $OUT/site 2>&1 | tee -a $SUM
+  log "GMS on the image: $(a dumpsys package com.google.android.gms 2>/dev/null | tr -d '\r' | grep -m1 -oE 'versionName=[^ ]+'); emoji font provider (androidx.content.action.LOAD_EMOJI_FONT): $(a dumpsys package com.google.android.gms 2>/dev/null | tr -d '\r' | grep -c 'LOAD_EMOJI_FONT') match(es); app EmojiCompatInitializer in the APK: $($(ls -d ${ANDROID_HOME:-/usr/local/lib/android/sdk}/build-tools/*/ | sort -V | tail -1)aapt2 dump xmltree --file AndroidManifest.xml app.apk 2>/dev/null | grep -c 'EmojiCompatInitializer')"
   warmup
-  sec "M1. Texts with emoji on API $SDK (no EmojiCompat)"
+  sec "M1. Texts with emoji on API $SDK"
   emoji_items
+  sec "M1b. The bread article again after 30 s (EmojiCompat loads its font asynchronously)"
+  sleep 30; link "$SITE/news/svetoven-den-na-hlyaba"; sleep 6; shot emoji/1b-news-after-30s
+  a am force-stop $PKG; sleep 2; launch >/dev/null; sleep 15; link "$SITE/news/svetoven-den-na-hlyaba"; sleep 6; shot emoji/1c-news-second-process
+  log "logcat EmojiCompat/fonts: $(grep -iE 'EmojiCompat|emoji2|FontsContract|FontProvider|FontRequest' $OUT/logcat-live.txt | cut -c19-200 | head -6 | tr '\n' '~')"
   sec "M2. Cold starts (10), API $SDK"
   : > $OUT/start-cold.txt
   for i in $(seq 1 10); do a am force-stop $PKG; sleep 3; launch | tee -a $OUT/start-cold.txt | tr '\n' ' '; echo; sleep 3; done
@@ -798,8 +803,11 @@ upd_wait_bg() {  # $1 — етикет: известието за хода и �
   [ $st = ready ]
 }
 upd_fresh_dialog() {  # изтеглените файлове изтрити, приложението наново → диалогът с „Изтегли и инсталирай“
-  a am force-stop $PKG; a "rm -rf /data/data/$PKG/no_backup/updates"; a cmd notification cancel-all 2>/dev/null
-  a "service call notification 1" >/dev/null 2>&1
+  # Данните на приложението се изчистват: проверката при пускане е веднъж на няколко часа, а
+  # изтегленият файл иначе стига направо до „Инсталирай“.
+  a am force-stop $PKG; a pm clear $PKG >/dev/null; a "rm -rf /data/data/$PKG/no_backup/updates"
+  a pm grant $PKG android.permission.POST_NOTIFICATIONS; a appops set $PKG REQUEST_INSTALL_PACKAGES allow
+  a cmd locale set-app-locales $PKG --locales bg-BG
   launch >/dev/null
   upd_dialog 'text="Изтегли и инсталирай"' || { log "no dialog with 'Изтегли и инсталирай': $(texts 8 | cut -c1-200)"; return 1; }
 }
