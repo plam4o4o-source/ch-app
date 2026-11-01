@@ -77,6 +77,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -114,16 +115,25 @@ import org.chyavorec.app.ui.components.observeReducedMotion
 import org.chyavorec.app.ui.components.LocalSharedScope
 import org.chyavorec.app.ui.components.LimitFontScale
 import org.chyavorec.app.ui.components.LocalTabReselect
+import org.chyavorec.app.ui.components.ListDetailPane
+import org.chyavorec.app.ui.components.LocalSearchShortcut
+import org.chyavorec.app.ui.components.SearchShortcutBus
+import org.chyavorec.app.ui.components.isTwoPaneWindow
 import org.chyavorec.app.ui.components.TabReselectBus
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.theme.LocalExtendedColors
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.messages.MessagesOnLaunch
+import org.chyavorec.app.ui.navigation.DETAIL_KEY
 import org.chyavorec.app.ui.navigation.DeepLinks
+import org.chyavorec.app.ui.navigation.KeyCommand
+import org.chyavorec.app.ui.navigation.ListDetail
 import org.chyavorec.app.ui.navigation.LinkTarget
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.navigation.TopTab
@@ -177,7 +187,13 @@ import org.chyavorec.app.ui.theme.AppMotion
 private object IntroState { var shown = false }
 
 @Composable
-fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: MutableStateFlow<String?>, showIntro: Boolean = true) {
+fun ChitalishteRoot(
+    container: AppContainer,
+    settings: AppSettings,
+    deepLink: MutableStateFlow<String?>,
+    showIntro: Boolean = true,
+    keyCommands: Flow<KeyCommand> = emptyFlow(),
+) {
     val scope = rememberCoroutineScope()
     // Въведението с логото — само при първото стартиране (после splash екранът е достатъчен).
     var intro by remember { mutableStateOf(showIntro && !IntroState.shown && !settings.introShown) }
@@ -205,7 +221,7 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
                 })
             } else {
                 // Въпросът за известията — едва след въведението с логото.
-                MainScaffold(container, deepLink, canAskNotifications = !intro)
+                MainScaffold(container, deepLink, canAskNotifications = !intro, keyCommands = keyCommands)
             }
             if (intro) BrandIntro(onFinished = {
                 IntroState.shown = true
@@ -232,7 +248,12 @@ internal fun appFontScale(system: Float, factor: Float): Float =
 private const val NAV_LABEL_MAX_FONT_SCALE = 1.3f
 
 @Composable
-private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<String?>, canAskNotifications: Boolean = true) {
+private fun MainScaffold(
+    container: AppContainer,
+    deepLink: MutableStateFlow<String?>,
+    canAskNotifications: Boolean = true,
+    keyCommands: Flow<KeyCommand> = emptyFlow(),
+) {
     // Известията са включени по подразбиране, но на Android 13+ без разрешение не излизат —
     // питаме веднъж след въведението (и веднъж при обновяване за старите инсталации): първо
     // кратко обяснение в приложението, а системният прозорец — само при „Да“.
@@ -264,6 +285,9 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     val online by container.connectivity.online.collectAsStateWithLifecycle(initialValue = true)
     val link by deepLink.collectAsState()
     val reselect = remember { TabReselectBus() }
+    val searchShortcut = remember { SearchShortcutBus() }
+    // Таблет (хоризонтално): книгата/статията — отдясно на списъка си (виж ListDetailPane).
+    val twoPane by rememberUpdatedState(isTwoPaneWindow())
     val haptic = LocalHapticFeedback.current
     val reduced = rememberReducedMotion()
 
@@ -277,7 +301,7 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
         when (val t = DeepLinks.target(target, container.config.siteBaseUrl)) {
             // Без стария подстек на раздела (иначе екранът би се повторил) — виж openLinkTarget.
             // Неуспешна навигация не срива приложението — причината остава в локалния дневник.
-            is LinkTarget.Screen -> runCatching { nav.openLinkTarget(t) }.logFailure("deeplink")
+            is LinkTarget.Screen -> runCatching { nav.openLinkTarget(t, twoPane) }.logFailure("deeplink")
             LinkTarget.UpdatePrompt -> container.updater.showPrompt()
             // Адрес от сайта без native екран — в браузъра; непознатите връзки се пренебрегват (без самата връзка в дневника).
             null -> if (target.startsWith("https://")) Intents.openUrl(context, target) else Diagnostics.note("deeplink", "unknown link")
@@ -290,7 +314,16 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
     LaunchedEffect(Unit) { MessagesOnLaunch.run(context, container) }
     UpdateDialog(container.updater)
 
+    /** Таблет: [target] (книга, статия) отдясно на текущия списък, ако той го показва до себе си. */
+    fun showInPane(target: String): Boolean {
+        val top = nav.currentBackStackEntry ?: return false
+        if (!twoPane || !ListDetail.accepts(top.destination.route, target)) return false
+        top.savedStateHandle[DETAIL_KEY] = target
+        return true
+    }
+
     fun navigate(target: String) = when {
+        showInPane(target) -> Unit
         // Търсене, поискано от друг екран: каталогът без стария си подстек (иначе би се
         // възстановил напр. екранът на книга над него, а не резултатите от търсенето).
         target == Routes.CATALOG && CatalogSearchRequests.pending.value != null -> nav.openLinkTarget(LinkTarget.Screen(Routes.CATALOG))
@@ -308,6 +341,7 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
      */
     fun openLink(url: String) {
         val t = DeepLinks.forUrl(url, container.config.siteBaseUrl) ?: return Intents.openUrl(context, url)
+        if (t.stack.singleOrNull()?.let(::showInPane) == true) return
         nav.openSiteLink(t)
     }
     val openExternal: (String) -> Unit = { Intents.openUrl(context, it) }
@@ -321,6 +355,21 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
             reselect.emit(tab.route)
         } else {
             nav.navigateTab(tab.route)
+        }
+    }
+
+    // Клавиатура (таблет, Chromebook): Ctrl+F или „/“ — търсенето на раздела (на „Начало“ и в
+    // каталога — полето им, другаде — екранът „Търсене“); Ctrl+1…5 — разделите. Esc — в активността.
+    LaunchedEffect(keyCommands) {
+        keyCommands.collect { command ->
+            val current = nav.currentBackStackEntry?.destination?.route
+            when (command) {
+                // Без поле на екрана (напр. превъртяно извън него) — екранът „Търсене“.
+                KeyCommand.Search -> if (current != null && !searchShortcut.emit(current) && current != Routes.SEARCH) nav.navigate(Routes.SEARCH)
+                is KeyCommand.Tab -> TopTab.entries.getOrNull(command.index)
+                    ?.takeIf { it.route != current }?.let { nav.navigateTab(it.route) }
+                KeyCommand.Back -> Unit
+            }
         }
     }
 
@@ -362,7 +411,7 @@ private fun MainScaffold(container: AppContainer, deepLink: MutableStateFlow<Str
                 contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0),
             ) { padding ->
                 Box(Modifier.padding(padding).fillMaxSize()) {
-                    CompositionLocalProvider(LocalTabReselect provides reselect) {
+                    CompositionLocalProvider(LocalTabReselect provides reselect, LocalSearchShortcut provides searchShortcut) {
                         AppNavHost(nav, ::navigate, back, ::openLink, openExternal)
                     }
                 }
@@ -571,13 +620,21 @@ private fun AppNavHost(
         },
     ) {
         screen(Routes.HOME) { HomeScreen(navigate, openExternal, openLink) }
-        screen(Routes.CATALOG) { CatalogScreen(navigate) }
+        screen(Routes.CATALOG) {
+            ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> PaneDetail(r, close, navigate, openLink) }) { CatalogScreen(navigate) }
+        }
         screen(Routes.MY) { MyHubScreen(navigate) }
-        screen(Routes.NEWS) { NewsListScreen(navigate, it.savedStateHandle) }
+        screen(Routes.NEWS) {
+            ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> PaneDetail(r, close, navigate, openLink) }) {
+                NewsListScreen(navigate, it.savedStateHandle)
+            }
+        }
         screen(Routes.MORE) { MoreScreen(navigate) }
 
         screen(Routes.ARTICLE, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
-            ArticleScreen(Uri.decode(it.arguments?.getString("id").orEmpty()), back, navigate, openLink)
+            val id = Uri.decode(it.arguments?.getString("id").orEmpty())
+            DetailIntoPane(nav, it, Routes.article(id))
+            ArticleScreen(id, back, navigate, openLink)
         }
         screen(Routes.EVENTS) { EventsScreen(back, navigate) }
         screen(Routes.EVENT, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
@@ -590,7 +647,10 @@ private fun AppNavHost(
                 navArgument("personal") { type = NavType.BoolType; defaultValue = false },
             ),
         ) {
-            BookScreen(it.arguments?.getLong("inv") ?: 0L, back, navigate, personal = it.arguments?.getBoolean("personal") == true)
+            val inv = it.arguments?.getLong("inv") ?: 0L
+            val personal = it.arguments?.getBoolean("personal") == true
+            DetailIntoPane(nav, it, Routes.book(inv, personal))
+            BookScreen(inv, back, navigate, personal = personal)
         }
         screen(Routes.SEARCH) { SearchScreen(back, navigate, openExternal, openLink) }
         screen(Routes.SCAN) { ScanScreen(back, navigate) }
@@ -602,7 +662,11 @@ private fun AppNavHost(
         screen(Routes.CARD_FULL) { CardFullscreen(onClose = back) }
         screen(Routes.LOANS) { LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }, onOpenBook = { navigate(Routes.book(it, personal = true)) }) }
         screen(Routes.HISTORY) { HistoryScreen(back, navigate, onLogin = { nav.navigate(Routes.LOGIN) }) }
-        screen(Routes.WANT_TO_READ) { org.chyavorec.app.ui.screens.my.WantToReadScreen(back, navigate) }
+        screen(Routes.WANT_TO_READ) {
+            ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> PaneDetail(r, close, navigate, openLink) }) {
+                org.chyavorec.app.ui.screens.my.WantToReadScreen(back, navigate)
+            }
+        }
         screen(Routes.MEMBERSHIP) { MembershipScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
         screen(Routes.NOTIFICATIONS) { NotificationSettingsScreen(back) }
         screen(Routes.ACTIVITIES) { ActivitiesScreen(back, navigate, openExternal) }
@@ -656,6 +720,35 @@ private fun AppNavHost(
         screen(Routes.DIAGNOSTICS) { DiagnosticsScreen(back) }
     }
     }
+    }
+}
+
+/** Детайлът отдясно на списъка (таблет): книгата или статията по маршрута ѝ (както в навигацията). */
+@Composable
+private fun PaneDetail(route: String, close: () -> Unit, navigate: (String) -> Unit, openLink: (String) -> Unit) {
+    val uri = Uri.parse(route)
+    when (uri.pathSegments.firstOrNull()) {
+        "book" -> BookScreen(
+            uri.pathSegments.getOrNull(1)?.toLongOrNull() ?: 0L, close, navigate,
+            personal = uri.getQueryParameter("personal") == "true",
+        )
+        "article" -> ArticleScreen(Uri.decode(route.substringAfter('/')), close, navigate, openLink)
+    }
+}
+
+/**
+ * Книга/статия на цял екран над списъка си (отворена на тесен прозорец), а прозорецът е вече
+ * широк (завъртане, разгънат сгъваем телефон) — отива отдясно на списъка.
+ */
+@Composable
+private fun DetailIntoPane(nav: NavController, entry: NavBackStackEntry, route: String) {
+    val twoPane = isTwoPaneWindow()
+    LaunchedEffect(twoPane) {
+        if (!twoPane || nav.currentBackStackEntry?.id != entry.id) return@LaunchedEffect
+        val host = nav.previousBackStackEntry ?: return@LaunchedEffect
+        if (!ListDetail.accepts(host.destination.route, route)) return@LaunchedEffect
+        host.savedStateHandle[DETAIL_KEY] = route
+        nav.popBackStack()
     }
 }
 

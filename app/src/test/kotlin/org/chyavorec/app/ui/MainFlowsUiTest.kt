@@ -26,6 +26,9 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import org.chyavorec.app.data.local.TextScale
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -84,7 +87,9 @@ class MainFlowsUiTest {
 
     @After fun stop() = server.shutdown()
 
-    private fun launch(useMock: Boolean = false, deepLink: String? = null) {
+    private lateinit var container: AppContainer
+
+    private fun launch(useMock: Boolean = false, deepLink: String? = null, settings: AppSettings = AppSettings(onboardingDone = true)) {
         val base = server.url("/").toString().trimEnd('/')
         val config = AppConfig(
             siteBaseUrl = base,
@@ -95,13 +100,13 @@ class MainFlowsUiTest {
             versionName = "test",
             versionCode = 1,
         )
-        val container = AppContainer(
+        container = AppContainer(
             ApplicationProvider.getApplicationContext(), config,
             FixedClock(Instant.parse("2026-09-26T10:00:00Z")), XorTestCipher(), OkHttpClient(),
         )
         compose.setContent {
             ChitalishteTheme {
-                ChitalishteRoot(container, AppSettings(onboardingDone = true), MutableStateFlow(deepLink), showIntro = false)
+                ChitalishteRoot(container, settings, MutableStateFlow(deepLink), showIntro = false)
             }
         }
     }
@@ -305,6 +310,38 @@ class MainFlowsUiTest {
         waitForText("Под игото")
         waitForText("остават 7 дни")
         waitForText("просрочена с 3 дни")
+    }
+
+    private fun storedSettings() = runBlocking { container.settings.settings.first() }
+
+    /**
+     * Въведението е от 3 екрана, с „Пропусни“ на всеки: възможностите, после размерът на текста
+     * (записва се веднага) и известията, накрая вход/карта.
+     */
+    @Test fun onboardingHasThreePagesWithSkipOnEach() {
+        launch(settings = AppSettings(onboardingDone = false, introShown = true))
+        waitForText("Каталог и „Искам да прочета“")
+        compose.onAllNodesWithText("Пропусни").onFirst().assertExists()
+        clickText("Напред")
+        waitForText("Размер на текста")
+        compose.onAllNodesWithText("Пропусни").onFirst().assertExists()
+        compose.onAllNodesWithText("Разреши известията").onFirst().assertExists()
+        clickText("Голям")
+        compose.waitUntil(10_000) { storedSettings().textScale == TextScale.LARGE }
+        clickText("Напред")
+        // Без адрес на InvLib онлайн входът не е включен — дигиталната карта вместо вход.
+        waitForText("Добави читателска карта")
+        compose.onAllNodesWithText("Пропусни").onFirst().assertExists()
+        check(compose.onAllNodes(hasText("Напред") and hasClickAction()).fetchSemanticsNodes().isEmpty()) { "„Напред“ на последната страница" }
+        clickText("Продължи")
+        compose.waitUntil(10_000) { storedSettings().onboardingDone }
+    }
+
+    /** „Пропусни“ още от първия екран приключва въведението (без вход). */
+    @Test fun onboardingSkipFromTheFirstPage() {
+        launch(settings = AppSettings(onboardingDone = false, introShown = true))
+        clickText("Пропусни")
+        compose.waitUntil(10_000) { storedSettings().onboardingDone }
     }
 
     @Test fun guestSeesPublicMessagesButNotMembersOnly() {

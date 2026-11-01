@@ -43,7 +43,7 @@ class TabNavigationTest {
                 listOf(
                     Routes.HOME, Routes.CATALOG, Routes.MY, Routes.NEWS, Routes.MORE,
                     Routes.LOANS, Routes.CARD, Routes.HISTORY, Routes.LOGIN, Routes.EVENTS, Routes.MESSAGES,
-                    Routes.ARTICLE, Routes.EVENT, Routes.MESSAGE,
+                    Routes.ARTICLE, Routes.EVENT, Routes.MESSAGE, Routes.WANT_TO_READ, Routes.BOOK,
                 ).forEach { r -> composable(r) { Text(r) } }
             }
         }
@@ -55,7 +55,9 @@ class TabNavigationTest {
         compose.waitForIdle()
     }
 
-    private fun link(link: String) = act { openLinkTarget(DeepLinks.target(link, base) as LinkTarget.Screen) }
+    private fun link(link: String, twoPane: Boolean = false) = act { openLinkTarget(DeepLinks.target(link, base) as LinkTarget.Screen, twoPane) }
+
+    private fun detailOf(host: String): String? = compose.runOnIdle { nav.getBackStackEntry(host).savedStateHandle.get<String>(DETAIL_KEY) }
 
     /** „article/{id}“ → „article/А“ — за да се различават екраните с различни аргументи. */
     private fun NavBackStackEntry.label(): String {
@@ -211,5 +213,49 @@ class TabNavigationTest {
         link(DeepLinks.MESSAGES)
         assertEquals(listOf("home", "messages"), stack())
         assertEquals(listOf("messages", "home"), backOrder())
+    }
+
+    // --- Таблет: книгата/статията от връзка — отдясно на списъка си (ListDetailPane) ---
+
+    /** Известие за новина на таблет: „Новини“ със статията до списъка (не върху него). */
+    @Test fun twoPaneArticleLinkOpensBesideTheNewsList() {
+        start()
+        link(DeepLinks.article("B"), twoPane = true)
+        assertEquals(listOf("home", "news"), stack())
+        assertEquals(Routes.article("B"), detailOf(Routes.NEWS))
+        // На телефон — както досега: статията над раздела, без детайл.
+        link(DeepLinks.article("C"))
+        assertEquals(listOf("home", "news", "article/C"), stack())
+        assertEquals(null, detailOf(Routes.NEWS))
+    }
+
+    /** „Вече е на рафта“ на таблет: „Искам да прочета“ с книгата до списъка. */
+    @Test fun twoPaneWantToReadBookLink() {
+        start()
+        link(DeepLinks.book(624), twoPane = true)
+        assertEquals(listOf("home", "my", "want-to-read"), stack())
+        assertEquals(Routes.book(624, personal = true), detailOf(Routes.WANT_TO_READ))
+    }
+
+    /** Връзка към самия раздел не връща избраната преди книга (както не връща стария подстек). */
+    @Test fun twoPaneTabLinkDropsTheOldSelection() {
+        start()
+        link(DeepLinks.catalogBook(7), twoPane = true)
+        assertEquals(listOf("home", "catalog"), stack())
+        assertEquals(Routes.book(7), detailOf(Routes.CATALOG))
+        link("catalog", twoPane = true)
+        assertEquals(null, detailOf(Routes.CATALOG))
+    }
+
+    /** Екрани, които не са детайл на списъка си (вход, събитие), остават върху него и на таблет. */
+    @Test fun twoPaneOnlyForListDetailPairs() {
+        start()
+        link("login", twoPane = true)
+        assertEquals(listOf("home", "my", "login"), stack())
+        link(DeepLinks.event("A"), twoPane = true)
+        assertEquals(listOf("home", "news", "event/A"), stack())
+        assertTrue(ListDetail.accepts(Routes.CATALOG, Routes.book(1)))
+        assertTrue(!ListDetail.accepts(Routes.HOME, Routes.book(1)))
+        assertTrue(!ListDetail.accepts(Routes.NEWS, Routes.event("A")))
     }
 }

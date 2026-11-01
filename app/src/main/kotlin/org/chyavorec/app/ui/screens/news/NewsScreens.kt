@@ -105,6 +105,7 @@ import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.navigation.SEGMENT_KEY
+import org.chyavorec.app.ui.navigation.DETAIL_KEY
 import org.chyavorec.app.ui.screens.events.EventsActions
 import org.chyavorec.app.ui.screens.events.EventsContent
 import org.chyavorec.app.ui.screens.events.eventsViewModel
@@ -139,6 +140,8 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
             segmentState.set(SEGMENT_KEY, null)
         }
     }
+    // Таблет: „Календар“ сам е на две колони — без статия отдясно (виж ListDetailPane).
+    LaunchedEffect(calendar) { if (calendar) segmentState?.set(DETAIL_KEY, null) }
     // Повторно докосване на раздела — към началото на видимия сегмент („Календар“ превърта своя
     // списък сам). Списъкът на новините не е в композицията, докато е избран „Календар“.
     // Превъртането не минава през nestedScroll — лентата със заглавието се показва отново изрично.

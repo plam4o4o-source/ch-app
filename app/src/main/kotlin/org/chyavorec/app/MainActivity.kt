@@ -3,6 +3,9 @@ package org.chyavorec.app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.KeyboardShortcutGroup
+import android.view.Menu
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
@@ -12,6 +15,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.chyavorec.app.data.local.AppSettings
@@ -19,6 +23,8 @@ import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.ChitalishteRoot
 import org.chyavorec.app.ui.navigation.AppShortcuts
+import org.chyavorec.app.ui.navigation.KeyCommand
+import org.chyavorec.app.ui.navigation.KeyboardShortcuts
 import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.EdgeToEdge
@@ -31,6 +37,8 @@ import org.chyavorec.domain.model.MessagePollPolicy
 class MainActivity : ComponentActivity() {
 
     private val deepLink = MutableStateFlow<String?>(null)
+    /** Клавишните комбинации (таблет, Chromebook) към интерфейса — виж [KeyboardShortcuts]. */
+    private val keyCommands = MutableSharedFlow<KeyCommand>(extraBufferCapacity = 4)
     private var ready by mutableStateOf(false)
 
     /** Избраният в настройките език (Android 8–12; на 13+ го прилага системата). */
@@ -66,7 +74,7 @@ class MainActivity : ComponentActivity() {
                 ready = true
                 ChitalishteTheme(mode = s.themeMode, dynamicColor = s.dynamicColor, style = s.themeStyle) {
                     SystemBarsAppearance {
-                        ChitalishteRoot(container = container, settings = s, deepLink = deepLink)
+                        ChitalishteRoot(container = container, settings = s, deepLink = deepLink, keyCommands = keyCommands)
                     }
                 }
             }
@@ -96,6 +104,18 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         if (LaunchIntents.shouldHandle(intent.flags, restored = false)) consumeDeepLink(intent)
+    }
+
+    /** Ctrl+F и „/“ — търсене, Ctrl+1…5 — разделите, Esc — „Назад“ (ако екранът не е обработил клавиша). */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean =
+        KeyboardShortcuts.dispatch(event, { super.dispatchKeyEvent(it) }) { command ->
+            if (command == KeyCommand.Back) onBackPressedDispatcher.onBackPressed() else keyCommands.tryEmit(command)
+        }
+
+    /** Комбинациите — и в системния списък (Meta+/). */
+    override fun onProvideKeyboardShortcuts(data: MutableList<KeyboardShortcutGroup>, menu: Menu?, deviceId: Int) {
+        super.onProvideKeyboardShortcuts(data, menu, deviceId)
+        data += KeyboardShortcuts.group(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

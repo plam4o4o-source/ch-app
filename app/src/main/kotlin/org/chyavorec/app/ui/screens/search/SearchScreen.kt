@@ -76,6 +76,7 @@ import org.chyavorec.app.ui.appViewModelWithState
 import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.SearchInput
+import org.chyavorec.app.ui.components.SearchShortcutEffect
 import org.chyavorec.app.ui.components.appFilterChipColors
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.BookListItem
@@ -175,6 +176,7 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
     val ui by vm.ui.collectAsStateWithLifecycle()
     val focus = remember { FocusRequester() }
     LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
+    SearchShortcutEffect(Routes.SEARCH) { runCatching { focus.requestFocus() } }
 
     Scaffold(topBar = {
         Column(Modifier.statusBarsPadding().padding(start = 8.dp, end = 8.dp, top = 6.dp)) {

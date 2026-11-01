@@ -29,6 +29,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import org.chyavorec.app.ui.components.SearchInput
 import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.SearchShortcutEffect
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.windowHeight
 import org.chyavorec.app.ui.components.appFilterChipColors
@@ -218,6 +221,12 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     val shelf = settings?.catalogShelf ?: false
     val scope = rememberCoroutineScope()
     TabReselectEffect(Routes.CATALOG) { (if (shelf) shelfState else listState).animateScrollToItem(0) }
+    // Ctrl+F или „/“ от клавиатурата — фокус в полето за търсене.
+    val searchFocus = remember { FocusRequester() }
+    SearchShortcutEffect(Routes.CATALOG) {
+        runCatching { searchFocus.requestFocus() }
+        keyboard?.show()
+    }
     // В началото — само при резултати за нова заявка или филтър. Опресненият във фонов режим
     // индекс (същата заявка) пази мястото в списъка; връщането от книга — също (помни се).
     // Ниска височина (телефон хоризонтално, разделен екран): горната лента се скрива при
@@ -297,7 +306,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                             keyboardType = if (q.field == SearchField.INVENTORY || q.field == SearchField.ISBN) KeyboardType.Number else KeyboardType.Text,
                         ),
                         keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
-                        modifier = m,
+                        modifier = m.focusRequester(searchFocus),
                     )
                 }
                 val fieldChips: @Composable (Modifier) -> Unit = { m ->
