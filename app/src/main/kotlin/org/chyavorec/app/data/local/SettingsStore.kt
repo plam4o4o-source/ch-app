@@ -66,6 +66,8 @@ data class AppSettings(
     val readerNarrow: Boolean = false,
     /** „Размер на текста“ в цялото приложение — умножава системния мащаб на шрифта. */
     val textScale: TextScale = TextScale.STANDARD,
+    /** Картата, заеманията, историята и личните съобщения — след отключване с телефона (Поверителност). */
+    val requireUnlock: Boolean = false,
 )
 
 /** Размер на шрифта в режим за четене (S/M/L/XL → мащаб на шрифта). */
@@ -133,6 +135,7 @@ class SettingsStore(private val context: Context) {
         val readerHttpCacheEvicted = booleanPreferencesKey("reader_http_cache_evicted")
         val catalogHttpCacheEvicted = booleanPreferencesKey("catalog_http_cache_evicted")
         val passwordManagerUsed = booleanPreferencesKey("password_manager_used")
+        val requireUnlock = booleanPreferencesKey("require_unlock")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -156,6 +159,7 @@ class SettingsStore(private val context: Context) {
             readerFontSize = p[Keys.readerFontSize]?.let { runCatching { ReaderFontSize.valueOf(it) }.getOrNull() } ?: ReaderFontSize.M,
             readerNarrow = p[Keys.readerNarrow] ?: false,
             textScale = p[Keys.textScale]?.let { runCatching { TextScale.valueOf(it) }.getOrNull() } ?: TextScale.STANDARD,
+            requireUnlock = p[Keys.requireUnlock] ?: false,
         )
     }
 
@@ -213,6 +217,7 @@ class SettingsStore(private val context: Context) {
     suspend fun setReaderFontSize(size: ReaderFontSize) = context.dataStore.edit { it[Keys.readerFontSize] = size.name }
     suspend fun setReaderNarrow(on: Boolean) = context.dataStore.edit { it[Keys.readerNarrow] = on }
     suspend fun setTextScale(scale: TextScale) = context.dataStore.edit { it[Keys.textScale] = scale.name }
+    suspend fun setRequireUnlock(on: Boolean) = context.dataStore.edit { it[Keys.requireUnlock] = on }
     suspend fun setNotifyMessages(on: Boolean) = context.dataStore.edit { it[Keys.notifyMessages] = on }
     val readMessageIds: Flow<Set<String>> = context.dataStore.data.map { it[Keys.readMessages].orEmpty() }
     suspend fun readMessageIdsNow(): Set<String> = readMessageIds.first()

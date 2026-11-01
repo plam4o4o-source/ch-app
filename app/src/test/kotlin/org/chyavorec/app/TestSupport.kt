@@ -14,6 +14,7 @@ import org.chyavorec.app.data.local.FavoritesDao
 import org.chyavorec.app.data.scan.BarcodeScanner
 import org.chyavorec.app.data.scan.ScanOutcome
 import org.chyavorec.app.data.security.BytesCipher
+import org.chyavorec.app.data.security.DeviceUnlock
 import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.data.security.SystemPasswords
 import org.junit.rules.TestWatcher
@@ -54,6 +55,22 @@ class FakeBarcodeScanner(vararg outcomes: ScanOutcome) : BarcodeScanner {
     @Volatile var calls = 0
         private set
     override suspend fun scan(activity: android.content.Context): ScanOutcome {
+        calls++
+        return queue.poll() ?: last
+    }
+}
+
+/**
+ * Заключването на телефона без системния прозорец: [available] — има ли заключване на екрана;
+ * проверките връщат поред [results] (последният — за всички следващи).
+ */
+class FakeDeviceUnlock(@Volatile var available: Boolean = true, vararg results: Boolean) : DeviceUnlock {
+    private val queue = java.util.concurrent.ConcurrentLinkedQueue(results.toList())
+    private val last: Boolean = results.lastOrNull() ?: true
+    @Volatile var calls = 0
+        private set
+    override fun available() = available
+    override suspend fun authenticate(activity: android.content.Context, title: String, subtitle: String): Boolean {
         calls++
         return queue.poll() ?: last
     }

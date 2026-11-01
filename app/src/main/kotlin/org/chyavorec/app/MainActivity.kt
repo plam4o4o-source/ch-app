@@ -3,12 +3,12 @@ package org.chyavorec.app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +28,8 @@ import org.chyavorec.app.widget.WidgetUpdater
 import org.chyavorec.core.logFailure
 import org.chyavorec.domain.model.MessagePollPolicy
 
-class MainActivity : ComponentActivity() {
+/** FragmentActivity — за системната проверка при отключване на личните екрани (BiometricPrompt). */
+class MainActivity : FragmentActivity() {
 
     private val deepLink = MutableStateFlow<String?>(null)
     private var ready by mutableStateOf(false)

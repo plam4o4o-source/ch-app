@@ -387,8 +387,10 @@ S = {
 "my_books_next_due": ("Следващ срок: %1$s", "Next due: %1$s"),
 "wait_about": ("около %1$s", "about %1$s"),
 "error_rate_limited_wait": ("Твърде много опити. Опитай отново след %1$s.", "Too many attempts. Try again in %1$s."),
-"login_locked": ("Входът е временно заключен. Опитай отново след %1$s.", "Sign-in is temporarily locked. Try again in %1$s."),
+"login_locked_countdown": ("Опитай отново след %1$s.", "Try again in %1$s."),
+"login_locked_status": ("Твърде много грешни опити — входът е временно блокиран.", "Too many wrong attempts — sign-in is temporarily blocked."),
 "login_forgot_title": ("Забравен ПИН", "Forgot your PIN"),
+"login_forgot_subject_card": ("Забравен ПИН — читателска карта %1$s", "Forgotten PIN — library card %1$s"),
 "login_forgot_no_contacts": ("Телефона и имейла на библиотеката ще намериш в „Още › Контакти“.", "You’ll find the library’s phone and email under “More › Contacts”."),
 "book_status_now": ("Наличност в момента", "Availability right now"),
 "renew_ok": ("Удължено до %1$s.", "Renewed until %1$s."),
@@ -562,6 +564,15 @@ S = {
 "settings_clear_cache_desc": ("Новините, събитията, каталогът, кориците и снимките, запазени за четене без интернет, и свалените документи. Свалят се наново при нужда", "News, events, catalogue, covers and images saved for reading offline, and downloaded documents. They’re downloaded again when needed"),
 "settings_clear_cache_confirm": ("Временните данни (новини, събития, каталог, корици и снимки, запазени за четене без интернет, и свалените документи) ще бъдат изтрити и свалени отново при нужда. Входът, картата, запазените новини, „Искам да прочета“, напомнянията и историята остават.", "Temporary data (news, events, catalogue, covers and images saved for reading offline, and downloaded documents) will be deleted and downloaded again when needed. Your sign-in, card, saved news, “Want to read”, reminders and history stay."),
 "settings_cache_cleared": ("Временните данни са изтрити.", "Temporary data cleared."),
+"settings_privacy": ("Поверителност", "Privacy"),
+"settings_require_unlock": ("Искай отключване за личните екрани", "Require unlock for personal screens"),
+"settings_require_unlock_desc": ("Картата, заеманията, историята и личните съобщения се отварят след пръстов отпечатък, лице или ПИН-а на телефона.", "The card, loans, history and personal messages open only after your fingerprint, face or the phone’s PIN."),
+"settings_require_unlock_unavailable": ("Не може да се включи: телефонът няма заключване на екрана. Задай ПИН, фигура или парола в настройките на телефона.", "Can’t be turned on: the phone has no screen lock. Set a PIN, pattern or password in the phone’s settings."),
+"unlock_prompt_title": ("Отключи личните екрани", "Unlock personal screens"),
+"unlock_prompt_subtitle": ("Читателска карта, заемания, история и съобщения", "Library card, loans, history and messages"),
+"unlock_locked_title": ("Личният екран е заключен", "This personal screen is locked"),
+"unlock_locked_desc": ("Отключи го с пръстов отпечатък, лице или ПИН-а на телефона.", "Unlock it with your fingerprint, face or the phone’s PIN."),
+"action_unlock": ("Отключи", "Unlock"),
 "settings_legal": ("Информация", "Information"),
 "theme_system": ("Както системата", "System default"),
 "theme_light": ("Светла", "Light"),
@@ -765,6 +776,8 @@ PRIVACY_BG = """Последна актуализация: 31 октомври 2
 
 Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
 
+Отключване на личните екрани (по избор, „Настройки › Поверителност“): картата, заеманията, историята и личните съобщения се отварят след отключване със заключването на телефона (пръстов отпечатък, лице или ПИН) — проверката прави системата на телефона, а приложението никога не получава биометрични данни.
+
 Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
 Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб.
@@ -820,6 +833,8 @@ Sign-in (only with consent given at the library and an issued PIN): your library
 Password manager: saving your card number and PIN in the phone’s password manager is optional — it happens only if you agree, and they are kept by the system’s password manager, not by the app. If the password manager (e.g. Google Password Manager) syncs passwords, it may also sync the card number and PIN to your Google account (or the provider’s) — under the provider’s own terms.
 
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
+
+Unlock for personal screens (optional, “Settings › Privacy”): the card, loans, history and personal messages open only after unlocking with the phone’s screen lock (fingerprint, face or PIN) — the phone’s system does the check, and the app never receives any biometric data.
 
 Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
@@ -928,7 +943,7 @@ P = {
 "wait_seconds": (("%1$d секунда", "%1$d секунди"), ("%1$d second", "%1$d seconds")),
 "wait_minutes": (("%1$d минута", "%1$d минути"), ("%1$d minute", "%1$d minutes")),
 "wait_hours": (("%1$d час", "%1$d часа"), ("%1$d hour", "%1$d hours")),
-"login_attempts_left": (("Остава %1$d опит преди временно заключване", "Остават %1$d опита преди временно заключване"), ("%1$d attempt left before a temporary lock", "%1$d attempts left before a temporary lock")),
+"login_attempts_left": (("Остава %1$d опит преди временно блокиране.", "Остават %1$d опита преди временно блокиране."), ("%1$d attempt left before a temporary block.", "%1$d attempts left before a temporary block.")),
 "loan_renewed_times": (("Удължавана %1$d път", "Удължавана %1$d пъти"), ("Renewed %1$d time", "Renewed %1$d times")),
 "home_loans_overdue": (("%1$d книга е просрочена", "%1$d книги са просрочени"), ("%1$d book is overdue", "%1$d books are overdue")),
 "home_loans_total": (("%1$d заета книга", "%1$d заети книги"), ("%1$d book borrowed", "%1$d books borrowed")),

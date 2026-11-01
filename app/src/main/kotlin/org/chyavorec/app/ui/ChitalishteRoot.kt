@@ -21,6 +21,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavController
 import org.chyavorec.app.ui.components.LocalSeasonalDecor
+import org.chyavorec.app.ui.components.LocalRequireUnlock
+import org.chyavorec.app.ui.components.UnlockGate
+import org.chyavorec.data.repository.AuthState
 import org.chyavorec.app.ui.components.LocalSharedTransitionsEnabled
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -196,6 +199,7 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
         LocalCoverNetwork provides observeCoverNetwork(container.connectivity, settings.coversWifiOnly),
         // Украсите — от вече прочетените настройки: вярни още в първия кадър на началния екран.
         LocalSeasonalDecor provides settings.seasonal,
+        LocalRequireUnlock provides settings.requireUnlock,
     ) {
         Box(Modifier.fillMaxSize()) {
             if (!settings.onboardingDone) {
@@ -219,6 +223,9 @@ fun ChitalishteRoot(container: AppContainer, settings: AppSettings, deepLink: Mu
 }
 
 private val topLevelRoutes = TopTab.entries.map { it.route }.toSet()
+
+/** Екраните зад „Искай отключване за личните екрани“ (виж UnlockGate). */
+private val personalRoutes = setOf(Routes.CARD, Routes.CARD_FULL, Routes.LOANS, Routes.HISTORY, Routes.MESSAGES, Routes.MESSAGE)
 
 /** Най-едрият мащаб на шрифта: нелинейните таблици на Android стигат до 2×, над него заглавията „избухват“. */
 internal const val MAX_FONT_SCALE = 2f
@@ -524,6 +531,18 @@ private fun AppNavHost(
         onDispose { nav.removeOnDestinationChangedListener(listener) }
     }
 
+    // Отказано отключване: назад до първия неличен екран (напр. от цял екран и през картата под него).
+    val leavePersonal: () -> Unit = {
+        while (nav.currentDestination?.route in personalRoutes) {
+            if (!nav.popBackStack()) {
+                nav.navigateTab(Routes.HOME)
+                break
+            }
+        }
+    }
+    val auth = LocalAppContainer.current.authRepository
+    val signedIn = auth.state.collectAsState().value is AuthState.SignedIn
+
     SharedTransitionLayout {
     CompositionLocalProvider(LocalSharedScope provides this, LocalSharedTransitionsEnabled provides !tabSwitch) {
     NavHost(
@@ -604,10 +623,16 @@ private fun AppNavHost(
             LoginScreen(back, onLoggedIn = { nav.popBackStack(); nav.navigateTab(Routes.MY) }, onAddCard = { nav.popBackStack(); nav.navigate(Routes.CARD) })
         }
         screen(Routes.PROFILE) { ProfileScreen(back) }
-        screen(Routes.CARD) { CardScreen(back, onFullscreen = { nav.navigate(Routes.CARD_FULL) }, onLogin = { nav.navigate(Routes.LOGIN) }) }
-        screen(Routes.CARD_FULL) { CardFullscreen(onClose = back) }
-        screen(Routes.LOANS) { LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }, onOpenBook = { navigate(Routes.book(it, personal = true)) }) }
-        screen(Routes.HISTORY) { HistoryScreen(back, navigate, onLogin = { nav.navigate(Routes.LOGIN) }) }
+        screen(Routes.CARD) {
+            UnlockGate(leavePersonal) { CardScreen(back, onFullscreen = { nav.navigate(Routes.CARD_FULL) }, onLogin = { nav.navigate(Routes.LOGIN) }) }
+        }
+        screen(Routes.CARD_FULL) { UnlockGate(leavePersonal) { CardFullscreen(onClose = back) } }
+        screen(Routes.LOANS) {
+            UnlockGate(leavePersonal) {
+                LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }, onOpenBook = { navigate(Routes.book(it, personal = true)) })
+            }
+        }
+        screen(Routes.HISTORY) { UnlockGate(leavePersonal) { HistoryScreen(back, navigate, onLogin = { nav.navigate(Routes.LOGIN) }) } }
         screen(Routes.WANT_TO_READ) { org.chyavorec.app.ui.screens.my.WantToReadScreen(back, navigate) }
         screen(Routes.MEMBERSHIP) { MembershipScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }) }
         screen(Routes.NOTIFICATIONS) { NotificationSettingsScreen(back) }
@@ -651,9 +676,12 @@ private fun AppNavHost(
         }
         screen(Routes.CONTACTS) { ContactsScreen(back) }
         screen(Routes.DOCUMENTS) { DocumentsScreen(back, openLink) }
-        screen(Routes.MESSAGES) { MessagesScreen(back, openLink) }
+        // Личните съобщения има само при вход — без него съобщенията са публични.
+        screen(Routes.MESSAGES) { UnlockGate(leavePersonal, required = signedIn) { MessagesScreen(back, openLink) } }
         screen(Routes.MESSAGE, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
-            MessagesScreen(back, openLink, focusId = Uri.decode(it.arguments?.getString("id").orEmpty()).ifBlank { null })
+            UnlockGate(leavePersonal, required = signedIn) {
+                MessagesScreen(back, openLink, focusId = Uri.decode(it.arguments?.getString("id").orEmpty()).ifBlank { null })
+            }
         }
         screen(Routes.SETTINGS) { SettingsScreen(back, navigate) }
         screen(Routes.PRIVACY) { PrivacyScreen(back, navigate) }

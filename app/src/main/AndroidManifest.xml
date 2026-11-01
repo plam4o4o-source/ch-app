@@ -8,9 +8,10 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Скенерът на баркодове е на Google Play услугите (свой прозорец с камерата) —
          приложението няма разрешение за камера. -->
-    <!-- androidx.credentials (вход с Google) носи разрешенията за биометрия, а приложението
-         не ползва биометрия (R8 маха и кода ѝ) — без тях в манифеста. -->
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" tools:node="remove" />
+    <!-- Отключването на личните екрани (по избор, Настройки › Поверителност): BiometricPrompt от
+         Android 9. На Android 8 е системният екран за ПИН/фигура/парола (KeyguardManager) —
+         старото USE_FINGERPRINT (от androidx.biometric/credentials) не трябва и се маха. -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" tools:node="remove" />
     <!-- Самообновяване от GitHub Releases (APK извън Google Play). Play build-ът
          премахва тези разрешения — виж src/play/AndroidManifest.xml. -->

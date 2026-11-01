@@ -1,7 +1,11 @@
 package org.chyavorec.app.di
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -21,7 +25,9 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import coil3.SingletonImageLoader
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -38,6 +44,9 @@ import org.chyavorec.app.data.local.SettingsStore
 import org.chyavorec.app.data.scan.BarcodeScanner
 import org.chyavorec.app.data.scan.PlayServicesBarcodeScanner
 import org.chyavorec.app.data.security.CredentialManagerPasswords
+import org.chyavorec.app.data.security.DeviceUnlock
+import org.chyavorec.app.data.security.PersonalUnlock
+import org.chyavorec.app.data.security.SystemDeviceUnlock
 import org.chyavorec.app.data.security.SystemPasswords
 import org.chyavorec.app.data.security.BytesCipher
 import org.chyavorec.app.data.security.KeystoreBytesCipher
@@ -112,6 +121,8 @@ class AppContainer(
     passwordsOverride: SystemPasswords? = null,
     /** Само за тестове: скенер на баркодове без Google Play услуги. */
     scannerOverride: BarcodeScanner? = null,
+    /** Само за тестове: отключване на личните екрани без системния прозорец. */
+    unlockOverride: DeviceUnlock? = null,
 ) {
     private val cipher: BytesCipher by lazy { cipherOverride ?: KeystoreBytesCipher() }
 
@@ -234,6 +245,10 @@ class AppContainer(
     val passwords: SystemPasswords by lazy { passwordsOverride ?: CredentialManagerPasswords(context) }
     /** Скенерът на баркодове (на Google Play услугите). */
     val scanner: BarcodeScanner by lazy { scannerOverride ?: PlayServicesBarcodeScanner() }
+    /** Заключването на телефона за личните екрани (по избор, Настройки › Поверителност). */
+    val deviceUnlock: DeviceUnlock by lazy { unlockOverride ?: SystemDeviceUnlock(context) }
+    /** Отключени ли са личните екрани в този процес (до фонов режим над минута или угаснал екран). */
+    val personalUnlock by lazy { PersonalUnlock(android.os.SystemClock::elapsedRealtime) }
     val selfCardRepository by lazy { SelfCardRepository(SecureSelfCardStore(File(context.noBackupFilesDir, "secure/card.bin"), cipher)) }
 
     val messagesRepository by lazy { MessagesRepository(siteService, publicCache, clock) }
@@ -265,6 +280,22 @@ class AppContainer(
      */
     val reconnected: SharedFlow<Unit> by lazy {
         connectivity.online.reconnections(foreground = processForeground()).shareIn(appScope, SharingStarted.WhileSubscribed(), replay = 0)
+    }
+
+    /**
+     * Отключването на личните екрани изтича: фонов режим (ProcessLifecycleOwner) над минута или
+     * угаснал екран. Само от главната нишка, веднъж (Application.onUiStart).
+     */
+    fun watchPersonalUnlock() {
+        val unlock = personalUnlock
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onStart(owner: LifecycleOwner) = unlock.onForeground()
+            override fun onStop(owner: LifecycleOwner) = unlock.onBackground()
+        })
+        val screenOff = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) = unlock.onScreenOff()
+        }
+        ContextCompat.registerReceiver(context, screenOff, IntentFilter(Intent.ACTION_SCREEN_OFF), ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     /** Дали процесът е на преден план (има видима Activity) — ProcessLifecycleOwner, STARTED. */

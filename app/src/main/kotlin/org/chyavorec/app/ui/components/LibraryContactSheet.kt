@@ -31,9 +31,9 @@ import org.chyavorec.app.util.Intents
 import org.chyavorec.domain.model.Contacts
 
 /**
- * Връзка с библиотеката: заглавие, обяснение и бутони за обаждане и имейл (първият
- * телефон/имейл от контактите на сайта или резервните). Без известен телефон/имейл —
- * къде да ги потърси. Ползва се от „Забравен ПИН?“ и „Попитай библиотеката“ при книга.
+ * Връзка с библиотеката: заглавие, обяснение и бутони за обаждане и имейл с номера и адреса
+ * (първият телефон/имейл от контактите на сайта или резервните; сайтът може да е без телефон —
+ * тогава само имейлът). Без известен телефон/имейл — къде да ги потърси. Ползва се от „Забравен ПИН?“ и „Попитай библиотеката“ при книга.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,7 +70,7 @@ fun LibraryContactSheet(
                             onClick = { Intents.email(context, email, subject = emailSubject, body = emailBody) },
                             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                         ) {
-                            Icon(Icons.Outlined.Email, null); Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.contacts_email))
+                            Icon(Icons.Outlined.Email, null); Spacer(Modifier.size(8.dp)); Text(stringResource(R.string.contacts_email) + " · " + email)
                         }
                     }
                 }

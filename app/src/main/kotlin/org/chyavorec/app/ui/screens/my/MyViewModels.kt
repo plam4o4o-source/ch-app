@@ -149,7 +149,7 @@ data class LoginUi(
     val resetSent: Boolean = false,
     /** Входът е временно заключен до този момент (епоха, ms); 0 — не е заключен. */
     val lockedUntilMillis: Long = 0,
-    /** Колко опита остават до заключване — само след 3 неуспешни (иначе `null`, без предупреждение). */
+    /** Колко опита остават до блокиране — след всеки неуспешен (без неуспешни — `null`, без предупреждение). */
     val attemptsLeft: Int? = null,
 )
 
@@ -202,12 +202,15 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
         else it.copy(lockedUntilMillis = 0, error = if (it.error is AppError.RateLimited) null else it.error)
     }
 
-    /** За „Забравен ПИН?“: контактите от сайта (кеша), иначе вградените резервни. */
+    /**
+     * За „Забравен ПИН?“: контактите от сайта (кеша), иначе вградените резервни — и когато
+     * страницата на сайта е без телефон и имейл.
+     */
     fun loadContacts() {
         if (_contacts.value != null) return
         viewModelScope.launch {
             val fromSite = (c.siteRepository.contacts(false) as? Outcome.Success)?.value?.data
-            _contacts.value = fromSite ?: c.fallbackContacts
+            _contacts.value = fromSite?.takeIf { it.phones.isNotEmpty() || it.emails.isNotEmpty() } ?: c.fallbackContacts
         }
     }
 
@@ -336,8 +339,8 @@ class LoginViewModel(private val c: AppContainer) : ViewModel() {
     }
 
     private companion object {
-        /** След толкова грешни опита се показва „остават N опита“. */
-        const val WARN_AFTER_FAILURES = 3
+        /** От първия грешен опит се показва „остават N опита“ — ясно и навреме. */
+        const val WARN_AFTER_FAILURES = 1
         const val MAX_CARD = 32
         const val MAX_PIN = 128
         /** Мениджърът на пароли при отваряне — не повече (иначе формата е ръчна). */
