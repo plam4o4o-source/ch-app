@@ -13,6 +13,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import kotlinx.coroutines.delay
+import java.util.Locale
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.LibraryContactSheet
 import org.chyavorec.app.ui.components.InfoBanner
@@ -171,12 +172,14 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                         modifier = Modifier.fillMaxWidth().semantics { contentType = ContentType.Username },
                     )
                     val err = ui.error
+                    // Заключено: видимо „след 4:59“, а за TalkBack — с думи („след около 5 минути“).
                     val errText = when {
-                        locked -> stringResource(R.string.login_locked, waitText(lockLeft))
+                        locked -> stringResource(R.string.login_locked_countdown, lockCountdown(lockLeft))
                         err == null -> null
                         err == AppError.Unauthorized -> stringResource(R.string.login_wrong)
                         else -> errorMessage(err)
                     }
+                    val errSpoken = if (locked) stringResource(R.string.login_locked_countdown, waitText(lockLeft)) else errText
                     // Скрит ПИН (последната цифра се вижда за миг) — „окото“ го показва целия.
                     OutlinedSecureTextField(
                         state = vm.pin,
@@ -198,9 +201,21 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                         onKeyboardAction = { vm.submit() },
                         modifier = Modifier.fillMaxWidth().semantics {
                             contentType = ContentType.Password
-                            if (errText != null) error(errText)
+                            if (errSpoken != null) error(errSpoken)
                         },
                     )
+                    // След всеки грешен опит — колко остават до временното блокиране; при блокиране — защо.
+                    // Жив регион: TalkBack го чете при промяна (не всяка секунда — броячът е в полето).
+                    val status = if (locked) stringResource(R.string.login_locked_status)
+                    else ui.attemptsLeft?.let { n -> pluralStringResource(R.plurals.login_attempts_left, n, n) }
+                    status?.let {
+                        Text(
+                            it,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Polite },
+                        )
+                    }
                     // Целият ред е едно поле за отметка (TalkBack чете текста, докосване и по текста).
                     Row(
                         Modifier.fillMaxWidth()
@@ -211,15 +226,6 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                         Checkbox(ui.remember, onCheckedChange = null)
                         Spacer(Modifier.width(14.dp))
                         Text(stringResource(R.string.login_remember), style = MaterialTheme.typography.bodyMedium)
-                    }
-                    // След 3 грешни опита — колко остават до временното заключване.
-                    ui.attemptsLeft?.takeIf { !locked }?.let { n ->
-                        Text(
-                            pluralStringResource(R.plurals.login_attempts_left, n, n),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Polite },
-                        )
                     }
                     Button(
                         onClick = vm::submit,
@@ -248,8 +254,17 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
     }
     if (showForgot) {
         val contacts by vm.contacts.collectAsStateWithLifecycle()
-        ForgotPinSheet(contacts, onDismiss = { showForgot = false })
+        ForgotPinSheet(contacts, cardNumber = vm.card.text.toString(), onDismiss = { showForgot = false })
     }
+}
+
+/** Обратното броене на блокирания вход: „4:59“, от час нагоре — „1:04:59“. */
+internal fun lockCountdown(seconds: Long): String {
+    val s = seconds.coerceAtLeast(0)
+    val h = s / 3600
+    val m = s % 3600 / 60
+    val sec = s % 60
+    return if (h > 0) String.format(Locale.ROOT, "%d:%02d:%02d", h, m, sec) else String.format(Locale.ROOT, "%d:%02d", m, sec)
 }
 
 /**
@@ -257,10 +272,15 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
  * и имейл до библиотеката. Без известен телефон/имейл — къде да ги потърси.
  */
 @Composable
-private fun ForgotPinSheet(contacts: Contacts?, onDismiss: () -> Unit) =
+private fun ForgotPinSheet(contacts: Contacts?, cardNumber: String, onDismiss: () -> Unit) {
+    val title = stringResource(R.string.login_forgot_title)
+    // Темата на имейла — с номера на картата, ако е въведен (ПИН-ът — никога).
+    val number = cardNumber.trim()
     LibraryContactSheet(
-        title = stringResource(R.string.login_forgot_title),
+        title = title,
         text = notAvailableMessage(Feature.PASSWORD_RESET),
         contacts = contacts,
         onDismiss = onDismiss,
+        emailSubject = if (number.isEmpty()) title else stringResource(R.string.login_forgot_subject_card, number),
     )
+}

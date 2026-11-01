@@ -32,6 +32,8 @@
 
 Защита на входа: след няколко неуспешни опита за вход входът временно се блокира (на устройството и на сървъра), за да не може ПИН-ът да бъде отгатнат.
 
+Отключване на личните екрани (по избор, „Настройки › Поверителност“): картата, заеманията, историята и личните съобщения се отварят след отключване със заключването на телефона (пръстов отпечатък, лице или ПИН) — проверката прави системата на телефона, а приложението никога не получава биометрични данни.
+
 Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.
 
 Скенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.
@@ -97,6 +99,8 @@ Sign-in (only with consent given at the library and an issued PIN): your library
 Password manager: saving your card number and PIN in the phone’s password manager is optional — it happens only if you agree, and they are kept by the system’s password manager, not by the app. If the password manager (e.g. Google Password Manager) syncs passwords, it may also sync the card number and PIN to your Google account (or the provider’s) — under the provider’s own terms.
 
 Sign-in protection: after several failed sign-in attempts, sign-in is temporarily blocked (on the device and on the server) so that the PIN cannot be guessed.
+
+Unlock for personal screens (optional, “Settings › Privacy”): the card, loans, history and personal messages open only after unlocking with the phone’s screen lock (fingerprint, face or PIN) — the phone’s system does the check, and the app never receives any biometric data.
 
 Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.
 

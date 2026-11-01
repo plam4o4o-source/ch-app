@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.settings
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -56,6 +57,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
@@ -104,11 +106,11 @@ private fun NavItem(icon: ImageVector, title: String, subtitle: String? = null, 
 )
 
 @Composable
-private fun SwitchItem(title: String, subtitle: String?, checked: Boolean, onChange: (Boolean) -> Unit) = ListItem(
+private fun SwitchItem(title: String, subtitle: String?, checked: Boolean, enabled: Boolean = true, onChange: (Boolean) -> Unit) = ListItem(
     headlineContent = { Text(title) },
     supportingContent = subtitle?.let { { Text(it) } },
-    trailingContent = { Switch(checked, onCheckedChange = null) },
-    modifier = Modifier.selectable(checked, role = Role.Switch, onClick = { onChange(!checked) }),
+    trailingContent = { Switch(checked, onCheckedChange = null, enabled = enabled) },
+    modifier = Modifier.selectable(checked, enabled = enabled, role = Role.Switch, onClick = { onChange(!checked) }),
 )
 
 @Composable
@@ -190,6 +192,9 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             }
             NavItem(Icons.Outlined.DeleteSweep, stringResource(R.string.settings_clear_cache), stringResource(R.string.settings_clear_cache_desc)) { clearDialog = true }
 
+            GroupTitle(stringResource(R.string.settings_privacy))
+            RequireUnlockItem(s.requireUnlock)
+
             GroupTitle(stringResource(R.string.settings_legal))
             NavItem(Icons.Outlined.PrivacyTip, stringResource(R.string.privacy_title)) { navigate(Routes.PRIVACY) }
             NavItem(Icons.Outlined.PersonRemove, stringResource(R.string.account_delete_web), stringResource(R.string.account_delete_web_desc)) {
@@ -250,6 +255,40 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             },
             dismissButton = { TextButton(onClick = { clearDialog = false }) { Text(stringResource(R.string.action_cancel)) } },
         )
+    }
+}
+
+/**
+ * „Искай отключване за личните екрани“: и включването, и изключването минават през
+ * проверката с телефона (иначе всеки с отключения телефон би я изключил). Без заключване на
+ * екрана не може да се включи — обяснено в описанието; проверява се наново при връщане от
+ * настройките на телефона.
+ */
+@Composable
+private fun RequireUnlockItem(on: Boolean) {
+    val c = LocalAppContainer.current
+    val scope = rememberCoroutineScope()
+    val activity = LocalActivity.current ?: LocalContext.current
+    var available by remember { mutableStateOf(c.deviceUnlock.available()) }
+    LifecycleResumeEffect(Unit) {
+        available = c.deviceUnlock.available()
+        onPauseOrDispose { }
+    }
+    val title = stringResource(R.string.unlock_prompt_title)
+    val subtitle = stringResource(R.string.settings_require_unlock)
+    SwitchItem(
+        stringResource(R.string.settings_require_unlock),
+        stringResource(if (available || on) R.string.settings_require_unlock_desc else R.string.settings_require_unlock_unavailable),
+        checked = on,
+        enabled = available || on,
+    ) { want ->
+        scope.launch {
+            // Без заключване на телефона няма с какво да се провери — изключва се направо.
+            val ok = !available || c.deviceUnlock.authenticate(activity, title, subtitle)
+            if (!ok) return@launch
+            c.settings.setRequireUnlock(want)
+            if (want) c.personalUnlock.unlock()
+        }
     }
 }
 

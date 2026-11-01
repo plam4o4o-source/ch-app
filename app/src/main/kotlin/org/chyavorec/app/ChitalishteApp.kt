@@ -79,6 +79,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
      */
     fun onUiStart() {
         if (!uiStarted.compareAndSet(false, true)) return
+        // Отключването на личните екрани изтича във фонов режим и при угаснал екран.
+        container.watchPersonalUnlock()
         appScope.launch { warmUp() }
         // Свалените PDF-и: по-старите от седмица, над 50 MB общо и прекъснатите (.part) — вън.
         appScope.launch(Dispatchers.IO) { runCatching { container.documents.prune(dropPartial = true) }.logFailure("startup.documents") }
