@@ -50,6 +50,7 @@ import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.EventAvailable
 import androidx.compose.material.icons.outlined.EventRepeat
 import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.Directions
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.NotificationsActive
@@ -152,7 +153,8 @@ fun EventCard(e: Event, onClick: () -> Unit, modifier: Modifier = Modifier, titl
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
                 Text(e.title, style = MaterialTheme.typography.titleMedium, maxLines = titleMaxLines, overflow = TextOverflow.Ellipsis, modifier = Modifier.sharedBoundsKey("event-title-${e.id}"))
-                val meta = listOfNotNull(e.time, e.place).joinToString(" · ").ifBlank { e.description }
+                // Мястото е почти винаги читалището — в картата е описанието, а мястото — в подробностите.
+                val meta = listOfNotNull(e.time, e.description.ifBlank { e.place.orEmpty() }.ifBlank { null }).joinToString(" · ")
                 if (meta.isNotBlank()) {
                     Text(meta, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
@@ -526,12 +528,13 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
                 e.category?.let { DetailLine(Icons.Outlined.Sell, it) }
                 e.time?.let { DetailLine(Icons.Outlined.AccessTime, it) }
                 // Мястото отваря картата (в селото — „<място>, с. Яворец“).
-                e.place?.let { place ->
+                val place = e.place?.takeIf { it.isNotBlank() }
+                place?.let {
                     DetailLine(
-                        Icons.Outlined.Place, place,
+                        Icons.Outlined.Place, it,
                         onClickLabel = stringResource(R.string.event_open_map),
                         trailing = Icons.Outlined.Map,
-                    ) { Intents.map(context, "$place, с. Яворец") }
+                    ) { Intents.map(context, Intents.placeQuery(it)) }
                 }
                 e.organizer?.let { DetailLine(Icons.Outlined.Groups, it) }
                 if (e.description.isNotBlank()) {
@@ -541,6 +544,12 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
                 if (e.date != null) {
                     Button(onClick = { Intents.addToCalendar(context, e, zone) }, modifier = Modifier.fillMaxWidth()) {
                         Icon(Icons.Outlined.CalendarMonth, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.event_add_calendar))
+                    }
+                }
+                // „Маршрут“ — картата с мястото (същото като бутона в напомнянето).
+                place?.let {
+                    OutlinedButton(onClick = { Intents.map(context, Intents.placeQuery(it)) }, modifier = Modifier.fillMaxWidth()) {
+                        Icon(Icons.Outlined.Directions, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.notif_action_route))
                     }
                 }
                 if (vm.canRemind(e) || hasReminder) {

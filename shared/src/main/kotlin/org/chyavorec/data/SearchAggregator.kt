@@ -53,7 +53,8 @@ object SearchAggregator {
 
     fun prepare(news: List<NewsArticle>, events: List<Event>, siteDocs: List<SiteSearchDoc>): SearchCorpus = SearchCorpus(
         news = news.map { it to haystack(it.title, it.summary, it.category) },
-        events = events.map { it to haystack(it.title, it.description, it.place) },
+        // Без мястото: то е адресът на читалището при всички прояви — „Левски“ би намерило всяка.
+        events = events.map { it to haystack(it.title, it.description) },
         pages = siteDocs.filter { it.type !in SKIPPED_PAGE_TYPES }.map { it to haystack(it.title, it.text, it.category) },
     )
 

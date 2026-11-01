@@ -15,6 +15,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import org.chyavorec.app.R
 import org.chyavorec.core.TrustedLinks
 import org.chyavorec.domain.model.Event
+import org.chyavorec.domain.model.EventSource
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
@@ -134,6 +135,12 @@ object Intents {
 
     fun map(context: Context, query: String) = context.safeStart(mapIntent(query))
 
+    /** Адресът на читалището — мястото по подразбиране на проявите от календара (както LOCATION в events.ics на сайта). */
+    const val CENTRE_ADDRESS = "НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец"
+
+    /** Мястото за картата и календара: „<място>, с. Яворец“, освен ако селото вече е в него (адресът от сайта). */
+    fun placeQuery(place: String): String = if (place.contains("Яворец", ignoreCase = true)) place else "$place, с. Яворец"
+
     /** Картата с търсене на [query] (и за бутона „Маршрут“ в известията за събития). */
     fun mapIntent(query: String): Intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query)))
 
@@ -174,17 +181,19 @@ object Intents {
 
     /** Добавя събитие в календара на Android (без разрешения — през системния екран). */
     fun addToCalendar(context: Context, event: Event, zone: ZoneId) {
-        calendarIntent(context, event, zone)?.let { context.safeStart(it) }
+        calendarIntent(event, zone)?.let { context.safeStart(it) }
     }
 
     /** Системният екран „ново събитие в календара“ за [event]; `null` — събитието е без дата. */
-    fun calendarIntent(context: Context, event: Event, zone: ZoneId): Intent? {
+    fun calendarIntent(event: Event, zone: ZoneId): Intent? {
         val date = event.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: return null
         val time = event.time?.let { runCatching { LocalTime.parse(it) }.getOrNull() }
         return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).apply {
             putExtra(CalendarContract.Events.TITLE, event.title)
             putExtra(CalendarContract.Events.DESCRIPTION, event.description + "\n\n" + event.sourceUrl)
-            event.place?.let { putExtra(CalendarContract.Events.EVENT_LOCATION, it + ", " + context.getString(R.string.org_place)) }
+            // Без място — проявите от календара на сайта са в читалището.
+            (event.place?.takeIf { it.isNotBlank() }?.let(::placeQuery) ?: CENTRE_ADDRESS.takeIf { event.source == EventSource.CALENDAR })
+                ?.let { putExtra(CalendarContract.Events.EVENT_LOCATION, it) }
             if (time != null) {
                 val start = date.atTime(time).atZone(zone)
                 putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, start.toInstant().toEpochMilli())

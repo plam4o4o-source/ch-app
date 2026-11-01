@@ -258,6 +258,29 @@ class NotifierTest {
         assertTrue(RichNotifications.eventActions(context, event.copy(date = null, place = null), ZoneId.of("Europe/Sofia"), id).isEmpty())
     }
 
+    /**
+     * Мястото от сайта е пълният адрес на читалището (с „с. Яворец“) — „Маршрут“ се появява, а
+     * картата и календарът го получават, без селото да се добави още веднъж.
+     */
+    @Test fun eventRouteUsesTheSitePlace() {
+        val address = Intents.CENTRE_ADDRESS
+        registerActivity(Intent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI), "com.example.calendar")
+        registerActivity(Intents.mapIntent(address), "com.example.maps")
+        val event = Event("event-69", "Световен ден за борба срещу СПИН", "2026-12-01", place = address, sourceUrl = "https://chyavorec.org/events")
+        val actions = RichNotifications.eventActions(context, event, ZoneId.of("Europe/Sofia"), NotificationIds.event(event.id))
+        assertEquals(context.getString(R.string.notif_action_route), actions[1].title.toString())
+        val map = shadowOf(actions[1].actionIntent).savedIntent
+        assertEquals(address, map.data?.schemeSpecificPart?.substringAfter("q="))
+        val calendar = shadowOf(actions[0].actionIntent).savedIntent
+        assertEquals(address, calendar.getStringExtra(CalendarContract.Events.EVENT_LOCATION))
+        // Без място: в календара — читалището (проявите от календара на сайта са там); без „Маршрут“.
+        val noPlace = assertNotNull(Intents.calendarIntent(event.copy(place = null), ZoneId.of("Europe/Sofia")))
+        assertEquals(address, noPlace.getStringExtra(CalendarContract.Events.EVENT_LOCATION))
+        assertEquals(1, RichNotifications.eventActions(context, event.copy(place = null), ZoneId.of("Europe/Sofia"), 1).size)
+        // Кратко място — в селото.
+        assertEquals("Голям салон, с. Яворец", Intents.placeQuery("Голям салон"))
+    }
+
     /** Няма приложение за календар/карта — няма и бутон (иначе докосването не би направило нищо). */
     @Test fun noHandlingAppMeansNoButton() {
         val event = Event("e2", "Сбирка", "2026-10-20", place = "Читалището", sourceUrl = "https://chyavorec.org/events")

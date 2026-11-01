@@ -1,11 +1,13 @@
 package org.chyavorec.app.ui
 
 import android.app.Application
+import android.content.Intent
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
@@ -14,6 +16,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -30,12 +33,15 @@ import org.chyavorec.app.data.local.AppSettings
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.ThemeMode
+import org.chyavorec.app.util.Intents
 import org.chyavorec.core.FixedClock
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
@@ -200,6 +206,21 @@ class EventsScreenshotTest {
         shown("Google Календар")
         shown("/events.ics")
         shot("84-events-subscribe")
+    }
+
+    /** Събитие с място (поле „place“ от сайта): адресът и „Маршрут“, който отваря картата с него. */
+    @Test fun eventDetailShowsPlaceAndRoute() {
+        launch(deepLink = "event/event-69")
+        waitFor("пл. 9-ти септември 3")
+        shown("НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец")
+        val route = compose.onNode(hasText("Маршрут") and hasClickAction())
+        route.performScrollTo().assertIsDisplayed()
+        shot("86-event-place-route")
+        route.performClick()
+        val started = shadowOf(ApplicationProvider.getApplicationContext<Application>()).nextStartedActivity
+        assertEquals(Intent.ACTION_VIEW, started.action)
+        assertEquals("geo", started.data?.scheme)
+        assertEquals(Intents.CENTRE_ADDRESS, started.data?.schemeSpecificPart?.substringAfter("q="))
     }
 
     @Config(qualifiers = "en-w411dp-h1100dp-xhdpi")

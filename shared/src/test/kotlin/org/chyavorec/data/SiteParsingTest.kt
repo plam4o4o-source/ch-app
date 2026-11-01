@@ -16,6 +16,7 @@ import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /** Тестове върху РЕАЛНИ файлове от chyavorec.org (plam4o4o-source/site-yavorec). */
@@ -57,6 +58,20 @@ class SiteParsingTest {
         assertEquals("Народен обичай", bogoyavlenie.category)
         assertTrue(bogoyavlenie.recurring)
         assertEquals("https://chyavorec.org/events", bogoyavlenie.sourceUrl)
+    }
+
+    /** Мястото идва от сайта (поле „place“ в index.json); без него или празно — null. */
+    @Test fun eventPlaceFromIndex() {
+        val events = parser.parseEvents(TestUtil.resource("site-index.json"), LocalDate.of(2026, 9, 26))
+        assertEquals(
+            "НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец",
+            events.first { it.title == "Световен ден за борба срещу СПИН" }.place,
+        )
+        assertNull(events.first { it.title == "Богоявление" }.place)
+        val blank = """{"docs":[{"id":"e","type":"event","title":"Сбирка","day":"05","monthNum":"10","place":"  "}]}"""
+        assertNull(parser.parseEvents(blank, LocalDate.of(2026, 9, 26)).single().place)
+        val trimmed = """{"docs":[{"id":"e","type":"event","title":"Сбирка","day":"05","monthNum":"10","place":" Голям салон "}]}"""
+        assertEquals("Голям салон", parser.parseEvents(trimmed, LocalDate.of(2026, 9, 26)).single().place)
     }
 
     @Test fun nextOccurrenceOnTheSameDayIsToday() {

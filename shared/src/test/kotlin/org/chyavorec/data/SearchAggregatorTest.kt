@@ -26,4 +26,14 @@ class SearchAggregatorTest {
         assertTrue(r.pages[0].snippet.contains("Вазов"))
         assertTrue(SearchAggregator.search("  ", engine, news, events, emptyList()).isEmpty)
     }
+
+    /** Мястото (адресът на читалището при всички прояви) не се търси — „Левски“ не намира всяко събитие. */
+    @Test fun eventPlaceIsNotSearched() {
+        val place = "НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец"
+        val events = listOf(
+            Event("a", "Богоявление", "2027-01-06", place = place, sourceUrl = "u"),
+            Event("b", "Ден на Левски", "2027-02-19", place = place, sourceUrl = "u"),
+        )
+        assertEquals(listOf("b"), SearchAggregator.search("левски", null, emptyList(), events, emptyList()).events.map { it.event.id })
+    }
 }

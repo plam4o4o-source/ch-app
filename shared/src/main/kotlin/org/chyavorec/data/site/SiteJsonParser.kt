@@ -63,6 +63,8 @@ class SiteJsonParser(private val baseUrl: String) {
         val badge: String? = null,
         val cover: String? = null,
         val size: String? = null,
+        /** Мястото на събитието (адресът на читалището, както LOCATION в events.ics). */
+        val place: String? = null,
     )
 
     @Serializable
@@ -139,6 +141,7 @@ class SiteJsonParser(private val baseUrl: String) {
                 id = d.id,
                 title = d.title.trim(),
                 date = date.toString(),
+                place = d.place?.trim()?.ifBlank { null },
                 description = d.excerpt.trim(),
                 imageUrl = abs(d.cover),
                 sourceUrl = abs(d.url) ?: (baseUrl.trimEnd('/') + "/events"),

@@ -63,10 +63,10 @@ object RichNotifications {
 
     /** „Добави в календара“ (ако събитието е с дата) и „Маршрут“ (ако е с място). */
     fun eventActions(context: Context, event: Event, zone: ZoneId, notificationId: Int): List<NotificationCompat.Action> = listOfNotNull(
-        Intents.calendarIntent(context, event, zone)?.let { activityAction(context, notificationId, R.string.event_add_calendar, it) },
-        // Както от екрана на събитието: „<място>, с. Яворец“.
+        Intents.calendarIntent(event, zone)?.let { activityAction(context, notificationId, R.string.event_add_calendar, it) },
+        // Както от екрана на събитието ([Intents.placeQuery]).
         event.place?.takeIf { it.isNotBlank() }?.let {
-            activityAction(context, notificationId, R.string.notif_action_route, Intents.mapIntent("$it, с. Яворец"))
+            activityAction(context, notificationId, R.string.notif_action_route, Intents.mapIntent(Intents.placeQuery(it)))
         },
     )
 
