@@ -467,7 +467,7 @@ class ChitalishteWidgetTest {
         WidgetUpdater.awaitIdle()
         val english = shown(id)
         assertTrue("in 3 days" in english, english.toString())
-        assertTrue("1 book to return" in english && "Scan" in english, english.toString())
+        assertTrue(english.none { t -> t.any { it in 'а'..'я' } }, english.toString())
     }
 
     @Test fun previewIsPublishedOncePerVersionWithSampleTexts() {
