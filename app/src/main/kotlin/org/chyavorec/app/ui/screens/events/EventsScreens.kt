@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.events
 
+import org.chyavorec.app.ui.components.AppBottomSheet
 import org.chyavorec.app.ui.components.sharedBoundsKey
 import org.chyavorec.app.ui.components.appFilterChipColors
 import androidx.compose.animation.AnimatedContent
@@ -63,7 +64,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -198,7 +198,7 @@ private fun CalendarSubscribeSheet(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val url = Intents.eventsFeedUrl(LocalAppContainer.current.config.siteBaseUrl)
     val linkLabel = stringResource(R.string.ics_link_label)
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    AppBottomSheet(onDismissRequest = onDismiss) {
         Column(
             Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp).padding(bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),

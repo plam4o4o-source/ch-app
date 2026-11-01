@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * Опресняването на уиджета (AppWidgetManager.updateAppWidget): след синхронизация
  * (PeriodicSyncWorker), след зареждане на заеманията, при вход/изход, при старт на
- * приложението и при смяна на езика му. Грешките се пренебрегват — уиджетът е допълнение.
+ * приложението и при смяна на езика (и от системните настройки, при затворено приложение). Грешките се пренебрегват — уиджетът е допълнение.
  */
 object WidgetUpdater {
     /** Фоновата работа на уиджета (приемникът, стартът на приложението). */
@@ -133,16 +133,25 @@ object WidgetUpdater {
     /**
      * Езикът на приложението е сменен (настройките; от Android 13 и системните настройки на
      * приложението) — уиджетът и генерираният преглед се опресняват. Извиква се при всеки
-     * старт на активността (MainActivity.onStart — и след пресъздаването ѝ за новия език).
+     * старт на активността (MainActivity.onStart — и след пресъздаването ѝ за новия език) и
+     * при смяна на конфигурацията на живия процес (ChitalishteApp.onConfigurationChanged).
      */
     fun refreshIfLanguageChanged(context: Context) {
         val app = context.applicationContext
-        scope.launch {
-            val shown = runCatching { prefs(app).getString(KEY_LANGUAGE, null) }.getOrNull() ?: return@launch
-            if (shown == AppLanguage.localized(app).getString(R.string.ui_language)) return@launch
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) publishPreview(app)
-            refresh(app)
-        }
+        scope.launch { refreshForLanguage(app) }
+    }
+
+    /**
+     * Опреснява, ако уиджетът е показан на друг език. Системата праща ACTION_LOCALE_CHANGED
+     * (ChitalishteWidgetReceiver) и при затворено приложение — при смяна на езика на телефона
+     * и, от Android 13, на езика само на приложението от системните му настройки.
+     */
+    internal suspend fun refreshForLanguage(context: Context) {
+        val app = context.applicationContext ?: context
+        val shown = runCatching { prefs(app).getString(KEY_LANGUAGE, null) }.getOrNull() ?: return
+        if (shown == AppLanguage.localized(app).getString(R.string.ui_language)) return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) publishPreview(app)
+        refresh(app)
     }
 
     private const val PREFS = "widget"

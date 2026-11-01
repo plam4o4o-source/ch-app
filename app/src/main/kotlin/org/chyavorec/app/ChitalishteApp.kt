@@ -149,6 +149,15 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         }
     }
 
+    /**
+     * Нова конфигурация на живия процес — и сменен език от системните настройки (без
+     * пресъздаване на процеса): уиджетът — на новия, без да чака отваряне на приложението.
+     */
+    override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+        super.onConfigurationChanged(newConfig)
+        WidgetUpdater.refreshIfLanguageChanged(this)
+    }
+
     /** Изображенията се кешират на диска — работят и офлайн (Coil 3 не зачита Cache-Control по подразбиране). */
     override fun newImageLoader(context: PlatformContext): ImageLoader = ImageLoader.Builder(context)
         .components { add(OkHttpNetworkFetcherFactory(callFactory = { imageHttp })) }

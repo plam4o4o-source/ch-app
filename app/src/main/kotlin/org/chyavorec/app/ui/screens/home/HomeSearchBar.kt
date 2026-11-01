@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -41,6 +42,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModelWithState
+import org.chyavorec.app.ui.components.KeepDensity
 import org.chyavorec.app.ui.components.LocalTabReselect
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.navigation.Routes
@@ -122,52 +124,58 @@ fun HomeSearchBar(
     val go = leave(navigate)
     val goLink = leave(openLink)
 
+    // Разгънатото поле е отделен прозорец — с мащаба на текста от приложението (виж AppDialogs).
+    val density = LocalDensity.current
     val inputField = @Composable {
-        SearchBarDefaults.InputField(
-            searchBarState = state,
-            textFieldState = text,
-            onSearch = { searchVm.value?.commit() },
-            modifier = Modifier.focusProperties { canFocus = !quiet },
-            placeholder = { Text(stringResource(R.string.home_search_hint), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-            leadingIcon = {
-                if (expanded) {
-                    IconButton(onClick = { scope.launch { state.animateToCollapsed() } }) {
-                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.action_back))
+        KeepDensity(density) {
+            SearchBarDefaults.InputField(
+                searchBarState = state,
+                textFieldState = text,
+                onSearch = { searchVm.value?.commit() },
+                modifier = Modifier.focusProperties { canFocus = !quiet },
+                placeholder = { Text(stringResource(R.string.home_search_hint), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                leadingIcon = {
+                    if (expanded) {
+                        IconButton(onClick = { scope.launch { state.animateToCollapsed() } }) {
+                            Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.action_back))
+                        }
+                    } else {
+                        Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                } else {
-                    Icon(Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-            },
-            trailingIcon = {
-                if (expanded && text.text.isNotEmpty()) {
-                    IconButton(onClick = { text.clearText() }) { Icon(Icons.Outlined.Clear, stringResource(R.string.action_clear)) }
-                } else {
-                    // Скенер на баркодове: ISBN на книга или етикет с инвентарен номер.
-                    IconButton(onClick = { go(Routes.SCAN) }) {
-                        Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                },
+                trailingIcon = {
+                    if (expanded && text.text.isNotEmpty()) {
+                        IconButton(onClick = { text.clearText() }) { Icon(Icons.Outlined.Clear, stringResource(R.string.action_clear)) }
+                    } else {
+                        // Скенер на баркодове: ISBN на книга или етикет с инвентарен номер.
+                        IconButton(onClick = { go(Routes.SCAN) }) {
+                            Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
-                }
-            },
-        )
+                },
+            )
+        }
     }
 
     SearchBar(state = state, inputField = inputField, modifier = modifier.fillMaxWidth())
     ExpandedFullScreenSearchBar(state = state, inputField = inputField) {
-        val vm = appViewModelWithState(key = "home-search") { c, saved -> GlobalSearchViewModel(c, saved) }
-        // Полето е източникът на текста; търсенето го следва.
-        LaunchedEffect(vm) { snapshotFlow { text.text.toString() }.collect { if (it != vm.ui.value.query) vm.setQuery(it) } }
-        SideEffect { searchVm.value = vm }
-        // Полето може да взима фокуса едва след като разгъването е свършило (и опитът на
-        // SearchBar да го фокусира при отваряне е минал) — докосването му после работи.
-        LaunchedEffect(Unit) {
-            if (!quiet) return@LaunchedEffect
-            snapshotFlow { state.currentValue }.first { it == SearchBarValue.Expanded }
-            withFrameNanos { }
-            quiet = false
+        KeepDensity(density) {
+            val vm = appViewModelWithState(key = "home-search") { c, saved -> GlobalSearchViewModel(c, saved) }
+            // Полето е източникът на текста; търсенето го следва.
+            LaunchedEffect(vm) { snapshotFlow { text.text.toString() }.collect { if (it != vm.ui.value.query) vm.setQuery(it) } }
+            SideEffect { searchVm.value = vm }
+            // Полето може да взима фокуса едва след като разгъването е свършило (и опитът на
+            // SearchBar да го фокусира при отваряне е минал) — докосването му после работи.
+            LaunchedEffect(Unit) {
+                if (!quiet) return@LaunchedEffect
+                snapshotFlow { state.currentValue }.first { it == SearchBarValue.Expanded }
+                withFrameNanos { }
+                quiet = false
+            }
+            GlobalSearchContent(
+                vm, go, openExternal, goLink,
+                onRecent = { q -> text.setTextAndPlaceCursorAtEnd(q) },
+            )
         }
-        GlobalSearchContent(
-            vm, go, openExternal, goLink,
-            onRecent = { q -> text.setTextAndPlaceCursorAtEnd(q) },
-        )
     }
 }

@@ -29,7 +29,6 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PersonRemove
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.SystemUpdate
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -64,6 +63,7 @@ import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.Channel
 import org.chyavorec.core.logFailure
 import org.chyavorec.app.ui.LocalAppContainer
+import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.updateStatusText
 import org.chyavorec.app.ui.navigation.Routes
@@ -238,7 +238,7 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
         )
     }
     if (clearDialog) {
-        AlertDialog(
+        AppAlertDialog(
             onDismissRequest = { clearDialog = false },
             title = { Text(stringResource(R.string.settings_clear_cache)) },
             text = { Text(stringResource(R.string.settings_clear_cache_confirm)) },
@@ -367,11 +367,12 @@ private fun PalettePicker(selected: ThemePalette, enabled: Boolean, onSelect: (T
 internal fun <T> ChoiceDialog(
     title: String, options: List<Pair<T, String>>, selected: T, onSelect: (T) -> Unit, onDismiss: () -> Unit, note: String? = null,
 ) {
-    AlertDialog(
+    AppAlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            Column(Modifier.selectableGroup()) {
+            // При едър шрифт редовете може да не се съберат — превъртат се, бутонът остава.
+            Column(Modifier.verticalScroll(rememberScrollState()).selectableGroup()) {
                 if (note != null) {
                     Text(note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 8.dp))
                 }

@@ -27,6 +27,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import org.chyavorec.app.ui.components.AppDropdownMenu
+import org.chyavorec.app.ui.components.AppBottomSheet
+import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.SearchInput
 import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.AppTopBar
@@ -50,11 +53,9 @@ import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -62,7 +63,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.RangeSlider
@@ -258,7 +258,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                         IconButton(onClick = { sortMenu = true }) {
                             Icon(Icons.Outlined.SwapVert, contentDescription = stringResource(R.string.catalog_sort))
                         }
-                        DropdownMenu(sortMenu, onDismissRequest = { sortMenu = false }) {
+                        AppDropdownMenu(sortMenu, onDismissRequest = { sortMenu = false }) {
                             CatalogSort.entries.forEach { s ->
                                 DropdownMenuItem(
                                     text = { Text(sortLabel(s) + if (q.sort == s) "  ✓" else "") },
@@ -428,7 +428,7 @@ fun BookListItem(b: CatalogBook, onClick: () -> Unit, modifier: Modifier = Modif
 private fun FiltersSheet(state: CatalogUiState, onDismiss: () -> Unit, onChange: ((CatalogQuery) -> CatalogQuery) -> Unit, onClear: () -> Unit) {
     val facets = state.facets ?: return
     val q = state.query
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    AppBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
         Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).padding(bottom = 32.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.catalog_filters), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f).semantics { heading() })
@@ -669,7 +669,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
     }
 
     hold?.let { result ->
-        AlertDialog(
+        AppAlertDialog(
             onDismissRequest = { vm.holdResult.value = null },
             confirmButton = { TextButton(onClick = { vm.holdResult.value = null }) { Text(stringResource(R.string.action_ok)) } },
             title = { Text(stringResource(if (result is Outcome.Success) R.string.hold_ok_title else R.string.hold_error_title)) },

@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.my
 
+import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +32,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.material.icons.outlined.CollectionsBookmark
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -192,7 +192,7 @@ private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((
     }
     // Отказът (напр. книгата е заявена от друг читател) се чете спокойно — в диалог.
     (renew as? Outcome.Failure)?.let { r ->
-        AlertDialog(
+        AppAlertDialog(
             onDismissRequest = { vm.renewResult.value = null },
             confirmButton = { TextButton(onClick = { vm.renewResult.value = null }) { Text(stringResource(R.string.action_ok)) } },
             text = { Text(errorMessage(r.error)) },
@@ -427,7 +427,7 @@ fun ProfileScreen(onBack: () -> Unit) {
         }
     }
     if (confirmDelete) {
-        AlertDialog(
+        AppAlertDialog(
             onDismissRequest = { confirmDelete = false },
             title = { Text(stringResource(R.string.profile_delete_request)) },
             text = { Text(stringResource(R.string.profile_delete_text)) },
@@ -436,7 +436,7 @@ fun ProfileScreen(onBack: () -> Unit) {
         )
     }
     deletion?.let { r ->
-        AlertDialog(
+        AppAlertDialog(
             onDismissRequest = { vm.deletion.value = null },
             confirmButton = { TextButton(onClick = { vm.deletion.value = null }) { Text(stringResource(R.string.action_ok)) } },
             text = { Text(if (r is Outcome.Success) stringResource(R.string.profile_delete_sent) else errorMessage((r as Outcome.Failure).error)) },

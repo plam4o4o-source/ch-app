@@ -34,7 +34,6 @@ import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -62,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.InlineNotice
@@ -177,7 +177,7 @@ fun MyHubScreen(navigate: (String) -> Unit) {
     }
 
     if (confirmLogout) {
-        AlertDialog(
+        AppAlertDialog(
             onDismissRequest = { confirmLogout = false },
             title = { Text(stringResource(R.string.logout_title)) },
             text = { Text(stringResource(R.string.logout_text)) },

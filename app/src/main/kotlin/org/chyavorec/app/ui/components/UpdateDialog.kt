@@ -14,13 +14,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.SystemUpdate
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -70,7 +68,7 @@ fun UpdateDialog(updater: AppUpdater) {
     val close = { updater.hidePrompt(); updater.dismissError() }
     val title = if (info != null) stringResource(R.string.update_dialog_title, info.versionName) else stringResource(R.string.settings_updates)
 
-    AlertDialog(
+    AppAlertDialog(
         onDismissRequest = { if (s !is UpdateState.Downloading) close() },
         icon = { Icon(Icons.Outlined.SystemUpdate, null) },
         title = { Text(title) },
@@ -189,7 +187,7 @@ private fun PendingWhatsNew(updater: AppUpdater) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WhatsNewSheet(versionName: String, notes: String, onDismiss: () -> Unit) {
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    AppBottomSheet(onDismissRequest = onDismiss) {
         Column(
             Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),

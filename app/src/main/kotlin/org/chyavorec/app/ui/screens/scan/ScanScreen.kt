@@ -39,7 +39,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -81,6 +80,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.components.AppBottomSheet
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.components.ChLoadingIndicator
@@ -178,7 +178,7 @@ fun ScanScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
 
     result?.let { r ->
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        ModalBottomSheet(onDismissRequest = { vm.dismiss() }, sheetState = sheetState) {
+        AppBottomSheet(onDismissRequest = { vm.dismiss() }, sheetState = sheetState) {
             when (r) {
                 is ScanResult.Hit -> HitSheet(
                     r,

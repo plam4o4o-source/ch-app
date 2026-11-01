@@ -2,10 +2,12 @@ package org.chyavorec.app.ui
 
 import android.app.Application
 import android.graphics.Bitmap
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
@@ -16,6 +18,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,6 +48,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.time.Instant
+import kotlin.test.assertEquals
 
 /**
  * „Размер на текста“ (Настройки → Изглед) на „Много голям“ — „Начало“ и „Настройки“ не се
@@ -147,6 +151,20 @@ class UxScreenshotTest {
         waitFor("Много голям")
         compose.onNode(isDialog()).assertExists()
         shot("82-ux-text-size-dialog")
+    }
+
+    /** Диалогът (отделен прозорец) е със същия „Много голям“ размер като екрана под него. */
+    @Test fun textSizeDialogExtraLarge() {
+        launch()
+        tab("Още")
+        click("Настройки")
+        click("Размер на текста")
+        val option = hasText("Стандартен") and hasAnyAncestor(isDialog())
+        compose.waitUntil(10_000) { compose.onAllNodes(option, useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        val node = compose.onAllNodes(option, useUnmergedTree = true).fetchSemanticsNodes().first()
+        val layouts = mutableListOf<TextLayoutResult>().also { node.config[SemanticsActions.GetTextLayoutResult].action!!(it) }
+        assertEquals(appFontScale(1f, TextScale.XLARGE.factor), layouts.first().layoutInput.density.fontScale, 0.001f)
+        shot("89-ux-text-xlarge-dialog")
     }
 
     @Test fun scannerUnavailableFallsBackToManualEntry() {

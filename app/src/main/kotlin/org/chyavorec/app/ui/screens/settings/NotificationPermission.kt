@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.NotificationsOff
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
@@ -47,6 +46,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
+import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.messages.MessagePollWorker
@@ -215,7 +215,7 @@ fun NotificationsBlockedBanner(status: NotificationStatus, modifier: Modifier = 
 /** Кратко обяснение преди системния прозорец при първото стартиране; системният — само при „Да“. */
 @Composable
 fun NotificationRationaleDialog(onYes: () -> Unit, onLater: () -> Unit) {
-    AlertDialog(
+    AppAlertDialog(
         onDismissRequest = onLater,
         icon = { Icon(Icons.Outlined.NotificationsActive, contentDescription = null) },
         title = { Text(stringResource(R.string.notifications_rationale_title)) },

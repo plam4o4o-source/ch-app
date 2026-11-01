@@ -38,9 +38,7 @@ import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.NotificationsOff
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -119,6 +117,8 @@ import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.notifications.Channel
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.components.AppDropdownMenu
+import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.components.AvailableMark
@@ -279,7 +279,7 @@ fun WantToReadScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
 
     if (confirmClear) {
         val cleared = stringResource(R.string.want_cleared)
-        AlertDialog(
+        AppAlertDialog(
             onDismissRequest = { confirmClear = false },
             title = { Text(stringResource(R.string.want_clear)) },
             text = { Text(stringResource(R.string.want_clear_confirm)) },
@@ -391,7 +391,7 @@ private fun WantToReadItem(
         }
         Box {
             IconButton(onClick = { menu = true }) { Icon(Icons.Outlined.MoreVert, contentDescription = stringResource(R.string.want_more)) }
-            DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+            AppDropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
                 if (canNotify) DropdownMenuItem(
                     text = { Text(notifyLabel) },
                     leadingIcon = { Icon(if (saved.notifyWhenAvailable) Icons.Outlined.NotificationsOff else Icons.Outlined.NotificationsNone, null) },
