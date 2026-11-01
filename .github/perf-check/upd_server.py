@@ -79,6 +79,8 @@ class H(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         r = rate() if path != 'update.json' else 0
         sent, t0, err = 0, time.time(), ''
+        if path != 'update.json':
+            log(f'{self.command} /{path} Range={rng} If-Range={ifr} -> {status} START ({n} B)')
         if not head:
             try:
                 with open(f, 'rb') as fh:

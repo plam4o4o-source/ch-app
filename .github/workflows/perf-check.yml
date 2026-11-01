@@ -350,7 +350,9 @@ jobs:
           set -e
           SRC=$(git rev-parse --short HEAD)
           mkdir -p "$RUNNER_TEMP/pub" results
-          if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
+          # Клонът е над 4 GB: работното копие е от плиткото fetch-нато emulator-results, така че push-ът
+          # праща само новите обекти (новият commit пак е без родител).
+          ( cd "$RUNNER_TEMP/pub" && git init -q -b scratch && git fetch -q --depth 1 "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" emulator-results && git checkout -q --orphan pub FETCH_HEAD )
           V="$RUNNER_TEMP/pub/v130c"
           mkdir -p "$V"
           # Заменят се само частите от това изпълнение; update.json остават за справка, APK-тата — не.
@@ -394,7 +396,6 @@ jobs:
             { head -1 "$R"; echo; echo "Wave 16 check, round c (255fdc6, re-download captures): [v130c/index.md](v130c/index.md)"; tail -n +2 "$R"; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" "$R"
           fi
           cd "$RUNNER_TEMP/pub"
-          git init -q -b emulator-results
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
