@@ -1,4 +1,4 @@
-name: Emulator check wave 16 / v1.2.30, round c (temporary)
+name: Emulator check wave 16 / v1.2.30, round c publish (temporary)
 # ВРЕМЕННО: проверка на сливането на вълна 16 (origin/claude/charming-rubin-3lzor2 @ bf10741) на
 # емулатор преди изданието, със сравнение с v1.2.29 (tag v1.2.29 = b84650f). Настройката е от
 # debug/wave15-check. Резултатите (снимки, логове, числа) се публикуват в клона emulator-results,
@@ -33,6 +33,7 @@ env:
   STAGE: v130c/update/${{ github.run_id }}
 jobs:
   key:
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -48,6 +49,7 @@ jobs:
           retention-days: 1
 
   helper:
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -62,6 +64,7 @@ jobs:
           path: dist/
 
   build:
+    if: false
     needs: key
     runs-on: ubuntu-latest
     timeout-minutes: 75
@@ -199,6 +202,7 @@ jobs:
   # Тестовото v1.2.30 и update.json (бележките на 1.2.30 от store/whats-new.md през
   # tools/whats_new.py, както в release.yml) в emulator-results/v130/update/<run>/.
   stage-update:
+    if: false
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -260,7 +264,7 @@ jobs:
 
   emulator:
     needs: [build, helper, stage-update]
-    if: always() && needs.build.result == 'success'
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 80
     continue-on-error: true
@@ -323,81 +327,69 @@ jobs:
           name: out-${{ matrix.part }}
           path: out/
 
+  # Кръг c: само публикуване на артефактите от изпълнение REPUBLISH_FROM (емулаторът вече е минал).
+  # Клонът emulator-results е над 4 GB: fetch без съдържанието на файловете (blob:none), индексът —
+  # от върха му, добавя се само v130c/ и index.md; push-ът праща само новите обекти.
   publish:
-    needs: [build, emulator, sizediff]
-    if: always()
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: write
+      actions: read
+    env:
+      REPUBLISH_FROM: "41361847878"
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
-        continue-on-error: true
         with:
           pattern: out-*
           path: results
           merge-multiple: true
+          run-id: ${{ env.REPUBLISH_FROM }}
+          github-token: ${{ github.token }}
       - uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           pattern: apk-*
           path: apks
           merge-multiple: true
-      - name: Push results to emulator-results/v130b (orphan, force; the rest of the branch is kept)
-        continue-on-error: true
+          run-id: ${{ env.REPUBLISH_FROM }}
+          github-token: ${{ github.token }}
+      - name: Push results to emulator-results/v130c (orphan commit; the rest of the branch is kept)
         run: |
-          set -e
+          set -ex
           SRC=$(git rev-parse --short HEAD)
-          mkdir -p "$RUNNER_TEMP/pub" results
-          # Клонът е над 4 GB: работното копие е от плиткото fetch-нато emulator-results, така че push-ът
-          # праща само новите обекти (новият commit пак е без родител).
-          ( cd "$RUNNER_TEMP/pub" && git init -q -b scratch && git fetch -q --depth 1 "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" emulator-results && git checkout -q --orphan pub FETCH_HEAD )
-          V="$RUNNER_TEMP/pub/v130c"
-          mkdir -p "$V"
-          # Заменят се само частите от това изпълнение; update.json остават за справка, APK-тата — не.
-          for p in $(ls results); do rm -rf "$V/$p"; done
-          find "$V/update" -name app.apk -delete 2>/dev/null || true
-          cp -r results/. "$V/"
-          mkdir -p "$V/size"; cp apks/size-*.txt apks/apk-*ref.txt "$V/size/" 2>/dev/null || true
-          echo "run ${{ github.run_id }} (attempt ${{ github.run_attempt }}) @ $SRC: $(ls results | tr '\n' ' ')" >> "$V/runs.txt"
-          cd "$V"
-          PARTS=$(ls -d */ 2>/dev/null | tr -d / | grep -vE '^(size|update)$' || true)
-          {
-            echo "# Wave 16 emulator check, round c (255fdc6): re-download after 'Отказ', local HTTPS server, WorkManager/job/service captures"
-            echo
-            echo "Source: \`debug/wave16-check\` @ $SRC, last run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ). Runs: [runs.txt](runs.txt)."
-            echo "Emulators: google_apis x86_64 API 33 (parts ending in 34/28/26: that API), pixel_6 profile, -gpu swangle_indirect, no camera; app locale bg-BG unless a part says otherwise. APKs: minified prodRelease, x86_64 added, throwaway key; v1.2.30 versionCode $VC_NEW, v1.2.29 versionCode $VC_BASE."
-            echo "Round b: [../v130b/index.md](../v130b/index.md). Round a (bf10741): [../v130/index.md](../v130/index.md). Earlier: v1.2.29 check [../v129/index.md](../v129/index.md)."
-            echo
-            echo "## APK size (release configuration: arm64-v8a + armeabi-v7a, no x86_64)"
-            echo; echo '```'; cat size/size-new.txt size/size-base.txt 2>/dev/null; echo '```'; echo
-            echo "| part | status |"; echo "|---|---|"
-            for p in $PARTS; do
-              st=$(cat "$p/job-status.txt" 2>/dev/null || echo "no job status")
-              if grep -q '## COMPLETE' "$p/summary.txt" 2>/dev/null; then c=COMPLETE; elif [ -f "$p/summary.txt" ]; then c="INCOMPLETE ($(grep -m1 'EMULATOR GONE' "$p/summary.txt" || echo 'stopped early'))"; else c="no summary"; fi
-              echo "| $p | $c; $st |"
-            done
-            echo
-            for p in $PARTS; do
-              [ -f "$p/summary.txt" ] || { echo "## $p: no summary (job failed?)"; continue; }
-              echo "## $p"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
-            done
-            echo "## Screenshots"
-            for d in $(find . -name '*.png' -printf '%h\n' | sort -u); do
-              echo; echo "### ${d#./}"; echo
-              for f in $(ls "$d"/*.png | sort); do echo "- [${f#./}](${f#./})"; done
-            done
-            echo; echo "## Other files"; echo
-            find . -type f ! -name '*.png' ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
-          } > index.md
-          R="$RUNNER_TEMP/pub/index.md"
-          if [ -f "$R" ] && ! grep -q "v130c/index.md" "$R"; then
-            { head -1 "$R"; echo; echo "Wave 16 check, round c (255fdc6, re-download captures): [v130c/index.md](v130c/index.md)"; tail -n +2 "$R"; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" "$R"
-          fi
-          cd "$RUNNER_TEMP/pub"
+          W=$GITHUB_WORKSPACE
+          ls -R results | head -40
+          P="$RUNNER_TEMP/pub"; mkdir -p "$P"; cd "$P"
+          git init -q -b scratch
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch --filter=blob:none --depth 1 origin emulator-results
+          git read-tree FETCH_HEAD
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -qm "Emulator results v130c for $SRC (run ${{ github.run_id }})"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/emulator-results
+          V=v130c
+          for p in $(ls "$W/results"); do git rm -r -q --cached --ignore-unmatch "$V/$p"; done
+          mkdir -p "$V"; cp -r "$W/results/." "$V/"
+          mkdir -p "$V/size"; cp "$W"/apks/size-*.txt "$W"/apks/apk-*ref.txt "$V/size/" 2>/dev/null || true
+          git show FETCH_HEAD:$V/runs.txt > "$V/runs.txt" 2>/dev/null || : > "$V/runs.txt"
+          echo "run $REPUBLISH_FROM @ $SRC (published by run ${{ github.run_id }}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
+          (
+            cd "$V"
+            echo "# Wave 16 emulator check, round c (255fdc6): re-download after 'Отказ' with a local HTTPS server"
+            echo
+            echo "Emulator run $REPUBLISH_FROM (debug/wave16-check @ $SRC). Round b: [../v130b/index.md](../v130b/index.md). Round a: [../v130/index.md](../v130/index.md)."
+            echo
+            for p in $(ls -d */ | tr -d /); do
+              [ -f "$p/summary.txt" ] || continue
+              echo "## $p"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
+            done
+            echo "## Files"; echo
+            find . -type f ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
+          ) > "$RUNNER_TEMP/v130c-index.md"
+          mv "$RUNNER_TEMP/v130c-index.md" "$V/index.md"
+          git show FETCH_HEAD:index.md > index.md
+          grep -q "v130c/index.md" index.md || { { head -1 index.md; echo; echo "Wave 16 check, round c (255fdc6, re-download captures): [v130c/index.md](v130c/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
+          git add "$V" index.md
+          git commit -q -m "Emulator results v130c for $SRC (run $REPUBLISH_FROM)"
+          git push -f origin HEAD:refs/heads/emulator-results
