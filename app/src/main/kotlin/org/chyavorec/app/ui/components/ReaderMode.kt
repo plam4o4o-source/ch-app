@@ -6,10 +6,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -71,8 +72,9 @@ fun ReaderSettingsSheet(onDismiss: () -> Unit) {
     val settings by store.settings.collectAsStateWithLifecycle(initialValue = null)
     val scope = rememberCoroutineScope()
     val s = settings ?: return
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(Modifier.padding(horizontal = 20.dp).padding(bottom = 32.dp)) {
+    AppBottomSheet(onDismissRequest = onDismiss) {
+        // При едър шрифт листът може да не се събере — превърта се.
+        Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).padding(bottom = 32.dp)) {
             Text(stringResource(R.string.reader_mode), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
             Spacer(Modifier.height(16.dp))
             Text(stringResource(R.string.reader_font_size), style = MaterialTheme.typography.titleMedium)

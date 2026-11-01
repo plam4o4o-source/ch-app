@@ -3,6 +3,7 @@ package org.chyavorec.app.widget
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import kotlinx.coroutines.launch
@@ -141,6 +142,16 @@ class ChitalishteWidgetReceiver : AppWidgetProvider() {
     /** Ново копие, обновяване на приложението, рестарт — данните се четат и се показват. */
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         inBackground { WidgetUpdater.update(context, appWidgetIds, fallback = true) }
+    }
+
+    /**
+     * Сменен език — на телефона или (Android 13+) само на приложението от системните му
+     * настройки: системата буди приемника и при затворено приложение, а процесът вече е с
+     * новия език. Останалите действия — както в AppWidgetProvider.
+     */
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == Intent.ACTION_LOCALE_CHANGED) inBackground { WidgetUpdater.refreshForLanguage(context) }
+        else super.onReceive(context, intent)
     }
 
     /** Под Android 12 оформлението се избира по новия размер (от 12 — системата, от картата с размери). */

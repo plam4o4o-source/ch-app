@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.my
 
+import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.limitedInput
 import org.chyavorec.app.ui.components.sharedTransitionsActive
 import org.chyavorec.app.ui.components.InfoBanner
@@ -66,7 +67,6 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Fullscreen
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -416,7 +416,7 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
         }
     }
     if (confirmRemove) {
-        AlertDialog(
+        AppAlertDialog(
             onDismissRequest = { confirmRemove = false },
             title = { Text(stringResource(R.string.card_remove_title)) },
             confirmButton = { TextButton(onClick = { confirmRemove = false; vm.removeSelfCard() }) { Text(stringResource(R.string.action_remove)) } },

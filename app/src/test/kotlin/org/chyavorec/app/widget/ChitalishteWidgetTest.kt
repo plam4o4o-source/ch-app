@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -36,6 +37,7 @@ import org.chyavorec.domain.model.Loan
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
@@ -432,6 +434,36 @@ class ChitalishteWidgetTest {
         assertTrue("след 3 дни" in shown(id))
         storeAppLanguage("en")
         WidgetUpdater.refreshIfLanguageChanged(app)
+        WidgetUpdater.awaitIdle()
+        val english = shown(id)
+        assertTrue("in 3 days" in english, english.toString())
+        assertTrue("1 book to return" in english && "Scan" in english, english.toString())
+    }
+
+    /**
+     * Android 13+: езикът е сменен от системните настройки на приложението (или на телефона)
+     * при затворено приложение — процесът е с новия език, а системата праща само
+     * ACTION_LOCALE_CHANGED. Приемникът на уиджета го слуша (манифестът) и го опреснява.
+     */
+    @Config(sdk = [34])
+    @Test fun localeChangedBroadcastRefreshesWidget() = runBlocking<Unit> {
+        val locale = Intent(Intent.ACTION_LOCALE_CHANGED).setPackage(app.packageName)
+        val receivers = app.packageManager.queryBroadcastReceivers(locale, 0).map { it.activityInfo.name }
+        assertTrue(ChitalishteWidgetReceiver::class.java.name in receivers, receivers.toString())
+
+        val id = signedInWidget()
+        backend!!.json("/javora/index.json", INDEX)
+        WidgetUpdater.refresh(app)
+        WidgetUpdater.awaitIdle()
+        assertTrue("след 3 дни" in shown(id))
+
+        // Същият език (напр. сменен е само езикът на телефона, а приложението е на своя) — нищо.
+        ChitalishteWidgetReceiver().onReceive(app, locale)
+        WidgetUpdater.awaitIdle()
+        assertTrue("след 3 дни" in shown(id))
+
+        RuntimeEnvironment.setQualifiers("+en")
+        ChitalishteWidgetReceiver().onReceive(app, locale)
         WidgetUpdater.awaitIdle()
         val english = shown(id)
         assertTrue("in 3 days" in english, english.toString())
