@@ -75,6 +75,8 @@ my_card() {  # „Моето“ › „Читателска карта“
   tap text '=Читателска карта' || tap text 'Читателска карта' || { log "MY: no 'Читателска карта' entry: $(texts 12 | cut -c1-200)"; card_screen; }
 }
 part_unlock() {
+  # Под API 33 няма език по приложение: езикът на устройството — български (рестарт на рамката, корен).
+  if [ "$SDK" -lt 33 ]; then sys_locale bg-BG; launch >/dev/null; sleep 5; fi
   warmup
   sec "P0. Package (GitHub build): requested permissions"
   a dumpsys package $PKG | tr -d '\r' > $OUT/dumpsys-package.txt
@@ -969,10 +971,28 @@ part_upc() {
   cp $OUT/server.log $OUT/server-log.txt
 }
 
+# ================================================================= КРЪГ d: кратка проверка
+part_smoke() {
+  warmup
+  sec "S1. Cold starts (10)"
+  : > $OUT/start-cold.txt
+  for i in $(seq 1 10); do a am force-stop $PKG; sleep 3; launch | tee -a $OUT/start-cold.txt | tr '\n' ' '; echo; sleep 3; done
+  python3 $H_/parse.py starts $OUT/start-cold.txt "cold" | tee -a $SUM
+  sec "S2. Monkey 2000 events (seed 1357, CAMERA revoked)"
+  no_camera; restart
+  local t0; t0=$(now_ms)
+  timeout 900 adb shell monkey -p $PKG --pct-syskeys 0 --pct-anyevent 0 --throttle 80 -s 1357 -v 2000 > $OUT/monkey.txt 2>&1
+  log "MONKEY exit=$? duration=$(( ($(now_ms) - t0) / 1000 )) s; $(grep -E 'Events injected|Monkey finished|aborted' $OUT/monkey.txt | tr '\n' ' ')"
+  log "MONKEY markers: CRASH=$(grep -c 'CRASH' $OUT/monkey.txt) ANR=$(grep -c 'NOT RESPONDING\|ANR in' $OUT/monkey.txt) FATAL=$(grep -c 'FATAL EXCEPTION' $OUT/monkey.txt)"
+  alive "after monkey"; online
+  log "pid after monkey: '$(a pidof $PKG | tr -d '\r')'"
+}
+
 # ================================================================= main (вълна 16)
 part_w16() {
   case $PART in
-    unlock33|unlock34) part_unlock;;
+    unlock33|unlock34|unlock28) part_unlock;;
+    smoke33) part_smoke;;
     login) part_login16;;
     update) part_update16;;
     upd33|upd34) part_upd2;;

@@ -1,4 +1,4 @@
-name: Emulator check wave 16 / v1.2.30, round c publish (temporary)
+name: Emulator check wave 16 / v1.2.30, round d (temporary)
 # ВРЕМЕННО: проверка на сливането на вълна 16 (origin/claude/charming-rubin-3lzor2 @ bf10741) на
 # емулатор преди изданието, със сравнение с v1.2.29 (tag v1.2.29 = b84650f). Настройката е от
 # debug/wave15-check. Резултатите (снимки, логове, числа) се публикуват в клона emulator-results,
@@ -25,15 +25,14 @@ on:
 permissions:
   contents: read
 env:
-  NEW_REF: 255fdc6de6bf362fcf0526420959f8613dc38784
+  NEW_REF: 858c8b251341700ef815677ba9e6ac8efad71be5
   BASE_REF: b84650fce3bc77adc89d8cb38ed4e6a68a11f4d3
   VC_NEW: "1488543"
   VC_BASE: "1488542"
   # Папката на тестовото обновяване — с номера на изпълнението (кешът на raw.githubusercontent).
-  STAGE: v130c/update/${{ github.run_id }}
+  STAGE: v130d/update/${{ github.run_id }}
 jobs:
   key:
-    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -64,7 +63,6 @@ jobs:
           path: dist/
 
   build:
-    if: false
     needs: key
     runs-on: ubuntu-latest
     timeout-minutes: 75
@@ -138,17 +136,6 @@ jobs:
             ./gradlew --no-daemon assembleProdRelease
             cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/app.apk
             echo "${{ matrix.vname }} $(git rev-parse --short HEAD) ($(git log -1 --format=%s | cut -c1-60)); versionCode $VC; x86_64 libs: $(unzip -l dist/app.apk | grep -c 'lib/x86_64/' || true)" > dist/apk-ref.txt
-            # Кодът на v1.2.30 под по-нисък versionCode, обновява се към тестовото v1.2.30.
-            sed -i 's/versionName = ".*"/versionName = "1.2.30-pre"/' app/build.gradle.kts
-            export VERSION_CODE=${{ env.VC_BASE }} UPDATE_MANIFEST_URL="$RAW/update.json"
-            ./gradlew --no-daemon assembleProdRelease
-            cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/app-new-upd.apk
-            echo "1.2.30-pre $(git rev-parse --short HEAD) (v1.2.30 code); versionCode ${{ env.VC_BASE }}; update manifest $UPDATE_MANIFEST_URL" > dist/apk-new-upd-ref.txt
-            # Кръг c: същото, update.json — от локалния HTTPS сървър на runner-а (10.0.2.2 от емулатора).
-            export UPDATE_MANIFEST_URL="https://10.0.2.2:8443/update.json"
-            ./gradlew --no-daemon assembleProdRelease
-            cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/app-new-upd-local.apk
-            echo "1.2.30-pre $(git rev-parse --short HEAD) (v1.2.30 code); versionCode ${{ env.VC_BASE }}; update manifest $UPDATE_MANIFEST_URL" > dist/apk-new-upd-local-ref.txt
           else
             export UPDATE_MANIFEST_URL="$RAW/none.json"
             ./gradlew --no-daemon assembleProdRelease
@@ -264,7 +251,7 @@ jobs:
 
   emulator:
     needs: [build, helper, stage-update]
-    if: false
+    if: always() && needs.build.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 80
     continue-on-error: true
@@ -279,7 +266,8 @@ jobs:
         # Кръг 3: вход (бутонът, изборът на имейл приложение), повторното изтегляне, езикът, емоджи.
         # Кръг b (255fdc6): повторното изтегляне след „Отказ“ (API 33/34), емоджи на API 26/28, старт A/B.
         # Кръг c: отказ → повторно „Изтегли и инсталирай“ (приложението отпред), локален сървър с Range/ETag.
-        part: [upc33]
+        # Кръг d (858c8b2): отключването без androidx.biometric (API 33/34/28), кратка проверка на API 33.
+        part: [unlock33, unlock34, unlock28, smoke33]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -336,8 +324,10 @@ jobs:
     permissions:
       contents: write
       actions: read
+    needs: [build, emulator]
+    if: always()
     env:
-      REPUBLISH_FROM: "41361847878"
+      REPUBLISH_FROM: ${{ github.run_id }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -345,17 +335,13 @@ jobs:
           pattern: out-*
           path: results
           merge-multiple: true
-          run-id: ${{ env.REPUBLISH_FROM }}
-          github-token: ${{ github.token }}
       - uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           pattern: apk-*
           path: apks
           merge-multiple: true
-          run-id: ${{ env.REPUBLISH_FROM }}
-          github-token: ${{ github.token }}
-      - name: Push results to emulator-results/v130c (orphan commit; the rest of the branch is kept)
+      - name: Push results to emulator-results/v130d (orphan commit; the rest of the branch is kept)
         run: |
           set -ex
           SRC=$(git rev-parse --short HEAD)
@@ -368,7 +354,7 @@ jobs:
           git read-tree FETCH_HEAD
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          V=v130c
+          V=v130d
           for p in $(ls "$W/results"); do git rm -r -q --cached --ignore-unmatch "$V/$p"; done
           mkdir -p "$V"; cp -r "$W/results/." "$V/"
           mkdir -p "$V/size"; cp "$W"/apks/size-*.txt "$W"/apks/apk-*ref.txt "$V/size/" 2>/dev/null || true
@@ -376,9 +362,10 @@ jobs:
           echo "run $REPUBLISH_FROM @ $SRC (published by run ${{ github.run_id }}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
           (
             cd "$V"
-            echo "# Wave 16 emulator check, round c (255fdc6): re-download after 'Отказ' with a local HTTPS server"
+            echo "# Wave 16 emulator check, round d (858c8b2): unlock with the framework BiometricPrompt, size, smoke"
             echo
-            echo "Emulator run $REPUBLISH_FROM (debug/wave16-check @ $SRC). Round b: [../v130b/index.md](../v130b/index.md). Round a: [../v130/index.md](../v130/index.md)."
+            echo "Emulator run $REPUBLISH_FROM (debug/wave16-check @ $SRC). Round c: [../v130c/index.md](../v130c/index.md). Round b: [../v130b/index.md](../v130b/index.md). Round a: [../v130/index.md](../v130/index.md)."
+            echo; echo '```'; cat size/size-new.txt 2>/dev/null; echo '```'
             echo
             for p in $(ls -d */ | tr -d /); do
               [ -f "$p/summary.txt" ] || continue
@@ -389,7 +376,7 @@ jobs:
           ) > "$RUNNER_TEMP/v130c-index.md"
           mv "$RUNNER_TEMP/v130c-index.md" "$V/index.md"
           git show FETCH_HEAD:index.md > index.md
-          grep -q "v130c/index.md" index.md || { { head -1 index.md; echo; echo "Wave 16 check, round c (255fdc6, re-download captures): [v130c/index.md](v130c/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
+          grep -q "v130d/index.md" index.md || { { head -1 index.md; echo; echo "Wave 16 check, round d (858c8b2, unlock without androidx.biometric): [v130d/index.md](v130d/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
           git add "$V" index.md
-          git commit -q -m "Emulator results v130c for $SRC (run $REPUBLISH_FROM)"
+          git commit -q -m "Emulator results v130d for $SRC (run $REPUBLISH_FROM)"
           git push -f origin HEAD:refs/heads/emulator-results
