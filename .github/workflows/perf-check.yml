@@ -236,8 +236,9 @@ jobs:
         # API 33 със swangle_indirect; частите с „34“ — API 34, с „26“/„28“ — API 26/28 (също swangle_indirect).
         # Вълна 16: unlock33/34, login, update, events, dialogs, widgetlang, a11y16, tablet, onboard,
         # emoji26/28. Регресия: abstart-1/2, mem, mem-base, monkey, rot, offline, look1/2/3, a11y.
-        part: [unlock33, unlock34, login, update, events, dialogs, widgetlang, a11y16, tablet, onboard, emoji26, emoji28,
-               abstart-1, abstart-2, mem, mem-base, monkey, rot, offline, look1, look2, look3, a11y]
+        # Кръг 1 (run 41338157812): всички части. Кръг 2: отказът на проверката с „Назад“, Esc в полето,
+        # повторното изтегляне, TalkBack, таблетът (книгата от каталога), езикът на устройството, емоджи.
+        part: [unlock33, unlock34, login, update, a11y16, tablet, onboard, widgetlang, emoji26, emoji28, emoji33]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8

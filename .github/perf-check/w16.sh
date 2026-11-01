@@ -7,12 +7,15 @@ tapa() {  # докосване по текст, иначе по описание
   dump || return 1; local p; p=$(xy text "$1"); [ -z "$p" ] && p=$(xy content-desc "$1")
   [ -n "$p" ] || { echo "not found (text/desc): $1"; return 1; }; echo ">>> tap '$1' @ $p"; a input tap $p
 }
+# Клавиатурата се скрива с „Назад“ (само ако е показана): от вълна 16 Esc (111) е „Назад“ в приложението.
+hide_ime() { a dumpsys input_method | tr -d '\r' | grep -q 'mInputShown=true' && { a input keyevent KEYCODE_BACK; sleep 1; }; return 0; }
 perm_notif() { a dumpsys package $PKG | tr -d '\r' | grep -m1 -oE 'android.permission.POST_NOTIFICATIONS: granted=[a-z]+(, flags=\[[^]]*\])?'; }
 helper_install() {
   [ -f helper.apk ] || { log "HELPER: helper.apk missing (helper job failed?)"; return 1; }
   timeout 120 adb install -r -g helper.apk 2>&1 | tail -1
   a pm grant org.pc.helper android.permission.CHANGE_CONFIGURATION 2>&1 | head -1
   a settings put global hidden_api_policy 1; a settings put global hidden_api_policy_p_apps 1; a settings put global hidden_api_policy_pre_p_apps 1
+  a appops set org.pc.helper WRITE_SETTINGS allow
   log "HELPER installed: $(a pm list packages org.pc.helper | tr -d '\r')"
 }
 a11y_on() {  # тестовата услуга за достъпност (без „изследване чрез докосване“)
@@ -59,6 +62,14 @@ enter_pin() {
   a input text 1234; sleep 0.5; a input keyevent 66; sleep 3
 }
 open_privacy() { open_settings && settings_find "$L_REQ"; }
+prompt_cancel() {  # „Назад“ на проверката (първото скрива клавиатурата на ПИН-а), докато изчезне
+  local i
+  for i in 1 2 3; do
+    a input keyevent KEYCODE_BACK; sleep 2.5; dump
+    log "cancel: Back #$i → prompt $(has "$RX_PROMPT" && echo still || echo gone); IME $(a dumpsys input_method | tr -d '\r' | grep -m1 -oE 'mInputShown=(true|false)')"
+    has "$RX_PROMPT" || return 0
+  done
+}
 my_card() {  # „Моето“ › „Читателска карта“
   ready; tab my; sleep 3; dump
   tap text '=Читателска карта' || tap text 'Читателска карта' || { log "MY: no 'Читателска карта' entry: $(texts 12 | cut -c1-200)"; card_screen; }
@@ -96,28 +107,32 @@ part_unlock() {
   sec "P4. New process: Моето › Читателска карта → prompt; Back (cancel) → Моето; PIN → the card"
   a am force-stop $PKG; launch >/dev/null; sleep 5; ready
   my_card; gate_state 20-card-prompt
-  back 3; gate_state 21-after-cancel 1
+  prompt_cancel; gate_state 21-after-cancel 1
   my_card; sleep 3; enter_pin; gate_state 22-after-pin 1
   sec "P5. Background 20 s (< 60 s): no prompt; background 70 s (> 60 s): prompt"
   go_home 2; sleep 20; launch >/dev/null; gate_state 30-after-20s-background
   go_home 2; sleep 70; launch >/dev/null; gate_state 31-after-70s-background
   has "$RX_PROMPT" && { enter_pin; gate_state 32-after-pin 1; }
   sec "P6. Screen off and on (keyguard with the PIN): prompt again"
+  mark m-screenoff
   a input keyevent KEYCODE_SLEEP; sleep 4; a input keyevent KEYCODE_WAKEUP; sleep 2
-  a wm dismiss-keyguard 2>/dev/null; sleep 2; dump; log "keyguard: $(texts 6 | cut -c1-160)"
-  if has 'password="true"' || has 'PIN'; then a input text 1234; a input keyevent 66; sleep 3; fi
+  a wm dismiss-keyguard 2>/dev/null; sleep 2; dump; shot unlock/39-keyguard; log "keyguard: $(prompt_state | cut -c1-260)"
+  if has "$RX_PROMPT"; then log "(the app's prompt is already on top of the keyguard)"
+  elif has 'password="true"'; then a input text 1234; a input keyevent 66; sleep 3; fi
   gate_state 40-after-screen-off
+  log "biometric/keyguard log after screen off: $(since m-screenoff 'BiometricService|AuthSession|BiometricPrompt|AuthController|onError|onAuthenticationError|ERROR_CANCELED|KeyguardViewMediator.*(show|hide)' | cut -c19-200 | head -14 | tr '\n' '~')"
   has "$RX_PROMPT" && { enter_pin; gate_state 41-after-pin 1; }
   sec "P7. Quick Settings tile → the card: the gate"
   qs_add; a am force-stop $PKG; go_home 2
   qs_tile gate
   if [ -n "$TP" ]; then a input tap $TP; else log "click-tile: $(a cmd statusbar click-tile $TILE 2>&1 | tr -d '\r' | head -1)"; fi
   gate_state 50-tile-tap 4
-  back 3; gate_state 51-tile-after-cancel 1
+  prompt_cancel; a cmd statusbar collapse; gate_state 51-tile-after-cancel 1
   qs_tile gate2
   if [ -n "$TP" ]; then a input tap $TP; else a cmd statusbar click-tile $TILE >/dev/null 2>&1; fi
   sleep 4; dump; has "$RX_PROMPT" && enter_pin
   gate_state 52-tile-after-pin 1
+  { fg | grep -q NotificationShade || has 'Display brightness'; } && { a cmd statusbar collapse; gate_state 53-tile-after-pin-shade-collapsed 2; }
   back 2
   sec "P8. Turning the switch off also asks for the PIN"
   if open_privacy; then tap text "$L_REQ"; sleep 3; dump; log "switch OFF tapped → $(prompt_state | cut -c1-200)"; has "$RX_PROMPT" && enter_pin; dump; log "SWITCH now: $(python3 $W16 switch $OUT/ui.xml "$L_REQ")"; fi
@@ -166,9 +181,15 @@ part_login16() {
   warmup
   ready; tab my; sleep 3; tap text '=Вход' || { log "no Вход in My: $(texts 10 | cut -c1-200)"; debug_ui login16; }
   sleep 4; dump; shot login/00-demo-login; log "LOGIN screen: $(texts 12 | cut -c1-400)"
-  sec "LG1. Two wrong attempts (fake card TEST-0042, PIN 1111)"
+  sec "LG1. Card number TEST-0042 (fake)"
   local p; p=$(xy --all class EditText | sed -n 1p)
   [ -n "$p" ] && { a input tap $p; sleep 0.8; a input text TEST-0042; sleep 0.5; }
+  sec "LG1a. Esc (hardware keyboard) in the focused card field: the field keeps the text, the screen stays?"
+  dump; log "before Esc: $(python3 $W15 field $OUT/ui.xml 0 | sed 's/password=[a-z]*//'); IME $(a dumpsys input_method | tr -d '\r' | grep -m1 -oE 'mInputShown=(true|false)')"
+  a input keyevent KEYCODE_ESCAPE; sleep 2; dump; shot login/05-after-esc
+  log "after Esc #1: login screen $(has 'text="Вход за читатели"' && echo STILL || echo 'GONE (navigated back)'); $(python3 $W15 field $OUT/ui.xml 0 | sed 's/password=[a-z]*//'); IME $(a dumpsys input_method | tr -d '\r' | grep -m1 -oE 'mInputShown=(true|false)'); $(python3 $W16 tabsel $OUT/ui.xml)"
+  has 'text="Вход за читатели"' || { tap text '=Вход'; sleep 3; dump; p=$(xy --all class EditText | sed -n 1p); [ -n "$p" ] && { a input tap $p; sleep 0.8; a input text TEST-0042; sleep 0.5; }; }
+  sec "LG1b. Two wrong attempts (fake card TEST-0042, PIN 1111)"
   login_try 1; login_try 2
   sec "LG2. Forgot PIN (card TEST-0042, PIN 9876 typed, not sent): the sheet; the email subject"
   p=$(xy --all class EditText | sed -n 2p); [ -n "$p" ] && { a input tap $p; sleep 0.8; a input text 9876; sleep 0.5; hide_ime; }
@@ -310,7 +331,16 @@ part_update16() {
     upd_dialog 'text="Изтегли и инсталирай"'
   fi
   shot update/30-dialog-again
-  tap text '=Изтегли и инсталирай' && { t0=$(now_ms); sleep 1; go_home 1; }
+  mark m-dl-2
+  tap text '=Изтегли и инсталирай' && t0=$(now_ms)
+  for i in 1 2 3 4; do
+    sleep 2; dump; [ $i = 2 ] && shot update/30b-dialog-after-second-tap
+    log "DIALOG after the 2nd tap +$(( $(now_ms) - t0 )) ms: progress $(grep -c 'class="android.widget.ProgressBar"' $OUT/ui.xml) $(grep -oE 'text="[0-9]+ ?%"' $OUT/ui.xml | head -1); 'Отказ' $(has 'text="Отказ"' && echo yes || echo no); 'Изтегли и инсталирай' $(has 'text="Изтегли и инсталирай"' && echo yes || echo no); notif: $(upd_notifs b4t-$i | head -1 | cut -c1-120)"
+  done
+  log "jobs of the app after the 2nd tap: $(a dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -E "JOB #.*$PKG" | cut -c1-140 | head -4 | tr '\n' '~'); files: [$(upd_files)]"
+  log "logcat since the 2nd tap: $(since m-dl-2 "$PKG|WM-|WorkManager|SystemForeground|update" | grep -vE 'Choreographer|OpenGLRenderer|uiautomator' | cut -c19-220 | head -10 | tr '\n' '~')"
+  if has 'text="Изтегли и инсталирай"'; then log "(still 'Изтегли и инсталирай' — tapping once more)"; tap text '=Изтегли и инсталирай'; sleep 3; log "after the 3rd tap: $(upd_notifs b4t-3rd | head -1 | cut -c1-160)"; fi
+  go_home 1
   st=none
   for i in $(seq 1 60); do
     upd_notifs b4 > $OUT/b4.txt
@@ -385,19 +415,20 @@ part_events16() {
   emoji_items
 }
 emoji_items() {
-  local n=0 kind id url
+  local n=0 kind id url q
   [ -s $OUT/site/emoji.txt ] || python3 $W16 site $OUT/site > /dev/null 2>&1
-  while IFS='|' read -r kind id url; do
-    n=$((n+1)); [ $n -gt 5 ] && break
+  while IFS='|' read -r kind id url <&3; do
+    n=$((n+1)); [ $n -gt 6 ] && break
+    q=$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$id")
     case $kind in
-      event) a am start -a org.chyavorec.app.SHORTCUT -d "chyavorec://app/event/$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$id")" -n $ACT >/dev/null 2>&1;;
-      news) case $url in http*) link "$url";; /*) link "$SITE$url";; *) link "$SITE/news/$id";; esac;;
-      *) case $url in http*) link "$url";; /*) link "$SITE$url";; *) continue;; esac;;
+      event) a am start -a org.chyavorec.app.SHORTCUT -d "chyavorec://app/event/$q" -n $ACT >/dev/null 2>&1 < /dev/null;;
+      news) a am start -a org.chyavorec.app.SHORTCUT -d "chyavorec://app/article/$q" -n $ACT >/dev/null 2>&1 < /dev/null;;
+      *) case $url in http*) link "$url" < /dev/null;; /*) link "$SITE$url" < /dev/null;; *) continue;; esac;;
     esac
     sleep 5; dump; shot emoji/$n-$kind
     log "EMOJI $n ($kind $id): $(python3 $H_/find.py $OUT/ui.xml --texts | LC_ALL=C grep -E $'\xF0|\xE2\x9C|\xE2\x8F|\xE2\x98|\xE2\xAD' | head -3 | cut -c1-160 | tr '\n' '|')"
-    back 2
-  done < $OUT/site/emoji.txt
+    back 2 < /dev/null
+  done 3< $OUT/site/emoji.txt
   [ $n = 0 ] && log "EMOJI: no site text with emoji found"
   link_pkg "$EVENTS_URL"; sleep 5; shot emoji/9-events-list
 }
@@ -522,7 +553,19 @@ part_a11y16() {
   restart; tab home; sleep 4; dump; shot a11y16/01-home-top; cp $OUT/ui.xml $OUT/home.xml
   log "MESSAGES button: $(grep -oE 'content-desc="Съобщения[^"]*"' $OUT/ui.xml | head -2 | tr '\n' ' '); bell/notification icons: $(grep -oE 'content-desc="[^"]*(Известия|звън)[^"]*"' $OUT/ui.xml | head -2 | tr '\n' ' ')"
   log "carousel card (uiautomator): $(python3 $W15 big $OUT/ui.xml $PKG | cut -c1-200)"
+  sec "B2. Unread messages: the stored read list emptied (as if none were read) → the badge and the label"
+  local D=/data/data/$PKG/files/datastore uid
+  a am force-stop $PKG; sleep 1; rm -f $OUT/settings.pb
+  timeout 20 adb pull $D/settings.preferences_pb $OUT/settings.pb >/dev/null 2>&1
+  python3 $W16 prefs-add $OUT/settings.pb read_messages=e: | tee -a $SUM
+  uid=$(a stat -c %u /data/data/$PKG | tr -d '\r')
+  timeout 20 adb push $OUT/settings.pb $D/settings.preferences_pb >/dev/null 2>&1
+  a chown $uid:$uid $D/settings.preferences_pb; a chmod 600 $D/settings.preferences_pb; a restorecon $D/settings.preferences_pb
+  launch >/dev/null; sleep 6; ready; tab home; sleep 3; dump; shot a11y16/02-home-unread
+  log "MESSAGES button (unread): $(grep -oE 'content-desc="Съобщения[^"]*"' $OUT/ui.xml | head -2 | tr '\n' ' '); badge texts near it: $(grep -oE 'text="[0-9]+\+?"' $OUT/ui.xml | head -3 | tr '\n' ' ')"
+  tap content-desc 'Съобщения' && { sleep 4; dump; shot a11y16/03-messages; log "Messages screen: $(texts 8 | cut -c1-260)"; back 2; }
   b=$(python3 $W15 big $OUT/ui.xml $PKG); read x0 y0 x1 y1 _ <<< "$b"
+  ready; tab home; sleep 2; dump
   declare -A TXY; local ref
   for t in home catalog my news more; do ref='=More|=Още'; [ $t = more ] && ref='=Home|=Начало'; TXY[$t]=$(xy --tab "$(tablabel $t)" "$ref"); done
   sec "T1. Test accessibility service on (log mode): pane titles on the tabs and detail screens"
@@ -549,7 +592,7 @@ for l in sys.stdin:
   adump home1
   grep -E 'Следваща новина|Предишна новина|Последни новини' $OUT/a11ytree-home1.txt | head -6 | cut -c1-300 | sed 's/^.*PCDUMP *: //' | tee -a $SUM
   grep -E 'desc=Съобщения' $OUT/a11ytree-home1.txt | head -2 | sed 's/^.*PCDUMP *: //' | cut -c1-260 | tee -a $SUM
-  mark m-act; a am broadcast -a org.pc.helper.ACT --es label 'Следваща новина' >/dev/null; sleep 3
+  mark m-act; a "am broadcast -a org.pc.helper.ACT --es label 'Следваща новина'" >/dev/null; sleep 3
   log "custom action: $(since m-act 'PCA11Y.*ACT' | tail -1 | cut -c1-200)"
   adump home2
   log "current card before/after 'Следваща новина': $(grep -m1 -E 'acts=.*новина' $OUT/a11ytree-home1.txt | grep -oE 'desc=[^=]* pane' | cut -c1-80) → $(grep -m1 -E 'acts=.*новина' $OUT/a11ytree-home2.txt | grep -oE 'desc=[^=]* pane' | cut -c1-80)"
@@ -565,11 +608,25 @@ for l in sys.stdin:
   shot a11y16/13-ctl-0s; sleep 6.5; shot a11y16/14-ctl-6s; sleep 6.5; shot a11y16/15-ctl-13s
   [ -n "${y1:-}" ] && log "CAROUSEL control (no touch exploration): diff 0→6.5 s $(python3 $W15 diff $S/13-ctl-0s.png $S/14-ctl-6s.png 0 $y0 $W $y1), 6.5→13 s $(python3 $W15 diff $S/14-ctl-6s.png $S/15-ctl-13s.png 0 $y0 $W $y1)"
   a11y_off
+  local TB; TB=$(a pm list packages 2>/dev/null | tr -d '\r' | grep -iE 'talkback|marvin' | sed 's/package://' | head -1)
+  sec "T3b. Real TalkBack ($TB): the carousel does not auto-advance"
+  if [ -n "$TB" ]; then
+    log "TalkBack services: $(a cmd package query-services --brief -a android.accessibilityservice.AccessibilityService 2>&1 | tr -d '\r' | grep -i "$TB" | tr '\n' ' ')"
+    a settings put secure enabled_accessibility_services $TB/com.google.android.marvin.talkback.TalkBackService
+    a settings put secure accessibility_enabled 1; sleep 6
+    log "TalkBack on: $(a dumpsys accessibility 2>/dev/null | tr -d '\r' | grep -m1 -oE 'touchExplorationEnabled=\w+'); bound: $(a dumpsys accessibility 2>/dev/null | tr -d '\r' | grep -m1 -oE 'Bound services:\{[^}]{0,80}')"
+    a am force-stop $PKG; sleep 1; a am start -n $ACT -a android.intent.action.MAIN -c android.intent.category.LAUNCHER >/dev/null 2>&1; sleep 8
+    shot a11y16/16-talkback-0s; sleep 6.5; shot a11y16/17-talkback-6s; sleep 6.5; shot a11y16/18-talkback-13s
+    [ -n "${y1:-}" ] && log "CAROUSEL with real TalkBack: diff 0→6.5 s $(python3 $W15 diff $S/16-talkback-0s.png $S/17-talkback-6s.png 0 $y0 $W $y1), 6.5→13 s $(python3 $W15 diff $S/17-talkback-6s.png $S/18-talkback-13s.png 0 $y0 $W $y1) (TalkBack's focus box may differ)"
+    a settings delete secure enabled_accessibility_services; a settings put secure accessibility_enabled 0; sleep 3
+  else log "no TalkBack package on the image"; fi
   sec "T4. Reduced motion (animator_duration_scale 0): the offline bar and the sync banner"
   local mode
   for mode in 0 1; do
     anims $mode; restart; tab home; sleep 4
-    rec_toggle reduced$mode-offline offline; dump; shot a11y16/2$mode-offline; log "anims $mode offline: app in front $(has "package=\"$PKG\"" && echo yes || echo NO); offline bar $(has 'Няма интернет връзка' && echo shown || echo NO); $(texts 6 | cut -c1-160)"
+    rec_toggle reduced$mode-offline offline
+    for i in 1 2 3 4 5 6 7 8; do dump; has 'Няма интернет връзка' && break; sleep 1.5; done
+    shot a11y16/2$mode-offline; log "anims $mode offline: app in front $(has "package=\"$PKG\"" && echo yes || echo NO); offline bar $(has 'Няма интернет връзка' && echo shown || echo NO); $(texts 6 | cut -c1-160)"
     tab news; sleep 3; dump; shot a11y16/2$mode-news-offline; log "anims $mode news offline: sync banner $(has 'Показваме последно наличните|Последно обновяване|синхрон|кеш' && echo shown || echo '?'); $(texts 8 | cut -c1-200)"
     tab home; sleep 2
     rec_toggle reduced$mode-online online; dump; log "anims $mode back online: offline bar $(has 'Няма интернет връзка' && echo STILL || echo gone)"
@@ -584,7 +641,7 @@ for l in sys.stdin:
 rec_toggle() {  # $1 — етикет, $2 — offline | online: запис 6 s около превключването, кадрите — 10 fps
   local d=$OUT/rec/$1 rp
   mkdir -p $d; a "rm -f /sdcard/rt.mp4"
-  T=30 a screenrecord --size 540x1200 --time-limit 6 /sdcard/rt.mp4 & rp=$!
+  T=30 a screenrecord --size 540x1200 --time-limit 12 /sdcard/rt.mp4 & rp=$!
   sleep 1.5; $2; wait $rp
   timeout 60 adb pull /sdcard/rt.mp4 $d/rec.mp4 >/dev/null 2>&1
   if [ -s $d/rec.mp4 ] && command -v ffmpeg >/dev/null; then
@@ -602,7 +659,8 @@ tb_first() {  # първият висок ред на списъка (новин
 tb_book() {  # каталогът → „12“ → „12 -те вятъра“
   ready; tab catalog; waitfor "$RX_RESULTS" 60; sleep 1
   dump; grep -q 'text="12"' $OUT/ui.xml || search_catalog 12
-  tap text '12 -те вятъра' || { log "TABLET: no '12 -те вятъра' row: $(texts 10 | cut -c1-200)"; debug_ui tb-row; return 1; }
+  # Първото съвпадение е подсказката (chip) над резултатите — редът е последното.
+  tap text '12 -те вятъра' --last || { log "TABLET: no '12 -те вятъра' row: $(texts 10 | cut -c1-200)"; debug_ui tb-row; return 1; }
   sleep 4
 }
 keyc() {  # клавишна комбинация (API 33+: input keycombination)
@@ -678,10 +736,10 @@ part_onboard() {
   log "page 1 features: news $(has 'text="Новини и събития"' && echo yes || echo NO), catalogue $(has 'text="Каталог и „Искам да прочета“"' && echo yes || echo NO), card $(has 'text="Читателска карта"' && echo yes || echo NO)"
   sec "OB2. Page 2: text-size chips (apply at once), 'Разреши известията' → the system prompt (API $SDK)"
   tap text '=Напред'; onb_page 02-page2
-  h0=$(python3 $W16 nodeh $OUT/ui.xml 'Удобно за теб' $DENS)
+  h0=$(python3 $W16 nodeh $OUT/ui.xml "Размерът на текста и известията" $DENS)
   log "chips: $(for c in Малък Стандартен Голям 'Много голям'; do printf '%s[%s] ' "$c" "$(xy --state text "=$c" | grep -oE 'checked=[a-z]+|selected=[a-z]+' | tr '\n' ',')"; done)"
   tap text '=Много голям'; onb_page 03-page2-xlarge 1.5
-  h1=$(python3 $W16 nodeh $OUT/ui.xml 'Удобно за теб' $DENS)
+  h1=$(python3 $W16 nodeh $OUT/ui.xml "Размерът на текста и известията" $DENS)
   log "TEXT SIZE applied at once: title height $h0 dp → $h1 dp; chips: $(for c in Стандартен 'Много голям'; do printf '%s[%s] ' "$c" "$(xy --state text "=$c" | grep -oE 'checked=[a-z]+|selected=[a-z]+' | tr '\n' ',')"; done)"
   tap text '=Стандартен'; sleep 1.5
   dump; for i in 1 2 3; do [ -n "$(xy text '=Разреши известията')" ] && break; sw_up 400; sleep 1; dump; done
@@ -714,7 +772,7 @@ part_w16() {
     login) part_login16;;
     update) part_update16;;
     events) part_events16;;
-    emoji26|emoji28) part_emoji;;
+    emoji26|emoji28|emoji33) part_emoji;;
     dialogs) part_dialogs;;
     widgetlang) part_widgetlang16;;
     a11y16) part_a11y16;;

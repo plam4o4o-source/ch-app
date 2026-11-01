@@ -222,6 +222,8 @@ def value(kind, raw):
         return varint(1 << 3 | 0) + varint(1 if raw.lower() == 'true' else 0)
     if kind == 'l':
         return varint(4 << 3 | 0) + varint(int(raw))
+    if kind == 'e':  # празно множество от низове (string_set)
+        return ld(6, b'')
     raise SystemExit(f"unknown kind {kind}")
 
 
