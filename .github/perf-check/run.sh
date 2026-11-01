@@ -238,7 +238,7 @@ finish() {
 }
 setup() {
   # Корен — за сензорния екран (sendevent) и кеша на приложението (само в частта media).
-  case $PART in homey|func|search34|media|widgetlang|zoom|notif|gallery|gallery34|update|events|dialogs|a11y16|upd33|upd34) ROOT=1;; *) ROOT=0;; esac
+  case $PART in homey|func|search34|media|widgetlang|zoom|notif|gallery|gallery34|update|events|dialogs|a11y16|upd33|upd34|upc33|upc34) ROOT=1;; *) ROOT=0;; esac
   if [ $ROOT = 1 ]; then timeout 30 adb root 2>&1 | head -2; sleep 4; timeout 60 adb wait-for-device; fi
   log "part $PART; APK: $(cat apk-ref.txt 2>/dev/null) size $(stat -c %s app.apk) bytes"
   log "base APK: $(cat apk-base-ref.txt 2>/dev/null) size $(stat -c %s app-base.apk 2>/dev/null) bytes"

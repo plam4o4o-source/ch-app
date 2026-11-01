@@ -1,4 +1,4 @@
-name: Emulator check wave 16 / v1.2.30, round b (temporary)
+name: Emulator check wave 16 / v1.2.30, round c (temporary)
 # ВРЕМЕННО: проверка на сливането на вълна 16 (origin/claude/charming-rubin-3lzor2 @ bf10741) на
 # емулатор преди изданието, със сравнение с v1.2.29 (tag v1.2.29 = b84650f). Настройката е от
 # debug/wave15-check. Резултатите (снимки, логове, числа) се публикуват в клона emulator-results,
@@ -30,7 +30,7 @@ env:
   VC_NEW: "1488543"
   VC_BASE: "1488542"
   # Папката на тестовото обновяване — с номера на изпълнението (кешът на raw.githubusercontent).
-  STAGE: v130b/update/${{ github.run_id }}
+  STAGE: v130c/update/${{ github.run_id }}
 jobs:
   key:
     runs-on: ubuntu-latest
@@ -70,7 +70,6 @@ jobs:
       matrix:
         include:
           - { app: new, vname: "1.2.30" }
-          - { app: base, vname: "1.2.29" }
     steps:
       - uses: actions/checkout@v7
         with:
@@ -142,6 +141,11 @@ jobs:
             ./gradlew --no-daemon assembleProdRelease
             cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/app-new-upd.apk
             echo "1.2.30-pre $(git rev-parse --short HEAD) (v1.2.30 code); versionCode ${{ env.VC_BASE }}; update manifest $UPDATE_MANIFEST_URL" > dist/apk-new-upd-ref.txt
+            # Кръг c: същото, update.json — от локалния HTTPS сървър на runner-а (10.0.2.2 от емулатора).
+            export UPDATE_MANIFEST_URL="https://10.0.2.2:8443/update.json"
+            ./gradlew --no-daemon assembleProdRelease
+            cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/app-new-upd-local.apk
+            echo "1.2.30-pre $(git rev-parse --short HEAD) (v1.2.30 code); versionCode ${{ env.VC_BASE }}; update manifest $UPDATE_MANIFEST_URL" > dist/apk-new-upd-local-ref.txt
           else
             export UPDATE_MANIFEST_URL="$RAW/none.json"
             ./gradlew --no-daemon assembleProdRelease
@@ -161,6 +165,7 @@ jobs:
   # Какво е пораснало: издадените APK-та (само ARM) и mapping.txt на двете версии.
   sizediff:
     needs: build
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 15
     continue-on-error: true
@@ -250,7 +255,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -qm "Stage the v1.2.30 test update for the v130b emulator run (run ${{ github.run_id }})"
+          git commit -qm "Stage the v1.2.30 test update for the v130c emulator run (run ${{ github.run_id }})"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/emulator-results
 
   emulator:
@@ -269,7 +274,8 @@ jobs:
         # повторното изтегляне, TalkBack, таблетът (книгата от каталога), езикът на устройството, емоджи.
         # Кръг 3: вход (бутонът, изборът на имейл приложение), повторното изтегляне, езикът, емоджи.
         # Кръг b (255fdc6): повторното изтегляне след „Отказ“ (API 33/34), емоджи на API 26/28, старт A/B.
-        part: [upd33, upd34, emoji26, emoji28]
+        # Кръг c: отказ → повторно „Изтегли и инсталирай“ (приложението отпред), локален сървър с Range/ETag.
+        part: [upc33]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -345,7 +351,7 @@ jobs:
           SRC=$(git rev-parse --short HEAD)
           mkdir -p "$RUNNER_TEMP/pub" results
           if git fetch -q --depth 1 origin emulator-results; then git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/pub"; fi
-          V="$RUNNER_TEMP/pub/v130b"
+          V="$RUNNER_TEMP/pub/v130c"
           mkdir -p "$V"
           # Заменят се само частите от това изпълнение; update.json остават за справка, APK-тата — не.
           for p in $(ls results); do rm -rf "$V/$p"; done
@@ -356,11 +362,11 @@ jobs:
           cd "$V"
           PARTS=$(ls -d */ 2>/dev/null | tr -d / | grep -vE '^(size|update)$' || true)
           {
-            echo "# Wave 16 emulator check, round b (255fdc6 fixes: update re-download, EmojiCompat back; test v1.2.30 vs v1.2.29 = b84650f)"
+            echo "# Wave 16 emulator check, round c (255fdc6): re-download after 'Отказ', local HTTPS server, WorkManager/job/service captures"
             echo
             echo "Source: \`debug/wave16-check\` @ $SRC, last run ${{ github.run_id }} (attempt ${{ github.run_attempt }}), $(date -u +%FT%TZ). Runs: [runs.txt](runs.txt)."
             echo "Emulators: google_apis x86_64 API 33 (parts ending in 34/28/26: that API), pixel_6 profile, -gpu swangle_indirect, no camera; app locale bg-BG unless a part says otherwise. APKs: minified prodRelease, x86_64 added, throwaway key; v1.2.30 versionCode $VC_NEW, v1.2.29 versionCode $VC_BASE."
-            echo "Round a (bf10741): [../v130/index.md](../v130/index.md). Earlier: v1.2.29 check [../v129/index.md](../v129/index.md)."
+            echo "Round b: [../v130b/index.md](../v130b/index.md). Round a (bf10741): [../v130/index.md](../v130/index.md). Earlier: v1.2.29 check [../v129/index.md](../v129/index.md)."
             echo
             echo "## APK size (release configuration: arm64-v8a + armeabi-v7a, no x86_64)"
             echo; echo '```'; cat size/size-new.txt size/size-base.txt 2>/dev/null; echo '```'; echo
@@ -384,13 +390,13 @@ jobs:
             find . -type f ! -name '*.png' ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
           } > index.md
           R="$RUNNER_TEMP/pub/index.md"
-          if [ -f "$R" ] && ! grep -q "v130b/index.md" "$R"; then
-            { head -1 "$R"; echo; echo "Wave 16 check, round b (255fdc6): [v130b/index.md](v130b/index.md)"; tail -n +2 "$R"; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" "$R"
+          if [ -f "$R" ] && ! grep -q "v130c/index.md" "$R"; then
+            { head -1 "$R"; echo; echo "Wave 16 check, round c (255fdc6, re-download captures): [v130c/index.md](v130c/index.md)"; tail -n +2 "$R"; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" "$R"
           fi
           cd "$RUNNER_TEMP/pub"
           git init -q -b emulator-results
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -qm "Emulator results v130b for $SRC (run ${{ github.run_id }})"
+          git commit -qm "Emulator results v130c for $SRC (run ${{ github.run_id }})"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/emulator-results

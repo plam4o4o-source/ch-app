@@ -860,6 +860,113 @@ part_upd2() {
   a cmd statusbar collapse; a svc wifi enable
 }
 
+# ================================================================= КРЪГ c: отказ → повторно изтегляне, локален HTTPS сървър
+UPC_S=""
+upc_server() {  # CA в системните сертификати (корен, tmpfs), HTTPS сървър на runner-а на :8443
+  UPC_S=$OUT/srv; mkdir -p $UPC_S/www
+  local S=$UPC_S h
+  openssl req -x509 -newkey rsa:2048 -nodes -keyout $S/ca.key -out $S/ca.pem -days 2 -subj "/CN=perf-check test CA" \
+    -addext "basicConstraints=critical,CA:TRUE" -addext "keyUsage=critical,keyCertSign,cRLSign" >/dev/null 2>&1
+  openssl req -newkey rsa:2048 -nodes -keyout $S/srv.key -out $S/srv.csr -subj "/CN=10.0.2.2" >/dev/null 2>&1
+  printf 'subjectAltName=IP:10.0.2.2\nbasicConstraints=CA:FALSE\nextendedKeyUsage=serverAuth\n' > $S/ext.cnf
+  openssl x509 -req -in $S/srv.csr -CA $S/ca.pem -CAkey $S/ca.key -CAcreateserial -out $S/srv.pem -days 2 -extfile $S/ext.cnf >/dev/null 2>&1
+  h=$(openssl x509 -inform PEM -subject_hash_old -in $S/ca.pem | head -1); cp $S/ca.pem $S/$h.0
+  a "rm -rf /data/local/tmp/cac; mkdir -p /data/local/tmp/cac; cp /system/etc/security/cacerts/* /data/local/tmp/cac/"
+  timeout 30 adb push $S/$h.0 /data/local/tmp/cac/$h.0 >/dev/null 2>&1
+  a "mount -t tmpfs tmpfs /system/etc/security/cacerts && cp /data/local/tmp/cac/* /system/etc/security/cacerts/ && chown root:root /system/etc/security/cacerts/* && chmod 644 /system/etc/security/cacerts/* && chcon u:object_r:system_file:s0 /system/etc/security/cacerts/*"
+  log "test CA in the system store: $(a ls -l /system/etc/security/cacerts/$h.0 2>&1 | tr -d '\r'); certs: $(a ls /system/etc/security/cacerts | wc -l)"
+  : > $OUT/server.log
+  python3 $H_/upd_server.py $UPC_S/www 8443 $S/srv.pem $S/srv.key $OUT/server.log & SRVPID=$!
+  sleep 2
+}
+upc_files() {  # $1 — файлът (app.apk | big.bin), $2 — байтове/s (0 — без ограничение)
+  local W=$UPC_S/www
+  echo $1 > $W/apkname; echo $2 > $W/rate
+  python3 - $W/$1 $W/update.json $OUT/update.json <<'EOF'
+import hashlib, json, os, sys
+f, out, staged = sys.argv[1:4]
+try:
+    notes = json.load(open(staged, encoding='utf-8'))
+except Exception:
+    notes = {'notes': '• Тест', 'notes_en': '• Test'}
+h = hashlib.sha256()
+with open(f, 'rb') as fh:
+    for b in iter(lambda: fh.read(1 << 20), b''):
+        h.update(b)
+d = {'versionCode': 1488543, 'versionName': '1.2.30', 'apkUrl': 'https://10.0.2.2:8443/' + os.path.basename(f),
+     'sha256': h.hexdigest(), 'size': os.path.getsize(f), 'minSdk': 26, 'notes': notes.get('notes', ''), 'notes_en': notes.get('notes_en', '')}
+json.dump(d, open(out, 'w', encoding='utf-8'), ensure_ascii=False)
+print(f"served update.json: {os.path.basename(f)} {d['size']} B sha {d['sha256'][:12]}")
+EOF
+  log "server: $1 at $2 B/s; host check: $(curl -s -k --max-time 10 https://127.0.0.1:8443/update.json | head -c 80)"
+}
+upc_cap() {  # $1 — етикет: WorkManager db, jobscheduler, услугите, известията, диалогът
+  local d=$OUT/cap/$1 DB=/data/data/$PKG/no_backup f
+  mkdir -p $d
+  a ls $DB/androidx.work.workdb >/dev/null 2>&1 || DB=/data/data/$PKG/databases
+  for f in androidx.work.workdb androidx.work.workdb-wal androidx.work.workdb-shm; do timeout 20 adb pull $DB/$f $d/$f >/dev/null 2>&1; done
+  python3 - $d <<'EOF' > $d/workdb.txt 2>&1
+import os, shutil, sqlite3, sys, tempfile
+d = sys.argv[1]
+t = tempfile.mkdtemp()
+for f in os.listdir(d):
+    if f.startswith('androidx.work.workdb'):
+        shutil.copy(os.path.join(d, f), t)
+c = sqlite3.connect(os.path.join(t, 'androidx.work.workdb'))
+S = {0: 'ENQUEUED', 1: 'RUNNING', 2: 'SUCCEEDED', 3: 'FAILED', 4: 'BLOCKED', 5: 'CANCELLED'}
+cols = [r[1] for r in c.execute('pragma table_info(WorkSpec)')]
+gen = 'generation' if 'generation' in cols else "''"
+for r in c.execute(f"select id, state, run_attempt_count, worker_class_name, period_count, {gen}, last_enqueue_time from WorkSpec"):
+    print(f"WS {r[0][:8]} {S.get(r[1], r[1])} attempts={r[2]} {r[3].split('.')[-1]} periods={r[4]} gen={r[5]} enq={r[6]}")
+for r in c.execute("select * from WorkName"):
+    print(f"WN {r}")
+EOF
+  a dumpsys jobscheduler $PKG 2>/dev/null | tr -d '\r' > $d/jobscheduler.txt
+  a dumpsys activity services $PKG 2>/dev/null | tr -d '\r' > $d/services.txt
+  a dumpsys notification --noredact 2>/dev/null | tr -d '\r' | grep -A3 chyavorec > $d/notif.txt
+  dump; cp $OUT/ui.xml $d/ui.xml 2>/dev/null; shot upc/$1
+  log "CAP $1 (+$(( $(now_ms) - t1 )) ms after the re-tap): WorkSpec: $(grep -E 'UpdateDownloadWorker' $d/workdb.txt | cut -c4- | tr '\n' ';') WorkName: $(grep -E 'update' $d/workdb.txt | tr '\n' ';' | cut -c1-160)"
+  log "CAP $1: jobs: $(grep -cE 'JOB #' $d/jobscheduler.txt) [$(grep -E 'JOB #|Ready:|Unsatisfied|Pending queue|Active jobs|Running|Slot #|Executing' $d/jobscheduler.txt | grep -vE 'Minimum latency' | cut -c1-80 | tr -s ' ' | head -10 | tr '\n' '~')]; SystemForegroundService: $(grep -c 'SystemForegroundService' $d/services.txt) [$(grep -m2 -E 'ServiceRecord.*SystemForeground|isForeground=' $d/services.txt | tr -s ' ' | cut -c1-120 | tr '\n' '~')]; notif: $(grep -oE 'android.title=[^\n]{0,60}' $d/notif.txt | head -1); dialog: $(grep -oE 'text="([0-9]+ ?%|Изтегляне на новата версия…|Проверка за нова версия…|Изтегли и инсталирай|Отказ|Инсталирай)"' $OUT/ui.xml | tr '\n' ' ')"
+}
+upc_run() {  # $1 — етикет, $2 — файлът, $3 — B/s, $4 — s изтегляне преди „Отказ“
+  local L=$1 i
+  sec "C-$L. Download ($2 at $3 B/s) → 'Отказ' from the notification → 'Изтегли и инсталирай' again, app kept in front"
+  upc_files $2 $3
+  a am force-stop $PKG; a pm clear $PKG >/dev/null; a pm grant $PKG android.permission.POST_NOTIFICATIONS
+  a appops set $PKG REQUEST_INSTALL_PACKAGES allow; a cmd locale set-app-locales $PKG --locales bg-BG
+  echo "=== $L: launch" >> $OUT/server.log
+  launch >/dev/null; upd_dialog 'text="Изтегли и инсталирай"' || { log "$L: no dialog: $(texts 8 | cut -c1-200)"; return; }
+  echo "=== $L: first tap" >> $OUT/server.log
+  tap text '=Изтегли и инсталирай'; t1=$(now_ms); sleep $4
+  upc_cap $L-1-downloading
+  echo "=== $L: cancel from the notification" >> $OUT/server.log
+  a cmd statusbar expand-notifications; sleep 2; dump; shot upc/$L-2-shade
+  tap text '=Отказ' || log "$L: no 'Отказ' in the shade: $(texts 10 | cut -c1-200)"
+  sleep 2; a cmd statusbar collapse; sleep 2
+  upc_cap $L-3-after-cancel
+  dump; has 'text="Изтегли и инсталирай"' || { log "$L: dialog after cancel: $(texts 8 | cut -c1-200)"; }
+  echo "=== $L: RE-TAP" >> $OUT/server.log
+  tap text '=Изтегли и инсталирай'; t1=$(now_ms)
+  upc_cap $L-4-retap-0s
+  while [ $(( $(now_ms) - t1 )) -lt 10000 ]; do sleep 0.5; done; upc_cap $L-5-retap-10s
+  while [ $(( $(now_ms) - t1 )) -lt 30000 ]; do sleep 0.5; done; upc_cap $L-6-retap-30s
+  while [ $(( $(now_ms) - t1 )) -lt 60000 ]; do sleep 0.5; done; upc_cap $L-7-retap-60s
+  log "SERVER log for $L: $(sed -n "/=== $L: launch/,\$p" $OUT/server.log | cut -c1-150 | tr '\n' '~')"
+}
+part_upc() {
+  sec "C0. Local HTTPS server (runner, 10.0.2.2:8443) with Range/ETag and a rate limit; no iptables"
+  upc_server
+  inst app-new-upd-local.apk new-upd-local apk-new-upd-local-ref.txt || return
+  a svc wifi disable; a svc data enable; sleep 5
+  curl -sS --max-time 30 "$STAGE_URL/update.json" -o $OUT/update.json
+  head -c 400M /dev/urandom > $UPC_S/www/big.bin; cp app.apk $UPC_S/www/app.apk
+  upc_run t1 app.apk 65536 8
+  upc_run t2 app.apk 65536 8
+  upc_run big big.bin 0 3
+  kill $SRVPID 2>/dev/null; a svc wifi enable
+  cp $OUT/server.log $OUT/server-log.txt
+}
+
 # ================================================================= main (вълна 16)
 part_w16() {
   case $PART in
@@ -867,6 +974,7 @@ part_w16() {
     login) part_login16;;
     update) part_update16;;
     upd33|upd34) part_upd2;;
+    upc33|upc34) part_upc;;
     events) part_events16;;
     emoji26|emoji28|emoji33) part_emoji;;
     dialogs) part_dialogs;;
