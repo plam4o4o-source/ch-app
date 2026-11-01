@@ -172,7 +172,7 @@ class TextsScreenshotTest {
 
     @Test fun onboardingWithoutLogin() {
         launch(settings = AppSettings(onboardingDone = false, introShown = true))
-        repeat(4) {
+        repeat(2) {
             waitFor("Next")
             compose.onAllNodes(hasText("Next") and hasClickAction()).onFirst().performClick()
             compose.mainClock.advanceTimeBy(1_000)

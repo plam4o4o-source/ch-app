@@ -228,12 +228,24 @@ class LargeFontScreenshotTest {
     @Test fun onboardingLarge() {
         launch(settings = AppSettings(onboardingDone = false, introShown = true))
         waitFor("Напред")
+        // Възможностите на приложението — и при 2× (страницата се превърта, не се реже).
+        waitFor("Каталог и „Искам да прочета“")
         shot("54-font2-onboarding")
+    }
+
+    /** Втората страница при 2×: размерът на текста и известията (бутоните се пренасят на нов ред). */
+    @Test fun onboardingLargeSettings() {
+        launch(settings = AppSettings(onboardingDone = false, introShown = true))
+        click("Напред")
+        compose.mainClock.advanceTimeBy(1_000)
+        waitFor("Много голям")
+        waitFor("Разреши известията")
+        shot("54b-font2-onboarding-settings")
     }
 
     @Test fun onboardingLargeLastSlide() {
         launch(settings = AppSettings(onboardingDone = false, introShown = true))
-        repeat(4) {
+        repeat(2) {
             click("Напред")
             compose.mainClock.advanceTimeBy(1_000)
             compose.waitForIdle()

@@ -23,11 +23,17 @@ fun NavController.navigateTab(route: String) = navigate(route) {
  * изскача по-късно при смяна на раздела), а подстекът му веднага се маха без запазване.
  * Подстекът на раздела, от който се идва, се запазва както при обикновена смяна.
  */
-fun NavController.openLinkTarget(target: LinkTarget.Screen) {
+fun NavController.openLinkTarget(target: LinkTarget.Screen, twoPane: Boolean = false) {
     navigateTab(target.tab)
     popBackStack(target.tab, inclusive = false, saveState = false)
     target.segment?.let { requestSegment(target.tab, it) }
-    target.stack.forEach { navigate(it) { launchSingleTop = true } }
+    // Без избрания отпреди детайл (както и без стария подстек).
+    requestDetail(target.tab, null)
+    // Таблет: последният екран (книга, статия) — отдясно на списъка под него, не върху него.
+    val host = target.stack.getOrNull(target.stack.lastIndex - 1) ?: target.tab
+    val detail = target.stack.lastOrNull()?.takeIf { twoPane && ListDetail.accepts(host, it) }
+    (if (detail != null) target.stack.dropLast(1) else target.stack).forEach { navigate(it) { launchSingleTop = true } }
+    detail?.let { requestDetail(host, it) }
 }
 
 /**
@@ -50,4 +56,25 @@ const val SEGMENT_KEY = "segment"
  */
 fun NavController.requestSegment(tab: String, segment: String) {
     runCatching { getBackStackEntry(tab).savedStateHandle[SEGMENT_KEY] = segment }
+}
+
+/** Ключът в SavedStateHandle на списъка, под който е маршрутът на детайла до него (виж [ListDetail]). */
+const val DETAIL_KEY = "detail"
+
+/**
+ * Списък и детайл един до друг (таблет, хоризонтално): кои екрани списъкът показва отдясно,
+ * вместо върху себе си. На телефон (и на тесен прозорец) — отделни екрани, както досега.
+ */
+object ListDetail {
+    /** Дали списъкът [host] (маршрутът на дестинацията) показва [route] до себе си. */
+    fun accepts(host: String?, route: String): Boolean = when (host) {
+        Routes.CATALOG, Routes.WANT_TO_READ -> route.startsWith("book/")
+        Routes.NEWS -> route.startsWith("article/")
+        else -> false
+    }
+}
+
+/** Списъкът [host] да покаже [route] отдясно (`null` — без детайл). Списъкът трябва да е в стека. */
+fun NavController.requestDetail(host: String, route: String?) {
+    runCatching { getBackStackEntry(host).savedStateHandle[DETAIL_KEY] = route }
 }

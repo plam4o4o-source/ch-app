@@ -44,6 +44,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModelWithState
 import org.chyavorec.app.ui.components.KeepDensity
 import org.chyavorec.app.ui.components.LocalTabReselect
+import org.chyavorec.app.ui.components.SearchShortcutEffect
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.search.GlobalSearchContent
@@ -100,6 +101,12 @@ fun HomeSearchBar(
             }
         }
         onPauseOrDispose { }
+    }
+
+    // Ctrl+F или „/“ от клавиатурата — полето се разгръща и взима фокуса.
+    SearchShortcutEffect(Routes.HOME) {
+        quiet = false
+        state.animateToExpanded()
     }
 
     // Прибрано („Назад“, жестът, стрелката) — без старото търсене; не и при отворен резултат.

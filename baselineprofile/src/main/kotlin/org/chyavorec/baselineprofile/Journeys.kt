@@ -316,7 +316,7 @@ fun MacrobenchmarkScope.coldStartToHome() {
     device.waitForIdle()
 }
 
-/** Първо стартиране: въведението (5 екрана) — „Пропусни“, както би направил потребителят. */
+/** Първо стартиране: въведението (3 екрана) — „Пропусни“ горе вдясно, както би направил потребителят. */
 private fun MacrobenchmarkScope.skipOnboardingIfShown() {
     // Началният екран (долната лента) или въведението — което се покаже първо.
     val first = By.text(Pattern.compile("${SKIP.pattern()}|${TAB_HOME.pattern()}", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE))
