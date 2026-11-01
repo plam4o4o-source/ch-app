@@ -191,11 +191,9 @@
             android:exported="false" />
 
         <!-- WorkManager се инициализира от ChitalishteApp (Configuration.Provider).
-             EmojiCompat (androidx.emoji2, идва с Compose) не се зарежда: при всяко стартиране
-             той търси шрифта за емоджи през Google Play услугите и после всеки текст минава
-             през него. Емоджитата в текстовете от сайта (карфица, плик, знаме, танцуващ човек)
-             са от Unicode 6–9 и ги има в системния шрифт още от Android 8; без EmojiCompat
-             Compose просто рисува със системния шрифт. -->
+             EmojiCompat (androidx.emoji2, идва с Compose) остава: на сайта има и нови емоджи
+             (напр. плоският хляб от Unicode 13), които системният шрифт на Android 8–10 няма; без него те
+             са празни квадратчета. Махането му не ускори стартирането измеримо. -->
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
@@ -204,9 +202,6 @@
             <meta-data
                 android:name="androidx.work.WorkManagerInitializer"
                 android:value="androidx.startup"
-                tools:node="remove" />
-            <meta-data
-                android:name="androidx.emoji2.text.EmojiCompatInitializer"
                 tools:node="remove" />
         </provider>
 

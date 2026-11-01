@@ -50,16 +50,24 @@ class UpdateDownloadWorker(context: Context, params: WorkerParameters) : Corouti
         val c = (applicationContext as? AppContainerOwner)?.appContainer ?: return Result.success()
         val updater = c.updater
         if (!updater.enabled) return Result.success()
-        // Версията се проверява наново: междувременно може да е спряна („paused“ в update.json) или
-        // да има по-нова; нов процес (приложението е било затворено) още не я знае.
-        val info = updater.check(userInitiated = true) ?: return Result.success()
         val notify = Notifier.canNotify(applicationContext)
+        var info: UpdateInfo? = null
         val file = try {
-            if (notify) startForeground(info)
+            // Услугата на преден план — веднага, докато приложението още е отпред (току-що е натиснато
+            // „Изтегли“): след „Отказ“ предишното изтегляне спира чак при следващото парче и новото
+            // чака. Ако междувременно приложението отиде във фона, Android 12+ вече не пуска услугата,
+            // а процесът без нея замръзва — изтеглянето не започва.
+            val known = updater.currentInfo()
+            if (notify && known != null) startForeground(known)
+            // Версията се проверява наново: междувременно може да е спряна („paused“ в update.json) или
+            // да има по-нова; нов процес (приложението е било затворено) още не я знае.
+            val checked = updater.check(userInitiated = true) ?: return Result.success()
+            info = checked
+            if (notify && known?.versionCode != checked.versionCode) startForeground(checked)
             coroutineScope {
-                val progress = if (notify) launch { showProgress(updater, info) } else null
+                val progress = if (notify) launch { showProgress(updater, checked) } else null
                 try {
-                    updater.download(info)
+                    updater.download(checked)
                 } finally {
                     withContext(NonCancellable) { progress?.cancelAndJoin() }
                 }
@@ -67,15 +75,16 @@ class UpdateDownloadWorker(context: Context, params: WorkerParameters) : Corouti
         } finally {
             NotificationManagerCompat.from(applicationContext).cancel(NotificationIds.UPDATE_PROGRESS)
         }
+        val done = info ?: return Result.success()
         when {
             file != null -> if (updater.appInForeground()) {
                 updater.install(background = false)
             } else {
-                show(info, R.string.notif_update_ready, R.string.notif_update_downloaded_text)
+                show(done, R.string.notif_update_ready, R.string.notif_update_downloaded_text)
             }
             // Неуспех — причината е в диалога; извън приложението — известие (отказът е без известие).
             updater.state.value is UpdateState.Failed && !updater.appInForeground() ->
-                show(info, R.string.notif_update_failed, R.string.notif_update_failed_text)
+                show(done, R.string.notif_update_failed, R.string.notif_update_failed_text)
         }
         return Result.success()
     }
