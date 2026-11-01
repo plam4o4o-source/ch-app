@@ -323,10 +323,6 @@ dependencies {
     // Мениджърът на пароли (вход с едно докосване); картата и ПИН-ът се пазят от системата.
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
-    // По избор: личните екрани (карта, заемания, история, съобщения) — след отключване с
-    // пръстов отпечатък, лице или ПИН-а на телефона. Биометричните данни остават в системата.
-    implementation(libs.androidx.biometric)
-    implementation(libs.androidx.fragment)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.room.runtime)
