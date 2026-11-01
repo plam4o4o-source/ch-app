@@ -54,7 +54,7 @@ import kotlin.test.assertTrue
 
 /**
  * Екранът за вход след грешни опити: от първия грешен ПИН — колко опита остават (жив регион,
- * с правилното множествено число), при блокиране — обратно броене „1:00“; „Забравен ПИН?“ —
+ * с правилното множествено число), при блокиране — обратно броене „1:00“ (м:сс); „Забравен ПИН?“ —
  * бутони за обаждане/имейл от контактите (сайтът без телефон — само имейл), а темата на
  * имейла е с номера на картата, без ПИН-а.
  */
@@ -156,9 +156,12 @@ class LoginAttemptsTest {
 
     @Test fun lockoutShowsACountdown() {
         launch { c -> repeat(5) { c.authRepository.throttle.onFailure() } }
-        pumpUntil { shown("1:00") }
-        assertTrue(shown(app.getString(R.string.login_locked_countdown, "1:00")))
-        compose.onNode(hasText(app.getString(R.string.login_locked_status)) and polite).assertExists()
+        val status = app.getString(R.string.login_locked_status)
+        pumpUntil { shown(status) }
+        compose.onNode(hasText(status) and polite).assertExists()
+        // Първото блокиране е минута (броячът закръгля нагоре — „1:01“ или „1:00“).
+        val countdown = app.getString(R.string.login_locked_countdown, "1:0")
+        assertTrue(shown(countdown.substringBefore("1:0") + "1:0"))
         // Блокирано — без „остават N опита“.
         assertFalse(shown(app.resources.getQuantityString(R.plurals.login_attempts_left, 5, 5)))
     }
