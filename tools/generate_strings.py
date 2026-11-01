@@ -698,6 +698,8 @@ S = {
 "onb_news_title": ("Новини и събития", "News and events"),
 "onb_news_text": ("Концерти, празници, срещи и всичко, което се случва в читалището — с напомняне и добавяне в календара.", "Concerts, celebrations, meetings and everything happening at the centre — with reminders and calendar sync."),
 "home_carousel": ("Последни новини", "Latest news"),
+"home_carousel_next": ("Следваща новина", "Next story"),
+"home_carousel_prev": ("Предишна новина", "Previous story"),
 "stat_years": ("години история", "years of history"),
 "event_recurring": ("Събитие от годишния календар на читалището — повтаря се всяка година на тази дата.", "An event from the centre’s annual calendar — it recurs every year on this date."),
 "contacts_persons": ("Лица за контакт", "Contact persons"),

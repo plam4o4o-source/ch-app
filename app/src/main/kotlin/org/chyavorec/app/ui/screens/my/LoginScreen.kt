@@ -67,6 +67,9 @@ import androidx.compose.ui.semantics.error
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -140,6 +143,7 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                     InlineNotice(
                         Icons.Outlined.CloudOff, stringResource(R.string.login_caps_failed),
                         actionLabel = stringResource(R.string.action_retry), onAction = vm::refreshCapabilities,
+                        announce = true,
                     )
                     // Картата може да се въведе и без връзка.
                     TextButton(onClick = onAddCard, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.card_add_manual)) }
@@ -193,7 +197,6 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                             }
                         },
                         isError = errText != null,
-                        supportingText = errText?.let { { Text(it) } },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.NumberPassword, autoCorrectEnabled = false),
                         onKeyboardAction = { vm.submit() },
                         modifier = Modifier.fillMaxWidth().semantics {
@@ -201,16 +204,28 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                             if (errText != null) error(errText)
                         },
                     )
+                    // Грешката е отделен ред под полето, не подсказка в него (тя се чете само заедно с
+                    // полето): TalkBack я казва веднага. Обратното броене при заключване — без обявяване.
+                    errText?.let {
+                        Text(
+                            it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                                .semantics { if (!locked) liveRegion = LiveRegionMode.Assertive },
+                        )
+                    }
                     // Целият ред е едно поле за отметка (TalkBack чете текста, докосване и по текста).
+                    // Без деца в дървото на достъпността — иначе ролята не стига до класа (CheckBox, а не View).
+                    val rememberLabel = stringResource(R.string.login_remember)
                     Row(
                         Modifier.fillMaxWidth()
                             .toggleable(value = ui.remember, role = Role.Checkbox, onValueChange = vm::setRemember)
+                            .clearAndSetSemantics { text = AnnotatedString(rememberLabel) }
                             .heightIn(min = 48.dp).padding(horizontal = 12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(ui.remember, onCheckedChange = null)
                         Spacer(Modifier.width(14.dp))
-                        Text(stringResource(R.string.login_remember), style = MaterialTheme.typography.bodyMedium)
+                        Text(rememberLabel, style = MaterialTheme.typography.bodyMedium)
                     }
                     // След 3 грешни опита — колко остават до временното заключване.
                     ui.attemptsLeft?.takeIf { !locked }?.let { n ->

@@ -176,6 +176,10 @@ internal object WidgetViews {
     private fun events(context: Context, v: RemoteViews, state: WidgetState, titleSp: Float, max: Int) {
         val shown = state.events?.take(max).orEmpty()
         val first = shown.firstOrNull()
+        // Докосването е на цялата колона, не на всеки ред: вторият ред сам е ~36 dp (под 48 dp), а и
+        // двата водят към „Събития“; TalkBack чете събитията заедно. Без събития — като фона (приложението);
+        // задава се винаги, защото началният екран може да приложи новия изглед върху стария.
+        v.setOnClickPendingIntent(R.id.widget_event_column, if (first != null) link(context, "events") else openApp(context))
         v.setViewVisibility(R.id.widget_event, if (first != null) View.VISIBLE else View.GONE)
         v.setViewVisibility(R.id.widget_no_events, if (state.events?.isEmpty() == true) View.VISIBLE else View.GONE)
         val second = shown.getOrNull(1)
@@ -186,11 +190,9 @@ internal object WidgetViews {
         v.setTextViewText(R.id.widget_event_title, first.title)
         v.setTextViewTextSize(R.id.widget_event_title, TypedValue.COMPLEX_UNIT_SP, titleSp)
         v.date(R.id.widget_event_date, first.date)
-        v.setOnClickPendingIntent(R.id.widget_event, link(context, "events"))
         if (second == null) return
         v.setTextViewText(R.id.widget_event2_title, second.title)
         v.date(R.id.widget_event2_date, second.date)
-        v.setOnClickPendingIntent(R.id.widget_event2, link(context, "events"))
     }
 
     private fun RemoteViews.date(@IdRes id: Int, date: String?) {

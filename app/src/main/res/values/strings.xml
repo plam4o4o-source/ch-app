@@ -210,6 +210,8 @@
     <string name="hold_ok_text">Библиотеката ще отдели книгата за теб.</string>
     <string name="hold_ok_title">Заявката е изпратена</string>
     <string name="home_carousel">Последни новини</string>
+    <string name="home_carousel_next">Следваща новина</string>
+    <string name="home_carousel_prev">Предишна новина</string>
     <string name="home_for_you">За теб</string>
     <string name="home_for_you_personal">По твоето четене</string>
     <string name="home_for_you_popular">Най-четени и нови</string>

@@ -491,7 +491,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
 
     Scaffold(
         topBar = {
-            BackTopBar("", onBack, actions = {
+            BackTopBar("", onBack, paneLabel = event?.title.orEmpty(), actions = {
                 event?.let { e ->
                     IconButton(onClick = { Intents.share(context, e.title, listOfNotNull(e.title, Formatters.date(context, e.date), e.time, e.place, e.sourceUrl).joinToString("\n")) }) {
                         Icon(Icons.Outlined.Share, contentDescription = stringResource(R.string.action_share))

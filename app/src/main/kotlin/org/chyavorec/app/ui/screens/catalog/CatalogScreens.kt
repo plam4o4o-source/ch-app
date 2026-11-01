@@ -7,6 +7,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.background
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import org.chyavorec.app.ui.components.rememberReducedMotion
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -93,7 +100,9 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -217,6 +226,7 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     val settings by container.settings.settings.collectAsStateWithLifecycle(initialValue = null)
     val shelf = settings?.catalogShelf ?: false
     val scope = rememberCoroutineScope()
+    val reduced = rememberReducedMotion()
     TabReselectEffect(Routes.CATALOG) { (if (shelf) shelfState else listState).animateScrollToItem(0) }
     // В началото — само при резултати за нова заявка или филтър. Опресненият във фонов режим
     // индекс (същата заявка) пази мястото в списъка; връщането от книга — също (помни се).
@@ -325,7 +335,11 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                     searchField(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp))
                     fieldChips(Modifier)
                 }
-                AnimatedVisibility(state.suggestions.isNotEmpty() && q.text.length >= 2) {
+                AnimatedVisibility(
+                    state.suggestions.isNotEmpty() && q.text.length >= 2,
+                    enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(),
+                    exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
+                ) {
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         items(state.suggestions) { s ->
                             SuggestionChip(onClick = { vm.setText(s) }, label = { Text(s, maxLines = 1, overflow = TextOverflow.Ellipsis) })
@@ -348,7 +362,8 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                             else pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults)) + "  ·  " +
                                 stringResource(R.string.catalog_data_as_of, Formatters.shortDate(LocalContext.current, engine.generatedOn) ?: "—"),
                             style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                            // Броят се сменя при писане — TalkBack го казва, без да се мести фокусът.
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp).semantics { liveRegion = LiveRegionMode.Polite },
                         )
                     }
                     if (state.results.isEmpty() && !state.searching) {
@@ -525,7 +540,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
     val snackbar = remember { androidx.compose.material3.SnackbarHostState() }
 
     Scaffold(snackbarHost = { androidx.compose.material3.SnackbarHost(snackbar) }, topBar = {
-        BackTopBar("", onBack, actions = {
+        BackTopBar("", onBack, paneLabel = b?.title.orEmpty(), actions = {
             if (b != null) {
                 IconButton(onClick = {
                     Intents.share(

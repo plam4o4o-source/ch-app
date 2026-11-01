@@ -23,6 +23,14 @@ import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.paneTitle
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.snap
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AnimatedCounter
@@ -49,6 +57,7 @@ import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.darkTopHighlight
 import org.chyavorec.app.ui.components.boldMarkdown
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
 import org.chyavorec.app.ui.components.MotionBudget
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.domain.model.DailyFeast
@@ -204,6 +213,8 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
     // При показан поздрав празникът за деня е ред в него, а не отделен ред под търсенето.
     val greetingShown = isGreetingShown(decor, dismissedGreeting, today)
     val loanSummary = rememberLoanSummary()
+    // TalkBack обявява раздела при отварянето му (другите раздели — с заглавката си, AppTopBar).
+    val paneLabel = stringResource(R.string.tab_home)
 
     LeafRefreshBox(isRefreshing = state.news.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.fillMaxSize()) {
         // На таблет/хоризонтално съдържанието е центрирано и не по-широко от 840 dp.
@@ -214,7 +225,8 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
             // отляво ги поема страничната лента.
             modifier = Modifier.align(Alignment.TopCenter)
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.End))
-                .widthIn(max = 840.dp).fillMaxSize(),
+                .widthIn(max = 840.dp).fillMaxSize()
+                .semantics { paneTitle = paneLabel },
         ) {
             item("header") {
                 // Името в заглавката спрямо ефекта (неговия Box) — при превъртане не се променя;
@@ -443,7 +455,10 @@ private val HeroScrim = Brush.verticalGradient(
  * средата, съседните „надничат“ отстрани (маскирани). Автоматично превъртане на 6 s и
  * индикатор на страниците. Само превъртане спира след ~30 s ([MotionBudget.carouselAdvances]),
  * изчаква, докато потребителят я докосва/плъзга или приложението не е на преден план, и
- * изобщо не тръгва при намалено движение.
+ * изобщо не тръгва при намалено движение и с екранен четец (TalkBack).
+ *
+ * За екранния четец е само голямата карта (страничните са маскирани, а текстът им — прозрачен,
+ * т.е. безименни бутони върху голямата); към съседните — с действията „Следваща“/„Предишна“.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -459,6 +474,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
         reduced = reduced, touched = touched,
         resumed = lifecycleState.isAtLeast(Lifecycle.State.RESUMED),
         advancesDone = advances, itemCount = items.size,
+        screenReader = rememberIsTouchExplorationEnabled(),
     )
     // Всяка пауза (докосване, фон) започва интервала отначало.
     LaunchedEffect(auto, advances, items.size) {
@@ -470,6 +486,21 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
     val context = LocalContext.current
     val windowH = windowHeight()
     val carouselLabel = stringResource(R.string.home_carousel)
+    val current = carousel.currentItem
+    val scope = rememberCoroutineScope()
+    val nextLabel = stringResource(R.string.home_carousel_next)
+    val prevLabel = stringResource(R.string.home_carousel_prev)
+    val pageSpec: AnimationSpec<Float> = if (reduced) snap() else tween(700)
+    val pageActions = { page: Int ->
+        listOfNotNull(
+            CustomAccessibilityAction(nextLabel) { scope.launch { carousel.animateScrollToItem(page + 1, pageSpec) }; true }
+                .takeIf { page < items.lastIndex },
+            CustomAccessibilityAction(prevLabel) { scope.launch { carousel.animateScrollToItem(page - 1, pageSpec) }; true }
+                .takeIf { page > 0 },
+        )
+    }
+    // При едър шрифт („Много голям“) заглавието е до 3 реда — картата расте, вместо да го реже.
+    val titleLines = if (LocalDensity.current.fontScale >= 1.3f) 3 else 2
     val season = rememberSeason()
     val shape = MaterialTheme.shapes.large
     Column {
@@ -482,7 +513,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
             state = carousel,
             contentPadding = PaddingValues(horizontal = 16.dp),
             itemSpacing = 8.dp,
-            modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = carouselLabel }
+            modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = carouselLabel; customActions = pageActions(current) }
                 .pointerInput(Unit) {
                     // Само наблюдава (Initial, без consume) — докосването и плъзгането стигат до картите.
                     awaitEachGesture {
@@ -514,7 +545,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                 onClick = { onOpen(a) },
                 shape = shape,
                 modifier = Modifier.fillMaxWidth().heightIn(min = minHeight).maskClip(shape)
-                    .darkTopHighlight(shape),
+                    .darkTopHighlight(shape)
+                    .semantics { if (page == current) customActions = pageActions(page) else hideFromAccessibility() },
             ) {
                 // Без снимка (или при грешка) — фирмен фон с воден знак, без тъмния воал.
                 var imageFailed by remember(a.imageUrl) { mutableStateOf(false) }
@@ -545,7 +577,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                         )
                         Spacer(Modifier.height(6.dp))
                         // Най-едрото заглавие на екрана — над заглавките на разделите (sectionTitle).
-                        Text(a.title, style = MaterialTheme.typography.headlineMedium, color = Brand.Parchment, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(a.title, style = MaterialTheme.typography.headlineMedium, color = Brand.Parchment, maxLines = titleLines, overflow = TextOverflow.Ellipsis)
                         val date = remember(a.publishedAtMillis) { Formatters.millisDate(context, a.publishedAtMillis) }
                         date?.let {
                             Spacer(Modifier.height(6.dp))
