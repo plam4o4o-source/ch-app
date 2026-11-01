@@ -961,7 +961,8 @@ part_upc() {
   upc_server
   a svc wifi disable; a svc data enable; sleep 5
   curl -sS --max-time 30 "$STAGE_URL/update.json" -o $OUT/update.json
-  head -c 150M /dev/urandom > $UPC_S/www/big.bin  # под MAX_APK_BYTES (200 MB) на приложението; cp app.apk $UPC_S/www/app.apk
+  # 150 MB — под MAX_APK_BYTES (200 MB) на приложението
+  head -c 150M /dev/urandom > $UPC_S/www/big.bin; cp app.apk $UPC_S/www/app.apk
   upc_run t3 app.apk 32768 5
   upc_run big big.bin 0 1
   kill $SRVPID 2>/dev/null; a svc wifi enable
