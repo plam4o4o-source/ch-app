@@ -438,7 +438,7 @@ emoji_items() {
           w=$(echo "$title" | grep -oE '[A-Za-z]{2,}( [A-Za-z]{2,})?' | head -1)
           [ -n "$w" ] || { log "EMOJI $n: '$title' — no URL and no Latin word to search for"; continue; }
           link_pkg "$SITE/news" < /dev/null; sleep 4; segstate | grep -q 'News\[checked=true' || segment news
-          tap text 'Търси в новините' < /dev/null; sleep 1; a input text "${w// /%s}" < /dev/null; sleep 3; hide_ime < /dev/null
+          tap text 'Търси в новините|Search news' < /dev/null; sleep 1; a input text "${w// /%s}" < /dev/null; sleep 3; hide_ime < /dev/null
           dump; p=$(python3 $H_/find.py $OUT/ui.xml --clickables $((H/4)) $((H*85/100)) 150 | head -1)
           [ -n "$p" ] && a input tap $p < /dev/null
         fi;;
@@ -784,12 +784,81 @@ part_onboard() {
   onb_fresh; tap text '=Пропусни'; main_asks 20-main-after-skip
 }
 
+# ================================================================= КРЪГ b: повторното изтегляне след „Отказ“ (255fdc6)
+upd_wait_bg() {  # $1 — етикет: известието за хода и „готова за инсталиране“, до ~5 min от t0
+  local i st=none first=""
+  for i in $(seq 1 70); do
+    upd_notifs $1 > $OUT/$1-n.txt
+    if [ -z "$first" ] && grep -q 'Изтегляне на версия' $OUT/$1-n.txt; then first=$(( $(now_ms) - t0 )); log "$1: progress notification at +${first} ms: $(head -1 $OUT/$1-n.txt | cut -c1-200)"; fi
+    grep -q 'готова за инсталиране' $OUT/$1-n.txt && { st=ready; break; }
+    [ $((i % 6)) = 0 ] && log "$1 +$(( $(now_ms) - t0 )) ms: $(head -1 $OUT/$1-n.txt | cut -c1-160); files [$(upd_files)]"
+    sleep 4
+  done
+  log "$1 RESULT: $st after $(( $(now_ms) - t0 )) ms (first progress notification at +${first:-never} ms); app process '$(a pidof $PKG | tr -d '\r')'; files [$(upd_files)]"
+  [ $st = ready ]
+}
+upd_fresh_dialog() {  # изтеглените файлове изтрити, приложението наново → диалогът с „Изтегли и инсталирай“
+  a am force-stop $PKG; a "rm -rf /data/data/$PKG/no_backup/updates"; a cmd notification cancel-all 2>/dev/null
+  a "service call notification 1" >/dev/null 2>&1
+  launch >/dev/null
+  upd_dialog 'text="Изтегли и инсталирай"' || { log "no dialog with 'Изтегли и инсталирай': $(texts 8 | cut -c1-200)"; return 1; }
+}
+upd_cancel_cycle() {  # $1 — етикет: изтегляне ~6 s, Home, „Отказ“ от известието, приложението наново
+  tap text '=Изтегли и инсталирай' || return 1
+  sleep 6; go_home 1
+  a cmd statusbar expand-notifications; sleep 2.5; dump; shot update/$1-shade-downloading
+  log "$1 shade: $(grep -oE 'text="[^"]*(Изтегляне на версия|Отказ)[^"]*"' $OUT/ui.xml | head -2 | tr '\n' ' ')"
+  tap text '=Отказ' || log "$1: no 'Отказ' in the shade"
+  sleep 4; log "$1 after 'Отказ': $(upd_notifs $1-c | tail -1); files [$(upd_files)]"
+  a cmd statusbar collapse; sleep 1
+  launch >/dev/null; upd_dialog 'text="Изтегли и инсталирай"' || log "$1: no 'Изтегли и инсталирай' after relaunch: $(texts 8 | cut -c1-200)"
+  shot update/$1-dialog-again
+}
+part_upd2() {
+  sec "R0. The v1.2.30 code as 1.2.30-pre (versionCode $VC_BASE, 255fdc6) → the test v1.2.30; mobile data only, throttled"
+  curl -sS --max-time 30 "$STAGE_URL/update.json" -o $OUT/update.json
+  log "staged: $(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["versionCode"], d["versionName"], d["size"])' $OUT/update.json 2>&1)"
+  inst app-new-upd.apk new-upd apk-new-upd-ref.txt || return
+  a appops set $PKG REQUEST_INSTALL_PACKAGES allow
+  a svc wifi disable; a svc data enable; sleep 6
+  throttle_on
+  launch >/dev/null; upd_dialog 'text="Изтегли и инсталирай"' || { log "no update dialog: $(texts 10 | cut -c1-200)"; return; }
+  sec "R1. Plain download: 'Изтегли и инсталирай', Home at +1 s → finishes in the background"
+  tap text '=Изтегли и инсталирай' && { t0=$(now_ms); sleep 1; go_home 1; }
+  upd_wait_bg r1-plain
+  sec "R2. Download → 'Отказ' from the notification → 'Изтегли и инсталирай' again, Home at +1 s"
+  upd_fresh_dialog && upd_cancel_cycle r2 && {
+    mark m-r2; tap text '=Изтегли и инсталирай' && { t0=$(now_ms); sleep 1; go_home 1; }
+    upd_wait_bg r2-home-1s
+    log "r2 logcat (app/FGS): $(since m-r2 "ForegroundService|startForeground|FGS|SystemForegroundService|$PKG" | grep -vE 'Choreographer|OpenGLRenderer' | cut -c19-200 | head -6 | tr '\n' '~')"
+  }
+  sec "R3. The same, Home at +17 s"
+  upd_fresh_dialog && upd_cancel_cycle r3 && {
+    mark m-r3; tap text '=Изтегли и инсталирай' && t0=$(now_ms)
+    for i in 1 2 3 4; do sleep 4; dump; log "r3 in the app +$(( $(now_ms) - t0 )) ms: $(grep -oE 'text="([0-9]+ ?%|Изтегляне на новата версия…|Проверка[^"]*)"' $OUT/ui.xml | head -2 | tr '\n' ' ')'Отказ' $(has 'text="Отказ"' && echo yes || echo no); notif: $(upd_notifs r3-in-$i | head -1 | cut -c1-120)"; done
+    while [ $(( $(now_ms) - t0 )) -lt 17000 ]; do sleep 0.5; done
+    go_home 1; shot update/r3-home-at-17s
+    upd_wait_bg r3-home-17s
+  }
+  sec "R4. 'готова за инсталиране' → installer → v1.2.30 and 'Какво ново'"
+  throttle_off
+  a cmd statusbar expand-notifications; sleep 2.5; dump; shot update/r4-shade-ready
+  if tap text 'готова за инсталиране'; then
+    sleep 4; dump; has 'text="Инсталирай"' && tap text '=Инсталирай'
+    installer_confirm $NEW_VC r4 && log "UPDATE: installed $(ver)" || log "UPDATE: NOT installed: $(ver)"
+    sleep 3; has "$RX_WHATSNEW" || { launch >/dev/null; sleep 3; }
+    whatsnew_check r4-whats-new
+  else log "no 'готова за инсталиране' in the shade: $(texts 10 | cut -c1-200)"; fi
+  a cmd statusbar collapse; a svc wifi enable
+}
+
 # ================================================================= main (вълна 16)
 part_w16() {
   case $PART in
     unlock33|unlock34) part_unlock;;
     login) part_login16;;
     update) part_update16;;
+    upd33|upd34) part_upd2;;
     events) part_events16;;
     emoji26|emoji28|emoji33) part_emoji;;
     dialogs) part_dialogs;;
