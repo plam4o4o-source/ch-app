@@ -13,6 +13,24 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.30
+
+### bg
+- По избор: картата, заеманията и историята се отключват с пръстов отпечатък или кода на телефона.
+- При вход се вижда колко опита остават, а „Забравен ПИН“ дава имейл до библиотеката с номера на картата.
+- Обновяването се тегли във фон с известие за напредъка и може да се откаже.
+- Събитията показват мястото и бутон „Маршрут“ до читалището.
+- На таблет — списък и книга (или новина) един до друг, и клавиши за търсене и разделите.
+- По-добре с TalkBack, с намалено движение и с голям текст — вече и в диалозите; по-кратко въведение.
+
+### en
+- Optional: unlock your card, loans and history with your fingerprint or the phone’s screen lock.
+- Sign-in shows how many attempts are left, and “Forgot PIN” offers an email to the library with your card number.
+- App updates download in the background with a progress notification and can be cancelled.
+- Events show the place and a “Directions” button to the community centre.
+- On tablets, the list and the book (or article) side by side, plus keyboard shortcuts for search and tabs.
+- Better with TalkBack, reduced motion and large text — now in dialogs too; a shorter introduction.
+
 ## 1.2.29
 
 ### bg
