@@ -5,16 +5,17 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.hardware.biometrics.BiometricManager
+import android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import android.hardware.biometrics.BiometricPrompt
 import android.os.Build
+import android.os.CancellationSignal
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
-import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
-import androidx.biometric.BiometricPrompt
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,10 +37,10 @@ interface DeviceUnlock {
 }
 
 /**
- * BiometricPrompt (`BIOMETRIC_WEAK or DEVICE_CREDENTIAL`): от Android 11 — направо; на 9–10 —
- * с `setDeviceCredentialAllowed`, а без записан отпечатък/лице — системният екран за ПИН.
- * На Android 8 (без USE_FINGERPRINT) — само системният екран за ПИН/фигура/парола
- * ([KeyguardManager.createConfirmDeviceCredentialIntent]).
+ * Системният BiometricPrompt (без androidx.biometric — тя тегли appcompat, ~400 KB): от
+ * Android 11 — `BIOMETRIC_WEAK or DEVICE_CREDENTIAL`; на Android 10 — с
+ * `setDeviceCredentialAllowed`, ако има записан отпечатък/лице. Иначе (и на Android 8–9) —
+ * системният екран за ПИН/фигура/парола ([KeyguardManager.createConfirmDeviceCredentialIntent]).
  */
 class SystemDeviceUnlock(private val context: Context) : DeviceUnlock {
     private val keyguard get() = context.getSystemService(KeyguardManager::class.java)
@@ -49,17 +50,20 @@ class SystemDeviceUnlock(private val context: Context) : DeviceUnlock {
     override suspend fun authenticate(activity: Context, title: String, subtitle: String): Boolean {
         if (!available()) return false
         val host = activity.findActivity() as? ComponentActivity ?: return false
-        return if (host is FragmentActivity && usePrompt(host)) prompt(host, title, subtitle) else confirmCredential(host, title, subtitle)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && usePrompt(host)) prompt(host, title, subtitle) else confirmCredential(host, title, subtitle)
     }
 
     private fun usePrompt(activity: Context): Boolean = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> true
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->
-            runCatching { BiometricManager.from(activity).canAuthenticate(BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS }.getOrDefault(false)
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> runCatching {
+            @Suppress("DEPRECATION")
+            activity.getSystemService(BiometricManager::class.java)?.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
+        }.getOrDefault(false)
         else -> false
     }
 
-    private suspend fun prompt(activity: FragmentActivity, title: String, subtitle: String): Boolean = suspendCancellableCoroutine { cont ->
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private suspend fun prompt(activity: Activity, title: String, subtitle: String): Boolean = suspendCancellableCoroutine { cont ->
         val callback = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 if (cont.isActive) cont.resume(true)
@@ -71,21 +75,21 @@ class SystemDeviceUnlock(private val context: Context) : DeviceUnlock {
                 if (cont.isActive) cont.resume(false)
             }
         }
-        val info = BiometricPrompt.PromptInfo.Builder().setTitle(title).setSubtitle(subtitle).apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                setAllowedAuthenticators(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
-            } else {
-                @Suppress("DEPRECATION")
-                setDeviceCredentialAllowed(true)
-            }
-        }.build()
-        val prompt = runCatching {
-            BiometricPrompt(activity, ContextCompat.getMainExecutor(activity), callback).also { it.authenticate(info) }
-        }.getOrElse {
-            cont.resume(false)
+        val builder = BiometricPrompt.Builder(activity).setTitle(title).setSubtitle(subtitle)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            builder.setAllowedAuthenticators(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+        } else {
+            @Suppress("DEPRECATION")
+            builder.setDeviceCredentialAllowed(true)
+        }
+        val cancel = CancellationSignal()
+        runCatching {
+            builder.build().authenticate(cancel, ContextCompat.getMainExecutor(activity), callback)
+        }.onFailure {
+            if (cont.isActive) cont.resume(false)
             return@suspendCancellableCoroutine
         }
-        cont.invokeOnCancellation { runCatching { prompt.cancelAuthentication() } }
+        cont.invokeOnCancellation { runCatching { cancel.cancel() } }
     }
 
     private suspend fun confirmCredential(activity: ComponentActivity, title: String, subtitle: String): Boolean {

@@ -25,10 +25,6 @@ codeScanner = "16.1.0"
 palette = "1.1.0"
 # Credential Manager: запазване на картата и ПИН-а в системния мениджър на пароли.
 credentials = "1.6.0"
-# Отключване на личните екрани с пръстов отпечатък, лице или ПИН-а на телефона (BiometricPrompt).
-biometric = "1.1.0"
-# FragmentActivity за BiometricPrompt (иначе само преходно, от biometric).
-fragment = "1.8.9"
 profileinstaller = "1.4.1"
 robolectric = "4.17"
 androidxTestCore = "1.7.0"
@@ -72,8 +68,6 @@ androidx-palette-ktx = { module = "androidx.palette:palette-ktx", version.ref = 
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 # Под Android 14 Credential Manager работи през Google Play услугите.
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
-androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
-androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-ui = { module = "androidx.compose.ui:ui" }

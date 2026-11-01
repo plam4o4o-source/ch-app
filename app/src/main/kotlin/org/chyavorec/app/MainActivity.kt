@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.KeyboardShortcutGroup
 import android.view.Menu
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -34,8 +34,7 @@ import org.chyavorec.app.widget.WidgetUpdater
 import org.chyavorec.core.logFailure
 import org.chyavorec.domain.model.MessagePollPolicy
 
-/** FragmentActivity — за системната проверка при отключване на личните екрани (BiometricPrompt). */
-class MainActivity : FragmentActivity() {
+class MainActivity : ComponentActivity() {
 
     private val deepLink = MutableStateFlow<String?>(null)
     /** Клавишните комбинации (таблет, Chromebook) към интерфейса — виж [KeyboardShortcuts]. */
