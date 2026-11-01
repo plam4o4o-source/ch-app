@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.os.Build
-import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -33,6 +32,8 @@ import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.navigation.LaunchIntents
 import org.chyavorec.core.Diagnostics
 import org.chyavorec.data.update.UpdateInfo
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.TimeSource
 
 /**
  * „Изтегли и инсталирай“ — изтеглянето като задача на WorkManager, за да продължи и след
@@ -100,17 +101,16 @@ class UpdateDownloadWorker(context: Context, params: WorkerParameters) : Corouti
         }
     }
 
-    /** Ходът от [AppUpdater.state] — при нов процент, но не по-често от [MIN_UPDATE_MS] (системата ограничава честотата). */
+    /** Ходът от [AppUpdater.state] — при нов процент, но не по-често от [MIN_UPDATE] (системата ограничава честотата). */
     private suspend fun showProgress(updater: AppUpdater, info: UpdateInfo) {
         var lastPercent = -1
-        var lastAt = 0L
+        var last = TimeSource.Monotonic.markNow()
         updater.state.collect { s ->
             if (s !is UpdateState.Downloading || s.info.versionCode != info.versionCode) return@collect
             val percent = s.progress?.let { (it * 100).toInt() } ?: -1
-            val now = SystemClock.elapsedRealtime()
-            if (percent == lastPercent || (lastPercent >= 0 && now - lastAt < MIN_UPDATE_MS)) return@collect
+            if (percent == lastPercent || (lastPercent >= 0 && last.elapsedNow() < MIN_UPDATE)) return@collect
             lastPercent = percent
-            lastAt = now
+            last = TimeSource.Monotonic.markNow()
             post(progressNotification(applicationContext, info, s.progress))
         }
     }
@@ -130,7 +130,7 @@ class UpdateDownloadWorker(context: Context, params: WorkerParameters) : Corouti
 
     companion object {
         private const val NAME = "update-download"
-        private const val MIN_UPDATE_MS = 500L
+        private val MIN_UPDATE = 500.milliseconds
 
         /** Второ натискане, докато тече — без второ изтегляне. Без условие за мрежа: без връзка грешката се вижда веднага. */
         fun enqueue(context: Context) {
