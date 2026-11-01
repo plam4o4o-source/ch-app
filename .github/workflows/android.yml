@@ -90,15 +90,13 @@ jobs:
       - name: Debug APKs
         run: ./gradlew assembleDevDebug assembleProdDebug
 
-      # Сливането на манифестите: EmojiCompat не се зарежда при старт (AndroidManifest.xml го маха),
-      # а изтеглянето на нова версия има вида на услугата (dataSync) и разрешението за него.
+      # Сливането на манифестите: EmojiCompat остава (новите емоджи на Android 8–10), а изтеглянето
+      # на нова версия има вида на услугата (dataSync) и разрешението за него.
       - name: Merged manifest
         run: |
           M=$(find app/build/intermediates -path '*prodDebug*' -name AndroidManifest.xml | grep merged_manifest | head -1)
           [ -f "$M" ] || { echo "::error::No merged prodDebug manifest"; exit 1; }
-          if grep -n '"androidx.emoji2.text.EmojiCompatInitializer"' "$M"; then
-            echo "::error::EmojiCompatInitializer is in the merged manifest"; exit 1
-          fi
+          grep -q 'android:name="androidx.emoji2.text.EmojiCompatInitializer"' "$M" || { echo "::error::EmojiCompatInitializer missing from the merged manifest"; exit 1; }
           grep -q 'permission.FOREGROUND_SERVICE_DATA_SYNC"' "$M" || { echo "::error::FOREGROUND_SERVICE_DATA_SYNC missing"; exit 1; }
           grep -B8 -A8 'SystemForegroundService"' "$M" | grep -q 'foregroundServiceType="dataSync"' || { echo "::error::SystemForegroundService without dataSync"; exit 1; }
           echo "Merged manifest OK ($M)"
@@ -235,16 +233,17 @@ jobs:
           fi
           # Изтеглянето на нова версия (dataSync) — само в APK-а от GitHub. Атрибутите, не коментарите
           # (сливането пази коментарите от AndroidManifest.xml).
-          if grep -n 'permission.FOREGROUND_SERVICE_DATA_SYNC"\|foregroundServiceType="dataSync"\|"androidx.emoji2.text.EmojiCompatInitializer"' "$M"; then
-            echo "::error::Play build must not contain the update download service type or EmojiCompatInitializer"; exit 1
+          if grep -n 'permission.FOREGROUND_SERVICE_DATA_SYNC"\|foregroundServiceType="dataSync"' "$M"; then
+            echo "::error::Play build must not contain the update download service type"; exit 1
           fi
           echo "Play manifest OK ($M)"
           # USE_BIOMETRIC — за отключването на личните екрани (по избор); старото USE_FINGERPRINT
           # не се ползва и AndroidManifest.xml го маха (tools:node="remove"); APK-ът — в следващата стъпка.
-          if ! grep -q "USE_BIOMETRIC" "$M"; then
+          # Атрибутите, не коментарите (коментарът в AndroidManifest.xml споменава и двете).
+          if ! grep -q 'android:name="android.permission.USE_BIOMETRIC"' "$M"; then
             echo "::error::USE_BIOMETRIC missing from the Play manifest"; exit 1
           fi
-          if grep -q "USE_FINGERPRINT" "$M"; then
+          if grep -q 'android:name="android.permission.USE_FINGERPRINT"' "$M"; then
             echo "::error::Unused USE_FINGERPRINT permission in the Play manifest"; exit 1
           fi
           # Символите на native библиотеките за Google Play. Сегашните .so (Compose graphics-path,
