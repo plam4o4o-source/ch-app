@@ -8,17 +8,23 @@ import androidx.core.content.IntentCompat
 import org.chyavorec.app.BuildConfig
 import org.chyavorec.app.ChitalishteApp
 import org.chyavorec.app.R
+import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.notifications.Channel
 import org.chyavorec.app.notifications.NotificationIds
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.core.Diagnostics
 
 /**
- * Резултатът от [PackageInstaller] за самообновяването. Не е експортиран —
- * само системата (от името на това приложение) може да го извика.
+ * Резултатът от [PackageInstaller] за самообновяването, както и „Отказ“ в известието за
+ * изтеглянето ([ACTION_CANCEL_DOWNLOAD]). Не е експортиран — само системата (от името на
+ * това приложение) може да го извика.
  */
 class UpdateInstallReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == ACTION_CANCEL_DOWNLOAD) {
+            (context.applicationContext as? AppContainerOwner)?.appContainer?.updater?.cancelDownload()
+            return
+        }
         val app = context.applicationContext as? ChitalishteApp ?: return
         val updater = app.container.updater
         when (val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)) {
@@ -63,6 +69,7 @@ class UpdateInstallReceiver : BroadcastReceiver() {
 
     companion object {
         const val EXTRA_BACKGROUND = "org.chyavorec.app.update.BACKGROUND"
+        const val ACTION_CANCEL_DOWNLOAD = "org.chyavorec.app.update.CANCEL_DOWNLOAD"
         const val NOTIFICATION_ID = NotificationIds.UPDATE
         const val DEEP_LINK = "update"
     }

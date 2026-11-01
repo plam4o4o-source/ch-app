@@ -99,7 +99,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.Badge as CountBadge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material.icons.outlined.NotificationsNone
+import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -415,6 +415,8 @@ private fun HomeHeader(
             Text(stringResource(R.string.org_place), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (ornament != OccasionOrnament.NONE) HolidayOrnament(ornament, Modifier.padding(end = 6.dp), quiet = quiet)
+        // Съобщенията от читалището — същата икона (високоговорител) като в „Още › Съобщения“;
+        // звънчето в приложението е само за настройките на известията.
         IconButton(onClick = onMessages, modifier = Modifier.size(48.dp)) {
             val label = if (unread > 0) pluralStringResource(R.plurals.messages_unread, unread, unread) else stringResource(R.string.messages_title)
             BadgedBox(
@@ -426,7 +428,7 @@ private fun HomeHeader(
                     }
                 },
             ) {
-                Icon(Icons.Outlined.NotificationsNone, contentDescription = label)
+                Icon(Icons.Outlined.Campaign, contentDescription = label)
             }
         }
     }

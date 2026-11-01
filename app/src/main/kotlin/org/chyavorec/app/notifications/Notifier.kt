@@ -56,6 +56,8 @@ enum class Channel(val id: String, val nameRes: Int, val descRes: Int, val impor
 object NotificationIds {
     const val NEWS = 500
     const val UPDATE = 700
+    /** Хода на изтеглянето на нова версия ([org.chyavorec.app.update.UpdateDownloadWorker]); резултатът е под [UPDATE]. */
+    const val UPDATE_PROGRESS = 701
     private const val DUE_SOON_BASE = 10_000
     private const val OVERDUE_BASE = 20_000
     private const val EVENT_BASE = 30_000
