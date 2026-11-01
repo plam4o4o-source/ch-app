@@ -241,10 +241,11 @@ jobs:
           echo "Play manifest OK ($M)"
           # USE_BIOMETRIC — за отключването на личните екрани (по избор); старото USE_FINGERPRINT
           # не се ползва и AndroidManifest.xml го маха (tools:node="remove"); APK-ът — в следващата стъпка.
-          if ! grep -q "USE_BIOMETRIC" "$M"; then
+          # Атрибутите, не коментарите (коментарът в AndroidManifest.xml споменава и двете).
+          if ! grep -q 'android:name="android.permission.USE_BIOMETRIC"' "$M"; then
             echo "::error::USE_BIOMETRIC missing from the Play manifest"; exit 1
           fi
-          if grep -q "USE_FINGERPRINT" "$M"; then
+          if grep -q 'android:name="android.permission.USE_FINGERPRINT"' "$M"; then
             echo "::error::Unused USE_FINGERPRINT permission in the Play manifest"; exit 1
           fi
           # Символите на native библиотеките за Google Play. Сегашните .so (Compose graphics-path,
