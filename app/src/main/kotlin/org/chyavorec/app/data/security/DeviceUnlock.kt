@@ -11,11 +11,13 @@ import android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDEN
 import android.hardware.biometrics.BiometricPrompt
 import android.os.Build
 import android.os.CancellationSignal
+import android.os.SystemClock
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -50,7 +52,19 @@ class SystemDeviceUnlock(private val context: Context) : DeviceUnlock {
     override suspend fun authenticate(activity: Context, title: String, subtitle: String): Boolean {
         if (!available()) return false
         val host = activity.findActivity() as? ComponentActivity ?: return false
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && usePrompt(host)) prompt(host, title, subtitle) else confirmCredential(host, title, subtitle)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && usePrompt(host)) {
+            // Веднага след връщане отпред (напр. след заключения екран) системата може да откаже
+            // прозореца — „не е отпред“ (BIOMETRIC_ERROR_CANCELED на мига). Това не е отказ от
+            // потребителя: опитва се пак след малко.
+            repeat(PROMPT_TRIES) {
+                val started = SystemClock.elapsedRealtime()
+                prompt(host, title, subtitle)?.let { return it }
+                if (SystemClock.elapsedRealtime() - started > FAST_FAIL_MS) return false
+                delay(RETRY_DELAY_MS)
+            }
+            return false
+        }
+        return confirmCredential(host, title, subtitle)
     }
 
     private fun usePrompt(activity: Context): Boolean = when {
@@ -62,8 +76,9 @@ class SystemDeviceUnlock(private val context: Context) : DeviceUnlock {
         else -> false
     }
 
+    /** `true`/`false` — отключено/отказано; `null` — системата затвори прозореца сама (BIOMETRIC_ERROR_CANCELED). */
     @RequiresApi(Build.VERSION_CODES.Q)
-    private suspend fun prompt(activity: Activity, title: String, subtitle: String): Boolean = suspendCancellableCoroutine { cont ->
+    private suspend fun prompt(activity: Activity, title: String, subtitle: String): Boolean? = suspendCancellableCoroutine { cont ->
         val callback = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 if (cont.isActive) cont.resume(true)
@@ -72,7 +87,7 @@ class SystemDeviceUnlock(private val context: Context) : DeviceUnlock {
             // Отказ, „Назад“, твърде много опити… — без отключване. Единичен грешен опит
             // (onAuthenticationFailed) оставя прозореца отворен.
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                if (cont.isActive) cont.resume(false)
+                if (cont.isActive) cont.resume(if (errorCode == BiometricPrompt.BIOMETRIC_ERROR_CANCELED) null else false)
             }
         }
         val builder = BiometricPrompt.Builder(activity).setTitle(title).setSubtitle(subtitle)
@@ -113,6 +128,10 @@ class SystemDeviceUnlock(private val context: Context) : DeviceUnlock {
 
     private companion object {
         val requests = AtomicInteger()
+        const val PROMPT_TRIES = 3
+        /** Отказ от системата по-бързо от това — „още не е отпред“, опитва се пак. */
+        const val FAST_FAIL_MS = 1_500L
+        const val RETRY_DELAY_MS = 400L
     }
 }
 
