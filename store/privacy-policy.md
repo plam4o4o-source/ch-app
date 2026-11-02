@@ -1,6 +1,6 @@
 # Политика за поверителност — приложение „Читалище Яворец“
 
-Последна актуализация: 31 октомври 2026 г.
+Последна актуализация: 2 ноември 2026 г.
 
 ## Кой обработва данните
 
@@ -68,7 +68,7 @@
 
 # Privacy policy — “Chitalishte Yavorets” app
 
-Last updated: October 31, 2026
+Last updated: November 2, 2026
 
 ## Who processes the data
 

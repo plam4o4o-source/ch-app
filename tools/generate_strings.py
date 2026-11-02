@@ -755,7 +755,7 @@ S = {
 "about_invlib": ("Библиотечната система InvLib", "The InvLib library system"),
 }
 
-PRIVACY_BG = """Последна актуализация: 31 октомври 2026 г.
+PRIVACY_BG = """Последна актуализация: 2 ноември 2026 г.
 
 # Кой обработва данните
 
@@ -813,7 +813,7 @@ PRIVACY_BG = """Последна актуализация: 31 октомври 2
 
 При промяна на тази политика новата версия се публикува в приложението и в сайта на читалището."""
 
-PRIVACY_EN = """Last updated: October 31, 2026
+PRIVACY_EN = """Last updated: November 2, 2026
 
 # Who processes the data
 
