@@ -109,21 +109,27 @@ part_unlock() {
   sec "P4. New process: Моето › Читателска карта → prompt; Back (cancel) → Моето; PIN → the card"
   a am force-stop $PKG; launch >/dev/null; sleep 5; ready
   my_card; gate_state 20-card-prompt
-  prompt_cancel; gate_state 21-after-cancel 1
+  mark m-cancel; prompt_cancel; gate_state 21-after-cancel 1
+  sleep 5; dump; log "cancel +6 s: prompt $(has "$RX_PROMPT" && echo 'SHOWN AGAIN (re-prompt loop?)' || echo absent); $(python3 $W16 tabsel $OUT/ui.xml); prompts since the cancel: $(since m-cancel 'START u0.*(BiometricPrompt|AuthBiometric|ConfirmDeviceCredential)|AuthSession' | wc -l) system lines"
   my_card; sleep 3; enter_pin; gate_state 22-after-pin 1
   sec "P5. Background 20 s (< 60 s): no prompt; background 70 s (> 60 s): prompt"
   go_home 2; sleep 20; launch >/dev/null; gate_state 30-after-20s-background
   go_home 2; sleep 70; launch >/dev/null; gate_state 31-after-70s-background
   has "$RX_PROMPT" && { enter_pin; gate_state 32-after-pin 1; }
-  sec "P6. Screen off and on (keyguard with the PIN): prompt again"
-  mark m-screenoff
-  a input keyevent KEYCODE_SLEEP; sleep 4; a input keyevent KEYCODE_WAKEUP; sleep 2
-  a wm dismiss-keyguard 2>/dev/null; sleep 2; dump; shot unlock/39-keyguard; log "keyguard: $(prompt_state | cut -c1-260)"
-  if has "$RX_PROMPT"; then log "(the app's prompt is already on top of the keyguard)"
-  elif has 'password="true"'; then a input text 1234; a input keyevent 66; sleep 3; fi
-  gate_state 40-after-screen-off
-  log "biometric/keyguard log after screen off: $(since m-screenoff 'BiometricService|AuthSession|BiometricPrompt|AuthController|onError|onAuthenticationError|ERROR_CANCELED|KeyguardViewMediator.*(show|hide)' | cut -c19-200 | head -14 | tr '\n' '~')"
-  has "$RX_PROMPT" && { enter_pin; gate_state 41-after-pin 1; }
+  local k
+  for k in 1 2 3; do
+    sec "P6.$k. Screen off and on (keyguard with the PIN) on the card: prompt again (attempt $k of 3)"
+    card_shown || { my_card; sleep 3; has "$RX_PROMPT" && enter_pin; dump; }
+    log "before screen off #$k: card $(card_shown && echo SHOWN || echo NO)"
+    mark m-screenoff-$k
+    a input keyevent KEYCODE_SLEEP; sleep 4; a input keyevent KEYCODE_WAKEUP; sleep 2
+    a wm dismiss-keyguard 2>/dev/null; sleep 2; dump; shot unlock/39-keyguard-$k; log "keyguard #$k: $(prompt_state | cut -c1-200)"
+    if has "$RX_PROMPT"; then log "(the app's prompt is already on top of the keyguard)"
+    elif has 'password="true"'; then a input text 1234; a input keyevent 66; sleep 3; fi
+    gate_state 40-after-screen-off-$k
+    log "screen off #$k system log: $(since m-screenoff-$k 'authenticateFastFail|AuthService|AuthSession|BiometricPrompt|onAuthenticationError' | grep -v hasEnrollments | cut -c19-180 | head -8 | tr '\n' '~')"
+    has "$RX_PROMPT" && { enter_pin; gate_state 41-after-pin-$k 1; }
+  done
   sec "P7. Quick Settings tile → the card: the gate"
   qs_add; a am force-stop $PKG; go_home 2
   qs_tile gate

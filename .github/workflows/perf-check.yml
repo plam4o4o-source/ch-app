@@ -1,4 +1,4 @@
-name: Emulator check wave 16 / v1.2.30, round d (temporary)
+name: Emulator check wave 16 / v1.2.30, round e (temporary)
 # ВРЕМЕННО: проверка на сливането на вълна 16 (origin/claude/charming-rubin-3lzor2 @ bf10741) на
 # емулатор преди изданието, със сравнение с v1.2.29 (tag v1.2.29 = b84650f). Настройката е от
 # debug/wave15-check. Резултатите (снимки, логове, числа) се публикуват в клона emulator-results,
@@ -25,12 +25,12 @@ on:
 permissions:
   contents: read
 env:
-  NEW_REF: 858c8b251341700ef815677ba9e6ac8efad71be5
+  NEW_REF: f01e6426783a7e4a6babc227e247c072af694446
   BASE_REF: b84650fce3bc77adc89d8cb38ed4e6a68a11f4d3
   VC_NEW: "1488543"
   VC_BASE: "1488542"
   # Папката на тестовото обновяване — с номера на изпълнението (кешът на raw.githubusercontent).
-  STAGE: v130d/update/${{ github.run_id }}
+  STAGE: v130e/update/${{ github.run_id }}
 jobs:
   key:
     runs-on: ubuntu-latest
@@ -267,7 +267,7 @@ jobs:
         # Кръг b (255fdc6): повторното изтегляне след „Отказ“ (API 33/34), емоджи на API 26/28, старт A/B.
         # Кръг c: отказ → повторно „Изтегли и инсталирай“ (приложението отпред), локален сървър с Range/ETag.
         # Кръг d (858c8b2): отключването без androidx.biometric (API 33/34/28), кратка проверка на API 33.
-        part: [unlock33, unlock34, unlock28, smoke33]
+        part: [unlock33, unlock34]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -341,7 +341,7 @@ jobs:
           pattern: apk-*
           path: apks
           merge-multiple: true
-      - name: Push results to emulator-results/v130d (orphan commit; the rest of the branch is kept)
+      - name: Push results to emulator-results/v130e (orphan commit; the rest of the branch is kept)
         run: |
           set -ex
           SRC=$(git rev-parse --short HEAD)
@@ -354,7 +354,7 @@ jobs:
           git read-tree FETCH_HEAD
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          V=v130d
+          V=v130e
           for p in $(ls "$W/results"); do git rm -r -q --cached --ignore-unmatch "$V/$p"; done
           mkdir -p "$V"; cp -r "$W/results/." "$V/"
           mkdir -p "$V/size"; cp "$W"/apks/size-*.txt "$W"/apks/apk-*ref.txt "$V/size/" 2>/dev/null || true
@@ -362,9 +362,9 @@ jobs:
           echo "run $REPUBLISH_FROM @ $SRC (published by run ${{ github.run_id }}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
           (
             cd "$V"
-            echo "# Wave 16 emulator check, round d (858c8b2): unlock with the framework BiometricPrompt, size, smoke"
+            echo "# Wave 16 emulator check, round e (f01e642): unlock retry after an instant CANCELED"
             echo
-            echo "Emulator run $REPUBLISH_FROM (debug/wave16-check @ $SRC). Round c: [../v130c/index.md](../v130c/index.md). Round b: [../v130b/index.md](../v130b/index.md). Round a: [../v130/index.md](../v130/index.md)."
+            echo "Emulator run $REPUBLISH_FROM (debug/wave16-check @ $SRC). Round d: [../v130d/index.md](../v130d/index.md). Round c: [../v130c/index.md](../v130c/index.md). Round b: [../v130b/index.md](../v130b/index.md). Round a: [../v130/index.md](../v130/index.md)."
             echo; echo '```'; cat size/size-new.txt 2>/dev/null; echo '```'
             echo
             for p in $(ls -d */ | tr -d /); do
@@ -376,7 +376,7 @@ jobs:
           ) > "$RUNNER_TEMP/v130c-index.md"
           mv "$RUNNER_TEMP/v130c-index.md" "$V/index.md"
           git show FETCH_HEAD:index.md > index.md
-          grep -q "v130d/index.md" index.md || { { head -1 index.md; echo; echo "Wave 16 check, round d (858c8b2, unlock without androidx.biometric): [v130d/index.md](v130d/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
+          grep -q "v130e/index.md" index.md || { { head -1 index.md; echo; echo "Wave 16 check, round e (f01e642, unlock retry): [v130e/index.md](v130e/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
           git add "$V" index.md
-          git commit -q -m "Emulator results v130d for $SRC (run $REPUBLISH_FROM)"
+          git commit -q -m "Emulator results v130e for $SRC (run $REPUBLISH_FROM)"
           git push -f origin HEAD:refs/heads/emulator-results
