@@ -64,6 +64,9 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_sha || 'main' }}
           fetch-depth: 0
+          # Историята без съдържанието на файловете (то идва при нужда): иначе се теглят и
+          # всички клонове с резултати (emulator-results, screenshots) — минути вместо секунди.
+          filter: blob:none
       - id: plan
         env:
           GH_TOKEN: ${{ github.token }}
@@ -175,6 +178,9 @@ jobs:
         with:
           ref: ${{ needs.plan.outputs.ref }}
           fetch-depth: 0
+          # Историята без съдържанието на файловете (то идва при нужда): иначе се теглят и
+          # всички клонове с резултати (emulator-results, screenshots) — минути вместо секунди.
+          filter: blob:none
       - id: profile
         env:
           GH_TOKEN: ${{ github.token }}
