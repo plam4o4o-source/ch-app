@@ -34,4 +34,6 @@ dependencies {
 
 tasks.test {
     useJUnit()
+    // Класовете — в до 2 JVM (MockWebServer е на случаен порт).
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceIn(1, 2)
 }

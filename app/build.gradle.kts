@@ -297,6 +297,11 @@ tasks.withType<Test>().configureEach {
     outputs.dir(layout.buildDirectory.dir("reports/screenshots"))
     // Robolectric (SDK 36) на JDK 25 чете jdk.internal.access чрез reflection.
     jvmArgs("--add-exports=java.base/jdk.internal.access=ALL-UNNAMED", "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED")
+    // Класовете — в до 2 JVM (CI: 4 ядра / 16 GB). Снимките са с различни имена, портовете на
+    // MockWebServer — случайни, а файловете на Robolectric — във временни папки на теста.
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceIn(1, 2)
+    // Robolectric със снимки на Compose — до ~2 GB; изрично, а не 1/4 от паметта за всяка JVM.
+    maxHeapSize = "2g"
     testLogging {
         events("failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
