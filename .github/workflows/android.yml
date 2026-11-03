@@ -182,12 +182,15 @@ jobs:
             shared/build/reports/
 
   # Задължителната проверка за main (и тази, която чака baseline-profile-merge.sh): зелена само
-  # ако tests, lint и build са минали. always() — паднала или отменена задача дава „checks“
-  # червена, не пропусната (пропусната задължителна проверка GitHub брои за минала).
+  # ако tests, lint и build са минали. !cancelled() — паднала задача дава „checks“ червена, не
+  # пропусната (пропусната задължителна проверка GitHub брои за минала). Изместено от нов push
+  # пускане (concurrency) не я пуска: иначе всеки бърз повторен push би бил „неуспешен“ (с
+  # имейл). Изместеният commit остава без зелена „checks“ (baseline-profile-merge.sh и
+  # auto-release искат success), а в main влиза само проверен commit.
   checks:
     needs: [tests, lint, build]
     if: >-
-      always() && (
+      !cancelled() && (
       github.event_name != 'pull_request' ||
       github.event.pull_request.head.repo.full_name != github.repository ||
       !(github.head_ref == 'main' || startsWith(github.head_ref, 'claude/') ||

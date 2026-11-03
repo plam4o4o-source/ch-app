@@ -204,12 +204,16 @@ cd shared && ../gradlew test && cd ..                 # ядро: парсери
 
 GitHub Actions (`.github/workflows/android.yml`) пуска всичко това при push в `main`,
 `claude/**` и `wave*/**`, при pull request (без повторение за commit, проверен вече при push)
-и ръчно, и качва APK/AAB като artifacts. Първо `checks` — само с права за четене (тестове на
-`shared`, тестовете на приложението за prod и `MainFlowsUiTest` за dev — заради демо входа,
-проверка, че Room схемите в `app/schemas/` са commit-нати, lint, debug APK-та, компилиране на
-генератора на профила); след като мине — `release` (подписаните AAB/APK и проверка на
-манифеста за Play) и `publish-screenshots`: Robolectric снимките на екраните (`ScreenshotTest`
-и др.) от artifact-а на `checks` се публикуват при push в клона `screenshots`. Отчетът на
+и ръчно, и качва APK/AAB като artifacts. Успоредно, само с права за четене: `tests` (тестовете
+на приложението за prod и `MainFlowsUiTest` за dev — заради демо входа, проверка, че Room
+схемите в `app/schemas/` са commit-нати, снимките на екраните), `lint` (с проверката на
+шрифтовете) и `build` (тестове на `shared`, debug APK-та, проверка на слетия манифест,
+компилиране на генератора на профила); `checks` е зелена само ако и трите са минали — това е
+задължителната проверка за `main`. Също успоредно — `release` (подписаните AAB/APK и проверка
+на манифеста за Play). След `checks` — `publish-screenshots`: Robolectric снимките на екраните
+(`ScreenshotTest` и др.) от artifact-а на `tests` се публикуват при push в клона `screenshots`.
+Изданието (`release.yml`) не пуска тестовете повторно, ако commit-ът вече има зелена `checks`.
+Действията в workflow-ите са закрепени по пълен SHA (Dependabot ги обновява). Отчетът на
 Compose компилатора е само при ръчно пускане.
 
 ## Release и Google Play
