@@ -171,7 +171,10 @@ class HomeScreenUiTest {
         val targets = compose.onAllNodes(hasClickAction()).fetchSemanticsNodes()
             .filter { it.config.getOrNull(SemanticsProperties.HideFromAccessibility) == null }
         assertTrue(targets.any { "Световен ден" in label(it) }, "картата на събитието липсва: ${targets.map(::label)}")
-        val small = targets.filter { it.size.width < min || it.size.height < min }.map { "„${label(it)}“ ${it.size}" }
+        // Размерът на целия възел: при minimumInteractiveComponentSize (IconButton) кликаемият
+        // модификатор е 40 dp, а целта за докосване — 48 dp.
+        val small = targets.filter { maxOf(it.size.width, it.layoutInfo.width) < min || maxOf(it.size.height, it.layoutInfo.height) < min }
+            .map { "„${label(it)}“ ${it.size} / ${it.layoutInfo.width}x${it.layoutInfo.height}" }
         assertTrue(small.isEmpty(), "под 48 dp: $small")
     }
 
