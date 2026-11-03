@@ -11,14 +11,17 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -146,6 +149,33 @@ class HomeScreenUiTest {
         assertTrue(main.config.getOrNull(SemanticsProperties.Text).orEmpty().any { it.text.isNotBlank() }, "голямата карта е без текст")
         val actions = main.config.getOrNull(SemanticsActions.CustomActions).orEmpty().map { it.label }
         assertTrue("Следваща новина" in actions, "$actions")
+    }
+
+    /**
+     * Целите за докосване на „Начало“ — поне 48 × 48 dp, и картите на събитията (280 dp). Dump-ът
+     * на емулатора мери само видимото: карта, отрязана от навигацията долу, излиза „280×28 dp“.
+     */
+    @Test fun touchTargetsAreAtLeast48dp() {
+        launch()
+        waitFor("45-ти")
+        // Събитията са под първия екран — превърта се до първото, щом се появи в списъка.
+        compose.waitUntil(15_000) {
+            runCatching { compose.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText("Световен ден", substring = true)) }.isSuccess
+        }
+        compose.waitForIdle()
+        val min = with(compose.density) { 48.dp.toPx() } - 1f
+        fun label(n: androidx.compose.ui.semantics.SemanticsNode) =
+            (n.config.getOrNull(SemanticsProperties.ContentDescription).orEmpty() +
+                n.config.getOrNull(SemanticsProperties.Text).orEmpty().map { it.text }).joinToString(" ").take(40)
+        // Страничните карти на въртележката са скрити от екранния четец (виж carouselHasNoUnlabelledButtons).
+        val targets = compose.onAllNodes(hasClickAction()).fetchSemanticsNodes()
+            .filter { it.config.getOrNull(SemanticsProperties.HideFromAccessibility) == null }
+        assertTrue(targets.any { "Световен ден" in label(it) }, "картата на събитието липсва: ${targets.map(::label)}")
+        // Размерът на целия възел: при minimumInteractiveComponentSize (IconButton) кликаемият
+        // модификатор е 40 dp, а целта за докосване — 48 dp.
+        val small = targets.filter { maxOf(it.size.width, it.layoutInfo.width) < min || maxOf(it.size.height, it.layoutInfo.height) < min }
+            .map { "„${label(it)}“ ${it.size} / ${it.layoutInfo.width}x${it.layoutInfo.height}" }
+        assertTrue(small.isEmpty(), "под 48 dp: $small")
     }
 
     /** TalkBack обявява раздела при отварянето му: „Начало“, после „Каталог“ (от заглавката). */

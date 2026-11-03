@@ -20,10 +20,17 @@ class BaselineProfileGenerator {
     @get:Rule
     val rule = BaselineProfileRule()
 
+    // По-малко повторения от подразбиращите се (15 / 3): два поредни профила се различават с
+    // 3–6% (~45 000 правила), а пътищата на емулатора траеха 30 min.
+    private val maxIterations = 5
+    private val stableIterations = 2
+
     /** Студен старт → начален екран със съдържание. Влиза и в Startup профила. */
     @Test
     fun startup() = rule.collect(
         packageName = targetPackage(),
+        maxIterations = maxIterations,
+        stableIterations = stableIterations,
         includeInStartupProfile = true,
     ) {
         coldStartToHome()
@@ -34,7 +41,11 @@ class BaselineProfileGenerator {
      * неуспешен път не проваля профила — остава всичко, до което другите са стигнали.
      */
     @Test
-    fun criticalUserJourneys() = rule.collect(packageName = targetPackage()) {
+    fun criticalUserJourneys() = rule.collect(
+        packageName = targetPackage(),
+        maxIterations = maxIterations,
+        stableIterations = stableIterations,
+    ) {
         coldStartToHome()
         optional("home scroll") { homeScrollJourney() }
         optional("catalog") { catalogJourney() }
