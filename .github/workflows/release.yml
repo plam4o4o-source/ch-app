@@ -58,8 +58,9 @@ on:
         required: false
         default: false
 
+# Правата — по задачи (при извикване от auto-release.yml — не повече от дадените там).
 permissions:
-  contents: write
+  contents: read
 
 # Едно издание наведнъж. GitHub пази само едно чакащо пускане на група (при ново отменя
 # чакащото), затова push на tag (напр. от публикувана чернова — guard-ът тогава не прави
@@ -73,6 +74,8 @@ jobs:
   # събитие (push на v*) — тогава изданието вече съществува и не се строи наново.
   guard:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       skip: ${{ steps.check.outputs.skip }}
     steps:
@@ -96,18 +99,22 @@ jobs:
     if: needs.guard.outputs.skip != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    # checks: read — за зеления „checks“ на commit-а (стъпката „Already checked“).
+    permissions:
+      contents: write
+      checks: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ inputs.ref || github.ref }}
           persist-credentials: false
 
-      - uses: actions/setup-java@v6
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: "25"
 
-      - uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
 
       - name: Version
         run: |
@@ -169,7 +176,35 @@ jobs:
             exit 1
           fi
 
+      # Тестовете и lint вече са минали в Android CI („checks“: shared тестовете,
+      # testProdDebugUnitTest, lintProdRelease и още) — ако commit-ът за издаване (HEAD след
+      # checkout, напр. commit-ът с профила от auto-release.yml) има зелен „checks“ от GitHub
+      # Actions на същия sha, тук не се пускат пак: кодът е същият, build-ът сменя само
+      # versionName. Издание от tag (push или ръчно), липсващ или червен „checks“, грешка от
+      # API — тестовете вървят.
+      - name: Already checked
+        id: checked
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SHA=$(git rev-parse HEAD)
+          # app.id 15368 = GitHub Actions; filter=latest — последното пускане във всеки check suite.
+          if R=$(gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/check-runs?check_name=checks&filter=latest&per_page=100" \
+                 --jq '[.check_runs[] | select(.app.id == 15368 and .status == "completed")] |
+                       "\(map(select(.conclusion == "success")) | length) \(map(select(.conclusion != "success" and .conclusion != "skipped")) | length)"'); then
+            read -r OK BAD <<< "$R"
+          else
+            OK=0 BAD=0
+          fi
+          echo "checks за ${SHA::7}: зелени $OK, червени $BAD"
+          if [ "${OK:-0}" -gt 0 ] && [ "${BAD:-0}" -eq 0 ]; then
+            echo "::notice::${SHA::7} вече има зелена проверка checks — без повторни тестове и lint."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Tests and lint
+        if: steps.checked.outputs.skip != 'true'
         run: |
           (cd shared && ../gradlew --no-daemon test)
           ./gradlew --no-daemon testProdDebugUnitTest lintProdRelease
@@ -205,7 +240,7 @@ jobs:
           mkdir -p dev-dist
           cp app/build/outputs/apk/dev/debug/app-dev-debug.apk "dev-dist/chitalishte-yavorets-$VERSION-dev-debug.apk"
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dev-debug-apk-${{ env.VERSION }}
           path: dev-dist/*.apk

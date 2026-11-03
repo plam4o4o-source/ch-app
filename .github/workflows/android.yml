@@ -13,16 +13,20 @@ on:
 permissions:
   contents: read
 
-# Нов push в същия клон / PR отменя още незавършената проверка на предишния.
+# Нов push в същия клон / PR отменя още незавършената проверка на предишния (всички задачи,
+# вкл. release; „checks“ на отменения commit остава червена — виж по-долу).
 concurrency:
   group: android-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-# Първо проверките (тестове, lint, debug) — само с права за четене; след тях, ако са минали:
-# подписаният release build (R8 за prodPlay и prodRelease) и публикуването на снимките на
+# Проверките вървят в три паралелни задачи — tests, lint и build, всяка с права само за четене;
+# „checks“ ги събира в една (задължителната проверка за main). Успоредно с тях — подписаният
+# release build (R8 за prodPlay и prodRelease); след „checks“ — публикуването на снимките на
 # екраните (единствената задача с право за запис). Gradle daemon-ът остава жив между стъпките.
+# Условието на задачите: PR от клон, който вече се проверява при push, се пропуска (виж по-горе).
 jobs:
-  checks:
+  # Тестовете на приложението (Robolectric, вкл. снимките на екраните) и схемите на Room.
+  tests:
     if: >-
       github.event_name != 'pull_request' ||
       github.event.pull_request.head.repo.full_name != github.repository ||
@@ -35,28 +39,16 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - uses: actions/setup-java@v6
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: "25"
 
-      - uses: gradle/actions/setup-gradle@v6
-
-      # Подмножествата на шрифтовете (tools/subset_fonts.py) покриват всички букви от низовете
-      # на приложението — нов текст със знак извън тях спира тук, не на екрана.
-      - name: Fonts cover app strings
-        run: |
-          python3 -m venv "$RUNNER_TEMP/fonttools"
-          "$RUNNER_TEMP/fonttools/bin/pip" install --quiet fonttools==4.67.0
-          "$RUNNER_TEMP/fonttools/bin/python" tools/subset_fonts.py --check
-
-      - name: Shared core tests (JVM)
-        working-directory: shared
-        run: ../gradlew test
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
 
       # Тестовете не зависят от flavor-а — веднъж за prod (снимките на екраните са от него).
       # Демо входът съществува само в dev, затова MainFlowsUiTest върви и за dev
@@ -77,15 +69,85 @@ jobs:
 
       # Снимките на екраните (ScreenshotTest) — artifact; в клона „screenshots“ ги качва
       # publish-screenshots, след като всички проверки са минали.
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: screenshots
           path: app/build/reports/screenshots/*.png
           if-no-files-found: ignore
           retention-days: 7
 
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: reports
+          path: app/build/reports/
+
+  # Шрифтовете и Android lint.
+  lint:
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository ||
+      !(github.head_ref == 'main' || startsWith(github.head_ref, 'claude/') ||
+        (startsWith(github.head_ref, 'wave') && contains(github.head_ref, '/')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+
+      # Подмножествата на шрифтовете (tools/subset_fonts.py) покриват всички букви от низовете
+      # на приложението — нов текст със знак извън тях спира тук, не на екрана.
+      - name: Fonts cover app strings
+        run: |
+          python3 -m venv "$RUNNER_TEMP/fonttools"
+          "$RUNNER_TEMP/fonttools/bin/pip" install --quiet fonttools==4.67.0
+          "$RUNNER_TEMP/fonttools/bin/python" tools/subset_fonts.py --check
+
       - name: Lint
         run: ./gradlew lintDevDebug lintProdRelease
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: reports-lint
+          path: app/build/reports/
+
+  # Тестовете на shared, debug APK-тата, слетият манифест и генераторът на профила.
+  build:
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository ||
+      !(github.head_ref == 'main' || startsWith(github.head_ref, 'claude/') ||
+        (startsWith(github.head_ref, 'wave') && contains(github.head_ref, '/')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+
+      - name: Shared core tests (JVM)
+        working-directory: shared
+        run: ../gradlew test
 
       - name: Debug APKs
         run: ./gradlew assembleDevDebug assembleProdDebug
@@ -106,23 +168,47 @@ jobs:
       - name: Baseline profile generator (compile)
         run: ./gradlew :baselineprofile:assembleProdNonMinifiedRelease
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: debug-apks
           path: app/build/outputs/apk/*/debug/*.apk
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
-          name: reports
+          name: reports-build
           path: |
             app/build/reports/
             shared/build/reports/
 
+  # Задължителната проверка за main (и тази, която чака baseline-profile-merge.sh): зелена само
+  # ако tests, lint и build са минали. always() — паднала или отменена задача дава „checks“
+  # червена, не пропусната (пропусната задължителна проверка GitHub брои за минала).
+  checks:
+    needs: [tests, lint, build]
+    if: >-
+      always() && (
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository ||
+      !(github.head_ref == 'main' || startsWith(github.head_ref, 'claude/') ||
+        (startsWith(github.head_ref, 'wave') && contains(github.head_ref, '/'))))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: All checks passed
+        env:
+          TESTS: ${{ needs.tests.result }}
+          LINT: ${{ needs.lint.result }}
+          BUILD: ${{ needs.build.result }}
+        run: |
+          echo "tests: $TESTS, lint: $LINT, build: $BUILD"
+          [ "$TESTS" = success ] && [ "$LINT" = success ] && [ "$BUILD" = success ]
+
   # Снимките на екраните → клон „screenshots“, за да се виждат директно в GitHub:
   # https://github.com/<repo>/tree/screenshots. Само при push в main и в клоните за разработка
   # (не от pull request) и само ако всички проверки са минали. Не изпълнява нищо от кода на
-  # клона — сваля само PNG файловете (artifact-а от checks). Един клон за всички: всеки push
+  # клона — сваля само PNG файловете (artifact-а от tests). Един клон за всички: всеки push
   # го презаписва изцяло (commit-ът назовава sha и клона; push -f е атомарен — печели
   # последният). Групата е за клона на кода: обща група за всички клонове би отменяла
   # чакащите публикувания, а отменена задача прави цялата проверка „cancelled“ (за main —
@@ -140,7 +226,7 @@ jobs:
       group: publish-screenshots-${{ github.ref }}
       cancel-in-progress: false
     steps:
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         id: shots
         continue-on-error: true
         with:
@@ -168,24 +254,29 @@ jobs:
             commit -qm "Screenshots: ${GITHUB_SHA::7} (${GITHUB_REF_NAME})"
           git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" screenshots
 
-  # Подписаният build — едва след като проверките са минали: истинският ключ (в main) не
-  # подписва commit с паднали тестове. (Условието на checks важи и тук: пропусната ли е,
-  # пропуска се и release.)
+  # Подписаният build — успоредно с проверките (не ги чака: R8 е най-дългата задача). Истинският
+  # ключ е само за main, а в main влиза само commit със зелен „checks“ (защитата на клона), т.е.
+  # кодът вече е проверен. Червен „checks“ или release прави цялото пускане неуспешно — без
+  # автоматично издание. Условието е като на проверките.
   release:
-    needs: checks
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository ||
+      !(github.head_ref == 'main' || startsWith(github.head_ref, 'claude/') ||
+        (startsWith(github.head_ref, 'wave') && contains(github.head_ref, '/')))
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - uses: actions/setup-java@v6
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: "25"
 
-      - uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
 
       # Подписване. Истинският upload ключ (GitHub Secrets) се ползва САМО в main — при push
       # и при ръчно пускане от main. Работните клонове (claude/**, wave*/**) и pull request-ите
@@ -280,7 +371,7 @@ jobs:
             echo "::error::Unused USE_FINGERPRINT permission in the GitHub APK"; exit 1
           fi
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-${{ env.SIGNING_KIND }}
           path: |
@@ -297,14 +388,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-java@v6
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: "25"
 
-      - uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
 
       - name: Compose compiler reports (prodRelease)
         continue-on-error: true
@@ -344,7 +437,7 @@ jobs:
                   s.write(text)
           PY
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: compose-compiler-reports

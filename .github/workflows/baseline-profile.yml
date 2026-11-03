@@ -57,17 +57,17 @@ jobs:
     steps:
       # Точно commit-ът на пускането (github.sha): при schedule — последният в main, при
       # ръчно пускане — върхът на избрания клон. Профилът в него е мярката за проверката.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
 
-      - uses: actions/setup-java@v6
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: "25"
 
-      - uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
 
       # Сглобяване преди емулатора (по-малко време с вървящ емулатор). nonMinifiedRelease
       # се създава от Baseline Profile плъгина; без ограничението до ARM (виж app/build.gradle.kts),
@@ -98,7 +98,7 @@ jobs:
         id: generate
         continue-on-error: true
         timeout-minutes: 75
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
           api-level: 33
           target: google_apis
@@ -118,7 +118,7 @@ jobs:
       - name: Generate baseline + startup profile on emulator (retry)
         if: steps.generate.outcome == 'failure'
         timeout-minutes: 75
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
           api-level: 34
           target: google_apis
@@ -159,13 +159,13 @@ jobs:
           fi
 
       # Профилът за задачата „merge“ (и за преглед) — само ако проверката е минала.
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: baseline-profile
           path: app/src/main/generated/baselineProfiles/
           if-no-files-found: error
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: baseline-profile-test-outputs
@@ -186,12 +186,12 @@ jobs:
       contents: write
       actions: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: baseline-profile
           path: app/src/main/generated/baselineProfiles
