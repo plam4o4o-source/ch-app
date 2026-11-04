@@ -13,6 +13,20 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.32
+
+### bg
+- По-малко памет за снимките в списъците — по-рядко затваряне във фон на телефони с малко памет.
+- В галерията увеличението с два пръста следва пръстите.
+- „Настройки › Информация › Диагностика“ показва бързодействието: време за стартиране и плавност по екрани (само на телефона).
+- По-плавни статистиката за четене и общото търсене.
+
+### en
+- Less memory for images in lists — fewer background closures on phones with little memory.
+- In the gallery, pinch-zoom now follows your fingers.
+- “Settings › Information › Diagnostics” shows performance: start-up time and smoothness per screen (kept on the phone).
+- Smoother reading statistics and global search.
+
 ## 1.2.31
 
 ### bg
