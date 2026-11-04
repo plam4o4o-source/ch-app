@@ -16,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
+import coil3.annotation.ExperimentalCoilApi
 import coil3.network.ConnectivityChecker
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import okhttp3.OkHttpClient
@@ -55,7 +56,7 @@ class BrokenPhotoTest {
     /** „Мрежата“: без нея сървърът прекъсва връзката, а проверката на Coil казва „офлайн“. */
     @Volatile private var online = true
 
-    @OptIn(DelicateCoilApi::class)
+    @OptIn(DelicateCoilApi::class, ExperimentalCoilApi::class)
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {

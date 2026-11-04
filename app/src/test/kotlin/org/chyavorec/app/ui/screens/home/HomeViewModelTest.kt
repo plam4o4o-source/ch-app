@@ -187,7 +187,7 @@ class HomeViewModelTest {
 
     private fun assertLoaded(s: HomeUiState, label: String) {
         assertNotNull(s.news.data, label)
-        assertTrue(s.news.data!!.isNotEmpty() && !s.news.refreshing, "$label — новините: $s")
+        assertTrue(s.news.data.isNotEmpty() && !s.news.refreshing, "$label — новините: $s")
         assertTrue(s.newBooks.isNotEmpty() && s.catalogCount != null, "$label — каталогът: $s")
         assertTrue(s.forYou.isNotEmpty(), "$label — „За теб“: $s")
         assertNotNull(s.feast, "$label — празникът")

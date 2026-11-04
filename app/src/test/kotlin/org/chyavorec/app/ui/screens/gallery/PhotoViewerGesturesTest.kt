@@ -16,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
+import coil3.annotation.ExperimentalCoilApi
 import coil3.network.ConnectivityChecker
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import okhttp3.OkHttpClient
@@ -48,7 +49,7 @@ class PhotoViewerGesturesTest {
     private val app = ApplicationProvider.getApplicationContext<Application>()
     private val server = MockWebServer()
 
-    @OptIn(DelicateCoilApi::class)
+    @OptIn(DelicateCoilApi::class, ExperimentalCoilApi::class)
     @Before fun start() {
         // Снимката липсва на сайта — прегледът стига бързо до едно и също, стабилно съдържание.
         server.dispatcher = object : Dispatcher() {

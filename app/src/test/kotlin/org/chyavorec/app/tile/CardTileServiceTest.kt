@@ -89,7 +89,7 @@ class CardTileServiceTest {
 
     @Test fun opensTheCardThroughThePrivateEntry() {
         val pending = shadowOf(CardTile.pendingIntent(app))
-        assertTrue(pending.isActivityIntent)
+        assertTrue(pending.isActivity)
         assertTrue(pending.isImmutable)
         val intent = pending.savedIntent
         assertEquals(ComponentName(app.packageName, LaunchIntents.OPEN_LINK_ALIAS), intent.component)

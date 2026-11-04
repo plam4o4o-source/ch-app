@@ -12,6 +12,7 @@ import org.chyavorec.core.FixedClock
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.LoanReminderKind
 import org.chyavorec.domain.model.LoanReminderSync
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -103,6 +104,7 @@ class LoanReminderSchedulerTest {
         assertEquals(1, enqueued("L3", LoanReminderKind.DUE_DAY).size)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test fun reschedulingWaitsForRunningReminder() = runTest {
         LoanReminderScheduler.workerStarted()
         val waiting = async { LoanReminderScheduler.awaitIdle() }

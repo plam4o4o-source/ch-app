@@ -14,6 +14,7 @@ import androidx.work.workDataOf
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
+import coil3.annotation.ExperimentalCoilApi
 import coil3.network.ConnectivityChecker
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import kotlinx.coroutines.runBlocking
@@ -58,7 +59,7 @@ class RichNotificationsWorkerTest {
     /** Уникален адрес на снимката — дисковият кеш на Coil не се споделя между тестовете. */
     private val cover = "/assets/uploads/news/" + UUID.randomUUID() + ".png"
 
-    @OptIn(DelicateCoilApi::class)
+    @OptIn(DelicateCoilApi::class, ExperimentalCoilApi::class)
     @Before fun setUp() = runBlocking<Unit> {
         backend.start()
         TestBackend.allowNotificationsAndNetwork(app)
@@ -163,7 +164,7 @@ class RichNotificationsWorkerTest {
         // Календарът на сайта е без място — само „Добави в календара“.
         assertEquals(listOf(app.getString(R.string.event_add_calendar)), n.actions.map { it.title.toString() })
         val calendar = shadowOf(n.actions.single().actionIntent)
-        assertTrue(calendar.isActivityIntent && calendar.isImmutable)
+        assertTrue(calendar.isActivity && calendar.isImmutable)
     }
 
     @Test fun eventReminderWithoutCachedEventIsPlainText() = runBlocking<Unit> {

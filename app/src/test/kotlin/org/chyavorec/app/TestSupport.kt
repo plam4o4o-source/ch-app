@@ -21,7 +21,7 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
 object TestResources {
-    fun text(name: String): String = requireNotNull(javaClass.classLoader.getResource(name)).readText()
+    fun text(name: String): String = requireNotNull(javaClass.classLoader?.getResource(name)).readText()
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
