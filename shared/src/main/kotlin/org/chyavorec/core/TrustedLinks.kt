@@ -93,9 +93,9 @@ object TrustedLinks {
         if (link.host !in hosts) return null
         val sameOrigin = base != null && link.host == base.host && link.port == base.port
         return when (link.scheme) {
-            "https" -> link.takeIf { it.port == -1 || (sameOrigin && base?.scheme == "https") }
+            "https" -> link.takeIf { it.port == -1 || (sameOrigin && base.scheme == "https") }
             // http — само при http базов адрес (MockWebServer в тестовете), на същия хост и порт.
-            else -> link.takeIf { sameOrigin && base?.scheme == "http" }
+            else -> link.takeIf { sameOrigin && base.scheme == "http" }
         }
     }
 

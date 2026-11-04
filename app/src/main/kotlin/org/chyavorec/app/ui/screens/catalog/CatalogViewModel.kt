@@ -212,7 +212,7 @@ class CatalogViewModel(
         val q = _state.value.query
         val last = lastSearch
         val sameQuery = last?.second == q
-        if (sameQuery && last?.first === engine) {
+        if (sameQuery && last.first === engine) {
             // Напр. опресняване без нови данни — резултатите (и страницирането) остават.
             _state.update { if (it.query == q) it.copy(searching = false) else it }
             return

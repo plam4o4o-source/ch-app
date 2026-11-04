@@ -53,12 +53,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.graphics.Bitmap
 import coil3.BitmapImage
+import coil3.PlatformContext
 import coil3.compose.AsyncImage
 import coil3.network.HttpException
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
+import coil3.request.bitmapConfig
 import org.chyavorec.app.network.ConnectivityObserver
 import org.chyavorec.app.network.CoverNetworkPolicy
 import org.chyavorec.app.ui.theme.Brand
@@ -93,6 +96,8 @@ fun RemoteImage(
      * екран да покаже веднага миниатюрата като заместител ([sitePhotoPlaceholderKey]).
      */
     urlMemoryKey: Boolean = false,
+    /** Непрозрачна миниатюра в списък или мрежа — в RGB_565 ([listThumbnail]). */
+    thumbnail: Boolean = false,
 ) {
     var failed by remember(url) { mutableStateOf(false) }
     val coversAllowed = !cover || LocalOnlineCovers.current
@@ -102,10 +107,8 @@ fun RemoteImage(
             val context = LocalContext.current
             // Заявката се създава веднъж за адрес (не при всяка рекомпозиция); crossfade идва от ImageLoader-а.
             val network = !cover || LocalCoverNetwork.current
-            val request = remember(context, target, network, urlMemoryKey) {
-                ImageRequest.Builder(context).data(target).coverNetwork(network)
-                    .apply { if (urlMemoryKey) memoryCacheKey(target) }
-                    .build()
+            val request = remember(context, target, network, urlMemoryKey, thumbnail) {
+                remoteImageRequest(context, target, network, urlMemoryKey, thumbnail)
             }
             AsyncImage(
                 model = request,
@@ -177,6 +180,44 @@ fun observeCoverNetwork(connectivity: ConnectivityObserver, wifiOnly: Boolean): 
     val metered by connectivity.metered.collectAsStateWithLifecycle(initialValue = remember(connectivity) { connectivity.isMetered() })
     return CoverNetworkPolicy.networkAllowed(wifiOnly, metered)
 }
+
+/** Заявката на [RemoteImage]: [urlMemoryKey] — ключът в паметта е самият адрес. */
+internal fun remoteImageRequest(context: PlatformContext, url: String, network: Boolean, urlMemoryKey: Boolean, thumbnail: Boolean): ImageRequest =
+    ImageRequest.Builder(context).data(url).coverNetwork(network)
+        .apply {
+            if (urlMemoryKey) memoryCacheKey(url)
+            if (thumbnail) listThumbnail()
+        }
+        .build()
+
+/**
+ * Заявката на [BookCover]. [large] (детайлите на книгата) остава в ARGB_8888, а [wantsBitmap]
+ * (цветовете на екрана) — и без хардуерен bitmap: Palette чете пикселите. Малките корици в
+ * списъците — в RGB_565 ([listThumbnail]).
+ */
+internal fun coverRequest(
+    context: PlatformContext,
+    url: String,
+    network: Boolean,
+    large: Boolean,
+    wantsBitmap: Boolean,
+    placeholderKey: String? = null,
+): ImageRequest = ImageRequest.Builder(context).data(url).coverNetwork(network).apply {
+    // В детайлите: докато се тегли голямата корица, се показва вече заредената средна от списъка.
+    placeholderKey?.let { placeholderMemoryCacheKey(it) }
+    when {
+        wantsBitmap -> allowHardware(false)
+        !large -> listThumbnail()
+    }
+}.build()
+
+/**
+ * Непрозрачна миниатюра в списък или мрежа (корица, снимка на новина, плочка от албум): RGB_565 —
+ * 2 байта на пиксел вместо 4, т.е. наполовина памет в кеша. Снимка с прозрачност (PNG, WebP с
+ * алфа) BitmapFactory все пак декодира в ARGB_8888. Прегледът на цял екран и голямата корица
+ * не го ползват (ARGB_8888 за качество).
+ */
+internal fun ImageRequest.Builder.listThumbnail(): ImageRequest.Builder = bitmapConfig(Bitmap.Config.RGB_565)
 
 /** Заявка за корица: без мрежа, ако [network] е false — само от кеша в паметта/на диска. */
 private fun ImageRequest.Builder.coverNetwork(network: Boolean): ImageRequest.Builder =
@@ -375,13 +416,9 @@ fun BookCover(
         }
         if (url != null) {
             val wantsBitmap = sink != null
-            val request = remember(context, url, wantsBitmap, network) {
-                ImageRequest.Builder(context).data(url).coverNetwork(network).apply {
-                    // В детайлите: докато се тегли голямата корица, се показва вече заредената средна от списъка.
-                    if (url == onlineUrl && large && isbn != null) placeholderMemoryCacheKey(openLibraryCoverUrl(isbn, large = false))
-                    // Само за цветовете на екрана с детайлите: софтуерен bitmap, който Palette може да чете.
-                    if (wantsBitmap) allowHardware(false)
-                }.build()
+            val request = remember(context, url, wantsBitmap, network, large) {
+                val placeholder = if (url == onlineUrl && large && isbn != null) openLibraryCoverUrl(isbn, large = false) else null
+                coverRequest(context, url, network, large, wantsBitmap, placeholder)
             }
             AsyncImage(
                 model = request,

@@ -16,6 +16,11 @@ kotlin {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
         freeCompilerArgs.add("-Xjsr305=strict")
     }
+    // Тестовете: runCurrent, advanceUntilIdle, StandardTestDispatcher… от kotlinx-coroutines-test са
+    // още експериментални — без предупреждение за всяко извикване.
+    target.compilations.named("test") {
+        compileTaskProvider.configure { compilerOptions.optIn.add("kotlinx.coroutines.ExperimentalCoroutinesApi") }
+    }
 }
 
 dependencies {

@@ -312,7 +312,7 @@ private fun SegmentLabel(text: String) {
 private fun FeaturedNews(a: NewsArticle, onClick: () -> Unit) {
     Column(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(16.dp)) {
         if (a.imageUrl != null) {
-            SiteImage(a.imageUrl, width = windowWidth() - 32.dp, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large))
+            SiteImage(a.imageUrl, width = windowWidth() - 32.dp, contentDescription = null, thumbnail = true, modifier = Modifier.sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large))
             Spacer(Modifier.height(12.dp))
         }
         MetaLine(a.category, a.publishedAtMillis)
@@ -347,7 +347,7 @@ fun NewsRow(
         modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        SiteImage(a.imageUrl, width = 84.dp, contentDescription = null, modifier = Modifier.sharedElementKey("news-${a.id}").size(84.dp).clip(MaterialTheme.shapes.small))
+        SiteImage(a.imageUrl, width = 84.dp, contentDescription = null, thumbnail = true, modifier = Modifier.sharedElementKey("news-${a.id}").size(84.dp).clip(MaterialTheme.shapes.small))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             MetaLine(a.category, a.publishedAtMillis)
@@ -421,8 +421,10 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                 item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
                 a.imageUrl?.let { hero ->
                     item {
+                        // Един запис в кеша с картата в „Новини“ и на началния екран (същият адрес) — също
+                        // RGB_565; в пълно качество е в прегледа на цял екран (докосване).
                         SiteImage(
-                            hero, width = windowWidth() - 32.dp, contentDescription = a.title,
+                            hero, width = windowWidth() - 32.dp, contentDescription = a.title, thumbnail = true,
                             modifier = Modifier.padding(horizontal = 16.dp).sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large)
                                 .clickable(onClickLabel = stringResource(R.string.a11y_open_photo), role = Role.Image) { navigate(viewer(gallery.indexOf(hero))) },
                         )
@@ -464,7 +466,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp).semantics { heading() })
                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             itemsIndexed(extra) { i, url ->
-                                SiteImage(url, width = 150.dp, contentDescription = detail.galleryAlts[url] ?: stringResource(R.string.photo_n, i + 1),
+                                SiteImage(url, width = 150.dp, contentDescription = detail.galleryAlts[url] ?: stringResource(R.string.photo_n, i + 1), thumbnail = true,
                                     modifier = Modifier.size(150.dp, 112.dp).clip(MaterialTheme.shapes.small).clickable { navigate(viewer(gallery.indexOf(url))) })
                             }
                         }

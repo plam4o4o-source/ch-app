@@ -138,7 +138,7 @@ class DiagnosticsTest {
         l.record("x", CancellationException("left the screen"))
         val timeout = runCatching { withTimeout(1) { delay(1_000) } }.exceptionOrNull()
         assertTrue(timeout is TimeoutCancellationException)
-        l.record("x", timeout!!)
+        l.record("x", timeout)
         assertTrue(l.entries().isEmpty())
     }
 

@@ -163,7 +163,7 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
     /** Изображенията се кешират на диска — работят и офлайн (Coil 3 не зачита Cache-Control по подразбиране). */
     override fun newImageLoader(context: PlatformContext): ImageLoader = ImageLoader.Builder(context)
         .components { add(OkHttpNetworkFetcherFactory(callFactory = { imageHttp })) }
-        .memoryCache { MemoryCache.Builder().maxSizePercent(context, 0.2).build() }
+        .memoryCache { MemoryCache.Builder().maxSizePercent(context, 0.15).build() }
         .diskCache { DiskCache.Builder().directory(cacheDir.resolve("image_cache").toOkioPath()).maxSizeBytes(80L * 1024 * 1024).build() }
         .crossfade(true)
         .build()

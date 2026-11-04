@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.gallery
 
+import android.content.Context
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -67,6 +68,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -215,7 +217,7 @@ internal fun PhotoTile(url: String?, width: Dp, contentDescription: String?, mod
     when (failure) {
         PhotoFailure.Missing -> MissingPhoto(contentDescription, modifier)
         PhotoFailure.Transient -> UnloadedPhoto(contentDescription, modifier, onRetry = { failure = null })
-        null -> SiteImage(url, width = width, contentDescription = contentDescription, modifier = modifier, onFailure = { failure = PhotoFailure.of(it) })
+        null -> SiteImage(url, width = width, contentDescription = contentDescription, modifier = modifier, thumbnail = true, onFailure = { failure = PhotoFailure.of(it) })
     }
 }
 
@@ -437,16 +439,13 @@ internal fun ZoomableImage(
     // Увеличено над 2× размера на зареждането — оригиналът; остава до нулирането.
     var original by remember { mutableStateOf(false) }
     var originalFailed by remember { mutableStateOf(false) }
-    // Местенето не извежда снимката извън екрана.
-    fun clamp(o: Offset, s: Float): Offset {
-        val maxX = (bounds.width * (s - 1f) / 2f).coerceAtLeast(0f)
-        val maxY = (bounds.height * (s - 1f) / 2f).coerceAtLeast(0f)
-        return Offset(o.x.coerceIn(-maxX, maxX), o.y.coerceIn(-maxY, maxY))
-    }
-    val transform = rememberTransformableState { zoom, pan, _ ->
-        scale = (scale * zoom).coerceIn(1f, 5f)
-        offset = if (scale > 1f) clamp(offset + pan, scale) else Offset.Zero
+    fun setTransform(t: ViewerTransform) {
+        scale = t.scale; offset = t.offset
         if (scale > ORIGINAL_ABOVE && !originalFailed) original = true
+    }
+    // Увеличава се около пръстите, а не около центъра на снимката.
+    val transform = rememberTransformableState { centroid, zoom, pan, _ ->
+        setTransform(zoomAround(ViewerTransform(scale, offset), zoom, pan, centroid, bounds))
     }
     LaunchedEffect(active) {
         if (!active) { scale = 1f; offset = Offset.Zero; original = false }
@@ -480,27 +479,7 @@ internal fun ZoomableImage(
     val sized = sources.getOrElse(attempt) { photo.fullUrl }
     // Двата размера имат свои ключове в паметта: голямата снимка е заместител на оригинала.
     val request = remember(sized, original, placeholder, screenW, screenH, retry) {
-        val data = if (original) photo.fullUrl else sized
-        ImageRequest.Builder(context)
-            .data(data)
-            .memoryCacheKey(data + if (original) ORIGINAL_KEY else VIEWER_KEY)
-            .apply {
-                // Повторният опит — от мрежата, не от диска.
-                if (retry > 0) diskCachePolicy(CachePolicy.WRITE_ONLY)
-                if (original) {
-                    // До 4× екрана (увеличението е до 5×) и без запис в паметта: голям bitmap
-                    // само за този преглед не изтласква миниатюрите и кориците от кеша.
-                    size(screenW * ORIGINAL_SCREENS, screenH * ORIGINAL_SCREENS)
-                    precision(Precision.INEXACT)
-                    memoryCachePolicy(CachePolicy.READ_ONLY)
-                    placeholderMemoryCacheKey(sized + VIEWER_KEY)
-                } else {
-                    size(screenW * 2, screenH * 2)
-                    precision(Precision.INEXACT)
-                    placeholder?.let { placeholderMemoryCacheKey(it) }
-                }
-            }
-            .build()
+        viewerRequest(context, if (original) photo.fullUrl else sized, sized, original, placeholder, screenW, screenH, retry > 0)
     }
     key(retry) {
         AsyncImage(
@@ -522,10 +501,8 @@ internal fun ZoomableImage(
                         if (scale > 1f) {
                             scale = 1f; offset = Offset.Zero
                         } else {
-                            scale = 2f
-                            // Увеличава се около докоснатото място.
-                            val center = Offset(bounds.width / 2f, bounds.height / 2f)
-                            offset = clamp((center - tap) * (scale - 1f), scale)
+                            // 2× около докоснатото място.
+                            setTransform(zoomAround(ViewerTransform(1f, Offset.Zero), DOUBLE_TAP_ZOOM, Offset.Zero, tap, bounds))
                         }
                     })
                 }
@@ -535,6 +512,41 @@ internal fun ZoomableImage(
         )
     }
 }
+
+/**
+ * Заявката на прегледа за [data]: оптимизираният вариант [sized] в 2× размера на екрана, а
+ * [original] — оригиналът до [ORIGINAL_SCREENS]× екрана. В ARGB_8888 (по подразбиране), не в
+ * RGB_565 като миниатюрите: на цял екран и при увеличение преливанията се виждат.
+ */
+internal fun viewerRequest(
+    context: Context,
+    data: String,
+    sized: String,
+    original: Boolean,
+    placeholder: String?,
+    screenW: Int,
+    screenH: Int,
+    retry: Boolean,
+): ImageRequest = ImageRequest.Builder(context)
+    .data(data)
+    .memoryCacheKey(data + if (original) ORIGINAL_KEY else VIEWER_KEY)
+    .apply {
+        // Повторният опит — от мрежата, не от диска.
+        if (retry) diskCachePolicy(CachePolicy.WRITE_ONLY)
+        if (original) {
+            // До 4× екрана (увеличението е до 5×) и без запис в паметта: голям bitmap
+            // само за този преглед не изтласква миниатюрите и кориците от кеша.
+            size(screenW * ORIGINAL_SCREENS, screenH * ORIGINAL_SCREENS)
+            precision(Precision.INEXACT)
+            memoryCachePolicy(CachePolicy.READ_ONLY)
+            placeholderMemoryCacheKey(sized + VIEWER_KEY)
+        } else {
+            size(screenW * 2, screenH * 2)
+            precision(Precision.INEXACT)
+            placeholder?.let { placeholderMemoryCacheKey(it) }
+        }
+    }
+    .build()
 
 /**
  * Снимката в прегледа не се зареди: ясно съобщение вместо черен екран — „липсва на сайта“
@@ -562,6 +574,33 @@ private fun PhotoLoadError(missing: Boolean, onRetry: () -> Unit, modifier: Modi
     }
 }
 
+/** Увеличението и изместването на снимката в прегледа ([offset] — спрямо центъра, в пиксели). */
+internal data class ViewerTransform(val scale: Float, val offset: Offset)
+
+/**
+ * Мащабиране с [zoom] около [centroid] (точката между пръстите в координатите на снимката преди
+ * увеличението; неуказана — центърът) и местене с [pan]: точката под пръстите остава под тях.
+ * Увеличението е от 1× до [MAX_ZOOM]; при 1× снимката е на мястото си.
+ */
+internal fun zoomAround(current: ViewerTransform, zoom: Float, pan: Offset, centroid: Offset, bounds: IntSize): ViewerTransform {
+    val scale = (current.scale * zoom).coerceIn(1f, MAX_ZOOM)
+    if (scale <= 1f) return ViewerTransform(1f, Offset.Zero)
+    val center = Offset(bounds.width / 2f, bounds.height / 2f)
+    val fromCenter = if (centroid.isSpecified) centroid - center else Offset.Zero
+    // Точката под centroid при старото увеличение остава там и при новото, после — местенето.
+    val offset = fromCenter + (current.offset - fromCenter) * (scale / current.scale) + pan
+    return ViewerTransform(scale, clampToBounds(offset, scale, bounds))
+}
+
+/** Местенето не извежда снимката (увеличена [scale] пъти) извън екрана. */
+internal fun clampToBounds(o: Offset, scale: Float, bounds: IntSize): Offset {
+    val maxX = (bounds.width * (scale - 1f) / 2f).coerceAtLeast(0f)
+    val maxY = (bounds.height * (scale - 1f) / 2f).coerceAtLeast(0f)
+    return Offset(o.x.coerceIn(-maxX, maxX), o.y.coerceIn(-maxY, maxY))
+}
+
+private const val MAX_ZOOM = 5f
+private const val DOUBLE_TAP_ZOOM = 2f
 /** Над това увеличение се зарежда оригиналът (до 2× зареждането е рязко). */
 private const val ORIGINAL_ABOVE = 2.05f
 /** Оригиналът — най-много толкова пъти размера на екрана. */

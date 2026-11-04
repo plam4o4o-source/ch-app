@@ -564,6 +564,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                             contentDescription = null,
                             containerColor = Brand.InkSoft,
                             onFailure = { imageFailed = true },
+                            thumbnail = true,
                             // Без shared element: същият ключ има и списъкът „Новини“, а при смяна на
                             // таб двата източника биха се засекли.
                             modifier = Modifier.fillMaxSize(),

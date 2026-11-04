@@ -75,7 +75,8 @@ class UpdateDownloadWorker(context: Context, params: WorkerParameters) : Corouti
         } finally {
             NotificationManagerCompat.from(applicationContext).cancel(NotificationIds.UPDATE_PROGRESS)
         }
-        val done = info ?: return Result.success()
+        // Тук версията винаги е известна: без нея (няма обновяване) задачата вече е завършила успешно по-горе.
+        val done: UpdateInfo = info
         when {
             file != null -> if (updater.appInForeground()) {
                 updater.install(background = false)

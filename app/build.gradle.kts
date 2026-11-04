@@ -199,8 +199,6 @@ android {
         warningsAsErrors = false
         // Проверките за „по-нова версия“ зависят от мрежата и не са грешки в кода.
         disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion", "OldTargetApi")
-        xmlReport = true
-        htmlReport = true
     }
 }
 

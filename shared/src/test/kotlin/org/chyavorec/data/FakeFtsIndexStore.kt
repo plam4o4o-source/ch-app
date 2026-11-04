@@ -155,8 +155,8 @@ class FakeFtsIndexStore : CatalogIndexStore {
         q.department?.let { if (b.department != it) return false }
         q.language?.let { if (b.language != it) return false }
         q.udcSection?.let { if (r.udcSection != it) return false }
-        q.yearFrom?.let { if (r.year == null || r.year!! < it) return false }
-        q.yearTo?.let { if (r.year == null || r.year!! > it) return false }
+        q.yearFrom?.let { if (r.year == null || r.year < it) return false }
+        q.yearTo?.let { if (r.year == null || r.year > it) return false }
         return true
     }
 

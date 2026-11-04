@@ -29,6 +29,8 @@ fun SiteImage(
     contentScale: ContentScale = ContentScale.Crop,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     onFailure: ((Throwable?) -> Unit)? = null,
+    /** Миниатюра в списък или мрежа — в RGB_565 (наполовина памет, вж. [listThumbnail]). */
+    thumbnail: Boolean = false,
 ) {
     val widthPx = with(LocalDensity.current) { width.roundToPx() }
     val optimized = remember(url, widthPx) { SiteImageUrls.optimized(url, widthPx) }
@@ -42,6 +44,7 @@ fun SiteImage(
         containerColor = containerColor,
         onFailure = onFailure,
         urlMemoryKey = true,
+        thumbnail = thumbnail,
     )
 }
 
