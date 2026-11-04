@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.chyavorec.app.data.local.AppSettings
+import org.chyavorec.app.diagnostics.AppPerf
 import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.ChitalishteRoot
@@ -79,6 +80,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        // „Бързодействие“ (само локално): времето до първия кадър и до пълното показване, плавността по екрани.
+        AppPerf.attach(this, restored = savedInstanceState != null)
     }
 
     /**

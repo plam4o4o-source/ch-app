@@ -5,6 +5,8 @@ import android.os.Build
 import androidx.compose.runtime.saveable.rememberSaveable
 import org.chyavorec.app.notifications.Notifier
 import androidx.activity.BackEventCompat
+import androidx.activity.compose.ReportDrawn
+import org.chyavorec.app.diagnostics.TrackRoute
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -219,6 +221,9 @@ fun ChitalishteRoot(
     ) {
         Box(Modifier.fillMaxSize()) {
             if (!settings.onboardingDone) {
+                // Първо пускане: въведението е цялото съдържание — пълното показване е веднага.
+                ReportDrawn()
+                TrackRoute("onboarding")
                 OnboardingScreen(onFinish = { link ->
                     scope.launch {
                         container.settings.setOnboardingDone()
@@ -290,6 +295,8 @@ private fun MainScaffold(
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
     val route = entry?.destination?.route
+    // Плавността (JankStats) — по маршрута, само шаблонът без аргументи (виж diagnostics/AppPerf).
+    TrackRoute(route)
     val context = LocalContext.current
     val online by container.connectivity.online.collectAsStateWithLifecycle(initialValue = true)
     val link by deepLink.collectAsState()

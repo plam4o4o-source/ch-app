@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.home
 
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -200,6 +201,12 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
     }
     val state by vm.state.collectAsStateWithLifecycle()
     val dismissedGreeting by vm.dismissed.collectAsStateWithLifecycle()
+    // Пълно показване (reportFullyDrawn) — при всеки старт: новините са на екрана (от кеша или
+    // мрежата) или вместо тях — грешката/офлайн; или празникът и събитията са заели местата си.
+    ReportDrawnWhen {
+        val news = state.news
+        news.data != null || news.error != null || !news.loading || (!state.feastPending && !state.eventsPending)
+    }
     val listState = rememberLazyListState()
     TabReselectEffect(Routes.HOME) { listState.animateScrollToItem(0) }
     // Дали броячите „отброяват“ днес — прочита се отрано и извън главната нишка.

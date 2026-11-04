@@ -25,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.withFrameNanos
@@ -179,8 +180,11 @@ fun HomeSearchBar(
                 withFrameNanos { }
                 quiet = false
             }
+            val ui by vm.ui.collectAsStateWithLifecycle()
+            val recent by vm.recent.collectAsStateWithLifecycle()
             GlobalSearchContent(
-                vm, go, openExternal, goLink,
+                ui, recent, vm::setScope, onCommit = { vm.commit() }, onClearRecent = vm::clearRecent, onRestoreRecent = { vm.restoreRecent(it) },
+                go, openExternal, goLink,
                 onRecent = { q -> text.setTextAndPlaceCursorAtEnd(q) },
             )
         }

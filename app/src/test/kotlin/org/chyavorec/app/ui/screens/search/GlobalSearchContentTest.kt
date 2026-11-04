@@ -1,6 +1,8 @@
 package org.chyavorec.app.ui.screens.search
 
 import android.app.Application
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
@@ -53,7 +55,12 @@ class GlobalSearchContentTest {
     private fun show(ui: SearchUi) {
         // Състоянието е зададено направо — без истинско търсене (заявката в ViewModel-а е празна).
         vm.ui.value = ui
-        compose.setContent { ChitalishteTheme { GlobalSearchContent(vm, {}, {}, {}, onRecent = {}) } }
+        compose.setContent {
+            ChitalishteTheme {
+                val state by vm.ui.collectAsState()
+                GlobalSearchContent(state, emptyList(), vm::setScope, {}, { emptyList() }, {}, {}, {}, {}, onRecent = {})
+            }
+        }
         compose.waitForIdle()
     }
 

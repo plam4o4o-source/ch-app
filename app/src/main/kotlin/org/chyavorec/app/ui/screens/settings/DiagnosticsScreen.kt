@@ -29,14 +29,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.diagnostics.AppDiagnostics
+import org.chyavorec.app.diagnostics.AppPerf
+import org.chyavorec.app.diagnostics.PerfData
+import org.chyavorec.app.diagnostics.PerfStats
+import org.chyavorec.app.diagnostics.PerfSummary
+import org.chyavorec.app.diagnostics.StartStats
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AppCard
 import org.chyavorec.app.ui.components.BackTopBar
@@ -49,7 +57,8 @@ import java.time.format.DateTimeFormatter
 /**
  * „Диагностика“: последните записи от локалния дневник на грешките. „Сподели“ праща
  * обикновен текст през системното меню — само по избор на читателя; „Изчисти“ ги изтрива.
- * Дневникът не съдържа лични данни (виж DiagnosticSanitizer).
+ * Дневникът не съдържа лични данни (виж DiagnosticSanitizer). Още „Бързодействие“
+ * (стартове и плавност, виж diagnostics/AppPerf) — над записите, също само на устройството.
  */
 @Composable
 fun DiagnosticsScreen(onBack: () -> Unit) {
@@ -58,6 +67,9 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
     val log = remember { AppDiagnostics.log(context) }
     // Най-новият запис отгоре.
     var entries by remember { mutableStateOf(log.entries().asReversed()) }
+    // „Бързодействие“: стартовете и плавността (малък файл, вече в паметта след първия път).
+    var perf by remember { mutableStateOf(PerfStats.summary(AppPerf.store(context).read())) }
+    val hasData = entries.isNotEmpty() || !perf.isEmpty
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val clearedMsg = stringResource(R.string.diagnostics_cleared)
@@ -82,9 +94,10 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
             item {
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedButton(
-                        enabled = entries.isNotEmpty(),
+                        enabled = hasData,
                         onClick = {
-                            val text = log.export(AppDiagnostics.header(c.config.versionName, c.config.versionCode), c.clock.zone())
+                            val text = log.export(AppDiagnostics.header(c.config.versionName, c.config.versionCode), c.clock.zone()) +
+                                PerfStats.export(perf)
                             Intents.share(context, subject, text)
                         },
                     ) {
@@ -92,10 +105,13 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
                         Text(stringResource(R.string.action_share))
                     }
                     OutlinedButton(
-                        enabled = entries.isNotEmpty(),
+                        enabled = hasData,
                         onClick = {
                             log.clear()
                             entries = emptyList()
+                            // И времената на стартиране, и плавността.
+                            AppPerf.clear(context)
+                            perf = PerfStats.summary(PerfData())
                             scope.launch { snackbar.showSnackbar(clearedMsg) }
                         },
                     ) {
@@ -104,6 +120,7 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
                     }
                 }
             }
+            item { PerfSection(perf) }
             if (entries.isEmpty()) {
                 // Празното състояние — като на всички екрани (илюстрация + заглавие).
                 item { EmptyView(stringResource(R.string.diagnostics_empty), icon = Icons.Outlined.TaskAlt) }
@@ -114,6 +131,63 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
                 items(entries) { e -> EntryCard(e, c.clock.zone()) }
             }
         }
+    }
+}
+
+/** „Бързодействие“: медианата и последният старт (студен/топъл) и най-насечените екрани. */
+@Composable
+internal fun PerfSection(summary: PerfSummary, modifier: Modifier = Modifier) {
+    val locale = LocalConfiguration.current.locales[0]
+    AppCard(modifier.fillMaxWidth()) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                stringResource(R.string.perf_title),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.semantics { heading() },
+            )
+            Text(
+                stringResource(R.string.perf_intro),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (summary.isEmpty) {
+                Text(stringResource(R.string.perf_empty), style = MaterialTheme.typography.bodyMedium)
+            }
+            summary.cold?.let { StartLines(stringResource(R.string.perf_cold, it.count), it) }
+            summary.warm?.let { StartLines(stringResource(R.string.perf_warm, it.count), it) }
+            if (summary.topRoutes.isNotEmpty()) {
+                Text(
+                    stringResource(R.string.perf_frames),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+                for (r in summary.topRoutes) {
+                    Text(
+                        stringResource(
+                            R.string.perf_route, r.route, String.format(locale, "%.1f %%", r.jankyPercent), r.frames,
+                            stringResource(R.string.perf_ms, r.worstMs),
+                        ),
+                        style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun StartLines(title: String, s: StartStats) {
+    Text(title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(top = 4.dp))
+    Text(
+        stringResource(R.string.perf_first_frame, stringResource(R.string.perf_ms, s.firstFrame.median), stringResource(R.string.perf_ms, s.firstFrame.last)),
+        style = MaterialTheme.typography.bodyMedium,
+    )
+    s.fullyDrawn?.let {
+        Text(
+            stringResource(R.string.perf_fully_drawn, stringResource(R.string.perf_ms, it.median), stringResource(R.string.perf_ms, it.last)),
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
 }
 
