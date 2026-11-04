@@ -60,8 +60,22 @@ object PerfStats {
     /** Екран с по-малко кадри не се класира (2 кадъра, 1 насечен — не е 50 %). */
     const val MIN_ROUTE_FRAMES = 30L
 
-    fun addStart(data: PerfData, sample: StartupSample, cap: Int = MAX_STARTS): PerfData =
-        data.copy(starts = (data.starts + sample).takeLast(cap))
+    /** Последните [cap] старта от всеки вид — честите връщания (топли) не изместват студените. */
+    fun addStart(data: PerfData, sample: StartupSample, cap: Int = MAX_STARTS): PerfData {
+        val all = data.starts + sample
+        // Колко от най-старите от всеки вид отпадат.
+        var dropCold = all.count { it.cold } - cap
+        var dropWarm = all.count { !it.cold } - cap
+        return data.copy(
+            starts = all.filter {
+                when {
+                    it.cold && dropCold > 0 -> { dropCold--; false }
+                    !it.cold && dropWarm > 0 -> { dropWarm--; false }
+                    else -> true
+                }
+            },
+        )
+    }
 
     /** Добавя новите кадри [delta] към натрупаните (по маршрут: сбор и най-бавен кадър). */
     fun addFrames(data: PerfData, delta: List<RouteFrames>, cap: Int = MAX_ROUTES): PerfData {

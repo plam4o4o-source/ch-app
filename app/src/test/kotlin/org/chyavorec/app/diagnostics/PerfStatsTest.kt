@@ -24,6 +24,14 @@ class PerfStatsTest {
         assertEquals(250L, PerfStats.median(listOf(400, 100, 200, 300)))
     }
 
+    @Test fun frequentWarmStartsDoNotPushOutColdOnes() {
+        var d = PerfData()
+        repeat(3) { i -> d = PerfStats.addStart(d, cold(1000L + i)) }
+        repeat(30) { i -> d = PerfStats.addStart(d, warm(200L + i)) }
+        assertEquals(listOf(1000L, 1001L, 1002L), d.starts.filter { it.cold }.map { it.firstFrameMs })
+        assertEquals((210L..229L).toList(), d.starts.filter { !it.cold }.map { it.firstFrameMs })
+    }
+
     @Test fun keepsOnlyTheLastStarts() {
         var d = PerfData()
         repeat(25) { i -> d = PerfStats.addStart(d, cold(i.toLong())) }
