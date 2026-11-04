@@ -42,6 +42,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -93,6 +94,7 @@ import org.chyavorec.data.site.SiteLinkClassifier
 
 enum class SearchScope { ALL, BOOKS, NEWS, EVENTS, PAGES }
 
+@Immutable
 data class SearchUi(val query: String = "", val scope: SearchScope = SearchScope.ALL, val results: SearchResults = SearchResults(), val searching: Boolean = false)
 
 /**
@@ -191,37 +193,46 @@ fun SearchScreen(onBack: () -> Unit, navigate: (String) -> Unit, openExternal: (
             )
         }
     }) { padding ->
-        GlobalSearchContent(vm, navigate, openExternal, openLink, onRecent = vm::setQuery, modifier = Modifier.padding(padding))
+        val recent by vm.recent.collectAsStateWithLifecycle()
+        GlobalSearchContent(
+            ui, recent, vm::setScope, onCommit = { vm.commit() }, onClearRecent = vm::clearRecent, onRestoreRecent = { vm.restoreRecent(it) },
+            navigate, openExternal, openLink, onRecent = vm::setQuery, modifier = Modifier.padding(padding),
+        )
     }
 }
 
 /**
  * Обхватите и под тях последните търсения или резултатите — общи за екрана „Търсене“ и
  * разгънатото поле за търсене на „Начало“ ([org.chyavorec.app.ui.screens.home.HomeSearchBar]).
- * [onRecent] — избрано последно търсене (полето е на извикващия).
+ * [onRecent] — избрано последно търсене (полето е на извикващия). Състоянието идва готово
+ * (стабилни параметри — прескача се, докато не се промени), а не като ViewModel.
  */
 @Composable
 internal fun GlobalSearchContent(
-    vm: GlobalSearchViewModel,
+    ui: SearchUi,
+    recent: List<String>,
+    onScope: (SearchScope) -> Unit,
+    onCommit: () -> Unit,
+    /** Изчиства последните търсения; връща изчистените — за „Отмени“. */
+    onClearRecent: () -> List<String>,
+    onRestoreRecent: (List<String>) -> Unit,
     navigate: (String) -> Unit,
     openExternal: (String) -> Unit,
     openLink: (String) -> Unit,
     onRecent: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val ui by vm.ui.collectAsStateWithLifecycle()
-    val recent by vm.recent.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val clearedMsg = stringResource(R.string.search_recent_cleared)
     val undoLabel = stringResource(R.string.action_undo)
     // Изчистването е с „Отмени“ вместо потвърждение — списъкът се връща с едно докосване.
     val clearRecent: () -> Unit = {
-        val cleared = vm.clearRecent()
+        val cleared = onClearRecent()
         scope.launch {
             snackbar.currentSnackbarData?.dismiss()
             if (snackbar.showSnackbar(clearedMsg, actionLabel = undoLabel, duration = SnackbarDuration.Short) == SnackbarResult.ActionPerformed) {
-                vm.restoreRecent(cleared)
+                onRestoreRecent(cleared)
             }
         }
     }
@@ -232,7 +243,7 @@ internal fun GlobalSearchContent(
         Column(Modifier.fillMaxSize()) {
             LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(SearchScope.entries) { s ->
-                    FilterChip(ui.scope == s, onClick = { vm.setScope(s) }, label = {
+                    FilterChip(ui.scope == s, onClick = { onScope(s) }, label = {
                         Text(stringResource(when (s) {
                             SearchScope.ALL -> R.string.filter_all
                             SearchScope.BOOKS -> R.string.search_books
@@ -263,7 +274,7 @@ internal fun GlobalSearchContent(
                         }
                     }
                 } else {
-                    Results(ui, navigate, openExternal, openLink, onOpen = { vm.commit() }, onScope = vm::setScope, itemColors = itemColors)
+                    Results(ui, navigate, openExternal, openLink, onOpen = onCommit, onScope = onScope, itemColors = itemColors)
                 }
             }
         }

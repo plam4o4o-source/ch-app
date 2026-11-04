@@ -749,13 +749,23 @@ S = {
 "diagnostics_count": ("Записи: %1$d", "Entries: %1$d"),
 "diagnostics_cleared": ("Дневникът е изчистен", "The log has been cleared"),
 "diagnostics_share_subject": ("Диагностика — Читалище Яворец", "Diagnostics — Chitalishte Yavorets"),
+"perf_title": ("Бързодействие", "Performance"),
+"perf_intro": ("Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни.", "Start-up times and screen smoothness measured on this device — screen names only, no personal data."),
+"perf_empty": ("Още няма измервания.", "No measurements yet."),
+"perf_cold": ("Студен старт · %1$d", "Cold start · %1$d"),
+"perf_warm": ("Топъл старт · %1$d", "Warm start · %1$d"),
+"perf_first_frame": ("Първи кадър: медиана %1$s, последен %2$s", "First frame: median %1$s, last %2$s"),
+"perf_fully_drawn": ("Пълно показване: медиана %1$s, последно %2$s", "Fully drawn: median %1$s, last %2$s"),
+"perf_frames": ("Насечени кадри по екрани", "Janky frames by screen"),
+"perf_route": ("%1$s: %2$s от %3$d кадъра · най-бавен %4$s", "%1$s: %2$s of %3$d frames · slowest %4$s"),
+"perf_ms": ("%1$d мс", "%1$d ms"),
 "about_version": ("Версия %1$s", "Version %1$s"),
 "about_version_full": ("Версия %1$s (%2$d)", "Version %1$s (%2$d)"),
 "about_env": ("Среда: %1$s · демо данни: %2$s", "Environment: %1$s · demo data: %2$s"),
 "about_invlib": ("Библиотечната система InvLib", "The InvLib library system"),
 }
 
-PRIVACY_BG = """Последна актуализация: 2 ноември 2026 г.
+PRIVACY_BG = """Последна актуализация: 4 ноември 2026 г.
 
 # Кой обработва данните
 
@@ -775,7 +785,7 @@ PRIVACY_BG = """Последна актуализация: 2 ноември 2026
 
 Обновления: версията, инсталирана извън Google Play, проверява за нова версия във файла update.json в GitHub (github.com) и изтегля новата версия оттам. Изпраща се само обикновена заявка (IP адресът е видим за GitHub); не се изпращат лични данни. Автоматичното обновяване се изключва от „Настройки › Обновления“. Версията от Google Play се обновява от Google Play.
 
-Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака. Последната книга, отворена от публичния каталог, става пряк път към нея при задържане на иконата на приложението; той също е само на телефона и се маха при „Изход“ и „Изчисти временните данни“. Приложението пази и локален дневник на грешките само на устройството, без лични данни; той напуска устройството единствено ако го споделиш ти („Настройки › Информация › Диагностика“).
+Данни само на устройството: настройки (тема, език, известия), запазени новини, напомняния за събития, история на търсенията и кеширано публично съдържание за офлайн работа. Те не напускат устройството и не се архивират в облака. Последната книга, отворена от публичния каталог, става пряк път към нея при задържане на иконата на приложението; той също е само на телефона и се маха при „Изход“ и „Изчисти временните данни“. Приложението пази и локален дневник на грешките само на устройството; той включва и времена на стартиране и плавност на екраните, без лични данни, и напуска устройството единствено ако го споделиш ти („Настройки › Информация › Диагностика“).
 
 „Искам да прочета“: списъкът с отбелязаните книги (и дали да ти кажем, когато някоя е на рафта) се пази само на устройството — наличността се сравнява с публичния каталог на телефона, без да се изпраща кои книги са отбелязани; изходът не го изтрива, а „Изчисти списъка“ (в самия списък) и деинсталирането — да. Ако за някоя книга е включено „Кажи ми, когато е на рафта“, наличността се проверява и във фонов режим: около веднъж на 6 часа приложението тегли публичния каталог katalog.json от GitHub (raw.githubusercontent.com или cdn.jsdelivr.net), без да изпраща списъка (само при включени известия „Отново на рафта“ и докато приложението е отваряно в последните 14 дни).
 
@@ -813,7 +823,7 @@ PRIVACY_BG = """Последна актуализация: 2 ноември 2026
 
 При промяна на тази политика новата версия се публикува в приложението и в сайта на читалището."""
 
-PRIVACY_EN = """Last updated: November 2, 2026
+PRIVACY_EN = """Last updated: November 4, 2026
 
 # Who processes the data
 
@@ -833,7 +843,7 @@ Personal messages from the library: after signing in, if the centre’s server s
 
 Updates: the version installed outside Google Play checks for a new version in the update.json file on GitHub (github.com) and downloads it from there. Only a plain request is sent (GitHub sees the IP address); no personal data is sent. Automatic updates can be turned off in “Settings › Updates”. The Google Play version is updated by Google Play.
 
-Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud. The last book you opened from the public catalogue becomes a shortcut to it when you long-press the app icon; it also stays on the phone and is removed by “Sign out” and “Clear temporary data”. The app also keeps a local error log on the device only, without personal data; it leaves the device only if you share it yourself (“Settings › Information › Diagnostics”).
+Data kept only on the device: settings (theme, language, notifications), saved news, event reminders, search history and cached public content for offline use. It never leaves the device and is not backed up to the cloud. The last book you opened from the public catalogue becomes a shortcut to it when you long-press the app icon; it also stays on the phone and is removed by “Sign out” and “Clear temporary data”. The app also keeps a local error log on the device only; it also includes start-up times and screen smoothness, without personal data, and leaves the device only if you share it yourself (“Settings › Information › Diagnostics”).
 
 “Want to read”: the list of books you mark (and whether to tell you when one is on the shelf) is kept only on the device — availability is compared with the public catalogue on the phone, without sending which books are marked; signing out does not delete it, while “Clear list” (in the list itself) and uninstalling do. If “Notify me when it’s on the shelf” is on for a book, availability is also checked in the background: about once every 6 hours the app downloads the public katalog.json from GitHub (raw.githubusercontent.com or cdn.jsdelivr.net), without sending the list (only while “Back on the shelf” notifications are on and the app has been opened in the last 14 days).
 

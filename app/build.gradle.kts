@@ -325,6 +325,8 @@ dependencies {
     implementation(libs.androidx.palette.ktx)
     // Инсталира Baseline профила при инсталиране от извън Google Play (по-бърз старт).
     implementation(libs.androidx.profileinstaller)
+    // JankStats: плавността по екрани — само в локалната „Диагностика“ (виж diagnostics/AppPerf).
+    implementation(libs.androidx.metrics.performance)
     // Мениджърът на пароли (вход с едно докосване); картата и ПИН-ът се пазят от системата.
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
