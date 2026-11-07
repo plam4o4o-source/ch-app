@@ -59,6 +59,9 @@ class ConfettiState(internal val seed: Long? = null) {
     var isPlaying by mutableStateOf(false)
         internal set
 
+    /** Колко избухвания са изиграни (за тестовете). */
+    internal var played = 0
+
     /** Откъде е последното избухване (в координатите на домакина); неуточнено — долу в средата. */
     internal var origin: Offset = Offset.Unspecified
 
@@ -113,6 +116,7 @@ fun ConfettiHost(
         if (state.bursts == 0 || reduced) return@LaunchedEffect
         particles.reset(Random((state.seed ?: System.nanoTime()) + state.bursts))
         state.isPlaying = true
+        state.played++
         try {
             // Собствен часовник от кадрите (не tween): физиката е във време, не в мащаба на анимациите.
             progress.floatValue = 0f
@@ -138,12 +142,27 @@ fun ConfettiHost(
         CompositionLocalProvider(LocalConfetti provides state) { content() }
         if (state.isPlaying) {
             val colors = confettiColors()
-            Canvas(Modifier.matchParentSize().clearAndSetSemantics { }) {
-                val o = state.origin
-                val origin = if (o.isSpecified) o else Offset(size.width / 2f, size.height * 0.8f)
-                particles.draw(this, origin, progress.floatValue, colors)
-            }
+            ConfettiLayer(particles, { state.origin }, { progress.floatValue }, colors, Modifier.matchParentSize())
         }
+    }
+}
+
+/**
+ * Неподвижен кадър от избухване: частиците от [seed] в момент [progress] (0..1) от [origin]
+ * (неуточнено — долу в средата). За снимките в тестовете — детерминирано, без часовник.
+ */
+@Composable
+fun ConfettiFrame(seed: Long, progress: Float, modifier: Modifier = Modifier, origin: Offset = Offset.Unspecified) {
+    val particles = remember(seed) { ConfettiParticles(CONFETTI_PARTICLES).apply { reset(Random(seed)) } }
+    ConfettiLayer(particles, { origin }, { progress }, confettiColors(), modifier)
+}
+
+@Composable
+private fun ConfettiLayer(particles: ConfettiParticles, origin: () -> Offset, progress: () -> Float, colors: Array<Color>, modifier: Modifier) {
+    Canvas(modifier.clearAndSetSemantics { }) {
+        val o = origin()
+        val at = if (o.isSpecified) o else Offset(size.width / 2f, size.height * 0.8f)
+        particles.draw(this, at, progress(), colors)
     }
 }
 

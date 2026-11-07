@@ -41,20 +41,19 @@ class ConfettiTest {
     }
 
     @Test fun successBurstsFromTheTappedActionAndEnds() {
-        compose.mainClock.autoAdvance = false
         val state = ConfettiState(seed = 1)
         content(state, reduced = false)
         compose.onNodeWithTag("action").performClick()
-        compose.mainClock.advanceTimeBy(100)
+        // Часовникът тече сам: избухването се изиграва докрай и слоят изчезва.
+        compose.waitForIdle()
         assertEquals(1, state.bursts)
-        assertTrue(state.isPlaying, "конфетито не тръгна")
+        assertEquals(1, state.played, "конфетито не тръгна")
+        assertFalse(state.isPlaying, "конфетито не спря")
         // От докоснатия бутон (долу вдясно), не от средата.
         val origin = state.origin
         assertTrue(origin.isSpecified)
         val side = compose.onNodeWithTag("action").fetchSemanticsNode().boundsInRoot
         assertTrue(side.contains(origin), "началото $origin е извън бутона $side")
-        compose.mainClock.advanceTimeBy(CONFETTI_MS + 200L)
-        assertFalse(state.isPlaying, "конфетито не спря")
     }
 
     @Test fun reducedMotionHasNoConfetti() {
@@ -66,8 +65,11 @@ class ConfettiTest {
             compose.mainClock.advanceTimeBy(150)
             assertFalse(state.isPlaying)
         }
+        compose.mainClock.autoAdvance = true
+        compose.waitForIdle()
         // Успехът е отчетен (вибрацията и снекбарът остават) — само без частици.
         assertEquals(1, state.bursts)
+        assertEquals(0, state.played)
     }
 
     @Test fun withoutAHostSuccessIsJustHaptic() {

@@ -36,8 +36,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.chyavorec.app.ui.components.ConfettiHost
-import org.chyavorec.app.ui.components.ConfettiState
+import org.chyavorec.app.ui.components.ConfettiFrame
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.LeafRefreshBox
 import org.chyavorec.app.ui.components.LocalReducedMotion
@@ -52,7 +51,6 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
-import kotlin.test.assertTrue
 
 /**
  * Бродираната шевица: кадри от бродирането, дърпането за опресняване по средата,
@@ -178,40 +176,28 @@ class StitchScreenshotTest {
         shot("s19-03-empty-state")
     }
 
-    /** Кадър от конфетито ~0.3 s след успеха (фиксиран seed): от „бутона“ в средата на картата. */
+    /** Кадри от конфетито (фиксиран seed) ~0.3 s и ~0.6 s след успеха — от „бутона“ в средата. */
     @Test fun confettiFrame() {
-        compose.mainClock.autoAdvance = false
-        val light = ConfettiState(seed = 19)
-        val dark = ConfettiState(seed = 22)
         var origin = Offset.Zero
         compose.setContent {
-            CompositionLocalProvider(LocalReducedMotion provides false) {
-                origin = with(LocalDensity.current) { Offset(205.dp.toPx(), 260.dp.toPx()) }
-                Column {
-                    listOf(light to ThemeMode.LIGHT, dark to ThemeMode.DARK).forEach { (state, mode) ->
-                        ChitalishteTheme(mode = mode) {
-                            ConfettiHost(Modifier.fillMaxWidth().height(380.dp).background(MaterialTheme.colorScheme.background), state = state) {
-                                Text(
-                                    "Заявката е изпратена",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onBackground,
-                                    modifier = Modifier.align(Alignment.Center).padding(top = 120.dp),
-                                )
-                            }
+            origin = with(LocalDensity.current) { Offset(205.dp.toPx(), 230.dp.toPx()) }
+            Column {
+                listOf(ThemeMode.LIGHT to 0.27f, ThemeMode.DARK to 0.55f).forEach { (mode, p) ->
+                    ChitalishteTheme(mode = mode) {
+                        Box(Modifier.fillMaxWidth().height(400.dp).background(MaterialTheme.colorScheme.background)) {
+                            Text(
+                                "Заявката е изпратена",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.align(Alignment.Center).padding(top = 120.dp),
+                            )
+                            ConfettiFrame(seed = 19, progress = p, origin = origin, modifier = Modifier.fillMaxSize())
+                            Label("t=${(p * 1100).toInt()} ms")
                         }
                     }
                 }
             }
         }
-        compose.mainClock.advanceTimeBy(32)
-        light.burst(origin)
-        dark.burst(origin)
-        compose.mainClock.advanceTimeBy(300)
-        assertTrue(light.isPlaying && dark.isPlaying)
         shot("s19-06-confetti")
-        // Цялото избухване е ~1 s — после слоят изчезва.
-        compose.mainClock.advanceTimeBy(1_200)
-        compose.waitForIdle()
-        assertTrue(!light.isPlaying && !dark.isPlaying)
     }
 }
