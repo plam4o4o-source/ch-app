@@ -1,8 +1,5 @@
 package org.chyavorec.app.ui.components
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -11,12 +8,14 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.isSpecified
@@ -108,15 +107,20 @@ fun ConfettiHost(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val reduced by rememberUpdatedState(rememberReducedMotion())
-    val progress = remember { Animatable(0f) }
+    val progress = remember { mutableFloatStateOf(0f) }
     val particles = remember { ConfettiParticles(CONFETTI_PARTICLES) }
     LaunchedEffect(state, state.bursts) {
         if (state.bursts == 0 || reduced) return@LaunchedEffect
         particles.reset(Random((state.seed ?: System.nanoTime()) + state.bursts))
         state.isPlaying = true
         try {
-            progress.snapTo(0f)
-            progress.animateTo(1f, tween(CONFETTI_MS, easing = LinearEasing))
+            // Собствен часовник от кадрите (не tween): физиката е във време, не в мащаба на анимациите.
+            progress.floatValue = 0f
+            val start = withFrameNanos { it }
+            do {
+                val elapsedMs = (withFrameNanos { it } - start) / 1_000_000f
+                progress.floatValue = (elapsedMs / CONFETTI_MS).coerceAtMost(1f)
+            } while (progress.floatValue < 1f)
         } finally {
             state.isPlaying = false
         }
@@ -137,7 +141,7 @@ fun ConfettiHost(
             Canvas(Modifier.matchParentSize().clearAndSetSemantics { }) {
                 val o = state.origin
                 val origin = if (o.isSpecified) o else Offset(size.width / 2f, size.height * 0.8f)
-                particles.draw(this, origin, progress.value, colors)
+                particles.draw(this, origin, progress.floatValue, colors)
             }
         }
     }
