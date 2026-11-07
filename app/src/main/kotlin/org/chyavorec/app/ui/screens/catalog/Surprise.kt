@@ -12,7 +12,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,6 +53,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -335,10 +335,26 @@ fun SurpriseOverlay(
         ui.empty && revealed -> stringResource(R.string.surprise_empty)
         else -> stringResource(R.string.surprise_shuffling)
     }
+    // Тъмната сцена се появява за ~0.16 s; зад тестето — топъл отблясък (бордо и злато).
+    val appear = remember { Animatable(0f) }
+    LaunchedEffect(Unit) { appear.animateTo(1f, tween(160)) }
     Box(
         Modifier
             .fillMaxSize()
-            .background(Brand.Ink.copy(alpha = 0.9f))
+            .graphicsLayer { alpha = appear.value }
+            .drawWithCache {
+                val glow = Brush.radialGradient(
+                    0f to Brand.Burgundy.copy(alpha = 0.55f),
+                    0.45f to Brand.Burgundy.copy(alpha = 0.18f),
+                    1f to Brand.Ink.copy(alpha = 0f),
+                    center = Offset(size.width / 2f, size.height * 0.22f),
+                    radius = size.width * 0.85f,
+                )
+                onDrawBehind {
+                    drawRect(Brand.Ink.copy(alpha = 0.97f))
+                    drawRect(glow)
+                }
+            }
             // Докосване извън картата затваря; списъкът отдолу не получава докосванията. Без семантика —
             // с TalkBack се затваря с бутона „Затвори“ или „Назад“.
             .pointerInput(Unit) { detectTapGestures { onClose() } }
@@ -437,7 +453,7 @@ private fun SurpriseDetails(book: CatalogBook, onOpen: () -> Unit, onAgain: () -
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                book.title, color = Brand.Cream, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center,
+                book.title, color = Brand.Cream, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center,
                 maxLines = 3, overflow = TextOverflow.Ellipsis,
             )
             if (book.author.isNotBlank()) {
