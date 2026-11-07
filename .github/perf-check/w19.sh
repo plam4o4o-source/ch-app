@@ -760,6 +760,8 @@ mem_probe_end() {  # $1 — етикет
 }
 part_surprisemem() {
   local i
+  # API < 33: езикът на приложението — през езика на устройството (няма cmd locale set-app-locales)
+  [ "$SDK" -lt 33 ] && { helper_install; dev_locale bg-BG || true; a am force-stop $PKG; }
   anims 1
   warmup
   sec "SM0. Device memory: $(a grep MemTotal /proc/meminfo | tr -s ' ' | tr -d '\r'); API $SDK"
