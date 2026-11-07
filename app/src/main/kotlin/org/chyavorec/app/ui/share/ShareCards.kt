@@ -327,7 +327,7 @@ private fun BookShareCard(card: ShareCard.Book, photo: ImageBitmap?) {
         Spacer(Modifier.weight(0.4f))
         Box(
             Modifier.fillMaxWidth().drawWithCache {
-                val glow = Brush.radialGradient(listOf(Brand.Gold.copy(alpha = 0.28f), Color.Transparent), center = center, radius = size.height * 0.75f)
+                val glow = Brush.radialGradient(listOf(Brand.Gold.copy(alpha = 0.28f), Color.Transparent), center = Offset(size.width / 2f, size.height / 2f), radius = size.height * 0.75f)
                 onDrawBehind { drawRect(glow) }
             }.padding(vertical = 8.dp),
             contentAlignment = Alignment.Center,
