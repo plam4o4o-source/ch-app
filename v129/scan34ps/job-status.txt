@@ -1,0 +1,1 @@
+part=scan34ps target=google_apis_playstore api=34 gpu=swangle_indirect camera-back=none emulator-step=success

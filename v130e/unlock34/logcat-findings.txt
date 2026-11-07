@@ -1,0 +1,49 @@
+app pids seen: ['5305', '7411', '8795']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 11
+   skipped-frames events=11 max=67 total=524
+   11-02 00:18:26.802  5305  5305 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-02 00:18:27.545  5305  5305 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-02 00:18:28.694  5305  5305 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-02 00:18:39.971  5305  5305 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-02 00:21:10.365  7411  7411 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   11-02 00:22:22.549  7411  7411 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-02 00:22:50.468  7411  7411 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-02 00:24:37.152  7411  7411 I Choreographer: Skipped 63 frames!  The application may be doing too much work on its main thread.
+   11-02 00:25:38.237  7411  7411 I Choreographer: Skipped 67 frames!  The application may be doing too much work on its main thread.
+   11-02 00:26:32.268  8795  8795 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-02 00:27:14.452  8795  8795 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+== Davey: 24
+   davey events=24 max=1591ms median=998ms
+   11-02 00:18:28.433  5305  5320 I OpenGLRenderer: Davey! duration=1591ms; Flags=1, FrameTimelineVsyncId=7183, IntendedVsync=96741870727, Vsync=97458537365, InputEventId=0, HandleInputStart=97467176008, AnimationStart=97467176418, PerformTrav
+   11-02 00:18:28.850  5305  5320 I OpenGLRenderer: Davey! duration=1216ms; Flags=0, FrameTimelineVsyncId=7262, IntendedVsync=97541870695, Vsync=97991870677, InputEventId=0, HandleInputStart=98005408369, AnimationStart=98005408619, PerformTrav
+   11-02 00:18:40.467  5305  5318 I OpenGLRenderer: Davey! duration=1202ms; Flags=0, FrameTimelineVsyncId=8319, IntendedVsync=109058536901, Vsync=109058536901, InputEventId=0, HandleInputStart=109060267984, AnimationStart=109060268344, Perform
+   11-02 00:18:40.850  5305  5602 I OpenGLRenderer: Davey! duration=1311ms; Flags=0, FrameTimelineVsyncId=8327, IntendedVsync=109075203567, Vsync=109875203535, InputEventId=0, HandleInputStart=109897561695, AnimationStart=109897562036, Perform
+   11-02 00:18:41.325  5305  5602 I OpenGLRenderer: Davey! duration=709ms; Flags=0, FrameTimelineVsyncId=8377, IntendedVsync=109908536867, Vsync=110075203527, InputEventId=0, HandleInputStart=110089113515, AnimationStart=110089114016, PerformT
+   11-02 00:18:41.467  5305  5318 I OpenGLRenderer: Davey! duration=876ms; Flags=0, FrameTimelineVsyncId=8393, IntendedVsync=110108536859, Vsync=110375203515, InputEventId=0, HandleInputStart=110390606185, AnimationStart=110390606556, PerformT
+   11-02 00:18:43.460  5305  5629 I OpenGLRenderer: Davey! duration=1052ms; Flags=0, FrameTimelineVsyncId=8512, IntendedVsync=111825203457, Vsync=112308536713, InputEventId=0, HandleInputStart=112336366321, AnimationStart=112336366822, Perform
+   11-02 00:18:43.867  5305  5629 I OpenGLRenderer: Davey! duration=1206ms; Flags=0, FrameTimelineVsyncId=8544, IntendedVsync=112391870101, Vsync=112825203417, InputEventId=0, HandleInputStart=112827368203, AnimationStart=112827368493, Perform
+   11-02 00:18:44.618  5305  5629 I OpenGLRenderer: Davey! duration=934ms; Flags=0, FrameTimelineVsyncId=8622, IntendedVsync=113125203405, Vsync=113491870057, InputEventId=0, HandleInputStart=113515380140, AnimationStart=113515380581, PerformT
+   11-02 00:18:44.812  5305  5319 I OpenGLRenderer: Davey! duration=838ms; Flags=0, FrameTimelineVsyncId=8658, IntendedVsync=113525203389, Vsync=113891870041, InputEventId=0, HandleInputStart=113918325872, AnimationStart=113918326413, PerformT
+   11-02 00:18:55.175  5305  5629 I OpenGLRenderer: Davey! duration=1033ms; Flags=0, FrameTimelineVsyncId=9181, IntendedVsync=123958536305, Vsync=124191869629, InputEventId=0, HandleInputStart=124298978264, AnimationStart=124298978915, Perform
+   11-02 00:18:55.443  5305  5629 I OpenGLRenderer: Davey! duration=924ms; Flags=0, FrameTimelineVsyncId=9207, IntendedVsync=124325208502, Vsync=124608541807, InputEventId=0, HandleInputStart=124623441505, AnimationStart=124623442066, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-02 00:18:24.572  5295  5295 I PERFCHECK: section: W. First launch and warm-up
+   11-02 00:19:11.849  6354  6354 I PERFCHECK: section: P0. Package GitHub build: requested permissions
+   11-02 00:19:13.552  6410  6410 I PERFCHECK: section: P1. No screen lock: Settings › Поверителност — the switch is disabled with an explanation
+   11-02 00:19:53.993  6815  6815 I PERFCHECK: section: P2. A self-entered card before the switch is on
+   11-02 00:20:17.800  7012  7012 I PERFCHECK: section: P3. Device PIN 1234; the switch → the system prompt → PIN
+   11-02 00:21:08.181  7396  7396 I PERFCHECK: section: P4. New process: Моето › Читателска карта → prompt; Back cancel → Моето; PIN → the card
+   11-02 00:21:40.227  7657  7657 I PERFCHECK: m-cancel
+   11-02 00:22:27.797  7987  7987 I PERFCHECK: section: P5. Background 20 s < 60 s: no prompt; background 70 s > 60 s: prompt
+   11-02 00:24:24.186  8211  8211 I PERFCHECK: section: P6.1. Screen off and on keyguard with the PIN on the card: prompt again attempt 1 of 3
+   11-02 00:24:24.212  8214  8214 I PERFCHECK: m-screenoff-1
+   11-02 00:24:54.397  8404  8404 I PERFCHECK: section: P6.2. Screen off and on keyguard with the PIN on the card: prompt again attempt 2 of 3
+   11-02 00:24:54.421  8407  8407 I PERFCHECK: m-screenoff-2
+   11-02 00:25:25.520  8580  8580 I PERFCHECK: section: P6.3. Screen off and on keyguard with the PIN on the card: prompt again attempt 3 of 3
+   11-02 00:25:25.545  8583  8583 I PERFCHECK: m-screenoff-3
+   11-02 00:25:55.626  8758  8758 I PERFCHECK: section: P7. Quick Settings tile → the card: the gate
+   11-02 00:27:21.421  9303  9303 I PERFCHECK: section: P8. Turning the switch off also asks for the PIN

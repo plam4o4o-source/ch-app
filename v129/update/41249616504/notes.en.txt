@@ -1,0 +1,6 @@
+• Scanning now uses Google’s scanner — the app no longer asks for camera access and is lighter.
+• A “Library card” button in Quick Settings — your card is one swipe away.
+• News and events in notifications now show a picture, and reminders offer “Add to calendar” and “Directions”.
+• Gallery photos open full screen and close with a swipe.
+• A better widget — due dates always visible, more sizes, and in the app’s language.
+• “New arrivals” without repeats, easier search and a new carousel on “Home”.

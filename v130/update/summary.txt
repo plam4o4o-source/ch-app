@@ -1,0 +1,76 @@
+part update; APK: 1.2.30 bf10741 (Какво ново: версия 1.2.30); versionCode 1488543; x86_64 libs: 2 size 4505009 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104418 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## U0. Staged manifest (test v1.2.30 APK + the real 1.2.30 notes: tools/whats_new.py 1.2.30 store/whats-new.md <released> <out>)
+staged manifest: 1488543 1.2.30 50421943bcb8 4505009 6 note lines
+notes (bg): • По избор: картата, заеманията и историята се отключват с пръстов отпечатък или кода на телефона. / • При вход се вижда колко опита остават, а „Забравен ПИН“ дава имейл до библиотеката с номера на картата. / • Обновяването се тегли във фон с известие за напредъка и може да се откаже. / • Събитията показват мястото и бутон „Маршрут“ до читалището. / • На таблет — списък и книга (или новина) един до друг, и клавиши за търсене и разделите. / • По-добре с TalkBack, с намалено движение и с голям текст — вече и в диалозите; по-кратко въведение.
+## UA1. v1.2.29 (tag) with the staged update.json: the dialog
+installed base-upd: 1.2.29 b84650f; versionCode 1488542; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v130/update/41346234873/update.json size 4104394;  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.29 
+install-unknown-apps: REQUEST_INSTALL_PACKAGES: allow
+UPDATE dialog (v1.2.29): dialog after 23900 ms: text="Нова версия 1.2.30" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• По избор: картата, заеманията и историята се отключват с пръстов отпечатък или кода на телефона.&#10;• При вход се вижда колко опита остават, а „Забравен ПИН“ дава имейл до библиотеката с номера на картата.&#10;• Обновяването се тегли във фон с известие за напредъка и може да се откаже.&#10;• Събитията показват мястото и бутон „Маршрут“ до читалището.&#10;• На таблет — спис
+NOTES a-dialog: 6/6 lines of the real 1.2.30 notes visible
+UPDATE (v1.2.29): tap Инсталирай
+UPDATE A: installed  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+after install: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; text="Sun, Nov 1" content-desc="Sun, Nov 1" text="Gmail" content-desc="Gmail" text="Photos" content-desc="Photos" 
+## UA2. 'Какво ново' after the update: the 1.2.30 notes
+WHATS-NEW 12-whats-new-1.2.30: SHOWN: text="Какво ново във версия 1.2.30"
+NOTES sheet-12-whats-new-1.2.30: 6/6 lines of the real 1.2.30 notes visible
+NOTES a-sheet-scrolled: 6/6 lines of the real 1.2.30 notes visible
+## UB0. The v1.2.30 code as 1.2.30-pre (versionCode 1488542) → the test v1.2.30; mobile data only (metered), throttled
+installed new-upd: 1.2.30-pre bf10741 (v1.2.30 code); versionCode 1488542; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v130/update/41346234873/update.json size 4505021;  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.30-pre 
+network: Active default network: 100 ; metered: Metered ifaces: {eth0}
+THROTTLE on: -P INPUT ACCEPT -A INPUT -p tcp -m tcp --sport 443 -m hashlimit --hashlimit-above 64kb/s --hashlimit-burst 64kb --hashlimit-mode srcip --hashlimit-name pcdl -j DROP -A INPUT -j bw_INPUT 
+UPDATE dialog (1.2.30-pre): dialog after 12780 ms: text="Нова версия 1.2.30" text="Излезе нова версия на приложението." text="Размер: 4,5 МБ" text="Какво ново" text="• По избор: картата, заеманията и историята се отключват с пръстов отпечатък или кода на телефона.&#10;• При вход се вижда колко опита остават, а „Забравен ПИН“ дава имейл до библиотеката с номера на картата.&#10;• Обновяването се тегли във фон с известие за напредъка и може да се откаже.&#10;• Събитията показват мястото и бутон „Маршрут“ до читалището.&#10;• На таблет — списък и кн
+NOTES b-dialog: 6/6 lines of the real 1.2.30 notes visible
+## UB1. 'Изтегли и инсталирай': progress and 'Отказ' in the dialog
+DIALOG +4550 ms: progress bars 1 [content-desc="" ]; 'Отказ' SHOWN; text="4%" 
+DIALOG +8663 ms: progress bars 1 [content-desc="" ]; 'Отказ' SHOWN; text="8%" 
+DIALOG +12596 ms: progress bars 1 [content-desc="" ]; 'Отказ' SHOWN; text="12%" 
+## UB2. Home during the download: the progress notification; the shade
+NOTIF +14176 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 13%) text=null progress=Integer (13)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ'] NOTIF total for org.chyavorec.app: 1 
+NOTIF +16568 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 15%) text=null progress=Integer (15)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ'] NOTIF total for org.chyavorec.app: 1 
+NOTIF +18728 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 17%) text=null progress=Integer (17)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ'] NOTIF total for org.chyavorec.app: 1 
+partial file: 882085 2026-11-01 20:40 update-1488543.apk.part;
+SHADE: text="Изтегляне на версия 1.2.30 — 22%" text="Отказ" ; progress bar in the shade: 1
+## UB3. 'Отказ' from the notification: the download stops, the partial file is deleted
+after 'Отказ' in the shade: NOTIF total for org.chyavorec.app: 0 ; files: []
+after 10 s: files: []; NOTIF total for org.chyavorec.app: 0
+## UB4. Restart the download, Home at once: it finishes in the background → 'готова за инсталиране' → tap → installer
+DIALOG after the 2nd tap +4031 ms: progress 1 ; 'Отказ' no; 'Изтегли и инсталирай' no; notif: NOTIF total for org.chyavorec.app: 0
+DIALOG after the 2nd tap +8451 ms: progress 1 ; 'Отказ' no; 'Изтегли и инсталирай' no; notif: NOTIF total for org.chyavorec.app: 0
+DIALOG after the 2nd tap +12575 ms: progress 1 ; 'Отказ' no; 'Изтегли и инсталирай' no; notif: NOTIF total for org.chyavorec.app: 0
+DIALOG after the 2nd tap +17552 ms: progress 1 text="0%"; 'Отказ' yes; 'Изтегли и инсталирай' no; notif: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 1%) text=null progress=Integer (1)/Integer (100) indeterminate=B
+jobs of the app after the 2nd tap:   JOB #u0a176/0: 3769a0a org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService~  JOB #u0a176/5: c11c946 org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService~  JOB #u0a176/6: c46a2b6 org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService~; files: [65527 2026-11-01 20:41 update-1488543.apk.part;]
+logcat since the 2nd tap:   1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0~  1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0~  1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0~  1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0~  1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0~  1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0~  1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0~  1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0~  1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0~  1747  2117 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0~
+app jobs (state):  JOB #u0a176/0: 3769a0a org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService~ Minimum latency: +3h59m59s800ms~ Required constraints: BATTERY_NOT_LOW TIMING_DELAY CONNECTIVITY [0x90000002]~ Satisfied constraints: BATTERY_NOT_LOW CONNECTIVITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED TARE_WEALTH WITHIN_Q~ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ JOB #u0a176/5: c11c946 org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService~ Minimum latency: +59m3s618ms~ Required constraints: BATTERY_NOT_LOW TIMING_DELAY CONNECTIVITY [0x90000002]~ Satisfied constraints: BATTERY_NOT_LOW CONNECTIVITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED TARE_WEALTH WITHIN_Q~ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ JOB #u0a176/6: c46a2b6 org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService~ Required constraints:~ Satisfied constraints: DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED TARE_WEALTH WITHIN_QUOTA [0xb400000]~ Unsatisfied constraints:~ Enqueue time: -17s740ms~ Ready: false (job=true user=true !restricted=true !pending=true !active=false !backingup=true comp=true)~
+app process: '7502'; state shown: text="Изтегляне на новата версия…" 
+NOTIF +19872 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 2%) text=null progress=Integer (2)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ']
+NOTIF +36176 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 16%) text=null progress=Integer (16)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ']
+NOTIF +52442 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 32%) text=null progress=Integer (32)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ']
+NOTIF +68792 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 46%) text=null progress=Integer (46)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ']
+NOTIF +85198 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 60%) text=null progress=Integer (60)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ']
+NOTIF +101509 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 75%) text=null progress=Integer (75)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ']
+NOTIF +117899 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 88%) text=null progress=Integer (88)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ']
+DOWNLOAD in the background: ready after 130556 ms; NOTIF id=700 title=String (Версия 1.2.30 е готова за инсталиране) text=String (Готово — докосни, за да инсталираш.) progress=Integer (0)/Integer (0) indeterminate=Boolean (false) ongoing=False fgs=False actions=[]
+THROTTLE off: 0 rules left
+tap on 'готова за инсталиране' → fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; text="Нова версия 1.2.30" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• По избор: картата, заеманията и историята се отключват с пръстов отпечатък и
+UPDATE B: installed  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+WHATS-NEW 34-whats-new-after-b: SHOWN: text="Какво ново във версия 1.2.30"
+NOTES sheet-34-whats-new-after-b: 6/6 lines of the real 1.2.30 notes visible
+## COMPLETE
+## logcat findings
+app pids seen: ['4787', '5998', '7502', '8741']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=85 total=362
+== Davey: 22
+   davey events=22 max=1523ms median=853ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

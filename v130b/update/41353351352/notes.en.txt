@@ -1,0 +1,6 @@
+• Optional: unlock your card, loans and history with your fingerprint or the phone’s screen lock.
+• Sign-in shows how many attempts are left, and “Forgot PIN” offers an email to the library with your card number.
+• App updates download in the background with a progress notification and can be cancelled.
+• Events show the place and a “Directions” button to the community centre.
+• On tablets, the list and the book (or article) side by side, plus keyboard shortcuts for search and tabs.
+• Better with TalkBack, reduced motion and large text — now in dialogs too; a shorter introduction.

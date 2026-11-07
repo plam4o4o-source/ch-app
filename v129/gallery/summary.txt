@@ -1,0 +1,60 @@
+part gallery; APK: 1.2.29 7bd2513 (NotifierTest: тестовете за снимки и действия — в NotifierTes); versionCode 1488542; x86_64 libs: 2 size 4100618 bytes
+base APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4; update manifest: no-update stub size 4323599 bytes
+host: 4 cpu, 15700 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.29 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3000 ms
+## G1. Album 1 online (the album data is cached); then the image caches are emptied
+ALBUM online: not-loaded=0 missing=1 retry-icons=0 cells=18; 404 tiles: content-desc="Стопанският двор на ТКЗС в Яворец — снимката липсва" content-desc="Техниката на стопанството — снимката липсва" content-desc="Хората на труда — снимката липсва" 
+app cache before: 1520	/data/data/org.chyavorec.app/cache/image_cache 744	/data/data/org.chyavorec.app/cache/http 
+## G2. Offline: thumbnails show 'Не се зареди' (not 'Снимката липсва')
+offline: airplane=1
+gallery offline: text="Няма интернет връзка. Показваме последно наличните данни." text="Последна синхронизация: Преди 0 минути" content-desc="Опитай отново" content-desc="Не се зареди" text="29 снимки" text="Фотодокум
+ALBUM offline: not-loaded=1 missing=0 retry-icons=1 cells=30; sample: content-desc="Сградата на читалището в Яворец — снимката не се зареди" content-desc="Фолклорен състав при читалището — снимката не се зареди" content-desc="Хорът на сцена — снимката не се зареди" 
+ALBUM offline scrolled: not-loaded=1 missing=0 retry-icons=1 cells=30
+## G3. Reconnect without touching: the thumbnails recover
+ALBUM +5s after reconnect: not-loaded=0 missing=1 retry-icons=0 cells=15
+ALBUM +15s after reconnect: not-loaded=0 missing=1 retry-icons=0 cells=15
+ALBUM +30s after reconnect: not-loaded=0 missing=1 retry-icons=0 cells=15
+ALBUM top after reconnect: not-loaded=0 missing=1 retry-icons=0 cells=18
+## G4. A real 404 photo: '<title> — снимката липсва'; the viewer on it
+404 tiles: content-desc="Стопанският двор на ТКЗС в Яворец — снимката липсва" content-desc="Техниката на стопанството — снимката липсва" content-desc="Хората на труда — снимката липсва" content-desc="Фермите на стопанството — снимката липсва" ; not-loaded here: 
+VIEWER on a 404 photo: text="8 / 29  ·  Стопанският двор на ТКЗС в Яворец"; 'Снимката липсва на сайта' SHOWN; retry absent; text="Снимката липсва на сайта." content-desc="Затвори" text="8 / 29  ·  Стопанският двор на ТКЗС в Яворец" content-desc="Сподели" 
+## G5. Viewer: a tap hides and shows the bars (immersive)
+VIEWER 20-viewer-start: counter 'text="1 / 29  ·  Сградата на читалището в Яворец"'; close button shown; album grid no; bars: ; BBOX [0,46][1080,2374] 1080x2328 of 1080x2400 (97% of the screen)
+VIEWER 21-after-tap1: counter ''; close button HIDDEN; album grid no; bars: ; BBOX [0,128][1080,1537] 1080x1409 of 1080x2400 (59% of the screen)
+VIEWER 22-after-tap2: counter 'text="1 / 29  ·  Сградата на читалището в Яворец"'; close button shown; album grid no; bars: ; BBOX [0,46][1080,2374] 1080x2328 of 1080x2400 (97% of the screen)
+## G6. Vertical drag: a short one returns, a long one dismisses
+VIEWER 30-after-short-drag: counter 'text="1 / 29  ·  Сградата на читалището в Яворец"'; close button shown; album grid no; bars: ; BBOX [0,46][1080,2374] 1080x2328 of 1080x2400 (97% of the screen)
+VIEWER 31-after-long-drag: counter ''; close button HIDDEN; album grid VISIBLE; bars: ; BBOX [0,0][1080,2400] 1080x2400 of 1080x2400 (100% of the screen)
+## G7. Zoom still works: double tap 2×, pinch, pan; no dismiss while zoomed; reset
+touch device: /dev/input/event2 x-max=32767 y-max=32767 pressure=11
+ZOOM: diff 1x→2x 0.0, 2x→pinched 75.2 (≈0 = no change)
+VIEWER 43-vertical-drag-while-zoomed: counter 'text="1 / 29  ·  Сградата на читалището в Яворец"'; close button shown; album grid no; bars: ; BBOX [0,46][1080,2400] 1080x2354 of 1080x2400 (98% of the screen)
+swipe while zoomed: text="1 / 29  ·  Сградата на читалището в Яворец" (same photo = panned)
+ZOOM reset: diff 1x vs after reset 0.3
+## G8. Back gesture (gesture navigation; API 33): the photo scales during the gesture
+gesture nav:  navigation_mode=2
+VIEWER 60-before-gesture: counter 'text="1 / 29  ·  Сградата на читалището в Яворец"'; close button shown; album grid no; bars: ; BBOX [0,46][1080,2374] 1080x2328 of 1080x2400 (97% of the screen)
+mid-gesture 30%: BBOX [0,46][1080,2374] 1080x2328 of 1080x2400 (97% of the screen)
+mid-gesture 50%: BBOX [0,46][1080,2374] 1080x2328 of 1080x2400 (97% of the screen)
+VIEWER 63-after-cancelled-gesture: counter 'text="1 / 29  ·  Сградата на читалището в Яворец"'; close button shown; album grid no; bars: ; BBOX [0,46][1080,2374] 1080x2328 of 1080x2400 (97% of the screen)
+full gesture midway: BBOX [0,46][1080,2374] 1080x2328 of 1080x2400 (97% of the screen)
+VIEWER 65-after-full-gesture: counter ''; close button HIDDEN; album grid VISIBLE; bars: ; BBOX [0,0][1080,2400] 1080x2400 of 1080x2400 (100% of the screen)
+## COMPLETE
+## logcat findings
+app pids seen: ['5376', '6819', '7610']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=30 total=60
+== Davey: 2
+   davey events=2 max=1152ms median=1088ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

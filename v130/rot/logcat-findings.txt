@@ -1,0 +1,32 @@
+app pids seen: ['5290', '7235', '9428', '9708', '9860', '10360', '10568', '10813', '10999']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=41 total=246
+   11-01 19:02:09.242  5290  5290 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-01 19:02:09.823  5290  5290 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-01 19:03:11.769  7235  7235 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-01 19:03:33.597  7235  7235 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-01 19:03:35.530  7235  7235 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-01 19:03:36.784  7235  7235 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-01 19:04:22.637  7235  7235 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 4
+   davey events=4 max=989ms median=834ms
+   11-01 19:02:10.418  5290  5325 I OpenGLRenderer: Davey! duration=989ms; Flags=1, FrameTimelineVsyncId=10427, IntendedVsync=113128618096, Vsync=113661951408, InputEventId=0, HandleInputStart=113679459167, AnimationStart=113679460087, Perform
+   11-01 19:03:33.829  7235  7281 I OpenGLRenderer: Davey! duration=754ms; Flags=0, FrameTimelineVsyncId=14659, IntendedVsync=196795281416, Vsync=197445281390, InputEventId=0, HandleInputStart=197452187734, AnimationStart=197452188290, Perform
+   11-01 19:03:35.543  7235  7248 I OpenGLRenderer: Davey! duration=913ms; Flags=0, FrameTimelineVsyncId=15185, IntendedVsync=198478625781, Vsync=198728625741, InputEventId=0, HandleInputStart=198740274881, AnimationStart=198740275428, Perform
+   11-01 19:03:38.910  7235  7248 I OpenGLRenderer: Davey! duration=750ms; Flags=0, FrameTimelineVsyncId=16211, IntendedVsync=201928614544, Vsync=202295281196, InputEventId=0, HandleInputStart=202309243738, AnimationStart=202309244245, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 19:02:07.861  5284  5284 I PERFCHECK: section: W. First launch and warm-up
+   11-01 19:03:09.506  7218  7218 I PERFCHECK: section: R1. Rotation 6 toggles each on Home, Catalogue 12, a book, Want to read, Calendar
+   11-01 19:06:24.776  9270  9270 I PERFCHECK: section: R2. Process death HOME → am kill → launcher on the same screens
+   11-01 19:06:39.572   494   863 I ActivityManager: Killing 7235:org.chyavorec.app/u0a174 (adj 700): kill background
+   11-01 19:07:07.960   494  1744 I ActivityManager: Killing 9428:org.chyavorec.app/u0a174 (adj 700): kill background
+   11-01 19:07:29.004   494  2496 I ActivityManager: Killing 9708:org.chyavorec.app/u0a174 (adj 700): kill background
+   11-01 19:08:09.944   494  2408 I ActivityManager: Killing 9860:org.chyavorec.app/u0a174 (adj 700): kill background
+   11-01 19:08:35.852   494  1588 I ActivityManager: Killing 10360:org.chyavorec.app/u0a174 (adj 700): kill background
+   11-01 19:08:49.767 10668 10668 I PERFCHECK: section: R3. Process death, back from Recents Calendar, book
+   11-01 19:09:04.358   494  2433 I ActivityManager: Killing 10568:org.chyavorec.app/u0a174 (adj 700): kill background
+   11-01 19:09:31.741   494  2559 I ActivityManager: Killing 10813:org.chyavorec.app/u0a174 (adj 700): kill background

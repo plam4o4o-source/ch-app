@@ -1,0 +1,47 @@
+part mem; APK: 1.2.29 7bd2513 (NotifierTest: тестовете за снимки и действия — в NotifierTes); versionCode 1488542; x86_64 libs: 2 size 4100618 bytes
+base APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4; update manifest: no-update stub size 4323599 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.29 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2675 ms
+## M. Memory over 30 cycles (all tabs + a book + the gallery viewer + the expanded search), new
+tab home @ 99 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=61857KB  Java=8528KB  Native=34876KB  Graphics=0KB  Views=9 Activities=1
+MEM c00 (trimmed)    PSS=60289KB  Java=7224KB  Native=16112KB  Graphics=0KB  Views=9 Activities=1
+cycle 1: book screen opened
+MEM c05 (trimmed)    PSS=101180KB  Java=12008KB  Native=32244KB  Graphics=0KB  Views=13 Activities=1
+cycles done: 10, gallery viewer reached in 10, search expanded in 10
+MEM c10 (raw)        PSS=127674KB  Java=17960KB  Native=51908KB  Graphics=0KB  Views=20 Activities=1
+MEM c10 (trimmed)    PSS=117417KB  Java=11496KB  Native=48320KB  Graphics=0KB  Views=13 Activities=1
+MEM c15 (trimmed)    PSS=119142KB  Java=11424KB  Native=48540KB  Graphics=0KB  Views=13 Activities=1
+cycles done: 20, gallery viewer reached in 20, search expanded in 20
+MEM c20 (raw)        PSS=139811KB  Java=26732KB  Native=52888KB  Graphics=0KB  Views=20 Activities=1
+MEM c20 (trimmed)    PSS=121019KB  Java=11544KB  Native=49332KB  Graphics=0KB  Views=13 Activities=1
+MEM c25 (trimmed)    PSS=120455KB  Java=11564KB  Native=49084KB  Graphics=0KB  Views=13 Activities=1
+cycles done: 30, gallery viewer reached in 30, search expanded in 30
+MEM c30 (raw)        PSS=122309KB  Java=16292KB  Native=49308KB  Graphics=0KB  Views=20 Activities=1
+MEM c30 (trimmed)    PSS=108603KB  Java=11548KB  Native=40412KB  Graphics=0KB  Views=13 Activities=1
+pid after cycles: 6730; gallery viewer reached in 30/30, expanded search with '12' in 30/30 cycles
+PSS after trim by cycle (KB): c0=60289 c5=101180 c10=117417 c15=119142 c20=121019 c25=120455 c30=108603
+LEAK TREND (cycles 10-30, least squares): -326 KB per cycle (-6.4 MB over 20 cycles)
+## COMPLETE
+## logcat findings
+app pids seen: ['5224', '6730']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 18
+   skipped-frames events=18 max=72 total=646
+== Davey: 47
+   davey events=47 max=1206ms median=761ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

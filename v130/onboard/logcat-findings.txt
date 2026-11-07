@@ -1,0 +1,29 @@
+app pids seen: ['5390', '7904', '8140', '8572', '8752']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=84 total=325
+   11-01 19:59:13.672  5390  5390 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+   11-01 19:59:14.891  5390  5390 I Choreographer: Skipped 72 frames!  The application may be doing too much work on its main thread.
+   11-01 20:00:51.828  7904  7904 I Choreographer: Skipped 84 frames!  The application may be doing too much work on its main thread.
+   11-01 20:01:08.642  8140  8140 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-01 20:01:56.544  8572  8572 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-01 20:02:20.139  8752  8752 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+== Davey: 8
+   davey events=8 max=2041ms median=854ms
+   11-01 19:59:15.939  5390  5402 I OpenGLRenderer: Davey! duration=2041ms; Flags=1, FrameTimelineVsyncId=6577, IntendedVsync=103869085694, Vsync=105069085646, InputEventId=0, HandleInputStart=105082558358, AnimationStart=105082558828, Perform
+   11-01 20:00:51.893  7904  7917 I OpenGLRenderer: Davey! duration=1400ms; Flags=1, FrameTimelineVsyncId=10641, IntendedVsync=200569081826, Vsync=200585748492, InputEventId=0, HandleInputStart=200592052584, AnimationStart=200592053355, Perfor
+   11-01 20:00:52.424  7904  7917 I OpenGLRenderer: Davey! duration=1775ms; Flags=0, FrameTimelineVsyncId=10686, IntendedVsync=200619081824, Vsync=202019081768, InputEventId=0, HandleInputStart=202020307886, AnimationStart=202020308607, Perfor
+   11-01 20:00:53.265  7904  7917 I OpenGLRenderer: Davey! duration=824ms; Flags=0, FrameTimelineVsyncId=10932, IntendedVsync=202485748416, Vsync=202635748410, InputEventId=0, HandleInputStart=202649224523, AnimationStart=202649225255, Perform
+   11-01 20:01:09.730  8140  8159 I OpenGLRenderer: Davey! duration=868ms; Flags=1, FrameTimelineVsyncId=11765, IntendedVsync=218852414428, Vsync=219252414412, InputEventId=0, HandleInputStart=219258311445, AnimationStart=219258311806, Perform
+   11-01 20:01:56.946  8572  8586 I OpenGLRenderer: Davey! duration=789ms; Flags=1, FrameTimelineVsyncId=13826, IntendedVsync=266185745868, Vsync=266719079180, InputEventId=0, HandleInputStart=266734994075, AnimationStart=266734994817, Perform
+   11-01 20:02:12.498  8752  8770 I OpenGLRenderer: Davey! duration=841ms; Flags=1, FrameTimelineVsyncId=14897, IntendedVsync=281652423015, Vsync=282135756300, InputEventId=0, HandleInputStart=282150699496, AnimationStart=282150700327, Perform
+   11-01 20:02:23.764  8752  8770 I OpenGLRenderer: Davey! duration=710ms; Flags=0, FrameTimelineVsyncId=15747, IntendedVsync=293019078128, Vsync=293319078116, InputEventId=0, HandleInputStart=293329117585, AnimationStart=293329118536, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 19:59:07.956  5247  5247 I PERFCHECK: section: OB1. Fresh install, no notification permission: page 1 welcome, three feature rows
+   11-01 19:59:47.587  6440  6440 I PERFCHECK: section: OB2. Page 2: text-size chips apply at once, Разреши известията → the system prompt API 33
+   11-01 20:00:29.918  7717  7717 I PERFCHECK: section: OB3. Page 3: sign in / add a card; then the main screen does not ask again
+   11-01 20:01:02.926  8046  8046 I PERFCHECK: section: OB4. Deny in the onboarding: the main screen does not ask again
+   11-01 20:02:07.577  8658  8658 I PERFCHECK: section: OB5. Пропусни on page 1 the permission not answered

@@ -1,0 +1,12 @@
+== new 1.2.28 6e2c640: release-config APK (arm64-v8a + armeabi-v7a, minified, throwaway key)
+APK size: 4290964 bytes
+manifest:  A: http://schemas.android.com/apk/res/android:versionCode(0x0101021b)=1488541  A: http://schemas.android.com/apk/res/android:versionName(0x0101021c)="1.2.28" (Raw: "1.2.28")  A: http://schemas.android.com/apk/res/android:extractNativeLibs(0x010104ea)=true 
+part                    compressed  uncompressed  files
+classes*.dex               3510555       6893172      2
+res                         468767        833220     58
+resources.arsc              213416        213416      1
+lib/arm64-v8a                26028         57912      4
+lib/armeabi-v7a              22503         41024      4
+assets/                      19172         19172      2
+AndroidManifest.xml           4890         20880      1
+META-INF/                      845          1288      6

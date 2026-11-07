@@ -1,0 +1,18 @@
+app pids seen: ['6176', '7515', '9552', '11521']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=40 total=78
+   10-31 21:31:06.146  6176  6176 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   10-31 21:39:49.289 11521 11521 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=1102ms median=970ms
+   10-31 21:31:06.800  6176  6190 I OpenGLRenderer: Davey! duration=1102ms; Flags=1, FrameTimelineVsyncId=6384, IntendedVsync=79566074019, Vsync=80232740579, InputEventId=0, HandleInputStart=80234671178, AnimationStart=80234672070, PerformTrav
+   10-31 21:39:49.556 11521 11639 I OpenGLRenderer: Davey! duration=837ms; Flags=0, FrameTimelineVsyncId=27246, IntendedVsync=602732708662, Vsync=603366041970, InputEventId=0, HandleInputStart=603377497093, AnimationStart=603377497373, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 21:31:04.490  6137  6137 I PERFCHECK: section: L0. First launch and warm-up
+   10-31 21:32:02.711  7495  7495 I PERFCHECK: section: L small-320dp
+   10-31 21:35:49.717  9536  9536 I PERFCHECK: section: L tablet-800dp
+   10-31 21:39:34.124 11506 11506 I PERFCHECK: section: L tablet-land

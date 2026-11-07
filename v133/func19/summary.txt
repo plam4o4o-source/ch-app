@@ -1,0 +1,106 @@
+part func19; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4221 ms
+## B1. Home ribbon „жива шевица“ (AGSL, API 33): renders, sweeps ~24 s, then stops
+RIBBON frames in the first 34 s: 273
+RIBBON box [0 280 1080 398] at 02 s: 
+RIBBON box [0 280 1080 398] at 12 s: mean=209.5 std=67.0 thread-px=26.7%
+RIBBON box [0 280 1080 398] at 34 s: mean=209.5 std=67.0 thread-px=26.7%
+RIBBON change between shots (2,5,8,12,16,20,24,28,34 s): 0.56 0.00 0.00 0.00 0.00 0.00 0.00
+RIBBON still after the budget (34 s → 40 s): diff 0.00
+## B1b. The first scroll stops the ribbon (new process)
+RIBBON after the first scroll: change a→b→c 0.00 0.00 (≈0 = stopped)
+## B1c. Once per process: back to Home from another tab — no new sweep
+RIBBON after a tab round trip: change 43.26
+RIBBON shader errors in logcat: 1
+## B2. Bottom-nav rosette morph (recording while switching tabs)
+REC rosette: 47 frames @8 fps; motion 0 2070 1080 2400: 
+ROSETTE: tab selected after the round: TAB selected: ['Начало']
+## B3. Connected button groups: News / Calendar
+GROUP news/calendar before: News[checked=true selected=false bounds=[42,307][537,433]] Calendar[checked=false selected=false bounds=[542,307][1038,433]] subscribe-action=absent
+GROUP after tapping 'Календар': News[checked=false selected=false bounds=[42,307][422,433]] Calendar[checked=true selected=false bounds=[427,307][807,433]] subscribe-action=visible
+GROUP after tapping 'Новини': News[checked=true selected=false bounds=[42,307][537,433]] Calendar[checked=false selected=false bounds=[542,307][1038,433]] subscribe-action=absent
+GROUP a11y: checkable="false" checked="false" clickable="false" selected="false" checkable="false" checked="false" clickable="false" selected="false" 
+## B7. Pull-to-refresh rosette (News list), shots during a slow pull
+REFRESH: top area diff pull vs after: 0.00
+## B8. Empty state with the stitched band: Want to read (empty on a fresh install)
+EMPTY want: text="Списъкът е празен" text="Отбележи книга с „Искам да прочета“ на страницата ѝ в каталога — тук ще виждаш дали е на рафта." content-desc="Назад" text="Искам да прочета" 
+## B4. Article: stitched progress thread, hero parallax, floating toolbar (Аа / bookmark / share / browser)
+ARTICLE toolbar at open: content-desc="Режим за четене" content-desc="Запази" content-desc="Сподели" content-desc="Отвори в сайта" 
+ARTICLE hero parallax: top area diff after a small scroll 92.01
+ARTICLE toolbar after scrolling down: VISIBLE (expected hidden)
+ARTICLE toolbar after scrolling up: visible
+ARTICLE thread (top 260 px) changed with reading: 5.96
+## B3b. Reader text size (connected button group in the 'Аа' sheet)
+READER sizes: Малък шрифт[checked=false] Нормален шрифт[checked=true] Голям шрифт[checked=false] Много голям шрифт[checked=false] 
+READER after 'Голям шрифт': Нормален шрифт[checked=false] Голям шрифт[checked=true] 
+ARTICLE bookmark: now content-desc="Премахни от запазените"
+## B11c. Article toolbar: share as image
+SHARE article sheet: text="Сподели като картинка" text="Карта с QR код — за Instagram, Facebook, Viber…" text="Сподели връзката" text="Текст с адреса в сайта" 
+SHARE article: chooser OPEN after 2 s (fg android/com.android.internal.app.ChooserActivity); app log: 11-07 16:14:29.811  9200  9200 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@19729; boundsInParent: ~
+SHARE article cache/share: 1169798 2026-11-07 16:14 chyavorec-news-1794068078931.png;
+SHARE article PNG: chyavorec-news-1794068078931.png → PNG-signature=yes size=1169798 B dims=1080x1350 mode=RGBA
+SHARE article received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794068078931.png mime=image/png bytes=1169798 png=true dims=1080x1350
+ARTICLE 'Отвори в сайта' → fg com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity
+## B5. Gallery viewer floating toolbar: share / open on site / photo info
+VIEWER toolbar: content-desc="Сподели" content-desc="Отвори в сайта" content-desc="За снимката" 
+VIEWER 'За снимката': content-desc="Сградата на читалището в Яворец" content-desc="Затвори" text="1 / 29  ·  Сградата на читалището в Яворец" text="Сградата на читалището в Яворец" content-desc="Сподели" content-desc="Отвори в сайта" content-desc="За снимката" 
+VIEWER closed after share? content-desc="Сградата на читалището в Яворец" content-desc="Фолклорен състав при читалището" content-desc="Хорът на сцена" content-desc="70-те години" content-
+## B6. Book open: catalogue → book (cover rotates around the spine) and back (recording)
+REC bookopen: 44 frames @8 fps; motion 0 150 1080 2150: 
+BOOKOPEN after back: catalogue shown
+REC bookopen-home: 44 frames @8 fps; motion all: frames=44 moving-frames(>1.0)=0 max-step=0.1 max-vs-first=0.1 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0]
+## B9. Confetti + haptics on 'Искам да прочета' (book screen)
+WANT before: checked=false selected=false bounds=[426,738][911,864]
+REC confetti-want: 31 frames @8 fps; motion all: frames=31 moving-frames(>1.0)=1 max-step=11.5 max-vs-first=12.3 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.6 11.5 0.0 0.2]
+CONFETTI want-to-read: confetti-like new saturated points per frame (max 43): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 12, 12, 43]
+WANT after: checked=true selected=false bounds=[426,738][911,864]; snackbar: text="Искам да прочета" 
+HAPTIC after the add:     createTime: 11-07 16:14:15.029, startTime: 11-07 16:14:15.030, endTime: 11-07 16:14:15.130, durationMs: 101, status: finished, effect: Mono{mEffect=Composed{segments=[Prebaked{effect=TICK, strengt~    createTime: 11-07 16:17:06.961, startTime: 11-07 16:17:06.965, endTime: 11-07 16:17:07.076, durationMs: 115, status: finished, effect: Mono{mEffect=Composed{segments=[Prebaked{effect=CLICK, streng~
+## B11b. Book: share as image, then share the link
+SHARE book sheet: text="Сподели като картинка" text="Карта с QR код — за Instagram, Facebook, Viber…" text="Сподели връзката" text="Текст с адреса в сайта" 
+SHARE book: chooser OPEN after 2 s (fg android/com.android.internal.app.ChooserActivity); app log: 
+SHARE book cache/share: 774403 2026-11-07 16:17 chyavorec-book-399560-1794068249804.png;
+SHARE book PNG: chyavorec-book-399560-1794068249804.png → PNG-signature=yes size=774403 B dims=1080x1920 mode=RGBA
+SHARE book received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 subject=12 -те вятъра text=12 -те вятъра Гарфилд, Джудит и др. В електронния каталог: https://chyavorec.org/elektronen-katalog#zapis=399560 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-book-399560-1794068249804.png mime=image/png bytes=774403 png=true dims=1080x1920
+SHARE book-link (link): chooser OPEN (fg android/com.android.internal.app.ChooserActivity)
+SHARE book-link received by the helper: action=android.intent.action.SEND type=text/plain flags=0x1b080001 subject=12 -те вятъра text=12 -те вятъра Гарфилд, Джудит и др. В електронния каталог: https://chyavorec.org/elektronen-katalog#zapis=399560 clipItems=1 stream=null
+## B10. Event: reminder set (confetti) and share as image
+EVENT: text="Михаил В. Ломоносов" text="8 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Библиотека" 
+EVENT: no 'Напомни ми' (past event or none)
+SHARE event sheet: text="Сподели като картинка" text="Карта с QR код — за Instagram, Facebook, Viber…" text="Сподели връзката" text="Текст с адреса в сайта" 
+SHARE event: chooser OPEN after 2 s (fg android/com.android.internal.app.ChooserActivity); app log: 
+SHARE event cache/share: 636560 2026-11-07 16:19 chyavorec-event-1794068339896.png;
+SHARE event PNG: chyavorec-event-1794068339896.png → PNG-signature=yes size=636560 B dims=1080x1920 mode=RGBA
+SHARE event received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 subject=Михаил В. Ломоносов text=Михаил В. Ломоносов 8 ноември 2026 НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец https://chyavorec.org/events clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-event-1794068339896.png mime=image/png bytes=636560 png=true dims=1080x1920
+## B12. 'Изненадай ме': the dice button in the catalogue
+REC surprise-dice: 46 frames @8 fps; motion all: frames=46 moving-frames(>1.0)=3 max-step=173.6 max-vs-first=200.8 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.0 4.6 0.0 0.0 0.0 0.0 173.6 0.1 0.0 0.0 0.0 0.0 0.0 28.8 0.0]
+SURPRISE dice: text="Още една" text="Към книгата" ; bottom bar hidden
+SURPRISE 'Към книгата' → book screen yes: text="Дъхът на планините" text="разказ за дома" text="Ангел Василев" 
+## B13. 'Изненадай ме' by shaking (emulator accelerometer: two peaks > 2.3 g within 0.7 s)
+accelerometer: 0000000000) Goldfish 3-axis Accelerometer | The Android Open Source Project | ver: 1 | type: android.sensor.acceleromete
+SHAKE one short peak (info; a peak held > 120 ms counts twice by design): not triggered
+SHAKE double peak: TRIGGERED; text="Към книгата" 
+## B13b. Shake on another tab (catalogue not resumed) must not trigger
+WARN: tab bar not reached
+SHAKE on Home: TRIGGERED (unexpected)
+## COMPLETE
+## logcat findings
+app pids seen: ['5244', '6157', '7836']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 47
+   skipped-frames events=47 max=110 total=2215
+== Davey: 92
+   davey events=92 max=3395ms median=974ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

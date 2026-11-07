@@ -1,0 +1,1 @@
+DIAGNOSTIC 1.2.29 7bd2513 + keep ML Kit registrar constructors; versionCode 1488542

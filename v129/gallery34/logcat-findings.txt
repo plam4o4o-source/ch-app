@@ -1,0 +1,40 @@
+app pids seen: ['8377', '9219', '10415']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 8
+   skipped-frames events=8 max=43 total=287
+   10-31 22:25:52.446  8377  8377 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-31 22:25:53.754  8377  8377 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   10-31 22:26:03.058  8377  8377 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   10-31 22:26:03.732  8377  8377 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   10-31 22:26:14.277  8377  8377 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-31 22:26:14.892  8377  8377 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   10-31 22:26:36.151  9219  9219 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-31 22:26:36.857  9219  9219 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+== Davey: 16
+   davey events=16 max=1550ms median=916ms
+   10-31 22:25:53.722  8377  8396 I OpenGLRenderer: Davey! duration=1157ms; Flags=1, FrameTimelineVsyncId=6128, IntendedVsync=130068686017, Vsync=130535352665, InputEventId=0, HandleInputStart=130548848140, AnimationStart=130548848792, Perform
+   10-31 22:25:54.428  8377  8396 I OpenGLRenderer: Davey! duration=1016ms; Flags=0, FrameTimelineVsyncId=6364, IntendedVsync=130635352661, Vsync=131352019299, InputEventId=0, HandleInputStart=131360365314, AnimationStart=131360365785, Perform
+   10-31 22:26:03.645  8377  8395 I OpenGLRenderer: Davey! duration=1214ms; Flags=0, FrameTimelineVsyncId=9811, IntendedVsync=140018685619, Vsync=140018685619, InputEventId=0, HandleInputStart=140021144971, AnimationStart=140021145973, Perform
+   10-31 22:26:03.917  8377  8388 I OpenGLRenderer: Davey! duration=840ms; Flags=0, FrameTimelineVsyncId=9826, IntendedVsync=140035352285, Vsync=140652018927, InputEventId=0, HandleInputStart=140663485857, AnimationStart=140663486388, PerformT
+   10-31 22:26:04.105  8377  8395 I OpenGLRenderer: Davey! duration=931ms; Flags=0, FrameTimelineVsyncId=9940, IntendedVsync=140668685593, Vsync=141335352233, InputEventId=0, HandleInputStart=141345048007, AnimationStart=141345048578, PerformT
+   10-31 22:26:05.520  8377  8396 I OpenGLRenderer: Davey! duration=717ms; Flags=0, FrameTimelineVsyncId=10488, IntendedVsync=142268685529, Vsync=142268685529, InputEventId=0, HandleInputStart=142269001710, AnimationStart=142269001990, Perform
+   10-31 22:26:05.622  8377  8395 I OpenGLRenderer: Davey! duration=779ms; Flags=0, FrameTimelineVsyncId=10509, IntendedVsync=142302018861, Vsync=142702018845, InputEventId=0, HandleInputStart=142703106617, AnimationStart=142703107027, Perform
+   10-31 22:26:15.196  8377  8391 I OpenGLRenderer: Davey! duration=1550ms; Flags=0, FrameTimelineVsyncId=13283, IntendedVsync=151068685177, Vsync=151302018501, InputEventId=0, HandleInputStart=151317866121, AnimationStart=151317866843, Perfor
+   10-31 22:26:15.430  8377  8391 I OpenGLRenderer: Davey! duration=913ms; Flags=0, FrameTimelineVsyncId=13354, IntendedVsync=151352018499, Vsync=151868685145, InputEventId=0, HandleInputStart=151881609066, AnimationStart=151881609507, Perform
+   10-31 22:26:15.501  8377  8391 I OpenGLRenderer: Davey! duration=918ms; Flags=0, FrameTimelineVsyncId=13499, IntendedVsync=151902018477, Vsync=152485351787, InputEventId=0, HandleInputStart=152502772022, AnimationStart=152502772363, Perform
+   10-31 22:26:36.826  9219  9232 I OpenGLRenderer: Davey! duration=1179ms; Flags=1, FrameTimelineVsyncId=21148, IntendedVsync=173235350957, Vsync=173752017603, InputEventId=0, HandleInputStart=173757902696, AnimationStart=173757902827, Perfor
+   10-31 22:26:37.697  9219  9232 I OpenGLRenderer: Davey! duration=1165ms; Flags=0, FrameTimelineVsyncId=21350, IntendedVsync=173802028682, Vsync=174452028578, InputEventId=0, HandleInputStart=174472152672, AnimationStart=174472153053, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 22:25:11.743  5089  5089 I PERFCHECK: section: G0. API 34: predictive back animations on developer option before the framework restarts
+   10-31 22:25:50.182  8347  8347 I PERFCHECK: section: W. First launch and warm-up
+   10-31 22:26:33.232  9191  9191 I PERFCHECK: section: G1. Album 1 online the album data is cached; then the image caches are emptied
+   10-31 22:27:27.347 10323 10323 I PERFCHECK: section: G2. Offline: thumbnails show Не се зареди not Снимката липсва
+   10-31 22:28:22.006 10763 10763 I PERFCHECK: section: G3. Reconnect without touching: the thumbnails recover
+   10-31 22:29:10.339 11247 11247 I PERFCHECK: section: G4. A real 404 photo: <title> — снимката липсва; the viewer on it
+   10-31 22:29:30.394 11382 11382 I PERFCHECK: section: G5. Viewer: a tap hides and shows the bars immersive
+   10-31 22:29:50.960 11538 11538 I PERFCHECK: section: G6. Vertical drag: a short one returns, a long one dismisses
+   10-31 22:30:05.148 11679 11679 I PERFCHECK: section: G7. Zoom still works: double tap 2×, pinch, pan; no dismiss while zoomed; reset
+   10-31 22:30:42.078 12015 12015 I PERFCHECK: section: G8. Back gesture gesture navigation; API 34: the photo scales during the gesture

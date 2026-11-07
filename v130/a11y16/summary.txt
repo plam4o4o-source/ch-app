@@ -1,0 +1,81 @@
+part a11y16; APK: 1.2.30 bf10741 (Какво ново: версия 1.2.30); versionCode 1488543; x86_64 libs: 2 size 4505009 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104414 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+TalkBack on the image: 2 package(s) — the test accessibility service stands in for it
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2821 ms
+## B. Home top bar: Messages (megaphone) and the unread badge
+MESSAGES button: content-desc="Съобщения" ; bell/notification icons: 
+carousel card (uiautomator): 35 809 863 1432 | СЪБИТИЕ Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец.
+## B2. Unread messages: the stored read list emptied (as if none were read) → the badge and the label
+prefs: 485 bytes after adding ['read_messages']
+MESSAGES button (unread): content-desc="Съобщения" ; badge texts near it: text="8" 
+Messages screen: text="Няма съобщения от читалището" text="Някои съобщения са само за членове. Въведи читателската си карта (или влез) в „Моето“, за да ги виждаш." content-desc="Назад" text="Съобщения" 
+## T1. Test accessibility service on (log mode): pane titles on the tabs and detail screens
+A11Y service: 11-01 20:00:36.687  7867  7867 I PCA11Y  : connected flags=80
+PANE events (13): cls=android.view.View text=[Каталог]|pane=Каталог|cls=android.view.View text=[Моето]|pane=Моето|cls=android.view.View text=[Новини и събития]|pane=Новини и събития|cls=android.view.View text=[Още]|pane=Още|cls=android.view.View text=[Начало]|pane=Начало|cls=android.view.View text=[12 -те вятъра]|pane=12 -те вятъра|cls=android.view.View text=[Фолклорно пътешествие из Пиринска, Родопска и Тракийска област|pane=Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец.|cls=android.view.View text=[Настройки]|pane=Настройки|
+## T2. Home as a screen reader sees it: the carousel
+TREE home1 (132 lines):
+TREE nodes=129 windows: ['11-01 20:01:21.701  7867  7867 I PCDUMP  : thome1 W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-01 20:01:21.703  7867  7867 I PCDUMP  : thome1 W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=16 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Начало']; headings: ['', 'Предстоящи събития']
+TREE nodes with labelled (custom) actions: 2: 'Последни новини' [2131361799:Следваща новина] | '' [2131361799:Следваща новина]
+TREE carousel nodes 'Последни новини': 1; nodes with Следваща/Предишна новина: 2: 'Последни новини' clk=false b=[0,809][1080,1432] acts=[2131361799:Следваща новина] | '' clk=true b=[35,809][863,1432] acts=[2131361799:Следваща новина]
+thome1 W1 d7 cls=android.view.View text= desc=Последни новини pane= heading=false clk=false lclk=false focusable=false checkable=false checked=false enabled=true imp=true sel=false b=[0,809][1080,1432] acts=2131361799:Следваща новина;
+thome1 W1 d8 cls=android.view.View text= desc= pane= heading=false clk=true lclk=false focusable=true checkable=false checked=false enabled=true imp=true sel=false b=[35,809][863,1432] acts=2131361799:Следваща новина;
+thome1 W1 d8 cls=android.view.View text= desc=Съобщения pane= heading=false clk=false lclk=false focusable=false checkable=false checked=false enabled=true imp=true sel=false b=[965,195][1028,258] acts=
+custom action: 11-01 20:01:24.807  7867  7867 I PCA11Y  : ACT 'Следваща новина' id=2131361799 on Последни новини -> true
+TREE home2 (135 lines):
+TREE nodes=132 windows: ['11-01 20:01:27.840  7867  7867 I PCDUMP  : thome2 W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-01 20:01:27.844  7867  7867 I PCDUMP  : thome2 W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=16 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Начало']; headings: ['', 'Предстоящи събития']
+TREE nodes with labelled (custom) actions: 2: 'Последни новини' [2131361799:Следваща новина;2131361800:Предишна новина] | '' [2131361799:Следваща новина;2131361800:Предишна новина]
+TREE carousel nodes 'Последни новини': 1; nodes with Следваща/Предишна новина: 2: 'Последни новини' clk=false b=[0,809][1080,1432] acts=[2131361799:Следваща новина;2131361800:Предишна новина] | '' clk=true b=[126,809][954,1432] acts=[2131361799:Следваща новина;2131361800:Предишна новина]
+current card before/after 'Следваща новина': desc=Последни новини pane → desc=Последни новини pane
+## T3. Touch exploration (as with TalkBack): the carousel does not auto-advance; control without it
+touch exploration true: touchExplorationEnabled=true
+dumpsys accessibility: touchExplorationEnabled=true, serviceHandlesDoubleTap=false, requestMultiFingerGestures=false, requestTw Bound services:{Service[label=PC a11y, feedbackType[FEEDBACK_SPOKEN], capabilities=3, eventType Enabled services:{{org.pc.helper/org.pc.helper.A11y 
+touch exploration false: touchExplorationEnabled=false
+## T3b. Real TalkBack (com.google.android.marvin.talkbackoverlay): the carousel does not auto-advance
+TalkBack services: 
+TalkBack on: touchExplorationEnabled=false; bound: Bound services:{
+## T4. Reduced motion (animator_duration_scale 0): the offline bar and the sync banner
+offline: airplane=1
+REC reduced0-offline: FRAMES 24 at 10 fps: changed frames [19]; longest run of consecutive changing frames 1 (1-2 = a jump, more = an animation); max diff 1.2
+anims 0 offline: app in front yes; offline bar shown; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Ден на народните будители" text="Почит към будителите — и към всички, които и дн
+anims 0 news offline: sync banner ?; text="Календар" text="Новини" text="Търси в новините" text="Всички" text="Запазени" text="Събитие" text="Състави" text="СЪБИТИЕ  ·  16 октомври 2026" 
+REC reduced0-online: FRAMES 59 at 10 fps: changed frames [38, 40]; longest run of consecutive changing frames 1 (1-2 = a jump, more = an animation); max diff 1.5
+anims 0 back online: offline bar gone
+offline: airplane=1
+REC reduced1-offline: FRAMES 117 at 10 fps: changed frames [35, 36, 37, 38, 40, 42, 43, 45, 105, 107, 108, 109, 110, 112, 114]; longest run of consecutive changing frames 4 (1-2 = a jump, more = an animation); max diff 14.4
+anims 1 offline: app in front yes; offline bar NO; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Ден на народните будители" text="Почит към будителите — и към всички, които и дн
+anims 1 news offline: sync banner shown; text="Календар" text="Новини" text="Търси в новините" text="Всички" text="Запазени" text="Събитие" text="Състави" text="Няма интернет връзка. Показваме последно наличните данни." 
+REC reduced1-online: FRAMES 64 at 10 fps: changed frames [45, 46]; longest run of consecutive changing frames 2 (1-2 = a jump, more = an animation); max diff 1.4
+anims 1 back online: offline bar gone
+## T5. System font 1.3: the carousel title (up to 3 lines)
+CAROUSEL text 'СЪБИТИЕ' h=17dp ≈ 0.4 lines of a 36sp×1.3 headline
+CAROUSEL text 'Фолклорно пътешествие из Пиринска, Родопска и Трак' h=104dp ≈ 2.2 lines of a 36sp×1.3 headline
+CAROUSEL text '16 октомври 2026' h=18dp ≈ 0.4 lines of a 36sp×1.3 headline
+CAROUSEL card [35,1013][863,1636] 237dp tall
+CAROUSEL text 'Фолклорно пътешествие из Пиринска, Родопска и Трак' h=67dp ≈ 1.9 lines of a 36sp×1.0 headline
+CAROUSEL text '16 октомври 2026' h=14dp ≈ 0.4 lines of a 36sp×1.0 headline
+CAROUSEL card [35,809][863,1432] 237dp tall
+## COMPLETE
+## logcat findings
+app pids seen: ['5702', '7198', '7447', '8125', '8223', '8363', '8498', '9204', '10086', '10277']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 10
+   skipped-frames events=10 max=100 total=540
+== Davey: 16
+   davey events=16 max=2210ms median=1068ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

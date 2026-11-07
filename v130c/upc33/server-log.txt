@@ -1,0 +1,22 @@
+23:37:40.763 server on :8443, dir /home/runner/upc-srv/www
+23:37:49.133 GET /update.json Range=None If-Range=None -> 200 sent 1815/1815 B in 0.0 s (rate 0 B/s)
+=== t3: launch
+23:38:12.185 GET /update.json Range=None If-Range=None -> 200 sent 1815/1815 B in 0.0 s (rate 0 B/s)
+=== t3: first tap
+23:38:21.654 GET /update.json Range=None If-Range=None -> 200 sent 1815/1815 B in 0.0 s (rate 0 B/s)
+23:38:21.000 GET /app.apk Range=None If-Range=None -> 200 START (4505177 B)
+=== t3: cancel from the notification
+23:39:48.625 GET /app.apk Range=None If-Range=None -> 200 sent 2838528/4505177 B in 86.6 s (rate 32768 B/s) ABORTED by client (BrokenPipeError)
+=== t3: RE-TAP
+23:39:59.277 GET /update.json Range=None If-Range=None -> 200 sent 1815/1815 B in 0.0 s (rate 0 B/s)
+23:39:59.379 GET /app.apk Range=None If-Range=None -> 200 START (4505177 B)
+23:41:02.462 GET /update.json Range=None If-Range=None -> 200 sent 1817/1817 B in 0.0 s (rate 0 B/s)
+23:41:03.004 GET /app.apk Range=None If-Range=None -> 200 sent 2084864/4505177 B in 63.6 s (rate 32768 B/s) ABORTED by client (BrokenPipeError)
+=== big: launch
+23:41:17.110 GET /update.json Range=None If-Range=None -> 200 sent 1817/1817 B in 0.0 s (rate 0 B/s)
+=== big: first tap
+23:41:24.307 GET /update.json Range=None If-Range=None -> 200 sent 1817/1817 B in 0.0 s (rate 0 B/s)
+23:41:24.323 GET /big.bin Range=None If-Range=None -> 200 START (157286400 B)
+=== big: cancel from the notification
+23:41:38.395 GET /big.bin Range=None If-Range=None -> 200 sent 157286400/157286400 B in 14.1 s (rate 0 B/s)
+=== big: RE-TAP

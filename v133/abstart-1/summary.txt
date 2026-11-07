@@ -1,0 +1,76 @@
+part abstart-1; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+animations ON for the start A/B (the ribbon runs at start)
+block order (the first, '-0', is a warm-up and is excluded): new-0 base-1 new-1 base-2 new-2
+## AB new-0: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+installed new-0: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-0 FIRST-INSTALL catalogue results after 4275 ms
+new-0 INDEX-READY #1 catalogue results after 4590 ms
+new-0 INDEX-READY #2 catalogue results after 5228 ms
+new-0 INDEX-READY #3 catalogue results after 4117 ms
+START cold new-0         n=10 min=2074ms median=2750ms max=3251ms  all=[3251, 3138, 3052, 2074, 2715, 3096, 2568, 2681, 2785, 2455]  states=['COLD']
+START warm new-0         n=8 min=521ms median=660ms max=760ms  all=[645, 676, 760, 521, 680, 711, 635, 576]  states=['HOT', 'UNKNOWN']
+## AB base-1: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+installed base-1: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-1 FIRST-INSTALL catalogue results after 3048 ms
+base-1 INDEX-READY #1 catalogue results after 3376 ms
+base-1 INDEX-READY #2 catalogue results after 3261 ms
+base-1 INDEX-READY #3 catalogue results after 4155 ms
+START cold base-1        n=10 min=2110ms median=2570ms max=2978ms  all=[2727, 2247, 2643, 2282, 2912, 2110, 2496, 2978, 2734, 2252]  states=['COLD']
+START warm base-1        n=10 min=322ms median=564ms max=992ms  all=[781, 537, 914, 992, 322, 591, 377, 351, 477, 705]  states=['HOT']
+## AB new-1: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+installed new-1: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-1 FIRST-INSTALL catalogue results after 2856 ms
+new-1 INDEX-READY #1 catalogue results after 3290 ms
+new-1 INDEX-READY #2 catalogue results after 3539 ms
+new-1 INDEX-READY #3 catalogue results after 3672 ms
+START cold new-1         n=10 min=2124ms median=2664ms max=3251ms  all=[2551, 2635, 3214, 3205, 2669, 3251, 2124, 2592, 2832, 2658]  states=['COLD']
+START warm new-1         n=10 min=343ms median=640ms max=1053ms  all=[438, 856, 712, 511, 1053, 695, 755, 585, 343, 542]  states=['HOT']
+## AB base-2: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+installed base-2: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-2 FIRST-INSTALL catalogue results after 3071 ms
+base-2 INDEX-READY #1 catalogue results after 3342 ms
+base-2 INDEX-READY #2 catalogue results after 3210 ms
+base-2 INDEX-READY #3 catalogue results after 3079 ms
+START cold base-2        n=10 min=2132ms median=2513ms max=2825ms  all=[2323, 2819, 2516, 2510, 2532, 2181, 2330, 2825, 2534, 2132]  states=['COLD']
+START warm base-2        n=10 min=362ms median=582ms max=973ms  all=[527, 528, 973, 621, 636, 733, 732, 362, 514, 544]  states=['HOT']
+## AB new-2: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+installed new-2: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-2 FIRST-INSTALL catalogue results after 3276 ms
+new-2 INDEX-READY #1 catalogue results after 3451 ms
+new-2 INDEX-READY #2 catalogue results after 3373 ms
+new-2 INDEX-READY #3 catalogue results after 3365 ms
+START cold new-2         n=10 min=2050ms median=2492ms max=3193ms  all=[2546, 2500, 2731, 2363, 2366, 2050, 3193, 2676, 2484, 2136]  states=['COLD']
+START warm new-2         n=10 min=313ms median=625ms max=1025ms  all=[775, 313, 668, 827, 389, 582, 694, 1025, 475, 510]  states=['HOT']
+## AB totals (blocks 1-2 of each app; block 0 excluded)
+START cold NEW 1.2.33    n=20 min=2050ms median=2614ms max=3251ms  all=[2551, 2635, 3214, 3205, 2669, 3251, 2124, 2592, 2832, 2658, 2546, 2500, 2731, 2363, 2366, 2050, 3193, 2676, 2484, 2136]  states=['COLD']
+START cold BASE 1.2.32   n=20 min=2110ms median=2513ms max=2978ms  all=[2727, 2247, 2643, 2282, 2912, 2110, 2496, 2978, 2734, 2252, 2323, 2819, 2516, 2510, 2532, 2181, 2330, 2825, 2534, 2132]  states=['COLD']
+START warm NEW 1.2.33    n=20 min=313ms median=626ms max=1053ms  all=[438, 856, 712, 511, 1053, 695, 755, 585, 343, 542, 775, 313, 668, 827, 389, 582, 694, 1025, 475, 510]  states=['HOT']
+START warm BASE 1.2.32   n=20 min=322ms median=568ms max=992ms  all=[781, 537, 914, 992, 322, 591, 377, 351, 477, 705, 527, 528, 973, 621, 636, 733, 732, 362, 514, 544]  states=['HOT']
+START catalogue first-install new n=2 min=2856ms median=3066ms max=3276ms  all=[2856, 3276]  states=[]
+START catalogue index-ready new n=6 min=3290ms median=3412ms max=3672ms  all=[3290, 3539, 3672, 3451, 3373, 3365]  states=[]
+START catalogue first-install base n=2 min=3048ms median=3060ms max=3071ms  all=[3048, 3071]  states=[]
+START catalogue index-ready base n=6 min=3079ms median=3302ms max=4155ms  all=[3376, 3261, 4155, 3342, 3210, 3079]  states=[]
+## COMPLETE
+## logcat findings
+app pids seen: ['5780', '6622', '7049', '7660', '8000', '8098', '8219', '8344', '8521', '8627', '8686', '8749', '8805', '8860', '9312', '9579', '9753', '9908', '10255', '10323', '10382', '10438', '10493', '10554', '10608', '10663', '10734', '10794', '11347', '11749', '11904', '12048', '12243', '12306', '12360', '12415', '12470', '12531', '12584', '12639', '12692', '12748', '13257', '13529', '13682', '13820', '14004', '14104', '14158', '14232', '14286', '14342', '14397', '14452', '14507', '14562', '14968', '15257', '15406', '15557', '15721', '15780', '15838', '15893', '15947', '16003', '16060', '16115', '16170', '16224']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 231
+   skipped-frames events=231 max=107 total=11761
+== Davey: 353
+   davey events=353 max=3156ms median=1096ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

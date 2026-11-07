@@ -1,0 +1,19 @@
+app pids seen: ['8714']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 20:37:27.568  4730  4730 I PERFCHECK: section: LG0. Demo build devDebug, org.chyavorec.app.dev: demo sign-in — wrong PINs never reach the real server
+   11-01 20:37:28.806  4804  4804 I PERFCHECK: section: W. First launch and warm-up
+   11-01 20:38:37.210  7069  7069 I PERFCHECK: section: LG1. Card number TEST-0042 fake
+   11-01 20:38:42.577  7115  7115 I PERFCHECK: section: LG1a. Esc hardware keyboard in the focused card field: the field keeps the text, the screen stays?
+   11-01 20:38:52.053  7331  7331 I PERFCHECK: section: LG1b. Two wrong attempts fake card TEST-0042, PIN 1111
+   11-01 20:39:20.267  7609  7609 I PERFCHECK: section: LG2. Forgot PIN card TEST-0042, PIN 9876 typed, not sent: the sheet; the email subject
+   11-01 20:39:30.200  7697  7697 I PERFCHECK: m-email-20-demo
+   11-01 20:40:26.656  8270  8270 I PERFCHECK: section: LG3. Attempts 3-5: the 5th locks sign-in; the countdown
+   11-01 20:41:17.002  8667  8667 I PERFCHECK: section: LG4. Запомни ме is a CheckBox
+   11-01 20:41:19.027  8701  8701 I PERFCHECK: section: LG5. Production build: the sign-in screen no submit, Запомни ме, Забравен ПИН? without a card number
+   11-01 20:41:53.929  9076  9076 I PERFCHECK: m-email-31-prod

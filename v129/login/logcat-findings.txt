@@ -1,0 +1,30 @@
+app pids seen: ['4985']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=52 total=244
+   10-31 21:30:41.576  4985  4985 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   10-31 21:30:42.329  4985  4985 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   10-31 21:30:43.086  4985  4985 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-31 21:31:07.054  4985  4985 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   10-31 21:31:07.700  4985  4985 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   10-31 21:31:08.460  4985  4985 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+== Davey: 7
+   davey events=7 max=2376ms median=1076ms
+   10-31 21:30:43.598  4985  4996 I OpenGLRenderer: Davey! duration=1666ms; Flags=1, FrameTimelineVsyncId=6250, IntendedVsync=97198733481, Vsync=97898733453, InputEventId=0, HandleInputStart=97917715290, AnimationStart=97917716261, PerformTrav
+   10-31 21:30:43.599  4985  5037 I OpenGLRenderer: Davey! duration=1040ms; Flags=0, FrameTimelineVsyncId=6494, IntendedVsync=98065405662, Vsync=98665405602, InputEventId=0, HandleInputStart=98670880160, AnimationStart=98670880791, PerformTrav
+   10-31 21:30:53.969  4985  4996 I OpenGLRenderer: Davey! duration=868ms; Flags=0, FrameTimelineVsyncId=6926, IntendedVsync=108565405210, Vsync=108915405175, InputEventId=0, HandleInputStart=108924855752, AnimationStart=108924856263, PerformT
+   10-31 21:31:08.439  4985  4997 I OpenGLRenderer: Davey! duration=1574ms; Flags=0, FrameTimelineVsyncId=7577, IntendedVsync=121532065841, Vsync=121748732499, InputEventId=0, HandleInputStart=121755302541, AnimationStart=121755302971, Perform
+   10-31 21:31:08.809  4985  4997 I OpenGLRenderer: Davey! duration=2376ms; Flags=0, FrameTimelineVsyncId=7608, IntendedVsync=121765410252, Vsync=122632076780, InputEventId=0, HandleInputStart=122639344567, AnimationStart=122639345279, Perform
+   10-31 21:31:08.883  4985  4997 I OpenGLRenderer: Davey! duration=1076ms; Flags=0, FrameTimelineVsyncId=7651, IntendedVsync=122648732463, Vsync=123282065771, InputEventId=0, HandleInputStart=123285479425, AnimationStart=123285480036, Perform
+   10-31 21:31:14.249  4985  4996 I OpenGLRenderer: Davey! duration=778ms; Flags=0, FrameTimelineVsyncId=7944, IntendedVsync=129015398875, Vsync=129365398861, InputEventId=0, HandleInputStart=129377517469, AnimationStart=129377518281, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 21:30:39.906  4977  4977 I PERFCHECK: section: W. First launch and warm-up
+   10-31 21:31:26.493  6669  6669 I PERFCHECK: section: LG1. Sign-in on a fresh install password-manager flag unset: no credential query, no crash API 33
+   10-31 21:31:40.308  7135  7135 I PERFCHECK: m-login-open
+   10-31 21:31:56.092  7393  7393 I PERFCHECK: section: LG2. Card number field
+   10-31 21:32:03.886  7564  7564 I PERFCHECK: section: LG3. PIN OutlinedSecureTextField: the last digit shows briefly; the eye toggle
+   10-31 21:32:51.180  8239  8239 I PERFCHECK: section: LG4. Запомни ме row: one labelled checkbox
+   10-31 21:33:08.898  8431  8431 I PERFCHECK: m-login-open2

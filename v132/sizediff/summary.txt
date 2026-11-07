@@ -1,0 +1,44 @@
+== release-config APKs: new 4143918 B, base 4130922 B
+TOTAL compressed entries: new 4119863 B, base 4106864 B, delta +12999 B
+ARSC resources by type (new/base/delta): string 804/794/+10, id 259/257/+2
+ARSC string configurations: new 2, base 2; only in new: []
+RES files, top growth by resource-name prefix (compressed B, new/base):
+RES resources with files only in new: 0; sample: []
+DEX classes (mapping.txt): new 8462, base 8417; top growth by package:
+     +21  org.chyavorec.app  (986/965)
+     +19  androidx.metrics.performance  (19/0)
+      +3  org.chyavorec.data  (376/373)
+      +3  androidx.activity.compose  (26/23)
+      +2  androidx.compose.foundation  (974/972)
+      +1  okio.internal  (11/10)
+      +1  kotlinx.serialization.json  (73/72)
+      +1  androidx.emoji2.text  (37/36)
+      +1  androidx.activity.OnBackPressedDispatcher$$ExternalSyntheticLambda0  (1/0)
+      +1  androidx.activity.FullyDrawnReporterOwner  (1/0)
+DEX size by package (depth 2, apkanalyzer, bytes), top growth:
+    +23591  <TOTAL>  (5453806/5430215)
+    +14672  org.chyavorec  (1197392/1182720)
+     +4343  androidx.activity  (29276/24933)
+     +4280  androidx.metrics  (4280/0)
+     +2984  com.google  (760570/757586)
+     +1225  okio.internal  (9504/8279)
+     +1098  okhttp3.internal  (112585/111487)
+      +778  kotlinx.serialization  (79825/79047)
+      +173  androidx.emoji2  (8784/8611)
+      +144  androidx.compose  (1816227/1816083)
+       +76  androidx.datastore  (126132/126056)
+       +64  android.view  (7583/7519)
+DEX size by package (depth 3, apkanalyzer, bytes), top growth:
+    +23591  <TOTAL>  (5453806/5430215)
+    +12022  org.chyavorec.app  (841887/829865)
+     +4280  androidx.metrics.performance  (4280/0)
+     +4108  androidx.compose.foundation  (562846/558738)
+     +2684  org.chyavorec.data  (250563/247879)
+     +2078  com.google.android  (665132/663054)
+     +1225  okio.internal  (9504/8279)
+     +1100  okhttp3.internal.publicsuffix  (3535/2435)
+      +976  androidx.activity.compose  (8643/7667)
+      +907  com.google.mlkit  (56231/55324)
+      +798  kotlinx.serialization.json  (44189/43391)
+      +210  androidx.work.impl  (72241/72031)
+## COMPLETE

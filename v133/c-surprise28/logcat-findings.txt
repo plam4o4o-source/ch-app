@@ -1,0 +1,20 @@
+app pids seen: ['5366']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=37 total=74
+   11-07 17:26:09.570  5366  5366 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-07 17:26:17.916  5366  5366 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=930ms median=858ms
+   11-07 17:26:09.903  5366  5391 I OpenGLRenderer: Davey! duration=930ms; Flags=1, IntendedVsync=122888118170, Vsync=123504784812, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=123508815940, AnimationStart=1235088
+   11-07 17:26:18.083  5366  5391 I OpenGLRenderer: Davey! duration=785ms; Flags=1, IntendedVsync=131234600892, Vsync=131851267534, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=131854895600, AnimationStart=1318549
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 17:26:08.528  5361  5361 I PERFCHECK: section: W. First launch and warm-up
+   11-07 17:27:07.250  5759  5759 I PERFCHECK: section: SM0. Device memory: MemTotal: 2046996 kB; API 28
+   11-07 17:27:07.272  5764  5764 I PERFCHECK: section: SM1. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-07 17:27:17.336  5856  5856 I PERFCHECK: section: SM2. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-07 17:27:27.364  5962  5962 I PERFCHECK: section: SM3. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-07 17:27:36.041  6057  6057 I PERFCHECK: section: SM9. For comparison: open a book from the catalogue list same memory probe

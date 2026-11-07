@@ -1,0 +1,19 @@
+app pids seen: ['5665', '6563', '8412', '8592']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=37 total=37
+   11-04 18:22:13.199  5665  5665 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=1030ms median=938ms
+   11-04 18:22:13.776  5665  5676 I OpenGLRenderer: Davey! duration=1030ms; Flags=1, FrameTimelineVsyncId=5793, IntendedVsync=80201952893, Vsync=80818619535, InputEventId=0, HandleInputStart=80823195654, AnimationStart=80823196606, PerformTrav
+   11-04 18:22:35.906  6563  6574 I OpenGLRenderer: Davey! duration=846ms; Flags=0, FrameTimelineVsyncId=7983, IntendedVsync=102551951999, Vsync=103018618647, InputEventId=0, HandleInputStart=103034861967, AnimationStart=103034862808, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-04 18:22:09.164  5544  5544 I PERFCHECK: section: Z-new. Viewer: pinch at off-centre points zoom around the fingers?, double tap, pan, drag to dismiss
+   11-04 18:24:06.389  8002  8002 I PERFCHECK: section: Z-new. Double tap at an off-centre point, pan while zoomed, double tap back
+   11-04 18:24:31.161  8184  8184 I PERFCHECK: section: Z-new. Swipe to the next photo, then drag down to dismiss
+   11-04 18:24:47.192  8290  8290 I PERFCHECK: section: Z-base. Viewer: pinch at off-centre points zoom around the fingers?, double tap, pan, drag to dismiss
+   11-04 18:26:37.700  9546  9546 I PERFCHECK: section: Z-base. Double tap at an off-centre point, pan while zoomed, double tap back
+   11-04 18:27:02.731  9724  9724 I PERFCHECK: section: Z-base. Swipe to the next photo, then drag down to dismiss

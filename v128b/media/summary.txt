@@ -1,0 +1,95 @@
+part media; APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4 size 4323599 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## P. Host probe: photos of album 1 (Фотодокументална изложба) on the site
+PAGE /fotodokumentalna-izlozhba: 200 0.29s 112916 bytes
+img tags: 35
+PROBE /fotodokumentalna-izlozhba: 30 images, optimizer non-200: 0
+original 404: 19 of 30 photos; first: #11 'Стопанският двор на ТКЗС в Яворец' original 404 0.10s 0KB  | w384: not opti
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2470 ms
+## G1. Album with missing photos: the 'Снимката липсва' placeholder
+ALBUM 1 top: cells 18; placeholders 1
+ALBUM 1 scrolled 1: 'Снимката липсва' tiles on screen: 1; cells 15
+ALBUM 1 scrolled 2: 'Снимката липсва' tiles on screen: 1; cells 14
+ALBUM 1 scrolled 3: 'Снимката липсва' tiles on screen: 1; cells 14
+## G2. Viewer on a missing photo: message and 'Опитай отново'
+VIEWER missing photo: text="13 / 29  ·  Жътва"; message SHOWN; retry button SHOWN; text="Снимката не се зареди — може да липсва на сайта или да няма връзка." text="Опитай отново" content-desc="Затвори" text="13 / 29  ·  Жътва" content-desc="Сподели" 
+VIEWER retry +1s: text="Снимката не се зареди — може да липсва на сайта или да няма връзка." text="Опитай отново" content-desc="Затвори" text="13 / 29  ·  Жътва" content-desc="Сподели" 
+VIEWER retry +8s: message SHOWN; app in front yes
+VIEWER next: text="14 / 29  ·  Харманът"; message shown
+## G3. Viewer: double tap 2×, then pinch beyond 2×, pan while zoomed, reset
+VIEWER: text="1 / 29  ·  Сградата на читалището в Яворец"; error absent
+touch device: /dev/input/event2 x-max=32767 y-max=32767 pressure=11
+after double tap: text="1 / 29  ·  Сградата на читалището в Яворец"
+after 2 pinches (from 2×: expected up to the cap, beyond 2×): text="1 / 29  ·  Сградата на читалището в Яворец"
+ZOOM check: mean abs difference 2x-shot vs pinched-shot = 75.0 (≈0 = the pinch did not zoom further)
+swipe while zoomed: text="1 / 29  ·  Сградата на читалището в Яворец" (same page = the swipe panned the photo)
+MEM zoomed (raw)     PSS=81361KB  Java=10696KB  Native=40196KB  Graphics=0KB  Views=10 Activities=1
+MEM zoomed (trimmed) PSS=82188KB  Java=8664KB  Native=38108KB  Graphics=0KB  Views=10 Activities=1
+after reset double tap: text="1 / 29  ·  Сградата на читалището в Яворец"
+swipe after reset: text="1 / 29  ·  Сградата на читалището в Яворец"
+## C. Covers: catalogue list and books with an ISBN
+Open Library covers from the host: 302/0B 404/0B 404/0B 
+search Gatsby:  results
+book 2184: text="Белият дома" text="Николай Симеонов" text="Налична" ; cover image nodes: 0
+book 958: text="Времето на любовта" text="Ивана Йорданова" text="Налична" ; cover image nodes: 0
+book 399560: text="12 -те вятъра" text="Гарфилд, Джудит и др." text="Налична" ; cover image nodes: 0
+Open Library traffic in logcat: 0
+## D1. Documents: PDF download opens with its readable file name (Drive PDF viewer)
+PDF handlers: 1 activities found:   Activity #0:     priority=0 preferredOrder=0 match=0x608000 specificIndex=-1 isDefault=true     com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity 
+DOCUMENTS: text="Документи" text="Исторически публикации" text="Декларации · 14.05.2026 · 4.1 MB" text="Декларация за частни интереси" text="Декларацията за частни интереси по чл. 19а ЗНЧ е официален документ, който членовете на ръководните органи на читалището
+PDF online +4633 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF online +7433 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF online +10176 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF online +12969 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF online +15718 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF online final +23949 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; content-desc="&#13;&#10;" content-desc="&#13;&#10;" content-desc="&#13;&#10;" text="Декларация за частни интереси.pdf" content-desc="Find" content-desc="Add to Drive" 
+PDF online FILE NAME shown: text="Декларация за частни интереси.pdf"; browser URL: text="Декларация за частни интереси.pdf"
+PDF online logcat (toast/download): 10-31 17:40:37.577   488   516 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW dat=content://org.chyavorec.app.files/... typ=application/pdf flg=0x10000001 cmp=com.google.android.apps. 10-31 17:40:38.634   488   533 I ActivityManager: Start proc 9162:com.google.android.apps.docs:com.google.android.apps.viewer.pdflib.PdfDocumentService/u0ai9000 for service {com.google.android.apps.do 10-31 17:40:38.648  9162  9162 I DocumentService: Using CollectorTypeCC GC. 10-31 17:40:38.649  9162  9162 W DocumentService: Unexpected CPU variant for x86: x86_64. 
+PDF publication +3576 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Баба Дамяна разказва.pdf" 
+PDF publication +6333 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Баба Дамяна разказва.pdf" 
+PDF publication +9024 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Баба Дамяна разказва.pdf" 
+PDF publication +11729 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Баба Дамяна разказва.pdf" 
+PDF publication +14484 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Баба Дамяна разказва.pdf" 
+PDF publication final +22733 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; content-desc="page 1" text="Баба Дамяна разказва.pdf" content-desc="Find" content-desc="Add to Drive" content-desc="More options" 
+PDF publication FILE NAME shown: text="Баба Дамяна разказва.pdf"; browser URL: text="Баба Дамяна разказва.pdf"
+PDF publication logcat (toast/download): 10-31 17:41:19.302   488  2352 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW dat=content://org.chyavorec.app.files/... typ=application/pdf flg=0x10000001 cmp=com.google.android.apps. 10-31 17:41:20.147   488  2273 D CoreBackPreview: Window{15550dc u0 com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity}: Setting back callback OnBackInvokedCallbackInfo{mCal 10-31 17:41:20.311  9162  9210 D pdf_document_jni: Creating FPDF_DOCUMENT from fd: 68 10-31 17:41:20.320   488   521 I ActivityTaskManager: Displayed com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity: +990ms 
+## D2. PDF download fails (offline on Documents) → message → browser
+offline: airplane=1
+PDF offline +6128 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; 
+PDF offline +9317 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; 
+PDF offline +12668 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; 
+PDF offline +16212 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; 
+PDF offline +18946 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; 
+PDF offline final +27253 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; text="chyavorec.org" text="No internet " text="Chrome will let you know when this page is ready. Cancel" text="Dino game. A pixelated dinosaur dodges cacti and pterodactyls as it runs across a desolate landscape. When yo
+PDF offline FILE NAME shown: ; browser URL: text="chyavorec.org"
+PDF offline logcat (toast/download): 10-31 17:41:59.189   488   516 D CoreBackPreview: Window{a9d35fd u0 Toast}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@85a1fc0, mPriorit 10-31 17:42:01.507   488  2290 D CoreBackPreview: Window{a9d35fd u0 Toast}: Setting back callback null 10-31 17:42:01.525   488  1858 W InputManager-JNI: Input channel object 'a9d35fd Toast (client)' was disposed without first being removed with the input manager! 10-31 17:42:01.551   488  1858 W NotificationService: Toast already killed. pkg=org.chyavorec.app token=android.os.BinderProxy@d38b7db 
+## D3. PDF with no PDF app at all (Drive disabled) → browser
+disable Drive: Package com.google.android.apps.docs new state: disabled-user
+PDF noapp +5879 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; text="File downloaded" text="f-msupd8ojtgx3-3_Ustav-2019.pdf" 
+PDF noapp +8573 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; text="File downloaded" text="f-msupd8ojtgx3-3_Ustav-2019.pdf" 
+PDF noapp +11292 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; text="File downloaded" text="f-msupd8ojtgx3-3_Ustav-2019.pdf" 
+PDF noapp +13986 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; text="File downloaded" text="f-msupd8ojtgx3-3_Ustav-2019.pdf" 
+PDF noapp +16675 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; text="File downloaded" text="f-msupd8ojtgx3-3_Ustav-2019.pdf" 
+PDF noapp final +24924 ms: fg com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity; text="File downloaded" text="f-msupd8ojtgx3-3_Ustav-2019.pdf" text="1.01 MB • chyavorec.org" content-desc="More options" text="Delete" text="Open" 
+PDF noapp FILE NAME shown: text="f-msupd8ojtgx3-3_Ustav-2019.pdf"; browser URL: text="f-msupd8ojtgx3-3_Ustav-2019.pdf"
+PDF noapp logcat (toast/download): 10-31 17:42:44.893  1657  9505 I MediaProvider: Open with lower FS for /storage/emulated/0/Download/.pending-1794073364-f-msupd8ojtgx3-3_Ustav-2019.pdf. Uid: 10125 10-31 17:42:44.983  1657  9505 I MediaProvider: Open with lower FS for /storage/emulated/0/Download/.pending-1794073364-f-msupd8ojtgx3-3_Ustav-2019.pdf. Uid: 10125 10-31 17:42:45.033  1657  9505 D MediaProvider: Moving /storage/emulated/0/Download/.pending-1794073364-f-msupd8ojtgx3-3_Ustav-2019.pdf to /storage/emulated/0/Download/f-msupd8ojtgx3-3_Ustav-2019.pdf 10-31 17:42:45.079  1657  9505 D MediaProvider: Identical paths /storage/emulated/0/Download/f-msupd8ojtgx3-3_Ustav-2019.pdf; not moving 
+enable Drive: Package com.google.android.apps.docs new state: enabled
+## COMPLETE
+## logcat findings
+app pids seen: ['6726', '7287']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=40 total=40
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

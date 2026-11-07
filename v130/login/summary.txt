@@ -1,0 +1,58 @@
+part login; APK: 1.2.30 bf10741 (Какво ново: версия 1.2.30); versionCode 1488543; x86_64 libs: 2 size 4505009 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104418 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## LG0. Demo build (devDebug, org.chyavorec.app.dev): demo sign-in — wrong PINs never reach the real server
+installed: devDebug 1.2.30-dev bf10741; org.chyavorec.app.dev; demo reader services;  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3650 ms
+LOGIN screen: text="ДЕМО ДАННИ — само за разработка, не са реални" text="Вход за читатели" text="Демо вход: DEMO-0001 / demo" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore." content-desc="Назад" text="Вход" 
+## LG1. Card number TEST-0042 (fake)
+## LG1a. Esc (hardware keyboard) in the focused card field: the field keeps the text, the screen stays?
+before Esc: FIELD 0: text='TEST-0042'  focused=true hint=''; IME mInputShown=true
+after Esc #1: login screen STILL; FIELD 0: text='TEST-0042'  focused=true hint=''; IME mInputShown=false; TAB selected: none
+## LG1b. Two wrong attempts (fake card TEST-0042, PIN 1111)
+LOGIN 11-attempt-1: error 'text="Грешен читателски номер или ПИН."' status 'text="Остават 4 опита преди временно блокиране."'; Вход button: clickable="false"; fields: FIELD 0: text='TEST-0042' password=false focused=false hint='' / FIELD 1: text='' password=true focused=true hint=''
+LOGIN 12-attempt-2: error 'text="Грешен читателски номер или ПИН."' status 'text="Остават 3 опита преди временно блокиране."'; Вход button: clickable="false"; fields: FIELD 0: text='TEST-0042' password=false focused=false hint='' / FIELD 1: text='' password=true focused=true hint=''
+## LG2. Forgot PIN (card TEST-0042, PIN 9876 typed, not sent): the sheet; the email subject
+FORGOT 20-demo sheet: content-desc="Затваряне на таблицата" content-desc="Манипулатор за преместване с плъзгане" text="Забравен ПИН" text="Нов ПИН се издава само в библиотеката — обърни се към библиотекаря." text="Изпрати имейл · chitalishte_yavorec@abv.bg" 
+FORGOT 20-demo email button: text="Изпрати имейл · chitalishte_yavorec@abv.bg"
+EMAIL 20-demo: chooser: text="Send using Gmail" text="Just once" text="Always" text="Use a different app" text="PC helper" text="PC catcher" 
+EMAIL 20-demo: chooser: text="PC catcher" text="PCCATCH action=android.intent.action.SENDTO data=mailto: | android.intent.extra.SUBJECT=Забравен ПИН — читателска карта TEST-0042 | android.intent.extra.EMAIL=[chitalishte_yavo
+EMAIL 20-demo: chooser: text="PC catcher" text="PCCATCH action=android.intent.action.SENDTO data=mailto: | android.intent.extra.SUBJECT=Забравен ПИН — читателска карта TEST-0042 | android.intent.extra.EMAIL=[chitalishte_yavo
+EMAIL 20-demo: chooser: text="PC catcher" text="PCCATCH action=android.intent.action.SENDTO data=mailto: | android.intent.extra.SUBJECT=Забравен ПИН — читателска карта TEST-0042 | android.intent.extra.EMAIL=[chitalishte_yavo
+EMAIL 20-demo: fg org.pc.helper/org.pc.helper.Catch; catcher: action=android.intent.action.SENDTO data=mailto: | android.intent.extra.SUBJECT=Забравен ПИН — читателска карта TEST-0042 | android.intent.extra.EMAIL=[chitalishte_yavorec@abv.bg]
+EMAIL 20-demo: activity starts: act=android.intent.action.SENDTO dat=mailto: flg=0x10000000 cmp=android/com.android.internal.app.ResolverActivity~act=android.intent.action.SENDTO dat=mailto: flg=0x13000000 cmp=org.pc.helper/.Catch~
+EMAIL subject has the card number: 1; has a PIN (9876/1111): 0
+## LG3. Attempts 3-5: the 5th locks sign-in; the countdown
+LOGIN 13-attempt-3: error 'text="Грешен читателски номер или ПИН."' status 'text="Остават 2 опита преди временно блокиране."'; Вход button: clickable="false"; fields: FIELD 0: text='TEST-0042' password=false focused=false hint='' / FIELD 1: text='' password=true focused=true hint=''
+LOGIN 14-attempt-4: error 'text="Грешен читателски номер или ПИН."' status 'text="Остава 1 опит преди временно блокиране."'; Вход button: clickable="false"; fields: FIELD 0: text='TEST-0042' password=false focused=false hint='' / FIELD 1: text='' password=true focused=true hint=''
+LOGIN 15-attempt-5: error 'text="Опитай отново след 0:55."' status 'text="Твърде много грешни опити — входът е временно блокиран."'; Вход button: clickable="false"; fields: FIELD 0: text='TEST-0042' password=false focused=false hint='' / FIELD 1: text='' password=true focused=true hint=''
+LOGIN 16-locked-again-3s: error 'text="Опитай отново след 0:53."' status 'text="Твърде много грешни опити — входът е временно блокиран."'; Вход button: clickable="false"; fields: FIELD 0: text='TEST-0042' password=false focused=false hint='' / FIELD 1: text='' password=true focused=true hint=''
+LOGIN 17-locked-after-8s: error 'text="Опитай отново след 0:46."' status 'text="Твърде много грешни опити — входът е временно блокиран."'; Вход button: clickable="false"; fields: FIELD 0: text='TEST-0042' password=false focused=false hint='' / FIELD 1: text='' password=true focused=true hint=''
+## LG4. 'Запомни ме' is a CheckBox
+CHECKABLE class=android.widget.CheckBox label='Запомни ме на това устройство' checked=true clickable=true bounds=[63,1604][1017,1730] nested-checkables=0
+## LG5. Production build: the sign-in screen (no submit), 'Запомни ме', 'Забравен ПИН?' without a card number
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+PROD login: text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore." content-desc="Назад" tex
+prod: CHECKABLE class=android.widget.CheckBox label='Запомни ме на това устройство' checked=true clickable=true bounds=[63,1161][1017,1287] nested-checkables=0
+FORGOT 31-prod sheet: content-desc="Затваряне на таблицата" content-desc="Манипулатор за преместване с плъзгане" text="Забравен ПИН" text="Нов ПИН се издава само в библиотеката — обърни се към библиотекаря." text="Изпрати имейл · chitalishte_yavorec@abv.bg" 
+FORGOT 31-prod email button: text="Изпрати имейл · chitalishte_yavorec@abv.bg"
+EMAIL 31-prod: fg android/com.android.internal.app.ResolverActivity; catcher: 
+EMAIL 31-prod: activity starts: act=android.intent.action.SENDTO dat=mailto: flg=0x10000000 cmp=android/com.android.internal.app.ResolverActivity~
+## COMPLETE
+## logcat findings
+app pids seen: ['8714']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

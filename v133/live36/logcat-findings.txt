@@ -1,0 +1,36 @@
+app pids seen: ['4414', '5896', '6125', '6716']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=60 total=198
+   11-07 16:48:45.510  4414  4414 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-07 16:48:46.688  4414  4414 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-07 16:48:48.819  4414  4414 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:08.977  4414  4414 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-07 16:51:26.282  6125  6125 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 18
+   davey events=18 max=1559ms median=836ms
+   11-07 16:48:36.098  4414  4424 I HWUI    : Davey! duration=966ms; Flags=1, FrameTimelineVsyncId=6784, IntendedVsync=121533965153, Vsync=121617298483, InputEventId=0, HandleInputStart=121630706928, AnimationStart=121630707659, PerformTravers
+   11-07 16:48:36.534  4414  4484 I HWUI    : Davey! duration=740ms; Flags=0, FrameTimelineVsyncId=6838, IntendedVsync=122267298457, Vsync=122567298445, InputEventId=0, HandleInputStart=122583372045, AnimationStart=122583372956, PerformTravers
+   11-07 16:48:45.666  4414  4537 I HWUI    : Davey! duration=754ms; Flags=0, FrameTimelineVsyncId=7359, IntendedVsync=131517298087, Vsync=131600631417, InputEventId=0, HandleInputStart=131611738783, AnimationStart=131611739123, PerformTravers
+   11-07 16:48:46.063  4414  4537 I HWUI    : Davey! duration=1017ms; Flags=0, FrameTimelineVsyncId=7367, IntendedVsync=131617298083, Vsync=132117298063, InputEventId=0, HandleInputStart=132128412138, AnimationStart=132128412498, PerformTraver
+   11-07 16:48:46.621  4414  4537 I HWUI    : Davey! duration=802ms; Flags=1, FrameTimelineVsyncId=7429, IntendedVsync=132350631387, Vsync=132600631377, InputEventId=0, HandleInputStart=132616623402, AnimationStart=132616624263, PerformTravers
+   11-07 16:48:48.842  4414  4537 I HWUI    : Davey! duration=789ms; Flags=0, FrameTimelineVsyncId=7665, IntendedVsync=134533964633, Vsync=134683964627, InputEventId=0, HandleInputStart=134699544243, AnimationStart=134699544854, PerformTravers
+   11-07 16:48:49.104  4414  4537 I HWUI    : Davey! duration=992ms; Flags=0, FrameTimelineVsyncId=7680, IntendedVsync=134717297959, Vsync=134833964621, InputEventId=0, HandleInputStart=134840710705, AnimationStart=134840711116, PerformTravers
+   11-07 16:48:49.443  4414  4484 I HWUI    : Davey! duration=852ms; Flags=0, FrameTimelineVsyncId=7696, IntendedVsync=134883964619, Vsync=135433964597, InputEventId=0, HandleInputStart=135439628869, AnimationStart=135439629610, PerformTravers
+   11-07 16:48:53.723  4414  4537 I HWUI    : Davey! duration=803ms; Flags=0, FrameTimelineVsyncId=7872, IntendedVsync=139083964451, Vsync=139283964443, InputEventId=0, HandleInputStart=139293426884, AnimationStart=139293427585, PerformTravers
+   11-07 16:50:57.806  4414  4794 I HWUI    : Davey! duration=892ms; Flags=1, FrameTimelineVsyncId=13315, IntendedVsync=263417292811, Vsync=263433959477, InputEventId=0, HandleInputStart=263447264604, AnimationStart=263447265315, PerformTraver
+   11-07 16:50:58.576  4414  4537 I HWUI    : Davey! duration=1559ms; Flags=1, FrameTimelineVsyncId=13315, IntendedVsync=263417292811, Vsync=263433959477, InputEventId=0, HandleInputStart=263447264604, AnimationStart=263447265315, PerformTrave
+   11-07 16:51:27.076  6125  6134 I HWUI    : Davey! duration=1351ms; Flags=0, FrameTimelineVsyncId=15430, IntendedVsync=292283958323, Vsync=292883958299, InputEventId=0, HandleInputStart=292901111858, AnimationStart=292901112729, PerformTrave
+== NativeLink: 3
+   11-07 16:48:48.849  4414  4739 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-07 16:51:25.853  6125  6228 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-07 16:52:17.466  6716  6762 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 16:48:19.652  3944  3944 I PERFCHECK: section: L0. Device: Android 16 SDK 36, 13894323
+   11-07 16:48:19.944  3961  3961 I PERFCHECK: section: L1. Update download as a Live Update: 1.2.33-pre versionCode 1488545 → the staged test 1.2.33 1488546, throttled
+   11-07 16:50:48.431  5715  5715 I PERFCHECK: section: L1b. Install the downloaded update system installer → 1.2.33
+   11-07 16:51:04.989   646   683 I ActivityManager: Killing 4414:org.chyavorec.app/u0a217 (adj 0): stop org.chyavorec.app due to installPackageLI
+   11-07 16:51:11.085  6013  6013 I PERFCHECK: section: L2. Event reminder → event Live Update 60 min before; needs the events start time
+   11-07 16:52:10.822  6704  6704 I PERFCHECK: section: L3. API 36 smoke: ribbon and card foil render

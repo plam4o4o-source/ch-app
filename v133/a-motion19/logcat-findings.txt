@@ -1,0 +1,31 @@
+app pids seen: ['5909', '7086', '8522', '8700']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=55 total=181
+   11-07 16:11:32.028  8522  8522 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-07 16:11:49.372  8700  8700 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-07 16:11:50.382  8700  8700 I Choreographer: Skipped 55 frames!  The application may be doing too much work on its main thread.
+   11-07 16:11:51.405  8700  8700 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+== Davey: 6
+   davey events=6 max=1855ms median=1030ms
+   11-07 16:08:17.954  5909  5923 I OpenGLRenderer: Davey! duration=728ms; Flags=1, FrameTimelineVsyncId=5999, IntendedVsync=78953629803, Vsync=79336963121, InputEventId=0, HandleInputStart=79339247478, AnimationStart=79339248389, PerformTrave
+   11-07 16:11:32.093  8522  8535 I OpenGLRenderer: Davey! duration=849ms; Flags=0, FrameTimelineVsyncId=15032, IntendedVsync=272953622043, Vsync=273220288699, InputEventId=0, HandleInputStart=273230958831, AnimationStart=273230959241, Perform
+   11-07 16:11:50.470  8700  8714 I OpenGLRenderer: Davey! duration=1855ms; Flags=1, FrameTimelineVsyncId=16454, IntendedVsync=290386954679, Vsync=291186954647, InputEventId=0, HandleInputStart=291192434501, AnimationStart=291192434862, Perfor
+   11-07 16:11:50.773  8700  8714 I OpenGLRenderer: Davey! duration=1210ms; Flags=0, FrameTimelineVsyncId=16672, IntendedVsync=291270287977, Vsync=292186954607, InputEventId=0, HandleInputStart=292201753226, AnimationStart=292201753687, Perfor
+   11-07 16:11:51.512  8700  8713 I OpenGLRenderer: Davey! duration=783ms; Flags=0, FrameTimelineVsyncId=16951, IntendedVsync=292286954603, Vsync=292453621263, InputEventId=0, HandleInputStart=292454246552, AnimationStart=292454247353, Perform
+   11-07 16:11:51.960  8700  8714 I OpenGLRenderer: Davey! duration=1224ms; Flags=0, FrameTimelineVsyncId=16964, IntendedVsync=292470287929, Vsync=293220287899, InputEventId=0, HandleInputStart=293226611244, AnimationStart=293226611634, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 16:08:15.183  5852  5852 I PERFCHECK: section: R0. Reduced motion: animator/transition/window scale 0 Developer options / „Премахни анимациите“
+   11-07 16:08:15.535  5894  5894 I PERFCHECK: section: W. First launch and warm-up
+   11-07 16:08:53.506  7047  7047 I PERFCHECK: section: R1. Home: the ribbon is drawn still no sweep
+   11-07 16:09:19.951  7297  7297 I PERFCHECK: section: R2. Library card: no sweep
+   11-07 16:09:59.792  7647  7647 I PERFCHECK: section: R3. No confetti on Искам да прочета
+   11-07 16:10:19.345  7820  7820 I PERFCHECK: section: R4. Nav rosette: static
+   11-07 16:10:34.338  8045  8045 I PERFCHECK: section: R5. Book open: no rotation
+   11-07 16:10:50.020  8174  8174 I PERFCHECK: section: R6. Изненадай ме still works
+   11-07 16:11:09.281  8350  8350 I PERFCHECK: section: R7. Article: plain progress line, toolbar
+   11-07 16:11:24.207  8442  8442 I PERFCHECK: section: R8. Battery saver animations ON: the ribbon must be still
+   11-07 16:11:44.748  8640  8640 I PERFCHECK: section: R9. Control: animations ON, no saver — the ribbon moves

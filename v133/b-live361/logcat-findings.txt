@@ -1,0 +1,22 @@
+app pids seen: ['4447', '4926', '6226', '6837']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=33 total=33
+   11-07 16:55:25.005  6226  6226 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 5
+   davey events=5 max=804ms median=765ms
+   11-07 16:48:17.595  4447  4458 I HWUI    : Davey! duration=765ms; Flags=1, FrameTimelineVsyncId=6862, IntendedVsync=104215296019, Vsync=104381962679, InputEventId=0, HandleInputStart=104401132162, AnimationStart=104401133354, PerformTravers
+   11-07 16:48:26.741  4447  4458 I HWUI    : Davey! duration=804ms; Flags=0, FrameTimelineVsyncId=7491, IntendedVsync=113415295651, Vsync=113765295637, InputEventId=0, HandleInputStart=113768394945, AnimationStart=113768395296, PerformTravers
+   11-07 16:48:31.660  4447  4456 I HWUI    : Davey! duration=794ms; Flags=0, FrameTimelineVsyncId=7961, IntendedVsync=118165301008, Vsync=118465300978, InputEventId=0, HandleInputStart=118481591682, AnimationStart=118481592524, PerformTravers
+   11-07 16:48:37.830  4447  4502 I HWUI    : Davey! duration=764ms; Flags=0, FrameTimelineVsyncId=8534, IntendedVsync=124581967417, Vsync=124848634057, InputEventId=0, HandleInputStart=124878424917, AnimationStart=124878425818, PerformTravers
+   11-07 16:55:25.425  6226  6257 I HWUI    : Davey! duration=736ms; Flags=0, FrameTimelineVsyncId=12673, IntendedVsync=531981950111, Vsync=532531950089, InputEventId=0, HandleInputStart=532547379381, AnimationStart=532547379911, PerformTraver
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 16:48:02.177  3852  3852 I PERFCHECK: section: L0. Device: Android 16 SDK 36, 14574095
+   11-07 16:48:02.497  3867  3867 I PERFCHECK: section: L1. Update download as a Live Update: 1.2.33-pre versionCode 1488545 → the staged test 1.2.33 1488546, throttled
+   11-07 16:48:41.000   696   731 I ActivityManager: Killing 4447:org.chyavorec.app/u0a227 (adj 0): stop org.chyavorec.app due to installPackageLI
+   11-07 16:55:01.895  6003  6003 I PERFCHECK: section: L1b. Install the downloaded update system installer → 1.2.33
+   11-07 16:55:09.013  6062  6062 I PERFCHECK: section: L2. Event reminder → event Live Update 60 min before; needs the events start time
+   11-07 16:56:05.821  6824  6824 I PERFCHECK: section: L3. API 36 smoke: ribbon and card foil render

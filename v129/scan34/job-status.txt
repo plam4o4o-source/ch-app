@@ -1,0 +1,1 @@
+part=scan34 api=34 gpu=swangle_indirect camera-back=none emulator-step=success

@@ -1,0 +1,39 @@
+part drawn19; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## F-base-1. Install base, first launch, warm-up; 6 cold starts online with 'Fully drawn' (animations ON)
+installed base-1: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+DRAWN base-1 fresh install (onboarding): Fully drawn org.chyavorec.app/.MainActivity: +4s497ms
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## F-new-1. Install new, first launch, warm-up; 6 cold starts online with 'Fully drawn' (animations ON)
+installed new-1: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+DRAWN new-1 fresh install (onboarding): Fully drawn org.chyavorec.app/.MainActivity: +3s726ms
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## F-base-2. Install base, first launch, warm-up; 6 cold starts online with 'Fully drawn' (animations ON)
+installed base-2: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+DRAWN base-2 fresh install (onboarding): Fully drawn org.chyavorec.app/.MainActivity: +2s312ms
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## F-new-2. Install new, first launch, warm-up; 6 cold starts online with 'Fully drawn' (animations ON)
+installed new-2: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+DRAWN new-2 fresh install (onboarding): Fully drawn org.chyavorec.app/.MainActivity: +2s629ms
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## F. Totals (12 cold starts per build)
+DRAWN new: TotalTime n=12 min=1995ms median=2626ms max=2953ms; fully drawn n=12 median=3262ms min=2470 max=3872 all=[3207, 2696, 2996, 3447, 3303, 2470, 2696, 3425, 3227, 3296, 3872, 3609]; without line: 0
+DRAWN base: TotalTime n=12 min=2416ms median=2914ms max=4155ms; fully drawn n=12 median=3696ms min=2684 max=5372 all=[5372, 4112, 3748, 5205, 5117, 4054, 3059, 2684, 3080, 3137, 3644, 3044]; without line: 0
+## COMPLETE
+## logcat findings
+app pids seen: ['5621', '7238', '7396', '7557', '7712', '7937', '8026', '8320', '8993', '9051', '9104', '9190', '9251', '9311', '9489', '9850', '9906', '9964', '10022', '10079', '10171', '10366', '10728', '10794', '10851', '10922', '10979', '11035']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 99
+   skipped-frames events=99 max=119 total=5098
+== Davey: 149
+   davey events=149 max=2765ms median=1098ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

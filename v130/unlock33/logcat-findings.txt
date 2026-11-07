@@ -1,0 +1,29 @@
+app pids seen: ['5654', '8588', '9994']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=47 total=124
+   11-01 19:59:50.895  5654  5654 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-01 19:59:51.674  5654  5654 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-01 19:59:52.367  5654  5654 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+== Davey: 5
+   davey events=5 max=1612ms median=952ms
+   11-01 19:59:52.643  5654  5668 I OpenGLRenderer: Davey! duration=1612ms; Flags=1, FrameTimelineVsyncId=6792, IntendedVsync=91729201041, Vsync=92445867679, InputEventId=0, HandleInputStart=92458709117, AnimationStart=92458710088, PerformTrav
+   11-01 19:59:52.786  5654  5668 I OpenGLRenderer: Davey! duration=969ms; Flags=0, FrameTimelineVsyncId=7006, IntendedVsync=92579212100, Vsync=93145878676, InputEventId=0, HandleInputStart=93156480443, AnimationStart=93156481084, PerformTrave
+   11-01 20:00:04.614  5654  5666 I OpenGLRenderer: Davey! duration=952ms; Flags=0, FrameTimelineVsyncId=8033, IntendedVsync=104362544968, Vsync=104362544968, InputEventId=0, HandleInputStart=104370352384, AnimationStart=104370352954, PerformT
+   11-01 20:00:14.435  5654  5758 I OpenGLRenderer: Davey! duration=838ms; Flags=0, FrameTimelineVsyncId=8367, IntendedVsync=114229211230, Vsync=114395877870, InputEventId=0, HandleInputStart=114402702684, AnimationStart=114402703395, PerformT
+   11-01 20:00:14.592  5654  5758 I OpenGLRenderer: Davey! duration=764ms; Flags=0, FrameTimelineVsyncId=8396, IntendedVsync=114445877862, Vsync=114695877822, InputEventId=0, HandleInputStart=114696292762, AnimationStart=114696293373, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 19:59:49.483  5645  5645 I PERFCHECK: section: W. First launch and warm-up
+   11-01 20:00:30.886  7211  7211 I PERFCHECK: section: P0. Package GitHub build: requested permissions
+   11-01 20:00:32.442  7251  7251 I PERFCHECK: section: P1. No screen lock: Settings › Поверителност — the switch is disabled with an explanation
+   11-01 20:01:12.209  7779  7779 I PERFCHECK: section: P2. A self-entered card before the switch is on
+   11-01 20:01:36.695  8115  8115 I PERFCHECK: section: P3. Device PIN 1234; the switch → the system prompt → PIN
+   11-01 20:02:23.714  8574  8574 I PERFCHECK: section: P4. New process: Моето › Читателска карта → prompt; Back cancel → Моето; PIN → the card
+   11-01 20:03:30.852  9180  9180 I PERFCHECK: section: P5. Background 20 s < 60 s: no prompt; background 70 s > 60 s: prompt
+   11-01 20:05:27.120  9708  9708 I PERFCHECK: section: P6. Screen off and on keyguard with the PIN: prompt again
+   11-01 20:05:27.133  9711  9711 I PERFCHECK: m-screenoff
+   11-01 20:05:55.630  9952  9952 I PERFCHECK: section: P7. Quick Settings tile → the card: the gate
+   11-01 20:07:16.750 10567 10567 I PERFCHECK: section: P8. Turning the switch off also asks for the PIN

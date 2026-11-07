@@ -1,0 +1,11 @@
+{
+  "versionCode": 1488541,
+  "versionName": "1.2.28",
+  "apkUrl": "https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v128b/update/41228034302/app.apk",
+  "sha256": "dbbebab83e7c5cd0faf676591677fcc4ee10162352cdc9a36b70bed123af24b6",
+  "size": 4323599,
+  "minSdk": 26,
+  "notes": "• По-лек уиджет за началния екран — вече с истинския си вид в избора на уиджети; приложението е с около 0,5 MB по-малко.\n• Вход с едно докосване: номерът на картата и ПИН-ът може да се запазят в мениджъра на пароли на телефона.\n• Търсенето на „Начало“ се разгръща на място; преки пътища до „Искам да прочета“ и последната отворена книга.\n• „Начало“ не подскача при зареждане, а известията са подредени в групи в настройките на телефона.\n• Галерията показва липсващите снимки, а документите се отварят с истинското си име.\n• По-добра работа с TalkBack и едър шрифт; напомнянията за срок не се губят.",
+  "notes_en": "• A lighter home screen widget — now shown as it really looks in the widget picker; the app is about 0.5 MB smaller.\n• One-tap sign-in: your card number and PIN can be saved in your phone’s password manager.\n• Search on “Home” expands in place; shortcuts to “Want to read” and the last book you opened.\n• “Home” no longer jumps while loading, and notifications are grouped in your phone’s settings.\n• The gallery marks missing photos, and documents open under their real names.\n• Better TalkBack and large-text support; due-date reminders are no longer lost.",
+  "releaseUrl": "https://github.com/plam4o4o-source/ch-app/releases/tag/v1.2.28"
+}

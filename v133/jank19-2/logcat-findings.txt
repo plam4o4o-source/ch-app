@@ -1,0 +1,51 @@
+app pids seen: ['5324', '7630', '9290', '9953', '10021', '10086', '10147', '10281']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 29
+   skipped-frames events=29 max=109 total=1373
+   11-07 16:08:28.355  5324  5324 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:30.250  5324  5324 I Choreographer: Skipped 109 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:31.792  5324  5324 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:33.306  5324  5324 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:34.164  5324  5324 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-07 16:09:08.079  5324  5324 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-07 16:10:12.496  7630  7630 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-07 16:10:13.402  7630  7630 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-07 16:10:14.207  7630  7630 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-07 16:10:14.936  7630  7630 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-07 16:11:00.192  7630  7630 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-07 16:14:15.459  9290  9290 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+== Davey: 56
+   davey events=56 max=2945ms median=989ms
+   11-07 16:08:31.509  5324  5349 I OpenGLRenderer: Davey! duration=2945ms; Flags=1, FrameTimelineVsyncId=5851, IntendedVsync=88172741349, Vsync=89989407943, InputEventId=0, HandleInputStart=89992129378, AnimationStart=89992130069, PerformTrav
+   11-07 16:08:32.493  5324  5349 I OpenGLRenderer: Davey! duration=951ms; Flags=0, FrameTimelineVsyncId=6241, IntendedVsync=90939407905, Vsync=91522741215, InputEventId=0, HandleInputStart=91534687401, AnimationStart=91534688082, PerformTrave
+   11-07 16:08:33.265  5324  5336 I OpenGLRenderer: Davey! duration=1147ms; Flags=0, FrameTimelineVsyncId=6331, IntendedVsync=91539407881, Vsync=91889407867, InputEventId=0, HandleInputStart=91901712370, AnimationStart=91901713021, PerformTrav
+   11-07 16:08:33.642  5324  5336 I OpenGLRenderer: Davey! duration=960ms; Flags=0, FrameTimelineVsyncId=6358, IntendedVsync=91906074533, Vsync=91906074533, InputEventId=0, HandleInputStart=91912919836, AnimationStart=91912920296, PerformTrave
+   11-07 16:08:34.154  5324  5336 I OpenGLRenderer: Davey! duration=1011ms; Flags=0, FrameTimelineVsyncId=6365, IntendedVsync=91922741199, Vsync=92356074515, InputEventId=0, HandleInputStart=92359608779, AnimationStart=92359608919, PerformTrav
+   11-07 16:08:34.278  5324  5336 I OpenGLRenderer: Davey! duration=1212ms; Flags=0, FrameTimelineVsyncId=6453, IntendedVsync=92389407847, Vsync=93039407821, InputEventId=0, HandleInputStart=93048461270, AnimationStart=93048461981, PerformTrav
+   11-07 16:08:34.617  5324  5336 I OpenGLRenderer: Davey! duration=712ms; Flags=0, FrameTimelineVsyncId=6542, IntendedVsync=93056074487, Vsync=93389407807, InputEventId=0, HandleInputStart=93395540595, AnimationStart=93395540955, PerformTrave
+   11-07 16:08:34.935  5324  5336 I OpenGLRenderer: Davey! duration=1046ms; Flags=0, FrameTimelineVsyncId=6578, IntendedVsync=93406074473, Vsync=93906074453, InputEventId=0, HandleInputStart=93906624602, AnimationStart=93906627556, PerformTrav
+   11-07 16:08:35.339  5324  5336 I OpenGLRenderer: Davey! duration=756ms; Flags=0, FrameTimelineVsyncId=6655, IntendedVsync=94039407781, Vsync=94389407767, InputEventId=0, HandleInputStart=94399486627, AnimationStart=94399487328, PerformTrave
+   11-07 16:09:07.604  5324  5348 I OpenGLRenderer: Davey! duration=725ms; Flags=0, FrameTimelineVsyncId=10114, IntendedVsync=126389406487, Vsync=126622739811, InputEventId=0, HandleInputStart=126635889192, AnimationStart=126635889532, Perform
+   11-07 16:09:08.472  5324  5336 I OpenGLRenderer: Davey! duration=1425ms; Flags=0, FrameTimelineVsyncId=10140, IntendedVsync=126722739807, Vsync=127106073125, InputEventId=0, HandleInputStart=127114422894, AnimationStart=127114423205, Perfor
+   11-07 16:09:09.120  5324  5336 I OpenGLRenderer: Davey! duration=966ms; Flags=0, FrameTimelineVsyncId=10182, IntendedVsync=127139417552, Vsync=127806084192, InputEventId=0, HandleInputStart=127821565515, AnimationStart=127821565995, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 16:08:21.847  5038  5038 I PERFCHECK: section: J-base. Install base, warm-up, library card TEST-12345
+   11-07 16:10:06.023  7592  7592 I PERFCHECK: section: J-base. Home after a cold start: the first 25 s ribbon weaving, carousel, no input
+   11-07 16:10:35.522  8019  8019 I PERFCHECK: section: J-base. Home 25-40 s after the cold start ribbon done, no input
+   11-07 16:10:54.631  8072  8072 I PERFCHECK: section: J-base. Scroll scenarios animations ON, 1080x2400: ~10 flings each, gfxinfo reset before each
+   11-07 16:13:04.544  8968  8968 I PERFCHECK: section: J-base. Library card screen: shader + foil 1.2.33, idle then emulated tilt
+   11-07 16:14:07.911  9146  9146 I PERFCHECK: section: J-new. Install new, warm-up, library card TEST-12345
+   11-07 16:15:34.499  9931  9931 I PERFCHECK: section: D0. A few starts for the card: 4 cold + 3 warm
+   11-07 16:15:38.054  9947  9947 I PERFCHECK: perf-cold-1
+   11-07 16:15:50.571 10015 10015 I PERFCHECK: perf-cold-2
+   11-07 16:16:02.129 10080 10080 I PERFCHECK: perf-cold-3
+   11-07 16:16:13.324 10141 10141 I PERFCHECK: perf-cold-4
+   11-07 16:16:43.195 10265 10265 I PERFCHECK: section: J-new. Home after a cold start: the first 25 s ribbon weaving, carousel, no input
+   11-07 16:17:12.033 10378 10378 I PERFCHECK: section: J-new. Home 25-40 s after the cold start ribbon done, no input
+   11-07 16:17:32.505 10432 10432 I PERFCHECK: section: J-new. Scroll scenarios animations ON, 1080x2400: ~10 flings each, gfxinfo reset before each
+   11-07 16:19:43.284 11222 11222 I PERFCHECK: section: J-new. Library card screen: shader + foil 1.2.33, idle then emulated tilt
+   11-07 16:20:47.078 11313 11313 I PERFCHECK: section: D. Diagnostics › „Бързодействие“ after the starts and the scenarios
+   11-07 16:21:46.544 11721 11721 I PERFCHECK: section: J. Totals

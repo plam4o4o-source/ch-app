@@ -1,0 +1,1 @@
+devDebug 1.2.30-dev bf10741; org.chyavorec.app.dev; demo reader services

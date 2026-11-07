@@ -1,0 +1,44 @@
+app pids seen: ['5702', '7198', '7447', '8125', '8223', '8363', '8498', '9204', '10086', '10277']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 10
+   skipped-frames events=10 max=100 total=540
+   11-01 19:58:58.442  5702  5702 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-01 19:59:37.902  7198  7198 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-01 20:01:36.062  8125  8125 I Choreographer: Skipped 98 frames!  The application may be doing too much work on its main thread.
+   11-01 20:01:36.933  8125  8125 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-01 20:01:37.627  8125  8125 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-01 20:02:00.308  8223  8223 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-01 20:02:01.048  8223  8223 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-01 20:02:33.384  8363  8363 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-01 20:02:35.061  8363  8363 I Choreographer: Skipped 100 frames!  The application may be doing too much work on its main thread.
+   11-01 20:04:02.075  9204  9204 I Choreographer: Skipped 75 frames!  The application may be doing too much work on its main thread.
+== Davey: 16
+   davey events=16 max=2210ms median=1068ms
+   11-01 19:58:59.514  5702  5718 I OpenGLRenderer: Davey! duration=889ms; Flags=1, FrameTimelineVsyncId=5230, IntendedVsync=78358540719, Vsync=78591874043, InputEventId=0, HandleInputStart=78592731013, AnimationStart=78592731694, PerformTrave
+   11-01 19:59:19.177  5702  5714 I OpenGLRenderer: Davey! duration=905ms; Flags=0, FrameTimelineVsyncId=6671, IntendedVsync=97941873269, Vsync=98225206591, InputEventId=0, HandleInputStart=98239164966, AnimationStart=98239165557, PerformTrave
+   11-01 20:01:36.124  8125  8136 I OpenGLRenderer: Davey! duration=1869ms; Flags=1, FrameTimelineVsyncId=11676, IntendedVsync=234008534493, Vsync=234291867815, InputEventId=0, HandleInputStart=234301284385, AnimationStart=234301285176, Perfor
+   11-01 20:01:36.721  8125  8137 I OpenGLRenderer: Davey! duration=1933ms; Flags=0, FrameTimelineVsyncId=11756, IntendedVsync=234308534481, Vsync=235941867749, InputEventId=0, HandleInputStart=235945648289, AnimationStart=235945648589, Perfor
+   11-01 20:01:37.688  8125  8139 I OpenGLRenderer: Davey! duration=1224ms; Flags=0, FrameTimelineVsyncId=12269, IntendedVsync=236108534409, Vsync=236275201069, InputEventId=0, HandleInputStart=236284655822, AnimationStart=236284656172, Perfor
+   11-01 20:01:37.860  8125  8139 I OpenGLRenderer: Davey! duration=781ms; Flags=0, FrameTimelineVsyncId=12337, IntendedVsync=236825201047, Vsync=237508534353, InputEventId=0, HandleInputStart=237511018417, AnimationStart=237511019188, Perform
+   11-01 20:02:01.197  8223  8238 I OpenGLRenderer: Davey! duration=1284ms; Flags=1, FrameTimelineVsyncId=16642, IntendedVsync=259658533467, Vsync=260175200113, InputEventId=0, HandleInputStart=260191853193, AnimationStart=260191853904, Perfor
+   11-01 20:02:01.990  8223  8238 I OpenGLRenderer: Davey! duration=882ms; Flags=0, FrameTimelineVsyncId=16924, IntendedVsync=260225200111, Vsync=260925200083, InputEventId=0, HandleInputStart=260931794925, AnimationStart=260931795476, Perform
+   11-01 20:02:02.101  8223  8238 I OpenGLRenderer: Davey! duration=912ms; Flags=0, FrameTimelineVsyncId=17100, IntendedVsync=260975200081, Vsync=261008533409, InputEventId=0, HandleInputStart=261017357592, AnimationStart=261017358944, Perform
+   11-01 20:02:35.146  8363  8376 I OpenGLRenderer: Davey! duration=2210ms; Flags=1, FrameTimelineVsyncId=21687, IntendedVsync=292741865477, Vsync=293258532123, InputEventId=0, HandleInputStart=293267732252, AnimationStart=293267733043, Perfor
+   11-01 20:02:35.636  8363  8414 I OpenGLRenderer: Davey! duration=1813ms; Flags=0, FrameTimelineVsyncId=21790, IntendedVsync=293275204338, Vsync=294941870838, InputEventId=0, HandleInputStart=294944426001, AnimationStart=294944426302, Perfor
+   11-01 20:02:36.361  8363  8414 I OpenGLRenderer: Davey! duration=854ms; Flags=0, FrameTimelineVsyncId=22372, IntendedVsync=295141865381, Vsync=295525198699, InputEventId=0, HandleInputStart=295541267773, AnimationStart=295541268194, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 19:58:56.871  5674  5674 I PERFCHECK: section: W. First launch and warm-up
+   11-01 19:59:35.918  7176  7176 I PERFCHECK: section: B. Home top bar: Messages megaphone and the unread badge
+   11-01 19:59:55.562  7411  7411 I PERFCHECK: section: B2. Unread messages: the stored read list emptied as if none were read → the badge and the label
+   11-01 20:00:35.983  7857  7857 I PERFCHECK: section: T1. Test accessibility service on log mode: pane titles on the tabs and detail screens
+   11-01 20:00:36.000  7860  7860 I PERFCHECK: m-a11y-on
+   11-01 20:00:37.646  7889  7889 I PERFCHECK: m-pane
+   11-01 20:01:18.659  8049  8049 I PERFCHECK: section: T2. Home as a screen reader sees it: the carousel
+   11-01 20:01:24.284  8065  8065 I PERFCHECK: m-act
+   11-01 20:01:30.445  8081  8081 I PERFCHECK: section: T3. Touch exploration as with TalkBack: the carousel does not auto-advance; control without it
+   11-01 20:02:25.299  8326  8326 I PERFCHECK: section: T3b. Real TalkBack com.google.android.marvin.talkbackoverlay: the carousel does not auto-advance
+   11-01 20:03:00.050  8464  8464 I PERFCHECK: section: T4. Reduced motion animator_duration_scale 0: the offline bar and the sync banner
+   11-01 20:05:30.017 10043 10043 I PERFCHECK: section: T5. System font 1.3: the carousel title up to 3 lines

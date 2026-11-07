@@ -1,0 +1,23 @@
+app pids seen: ['5752', '7912', '8209', '8761', '9706']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=44 total=44
+   11-01 20:37:06.315  5752  5752 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=1363ms median=1048ms
+   11-01 20:37:07.072  5752  5765 I OpenGLRenderer: Davey! duration=1363ms; Flags=1, FrameTimelineVsyncId=5578, IntendedVsync=90918751214, Vsync=91652084518, InputEventId=0, HandleInputStart=91656092248, AnimationStart=91656093321, PerformTrav
+   11-01 20:37:16.801  5752  5827 I OpenGLRenderer: Davey! duration=734ms; Flags=0, FrameTimelineVsyncId=6520, IntendedVsync=101385417462, Vsync=101385417462, InputEventId=0, HandleInputStart=101389344758, AnimationStart=101389345217, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 20:37:04.496  5741  5741 I PERFCHECK: section: W. First launch and warm-up
+   11-01 20:37:44.311  7039  7039 I PERFCHECK: section: WL1. The widget system en-US, app bg-BG
+   11-01 20:38:45.142  7887  7887 I PERFCHECK: section: WL2. App language → English from the system per-app setting cmd locale, app not opened process killed, not force-stopped
+   11-01 20:38:47.193   483  2556 I ActivityManager: Killing 5752:org.chyavorec.app/u0a174 (adj 700): kill background
+   11-01 20:38:49.253  7907  7907 I PERFCHECK: m-wl2
+   11-01 20:40:01.183  8199  8199 I PERFCHECK: section: WL3. App language → Български cmd locale, app not opened
+   11-01 20:40:01.203   483  2020 I ActivityManager: Killing 7912:org.chyavorec.app/u0a174 (adj 915): kill background
+   11-01 20:41:13.598  8465  8465 I PERFCHECK: section: WL4. Device language app follows the system: en-US → bg-BG → en-US, without a reboot
+   11-01 20:41:32.477   483  2863 I ActivityManager: Killing 8209:org.chyavorec.app/u0a174 (adj 905): kill background
+   11-01 20:42:49.772   483   623 I ActivityManager: Killing 8761:org.chyavorec.app/u0a174 (adj 999): kill background

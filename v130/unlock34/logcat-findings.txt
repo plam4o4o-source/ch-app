@@ -1,0 +1,24 @@
+app pids seen: ['5340', '7329', '8411']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=53 total=53
+   11-01 20:04:52.940  8411  8411 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=995ms median=932ms
+   11-01 20:04:52.960  8411  8423 I OpenGLRenderer: Davey! duration=868ms; Flags=1, FrameTimelineVsyncId=26493, IntendedVsync=462762958486, Vsync=462762958486, InputEventId=0, HandleInputStart=462764528400, AnimationStart=462764528500, Perform
+   11-01 20:04:53.055  8411  8604 I OpenGLRenderer: Davey! duration=995ms; Flags=0, FrameTimelineVsyncId=26518, IntendedVsync=462829625150, Vsync=463712958448, InputEventId=0, HandleInputStart=463716086380, AnimationStart=463716087171, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 19:58:26.925  5333  5333 I PERFCHECK: section: W. First launch and warm-up
+   11-01 19:59:04.715  6310  6310 I PERFCHECK: section: P0. Package GitHub build: requested permissions
+   11-01 19:59:06.032  6335  6335 I PERFCHECK: section: P1. No screen lock: Settings › Поверителност — the switch is disabled with an explanation
+   11-01 19:59:44.324  6737  6737 I PERFCHECK: section: P2. A self-entered card before the switch is on
+   11-01 20:00:05.738  6957  6957 I PERFCHECK: section: P3. Device PIN 1234; the switch → the system prompt → PIN
+   11-01 20:00:50.048  7315  7315 I PERFCHECK: section: P4. New process: Моето › Читателска карта → prompt; Back cancel → Моето; PIN → the card
+   11-01 20:01:57.060  7838  7838 I PERFCHECK: section: P5. Background 20 s < 60 s: no prompt; background 70 s > 60 s: prompt
+   11-01 20:03:51.214  8161  8161 I PERFCHECK: section: P6. Screen off and on keyguard with the PIN: prompt again
+   11-01 20:03:51.227  8164  8164 I PERFCHECK: m-screenoff
+   11-01 20:04:19.612  8373  8373 I PERFCHECK: section: P7. Quick Settings tile → the card: the gate
+   11-01 20:05:38.840  8908  8908 I PERFCHECK: section: P8. Turning the switch off also asks for the PIN

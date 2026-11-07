@@ -1,0 +1,66 @@
+app pids seen: ['5736', '7712', '7862', '7988', '8182', '8273', '8354', '8510', '8578', '8641', '8704', '8766', '8825', '9421', '9828', '10193', '10756', '10870', '11347', '11597', '12087', '12382', '12936', '13227', '13693', '13968', '14138', '14262', '14309']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 18
+   skipped-frames events=18 max=53 total=693
+   11-04 18:22:55.331  5736  5736 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-04 18:22:55.911  5736  5736 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-04 18:23:50.138  7712  7712 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-04 18:23:59.754  7862  7862 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-04 18:24:09.128  7988  7988 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-04 18:24:18.786  8182  8182 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-04 18:24:27.811  8273  8273 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-04 18:24:50.807  8510  8510 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-04 18:25:24.700  8766  8766 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-04 18:26:27.450  9421  9421 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-04 18:28:06.006 10193 10193 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-04 18:28:55.578 10756 10756 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+== Davey: 18
+   davey events=18 max=1327ms median=826ms
+   11-04 18:22:56.748  5736  5757 I OpenGLRenderer: Davey! duration=1327ms; Flags=1, FrameTimelineVsyncId=9535, IntendedVsync=102356695752, Vsync=102923362396, InputEventId=0, HandleInputStart=102926545523, AnimationStart=102926546464, Perform
+   11-04 18:22:57.001  5736  5802 I OpenGLRenderer: Davey! duration=943ms; Flags=0, FrameTimelineVsyncId=9592, IntendedVsync=102973362394, Vsync=103440029042, InputEventId=0, HandleInputStart=103450527852, AnimationStart=103450528653, PerformT
+   11-04 18:23:14.745  5736  5758 I OpenGLRenderer: Davey! duration=746ms; Flags=0, FrameTimelineVsyncId=10997, IntendedVsync=120890039401, Vsync=121240039345, InputEventId=0, HandleInputStart=121244487596, AnimationStart=121244488357, Perform
+   11-04 18:23:51.303  7712  7725 I OpenGLRenderer: Davey! duration=701ms; Flags=0, FrameTimelineVsyncId=12822, IntendedVsync=157590037963, Vsync=158006704563, InputEventId=0, HandleInputStart=158012259099, AnimationStart=158012259660, Perform
+   11-04 18:23:52.253  7712  7725 I OpenGLRenderer: Davey! duration=870ms; Flags=0, FrameTimelineVsyncId=12971, IntendedVsync=158306693514, Vsync=158390026844, InputEventId=0, HandleInputStart=158394108173, AnimationStart=158394108844, Perform
+   11-04 18:23:52.441  7712  7724 I OpenGLRenderer: Davey! duration=765ms; Flags=0, FrameTimelineVsyncId=12997, IntendedVsync=158473360174, Vsync=158856693492, InputEventId=0, HandleInputStart=158872194618, AnimationStart=158872195109, Perform
+   11-04 18:24:00.958  7862  7878 I OpenGLRenderer: Davey! duration=727ms; Flags=0, FrameTimelineVsyncId=13756, IntendedVsync=167040026498, Vsync=167523359812, InputEventId=0, HandleInputStart=167539202222, AnimationStart=167539202983, Perform
+   11-04 18:24:09.594  7988  8001 I OpenGLRenderer: Davey! duration=934ms; Flags=1, FrameTimelineVsyncId=14449, IntendedVsync=175590026156, Vsync=176140026134, InputEventId=0, HandleInputStart=176143613515, AnimationStart=176143614276, Perform
+   11-04 18:24:28.065  8273  8287 I OpenGLRenderer: Davey! duration=829ms; Flags=1, FrameTimelineVsyncId=16207, IntendedVsync=194173358746, Vsync=194823358720, InputEventId=0, HandleInputStart=194826682714, AnimationStart=194826683545, Perform
+   11-04 18:24:51.102  8510  8540 I OpenGLRenderer: Davey! duration=821ms; Flags=1, FrameTimelineVsyncId=17994, IntendedVsync=217190024492, Vsync=217806691134, InputEventId=0, HandleInputStart=217822642601, AnimationStart=217822643613, Perform
+   11-04 18:25:24.981  8766  8780 I OpenGLRenderer: Davey! duration=1017ms; Flags=1, FrameTimelineVsyncId=21058, IntendedVsync=250890023144, Vsync=251706689778, InputEventId=0, HandleInputStart=251715495766, AnimationStart=251715496738, Perfor
+   11-04 18:26:27.888  9421  9434 I OpenGLRenderer: Davey! duration=996ms; Flags=1, FrameTimelineVsyncId=24653, IntendedVsync=313740020630, Vsync=314456687268, InputEventId=0, HandleInputStart=314465247142, AnimationStart=314465247973, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-04 18:22:49.241  5672  5672 I PERFCHECK: section: F0. Fresh install, first launch onboarding: ReportDrawn
+   11-04 18:22:51.467  5703  5703 I PERFCHECK: fd-fresh
+   11-04 18:23:44.763  7673  7673 I PERFCHECK: section: F1. Cold starts online ×6 Home: ReportDrawnWhen
+   11-04 18:23:48.076  7706  7706 I PERFCHECK: fd-online-9085
+   11-04 18:23:57.975  7840  7840 I PERFCHECK: fd-online-30496
+   11-04 18:24:07.334  7979  7979 I PERFCHECK: fd-online-25758
+   11-04 18:24:16.856  8176  8176 I PERFCHECK: fd-online-14066
+   11-04 18:24:26.030  8259  8259 I PERFCHECK: fd-online-20484
+   11-04 18:24:34.674  8348  8348 I PERFCHECK: fd-online-47
+   11-04 18:24:41.164  8411  8411 I PERFCHECK: section: F2. Cold starts offline ×6 cached news
+   11-04 18:24:49.007  8504  8504 I PERFCHECK: fd-offline-4039
+   11-04 18:24:57.715  8572  8572 I PERFCHECK: fd-offline-30296
+   11-04 18:25:06.322  8635  8635 I PERFCHECK: fd-offline-2831
+   11-04 18:25:14.839  8698  8698 I PERFCHECK: fd-offline-9639
+   11-04 18:25:22.823  8759  8759 I PERFCHECK: fd-offline-15552
+   11-04 18:25:31.587  8819  8819 I PERFCHECK: fd-offline-303
+   11-04 18:25:43.049  9076  9076 I PERFCHECK: section: F3. Empty cache Settings › Изчисти временните данни, then a cold start online ×4
+   11-04 18:26:25.687  9415  9415 I PERFCHECK: fd-empty-online-13797
+   11-04 18:27:15.294  9822  9822 I PERFCHECK: fd-empty-online-17512
+   11-04 18:28:04.506 10187 10187 I PERFCHECK: fd-empty-online-16743
+   11-04 18:28:54.062 10750 10750 I PERFCHECK: fd-empty-online-1482
+   11-04 18:29:01.091 10838 10838 I PERFCHECK: section: F4. Empty cache, then a cold start offline ×4 nothing cached: the error/offline state
+   11-04 18:30:02.536 11341 11341 I PERFCHECK: fd-empty-offline-11701
+   11-04 18:31:09.505 12081 12081 I PERFCHECK: fd-empty-offline-3177
+   11-04 18:32:16.476 12930 12930 I PERFCHECK: fd-empty-offline-3
+   11-04 18:33:22.774 13687 13687 I PERFCHECK: fd-empty-offline-31694
+   11-04 18:33:33.827 13934 13934 I PERFCHECK: section: F5. After pm clear onboarding again ×2
+   11-04 18:33:33.857   488   618 I ActivityManager: Killing 13693:org.chyavorec.app/u0a174 (adj 0): stop org.chyavorec.app due to clear data
+   11-04 18:33:37.809 14131 14131 I PERFCHECK: fd-cleared-24325
+   11-04 18:33:43.307   488  2137 I ActivityManager: Killing 14138:org.chyavorec.app/u0a174 (adj 0): stop org.chyavorec.app due to clear data
+   11-04 18:33:46.816 14303 14303 I PERFCHECK: fd-cleared-4005
+   11-04 18:33:52.510 14363 14363 I PERFCHECK: section: F6. All Fully drawn lines of the app in logcat

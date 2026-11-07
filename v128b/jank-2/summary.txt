@@ -1,0 +1,72 @@
+part jank-2; APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4 size 4323599 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## J-base. Install base, warm-up, 16 books in Want to read
+installed base: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base first-install catalogue results after 3498 ms
+Want to read: added 16 books by inventory-number links (inv 1..16)
+## J-base. Jank at 540x1200 (animations ON)
+jank screen 540x1200
+GFX base-catalog frames=  170  janky=168 (98.82%)  p50=200ms p90=300ms p95=300ms p99=400ms  slowUI=74 slowDraw=168 highInput=3
+base-catalog: 30 swipes, 'Покажи още' pages: 1, mis-taps recovered: 0
+jank base-home screen: --- screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="31 октомври 2026 · Св. апли от 70-те: Ст
+GFX base-home    frames=   87  janky=84 (96.55%)  p50=250ms p90=400ms p95=450ms p99=650ms  slowUI=58 slowDraw=84 highInput=6
+base want list: 1 rows visible
+jank base-want screen: --- screen: text="Наличност към 28.10.2026" text="Плъзни книга настрани, за да я махнеш." content-desc="Дъхът на пролетта" text="Дъхът на пролетта" text="Пламен Иванов" text="налична" content-desc="Ощ
+GFX base-want    frames=   87  janky=85 (97.70%)  p50=200ms p90=300ms p95=350ms p99=400ms  slowUI=47 slowDraw=85 highInput=4
+jank base-news screen: --- screen: text="Календар" text="Новини" text="Търси в новините" text="Всички" text="Запазени" text="Събитие" text="Състави" text="СЪБИТИЕ  ·  16 октомври 2026" 
+GFX base-news    frames=   98  janky=87 (88.78%)  p50=150ms p90=250ms p95=250ms p99=300ms  slowUI=41 slowDraw=87 highInput=17
+jank base-calendar screen: --- screen: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" text="Читалище" text="Народен обичай" 
+GFX base-calendar frames=  105  janky=82 (78.10%)  p50=117ms p90=200ms p95=200ms p99=250ms  slowUI=50 slowDraw=82 highInput=38
+base gallery albums shown after 2515 ms
+GFX base-gallery frames=  108  janky=95 (87.96%)  p50=150ms p90=250ms p95=250ms p99=300ms  slowUI=39 slowDraw=95 highInput=22
+base album: content-desc="Сградата на читалището в Яворец" content-desc="Фолклорен състав при читалището" content-desc="Хорът на сце; photos on screen 15
+GFX base-album-grid frames=   40  janky=35 (87.50%)  p50=101ms p90=300ms p95=300ms p99=350ms  slowUI=13 slowDraw=35 highInput=10
+base viewer: no photo to open
+MEM base-jank-end (raw) PSS=111345KB  Java=12820KB  Native=61884KB  Graphics=0KB  Views=10 Activities=1
+MEM base-jank-end (trimmed) PSS=108215KB  Java=9952KB  Native=52452KB  Graphics=0KB  Views=10 Activities=1
+## J-new. Install new, warm-up, 16 books in Want to read
+installed new: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4 size 4323599;  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new first-install catalogue results after 2833 ms
+Want to read: added 16 books by inventory-number links (inv 1..16)
+## J-new. Jank at 540x1200 (animations ON)
+jank screen 540x1200
+GFX new-catalog  frames=  153  janky=145 (94.77%)  p50=250ms p90=350ms p95=400ms p99=500ms  slowUI=73 slowDraw=145 highInput=12
+new-catalog: 30 swipes, 'Покажи още' pages: 0, mis-taps recovered: 0
+jank new-home screen: --- screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="31 октом
+GFX new-home     frames=   69  janky=69 (100.00%)  p50=300ms p90=500ms p95=550ms p99=950ms  slowUI=43 slowDraw=69 highInput=0
+jank new-search screen: --- screen: text="12" content-desc="Лента за търсене" content-desc="Назад" content-desc="Изчисти" text="Всички" text="Книги" text="Новини" text="Събития" 
+GFX new-search-expanded frames=   51  janky=44 (86.27%)  p50=150ms p90=350ms p95=450ms p99=600ms  slowUI=17 slowDraw=44 highInput=12
+new want list: 1 rows visible
+jank new-want screen: --- screen: text="Наличност към 28.10.2026" text="Плъзни книга настрани, за да я премахнеш." text="Дъхът на пролетта" text="Пламен Иванов" text="налична" content-desc="Още действия" text="Времето на с
+GFX new-want     frames=   87  janky=85 (97.70%)  p50=200ms p90=350ms p95=350ms p99=400ms  slowUI=44 slowDraw=85 highInput=3
+jank new-news screen: --- screen: text="Календар" text="Новини" text="Търси в новините" text="Всички" text="Запазени" text="Събитие" text="Състави" text="СЪБИТИЕ  ·  16 октомври 2026" 
+GFX new-news     frames=   63  janky=52 (82.54%)  p50=150ms p90=200ms p95=250ms p99=350ms  slowUI=35 slowDraw=52 highInput=21
+jank new-calendar screen: --- screen: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" text="Читалище" text="Народен обичай" 
+GFX new-calendar frames=   21  janky=17 (80.95%)  p50=150ms p90=200ms p95=250ms p99=250ms  slowUI=12 slowDraw=17 highInput=7
+new gallery albums shown after 2572 ms
+GFX new-gallery  frames=  111  janky=105 (94.59%)  p50=150ms p90=250ms p95=250ms p99=250ms  slowUI=45 slowDraw=105 highInput=11
+new album: content-desc="Сградата на читалището в Яворец" content-desc="Фолклорен състав при читалището" content-desc="Хорът на сце; photos on screen 15
+GFX new-album-grid frames=  105  janky=95 (90.48%)  p50=150ms p90=200ms p95=250ms p99=300ms  slowUI=41 slowDraw=95 highInput=18
+new viewer: no photo to open
+MEM new-jank-end (raw) PSS=128897KB  Java=26380KB  Native=70732KB  Graphics=0KB  Views=10 Activities=1
+MEM new-jank-end (trimmed) PSS=112549KB  Java=12408KB  Native=64464KB  Graphics=0KB  Views=10 Activities=1
+## COMPLETE
+## logcat findings
+app pids seen: ['5571', '8981', '11822', '13500']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 13
+   skipped-frames events=13 max=76 total=583
+== Davey: 30
+   davey events=30 max=1830ms median=990ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

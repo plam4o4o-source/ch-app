@@ -1,0 +1,21 @@
+app pids seen: ['5205', '7792', '8438']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=47 total=47
+   10-31 21:37:59.677  5205  5205 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=1249ms median=750ms
+   10-31 21:38:00.204  5205  5224 I OpenGLRenderer: Davey! duration=1249ms; Flags=1, FrameTimelineVsyncId=5402, IntendedVsync=76468625026, Vsync=77251958328, InputEventId=0, HandleInputStart=77268230562, AnimationStart=77268231674, PerformTrav
+   10-31 21:38:10.431  5205  5217 I OpenGLRenderer: Davey! duration=717ms; Flags=0, FrameTimelineVsyncId=6146, IntendedVsync=87251957928, Vsync=87651957912, InputEventId=0, HandleInputStart=87661671900, AnimationStart=87661672862, PerformTrave
+   10-31 21:38:21.456  5205  5217 I OpenGLRenderer: Davey! duration=750ms; Flags=0, FrameTimelineVsyncId=6874, IntendedVsync=98085290828, Vsync=98085290828, InputEventId=0, HandleInputStart=98085701422, AnimationStart=98085702443, PerformTrave
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 21:37:53.453  5014  5014 I PERFCHECK: section: U0. Install v1.2.28 RemoteViews widget
+   10-31 21:37:57.479  5191  5191 I PERFCHECK: section: W. First launch and warm-up
+   10-31 21:38:38.115  7091  7091 I PERFCHECK: section: U1. v1.2.28: add the widget
+   10-31 21:39:34.676  7759  7759 I PERFCHECK: section: U2. adb install -r v1.2.29 over v1.2.28 with the widget on the home screen app not opened
+   10-31 21:39:36.787   481   518 I ActivityManager: Killing 5205:org.chyavorec.app/u0a175 (adj 700): stop org.chyavorec.app due to installPackageLI
+   10-31 21:40:26.483  8018  8018 I PERFCHECK: section: U3. The kept widget after the update: clicks
+   10-31 21:41:13.872  8422  8422 I PERFCHECK: section: U4. App opened after the update: channel groups; widget

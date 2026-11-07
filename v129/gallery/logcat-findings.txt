@@ -1,0 +1,23 @@
+app pids seen: ['5376', '6819', '7610']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=30 total=60
+   10-31 21:32:07.249  5376  5376 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-31 21:32:07.776  5376  5376 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=1152ms median=1088ms
+   10-31 21:32:08.357  5376  5389 I OpenGLRenderer: Davey! duration=1023ms; Flags=1, FrameTimelineVsyncId=8950, IntendedVsync=115965921610, Vsync=116465921590, InputEventId=0, HandleInputStart=116473540269, AnimationStart=116473541007, Perform
+   10-31 21:32:28.830  5376  5461 I OpenGLRenderer: Davey! duration=1152ms; Flags=0, FrameTimelineVsyncId=10330, IntendedVsync=136232587466, Vsync=136615920784, InputEventId=0, HandleInputStart=136629255579, AnimationStart=136629256306, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 21:32:05.724  5368  5368 I PERFCHECK: section: W. First launch and warm-up
+   10-31 21:32:45.358  6801  6801 I PERFCHECK: section: G1. Album 1 online the album data is cached; then the image caches are emptied
+   10-31 21:33:31.864  7542  7542 I PERFCHECK: section: G2. Offline: thumbnails show Не се зареди not Снимката липсва
+   10-31 21:34:23.901  7938  7938 I PERFCHECK: section: G3. Reconnect without touching: the thumbnails recover
+   10-31 21:35:10.911  8333  8333 I PERFCHECK: section: G4. A real 404 photo: <title> — снимката липсва; the viewer on it
+   10-31 21:35:30.025  8478  8478 I PERFCHECK: section: G5. Viewer: a tap hides and shows the bars immersive
+   10-31 21:35:49.669  8630  8630 I PERFCHECK: section: G6. Vertical drag: a short one returns, a long one dismisses
+   10-31 21:36:02.798  8778  8778 I PERFCHECK: section: G7. Zoom still works: double tap 2×, pinch, pan; no dismiss while zoomed; reset
+   10-31 21:36:36.073  9115  9115 I PERFCHECK: section: G8. Back gesture gesture navigation; API 33: the photo scales during the gesture

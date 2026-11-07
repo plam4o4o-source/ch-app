@@ -1,0 +1,30 @@
+app pids seen: ['5254', '6456', '9363']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=39 total=108
+   10-31 22:25:01.305  5254  5254 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   10-31 22:25:44.679  6456  6456 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   10-31 22:28:03.365  9363  9363 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 8
+   davey events=8 max=878ms median=799ms
+   10-31 22:25:02.337  5254  5271 I OpenGLRenderer: Davey! duration=878ms; Flags=1, FrameTimelineVsyncId=7059, IntendedVsync=79922222416, Vsync=80255555736, InputEventId=0, HandleInputStart=80258808326, AnimationStart=80258809282, PerformTrave
+   10-31 22:25:11.754  5254  5370 I OpenGLRenderer: Davey! duration=786ms; Flags=0, FrameTimelineVsyncId=7628, IntendedVsync=89355555372, Vsync=89355555372, InputEventId=-531624694, HandleInputStart=89355733806, AnimationStart=89355734889, Per
+   10-31 22:25:11.877  5254  5271 I OpenGLRenderer: Davey! duration=825ms; Flags=0, FrameTimelineVsyncId=7635, IntendedVsync=89372222038, Vsync=89822222020, InputEventId=0, HandleInputStart=89839310932, AnimationStart=89839311679, PerformTrave
+   10-31 22:25:22.056  5254  5264 I OpenGLRenderer: Davey! duration=812ms; Flags=0, FrameTimelineVsyncId=8197, IntendedVsync=99788888288, Vsync=99988888280, InputEventId=0, HandleInputStart=99999585625, AnimationStart=99999586269, PerformTrave
+   10-31 22:25:44.457  6456  6471 I OpenGLRenderer: Davey! duration=785ms; Flags=1, FrameTimelineVsyncId=9704, IntendedVsync=122255554056, Vsync=122505554046, InputEventId=0, HandleInputStart=122518734362, AnimationStart=122518735254, PerformT
+   10-31 22:25:45.049  6456  6490 I OpenGLRenderer: Davey! duration=868ms; Flags=0, FrameTimelineVsyncId=9751, IntendedVsync=122638887374, Vsync=123272220682, InputEventId=0, HandleInputStart=123280847752, AnimationStart=123280848179, PerformT
+   10-31 22:28:03.391  9363  9396 I OpenGLRenderer: Davey! duration=714ms; Flags=1, FrameTimelineVsyncId=16421, IntendedVsync=261188881832, Vsync=261405548490, InputEventId=0, HandleInputStart=261416439260, AnimationStart=261416440460, Perform
+   10-31 22:28:03.564  9363  9396 I OpenGLRenderer: Davey! duration=716ms; Flags=0, FrameTimelineVsyncId=16457, IntendedVsync=261438881822, Vsync=261955548468, InputEventId=0, HandleInputStart=261965424174, AnimationStart=261965424591, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 22:24:59.464  5246  5246 I PERFCHECK: section: W. First launch and warm-up
+   10-31 22:25:39.701  6364  6364 I PERFCHECK: section: S0. Package: permissions no CAMERA; Google Play services on the image
+   10-31 22:25:40.627  6413  6413 I PERFCHECK: section: S1. Scan from Home API 34, camera: Number of camera devices: 0
+   10-31 22:26:02.475  7188  7188 I PERFCHECK: m-scan-home
+   10-31 22:26:41.436  7956  7956 I PERFCHECK: section: S2. Back / cancel
+   10-31 22:27:00.226  8137  8137 I PERFCHECK: section: S3. Manual entry 399560
+   10-31 22:27:20.308  9038  9038 I PERFCHECK: section: S4. Scan from the launcher shortcut scan, ~60 s later the module may have downloaded
+   10-31 22:28:00.507  9335  9335 I PERFCHECK: m-scan-shortcut
+   10-31 22:28:51.028 10133 10133 I PERFCHECK: section: S5. The button on the screen again

@@ -1,0 +1,62 @@
+part search34; APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4 size 4323599 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 14 sdk 34; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3310 ms
+## H. Home SearchBar: tap, '12', open a result, back (key)
+SEARCHBAR collapsed: field @ 503 393; scanner icon yes
+SEARCHBAR tapped: expanded=yes query-12=no hint=yes tabbar=no app-in-front=yes IME mInputShown=true
+SEARCHBAR '12': text="12" content-desc="Лента за търсене" content-desc="Назад" content-desc="Изчисти" text="Всички" text="Книги" text="Новини" text="Събития" text="Страници" text="Книги" text="Спомен за здрача" text="Веска Пенчева" text="1972 · графично издание · за възрастни" text="Не е на рафта" text="12 -те вятъ
+SEARCHBAR result opened: back=yes bar-gone=yes; text="12 -те вятъра" text="Гарфилд, Джудит и др." text="Налична" text="Наличност към 28.10.2026" text="Искам да прочета" 
+SEARCHBAR Back from the result: expanded=yes query-12=no hint=no tabbar=no app-in-front=yes IME mInputShown=false
+SEARCHBAR Back key on the expanded bar: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=true
+SEARCHBAR 2nd Back key: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=false
+## H2. Back GESTURE from the expanded bar (gesture navigation; API 34)
+gesture nav:  navigation_mode=2
+predictive back developer option: 1
+SEARCHBAR expanded again: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=true
+SEARCHBAR IME hidden: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=false
+SEARCHBAR after back gesture #1: expanded=no query-12=yes hint=no tabbar=yes app-in-front=yes IME mInputShown=false
+SEARCHBAR after a CANCELLED back gesture (should stay expanded): expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=false
+## H3. Process death while the search is expanded with '12'
+PD-SEARCH before: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=false
+PD-SEARCH killed: pid ''
+PD-SEARCH restored from Recents: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=true; text="12" content-desc="Лента за търсене" content-desc="Назад" content-desc="Изчисти" text="Всички" text="Книги" text="Новини" text="Събития" 
+PD-SEARCH Back after restore: expanded=yes query-12=yes hint=no tabbar=no app-in-front=yes IME mInputShown=false
+## H4. API 34: predictive back — several frames during a slow gesture
+gesture nav:  navigation_mode=0
+SEARCHBAR after slow gesture (API 34): expanded=no query-12=yes hint=no tabbar=yes app-in-front=yes IME mInputShown=false
+## H5. API 34: back gesture from a book page (predictive back to Home)
+after back gesture from the book: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" 
+## CM. Sign-in screen; Credential Manager; Google Play services / password manager on the image
+image: sdk_gphone64_x86_64 google/sdk_gphone64_x86_64/emu64xa:14/UE1A.230829.050/12077443:userdebug/dev-keys
+GMS: versionName=23.18.18(190800-535401451) ; Play Store: 1 ; GSF: 1
+autofill service: 'com.google.android.gms/.autofill.service.AutofillService'; credential_service: 'com.google.android.gms/.auth.api.credentials.credman.service.PasswordAndPasskeyService'; credential_service_primary: 'com.google.android.gms/.auth.api.credentials.credman.service.PasswordAndPasskeyService'
+credential providers (dumpsys credential): 
+CredentialProviderService implementations: 1 services found:   Service #0:     priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=false     com.google.android.gms/.auth.api.credentials.credman.service.PasswordAndPasskeyService 
+Google accounts on the device: 0
+LOGIN +1s: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството.
+LOGIN +4s: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството.
+LOGIN +8s: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството.
+LOGIN logcat (credentials/crash): 10-31 17:40:41.515   527   908 I CredManSysService: starting executeGetCredential with callingPackage: org.chyavorec.app 10-31 17:40:41.530   527   908 I ProviderGetSession: Filtering request options for: ComponentInfo{com.google.android.gms/com.google.android.gms.auth.api.credentials.credman.service.PasswordAndPasskeyService} 10-31 17:40:41.530   527   908 I ProviderGetSession: Option of type: android.credentials.TYPE_PASSWORD_CREDENTIAL meets all filteringconditions 10-31 17:40:41.530   527   908 I GetRequestSession: Provider session created and being added for: ComponentInfo{com.google.android.gms/com.google.android.gms.auth.api.credentials.credman.service.PasswordAndPasskeyService 10-31 17:40:41.530   527   908 I CredManSysServiceImpl: Service does not have the required capabilities 10-31 17:40:41.530   527   908 I CredManSysServiceImpl: Service does not have the required capabilities 10-31 17:40:41.567  6231  6322 W Auth.Api.Credentials: [BaseCredentialProviderService] Operation execution failed. [CONTEXT service_id=68 ] 10-31 17:40:41.567  6231  6322 W Auth.Api.Credentials: cgi: No matching credentials. 
+LOGIN card field typed (not submitted: no test account, and a made-up card would hit the real library API): 1 field(s) show it; app in front yes
+LOGIN after Back: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="12" 
+app pid at the end of CM: '8324'
+## COMPLETE
+## logcat findings
+app pids seen: ['5204', '5992', '7110', '7442', '7834', '8091', '8324']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 40
+   skipped-frames events=40 max=72 total=1613
+== Davey: 113
+   davey events=113 max=1511ms median=863ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

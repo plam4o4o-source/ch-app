@@ -1,0 +1,35 @@
+app pids seen: ['4916', '7971', '8544']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=104 total=325
+   10-31 17:35:15.062  4916  4916 I Choreographer: Skipped 104 frames!  The application may be doing too much work on its main thread.
+   10-31 17:35:15.703  4916  4916 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-31 17:38:41.454  7971  7971 I Choreographer: Skipped 57 frames!  The application may be doing too much work on its main thread.
+   10-31 17:38:53.188  7971  7971 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   10-31 17:39:13.996  8544  8544 I Choreographer: Skipped 55 frames!  The application may be doing too much work on its main thread.
+   10-31 17:39:41.650  8544  8544 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 16
+   davey events=16 max=1254ms median=786ms
+   10-31 17:35:16.426  4916  4927 I OpenGLRenderer: Davey! duration=1227ms; Flags=1, FrameTimelineVsyncId=6269, IntendedVsync=102130916893, Vsync=102730916869, InputEventId=0, HandleInputStart=102736760353, AnimationStart=102736761025, Perform
+   10-31 17:35:31.570  4916  5505 I OpenGLRenderer: Davey! duration=737ms; Flags=0, FrameTimelineVsyncId=7291, IntendedVsync=117714249603, Vsync=117714249603, InputEventId=0, HandleInputStart=117714705487, AnimationStart=117714705808, PerformT
+   10-31 17:35:40.271  4916  4937 I OpenGLRenderer: Davey! duration=1108ms; Flags=0, FrameTimelineVsyncId=7516, IntendedVsync=125947582607, Vsync=126297582593, InputEventId=0, HandleInputStart=126302111653, AnimationStart=126302112284, Perform
+   10-31 17:35:40.349  4916  4937 I OpenGLRenderer: Davey! duration=859ms; Flags=0, FrameTimelineVsyncId=7533, IntendedVsync=126347582591, Vsync=126680915911, InputEventId=0, HandleInputStart=126691768118, AnimationStart=126691768679, PerformT
+   10-31 17:35:54.197  4916  4937 I OpenGLRenderer: Davey! duration=720ms; Flags=0, FrameTimelineVsyncId=8025, IntendedVsync=140380926336, Vsync=140397593000, InputEventId=0, HandleInputStart=140403485541, AnimationStart=140403485882, PerformT
+   10-31 17:35:54.292  4916  4927 I OpenGLRenderer: Davey! duration=725ms; Flags=0, FrameTimelineVsyncId=8033, IntendedVsync=140414259664, Vsync=140830926264, InputEventId=0, HandleInputStart=140839977305, AnimationStart=140839977917, PerformT
+   10-31 17:38:29.976  7971  7985 I OpenGLRenderer: Davey! duration=757ms; Flags=1, FrameTimelineVsyncId=14757, IntendedVsync=296080909135, Vsync=296447575787, InputEventId=0, HandleInputStart=296457119174, AnimationStart=296457119455, Perform
+   10-31 17:38:30.218  7971  7988 I OpenGLRenderer: Davey! duration=713ms; Flags=0, FrameTimelineVsyncId=14888, IntendedVsync=296530920214, Vsync=296830920166, InputEventId=0, HandleInputStart=296836995447, AnimationStart=296836995798, Perform
+   10-31 17:38:30.715  7971  7988 I OpenGLRenderer: Davey! duration=715ms; Flags=0, FrameTimelineVsyncId=15051, IntendedVsync=296847575771, Vsync=297097575761, InputEventId=0, HandleInputStart=297108514677, AnimationStart=297108515007, Perform
+   10-31 17:38:41.466  7971  7985 I OpenGLRenderer: Davey! duration=814ms; Flags=1, FrameTimelineVsyncId=15961, IntendedVsync=307514242011, Vsync=307514242011, InputEventId=0, HandleInputStart=307514653553, AnimationStart=307514653833, Perform
+   10-31 17:38:41.868  7971  7988 I OpenGLRenderer: Davey! duration=1148ms; Flags=0, FrameTimelineVsyncId=15969, IntendedVsync=307530908677, Vsync=308480908639, InputEventId=0, HandleInputStart=308488008911, AnimationStart=308488009321, Perfor
+   10-31 17:38:53.377  7971  7987 I OpenGLRenderer: Davey! duration=722ms; Flags=1, FrameTimelineVsyncId=16956, IntendedVsync=319497574865, Vsync=319497574865, InputEventId=0, HandleInputStart=319500483418, AnimationStart=319500483758, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 17:35:06.053  4663  4663 I PERFCHECK: section: U0. Install v1.2.27 Glance widget
+   10-31 17:35:11.655  4904  4904 I PERFCHECK: section: W. First launch and warm-up
+   10-31 17:35:58.543  6348  6348 I PERFCHECK: section: U1. v1.2.27: add the widget
+   10-31 17:37:29.881  7926  7926 I PERFCHECK: section: U2. adb install -r v1.2.28 over v1.2.27 with the widget on the home screen app not opened
+   10-31 17:37:32.138   481   523 I ActivityManager: Killing 4916:org.chyavorec.app/u0a175 (adj 250): stop org.chyavorec.app due to installPackageLI
+   10-31 17:38:23.125  8162  8162 I PERFCHECK: section: U3. The kept widget after the update: clicks
+   10-31 17:39:11.507  8519  8519 I PERFCHECK: section: U4. App opened after the update: channel groups; widget

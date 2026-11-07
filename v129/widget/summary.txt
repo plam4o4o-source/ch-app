@@ -1,0 +1,94 @@
+part widget; APK: 1.2.29 7bd2513 (NotifierTest: тестовете за снимки и действия — в NotifierTes); versionCode 1488542; x86_64 libs: 2 size 4100618 bytes
+base APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4; update manifest: no-update stub size 4323599 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.29 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3704 ms
+## W1. Add the widget from the launcher's widget picker (default 4×2 = wide)
+launcher: com.google.android.apps.nexuslauncher
+WIDGET new long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET new picker: our row @ 437 999; size label @ 540 1907; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
+WIDGET new after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
+WIDGET new: widgets of ours bound: 0 -> 1 (ids id=2 ); options: 
+WIDGET grid from the 4x2 copy: [57 537 1023 1123] cell 241x293 px
+## W2. Wide 4×2, signed out: content, light and dark
+WIDGET 10-wide-4x2 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 10-wide-4x2 (w15): WIDGET VIEW: title='Читалище Яворец' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 5 clickable, <48dp: 1; background('Читалище Яворец Сканирай') 368x223dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event('Предстоящи събития Ден н') 340x50dp; widget_event2('Михаил В. Ломоносов 8 но') 340x36dp
+WIDGET 10-wide-4x2 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET signed-out: loans block hidden; event shown; no-events absent
+## W3. Wide widget: clicks
+WIDGET click catalog (widget_catalog @ 900 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+WIDGET click scan (widget_scan @ 694 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Въведи номера на ръка" text="Скенерът на баркодове идва с Google Play услугите — тук те липсват или скенерът още се изтегля. Въведи номера на ръка или опитай пак сл
+WIDGET click event (widget_event @ 540 786) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+WIDGET click app (t:Chitalishte Yavorets|Читалище Яворец @ 337 599) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+## W4. Sizes: 4×3, 3×2, 2×2, 2×3 (resize handles), light and dark each
+RESIZE 4x3 (4x3): bounds [57 537 1023 1437] options 
+WIDGET 20-wide-tall-4x3 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1437]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 20-wide-tall-4x3 (w15): WIDGET VIEW: title='Читалище Яворец' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 5 clickable, <48dp: 1; background('Читалище Яворец Сканирай') 368x343dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event('Предстоящи събития Ден н') 340x50dp; widget_event2('Михаил В. Ломоносов 8 но') 340x36dp
+WIDGET 20-wide-tall-4x3 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1437]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+RESIZE 3x2 (3x2): bounds [57 537 771 1123] options 
+WIDGET 30-medium-3x2 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan ]; bounds [57 537 771 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 30-medium-3x2 (w15): WIDGET VIEW: title='-' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 5 clickable, <48dp: 1; background('Читалище Яворец Сканирай') 272x223dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event('Предстоящи събития Ден н') 244x50dp; widget_event2('Михаил В. Ломоносов 8 но') 244x36dp
+WIDGET 30-medium-3x2 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan ]; bounds [57 537 771 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+RESIZE 2x2 (2x2): bounds [57 537 519 1123] options 
+WIDGET 40-small-2x2 light: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1123]; texts: Читалище|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 40-small-2x2 (w15): WIDGET VIEW: title='Читалище' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=[]
+WIDGET TARGETS: 3 clickable, <48dp: 1; background('Читалище Предстоящи съби') 176x223dp; widget_event('Предстоящи събития Ден н') 148x69dp; widget_event2('Михаил В. Ломоносов 8 но') 148x36dp
+WIDGET 40-small-2x2 dark: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1123]; texts: Читалище|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET click small-event (widget_event @ 288 773) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+WIDGET click small-app: 't:Chitalishte Yavorets|Читалище Яворец' not on the home screen
+RESIZE 2x3 (2x3): bounds [57 537 519 1437] options 
+WIDGET 50-small-tall-2x3 light: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1437]; texts: Читалище|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 50-small-tall-2x3 (w15): WIDGET VIEW: title='Читалище' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=[]
+WIDGET TARGETS: 3 clickable, <48dp: 1; background('Читалище Предстоящи съби') 176x343dp; widget_event('Предстоящи събития Ден н') 148x69dp; widget_event2('Михаил В. Ломоносов 8 но') 148x36dp
+WIDGET 50-small-tall-2x3 dark: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1437]; texts: Читалище|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+RESIZE back-4x2 (4x2): bounds [57 537 1023 1123] options 
+WIDGET back to 4x2: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+## W5. After force-stop of the app process
+WIDGET after force-stop: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+## W6. With a self-entered card (no sign-in: loans need a reader account)
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+WIDGET 80-card-4x2 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 80-card-4x2 (w15): WIDGET VIEW: title='Читалище Яворец' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 5 clickable, <48dp: 1; background('Читалище Яворец Сканирай') 368x223dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event('Предстоящи събития Ден н') 340x50dp; widget_event2('Михаил В. Ломоносов 8 но') 340x36dp
+WIDGET 80-card-4x2 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+RESIZE card-4x3 (4x3): bounds [57 537 1023 1437] options 
+WIDGET 81-card-4x3 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1437]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 81-card-4x3 (w15): WIDGET VIEW: title='Читалище Яворец' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 5 clickable, <48dp: 1; background('Читалище Яворец Сканирай') 368x343dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event('Предстоящи събития Ден н') 340x50dp; widget_event2('Михаил В. Ломоносов 8 но') 340x36dp
+WIDGET 81-card-4x3 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1437]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+RESIZE card-2x3 (2x3): bounds [57 537 519 1437] options 
+WIDGET 82-card-2x3 light: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1437]; texts: Читалище|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 82-card-2x3 (w15): WIDGET VIEW: title='Читалище' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=[]
+WIDGET TARGETS: 3 clickable, <48dp: 1; background('Читалище Предстоящи съби') 176x343dp; widget_event('Предстоящи събития Ден н') 148x69dp; widget_event2('Михаил В. Ломоносов 8 но') 148x36dp
+WIDGET 82-card-2x3 dark: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1437]; texts: Читалище|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+RESIZE card-2x2 (2x2): bounds [57 537 519 1123] options 
+WIDGET 83-card-2x2 light: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1123]; texts: Читалище|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 83-card-2x2 (w15): WIDGET VIEW: title='Читалище' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=[]
+WIDGET TARGETS: 3 clickable, <48dp: 1; background('Читалище Предстоящи съби') 176x223dp; widget_event('Предстоящи събития Ден н') 148x69dp; widget_event2('Михаил В. Ломоносов 8 но') 148x36dp
+WIDGET 83-card-2x2 dark: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1123]; texts: Читалище|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+RESIZE card-3x2 (3x2): bounds [57 537 771 1123] options 
+WIDGET 84-card-3x2 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan ]; bounds [57 537 771 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+WIDGET 84-card-3x2 (w15): WIDGET VIEW: title='-' logo=True events=2 [1 ноември 2026: Ден на народните будители] [8 ноември 2026: Михаил В. Ломоносов] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 5 clickable, <48dp: 1; background('Читалище Яворец Сканирай') 272x223dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event('Предстоящи събития Ден н') 244x50dp; widget_event2('Михаил В. Ломоносов 8 но') 244x36dp
+WIDGET 84-card-3x2 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan ]; bounds [57 537 771 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|; error text: 
+## COMPLETE
+## logcat findings
+app pids seen: ['4671', '10348', '10601']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 12
+   skipped-frames events=12 max=67 total=561
+== Davey: 22
+   davey events=22 max=1614ms median=938ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

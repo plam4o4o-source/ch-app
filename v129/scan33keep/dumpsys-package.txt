@@ -1,0 +1,233 @@
+Activity Resolver Table:
+  Schemes:
+      https:
+        55611c4 org.chyavorec.app/.MainActivity filter e147e2
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "https"
+          Authority: "chyavorec.org": -1
+          Path: "PatternMatcher{LITERAL: /}"
+          Path: "PatternMatcher{LITERAL: /news}"
+          Path: "PatternMatcher{LITERAL: /elektronen-katalog}"
+          Path: "PatternMatcher{LITERAL: /events}"
+          Path: "PatternMatcher{LITERAL: /kontakti}"
+          Path: "PatternMatcher{LITERAL: /load}"
+          Path: "PatternMatcher{LITERAL: /istoricheski-publikacii}"
+          Path: "PatternMatcher{LITERAL: /policy}"
+          Path: "PatternMatcher{LITERAL: /about}"
+          Path: "PatternMatcher{LITERAL: /history}"
+          Path: "PatternMatcher{LITERAL: /library}"
+          Path: "PatternMatcher{LITERAL: /folklorna-grupa}"
+          Path: "PatternMatcher{LITERAL: /yavorski-hlapeta}"
+          Path: "PatternMatcher{LITERAL: /tancov-klub}"
+          Path: "PatternMatcher{LITERAL: /klubove-i-krzhoci}"
+          Path: "PatternMatcher{LITERAL: /proekti}"
+          Path: "PatternMatcher{LITERAL: /darenija}"
+          Path: "PatternMatcher{LITERAL: /fotodokumentalna-izlozhba}"
+          Path: "PatternMatcher{LITERAL: /selo-yavorec}"
+          Path: "PatternMatcher{LITERAL: /nature}"
+          Path: "PatternMatcher{LITERAL: /dostapnost}"
+          Path: "PatternMatcher{PREFIX: /news/}"
+          AutoVerify=true
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        55611c4 org.chyavorec.app/.MainActivity filter a778ad
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        52c1065 org.chyavorec.app/androidx.profileinstaller.ProfileInstallReceiver filter c86eb48
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        52c1065 org.chyavorec.app/androidx.profileinstaller.ProfileInstallReceiver filter 3dff13a
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        52c1065 org.chyavorec.app/androidx.profileinstaller.ProfileInstallReceiver filter eb591eb
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        52c1065 org.chyavorec.app/androidx.profileinstaller.ProfileInstallReceiver filter 2d24de1
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+      android.intent.action.BOOT_COMPLETED:
+        6ff2a9 org.chyavorec.app/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 350002e
+          Action: "android.intent.action.BOOT_COMPLETED"
+      android.appwidget.action.APPWIDGET_UPDATE:
+        e9ea773 org.chyavorec.app/.widget.ChitalishteWidgetReceiver filter 6848630
+          Action: "android.appwidget.action.APPWIDGET_UPDATE"
+      androidx.work.diagnostics.REQUEST_DIAGNOSTICS:
+        ab247cf org.chyavorec.app/androidx.work.impl.diagnostics.DiagnosticsReceiver filter 8e3d55c
+          Action: "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+
+Service Resolver Table:
+  Non-Data Actions:
+      android.service.quicksettings.action.QS_TILE:
+        44be706 org.chyavorec.app/.tile.CardTileService filter 95961c7 permission android.permission.BIND_QUICK_SETTINGS_TILE
+          Action: "android.service.quicksettings.action.QS_TILE"
+
+Domain verification status:
+  org.chyavorec.app:
+    ID: e1fb5e48-277e-4269-9ae5-3c0c0bf8d02b
+    Signatures: [6F:31:D8:72:AC:DD:FF:C3:14:A2:64:BB:A6:13:8E:91:9A:E5:42:95:1A:23:AD:AA:2A:15:D2:C1:45:2C:B3:E1]
+    Domain verification state:
+      chyavorec.org: legacy_failure
+    User all:
+      Verification link handling allowed: true
+      Selection state:
+        Disabled:
+          chyavorec.org
+
+Permissions:
+  Permission [org.chyavorec.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (83fe555):
+    sourcePackage=org.chyavorec.app
+    uid=10174 gids=[] type=0 prot=signature
+    perm=PermissionInfo{faa0e35 org.chyavorec.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  org.chyavorec.app/androidx.startup.InitializationProvider:
+    Provider{8fa58b1 org.chyavorec.app/androidx.startup.InitializationProvider}
+  org.chyavorec.app/androidx.core.content.FileProvider:
+    Provider{383e196 org.chyavorec.app/androidx.core.content.FileProvider}
+  org.chyavorec.app/com.google.mlkit.common.internal.MlKitInitProvider:
+    Provider{de6f117 org.chyavorec.app/com.google.mlkit.common.internal.MlKitInitProvider}
+
+ContentProvider Authorities:
+  [org.chyavorec.app.androidx-startup]:
+    Provider{8fa58b1 org.chyavorec.app/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{fd0485b org.chyavorec.app}
+  [org.chyavorec.app.mlkitinitprovider]:
+    Provider{de6f117 org.chyavorec.app/com.google.mlkit.common.internal.MlKitInitProvider}
+      applicationInfo=ApplicationInfo{31cb8f8 org.chyavorec.app}
+  [org.chyavorec.app.files]:
+    Provider{383e196 org.chyavorec.app/androidx.core.content.FileProvider}
+      applicationInfo=ApplicationInfo{b6681d1 org.chyavorec.app}
+
+Key Set Manager:
+  [org.chyavorec.app]
+      Signing KeySets: 53
+
+Packages:
+  Package [org.chyavorec.app] (3410f37):
+    userId=10174
+    pkg=Package{b1d8d6e org.chyavorec.app}
+    codePath=/data/app/~~iEyi2c9Y7cadSOspSUkWUw==/org.chyavorec.app-21KP_kuBEnwbMG1TrGhG1g==
+    resourcePath=/data/app/~~iEyi2c9Y7cadSOspSUkWUw==/org.chyavorec.app-21KP_kuBEnwbMG1TrGhG1g==
+    legacyNativeLibraryDir=/data/app/~~iEyi2c9Y7cadSOspSUkWUw==/org.chyavorec.app-21KP_kuBEnwbMG1TrGhG1g==/lib
+    extractNativeLibs=true
+    primaryCpuAbi=x86_64
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=1488542 minSdk=26 targetSdk=37
+    minExtensionVersions=[]
+    versionName=1.2.29
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE HAS_DOMAIN_URLS PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesIntents=[Intent { act=android.intent.action.DIAL }, Intent { act=android.intent.action.SENDTO dat=mailto:xx }, Intent { act=android.intent.action.VIEW dat=geo:/... }, Intent { act=android.intent.action.INSERT dat=content://*/... typ=vnd.android.cursor.dir/event }, Intent { act=android.support.customtabs.action.CustomTabsService }, Intent { act=android.intent.action.VIEW dat=content://*/... typ=application/pdf }, Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:/... }]
+    dataDir=/data/user/0/org.chyavorec.app
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-10-31 22:24:31
+    lastUpdateTime=2026-10-31 22:24:32
+    packageSource=0
+    signatures=PackageSignatures{5ab449c version:2, signatures:[62ca1c8f], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    declared permissions:
+      org.chyavorec.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.POST_NOTIFICATIONS
+      android.permission.REQUEST_INSTALL_PACKAGES
+      android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION
+      android.permission.WAKE_LOCK
+      android.permission.RECEIVE_BOOT_COMPLETED
+      android.permission.FOREGROUND_SERVICE
+      org.chyavorec.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.FOREGROUND_SERVICE: granted=true
+      android.permission.RECEIVE_BOOT_COMPLETED: granted=true
+      android.permission.INTERNET: granted=true
+      android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION: granted=true
+      org.chyavorec.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.REQUEST_INSTALL_PACKAGES: granted=false
+      android.permission.WAKE_LOCK: granted=true
+    User 0: ceDataInode=131232 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      installReason=0
+      firstInstallTime=2026-10-31 22:24:32
+      uninstallReason=0
+      overlay paths:
+        /product/overlay/EmulationPixel6/EmulationPixel6Overlay.apk
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+      legacy overlay paths:
+        /product/overlay/EmulationPixel6/EmulationPixel6Overlay.apk
+        /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+      enabledComponents:
+        androidx.work.impl.background.systemalarm.RescheduleReceiver
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+    com.google.android.settings.intelligence:
+      org.chyavorec.app
+    com.google.android.apps.messaging:
+      org.chyavorec.app
+    org.chyavorec.app:
+      com.google.android.dialer
+      com.google.android.setupwizard
+      com.google.android.calendar
+      com.google.android.apps.docs
+      com.android.chrome
+      com.google.android.apps.maps
+      com.google.android.gm
+  queryable via interaction:
+    User 0:
+      [android,com.android.providers.settings,com.android.emulator.multidisplay,com.android.settings,com.android.server.telecom,com.android.inputdevices,com.android.location.fused,com.android.localtransport,com.android.dynsystem,com.android.wallpaperbackup,com.android.keychain]:
+        org.chyavorec.app
+      [com.google.android.gms,com.google.android.gsf]:
+        org.chyavorec.app
+      com.google.android.inputmethod.latin:
+        org.chyavorec.app
+      org.chyavorec.app:
+        [android,com.android.providers.settings,com.android.emulator.multidisplay,com.android.settings,com.android.server.telecom,com.android.inputdevices,com.android.location.fused,com.android.localtransport,com.android.dynsystem,com.android.wallpaperbackup,com.android.keychain]
+  queryable via uses-library:
+
+Dexopt state:
+  [org.chyavorec.app]
+    path: /data/app/~~iEyi2c9Y7cadSOspSUkWUw==/org.chyavorec.app-21KP_kuBEnwbMG1TrGhG1g==/base.apk
+      x86_64: [status=verify] [reason=install]
+  BgDexopt state:
+    enabled:true
+    mDexOptThread:null
+    mDexOptCancellingThread:null
+    mFinishedPostBootUpdate:false
+    mLastExecutionStatus:0
+    mLastExecutionStartTimeMs:0
+    mLastExecutionDurationIncludingSleepMs:0
+    mLastExecutionStartUptimeMs:0
+    mLastExecutionDurationMs:0
+    now:142795
+    mLastCancelledPackages:
+    mFailedPackageNamesPrimary:
+    mFailedPackageNamesSecondary:
+
+Compiler stats:
+  [org.chyavorec.app]
+     base.apk - 3010

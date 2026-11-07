@@ -1,0 +1,52 @@
+part widgetlang; APK: 1.2.29 7bd2513 (NotifierTest: тестовете за снимки и действия — в NotifierTes); versionCode 1488542; x86_64 libs: 2 size 4100618 bytes
+base APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4; update manifest: no-update stub size 4323599 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.29 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4230 ms
+## WL1. System EN, app BG: add the widget
+system locale:  / config: mcc310-mnc260-en-rUS-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-nowidecg-lowdr-port-notnight-420dpi-finger-keysexposed-qwerty-navhidden-nonav-2209x1080-v33; app: [bg-BG]
+WIDGET lang long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET lang picker: our row @ 437 809; size label @ 540 1717; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
+WIDGET lang after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
+WIDGET lang: widgets of ours bound: 0 -> 1 (ids id=2 ); options: 
+WIDGET-LANG 01-sysEN-appBG: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+## WL2. System EN: the app switched to English in its Settings (process kept)
+APP language chosen in Settings: English; get-app-locales: [en]; pid 4328
+WIDGET-LANG 02-sysEN-appEN-right-after: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 03-sysEN-appEN-after-15s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 04-sysEN-appEN-after-reopen: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 05-sysEN-appEN-after-restart: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+## WL3. System BG (framework restart), app EN
+SYSTEM locale -> bg-BG: 
+SYSTEM locale now: persist.sys.locale=bg-BG; config: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-nowidecg-lowdr-port-notnight-420dpi-finger-keysexposed-qwerty-navhidden-nonav-2209x1080-v33
+WIDGET-LANG 10-sysBG-appEN-after-reboot: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+app screen (should be EN): text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" content-desc="Search" text="Search books, news, events…" content-desc="Scan barcode
+WIDGET-LANG 11-sysBG-appEN-after-launch: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+## WL4. System BG, app switched to Български in Settings, then restart
+APP language chosen in Settings: Български; get-app-locales: [bg]; pid 9827
+WIDGET-LANG 20-sysBG-appBG-right-after: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 21-sysBG-appBG-after-restart: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+## WL5. System BG, app EN set with cmd locale (as from the system's per-app language screen), restart
+WIDGET-LANG 30-sysBG-appEN-cmd-right-after: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 31-sysBG-appEN-cmd-after-restart: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 32-sysBG-appEN-dark: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+SYSTEM locale -> en-US: 
+SYSTEM locale now: persist.sys.locale=en-US; config: config: mcc310-mnc260-en-rUS-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-nowidecg-lowdr-port-notnight-420dpi-finger-keysexposed-qwerty-navhidden-nonav-2209x1080-v33
+## COMPLETE
+## logcat findings
+app pids seen: ['4328', '8055', '9827', '12630', '12807', '14207']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 11
+   skipped-frames events=11 max=91 total=472
+== Davey: 18
+   davey events=18 max=2461ms median=1064ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

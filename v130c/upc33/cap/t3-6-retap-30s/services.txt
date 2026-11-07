@@ -1,0 +1,82 @@
+      ConnectionRecord{a3fd686 u0 CR IMP com.google.android.networkstack.tethering/com.android.networkstack.tethering.TetheringService:@c6a4b61}
+
+  * ServiceRecord{48bacd8 u0 org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService}
+    intent={cmp=org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService}
+    packageName=org.chyavorec.app
+    processName=org.chyavorec.app
+    permission=android.permission.BIND_JOB_SERVICE
+    baseDir=/data/app/~~QkR7_c3pQQRgbkg_YUbvgg==/org.chyavorec.app-d_RMkIVBQ7xfLpry_ThO4Q==/base.apk
+    dataDir=/data/user/0/org.chyavorec.app
+    app=ProcessRecord{3b22c86 5589:org.chyavorec.app/u0a175}
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=android
+    recentCallingUid=1000
+    allowStartForeground=PROC_STATE_PERSISTENT
+    startForegroundCount=0
+    infoAllowStartForeground=[callingPackage: android; callingUid: 1000; uidState: PER ; intent: Intent { cmp=org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService }; code:PROC_STATE_PERSISTENT; tempAllowListReason:<null>; targetSdkVersion:37; callerTargetSdkVersion:33; startForegroundCount:0; bindFromPackage:null]
+    createTime=-30s566ms startingBgTimeout=--
+    lastActivity=-30s566ms restartTime=-30s566ms createdFromFg=true
+    Bindings:
+    * IntentBindRecord{8fa4f6c CREATE}:
+      intent={cmp=org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService}
+      binder=android.os.BinderProxy@4ee935
+      requested=true received=true hasBound=true doRebind=false
+      * Client AppBindRecord{a5a1ca ProcessRecord{d5d91a5 488:system/1000}}
+        Per-process Connections:
+          ConnectionRecord{7551fbb u0 CR !FG !PRCP org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService:@d50d44a}
+    All Connections:
+      ConnectionRecord{7551fbb u0 CR !FG !PRCP org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService:@d50d44a}
+
+  * ServiceRecord{a182952 u0 com.google.android.gms/.nearby.sharing.ReceiveSurfaceService}
+    intent={cmp=com.google.android.gms/.nearby.sharing.ReceiveSurfaceService}
+    packageName=com.google.android.gms
+    processName=com.google.android.gms.persistent
+    baseDir=/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
+--
+      ConnectionRecord{801c71e u0 CR !FG !VIS com.google.android.gms/.location.geocode.GeocodeService:@fa1bf59}
+
+  * ServiceRecord{63745c6 u0 org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService}
+    intent={act=ACTION_START_FOREGROUND cmp=org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService}
+    packageName=org.chyavorec.app
+    processName=org.chyavorec.app
+    baseDir=/data/app/~~QkR7_c3pQQRgbkg_YUbvgg==/org.chyavorec.app-d_RMkIVBQ7xfLpry_ThO4Q==/base.apk
+    dataDir=/data/user/0/org.chyavorec.app
+    app=ProcessRecord{3b22c86 5589:org.chyavorec.app/u0a175}
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=org.chyavorec.app
+    recentCallingUid=10175
+    allowStartForeground=PROC_STATE_TOP
+    startForegroundCount=1
+    infoAllowStartForeground=[callingPackage: org.chyavorec.app; callingUid: 10175; uidState: TOP ; intent: Intent { act=ACTION_START_FOREGROUND cmp=org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService (has extras) }; code:PROC_STATE_TOP; tempAllowListReason:<setPendingIntentAllowlistDuration,reason:NotificationManagerService,pendingintent:u0a157:org.chyavorec.app.update.CANCEL_DOWNLOAD,reasonCode:NOTIFICATION_SERVICE,duration:30000,callingUid:10157>; targetSdkVersion:37; callerTargetSdkVersion:37; startForegroundCount:0; bindFromPackage:null]
+    isForeground=true foregroundId=701 foregroundNoti=Notification(channel=updates shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x6a color=0xff8b6914 category=progress groupKey=silent actions=1 vis=PUBLIC)
+    createTime=-30s104ms startingBgTimeout=--
+    lastActivity=-30s103ms restartTime=-30s104ms createdFromFg=true
+    startRequested=true delayedStop=false stopIfKilled=true callStart=true lastStartId=2
+    Delivered Starts:
+    #0 id=1 dur=-30s104ms dxc=1
+      intent=Intent { act=ACTION_START_FOREGROUND cmp=org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService (has extras) }
+    #1 id=2 dur=-30s103ms dxc=1
+      intent=Intent { act=ACTION_NOTIFY cmp=org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService (has extras) }
+
+  * ServiceRecord{579b2a4 u0 com.android.phone/com.android.internal.telephony.CellularNetworkService}
+    intent={act=android.telephony.NetworkService pkg=com.android.phone}
+    packageName=com.android.phone
+    processName=com.android.phone
+    permission=android.permission.BIND_TELEPHONY_NETWORK_SERVICE
+--
+    binding=AppBindRecord{d217735 com.google.android.ims/.services.RcsService:com.google.android.apps.messaging}
+    conn=android.os.BinderProxy@d134f4a flags=0x1
+  * ConnectionRecord{7551fbb u0 CR !FG !PRCP org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService:@d50d44a}
+    binding=AppBindRecord{a5a1ca org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService:system}
+    conn=android.app.LoadedApk$ServiceDispatcher$InnerConnection@d50d44a flags=0x8105
+  * ConnectionRecord{931bb2d u0 CR WACT CAPS com.google.android.gms/.chimera.GmsApiService:@d6dce44}
+    binding=AppBindRecord{c4184cf com.google.android.gms/.chimera.GmsApiService:com.google.android.ims}
+    conn=android.os.BinderProxy@d6dce44 flags=0x1081
+  * ConnectionRecord{70c5753 u0 CR WACT CAPS com.google.android.gms/.chimera.PersistentDirectBootAwareApiService:@d7a4b42}
+    binding=AppBindRecord{8a618db com.google.android.gms/.chimera.PersistentDirectBootAwareApiService:com.google.android.gms}
+--
+
+Active foreground apps - user 0:
+  #0: org.chyavorec.app
+    mNumActive=1 mAppOnTop=true mShownWhileTop=true mShownWhileScreenOn=true
+    mStartTime=-30s104ms mStartVisibleTime=-30s104ms

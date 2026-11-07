@@ -1,0 +1,40 @@
+app pids seen: ['4828', '5417', '5696', '5961', '6687', '7052', '7258', '7439', '7504', '7560', '7613', '7681', '7735', '7797', '8261', '8759', '8899', '9044', '9212', '9289', '9359', '9412', '9466', '9519', '9575', '9629', '9687', '9740', '10164', '10450', '10591', '10736', '10890', '10957', '11032', '11084', '11171', '11236', '11306', '11360', '11416', '11471', '11960', '12480', '12623', '12767', '12919', '12985', '13041', '13098', '13151', '13205', '13258', '13310', '13363', '13415', '13803', '14083', '14225', '14372', '14519', '14585', '14641', '14695', '14750', '14802', '14857', '14911', '14965', '15020']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 98
+   skipped-frames events=98 max=88 total=4652
+   11-01 21:14:44.455  4828  4828 I Choreographer: Skipped 88 frames!  The application may be doing too much work on its main thread.
+   11-01 21:14:45.029  4828  4828 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-01 21:14:56.646  4828  4828 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   11-01 21:14:58.459  4828  4828 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-01 21:15:16.079  5417  5417 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+   11-01 21:15:17.175  5417  5417 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-01 21:15:32.770  5696  5696 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-01 21:15:47.566  5961  5961 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-01 21:15:48.223  5961  5961 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-01 21:15:49.284  5961  5961 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+   11-01 21:16:08.839  6687  6687 I Choreographer: Skipped 72 frames!  The application may be doing too much work on its main thread.
+   11-01 21:16:10.023  6687  6687 I Choreographer: Skipped 66 frames!  The application may be doing too much work on its main thread.
+== Davey: 113
+   davey events=113 max=2398ms median=889ms
+   11-01 21:14:46.642  4828  4884 I OpenGLRenderer: Davey! duration=1790ms; Flags=1, FrameTimelineVsyncId=5933, IntendedVsync=115893906581, Vsync=116427239893, InputEventId=0, HandleInputStart=116430865710, AnimationStart=116430866651, Perform
+   11-01 21:14:56.957  4828  4884 I OpenGLRenderer: Davey! duration=1074ms; Flags=0, FrameTimelineVsyncId=6664, IntendedVsync=127077239467, Vsync=127077239467, InputEventId=0, HandleInputStart=127081164985, AnimationStart=127081165616, Perform
+   11-01 21:14:57.195  4828  4839 I OpenGLRenderer: Davey! duration=1309ms; Flags=0, FrameTimelineVsyncId=6673, IntendedVsync=127110572799, Vsync=128043906095, InputEventId=0, HandleInputStart=128048214229, AnimationStart=128048214990, Perform
+   11-01 21:14:59.014  4828  4839 I OpenGLRenderer: Davey! duration=1168ms; Flags=0, FrameTimelineVsyncId=6841, IntendedVsync=129127239385, Vsync=129127239385, InputEventId=0, HandleInputStart=129132398781, AnimationStart=129132399453, Perform
+   11-01 21:14:59.229  4828  4839 I OpenGLRenderer: Davey! duration=928ms; Flags=0, FrameTimelineVsyncId=6851, IntendedVsync=129177239383, Vsync=129860572689, InputEventId=0, HandleInputStart=129861302104, AnimationStart=129861302755, PerformT
+   11-01 21:14:59.503  4828  4839 I OpenGLRenderer: Davey! duration=750ms; Flags=0, FrameTimelineVsyncId=6883, IntendedVsync=129893906021, Vsync=130177239343, InputEventId=0, HandleInputStart=130190464519, AnimationStart=130190464939, PerformT
+   11-01 21:15:09.888  4828  5073 I OpenGLRenderer: Davey! duration=989ms; Flags=0, FrameTimelineVsyncId=7256, IntendedVsync=140143905611, Vsync=140360572269, InputEventId=0, HandleInputStart=140374515800, AnimationStart=140374516501, PerformT
+   11-01 21:15:10.079  4828  5073 I OpenGLRenderer: Davey! duration=702ms; Flags=0, FrameTimelineVsyncId=7270, IntendedVsync=140393905601, Vsync=140577238927, InputEventId=0, HandleInputStart=140584865616, AnimationStart=140584866378, PerformT
+   11-01 21:15:17.211  5417  5437 I OpenGLRenderer: Davey! duration=1114ms; Flags=1, FrameTimelineVsyncId=8090, IntendedVsync=147493905317, Vsync=147977238631, InputEventId=0, HandleInputStart=147992545424, AnimationStart=147992546076, Perform
+   11-01 21:15:17.903  5417  5436 I OpenGLRenderer: Davey! duration=780ms; Flags=0, FrameTimelineVsyncId=8259, IntendedVsync=148027238629, Vsync=148577238607, InputEventId=0, HandleInputStart=148577363812, AnimationStart=148577364513, PerformT
+   11-01 21:15:18.140  5417  5436 I OpenGLRenderer: Davey! duration=756ms; Flags=0, FrameTimelineVsyncId=8269, IntendedVsync=148593905273, Vsync=148960571925, InputEventId=0, HandleInputStart=148974715798, AnimationStart=148974716389, PerformT
+   11-01 21:15:18.978  5417  5437 I OpenGLRenderer: Davey! duration=1197ms; Flags=0, FrameTimelineVsyncId=8421, IntendedVsync=149093905253, Vsync=149343905243, InputEventId=0, HandleInputStart=149357116343, AnimationStart=149357116783, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 21:14:34.524  4574  4574 I PERFCHECK: section: AB new-0: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+   11-01 21:18:27.715  8114  8114 I PERFCHECK: section: AB base-1: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+   11-01 21:22:01.039 10024 10024 I PERFCHECK: section: AB new-1: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+   11-01 21:25:34.759 11730 11730 I PERFCHECK: section: AB base-2: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+   11-01 21:29:08.103 13674 13674 I PERFCHECK: section: AB new-2: fresh install, first launch, catalogue, 10 cold + 10 warm starts
+   11-01 21:32:40.127 15294 15294 I PERFCHECK: section: AB totals blocks 1-2 of each app; block 0 excluded

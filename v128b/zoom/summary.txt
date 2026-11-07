@@ -1,0 +1,39 @@
+part zoom; APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4 size 4323599 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+screen 1080x2400
+## Z-new. Viewer: double tap at 2× resets? pinch beyond 2× then double tap resets?
+installed new: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4 size 4323599;  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+touch device: /dev/input/event2 x-max=32767 y-max=32767 pressure=11
+Z-new round 1: after dtap on the pinched photo + swipe: text="2 / 29  ·  Фолклорен състав при читалището"
+ZOOM diff vs 1x: after dtap at 2x=0.0  pinched=87.0  after dtap on pinched=0.4  (≈0 = back at 1x)
+Z-new round 2: after dtap on the pinched photo + swipe: text="2 / 29  ·  Фолклорен състав при читалището"
+ZOOM diff vs 1x: after dtap at 2x=0.0  pinched=87.0  after dtap on pinched=0.4  (≈0 = back at 1x)
+Z-new round 3: after dtap on the pinched photo + swipe: text="2 / 29  ·  Фолклорен състав при читалището"
+ZOOM diff vs 1x: after dtap at 2x=71.4  pinched=99.8  after dtap on pinched=0.4  (≈0 = back at 1x)
+## Z-base. Viewer: double tap at 2× resets? pinch beyond 2× then double tap resets?
+installed base: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+Z-base round 1: after dtap on the pinched photo + swipe: text="2 / 29  ·  Фолклорен състав при читалището"
+ZOOM diff vs 1x: after dtap at 2x=0.0  pinched=87.0  after dtap on pinched=0.4  (≈0 = back at 1x)
+Z-base round 2: after dtap on the pinched photo + swipe: text="2 / 29  ·  Фолклорен състав при читалището"
+ZOOM diff vs 1x: after dtap at 2x=0.0  pinched=87.0  after dtap on pinched=0.4  (≈0 = back at 1x)
+Z-base round 3: after dtap on the pinched photo + swipe: text="2 / 29  ·  Фолклорен състав при читалището"
+ZOOM diff vs 1x: after dtap at 2x=71.4  pinched=99.8  after dtap on pinched=0.4  (≈0 = back at 1x)
+## COMPLETE
+## logcat findings
+app pids seen: ['5541', '6140', '9034', '9200']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 8
+   skipped-frames events=8 max=85 total=361
+== Davey: 7
+   davey events=7 max=2005ms median=854ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

@@ -1,0 +1,123 @@
+app pids seen: ['5246', '7378', '8654', '9077', '9163', '9337', '9418', '9538']
+== FATAL: 10
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: FATAL EXCEPTION: main
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: Process: org.chyavorec.app, PID: 8654
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: java.lang.IllegalArgumentException
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.LinearGradient.nativeCreate(Native Method)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.LinearGradient.createNativeInstance(LinearGradient.java:158)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.Shader.getNativeInstance(Shader.java:191)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.Paint.getNativeInstance(Paint.java:733)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.BaseRecordingCanvas.drawRect(BaseRecordingCanvas.java:368)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at m6.q(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:7)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at l30.w0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:68)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at vp2.w0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:3)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at pd1.P0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:42)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at s.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:788)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at ud1.c0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:3)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at vp2.c(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:50)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at vp2.a(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:93)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at tr.c0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:313)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at dj3.a1(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:50)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at yi3.a(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:25)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at y45.d(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:315)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at s8.invoke(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:243)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at u3.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:338)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at n22.c(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:47)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at ae.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:68)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at u22.q(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:77)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: Process: org.chyavorec.app, PID: 8654
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: java.lang.IllegalArgumentException
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.LinearGradient.nativeCreate(Native Method)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.LinearGradient.createNativeInstance(LinearGradient.java:158)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.Shader.getNativeInstance(Shader.java:191)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.Paint.getNativeInstance(Paint.java:733)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at android.graphics.BaseRecordingCanvas.drawRect(BaseRecordingCanvas.java:368)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at m6.q(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:7)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at l30.w0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:68)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at vp2.w0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:3)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at pd1.P0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:42)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at s.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:788)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at ud1.c0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:3)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at vp2.c(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:50)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at vp2.a(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:93)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at tr.c0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:313)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at dj3.a1(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:50)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at yi3.a(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:25)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at y45.d(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:315)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at s8.invoke(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:243)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at u3.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:338)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at n22.c(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:47)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at ae.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:68)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at u22.q(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:77)
+   11-07 16:17:31.568  8654  8654 E AndroidRuntime: 	at n22.e(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:55)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: FATAL EXCEPTION: main
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: Process: org.chyavorec.app, PID: 9077
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: java.lang.IllegalArgumentException
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at android.graphics.LinearGradient.nativeCreate(Native Method)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at android.graphics.LinearGradient.createNativeInstance(LinearGradient.java:158)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at android.graphics.Shader.getNativeInstance(Shader.java:191)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at android.graphics.Paint.getNativeInstance(Paint.java:733)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at android.graphics.BaseRecordingCanvas.drawRect(BaseRecordingCanvas.java:368)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at m6.q(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:7)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at l30.w0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:68)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at vp2.w0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:3)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at pd1.P0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:42)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at s.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:788)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at ud1.c0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:3)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at vp2.c(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:50)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at vp2.a(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:93)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at tr.c0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:313)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at dj3.a1(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:50)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at yi3.a(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:25)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at y45.d(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:315)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at s8.invoke(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:243)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at u3.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:338)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at n22.c(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:47)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at ae.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:68)
+   11-07 16:17:40.085  9077  9077 E AndroidRuntime: 	at u22.q(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:77)
+== ANR: 0
+== StrictMode: 0
+== Skipped: 41
+   skipped-frames events=41 max=110 total=2182
+   11-07 16:08:00.688  5246  5246 I Choreographer: Skipped 110 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:01.378  5246  5246 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:02.342  5246  5246 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:03.828  5246  5246 I Choreographer: Skipped 74 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:05.428  5246  5246 I Choreographer: Skipped 95 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:06.157  5246  5246 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:06.988  5246  5246 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:07.853  5246  5246 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:14.631  5246  5246 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:20.833  5246  5246 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:28.170  5246  5246 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-07 16:08:48.477  5246  5246 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+== Davey: 76
+   davey events=76 max=2715ms median=894ms
+   11-07 16:08:02.490  5246  5261 I OpenGLRenderer: Davey! duration=1763ms; Flags=1, FrameTimelineVsyncId=7372, IntendedVsync=106155983088, Vsync=106805983062, InputEventId=0, HandleInputStart=106813286344, AnimationStart=106813286985, Perform
+   11-07 16:08:04.589  5246  5261 I OpenGLRenderer: Davey! duration=1680ms; Flags=0, FrameTimelineVsyncId=7486, IntendedVsync=107922655184, Vsync=107955988514, InputEventId=0, HandleInputStart=107964140083, AnimationStart=107964140714, Perform
+   11-07 16:08:04.690  5246  5260 I OpenGLRenderer: Davey! duration=806ms; Flags=0, FrameTimelineVsyncId=7499, IntendedVsync=107972649682, Vsync=108005983014, InputEventId=0, HandleInputStart=108013013997, AnimationStart=108013014338, PerformT
+   11-07 16:08:05.078  5246  5260 I OpenGLRenderer: Davey! duration=1726ms; Flags=0, FrameTimelineVsyncId=7508, IntendedVsync=108022649680, Vsync=109255982964, InputEventId=0, HandleInputStart=109264189023, AnimationStart=109264189394, Perform
+   11-07 16:08:06.986  5246  5261 I OpenGLRenderer: Davey! duration=2606ms; Flags=0, FrameTimelineVsyncId=7718, IntendedVsync=109272649630, Vsync=110855982900, InputEventId=0, HandleInputStart=110863549715, AnimationStart=110863550385, Perform
+   11-07 16:08:07.148  5246  5261 I OpenGLRenderer: Davey! duration=889ms; Flags=0, FrameTimelineVsyncId=7974, IntendedVsync=110872649566, Vsync=110905982898, InputEventId=0, HandleInputStart=110908740499, AnimationStart=110908741141, PerformT
+   11-07 16:08:07.851  5246  5261 I OpenGLRenderer: Davey! duration=1377ms; Flags=0, FrameTimelineVsyncId=7981, IntendedVsync=110922649564, Vsync=111589316204, InputEventId=0, HandleInputStart=111592338754, AnimationStart=111592339244, Perform
+   11-07 16:08:08.179  5246  5261 I OpenGLRenderer: Davey! duration=1605ms; Flags=0, FrameTimelineVsyncId=8027, IntendedVsync=111605988416, Vsync=112422655001, InputEventId=0, HandleInputStart=112423320218, AnimationStart=112423320709, Perform
+   11-07 16:08:14.786  5246  5428 I OpenGLRenderer: Davey! duration=852ms; Flags=0, FrameTimelineVsyncId=8606, IntendedVsync=119122649236, Vsync=119122649236, InputEventId=0, HandleInputStart=119124718522, AnimationStart=119124719183, PerformT
+   11-07 16:08:15.464  5246  5428 I OpenGLRenderer: Davey! duration=1174ms; Flags=0, FrameTimelineVsyncId=8643, IntendedVsync=119305982562, Vsync=120055982532, InputEventId=0, HandleInputStart=120067792081, AnimationStart=120067792492, Perform
+   11-07 16:08:17.999  5246  5260 I OpenGLRenderer: Davey! duration=716ms; Flags=0, FrameTimelineVsyncId=8936, IntendedVsync=122355982440, Vsync=122672649094, InputEventId=0, HandleInputStart=122689255832, AnimationStart=122689256123, PerformT
+   11-07 16:08:21.179  5246  5261 I OpenGLRenderer: Davey! duration=997ms; Flags=0, FrameTimelineVsyncId=9184, IntendedVsync=125489315648, Vsync=125672648974, InputEventId=0, HandleInputStart=125673047868, AnimationStart=125673048510, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 16:07:53.038  4888  4888 I PERFCHECK: section: I-new. Install new, warm-up, library card
+   11-07 16:09:50.497  7359  7359 I PERFCHECK: section: I-new. Home: cold start, 0-24 s ribbon + carousel and 37-67 s should be ~0
+   11-07 16:11:07.978  7678  7678 I PERFCHECK: section: I-new. Library card: first 30 s shader budget, then 35-65 s, then with sensor jitter
+   11-07 16:12:54.190  8040  8040 I PERFCHECK: section: I-new. Other screens, 8 s after opening, 20 s each
+   11-07 16:15:39.221  8367  8367 I PERFCHECK: section: I-new. In the background Home key
+   11-07 16:16:14.550  8495  8495 I PERFCHECK: section: I-base. Install base, warm-up, library card
+   11-07 16:17:31.998   481   822 I ActivityManager: Process org.chyavorec.app (pid 8654) has died: fg  TOP 
+   11-07 16:17:43.282  9152  9152 I PERFCHECK: section: I-base. Home: cold start, 0-24 s ribbon + carousel and 37-67 s should be ~0
+   11-07 16:18:57.900  9246  9246 I PERFCHECK: section: I-base. Library card: first 30 s shader budget, then 35-65 s, then with sensor jitter
+   11-07 16:18:59.278   481  1748 I ActivityManager: Process org.chyavorec.app (pid 9163) has died: fg  TOP 
+   11-07 16:19:09.110   481  1748 I ActivityManager: Process org.chyavorec.app (pid 9337) has died: prcp TOP 
+   11-07 16:19:17.343   481  1566 I ActivityManager: Process org.chyavorec.app (pid 9418) has died: prcp TOP 
+   11-07 16:19:20.231  9530  9530 I PERFCHECK: section: I-base. Other screens, 8 s after opening, 20 s each
+   11-07 16:22:09.122 10059 10059 I PERFCHECK: section: I-base. In the background Home key

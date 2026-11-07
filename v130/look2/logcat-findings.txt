@@ -1,0 +1,22 @@
+app pids seen: ['6026', '7902', '10277']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=43 total=111
+   11-01 19:01:28.637  6026  6026 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-01 19:03:19.657  7902  7902 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-01 19:07:31.676 10277 10277 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+== Davey: 6
+   davey events=6 max=881ms median=750ms
+   11-01 19:01:29.629  6026  6039 I OpenGLRenderer: Davey! duration=881ms; Flags=1, FrameTimelineVsyncId=7026, IntendedVsync=79755518176, Vsync=80105518162, InputEventId=0, HandleInputStart=80108601129, AnimationStart=80108601750, PerformTrave
+   11-01 19:03:19.959  7902  7914 I OpenGLRenderer: Davey! duration=712ms; Flags=0, FrameTimelineVsyncId=13432, IntendedVsync=190205513758, Vsync=190755513736, InputEventId=0, HandleInputStart=190766807103, AnimationStart=190766808215, Perform
+   11-01 19:03:20.111  7902  7914 I OpenGLRenderer: Davey! duration=738ms; Flags=0, FrameTimelineVsyncId=13432, IntendedVsync=190205513758, Vsync=190755513736, InputEventId=0, HandleInputStart=190766807103, AnimationStart=190766808215, Perform
+   11-01 19:07:31.680 10277 10307 I OpenGLRenderer: Davey! duration=763ms; Flags=0, FrameTimelineVsyncId=23190, IntendedVsync=441972170354, Vsync=442022170352, InputEventId=0, HandleInputStart=442026615368, AnimationStart=442026615558, Perform
+   11-01 19:07:31.868 10277 10307 I OpenGLRenderer: Davey! duration=857ms; Flags=0, FrameTimelineVsyncId=23265, IntendedVsync=442055503684, Vsync=442772170322, InputEventId=0, HandleInputStart=442785683545, AnimationStart=442785684286, Perform
+   11-01 19:07:52.944 10277 10290 I OpenGLRenderer: Davey! duration=711ms; Flags=0, FrameTimelineVsyncId=24568, IntendedVsync=463188836172, Vsync=463572169490, InputEventId=0, HandleInputStart=463588164262, AnimationStart=463588164873, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 19:01:27.538  6020  6020 I PERFCHECK: section: L0. First launch and warm-up
+   11-01 19:02:53.479  7875  7875 I PERFCHECK: section: L font130-xlarge
+   11-01 19:07:16.045 10260 10260 I PERFCHECK: section: L landscape

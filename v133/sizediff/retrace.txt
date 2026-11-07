@@ -1,0 +1,62 @@
+== stack id: r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439
+== new mapping header: 
+== base mapping header: 
+== retrace with the new mapping
+FATAL EXCEPTION: main
+Process: org.chyavorec.app, PID: 8654
+java.lang.IllegalArgumentException
+	at android.graphics.LinearGradient.nativeCreate(Native Method)
+	at android.graphics.LinearGradient.createNativeInstance(LinearGradient.java:158)
+	at android.graphics.Shader.getNativeInstance(Shader.java:191)
+	at android.graphics.Paint.getNativeInstance(Paint.java:733)
+	at android.graphics.BaseRecordingCanvas.drawRect(BaseRecordingCanvas.java:368)
+	at androidx.compose.ui.graphics.AndroidBlendMode_androidKt$$ExternalSyntheticApiModelOutline3.q(R8$$SyntheticClass:7)
+	at androidx.compose.ui.input.pointer.CancelTimeoutCancellationException.w0(SuspendingPointerInputFilter.kt:68)
+	at org.chyavorec.app.data.security.KeystoreCipher.w0(KeystoreCipher.kt:3)
+	at androidx.compose.foundation.gestures.DragGestureNode$processDragCancel$1.P0(Draggable.kt:42)
+	at androidx.compose.foundation.BorderModifierNode.drawGenericBorder(Border.kt:243)
+	at androidx.compose.foundation.BorderModifierNode.drawWithCacheModifierNode$lambda$0(Border.kt:183)
+	at androidx.compose.foundation.interaction.DragInteraction$Start.c0(DragInteraction.kt:3)
+	at org.chyavorec.app.data.security.KeystoreCipher.c(KeystoreCipher.kt:50)
+	at org.chyavorec.app.data.security.KeystoreCipher.loadOrCreateKey(KeystoreCipher.kt:50)
+	at androidx.compose.material3.internal.BackHandler_androidKt$$ExternalSyntheticLambda0.c0(R8$$SyntheticClass:313)
+	at coil3.network.NetworkFetcher$Factory.a1(NetworkFetcher.kt:50)
+	at androidx.work.Constraints.getRequiredNetworkType(Constraints.kt:40)
+	at androidx.work.impl.constraints.controllers.NetworkConnectedControllerPre28.hasConstraint(ContraintControllers.kt:160)
+	at androidx.compose.animation.SkipToLookaheadSizeNode.d(SkipToLookaheadSizeNode.kt:315)
+	at androidx.compose.foundation.text.contextmenu.modifier.AddTextContextMenuDataComponentsWithContextElement.i(TextContextMenuModifier.android.kt:338)
+	at com.google.android.gms.auth.blockstore.restorecredential.GetRestoreCredentialResponse.c(com.google.android.gms:play-services-auth-blockstore@@16.4.0:47)
+	at androidx.compose.animation.AnimatedContentKt$AnimatedContentImpl$11.i(AnimatedContent.kt:68)
+	at androidx.compose.ui.node.GlobalPositionAwareModifierNode.q(GlobalPositionAwareModifierNode.kt:77)
+Process: org.chyavorec.app, PID: 8654
+== retrace with the base mapping
+FATAL EXCEPTION: main
+Process: org.chyavorec.app, PID: 8654
+java.lang.IllegalArgumentException
+	at android.graphics.LinearGradient.nativeCreate(Native Method)
+	at android.graphics.LinearGradient.createNativeInstance(LinearGradient.java:158)
+	at android.graphics.Shader.getNativeInstance(Shader.java:191)
+	at android.graphics.Paint.getNativeInstance(Paint.java:733)
+	at android.graphics.BaseRecordingCanvas.drawRect(BaseRecordingCanvas.java:368)
+	at androidx.compose.ui.graphics.AndroidCanvas.drawRect(AndroidCanvas.android.kt:147)
+	at androidx.compose.ui.graphics.drawscope.CanvasDrawScope.drawRect-AsUm42w(CanvasDrawScope.kt:176)
+	at androidx.compose.ui.node.LayoutNodeDrawScope.drawRect-AsUm42w(LayoutNodeDrawScope.kt)
+	at androidx.compose.ui.graphics.drawscope.DrawScope.drawRect-AsUm42w$default(DrawScope.kt:430)
+	at org.chyavorec.app.ui.screens.my.CardScreensKt.tiltGloss$lambda$0(CardScreens.kt:215)
+	at androidx.compose.ui.draw.DrawWithContentModifier.draw(DrawModifier.kt:472)
+	at androidx.compose.ui.node.LayoutNodeDrawScope.drawDirect-eZhPAX0$ui(LayoutNodeDrawScope.kt:132)
+	at androidx.compose.ui.node.LayoutNodeDrawScope.performDraw(LayoutNodeDrawScope.kt:109)
+	at androidx.compose.ui.node.LayoutNodeDrawScope.drawContent(LayoutNodeDrawScope.kt:65)
+	at androidx.compose.foundation.BackgroundNode.draw(Background.kt:167)
+	at androidx.compose.ui.node.LayoutNodeDrawScope.draw-eZhPAX0$ui(LayoutNodeDrawScope.kt:119)
+	at androidx.compose.ui.node.NodeCoordinator.drawContainedDrawModifiers(NodeCoordinator.kt:515)
+	at androidx.compose.ui.node.NodeCoordinator._get_drawBlock_$lambda$0(NodeCoordinator.kt:538)
+	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:758)
+	at androidx.compose.ui.node.NodeCoordinator._get_drawBlock_$lambda$1(NodeCoordinator.kt:2587)
+	at androidx.compose.ui.platform.GraphicsLayerOwnerLayer.recordLambda$lambda$0(GraphicsLayerOwnerLayer.android.kt:293)
+	at androidx.compose.ui.graphics.layer.GraphicsLayer.drawWithChildTracking(AndroidGraphicsLayer.android.kt:480)
+	at androidx.compose.ui.graphics.layer.GraphicsLayer.access$drawWithChildTracking(AndroidGraphicsLayer.android.kt:57)
+	at androidx.compose.ui.graphics.layer.GraphicsLayer$clipDrawBlock$1.invoke(GraphicsLayer.java:70)
+	at androidx.compose.ui.graphics.layer.GraphicsLayer$clipDrawBlock$1.invoke(GraphicsLayer.java:65)
+	at androidx.compose.ui.graphics.layer.GraphicsLayerV29.record(GraphicsLayerV29.android.kt:323)
+Process: org.chyavorec.app, PID: 8654

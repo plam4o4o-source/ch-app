@@ -1,0 +1,88 @@
+part widgetlang; APK: 1.2.30 bf10741 (Какво ново: версия 1.2.30); versionCode 1488543; x86_64 libs: 2 size 4505009 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104418 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2863 ms
+## WL1. The widget (system en-US, app bg-BG)
+system: config: mcc310-mnc260-en-rUS-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-nowidecg-lowdr-port-notnight-420dpi-finger-keysexposed-qwerty-navhidden-nonav-2209x1080-v33; app: [bg-BG]
+WIDGET lang long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET lang picker: our row @ 437 983; size label @ 540 1891; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
+WIDGET lang after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
+WIDGET lang: widgets of ours bound: 0 -> 1 (ids id=2 ); options: 
+WIDGET-LANG 01-appBG: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 01-appBG: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+WIDGET event column 340x90dp clickable=true label='Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов '
+WIDGET TARGETS: 4 clickable, <48dp: 0; background('Читалище Яворец Сканирай') 368x223dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event_column('Предстоящи събития Ден н') 340x90dp
+## WL2. App language → English from the system per-app setting (cmd locale), app not opened (process killed, not force-stopped)
+app process before: ''
+WIDGET-LANG 10-appEN-2s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 10-appEN-2s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+WIDGET-LANG 10-appEN-5s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 10-appEN-5s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+WIDGET-LANG 10-appEN-10s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 10-appEN-10s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+WIDGET-LANG 10-appEN-20s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 10-appEN-20s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+WIDGET-LANG 10-appEN-40s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 10-appEN-40s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+app process after: '7912'
+receiver/broadcast lines: 11-01 20:38:49.783   483   578 I ActivityManager: Start proc 7912:org.chyavorec.app/u0a174 for broadcast {org.chyavorec.app/org.chyavorec.app.widget.Chitalishte~11-01 20:38:49.789  7912  7912 I g.chyavorec.app: Using CollectorTypeCC GC.~11-01 20:38:49.790  7912  7912 W g.chyavorec.app: Unexpected CPU variant for x86: x86_64.~11-01 20:38:49.790  7912  7912 W g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default~
+## WL3. App language → Български (cmd locale), app not opened
+WIDGET-LANG 20-appBG-2s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 20-appBG-2s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+WIDGET-LANG 20-appBG-5s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 20-appBG-5s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+WIDGET-LANG 20-appBG-10s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 20-appBG-10s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+WIDGET-LANG 20-appBG-20s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 20-appBG-20s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+WIDGET-LANG 20-appBG-40s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 20-appBG-40s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+app process after: '8209'
+## WL4. Device language (app follows the system): en-US → bg-BG → en-US, without a reboot
+app locales cleared: Locales for org.chyavorec.app for user 0 are []
+WIDGET-LANG 30-follow-system-en: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 30-follow-system-en: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-nowidecg-lowdr-port-notnight-420dpi-finger-keysexposed-qwerty-navhidden-nonav-2209x1080-v33
+WIDGET-LANG 31-deviceBG-2s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 31-deviceBG-2s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+WIDGET-LANG 31-deviceBG-5s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 31-deviceBG-5s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+WIDGET-LANG 31-deviceBG-10s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 31-deviceBG-10s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+WIDGET-LANG 31-deviceBG-20s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 31-deviceBG-20s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+WIDGET-LANG 31-deviceBG-40s: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|Ден на народните будители|1 ноември 2026|Михаил В. Ломоносов|8 ноември 2026|
+WIDGET-LANG 31-deviceBG-40s: LANG cyrillic=98 latin=0 -> BG | Читалище Яворец Сканирай Каталог Предстоящи събития Ден на народните будители 1 ноември 2026 Михаил В. Ломоносов 8 ноември 2026 
+app process after: '8761'
+DEVICE locale -> en-US: data="LOCALE ok en-US"; config now: config: mcc310-mnc260-en-rUS-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-nowidecg-lowdr-port-notnight-420dpi-finger-keysexposed-qwerty-navhidden-nonav-2209x1080-v33
+WIDGET-LANG 32-deviceEN-2s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 32-deviceEN-2s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+WIDGET-LANG 32-deviceEN-5s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 32-deviceEN-5s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+WIDGET-LANG 32-deviceEN-10s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 32-deviceEN-10s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+WIDGET-LANG 32-deviceEN-20s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 32-deviceEN-20s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+WIDGET-LANG 32-deviceEN-40s: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|Ден на народните будители|November 1, 2026|Михаил В. Ломоносов|November 8, 2026|
+WIDGET-LANG 32-deviceEN-40s: LANG cyrillic=38 latin=62 -> EN | Chitalishte Yavorets Scan Catalogue Upcoming events Ден на народните будители November 1, 2026 Михаил В. Ломоносов November 8, 2026 
+app process after: '9706'
+## COMPLETE
+## logcat findings
+app pids seen: ['5752', '7912', '8209', '8761', '9706']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=44 total=44
+== Davey: 2
+   davey events=2 max=1363ms median=1048ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

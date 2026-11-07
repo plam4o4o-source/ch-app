@@ -1,0 +1,70 @@
+part live361; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160886 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## L0. Device: Android 16 (SDK 36), 14574095
+POST_PROMOTED_NOTIFICATIONS: android.permission.POST_PROMOTED_NOTIFICATIONS: granted=true
+## L1. Update download as a Live Update: 1.2.33-pre (versionCode 1488545) → the staged test 1.2.33 (1488546), throttled
+staged: 1488546 1.2.33 4274690 urce/ch-app/emulator-results/v133/update/42395220039/app.apk
+installed new-upd: 1.2.33-pre 6d3a324; versionCode 1488545; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v133/update/42395220039/update.json size 4274666;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.33-pre 
+POST_PROMOTED_NOTIFICATIONS (pre build): android.permission.POST_PROMOTED_NOTIFICATIONS: granted=true
+network: wifi 0; Active default network: 101; 2 PROMOTED lines in dumpsys package
+THROTTLE on: -P INPUT ACCEPT -A INPUT -p tcp -m tcp --sport 443 -m hashlimit --hashlimit-above 64kb/s --hashlimit-burst 64kb --hashlimit-mode srcip --hashlimit-name pcdl -j DROP -A INPUT -j oem_in 
+LIVE update notification at +3973 ms:
+LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 0%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (0) requestPromotedOngoing=Boolean (true) shortCriticalText=String (0%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+   raw: 0x04880deb: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=ONGOING_EVENT|ONL
+   raw: flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+   raw: mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800(FLAG_MUTE_HAPTIC)  tags= bundle=null
+   android.requestPromotedOngoing=Boolean (true)
+   android.template=String (android.app.Notification$ProgressStyle)
+   android.shortCriticalText=String (0%)
+LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 3%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (3) requestPromotedOngoing=Boolean (true) shortCriticalText=String (3%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+SHADE: text="Изтегляне на версия 1.2.33 — 24%" text="Отказ" 
+LIVE at +40124 ms: LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 37%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (37) requestPromotedOngoing=Boolean (true) shortCriticalText=String (37%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+LIVE last capture: LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 99%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (99) requestPromotedOngoing=Boolean (true) shortCriticalText=String (99%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+  dumpsys:      31       originalFlags=ONGOING_EVENT|ONLY_ALERT_ONCE|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  dumpsys:      31                 android.template=String (android.app.Notification$ProgressStyle)
+  dumpsys:      31                 android.requestPromotedOngoing=Boolean (true)
+  dumpsys:      29       flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  dumpsys:       2       flags=ONGOING_EVENT|ONLY_ALERT_ONCE|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  dumpsys:       1     NotificationRecord(0x0fd79dc7: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0f4b9678: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0f18fbad: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0ed32d8c: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0e045d4b: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0e02f704: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0ca03f31: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+THROTTLE off: 0 rules left
+l-finish RESULT: ready after 111874 ms (first progress notification at +never ms); app process '4113'; files [4274690 2026-11-07 17:28 update-1488546.apk;]
+## L1b. Install the downloaded update (system installer) → 1.2.33
+UPDATE: installed  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+## L2. Event reminder → event Live Update (60 min before; needs the event's start time)
+installed new: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+(dismissed '=По-късно': text="Нова версия 1.2.32" text="Излезе нова версия на приложението." text="Размер: 4,2 MB" )
+EVENT: text="80 г. от създаването на ЮНЕСКО" text="16 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Библиотека" text="НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец" t
+REMINDER set: text="Ще получиш напомняне на 15 ноември 2026, 18:00."; bell: on
+CAP event-reminder (+2690 ms after the tap; capture took 2492 ms): WorkSpec:  WorkName: 
+CAP event-reminder: jobs: 0 [ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~Pending queue:~Active jobs:~ Unsatisfied constraints:~ Unsatisfied constraints:~]; SystemForegroundService: 0 []; notif: ; dialog: 
+WORK after the reminder: 06a6da59 ENQUEUED attempts=0 PeriodicSyncWorker periods=0 gen=0 enq=1794072525885;25365f98 SUCCEEDED attempts=1 MessagePollWorker periods=0 gen=0 enq=1794072526588;79c1e849 ENQUEUED attempts=0 MessagePollWorker periods=0 gen=0 enq=1794072527856;174f7944 ENQUEUED attempts=0 EventReminderWorker periods=0 gen=0 enq=1794072574262;
+EventReminderWorker scheduled: 1; EventLiveUpdateWorker scheduled: 0
+notifications now: LIVE total for org.chyavorec.app: 0
+## L3. API 36 smoke: ribbon and card foil render
+API36 ribbon mean=209.5 std=67.1 thread-px=26.8%; change 3→9 s 0.07
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## COMPLETE
+## logcat findings
+app pids seen: ['4113', '5882', '6082', '6794']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 15
+   skipped-frames events=15 max=84 total=706
+== Davey: 27
+   davey events=27 max=2202ms median=956ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

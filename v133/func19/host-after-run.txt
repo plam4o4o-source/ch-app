@@ -1,0 +1,9 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15982        1260        3732          49       11383       14722
+Swap:           3071           0        3071
+== host kernel: oom / kvm / segfault
+[Sat Nov  7 16:04:16 2026] kvm_intel: Using Hyper-V Enlightened VMCS
+[Sat Nov  7 16:06:40 2026] kvm: kvm [5354]: vcpu0, guest rIP: 0xffffffffb6464d95 Unhandled WRMSR(0xc2) = 0xffff
+== emulator processes
+  10184       00:04 15196 S    /usr/local/lib/android/sdk/emulator/emulator -kill 5354 -sleep 20

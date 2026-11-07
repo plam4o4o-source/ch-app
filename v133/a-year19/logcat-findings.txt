@@ -1,0 +1,20 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 16:07:43.649  4747  4747 I PERFCHECK: section: Y0. devDebug org.chyavorec.app.dev, demo data
+   11-07 16:07:45.030  4872  4872 I PERFCHECK: section: W. First launch and warm-up
+   11-07 16:09:00.410  6109  6109 I PERFCHECK: section: Y1. Demo sign-in DEMO-0001 / demo
+   11-07 16:10:24.282  7700  7700 I PERFCHECK: section: Y2. The year card on „Моето“
+   11-07 16:10:30.611  7845  7845 I PERFCHECK: section: Y3. Open the story: 8 slides, auto-advance 5.5 s accessibility events of the slide state
+   11-07 16:10:30.658  7858  7858 I PERFCHECK: m-a11y-on
+   11-07 16:10:32.408  7925  7925 I PERFCHECK: y-open
+   11-07 16:11:35.180  8300  8300 I PERFCHECK: section: Y4. Tap left previous ×2, tap right next
+   11-07 16:11:51.269  8352  8352 I PERFCHECK: section: Y5. Hold press 8 s pauses the auto-advance
+   11-07 16:12:17.592  8409  8409 I PERFCHECK: section: Y6. Swipe down closes the story
+   11-07 16:12:29.107  8465  8465 I PERFCHECK: section: Y7. Confetti on renewing a demo loan Удължи срока
+   11-07 16:12:35.811  8509  8509 I PERFCHECK: section: Y8. Confetti on Искам да прочета demo account
