@@ -349,7 +349,7 @@ private fun AuthorSlide(s: ReadingYear.Summary, appear: () -> Float) {
             )
         }
     }
-    Box(Modifier.width(spines * 21.dp + 24.dp).height(3.dp).background(GoldSoft.copy(alpha = 0.5f)))
+    Box(Modifier.width((spines * 21 + 24).dp).height(3.dp).background(GoldSoft.copy(alpha = 0.5f)))
     Spacer(Modifier.height(16.dp))
     Text(
         pluralStringResource(R.plurals.history_year_count, s.favouriteAuthorCount, s.favouriteAuthorCount),
