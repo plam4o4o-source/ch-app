@@ -340,6 +340,8 @@
     <string name="notif_due_on">%1$s — до %2$s</string>
     <string name="notif_due_soon">Наближава срок за връщане</string>
     <string name="notif_due_today">Днес е срокът за връщане</string>
+    <string name="notif_event_live_text">Начало в %1$s</string>
+    <string name="notif_event_live_text_place">%1$s — начало в %2$s</string>
     <string name="notif_event_reminder">Напомняне за събитие</string>
     <string name="notif_loans_summary">Известия за заетите книги</string>
     <string name="notif_new_article">Нова публикация</string>
@@ -361,6 +363,7 @@
     <string name="notif_renew_sent_text">„%1$s“: библиотеката ще удължи срока при следващото обновяване на програмата си.</string>
     <string name="notif_renew_session_unavailable">Профилът ти временно не се отваря на това устройство. Опитай пак по-късно.</string>
     <string name="notif_update_available">Налична е нова версия %1$s</string>
+    <string name="notif_update_chip">%1$d%%</string>
     <string name="notif_update_downloaded_text">Готово — докосни, за да инсталираш.</string>
     <string name="notif_update_downloading">Изтегляне на версия %1$s — %2$d%%</string>
     <string name="notif_update_downloading_unknown">Изтегляне на версия %1$s…</string>

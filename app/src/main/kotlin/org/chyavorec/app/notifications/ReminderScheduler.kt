@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Локални напомняния за събития (без сървър): известие ден преди събитието в
  * 18:00, или 2 часа преди началото, ако събитието е днес/утре и часът е известен.
+ * На Android 16+ — и живо известие от час преди началото ([EventLiveUpdates]).
  */
 class ReminderScheduler(
     private val context: Context,
@@ -54,6 +55,8 @@ class ReminderScheduler(
             .addTag(tag(event.id))
             .build()
         WorkManager.getInstance(context).enqueue(request)
+        // Android 16+: и живо известие час преди началото (ако часът е известен).
+        EventLiveUpdates.schedule(context, event, clock.zone(), clock.now().toEpochMilli(), tag(event.id))
         // Известието е планирано и без записа — той само отбелязва звънчето на събитието.
         dbWrite { dao.upsert(EventReminderEntity(event.id, event.title, at)) }
         return true
@@ -61,10 +64,11 @@ class ReminderScheduler(
 
     suspend fun cancel(eventId: String) {
         WorkManager.getInstance(context).cancelAllWorkByTag(tag(eventId))
+        EventLiveUpdates.cancel(context, eventId)
         dbWrite { dao.delete(eventId) }
     }
 
-    private fun tag(id: String) = "event-reminder:" + id.hashCode()
+    internal fun tag(id: String) = "event-reminder:" + id.hashCode()
 
     companion object {
         const val KEY_TITLE = "title"

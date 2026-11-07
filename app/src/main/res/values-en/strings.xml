@@ -340,6 +340,8 @@
     <string name="notif_due_on">%1$s — due %2$s</string>
     <string name="notif_due_soon">Due date approaching</string>
     <string name="notif_due_today">Due back today</string>
+    <string name="notif_event_live_text">Starts at %1$s</string>
+    <string name="notif_event_live_text_place">%1$s — starts at %2$s</string>
     <string name="notif_event_reminder">Event reminder</string>
     <string name="notif_loans_summary">About your borrowed books</string>
     <string name="notif_new_article">New post</string>
@@ -361,6 +363,7 @@
     <string name="notif_renew_sent_text">“%1$s”: the library will extend the due date at its program’s next update.</string>
     <string name="notif_renew_session_unavailable">Your account can’t be opened on this device right now. Please try again later.</string>
     <string name="notif_update_available">New version %1$s available</string>
+    <string name="notif_update_chip">%1$d%%</string>
     <string name="notif_update_downloaded_text">Done — tap to install.</string>
     <string name="notif_update_downloading">Downloading version %1$s — %2$d%%</string>
     <string name="notif_update_downloading_unknown">Downloading version %1$s…</string>

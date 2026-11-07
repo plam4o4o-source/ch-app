@@ -8,7 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
+import android.graphics.drawable.Icon
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -27,6 +29,7 @@ import kotlinx.coroutines.withContext
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.notifications.Channel
+import org.chyavorec.app.notifications.LiveUpdates
 import org.chyavorec.app.notifications.NotificationIds
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.navigation.LaunchIntents
@@ -176,6 +179,7 @@ class UpdateDownloadWorker(context: Context, params: WorkerParameters) : Corouti
                 Intent(context, UpdateInstallReceiver::class.java).setAction(UpdateInstallReceiver.ACTION_CANCEL_DOWNLOAD),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
+            if (LiveUpdates.supported()) return liveProgress(context, title, percent, open, cancel)
             return NotificationCompat.Builder(context, Channel.UPDATES.id)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(ContextCompat.getColor(context, R.color.brand_gold_dark))
@@ -188,6 +192,37 @@ class UpdateDownloadWorker(context: Context, params: WorkerParameters) : Corouti
                 .setSilent(true)
                 .setCategory(NotificationCompat.CATEGORY_PROGRESS)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .build()
+        }
+
+        /**
+         * Android 16+: живо известие — ProgressStyle със златна лента, процентът като чип в лентата
+         * на състоянието („45%“) и „Отказ“. Услугата на преден план (dataSync) не пречи: известието
+         * ѝ и без това е постоянно, а системата го повишава само ако потребителят не е изключил
+         * живите известия. Известието „готова за инсталиране“ остава обикновено.
+         */
+        @RequiresApi(Build.VERSION_CODES.BAKLAVA)
+        private fun liveProgress(context: Context, title: String, percent: Int?, open: PendingIntent, cancel: PendingIntent): Notification {
+            val gold = ContextCompat.getColor(context, R.color.brand_gold)
+            val style = Notification.ProgressStyle()
+                .setProgressSegments(listOf(Notification.ProgressStyle.Segment(100).setColor(gold)))
+                .setProgress(percent ?: 0)
+                .setProgressIndeterminate(percent == null)
+            return LiveUpdates.requestPromotion(Notification.Builder(context, Channel.UPDATES.id))
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(ContextCompat.getColor(context, R.color.brand_gold_dark))
+                .setContentTitle(title)
+                .setStyle(style)
+                .apply { if (percent != null) setShortCriticalText(context.getString(R.string.notif_update_chip, percent)) }
+                .setContentIntent(open)
+                .addAction(
+                    Notification.Action.Builder(Icon.createWithResource(context, R.drawable.ic_notification), context.getString(R.string.action_cancel), cancel).build(),
+                )
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setSilent(true)
+                .setCategory(Notification.CATEGORY_PROGRESS)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .build()
         }
     }
