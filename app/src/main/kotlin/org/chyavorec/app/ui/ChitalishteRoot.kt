@@ -165,6 +165,7 @@ import org.chyavorec.app.ui.screens.my.LoginScreen
 import org.chyavorec.app.ui.screens.my.MembershipScreen
 import org.chyavorec.app.ui.screens.my.MyHubScreen
 import org.chyavorec.app.ui.screens.my.ProfileScreen
+import org.chyavorec.app.ui.screens.my.YearStoryScreen
 import org.chyavorec.app.ui.screens.news.ArticleScreen
 import org.chyavorec.app.ui.screens.news.NewsListScreen
 import org.chyavorec.app.ui.screens.onboarding.OnboardingScreen
@@ -246,7 +247,7 @@ fun ChitalishteRoot(
 private val topLevelRoutes = TopTab.entries.map { it.route }.toSet()
 
 /** Екраните зад „Искай отключване за личните екрани“ (виж UnlockGate). */
-private val personalRoutes = setOf(Routes.CARD, Routes.CARD_FULL, Routes.LOANS, Routes.HISTORY, Routes.MESSAGES, Routes.MESSAGE)
+private val personalRoutes = setOf(Routes.CARD, Routes.CARD_FULL, Routes.LOANS, Routes.HISTORY, Routes.YEAR, Routes.MESSAGES, Routes.MESSAGE)
 
 /** Най-едрият мащаб на шрифта: нелинейните таблици на Android стигат до 2×, над него заглавията „избухват“. */
 internal const val MAX_FONT_SCALE = 2f
@@ -700,6 +701,10 @@ private fun AppNavHost(
             }
         }
         screen(Routes.HISTORY) { UnlockGate(leavePersonal) { HistoryScreen(back, navigate, onLogin = { nav.navigate(Routes.LOGIN) }) } }
+        screen(Routes.YEAR, arguments = listOf(navArgument("year") { type = NavType.IntType })) {
+            val year = it.arguments?.getInt("year") ?: LocalAppContainer.current.clock.today().year
+            UnlockGate(leavePersonal) { YearStoryScreen(year, onClose = back) }
+        }
         screen(Routes.WANT_TO_READ) {
             ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> PaneDetail(r, close, navigate, openLink) }) {
                 org.chyavorec.app.ui.screens.my.WantToReadScreen(back, navigate)

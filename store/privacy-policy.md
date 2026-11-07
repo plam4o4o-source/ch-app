@@ -46,6 +46,8 @@
 
 Документи: „Отвори с приложение за PDF“ сваля документа от chyavorec.org във временните данни на приложението (пази се до седмица) и го отваря в избрано от теб приложение за PDF на телефона.
 
+Картинки за споделяне: картинките (на събитие, книга, новина или от „Моята читателска година“) се създават на телефона и излизат от него само ако ти избереш да ги споделиш и къде.
+
 Абонамент за календара: ако добавиш календара на читалището (https://chyavorec.org/events.ics) в приложение за календар, то или неговата услуга (напр. Google Календар) тегли файла от сайта по свой график — като обикновена заявка, без лични данни; приложението на читалището не участва в това.
 
 ## Известия
@@ -113,6 +115,8 @@ Renewals: a renewal request goes to the centre’s server and is carried out by 
 Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you.
 
 Documents: “Open with a PDF app” downloads the document from chyavorec.org into the app’s temporary data (kept for up to a week) and opens it in a PDF app of your choice on the phone.
+
+Share images: images (of an event, a book, a news story or from “My reading year”) are created on the phone and leave it only if you choose to share them, and where.
 
 Calendar subscription: if you add the centre’s calendar (https://chyavorec.org/events.ics) to a calendar app, that app or its service (e.g. Google Calendar) fetches the file from the website on its own schedule — as a plain request, without personal data; the centre’s app is not involved.
 

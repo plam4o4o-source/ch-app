@@ -78,6 +78,7 @@ import org.chyavorec.app.ui.components.MembershipPill
 import org.chyavorec.app.ui.components.OnDarkSurfaceStatuses
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.Brand
+import org.chyavorec.data.catalog.ReadingYear
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.data.repository.CapabilitiesStatus
 import org.chyavorec.domain.model.LoanSummary
@@ -144,6 +145,9 @@ fun MyHubScreen(navigate: (String) -> Unit) {
                 )
             }
 
+            // „Моята читателска година“ — през декември и януари голяма, най-горе.
+            if (signedIn) YearCards(prominent = true, navigate = navigate)
+
             SectionLabel(stringResource(R.string.my_section_library), Modifier.padding(start = ScreenGutter, top = 8.dp, bottom = 12.dp))
             val cachedLoans = rememberCachedLoans()
             val today = rememberToday()
@@ -166,7 +170,7 @@ fun MyHubScreen(navigate: (String) -> Unit) {
             Spacer(Modifier.height(8.dp))
 
             // „Моето четене“ — само за влязъл читател с история (иначе нищо, без празно място).
-            if (signedIn) ReadingSection(onOpenHistory = { navigate(Routes.HISTORY) })
+            if (signedIn) ReadingSection(onOpenHistory = { navigate(Routes.HISTORY) }, navigate = navigate)
 
             if (signedIn) {
                 OutlinedButton(onClick = { confirmLogout = true }, modifier = Modifier.fillMaxWidth().padding(20.dp)) {
@@ -237,8 +241,8 @@ private fun AddCardButton(onClick: () -> Unit) {
 
 /** Графиките за четенето ([ReadingStatsCard]) под плочките; изчезват при изход. */
 @Composable
-private fun ReadingSection(onOpenHistory: () -> Unit) {
-    val vm = appViewModel(key = "reading-stats") { ReadingStatsViewModel(it) }
+private fun ReadingSection(onOpenHistory: () -> Unit, navigate: (String) -> Unit) {
+    val vm = readingStatsViewModel()
     val stats by vm.stats.collectAsStateWithLifecycle()
     val reduced = rememberReducedMotion()
     AnimatedVisibility(
@@ -249,8 +253,34 @@ private fun ReadingSection(onOpenHistory: () -> Unit) {
         stats?.let { s ->
             Column {
                 SectionLabel(stringResource(R.string.reading_title), Modifier.padding(start = ScreenGutter, top = 12.dp, bottom = 12.dp))
+                YearCards(prominent = false, navigate = navigate)
                 ReadingStatsCard(s, onOpenHistory)
             }
         }
     }
 }
+
+@Composable
+private fun readingStatsViewModel(): ReadingStatsViewModel = appViewModel(key = "reading-stats") { ReadingStatsViewModel(it) }
+
+/**
+ * Картите „Моята читателска година“ — само за години с книги ([ReadingStatsViewModel.years]).
+ * Голяма ([prominent]) е през декември (текущата година) и януари (миналата); иначе — малка,
+ * над графиките.
+ */
+@Composable
+private fun YearCards(prominent: Boolean, navigate: (String) -> Unit) {
+    val years by readingStatsViewModel().years.collectAsStateWithLifecycle()
+    val today = rememberToday()
+    val shown = years.filter { y -> isProminentYear(y.year, today) == prominent }
+    shown.forEach { y ->
+        YearStoryCard(
+            y, prominent, onOpen = { navigate(Routes.year(y.year)) },
+            modifier = Modifier.padding(top = if (prominent) 4.dp else 0.dp, bottom = if (prominent) 8.dp else 12.dp),
+        )
+    }
+}
+
+/** Декември — текущата година; януари — миналата (текущата тепърва започва). */
+internal fun isProminentYear(year: Int, today: java.time.LocalDate): Boolean =
+    ReadingYear.isSeason(today) && !(today.month == java.time.Month.JANUARY && year == today.year)

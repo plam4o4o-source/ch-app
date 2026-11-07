@@ -118,7 +118,7 @@ object ReadingStats {
     }
 
     /** Най-честият автор (от каталога, иначе от историята); при равенство — по-скоро четеният. */
-    private fun favouriteAuthor(items: List<HistoryItem>, books: Map<String, CatalogBook>): Pair<String?, Int> {
+    internal fun favouriteAuthor(items: List<HistoryItem>, books: Map<String, CatalogBook>): Pair<String?, Int> {
         class Tally(val name: String, var count: Int, var last: String)
         val tally = LinkedHashMap<String, Tally>()
         for (h in items) {

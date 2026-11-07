@@ -1,0 +1,120 @@
+package org.chyavorec.app.ui.screens.my
+
+import android.app.Application
+import android.content.Context
+import android.view.accessibility.AccessibilityManager
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.chyavorec.app.ui.components.LocalReducedMotion
+import org.chyavorec.app.ui.share.ShareFixtures
+import org.chyavorec.app.ui.theme.ChitalishteTheme
+import org.chyavorec.app.ui.theme.ThemeMode
+import org.chyavorec.data.catalog.ReadingYear
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
+/** „Моята читателска година“: докосвания, автоматично превъртане, пауза с TalkBack, затваряне с плъзгане. */
+@RunWith(AndroidJUnit4::class)
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
+@Config(application = Application::class, qualifiers = "bg-w411dp-h891dp-xhdpi")
+class YearStoryTest {
+    @get:Rule val compose = createComposeRule()
+    private val year = ShareFixtures.year
+    private val total = yearSlides(year).size
+    private var closed = false
+
+    private fun show(reduced: Boolean = true, initial: Int = 0) {
+        compose.setContent {
+            ChitalishteTheme(mode = ThemeMode.LIGHT) {
+                CompositionLocalProvider(LocalReducedMotion provides reduced) {
+                    YearStory(year, onClose = { closed = true }, siteUrl = "https://chyavorec.org", initialSlide = initial)
+                }
+            }
+        }
+    }
+
+    private fun onSlide(n: Int): Boolean =
+        compose.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Слайд $n от $total")).fetchSemanticsNodes().isNotEmpty()
+
+    private fun tap(right: Boolean) = compose.onRoot().performTouchInput {
+        click(Offset(if (right) width * 0.8f else width * 0.1f, height * 0.5f))
+    }
+
+    @Test fun demoYearHasEverySlide() {
+        assertEquals(ReadingYear.Archetype.BOOKWORM, year.archetype)
+        assertEquals(YearSlideKind.entries.toList(), yearSlides(year), "демо годината показва всички слайдове")
+    }
+
+    @Test fun slidesWithoutDataAreSkipped() {
+        val one = ReadingYear.compute(listOf(ShareFixtures.history.first()), emptyMap(), ShareFixtures.today.year)!!
+        assertEquals(listOf(YearSlideKind.INTRO, YearSlideKind.BOOKS, YearSlideKind.ARCHETYPE, YearSlideKind.OUTRO), yearSlides(one))
+    }
+
+    @Test fun tapsMoveBetweenSlidesAndTheLastOneCloses() {
+        show()
+        assertTrue(onSlide(1))
+        tap(right = true)
+        compose.waitForIdle()
+        assertTrue(onSlide(2), "докосване вдясно — напред")
+        tap(right = false)
+        compose.waitForIdle()
+        assertTrue(onSlide(1), "докосване вляво — назад")
+        repeat(total) { tap(right = true); compose.waitForIdle() }
+        assertTrue(closed, "след последния слайд историята се затваря")
+    }
+
+    @Test fun eachSlideIsOneNodeWithASummary() {
+        show(initial = 1)
+        // Целият слайд е един възел с описание — числото и месеците заедно.
+        assertTrue(compose.onAllNodes(hasContentDescription("През ${year.year} г. взе ${year.books} книги", substring = true)).fetchSemanticsNodes().isNotEmpty())
+    }
+
+    @Test fun advancesByItselfAfterAboutFiveSeconds() {
+        compose.mainClock.autoAdvance = false
+        show(reduced = false)
+        compose.mainClock.advanceTimeBy(3_000)
+        assertTrue(onSlide(1))
+        compose.mainClock.advanceTimeBy(3_500)
+        assertTrue(onSlide(2), "след ~5.5 s — следващият слайд")
+    }
+
+    @Test fun reducedMotionDoesNotAdvance() {
+        compose.mainClock.autoAdvance = false
+        show(reduced = true)
+        compose.mainClock.advanceTimeBy(12_000)
+        assertTrue(onSlide(1))
+    }
+
+    @Test fun talkBackPausesAndOffersButtons() {
+        val am = ApplicationProvider.getApplicationContext<Context>().getSystemService(AccessibilityManager::class.java)
+        shadowOf(am).setTouchExplorationEnabled(true)
+        compose.mainClock.autoAdvance = false
+        show(reduced = false)
+        compose.mainClock.advanceTimeBy(12_000)
+        assertTrue(onSlide(1), "с TalkBack не превърта само")
+        assertTrue(compose.onAllNodes(hasContentDescription("Следващ слайд")).fetchSemanticsNodes().isNotEmpty())
+    }
+
+    @Test fun swipeDownCloses() {
+        show()
+        compose.onRoot().performTouchInput { swipeDown(startY = height * 0.3f, endY = height * 0.95f) }
+        compose.waitForIdle()
+        assertTrue(closed)
+    }
+}

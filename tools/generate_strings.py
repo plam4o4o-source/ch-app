@@ -89,6 +89,51 @@ S = {
 "reading_favourite_author": ("любим автор", "favourite author"),
 "reading_streak": ("най-дълга поредица", "longest streak"),
 "reading_note": ("Изчислено на телефона от историята ти — нищо не се изпраща.", "Worked out on your phone from your history — nothing is sent anywhere."),
+# „Моята читателска година“ — историята на цял екран (като „Wrapped“).
+"year_title": ("Моята читателска година", "My reading year"),
+"year_title_with": ("Моята читателска година %1$d", "My reading year %1$d"),
+"year_card_text": ("Книгите ти, любимият автор и рекордният месец — като история на цял екран.", "Your books, favourite author and record month — as a full-screen story."),
+"year_card_open": ("Виж историята", "Watch the story"),
+"year_intro_title": ("твоята година с книгите", "your year in books"),
+"year_intro_cd": ("%1$d — твоята година с книгите", "%1$d — your year in books"),
+"year_books_label": ("Тази година взе", "This year you borrowed"),
+"year_author_label": ("Любим автор", "Favourite author"),
+"year_author_cd": ("Любим автор: %1$s — %2$d книги през годината.", "Favourite author: %1$s — %2$d books this year."),
+"year_section_label": ("Най-четен раздел", "Most-read section"),
+"year_month_label": ("Рекорден месец", "Record month"),
+"year_streak_label": ("Най-дългата ти поредица", "Your longest streak"),
+"year_streak_text": ("Всеки месец — поне по една книга.", "At least one book every month."),
+"year_type_label": ("Твоят читателски тип", "Your reader type"),
+"year_type_cd": ("Твоят читателски тип: %1$s. %2$s", "Your reader type: %1$s. %2$s"),
+"year_type_bookworm": ("Книжен дракон", "Book dragon"),
+"year_type_bookworm_text": ("Поглъщаш книга след книга — рафтовете едва смогват.", "You devour book after book — the shelves can barely keep up."),
+"year_type_loyal": ("Верен почитател", "Loyal fan"),
+"year_type_loyal_text": ("Когато харесаш автор, оставаш му верен.", "When you like an author, you stay loyal."),
+"year_type_explorer": ("Изследовател", "Explorer"),
+"year_type_explorer_text": ("Обикаляш библиотеката — от раздел на раздел.", "You roam the library, section by section."),
+"year_type_steady": ("Маратонец", "Marathon reader"),
+"year_type_steady_text": ("Четеш постоянно — месец след месец.", "You read steadily, month after month."),
+"year_type_curious": ("Любопитен читател", "Curious reader"),
+"year_type_curious_text": ("Избираш книгите си внимателно — всяка е малко откритие.", "You choose your books with care — each one a small discovery."),
+"year_outro_title": ("Благодарим ти, че четеш с нас!", "Thank you for reading with us!"),
+"year_outro_text": ("Библиотеката на читалището те очаква и през %1$d г.", "The library looks forward to seeing you again in %1$d."),
+"year_slide_state": ("Слайд %1$d от %2$d", "Slide %1$d of %2$d"),
+"year_next": ("Следващ слайд", "Next slide"),
+"year_previous": ("Предишен слайд", "Previous slide"),
+"year_share_text": ("Моята читателска година %1$d в библиотеката на НЧ „Васил Левски – 1922“ — %2$s", "My %1$d reading year at the “Vasil Levski – 1922” library — %2$s"),
+"year_empty": ("През тази година още няма взети книги.", "No books borrowed this year yet."),
+# Споделяне като картинка (карта с QR код) — събитие, книга, новина, слайд от годината.
+"share_as_image": ("Сподели като картинка", "Share as an image"),
+"share_as_image_desc": ("Карта с QR код — за Instagram, Facebook, Viber…", "A card with a QR code — for Instagram, Facebook, Viber…"),
+"share_as_link": ("Сподели връзката", "Share the link"),
+"share_as_link_desc": ("Текст с адреса в сайта", "Text with the website address"),
+"share_image_busy": ("Създава се картинка…", "Creating the image…"),
+"share_image_failed": ("Картинката не можа да се създаде.", "Couldn’t create the image."),
+"share_card_event": ("Събитие", "Event"),
+"share_card_book": ("Книга от библиотеката", "From our library"),
+"share_card_news": ("Новина", "News"),
+"share_card_scan": ("Сканирай за повече", "Scan for more"),
+"share_card_book_cta": ("Търси я в библиотеката на читалището", "Find it at the community centre library"),
 "history_range": ("взета %1$s · върната %2$s", "borrowed %1$s · returned %2$s"),
 "history_range_open": ("взета %1$s · още не е върната", "borrowed %1$s · not returned yet"),
 "scan_action": ("Сканирай баркод", "Scan barcode"),
@@ -805,6 +850,8 @@ PRIVACY_BG = """Последна актуализация: 4 ноември 2026
 
 Документи: „Отвори с приложение за PDF“ сваля документа от chyavorec.org във временните данни на приложението (пази се до седмица) и го отваря в избрано от теб приложение за PDF на телефона.
 
+Картинки за споделяне: картинките (на събитие, книга, новина или от „Моята читателска година“) се създават на телефона и излизат от него само ако ти избереш да ги споделиш и къде.
+
 Абонамент за календара: ако добавиш календара на читалището (https://chyavorec.org/events.ics) в приложение за календар, то или неговата услуга (напр. Google Календар) тегли файла от сайта по свой график — като обикновена заявка, без лични данни; приложението на читалището не участва в това.
 
 # Известия
@@ -862,6 +909,8 @@ Home-screen widget: if you add it, it shows only the number of books due and the
 Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you.
 
 Documents: “Open with a PDF app” downloads the document from chyavorec.org into the app’s temporary data (kept for up to a week) and opens it in a PDF app of your choice on the phone.
+
+Share images: images (of an event, a book, a news story or from “My reading year”) are created on the phone and leave it only if you choose to share them, and where.
 
 Calendar subscription: if you add the centre’s calendar (https://chyavorec.org/events.ics) to a calendar app, that app or its service (e.g. Google Calendar) fetches the file from the website on its own schedule — as a plain request, without personal data; the centre’s app is not involved.
 
@@ -970,6 +1019,14 @@ P = {
 "home_loans_total": (("%1$d заета книга", "%1$d заети книги"), ("%1$d book borrowed", "%1$d books borrowed")),
 "reading_months_cd": (("%1$d книга за последните 12 месеца, най-много през %2$s", "%1$d книги за последните 12 месеца, най-много през %2$s"), ("%1$d book in the last 12 months, most in %2$s", "%1$d books in the last 12 months, most in %2$s")),
 "reading_streak_months": (("%1$d месец", "%1$d месеца"), ("%1$d month", "%1$d months")),
+"year_books_unit": (("книга", "книги"), ("book", "books")),
+"year_books_months": (("в %1$d месец от годината", "в %1$d различни месеца"), ("in %1$d month of the year", "across %1$d different months")),
+"year_books_cd": (("През %2$d г. взе %1$d книга от библиотеката.", "През %2$d г. взе %1$d книги от библиотеката."), ("In %2$d you borrowed %1$d book from the library.", "In %2$d you borrowed %1$d books from the library.")),
+"year_section_cd": (("Най-четен раздел: %2$s — %1$d книга.", "Най-четен раздел: %2$s — %1$d книги."), ("Most-read section: %2$s — %1$d book.", "Most-read section: %2$s — %1$d books.")),
+"year_month_cd": (("Рекорден месец: %2$s — %1$d книга.", "Рекорден месец: %2$s — %1$d книги."), ("Record month: %2$s — %1$d book.", "Record month: %2$s — %1$d books.")),
+"year_streak_unit": (("месец подред", "месеца подред"), ("month in a row", "months in a row")),
+"year_streak_cd": (("Най-дълга поредица: %1$d месец подред с поне една книга.", "Най-дълга поредица: %1$d месеца подред с поне една книга."), ("Longest streak: %1$d month in a row with at least one book.", "Longest streak: %1$d months in a row with at least one book.")),
+"year_card_books": (("%1$d книга · виж историята", "%1$d книги · виж историята"), ("%1$d book · watch the story", "%1$d books · watch the story")),
 # Под брояча на „Начало“ (числото е отделно, над текста).
 "stat_books": (("документ в каталога", "документа в каталога"), ("catalogue item", "catalogue items")),
 "stat_events": (("събитие през следващите 30 дни", "събития през следващите 30 дни"), ("event in the next 30 days", "events in the next 30 days")),
