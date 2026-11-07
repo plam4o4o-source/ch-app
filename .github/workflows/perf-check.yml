@@ -294,7 +294,7 @@ jobs:
         #    idle19, mem/mem-base; B: func19, year19 (devDebug), fb28 (API 28); C: live36 (API 36 или
         #    най-новият образ); D: motion19; E: monkey19.
         # Кръг b: повторени/поправени части и картата (срив с LinearGradient в 1.2.32 в кръг a).
-        part: [func19b, year19, live36, live361, motion19, fb28, cardcrash]
+        part: [idlelong, confetti19, article19, live361, surprise28, surprise33]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8

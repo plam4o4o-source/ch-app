@@ -372,7 +372,8 @@ f_confetti() {
   [ -z "$(xy text "$L_WANT")" ] && { sw_up 300; sleep 1; dump; }
   if [ -n "$(xy text "$L_WANT")" ]; then
     log "WANT before: $(xy --state text "$L_WANT")"
-    rec_start confetti-want 4; tap text "$L_WANT" >/dev/null; rec_end
+    local pw; pw=$(xy text "$L_WANT")
+    rec_start confetti-want 4; a input tap $pw; rec_end
     log "CONFETTI want-to-read: $(python3 $W19 confetti all $OUT/rec/confetti-want/f001.png $OUT/rec/confetti-want/f0*.png | cut -c1-300)"; rec_clean
     dump; log "WANT after: $(xy --state text "$L_WANT"); snackbar: $(grep -oE 'text="[^"]*(Искам да прочета|добав)[^"]*"' $OUT/ui.xml | head -2 | tr '\n' ' ')"
     log "HAPTIC after the add: $(a dumpsys vibrator_manager 2>/dev/null | tr -d '\r' | grep -E "$PKG" | tail -2 | cut -c1-200 | tr '\n' '~')"
@@ -394,7 +395,8 @@ f_event() {
   done
   log "EVENT: $(texts 4 | cut -c1-160)"
   if [ -n "$(xy text '=Напомни ми')" ]; then
-    rec_start confetti-reminder 4; tap text '=Напомни ми' >/dev/null; rec_end
+    local pr; pr=$(xy text '=Напомни ми')
+    rec_start confetti-reminder 4; a input tap $pr; rec_end
     log "CONFETTI reminder: $(python3 $W19 confetti all $OUT/rec/confetti-reminder/f001.png $OUT/rec/confetti-reminder/f0*.png | cut -c1-300)"; rec_clean
     dump; log "REMINDER: $(grep -oE 'text="Ще получиш напомняне[^"]*"' $OUT/ui.xml | head -1); bell: $(has 'Премахни напомнянето' && echo on || echo '?')"
   else log "EVENT: no 'Напомни ми' (past event or none)"; fi
@@ -515,7 +517,7 @@ part_year19() {
   sleep 4; dump; shot year/20-loans
   for i in 1 2 3; do [ -n "$(xy text '=Удължи срока')" ] && break; sw_up 350; sleep 1.2; dump; done
   if [ -n "$(xy text '=Удължи срока')" ]; then
-    rec_start confetti-renew 4; tap text '=Удължи срока' >/dev/null; rec_end
+    p=$(xy text '=Удължи срока'); rec_start confetti-renew 4; a input tap $p; rec_end
     log "CONFETTI renew: $(python3 $W19 confetti all $OUT/rec/confetti-renew/f001.png $OUT/rec/confetti-renew/f0*.png | cut -c1-300)"; rec_clean
     sleep 1; dump; log "RENEW: $(grep -oE 'text="(Удължено ✓|Заявено удължаване[^"]*)"' $OUT/ui.xml | head -1)"
   else log "RENEW: no 'Удължи срока' in the demo loans: $(texts 10 | cut -c1-200)"; fi
@@ -716,6 +718,77 @@ part_cardcrash() {
   log "All FATAL in logcat: $(grep -c 'FATAL EXCEPTION' $OUT/logcat-live.txt)"
 }
 
+# ================================================================= КРЪГ c: кога спира рисуването без докосване
+idlelong_app() {  # $1 — new | base: „Начало“ и картата, прозорци по 15 s
+  local K=$1 i
+  sec "IL-$K. Install $K, warm-up, library card"
+  inst $(apk_of $K) $K $(ref_of $K) >/dev/null || return
+  anims 1
+  launch >/dev/null; sleep 6; dismiss; ready; dims
+  tab catalog; waitfor "$RX_RESULTS" 150; tab news; sleep 4; tab home; sleep 4
+  card_open >/dev/null || log "$K: card not shown"
+  sec "IL-$K. Home after a cold start: frames/CPU in 15 s windows, 0-120 s, no input"
+  a am force-stop $PKG; sleep 3; launch >/dev/null
+  if [ $K = new ]; then rec_start ribbon-$K 12; rec_end "0 280 1080 398"; rec_clean; else sleep 13; fi
+  for i in 1 2 3 4 5 6 7; do cpu_win $K-home-w$i 15; done
+  sec "IL-$K. Library card: 15 s windows, 0-105 s, no input"
+  if card_open; then for i in 1 2 3 4 5 6 7; do cpu_win $K-card-w$i 15; done; back 1.5; fi
+}
+part_idlelong() { idlelong_app new; idlelong_app base; anims 0; }
+part_confetti19() {
+  helper_install
+  anims 1
+  warmup
+  f_confetti; f_event
+}
+
+# ================================================================= КРЪГ c: „Изненадай ме“ и паметта (API 28: LMK в кръг a и b)
+mem_probe_start() {  # RSS на приложението и MemAvailable на всеки ~0.25 s → /data/local/tmp/mp.txt (до mp.stop)
+  local pid; pid=$(pidof_app)
+  printf '%s\n' "rm -f /data/local/tmp/mp.txt /data/local/tmp/mp.stop" \
+    "while [ ! -f /data/local/tmp/mp.stop ]; do" \
+    "  echo \$(cut -d' ' -f1 /proc/uptime) \$(grep VmRSS /proc/$pid/status 2>/dev/null | tr -s ' ' | cut -d' ' -f2) \$(grep MemAvailable /proc/meminfo | tr -s ' ' | cut -d' ' -f2) >> /data/local/tmp/mp.txt" \
+    "  sleep 0.25" "done" > $OUT/mp.sh
+  timeout 20 adb push $OUT/mp.sh /data/local/tmp/mp.sh >/dev/null 2>&1
+  adb shell "sh /data/local/tmp/mp.sh" >/dev/null 2>&1 &
+  MPPID=$!; sleep 0.5
+}
+mem_probe_end() {  # $1 — етикет
+  a "touch /data/local/tmp/mp.stop" >/dev/null 2>&1; sleep 0.6; wait $MPPID 2>/dev/null
+  timeout 20 adb pull /data/local/tmp/mp.txt $OUT/memprobe-$1.txt >/dev/null 2>&1
+  log "MEMPROBE $1: $(awk 'NF>=3 && $2>0 {if(!t0)t0=$1; if($2>mr){mr=$2;tr=($1-t0)*1000}; if(!ma||$3<ma){ma=$3;ta=($1-t0)*1000}; if(!r0)r0=$2; n++} END{printf "samples %d; app RSS %.0f→max %.0f MB at +%d ms; min MemAvailable %.0f MB at +%d ms", n, r0/1024, mr/1024, tr, ma/1024, ta}' $OUT/memprobe-$1.txt 2>/dev/null)"
+}
+part_surprisemem() {
+  local i
+  anims 1
+  warmup
+  sec "SM0. Device memory: $(a grep MemTotal /proc/meminfo | tr -s ' ' | tr -d '\r'); API $SDK"
+  for i in 1 2 3; do
+    sec "SM$i. 'Изненадай ме' (dice): app RSS and MemAvailable every 0.25 s, 10 s"
+    ready; tab catalog; waitfor "$RX_RESULTS" 60; sleep 2; dump
+    local p; p=$(xy content-desc '=Изненадай ме'); [ -n "$p" ] || { log "no dice button"; continue; }
+    log "before: $(a dumpsys meminfo -s $PKG 2>/dev/null | tr -d '\r' | grep -E 'TOTAL PSS|TOTAL:' | head -1 | tr -s ' ')"
+    mem_probe_start; mark sm-$i; sleep 1; a input tap $p; sleep 10
+    mem_probe_end dice-$i
+    dump; shot surprise/after-$i
+    log "SM$i after 10 s: app $(has "package=\"$PKG\"" && echo 'in front' || echo 'NOT in front'); pid '$(pidof_app)'; scene $(has 'text="(Към книгата|Още една)"' && echo shown || echo no); deaths: $(since sm-$i 'has died|lowmemorykiller|lmkd.*kill|Killing' | grep -c .) ($(since sm-$i 'org.chyavorec.app.*died' | head -1 | cut -c30-120))"
+    has 'text="(Към книгата|Още една)"' && { tap content-desc '=Затвори' >/dev/null || back 1.5; sleep 1.5; }
+    has "package=\"$PKG\"" || { launch >/dev/null; sleep 5; }
+  done
+  sec "SM9. For comparison: open a book from the catalogue list (same memory probe)"
+  link "$SITE/elektronen-katalog" >/dev/null; waitfor "$RX_RESULTS" 60; sleep 2; dump
+  p=$(python3 $H_/find.py $OUT/ui.xml --first-clickable $(results_top) $((H*85/100)) 150)
+  mem_probe_start; sleep 1; a input tap $p; sleep 8; mem_probe_end book
+}
+
+part_article19() {  # кръг c: най-дългата статия — лентата се крие при четене надолу и се връща нагоре
+  helper_install
+  anims 1
+  warmup
+  ART_URL=$(python3 $H_/find_article.py long | cut -f1); log "longest article: $ART_URL"
+  f_article
+}
+
 part_monkey19() { MONKEY_N=4000; part_monkey; }
 
 part_w19() {
@@ -726,6 +799,10 @@ part_w19() {
     func19) part_func19;;
     func19b) part_func19b;;
     cardcrash) part_cardcrash;;
+    idlelong) part_idlelong;;
+    article19) part_article19;;
+    surprise28|surprise33) part_surprisemem;;
+    confetti19) part_confetti19;;
     year19) part_year19;;
     motion19) part_motion19;;
     live36|live361) part_live36;;

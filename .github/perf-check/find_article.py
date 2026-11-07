@@ -35,6 +35,8 @@ for it in items:
     if not url:
         continue
     score = (ital > 0, ital + quotes)
+    if sys.argv[1:] == ["long"]:  # вълна 19: най-дългата статия (лентата с действията)
+        score = (True, len(body))
     if best is None or score > best[0]:
         best = (score, url, title, ital, quotes)
 if best:

@@ -240,6 +240,8 @@ def cmd_notif(f, pkg):
               f"shortCriticalText={g('android.shortCriticalText')} chronometer={g('android.showChronometer')} "
               f"flags={flags} FLAG_PROMOTED_ONGOING={promo_flag} promotable={'isPromotable' in r or 'promotable' in r.lower()} "
               f"ongoing={'FLAG_ONGOING_EVENT' in r or 'ongoing=true' in r}")
+        for l in [l for l in r.splitlines() if 'flags=' in l or 'Notification(' in l][:3]:
+            print('   raw: ' + l.strip()[:240])
         for k in ('promot', 'Promot', 'ProgressStyle', 'criticalText', 'CriticalText'):
             for l in r.splitlines():
                 if k in l:
