@@ -52,6 +52,13 @@ object LiveUpdates {
     internal fun requestPromotion(builder: Notification.Builder, extras: Bundle = Bundle()): Notification.Builder =
         builder.addExtras(extras.apply { putBoolean(EXTRA_REQUEST_PROMOTED_ONGOING, true) })
 
+    /**
+     * Без звук и вибрация — като NotificationCompat.setSilent (платформеният Builder няма такъв метод):
+     * собствена група, в която алармира само (несъществуващото) обобщение.
+     */
+    internal fun silent(builder: Notification.Builder, group: String): Notification.Builder =
+        builder.setGroup(group).setGroupAlertBehavior(Notification.GROUP_ALERT_SUMMARY)
+
     /** Показва ли се още живото известие за събитие [id] (не е махнато от потребителя или от системата). */
     internal fun isEventShowing(context: Context, id: Int): Boolean = runCatching {
         context.getSystemService(NotificationManager::class.java)?.activeNotifications.orEmpty()
@@ -181,7 +188,7 @@ object EventLiveUpdates {
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             // Напомнянето отпреди вече е звъннало — живото известие е тихо.
-            .setSilent(true)
+            .let { LiveUpdates.silent(it, "org.chyavorec.live.event") }
             .setCategory(Notification.CATEGORY_EVENT)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
             .build()

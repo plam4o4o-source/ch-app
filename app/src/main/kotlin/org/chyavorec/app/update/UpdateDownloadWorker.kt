@@ -220,7 +220,7 @@ class UpdateDownloadWorker(context: Context, params: WorkerParameters) : Corouti
                 )
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
-                .setSilent(true)
+                .let { LiveUpdates.silent(it, "org.chyavorec.live.update") }
                 .setCategory(Notification.CATEGORY_PROGRESS)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .build()
