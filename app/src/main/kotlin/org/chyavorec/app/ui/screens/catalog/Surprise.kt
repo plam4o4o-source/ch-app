@@ -351,7 +351,7 @@ fun SurpriseOverlay(
                     radius = size.width * 0.85f,
                 )
                 onDrawBehind {
-                    drawRect(Brand.Ink.copy(alpha = 0.97f))
+                    drawRect(Brand.Ink)
                     drawRect(glow)
                 }
             }
