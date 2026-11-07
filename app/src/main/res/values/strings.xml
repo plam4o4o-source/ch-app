@@ -208,8 +208,7 @@
     <string name="history_year_all">Всички години</string>
     <string name="hold_error_title">Заявката не е изпратена</string>
     <string name="hold_login_needed">За да заявиш книга, влез в профила си.</string>
-    <string name="hold_ok_text">Библиотеката ще отдели книгата за теб.</string>
-    <string name="hold_ok_title">Заявката е изпратена</string>
+    <string name="hold_ok">Заявката е изпратена. Библиотеката ще отдели книгата за теб.</string>
     <string name="home_carousel">Последни новини</string>
     <string name="home_carousel_next">Следваща новина</string>
     <string name="home_carousel_prev">Предишна новина</string>

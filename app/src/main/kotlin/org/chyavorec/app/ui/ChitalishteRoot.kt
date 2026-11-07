@@ -117,6 +117,7 @@ import org.chyavorec.app.ui.components.LocalNavAnimatedScope
 import org.chyavorec.app.ui.components.LocalOnlineCovers
 import org.chyavorec.app.ui.components.LocalCoverNetwork
 import org.chyavorec.app.ui.components.observeCoverNetwork
+import org.chyavorec.app.ui.components.ConfettiHost
 import org.chyavorec.app.ui.components.LocalReducedMotion
 import org.chyavorec.app.ui.components.observeReducedMotion
 import org.chyavorec.app.ui.components.LocalSharedScope
@@ -219,7 +220,8 @@ fun ChitalishteRoot(
         LocalSeasonalDecor provides settings.seasonal,
         LocalRequireUnlock provides settings.requireUnlock,
     ) {
-        Box(Modifier.fillMaxSize()) {
+        // Конфетито за успех (заявка, удължаване…) — над всички екрани, от мястото на докосването.
+        ConfettiHost(Modifier.fillMaxSize()) {
             if (!settings.onboardingDone) {
                 // Първо пускане: въведението е цялото съдържание — пълното показване е веднага.
                 ReportDrawn()

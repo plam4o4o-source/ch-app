@@ -46,8 +46,6 @@ import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalResources
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
@@ -86,6 +84,7 @@ import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.SyncStamp
 import org.chyavorec.app.ui.components.errorMessage
+import org.chyavorec.app.ui.components.rememberSuccessFeedback
 import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.AppError
@@ -130,14 +129,14 @@ private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((
     val calc = LoanDueCalculator()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val haptic = LocalHapticFeedback.current
+    val success = rememberSuccessFeedback()
     val context = LocalContext.current
     val resources = LocalResources.current
-    // Успешното удължаване — кратко съобщение и потвърждение с вибрация, без диалог за затваряне.
+    // Успешното удължаване — кратко съобщение, потвърждение с вибрация и шевичено конфети, без диалог за затваряне.
     LaunchedEffect(renew) {
         val r = renew as? Outcome.Success ?: return@LaunchedEffect
         vm.renewResult.value = null
-        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+        success()
         val msg = if (r.value.renewPending) resources.getString(R.string.renew_requested)
         else resources.getString(R.string.renew_ok, Formatters.shortDate(context, r.value.dueOn) ?: "—")
         scope.launch {
