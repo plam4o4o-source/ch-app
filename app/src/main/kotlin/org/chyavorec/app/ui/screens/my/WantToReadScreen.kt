@@ -127,7 +127,7 @@ import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.rememberReducedMotion
-import org.chyavorec.app.ui.components.sharedElementKey
+import org.chyavorec.app.ui.components.bookCoverShared
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.settings.NotificationAccess
 import org.chyavorec.app.ui.screens.settings.notificationStatus
@@ -362,7 +362,7 @@ private fun WantToReadItem(
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BookCover(row.shown, width = 56.dp, showStatusDot = false, modifier = Modifier.sharedElementKey("book-${saved.inv}"), decorative = true)
+        BookCover(row.shown, width = 56.dp, showStatusDot = false, modifier = Modifier.bookCoverShared(saved.inv), decorative = true)
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
             Text(saved.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)

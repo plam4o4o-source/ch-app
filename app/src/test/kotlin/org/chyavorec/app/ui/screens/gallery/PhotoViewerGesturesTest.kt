@@ -3,7 +3,14 @@ package org.chyavorec.app.ui.screens.gallery
 import android.app.Application
 import android.view.accessibility.AccessibilityManager
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.click
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
@@ -108,5 +115,31 @@ class PhotoViewerGesturesTest {
         compose.mainClock.advanceTimeBy(1_000)
         compose.waitForIdle()
         assertEquals(true, controlsShown(), "с TalkBack „Затвори“ остава достъпно")
+    }
+
+    /**
+     * Плаващата лента долу: „Сподели“, „Отвори в сайта“ (страницата на снимката е в сайта) и
+     * „За снимката“ — описанието на цял текст над лентата. Скрива се с тапа, заедно с горната.
+     */
+    @Config(qualifiers = "bg-w411dp-h891dp-xhdpi")
+    @Test fun floatingToolbarActionsAndCaption() {
+        val withPage = photo.copy(title = "Сцена от празника на селото с певческата група и гостите от съседните села", pageUrl = "https://chyavorec.org/galeriya")
+        compose.setContent { ChitalishteTheme { PhotoViewer(listOf(withPage), 0, {}) } }
+        compose.waitUntil(10_000) { compose.onAllNodesWithText(missing).fetchSemanticsNodes().isNotEmpty() }
+        val share = app.getString(R.string.action_share)
+        compose.onAllNodesWithContentDescription(share).assertCountEquals(1)
+        compose.onAllNodesWithContentDescription(app.getString(R.string.action_open_site)).assertCountEquals(1)
+        val info = compose.onNodeWithContentDescription(app.getString(R.string.photo_info))
+        info.assertIsOff()
+        info.performClick()
+        compose.mainClock.advanceTimeBy(1_000)
+        info.assertIsOn()
+        compose.onAllNodesWithText(withPage.title).assertCountEquals(1)
+        val bmp = compose.onRoot().captureToImage().asAndroidBitmap()
+        java.io.File("build/reports/screenshots").apply { mkdirs() }.resolve("w19m-05-gallery-toolbar.png")
+            .outputStream().use { bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }
+        // Тап по снимката — лентата се скрива заедно с горната.
+        compose.onNodeWithText(missing).performTouchInput { click() }
+        compose.waitUntil(5_000) { compose.onAllNodesWithContentDescription(share).fetchSemanticsNodes().isEmpty() }
     }
 }

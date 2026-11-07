@@ -46,7 +46,7 @@ import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.windowHeight
 import org.chyavorec.app.ui.components.appFilterChipColors
 import org.chyavorec.app.ui.components.animateEntrance
-import org.chyavorec.app.ui.components.sharedElementKey
+import org.chyavorec.app.ui.components.bookCoverShared
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -424,7 +424,7 @@ fun BookListItem(b: CatalogBook, onClick: () -> Unit, modifier: Modifier = Modif
         modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BookCover(b, width = 50.dp, showStatusDot = false, modifier = Modifier.sharedElementKey("book-${b.inv}"), decorative = true)
+        BookCover(b, width = 50.dp, showStatusDot = false, modifier = Modifier.bookCoverShared(b.inv), decorative = true)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(b.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -584,7 +584,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
             SyncBanner(ui.fromCache && ui.refreshError != null, ui.syncedAt, ui.refreshError)
             Row(Modifier.padding(20.dp), verticalAlignment = Alignment.Top) {
                 // Заглавието и наличността са текст до корицата — четат се оттам.
-                BookCover(b, width = 124.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"), decorative = true)
+                BookCover(b, width = 124.dp, modifier = Modifier.bookCoverShared(b.inv), decorative = true)
                 Spacer(Modifier.width(18.dp))
                 Column(Modifier.weight(1f)) {
                     Text(b.title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })

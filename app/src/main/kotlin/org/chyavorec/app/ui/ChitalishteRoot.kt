@@ -27,6 +27,7 @@ import org.chyavorec.app.ui.components.LocalRequireUnlock
 import org.chyavorec.app.ui.components.UnlockGate
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.app.ui.components.LocalSharedTransitionsEnabled
+import org.chyavorec.app.ui.components.tabRosette
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -440,15 +441,27 @@ private fun MainScaffold(
     }
 }
 
-/** Иконата на раздела — „подскача“ при избор (без анимация при намалено движение). */
+/**
+ * Иконата на раздела — „подскача“ при избор, а зад нея индикаторът „разцъфва“ от хапче в
+ * осморъка ([tabRosette]; стандартният индикатор на лентата е прозрачен). Без анимация при
+ * намалено движение.
+ */
 @Composable
 private fun TabIcon(tab: TopTab, selected: Boolean, reduced: Boolean) {
     val iconSpec: AnimationSpec<Float> = if (reduced) snap() else AppMotion.fastSpatial()
     val iconScale by animateFloatAsState(if (selected) 1.15f else 1f, iconSpec, label = "tab-icon")
-    Icon(
-        if (selected) tab.selectedIcon else tab.icon, contentDescription = null,
-        modifier = Modifier.graphicsLayer { scaleX = iconScale; scaleY = iconScale },
-    )
+    Box(
+        Modifier.tabRosette(
+            selected, reduced,
+            fill = MaterialTheme.colorScheme.primaryContainer,
+            stitch = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.45f),
+        ),
+    ) {
+        Icon(
+            if (selected) tab.selectedIcon else tab.icon, contentDescription = null,
+            modifier = Modifier.graphicsLayer { scaleX = iconScale; scaleY = iconScale },
+        )
+    }
 }
 
 /** Цветът на текста на избрания раздел — златно в тъмна тема, бордо в светла (не розово). */
@@ -462,7 +475,8 @@ private fun AppNavigationBar(route: String?, reduced: Boolean, onTab: (TopTab, B
     val navColors = NavigationBarItemDefaults.colors(
         selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
         selectedTextColor = selectedTabTextColor(),
-        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+        // Индикаторът е розетката в TabIcon.
+        indicatorColor = Color.Transparent,
     )
     NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
         TopTab.entries.forEach { tab ->
@@ -483,7 +497,7 @@ private fun AppNavigationRail(route: String?, reduced: Boolean, onTab: (TopTab, 
     val railColors = NavigationRailItemDefaults.colors(
         selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
         selectedTextColor = selectedTabTextColor(),
-        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+        indicatorColor = Color.Transparent,
     )
     // Нисък екран — без емблемата: тя е и в заглавието на екрана, а мястото е за разделите.
     val header: (@Composable ColumnScope.() -> Unit)? =

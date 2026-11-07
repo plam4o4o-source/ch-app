@@ -340,6 +340,8 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.animation)
+    // RoundedPolygon + Morph: избраният раздел „разцъфва“ от хапче в осморъка.
+    implementation(libs.androidx.graphics.shapes)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.tooling.preview)
     debugImplementation(libs.compose.ui.test.manifest)

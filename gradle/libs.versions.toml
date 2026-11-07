@@ -23,6 +23,8 @@ zxing = "3.5.4"
 # Скенерът на баркодове на Google (Google Play услуги) — без камера и разпознаване в APK-а.
 codeScanner = "16.1.0"
 palette = "1.1.0"
+# Форми и превръщане между тях (RoundedPolygon/Morph): розетката на избрания раздел.
+graphicsShapes = "1.0.1"
 # Credential Manager: запазване на картата и ПИН-а в системния мениджър на пароли.
 credentials = "1.6.0"
 profileinstaller = "1.4.1"
@@ -67,6 +69,7 @@ androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.re
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 # Цветове от корицата на книгата (екранът с детайлите).
 androidx-palette-ktx = { module = "androidx.palette:palette-ktx", version.ref = "palette" }
+androidx-graphics-shapes = { module = "androidx.graphics:graphics-shapes", version.ref = "graphicsShapes" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 # Под Android 14 Credential Manager работи през Google Play услугите.
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }

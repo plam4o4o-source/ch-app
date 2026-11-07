@@ -10,6 +10,8 @@ import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +32,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -43,7 +46,6 @@ import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ButtonDefaults
@@ -294,7 +296,8 @@ fun PhotoViewerScreen(
 }
 
 /**
- * Самият преглед. Тап — скрива/показва лентата отгоре (затвори, брояч, заглавие, споделяне) и
+ * Самият преглед. Тап — скрива/показва лентата отгоре (затвори, брояч, заглавие), плаващата
+ * лента с действията долу ([ViewerToolbar]: споделяне, сайтът, описанието) и
  * системните ленти (потапящ режим). Плъзгане нагоре/надолу без увеличение — снимката следва
  * пръста, фонът избледнява, а след прага прегледът се затваря (иначе снимката се връща).
  * Жестът „назад“ смалява снимката (predictive back). С екранен четец контролите не се крият.
@@ -311,6 +314,8 @@ internal fun PhotoViewer(photos: List<GalleryPhoto>, index: Int, onClose: () -> 
     val touchExploration = rememberIsTouchExplorationEnabled()
     val showControls = controls || touchExploration
     var zoomed by remember { mutableStateOf(false) }
+    // „За снимката“: описанието на цял текст над плаващата лента.
+    var info by rememberSaveable { mutableStateOf(false) }
     var height by remember { mutableIntStateOf(0) }
     // Изместването при плъзгане за затваряне и напредъкът на жеста „назад“ (0..1).
     var dragY by remember { mutableFloatStateOf(0f) }
@@ -379,14 +384,30 @@ internal fun PhotoViewer(photos: List<GalleryPhoto>, index: Int, onClose: () -> 
                     color = Color.White, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f),
                 )
+            }
+        }
+        // Действията — в плаващата лента долу; скрива се заедно с горната.
+        AnimatedVisibility(
+            showControls,
+            enter = if (reduced) EnterTransition.None else fadeIn() + slideInVertically { it / 2 },
+            exit = if (reduced) ExitTransition.None else fadeOut() + slideOutVertically { it / 2 },
+            modifier = Modifier.align(Alignment.BottomCenter).graphicsLayer { alpha = 1f - (dragFraction * 4f).coerceAtMost(1f) },
+        ) {
+            // „Отвори в сайта“: страницата на снимката (албумът, статията), иначе самата снимка.
+            val link = current.pageUrl.ifBlank { current.fullUrl }.takeIf { it.startsWith("https://") }
+            ViewerToolbar(
+                caption = current.title,
+                info = info,
+                onInfo = { info = it },
                 // Споделя се страницата (статията, албумът), а без нея — адресът на снимката.
-                IconButton(onClick = {
+                onShare = {
                     val share = PhotoShare.of(current, pageTitle, resources.getString(R.string.gallery_title))
                     Intents.share(context, share.subject, share.text)
-                }) {
-                    Icon(Icons.Outlined.Share, stringResource(R.string.action_share), tint = Color.White)
-                }
-            }
+                },
+                onOpenSite = link?.let { { Intents.openUrl(context, it) } },
+                reduced = reduced,
+                modifier = Modifier.navigationBarsPadding().padding(start = 16.dp, end = 16.dp, bottom = 20.dp),
+            )
         }
     }
 }

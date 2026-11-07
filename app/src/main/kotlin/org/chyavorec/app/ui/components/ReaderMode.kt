@@ -11,9 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -79,47 +76,26 @@ fun ReaderSettingsSheet(onDismiss: () -> Unit) {
             Spacer(Modifier.height(16.dp))
             Text(stringResource(R.string.reader_font_size), style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(8.dp))
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                val sizes = ReaderFontSize.entries
-                sizes.forEachIndexed { i, size ->
-                    // „Аа“ в съответния размер; името на размера — за екранния четец.
-                    val sizeName = stringResource(
-                        when (size) {
-                            ReaderFontSize.S -> R.string.reader_size_s
-                            ReaderFontSize.M -> R.string.reader_size_m
-                            ReaderFontSize.L -> R.string.reader_size_l
-                            ReaderFontSize.XL -> R.string.reader_size_xl
-                        },
-                    )
-                    SegmentedButton(
-                        selected = s.readerFontSize == size,
-                        onClick = { scope.launch { store.setReaderFontSize(size) } },
-                        shape = SegmentedButtonDefaults.itemShape(i, sizes.size),
-                        label = {
-                            Text(
-                                stringResource(R.string.reader_mode_glyph), fontSize = (15 * size.scale).sp, maxLines = 1,
-                                modifier = Modifier.semantics { contentDescription = sizeName },
-                            )
-                        },
-                    )
-                }
+            // Свързани бутони (Material 3 Expressive): „Аа“ в съответния размер; името — за екранния четец.
+            ConnectedButtonGroup(ReaderFontSize.entries, s.readerFontSize, { size -> scope.launch { store.setReaderFontSize(size) } }, Modifier.fillMaxWidth()) { size, _ ->
+                val sizeName = stringResource(
+                    when (size) {
+                        ReaderFontSize.S -> R.string.reader_size_s
+                        ReaderFontSize.M -> R.string.reader_size_m
+                        ReaderFontSize.L -> R.string.reader_size_l
+                        ReaderFontSize.XL -> R.string.reader_size_xl
+                    },
+                )
+                Text(
+                    stringResource(R.string.reader_mode_glyph), fontSize = (15 * size.scale).sp, maxLines = 1,
+                    modifier = Modifier.semantics { contentDescription = sizeName },
+                )
             }
             Spacer(Modifier.height(20.dp))
             Text(stringResource(R.string.reader_width), style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(8.dp))
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                SegmentedButton(
-                    selected = !s.readerNarrow,
-                    onClick = { scope.launch { store.setReaderNarrow(false) } },
-                    shape = SegmentedButtonDefaults.itemShape(0, 2),
-                    label = { Text(stringResource(R.string.reader_width_normal), maxLines = 1) },
-                )
-                SegmentedButton(
-                    selected = s.readerNarrow,
-                    onClick = { scope.launch { store.setReaderNarrow(true) } },
-                    shape = SegmentedButtonDefaults.itemShape(1, 2),
-                    label = { Text(stringResource(R.string.reader_width_narrow), maxLines = 1) },
-                )
+            ConnectedButtonGroup(listOf(false, true), s.readerNarrow, { narrow -> scope.launch { store.setReaderNarrow(narrow) } }, Modifier.fillMaxWidth()) { narrow, _ ->
+                Text(stringResource(if (narrow) R.string.reader_width_narrow else R.string.reader_width_normal), maxLines = 1)
             }
         }
     }

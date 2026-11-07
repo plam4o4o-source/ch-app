@@ -1,6 +1,6 @@
 package org.chyavorec.app.ui.screens.my
 
-import org.chyavorec.app.ui.components.sharedElementKey
+import org.chyavorec.app.ui.components.bookCoverShared
 import org.chyavorec.app.ui.components.appFilterChipColors
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -264,7 +264,7 @@ private fun HistoryRow(item: HistoryItem, book: CatalogBook?, onOpen: (Long) -> 
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BookCover(cover, width = 48.dp, showStatusDot = book != null, modifier = if (inv != null) Modifier.sharedElementKey("book-$inv") else Modifier, decorative = true)
+        BookCover(cover, width = 48.dp, showStatusDot = book != null, modifier = if (inv != null) Modifier.bookCoverShared(inv) else Modifier, decorative = true)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(item.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
