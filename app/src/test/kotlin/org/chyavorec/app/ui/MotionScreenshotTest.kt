@@ -188,6 +188,7 @@ class MotionScreenshotTest {
     private val book = CatalogBook(inv = 624, author = "Яна Язова", title = "Ох...", available = true)
 
     /** Корицата при 0°, 35°, 70°, 100° и 110°: страницата отдолу, а над 90° — форзацът. */
+    @Config(qualifiers = "bg-w720dp-h360dp-xhdpi")
     @Test fun bookOpeningAngles() {
         val angles = listOf(0f, 35f, 70f, 100f, BOOK_OPEN_MAX_DEG)
         compose.setContent {
@@ -226,8 +227,9 @@ class MotionScreenshotTest {
         compose.waitUntil(15_000) { compose.onAllNodes(hasText(text, substring = true)).fetchSemanticsNodes().isNotEmpty() }
 
     /**
-     * Истинският преход каталог → книга: кадри 60, 140 и 260 ms след докосването (корицата
-     * „прелита“ и се разтваря), после книгата се отваря както досега.
+     * Истинският преход каталог → книга: щом детайлите покажат корицата (книгата се чете от
+     * базата), кадри през 0, 50, 100 и 170 ms — корицата „прелита“ и се разтваря; после
+     * книгата се отваря както досега.
      */
     @Test fun bookOpenTransitionFrames() {
         launch()
@@ -244,7 +246,15 @@ class MotionScreenshotTest {
 
         compose.mainClock.autoAdvance = false
         compose.onAllNodes(hasText("\"Ох...\"") and hasClickAction()).onFirst().performClick()
-        val frames = listOf(60L, 80L, 120L).map { t ->
+        // Кадър по кадър, докато детайлите се покажат (до 1 s).
+        val detail = hasText("Наличност към", substring = true)
+        var waited = 0L
+        while (compose.onAllNodes(detail).fetchSemanticsNodes().isEmpty() && waited < 1_000) {
+            compose.mainClock.advanceTimeByFrame()
+            Thread.sleep(5)
+            waited += 16
+        }
+        val frames = listOf(0L, 50L, 50L, 70L).map { t ->
             compose.mainClock.advanceTimeBy(t)
             capture()
         }

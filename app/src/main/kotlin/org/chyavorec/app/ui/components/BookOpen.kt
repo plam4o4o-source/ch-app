@@ -81,7 +81,8 @@ internal fun Modifier.bookOpening(angle: () -> Float): Modifier =
         }
     }.graphicsLayer {
         val a = angle()
-        rotationY = -a
+        // Свободният ръб идва към читателя (по-близо — по-голям) и минава наляво.
+        rotationY = a
         transformOrigin = TransformOrigin(0f, 0.5f)
         cameraDistance = 12f * density
     }.drawWithCache {
@@ -111,6 +112,7 @@ private class PageDrawing(scope: CacheDrawScope) {
     private val radius: CornerRadius
     private val edges: List<Float>
     private val edgeStroke: Float
+    private val edgeOutline: Stroke
     private val edgeTop: Float
     private val frameTopLeft: Offset
     private val frameSize: Size
@@ -127,6 +129,7 @@ private class PageDrawing(scope: CacheDrawScope) {
             radius = CornerRadius(3.dp.toPx())
             edges = (1..3).map { w - it * gap }
             edgeStroke = 0.6.dp.toPx()
+            edgeOutline = Stroke(0.8.dp.toPx())
             edgeTop = gap * 2
             val inset = w * 0.14f
             frameTopLeft = Offset(inset, inset)
@@ -146,6 +149,7 @@ private class PageDrawing(scope: CacheDrawScope) {
 
     fun draw(scope: DrawScope, angleDeg: Float) = with(scope) {
         drawRoundRect(PageColor, cornerRadius = radius)
+        drawRoundRect(PageLine, cornerRadius = radius, style = edgeOutline)
         for (x in edges) drawLine(PageLine, Offset(x, edgeTop), Offset(x, size.height - edgeTop), strokeWidth = edgeStroke)
         drawRect(Frame, frameTopLeft, frameSize, style = frameStroke)
         for ((o, s) in lines) drawRect(PageText, o, s)

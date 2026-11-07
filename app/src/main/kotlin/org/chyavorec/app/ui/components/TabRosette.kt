@@ -19,21 +19,20 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.Morph
 import androidx.graphics.shapes.RoundedPolygon
-import androidx.graphics.shapes.rectangle
+import androidx.graphics.shapes.circle
 import androidx.graphics.shapes.star
 import androidx.graphics.shapes.toPath
 
 /**
  * Формите на индикатора на избрания раздел, в единици = радиуса на розетката (18 dp):
- * хапчето на Material (56 × 32 dp) и осморъка — осемлъчата звезда от шевиците.
+ * кръг (началото — симетрично „разцъфване“) и осморъка — осемлъчата звезда от шевиците.
  */
 internal object TabRosetteShapes {
     /** Радиусът на розетката (dp): 36 dp — колкото да не стига етикета под иконата. */
     const val UNIT_DP = 18f
 
-    val pill: RoundedPolygon = RoundedPolygon.rectangle(
-        width = 56f / UNIT_DP, height = 32f / UNIT_DP, rounding = CornerRounding(16f / UNIT_DP),
-    )
+    /** Кръг с 8 върха — всеки лъч на розетката „израства“ от свой връх. */
+    val circle: RoundedPolygon = RoundedPolygon.circle(numVertices = 8, radius = 0.86f)
 
     /** Осморъка: 8 заоблени лъча, вътрешният радиус е голям — мека „розетка“, не бодлива звезда. */
     val rosette: RoundedPolygon = RoundedPolygon.star(
@@ -41,13 +40,13 @@ internal object TabRosetteShapes {
         rounding = CornerRounding(0.2f, smoothing = 0.5f), innerRounding = CornerRounding(0.1f),
     )
 
-    val morph = Morph(pill, rosette)
+    val morph = Morph(circle, rosette)
 }
 
 /**
- * Индикаторът на избрания раздел (долната лента и страничната): при избор хапчето се
+ * Индикаторът на избрания раздел (долната лента и страничната): при избор кръгът се
  * „разцъфва“ в осморъка с леко завъртане и пружина, а вътре се появява пунктирен „бод“ —
- * като шевица. При отказ от избора — обратно към хапчето и изчезва.
+ * като шевица. При отказ от избора — обратно към кръга и изчезва.
  * При намалено движение — направо крайната форма. Само рисуване: прогресът се чете във
  * фазата на рисуване, без рекомпозиция по кадри; пътят се строи наново само при промяна.
  */
