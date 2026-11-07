@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.paneTitle
@@ -112,10 +113,28 @@ fun BackTopBar(
     actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior? = null,
     paneLabel: String = title,
+    /**
+     * false — заглавието е скрито (статията: появява се, щом заглавието в текста мине под лентата).
+     * Преливането е само в слоя — без рекомпозиция на кадър; скритото не се чете от TalkBack.
+     */
+    titleShown: Boolean = true,
 ) {
+    val reduced = rememberReducedMotion()
+    val titleSpec: AnimationSpec<Float> = if (reduced) snap() else AppMotion.defaultEffects()
+    val titleAlpha by animateFloatAsState(if (titleShown) 1f else 0f, titleSpec, label = "bar-title")
     TopAppBar(
         modifier = Modifier.screenPane(paneLabel),
-        title = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleLarge) },
+        title = {
+            Text(
+                title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .graphicsLayer {
+                        alpha = titleAlpha
+                        translationY = (1f - titleAlpha) * 6.dp.toPx()
+                    }
+                    .then(if (titleShown) Modifier else Modifier.clearAndSetSemantics { }),
+            )
+        },
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back))

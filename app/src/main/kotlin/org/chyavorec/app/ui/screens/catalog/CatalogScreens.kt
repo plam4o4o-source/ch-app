@@ -130,6 +130,7 @@ import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.SyncStamp
 import org.chyavorec.app.ui.components.errorMessage
+import org.chyavorec.app.ui.components.rememberSuccessFeedback
 import org.chyavorec.app.ui.navigation.Routes
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.icons.outlined.Call
@@ -692,18 +693,27 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
         )
     }
 
-    hold?.let { result ->
+    // Изпратената заявка — успех: снекбар, вибрация и шевичено конфети (като удължаването);
+    // отказът се чете спокойно — в диалог.
+    val success = rememberSuccessFeedback()
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(hold) {
+        if (hold !is Outcome.Success) return@LaunchedEffect
+        vm.holdResult.value = null
+        success()
+        // Снекбарът — извън ефекта: изчистеният резултат го рестартира (и би затворил съобщението).
+        scope.launch {
+            snackbar.currentSnackbarData?.dismiss()
+            snackbar.showSnackbar(resources.getString(R.string.hold_ok))
+        }
+    }
+    (hold as? Outcome.Failure)?.let { result ->
         AppAlertDialog(
             onDismissRequest = { vm.holdResult.value = null },
             confirmButton = { TextButton(onClick = { vm.holdResult.value = null }) { Text(stringResource(R.string.action_ok)) } },
-            title = { Text(stringResource(if (result is Outcome.Success) R.string.hold_ok_title else R.string.hold_error_title)) },
+            title = { Text(stringResource(R.string.hold_error_title)) },
             text = {
-                Text(
-                    when (result) {
-                        is Outcome.Success -> stringResource(R.string.hold_ok_text)
-                        is Outcome.Failure -> if (result.error == AppError.Unauthorized) stringResource(R.string.hold_login_needed) else errorMessage(result.error)
-                    },
-                )
+                Text(if (result.error == AppError.Unauthorized) stringResource(R.string.hold_login_needed) else errorMessage(result.error))
             },
         )
     }

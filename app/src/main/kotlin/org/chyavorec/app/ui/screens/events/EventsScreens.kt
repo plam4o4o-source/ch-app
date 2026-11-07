@@ -108,6 +108,7 @@ import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.rememberSuccessFeedback
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.LocalThemeStyle
@@ -476,7 +477,10 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
     val msgBlocked = stringResource(R.string.reminder_blocked)
     val scope = rememberCoroutineScope()
     val resources = androidx.compose.ui.platform.LocalResources.current
+    val success = rememberSuccessFeedback()
     LaunchedEffect(result) {
+        // Зададеното напомняне — успех: вибрация и шевичено конфети (при намалено движение — само снекбарът).
+        if (result == true) success()
         when (result) {
             // Кога точно ще дойде напомнянето.
             true -> snackbar.showSnackbar(

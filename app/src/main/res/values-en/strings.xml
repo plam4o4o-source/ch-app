@@ -208,8 +208,7 @@
     <string name="history_year_all">All years</string>
     <string name="hold_error_title">Hold not placed</string>
     <string name="hold_login_needed">Sign in to place a hold.</string>
-    <string name="hold_ok_text">The library will set the book aside for you.</string>
-    <string name="hold_ok_title">Hold placed</string>
+    <string name="hold_ok">Hold placed. The library will set the book aside for you.</string>
     <string name="home_carousel">Latest news</string>
     <string name="home_carousel_next">Next story</string>
     <string name="home_carousel_prev">Previous story</string>

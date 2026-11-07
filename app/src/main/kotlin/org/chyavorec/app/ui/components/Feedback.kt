@@ -142,6 +142,8 @@ fun MessageView(
     animation: (@Composable () -> Unit)? = null,
     /** Лека анимация по значката (EmptyAnimations.kt), ако няма [animation]; `null` — статично. */
     motion: EmptyMotion? = emptyMotionFor(icon),
+    /** Бродирана лента от ромбове под илюстрацията — избродира се веднъж при появата (празните състояния). */
+    ornament: Boolean = false,
 ) {
     Column(
         modifier = modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 40.dp),
@@ -169,7 +171,13 @@ fun MessageView(
                 Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(24.dp))
             }
         }
-        Spacer(Modifier.height(20.dp))
+        if (ornament) {
+            Spacer(Modifier.height(8.dp))
+            StitchInOrnament(EmptyBand, Modifier.size(width = 112.dp, height = 24.dp))
+            Spacer(Modifier.height(10.dp))
+        } else {
+            Spacer(Modifier.height(20.dp))
+        }
         Text(
             title, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center,
             modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
@@ -226,7 +234,10 @@ fun EmptyView(
     illustration: Illustration = illustrationFor(icon),
     animation: (@Composable () -> Unit)? = null,
     motion: EmptyMotion? = emptyMotionFor(icon),
-) = MessageView(icon, title, message, modifier, illustration = illustration, animation = animation, motion = motion)
+) = MessageView(icon, title, message, modifier, illustration = illustration, animation = animation, motion = motion, ornament = true)
+
+/** Лентата под илюстрацията на празните състояния: четири ромба (33×7 бода). */
+private val EmptyBand: StitchChart = StitchCharts.band(4)
 
 /**
  * Лента „Няма интернет връзка. Показваме последно наличните данни.“ + кога е

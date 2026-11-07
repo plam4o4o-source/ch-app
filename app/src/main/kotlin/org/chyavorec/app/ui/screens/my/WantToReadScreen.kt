@@ -127,6 +127,7 @@ import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.components.rememberSuccessFeedback
 import org.chyavorec.app.ui.components.sharedElementKey
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.settings.NotificationAccess
@@ -494,11 +495,14 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
     val resources = LocalResources.current
     val haptic = LocalHapticFeedback.current
     val reduced = rememberReducedMotion()
+    val success = rememberSuccessFeedback()
     FilterChip(
         selected = saved != null,
         onClick = {
-            haptic.performHapticFeedback(if (saved != null) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn)
+            // Добавянето е успех — вибрацията (и конфетито) идват, щом книгата е записана.
+            if (saved != null) haptic.performHapticFeedback(HapticFeedbackType.ToggleOff)
             vm.toggle(book) { removed ->
+                if (removed == null) success()
                 scope.launch {
                     snackbar.currentSnackbarData?.dismiss()
                     if (removed == null) {
