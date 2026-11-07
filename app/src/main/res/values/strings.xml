@@ -208,8 +208,7 @@
     <string name="history_year_all">Всички години</string>
     <string name="hold_error_title">Заявката не е изпратена</string>
     <string name="hold_login_needed">За да заявиш книга, влез в профила си.</string>
-    <string name="hold_ok_text">Библиотеката ще отдели книгата за теб.</string>
-    <string name="hold_ok_title">Заявката е изпратена</string>
+    <string name="hold_ok">Заявката е изпратена. Библиотеката ще отдели книгата за теб.</string>
     <string name="home_carousel">Последни новини</string>
     <string name="home_carousel_next">Следваща новина</string>
     <string name="home_carousel_prev">Предишна новина</string>
@@ -340,6 +339,8 @@
     <string name="notif_due_on">%1$s — до %2$s</string>
     <string name="notif_due_soon">Наближава срок за връщане</string>
     <string name="notif_due_today">Днес е срокът за връщане</string>
+    <string name="notif_event_live_text">Начало в %1$s</string>
+    <string name="notif_event_live_text_place">%1$s — начало в %2$s</string>
     <string name="notif_event_reminder">Напомняне за събитие</string>
     <string name="notif_loans_summary">Известия за заетите книги</string>
     <string name="notif_new_article">Нова публикация</string>
@@ -361,6 +362,7 @@
     <string name="notif_renew_sent_text">„%1$s“: библиотеката ще удължи срока при следващото обновяване на програмата си.</string>
     <string name="notif_renew_session_unavailable">Профилът ти временно не се отваря на това устройство. Опитай пак по-късно.</string>
     <string name="notif_update_available">Налична е нова версия %1$s</string>
+    <string name="notif_update_chip">%1$d%%</string>
     <string name="notif_update_downloaded_text">Готово — докосни, за да инсталираш.</string>
     <string name="notif_update_downloading">Изтегляне на версия %1$s — %2$d%%</string>
     <string name="notif_update_downloading_unknown">Изтегляне на версия %1$s…</string>
@@ -671,6 +673,13 @@
     <string name="subject_messages">съобщенията</string>
     <string name="subject_news">новините</string>
     <string name="subject_page">страницата</string>
+    <string name="surprise_action">Изненадай ме</string>
+    <string name="surprise_again">Още една</string>
+    <string name="surprise_announce">Предложение: %1$s — %2$s</string>
+    <string name="surprise_empty">Няма налична книга за предложение</string>
+    <string name="surprise_label">Предложение</string>
+    <string name="surprise_open">Към книгата</string>
+    <string name="surprise_shuffling">Избирам книга…</string>
     <string name="sync_never">никога</string>
     <string name="tab_catalog">Каталог</string>
     <string name="tab_home">Начало</string>

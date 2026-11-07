@@ -4,6 +4,10 @@ import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.limitedInput
 import org.chyavorec.app.ui.components.sharedTransitionsActive
 import org.chyavorec.app.ui.components.InfoBanner
+import org.chyavorec.app.ui.components.LivingShevitsa
+import org.chyavorec.app.ui.components.ShevitsaPalettes
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.text.TextStyle
 import org.chyavorec.app.ui.components.sharedBoundsKey
 import android.app.Activity
 import android.hardware.Sensor
@@ -15,7 +19,6 @@ import android.content.Context
 import android.provider.Settings
 import android.view.Window
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -156,7 +159,7 @@ private const val SENSOR_PERIOD_US = 33_000
 private const val SENSOR_MAX_LATENCY_US = 66_000
 
 /** Наклон на устройството (−1..1 по двете оси), нискочестотно филтриран; (0, 0) без сензор. */
-private class Tilt {
+internal class Tilt {
     var x by mutableFloatStateOf(0f)
     var y by mutableFloatStateOf(0f)
 }
@@ -172,9 +175,10 @@ private class Tilt {
 private fun rememberTilt(): Tilt {
     val context = LocalContext.current
     val reduced = rememberReducedMotion()
-    val tilt = remember { Tilt() }
-    LifecycleResumeEffect(reduced) {
-        if (reduced) return@LifecycleResumeEffect onPauseOrDispose {}
+    val fixed = LocalFixedCardTilt.current
+    val tilt = remember(fixed) { Tilt().apply { fixed?.let { x = it.x; y = it.y } } }
+    LifecycleResumeEffect(reduced, fixed) {
+        if (reduced || fixed != null) return@LifecycleResumeEffect onPauseOrDispose {}
         val manager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
         val sensor = manager?.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) ?: manager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
         if (manager == null || sensor == null) return@LifecycleResumeEffect onPauseOrDispose {}
@@ -202,35 +206,17 @@ private fun rememberTilt(): Tilt {
     return tilt
 }
 
-/** Диагонален отблясък (бяло 12 % → прозрачно), който се мести с наклона на телефона. */
-private fun Modifier.tiltGloss(tilt: Tilt): Modifier = drawWithContent {
-    drawContent()
-    val w = size.width
-    val h = size.height
-    val tx = tilt.x
-    val ty = tilt.y
-    if (tx == 0f && ty == 0f) return@drawWithContent
-    // Центърът на ивицата върви по диагонала според наклона; краищата остават прозрачни.
-    val center = (0.5f + 0.35f * tx - 0.2f * ty).coerceIn(0.12f, 0.88f)
-    drawRect(
-        Brush.linearGradient(
-            colorStops = arrayOf(
-                0f to Color.Transparent,
-                (center - 0.12f).coerceAtLeast(0f) to Color.Transparent,
-                center to Color.White.copy(alpha = 0.12f),
-                (center + 0.12f).coerceAtMost(1f) to Color.Transparent,
-                1f to Color.Transparent,
-            ),
-            start = Offset(0f, h * 0.25f * ty),
-            end = Offset(w, h + h * 0.25f * ty),
-        ),
-    )
-}
+/** Неподвижен наклон вместо сензора — за снимките на фолиото в тестовете. */
+internal val LocalFixedCardTilt = staticCompositionLocalOf<Offset?> { null }
 
 /** Ключ на shared element прехода „карта → карта на цял екран“. */
 private const val LIBRARY_CARD_KEY = "library-card"
 
-/** Рамката на картата (размер ID-1, мастилено-бордо градиент, златен кант) — обща за двете страни. */
+/**
+ * Рамката на картата (размер ID-1, мастилено-бордо градиент, златен кант) — обща за двете страни.
+ * Отдолу нагоре: градиентът, „живата шевица“ (приглушени конци със сноп светлина),
+ * холографското фолио по наклона и съдържанието (баркодът е на бял фон над фолиото).
+ */
 @Composable
 private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable ColumnScope.() -> Unit) {
     val tilt = rememberTilt()
@@ -240,19 +226,22 @@ private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable C
             .cardProportions()
             .shadow(12.dp, RoundedCornerShape(20.dp))
             .clip(RoundedCornerShape(20.dp))
-            .background(Brush.linearGradient(listOf(Brand.Ink, Color(0xFF3A1A18), Brand.Burgundy)))
-            // „Жив“ отблясък по наклона на телефона; баркодът отдолу остава неподвижен.
-            .tiltGloss(tilt),
+            .background(Brush.linearGradient(listOf(Brand.Ink, Color(0xFF3A1A18), Brand.Burgundy))),
         // Минималната височина (пропорциите) стига и до съдържанието — за разтягащите Spacer-и.
         propagateMinConstraints = true,
     ) {
+        LivingShevitsa(ShevitsaPalettes.card, Modifier.matchParentSize(), cell = if (large) 3.dp else 2.4.dp, intensity = 0.9f)
+        CardFoilLayer(tilt, Modifier.matchParentSize())
         Box(Modifier.matchParentSize().padding(2.dp).border(1.dp, Brand.Gold.copy(alpha = 0.45f), RoundedCornerShape(18.dp)))
         // На цял екран — и шевица по ъглите (ненатрапчива златна рамка).
         if (large) OrnamentFrame(Modifier.matchParentSize().padding(6.dp))
         // Пропорциите на картата се пазят: мащабът на шрифта вътре е ограничен до 1.3×.
         // Ако и така текстът не се събира (тесен екран), картата расте надолу — не реже текста.
         val density = LocalDensity.current
-        CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale = density.fontScale.coerceAtMost(1.3f))) {
+        CompositionLocalProvider(
+            LocalDensity provides Density(density.density, fontScale = density.fontScale.coerceAtMost(1.3f)),
+            LocalCardTilt provides tilt,
+        ) {
             Column(Modifier.fillMaxWidth().padding(if (large) 24.dp else 18.dp), content = content)
         }
     }
@@ -297,13 +286,12 @@ fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = 
             }
         }
         Spacer(Modifier.weight(1f))
-        Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        EmbossedText(data.holder.ifBlank { "—" }, Brand.Parchment, TextStyle(fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp))
         // Номерът не се съкращава: ако до него няма място за статуса, той минава на нов ред.
         FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(
-                stringResource(R.string.reader_number, data.number),
-                color = Brand.GoldLight, style = MaterialTheme.typography.labelMedium,
-                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.CenterVertically),
+            EmbossedText(
+                stringResource(R.string.reader_number, data.number), Brand.GoldLight, MaterialTheme.typography.labelMedium,
+                Modifier.align(Alignment.CenterVertically),
             )
             data.status?.let { OnDarkSurfaceStatuses { MembershipPill(it) } }
         }
@@ -339,12 +327,9 @@ fun LibraryCardBack(data: CardData, modifier: Modifier = Modifier, large: Boolea
             data.number.length > 11 -> if (large) 30.sp else 24.sp
             else -> if (large) 44.sp else 34.sp
         }
-        Text(
-            data.number, color = Brand.Parchment, fontFamily = FontFamily.Monospace, fontSize = numberSize,
-            letterSpacing = 2.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
-        )
+        EmbossedText(data.number, Brand.Parchment, TextStyle(fontFamily = FontFamily.Monospace, fontSize = numberSize, letterSpacing = 2.sp))
         Spacer(Modifier.height(6.dp))
-        Text(data.holder.ifBlank { "—" }, color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 24.sp else 20.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        EmbossedText(data.holder.ifBlank { "—" }, Brand.Parchment, TextStyle(fontFamily = Cormorant, fontSize = if (large) 24.sp else 20.sp))
         Spacer(Modifier.weight(1f))
         Text(
             stringResource(R.string.org_library_name), color = Brand.Parchment.copy(alpha = 0.8f),

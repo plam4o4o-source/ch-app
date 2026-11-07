@@ -32,12 +32,14 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.Brand
+import org.chyavorec.app.ui.theme.ShevitsaShaders
 import org.chyavorec.app.ui.theme.SystemBarIcons
 
 /**
- * Кратко анимирано въведение след системния splash (≈1,2 s, само при студен старт):
- * логото „изплува“, около него се изписва златен пръстен, после името на
- * читалището. При изключени анимации се пропуска изцяло.
+ * Кратко анимирано въведение след системния splash (≈1,2 s, само при първото
+ * стартиране): логото „изплува“, около него се изписва златен пръстен и се
+ * появява „живата шевица“ по краищата, после името на читалището. При изключени
+ * анимации се пропуска изцяло.
  */
 @Composable
 fun BrandIntro(onFinished: () -> Unit) {
@@ -65,6 +67,14 @@ fun BrandIntro(onFinished: () -> Unit) {
             .background(Brush.verticalGradient(listOf(Brand.Cream, androidx.compose.ui.graphics.Color.White, Brand.Parchment))),
         contentAlignment = Alignment.Center,
     ) {
+        // „Жива шевица“ по краищата (средата е празна за логото): появява се с пръстена,
+        // а един сноп златна светлина минава през нея за времето на въведението.
+        LivingShevitsa(
+            ShevitsaPalettes.intro, Modifier.matchParentSize(), cell = 3.dp, clearCenter = 0.55f,
+            speed = ShevitsaShaders.SWEEP_SECONDS / 1.3f, budget = remember { WeaveBudget(cycles = 1) }, alpha = { ring.value },
+            // Без шейдър (до Android 12L) въведението остава както досега.
+            still = false,
+        )
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Box(contentAlignment = Alignment.Center) {
                 Canvas(Modifier.size(196.dp)) {

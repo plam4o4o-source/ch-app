@@ -1,10 +1,12 @@
 package org.chyavorec.app.notifications
 
+import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
 import coil3.SingletonImageLoader
 import coil3.request.CachePolicy
@@ -81,13 +83,26 @@ object RichNotifications {
      * Без приложение за действието — без бутон.
      */
     private fun activityAction(context: Context, requestCode: Int, label: Int, intent: Intent): NotificationCompat.Action? {
+        val pending = activityPending(context, requestCode, intent) ?: return null
+        return NotificationCompat.Action.Builder(R.drawable.ic_notification, context.getString(label), pending).build()
+    }
+
+    private fun activityPending(context: Context, requestCode: Int, intent: Intent): PendingIntent? {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         if (intent.action != Intent.ACTION_CHOOSER &&
             context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).isEmpty()
         ) return null
-        val pending = PendingIntent.getActivity(
+        return PendingIntent.getActivity(
             context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
-        return NotificationCompat.Action.Builder(R.drawable.ic_notification, context.getString(label), pending).build()
+    }
+
+    /** „Маршрут“ до [place] за живото известие (платформеният Notification.Builder); без приложение за карти — `null`. */
+    fun routeAction(context: Context, place: String?, notificationId: Int): Notification.Action? {
+        val p = place?.takeIf { it.isNotBlank() } ?: return null
+        val pending = activityPending(context, notificationId, Intents.mapIntent(Intents.placeQuery(p))) ?: return null
+        return Notification.Action.Builder(
+            Icon.createWithResource(context, R.drawable.ic_notification), context.getString(R.string.notif_action_route), pending,
+        ).build()
     }
 }

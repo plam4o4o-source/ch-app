@@ -4,6 +4,14 @@ import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.sharedBoundsKey
 import org.chyavorec.app.ui.components.appFilterChipColors
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onPlaced
+import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.KeyboardActions
@@ -376,38 +384,27 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
     val context = LocalContext.current
     val scroll = TopAppBarDefaults.pinnedScrollBehavior()
     var readerSheet by rememberSaveable { mutableStateOf(false) }
+    val reduced = rememberReducedMotion()
+    // С екранен четец лентата с действията не се крие (фокусът не бива да „изчезва“).
+    val screenReader = rememberIsTouchExplorationEnabled()
+    val reading = rememberScrollState()
+    val slop = with(LocalDensity.current) { 6.dp.toPx() }
+    val toolbarScroll = remember(slop) { ToolbarScrollConnection(slop) }
+    // В края на статията лентата се връща (там е „Сподели“ / „Отвори в сайта“).
+    val atEnd by remember { derivedStateOf { reading.maxValue in 1 until Int.MAX_VALUE && reading.value >= reading.maxValue } }
+    // Заглавието в лентата се показва, щом заглавието в текста мине под нея.
+    var headlineGone by remember { mutableStateOf(false) }
+    val viewport = remember { arrayOfNulls<LayoutCoordinates>(1) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
         topBar = {
             BackTopBar(
-                title = "",
+                title = state.data?.article?.title.orEmpty(),
                 onBack = onBack,
                 paneLabel = state.data?.article?.title.orEmpty(),
                 scrollBehavior = scroll,
-                actions = {
-                    ReaderModeButton(onClick = { readerSheet = true })
-                    state.data?.article?.let { a ->
-                        IconButton(onClick = { vm.toggleFavorite() }) {
-                            Icon(
-                                if (fav) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
-                                contentDescription = stringResource(if (fav) R.string.action_unsave else R.string.action_save),
-                            )
-                        }
-                        ShareActionButton(
-                            onShareLink = { Intents.share(context, a.title, a.title + "\n" + a.url) },
-                            image = {
-                                val photo = a.imageUrl ?: state.data?.gallery?.firstOrNull()
-                                ShareImageRequest(
-                                    ShareCards.news(context, a, photo), a.title, a.title + "\n" + a.url,
-                                )
-                            },
-                        )
-                        IconButton(onClick = { Intents.openUrl(context, a.url) }) {
-                            Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = stringResource(R.string.action_open_site))
-                        }
-                    }
-                },
+                titleShown = headlineGone,
             )
         },
     ) { padding ->
@@ -425,24 +422,36 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
             // Прегледът на цял екран: с описанията на снимките, а споделянето — със статията.
             val alts = detail.galleryAltList
             fun viewer(index: Int) = Routes.viewerUrls(gallery, index, alts, a.url, a.title)
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 32.dp)) {
-                item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
-                a.imageUrl?.let { hero ->
-                    item {
+            Box(Modifier.fillMaxSize()) {
+                Column(
+                    Modifier.fillMaxSize().onPlaced { viewport[0] = it }.nestedScroll(toolbarScroll).verticalScroll(reading)
+                        // Място за плаващата лента под последния ред.
+                        .padding(bottom = 104.dp),
+                ) {
+                    SyncBanner(state.fromCache, state.syncedAt, state.refreshError)
+                    a.imageUrl?.let { hero ->
                         // Един запис в кеша с картата в „Новини“ и на началния екран (същият адрес) — също
-                        // RGB_565; в пълно качество е в прегледа на цял екран (докосване).
+                        // RGB_565; в пълно качество е в прегледа на цял екран (докосване). Паралаксът е след
+                        // изрязването — снимката се движи в рамката си; при намалено движение — без него.
                         SiteImage(
                             hero, width = windowWidth() - 32.dp, contentDescription = a.title, thumbnail = true,
                             modifier = Modifier.padding(horizontal = 16.dp).sharedElementKey("news-${a.id}").fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.large)
-                                .clickable(onClickLabel = stringResource(R.string.a11y_open_photo), role = Role.Image) { navigate(viewer(gallery.indexOf(hero))) },
+                                .clickable(onClickLabel = stringResource(R.string.a11y_open_photo), role = Role.Image) { navigate(viewer(gallery.indexOf(hero))) }
+                                .then(if (reduced) Modifier else Modifier.heroParallax(reading)),
                         )
                     }
-                }
-                item {
                     Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp).widthIn(max = 720.dp)) {
                         MetaLine(a.category, a.publishedAtMillis)
                         Spacer(Modifier.height(6.dp))
-                        Text(a.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.sharedBoundsKey("news-title-${a.id}").semantics { heading() })
+                        Text(
+                            a.title, style = MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier.sharedBoundsKey("news-title-${a.id}").semantics { heading() }
+                                .onGloballyPositioned { c ->
+                                    val vp = viewport[0]?.takeIf { it.isAttached } ?: return@onGloballyPositioned
+                                    val gone = vp.localPositionOf(c, Offset(0f, c.size.height.toFloat())).y <= 0f
+                                    if (gone != headlineGone) headlineGone = gone
+                                },
+                        )
                         Spacer(Modifier.height(16.dp))
                         // Режим за четене: размерът на шрифта и ширината на колоната са от настройките.
                         ReaderContent {
@@ -460,16 +469,14 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                                     onLink = openLink,
                                     onImage = { url -> navigate(gallery.indexOf(url).takeIf { it >= 0 }?.let(::viewer) ?: Routes.viewerUrls(listOf(url), 0, listOf(detail.galleryAlts[url].orEmpty()), a.url, a.title)) },
                                     // Без „разтягане“ на текста при намалено движение.
-                                    modifier = if (rememberReducedMotion()) Modifier else Modifier.animateContentSize(),
+                                    modifier = if (reduced) Modifier else Modifier.animateContentSize(),
                                     skipImages = true,
                                 )
                             }
                         }
                     }
-                }
-                val extra = gallery.filter { it != a.imageUrl }
-                if (extra.isNotEmpty()) {
-                    item {
+                    val extra = gallery.filter { it != a.imageUrl }
+                    if (extra.isNotEmpty()) {
                         Text(stringResource(R.string.article_gallery), style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp).semantics { heading() })
                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -478,6 +485,35 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                                     modifier = Modifier.size(150.dp, 112.dp).clip(MaterialTheme.shapes.small).clickable { navigate(viewer(gallery.indexOf(url))) })
                             }
                         }
+                    }
+                }
+                // Прочетеното — бродиран „конец“ под лентата със заглавието (декоративен).
+                ReadingThread(
+                    progress = { ArticleReading.fraction(reading.value, reading.maxValue) },
+                    modifier = Modifier.align(Alignment.TopStart).fillMaxWidth().height(4.dp),
+                )
+                // Действията — в плаваща лента долу (горе остава само „Назад“).
+                ArticleToolbar(
+                    visible = toolbarScroll.visible || atEnd || screenReader,
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp),
+                ) {
+                    ReaderModeButton(onClick = { readerSheet = true })
+                    IconButton(onClick = { vm.toggleFavorite() }) {
+                        Icon(
+                            if (fav) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                            contentDescription = stringResource(if (fav) R.string.action_unsave else R.string.action_save),
+                            tint = if (fav) LocalExtendedColors.current.gold else LocalContentColor.current,
+                        )
+                    }
+                    // Връзката (текст) или карта-картинка с QR код към новината.
+                    ShareActionButton(
+                        onShareLink = { Intents.share(context, a.title, a.title + "\n" + a.url) },
+                        image = {
+                            ShareImageRequest(ShareCards.news(context, a, a.imageUrl ?: gallery.firstOrNull()), a.title, a.title + "\n" + a.url)
+                        },
+                    )
+                    IconButton(onClick = { Intents.openUrl(context, a.url) }) {
+                        Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = stringResource(R.string.action_open_site))
                     }
                 }
             }

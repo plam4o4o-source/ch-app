@@ -60,6 +60,9 @@ import org.chyavorec.app.ui.components.boldMarkdown
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
 import org.chyavorec.app.ui.components.MotionBudget
+import org.chyavorec.app.ui.components.LivingShevitsa
+import org.chyavorec.app.ui.components.ShevitsaPalettes
+import org.chyavorec.app.ui.components.WeaveSession
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.domain.model.DailyFeast
 import androidx.compose.animation.fadeIn
@@ -235,7 +238,7 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
                 .widthIn(max = 840.dp).fillMaxSize()
                 .semantics { paneTitle = paneLabel },
         ) {
-            item("header") {
+            item("header") { Column {
                 // Името в заглавката спрямо ефекта (неговия Box) — при превъртане не се променя;
                 // координатите са едни и същи обекти, четат се само при рисуване.
                 var titleCoords by remember { mutableStateOf<LayoutCoordinates?>(null) }
@@ -271,7 +274,15 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
                         titleModifier = if (decor.effect != OccasionEffect.NONE) Modifier.onPlaced { titleCoords = it } else Modifier,
                     )
                 }
-            }
+                // „Жива шевица“: тънка везана лента под заглавката; снопът светлина минава
+                // ~24 s веднъж на процес и спира при първото превъртане.
+                LivingShevitsa(
+                    ShevitsaPalettes.ribbon(LocalExtendedColors.current.isDark),
+                    Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 2.dp).height(HomeBandHeight),
+                    period = HOME_BAND_PERIOD, ribbon = true, budget = WeaveSession.home,
+                    stopWhen = { listState.isScrollInProgress || listState.firstVisibleItemIndex > 0 },
+                )
+            } }
             // Ако поздравът дойде след първия кадър (местен празник от сайта), се появява плавно.
             if (decor.greeting != null) {
                 item("greeting") {
@@ -452,6 +463,10 @@ private fun HomeHeader(
         }
     }
 }
+
+/** Височината на везаната лента под заглавката и бодовете между два възела на мрежата. */
+private val HomeBandHeight = 26.dp
+private const val HOME_BAND_PERIOD = 10
 
 /** Тъмен воал под текста на въртележката — еднакъв за всички страници, създава се веднъж. */
 private val HeroScrim = Brush.verticalGradient(

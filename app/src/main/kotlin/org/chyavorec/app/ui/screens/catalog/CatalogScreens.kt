@@ -14,6 +14,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -84,6 +85,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -129,6 +131,7 @@ import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.SyncStamp
 import org.chyavorec.app.ui.components.errorMessage
+import org.chyavorec.app.ui.components.rememberSuccessFeedback
 import org.chyavorec.app.ui.navigation.Routes
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.icons.outlined.Call
@@ -256,151 +259,165 @@ fun CatalogScreen(navigate: (String) -> Unit) {
         // Списъкът е в началото — лентата също се показва отново.
         barScroll.state.heightOffset = 0f
     }
+    // „Изненадай ме“: бутонът в лентата или разклащане (само докато каталогът е отпред).
+    val surprise = appViewModel { c -> SurpriseViewModel({ searcher -> surpriseTastes(c, searcher) }) }
+    val surpriseUi by surprise.ui.collectAsStateWithLifecycle()
+    val screenReader = rememberIsTouchExplorationEnabled()
+    val roll = { surprise.roll(vm.state.value.engine.data) }
+    // Към друг раздел (или завъртане) — изненадата се затваря, не чака отворена.
+    DisposableEffect(surprise) { onDispose { surprise.close() } }
+    ShakeEffect(enabled = !surpriseUi.open) {
+        haptic.performHapticFeedback(HapticFeedbackType.GestureThresholdActivate)
+        roll()
+    }
 
-    Scaffold(
-        modifier = if (compactHeight) Modifier.nestedScroll(barScroll.nestedScrollConnection) else Modifier,
-        topBar = {
-            // Като останалите основни раздели: емблемата + „Каталог“. Източникът (InvLib) е в реда
-            // с броя резултати, а логата на каталога и InvLib — в „За приложението“.
-            AppTopBar(
-                stringResource(R.string.tab_catalog),
-                scrollBehavior = if (compactHeight) barScroll else null,
-                expandedHeight = if (compactHeight) 56.dp else TopAppBarDefaults.TopAppBarExpandedHeight,
-                actions = {
-                    IconButton(onClick = {
-                        haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                        scope.launch { container.settings.setCatalogShelf(!shelf) }
-                    }) {
-                        if (shelf) {
-                            Icon(Icons.AutoMirrored.Outlined.ViewList, contentDescription = stringResource(R.string.catalog_view_list))
-                        } else {
-                            Icon(Icons.Outlined.ViewModule, contentDescription = stringResource(R.string.catalog_view_shelf))
+    Box(Modifier.fillMaxSize()) {
+        Scaffold(
+            modifier = if (compactHeight) Modifier.nestedScroll(barScroll.nestedScrollConnection) else Modifier,
+            topBar = {
+                // Като останалите основни раздели: емблемата + „Каталог“. Източникът (InvLib) е в реда
+                // с броя резултати, а логата на каталога и InvLib — в „За приложението“.
+                AppTopBar(
+                    stringResource(R.string.tab_catalog),
+                    scrollBehavior = if (compactHeight) barScroll else null,
+                    expandedHeight = if (compactHeight) 56.dp else TopAppBarDefaults.TopAppBarExpandedHeight,
+                    actions = {
+                        SurpriseButton(onClick = roll)
+                        IconButton(onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                            scope.launch { container.settings.setCatalogShelf(!shelf) }
+                        }) {
+                            if (shelf) {
+                                Icon(Icons.AutoMirrored.Outlined.ViewList, contentDescription = stringResource(R.string.catalog_view_list))
+                            } else {
+                                Icon(Icons.Outlined.ViewModule, contentDescription = stringResource(R.string.catalog_view_shelf))
+                            }
                         }
+                        Box {
+                            IconButton(onClick = { sortMenu = true }) {
+                                Icon(Icons.Outlined.SwapVert, contentDescription = stringResource(R.string.catalog_sort))
+                            }
+                            AppDropdownMenu(sortMenu, onDismissRequest = { sortMenu = false }) {
+                                CatalogSort.entries.forEach { s ->
+                                    DropdownMenuItem(
+                                        text = { Text(sortLabel(s) + if (q.sort == s) "  ✓" else "") },
+                                        onClick = { vm.setSort(s); sortMenu = false },
+                                    )
+                                }
+                            }
+                        }
+                        IconButton(onClick = { showFilters = true }) {
+                            BadgedBox(badge = { if (q.hasFilters) Badge() }) {
+                                Icon(Icons.Outlined.Tune, contentDescription = stringResource(R.string.catalog_filters))
+                            }
+                        }
+                    },
+                )
+            },
+        ) { padding ->
+            LeafRefreshBox(state.engine.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
+                Column(Modifier.fillMaxSize()) {
+                    val searchField: @Composable (Modifier) -> Unit = { m ->
+                        SearchInput(
+                            value = q.text,
+                            onValueChange = vm::setText,
+                            placeholder = searchHint(q.field),
+                            trailingIcon = {
+                                // Празно поле → скенер на баркодове (както в търсачката на началния екран);
+                                // с текст → „Изчисти“. Така горната лента не реже заглавието.
+                                if (q.text.isNotEmpty()) IconButton(onClick = { vm.setText("") }) {
+                                    Icon(Icons.Outlined.Clear, contentDescription = stringResource(R.string.action_clear))
+                                } else IconButton(onClick = { navigate(Routes.SCAN) }) {
+                                    Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action))
+                                }
+                            },
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Search,
+                                keyboardType = if (q.field == SearchField.INVENTORY || q.field == SearchField.ISBN) KeyboardType.Number else KeyboardType.Text,
+                            ),
+                            keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
+                            modifier = m.focusRequester(searchFocus),
+                        )
                     }
-                    Box {
-                        IconButton(onClick = { sortMenu = true }) {
-                            Icon(Icons.Outlined.SwapVert, contentDescription = stringResource(R.string.catalog_sort))
-                        }
-                        AppDropdownMenu(sortMenu, onDismissRequest = { sortMenu = false }) {
-                            CatalogSort.entries.forEach { s ->
-                                DropdownMenuItem(
-                                    text = { Text(sortLabel(s) + if (q.sort == s) "  ✓" else "") },
-                                    onClick = { vm.setSort(s); sortMenu = false },
+                    val fieldChips: @Composable (Modifier) -> Unit = { m ->
+                        LazyRow(m, contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            items(SearchField.entries) { f ->
+                                FilterChip(
+                                    q.field == f,
+                                    onClick = {
+                                        if (q.field != f) haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                                        vm.setField(f)
+                                    },
+                                    label = { Text(fieldLabel(f)) },
+                                    colors = appFilterChipColors(),
                                 )
                             }
                         }
                     }
-                    IconButton(onClick = { showFilters = true }) {
-                        BadgedBox(badge = { if (q.hasFilters) Badge() }) {
-                            Icon(Icons.Outlined.Tune, contentDescription = stringResource(R.string.catalog_filters))
+                    if (compactHeight) {
+                        // Ниско (хоризонтално): търсенето и полетата — на един ред, за да остане място за резултатите.
+                        Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                            searchField(Modifier.weight(1f).padding(start = 16.dp))
+                            fieldChips(Modifier.weight(1f))
+                        }
+                    } else {
+                        searchField(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp))
+                        fieldChips(Modifier)
+                    }
+                    AnimatedVisibility(
+                        state.suggestions.isNotEmpty() && q.text.length >= 2,
+                        enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(),
+                        exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
+                    ) {
+                        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            items(state.suggestions) { s ->
+                                SuggestionChip(onClick = { vm.setText(s) }, label = { Text(s, maxLines = 1, overflow = TextOverflow.Ellipsis) })
+                            }
                         }
                     }
-                },
-            )
-        },
-    ) { padding ->
-        LeafRefreshBox(state.engine.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
-            Column(Modifier.fillMaxSize()) {
-                val searchField: @Composable (Modifier) -> Unit = { m ->
-                    SearchInput(
-                        value = q.text,
-                        onValueChange = vm::setText,
-                        placeholder = searchHint(q.field),
-                        trailingIcon = {
-                            // Празно поле → скенер на баркодове (както в търсачката на началния екран);
-                            // с текст → „Изчисти“. Така горната лента не реже заглавието.
-                            if (q.text.isNotEmpty()) IconButton(onClick = { vm.setText("") }) {
-                                Icon(Icons.Outlined.Clear, contentDescription = stringResource(R.string.action_clear))
-                            } else IconButton(onClick = { navigate(Routes.SCAN) }) {
-                                Icon(Icons.Outlined.QrCodeScanner, contentDescription = stringResource(R.string.scan_action))
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Search,
-                            keyboardType = if (q.field == SearchField.INVENTORY || q.field == SearchField.ISBN) KeyboardType.Number else KeyboardType.Text,
-                        ),
-                        keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
-                        modifier = m.focusRequester(searchFocus),
-                    )
-                }
-                val fieldChips: @Composable (Modifier) -> Unit = { m ->
-                    LazyRow(m, contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        items(SearchField.entries) { f ->
-                            FilterChip(
-                                q.field == f,
-                                onClick = {
-                                    if (q.field != f) haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                                    vm.setField(f)
-                                },
-                                label = { Text(fieldLabel(f)) },
-                                colors = appFilterChipColors(),
+                    SyncBanner(state.engine.fromCache, state.engine.syncedAt, state.engine.refreshError)
+                    StateContent(
+                        state = state.engine,
+                        onRetry = { vm.refresh() },
+                        isEmpty = { false },
+                        skeleton = { SkeletonList() },
+                        empty = {},
+                        errorSubject = stringResource(R.string.subject_catalog),
+                    ) { engine ->
+                        val header: @Composable () -> Unit = {
+                            Text(
+                                // Докато новото търсене тече, резултатите са изчистени — не „0 резултата“, а „Търся…“.
+                                (if (state.searching && state.results.isEmpty()) stringResource(R.string.catalog_searching)
+                                else pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults)) + "  ·  " +
+                                    stringResource(R.string.catalog_data_as_of, Formatters.shortDate(LocalContext.current, engine.generatedOn) ?: "—"),
+                                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                // Броят се сменя при писане — TalkBack го казва, без да се мести фокусът.
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp).semantics { liveRegion = LiveRegionMode.Polite },
                             )
                         }
-                    }
-                }
-                if (compactHeight) {
-                    // Ниско (хоризонтално): търсенето и полетата — на един ред, за да остане място за резултатите.
-                    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        searchField(Modifier.weight(1f).padding(start = 16.dp))
-                        fieldChips(Modifier.weight(1f))
-                    }
-                } else {
-                    searchField(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp))
-                    fieldChips(Modifier)
-                }
-                AnimatedVisibility(
-                    state.suggestions.isNotEmpty() && q.text.length >= 2,
-                    enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(),
-                    exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
-                ) {
-                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        items(state.suggestions) { s ->
-                            SuggestionChip(onClick = { vm.setText(s) }, label = { Text(s, maxLines = 1, overflow = TextOverflow.Ellipsis) })
-                        }
-                    }
-                }
-                SyncBanner(state.engine.fromCache, state.engine.syncedAt, state.engine.refreshError)
-                StateContent(
-                    state = state.engine,
-                    onRetry = { vm.refresh() },
-                    isEmpty = { false },
-                    skeleton = { SkeletonList() },
-                    empty = {},
-                    errorSubject = stringResource(R.string.subject_catalog),
-                ) { engine ->
-                    val header: @Composable () -> Unit = {
-                        Text(
-                            // Докато новото търсене тече, резултатите са изчистени — не „0 резултата“, а „Търся…“.
-                            (if (state.searching && state.results.isEmpty()) stringResource(R.string.catalog_searching)
-                            else pluralStringResource(R.plurals.catalog_count, state.totalResults, state.totalResults)) + "  ·  " +
-                                stringResource(R.string.catalog_data_as_of, Formatters.shortDate(LocalContext.current, engine.generatedOn) ?: "—"),
-                            style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            // Броят се сменя при писане — TalkBack го казва, без да се мести фокусът.
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp).semantics { liveRegion = LiveRegionMode.Polite },
-                        )
-                    }
-                    if (state.results.isEmpty() && !state.searching) {
-                        EmptyView(stringResource(R.string.catalog_no_results), stringResource(R.string.catalog_no_results_hint), icon = Icons.Outlined.SearchOff)
-                    } else if (shelf) {
-                        CatalogShelfView(
-                            books = state.page,
-                            listState = shelfState,
-                            header = header,
-                            canLoadMore = state.canLoadMore,
-                            onLoadMore = vm::loadMore,
-                            onOpen = { navigate(Routes.book(it.inv)) },
-                            staggered = staggered,
-                        )
-                    } else {
-                        LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
-                            item(contentType = "header") { header() }
-                            itemsIndexed(state.page, key = { _, b -> b.inv }, contentType = { _, _ -> "book" }) { i, b ->
-                                BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i, maxStaggered = staggered))
-                            }
-                            if (state.canLoadMore) {
-                                item(contentType = "more") {
-                                    OutlinedButton(onClick = vm::loadMore, modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-                                        Text(stringResource(R.string.action_load_more))
+                        if (state.results.isEmpty() && !state.searching) {
+                            EmptyView(stringResource(R.string.catalog_no_results), stringResource(R.string.catalog_no_results_hint), icon = Icons.Outlined.SearchOff)
+                        } else if (shelf) {
+                            CatalogShelfView(
+                                books = state.page,
+                                listState = shelfState,
+                                header = header,
+                                canLoadMore = state.canLoadMore,
+                                onLoadMore = vm::loadMore,
+                                onOpen = { navigate(Routes.book(it.inv)) },
+                                staggered = staggered,
+                            )
+                        } else {
+                            LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
+                                item(contentType = "header") { header() }
+                                itemsIndexed(state.page, key = { _, b -> b.inv }, contentType = { _, _ -> "book" }) { i, b ->
+                                    BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i, maxStaggered = staggered))
+                                }
+                                if (state.canLoadMore) {
+                                    item(contentType = "more") {
+                                        OutlinedButton(onClick = vm::loadMore, modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                                            Text(stringResource(R.string.action_load_more))
+                                        }
                                     }
                                 }
                             }
@@ -408,6 +425,19 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                     }
                 }
             }
+        }
+
+        if (surpriseUi.open) {
+            SurpriseOverlay(
+                surpriseUi,
+                reduced = reduced || screenReader,
+                onOpen = { b ->
+                    surprise.close()
+                    navigate(Routes.book(b.inv))
+                },
+                onAgain = roll,
+                onClose = surprise::close,
+            )
         }
     }
 
@@ -700,18 +730,27 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
         )
     }
 
-    hold?.let { result ->
+    // Изпратената заявка — успех: снекбар, вибрация и шевичено конфети (като удължаването);
+    // отказът се чете спокойно — в диалог.
+    val success = rememberSuccessFeedback()
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(hold) {
+        if (hold !is Outcome.Success) return@LaunchedEffect
+        vm.holdResult.value = null
+        success()
+        // Снекбарът — извън ефекта: изчистеният резултат го рестартира (и би затворил съобщението).
+        scope.launch {
+            snackbar.currentSnackbarData?.dismiss()
+            snackbar.showSnackbar(resources.getString(R.string.hold_ok))
+        }
+    }
+    (hold as? Outcome.Failure)?.let { result ->
         AppAlertDialog(
             onDismissRequest = { vm.holdResult.value = null },
             confirmButton = { TextButton(onClick = { vm.holdResult.value = null }) { Text(stringResource(R.string.action_ok)) } },
-            title = { Text(stringResource(if (result is Outcome.Success) R.string.hold_ok_title else R.string.hold_error_title)) },
+            title = { Text(stringResource(R.string.hold_error_title)) },
             text = {
-                Text(
-                    when (result) {
-                        is Outcome.Success -> stringResource(R.string.hold_ok_text)
-                        is Outcome.Failure -> if (result.error == AppError.Unauthorized) stringResource(R.string.hold_login_needed) else errorMessage(result.error)
-                    },
-                )
+                Text(if (result.error == AppError.Unauthorized) stringResource(R.string.hold_login_needed) else errorMessage(result.error))
             },
         )
     }
