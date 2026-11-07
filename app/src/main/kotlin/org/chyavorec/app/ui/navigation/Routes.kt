@@ -44,6 +44,8 @@ object Routes {
     const val CARD_FULL = "card/full"
     const val LOANS = "loans"
     const val HISTORY = "history"
+    /** „Моята читателска година“ — историята на цял екран за година. */
+    const val YEAR = "my/year/{year}"
     /** „Искам да прочета“ — списъкът само на устройството. */
     const val WANT_TO_READ = "want-to-read"
     const val MEMBERSHIP = "membership"
@@ -70,6 +72,7 @@ object Routes {
     fun event(id: String) = "event/" + Uri.encode(id)
     fun book(inv: Long, personal: Boolean = false) = if (personal) "book/$inv?personal=true" else "book/$inv"
     fun message(id: String) = "messages/" + Uri.encode(id)
+    fun year(year: Int) = "my/year/$year"
     fun page(url: String, title: String) = "page?url=" + Uri.encode(url) + "&title=" + Uri.encode(title)
     fun album(name: String) = "album/" + Uri.encode(name)
     fun viewer(album: String?, index: Int, url: String? = null, alt: String? = null, page: String? = null, title: String? = null) =

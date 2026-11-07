@@ -43,7 +43,6 @@ import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Newspaper
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -120,6 +119,9 @@ import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.app.util.Intents
 import org.chyavorec.domain.model.NewsArticle
+import org.chyavorec.app.ui.share.ShareImageRequest
+import org.chyavorec.app.ui.share.ShareCards
+import org.chyavorec.app.ui.share.ShareActionButton
 
 /**
  * Разделът „Новини и събития“: сегменти „Новини | Календар“ под заглавието. В долната
@@ -494,9 +496,13 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                             tint = if (fav) LocalExtendedColors.current.gold else LocalContentColor.current,
                         )
                     }
-                    IconButton(onClick = { Intents.share(context, a.title, a.title + "\n" + a.url) }) {
-                        Icon(Icons.Outlined.Share, contentDescription = stringResource(R.string.action_share))
-                    }
+                    // Връзката (текст) или карта-картинка с QR код към новината.
+                    ShareActionButton(
+                        onShareLink = { Intents.share(context, a.title, a.title + "\n" + a.url) },
+                        image = {
+                            ShareImageRequest(ShareCards.news(context, a, a.imageUrl ?: gallery.firstOrNull()), a.title, a.title + "\n" + a.url)
+                        },
+                    )
                     IconButton(onClick = { Intents.openUrl(context, a.url) }) {
                         Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = stringResource(R.string.action_open_site))
                     }

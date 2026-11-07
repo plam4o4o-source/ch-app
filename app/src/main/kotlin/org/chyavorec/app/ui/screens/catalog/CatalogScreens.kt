@@ -63,7 +63,6 @@ import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
@@ -153,6 +152,11 @@ import org.chyavorec.domain.model.CatalogQuery
 import kotlinx.coroutines.flow.first
 import org.chyavorec.domain.model.CatalogSort
 import org.chyavorec.domain.model.SearchField
+import org.chyavorec.app.ui.share.ShareImageRequest
+import org.chyavorec.app.ui.share.ShareCards
+import org.chyavorec.app.ui.share.ShareActionButton
+import org.chyavorec.app.ui.components.openLibraryCoverUrl
+import org.chyavorec.app.ui.components.LocalOnlineCovers
 
 @Composable
 fun fieldLabel(f: SearchField): String = stringResource(
@@ -581,14 +585,18 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
     Scaffold(snackbarHost = { androidx.compose.material3.SnackbarHost(snackbar) }, topBar = {
         BackTopBar("", onBack, paneLabel = b?.title.orEmpty(), actions = {
             if (b != null) {
-                IconButton(onClick = {
-                    Intents.share(
-                        context, b.title,
-                        // Връзката води до самата книга — в сайта или (App Link) в приложението.
-                        listOf(b.title, b.author, resources.getString(R.string.share_book_footer, DeepLinks.bookUrl(container.config.siteBaseUrl, b.inv)))
-                            .filter { it.isNotBlank() }.joinToString("\n"),
-                    )
-                }) { Icon(Icons.Outlined.Share, contentDescription = stringResource(R.string.action_share)) }
+                // Връзката води до самата книга — в сайта или (App Link) в приложението.
+                val bookUrl = DeepLinks.bookUrl(container.config.siteBaseUrl, b.inv)
+                val text = listOf(b.title, b.author, resources.getString(R.string.share_book_footer, bookUrl)).filter { it.isNotBlank() }.joinToString("\n")
+                // Истинската корица — само ако корици от интернет са позволени (не от личен списък).
+                val onlineCovers = LocalOnlineCovers.current
+                ShareActionButton(
+                    onShareLink = { Intents.share(context, b.title, text) },
+                    image = {
+                        val cover = if (onlineCovers) b.coverUrl.ifBlank { null } ?: openLibraryCoverUrl(b.isbn, large = true) else null
+                        ShareImageRequest(ShareCards.book(b, bookUrl, cover), b.title, text)
+                    },
+                )
             }
         })
     }) { padding ->

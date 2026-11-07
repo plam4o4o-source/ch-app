@@ -75,6 +75,7 @@ import org.chyavorec.app.util.Formatters
 import org.chyavorec.app.util.UdcLabels
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.catalog.ReadingStats
+import org.chyavorec.data.catalog.ReadingYear
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.HistoryItem
@@ -91,6 +92,10 @@ class ReadingStatsViewModel(private val c: AppContainer) : ViewModel() {
     /** `null` — няма какво да се покаже (не е влязъл, няма история или още се изчислява). */
     val stats: StateFlow<ReadingStats.Summary?> = _stats.asStateFlow()
 
+    private val _years = MutableStateFlow<List<ReadingYear.Summary>>(emptyList())
+    /** „Моята читателска година“ — предлаганите години ([ReadingYear.offeredYears]) с поне една книга. */
+    val years: StateFlow<List<ReadingYear.Summary>> = _years.asStateFlow()
+
     /** Опитът да се изтегли история без кеш — веднъж на вход. */
     private var fetched = false
 
@@ -101,11 +106,22 @@ class ReadingStatsViewModel(private val c: AppContainer) : ViewModel() {
             combine(c.authRepository.state, c.libraryRepository.historyVersion) { a, _ -> a }.collectLatest { a ->
                 if (a !is AuthState.SignedIn) {
                     _stats.value = null
+                    _years.value = emptyList()
                     fetched = false
                     return@collectLatest
                 }
                 val history = c.libraryRepository.cachedHistory()?.data ?: loadOnce()
-                _stats.value = history?.takeIf { it.isNotEmpty() }?.let { compute(it) }
+                if (history.isNullOrEmpty()) {
+                    _stats.value = null
+                    _years.value = emptyList()
+                    return@collectLatest
+                }
+                val books = readingBooks(c, history)
+                val today = c.clock.today()
+                withContext(Dispatchers.Default) {
+                    _stats.value = ReadingStats.compute(history, books, today, c.clock.zone())
+                    _years.value = ReadingYear.offeredYears(today).mapNotNull { ReadingYear.compute(history, books, it, c.clock.zone()) }
+                }
             }
         }
     }
@@ -115,18 +131,18 @@ class ReadingStatsViewModel(private val c: AppContainer) : ViewModel() {
         fetched = true
         return (c.libraryRepository.history(force = false) as? Outcome.Success)?.value?.data
     }
+}
 
-    private suspend fun compute(history: List<HistoryItem>): ReadingStats.Summary? {
-        // Разделите — от каталога в базата (без мрежа); без него графиката по раздели се скрива.
-        val books: Map<String, CatalogBook> = try {
-            c.catalogRepository.lookupSearcher(network = false)?.data?.let { ReadingStats.resolveBooks(it, history) }.orEmpty()
-        } catch (e: CancellationException) {
-            throw e
-        } catch (_: Exception) {
-            emptyMap()
-        }
-        return withContext(Dispatchers.Default) { ReadingStats.compute(history, books, c.clock.today(), c.clock.zone()) }
-    }
+/**
+ * Каталожните записи на книгите от историята — от каталога в базата (без мрежа); без него
+ * разделите по УДК липсват (графиката по раздели и слайдът с раздела се скриват).
+ */
+internal suspend fun readingBooks(c: AppContainer, history: List<HistoryItem>): Map<String, CatalogBook> = try {
+    c.catalogRepository.lookupSearcher(network = false)?.data?.let { ReadingStats.resolveBooks(it, history) }.orEmpty()
+} catch (e: CancellationException) {
+    throw e
+} catch (_: Exception) {
+    emptyMap()
 }
 
 /** Парче от пръстена по раздели: име, брой, цвят. */

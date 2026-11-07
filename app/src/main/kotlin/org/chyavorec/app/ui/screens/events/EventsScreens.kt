@@ -57,7 +57,6 @@ import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.Place
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -124,6 +123,9 @@ import org.chyavorec.core.BulgarianDates
 import org.chyavorec.domain.model.Event
 import java.time.DayOfWeek
 import java.time.LocalDate
+import org.chyavorec.app.ui.share.ShareImageRequest
+import org.chyavorec.app.ui.share.ShareCards
+import org.chyavorec.app.ui.share.ShareActionButton
 
 @Composable
 private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier) {
@@ -499,9 +501,12 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
         topBar = {
             BackTopBar("", onBack, paneLabel = event?.title.orEmpty(), actions = {
                 event?.let { e ->
-                    IconButton(onClick = { Intents.share(context, e.title, listOfNotNull(e.title, Formatters.date(context, e.date), e.time, e.place, e.sourceUrl).joinToString("\n")) }) {
-                        Icon(Icons.Outlined.Share, contentDescription = stringResource(R.string.action_share))
-                    }
+                    val text = listOfNotNull(e.title, Formatters.date(context, e.date), e.time, e.place, e.sourceUrl).joinToString("\n")
+                    // Връзката (текст) или карта-картинка с QR код към събитието.
+                    ShareActionButton(
+                        onShareLink = { Intents.share(context, e.title, text) },
+                        image = { ShareImageRequest(ShareCards.event(context, e), e.title, text) },
+                    )
                 }
             })
         },
