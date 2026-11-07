@@ -25,8 +25,6 @@ public class Share extends Activity {
         sb.append("action=").append(i.getAction()).append(" type=").append(i.getType());
         sb.append(" flags=0x").append(Integer.toHexString(i.getFlags()));
         CharSequence text = i.getCharSequenceExtra(Intent.EXTRA_TEXT);
-        sb.append(" subject=").append(i.getStringExtra(Intent.EXTRA_SUBJECT));
-        sb.append(" text=").append(text == null ? null : text.toString().replace('\n', ' '));
         Uri u = null;
         try {
             u = i.getParcelableExtra(Intent.EXTRA_STREAM);
@@ -54,6 +52,8 @@ public class Share extends Activity {
                 sb.append(" READ FAILED: ").append(t);
             }
         }
+        sb.append(" subject=").append(i.getStringExtra(Intent.EXTRA_SUBJECT));
+        sb.append(" text=").append(text == null ? null : text.toString().replace('\n', ' '));
         Log.i("PCSHARE", sb.toString());
         TextView t = new TextView(this);
         t.setText("PCSHARE " + sb);

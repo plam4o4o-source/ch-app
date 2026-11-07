@@ -43,8 +43,8 @@ rec_end() {  # [CROP] — кадрите в $OUT/rec/$RECNAME/; движение
   [ -s $OUT/rec/$RECNAME.mp4 ] && ffmpeg -loglevel error -i $OUT/rec/$RECNAME.mp4 -vf fps=8,scale=1080:2400 $OUT/rec/$RECNAME/f%03d.png
   local n; n=$(ls $OUT/rec/$RECNAME 2>/dev/null | wc -l)
   if [ "$n" = 0 ]; then log "REC $RECNAME: screenrecord gave no frames"; return 1; fi
-  log "REC $RECNAME: $n frames @8 fps; motion ${1:-all}: $(python3 $W19 motion ${1:-all} $OUT/rec/$RECNAME/f*.png | cut -c1-420)"
-  python3 $W19 sheet $OUT/shots/rec-$RECNAME.png ${1:-all} $OUT/rec/$RECNAME/f*.png >/dev/null
+  log "REC $RECNAME: $n frames @8 fps; motion ${1:-all}: $(python3 $W19 motion "${1:-all}" $OUT/rec/$RECNAME/f*.png | cut -c1-420)"
+  python3 $W19 sheet $OUT/shots/rec-$RECNAME.png "${1:-all}" $OUT/rec/$RECNAME/f*.png >/dev/null
 }
 rec_clean() { rm -rf $OUT/rec/$RECNAME; }
 ribbon_box() { RBOX=$(python3 $W19 ribbon $OUT/ui.xml); }
@@ -93,7 +93,7 @@ share_pick_helper() {  # $1 — етикет: „PC share“ в избора →
   local i
   for i in 1 2 3; do dump; [ -n "$(xy text '=PC share')" ] && break; sw_up 300; sleep 1.5; done
   if tap text '=PC share' >/dev/null; then
-    sleep 3; log "SHARE $1 received by the helper: $(since sh-$1 PCSHARE | tail -1 | sed 's/.*PCSHARE *: //' | cut -c1-460)"
+    sleep 3; log "SHARE $1 received by the helper: $(since sh-$1 PCSHARE | tail -1 | sed 's/.*PCSHARE *: //' | cut -c1-900)"
   else log "SHARE $1: 'PC share' not in the chooser: $(texts 12 | cut -c1-200)"; fi
   back 1.5; dump; chooser_up && back 1.5
   has "package=\"$PKG\"" || { launch >/dev/null; sleep 2; }
@@ -251,12 +251,12 @@ f_ribbon() {
   sec "B1. Home ribbon „жива шевица“ (AGSL, API $SDK): renders, sweeps ~24 s, then stops"
   a am force-stop $PKG; sleep 3
   t0=$(now_ms); launch >/dev/null; gfx_reset
-  for i in 02 05 08 12 16 20 24 28 34; do shot_t func/ribbon-${i}s $((10#$i * 1000)); done
+  for i in 03 05 08 12 16 20 24 28 34; do shot_t func/ribbon-${i}s $((10#$i * 1000)); done
   log "RIBBON frames in the first 34 s: $(gfx_total)"
   dump; ribbon_box
   if [ -n "$RBOX" ]; then
-    for i in 02 12 34; do log "RIBBON box [$RBOX] at ${i} s: $(python3 $W19 rstat $OUT/shots/func/ribbon-${i}s.png "$RBOX")"; done
-    log "RIBBON change between shots (2,5,8,12,16,20,24,28,34 s): $(python3 $W19 seq "$RBOX" $OUT/shots/func/ribbon-{02,05,08,12,16,20,24,28,34}s.png)"
+    for i in 03 12 34; do log "RIBBON box [$RBOX] at ${i} s: $(python3 $W19 rstat $OUT/shots/func/ribbon-${i}s.png "$RBOX")"; done
+    log "RIBBON change between shots (3,5,8,12,16,20,24,28,34 s): $(python3 $W19 seq "$RBOX" $OUT/shots/func/ribbon-{03,05,08,12,16,20,24,28,34}s.png)"
     sleep 6; shot func/ribbon-40s
     log "RIBBON still after the budget (34 s → 40 s): diff $(python3 $W19 rdiff $OUT/shots/func/ribbon-34s.png $OUT/shots/func/ribbon-40s.png "$RBOX")"
   else log "RIBBON: header/search bounds not found ($(texts 8 | cut -c1-200))"; debug_ui ribbon; fi
@@ -297,8 +297,10 @@ f_article() {
   log "ARTICLE toolbar at open: $(grep -oE 'content-desc="(Режим за четене|Запази|Премахни[^"]*|Сподели|Отвори в сайта)"' $OUT/ui.xml | tr '\n' ' ')"
   a input swipe $((W/2)) $((H*70/100)) $((W/2)) $((H*45/100)) 500; sleep 1.5; shot func/article-1-small-scroll
   log "ARTICLE hero parallax: top area diff after a small scroll $(python3 $W19 rdiff $OUT/shots/func/article-0.png $OUT/shots/func/article-1-small-scroll.png "0 200 $W 900")"
-  sw_up 300; sleep 0.6; sw_up 300; sleep 1.5; dump; shot func/article-2-down
-  log "ARTICLE toolbar after scrolling down: $(has 'content-desc="Режим за четене"' && echo 'VISIBLE (expected hidden)' || echo hidden)"
+  a input swipe $((W/2)) $((H*70/100)) $((W/2)) $((H*50/100)) 600; sleep 1.5; dump; shot func/article-2-down
+  log "ARTICLE toolbar after a further short scroll down (~480 px): $(has 'content-desc="Режим за четене"' && echo 'VISIBLE (expected hidden)' || echo hidden)"
+  sw_up 300; sleep 0.6; sw_up 300; sleep 1.5; dump; shot func/article-2b-down2
+  log "ARTICLE toolbar after two long scrolls: $(has 'content-desc="Режим за четене"' && echo 'visible' || echo hidden)"
   sw_down 400; sleep 1.5; dump; shot func/article-3-up
   log "ARTICLE toolbar after scrolling up: $(has 'content-desc="Режим за четене"' && echo visible || echo 'HIDDEN (expected visible)')"
   log "ARTICLE thread (top 260 px) changed with reading: $(python3 $W19 rdiff $OUT/shots/func/article-0.png $OUT/shots/func/article-2-down.png "0 0 $W 260")"
@@ -323,7 +325,7 @@ f_gallery() {
   if ! { open_gallery && waitfor "$RX_GALLERY_LOADED" 40 && open_album 1 && open_photo 1; }; then log "VIEWER: not reached"; debug_ui viewer; return 1; fi
   sleep 2; dump; shot func/viewer-0
   log "VIEWER toolbar: $(grep -oE 'content-desc="(Сподели|Отвори в сайта|За снимката)"' $OUT/ui.xml | tr '\n' ' ')"
-  if tap content-desc '=За снимката' >/dev/null; then sleep 2; dump; shot func/viewer-info; log "VIEWER 'За снимката': $(texts 10 | cut -c1-300)"; back 1.5; fi
+  if tap content-desc '=За снимката' >/dev/null; then sleep 2; dump; shot func/viewer-info; log "VIEWER 'За снимката': $(texts 10 | cut -c1-300)"; tap content-desc '=За снимката' >/dev/null; sleep 1.5; dump; log "VIEWER after the 2nd 'За снимката' tap: viewer $( [ -n "$(viewer_page)" ] && echo open || echo CLOSED)"; fi
   dump; viewer_page >/dev/null
   mark sh-viewer
   if tap content-desc '=Сподели' >/dev/null; then
@@ -354,10 +356,11 @@ f_bookopen() {
 f_refresh() {
   sec "B7. Pull-to-refresh rosette (News list), shots during a slow pull"
   link "$SITE/news" >/dev/null; sleep 5; segstate | grep -q 'News\[checked=true' || segment news
-  adb shell input swipe $((W/2)) $((H*28/100)) $((W/2)) $((H*72/100)) 2600 & local sp=$!
+  sw_down 200; sleep 1; sw_down 200; sleep 1.5; shot func/refresh-0-before
+  adb shell input swipe $((W/2)) $((H*40/100)) $((W/2)) $((H*85/100)) 2600 & local sp=$!
   sleep 1.0; shot func/refresh-1-pull; sleep 0.9; shot func/refresh-2-pull; wait $sp
   sleep 0.4; shot func/refresh-3-released; sleep 2.5; shot func/refresh-4-after
-  log "REFRESH: top area diff pull vs after: $(python3 $W19 rdiff $OUT/shots/func/refresh-2-pull.png $OUT/shots/func/refresh-4-after.png "0 200 $W 900")"
+  log "REFRESH: top area diff before vs pull $(python3 $W19 rdiff $OUT/shots/func/refresh-0-before.png $OUT/shots/func/refresh-2-pull.png "0 200 $W 1100"), pull vs after $(python3 $W19 rdiff $OUT/shots/func/refresh-2-pull.png $OUT/shots/func/refresh-4-after.png "0 200 $W 1100")"
 }
 f_empty() {
   sec "B8. Empty state with the stitched band: Want to read (empty on a fresh install)"
@@ -382,9 +385,14 @@ f_confetti() {
 }
 f_event() {
   sec "B10. Event: reminder set (confetti) and share as image"
-  open_event 1 || { log "EVENT: not opened"; debug_ui event; return 1; }
+  local i n
+  for n in 2 3 4 1; do
+    open_event $n || continue
+    for i in 1 2 3; do [ -n "$(xy text '=Напомни ми')" ] && break; sw_up 400; sleep 1; dump; done
+    [ -n "$(xy text '=Напомни ми')" ] && break
+    back 1.5
+  done
   log "EVENT: $(texts 4 | cut -c1-160)"
-  local i; for i in 1 2 3; do [ -n "$(xy text '=Напомни ми')" ] && break; sw_up 400; sleep 1; dump; done
   if [ -n "$(xy text '=Напомни ми')" ]; then
     rec_start confetti-reminder 4; tap text '=Напомни ми' >/dev/null; rec_end
     log "CONFETTI reminder: $(python3 $W19 confetti all $OUT/rec/confetti-reminder/f001.png $OUT/rec/confetti-reminder/f0*.png | cut -c1-300)"; rec_clean
@@ -401,26 +409,34 @@ f_surprise() {
     sleep 1; dump; shot func/surprise-result
     log "SURPRISE dice: $(grep -oE 'text="(Предложение|Към книгата|Още една|Избирам книга…|Няма налична книга[^"]*)"' $OUT/ui.xml | tr '\n' ' '); bottom bar $(has 'text="(Начало|Каталог)"' && echo 'VISIBLE (expected hidden)' || echo hidden)"
     if tap text '=Към книгата' >/dev/null; then sleep 3; dump; log "SURPRISE 'Към книгата' → book screen $(has "$RX_BACK" && echo yes || echo no): $(texts 3 | cut -c1-120)"; back 1.5; fi
-    dump; has 'text="Предложение"' && { tap content-desc '=Затвори' >/dev/null || back 1.5; sleep 1; }
+    dump; has 'text="(Към книгата|Още една)"' && { tap content-desc '=Затвори' >/dev/null || back 1.5; sleep 1; }
   fi
   sec "B13. 'Изненадай ме' by shaking (emulator accelerometer: two peaks > 2.3 g within 0.7 s)"
   ready; tab catalog; waitfor "$RX_RESULTS" 30; sleep 1.5
   log "accelerometer: $(a dumpsys sensorservice 2>/dev/null | tr -d '\r' | grep -m1 -iE 'accelerometer' | cut -c1-120)"
   mark shake1
   emu sensor set acceleration 0:30:0 >/dev/null; emu sensor set acceleration 0:9.81:0 >/dev/null
-  sleep 2.5; dump; log "SHAKE one short peak (info; a peak held > 120 ms counts twice by design): $(has 'text="(Предложение|Избирам книга…)"' && echo TRIGGERED || echo 'not triggered')"
-  has 'text="Предложение"' && { tap content-desc '=Затвори' >/dev/null || back 1.5; sleep 1.5; }
+  sleep 2.5; dump; log "SHAKE one short peak (info; a peak held > 120 ms counts twice by design): $(has 'text="(Към книгата|Още една|Избирам книга…)"' && echo TRIGGERED || echo 'not triggered')"
+  has 'text="(Към книгата|Още една)"' && { tap content-desc '=Затвори' >/dev/null || back 1.5; sleep 1.5; }
   shake; sleep 0.8; shot func/shake-1; sleep 2; dump; shot func/shake-2
   log "SHAKE double peak: $(has 'text="(Предложение|Избирам книга…|Към книгата)"' && echo TRIGGERED || echo 'not triggered'); $(grep -oE 'text="(Предложение|Към книгата)"' $OUT/ui.xml | tr '\n' ' ')"
   if ! has 'text="(Предложение|Избирам книга…|Към книгата)"'; then
     log "  emu output: '$(emu sensor get acceleration)'"; shake; sleep 0.3; shake; sleep 3; dump
     log "SHAKE retry (2 × double peak): $(has 'text="(Предложение|Към книгата)"' && echo TRIGGERED || echo 'not triggered')"
   fi
-  has 'text="Предложение"' && { tap content-desc '=Затвори' >/dev/null || back 1.5; sleep 1; }
+  dump; has 'text="(Към книгата|Още една)"' && { tap content-desc '=Затвори' >/dev/null || back 1.5; sleep 1.5; }
+  dump; has 'text="(Към книгата|Още една)"' && back 1.5
   emu sensor set acceleration 0:9.81:0 >/dev/null
   sec "B13b. Shake on another tab (catalogue not resumed) must not trigger"
-  ready; tab home; sleep 2; shake; sleep 2.5; dump
-  log "SHAKE on Home: $(has 'text="(Предложение|Към книгата)"' && echo 'TRIGGERED (unexpected)' || echo 'not triggered')"
+  ready; tab home; sleep 2; dump; log "on Home before the shake: $(python3 $W16 tabsel $OUT/ui.xml)"
+  shake; sleep 2.5; dump
+  log "SHAKE on Home: $(has 'text="(Към книгата|Още една)"' && echo 'TRIGGERED (unexpected)' || echo 'not triggered')"
+}
+part_func19b() {
+  helper_install
+  anims 1
+  warmup
+  f_ribbon; f_rosette; f_refresh; f_article; f_gallery; f_bookopen; f_event; f_surprise
 }
 part_func19() {
   helper_install
@@ -457,33 +473,47 @@ part_year19() {
   shot year/01-year-card
   log "YEAR card: $(grep -oE 'text="(Моята читателска година[^"]*|[0-9]+ книг[^"]*виж историята|Книгите ти[^"]*)"' $OUT/ui.xml | head -4 | tr '\n' ' ')"
   [ -n "$(xy text 'Моята читателска година')" ] || { log "YEAR: FAIL — no year card on My"; debug_ui year-card; return; }
-  sec "Y3. Open the story: 8 slides, auto-advance 5.5 s (accessibility events of the slide state)"
+  sec "Y3. Open the story: 8 slides, auto-advance 5.5 s (slide state polled through the test accessibility service)"
   a11y_on
   mark y-open; t0=$(now_ms)
   tap text 'Моята читателска година' >/dev/null
-  for i in 02 07 13 19 30; do shot_t year/10-story-${i}s $((10#$i * 1000)); done
-  s0=$(year_state y-at-35s); log "YEAR state at ~35 s: $s0"
-  while [ $(( $(now_ms) - t0 )) -lt 52000 ]; do sleep 0.5; done
-  s1=$(year_state y-at-52s); log "YEAR state at ~52 s (8 × 5.5 s = 44 s → last slide, stays): $s1"; shot year/11-story-end
-  since y-open 'PCLIVE' > $OUT/year-live.txt
-  python3 $W19 slides $OUT/year-live.txt | tee -a $SUM
+  : > $OUT/year-timeline.txt
+  while [ $(( $(now_ms) - t0 )) -lt 56000 ]; do
+    s0=$(year_state y-poll); echo "+$(( $(now_ms) - t0 )) ms ${s0:-no-slide-state}" | tee -a $OUT/year-timeline.txt
+  done
+  log "YEAR timeline (state every ~3 s from the tap): $(awk '{print $1, $3 $4}' $OUT/year-timeline.txt | uniq -f1 | tr '\n' ';')"
+  shot year/11-story-end
   sec "Y4. Tap left (previous) ×2, tap right (next)"
   a input tap $((W*12/100)) $((H/2)); sleep 1.2; a input tap $((W*12/100)) $((H/2)); sleep 1.2
   s0=$(year_state y-left2); log "YEAR after 2 × left tap: $s0"
   a input tap $((W*80/100)) $((H/2)); sleep 1.2; s1=$(year_state y-right); log "YEAR after a right tap: $s1"
-  sec "Y5. Hold (press 8 s) pauses the auto-advance"
-  s0=$(year_state y-hold-0)
-  adb shell input swipe $((W/2)) $((H*60/100)) $((W/2)) $((H*60/100)) 8000 & p=$!
-  sleep 6.5; s1=$(year_state y-hold-during); wait $p; shot year/12-after-hold
-  sleep 7; s2=$(year_state y-hold-after)
-  log "YEAR hold: before '$s0' → while held (~9 s) '$s1' → 7 s after release '$s2' (paused = same while held, advances after)"
+  sec "Y5. Hold pauses the auto-advance (fresh story, press 12 s on slide 1-2)"
+  back 2; dump; has 'Моята читателска година' || { ready; tab my; sleep 2; }
+  for i in 1 2 3 4 5 6; do dump; [ -n "$(xy text 'Моята читателска година')" ] && break; sw_up 350; sleep 1.2; done
+  tap text 'Моята читателска година' >/dev/null; t0=$(now_ms)
+  for i in 1 2 3 4 5 6; do s0=$(year_state y-hold-0); [ -n "$s0" ] && break; done
+  log "YEAR reopened: $s0 at +$(( $(now_ms) - t0 )) ms"
+  adb shell input swipe $((W/2)) $((H*60/100)) $((W/2 + 2)) $((H*60/100)) 12000 & p=$!
+  sleep 1; t1=$(now_ms)
+  s1=$(year_state y-hold-a); sleep 2; s2=$(year_state y-hold-b)
+  log "YEAR while held: +$(( $(now_ms) - t1 )) ms: '$s1' → '$s2' (start '$s0'; paused = unchanged over > 5.5 s)"
+  wait $p; sleep 8; s1=$(year_state y-hold-after)
+  log "YEAR 8 s after release: '$s1' (advanced = resumed)"
   sec "Y6. Swipe down closes the story"
   a input swipe $((W/2)) $((H*30/100)) $((W/2)) $((H*85/100)) 350; sleep 2.5; dump; shot year/13-after-swipe-down
   adump_q y-closed
-  log "YEAR after swipe down: story $(grep -q 'state=Слайд' $OUT/a11ytree-y-closed.txt && echo 'STILL OPEN' || echo closed); screen: $(texts 6 | cut -c1-160)"
+  if grep -q 'state=Слайд' $OUT/a11ytree-y-closed.txt; then
+    log "YEAR after a fast swipe down (350 ms): STILL OPEN"
+    a input swipe $((W/2)) $((H*25/100)) $((W/2)) $((H*80/100)) 1200; sleep 2.5; dump; shot year/14-after-slow-swipe
+    adump_q y-closed2; log "YEAR after a slow drag down (1.2 s): $(grep -q 'state=Слайд' $OUT/a11ytree-y-closed2.txt && echo 'STILL OPEN' || echo closed)"
+  else log "YEAR after a fast swipe down (350 ms): closed; screen: $(texts 4 | cut -c1-120)"; fi
+  adump_q y-closed3; grep -q 'state=Слайд' $OUT/a11ytree-y-closed3.txt && { back 2; adump_q y-closed4; log "YEAR after Back: $(grep -q 'state=Слайд' $OUT/a11ytree-y-closed4.txt && echo 'STILL OPEN' || echo closed)"; }
   a11y_off
   sec "Y7. Confetti on renewing a demo loan ('Удължи срока')"
-  a am start -a org.chyavorec.app.SHORTCUT -d chyavorec://app/my/loans -n $ACT >/dev/null 2>&1; sleep 4; dump; shot year/20-loans
+  ready; tab my; sleep 2; dump
+  tap text '=Моите книги' >/dev/null || a am start -a org.chyavorec.app.SHORTCUT -d chyavorec://app/my/loans -n $ACT >/dev/null 2>&1
+  sleep 4; dump; shot year/20-loans
+  for i in 1 2 3; do [ -n "$(xy text '=Удължи срока')" ] && break; sw_up 350; sleep 1.2; dump; done
   if [ -n "$(xy text '=Удължи срока')" ]; then
     rec_start confetti-renew 4; tap text '=Удължи срока' >/dev/null; rec_end
     log "CONFETTI renew: $(python3 $W19 confetti all $OUT/rec/confetti-renew/f001.png $OUT/rec/confetti-renew/f0*.png | cut -c1-300)"; rec_clean
@@ -574,6 +604,8 @@ part_live36() {
   inst app-new-upd.apk new-upd apk-new-upd-ref.txt || { log "no app-new-upd.apk"; return; }
   log "POST_PROMOTED_NOTIFICATIONS (pre build): $(a dumpsys package $PKG | tr -d '\r' | grep -m1 -oE 'android.permission.POST_PROMOTED_NOTIFICATIONS: granted=[a-z]+')"
   a appops set $PKG REQUEST_INSTALL_PACKAGES allow
+  a svc wifi disable; a svc data enable; sleep 6
+  log "network: wifi $(a settings get global wifi_on | tr -d '\r'); $(a dumpsys connectivity 2>/dev/null | tr -d '\r' | grep -m1 -oE 'Active default network: [0-9]+'); $(a dumpsys package $PKG | tr -d '\r' | grep -ciE 'PROMOTED') PROMOTED lines in dumpsys package"
   throttle_on
   launch >/dev/null
   if upd_dialog 'text="Изтегли и инсталирай"'; then
@@ -605,13 +637,20 @@ part_live36() {
   sec "L2. Event reminder → event Live Update (60 min before; needs the event's start time)"
   inst app.apk new apk-ref.txt
   launch >/dev/null; sleep 6; dismiss; ready; dims
-  if open_event 1; then
-    local i2; for i2 in 1 2 3; do [ -n "$(xy text '=Напомни ми')" ] && break; sw_up 400; sleep 1; dump; done
+  a svc wifi enable; sleep 4
+  local i2 n2 ok2=no
+  for n2 in 2 3 4 5; do
+    open_event $n2 || continue
+    for i2 in 1 2 3; do [ -n "$(xy text '=Напомни ми')" ] && break; sw_up 400; sleep 1; dump; done
+    [ -n "$(xy text '=Напомни ми')" ] && { ok2=yes; break; }
+    back 1.5
+  done
+  if [ $ok2 = yes ]; then
     log "EVENT: $(texts 6 | cut -c1-240)"
-    tap text '=Напомни ми' >/dev/null && { sleep 2; dump; log "REMINDER: $(grep -oE 'text="Ще получиш напомняне[^"]*"' $OUT/ui.xml | head -1)"; }
+    tap text '=Напомни ми' >/dev/null && { sleep 2; dump; log "REMINDER set: $(grep -oE 'text="Ще получиш напомняне[^"]*"' $OUT/ui.xml | head -1); bell: $(has 'Премахни напомнянето' && echo on || echo '?')"; }
     t1=$(now_ms); upc_cap event-reminder >/dev/null 2>&1
     log "WORK after the reminder: $(grep -E 'Worker' $OUT/cap/event-reminder/workdb.txt 2>/dev/null | cut -c4- | tr '\n' ';' | cut -c1-400)"
-    log "EventLiveUpdateWorker scheduled: $(grep -c 'EventLiveUpdateWorker' $OUT/cap/event-reminder/workdb.txt 2>/dev/null)"
+    log "EventReminderWorker scheduled: $(grep -c 'EventReminderWorker' $OUT/cap/event-reminder/workdb.txt 2>/dev/null); EventLiveUpdateWorker scheduled: $(grep -c 'EventLiveUpdateWorker' $OUT/cap/event-reminder/workdb.txt 2>/dev/null)"
     live_notifs ev > $OUT/live/ev.txt; log "notifications now: $(tail -1 $OUT/live/ev.txt)"
   fi
   sec "L3. API $SDK smoke: ribbon and card foil render"
@@ -651,6 +690,32 @@ part_fb28() {
   open_article && { sw_up 300; sleep 1.5; shot fb/article; dump; log "FB article toolbar after scroll down: $(has 'content-desc="Режим за четене"' && echo visible || echo hidden)"; }
 }
 
+# ================================================================= КРЪГ b: картата — срив с LinearGradient (видян в 1.2.32)
+cc_cycle() {  # $1 — етикет: изчистени данни, първо пускане, „Читателска карта“ (празна) → номер → цял екран
+  local L=$1 f
+  a am force-stop $PKG; a pm clear $PKG >/dev/null; a cmd locale set-app-locales $PKG --locales bg-BG; a pm grant $PKG android.permission.POST_NOTIFICATIONS
+  mark cc-$L
+  launch >/dev/null; sleep 5; dismiss
+  card_screen; dump; shot cardcrash/$L-1-empty
+  card_add $CARD_NO >/dev/null 2>&1
+  card_screen; dump; card_shown && { tap text '=Покажи картата' >/dev/null; sleep 2.5; shot cardcrash/$L-2-full; back 1.5; }
+  sleep 1
+  f=$(since cc-$L 'FATAL EXCEPTION' | wc -l)
+  log "CARDCRASH $L: FATAL $f; card shown $(card_shown && echo yes || echo no); app in front $(dump; has "package=\"$PKG\"" && echo yes || echo NO); $(since cc-$L 'IllegalArgumentException|LinearGradient' | head -2 | cut -c30-140 | tr '\n' '~')"
+}
+part_cardcrash() {
+  local r K i
+  anims 1
+  for r in new base new base; do
+    inst $(apk_of $r) $r $(ref_of $r) >/dev/null || continue
+    sec "CC-$r. 5 cycles: cleared data, first launch, empty card screen, add the number, full-screen card"
+    for i in 1 2 3 4 5; do cc_cycle $r-$i; done
+  done
+  sec "CC. Totals"
+  for K in new base; do log "CARDCRASH total $K: $(grep -E "^CARDCRASH $K-" $SUM | grep -cv 'FATAL 0;') of $(grep -cE "^CARDCRASH $K-" $SUM) cycles with a crash"; done
+  log "All FATAL in logcat: $(grep -c 'FATAL EXCEPTION' $OUT/logcat-live.txt)"
+}
+
 part_monkey19() { MONKEY_N=4000; part_monkey; }
 
 part_w19() {
@@ -659,9 +724,11 @@ part_w19() {
     jank19-1|jank19-2) part_jank19;;
     idle19) part_idle19;;
     func19) part_func19;;
+    func19b) part_func19b;;
+    cardcrash) part_cardcrash;;
     year19) part_year19;;
     motion19) part_motion19;;
-    live36) part_live36;;
+    live36|live361) part_live36;;
     fb28) part_fb28;;
     monkey19) part_monkey19;;
     abstart-1|abstart-2) anims 1; log "animations ON for the start A/B (the ribbon runs at start)"; part_abstart;;

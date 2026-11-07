@@ -209,6 +209,15 @@ jobs:
             echo "## COMPLETE"; } 2>&1 | tee out/sizediff/summary.txt
           for k in new base; do unzip -lv rel/release-$k.apk > out/sizediff/files-$k.txt || true
             [ -n "$APKAN" ] && "$APKAN" dex packages --defined-only --proguard-mappings rel/mapping-$k.txt rel/release-$k.apk > out/sizediff/dex-packages-$k.txt 2>&1 || true; done
+      - name: Retrace the crash from round a (LinearGradient, card screen) with both mappings
+        continue-on-error: true
+        run: |
+          mkdir -p out/sizediff
+          R=$(ls $ANDROID_HOME/cmdline-tools/*/bin/retrace 2>/dev/null | head -1)
+          echo "retrace: ${R:-none}"
+          { echo "== stack id: $(grep -m1 -oE 'r8-map-id-[0-9a-f]+' .github/perf-check/crash-v133a.txt)"
+            for k in new base; do echo "== $k mapping header: $(grep -m4 -E '^# ' rel/mapping-$k.txt | grep -iE 'map_id|map_hash' | tr '\n' ' ')"; done
+            for k in new base; do echo "== retrace with the $k mapping"; [ -n "$R" ] && "$R" rel/mapping-$k.txt .github/perf-check/crash-v133a.txt 2>&1 | head -45; done; } | tee out/sizediff/retrace.txt
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -284,7 +293,8 @@ jobs:
         # A: abstart-1/2 (анимациите включени), abstart-3 (изключени, както v132), drawn19, jank19-1/2,
         #    idle19, mem/mem-base; B: func19, year19 (devDebug), fb28 (API 28); C: live36 (API 36 или
         #    най-новият образ); D: motion19; E: monkey19.
-        part: [abstart-1, abstart-2, abstart-3, drawn19, jank19-1, jank19-2, idle19, mem, mem-base, func19, year19, motion19, live36, fb28, monkey19]
+        # Кръг b: повторени/поправени части и картата (срив с LinearGradient в 1.2.32 в кръг a).
+        part: [func19b, year19, live36, live361, motion19, fb28, cardcrash]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -307,7 +317,7 @@ jobs:
         env:
           STAGE_URL: https://raw.githubusercontent.com/${{ github.repository }}/emulator-results/${{ env.STAGE }}
         with:
-          api-level: ${{ matrix.part == 'live36' && needs.images.outputs.api || contains(matrix.part, '28') && 28 || 33 }}
+          api-level: ${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && needs.images.outputs.api || contains(matrix.part, '28') && 28 || 33 }}
           target: google_apis
           arch: x86_64
           profile: pixel_6
@@ -320,7 +330,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p out/${{ matrix.part }}
-          echo "part=${{ matrix.part }} target=google_apis api=${{ matrix.part == 'live36' && needs.images.outputs.api || contains(matrix.part, '28') && 28 || 33 }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          echo "part=${{ matrix.part }} target=google_apis api=${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && needs.images.outputs.api || contains(matrix.part, '28') && 28 || 33 }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
           cat out/${{ matrix.part }}/job-status.txt
           rm -rf out/${{ matrix.part }}/rec/*/
           { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
