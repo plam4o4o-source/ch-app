@@ -663,6 +663,13 @@
     <string name="subject_messages">съобщенията</string>
     <string name="subject_news">новините</string>
     <string name="subject_page">страницата</string>
+    <string name="surprise_action">Изненадай ме</string>
+    <string name="surprise_again">Още една</string>
+    <string name="surprise_announce">Предложение: %1$s — %2$s</string>
+    <string name="surprise_empty">Няма налична книга за предложение</string>
+    <string name="surprise_label">Предложение</string>
+    <string name="surprise_open">Към книгата</string>
+    <string name="surprise_shuffling">Избирам книга…</string>
     <string name="sync_never">никога</string>
     <string name="tab_catalog">Каталог</string>
     <string name="tab_home">Начало</string>

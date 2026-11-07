@@ -663,6 +663,13 @@
     <string name="subject_messages">the messages</string>
     <string name="subject_news">the news</string>
     <string name="subject_page">the page</string>
+    <string name="surprise_action">Surprise me</string>
+    <string name="surprise_again">Another one</string>
+    <string name="surprise_announce">Suggestion: %1$s — %2$s</string>
+    <string name="surprise_empty">No book on the shelf to suggest</string>
+    <string name="surprise_label">Suggestion</string>
+    <string name="surprise_open">Open the book</string>
+    <string name="surprise_shuffling">Picking a book…</string>
     <string name="sync_never">never</string>
     <string name="tab_catalog">Catalogue</string>
     <string name="tab_home">Home</string>

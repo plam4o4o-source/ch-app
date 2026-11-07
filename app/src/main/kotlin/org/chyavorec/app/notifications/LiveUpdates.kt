@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -46,7 +47,8 @@ object LiveUpdates {
     /** Белег на живото известие за събитие — опресняването не го показва отново, ако е махнато. */
     internal const val EXTRA_LIVE_EVENT = "org.chyavorec.liveEvent"
 
-    fun supported(sdk: Int = Build.VERSION.SDK_INT): Boolean = sdk >= Build.VERSION_CODES.BAKLAVA
+    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.BAKLAVA)
+    fun supported(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA
 
     /** Моли за „живо“ показване (ProgressStyle, без цветен фон и собствени изгледи — условията на системата). */
     internal fun requestPromotion(builder: Notification.Builder, extras: Bundle = Bundle()): Notification.Builder =

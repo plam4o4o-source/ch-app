@@ -123,7 +123,7 @@ class LiveUpdatesTest {
         assertTrue(n.promotionRequested())
         assertEquals(Channel.EVENTS.id, n.channelId)
         assertEquals("Вечер на поезията", n.text(Notification.EXTRA_TITLE))
-        assertEquals("Читалището — начало в 13:40", n.text(Notification.EXTRA_TEXT))
+        assertEquals(app.getString(R.string.notif_event_live_text_place, "Читалището", "13:40"), n.text(Notification.EXTRA_TEXT))
         // Изминали 20 от 60 минути; последните 15 — в бордо, точка на половината.
         assertEquals(20, n.extras.getInt(Notification.EXTRA_PROGRESS))
         assertEquals(60, n.extras.getInt(Notification.EXTRA_PROGRESS_MAX))
@@ -144,7 +144,7 @@ class LiveUpdatesTest {
 
     @Test fun eventWithoutPlaceHasNoRoute() {
         val n = EventLiveUpdates.notification(app, "e-2", "Сбирка", null, now + 50 * 60_000L, now, clock.zone())
-        assertEquals("Начало в 13:50", n.text(Notification.EXTRA_TEXT))
+        assertEquals(app.getString(R.string.notif_event_live_text, "13:50"), n.text(Notification.EXTRA_TEXT))
         assertTrue(n.actions.isNullOrEmpty())
     }
 
