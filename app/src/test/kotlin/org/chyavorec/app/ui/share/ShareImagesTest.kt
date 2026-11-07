@@ -4,7 +4,12 @@ import android.app.Application
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -22,6 +27,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import org.robolectric.shadows.ShadowToast
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -57,18 +63,26 @@ class ShareImagesTest {
         assertEquals(url, decodeQr(bmp))
     }
 
-    /** Рисува [card] през [ShareImageHost] (извън екрана) и връща готовата картинка. */
+    /**
+     * Рисува [card] през [ShareImageHost] (извън екрана) и връща готовата картинка. Robolectric
+     * не рисува прозореца сам (няма Surface) — снимката на екрана предизвиква рисуването.
+     */
     private fun render(card: ShareCard): Bitmap {
         var result: Bitmap? = null
         compose.setContent {
             ChitalishteTheme(mode = ThemeMode.LIGHT) {
-                val state = rememberShareImageState()
-                LaunchedEffect(Unit) { state.share(ShareImageRequest(card, "тема", "текст")) }
-                ShareImageHost(state) { bitmap, _ -> result = bitmap }
+                Box(Modifier.fillMaxSize()) {
+                    val state = rememberShareImageState()
+                    LaunchedEffect(Unit) { state.share(ShareImageRequest(card, "тема", "текст")) }
+                    ShareImageHost(state) { bitmap, _ -> result = bitmap }
+                }
             }
         }
-        compose.waitUntil(15_000) { result != null }
-        return result!!
+        compose.waitUntil(15_000) {
+            runCatching { compose.onRoot().captureToImage() }
+            result != null || ShadowToast.getTextOfLatestToast() != null
+        }
+        return assertNotNull(result, "картата не се нарисува: ${ShadowToast.getTextOfLatestToast()}")
     }
 
     private fun save(bitmap: Bitmap, name: String) =

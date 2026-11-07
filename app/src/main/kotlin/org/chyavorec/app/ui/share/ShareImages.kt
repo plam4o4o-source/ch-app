@@ -223,7 +223,7 @@ fun ShareImageHost(state: ShareImageState, onRendered: ((Bitmap, ShareImageReque
     LaunchedEffect(request, loaded) {
         // Няколко кадъра — шрифтовете и снимката вече са в паметта, картата е записана.
         var frames = 0
-        while (!recorded.get() && frames++ < 30) withFrameNanos { }
+        while (!recorded.get() && frames++ < 60) withFrameNanos { }
         withFrameNanos { }
         val bitmap = if (recorded.get()) layer.toShareBitmap(format) else null
         try {
