@@ -14,9 +14,9 @@ name: Emulator check wave 19 / v1.2.33 vs v1.2.32 (temporary)
 #                     emulator-results/v133/update/<run> → обновяване до app.apk (живото известие, API 36).
 #   app-dev.apk     — devDebug на 6d3a324 (org.chyavorec.app.dev, демо вход) — „Моята читателска година“.
 #   helper.apk      — помощно приложение само за емулатора (.github/perf-check/helper).
+# Кръговете a–e са изпълнени при push; сега — само ръчно (последният push е за perf-restore.yml).
 on:
-  push:
-    branches: [debug/wave19-check]
+  workflow_dispatch:
 permissions:
   contents: read
 env:

@@ -1,0 +1,34 @@
+name: Emulator results v133 — merge rounds a–e (temporary)
+# ВРЕМЕННО: публикуването на кръговете b–d е заменяло цялата папка v133/ (git add на папката записва и
+# изтриванията). Старите orphan commit-и още са в хранилището: тук на сървъра (Git Data API, без
+# изтегляне на файловете) се прави дърво v133/ с частите от всички кръгове (.github/perf-check/v133-tree.json,
+# сглобено от v133_restore.py) и нов orphan commit; останалото съдържание на клона се запазва.
+on:
+  push:
+    branches: [debug/wave19-check]
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Merge v133/ of the rounds into one tree and move emulator-results to it
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_TIP: be147974692bbdac1b8700ab2d34f5d5a58a8cca
+        run: |
+          set -euo pipefail
+          R=repos/${{ github.repository }}
+          TIP=$(gh api $R/git/ref/heads/emulator-results --jq .object.sha)
+          echo "tip: $TIP"
+          if [ "$TIP" != "$EXPECTED_TIP" ]; then echo "emulator-results moved since the payload was built — not touching it"; exit 1; fi
+          V=$(gh api -X POST $R/git/trees --input .github/perf-check/v133-tree.json --jq .sha)
+          echo "v133 tree: $V"
+          ROOT=$(gh api $R/git/commits/$TIP --jq .tree.sha)
+          NEW=$(jq -n --arg b "$ROOT" --arg v "$V" '{base_tree:$b, tree:[{path:"v133",mode:"040000",type:"tree",sha:$v}]}' | gh api -X POST $R/git/trees --input - --jq .sha)
+          C=$(jq -n --arg t "$NEW" '{message:"Emulator results v133: wave 19 rounds a–e merged (6d3a324)", tree:$t, parents:[]}' | gh api -X POST $R/git/commits --input - --jq .sha)
+          echo "commit: $C"
+          gh api -X PATCH $R/git/refs/heads/emulator-results -f sha="$C" -F force=true --jq .object.sha
+          gh api "$R/contents/v133?ref=emulator-results" --jq '.[].name' | tr '\n' ' '
