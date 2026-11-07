@@ -193,7 +193,7 @@ val LocalSharedTransitionsEnabled = compositionLocalOf { true }
  * при прекъснат жест „назад“ пружината естествено се връща без скок.
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
-private val SpringBounds = BoundsTransform { _: Rect, _: Rect ->
+internal val SpringBounds = BoundsTransform { _: Rect, _: Rect ->
     spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessMediumLow, visibilityThreshold = Rect.VisibilityThreshold)
 }
 

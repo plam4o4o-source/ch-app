@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
+import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.EmptyView
@@ -131,7 +132,8 @@ private fun PdfAppButton(download: DocumentsViewModel.PdfDownload?, onOpen: () -
     IconButton(onClick = onCancel, modifier = Modifier.semantics { stateDescription = label }) {
         Box(contentAlignment = Alignment.Center) {
             val p = download.progress
-            if (p == null) CircularProgressIndicator(Modifier.size(28.dp), strokeWidth = 3.dp)
+            // Без проценти — меката „превръщаща се“ форма на приложението (светла, под кръстчето).
+            if (p == null) ChLoadingIndicator(Modifier.size(32.dp), contentDescription = null, color = MaterialTheme.colorScheme.primaryContainer)
             else CircularProgressIndicator(progress = { p }, modifier = Modifier.size(28.dp), strokeWidth = 3.dp)
             Icon(Icons.Outlined.Close, stringResource(R.string.pdf_cancel_download), Modifier.size(16.dp))
         }

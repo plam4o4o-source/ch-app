@@ -13,7 +13,7 @@ import androidx.compose.runtime.derivedStateOf
 import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.LocalOnlineCovers
 import org.chyavorec.app.ui.components.mayHaveRealCover
-import org.chyavorec.app.ui.components.sharedElementKey
+import org.chyavorec.app.ui.components.bookCoverShared
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -776,7 +776,7 @@ fun BookRow(books: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (C
             PressableCard(onClick = { onClick(b) }, modifier = Modifier.width(128.dp)) {
                 Column(Modifier.padding(10.dp)) {
                     BookCover(
-                        b, width = 108.dp, modifier = Modifier.sharedElementKey("book-${b.inv}"),
+                        b, width = 108.dp, modifier = Modifier.bookCoverShared(b.inv),
                         onRealCover = if (captions) { shown -> if (shown) realCover.value = true } else null,
                     )
                     if (captions) {

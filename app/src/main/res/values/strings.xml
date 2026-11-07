@@ -511,6 +511,7 @@
     <string name="perf_title">Бързодействие</string>
     <string name="perf_warm">Топъл старт · %1$d</string>
     <string name="photo_in">%1$s – %2$s</string>
+    <string name="photo_info">За снимката</string>
     <string name="photo_load_failed">Снимката не се зареди — може да липсва на сайта или да няма връзка.</string>
     <string name="photo_missing_on_site">Снимката липсва на сайта.</string>
     <string name="photo_n">Снимка %1$d</string>

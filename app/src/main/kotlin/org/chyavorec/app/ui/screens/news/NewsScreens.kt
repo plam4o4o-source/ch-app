@@ -51,9 +51,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -112,6 +109,7 @@ import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.windowWidth
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.sharedElementKey
+import org.chyavorec.app.ui.components.ConnectedButtonGroup
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.navigation.SEGMENT_KEY
 import org.chyavorec.app.ui.navigation.DETAIL_KEY
@@ -278,16 +276,9 @@ private fun NewsSegments(calendar: Boolean, onSelect: (Boolean) -> Unit) {
             ) {
                 // На таблет сегментите не се разтягат през целия екран.
                 val width = if (stacked) Modifier.weight(1f) else Modifier.weight(1f).wrapContentWidth(Alignment.Start)
-                SingleChoiceSegmentedButtonRow(width.widthIn(max = 480.dp)) {
-                    listOf(false to R.string.news_segment_news, true to R.string.news_segment_calendar).forEachIndexed { i, (isCalendar, label) ->
-                        SegmentedButton(
-                            selected = calendar == isCalendar,
-                            onClick = { if (calendar != isCalendar) onSelect(isCalendar) },
-                            shape = SegmentedButtonDefaults.itemShape(i, 2),
-                            icon = {},
-                            label = { SegmentLabel(stringResource(label)) },
-                        )
-                    }
+                // Свързана група (Material 3 Expressive): избраният сегмент е плътно „хапче“.
+                ConnectedButtonGroup(listOf(false, true), calendar, onSelect, width.widthIn(max = 480.dp)) { isCalendar, _ ->
+                    SegmentLabel(stringResource(if (isCalendar) R.string.news_segment_calendar else R.string.news_segment_news))
                 }
                 if (!stacked) {
                     if (calendar) EventsActions(eventsViewModel()) else Spacer(Modifier.width(8.dp))

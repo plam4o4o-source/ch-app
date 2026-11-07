@@ -511,6 +511,7 @@
     <string name="perf_title">Performance</string>
     <string name="perf_warm">Warm start · %1$d</string>
     <string name="photo_in">%1$s – %2$s</string>
+    <string name="photo_info">About this photo</string>
     <string name="photo_load_failed">The photo didn’t load — it may be missing from the website, or there’s no connection.</string>
     <string name="photo_missing_on_site">This photo is missing from the website.</string>
     <string name="photo_n">Photo %1$d</string>
