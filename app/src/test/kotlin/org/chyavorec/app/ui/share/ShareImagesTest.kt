@@ -69,6 +69,8 @@ class ShareImagesTest {
      */
     private fun render(card: ShareCard): Bitmap {
         var result: Bitmap? = null
+        // Кадрите — на ръка: всеки кадър снимката на екрана рисува прозореца (и записва картата).
+        compose.mainClock.autoAdvance = false
         compose.setContent {
             ChitalishteTheme(mode = ThemeMode.LIGHT) {
                 Box(Modifier.fillMaxSize()) {
@@ -78,9 +80,10 @@ class ShareImagesTest {
                 }
             }
         }
-        compose.waitUntil(15_000) {
+        for (frame in 0 until 300) {
+            if (result != null || ShadowToast.getTextOfLatestToast() != null) break
+            compose.mainClock.advanceTimeByFrame()
             runCatching { compose.onRoot().captureToImage() }
-            result != null || ShadowToast.getTextOfLatestToast() != null
         }
         return assertNotNull(result, "картата не се нарисува: ${ShadowToast.getTextOfLatestToast()}")
     }
