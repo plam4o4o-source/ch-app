@@ -762,7 +762,7 @@ part_surprisemem() {
   local i
   # API < 33: езикът на приложението — през езика на устройството (няма cmd locale set-app-locales)
   [ "$SDK" -lt 33 ] && { helper_install; dev_locale bg-BG || true; a am force-stop $PKG; }
-  anims 1
+  anims ${SM_ANIMS:-1}; log "animator scale: $(a settings get global animator_duration_scale | tr -d '\r') (0 = reduced motion: no fan/flip animation)"
   warmup
   sec "SM0. Device memory: $(a grep MemTotal /proc/meminfo | tr -s ' ' | tr -d '\r'); API $SDK"
   for i in 1 2 3; do
@@ -803,7 +803,8 @@ part_w19() {
     cardcrash) part_cardcrash;;
     idlelong) part_idlelong;;
     article19) part_article19;;
-    surprise28|surprise33) part_surprisemem;;
+    surprise28|surprise33|surprise31) part_surprisemem;;
+    surprise28rm) SM_ANIMS=0 part_surprisemem;;
     confetti19) part_confetti19;;
     year19) part_year19;;
     motion19) part_motion19;;

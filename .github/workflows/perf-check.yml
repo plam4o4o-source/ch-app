@@ -294,7 +294,7 @@ jobs:
         #    idle19, mem/mem-base; B: func19, year19 (devDebug), fb28 (API 28); C: live36 (API 36 или
         #    най-новият образ); D: motion19; E: monkey19.
         # Кръг b: повторени/поправени части и картата (срив с LinearGradient в 1.2.32 в кръг a).
-        part: [surprise28]
+        part: [surprise28rm, surprise31]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -317,7 +317,7 @@ jobs:
         env:
           STAGE_URL: https://raw.githubusercontent.com/${{ github.repository }}/emulator-results/${{ env.STAGE }}
         with:
-          api-level: ${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && needs.images.outputs.api || contains(matrix.part, '28') && 28 || 33 }}
+          api-level: ${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && needs.images.outputs.api || contains(matrix.part, '28') && 28 || contains(matrix.part, '31') && 31 || 33 }}
           target: google_apis
           arch: x86_64
           profile: pixel_6
@@ -330,7 +330,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p out/${{ matrix.part }}
-          echo "part=${{ matrix.part }} target=google_apis api=${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && needs.images.outputs.api || contains(matrix.part, '28') && 28 || 33 }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          echo "part=${{ matrix.part }} target=google_apis api=${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && needs.images.outputs.api || contains(matrix.part, '28') && 28 || contains(matrix.part, '31') && 31 || 33 }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
           cat out/${{ matrix.part }}/job-status.txt
           rm -rf out/${{ matrix.part }}/rec/*/
           { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
@@ -406,6 +406,8 @@ jobs:
           mv "$RUNNER_TEMP/v133-index.md" "$V/index.md"
           git show FETCH_HEAD:index.md > index.md
           grep -q "v133/index.md" index.md || { { head -1 index.md; echo; echo "Wave 19 check (6d3a324, test v1.2.33 vs v1.2.32): [v133/index.md](v133/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
-          git add "$V" index.md
+          # Само папките на това изпълнение (иначе add на цялата папка изтрива частите от предишните кръгове).
+          for p in $(ls "$W/results"); do git add -A -- "$V/$p"; done
+          git add -A -- "$V/size" "$V/runs.txt" "$V/index.md" index.md
           git commit -q -m "Emulator results v133 for $SRC (run $RUN)"
           git push -f origin HEAD:refs/heads/emulator-results
