@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui
 
+import org.chyavorec.app.ui.components.LocalAppChromeHidden
 import android.net.Uri
 import android.os.Build
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -366,7 +367,9 @@ private fun MainScaffold(
     val openExternal: (String) -> Unit = { Intents.openUrl(context, it) }
     val back: () -> Unit = { if (!nav.popBackStack()) nav.navigateTab(Routes.HOME) }
 
-    val topLevel = route in topLevelRoutes
+    // Сцена на цял екран над раздела (HideAppChrome) скрива лентите на приложението.
+    val chromeHidden = remember { mutableStateOf(false) }
+    val topLevel = route in topLevelRoutes && !chromeHidden.value
     val onTab: (TopTab, Boolean) -> Unit = { tab, selected ->
         if (selected) {
             // Повторно докосване на текущия раздел — към началото на списъка.
@@ -434,7 +437,11 @@ private fun MainScaffold(
                 contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0),
             ) { padding ->
                 Box(Modifier.padding(padding).fillMaxSize()) {
-                    CompositionLocalProvider(LocalTabReselect provides reselect, LocalSearchShortcut provides searchShortcut) {
+                    CompositionLocalProvider(
+                        LocalTabReselect provides reselect,
+                        LocalSearchShortcut provides searchShortcut,
+                        LocalAppChromeHidden provides chromeHidden,
+                    ) {
                         AppNavHost(nav, ::navigate, back, ::openLink, openExternal)
                     }
                 }

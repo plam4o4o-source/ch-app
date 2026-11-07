@@ -34,6 +34,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -285,5 +288,18 @@ fun InfoRow(label: String, value: String?, modifier: Modifier = Modifier, copyab
     Row(modifier.fillMaxWidth().then(copy).padding(vertical = 7.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(0.42f))
         Text(value, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(0.58f))
+    }
+}
+
+/** Скрити долна/странична лента на приложението (сцена на цял екран над раздела) — от корена. */
+val LocalAppChromeHidden = compositionLocalOf<MutableState<Boolean>?> { null }
+
+/** Докато е в композицията, лентите на приложението са скрити (напр. „Изненадай ме“). */
+@Composable
+fun HideAppChrome() {
+    val hidden = LocalAppChromeHidden.current ?: return
+    DisposableEffect(hidden) {
+        hidden.value = true
+        onDispose { hidden.value = false }
     }
 }

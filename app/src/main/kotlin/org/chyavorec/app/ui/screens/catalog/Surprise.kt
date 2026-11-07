@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.catalog
 
+import org.chyavorec.app.ui.components.HideAppChrome
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -275,6 +276,8 @@ fun SurpriseOverlay(
     onClose: () -> Unit,
 ) {
     BackHandler(onBack = onClose)
+    // Сцената е на цял екран — без долната лента на приложението под нея.
+    HideAppChrome()
     val haptic = LocalHapticFeedback.current
     val cards = remember(ui.round) { List(CARDS) { CardAnim(if (reduced) 0f else 1f) } }
     val flip = remember(ui.round) { Animatable(if (reduced) 0f else 180f) }
