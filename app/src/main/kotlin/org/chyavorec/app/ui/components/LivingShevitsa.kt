@@ -128,15 +128,17 @@ private fun rememberWeaveTime(budget: WeaveBudget, speed: Float, stopWhen: () ->
     LaunchedEffect(budget, still, resumed) {
         if (still || !resumed) return@LaunchedEffect
         var last = withFrameNanos { it }
+        // На бавен телефон (кадри над 0.5 s) бюджетът не бива да се разтяга: край и по часовник.
+        val wallLimit = last + (2 * (budget.totalSeconds - budget.seconds) / speed * 1e9f).toLong()
         while (!budget.exhausted) {
-            if (stop()) {
+            if (stop() || last > wallLimit) {
                 budget.finish()
                 time.floatValue = budget.seconds
                 break
             }
             delay(WEAVE_FRAME_DELAY_MS)
             val now = withFrameNanos { it }
-            budget.advance(((now - last) / 1e9f).coerceIn(0f, 0.1f) * speed)
+            budget.advance(((now - last) / 1e9f).coerceIn(0f, 0.5f) * speed)
             last = now
             time.floatValue = budget.seconds
         }

@@ -21,7 +21,7 @@
 - „Изненадай ме“ в каталога — разклати телефона за случайна книга по твоя вкус.
 - Жива шевица и холографска читателска карта; розетка в долната лента.
 - Книгите се разгръщат при отваряне, а успехите — с бродирани конфети.
-- Живи известия за изтегляне и за предстоящо събитие (Android 16+).
+- Живо известие с напредъка при изтегляне на обновление (Android 16+).
 
 ### en
 - “My reading year” — an animated story of your year in books (in “My”).
@@ -29,7 +29,7 @@
 - “Surprise me” in the catalogue — shake the phone for a random book to your taste.
 - A living шевица and a holographic library card; a rosette in the bottom bar.
 - Books open like real books, and successes come with embroidered confetti.
-- Live updates for downloads and upcoming events (Android 16+).
+- A live progress notification while an update downloads (Android 16+).
 
 ## 1.2.32
 

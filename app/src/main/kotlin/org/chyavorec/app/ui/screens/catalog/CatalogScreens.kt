@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.catalog
 
+import android.os.Build
 import org.chyavorec.domain.model.BookStatus
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import androidx.compose.material3.FilledTonalButton
@@ -430,7 +431,8 @@ fun CatalogScreen(navigate: (String) -> Unit) {
         if (surpriseUi.open) {
             SurpriseOverlay(
                 surpriseUi,
-                reduced = reduced || screenReader,
+                // До Android 11 разбъркването (3D завъртане със сянка) изяжда паметта — само резултатът.
+                reduced = reduced || screenReader || Build.VERSION.SDK_INT < Build.VERSION_CODES.S,
                 onOpen = { b ->
                     surprise.close()
                     navigate(Routes.book(b.inv))

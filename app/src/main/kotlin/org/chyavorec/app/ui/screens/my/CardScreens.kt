@@ -192,6 +192,8 @@ private fun rememberTilt(): Tilt {
                     // pitch (напред/назад) и roll (наляво/надясно) в радиани → ±1 при ≈ ±45°.
                     val ty = (orientation[1] / 0.8f).coerceIn(-1f, 1f)
                     val tx = (orientation[2] / 0.8f).coerceIn(-1f, 1f)
+                    // Невалидно показание (NaN) би останало в наклона завинаги — пропуска се.
+                    if (!tx.isFinite() || !ty.isFinite()) return@runCatching
                     tilt.x += (tx - tilt.x) * 0.18f
                     tilt.y += (ty - tilt.y) * 0.18f
                 }
