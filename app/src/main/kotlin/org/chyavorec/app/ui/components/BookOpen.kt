@@ -82,7 +82,7 @@ internal fun Modifier.bookOpening(angle: () -> Float): Modifier =
     }.graphicsLayer {
         val a = angle()
         // Свободният ръб идва към читателя (по-близо — по-голям) и минава наляво.
-        rotationY = a
+        rotationY = -a
         transformOrigin = TransformOrigin(0f, 0.5f)
         cameraDistance = 12f * density
     }.drawWithCache {

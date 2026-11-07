@@ -30,6 +30,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
@@ -263,5 +264,19 @@ class MotionScreenshotTest {
 
         compose.mainClock.autoAdvance = true
         waitFor("ЦБ/840/Д 51")
+        compose.mainClock.advanceTimeBy(1_000)
+        compose.waitForIdle()
+
+        // Назад — корицата се връща в реда и пак се разтваря по пътя; списъкът е на мястото си.
+        compose.mainClock.autoAdvance = false
+        compose.onAllNodes(hasContentDescription("Назад") and hasClickAction()).onFirst().performClick()
+        val back = listOf(40L, 60L, 60L).map { t ->
+            compose.mainClock.advanceTimeBy(t)
+            capture()
+        }
+        save(strip(back, heightPx = back.first().height / 2), "w19m-06-book-close-transition")
+        compose.mainClock.autoAdvance = true
+        compose.waitUntil(10_000) { compose.onAllNodes(hasText("ЦБ/840/Д 51")).fetchSemanticsNodes().isEmpty() }
+        waitFor("резултата")
     }
 }
