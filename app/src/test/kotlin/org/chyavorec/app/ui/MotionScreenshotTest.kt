@@ -39,6 +39,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.printToString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.test.core.app.ApplicationProvider
@@ -277,6 +278,9 @@ class MotionScreenshotTest {
         save(strip(back, heightPx = back.first().height / 2), "w19m-06-book-close-transition")
         compose.mainClock.autoAdvance = true
         compose.waitUntil(10_000) { compose.onAllNodes(hasText("ЦБ/840/Д 51")).fetchSemanticsNodes().isEmpty() }
-        waitFor("резултата")
+        runCatching { waitFor("Джиан, Филип") }.onFailure {
+            System.err.println(compose.onRoot(useUnmergedTree = true).printToString())
+            throw it
+        }
     }
 }
