@@ -334,7 +334,7 @@ private fun BookShareCard(card: ShareCard.Book, photo: ImageBitmap?) {
             }.padding(vertical = 8.dp),
             contentAlignment = Alignment.Center,
         ) {
-            val coverWidth = 156.dp
+            val coverWidth = 128.dp
             if (photo != null) {
                 val shape = RoundedCornerShape(4.dp)
                 Image(photo, null, contentScale = ContentScale.Crop,
@@ -344,7 +344,7 @@ private fun BookShareCard(card: ShareCard.Book, photo: ImageBitmap?) {
                 ChitalishteTheme(mode = ThemeMode.LIGHT) { PersonalCovers { BookCover(b, width = coverWidth, showStatusDot = false, decorative = true) } }
             }
         }
-        Spacer(Modifier.height(26.dp))
+        Spacer(Modifier.height(20.dp))
         CardLabel(stringResource(R.string.share_card_book), modifier = Modifier.align(Alignment.CenterHorizontally))
         Spacer(Modifier.height(8.dp))
         Text(b.title, style = serif(titleSize(b.title, 34f)), maxLines = 3, overflow = TextOverflow.Ellipsis,
