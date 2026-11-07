@@ -166,12 +166,18 @@ private fun ConfettiLayer(particles: ConfettiParticles, origin: () -> Offset, pr
     }
 }
 
-/** Цветовете на конфетито: злато, светло злато, бордо и тъмно злато (бордото — по-светло в тъмна тема). */
+/**
+ * Цветовете на конфетито: злато, бордо и още два тона злато — светлото само в тъмна тема
+ * (върху кремавия фон не се вижда); бордото е по-светло в тъмна тема.
+ */
 @Composable
 private fun confettiColors(): Array<Color> {
     val gold = LocalExtendedColors.current.gold
     val burgundy = stitchBurgundy()
-    return remember(gold, burgundy) { arrayOf(gold, Brand.GoldLight, burgundy, Brand.GoldDark) }
+    val dark = LocalExtendedColors.current.isDark
+    return remember(gold, burgundy, dark) {
+        arrayOf(gold, if (dark) Brand.GoldLight else Brand.Gold, burgundy, Brand.GoldDark)
+    }
 }
 
 /** Движението на частица — чисти функции (dp, секунди; y расте надолу). */
@@ -215,7 +221,7 @@ internal class ConfettiParticles(val count: Int) {
             vy[i] = sin(angle) * speed
             rotation[i] = 360f * random.nextFloat()
             spin[i] = (if (random.nextBoolean()) 1f else -1f) * (180f + 540f * random.nextFloat())
-            sizeDp[i] = 5f + 4f * random.nextFloat()
+            sizeDp[i] = 6f + 4f * random.nextFloat()
             flutter[i] = 2f * PI.toFloat() * random.nextFloat()
             color[i] = random.nextInt(4)
             cross[i] = random.nextInt(3) == 0

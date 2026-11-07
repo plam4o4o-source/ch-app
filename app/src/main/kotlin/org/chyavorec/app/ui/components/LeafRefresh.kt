@@ -78,11 +78,15 @@ fun StitchRefreshIndicator(state: PullToRefreshState, isRefreshing: Boolean, mod
     }
 
     // След опресняването шевицата остава цяла и избледнява с прибирането (не се „разшива“).
+    // Само след истинско опресняване (true → false), не при дърпане, започнало без него.
     var finishing by remember { mutableStateOf(false) }
+    val wasRefreshing = remember { BooleanArray(1) }
     LaunchedEffect(isRefreshing) {
+        val ended = wasRefreshing[0] && !isRefreshing
+        wasRefreshing[0] = isRefreshing
         if (isRefreshing) {
             finishing = false
-        } else if (state.distanceFraction > 0f) {
+        } else if (ended && state.distanceFraction > 0f) {
             finishing = true
             snapshotFlow { state.distanceFraction <= 0f }.first { it }
             finishing = false

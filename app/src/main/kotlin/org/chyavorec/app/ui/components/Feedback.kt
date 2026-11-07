@@ -173,7 +173,7 @@ fun MessageView(
         }
         if (ornament) {
             Spacer(Modifier.height(8.dp))
-            StitchInOrnament(EmptyBand, Modifier.size(width = 112.dp, height = 24.dp))
+            StitchInOrnament(EmptyBand, Modifier.size(width = 132.dp, height = 28.dp))
             Spacer(Modifier.height(10.dp))
         } else {
             Spacer(Modifier.height(20.dp))

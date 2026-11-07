@@ -6,6 +6,8 @@ import android.graphics.Canvas
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Shader
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.semantics.SemanticsActions
@@ -44,8 +46,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.time.Instant
@@ -95,6 +99,12 @@ class ArticleReadingTest {
     @After fun stop() = server.shutdown()
 
     private fun launch(mode: ThemeMode = ThemeMode.LIGHT) {
+        // С връзка — без лентата „Няма интернет връзка“ и със заглавната снимка.
+        val cm = ApplicationProvider.getApplicationContext<Application>().getSystemService(ConnectivityManager::class.java)
+        val caps = ShadowNetworkCapabilities.newInstance()
+        shadowOf(caps).addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        shadowOf(caps).addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        shadowOf(cm).setNetworkCapabilities(cm.activeNetwork, caps)
         val base = server.url("/").toString().trimEnd('/')
         val config = AppConfig(
             siteBaseUrl = base, catalogUrls = listOf("$base/katalog.json"), inflibApiUrl = "",
@@ -127,10 +137,12 @@ class ArticleReadingTest {
         File(outDir, "$name.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
+    /** Превърта статията с [px] надолу и малко назад — лентата с действията се връща (както при четене). */
     private fun scrollArticleBy(px: Float) {
-        // Програмно превъртане (не жест) — лентата с действията остава видима за снимката.
         compose.onAllNodes(article).onFirst().performSemanticsAction(SemanticsActions.ScrollBy) { it(0f, px) }
         compose.waitForIdle()
+        compose.onAllNodes(article).onFirst().performSemanticsAction(SemanticsActions.ScrollBy) { it(0f, -60f) }
+        compose.waitUntil(5_000) { toolbarShown() }
     }
 
     @Test fun toolbarHidesWhileReadingDownAndReturnsOnScrollUp() {
@@ -146,13 +158,13 @@ class ArticleReadingTest {
 
     @Test fun readingLight() {
         launch()
-        scrollArticleBy(700f)
+        scrollArticleBy(760f)
         shot("s19-04-article-reading")
     }
 
     @Test fun readingDark() {
         launch(ThemeMode.DARK)
-        scrollArticleBy(260f)
+        scrollArticleBy(320f)
         shot("s19-05-article-reading-dark")
     }
 }
