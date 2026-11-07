@@ -139,7 +139,7 @@ private val Paper = Brand.Parchment
 
 internal fun serif(size: TextUnit, color: Color = Paper, weight: FontWeight = FontWeight.SemiBold, lineHeight: Float = 1.1f) =
     TextStyle(fontFamily = Cormorant, fontWeight = weight, fontSize = size, lineHeight = size * lineHeight, color = color,
-        lineBreak = LineBreak.Heading, hyphens = Hyphens.Auto)
+        lineBreak = LineBreak.Heading, hyphens = Hyphens.None)
 
 internal fun sans(size: TextUnit, color: Color = Paper, weight: FontWeight = FontWeight.Normal, spacing: Float = 0f) =
     TextStyle(fontFamily = Raleway, fontWeight = weight, fontSize = size, lineHeight = size * 1.4f, color = color, letterSpacing = spacing.em)
@@ -297,12 +297,12 @@ private fun EventShareCard(card: ShareCard.Event, photo: ImageBitmap?) {
     BrandCardFrame(card.format, card.url) {
         if (photo != null) {
             Box(Modifier.fillMaxWidth()) {
-                CardPhoto(photo, Modifier.fillMaxWidth().aspectRatio(4f / 3f))
+                CardPhoto(photo, Modifier.fillMaxWidth().aspectRatio(16f / 10f))
                 if (card.day != null && card.month != null) {
                     DateBadge(card.day, card.month, Modifier.align(Alignment.BottomStart).offset(x = 14.dp, y = 18.dp))
                 }
             }
-            Spacer(Modifier.height(34.dp))
+            Spacer(Modifier.height(30.dp))
         } else {
             Spacer(Modifier.weight(0.6f))
             if (card.day != null && card.month != null) {
@@ -327,8 +327,10 @@ private fun BookShareCard(card: ShareCard.Book, photo: ImageBitmap?) {
         Spacer(Modifier.weight(0.4f))
         Box(
             Modifier.fillMaxWidth().drawWithCache {
-                val glow = Brush.radialGradient(listOf(Brand.Gold.copy(alpha = 0.28f), Color.Transparent), center = Offset(size.width / 2f, size.height / 2f), radius = size.height * 0.75f)
-                onDrawBehind { drawRect(glow) }
+                // Кръг (не правоъгълник) — сиянието няма ръбове.
+                val r = size.minDimension / 2f
+                val glow = Brush.radialGradient(listOf(Brand.Gold.copy(alpha = 0.28f), Color.Transparent), center = Offset(size.width / 2f, size.height / 2f), radius = r)
+                onDrawBehind { drawCircle(glow, radius = r) }
             }.padding(vertical = 8.dp),
             contentAlignment = Alignment.Center,
         ) {

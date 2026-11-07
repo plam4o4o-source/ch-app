@@ -159,8 +159,10 @@ internal fun SlideBackdrop(look: SlideLook, drift: () -> Float, modifier: Modifi
             val bg = look.brush
             onDrawBehind {
                 // В картата за споделяне фонът е на рамката — тук само светлината и мотивът.
-                if (fill) drawRect(bg)
-                drawRect(glow)
+                if (fill) {
+                    drawRect(bg)
+                    drawRect(glow)
+                }
                 rotate(degrees = 12f * drift(), pivot = Offset(size.width / 2f, size.height * 0.45f)) {
                     translate(size.width / 2f - side / 2f, size.height * 0.45f - side / 2f) {
                         drawPath(motif, Brand.Gold.copy(alpha = 0.055f))
@@ -319,8 +321,6 @@ private fun AuthorSlide(s: ReadingYear.Summary, appear: () -> Float) {
     val name = shortAuthor(s.favouriteAuthor.orEmpty())
     SlideLabel(stringResource(R.string.year_author_label), appear)
     Box(contentAlignment = Alignment.Center) {
-        // Голяма кавичка зад името.
-        Text("„", style = serif(220.sp, Brand.Gold.copy(alpha = 0.16f), lineHeight = 1f), modifier = Modifier.align(Alignment.TopStart).rise(appear, 0f, 0.4f))
         Text(
             name,
             style = serif(if (name.length > 22) 44.sp else 56.sp, Paper, lineHeight = 1.02f),
@@ -429,7 +429,9 @@ private fun monthInitials(): List<String> {
 private fun MonthSlide(s: ReadingYear.Summary, appear: () -> Float) {
     val peak = s.peakMonth ?: return
     SlideLabel(stringResource(R.string.year_month_label), appear)
-    Text(monthName(peak), style = serif(64.sp, Brand.Gold, lineHeight = 1f), modifier = Modifier.rise(appear, 0.05f, 0.4f))
+    val name = monthName(peak)
+    // Дългите имена („Септември“) — по-дребно, за да са на един ред и в картата за споделяне.
+    Text(name, style = serif(if (name.length > 6) 54.sp else 64.sp, Brand.Gold, lineHeight = 1f), maxLines = 1, modifier = Modifier.rise(appear, 0.05f, 0.4f))
     Spacer(Modifier.height(6.dp))
     Text(
         pluralStringResource(R.plurals.history_year_count, s.peakCount, s.peakCount),

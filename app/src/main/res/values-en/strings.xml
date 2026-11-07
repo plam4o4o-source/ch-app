@@ -780,11 +780,11 @@
     <string name="widget_preview_event">Literary evening</string>
     <string name="widget_preview_event_date">October 18, 18:00</string>
     <string name="widget_upcoming_events">Upcoming events</string>
-    <string name="year_author_cd">Favourite author: %1$s — %2$d books this year.</string>
+    <string name="year_author_cd">Favourite author: %1$s — %2$d books this year.</string>
     <string name="year_author_label">Favourite author</string>
     <string name="year_books_label">This year you borrowed</string>
     <string name="year_card_open">Watch the story</string>
-    <string name="year_card_text">Your books, favourite author and record month — as a full-screen story.</string>
+    <string name="year_card_text">Your books, favourite author and record month — as a full-screen story.</string>
     <string name="year_empty">No books borrowed this year yet.</string>
     <string name="year_intro_cd">%1$d — your year in books</string>
     <string name="year_intro_title">your year in books</string>
@@ -801,10 +801,10 @@
     <string name="year_title">My reading year</string>
     <string name="year_title_with">My reading year %1$d</string>
     <string name="year_type_bookworm">Book dragon</string>
-    <string name="year_type_bookworm_text">You devour book after book — the shelves can barely keep up.</string>
+    <string name="year_type_bookworm_text">You devour book after book — the shelves can barely keep up.</string>
     <string name="year_type_cd">Your reader type: %1$s. %2$s</string>
     <string name="year_type_curious">Curious reader</string>
-    <string name="year_type_curious_text">You choose your books with care — each one a small discovery.</string>
+    <string name="year_type_curious_text">You choose your books with care — each one a small discovery.</string>
     <string name="year_type_explorer">Explorer</string>
     <string name="year_type_explorer_text">You roam the library, section by section.</string>
     <string name="year_type_label">Your reader type</string>
