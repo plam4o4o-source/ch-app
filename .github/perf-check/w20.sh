@@ -857,10 +857,10 @@ year_frames() {  # devDebug: снимка на всяка ~1 s след доко
   year_card_find || { log "YEARF $1: no card"; return; }
   tap text "$L_YEAR" >/dev/null; t1=$(now_ms)
   local pid; pid=$(pidof_app)
-  ( for k in 3 7 11; do sleep 4; a "debuggerd -j $pid" > $OUT/year-stack-$1-$k.txt 2>&1; done ) &
+  ( for k in 3 7 11; do sleep 4; a "debuggerd -j $pid" > $OUT/year-stack-$1-$k.txt 2>&1; done ) & local stpid=$!
   for i in $(seq 1 18); do shot year2/$1-$(printf %02d $i)s >/dev/null; while [ $(( $(now_ms) - t1 )) -lt $((i * 1000 + 1000)) ]; do sleep 0.1; done; done
   python3 $W20 strip $OUT/shots/year2/$1-strip.png all $OUT/shots/year2/$1-{01,02,03,04,05,06,08,10,12,14,16,18}s.png >/dev/null
-  wait
+  wait $stpid 2>/dev/null
   for k in 3 7 11; do log "YEAR STACK $1 +~${k}s: $(grep -E '^"(main|DefaultDispatcher[^"]*)"' -A14 $OUT/year-stack-$1-$k.txt 2>/dev/null | grep -E '^"|at org\.chyavorec|kotlinx\.serialization|json|Json|Reader|Search|Index|sqlite|SQLite|okhttp|Socket|sleep|park|delay' | grep -vE 'parking to wait|- waiting' | head -16 | cut -c1-140 | tr '\n' '~')"; done
   log "YEARF $1 frame stats per second: $(python3 $W20 frames $OUT/shots/year2/$1-*s.png | awk '{sub(/std=/,"",$3); printf "%s ", $3}')"
 }
