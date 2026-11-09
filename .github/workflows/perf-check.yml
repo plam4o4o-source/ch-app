@@ -1,0 +1,351 @@
+name: Emulator full test of the released v1.2.33 (temporary)
+# ВРЕМЕННО (клон debug/full-test-133): пълна регресионна проверка на издаденото v1.2.33 (a830b51, versionCode
+# 1500183) на емулатор. Резултатите — в клона emulator-results, папка v133full/ (orphan commit; останалото
+# съдържание на клона се запазва, само папките на това изпълнение се заменят). Стъпките с емулатора са
+# continue-on-error. Инструментите са от debug/wave19-check (764f396); новите части са в .github/perf-check/w20.sh.
+#
+#   rel-133.apk / rel-132.apk — истинските APK-та от GitHub Release (arm64/armv7, ключът на изданията);
+#                               на x86_64 образите (API 30+) се пробват с превода на ARM (relprobe в run.sh).
+#   app.apk         — prodRelease x86_64 от a830b51, versionCode 1500183, временен ключ (ако издаденият не тръгне;
+#                     и източникът на тестовото обновяване в update.json).
+#   app-new-upd.apk — кодът на a830b51 като „1.2.33-pre“ (1500182) с update.json от emulator-results → app.apk
+#                     (живото известие на API 36/36.1).
+#   app-base-upd.apk— v1.2.32 (tag, 87ef20e) x86_64, versionCode 1495920, със същия update.json (резервен път на
+#                     обновяването 1.2.32 → 1.2.33, ако издадените APK-та не тръгнат).
+#   app-dev.apk     — devDebug на a830b51 (org.chyavorec.app.dev, демо вход).
+#   helper.apk      — помощно приложение само за емулатора (.github/perf-check/helper).
+on:
+  push:
+    branches: [debug/full-test-133]
+    paths: [.github/workflows/perf-check.yml, .github/perf-check/**]
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  NEW_REF: a830b518213e78cc684dcca357dc12f103124440
+  BASE_REF: 87ef20e4749d1f1e3637de6505a88b57b5b0dc50
+  VC_NEW: "1500183"
+  VC_PRE: "1500182"
+  VC_BASE: "1495920"
+  STAGE: v133full/update/${{ github.run_id }}
+jobs:
+  key:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Throwaway signing key, shared by all built test APKs
+        run: |
+          mkdir key; PASS=$(openssl rand -hex 16); echo "$PASS" > key/pass
+          keytool -genkeypair -noprompt -keystore key/t.jks -storepass "$PASS" -keypass "$PASS" \
+            -alias t -keyalg RSA -keysize 2048 -validity 3 -dname "CN=emulator test, O=not for release"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: key
+          path: key/
+          retention-days: 1
+
+  helper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the emulator helper APK (intent/share catcher, test accessibility service, device locale)
+        run: |
+          mkdir -p dist
+          bash .github/perf-check/helper/build.sh dist/helper.apk
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-helper
+          path: dist/
+
+  # Издадените APK-та (v1.2.33 и v1.2.32) от GitHub Release и размерът им.
+  rel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Download the release APK assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p dist
+          for v in 1.2.33 1.2.32; do
+            id=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$v" --jq ".assets[] | select(.name == \"chitalishte-yavorets-$v.apk\") | .id")
+            gh api -H "Accept: application/octet-stream" "repos/$GITHUB_REPOSITORY/releases/assets/$id" > "dist/rel-${v##*.}.apk"
+            gh api -H "Accept: application/octet-stream" "repos/$GITHUB_REPOSITORY/releases/assets/$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$v" --jq '.assets[] | select(.name == "update.json") | .id')" > "dist/update-${v##*.}.json"
+          done
+          ls -l dist
+          AAPT=$(ls -d $ANDROID_HOME/build-tools/*/ | sort -V | tail -1)aapt2
+          APKAN=$(ls $ANDROID_HOME/cmdline-tools/*/bin/apkanalyzer 2>/dev/null | head -1)
+          for k in 133 132; do
+            A=dist/rel-$k.apk
+            {
+              echo "== released v1.2.${k#1}: $(basename $A) — $(stat -c %s $A) bytes; sha256 $(sha256sum $A | cut -c1-16); update.json sha256 $(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["sha256"][:16])' dist/update-$k.json)"
+              echo "manifest: $($AAPT dump xmltree --file AndroidManifest.xml "$A" | grep -E 'versionCode|versionName|minSdkVersion|targetSdkVersion' | tr -s ' ' | tr '\n' ' ')"
+              echo "native libs: $(unzip -l $A | grep -oE 'lib/[^ ]+\.so' | tr '\n' ' ')"
+              echo "baseline profile: $(unzip -l $A | grep -oE 'assets/dexopt/[^ ]+' | tr '\n' ' ')"
+              [ -n "$APKAN" ] && echo "apkanalyzer download size: $("$APKAN" apk download-size "$A" 2>/dev/null) B; file size $("$APKAN" apk file-size "$A" 2>/dev/null) B"
+              python3 - "$A" <<'EOF'
+          import zipfile, sys, collections
+          z = zipfile.ZipFile(sys.argv[1])
+          comp, unc, cnt = collections.Counter(), collections.Counter(), collections.Counter()
+          for i in z.infolist():
+              p = i.filename
+              if p.startswith('lib/'): k = '/'.join(p.split('/')[:2])
+              elif p.endswith('.dex'): k = 'classes*.dex'
+              elif p.startswith('res/'): k = 'res'
+              elif '/' in p: k = p.split('/')[0] + '/'
+              else: k = p
+              comp[k] += i.compress_size; unc[k] += i.file_size; cnt[k] += 1
+          print(f"{'part':<22}{'compressed':>12}{'uncompressed':>14}{'files':>7}")
+          for k, v in comp.most_common():
+              print(f"{k:<22}{v:>12}{unc[k]:>14}{cnt[k]:>7}")
+          EOF
+            } >> dist/size-rel.txt
+          done
+          cat dist/size-rel.txt
+          echo "1.2.33 RELEASED APK (GitHub release asset, arm64-v8a/armeabi-v7a); versionCode 1500183" > dist/apk-rel-ref.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-rel
+          path: dist/
+
+  build:
+    needs: key
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { app: new, vname: "1.2.33" }
+          - { app: upd, vname: "1.2.33-pre" }
+          - { app: baseupd, vname: "1.2.32" }
+          - { app: dev, vname: "1.2.33" }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.app == 'baseupd' && env.BASE_REF || env.NEW_REF }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: key
+          path: ${{ runner.temp }}/key
+      - name: versionName of the release (as release.yml does; not committed)
+        run: |
+          sed -i 's/versionName = ".*"/versionName = "${{ matrix.vname }}"/' app/build.gradle.kts
+          grep -nE '^val releaseAbis|versionName = ' app/build.gradle.kts
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v6
+      - name: prodRelease with x86_64 added (emulator only, not committed)
+        if: matrix.app != 'dev'
+        run: |
+          sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО|' app/build.gradle.kts
+          grep -nE '^val releaseAbis' app/build.gradle.kts
+          K="$RUNNER_TEMP/key"; P=$(cat "$K/pass")
+          case ${{ matrix.app }} in new) VC=$VC_NEW;; upd) VC=$VC_PRE;; baseupd) VC=$VC_BASE;; esac
+          export SIGNING_STORE_FILE="$K/t.jks" SIGNING_STORE_PASSWORD="$P" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$P" VERSION_CODE=$VC
+          RAW="https://raw.githubusercontent.com/${{ github.repository }}/emulator-results/$STAGE"
+          [ ${{ matrix.app }} = new ] || export UPDATE_MANIFEST_URL="$RAW/update.json"
+          ./gradlew --no-daemon assembleProdRelease
+          mkdir -p dist
+          case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt;; upd) O=app-new-upd.apk; R=apk-new-upd-ref.txt;; baseupd) O=app-base-upd.apk; R=apk-base-upd-ref.txt;; esac
+          cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/$O
+          echo "${{ matrix.vname }} $(git rev-parse --short HEAD) built prodRelease x86_64 (throwaway key); versionCode $VC; update manifest: ${UPDATE_MANIFEST_URL:-the real one (releases/latest)}" > dist/$R
+          cat dist/*.txt; ls -l dist
+      - name: devDebug (demo data)
+        if: matrix.app == 'dev'
+        run: |
+          ./gradlew --no-daemon assembleDevDebug
+          mkdir -p dist
+          cp app/build/outputs/apk/dev/debug/app-dev-debug.apk dist/app-dev.apk
+          echo "devDebug $(git rev-parse --short HEAD) (org.chyavorec.app.dev, demo sign-in DEMO-0001)" > dist/apk-dev-ref.txt
+          ls -l dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-${{ matrix.app }}
+          path: dist/
+
+  # Построеното v1.2.33 и update.json в emulator-results/v133full/update/<run>/ (за „1.2.33-pre“ и v1.2.32 x86_64).
+  stage-update:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.NEW_REF }}
+          path: newsrc
+      - uses: actions/download-artifact@v8
+        with:
+          name: apk-new
+          path: dist
+      - name: Stage update.json + APK (orphan; the rest of the branch is kept)
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          WN="$RUNNER_TEMP/whats-new"; mkdir -p "$WN"
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate --jq '.[].tag_name' | grep -vx 'v1.2.33' > "$RUNNER_TEMP/released.txt" || : > "$RUNNER_TEMP/released.txt"
+          python3 newsrc/tools/whats_new.py 1.2.33 newsrc/store/whats-new.md "$RUNNER_TEMP/released.txt" "$WN" || { echo "• Тест" > "$WN/notes.bg.txt"; echo "• Test" > "$WN/notes.en.txt"; }
+          cat "$WN"/notes.bg.txt
+          P="$RUNNER_TEMP/pub"; mkdir -p "$P"; cd "$P"
+          git init -q -b scratch
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch -q --filter=blob:none --depth 1 origin emulator-results
+          git read-tree FETCH_HEAD
+          mkdir -p "$STAGE"; cp "$GITHUB_WORKSPACE/dist/app.apk" "$STAGE/app.apk"
+          WN="$WN" python3 - <<'PY'
+          import hashlib, json, os
+          st = os.environ["STAGE"]; repo = os.environ["GITHUB_REPOSITORY"]; wn = os.environ["WN"]
+          notes = lambda lang: open(os.path.join(wn, f"notes.{lang}.txt"), encoding="utf-8").read().strip()
+          apk = f"{st}/app.apk"
+          raw = f"https://raw.githubusercontent.com/{repo}/emulator-results/{st}"
+          data = {
+              "versionCode": int(os.environ["VC_NEW"]), "versionName": "1.2.33",
+              "apkUrl": f"{raw}/app.apk",
+              "sha256": hashlib.sha256(open(apk, "rb").read()).hexdigest(),
+              "size": os.path.getsize(apk), "minSdk": 26,
+              "notes": notes("bg"), "notes_en": notes("en"),
+              "releaseUrl": f"https://github.com/{repo}/releases/tag/v1.2.33",
+          }
+          json.dump(data, open(f"{st}/update.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+          print(json.dumps(data, ensure_ascii=False, indent=2))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$STAGE"
+          git commit -q -m "Stage the built v1.2.33 update for the v133full emulator run (run ${{ github.run_id }})"
+          git push -f origin HEAD:refs/heads/emulator-results
+
+  emulator:
+    needs: [build, helper, rel, stage-update]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 130
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        # API 33 google_apis x86_64, swangle_indirect; live36 — API 36, live361 — API 36.1, old28 — API 28.
+        part: [first, tour-a, tour-b, tour-c, demo, func, func2, robust, offline, monkey, update, widget, perf, idle, mem, a11yt, live36, live361, old28]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: apk-*
+          merge-multiple: true
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l *.apk; cat apk-*.txt
+          python3 -c "import PIL, numpy, cv2" 2>/dev/null && command -v ffmpeg || { sudo apt-get update -qq >/dev/null 2>&1; sudo apt-get install -y -qq python3-pil python3-numpy python3-opencv ffmpeg >/dev/null 2>&1; }
+          python3 -c "import PIL; print('PIL', PIL.__version__)"; command -v ffmpeg
+      - name: Run on emulator (${{ matrix.part }}, swangle_indirect)
+        id: run
+        continue-on-error: true
+        timeout-minutes: 115
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          STAGE_URL: https://raw.githubusercontent.com/${{ github.repository }}/emulator-results/${{ env.STAGE }}
+        with:
+          api-level: ${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && '36' || matrix.part == 'old28' && '28' || '33' }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          # Без камера (емулаторът пада при отваряне на камерата).
+          emulator-options: -no-window -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: bash .github/perf-check/run.sh ${{ matrix.part }}
+      - name: Record the step outcome
+        if: always()
+        continue-on-error: true
+        run: |
+          mkdir -p out/${{ matrix.part }}
+          echo "part=${{ matrix.part }} target=google_apis api=${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && '36' || matrix.part == 'old28' && '28' || '33' }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          cat out/${{ matrix.part }}/job-status.txt
+          rm -rf out/${{ matrix.part }}/rec/*/
+          { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
+            echo "== emulator processes"; ps -eo pid,etime,rss,stat,args | grep -iE "qemu|emulator" | grep -v grep | cut -c1-200; } > out/${{ matrix.part }}/host-after-run.txt 2>&1 || true
+      - uses: actions/upload-artifact@v7
+        if: always()
+        continue-on-error: true
+        with:
+          name: out-${{ matrix.part }}
+          path: out/
+
+  # Клонът emulator-results е над 4 GB: fetch без съдържанието на файловете (blob:none), индексът — от върха му;
+  # заменят се само папките на това изпълнение (иначе следващите кръгове изтриват предишните) и index.md.
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+    needs: [build, rel, emulator, stage-update]
+    if: always()
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: out-*
+          path: results
+          merge-multiple: true
+      - uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          pattern: apk-*
+          path: apks
+          merge-multiple: true
+      - name: Push results to emulator-results/v133full (orphan commit; the rest of the branch is kept)
+        run: |
+          set -ex
+          SRC=$(git rev-parse --short HEAD)
+          W=$GITHUB_WORKSPACE
+          RUN=${{ github.run_id }}
+          ls -R results | head -60
+          P="$RUNNER_TEMP/pub"; mkdir -p "$P"; cd "$P"
+          git init -q -b scratch
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch --filter=blob:none --depth 1 origin emulator-results
+          git read-tree FETCH_HEAD
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          V=v133full
+          for p in $(ls "$W/results"); do git rm -r -q --cached --ignore-unmatch "$V/$p"; done
+          # Тестовият APK на обновяването не се пази (само update.json).
+          git rm -q --cached --ignore-unmatch "$STAGE/app.apk"
+          mkdir -p "$V"; cp -r "$W/results/." "$V/"
+          mkdir -p "$V/size"; cp "$W"/apks/size-*.txt "$W"/apks/apk-*ref.txt "$V/size/" 2>/dev/null || true
+          git show FETCH_HEAD:$V/runs.txt > "$V/runs.txt" 2>/dev/null || : > "$V/runs.txt"
+          echo "run $RUN @ $SRC: $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
+          (
+            cd "$V"
+            echo "# Full emulator test of the released v1.2.33 (a830b51, versionCode 1500183)"
+            echo
+            echo "debug/full-test-133 (runs in runs.txt, latest $RUN @ $SRC). API 33 google_apis x86_64, -gpu swangle_indirect, unless the part says otherwise (live36: API 36, live361: API 36.1, old28: API 28). Each part's summary says which APK it ran (the released ARM APK via ARM translation, or the built x86_64 prodRelease). Previous checks: [../v133/index.md](../v133/index.md)."
+            echo; echo "| part | status |"; echo "|---|---|"
+            for p in $(ls -d */ | tr -d /); do [ -f "$p/job-status.txt" ] && echo "| $p | $(grep -c '## COMPLETE' $p/summary.txt 2>/dev/null | sed 's/^1$/COMPLETE/;s/^0$/incomplete/'); $(cat $p/job-status.txt) |"; done
+            echo; echo '```'; cat size/size-rel.txt 2>/dev/null; cat size/apk-*ref.txt 2>/dev/null; echo '```'
+            echo
+            for p in $(ls -d */ | tr -d /); do
+              [ -f "$p/summary.txt" ] || continue
+              echo "## $p"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
+            done
+            echo "## Files"; echo
+            find . -type f ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
+          ) > "$RUNNER_TEMP/v-index.md"
+          mv "$RUNNER_TEMP/v-index.md" "$V/index.md"
+          git show FETCH_HEAD:index.md > index.md
+          grep -q "$V/index.md" index.md || { { head -1 index.md; echo; echo "Full test of the released v1.2.33 (a830b51): [$V/index.md]($V/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
+          # Само папките на това изпълнение (иначе add на цялата папка изтрива частите от предишните кръгове).
+          for p in $(ls "$W/results"); do git add -A -- "$V/$p"; done
+          git add -A -- "$V/size" "$V/runs.txt" "$V/index.md" index.md
+          git commit -q -m "Emulator results v133full for $SRC (run $RUN)"
+          git push -f origin HEAD:refs/heads/emulator-results
