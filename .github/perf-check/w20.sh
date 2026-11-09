@@ -34,7 +34,7 @@ L_READER='=Режим за четене|=Reading mode'; L_PHOTOINFO='=За сн�
 L_HOMESEARCH='Търси книга|Search books'; L_SIGNIN='=Вход|=Sign in'; L_CARDSHOW='=Покажи картата|=Show card'
 L_REMIND='=Напомни ми|=Remind me'; L_ROUTE='=Маршрут|=Directions'; L_MANUAL='=Въведи номера на ръка|=Enter the number manually'
 L_YEAR='Моята читателска година|My reading year'
-W20_PARTS=" first tour-a tour-b tour-c demo func func2 robust offline monkey update widget perf idle mem a11yt live36 live361 old28 "
+W20_PARTS=" live361b first tour-a tour-b tour-c demo func func2 robust offline monkey update widget perf idle mem a11yt live36 live361 old28 upd2 fix demo2 old28b "
 
 cfg_desc() { echo "${W}x${H} px, density $(dens), font_scale $(a settings get system font_scale | tr -d '\r'), night $(a cmd uimode night | tr -d '\r' | grep -oE '(yes|no|auto)'), app locale $(a cmd locale get-app-locales $PKG 2>/dev/null | grep -oE '\[[^]]*\]'), rotation $(a settings get system user_rotation | tr -d '\r')"; }
 
@@ -334,8 +334,8 @@ card_tilt() {  # $1 — етикет
 }
 
 # ---------------------------------------------------------------- 3. ФУНКЦИИ
-pull_refresh() {  # $1 — етикет: бавно дърпане 1500 ms от горе, снимки по средата на жеста (на устройството)
-  local x=$((W/2)) y0=$((H*22/100)) y1=$((H*78/100)) f
+pull_refresh() {  # $1 — етикет, [$2 — начало в % от височината]: бавно дърпане 1500 ms, снимки по средата на жеста
+  local x=$((W/2)) y0=$((H*${2:-22}/100)) y1=$((H*92/100)) f
   top_of; sleep 1; shot refresh/$1-0-before
   a "rm -f /sdcard/pr*.png"
   a "input swipe $x $y0 $x $y1 1500 & sleep 0.45; screencap -p /sdcard/pr1.png; sleep 0.15; screencap -p /sdcard/pr2.png; screencap -p /sdcard/pr3.png; wait; screencap -p /sdcard/pr4.png; sleep 0.5; screencap -p /sdcard/pr5.png; sleep 1.2; screencap -p /sdcard/pr6.png" >/dev/null 2>&1
@@ -706,6 +706,7 @@ part_a11yt() {
 # ---------------------------------------------------------------- 11. ЖИВИ ИЗВЕСТИЯ (36 / 36.1)
 part_live2() {
   part_live36
+  log "SYSTEMUI flags (chips/promoted): $(a aflags list 2>/dev/null | grep -iE 'chip|promot|rich_ongoing|live_update' | tr -s ' ' | head -14 | cut -c1-120 | tr '\n' ';')"
   sec "L4. Live Update evidence: raw notification records during the download, the app's notification settings"
   local f
   for f in $(ls $OUT/live/notif-l*.txt 2>/dev/null | sort -V | sed -n '2p;5p;9p'); do echo "== $(basename $f)"; python3 $W20 notifraw $f $PKG | head -30; done | tee -a $SUM
@@ -746,15 +747,207 @@ part_w20() {
     idle) part_idle;;
     mem) part_mem; diag_end;;
     a11yt) part_a11yt;;
-    live36|live361) part_live2;;
+    live36|live361|live361b) part_live2;;
     old28) part_old28;;
+    upd2) part_upd2;;
+    fix) part_fix;;
+    demo2) part_demo2;;
+    old28b) part_old28b;;
   esac
   return 0
 }
 
+# ================================================================= КРЪГ b: повторни и по-точни проверки
+# Обновяване 1.2.32 → 1.2.33 без „По-късно“: уиджетът преди първото пускане, диалогът се приема.
+upd_wait_dialog() {  # $1 — етикет; пропуска въведението и известията, НЕ натиска „По-късно“
+  local i t0; t0=$(now_ms)
+  for i in $(seq 1 60); do
+    sleep 2; dump
+    has 'text="(Нова версия|New version)' && { log "UPDATE $1 dialog after $(( $(now_ms) - t0 )) ms: $(texts 14 | cut -c1-500)"; return 0; }
+    has 'text="(Пропусни|Skip)"' && tap text '=Пропусни|=Skip' >/dev/null
+    has 'text="(Не сега|Not now)"' && tap text '=Не сега|=Not now' >/dev/null
+  done
+  log "UPDATE $1: no dialog in 120 s: $(texts 10 | cut -c1-300)"; return 1
+}
+part_upd2() {
+  local p
+  helper_install
+  anims 1
+  sec "UC0. Built v1.2.32 (tag 87ef20e, x86_64, versionCode 1495920) with update.json → built v1.2.33 (1500183)"
+  curl -sS --max-time 30 "$STAGE_URL/update.json" -o $OUT/update.json
+  log "staged manifest: $(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["versionCode"], d["versionName"], d["size"], len(d["notes"].split(chr(10))), "note lines")' $OUT/update.json 2>&1)"
+  inst app-base-upd.apk base-upd apk-base-upd-ref.txt || return
+  a appops set $PKG REQUEST_INSTALL_PACKAGES allow
+  sec "UC1. The widget on the home screen before the first launch of v1.2.32"
+  K=c132; widget_add c132 && { go_home 3; log "WIDGET v1.2.32 (not launched yet): $(wstate)"; shot update/c-01-widget-132-before-launch; }
+  sec "UC2. First launch of v1.2.32: onboarding skipped, the update dialog accepted"
+  launch >/dev/null
+  if upd_wait_dialog c; then
+    shot update/c-10-dialog; cp $OUT/ui.xml $OUT/dialog-c.xml; notes_match c-dialog
+    p=$(xy text '=Инсталирай|=Install'); [ -z "$p" ] && p=$(xy text '=Изтегли и инсталирай|=Download and install')
+    [ -n "$p" ] && a input tap $p
+    if installer_confirm 1500183 c; then
+      log "UPDATE c: installed $(ver)"; sleep 3
+      sec "UC3. After the update: widget before reopening, „Какво ново“, widget after"
+      go_home 3; log "WIDGET after the update (before opening): $(wstate)"; shot update/c-20-widget-after
+      launch >/dev/null; sleep 3
+      whatsnew_check c-30-whats-new && { a input swipe $((W/2)) $((H*80/100)) $((W/2)) $((H*40/100)) 400; sleep 1.5; shot update/c-31-whats-new-scrolled; dump; notes_match c-sheet-scrolled; tap text '=Добре|=OK|=Разбрах|=Got it' >/dev/null || back 2; }
+      sleep 2; a am force-stop $PKG; launch >/dev/null; sleep 5; dump; log "relaunch: what's new again? $(has "$RX_WHATSNEW" && echo 'SHOWN AGAIN' || echo no)"
+      go_home 3; log "WIDGET after opening the app: $(wstate)"; shot update/c-40-widget-after-app
+      K=c133; widget_clicks
+    else log "UPDATE c: NOT installed: $(ver)"; fi
+  fi
+  sec "UD. 'По-късно' on the update dialog: what the app offers afterwards (Settings › Обновления)"
+  inst app-base-upd.apk base-upd2 apk-base-upd-ref.txt; a appops set $PKG REQUEST_INSTALL_PACKAGES allow
+  launch >/dev/null
+  if upd_wait_dialog d; then tap text '=По-късно|=Later' >/dev/null; sleep 2
+    a am force-stop $PKG; launch >/dev/null; sleep 8; dump; log "after 'По-късно' + relaunch: dialog $(has 'text="(Нова версия|New version)' && echo SHOWN || echo 'not shown')"
+    if open_settings && settings_find 'Налична е версия|Провери за нова версия|Обновления'; then dump; shot update/d-settings; log "SETTINGS › Обновления: $(grep -oE 'text="[^"]*(версия|Обнов|автомат)[^"]*"' $OUT/ui.xml | head -5 | tr '\n' ' ')"
+      tap text 'Налична е версия' >/dev/null || tap text 'Провери за нова версия' >/dev/null; sleep 4; dump; shot update/d-after-check
+      log "after 'check now': dialog $(has 'text="(Нова версия|New version)' && echo SHOWN || echo 'not shown'); $(texts 8 | cut -c1-200)"; fi
+  fi
+  diag_end
+}
+eshot() {  # $1 — име: снимка от емулатора (дисплеят отвън — и на екраните с FLAG_SECURE)
+  local d; d=$(realpath -m $OUT/shots/eshot); mkdir -p $d; rm -f $d/Screenshot*.png
+  timeout 20 adb emu screenrecord screenshot $d >/dev/null 2>&1; sleep 1
+  local f; f=$(ls -t $d/Screenshot*.png 2>/dev/null | head -1)
+  [ -n "$f" ] && mv "$f" $d/$1.png && echo "$d/$1.png"
+}
+# Картата: сензорът и фолиото — пълният dumpsys sensorservice и наклон и с жироскопа
+card_tilt2() {  # $1 — етикет
+  local f=$OUT/sensors-$1.txt
+  card_screen; dump; card_shown || { card_add $CARD_NO >/dev/null 2>&1; card_screen; dump; }
+  sleep 3; a dumpsys sensorservice > $f 2>&1
+  log "SENSORS on the card screen ($1): active connections mentioning the app: $(grep -c "$PKG" $f); lines: $(grep -E "$PKG|Game Rotation|game_rotation" $f | tr -s ' ' | head -6 | cut -c1-160 | tr '\n' '~')"
+  local E=$OUT/shots/eshot
+  eshot $1-0 >/dev/null; sleep 1.5; eshot $1-0b >/dev/null
+  emu sensor set acceleration 4.5:8.7:0 >/dev/null; sleep 2.5; eshot $1-acc-A >/dev/null
+  emu sensor set acceleration -4.5:8.7:0 >/dev/null; sleep 2.5; eshot $1-acc-B >/dev/null
+  emu sensor set acceleration 0:9.81:0 >/dev/null
+  emu sensor set gyroscope 0:0.9:0 >/dev/null; sleep 1.2; emu sensor set gyroscope 0:0:0 >/dev/null; sleep 1.5; eshot $1-gyro-A >/dev/null
+  emu sensor set gyroscope 0:-1.8:0 >/dev/null; sleep 1.2; emu sensor set gyroscope 0:0:0 >/dev/null; sleep 1.5; eshot $1-gyro-B >/dev/null
+  emu sensor set gyroscope 0.9:0:0 >/dev/null; sleep 1.2; emu sensor set gyroscope 0:0:0 >/dev/null; sleep 1.5; eshot $1-gyro-C >/dev/null
+  log "ESHOT files: $(ls $E 2>/dev/null | tr '\n' ' '); size of $1-0: $(python3 $W19 png $E/$1-0.png 2>&1 | cut -c1-120)"
+  mkdir -p $OUT/shots/tilt2; for f in 0 0b acc-A acc-B gyro-A gyro-B gyro-C; do [ -f $E/$1-$f.png ] && python3 -c "from PIL import Image; import sys; Image.open(sys.argv[1]).convert('RGB').resize(($W,$H)).save(sys.argv[2])" $E/$1-$f.png $OUT/shots/tilt2/$1-$f.png 2>/dev/null; done
+  local R="0 250 $W 1250"
+  log "TILT2 $1 noise 0→0b (same tilt, 1.5 s): $(python3 $W19 rdiff $OUT/shots/tilt2/$1-0.png $OUT/shots/tilt2/$1-0b.png "$R" 2>&1 | tail -1)"
+  log "TILT2 $1: acc A→B $(python3 $W19 rdiff $OUT/shots/tilt2/$1-acc-A.png $OUT/shots/tilt2/$1-acc-B.png "$R"); 0→accA $(python3 $W19 rdiff $OUT/shots/tilt2/$1-0.png $OUT/shots/tilt2/$1-acc-A.png "$R"); gyro A→B $(python3 $W19 rdiff $OUT/shots/tilt2/$1-gyro-A.png $OUT/shots/tilt2/$1-gyro-B.png "$R"); gyro B→C $(python3 $W19 rdiff $OUT/shots/tilt2/$1-gyro-B.png $OUT/shots/tilt2/$1-gyro-C.png "$R"); 0→gyroA $(python3 $W19 rdiff $OUT/shots/tilt2/$1-0.png $OUT/shots/tilt2/$1-gyro-A.png "$R")"
+  python3 $W20 strip $OUT/shots/tilt2/$1-strip.png "$R" $OUT/shots/tilt2/$1-{0,acc-A,acc-B,gyro-A,gyro-B,gyro-C}.png >/dev/null
+  a dumpsys sensorservice > $OUT/sensors-$1-after.txt 2>&1
+  log "SENSOR events for the app (recent): $(grep -iE "$PKG" -A3 $OUT/sensors-$1-after.txt | grep -iE 'rotation|events|rate' | head -4 | tr -s ' ' | cut -c1-160 | tr '\n' '~')"
+  back 1.5
+}
+article_toolbar2() {
+  local u
+  sec "AR2. Article toolbar: the longest article, slow drags; screenshots of the bottom"
+  ART_URL=$(python3 $H_/find_article.py long | cut -f1); log "longest article: $ART_URL"
+  open_article || { log "AR2: article not opened"; return; }
+  shot article2/0-open
+  a input swipe $((W/2)) $((H*70/100)) $((W/2)) $((H*40/100)) 700; sleep 2; dump; shot article2/1-drag-down
+  log "AR2 after a slow 700 ms drag down (720 px): toolbar $(has 'content-desc="Режим за четене"' && echo VISIBLE || echo hidden)"
+  a input swipe $((W/2)) $((H*70/100)) $((W/2)) $((H*30/100)) 250; sleep 2; dump; shot article2/2-fling-down
+  log "AR2 after a fling down: toolbar $(has 'content-desc="Режим за четене"' && echo VISIBLE || echo hidden)"
+  a input swipe $((W/2)) $((H*40/100)) $((W/2)) $((H*55/100)) 500; sleep 2; dump; shot article2/3-drag-up
+  log "AR2 after a drag up: toolbar $(has 'content-desc="Режим за четене"' && echo visible || echo HIDDEN)"
+  back 2
+}
+year_frames() {  # devDebug: снимка на всяка ~1 s след докосването на картата на годината (до 20 s)
+  local i t1
+  year_card_find || { log "YEARF $1: no card"; return; }
+  tap text "$L_YEAR" >/dev/null; t1=$(now_ms)
+  local pid; pid=$(pidof_app)
+  ( for k in 3 7 11; do sleep 4; a "debuggerd -j $pid" > $OUT/year-stack-$1-$k.txt 2>&1; done ) &
+  for i in $(seq 1 18); do shot year2/$1-$(printf %02d $i)s >/dev/null; while [ $(( $(now_ms) - t1 )) -lt $((i * 1000 + 1000)) ]; do sleep 0.1; done; done
+  python3 $W20 strip $OUT/shots/year2/$1-strip.png all $OUT/shots/year2/$1-{01,02,03,04,05,06,08,10,12,14,16,18}s.png >/dev/null
+  wait
+  for k in 3 7 11; do log "YEAR STACK $1 +~${k}s: $(grep -E '^"(main|DefaultDispatcher[^"]*)"' -A14 $OUT/year-stack-$1-$k.txt 2>/dev/null | grep -E '^"|at org\.chyavorec|kotlinx\.serialization|json|Json|Reader|Search|Index|sqlite|SQLite|okhttp|Socket|sleep|park|delay' | grep -vE 'parking to wait|- waiting' | head -16 | cut -c1-140 | tr '\n' '~')"; done
+  log "YEARF $1 frame stats per second: $(python3 $W20 frames $OUT/shots/year2/$1-*s.png | awk '{sub(/std=/,"",$3); printf "%s ", $3}')"
+}
+part_fix() {
+  local i
+  helper_install
+  anims 1
+  sec "FX0. BrandIntro on the very first launch: 12 s recording (round a stopped at ~5 s, on the splash)"
+  a am force-stop $PKG; timeout 60 adb uninstall $PKG >/dev/null 2>&1; timeout 180 adb install app.apk 2>&1 | tail -1
+  a cmd locale set-app-locales $PKG --locales bg-BG; a pm grant $PKG android.permission.POST_NOTIFICATIONS; go_home 2
+  rec_start brandintro2 12; launch >/dev/null; rec_end >/dev/null
+  python3 $W20 strip $OUT/shots/first/brandintro-12s-strip.png all $(ls $OUT/rec/brandintro2/f*.png 2>/dev/null | awk 'NR>=12 && NR%3==0' | head -16) >/dev/null
+  log "BRANDINTRO2: $(ls $OUT/rec/brandintro2 2>/dev/null | wc -l) frames; motion: $(python3 $W19 motion all $OUT/rec/brandintro2/f*.png 2>/dev/null | cut -c1-500)"
+  rec_clean
+  dismiss; warmup
+  sec "FX4. Pull-to-refresh rosette: slow 1500 ms pull starting inside the list (45% of the height)"
+  link_pkg "$SITE/news" >/dev/null; sleep 5; segstate | grep -q 'News\[checked=true' || segment news; pull_refresh news2 45
+  link_pkg "$EVENTS_URL" >/dev/null; sleep 5; cal_checked || segment calendar; pull_refresh calendar2 45
+  ready; tab home; sleep 3; pull_refresh home2 45
+  if open_gallery && waitfor "$RX_GALLERY_LOADED" 30; then pull_refresh gallery2 45; back 1.5; fi
+  link_pkg "$SITE/news" >/dev/null; sleep 4; top_of
+  rec_start refresh-news2 6; a input swipe $((W/2)) $((H*45/100)) $((W/2)) $((H*92/100)) 1500; sleep 3; rec_end "0 0 1080 1400"; rec_clean
+  sec "FX1. Card foil and the sensor (self-entered card)"
+  sensors_info; card_tilt2 release
+  card_screen; tap text "$L_CARDSHOW" >/dev/null && { sleep 2; card_tilt2 release-full; }
+  article_toolbar2
+  sec "FX2. Catalogue filter 'Само налични' applied"
+  ready; tab catalog; waitfor "$RX_RESULTS" 60; search_catalog 12 >/dev/null; log "before: $(rcount) results"
+  if tap content-desc "$L_FILTERS" >/dev/null; then sleep 2; tap text '=Само налични' >/dev/null; sleep 1.5; dump; shot fix/filter-1
+    log "FILTER sheet after the chip: $(texts 30 | cut -c1-500)"
+    back 1.5; sleep 2; dump; shot fix/filter-2; log "after closing the sheet: $(rcount) results; $(grep -oE 'text="[^"]*(налични|Филтри|филт)[^"]*"' $OUT/ui.xml | head -3 | tr '\n' ' ')"; fi
+  sec "FX3. Shelf view vs list: gfxinfo of the same flings"
+  ready; tab catalog; waitfor "$RX_RESULTS" 30; sleep 2; gfx_reset; fling_v; gfx_save list-flings
+  tap content-desc "$L_SHELF" >/dev/null && { sleep 3; gfx_reset; fling_v; gfx_save shelf-flings; gfx_reset; sleep 8; gfx_save shelf-idle-8s; tap content-desc "$L_LIST" >/dev/null; }
+  diag_end
+}
+part_demo2() {
+  helper_install
+  use_pkg org.chyavorec.app.dev
+  timeout 180 adb install -r app-dev.apk 2>&1 | tail -1
+  a cmd locale set-app-locales $PKG --locales bg-BG; a pm grant $PKG android.permission.POST_NOTIFICATIONS
+  anims 1
+  warmup
+  demo_signin
+  sec "Y2b. Year story: what is on the screen during the first 18 s (screenshot each second)"
+  a am force-stop $PKG; sleep 2; launch >/dev/null; sleep 5; dismiss; ready; tab my; sleep 3
+  year_frames fresh
+  back 2; sleep 1; year_story_closed || back 2; ready; tab my; sleep 2; top_of
+  year_frames again
+  sec "Y6b. Short flick variants (the 22% / 90 ms flick stayed open in round a)"
+  local spec dur y1 y2 lbl i
+  for spec in "flick90:40:62:90" "flick150:40:62:150" "flick90b:40:62:90" "short300:40:62:300" "fast200:30:85:200"; do
+    IFS=: read lbl y1 y2 dur <<< "$spec"
+    year_story_closed && { ready; tab my; sleep 1.5; top_of; year_card_find && tap text "$L_YEAR" >/dev/null; for i in $(seq 1 25); do sleep 1; dump && grep -qE 'content-desc="[^"]*(Затвори|Следващ слайд)' $OUT/ui.xml && break; done; sleep 1.5; }
+    a input swipe $((W/2)) $((H*y1/100)) $((W/2)) $((H*y2/100)) $dur; sleep 2.5; shot year2/swipe-$lbl
+    log "YEAR swipe down $lbl (${y1}%→${y2}% = $((H*(y2-y1)/100)) px in ${dur} ms): $(year_story_closed && echo closed || echo 'STILL OPEN')"
+  done
+  year_story_closed || back 2
+  sec "Y4b. Demo card: foil and the sensor"
+  card_tilt2 demo
+  sec "Y3b. Hold result"
+  link "$SITE/elektronen-katalog?inv=$INV" >/dev/null; sleep 4; dump; for i in 1 2; do [ -n "$(xy text '=Заяви книгата')" ] && break; sw_up 400; sleep 1; dump; done
+  if [ -n "$(xy text '=Заяви книгата')" ]; then tap text '=Заяви книгата' >/dev/null; for i in 1 2 3 4 5 6; do sleep 0.7; shot fix/hold-$i >/dev/null; done; dump; log "HOLD after the tap: $(texts 20 | cut -c1-500)"; fi
+  diag_end
+  use_pkg org.chyavorec.app
+}
+part_old28b() {
+  helper_install; dev_locale bg-BG || true; a am force-stop $PKG
+  anims 1
+  warmup
+  sec "O28. Event share as image on API $SDK (round a: no choice sheet)"
+  local n
+  for n in 1 2; do
+    open_event $n || continue
+    dump; log "event $n: share button $(xy content-desc '=Сподели')"; shot share28/event-$n-0
+    tap content-desc '=Сподели' >/dev/null; sleep 3; dump; shot share28/event-$n-1; log "after tapping 'Сподели': $(texts 10 | cut -c1-300); fg $(fg)"
+    has 'Сподели като картинка' && { share_image ev28-$n; break; }
+    back 1.5; back 1.5
+  done
+  sec "O28b. Home on API $SDK: frames with no input after 30 s (no AGSL; carousel?)"
+  restart; tab home; sleep 30; cpu_win home-30s 15
+  diag_end
+}
+
 # ---------------------------------------------------------------- издаденият APK на x86_64 образа
 relprobe() {  # издаденият APK (само ARM) на x86_64: инсталира ли се и тръгва ли (превод на ARM)? → app.apk
-  case " live36 live361 update old28 " in *" $PART "*) log "RELEASE APK: not used in this part (built x86_64 app.apk)"; return;; esac
+  case " live36 live361 live361b update old28 upd2 old28b " in *" $PART "*) log "RELEASE APK: not used in this part (built x86_64 app.apk)"; return;; esac
   [ -f rel-133.apk ] || { log "RELEASE APK: rel-133.apk missing — built x86_64 app.apk"; return; }
   [ "$SDK" -ge 30 ] || { log "RELEASE APK: API $SDK has no ARM translation — built x86_64 app.apk"; return; }
   log "abilist: $(a getprop ro.product.cpu.abilist | tr -d '\r'); native bridge: $(a getprop ro.dalvik.vm.native.bridge | tr -d '\r')"

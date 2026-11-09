@@ -232,7 +232,7 @@ jobs:
       fail-fast: false
       matrix:
         # API 33 google_apis x86_64, swangle_indirect; live36 — API 36, live361 — API 36.1, old28 — API 28.
-        part: [first, tour-a, tour-b, tour-c, demo, func, func2, robust, offline, monkey, update, widget, perf, idle, mem, a11yt, live36, live361, old28]
+        part: [upd2, fix, demo2, old28b, live361b]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -255,7 +255,7 @@ jobs:
         env:
           STAGE_URL: https://raw.githubusercontent.com/${{ github.repository }}/emulator-results/${{ env.STAGE }}
         with:
-          api-level: ${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && '36' || matrix.part == 'old28' && '28' || '33' }}
+          api-level: ${{ contains(matrix.part, 'live361') && '36.1' || matrix.part == 'live36' && '36' || contains(matrix.part, 'old28') && '28' || '33' }}
           target: google_apis
           arch: x86_64
           profile: pixel_6
@@ -268,7 +268,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p out/${{ matrix.part }}
-          echo "part=${{ matrix.part }} target=google_apis api=${{ matrix.part == 'live361' && '36.1' || matrix.part == 'live36' && '36' || matrix.part == 'old28' && '28' || '33' }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          echo "part=${{ matrix.part }} target=google_apis api=${{ contains(matrix.part, 'live361') && '36.1' || matrix.part == 'live36' && '36' || contains(matrix.part, 'old28') && '28' || '33' }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
           cat out/${{ matrix.part }}/job-status.txt
           rm -rf out/${{ matrix.part }}/rec/*/
           { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault|qemu|trap" | tail -40
