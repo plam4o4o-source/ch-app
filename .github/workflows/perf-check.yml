@@ -69,9 +69,9 @@ jobs:
         run: |
           mkdir -p dist
           for v in 1.2.33 1.2.32; do
-            id=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$v" --jq ".assets[] | select(.name == \"chitalishte-yavorets-$v.apk\") | .id")
-            gh api -H "Accept: application/octet-stream" "repos/$GITHUB_REPOSITORY/releases/assets/$id" > "dist/rel-1${v##*.}.apk"
-            gh api -H "Accept: application/octet-stream" "repos/$GITHUB_REPOSITORY/releases/assets/$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$v" --jq '.assets[] | select(.name == "update.json") | .id')" > "dist/update-1${v##*.}.json"
+            k=1${v##*.}; T=$(mktemp -d)
+            for t in 1 2 3; do gh release download "v$v" -R "$GITHUB_REPOSITORY" -p "chitalishte-yavorets-$v.apk" -p update.json -D "$T" --clobber && break; sleep 10; done
+            mv "$T/chitalishte-yavorets-$v.apk" "dist/rel-$k.apk"; mv "$T/update.json" "dist/update-$k.json"
           done
           ls -l dist
           AAPT=$(ls -d $ANDROID_HOME/build-tools/*/ | sort -V | tail -1)aapt2
