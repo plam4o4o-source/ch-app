@@ -1,5 +1,5 @@
 [versions]
-agp = "9.4.1"
+agp = "9.5.1"
 kotlin = "2.4.21"
 ksp = "2.3.12"
 coroutines = "1.11.0"
@@ -24,7 +24,7 @@ zxing = "3.5.4"
 codeScanner = "16.1.0"
 palette = "1.1.0"
 # Форми и превръщане между тях (RoundedPolygon/Morph): розетката на избрания раздел.
-graphicsShapes = "1.0.1"
+graphicsShapes = "1.1.0"
 # Credential Manager: запазване на картата и ПИН-а в системния мениджър на пароли.
 credentials = "1.6.0"
 profileinstaller = "1.4.1"
@@ -37,7 +37,7 @@ espresso = "3.7.0"
 # Macrobenchmark / Baseline Profile Gradle plugin. 1.5.0+: съвместим с AGP 9 без android.newDsl=false
 # (1.4.x изисква newDsl=false при AGP 9).
 benchmark = "1.5.0"
-uiautomator = "2.4.0"
+uiautomator = "2.4.1"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
