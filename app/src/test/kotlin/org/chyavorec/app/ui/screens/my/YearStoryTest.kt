@@ -144,6 +144,13 @@ class YearStoryTest {
 
     @Test fun aShortQuickFlickCloses() = assertTrue(swipeCloses(100f, 80L), "кратко, но бързо (≈1250 dp/s) — затваря")
 
+    // Хоризонтално и с едър шрифт слайдът се превърта — плъзгането от началото му пак затваря
+    // (на емулатора превъртаният текст взимаше жеста и 200 dp не стигаха).
+    @Test @Config(qualifiers = "bg-w891dp-h411dp-land-xhdpi", fontScale = 1.69f)
+    fun scrollableSlideStillClosesOnSwipeDown() {
+        assertTrue(swipeCloses(150f, 300L), "150 dp за 300 ms от началото на текста — затваря")
+    }
+
     @Test fun aShortSlowDragDoesNotClose() {
         assertTrue(!swipeCloses(100f, 1_000L), "кратко и бавно — историята се връща")
         assertTrue(onSlide(1))

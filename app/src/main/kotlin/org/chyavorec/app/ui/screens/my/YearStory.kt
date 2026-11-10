@@ -1,5 +1,13 @@
 package org.chyavorec.app.ui.screens.my
 
+import kotlin.math.abs
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.input.pointer.util.addPosition
+import androidx.compose.ui.input.pointer.util.VelocityTracker
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.ScrollState
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
@@ -17,10 +25,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -91,11 +96,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -336,13 +337,15 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
 
     // Плъзгане надолу — затваря (историята се смалява след пръста). Решава цялото изминато
     // разстояние ([dragY]) или скоростта при пускане. Жестът се хваща ИЗВЪН слоя, който се
-    // мести и смалява: иначе координатите се местят заедно с пръста — изминатото и скоростта
-    // излизат по-малки и бързото плъзгане понякога не затваря.
+    // мести и смалява, и в първата фаза (преди превъртането на слайда): иначе превъртаният
+    // текст го взима, а изминатото и скоростта излизат по-малки (координатите вървят с пръста).
     var dragY by remember { mutableFloatStateOf(0f) }
     val density = LocalDensity.current
     val dismiss = remember(density) { StoryDismiss(density) }
     var settling by remember { mutableStateOf<Job?>(null) }
     val close by rememberUpdatedState(onClose)
+    // Превъртането на текущия слайд: надолу от средата на текста — превърта, не затваря.
+    var currentScroll by remember { mutableStateOf<ScrollState?>(null) }
     fun release(velocity: Float) {
         held = false
         if (dismiss.shouldClose(dragY, velocity)) {
@@ -351,34 +354,9 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
             settling = scope.launch { animate(dragY, 0f) { v, _ -> dragY = v } }
         }
     }
-    fun pull(delta: Float): Float {
+    fun pull(delta: Float) {
         settling?.cancel()
-        val before = dragY
         dragY = (dragY + delta).coerceAtLeast(0f)
-        return dragY - before
-    }
-    // Превъртаният слайд (едър шрифт, хоризонтално): надолу от началото на текста — също затваря.
-    val dismissScroll = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset =
-                // Нагоре, докато историята е дръпната — първо се връща тя.
-                if (source == NestedScrollSource.UserInput && available.y < 0f && dragY > 0f) Offset(0f, pull(available.y)) else Offset.Zero
-
-            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                if (source != NestedScrollSource.UserInput || available.y <= 0f) return Offset.Zero
-                held = true
-                return Offset(0f, pull(available.y))
-            }
-
-            override suspend fun onPreFling(available: Velocity): Velocity {
-                if (dragY <= 0f) {
-                    held = false
-                    return Velocity.Zero
-                }
-                release(available.y)
-                return available
-            }
-        }
     }
     val nextLabel = stringResource(R.string.year_next)
     val previousLabel = stringResource(R.string.year_previous)
@@ -388,13 +366,37 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
 
     Box(
         Modifier.fillMaxSize()
-            .nestedScroll(dismissScroll)
-            .draggable(
-                rememberDraggableState { d -> pull(d) },
-                Orientation.Vertical,
-                onDragStarted = { held = true },
-                onDragStopped = { velocity -> release(velocity) },
-            )
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                    val tracker = VelocityTracker().apply { addPosition(down.uptimeMillis, down.position) }
+                    var pulling = false
+                    var last = down.position.y
+                    while (true) {
+                        val change = awaitPointerEvent(PointerEventPass.Initial).changes.firstOrNull { it.id == down.id } ?: break
+                        tracker.addPosition(change.uptimeMillis, change.position)
+                        if (!change.pressed) {
+                            if (pulling) release(tracker.calculateVelocity().y)
+                            break
+                        }
+                        if (!pulling) {
+                            val dy = change.position.y - down.position.y
+                            val dx = change.position.x - down.position.x
+                            val atTop = currentScroll?.canScrollBackward != true
+                            if (atTop && dy > viewConfiguration.touchSlop && dy > abs(dx)) {
+                                pulling = true
+                                held = true
+                                last = change.position.y
+                            }
+                        }
+                        if (pulling) {
+                            pull(change.position.y - last)
+                            last = change.position.y
+                            change.consume()
+                        }
+                    }
+                }
+            }
             .pointerInput(slides.size) {
                 detectTapGestures(
                     onPress = {
@@ -430,6 +432,7 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
             val stateText = stringResource(R.string.year_slide_state, i + 1, slides.size)
             val scroll = rememberScrollState()
             if (current) {
+                SideEffect { currentScroll = scroll }
                 // Докато читателят превърта текста — слайдът стои.
                 LaunchedEffect(scroll) {
                     try {
