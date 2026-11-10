@@ -293,6 +293,8 @@ S = {
 "filter_year": ("Година на издаване", "Publication year"),
 "book_status_as_of": ("Наличност към %1$s", "Availability as of %1$s"),
 "book_hold": ("Заяви книгата", "Place a hold"),
+"book_held": ("Заявена", "Hold placed"),
+"book_held_note": ("Заявена на %1$s. Библиотеката ще отдели книгата за теб.", "Hold placed on %1$s. The library will set the book aside for you."),
 "book_description": ("Описание", "Description"),
 "book_details": ("Библиографски данни", "Bibliographic details"),
 "book_other_authors": ("Други автори", "Other authors"),
@@ -525,6 +527,8 @@ S = {
 "settings_covers_wifi_only_desc": ("По мобилни данни — само вече заредените корици, без нови заявки", "On mobile data, only covers already loaded — no new downloads"),
 "settings_seasonal": ("Сезонни украси", "Seasonal decorations"),
 "settings_seasonal_desc": ("Празници, сезони и обичаи: поздрави, орнаменти, сняг и листа", "Holidays, seasons and traditions: greetings, ornaments, snow and leaves"),
+"settings_shake_surprise": ("Разклащане за „Изненадай ме“", "Shake for “Surprise me”"),
+"settings_shake_surprise_desc": ("Разклати телефона в каталога за случайна налична книга. Докато TalkBack е включен, не действа.", "Shake the phone in the catalogue for a random available book. Does nothing while TalkBack is on."),
 "occ_spring_title": ("Честита пролет!", "Happy spring!"),
 "occ_spring_text": ("Днес е пролетното равноденствие — денят и нощта са равни.", "Today is the spring equinox — day and night are equal."),
 "occ_summer_title": ("Лятно слънцестоене", "Summer solstice"),
@@ -609,6 +613,7 @@ S = {
 "surprise_empty": ("Няма налична книга за предложение", "No book on the shelf to suggest"),
 "surprise_again": ("Още една", "Another one"),
 "surprise_open": ("Към книгата", "Open the book"),
+"shelf_copy_of": ("%1$s, екземпляр %2$d от %3$d", "%1$s, copy %2$d of %3$d"),
 "reader_mode": ("Режим за четене", "Reading mode"),
 "reader_font_size": ("Размер на шрифта", "Font size"),
 "reader_mode_glyph": ("Аа", "Aa"),
@@ -866,7 +871,7 @@ PRIVACY_BG = """Последна актуализация: 7 ноември 2026
 
 Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
-Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб.
+Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб. Телефонът помни седмица, че си я заявил (шифровано, изтрива се при изход).
 
 Документи: „Отвори с приложение за PDF“ сваля документа от chyavorec.org във временните данни на приложението (пази се до седмица) и го отваря в избрано от теб приложение за PDF на телефона.
 
@@ -926,7 +931,7 @@ Unlock for personal screens (optional, “Settings › Privacy”): the card, lo
 
 Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
-Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you.
+Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you. The phone remembers for a week that you placed it (encrypted, deleted when you sign out).
 
 Documents: “Open with a PDF app” downloads the document from chyavorec.org into the app’s temporary data (kept for up to a week) and opens it in a PDF app of your choice on the phone.
 

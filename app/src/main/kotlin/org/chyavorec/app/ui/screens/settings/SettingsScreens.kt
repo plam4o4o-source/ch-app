@@ -1,5 +1,7 @@
 package org.chyavorec.app.ui.screens.settings
 
+import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
+import org.chyavorec.app.ui.screens.catalog.shakeToSurpriseDefault
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -157,6 +159,14 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             NavItem(Icons.Outlined.Language, stringResource(R.string.settings_language), currentLanguageLabel()) { langDialog = true }
             SwitchItem(stringResource(R.string.settings_seasonal), stringResource(R.string.settings_seasonal_desc), s.seasonal) {
                 scope.launch { c.settings.setSeasonal(it) }
+            }
+            // Още неизбрано — както при първото ползване: изкл., ако е включен TalkBack.
+            val touchExploration = rememberIsTouchExplorationEnabled()
+            SwitchItem(
+                stringResource(R.string.settings_shake_surprise), stringResource(R.string.settings_shake_surprise_desc),
+                s.shakeSurprise ?: shakeToSurpriseDefault(touchExploration),
+            ) {
+                scope.launch { c.settings.setShakeSurprise(it) }
             }
 
             GroupTitle(stringResource(R.string.settings_notifications))

@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.screens.catalog
 
 import android.os.Build
+import androidx.activity.compose.LocalActivity
 import org.chyavorec.domain.model.BookStatus
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import androidx.compose.material3.FilledTonalButton
@@ -17,6 +18,7 @@ import androidx.compose.animation.shrinkVertically
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +59,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.BookmarkAdd
+import androidx.compose.material.icons.outlined.BookmarkAdded
 import androidx.compose.material.icons.outlined.ViewModule
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.SwapVert
@@ -263,13 +266,22 @@ fun CatalogScreen(navigate: (String) -> Unit) {
         barScroll.state.heightOffset = 0f
     }
     // „Изненадай ме“: бутонът в лентата или разклащане (само докато каталогът е отпред).
-    val surprise = appViewModel { c -> SurpriseViewModel({ searcher -> surpriseTastes(c, searcher) }) }
+    val surprise = appViewModelWithState { c, saved -> SurpriseViewModel({ searcher -> surpriseTastes(c, searcher) }, saved = saved) }
     val surpriseUi by surprise.ui.collectAsStateWithLifecycle()
     val screenReader = rememberIsTouchExplorationEnabled()
     val roll = { surprise.roll(vm.state.value.engine.data) }
-    // Към друг раздел (или завъртане) — изненадата се затваря, не чака отворена.
-    DisposableEffect(surprise) { onDispose { surprise.close() } }
-    ShakeEffect(enabled = !surpriseUi.open) {
+    // След спиране на процеса — същото предложение, щом каталогът е зареден.
+    val searcher = state.engine.data
+    LaunchedEffect(searcher) { surprise.restore(searcher) }
+    // Към друг раздел — изненадата се затваря, не чака отворена (при завъртане остава).
+    val activity = LocalActivity.current
+    DisposableEffect(surprise) { onDispose { if (activity?.isChangingConfigurations != true) surprise.close() } }
+    // Разклащане: по подразбиране вкл., освен ако при първото ползване е включен TalkBack; с TalkBack — никога.
+    val shakeSetting = settings?.shakeSurprise
+    LaunchedEffect(settings != null, shakeSetting) {
+        if (settings != null && shakeSetting == null) container.settings.initShakeSurprise(shakeToSurpriseDefault(screenReader))
+    }
+    ShakeEffect(enabled = settings != null && !surpriseUi.open && shakeToSurpriseEnabled(shakeSetting, screenReader)) {
         haptic.performHapticFeedback(HapticFeedbackType.GestureThresholdActivate)
         roll()
     }
@@ -433,14 +445,15 @@ fun CatalogScreen(navigate: (String) -> Unit) {
         if (surpriseUi.open) {
             SurpriseOverlay(
                 surpriseUi,
-                // До Android 11 разбъркването (3D завъртане със сянка) изяжда паметта — само резултатът.
-                reduced = reduced || screenReader || Build.VERSION.SDK_INT < Build.VERSION_CODES.S,
+                // До Android 11 — разбъркване без 3D и без сенки на слоя (вж. SurpriseMotion).
+                motion = surpriseMotion(Build.VERSION.SDK_INT, reducedMotion = reduced, screenReader = screenReader),
                 onOpen = { b ->
                     surprise.close()
                     navigate(Routes.book(b.inv))
                 },
                 onAgain = roll,
                 onClose = surprise::close,
+                onRevealed = surprise::markRevealed,
             )
         }
     }
@@ -496,10 +509,7 @@ private fun FiltersSheet(state: CatalogUiState, onDismiss: () -> Unit, onChange:
                 Text(stringResource(R.string.catalog_filters), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f).semantics { heading() })
                 TextButton(onClick = onClear, enabled = q.hasFilters) { Text(stringResource(R.string.action_clear_filters)) }
             }
-            Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.filter_only_available), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                Switch(q.onlyAvailable, onCheckedChange = { v -> onChange { it.copy(onlyAvailable = v) } })
-            }
+            OnlyAvailableRow(q.onlyAvailable) { v -> onChange { it.copy(onlyAvailable = v) } }
             FacetGroup(stringResource(R.string.filter_doc_type), facets.docTypes, q.docType) { v -> onChange { it.copy(docType = v) } }
             val res = LocalResources.current
             FacetGroup(stringResource(R.string.filter_genre), facets.udcSections.map { it.toString() }, q.udcSection?.toString(),
@@ -531,6 +541,26 @@ private fun FiltersSheet(state: CatalogUiState, onDismiss: () -> Unit, onChange:
                 Text(pluralStringResource(R.plurals.catalog_show_results, state.totalResults, state.totalResults))
             }
         }
+    }
+}
+
+/**
+ * „Само налични“: целият ред е един превключвател (TalkBack: „Само налични, превключвател,
+ * изключен“), докосване и на текста превключва; поне 48 dp висок.
+ */
+@Composable
+internal fun OnlyAvailableRow(checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .heightIn(min = 48.dp)
+            .clip(MaterialTheme.shapes.small)
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onChange)
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(stringResource(R.string.filter_only_available), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+        Switch(checked, onCheckedChange = null)
     }
 }
 
@@ -652,7 +682,11 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                     org.chyavorec.app.ui.screens.my.WantToReadToggle(b, snackbar, Modifier.padding(top = 8.dp))
                 }
             }
-            if (ui.canHold && onShelf) {
+            val heldAt = ui.heldAt
+            if (ui.canHold && heldAt != null) {
+                // Вече заявена от този телефон — не втори път; обяснение какво следва.
+                HeldNotice(Formatters.millisDate(context, heldAt.toEpochMilli()) ?: "—", Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+            } else if (ui.canHold && onShelf) {
                 Button(onClick = { vm.placeHold() }, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
                     Icon(Icons.Outlined.BookmarkAdd, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.book_hold))
                 }
@@ -760,6 +794,24 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
             text = {
                 Text(if (result.error == AppError.Unauthorized) stringResource(R.string.hold_login_needed) else errorMessage(result.error))
             },
+        )
+    }
+}
+
+/**
+ * „Заявена“: изключеният бутон (на мястото на „Заяви книгата“ — втора заявка няма) и под него
+ * кога е заявена и какво следва.
+ */
+@Composable
+private fun HeldNotice(date: String, modifier: Modifier = Modifier) {
+    val note = stringResource(R.string.book_held_note, date)
+    Column(modifier) {
+        OutlinedButton(onClick = {}, enabled = false, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+            Icon(Icons.Outlined.BookmarkAdded, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.book_held))
+        }
+        Text(
+            note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 6.dp, start = 4.dp, end = 4.dp),
         )
     }
 }

@@ -35,7 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -111,6 +112,8 @@ fun CatalogShelfView(
     BoxWithConstraints(modifier.fillMaxSize()) {
         val rowWidth = maxWidth - SHELF_PADDING * 2
         val rows = remember(books, rowWidth) { shelves(books, rowWidth) }
+        // Екземплярите на едно заглавие: „екземпляр 2 от 3“ — TalkBack ги различава.
+        val copies = remember(books) { copyNumbers(books) }
         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
             item(contentType = "header") { header() }
             rows.forEachIndexed { r, row ->
@@ -121,7 +124,7 @@ fun CatalogShelfView(
                             verticalAlignment = Alignment.Bottom,
                             horizontalArrangement = Arrangement.spacedBy(SPINE_GAP),
                         ) {
-                            row.forEach { b -> BookSpine(b, onClick = { onOpen(b) }) }
+                            row.forEach { b -> BookSpine(b, copies[b.inv], onOpen = { onOpen(b) }) }
                         }
                         ShelfBoard()
                         Spacer(Modifier.height(14.dp))
@@ -184,13 +187,55 @@ private fun Modifier.verticalText(): Modifier = this
     }
     .rotate(-90f)
 
-/** Гръбче на книга: цвят по раздела по УДК (като корицата), заглавие по дължината, автор дребно. */
+/** Поредният номер и броят на екземплярите на едно заглавие (заглавие + автор) в [books]; само за повече от един. */
+internal fun copyNumbers(books: List<CatalogBook>): Map<Long, Pair<Int, Int>> {
+    val groups = books.groupBy { it.title.trim().lowercase() to it.author.trim().lowercase() }
+    val out = HashMap<Long, Pair<Int, Int>>()
+    for (group in groups.values) {
+        if (group.size < 2) continue
+        group.forEachIndexed { i, b -> out[b.inv] = (i + 1) to group.size }
+    }
+    return out
+}
+
+/** Минималната зона за докосване и за TalkBack. */
+private val TOUCH_WIDTH = 48.dp
+
+/**
+ * Гръбче на книга: цвят по раздела по УДК (като корицата), заглавие по дължината, автор дребно.
+ * Гръбчето се вижда 28–44 dp широко, но възелът за TalkBack е поне 48 dp (центриран върху него,
+ * застъпва съседите); докосването е самото гръбче — Compose разширява зоната му до 48 dp, а при
+ * застъпване печели гръбчето под пръста. [copy] — „екземпляр N от M“ за еднаквите заглавия.
+ */
 @Composable
-private fun BookSpine(b: CatalogBook, onClick: () -> Unit) {
+private fun BookSpine(b: CatalogBook, copy: Pair<Int, Int>?, onOpen: () -> Unit) {
     val base = coverColor(b)
     val w = spineWidth(b)
     val h = spineHeight(b)
-    val description = listOf(b.title, b.author).filter { it.isNotBlank() }.joinToString(", ")
+    val label = listOf(b.title, b.author).filter { it.isNotBlank() }.joinToString(", ")
+    val description = if (copy != null) stringResource(R.string.shelf_copy_of, label, copy.first, copy.second) else label
+    Box(
+        Modifier
+            .layout { measurable, _ ->
+                // В реда заема видимата ширина; възелът е поне 48 dp и е центриран.
+                val visible = w.roundToPx()
+                val touch = maxOf(visible, TOUCH_WIDTH.roundToPx())
+                val placeable = measurable.measure(Constraints.fixed(touch, h.roundToPx()))
+                layout(visible, placeable.height) { placeable.place((visible - touch) / 2, 0) }
+            }
+            .clearAndSetSemantics {
+                role = Role.Button
+                contentDescription = description
+                onClick { onOpen(); true }
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        BookSpineFace(b, base, w, h, onOpen)
+    }
+}
+
+@Composable
+private fun BookSpineFace(b: CatalogBook, base: Color, w: Dp, h: Dp, onOpen: () -> Unit) {
     Box(
         Modifier
             .size(w, h)
@@ -205,8 +250,7 @@ private fun BookSpine(b: CatalogBook, onClick: () -> Unit) {
                 drawRect(band, topLeft = Offset(0f, size.height - 10.dp.toPx()), size = size.copy(height = 1.5.dp.toPx()))
                 drawRect(Color.Black.copy(alpha = 0.18f), topLeft = Offset(size.width - 2.dp.toPx(), 0f), size = size.copy(width = 2.dp.toPx()))
             }
-            .clickable(onClick = onClick)
-            .semantics(mergeDescendants = true) { role = Role.Button; contentDescription = description },
+            .clickable(onClick = onOpen),
         contentAlignment = Alignment.Center,
     ) {
         Row(

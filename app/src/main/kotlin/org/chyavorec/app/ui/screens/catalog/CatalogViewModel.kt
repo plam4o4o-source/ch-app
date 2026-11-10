@@ -259,6 +259,8 @@ class BookViewModel(private val inv: Long, private val container: org.chyavorec.
         val refreshError: AppError? = null,
         val canHold: Boolean = false,
         val liveStatus: org.chyavorec.domain.model.BookStatus? = null,
+        /** Кога читателят е заявил книгата от телефона (вж. [org.chyavorec.data.repository.LibraryRepository.heldAt]). */
+        val heldAt: java.time.Instant? = null,
     ) {
         val loading: Boolean get() = !loaded && error == null
     }
@@ -329,13 +331,20 @@ class BookViewModel(private val inv: Long, private val container: org.chyavorec.
             val caps = container.authRepository.capabilities()
             // „Заяви книгата“ се показва САМО ако библиотечният сървър го поддържа.
             ui.update { it.copy(canHold = caps.holds) }
+            if (caps.holds) container.libraryRepository.heldAt(inv)?.let { at -> ui.update { it.copy(heldAt = at) } }
             if (caps.availability) {
                 (container.readerServices.reader.availability(inv) as? Outcome.Success)?.value?.let { s -> ui.update { it.copy(liveStatus = s) } }
             }
         }
     }
 
-    fun placeHold() = viewModelScope.launch { holdResult.value = container.libraryRepository.placeHold(inv) }
+    fun placeHold() = viewModelScope.launch {
+        if (ui.value.heldAt != null) return@launch
+        val r = container.libraryRepository.placeHold(inv)
+        // Успех — бутонът става „Заявена“ (и остава такъв при следващо отваряне).
+        if (r is Outcome.Success) ui.update { it.copy(heldAt = container.libraryRepository.heldAt(inv) ?: container.clock.now()) }
+        holdResult.value = r
+    }
 
     fun loadContacts() {
         if (contacts.value != null) return

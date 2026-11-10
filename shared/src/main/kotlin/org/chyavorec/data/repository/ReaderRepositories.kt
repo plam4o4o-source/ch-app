@@ -3,6 +3,10 @@ package org.chyavorec.data.repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
@@ -18,6 +22,7 @@ import org.chyavorec.domain.repository.PayloadCache
 import org.chyavorec.domain.repository.SelfCardStore
 import org.chyavorec.domain.service.MembershipService
 import org.chyavorec.domain.service.ReaderService
+import java.time.Instant
 
 /**
  * Профилът на читателя. [data] е общото хранилище — в приложението една инстанция
@@ -69,7 +74,32 @@ class LibraryRepository(
         return r
     }
 
-    suspend fun placeHold(inv: Long): Outcome<Unit> = auth.withSession { service.placeHold(it, inv) }
+    /** Изпратените от телефона заявки (инв. № → кога) — в кеша на читателя, изтриват се при изход. */
+    private val holdsCache: PayloadCache = auth.scopedCache(secureCache)
+    private val holdsClock = clock
+    private val holdsLock = Mutex()
+
+    /** Заявка за книга; при успех се помни ([heldAt]) — сървърът не връща списък със заявките. */
+    suspend fun placeHold(inv: Long): Outcome<Unit> {
+        val r = auth.withSession { service.placeHold(it, inv) }
+        if (r is Outcome.Success) rememberHold(inv)
+        return r
+    }
+
+    /** Кога книгата е заявена от този телефон (в последните [HOLD_KEEP_MILLIS]); `null` — не е. */
+    suspend fun heldAt(inv: Long): Instant? = readHolds()[inv]?.let(Instant::ofEpochMilli)
+
+    private suspend fun readHolds(): Map<Long, Long> {
+        val text = holdsCache.read(KEY_HOLDS)?.text ?: return emptyMap()
+        val now = holdsClock.now().toEpochMilli()
+        val all = runCatching { cacheJson.decodeFromString(holdsSerializer, text) }.getOrNull() ?: return emptyMap()
+        return all.filterValues { now - it in 0..HOLD_KEEP_MILLIS }
+    }
+
+    private suspend fun rememberHold(inv: Long) = holdsLock.withLock {
+        val updated = readHolds() + (inv to holdsClock.now().toEpochMilli())
+        holdsCache.write(KEY_HOLDS, cacheJson.encodeToString(holdsSerializer, updated))
+    }
 
     /** История на четенето — шифрован кеш (10 минути без мрежа), изтрива се при изход. */
     suspend fun history(force: Boolean = true): Outcome<Synced<List<HistoryItem>>> = data.history(force)
@@ -78,6 +108,13 @@ class LibraryRepository(
 
     /** Сменя се при всяка промяна на кешираната история ([ReaderDataRepository.historyVersion]). */
     val historyVersion: StateFlow<Long> get() = data.historyVersion
+
+    companion object {
+        /** Колко дълго книгата се показва като „Заявена“ (библиотеката я пази няколко дни). */
+        const val HOLD_KEEP_MILLIS = 7 * 24 * 60 * 60_000L
+        internal const val KEY_HOLDS = "reader:holds"
+        private val holdsSerializer = MapSerializer(Long.serializer(), Long.serializer())
+    }
 }
 
 /**

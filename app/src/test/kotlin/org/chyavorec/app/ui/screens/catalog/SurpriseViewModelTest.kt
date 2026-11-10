@@ -2,6 +2,7 @@ package org.chyavorec.app.ui.screens.catalog
 
 import android.app.Application
 import android.os.Looper
+import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.Dispatchers
 import org.chyavorec.data.catalog.CatalogSearchEngine
@@ -23,7 +24,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-/** „Изненадай ме“: опит → предложение (само налични, без повторение), затваряне; разклащането. */
+/** „Изненадай ме“: опит → предложение (само налични, без повторение), затваряне, спиране на процеса. */
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class SurpriseViewModelTest {
@@ -32,8 +33,11 @@ class SurpriseViewModelTest {
 
     @Before fun reset() { SurpriseSession.recent = emptyList() }
 
-    private fun vm(tastes: SurpriseTastes = SurpriseTastes()) =
-        SurpriseViewModel({ tastes }, Random(5), Dispatchers.Unconfined)
+    private fun vm(tastes: SurpriseTastes = SurpriseTastes(), saved: SavedStateHandle = SavedStateHandle()) =
+        SurpriseViewModel({ tastes }, Random(5), Dispatchers.Unconfined, saved)
+
+    /** Както след спиране на процеса: само записаните стойности, в нов SavedStateHandle. */
+    private fun restored(saved: SavedStateHandle) = SavedStateHandle(saved.keys().associateWith { saved.get<Any>(it) })
 
     private fun SurpriseViewModel.await(): SurpriseUi {
         val main = shadowOf(Looper.getMainLooper())
@@ -88,33 +92,64 @@ class SurpriseViewModelTest {
         }
         assertTrue(counts.getValue(6L) > 2 * (counts[1L] ?: 0), "$counts")
     }
-}
 
-/** Разклащането: два удара над прага в рамките на 0,7 s; после пауза; един удар или леко движение — нищо. */
-class ShakeDetectorTest {
-    private val g = 9.80665f
-
-    @Test fun twoStrongPeaksAreAShake() {
-        val d = ShakeDetector()
-        assertFalse(d.onSample(0f, 0f, g, 0))
-        assertFalse(d.onSample(2.6f * g, 0f, 0f, 100))
-        // Същият удар (следващото отчитане) не се брои втори път.
-        assertFalse(d.onSample(2.6f * g, 0f, 0f, 160))
-        assertTrue(d.onSample(-2.8f * g, 0f, 0f, 400))
-        // Пауза след разклащане.
-        assertFalse(d.onSample(3f * g, 0f, 0f, 700))
-        assertFalse(d.onSample(3f * g, 0f, 0f, 1_000))
-        // След паузата — пак.
-        assertFalse(d.onSample(3f * g, 0f, 0f, 2_100))
-        assertTrue(d.onSample(3f * g, 0f, 0f, 2_400))
+    /** Спиране на процеса при отворено предложение: същата книга, без ново теглене и разбъркване. */
+    @Test fun suggestionSurvivesProcessDeath() {
+        val saved = SavedStateHandle()
+        val vm = vm(saved = saved)
+        vm.roll(searcher)
+        val first = vm.await()
+        val pick = assertNotNull(first.pick)
+        vm.markRevealed(first.round)
+        val recent = SurpriseSession.recent
+        val again = restored(saved)
+        val vm2 = SurpriseViewModel({ error("без ново теглене") }, Random(99), Dispatchers.Unconfined, again)
+        vm2.ui.value.let {
+            assertTrue(it.open)
+            assertTrue(it.revealed, "без разбъркване")
+            assertTrue(it.loading)
+        }
+        // Каталогът още не е зареден — чака.
+        vm2.restore(null)
+        assertTrue(vm2.ui.value.loading)
+        vm2.restore(searcher)
+        val u = vm2.await()
+        assertEquals(pick.inv, u.pick?.inv)
+        assertEquals(first.round, u.round)
+        assertTrue(u.revealed)
+        assertEquals(recent, SurpriseSession.recent)
+        // Затворено — при следващо спиране не се отваря наново.
+        vm2.close()
+        assertFalse(SurpriseViewModel({ SurpriseTastes() }, saved = restored(again)).ui.value.open)
     }
 
-    @Test fun walkingOrASingleBumpIsNot() {
-        val d = ShakeDetector()
-        // Ходене, телефон в ръка: до ~1.5 g.
-        for (t in 0L until 3_000L step 50) assertFalse(d.onSample(0f, 1.5f * g, 0f, t))
-        // Два удара, но твърде далеч един от друг.
-        assertFalse(d.onSample(3f * g, 0f, 0f, 4_000))
-        assertFalse(d.onSample(3f * g, 0f, 0f, 5_000))
+    /** Спряно по време на избора (още без предложение) — не се възстановява. */
+    @Test fun processDeathWhileShufflingDoesNotReopen() {
+        val saved = SavedStateHandle(mapOf("surprise.open" to true, "surprise.round" to 2))
+        assertFalse(SurpriseViewModel({ SurpriseTastes() }, saved = saved).ui.value.open)
+    }
+
+    /** Книгата вече не е на рафта (или я няма) — изненадата се затваря. */
+    @Test fun restoredBookNoLongerAvailableCloses() {
+        val saved = SavedStateHandle(mapOf("surprise.open" to true, "surprise.round" to 1, "surprise.inv" to 3L))
+        val vm = SurpriseViewModel({ SurpriseTastes() }, Random(1), Dispatchers.Unconfined, saved)
+        vm.restore(searcher)
+        val main = shadowOf(Looper.getMainLooper())
+        val end = System.currentTimeMillis() + 10_000
+        while (vm.ui.value.open && System.currentTimeMillis() < end) { main.idleFor(Duration.ofMillis(10)); Thread.sleep(5) }
+        assertFalse(vm.ui.value.open)
+    }
+
+    /** Показаният резултат се помни (завъртане) — само за текущия опит. */
+    @Test fun revealedIsPerRound() {
+        val vm = vm()
+        vm.roll(searcher)
+        val u = vm.await()
+        vm.markRevealed(u.round + 1)
+        assertFalse(vm.ui.value.revealed)
+        vm.markRevealed(u.round)
+        assertTrue(vm.ui.value.revealed)
+        vm.roll(searcher)
+        assertFalse(vm.ui.value.revealed)
     }
 }

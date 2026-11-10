@@ -42,7 +42,7 @@
 
 Удължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
-Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб.
+Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб. Телефонът помни седмица, че си я заявил (шифровано, изтрива се при изход).
 
 Документи: „Отвори с приложение за PDF“ сваля документа от chyavorec.org във временните данни на приложението (пази се до седмица) и го отваря в избрано от теб приложение за PDF на телефона.
 
@@ -112,7 +112,7 @@ Reading history: for readers who consented at the library, the list of returned 
 
 Renewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
-Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you.
+Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you. The phone remembers for a week that you placed it (encrypted, deleted when you sign out).
 
 Documents: “Open with a PDF app” downloads the document from chyavorec.org into the app’s temporary data (kept for up to a week) and opens it in a PDF app of your choice on the phone.
 

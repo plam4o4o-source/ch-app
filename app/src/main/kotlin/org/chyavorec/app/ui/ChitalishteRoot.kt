@@ -115,7 +115,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.graphicsLayer
 import org.chyavorec.app.ui.components.BrandIntro
+import org.chyavorec.app.ui.components.LocalBookFold
 import org.chyavorec.app.ui.components.LocalNavAnimatedScope
+import org.chyavorec.app.ui.components.rememberBookFold
 import org.chyavorec.app.ui.components.LocalOnlineCovers
 import org.chyavorec.app.ui.components.LocalCoverNetwork
 import org.chyavorec.app.ui.components.observeCoverNetwork
@@ -848,6 +850,8 @@ private fun NavGraphBuilder.screen(
             }
         },
     ) {
-        CompositionLocalProvider(LocalNavAnimatedScope provides this@composable) { content(entry) }
+        // Една стойност за „разгръщането“ на корицата на дестинация — не по една на корица.
+        val fold = rememberBookFold(this@composable, active = !reduced && LocalSharedTransitionsEnabled.current)
+        CompositionLocalProvider(LocalNavAnimatedScope provides this@composable, LocalBookFold provides fold) { content(entry) }
     }
 }
