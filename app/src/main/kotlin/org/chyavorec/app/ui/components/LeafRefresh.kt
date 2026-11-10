@@ -110,11 +110,13 @@ fun StitchRefreshIndicator(state: PullToRefreshState, isRefreshing: Boolean, mod
 
     // Подложката: диск като контейнера на индикатора в M3, но малко по-голям, с ясна сянка и
     // тънък ръб — над сегментите, търсачката и чиповете (същите тонове) розетката не се губи.
-    // Светла тема — най-светлата повърхност (сянката я отделя); тъмна — по-светла от фона.
+    // Светла тема — най-светлата повърхност (сянката я отделя). Тъмна — сянката не се вижда, а
+    // по-светъл диск се слива с полетата (същите тонове): тъмен диск със златен ръб.
     val colors = MaterialTheme.colorScheme
-    val dark = LocalExtendedColors.current.isDark
-    val disc = if (dark) colors.surfaceContainerHighest else colors.surfaceContainerLowest
-    val rim = colors.outlineVariant.copy(alpha = if (dark) 0.9f else 0.6f)
+    val extended = LocalExtendedColors.current
+    val dark = extended.isDark
+    val disc = if (dark) colors.surface else colors.surfaceContainerLowest
+    val rim = if (dark) extended.gold.copy(alpha = 0.6f) else colors.outlineVariant.copy(alpha = 0.6f)
     PullToRefreshDefaults.IndicatorBox(
         state = state,
         isRefreshing = isRefreshing,
