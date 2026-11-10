@@ -1,0 +1,197 @@
+name: Emulator check of wave20/card (temporary)
+# ВРЕМЕННО (клон debug/wave20-card): картата в покой (кадри, CPU, сензорът), наклонът след покоя (API 33) и
+# прехода към картата на цял екран на API 28 — новото (wave20/card, NEW_REF) срещу 1.2.33 (a830b51, BASE_REF).
+# Резултатите — в клона emulator-results, папка v134-card/ (orphan commit; останалото съдържание се запазва).
+# Инструментите са от debug/full-test-133; частите са в .github/perf-check/w20card.sh.
+#   app.apk      — prodRelease x86_64 от NEW_REF, временен ключ
+#   app-base.apk — prodRelease x86_64 от BASE_REF (1.2.33), същият ключ
+on:
+  push:
+    branches: [debug/wave20-card]
+    paths: [.github/workflows/perf-check.yml, .github/perf-check/**]
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  NEW_REF: 58b37b26c9c4874e0232fa1b9d0c75f5026cbdbb
+  BASE_REF: a830b518213e78cc684dcca357dc12f103124440
+  V: v134-card
+jobs:
+  key:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Throwaway signing key, shared by all built test APKs
+        run: |
+          mkdir key; PASS=$(openssl rand -hex 16); echo "$PASS" > key/pass
+          keytool -genkeypair -noprompt -keystore key/t.jks -storepass "$PASS" -keypass "$PASS" \
+            -alias t -keyalg RSA -keysize 2048 -validity 3 -dname "CN=emulator test, O=not for release"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: key
+          path: key/
+          retention-days: 1
+
+  build:
+    needs: key
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { app: new, vname: "1.2.34-card", vc: "1500190" }
+          - { app: base, vname: "1.2.33", vc: "1500183" }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.app == 'base' && env.BASE_REF || env.NEW_REF }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: key
+          path: ${{ runner.temp }}/key
+      - name: versionName (not committed)
+        run: |
+          sed -i 's/versionName = ".*"/versionName = "${{ matrix.vname }}"/' app/build.gradle.kts
+          grep -nE '^val releaseAbis|versionName = ' app/build.gradle.kts
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v6
+      - name: prodRelease with x86_64 added (emulator only, not committed)
+        run: |
+          sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО|' app/build.gradle.kts
+          grep -nE '^val releaseAbis' app/build.gradle.kts
+          K="$RUNNER_TEMP/key"; P=$(cat "$K/pass")
+          export SIGNING_STORE_FILE="$K/t.jks" SIGNING_STORE_PASSWORD="$P" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$P" VERSION_CODE=${{ matrix.vc }}
+          ./gradlew --no-daemon assembleProdRelease
+          mkdir -p dist
+          case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt;; base) O=app-base.apk; R=apk-base-ref.txt;; esac
+          cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/$O
+          echo "${{ matrix.vname }} $(git rev-parse --short HEAD) built prodRelease x86_64 (throwaway key); versionCode ${{ matrix.vc }}" > dist/$R
+          cat dist/*.txt; ls -l dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-${{ matrix.app }}
+          path: dist/
+
+  emulator:
+    needs: [build]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        # card33 — API 33 google_apis x86_64; card28 — API 28. Двете с -gpu swangle_indirect.
+        part: [card33, card28]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: apk-*
+          merge-multiple: true
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l *.apk; cat apk-*.txt
+          python3 -c "import PIL, numpy, cv2" 2>/dev/null && command -v ffmpeg || { sudo apt-get update -qq >/dev/null 2>&1; sudo apt-get install -y -qq python3-pil python3-numpy python3-opencv ffmpeg >/dev/null 2>&1; }
+          python3 -c "import PIL; print('PIL', PIL.__version__)"
+      - name: Run on emulator (${{ matrix.part }}, swangle_indirect)
+        id: run
+        continue-on-error: true
+        timeout-minutes: 80
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ contains(matrix.part, '28') && '28' || '33' }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: bash .github/perf-check/run.sh ${{ matrix.part }}
+      - name: Record the step outcome
+        if: always()
+        continue-on-error: true
+        run: |
+          mkdir -p out/${{ matrix.part }}
+          echo "part=${{ matrix.part }} target=google_apis api=${{ contains(matrix.part, '28') && '28' || '33' }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          cat out/${{ matrix.part }}/job-status.txt
+          rm -rf out/${{ matrix.part }}/rec/*/
+      - uses: actions/upload-artifact@v7
+        if: always()
+        continue-on-error: true
+        with:
+          name: out-${{ matrix.part }}
+          path: out/
+
+  # Клонът emulator-results е голям: fetch без съдържанието на файловете (blob:none), индексът — от върха му;
+  # заменят се само папките на това изпълнение.
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+    needs: [build, emulator]
+    if: always()
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: out-*
+          path: results
+          merge-multiple: true
+      - uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          pattern: apk-*
+          path: apks
+          merge-multiple: true
+      - name: Push results to emulator-results/v134-card (orphan commit; the rest of the branch is kept)
+        run: |
+          set -ex
+          SRC=$(git rev-parse --short HEAD)
+          W=$GITHUB_WORKSPACE
+          RUN=${{ github.run_id }}
+          ls -R results | head -60
+          P="$RUNNER_TEMP/pub"; mkdir -p "$P"; cd "$P"
+          git init -q -b scratch
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch --filter=blob:none --depth 1 origin emulator-results
+          git read-tree FETCH_HEAD
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for p in $(ls "$W/results"); do git rm -r -q --cached --ignore-unmatch "$V/$p"; done
+          mkdir -p "$V"; cp -r "$W/results/." "$V/"
+          mkdir -p "$V/size"; cp "$W"/apks/apk-*ref.txt "$V/size/" 2>/dev/null || true
+          for a in app.apk app-base.apk; do [ -f "$W/apks/$a" ] && echo "$a $(stat -c %s "$W/apks/$a") bytes"; done > "$V/size/apk-size.txt" || true
+          git show FETCH_HEAD:$V/runs.txt > "$V/runs.txt" 2>/dev/null || : > "$V/runs.txt"
+          echo "run $RUN @ $SRC (new ${NEW_REF:0:7}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
+          (
+            cd "$V"
+            echo "# Emulator check of wave20/card (${NEW_REF:0:7}) vs 1.2.33 (a830b51)"
+            echo
+            echo "debug/wave20-card (runs in runs.txt, latest $RUN @ $SRC). card33: API 33 google_apis x86_64; card28: API 28; -gpu swangle_indirect."
+            echo; echo "| part | status |"; echo "|---|---|"
+            for p in $(ls -d */ | tr -d /); do [ -f "$p/job-status.txt" ] && echo "| $p | $(grep -c '## COMPLETE' $p/summary.txt 2>/dev/null | sed 's/^1$/COMPLETE/;s/^0$/incomplete/'); $(cat $p/job-status.txt) |"; done
+            echo; echo '```'; cat size/apk-*ref.txt size/apk-size.txt 2>/dev/null; echo '```'
+            echo
+            for p in $(ls -d */ | tr -d /); do
+              [ -f "$p/summary.txt" ] || continue
+              echo "## $p"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
+            done
+            echo "## Files"; echo
+            find . -type f ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
+          ) > "$RUNNER_TEMP/v-index.md"
+          mv "$RUNNER_TEMP/v-index.md" "$V/index.md"
+          git show FETCH_HEAD:index.md > index.md
+          grep -q "$V/index.md" index.md || { { head -1 index.md; echo; echo "Wave 20, card stream (wave20/card): [$V/index.md]($V/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
+          for p in $(ls "$W/results"); do git add -A -- "$V/$p"; done
+          git add -A -- "$V/size" "$V/runs.txt" "$V/index.md" index.md
+          git commit -q -m "Emulator results $V for $SRC (run $RUN)"
+          git push -f origin HEAD:refs/heads/emulator-results
