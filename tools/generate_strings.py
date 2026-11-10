@@ -862,7 +862,7 @@ PRIVACY_BG = """Последна актуализация: 7 ноември 2026
 
 Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
-Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб.
+Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб. Телефонът помни седмица, че си я заявил (шифровано, изтрива се при изход).
 
 Документи: „Отвори с приложение за PDF“ сваля документа от chyavorec.org във временните данни на приложението (пази се до седмица) и го отваря в избрано от теб приложение за PDF на телефона.
 
@@ -922,7 +922,7 @@ Unlock for personal screens (optional, “Settings › Privacy”): the card, lo
 
 Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
-Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you.
+Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you. The phone remembers for a week that you placed it (encrypted, deleted when you sign out).
 
 Documents: “Open with a PDF app” downloads the document from chyavorec.org into the app’s temporary data (kept for up to a week) and opens it in a PDF app of your choice on the phone.
 
