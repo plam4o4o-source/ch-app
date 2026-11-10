@@ -66,12 +66,13 @@ jobs:
           - { app: base, vname: "1.2.33", vc: "1500183", x86: true }
           - { app: upd, vname: "1.2.34-pre", vc: "1500180", x86: true }
           - { app: dev, vname: "1.2.34", vc: "1", x86: false }
+          - { app: devbase, vname: "1.2.33", vc: "1", x86: false }
           - { app: relsize, vname: "1.2.34", vc: "1500184", x86: false }
           - { app: relsizebase, vname: "1.2.33", vc: "1500183", x86: false }
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ (matrix.app == 'base' || matrix.app == 'relsizebase') && env.BASE_REF || env.NEW_REF }}
+          ref: ${{ (matrix.app == 'base' || matrix.app == 'relsizebase' || matrix.app == 'devbase') && env.BASE_REF || env.NEW_REF }}
       - uses: actions/download-artifact@v8
         with:
           name: key
@@ -86,7 +87,7 @@ jobs:
           java-version: "25"
       - uses: gradle/actions/setup-gradle@v6
       - name: prodRelease (x86_64 added for the emulator APKs only, not committed)
-        if: matrix.app != 'dev'
+        if: matrix.app != 'dev' && matrix.app != 'devbase'
         run: |
           if [ "${{ matrix.x86 }}" = true ]; then
             sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО|' app/build.gradle.kts
@@ -108,12 +109,13 @@ jobs:
           [ -f app/build/outputs/mapping/prodRelease/mapping.txt ] && cp app/build/outputs/mapping/prodRelease/mapping.txt dist/${O%.apk}-mapping.txt || true
           cat dist/*.txt; ls -l dist
       - name: devDebug (demo data, StrictMode)
-        if: matrix.app == 'dev'
+        if: matrix.app == 'dev' || matrix.app == 'devbase'
         run: |
           ./gradlew --no-daemon assembleDevDebug
           mkdir -p dist
-          cp app/build/outputs/apk/dev/debug/app-dev-debug.apk dist/app-dev.apk
-          echo "devDebug $(git rev-parse --short HEAD) (org.chyavorec.app.dev, demo sign-in DEMO-0001)" > dist/apk-dev-ref.txt
+          S=$([ ${{ matrix.app }} = devbase ] && echo -base || true)
+          cp app/build/outputs/apk/dev/debug/app-dev-debug.apk dist/app-dev$S.apk
+          echo "devDebug ${{ matrix.vname }} $(git rev-parse --short HEAD) (org.chyavorec.app.dev, demo sign-in DEMO-0001)" > dist/apk-dev$S-ref.txt
           ls -l dist
       - uses: actions/upload-artifact@v7
         with:
@@ -246,7 +248,8 @@ jobs:
       fail-fast: false
       matrix:
         # API 33 google_apis x86_64, -gpu swangle_indirect; old28 — API 28.
-        part: [ab34, gfx34, idle34, mem34, monkey34, demo34, dev34, misc34, upd34, old28]
+        # Кръг 1 (42882812118): ab34, gfx34, idle34, mem34, monkey34, demo34, dev34, misc34, upd34, old28.
+        part: [upd34, year34b, shake34b, idlecat, mem34b, mem-base]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8

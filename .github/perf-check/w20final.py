@@ -283,6 +283,69 @@ def cmd_ys(ui, h='2400'):
           f"scrollable={scroll} ellipsized={len(ell)} beyond-screen={len(clipped)} {clipped[:3]} | " + ' · '.join(t[:40] for t in texts[:8]))
 
 
+def load_any(p):
+    from PIL import Image
+    if p.endswith('.raw'):
+        import struct
+        b = open(p, 'rb').read()
+        w, h = struct.unpack('<II', b[:8])
+        hdr = len(b) - w * h * 4
+        return Image.frombuffer('RGBA', (w, h), b[hdr:hdr + w * h * 4], 'raw', 'RGBA', 0, 1)
+    return Image.open(p)
+
+
+def classify2(p):
+    from PIL import ImageStat
+    im = load_any(p).convert('L').resize((270, 600))
+    st = ImageStat.Stat(im)
+    mean, std = st.mean[0], st.stddev[0]
+    if mean < 3 and std < 3:
+        k = 'black(secure My screen)'
+    elif mean < 90 and std >= 18:
+        k = 'SLIDE'
+    elif mean < 90:
+        k = 'story-dark/loader'
+    else:
+        k = 'light'
+    return k, mean, std
+
+
+def cmd_rawshots(times, *ps):
+    """Снимките (raw или png) след докосването: кога се вижда прозорецът на историята и кога слайдът."""
+    t = {}
+    for l in read(times).split('\n'):
+        f = l.split()
+        if len(f) == 2:
+            t[f[0]] = float(f[1])
+    t0 = t.get('tapdone', t.get('tap'))
+    prev, first_story, first_slide, out = t0, None, None, []
+    for p in sorted(ps, key=lambda s: int(re.search(r'(\d+)\.(raw|png)$', s).group(1))):
+        i = re.search(r'(\d+)\.(raw|png)$', p).group(1)
+        k, mean, std = classify2(p)
+        te = t.get(i)
+        lo = (prev - t0) * 1000 if prev is not None and t0 is not None else -1
+        hi = (te - t0) * 1000 if te is not None and t0 is not None else -1
+        out.append(f"#{i} [{lo:.0f}..{hi:.0f}] {k.split('(')[0]} m={mean:.0f} s={std:.0f}")
+        if first_story is None and k in ('SLIDE', 'story-dark/loader'):
+            first_story = (lo, hi, i)
+        if first_slide is None and k == 'SLIDE':
+            first_slide = (lo, hi, i)
+        prev = te
+        if p.endswith('.raw'):
+            try:
+                load_any(p).convert('RGB').resize((540, 1200)).save(p[:-4] + '.png')
+            except Exception:
+                pass
+    print(' | '.join(out))
+    f = lambda x: f"shot #{x[2]}, {x[0]:.0f}..{x[1]:.0f} ms after the tap" if x else 'not seen'
+    print(f"STORY window first seen: {f(first_story)}; FIRST SLIDE (content) seen: {f(first_slide)}")
+
+
+def cmd_state(p):
+    k, mean, std = classify2(p)
+    print(('open' if k in ('SLIDE', 'story-dark/loader') else 'closed') + f" ({k} m={mean:.0f} s={std:.0f})")
+
+
 if __name__ == '__main__':
     c, args = sys.argv[1], sys.argv[2:]
     try:

@@ -14,7 +14,7 @@
 #              прегледът, „Само налични“, полицата), настройката за разклащане — новото и 1.2.33
 #   upd34    — 1.2.34-pre (1500180) → 1.2.34 (1500184): „По-късно“, рестарт, „Настройки › Обновления“ с картата
 #   old28    — API 28: картата в покой (плочката), „Изненадай ме“, споделяне на събитие, monkey 2000
-FINAL_PARTS=" ab34 gfx34 idle34 mem34 monkey34 demo34 dev34 misc34 upd34 old28 "
+FINAL_PARTS=" ab34 gfx34 idle34 mem34 monkey34 demo34 dev34 misc34 upd34 old28 year34b shake34b idlecat mem34b "
 W20_PARTS="$W20_PARTS $FINAL_PARTS"
 WF=$H_/w20final.py
 L_SHAKE='Разклащане за „Изненадай ме“'
@@ -386,6 +386,10 @@ part_misc34() {
 }
 
 # ---------------------------------------------------------------- D. КАРТАТА ЗА ОБНОВЯВАНЕ В НАСТРОЙКИТЕ
+# Листът „Размер на текста“ от въведението (първото пускане, прекъснато от диалога за обновяване) — „Затвори“.
+textsize_close() {
+  dump; if has 'text="Размер на текста"' && has 'text="Затвори"'; then log "(onboarding sheet 'Размер на текста' shown after the relaunch → Затвори)"; tap text '=Затвори' >/dev/null; sleep 2; fi
+}
 part_upd34() {
   local p
   helper_install
@@ -400,12 +404,12 @@ part_upd34() {
     tap text '=По-късно|=Later' >/dev/null; sleep 2
     log "downloaded files: $(upd_files)"
     sec "U1. „По-късно“ + relaunch: no dialog; Settings › Обновления shows the ready card"
-    a am force-stop $PKG; launch >/dev/null; sleep 8; dump; log "after 'По-късно' + relaunch: dialog $(has 'text="(Нова версия|New version)' && echo SHOWN || echo 'not shown')"
-    dismiss
+    a am force-stop $PKG; launch >/dev/null; sleep 8; dump; shot update/u-15-relaunch; log "after 'По-късно' + relaunch: dialog $(has 'text="(Нова версия|New version)' && echo SHOWN || echo 'not shown'); on screen: $(texts 6 | cut -c1-200)"
+    textsize_close; dismiss
     if open_settings && settings_find 'е готова|Провери за нова версия|Налична е версия'; then sleep 2; dump; shot update/u-20-settings
       log "SETTINGS › Обновления: $(grep -oE 'text="[^"]*(е готова|Изтеглена и проверена|Инсталирай|Налична е версия|Провери за нова версия|Изтегли и инсталирай)[^"]*"' $OUT/ui.xml | tr '\n' ' ')"
       sec "U2. Process death, then Settings again (the card restored)"
-      a am force-stop $PKG; launch >/dev/null; sleep 5; dismiss
+      a am force-stop $PKG; launch >/dev/null; sleep 5; textsize_close; dismiss
       if open_settings && settings_find 'е готова|Провери за нова версия|Налична е версия'; then sleep 2; dump; shot update/u-30-settings-again
         log "SETTINGS after a 2nd relaunch: $(grep -oE 'text="[^"]*(е готова|Изтеглена и проверена|Инсталирай|Налична е версия|Провери за нова версия)[^"]*"' $OUT/ui.xml | tr '\n' ' ')"
         cp $OUT/ui.xml $OUT/settings-update.xml
@@ -491,19 +495,163 @@ part_old28f() {
   diag_end
 }
 
+# ================================================================= КРЪГ 2
+# Годината: по-точно време (raw снимки ~0.2 s), затваряне с плъзгане (всеки път от първия слайд, по снимка),
+# хоризонтално (с проверка, че екранът наистина е завъртян) — новото и devDebug на 1.2.33 (a830b51).
+year_tap_raw() {  # $1 — етикет: докосване на картата и 24 raw снимки с uptime
+  local p d=/data/local/tmp/ysr
+  year_card_find || { log "YR $1: year card not found"; return 1; }
+  p=$(xy text "$L_YEAR")
+  a "rm -rf $d; mkdir -p $d"
+  cat > $OUT/ysr.sh <<EOF
+read u r < /proc/uptime; echo "tap \$u" > $d/t.txt
+input tap $p
+read u r < /proc/uptime; echo "tapdone \$u" >> $d/t.txt
+i=1; while [ \$i -le 24 ]; do screencap $d/\$i.raw; read u r < /proc/uptime; echo "\$i \$u" >> $d/t.txt; i=\$((i+1)); done
+EOF
+  timeout 20 adb push $OUT/ysr.sh /data/local/tmp/ysr.sh >/dev/null 2>&1
+  T=120 a sh /data/local/tmp/ysr.sh
+  local o=$OUT/yr/$1; mkdir -p $o; timeout 120 adb pull $d/. $o/ >/dev/null 2>&1
+  python3 $WF rawshots $o/t.txt $o/*.raw > $o/result.txt 2>&1
+  log "YR $1: $(tail -1 $o/result.txt)"
+  log "YR $1 shots: $(head -1 $o/result.txt | cut -c1-700)"
+  rm -f $o/*.raw; a "rm -rf $d"
+}
+ystate() {  # снимка → open | closed
+  shot year/state >/dev/null; python3 $WF state $OUT/shots/year/state.png | cut -d' ' -f1
+}
+year_open_fresh() {  # затваря (ако е отворена), отваря отначало и чака първия слайд (до $1 s)
+  local i
+  [ "$(ystate)" = open ] && back 2
+  ready >/dev/null; tab my >/dev/null; sleep 1.5; top_of; year_card_find || return 1
+  tap text "$L_YEAR" >/dev/null
+  for i in $(seq 1 ${1:-25}); do sleep 1; shot year/wait >/dev/null; python3 $WF state $OUT/shots/year/wait.png | grep -q 'SLIDE' && return 0; done
+  return 1
+}
+year_swipes2() {  # $1 — етикет (new | base), $2 — колко пъти всяко
+  local spec px dur lbl dp dist y1 r k n=0 c=0
+  dp=$(dens | tr -dc 0-9); [ -n "$dp" ] || dp=420
+  for spec in "d200t150:200:150" "d200t300:200:300" "d200t600:200:600" "d120fast:120:70" "d120slow:120:900" "d40fast:40:45" "d20fast:20:45" "v133fast200:525:200"; do
+    IFS=: read lbl px dur <<< "$spec"
+    dist=$(( px * dp / 160 )); [ $lbl = v133fast200 ] && dist=$((H*55/100))
+    r=""
+    for k in $(seq 1 ${2:-2}); do
+      year_open_fresh ${YWAIT:-25} || { r="$r no-open"; continue; }
+      sleep 1.2; y1=$((H*30/100))
+      a input swipe $((W/2)) $y1 $((W/2)) $((y1 + dist)) $dur; sleep 2.5
+      shot year/sw-$1-$lbl-$k >/dev/null
+      r="$r $(python3 $WF state $OUT/shots/year/sw-$1-$lbl-$k.png | cut -d' ' -f1)"
+    done
+    log "YEAR2 $1 swipe $lbl ($dist px ≈ $((dist * 160 / dp)) dp in $dur ms):$r"
+  done
+  [ "$(ystate)" = open ] && back 2
+}
+land_on() {  # хоризонтално; проверка по йерархията на uiautomator (rotation="1|3")
+  local m
+  for m in 1 2 3; do
+    case $m in
+      1) a settings put system accelerometer_rotation 0; a settings put system user_rotation 1; a wm user-rotation lock 1 >/dev/null 2>&1;;
+      2) a cmd window user-rotation lock 1 >/dev/null 2>&1; a content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:1 >/dev/null 2>&1;;
+      3) a settings put system accelerometer_rotation 1; emu rotate >/dev/null; sleep 1; emu sensor set acceleration 9.81:0:0 >/dev/null;;
+    esac
+    sleep 3; dump
+    if grep -qE 'hierarchy rotation="(1|3)"' $OUT/ui.xml; then log "LANDSCAPE on (method $m): $(grep -oE 'hierarchy rotation="[0-9]"' $OUT/ui.xml); $(a dumpsys window displays 2>/dev/null | tr -d '\r' | grep -m1 -oE 'mRotation=[0-9]|cur=[0-9x]+' | tr '\n' ' ')"; LAND_M=$m; return 0; fi
+  done
+  log "LANDSCAPE: NOT achieved with any method ($(grep -oE 'hierarchy rotation="[0-9]"' $OUT/ui.xml); user_rotation=$(a settings get system user_rotation | tr -d '\r'); $(a dumpsys window displays 2>/dev/null | tr -d '\r' | grep -m2 -oE 'mRotation=[0-9]|mUserRotation=[A-Z_0-9]+' | tr '\n' ' '))"
+  return 1
+}
+land_off() {
+  emu sensor set acceleration 0:9.81:0 >/dev/null; a settings put system accelerometer_rotation 0; a settings put system user_rotation 0; a wm user-rotation lock 0 >/dev/null 2>&1; sleep 2
+}
+year_slides_walk() {  # $1 — етикет: всеки слайд (докосване вдясно → следващ), снимка, ys, превъртане вътре
+  local i
+  year_open_fresh 25 || { log "YEAR $1: story did not open"; return 1; }
+  for i in 1 2 3 4 5 6 7 8 9; do
+    sleep 1.2; dump; shot year/$1-slide-$i >/dev/null; cp $OUT/ui.xml $OUT/year-$1-$i.xml 2>/dev/null
+    log "YEAR $1 slide $i: $(python3 $WF ys $OUT/ui.xml $H | cut -c1-260)"
+    a input swipe $((W/2)) $((H*70/100)) $((W/2)) $((H*45/100)) 600; sleep 1; shot year/$1-slide-$i-scrolled >/dev/null
+    log "  slide $i after a slow drag up inside: diff $(python3 $W19 rdiff $OUT/shots/year/$1-slide-$i.png $OUT/shots/year/$1-slide-$i-scrolled.png "0 0 $W $H" 2>&1 | tail -1)"
+    [ "$(python3 $WF state $OUT/shots/year/$1-slide-$i-scrolled.png | cut -d' ' -f1)" = open ] || { log "  story closed at slide $i"; return 0; }
+    a input tap $((W*88/100)) $((H/2)); sleep 0.6
+  done
+  [ "$(ystate)" = open ] && back 2
+}
+part_year34b() {
+  local i
+  helper_install
+  dev_install
+  anims 1
+  warmup
+  demo_signin_remember
+  sec "Y1. Year story, new (b06d1ce devDebug): tap → raw screencaps (~0.2 s each), fresh process ×2 and reopen ×2"
+  for i in 1 2; do
+    a am force-stop $PKG; sleep 2; launch >/dev/null; sleep 5; dismiss; ready; tab my; sleep 3; top_of
+    year_tap_raw fresh-$i; sleep 2; [ "$(ystate)" = open ] && back 2
+    ready; tab my; sleep 2; top_of; year_tap_raw reopen-$i; sleep 2; [ "$(ystate)" = open ] && back 2
+  done
+  sec "Y2. Swipe-down dismiss, new: every swipe from the first slide of a freshly opened story, twice; open/closed by screenshot"
+  year_swipes2 new 2
+  sec "Y3. Landscape + font 1.3 + „Много голям“, new: every slide"
+  set_text_size '=Много голям' >/dev/null; back 1.5; back 1.5; a settings put system font_scale 1.3; sleep 2
+  if land_on; then year_slides_walk land13; fi
+  land_off
+  sec "Y4. Portrait + font 1.3 + „Много голям“, new: every slide"
+  year_slides_walk port13
+  a settings put system font_scale 1.0; sleep 1; set_text_size '=Стандартен' >/dev/null; back 1.5; back 1.5
+  sec "Y5. The same swipes on 1.2.33 devDebug (a830b51), for comparison (the story takes ~17 s to load there)"
+  a am force-stop $PKG; timeout 60 adb uninstall $PKG >/dev/null 2>&1
+  timeout 180 adb install -r app-dev-base.apk 2>&1 | tail -1
+  a cmd locale set-app-locales $PKG --locales bg-BG; a pm grant $PKG android.permission.POST_NOTIFICATIONS
+  log "installed: $(cat apk-dev-base-ref.txt 2>/dev/null); $(a dumpsys package $PKG | grep -m2 -E 'versionName|versionCode' | tr -s ' ' | tr -d '\r' | tr '\n' ' ')"
+  warmup; demo_signin_remember
+  YWAIT=40 year_swipes2 base 1
+  diag_end
+}
+part_shake34b() {
+  anims 1
+  warmup
+  sec "SK1. Default setting: 3 peaks + stillness, ×4 (positive control)"
+  local i; for i in 1 2 3 4; do shake_round def-$i shake3; sleep 1; done
+  sec "SK2. Settings › Изглед: off; shake ×3 must do nothing"
+  restart
+  if open_settings && settings_find "=$L_SHAKE"; then tap text "=$L_SHAKE" >/dev/null; sleep 1.5; dump; shot shake/b-setting-off; log "setting now: $(python3 $WF checkstate $OUT/ui.xml "$L_SHAKE")"; fi
+  restart
+  for i in 1 2 3; do shake_round off-$i shake3; sleep 1; done
+  sec "SK3. Setting back on (after an app restart); shake ×2 opens again"
+  restart
+  if open_settings && settings_find "=$L_SHAKE"; then tap text "=$L_SHAKE" >/dev/null; sleep 1.5; dump; log "setting now: $(python3 $WF checkstate $OUT/ui.xml "$L_SHAKE")"; fi
+  restart
+  for i in 1 2; do shake_round on-$i shake3; sleep 1; done
+  diag_end
+}
+part_idlecat() {
+  anims 1
+  warmup
+  sec "IC. Catalogue at rest without a focused search field: 30 s after opening, then 15 s"
+  a am force-stop $PKG; sleep 2; launch >/dev/null; sleep 3; dismiss; ready; tab catalog; waitfor "$RX_RESULTS" 60
+  idle_at catalog-plain; log "  focused field: $(grep -c 'focused="true"' $OUT/ui.xml) node(s) focused; IME $(a dumpsys input_method | tr -d '\r' | grep -m1 -oE 'mInputShown=(true|false)')"
+  tap content-desc "$L_SHELF" >/dev/null && { idle_at catalog-shelf-plain; tap content-desc "$L_LIST" >/dev/null; sleep 1; }
+  search_catalog 12 >/dev/null; hide_ime
+  idle_at catalog-search-typed; log "  focused field: $(grep -c 'focused="true"' $OUT/ui.xml) node(s) focused; IME $(a dumpsys input_method | tr -d '\r' | grep -m1 -oE 'mInputShown=(true|false)')"
+  diag_end
+}
+
 part_final() {
   case "$FINAL_PARTS" in *" $PART "*) ;; *) return 1;; esac
   case $PART in
     ab34) part_ab34;;
     gfx34) part_gfx34;;
     idle34) part_idle34;;
-    mem34) part_mem34;;
+    mem34|mem34b) part_mem34;;
     monkey34) part_monkey34;;
     demo34) part_demo34;;
     dev34) part_dev34;;
     misc34) part_misc34;;
     upd34) part_upd34;;
     old28) part_old28f;;
+    year34b) part_year34b;;
+    shake34b) part_shake34b;;
+    idlecat) part_idlecat;;
   esac
   return 0
 }
