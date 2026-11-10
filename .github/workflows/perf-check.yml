@@ -86,7 +86,7 @@ jobs:
       fail-fast: false
       matrix:
         # card33 — API 33 google_apis x86_64; card28 — API 28. Двете с -gpu swangle_indirect.
-        part: [card33, card28]
+        part: [card28]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8

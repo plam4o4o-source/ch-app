@@ -71,7 +71,7 @@ c28_round() {  # $1 — new | base, $2 — кръг
     ready; tab my; sleep 2; dump
     p=$(xy text '=Читателска карта|=Library card'); [ -n "$p" ] && a input tap $p || card_screen
     sleep 3; dump
-    [ $i = 1 ] && shot c28/$K-$2-card
+    [ $i = 1 ] && eshot c28-$K-$2-card >/dev/null
     tap text "$L_CARDSHOW" >/dev/null; sleep 3
     [ $i = 1 ] && eshot c28-$K-$2-full >/dev/null
     back 2.5; back 2
@@ -81,6 +81,19 @@ c28_round() {  # $1 — new | base, $2 — кръг
   gc=$(grep -E " $pid +[0-9]+ " $OUT/logcat-c28-$K-$2.txt | grep -cE 'GC freed|concurrent copying GC|WaitForGcToComplete')
   log "C28 $K round $2: GC lines in logcat for pid $pid: $gc; $(grep -E " $pid +[0-9]+ " $OUT/logcat-c28-$K-$2.txt | grep -E 'GC freed' | tail -3 | cut -c1-200 | tr '\n' '~')"
 }
+card_add28() {  # картата на API 28: полето, после текстът (с повторение — клавиатурата идва бавно)
+  local i p
+  for i in 1 2 3; do
+    card_screen; dump; card_shown && return 0
+    p=$(xy --all class EditText | sed -n 1p)
+    [ -n "$p" ] || { log "CARD28: no field: $(texts 8 | cut -c1-200)"; continue; }
+    a input tap $p; sleep 2.5; a input text "$CARD_NO"; sleep 1.5; dump
+    log "CARD28 try $i after typing: $(texts 12 | cut -c1-260)"
+    hide_ime; sleep 1; tap text '=Запази|=Save' >/dev/null; sleep 3; dump; card_shown && { log "CARD28: card shown"; return 0; }
+    back 1.5
+  done
+  log "CARD28: NOT added"; return 1
+}
 part_card28() {
   local K r
   for r in 1 2; do
@@ -89,7 +102,8 @@ part_card28() {
       inst $(apk_of $K) $K $(ref_of $K) || continue
       anims 1
       launch >/dev/null; sleep 6; dismiss; ready
-      card_open >/dev/null; leave
+      card_add28 || { shot c28/$K-$r-no-card; continue; }
+      leave
       c28_round $K $r
     done
   done
