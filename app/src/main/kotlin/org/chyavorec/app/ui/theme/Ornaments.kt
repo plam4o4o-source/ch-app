@@ -5,7 +5,16 @@ import java.time.LocalDate
 import java.time.Month
 import java.time.temporal.ChronoUnit
 
-/** Мотиви от българската шевица (рисуват се като векторни пътища — виж ui/components/Decor.kt). */
+/**
+ * Мотиви от българската шевица — общият речник („кой мотив кога“). Рисуват го три
+ * „превода“, всеки с нарочно свой мащаб и цветове:
+ * - векторни пътища (рамки, ленти) — `addShevitsaMotif` в ui/components/Decor.kt;
+ * - схеми за бродиране бод по бод — `StitchCharts` в ui/components/Stitching.kt;
+ * - тъканата „жива шевица“ (ромб и осморъка в ромбова мрежа) — AGSL в [ShevitsaShaders]
+ *   с едно Kotlin копие [ShevitsaPattern].
+ * ShevitsaSourcesTest пази общата форма (ромб в ромба, осмолъчна осморъка), а
+ * ShevitsaParityTest — съвпадението на AGSL с Kotlin.
+ */
 enum class ShevitsaMotif {
     /** Ромб с ромб и точка в средата — най-старият „пазещ“ знак. */
     RHOMBUS,
