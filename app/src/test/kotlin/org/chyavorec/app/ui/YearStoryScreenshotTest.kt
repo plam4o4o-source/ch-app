@@ -28,6 +28,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
+import org.chyavorec.app.ui.theme.Brand
+import org.chyavorec.app.ui.screens.my.StoryMessage
+import org.chyavorec.app.data.local.TextScale
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.platform.LocalDensity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.chyavorec.app.ui.components.LocalReducedMotion
 import org.chyavorec.app.ui.components.SectionLabel
@@ -59,6 +64,7 @@ import java.io.File
 @Config(application = Application::class, qualifiers = "bg-w411dp-h891dp-xhdpi")
 class YearStoryScreenshotTest {
     @get:Rule val compose = createComposeRule()
+    private val large = appFontScale(1.3f, TextScale.XLARGE.factor)
     private val outDir = File("build/reports/screenshots").apply { mkdirs() }
 
     private fun save(bmp: Bitmap, name: String) = File(outDir, "$name.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
@@ -67,13 +73,16 @@ class YearStoryScreenshotTest {
         compose.waitUntil(10_000) { compose.onAllNodes(hasText(text, substring = true) or hasContentDescription(text, substring = true)).fetchSemanticsNodes().isNotEmpty() }
 
     /** Слайдът [kind] в средата на своя таймер: влизането е завършило, лентичката — наполовина. */
-    private fun slide(kind: YearSlideKind, name: String, summaryText: String) {
+    private fun slide(kind: YearSlideKind, name: String, summaryText: String, fontScale: Float = 1f) {
         val index = yearSlides(ShareFixtures.year).indexOf(kind)
         compose.mainClock.autoAdvance = false
         compose.setContent {
-            ChitalishteTheme(mode = ThemeMode.LIGHT) {
-                CompositionLocalProvider(LocalReducedMotion provides false) {
-                    YearStory(ShareFixtures.year, onClose = {}, siteUrl = "https://chyavorec.org", initialSlide = index)
+            val d = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(d.density, fontScale)) {
+                ChitalishteTheme(mode = ThemeMode.LIGHT) {
+                    CompositionLocalProvider(LocalReducedMotion provides false) {
+                        YearStory(ShareFixtures.year, onClose = {}, siteUrl = "https://chyavorec.org", initialSlide = index)
+                    }
                 }
             }
         }
@@ -97,6 +106,34 @@ class YearStoryScreenshotTest {
     @Test fun archetype() = slide(YearSlideKind.ARCHETYPE, "year-07-archetype", "Книжен дракон")
 
     @Test fun outro() = slide(YearSlideKind.OUTRO, "year-08-outro", "Благодарим ти")
+
+    /** Хоризонтално: по-тесни отстъпи, по-малки цифри, а каквото не се побира — превърта се. */
+    @Config(qualifiers = "bg-w891dp-h411dp-land-xhdpi")
+    @Test fun landscapeBooks() = slide(YearSlideKind.BOOKS, "year-11-landscape-books", "28 книги")
+
+    @Config(qualifiers = "bg-w891dp-h411dp-land-xhdpi")
+    @Test fun landscapeMonth() = slide(YearSlideKind.MONTH, "year-12-landscape-month", "Септември")
+
+    /** „Много голям“ в приложението и 1.3 в системата: текстът расте и се пренася, цифрите — не. */
+    @Test fun largeFontBooks() = slide(YearSlideKind.BOOKS, "year-13-large-font-books", "28 книги", fontScale = large)
+
+    @Test fun largeFontArchetype() = slide(YearSlideKind.ARCHETYPE, "year-14-large-font-archetype", "Книжен дракон", fontScale = large)
+
+    /** Без връзка и без изтеглена история: „Няма връзка“ и „Опитай отново“, не „няма книги“. */
+    @Test fun offline() {
+        compose.setContent {
+            ChitalishteTheme(mode = ThemeMode.LIGHT) {
+                Box(Modifier.fillMaxSize().background(Brand.Ink)) {
+                    StoryMessage(
+                        "Няма връзка", "Историята на четенето ти още не е на телефона. Провери връзката и опитай отново.",
+                        onClose = {}, onRetry = {},
+                    )
+                }
+            }
+        }
+        shown("Опитай отново")
+        save(compose.onRoot().captureToImage().asAndroidBitmap(), "year-15-offline")
+    }
 
     /** Картата в „Моето“: голяма (декември–януари) и малка (през годината), светла и тъмна тема. */
     private fun hubCards(mode: ThemeMode, name: String) {

@@ -28,6 +28,7 @@ import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.PeriodicSyncWorker
 import org.chyavorec.app.ui.navigation.AppShortcuts
+import org.chyavorec.app.ui.share.ShareFiles
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.Raleway
 import org.chyavorec.app.widget.WidgetUpdater
@@ -84,6 +85,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         appScope.launch { warmUp() }
         // Свалените PDF-и: по-старите от седмица, над 50 MB общо и прекъснатите (.part) — вън.
         appScope.launch(Dispatchers.IO) { runCatching { container.documents.prune(dropPartial = true) }.logFailure("startup.documents") }
+        // Картинките за споделяне (и личните слайдове от „Моята читателска година“) — по-старите от час.
+        appScope.launch(Dispatchers.IO) { runCatching { ShareFiles.prune(this@ChitalishteApp) }.logFailure("startup.share") }
         // Само тук нечетимата сесия се брои към изхода — фоновите събуждания не броят.
         appScope.launch { runCatching { container.authRepository.restore(countLaunch = true) }.logFailure("startup.restore") }
         // „Кажи ми, когато е на рафта“ — при всеки нов каталог, приет на преден план (фоновият — PeriodicSyncWorker).

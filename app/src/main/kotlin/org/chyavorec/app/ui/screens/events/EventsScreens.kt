@@ -126,6 +126,8 @@ import java.time.LocalDate
 import org.chyavorec.app.ui.share.ShareImageRequest
 import org.chyavorec.app.ui.share.ShareCards
 import org.chyavorec.app.ui.share.ShareActionButton
+import org.chyavorec.app.ui.share.ShareImageHost
+import org.chyavorec.app.ui.share.rememberShareImageState
 
 @Composable
 private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier) {
@@ -497,6 +499,9 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
     }
     val permission = org.chyavorec.app.ui.screens.settings.rememberNotificationPermission()
 
+    // Споделянето като картинка — на нивото на екрана (бутонът в лентата може да изчезне, докато се рисува).
+    val share = rememberShareImageState()
+    ShareImageHost(share)
     Scaffold(
         topBar = {
             BackTopBar("", onBack, paneLabel = event?.title.orEmpty(), actions = {
@@ -506,6 +511,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
                     ShareActionButton(
                         onShareLink = { Intents.share(context, e.title, text) },
                         image = { ShareImageRequest(ShareCards.event(context, e), e.title, text) },
+                        state = share,
                     )
                 }
             })

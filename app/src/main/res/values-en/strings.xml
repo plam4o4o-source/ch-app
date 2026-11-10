@@ -787,10 +787,12 @@
     <string name="year_card_open">Watch the story</string>
     <string name="year_card_text">Your books, favourite author and record month — as a full-screen story.</string>
     <string name="year_empty">No books borrowed this year yet.</string>
+    <string name="year_error_title">Couldn’t load the story</string>
     <string name="year_intro_cd">%1$d — your year in books</string>
     <string name="year_intro_title">your year in books</string>
     <string name="year_month_label">Record month</string>
     <string name="year_next">Next slide</string>
+    <string name="year_offline_text">Your reading history isn’t on this phone yet. Check your connection and try again.</string>
     <string name="year_outro_text">The library looks forward to seeing you again in %1$d.</string>
     <string name="year_outro_title">Thank you for reading with us!</string>
     <string name="year_previous">Previous slide</string>

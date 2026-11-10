@@ -156,6 +156,8 @@ import org.chyavorec.domain.model.SearchField
 import org.chyavorec.app.ui.share.ShareImageRequest
 import org.chyavorec.app.ui.share.ShareCards
 import org.chyavorec.app.ui.share.ShareActionButton
+import org.chyavorec.app.ui.share.ShareImageHost
+import org.chyavorec.app.ui.share.rememberShareImageState
 import org.chyavorec.app.ui.components.openLibraryCoverUrl
 import org.chyavorec.app.ui.components.LocalOnlineCovers
 
@@ -584,6 +586,9 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
     // „Искам да прочета“ / „Кажи ми“ — потвърждение и „Отмени“.
     val snackbar = remember { androidx.compose.material3.SnackbarHostState() }
 
+    // Споделянето като картинка — на нивото на екрана (бутонът в лентата може да изчезне, докато се рисува).
+    val share = rememberShareImageState()
+    ShareImageHost(share)
     Scaffold(snackbarHost = { androidx.compose.material3.SnackbarHost(snackbar) }, topBar = {
         BackTopBar("", onBack, paneLabel = b?.title.orEmpty(), actions = {
             if (b != null) {
@@ -598,6 +603,7 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                         val cover = if (onlineCovers) b.coverUrl.ifBlank { null } ?: openLibraryCoverUrl(b.isbn, large = true) else null
                         ShareImageRequest(ShareCards.book(b, bookUrl, cover), b.title, text)
                     },
+                    state = share,
                 )
             }
         })

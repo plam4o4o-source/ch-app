@@ -53,8 +53,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.chyavorec.app.R
@@ -175,37 +180,59 @@ internal fun SlideBackdrop(look: SlideLook, drift: () -> Float, modifier: Modifi
 
 /**
  * Съдържанието на слайда (без фона). [appear] — влизането 0..1 (при намалено движение и в
- * картинката за споделяне — 1). Шрифтът е до 1.3× — големите цифри иначе не се побират.
+ * картинката за споделяне — 1). Текстът следва размера на шрифта в системата и се пренася;
+ * големите цифри не растат с него, а се смаляват по наличната височина ([numeral]). С [scroll]
+ * (историята) — ако не се побира (хоризонтално, таблет, едър шрифт), слайдът се превърта.
  */
 @Composable
-internal fun SlideBody(s: ReadingYear.Summary, kind: YearSlideKind, appear: () -> Float, modifier: Modifier = Modifier) {
-    val density = LocalDensity.current
-    CompositionLocalProvider(LocalDensity provides Density(density.density, density.fontScale.coerceAtMost(1.3f))) {
-        Column(
-            modifier.fillMaxWidth().clearAndSetSemantics { },
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            when (kind) {
-                YearSlideKind.INTRO -> IntroSlide(s, appear)
-                YearSlideKind.BOOKS -> BooksSlide(s, appear)
-                YearSlideKind.AUTHOR -> AuthorSlide(s, appear)
-                YearSlideKind.SECTION -> SectionSlide(s, appear)
-                YearSlideKind.MONTH -> MonthSlide(s, appear)
-                YearSlideKind.STREAK -> StreakSlide(s, appear)
-                YearSlideKind.ARCHETYPE -> ArchetypeSlide(s, appear)
-                YearSlideKind.OUTRO -> OutroSlide(s, appear)
+internal fun SlideBody(s: ReadingYear.Summary, kind: YearSlideKind, appear: () -> Float, modifier: Modifier = Modifier, scroll: ScrollState? = null) {
+    BoxWithConstraints(modifier.fillMaxWidth().clearAndSetSemantics { }) {
+        // Цифрите — в пълен размер от ~560 dp височина нагоре; в картата за споделяне — винаги.
+        val scale = if (scroll == null) 1f else (maxHeight / SLIDE_DESIGN_HEIGHT).coerceIn(0.45f, 1f)
+        CompositionLocalProvider(LocalNumeralScale provides scale) {
+            Column(
+                (if (scroll != null) Modifier.verticalScroll(scroll) else Modifier).fillMaxWidth().heightIn(min = maxHeight),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                when (kind) {
+                    YearSlideKind.INTRO -> IntroSlide(s, appear)
+                    YearSlideKind.BOOKS -> BooksSlide(s, appear)
+                    YearSlideKind.AUTHOR -> AuthorSlide(s, appear)
+                    YearSlideKind.SECTION -> SectionSlide(s, appear)
+                    YearSlideKind.MONTH -> MonthSlide(s, appear)
+                    YearSlideKind.STREAK -> StreakSlide(s, appear)
+                    YearSlideKind.ARCHETYPE -> ArchetypeSlide(s, appear)
+                    YearSlideKind.OUTRO -> OutroSlide(s, appear)
+                }
             }
         }
     }
 }
+
+/** Височината, при която големите цифри са в пълния си размер. */
+private val SLIDE_DESIGN_HEIGHT = 560.dp
+
+/** Колко от пълния си размер са големите цифри (по наличната височина). */
+private val LocalNumeralScale = staticCompositionLocalOf { 1f }
+
+/**
+ * Размерът на голяма цифра (годината, броят книги, месецът): [size] при обикновен шрифт —
+ * не расте с шрифта в системата (иначе не се побира), а се смалява по височината на слайда.
+ */
+@Composable
+private fun numeral(size: Float): TextUnit = with(LocalDensity.current) { (size * LocalNumeralScale.current).dp.toSp() }
 
 private val Paper = Brand.Parchment
 private val GoldSoft = Brand.GoldLight
 
 @Composable
 private fun SlideLabel(text: String, appear: () -> Float) {
-    CardLabel(text, modifier = Modifier.rise(appear, 0f, 0.3f))
+    // Като [CardLabel], но се пренася на втори ред (едър шрифт).
+    Text(
+        text.uppercase(), style = sans(11.sp, Brand.Gold, FontWeight.Bold, spacing = 0.2f), textAlign = TextAlign.Center,
+        modifier = Modifier.rise(appear, 0f, 0.3f),
+    )
     Spacer(Modifier.height(14.dp))
 }
 
@@ -215,7 +242,7 @@ private fun CountUp(target: Int, appear: () -> Float, from: Float, to: Float, si
     val shown by remember(target) { derivedStateOf { (target * part(appear(), from, to)).roundToInt() } }
     Text(
         shown.toString(),
-        style = serif(size.sp, color, lineHeight = 1f).copy(fontFeatureSettings = "tnum"),
+        style = serif(numeral(size.toFloat()), color, lineHeight = 1f).copy(fontFeatureSettings = "tnum"),
         maxLines = 1,
         modifier = Modifier.graphicsLayer {
             val t = part(appear(), from - 0.05f, from + 0.15f)
@@ -260,7 +287,7 @@ private fun IntroSlide(s: ReadingYear.Summary, appear: () -> Float) {
             val start = 0.12f + i * 0.08f
             Text(
                 digit.toString(),
-                style = serif(124.sp, Brand.Gold, lineHeight = 1f).copy(fontFeatureSettings = "tnum"),
+                style = serif(numeral(124f), Brand.Gold, lineHeight = 1f).copy(fontFeatureSettings = "tnum"),
                 modifier = Modifier.graphicsLayer {
                     val t = part(appear(), start, start + 0.38f)
                     alpha = t
@@ -431,7 +458,7 @@ private fun MonthSlide(s: ReadingYear.Summary, appear: () -> Float) {
     SlideLabel(stringResource(R.string.year_month_label), appear)
     val name = monthName(peak)
     // Дългите имена („Септември“) — по-дребно, за да са на един ред и в картата за споделяне.
-    Text(name, style = serif(if (name.length > 6) 54.sp else 64.sp, Brand.Gold, lineHeight = 1f), maxLines = 1, modifier = Modifier.rise(appear, 0.05f, 0.4f))
+    Text(name, style = serif(numeral(if (name.length > 6) 54f else 64f), Brand.Gold, lineHeight = 1f), maxLines = 1, modifier = Modifier.rise(appear, 0.05f, 0.4f))
     Spacer(Modifier.height(6.dp))
     Text(
         pluralStringResource(R.plurals.history_year_count, s.peakCount, s.peakCount),
@@ -635,3 +662,6 @@ fun YearShareCard(s: ReadingYear.Summary, kind: YearSlideKind, url: String) {
 
 /** Вътрешни отстъпи на слайда в историята — под лентите горе и над бутона долу. */
 internal val StoryContentPadding = PaddingValues(start = 28.dp, end = 28.dp, top = 96.dp, bottom = 104.dp)
+
+/** Същото на нисък екран (хоризонтално) — само колкото лентите горе и бутона долу. */
+internal val StoryContentPaddingCompact = PaddingValues(start = 28.dp, end = 28.dp, top = 76.dp, bottom = 84.dp)

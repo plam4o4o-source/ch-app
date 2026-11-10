@@ -47,10 +47,15 @@ import org.chyavorec.app.ui.theme.Brand
  * Бутонът „Сподели“ в лентата на събитие, книга и новина: лист с избор — „Сподели като
  * картинка“ (карта с QR код, [ShareImageHost]) или връзката като текст ([onShareLink],
  * досегашното споделяне). Докато картинката се рисува, вместо иконата се върти индикатор.
+ *
+ * [state] — състоянието от екрана, който сам държи [ShareImageHost] (извън лентата, която може
+ * да се скрие докато снимката се зарежда — иначе споделянето тихо се прекъсва). Без него бутонът
+ * държи своето.
  */
 @Composable
-fun ShareActionButton(onShareLink: () -> Unit, image: () -> ShareImageRequest?) {
-    val state = rememberShareImageState()
+fun ShareActionButton(onShareLink: () -> Unit, image: () -> ShareImageRequest?, state: ShareImageState? = null) {
+    val own = if (state == null) rememberShareImageState() else null
+    val share = state ?: own!!
     var sheet by remember { mutableStateOf<ShareImageRequest?>(null) }
     Box(contentAlignment = Alignment.Center) {
         IconButton(
@@ -58,22 +63,22 @@ fun ShareActionButton(onShareLink: () -> Unit, image: () -> ShareImageRequest?) 
                 val request = image()
                 if (request == null) onShareLink() else sheet = request
             },
-            enabled = !state.busy,
+            enabled = !share.busy,
         ) {
-            if (state.busy) {
+            if (share.busy) {
                 val busy = stringResource(R.string.share_image_busy)
                 CircularProgressIndicator(Modifier.size(22.dp).semantics { contentDescription = busy }, strokeWidth = 2.dp)
             } else {
                 Icon(Icons.Outlined.Share, contentDescription = stringResource(R.string.action_share))
             }
         }
-        ShareImageHost(state)
+        if (own != null) ShareImageHost(own)
     }
     sheet?.let { request ->
         ShareChoiceSheet(
             request,
             onDismiss = { sheet = null },
-            onImage = { sheet = null; state.share(request) },
+            onImage = { sheet = null; share.share(request) },
             onLink = { sheet = null; onShareLink() },
         )
     }

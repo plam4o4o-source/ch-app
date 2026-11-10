@@ -787,10 +787,12 @@
     <string name="year_card_open">Виж историята</string>
     <string name="year_card_text">Книгите ти, любимият автор и рекордният месец — като история на цял екран.</string>
     <string name="year_empty">През тази година още няма взети книги.</string>
+    <string name="year_error_title">Историята не се зареди</string>
     <string name="year_intro_cd">%1$d — твоята година с книгите</string>
     <string name="year_intro_title">твоята година с книгите</string>
     <string name="year_month_label">Рекорден месец</string>
     <string name="year_next">Следващ слайд</string>
+    <string name="year_offline_text">Историята на четенето ти още не е на телефона. Провери връзката и опитай отново.</string>
     <string name="year_outro_text">Библиотеката на читалището те очаква и през %1$d г.</string>
     <string name="year_outro_title">Благодарим ти, че четеш с нас!</string>
     <string name="year_previous">Предишен слайд</string>

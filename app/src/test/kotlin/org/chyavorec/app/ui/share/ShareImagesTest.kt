@@ -3,6 +3,7 @@ package org.chyavorec.app.ui.share
 import android.app.Application
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -141,6 +142,38 @@ class ShareImagesTest {
         assertEquals(Intent.ACTION_CHOOSER, chooser.action)
         @Suppress("DEPRECATION")
         assertEquals("image/png", chooser.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)?.type)
+    }
+
+    @Test fun cardsWithAPhotoAreJpegAndTheQrStillReads() {
+        val url = "https://chyavorec.org/news/45-ti-sabor"
+        val bitmap = render(ShareCard.News("45-ти събор на народното творчество", "26 септември 2026", "Кратко описание.", null, url))
+        val file = ShareFiles.write(context, bitmap, "news", photo = true)
+        assertEquals("jpg", file.extension)
+        assertEquals("image/jpeg", ShareFiles.mimeType(file))
+        val decoded = assertNotNull(BitmapFactory.decodeFile(file.path), "JPEG-ът не се чете")
+        assertEquals(1080 to 1350, decoded.width to decoded.height)
+        // QR кодът оцелява при компресията (JPEG, качество 92).
+        assertEquals(url, decodeQr(qrCorner(decoded)))
+        val send = ShareFiles.sendIntent(ShareFiles.uri(context, file), "тема", "текст", ShareFiles.mimeType(file))
+        assertEquals("image/jpeg", send.type)
+        // Плоската карта остава PNG.
+        val flat = ShareFiles.write(context, bitmap, "year", photo = false)
+        assertEquals("png", flat.extension)
+        assertEquals("image/png", ShareFiles.mimeType(flat))
+    }
+
+    @Test fun onStartOnlyImagesOlderThanAnHourGo() {
+        val dir = ShareFiles.dir(context).apply { mkdirs() }
+        val now = 10L * ShareFiles.MAX_AGE_MS
+        val old = File(dir, "old.png").apply { writeText("x"); setLastModified(now - ShareFiles.START_MAX_AGE_MS - 1_000) }
+        val justShared = File(dir, "new.jpg").apply { writeText("x"); setLastModified(now - 5 * 60_000L) }
+        ShareFiles.prune(context, now)
+        assertFalse(old.exists(), "по-стара от час")
+        assertTrue(justShared.exists(), "току-що споделената остава за приложението-получател")
+        // При изход от профила — всичко.
+        ShareFiles.clear(context)
+        assertFalse(dir.exists())
+        ShareFiles.prune(context, now)
     }
 
     @Test fun oldImagesAreCleanedUp() {

@@ -10,6 +10,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.heading
+import androidx.compose.material3.TextButton
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -17,6 +23,7 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -53,6 +60,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -82,6 +90,12 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -91,6 +105,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -99,8 +115,10 @@ import kotlinx.coroutines.withContext
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.LocalAppContainer
+import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.ChLoadingIndicator
+import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.ShevitsaStrip
 import org.chyavorec.app.ui.components.addShevitsaMotif
 import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
@@ -115,6 +133,7 @@ import org.chyavorec.app.ui.share.serif
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.ShevitsaMotif
 import org.chyavorec.app.ui.theme.SystemBarIcons
+import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.catalog.ReadingYear
 import org.chyavorec.data.repository.AuthState
@@ -122,35 +141,91 @@ import org.chyavorec.data.repository.AuthState
 /** Колко трае един слайд при автоматично превъртане. */
 internal const val SLIDE_MS = 5_500
 
-/** Състоянието на историята: още се изчислява, готова или празна (няма книги през годината). */
+/**
+ * Състоянието на историята: още се изчислява, готова, празна (няма книги през годината) или
+ * грешка (историята на заеманията не е на телефона и не се изтегли — напр. без връзка).
+ */
 sealed interface YearStoryState {
     data object Loading : YearStoryState
     data object Empty : YearStoryState
+    data class Error(val error: AppError) : YearStoryState
     data class Ready(val summary: ReadingYear.Summary) : YearStoryState
 }
 
-/** „Моята читателска година“ за [year] — от кешираната история (иначе веднъж от сървъра) и каталога в базата. */
-class ReadingYearViewModel(private val year: Int, private val c: AppContainer) : ViewModel() {
+/**
+ * Изчислените в „Моето“ години ([ReadingStatsViewModel]) — историята се отваря от тях веднага,
+ * без нови справки в каталога. Валидни са само за същата кеширана история
+ * ([org.chyavorec.data.repository.LibraryRepository.historyVersion]); при смяна на читателя — изчистват се.
+ */
+class ReadingYearMemo {
+    private class Entry(val version: Long, val years: Map<Int, ReadingYear.Summary>)
+
+    @Volatile private var entry: Entry? = null
+
+    fun put(version: Long, years: List<ReadingYear.Summary>) {
+        val old = entry?.takeIf { it.version == version }?.years.orEmpty()
+        entry = Entry(version, old + years.associateBy { it.year })
+    }
+
+    fun get(version: Long, year: Int): ReadingYear.Summary? = entry?.takeIf { it.version == version }?.years?.get(year)
+
+    fun clear() {
+        entry = null
+    }
+}
+
+/**
+ * „Моята читателска година“ за [year] — от паметта на „Моето“ ([ReadingYearMemo]) или от
+ * кешираната история (иначе веднъж от сървъра) и каталога в базата. Справките в каталога
+ * (десетки заявки към базата) вървят извън главната нишка: иначе всяко връщане от базата
+ * чака кадър на анимацията за зареждане и историята се отваря за секунди.
+ */
+class ReadingYearViewModel(private val year: Int, private val c: AppContainer) : ViewModel(), RefreshOnReconnect {
     private val _state = MutableStateFlow<YearStoryState>(YearStoryState.Loading)
     val state: StateFlow<YearStoryState> = _state.asStateFlow()
+    private var job: Job? = null
+
+    override val reconnectState: ScreenState<*>
+        get() = when (val s = _state.value) {
+            YearStoryState.Loading -> ScreenState<Unit>(loading = true)
+            is YearStoryState.Error -> ScreenState<Unit>(loading = false, error = s.error)
+            else -> ScreenState<Unit>(data = Unit, loading = false)
+        }
 
     init {
-        viewModelScope.launch {
-            if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
-            if (c.authRepository.state.value !is AuthState.SignedIn) {
-                _state.value = YearStoryState.Empty
-                return@launch
+        load()
+    }
+
+    override fun refreshOnReconnect() {
+        load()
+    }
+
+    /** „Опитай отново“ и връщането на връзката. */
+    fun load() {
+        if (job?.isActive == true) return
+        _state.value = YearStoryState.Loading
+        job = viewModelScope.launch { _state.value = compute() }
+    }
+
+    private suspend fun compute(): YearStoryState = withContext(Dispatchers.Default) {
+        if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
+        if (c.authRepository.state.value !is AuthState.SignedIn) return@withContext YearStoryState.Empty
+        val version = c.libraryRepository.historyVersion.value
+        c.readingYears.get(version, year)?.let { return@withContext YearStoryState.Ready(it) }
+        val history = c.libraryRepository.cachedHistory()?.data ?: when (val r = c.libraryRepository.history(force = false)) {
+            is Outcome.Success -> r.value.data
+            // Без връзка (или сървърът не отговаря) — грешка с „Опитай отново“, не „няма книги“.
+            is Outcome.Failure -> return@withContext when (r.error) {
+                AppError.Unauthorized, AppError.NotFound, is AppError.NotAvailable -> YearStoryState.Empty
+                else -> YearStoryState.Error(r.error)
             }
-            val history = c.libraryRepository.cachedHistory()?.data
-                ?: (c.libraryRepository.history(force = false) as? Outcome.Success)?.value?.data
-            if (history.isNullOrEmpty()) {
-                _state.value = YearStoryState.Empty
-                return@launch
-            }
-            val books = readingBooks(c, history)
-            val summary = withContext(Dispatchers.Default) { ReadingYear.compute(history, books, year, c.clock.zone()) }
-            _state.value = summary?.let { YearStoryState.Ready(it) } ?: YearStoryState.Empty
         }
+        if (history.isEmpty()) return@withContext YearStoryState.Empty
+        val books = readingBooks(c, history)
+        ReadingYear.compute(history, books, year, c.clock.zone())
+            ?.also { c.readingYears.put(version, listOf(it)) }
+            ?.let { YearStoryState.Ready(it) }
+            ?: YearStoryState.Empty
     }
 }
 
@@ -162,13 +237,58 @@ fun YearStoryScreen(year: Int, onClose: () -> Unit) {
     SystemBarIcons(darkStatusBackground = true, darkNavigationBackground = true)
     Box(Modifier.fillMaxSize().background(Brand.Ink), contentAlignment = Alignment.Center) {
         when (val s = state) {
-            YearStoryState.Loading -> ChLoadingIndicator(color = Brand.Gold)
-            YearStoryState.Empty -> Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(32.dp)) {
-                Text(stringResource(R.string.year_empty), style = serif(26.sp, Brand.Parchment))
-                Spacer(Modifier.height(16.dp))
-                Button(onClick = onClose) { Text(stringResource(R.string.action_close)) }
-            }
+            YearStoryState.Loading -> DelayedLoader()
+            YearStoryState.Empty -> StoryMessage(stringResource(R.string.year_empty), text = null, onClose = onClose)
+            is YearStoryState.Error -> StoryMessage(
+                stringResource(if (s.error == AppError.Network) R.string.error_offline_title else R.string.year_error_title),
+                text = stringResource(if (s.error == AppError.Network) R.string.year_offline_text else R.string.error_temporary),
+                onClose = onClose,
+                onRetry = vm::load,
+            )
             is YearStoryState.Ready -> YearStory(s.summary, onClose, siteUrl = LocalAppContainer.current.config.siteBaseUrl)
+        }
+    }
+}
+
+/** Индикаторът — едва ако изчисляването трае (обикновено историята е готова за миг и не мигва). */
+@Composable
+private fun DelayedLoader() {
+    var shown by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        delay(LOADER_DELAY_MS)
+        shown = true
+    }
+    if (shown) ChLoadingIndicator(color = Brand.Gold)
+}
+
+private const val LOADER_DELAY_MS = 350L
+
+/** Празна година или грешка: заглавие, обяснение, „Опитай отново“ (при грешка) и „Затвори“. */
+@Composable
+internal fun StoryMessage(title: String, text: String?, onClose: () -> Unit, onRetry: (() -> Unit)? = null) {
+    Column(
+        Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing).verticalScroll(rememberScrollState()).padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(title, style = serif(26.sp, Brand.Parchment), textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
+        if (text != null) {
+            Spacer(Modifier.height(10.dp))
+            Text(text, style = sans(15.sp, Brand.GoldLight), textAlign = TextAlign.Center)
+        }
+        Spacer(Modifier.height(20.dp))
+        if (onRetry != null) {
+            Button(
+                onClick = onRetry,
+                colors = ButtonDefaults.buttonColors(containerColor = Brand.Gold, contentColor = Brand.Ink),
+                modifier = Modifier.heightIn(min = 48.dp),
+            ) { Text(stringResource(R.string.action_retry)) }
+            Spacer(Modifier.height(8.dp))
+            TextButton(onClick = onClose, colors = ButtonDefaults.textButtonColors(contentColor = Brand.Parchment), modifier = Modifier.heightIn(min = 48.dp)) {
+                Text(stringResource(R.string.action_close))
+            }
+        } else {
+            Button(onClick = onClose, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.action_close)) }
         }
     }
 }
@@ -200,7 +320,8 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
     LaunchedEffect(index, reduced) {
         if (reduced) appear.snapTo(1f) else appear.animateTo(1f, tween(1_800, easing = LinearEasing))
     }
-    val paused = held || share.busy || !resumed.isAtLeast(Lifecycle.State.RESUMED)
+    var scrolling by remember { mutableStateOf(false) }
+    val paused = held || scrolling || share.busy || !resumed.isAtLeast(Lifecycle.State.RESUMED)
     LaunchedEffect(index, restart, auto, paused) {
         if (!auto || paused) return@LaunchedEffect
         timer.animateTo(1f, tween(((1f - timer.value) * SLIDE_MS).toInt().coerceAtLeast(1), easing = LinearEasing))
@@ -213,41 +334,66 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
         if (index > 0) index-- else restart++
     }
 
-    // Плъзгане надолу — затваря (историята се смалява след пръста).
+    // Плъзгане надолу — затваря (историята се смалява след пръста). Решава цялото изминато
+    // разстояние ([dragY]) или скоростта при пускане. Жестът се хваща ИЗВЪН слоя, който се
+    // мести и смалява: иначе координатите се местят заедно с пръста — изминатото и скоростта
+    // излизат по-малки и бързото плъзгане понякога не затваря.
     var dragY by remember { mutableFloatStateOf(0f) }
-    val closeAt = with(LocalDensity.current) { 140.dp.toPx() }
-    val kind = slides[index]
-    val description = slideDescription(summary, kind)
-    val stateText = stringResource(R.string.year_slide_state, index + 1, slides.size)
+    val density = LocalDensity.current
+    val dismiss = remember(density) { StoryDismiss(density) }
+    var settling by remember { mutableStateOf<Job?>(null) }
+    val close by rememberUpdatedState(onClose)
+    fun release(velocity: Float) {
+        held = false
+        if (dismiss.shouldClose(dragY, velocity)) {
+            close()
+        } else if (dragY > 0f) {
+            settling = scope.launch { animate(dragY, 0f) { v, _ -> dragY = v } }
+        }
+    }
+    fun pull(delta: Float): Float {
+        settling?.cancel()
+        val before = dragY
+        dragY = (dragY + delta).coerceAtLeast(0f)
+        return dragY - before
+    }
+    // Превъртаният слайд (едър шрифт, хоризонтално): надолу от началото на текста — също затваря.
+    val dismissScroll = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset =
+                // Нагоре, докато историята е дръпната — първо се връща тя.
+                if (source == NestedScrollSource.UserInput && available.y < 0f && dragY > 0f) Offset(0f, pull(available.y)) else Offset.Zero
+
+            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                if (source != NestedScrollSource.UserInput || available.y <= 0f) return Offset.Zero
+                held = true
+                return Offset(0f, pull(available.y))
+            }
+
+            override suspend fun onPreFling(available: Velocity): Velocity {
+                if (dragY <= 0f) {
+                    held = false
+                    return Velocity.Zero
+                }
+                release(available.y)
+                return available
+            }
+        }
+    }
     val nextLabel = stringResource(R.string.year_next)
     val previousLabel = stringResource(R.string.year_previous)
+    val kind = slides[index]
     val shareSubject = stringResource(R.string.year_title_with, summary.year)
     val shareText = stringResource(R.string.year_share_text, summary.year, siteUrl)
 
     Box(
         Modifier.fillMaxSize()
-            .graphicsLayer {
-                val f = (dragY / size.height).coerceIn(0f, 1f)
-                translationY = dragY
-                scaleX = 1f - 0.12f * f
-                scaleY = scaleX
-                if (dragY > 0f) {
-                    shape = RoundedCornerShape(28.dp)
-                    clip = true
-                }
-            }
+            .nestedScroll(dismissScroll)
             .draggable(
-                rememberDraggableState { d -> dragY = (dragY + d).coerceAtLeast(0f) },
+                rememberDraggableState { d -> pull(d) },
                 Orientation.Vertical,
                 onDragStarted = { held = true },
-                onDragStopped = { velocity ->
-                    held = false
-                    if (dragY > closeAt || velocity > 2_000f) {
-                        onClose()
-                    } else {
-                        scope.launch { animate(dragY, 0f) { v, _ -> dragY = v } }
-                    }
-                },
+                onDragStopped = { velocity -> release(velocity) },
             )
             .pointerInput(slides.size) {
                 detectTapGestures(
@@ -259,6 +405,16 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
                     onLongPress = { haptic.performHapticFeedback(HapticFeedbackType.LongPress) },
                     onTap = { o -> if (o.x < size.width * 0.3f) previous() else next() },
                 )
+            }
+            .graphicsLayer {
+                val f = (dragY / size.height).coerceIn(0f, 1f)
+                translationY = dragY
+                scaleX = 1f - 0.12f * f
+                scaleY = scaleX
+                if (dragY > 0f) {
+                    shape = RoundedCornerShape(28.dp)
+                    clip = true
+                }
             },
     ) {
         AnimatedContent(
@@ -269,14 +425,34 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
             val k = slides[i]
             val look = remember(k, summary) { lookOf(k, summary) }
             val current = i == index
-            Box(Modifier.fillMaxSize()) {
+            // Описанието — на самия слайд (не на текущия): при смяната и двата са на екрана.
+            val description = slideDescription(summary, k)
+            val stateText = stringResource(R.string.year_slide_state, i + 1, slides.size)
+            val scroll = rememberScrollState()
+            if (current) {
+                // Докато читателят превърта текста — слайдът стои.
+                LaunchedEffect(scroll) {
+                    try {
+                        snapshotFlow { scroll.isScrollInProgress }.collect { scrolling = it }
+                    } finally {
+                        scrolling = false
+                    }
+                }
+            }
+            BoxWithConstraints(Modifier.fillMaxSize()) {
+                // Ниският екран (хоризонтално) — по-тесни отстъпи над и под слайда.
+                val padding = if (maxHeight < 600.dp) StoryContentPaddingCompact else StoryContentPadding
                 // Мотивът във фона бавно се завърта с таймера (само докато слайдът тече).
                 SlideBackdrop(look, drift = { if (current) timer.value else 1f })
                 SlideBody(
                     summary, k,
                     appear = { if (current) appear.value else 1f },
-                    modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing).padding(StoryContentPadding)
+                    scroll = scroll,
+                    modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing).padding(padding)
                         .clearAndSetSemantics {
+                            // Само текущият слайд: излизащият не се чете, а „учтивото“ съобщение е
+                            // едно (иначе при преливането TalkBack чете два пъти).
+                            if (!current) return@clearAndSetSemantics
                             contentDescription = description
                             stateDescription = stateText
                             liveRegion = LiveRegionMode.Polite
@@ -341,6 +517,19 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
         }
         ShareImageHost(share)
     }
+}
+
+/**
+ * Кога плъзгането надолу затваря историята: изминати поне 140 dp (колкото и бавно) или
+ * бързо пускане (от 700 dp/s) след поне 32 dp — по цялото изминато разстояние, не по едно събитие.
+ */
+internal class StoryDismiss(density: Density) {
+    private val closeAt = with(density) { 140.dp.toPx() }
+    private val flingFrom = with(density) { 32.dp.toPx() }
+    private val flingVelocity = with(density) { 700.dp.toPx() }
+
+    fun shouldClose(distance: Float, velocity: Float): Boolean =
+        distance >= closeAt || (distance >= flingFrom && velocity >= flingVelocity)
 }
 
 /** Лентичките горе: минали — пълни, текущата — според [progress], следващите — празни. */

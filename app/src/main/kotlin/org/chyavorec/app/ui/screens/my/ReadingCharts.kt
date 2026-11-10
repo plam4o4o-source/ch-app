@@ -110,17 +110,21 @@ class ReadingStatsViewModel(private val c: AppContainer) : ViewModel() {
                     fetched = false
                     return@collectLatest
                 }
-                val history = c.libraryRepository.cachedHistory()?.data ?: loadOnce()
-                if (history.isNullOrEmpty()) {
-                    _stats.value = null
-                    _years.value = emptyList()
-                    return@collectLatest
-                }
-                val books = readingBooks(c, history)
-                val today = c.clock.today()
+                // Извън главната нишка — и справките в каталога (десетки заявки към базата):
+                // иначе всяко връщане от базата чака свободен кадър на главната нишка.
                 withContext(Dispatchers.Default) {
+                    val version = c.libraryRepository.historyVersion.value
+                    val history = c.libraryRepository.cachedHistory()?.data ?: loadOnce()
+                    if (history.isNullOrEmpty()) {
+                        _stats.value = null
+                        _years.value = emptyList()
+                        return@withContext
+                    }
+                    val books = readingBooks(c, history)
+                    val today = c.clock.today()
                     _stats.value = ReadingStats.compute(history, books, today, c.clock.zone())
                     _years.value = ReadingYear.offeredYears(today).mapNotNull { ReadingYear.compute(history, books, it, c.clock.zone()) }
+                        .also { c.readingYears.put(version, it) }
                 }
             }
         }

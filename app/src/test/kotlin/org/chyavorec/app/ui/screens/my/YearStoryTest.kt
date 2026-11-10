@@ -12,6 +12,7 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipe
 import androidx.compose.ui.test.swipeDown
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -116,5 +117,70 @@ class YearStoryTest {
         compose.onRoot().performTouchInput { swipeDown(startY = height * 0.3f, endY = height * 0.95f) }
         compose.waitForIdle()
         assertTrue(closed)
+    }
+
+    /** Плъзгане надолу с [dp] за [ms] милисекунди от 40% височина. */
+    private fun drag(dp: Float, ms: Long) = compose.onRoot().performTouchInput {
+        val start = Offset(width / 2f, height * 0.4f)
+        swipe(start, start + Offset(0f, dp * density), ms)
+    }
+
+    /** Плъзва и казва дали историята се затвори. */
+    private fun swipeCloses(dp: Float, ms: Long): Boolean {
+        show()
+        drag(dp, ms)
+        compose.waitForIdle()
+        return closed
+    }
+
+    // Като в изпитанието на емулатора: 22% от екрана (~200 dp) за 90, 150, 300 и 1200 ms — винаги затваря.
+    @Test fun aFifthOfTheScreenIn90msCloses() = assertTrue(swipeCloses(196f, 90L))
+
+    @Test fun aFifthOfTheScreenIn150msCloses() = assertTrue(swipeCloses(196f, 150L))
+
+    @Test fun aFifthOfTheScreenIn300msCloses() = assertTrue(swipeCloses(196f, 300L))
+
+    @Test fun aFifthOfTheScreenSlowlyCloses() = assertTrue(swipeCloses(196f, 1_200L))
+
+    @Test fun aShortQuickFlickCloses() = assertTrue(swipeCloses(100f, 80L), "кратко, но бързо (≈1250 dp/s) — затваря")
+
+    @Test fun aShortSlowDragDoesNotClose() {
+        assertTrue(!swipeCloses(100f, 1_000L), "кратко и бавно — историята се връща")
+        assertTrue(onSlide(1))
+    }
+
+    /** Годините от „Моето“ — само за същата история; при смяна на читателя изчезват. */
+    @Test fun theMemoServesOnlyTheSameHistory() {
+        val memo = ReadingYearMemo()
+        memo.put(3, listOf(year))
+        assertEquals(year, memo.get(3, year.year))
+        assertEquals(null, memo.get(4, year.year), "историята е сменена")
+        assertEquals(null, memo.get(3, year.year - 1))
+        memo.clear()
+        assertEquals(null, memo.get(3, year.year))
+    }
+
+    @Test fun theRuleUsesTheWholeDistanceOrTheSpeed() {
+        val d = StoryDismiss(androidx.compose.ui.unit.Density(2.625f))
+        val dp = 2.625f
+        assertTrue(d.shouldClose(141 * dp, 0f), "от 140 dp — и съвсем бавно")
+        assertTrue(!d.shouldClose(120 * dp, 300 * dp), "под 140 dp и бавно — не")
+        assertTrue(d.shouldClose(60 * dp, 900 * dp), "бързо пускане след 32 dp")
+        assertTrue(!d.shouldClose(20 * dp, 3_000 * dp), "само трепване — не")
+        assertTrue(!d.shouldClose(60 * dp, -900 * dp), "пуснато нагоре — не")
+    }
+
+    /** Само показаният слайд е „учтив“ регион и само той се чете — при преливането не два пъти. */
+    @Test fun onlyTheCurrentSlideIsALiveRegion() {
+        compose.mainClock.autoAdvance = false
+        show(reduced = false)
+        compose.mainClock.advanceTimeBy(500)
+        tap(right = true)
+        // По средата на преливането: и двата слайда са на екрана.
+        compose.mainClock.advanceTimeBy(100)
+        val live = compose.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.LiveRegion)).fetchSemanticsNodes()
+        assertEquals(1, live.size, "един „учтив“ регион")
+        assertEquals("Слайд 2 от $total", live.single().config[SemanticsProperties.StateDescription])
+        assertTrue(!onSlide(1), "излизащият слайд не се чете")
     }
 }

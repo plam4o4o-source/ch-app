@@ -58,6 +58,8 @@ import org.chyavorec.app.notifications.ReminderScheduler
 import org.chyavorec.app.notifications.RenewActionWorker
 import org.chyavorec.app.notifications.RenewOutcomeNotifier
 import org.chyavorec.app.ui.navigation.AppShortcuts
+import org.chyavorec.app.ui.screens.my.ReadingYearMemo
+import org.chyavorec.app.ui.share.ShareFiles
 import org.chyavorec.app.update.AppUpdater
 import org.chyavorec.app.widget.WidgetUpdater
 import org.chyavorec.app.messages.MessageCenter
@@ -225,6 +227,9 @@ class AppContainer(
             unreadableCounter = FileUnreadableSessionCounter(File(context.noBackupFilesDir, "secure/session.unreadable")),
         ).also(::onAuthCreated)
     }
+    /** „Моята читателска година“, изчислена в „Моето“ — историята се отваря от нея веднага; при смяна на читателя се забравя. */
+    val readingYears by lazy { ReadingYearMemo().also { memo -> authRepository.addReaderResetListener(memo::clear) } }
+
     /**
      * Едно общо хранилище за читателските данни (един кеш на вид, `/v1/me/all` при наличие,
      * профилът на ниво приложение) — всички читателски репозиторита го споделят.
@@ -432,6 +437,8 @@ class AppContainer(
         // Вече показаните известия за заемания и лични съобщения.
         runCatching { Notifier.cancelPersonal(context) }.logFailure("signout.notifications")
         runCatching { evictReaderApiFromHttpCache() }.logFailure("signout.http-cache")
+        // Споделените картинки — слайдовете от „Моята читателска година“ са лични.
+        runCatching { withContext(Dispatchers.IO) { ShareFiles.clear(context) } }.logFailure("signout.share")
         // Локалният дневник на грешките остава: без лични данни е (записите се изчистват при
         // запис), а при принудителен изход в него е и причината — изтриването би я загубило.
         runCatching { settings.setReaderTraces(false) }
@@ -558,7 +565,7 @@ class AppContainer(
     /**
      * „Изчисти временните данни“ — само публичните данни: новините, събитията, страниците, каталогът
      * (katalog.json с хеша/ETag-а, обобщението и „За теб“, индексът в базата), HTTP кешът,
-     * изображенията (и кориците), свалените PDF документи и прекият път „последната книга“. Сесията, картата, запазените новини, „Искам да прочета“,
+     * изображенията (и кориците), свалените PDF документи, картинките за споделяне и прекият път „последната книга“. Сесията, картата, запазените новини, „Искам да прочета“,
      * напомнянията, историята и настройките остават.
      *
      * Върви на ниво приложение и без отмяна: излизането от „Настройки“ по средата не оставя
@@ -574,6 +581,7 @@ class AppContainer(
                     runCatching { publicCache.clear() }.logFailure("cache.public")
                     runCatching { okHttp.cache?.evictAll() }
                     runCatching { documents.clear() }.logFailure("cache.documents")
+                    runCatching { ShareFiles.clear(context) }.logFailure("cache.share")
                     runCatching { AppShortcuts.removeLastBook(context) }.logFailure("cache.shortcut")
                     clearImageCaches()
                 }

@@ -120,8 +120,10 @@ import org.chyavorec.app.util.Formatters
 import org.chyavorec.app.util.Intents
 import org.chyavorec.domain.model.NewsArticle
 import org.chyavorec.app.ui.share.ShareImageRequest
+import org.chyavorec.app.ui.share.rememberShareImageState
 import org.chyavorec.app.ui.share.ShareCards
 import org.chyavorec.app.ui.share.ShareActionButton
+import org.chyavorec.app.ui.share.ShareImageHost
 
 /**
  * Разделът „Новини и събития“: сегменти „Новини | Календар“ под заглавието. В долната
@@ -413,6 +415,9 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
             // Прегледът на цял екран: с описанията на снимките, а споделянето — със статията.
             val alts = detail.galleryAltList
             fun viewer(index: Int) = Routes.viewerUrls(gallery, index, alts, a.url, a.title)
+            // Споделянето като картинка — на нивото на екрана, не в лентата: тя се скрива при
+            // превъртане, а с нея би изчезнало и започнатото рисуване (докато се зарежда снимката).
+            val share = rememberShareImageState()
             Box(Modifier.fillMaxSize()) {
                 Column(
                     Modifier.fillMaxSize().onPlaced { viewport[0] = it }.nestedScroll(toolbarScroll).verticalScroll(reading)
@@ -485,7 +490,8 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                 )
                 // Действията — в плаваща лента долу (горе остава само „Назад“).
                 ArticleToolbar(
-                    visible = toolbarScroll.visible || atEnd || screenReader,
+                    // Докато картинката се рисува — видима (индикаторът е в бутона).
+                    visible = toolbarScroll.visible || atEnd || screenReader || share.busy,
                     modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp),
                 ) {
                     ReaderModeButton(onClick = { readerSheet = true })
@@ -502,11 +508,13 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                         image = {
                             ShareImageRequest(ShareCards.news(context, a, a.imageUrl ?: gallery.firstOrNull()), a.title, a.title + "\n" + a.url)
                         },
+                        state = share,
                     )
                     IconButton(onClick = { Intents.openUrl(context, a.url) }) {
                         Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = stringResource(R.string.action_open_site))
                     }
                 }
+                ShareImageHost(share)
             }
         }
     }

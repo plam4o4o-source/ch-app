@@ -122,6 +122,8 @@ S = {
 "year_previous": ("Предишен слайд", "Previous slide"),
 "year_share_text": ("Моята читателска година %1$d в библиотеката на НЧ „Васил Левски – 1922“ — %2$s", "My %1$d reading year at the “Vasil Levski – 1922” library — %2$s"),
 "year_empty": ("През тази година още няма взети книги.", "No books borrowed this year yet."),
+"year_offline_text": ("Историята на четенето ти още не е на телефона. Провери връзката и опитай отново.", "Your reading history isn’t on this phone yet. Check your connection and try again."),
+"year_error_title": ("Историята не се зареди", "Couldn’t load the story"),
 # Споделяне като картинка (карта с QR код) — събитие, книга, новина, слайд от годината.
 "share_as_image": ("Сподели като картинка", "Share as an image"),
 "share_as_image_desc": ("Карта с QR код — за Instagram, Facebook, Viber…", "A card with a QR code — for Instagram, Facebook, Viber…"),

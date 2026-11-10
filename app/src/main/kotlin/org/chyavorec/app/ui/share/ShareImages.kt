@@ -55,7 +55,7 @@ import java.io.File
 
 /**
  * Картинки за споделяне: карта (събитие, книга, новина, слайд от „Моята читателска година“),
- * нарисувана с Compose извън екрана в точен размер, записана като PNG в `cacheDir/share/` и
+ * нарисувана с Compose извън екрана в точен размер, записана в `cacheDir/share/` (със снимка — JPEG, иначе PNG) и
  * подадена на избраното приложение през FileProvider. Всичко става на телефона — картинката
  * излиза от него само когато читателят избере къде да я сподели.
  */
@@ -75,36 +75,63 @@ enum class ShareFormat(val widthPx: Int, val heightPx: Int) {
     }
 }
 
-/** Файловете за споделяне в кеша: пишат се тук и се чистят след ден (приложението-получател може да чете по-късно). */
+/**
+ * Файловете за споделяне в кеша: пишат се тук и се чистят след ден (приложението-получател може
+ * да чете по-късно), при старт — по-старите от час ([prune]), а при изход от профила и „Изчисти
+ * временните данни“ — всички ([clear]): слайдовете от „Моята читателска година“ са лични.
+ */
 object ShareFiles {
     const val DIR = "share"
     const val MAX_AGE_MS = 24L * 60 * 60 * 1000
+    /** При старт: по-старите от толкова — вън (току-що споделената остава за получателя). */
+    const val START_MAX_AGE_MS = 60L * 60 * 1000
     /** Най-много толкова картинки остават в кеша (най-новите). */
     const val KEEP = 6
+    /** Качеството на JPEG за картите със снимка — QR кодът остава ясен. */
+    const val JPEG_QUALITY = 92
 
     fun dir(context: Context): File = File(context.cacheDir, DIR)
 
-    /** Записва [bitmap] като PNG; преди това маха старите. */
-    fun write(context: Context, bitmap: Bitmap, name: String, nowMs: Long = System.currentTimeMillis()): File {
+    /**
+     * Записва [bitmap]: картата със снимка ([photo]) — като JPEG (PNG на снимка е няколко MB),
+     * плоската (слайдовете, събитие без снимка) — като PNG (ясни ръбове, малък файл). Преди това маха старите.
+     */
+    fun write(context: Context, bitmap: Bitmap, name: String, photo: Boolean = false, nowMs: Long = System.currentTimeMillis()): File {
         val dir = dir(context).apply { mkdirs() }
         cleanup(dir, nowMs)
         val safe = name.filter { it.isLetterOrDigit() || it == '-' }.take(40).ifBlank { "card" }
-        val file = File(dir, "chyavorec-$safe-$nowMs.png")
-        file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        val file = File(dir, "chyavorec-$safe-$nowMs.${if (photo) "jpg" else "png"}")
+        file.outputStream().use {
+            if (photo) bitmap.compress(Bitmap.CompressFormat.JPEG, JPEG_QUALITY, it) else bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+        }
         return file
     }
 
-    /** Маха картинките, по-стари от [MAX_AGE_MS], и всички над [KEEP]-те най-нови. */
-    fun cleanup(dir: File, nowMs: Long) {
+    /** Маха картинките, по-стари от [maxAgeMs], и всички над [KEEP]-те най-нови. */
+    fun cleanup(dir: File, nowMs: Long, maxAgeMs: Long = MAX_AGE_MS) {
         val files = dir.listFiles()?.filter { it.isFile }?.sortedByDescending { it.lastModified() } ?: return
-        files.forEachIndexed { i, f -> if (i >= KEEP - 1 || nowMs - f.lastModified() > MAX_AGE_MS) f.delete() }
+        files.forEachIndexed { i, f -> if (i >= KEEP - 1 || nowMs - f.lastModified() > maxAgeMs) f.delete() }
     }
+
+    /** При старт на приложението (във фонов режим): по-старите от час. */
+    fun prune(context: Context, nowMs: Long = System.currentTimeMillis()) {
+        val dir = dir(context)
+        if (dir.isDirectory) cleanup(dir, nowMs, START_MAX_AGE_MS)
+    }
+
+    /** Всички картинки — при изход от профила и „Изчисти временните данни“. */
+    fun clear(context: Context) {
+        dir(context).deleteRecursively()
+    }
+
+    /** Типът на файла за намерението „Сподели“. */
+    fun mimeType(file: File): String = if (file.extension.equals("jpg", ignoreCase = true)) "image/jpeg" else "image/png"
 
     fun uri(context: Context, file: File): Uri = FileProvider.getUriForFile(context, Intents.fileProviderAuthority(context), file)
 
-    /** ACTION_SEND с картинката ([uri]) и текста с връзката — с временно право за четене. */
-    fun sendIntent(uri: Uri, subject: String, text: String): Intent = Intent(Intent.ACTION_SEND).apply {
-        type = "image/png"
+    /** ACTION_SEND с картинката ([uri], тип [mime]) и текста с връзката — с временно право за четене. */
+    fun sendIntent(uri: Uri, subject: String, text: String, mime: String = "image/png"): Intent = Intent(Intent.ACTION_SEND).apply {
+        type = mime
         putExtra(Intent.EXTRA_STREAM, uri)
         putExtra(Intent.EXTRA_SUBJECT, subject)
         putExtra(Intent.EXTRA_TEXT, text)
@@ -113,8 +140,8 @@ object ShareFiles {
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
 
-    fun chooser(context: Context, uri: Uri, subject: String, text: String): Intent =
-        Intent.createChooser(sendIntent(uri, subject, text), context.getString(R.string.action_share))
+    fun chooser(context: Context, uri: Uri, subject: String, text: String, mime: String = "image/png"): Intent =
+        Intent.createChooser(sendIntent(uri, subject, text, mime), context.getString(R.string.action_share))
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 }
 
@@ -147,7 +174,11 @@ suspend fun loadSharePhoto(context: Context, url: String?): ImageBitmap? {
  */
 internal suspend fun GraphicsLayer.toShareBitmap(format: ShareFormat): Bitmap? {
     val viaLayer = try {
-        toImageBitmap().asAndroidBitmap().let { if (it.config == Bitmap.Config.HARDWARE) it.copy(Bitmap.Config.ARGB_8888, false) else it }
+        // Хардуерният bitmap се копира в софтуерен (за записа) и веднага се освобождава — двете
+        // копия на картата (~8 MB всяко) не стоят в паметта едновременно по-дълго от нужното.
+        toImageBitmap().asAndroidBitmap().let { hw ->
+            if (hw.config == Bitmap.Config.HARDWARE) hw.copy(Bitmap.Config.ARGB_8888, false).also { hw.recycle() } else hw
+        }
     } catch (e: CancellationException) {
         throw e
     } catch (_: Exception) {
@@ -231,9 +262,13 @@ fun ShareImageHost(state: ShareImageState, onRendered: ((Bitmap, ShareImageReque
                 bitmap == null -> Toast.makeText(context, R.string.share_image_failed, Toast.LENGTH_SHORT).show()
                 onRendered != null -> onRendered(bitmap, request)
                 else -> {
-                    val file = withContext(Dispatchers.IO) { ShareFiles.write(context, bitmap, request.card.fileName) }
+                    val file = withContext(Dispatchers.IO) {
+                        ShareFiles.write(context, bitmap, request.card.fileName, photo = loaded.image != null).also { bitmap.recycle() }
+                    }
                     val uri = ShareFiles.uri(context, file)
-                    context.startActivity(ShareFiles.chooser(context, uri, request.subject, request.text).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                    context.startActivity(
+                        ShareFiles.chooser(context, uri, request.subject, request.text, ShareFiles.mimeType(file)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                    )
                 }
             }
         } catch (e: CancellationException) {
