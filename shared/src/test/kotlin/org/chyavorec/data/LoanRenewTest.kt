@@ -78,7 +78,8 @@ class LoanRenewTest {
         var loansCalls = 0
         override suspend fun profile(session: AuthSession) = Outcome.Success(ReaderProfile("R1", "1", "Читател"))
         override suspend fun loans(session: AuthSession): Outcome<List<Loan>> { loansCalls++; return Outcome.Success(loans) }
-        override suspend fun placeHold(session: AuthSession, inv: Long) = Outcome.Success(Unit)
+        var holdResult: Outcome<Unit> = Outcome.Success(Unit)
+        override suspend fun placeHold(session: AuthSession, inv: Long) = holdResult
         override suspend fun renew(session: AuthSession, loanId: String): Outcome<Loan> {
             renewTokens += session.accessToken
             return renewResult(session, loanId)
@@ -95,6 +96,24 @@ class LoanRenewTest {
         val auth = AuthRepository(authService, store, clock, cache)
         val reader = Reader()
         val library = LibraryRepository(reader, auth, cache, clock)
+    }
+
+    /** Заявка: при успех книгата се помни като заявена за седмица (сървърът не връща списък); отказът — не. */
+    @Test fun successfulHoldIsRememberedForAWeek() = runTest {
+        val s = Setup()
+        s.auth.restore()
+        assertNull(s.library.heldAt(5))
+        s.reader.holdResult = Outcome.Failure(AppError.Network)
+        assertTrue(s.library.placeHold(5) is Outcome.Failure)
+        assertNull(s.library.heldAt(5))
+        s.reader.holdResult = Outcome.Success(Unit)
+        assertTrue(s.library.placeHold(5) is Outcome.Success)
+        assertEquals(clock.now(), s.library.heldAt(5))
+        assertNull(s.library.heldAt(6))
+        clock.advanceSeconds(6 * 24 * 3600L)
+        assertEquals(clock.now().minusSeconds(6 * 24 * 3600L), s.library.heldAt(5))
+        clock.advanceSeconds(2 * 24 * 3600L)
+        assertNull(s.library.heldAt(5), "след седмица библиотеката вече не пази книгата")
     }
 
     @Test fun successMarksOnlyThatLoanPendingInCache() = runTest {

@@ -54,6 +54,8 @@
     <string name="book_doc_type">Вид</string>
     <string name="book_genre">Раздел</string>
     <string name="book_genre_udc">%1$s (УДК %2$s)</string>
+    <string name="book_held">Заявена</string>
+    <string name="book_held_note">Заявена на %1$s. Библиотеката ще отдели книгата за теб.</string>
     <string name="book_hold">Заяви книгата</string>
     <string name="book_inventory">Инвентарен номер</string>
     <string name="book_isbn">ISBN</string>
@@ -627,6 +629,8 @@
     <string name="settings_require_unlock_unavailable">Не може да се включи: телефонът няма заключване на екрана. Задай ПИН, фигура или парола в настройките на телефона.</string>
     <string name="settings_seasonal">Сезонни украси</string>
     <string name="settings_seasonal_desc">Празници, сезони и обичаи: поздрави, орнаменти, сняг и листа</string>
+    <string name="settings_shake_surprise">Разклащане за „Изненадай ме“</string>
+    <string name="settings_shake_surprise_desc">Разклати телефона в каталога за случайна налична книга. Докато TalkBack е включен, не действа.</string>
     <string name="settings_text_size">Размер на текста</string>
     <string name="settings_text_size_note">Умножава размера на шрифта от настройките на телефона. В статиите бутонът „Аа“ го променя допълнително.</string>
     <string name="settings_theme">Тема</string>
@@ -644,6 +648,7 @@
     <string name="share_card_scan">Сканирай за повече</string>
     <string name="share_image_busy">Създава се картинка…</string>
     <string name="share_image_failed">Картинката не можа да се създаде.</string>
+    <string name="shelf_copy_of">%1$s, екземпляр %2$d от %3$d</string>
     <string name="shortcut_card">Читателска карта</string>
     <string name="shortcut_card_long">Моята читателска карта</string>
     <string name="shortcut_catalog">Каталог</string>

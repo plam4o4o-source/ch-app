@@ -60,6 +60,8 @@ data class AppSettings(
     val seasonal: Boolean = true,
     /** Каталогът като „полица“ (гръбчета на книги) вместо списък. */
     val catalogShelf: Boolean = false,
+    /** Разклащане за „Изненадай ме“; `null` — още не е избрано (при първото ползване: изкл. с TalkBack). */
+    val shakeSurprise: Boolean? = null,
     /** Режим за четене: размер на шрифта в статиите. */
     val readerFontSize: ReaderFontSize = ReaderFontSize.M,
     /** Режим за четене: по-тясна колона за текста. */
@@ -121,6 +123,7 @@ class SettingsStore(private val context: Context) {
         val notificationPermissionAsked = booleanPreferencesKey("notification_permission_asked")
         val cardTilePromptDone = booleanPreferencesKey("card_tile_prompt_done")
         val catalogShelf = booleanPreferencesKey("catalog_shelf")
+        val shakeSurprise = booleanPreferencesKey("shake_surprise")
         val readerFontSize = stringPreferencesKey("reader_font_size")
         val readerNarrow = booleanPreferencesKey("reader_narrow")
         val textScale = stringPreferencesKey("text_scale")
@@ -156,6 +159,7 @@ class SettingsStore(private val context: Context) {
             coversWifiOnly = p[Keys.coversWifiOnly] ?: false,
             seasonal = p[Keys.seasonal] ?: true,
             catalogShelf = p[Keys.catalogShelf] ?: false,
+            shakeSurprise = p[Keys.shakeSurprise],
             readerFontSize = p[Keys.readerFontSize]?.let { runCatching { ReaderFontSize.valueOf(it) }.getOrNull() } ?: ReaderFontSize.M,
             readerNarrow = p[Keys.readerNarrow] ?: false,
             textScale = p[Keys.textScale]?.let { runCatching { TextScale.valueOf(it) }.getOrNull() } ?: TextScale.STANDARD,
@@ -214,6 +218,9 @@ class SettingsStore(private val context: Context) {
     val cardTilePromptDone: Flow<Boolean> = context.dataStore.data.map { it[Keys.cardTilePromptDone] ?: false }
     suspend fun setCardTilePromptDone(done: Boolean = true) = context.dataStore.edit { it[Keys.cardTilePromptDone] = done }
     suspend fun setCatalogShelf(on: Boolean) = context.dataStore.edit { it[Keys.catalogShelf] = on }
+    suspend fun setShakeSurprise(on: Boolean) = context.dataStore.edit { it[Keys.shakeSurprise] = on }
+    /** Подразбиращата се стойност — само ако още не е избрана (първото ползване). */
+    suspend fun initShakeSurprise(on: Boolean) = context.dataStore.edit { if (it[Keys.shakeSurprise] == null) it[Keys.shakeSurprise] = on }
     suspend fun setReaderFontSize(size: ReaderFontSize) = context.dataStore.edit { it[Keys.readerFontSize] = size.name }
     suspend fun setReaderNarrow(on: Boolean) = context.dataStore.edit { it[Keys.readerNarrow] = on }
     suspend fun setTextScale(scale: TextScale) = context.dataStore.edit { it[Keys.textScale] = scale.name }

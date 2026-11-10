@@ -54,6 +54,8 @@
     <string name="book_doc_type">Type</string>
     <string name="book_genre">Section</string>
     <string name="book_genre_udc">%1$s (UDC %2$s)</string>
+    <string name="book_held">Hold placed</string>
+    <string name="book_held_note">Hold placed on %1$s. The library will set the book aside for you.</string>
     <string name="book_hold">Place a hold</string>
     <string name="book_inventory">Inventory number</string>
     <string name="book_isbn">ISBN</string>
@@ -627,6 +629,8 @@
     <string name="settings_require_unlock_unavailable">Can’t be turned on: the phone has no screen lock. Set a PIN, pattern or password in the phone’s settings.</string>
     <string name="settings_seasonal">Seasonal decorations</string>
     <string name="settings_seasonal_desc">Holidays, seasons and traditions: greetings, ornaments, snow and leaves</string>
+    <string name="settings_shake_surprise">Shake for “Surprise me”</string>
+    <string name="settings_shake_surprise_desc">Shake the phone in the catalogue for a random available book. Does nothing while TalkBack is on.</string>
     <string name="settings_text_size">Text size</string>
     <string name="settings_text_size_note">Multiplies the font size set on your phone. In articles, the “Aa” button adjusts it further.</string>
     <string name="settings_theme">Theme</string>
@@ -644,6 +648,7 @@
     <string name="share_card_scan">Scan for more</string>
     <string name="share_image_busy">Creating the image…</string>
     <string name="share_image_failed">Couldn’t create the image.</string>
+    <string name="shelf_copy_of">%1$s, copy %2$d of %3$d</string>
     <string name="shortcut_card">Library card</string>
     <string name="shortcut_card_long">My library card</string>
     <string name="shortcut_catalog">Catalogue</string>

@@ -1,6 +1,9 @@
 package org.chyavorec.app.ui.components
 
-import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,14 +15,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 import org.chyavorec.app.ui.navigation.DETAIL_KEY
+
+/** Колко се измества детайлът към списъка при пълен жест „назад“. */
+private val BACK_SHIFT = 64.dp
 
 /**
  * Прозорец за списък и детайл един до друг: поне 840 dp ширина (таблет, Chromebook
@@ -54,13 +64,38 @@ fun ListDetailPane(
         }
     }
     val shown = selected?.takeIf { twoPane }
-    BackHandler(enabled = shown != null, onBack = close)
+    // Предсказуемо „назад“: детайлът се плъзга към списъка и избледнява с жеста; пуснат —
+    // затваря се, отказан — пружината го връща. При намалено движение — само избледнява.
+    val reduced = rememberReducedMotion()
+    val scope = rememberCoroutineScope()
+    val back = remember { Animatable(0f) }
+    // Нов (или затворен) детайл — без остатък от предишния жест.
+    LaunchedEffect(shown) { back.snapTo(0f) }
+    PredictiveBackHandler(enabled = shown != null) { events ->
+        try {
+            events.collect { back.snapTo(it.progress) }
+            close()
+        } catch (e: CancellationException) {
+            scope.launch { back.animateTo(0f, spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow)) }
+            throw e
+        }
+    }
     // Списъкът е винаги първото дете — при избор не губи превъртането и състоянието си.
     Row(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f).fillMaxHeight().semantics { isTraversalGroup = true; traversalIndex = 0f }) { list() }
         if (shown != null) {
             VerticalDivider()
-            Box(Modifier.weight(1.4f).fillMaxHeight().semantics { isTraversalGroup = true; traversalIndex = 1f }) {
+            Box(
+                Modifier
+                    .weight(1.4f)
+                    .fillMaxHeight()
+                    .graphicsLayer {
+                        val p = back.value
+                        alpha = 1f - 0.6f * p
+                        if (!reduced) translationX = -p * BACK_SHIFT.toPx()
+                    }
+                    .semantics { isTraversalGroup = true; traversalIndex = 1f },
+            ) {
                 // Корицата е и в списъка, и в детайла едновременно — без shared element.
                 CompositionLocalProvider(LocalSharedTransitionsEnabled provides false) {
                     key(shown) { detail(shown, close) }

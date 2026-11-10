@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.components
 
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Spring
@@ -7,6 +8,10 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.CacheDrawScope
 import androidx.compose.ui.draw.drawWithCache
@@ -38,16 +43,31 @@ private val PageText = Brand.Muted.copy(alpha = 0.22f)
 private val Frame = Brand.Gold.copy(alpha = 0.6f)
 
 /**
+ * Напредъкът на прехода на екрана за „разгръщането“ ([bookCoverShared]): 0 преди и след прехода,
+ * 1 когато екранът е видим. Една стойност на дестинация (подава се от навигацията) — не по една
+ * анимация за всяка корица в списъка.
+ */
+val LocalBookFold = compositionLocalOf<State<Float>?> { null }
+
+/** Стойността за [LocalBookFold] от прехода на дестинацията ([scope]) — пружина без подскачане. */
+@Composable
+fun rememberBookFold(scope: AnimatedVisibilityScope): State<Float> =
+    scope.transition.animateFloat(
+        transitionSpec = { spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow) },
+        label = "book-open",
+    ) { if (it == EnterExitState.Visible) 1f else 0f }
+
+/**
  * „Разгръщане на книга“: корицата като [sharedElementKey] („прелита“ между списъка и детайлите
  * с ключ `book-<инв. №>`), но по време на прехода се отваря около гръбчето (лявия ръб) като
  * истинска предна корица — под нея се показва пергаментовата страница, а над 90° и вътрешната
  * страна на корицата, — и се затваря, докато застане на мястото си. Назад — обратно; жестът
  * „назад“ (predictive back) превърта същия преход, защото напредъкът е част от прехода на
- * екрана. Само трансформации на слоя и рисуване — без рекомпозиция по кадри.
+ * екрана ([LocalBookFold]). Само трансформации на слоя и рисуване — без рекомпозиция по кадри.
  *
- * Само за корицата, чийто двойник е на другия екран (останалите корици в списъка не се
- * движат). При намалено движение и в двата панела (таблет) — без споделен елемент, както
- * [sharedElementKey].
+ * Слоят с отварянето се добавя само към корицата, чийто двойник е на другия екран, и само
+ * докато преходът тече; останалите корици в списъка са само споделени елементи. При намалено
+ * движение и в двата панела (таблет) — без споделен елемент, както [sharedElementKey].
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -57,15 +77,13 @@ fun Modifier.bookCoverShared(inv: Long): Modifier {
     val reduced = rememberReducedMotion()
     if (reduced || !LocalSharedTransitionsEnabled.current) return this
     val state = with(shared) { rememberSharedContentState("book-$inv") }
+    val base = with(shared) { this@bookCoverShared.sharedElement(state, animatedVisibilityScope = nav, boundsTransform = SpringBounds) }
+    val fold = LocalBookFold.current ?: return base
+    // Съвпадението се сменя два пъти на преход (начало и край) — не при всеки кадър.
+    val matched by remember(state, shared) { derivedStateOf { state.isMatchFound && shared.isTransitionActive } }
+    if (!matched) return base
     // 0 преди и след прехода на екрана, 1 когато е видим: ъгълът е sin(π·fold) — 0 в двата края.
-    val fold: State<Float> = nav.transition.animateFloat(
-        transitionSpec = { spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow) },
-        label = "book-open",
-    ) { if (it == EnterExitState.Visible) 1f else 0f }
-    // Чете се само във фазите на слоя/рисуването; без съвпадение (друга корица) — 0, без четене на fold.
-    val angle = { if (state.isMatchFound && shared.isTransitionActive) bookOpenAngle(fold.value) else 0f }
-    return with(shared) { this@bookCoverShared.sharedElement(state, animatedVisibilityScope = nav, boundsTransform = SpringBounds) }
-        .bookOpening(angle)
+    return base.bookOpening { bookOpenAngle(fold.value) }
 }
 
 /**

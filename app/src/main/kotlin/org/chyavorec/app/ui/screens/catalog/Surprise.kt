@@ -1,13 +1,10 @@
 package org.chyavorec.app.ui.screens.catalog
 
-import org.chyavorec.app.ui.components.HideAppChrome
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
-import androidx.activity.compose.BackHandler
+import android.os.Build
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
@@ -28,7 +25,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Casino
@@ -42,209 +38,69 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathFillType
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.LifecycleResumeEffect
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.chyavorec.app.R
-import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.components.BookCover
-import org.chyavorec.app.ui.components.addShevitsaMotif
-import org.chyavorec.app.ui.components.shevitsaStripPath
+import org.chyavorec.app.ui.components.HideAppChrome
+import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.theme.Brand
-import org.chyavorec.app.ui.theme.ShevitsaMotif
 import org.chyavorec.app.util.udcSectionName
-import org.chyavorec.data.catalog.CatalogSearcher
-import org.chyavorec.data.catalog.SurprisePicker
-import org.chyavorec.data.catalog.SurpriseTastes
-import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.CatalogBook
+import kotlin.math.PI
 import kotlin.math.abs
-import kotlin.math.sqrt
+import kotlin.math.cos
 import kotlin.random.Random
 
-/** Скоро предложените заглавия — за цялата сесия (процеса), не само за екрана. */
-internal object SurpriseSession {
-    @Volatile var recent: List<String> = emptyList()
-}
-
 /**
- * „Изненадай ме“ — един опит: [round] се сменя при всеки („Още една“ пуска анимацията наново),
- * [pick] — предложението (`null` и [loading] = false — няма налична книга).
+ * Как се показва „Изненадай ме“: [FULL] — тестето с 3D обръщане и сенки на слоя; [LITE] — същото
+ * разбъркване, но без перспектива и без сенки на слоя (Android 8–11: HWUI там преизчислява сянката
+ * и изрязването при всеки кадър под 3D матрица — паметта растеше до 1,5 GB); [STILL] — без
+ * разбъркване, само плавна поява на резултата (намалено движение, екранен четец).
  */
-data class SurpriseUi(
-    val open: Boolean = false,
-    val round: Int = 0,
-    val loading: Boolean = false,
-    val pick: CatalogBook? = null,
-) {
-    val empty: Boolean get() = open && !loading && pick == null
-}
+enum class SurpriseMotion { FULL, LITE, STILL }
 
-class SurpriseViewModel(
-    /** Вкусът на читателя ([surpriseTastes]); тестовете подават свой. */
-    private val tastes: suspend (CatalogSearcher) -> SurpriseTastes,
-    private val random: Random = Random.Default,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
-) : ViewModel() {
-    private val _ui = MutableStateFlow(SurpriseUi())
-    val ui: StateFlow<SurpriseUi> = _ui.asStateFlow()
-    private var job: Job? = null
+/** Най-старият Android, на който разбъркването е проверено на емулатор (паметта остава равна). */
+internal const val MIN_SHUFFLE_SDK = Build.VERSION_CODES.O
 
-    /** Ново предложение от [searcher] (търсачката на каталога; `null` — каталогът още не е зареден). */
-    fun roll(searcher: CatalogSearcher?) {
-        if (job?.isActive == true) return
-        val round = _ui.value.round + 1
-        _ui.value = SurpriseUi(open = true, round = round, loading = true)
-        job = viewModelScope.launch {
-            val pick = if (searcher == null) null else withContext(dispatcher) {
-                val t = try {
-                    tastes(searcher)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (_: Exception) {
-                    SurpriseTastes()
-                }
-                // Грешка на индекса (базата) — „няма предложение“, не срив.
-                try {
-                    SurprisePicker.pick(SurprisePicker.pool(searcher, t, random), t, SurpriseSession.recent, random)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (_: Exception) {
-                    null
-                }
-            }
-            pick?.let { SurpriseSession.recent = SurprisePicker.remember(SurpriseSession.recent, it) }
-            _ui.update { if (it.round == round) it.copy(loading = false, pick = pick) else it }
-        }
-    }
-
-    fun close() {
-        job?.cancel()
-        _ui.update { SurpriseUi(round = it.round) }
-    }
-}
-
-/**
- * Вкусът — само от данни на телефона: „Искам да прочета“, историята на четене (ако е влязъл
- * читател, от кеша — без мрежа) и последните търсения. Нищо не излиза от телефона.
- */
-suspend fun surpriseTastes(c: AppContainer, searcher: CatalogSearcher): SurpriseTastes {
-    val wanted = c.database.wantToRead().all()
-    val history = if (c.authRepository.state.value is AuthState.SignedIn) c.libraryRepository.cachedHistory()?.data.orEmpty() else emptyList()
-    val searches = c.settings.recentSearches.first()
-    val books = searcher.books((wanted.map { it.inv } + history.mapNotNull { it.inv }).distinct())
-    return SurpriseTastes.of(
-        wanted = wanted.mapNotNull { books[it.inv] },
-        readBooks = history.mapNotNull { h -> h.inv?.let(books::get) },
-        history = history,
-        searches = searches,
-    )
-}
-
-/**
- * Разклащане на телефона: поне [peaks] удара над [thresholdG] g за [windowMs] (напред-назад),
- * после пауза [cooldownMs]. Чиста логика — сензорът е в [ShakeEffect].
- */
-class ShakeDetector(
-    private val thresholdG: Float = 2.3f,
-    private val windowMs: Long = 700,
-    private val peaks: Int = 2,
-    private val cooldownMs: Long = 1_500,
-) {
-    private var count = 0
-    private var firstPeakAt = 0L
-    private var lastPeakAt = Long.MIN_VALUE / 2
-    private var lastShakeAt = Long.MIN_VALUE / 2
-
-    /** Ускорението (m/s², с гравитацията) в момента [timeMs]; `true` — разклащане. */
-    fun onSample(x: Float, y: Float, z: Float, timeMs: Long): Boolean {
-        val g = sqrt(x * x + y * y + z * z) / SensorManager.GRAVITY_EARTH
-        if (g < thresholdG || timeMs - lastShakeAt < cooldownMs) return false
-        // Един и същ удар (няколко отчитания подред) се брои веднъж.
-        if (timeMs - lastPeakAt < MIN_PEAK_GAP_MS) return false
-        lastPeakAt = timeMs
-        if (count == 0 || timeMs - firstPeakAt > windowMs) {
-            count = 1
-            firstPeakAt = timeMs
-            return false
-        }
-        if (++count < peaks) return false
-        count = 0
-        lastShakeAt = timeMs
-        return true
-    }
-
-    private companion object { const val MIN_PEAK_GAP_MS = 120L }
-}
-
-/**
- * Акселерометърът — само докато екранът е отпред (RESUMED) и [enabled]; при пауза, смяна на
- * екрана или изход се спира веднага. Без сензор (емулатор, таблет) — нищо.
- */
-@Composable
-fun ShakeEffect(enabled: Boolean, onShake: () -> Unit) {
-    if (!enabled) return
-    val context = LocalContext.current
-    val current by rememberUpdatedState(onShake)
-    LifecycleResumeEffect(context) {
-        val sm = context.getSystemService(SensorManager::class.java)
-        val sensor = sm?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        val detector = ShakeDetector()
-        val listener = object : SensorEventListener {
-            override fun onSensorChanged(e: SensorEvent) {
-                if (detector.onSample(e.values[0], e.values[1], e.values[2], e.timestamp / 1_000_000L)) current()
-            }
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
-        }
-        if (sm != null && sensor != null) sm.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_UI)
-        onPauseOrDispose { sm?.unregisterListener(listener) }
-    }
+/** Изборът на [SurpriseMotion] за устройството ([sdk]) и настройките на достъпността. */
+fun surpriseMotion(sdk: Int, reducedMotion: Boolean, screenReader: Boolean): SurpriseMotion = when {
+    reducedMotion || screenReader || sdk < MIN_SHUFFLE_SDK -> SurpriseMotion.STILL
+    sdk < Build.VERSION_CODES.S -> SurpriseMotion.LITE
+    else -> SurpriseMotion.FULL
 }
 
 /** Картите в тестето и разположението им. */
@@ -252,6 +108,9 @@ private const val CARDS = 5
 private const val HERO = CARDS / 2
 private val CardWidth = 112.dp
 private val CardHeight = CardWidth * 1.42f
+private const val FAN_STEP = 46f
+private const val FAN_DROP = 9f
+private const val FAN_TILT = 9f
 
 /** Едно карта: отместване (dp), завъртане и прозрачност. */
 private class CardAnim(alpha: Float) {
@@ -265,36 +124,56 @@ private class CardAnim(alpha: Float) {
  * „Изненадай ме“ върху целия екран: тесте карти с гръб-шевица се разперва и разбърква
  * (пружини, ~1 s, тик при всяко разместване), после средната се обръща и излиза напред —
  * корицата на предложението (потвърждение с вибрация), под нея заглавието, „Още една“ и
- * „Към книгата“. При намалено движение или екранен четец — само плавна поява на резултата.
+ * „Към книгата“. При [SurpriseMotion.STILL] или вече показан резултат ([SurpriseUi.revealed]) —
+ * само плавна поява. Жестът „назад“ смалява и избледнява сцената; пуснат — затваря, отказан — връща.
  */
 @Composable
 fun SurpriseOverlay(
     ui: SurpriseUi,
-    reduced: Boolean,
+    motion: SurpriseMotion,
     onOpen: (CatalogBook) -> Unit,
     onAgain: () -> Unit,
     onClose: () -> Unit,
+    onRevealed: (round: Int) -> Unit = {},
 ) {
-    BackHandler(onBack = onClose)
+    val reducedMotion = rememberReducedMotion()
+    val scope = rememberCoroutineScope()
+    // Напредъкът на жеста „назад“ (0..1).
+    val back = remember { Animatable(0f) }
+    PredictiveBackHandler { events ->
+        try {
+            events.collect { back.snapTo(it.progress) }
+            onClose()
+        } catch (e: CancellationException) {
+            scope.launch { back.animateTo(0f, spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow)) }
+            throw e
+        }
+    }
     // Сцената е на цял екран — без долната лента на приложението под нея.
     HideAppChrome()
     val haptic = LocalHapticFeedback.current
-    val cards = remember(ui.round) { List(CARDS) { CardAnim(if (reduced) 0f else 1f) } }
-    val flip = remember(ui.round) { Animatable(if (reduced) 0f else 180f) }
-    val zoom = remember(ui.round) { Animatable(if (reduced) 1.25f else 1f) }
+    // Без разбъркване: намалено движение / екранен четец, или резултатът вече е бил показан.
+    val still = remember(ui.round) { motion == SurpriseMotion.STILL || ui.revealed }
+    val lite = motion == SurpriseMotion.LITE
+    val cards = remember(ui.round) { List(CARDS) { CardAnim(if (still) 0f else 1f) } }
+    val flip = remember(ui.round) { Animatable(if (still) 0f else 180f) }
+    val zoom = remember(ui.round) { Animatable(if (still) 1.25f else 1f) }
+    // Лицевата страна се вижда под 90° — чете се при смяна, не при всеки кадър.
+    val front by remember(ui.round) { derivedStateOf { flip.value < 90f } }
     var revealed by remember(ui.round) { mutableStateOf(false) }
     val latest by rememberUpdatedState(ui)
     LaunchedEffect(ui.round) {
-        if (reduced) {
+        if (still) {
             // Без разбъркване — само плавна поява на корицата и текста.
             snapshotFlow { latest.loading }.first { !it }
             revealed = true
+            onRevealed(ui.round)
             if (latest.pick != null) cards[HERO].alpha.animateTo(1f, tween(220))
             return@LaunchedEffect
         }
         val fanSpring = spring<Float>(dampingRatio = 0.68f, stiffness = Spring.StiffnessMediumLow)
         val swapSpring = spring<Float>(dampingRatio = 0.75f, stiffness = Spring.StiffnessMedium)
-        fun moveTo(card: CardAnim, slot: Int, s: androidx.compose.animation.core.AnimationSpec<Float>) {
+        fun moveTo(card: CardAnim, slot: Int, s: AnimationSpec<Float>) {
             val off = slot - HERO
             launch { card.x.animateTo(off * FAN_STEP, s) }
             launch { card.y.animateTo(abs(off) * FAN_DROP, s) }
@@ -331,6 +210,7 @@ fun SurpriseOverlay(
             flip.animateTo(0f, spring(dampingRatio = 0.7f, stiffness = Spring.StiffnessMedium))
         }
         revealed = true
+        onRevealed(ui.round)
     }
 
     val status = when {
@@ -338,6 +218,8 @@ fun SurpriseOverlay(
         ui.empty && revealed -> stringResource(R.string.surprise_empty)
         else -> stringResource(R.string.surprise_shuffling)
     }
+    // Заглавието на „прозореца“ за TalkBack: сцената, после резултатът.
+    val pane = stringResource(if (revealed && ui.pick != null) R.string.surprise_label else R.string.surprise_action)
     // Тъмната сцена се появява за ~0.16 s; зад тестето — топъл отблясък (бордо и злато).
     val appear = remember { Animatable(0f) }
     LaunchedEffect(Unit) { appear.animateTo(1f, tween(160)) }
@@ -361,10 +243,24 @@ fun SurpriseOverlay(
             // Докосване извън картата затваря; списъкът отдолу не получава докосванията. Без семантика —
             // с TalkBack се затваря с бутона „Затвори“ или „Назад“.
             .pointerInput(Unit) { detectTapGestures { onClose() } }
+            .semantics { paneTitle = pane }
             .testTag("surprise"),
     ) {
         Column(
-            Modifier.fillMaxSize().systemBarsPadding().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 16.dp),
+            Modifier
+                .fillMaxSize()
+                .graphicsLayer {
+                    // Жестът „назад“: сцената се смалява (до 0,9) и избледнява; при намалено движение — само избледнява.
+                    val p = back.value
+                    alpha = 1f - 0.5f * p
+                    if (!reducedMotion) {
+                        scaleX = 1f - 0.1f * p
+                        scaleY = 1f - 0.1f * p
+                    }
+                }
+                .systemBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(40.dp))
@@ -389,21 +285,30 @@ fun SurpriseOverlay(
                                 rotationZ = c.rotation.value
                                 alpha = c.alpha.value
                                 if (hero) {
-                                    rotationY = flip.value
-                                    cameraDistance = 14f * density
-                                    scaleX = zoom.value
+                                    if (lite) {
+                                        // Без перспектива: обръщането — свиване по ширина (cos на ъгъла).
+                                        scaleX = zoom.value * abs(cos(flip.value * PI.toFloat() / 180f))
+                                    } else {
+                                        rotationY = flip.value
+                                        cameraDistance = 14f * density
+                                        scaleX = zoom.value
+                                    }
                                     scaleY = zoom.value
                                 }
-                                shadowElevation = 10f * density
-                                shape = CardShape
-                                clip = true
+                                if (!lite) {
+                                    shadowElevation = 10f * density
+                                    shape = CardShape
+                                    clip = true
+                                }
                             }
+                            // Леко: нарисувана сянка зад картата и изрязване в отделен слой без трансформации.
+                            .then(if (lite) Modifier.cardShadow().clip(CardShape) else Modifier)
                             .clearAndSetSemantics { },
                     ) {
                         val pick = ui.pick
-                        if (hero && pick != null && (flip.value < 90f) && (!reduced || revealed)) {
+                        if (hero && pick != null && front && (!still || revealed)) {
                             BookCover(pick, width = CardWidth, showStatusDot = false, decorative = true)
-                        } else if (!reduced) {
+                        } else if (!still) {
                             CardBack(Modifier.fillMaxSize())
                         }
                     }
@@ -414,7 +319,7 @@ fun SurpriseOverlay(
             Box(Modifier.size(1.dp).semantics { liveRegion = LiveRegionMode.Assertive; contentDescription = status })
             AnimatedVisibility(
                 visible = revealed,
-                enter = if (reduced) fadeIn(tween(220)) else fadeIn(tween(220)) + slideInVertically(tween(260)) { it / 6 },
+                enter = if (still) fadeIn(tween(220)) else fadeIn(tween(220)) + slideInVertically(tween(260)) { it / 6 },
             ) {
                 val pick = ui.pick
                 if (pick != null) {
@@ -434,11 +339,6 @@ fun SurpriseOverlay(
         }
     }
 }
-
-private const val FAN_STEP = 46f
-private const val FAN_DROP = 9f
-private const val FAN_TILT = 9f
-private val CardShape = RoundedCornerShape(10.dp)
 
 /** Заглавието, авторът, разделът и бутоните под обърнатата карта. */
 @Composable
@@ -489,44 +389,6 @@ private fun SurpriseDetails(book: CatalogBook, onOpen: () -> Unit, onAgain: () -
             }
         }
     }
-}
-
-/**
- * Гърбът на картата: бордо, тънка златна рамка, ромбът-шевица в средата и ленти с кривулица
- * горе и долу. Пътищата — веднъж за размера (drawWithCache).
- */
-@Composable
-private fun CardBack(modifier: Modifier) {
-    Spacer(
-        modifier.drawWithCache {
-            val w = size.width
-            val h = size.height
-            val inset = 7.dp.toPx()
-            val band = 14.dp.toPx()
-            val strip = shevitsaStripPath(ShevitsaMotif.ZIGZAG, w - 2 * inset - 8.dp.toPx(), band)
-            val center = Path().apply {
-                fillType = PathFillType.EvenOdd
-                val s = w * 0.46f
-                addShevitsaMotif(ShevitsaMotif.RHOMBUS, (w - s) / 2f, (h - s) / 2f, s)
-            }
-            val corners = Path().apply {
-                fillType = PathFillType.EvenOdd
-                val s = w * 0.12f
-                addShevitsaMotif(ShevitsaMotif.ROSETTE, (w - s) / 2f, h / 2f - w * 0.23f - s * 1.3f, s)
-                addShevitsaMotif(ShevitsaMotif.ROSETTE, (w - s) / 2f, h / 2f + w * 0.23f + s * 0.3f, s)
-            }
-            val line = Stroke(width = 1.2.dp.toPx())
-            val radius = CornerRadius(6.dp.toPx())
-            onDrawBehind {
-                drawRect(Brand.Burgundy)
-                drawRoundRect(Brand.Gold.copy(alpha = 0.8f), Offset(inset, inset), Size(w - 2 * inset, h - 2 * inset), radius, style = line)
-                translate(inset + 4.dp.toPx(), inset + 5.dp.toPx()) { drawPath(strip, Brand.Gold.copy(alpha = 0.85f)) }
-                translate(inset + 4.dp.toPx(), h - inset - 5.dp.toPx() - band) { drawPath(strip, Brand.Gold.copy(alpha = 0.85f)) }
-                drawPath(center, Brand.Gold)
-                drawPath(corners, Brand.GoldLight.copy(alpha = 0.7f))
-            }
-        },
-    )
 }
 
 /** Бутонът в горната лента на каталога. */

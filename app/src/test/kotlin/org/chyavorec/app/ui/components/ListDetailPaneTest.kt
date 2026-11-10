@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.components
 
 import android.app.Application
+import androidx.activity.BackEventCompat
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -64,6 +65,33 @@ class ListDetailPaneTest {
         compose.onNodeWithText("LIST").assertExists()
         // Следващото „Назад“ е вече на навигацията (списъкът не го задържа).
         assertFalse(compose.runOnUiThread { compose.activity.onBackPressedDispatcher.hasEnabledCallbacks() })
+    }
+
+    /** Предсказуемо „назад“: докато жестът тече и при отказ детайлът остава; пуснат — затваря се. */
+    @Test fun predictiveBackCancelKeepsTheDetail() {
+        start()
+        compose.onNodeWithText("OPEN").performClick()
+        compose.waitForIdle()
+        val back = compose.activity.onBackPressedDispatcher
+        compose.runOnUiThread {
+            back.dispatchOnBackStarted(BackEventCompat(0f, 400f, 0f, BackEventCompat.EDGE_LEFT))
+            back.dispatchOnBackProgressed(BackEventCompat(200f, 400f, 0.5f, BackEventCompat.EDGE_LEFT))
+        }
+        compose.waitForIdle()
+        assertTrue(detailShown())
+        compose.runOnUiThread { back.dispatchOnBackCancelled() }
+        compose.waitForIdle()
+        assertTrue(detailShown())
+        assertEquals("book/1", state.get<String>(DETAIL_KEY))
+        // Целият жест — детайлът се затваря.
+        compose.runOnUiThread {
+            back.dispatchOnBackStarted(BackEventCompat(0f, 400f, 0f, BackEventCompat.EDGE_LEFT))
+            back.dispatchOnBackProgressed(BackEventCompat(300f, 400f, 0.8f, BackEventCompat.EDGE_LEFT))
+            back.onBackPressed()
+        }
+        compose.waitForIdle()
+        assertFalse(detailShown())
+        assertNull(state.get<String>(DETAIL_KEY))
     }
 
     @Test fun closeButtonInTheDetail() {
