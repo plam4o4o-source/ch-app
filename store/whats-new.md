@@ -13,6 +13,22 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.34
+
+### bg
+- Читателската карта пести батерия — в покой вече не се рисува.
+- По-плавни анимации на по-стари телефони; „Изненадай ме“ — и на Android 8–11.
+- „Моята читателска година“ се отваря веднага и работи по-добре с голям шрифт.
+- Заявената книга остава отбелязана като „Заявена“; в Настройки — „Инсталирай“ за готово обновление.
+- Начален час на събитията и по-добър TalkBack; разклащането може да се изключи.
+
+### en
+- The library card saves battery — it no longer redraws when nothing moves.
+- Smoother animations on older phones; “Surprise me” now on Android 8–11 too.
+- “My reading year” opens instantly and works better with large text.
+- A held book stays marked as held; Settings shows “Install” for a ready update.
+- Event start times and better TalkBack support; shake can be turned off.
+
 ## 1.2.33
 
 ### bg
