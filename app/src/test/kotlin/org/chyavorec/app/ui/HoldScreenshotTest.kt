@@ -123,7 +123,8 @@ class HoldScreenshotTest {
     @Test fun successfulHoldShowsHeldStateAndIsRemembered() {
         val container = container()
         runBlocking {
-            val r = container.authRepository.login("1024-5678", "1234".toCharArray(), remember = false)
+            // „Запомни ме“: читателският кеш (и запомнената заявка) е само за запомнен вход.
+            val r = container.authRepository.login("1024-5678", "1234".toCharArray(), remember = true)
             check(r is Outcome.Success) { "входът на примерния читател: $r" }
         }
         compose.setContent {

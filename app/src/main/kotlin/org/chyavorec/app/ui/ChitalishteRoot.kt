@@ -851,7 +851,7 @@ private fun NavGraphBuilder.screen(
         },
     ) {
         // Една стойност за „разгръщането“ на корицата на дестинация — не по една на корица.
-        val fold = rememberBookFold(this@composable)
+        val fold = rememberBookFold(this@composable, active = !reduced && LocalSharedTransitionsEnabled.current)
         CompositionLocalProvider(LocalNavAnimatedScope provides this@composable, LocalBookFold provides fold) { content(entry) }
     }
 }

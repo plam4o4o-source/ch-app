@@ -5,6 +5,7 @@ import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -49,13 +50,17 @@ private val Frame = Brand.Gold.copy(alpha = 0.6f)
  */
 val LocalBookFold = compositionLocalOf<State<Float>?> { null }
 
-/** Стойността за [LocalBookFold] от прехода на дестинацията ([scope]) — пружина без подскачане. */
+/**
+ * Стойността за [LocalBookFold] от прехода на дестинацията ([scope]) — пружина без подскачане.
+ * Без споделени елементи ([active] = false: намалено движение, смяна на раздел) — постоянна 0:
+ * не се анимира и не удължава прехода на екрана.
+ */
 @Composable
-fun rememberBookFold(scope: AnimatedVisibilityScope): State<Float> =
+fun rememberBookFold(scope: AnimatedVisibilityScope, active: Boolean): State<Float> =
     scope.transition.animateFloat(
-        transitionSpec = { spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow) },
+        transitionSpec = { if (active) spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow) else snap() },
         label = "book-open",
-    ) { if (it == EnterExitState.Visible) 1f else 0f }
+    ) { if (active && it == EnterExitState.Visible) 1f else 0f }
 
 /**
  * „Разгръщане на книга“: корицата като [sharedElementKey] („прелита“ между списъка и детайлите
