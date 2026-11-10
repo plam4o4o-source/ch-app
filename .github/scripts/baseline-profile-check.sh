@@ -29,6 +29,9 @@ KEYS=(
   "MyHubScreen|MyHubScreenKt"
   "MoreScreen|MoreScreenKt"
   "GalleryScreens|GalleryScreensKt"
+  # Картата без вход (ръчно въведена) — не зависи от мрежата.
+  "CardScreen|CardScreensKt(;->|\\$)CardScreen"
+  "CardFullscreen|CardScreensKt(;->|\\$)CardFullscreen"
 )
 # Само за сведение (не спират профила).
 INFO=(
@@ -36,7 +39,15 @@ INFO=(
   "EventCard|EventsScreensKt(;->|\\$)EventCard"
   "WantToReadItem|WantToReadScreenKt(;->|\\$)WantToReadItem"
   "SearchScreen|SearchScreenKt"
+  # Изненадата и споделянето зависят от мрежата (каталогът, новините).
+  "SurpriseOverlay|SurpriseKt(;->|\\$)SurpriseOverlay"
+  "ShareChoiceSheet|ShareButtonKt(;->|\\$)ShareChoiceSheet"
+  "ShareImages|ShareImagesKt"
+  "CardFoil|screens/my/CardFoil"
+  "LivingShevitsa|LivingShevitsaKt"
 )
+# Ръчните правила (историята на годината, неподвижните шевици до API 32) не са в генерирания
+# профил — те са в app/src/main/baselineProfiles/ и AGP ги слива с него при сглобяване.
 
 if [ ! -s "$NEW" ]; then
   echo "::error::baseline-prof.txt was not generated"

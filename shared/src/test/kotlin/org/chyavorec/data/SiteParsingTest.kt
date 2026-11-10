@@ -74,6 +74,23 @@ class SiteParsingTest {
         assertEquals("Голям салон", parser.parseEvents(trimmed, LocalDate.of(2026, 9, 26)).single().place)
     }
 
+    /** Часът идва от сайта (поле „time“ в index.json), винаги като HH:mm; без него, празен или невалиден — null. */
+    @Test fun eventTimeFromIndex() {
+        fun time(field: String) = parser.parseEvents(
+            """{"docs":[{"id":"e","type":"event","title":"Сбирка","day":"05","monthNum":"10"$field}]}""",
+            LocalDate.of(2026, 9, 26),
+        ).single().time
+        assertEquals("18:30", time(""","time":"18:30""""))
+        assertEquals("18:30", time(""","time":"18.30""""))
+        assertEquals("09:05", time(""","time":"9:05""""))
+        assertNull(time(""))
+        assertNull(time(""","time":"""""))
+        assertNull(time(""","time":"  """"))
+        assertNull(time(""","time":"вечерта""""))
+        // Календарът на сайта без часове — както досега.
+        assertTrue(parser.parseEvents(TestUtil.resource("site-index.json"), LocalDate.of(2026, 9, 26)).all { it.time == null })
+    }
+
     @Test fun nextOccurrenceOnTheSameDayIsToday() {
         assertEquals(LocalDate.of(2026, 1, 6), parser.nextOccurrence(1, 6, LocalDate.of(2026, 1, 6)))
         assertEquals(LocalDate.of(2028, 2, 29), parser.nextOccurrence(2, 29, LocalDate.of(2027, 3, 1)))

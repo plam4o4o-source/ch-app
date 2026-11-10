@@ -32,6 +32,21 @@ class BulgarianDatesTest {
 
     @Test fun dateIsNotMistakenForTime() = assertNull(BulgarianDates.findTime("на 12.10.2026 г."))
 
+    /** Полето „time“ на сайта: „18:30“, „18.30“, „9:05“, с „ч.“; празно, невалидно или текст — null. */
+    @Test fun clockField() {
+        assertEquals(LocalTime.of(18, 30), BulgarianDates.parseClock("18:30"))
+        assertEquals(LocalTime.of(18, 30), BulgarianDates.parseClock("18.30"))
+        assertEquals(LocalTime.of(9, 5), BulgarianDates.parseClock(" 9:05 "))
+        assertEquals(LocalTime.of(18, 0), BulgarianDates.parseClock("18:00 ч."))
+        assertNull(BulgarianDates.parseClock(null))
+        assertNull(BulgarianDates.parseClock(""))
+        assertNull(BulgarianDates.parseClock("   "))
+        assertNull(BulgarianDates.parseClock("25:00"))
+        assertNull(BulgarianDates.parseClock("18:75"))
+        assertNull(BulgarianDates.parseClock("вечерта"))
+        assertNull(BulgarianDates.parseClock("от 18:30 до 20:00"))
+    }
+
     @Test fun formatting() {
         assertEquals("3 октомври 2026", BulgarianDates.formatLong(LocalDate.of(2026, 10, 3)))
         assertEquals("03.10.2026", BulgarianDates.formatShort(LocalDate.of(2026, 10, 3)))

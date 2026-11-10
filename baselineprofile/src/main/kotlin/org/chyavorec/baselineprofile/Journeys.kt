@@ -69,6 +69,19 @@ private val MESSAGES = containing("Съобщения", "съобщени", "Mes
 /** Заглавката над резултатите в каталога: „12 резултата · данни от InvLib към …“ / „12 results · InvLib data as of …“. */
 private val CATALOG_RESULTS = Pattern.compile("^[1-9][0-9]*\\s+(резултат|result).*", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE or Pattern.DOTALL)
 private val EDIT_TEXT: BySelector = By.clazz("android.widget.EditText")
+/** Бързото действие „Читателска карта“ на „Начало“ и бутоните на екрана на картата. */
+private val CARD = exactly("Читателска карта", "Library card")
+private val CARD_SHOW = exactly("Покажи картата", "Show card")
+private val SAVE = exactly("Запази", "Save")
+private val CLOSE = exactly("Затвори", "Close")
+/** Заровете в лентата на каталога (contentDescription) и „Още една“ под изтеглената карта. */
+private val SURPRISE = exactly("Изненадай ме", "Surprise me")
+private val SURPRISE_AGAIN = exactly("Още една", "Another one")
+/** „Сподели“ в лентата на статията и „Сподели като картинка“ в листа с избор. */
+private val SHARE = exactly("Сподели", "Share")
+private val SHARE_IMAGE = exactly("Сподели като картинка", "Share as an image")
+/** Измислен номер за собствената карта (само на емулатора; Code 39 — главни букви и цифри). */
+private const val PROFILE_CARD_NUMBER = "BP2026"
 
 /** Броят бележки досега — път с нови бележки е стигнал само донякъде. */
 private var notes = 0
@@ -576,5 +589,119 @@ fun MacrobenchmarkScope.galleryJourney() {
         Thread.sleep(1_000)
     } finally {
         backToTab()
+    }
+}
+
+/**
+ * Читателската карта без вход: „Начало“ → „Читателска карта“ → (първия път — ръчно въведена
+ * карта, както би я добавил читател без профил; остава и за следващите повторения) → „Покажи
+ * картата“ → цял екран → обръщане и обратно → затваряне → към „Начало“.
+ */
+fun MacrobenchmarkScope.cardJourney() {
+    if (!openTab(TAB_HOME)) return
+    val label = findScrolling(By.text(CARD).pkg(packageName), swipes = 2)
+        ?: run { repeat(2) { swipeDown() }; device.findObject(By.text(CARD).pkg(packageName)) }
+        ?: return note("card quick action not found")
+    label.clickableAncestor().click()
+    // Картата вече е добавена („Покажи картата“) или формата за нея (полето за номера).
+    try {
+        val ready = poll(TIMEOUT) { device.findObject(By.text(CARD_SHOW)) ?: device.findObject(EDIT_TEXT) }
+            ?: return note("card screen not shown")
+        if (!device.hasObject(By.text(CARD_SHOW))) {
+            // Първото поле — номерът (второто, името, е по желание).
+            (device.findObjects(EDIT_TEXT).minByOrNull { it.visibleBounds.top } ?: ready).setText(PROFILE_CARD_NUMBER)
+            device.waitForIdle()
+            // Клавиатурата може да покрива „Запази“.
+            if (keyboardShown()) { device.pressBack(); device.waitForIdle() }
+            val save = device.findObject(By.text(SAVE).pkg(packageName)) ?: return note("card save button not found")
+            save.clickableAncestor().click()
+            if (waitFor(By.text(CARD_SHOW)) == null) return note("self card not saved")
+        }
+        Thread.sleep(1_000)
+        swipeUp()
+        swipeDown()
+        device.findObject(By.text(CARD_SHOW))?.clickableAncestor()?.click() ?: return note("show card button not found")
+        if (waitFor(By.desc(CLOSE).pkg(packageName)) == null) return note("fullscreen card not shown")
+        // Влизането (3D обръщане) и яркостта.
+        Thread.sleep(1_500)
+        // Обръщане към гърба и обратно. Самата карта е най-големият докосваем елемент (освен нея
+        // е само „Затвори“).
+        repeat(2) {
+            val card = device.findObjects(By.clickable(true).pkg(packageName))
+                .filter { !it.visibleBounds.isEmpty }
+                .maxByOrNull { it.visibleBounds.width() * it.visibleBounds.height() }
+                ?: return note("card not found on the fullscreen screen")
+            card.click()
+            Thread.sleep(1_200)
+        }
+        device.findObject(By.desc(CLOSE).pkg(packageName))?.click() ?: device.pressBack()
+        device.wait(Until.hasObject(By.text(CARD_SHOW)), TIMEOUT)
+        device.waitForIdle()
+    } finally {
+        backToTab()
+    }
+}
+
+/**
+ * „Изненадай ме“ (заровете в каталога): разбъркване → обърнатата карта → „Още една“ →
+ * затваряне. Каталогът трябва да е зареден (иначе — само „няма предложение“).
+ */
+fun MacrobenchmarkScope.surpriseJourney() {
+    if (!openTab(TAB_CATALOG)) return
+    if (waitFor(By.text(CATALOG_RESULTS), CONTENT_TIMEOUT) == null) return note("catalog not loaded for surprise")
+    // Клавиатурата (от търсенето) покрива част от екрана.
+    if (keyboardShown()) { device.pressBack(); device.waitForIdle() }
+    val dice = waitFor(By.desc(SURPRISE).pkg(packageName)) ?: return note("surprise button not found")
+    dice.click()
+    // Разбъркването трае около 2–3 s, после картата се обръща.
+    if (waitFor(By.text(SURPRISE_AGAIN), CONTENT_TIMEOUT) == null) {
+        note("surprise result not shown")
+    } else {
+        Thread.sleep(1_000)
+        device.findObject(By.text(SURPRISE_AGAIN))?.clickableAncestor()?.click()
+        device.waitForIdle()
+        Thread.sleep(3_500)
+    }
+    device.findObject(By.desc(CLOSE).pkg(packageName))?.click() ?: device.pressBack()
+    device.wait(Until.gone(By.text(SURPRISE_AGAIN)), TIMEOUT)
+    device.waitForIdle()
+    backToTab()
+}
+
+/**
+ * Споделяне на новина: статия → „Сподели“ → листът с избор (умалената карта) → „Сподели
+ * като картинка“ (рисуването на картата с QR кода) → системният избор на приложение се
+ * затваря с „назад“, без да се изпраща нищо → към „Новини“.
+ */
+fun MacrobenchmarkScope.shareJourney() {
+    if (!openTab(TAB_NEWS)) return
+    val first = poll(CONTENT_TIMEOUT) { device.findObject(EDIT_TEXT)?.let { largestClickableBelow(it.visibleBounds.bottom) } }
+        ?: return note("news not loaded for share")
+    first.click()
+    if (device.wait(Until.gone(EDIT_TEXT), TIMEOUT) != true) return note("article not opened for share")
+    try {
+        Thread.sleep(1_500)
+        val share = waitFor(By.desc(SHARE).pkg(packageName)) ?: return note("share button not found")
+        share.click()
+        if (waitFor(By.text(SHARE_IMAGE), 5_000) == null) {
+            // Без картинка — направо системният избор (споделяне на връзката).
+            note("share sheet not shown")
+        } else {
+            Thread.sleep(1_000)
+            device.findObject(By.text(SHARE_IMAGE))?.clickableAncestor()?.click()
+            // Картинката се рисува, после се отваря системният избор (друго приложение).
+            poll(CONTENT_TIMEOUT) { (!inApp()).takeIf { it } } ?: note("share chooser not shown")
+        }
+        Thread.sleep(1_500)
+        // Затваряне на системния избор — нищо не се изпраща.
+        repeat(3) {
+            if (inApp()) return@repeat
+            device.pressBack()
+            device.waitForIdle()
+            poll(2_000) { inApp().takeIf { it } }
+        }
+        if (!inApp()) note("share chooser not closed")
+    } finally {
+        if (inApp()) backUntil(EDIT_TEXT)
     }
 }

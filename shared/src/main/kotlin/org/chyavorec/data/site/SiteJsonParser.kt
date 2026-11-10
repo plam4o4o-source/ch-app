@@ -65,6 +65,8 @@ class SiteJsonParser(private val baseUrl: String) {
         val size: String? = null,
         /** Мястото на събитието (адресът на читалището, както LOCATION в events.ics). */
         val place: String? = null,
+        /** Началният час на събитието („18:30“), ако е зададен в календара на сайта. */
+        val time: String? = null,
     )
 
     @Serializable
@@ -141,6 +143,8 @@ class SiteJsonParser(private val baseUrl: String) {
                 id = d.id,
                 title = d.title.trim(),
                 date = date.toString(),
+                // Винаги HH:mm („18.30“ → „18:30“); празно или невалидно — без час.
+                time = BulgarianDates.parseClock(d.time)?.toString(),
                 place = d.place?.trim()?.ifBlank { null },
                 description = d.excerpt.trim(),
                 imageUrl = abs(d.cover),

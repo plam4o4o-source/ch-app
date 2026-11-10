@@ -66,6 +66,8 @@ class LiveUpdatesTest {
         TestBackend.allowNotificationsAndNetwork(app)
         app.container = backend.container(app, clock)
         app.container.settings.setNotifyEvents(true)
+        // Robolectric няма отговор на системата за живите известия — разрешени (като по подразбиране).
+        LiveUpdates.promotionAllowed = { true }
         WorkManagerTestInitHelper.initializeTestWorkManager(app, Configuration.Builder().setExecutor(SynchronousExecutor()).build())
         // Приложение за карти — за „Маршрут“.
         shadowOf(app.packageManager).addResolveInfoForIntent(
@@ -74,7 +76,12 @@ class LiveUpdatesTest {
         )
     }
 
-    @After fun tearDown() = backend.shutdown()
+    @After fun tearDown() {
+        LiveUpdates.promotionAllowed = defaultPromotionAllowed
+        backend.shutdown()
+    }
+
+    private val defaultPromotionAllowed = LiveUpdates.promotionAllowed
 
     private fun Notification.template() = extras.getString(Notification.EXTRA_TEMPLATE)
     private fun Notification.text(key: String) = extras.getCharSequence(key)?.toString()
@@ -131,7 +138,8 @@ class LiveUpdatesTest {
         assertEquals(listOf(45, 15), style.progressSegments.map { it.length })
         assertEquals(ContextCompat.getColor(app, R.color.brand_burgundy), style.progressSegments.last().color)
         assertEquals(listOf(30), style.progressPoints.map { it.position })
-        // Чипът: обратно броене до началото (хронометър, без опресняване всяка минута).
+        // Чипът: часът на началото; в известието — обратно броене (хронометър, без опресняване всяка минута).
+        assertEquals("13:40", n.extras.getString("android.shortCriticalText"))
         assertEquals(start, n.`when`)
         assertTrue(n.extras.getBoolean(Notification.EXTRA_SHOW_CHRONOMETER))
         assertTrue(n.extras.getBoolean(Notification.EXTRA_CHRONOMETER_COUNT_DOWN))
@@ -192,6 +200,14 @@ class LiveUpdatesTest {
         assertNull(shown("ev-1"))
     }
 
+    /** Потребителят е спрял живите известия за приложението — нищо (и без опреснявания). */
+    @Test fun liveUpdatesTurnedOffMeansNoLiveEvent() = runBlocking<Unit> {
+        LiveUpdates.promotionAllowed = { false }
+        runLive(start = now + 40 * 60_000L)
+        assertNull(shown("ev-1"))
+        assertTrue(liveWork("ev-1").none { it.state == WorkInfo.State.ENQUEUED })
+    }
+
     @Test fun startedEventIsNotShown() = runBlocking<Unit> {
         runLive(start = now - 60_000L)
         assertNull(shown("ev-1"))
@@ -215,6 +231,20 @@ class LiveUpdatesTest {
             EventLiveWindow.startMillis(event(time = "18:30"), clock.zone()),
         )
         assertNull(EventLiveWindow.startMillis(event(time = null), clock.zone()))
+    }
+
+    /** Началото: датата и часът по софийско време (и около смяната на часа); „18.30“ — същото; без час — нищо. */
+    @Test fun startMillisIsSofiaLocalTime() {
+        val zone = clock.zone()
+        assertEquals(Instant.parse("2026-10-17T15:30:00Z").toEpochMilli(), EventLiveWindow.startMillis(event(time = "18.30"), zone))
+        // Лятно време (UTC+3) от 29 март, зимно (UTC+2) от 25 октомври 2026.
+        assertEquals(Instant.parse("2026-03-29T15:30:00Z").toEpochMilli(), EventLiveWindow.startMillis(event(date = "2026-03-29", time = "18:30"), zone))
+        assertEquals(Instant.parse("2026-10-25T16:30:00Z").toEpochMilli(), EventLiveWindow.startMillis(event(date = "2026-10-25", time = "18:30"), zone))
+        assertEquals(Instant.parse("2026-12-05T07:05:00Z").toEpochMilli(), EventLiveWindow.startMillis(event(date = "2026-12-05", time = "9:05"), zone))
+        assertNull(EventLiveWindow.startMillis(event(time = ""), zone))
+        assertNull(EventLiveWindow.startMillis(event(time = "вечерта"), zone))
+        assertNull(EventLiveWindow.startMillis(event(date = "", time = "18:30"), zone))
+        assertNull(EventLiveWindow.startMillis(Event(id = "x", title = "Без дата", date = null, time = "18:30", sourceUrl = "https://example.org/e"), zone))
     }
 
     private fun event(date: String = "2026-10-17", time: String?) =

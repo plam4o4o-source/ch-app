@@ -56,6 +56,12 @@ class BaselineProfileGenerator {
         optional("my") { myGuestJourney() }
         optional("more") { moreJourney() }
         optional("gallery") { galleryJourney() }
+        optional("card") { cardJourney() }
+        optional("surprise") { surpriseJourney() }
+        optional("share") { shareJourney() }
+        // Историята „Моята читателска година“ иска история на четене (вход в профил), а prod
+        // няма демо вход — тя, неподвижните шевици до API 32 и фолиото на картата без шейдър
+        // са с ръчни правила в app/src/main/baselineProfiles/hand-written-rules.txt.
     }
 
     /**
