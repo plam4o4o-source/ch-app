@@ -37,6 +37,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -166,10 +167,16 @@ fun AppTopBar(
     expandedHeight: androidx.compose.ui.unit.Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
     actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
 ) {
+    // Свита лента (enterAlways): съдържанието ѝ остава в дървото, изрязано над екрана — TalkBack
+    // би стигал до невидим бутон без име. Докато е скрита повече от наполовина, е извън семантиката.
+    val hidden by remember(scrollBehavior) {
+        derivedStateOf { (scrollBehavior?.state?.collapsedFraction ?: 0f) > 0.5f }
+    }
+    val hiddenSemantics = if (hidden) Modifier.clearAndSetSemantics { } else Modifier
     TopAppBar(
         modifier = Modifier.screenPane(title),
         title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(hiddenSemantics, verticalAlignment = Alignment.CenterVertically) {
                 Emblem(34.dp)
                 Spacer(Modifier.width(12.dp))
                 // Заглавието на основен раздел — над заглавките на разделите под него. При едър шрифт
@@ -189,10 +196,12 @@ fun AppTopBar(
             }
         },
         actions = {
-            actions()
-            if (onSearch != null) {
-                IconButton(onClick = onSearch) {
-                    Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.action_search))
+            Row(hiddenSemantics, verticalAlignment = Alignment.CenterVertically) {
+                actions()
+                if (onSearch != null) {
+                    IconButton(onClick = onSearch) {
+                        Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.action_search))
+                    }
                 }
             }
         },

@@ -12,7 +12,7 @@ import okhttp3.Response
 import org.chyavorec.core.AppError
 import org.chyavorec.core.Outcome
 import java.io.IOException
-import kotlin.coroutines.resume
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Суров HTTP отговор.
@@ -133,7 +133,9 @@ class HttpFetcher(
 internal suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
     enqueue(object : Callback {
         override fun onResponse(call: Call, response: Response) {
-            cont.resume(response)
+            // Отказ точно когато отговорът пристига: отговорът не стига до `use {}` — затваря се тук
+            // (иначе връзката и тялото остават незатворени).
+            cont.resume(response) { _: Throwable, r: Response, _: CoroutineContext -> r.close() }
         }
 
         override fun onFailure(call: Call, e: IOException) {

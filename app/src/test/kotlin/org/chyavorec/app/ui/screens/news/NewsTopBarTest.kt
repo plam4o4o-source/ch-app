@@ -5,6 +5,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -36,6 +38,8 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import java.time.Instant
 import kotlin.math.abs
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * „Новини и събития“: лентата със заглавието се скрива при превъртане надолу, а повторното
@@ -107,5 +111,47 @@ class NewsTopBarTest {
         compose.onAllNodes(newsTab).onFirst().performClick()
         compose.waitUntil(5_000) { abs(segmentsTop() - expanded) < 1f }
         compose.waitUntil(5_000) { compose.onAllNodes(hasText("Новина номер 1")).fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    private fun count(m: SemanticsMatcher) = compose.onAllNodes(m).fetchSemanticsNodes().size
+
+    /**
+     * Свитата лента не оставя невидим бутон без име в дървото за TalkBack (търсенето и заглавието
+     * са изрязани над екрана); щом лентата се покаже отново — са пак там.
+     */
+    @Test fun collapsedTitleBarLeavesNothingFocusableBehind() {
+        launch()
+        compose.waitUntil(15_000) { compose.onAllNodes(hasText("Новина номер 1")).fetchSemanticsNodes().isNotEmpty() }
+        compose.waitForIdle()
+        val search = hasContentDescription("Търсене")
+        assertEquals(1, count(search))
+
+        compose.onRoot().performTouchInput {
+            swipe(Offset(centerX, height * 0.75f), Offset(centerX, height * 0.3f), durationMillis = 400)
+        }
+        compose.waitUntil(5_000) { count(search) == 0 }
+        compose.waitForIdle()
+        // Нищо докосваемо над сегментите (там е само изрязаната лента).
+        val top = segmentsTop()
+        val above = compose.onAllNodes(hasClickAction()).fetchSemanticsNodes().filter { it.boundsInRoot.bottom <= top + 1f }
+        assertTrue(above.isEmpty(), "докосваеми елементи над сегментите: ${above.map { it.boundsInRoot }}")
+        assertEquals(0, count(hasText("Новини и събития")))
+
+        compose.onAllNodes(newsTab).onFirst().performClick()
+        compose.waitUntil(5_000) { count(search) == 1 }
+    }
+
+    /** Отметката на всяка новина казва коя е — и в списъка със запазените. */
+    @Test fun bookmarksNameTheirArticle() {
+        launch()
+        compose.waitUntil(15_000) { compose.onAllNodes(hasText("Новина номер 2")).fetchSemanticsNodes().isNotEmpty() }
+        compose.waitForIdle()
+        assertEquals(0, count(hasContentDescription("Запази", substring = false)))
+        compose.onNode(hasContentDescription("Запази: Новина номер 2")).performClick()
+        compose.waitUntil(5_000) { count(hasContentDescription("Премахни от запазените: Новина номер 2")) == 1 }
+
+        compose.onNode(hasText("Запазени") and hasClickAction()).performClick()
+        compose.waitUntil(5_000) { count(hasText("Новина номер 3")) == 0 }
+        compose.onNode(hasContentDescription("Премахни от запазените: Новина номер 2")).assertExists()
     }
 }

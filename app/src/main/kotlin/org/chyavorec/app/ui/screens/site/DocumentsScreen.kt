@@ -106,7 +106,7 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                                 },
                                 leadingContent = { Icon(Icons.Outlined.PictureAsPdf, null, tint = MaterialTheme.colorScheme.secondary) },
                                 trailingContent = if (vm.canDownload(d.url)) {
-                                    { PdfAppButton(download?.takeIf { it.url == d.url }, onOpen = { vm.openInPdfApp(d.url, d.title) }, onCancel = vm::cancelDownload) }
+                                    { PdfAppButton(d.title, download?.takeIf { it.url == d.url }, onOpen = { vm.openInPdfApp(d.url, d.title) }, onCancel = vm::cancelDownload) }
                                 } else null,
                                 modifier = Modifier.clickable { openLink(d.url) }.animateEntrance(i),
                             )
@@ -119,13 +119,15 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
 }
 
 /**
- * „Отвори с приложение за PDF“: сваля файла и го подава на приложение на телефона (докосване на
+ * „Отвори с приложение за PDF: <документ>“: сваля файла и го подава на приложение на телефона (докосване на
  * реда — в браузъра, както досега). Докато се сваля — напредъкът; докосване го отказва.
  */
 @Composable
-private fun PdfAppButton(download: DocumentsViewModel.PdfDownload?, onOpen: () -> Unit, onCancel: () -> Unit) {
+private fun PdfAppButton(title: String, download: DocumentsViewModel.PdfDownload?, onOpen: () -> Unit, onCancel: () -> Unit) {
     if (download == null) {
-        IconButton(onClick = onOpen) { Icon(Icons.Outlined.FileOpen, stringResource(R.string.pdf_open_with_app)) }
+        // С името на документа — иначе TalkBack чете едно и също на всеки ред.
+        val label = if (title.isBlank()) stringResource(R.string.pdf_open_with_app) else stringResource(R.string.pdf_open_with_app_named, title)
+        IconButton(onClick = onOpen) { Icon(Icons.Outlined.FileOpen, label) }
         return
     }
     val label = stringResource(R.string.pdf_downloading)

@@ -3,7 +3,13 @@ package org.chyavorec.app.ui.screens.gallery
 import android.app.Application
 import android.view.accessibility.AccessibilityManager
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
@@ -106,6 +112,24 @@ class PhotoViewerGesturesTest {
         compose.onRoot().performTouchInput { swipeDown(startY = centerY, endY = bottom - 1f, durationMillis = 300) }
         compose.waitForIdle()
         assertEquals(1, closed)
+    }
+
+    /** TalkBack обявява прегледа с име: албумът (или статията), а без тях — „Галерия“. */
+    @Test fun viewerHasAPaneTitle() {
+        var page by mutableStateOf("")
+        var photos by mutableStateOf(listOf(photo))
+        compose.setContent { ChitalishteTheme { key(page, photos) { PhotoViewer(photos, 0, {}, pageTitle = page) } } }
+        compose.waitForIdle()
+        fun pane() = compose.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.PaneTitle))
+            .fetchSemanticsNodes().map { it.config[SemanticsProperties.PaneTitle] }
+        assertEquals(listOf(app.getString(R.string.photo_viewer_pane, "Празници")), pane())
+        page = "Ден на хляба"
+        compose.waitForIdle()
+        assertEquals(listOf(app.getString(R.string.photo_viewer_pane, "Ден на хляба")), pane())
+        page = ""
+        photos = listOf(photo.copy(album = ""))
+        compose.waitForIdle()
+        assertEquals(listOf(app.getString(R.string.gallery_title)), pane())
     }
 
     @Test fun controlsStayWithAScreenReader() {

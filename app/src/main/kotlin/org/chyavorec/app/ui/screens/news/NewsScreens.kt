@@ -358,7 +358,8 @@ fun NewsRow(
             IconButton(onClick = onToggleFavorite) {
                 Icon(
                     if (isFavorite) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
-                    contentDescription = stringResource(if (isFavorite) R.string.action_unsave else R.string.action_save),
+                    // С заглавието — в списъка TalkBack иначе чете само „Запази“ при всяка новина.
+                    contentDescription = stringResource(if (isFavorite) R.string.action_unsave_named else R.string.action_save_named, a.title),
                     tint = if (isFavorite) LocalExtendedColors.current.gold else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }

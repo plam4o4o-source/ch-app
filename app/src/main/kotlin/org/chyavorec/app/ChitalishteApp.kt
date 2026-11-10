@@ -1,6 +1,7 @@
 package org.chyavorec.app
 
 import android.app.Application
+import android.os.StrictMode
 import androidx.compose.ui.text.font.FontListFontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.ResourceFont
@@ -55,6 +56,7 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
 
     override fun onCreate() {
         super.onCreate()
+        if (BuildConfig.DEBUG) detectLeaks()
         // Локалният дневник на грешките (само на устройството) — и за сривовете.
         AppDiagnostics.install(this)
         container = AppContainer(this)
@@ -63,6 +65,22 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         container.watchReader()
         // Каналите за известия и инициализацията на WorkManager (база данни) не бива да бавят първия кадър.
         appScope.launch { setUpBackground() }
+    }
+
+    /**
+     * Само в debug: незатворен ресурс (курсор, поток, отговор на OkHttp, Surface…) или
+     * неотписан приемник — в logcat със стека на мястото, където е отворен (тагът StrictMode).
+     * В release е изрязано (BuildConfig.DEBUG е константа).
+     */
+    private fun detectLeaks() {
+        StrictMode.setVmPolicy(
+            StrictMode.VmPolicy.Builder()
+                .detectLeakedClosableObjects()
+                .detectLeakedRegistrationObjects()
+                .detectLeakedSqlLiteObjects()
+                .penaltyLog()
+                .build(),
+        )
     }
 
     private val uiStarted = AtomicBoolean(false)

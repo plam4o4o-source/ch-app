@@ -192,7 +192,12 @@ class AppUpdater(
             loadWhatsNew()
             if (!settings.current().autoUpdate) return@launch
             val sinceLast = clock.now().toEpochMilli() - settings.lastUpdateCheck.first()
-            if (sinceLast in 0L until LAUNCH_CHECK_INTERVAL_MS) return@launch
+            if (sinceLast in 0L until LAUNCH_CHECK_INTERVAL_MS) {
+                // Проверката е правена скоро, но изтеглената версия чака („По-късно“) — да я
+                // предлагат настройките (без диалог: отлагането важи).
+                restoreDownloaded()
+                return@launch
+            }
             val info = check(userInitiated = false) ?: return@launch
             if (isUnmetered()) download(info)
             val s = _state.value
@@ -219,6 +224,28 @@ class AppUpdater(
     }
 
     fun dismissWhatsNew() { _whatsNew.value = null }
+
+    /**
+     * Изтеглена (и проверена) версия от предишно пускане — след „По-късно“ и рестарт състоянието
+     * е празно, а файлът е тук. Данните за версията (име, сума) идват от update.json — тихо, само
+     * ако има такъв файл; после [check] я разпознава като готова ([UpdateState.Ready]).
+     * @return дали се стигна до проверка.
+     */
+    internal suspend fun restoreDownloaded(): Boolean = withContext(Dispatchers.IO) {
+        if (!enabled || _state.value != UpdateState.Idle) return@withContext false
+        val pending = dir.listFiles()?.any { f ->
+            f.name.endsWith(".apk") && (f.name.removePrefix("update-").substringBefore('.').toIntOrNull() ?: 0) > config.versionCode
+        } == true
+        if (!pending) return@withContext false
+        check(userInitiated = false)
+        true
+    }
+
+    /** От „Настройки › Обновления“: ако има изтеглена версия, да се види веднага (виж [restoreDownloaded]). */
+    fun restoreDownloadedAsync() {
+        if (!enabled || _state.value != UpdateState.Idle || uiCheck?.isActive == true) return
+        uiCheck = scope.launch { restoreDownloaded() }
+    }
 
     /** „По-късно“ в диалога. */
     fun snooze() {
