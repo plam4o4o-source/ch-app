@@ -103,13 +103,15 @@ class UpdateReadyCardTest {
             }
         }
         compose.waitUntil(10_000) { compose.onAllNodes(hasText("Версия 1.2.33 е готова")).fetchSemanticsNodes().isNotEmpty() }
-        compose.onNode(hasText("Версия 1.2.33 е готова")).performScrollTo()
+        // Цялата карта — до бутона ѝ (иначе докосването може да е извън екрана).
+        val install = compose.onNode(hasText("Инсталирай") and hasClickAction())
+        install.performScrollTo()
         compose.waitForIdle()
         val bmp = compose.onRoot().captureToImage().asAndroidBitmap()
         File("build/reports/screenshots").apply { mkdirs() }.resolve("w20m-02-settings-update-ready.png")
             .outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
 
-        compose.onNode(hasText("Инсталирай") and hasClickAction()).performClick()
+        install.performClick()
         compose.waitUntil(5_000) { c.updater.prompt.value }
         // Инсталирането е започнало (тук — без разрешение за инсталиране: диалогът води до него).
         compose.waitUntil(5_000) { c.updater.state.value !is UpdateState.Ready }
@@ -118,13 +120,14 @@ class UpdateReadyCardTest {
     /** Картата в двете теми — и „Налична е версия“ (още не е изтеглена). */
     @Test fun cardInBothThemes() {
         val c = readyContainer()
-        val available = UpdateState.Available((c.updater.state.value as UpdateState.Ready).info)
+        val ready = c.updater.state.value
+        val available = UpdateState.Available((ready as UpdateState.Ready).info)
         compose.setContent {
             Column {
                 listOf(ThemeMode.LIGHT, ThemeMode.DARK).forEach { mode ->
                     ChitalishteTheme(mode = mode) {
                         Column(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background).padding(vertical = 8.dp)) {
-                            UpdateReadyCard(c.updater.state.value, c.updater, Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
+                            UpdateReadyCard(ready, c.updater, Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
                             UpdateReadyCard(available, c.updater, Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
                         }
                     }
