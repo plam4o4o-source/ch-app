@@ -1,0 +1,174 @@
+name: Emulator check of wave20/catalog — Surprise memory on old Android (temporary)
+# ВРЕМЕННО (клон debug/wave20-catalog): „Изненадай ме“ на Android 8–11 (облекчено разбъркване без 3D и
+# без сенки на слоя) — паметта (RSS, PSS, Graphics) при три натискания на заровете на API 26, 28 и 30.
+# Резултатите — в клона emulator-results, папка v134-catalog/ (orphan commit; останалото съдържание
+# на клона се запазва). Инструментите са от debug/full-test-133 (.github/perf-check).
+on:
+  push:
+    branches: [debug/wave20-catalog]
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  VC_NEW: "1500190"
+jobs:
+  key:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Throwaway signing key
+        run: |
+          mkdir key; PASS=$(openssl rand -hex 16); echo "$PASS" > key/pass
+          keytool -genkeypair -noprompt -keystore key/t.jks -storepass "$PASS" -keypass "$PASS" \
+            -alias t -keyalg RSA -keysize 2048 -validity 3 -dname "CN=emulator test, O=not for release"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: key
+          path: key/
+          retention-days: 1
+
+  helper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the emulator helper APK (device locale on API < 33)
+        run: |
+          mkdir -p dist
+          bash .github/perf-check/helper/build.sh dist/helper.apk
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-helper
+          path: dist/
+
+  build:
+    needs: key
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: key
+          path: ${{ runner.temp }}/key
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v6
+      - name: prodRelease with x86_64 added (emulator only, not committed)
+        run: |
+          sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО|' app/build.gradle.kts
+          grep -nE '^val releaseAbis' app/build.gradle.kts
+          K="$RUNNER_TEMP/key"; P=$(cat "$K/pass")
+          export SIGNING_STORE_FILE="$K/t.jks" SIGNING_STORE_PASSWORD="$P" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$P" VERSION_CODE=$VC_NEW
+          ./gradlew --no-daemon assembleProdRelease
+          mkdir -p dist
+          cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/app.apk
+          echo "wave20/catalog $(git rev-parse --short HEAD) built prodRelease x86_64 (throwaway key); versionCode $VC_NEW" > dist/apk-ref.txt
+          cat dist/*.txt; ls -l dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-new
+          path: dist/
+
+  emulator:
+    needs: [build, helper]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { part: surprise28, api: 28 }
+          - { part: surprise30, api: 30 }
+          - { part: surprise26, api: 26 }
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: apk-*
+          merge-multiple: true
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l *.apk; cat apk-*.txt
+      - name: Run on emulator (${{ matrix.part }}, API ${{ matrix.api }}, swangle_indirect)
+        id: run
+        continue-on-error: true
+        timeout-minutes: 50
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: bash .github/perf-check/run.sh ${{ matrix.part }}
+      - name: Record the step outcome
+        if: always()
+        continue-on-error: true
+        run: |
+          mkdir -p out/${{ matrix.part }}
+          echo "part=${{ matrix.part }} target=google_apis api=${{ matrix.api }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > out/${{ matrix.part }}/job-status.txt
+          cat out/${{ matrix.part }}/job-status.txt
+          { echo "== free"; free -m; echo "== host kernel: oom / kvm"; sudo dmesg -T | grep -iE "oom|killed process|kvm|segfault" | tail -20; } > out/${{ matrix.part }}/host-after-run.txt 2>&1 || true
+      - uses: actions/upload-artifact@v7
+        if: always()
+        continue-on-error: true
+        with:
+          name: out-${{ matrix.part }}
+          path: out/
+
+  # Клонът emulator-results е голям: fetch без съдържанието на файловете (blob:none); заменя се само v134-catalog/.
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    needs: [build, emulator]
+    if: always()
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: out-*
+          path: results
+          merge-multiple: true
+      - name: Push results to emulator-results/v134-catalog (orphan commit; the rest of the branch is kept)
+        run: |
+          set -ex
+          SRC=$(git rev-parse --short HEAD)
+          W=$GITHUB_WORKSPACE
+          RUN=${{ github.run_id }}
+          P="$RUNNER_TEMP/pub"; mkdir -p "$P"; cd "$P"
+          git init -q -b scratch
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch --filter=blob:none --depth 1 origin emulator-results
+          git read-tree FETCH_HEAD
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          V=v134-catalog
+          for p in $(ls "$W/results"); do git rm -r -q --cached --ignore-unmatch "$V/$p"; done
+          mkdir -p "$V"; cp -r "$W/results/." "$V/"
+          git show FETCH_HEAD:$V/runs.txt > "$V/runs.txt" 2>/dev/null || : > "$V/runs.txt"
+          echo "run $RUN @ $SRC: $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
+          (
+            cd "$V"
+            echo "# wave20/catalog: Surprise memory on old Android (run $RUN @ $SRC)"
+            echo
+            for p in $(ls -d */ | tr -d /); do
+              [ -f "$p/summary.txt" ] || continue
+              echo "## $p"; echo; echo '```'; cat "$p/job-status.txt" 2>/dev/null; cat "$p/summary.txt"; echo '```'; echo
+            done
+          ) > "$RUNNER_TEMP/v-index.md"
+          mv "$RUNNER_TEMP/v-index.md" "$V/index.md"
+          for p in $(ls "$W/results"); do git add -A -- "$V/$p"; done
+          git add -A -- "$V/runs.txt" "$V/index.md"
+          git commit -q -m "Emulator results v134-catalog for $SRC (run $RUN)"
+          git push -f origin HEAD:refs/heads/emulator-results
