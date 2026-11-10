@@ -154,7 +154,8 @@ class ShareImagesTest {
         assertEquals(1080 to 1350, decoded.width to decoded.height)
         // QR кодът оцелява при компресията (JPEG, качество 92).
         assertEquals(url, decodeQr(qrCorner(decoded)))
-        val send = ShareFiles.sendIntent(ShareFiles.uri(context, file), "тема", "текст", ShareFiles.mimeType(file))
+        // Адресът — без FileProvider: той помни корена си от първия тест в процеса (статичен кеш).
+        val send = ShareFiles.sendIntent(Uri.parse("content://${context.packageName}.files/share/${file.name}"), "тема", "текст", ShareFiles.mimeType(file))
         assertEquals("image/jpeg", send.type)
         // Плоската карта остава PNG.
         val flat = ShareFiles.write(context, bitmap, "year", photo = false)
