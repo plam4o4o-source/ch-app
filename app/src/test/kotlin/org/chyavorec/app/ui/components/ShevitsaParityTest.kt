@@ -2,10 +2,21 @@ package org.chyavorec.app.ui.components
 
 import android.app.Application
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.RuntimeShader
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,6 +25,7 @@ import org.chyavorec.app.ui.theme.ShevitsaShaders
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -29,8 +41,10 @@ import kotlin.math.floor
  */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(application = Application::class)
+@Config(application = Application::class, qualifiers = "w1000dp-h1400dp-mdpi")
 class ShevitsaParityTest {
+    @get:Rule val compose = createComposeRule()
+
     /** Чисти цветове: всеки конец — свой канал, без сноп и проблясване. */
     private val pure = ShevitsaColors(
         fabric = Color.Black, red = Color(0xFFFF0000), ink = Color(0xFF00FF00), gold = Color(0xFF0000FF), glow = Color.White,
@@ -54,17 +68,32 @@ class ShevitsaParityTest {
         s.setColorUniform("uInk", colors.ink.toArgb())
         s.setColorUniform("uGold", colors.gold.toArgb())
         s.setColorUniform("uGlow", colors.glow.toArgb())
-        val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        Canvas(bmp).drawRect(0f, 0f, w.toFloat(), h.toFloat(), Paint().apply { shader = s })
+        // Софтуерното платно не изпълнява RuntimeShader — рисува се през Compose (хардуерния път на
+        // Robolectric), върху черно: снимката е премултиплицираният цвят на шейдъра.
+        val brush = ShaderBrush(s)
+        compose.setContent {
+            CompositionLocalProvider(LocalDensity provides Density(1f)) {
+                Spacer(
+                    Modifier.size(w.dp, h.dp).testTag("weave").drawBehind {
+                        drawRect(Color.Black)
+                        drawRect(brush)
+                    },
+                )
+            }
+        }
+        compose.waitForIdle()
+        val bmp = compose.onNodeWithTag("weave").captureToImage().asAndroidBitmap()
+        assertEquals(w, bmp.width)
+        assertEquals(h, bmp.height)
         return bmp
     }
 
     private fun kindOf(argb: Int): Int {
-        if ((argb ushr 24) < 128) return ShevitsaPattern.EMPTY
         val r = (argb shr 16) and 0xFF
         val g = (argb shr 8) and 0xFF
         val b = argb and 0xFF
         return when {
+            maxOf(r, g, b) < 100 -> ShevitsaPattern.EMPTY
             r >= g && r >= b -> ShevitsaPattern.RED
             g >= b -> ShevitsaPattern.INK
             else -> ShevitsaPattern.GOLD
@@ -133,9 +162,9 @@ class ShevitsaParityTest {
         for (y in 0 until h) for (x in 0 until w) {
             val a = shader.getPixel(x, y)
             val b = img.getPixel(Math.floorMod(x - ox, img.width), if (ribbon) y else Math.floorMod(y - oy, img.height))
-            for (sh in intArrayOf(24, 16, 8, 0)) {
-                // Сравнява се premultiplied — цветът на почти прозрачен пиксел няма значение.
-                val d = abs(premul(a, sh) - premul(b, sh))
+            for (sh in intArrayOf(16, 8, 0)) {
+                // Шейдърът е върху черно, т.е. premultiplied; плочката се премултиплицира тук.
+                val d = abs(((a ushr sh) and 0xFF) - premul(b, sh))
                 sum += d
                 if (d > max) max = d
                 n++
@@ -150,7 +179,7 @@ class ShevitsaParityTest {
     private fun premul(argb: Int, shift: Int): Int {
         val a = argb ushr 24
         val v = (argb ushr shift) and 0xFF
-        return if (shift == 24) a else (v * a + 127) / 255
+        return (v * a + 127) / 255
     }
 
     @Test fun fieldTileMatchesTheShader() = checkTile(300, 250, 6f, 18, ribbon = false, ShevitsaPalettes.ribbon(dark = false))
