@@ -2,7 +2,6 @@ package org.chyavorec.app.ui.screens.my
 
 import kotlin.math.abs
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.input.pointer.util.addPosition
 import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.foundation.gestures.awaitFirstDown
