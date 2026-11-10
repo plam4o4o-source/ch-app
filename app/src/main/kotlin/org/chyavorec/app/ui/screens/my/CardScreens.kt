@@ -6,20 +6,13 @@ import org.chyavorec.app.ui.components.sharedTransitionsActive
 import org.chyavorec.app.ui.components.InfoBanner
 import org.chyavorec.app.ui.components.LivingShevitsa
 import org.chyavorec.app.ui.components.ShevitsaPalettes
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import org.chyavorec.app.ui.components.sharedBoundsKey
 import android.app.Activity
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.view.WindowManager
 import android.content.Context
 import android.provider.Settings
 import android.view.Window
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -108,7 +101,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.BackTopBar
@@ -153,64 +145,6 @@ private fun rememberCardData(vm: AccountViewModel): CardData? {
     }
 }
 
-/** ≈30 Hz — достатъчно за плавен отблясък. */
-private const val SENSOR_PERIOD_US = 33_000
-/** Най-много ~2 събития на порция: отблясъкът остава плавен, а системата може да ги групира. */
-private const val SENSOR_MAX_LATENCY_US = 66_000
-
-/** Наклон на устройството (−1..1 по двете оси), нискочестотно филтриран; (0, 0) без сензор. */
-internal class Tilt {
-    var x by mutableFloatStateOf(0f)
-    var y by mutableFloatStateOf(0f)
-}
-
-/**
- * Чете вектора на завъртане (≈30 Hz) и го изглажда — за „живия“ отблясък на
- * картата. Не прави нищо без сензор или при намалено движение. Сензорът е
- * включен само докато екранът е на преден план (ON_RESUME … ON_PAUSE) — не и при
- * заключен екран или приложение във фона, — а събитията се доставят на порции
- * (maxReportLatencyUs), за да не се буди процесорът за всяко поотделно.
- */
-@Composable
-private fun rememberTilt(): Tilt {
-    val context = LocalContext.current
-    val reduced = rememberReducedMotion()
-    val fixed = LocalFixedCardTilt.current
-    val tilt = remember(fixed) { Tilt().apply { fixed?.let { x = it.x; y = it.y } } }
-    LifecycleResumeEffect(reduced, fixed) {
-        if (reduced || fixed != null) return@LifecycleResumeEffect onPauseOrDispose {}
-        val manager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
-        val sensor = manager?.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) ?: manager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
-        if (manager == null || sensor == null) return@LifecycleResumeEffect onPauseOrDispose {}
-        val rotation = FloatArray(9)
-        val orientation = FloatArray(3)
-        val listener = object : SensorEventListener {
-            override fun onSensorChanged(event: SensorEvent) {
-                runCatching {
-                    SensorManager.getRotationMatrixFromVector(rotation, event.values)
-                    SensorManager.getOrientation(rotation, orientation)
-                    // pitch (напред/назад) и roll (наляво/надясно) в радиани → ±1 при ≈ ±45°.
-                    val ty = (orientation[1] / 0.8f).coerceIn(-1f, 1f)
-                    val tx = (orientation[2] / 0.8f).coerceIn(-1f, 1f)
-                    // Невалидно показание (NaN) би останало в наклона завинаги — пропуска се.
-                    if (!tx.isFinite() || !ty.isFinite()) return@runCatching
-                    tilt.x += (tx - tilt.x) * 0.18f
-                    tilt.y += (ty - tilt.y) * 0.18f
-                }
-            }
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
-        }
-        val registered = runCatching {
-            manager.registerListener(listener, sensor, SENSOR_PERIOD_US, SENSOR_MAX_LATENCY_US)
-        }.getOrDefault(false)
-        onPauseOrDispose { if (registered) manager.unregisterListener(listener) }
-    }
-    return tilt
-}
-
-/** Неподвижен наклон вместо сензора — за снимките на фолиото в тестовете. */
-internal val LocalFixedCardTilt = staticCompositionLocalOf<Offset?> { null }
-
 /** Ключ на shared element прехода „карта → карта на цял екран“. */
 private const val LIBRARY_CARD_KEY = "library-card"
 
@@ -218,12 +152,15 @@ private const val LIBRARY_CARD_KEY = "library-card"
  * Рамката на картата (размер ID-1, мастилено-бордо градиент, златен кант) — обща за двете страни.
  * Отдолу нагоре: градиентът, „живата шевица“ (приглушени конци със сноп светлина),
  * холографското фолио по наклона и съдържанието (баркодът е на бял фон над фолиото).
+ * Шевицата и фолиото са в свои слоеве: наклонът прерисува само фолиото. [motion] — общ
+ * наклон и „тъкане“ (на цял екран — за лицето и гърба); без него картата има свои.
  */
 @Composable
-private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable ColumnScope.() -> Unit) {
-    val tilt = rememberTilt()
+private fun CardFrame(modifier: Modifier, large: Boolean, motion: CardMotion?, content: @Composable ColumnScope.() -> Unit) {
+    val m = if (motion != null) motion else rememberCardMotion()
     Box(
         modifier
+            .wakesTilt(m.tilt)
             .fillMaxWidth()
             .cardProportions()
             .shadow(12.dp, RoundedCornerShape(20.dp))
@@ -232,8 +169,8 @@ private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable C
         // Минималната височина (пропорциите) стига и до съдържанието — за разтягащите Spacer-и.
         propagateMinConstraints = true,
     ) {
-        LivingShevitsa(ShevitsaPalettes.card, Modifier.matchParentSize(), cell = if (large) 3.dp else 2.4.dp, intensity = 0.9f)
-        CardFoilLayer(tilt, Modifier.matchParentSize())
+        LivingShevitsa(ShevitsaPalettes.card, Modifier.matchParentSize(), cell = if (large) 3.dp else 2.4.dp, intensity = 0.9f, budget = m.budget)
+        CardFoilLayer(m.tilt, Modifier.matchParentSize())
         Box(Modifier.matchParentSize().padding(2.dp).border(1.dp, Brand.Gold.copy(alpha = 0.45f), RoundedCornerShape(18.dp)))
         // На цял екран — и шевица по ъглите (ненатрапчива златна рамка).
         if (large) OrnamentFrame(Modifier.matchParentSize().padding(6.dp))
@@ -242,7 +179,7 @@ private fun CardFrame(modifier: Modifier, large: Boolean, content: @Composable C
         val density = LocalDensity.current
         CompositionLocalProvider(
             LocalDensity provides Density(density.density, fontScale = density.fontScale.coerceAtMost(1.3f)),
-            LocalCardTilt provides tilt,
+            LocalCardTilt provides m.tilt,
         ) {
             Column(Modifier.fillMaxWidth().padding(if (large) 24.dp else 18.dp), content = content)
         }
@@ -277,8 +214,8 @@ private const val CARD_RATIO = 1.586f
 /** Дигитална читателска карта — оформена като истинска библиотечна карта (лице с баркод). */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = false) {
-    CardFrame(modifier, large) {
+internal fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = false, motion: CardMotion? = null) {
+    CardFrame(modifier, large, motion) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Emblem(if (large) 44.dp else 34.dp)
             Spacer(Modifier.width(10.dp))
@@ -314,8 +251,8 @@ fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = 
  * името на читателя и библиотеката.
  */
 @Composable
-fun LibraryCardBack(data: CardData, modifier: Modifier = Modifier, large: Boolean = false) {
-    CardFrame(modifier, large) {
+internal fun LibraryCardBack(data: CardData, modifier: Modifier = Modifier, large: Boolean = false, motion: CardMotion? = null) {
+    CardFrame(modifier, large, motion) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Emblem(if (large) 32.dp else 26.dp)
             Spacer(Modifier.width(10.dp))
@@ -523,6 +460,8 @@ fun CardFullscreen(onClose: () -> Unit) {
             Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.action_close), tint = Color.Black)
         }
         if (data == null) return@Box
+        // Наклонът и шевицата — общи за лицето и гърба: обръщането не ги започва отначало.
+        val motion = rememberCardMotion()
         BoxWithConstraints(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
             val landscape = maxWidth > maxHeight
             val content: @Composable () -> Unit = {
@@ -550,9 +489,9 @@ fun CardFullscreen(onClose: () -> Unit) {
                 ) {
                     if (backVisible) {
                         // Гърбът е завъртян още 180°, за да не се чете огледално.
-                        LibraryCardBack(data, Modifier.graphicsLayer { rotationY = 180f }, large = true)
+                        LibraryCardBack(data, Modifier.graphicsLayer { rotationY = 180f }, large = true, motion = motion)
                     } else {
-                        LibraryCard(data, large = true)
+                        LibraryCard(data, large = true, motion = motion)
                     }
                 }
             }

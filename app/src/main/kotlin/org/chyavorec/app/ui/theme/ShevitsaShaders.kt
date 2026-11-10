@@ -7,8 +7,10 @@ import kotlin.math.min
 
 /**
  * AGSL шейдърите на „Живата шевица“ (API 33+). Пазят се тук като текст, за да
- * ги проверяват тестовете (униформите, сигнатурата); Kotlin копието на шарката
- * е [ShevitsaPattern] — то рисува неподвижния вариант до API 32.
+ * ги проверяват тестовете (униформите, сигнатурата). Шарката (`stitchKind`) има
+ * едно Kotlin копие — [ShevitsaPattern]; осветлението на бода — едно копие на
+ * процесора, само за плочката на неподвижния вариант до API 32 (ShevitsaStill в
+ * LivingShevitsa.kt). ShevitsaParityTest изпълнява AGSL и сверява и двете.
  */
 object ShevitsaShaders {
     /**
@@ -196,8 +198,10 @@ half4 main(float2 p) {
 }
 
 /**
- * Kotlin копие на шарката от [ShevitsaShaders.WEAVE] (stitchKind) — за неподвижния
- * вариант без шейдър и за тестовете. Промяна тук = промяна и в шейдъра.
+ * Kotlin копие на шарката от [ShevitsaShaders.WEAVE] (stitchKind) — за плочката на
+ * неподвижния вариант без шейдър и за тестовете. Промяна тук = промяна и в шейдъра:
+ * ShevitsaParityTest рисува шейдъра и сверява вида на всяка клетка с [kind].
+ * Шарката е периодична — поле през [period] бода по двете оси, лента през 2·period.
  */
 object ShevitsaPattern {
     const val EMPTY = 0

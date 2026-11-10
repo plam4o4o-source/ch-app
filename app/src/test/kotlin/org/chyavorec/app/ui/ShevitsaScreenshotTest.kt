@@ -149,6 +149,45 @@ class ShevitsaScreenshotTest {
         shot("shevitsa-2-field")
     }
 
+    /**
+     * Неподвижната плочка (вляво — шейдърът без снопа, вдясно — повторената плочка): картата
+     * (конците на 100 %, за да се види разлика) и лентата в светла и тъмна тема.
+     */
+    @Test fun tileVsShader() {
+        compose.setContent {
+            CompositionLocalProvider(LocalReducedMotion provides true) {
+                Column(Modifier.background(Color.White).padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Label("AGSL без сноп | плочка (без AGSL)")
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        for (agsl in listOf(true, false)) {
+                            CompositionLocalProvider(LocalAgslEnabled provides agsl) {
+                                Box(Modifier.size(190.dp, 120.dp).background(cardBackground)) {
+                                    LivingShevitsa(
+                                        ShevitsaPalettes.card.copy(threadAlpha = 1f), Modifier.size(190.dp, 120.dp),
+                                        cell = 2.4.dp, intensity = 0f,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    for (dark in listOf(false, true)) {
+                        for (agsl in listOf(true, false)) {
+                            CompositionLocalProvider(LocalAgslEnabled provides agsl) {
+                                Box(Modifier.fillMaxWidth().background(if (dark) Brand.Ink else Brand.Cream).padding(vertical = 4.dp)) {
+                                    LivingShevitsa(
+                                        ShevitsaPalettes.ribbon(dark), Modifier.fillMaxWidth().height(26.dp),
+                                        period = 10, ribbon = true, intensity = 0f,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        shot("shevitsa-6-tile-vs-shader")
+    }
+
     private val data = CardData(holder = "Мария Петрова", number = "1024-5678", barcode = "10245678", status = MembershipStatus.ACTIVE, verified = true)
 
     private fun cards(name: String, dark: Boolean, agsl: Boolean) {
