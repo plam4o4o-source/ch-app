@@ -383,9 +383,10 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
                             val dx = change.position.x - down.position.x
                             val atTop = currentScroll?.canScrollBackward != true
                             if (atTop && dy > viewConfiguration.touchSlop && dy > abs(dx)) {
+                                // Изминатото се брои от докосването, не от разпознаването на жеста.
                                 pulling = true
                                 held = true
-                                last = change.position.y
+                                last = down.position.y
                             }
                         }
                         if (pulling) {
