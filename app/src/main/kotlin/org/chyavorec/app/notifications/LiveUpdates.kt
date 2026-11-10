@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
+import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.work.CoroutineWorker
@@ -24,24 +25,23 @@ import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainerOwner
 import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.ui.navigation.LaunchIntents
+import org.chyavorec.core.BulgarianDates
 import org.chyavorec.domain.model.Event
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
 /**
  * „Живи известия“ (Android 16+): системата показва известието най-отгоре в панела, на заключения
- * екран и като чип в лентата на състоянието (процент, обратно броене). Под Android 16 — обичайните
+ * екран и като чип в лентата на състоянието (процент, час на началото). Под Android 16 — обичайните
  * известия, без промяна. Потребителят може да ги изключи (Настройки › Известия › приложението).
  */
 object LiveUpdates {
     /**
-     * Ключът на `Notification.Builder.setRequestPromotedOngoing` (Android 16 QPR2) — методът само
-     * го записва в extras. Така молбата работи и на 36.0 (там системата я пренебрегва) без
-     * проверка на второстепенната версия.
+     * Ключът на `Notification.Builder.setRequestPromotedOngoing` (Android 16 QPR2, 36.1) — методът
+     * само го записва в extras. На 36.0 (без метода) молбата е същият ключ; системата там я пренебрегва.
      */
     internal const val EXTRA_REQUEST_PROMOTED_ONGOING = "android.requestPromotedOngoing"
     /** Белег на живото известие за събитие — опресняването не го показва отново, ако е махнато. */
@@ -51,8 +51,29 @@ object LiveUpdates {
     fun supported(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA
 
     /** Моли за „живо“ показване (ProgressStyle, без цветен фон и собствени изгледи — условията на системата). */
+    @RequiresApi(Build.VERSION_CODES.BAKLAVA)
     internal fun requestPromotion(builder: Notification.Builder, extras: Bundle = Bundle()): Notification.Builder =
-        builder.addExtras(extras.apply { putBoolean(EXTRA_REQUEST_PROMOTED_ONGOING, true) })
+        if (Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1) {
+            builder.addExtras(extras).setRequestPromotedOngoing(true)
+        } else {
+            builder.addExtras(extras.apply { putBoolean(EXTRA_REQUEST_PROMOTED_ONGOING, true) })
+        }
+
+    /**
+     * Може ли приложението да показва живи известия: потребителят може да ги спре само за него
+     * (Настройки › Известия › приложението). Без отговор от системата — да.
+     */
+    fun canPromote(context: Context): Boolean = supported() && promotionAllowed(context)
+
+    /** Подменя се в тестовете (Robolectric няма отговор на системата за живите известия). */
+    @VisibleForTesting
+    internal var promotionAllowed: (Context) -> Boolean = { context ->
+        if (supported()) {
+            runCatching { context.getSystemService(NotificationManager::class.java)?.canPostPromotedNotifications() }.getOrNull() != false
+        } else {
+            false
+        }
+    }
 
     /**
      * Без звук и вибрация — като NotificationCompat.setSilent (платформеният Builder няма такъв метод):
@@ -85,7 +106,8 @@ object EventLiveWindow {
     /** Началото на събитието (дата и час в [zone]); без час — `null` (живо известие няма). */
     fun startMillis(event: Event, zone: ZoneId): Long? {
         val date = event.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: return null
-        val time = event.time?.let { runCatching { LocalTime.parse(it) }.getOrNull() } ?: return null
+        // „18:30“ от сайта; и по-стар запис в кеша („18.30“) — същият час.
+        val time = BulgarianDates.parseClock(event.time) ?: return null
         return date.atTime(time).atZone(zone).toInstant().toEpochMilli()
     }
 
@@ -136,8 +158,8 @@ object EventLiveUpdates {
 
     /**
      * „Вечер на поезията“ / „Читалището — начало в 18:30“: ProgressStyle с изминалото от часа
-     * преди началото (злато, последните 15 мин — бордо), чип с обратното броене до началото
-     * (хронометър) и „Маршрут“, ако е известно мястото.
+     * преди началото (злато, последните 15 мин — бордо), чип с часа на началото, обратно броене
+     * в известието (хронометър) и „Маршрут“, ако е известно мястото.
      */
     @RequiresApi(Build.VERSION_CODES.BAKLAVA)
     internal fun notification(
@@ -179,7 +201,9 @@ object EventLiveUpdates {
             .setContentTitle(title)
             .setContentText(text)
             .setStyle(style)
-            // Чипът в лентата на състоянието: обратно броене до началото, без опресняване.
+            // Чипът в лентата на състоянието: часът на началото („18:30“, до 7 знака); в самото
+            // известие — обратно броене до началото (хронометър, без опресняване).
+            .setShortCriticalText(at)
             .setWhen(start)
             .setShowWhen(true)
             .setUsesChronometer(true)
@@ -223,7 +247,8 @@ class EventLiveUpdateWorker(context: Context, params: WorkerParameters) : Corout
         } catch (_: Exception) {
             true
         }
-        if (!enabled || !Notifier.canNotify(applicationContext)) return Result.success()
+        // Изключени живи известия за приложението — нищо (напомнянето отпреди вече е звъннало).
+        if (!enabled || !Notifier.canNotify(applicationContext) || !LiveUpdates.canPromote(applicationContext)) return Result.success()
         val n = EventLiveUpdates.notification(
             applicationContext, id, title, inputData.getString(EventLiveUpdates.KEY_PLACE), start, now, c.clock.zone(),
         )

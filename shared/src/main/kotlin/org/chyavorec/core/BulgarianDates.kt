@@ -61,6 +61,15 @@ object BulgarianDates {
         return runCatching { LocalTime.of(m.groupValues[1].toInt(), m.groupValues[2].toInt()) }.getOrNull()
     }
 
+    /** Самостоятелен час (полето „time“ на сайта): „18:30“, „18.30“, „9:05“, „18:30 ч.“. */
+    private val clock = Regex("^\\s*([01]?\\d|2[0-3])[:.]([0-5]\\d)\\s*(?:ч\\.?|часа)?\\s*$", RegexOption.IGNORE_CASE)
+
+    /** Часът от [text] (цялото поле — не търсене в текст); празно или невалидно — `null`. */
+    fun parseClock(text: String?): LocalTime? {
+        val m = clock.matchEntire(text ?: return null) ?: return null
+        return LocalTime.of(m.groupValues[1].toInt(), m.groupValues[2].toInt())
+    }
+
     private val shortFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy", locale)
 
     fun formatLong(date: LocalDate): String = "${date.dayOfMonth} ${months[date.monthValue - 1]} ${date.year}"
