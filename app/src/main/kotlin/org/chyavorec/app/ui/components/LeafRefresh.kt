@@ -5,7 +5,10 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -26,12 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import org.chyavorec.app.ui.theme.LocalExtendedColors
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 
 /**
- * [PullToRefreshBox] с нашия индикатор: осморъка, която се бродира, докато потребителят
- * дърпа ([StitchRefreshIndicator]), вместо стандартния кръг. (Името е от яворовия лист,
+ * [PullToRefreshBox] с нашия индикатор: осморъка върху светъл диск, която се бродира, докато
+ * потребителят дърпа ([StitchRefreshIndicator]), вместо стандартния кръг. (Името е от яворовия лист,
  * който беше тук преди — извикванията не се променят.)
  */
 @Composable
@@ -104,21 +108,37 @@ fun StitchRefreshIndicator(state: PullToRefreshState, isRefreshing: Boolean, mod
         null
     }
 
+    // Подложката: диск като контейнера на индикатора в M3, но малко по-голям, с ясна сянка и
+    // тънък ръб — над сегментите, търсачката и чиповете (същите тонове) розетката не се губи.
+    // Светла тема — най-светлата повърхност (сянката я отделя). Тъмна — сянката не се вижда, а
+    // по-светъл диск се слива с полетата (същите тонове): тъмен диск със златен ръб.
+    val colors = MaterialTheme.colorScheme
+    val extended = LocalExtendedColors.current
+    val dark = extended.isDark
+    val disc = if (dark) colors.surface else colors.surfaceContainerLowest
+    val rim = if (dark) extended.gold.copy(alpha = 0.6f) else colors.outlineVariant.copy(alpha = 0.6f)
     PullToRefreshDefaults.IndicatorBox(
         state = state,
         isRefreshing = isRefreshing,
-        modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+        // Външният размер надделява над 40 dp по подразбиране на IndicatorBox.
+        modifier = modifier.size(RefreshDiscSize),
+        containerColor = disc,
+        elevation = RefreshDiscElevation,
     ) {
+        Box(Modifier.matchParentSize().border(1.dp, rim, CircleShape))
         StitchedMotif(
             RefreshRosette,
             progress = { if (isRefreshing || finishing) 1f else refreshProgress(state.distanceFraction) },
-            modifier = Modifier.size(32.dp),
+            modifier = Modifier.size(30.dp),
             glowPhase = { run?.value ?: -1f },
             alpha = { if (finishing) state.distanceFraction.coerceIn(0f, 1f) else 1f },
         )
     }
 }
+
+/** Дискът зад розетката — между 40 dp на M3 и 48 dp (розетката е 30 dp, с въздух около нея). */
+internal val RefreshDiscSize = 46.dp
+private val RefreshDiscElevation = 6.dp
 
 /** Колко от осморъката е избродирано при дърпане [distanceFraction] (1 = прагът): цялата — на прага. */
 internal fun refreshProgress(distanceFraction: Float): Float = distanceFraction.coerceIn(0f, 1f)

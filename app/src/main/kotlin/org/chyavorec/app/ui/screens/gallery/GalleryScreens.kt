@@ -82,6 +82,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.paneTitle
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -335,7 +337,14 @@ internal fun PhotoViewer(photos: List<GalleryPhoto>, index: Int, onClose: () -> 
         }
     }
 
-    Box(Modifier.fillMaxSize().onSizeChanged { height = it.height }.background(Color.Black.copy(alpha = 1f - dragFraction * 0.75f))) {
+    // Името на екрана за TalkBack: статията/страницата или албумът — постоянно, а не при всяко
+    // прелистване (номерът на снимката е в описанието ѝ).
+    val subject = pageTitle.ifBlank { photos.getOrNull(index)?.album.orEmpty().let { if (it.isBlank()) it else albumTitle(it) } }
+    val pane = if (subject.isBlank()) stringResource(R.string.gallery_title) else stringResource(R.string.photo_viewer_pane, subject)
+    Box(
+        Modifier.fillMaxSize().semantics { paneTitle = pane }.onSizeChanged { height = it.height }
+            .background(Color.Black.copy(alpha = 1f - dragFraction * 0.75f)),
+    ) {
         val pager = rememberPagerState(initialPage = index.coerceIn(0, photos.lastIndex)) { photos.size }
         val threshold = height * DISMISS_FRACTION
         val fling = with(density) { DISMISS_VELOCITY.toPx() }

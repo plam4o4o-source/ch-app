@@ -42,6 +42,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,6 +69,7 @@ import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.updateStatusText
+import org.chyavorec.app.ui.components.UpdateReadyCard
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.ThemeMode
 import androidx.compose.foundation.BorderStroke
@@ -166,6 +168,9 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             val updater = c.updater
             if (updater.enabled) {
                 val updateState by updater.state.collectAsStateWithLifecycle()
+                // Изтеглена версия от предишно пускане (отложена с „По-късно“) — да се види и тук.
+                LaunchedEffect(updater) { updater.restoreDownloadedAsync() }
+                UpdateReadyCard(updateState, updater, Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
                 SwitchItem(stringResource(R.string.update_auto), stringResource(R.string.update_auto_desc), s.autoUpdate) { on ->
                     scope.launch { c.settings.setAutoUpdate(on) }
                 }

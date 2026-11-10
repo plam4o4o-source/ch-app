@@ -7,6 +7,10 @@ import android.text.format.Formatter
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -23,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -38,6 +43,7 @@ import org.chyavorec.app.update.AppUpdater
 import org.chyavorec.app.update.UpdateFailure
 import org.chyavorec.app.update.UpdateState
 import org.chyavorec.app.util.Formatters
+import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Intents
 import org.chyavorec.data.update.UpdateInfo
 
@@ -221,4 +227,50 @@ fun updateStatusText(state: UpdateState, updater: AppUpdater): String = when (st
     is UpdateState.Failed -> stringResource(failureText(state.reason))
     UpdateState.UpToDate -> stringResource(R.string.update_status_current, versionLabel(updater))
     UpdateState.Idle -> stringResource(R.string.about_version, versionLabel(updater))
+}
+
+/**
+ * „Настройки › Обновления“: изтеглената (или налична) версия, отложена с „По-късно“, остава на
+ * видно място — „Версия X е готова · Инсталирай“ / „Налична е версия X · Изтегли и инсталирай“.
+ * Бутонът започва действието и отваря диалога (ходът, разрешението за инсталиране, грешките).
+ * В останалите състояния — нищо (там е редът „Провери за нова версия“).
+ */
+@Composable
+fun UpdateReadyCard(state: UpdateState, updater: AppUpdater, modifier: Modifier = Modifier) {
+    val ready = state is UpdateState.Ready || state is UpdateState.NeedsPermission
+    val info = when (state) {
+        is UpdateState.Available -> state.info
+        is UpdateState.Ready -> state.info
+        is UpdateState.NeedsPermission -> state.info
+        else -> return
+    }
+    val gold = LocalExtendedColors.current.gold
+    AppCard(modifier) {
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
+            Icon(Icons.Outlined.SystemUpdate, null, tint = gold, modifier = Modifier.padding(top = 2.dp).size(28.dp))
+            Spacer(Modifier.width(14.dp))
+            Column(Modifier.weight(1f)) {
+                Text(
+                    if (ready) stringResource(R.string.update_card_ready, info.versionName) else stringResource(R.string.update_status_available, info.versionName),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Text(
+                    stringResource(if (ready) R.string.update_card_ready_desc else R.string.update_card_available_desc),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 2.dp),
+                )
+                Button(
+                    onClick = {
+                        if (state is UpdateState.Ready) updater.startInstall()
+                        else if (state is UpdateState.Available) updater.startDownloadAndInstall()
+                        updater.showPrompt()
+                    },
+                    modifier = Modifier.padding(top = 10.dp).heightIn(min = 48.dp),
+                ) {
+                    Text(stringResource(if (ready) R.string.update_install else R.string.update_download))
+                }
+            }
+        }
+    }
 }

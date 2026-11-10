@@ -162,4 +162,29 @@ class AppUpdaterTest {
         assertEquals(UpdateState.Failed(UpdateFailure.CHECKSUM, info), u.state.value)
         assertTrue(updatesDir().listFiles().orEmpty().isEmpty())
     }
+
+    /**
+     * „По-късно“ и рестарт: изтеглената версия е във файла, а състоянието — празно. Без файл
+     * нищо не се проверява; с файл версията пак е „готова“ (за реда в настройките).
+     */
+    @Test fun restoresTheDownloadedVersionAfterRestart() = runTest {
+        val u = updater()
+        assertFalse(u.restoreDownloaded())
+        assertEquals(0, server.requestCount)
+        assertEquals(UpdateState.Idle, u.state.value)
+
+        updatesDir().mkdirs()
+        File(updatesDir(), "update-5.apk").writeBytes(apkBytes)
+        // Отложена версия — диалогът не се показва, но състоянието я знае.
+        assertTrue(u.restoreDownloaded())
+        val ready = u.state.value
+        assertTrue("$ready", ready is UpdateState.Ready)
+        assertEquals("1.1.0", (ready as UpdateState.Ready).info.versionName)
+        assertFalse(u.prompt.value)
+        // Вече известно състояние — без нова проверка.
+        val requests = server.requestCount
+        assertFalse(u.restoreDownloaded())
+        assertEquals(requests, server.requestCount)
+        updatesDir().deleteRecursively()
+    }
 }
