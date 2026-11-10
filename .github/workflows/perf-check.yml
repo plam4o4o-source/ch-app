@@ -249,7 +249,8 @@ jobs:
       matrix:
         # API 33 google_apis x86_64, -gpu swangle_indirect; old28 — API 28.
         # Кръг 1 (42882812118): ab34, gfx34, idle34, mem34, monkey34, demo34, dev34, misc34, upd34, old28.
-        part: [upd34, year34b, shake34b, idlecat, mem34b, mem-base]
+        # Кръг 2 (42892028324): upd34, year34b, shake34b, idlecat, mem34b, mem-base.
+        part: [land34]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8

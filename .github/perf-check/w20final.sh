@@ -14,7 +14,7 @@
 #              прегледът, „Само налични“, полицата), настройката за разклащане — новото и 1.2.33
 #   upd34    — 1.2.34-pre (1500180) → 1.2.34 (1500184): „По-късно“, рестарт, „Настройки › Обновления“ с картата
 #   old28    — API 28: картата в покой (плочката), „Изненадай ме“, споделяне на събитие, monkey 2000
-FINAL_PARTS=" ab34 gfx34 idle34 mem34 monkey34 demo34 dev34 misc34 upd34 old28 year34b shake34b idlecat mem34b "
+FINAL_PARTS=" ab34 gfx34 idle34 mem34 monkey34 demo34 dev34 misc34 upd34 old28 year34b shake34b idlecat mem34b land34 "
 W20_PARTS="$W20_PARTS $FINAL_PARTS"
 WF=$H_/w20final.py
 L_SHAKE='Разклащане за „Изненадай ме“'
@@ -531,7 +531,7 @@ year_open_fresh() {  # затваря (ако е отворена), отваря
 year_swipes2() {  # $1 — етикет (new | base), $2 — колко пъти всяко
   local spec px dur lbl dp dist y1 r k n=0 c=0
   dp=$(dens | tr -dc 0-9); [ -n "$dp" ] || dp=420
-  for spec in "d200t150:200:150" "d200t300:200:300" "d200t600:200:600" "d120fast:120:70" "d120slow:120:900" "d40fast:40:45" "d20fast:20:45" "v133fast200:525:200"; do
+  for spec in ${YSPECS:-"d200t150:200:150" "d200t300:200:300" "d200t600:200:600" "d120fast:120:70" "d120slow:120:900" "d40fast:40:45" "d20fast:20:45" "v133fast200:525:200"}; do
     IFS=: read lbl px dur <<< "$spec"
     dist=$(( px * dp / 160 )); [ $lbl = v133fast200 ] && dist=$((H*55/100))
     r=""
@@ -555,13 +555,39 @@ land_on() {  # хоризонтално; проверка по йерархия�
       3) a settings put system accelerometer_rotation 1; emu rotate >/dev/null; sleep 1; emu sensor set acceleration 9.81:0:0 >/dev/null;;
     esac
     sleep 3; dump
-    if grep -qE 'hierarchy rotation="(1|3)"' $OUT/ui.xml; then log "LANDSCAPE on (method $m): $(grep -oE 'hierarchy rotation="[0-9]"' $OUT/ui.xml); $(a dumpsys window displays 2>/dev/null | tr -d '\r' | grep -m1 -oE 'mRotation=[0-9]|cur=[0-9x]+' | tr '\n' ' ')"; LAND_M=$m; return 0; fi
+    if grep -qE 'hierarchy rotation="(1|3)"' $OUT/ui.xml; then log "LANDSCAPE on (method $m): $(grep -oE 'hierarchy rotation="[0-9]"' $OUT/ui.xml); $(a dumpsys window displays 2>/dev/null | tr -d '\r' | grep -m1 -oE 'mRotation=[0-9]|cur=[0-9x]+' | tr '\n' ' ')"; LAND_M=$m; W=2400; H=1080; local s; s=$(a wm size | tail -1 | grep -oE "[0-9]+x[0-9]+"); [ -n "$s" ] && { W=${s#*x}; H=${s%x*}; }; log "  screen now ${W}x${H} (landscape)"; return 0; fi
   done
   log "LANDSCAPE: NOT achieved with any method ($(grep -oE 'hierarchy rotation="[0-9]"' $OUT/ui.xml); user_rotation=$(a settings get system user_rotation | tr -d '\r'); $(a dumpsys window displays 2>/dev/null | tr -d '\r' | grep -m2 -oE 'mRotation=[0-9]|mUserRotation=[A-Z_0-9]+' | tr '\n' ' '))"
   return 1
 }
 land_off() {
-  emu sensor set acceleration 0:9.81:0 >/dev/null; a settings put system accelerometer_rotation 0; a settings put system user_rotation 0; a wm user-rotation lock 0 >/dev/null 2>&1; sleep 2
+  emu sensor set acceleration 0:9.81:0 >/dev/null; a settings put system accelerometer_rotation 0; a settings put system user_rotation 0; a wm user-rotation lock 0 >/dev/null 2>&1; sleep 2; dims
+}
+part_land34() {
+  local i
+  helper_install
+  dev_install
+  anims 1
+  warmup
+  demo_signin_remember
+  sec "L1. More swipe lengths (new, slow and fast): where is the effective close distance?"
+  YSPECS="d250t600:250:600 d300t600:300:600 d350t600:350:600 d300t150:300:150 d400t150:400:150" year_swipes2 new 2
+  sec "L2. Font 1.3 + „Много голям“, landscape (screen size swapped for the gestures): open the story, every slide"
+  set_text_size '=Много голям' >/dev/null; back 1.5; back 1.5; a settings put system font_scale 1.3; sleep 2
+  if land_on; then
+    ready; tab my; sleep 3; shot land/my-landscape; dump; log "My in landscape: year card $(year_card_find && echo found || echo 'NOT found')"
+    year_slides_walk land13
+    land_off
+  fi
+  sec "L3. Story opened in portrait, then rotated to landscape while open"
+  if year_open_fresh 25; then sleep 1; shot year/rot-0-portrait >/dev/null
+    if land_on; then sleep 2; dump; shot year/rot-1-landscape >/dev/null; log "YEAR after rotating while open: $(python3 $WF state $OUT/shots/year/rot-1-landscape.png); $(python3 $WF ys $OUT/ui.xml $H | cut -c1-260)"
+      for i in 1 2 3 4 5 6; do a input tap $((W*88/100)) $((H/2)); sleep 1.5; dump; shot year/rot-land-slide-$i >/dev/null; log "  land slide +$i: $(python3 $WF state $OUT/shots/year/rot-land-slide-$i.png | cut -d' ' -f1); $(python3 $WF ys $OUT/ui.xml $H | cut -c1-200)"; done
+      land_off; fi
+    [ "$(ystate)" = open ] && back 2
+  fi
+  a settings put system font_scale 1.0; set_text_size '=Стандартен' >/dev/null; back 1.5; back 1.5
+  diag_end
 }
 year_slides_walk() {  # $1 — етикет: всеки слайд (докосване вдясно → следващ), снимка, ys, превъртане вътре
   local i
@@ -650,6 +676,7 @@ part_final() {
     upd34) part_upd34;;
     old28) part_old28f;;
     year34b) part_year34b;;
+    land34) part_land34;;
     shake34b) part_shake34b;;
     idlecat) part_idlecat;;
   esac
