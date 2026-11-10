@@ -82,14 +82,16 @@ c28_round() {  # $1 — new | base, $2 — кръг
   log "C28 $K round $2: GC lines in logcat for pid $pid: $gc; $(grep -E " $pid +[0-9]+ " $OUT/logcat-c28-$K-$2.txt | grep -E 'GC freed' | tail -3 | cut -c1-200 | tr '\n' '~')"
 }
 card_add28() {  # картата на API 28: полето, после текстът (с повторение — клавиатурата идва бавно)
-  local i p
+  local i p s
   for i in 1 2 3; do
     card_screen; dump; card_shown && return 0
-    p=$(xy --all class EditText | sed -n 1p)
+    p=$(xy --all class EditText | sed -n 1p); s=$(xy text '=Запази|=Save')
     [ -n "$p" ] || { log "CARD28: no field: $(texts 8 | cut -c1-200)"; continue; }
-    a input tap $p; sleep 2.5; a input text "$CARD_NO"; sleep 1.5; dump
-    log "CARD28 try $i after typing: $(texts 12 | cut -c1-260)"
-    hide_ime; sleep 1; tap text '=Запази|=Save' >/dev/null; sleep 3; dump; card_shown && { log "CARD28: card shown"; return 0; }
+    # С мигащ курсор uiautomator на API 28 не дочаква покой — „Запази“ се натиска по мястото отпреди.
+    a input tap $p; sleep 2.5; a input text "$CARD_NO"; sleep 1.5; eshot c28-typed-$i >/dev/null
+    hide_ime; sleep 1.5; [ -n "$s" ] && a input tap $s; sleep 3; dump
+    log "CARD28 try $i (field $p, save $s): $(texts 12 | cut -c1-260)"
+    card_shown && { log "CARD28: card shown"; return 0; }
     back 1.5
   done
   log "CARD28: NOT added"; return 1
