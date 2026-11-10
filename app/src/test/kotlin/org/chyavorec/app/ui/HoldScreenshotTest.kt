@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Looper
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasClickAction
@@ -42,6 +43,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.io.File
+import java.time.Duration
 import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -144,10 +146,17 @@ class HoldScreenshotTest {
         // „Заявена“ е изключен бутон — не праща втора заявка.
         val held = compose.onAllNodes(hasText("Заявена", substring = true) and SemanticsMatcher.keyIsDefined(SemanticsProperties.Disabled))
         assertTrue(held.fetchSemanticsNodes().isNotEmpty(), "няма изключен „Заявена“")
-        // Нов екран на същата книга (напр. след рестарт) — пак „Заявена“.
+        // Заявката е запомнена (в кеша на читателя)…
+        assertEquals(Instant.parse(NOW), runBlocking { container.libraryRepository.heldAt(INV) }, "заявката не е запомнена")
+        // …и нов екран на същата книга (напр. след рестарт) пак я показва като „Заявена“.
         val again = BookViewModel(INV, container)
-        compose.waitUntil(15_000) { again.ui.value.heldAt != null }
-        assertEquals(Instant.parse(NOW), again.ui.value.heldAt)
+        val main = shadowOf(Looper.getMainLooper())
+        val end = System.currentTimeMillis() + 15_000
+        while (again.ui.value.heldAt == null && System.currentTimeMillis() < end) {
+            main.idleFor(Duration.ofMillis(10))
+            Thread.sleep(5)
+        }
+        assertEquals(Instant.parse(NOW), again.ui.value.heldAt, "нов екран: ${again.ui.value}")
     }
 
     private companion object {

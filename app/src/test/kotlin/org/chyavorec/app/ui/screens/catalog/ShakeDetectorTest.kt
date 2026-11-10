@@ -112,6 +112,8 @@ class SurpriseMotionTest {
             assertEquals(SurpriseMotion.LITE, surpriseMotion(sdk, reducedMotion = false, screenReader = false), "API $sdk")
         }
         assertEquals(SurpriseMotion.STILL, surpriseMotion(MIN_SHUFFLE_SDK - 1, reducedMotion = false, screenReader = false))
+        // Проверено на емулатор с API 26, 28 и 30 (3 опита: RSS +2…7 MB, PSS равен) — разбъркване на всички поддържани версии.
+        assertEquals(Build.VERSION_CODES.O, MIN_SHUFFLE_SDK)
     }
 
     @Test fun reducedMotionOrScreenReaderIsAlwaysStill() {
