@@ -67,28 +67,56 @@ internal object HapticScores {
     }
 }
 
+/** Изходът на съставените ефекти (Android 11+) — отделен, за да се тества без истински вибратор. */
+internal interface CompositionOutput {
+    /** Поддържа ли телефонът всички [primitives]. */
+    fun supports(primitives: IntArray): Boolean
+    /** Свири [notes]; `false` — не е успяло (тогава се ползва резервата). */
+    fun play(notes: List<HapticScores.Note>): Boolean
+}
+
+@RequiresApi(Build.VERSION_CODES.R)
+private class VibratorOutput(private val vibrator: Vibrator) : CompositionOutput {
+    override fun supports(primitives: IntArray): Boolean =
+        runCatching { vibrator.hasVibrator() && vibrator.areAllPrimitivesSupported(*primitives) }.getOrDefault(false)
+
+    override fun play(notes: List<HapticScores.Note>): Boolean = runCatching {
+        val composition = VibrationEffect.startComposition()
+        for (n in notes) composition.addPrimitive(n.primitive, n.scale, n.delayMs)
+        val effect = composition.compose()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) vibrator.vibrate(effect, VibrationAttributes.createForUsage(VibrationAttributes.USAGE_TOUCH))
+        else vibrator.vibrate(effect)
+        true
+    }.getOrDefault(false)
+}
+
 /**
- * Свири подписите. [vibrator] и [touchFeedbackOn] са отделени за тестовете; на устройство
+ * Свири подписите. [output] и [touchFeedbackOn] са отделени за тестовете; на устройство
  * идват от системата ([rememberAppHaptics]).
  */
 class AppHaptics internal constructor(
     private val view: View,
     private val compose: HapticFeedback,
     private val sdk: Int = Build.VERSION.SDK_INT,
-    private val vibrator: () -> Vibrator? = { systemVibrator(view.context) },
+    private val output: () -> CompositionOutput? = { systemOutput(view.context, Build.VERSION.SDK_INT) },
     private val touchFeedbackOn: () -> Boolean = { systemTouchFeedbackOn(view) },
+    private val post: (Long, () -> Unit) -> Unit = { delay, block -> Handler(Looper.getMainLooper()).postDelayed(block, delay) },
 ) {
-    private val handler by lazy(LazyThreadSafetyMode.NONE) { Handler(Looper.getMainLooper()) }
+    private fun compositionOutput(signature: HapticSignature): CompositionOutput? {
+        if (sdk < Build.VERSION_CODES.R) return null
+        val out = output() ?: return null
+        return out.takeIf { it.supports(HapticScores.of(signature).map { n -> n.primitive }.distinct().toIntArray()) }
+    }
 
     /** Дали [play] ще ползва съставен ефект (за тестовете). */
-    internal fun usesComposition(signature: HapticSignature): Boolean = compositionVibrator(signature) != null
+    internal fun usesComposition(signature: HapticSignature): Boolean = compositionOutput(signature) != null
 
     fun play(signature: HapticSignature) {
-        val v = compositionVibrator(signature)
-        if (v != null) {
+        val out = compositionOutput(signature)
+        if (out != null) {
             // Настройката „Докосване“ е изключена — нищо; иначе съставеният ефект.
             if (!touchFeedbackOn()) return
-            if (vibrateSafely(v, HapticScores.of(signature))) return
+            if (out.play(HapticScores.of(signature))) return
         }
         // Резерва: стандартните типове (прозорецът сам спазва системната настройка). Паузите са
         // една след друга, затова се събират.
@@ -96,7 +124,7 @@ class AppHaptics internal constructor(
         for (step in HapticScores.fallback(signature)) {
             at += step.delayMs
             if (at == 0L) compose.performHapticFeedback(step.type)
-            else handler.postDelayed({ compose.performHapticFeedback(step.type) }, at)
+            else post(at) { compose.performHapticFeedback(step.type) }
         }
     }
 
@@ -105,35 +133,13 @@ class AppHaptics internal constructor(
         if (on) play(HapticSignature.STITCH) else compose.performHapticFeedback(HapticFeedbackType.ToggleOff)
     }
 
-    private fun compositionVibrator(signature: HapticSignature): Vibrator? {
-        if (sdk < Build.VERSION_CODES.R) return null
-        val v = vibrator() ?: return null
-        val primitives = HapticScores.of(signature).map { it.primitive }.distinct().toIntArray()
-        return v.takeIf { supported(it, primitives) }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun supported(v: Vibrator, primitives: IntArray): Boolean =
-        runCatching { v.hasVibrator() && v.areAllPrimitivesSupported(*primitives) }.getOrDefault(false)
-
-    private fun vibrateSafely(v: Vibrator, notes: List<HapticScores.Note>): Boolean {
-        if (sdk < Build.VERSION_CODES.R) return false
-        return runCatching { vibrate(v, notes); true }.getOrDefault(false)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun vibrate(v: Vibrator, notes: List<HapticScores.Note>) {
-        val composition = VibrationEffect.startComposition()
-        for (n in notes) composition.addPrimitive(n.primitive, n.scale, n.delayMs)
-        val effect = composition.compose()
-        if (sdk >= Build.VERSION_CODES.TIRAMISU) v.vibrate(effect, VibrationAttributes.createForUsage(VibrationAttributes.USAGE_TOUCH))
-        else v.vibrate(effect)
-    }
-
     private companion object {
-        fun systemVibrator(context: Context): Vibrator? =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) context.getSystemService(VibratorManager::class.java)?.defaultVibrator
+        fun systemOutput(context: Context, sdk: Int): CompositionOutput? {
+            if (sdk < Build.VERSION_CODES.R || Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return null
+            val v = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) context.getSystemService(VibratorManager::class.java)?.defaultVibrator
             else context.getSystemService(Vibrator::class.java)
+            return v?.let { VibratorOutput(it) }
+        }
 
         /** „Докосване“ в системните настройки и разрешението на самия прозорец. */
         fun systemTouchFeedbackOn(view: View): Boolean =
