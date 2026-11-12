@@ -70,6 +70,12 @@ data class AppSettings(
     val textScale: TextScale = TextScale.STANDARD,
     /** Картата, заеманията, историята и личните съобщения — след отключване с телефона (Поверителност). */
     val requireUnlock: Boolean = false,
+    /** „Тази седмица в Яворец“ — тих седмичен преглед (неделя вечер); по подразбиране изключен. */
+    val weeklyDigest: Boolean = false,
+    /** Любими раздели за реда „Нови на рафта“ в прегледа ([org.chyavorec.domain.model.FavouriteSections]); празно — всички. */
+    val digestSections: Set<String> = emptySet(),
+    /** „Утре: …“ — напомняне ден преди събитие на читалището с начален час; по подразбиране изключено. */
+    val tomorrowReminder: Boolean = false,
 )
 
 /** Размер на шрифта в режим за четене (S/M/L/XL → мащаб на шрифта). */
@@ -83,6 +89,7 @@ enum class TextScale(val factor: Float) { SMALL(0.9f), STANDARD(1f), LARGE(1.15f
 
 private const val MAX_MESSAGE_IDS = 300
 private const val MAX_PENDING_READS = 100
+private const val MAX_TOMORROW_KEYS = 60
 /** Същият като [org.chyavorec.domain.model.Inbox.PERSONAL_PREFIX]. */
 private const val PERSONAL_ID_PREFIX = org.chyavorec.domain.model.Inbox.PERSONAL_PREFIX
 
@@ -139,6 +146,12 @@ class SettingsStore(private val context: Context) {
         val catalogHttpCacheEvicted = booleanPreferencesKey("catalog_http_cache_evicted")
         val passwordManagerUsed = booleanPreferencesKey("password_manager_used")
         val requireUnlock = booleanPreferencesKey("require_unlock")
+        val weeklyDigest = booleanPreferencesKey("weekly_digest")
+        val digestSections = stringSetPreferencesKey("digest_sections")
+        val digestBaseline = longPreferencesKey("digest_baseline")
+        val digestLastSlot = longPreferencesKey("digest_last_slot")
+        val tomorrowReminder = booleanPreferencesKey("tomorrow_reminder")
+        val tomorrowReminded = stringSetPreferencesKey("tomorrow_reminded")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { p ->
@@ -164,6 +177,9 @@ class SettingsStore(private val context: Context) {
             readerNarrow = p[Keys.readerNarrow] ?: false,
             textScale = p[Keys.textScale]?.let { runCatching { TextScale.valueOf(it) }.getOrNull() } ?: TextScale.STANDARD,
             requireUnlock = p[Keys.requireUnlock] ?: false,
+            weeklyDigest = p[Keys.weeklyDigest] ?: false,
+            digestSections = p[Keys.digestSections].orEmpty(),
+            tomorrowReminder = p[Keys.tomorrowReminder] ?: false,
         )
     }
 
@@ -376,6 +392,45 @@ class SettingsStore(private val context: Context) {
      */
     suspend fun passwordManagerUsed(): Boolean = context.dataStore.data.first()[Keys.passwordManagerUsed] ?: false
     suspend fun setPasswordManagerUsed(on: Boolean) { context.dataStore.edit { it[Keys.passwordManagerUsed] = on } }
+
+    // --- Седмичен преглед „Тази седмица в Яворец“ и напомняне „Утре“ (виж WeeklyDigestStep) ---
+
+    /**
+     * Включва прегледа: записва начална точка (сега) — първият преглед идва едва със следващия слот
+     * и брои „нови“ само СЛЕД нея, затова включването не залива с вече познатото. Изключването
+     * забравя състоянието (следващото включване пак е „първо“).
+     */
+    suspend fun setWeeklyDigest(on: Boolean, nowMillis: Long, slotMillis: Long) = context.dataStore.edit {
+        it[Keys.weeklyDigest] = on
+        if (on) {
+            it[Keys.digestBaseline] = nowMillis
+            it[Keys.digestLastSlot] = slotMillis
+        } else {
+            it.remove(Keys.digestBaseline)
+            it.remove(Keys.digestLastSlot)
+        }
+    }
+
+    suspend fun setDigestSections(sections: Set<String>) = context.dataStore.edit { it[Keys.digestSections] = sections }
+
+    /** Началната точка и последният обработен слот на прегледа ([org.chyavorec.domain.model.WeeklyDigest.State]). */
+    suspend fun digestState(): org.chyavorec.domain.model.WeeklyDigest.State = context.dataStore.data.first().let {
+        org.chyavorec.domain.model.WeeklyDigest.State(it[Keys.digestBaseline], it[Keys.digestLastSlot])
+    }
+
+    /** След обработен слот: [baselineMillis] се сменя само ако е подаден (при показан/празен преглед). */
+    suspend fun markDigestSlot(slotMillis: Long, baselineMillis: Long? = null) = context.dataStore.edit {
+        it[Keys.digestLastSlot] = slotMillis
+        if (baselineMillis != null) it[Keys.digestBaseline] = baselineMillis
+    }
+
+    suspend fun setTomorrowReminder(on: Boolean) = context.dataStore.edit { it[Keys.tomorrowReminder] = on }
+    suspend fun tomorrowReminded(): Set<String> = context.dataStore.data.first()[Keys.tomorrowReminded].orEmpty()
+
+    /** Запомня напомнените събития („id|дата“); най-много [MAX_TOMORROW_KEYS] (старите отпадат). */
+    suspend fun addTomorrowReminded(keys: Collection<String>) = context.dataStore.edit {
+        it[Keys.tomorrowReminded] = (it[Keys.tomorrowReminded].orEmpty() + keys).toList().takeLast(MAX_TOMORROW_KEYS).toSet()
+    }
 
     /**
      * Изчистване на личните следи (история на търсенето, известия за заемания,

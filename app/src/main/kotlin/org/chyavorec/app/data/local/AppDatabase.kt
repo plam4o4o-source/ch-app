@@ -54,6 +54,25 @@ data class WantToReadEntity(
     val lastKnownAvailable: Boolean,
 )
 
+/**
+ * „Читателски дневник“: личната оценка (1–5 розетки; 0 — „Не сега“, повече не се пита) и бележката
+ * на ред за прочетена книга. Само на телефона; трие се при изход заедно с останалите следи на
+ * читателя (AppContainer.clearReaderTraces). [bookKey] — заглавие + автор без препинателни знаци
+ * ([org.chyavorec.domain.model.ReadingDiary.bookKey]); [inv] — последният видян инвентарен номер.
+ */
+@Entity(tableName = "reading_diary")
+data class ReadingDiaryEntity(
+    @PrimaryKey val bookKey: String,
+    val title: String,
+    val author: String,
+    val inv: Long?,
+    val rating: Int,
+    val note: String,
+    /** Годината на заемане (от историята) — за „любимата книга на годината“. */
+    val readYear: Int?,
+    val ratedAtMillis: Long,
+)
+
 @Dao
 interface FavoritesDao {
     @Query("SELECT * FROM favorite_news ORDER BY savedAtMillis DESC")
@@ -118,21 +137,47 @@ interface WantToReadDao {
     suspend fun clear()
 }
 
+@Dao
+interface ReadingDiaryDao {
+    @Query("SELECT * FROM reading_diary ORDER BY ratedAtMillis DESC")
+    fun observeAll(): Flow<List<ReadingDiaryEntity>>
+
+    @Query("SELECT * FROM reading_diary")
+    suspend fun all(): List<ReadingDiaryEntity>
+
+    @Query("SELECT * FROM reading_diary WHERE bookKey = :key")
+    suspend fun get(key: String): ReadingDiaryEntity?
+
+    /** Записът за книгата — по ключа или (друго заглавие в историята, същият екземпляр) по инв. №. */
+    @Query("SELECT * FROM reading_diary WHERE bookKey = :key OR (:inv IS NOT NULL AND inv = :inv) ORDER BY ratedAtMillis DESC LIMIT 1")
+    fun observeFor(key: String, inv: Long?): Flow<ReadingDiaryEntity?>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(item: ReadingDiaryEntity)
+
+    @Query("DELETE FROM reading_diary WHERE bookKey = :key")
+    suspend fun delete(key: String)
+
+    @Query("DELETE FROM reading_diary")
+    suspend fun clear()
+}
+
 /**
- * Данните на потребителя (любими новини, напомняния за събития, „Искам да прочета“) — за разлика от индекса на
+ * Данните на потребителя (любими новини, напомняния за събития, „Искам да прочета“, „Читателски дневник“) — за разлика от индекса на
  * каталога ([CatalogDatabase]) не могат да се попълнят отново, затова НЯМА изтриване при
  * смяна на схемата: всяка нова версия идва с миграция в [MIGRATIONS] и с изнесената схема
  * в app/schemas (проверява се в AppDatabaseMigrationTest с MigrationTestHelper).
  */
 @Database(
-    entities = [FavoriteNewsEntity::class, EventReminderEntity::class, WantToReadEntity::class],
-    version = 2,
+    entities = [FavoriteNewsEntity::class, EventReminderEntity::class, WantToReadEntity::class, ReadingDiaryEntity::class],
+    version = 3,
     exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun favorites(): FavoritesDao
     abstract fun reminders(): RemindersDao
     abstract fun wantToRead(): WantToReadDao
+    abstract fun readingDiary(): ReadingDiaryDao
 
     companion object {
         const val NAME = "chitalishte.db"
@@ -148,8 +193,19 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        /** Миграциите между версиите на схемата (следващата: `Migration(2, 3) { … }`). */
-        val MIGRATIONS: Array<Migration> = arrayOf(MIGRATION_1_2)
+        /** 2 → 3: „Читателски дневник“ (нова таблица; старите данни не се пипат). */
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `reading_diary` (`bookKey` TEXT NOT NULL, `title` TEXT NOT NULL, " +
+                        "`author` TEXT NOT NULL, `inv` INTEGER, `rating` INTEGER NOT NULL, `note` TEXT NOT NULL, " +
+                        "`readYear` INTEGER, `ratedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`bookKey`))",
+                )
+            }
+        }
+
+        /** Миграциите между версиите на схемата (следващата: `Migration(3, 4) { … }`). */
+        val MIGRATIONS: Array<Migration> = arrayOf(MIGRATION_1_2, MIGRATION_2_3)
 
         /**
          * Само при връщане към по-стара версия на приложението (по-нова схема на диска, за която

@@ -47,6 +47,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -110,7 +111,7 @@ private fun NavItem(icon: ImageVector, title: String, subtitle: String? = null, 
 )
 
 @Composable
-private fun SwitchItem(title: String, subtitle: String?, checked: Boolean, enabled: Boolean = true, onChange: (Boolean) -> Unit) = ListItem(
+internal fun SwitchItem(title: String, subtitle: String?, checked: Boolean, enabled: Boolean = true, onChange: (Boolean) -> Unit) = ListItem(
     headlineContent = { Text(title) },
     supportingContent = subtitle?.let { { Text(it) } },
     trailingContent = { Switch(checked, onCheckedChange = null, enabled = enabled) },
@@ -446,7 +447,7 @@ internal fun <T> ChoiceDialog(
 }
 
 /** Каналите, които се управляват от превключвателите на [NotificationSettingsScreen]. */
-private val settingsChannels = listOf(Channel.LOANS, Channel.EVENTS, Channel.MESSAGES, Channel.MESSAGES_IMPORTANT, Channel.NEWS, Channel.LIBRARY)
+private val settingsChannels = listOf(Channel.LOANS, Channel.EVENTS, Channel.MESSAGES, Channel.MESSAGES_IMPORTANT, Channel.NEWS, Channel.LIBRARY, Channel.DIGEST)
 
 @Composable
 fun NotificationSettingsScreen(onBack: () -> Unit) {
@@ -497,6 +498,28 @@ fun NotificationSettingsScreen(onBack: () -> Unit) {
                 s.notifyLoans,
             ) { enable(it, { v -> c.settings.setNotifyLoans(v) }) }
             SwitchItem(stringResource(R.string.channel_library), stringResource(R.string.notifications_library_desc), s.notifyLibrary) { enable(it, { v -> c.settings.setNotifyLibrary(v) }) }
+            // Седмичен преглед (изключен по подразбиране): разрешението за известия се иска чак при включването.
+            val digestDepartments by produceState(emptyList<String>()) {
+                value = runCatching {
+                    (c.catalogRepository.publishedSearcher() ?: c.catalogRepository.lookupSearcher(network = false))?.data?.facets?.departments
+                }.getOrNull().orEmpty().filter { it.isNotBlank() }
+            }
+            val digestFirst = stringResource(R.string.digest_first_note)
+            DigestSettingsRows(
+                digest = s.weeklyDigest,
+                onDigest = { on ->
+                    enable(on, { v ->
+                        val now = c.clock.now()
+                        c.settings.setWeeklyDigest(v, now.toEpochMilli(), org.chyavorec.domain.model.WeeklyDigest.slotStart(now, c.clock.zone()).toEpochMilli())
+                        if (v) snackbar.showSnackbar(digestFirst)
+                    })
+                },
+                sections = s.digestSections,
+                departments = digestDepartments,
+                onToggleSection = { key -> scope.launch { c.settings.setDigestSections(if (key in s.digestSections) s.digestSections - key else s.digestSections + key) } },
+                tomorrow = s.tomorrowReminder,
+                onTomorrow = { on -> enable(on, { v -> c.settings.setTomorrowReminder(v) }) },
+            )
             HorizontalDivider(Modifier.padding(vertical = 8.dp))
             NavItem(Icons.Outlined.Palette, stringResource(R.string.notifications_system)) { openNotificationSettings(context) }
             Text(stringResource(R.string.notifications_push_note), style = MaterialTheme.typography.bodySmall,

@@ -3,6 +3,7 @@ package org.chyavorec.data.catalog
 import org.chyavorec.core.TextNormalizer
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.HistoryItem
+import org.chyavorec.domain.model.ReadingDiary
 
 /**
  * „Подобни книги“ — препоръки само на устройството, от публичния каталог и
@@ -12,8 +13,8 @@ import org.chyavorec.domain.model.HistoryItem
  */
 object ReadingRecommender {
 
-    fun recommend(engine: CatalogSearchEngine, history: List<HistoryItem>, limit: Int = 12): List<CatalogBook> =
-        recommend(engine.snapshot.books, history, engine::book, limit)
+    fun recommend(engine: CatalogSearchEngine, history: List<HistoryItem>, limit: Int = 12, ratings: Map<String, Int> = emptyMap()): List<CatalogBook> =
+        recommend(engine.snapshot.books, history, engine::book, limit, ratings)
 
     @JvmOverloads
     fun recommend(
@@ -21,11 +22,17 @@ object ReadingRecommender {
         history: List<HistoryItem>,
         byInv: (Long) -> CatalogBook?,
         limit: Int = 12,
+        /**
+         * Личните оценки от „Читателския дневник“ (ключ на книгата — [ReadingDiary.bookKey] → 1–5):
+         * харесаните автори и раздели тежат повече, нехаресаните — по-малко ([ReadingDiary.weight]).
+         * Празно — както преди.
+         */
+        ratings: Map<String, Int> = emptyMap(),
         /** Вика се периодично в цикъла — напр. `ensureActive()`, за да може изчислението да се отмени. */
         checkpoint: () -> Unit = {},
     ): List<CatalogBook> {
         if (history.isEmpty() || books.isEmpty()) return emptyList()
-        val p = profile(history, byInv) ?: return emptyList()
+        val p = profile(history, byInv, ratings) ?: return emptyList()
         val scored = ArrayList<Pair<CatalogBook, Int>>()
         val seenTitles = HashSet<String>()
         // Точките по УДК и по автор — по веднъж за всеки различен низ (индексите и авторите се повтарят).
@@ -72,13 +79,14 @@ object ReadingRecommender {
     )
 
     /** `null` — няма какво да се препоръча (празна история или нищо за точкуване). */
-    fun prefilter(history: List<HistoryItem>, byInv: (Long) -> CatalogBook?): Prefilter? {
+    fun prefilter(history: List<HistoryItem>, byInv: (Long) -> CatalogBook?, ratings: Map<String, Int> = emptyMap()): Prefilter? {
         if (history.isEmpty()) return null
-        val p = profile(history, byInv) ?: return null
+        val p = profile(history, byInv, ratings) ?: return null
         // Префиксът по УДК започва с първата цифра на индекса — тя е и разделът (udc_section).
-        val sections = p.udc2.keys.mapTo(HashSet()) { it[0].digitToInt() }
+        // Само с положително тегло: точки може да даде само такъв раздел или автор.
+        val sections = p.udc2.filterValues { it > 0 }.keys.mapTo(HashSet()) { it[0].digitToInt() }
         // Ключът на автора е от думи (букви/цифри); всяка от тях е подниз и на нормализирания автор.
-        val words = p.authors.keys.mapTo(HashSet()) { key -> TextNormalizer.normalize(key.split(' ').maxBy { it.length }) }
+        val words = p.authors.filterValues { it > 0 }.keys.mapTo(HashSet()) { key -> TextNormalizer.normalize(key.split(' ').maxBy { it.length }) }
         val usable = words.none { it.isEmpty() } && words.size <= MAX_AUTHOR_WORDS
         return Prefilter(sections, if (usable) words else null)
     }
@@ -120,23 +128,34 @@ object ReadingRecommender {
         val authors: Map<String, Int>,
     )
 
-    private fun profile(history: List<HistoryItem>, byInv: (Long) -> CatalogBook?): Profile? {
+    private fun profile(history: List<HistoryItem>, byInv: (Long) -> CatalogBook?, ratings: Map<String, Int> = emptyMap()): Profile? {
         val readInv = history.mapNotNull { it.inv }.toSet()
         val readBooks = readInv.mapNotNull(byInv)
         val readTitles = (readBooks.map { titleKey(it.title, it.author) } + history.map { titleKey(it.title, it.author) }).toSet()
-        // Тежест на всеки префикс/автор = колко пъти се среща в прочетеното.
+        // Тежест на всеки префикс/автор = колко пъти се среща в прочетеното; оценена книга тежи по-друго.
+        fun weight(title: String, author: String): Int =
+            if (ratings.isEmpty()) 1 else ReadingDiary.weight(ratings[titleKey(title, author)])
         val udc3 = HashMap<String, Int>()
         val udc2 = HashMap<String, Int>()
         for (b in readBooks) {
-            udcPrefix(b.udc, 3)?.let { udc3[it] = (udc3[it] ?: 0) + 1 }
-            udcPrefix(b.udc, 2)?.let { udc2[it] = (udc2[it] ?: 0) + 1 }
+            val w = weight(b.title, b.author)
+            if (w == 0) continue
+            udcPrefix(b.udc, 3)?.let { udc3[it] = (udc3[it] ?: 0) + w }
+            udcPrefix(b.udc, 2)?.let { udc2[it] = (udc2[it] ?: 0) + w }
         }
         val authors = HashMap<String, Int>()
-        for (a in readBooks.flatMap { it.authors } + history.map { it.author }) {
-            val k = authorKey(a) ?: continue
-            authors[k] = (authors[k] ?: 0) + 1
+        for (b in readBooks) {
+            val w = weight(b.title, b.author)
+            if (w == 0) continue
+            for (a in b.authors) authorKey(a)?.let { authors[it] = (authors[it] ?: 0) + w }
         }
-        if (udc3.isEmpty() && udc2.isEmpty() && authors.isEmpty()) return null
+        for (h in history) {
+            val w = weight(h.title, h.author)
+            if (w == 0) continue
+            authorKey(h.author)?.let { authors[it] = (authors[it] ?: 0) + w }
+        }
+        // Нищо с положителна тежест — няма какво да се препоръча (напр. всичко прочетено е нехаресано).
+        if (udc3.values.none { it > 0 } && udc2.values.none { it > 0 } && authors.values.none { it > 0 }) return null
         return Profile(readInv, readTitles, udc3, udc2, authors)
     }
 
