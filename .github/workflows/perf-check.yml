@@ -114,7 +114,7 @@ jobs:
       fail-fast: false
       matrix:
         # API 33 google_apis x86_64, -gpu swangle_indirect; частите с име на 28 — API 28; на 26 — API 26; c36 — API 36.
-        part: [upd36, upd28, onb36, new36, new36b, new28, new26, mon36, c28, c26, c36, hi28, idle33, start36a, start36b, gfx36, gfxb36, mem36, memb36, diary36, widget36]
+        part: [perf36, widget36, diary36, set36, anr36, memL36, membL36]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -124,7 +124,7 @@ jobs:
       - name: API level of the part
         id: api
         run: |
-          case "${{ matrix.part }}" in *26) A=26;; *28) A=28;; c36) A=36;; *) A=33;; esac
+          case "${{ matrix.part }}" in *26) A=26;; *28) A=28;; c36|anr36) A=36;; *) A=33;; esac
           echo "level=$A" >> "$GITHUB_OUTPUT"; echo "API $A"
       - name: Enable KVM
         run: |

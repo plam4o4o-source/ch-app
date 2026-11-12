@@ -515,7 +515,7 @@ part_mem() {
   done
   mem c00
   : > $OUT/mem-trend.txt
-  for c in $(seq 1 30); do
+  for c in $(seq 1 ${MEM_CYCLES:-30}); do
     for t in home catalog my news more; do [ -n "${TXY[$t]}" ] && a input tap ${TXY[$t]}; sleep 0.4; done
     link "$BOOK_URL" >/dev/null; sleep 1.2
     [ $c = 1 ] && { show 12; has "$RX_BACK" && log "cycle 1: book screen opened" || log "cycle 1: book screen NOT detected"; shot cycles-book; }
@@ -529,7 +529,7 @@ part_mem() {
       5|15|25) a dumpsys meminfo $PKG > $OUT/mem-c0$c-raw.txt 2>/dev/null; [ $c -ge 10 ] && mv $OUT/mem-c0$c-raw.txt $OUT/mem-c$c-raw.txt
                local cc; cc=$(printf %02d $c); a am send-trim-memory $PKG RUNNING_CRITICAL >/dev/null 2>&1; sleep 6
                a dumpsys meminfo $PKG > $OUT/mem-c$cc.txt; python3 $H_/parse.py mem $OUT/mem-c$cc.txt "c$cc (trimmed)" | tee -a $SUM;;
-      10|20|30) log "cycles done: $c, gallery viewer reached in $gok, search expanded in $sok"; mem c$c;;
+      10|20|30|40|50|60) log "cycles done: $c, gallery viewer reached in $gok, search expanded in $sok"; mem c$c;;
     esac
   done
   log "pid after cycles: $(a pidof $PKG | tr -d '\r'); gallery viewer reached in $gok/30, expanded search with '12' in $sok/30 cycles"

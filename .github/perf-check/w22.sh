@@ -16,7 +16,7 @@
 #   perf36        — покой (CPU/кадри) и плавност на новите екрани; памет след обиколка на новите екрани
 #   diary36       — devDebug: читателски дневник, печат „Върната“, годишната история „Твоята шевица“
 #   widget36      — уиджетите (стар и „Книга на деня“) от бутоните в Настройки, пряк път „Шевица“, икона
-W22_PARTS=" upd36 upd28 onb36 new36 new36b new28 new26 mon36 start36a start36b gfx36 gfxb36 mem36 memb36 perf36 diary36 widget36 "
+W22_PARTS=" upd36 upd28 onb36 new36 new36b new28 new26 mon36 start36a start36b gfx36 gfxb36 mem36 memb36 memL36 membL36 perf36 diary36 widget36 set36 anr36 "
 W20_PARTS="$W20_PARTS $W22_PARTS"
 W22=$H_/w22.py
 L_EMB='Извези шевица|Embroider a pattern'
@@ -461,7 +461,7 @@ part_perf36() {
 
 # ---------------------------------------------------------------- devDebug: читателски дневник, „Върната“, годишната история
 part_diary36() {
-  local i p
+  local i p b l t r bt mode
   helper_install
   dev_install
   anims 1
@@ -470,37 +470,125 @@ part_diary36() {
   demo_signin_remember
   CFG=demo36; DENS=$(dens); dims; : > $OUT/a11y-demo36.txt
   mark d36
-  sec "D1. Моето and „История“ (reading diary prompts, the „Върната“ stamp)"
-  ready; tab my; cap 01-my 3; sw_up 500; cap 01b-my-2 1.5; sw_up 500; cap 01c-my-3 1.5; top_of
-  open_link_dev my/loans; cap 02-loans 2; back 1.5
-  open_link_dev my/history 5; cap 03-history 2; sw_up 500; cap 03b-history-2 1.5; sw_up 500; cap 03c-history-3 1.5; top_of
-  dump; log "HISTORY: diary prompts '$(grep -c 'Хареса ли ти' $OUT/ui.xml)', rating marks '$(grep -c 'Оцени с' $OUT/ui.xml)', stamp 'Върната' '$(grep -c 'Върната' $OUT/ui.xml)'"
-  p=$(xy content-desc 'Оцени с 4 от 5'); if [ -n "$p" ]; then a input tap $p; sleep 2; cap 04-rated 1; fi
-  dump; if tap text '=Добави бележка' >/dev/null; then sleep 1; dump; p=$(xy --all class EditText | sed -n 1p); [ -n "$p" ] && { a input tap $p; sleep 1; a input text "ok"; sleep 1; hide_ime; }; tap text '=Запази|=Save' >/dev/null; sleep 1.5; cap 04b-note 1; fi
-  dump; if tap text '=Препоръчай' >/dev/null; then sleep 2; cap 05-recommend-sheet 1.5; tap text '=Сподели като картинка|=Share as an image' >/dev/null
+  sec "D1. Моето and „История“ (these screens are FLAG_SECURE: emulator screenshots)"
+  ready; tab my; sleep 2; eshot d-my >/dev/null; sw_up 500; sleep 1; eshot d-my-2 >/dev/null; sw_up 500; sleep 1; eshot d-my-3 >/dev/null; top_of
+  open_link_dev my/loans; sleep 1; eshot d-loans >/dev/null; back 1.5
+  open_link_dev my/history 5; sleep 1; eshot d-history >/dev/null
+  for i in 1 2 3; do sw_up 500; sleep 1; eshot d-history-$((i + 1)) >/dev/null; done; top_of
+  dump; log "HISTORY: diary prompts '$(grep -c 'Хареса ли ти' $OUT/ui.xml)', rating nodes '$(grep -c 'Оценка на книгата' $OUT/ui.xml)', texts: $(texts 40 | cut -c1-500)"
+  for i in 1 2 3 4; do dump; b=$(xy --bounds content-desc 'Оценка на книгата|Book rating'); [ -n "$b" ] && break; sw_up 400; sleep 1; done
+  if [ -n "$b" ]; then
+    read l t r bt <<< "$b"; log "DIARY rating node [$b]"
+    a input tap $(( l + (r - l) * 70 / 100 )) $(( (t + bt) / 2 )); sleep 2; eshot d-rated >/dev/null; dump
+    log "DIARY after rating: $(texts 24 | cut -c1-400)"
+  else log "DIARY: no rating node found"; fi
+  dump; if tap text '=Добави бележка|=Add a note' >/dev/null; then
+    sleep 1.2; dump; p=$(xy --all class EditText | sed -n 1p); [ -n "$p" ] && { a input tap $p; sleep 1; a input text "very_good"; sleep 1; hide_ime; }
+    eshot d-note >/dev/null; tap text '=Запази|=Save' >/dev/null; sleep 1.5; eshot d-note-saved >/dev/null
+  fi
+  dump; if tap text '=Препоръчай|=Recommend' >/dev/null; then
+    sleep 2; eshot d-recommend-sheet >/dev/null; tap text '=Сподели като картинка|=Share as an image' >/dev/null
     for i in $(seq 1 15); do sleep 1; chooser_up && break; done
-    log "DIARY recommend share: chooser $(chooser_up && echo OPEN || echo 'NOT open') after $i s"; shot diary/recommend-chooser >/dev/null; chooser_up && back 1.5
-  else log "DIARY: no 'Препоръчай': $(texts 14 | cut -c1-260)"; fi
+    log "DIARY recommend share: chooser $(chooser_up && echo OPEN || echo 'NOT open') after $i s"; eshot d-recommend-chooser >/dev/null; chooser_up && back 1.5
+  else log "DIARY: no 'Препоръчай' after rating: $(texts 14 | cut -c1-260)"; fi
   back 1.5
   log "DIARY: $(since_fatal d36)"
-  sec "D2. The diary survives a process death; a book screen shows the diary section"
+  sec "D2. The diary survives a process death"
   go_home 2; a am kill $PKG; sleep 2; launch >/dev/null; sleep 5
-  open_link_dev my/history 5; cap 06-history-after-kill 2; dump; log "HISTORY after kill: rating state '$(grep -oE 'text="[0-9] от 5"|content-desc="[^"]*Оценка[^"]*"' $OUT/ui.xml | head -2 | tr '\n' ' ')'"
+  open_link_dev my/history 5; sleep 1; eshot d-history-after-kill >/dev/null; dump
+  log "HISTORY after kill: $(grep -oE 'content-desc="[^"]*Оценка[^"]*"|text="[0-9] от 5"|text="very_good"' $OUT/ui.xml | head -4 | tr '\n' ' ')"
   back 1.5
-  sec "D3. Year story: „Твоята шевица“ and the embroidered charts (portrait; dark)"
-  year_slides_walk port
-  a cmd uimode night yes; sleep 3
-  year_slides_walk dark
-  a cmd uimode night no; sleep 2
+  sec "D3. Year story, every slide one by one (taps on the right side; emulator screenshots, no drags)"
+  for mode in light dark; do
+    [ $mode = dark ] && { a cmd uimode night yes; sleep 3; }
+    year_open_fresh 25 || { log "YEAR $mode: story did not open"; continue; }
+    for i in 1 2 3 4 5 6 7 8 9 10; do
+      sleep 1.5; dump; eshot y-$mode-$i >/dev/null
+      log "YEAR $mode slide $i: $(texts 8 | cut -c1-260)"
+      grep -q 'Затвори' $OUT/ui.xml || { log "YEAR $mode: story no longer open at $i"; break; }
+      a input tap $((W*88/100)) $((H/2)); sleep 0.8
+    done
+    [ "$(ystate)" = open ] && back 2
+    [ $mode = dark ] && { a cmd uimode night no; sleep 2; }
+  done
   sec "D4. Signed-in card, fullscreen"
   card_screen; sleep 2; eshot zz-demo-card >/dev/null; dump; tap text "$L_CARDSHOW" >/dev/null; sleep 3; eshot zz-demo-card-full >/dev/null
   log "demo fullscreen card: $(fullscreen_ok && echo yes || echo NO)"; back 1.5; leave
-  new_pass demo-new brief
   log "DIARY36 part: $(since_fatal d36)"
   python3 $W20 a11yagg $OUT/a11y-demo36.txt | head -30 | tee -a $SUM
   all_sheets
   diag_end
   use_pkg org.chyavorec.app
+}
+
+# ---------------------------------------------------------------- Настройки: известия (седмичен преглед), палитри, цветове от тапета
+part_set36() {
+  local i p pal
+  helper_install
+  anims 1
+  warmup
+  CFG=set36; DENS=$(dens); dims; : > $OUT/a11y-set36.txt
+  mark s36
+  sec "S1. Settings › Избери известията: weekly digest, favourite sections, tomorrow reminder"
+  open_settings && settings_item 'Избери известията|Choose notifications|Choose which' >/dev/null
+  sleep 2; cap n-01 1
+  for i in 1 2 3 4 5 6; do dump; [ -n "$(xy text 'Седмичен преглед|Weekly digest')" ] && break; sw_up 500; sleep 1; done
+  cap n-02-digest 1
+  log "DIGEST row: $(xy --state text 'Седмичен преглед|Weekly digest'); sections row $(has 'Любими раздели|Favourite sections' && echo present || echo ABSENT); tomorrow row $(has 'Напомняне .Утре|Tomorrow' && echo present || echo ABSENT)"
+  tap text 'Седмичен преглед|Weekly digest' >/dev/null; sleep 1.2; shot digest/on-snack >/dev/null; dump
+  log "DIGEST after the tap: $(xy --state text 'Седмичен преглед|Weekly digest'); snackbar: $(texts 40 | grep -oE 'text="[^"]*(неделя|Sunday)[^"]*"' | head -1)"
+  sleep 1.5; cap n-03-digest-on 1
+  for i in 1 2 3; do sw_up 400; sleep 0.8; done; cap n-04-sections 1
+  tap text 'Любими раздели|Favourite sections' >/dev/null; sleep 1.5; cap n-05-sections-tap 1
+  dump; tap text 'Напомняне „Утре“|“Tomorrow” reminder|Утре' >/dev/null; sleep 1.2; cap n-06-tomorrow 1
+  back 1.5; back 1.5
+  sec "S2. Digest notification: the clock jumps to Sunday 18:30, the periodic worker runs"
+  a settings put global auto_time 0; a settings put global auto_time_zone 0
+  log "device date before: $(a date | tr -d '\r'); tz $(a getprop persist.sys.timezone | tr -d '\r')"
+  a date 111518302026.00 >/dev/null 2>&1; a am broadcast -a android.intent.action.TIME_SET >/dev/null 2>&1; sleep 3
+  log "device date now: $(a date | tr -d '\r')"
+  log "jobs: $(app_jobs)"; run_jobs; sleep 30
+  notifs digest | cut -c1-500 | tee -a $SUM
+  shade_expand 'Тази седмица|This week|седмица' digest || log "DIGEST: not in the shade"
+  go_home 2; a cmd statusbar collapse
+  log "DIGEST: $(since s36 'WeeklyDigest|digest' | head -5 | cut -c1-240 | tr '\n' '|'); $(since_fatal s36)"
+  sec "S3. Palettes (Яворец / Левски / Шевица) and colours from the wallpaper: Home and Още"
+  for pal in Левски Шевица Яворец; do
+    open_settings; settings_find "=$pal" && { tap text "=$pal" >/dev/null; sleep 2; }
+    leave; ready; tab home; cap pal-$pal-home 3; ready; tab more; cap pal-$pal-more 1.5
+  done
+  open_settings; settings_find '=Цветове от тапета|=Colours from the wallpaper|=Colors from the wallpaper' && { tap text 'Цветове от тапета|Colours from the wallpaper|Colors from the wallpaper' >/dev/null; sleep 2; }
+  leave; ready; tab home; cap dyn-home 3; ready; tab more; cap dyn-more 1.5
+  a cmd uimode night yes; sleep 3; ready; tab home; cap dyn-home-dark 3; a cmd uimode night no; sleep 2
+  open_settings; settings_find '=Цветове от тапета|=Colours from the wallpaper|=Colors from the wallpaper' && { tap text 'Цветове от тапета|Colours from the wallpaper|Colors from the wallpaper' >/dev/null; sleep 2; }
+  leave
+  python3 $W20 a11yagg $OUT/a11y-set36.txt | head -20 | tee -a $SUM
+  all_sheets
+  diag_end
+}
+
+# ---------------------------------------------------------------- API 36: ANR при monkey 777 — 1.2.36 срещу 1.2.35, с проследяванията
+part_anr36() {
+  local K n r f
+  anims 1
+  warmup
+  for n in 1 2 3; do
+    for K in new base; do
+      sec "AN $K-$n: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected"
+      inst $(apk_of $K) anr-$K-$n $(ref_of $K) || continue
+      a input keyevent KEYCODE_HOME; sleep 2; launch >/dev/null; sleep 6; dismiss; ready; tab catalog; waitfor "$RX_RESULTS" 150 >/dev/null
+      a "rm -rf /data/anr/* 2>/dev/null"; mark anr-$K-$n
+      MONKEY_N=2500 MONKEY_SEED=777 part_monkey >/dev/null 2>&1
+      r="$(grep -E 'Events injected' $OUT/monkey.txt | tr '\n' ' ') ANR=$(grep -c 'NOT RESPONDING\|ANR in' $OUT/monkey.txt) CRASH=$(grep -c CRASH $OUT/monkey.txt)"
+      log "AN $K-$n: $r; logcat ANR lines since: $(since anr-$K-$n 'ANR in ' | wc -l); app FATAL $(since anr-$K-$n 'Process: org\.chyavorec\.app' | wc -l)"
+      mkdir -p $OUT/anr/$K-$n; timeout 60 adb pull /data/anr $OUT/anr/$K-$n >/dev/null 2>&1
+      cp $OUT/monkey.txt $OUT/monkey-$K-$n.txt
+      log "  /data/anr: $(ls $OUT/anr/$K-$n/anr 2>/dev/null | tr '\n' ' ')"
+      online
+    done
+  done
+  for f in $(ls $OUT/anr/*/anr/* 2>/dev/null | head -4); do log "ANR TRACE $f: $(grep -A12 '"main"' $f | head -14 | tr '\n' '|' | cut -c1-900)"; done
+  diag_end
 }
 
 # ---------------------------------------------------------------- уиджети, пряк път, икона
@@ -509,7 +597,7 @@ pin_dialog() {  # $1 — етикет: диалогът на лаунчера �
   for i in 1 2 3 4 5 6; do sleep 1.5; dump; has 'Add to home screen|Добави на началния екран|Add automatically|автоматично' && break; done
   shot widget/$1-dialog >/dev/null
   log "PIN $1 dialog: fg $(fg); $(texts 12 | cut -c1-300)"
-  p=$(xy text '=Add automatically|=Добави автоматично|=Автоматично добавяне')
+  p=$(xy text '=Add to home screen|=Добави на началния екран|=Add automatically|=Добави автоматично|=Автоматично добавяне')
   [ -z "$p" ] && p=$(xy text '=Add|=Добави|=ADD')
   if [ -n "$p" ]; then a input tap $p; sleep 3; else log "PIN $1: no confirm button"; fi
 }
@@ -574,6 +662,10 @@ part_w22() {
     gfx36|gfxb36) PART=gfx35; part_gfx35;;
     mem36) PART=mem; part_mem;;
     memb36) PART=mem-base; part_mem;;
+    memL36) PART=mem; MEM_CYCLES=60 part_mem;;
+    membL36) PART=mem-base; MEM_CYCLES=60 part_mem;;
+    set36) part_set36;;
+    anr36) part_anr36;;
     perf36) part_perf36;;
     diary36) part_diary36;;
     widget36) part_widget36;;
