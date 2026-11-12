@@ -1,0 +1,48 @@
+part year19; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## Y0. devDebug (org.chyavorec.app.dev, demo data)
+installed: devDebug 6d3a324 (org.chyavorec.app.dev, demo sign-in DEMO-0001);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.33-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 7176 ms
+## Y1. Demo sign-in (DEMO-0001 / demo)
+MY after sign-in: text="ДЕМО ДАННИ — само за разработка, не са реални" text="ДЧ" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" text="БИБЛИОТЕКА" text="Читателска карта" text="Покажи картата на гишето" text="Моите книги" text="Заети книги и срокове за връщане" text="Искам да прочета" text="Книги, ко
+## Y2. The year card on „Моето“
+YEAR card: text="Моята читателска година 2026" text="30 книги · виж историята" 
+## Y3. Open the story: 8 slides, auto-advance 5.5 s (slide state polled through the test accessibility service)
+A11Y service: 11-07 16:51:01.907  8208  8208 I PCA11Y  : connected flags=80
+YEAR timeline (state every ~3 s from the tap): +5640 no-slide-state;+21524 state=Слайд1;
+## Y4. Tap left (previous) ×2, tap right (next)
+YEAR after 2 × left tap: state=Слайд 6 от 8
+YEAR after a right tap: state=Слайд 8 от 8
+## Y5. Hold pauses the auto-advance (fresh story, press 12 s on slide 1-2)
+YEAR reopened: state=Слайд 1 от 8 at +15621 ms
+YEAR while held: +7083 ms: 'state=Слайд 1 от 8' → 'state=Слайд 1 от 8' (start 'state=Слайд 1 от 8'; paused = unchanged over > 5.5 s)
+YEAR 8 s after release: 'state=Слайд 3 от 8' (advanced = resumed)
+## Y6. Swipe down closes the story
+YEAR after a fast swipe down (350 ms): STILL OPEN
+YEAR after a slow drag down (1.2 s): closed
+## Y7. Confetti on renewing a demo loan ('Удължи срока')
+REC confetti-renew: 33 frames @8 fps; motion all: frames=33 moving-frames(>1.0)=0 max-step=0.0 max-vs-first=0.0 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0]
+CONFETTI renew: confetti-like new saturated points per frame (max 0): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+RENEW: text="Заявено удължаване · чака библиотеката"
+## Y8. Confetti on 'Искам да прочета' (demo account)
+REC confetti-want-dev: 32 frames @8 fps; motion all: frames=32 moving-frames(>1.0)=1 max-step=11.1 max-vs-first=12.0 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.6 11.1 0.0 0.3 0.0 0.5 0.4 0.0]
+CONFETTI want (dev): confetti-like new saturated points per frame (max 49): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10, 43, 43, 49, 33, 33]
+## COMPLETE
+## logcat findings
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

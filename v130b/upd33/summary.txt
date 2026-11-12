@@ -1,0 +1,69 @@
+part upd33; APK: 1.2.30 255fdc6 (Обновяване и емоджи: поправки след проверката на емулатор); versionCode 1488543; x86_64 libs: 2 size 4505177 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104430 bytes
+host: 4 cpu, 15987 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## R0. The v1.2.30 code as 1.2.30-pre (versionCode 1488542, 255fdc6) → the test v1.2.30; mobile data only, throttled
+staged: 1488543 1.2.30 4505177
+installed new-upd: 1.2.30-pre 255fdc6 (v1.2.30 code); versionCode 1488542; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v130b/update/41353351352/update.json size 4505145;  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.30-pre 
+THROTTLE on: -P INPUT ACCEPT -A INPUT -p tcp -m tcp --sport 443 -m hashlimit --hashlimit-above 64kb/s --hashlimit-burst 64kb --hashlimit-mode srcip --hashlimit-name pcdl -j DROP -A INPUT -j bw_INPUT 
+## R1. Plain download: 'Изтегли и инсталирай', Home at +1 s → finishes in the background
+r1-plain: progress notification at +4275 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 0%) text=null progress=Integer (0)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ']
+r1-plain +25302 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 21%) text=null progress=Integer (21)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False; files [1000576 2026-11-01 21:59 update-1488543.apk.part;]
+r1-plain +50377 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 45%) text=null progress=Integer (45)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False; files [2027621 2026-11-01 21:59 update-1488543.apk.part;]
+r1-plain +75465 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 66%) text=null progress=Integer (66)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False; files [3054592 2026-11-01 22:00 update-1488543.apk.part;]
+r1-plain +100517 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.30 — 89%) text=null progress=Integer (89)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False; files [4016101 2026-11-01 22:00 update-1488543.apk.part;]
+r1-plain RESULT: ready after 117080 ms (first progress notification at +4275 ms); app process '5433'; files [4505177 2026-11-01 22:00 update-1488543.apk;]
+## R2. Download → 'Отказ' from the notification → 'Изтегли и инсталирай' again, Home at +1 s
+r2 shade: 
+r2 after 'Отказ': NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +23005 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +47561 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +72010 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +96457 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +120908 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +145353 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +169798 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +194244 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +218689 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +243125 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s +267570 ms: NOTIF total for org.chyavorec.app: 0; files []
+r2-home-1s RESULT: none after 287880 ms (first progress notification at +never ms); app process '7725'; files []
+r2 logcat (app/FGS): 
+## R3. The same, Home at +17 s
+r3 shade: text="Изтегляне на версия 1.2.30 — 10%" text="Отказ" 
+r3 after 'Отказ': NOTIF total for org.chyavorec.app: 0; files []
+r3 in the app +6014 ms: text="Проверка за нова версия…" 'Отказ' no; notif: NOTIF total for org.chyavorec.app: 0
+r3 in the app +12073 ms: text="Проверка за нова версия…" 'Отказ' no; notif: NOTIF total for org.chyavorec.app: 0
+r3 in the app +18145 ms: text="Проверка за нова версия…" 'Отказ' no; notif: NOTIF total for org.chyavorec.app: 0
+r3 in the app +24251 ms: text="Проверка за нова версия…" 'Отказ' no; notif: NOTIF total for org.chyavorec.app: 0
+r3-home-17s +47311 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +71751 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +96193 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +120637 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +145074 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +169514 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +194073 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +218514 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +242967 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +267412 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s +291857 ms: NOTIF total for org.chyavorec.app: 0; files []
+r3-home-17s RESULT: none after 312167 ms (first progress notification at +never ms); app process '8487'; files []
+## R4. 'готова за инсталиране' → installer → v1.2.30 and 'Какво ново'
+THROTTLE off: 0 rules left
+no 'готова за инсталиране' in the shade: text="On" content-desc="Internet" text="Internet" text="On" content-desc="Bluetooth." text="Bluetooth" text="Flashlight" text="Off" content-desc="Do Not Disturb." text="Do Not Disturb" 
+## COMPLETE
+## logcat findings
+app pids seen: ['5433', '7725', '8487']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 21
+   skipped-frames events=21 max=93 total=1002
+== Davey: 29
+   davey events=29 max=2184ms median=922ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

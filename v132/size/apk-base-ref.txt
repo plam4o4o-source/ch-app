@@ -1,0 +1,1 @@
+1.2.31 6f44326 (Профил за бърз старт: генериран на емулатор от e20a974); versionCode 1488544; x86_64 libs: 2; update manifest: no-update stub

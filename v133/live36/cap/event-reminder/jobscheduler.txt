@@ -1,0 +1,1450 @@
+Settings:
+  min_ready_cpu_only_jobs_count=3 
+  min_ready_non_active_jobs_count=5 
+  max_cpu_only_job_batch_delay_ms=1860000 
+  max_non_active_job_batch_delay_ms=1860000 
+  heavy_use_factor=0.9 
+  moderate_use_factor=0.5 
+  min_linear_backoff_time_ms=10000 
+  min_exp_backoff_time_ms=10000 
+  system_stop_to_failure_ratio=3 
+  abandoned_job_timeouts_before_aggressive_backoff=3 
+  conn_congestion_delay_frac=0.5 
+  conn_prefetch_relax_frac=0.5 
+  conn_use_cell_signal_strength=true 
+  conn_update_all_jobs_min_interval_ms=60000 
+  conn_low_signal_strength_relax_frac=0.5 
+  conn_transport_batch_threshold={0=3} 
+  conn_max_connectivity_job_batch_delay_ms=1860000 
+  prefetch_force_batch_relax_threshold_ms=3600000 
+  enable_api_quotas=true 
+  aq_schedule_count=250 
+  aq_schedule_window_ms=60000 
+  aq_schedule_throw_exception=true 
+  aq_schedule_return_failure=false 
+  enable_execution_safeguards_udc=true 
+  es_u_timeout_uij_count=2 
+  es_u_timeout_ej_count=5 
+  es_u_timeout_reg_count=3 
+  es_u_timeout_total_count=10 
+  es_u_timeout_window_ms=86400000 
+  es_u_anr_count=3 
+  es_u_anr_window_ms=21600000 
+  runtime_min_guarantee_ms=600000 
+  runtime_min_ej_guarantee_ms=180000 
+  runtime_free_quota_max_limit_ms=1800000 
+  runtime_min_ui_guarantee_ms=21600000 
+  runtime_ui_limit_ms=43200000 
+  runtime_min_ui_data_transfer_guarantee_buffer_factor=1.35 
+  runtime_min_ui_data_transfer_guarantee_ms=21600000 
+  runtime_cumulative_ui_limit_ms=86400000 
+  runtime_use_data_estimates_for_limits=false 
+  persist_in_split_files=true 
+  max_num_persisted_job_work_items=100000 
+  
+  PrefetchController:
+    pc_launch_time_threshold_ms=3600000 
+    pc_launch_time_allowance_ms=1800000 
+  
+  FlexibilityController:
+    fc_applied_constraints=0 (nothing)
+    fc_flexibility_deadline_proximity_limit_ms=900000 
+    fc_fallback_flexibility_deadline_ms=86400000 
+    fc_fallback_flexibility_deadlines={100=172800000, 200=86400000, 300=43200000, 400=21600000, 500=3600000} 
+    fc_fallback_flexibility_deadline_scores={100=1, 200=2, 300=3, 400=4, 500=5} 
+    fc_fallback_flexibility_deadline_additional_score_time_factors={100=60000, 200=60000, 300=120000, 400=180000, 500=0} 
+    fc_min_time_between_flexibility_alarms_ms=60000 
+    fc_percents_to_drop_flexible_constraints={100=[I@a1d3d2e, 200=[I@6ab40cf, 300=[I@3c3da5c, 400=[I@6143165, 500=[I@6c3fe3a} 
+    fc_rescheduled_job_deadline_ms=3600000 
+    fc_max_rescheduled_deadline_ms=86400000 
+    fc_unseen_constraint_grace_period_ms=259200000 
+  
+  ConnectivityController:
+    conn_avoid_undefined_transport_affinity=false 
+    conn_network_activation_expiration_ms=10000 
+    conn_network_activation_max_wait_time_ms=1860000 
+  
+  IdleController:
+    DeviceIdlenessTracker:
+      ic_dit_inactivity_idle_threshold_ms=1860000 
+      ic_dit_inactivity_idle_stable_power_threshold_ms=1860000 
+      ic_dit_idle_window_slop_ms=300000 
+  
+  DeviceIdleJobsController:
+    dijc_background_jobs_delay_ms=3000 
+  
+  QuotaController:
+    qc_allowed_time_per_period_exempted_ms=1200000 
+    qc_allowed_time_per_period_active_ms=1200000 
+    qc_allowed_time_per_period_working_ms=600000 
+    qc_allowed_time_per_period_frequent_ms=600000 
+    qc_allowed_time_per_period_rare_ms=600000 
+    qc_allowed_time_per_period_restricted_ms=600000 
+    qc_allowed_time_per_period_addition_installer_ms=1200000 
+    qc_in_quota_buffer_ms=30000 
+    qc_window_size_exempted_ms=2400000 
+    qc_window_size_active_ms=3600000 
+    qc_window_size_working_ms=14400000 
+    qc_window_size_frequent_ms=43200000 
+    qc_window_size_rare_ms=86400000 
+    qc_window_size_restricted_ms=86400000 
+    qc_max_execution_time_ms=14400000 
+    qc_max_job_count_exempted=75 
+    qc_max_job_count_active=75 
+    qc_max_job_count_working=120 
+    qc_max_job_count_frequent=200 
+    qc_max_job_count_rare=48 
+    qc_max_job_count_restricted=10 
+    qc_rate_limiting_window_ms=60000 
+    qc_max_job_count_per_rate_limiting_window=20 
+    qc_max_session_count_exempted=75 
+    qc_max_session_count_active=75 
+    qc_max_session_count_working=10 
+    qc_max_session_count_frequent=8 
+    qc_max_session_count_rare=3 
+    qc_max_session_count_restricted=1 
+    qc_max_session_count_per_rate_limiting_window=20 
+    qc_timing_session_coalescing_duration_ms=5000 
+    qc_min_quota_check_delay_ms=60000 
+    qc_ej_limit_exempted_ms=3600000 
+    qc_ej_limit_active_ms=1800000 
+    qc_ej_limit_working_ms=900000 
+    qc_ej_limit_frequent_ms=600000 
+    qc_ej_limit_rare_ms=600000 
+    qc_ej_limit_restricted_ms=300000 
+    qc_ej_limit_addition_installer_ms=1800000 
+    qc_ej_limit_addition_special_ms=900000 
+    qc_ej_window_size_ms=86400000 
+    qc_ej_top_app_time_chunk_size_ms=300000 
+    qc_ej_reward_top_app_ms=10000 
+    qc_ej_reward_interaction_ms=5000 
+    qc_ej_reward_notification_seen_ms=0 
+    qc_ej_grace_period_temp_allowlist_ms=180000 
+    qc_ej_grace_period_top_app_ms=60000 
+
+Aconfig flags:
+  com.android.server.job.batch_active_bucket_jobs=false 
+  com.android.server.job.batch_connectivity_jobs_per_network=false 
+  com.android.server.job.do_not_force_rush_execution_at_boot=false 
+  android.app.job.ignore_important_while_foreground=true 
+  android.app.job.get_pending_job_reasons_api=true 
+  android.app.job.get_pending_job_reasons_history_api=true 
+  android.app.job.add_type_info_to_wakelock_tag=true 
+
+Thermal status: 0
+
+CountQuotaTracker:
+  QuotaTracker:
+    Is enabled: true
+    Is global quota free: false
+    Current elapsed time: 334812
+    
+    
+    In quota alarms:
+      NOT WAITING
+    
+    Per-app free quota:
+  
+  Instantaneous events:
+    <0>com.google.android.ext.services::.schedulePersisted():
+      93590
+    <0>com.google.android.googlequicksearchbox::.schedulePersisted():
+      79189, 86395, 94380, 151905, 151906, 151929, 151938, 151943, 151956, 151959, 151962, 152056, 152094, 152108, 152116, 152123, 152131, 152133, 152134, 152135, 152135, 152136, 152136, 152137, 152148, 152154, 152159, 152160, 152160, 152166, 152178, 152181, 152194
+    <0>com.google.android.apps.safetyhub::.schedulePersisted():
+      104880, 105174
+    <0>android::.schedulePersisted():
+      42970, 43871, 48123, 50802
+    <0>com.google.android.as::.schedulePersisted():
+      59020, 59183, 61168, 61678, 63791, 65106, 67316, 78878, 79005, 89097, 92022, 92134, 92259, 113045, 152012, 152074, 308593, 308684, 308686, 308692, 308694, 308754, 308759, 308763, 308767, 308770, 308804, 319086
+    <0>com.google.android.permissioncontroller::.schedulePersisted():
+      95684, 96496, 96922
+    <0>com.android.providers.settings::.schedulePersisted():
+      31661
+    <0>com.google.android.dialer::.schedulePersisted():
+      86440
+    <0>com.google.android.partnersetup::anr:
+      146736
+    <0>com.google.android.apps.photos::.schedulePersisted():
+      275919, 275934, 276057, 276060
+    <0>com.google.android.settings.intelligence::.schedulePersisted():
+      97452, 97497, 308194, 308197
+  
+  Cached execution stats:
+    <0>com.google.android.ext.services::timeout-reg:
+      expirationTime=86493662, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.ext.services::.schedulePersisted():
+      expirationTime=9223372036854775807, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.ext.services::anr:
+      expirationTime=86493636, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.ext.services::timeout-total:
+      expirationTime=86493636, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.googlequicksearchbox::timeout-reg:
+      expirationTime=86455790, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.googlequicksearchbox::.schedulePersisted():
+      expirationTime=9223372036854775807, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.googlequicksearchbox::anr:
+      expirationTime=86455732, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.googlequicksearchbox::timeout-total:
+      expirationTime=86455732, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.calendar::.schedulePersisted():
+      expirationTime=86496222, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.calendar::anr:
+      expirationTime=86496222, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.calendar::timeout-total:
+      expirationTime=86496222, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.calendar::timeout-ej:
+      expirationTime=86496229, windowSizeMs=86400000, countLimit=5, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.downloads::timeout-reg:
+      expirationTime=86462670, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.downloads::.schedulePersisted():
+      expirationTime=86455485, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.downloads::anr:
+      expirationTime=86455485, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.downloads::timeout-total:
+      expirationTime=86455485, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.messaging::timeout-reg:
+      expirationTime=86505180, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.messaging::.schedulePersisted():
+      expirationTime=86504790, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.messaging::anr:
+      expirationTime=86504790, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.messaging::timeout-total:
+      expirationTime=86504790, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.configupdater::timeout-reg:
+      expirationTime=86511001, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.configupdater::.schedulePersisted():
+      expirationTime=86493644, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.configupdater::anr:
+      expirationTime=86493644, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.configupdater::timeout-total:
+      expirationTime=86493644, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.providers.media.module::timeout-reg:
+      expirationTime=86459104, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.providers.media.module::.schedulePersisted():
+      expirationTime=86457704, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.providers.media.module::anr:
+      expirationTime=86457704, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.providers.media.module::timeout-total:
+      expirationTime=86457704, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.safetyhub::timeout-reg:
+      expirationTime=86504732, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.safetyhub::.schedulePersisted():
+      expirationTime=9223372036854775807, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.safetyhub::anr:
+      expirationTime=86504732, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.safetyhub::timeout-total:
+      expirationTime=86504732, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>android::timeout-reg:
+      expirationTime=86433477, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>android::.schedulePersisted():
+      expirationTime=9223372036854775807, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>android::anr:
+      expirationTime=86432672, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>android::timeout-total:
+      expirationTime=86432672, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.as::timeout-reg:
+      expirationTime=86452678, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.as::.schedulePersisted():
+      expirationTime=368593, windowSizeMs=60000, countLimit=250, countInWindow=12, inQuotaTime=0
+    <0>com.google.android.as::anr:
+      expirationTime=86452148, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.as::timeout-total:
+      expirationTime=86452148, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.permissioncontroller::timeout-reg:
+      expirationTime=86499441, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.permissioncontroller::.schedulePersisted():
+      expirationTime=9223372036854775807, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.permissioncontroller::anr:
+      expirationTime=86495180, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.permissioncontroller::timeout-total:
+      expirationTime=86495180, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.settings::timeout-reg:
+      expirationTime=86433434, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.settings::.schedulePersisted():
+      expirationTime=9223372036854775807, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.settings::anr:
+      expirationTime=86432672, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.providers.settings::timeout-total:
+      expirationTime=86432672, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.as.oss::.schedulePersisted():
+      expirationTime=86459393, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.as.oss::anr:
+      expirationTime=86459393, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.as.oss::timeout-total:
+      expirationTime=86459393, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.wellbeing::timeout-reg:
+      expirationTime=86450144, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.wellbeing::.schedulePersisted():
+      expirationTime=86446357, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.wellbeing::anr:
+      expirationTime=86446357, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.wellbeing::timeout-total:
+      expirationTime=86446357, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.dialer::timeout-reg:
+      expirationTime=86492803, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.dialer::.schedulePersisted():
+      expirationTime=9223372036854775807, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.dialer::anr:
+      expirationTime=86486450, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.dialer::timeout-total:
+      expirationTime=86486450, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.webview::timeout-reg:
+      expirationTime=86517361, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.webview::.schedulePersisted():
+      expirationTime=86517352, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.webview::anr:
+      expirationTime=86517352, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.webview::timeout-total:
+      expirationTime=86517352, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.networkstack::.schedulePersisted():
+      expirationTime=86433002, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.networkstack::anr:
+      expirationTime=86433002, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.networkstack::timeout-total:
+      expirationTime=86433002, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.rkpdapp::timeout-reg:
+      expirationTime=86494279, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.rkpdapp::.schedulePersisted():
+      expirationTime=86494275, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.rkpdapp::anr:
+      expirationTime=86494275, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.rkpdapp::timeout-total:
+      expirationTime=86494275, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.gms::timeout-reg:
+      expirationTime=86488049, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.gms::.schedulePersisted():
+      expirationTime=86487244, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.gms::anr:
+      expirationTime=86487244, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.gms::timeout-total:
+      expirationTime=86487244, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.tts::timeout-reg:
+      expirationTime=86470251, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.tts::.schedulePersisted():
+      expirationTime=86469821, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.tts::anr:
+      expirationTime=86469821, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.tts::timeout-total:
+      expirationTime=86469821, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.partnersetup::timeout-reg:
+      expirationTime=86466499, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.partnersetup::.schedulePersisted():
+      expirationTime=86460196, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.partnersetup::anr:
+      expirationTime=21746736, windowSizeMs=21600000, countLimit=3, countInWindow=1, inQuotaTime=0
+    <0>com.google.android.partnersetup::timeout-total:
+      expirationTime=86460196, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>org.chyavorec.app::timeout-reg:
+      expirationTime=86682104, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>org.chyavorec.app::.schedulePersisted():
+      expirationTime=86682097, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>org.chyavorec.app::anr:
+      expirationTime=86682097, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>org.chyavorec.app::timeout-total:
+      expirationTime=86682097, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.photos::timeout-reg:
+      expirationTime=86675725, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.photos::.schedulePersisted():
+      expirationTime=335919, windowSizeMs=60000, countLimit=250, countInWindow=4, inQuotaTime=0
+    <0>com.google.android.apps.photos::anr:
+      expirationTime=86675725, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.apps.photos::timeout-total:
+      expirationTime=86675725, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.android.imsserviceentitlement::timeout-reg:
+      expirationTime=86490028, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.imsserviceentitlement::.schedulePersisted():
+      expirationTime=86490028, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.android.imsserviceentitlement::anr:
+      expirationTime=86490028, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.imsserviceentitlement::timeout-total:
+      expirationTime=86490028, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.android.settings::timeout-reg:
+      expirationTime=86438011, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.settings::.schedulePersisted():
+      expirationTime=86438003, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.android.settings::anr:
+      expirationTime=86438003, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.settings::timeout-total:
+      expirationTime=86438003, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.settings.intelligence::timeout-reg:
+      expirationTime=86498557, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.settings.intelligence::.schedulePersisted():
+      expirationTime=368194, windowSizeMs=60000, countLimit=250, countInWindow=2, inQuotaTime=0
+    <0>com.google.android.settings.intelligence::anr:
+      expirationTime=86497297, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.settings.intelligence::timeout-total:
+      expirationTime=86497297, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.android.devicelockcontroller::.schedulePersisted():
+      expirationTime=86489085, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.android.devicelockcontroller::anr:
+      expirationTime=86489085, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.android.devicelockcontroller::timeout-total:
+      expirationTime=86489085, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.android.devicelockcontroller::timeout-ej:
+      expirationTime=86489085, windowSizeMs=86400000, countLimit=5, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.inputmethod.latin::timeout-reg:
+      expirationTime=86452686, windowSizeMs=86400000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.inputmethod.latin::.schedulePersisted():
+      expirationTime=86450904, windowSizeMs=60000, countLimit=250, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.inputmethod.latin::anr:
+      expirationTime=86450904, windowSizeMs=21600000, countLimit=3, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.inputmethod.latin::timeout-total:
+      expirationTime=86450904, windowSizeMs=86400000, countLimit=10, countInWindow=0, inQuotaTime=0
+    <0>com.google.android.inputmethod.latin::timeout-ej:
+      expirationTime=86468213, windowSizeMs=86400000, countLimit=5, countInWindow=0, inQuotaTime=0
+  
+  Limits:
+    Category{timeout-reg}: 3 events in +1d0h0m0s0ms
+    Category{timeout-uij}: 2 events in +1d0h0m0s0ms
+    Category{.schedulePersisted()}: 250 events in +1m0s0ms
+    Category{anr}: 3 events in +6h0m0s0ms
+    Category{disabled}: 2147483647 events in +1m0s0ms
+    Category{timeout-total}: 10 events in +1d0h0m0s0ms
+    Category{.schedulePersisted out-of-quota logged}: 1 events in +1m0s0ms
+    Category{timeout-ej}: 5 events in +1d0h0m0s0ms
+
+Power connected: false
+Battery charging: true
+Considered charging: true
+Battery level: 100
+Battery not low: true
+
+Started users: [0]
+
+Media Cloud Providers: {0=com.google.android.apps.photos}
+
+Registered 188 jobs:
+  JOB androidx.work.systemjobscheduler:u0a218/0: 220bd58 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+    u0a218 tag=*job*r/@androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+    Source: uid=u0a218 user=0 pkg=org.chyavorec.app
+    JobInfo:
+      Service: org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+      Priority: 300 [DEFAULT]
+      Requires: charging=false batteryNotLow=true deviceIdle=false
+      Extras: mParcelledData.dataSize=248
+      Network type: NetworkRequest [ NONE id=0, [ Capabilities: INTERNET&TRUSTED&VALIDATED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10218 UnderlyingNetworks: Null] ]
+      Minimum latency: +3h59m59s989ms
+      Backoff: policy=1 initial=+30s0ms
+      Has early constraint
+    Required constraints: BATTERY_NOT_LOW TIMING_DELAY CONNECTIVITY FLEXIBILITY [0x90200002]
+    Dynamic constraints:
+    Satisfied constraints: BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x13600002]
+    Unsatisfied constraints: TIMING_DELAY [0x80000000]
+    Num Required Flexible constraints: 0
+    Num Dropped Flexible constraints: 0
+    Constraint history:
+      -52s717ms = FLEXIBILITY [0x200000]
+      -52s715ms = BATTERY_NOT_LOW FLEXIBILITY [0x200002]
+      -52s715ms = BATTERY_NOT_LOW FLEXIBILITY BACKGROUND_NOT_RESTRICTED [0x600002]
+      -52s715ms = BATTERY_NOT_LOW FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED [0x2600002]
+      -52s715ms = BATTERY_NOT_LOW FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x3600002]
+      -52s624ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x13600002]
+      -27s396ms = BATTERY_NOT_LOW FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x3600002]
+      -27s323ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x13600002]
+    Uid: active
+    Tracking: BATTERY CONNECTIVITY TIME QUOTA
+    Implicit constraints:
+      readyNotDozing: true
+      readyNotRestrictedInBg: true
+      readyComponentEnabled: true
+    Started with foreground flag: false
+    Network: 102
+    Standby bucket: ACTIVE
+    Enqueue time: -52s717ms
+    Run time: earliest=+3h59m7s272ms, latest=none, original latest=none
+    Restricted due to: none.
+    Ready: false (job=false user=true !restricted=true !pending=true !active=true !backingup=true comp=true)
+  JOB androidx.work.systemjobscheduler:u0a218/3: dd66f2f @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+    u0a218 tag=*job*r/@androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+    Source: uid=u0a218 user=0 pkg=org.chyavorec.app
+    JobInfo:
+      Service: org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+      Priority: 300 [DEFAULT]
+      Requires: charging=false batteryNotLow=true deviceIdle=false
+      Extras: mParcelledData.dataSize=248
+      Network type: NetworkRequest [ NONE id=0, [ Capabilities: INTERNET&TRUSTED&VALIDATED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10218 UnderlyingNetworks: Null] ]
+      Minimum latency: +59m58s409ms
+      Backoff: policy=1 initial=+30s0ms
+      Has early constraint
+    Required constraints: BATTERY_NOT_LOW TIMING_DELAY CONNECTIVITY FLEXIBILITY [0x90200002]
+    Dynamic constraints:
+    Satisfied constraints: BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x13600002]
+    Unsatisfied constraints: TIMING_DELAY [0x80000000]
+    Num Required Flexible constraints: 0
+    Num Dropped Flexible constraints: 0
+    Constraint history:
+      -50s450ms = FLEXIBILITY [0x200000]
+      -50s450ms = CONNECTIVITY FLEXIBILITY [0x10200000]
+      -50s450ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY [0x10200002]
+      -50s450ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY BACKGROUND_NOT_RESTRICTED [0x10600002]
+      -50s450ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED [0x12600002]
+      -50s450ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x13600002]
+      -27s396ms = BATTERY_NOT_LOW FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x3600002]
+      -27s323ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x13600002]
+    Uid: active
+    Tracking: BATTERY CONNECTIVITY TIME QUOTA
+    Implicit constraints:
+      readyNotDozing: true
+      readyNotRestrictedInBg: true
+      readyComponentEnabled: true
+    Started with foreground flag: false
+    Network: 102
+    Standby bucket: ACTIVE
+    Enqueue time: -50s450ms
+    Run time: earliest=+59m7s959ms, latest=none, original latest=none
+    Restricted due to: none.
+    Ready: false (job=false user=true !restricted=true !pending=true !active=true !backingup=true comp=true)
+  JOB androidx.work.systemjobscheduler:u0a218/4: 3e91a39 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+    u0a218 tag=*job*r/@androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+    Source: uid=u0a218 user=0 pkg=org.chyavorec.app
+    JobInfo:
+      Service: org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+      Priority: 300 [DEFAULT]
+      Requires: charging=false batteryNotLow=false deviceIdle=false
+      Extras: mParcelledData.dataSize=248
+      Minimum latency: +7d23h7m56s49ms
+      Backoff: policy=1 initial=+30s0ms
+      Has early constraint
+      Trace tag: EventReminderWorker
+    Required constraints: TIMING_DELAY FLEXIBILITY [0x80200000]
+    Dynamic constraints:
+    Satisfied constraints: FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x3600000]
+    Unsatisfied constraints: TIMING_DELAY [0x80000000]
+    Num Required Flexible constraints: 0
+    Num Dropped Flexible constraints: 0
+    Constraint history:
+      -4s240ms = FLEXIBILITY [0x200000]
+      -4s240ms = FLEXIBILITY BACKGROUND_NOT_RESTRICTED [0x600000]
+      -4s240ms = FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED [0x2600000]
+      -4s240ms = FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x3600000]
+    Uid: active
+    Tracking: TIME QUOTA
+    Implicit constraints:
+      readyNotDozing: true
+      readyNotRestrictedInBg: true
+      readyComponentEnabled: true
+    Started with foreground flag: false
+    Standby bucket: ACTIVE
+    Enqueue time: -4s240ms
+    Run time: earliest=+7d23h7m51s809ms, latest=none, original latest=none
+    Restricted due to: none.
+    Ready: false (job=false user=true !restricted=true !pending=true !active=true !backingup=true comp=true)
+
+PrefetchController:
+  Cached launch times:
+  
+  
+  Prefetch threshold alarms:
+    NOT WAITING
+
+FlexibilityController:
+  Applied Flexible Constraints:
+  Satisfied Flexible Constraints: CHARGING BATTERY_NOT_LOW CONNECTIVITY [0x10000003]
+  
+  Time since constraint combos last seen:
+    -5m1s293ms: none
+    -5m1s293ms: CHARGING [0x1]
+    -3m41s439ms: CHARGING BATTERY_NOT_LOW [0x3]
+    -3m42s338ms: CONNECTIVITY [0x10000000]
+    0ms: CHARGING BATTERY_NOT_LOW CONNECTIVITY [0x10000003]
+  
+  Special apps:
+    
+    Carrier privileged packages:
+    
+    Power allowlisted packages: {}
+  
+  androidx.work.systemjobscheduler:u0a218/0 from u0a218-> Num Required Constraints: 0, lifecycle=[14682084, (0%), 57882084]
+  androidx.work.systemjobscheduler:u0a218/4 from u0a218-> Num Required Constraints: 0, lifecycle=[688406621, (0%), 731606621]
+  androidx.work.systemjobscheduler:u0a218/3 from u0a218-> Num Required Constraints: 0, lifecycle=[3882771, (0%), 47082771]
+  
+  Job scores:
+    10200/com.google.android.providers.media.module: {-4m35s711ms=21}
+    10198/com.android.devicelockcontroller: {-4m5s723ms=5}
+    10193/com.google.android.permissioncontroller: {-3m55s374ms=6}
+    10168/com.google.android.webview: {-3m27s793ms=6}
+    10159/com.google.android.apps.photos: {-59s88ms=21}
+    10153/com.google.android.inputmethod.latin: {-4m42s129ms=103}
+    10146/com.google.android.googlequicksearchbox: {-4m37s665ms=141}
+    10145/com.google.android.as: {-4m42s311ms=48}
+    10144/com.google.android.apps.messaging: {-3m49s454ms=33}
+    10141/com.google.android.apps.wellbeing: {-4m37s341ms=15}
+    10140/com.google.android.configupdater: {-3m43s814ms=36}
+    10139/com.google.android.partnersetup: {-4m28s316ms=48}
+    10137/com.google.android.settings.intelligence: {-3m56s261ms=45}
+    10136/com.google.android.apps.safetyhub: {-3m50s83ms=9}
+    10135/com.google.android.dialer: {-4m2s12ms=39}
+    10131/com.android.imsserviceentitlement: {-4m4s592ms=3}
+    10099/com.android.providers.calendar: {-3m58s588ms=5}
+    1000/com.android.settings: {-4m56s804ms=6}
+    1000/com.android.providers.settings: {-5m1s381ms=3}
+    1000/android: {-5m1s338ms=18}
+  
+  Flexible Constraint Check alarms:
+    JobStatus{492d6be #1000/203142925 android/com.android.server.pm.DynamicCodeLoggingService u=0 s=1000 TIME=-5m3s221ms:+1h54m56s779ms BATNOTLOW IDLE PERIODIC satisfied:0x83600002 unsatisfied:0x4}: 21631594
+    JobStatus{7649dd #1000/882313 android/com.android.server.net.watchlist.ReportWatchlistJobService u=0 s=1000 TIME=-5m2s580ms:+11h54m57s420ms BATNOTLOW IDLE PERIODIC satisfied:0x83600002 unsatisfied:0x4}: 21632235
+    JobStatus{257febc androidx.work.systemjobscheduler:u0a153/0 @androidx.work.systemjobscheduler@com.google.android.inputmethod.latin/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10153 IDLE satisfied:0x3600000 unsatisfied:0x4}: 21650904
+    JobStatus{eed7dc8 #u0a105/-101 com.android.providers.downloads/.MediaScanTriggerJob u=0 s=10105 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 21655486
+    JobStatus{c45c8ec #1000/16942831 android/com.android.server.appsearch.contactsindexer.ContactsIndexerMaintenanceService u=0 s=1000 BATNOTLOW IDLE PERSISTED satisfied:0x3600002 unsatisfied:0x4}: 21828181
+    JobStatus{f83458a androidx.work.systemjobscheduler:u0a145/4 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 22563214
+    JobStatus{b6e58af #u0a145/315933870 com.google.android.as/com.google.android.apps.miphone.aiai.echo.scheduler.EchoJobService u=0 s=10145 TIME=-4m41s860ms:+11h55m18s140ms IDLE PERIODIC satisfied:0x83600000 unsatisfied:0x4}: 22012955
+    JobStatus{de1b79f #u0a193/8 com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.v34.SafetyLabelChangesJobService u=0 s=10193 IDLE satisfied:0x3600000 unsatisfied:0x4}: 21696489
+    JobStatus{7594a0b androidx.work.systemjobscheduler:u0a149/2 @androidx.work.systemjobscheduler@com.google.android.tts/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10149 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 21670192
+    JobStatus{bd3b247 #u0a145/16440 com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.AiAiPersistentDownloadJobService u=0 s=10145 TIME=-4m35s647ms:none NET CHARGING IDLE PERSISTED satisfied:0x93600003 unsatisfied:0x4}: 22199168
+    JobStatus{c720230 androidx.work.systemjobscheduler:u0a200/2 @androidx.work.systemjobscheduler@com.google.android.providers.media.module/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10200 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 22300739
+    JobStatus{9597d05 androidx.work.systemjobscheduler:u0a135/9 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 22630415
+    JobStatus{aa7a9f0 androidx.work.systemjobscheduler:u0a145/5 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 22563454
+    JobStatus{cd1d0cb #u0a145/405939170 com.google.android.as/com.google.android.apps.miphone.aiai.echo.scheduler.EchoJobService u=0 s=10145 TIME=-4m41s838ms:+11h55m18s162ms IDLE PERIODIC satisfied:0x83600000 unsatisfied:0x4}: 22012977
+    JobStatus{5aaaea7 #u0a145/441325365 com.google.android.as/com.google.android.apps.miphone.aiai.echo.scheduler.EchoJobService u=0 s=10145 TIME=-4m41s814ms:+4h55m18s186ms IDLE PERIODIC satisfied:0x83600000 unsatisfied:0x4}: 22013001
+    JobStatus{f2668a6 #1000/1740526926 android/com.android.server.BinaryTransparencyService$UpdateMeasurementsJobService u=0 s=1000 TIME=-4m54s583ms:none CHARGING IDLE satisfied:0x83600003 unsatisfied:0x4}: 21820232
+    JobStatus{dec5ed9 #1000/237039804 android/com.android.server.notification.NotificationHistoryJobService u=0 s=1000 TIME=+14m57s764ms:+34m57s764ms PERIODIC satisfied:0x3600000 unsatisfied:0x80000000}: 23012579
+    JobStatus{17b5866 androidx.work.systemjobscheduler:u0a149/3 @androidx.work.systemjobscheduler@com.google.android.tts/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10149 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 21670232
+    JobStatus{fc708d8 androidx.work.systemjobscheduler:u0a149/5 @androidx.work.systemjobscheduler@com.google.android.tts/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10149 NET CHARGING IDLE satisfied:0x13600003 unsatisfied:0x4}: 21670271
+    JobStatus{4264d72 #u0a146/-334 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s684ms:+1h56m57s316ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 27512131
+    JobStatus{d22dc35 #u0a146/-110 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s679ms:+11h56m57s321ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 27692136
+    JobStatus{a55bea9 androidx.work.systemjobscheduler:u0a200/3 @androidx.work.systemjobscheduler@com.google.android.providers.media.module/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10200 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 22300746
+    JobStatus{e92b445 androidx.work.systemjobscheduler:u0a141/10 @androidx.work.systemjobscheduler@com.google.android.apps.wellbeing/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10141 URIS=[android.app.job.JobInfo$TriggerContentUri@d9b0aa70] satisfied:0x3600000 unsatisfied:0x4000000}: 22412617
+    JobStatus{b19c9aa androidx.work.systemjobscheduler:u0a135/1 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+57s335ms:none IDLE satisfied:0x3600000 unsatisfied:0x80000004}: 22892151
+    JobStatus{68a3868 androidx.work.systemjobscheduler:u0a135/12 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 NET CHARGING IDLE satisfied:0x13600003 unsatisfied:0x4}: 22630550
+    JobStatus{126907c androidx.work.systemjobscheduler:u0a135/8 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+58s810ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 22893626
+    JobStatus{b6e92e6 androidx.work.systemjobscheduler:u0a149/1 @androidx.work.systemjobscheduler@com.google.android.tts/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10149 TIME=+6h2m3s609ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 43658425
+    JobStatus{53953da androidx.work.systemjobscheduler:u0a144/1011 @androidx.work.systemjobscheduler@com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10144 BATNOTLOW STORENOTLOW IDLE satisfied:0x360000a unsatisfied:0x4}: 22442086
+    JobStatus{60ff15a androidx.work.systemjobscheduler:u0a135/10 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 22630416
+    JobStatus{ff53f86 #u0a145/360265855 com.google.android.as/com.google.android.apps.miphone.aiai.smartrec.pixelsearch.cronjob.PixelSearchCronJobService u=0 s=10145 TIME=-4m33s868ms:+23h55m26s132ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43260948
+    JobStatus{baf90ab #u0a145/486216969 com.google.android.as/com.google.android.apps.miphone.aiai.echo.scheduler.EchoJobService u=0 s=10145 TIME=-4m41s748ms:+23h55m18s252ms IDLE PERIODIC satisfied:0x83600000 unsatisfied:0x4}: 43253068
+    JobStatus{fef0eab androidx.work.systemjobscheduler:u0a153/5 @androidx.work.systemjobscheduler@com.google.android.inputmethod.latin/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10153 BATNOTLOW IDLE satisfied:0x3600002 unsatisfied:0x4}: 22195054
+    JobStatus{3c96155 androidx.work.systemjobscheduler:u0a145/12 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 23290029
+    JobStatus{4d3e69a androidx.work.systemjobscheduler:u0a144/1020 @androidx.work.systemjobscheduler@com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10144 TIME=+9m52s751ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 24507567
+    JobStatus{63aec3b androidx.work.systemjobscheduler:u0a145/13 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 23290112
+    JobStatus{efc1301 androidx.work.systemjobscheduler:u0a145/15 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 NET CHARGING IDLE satisfied:0x13600003 unsatisfied:0x4}: 23290201
+    JobStatus{a130e3e androidx.work.systemjobscheduler:u0a149/4 @androidx.work.systemjobscheduler@com.google.android.tts/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10149 NET CHARGING IDLE satisfied:0x13600003 unsatisfied:0x4}: 21670249
+    JobStatus{b6c693b #u0a140/1 com.google.android.configupdater/.MainJobService u=0 s=10140 URIS=[android.app.job.JobInfo$TriggerContentUri@6510486a] satisfied:0x3600000 unsatisfied:0x4000000}: 22807111
+    JobStatus{cfadcb #u0a137/1960 com.google.android.settings.intelligence/.modules.routines.impl.SampleCurrentRingerModeJobService u=0 s=10137 TIME=+14m33s378ms:none PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 25328194
+    JobStatus{7f16dc7 #u0a146/-484 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+1h56m57s144ms:+3h56m57s144ms NET CHARGING PERIODIC PERSISTED satisfied:0x13600003 unsatisfied:0x80000000}: 37051960
+    JobStatus{b451b1f #u0a146/-408 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s681ms:+7h56m57s319ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 27692135
+    JobStatus{e1da867 androidx.work.systemjobscheduler:u0a144/1014 @androidx.work.systemjobscheduler@com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10144 TIME=+4h6m17s800ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 37432616
+    JobStatus{56309a8 #u0a137/1961 com.google.android.settings.intelligence/.modules.routines.impl.SampleCurrentRingerModeJobService u=0 s=10137 TIME=+59m33s381ms:none PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 28028197
+    JobStatus{4335cac #u0a145/16442 com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.AiAiPersistentDownloadJobService u=0 s=10145 TIME=+2h59m44s270ms:+3h59m44s270ms NET CHARGING IDLE PERIODIC PERSISTED satisfied:0x13600003 unsatisfied:0x80000004}: 35599086
+    JobStatus{860319e androidx.work.systemjobscheduler:u0a135/0 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 22630293
+    JobStatus{6f2d48d #u0a159/1034 com.google.android.apps.photos/com.google.android.libraries.social.mediamonitor.MediaMonitorJobSchedulerService u=0 s=10159 URIS=[android.app.job.JobInfo$TriggerContentUri@e25fb835, android.app.job.JobInfo$TriggerContentUri@8abd8844, android.app.job.JobInfo$TriggerContentUri@fed4dc22, android.app.job.JobInfo$TriggerContentUri@691cff99, android.app.job.JobInfo$TriggerContentUri@f0fcb7fb] satisfied:0x3600000 unsatisfied:0x4000000}: 22595965
+    JobStatus{b3c5de2 androidx.work.systemjobscheduler:u0a144/1012 @androidx.work.systemjobscheduler@com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10144 TIME=+2h56m27s374ms:none NET BATNOTLOW satisfied:0x13600002 unsatisfied:0x80000000}: 33242190
+    JobStatus{9697641 androidx.work.systemjobscheduler:u0a145/0 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 TIME=+3h55m21s443ms:none CHARGING BATNOTLOW satisfied:0x3600003 unsatisfied:0x80000000}: 36596259
+    JobStatus{751d549 androidx.work.systemjobscheduler:u0a135/5 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+58s33ms:none NET IDLE satisfied:0x13600000 unsatisfied:0x80000004}: 22892849
+    JobStatus{fdde402 androidx.work.systemjobscheduler:u0a135/3 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+58s29ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 22892845
+    JobStatus{c4a3e4e androidx.work.systemjobscheduler:u0a135/6 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+58s352ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 22893168
+    JobStatus{a6c8c3a NotificationBitmapJob:1000/290381858 @NotificationBitmapJob@android/com.android.server.notification.NotificationBitmapJobService u=0 s=1000 TIME=+9h7m51s801ms:none IDLE satisfied:0x3600000 unsatisfied:0x80000004}: 54986617
+    JobStatus{8ec7b6f androidx.work.systemjobscheduler:u0a135/7 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+15m58s694ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 23793510
+    JobStatus{ed45e10 androidx.work.systemjobscheduler:u0a146/15 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+13h5m54s677ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 75929493
+    JobStatus{ca3cf04 androidx.work.systemjobscheduler:u0a145/2 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 TIME=+23h55m25s151ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 108599967
+    JobStatus{29f06a2 #u0a139/4096 com.google.android.partnersetup/.InstalledAppJobService u=0 s=10139 TIME=+55m59s98ms:+55m59s98ms satisfied:0x3600000 unsatisfied:0x80000000}: 26013914
+    JobStatus{ecaab69 androidx.work.systemjobscheduler:u0a145/6 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 CHARGING IDLE satisfied:0x3600003 unsatisfied:0x4}: 22563479
+    JobStatus{5ef5f8b androidx.work.systemjobscheduler:u0a135/11 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 NET CHARGING IDLE satisfied:0x13600003 unsatisfied:0x4}: 22630532
+    JobStatus{1a27986 usagestats_mapping:1000/0 @usagestats_mapping@android/com.android.server.usage.UsageStatsIdleService u=0 s=1000 TIME=+23h55m8s154ms:+1d23h55m8s154ms PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 129642970
+    JobStatus{46f4dc3 androidx.work.systemjobscheduler:u0a141/15 @androidx.work.systemjobscheduler@com.google.android.apps.wellbeing/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10141 TIME=+23h55m59s466ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 108994282
+    JobStatus{8046a2d #u0a193/0 com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.LocationAccessCheck$LocationAccessCheckJobService u=0 s=10193 TIME=+21h32m0s364ms:+23h56m0s364ms PERIODIC satisfied:0x3600000 unsatisfied:0x80000000}: 99455180
+    JobStatus{85fe940 #u0a193/4 com.google.android.permissioncontroller/com.android.permissioncontroller.privacysources.NotificationListenerCheckJobService u=0 s=10193 TIME=+21h32m0s493ms:+23h56m0s493ms PERIODIC satisfied:0x3600000 unsatisfied:0x80000000}: 99455309
+    JobStatus{d36f650 androidx.work.systemjobscheduler:u0a141/8 @androidx.work.systemjobscheduler@com.google.android.apps.wellbeing/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10141 TIME=+3d0h5m34s769ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 281829585
+    JobStatus{8c773b1 #u0a193/7 com.google.android.permissioncontroller/com.android.permissioncontroller.safetycenter.service.SafetyCenterBackgroundRefreshJobService u=0 s=10193 TIME=-3m58s484ms:+23h56m1s516ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43296332
+    JobStatus{5677473 androidx.work.systemjobscheduler:u0a153/4 @androidx.work.systemjobscheduler@com.google.android.inputmethod.latin/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10153 TIME=+5h55m18s339ms:none IDLE satisfied:0x3600000 unsatisfied:0x80000004}: 43793155
+    JobStatus{61d60 SelinuxAuditLogsNamespace:1000/25327386 @SelinuxAuditLogsNamespace@android/com.android.server.selinux.SelinuxAuditLogsService u=0 s=1000 TIME=-23s127ms:+23h59m36s873ms BATNOTLOW IDLE PERIODIC satisfied:0x83600002 unsatisfied:0x4}: 43511689
+    JobStatus{b6a81b4 androidx.work.systemjobscheduler:u0a141/6 @androidx.work.systemjobscheduler@com.google.android.apps.wellbeing/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10141 TIME=+1h5m33s877ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 26228693
+    JobStatus{e9b28f3 #u0a137/17 com.google.android.settings.intelligence/.libs.instrumentation.snapshot.SnapshotJobService u=0 s=10137 TIME=-3m57s208ms:+23h56m2s792ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43297608
+    JobStatus{a907e56 #u0a135/100 com.google.android.dialer/com.android.dialer.shortcuts.PeriodicJobService u=0 s=10135 TIME=-4m8s367ms:+23h55m51s633ms CHARGING IDLE PERIODIC PERSISTED satisfied:0x83600003 unsatisfied:0x4}: 43286449
+    JobStatus{69e9fd0 androidx.work.systemjobscheduler:u0a144/1001 @androidx.work.systemjobscheduler@com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10144 TIME=+27m35s958ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 23590774
+    JobStatus{59cf5da androidx.work.systemjobscheduler:u0a145/14 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 NET CHARGING IDLE satisfied:0x13600003 unsatisfied:0x4}: 23290192
+    JobStatus{caba706 androidx.work.systemjobscheduler:u0a144/1003 @androidx.work.systemjobscheduler@com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10144 TIME=+2h57m36s53ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 32590869
+    JobStatus{6e46d10 androidx.work.systemjobscheduler:u0a153/22 @androidx.work.systemjobscheduler@com.google.android.inputmethod.latin/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10153 BATNOTLOW IDLE satisfied:0x3600002 unsatisfied:0x4}: 25958572
+    JobStatus{577e770 #u0a146/-184 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s650ms:+7h56m57s350ms NET IDLE PERIODIC PERSISTED satisfied:0x93600000 unsatisfied:0x4}: 27692166
+    JobStatus{3feecd #u0a105/-100 com.android.providers.downloads/.DownloadIdleService u=0 s=10105 TIME=-4m23s970ms:+11h55m36s30ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 21670846
+    JobStatus{6d2e14c #u0a146/-382 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s877ms:+23h56m57s123ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 43351939
+    JobStatus{a42d87d #u0a146/-353 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+3s275ms:+3s275ms NET satisfied:0x13600000 unsatisfied:0x80000000}: 28958091
+    JobStatus{fbd4772 #u0a142/412882778 com.google.android.as.oss/com.google.android.apps.miphone.astrea.networkusage.db.impl.NetworkUsageLogTtlService u=0 s=10142 TIME=-4m35s423ms:+23h55m24s577ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43259393
+    JobStatus{dd66f2f androidx.work.systemjobscheduler:u0a218/3 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10218 TIME=+59m7s955ms:none NET BATNOTLOW satisfied:0x13600002 unsatisfied:0x80000000}: 25482771
+    JobStatus{8d4c979 #1000/2030028 android/com.android.server.pm.DynamicCodeLoggingService u=0 s=1000 TIME=-5m3s223ms:+23h54m56s777ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43231593
+    JobStatus{5751d09 androidx.work.systemjobscheduler:u0a146/16 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+8h5m54s667ms:none NET CHARGING satisfied:0x13600003 unsatisfied:0x80000000}: 57929483
+    JobStatus{a0b2d9 #1000/204561367 android/com.android.server.people.data.DataMaintenanceService u=0 s=1000 TIME=-4m13s760ms:+23h55m46s240ms IDLE PERIODIC satisfied:0x83600000 unsatisfied:0x4}: 43281056
+    JobStatus{7ab38d9 androidx.work.systemjobscheduler:u0a159/555000002 @androidx.work.systemjobscheduler@com.google.android.apps.photos/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10159 TIME=+5h59m1s539ms:none CHARGING IDLE satisfied:0x3600003 unsatisfied:0x80000004}: 44556355
+    JobStatus{3aa2e6c #u0a146/-380 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s680ms:+23h56m57s320ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 43352136
+    JobStatus{32a4a3b #u0a146/-234 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s676ms:+23h56m57s324ms NET IDLE PERIODIC PERSISTED satisfied:0x93600000 unsatisfied:0x4}: 43352140
+    JobStatus{b83c272 androidx.work.systemjobscheduler:u0a146/19 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 NET CHARGING IDLE satisfied:0x13600003 unsatisfied:0x4}: 28642486
+    JobStatus{4458419 #u0a146/-370 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+3h56m57s280ms:+7h56m57s280ms NET CHARGING PERIODIC PERSISTED satisfied:0x13600003 unsatisfied:0x80000000}: 44432096
+    JobStatus{e86a86f #u0a137/14 com.google.android.settings.intelligence/.modules.search.indexing.backend.IndexingJobService u=0 s=10137 TIME=-3m55s424ms:+23h56m4s576ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43299392
+    JobStatus{5d99665 #u0a146/-128 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+9h26m57s320ms:+18h56m57s320ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 62432136
+    JobStatus{220bd58 androidx.work.systemjobscheduler:u0a218/0 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10218 TIME=+3h59m7s268ms:none NET BATNOTLOW satisfied:0x13600002 unsatisfied:0x80000000}: 36282084
+    JobStatus{8e4b1ac androidx.work.systemjobscheduler:u0a137/2 @androidx.work.systemjobscheduler@com.google.android.settings.intelligence/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10137 URIS=[android.app.job.JobInfo$TriggerContentUri@394a5196] satisfied:0x3600000 unsatisfied:0x4000000}: 24347817
+    JobStatus{a1fbe1f androidx.work.systemjobscheduler:u0a135/28 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+49s818ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 24324634
+    JobStatus{fbba523 androidx.work.systemjobscheduler:u0a146/18 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+5h59m41s613ms:none NET CHARGING satisfied:0x13600003 unsatisfied:0x80000000}: 51976429
+    JobStatus{8ca7c97 #u0a146/-480 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+23h56m57s380ms:+1d23h56m57s380ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 129752196
+    JobStatus{68fe1bb #u0a147/2 com.google.android.gms/.backup.component.MmsBackupSchedulerService u=0 s=10147 TIME=+23h56m35s272ms:none NET CHARGING IDLE satisfied:0x13600003 unsatisfied:0x80000004}: 108130088
+    JobStatus{3754e87 SettingsProviderJobsNamespace:1000/1 @SettingsProviderJobsNamespace@com.android.providers.settings/.WriteFallbackSettingsFilesJobService u=0 s=1000 TIME=+23h54m56s845ms:+1d23h54m56s845ms CHARGING PERIODIC PERSISTED satisfied:0x3600003 unsatisfied:0x80000000}: 129631661
+    JobStatus{4e7831f #1000/765123 android/com.android.server.PruneInstantAppsJobService u=0 s=1000 TIME=-5m3s222ms:+23h54m56s778ms IDLE PERIODIC satisfied:0x83600000 unsatisfied:0x4}: 43231594
+    JobStatus{284b6c3 androidx.work.systemjobscheduler:u0a146/3 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+5h56m54s171ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 50188987
+    JobStatus{6a1a1dc androidx.work.systemjobscheduler:u0a145/16 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 TIME=+10h7m51s823ms:none IDLE satisfied:0x3600000 unsatisfied:0x80000004}: 60386639
+    JobStatus{5464df9 #1000/191934935 android/com.android.server.blob.BlobStoreIdleJobService u=0 s=1000 TIME=-4m54s428ms:+23h55m5s572ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43240388
+    JobStatus{e4bcf50 androidx.work.systemjobscheduler:u0a135/4 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+58s37ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 22892853
+    JobStatus{e319044 #u0a206/27 com.google.android.ext.services/android.ext.services.common.AdServicesAppsearchDeleteJob u=0 s=10206 TIME=+6d15h31m58s812ms:+6d23h55m58s812ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 596253628
+    JobStatus{bcc0a9c #u0a146/-188 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s636ms:+23h56m57s364ms NET IDLE PERIODIC PERSISTED satisfied:0x93600000 unsatisfied:0x4}: 43352180
+    JobStatus{604a90b #1000/16985783 android/com.android.server.appsearch.contactsindexer.ContactsIndexerMaintenanceService u=0 s=1000 TIME=+11h55m9s55ms:+23h55m9s55ms BATNOTLOW IDLE PERIODIC PERSISTED satisfied:0x3600002 unsatisfied:0x80000004}: 65023871
+    JobStatus{4e8d6fe androidx.work.systemjobscheduler:u0a135/15 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+11h57m59s250ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 65914066
+    JobStatus{70d6f54 #u0a145/452416931 com.google.android.as/com.google.android.apps.miphone.aiai.echo.scheduler.EchoJobService u=0 s=10145 TIME=-4m41s815ms:+23h55m18s185ms IDLE PERIODIC satisfied:0x83600000 unsatisfied:0x4}: 43253001
+    JobStatus{2fc8475 androidx.work.systemjobscheduler:u0a149/0 @androidx.work.systemjobscheduler@com.google.android.tts/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10149 TIME=+1d6h2m3s394ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 130058210
+    JobStatus{9a63683 #1000/13254266 android/com.android.server.camera.CameraStatsJobService u=0 s=1000 TIME=+23h55m5s417ms:none IDLE satisfied:0x3600000 unsatisfied:0x80000004}: 108220233
+    JobStatus{a2b3e80 androidx.work.systemjobscheduler:u0a146/1 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+23h55m33s88ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 114907904
+    JobStatus{60e692f androidx.work.systemjobscheduler:u0a146/8 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+23h55m52s972ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 114927788
+    JobStatus{32b6c9f androidx.work.systemjobscheduler:u0a141/14 @androidx.work.systemjobscheduler@com.google.android.apps.wellbeing/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10141 TIME=+23h55m58s706ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 108993522
+    JobStatus{70b123b VirtualizationSystemService:1000/1 @VirtualizationSystemService@android/com.android.system.virtualmachine.SecretkeeperJobService u=0 s=1000 TIME=-4m54s272ms:+23h55m5s728ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43240544
+    JobStatus{db3bc87 #1000/1145656139 android/com.android.server.storage.DiskStatsLoggingService u=0 s=1000 TIME=-5m3s267ms:+23h54m56s733ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43231549
+    JobStatus{1166237 #u0a200/-200 com.google.android.providers.media.module/com.android.providers.media.IdleService u=0 s=10200 TIME=-4m0s761ms:+23h55m59s239ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43294055
+    JobStatus{4e938c5 #u0a200/-500 com.google.android.providers.media.module/com.android.providers.media.stableuris.job.StableUriIdleMaintenanceService u=0 s=10200 TIME=-4m0s747ms:+23h55m59s253ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43294069
+    JobStatus{8bf97c8 #u0a146/2000007999 com.google.android.googlequicksearchbox/com.google.android.libraries.notifications.entrypoints.scheduled.ScheduledTaskService u=0 s=10146 TIME=+23h55m51s580ms:+1d23h55m51s580ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 129686396
+    JobStatus{e4e6929 androidx.work.systemjobscheduler:u0a153/7 @androidx.work.systemjobscheduler@com.google.android.inputmethod.latin/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10153 TIME=+23h55m29s297ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 108784113
+    JobStatus{d6a50c #u0a145/249456912 com.google.android.as/com.google.android.apps.miphone.aiai.common.brella.service.AiAiExampleStoreTtlService u=0 s=10145 TIME=+23h55m25s763ms:+1d23h55m25s763ms CHARGING PERIODIC satisfied:0x3600003 unsatisfied:0x80000000}: 129660579
+    JobStatus{81c906 #u0a145/485394179 com.google.android.as/com.google.android.apps.miphone.aiai.fedass.ekho.service.EkhoTtlService u=0 s=10145 TIME=+23h55m25s995ms:+1d23h55m25s995ms CHARGING PERIODIC satisfied:0x3600003 unsatisfied:0x80000000}: 129660811
+    JobStatus{c2a3932 #u0a139/4097 com.google.android.partnersetup/.RlzPingJobService u=0 s=10139 TIME=+23h56m3s398ms:+23h56m3s398ms satisfied:0x3600000 unsatisfied:0x80000000}: 109178214
+    JobStatus{e79e481 androidx.work.systemjobscheduler:u0a135/13 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+23h57m58s969ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 109113785
+    JobStatus{b65835d androidx.work.systemjobscheduler:u0a199/2 @androidx.work.systemjobscheduler@com.google.android.rkpdapp/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10199 TIME=+23h55m59s875ms:none NET BATNOTLOW satisfied:0x13600002 unsatisfied:0x80000000}: 108094691
+    JobStatus{5710212 #u0a193/3 com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.PermissionEventCleanupJobService u=0 s=10193 TIME=+23h56m2s106ms:+1d23h56m2s106ms PERIODIC PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 129696922
+    JobStatus{c6abc11 #u0a145/272538963 com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.PeriodicCleanupService u=0 s=10145 TIME=+23h55m26s867ms:+1d23h55m26s867ms PERIODIC PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 129661683
+    JobStatus{7324ba5 #u0a135/201 com.google.android.dialer/com.android.voicemail.impl.StatusCheckJobService u=0 s=10135 TIME=+23h55m58s894ms:+1d23h55m58s894ms NET CHARGING PERIODIC satisfied:0x13600003 unsatisfied:0x80000000}: 129693710
+    JobStatus{602e8d6 #u0a193/2 com.google.android.permissioncontroller/com.android.permissioncontroller.hibernation.HibernationJobService u=0 s=10193 TIME=+14d23h56m0s901ms:+29d23h56m0s901ms PERIODIC PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 1944095717
+    JobStatus{c342ebb #u0a193/9 com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.v34.SafetyLabelChangesJobService u=0 s=10193 TIME=-3m58s315ms:+29d23h56m1s685ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 1296096501
+    JobStatus{c1b98f2 #u0a146/-352 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+11h56m57s308ms:+23h56m57s308ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 73412124
+    JobStatus{461c4b #u0a193/6 com.google.android.permissioncontroller/com.android.permissioncontroller.privacysources.AccessibilityJobService u=0 s=10193 TIME=+21h32m2s44ms:+23h56m2s44ms PERIODIC satisfied:0x3600000 unsatisfied:0x80000000}: 99456860
+    JobStatus{12c4f27 androidx.work.systemjobscheduler:u0a146/4 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+23h56m21s727ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 114956543
+    JobStatus{f191e5f androidx.work.systemjobscheduler:u0a135/2 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+23h56m0s140ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 108994956
+    JobStatus{affd4c8 androidx.work.systemjobscheduler:u0a136/5 @androidx.work.systemjobscheduler@com.google.android.apps.safetyhub/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10136 TIME=+7h56m10s631ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 50685447
+    JobStatus{8aeb352 #u0a137/1981 com.google.android.settings.intelligence/.modules.routines.impl.ComputeNewInferencesJobService u=0 s=10137 TIME=+23h56m2s685ms:+1d23h56m2s685ms PERIODIC PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 129697501
+    JobStatus{821abc5 #u0a137/1976 com.google.android.settings.intelligence/.modules.routines.impl.PruneDatabaseJobService u=0 s=10137 TIME=+23h56m2s636ms:+1d23h56m2s636ms PERIODIC PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 129697452
+    JobStatus{31127e0 androidx.work.systemjobscheduler:u0a144/1005 @androidx.work.systemjobscheduler@com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10144 TIME=+23h56m10s812ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 108285628
+    JobStatus{4a3909a #u0a146/-358 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+23h56m57s141ms:+1d23h56m57s141ms NET CHARGING PERIODIC PERSISTED satisfied:0x13600003 unsatisfied:0x80000000}: 129751957
+    JobStatus{5b62b7e #u0a136/111007999 com.google.android.apps.safetyhub/com.google.android.libraries.notifications.entrypoints.scheduled.ScheduledTaskService u=0 s=10136 TIME=+23h56m10s360ms:+1d23h56m10s360ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 129705176
+    JobStatus{cea97a0 #u0a144/30000 com.google.android.apps.messaging/com.google.android.ims.metrics.PeriodicMetricsJobService u=0 s=10144 TIME=+23h56m19s191ms:+1d23h56m19s191ms NET PERIODIC satisfied:0x13600000 unsatisfied:0x80000000}: 129714007
+    JobStatus{c0055de #1000/16964307 android/com.android.server.appsearch.contactsindexer.ContactsIndexerMaintenanceService u=0 s=1000 TIME=+14d23h55m15s991ms:+29d23h55m15s991ms BATNOTLOW IDLE PERIODIC PERSISTED satisfied:0x3600002 unsatisfied:0x80000004}: 1944050807
+    JobStatus{76b2082 androidx.work.systemjobscheduler:u0a136/1 @androidx.work.systemjobscheduler@com.google.android.apps.safetyhub/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10136 TIME=+6h2m54s659ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 43889475
+    JobStatus{7c507f #u0a145/310487677 com.google.android.as/com.google.android.apps.miphone.aiai.echo.scheduler.EchoJobService u=0 s=10145 TIME=+5h55m17s986ms:+11h55m17s986ms PERIODIC satisfied:0x3600000 unsatisfied:0x80000000}: 43792802
+    JobStatus{b5c73fb androidx.work.systemjobscheduler:u0a136/2 @androidx.work.systemjobscheduler@com.google.android.apps.safetyhub/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10136 TIME=+3d0h2m54s780ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 281489596
+    JobStatus{562a671 androidx.work.systemjobscheduler:u0a144/1002 @androidx.work.systemjobscheduler@com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10144 TIME=+23h57m36s27ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 108190843
+    JobStatus{c82f4d8 #1000/52417896 android/com.android.server.backup.KeyValueBackupJob u=0 s=1000 TIME=+3h57m5s25ms:+23h55m11s977ms NET CHARGING satisfied:0x13600003 unsatisfied:0x80000000}: 50503317
+    JobStatus{36b40 androidx.work.systemjobscheduler:u0a146/20 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+5h57m18s183ms:none NET CHARGING satisfied:0x13600003 unsatisfied:0x80000000}: 50212999
+    JobStatus{feba0a androidx.work.systemjobscheduler:u0a136/6 @androidx.work.systemjobscheduler@com.google.android.apps.safetyhub/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10136 TIME=+7h56m10s772ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 50685588
+    JobStatus{ca2694b androidx.work.systemjobscheduler:u0a146/17 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+23h55m58s736ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 114933552
+    JobStatus{2d906fc #u0a146/-406 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+5h56m57s317ms:+11h56m57s317ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 49832133
+    JobStatus{d67f7dd #u0a146/-12 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s911ms:+1d23h56m57s89ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 86551905
+    JobStatus{6d63862 #u0a145/383097104 com.google.android.as/com.google.android.apps.miphone.aiai.interestsmodel.storage.privacy.TtlExpiryService u=0 s=10145 TIME=+23h55m31s1ms:+1d23h55m31s1ms CHARGING PERIODIC satisfied:0x3600003 unsatisfied:0x80000000}: 129665817
+    JobStatus{e23ce9e #u0a146/-30 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s887ms:+23h56m57s113ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 43351929
+    JobStatus{c8643dd androidx.work.systemjobscheduler:u0a145/8 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 TIME=+23h55m28s831ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 108963647
+    JobStatus{9ad429b #u0a146/-48 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s872ms:+23h56m57s128ms NET CHARGING IDLE PERIODIC PERSISTED satisfied:0x93600003 unsatisfied:0x4}: 43351944
+    JobStatus{818b890 #u0a146/-202 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+2d23h56m57s366ms:+5d23h56m57s366ms NET CHARGING PERIODIC PERSISTED satisfied:0x13600003 unsatisfied:0x80000000}: 388952182
+    JobStatus{90ced3a #u0a146/-148 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+23h56m57s333ms:+1d23h56m57s333ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 129752149
+    JobStatus{4ce6fc2 #u0a146/-324 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+23h56m57s91ms:+1d23h56m57s91ms CHARGING PERIODIC PERSISTED satisfied:0x3600003 unsatisfied:0x80000000}: 129751907
+    JobStatus{629c5b3 #u0a146/-170 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s654ms:+23h56m57s346ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 43352162
+    JobStatus{a4da5ff androidx.work.systemjobscheduler:u0a145/10 @androidx.work.systemjobscheduler@com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10145 TIME=+89d23h55m35s568ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 7799290384
+    JobStatus{886a110 #u0a146/-268 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s734ms:+23h56m57s266ms CHARGING IDLE PERIODIC PERSISTED satisfied:0x83600003 unsatisfied:0x4}: 43352082
+    JobStatus{3431b99 androidx.work.systemjobscheduler:u0a146/10 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+6h5m54s667ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 50729483
+    JobStatus{fd7fce0 androidx.work.systemjobscheduler:u0a146/7 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+19h55m39s526ms:none BATNOTLOW satisfied:0x3600002 unsatisfied:0x80000000}: 100514342
+    JobStatus{48c24f7 #u0a146/-462 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+11h56m57s344ms:+23h56m57s344ms PERIODIC PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 71072160
+    JobStatus{5daae82 #u0a146/-350 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+11h56m57s293ms:+23h56m57s293ms PERIODIC PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 71252109
+    JobStatus{b5b71b1 androidx.work.systemjobscheduler:u0a200/0 @androidx.work.systemjobscheduler@com.google.android.providers.media.module/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10200 TIME=+364d23h55m22s884ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 31557657700
+    JobStatus{98930ce #u0a146/-446 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+11h56m57s301ms:+23h56m57s301ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 71432117
+    JobStatus{fa26a37 androidx.work.systemjobscheduler:u0a146/14 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+1d0h5m54s691ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 115529507
+    JobStatus{9fe7314 androidx.work.systemjobscheduler:u0a135/14 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+11h57m59s31ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 65913847
+    JobStatus{1ce723f androidx.work.systemjobscheduler:u0a146/11 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+6h5m54s666ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 50729482
+    JobStatus{b3557e6 androidx.work.systemjobscheduler:u0a153/1 @androidx.work.systemjobscheduler@com.google.android.inputmethod.latin/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10153 TIME=+5h55m22s220ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 43977036
+    JobStatus{2184ef7 HEALTH_CONNECT_DAILY_JOB:1000/178097824 @HEALTH_CONNECT_DAILY_JOB@android/com.android.server.healthconnect.HealthConnectDailyService u=0 s=1000 TIME=+11h55m48s972ms:+23h55m48s972ms CHARGING IDLE PERIODIC satisfied:0x3600003 unsatisfied:0x80000004}: 65603788
+    JobStatus{d5bb35c #u0a146/-362 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+7h56m57s318ms:+15h56m57s318ms PERIODIC PERSISTED satisfied:0x3600000 unsatisfied:0x80000000}: 57032134
+    JobStatus{2cb0b36 androidx.work.systemjobscheduler:u0a146/13 @androidx.work.systemjobscheduler@com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10146 TIME=+6h5m54s666ms:none NET CHARGING satisfied:0x13600003 unsatisfied:0x80000000}: 50729482
+    JobStatus{bb9df04 #u0a146/-154 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s662ms:+6d23h56m57s338ms CHARGING IDLE PERIODIC PERSISTED satisfied:0x83600003 unsatisfied:0x4}: 302552154
+    JobStatus{a84a777 androidx.work.systemjobscheduler:u0a141/7 @androidx.work.systemjobscheduler@com.google.android.apps.wellbeing/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10141 TIME=+7d0h5m34s731ms:none NET satisfied:0x13600000 unsatisfied:0x80000000}: 627429547
+    JobStatus{12f5ced #u0a146/-166 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=-3m2s657ms:+6d23h56m57s343ms IDLE PERIODIC PERSISTED satisfied:0x83600000 unsatisfied:0x4}: 302552159
+    JobStatus{fd920a5 class com.android.server.healthconnect.migration.MigrationStateChangeJob:1000/167894992 @class com.android.server.healthconnect.migration.MigrationStateChangeJob@android/com.android.server.healthconnect.HealthConnectDailyService u=0 s=1000 TIME=+23h55m49s82ms:+1d23h55m49s82ms PERIODIC satisfied:0x3600000 unsatisfied:0x80000000}: 129683898
+    JobStatus{d31dae9 #u0a146/-486 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService u=0 s=10146 TIME=+23h56m57s146ms:+1d23h56m57s146ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 129751962
+    JobStatus{bd581f0 #u0a159/605007999 com.google.android.apps.photos/com.google.android.libraries.notifications.entrypoints.scheduled.ScheduledTaskService u=0 s=10159 TIME=+23h59m1s118ms:+1d23h59m1s118ms NET PERIODIC PERSISTED satisfied:0x13600000 unsatisfied:0x80000000}: 129875934
+    JobStatus{f829e androidx.work.systemjobscheduler:u0a159/555000003 @androidx.work.systemjobscheduler@com.google.android.apps.photos/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10159 TIME=+1d23h59m1s542ms:none BATNOTLOW satisfied:0x3600002 unsatisfied:0x80000000}: 195756358
+    JobStatus{916b4cd androidx.work.systemjobscheduler:u0a135/16 @androidx.work.systemjobscheduler@com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10135 TIME=+23h56m3s587ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 109358403
+    JobStatus{49af17f androidx.work.systemjobscheduler:u0a159/555000004 @androidx.work.systemjobscheduler@com.google.android.apps.photos/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10159 TIME=+23h59m1s546ms:none CHARGING satisfied:0x3600003 unsatisfied:0x80000000}: 109356362
+    JobStatus{b1f9fd7 androidx.work.systemjobscheduler:u0a159/555000001 @androidx.work.systemjobscheduler@com.google.android.apps.photos/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10159 TIME=+2h59m0s927ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 33035743
+    JobStatus{a6475ee companion:1000/1 @companion@android/com.android.server.companion.association.InactiveAssociationsRemovalService u=0 s=1000 TIME=-4m54s385ms:+23h55m5s615ms CHARGING IDLE PERIODIC satisfied:0x83600003 unsatisfied:0x4}: 43240431
+    JobStatus{3e91a39 androidx.work.systemjobscheduler:u0a218/4 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService u=0 s=10218 TIME=+7d23h7m51s805ms:none satisfied:0x3600000 unsatisfied:0x80000000}: 710006621
+
+ConnectivityController:
+  Aconfig flags:
+    com.android.server.job.relax_prefetch_connectivity_constraint_only_on_charger=true 
+  
+  Available networks:
+    101: CNM{[ Transports: CELLULAR Capabilities: MMS&SUPL&DUN&FOTA&IMS&CBS&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED LinkUpBandwidth>=60000Kbps LinkDnBandwidth>=145000Kbps Specifier: <TelephonyNetworkSpecifier [mSubId = 1]> SubscriptionIds: {1} UnderlyingNetworks: Null], satisfiesTransportAffinities=true, capabilitiesFirstAcquiredTimeElapsed=113376, defaultNetworkActivationLastCheckTimeElapsed=0, defaultNetworkActivationLastConfirmedTimeElapsed=0}
+    102: CNM{[ Transports: WIFI Capabilities: NOT_METERED&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED LinkUpBandwidth>=12000Kbps LinkDnBandwidth>=30000Kbps TransportInfo: <SSID: <unknown ssid>, BSSID: 02:00:00:00:00:00, MAC: 02:00:00:00:00:00, IP: /10.0.2.16, Security type: 0, Supplicant state: COMPLETED, Wi-Fi standard: legacy, RSSI: -50, Link speed: 1Mbps, Tx Link speed: 1Mbps, Max Supported Tx Link speed: 54Mbps, Rx Link speed: 2Mbps, Max Supported Rx Link speed: 54Mbps, Frequency: 2437MHz, Net ID: -1, Metered hint: false, score: 60, isUsable: true, CarrierMerged: false, SubscriptionId: -1, IsPrimary: 1, Trusted: true, Restricted: false, Ephemeral: false, OEM paid: false, OEM private: false, OSU AP: false, FQDN: <none>, Provider friendly name: <none>, Requesting package name: <none><none>MLO Information: , Is TID-To-Link negotiation supported by the AP: false, AP MLD Address: <none>, AP MLO Link Id: <none>, AP MLO Affiliated links: <none>, Vendor Data: <none>> SignalStrength: -50 AdminUids: [10182] SSID: "AndroidWifi" UnderlyingNetworks: Null], satisfiesTransportAffinities=true, capabilitiesFirstAcquiredTimeElapsed=307295, defaultNetworkActivationLastCheckTimeElapsed=0, defaultNetworkActivationLastConfirmedTimeElapsed=0}
+  
+  Subscription ID signal strengths:
+    1: 2
+  
+  Background metered allowed: {1000=true, 10135=true, 10136=true, 10140=true, 10149=true, 10153=true, 10159=true, 10168=true, 10199=true, 10206=true}
+  
+  Current default network callbacks:
+    UID: 1000; Network: 102 (blocked=REASON_NONE)
+    UID: 10131; Network: 102 (blocked=REASON_NONE)
+    UID: 10135; Network: 102 (blocked=REASON_APP_BACKGROUND)
+    UID: 10136; Network: 102 (blocked=REASON_NONE)
+    UID: 10140; Network: 102 (blocked=REASON_APP_BACKGROUND)
+    UID: 10141; Network: 102 (blocked=REASON_NONE)
+    UID: 10144; Network: 102 (blocked=REASON_NONE)
+    UID: 10145; Network: 102 (blocked=REASON_NONE)
+    UID: 10146; Network: 102 (blocked=REASON_NONE)
+    UID: 10147; Network: 102 (blocked=REASON_NONE)
+    UID: 10149; Network: 102 (blocked=REASON_APP_BACKGROUND)
+    UID: 10153; Network: 102 (blocked=REASON_NONE)
+    UID: 10159; Network: 102 (blocked=REASON_APP_BACKGROUND)
+    UID: 10168; Network: 102 (blocked=REASON_APP_BACKGROUND)
+    UID: 10198; Network: 102 (blocked=REASON_NONE)
+    UID: 10199; Network: 102 (blocked=REASON_NONE)
+    UID: 10206; Network: 102 (blocked=REASON_APP_BACKGROUND)
+    UID: 10218; Network: 102 (blocked=REASON_NONE)
+  
+  UID Pecking Order:
+    0: UidStats{uid=1000 pri=0 #run=0 #readyWithConn=-8 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    1: UidStats{uid=10141 pri=30 #run=0 #readyWithConn=-1 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    2: UidStats{uid=10153 pri=0 #run=0 #readyWithConn=-30 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    3: UidStats{uid=10146 pri=30 #run=0 #readyWithConn=-28 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    4: UidStats{uid=10145 pri=0 #run=0 #readyWithConn=-25 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    5: UidStats{uid=10149 pri=0 #run=0 #readyWithConn=0 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    6: UidStats{uid=10147 pri=30 #run=0 #readyWithConn=-1 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    7: UidStats{uid=10198 pri=0 #run=0 #readyWithConn=1 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    8: UidStats{uid=10131 pri=0 #run=0 #readyWithConn=0 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    9: UidStats{uid=10135 pri=0 #run=0 #readyWithConn=-22 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    10: UidStats{uid=10206 pri=0 #run=0 #readyWithConn=0 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    11: UidStats{uid=10199 pri=0 #run=0 #readyWithConn=-1 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    12: UidStats{uid=10136 pri=0 #run=0 #readyWithConn=4 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    13: UidStats{uid=10144 pri=30 #run=0 #readyWithConn=-4 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    14: UidStats{uid=10140 pri=0 #run=0 #readyWithConn=-9 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    15: UidStats{uid=10168 pri=0 #run=0 #readyWithConn=-1 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    16: UidStats{uid=10159 pri=0 #run=0 #readyWithConn=-3 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+    17: UidStats{uid=10218 pri=0 #run=0 #readyWithConn=0 #netAvail=0 #EJs=0 #reg=0 earliestEnqueue=0 earliestEJEnqueue=0 earliestUIJEnqueue=0 updated=-5m34s816ms}
+  
+  #androidx.work.systemjobscheduler:u0a218/0 from u0a218: NetworkRequest [ NONE id=0, [ Capabilities: INTERNET&TRUSTED&VALIDATED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10218 UnderlyingNetworks: Null] ]
+  #androidx.work.systemjobscheduler:u0a218/3 from u0a218: NetworkRequest [ NONE id=0, [ Capabilities: INTERNET&TRUSTED&VALIDATED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10218 UnderlyingNetworks: Null] ]
+
+TimeController:
+  Elapsed clock: 334817
+  Next delay alarm in +18s984ms
+  Last delay alarm fired @ +11s16ms
+  Next deadline alarm in +3s274ms
+  
+  #androidx.work.systemjobscheduler:u0a218/3 from u0a218: Delay=+59m7s954ms, Deadline=N/A
+  #androidx.work.systemjobscheduler:u0a218/0 from u0a218: Delay=+3h59m7s267ms, Deadline=N/A
+  #androidx.work.systemjobscheduler:u0a218/4 from u0a218: Delay=+7d23h7m51s804ms, Deadline=N/A
+
+IdleController:
+  Currently idle: false
+  Idleness tracker:
+    mIdle: false
+    mScreenOn: true
+    mIsStablePower: true
+    mDockIdle: false
+    mProjectionActive: false
+    mIdlenessCheckScheduledElapsed: -1
+    mIdleStartElapsed: 9223372036854775807
+  
+
+BatteryController:
+  Stable power: true
+  Not low: true
+  #androidx.work.systemjobscheduler:u0a218/0 from u0a218
+  #androidx.work.systemjobscheduler:u0a218/3 from u0a218
+
+StorageController:
+  Not low: true
+  Sequence: -1
+  
+
+BackgroundJobsController:
+  Aconfig flags:
+    android.content.pm.stay_stopped=true 
+  
+  Current AppStateTracker State:
+    Force all apps standby: false
+    Small Battery Device: false
+    Force all apps standby for small battery device: false
+    Plugged In: true
+    Active uids: [u0a137 u0a141 u0a142 u0a144 u0a145 u0a146 u0a147 u0a153 u0a159 u0a183 u0a185 u0a193 u0a200 u0a206 u0a218]
+    Except-idle + user exemption list appids: [2000, 10097, 10098, 10099, 10105, 10111, 10131, 10136, 10147, 10162, 10188, 10198, 10199, 10213]
+    User exemption list appids: []
+    Temp exemption list appids: []
+    Exempted bucket packages:
+      User 0
+        com.google.android.networkstack.tethering
+        com.android.providers.telephony
+        com.android.dynsystem
+        com.google.android.cellbroadcastservice
+        com.android.providers.calendar
+        com.android.mms.service
+        com.android.providers.downloads
+        com.google.android.apps.safetyhub
+        com.android.vending
+        android
+        com.android.nfc
+        com.android.ons
+        com.android.stk
+        com.google.android.bluetooth
+        com.android.providers.settings
+        com.android.se
+        com.android.inputdevices
+        com.android.cellbroadcastreceiver
+        com.google.android.networkstack
+        com.google.android.rkpdapp
+        com.android.server.telecom
+        com.android.keychain
+        com.google.android.gms
+        com.google.android.nfc
+        com.android.localtransport
+        com.android.DeviceAsWebcam
+        com.android.proxyhandler
+        com.android.emulator.multidisplay
+        com.android.imsserviceentitlement
+        com.android.settings
+        com.android.phone
+        com.android.shell
+        com.android.emergency
+        com.android.location.fused
+        com.google.android.cellbroadcastreceiver
+        com.android.bluetooth
+        com.android.providers.contacts
+        com.android.devicelockcontroller
+    
+    Restricted packages:
+    Stats:
+      UID_FG_STATE_CHANGED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      UID_ACTIVE_STATE_CHANGED: count=107, total=292.0ms, avg=2.729ms, max calls/s=15 max dur/s=132.6ms max time=132.6ms
+      RUN_ANY_CHANGED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      ALL_UNEXEMPTED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      ALL_EXEMPTION_LIST_CHANGED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      TEMP_EXEMPTION_LIST_CHANGED: count=95, total=157.2ms, avg=1.655ms, max calls/s=11 max dur/s=107.0ms max time=106.7ms
+      EXEMPTED_BUCKET_CHANGED: count=3, total=0.2ms, avg=0.054ms, max calls/s=0 max dur/s=0.0ms max time=0.1ms
+      FORCE_ALL_CHANGED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      IS_UID_ACTIVE_CACHED: count=0, total=0.0ms, avg=0.000ms, max calls/s=0 max dur/s=0.0ms max time=0.0ms
+      IS_UID_ACTIVE_RAW: count=19, total=2.3ms, avg=0.122ms, max calls/s=7 max dur/s=2.2ms max time=2.0ms
+  
+  Stopped packages:
+    10218:org.chyavorec.app=false
+    10206:com.google.android.ext.services=false
+    10200:com.google.android.providers.media.module=false
+    10199:com.google.android.rkpdapp=false
+    10198:com.android.devicelockcontroller=false
+    10193:com.google.android.permissioncontroller=false
+    10168:com.google.android.webview=false
+    10159:com.google.android.apps.photos=false
+    10153:com.google.android.inputmethod.latin=false
+    10149:com.google.android.tts=false
+    10147:com.google.android.gms=false
+    10146:com.google.android.googlequicksearchbox=false
+    10145:com.google.android.as=false
+    10144:com.google.android.apps.messaging=false
+    10142:com.google.android.as.oss=false
+    10141:com.google.android.apps.wellbeing=false
+    10140:com.google.android.configupdater=false
+    10139:com.google.android.partnersetup=false
+    10137:com.google.android.settings.intelligence=false
+    10136:com.google.android.apps.safetyhub=false
+    10135:com.google.android.dialer=false
+    10131:com.android.imsserviceentitlement=false
+    10105:com.android.providers.downloads=false
+    10103:com.google.android.documentsui=false
+    10099:com.android.providers.calendar=false
+    1073:com.google.android.networkstack=false
+    1000:com.android.settings=false
+    1000:com.android.providers.settings=false
+    1000:android=false
+    
+    #androidx.work.systemjobscheduler:u0a218/3 from u0a218 active: org.chyavorec.app [RUN_ANY_IN_BACKGROUND allowed] RUNNABLE
+    #androidx.work.systemjobscheduler:u0a218/4 from u0a218 active: org.chyavorec.app [RUN_ANY_IN_BACKGROUND allowed] RUNNABLE
+    #androidx.work.systemjobscheduler:u0a218/0 from u0a218 active: org.chyavorec.app [RUN_ANY_IN_BACKGROUND allowed] RUNNABLE
+  
+  ContentObserverController:
+    
+    Observers:
+  
+  DeviceIdleJobsController:
+    Idle mode: false
+    
+    #androidx.work.systemjobscheduler:u0a218/3 from u0a218: org.chyavorec.app RUNNABLE
+    #androidx.work.systemjobscheduler:u0a218/4 from u0a218: org.chyavorec.app RUNNABLE
+    #androidx.work.systemjobscheduler:u0a218/0 from u0a218: org.chyavorec.app RUNNABLE
+  
+  QuotaController:
+    Aconfig Flags:
+        com.android.server.job.adjust_quota_default_constants: true
+        com.android.server.job.enforce_quota_policy_to_fgs_jobs: true
+        com.android.server.job.enforce_quota_policy_to_top_started_jobs: true
+        com.android.server.job.additional_quota_for_system_installer: true
+    
+    Current elapsed time: 334819
+    
+    Foreground UIDs: {1001=true, 1002=true, 1037=true, 1068=true, 1073=true, 10185=true, 10200=true, 10218=true}
+    
+    Cached top apps: {1001=true, 1002=true, 1037=true, 1068=true, 1073=true, 10185=true, 10200=true, 10218=true}
+    Cached top app grace period: {10147=136568, 10183=343000}
+    Cached temp allowlist: {}
+    Cached temp allowlist grace period: {1000=488137, 1001=288084, 1002=225456, 10137=511228, 10147=476400, 10185=284037, 10200=294193, 10217=472534}
+    
+    Special apps:
+      System installers={0->{com.google.android.packageinstaller, com.android.managedprovisioning, com.android.shell}}
+    
+    #androidx.work.systemjobscheduler:u0a218/0 from u0a218
+      ACTIVE, within regular quota, 1200000ms remaining in quota
+    #androidx.work.systemjobscheduler:u0a218/4 from u0a218
+      ACTIVE, within regular quota, 1200000ms remaining in quota
+    #androidx.work.systemjobscheduler:u0a218/3 from u0a218
+      ACTIVE, within regular quota, 1200000ms remaining in quota
+    
+    Timer<REG>{<0>com.google.android.googlequicksearchbox} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.apps.messaging} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.configupdater} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.providers.media.module} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.apps.safetyhub} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>android} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.as} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.permissioncontroller} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.android.providers.settings} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.apps.wellbeing} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.dialer} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.webview} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.partnersetup} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>org.chyavorec.app} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.apps.photos} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.android.imsserviceentitlement} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.android.settings} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.settings.intelligence} NOT active, 0 running bg jobs
+    
+    Timer<REG>{<0>com.google.android.inputmethod.latin} NOT active, 0 running bg jobs
+    
+    
+    Timer<EJ>{<0>com.android.providers.calendar} NOT active, 0 running bg jobs (debit adj=0)
+    
+    Timer<EJ>{<0>com.android.devicelockcontroller} NOT active, 0 running bg jobs (debit adj=0)
+    
+    Timer<EJ>{<0>com.google.android.inputmethod.latin} NOT active, 0 running bg jobs (debit adj=0)
+    
+    
+    TopAppTimer{<0>org.chyavorec.app} started at 281529 (53290ms ago)
+      org.chyavorec.app.MainActivity
+    TopAppTimer{<0>com.google.android.apps.nexuslauncher} NOT active
+    TopAppTimer{<0>com.google.android.googlesdksetup} NOT active
+    TopAppTimer{<0>com.google.android.gms} NOT active
+    
+    Cached execution stats:
+      <0>com.google.android.ext.services
+        ACTIVE: expirationTime=86508299, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.googlequicksearchbox
+        ACTIVE: expirationTime=86465090, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.android.providers.downloads
+        EXEMPTED: expirationTime=86490524, allowedTimePerPeriodMs=1200000, windowSizeMs=2400000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.apps.messaging
+        ACTIVE: expirationTime=86506914, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.configupdater
+        ACTIVE: expirationTime=86694175, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.providers.media.module
+        ACTIVE: expirationTime=86479883, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>android
+        ACTIVE: expirationTime=86434334, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+        EXEMPTED: expirationTime=86473773, allowedTimePerPeriodMs=1200000, windowSizeMs=2400000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.as
+        ACTIVE: expirationTime=86484317, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.permissioncontroller
+        ACTIVE: expirationTime=86696937, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.android.providers.settings
+        EXEMPTED: expirationTime=86434334, allowedTimePerPeriodMs=1200000, windowSizeMs=2400000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.as.oss
+        ACTIVE: expirationTime=86493258, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.apps.wellbeing
+        ACTIVE: expirationTime=86465516, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.dialer
+        ACTIVE: expirationTime=86529697, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.rkpdapp
+        EXEMPTED: expirationTime=86694248, allowedTimePerPeriodMs=1200000, windowSizeMs=2400000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.gms
+        EXEMPTED: expirationTime=86510202, allowedTimePerPeriodMs=1200000, windowSizeMs=2400000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.tts
+        ACTIVE: expirationTime=86494262, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.partnersetup
+        ACTIVE: expirationTime=86553678, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>org.chyavorec.app
+        ACTIVE: expirationTime=86734819, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.settings.intelligence
+        ACTIVE: expirationTime=86497595, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+      <0>com.google.android.inputmethod.latin
+        ACTIVE: expirationTime=86493782, allowedTimePerPeriodMs=1200000, windowSizeMs=3600000, jobCountLimit=75, sessionCountLimit=75, executionTimeInWindow=0, bgJobCountInWindow=0, executionTimeInMaxPeriod=0, bgJobCountInMaxPeriod=0, sessionCountInWindow=0, inQuotaTime=0, rateLimitJobCountExpirationTime=0, rateLimitJobCountWindow=0, rateLimitSessionCountExpirationTime=0, rateLimitSessionCountWindow=0
+    
+    EJ debits:
+      <0>com.google.android.ext.services: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.googlequicksearchbox: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.android.providers.downloads: ShrinkableDebits { debit tally: 0, bucket: 6 }
+      <0>com.google.android.apps.messaging: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.configupdater: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.providers.media.module: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>android: ShrinkableDebits { debit tally: 0, bucket: 6 }
+      <0>com.google.android.as: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.permissioncontroller: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.android.providers.settings: ShrinkableDebits { debit tally: 0, bucket: 6 }
+      <0>com.google.android.as.oss: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.apps.wellbeing: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.dialer: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.rkpdapp: ShrinkableDebits { debit tally: 0, bucket: 6 }
+      <0>com.google.android.gms: ShrinkableDebits { debit tally: 0, bucket: 6 }
+      <0>com.google.android.tts: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.googlesdksetup: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.partnersetup: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.apps.nexuslauncher: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.settings.intelligence: ShrinkableDebits { debit tally: 0, bucket: 0 }
+      <0>com.google.android.inputmethod.latin: ShrinkableDebits { debit tally: 0, bucket: 0 }
+    
+    In quota alarms:
+      NOT WAITING
+
+ComponentController:
+  0-ComponentInfo{com.google.android.apps.safetyhub/com.google.android.libraries.notifications.entrypoints.scheduled.ScheduledTaskService}: com.google.android.apps.safetyhub
+  0-ComponentInfo{com.google.android.rkpdapp/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.rkpdapp
+  0-ComponentInfo{com.google.android.partnersetup/com.google.android.partnersetup.ClientIdJobService}: com.google.android.partnersetup
+  0-ComponentInfo{com.google.android.partnersetup/com.google.android.partnersetup.AppHidingJobService}: com.google.android.partnersetup
+  0-ComponentInfo{android/com.android.server.PruneInstantAppsJobService}: system
+  0-ComponentInfo{com.google.android.tts/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.tts
+  0-ComponentInfo{com.google.android.permissioncontroller/com.android.permissioncontroller.hibernation.HibernationJobService}: com.google.android.permissioncontroller
+  0-ComponentInfo{com.google.android.dialer/com.android.dialer.shortcuts.PeriodicJobService}: com.google.android.dialer
+  0-ComponentInfo{com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.PermissionEventCleanupJobService}: com.google.android.permissioncontroller
+  0-ComponentInfo{org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService}: org.chyavorec.app
+  0-ComponentInfo{com.google.android.settings.intelligence/com.google.android.settings.intelligence.libs.instrumentation.snapshot.SnapshotJobService}: com.google.android.settings.intelligence
+  0-ComponentInfo{android/com.android.server.appsearch.contactsindexer.ContactsIndexerMaintenanceService}: system
+  0-ComponentInfo{com.google.android.apps.photos/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.apps.photos
+  0-ComponentInfo{com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.search.indexing.backend.IndexingJobService}: com.google.android.settings.intelligence
+  0-ComponentInfo{com.google.android.configupdater/com.google.android.configupdater.MainJobService}: com.google.android.configupdater
+  0-ComponentInfo{android/com.android.server.camera.CameraStatsJobService}: system
+  0-ComponentInfo{com.google.android.ext.services/android.ext.services.common.AdServicesAppsearchDeleteJob}: com.google.android.ext.services
+  0-ComponentInfo{com.android.providers.downloads/com.android.providers.downloads.DownloadJobService}: android.process.media
+  0-ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.smartrec.pixelsearch.cronjob.PixelSearchCronJobService}: com.google.android.as
+  0-ComponentInfo{com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService}: com.google.android.googlequicksearchbox:search
+  0-ComponentInfo{com.google.android.webview/org.chromium.android_webview.nonembedded.AwComponentUpdateService}: com.google.android.webview:webview_apk
+  0-ComponentInfo{android/com.android.server.notification.NotificationBitmapJobService}: system
+  0-ComponentInfo{com.google.android.webview/org.chromium.android_webview.services.AwVariationsSeedFetcher}: com.google.android.webview:webview_service
+  0-ComponentInfo{com.android.providers.settings/com.android.providers.settings.WriteFallbackSettingsFilesJobService}: system
+  0-ComponentInfo{com.google.android.settings.intelligence/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.settings.intelligence
+  0-ComponentInfo{android/com.android.server.blob.BlobStoreIdleJobService}: system
+  0-ComponentInfo{com.google.android.providers.media.module/com.android.providers.media.stableuris.job.StableUriIdleMaintenanceService}: com.google.android.providers.media.module
+  0-ComponentInfo{com.android.providers.calendar/com.android.providers.calendar.CalendarProviderJobService}: com.android.providers.calendar
+  0-ComponentInfo{android/com.android.server.BinaryTransparencyService$UpdateMeasurementsJobService}: system
+  0-ComponentInfo{com.google.android.apps.messaging/com.google.android.ims.metrics.PeriodicMetricsJobService}: com.google.android.apps.messaging:rcs
+  0-ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.common.brella.service.AiAiExampleStoreTtlService}: com.google.android.as
+  0-ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.PeriodicCleanupService}: com.google.android.as
+  0-ComponentInfo{com.google.android.apps.photos/com.google.android.libraries.notifications.entrypoints.scheduled.ScheduledTaskService}: com.google.android.apps.photos
+  0-ComponentInfo{android/com.android.system.virtualmachine.SecretkeeperJobService}: system
+  0-ComponentInfo{android/com.android.server.art.BackgroundDexoptJobService}: system
+  0-ComponentInfo{com.google.android.permissioncontroller/com.android.permissioncontroller.privacysources.NotificationListenerCheckJobService}: com.google.android.permissioncontroller
+  0-ComponentInfo{com.google.android.as.oss/com.google.android.apps.miphone.astrea.networkusage.db.impl.NetworkUsageLogTtlService}: com.google.android.as.oss
+  0-ComponentInfo{com.google.android.permissioncontroller/com.android.permissioncontroller.privacysources.AccessibilityJobService}: com.google.android.permissioncontroller
+  0-ComponentInfo{com.google.android.inputmethod.latin/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.inputmethod.latin
+  0-ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.fedass.ekho.service.EkhoTtlService}: com.google.android.as
+  0-ComponentInfo{com.google.android.providers.media.module/com.android.providers.media.IdleService}: com.google.android.providers.media.module
+  0-ComponentInfo{android/com.android.server.backup.KeyValueBackupJob}: system
+  0-ComponentInfo{com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.routines.impl.RoutinesJobIntentService}: com.google.android.settings.intelligence
+  0-ComponentInfo{android/com.android.server.healthconnect.HealthConnectDailyService}: system
+  0-ComponentInfo{com.google.android.googlequicksearchbox/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.googlequicksearchbox:search
+  0-ComponentInfo{com.android.providers.downloads/com.android.providers.downloads.MediaScanTriggerJob}: android.process.media
+  0-ComponentInfo{android/com.android.server.storage.DiskStatsLoggingService}: system
+  0-ComponentInfo{com.google.android.providers.media.module/com.android.providers.media.MediaService}: com.google.android.providers.media.module
+  0-ComponentInfo{android/com.android.server.pm.DynamicCodeLoggingService}: system
+  0-ComponentInfo{android/com.android.server.net.watchlist.ReportWatchlistJobService}: system
+  0-ComponentInfo{com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.apps.messaging
+  0-ComponentInfo{com.google.android.apps.photos/com.google.android.libraries.social.async.BackgroundTaskJobService}: com.google.android.apps.photos
+  0-ComponentInfo{android/com.android.server.people.data.DataMaintenanceService}: system
+  0-ComponentInfo{com.android.providers.downloads/com.android.providers.downloads.DownloadIdleService}: android.process.media
+  0-ComponentInfo{com.google.android.apps.photos/com.google.android.apps.photos.account.full.SyncAccountsForLoginService}: com.google.android.apps.photos
+  0-ComponentInfo{com.google.android.providers.media.module/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.providers.media.module
+  0-ComponentInfo{com.google.android.apps.safetyhub/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.apps.safetyhub
+  0-ComponentInfo{com.google.android.networkstack/com.android.networkstack.ipmemorystore.RegularMaintenanceJobService}: com.android.networkstack.process
+  0-ComponentInfo{com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.routines.impl.SampleCurrentRingerModeJobService}: com.google.android.settings.intelligence
+  0-ComponentInfo{android/com.android.server.selinux.SelinuxAuditLogsService}: system
+  0-ComponentInfo{com.google.android.partnersetup/com.google.android.partnersetup.InstalledAppJobService}: com.google.android.partnersetup
+  0-ComponentInfo{android/com.android.server.usage.UsageStatsIdleService}: system
+  0-ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.echo.scheduler.EchoJobService}: com.google.android.as
+  0-ComponentInfo{com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.routines.impl.ComputeNewInferencesJobService}: com.google.android.settings.intelligence
+  0-ComponentInfo{com.google.android.gms/com.google.android.gms.backup.component.MmsBackupSchedulerService}: com.google.android.gms
+  0-ComponentInfo{com.google.android.googlequicksearchbox/com.google.android.libraries.notifications.entrypoints.scheduled.ScheduledTaskService}: com.google.android.googlequicksearchbox:search
+  0-ComponentInfo{com.android.imsserviceentitlement/com.android.imsserviceentitlement.fcm.FcmRegistrationService}: com.android.imsserviceentitlement
+  0-ComponentInfo{com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.LocationAccessCheck$LocationAccessCheckJobService}: com.google.android.permissioncontroller
+  0-ComponentInfo{com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.appsearchindexing.impl.AppSearchIndexUpdateJobService}: com.google.android.settings.intelligence
+  0-ComponentInfo{com.google.android.as/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.as
+  0-ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.interestsmodel.storage.privacy.TtlExpiryService}: com.google.android.as
+  0-ComponentInfo{android/com.android.server.companion.association.InactiveAssociationsRemovalService}: system
+  0-ComponentInfo{com.google.android.permissioncontroller/com.android.permissioncontroller.safetycenter.service.SafetyCenterBackgroundRefreshJobService}: com.google.android.permissioncontroller
+  0-ComponentInfo{com.google.android.dialer/com.android.voicemail.impl.StatusCheckJobService}: com.google.android.dialer
+  0-ComponentInfo{com.google.android.partnersetup/com.google.android.partnersetup.RlzPingJobService}: com.google.android.partnersetup
+  0-ComponentInfo{com.google.android.apps.photos/com.google.android.libraries.social.mediamonitor.MediaMonitorJobSchedulerService}: com.google.android.apps.photos
+  0-ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.AiAiPersistentDownloadJobService}: com.google.android.as
+  0-ComponentInfo{com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.v34.SafetyLabelChangesJobService}: com.google.android.permissioncontroller
+  0-ComponentInfo{com.google.android.apps.wellbeing/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.apps.wellbeing
+  0-ComponentInfo{com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService}: com.google.android.dialer
+  0-ComponentInfo{android/com.android.server.notification.NotificationHistoryJobService}: system
+  0-ComponentInfo{com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.routines.impl.PruneDatabaseJobService}: com.google.android.settings.intelligence
+  0-ComponentInfo{com.google.android.partnersetup/com.google.android.partnersetup.PhenotypeJobService}: com.google.android.partnersetup
+  0-ComponentInfo{android/com.android.server.MountServiceIdler}: system
+
+Uid proc states:
+  u0a218: TOP 
+
+Uid bias overrides:
+  u0a218: 40
+
+Uid capabilities:
+  u0a218: LCMNFUAT
+
+Cached UID->package map:
+  10218: {org.chyavorec.app}
+
+Current stats at 2026-11-07-16-47-04 (-5m3s321ms) over +5m3s321ms:
+  Max concurrency: 13 total, 2 foreground
+  
+  u0a218 / org.chyavorec.app:
+    2x pending 1% 1x active-top
+    1x canceled, 1x successful_finish
+
+  Job history:
+          -52s586ms   START: #u0a218/1 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+          -52s319ms   START: #u0a218/2 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+          -52s039ms    STOP: #u0a218/1 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService canceled
+          -50s463ms    STOP: #u0a218/2 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService app called jobFinished
+
+Pending queue:
+  None
+
+Active jobs:
+  N/A
+
+Idle contexts (17):
+  ID=6071003: inactive since -3m38s271ms, stopped because: app called jobFinished
+  ID=7849872: inactive since -10s907ms, stopped because: app called jobFinished
+  ID=24265080: inactive since -26s45ms, stopped because: job rescheduled by app
+  ID=80080874: inactive since -18s378ms, stopped because: app called jobFinished
+  ID=84615350: inactive since -10s696ms, stopped because: app called jobFinished
+  ID=105250084: inactive since -26s422ms, stopped because: app called jobFinished
+  ID=108341695: inactive since -26s609ms, stopped because: app called jobFinished
+  ID=117084755: inactive since -26s566ms, stopped because: app called jobFinished
+  ID=141074513: inactive since -1m56s487ms, stopped because: job rescheduled by app
+  ID=161518146: inactive since -3m16s593ms, stopped because: app called jobFinished
+  ID=187566217: inactive since -3m24s46ms, stopped because: app called jobFinished
+  ID=190130316: inactive since -1m53s763ms, stopped because: job rescheduled by app
+  ID=204050574: inactive since -26s560ms, stopped because: last work dequeued
+  ID=209228215: inactive since -2m12s169ms, stopped because: app called jobFinished
+  ID=214298765: inactive since -3m2s309ms, stopped because: app called jobFinished
+  ID=233118677: inactive since -3m8s80ms, stopped because: timed out while binding
+  ID=264693828: inactive since -3m12s255ms, stopped because: cancel() called by app, callingUid=10146 uid=10146 jobId=-43
+
+Recently completed jobs:
+  -50s455ms
+      870cacc {androidx.work.systemjobscheduler} #u0a218/2 @androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+      u0a218 tag=*job*r/@androidx.work.systemjobscheduler@org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+      Source: uid=u0a218 user=0 pkg=org.chyavorec.app
+      JobInfo:
+        Service: org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService
+        Priority: 300 [DEFAULT]
+        Internal flags: 1 HAS_FOREGROUND_EXEMPTION
+        Requires: charging=false batteryNotLow=true deviceIdle=false
+        Extras: mParcelledData.dataSize=248
+        Network type: NetworkRequest [ NONE id=0, [ Capabilities: INTERNET&TRUSTED&VALIDATED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10218 UnderlyingNetworks: Null] ]
+        Backoff: policy=1 initial=+30s0ms
+      Required constraints: BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY [0x10200002]
+      Dynamic constraints:
+      Satisfied constraints: BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x13600002]
+      Unsatisfied constraints:
+      Num Required Flexible constraints: 0
+      Num Dropped Flexible constraints: 0
+      Constraint history:
+        -52s313ms = FLEXIBILITY [0x200000]
+        -52s313ms = CONNECTIVITY FLEXIBILITY [0x10200000]
+        -52s313ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY [0x10200002]
+        -52s313ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY BACKGROUND_NOT_RESTRICTED [0x10600002]
+        -52s313ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED [0x12600002]
+        -52s313ms = BATTERY_NOT_LOW CONNECTIVITY FLEXIBILITY DEVICE_NOT_DOZING BACKGROUND_NOT_RESTRICTED WITHIN_QUOTA [0x13600002]
+      Uid: active
+      Implicit constraints:
+        readyNotDozing: true
+        readyNotRestrictedInBg: true
+        readyComponentEnabled: true
+      Started with foreground flag: false
+      Network: 101
+      Standby bucket: ACTIVE
+      Enqueue time: -52s313ms
+      Run time: earliest=none, latest=none, original latest=none
+      Cumulative execution time=+1s857ms
+
+
+
+Concurrency:
+  Configuration:
+    concurrency_limit=16 
+    concurrency_screen_off_adjustment_delay_ms=30000 
+    concurrency_pkg_concurrency_limit_ej=3 
+    concurrency_pkg_concurrency_limit_regular=8 
+    concurrency_enable_max_wait_time_bypass=true 
+    concurrency_max_wait_ui_ms=300000 
+    concurrency_max_wait_ej_ms=300000 
+    concurrency_max_wait_regular_ms=1800000 
+    
+    concurrency_max_total_screen_on_normal=12 
+    concurrency_min_ratio_top_screen_on_normal=4 
+    concurrency_max_ratio_top_screen_on_normal=12 
+    concurrency_min_ratio_fgs_screen_on_normal=2 
+    concurrency_max_ratio_fgs_screen_on_normal=12 
+    concurrency_min_ratio_ui_screen_on_normal=1 
+    concurrency_max_ratio_ui_screen_on_normal=12 
+    concurrency_min_ratio_ej_screen_on_normal=1 
+    concurrency_max_ratio_ej_screen_on_normal=12 
+    concurrency_min_ratio_bg_screen_on_normal=0 
+    concurrency_max_ratio_bg_screen_on_normal=6 
+    concurrency_min_ratio_bguser_screen_on_normal=0 
+    concurrency_max_ratio_bguser_screen_on_normal=3 
+    concurrency_min_ratio_bguser_screen_on_normal=0 
+    concurrency_max_ratio_bguser_screen_on_normal=2 
+    
+    concurrency_max_total_screen_on_moderate=8 
+    concurrency_min_ratio_top_screen_on_moderate=3 
+    concurrency_max_ratio_top_screen_on_moderate=8 
+    concurrency_min_ratio_fgs_screen_on_moderate=0 
+    concurrency_max_ratio_fgs_screen_on_moderate=8 
+    concurrency_min_ratio_ui_screen_on_moderate=0 
+    concurrency_max_ratio_ui_screen_on_moderate=8 
+    concurrency_min_ratio_ej_screen_on_moderate=0 
+    concurrency_max_ratio_ej_screen_on_moderate=8 
+    concurrency_min_ratio_bg_screen_on_moderate=0 
+    concurrency_max_ratio_bg_screen_on_moderate=3 
+    concurrency_min_ratio_bguser_screen_on_moderate=0 
+    concurrency_max_ratio_bguser_screen_on_moderate=1 
+    concurrency_min_ratio_bguser_screen_on_moderate=0 
+    concurrency_max_ratio_bguser_screen_on_moderate=1 
+    
+    concurrency_max_total_screen_on_low=6 
+    concurrency_min_ratio_top_screen_on_low=3 
+    concurrency_max_ratio_top_screen_on_low=6 
+    concurrency_min_ratio_fgs_screen_on_low=0 
+    concurrency_max_ratio_fgs_screen_on_low=6 
+    concurrency_min_ratio_ui_screen_on_low=0 
+    concurrency_max_ratio_ui_screen_on_low=6 
+    concurrency_min_ratio_ej_screen_on_low=0 
+    concurrency_max_ratio_ej_screen_on_low=6 
+    concurrency_min_ratio_bg_screen_on_low=0 
+    concurrency_max_ratio_bg_screen_on_low=2 
+    concurrency_min_ratio_bguser_screen_on_low=0 
+    concurrency_max_ratio_bguser_screen_on_low=1 
+    concurrency_min_ratio_bguser_screen_on_low=0 
+    concurrency_max_ratio_bguser_screen_on_low=1 
+    
+    concurrency_max_total_screen_on_critical=6 
+    concurrency_min_ratio_top_screen_on_critical=4 
+    concurrency_max_ratio_top_screen_on_critical=6 
+    concurrency_min_ratio_fgs_screen_on_critical=0 
+    concurrency_max_ratio_fgs_screen_on_critical=6 
+    concurrency_min_ratio_ui_screen_on_critical=0 
+    concurrency_max_ratio_ui_screen_on_critical=6 
+    concurrency_min_ratio_ej_screen_on_critical=0 
+    concurrency_max_ratio_ej_screen_on_critical=6 
+    concurrency_min_ratio_bg_screen_on_critical=0 
+    concurrency_max_ratio_bg_screen_on_critical=1 
+    concurrency_min_ratio_bguser_screen_on_critical=0 
+    concurrency_max_ratio_bguser_screen_on_critical=1 
+    concurrency_min_ratio_bguser_screen_on_critical=0 
+    concurrency_max_ratio_bguser_screen_on_critical=1 
+    
+    concurrency_max_total_screen_off_normal=16 
+    concurrency_min_ratio_top_screen_off_normal=4 
+    concurrency_max_ratio_top_screen_off_normal=16 
+    concurrency_min_ratio_fgs_screen_off_normal=3 
+    concurrency_max_ratio_fgs_screen_off_normal=16 
+    concurrency_min_ratio_ui_screen_off_normal=3 
+    concurrency_max_ratio_ui_screen_off_normal=16 
+    concurrency_min_ratio_ej_screen_off_normal=2 
+    concurrency_max_ratio_ej_screen_off_normal=16 
+    concurrency_min_ratio_bg_screen_off_normal=1 
+    concurrency_max_ratio_bg_screen_off_normal=9 
+    concurrency_min_ratio_bguser_screen_off_normal=0 
+    concurrency_max_ratio_bguser_screen_off_normal=3 
+    concurrency_min_ratio_bguser_screen_off_normal=0 
+    concurrency_max_ratio_bguser_screen_off_normal=3 
+    
+    concurrency_max_total_screen_off_moderate=14 
+    concurrency_min_ratio_top_screen_off_moderate=4 
+    concurrency_max_ratio_top_screen_off_moderate=14 
+    concurrency_min_ratio_fgs_screen_off_moderate=2 
+    concurrency_max_ratio_fgs_screen_off_moderate=14 
+    concurrency_min_ratio_ui_screen_off_moderate=2 
+    concurrency_max_ratio_ui_screen_off_moderate=14 
+    concurrency_min_ratio_ej_screen_off_moderate=2 
+    concurrency_max_ratio_ej_screen_off_moderate=14 
+    concurrency_min_ratio_bg_screen_off_moderate=1 
+    concurrency_max_ratio_bg_screen_off_moderate=7 
+    concurrency_min_ratio_bguser_screen_off_moderate=0 
+    concurrency_max_ratio_bguser_screen_off_moderate=1 
+    concurrency_min_ratio_bguser_screen_off_moderate=0 
+    concurrency_max_ratio_bguser_screen_off_moderate=1 
+    
+    concurrency_max_total_screen_off_low=9 
+    concurrency_min_ratio_top_screen_off_low=2 
+    concurrency_max_ratio_top_screen_off_low=9 
+    concurrency_min_ratio_fgs_screen_off_low=1 
+    concurrency_max_ratio_fgs_screen_off_low=9 
+    concurrency_min_ratio_ui_screen_off_low=1 
+    concurrency_max_ratio_ui_screen_off_low=9 
+    concurrency_min_ratio_ej_screen_off_low=0 
+    concurrency_max_ratio_ej_screen_off_low=9 
+    concurrency_min_ratio_bg_screen_off_low=0 
+    concurrency_max_ratio_bg_screen_off_low=2 
+    concurrency_min_ratio_bguser_screen_off_low=0 
+    concurrency_max_ratio_bguser_screen_off_low=1 
+    concurrency_min_ratio_bguser_screen_off_low=0 
+    concurrency_max_ratio_bguser_screen_off_low=1 
+    
+    concurrency_max_total_screen_off_critical=6 
+    concurrency_min_ratio_top_screen_off_critical=1 
+    concurrency_max_ratio_top_screen_off_critical=6 
+    concurrency_min_ratio_fgs_screen_off_critical=0 
+    concurrency_max_ratio_fgs_screen_off_critical=6 
+    concurrency_min_ratio_ui_screen_off_critical=0 
+    concurrency_max_ratio_ui_screen_off_critical=6 
+    concurrency_min_ratio_ej_screen_off_critical=0 
+    concurrency_max_ratio_ej_screen_off_critical=6 
+    concurrency_min_ratio_bg_screen_off_critical=0 
+    concurrency_max_ratio_bg_screen_off_critical=1 
+    concurrency_min_ratio_bguser_screen_off_critical=0 
+    concurrency_max_ratio_bguser_screen_off_critical=1 
+    concurrency_min_ratio_bguser_screen_off_critical=0 
+    concurrency_max_ratio_bguser_screen_off_critical=1 
+    
+  Screen state: current ON  effective ON
+  Last screen ON: 2026-11-07 16:47:05.249 (-5m2s945ms)
+  Last screen OFF: 2026-11-07 16:46:33.382 (-5m34s812ms)
+  
+  Current work counts: Config={tot=12 mins={1=4, 2=2, 4=1, 8=1, 16=0, 32=0, 64=0} maxs={1=12, 2=12, 4=12, 8=12, 16=6, 32=3, 64=2}}, act res={1=0, 2=0, 4=0, 8=0, 16=0, 32=0, 64=0}, Pending={16=0}, Running={16=0}, Staged={}, # unspecialized remaining=12
+  
+  mLastMemoryTrimLevel: 0
+  
+  Active Package stats:
+  
+  User Grace Period: {}
+  
+  Stats:
+    assignJobsToContexts: count=1481, total=8962.5ms, avg=6.052ms, max calls/s=84 max dur/s=1407.7ms max time=512.4ms
+    refreshSystemState: count=90, total=2372.7ms, avg=26.363ms, max calls/s=12 max dur/s=508.6ms max time=381.5ms
+
+PersistStats: FirstLoad: 0/0/0 LastSave: 3/0/0
+

@@ -1,0 +1,20 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15700         997        3741          85       11382       14703
+Swap:           3071           0        3071
+== host kernel: oom / kvm / segfault
+[Sun Nov  1 18:56:43 2026] Hypervisor detected: KVM
+[Sun Nov  1 18:56:43 2026] kvm-clock: Using msrs 4b564d01 and 4b564d00
+[Sun Nov  1 18:56:43 2026] kvm-clock: using sched offset of 7679154955 cycles
+[Sun Nov  1 18:56:43 2026] clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+[Sun Nov  1 18:56:43 2026] kvm-guest: APIC: eoi() replaced with kvm_guest_apic_eoi_write()
+[Sun Nov  1 18:56:43 2026] Booting paravirtualized kernel on KVM
+[Sun Nov  1 18:56:43 2026] kvm-guest: PV spinlocks disabled, no host support
+[Sun Nov  1 18:56:43 2026] kvm-guest: APIC: send_IPI_mask() replaced with kvm_send_ipi_mask()
+[Sun Nov  1 18:56:43 2026] kvm-guest: APIC: send_IPI_mask_allbutself() replaced with kvm_send_ipi_mask_allbutself()
+[Sun Nov  1 18:56:43 2026] kvm-guest: setup PV IPIs
+[Sun Nov  1 18:56:43 2026] clocksource: Switched to clocksource kvm-clock
+== emulator processes
+   6998       00:03 15312 S    /usr/local/lib/android/sdk/emulator/emulator -kill 3911 -sleep 20
+== emulator crash dumps / logs
+/tmp/android-runner/emu-crash-37.2.13.db

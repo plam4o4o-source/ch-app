@@ -1,0 +1,1 @@
+1.2.34-pre b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500180; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v134/update/42899544863/update.json

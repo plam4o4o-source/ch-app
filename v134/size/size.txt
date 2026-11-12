@@ -1,0 +1,36 @@
+== size-new.apk: 4293102 bytes; 1.2.34 b06d1ce built prodRelease, release ABIs only (arm64-v8a, armeabi-v7a) (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest)
+manifest: =1500184 "1.2.34" "1.2.34" 
+apkanalyzer download size: 4088039 B; file size 4293102 B
+part                    compressed  uncompressed  files
+classes*.dex               3520333       6934884      2
+res                         468406        832536     57
+resources.arsc              238512        238512      1
+assets/                      20217         20217      2
+lib/arm64-v8a                 8642         20472      2
+lib/armeabi-v7a               6601         13116      2
+AndroidManifest.xml           5488         23940      1
+META-INF/                      846          1288      6
+== size-base.apk: 4269526 bytes; 1.2.33 a830b51 built prodRelease, release ABIs only (arm64-v8a, armeabi-v7a) (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest)
+manifest: =1500183 "1.2.33" "1.2.33" 
+apkanalyzer download size: 4066585 B; file size 4269526 B
+part                    compressed  uncompressed  files
+classes*.dex               3500025       6899732      2
+res                         468408        832536     57
+resources.arsc              235600        235600      1
+assets/                      19856         19856      2
+lib/arm64-v8a                 8642         20472      2
+lib/armeabi-v7a               6601         13116      2
+AndroidManifest.xml           5489         23940      1
+META-INF/                      846          1288      6
+== size-rel133.apk: 4269526 bytes; released v1.2.33 (GitHub release asset, real key)
+manifest: =1500183 "1.2.33" "1.2.33" 
+apkanalyzer download size: 4067421 B; file size 4269526 B
+part                    compressed  uncompressed  files
+classes*.dex               3500025       6899732      2
+res                         468408        832536     57
+resources.arsc              235600        235600      1
+assets/                      19856         19856      2
+lib/arm64-v8a                 8642         20472      2
+lib/armeabi-v7a               6601         13116      2
+AndroidManifest.xml           5489         23940      1
+META-INF/                      846          1288      6

@@ -1,0 +1,50 @@
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 1248
+WaitTime: 1254
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 534
+WaitTime: 535
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 385
+WaitTime: 406
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 862
+WaitTime: 865
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 809
+WaitTime: 841
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 994
+WaitTime: 1012
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 799
+WaitTime: 801
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 580
+WaitTime: 612
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 659
+WaitTime: 670
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+TotalTime: 524
+WaitTime: 529

@@ -1,0 +1,36 @@
+app pids seen: ['4426', '5803', '6006', '6740']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=76 total=306
+   11-09 18:06:44.273  4426  4426 I Choreographer: Skipped 76 frames!  The application may be doing too much work on its main thread.
+   11-09 18:06:55.304  4426  4426 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-09 18:06:57.701  4426  4426 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-09 18:07:17.203  4426  4426 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-09 18:09:03.406  4426  4426 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-09 18:10:15.201  6740  6740 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-09 18:10:16.790  6740  6740 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+== Davey: 15
+   davey events=15 max=1781ms median=913ms
+   11-09 18:06:45.996  4426  4434 I HWUI    : Davey! duration=913ms; Flags=1, FrameTimelineVsyncId=9397, IntendedVsync=111486575435, Vsync=111686575427, InputEventId=0, HandleInputStart=111702185788, AnimationStart=111702186028, PerformTravers
+   11-09 18:06:46.415  4426  4434 I HWUI    : Davey! duration=967ms; Flags=0, FrameTimelineVsyncId=9446, IntendedVsync=111919914297, Vsync=112369914252, InputEventId=0, HandleInputStart=112380152274, AnimationStart=112380153195, PerformTravers
+   11-09 18:06:54.655  4426  4434 I HWUI    : Davey! duration=836ms; Flags=0, FrameTimelineVsyncId=9983, IntendedVsync=120403241745, Vsync=120403241745, InputEventId=0, HandleInputStart=120405075547, AnimationStart=120405076589, PerformTravers
+   11-09 18:06:54.955  4426  4434 I HWUI    : Davey! duration=830ms; Flags=0, FrameTimelineVsyncId=9990, IntendedVsync=120436575077, Vsync=120903241725, InputEventId=0, HandleInputStart=120917962986, AnimationStart=120917963697, PerformTravers
+   11-09 18:06:55.272  4426  4492 I HWUI    : Davey! duration=869ms; Flags=0, FrameTimelineVsyncId=10020, IntendedVsync=120919908391, Vsync=121303241709, InputEventId=0, HandleInputStart=121315731060, AnimationStart=121315731781, PerformTraver
+   11-09 18:06:55.436  4426  4434 I HWUI    : Davey! duration=927ms; Flags=1, FrameTimelineVsyncId=10020, IntendedVsync=120919908391, Vsync=121303241709, InputEventId=0, HandleInputStart=121315731060, AnimationStart=121315731781, PerformTraver
+   11-09 18:06:57.865  4426  4435 I HWUI    : Davey! duration=1218ms; Flags=0, FrameTimelineVsyncId=10300, IntendedVsync=123203241633, Vsync=123203241633, InputEventId=0, HandleInputStart=123203743183, AnimationStart=123203743894, PerformTrave
+   11-09 18:06:58.282  4426  4742 I HWUI    : Davey! duration=732ms; Flags=0, FrameTimelineVsyncId=10307, IntendedVsync=123219908299, Vsync=123569908285, InputEventId=0, HandleInputStart=123585845136, AnimationStart=123585845747, PerformTraver
+   11-09 18:07:02.639  4426  4742 I HWUI    : Davey! duration=716ms; Flags=0, FrameTimelineVsyncId=10529, IntendedVsync=128319908095, Vsync=128703241413, InputEventId=0, HandleInputStart=128716555086, AnimationStart=128716555607, PerformTraver
+   11-09 18:07:06.670  4426  4742 I HWUI    : Davey! duration=701ms; Flags=0, FrameTimelineVsyncId=10676, IntendedVsync=132436574597, Vsync=132886574579, InputEventId=0, HandleInputStart=132903733773, AnimationStart=132903734384, PerformTraver
+   11-09 18:07:15.500  4426  4742 I HWUI    : Davey! duration=1033ms; Flags=0, FrameTimelineVsyncId=11459, IntendedVsync=140936574257, Vsync=141119907583, InputEventId=0, HandleInputStart=141127996260, AnimationStart=141127997131, PerformTrave
+   11-09 18:09:04.345  4426  4742 I HWUI    : Davey! duration=1323ms; Flags=1, FrameTimelineVsyncId=16717, IntendedVsync=249453236583, Vsync=249986569895, InputEventId=0, HandleInputStart=250001476877, AnimationStart=250001477769, PerformTrave
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 18:06:29.912  3947  3947 I PERFCHECK: section: L0. Device: Android 16 SDK 36, 14574095
+   11-09 18:06:30.226  3960  3960 I PERFCHECK: section: L1. Update download as a Live Update: 1.2.33-pre versionCode 1500182 → the staged test 1.2.33 1500183, throttled
+   11-09 18:08:54.185  5637  5637 I PERFCHECK: section: L1b. Install the downloaded update system installer → 1.2.33
+   11-09 18:09:11.581   700   776 I ActivityManager: Killing 4426:org.chyavorec.app/u0a227 (adj 0): stop org.chyavorec.app due to installPackageLI
+   11-09 18:09:16.406  5888  5888 I PERFCHECK: section: L2. Event reminder → event Live Update 60 min before; needs the events start time
+   11-09 18:10:10.766  6716  6716 I PERFCHECK: section: L3. API 36 smoke: ribbon and card foil render
+   11-09 18:11:00.428  7061  7061 I PERFCHECK: section: L4. Live Update evidence: raw notification records during the download, the apps notification settings

@@ -1,0 +1,14 @@
+APP W/E lines (pids ['4932', '10138', '10414', '12829', '17263']): 57 in 13 groups
+      16  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       9  W/Parcel: Expecting binder but got null!
+       5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       2  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#cdd#bc#-#-#ff-#-fc#f#d#, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/ViewRootImpl: Not reporting timeline because gpuCompletedTime is #.#E#ms ahead of presentTime. FRAME_TIMELINE_VSYNC_ID=#, IN

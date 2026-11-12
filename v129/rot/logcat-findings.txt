@@ -1,0 +1,45 @@
+app pids seen: ['4595', '6845', '9883', '10164', '10310', '10866', '11080', '11331', '11515']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 20
+   skipped-frames events=20 max=87 total=904
+   10-31 21:30:38.874  4595  4595 I Choreographer: Skipped 75 frames!  The application may be doing too much work on its main thread.
+   10-31 21:30:40.663  4595  4595 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   10-31 21:30:50.530  4595  4595 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   10-31 21:31:02.348  4595  4595 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   10-31 21:31:46.988  6845  6845 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   10-31 21:31:48.460  6845  6845 I Choreographer: Skipped 87 frames!  The application may be doing too much work on its main thread.
+   10-31 21:31:49.915  6845  6845 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   10-31 21:32:14.032  6845  6845 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
+   10-31 21:32:17.758  6845  6845 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+   10-31 21:32:18.553  6845  6845 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   10-31 21:32:19.764  6845  6845 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   10-31 21:32:20.971  6845  6845 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 29
+   davey events=29 max=1927ms median=867ms
+   10-31 21:30:51.061  4595  4614 I OpenGLRenderer: Davey! duration=722ms; Flags=0, FrameTimelineVsyncId=7100, IntendedVsync=102520421691, Vsync=102520421691, InputEventId=0, HandleInputStart=102526764315, AnimationStart=102526764676, PerformT
+   10-31 21:30:51.064  4595  4614 I OpenGLRenderer: Davey! duration=725ms; Flags=0, FrameTimelineVsyncId=7107, IntendedVsync=102537088357, Vsync=103037088337, InputEventId=0, HandleInputStart=103051183983, AnimationStart=103051184904, PerformT
+   10-31 21:31:02.217  4595  4614 I OpenGLRenderer: Davey! duration=805ms; Flags=0, FrameTimelineVsyncId=7584, IntendedVsync=113903754569, Vsync=113903754569, InputEventId=0, HandleInputStart=113916730409, AnimationStart=113916730849, PerformT
+   10-31 21:31:02.835  4595  4614 I OpenGLRenderer: Davey! duration=1355ms; Flags=0, FrameTimelineVsyncId=7591, IntendedVsync=113920421235, Vsync=114253754555, InputEventId=0, HandleInputStart=114263984712, AnimationStart=114263985113, Perform
+   10-31 21:31:03.101  4595  4614 I OpenGLRenderer: Davey! duration=1207ms; Flags=0, FrameTimelineVsyncId=7613, IntendedVsync=114287087887, Vsync=114853754531, InputEventId=0, HandleInputStart=114868981681, AnimationStart=114868982102, Perform
+   10-31 21:31:16.186  4595  4614 I OpenGLRenderer: Davey! duration=701ms; Flags=0, FrameTimelineVsyncId=7996, IntendedVsync=127870420677, Vsync=128220420663, InputEventId=0, HandleInputStart=128227385359, AnimationStart=128227386261, PerformT
+   10-31 21:31:49.040  6845  6858 I OpenGLRenderer: Davey! duration=1927ms; Flags=1, FrameTimelineVsyncId=10081, IntendedVsync=159520419411, Vsync=160970419353, InputEventId=0, HandleInputStart=160980243060, AnimationStart=160980243701, Perfor
+   10-31 21:31:49.570  6845  6860 I OpenGLRenderer: Davey! duration=752ms; Flags=0, FrameTimelineVsyncId=10383, IntendedVsync=161087086015, Vsync=161420419335, InputEventId=0, HandleInputStart=161436844564, AnimationStart=161436845285, Perform
+   10-31 21:31:50.160  6845  6858 I OpenGLRenderer: Davey! duration=933ms; Flags=0, FrameTimelineVsyncId=10477, IntendedVsync=161570419329, Vsync=161753752655, InputEventId=0, HandleInputStart=161766816468, AnimationStart=161766816919, Perform
+   10-31 21:31:50.390  6845  6858 I OpenGLRenderer: Davey! duration=997ms; Flags=0, FrameTimelineVsyncId=10546, IntendedVsync=161787085987, Vsync=162420419295, InputEventId=0, HandleInputStart=162436158326, AnimationStart=162436158987, Perform
+   10-31 21:32:14.302  6845  6858 I OpenGLRenderer: Davey! duration=1418ms; Flags=0, FrameTimelineVsyncId=11345, IntendedVsync=185370418377, Vsync=186537084997, InputEventId=0, HandleInputStart=186552544891, AnimationStart=186552545421, Perfor
+   10-31 21:32:19.773  6845  6860 I OpenGLRenderer: Davey! duration=1089ms; Flags=0, FrameTimelineVsyncId=12402, IntendedVsync=191087084815, Vsync=191270418141, InputEventId=0, HandleInputStart=191274618470, AnimationStart=191274619372, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 21:30:35.459  4565  4565 I PERFCHECK: section: W. First launch and warm-up
+   10-31 21:31:43.812  6819  6819 I PERFCHECK: section: R1. Rotation 6 toggles each on Home, Catalogue 12, a book, Want to read, Calendar
+   10-31 21:35:16.412  9717  9717 I PERFCHECK: section: R2. Process death HOME → am kill → launcher on the same screens
+   10-31 21:35:31.455   479  1477 I ActivityManager: Killing 6845:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-31 21:35:59.880   479  1599 I ActivityManager: Killing 9883:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-31 21:36:21.164   479  1722 I ActivityManager: Killing 10164:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-31 21:37:02.105   479  2046 I ActivityManager: Killing 10310:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-31 21:37:29.589   479  1477 I ActivityManager: Killing 10866:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-31 21:37:43.265 11182 11182 I PERFCHECK: section: R3. Process death, back from Recents Calendar, book
+   10-31 21:37:57.988   479  2034 I ActivityManager: Killing 11080:org.chyavorec.app/u0a174 (adj 700): kill background
+   10-31 21:38:25.853   479  2048 I ActivityManager: Killing 11331:org.chyavorec.app/u0a174 (adj 700): kill background

@@ -1,0 +1,61 @@
+part idlelong; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160886 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## IL-new. Install new, warm-up, library card
+installed new: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## IL-new. Home after a cold start: frames/CPU in 15 s windows, 0-120 s, no input
+REC ribbon-new: 95 frames @8 fps; motion 0 280 1080 398: frames=95 moving-frames(>1.0)=28 max-step=1.9 max-vs-first=5.5 steps=[0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.2 0.1 0.5 0.5 0.2 0.0 0.8 0.0 1.2 0.0 1.0 0.5 0.0 1.5 0.0 0.6 1.0 1.0 0.0 1.1 0.0 1.4 0.1 0.0 1.5 0.8 1.1 0.7 1.3 0.4 1.1 0.9 0.8 1.1 0.4 1.5 0.4 1.2 0.2 1.2 1.0 1.1 0.4 1.3 0.0 0.2 0.3 0.6 0.3 0.0 0.5 0.0 1.4 0.0 1.7 0.0 1.2 1.0 0.7 0.8 1.9 0.0 0.9 1.9 0.0 0.8 0.0 1.0 1.2 1.2 0.2 0.0 1.2 0.0 1.1 0.0 1.1 0.9 0.0 0.0 1.
+IDLE new-home-w1 (15 s, no input): frames +99; cpu=23.1% (ticks 347 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=21.7%, g.chyavorec.app=0.9%, Jit thread pool=0.4%, binder:7771_2=0.1%, DefaultExecutor=0.1%; pid 7771
+IDLE new-home-w2 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7771
+IDLE new-home-w3 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7771
+IDLE new-home-w4 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7771
+IDLE new-home-w5 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7771
+IDLE new-home-w6 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7771
+IDLE new-home-w7 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7771
+## IL-new. Library card: 15 s windows, 0-105 s, no input
+IDLE new-card-w1 (15 s, no input): frames +147; cpu=27.3% (ticks 410 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=25.7%, g.chyavorec.app=0.9%, Jit thread pool=0.5%, DefaultExecutor=0.1%, binder:7771_2=0.1%; pid 7771
+IDLE new-card-w2 (15 s, no input): frames +149; cpu=29.4% (ticks 441 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=28.0%, g.chyavorec.app=0.7%, Jit thread pool=0.4%, binder:7771_2=0.1%, binder:7771_4=0.1%; pid 7771
+IDLE new-card-w3 (15 s, no input): frames +144; cpu=28.3% (ticks 425 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=27.3%, g.chyavorec.app=0.9%, Jit thread pool=0.1%, binder:7771_1=0.1%; pid 7771
+IDLE new-card-w4 (15 s, no input): frames +145; cpu=28.1% (ticks 421 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=27.2%, g.chyavorec.app=0.7%, binder:7771_1=0.1%, FrameMetricsAgg=0.1%; pid 7771
+IDLE new-card-w5 (15 s, no input): frames +147; cpu=29.4% (ticks 441 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=28.3%, g.chyavorec.app=0.7%, HeapTaskDaemon=0.1%, binder:7771_2=0.1%, binder:7771_1=0.1%; pid 7771
+IDLE new-card-w6 (15 s, no input): frames +128; cpu=22.9% (ticks 344 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=22.1%, g.chyavorec.app=0.7%, binder:7771_2=0.1%, FrameMetricsAgg=0.1%; pid 7771
+IDLE new-card-w7 (15 s, no input): frames +131; cpu=23.0% (ticks 345 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=22.1%, g.chyavorec.app=0.6%, binder:7771_4=0.1%, binder:7771_4=0.1%, binder:7771_1=0.1%; pid 7771
+## IL-base. Install base, warm-up, library card
+installed base: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160886;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## IL-base. Home after a cold start: frames/CPU in 15 s windows, 0-120 s, no input
+IDLE base-home-w1 (15 s, no input): frames +99; cpu=19.7% (ticks 295 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=17.5%, g.chyavorec.app=1.1%, Jit thread pool=0.9%, binder:9207_3=0.1%, binder:9207_1=0.1%; pid 9207
+IDLE base-home-w2 (15 s, no input): frames +13; cpu=3.0% (ticks 45 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=2.4%, g.chyavorec.app=0.3%, Jit thread pool=0.3%; pid 9207
+IDLE base-home-w3 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 9207
+IDLE base-home-w4 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 9207
+IDLE base-home-w5 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 9207
+IDLE base-home-w6 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 9207
+IDLE base-home-w7 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 9207
+## IL-base. Library card: 15 s windows, 0-105 s, no input
+IDLE base-card-w1 (15 s, no input): frames +170; cpu=30.6% (ticks 459 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=29.4%, g.chyavorec.app=0.9%, Jit thread pool=0.2%, binder:9207_5=0.1%; pid 9207
+IDLE base-card-w2 (15 s, no input): frames +168; cpu=30.8% (ticks 462 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=29.7%, g.chyavorec.app=0.8%, Jit thread pool=0.2%, binder:9207_5=0.1%, FrameMetricsAgg=0.1%; pid 9207
+IDLE base-card-w3 (15 s, no input): frames +172; cpu=29.6% (ticks 444 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=28.4%, g.chyavorec.app=0.9%, binder:9207_3=0.2%, Jit thread pool=0.1%, FrameMetricsAgg=0.1%; pid 9207
+IDLE base-card-w4 (15 s, no input): frames +175; cpu=32.1% (ticks 481 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=31.0%, g.chyavorec.app=0.8%, binder:9207_5=0.1%, FrameMetricsAgg=0.1%; pid 9207
+IDLE base-card-w5 (15 s, no input): frames +176; cpu=30.0% (ticks 450 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=28.9%, g.chyavorec.app=0.8%, binder:9207_3=0.1%, binder:9207_1=0.1%, Profile Saver=0.1%; pid 9207
+IDLE base-card-w6 (15 s, no input): frames +176; cpu=32.3% (ticks 484 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=31.1%, g.chyavorec.app=0.8%, binder:9207_5=0.2%, binder:9207_1=0.1%, Jit thread pool=0.1%; pid 9207
+IDLE base-card-w7 (15 s, no input): frames +177; cpu=30.4% (ticks 456 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=29.4%, g.chyavorec.app=0.8%, binder:9207_5=0.1%, binder:9207_2=0.1%, FrameMetricsAgg=0.1%; pid 9207
+## COMPLETE
+## logcat findings
+app pids seen: ['6143', '7771', '8772', '9207']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 19
+   skipped-frames events=19 max=78 total=782
+== Davey: 32
+   davey events=32 max=1860ms median=950ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

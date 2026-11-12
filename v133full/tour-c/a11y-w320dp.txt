@@ -1,0 +1,74 @@
+A11Y w320dp/01-home: targets=12 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   MISSING: View@[54,1958][540,2049]; View@[540,1958][1026,2049]
+   SMALL: '' 144x27dp; '' 144x27dp
+A11Y w320dp/01b-home-2: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[1040,1550][1080,1946]
+A11Y w320dp/01c-home-3: targets=13 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[1040,610][1080,1006]
+A11Y w320dp/01d-home-4: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/01e-search-12: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/02-catalog: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Всички' 76x43dp
+A11Y w320dp/02g-search-12: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/03-book: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/03b-book-2: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/03c-book-3: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3
+   SMALL: 'Всички' 84x30dp; 'Книги' 76x30dp; 'Новини' 87x30dp
+A11Y w320dp/04-surprise: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/05-my: targets=10 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[54,1844][519,2006]; View@[560,1844][1026,2006]
+A11Y w320dp/05b-my-2: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/06-card: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Не предлагай отново' 48x41dp
+A11Y w320dp/06b-card-full: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/07-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/08-news: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/08b-news-2: targets=16 MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=3
+   MISSING: View@[905,48][1067,210]
+   SAME-LABEL: 'Запази' x2
+   SMALL: 'Всички' 84x24dp; 'Запазени' 118x24dp; 'Запази' 48x41dp
+A11Y w320dp/09-article: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/09b-article-2: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/09c-reader-sheet: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y w320dp/09d-share-sheet: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y w320dp/10-calendar: targets=16 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[905,48][1067,210]
+A11Y w320dp/11-event: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/11b-event-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/11c-event-share: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y w320dp/12-more: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/12b-more-2: targets=11 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[0,1916][1080,2049]
+A11Y w320dp/13-gallery: targets=3 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[54,1562][1026,2319]
+A11Y w320dp/14-album: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/15-viewer: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/15b-viewer-info: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/16-contacts: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/16b-contacts-2: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/17-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0
+   SAME-LABEL: 'Отвори с приложение за PDF' x3
+A11Y w320dp/17b-documents-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0
+   SAME-LABEL: 'Отвори с приложение за PDF' x3
+A11Y w320dp/18-settings: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18b-settings-2: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18c-settings-3: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18d-settings-4: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18e-text-size: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18f-language: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18g-theme: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18h-notifications: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18i-privacy-policy: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18j-terms: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18k-about: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18l-diagnostics: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/18m-diagnostics-2: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/20-scanner: targets=3 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[413,1317][658,1479]
+A11Y w320dp/20b-scan-manual: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

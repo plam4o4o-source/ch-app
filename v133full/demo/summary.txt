@@ -1,0 +1,122 @@
+part demo; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## Y0. devDebug (org.chyavorec.app.dev, demo data)
+installed: devDebug a830b51 (org.chyavorec.app.dev, demo sign-in DEMO-0001);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.33-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4983 ms
+## Y1. Demo sign-in (DEMO-0001 / demo)
+MY after the demo sign-in: text="ДЕМО ДАННИ — само за разработка, не са реални" text="ДЧ" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" text="БИБЛИОТЕКА" text="Читателска карта" text="Покажи картата на гишето" text="Моите книги" text="1 книга е просрочена" text="Искам да прочета" text="Книги, които искаш да
+## Y2. Моето (signed in) and its screens
+CAP demo/01-my: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · ДЧ · Демо Читател · Читателски № DEMO-0001 · Активно · БИБЛИОТЕКА
+CAP demo/01b-my-2: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Искам да прочета · Книги, които искаш да вземеш · Моето членство · Статус и валидност · Прочетени книги · Историята на четенето и подо
+CAP demo/01c-my-3: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=24 ellipsized=0 | Кои да получаваш: срокове, с · МОЕТО ЧЕТЕНЕ · 2026 · Моята читателска година 2026 · 30 книги · виж историята · Книги по месеци
+CAP demo/02-loans: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Последна синхронизация: Пред · Демо заглавие (просрочено) · Демо автор · Взета на 30.09.2026 · Срокът изтече на 06.11.2026
+CAP demo/03-history: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=30 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Всички години · 2026 · 2025 · 2026 · 30 книги
+CAP demo/03b-history-2: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · взета 31.10.2026 · върната 0 · Железният светилник · Талев, Димитър · взета 24.10.2026 · върната 0 · Бай Ганьо
+CAP demo/04-messages: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 9 ноември 2026, 16:57 · Ново · Запазената книга пристигна · Демо: книгата, която запазих · Лично · 4 ноември 2026, 18:57
+CAP demo/04b-message: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 9 ноември 2026, 16:57 · Ново · Запазената книга пристигна · Демо: книгата, която запазих · Лично · 4 ноември 2026, 18:57
+CAP demo/05-Моето-членство: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Демо Читател · Активно · Членски номер · DEMO-0001 · Член от
+CAP demo/05-Моят-профил: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Демо Читател · Читателски номер · DEMO-0001 · Категория · възрастен
+CAP demo/05-Известия: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Известията се подготвят на с · Съобщения · Съобщения, изпратени от чита · Новини · Нова публикация в сайта · Събития
+CAP demo/06-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Списъкът е празен · Отбележи книга с „Искам да п · Назад · Искам да прочета
+## Y3. Hold ('Заяви книгата') on a book on the shelf
+CAP demo/07-book-hold-button: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | 12 -те вятъра · Гарфилд, Джудит и др. · Налична · Наличност към 06.11.2026 · Искам да прочета · Заяви книгата
+CAP demo/07b-after-hold: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | 12 -те вятъра · Гарфилд, Джудит и др. · Налична · Наличност към 06.11.2026 · Искам да прочета · Заяви книгата
+HOLD (inv 399560): 
+## Y4. Library card with the foil: two different tilts → pixel diff (signed-in demo card)
+SENSORS: Accelerometer (handle=0x00000000, connectio;Accelerometer Uncalibrated ;Game Rotation Vector Sensor ;Gyroscope ;Gyroscope (uncalibrated) ;Gyroscope Bias (debug)    ;Gyroscope Sensor ;Magnetic field sensor ;Magnetic field sensor (uncalibrated) ;Rotation Vector Sensor ;Rotation Vector Sensor    ;accel
+emu console: sensor status → acceleration: enabled. gyroscope: enabled. 
+TILT demo (card region 0 250 1080 1250; barcode at [121 947 959 1063]): noise (same tilt, 1.5 s apart)=0.00; tilt A→B=0.00; B→C=0.00; A→flat=0.00; verdict: no clear change
+TILT demo sensor status: acceleration: enabled. gyroscope: enabled. ; game rotation vector listeners: 0
+## Y5. „Моята читателска година“: loading time (A: fresh process, catalogue not opened; B: after the catalogue tab; C: reopened)
+REC year-A-fresh-process: 160 frames @8 fps; motion all: frames=160 moving-frames(>1.0)=5 max-step=42.5 max-vs-first=52.3 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.2 42.5 26.6 0.1 0.1 0.7 0.1 0.1 0.1 0.1 0.0 0.1 0.1 0.1 0.0 0.0 0.0 0.1 0.1 0.0 0.1 0.0 0.1 0.1 0.0 0.0 0.0 0.1 0.1 0.0 0.0 0.0 0.1 0.0 0.0 0.1 0.1 0.0 0.1 0.1 0.0 0.1 0.0 0.1 0.1 0.1 0.1 0.0 0.0 0.0 0.1 0.1 0.0 0.1 0.0 0.0 0.
+YEAR A-fresh-process: slide visible to uiautomator after 20248 ms (-1 = not within 22 s); frame std every 1 s: 0.0 0.0 0.0 0.0 72.7 10.5 12.2 12.2 12.4 12.3 11.8 12.3 12.2 12.4 12.3 12.0 12.3 24.0 27.8 30.0 
+YEAR A-fresh-process logcat in the window (GC / catalogue / app): GC lines 3, catalogue lines: 
+catalogue results after 2822 ms
+REC year-B-after-catalogue: 163 frames @8 fps; motion all: frames=163 moving-frames(>1.0)=6 max-step=123.7 max-vs-first=123.8 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 123.7 81.2 26.6 0.1 0.1 0.1 0.0 0.1 0.1 0.1 0.0 0.1 0.0 0.1 0.0 0.0 0.0 0.1 0.1 0.1 0.0 0.1 0.0 0.1 0.1 0.0 0.0 0.1 0.0 0.1 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.1 0.1 0.0 0.1 0.0 0.1 0.0 0.1 0.0 0.1 0.0 0.0 0.1 0.0 0.1 0.0 0.0 0.0 0.
+YEAR B-after-catalogue: slide visible to uiautomator after 17833 ms (-1 = not within 22 s); frame std every 1 s: 0.0 0.0 0.0 0.0 72.3 10.6 12.3 12.2 12.4 12.3 11.9 12.3 12.2 12.4 12.3 12.3 12.3 24.0 28.5 30.1 30.1 
+YEAR B-after-catalogue logcat in the window (GC / catalogue / app): GC lines 1, catalogue lines: 
+REC year-C-reopened: 158 frames @8 fps; motion all: frames=158 moving-frames(>1.0)=5 max-step=44.0 max-vs-first=52.3 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.2 44.0 0.9 26.6 0.0 0.1 0.1 0.1 0.1 0.1 0.0 0.1 0.1 0.0 0.1 0.1 0.0 0.1 0.0 0.1 0.0 0.1 0.1 0.0 0.1 0.0 0.0 0.1 0.1 0.0 0.1 0.1 0.1 0.1 0.0 0.1 0.1 0.1 0.1 0.0 0.1 0.1 0.1 0.0 0.1 0.1 0.1 0.0 0.1 0.1 0.0 0.1 0.0 0.0 0.0 0.
+YEAR C-reopened: slide visible to uiautomator after 16971 ms (-1 = not within 22 s); frame std every 1 s: 0.0 0.0 0.0 0.0 6.0 9.8 12.4 12.2 12.5 12.3 11.8 12.4 12.2 12.4 12.3 11.8 12.3 25.8 30.0 30.1 
+YEAR C-reopened logcat in the window (GC / catalogue / app): GC lines 1, catalogue lines:    283 11298 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x73c012be5190~
+CAP demo/08-year-story-slide: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Благодарим ти, че четеш с на · Моята читателска година · 2026 · Затвори · Сподели
+## Y6. Year story: closing with a swipe down (fast 350/200/120 ms, short flick, slow 1200 ms control)
+YEAR swipe down fast350 (30%→85% in 350 ms): closed
+YEAR swipe down fast200 (30%→85% in 200 ms): closed
+YEAR swipe down fast120 (30%→85% in 120 ms): closed
+YEAR swipe down flick (40%→62% in 90 ms): STILL OPEN
+YEAR swipe down slow1200 (25%→80% in 1200 ms): closed
+## Y7. Accessibility tree of the story (test service)
+A11Y service: 11-09 17:08:41.154 12547 12547 I PCA11Y  : connected flags=80
+TREE year-story (32 lines):
+TREE nodes=29 windows: ['11-09 17:09:21.186 12547 12547 I PCDUMP  : tyear-story W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 17:09:21.517 12547 12547 I PCDUMP  : tyear-story W1 type=1 active=true focused=true title=Яворец dev pkg=org.chyavorec.app.dev b=[0,0][1080,2400]']
+TREE clickable=2 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar']; headings: []
+TREE nodes with labelled (custom) actions: 1: 'През 2026 г. взе 30 книги от библиотекат' [2131361799:Следващ слайд;2131361800:Предишен слайд]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+## Y8. Diagnostics › Бързодействие (devDebug)
+PERF CARD dev: Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 2 | Първи кадър: медиана 4227 мс, последен 4094 мс | Пълно показване: медиана 4884 мс, последно 5408 мс | Топъл старт · 1 | Първи кадър: медиана 848 мс, последен 848 мс | Насечени кадри по екрани | my: 9,3 % от 118 кадъра · най-бавен 735 мс | login: 8,8 % от 80 кадъра · най-бавен 859 мс | home: 2,7 % от 182 кадъра · най-бавен 1623 мс | Няма записани грешки. | Диагностика
+PERF CARD dev (scrolled): Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 2 | Първи кадър: медиана 4227 мс, последен 4094 мс | Пълно показване: медиана 4884 мс, последно 5408 мс | Топъл старт · 1 | Първи кадър: медиана 848 мс, последен 848 мс | Насечени кадри по екрани | my: 9,3 % от 118 кадъра · най-бавен 735 мс | login: 8,8 % от 80 кадъра · най-бавен 859 мс | home: 2,7 % от 182 кадъра · най-бавен 1623 мс | Няма записани грешки. | Диагностика
+A11Y AGG: 15 screens analysed, 0 dumps failed; totals MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+== MISSING: 1 distinct
+   View@[42,1995][524,2121]  [1 screens: 01-my]
+== SMALL: 1 distinct
+   'Кои да получаваш: срокове, съб'  [1 screens: 01c-my-3]
+== SAME-LABEL: 1 distinct
+   'Удължи срока' x2  [1 screens: 02-loans]
+== DOUBLE: 0 distinct
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 2 | Първи кадър: медиана 4227 мс, последен 4094 мс | Пълно показване: медиана 4884 мс, последно 5408 мс | Топъл старт · 1 | Първи кадър: медиана 848 мс, последен 848 мс | Насечени кадри по екрани | my: 9,3 % от 118 кадъра · най-бавен 735 мс | l
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 2" text="Първи кадър: медиана 4227 мс, последен 4094 мс" text="Пълно показване: медиана 4884 мс, последно 5408 мс" text="Топъл старт · 1" text="Първи кадър: медиана 848 мс, последен 848 мс" text="Насечени кад
+APP W/E lines (pids ['5888', '9449']): 232 in 104 groups
+       8  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+       6  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
+       4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       4  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       3  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       3  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       2  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       2  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/ziparchive: Unable to open '/data/app/~~CMBt#uo#MVdGFDU-y#mXNA==/org.chyavorec.app.dev-Nlnu#QVACiNdfcYYyT#c#A==/base.dm': 
+       2  W/Parcel: Expecting binder but got null!
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       2  W/Gralloc4: allocator #.x is not supported
+       2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       2  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.PlatformPasswordVisibilitySettingImpl.getSystemShowPasswordSetting(BasicS
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextField_androidKt.rememberPlatformPasswordVisibilitySettings
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-ltb#GB#(BasicSecureTextField.
+## COMPLETE
+## logcat findings
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

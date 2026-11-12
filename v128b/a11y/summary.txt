@@ -1,0 +1,58 @@
+part a11y; APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4 size 4323599 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED]
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2917 ms
+## A. Accessibility (uiautomator): main screens, density 420
+A11Y 01-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 02-search-expanded: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 03-catalog: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 04-book: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   SMALL: 'Сигнатура ЦБ/820(73)/Г 23' 371x30dp; 'Инвентарен номер 399560' 371x30dp
+A11Y 05-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 06-article: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 07-calendar: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 08-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 09-want: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 10-more: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 11-settings: targets=11 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[0,2317][1080,2400]
+A11Y 12-gallery: targets=9 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[42,2321][524,2400]; View@[556,2321][1038,2400]
+A11Y 13-album: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0
+   SAME-LABEL: 'Снимката липсва' x10
+A11Y 14-viewer: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 15-contacts: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 16-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0
+   SAME-LABEL: 'Отвори с приложение за PDF' x3
+A11Y 17-login: targets=6 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: CheckBox@[64,1162][190,1288]
+A11Y 18-scanner-manual: targets=4 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[0,296][1080,860]
+## A2. The same, English, font 1.3 (Home, Catalogue, Book, More)
+A11Y 21-home-en-font130: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'All' 58x42dp
+A11Y 22-catalog-en-font130: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y 23-book-en-font130: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Call number ЦБ/820(73)/Г 23' 371x36dp
+A11Y 24-more-en-font130: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+## A3. Totals over all screens
+A11Y TOTAL: SMALL(<48dp)=4 SAME-LABEL=2 MISSING=5 DOUBLE=0 
+## COMPLETE
+## logcat findings
+app pids seen: ['4716', '6581', '9895']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 12
+   skipped-frames events=12 max=82 total=585
+== Davey: 33
+   davey events=33 max=2115ms median=863ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

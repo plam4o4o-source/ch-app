@@ -1,0 +1,20 @@
+      AppSettings: org.chyavorec.app (10175) importance=DEFAULT userSet=false
+        NotificationChannel{mId='events', mName=Събития, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mFgServiceShown=false, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mDeletedTimeMs=-1, mGroup='2_centre', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedDefaultApp=false, mOriginalImp=3, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false}
+        NotificationChannel{mId='messages', mName=Съобщения, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mFgServiceShown=false, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mDeletedTimeMs=-1, mGroup='2_centre', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedDefaultApp=false, mOriginalImp=3, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false}
+        NotificationChannel{mId='updates', mName=Обновления, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mFgServiceShown=true, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mDeletedTimeMs=-1, mGroup='3_app', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedDefaultApp=false, mOriginalImp=3, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false}
+--
+    11-01 23:37:50.821 config: org.chyavorec.app|removeAutomaticZenRules no changes
+    11-01 23:37:50.890 set_zen_mode: off,org.chyavorec.app|removeAutomaticZenRules
+    11-01 23:38:25.633 config: zmc.onServiceAdded:ComponentInfo{com.google.android.gms/com.google.android.location.settings.DrivingConditionProvider} no changes
+    11-01 23:38:25.635 set_zen_mode: off,zmc.onServiceAdded:ComponentInfo{com.google.android.gms/com.google.android.location.settings.DrivingConditionProvider}
+
+--
+      userId=0 value={com.google.android.apps.diagnosticstool, com.google.android.as/com.google.android.apps.miphone.aiai.common.notification.service.AiAiNotificationAssistantService, com.google.android.as/com.google.android.apps.miphone.aiai.common.notification.service.AiAiNotificationListenerService, com.google.android.apps.safetyhub, com.google.intelligence.sense, com.google.android.apps.nexuslauncher/com.android.launcher3.notification.NotificationListener, com.google.android.apps.wellbeing, com.google.android.dialer, com.google.android.gms, org.chyavorec.app, com.google.android.settings.intelligence, com.google.android.GoogleCamera}
+    All condition providers (2) enabled for current profiles:
+      ComponentInfo{com.google.android.gms/com.google.android.location.settings.DrivingConditionProvider}
+      ComponentInfo{com.google.android.apps.wellbeing/com.google.android.apps.wellbeing.dnd.impl.DndConditionProviderService}
+--
+      key='org.chyavorec.app',
+      numEnqueuedByApp=66,
+      numPostedByApp=1,
+      numUpdatedByApp=65,

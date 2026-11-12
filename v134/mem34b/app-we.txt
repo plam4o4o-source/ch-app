@@ -1,0 +1,11 @@
+APP W/E lines (pids ['5422', '7001']): 93 in 10 groups
+      32  W/Parcel: Expecting binder but got null!
+      32  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       9  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       9  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       2  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/Gralloc4: allocator #.x is not supported
+       2  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#f#ec#-f#-#eb-#e#-#ad#e#e#c, generation=#)
+       2  W/ViewRootImpl: Not reporting timeline because gpuCompletedTime is #.#E#ms ahead of presentTime. FRAME_TIMELINE_VSYNC_ID=#, IN
+       1  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)

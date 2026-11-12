@@ -1,0 +1,1 @@
+1.2.34-card 58b37b2 built prodRelease x86_64 (throwaway key); versionCode 1500190

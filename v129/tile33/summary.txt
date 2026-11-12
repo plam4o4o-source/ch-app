@@ -1,0 +1,54 @@
+part tile33; APK: 1.2.29 7bd2513 (NotifierTest: тестовете за снимки и действия — в NotifierTes); versionCode 1488542; x86_64 libs: 2 size 4100618 bytes
+base APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4; update manifest: no-update stub size 4323599 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.29 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2434 ms
+## T0. The tile service
+QS_TILE services:     org.chyavorec.app/.tile.CardTileService 
+## T1. No card: added with 'cmd statusbar add-tile' → inactive
+sysui_qs_tiles before: internet,bt,flashlight,dnd,alarm,airplane,controls,rotation,qr_code_scanner,battery,cast,screenrecord,custom(com.google.android.gms/.nearby.sharing.SharingTileService),mictoggle,cameratoggle,dbg:mem,ott
+add-tile org.chyavorec.app/.tile.CardTileService: ''
+sysui_qs_tiles after: custom(org.chyavorec.app/.tile.CardTileService),internet,bt,flashlight,dnd,alarm,airplane,controls,rotation,qr_code_scanner,battery,cast,screenrecord,custom(com.google.android.gms/.nearby.sharing.SharingTileService),mictoggle,cameratoggle,dbg:mem,ott
+QS no-card: tile @ 285 630 (page 1): MATCH class="android.widget.LinearLayout" text="" content-desc="Читателска карта" checkable="false" checked="false" clickable="true" bounds="[42,525][529,735]" | ACTIONABLE-ANCESTOR class="android.widget.LinearLayout" text="" content-desc="Читателска карта" checkable="false" checked="false" clickable="true" bounds="[42,525][529,735]" | ACTIONABLE-CHILD none MATCH class="android.widget.TextView" text="Читателска карта" content-desc="" checkable="false" checked="false" clickable="false" bounds="[163,579][418,630]" | ACTIONABLE-ANCESTOR class="android.widget.LinearLayout" text="" content-desc="Читателска карта" checkable="false" checked="false" clickable="true" bounds="[42,525][529,735]" | ACTIONABLE-CHILD none  texts: content-desc="Читателска карта" text="Читателска карта" text="Добави картата" 
+QS no-card: ours in sysui_qs_tiles: 1
+## T2. Tap without a card (unlocked)
+after tap (no card): fg org.chyavorec.app/org.chyavorec.app.MainActivity; app IN FRONT; text="Дигитална карта" text="Въведи номера от своята читателска карта. Приложението ще покаже баркод в същия формат (Code 39), в който библиотеката печата картите." text="Номер на картата" text="Главни латински букви, цифри и „-“" text="Име
+## T3. Card-screen prompt 'Добави в бързите настройки' (API 33; the tile removed first)
+remove-tile: ''; ours in sysui_qs_tiles: 0
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+CARD screen: card shown; prompt SHOWN; dismiss X yes
+system dialog: fg TileRequestDialog; text="Chitalishte Yavorets wants to add the following tile to Quick Settings" content-desc="Читателска карта" text="Читателска карта" text="Do not add tile" text="Add tile" 
+after 'Add tile': prompt gone; fg org.chyavorec.app/org.chyavorec.app.MainActivity
+## T4. With a card: active
+after the prompt: ours in sysui_qs_tiles 1
+QS with-card: tile @ 793 630 (page 4): MATCH class="android.widget.LinearLayout" text="" content-desc="Читателска карта" checkable="false" checked="false" clickable="true" bounds="[550,525][1037,735]" | ACTIONABLE-ANCESTOR class="android.widget.LinearLayout" text="" content-desc="Читателска карта" checkable="false" checked="false" clickable="true" bounds="[550,525][1037,735]" | ACTIONABLE-CHILD none MATCH class="android.widget.TextView" text="Читателска карта" content-desc="" checkable="false" checked="false" clickable="false" bounds="[671,579][926,630]" | ACTIONABLE-ANCESTOR class="android.widget.LinearLayout" text="" content-desc="Читателска карта" checkable="false" checked="false" clickable="true" bounds="[550,525][1037,735]" | ACTIONABLE-CHILD none  texts: content-desc="Читателска карта" text="Читателска карта" text="Покажи на гишето" 
+QS with-card: ours in sysui_qs_tiles: 1
+## T5. Tap (unlocked) → the card screen
+after tap (card): fg org.chyavorec.app/org.chyavorec.app.MainActivity; card screen SHOWN; text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован
+## T6. Locked with a PIN: tap the tile → the unlock prompt first
+set-pin: Pin set to '1234'
+lock screen: isKeyguardShowing=true ; text="Configure physical keyboard" content-desc="Alerted" text="Tap to select language and layout" content-desc="Expand" text="11:04" content-desc="11:04" 
+QS locked: tile @ NOT FOUND (page 4):  texts: 
+QS locked: ours in sysui_qs_tiles: 1
+tile not on screen — click-tile: ''
+after tap while LOCKED: fg NotificationShade; PIN entry SHOWN; app in front no; content-desc="Display brightness" text="Display brightness" content-desc="QR code scanner" text="QR code scanner" text="Updating" content-desc="Battery Saver" text="Battery Saver" text="Unavailable" 
+after entering the PIN: fg org.chyavorec.app/org.chyavorec.app.MainActivity; card screen SHOWN; text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+clear PIN: Lock credential cleared
+## COMPLETE
+## logcat findings
+app pids seen: ['5503']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=33 total=33
+== Davey: 1
+   davey events=1 max=824ms median=824ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

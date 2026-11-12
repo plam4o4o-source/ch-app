@@ -1,0 +1,82 @@
+part card28; APK: 1.2.34-card 58b37b2 built prodRelease x86_64 (throwaway key); versionCode 1500190 size 4280898 bytes
+base APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183 size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34-card 58b37b2 built prodRelease x86_64 (throwaway key); versionCode 1500190 size 4280898 bytes
+installed:  versionCode=1500190 minSdk=26 targetSdk=37  versionName=1.2.34-card 
+app locale: 
+camera permission: 
+screen 1080x2400
+## C28-new-1. API 28: Моето → картата → „Покажи картата“ ×5 (gfxinfo, GC)
+installed new: 1.2.34-card 58b37b2 built prodRelease x86_64 (throwaway key); versionCode 1500190 size 4280898;  versionCode=1500190 minSdk=26 targetSdk=37  versionName=1.2.34-card 
+(dismissed '=Skip': text="Skip" text="Chitalishte Yavorets" text="Community Centre “Vasil Levski – 1922”" )
+CARD28 try 1 (field 540 691, save 540 1104): text="LIBRARY CARD" text="“Vasil Levski – 1922”" text="—" text="Reader no. TEST-12345" content-desc="Barcode for card TEST-12345" text="Show card" text="You entered this number; it hasn’t been verified by the library. It is stored encrypted on this device only
+CARD28: card shown
+GFX c28-new-1    frames=  266  janky=250 (93.98%)  p50=150ms p90=500ms p95=600ms p99=750ms  slowUI=177 slowDraw=225 highInput=2
+C28 new round 1: uiautomator got an idle card screen 5 of 5 times; show-card button at 582 1003
+C28 new round 1: GC lines in logcat for pid 5558: 2; 11-10 18:37:28.663  5558  5569 I g.chyavorec.ap: Background concurrent copying GC freed 144256(5MB) AllocSpace objects, 3(120KB) LOS objects, 39% free, 9MB/15MB, paused 774us total 116.645ms~11-10 18:38:31.003  5558  5569 I g.chyavorec.ap: Background concurrent copying GC freed 138883(5MB) AllocSpace objects, 0(0B) LOS objects, 38% free, 9MB/15MB, paused 526us total 131.579ms~
+## C28-base-1. API 28: Моето → картата → „Покажи картата“ ×5 (gfxinfo, GC)
+installed base: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183 size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Skip': text="Skip" text="Chitalishte Yavorets" text="Community Centre “Vasil Levski – 1922”" )
+CARD28 try 1: no uiautomator dump after saving (the screen never idles) — taken as added
+GFX c28-base-1   frames=  985  janky=973 (98.78%)  p50=200ms p90=400ms p95=450ms p99=650ms  slowUI=576 slowDraw=942 highInput=15
+C28 base round 1: uiautomator got an idle card screen 0 of 5 times; show-card button at 582 1003
+C28 base round 1: GC lines in logcat for pid 6907: 6; 11-10 18:41:12.663  6907  6918 I g.chyavorec.ap: Background concurrent copying GC freed 100011(4MB) AllocSpace objects, 3(2MB) LOS objects, 36% free, 10MB/16MB, paused 760us total 148.967ms~11-10 18:41:56.780  6907  6918 I g.chyavorec.ap: Background concurrent copying GC freed 103513(4MB) AllocSpace objects, 2(1880KB) LOS objects, 34% free, 11MB/17MB, paused 861us total 131.781ms~11-10 18:42:18.922  6907  6918 I g.chyavorec.ap: Background concurrent copying GC freed 106886(4MB) AllocSpace objects, 3(2MB) LOS objects, 36% free, 10MB/16MB, paused 905us total 269.526ms~
+## C28-new-2. API 28: Моето → картата → „Покажи картата“ ×5 (gfxinfo, GC)
+installed new: 1.2.34-card 58b37b2 built prodRelease x86_64 (throwaway key); versionCode 1500190 size 4280898;  versionCode=1500190 minSdk=26 targetSdk=37  versionName=1.2.34-card 
+(dismissed '=Skip': text="Skip" text="Chitalishte Yavorets" text="Community Centre “Vasil Levski – 1922”" )
+CARD28 try 1 (field 540 691, save 540 1104): text="LIBRARY CARD" text="“Vasil Levski – 1922”" text="—" text="Reader no. TEST-12345" content-desc="Barcode for card TEST-12345" text="Show card" text="You entered this number; it hasn’t been verified by the library. It is stored encrypted on this device only
+CARD28: card shown
+GFX c28-new-2    frames=  269  janky=252 (93.68%)  p50=150ms p90=500ms p95=550ms p99=750ms  slowUI=172 slowDraw=229 highInput=2
+C28 new round 2: uiautomator got an idle card screen 5 of 5 times; show-card button at 582 1003
+C28 new round 2: GC lines in logcat for pid 8175: 1; 11-10 18:45:46.725  8175  8186 I g.chyavorec.ap: Background concurrent copying GC freed 146795(6MB) AllocSpace objects, 0(0B) LOS objects, 36% free, 10MB/16MB, paused 862us total 127.722ms~
+## C28-base-2. API 28: Моето → картата → „Покажи картата“ ×5 (gfxinfo, GC)
+installed base: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183 size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Skip': text="Skip" text="Chitalishte Yavorets" text="Community Centre “Vasil Levski – 1922”" )
+CARD28 try 1: no uiautomator dump after saving (the screen never idles) — taken as added
+GFX c28-base-2   frames=  978  janky=968 (98.98%)  p50=200ms p90=400ms p95=450ms p99=600ms  slowUI=551 slowDraw=933 highInput=13
+C28 base round 2: uiautomator got an idle card screen 0 of 5 times; show-card button at 582 1003
+C28 base round 2: GC lines in logcat for pid 9377: 5; 11-10 18:48:51.318  9377  9388 I g.chyavorec.ap: Background concurrent copying GC freed 114648(4MB) AllocSpace objects, 2(1880KB) LOS objects, 34% free, 11MB/17MB, paused 695us total 219.024ms~11-10 18:49:07.925  9377  9388 I g.chyavorec.ap: Background concurrent copying GC freed 101496(4MB) AllocSpace objects, 2(1880KB) LOS objects, 34% free, 11MB/17MB, paused 1.293ms total 121.724ms~11-10 18:49:29.072  9377  9388 I g.chyavorec.ap: Background concurrent copying GC freed 108580(4MB) AllocSpace objects, 3(2MB) LOS objects, 36% free, 10MB/16MB, paused 707us total 171.261ms~
+## C28-sum. Totals
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN:  (card not on screen) Covers on Wi-Fi only | On mobile data, only covers already loaded — no new downloads | Clear temporary data | News, events, catalogue, covers and images saved for reading offline, and downloaded documents. They’re downloaded again when needed | Privacy | Require unlock for personal screens | Can’t be turned on: the phone has no screen lock. Set a PIN, pattern or password in th
+DIAG SCREEN (scrolled): text="Covers on Wi-Fi only" text="On mobile data, only covers already loaded — no new downloads" text="Clear temporary data" text="News, events, catalogue, covers and images saved for reading offline, and downloaded documents. They’re downloaded again when needed" text="Privacy" text="Require unlock for personal screens" text="Can’t be turned on: the phone has no screen lock. Set a PIN, pattern or password in the phone’s settings." text="Information" text="Privacy policy" text="Delete account and data" text="Request deletion of your reader account and its data (chyavorec.org)" text="Terms of use" text="About the app" text="Version 1.2.33" text="Diagnostics" text="Error log — kept on this dev
+APP W/E lines (pids ['5558', '6907', '8175', '9377']): 96 in 24 groups
+       8  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->getScaleX()F (dark greylist, linking)
+       8  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setPivotX(F)Z (dark greylist, linking)
+       5  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       4  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setScaleY(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->getMatrix(Landroid/graphics/Matrix;)V (dark greylist, linki
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setLayerPaint(Landroid/graphics/Paint;)Z (dark greylist, li
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setCameraDistance(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setRotationX(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setClipToOutline(Z)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setLayerType(I)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setRotationY(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setAlpha(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setElevation(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setRotation(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setTranslationY(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setOutline(Landroid/graphics/Outline;)Z (dark greylist, lin
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setScaleX(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setTranslationX(F)Z (dark greylist, linking)
+       1  W/g.chyavorec.ap: Long monitor contention with owner main (#) at boolean android.os.BinderProxy.transactNative(int, android.os.P
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#-de#-#-a#-#c#a#daae#b#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=ebb#d#f-f#-#f-#e#-#e#c#e#, generation=#)
+## COMPLETE
+## logcat findings
+app pids seen: ['5558', '6907', '8175', '9377']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 12
+   skipped-frames events=12 max=51 total=433
+== Davey: 36
+   davey events=36 max=1566ms median=760ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

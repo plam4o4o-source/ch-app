@@ -1,0 +1,1 @@
+1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub

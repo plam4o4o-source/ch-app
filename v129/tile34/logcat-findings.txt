@@ -1,0 +1,23 @@
+app pids seen: ['5064']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=32 total=62
+   10-31 23:01:11.427  5064  5064 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   10-31 23:01:12.363  5064  5064 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=783ms median=763ms
+   10-31 23:01:12.280  5064  5084 I OpenGLRenderer: Davey! duration=763ms; Flags=1, FrameTimelineVsyncId=5594, IntendedVsync=69581352344, Vsync=69881352314, InputEventId=0, HandleInputStart=69885415962, AnimationStart=69885416804, PerformTrave
+   10-31 23:01:12.686  5064  5084 I OpenGLRenderer: Davey! duration=783ms; Flags=0, FrameTimelineVsyncId=5651, IntendedVsync=69964685662, Vsync=70464685642, InputEventId=0, HandleInputStart=70486756041, AnimationStart=70486757032, PerformTrave
+   10-31 23:01:32.416  5064  5076 I OpenGLRenderer: Davey! duration=724ms; Flags=0, FrameTimelineVsyncId=7119, IntendedVsync=89598018210, Vsync=89648018208, InputEventId=0, HandleInputStart=89649529259, AnimationStart=89649529579, PerformTrave
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 23:01:10.085  5058  5058 I PERFCHECK: section: W. First launch and warm-up
+   10-31 23:01:48.763  6178  6178 I PERFCHECK: section: T0. The tile service
+   10-31 23:01:48.850  6187  6187 I PERFCHECK: section: T1. No card: added with cmd statusbar add-tile → inactive
+   10-31 23:02:07.151  6350  6350 I PERFCHECK: section: T2. Tap without a card unlocked
+   10-31 23:02:15.428  6395  6395 I PERFCHECK: section: T3. Card-screen prompt Добави в бързите настройки API 34; the tile removed first
+   10-31 23:02:50.780  6811  6811 I PERFCHECK: section: T4. With a card: active
+   10-31 23:03:21.790  7026  7026 I PERFCHECK: section: T5. Tap unlocked → the card screen
+   10-31 23:03:32.016  7092  7092 I PERFCHECK: section: T6. Locked with a PIN: tap the tile → the unlock prompt first

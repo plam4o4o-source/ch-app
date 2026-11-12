@@ -1,0 +1,39 @@
+app pids seen: ['4739', '5960', '7079']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=60 total=209
+   10-31 21:30:06.928  4739  4739 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   10-31 21:30:29.015  4739  4739 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   10-31 21:30:50.823  5960  5960 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   10-31 21:30:51.435  5960  5960 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   10-31 21:33:13.291  7079  7079 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+== Davey: 9
+   davey events=9 max=1372ms median=850ms
+   10-31 21:30:07.922  4739  4754 I OpenGLRenderer: Davey! duration=865ms; Flags=1, FrameTimelineVsyncId=5653, IntendedVsync=81763444254, Vsync=82113444240, InputEventId=0, HandleInputStart=82117601270, AnimationStart=82117601921, PerformTrave
+   10-31 21:30:08.230  4739  4752 I OpenGLRenderer: Davey! duration=748ms; Flags=0, FrameTimelineVsyncId=5708, IntendedVsync=82163444238, Vsync=82613444220, InputEventId=0, HandleInputStart=82649979164, AnimationStart=82649979665, PerformTrave
+   10-31 21:30:20.492  4739  5071 I OpenGLRenderer: Davey! duration=775ms; Flags=0, FrameTimelineVsyncId=6482, IntendedVsync=94346777084, Vsync=94630110406, InputEventId=0, HandleInputStart=94647982101, AnimationStart=94647982832, PerformTrave
+   10-31 21:30:29.004  4739  5071 I OpenGLRenderer: Davey! duration=738ms; Flags=0, FrameTimelineVsyncId=6796, IntendedVsync=102546776756, Vsync=102613443420, InputEventId=0, HandleInputStart=102624217100, AnimationStart=102624217361, PerformT
+   10-31 21:30:29.488  4739  5305 I OpenGLRenderer: Davey! duration=1372ms; Flags=0, FrameTimelineVsyncId=6803, IntendedVsync=102630110086, Vsync=103063443402, InputEventId=0, HandleInputStart=103069183239, AnimationStart=103069183841, Perform
+   10-31 21:30:51.370  5960  5994 I OpenGLRenderer: Davey! duration=1052ms; Flags=1, FrameTimelineVsyncId=8464, IntendedVsync=125096775854, Vsync=125630109166, InputEventId=0, HandleInputStart=125635809521, AnimationStart=125635810072, Perform
+   10-31 21:30:52.027  5960  5994 I OpenGLRenderer: Davey! duration=1010ms; Flags=0, FrameTimelineVsyncId=8599, IntendedVsync=125663442498, Vsync=126230109142, InputEventId=0, HandleInputStart=126246476949, AnimationStart=126246477680, Perform
+   10-31 21:32:14.982  5960  6058 I OpenGLRenderer: Davey! duration=850ms; Flags=0, FrameTimelineVsyncId=12657, IntendedVsync=208913439168, Vsync=209246772488, InputEventId=0, HandleInputStart=209388623548, AnimationStart=209388624720, Perform
+   10-31 21:32:15.672  5960  5973 I OpenGLRenderer: Davey! duration=711ms; Flags=0, FrameTimelineVsyncId=12697, IntendedVsync=209396772482, Vsync=209746772468, InputEventId=0, HandleInputStart=209760085675, AnimationStart=209760107405, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 21:30:05.133  4733  4733 I PERFCHECK: section: W. First launch and warm-up
+   10-31 21:30:46.695  5779  5779 I PERFCHECK: section: S0. Package: permissions no CAMERA; Google Play services on the image
+   10-31 21:30:47.517  5909  5909 I PERFCHECK: section: S1. Scan from Home API 34, camera: Number of camera devices: 0
+   10-31 21:31:07.783  6315  6315 I PERFCHECK: m-scan-home
+   10-31 21:31:45.609  6642  6642 I PERFCHECK: section: S2. Back / cancel
+   10-31 21:32:03.705  6858  6858 I PERFCHECK: section: S3. Manual entry 399560
+   10-31 21:32:31.344  7035  7035 I PERFCHECK: section: S4. Scan from the launcher shortcut scan, ~60 s later the module may have downloaded
+   10-31 21:33:11.580  7069  7069 I PERFCHECK: m-scan-shortcut
+   10-31 21:34:02.484  7425  7425 I PERFCHECK: section: S5. The button on the screen again
+   10-31 21:34:36.604  7620  7620 I PERFCHECK: section: LG1. Sign-in on a fresh install password-manager flag unset: no credential query, no crash API 34
+   10-31 21:34:54.871  7793  7793 I PERFCHECK: m-login-open
+   10-31 21:35:10.088  7876  7876 I PERFCHECK: section: LG2. Card number field
+   10-31 21:35:16.676  7936  7936 I PERFCHECK: section: LG3. PIN OutlinedSecureTextField: the last digit shows briefly; the eye toggle
+   10-31 21:35:59.947  8241  8241 I PERFCHECK: section: LG4. Запомни ме row: one labelled checkbox
+   10-31 21:36:17.563  8396  8396 I PERFCHECK: m-login-open2

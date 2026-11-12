@@ -1,0 +1,13 @@
+== base 1.2.32 87ef20e: release-config APK (arm64-v8a + armeabi-v7a, minified, throwaway key)
+APK size: 4153198 bytes
+manifest:  A: http://schemas.android.com/apk/res/android:versionCode(0x0101021b)=1488545  A: http://schemas.android.com/apk/res/android:versionName(0x0101021c)="1.2.32" (Raw: "1.2.32")  A: http://schemas.android.com/apk/res/android:extractNativeLibs(0x010104ea)=true 
+uses-permission: 'android.permission.INTERNET' 'android.permission.ACCESS_NETWORK_STATE' 'android.permission.POST_NOTIFICATIONS' 'android.permission.USE_BIOMETRIC' 'android.permission.REQUEST_INSTALL_PACKAGES' 'android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION' 'android.permission.FOREGROUND_SERVICE' 'android.permission.FOREGROUND_SERVICE_DATA_SYNC' 'android.permission.WAKE_LOCK' 'android.permission.RECEIVE_BOOT_COMPLETED' 'org.chyavorec.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION' 
+part                    compressed  uncompressed  files
+classes*.dex               3395623       6707860      2
+res                         468365        832408     57
+resources.arsc              224392        224392      1
+assets/                      19210         19210      2
+lib/arm64-v8a                 8642         20472      2
+lib/armeabi-v7a               6601         13116      2
+AndroidManifest.xml           5463         23760      1
+META-INF/                      846          1288      6

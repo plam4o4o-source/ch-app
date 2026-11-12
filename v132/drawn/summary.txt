@@ -1,0 +1,54 @@
+part drawn; APK: 1.2.32 c1b5ef5 (Какво ново: версия 1.2.32); versionCode 1488545; x86_64 libs: 2 size 4151654 bytes
+base APK: 1.2.31 6f44326 (Профил за бърз старт: генериран на емулатор от e20a974); versionCode 1488544; x86_64 libs: 2; update manifest: no-update stub size 4138646 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## F0. Fresh install, first launch (onboarding: ReportDrawn)
+DRAWN fresh-install (onboarding): Fully drawn org.chyavorec.app/.MainActivity: +4s240ms
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+catalogue results after 3273 ms
+## F1. Cold starts online ×6 (Home: ReportDrawnWhen)
+DRAWN online: TotalTime n=6 min=1412ms median=1767ms max=2276ms; fully drawn n=6 median=2328ms min=1767 max=2812 all=[2812, 2488, 2281, 2375, 1767, 1938]; without line: 0
+## F2. Cold starts offline ×6 (cached news)
+offline: airplane=1
+DRAWN offline: TotalTime n=6 min=1276ms median=1342ms max=1522ms; fully drawn n=6 median=1584ms min=1362 max=1780 all=[1780, 1651, 1510, 1362, 1736, 1518]; without line: 0
+## F3. Empty cache (Settings › Изчисти временните данни), then a cold start online ×4
+cache cleared: snackbar ''; app cache dir: 96 KB
+cache cleared: snackbar ''; app cache dir: 96 KB
+cache cleared: snackbar ''; app cache dir: 96 KB
+cache cleared: snackbar ''; app cache dir: 100 KB
+DRAWN empty-online: TotalTime n=4 min=1307ms median=1402ms max=1643ms; fully drawn n=4 median=2078ms min=2024 max=2579 all=[2105, 2050, 2024, 2579]; without line: 0
+## F4. Empty cache, then a cold start offline ×4 (nothing cached: the error/offline state)
+cache cleared: snackbar ''; app cache dir: 100 KB
+offline: airplane=1
+cache cleared: snackbar ''; app cache dir: 100 KB
+offline: airplane=1
+cache cleared: snackbar ''; app cache dir: 108 KB
+offline: airplane=1
+cache cleared: snackbar ''; app cache dir: 108 KB
+offline: airplane=1
+DRAWN empty-offline: TotalTime n=4 min=1268ms median=1311ms max=1380ms; fully drawn n=4 median=1880ms min=1453 max=2294 all=[1873, 1453, 2294, 1888]; without line: 0
+empty+offline Home: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="Няма връзка" text="Провери интернет връзката си и опитай отн
+## F5. After pm clear (onboarding again) ×2
+DRAWN cleared: TotalTime n=2 min=1433ms median=1544ms max=1656ms; fully drawn n=2 median=1544ms min=1433 max=1656 all=[1656, 1433]; without line: 0
+## F6. All 'Fully drawn' lines of the app in logcat
+      1 Fully drawn org.chyavorec.app/.MainActivity: +4s240ms
+      1 Fully drawn org.chyavorec.app/.MainActivity: +2s812ms
+      1 Fully drawn org.chyavorec.app/.MainActivity: +2s579ms
+      1 Fully drawn org.chyavorec.app/.MainActivity: +2s50ms
+      1 Fully drawn org.chyavorec.app/.MainActivity: +2s488ms
+## COMPLETE
+## logcat findings
+app pids seen: ['5736', '7712', '7862', '7988', '8182', '8273', '8354', '8510', '8578', '8641', '8704', '8766', '8825', '9421', '9828', '10193', '10756', '10870', '11347', '11597', '12087', '12382', '12936', '13227', '13693', '13968', '14138', '14262', '14309']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 18
+   skipped-frames events=18 max=53 total=693
+== Davey: 18
+   davey events=18 max=1327ms median=826ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

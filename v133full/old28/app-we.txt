@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5602', '6489', '7384', '12443', '12875']): 111 in 88 groups
+       7  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       5  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       2  W/BasicSecureTextField: 	at ow#.b(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       2  W/BasicSecureTextField: 	at x#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       2  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       2  W/GooglePlayServicesUtil: Google Play services out of date for org.chyavorec.app.  Requires # but found #
+       2  W/GoogleApiManager: The service for je# is not available: hr#{statusCode=SERVICE_VERSION_UPDATE_REQUIRED, resolution=null, message
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ee#-#aa#-#b-#fa-#f#f#daff#, generation=#)
+       1  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+       1  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+       1  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+       1  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+       1  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+       1  W/ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@f#b#
+       1  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       1  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       1  W/BasicSecureTextField: 	at yz#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at yz#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at ow#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at aq#.invoke(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at on#.c(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at on#.invoke(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at j#.i(Unknown Source:#)
+       1  W/BasicSecureTextField: 	at bq#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at h#.f(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at on#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at on#.f(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at d#.invoke(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at q#.v(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at j#.o(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at dq#.j(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at mb#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at h#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at dq#.A(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at yr#.m(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at tr#.Q(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)

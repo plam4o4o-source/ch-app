@@ -1,0 +1,208 @@
+part card35; APK: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+base APK: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+installed:  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+block order: new base base new (each a fresh install; the card added by hand in each)
+## C new-1: fresh install, card added by hand, then 5× (cold start, 5 s, Моето › Читателска карта › Покажи картата) + no-wait + cleared GL cache
+installed new-1: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682;  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+COORDS: My 540 2274, card tile 258 1182, show-card 582 1068
+COORDS: fullscreen card reached
+new-1 GL shader cache after the first card: 
+TRIAL new-1-1-wait: start TotalTime: 4039; taps after the first frame: My +5352 ms, card +7425 ms, show +10916 ms; fullscreen reached: yes
+FS new-1-1-wait-cardscreen: n=16 slowest=599.9ms (frame #12; ui 231.3 rt 193.6 issue 63.2 flags 0) first5=[69, 129, 257, 546, 514] >32ms=16 >64ms=16 >100ms=15 span=2333ms
+FS new-1-1-wait-full: n=13 slowest=1199.5ms (frame #5; ui 824.2 rt 268.9 issue 165.9 flags 0) first5=[148, 303, 418, 1164, 1199] >32ms=13 >64ms=13 >100ms=13 span=2067ms
+TRIAL new-1-2-wait: start TotalTime: 3756; taps after the first frame: My +5344 ms, card +7405 ms, show +11350 ms; fullscreen reached: yes
+FS new-1-2-wait-cardscreen: n=15 slowest=662.0ms (frame #12; ui 219.9 rt 276.7 issue 130.7 flags 0) first5=[79, 130, 260, 529, 491] >32ms=15 >64ms=15 >100ms=14 span=2217ms
+FS new-1-2-wait-full: n=13 slowest=1044.2ms (frame #6; ui 618.6 rt 252.7 issue 126.3 flags 0) first5=[289, 464, 526, 626, 1041] >32ms=13 >64ms=13 >100ms=13 span=2333ms
+TRIAL new-1-3-wait: start TotalTime: 3204; taps after the first frame: My +5337 ms, card +7400 ms, show +11052 ms; fullscreen reached: yes
+FS new-1-3-wait-cardscreen: n=15 slowest=666.9ms (frame #11; ui 237.8 rt 264.4 issue 63.0 flags 0) first5=[78, 141, 355, 581, 596] >32ms=15 >64ms=15 >100ms=14 span=2050ms
+FS new-1-3-wait-full: n=13 slowest=935.0ms (frame #6; ui 280.5 rt 603.7 issue 438.6 flags 0) first5=[255, 395, 205, 397, 611] >32ms=13 >64ms=13 >100ms=13 span=2367ms
+TRIAL new-1-4-wait: start TotalTime: 3462; taps after the first frame: My +5445 ms, card +7509 ms, show +11480 ms; fullscreen reached: yes
+FS new-1-4-wait-cardscreen: n=16 slowest=664.2ms (frame #12; ui 244.0 rt 233.6 issue 62.1 flags 0) first5=[72, 133, 267, 550, 593] >32ms=16 >64ms=16 >100ms=15 span=2200ms
+FS new-1-4-wait-full: n=15 slowest=774.2ms (frame #6; ui 388.9 rt 371.9 issue 271.4 flags 0) first5=[191, 252, 473, 376, 659] >32ms=15 >64ms=15 >100ms=15 span=2450ms
+TRIAL new-1-5-wait: start TotalTime: 3114; taps after the first frame: My +5474 ms, card +7549 ms, show +11167 ms; fullscreen reached: yes
+FS new-1-5-wait-cardscreen: n=16 slowest=609.1ms (frame #4; ui 274.7 rt 222.9 issue 102.7 flags 0) first5=[150, 361, 188, 609, 481] >32ms=16 >64ms=16 >100ms=16 span=2217ms
+FS new-1-5-wait-full: n=14 slowest=825.8ms (frame #6; ui 359.3 rt 263.1 issue 157.5 flags 0) first5=[197, 350, 500, 489, 723] >32ms=14 >64ms=14 >100ms=14 span=2217ms
+TRIAL new-1-now: start TotalTime: 3114; taps after the first frame: My +903 ms, card +1578 ms, show +2603 ms; fullscreen reached: NO
+FS new-1-now-full: n=5 slowest=361.6ms (frame #5; ui 179.2 rt 129.7 issue 78.3 flags 0) first5=[183, 148, 262, 332, 362] >32ms=5 >64ms=5 >100ms=5 span=300ms
+TRIAL new-1-coldgl: start TotalTime: 2672; taps after the first frame: My +5676 ms, card +7756 ms, show +11190 ms; fullscreen reached: yes
+FS new-1-coldgl-cardscreen: n=14 slowest=614.7ms (frame #5; ui 161.2 rt 292.5 issue 143.7 flags 0) first5=[70, 125, 240, 597, 615] >32ms=14 >64ms=14 >100ms=13 span=2200ms
+FS new-1-coldgl-full: n=14 slowest=735.8ms (frame #5; ui 284.4 rt 400.1 issue 301.7 flags 0) first5=[178, 351, 420, 627, 736] >32ms=14 >64ms=14 >100ms=14 span=2317ms
+TRIAL new-1-now-coldgl: start TotalTime: 2880; taps after the first frame: My +73 ms, card +618 ms, show +1862 ms; fullscreen reached: NO
+FS new-1-now-coldgl-full: n=8 slowest=908.7ms (frame #4; ui 461.2 rt 226.1 issue 87.3 flags 0) first5=[502, 471, 685, 909, 323] >32ms=8 >64ms=8 >100ms=8 span=1467ms
+new-1 GL shader cache at the end: 
+## C base-2: fresh install, card added by hand, then 5× (cold start, 5 s, Моето › Читателска карта › Покажи картата) + no-wait + cleared GL cache
+installed base-2: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+COORDS: My 540 2274, card tile 258 1182, show-card 582 1068
+COORDS: fullscreen card reached
+base-2 GL shader cache after the first card: 
+TRIAL base-2-1-wait: start TotalTime: 3203; taps after the first frame: My +5387 ms, card +7452 ms, show +11133 ms; fullscreen reached: yes
+FS base-2-1-wait-cardscreen: n=16 slowest=615.4ms (frame #9; ui 223.2 rt 251.4 issue 129.5 flags 0) first5=[71, 119, 379, 594, 507] >32ms=16 >64ms=16 >100ms=15 span=2333ms
+FS base-2-1-wait-full: n=15 slowest=768.7ms (frame #6; ui 245.3 rt 363.2 issue 247.1 flags 0) first5=[374, 343, 393, 383, 700] >32ms=15 >64ms=15 >100ms=15 span=2683ms
+TRIAL base-2-2-wait: start TotalTime: 3184; taps after the first frame: My +5372 ms, card +7445 ms, show +10951 ms; fullscreen reached: yes
+FS base-2-2-wait-cardscreen: n=16 slowest=694.9ms (frame #11; ui 221.5 rt 195.9 issue 63.0 flags 0) first5=[77, 137, 367, 635, 593] >32ms=16 >64ms=16 >100ms=15 span=2433ms
+FS base-2-2-wait-full: n=13 slowest=826.6ms (frame #5; ui 402.9 rt 336.7 issue 232.4 flags 0) first5=[216, 368, 391, 634, 827] >32ms=13 >64ms=13 >100ms=13 span=2000ms
+TRIAL base-2-3-wait: start TotalTime: 3301; taps after the first frame: My +5449 ms, card +7509 ms, show +11293 ms; fullscreen reached: yes
+FS base-2-3-wait-cardscreen: n=16 slowest=637.7ms (frame #11; ui 203.3 rt 264.4 issue 135.4 flags 0) first5=[70, 129, 303, 618, 564] >32ms=16 >64ms=16 >100ms=15 span=2367ms
+FS base-2-3-wait-full: n=13 slowest=1121.8ms (frame #5; ui 470.3 rt 347.1 issue 244.7 flags 0) first5=[457, 484, 469, 725, 1122] >32ms=13 >64ms=13 >100ms=13 span=2533ms
+TRIAL base-2-4-wait: start TotalTime: 3057; taps after the first frame: My +5455 ms, card +7516 ms, show +10785 ms; fullscreen reached: yes
+FS base-2-4-wait-cardscreen: n=16 slowest=659.3ms (frame #4; ui 263.2 rt 192.5 issue 147.5 flags 0) first5=[66, 177, 500, 659, 147] >32ms=16 >64ms=16 >100ms=15 span=2050ms
+FS base-2-4-wait-full: n=13 slowest=768.2ms (frame #4; ui 204.5 rt 380.7 issue 253.6 flags 0) first5=[200, 326, 504, 768, 661] >32ms=13 >64ms=13 >100ms=13 span=2167ms
+TRIAL base-2-5-wait: start TotalTime: 3625; taps after the first frame: My +5515 ms, card +7570 ms, show +11007 ms; fullscreen reached: yes
+FS base-2-5-wait-cardscreen: n=16 slowest=610.4ms (frame #11; ui 221.1 rt 195.4 issue 61.4 flags 0) first5=[82, 199, 316, 585, 483] >32ms=16 >64ms=16 >100ms=15 span=2217ms
+FS base-2-5-wait-full: n=13 slowest=880.3ms (frame #5; ui 437.5 rt 266.4 issue 164.7 flags 0) first5=[320, 362, 389, 847, 880] >32ms=13 >64ms=13 >100ms=13 span=2317ms
+TRIAL base-2-now: start TotalTime: 3055; taps after the first frame: My +85 ms, card +974 ms, show +2014 ms; fullscreen reached: NO
+FS base-2-now-full: n=13 slowest=813.4ms (frame #4; ui 321.3 rt 205.1 issue 3.0 flags 0) first5=[453, 334, 455, 813, 670] >32ms=13 >64ms=13 >100ms=12 span=1800ms
+TRIAL base-2-coldgl: start TotalTime: 2866; taps after the first frame: My +5344 ms, card +7423 ms, show +10823 ms; fullscreen reached: yes
+FS base-2-coldgl-cardscreen: n=16 slowest=622.7ms (frame #4; ui 155.9 rt 267.6 issue 139.2 flags 0) first5=[80, 127, 371, 623, 575] >32ms=16 >64ms=16 >100ms=15 span=2183ms
+FS base-2-coldgl-full: n=11 slowest=886.4ms (frame #3; ui 393.3 rt 263.0 issue 156.1 flags 0) first5=[181, 730, 886, 357, 710] >32ms=11 >64ms=11 >100ms=11 span=1833ms
+TRIAL base-2-now-coldgl: start TotalTime: 3171; taps after the first frame: My +590 ms, card +1262 ms, show +2422 ms; fullscreen reached: NO
+FS base-2-now-coldgl-full: n=8 slowest=637.0ms (frame #4; ui 239.8 rt 200.9 issue 26.3 flags 0) first5=[191, 357, 449, 637, 485] >32ms=8 >64ms=8 >100ms=8 span=950ms
+base-2 GL shader cache at the end: 
+## C base-3: fresh install, card added by hand, then 5× (cold start, 5 s, Моето › Читателска карта › Покажи картата) + no-wait + cleared GL cache
+installed base-3: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+COORDS: My 540 2274, card tile 258 1182, show-card 582 1068
+COORDS: fullscreen card reached
+base-3 GL shader cache after the first card: 
+TRIAL base-3-1-wait: start TotalTime: 3233; taps after the first frame: My +5573 ms, card +7636 ms, show +11415 ms; fullscreen reached: yes
+FS base-3-1-wait-cardscreen: n=16 slowest=616.8ms (frame #7; ui 288.5 rt 243.7 issue 57.5 flags 0) first5=[69, 128, 293, 567, 566] >32ms=16 >64ms=16 >100ms=15 span=2467ms
+FS base-3-1-wait-full: n=14 slowest=821.6ms (frame #5; ui 264.4 rt 443.7 issue 311.5 flags 0) first5=[234, 322, 373, 713, 822] >32ms=14 >64ms=14 >100ms=14 span=2383ms
+TRIAL base-3-2-wait: start TotalTime: 3241; taps after the first frame: My +5545 ms, card +7619 ms, show +11152 ms; fullscreen reached: yes
+FS base-3-2-wait-cardscreen: n=15 slowest=657.4ms (frame #15; ui 172.1 rt 349.2 issue 141.1 flags 0) first5=[70, 124, 383, 651, 598] >32ms=15 >64ms=15 >100ms=14 span=2050ms
+FS base-3-2-wait-full: n=13 slowest=713.7ms (frame #4; ui 167.9 rt 369.5 issue 254.7 flags 0) first5=[217, 442, 577, 714, 700] >32ms=13 >64ms=13 >100ms=13 span=2150ms
+TRIAL base-3-3-wait: start TotalTime: 3143; taps after the first frame: My +5560 ms, card +7632 ms, show +11300 ms; fullscreen reached: yes
+FS base-3-3-wait-cardscreen: n=16 slowest=618.6ms (frame #4; ui 145.2 rt 251.0 issue 86.1 flags 0) first5=[87, 139, 323, 619, 575] >32ms=16 >64ms=16 >100ms=15 span=2333ms
+FS base-3-3-wait-full: n=15 slowest=798.9ms (frame #6; ui 286.0 rt 407.4 issue 300.0 flags 0) first5=[242, 312, 469, 385, 635] >32ms=15 >64ms=15 >100ms=15 span=2450ms
+TRIAL base-3-4-wait: start TotalTime: 3341; taps after the first frame: My +5619 ms, card +7680 ms, show +11075 ms; fullscreen reached: yes
+FS base-3-4-wait-cardscreen: n=16 slowest=605.0ms (frame #11; ui 229.5 rt 183.6 issue 55.6 flags 0) first5=[72, 127, 305, 586, 486] >32ms=16 >64ms=16 >100ms=15 span=2433ms
+FS base-3-4-wait-full: n=12 slowest=824.8ms (frame #5; ui 325.7 rt 341.2 issue 242.1 flags 0) first5=[443, 396, 428, 750, 825] >32ms=12 >64ms=12 >100ms=12 span=2167ms
+TRIAL base-3-5-wait: start TotalTime: 3025; taps after the first frame: My +5467 ms, card +7538 ms, show +10881 ms; fullscreen reached: yes
+FS base-3-5-wait-cardscreen: n=16 slowest=607.4ms (frame #4; ui 152.5 rt 269.0 issue 159.7 flags 0) first5=[80, 136, 291, 607, 560] >32ms=16 >64ms=16 >100ms=15 span=2367ms
+FS base-3-5-wait-full: n=12 slowest=1087.2ms (frame #5; ui 456.1 rt 361.7 issue 267.9 flags 0) first5=[314, 448, 403, 736, 1087] >32ms=12 >64ms=12 >100ms=12 span=1967ms
+TRIAL base-3-now: start TotalTime: 3461; taps after the first frame: My +126 ms, card +883 ms, show +2475 ms; fullscreen reached: NO
+FS base-3-now-full: n=16 slowest=589.1ms (frame #5; ui 310.3 rt 228.1 issue 94.5 flags 0) first5=[551, 286, 346, 502, 589] >32ms=16 >64ms=15 >100ms=15 span=2200ms
+TRIAL base-3-coldgl: start TotalTime: 3025; taps after the first frame: My +5317 ms, card +7413 ms, show +10979 ms; fullscreen reached: yes
+FS base-3-coldgl-cardscreen: n=15 slowest=712.9ms (frame #11; ui 253.9 rt 256.9 issue 129.5 flags 0) first5=[72, 126, 320, 671, 652] >32ms=15 >64ms=15 >100ms=14 span=2133ms
+FS base-3-coldgl-full: n=12 slowest=1014.6ms (frame #4; ui 518.0 rt 357.4 issue 240.1 flags 0) first5=[181, 398, 665, 1015, 719] >32ms=12 >64ms=12 >100ms=12 span=2150ms
+TRIAL base-3-now-coldgl: start TotalTime: 2999; taps after the first frame: My +815 ms, card +1320 ms, show +2467 ms; fullscreen reached: NO
+FS base-3-now-coldgl-full: n=9 slowest=835.4ms (frame #4; ui 327.8 rt 204.2 issue 8.0 flags 0) first5=[534, 450, 448, 835, 685] >32ms=9 >64ms=9 >100ms=9 span=1500ms
+base-3 GL shader cache at the end: 
+## C new-4: fresh install, card added by hand, then 5× (cold start, 5 s, Моето › Читателска карта › Покажи картата) + no-wait + cleared GL cache
+installed new-4: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682;  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+COORDS: My 540 2274, card tile 258 1182, show-card 582 1068
+COORDS: fullscreen card reached
+new-4 GL shader cache after the first card: 
+TRIAL new-4-1-wait: start TotalTime: 3620; taps after the first frame: My +5533 ms, card +7600 ms, show +10990 ms; fullscreen reached: yes
+FS new-4-1-wait-cardscreen: n=16 slowest=682.8ms (frame #7; ui 285.7 rt 158.4 issue 69.1 flags 0) first5=[82, 200, 277, 548, 580] >32ms=16 >64ms=16 >100ms=15 span=2400ms
+FS new-4-1-wait-full: n=14 slowest=797.6ms (frame #5; ui 258.6 rt 365.7 issue 174.6 flags 0) first5=[296, 355, 424, 615, 798] >32ms=14 >64ms=14 >100ms=14 span=2467ms
+TRIAL new-4-2-wait: start TotalTime: 3322; taps after the first frame: My +5299 ms, card +7363 ms, show +10903 ms; fullscreen reached: yes
+FS new-4-2-wait-cardscreen: n=16 slowest=673.7ms (frame #12; ui 234.3 rt 249.3 issue 58.4 flags 0) first5=[87, 129, 254, 542, 497] >32ms=16 >64ms=16 >100ms=15 span=2383ms
+FS new-4-2-wait-full: n=15 slowest=805.8ms (frame #6; ui 406.8 rt 217.4 issue 119.0 flags 0) first5=[408, 377, 616, 373, 638] >32ms=15 >64ms=15 >100ms=15 span=2650ms
+TRIAL new-4-3-wait: start TotalTime: 2822; taps after the first frame: My +5618 ms, card +7688 ms, show +11236 ms; fullscreen reached: yes
+FS new-4-3-wait-cardscreen: n=16 slowest=688.5ms (frame #5; ui 177.6 rt 347.3 issue 239.6 flags 0) first5=[68, 126, 242, 583, 688] >32ms=16 >64ms=16 >100ms=15 span=2200ms
+FS new-4-3-wait-full: n=13 slowest=880.0ms (frame #5; ui 455.5 rt 424.4 issue 317.5 flags 0) first5=[262, 378, 383, 851, 880] >32ms=13 >64ms=13 >100ms=13 span=2183ms
+TRIAL new-4-4-wait: start TotalTime: 3354; taps after the first frame: My +5373 ms, card +7439 ms, show +11086 ms; fullscreen reached: yes
+FS new-4-4-wait-cardscreen: n=16 slowest=674.7ms (frame #4; ui 247.1 rt 240.2 issue 99.9 flags 0) first5=[75, 129, 322, 675, 616] >32ms=16 >64ms=16 >100ms=15 span=2133ms
+FS new-4-4-wait-full: n=12 slowest=916.1ms (frame #7; ui 360.5 rt 224.3 issue 134.6 flags 0) first5=[235, 388, 373, 656, 752] >32ms=12 >64ms=12 >100ms=12 span=2133ms
+TRIAL new-4-5-wait: start TotalTime: 3647; taps after the first frame: My +5330 ms, card +7392 ms, show +10879 ms; fullscreen reached: yes
+FS new-4-5-wait-cardscreen: n=16 slowest=630.8ms (frame #7; ui 262.7 rt 202.1 issue 54.4 flags 0) first5=[70, 126, 269, 533, 572] >32ms=16 >64ms=16 >100ms=15 span=2317ms
+FS new-4-5-wait-full: n=12 slowest=748.5ms (frame #5; ui 367.6 rt 327.7 issue 230.1 flags 0) first5=[410, 447, 533, 745, 749] >32ms=12 >64ms=12 >100ms=12 span=2283ms
+TRIAL new-4-now: start TotalTime: 3047; taps after the first frame: My +454 ms, card +1196 ms, show +2266 ms; fullscreen reached: NO
+FS new-4-now-full: n=6 slowest=382.0ms (frame #6; ui 122.7 rt 165.1 issue 121.6 flags 0) first5=[201, 191, 84, 217, 253] >32ms=6 >64ms=6 >100ms=5 span=433ms
+TRIAL new-4-coldgl: start TotalTime: 3108; taps after the first frame: My +5673 ms, card +7740 ms, show +11167 ms; fullscreen reached: yes
+FS new-4-coldgl-cardscreen: n=16 slowest=629.9ms (frame #7; ui 259.4 rt 200.2 issue 50.4 flags 0) first5=[80, 133, 275, 531, 554] >32ms=16 >64ms=16 >100ms=15 span=2200ms
+FS new-4-coldgl-full: n=14 slowest=765.4ms (frame #5; ui 341.6 rt 360.8 issue 241.3 flags 0) first5=[243, 294, 409, 605, 765] >32ms=14 >64ms=14 >100ms=14 span=2367ms
+TRIAL new-4-now-coldgl: start TotalTime: 2929; taps after the first frame: My +572 ms, card +1368 ms, show +2446 ms; fullscreen reached: NO
+FS new-4-now-coldgl-full: n=2 slowest=259.9ms (frame #2; ui 10.8 rt 171.0 issue 131.4 flags 0) first5=[222, 260] >32ms=2 >64ms=2 >100ms=2 span=133ms
+new-4 GL shader cache at the end: 
+## C totals: per build and mode — the slowest frame of each open, the first 5 frames (ms, IntendedVsync → FrameCompleted)
+FSAGG full       coldgl      new  opens= 2  slowest frame: median  750.6 ms, mean  750.6, min  735.8, max  765.4  | frame 1 median  210.5 ms | frames 2-5 median 512.5 ms  | slowest per open: [736, 765] at frame # [5, 5]
+FSAGG full       coldgl      base opens= 2  slowest frame: median  950.5 ms, mean  950.5, min  886.4, max 1014.6  | frame 1 median  181.0 ms | frames 2-5 median 714.5 ms  | slowest per open: [886, 1015] at frame # [3, 4]
+FSAGG full       now         new  opens= 2  slowest frame: median  371.8 ms, mean  371.8, min  361.6, max  382.0  | frame 1 median  192.0 ms | frames 2-5 median 235.0 ms  | slowest per open: [362, 382] at frame # [5, 6]
+FSAGG full       now         base opens= 2  slowest frame: median  701.2 ms, mean  701.2, min  589.1, max  813.4  | frame 1 median  502.0 ms | frames 2-5 median 478.5 ms  | slowest per open: [813, 589] at frame # [4, 5]
+FSAGG full       now-coldgl  new  opens= 2  slowest frame: median  584.3 ms, mean  584.3, min  259.9, max  908.7  | frame 1 median  362.0 ms | frames 2-5 median 471.0 ms  | slowest per open: [909, 260] at frame # [4, 2]
+FSAGG full       now-coldgl  base opens= 2  slowest frame: median  736.2 ms, mean  736.2, min  637.0, max  835.4  | frame 1 median  362.5 ms | frames 2-5 median 467.5 ms  | slowest per open: [637, 835] at frame # [4, 4]
+FSAGG full       wait5s      new  opens=10  slowest frame: median  852.9 ms, mean  892.7, min  748.5, max 1199.5  | frame 1 median  258.5 ms | frames 2-5 median 494.5 ms  | slowest per open: [1200, 1044, 935, 774, 826, 798, 806, 880, 916, 748] at frame # [5, 6, 6, 6, 6, 5, 6, 5, 7, 5]
+FSAGG full       wait5s      base opens=10  slowest frame: median  823.2 ms, mean  861.2, min  713.7, max 1121.8  | frame 1 median  278.0 ms | frames 2-5 median 494.0 ms  | slowest per open: [769, 827, 1122, 768, 880, 822, 714, 799, 825, 1087] at frame # [6, 5, 5, 4, 5, 5, 4, 6, 5, 5]
+FSAGG cardscreen coldgl      new  opens= 2  slowest frame: median  622.3 ms, mean  622.3, min  614.7, max  629.9  | frame 1 median   75.0 ms | frames 2-5 median 403.0 ms  | slowest per open: [615, 630] at frame # [5, 7]
+FSAGG cardscreen coldgl      base opens= 2  slowest frame: median  667.8 ms, mean  667.8, min  622.7, max  712.9  | frame 1 median   76.0 ms | frames 2-5 median 473.0 ms  | slowest per open: [623, 713] at frame # [4, 11]
+FSAGG cardscreen wait5s      new  opens=10  slowest frame: median  665.5 ms, mean  655.3, min  599.9, max  688.5  | frame 1 median   76.5 ms | frames 2-5 median 421.0 ms  | slowest per open: [600, 662, 667, 664, 609, 683, 674, 688, 675, 631] at frame # [12, 12, 11, 12, 4, 7, 12, 5, 4, 7]
+FSAGG cardscreen wait5s      base opens=10  slowest frame: median  617.7 ms, mean  632.3, min  605.0, max  694.9  | frame 1 median   71.5 ms | frames 2-5 median 433.0 ms  | slowest per open: [615, 695, 638, 659, 610, 617, 657, 619, 605, 607] at frame # [9, 11, 11, 4, 11, 7, 15, 4, 11, 4]
+FSAGG first-5 frames per open (ms):
+   full new-1-coldgl           first5=[178, 351, 420, 627, 736] slowest=736 (#5, rt 400)
+   full new-4-coldgl           first5=[243, 294, 409, 605, 765] slowest=765 (#5, rt 361)
+   full base-2-coldgl          first5=[181, 730, 886, 357, 710] slowest=886 (#3, rt 263)
+   full base-3-coldgl          first5=[181, 398, 665, 1015, 719] slowest=1015 (#4, rt 357)
+   full new-1-now              first5=[183, 148, 262, 332, 362] slowest=362 (#5, rt 130)
+   full new-4-now              first5=[201, 191, 84, 217, 253] slowest=382 (#6, rt 165)
+   full base-2-now             first5=[453, 334, 455, 813, 670] slowest=813 (#4, rt 205)
+   full base-3-now             first5=[551, 286, 346, 502, 589] slowest=589 (#5, rt 228)
+   full new-1-now-coldgl       first5=[502, 471, 685, 909, 323] slowest=909 (#4, rt 226)
+   full new-4-now-coldgl       first5=[222, 260] slowest=260 (#2, rt 171)
+   full base-2-now-coldgl      first5=[191, 357, 449, 637, 485] slowest=637 (#4, rt 201)
+   full base-3-now-coldgl      first5=[534, 450, 448, 835, 685] slowest=835 (#4, rt 204)
+   full new-1-1-wait           first5=[148, 303, 418, 1164, 1199] slowest=1200 (#5, rt 269)
+   full new-1-2-wait           first5=[289, 464, 526, 626, 1041] slowest=1044 (#6, rt 253)
+   full new-1-3-wait           first5=[255, 395, 205, 397, 611] slowest=935 (#6, rt 604)
+   full new-1-4-wait           first5=[191, 252, 473, 376, 659] slowest=774 (#6, rt 372)
+   full new-1-5-wait           first5=[197, 350, 500, 489, 723] slowest=826 (#6, rt 263)
+   full new-4-1-wait           first5=[296, 355, 424, 615, 798] slowest=798 (#5, rt 366)
+   full new-4-2-wait           first5=[408, 377, 616, 373, 638] slowest=806 (#6, rt 217)
+   full new-4-3-wait           first5=[262, 378, 383, 851, 880] slowest=880 (#5, rt 424)
+   full new-4-4-wait           first5=[235, 388, 373, 656, 752] slowest=916 (#7, rt 224)
+   full new-4-5-wait           first5=[410, 447, 533, 745, 749] slowest=748 (#5, rt 328)
+   full base-2-1-wait          first5=[374, 343, 393, 383, 700] slowest=769 (#6, rt 363)
+   full base-2-2-wait          first5=[216, 368, 391, 634, 827] slowest=827 (#5, rt 337)
+   full base-2-3-wait          first5=[457, 484, 469, 725, 1122] slowest=1122 (#5, rt 347)
+   full base-2-4-wait          first5=[200, 326, 504, 768, 661] slowest=768 (#4, rt 381)
+   full base-2-5-wait          first5=[320, 362, 389, 847, 880] slowest=880 (#5, rt 266)
+   full base-3-1-wait          first5=[234, 322, 373, 713, 822] slowest=822 (#5, rt 444)
+   full base-3-2-wait          first5=[217, 442, 577, 714, 700] slowest=714 (#4, rt 370)
+   full base-3-3-wait          first5=[242, 312, 469, 385, 635] slowest=799 (#6, rt 407)
+   full base-3-4-wait          first5=[443, 396, 428, 750, 825] slowest=825 (#5, rt 341)
+   full base-3-5-wait          first5=[314, 448, 403, 736, 1087] slowest=1087 (#5, rt 362)
+SHADER DIAG card35: diagnostics log entries with shevitsa-shader/foil-shader: 0 (of 0); logcat error lines naming them: 0
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 9 | Първи кадър: медиана 2955 мс, последен 2687 мс | Пълно показване: медиана 3913 мс, последно 3760 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 9" text="Първи кадър: медиана 2955 мс, последен 2687 мс" text="Пълно показване: медиана 3913 мс, последно 3760 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5440', '8382', '8501', '8653', '8782', '8917', '9035', '9158', '9286', '9561', '10504', '10634', '10749', '10868', '10983', '11147', '11268', '11425', '11834', '12580', '12693', '12809', '12923', '13053', '13174', '13295', '13494', '13725', '14508', '14621', '14741', '14862', '14976', '15093', '15221', '15340']): 271 in 13 groups
+      36  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      36  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      36  W/Parcel: Expecting binder but got null!
+      36  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      36  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      36  W/Gralloc4: allocator #.x is not supported
+      36  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       5  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       4  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       4  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       4  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object g#.s(java.lang.Object)(r
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#-d#-#ad-aedf-#cc#dd#ef#, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+## COMPLETE
+## logcat findings
+app pids seen: ['5440', '8382', '8501', '8653', '8782', '8917', '9035', '9158', '9286', '9561', '10504', '10634', '10749', '10868', '10983', '11147', '11268', '11425', '11834', '12580', '12693', '12809', '12923', '13053', '13174', '13295', '13494', '13725', '14508', '14621', '14741', '14862', '14976', '15093', '15221', '15340']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 137
+   skipped-frames events=137 max=124 total=7686
+== Davey: 229
+   davey events=229 max=3228ms median=1137ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

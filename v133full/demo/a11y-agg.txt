@@ -1,0 +1,8 @@
+A11Y AGG: 15 screens analysed, 0 dumps failed; totals MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+== MISSING: 1 distinct
+   View@[42,1995][524,2121]  [1 screens: 01-my]
+== SMALL: 1 distinct
+   'Кои да получаваш: срокове, съб'  [1 screens: 01c-my-3]
+== SAME-LABEL: 1 distinct
+   'Удължи срока' x2  [1 screens: 02-loans]
+== DOUBLE: 0 distinct

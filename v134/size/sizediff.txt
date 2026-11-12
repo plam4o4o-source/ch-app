@@ -1,0 +1,40 @@
+TOTAL compressed entries: new 4269045 B, base 4245467 B, delta +23578 B
+ARSC resources by type (new/base/delta): string 871/857/+14
+ARSC string configurations: new 2, base 2; only in new: []
+RES files, top growth by resource-name prefix (compressed B, new/base):
+RES resources with files only in new: 0; sample: []
+DEX classes (mapping.txt): new 8642, base 8608; top growth by package:
+     +39  org.chyavorec.app  (1161/1122)
+      +3  org.chyavorec.data  (384/381)
+      +2  androidx.compose.foundation  (970/968)
+      +1  org.chyavorec.domain  (168/167)
+      +1  okhttp3.RequestBody$Companion  (1/0)
+      +1  coil3.network  (36/35)
+      +1  androidx.work.impl  (136/135)
+      +1  androidx.compose.ui  (969/968)
+DEX size by package (depth 2, apkanalyzer, bytes), top growth:
+    +32422  <TOTAL>  (5660495/5628073)
+    +25255  org.chyavorec  (1370338/1345083)
+     +8365  com.google  (785975/777610)
+     +3375  coil3.network  (15184/11809)
+     +2213  androidx.compose  (1835978/1833765)
+     +1475  androidx.work  (100999/99524)
+     +1406  kotlin.io  (4212/2806)
+      +226  org.jsoup  (161547/161321)
+      +140  kotlin.jvm  (52400/52260)
+      +111  androidx.core  (98810/98699)
+       +51  okhttp3.internal  (119545/119494)
+       +16  android.os  (2605/2589)
+DEX size by package (depth 3, apkanalyzer, bytes), top growth:
+    +32422  <TOTAL>  (5660495/5628073)
+    +22870  org.chyavorec.app  (1004605/981735)
+     +7431  com.google.android  (688775/681344)
+     +5573  androidx.compose.foundation  (574612/569039)
+     +2791  org.chyavorec.domain  (88213/85422)
+     +1626  androidx.compose.ui  (579009/577383)
+     +1478  androidx.work.impl  (72085/70607)
+     +1127  org.chyavorec.data  (259771/258644)
+      +950  com.google.mlkit  (61948/60998)
+      +386  androidx.compose.material  (15622/15236)
+      +173  org.jsoup.internal  (26327/26154)
+      +139  kotlin.jvm.internal  (51312/51173)

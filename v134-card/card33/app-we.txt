@@ -1,0 +1,12 @@
+APP W/E lines (pids ['5377']): 30 in 11 groups
+      10  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       9  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       2  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       1  W/Parcel: Expecting binder but got null!
+       1  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       1  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       1  W/Gralloc4: allocator #.x is not supported
+       1  E/OpenGLRenderer: Unable to match the desired swap behavior.

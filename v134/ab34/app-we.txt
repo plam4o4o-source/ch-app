@@ -1,0 +1,17 @@
+APP W/E lines (pids ['4820', '6095', '6569', '6684', '6880', '6995', '7176', '7326', '7647', '7796', '7900', '7988', '8146', '8818', '9017', '9085', '9149', '9227', '9289', '9355', '9414', '9478', '9539', '9600', '9667', '10142', '10456', '10515', '10577', '10638', '10698', '10757', '10818', '10878', '10938', '10999', '11059', '11119', '11384', '11445', '11507', '11566', '11668', '11729', '11790', '11867', '11929', '11988', '12049', '12109', '12574', '12895', '12954', '13014', '13073', '13139', '13230', '13294', '13355', '13415', '13474', '13532', '13590', '13894', '13955', '14015', '14074', '14134', '14193', '14253', '14330', '14405', '14464', '14523', '14582', '14992', '15295', '15353', '15413', '15474', '15536', '15597', '15657', '15717', '15777', '15838', '15898', '15958', '16217', '16277', '16337', '16397', '16457', '16519', '16583', '16653', '16712', '16771', '16829', '16890']): 794 in 16 groups
+     180  E/OpenGLRenderer: Unable to match the desired swap behavior.
+     101  W/Parcel: Expecting binder but got null!
+     100  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+     100  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+     100  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+     100  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+     100  W/Gralloc4: allocator #.x is not supported
+       3  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object f#.s(java.lang.Object)(r
+       3  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/g.chyavorec.app: Long monitor contention with owner arch_disk_io_# (#) at android.database.sqlite.SQLiteConnection android.data
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=fac#f#-c#d-#f#-b#c-a#f#d#b#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object of#.getValue()(r#-map-id
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at yo# dj#.a(java.lang.Object, zr#, sa#)(r#-
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#ccd-e#b#-#c#f-b#fa-cf#c#f#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void w#.k()(r#-map-id-#a#f#e#f#e#fcb#cb#c
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void android.net.ConnectivityManager.unre

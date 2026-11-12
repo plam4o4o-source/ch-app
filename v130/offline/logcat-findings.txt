@@ -1,0 +1,21 @@
+app pids seen: ['5449', '9082', '12198', '15981']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=40 total=40
+   11-01 19:02:02.499  5449  5449 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+== Davey: 4
+   davey events=4 max=917ms median=771ms
+   11-01 19:02:12.918  5449  5462 I OpenGLRenderer: Davey! duration=725ms; Flags=0, FrameTimelineVsyncId=10305, IntendedVsync=119751391922, Vsync=119751391922, InputEventId=0, HandleInputStart=119754719380, AnimationStart=119754720261, Perform
+   11-01 19:02:13.127  5449  5462 I OpenGLRenderer: Davey! duration=797ms; Flags=0, FrameTimelineVsyncId=10312, IntendedVsync=119784725254, Vsync=120251391902, InputEventId=0, HandleInputStart=120257929240, AnimationStart=120257929951, Perform
+   11-01 19:02:23.343  5449  5475 I OpenGLRenderer: Davey! duration=917ms; Flags=0, FrameTimelineVsyncId=11089, IntendedVsync=129951391514, Vsync=130268058168, InputEventId=0, HandleInputStart=130272568944, AnimationStart=130272569905, Perform
+   11-01 19:02:58.349  5449  5461 I OpenGLRenderer: Davey! duration=745ms; Flags=0, FrameTimelineVsyncId=12237, IntendedVsync=165034723444, Vsync=165434723428, InputEventId=0, HandleInputStart=165435111892, AnimationStart=165435112864, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 19:02:00.240  5437  5437 I PERFCHECK: section: O1. Online warm-up fills the caches
+   11-01 19:05:13.081  8987  8987 I PERFCHECK: section: O2. Offline cold start with caches: all tabs
+   11-01 19:07:56.687 10461 10461 I PERFCHECK: section: O3. Reconnect on Contacts no touch, then the other screens
+   11-01 19:10:59.555 12013 12013 I PERFCHECK: section: O4. Empty cache, offline, guest: all tabs MyHub
+   11-01 19:14:07.741 14102 14102 I PERFCHECK: section: O5. Reconnect with the empty cache: Gallery no touch, then all tabs
+   11-01 19:17:01.817 15896 15896 I PERFCHECK: section: O6. My offline as guest again after the online start

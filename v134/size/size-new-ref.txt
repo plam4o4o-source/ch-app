@@ -1,0 +1,1 @@
+1.2.34 b06d1ce built prodRelease, release ABIs only (arm64-v8a, armeabi-v7a) (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest)

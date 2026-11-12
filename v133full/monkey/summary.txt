@@ -1,0 +1,70 @@
+part monkey; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2817 ms
+## K-1357. Monkey 8000 events (seed 1357, throttle 80 ms, CAMERA revoked)
+MONKEY 1357 exit=0 duration=304 s; Events injected: 8000 // Monkey finished 
+MONKEY 1357 markers: CRASH=0 ANR=0 FATAL since start: 0
+MEM after-monkey-1357 (raw) PSS=83298KB  Java=11980KB  Native=22488KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=5)  RSS=125720KB  Views=15 Activities=1
+MEM after-monkey-1357 (trimmed) PSS=85456KB  Java=11060KB  Native=20836KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=5)  RSS=129344KB  Views=15 Activities=1
+## K-24680. Monkey 8000 events (seed 24680, throttle 80 ms, CAMERA revoked)
+MONKEY 24680 exit=0 duration=279 s; Events injected: 8000 // Monkey finished 
+MONKEY 24680 markers: CRASH=0 ANR=0 FATAL since start: 0
+MEM after-monkey-24680 (raw) PSS=97743KB  Java=17452KB  Native=50092KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=19)  RSS=179360KB  Views=16 Activities=1
+MEM after-monkey-24680 (trimmed) PSS=98210KB  Java=13244KB  Native=49808KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=19)  RSS=180728KB  Views=14 Activities=1
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 3 | Първи кадър: медиана 1393 мс, последен 1393 мс | Пълно показване: медиана 1860 мс, последно 1860 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 3" text="Първи кадър: медиана 1393 мс, последен 1393 мс" text="Пълно показване: медиана 1860 мс, последно 1860 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5628', '7178', '8948']): 5330 in 46 groups
+    4892  W/InputEventSender: Received 'finished' signal for unknown seq number = #
+     126  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+     109  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+      45  W/Parcel: Expecting binder but got null!
+      45  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      11  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      11  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       8  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+       7  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       5  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       5  W/System: A resource failed to call release. 
+       5  W/RemoteInputConnectionImpl: setComposingText on inactive InputConnection
+       4  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[#]=-#.
+       4  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       4  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, metaSta
+       3  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       3  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       3  W/Gralloc4: allocator #.x is not supported
+       3  W/InputMethodManager: Ignoring showSoftInput() as view=j#{#de#a# VFED..... .F....ID #,#-#,# aid=#} is not served.
+       3  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+       3  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, metaSt
+       2  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+       2  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=
+       2  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       2  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, metaSta
+       2  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, metaState=#,
+       2  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#, metaS
+       1  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, metaSta
+       1  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#
+## COMPLETE
+## logcat findings
+app pids seen: ['5628', '7178', '8948']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 48
+   skipped-frames events=48 max=60 total=1806
+== Davey: 150
+   davey events=150 max=1424ms median=822ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

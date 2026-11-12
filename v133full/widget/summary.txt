@@ -1,0 +1,132 @@
+part widget; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 5753 ms
+## W1. Add the widget from the launcher's widget picker (default 4×2 = wide)
+launcher: com.google.android.apps.nexuslauncher
+WIDGET new long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET new picker: our row @ 437 672; size label @ 540 1580; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
+WIDGET new after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
+WIDGET new: widgets of ours bound: 0 -> 1 (ids id=2 ); options: 
+WIDGET grid from the 4x2 copy: [57 537 1023 1123] cell 241x293 px
+## W2. Wide 4×2, signed out: content, light and dark
+WIDGET 10-wide-4x2 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 10-wide-4x2 (w15): WIDGET VIEW: title='Читалище Яворец' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 4 clickable, <48dp: 0; background('Читалище Яворец Сканирай') 368x223dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event_column('Предстоящи събития 80 г.') 340x90dp
+WIDGET 10-wide-4x2 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET signed-out: loans block hidden; event shown; no-events absent
+## W3. Wide widget: clicks
+WIDGET click catalog (widget_catalog @ 900 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+WIDGET click scan (widget_scan @ 694 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Въведи номера на ръка" text="Скенерът на баркодове идва с Google Play услугите — тук те липсват или скенерът още се изтегля. Въведи номера на ръка или опитай пак сл
+WIDGET click event (widget_event @ 540 786) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+WIDGET click app (t:Chitalishte Yavorets|Читалище Яворец @ 337 599) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+## W4. Sizes: 4×3, 3×2, 2×2, 2×3 (resize handles), light and dark each
+RESIZE 4x3 (4x3): bounds [57 537 1023 1437] options 
+WIDGET 20-wide-tall-4x3 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1437]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 20-wide-tall-4x3 (w15): WIDGET VIEW: title='Читалище Яворец' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 4 clickable, <48dp: 0; background('Читалище Яворец Сканирай') 368x343dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event_column('Предстоящи събития 80 г.') 340x90dp
+WIDGET 20-wide-tall-4x3 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1437]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+RESIZE 3x2 (3x2): bounds [57 537 771 1123] options 
+WIDGET 30-medium-3x2 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan ]; bounds [57 537 771 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 30-medium-3x2 (w15): WIDGET VIEW: title='-' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 4 clickable, <48dp: 0; background('Читалище Яворец Сканирай') 272x223dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event_column('Предстоящи събития 80 г.') 244x90dp
+WIDGET 30-medium-3x2 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan ]; bounds [57 537 771 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+RESIZE 2x2 (2x2): bounds [57 537 519 1123] options 
+WIDGET 40-small-2x2 light: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1123]; texts: Читалище|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 40-small-2x2 (w15): WIDGET VIEW: title='Читалище' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=[]
+WIDGET TARGETS: 2 clickable, <48dp: 0; background('Читалище Предстоящи съби') 176x223dp; widget_event_column('Предстоящи събития 80 г.') 148x109dp
+WIDGET 40-small-2x2 dark: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1123]; texts: Читалище|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET click small-event (widget_event @ 288 773) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+WIDGET click small-app: 't:Chitalishte Yavorets|Читалище Яворец' not on the home screen
+RESIZE 2x3 (2x3): bounds [57 537 519 1437] options 
+WIDGET 50-small-tall-2x3 light: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1437]; texts: Читалище|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 50-small-tall-2x3 (w15): WIDGET VIEW: title='Читалище' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=[]
+WIDGET TARGETS: 2 clickable, <48dp: 0; background('Читалище Предстоящи съби') 176x343dp; widget_event_column('Предстоящи събития 80 г.') 148x109dp
+WIDGET 50-small-tall-2x3 dark: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1437]; texts: Читалище|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+RESIZE back-4x2 (4x2): bounds [57 537 1023 1123] options 
+WIDGET back to 4x2: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+## W5. After force-stop of the app process
+WIDGET after force-stop: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+## W6. With a self-entered card (no sign-in: loans need a reader account)
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+WIDGET 80-card-4x2 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 80-card-4x2 (w15): WIDGET VIEW: title='Читалище Яворец' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 4 clickable, <48dp: 0; background('Читалище Яворец Сканирай') 368x223dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event_column('Предстоящи събития 80 г.') 340x90dp
+WIDGET 80-card-4x2 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+RESIZE card-4x3 (4x3): bounds [57 537 1023 1437] options 
+WIDGET 81-card-4x3 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1437]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 81-card-4x3 (w15): WIDGET VIEW: title='Читалище Яворец' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 4 clickable, <48dp: 0; background('Читалище Яворец Сканирай') 368x343dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event_column('Предстоящи събития 80 г.') 340x90dp
+WIDGET 81-card-4x3 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1437]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+RESIZE card-2x3 (2x3): bounds [57 537 519 1437] options 
+WIDGET 82-card-2x3 light: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1437]; texts: Читалище|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 82-card-2x3 (w15): WIDGET VIEW: title='Читалище' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=[]
+WIDGET TARGETS: 2 clickable, <48dp: 0; background('Читалище Предстоящи съби') 176x343dp; widget_event_column('Предстоящи събития 80 г.') 148x109dp
+WIDGET 82-card-2x3 dark: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1437]; texts: Читалище|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+RESIZE card-2x2 (2x2): bounds [57 537 519 1123] options 
+WIDGET 83-card-2x2 light: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1123]; texts: Читалище|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 83-card-2x2 (w15): WIDGET VIEW: title='Читалище' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=[]
+WIDGET TARGETS: 2 clickable, <48dp: 0; background('Читалище Предстоящи съби') 176x223dp; widget_event_column('Предстоящи събития 80 г.') 148x109dp
+WIDGET 83-card-2x2 dark: views from org.chyavorec.app: 1 [ids: widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_title ]; bounds [57 537 519 1123]; texts: Читалище|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+RESIZE card-3x2 (3x2): bounds [57 537 771 1123] options 
+WIDGET 84-card-3x2 light: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan ]; bounds [57 537 771 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET 84-card-3x2 (w15): WIDGET VIEW: title='-' logo=True events=2 [16 ноември 2026: 80 г. от създаването на ЮНЕСКО] [21 ноември 2026: Панайот Пипков · Ден на семейството] no-events=False loans=False due=[] buttons=['widget_scan', 'widget_catalog']
+WIDGET TARGETS: 4 clickable, <48dp: 0; background('Читалище Яворец Сканирай') 272x223dp; widget_scan('Сканирай') 75x48dp; widget_catalog('Каталог') 66x48dp; widget_event_column('Предстоящи събития 80 г.') 244x90dp
+WIDGET 84-card-3x2 dark: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan ]; bounds [57 537 771 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+## WL. App language (in-app Settings and cmd) and system language (framework restart): widget and app
+widgets of ours before the language part: 1
+SYSTEM locale -> en-US: 
+SYSTEM locale now: persist.sys.locale=en-US; config: config: mcc310-mnc260-en-rUS-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-nowidecg-lowdr-port-notnight-420dpi-finger-keysexposed-qwerty-navhidden-nonav-2209x1080-v33
+CAP lang/01-sysEN-appBG-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+APP language chosen in Settings: English; get-app-locales: [en]; pid 12829
+CAP lang/02-sysEN-appEN-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=1 [Search books, news, events…] | “Vasil Levski – 1922” · Yavorets village · Messages · Search · Search books, news, events… · Scan barcode
+CAP lang/03-sysEN-appEN-more: targets=14 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | THE CENTRE · Messages · Announcements and invitation · Events · Community centre calendar · Activities
+WIDGET-LANG 04-sysEN-appEN: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|80 г. от създаването на ЮНЕСКО|November 16, 2026|Панайот Пипков · Ден на семейството|November 21, 2026|
+SYSTEM locale -> bg-BG: 
+SYSTEM locale now: persist.sys.locale=bg-BG; config: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-nowidecg-lowdr-port-notnight-420dpi-finger-keysexposed-qwerty-navhidden-nonav-2209x1080-v33
+CAP lang/05-sysBG-appEN-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=1 [Search books, news, events…] | “Vasil Levski – 1922” · Yavorets village · Messages · Search · Search books, news, events… · Scan barcode
+WIDGET-LANG 06-sysBG-appEN: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|80 г. от създаването на ЮНЕСКО|November 16, 2026|Панайот Пипков · Ден на семейството|November 21, 2026|
+APP language chosen in Settings: Български; get-app-locales: [bg]; pid 17263
+CAP lang/07-sysBG-appBG-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+WIDGET-LANG 08-sysBG-appBG: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 3 | Първи кадър: медиана 3518 мс, последен 1365 мс | Пълно показване: медиана 3518 мс, последно 2542 мс | Топъл старт · 9 | Първи кадър: медиана 751 мс, последен 637 мс | Пълно показване: медиана 6182 мс, последно 6284 мс | Насечени кадри по ек
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 3" text="Първи кадър: медиана 3518 мс, последен 1365 мс" text="Пълно показване: медиана 3518 мс, последно 2542 мс" text="Топъл старт · 9" text="Първи кадър: медиана 751 мс, последен 637 мс" text="Пълно показв
+APP W/E lines (pids ['4932', '10138', '10414', '12829', '17263']): 57 in 13 groups
+      16  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       9  W/Parcel: Expecting binder but got null!
+       5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       2  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#cdd#bc#-#-#ff-#-fc#f#d#, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/ViewRootImpl: Not reporting timeline because gpuCompletedTime is #.#E#ms ahead of presentTime. FRAME_TIMELINE_VSYNC_ID=#, IN
+## COMPLETE
+## logcat findings
+app pids seen: ['4932', '10138', '10414', '12829', '17263']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 41
+   skipped-frames events=41 max=148 total=2293
+== Davey: 81
+   davey events=81 max=3658ms median=894ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

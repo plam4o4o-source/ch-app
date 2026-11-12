@@ -1,0 +1,51 @@
+== release-config APKs: new 4266950 B, base 4153198 B (v1.2.32 as released: 4153198 B)
+TOTAL compressed entries: new 4242891 B, base 4129142 B, delta +113749 B
+ARSC resources by type (new/base/delta): string 857/804/+53, plurals 34/26/+8, color 24/23/+1
+ARSC string configurations: new 2, base 2; only in new: []
+RES files, top growth by resource-name prefix (compressed B, new/base):
+       +37  xml/file_*  (183/146)
+        +5  layout/widget_*  (3145/3140)
+        +1  xml/shortcuts_*  (553/552)
+        +1  drawable/widget_*  (1692/1691)
+RES resources with files only in new: 0; sample: []
+DEX classes (mapping.txt): new 8606, base 8458; top growth by package:
+    +125  org.chyavorec.app  (1122/997)
+     +17  androidx.graphics.shapes  (17/0)
+      +9  androidx.compose.ui  (967/958)
+      +7  org.chyavorec.data  (381/374)
+      +1  org.chyavorec.domain  (168/167)
+      +1  okhttp3.internal  (148/147)
+      +1  kotlin.sequences  (22/21)
+      +1  com.google.mlkit  (33/32)
+      +1  coil3.RealImageLoader$execute$2  (1/0)
+      +1  androidx.work.OneTimeWorkRequestKt  (1/0)
+      +1  androidx.work.DataKt  (1/0)
+      +1  androidx.navigation.NavGraph$Companion$$ExternalSyntheticLambda0  (1/0)
+      +1  androidx.core.view  (95/94)
+DEX size by package (depth 2, apkanalyzer, bytes), top growth:
+   +170964  <TOTAL>  (5629814/5458850)
+   +131729  org.chyavorec  (1345874/1214145)
+    +16798  com.google  (773294/756496)
+     +6701  androidx.work  (101570/94869)
+     +6634  androidx.graphics  (6915/281)
+     +5554  okhttp3.internal  (114711/109157)
+     +4582  androidx.compose  (1851084/1846502)
+     +4520  kotlin.math  (16967/12447)
+     +2647  kotlin.jvm  (58033/55386)
+     +2189  androidx.core  (96804/94615)
+     +2121  androidx.navigation  (48669/46548)
+     +1407  kotlin.sequences  (7850/6443)
+DEX size by package (depth 3, apkanalyzer, bytes), top growth:
+   +170964  <TOTAL>  (5629814/5458850)
+   +123861  org.chyavorec.app  (978813/854952)
+    +21179  com.google.android  (677770/656591)
+     +7946  androidx.compose.foundation  (585458/577512)
+     +6765  androidx.work.impl  (77495/70730)
+     +6634  androidx.graphics.shapes  (6634/0)
+     +6600  org.chyavorec.data  (258467/251867)
+     +5171  okhttp3.internal.platform  (24609/19438)
+     +4520  kotlin.math  (16967/12447)
+     +3239  androidx.compose.material3  (349816/346577)
+     +2841  org.chyavorec.domain  (88389/85548)
+     +2647  kotlin.jvm.internal  (56947/54300)
+## COMPLETE

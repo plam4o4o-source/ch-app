@@ -1,0 +1,42 @@
+app pids seen: ['5800', '7917', '8564', '13976']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 34
+   skipped-frames events=34 max=112 total=1531
+   11-10 20:20:39.163  5800  5800 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-10 20:20:40.009  5800  5800 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-10 20:20:40.957  5800  5800 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-10 20:20:42.045  5800  5800 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-10 20:20:43.313  5800  5800 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-10 20:20:44.356  5800  5800 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-10 20:20:45.164  5800  5800 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-10 20:20:45.922  5800  5800 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-10 20:20:51.534  5800  5800 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-10 20:20:53.433  5800  5800 I Choreographer: Skipped 73 frames!  The application may be doing too much work on its main thread.
+   11-10 20:21:23.361  5800  5800 I Choreographer: Skipped 112 frames!  The application may be doing too much work on its main thread.
+   11-10 20:21:24.666  5800  5800 I Choreographer: Skipped 77 frames!  The application may be doing too much work on its main thread.
+== Davey: 211
+   davey events=211 max=3360ms median=796ms
+   11-10 20:20:40.996  5800  5819 I OpenGLRenderer: Davey! duration=1611ms; Flags=1, FrameTimelineVsyncId=7351, IntendedVsync=102869535574, Vsync=103586202212, InputEventId=0, HandleInputStart=103604103626, AnimationStart=103604106200, Perform
+   11-10 20:20:41.983  5800  5817 I OpenGLRenderer: Davey! duration=1000ms; Flags=0, FrameTimelineVsyncId=7476, IntendedVsync=104552868840, Vsync=104586202172, InputEventId=0, HandleInputStart=104593755268, AnimationStart=104593757421, Perform
+   11-10 20:20:42.710  5800  5817 I OpenGLRenderer: Davey! duration=1146ms; Flags=0, FrameTimelineVsyncId=7500, IntendedVsync=104819535496, Vsync=105636202130, InputEventId=0, HandleInputStart=105638383825, AnimationStart=105638386459, Perform
+   11-10 20:20:43.296  5800  5817 I OpenGLRenderer: Davey! duration=1085ms; Flags=0, FrameTimelineVsyncId=7670, IntendedVsync=105652868796, Vsync=105702868794, InputEventId=0, HandleInputStart=105712709581, AnimationStart=105712711905, Perform
+   11-10 20:20:43.784  5800  5817 I OpenGLRenderer: Davey! duration=1296ms; Flags=0, FrameTimelineVsyncId=7688, IntendedVsync=105719535460, Vsync=106019535448, InputEventId=0, HandleInputStart=106033509589, AnimationStart=106033511161, Perform
+   11-10 20:20:44.353  5800  5910 I OpenGLRenderer: Davey! duration=1192ms; Flags=0, FrameTimelineVsyncId=7726, IntendedVsync=106052868780, Vsync=106319535436, InputEventId=0, HandleInputStart=106326656197, AnimationStart=106326658921, Perform
+   11-10 20:20:45.162  5800  5910 I OpenGLRenderer: Davey! duration=1554ms; Flags=0, FrameTimelineVsyncId=7756, IntendedVsync=106336202102, Vsync=106902868746, InputEventId=0, HandleInputStart=106906338554, AnimationStart=106906339646, Perform
+   11-10 20:20:45.325  5800  5817 I OpenGLRenderer: Davey! duration=1295ms; Flags=0, FrameTimelineVsyncId=7777, IntendedVsync=106919540960, Vsync=107402874245, InputEventId=0, HandleInputStart=107405016394, AnimationStart=107405017466, Perform
+   11-10 20:20:45.891  5800  5817 I OpenGLRenderer: Davey! duration=1159ms; Flags=0, FrameTimelineVsyncId=7808, IntendedVsync=107419535392, Vsync=107936202038, InputEventId=0, HandleInputStart=107949525776, AnimationStart=107949526867, Perform
+   11-10 20:20:51.838  5800  6034 I OpenGLRenderer: Davey! duration=980ms; Flags=0, FrameTimelineVsyncId=8406, IntendedVsync=114436201778, Vsync=114436201778, InputEventId=-107896086, HandleInputStart=114437990225, AnimationStart=114437992278,
+   11-10 20:20:52.013  5800  6034 I OpenGLRenderer: Davey! duration=1116ms; Flags=0, FrameTimelineVsyncId=8413, IntendedVsync=114486201776, Vsync=115119535084, InputEventId=0, HandleInputStart=115127695700, AnimationStart=115127697463, Perform
+   11-10 20:20:53.315  5800  6034 I OpenGLRenderer: Davey! duration=766ms; Flags=0, FrameTimelineVsyncId=8447, IntendedVsync=115136212847, Vsync=115436212799, InputEventId=0, HandleInputStart=115446641906, AnimationStart=115446643648, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-10 20:20:34.871  5794  5794 I PERFCHECK: section: W. First launch and warm-up
+   11-10 20:22:35.241  7887  7887 I PERFCHECK: section: Y1. Year story, new b06d1ce devDebug: tap → raw screencaps ~0.2 s each, fresh process ×2 and reopen ×2
+   11-10 20:26:52.710  9165  9165 I PERFCHECK: section: Y2. Swipe-down dismiss, new: every swipe from the first slide of a freshly opened story, twice; open/closed by screenshot
+   11-10 20:35:20.278 12432 12432 I PERFCHECK: section: Y3. Landscape + font 1.3 + „Много голям“, new: every slide
+   11-10 20:36:37.907 13068 13068 I PERFCHECK: section: Y4. Portrait + font 1.3 + „Много голям“, new: every slide
+   11-10 20:38:34.368 13820 13820 I PERFCHECK: section: Y5. The same swipes on 1.2.33 devDebug a830b51, for comparison the story takes ~17 s to load there
+   11-10 20:38:37.763 13964 13964 I PERFCHECK: section: W. First launch and warm-up
+   11-10 20:46:00.490 16771 16771 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

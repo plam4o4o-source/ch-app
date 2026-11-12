@@ -1,0 +1,10 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15982        1511        3574          48       11288       14470
+Swap:           3071           0        3071
+== host kernel: oom / kvm / segfault
+[Sat Nov  7 18:06:01 2026] x86/fpu: Supporting XSAVE feature 0x1000: 'Control-flow Kernel registers (KVM only)'
+[Sat Nov  7 18:06:04 2026] kvm_intel: Using Hyper-V Enlightened VMCS
+[Sat Nov  7 18:09:55 2026] kvm: kvm [5236]: vcpu0, guest rIP: 0xffffffffb62c0474 Unhandled WRMSR(0xc2) = 0xffff
+== emulator processes
+   6597       00:03 15340 S    /usr/local/lib/android/sdk/emulator/emulator -kill 5236 -sleep 20

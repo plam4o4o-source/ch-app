@@ -1,0 +1,36 @@
+part full28; APK: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+base APK: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450 bytes
+host: 4 cpu, 15983 MB RAM
+android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+installed:  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: 
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Skip': text="Skip" text="Chitalishte Yavorets" text="Community Centre “Vasil Levski – 1922”" )
+first-install catalogue results after 2599 ms
+## F28. API 28: card added, then the fullscreen card ×3 (by the button's position), shots and frames at rest
+CARD28 try 1 (field 540 691, save 540 1104): text="LIBRARY CARD" text="“Vasil Levski – 1922”" text="—" text="Reader no. TEST-12345" content-desc="Barcode for card TEST-12345" text="Show card" text="You entered this number; it hasn’t been verified by the library. It is stored encrypted on this device only
+CARD28: card shown
+show-card at 582 1003
+FULL28 1: fullscreen NO; app in front yes
+FULL28 2: fullscreen NO; app in front yes
+FULL28 3: fullscreen NO; app in front yes
+IDLE full28-30-45s (15 s, no input): frames +0; cpu=0.2% (ticks 3 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.2%; pid 5422
+FULL28 after a restart: fullscreen NO
+FATAL: 0
+SHADER DIAG full28: diagnostics log entries with shevitsa-shader/foil-shader: 0 (of 0); logcat error lines naming them: 0
+## COMPLETE
+## logcat findings
+app pids seen: ['5422', '6231']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=39 total=109
+== Davey: 8
+   davey events=8 max=1142ms median=766ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

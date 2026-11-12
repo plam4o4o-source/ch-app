@@ -1,0 +1,32 @@
+app pids seen: ['6701']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=78 total=270
+   11-09 18:06:38.659  6701  6701 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-09 18:06:40.789  6701  6701 I Choreographer: Skipped 78 frames!  The application may be doing too much work on its main thread.
+   11-09 18:06:42.355  6701  6701 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+   11-09 18:06:43.161  6701  6701 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-09 18:07:07.528  6701  6701 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+== Davey: 9
+   davey events=9 max=1623ms median=782ms
+   11-09 18:06:40.855  6701  6713 I OpenGLRenderer: Davey! duration=1623ms; Flags=1, FrameTimelineVsyncId=7445, IntendedVsync=90302432434, Vsync=90302432434, InputEventId=0, HandleInputStart=90302573337, AnimationStart=90302573938, PerformTrav
+   11-09 18:06:42.317  6701  6713 I OpenGLRenderer: Davey! duration=758ms; Flags=0, FrameTimelineVsyncId=7648, IntendedVsync=92019099032, Vsync=92469099014, InputEventId=0, HandleInputStart=92480623886, AnimationStart=92480624597, PerformTrave
+   11-09 18:06:43.160  6701  6713 I OpenGLRenderer: Davey! duration=1458ms; Flags=0, FrameTimelineVsyncId=7719, IntendedVsync=92485765680, Vsync=93502432306, InputEventId=0, HandleInputStart=93513968060, AnimationStart=93513968922, PerformTrav
+   11-09 18:06:43.200  6701  6713 I OpenGLRenderer: Davey! duration=705ms; Flags=0, FrameTimelineVsyncId=7886, IntendedVsync=93519098972, Vsync=93585765636, InputEventId=0, HandleInputStart=93601195591, AnimationStart=93601195841, PerformTrave
+   11-09 18:06:43.989  6701  6716 I OpenGLRenderer: Davey! duration=1267ms; Flags=0, FrameTimelineVsyncId=7947, IntendedVsync=93702432298, Vsync=94302432274, InputEventId=0, HandleInputStart=94310239306, AnimationStart=94310239606, PerformTrav
+   11-09 18:06:44.050  6701  6716 I OpenGLRenderer: Davey! duration=746ms; Flags=0, FrameTimelineVsyncId=7977, IntendedVsync=94319098940, Vsync=94652432260, InputEventId=0, HandleInputStart=94661841152, AnimationStart=94661841803, PerformTrave
+   11-09 18:07:08.077  6701  6713 I OpenGLRenderer: Davey! duration=1134ms; Flags=0, FrameTimelineVsyncId=8723, IntendedVsync=117919097996, Vsync=118669097966, InputEventId=0, HandleInputStart=118677522039, AnimationStart=118677522520, Perform
+   11-09 18:07:10.702  6701  7258 I OpenGLRenderer: Davey! duration=782ms; Flags=0, FrameTimelineVsyncId=9225, IntendedVsync=121002431206, Vsync=121052431204, InputEventId=0, HandleInputStart=121057652886, AnimationStart=121057653426, PerformT
+   11-09 18:07:10.873  6701  7258 I OpenGLRenderer: Davey! duration=700ms; Flags=0, FrameTimelineVsyncId=9234, IntendedVsync=121069097870, Vsync=121452431188, InputEventId=0, HandleInputStart=121467442009, AnimationStart=121467443181, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 18:06:32.355  6491  6491 I PERFCHECK: section: FX0. BrandIntro on the very first launch: 12 s recording round a stopped at ~5 s, on the splash
+   11-09 18:07:14.512  7282  7282 I PERFCHECK: section: W. First launch and warm-up
+   11-09 18:07:49.771  7552  7552 I PERFCHECK: section: FX4. Pull-to-refresh rosette: slow 1500 ms pull starting inside the list 45% of the height
+   11-09 18:09:31.727  8376  8376 I PERFCHECK: section: FX1. Card foil and the sensor self-entered card
+   11-09 18:11:21.809  8700  8700 I PERFCHECK: section: AR2. Article toolbar: the longest article, slow drags; screenshots of the bottom
+   11-09 18:11:45.781  8894  8894 I PERFCHECK: section: FX2. Catalogue filter Само налични applied
+   11-09 18:12:20.747  9199  9199 I PERFCHECK: section: FX3. Shelf view vs list: gfxinfo of the same flings
+   11-09 18:13:08.243  9602  9602 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

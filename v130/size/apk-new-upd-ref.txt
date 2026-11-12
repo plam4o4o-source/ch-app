@@ -1,0 +1,1 @@
+1.2.30-pre bf10741 (v1.2.30 code); versionCode 1488542; update manifest https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v130/update/41346234873/update.json

@@ -1,0 +1,24 @@
+app pids seen: ['5683']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=51 total=82
+   11-10 17:15:26.797  5683  5683 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-10 17:15:34.233  5683  5683 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=901ms median=787ms
+   11-10 17:15:26.621  5683  5725 I OpenGLRenderer: Davey! duration=787ms; Flags=1, IntendedVsync=131021180687, Vsync=131021180687, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=131021691560, AnimationStart=1310217
+   11-10 17:15:26.846  5683  5725 I OpenGLRenderer: Davey! duration=901ms; Flags=1, IntendedVsync=131173035197, Vsync=132023035163, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=132026947140, AnimationStart=1320269
+   11-10 17:15:34.435  5683  5725 I OpenGLRenderer: Davey! duration=722ms; Flags=1, IntendedVsync=138941876703, Vsync=139458543349, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=139462726720, AnimationStart=1394627
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-10 17:15:24.050  5673  5673 I PERFCHECK: section: W. First launch and warm-up
+   11-10 17:16:06.260  6306  6306 I PERFCHECK: section: SM0. Device memory: MemTotal: 2046996 kB; API 28
+   11-10 17:16:06.376  6311  6311 I PERFCHECK: section: SM1. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-10 17:16:18.888  6435  6435 I PERFCHECK: sm-1
+   11-10 17:16:36.129  6897  6897 I PERFCHECK: section: SM2. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-10 17:16:46.708  7037  7037 I PERFCHECK: sm-2
+   11-10 17:17:03.466  7472  7472 I PERFCHECK: section: SM3. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-10 17:17:12.881  7590  7590 I PERFCHECK: sm-3
+   11-10 17:17:29.453  8016  8016 I PERFCHECK: section: SM9. For comparison: open a book from the catalogue list same memory probe

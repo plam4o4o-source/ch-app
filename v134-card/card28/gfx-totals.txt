@@ -1,0 +1,4 @@
+GFX c28-new-1    frames=  266  janky=250 (93.98%)  p50=150ms p90=500ms p95=600ms p99=750ms  slowUI=177 slowDraw=225 highInput=2
+GFX c28-base-1   frames=  985  janky=973 (98.78%)  p50=200ms p90=400ms p95=450ms p99=650ms  slowUI=576 slowDraw=942 highInput=15
+GFX c28-new-2    frames=  269  janky=252 (93.68%)  p50=150ms p90=500ms p95=550ms p99=750ms  slowUI=172 slowDraw=229 highInput=2
+GFX c28-base-2   frames=  978  janky=968 (98.98%)  p50=200ms p90=400ms p95=450ms p99=600ms  slowUI=551 slowDraw=933 highInput=13

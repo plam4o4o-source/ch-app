@@ -1,0 +1,59 @@
+part mem-base; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+installed base: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2822 ms
+## M. Memory over 30 cycles (all tabs + a book + the gallery viewer + the expanded search), base
+tab home @ 99 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=49483KB  Java=6936KB  Native=15044KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=10)  RSS=113216KB  Views=9 Activities=1
+MEM c00 (trimmed)    PSS=47490KB  Java=7140KB  Native=12220KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=1)  RSS=90224KB  Views=9 Activities=1
+cycle 1: book screen opened
+MEM c05 (trimmed)    PSS=94152KB  Java=11040KB  Native=34720KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=14)  RSS=143160KB  Views=13 Activities=1
+cycles done: 10, gallery viewer reached in 10, search expanded in 10
+MEM c10 (raw)        PSS=106140KB  Java=12172KB  Native=36788KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=14)  RSS=151384KB  Views=20 Activities=1
+MEM c10 (trimmed)    PSS=103417KB  Java=10812KB  Native=36292KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=14)  RSS=149612KB  Views=13 Activities=1
+MEM c15 (trimmed)    PSS=112894KB  Java=10952KB  Native=43768KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=160360KB  Views=13 Activities=1
+cycles done: 20, gallery viewer reached in 20, search expanded in 20
+MEM c20 (raw)        PSS=127221KB  Java=18076KB  Native=50332KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=175624KB  Views=20 Activities=1
+MEM c20 (trimmed)    PSS=119275KB  Java=10916KB  Native=49576KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=167680KB  Views=13 Activities=1
+MEM c25 (trimmed)    PSS=131074KB  Java=11056KB  Native=62112KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=181296KB  Views=13 Activities=1
+cycles done: 30, gallery viewer reached in 30, search expanded in 30
+MEM c30 (raw)        PSS=128327KB  Java=12160KB  Native=57856KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=179196KB  Views=20 Activities=1
+MEM c30 (trimmed)    PSS=126595KB  Java=10948KB  Native=57376KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=177464KB  Views=13 Activities=1
+pid after cycles: 6420; gallery viewer reached in 30/30, expanded search with '12' in 30/30 cycles
+PSS after trim by cycle (KB): c0=47490 c5=94152 c10=103417 c15=112894 c20=119275 c25=131074 c30=126595
+LEAK TREND (cycles 10-30, least squares): +1291 KB per cycle (+25.2 MB over 20 cycles)
+MEMTABLE base 1.2.33 (MB; Graphics = GL mtrack + EGL mtrack + Gfx dev in the App Summary)
+  c00 raw  PSS=48.3  Java=6.8  Native=14.7  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=3.0  RSS=110.6
+  c00 trim PSS=46.4  Java=7.0  Native=11.9  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=8.1  RSS=88.1
+  c10 raw  PSS=103.7  Java=11.9  Native=35.9  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.9  RSS=147.8
+  c10 trim PSS=101.0  Java=10.6  Native=35.4  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.7  RSS=146.1
+  c20 raw  PSS=124.2  Java=17.7  Native=49.2  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.8  RSS=171.5
+  c20 trim PSS=116.5  Java=10.7  Native=48.4  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.8  RSS=163.8
+  c30 raw  PSS=125.3  Java=11.9  Native=56.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.7  RSS=175.0
+  c30 trim PSS=123.6  Java=10.7  Native=56.0  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.7  RSS=173.3
+## COMPLETE
+## logcat findings
+app pids seen: ['4819', '6420']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 46
+   skipped-frames events=46 max=42 total=1557
+== Davey: 102
+   davey events=102 max=1150ms median=794ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

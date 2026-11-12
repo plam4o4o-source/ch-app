@@ -1,0 +1,28 @@
+APP W/E lines (pids ['5625', '7945']): 128 in 27 groups
+      12  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+      11  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      11  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+       9  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+       9  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+       8  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+       7  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+       7  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+       7  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+       4  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[
+       3  W/IInputConnectionWrapper: setComposingText on inactive InputConnection
+       3  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       2  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       2  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       2  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+       2  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#cab#bf-c#-#e#-b#e#-#fde#b#e#b#, generation=#)
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       1  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_MULTIPLE, keyCode=KEYCODE_DPAD_UP, scanCode=#,

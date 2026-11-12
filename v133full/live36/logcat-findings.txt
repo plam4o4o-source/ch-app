@@ -1,0 +1,39 @@
+app pids seen: ['4348', '5741', '5983', '6498']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=90 total=367
+   11-09 16:55:42.060  4348  4348 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-09 16:55:43.039  4348  4348 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-09 16:55:56.970  4348  4348 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-09 16:56:03.132  4348  4348 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-09 16:56:03.730  4348  4348 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-09 16:56:11.610  4348  4348 I Choreographer: Skipped 87 frames!  The application may be doing too much work on its main thread.
+   11-09 16:57:59.900  4348  4348 I Choreographer: Skipped 90 frames!  The application may be doing too much work on its main thread.
+== Davey: 12
+   davey events=12 max=1532ms median=976ms
+   11-09 16:55:43.133  4348  4420 I HWUI    : Davey! duration=1532ms; Flags=1, FrameTimelineVsyncId=7551, IntendedVsync=116040931490, Vsync=116640931466, InputEventId=0, HandleInputStart=116651318683, AnimationStart=116651319154, PerformTraver
+   11-09 16:55:43.341  4348  4380 I HWUI    : Davey! duration=1042ms; Flags=0, FrameTimelineVsyncId=7680, IntendedVsync=116874264790, Vsync=117624264760, InputEventId=0, HandleInputStart=117660478078, AnimationStart=117660479190, PerformTraver
+   11-09 16:55:53.319  4348  4357 I HWUI    : Davey! duration=829ms; Flags=0, FrameTimelineVsyncId=8593, IntendedVsync=127074264382, Vsync=127074264382, InputEventId=0, HandleInputStart=127074447926, AnimationStart=127074448768, PerformTravers
+   11-09 16:55:54.271  4348  4358 I HWUI    : Davey! duration=1269ms; Flags=0, FrameTimelineVsyncId=8629, IntendedVsync=127524264364, Vsync=127757597688, InputEventId=0, HandleInputStart=127775184084, AnimationStart=127775184434, PerformTraver
+   11-09 16:55:56.172  4348  4698 I HWUI    : Davey! duration=979ms; Flags=0, FrameTimelineVsyncId=8726, IntendedVsync=129540930950, Vsync=129874264270, InputEventId=0, HandleInputStart=129896111951, AnimationStart=129896112732, PerformTravers
+   11-09 16:55:57.430  4348  4698 I HWUI    : Davey! duration=996ms; Flags=0, FrameTimelineVsyncId=8889, IntendedVsync=131007597558, Vsync=131557597536, InputEventId=0, HandleInputStart=131562116543, AnimationStart=131562116823, PerformTravers
+   11-09 16:56:03.950  4348  4358 I HWUI    : Davey! duration=714ms; Flags=0, FrameTimelineVsyncId=9328, IntendedVsync=137740930622, Vsync=138307597266, InputEventId=0, HandleInputStart=138322940663, AnimationStart=138322941354, PerformTravers
+   11-09 16:57:59.716  4348  4689 I HWUI    : Davey! duration=972ms; Flags=1, FrameTimelineVsyncId=14096, IntendedVsync=252957592680, Vsync=252957592680, InputEventId=0, HandleInputStart=252961407115, AnimationStart=252961407325, PerformTraver
+   11-09 16:58:00.067  4348  4698 I HWUI    : Davey! duration=1466ms; Flags=1, FrameTimelineVsyncId=14096, IntendedVsync=252957592680, Vsync=252957592680, InputEventId=0, HandleInputStart=252961407115, AnimationStart=252961407325, PerformTrave
+   11-09 16:59:10.736  6498  6506 I HWUI    : Davey! duration=932ms; Flags=0, FrameTimelineVsyncId=17394, IntendedVsync=324190923164, Vsync=324407589822, InputEventId=0, HandleInputStart=324422944095, AnimationStart=324422944746, PerformTraver
+   11-09 16:59:11.023  6498  6541 I HWUI    : Davey! duration=793ms; Flags=0, FrameTimelineVsyncId=17410, IntendedVsync=324424256488, Vsync=324857589804, InputEventId=0, HandleInputStart=324874362957, AnimationStart=324874363478, PerformTraver
+   11-09 16:59:11.634  6498  6541 I HWUI    : Davey! duration=773ms; Flags=0, FrameTimelineVsyncId=17552, IntendedVsync=325340923118, Vsync=325557589776, InputEventId=0, HandleInputStart=325569809233, AnimationStart=325569809904, PerformTraver
+== NativeLink: 3
+   11-09 16:55:53.109  4348  4665 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-09 16:58:25.800  5983  6078 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-09 16:59:11.209  6498  6548 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 16:55:27.439  3959  3959 I PERFCHECK: section: L0. Device: Android 16 SDK 36, 13894323
+   11-09 16:55:27.811  3977  3977 I PERFCHECK: section: L1. Update download as a Live Update: 1.2.33-pre versionCode 1500182 → the staged test 1.2.33 1500183, throttled
+   11-09 16:57:49.726  5592  5592 I PERFCHECK: section: L1b. Install the downloaded update system installer → 1.2.33
+   11-09 16:58:06.756   643   673 I ActivityManager: Killing 4348:org.chyavorec.app/u0a217 (adj 0): stop org.chyavorec.app due to installPackageLI
+   11-09 16:58:11.601  5834  5834 I PERFCHECK: section: L2. Event reminder → event Live Update 60 min before; needs the events start time
+   11-09 16:59:04.915  6485  6485 I PERFCHECK: section: L3. API 36 smoke: ribbon and card foil render
+   11-09 16:59:57.735  6849  6849 I PERFCHECK: section: L4. Live Update evidence: raw notification records during the download, the apps notification settings

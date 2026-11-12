@@ -1,0 +1,259 @@
+part misc34; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 6085 ms
+## C1-new. Event with a photo: share as image (file in cache/share, MIME in the chooser)
+SHARE ev1-new: no choice sheet ()
+SHARE ev2-new: chooser OPEN after 3 s; cache/share: 648781 2026-11-10 19:27 chyavorec-event-1794338842386.png;
+SHARE ev2-new file: chyavorec-event-1794338842386.png 648781 B; PNG (1080, 1920) RGBA
+SHARE ev2-new: chyavorec-event-1794338842386.png (no photo?) text="Панайот Пипков · Ден на семейството" text="21 ноември 2026" 
+SHARE ev3-new: chooser OPEN after 2 s; cache/share: 643430 2026-11-10 19:28 chyavorec-event-1794338886538.png;
+SHARE ev3-new file: chyavorec-event-1794338886538.png 643430 B; PNG (1080, 1920) RGBA
+SHARE ev3-new: chyavorec-event-1794338886538.png (no photo?) text="Световен ден за борба срещу СПИН" text="1 декември 2026" 
+SHARE ev4-new: chooser OPEN after 2 s; cache/share: 645001 2026-11-10 19:28 chyavorec-event-1794338927428.png;
+SHARE ev4-new file: chyavorec-event-1794338927428.png 645001 B; PNG (1080, 1920) RGBA
+SHARE ev4-new: chyavorec-event-1794338927428.png (no photo?) text="Международен ден на инвалида" text="3 декември 2026" 
+SHARE ev5-new: chooser OPEN after 2 s; cache/share: 621497 2026-11-10 19:29 chyavorec-event-1794338968811.png;
+SHARE ev5-new file: chyavorec-event-1794338968811.png 621497 B; PNG (1080, 1920) RGBA
+SHARE ev5-new: chyavorec-event-1794338968811.png (no photo?) text="Никулден" text="6 декември 2026" 
+no event row 6: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" text="Читалище" text="Народен обичай" 
+no event row 7: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" text="Читалище" text="Народен обичай" 
+no event row 8: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" text="Читалище" text="Народен обичай" 
+SHARE new: event with a photo: none of the first 8
+## C1b-new. Article: share as image (photo card)
+SHARE art-new: chooser OPEN after 2 s; cache/share: 296537 2026-11-10 19:30 chyavorec-news-1794339032277.jpg;
+SHARE art-new file: chyavorec-news-1794339032277.jpg 296537 B; JPEG (1080, 1350) RGB
+SHARE art-new received by the helper: action=android.intent.action.SEND type=image/jpeg flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794339032277.jpg mime=image/jpeg bytes=296537 png=false dims=1080x1350 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026
+## C2-new. Article toolbar share while scrolling during the render
+ARTSHARE new-1 (scrolled 3× right after 'Сподели като картинка'): chooser OPEN after 1 s; toolbar now hidden; cache/share: 296537 2026-11-10 19:31 chyavorec-news-1794339071230.jpg;
+SHARE as-new-1 received by the helper: action=android.intent.action.SEND type=image/jpeg flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794339071230.jpg mime=image/jpeg bytes=296537 png=false dims=1080x1350 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026
+ARTSHARE new-2 (scrolled 3× right after 'Сподели като картинка'): chooser OPEN after 1 s; toolbar now hidden; cache/share: 296537 2026-11-10 19:31 chyavorec-news-1794339111303.jpg;
+SHARE as-new-2 received by the helper: action=android.intent.action.SEND type=image/jpeg flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794339111303.jpg mime=image/jpeg bytes=296537 png=false dims=1080x1350 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026
+## D1-new. Pull-to-refresh rosette mid-gesture (slow pull, screencaps on the device)
+REFRESH news-new: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.03 0.42 0.00 0.00 0.00 0.00 
+REFRESH news-top-new: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.00 0.00 0.00 0.00 0.00 0.00 
+REFRESH calendar-new: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.06 0.43 0.84 0.01 0.01 0.01 
+## SH1. Shake with the setting at its default: 3 peaks + stillness (opens), the old 2-peak pattern
+SHAKE default-3peaks: not triggered
+SHAKE default-2peaks: not triggered
+SHAKE default-3peaks-again: TRIGGERED
+## SH2. Settings › Изглед › „Разклащане за „Изненадай ме““ off → shake does nothing
+setting before: CHECKSTATE 'Разклащане за „Изненадай ме“': checked=true (node itself/ancestor, clickable=true)
+setting after the tap: CHECKSTATE 'Разклащане за „Изненадай ме“': checked=false (node itself/ancestor, clickable=true)
+SHAKE off-3peaks: not triggered
+SHAKE off-3peaks-b: not triggered
+WARN: settings item =Разклащане за „Изненадай ме“ not found
+WARN: tab bar not reached
+SHAKE on-again-3peaks: not triggered
+## D2-new. Accessibility: news bookmarks, documents, calendar with the collapsed bar, viewer pane title, „Само налични“, shelf spines
+A11Y service: 11-10 19:37:58.303  9576  9576 I PCA11Y  : connected flags=80
+A-new NEWS bookmark buttons (uiautomator): named 1, bare 'Запази' 0; e.g. content-desc="Запази: Световен ден на хляба! &#127838;&#129747;&#129366;" 
+TREE news-new (104 lines):
+TREE nodes=101 windows: ['11-10 19:38:10.500  9576  9576 I PCDUMP  : tnews-new W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:38:10.506  9576  9576 I PCDUMP  : tnews-new W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=14 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Новини и събития']; headings: ['Новини и събития']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+NODE 'Запази: Световен ден на хляба! 🍞🫓🥖' cls=View clk=false focusable=false checkable=false checked=false pane= b=[944,1957][1007,2020]
+NODES matching /^Запази/: 1
+A-new DOCUMENTS PDF buttons: named 1, bare 0; e.g. content-desc="Отвори с приложение за PDF: Декларация за частни интереси" content-desc="Отвори с приложение за PDF: Отчет за дейност 2025" 
+TREE documents-new (58 lines):
+TREE nodes=55 windows: ['11-10 19:38:21.479  9576  9576 I PCDUMP  : tdocuments-new W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:38:21.482  9576  9576 I PCDUMP  : tdocuments-new W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=8 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Документи и архив']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+NODE 'Отвори с приложение за PDF: Устав' cls=View clk=false focusable=false checkable=false checked=false pane= b=[944,1226][1007,1289]
+NODES matching /PDF/: 3
+TREE cal-top-new (127 lines):
+TREE nodes=124 windows: ['11-10 19:38:38.484  9576  9576 I PCDUMP  : tcal-top-new W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:38:38.488  9576  9576 I PCDUMP  : tcal-top-new W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=17 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Новини и събития']; headings: ['Новини и събития']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+A-new cal top: TOPBAR focusable/clickable nodes with top < 420px: 5: '' b=[42,307][422,433] | '' b=[427,307][807,433] | '' b=[808,308][934,434] | '' b=[934,308][1060,434] | '' b=[944,150][1070,276]
+A-new cal top: TOPBAR focusable/clickable nodes with empty bounds (invisible but in the tree): 0: 
+TREE cal-collapsed-new (129 lines):
+TREE nodes=126 windows: ['11-10 19:38:49.083  9576  9576 I PCDUMP  : tcal-collapsed-new W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:38:49.086  9576  9576 I PCDUMP  : tcal-collapsed-new W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=18 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+A-new cal collapsed: TOPBAR focusable/clickable nodes with top < 420px: 9: '' b=[42,139][422,265] | '' b=[427,139][807,265] | '' b=[808,140][934,266] | '' b=[934,140][1060,266] | '' b=[42,287][260,361] | '' b=[281,287][603,361] | '' b=[624,287][915,361] | '' b=[936,287][1080,413] | '' b=[42,361][1038,591]
+A-new cal collapsed: TOPBAR focusable/clickable nodes with empty bounds (invisible but in the tree): 0: 
+A-new cal collapsed (uiautomator): top-bar actions present: content-desc="Абонирай се за календара "[839,171][902,234]";content-desc="Изглед календар "[965,171][1028,234]";
+TREE viewer-new (36 lines):
+TREE nodes=33 windows: ['11-10 19:39:20.851  9576  9576 I PCDUMP  : tviewer-new W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:39:20.854  9576  9576 I PCDUMP  : tviewer-new W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=4 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Снимки: Фотодокументална изложба']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+A-new VIEWER pane titles: pane titles: ['Status bar', 'Снимки: Фотодокументална изложба']
+CAP a11y-new/filters: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=26 ellipsized=0 | Манипулатор за преместване с · Филтри · Без филтри · Само налични · Вид документ · книга
+TREE filters-new (90 lines):
+TREE nodes=87 windows: ['11-10 19:39:49.491  9576  9576 I PCDUMP  : tfilters-new W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:39:49.494  9576  9576 I PCDUMP  : tfilters-new W1 type=1 active=true focused=true title= pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=21 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Долен лист']; headings: ['Филтри']
+TREE nodes with labelled (custom) actions: 2: '' [32:показване на подсказка] | '' [1048576:Отхвърляне на долния лист]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+NODE 'Само налични' cls=TextView clk=false focusable=false checkable=false checked=false pane= b=[53,420][890,469]
+NODES matching /Само налични/: 1
+A-new filters (uiautomator) 'Само налични': CHECKSTATE 'Само налични': checked=false (node itself/ancestor, clickable=true); checkable nodes on the sheet: 1
+CAP a11y-new/shelf: targets=48 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=14 | front: app | texts=51 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+TREE shelf-new (134 lines):
+TREE nodes=131 windows: ['11-10 19:40:03.632  9576  9576 I PCDUMP  : tshelf-new W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:40:03.635  9576  9576 I PCDUMP  : tshelf-new W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=48 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Каталог']; headings: ['Каталог']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+A-new SPINES clickable tall nodes: 34; min width 32 dp, min height 48 dp; <48dp wide: 15; unlabelled: 1; duplicate labels: 0 []
+A-new SPINES examples: '' [988,468][1080,594] | '"Ох...", Джиан, Филип' [16,715][142,1083] | '12 -те вятъра, Гарфилд, Джудит и др.' [101,755][189,1083] | '6 дни в Ал Араф, Райт, Мишел' [189,676][315,1083] | '66 градуса Северна ширина, Ридпат, Майкъл' [281,742][407,1083]
+REFRESH news-dark-new: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.03 0.51 0.49 0.06 0.03 0.03 
+installed base: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3707 ms
+## C1-base. Event with a photo: share as image (file in cache/share, MIME in the chooser)
+SHARE ev1-base: chooser OPEN after 2 s; cache/share: 654869 2026-11-10 19:42 chyavorec-event-1794339728789.png;
+SHARE ev1-base file: chyavorec-event-1794339728789.png 654869 B; PNG (1080, 1920) RGBA
+SHARE ev1-base received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-event-1794339728789.png mime=image/png bytes=654869 png=true dims=1080x1920 subject=80 г. от създаването на ЮНЕСКО text=80 г. от създаването на ЮНЕСКО 16 ноември 2026 НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец https://chyavorec.org/events
+SHARE base: event with a photo: 1
+## C1b-base. Article: share as image (photo card)
+SHARE art-base: chooser OPEN after 2 s; cache/share: 1169798 2026-11-10 19:42 chyavorec-news-1794339766410.png;
+SHARE art-base file: chyavorec-news-1794339766410.png 1169798 B; PNG (1080, 1350) RGBA
+SHARE art-base received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794339766410.png mime=image/png bytes=1169798 png=true dims=1080x1350 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026
+## C2-base. Article toolbar share while scrolling during the render
+ARTSHARE base-1 (scrolled 3× right after 'Сподели като картинка'): chooser OPEN after 1 s; toolbar now hidden; cache/share: 1169798 2026-11-10 19:43 chyavorec-news-1794339801449.png;
+SHARE as-base-1 received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794339801449.png mime=image/png bytes=1169798 png=true dims=1080x1350 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026
+ARTSHARE base-2 (scrolled 3× right after 'Сподели като картинка'): chooser OPEN after 1 s; toolbar now hidden; cache/share: 1169798 2026-11-10 19:44 chyavorec-news-1794339840420.png;
+SHARE as-base-2 received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794339840420.png mime=image/png bytes=1169798 png=true dims=1080x1350 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026
+## D1-base. Pull-to-refresh rosette mid-gesture (slow pull, screencaps on the device)
+REFRESH news-base: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.05 0.31 0.00 0.00 0.00 0.00 
+REFRESH news-top-base: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.00 0.02 0.02 0.02 0.02 0.02 
+REFRESH calendar-base: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.42 0.33 0.00 0.00 0.00 0.00 
+## D2-base. Accessibility: news bookmarks, documents, calendar with the collapsed bar, viewer pane title, „Само налични“, shelf spines
+A11Y service: 11-10 19:45:14.767  9576  9576 I PCA11Y  : connected flags=80
+A-base NEWS bookmark buttons (uiautomator): named 0, bare 'Запази' 1; e.g. content-desc="Запази" 
+TREE news-base (103 lines):
+TREE nodes=100 windows: ['11-10 19:45:27.008  9576  9576 I PCDUMP  : tnews-base W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:45:27.016  9576  9576 I PCDUMP  : tnews-base W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=14 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Новини и събития']; headings: ['Новини и събития']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+NODE 'Запази' cls=View clk=false focusable=false checkable=false checked=false pane= b=[944,1957][1007,2020]
+NODES matching /^Запази/: 1
+A-base DOCUMENTS PDF buttons: named 0, bare 1; e.g. content-desc="Отвори с приложение за PDF" content-desc="Отвори с приложение за PDF" 
+TREE documents-base (57 lines):
+TREE nodes=54 windows: ['11-10 19:45:38.080  9576  9576 I PCDUMP  : tdocuments-base W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:45:38.086  9576  9576 I PCDUMP  : tdocuments-base W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=8 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Документи и архив']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+NODE 'Отвори с приложение за PDF' cls=View clk=false focusable=false checkable=false checked=false pane= b=[944,1226][1007,1289]
+NODES matching /PDF/: 3
+TREE cal-top-base (126 lines):
+TREE nodes=123 windows: ['11-10 19:45:55.287  9576  9576 I PCDUMP  : tcal-top-base W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:45:55.290  9576  9576 I PCDUMP  : tcal-top-base W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=17 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Новини и събития']; headings: ['Новини и събития']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+A-base cal top: TOPBAR focusable/clickable nodes with top < 420px: 5: '' b=[42,307][422,433] | '' b=[427,307][807,433] | '' b=[808,308][934,434] | '' b=[934,308][1060,434] | '' b=[944,150][1070,276]
+A-base cal top: TOPBAR focusable/clickable nodes with empty bounds (invisible but in the tree): 0: 
+TREE cal-collapsed-base (129 lines):
+TREE nodes=126 windows: ['11-10 19:46:05.724  9576  9576 I PCDUMP  : tcal-collapsed-base W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:46:05.728  9576  9576 I PCDUMP  : tcal-collapsed-base W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=18 UNLABELLED clickable=1 ['View [944,66][1070,192]']
+TREE pane titles: ['Status bar']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+A-base cal collapsed: TOPBAR focusable/clickable nodes with top < 420px: 9: '' b=[42,139][422,265] | '' b=[427,139][807,265] | '' b=[808,140][934,266] | '' b=[934,140][1060,266] | '' b=[42,287][260,413] | '' b=[281,287][603,413] | '' b=[624,287][915,413] | '' b=[936,287][1080,413] | '' b=[944,66][1070,192]
+A-base cal collapsed: TOPBAR focusable/clickable nodes with empty bounds (invisible but in the tree): 0: 
+A-base cal collapsed (uiautomator): top-bar actions present: content-desc="Абонирай се за календара "[839,171][902,234]";content-desc="Изглед календар "[965,192][1028,234]";
+TREE viewer-base (36 lines):
+TREE nodes=33 windows: ['11-10 19:46:36.061  9576  9576 I PCDUMP  : tviewer-base W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:46:36.065  9576  9576 I PCDUMP  : tviewer-base W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=4 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+A-base VIEWER pane titles: pane titles: ['Status bar']
+CAP a11y-base/filters: targets=22 MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=26 ellipsized=0 | Манипулатор за преместване с · Филтри · Без филтри · Само налични · Вид документ · книга
+TREE filters-base (89 lines):
+TREE nodes=86 windows: ['11-10 19:47:05.771  9576  9576 I PCDUMP  : tfilters-base W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:47:05.779  9576  9576 I PCDUMP  : tfilters-base W1 type=1 active=true focused=true title= pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=21 UNLABELLED clickable=1 ['View [890,402][1027,528]']
+TREE pane titles: ['Status bar', 'Долен лист']; headings: ['Филтри']
+TREE nodes with labelled (custom) actions: 2: '' [32:показване на подсказка] | '' [1048576:Отхвърляне на долния лист]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+NODE 'Само налични' cls=TextView clk=false focusable=false checkable=false checked=false pane= b=[53,441][890,490]
+NODES matching /Само налични/: 1
+A-base filters (uiautomator) 'Само налични': CHECKSTATE 'Само налични': checked=false (descendant android.view.View); checkable nodes on the sheet: 1
+CAP a11y-base/shelf: targets=48 MISSING=0 DOUBLE=0 SAME-LABEL=4 SMALL(<48dp)=14 | front: app | texts=85 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+TREE shelf-base (266 lines):
+TREE nodes=263 windows: ['11-10 19:47:19.904  9576  9576 I PCDUMP  : tshelf-base W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-10 19:47:19.906  9576  9576 I PCDUMP  : tshelf-base W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=48 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Каталог']; headings: ['Каталог']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+A-base SPINES clickable tall nodes: 34; min width 32 dp, min height 48 dp; <48dp wide: 15; unlabelled: 34; duplicate labels: 1 [('', 34)]
+A-base SPINES examples: '' [988,468][1080,594] | '' [16,715][142,1083] | '' [101,755][189,1083] | '' [189,676][315,1083] | '' [281,742][407,1083]
+REFRESH news-dark-base: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.21 0.30 0.32 0.00 0.00 0.00 
+A11Y AGG: 4 screens analysed, 0 dumps failed; totals MISSING=1 DOUBLE=0 SAME-LABEL=6 SMALL(<48dp)=30
+== MISSING: 1 distinct
+   View@[890,402][1027,528]  [1 screens: filters]
+== SMALL: 13 distinct
+   'Манипулатор за преместване с п'  [1 screens: filters]
+   '12 -те вятъра, Гарфилд, Джудит'  [1 screens: shelf]
+   'Аз обичам Ню Йорк, Келк, Линдз'  [1 screens: shelf]
+   'Ако върнеш времето назад, Потъ'  [1 screens: shelf]
+   'Алтъна, Никова, Ивелина Алтъна'  [1 screens: shelf]
+   'Анатомът, Андахази, Федерико А'  [1 screens: shelf]
+   'Бевълстоук : Кн. 1 - 2, Куин, '  [1 screens: shelf]
+   'Безсрамна добродетел, Робъртс,'  [1 screens: shelf]
+   'Белият дома, Николай Симеонов '  [1 screens: shelf]
+   'Белият звездите, Диана Христов'  [1 screens: shelf]
+   'Алтъна, Никова, Ивелина'  [1 screens: shelf]
+   'Анатомът, Андахази, Федерико'  [1 screens: shelf]
+   'Белият дома, Николай Симеонов,'  [1 screens: shelf]
+== SAME-LABEL: 5 distinct
+   'Манипулатор за преместване с п' x2  [1 screens: filters]
+   'Бевълстоук : Кн. 1 - 2, Куин, ' x2  [1 screens: shelf]
+   'Белият дома, Николай Симеонов ' x7  [1 screens: shelf]
+   'Белият звездите, Диана Христов' x5  [1 screens: shelf]
+   'Белият звездите, Гергана Димит' x5  [1 screens: shelf]
+== DOUBLE: 0 distinct
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: Settings not found
+APP W/E lines (pids ['5245', '14493']): 139 in 12 groups
+      59  W/AccessibilityDelegate: Drawing order is not available, was AccessibilityNodeInfo requested for a child node before its parent?
+      28  W/Parcel: Expecting binder but got null!
+      24  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      11  E/FrameEvents: updateAcquireFence: Did not find frame.
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       2  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=c#e#-#c#-#c#b-aa#-fba#e#a#, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=fc#b#-e#-#c#-#ff-f#f#a#cfcb#, generation=#)
+## COMPLETE
+## logcat findings
+app pids seen: ['5245', '14493']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 77
+   skipped-frames events=77 max=118 total=3323
+== Davey: 159
+   davey events=159 max=3037ms median=896ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

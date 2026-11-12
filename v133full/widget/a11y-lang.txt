@@ -1,0 +1,6 @@
+A11Y lang/01-sysEN-appBG-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y lang/02-sysEN-appEN-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y lang/03-sysEN-appEN-more: targets=14 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[0,2043][1080,2127]
+A11Y lang/05-sysBG-appEN-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y lang/07-sysBG-appBG-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

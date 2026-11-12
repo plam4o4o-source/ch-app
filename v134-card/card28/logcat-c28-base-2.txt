@@ -1,0 +1,1020 @@
+--------- beginning of main
+11-10 18:47:22.480  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f270e51)
+11-10 18:47:22.480  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f270e51)
+11-10 18:47:23.409  2005  4679 E memtrack: Couldn't load memtrack module
+11-10 18:47:23.409  2005  4679 W android.os.Debug: failed to get memory consumption info: -1
+11-10 18:47:23.480  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@da3f6b6)
+11-10 18:47:23.481  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@da3f6b6)
+11-10 18:47:23.500  2005  2020 E memtrack: Couldn't load memtrack module
+11-10 18:47:23.500  2005  2020 W android.os.Debug: failed to get memory consumption info: -1
+11-10 18:47:23.639  9740  9740 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:23.668  9740  9740 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:23.670  9740  9740 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:23.670  9740  9740 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:23.685  9740  9740 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:47:23.769  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 8956544 , only wrote 8803440
+11-10 18:47:24.480  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bfd3e8d)
+11-10 18:47:24.481  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bfd3e8d)
+11-10 18:47:24.714  9740  9740 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c212; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:24.717  9740  9740 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c348; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:24.721  9740  9740 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c5b4; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:24.723  9740  9740 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c6ea; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:24.724  9740  9740 W AccessibilityNodeInfoDumper: Fetch time: 16ms
+--------- beginning of system
+11-10 18:47:23.691  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:24.724  2005  2649 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@abfafb7
+11-10 18:47:24.725  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:24.730  9740  9740 D AndroidRuntime: Shutting down VM
+11-10 18:47:24.944  9763  9763 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:24.975  9763  9763 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:24.976  9763  9763 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:24.977  9763  9763 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:24.992  9763  9763 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:47:25.481  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@18c3689)
+11-10 18:47:25.481  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@18c3689)
+11-10 18:47:26.027  9763  9763 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c218; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:26.030  9763  9763 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c34e; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:26.034  9763  9763 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c5ba; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:26.036  9763  9763 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c6f0; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:26.038  9763  9763 W AccessibilityNodeInfoDumper: Fetch time: 21ms
+11-10 18:47:25.000  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:26.038  2005  2748 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@5959053
+11-10 18:47:26.039  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:26.044  9763  9763 D AndroidRuntime: Shutting down VM
+11-10 18:47:26.345  9778  9778 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:26.374  9778  9778 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:26.376  9778  9778 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:26.377  9778  9778 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:26.392  9778  9778 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:47:26.480  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2c4b6cb)
+11-10 18:47:26.481  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2c4b6cb)
+11-10 18:47:26.482  2514  9791 I Vision  : Requesting optional module download of ocr.
+11-10 18:47:26.486  2514  9791 I Vision  : Checking for download completion for 855750 -- ocr
+11-10 18:47:26.489  2514  9791 I ChimeraConfigurator: Starting update, reason: 4 urgentFeatures: vision.ocr:-1
+11-10 18:47:27.420  9778  9778 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c21e; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:27.423  9778  9778 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c354; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:27.427  9778  9778 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c5c0; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:27.429  9778  9778 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c6f6; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:27.430  9778  9778 W AccessibilityNodeInfoDumper: Fetch time: 16ms
+11-10 18:47:26.399  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:27.431  2005  4475 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@3dedeaf
+11-10 18:47:27.431  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:27.434  9778  9778 D AndroidRuntime: Shutting down VM
+11-10 18:47:27.481  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ee5f4a7)
+11-10 18:47:27.482  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ee5f4a7)
+11-10 18:47:27.573  9795  9795 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:27.603  9795  9795 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:27.604  9795  9795 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:27.605  9795  9795 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:27.617  9795  9795 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:47:28.481  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@4cfc5f2)
+11-10 18:47:28.481  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@4cfc5f2)
+11-10 18:47:28.651  9795  9795 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c227; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:28.654  9795  9795 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c35d; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:28.657  9795  9795 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c5c9; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:28.660  9795  9795 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c6ff; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:28.660  9795  9795 W AccessibilityNodeInfoDumper: Fetch time: 21ms
+11-10 18:47:27.625  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:28.661  2005  4679 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@89e3d54
+11-10 18:47:28.662  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:28.667  9795  9795 D AndroidRuntime: Shutting down VM
+11-10 18:47:28.816  9808  9808 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:28.844  9808  9808 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:28.845  9808  9808 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:28.858  9808  9808 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:47:28.861  9808  9808 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=540.0, y[0]=2211.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=848122, downTime=848122, deviceId=0, source=0x1002 }
+11-10 18:47:28.864  9808  9808 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=540.0, y[0]=2211.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=848122, downTime=848122, deviceId=0, source=0x1002 }
+11-10 18:47:28.865  9808  9808 D AndroidRuntime: Shutting down VM
+11-10 18:47:28.868  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 8803504 , only wrote 8803440
+11-10 18:47:29.481  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@14bdac0)
+11-10 18:47:29.482  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@14bdac0)
+11-10 18:47:30.481  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a72d3f9)
+11-10 18:47:30.482  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a72d3f9)
+11-10 18:47:30.973  9820  9820 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:31.002  9820  9820 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:31.004  9820  9820 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:31.004  9820  9820 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:31.018  9820  9820 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:47:31.481  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e73e2ec)
+11-10 18:47:31.481  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e73e2ec)
+11-10 18:47:32.045  9820  9820 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c232; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:32.048  9820  9820 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c368; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:32.053  9820  9820 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c5d4; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:32.055  9820  9820 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@c70a; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:32.057  9820  9820 W AccessibilityNodeInfoDumper: Fetch time: 19ms
+11-10 18:47:31.024  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:32.058  2005  4475 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@b104f3e
+11-10 18:47:32.059  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:32.062  9820  9820 D AndroidRuntime: Shutting down VM
+11-10 18:47:32.153  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 9116788 , only wrote 8961120
+11-10 18:47:32.212  9834  9834 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:32.241  9834  9834 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:32.243  9834  9834 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:32.257  9834  9834 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:47:32.261  9834  9834 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=851521, downTime=851521, deviceId=0, source=0x1002 }
+11-10 18:47:32.263  9834  9834 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=851521, downTime=851521, deviceId=0, source=0x1002 }
+11-10 18:47:32.269  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 8961286 , only wrote 8961120
+11-10 18:47:32.273  9834  9834 D AndroidRuntime: Shutting down VM
+11-10 18:47:32.483  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@93e214a)
+11-10 18:47:32.486  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@93e214a)
+11-10 18:47:32.572  9377  9388 I g.chyavorec.ap: Background concurrent copying GC freed 165116(6MB) AllocSpace objects, 2(960KB) LOS objects, 35% free, 10MB/16MB, paused 26.831ms total 255.224ms
+11-10 18:47:32.650  1751  1751 I keystore: 1 0
+11-10 18:47:32.658  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:47:32.659  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:47:33.485  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@675a384)
+11-10 18:47:33.485  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@675a384)
+11-10 18:47:34.483  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@401076d)
+11-10 18:47:34.485  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@401076d)
+11-10 18:47:35.479  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 9269002 , only wrote 9115200
+11-10 18:47:35.492  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@18fa2)
+11-10 18:47:35.539  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@18fa2)
+11-10 18:47:35.649  9850  9850 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:35.735  9850  9850 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:35.737  9850  9850 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:35.738  9850  9850 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:35.759  9850  9850 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:47:35.793  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:36.484  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@fb3ad69)
+11-10 18:47:36.494  2514  9846 I Vision  : Requesting optional module download of ocr.
+11-10 18:47:36.494  2514  9846 I Vision  : Checking for download completion for 865758 -- ocr
+11-10 18:47:36.498  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@fb3ad69)
+11-10 18:47:37.489  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@951608f)
+11-10 18:47:37.489  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@951608f)
+11-10 18:47:38.486  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@abdf1c)
+11-10 18:47:38.487  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@abdf1c)
+11-10 18:47:39.493  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2d0b725)
+11-10 18:47:39.495  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2d0b725)
+11-10 18:47:40.489  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@64970fa)
+11-10 18:47:40.523  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@64970fa)
+11-10 18:47:41.488  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@90d76ab)
+11-10 18:47:41.490  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@90d76ab)
+11-10 18:47:42.490  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@825d108)
+11-10 18:47:42.490  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@825d108)
+11-10 18:47:43.490  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1faa0a1)
+11-10 18:47:43.490  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1faa0a1)
+11-10 18:47:44.489  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@22da2c6)
+11-10 18:47:44.492  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@22da2c6)
+11-10 18:47:45.493  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2ad287)
+11-10 18:47:45.495  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2ad287)
+11-10 18:47:45.989  2005  4774 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@3b9b433
+11-10 18:47:45.996  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:46.005  9850  9850 D AndroidRuntime: Shutting down VM
+11-10 18:47:46.492  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f7fa5dd)
+11-10 18:47:46.493  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f7fa5dd)
+11-10 18:47:47.463  9863  9863 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:47.494  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3d12552)
+11-10 18:47:47.495  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3d12552)
+11-10 18:47:47.578  9863  9863 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:47.579  9863  9863 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:47.616  9863  9863 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:47:47.628  9863  9863 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=866882, downTime=866882, deviceId=0, source=0x1002 }
+11-10 18:47:47.648  9863  9863 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=866882, downTime=866882, deviceId=0, source=0x1002 }
+11-10 18:47:47.689  9863  9863 D AndroidRuntime: Shutting down VM
+11-10 18:47:47.711  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9115679 , only wrote 9115200
+11-10 18:47:48.288  1751  1751 I keystore: 1 0
+11-10 18:47:48.294  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:47:48.294  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:47:48.493  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@600caa)
+11-10 18:47:48.493  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@600caa)
+11-10 18:47:48.894  2514  9876 I Vision  : Requesting optional module download of ocr.
+11-10 18:47:48.894  2514  9876 I Vision  : Checking for download completion for 878157 -- ocr
+11-10 18:47:49.499  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@33bf411)
+11-10 18:47:49.501  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@33bf411)
+11-10 18:47:49.754  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9213267 , only wrote 9213120
+11-10 18:47:49.953  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9222675 , only wrote 9221760
+11-10 18:47:49.953  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9221766 , only wrote 9221760
+11-10 18:47:49.971  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9222599 , only wrote 9222480
+11-10 18:47:50.498  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@b0a4976)
+11-10 18:47:50.499  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@b0a4976)
+11-10 18:47:50.974  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9270629 , only wrote 9262800
+11-10 18:47:50.977  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 9262953 , only wrote 9262800
+11-10 18:47:51.078  1849  1849 E netmgr  : Failed to open QEMU pipe 'qemud:network': Invalid argument
+11-10 18:47:51.078  1849  1849 E netmgr  : WifiForwarder unable to open QEMU pipe: Invalid argument
+11-10 18:47:51.497  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d076b77)
+11-10 18:47:51.500  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d076b77)
+11-10 18:47:52.217  9879  9879 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:52.327  9879  9879 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:52.329  9879  9879 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:52.367  9879  9879 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:47:52.367  9879  9879 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=871631, downTime=871631, deviceId=-1, source=0x101 }
+11-10 18:47:52.428  9879  9879 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=871631, downTime=871631, deviceId=-1, source=0x101 }
+11-10 18:47:52.431  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:47:52.496  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1dac04d)
+11-10 18:47:52.498  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1dac04d)
+11-10 18:47:52.771  9879  9879 D AndroidRuntime: Shutting down VM
+11-10 18:47:53.497  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@9498702)
+11-10 18:47:53.498  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@9498702)
+11-10 18:47:54.503  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@8fd4813)
+11-10 18:47:54.507  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@8fd4813)
+11-10 18:47:55.499  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@17faa50)
+11-10 18:47:55.500  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@17faa50)
+11-10 18:47:55.555  9891  9891 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:55.667  9891  9891 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:55.676  9891  9891 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:55.704  9891  9891 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:47:55.704  9891  9891 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=874968, downTime=874968, deviceId=-1, source=0x101 }
+11-10 18:47:55.763  9891  9891 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=874968, downTime=874968, deviceId=-1, source=0x101 }
+11-10 18:47:55.996  9891  9891 D AndroidRuntime: Shutting down VM
+11-10 18:47:56.503  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@44d114e)
+11-10 18:47:56.503  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@44d114e)
+11-10 18:47:55.770  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:47:56.879  1760  1786 E storaged: getDiskStats failed with result NOT_SUPPORTED and size 0
+11-10 18:47:57.500  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6a526f)
+11-10 18:47:57.500  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6a526f)
+11-10 18:47:58.157  9903  9903 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:58.186  9903  9903 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:58.188  9903  9903 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:58.188  9903  9903 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:58.201  9903  9903 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:47:58.208  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:58.210  1833  1841 D hwcomposer: hw_composer sent 78 syncs in 82s
+11-10 18:47:58.500  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6ecf45a)
+11-10 18:47:58.500  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6ecf45a)
+11-10 18:47:58.898  2514  9915 I Vision  : Requesting optional module download of ocr.
+11-10 18:47:58.898  2514  9915 I Vision  : Checking for download completion for 888161 -- ocr
+11-10 18:47:59.230  9903  9903 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@ea54; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:59.233  9903  9903 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@eb8a; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:59.236  9903  9903 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@edf6; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:59.238  9903  9903 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@ef2c; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:47:59.239  9903  9903 W AccessibilityNodeInfoDumper: Fetch time: 15ms
+11-10 18:47:59.239  2005  2649 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@33d1b7c
+11-10 18:47:59.240  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:47:59.244  9903  9903 D AndroidRuntime: Shutting down VM
+11-10 18:47:59.500  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ff10381)
+11-10 18:47:59.500  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ff10381)
+11-10 18:47:59.558  9919  9919 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:47:59.589  9919  9919 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:47:59.591  9919  9919 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:59.591  9919  9919 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:47:59.606  9919  9919 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:48:00.500  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@92956bd)
+11-10 18:48:00.501  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@92956bd)
+11-10 18:48:00.667  9919  9919 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@ea5e; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:00.670  9919  9919 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@eb94; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:00.673  9919  9919 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@ee00; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:00.676  9919  9919 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@ef36; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:00.676  9919  9919 W AccessibilityNodeInfoDumper: Fetch time: 15ms
+11-10 18:47:59.613  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:00.678  2005  2748 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@f75fc26
+11-10 18:48:00.679  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:00.684  9919  9919 D AndroidRuntime: Shutting down VM
+11-10 18:48:00.822  9934  9934 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:00.849  9934  9934 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:00.851  9934  9934 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:00.851  9934  9934 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:00.867  9934  9934 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:48:01.500  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@299a1b9)
+11-10 18:48:01.501  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@299a1b9)
+11-10 18:48:00.899  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:01.894  2005  2649 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@1985c03
+11-10 18:48:01.895  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:01.900  9934  9934 D AndroidRuntime: Shutting down VM
+11-10 18:48:02.500  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@93ab55f)
+11-10 18:48:02.501  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@93ab55f)
+11-10 18:48:03.500  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@7bc5bac)
+11-10 18:48:03.501  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@7bc5bac)
+11-10 18:48:04.038  9950  9950 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:04.068  9950  9950 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:04.069  9950  9950 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:04.069  9950  9950 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:04.081  9950  9950 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:48:04.501  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@57f487b)
+11-10 18:48:04.502  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@57f487b)
+11-10 18:48:05.146  9950  9950 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@ea6d; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:05.148  9950  9950 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@eba3; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:05.152  9950  9950 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@ee0f; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:05.154  9950  9950 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@ef45; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:05.155  9950  9950 W AccessibilityNodeInfoDumper: Fetch time: 15ms
+11-10 18:48:04.120  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:05.155  2005  2649 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@229a075
+11-10 18:48:05.156  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:05.162  9950  9950 D AndroidRuntime: Shutting down VM
+11-10 18:48:05.314  9963  9963 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:05.344  9963  9963 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:05.345  9963  9963 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:05.358  9963  9963 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:48:05.362  9963  9963 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=884622, downTime=884622, deviceId=0, source=0x1002 }
+11-10 18:48:05.364  9963  9963 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=884622, downTime=884622, deviceId=0, source=0x1002 }
+11-10 18:48:05.368  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9262860 , only wrote 9262800
+11-10 18:48:05.369  9963  9963 D AndroidRuntime: Shutting down VM
+11-10 18:48:05.502  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a80cef1)
+11-10 18:48:05.506  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a80cef1)
+11-10 18:48:05.568  1751  1751 I keystore: 1 0
+11-10 18:48:05.584  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:48:05.585  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:48:05.766  2179  2210 I .gms.persisten: Background concurrent copying GC freed 102593(5MB) AllocSpace objects, 4(208KB) LOS objects, 39% free, 9MB/15MB, paused 666us total 158.346ms
+11-10 18:48:06.201  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9302777 , only wrote 9302400
+11-10 18:48:06.217  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9303162 , only wrote 9303120
+11-10 18:48:06.504  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9316889 , only wrote 9316800
+11-10 18:48:06.510  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1096b29)
+11-10 18:48:06.511  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1096b29)
+11-10 18:48:06.726  2514  9791 W ChimeraConfigurator: Error syncing flags: qoq: COMMIT_TIMEOUT
+11-10 18:48:06.726  2514  9791 I ChmraDebugLogger: [79] COMMIT_TIMEOUT
+11-10 18:48:06.732  2514  9791 I ChmraDebugLogger: [52] null
+11-10 18:48:06.733  2514  9791 W ChimeraConfigService: Retry attempt was throttled.
+11-10 18:48:06.768  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9329472 , only wrote 9329040
+11-10 18:48:07.509  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d21b44f)
+11-10 18:48:07.513  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d21b44f)
+11-10 18:48:08.494  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9411880 , only wrote 9411840
+11-10 18:48:08.526  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6407dc)
+11-10 18:48:08.527  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6407dc)
+11-10 18:48:08.614  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 9423344 , only wrote 9417600
+11-10 18:48:08.703  9979  9979 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:08.818  9979  9979 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:08.821  9979  9979 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:08.822  9979  9979 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:08.865  9979  9979 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:48:08.922  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:08.949  2514  9791 I Vision  : Requesting optional module download of ocr.
+11-10 18:48:08.949  2514  9791 I Vision  : Checking for download completion for 898213 -- ocr
+11-10 18:48:09.510  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@417c5c8)
+11-10 18:48:09.511  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@417c5c8)
+11-10 18:48:10.512  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d125661)
+11-10 18:48:10.512  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d125661)
+11-10 18:48:11.522  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@7268586)
+11-10 18:48:11.524  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@7268586)
+11-10 18:48:12.514  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3b9de47)
+11-10 18:48:12.515  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3b9de47)
+11-10 18:48:13.511  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@9c77674)
+11-10 18:48:13.515  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@9c77674)
+11-10 18:48:14.511  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1bcf79d)
+11-10 18:48:14.513  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1bcf79d)
+11-10 18:48:15.527  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1557412)
+11-10 18:48:15.527  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1557412)
+11-10 18:48:16.513  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2ac17e3)
+11-10 18:48:16.527  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2ac17e3)
+11-10 18:48:17.513  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f1f85e0)
+11-10 18:48:17.515  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f1f85e0)
+11-10 18:48:18.513  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6767099)
+11-10 18:48:18.517  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6767099)
+11-10 18:48:18.949  2005  4679 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@52490e5
+11-10 18:48:18.978  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:18.985  9979  9979 D AndroidRuntime: Shutting down VM
+11-10 18:48:19.046  2514  9994 I Vision  : Requesting optional module download of ocr.
+11-10 18:48:19.046  2514  9994 I Vision  : Exceeded maximum feature download tries for ocr
+11-10 18:48:19.046  2514  9994 W Vision  : Request of optional module download of ocr failed.
+11-10 18:48:19.047  2514  9994 I Vision  : Checking for download completion for 908310 -- ocr
+11-10 18:48:19.273  9996  9996 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:19.375  9996  9996 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:19.380  9996  9996 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:19.415  9996  9996 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:48:19.417  9996  9996 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=898679, downTime=898679, deviceId=0, source=0x1002 }
+11-10 18:48:19.464  9996  9996 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=898679, downTime=898679, deviceId=0, source=0x1002 }
+11-10 18:48:19.517  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@7b47d55)
+11-10 18:48:19.518  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@7b47d55)
+11-10 18:48:19.600  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9418338 , only wrote 9417600
+11-10 18:48:19.622  9996  9996 D AndroidRuntime: Shutting down VM
+11-10 18:48:19.896  1751  1751 I keystore: 1 0
+11-10 18:48:19.922  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:48:19.922  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:48:20.514  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@98c99d1)
+11-10 18:48:20.514  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@98c99d1)
+11-10 18:48:20.983  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9484011 , only wrote 9483840
+11-10 18:48:20.985  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9483913 , only wrote 9483840
+11-10 18:48:21.525  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@615c36)
+11-10 18:48:21.534  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@615c36)
+11-10 18:48:22.520  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@b50e737)
+11-10 18:48:22.544  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@b50e737)
+11-10 18:48:22.770  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 9655068 , only wrote 9569520
+11-10 18:48:22.835 10010 10010 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:22.918 10010 10010 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:22.919 10010 10010 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:22.979 10010 10010 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:48:22.985 10010 10010 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=902248, downTime=902248, deviceId=-1, source=0x101 }
+11-10 18:48:23.133 10010 10010 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=902248, downTime=902248, deviceId=-1, source=0x101 }
+11-10 18:48:23.135  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:48:23.418 10010 10010 D AndroidRuntime: Shutting down VM
+11-10 18:48:23.522  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1f0020d)
+11-10 18:48:23.524  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1f0020d)
+11-10 18:48:23.590  2005  4679 E memtrack: Couldn't load memtrack module
+11-10 18:48:23.590  2005  4679 W android.os.Debug: failed to get memory consumption info: -1
+11-10 18:48:23.602  9377  9388 I g.chyavorec.ap: Background concurrent copying GC freed 106168(4MB) AllocSpace objects, 2(1880KB) LOS objects, 34% free, 11MB/17MB, paused 8.276ms total 165.542ms
+11-10 18:48:24.525  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6df05c2)
+11-10 18:48:24.527  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6df05c2)
+11-10 18:48:25.526  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6c2bfd3)
+11-10 18:48:25.527  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6c2bfd3)
+11-10 18:48:26.248 10021 10021 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:26.367 10021 10021 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:26.370 10021 10021 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:26.390 10021 10021 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:48:26.391 10021 10021 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=905654, downTime=905654, deviceId=-1, source=0x101 }
+11-10 18:48:26.477 10021 10021 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=905654, downTime=905654, deviceId=-1, source=0x101 }
+11-10 18:48:26.526  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@aa7b209)
+11-10 18:48:26.527  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@aa7b209)
+11-10 18:48:26.694 10021 10021 D AndroidRuntime: Shutting down VM
+11-10 18:48:27.530  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d9bbc0e)
+11-10 18:48:27.538  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d9bbc0e)
+11-10 18:48:28.524  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f6f862f)
+11-10 18:48:28.525  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f6f862f)
+11-10 18:48:28.818 10033 10033 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:28.848 10033 10033 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:28.850 10033 10033 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:28.851 10033 10033 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:28.866 10033 10033 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:48:26.479  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:48:28.875  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:29.054  2514 10046 I Vision  : Requesting optional module download of ocr.
+11-10 18:48:29.062  2514 10046 I Vision  : Checking for download completion for 918325 -- ocr
+11-10 18:48:29.062  2514 10047 I ChimeraConfigurator: Starting update, reason: 4 urgentFeatures: vision.ocr:-1
+11-10 18:48:29.524  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1173ee6)
+11-10 18:48:29.524  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1173ee6)
+11-10 18:48:29.881  2005  2748 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@4b8a43c
+11-10 18:48:29.882  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:29.886 10033 10033 D AndroidRuntime: Shutting down VM
+11-10 18:48:30.012 10051 10051 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:30.042 10051 10051 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:30.044 10051 10051 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:30.044 10051 10051 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:30.058 10051 10051 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:48:30.524  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e886372)
+11-10 18:48:30.525  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e886372)
+11-10 18:48:31.095 10051 10051 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1129c; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:31.098 10051 10051 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@113d2; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:31.103 10051 10051 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1163e; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:31.106 10051 10051 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@11774; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:31.107 10051 10051 W AccessibilityNodeInfoDumper: Fetch time: 22ms
+11-10 18:48:30.066  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:31.107  2005  4475 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@bc73ed4
+11-10 18:48:31.108  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:31.115 10051 10051 D AndroidRuntime: Shutting down VM
+11-10 18:48:31.249 10066 10066 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:31.278 10066 10066 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:31.279 10066 10066 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:31.280 10066 10066 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:31.293 10066 10066 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:48:31.524  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@77544be)
+11-10 18:48:31.525  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@77544be)
+11-10 18:48:32.343 10066 10066 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@112a3; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:32.346 10066 10066 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@113d9; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:32.350 10066 10066 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@11645; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:32.353 10066 10066 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1177b; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:32.354 10066 10066 W AccessibilityNodeInfoDumper: Fetch time: 21ms
+11-10 18:48:31.300  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:32.355  2005  4679 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@7c37440
+11-10 18:48:32.357  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:32.361 10066 10066 D AndroidRuntime: Shutting down VM
+11-10 18:48:32.511 10080 10080 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:32.524  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a8b946c)
+11-10 18:48:32.525  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a8b946c)
+11-10 18:48:32.540 10080 10080 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:32.541 10080 10080 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:32.554 10080 10080 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:48:32.556 10080 10080 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=540.0, y[0]=2211.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=911818, downTime=911818, deviceId=0, source=0x1002 }
+11-10 18:48:32.558 10080 10080 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=540.0, y[0]=2211.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=911818, downTime=911818, deviceId=0, source=0x1002 }
+11-10 18:48:32.562  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9569580 , only wrote 9569520
+11-10 18:48:32.565 10080 10080 D AndroidRuntime: Shutting down VM
+11-10 18:48:33.524  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c2f4a35)
+11-10 18:48:33.525  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c2f4a35)
+11-10 18:48:34.524  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2bceeca)
+11-10 18:48:34.526  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2bceeca)
+11-10 18:48:34.717 10092 10092 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:34.750 10092 10092 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:34.752 10092 10092 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:34.752 10092 10092 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:34.768 10092 10092 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:48:35.524  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e9754b1)
+11-10 18:48:35.525  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e9754b1)
+11-10 18:48:35.787  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 9877113 , only wrote 9724320
+11-10 18:48:35.803 10092 10092 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@112aa; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:35.806 10092 10092 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@113e0; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:35.810 10092 10092 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1164c; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:35.812 10092 10092 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@11782; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:48:35.813 10092 10092 W AccessibilityNodeInfoDumper: Fetch time: 16ms
+11-10 18:48:34.775  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:35.813  2005  2649 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@56f683b
+11-10 18:48:35.814  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:35.819 10092 10092 D AndroidRuntime: Shutting down VM
+11-10 18:48:35.974 10105 10105 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:36.002 10105 10105 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:36.004 10105 10105 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:36.018 10105 10105 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:48:36.022 10105 10105 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=915282, downTime=915282, deviceId=0, source=0x1002 }
+11-10 18:48:36.026 10105 10105 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=915282, downTime=915282, deviceId=0, source=0x1002 }
+11-10 18:48:36.029 10105 10105 D AndroidRuntime: Shutting down VM
+11-10 18:48:36.029  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9724390 , only wrote 9724320
+11-10 18:48:36.216  1751  1751 I keystore: 1 0
+11-10 18:48:36.229  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:48:36.229  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:48:36.533  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bbc6d70)
+11-10 18:48:36.538  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bbc6d70)
+11-10 18:48:37.533  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d32e8e9)
+11-10 18:48:37.537  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d32e8e9)
+11-10 18:48:38.341  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9835293 , only wrote 9835200
+11-10 18:48:38.341  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9835219 , only wrote 9835200
+11-10 18:48:38.358  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9835978 , only wrote 9835920
+11-10 18:48:38.528  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eda596e)
+11-10 18:48:38.533  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eda596e)
+11-10 18:48:38.749  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9854694 , only wrote 9854640
+11-10 18:48:39.073  2514 10117 I Vision  : Requesting optional module download of ocr.
+11-10 18:48:39.081  2514 10117 I Vision  : Checking for download completion for 928337 -- ocr
+11-10 18:48:39.122  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9872558 , only wrote 9871200
+11-10 18:48:39.124  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9871285 , only wrote 9871200
+11-10 18:48:39.141  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9872008 , only wrote 9871920
+11-10 18:48:39.261  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 9882184 , only wrote 9877680
+11-10 18:48:39.359 10121 10121 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:39.445 10121 10121 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:39.447 10121 10121 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:39.448 10121 10121 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:39.470 10121 10121 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:48:39.541  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1d69e7a)
+11-10 18:48:39.541  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1d69e7a)
+11-10 18:48:39.612  2005  2057 W system_server: Long monitor contention with owner Binder:2005_18 (4475) at void com.android.server.wm.WindowManagerService.addWindowToken(android.os.IBinder, int, int)(WindowManagerService.java:2331) waiters=0 in void com.android.server.wm.WindowAnimator.lambda$new$1(com.android.server.wm.WindowAnimator, long) for 112ms
+11-10 18:48:39.625  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:40.539  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@906d62b)
+11-10 18:48:40.540  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@906d62b)
+11-10 18:48:41.536  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d6c7a88)
+11-10 18:48:41.536  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d6c7a88)
+11-10 18:48:42.530  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1b5cc21)
+11-10 18:48:42.530  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1b5cc21)
+11-10 18:48:43.536  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1202846)
+11-10 18:48:43.537  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1202846)
+11-10 18:48:44.542  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@31aaa07)
+11-10 18:48:44.551  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@31aaa07)
+11-10 18:48:45.536  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a92b734)
+11-10 18:48:45.537  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a92b734)
+11-10 18:48:46.532  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a82095d)
+11-10 18:48:46.547  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@32682d2)
+11-10 18:48:46.547  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a82095d)
+11-10 18:48:46.548  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@32682d2)
+11-10 18:48:47.544  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3addfa3)
+11-10 18:48:47.544  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3addfa3)
+11-10 18:48:48.547  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@63e12a0)
+11-10 18:48:48.547  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@63e12a0)
+11-10 18:48:49.121  2514 10133 I Vision  : Requesting optional module download of ocr.
+11-10 18:48:49.145  2514 10133 I Vision  : Checking for download completion for 938408 -- ocr
+11-10 18:48:49.541  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eb4d2ff)
+11-10 18:48:49.550  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eb4d2ff)
+11-10 18:48:49.928  2005  4475 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@8d2f09c
+11-10 18:48:49.934  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:48:49.941 10121 10121 D AndroidRuntime: Shutting down VM
+11-10 18:48:50.545 10135 10135 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:50.557  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6520715)
+11-10 18:48:50.559  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6520715)
+11-10 18:48:50.629 10135 10135 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:50.636 10135 10135 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:50.683 10135 10135 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:48:50.688 10135 10135 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=929947, downTime=929947, deviceId=0, source=0x1002 }
+11-10 18:48:50.723 10135 10135 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=929947, downTime=929947, deviceId=0, source=0x1002 }
+11-10 18:48:50.771  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9877773 , only wrote 9877680
+11-10 18:48:50.794 10135 10135 D AndroidRuntime: Shutting down VM
+11-10 18:48:50.802  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9879180 , only wrote 9879120
+11-10 18:48:50.809  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9879477 , only wrote 9879120
+11-10 18:48:51.086  1849  1849 E netmgr  : Failed to open QEMU pipe 'qemud:network': Invalid argument
+11-10 18:48:51.086  1849  1849 E netmgr  : WifiForwarder unable to open QEMU pipe: Invalid argument
+11-10 18:48:51.210  1751  1751 I keystore: 1 0
+11-10 18:48:51.224  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:48:51.246  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:48:51.318  9377  9388 I g.chyavorec.ap: Background concurrent copying GC freed 114648(4MB) AllocSpace objects, 2(1880KB) LOS objects, 34% free, 11MB/17MB, paused 695us total 219.024ms
+11-10 18:48:51.545  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3d8ff91)
+11-10 18:48:51.567  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3d8ff91)
+11-10 18:48:52.259  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9948707 , only wrote 9948240
+11-10 18:48:52.259  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9948253 , only wrote 9948240
+11-10 18:48:52.276  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9949018 , only wrote 9948960
+11-10 18:48:52.556  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c692ef6)
+11-10 18:48:52.560  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c692ef6)
+11-10 18:48:52.748  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9971637 , only wrote 9971280
+11-10 18:48:52.759  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9971782 , only wrote 9971280
+11-10 18:48:52.797  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 9973139 , only wrote 9972720
+11-10 18:48:53.549  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d5c22f7)
+11-10 18:48:53.549  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d5c22f7)
+11-10 18:48:53.600  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10011235 , only wrote 10010880
+11-10 18:48:53.631  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10012376 , only wrote 10012320
+11-10 18:48:54.066  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 10052989 , only wrote 10033200
+11-10 18:48:54.181 10149 10149 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:54.236 10149 10149 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:54.237 10149 10149 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:54.289 10149 10149 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:48:54.292 10149 10149 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=933555, downTime=933555, deviceId=-1, source=0x101 }
+11-10 18:48:54.524 10149 10149 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=933555, downTime=933555, deviceId=-1, source=0x101 }
+11-10 18:48:54.526  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:48:54.542  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@9fd03cd)
+11-10 18:48:54.543  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@9fd03cd)
+11-10 18:48:54.760 10149 10149 D AndroidRuntime: Shutting down VM
+11-10 18:48:55.546  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5714482)
+11-10 18:48:55.547  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5714482)
+11-10 18:48:55.752  9377  9377 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+11-10 18:48:56.073  9377  9404 I OpenGLRenderer: Davey! duration=814ms; Flags=0, IntendedVsync=934491735934, Vsync=935008402580, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=935016378210, AnimationStart=935016421830, PerformTraversalsStart=935018362770, DrawStart=935018440790, SyncQueued=935020703500, SyncStart=935051348850, IssueDrawCommandsStart=935056581990, SwapBuffers=935057536820, FrameCompleted=935336979130, DequeueBufferDuration=102356000, QueueBufferDuration=796000, 
+11-10 18:48:56.555  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2a5f793)
+11-10 18:48:56.561  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2a5f793)
+11-10 18:48:56.882  1760  1786 E storaged: getDiskStats failed with result NOT_SUPPORTED and size 0
+11-10 18:48:57.554 10162 10162 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:48:57.572  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@cb63d0)
+11-10 18:48:57.572  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@cb63d0)
+11-10 18:48:57.679 10162 10162 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:48:57.681 10162 10162 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:48:57.717 10162 10162 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:48:57.718 10162 10162 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=936981, downTime=936981, deviceId=-1, source=0x101 }
+11-10 18:48:57.902 10162 10162 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=936981, downTime=936981, deviceId=-1, source=0x101 }
+11-10 18:48:57.906  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:48:58.154 10162 10162 D AndroidRuntime: Shutting down VM
+11-10 18:48:58.547  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@af326ce)
+11-10 18:48:58.547  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@af326ce)
+11-10 18:48:59.155  2005  2020 E memtrack: Couldn't load memtrack module
+11-10 18:48:59.155  2005  2020 W android.os.Debug: failed to get memory consumption info: -1
+11-10 18:48:59.180  2514 10172 I Vision  : Requesting optional module download of ocr.
+11-10 18:48:59.180  2514 10172 I Vision  : Checking for download completion for 948444 -- ocr
+11-10 18:48:59.545  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@14aecfc)
+11-10 18:48:59.545  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@14aecfc)
+11-10 18:49:00.021  1833  1841 D hwcomposer: hw_composer sent 72 syncs in 62s
+11-10 18:49:00.296 10175 10175 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:00.324 10175 10175 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:00.325 10175 10175 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:00.326 10175 10175 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:00.338 10175 10175 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:00.343  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:00.545  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@dd7dce8)
+11-10 18:49:00.545  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@dd7dce8)
+11-10 18:49:01.367 10175 10175 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13ad3; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:01.370 10175 10175 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13c09; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:01.374 10175 10175 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13e75; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:01.376 10175 10175 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13fab; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:01.377 10175 10175 W AccessibilityNodeInfoDumper: Fetch time: 17ms
+11-10 18:49:01.378  2005  4679 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@d9ee1da
+11-10 18:49:01.379  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:01.386 10175 10175 D AndroidRuntime: Shutting down VM
+11-10 18:49:01.545  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@71941a6)
+11-10 18:49:01.546  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@71941a6)
+11-10 18:49:01.702 10190 10190 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:01.733 10190 10190 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:01.735 10190 10190 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:01.735 10190 10190 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:01.749 10190 10190 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:02.545  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6237a3d)
+11-10 18:49:02.546  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6237a3d)
+11-10 18:49:02.784 10190 10190 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13ad5; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:02.788 10190 10190 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13c0b; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:02.793 10190 10190 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13e77; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:02.795 10190 10190 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13fad; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:02.796 10190 10190 W AccessibilityNodeInfoDumper: Fetch time: 22ms
+11-10 18:49:01.757  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:02.797  2005  2649 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@425b7e7
+11-10 18:49:02.798  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:02.804 10190 10190 D AndroidRuntime: Shutting down VM
+11-10 18:49:02.945 10205 10205 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:02.974 10205 10205 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:02.976 10205 10205 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:02.976 10205 10205 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:02.988 10205 10205 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:03.545  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bd27d39)
+11-10 18:49:03.546  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bd27d39)
+11-10 18:49:04.015 10205 10205 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13add; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:04.017 10205 10205 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13c13; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:04.021 10205 10205 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13e7f; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:04.023 10205 10205 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13fb5; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:04.025 10205 10205 W AccessibilityNodeInfoDumper: Fetch time: 16ms
+11-10 18:49:02.995  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:04.025  2005  4475 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@48beb83
+11-10 18:49:04.027  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:04.033 10205 10205 D AndroidRuntime: Shutting down VM
+11-10 18:49:04.188 10218 10218 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:04.216 10218 10218 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:04.217 10218 10218 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:04.229 10218 10218 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:04.233 10218 10218 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=540.0, y[0]=2211.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=943493, downTime=943493, deviceId=0, source=0x1002 }
+11-10 18:49:04.235 10218 10218 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=540.0, y[0]=2211.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=943493, downTime=943493, deviceId=0, source=0x1002 }
+11-10 18:49:04.238 10218 10218 D AndroidRuntime: Shutting down VM
+11-10 18:49:04.239  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10033274 , only wrote 10033200
+11-10 18:49:04.546  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c97bcdf)
+11-10 18:49:04.551  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c97bcdf)
+11-10 18:49:04.940  2005  2025 D KernelUidCpuTimeReader: Removing uids 10088-10088
+11-10 18:49:05.545  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ba18d2c)
+11-10 18:49:05.546  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ba18d2c)
+11-10 18:49:06.360 10231 10231 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:06.390 10231 10231 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:06.391 10231 10231 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:06.392 10231 10231 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:06.406 10231 10231 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:06.412  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:06.546  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@26547fb)
+11-10 18:49:06.547  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@26547fb)
+11-10 18:49:07.435 10231 10231 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13ae5; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:07.438 10231 10231 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13c1b; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:07.442 10231 10231 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13e87; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:07.445 10231 10231 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@13fbd; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:07.446 10231 10231 W AccessibilityNodeInfoDumper: Fetch time: 16ms
+11-10 18:49:07.448  2005  4774 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@8d4b3f5
+11-10 18:49:07.449  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 10339439 , only wrote 10187280
+11-10 18:49:07.449  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:07.468 10231 10231 D AndroidRuntime: Shutting down VM
+11-10 18:49:07.546  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f899a71)
+11-10 18:49:07.547  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f899a71)
+11-10 18:49:07.626 10244 10244 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:07.656 10244 10244 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:07.657 10244 10244 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:07.671 10244 10244 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:07.674 10244 10244 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=946935, downTime=946935, deviceId=0, source=0x1002 }
+11-10 18:49:07.677 10244 10244 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=946935, downTime=946935, deviceId=0, source=0x1002 }
+11-10 18:49:07.681 10244 10244 D AndroidRuntime: Shutting down VM
+11-10 18:49:07.683  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10187454 , only wrote 10187280
+11-10 18:49:07.925  9377  9388 I g.chyavorec.ap: Background concurrent copying GC freed 101496(4MB) AllocSpace objects, 2(1880KB) LOS objects, 34% free, 11MB/17MB, paused 1.293ms total 121.724ms
+11-10 18:49:08.004  1751  1751 I keystore: 1 0
+11-10 18:49:08.021  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:49:08.021  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:49:08.549  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@df026a9)
+11-10 18:49:08.549  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@df026a9)
+11-10 18:49:09.190  2514 10256 I Vision  : Requesting optional module download of ocr.
+11-10 18:49:09.191  2514 10256 I Vision  : Checking for download completion for 958454 -- ocr
+11-10 18:49:09.419  2514 10047 W ChimeraConfigurator: Error syncing flags: qoq: COMMIT_TIMEOUT
+11-10 18:49:09.419  2514 10047 I ChmraDebugLogger: [79] COMMIT_TIMEOUT
+11-10 18:49:09.429  2514 10047 I ChmraDebugLogger: [52] null
+11-10 18:49:09.434  2514 10047 W ChimeraConfigService: Retry attempt was throttled.
+11-10 18:49:09.550  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c7b8465)
+11-10 18:49:09.551  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c7b8465)
+11-10 18:49:09.957  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10296401 , only wrote 10296000
+11-10 18:49:10.552  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e0c553a)
+11-10 18:49:10.552  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e0c553a)
+11-10 18:49:10.558  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@21425eb)
+11-10 18:49:10.559  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@21425eb)
+11-10 18:49:10.914  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 10341924 , only wrote 10341360
+11-10 18:49:11.002 10260 10260 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:11.080 10260 10260 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:11.081 10260 10260 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:11.082 10260 10260 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:11.114 10260 10260 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:11.145  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:11.557  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eda8b06)
+11-10 18:49:11.557  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eda8b06)
+11-10 18:49:12.557  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@60d35c7)
+11-10 18:49:12.558  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@60d35c7)
+11-10 18:49:13.559  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@8ecb7f4)
+11-10 18:49:13.564  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@8ecb7f4)
+11-10 18:49:14.567  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@78edb1d)
+11-10 18:49:14.574  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@78edb1d)
+11-10 18:49:15.560  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@4045192)
+11-10 18:49:15.578  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@4045192)
+11-10 18:49:16.558  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f9d6763)
+11-10 18:49:16.559  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f9d6763)
+11-10 18:49:17.559  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5175f60)
+11-10 18:49:17.560  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5175f60)
+11-10 18:49:18.559  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e430c19)
+11-10 18:49:18.561  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e430c19)
+11-10 18:49:19.213  2514 10274 I Vision  : Requesting optional module download of ocr.
+11-10 18:49:19.213  2514 10274 I Vision  : Exceeded maximum feature download tries for ocr
+11-10 18:49:19.213  2514 10274 W Vision  : Request of optional module download of ocr failed.
+11-10 18:49:19.222  2514 10274 I Vision  : Checking for download completion for 968477 -- ocr
+11-10 18:49:19.561  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@183118c)
+11-10 18:49:19.562  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@183118c)
+11-10 18:49:20.559  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@26f50d5)
+11-10 18:49:20.560  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@26f50d5)
+11-10 18:49:21.278  2005  4475 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@4e3ef48
+11-10 18:49:21.287  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:21.304 10260 10260 D AndroidRuntime: Shutting down VM
+11-10 18:49:21.560  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@aee5fdb)
+11-10 18:49:21.561  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@aee5fdb)
+11-10 18:49:21.567 10276 10276 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:21.659 10276 10276 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:21.681 10276 10276 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:21.718 10276 10276 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:21.724 10276 10276 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=960982, downTime=960982, deviceId=0, source=0x1002 }
+11-10 18:49:21.767 10276 10276 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=960982, downTime=960982, deviceId=0, source=0x1002 }
+11-10 18:49:21.806 10276 10276 D AndroidRuntime: Shutting down VM
+11-10 18:49:21.839  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10341841 , only wrote 10341360
+11-10 18:49:22.157  1751  1751 I keystore: 1 0
+11-10 18:49:22.189  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:49:22.189  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:49:22.299  2005  2015 I system_server: Background concurrent copying GC freed 97663(4MB) AllocSpace objects, 57(1156KB) LOS objects, 39% free, 9MB/15MB, paused 851us total 107.598ms
+11-10 18:49:22.561  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ae91eb7)
+11-10 18:49:22.563  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ae91eb7)
+11-10 18:49:22.564  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5280624)
+11-10 18:49:22.587  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5280624)
+11-10 18:49:22.935  9377  9404 I OpenGLRenderer: Davey! duration=759ms; Flags=1, IntendedVsync=961438719879, Vsync=961805386531, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=961816310930, AnimationStart=961816378190, PerformTraversalsStart=961816889390, DrawStart=961850643050, SyncQueued=961852428290, SyncStart=961853470810, IssueDrawCommandsStart=961857675010, SwapBuffers=962085440600, FrameCompleted=962199038560, DequeueBufferDuration=110399000, QueueBufferDuration=1818000, 
+11-10 18:49:23.031  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10398571 , only wrote 10398240
+11-10 18:49:23.031  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10398246 , only wrote 10398240
+11-10 18:49:23.576  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@7c1c58d)
+11-10 18:49:23.587  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@7c1c58d)
+11-10 18:49:23.602  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10425670 , only wrote 10425600
+11-10 18:49:23.603  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10425627 , only wrote 10425600
+11-10 18:49:23.621  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10426457 , only wrote 10426320
+11-10 18:49:23.765  2005  4679 E memtrack: Couldn't load memtrack module
+11-10 18:49:23.765  2005  4679 W android.os.Debug: failed to get memory consumption info: -1
+11-10 18:49:23.925  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10440911 , only wrote 10440720
+11-10 18:49:23.925  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10440749 , only wrote 10440720
+11-10 18:49:23.944  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10441608 , only wrote 10441440
+11-10 18:49:24.567  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@fc04342)
+11-10 18:49:24.569  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@fc04342)
+11-10 18:49:24.576  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10471797 , only wrote 10471680
+11-10 18:49:24.596  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10472634 , only wrote 10472400
+11-10 18:49:25.065  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 10494906 , only wrote 10494720
+11-10 18:49:25.133 10295 10295 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:25.224 10295 10295 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:25.235 10295 10295 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:25.259 10295 10295 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:25.259 10295 10295 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=964523, downTime=964523, deviceId=-1, source=0x101 }
+11-10 18:49:25.408 10295 10295 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=964523, downTime=964523, deviceId=-1, source=0x101 }
+11-10 18:49:25.410  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:49:25.420 10295 10295 D AndroidRuntime: Shutting down VM
+11-10 18:49:25.571  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5f16090)
+11-10 18:49:25.571  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5f16090)
+11-10 18:49:26.468  9377  9404 I OpenGLRenderer: Davey! duration=703ms; Flags=0, IntendedVsync=964994930795, Vsync=965111597457, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=965117212300, AnimationStart=965117256980, PerformTraversalsStart=965118364810, DrawStart=965118448410, SyncQueued=965120411160, SyncStart=965154059290, IssueDrawCommandsStart=965154222280, SwapBuffers=965156102230, FrameCompleted=965731625260, DequeueBufferDuration=301776000, QueueBufferDuration=2076000, 
+11-10 18:49:26.477  9377  9377 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+11-10 18:49:26.580  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2922d89)
+11-10 18:49:26.581  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2922d89)
+11-10 18:49:27.572  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@313518e)
+11-10 18:49:27.580  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@313518e)
+11-10 18:49:28.194 10306 10306 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:28.311 10306 10306 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:28.313 10306 10306 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:28.346 10306 10306 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:28.347 10306 10306 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=967610, downTime=967610, deviceId=-1, source=0x101 }
+11-10 18:49:28.571  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@db3f5bc)
+11-10 18:49:28.571  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@db3f5bc)
+11-10 18:49:28.591 10306 10306 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=967610, downTime=967610, deviceId=-1, source=0x101 }
+11-10 18:49:28.869 10306 10306 D AndroidRuntime: Shutting down VM
+11-10 18:49:29.072  9377  9388 I g.chyavorec.ap: Background concurrent copying GC freed 108580(4MB) AllocSpace objects, 3(2MB) LOS objects, 36% free, 10MB/16MB, paused 707us total 171.261ms
+11-10 18:49:29.221  2514 10274 I Vision  : Requesting optional module download of ocr.
+11-10 18:49:29.227  2514 10274 I Vision  : Checking for download completion for 978491 -- ocr
+11-10 18:49:29.231  2514 10274 I ChimeraConfigurator: Starting update, reason: 4 urgentFeatures: vision.ocr:-1
+11-10 18:49:29.573  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a8b1a8)
+11-10 18:49:29.574  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a8b1a8)
+11-10 18:49:30.571  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@de504c1)
+11-10 18:49:30.571  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@de504c1)
+11-10 18:49:31.073 10319 10319 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:31.100 10319 10319 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:31.102 10319 10319 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:31.102 10319 10319 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:31.114 10319 10319 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:28.610  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:49:31.124  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:31.571  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bab4054)
+11-10 18:49:31.572  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bab4054)
+11-10 18:49:32.152 10319 10319 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1630e; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:32.154 10319 10319 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16444; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:32.159 10319 10319 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@166b0; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:32.161 10319 10319 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@167e6; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:32.162 10319 10319 W AccessibilityNodeInfoDumper: Fetch time: 20ms
+11-10 18:49:32.163  2005  4679 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@3c0466
+11-10 18:49:32.164  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:32.169 10319 10319 D AndroidRuntime: Shutting down VM
+11-10 18:49:32.483 10335 10335 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:32.514 10335 10335 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:32.515 10335 10335 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:32.515 10335 10335 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:32.530 10335 10335 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:32.576  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ba60dc0)
+11-10 18:49:32.581  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@ba60dc0)
+11-10 18:49:33.561 10335 10335 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16317; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:33.564 10335 10335 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1644d; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:33.568 10335 10335 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@166b9; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:33.570 10335 10335 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@167ef; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:33.571 10335 10335 W AccessibilityNodeInfoDumper: Fetch time: 16ms
+11-10 18:49:32.536  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:33.571  2005  2649 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@ef400f2
+11-10 18:49:33.572  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:33.573  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2bd3a3e)
+11-10 18:49:33.574  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@2bd3a3e)
+11-10 18:49:33.577 10335 10335 D AndroidRuntime: Shutting down VM
+11-10 18:49:33.746 10350 10350 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:33.775 10350 10350 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:33.777 10350 10350 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:33.777 10350 10350 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:33.791 10350 10350 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:33.961  1976  3072 W DnsTlsSocket: SSL_connect error 5, errno=111
+11-10 18:49:34.573  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@dd9ddb5)
+11-10 18:49:34.573  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@dd9ddb5)
+11-10 18:49:34.826 10350 10350 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@1631e; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:34.828 10350 10350 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16454; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:34.833 10350 10350 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@166c0; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:34.835 10350 10350 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@167f6; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:34.836 10350 10350 W AccessibilityNodeInfoDumper: Fetch time: 19ms
+11-10 18:49:33.800  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:34.837  2005  2748 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@c44e09f
+11-10 18:49:34.838  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:34.842 10350 10350 D AndroidRuntime: Shutting down VM
+11-10 18:49:35.034 10364 10364 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:35.064 10364 10364 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:35.065 10364 10364 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:35.080 10364 10364 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:35.083 10364 10364 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=540.0, y[0]=2211.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=974344, downTime=974344, deviceId=0, source=0x1002 }
+11-10 18:49:35.086 10364 10364 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=540.0, y[0]=2211.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=974344, downTime=974344, deviceId=0, source=0x1002 }
+11-10 18:49:35.088 10364 10364 D AndroidRuntime: Shutting down VM
+11-10 18:49:35.090  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10494782 , only wrote 10494720
+11-10 18:49:35.139  1976  3149 W DnsTlsSocket: SSL_connect error 5, errno=111
+11-10 18:49:35.592  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@820e7bb)
+11-10 18:49:35.601  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@820e7bb)
+11-10 18:49:36.575  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@23fd4d8)
+11-10 18:49:36.576  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@23fd4d8)
+11-10 18:49:37.244 10377 10377 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:37.276 10377 10377 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:37.278 10377 10377 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:37.278 10377 10377 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:37.293 10377 10377 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:37.575  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bec4497)
+11-10 18:49:37.575  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bec4497)
+11-10 18:49:38.325 10377 10377 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16322; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(37, 2074 - 163, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:38.327 10377 10377 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16458; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(257, 2074 - 383, 2190); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:38.332 10377 10377 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@166c4; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(697, 2074 - 823, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:38.334 10377 10377 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@167fa; boundsInParent: Rect(0, 0 - 0, 0); boundsInScreen: Rect(917, 2074 - 1043, 2200); packageName: org.chyavorec.app; className: android.view.View; text: null; error: null; maxTextLength: -1; contentDescription: null; tooltipText: null; viewIdResName: null; checkable: false; checked: false; focusable: false; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: false; visible: false; actions: [AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null]
+11-10 18:49:38.335 10377 10377 W AccessibilityNodeInfoDumper: Fetch time: 17ms
+11-10 18:49:37.301  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:38.335  2005  4475 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@f17a031
+11-10 18:49:38.337  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:38.341 10377 10377 D AndroidRuntime: Shutting down VM
+11-10 18:49:38.375  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 10808119 , only wrote 10652400
+11-10 18:49:38.533 10390 10390 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:38.561 10390 10390 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:38.561 10390 10390 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:38.573 10390 10390 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:38.575  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e950e6d)
+11-10 18:49:38.575  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e950e6d)
+11-10 18:49:38.579 10390 10390 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=977837, downTime=977837, deviceId=0, source=0x1002 }
+11-10 18:49:38.581 10390 10390 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=181.0, y[0]=1061.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=977837, downTime=977837, deviceId=0, source=0x1002 }
+11-10 18:49:38.585 10390 10390 D AndroidRuntime: Shutting down VM
+11-10 18:49:38.587  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10652575 , only wrote 10652400
+11-10 18:49:38.784  1751  1751 I keystore: 1 0
+11-10 18:49:38.823  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:49:38.823  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:49:39.240  2514 10403 I Vision  : Requesting optional module download of ocr.
+11-10 18:49:39.240  2514 10403 I Vision  : Checking for download completion for 988504 -- ocr
+11-10 18:49:39.581  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6d5021c)
+11-10 18:49:39.591  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6d5021c)
+11-10 18:49:40.582  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@cfe9e25)
+11-10 18:49:40.585  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@cfe9e25)
+11-10 18:49:41.579  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@236cbfa)
+11-10 18:49:41.581  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@236cbfa)
+11-10 18:49:41.797  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 10959283 , only wrote 10806480
+11-10 18:49:41.907 10406 10406 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:41.956 10406 10406 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:41.958 10406 10406 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:41.958 10406 10406 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:41.974 10406 10406 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-10 18:49:42.016  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:42.582  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e9ff7a1)
+11-10 18:49:42.583  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@e9ff7a1)
+11-10 18:49:43.584  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f15adc6)
+11-10 18:49:43.586  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f15adc6)
+11-10 18:49:44.584  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@4518187)
+11-10 18:49:44.589  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@4518187)
+11-10 18:49:45.588  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@19578b4)
+11-10 18:49:45.593  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@19578b4)
+11-10 18:49:46.584  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6a36cdd)
+11-10 18:49:46.585  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@6a36cdd)
+11-10 18:49:47.588  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eaee052)
+11-10 18:49:47.589  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eaee052)
+11-10 18:49:48.584  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a3aaf23)
+11-10 18:49:48.585  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@a3aaf23)
+11-10 18:49:49.264  2514 10419 I Vision  : Requesting optional module download of ocr.
+11-10 18:49:49.268  2514 10419 I Vision  : Checking for download completion for 998528 -- ocr
+11-10 18:49:49.585  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d6ef9d9)
+11-10 18:49:49.586  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@d6ef9d9)
+11-10 18:49:50.590  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f36af9e)
+11-10 18:49:50.590  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@f36af9e)
+11-10 18:49:51.094  1849  1849 E netmgr  : Failed to open QEMU pipe 'qemud:network': Invalid argument
+11-10 18:49:51.094  1849  1849 E netmgr  : WifiForwarder unable to open QEMU pipe: Invalid argument
+11-10 18:49:51.585  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5ff1a7f)
+11-10 18:49:51.586  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@5ff1a7f)
+11-10 18:49:52.217  2005  4774 W WindowManager: removeWindowToken: Attempted to remove non-existing token: android.os.Binder@d735ab
+11-10 18:49:52.218  2005  2005 V SettingsProvider: Notifying for 0: content://settings/secure/accessibility_enabled
+11-10 18:49:52.239 10406 10406 D AndroidRuntime: Shutting down VM
+11-10 18:49:52.541 10425 10425 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:52.622  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1cc5a95)
+11-10 18:49:52.629  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@1cc5a95)
+11-10 18:49:52.657 10425 10425 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:52.662 10425 10425 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:52.699 10425 10425 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:52.704 10425 10425 I Input   : injectMotionEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=991963, downTime=991963, deviceId=0, source=0x1002 }
+11-10 18:49:52.839 10425 10425 I Input   : injectMotionEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=582.0, y[0]=1003.0, toolType[0]=TOOL_TYPE_UNKNOWN, buttonState=0, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=991963, downTime=991963, deviceId=0, source=0x1002 }
+11-10 18:49:52.881 10425 10425 D AndroidRuntime: Shutting down VM
+11-10 18:49:52.882  1937  5693 W audio_hw_generic: Not supplying enough data to HAL, expected position 10806537 , only wrote 10806480
+11-10 18:49:53.245  1751  1751 I keystore: 1 0
+11-10 18:49:53.278  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.stats.service.DropBoxEntryAddedReceiver
+11-10 18:49:53.278  2005  2021 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.intent.action.DROPBOX_ENTRY_ADDED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+11-10 18:49:53.604  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@b650b11)
+11-10 18:49:53.614  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@b650b11)
+11-10 18:49:53.961  9377  9404 I OpenGLRenderer: Davey! duration=708ms; Flags=1, IntendedVsync=992516384208, Vsync=992866384194, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=992876904210, AnimationStart=992876944550, PerformTraversalsStart=992877378230, DrawStart=993189238270, SyncQueued=993192236580, SyncStart=993192500070, IssueDrawCommandsStart=993196319870, SwapBuffers=993223043320, FrameCompleted=993224990400, DequeueBufferDuration=459000, QueueBufferDuration=647000, 
+11-10 18:49:54.588  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@38b1476)
+11-10 18:49:54.588  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@38b1476)
+11-10 18:49:55.588  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bb7da77)
+11-10 18:49:55.590  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@bb7da77)
+11-10 18:49:56.092  1937  1954 W audio_hw_generic: Not supplying enough data to HAL, expected position 11113359 , only wrote 10960560
+11-10 18:49:56.195 10439 10439 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:56.315 10439 10439 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:56.317 10439 10439 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:56.347 10439 10439 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:56.348 10439 10439 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=995611, downTime=995611, deviceId=-1, source=0x101 }
+11-10 18:49:56.493 10439 10439 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=995611, downTime=995611, deviceId=-1, source=0x101 }
+11-10 18:49:56.495  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:49:56.595  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@8fe474d)
+11-10 18:49:56.599  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@8fe474d)
+11-10 18:49:56.748 10439 10439 D AndroidRuntime: Shutting down VM
+11-10 18:49:56.883  1760  1786 E storaged: getDiskStats failed with result NOT_SUPPORTED and size 0
+11-10 18:49:57.593  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@8c0202)
+11-10 18:49:57.593  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@8c0202)
+11-10 18:49:57.902  9377  9404 I OpenGLRenderer: Davey! duration=762ms; Flags=0, IntendedVsync=996375940957, Vsync=996725940943, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=996732206520, AnimationStart=996732244120, PerformTraversalsStart=996732749110, DrawStart=996732816840, SyncQueued=996734148510, SyncStart=996761492970, IssueDrawCommandsStart=996761706230, SwapBuffers=996762451960, FrameCompleted=997165373500, DequeueBufferDuration=113969000, QueueBufferDuration=1452000, 
+11-10 18:49:58.596  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3c5a713)
+11-10 18:49:58.597  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@3c5a713)
+11-10 18:49:59.307  2514 10453 I Vision  : Requesting optional module download of ocr.
+11-10 18:49:59.307  2514 10453 I Vision  : Checking for download completion for 1008571 -- ocr
+11-10 18:49:59.552 10454 10454 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+11-10 18:49:59.591  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eb3be7c)
+11-10 18:49:59.592  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@eb3be7c)
+11-10 18:49:59.679 10454 10454 W app_process: Unexpected CPU variant for X86 using defaults: x86_64
+11-10 18:49:59.680 10454 10454 I app_process: The ClassLoaderContext is a special shared library.
+11-10 18:49:59.746 10454 10454 D AndroidRuntime: Calling main entry com.android.commands.input.Input
+11-10 18:49:59.747 10454 10454 I Input   : injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=999010, downTime=999010, deviceId=-1, source=0x101 }
+11-10 18:49:59.961 10454 10454 I Input   : injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_BACK, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=999010, downTime=999010, deviceId=-1, source=0x101 }
+11-10 18:49:59.968  2005  2022 D AutofillManagerService: onBackKeyPressed()
+11-10 18:50:00.179 10454 10454 D AndroidRuntime: Shutting down VM
+11-10 18:50:00.593  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@abc4668)
+11-10 18:50:00.595  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@abc4668)
+11-10 18:50:01.595  2005  2464 I GnssLocationProvider: WakeLock acquired by sendMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c0dda81)
+11-10 18:50:01.596  2005  2020 I GnssLocationProvider: WakeLock released by handleMessage(REPORT_SV_STATUS, 0, com.android.server.location.GnssLocationProvider$SvStatusInfo@c0dda81)

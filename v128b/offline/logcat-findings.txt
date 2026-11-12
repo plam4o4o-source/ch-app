@@ -1,0 +1,19 @@
+app pids seen: ['5941', '9096', '12183', '16188']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=32 total=32
+   10-31 17:47:34.771  9096  9096 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=899ms median=838ms
+   10-31 17:44:26.505  5941  5973 I OpenGLRenderer: Davey! duration=899ms; Flags=1, FrameTimelineVsyncId=7054, IntendedVsync=80768587961, Vsync=81235254609, InputEventId=0, HandleInputStart=81238748400, AnimationStart=81238749191, PerformTrave
+   10-31 17:53:22.343 12183 12197 I OpenGLRenderer: Davey! duration=776ms; Flags=1, FrameTimelineVsyncId=20182, IntendedVsync=616785233187, Vsync=617101899841, InputEventId=0, HandleInputStart=617115627206, AnimationStart=617115627647, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 17:44:24.046  5934  5934 I PERFCHECK: section: O1. Online warm-up fills the caches
+   10-31 17:47:28.070  9001  9001 I PERFCHECK: section: O2. Offline cold start with caches: all tabs
+   10-31 17:50:11.628 10464 10464 I PERFCHECK: section: O3. Reconnect on Contacts no touch, then the other screens
+   10-31 17:53:15.418 11986 11986 I PERFCHECK: section: O4. Empty cache, offline, guest: all tabs MyHub
+   10-31 17:56:23.990 14083 14083 I PERFCHECK: section: O5. Reconnect with the empty cache: Gallery no touch, then all tabs
+   10-31 17:59:18.736 16099 16099 I PERFCHECK: section: O6. My offline as guest again after the online start

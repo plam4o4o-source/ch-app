@@ -1,0 +1,26 @@
+app pids seen: ['7621', '8891', '9895']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=44 total=44
+   11-02 00:03:11.664  9895  9895 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=1123ms median=959ms
+   11-02 00:03:11.526  9895 10025 I OpenGLRenderer: Davey! duration=1123ms; Flags=1, IntendedVsync=464134123528, Vsync=464434123516, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=464436182331, AnimationStart=464436
+   11-02 00:03:11.716  9895 10025 I OpenGLRenderer: Davey! duration=795ms; Flags=0, IntendedVsync=464654364680, Vsync=465387697984, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=465398036077, AnimationStart=4653980
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 23:57:24.251  7670  7670 I PERFCHECK: section: W. First launch and warm-up
+   11-01 23:57:51.932  7895  7895 I PERFCHECK: section: P0. Package GitHub build: requested permissions
+   11-01 23:57:52.419  7917  7917 I PERFCHECK: section: P1. No screen lock: Settings › Поверителност — the switch is disabled with an explanation
+   11-01 23:58:23.325  8271  8271 I PERFCHECK: section: P2. A self-entered card before the switch is on
+   11-01 23:59:09.101  8450  8450 I PERFCHECK: section: P3. Device PIN 1234; the switch → the system prompt → PIN
+   11-01 23:59:46.236  8878  8878 I PERFCHECK: section: P4. New process: Моето › Читателска карта → prompt; Back cancel → Моето; PIN → the card
+   11-01 23:59:46.253  5226  7102 I ActivityManager: Killing 7621:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-02 00:00:39.002  9449  9449 I PERFCHECK: section: P5. Background 20 s < 60 s: no prompt; background 70 s > 60 s: prompt
+   11-02 00:02:30.022  9727  9727 I PERFCHECK: section: P6. Screen off and on keyguard with the PIN: prompt again
+   11-02 00:02:30.032  9730  9730 I PERFCHECK: m-screenoff
+   11-02 00:02:48.107  9850  9850 I PERFCHECK: section: P7. Quick Settings tile → the card: the gate
+   11-02 00:02:51.203  5226  9548 I ActivityManager: Killing 8891:org.chyavorec.app/u0a86 (adj 100): stop org.chyavorec.app
+   11-02 00:03:54.537 10347 10347 I PERFCHECK: section: P8. Turning the switch off also asks for the PIN

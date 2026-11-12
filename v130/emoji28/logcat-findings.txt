@@ -1,0 +1,24 @@
+app pids seen: ['5372', '5979', '6024', '6073', '6121', '6161', '6216', '6258', '6306', '6346', '6399']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 1
+   davey events=1 max=875ms median=875ms
+   11-01 19:59:17.080  5372  5397 I OpenGLRenderer: Davey! duration=875ms; Flags=1, IntendedVsync=119290208735, Vsync=119673542053, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=119680129820, AnimationStart=1196801
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 19:59:15.059  5362  5362 I PERFCHECK: section: M0. Site data host: texts with emoji
+   11-01 19:59:15.924  5367  5367 I PERFCHECK: section: W. First launch and warm-up
+   11-01 19:59:44.876  5669  5669 I PERFCHECK: section: M1. Texts with emoji on API 28 no EmojiCompat
+   11-01 20:00:34.480  5964  5964 I PERFCHECK: section: M2. Cold starts 10, API 28
+   11-01 20:00:34.505  2005  2285 I ActivityManager: Killing 5372:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-01 20:00:41.643  2005  2164 I ActivityManager: Killing 5979:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-01 20:00:49.010  2005  2905 I ActivityManager: Killing 6024:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-01 20:00:56.027  2005  2280 I ActivityManager: Killing 6073:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-01 20:01:03.338  2005  2280 I ActivityManager: Killing 6121:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-01 20:01:10.388  2005  3194 I ActivityManager: Killing 6161:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-01 20:01:17.558  2005  2387 I ActivityManager: Killing 6216:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-01 20:01:24.586  2005  3194 I ActivityManager: Killing 6258:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-01 20:01:31.832  2005  2387 I ActivityManager: Killing 6306:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-01 20:01:38.789  2005  4576 I ActivityManager: Killing 6346:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app

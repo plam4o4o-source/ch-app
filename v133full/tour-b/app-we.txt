@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5221', '7271', '12675', '18151', '23067']): 770 in 85 groups
+      45  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      43  W/Parcel: Expecting binder but got null!
+      19  W/BasicSecureTextField: 	at x#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+      17  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+      16  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+      11  W/BasicSecureTextField: 	at nh#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+      11  W/BasicSecureTextField: 	at q#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+      11  W/BasicSecureTextField: 	at pr#.c(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+      11  W/BasicSecureTextField: 	at r#.F#(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+      11  W/BasicSecureTextField: 	at r#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+      11  W/BasicSecureTextField: 	at ay.c(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+      11  W/BasicSecureTextField: 	at er#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       9  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       9  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       9  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
+       9  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
+       8  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       8  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       8  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       8  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       8  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       8  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       8  W/BasicSecureTextField: 	at yz#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at ow#.b(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at ow#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at aq#.invoke(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at on#.c(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at on#.invoke(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at j#.i(Unknown Source:#)
+       8  W/BasicSecureTextField: 	at bq#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at h#.f(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at on#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at on#.f(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at d#.invoke(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at q#.v(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at j#.o(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at dq#.j(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at mb#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at h#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       8  W/BasicSecureTextField: 	at dq#.A(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)

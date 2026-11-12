@@ -1,0 +1,111 @@
+part live361; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: not used in this part (built x86_64 app.apk)
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## L0. Device: Android 16 (SDK 36), 14574095
+POST_PROMOTED_NOTIFICATIONS: android.permission.POST_PROMOTED_NOTIFICATIONS: granted=true
+## L1. Update download as a Live Update: 1.2.33-pre (versionCode 1500182) → the staged test 1.2.33 (1500183), throttled
+staged: 1500183 1.2.33 4277262 /ch-app/emulator-results/v133full/update/42657877413/app.apk
+installed new-upd: 1.2.33-pre a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500182; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v133full/update/42657877413/update.json size 4277238;  versionCode=1500182 minSdk=26 targetSdk=37  versionName=1.2.33-pre 
+POST_PROMOTED_NOTIFICATIONS (pre build): android.permission.POST_PROMOTED_NOTIFICATIONS: granted=true
+network: wifi 0; Active default network: 101; 2 PROMOTED lines in dumpsys package
+THROTTLE on: -P INPUT ACCEPT -A INPUT -p tcp -m tcp --sport 443 -m hashlimit --hashlimit-above 64kb/s --hashlimit-burst 64kb --hashlimit-mode srcip --hashlimit-name pcdl -j DROP -A INPUT -j oem_in 
+LIVE update notification at +4333 ms:
+LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 5%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (5) requestPromotedOngoing=Boolean (true) shortCriticalText=String (5%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+   raw: 0x006003c5: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=ONGOING_EVENT|ONL
+   raw: flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+   raw: mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800(FLAG_MUTE_HAPTIC)  tags= bundle=null
+   android.requestPromotedOngoing=Boolean (true)
+   android.template=String (android.app.Notification$ProgressStyle)
+   android.shortCriticalText=String (5%)
+LIVE total for org.chyavorec.app: 1
+SHADE: text="Изтегляне на версия 1.2.33 — 20%" text="Отказ" 
+LIVE at +32096 ms: LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 30%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (30) requestPromotedOngoing=Boolean (true) shortCriticalText=String (30%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+LIVE last capture: LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 94%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (94) requestPromotedOngoing=Boolean (true) shortCriticalText=String (94%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+  dumpsys:      33       originalFlags=ONGOING_EVENT|ONLY_ALERT_ONCE|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  dumpsys:      33                 android.template=String (android.app.Notification$ProgressStyle)
+  dumpsys:      33                 android.requestPromotedOngoing=Boolean (true)
+  dumpsys:      29       flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  dumpsys:       4       flags=ONGOING_EVENT|ONLY_ALERT_ONCE|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  dumpsys:       1     NotificationRecord(0x0ffe8880: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0fcafde8: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0f873686: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0f848980: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0f6d1a23: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0f110310: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1     NotificationRecord(0x0eb0c159: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+THROTTLE off: 0 rules left
+l-finish: progress notification at +103229 ms: NOTIF id=701 title=String (Изтегляне на версия 1.2.33 — 97%) text=- progress=Integer (97)/Integer (100) indeterminate=Boolean (false) ongoing=False fgs=False actions=['Отказ']
+l-finish RESULT: ready after 107332 ms (first progress notification at +103229 ms); app process '4667'; files [4277262 2026-11-09 16:57 update-1500183.apk;]
+## L1b. Install the downloaded update (system installer) → 1.2.33
+UPDATE: installed  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+## L2. Event reminder → event Live Update (60 min before; needs the event's start time)
+installed new: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+EVENT: text="Панайот Пипков · Ден на семейството" text="21 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Читалище" text="НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец
+REMINDER set: text="Ще получиш напомняне на 20 ноември 2026, 18:00."; bell: on
+CAP event-reminder (+2502 ms after the tap; capture took 2421 ms): WorkSpec:  WorkName: 
+CAP event-reminder: jobs: 0 [ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~Pending queue:~Active jobs:~ Unsatisfied constraints:~ Unsatisfied constraints:~]; SystemForegroundService: 0 []; notif: ; dialog: 
+WORK after the reminder: c4ab91ee ENQUEUED attempts=0 PeriodicSyncWorker periods=0 gen=0 enq=1794243453079;590f35b6 SUCCEEDED attempts=1 MessagePollWorker periods=0 gen=0 enq=1794243453630;d40f0847 ENQUEUED attempts=0 MessagePollWorker periods=0 gen=0 enq=1794243454588;f62d4f96 ENQUEUED attempts=0 EventReminderWorker periods=0 gen=0 enq=1794243494167;
+EventReminderWorker scheduled: 1; EventLiveUpdateWorker scheduled: 0
+notifications now: LIVE total for org.chyavorec.app: 0
+## L3. API 36 smoke: ribbon and card foil render
+API36 ribbon mean=209.5 std=67.0 thread-px=26.8%; change 3→9 s 0.00
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## L4. Live Update evidence: raw notification records during the download, the app's notification settings
+== notif-l2.txt
+REC 0x006003c5: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate=null sound
+   flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+   groupKey=0|org.chyavorec.app|g:org.chyavorec.live.update
+   groupAlertBehavior=1
+   android.template=String (android.app.Notification$ProgressStyle)
+   android.requestPromotedOngoing=Boolean (true)
+   android.shortCriticalText=String (5%)
+   mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800(FLAG_MUTE_HAPTIC)  tags= bundle=null
+   effectiveNotificationChannel=NotificationChannel{mId='updates', mName=Обновления, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_
+== notif-l5.txt
+REC 0x0cccdb79: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate=null sound
+   flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+   groupKey=0|org.chyavorec.app|g:org.chyavorec.live.update
+   groupAlertBehavior=1
+   android.template=String (android.app.Notification$ProgressStyle)
+   android.requestPromotedOngoing=Boolean (true)
+   android.shortCriticalText=String (16%)
+   mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800(FLAG_MUTE_HAPTIC)  tags= bundle=null
+   effectiveNotificationChannel=NotificationChannel{mId='updates', mName=Обновления, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_
+== notif-l9.txt
+REC 0x0eb0c159: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate=null sound
+   flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+   groupKey=0|org.chyavorec.app|g:org.chyavorec.live.update
+   groupAlertBehavior=1
+   android.template=String (android.app.Notification$ProgressStyle)
+   android.requestPromotedOngoing=Boolean (true)
+   android.shortCriticalText=String (34%)
+   mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800(FLAG_MUTE_HAPTIC)  tags= bundle=null
+   effectiveNotificationChannel=NotificationChannel{mId='updates', mName=Обновления, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_
+  any promot line:       1     NotificationRecord(0x006003c5: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  any promot line:       1       originalFlags=ONGOING_EVENT|ONLY_ALERT_ONCE|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  any promot line:       1       flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  any promot line:       1                 android.requestPromotedOngoing=Boolean (true)
+PERMISSION lines:  android.permission.POST_PROMOTED_NOTIFICATIONS; android.permission.POST_PROMOTED_NOTIFICATIONS: granted=true;
+appops: 
+APP NOTIFICATION SETTINGS: content-desc="Chitalishte Yavorets" content-desc="Navigate up" text="All Chitalishte Yavorets notifications" text="Notification categories" text="Show unused categories" text="App settings" text="Live updates" text="Display ongoing, time-sensitive notifications on the status bar and lock screen" text="Allow notification dot" 
+  (scrolled): content-desc="Chitalishte Yavorets" content-desc="Navigate up" text="All Chitalishte Yavorets notifications" text="Notification categories" text="Show unused categories" text="App settings" text="Live updates" text="Display ongoing, time-sensitive notifications on the status bar and lock screen" text="Allow notification dot" 
+## COMPLETE
+## logcat findings
+app pids seen: ['4667', '5792', '5980', '6495']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=40 total=40
+== Davey: 3
+   davey events=3 max=902ms median=788ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

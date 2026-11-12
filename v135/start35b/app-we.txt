@@ -1,0 +1,15 @@
+APP W/E lines (pids ['5115', '5710', '5880', '6046', '6532', '6753', '7022', '7827', '7922', '8055', '8221', '8416', '8642', '8989', '9045', '9108', '9165', '9224', '9285', '9349', '9520', '9850', '9909', '10094', '10213', '10319', '10376', '10431', '10597', '10904', '11020', '11079', '11134', '11195', '11252', '11310', '11581', '11900', '11965', '12023', '12082', '12140', '12201', '12257', '12439', '12734', '12792', '12848', '12906', '13016', '13076', '13132', '13303', '13665', '13720', '13775', '13832', '13892', '13951', '14006', '14183', '14484', '14540', '14635', '14691', '14751', '14807', '14864', '15031', '15316', '15374', '15432', '15506', '15565', '15622', '15680']): 539 in 14 groups
+      76  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      76  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      76  W/Parcel: Expecting binder but got null!
+      76  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      76  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      76  W/Gralloc4: allocator #.x is not supported
+      76  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#e#fcf-dc#-#eaa-bc#-#bdedbe#a#b, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#e#e-#b#-#cb-#e#a-abeee#e#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#d#a#e-a#c-#-#fb-#bbcdc#e, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object g#.s(java.lang.Object)(r
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=d#c#de-#e#-#be-#ccf-#fb#e#cf, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=f#-#-#ab#-bccf-#b#c#eadc#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at jp# yj#.a(java.lang.Object, is#, jb#)(r#-

@@ -1,0 +1,49 @@
+part login; APK: 1.2.29 7bd2513 (NotifierTest: тестовете за снимки и действия — в NotifierTes); versionCode 1488542; x86_64 libs: 2 size 4100618 bytes
+base APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4; update manifest: no-update stub size 4323599 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.29 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4716 ms
+## LG1. Sign-in on a fresh install (password-manager flag unset): no credential query, no crash (API 33)
+GMS versionName=23.18.18(190800-535401451) ; Play Store 1 ; Google accounts 0; credential providers:     com.google.android.gms/.auth.api.credentials.credman.service.PasswordAndPasskeyService 
+LOGIN +2s: fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от And
+LOGIN +6s: fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от And
+LOGIN credential traffic after open: []
+LOGIN activities started after open: []
+## LG2. Card number field
+LOGIN card field after typing 'ab-123': FIELD 0: text='ab-123' password=false focused=true hint=''
+## LG3. PIN (OutlinedSecureTextField): the last digit shows briefly; the eye toggle
+PIN after '1' +2557 ms: FIELD 1: text='1' password=true focused=true hint=''
+PIN after '1' +7154 ms: FIELD 1: text='1' password=true focused=true hint=''
+PIN after '2' +2165 ms: FIELD 1: text='12' password=true focused=true hint=''
+PIN after '2' +6860 ms: FIELD 1: text='12' password=true focused=true hint=''
+PIN after '3' +2652 ms: FIELD 1: text='123' password=true focused=true hint=''
+PIN after '3' +8020 ms: FIELD 1: text='123' password=true focused=true hint=''
+PIN after '4' +2817 ms: FIELD 1: text='1234' password=true focused=true hint=''
+PIN after '4' +8218 ms: FIELD 1: text='1234' password=true focused=true hint=''
+PIN eye ON: FIELD 1: text='1234' password=true focused=true hint=''; toggle now: content-desc="Скрий ПИН-а"
+PIN eye OFF: FIELD 1: text='1234' password=true focused=true hint=''; toggle now: content-desc="Покажи ПИН-а"
+## LG4. 'Запомни ме' row: one labelled checkbox
+before: CHECKABLE class=android.view.View label='Запомни ме на това устройство' checked=true clickable=true bounds=[63,1161][1017,1287] nested-checkables=0
+'Запомни ме' text nodes: 1
+after tap on the text: CHECKABLE class=android.view.View label='Запомни ме на това устройство' checked=false clickable=true bounds=[63,1161][1017,1287] nested-checkables=0
+A11Y login-15: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+LOGIN after Back: text="Здравей!" text="Новините, събитията, каталогът и информацията за читалището са достъпни и без вход." text="Вход" t; pid '4985'
+LOGIN second open: fg org.chyavorec.app/org.chyavorec.app.MainActivity; credential traffic: []
+## COMPLETE
+## logcat findings
+app pids seen: ['4985']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=52 total=244
+== Davey: 7
+   davey events=7 max=2376ms median=1076ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

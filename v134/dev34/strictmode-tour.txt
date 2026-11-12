@@ -1,0 +1,2 @@
+STRICT pids of org.chyavorec.app.dev: ['5912']; StrictMode/CloseGuard messages: 0
+STACKS (one example per kind):

@@ -1,0 +1,16 @@
+GFX rel-album-grid frames=   79  janky=76 (96.20%)  p50=250ms p90=400ms p95=500ms p99=700ms  slowUI=30 slowDraw=76 highInput=3
+GFX rel-article  frames=   73  janky=72 (98.63%)  p50=300ms p90=400ms p95=450ms p99=550ms  slowUI=25 slowDraw=72 highInput=2
+GFX rel-book-open-x5 frames=   76  janky=76 (100.00%)  p50=300ms p90=550ms p95=600ms p99=650ms  slowUI=44 slowDraw=76 highInput=0
+GFX rel-calendar frames=   35  janky=35 (100.00%)  p50=200ms p90=300ms p95=450ms p99=450ms  slowUI=21 slowDraw=35 highInput=0
+GFX rel-card-idle-0-10s frames=   55  janky=54 (98.18%)  p50=250ms p90=400ms p95=450ms p99=450ms  slowUI=19 slowDraw=54 highInput=2
+GFX rel-card-tilt frames=   40  janky=37 (92.50%)  p50=300ms p90=450ms p95=500ms p99=500ms  slowUI=9 slowDraw=37 highInput=4
+GFX rel-catalog  frames=   57  janky=57 (100.00%)  p50=300ms p90=550ms p95=650ms p99=650ms  slowUI=20 slowDraw=57 highInput=0
+GFX rel-gallery  frames=   70  janky=68 (97.14%)  p50=250ms p90=400ms p95=450ms p99=550ms  slowUI=27 slowDraw=68 highInput=2
+GFX rel-home-scroll frames=   65  janky=64 (98.46%)  p50=300ms p90=500ms p95=550ms p99=650ms  slowUI=31 slowDraw=64 highInput=1
+GFX rel-my       frames=   76  janky=75 (98.68%)  p50=250ms p90=400ms p95=450ms p99=550ms  slowUI=24 slowDraw=75 highInput=1
+GFX rel-news     frames=   84  janky=84 (100.00%)  p50=250ms p90=400ms p95=450ms p99=550ms  slowUI=45 slowDraw=84 highInput=0
+GFX rel-settings frames=   76  janky=74 (97.37%)  p50=200ms p90=300ms p95=350ms p99=400ms  slowUI=29 slowDraw=74 highInput=4
+GFX rel-shelf    frames=   61  janky=61 (100.00%)  p50=350ms p90=450ms p95=500ms p99=600ms  slowUI=27 slowDraw=61 highInput=0
+GFX rel-surprise-x3 frames=   67  janky=67 (100.00%)  p50=600ms p90=1000ms p95=1100ms p99=1500ms  slowUI=29 slowDraw=67 highInput=0
+GFX rel-tab-switch frames=   42  janky=42 (100.00%)  p50=200ms p90=500ms p95=500ms p99=800ms  slowUI=21 slowDraw=42 highInput=0
+GFX rel-viewer   frames=  154  janky=149 (96.75%)  p50=150ms p90=250ms p95=250ms p99=350ms  slowUI=63 slowDraw=149 highInput=6

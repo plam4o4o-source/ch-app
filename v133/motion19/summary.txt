@@ -1,0 +1,53 @@
+part motion19; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## R0. Reduced motion: animator/transition/window scale 0 (Developer options / „Премахни анимациите“)
+scales: 0 0 0
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3849 ms
+## R1. Home: the ribbon is drawn still (no sweep)
+RM frames in the first 20 s on Home: 10
+RM ribbon [0 280 1080 398] mean=209.5 std=67.0 thread-px=26.8%; change 2→6→12→20 s: 0.00 0.00 0.00 (≈0 = still)
+## R2. Library card: no sweep
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+RM card: frames in 6 s 0; change 0.00
+## R3. No confetti on 'Искам да прочета'
+REC rm-want: 29 frames @8 fps; motion all: frames=29 moving-frames(>1.0)=1 max-step=12.1 max-vs-first=12.1 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 12.1 0.0 0.0 0.0 0.1]
+RM confetti: confetti-like new saturated points per frame (max 2): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 1]
+RM want added: checked=true selected=false bounds=[426,738][911,864]
+## R4. Nav rosette: static
+REC rm-rosette: 48 frames @8 fps; motion 0 2070 1080 2400: frames=48 moving-frames(>1.0)=4 max-step=232.0 max-vs-first=232.3 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.2 0.2 0.0 0.0 232.0 0.0 0.0 0.0 0.0 0.0 0.0 231.8 0.0 0.8 2.2 0.0 0.0 0.0 0.0 0.0 0.0 0.2 0.0 0.0 2.1 0.0 0.0 0.0 0.5 0.0]
+## R5. Book open: no rotation
+REC rm-bookopen: 29 frames @8 fps; motion 0 150 1080 2150: frames=29 moving-frames(>1.0)=2 max-step=20.1 max-vs-first=31.5 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 20.1 0.0 18.2 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.4]
+RM after book + back: catalogue shown
+## R6. 'Изненадай ме' still works
+RM surprise: text="Към книгата" 
+## R7. Article: plain progress line, toolbar
+RM article toolbar after scrolling down: visible
+RM article toolbar after scrolling up: visible
+## R8. Battery saver (animations ON): the ribbon must be still
+battery saver: low_power=1;  mSettingBatterySaverEnabled=true
+SAVER frames in 14 s: 17
+SAVER ribbon change 3→8→14 s: 0.06 0.00 (≈0 = still)
+## R9. Control: animations ON, no saver — the ribbon moves
+CONTROL frames in 14 s: 54
+CONTROL ribbon change 3→8→14 s: 1.57 4.80
+## COMPLETE
+## logcat findings
+app pids seen: ['5346', '6675', '8927', '9102']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 14
+   skipped-frames events=14 max=140 total=777
+== Davey: 32
+   davey events=32 max=3824ms median=984ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

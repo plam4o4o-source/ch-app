@@ -1,0 +1,29 @@
+app pids seen: ['5838', '7322']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=39 total=169
+   10-31 21:30:39.341  5838  5838 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   10-31 21:31:18.185  7322  7322 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   10-31 21:31:19.152  7322  7322 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   10-31 21:35:52.730  7322  7322 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   10-31 21:49:02.678  7322  7322 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 26
+   davey events=26 max=993ms median=736ms
+   10-31 21:30:40.208  5838  5851 I OpenGLRenderer: Davey! duration=719ms; Flags=1, FrameTimelineVsyncId=6655, IntendedVsync=80553652123, Vsync=80853652111, InputEventId=0, HandleInputStart=80868180890, AnimationStart=80868181721, PerformTrave
+   10-31 21:30:59.473  5838  5850 I OpenGLRenderer: Davey! duration=993ms; Flags=0, FrameTimelineVsyncId=7859, IntendedVsync=99520318031, Vsync=99786984687, InputEventId=0, HandleInputStart=99797955512, AnimationStart=99797956303, PerformTrave
+   10-31 21:31:19.186  7322  7336 I OpenGLRenderer: Davey! duration=896ms; Flags=1, FrameTimelineVsyncId=9204, IntendedVsync=119403650569, Vsync=119736983889, InputEventId=0, HandleInputStart=119740451115, AnimationStart=119740452197, PerformT
+   10-31 21:31:19.327  7322  7336 I OpenGLRenderer: Davey! duration=724ms; Flags=0, FrameTimelineVsyncId=9287, IntendedVsync=119770317221, Vsync=120353650531, InputEventId=0, HandleInputStart=120355649606, AnimationStart=120355650027, PerformT
+   10-31 21:33:37.478  7322  7333 I OpenGLRenderer: Davey! duration=935ms; Flags=0, FrameTimelineVsyncId=16501, IntendedVsync=257453645047, Vsync=257936978361, InputEventId=0, HandleInputStart=257944540930, AnimationStart=257944541361, Perform
+   10-31 21:33:37.698  7322  8709 I OpenGLRenderer: Davey! duration=735ms; Flags=0, FrameTimelineVsyncId=16573, IntendedVsync=257953645027, Vsync=258103645021, InputEventId=0, HandleInputStart=258115605339, AnimationStart=258115606871, Perform
+   10-31 21:34:20.530  7322  8035 I OpenGLRenderer: Davey! duration=795ms; Flags=0, FrameTimelineVsyncId=19088, IntendedVsync=300636982204, Vsync=301003648834, InputEventId=0, HandleInputStart=301006127671, AnimationStart=301006128072, Perform
+   10-31 21:35:53.069  7322  8035 I OpenGLRenderer: Davey! duration=752ms; Flags=0, FrameTimelineVsyncId=24443, IntendedVsync=393386972943, Vsync=393920306255, InputEventId=0, HandleInputStart=393933040298, AnimationStart=393933040488, Perform
+   10-31 21:37:17.249  7322  8035 I OpenGLRenderer: Davey! duration=721ms; Flags=0, FrameTimelineVsyncId=29497, IntendedVsync=477420302915, Vsync=477803636233, InputEventId=0, HandleInputStart=477813233268, AnimationStart=477813233909, Perform
+   10-31 21:37:18.599  7322  8035 I OpenGLRenderer: Davey! duration=728ms; Flags=0, FrameTimelineVsyncId=29745, IntendedVsync=478836980622, Vsync=479036980590, InputEventId=0, HandleInputStart=479046504118, AnimationStart=479046504929, Perform
+   10-31 21:37:18.671  7322  8035 I OpenGLRenderer: Davey! duration=737ms; Flags=0, FrameTimelineVsyncId=29767, IntendedVsync=479053636183, Vsync=479403636169, InputEventId=0, HandleInputStart=479415378479, AnimationStart=479415378970, Perform
+   10-31 21:40:18.211  7322  7334 I OpenGLRenderer: Davey! duration=775ms; Flags=0, FrameTimelineVsyncId=39970, IntendedVsync=658570295669, Vsync=658986962319, InputEventId=0, HandleInputStart=658999938745, AnimationStart=658999939006, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 21:30:37.882  5825  5825 I PERFCHECK: section: W. First launch and warm-up
+   10-31 21:31:15.816  7304  7304 I PERFCHECK: section: M. Memory over 30 cycles all tabs + a book + the gallery viewer + the expanded search, base

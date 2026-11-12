@@ -1,0 +1,73 @@
+part mem34; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3291 ms
+## M. Memory over 30 cycles (all tabs + a book + the gallery viewer + the expanded search), new
+tab home @ 99 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=48877KB  Java=6756KB  Native=12208KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=7)  RSS=110208KB  Views=9 Activities=1
+MEM c00 (trimmed)    PSS=49888KB  Java=7232KB  Native=12320KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=6)  RSS=105624KB  Views=9 Activities=1
+cycle 1: book screen opened
+MEM c05 (trimmed)    PSS=100154KB  Java=10936KB  Native=32044KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=147804KB  Views=13 Activities=1
+cycles done: 10, gallery viewer reached in 10, search expanded in 10
+MEM c10 (raw)        PSS=122054KB  Java=23940KB  Native=36344KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=167880KB  Views=20 Activities=1
+MEM c10 (trimmed)    PSS=106122KB  Java=10848KB  Native=33552KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=151948KB  Views=13 Activities=1
+MEM c15 (trimmed)    PSS=112706KB  Java=10884KB  Native=40936KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=161976KB  Views=13 Activities=1
+cycles done: 20, gallery viewer reached in 20, search expanded in 20
+MEM c20 (raw)        PSS=128817KB  Java=19908KB  Native=51204KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=183156KB  Views=20 Activities=1
+MEM c20 (trimmed)    PSS=111834KB  Java=10804KB  Native=43532KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=166172KB  Views=13 Activities=1
+MEM c25 (trimmed)    PSS=122076KB  Java=10704KB  Native=57956KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=179596KB  Views=13 Activities=1
+cycles done: 30, gallery viewer reached in 30, search expanded in 30
+MEM c30 (raw)        PSS=127537KB  Java=19848KB  Native=53596KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=185608KB  Views=20 Activities=1
+MEM c30 (trimmed)    PSS=114681KB  Java=10788KB  Native=50000KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=172752KB  Views=13 Activities=1
+pid after cycles: 6356; gallery viewer reached in 30/30, expanded search with '12' in 30/30 cycles
+PSS after trim by cycle (KB): c0=49888 c5=100154 c10=106122 c15=112706 c20=111834 c25=122076 c30=114681
+LEAK TREND (cycles 10-30, least squares): +530 KB per cycle (+10.3 MB over 20 cycles)
+MEMTABLE new 1.2.34 (MB; Graphics = GL mtrack + EGL mtrack + Gfx dev in the App Summary)
+  c00 raw  PSS=47.7  Java=6.6  Native=11.9  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=2.3  RSS=107.6
+  c00 trim PSS=48.7  Java=7.1  Native=12.0  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=8.0  RSS=103.1
+  c10 raw  PSS=119.2  Java=23.4  Native=35.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.3  PrivOther=11.6  RSS=163.9
+  c10 trim PSS=103.6  Java=10.6  Native=32.8  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.3  PrivOther=11.5  RSS=148.4
+  c20 raw  PSS=125.8  Java=19.4  Native=50.0  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.3  PrivOther=11.6  RSS=178.9
+  c20 trim PSS=109.2  Java=10.6  Native=42.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.3  PrivOther=11.4  RSS=162.3
+  c30 raw  PSS=124.5  Java=19.4  Native=52.3  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=11.2  RSS=181.3
+  c30 trim PSS=112.0  Java=10.5  Native=48.8  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=11.0  RSS=168.7
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 2 | Първи кадър: медиана 2328 мс, последен 1626 мс | Пълно показване: медиана 2624 мс, последно 2217 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 2" text="Първи кадър: медиана 2328 мс, последен 1626 мс" text="Пълно показване: медиана 2624 мс, последно 2217 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5148', '6356']): 109 in 10 groups
+      32  W/Parcel: Expecting binder but got null!
+      32  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      18  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      18  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       2  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#-#c#-#f#-b#-dfd#ca#a, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void w#.k()(r#-map-id-#a#f#e#f#e#fcb#cb#c
+       1  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+## COMPLETE
+## logcat findings
+app pids seen: ['5148', '6356']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 110
+   skipped-frames events=110 max=74 total=4351
+== Davey: 331
+   davey events=331 max=2234ms median=867ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

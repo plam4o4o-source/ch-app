@@ -1,0 +1,28 @@
+== released v1.2.33: rel-133.apk — 4269526 bytes; sha256 9300ccd527ff18b4; update.json sha256 9300ccd527ff18b4
+manifest:  A: http://schemas.android.com/apk/res/android:versionCode(0x0101021b)=1500183  A: http://schemas.android.com/apk/res/android:versionName(0x0101021c)="1.2.33" (Raw: "1.2.33")  A: http://schemas.android.com/apk/res/android:minSdkVersion(0x0101020c)=26  A: http://schemas.android.com/apk/res/android:targetSdkVersion(0x01010270)=37 
+native libs: lib/arm64-v8a/libandroidx.graphics.path.so lib/arm64-v8a/libdatastore_shared_counter.so lib/armeabi-v7a/libandroidx.graphics.path.so lib/armeabi-v7a/libdatastore_shared_counter.so 
+baseline profile: assets/dexopt/baseline.prof assets/dexopt/baseline.profm 
+apkanalyzer download size: 4067421 B; file size 4269526 B
+part                    compressed  uncompressed  files
+classes*.dex               3500025       6899732      2
+res                         468408        832536     57
+resources.arsc              235600        235600      1
+assets/                      19856         19856      2
+lib/arm64-v8a                 8642         20472      2
+lib/armeabi-v7a               6601         13116      2
+AndroidManifest.xml           5489         23940      1
+META-INF/                      846          1288      6
+== released v1.2.32: rel-132.apk — 4153198 bytes; sha256 ba4988b065d0618b; update.json sha256 ba4988b065d0618b
+manifest:  A: http://schemas.android.com/apk/res/android:versionCode(0x0101021b)=1495920  A: http://schemas.android.com/apk/res/android:versionName(0x0101021c)="1.2.32" (Raw: "1.2.32")  A: http://schemas.android.com/apk/res/android:minSdkVersion(0x0101020c)=26  A: http://schemas.android.com/apk/res/android:targetSdkVersion(0x01010270)=37 
+native libs: lib/arm64-v8a/libandroidx.graphics.path.so lib/arm64-v8a/libdatastore_shared_counter.so lib/armeabi-v7a/libandroidx.graphics.path.so lib/armeabi-v7a/libdatastore_shared_counter.so 
+baseline profile: assets/dexopt/baseline.prof assets/dexopt/baseline.profm 
+apkanalyzer download size: 3959811 B; file size 4153198 B
+part                    compressed  uncompressed  files
+classes*.dex               3395621       6707860      2
+res                         468365        832408     57
+resources.arsc              224392        224392      1
+assets/                      19213         19213      2
+lib/arm64-v8a                 8642         20472      2
+lib/armeabi-v7a               6601         13116      2
+AndroidManifest.xml           5464         23760      1
+META-INF/                      846          1288      6

@@ -1,0 +1,84 @@
+part old28; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: not used in this part (built x86_64 app.apk)
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: 
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-lowdr-nowidecg-port-notnight-420dpi-finger-keysexposed-nokeys-navhidden-nonav-2274x1080-v28
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2024 ms
+## O1. Card screen on API 28 (tiled шевица fallback): no input 0-15 s and 30-45 s
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+IDLE card28-0-15s (15 s, no input): frames +0; cpu=3.9% (ticks 59 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=3.2%, DefaultExecutor=0.7%; pid 5625
+IDLE card28-30-45s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 5625
+IDLE cardfull28-30-45s (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%, 3 chyavorec.org=0.1%; pid 5625
+## O2. Surprise (lite shuffle on API 26-30) ×3
+SURPRISE 1: text="Още една" text="Към книгата" ; app in front yes
+SURPRISE 2: text="Още една" text="Към книгата" ; app in front yes
+SURPRISE 3: text="Още една" text="Към книгата" ; app in front yes
+## O3. Share an event as image on API 28
+SHARE ev1-old28: chooser OPEN after 1 s; cache/share: 235269 2026-11-10 19:28 chyavorec-event-1794338912862.png;
+SHARE ev1-old28 file: chyavorec-event-1794338912862.png 235269 B; PNG (1080, 1920) RGBA
+SHARE ev1-old28 received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-event-1794338912862.png mime=image/png bytes=235269 png=true dims=1080x1920 subject=Панайот Пипков · Ден на семейството text=Панайот Пипков · Ден на семейството 21 ноември 2026 НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец https://chyavorec.org/events
+SHARE old28: event with a photo: 1
+## O4. Monkey 2000 (seed 1357)
+## W. First launch and warm-up
+first-install catalogue results after 1594 ms
+## K. Monkey 2000 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=7945
+MONKEY exit=0 duration=72 s; Events injected: 2000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '7945'; airplane=1; camera: 
+MEM after-monkey (raw) PSS=79071KB  Java=12648KB  Native=39172KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=16)  RSS=?KB  Views=15 Activities=1
+MEM after-monkey (trimmed) PSS=79885KB  Java=13220KB  Native=39108KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=16)  RSS=?KB  Views=15 Activities=1
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 2 | Първи кадър: медиана 1056 мс, последен 1092 мс | Пълно показване: медиана 1290 мс, последно 1559 мс | Топъл старт · 1 | Първи кадър: медиана 81 мс, последен 81 мс | Насечени кадри по екрани | news: 60,0 % от 35 кадъра · най-бавен 171 мс | c
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 2" text="Първи кадър: медиана 1056 мс, последен 1092 мс" text="Пълно показване: медиана 1290 мс, последно 1559 мс" text="Топъл старт · 1" text="Първи кадър: медиана 81 мс, последен 81 мс" text="Насечени кадри
+APP W/E lines (pids ['5625', '7945']): 128 in 27 groups
+      12  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+      11  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      11  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+       9  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+       9  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+       8  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+       7  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+       7  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+       7  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+       4  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[
+       3  W/IInputConnectionWrapper: setComposingText on inactive InputConnection
+       3  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       2  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       2  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       2  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+       2  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#cab#bf-c#-#e#-b#e#-#fde#b#e#b#, generation=#)
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       1  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_MULTIPLE, keyCode=KEYCODE_DPAD_UP, scanCode=#,
+## COMPLETE
+## logcat findings
+app pids seen: ['5625', '7945']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 2
+   skipped-frames events=2 max=33 total=66
+== Davey: 1
+   davey events=1 max=854ms median=854ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

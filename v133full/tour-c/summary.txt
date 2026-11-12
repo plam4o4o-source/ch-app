@@ -1,0 +1,292 @@
+part tour-c; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4190 ms
+## T-w320dp. All screens (1080x2400 px, density 540, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
+CAP w320dp/01-home: targets=12 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=18 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP w320dp/01b-home-2: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Последни новини · СЪБИТИЕ · Фолклорно пътешествие из Пир · 16 октомври 2026 · Сканирай · Читателска карта
+CAP w320dp/01c-home-3: targets=13 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Искам да прочета · Контакти · КАЛЕНДАР · Предстоящи събития · Всички · 16
+CAP w320dp/01d-home-4: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | БИБЛИОТЕКА · Нови постъпления · Към каталога · Дъхът на спомените — том 3 · Гласът на реката · Забравеният морето — том 3
+CAP w320dp/01e-search-12: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | 12 · Лента за търсене · Назад · Изчисти · Всички · Книги
+CAP w320dp/02-catalog: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=20 ellipsized=1 [Търси книга, новина, събитие…] | Лента за търсене · Търси книга, новина, събитие · Сканирай баркод · 9 ноември 2026 · *Св. Нектар · Последни новини · СЪБИТИЕ
+CAP w320dp/02g-search-12: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | 12 · Лента за търсене · Назад · Изчисти · Всички · Книги
+CAP w320dp/03-book: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | 12 · Лента за търсене · Назад · Изчисти · Всички · Книги
+CAP w320dp/03b-book-2: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=38 ellipsized=0 | 12 · Лента за търсене · Назад · Изчисти · Всички · Книги
+CAP w320dp/03c-book-3: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=41 ellipsized=0 | 12 · Лента за търсене · Назад · Изчисти · Всички · Книги
+CAP w320dp/04-surprise: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Предложение: Пристанище за м · Още една · Към книгата · Затвори
+CAP w320dp/05-my: targets=10 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Здравей! · Новините, събитията, каталог · Вход · БИБЛИОТЕКА · Читателска карта · Добави номера от своята карт
+CAP w320dp/05b-my-2: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Читателска карта · Добави номера от своята карт · Моите книги · Заети книги и срокове за връ · Искам да прочета · Книги, които искаш да вземеш
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+CAP w320dp/06-card: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=14 ellipsized=0 | ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345 · Покажи картата
+CAP w320dp/06b-card-full: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Затвори · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345
+CAP w320dp/07-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Списъкът е празен · Отбележи книга с „Искам да п · Назад · Искам да прочета
+CAP w320dp/08-news: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Събитие
+CAP w320dp/08b-news-2: targets=16 MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=3 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Събитие
+CAP w320dp/09-article: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Групата за народни танци при · СЪБИТИЕ  ·  25 юли 2026 · Групата за народни танци при · Групата за народни танци при · Режим за четене · Аа
+CAP w320dp/09b-article-2: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=3 ellipsized=0 | Групата за народни танци при · Групата за народни танци при · Назад
+CAP w320dp/09c-reader-sheet: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Затваряне на таблицата · Манипулатор за преместване с · Режим за четене · Размер на шрифта · Аа · Малък шрифт
+CAP w320dp/09d-share-sheet: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP w320dp/10-calendar: targets=16 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=28 ellipsized=0 | Новини · Календар · Абонирай се за календара · Изглед календар · Всички · Библиотека
+CAP w320dp/11-event: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Панайот Пипков · Ден на семе · 21 ноември 2026 · Събитие от годишния календар · Читалище · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана
+CAP w320dp/11b-event-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 21 ноември 2026 · Събитие от годишния календар · Читалище · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана · Добави в календара
+CAP w320dp/11c-event-share: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP w320dp/12-more: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP w320dp/12b-more-2: targets=11 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Галерия · Снимки от сайта · Документи и архив · Устав, отчети, юбилейният ве · Контакти · Адрес, телефон, местоположен
+CAP w320dp/13-gallery: targets=3 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | 29 снимки · Фотодокументална изложба · Назад · Галерия
+CAP w320dp/14-album: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Сградата на читалището в Яво · Фолклорен състав при читалищ · Хорът на сцена · 70-те години · Сценичен ансамбъл Яворски хл · Фолклорна група Явор
+CAP w320dp/15-viewer: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Сградата на читалището в Яво · Затвори · 1 / 29  ·  Сградата на читал · Сподели · Отвори в сайта · За снимката
+CAP w320dp/15b-viewer-info: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Сградата на читалището в Яво · Затвори · 1 / 29  ·  Сградата на читал · Сградата на читалището в Яво · Сподели · Отвори в сайта
+CAP w320dp/16-contacts: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | НЧ „Васил Левски – 1922“ · Изпрати имейл на читалището · Имейл · Покажи читалището на картата · Карта · Отвори сайта на читалището
+CAP w320dp/16b-contacts-2: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | пл. 9-ти Септември 3, с. Яво · Лица за контакт · Председател: Пламен Христов · Секретар: Даниела Цвяткова · Имейл · chitalishte_yavorec@abv.bg
+CAP w320dp/17-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF
+CAP w320dp/17b-documents-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF
+CAP w320dp/18-settings: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP w320dp/18b-settings-2: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Злато и жито · Зелено и сребро · Червено, черно и слонова кос · Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета
+CAP w320dp/18c-settings-3: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Цветовете на телефона, взети · Език · Български · Сезонни украси · Празници, сезони и обичаи: п · Известия
+CAP w320dp/18d-settings-4: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Заемания, събития, съобщения · Обновления · Автоматично обновяване · Проверка при отваряне и два  · Провери за нова версия · Версия 1.2.33
+CAP w320dp/18e-text-size: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+CAP w320dp/18f-language: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Език · Както системата · Български · English · Затвори
+CAP w320dp/18g-theme: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Тема · Както системата · Светла · Тъмна · Затвори
+CAP w320dp/18h-notifications: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | Известията се подготвят на с · Съобщения · Съобщения, изпратени от чита · Новини · Нова публикация в сайта · Събития
+CAP w320dp/18i-privacy-policy: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Виж и: Политика за поверител · Последна актуализация: 7 ное · Кой обработва данните · Приложението „Читалище Яворе · Принцип · Приложението събира възможно
+CAP w320dp/18j-terms: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Предназначение · Приложението предоставя инфо · Съдържание · Новините, събитията, снимкит · Наличност на книгите · Наличността в каталога е инф
+CAP w320dp/18k-about: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Читалище Яворец · НЧ „Васил Левски – 1922“ · Версия 1.2.33 (1500183) · Официалното мобилно приложен · Откъде идват данните · Новини, събития, снимки, док
+CAP w320dp/18l-diagnostics: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | Тук приложението записва тех · Сподели · Изчисти · Бързодействие · Времената на стартиране и пл · Студен старт · 2
+CAP w320dp/18m-diagnostics-2: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Времената на стартиране и пл · Студен старт · 2 · Първи кадър: медиана 2287 мс · Пълно показване: медиана 286 · Топъл старт · 1 · Първи кадър: медиана 530 мс,
+CAP w320dp/20-scanner: targets=3 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Назад · Сканиране
+CAP w320dp/20b-scan-manual: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Отказ · Търси
+TOUR w320dp: A11Y AGG: 51 screens analysed, 0 dumps failed; totals MISSING=11 DOUBLE=0 SAME-LABEL=6 SMALL(<48dp)=13
+## T-tablet-1280x800dp. All screens (2560x1600 px, density 320, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
+CAP tablet-1280x800dp/01-home: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=1 [Търси книга, новина, събитие…] | Начало · Каталог · Моето · Новини · Още · НЧ „Васил Левски – 1922“
+CAP tablet-1280x800dp/01b-home-2: targets=20 MISSING=6 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=34 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Последни новини
+CAP tablet-1280x800dp/01c-home-3: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=40 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Последни новини
+CAP tablet-1280x800dp/01d-home-4: targets=27 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=45 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · 16
+CAP tablet-1280x800dp/02-catalog: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Търси навсякъде
+CAP tablet-1280x800dp/02b-filters: targets=32 MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=37 ellipsized=0 | Затваряне на таблицата · Манипулатор за преместване с · Филтри · Без филтри · Само налични · Вид документ
+CAP tablet-1280x800dp/02c-filters-2: targets=32 MISSING=4 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=6 | front: app | texts=34 ellipsized=0 | Затваряне на таблицата · Манипулатор за преместване с · електронен документ · графично издание · аудиодокумент · продължаващо издание
+CAP tablet-1280x800dp/02d-sort: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Най-подходящи  ✓ · Заглавие (А–Я) · Автор (А–Я) · Година (нови първо) · Година (стари първо) · Нови постъпления
+CAP tablet-1280x800dp/02e-shelf: targets=57 MISSING=0 DOUBLE=0 SAME-LABEL=6 SMALL(<48dp)=17 | front: app | texts=101 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Търси навсякъде
+CAP tablet-1280x800dp/02f-shelf-2: targets=57 MISSING=0 DOUBLE=0 SAME-LABEL=6 SMALL(<48dp)=17 | front: app | texts=101 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Търси навсякъде
+CAP tablet-1280x800dp/02g-search-12: targets=23 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=44 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · 12
+CAP tablet-1280x800dp/03-book: targets=28 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=69 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · 12
+CAP tablet-1280x800dp/03b-book-2: targets=28 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=69 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · 12
+CAP tablet-1280x800dp/03c-book-3: targets=28 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=69 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · 12
+CAP tablet-1280x800dp/04-surprise: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Предложение: Дъхът на детств · Още една · Към книгата · Затвори
+CAP tablet-1280x800dp/05-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Здравей!
+CAP tablet-1280x800dp/05b-my-2: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Здравей!
+CAP tablet-1280x800dp/06-card: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345 · Покажи картата
+CAP tablet-1280x800dp/06b-card-full: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Затвори · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345
+CAP tablet-1280x800dp/07-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Списъкът е празен · Отбележи книга с „Искам да п · Назад · Искам да прочета
+CAP tablet-1280x800dp/08-news: targets=14 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Новини
+CAP tablet-1280x800dp/08b-news-2: targets=14 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=5 | front: app | texts=13 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Новини
+CAP tablet-1280x800dp/09-article: targets=25 MISSING=2 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=5 | front: app | texts=32 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Новини
+CAP tablet-1280x800dp/09b-article-2: targets=25 MISSING=2 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=5 | front: app | texts=32 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Новини
+CAP tablet-1280x800dp/09c-reader-sheet: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Затваряне на таблицата · Манипулатор за преместване с · Режим за четене · Размер на шрифта · Аа · Малък шрифт
+CAP tablet-1280x800dp/09d-share-sheet: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP tablet-1280x800dp/10-calendar: targets=20 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=44 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Новини
+CAP tablet-1280x800dp/11-event: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Панайот Пипков · Ден на семе · 21 ноември 2026 · Събитие от годишния календар · Читалище · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана
+CAP tablet-1280x800dp/11b-event-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Панайот Пипков · Ден на семе · 21 ноември 2026 · Събитие от годишния календар · Читалище · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана
+CAP tablet-1280x800dp/11c-event-share: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP tablet-1280x800dp/12-more: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP tablet-1280x800dp/12b-more-2: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP tablet-1280x800dp/13-gallery: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | 29 снимки · Фотодокументална изложба · 4 снимки · Фолклорна група „Явор“ · 6 снимки · Клуб за народни танци
+CAP tablet-1280x800dp/14-album: targets=30 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=0 | Сградата на читалището в Яво · Фолклорен състав при читалищ · Хорът на сцена · 70-те години · Сценичен ансамбъл Яворски хл · Фолклорна група Явор
+CAP tablet-1280x800dp/15-viewer: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Сградата на читалището в Яво · Затвори · 1 / 29  ·  Сградата на читал · Сподели · Отвори в сайта · За снимката
+CAP tablet-1280x800dp/15b-viewer-info: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Сградата на читалището в Яво · Затвори · 1 / 29  ·  Сградата на читал · Сградата на читалището в Яво · Сподели · Отвори в сайта
+CAP tablet-1280x800dp/16-contacts: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | НЧ „Васил Левски – 1922“ · Изпрати имейл на читалището · Имейл · Покажи читалището на картата · Карта · Отвори сайта на читалището
+CAP tablet-1280x800dp/16b-contacts-2: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Секретар: Даниела Цвяткова · Имейл · chitalishte_yavorec@abv.bg · Работно време · Понеделник: 08:00 – 16:30 · Вторник: 08:00 – 16:30
+CAP tablet-1280x800dp/17-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF
+CAP tablet-1280x800dp/17b-documents-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF
+CAP tablet-1280x800dp/18-settings: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP tablet-1280x800dp/18b-settings-2: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+CAP tablet-1280x800dp/18c-settings-3: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Обновления · Автоматично обновяване · Проверка при отваряне и два  · Провери за нова версия · Версия 1.2.33 · Данни
+CAP tablet-1280x800dp/18d-settings-4: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | По мобилни данни — само вече · Изчисти временните данни · Новините, събитията, каталог · Поверителност · Искай отключване за личните  · Не може да се включи: телефо
+CAP tablet-1280x800dp/18e-text-size: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+CAP tablet-1280x800dp/18f-language: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Език · Както системата · Български · English · Затвори
+CAP tablet-1280x800dp/18g-theme: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Тема · Както системата · Светла · Тъмна · Затвори
+CAP tablet-1280x800dp/18h-notifications: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Известията се подготвят на с · Съобщения · Съобщения, изпратени от чита · Новини · Нова публикация в сайта · Събития
+CAP tablet-1280x800dp/18i-privacy-policy: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Виж и: Политика за поверител · Последна актуализация: 7 ное · Кой обработва данните · Приложението „Читалище Яворе · Принцип · Приложението събира възможно
+CAP tablet-1280x800dp/18j-terms: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Предназначение · Приложението предоставя инфо · Съдържание · Новините, събитията, снимкит · Наличност на книгите · Наличността в каталога е инф
+CAP tablet-1280x800dp/18k-about: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Читалище Яворец · НЧ „Васил Левски – 1922“ · Версия 1.2.33 (1500183) · Официалното мобилно приложен · Откъде идват данните · Новини, събития, снимки, док
+CAP tablet-1280x800dp/18l-diagnostics: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Тук приложението записва тех · Сподели · Изчисти · Бързодействие · Времената на стартиране и пл · Студен старт · 3
+CAP tablet-1280x800dp/18m-diagnostics-2: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Тук приложението записва тех · Сподели · Изчисти · Бързодействие · Времената на стартиране и пл · Студен старт · 3
+CAP tablet-1280x800dp/19-login: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Вход за читатели · Читателски номер · ПИН (от библиотеката) · Покажи ПИН-а · Запомни ме на това устройств · Вход
+CAP tablet-1280x800dp/20-scanner: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Отказ · Търси
+CAP tablet-1280x800dp/20b-scan-manual: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Отказ · Търси
+TOUR tablet-1280x800dp: A11Y AGG: 56 screens analysed, 0 dumps failed; totals MISSING=24 DOUBLE=0 SAME-LABEL=21 SMALL(<48dp)=59
+## T-tablet-portrait. All screens (1600x2560 px, density 320, font_scale 1.0, night no, app locale [bg-BG], rotation 1)
+CAP tablet-portrait/01-home: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=43 ellipsized=1 [Търси книга, новина, събитие…] | Начало · Каталог · Моето · Новини · Още · НЧ „Васил Левски – 1922“
+CAP tablet-portrait/01b-home-2: targets=24 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=43 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Последни новини
+CAP tablet-portrait/01c-home-3: targets=29 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Последни новини
+CAP tablet-portrait/01d-home-4: targets=27 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=46 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · 16
+CAP tablet-portrait/01e-search-12: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=2 […ивовес на самотата и допринас; …грами и организиране на читал] | 12 · Лента за търсене · Назад · Изчисти · Всички · Книги
+CAP tablet-portrait/02-catalog: targets=28 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=79 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Търси навсякъде
+CAP tablet-portrait/02b-filters: targets=33 MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=42 ellipsized=0 | Затваряне на таблицата · Манипулатор за преместване с · Филтри · Без филтри · Само налични · Вид документ
+CAP tablet-portrait/02c-filters-2: targets=33 MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=42 ellipsized=0 | Затваряне на таблицата · Манипулатор за преместване с · Филтри · Без филтри · Само налични · Вид документ
+CAP tablet-portrait/02d-sort: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Най-подходящи  ✓ · Заглавие (А–Я) · Автор (А–Я) · Година (нови първо) · Година (стари първо) · Нови постъпления
+CAP tablet-portrait/02e-shelf: targets=57 MISSING=0 DOUBLE=0 SAME-LABEL=6 SMALL(<48dp)=17 | front: app | texts=101 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Търси навсякъде
+CAP tablet-portrait/02f-shelf-2: targets=57 MISSING=0 DOUBLE=0 SAME-LABEL=6 SMALL(<48dp)=17 | front: app | texts=101 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Търси навсякъде
+CAP tablet-portrait/02g-search-12: targets=29 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=73 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · 12
+CAP tablet-portrait/03-book: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | 12 -те вятъра · Гарфилд, Джудит и др. · Налична · Наличност към 06.11.2026 · Искам да прочета · Библиографски данни
+CAP tablet-portrait/03b-book-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | 12 -те вятъра · Гарфилд, Джудит и др. · Налична · Наличност към 06.11.2026 · Искам да прочета · Библиографски данни
+CAP tablet-portrait/03c-book-3: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | 12 -те вятъра · Гарфилд, Джудит и др. · Налична · Наличност към 06.11.2026 · Искам да прочета · Библиографски данни
+CAP tablet-portrait/04-surprise: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Предложение: Изгубеният войн · Още една · Към книгата · Затвори
+CAP tablet-portrait/05-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Здравей!
+CAP tablet-portrait/05b-my-2: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Здравей!
+CAP tablet-portrait/06-card: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345 · Покажи картата
+CAP tablet-portrait/06b-card-full: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Затвори · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345
+CAP tablet-portrait/07-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Списъкът е празен · Отбележи книга с „Искам да п · Назад · Искам да прочета
+CAP tablet-portrait/08-news: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=30 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Новини
+CAP tablet-portrait/08b-news-2: targets=34 MISSING=2 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=6 | front: app | texts=42 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Новини
+CAP tablet-portrait/09-article: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Групата за народни танци при · СЪБИТИЕ  ·  25 юли 2026 · Групата за народни танци при · Групата за народни танци при · Режим за четене · Аа
+CAP tablet-portrait/09b-article-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Групата за народни танци при · СЪБИТИЕ  ·  25 юли 2026 · Групата за народни танци при · Групата за народни танци при · Режим за четене · Аа
+CAP tablet-portrait/09c-reader-sheet: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Затваряне на таблицата · Манипулатор за преместване с · Режим за четене · Размер на шрифта · Аа · Малък шрифт
+CAP tablet-portrait/09d-share-sheet: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP tablet-portrait/10-calendar: targets=24 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=66 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Новини
+CAP tablet-portrait/11-event: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Панайот Пипков · Ден на семе · 21 ноември 2026 · Събитие от годишния календар · Читалище · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана
+CAP tablet-portrait/11b-event-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Панайот Пипков · Ден на семе · 21 ноември 2026 · Събитие от годишния календар · Читалище · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана
+CAP tablet-portrait/11c-event-share: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP tablet-portrait/12-more: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP tablet-portrait/12b-more-2: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP tablet-portrait/13-gallery: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | 29 снимки · Фотодокументална изложба · 4 снимки · Фолклорна група „Явор“ · 6 снимки · Клуб за народни танци
+CAP tablet-portrait/14-album: targets=30 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=0 | Сградата на читалището в Яво · Фолклорен състав при читалищ · Хорът на сцена · 70-те години · Сценичен ансамбъл Яворски хл · Фолклорна група Явор
+CAP tablet-portrait/15-viewer: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Клуб за народни танци · Затвори · 7 / 29  ·  Клуб за народни т · Сподели · Отвори в сайта · За снимката
+CAP tablet-portrait/15b-viewer-info: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Клуб за народни танци · Затвори · 7 / 29  ·  Клуб за народни т · Клуб за народни танци · Сподели · Отвори в сайта
+CAP tablet-portrait/16-contacts: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=28 ellipsized=0 | НЧ „Васил Левски – 1922“ · Изпрати имейл на читалището · Имейл · Покажи читалището на картата · Карта · Отвори сайта на читалището
+CAP tablet-portrait/16b-contacts-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=28 ellipsized=0 | НЧ „Васил Левски – 1922“ · Изпрати имейл на читалището · Имейл · Покажи читалището на картата · Карта · Отвори сайта на читалището
+CAP tablet-portrait/17-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF
+CAP tablet-portrait/17b-documents-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF
+CAP tablet-portrait/18-settings: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP tablet-portrait/18b-settings-2: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=31 ellipsized=0 | Сезонни украси · Празници, сезони и обичаи: п · Известия · Избери известията · Заемания, събития, съобщения · Обновления
+CAP tablet-portrait/18c-settings-3: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | Известия · Избери известията · Заемания, събития, съобщения · Обновления · Автоматично обновяване · Проверка при отваряне и два 
+CAP tablet-portrait/18d-settings-4: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | Известия · Избери известията · Заемания, събития, съобщения · Обновления · Автоматично обновяване · Проверка при отваряне и два 
+CAP tablet-portrait/18e-text-size: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+CAP tablet-portrait/18f-language: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Език · Както системата · Български · English · Затвори
+CAP tablet-portrait/18g-theme: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Тема · Както системата · Светла · Тъмна · Затвори
+CAP tablet-portrait/18h-notifications: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Известията се подготвят на с · Съобщения · Съобщения, изпратени от чита · Новини · Нова публикация в сайта · Събития
+CAP tablet-portrait/18i-privacy-policy: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Виж и: Политика за поверител · Последна актуализация: 7 ное · Кой обработва данните · Приложението „Читалище Яворе · Принцип · Приложението събира възможно
+CAP tablet-portrait/18j-terms: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Предназначение · Приложението предоставя инфо · Съдържание · Новините, събитията, снимкит · Наличност на книгите · Наличността в каталога е инф
+CAP tablet-portrait/18k-about: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Читалище Яворец · НЧ „Васил Левски – 1922“ · Версия 1.2.33 (1500183) · Официалното мобилно приложен · Откъде идват данните · Новини, събития, снимки, док
+CAP tablet-portrait/18l-diagnostics: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Тук приложението записва тех · Сподели · Изчисти · Бързодействие · Времената на стартиране и пл · Студен старт · 4
+CAP tablet-portrait/18m-diagnostics-2: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Тук приложението записва тех · Сподели · Изчисти · Бързодействие · Времената на стартиране и пл · Студен старт · 4
+CAP tablet-portrait/19-login: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Вход за читатели · Читателски номер · ПИН (от библиотеката) · Покажи ПИН-а · Запомни ме на това устройств · Вход
+CAP tablet-portrait/20-scanner: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Отказ · Търси
+CAP tablet-portrait/20b-scan-manual: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Отказ · Търси
+TOUR tablet-portrait: A11Y AGG: 57 screens analysed, 0 dumps failed; totals MISSING=6 DOUBLE=0 SAME-LABEL=21 SMALL(<48dp)=46
+## T. Accessibility over all screens of this part
+A11Y AGG: 164 screens analysed, 0 dumps failed; totals MISSING=41 DOUBLE=0 SAME-LABEL=48 SMALL(<48dp)=118
+== MISSING: 34 distinct
+   View@[160,1448][1159,1544]  [3 screens: 03-book, 03b-book-2, 03c-book-3]
+   View@[2456,37][2552,133]  [2 screens: 08b-news-2, 10-calendar]
+   View@[160,1447][1159,1543]  [2 screens: 09-article, 09b-article-2]
+   View@[1055,37][1151,133]  [2 screens: 09-article, 09b-article-2]
+   View@[1296,854][1400,950]  [2 screens: 02b-filters, 02c-filters-2]
+   View@[905,48][1067,210]  [2 screens: 08b-news-2, 10-calendar]
+   View@[552,1589][808,1600]  [1 screens: 01b-home-2]
+   View@[836,1589][1092,1600]  [1 screens: 01b-home-2]
+   View@[1120,1589][1376,1600]  [1 screens: 01b-home-2]
+   View@[1404,1589][1660,1600]  [1 screens: 01b-home-2]
+   View@[1688,1589][1944,1600]  [1 screens: 01b-home-2]
+   View@[1972,1589][2200,1600]  [1 screens: 01b-home-2]
+   View@[2039,0][2192,24]  [1 screens: 01d-home-4]
+   View@[1776,293][1880,389]  [1 screens: 02b-filters]
+   View@[680,133][829,183]  [1 screens: 02c-filters-2]
+   View@[845,133][1150,183]  [1 screens: 02c-filters-2]
+   View@[1166,133][1577,183]  [1 screens: 02c-filters-2]
+   View@[1593,133][1744,183]  [1 screens: 02c-filters-2]
+   View@[160,1448][2560,1544]  [1 screens: 02g-search-12]
+   View@[160,551][2560,1480]  [1 screens: 08-news]
+   View@[160,375][2560,1480]  [1 screens: 08b-news-2]
+   View@[245,2543][1600,2560]  [1 screens: 01d-home-4]
+   View@[330,2421][1600,2517]  [1 screens: 02g-search-12]
+   View@[1472,2434][1568,2470]  [1 screens: 08b-news-2]
+   View@[1496,0][1592,96]  [1 screens: 08b-news-2]
+== SMALL: 20 distinct
+   'Манипулатор за преместване с п'  [5 screens: 02b-filters, 02c-filters-2, 09c-reader-sheet, 09d-share-sheet, 11c-event-share]
+   'Всички'  [5 screens: 02-catalog, 03c-book-3, 08b-news-2, 09-article, 09b-article-2]
+   ''  [3 screens: 01-home, 02c-filters-2, 08b-news-2]
+   'Запазени'  [3 screens: 08b-news-2, 09-article, 09b-article-2]
+   'Събитие'  [3 screens: 08b-news-2, 09-article, 09b-article-2]
+   'Състави'  [3 screens: 08b-news-2, 09-article, 09b-article-2]
+   'Проекти'  [3 screens: 08b-news-2, 09-article, 09b-article-2]
+   '12 -те вятъра, Гарфилд, Джудит'  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Аз обичам Ню Йорк, Келк, Линдз'  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Ако върнеш времето назад, Потъ'  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Алтъна, Никова, Ивелина Алтъна'  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Анатомът, Андахази, Федерико А'  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Бевълстоук : Кн. 1 - 2, Куин, '  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Безсрамна добродетел, Робъртс,'  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Белият дома, Николай Симеонов '  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Сезонни украси Празници, сезон'  [1 screens: 18b-settings-2]
+   'Книги'  [1 screens: 03c-book-3]
+   'Новини'  [1 screens: 03c-book-3]
+   'Не предлагай отново'  [1 screens: 06-card]
+   'Запази'  [1 screens: 08b-news-2]
+== SAME-LABEL: 12 distinct
+   'Манипулатор за преместване с п' x2  [5 screens: 02b-filters, 02c-filters-2, 09c-reader-sheet, 09d-share-sheet, 11c-event-share]
+   'Бевълстоук : Кн. 1 - 2, Куин, ' x2  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Белият дома, Николай Симеонов ' x7  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Белият звездите, Диана Христов' x6  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Белият звездите, Гергана Димит' x6  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Белият здрача, Мартин Тонев Бе' x3  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Белият здрача, Мартин Георгиев' x2  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Запази' x3  [2 screens: 09-article, 09b-article-2]
+   'Отвори с приложение за PDF' x3  [2 screens: 17-documents, 17b-documents-2]
+   'Запази' x4  [1 screens: 08-news]
+   'Запази' x9  [1 screens: 08b-news-2]
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 4 | Първи кадър: медиана 1648 мс, последен 1102 мс | Пълно показване: медиана 2234 мс, последно 2213 мс | Топъл старт · 2 | Първи кадър: медиана 502 мс, последен 475 мс | Насечени кадри по екрани | home: 2,7 % от 449 кадъра · най-бавен 1733 мс 
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 4" text="Първи кадър: медиана 1648 мс, последен 1102 мс" text="Пълно показване: медиана 2234 мс, последно 2213 мс" text="Топъл старт · 2" text="Първи кадър: медиана 502 мс, последен 475 мс" text="Насечени кад
+APP W/E lines (pids ['5772', '6853', '13897', '18888']): 457 in 87 groups
+      35  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      29  W/Parcel: Expecting binder but got null!
+      14  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      11  W/BasicSecureTextField: 	at x#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+      10  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       9  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       8  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       7  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       7  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       7  W/BasicSecureTextField: 	at nh#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       7  W/BasicSecureTextField: 	at q#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       7  W/BasicSecureTextField: 	at pr#.c(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       7  W/BasicSecureTextField: 	at r#.F#(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       7  W/BasicSecureTextField: 	at r#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       7  W/BasicSecureTextField: 	at ay.c(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       7  W/BasicSecureTextField: 	at er#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       6  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
+       6  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/Gralloc4: allocator #.x is not supported
+       4  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       4  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       4  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       4  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       4  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       4  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       4  W/BasicSecureTextField: 	at yz#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       4  W/BasicSecureTextField: 	at ow#.b(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+## COMPLETE
+## logcat findings
+app pids seen: ['5772', '6853', '13897', '18888']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 40
+   skipped-frames events=40 max=94 total=1619
+== Davey: 115
+   davey events=115 max=2398ms median=820ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

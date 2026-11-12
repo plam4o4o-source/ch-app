@@ -1,0 +1,37 @@
+app pids seen: ['5602', '6489', '7384', '12443', '12875']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=43 total=137
+   11-09 16:58:51.502  7384  7384 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-09 16:58:52.482  7384  7384 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-09 16:59:47.332  7384  7384 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-09 17:08:49.084 12443 12443 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 7
+   davey events=7 max=883ms median=820ms
+   11-09 16:56:52.101  6489  6513 I OpenGLRenderer: Davey! duration=865ms; Flags=1, IntendedVsync=177552751800, Vsync=177986085116, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=177988221770, AnimationStart=1779882
+   11-09 16:58:52.329  7384  7409 I OpenGLRenderer: Davey! duration=771ms; Flags=1, IntendedVsync=297874951451, Vsync=298258284769, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=298267635490, AnimationStart=2982676
+   11-09 16:58:52.700  7384  7409 I OpenGLRenderer: Davey! duration=722ms; Flags=0, IntendedVsync=298298049745, Vsync=298798049725, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=298802772790, AnimationStart=2988028
+   11-09 16:59:47.256  7384  7409 I OpenGLRenderer: Davey! duration=820ms; Flags=1, IntendedVsync=352645512011, Vsync=352878845335, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=352890758860, AnimationStart=3528907
+   11-09 16:59:47.527  7384  7409 I OpenGLRenderer: Davey! duration=883ms; Flags=0, IntendedVsync=352932623254, Vsync=353649289892, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=353656281960, AnimationStart=3536564
+   11-09 17:08:49.382 12443 12468 I OpenGLRenderer: Davey! duration=799ms; Flags=1, IntendedVsync=894866644042, Vsync=895399977354, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=895405397570, AnimationStart=8954054
+   11-09 17:09:43.379 12875 12898 I OpenGLRenderer: Davey! duration=845ms; Flags=1, IntendedVsync=948853178404, Vsync=949253178388, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=949265020840, AnimationStart=9492650
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 16:56:03.709  5592  5592 I PERFCHECK: section: W. First launch and warm-up
+   11-09 16:56:47.266  6471  6471 I PERFCHECK: section: P1. Home ribbon on API 28 no AGSL: the still pattern, drawn once
+   11-09 16:56:47.357  2009  2312 I ActivityManager: Killing 5602:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-09 16:57:13.220  6605  6605 I PERFCHECK: section: P2. Library card: fallback foil gradients
+   11-09 16:57:47.718  6860  6860 I PERFCHECK: section: P3. Изненадай ме
+   11-09 16:58:03.053  7025  7025 I PERFCHECK: section: P4. Book open
+   11-09 16:58:19.602  7134  7134 I PERFCHECK: section: P5. Event: share as image
+   11-09 16:58:33.753  7250  7250 I PERFCHECK: sh-fb-event
+   11-09 16:58:39.096  7307  7307 I PERFCHECK: section: P6. Article: toolbar and thread
+   11-09 16:58:49.506  7369  7369 I PERFCHECK: section: O. Tour on API 28 device language bg-BG via the helper
+   11-09 16:58:49.523  2009  4467 I ActivityManager: Killing 6489:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-09 16:59:01.925  7498  7498 I PERFCHECK: section: T-api28-light. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-09 17:08:21.730 12276 12276 I PERFCHECK: section: O2. Rotation and process death on API 28 book, catalogue
+   11-09 17:08:45.540  2009  2292 I ActivityManager: Killing 7384:org.chyavorec.app/u0a86 (adj 700): kill background
+   11-09 17:09:39.618  2009  4331 I ActivityManager: Killing 12443:org.chyavorec.app/u0a86 (adj 700): kill background
+   11-09 17:09:51.265 12958 12958 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

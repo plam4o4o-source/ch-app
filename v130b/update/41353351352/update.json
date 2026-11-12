@@ -1,0 +1,11 @@
+{
+  "versionCode": 1488543,
+  "versionName": "1.2.30",
+  "apkUrl": "https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v130b/update/41353351352/app.apk",
+  "sha256": "9f202c4fe37f8509e9cb9a5a2d1dcbc99dedb23d1dbb0bca451ac2146d3bcb3b",
+  "size": 4505177,
+  "minSdk": 26,
+  "notes": "• По избор: картата, заеманията и историята се отключват с пръстов отпечатък или кода на телефона.\n• При вход се вижда колко опита остават, а „Забравен ПИН“ дава имейл до библиотеката с номера на картата.\n• Обновяването се тегли във фон с известие за напредъка и може да се откаже.\n• Събитията показват мястото и бутон „Маршрут“ до читалището.\n• На таблет — списък и книга (или новина) един до друг, и клавиши за търсене и разделите.\n• По-добре с TalkBack, с намалено движение и с голям текст — вече и в диалозите; по-кратко въведение.",
+  "notes_en": "• Optional: unlock your card, loans and history with your fingerprint or the phone’s screen lock.\n• Sign-in shows how many attempts are left, and “Forgot PIN” offers an email to the library with your card number.\n• App updates download in the background with a progress notification and can be cancelled.\n• Events show the place and a “Directions” button to the community centre.\n• On tablets, the list and the book (or article) side by side, plus keyboard shortcuts for search and tabs.\n• Better with TalkBack, reduced motion and large text — now in dialogs too; a shorter introduction.",
+  "releaseUrl": "https://github.com/plam4o4o-source/ch-app/releases/tag/v1.2.30"
+}

@@ -1,0 +1,58 @@
+part events; APK: 1.2.30 bf10741 (Какво ново: версия 1.2.30); versionCode 1488543; x86_64 libs: 2 size 4505009 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104414 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## E0. Site data (host): events with a place; texts with emoji
+SITE news.json: 25 items; keys of the first: ['author', 'category', 'content', 'cover', 'date', 'excerpt', 'id', 'tags', 'title']
+SITE events: 75, with a place: 75; places: ['НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец']
+EMOJI news id=news-svetoven-den-na-hlyaba url=/news/svetoven-den-na-hlyaba 🍞🥖🫓 'Световен ден на хляба! 🍞🫓🥖'
+EMOJI news id=news-obuchenie-po-narodni-tantsi url=/news/obuchenie-po-narodni-tantsi 🕺 'Обучение по народни танци'
+EMOJI news id=news-mvbb0tp9hi2d url=None ❤️🍞🥖🫓 'Световен ден на хляба! 🍞🫓🥖'
+EMOJI news id=news-mt5mv5hvwdzg url=None 🇧🇬 'Танцовият клуб участие във VW Fest Узана'
+EMOJI news id=news-msuodcr0yrmu url=None 🔹🕺 'Обучение по народни танци'
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3105 ms
+## E1. Events list: the cards show the time and the description, not the place
+CARD ['1', 'НОЕ', 'Ден на народните будители', 'Тържество с ученически рецитали, четения и музикална програма в памет на народните будители.'] place-in-card=no
+CARD ['8', 'НОЕ', 'Михаил В. Ломоносов', '315 г. от рождението на Михаил В. Ломоносов — учен и енциклопедист, основател на естествознанието (1711–1765).'] place-in-card=no
+CARD ['16', 'НОЕ', '80 г. от създаването на ЮНЕСКО', 'Организацията на ООН за образование, наука и култура е основана на 16 ноември 1946 г.'] place-in-card=no
+CARD ['21', 'НОЕ', 'Панайот Пипков · Ден на семейството', '155 г. от рождението на Панайот Пипков — автор на „Върви народе възродени“. Ден на християнското семейство.'] place-in-card=no
+CARD ['1', 'ДЕК', 'Световен ден за борба срещу СПИН', 'Информационна инициатива за младежи и ученици.'] place-in-card=no
+CARDS 5 (known places: 75)
+CARD ['6', 'ДЕК', 'Никулден', 'Традиционен народен и религиозен празник.'] place-in-card=no
+CARD ['20', 'Игнажден'] place-in-card=no
+CARDS 6 (known places: 75)
+## E2. An event with a place: the address line and 'Маршрут' → a geo: intent
+EVENT with a place: text="80 г. от създаването на ЮНЕСКО" text="16 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Библиотека" text="НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец" text="Организацията на ООН за образование, наука и култура е основана на 16 ноември 1946 г." text="Добави в календара" text="Маршрут" text="Напомни ми" text="Виж публикацията" content-desc="Назад" content-desc="Сподели" 
+EVENT place line: Събитие от годишния календар на читалището — повтаря се всяка година на тази дата.|НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец|
+ROUTE 11: fg com.google.android.apps.maps/com.google.android.maps.MapsActivity; geo intent: act=android.intent.action.VIEW dat=geo: flg=0x10000000 cmp=com.google.android.apps.maps/com.google.android.maps.MapsActivity}; cmp=com.google.android.apps.maps/com.google.android.maps.MapsActivity 
+REMINDER set on this event: text="Ще получиш напомняне на 15 ноември 2026, 18:00."
+## E3. The event reminder notification: 'Маршрут'
+app jobs: 0 4 5 
+jobscheduler run -f 0: Running job [FORCED]
+jobscheduler run -f 4: Running job [FORCED]
+jobscheduler run -f 5: Running job [FORCED]
+NOTIF id=37891 channel=events title=String (Напомняне за събитие) text=String (80 г. от създаването на ЮНЕСКО) template=String (android.app.Notification$BigTextStyle) picture=NO largeIcon=yes actions=2 ['Добави в календара', 'Маршрут']
+NOTIF total for org.chyavorec.app: 1
+SHADE 20-reminder expanded: buttons [text="Добави в календара" text="Маршрут" ]; big picture view no; text="On" content-desc="Internet,AndroidWifi" text="Internet" text="On" content-desc="Bluetooth." text="Bluetooth" text="Flashlight" text="Off" content-desc="Do Not Disturb." text="Do Not Disturb" text="Chitalishte Yavorets" text="•" text="now" content-desc="Alerted" content-desc="Collapse" text="Напомняне за събитие" 
+ACTION 'Маршрут' → fg com.google.android.apps.maps/com.google.android.maps.MapsActivity; text="Make it your map" text="Sign in for quick access to your favorite places and get better recommendations" text="Sign in" text="SKIP" 
+ROUTE from the notification: geo intent: dat=geo:
+## E4. Texts with emoji (API 33)
+EMOJI 1 (news news-svetoven-den-na-hlyaba): Световен ден на хляба! 🍞🫓🥖|Световен ден на хляба! 🍞🫓🥖|
+## COMPLETE
+## logcat findings
+app pids seen: ['4828']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=88 total=228
+== Davey: 6
+   davey events=6 max=1500ms median=893ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

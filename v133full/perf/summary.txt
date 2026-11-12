@@ -1,0 +1,91 @@
+part perf; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## P0. Package: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest); APK on the device 4277262 bytes; dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+baseline profile in the APK: assets/dexopt/baseline.prof assets/dexopt/baseline.profm 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 5029 ms
+## P1. 20 cold (with 'Fully drawn') + 20 warm starts, as installed (dexopt: x86_64: [status=verify] x86_64: [status=verify] )
+START cold installed     n=20 min=2647ms median=3163ms max=4576ms  all=[4576, 3746, 3577, 3990, 3922, 3827, 3359, 3279, 3103, 3335, 3150, 3033, 2803, 2715, 2647, 3036, 2748, 3176, 3077, 2717]  states=['COLD']
+DRAWN installed: TotalTime n=20 min=2647ms median=3163ms max=4576ms; fully drawn n=20 median=4143ms min=3155 max=6674 all=[6674, 5136, 4899, 4792, 5361, 5243, 4465, 4144, 4142, 4599, 3651, 3811, 3471, 4004, 3801, 3396, 4019, 4479, 4057, 3155]; without line: 0
+START warm installed     n=19 min=360ms median=795ms max=1026ms  all=[726, 992, 419, 1013, 870, 813, 360, 434, 1026, 520, 803, 879, 795, 907, 466, 792, 951, 711, 720]  states=['HOT', 'UNKNOWN']
+## P2. After 'cmd package compile -m speed-profile -f' (as the idle background dexopt would): 20 + 20
+compile: Success; dexopt now: x86_64: [status=speed-profile] x86_64: [status=verify] 
+START cold speedprofile  n=20 min=2452ms median=2972ms max=3361ms  all=[2986, 2482, 2936, 2959, 2824, 3227, 3229, 3010, 2928, 2957, 3361, 2452, 2997, 3043, 2633, 3032, 3115, 2546, 2599, 3009]  states=['COLD']
+DRAWN speedprofile: TotalTime n=20 min=2452ms median=2972ms max=3361ms; fully drawn n=20 median=3872ms min=2767 max=4580 all=[4073, 3795, 3945, 3799, 3773, 3718, 4308, 4240, 3083, 3167, 4580, 3455, 4187, 4073, 3443, 3616, 4005, 2767, 4129, 4072]; without line: 0
+START warm speedprofile  n=20 min=304ms median=682ms max=1028ms  all=[943, 543, 743, 681, 406, 693, 482, 818, 965, 971, 713, 393, 430, 428, 504, 1028, 304, 830, 320, 684]  states=['HOT']
+## P3. Offline cold starts ×6 (cached content)
+offline: airplane=1
+DRAWN offline: TotalTime n=6 min=2098ms median=2463ms max=2933ms; fully drawn n=6 median=3555ms min=2833 max=4213 all=[3756, 4213, 2891, 3791, 3354, 2833]; without line: 0
+## P4. gfxinfo per main scenario (animations ON, 1080x2400)
+GFX rel-home-scroll frames=   65  janky=64 (98.46%)  p50=300ms p90=500ms p95=550ms p99=650ms  slowUI=31 slowDraw=64 highInput=1
+  GFXMEM rel-home-scroll: pipeline: Skia (OpenGL); GPU total: 36898672 bytes, 35.19 MB (30.41 MB is purgeable); textures: 2.83 MB (6 entries) | 5.55 MB (29 entries) | 7.29 MB (19 entries); frames: 65
+GFX rel-news     frames=   84  janky=84 (100.00%)  p50=250ms p90=400ms p95=450ms p99=550ms  slowUI=45 slowDraw=84 highInput=0
+  GFXMEM rel-news: pipeline: Skia (OpenGL); GPU total: 73577688 bytes, 70.17 MB (65.13 MB is purgeable); textures: 13.85 KB (1 entry) | 8.68 MB (40 entries) | 10.40 MB (38 entries); frames: 84
+GFX rel-article  frames=   73  janky=72 (98.63%)  p50=300ms p90=400ms p95=450ms p99=550ms  slowUI=25 slowDraw=72 highInput=2
+  GFXMEM rel-article: pipeline: Skia (OpenGL); GPU total: 88248768 bytes, 84.16 MB (81.12 MB is purgeable); textures: 27.70 KB (2 entries) | 8.35 MB (43 entries) | 10.40 MB (37 entries); frames: 73
+GFX rel-calendar frames=   35  janky=35 (100.00%)  p50=200ms p90=300ms p95=450ms p99=450ms  slowUI=21 slowDraw=35 highInput=0
+  GFXMEM rel-calendar: pipeline: Skia (OpenGL); GPU total: 88955704 bytes, 84.83 MB (82.33 MB is purgeable); textures: 3.24 MB (28 entries) | 4.34 MB (26 entries); frames: 35
+GFX rel-catalog  frames=   57  janky=57 (100.00%)  p50=300ms p90=550ms p95=650ms p99=650ms  slowUI=20 slowDraw=57 highInput=0
+  GFXMEM rel-catalog: pipeline: Skia (OpenGL); GPU total: 87145888 bytes, 83.11 MB (52.59 MB is purgeable); textures: 346.24 KB (17 entries) | 2.00 MB (3 entries); frames: 57
+GFX rel-shelf    frames=   61  janky=61 (100.00%)  p50=350ms p90=450ms p95=500ms p99=600ms  slowUI=27 slowDraw=61 highInput=0
+  GFXMEM rel-shelf: pipeline: Skia (OpenGL); GPU total: 86460304 bytes, 82.45 MB (51.44 MB is purgeable); textures: 338.49 KB (15 entries) | 2.01 MB (5 entries); frames: 61
+GFX rel-my       frames=   76  janky=75 (98.68%)  p50=250ms p90=400ms p95=450ms p99=550ms  slowUI=24 slowDraw=75 highInput=1
+  GFXMEM rel-my: pipeline: Skia (OpenGL); GPU total: 88789216 bytes, 84.68 MB (61.41 MB is purgeable); textures: 612.59 KB (26 entries) | 2.00 MB (2 entries); frames: 76
+GFX rel-gallery  frames=   70  janky=68 (97.14%)  p50=250ms p90=400ms p95=450ms p99=550ms  slowUI=27 slowDraw=68 highInput=2
+  GFXMEM rel-gallery: pipeline: Skia (OpenGL); GPU total: 83306808 bytes, 79.45 MB (76.86 MB is purgeable); textures: 5.20 MB (33 entries) | 2.29 MB (20 entries); frames: 70
+GFX rel-album-grid frames=   79  janky=76 (96.20%)  p50=250ms p90=400ms p95=500ms p99=700ms  slowUI=30 slowDraw=76 highInput=3
+  GFXMEM rel-album-grid: pipeline: Skia (OpenGL); GPU total: 80430776 bytes, 76.70 MB (74.49 MB is purgeable); textures: 6.59 MB (62 entries) | 2.41 MB (42 entries); frames: 79
+GFX rel-viewer   frames=  154  janky=149 (96.75%)  p50=150ms p90=250ms p95=250ms p99=350ms  slowUI=63 slowDraw=149 highInput=6
+GFX rel-settings frames=   76  janky=74 (97.37%)  p50=200ms p90=300ms p95=350ms p99=400ms  slowUI=29 slowDraw=74 highInput=4
+  GFXMEM rel-settings: pipeline: Skia (OpenGL); GPU total: 70175200 bytes, 66.92 MB (64.57 MB is purgeable); textures: 5.65 MB (107 entries) | 2.09 MB (8 entries); frames: 76
+GFX rel-tab-switch frames=   42  janky=42 (100.00%)  p50=200ms p90=500ms p95=500ms p99=800ms  slowUI=21 slowDraw=42 highInput=0
+GFX rel-book-open-x5 frames=   76  janky=76 (100.00%)  p50=300ms p90=550ms p95=600ms p99=650ms  slowUI=44 slowDraw=76 highInput=0
+GFX rel-surprise-x3 frames=   67  janky=67 (100.00%)  p50=600ms p90=1000ms p95=1100ms p99=1500ms  slowUI=29 slowDraw=67 highInput=0
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+GFX rel-card-idle-0-10s frames=   55  janky=54 (98.18%)  p50=250ms p90=400ms p95=450ms p99=450ms  slowUI=19 slowDraw=54 highInput=2
+GFX rel-card-tilt frames=   40  janky=37 (92.50%)  p50=300ms p90=450ms p95=500ms p99=500ms  slowUI=9 slowDraw=37 highInput=4
+## P4b. Totals
+## P5. Diagnostics › „Бързодействие“ (the app's own numbers)
+PERF CARD filled: Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 20 | Първи кадър: медиана 2590 мс, последен 2611 мс | Пълно показване: медиана 3501 мс, последно 3613 мс | Топъл старт · 20 | Първи кадър: медиана 511 мс, последен 572 мс | Насечени кадри по екрани | home: 4,4 % от 343 кадъра · най-бавен 1399 мс | Няма записани грешки. | Диагностика
+PERF CARD filled (scrolled): Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 20 | Първи кадър: медиана 2590 мс, последен 2611 мс | Пълно показване: медиана 3501 мс, последно 3613 мс | Топъл старт · 20 | Първи кадър: медиана 511 мс, последен 572 мс | Насечени кадри по екрани | home: 4,4 % от 343 кадъра · най-бавен 1399 мс | Няма записани грешки. | Диагностика
+## P6. Memory after the scenarios
+MEM after-scenarios (raw) PSS=92557KB  Java=19700KB  Native=38732KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=15)  RSS=182568KB  Views=13 Activities=1
+MEM after-scenarios (trimmed) PSS=86016KB  Java=12568KB  Native=36396KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=15)  RSS=179784KB  Views=13 Activities=1
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 20 | Първи кадър: медиана 2590 мс, последен 2611 мс | Пълно показване: медиана 3501 мс, последно 3613 мс | Топъл старт · 20 | Първи кадър: медиана 511 мс, последен 572 мс | Насечени кадри по екрани | home: 4,4 % от 343 кадъра · най-бавен 1399 м
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 20" text="Първи кадър: медиана 2590 мс, последен 2611 мс" text="Пълно показване: медиана 3501 мс, последно 3613 мс" text="Топъл старт · 20" text="Първи кадър: медиана 511 мс, последен 572 мс" text="Насечени к
+APP W/E lines (pids ['4448', '5741', '6140', '6606', '6875', '7131', '7206', '7325', '7466', '7534', '7589', '7651', '7709', '7764', '7846', '7903', '7964', '8022', '8080', '8134', '8188', '8254', '8309', '8738', '8794', '8849', '8904', '8961', '9017', '9074', '9131', '9220', '9293', '9350', '9407', '9462', '9517', '9572', '9635', '9707', '9762', '9817', '9874', '9928', '9983', '10597', '10695', '10752', '10806', '10861', '10916', '11210']): 416 in 11 groups
+      93  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      54  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      54  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      53  W/Parcel: Expecting binder but got null!
+      52  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      52  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      52  W/Gralloc4: allocator #.x is not supported
+       3  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#f-#c#-#a-b#d#-#d#e#adccc, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object f#.s(java.lang.Object)(r
+## COMPLETE
+## logcat findings
+app pids seen: ['4448', '5741', '6140', '6606', '6875', '7131', '7206', '7325', '7466', '7534', '7589', '7651', '7709', '7764', '7846', '7903', '7964', '8022', '8080', '8134', '8188', '8254', '8309', '8738', '8794', '8849', '8904', '8961', '9017', '9074', '9131', '9220', '9293', '9350', '9407', '9462', '9517', '9572', '9635', '9707', '9762', '9817', '9874', '9928', '9983', '10597', '10695', '10752', '10806', '10861', '10916', '11210']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 222
+   skipped-frames events=222 max=117 total=11304
+== Davey: 309
+   davey events=309 max=2965ms median=1081ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

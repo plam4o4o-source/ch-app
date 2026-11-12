@@ -1,0 +1,95 @@
+part first; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## OB1. Fresh install, no notification permission: page 1 (welcome, three feature rows)
+fresh install; POST_NOTIFICATIONS: android.permission.POST_NOTIFICATIONS: granted=false
+ONB 01-page1: skip yes; text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" text="Официалното приложение на читалището — винаги актуално от сайта chyavorec.org." text="Новини и събития" text="Концерти, празници и срещи — с напомняне и добавяне в календара." text="Каталог и „Искам да прочета“" text="Търси книгите на библиотеката и си запази желаните — ще ти кажем, щом са на рафта." text="Читателска карта" text="Картата в телефона — с баркод, който се сканира на гишето." text="Напред" 
+page 1 features: news yes, catalogue yes, card yes
+## OB2. Page 2: text-size chips (apply at once), 'Разреши известията' → the system prompt (API 33)
+ONB 02-page2: skip yes; text="Пропусни" text="Удобно за теб" text="Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“." text="Размер на текста" text="Малък" text="Стандартен" text="Голям" text="Много голям" text="Известия" text="Сроковете на книгите, нови съобщения и събития." text="Разреши известията" text="Напред" 
+chips: Малък[checked=false,selected=false,] Стандартен[checked=true,selected=false,] Голям[checked=false,selected=false,] Много голям[checked=false,selected=false,] 
+ONB 03-page2-xlarge: skip yes; text="Пропусни" text="Удобно за теб" text="Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“." text="Размер на текста" text="Малък" text="Стандартен" text="Голям" text="Много голям" text="Известия" text="Сроковете на книгите, нови съобщения и събития." text="Разреши известията" text="Напред" 
+TEXT SIZE applied at once: title height 69.0 dp → 118.5 dp; chips: Стандартен[checked=false,selected=false,] Много голям[checked=true,selected=false,] 
+after 'Разреши известията': system dialog SHOWN; text="Allow Chitalishte Yavorets to send you notifications?" text="Allow" text="Don’t allow" 
+ONB 05-page2-after-allow: skip yes; text="Пропусни" text="Удобно за теб" text="Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“." text="Размер на текста" text="Малък" text="Стандартен" text="Голям" text="Много голям" text="Известия" text="Сроковете на книгите, нови съобщения и събития." text="Известията са включени" text="Напред" 
+status: text="Известията са включени"; android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+## OB3. Page 3: sign in / add a card; then the main screen does not ask again
+ONB 06-page3: skip yes; text="Пропусни" text="Вход и читателска карта" text="Влез с данните си от библиотеката или добави читателската си карта. Можеш и по-късно — от „Моето“." text="Вход с читателски данни" text="Продължи без вход" 
+MAIN 07-main-after-allow: system permission dialog no; in-app ask no; android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Ска
+MAIN 08-main-restart: system permission dialog no; in-app ask no; android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Ска
+## OB4. Deny in the onboarding: the main screen does not ask again
+fresh install; POST_NOTIFICATIONS: android.permission.POST_NOTIFICATIONS: granted=false
+ONB 11-page2-after-deny: skip yes; text="Пропусни" text="Удобно за теб" text="Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“." text="Размер на текста" text="Малък" text="Стандартен" text="Голям" text="Много голям" text="Известия" text="Сроковете на книгите, нови съобщения и събития." text="Засега без известия — включват се от „Настройки › Известия“." text="Напред" 
+status: text="Засега без известия — включват се от „Настройки › Известия“."; android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+ONB 12-page3: skip yes; text="Пропусни" text="Вход и читателска карта" text="Влез с данните си от библиотеката или добави читателската си карта. Можеш и по-късно — от „Моето“." text="Вход с читателски данни" text="Продължи без вход" 
+MAIN 13-main-after-deny: system permission dialog no; in-app ask no; android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Ска
+MAIN 14-main-after-deny-restart: system permission dialog no; in-app ask no; android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Ска
+## OB5. 'Пропусни' on page 1 (the permission not answered)
+fresh install; POST_NOTIFICATIONS: android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+MAIN 20-main-after-skip: system permission dialog no; in-app ask SHOWN; android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="Известия от читалището" text="Искаш ли известия за сроковете на книгите, нови съобщения и събития? Можеш да ги промениш по всяко време от „Настройки › Изв
+## F1. BrandIntro on the very first launch (fresh install, animations ON): screen recording
+REC brandintro: 41 frames @8 fps; motion all: frames=41 moving-frames(>1.0)=3 max-step=110.8 max-vs-first=161.6 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 46.1 0.0 0.0 110.8 9.4 0.0 0.0 0.0 0.2 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0]
+BRANDINTRO frame stats (8 fps; the edges = the shader 'жива шевица'): f002.png mean=77.7 std=89.3 f004.png mean=77.7 std=89.3 f006.png mean=77.7 std=89.3 f008.png mean=77.7 std=89.3 f010.png mean=77.6 std=89.3 f012.png mean=77.6 std=89.3 f016.png mean=123.3 std=71.0 f024.png mean=237.9 std=34.3 
+after the intro: text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" text="Официалното приложение на читалището — винаги актуално от сайта chyavorec.org." text="Новини и събития" text="Концерти, пра
+## F2. Onboarding → Home (guest): the шевица ribbon, carousel, feasts/events, „Нови постъпления“, the search bar
+RIBBON first run: change 1→4→8→14→20→26 s 4.84 5.18 4.66 7.87 4.38
+CAP first/10-home-top: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP first/11-home-scroll-1: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Последни новини · Фолклорно пътешествие из Пир · 16 октомври 2026 · Сканирай · Читателска карта · Искам да прочета
+CAP first/12-home-scroll-2: targets=17 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=30 ellipsized=0 | Предстоящи събития · Всички · 16 · НОЕ · 80 г. от създаването на ЮНЕС · Организацията на ООН за обра
+CAP first/13-home-scroll-3: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Дъхът на спомените — том 3 · Гласът на реката · Забравеният морето — том 3 · НАЙ-ЧЕТЕНИ И НОВИ · За теб · Пътят на пътя
+CAP first/14-home-scroll-4: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Пътят на пътя · Огънят на здрача · Дъхът на любовта · ВИТРИНА · Най търсени · Далечният морето
+CAP first/15-home-scroll-5: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Далечният морето · Дългият пътя · Дъхът на планините · НОВИНИ · Още новини · Всички
+HOME sections seen while scrolling: text="Нови постъпления" text="Още новини" text="Предстоящи събития" text="Участие в Деветия празник на Кръвенишката баница" 
+CAROUSEL swipe at y=309: diff 65.86
+## F3. Second launch: no intro, no onboarding
+REC second: 41 frames @8 fps; motion all: frames=41 moving-frames(>1.0)=4 max-step=151.6 max-vs-first=166.5 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 151.6 25.0 1.6 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.2 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.5 0.0 0.0 4.5 0.0 0.0 0.0]
+second launch: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" 
+## F4. First run offline with nothing cached (fresh install, airplane mode): all tabs
+offline: airplane=1
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-offline home: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" text="Сканирай" text="Читателска 
+first-offline catalogue: NO results
+first-offline catalogue: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" text="Каталог" content-desc="Изненадай ме" content-desc="Полица" content-desc=
+first-offline book: text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" content-desc="Назад" text="Няма интернет връзка" 
+first-offline My: text="Здравей!" text="Новините, събитията, каталогът и информацията за читалището са достъпни и без вход." text="Добави читателска карта" text="Не можем да проверим дали онлайн входът е включен." text="Опитай отново" text="БИБЛИОТЕКА" text="Читателска карта" text="Добави номера от своята карта" text
+first-offline Want to read: text="Списъкът е празен" text="Отбележи книга с „Искам да прочета“ на страницата ѝ в каталога — тук ще виждаш дали е на рафта." content-desc="Назад" text="Искам да прочета" text="Няма интернет връзка" 
+first-offline news: text="Новини" text="Календар" text="Търси в новините" text="Всички" text="Запазени" text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" text="Новини и събития" content-desc="Търсене" text="Няма интернет връзка" text="Начало" text="Каталог" text="Моето" 
+first-offline calendar: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" text="Новини и събития" content-desc="Търсене" text="Няма интернет връзка" text="Начало" tex
+first-offline More: text="ЧИТАЛИЩЕТО" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" text="За читалището" text="История и мисия" text="Галерия" text="Снимки от сайта" text="Документи и архив" text="Устав, отчети, юбиле
+first-offline gallery: text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" content-desc="Назад" text="Галерия" text="Няма интернет връзка" 
+first-offline contacts: text="Контактите от сайта не се заредиха — показваме основните данни, вградени в приложението. Може да не са актуални." text="НЧ „Васил Левски – 1922“" content-desc="Изпрати имейл на читалището" text="Имейл" content-desc="Покажи читалището на картата" text="Карта" content-desc="Отвори сайта на читал
+first-offline documents: text="Документи" text="Исторически публикации" text="Няма връзка" text="Провери интернет връзката си и опитай отново." text="Опитай отново" content-desc="Назад" text="Документи и архив" text="Няма интернет връзка" 
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 1 | Първи кадър: медиана 2145 мс, последен 2145 мс | Пълно показване: медиана 2145 мс, последно 2145 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 1" text="Първи кадър: медиана 2145 мс, последен 2145 мс" text="Пълно показване: медиана 2145 мс, последно 2145 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5193', '7946', '8197', '8577', '8771', '9092', '9843', '10380']): 60 in 9 groups
+       9  W/Parcel: Expecting binder but got null!
+       9  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       8  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       8  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       8  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       8  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       8  W/Gralloc4: allocator #.x is not supported
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#c#-#a#-#-#ea-b#a#ce#e#, generation=#)
+## COMPLETE
+## logcat findings
+app pids seen: ['5193', '7946', '8197', '8577', '8771', '9092', '9843', '10380']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 48
+   skipped-frames events=48 max=109 total=2485
+== Davey: 91
+   davey events=91 max=2838ms median=1023ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

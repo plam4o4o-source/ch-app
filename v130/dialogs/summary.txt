@@ -1,0 +1,62 @@
+part dialogs; APK: 1.2.30 bf10741 (Какво ново: версия 1.2.30); versionCode 1488543; x86_64 libs: 2 size 4505009 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104414 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3480 ms
+## D-std. Dialogs at 'std' (font_scale 1.0)
+DIALOG std-01-text-size: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=7: 'Размер на текста' 28dp; 'Умножава размера на шрифта о' 81dp; 'Малък' 21dp; 'Стандартен' 21dp; 'Голям' 21dp; 'Много голям' 21dp; 'Затвори' 20dp
+DIALOG std-02-clear-cache: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=4: 'Изчисти временните данни' 28dp; 'Временните данни (новини, съ' 171dp; 'Отказ' 20dp; 'Изчисти' 20dp
+DIALOG std-03-sort-menu: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=6: 'Най-подходящи  ✓' 20dp; 'Заглавие (А–Я)' 20dp; 'Автор (А–Я)' 20dp; 'Година (нови първо)' 20dp; 'Година (стари първо)' 20dp; 'Нови постъпления' 20dp
+DIALOG std-04-filters: TEXTH packages=['org.chyavorec.app'] scrollable=1 ['[0,255][1080,2337]'] texts=25: 'Филтри' 28dp; 'Без филтри' 20dp; 'Само налични' 19dp; 'Вид документ' 19dp; 'книга' 17dp; 'видеодокумент' 17dp; 'картографско издание' 17dp; 'друго' 17dp
+filters after a swipe: TEXTH packages=['org.chyavorec.app'] scrollable=1 ['[0,255][1080,2337]'] texts=26: 'Вид документ' 19dp; 'книга' 17dp; 'видеодокумент' 17dp; 'картографско издание' 17dp
+whats-new record: 1.2.30 (1488543), 6 lines
+prefs: 2154 bytes after adding ['pending_whats_new']
+DIALOG std-05-whats-new: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=2: 'Какво ново във версия 1.2.30' 27dp; '• По избор: картата, заемани' 368dp
+TEXT SIZE now: text="Много голям" 
+## D-xl. Dialogs at 'xl' (font_scale 1.0)
+DIALOG xl-01-text-size: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=7: 'Размер на текста' 32dp; 'Умножава размера на шрифта о' 136dp; 'Малък' 29dp; 'Стандартен' 29dp; 'Голям' 29dp; 'Много голям' 29dp; 'Затвори' 27dp
+DIALOG xl-02-clear-cache: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=4: 'Изчисти временните данни' 63dp; 'Временните данни (новини, съ' 314dp; 'Отказ' 27dp; 'Изчисти' 27dp
+DIALOG xl-03-sort-menu: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=6: 'Най-подходящи  ✓' 27dp; 'Заглавие (А–Я)' 27dp; 'Автор (А–Я)' 27dp; 'Година (нови първо)' 27dp; 'Година (стари първо)' 27dp; 'Нови постъпления' 27dp
+DIALOG xl-04-filters: TEXTH packages=['org.chyavorec.app'] scrollable=1 ['[0,255][1080,2337]'] texts=21: 'Филтри' 31dp; 'Без филтри' 27dp; 'Само налични' 24dp; 'Вид документ' 24dp; 'книга' 22dp; 'видеодокумент' 22dp; 'картографско издание' 22dp; 'друго' 22dp
+filters after a swipe: TEXTH packages=['org.chyavorec.app'] scrollable=1 ['[0,255][1080,2337]'] texts=20: 'Вид документ' 24dp; 'книга' 22dp; 'видеодокумент' 22dp; 'картографско издание' 22dp
+whats-new record: 1.2.30 (1488543), 6 lines
+prefs: 2178 bytes after adding ['pending_whats_new']
+DIALOG xl-05-whats-new: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=2: 'Какво ново във версия 1.2.30' 30dp; '• По избор: картата, заемани' 364dp
+## D-xl130. 'Много голям' + system font 1.3 (the stress case)
+## D-xl130. Dialogs at 'xl130' (font_scale 1.3)
+DIALOG xl130-01-text-size: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=7: 'Размер на текста' 37dp; 'Умножава размера на шрифта о' 240dp; 'Малък' 35dp; 'Стандартен' 35dp; 'Голям' 35dp; 'Много голям' 35dp; 'Затвори' 34dp
+DIALOG xl130-02-clear-cache: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=4: 'Изчисти временните данни' 75dp; 'Временните данни (новини, съ' 496dp; 'Отказ' 34dp; 'Изчисти' 34dp
+DIALOG xl130-03-sort-menu: TEXTH packages=['org.chyavorec.app'] scrollable=0 [] texts=6: 'Най-подходящи  ✓' 34dp; 'Заглавие (А–Я)' 34dp; 'Автор (А–Я)' 34dp; 'Година (нови първо)' 34dp; 'Година (стари първо)' 68dp; 'Нови постъпления' 34dp
+DIALOG xl130-04-filters: TEXTH packages=['org.chyavorec.app'] scrollable=1 ['[0,255][1080,2337]'] texts=18: 'Филтри' 37dp; 'Без филтри' 34dp; 'Само налични' 29dp; 'Вид документ' 29dp; 'книга' 27dp; 'видеодокумент' 27dp; 'картографско издание' 27dp; 'друго' 27dp
+filters after a swipe: TEXTH packages=['org.chyavorec.app'] scrollable=1 ['[0,255][1080,2337]'] texts=17: 'електронен документ' 5dp; 'графично издание' 27dp; 'аудиодокумент' 27dp; 'продължаващо издание' 27dp
+whats-new record: 1.2.30 (1488543), 6 lines
+prefs: 2178 bytes after adding ['pending_whats_new']
+DIALOG xl130-05-whats-new: TEXTH packages=['org.chyavorec.app'] scrollable=1 ['[0,1327][1080,2400]'] texts=2: 'Какво ново във версия 1.2.30' 37dp; '• По избор: картата, заемани' 358dp
+## D-ratio. Dialog text height ×(Много голям / Стандартен) next to the screen text
+RATIO 00-settings-screen xl/std: RATIO 17 common texts: median 1.32 min 1.11 max 2.89; 'Изглед' 1.32; 'Тема' 1.26; 'Както системата' 1.34; 'Размер на текста' 1.26; 'Палитра' 1.26; 'Яворец' 1.32; 'Злато и жито' 2.89; 'Левски' 1.32
+RATIO 01-text-size xl/std: RATIO 7 common texts: median 1.34 min 1.12 max 1.69; 'Размер на текста' 1.12; 'Умножава размера на ' 1.69; 'Малък' 1.34; 'Стандартен' 1.34; 'Голям' 1.34; 'Много голям' 1.34; 'Затвори' 1.34
+RATIO 02-clear-cache xl/std: RATIO 4 common texts: median 1.59 min 1.34 max 2.24; 'Изчисти временните д' 2.24; 'Временните данни (но' 1.84; 'Отказ' 1.34; 'Изчисти' 1.34
+RATIO 03a-catalog-screen xl/std: RATIO 29 common texts: median 1.31 min 1.26 max 2.78; 'Търси навсякъде' 1.26; 'Всичко' 1.32; 'Заглавие' 1.32; 'Автор' 1.32; 'ISBN' 1.32; '2446 резултата  ·  д' 2.78; '"Ох..."' 1.27; 'Джиан, Филип' 1.32
+RATIO 03-sort-menu xl/std: RATIO 6 common texts: median 1.34 min 1.34 max 1.34; 'Най-подходящи  ✓' 1.34; 'Заглавие (А–Я)' 1.34; 'Автор (А–Я)' 1.34; 'Година (нови първо)' 1.34; 'Година (стари първо)' 1.34; 'Нови постъпления' 1.34
+RATIO 04-filters xl/std: RATIO 21 common texts: median 1.32 min 0.05 max 1.34; 'Филтри' 1.11; 'Без филтри' 1.34; 'Само налични' 1.27; 'Вид документ' 1.27; 'книга' 1.32; 'видеодокумент' 1.32; 'картографско издание' 1.32; 'друго' 1.32
+RATIO 05-whats-new xl/std: RATIO 2 common texts: median 1.07 min 0.99 max 1.14; 'Какво ново във верси' 1.14; '• По избор: картата,' 0.99
+WARN: tab bar not reached
+WARN: Settings not found
+## COMPLETE
+## logcat findings
+app pids seen: ['5198', '8443', '9694', '9869', '10985']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 18
+   skipped-frames events=18 max=112 total=755
+== Davey: 37
+   davey events=37 max=1422ms median=898ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

@@ -1,0 +1,31 @@
+part monkey19; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4164 ms
+## K. Monkey 4000 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=6613
+MONKEY exit=0 duration=207 s; Events injected: 4000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '6613'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=107721KB  Java=13508KB  Native=41236KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=8)  RSS=143568KB  Views=15 Activities=1
+MEM after-monkey (trimmed) PSS=85899KB  Java=10304KB  Native=34188KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=8)  RSS=139364KB  Views=15 Activities=1
+## COMPLETE
+## logcat findings
+app pids seen: ['5216', '6613']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 51
+   skipped-frames events=51 max=134 total=2374
+== Davey: 148
+   davey events=148 max=2639ms median=887ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

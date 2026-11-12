@@ -1,0 +1,15 @@
+scenario          app     n   frames  janky%   p50   p90   p99
+article           new     2       74   100.0   250   400   600
+article           base    2       77   100.0   275   400   475
+card-0-15s        new     2       80   100.0   250   350   600
+card-0-15s        base    2       80   100.0   300   450   625
+cardfull-0-15s    new     2       81   100.0   225   325   825
+cardfull-0-15s    base    2       82   100.0   250   425   975
+catalog           new     2       58   100.0   325   600   725
+catalog           base    2       60   100.0   325   550   675
+home-scroll       new     2       64    99.2   325   525   700
+home-scroll       base    2       59   100.0   350   550   700
+news              new     2       74   100.0   225   350   425
+news              base    2       82   100.0   250   375   475
+viewer            new     2      152    98.7   150   250   350
+viewer            base    2      156    97.8   150   250   325

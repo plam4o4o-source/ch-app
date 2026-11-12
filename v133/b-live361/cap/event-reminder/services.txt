@@ -1,0 +1,9 @@
+
+  * ServiceRecord{1965136 u0 com.google.android.gms/.chimera.PersistentIntentOperationService c:com.google.android.gms}
+    intent={act=android.intent.action.PACKAGE_FULLY_REMOVED dat=package:org.chyavorec.app pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService}
+    packageName=com.google.android.gms
+    processName=com.google.android.gms.persistent
+    targetSdkVersion=36
+    baseDir=/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
+    dataDir=/data/user/0/com.google.android.gms
+    app=ProcessRecord{82588bf 1441:com.google.android.gms.persistent/u0a152}

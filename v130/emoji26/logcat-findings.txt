@@ -1,0 +1,22 @@
+app pids seen: ['4829', '5401', '5445', '5502', '5552', '5596', '5640', '5687', '5730', '5779', '5824']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 20:37:07.411  4819  4819 I PERFCHECK: section: M0. Site data host: texts with emoji
+   11-01 20:37:07.994  4824  4824 I PERFCHECK: section: W. First launch and warm-up
+   11-01 20:37:37.182  5122  5122 I PERFCHECK: section: M1. Texts with emoji on API 26 no EmojiCompat
+   11-01 20:38:21.216  5378  5378 I PERFCHECK: section: M2. Cold starts 10, API 26
+   11-01 20:38:21.231  1605  1627 I ActivityManager: Killing 4829:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 20:38:28.060  1605  4275 I ActivityManager: Killing 5401:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 20:38:34.900  1605  2613 I ActivityManager: Killing 5445:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 20:38:41.744  1605  1805 I ActivityManager: Killing 5502:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 20:38:48.499  1605  4632 I ActivityManager: Killing 5552:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 20:38:55.366  1605  1942 I ActivityManager: Killing 5596:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 20:39:02.205  1605  1805 I ActivityManager: Killing 5640:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 20:39:08.981  1605  4275 I ActivityManager: Killing 5687:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 20:39:15.757  1605  1805 I ActivityManager: Killing 5730:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 20:39:22.499  1605  1835 I ActivityManager: Killing 5779:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app

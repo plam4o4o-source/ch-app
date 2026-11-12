@@ -1,0 +1,94 @@
+app pids seen: ['4448', '5741', '6140', '6606', '6875', '7131', '7206', '7325', '7466', '7534', '7589', '7651', '7709', '7764', '7846', '7903', '7964', '8022', '8080', '8134', '8188', '8254', '8309', '8738', '8794', '8849', '8904', '8961', '9017', '9074', '9131', '9220', '9293', '9350', '9407', '9462', '9517', '9572', '9635', '9707', '9762', '9817', '9874', '9928', '9983', '10597', '10695', '10752', '10806', '10861', '10916', '11210']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 222
+   skipped-frames events=222 max=117 total=11304
+   11-09 17:04:16.896  4448  4448 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   11-09 17:04:18.232  4448  4448 I Choreographer: Skipped 79 frames!  The application may be doing too much work on its main thread.
+   11-09 17:04:19.144  4448  4448 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-09 17:04:19.975  4448  4448 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-09 17:04:20.685  4448  4448 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-09 17:04:22.303  4448  4448 I Choreographer: Skipped 63 frames!  The application may be doing too much work on its main thread.
+   11-09 17:04:23.358  4448  4448 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-09 17:04:32.640  4448  4448 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-09 17:05:01.346  4448  4448 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-09 17:05:02.152  4448  4448 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-09 17:05:03.839  4448  4448 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-09 17:05:17.111  4448  4448 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 309
+   davey events=309 max=2965ms median=1081ms
+   11-09 17:04:19.942  4448  4459 I OpenGLRenderer: Davey! duration=2519ms; Flags=1, FrameTimelineVsyncId=6174, IntendedVsync=102250642397, Vsync=103567309011, InputEventId=0, HandleInputStart=103577167099, AnimationStart=103577168010, Perform
+   11-09 17:04:20.453  4448  4459 I OpenGLRenderer: Davey! duration=1057ms; Flags=0, FrameTimelineVsyncId=6349, IntendedVsync=104500642307, Vsync=104650642301, InputEventId=0, HandleInputStart=104666055218, AnimationStart=104666056179, Perform
+   11-09 17:04:20.838  4448  4477 I OpenGLRenderer: Davey! duration=743ms; Flags=0, FrameTimelineVsyncId=6393, IntendedVsync=104683975633, Vsync=104733975631, InputEventId=0, HandleInputStart=104750520158, AnimationStart=104750521380, PerformT
+   11-09 17:04:21.214  4448  4477 I OpenGLRenderer: Davey! duration=946ms; Flags=0, FrameTimelineVsyncId=6400, IntendedVsync=104767308963, Vsync=105317308941, InputEventId=0, HandleInputStart=105319628849, AnimationStart=105319629921, PerformT
+   11-09 17:04:22.301  4448  4477 I OpenGLRenderer: Davey! duration=1607ms; Flags=0, FrameTimelineVsyncId=6436, IntendedVsync=105333986711, Vsync=106017319976, InputEventId=0, HandleInputStart=106029665409, AnimationStart=106029666310, Perform
+   11-09 17:04:22.478  4448  4460 I OpenGLRenderer: Davey! duration=1301ms; Flags=0, FrameTimelineVsyncId=6475, IntendedVsync=106050647784, Vsync=106217314434, InputEventId=0, HandleInputStart=106233765191, AnimationStart=106233765973, Perform
+   11-09 17:04:23.345  4448  4519 I OpenGLRenderer: Davey! duration=1073ms; Flags=0, FrameTimelineVsyncId=6508, IntendedVsync=106267308903, Vsync=106567308891, InputEventId=0, HandleInputStart=106568589446, AnimationStart=106568589987, Perform
+   11-09 17:04:23.366  4448  4519 I OpenGLRenderer: Davey! duration=1790ms; Flags=0, FrameTimelineVsyncId=6519, IntendedVsync=106583975557, Vsync=107633975515, InputEventId=0, HandleInputStart=107647692158, AnimationStart=107647692579, Perform
+   11-09 17:04:30.158  4448  4645 I OpenGLRenderer: Davey! duration=880ms; Flags=0, FrameTimelineVsyncId=7234, IntendedVsync=114617308569, Vsync=114617308569, InputEventId=-311603968, HandleInputStart=114617541723, AnimationStart=114617542384,
+   11-09 17:04:30.777  4448  4645 I OpenGLRenderer: Davey! duration=914ms; Flags=0, FrameTimelineVsyncId=7241, IntendedVsync=114700641899, Vsync=115167308547, InputEventId=0, HandleInputStart=115178265578, AnimationStart=115178266500, PerformT
+   11-09 17:04:31.064  4448  4645 I OpenGLRenderer: Davey! duration=1046ms; Flags=0, FrameTimelineVsyncId=7286, IntendedVsync=115183980763, Vsync=115583980723, InputEventId=0, HandleInputStart=115586812885, AnimationStart=115586813927, Perform
+   11-09 17:04:31.475  4448  4645 I OpenGLRenderer: Davey! duration=756ms; Flags=0, FrameTimelineVsyncId=7353, IntendedVsync=115717308525, Vsync=116133975175, InputEventId=0, HandleInputStart=116138540466, AnimationStart=116138540947, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 17:04:14.905  4437  4437 I PERFCHECK: section: P0. Package: 1.2.33 a830b51 built prodRelease x86_64 throwaway key; versionCode 1500183; update manifest: the real one releases/latest; APK on the device 4277262 bytes
+   11-09 17:04:15.012  4442  4442 I PERFCHECK: section: W. First launch and warm-up
+   11-09 17:05:24.960  5730  5730 I PERFCHECK: fd-excluded-204
+   11-09 17:05:38.835  6113  6113 I PERFCHECK: fd-excluded-25079
+   11-09 17:05:54.529  6458  6458 I PERFCHECK: section: P1. 20 cold with Fully drawn + 20 warm starts, as installed dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+   11-09 17:05:58.151  6578  6578 I PERFCHECK: fd-installed-14472
+   11-09 17:06:11.864  6841  6841 I PERFCHECK: fd-installed-13488
+   11-09 17:06:24.618  7114  7114 I PERFCHECK: fd-installed-32163
+   11-09 17:06:37.036  7192  7192 I PERFCHECK: fd-installed-15851
+   11-09 17:06:49.275  7314  7314 I PERFCHECK: fd-installed-1378
+   11-09 17:07:01.885  7449  7449 I PERFCHECK: fd-installed-12642
+   11-09 17:07:14.267  7528  7528 I PERFCHECK: fd-installed-14925
+   11-09 17:07:25.676  7583  7583 I PERFCHECK: fd-installed-15282
+   11-09 17:07:36.842  7645  7645 I PERFCHECK: fd-installed-20562
+   11-09 17:07:47.897  7703  7703 I PERFCHECK: fd-installed-26831
+   11-09 17:07:59.762  7758  7758 I PERFCHECK: fd-installed-5973
+   11-09 17:08:10.343  7840  7840 I PERFCHECK: fd-installed-6815
+   11-09 17:08:21.245  7897  7897 I PERFCHECK: fd-installed-17566
+   11-09 17:08:31.878  7958  7958 I PERFCHECK: fd-installed-17069
+   11-09 17:08:43.003  8016  8016 I PERFCHECK: fd-installed-16005
+   11-09 17:08:53.621  8074  8074 I PERFCHECK: fd-installed-1107
+   11-09 17:09:04.084  8128  8128 I PERFCHECK: fd-installed-10516
+   11-09 17:09:15.280  8182  8182 I PERFCHECK: fd-installed-4785
+   11-09 17:09:27.145  8248  8248 I PERFCHECK: fd-installed-12072
+   11-09 17:09:38.099  8303  8303 I PERFCHECK: fd-installed-22866
+   11-09 17:11:47.880  8705  8705 I PERFCHECK: section: P2. After cmd package compile -m speed-profile -f as the idle background dexopt would: 20 + 20
+   11-09 17:11:54.579  8732  8732 I PERFCHECK: fd-excluded2-15765
+   11-09 17:12:06.448  8788  8788 I PERFCHECK: fd-excluded2-15559
+   11-09 17:12:16.867  8843  8843 I PERFCHECK: fd-speedprofile-15269
+   11-09 17:12:27.700  8898  8898 I PERFCHECK: fd-speedprofile-14094
+   11-09 17:12:38.588  8955  8955 I PERFCHECK: fd-speedprofile-9490
+   11-09 17:12:49.539  9011  9011 I PERFCHECK: fd-speedprofile-27497
+   11-09 17:13:00.412  9068  9068 I PERFCHECK: fd-speedprofile-25813
+   11-09 17:13:11.204  9125  9125 I PERFCHECK: fd-speedprofile-25329
+   11-09 17:13:22.612  9214  9214 I PERFCHECK: fd-speedprofile-25200
+   11-09 17:13:33.947  9287  9287 I PERFCHECK: fd-speedprofile-5751
+   11-09 17:13:45.394  9344  9344 I PERFCHECK: fd-speedprofile-17158
+   11-09 17:13:55.810  9401  9401 I PERFCHECK: fd-speedprofile-7542
+   11-09 17:14:06.207  9456  9456 I PERFCHECK: fd-speedprofile-2783
+   11-09 17:14:17.601  9511  9511 I PERFCHECK: fd-speedprofile-11282
+   11-09 17:14:28.201  9566  9566 I PERFCHECK: fd-speedprofile-27544
+   11-09 17:14:39.220  9629  9629 I PERFCHECK: fd-speedprofile-3339
+   11-09 17:14:50.292  9701  9701 I PERFCHECK: fd-speedprofile-860
+   11-09 17:15:00.902  9756  9756 I PERFCHECK: fd-speedprofile-8166
+   11-09 17:15:11.396  9811  9811 I PERFCHECK: fd-speedprofile-2842
+   11-09 17:15:22.458  9868  9868 I PERFCHECK: fd-speedprofile-9463
+   11-09 17:15:32.356  9922  9922 I PERFCHECK: fd-speedprofile-17373
+   11-09 17:15:43.385  9977  9977 I PERFCHECK: fd-speedprofile-12956
+   11-09 17:17:51.802 10402 10402 I PERFCHECK: section: P3. Offline cold starts ×6 cached content
+   11-09 17:18:00.469 10587 10587 I PERFCHECK: fd-offline-19613
+   11-09 17:18:11.393 10689 10689 I PERFCHECK: fd-offline-9438
+   11-09 17:18:22.754 10746 10746 I PERFCHECK: fd-offline-12811
+   11-09 17:18:32.899 10800 10800 I PERFCHECK: fd-offline-22239
+   11-09 17:18:43.695 10855 10855 I PERFCHECK: fd-offline-2602
+   11-09 17:18:53.976 10910 10910 I PERFCHECK: fd-offline-12288
+   11-09 17:19:06.676 11163 11163 I PERFCHECK: section: P4. gfxinfo per main scenario animations ON, 1080x2400
+   11-09 17:27:11.612 14364 14364 I PERFCHECK: section: P4b. Totals
+   11-09 17:27:11.648 14369 14369 I PERFCHECK: section: P5. Diagnostics › „Бързодействие“ the apps own numbers
+   11-09 17:27:59.331 14694 14694 I PERFCHECK: section: P6. Memory after the scenarios
+   11-09 17:28:07.585 14716 14716 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

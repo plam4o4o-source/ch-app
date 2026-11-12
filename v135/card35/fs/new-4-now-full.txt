@@ -1,0 +1,98 @@
+Applications Graphics Acceleration Info:
+Uptime: 1324307 Realtime: 1324307
+
+** Graphics info for pid 15093 [org.chyavorec.app] **
+
+Stats since: 1322031528798ns
+Total frames rendered: 8
+Janky frames: 8 (100.00%)
+Janky frames (legacy): 8 (100.00%)
+50th percentile: 150ms
+90th percentile: 550ms
+95th percentile: 550ms
+99th percentile: 550ms
+Number Missed Vsync: 5
+Number High input latency: 0
+Number Slow UI thread: 4
+Number Slow bitmap uploads: 0
+Number Slow issue draw commands: 8
+Number Frame deadline missed: 8
+Number Frame deadline missed (legacy): 8
+HISTOGRAM: 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 26ms=0 27ms=0 28ms=0 29ms=0 30ms=0 31ms=0 32ms=0 34ms=0 36ms=0 38ms=0 40ms=0 42ms=1 44ms=0 46ms=0 48ms=0 53ms=0 57ms=0 61ms=0 65ms=0 69ms=0 73ms=0 77ms=0 81ms=0 85ms=0 89ms=0 93ms=0 97ms=0 101ms=0 105ms=0 109ms=0 113ms=0 117ms=1 121ms=0 125ms=0 129ms=0 133ms=1 150ms=2 200ms=0 250ms=1 300ms=0 350ms=0 400ms=1 450ms=0 500ms=0 550ms=1 600ms=0 650ms=0 700ms=0 750ms=0 800ms=0 850ms=0 900ms=0 950ms=0 1000ms=0 1050ms=0 1100ms=0 1150ms=0 1200ms=0 1250ms=0 1300ms=0 1350ms=0 1400ms=0 1450ms=0 1500ms=0 1550ms=0 1600ms=0 1650ms=0 1700ms=0 1750ms=0 1800ms=0 1850ms=0 1900ms=0 1950ms=0 2000ms=0 2050ms=0 2100ms=0 2150ms=0 2200ms=0 2250ms=0 2300ms=0 2350ms=0 2400ms=0 2450ms=0 2500ms=0 2550ms=0 2600ms=0 2650ms=0 2700ms=0 2750ms=0 2800ms=0 2850ms=0 2900ms=0 2950ms=0 3000ms=0 3050ms=0 3100ms=0 3150ms=0 3200ms=0 3250ms=0 3300ms=0 3350ms=0 3400ms=0 3450ms=0 3500ms=0 3550ms=0 3600ms=0 3650ms=0 3700ms=0 3750ms=0 3800ms=0 3850ms=0 3900ms=0 3950ms=0 4000ms=0 4050ms=0 4100ms=0 4150ms=0 4200ms=0 4250ms=0 4300ms=0 4350ms=0 4400ms=0 4450ms=0 4500ms=0 4550ms=0 4600ms=0 4650ms=0 4700ms=0 4750ms=0 4800ms=0 4850ms=0 4900ms=0 4950ms=0
+50th gpu percentile: 4950ms
+90th gpu percentile: 4950ms
+95th gpu percentile: 4950ms
+99th gpu percentile: 4950ms
+GPU HISTOGRAM: 1ms=0 2ms=0 3ms=0 4ms=0 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 4950ms=8
+
+Pipeline=Skia (OpenGL)
+CPU Caches:
+  Glyph Cache: 208.17 KB (1 entry)
+  Glyph Count: 45 
+Total CPU memory usage:
+  213166 bytes, 208.17 KB (0.00 bytes is purgeable)
+GPU Caches:
+  SW Path Mask:
+    Texture: 941.00 KB (2 entries)
+  Other:
+    Buffer Object: 2.50 KB (4 entries)
+    Other: 12.46 KB (1 entry)
+    StencilAttachment: 128.00 KB (1 entry)
+  Image:
+    Texture: 5.97 MB (27 entries)
+  Scratch:
+    RenderTarget: 2.91 MB (7 entries)
+    Buffer Object: 206.00 KB (6 entries)
+    Texture: 2.00 MB (2 entries)
+Total GPU memory usage:
+  12726829 bytes, 12.14 MB (9.91 MB is purgeable)
+
+Profile data in ms:
+
+	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@7c6750 (visibility=0)
+Window: org.chyavorec.app/org.chyavorec.app.MainActivity
+Stats since: 1322031528498ns
+Total frames rendered: 8
+Janky frames: 8 (100.00%)
+Janky frames (legacy): 8 (100.00%)
+50th percentile: 150ms
+90th percentile: 550ms
+95th percentile: 550ms
+99th percentile: 550ms
+Number Missed Vsync: 5
+Number High input latency: 0
+Number Slow UI thread: 4
+Number Slow bitmap uploads: 0
+Number Slow issue draw commands: 8
+Number Frame deadline missed: 8
+Number Frame deadline missed (legacy): 8
+HISTOGRAM: 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 26ms=0 27ms=0 28ms=0 29ms=0 30ms=0 31ms=0 32ms=0 34ms=0 36ms=0 38ms=0 40ms=0 42ms=1 44ms=0 46ms=0 48ms=0 53ms=0 57ms=0 61ms=0 65ms=0 69ms=0 73ms=0 77ms=0 81ms=0 85ms=0 89ms=0 93ms=0 97ms=0 101ms=0 105ms=0 109ms=0 113ms=0 117ms=1 121ms=0 125ms=0 129ms=0 133ms=1 150ms=2 200ms=0 250ms=1 300ms=0 350ms=0 400ms=1 450ms=0 500ms=0 550ms=1 600ms=0 650ms=0 700ms=0 750ms=0 800ms=0 850ms=0 900ms=0 950ms=0 1000ms=0 1050ms=0 1100ms=0 1150ms=0 1200ms=0 1250ms=0 1300ms=0 1350ms=0 1400ms=0 1450ms=0 1500ms=0 1550ms=0 1600ms=0 1650ms=0 1700ms=0 1750ms=0 1800ms=0 1850ms=0 1900ms=0 1950ms=0 2000ms=0 2050ms=0 2100ms=0 2150ms=0 2200ms=0 2250ms=0 2300ms=0 2350ms=0 2400ms=0 2450ms=0 2500ms=0 2550ms=0 2600ms=0 2650ms=0 2700ms=0 2750ms=0 2800ms=0 2850ms=0 2900ms=0 2950ms=0 3000ms=0 3050ms=0 3100ms=0 3150ms=0 3200ms=0 3250ms=0 3300ms=0 3350ms=0 3400ms=0 3450ms=0 3500ms=0 3550ms=0 3600ms=0 3650ms=0 3700ms=0 3750ms=0 3800ms=0 3850ms=0 3900ms=0 3950ms=0 4000ms=0 4050ms=0 4100ms=0 4150ms=0 4200ms=0 4250ms=0 4300ms=0 4350ms=0 4400ms=0 4450ms=0 4500ms=0 4550ms=0 4600ms=0 4650ms=0 4700ms=0 4750ms=0 4800ms=0 4850ms=0 4900ms=0 4950ms=0
+50th gpu percentile: 4950ms
+90th gpu percentile: 4950ms
+95th gpu percentile: 4950ms
+99th gpu percentile: 4950ms
+GPU HISTOGRAM: 1ms=0 2ms=0 3ms=0 4ms=0 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms=0 12ms=0 13ms=0 14ms=0 15ms=0 16ms=0 17ms=0 18ms=0 19ms=0 20ms=0 21ms=0 22ms=0 23ms=0 24ms=0 25ms=0 4950ms=8
+
+
+
+---PROFILEDATA---
+Flags,FrameTimelineVsyncId,IntendedVsync,Vsync,InputEventId,HandleInputStart,AnimationStart,PerformTraversalsStart,DrawStart,FrameDeadline,FrameInterval,FrameStartTime,SyncQueued,SyncStart,IssueDrawCommandsStart,SwapBuffers,FrameCompleted,DequeueBufferDuration,QueueBufferDuration,GpuCompleted,SwapBuffersCompleted,DisplayPresentTime,CommandSubmissionCompleted,
+0,143308,1322053895979,1322170562641,0,1322174359361,1322174359982,1322182155995,1322182187962,1322237229305,1322174356818,16666666,1322182489780,1322193060467,1322194940334,1322219088769,1322254477311,33186552,140519,1322249307394,1322254477311,1322432887706,1322219088769,
+0,143345,1322187229307,1322187229307,-472864905,1322195016041,1322195016442,1322195719205,1322195744303,1322270562637,1322195014719,16666666,1322196295972,1322254553074,1322257061234,1322330350278,1322378613008,47430434,251503,1322368660368,1322378613008,1322536155654,1322330350278,
+0,143384,1322387229299,1322387229299,-664520117,1322391023017,1322391023528,1322391023728,1322391062876,1322403895965,1322391019762,16666666,1322392142630,1322433295812,1322433658340,1322435926549,1322471203990,34349354,156402,1322469672882,1322471203990,1321187260400,1322435926549,
+0,143394,1322437229297,1322437229297,0,1322437705070,1322437705591,1322437705781,1322437742936,1322487229295,1322437702386,16666666,1322438290269,1322471237150,1322472513325,1322607184652,1322654479205,11598,272895,1322654479205,1322608720894,1321420918497,1322607184652,
+0,143402,1322453895963,1322470562629,0,1322471835298,1322471835638,1322471835829,1322471875377,1322687229287,1322471833255,16666666,1322472357373,1322608757218,1322608805730,1322655258893,1322706477141,48009683,300116,1322706477141,1322704180611,1321753359967,1322655258893,
+0,143410,1322487229295,1322603895957,0,1322609535733,1322609536063,1322609536264,1322609572257,1322737229285,1322609533480,16666666,1322609957619,1322704213670,1322704302542,1322825920444,1322869270835,3215,1450164,1322869270835,1322828398805,1321820647710,1322825920444,
+---PROFILEDATA---
+
+
+View hierarchy:
+
+  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@7c6750
+  8 views, 14,38 kB of render nodes
+
+
+Total ViewRootImpl   : 1
+Total attached Views : 8
+Total RenderNode     : 14,38 kB (used) / 38,45 kB (capacity)
+

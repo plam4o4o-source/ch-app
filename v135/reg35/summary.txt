@@ -1,0 +1,93 @@
+part reg35; APK: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+base APK: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+installed:  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 8358 ms
+## R0. Card added by hand (Моето › Добави читателска карта)
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+## R1. Home ribbon, 1.2.35: animates right after start, stops later
+IDLE home-new-a-76-91s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7134
+RIBBON new-a [0 280 1080 398]: diff 0.5→3 s 7.80; 3→6 s 8.28; 70→75 s 0.00 (0 = still); pattern at 0.5 s: mean=209.4 std=65.0 thread-px=28.4%; at 75 s: mean=209.6 std=67.0 thread-px=26.7%
+IDLE home-new-b-76-91s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: DefaultDispatch=0.1%; pid 7339
+RIBBON new-b [0 280 1080 398]: diff 0.5→3 s 35.41; 3→6 s 7.50; 70→75 s 0.00 (0 = still); pattern at 0.5 s: mean=247.0 std=0.0 thread-px=0.0%; at 75 s: mean=209.6 std=67.0 thread-px=26.7%
+## R2. Card screen and fullscreen card at rest: 0-15 s, 30-45 s, 45-60 s after opening
+IDLE card-0-15s (15 s, no input): frames +101; cpu=29.2% (ticks 438 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=28.1%, g.chyavorec.app=0.6%, Jit thread pool=0.3%, binder:7736_4=0.1%, Profile Saver=0.1%; pid 7736
+SENSORS card-15s: lines with the app 0: 
+IDLE card-30-45s (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 7736
+IDLE card-45-60s (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 7736
+SENSORS card-60s: lines with the app 0: 
+IDLE card-full-0-15s (15 s, no input): frames +99; cpu=27.7% (ticks 416 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=26.9%, g.chyavorec.app=0.5%, binder:7736_3=0.1%, binder:7736_1=0.1%, Jit thread pool=0.1%; pid 7736
+SENSORS card-full-15s: lines with the app 0: 
+IDLE card-full-30-45s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 7736
+IDLE card-full-45-60s (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 7736
+SENSORS card-full-60s: lines with the app 0: 
+## R3. Monkey 2000 events (seed 1357)
+## W. First launch and warm-up
+first-install catalogue results after 3175 ms
+## K. Monkey 2000 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=8419
+MONKEY exit=0 duration=121 s; Events injected: 2000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '8419'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=100660KB  Java=18148KB  Native=49312KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=22)  RSS=192164KB  Views=12 Activities=1
+MEM after-monkey (trimmed) PSS=93730KB  Java=12916KB  Native=43360KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=20)  RSS=186544KB  Views=12 Activities=1
+SHADER DIAG reg35: diagnostics log entries with shevitsa-shader/foil-shader: 0 (of 0); logcat error lines naming them: 0
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: tab bar not reached
+WARN: Settings not found
+APP W/E lines (pids ['5329', '7134', '7339', '7736', '8419']): 710 in 28 groups
+     585  W/InputEventSender: Received 'finished' signal for unknown seq number = #
+      22  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      19  W/Parcel: Expecting binder but got null!
+      13  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, metaSta
+      10  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       7  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       6  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       6  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/Gralloc4: allocator #.x is not supported
+       4  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, metaSta
+       3  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       3  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanC
+       3  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCod
+       2  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[#]=#.#
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object g#.s(java.lang.Object)(r
+       1  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       1  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+       1  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, sca
+       1  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanC
+       1  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y[#]=-#
+       1  W/RemoteInputConnectionImpl: setComposingText on inactive InputConnection
+       1  W/RemoteInputConnectionImpl: commitText on inactive InputConnection
+       1  W/AutofillManager: Session # could not be restored
+       1  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       1  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       1  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+## R4. Home ribbon on 1.2.34 for comparison
+installed base: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+IDLE home-base-a-76-91s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 10094
+RIBBON base-a [0 280 1080 398]: diff 0.5→3 s 4.93; 3→6 s 8.03; 70→75 s 0.00 (0 = still); pattern at 0.5 s: mean=210.2 std=65.7 thread-px=26.8%; at 75 s: mean=209.6 std=67.0 thread-px=26.7%
+## COMPLETE
+## logcat findings
+app pids seen: ['5329', '7134', '7339', '7736', '8419', '9851', '10094']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 47
+   skipped-frames events=47 max=117 total=2333
+== Davey: 129
+   davey events=129 max=3130ms median=911ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

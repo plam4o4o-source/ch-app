@@ -1,0 +1,12 @@
+APP W/E lines (pids ['5652', '8597', '9832', '11465']): 61 in 11 groups
+      12  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      11  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      10  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       6  W/Parcel: Expecting binder but got null!
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       4  W/Gralloc4: allocator #.x is not supported
+       1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection

@@ -1,0 +1,24 @@
+app pids seen: ['4955', '5527', '5617', '5662', '5719', '5764', '5818', '5865', '5970', '6017', '6073', '6120']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-01 21:58:41.740  4937  4937 I PERFCHECK: section: M0. Site data host: texts with emoji
+   11-01 21:58:42.773  4950  4950 I PERFCHECK: section: W. First launch and warm-up
+   11-01 21:59:13.713  5196  5196 I PERFCHECK: section: M1. Texts with emoji on API 26
+   11-01 22:00:01.590  5477  5477 I PERFCHECK: section: M1b. The bread article again after 30 s EmojiCompat loads its font asynchronously
+   11-01 22:00:38.138  1627  4085 I ActivityManager: Killing 4955:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:01:02.596  5594  5594 I PERFCHECK: section: M2. Cold starts 10, API 26
+   11-01 22:01:02.616  1627  4085 I ActivityManager: Killing 5527:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:01:09.513  1627  1801 I ActivityManager: Killing 5617:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:01:16.495  1627  3872 I ActivityManager: Killing 5662:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:01:23.414  1627  2410 I ActivityManager: Killing 5719:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:01:30.354  1627  1801 I ActivityManager: Killing 5764:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:01:37.251  1627  2302 I ActivityManager: Killing 5818:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:01:44.215  1627  1986 I ActivityManager: Killing 5865:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:01:51.145  1627  3821 I ActivityManager: Killing 5970:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:01:58.041  1627  4566 I ActivityManager: Killing 6017:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-01 22:02:04.924  1627  1945 I ActivityManager: Killing 6073:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app

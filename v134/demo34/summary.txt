@@ -1,0 +1,126 @@
+part demo34; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+installed: devDebug b06d1ce (org.chyavorec.app.dev, demo sign-in DEMO-0001);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.34-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4437 ms
+## B0. Demo sign-in with „Запомни ме“
+Запомни ме before: CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true)
+Запомни ме now: CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true)
+MY after the demo sign-in: text="ДЕМО ДАННИ — само за разработка, не са реални" text="ДЧ" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" text="БИБЛИОТЕКА" text="Читателска карта" text="Покажи картата на гишето" 
+## B1. Year story: time from the tap to the first slide (device-side tap + screencaps with uptime)
+YT fresh shots: #1 [0..910 ms] dark-blank/loader mean=0 std=0 | #2 [910..1840 ms] other(light) mean=100 std=61 | #3 [1840..3390 ms] SLIDE mean=54 std=29 | #4 [3390..4430 ms] SLIDE mean=55 std=31 | #5 [4430..5320 ms] SLIDE mean=55 std=31 | #6 [5320..6380 ms] SLIDE mean=55 std=31 | #7 [6380..7540 ms] SLIDE mean=55 std=31 | #8 [7540..8460 ms] SLIDE mean=44 std=29 | #9 [8460..9330 ms] SLIDE mean=45 std=31 | #10 [9330..10450 ms] SLIDE mean=45 std=31 | #11 [10450..11480 ms] SLIDE mean=45 std=31 | #12 [11480..12900 ms] SLIDE mean=45 std=31
+YT fresh: FIRST SLIDE in shot #3: taken 1840..3390 ms after the tap returned (input tap itself took 20 ms)
+YT fresh after the shots (uiautomator): YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Любим автор: Иван Вазов — 6 книги през г · Моята читателска година · 2026 · Затвори · Сподели
+YT reopen shots: #1 [0..670 ms] dark-blank/loader mean=0 std=0 | #2 [670..2650 ms] SLIDE mean=52 std=24 | #3 [2650..3950 ms] SLIDE mean=55 std=31 | #4 [3950..4950 ms] SLIDE mean=55 std=31 | #5 [4950..6000 ms] SLIDE mean=55 std=31 | #6 [6000..7290 ms] SLIDE mean=55 std=31 | #7 [7290..8390 ms] SLIDE mean=55 std=31 | #8 [8390..9460 ms] SLIDE mean=45 std=30 | #9 [9460..10630 ms] SLIDE mean=45 std=31 | #10 [10630..11660 ms] SLIDE mean=45 std=31 | #11 [11660..12670 ms] SLIDE mean=45 std=31 | #12 [12670..14040 ms] SLIDE mean=45 std=31
+YT reopen: FIRST SLIDE in shot #2: taken 670..2650 ms after the tap returned (input tap itself took 10 ms)
+YT reopen after the shots (uiautomator): YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Най-четен раздел: Език. Литература — 2 к · Моята читателска година · 2026 · Затвори · Сподели
+## B1b. The same with a screen recording (8 fps) for the frames (fresh process)
+REC year-rec-fresh: 160 frames @8 fps; motion all: frames=160 moving-frames(>1.0)=10 max-step=71.5 max-vs-first=71.8 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.2 0.1 0.0 71.5 0.0 0.0 30.0 0.9 0.2 0.0 0.0 1.6 0.0 0.1 1.2 0.6 0.0 0.0 0.1 0.0 0.0 0.1 0.0 0.2 0.0 0.0 0.1 0.0 0.0 0.0 0.0 0.1 0.0 0.1 0.0 0.0 0.0 0.1 0.0 0.0 0.1 0.0 0.1 0.0 0.0 0.1 0.0 0.0 0.1 0.0 0.0 0.1 0.0 0.0 0.0 0.0 8.3 7.5 0
+YEAR rec-fresh: slide visible to uiautomator after 6055 ms (-1 = not within 22 s); frame std every 1 s: 0.0 0.0 0.0 0.0 65.8 27.9 30.0 30.2 30.2 30.2 30.2 28.6 30.6 30.7 30.7 30.7 30.7 28.8 32.4 32.4 
+YEAR rec-fresh logcat in the window (GC / catalogue / app): GC lines 1, catalogue lines:    285  9035 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x731805540d90~   285  9036 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7317f5547950~  8659  8667 I yavorec.app.dev: Compiler allocated 6713KB to compile void org.chyavorec.app.ui.screens.my.YearStoryKt.YearStory(org.chyavorec.data.catal~
+## B2. Swipe-down dismiss: ≥140 dp at any speed, or a fast flick (≥700 dp/s) after ≥32 dp
+YEAR swipe down d200t150 (200 dp = 525 px in 150 ms, ~1333 dp/s avg): STILL OPEN
+YEAR swipe down d200t300 (200 dp = 525 px in 300 ms, ~666 dp/s avg): STILL OPEN
+YEAR swipe down d200t600 (200 dp = 525 px in 600 ms, ~333 dp/s avg): closed
+YEAR swipe down d120fast (120 dp = 315 px in 70 ms, ~1714 dp/s avg): STILL OPEN
+YEAR swipe down d120slow (120 dp = 315 px in 900 ms, ~133 dp/s avg): STILL OPEN
+YEAR swipe down d40fast (40 dp = 105 px in 45 ms, ~888 dp/s avg): STILL OPEN
+YEAR swipe down d20fast (20 dp = 52 px in 45 ms, ~444 dp/s avg): closed
+YEAR swipe down d160slow (160 dp = 420 px in 1500 ms, ~106 dp/s avg): closed
+## B3. Offline: the story with airplane mode on (fresh process)
+offline: airplane=1
+YEAR offline: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | 2026 — твоята година с книгите · Моята читателска година · 2026 · Затвори · Сподели · Няма интернет връзка
+YEAR after reconnect (8 s): YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Най-четен раздел: Език. Литература — 2 к · Моята читателска година · 2026 · Затвори · Сподели
+YEAR offline: demo history cache: drwx------ 4 u0_a176 u0_a176 4096 2026-11-10 19:26 cache;
+## B4. Landscape + font 1.3 + „Много голям“: each slide (scrollable? clipped? ellipsized?)
+TEXT SIZE now: text="Много голям" 
+YEAR land+1.3+XL slide 1: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | 2026 — твоята година с книгите · Моята читателска година · 2026 · Затвори · Сподели
+  scroll inside slide 1: diff 15.92
+TEXT SIZE now: text="Стандартен" 
+## B5. Portrait, font 1.3 + „Много голям“: the first slides
+TEXT SIZE now: text="Много голям" 
+YEAR port+1.3+XL slide 1: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | 2026 — твоята година с книгите · Моята читателска година · 2026 · Затвори · Сподели
+TEXT SIZE now: text="Стандартен" 
+## B6. Hold: „Заяви книгата“ → „Заявена“; again after an app restart („Запомни ме“)
+HOLD inv 399560 after the tap: text="Заявена" text="Заявена на 10 ноември 2026. Библиотеката ще отдели книгата за теб." text="Заявката е изпратена. Библиотеката ще отдели книгата за теб." 
+HOLD reopened (same process): text="Заявена" text="Заявена на 10 ноември 2026. Библиотеката ще отдели книгата за теб." 
+HOLD after an app restart: text="Заявена" text="Заявена на 10 ноември 2026. Библиотеката ще отдели книгата за теб." 
+HOLD: still signed in after the restart: yes
+## B7. Share files (event card, year slide) → logout → cache/share
+SHARE ev1-dev: chooser OPEN after 2 s; cache/share: 654870 2026-11-10 19:39 chyavorec-event-1794339589285.png;
+SHARE ev1-dev file: chyavorec-event-1794339589285.png 654870 B; PNG (1080, 1920) RGBA
+SHARE ev1-dev: chyavorec-event-1794339589285.png (no photo?) text="80 г. от създаването на ЮНЕСКО" text="16 ноември 2026" 
+SHARE ev2-dev: chooser OPEN after 2 s; cache/share: 648786 2026-11-10 19:40 chyavorec-event-1794339628621.png;
+SHARE ev2-dev file: chyavorec-event-1794339628621.png 648786 B; PNG (1080, 1920) RGBA
+SHARE ev2-dev: chyavorec-event-1794339628621.png (no photo?) text="Панайот Пипков · Ден на семейството" text="21 ноември 2026" 
+SHARE ev3-dev: chooser OPEN after 2 s; cache/share: 643434 2026-11-10 19:41 chyavorec-event-1794339667438.png;
+SHARE ev3-dev file: chyavorec-event-1794339667438.png 643434 B; PNG (1080, 1920) RGBA
+SHARE ev3-dev: chyavorec-event-1794339667438.png (no photo?) text="Световен ден за борба срещу СПИН" text="1 декември 2026" 
+SHARE ev4-dev: chooser OPEN after 2 s; cache/share: 645003 2026-11-10 19:41 chyavorec-event-1794339706191.png;
+SHARE ev4-dev file: chyavorec-event-1794339706191.png 645003 B; PNG (1080, 1920) RGBA
+SHARE ev4-dev: chyavorec-event-1794339706191.png (no photo?) text="Международен ден на инвалида" text="3 декември 2026" 
+SHARE ev5-dev: chooser OPEN after 1 s; cache/share: 621497 2026-11-10 19:42 chyavorec-event-1794339744943.png;
+SHARE ev5-dev file: chyavorec-event-1794339744943.png 621497 B; PNG (1080, 1920) RGBA
+SHARE ev5-dev: chyavorec-event-1794339744943.png (no photo?) text="Никулден" text="6 декември 2026" 
+no event row 6: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" text="Читалище" text="Народен обичай" 
+SHARE dev: event with a photo: none of the first 6
+YEAR share: fg org.chyavorec.app.dev/org.chyavorec.app.MainActivity
+cache/share before logout: 621497 2026-11-10 19:42 chyavorec-event-1794339744943.png;
+LOGOUT: text="Здравей!" text="Новините, събитията, каталогът и информацията за читалището са достъпни и без вход." text="Вход" text="БИБЛИОТЕКА" text="Читателска карта" text="Добави номера от своята карта" 
+cache/share after logout: 'file or directory;'
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 5 | Първи кадър: медиана 2472 мс, последен 2669 мс | Пълно показване: медиана 3332 мс, последно 3688 мс | Насечени кадри по екрани | settings: 6,4 % от 188 кадъра · най-бавен 343 мс | my: 1,0 % от 199 кадъра · най-бавен 493 мс | home: 0,8 % от 
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 5" text="Първи кадър: медиана 2472 мс, последен 2669 мс" text="Пълно показване: медиана 3332 мс, последно 3688 мс" text="Насечени кадри по екрани" text="settings: 6,4 % от 188 кадъра · най-бавен 343 мс" text=
+APP W/E lines (pids ['6198', '7968', '8659', '10541', '13068']): 272 in 112 groups
+      24  W/Parcel: Expecting binder but got null!
+      21  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       6  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+       5  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       5  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/ziparchive: Unable to open '/data/app/~~AzjllT#MF#CX#OCw#Vjb#w==/org.chyavorec.app.dev-X#yo#O#a#N_rAKJYQOsA==/base.dm': No
+       5  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       5  E/FrameEvents: updateAcquireFence: Did not find frame.
+       4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+       4  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       4  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       4  W/yavorec.app.dev: Accessing hidden method Landroid/view/ViewTreeObserver;->dispatchOnScrollChanged()V (unsupported, reflection, 
+       3  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       3  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       2  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.PlatformPasswordVisibilitySettingImpl.getSystemShowPasswordSetting(BasicS
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextField_androidKt.rememberPlatformPasswordVisibilitySettings
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-ltb#GB#(BasicSecureTextField.
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-egD#TGM(BasicSecureTextField.
+## COMPLETE
+## logcat findings
+app pids seen: ['6198', '7968', '8659', '10541', '13068']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 18
+   skipped-frames events=18 max=82 total=713
+== Davey: 47
+   davey events=47 max=2525ms median=857ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

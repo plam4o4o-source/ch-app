@@ -1,0 +1,11 @@
+{
+  "versionCode": 1488542,
+  "versionName": "1.2.29",
+  "apkUrl": "https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v129/update/41246985336/app.apk",
+  "sha256": "55b43fbdac1e7c5f77ef2cd8743a317b68e50a36d28fbf1e453ec88bc2e9861a",
+  "size": 4100618,
+  "minSdk": 26,
+  "notes": "• Скенерът използва скенера на Google — приложението вече не иска достъп до камерата и е по-леко.\n• Бутон „Читателска карта“ в бързите настройки — картата е на едно плъзгане разстояние.\n• Новините и събитията в известията — със снимка, а напомнянията — с „Добави в календара“ и „Маршрут“.\n• Снимките в галерията се отварят на цял екран и се затварят с плъзгане.\n• По-удобен уиджет — сроковете винаги се виждат, в повече размери и на езика на приложението.\n• „Нови постъпления“ без повторения, по-удобно търсене и нов карусел на „Начало“.",
+  "notes_en": "• Scanning now uses Google’s scanner — the app no longer asks for camera access and is lighter.\n• A “Library card” button in Quick Settings — your card is one swipe away.\n• News and events in notifications now show a picture, and reminders offer “Add to calendar” and “Directions”.\n• Gallery photos open full screen and close with a swipe.\n• A better widget — due dates always visible, more sizes, and in the app’s language.\n• “New arrivals” without repeats, easier search and a new carousel on “Home”.",
+  "releaseUrl": "https://github.com/plam4o4o-source/ch-app/releases/tag/v1.2.29"
+}

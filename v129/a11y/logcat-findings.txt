@@ -1,0 +1,32 @@
+app pids seen: ['4857', '6891', '9489']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=62 total=229
+   10-31 21:36:01.697  4857  4857 I Choreographer: Skipped 62 frames!  The application may be doing too much work on its main thread.
+   10-31 21:36:02.308  4857  4857 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   10-31 21:36:13.314  4857  4857 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   10-31 21:37:00.339  6891  6891 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   10-31 21:37:18.045  6891  6891 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   10-31 21:37:26.653  6891  6891 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+== Davey: 14
+   davey events=14 max=1252ms median=826ms
+   10-31 21:36:13.495  4857  4868 I OpenGLRenderer: Davey! duration=739ms; Flags=0, FrameTimelineVsyncId=6255, IntendedVsync=106548601766, Vsync=106548601766, InputEventId=0, HandleInputStart=106549276035, AnimationStart=106549276716, PerformT
+   10-31 21:36:13.648  4857  4868 I OpenGLRenderer: Davey! duration=831ms; Flags=0, FrameTimelineVsyncId=6262, IntendedVsync=106598601761, Vsync=107198601701, InputEventId=0, HandleInputStart=107211820207, AnimationStart=107211820888, PerformT
+   10-31 21:36:25.881  4857  4875 I OpenGLRenderer: Davey! duration=810ms; Flags=0, FrameTimelineVsyncId=6830, IntendedVsync=118948595741, Vsync=118998595739, InputEventId=0, HandleInputStart=119009802494, AnimationStart=119009802995, PerformT
+   10-31 21:36:26.571  4857  4869 I OpenGLRenderer: Davey! duration=1252ms; Flags=0, FrameTimelineVsyncId=6837, IntendedVsync=119015262405, Vsync=119448595721, InputEventId=0, HandleInputStart=119452685468, AnimationStart=119452686299, Perform
+   10-31 21:36:26.639  4857  4869 I OpenGLRenderer: Davey! duration=821ms; Flags=0, FrameTimelineVsyncId=6851, IntendedVsync=119498601254, Vsync=119915267879, InputEventId=0, HandleInputStart=119919239416, AnimationStart=119919240158, PerformT
+   10-31 21:37:00.370  6891  6910 I OpenGLRenderer: Davey! duration=870ms; Flags=1, FrameTimelineVsyncId=8703, IntendedVsync=153315261033, Vsync=153648594353, InputEventId=0, HandleInputStart=153663722339, AnimationStart=153663723050, PerformT
+   10-31 21:37:00.817  6891  6910 I OpenGLRenderer: Davey! duration=945ms; Flags=0, FrameTimelineVsyncId=8738, IntendedVsync=153698594351, Vsync=154231927663, InputEventId=0, HandleInputStart=154236837629, AnimationStart=154236838250, PerformT
+   10-31 21:37:18.289  6891  7352 I OpenGLRenderer: Davey! duration=783ms; Flags=0, FrameTimelineVsyncId=9353, IntendedVsync=171365260311, Vsync=171931926955, InputEventId=0, HandleInputStart=171942795977, AnimationStart=171942796678, PerformT
+   10-31 21:37:18.492  6891  7352 I OpenGLRenderer: Davey! duration=830ms; Flags=0, FrameTimelineVsyncId=9353, IntendedVsync=171365260311, Vsync=171931926955, InputEventId=0, HandleInputStart=171942795977, AnimationStart=171942796678, PerformT
+   10-31 21:37:21.212  6891  6911 I OpenGLRenderer: Davey! duration=750ms; Flags=0, FrameTimelineVsyncId=9703, IntendedVsync=174015260205, Vsync=174348593525, InputEventId=-885438761, HandleInputStart=174364939676, AnimationStart=174364940096,
+   10-31 21:37:22.871  6891  6911 I OpenGLRenderer: Davey! duration=856ms; Flags=0, FrameTimelineVsyncId=9825, IntendedVsync=175648599016, Vsync=175648599016, InputEventId=-468645039, HandleInputStart=175664728762, AnimationStart=175664729593,
+   10-31 21:37:23.689  6891  6911 I OpenGLRenderer: Davey! duration=794ms; Flags=0, FrameTimelineVsyncId=9899, IntendedVsync=176398593443, Vsync=176831926759, InputEventId=0, HandleInputStart=176833206507, AnimationStart=176833207088, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 21:35:59.628  4838  4838 I PERFCHECK: section: W. First launch and warm-up
+   10-31 21:36:56.411  6809  6809 I PERFCHECK: section: A. Accessibility uiautomator: main screens, density 420
+   10-31 21:41:11.554  9430  9430 I PERFCHECK: section: A2. The same, English, font 1.3 Home, Catalogue, Book, More
+   10-31 21:41:58.806  9948  9948 I PERFCHECK: section: A3. Totals over all screens

@@ -1,0 +1,45 @@
+FSAGG full       coldgl      new  opens= 2  slowest frame: median  750.6 ms, mean  750.6, min  735.8, max  765.4  | frame 1 median  210.5 ms | frames 2-5 median 512.5 ms  | slowest per open: [736, 765] at frame # [5, 5]
+FSAGG full       coldgl      base opens= 2  slowest frame: median  950.5 ms, mean  950.5, min  886.4, max 1014.6  | frame 1 median  181.0 ms | frames 2-5 median 714.5 ms  | slowest per open: [886, 1015] at frame # [3, 4]
+FSAGG full       now         new  opens= 2  slowest frame: median  371.8 ms, mean  371.8, min  361.6, max  382.0  | frame 1 median  192.0 ms | frames 2-5 median 235.0 ms  | slowest per open: [362, 382] at frame # [5, 6]
+FSAGG full       now         base opens= 2  slowest frame: median  701.2 ms, mean  701.2, min  589.1, max  813.4  | frame 1 median  502.0 ms | frames 2-5 median 478.5 ms  | slowest per open: [813, 589] at frame # [4, 5]
+FSAGG full       now-coldgl  new  opens= 2  slowest frame: median  584.3 ms, mean  584.3, min  259.9, max  908.7  | frame 1 median  362.0 ms | frames 2-5 median 471.0 ms  | slowest per open: [909, 260] at frame # [4, 2]
+FSAGG full       now-coldgl  base opens= 2  slowest frame: median  736.2 ms, mean  736.2, min  637.0, max  835.4  | frame 1 median  362.5 ms | frames 2-5 median 467.5 ms  | slowest per open: [637, 835] at frame # [4, 4]
+FSAGG full       wait5s      new  opens=10  slowest frame: median  852.9 ms, mean  892.7, min  748.5, max 1199.5  | frame 1 median  258.5 ms | frames 2-5 median 494.5 ms  | slowest per open: [1200, 1044, 935, 774, 826, 798, 806, 880, 916, 748] at frame # [5, 6, 6, 6, 6, 5, 6, 5, 7, 5]
+FSAGG full       wait5s      base opens=10  slowest frame: median  823.2 ms, mean  861.2, min  713.7, max 1121.8  | frame 1 median  278.0 ms | frames 2-5 median 494.0 ms  | slowest per open: [769, 827, 1122, 768, 880, 822, 714, 799, 825, 1087] at frame # [6, 5, 5, 4, 5, 5, 4, 6, 5, 5]
+FSAGG cardscreen coldgl      new  opens= 2  slowest frame: median  622.3 ms, mean  622.3, min  614.7, max  629.9  | frame 1 median   75.0 ms | frames 2-5 median 403.0 ms  | slowest per open: [615, 630] at frame # [5, 7]
+FSAGG cardscreen coldgl      base opens= 2  slowest frame: median  667.8 ms, mean  667.8, min  622.7, max  712.9  | frame 1 median   76.0 ms | frames 2-5 median 473.0 ms  | slowest per open: [623, 713] at frame # [4, 11]
+FSAGG cardscreen wait5s      new  opens=10  slowest frame: median  665.5 ms, mean  655.3, min  599.9, max  688.5  | frame 1 median   76.5 ms | frames 2-5 median 421.0 ms  | slowest per open: [600, 662, 667, 664, 609, 683, 674, 688, 675, 631] at frame # [12, 12, 11, 12, 4, 7, 12, 5, 4, 7]
+FSAGG cardscreen wait5s      base opens=10  slowest frame: median  617.7 ms, mean  632.3, min  605.0, max  694.9  | frame 1 median   71.5 ms | frames 2-5 median 433.0 ms  | slowest per open: [615, 695, 638, 659, 610, 617, 657, 619, 605, 607] at frame # [9, 11, 11, 4, 11, 7, 15, 4, 11, 4]
+FSAGG first-5 frames per open (ms):
+   full new-1-coldgl           first5=[178, 351, 420, 627, 736] slowest=736 (#5, rt 400)
+   full new-4-coldgl           first5=[243, 294, 409, 605, 765] slowest=765 (#5, rt 361)
+   full base-2-coldgl          first5=[181, 730, 886, 357, 710] slowest=886 (#3, rt 263)
+   full base-3-coldgl          first5=[181, 398, 665, 1015, 719] slowest=1015 (#4, rt 357)
+   full new-1-now              first5=[183, 148, 262, 332, 362] slowest=362 (#5, rt 130)
+   full new-4-now              first5=[201, 191, 84, 217, 253] slowest=382 (#6, rt 165)
+   full base-2-now             first5=[453, 334, 455, 813, 670] slowest=813 (#4, rt 205)
+   full base-3-now             first5=[551, 286, 346, 502, 589] slowest=589 (#5, rt 228)
+   full new-1-now-coldgl       first5=[502, 471, 685, 909, 323] slowest=909 (#4, rt 226)
+   full new-4-now-coldgl       first5=[222, 260] slowest=260 (#2, rt 171)
+   full base-2-now-coldgl      first5=[191, 357, 449, 637, 485] slowest=637 (#4, rt 201)
+   full base-3-now-coldgl      first5=[534, 450, 448, 835, 685] slowest=835 (#4, rt 204)
+   full new-1-1-wait           first5=[148, 303, 418, 1164, 1199] slowest=1200 (#5, rt 269)
+   full new-1-2-wait           first5=[289, 464, 526, 626, 1041] slowest=1044 (#6, rt 253)
+   full new-1-3-wait           first5=[255, 395, 205, 397, 611] slowest=935 (#6, rt 604)
+   full new-1-4-wait           first5=[191, 252, 473, 376, 659] slowest=774 (#6, rt 372)
+   full new-1-5-wait           first5=[197, 350, 500, 489, 723] slowest=826 (#6, rt 263)
+   full new-4-1-wait           first5=[296, 355, 424, 615, 798] slowest=798 (#5, rt 366)
+   full new-4-2-wait           first5=[408, 377, 616, 373, 638] slowest=806 (#6, rt 217)
+   full new-4-3-wait           first5=[262, 378, 383, 851, 880] slowest=880 (#5, rt 424)
+   full new-4-4-wait           first5=[235, 388, 373, 656, 752] slowest=916 (#7, rt 224)
+   full new-4-5-wait           first5=[410, 447, 533, 745, 749] slowest=748 (#5, rt 328)
+   full base-2-1-wait          first5=[374, 343, 393, 383, 700] slowest=769 (#6, rt 363)
+   full base-2-2-wait          first5=[216, 368, 391, 634, 827] slowest=827 (#5, rt 337)
+   full base-2-3-wait          first5=[457, 484, 469, 725, 1122] slowest=1122 (#5, rt 347)
+   full base-2-4-wait          first5=[200, 326, 504, 768, 661] slowest=768 (#4, rt 381)
+   full base-2-5-wait          first5=[320, 362, 389, 847, 880] slowest=880 (#5, rt 266)
+   full base-3-1-wait          first5=[234, 322, 373, 713, 822] slowest=822 (#5, rt 444)
+   full base-3-2-wait          first5=[217, 442, 577, 714, 700] slowest=714 (#4, rt 370)
+   full base-3-3-wait          first5=[242, 312, 469, 385, 635] slowest=799 (#6, rt 407)
+   full base-3-4-wait          first5=[443, 396, 428, 750, 825] slowest=825 (#5, rt 341)
+   full base-3-5-wait          first5=[314, 448, 403, 736, 1087] slowest=1087 (#5, rt 362)

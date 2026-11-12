@@ -1,0 +1,8 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15982        1077        7023          48        8273       14904
+Swap:           3071           0        3071
+== host kernel: oom / kvm
+[Tue Nov 10 17:10:39 2026] x86/fpu: Supporting XSAVE feature 0x1000: 'Control-flow Kernel registers (KVM only)'
+[Tue Nov 10 17:10:42 2026] kvm_intel: Using Hyper-V Enlightened VMCS
+[Tue Nov 10 17:13:20 2026] kvm: kvm [2670]: vcpu0, guest rIP: 0xffffffff83b8a78f Unhandled WRMSR(0xc2) = 0xffff

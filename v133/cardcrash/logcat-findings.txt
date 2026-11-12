@@ -1,0 +1,59 @@
+app pids seen: ['5810', '7755', '8654', '9102', '9594', '10379', '10808', '11253', '11690', '12231', '12934', '13386', '13828', '14266', '14805', '15424', '15860', '16281', '16713', '17148']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 75
+   skipped-frames events=75 max=105 total=3577
+   11-07 16:49:07.240  5810  5810 I Choreographer: Skipped 105 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:08.064  5810  5810 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:11.403  5810  5810 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:13.375  5810  5810 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:19.557  5810  5810 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-07 16:50:15.012  5810  5810 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   11-07 16:50:28.138  7755  7755 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-07 16:50:30.354  7755  7755 I Choreographer: Skipped 89 frames!  The application may be doing too much work on its main thread.
+   11-07 16:50:31.187  7755  7755 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-07 16:50:33.657  7755  7755 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-07 16:50:40.369  7755  7755 I Choreographer: Skipped 73 frames!  The application may be doing too much work on its main thread.
+   11-07 16:51:42.647  8654  8654 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
+== Davey: 149
+   davey events=149 max=2633ms median=950ms
+   11-07 16:49:09.877  5810  5821 I OpenGLRenderer: Davey! duration=2268ms; Flags=1, FrameTimelineVsyncId=9730, IntendedVsync=125787065333, Vsync=126587065205, InputEventId=0, HandleInputStart=126602893082, AnimationStart=126602893712, Perform
+   11-07 16:49:11.390  5810  5822 I OpenGLRenderer: Davey! duration=950ms; Flags=0, FrameTimelineVsyncId=10056, IntendedVsync=128003731911, Vsync=128437065227, InputEventId=0, HandleInputStart=128441124909, AnimationStart=128441125370, Perform
+   11-07 16:49:11.891  5810  5822 I OpenGLRenderer: Davey! duration=1702ms; Flags=0, FrameTimelineVsyncId=10095, IntendedVsync=128453742988, Vsync=128787076268, InputEventId=0, HandleInputStart=128799998017, AnimationStart=128799998678, Perfor
+   11-07 16:49:12.339  5810  5822 I OpenGLRenderer: Davey! duration=1302ms; Flags=0, FrameTimelineVsyncId=10121, IntendedVsync=128820398545, Vsync=129237065195, InputEventId=0, HandleInputStart=129242505887, AnimationStart=129242506658, Perfor
+   11-07 16:49:12.848  5810  5822 I OpenGLRenderer: Davey! duration=1567ms; Flags=0, FrameTimelineVsyncId=10153, IntendedVsync=129253731861, Vsync=129937065167, InputEventId=0, HandleInputStart=129944897879, AnimationStart=129944898299, Perfor
+   11-07 16:49:13.366  5810  5822 I OpenGLRenderer: Davey! duration=1389ms; Flags=0, FrameTimelineVsyncId=10342, IntendedVsync=129953742924, Vsync=130437076180, InputEventId=0, HandleInputStart=130447315706, AnimationStart=130447316026, Perfor
+   11-07 16:49:13.507  5810  5955 I OpenGLRenderer: Davey! duration=976ms; Flags=0, FrameTimelineVsyncId=10379, IntendedVsync=130453731813, Vsync=130903731795, InputEventId=0, HandleInputStart=130919137213, AnimationStart=130919137614, Perform
+   11-07 16:49:19.566  5810  5953 I OpenGLRenderer: Davey! duration=838ms; Flags=0, FrameTimelineVsyncId=11193, IntendedVsync=137137064879, Vsync=137237064875, InputEventId=0, HandleInputStart=137241813676, AnimationStart=137241814046, Perform
+   11-07 16:49:19.871  5810  5955 I OpenGLRenderer: Davey! duration=986ms; Flags=0, FrameTimelineVsyncId=11228, IntendedVsync=137320398205, Vsync=138020398177, InputEventId=0, HandleInputStart=138102997471, AnimationStart=138102998022, Perform
+   11-07 16:49:22.775  5810  6325 I OpenGLRenderer: Davey! duration=775ms; Flags=0, FrameTimelineVsyncId=11545, IntendedVsync=140253731421, Vsync=140287064753, InputEventId=0, HandleInputStart=140288386925, AnimationStart=140288387275, Perform
+   11-07 16:49:23.068  5810  6325 I OpenGLRenderer: Davey! duration=709ms; Flags=0, FrameTimelineVsyncId=11588, IntendedVsync=140753731401, Vsync=141220398049, InputEventId=0, HandleInputStart=141221552473, AnimationStart=141221552814, Perform
+   11-07 16:49:54.904  5810  7439 I OpenGLRenderer: Davey! duration=1086ms; Flags=0, FrameTimelineVsyncId=14155, IntendedVsync=172220396809, Vsync=172653730125, InputEventId=0, HandleInputStart=172655701024, AnimationStart=172655701705, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 16:49:03.411  5768  5768 I PERFCHECK: section: CC-new. 5 cycles: cleared data, first launch, empty card screen, add the number, full-screen card
+   11-07 16:49:03.895  5803  5803 I PERFCHECK: cc-new-1
+   11-07 16:50:26.306  7743  7743 I PERFCHECK: cc-new-2
+   11-07 16:51:40.213  8647  8647 I PERFCHECK: cc-new-3
+   11-07 16:52:45.041  9088  9088 I PERFCHECK: cc-new-4
+   11-07 16:53:49.363  9586  9586 I PERFCHECK: cc-new-5
+   11-07 16:55:08.933 10328 10328 I PERFCHECK: section: CC-base. 5 cycles: cleared data, first launch, empty card screen, add the number, full-screen card
+   11-07 16:55:09.775 10366 10366 I PERFCHECK: cc-base-1
+   11-07 16:56:13.609 10802 10802 I PERFCHECK: cc-base-2
+   11-07 16:57:16.509 11246 11246 I PERFCHECK: cc-base-3
+   11-07 16:58:16.783 11684 11684 I PERFCHECK: cc-base-4
+   11-07 16:59:18.043 12225 12225 I PERFCHECK: cc-base-5
+   11-07 17:00:23.755 12891 12891 I PERFCHECK: section: CC-new. 5 cycles: cleared data, first launch, empty card screen, add the number, full-screen card
+   11-07 17:00:24.371 12927 12927 I PERFCHECK: cc-new-1
+   11-07 17:01:32.078 13377 13377 I PERFCHECK: cc-new-2
+   11-07 17:02:39.344 13820 13820 I PERFCHECK: cc-new-3
+   11-07 17:03:42.041 14257 14257 I PERFCHECK: cc-new-4
+   11-07 17:04:48.003 14778 14778 I PERFCHECK: cc-new-5
+   11-07 17:05:55.194 15386 15386 I PERFCHECK: section: CC-base. 5 cycles: cleared data, first launch, empty card screen, add the number, full-screen card
+   11-07 17:05:55.355 15417 15417 I PERFCHECK: cc-base-1
+   11-07 17:06:56.420 15854 15854 I PERFCHECK: cc-base-2
+   11-07 17:07:57.957 16273 16273 I PERFCHECK: cc-base-3
+   11-07 17:09:00.368 16703 16703 I PERFCHECK: cc-base-4
+   11-07 17:10:03.397 17141 17141 I PERFCHECK: cc-base-5
+   11-07 17:11:04.705 17515 17515 I PERFCHECK: section: CC. Totals

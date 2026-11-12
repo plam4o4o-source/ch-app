@@ -1,0 +1,81 @@
+part fix; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## FX0. BrandIntro on the very first launch: 12 s recording (round a stopped at ~5 s, on the splash)
+REC brandintro2: 81 frames @8 fps; motion all: frames=81 moving-frames(>1.0)=9 max-step=189.2 max-vs-first=170.8 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.1 0.0 47.0 57.3 0.1 62.1 0.0 0.0 0.0 0.2 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 9.0 1.7 0.0 0.0 0.0 0.0 3.6 0.0 0.0 0.0 0.0 0.0 8.4 0.0 1.3 0.0 0.0 0.0 189.2 0.0 0.3 0.1 0.2 0.0 0.1 0.2 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.1 0.1 0.0]
+BRANDINTRO2: 81 frames; motion: frames=81 moving-frames(>1.0)=9 max-step=189.2 max-vs-first=170.8 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.1 0.0 47.0 57.3 0.1 62.1 0.0 0.0 0.0 0.2 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 9.0 1.7 0.0 0.0 0.0 0.0 3.6 0.0 0.0 0.0 0.0 0.0 8.4 0.0 1.3 0.0 0.0 0.0 189.2 0.0 0.3 0.1 0.2 0.0 0.1 0.2 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.1 0.1 0.0]
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 2630 ms
+## FX4. Pull-to-refresh rosette: slow 1500 ms pull starting inside the list (45% of the height)
+REFRESH news2: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.57 0.32 0.30 0.00 0.00 0.00 
+REFRESH calendar2: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.56 0.38 0.37 0.53 0.00 0.00 
+REFRESH home2: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 22.10 22.41 22.35 21.97 21.97 21.97 
+REFRESH gallery2: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.25 0.37 0.04 0.02 0.02 0.02 
+REC refresh-news2: 28 frames @8 fps; motion 0 0 1080 1400: frames=28 moving-frames(>1.0)=0 max-step=0.8 max-vs-first=0.9 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.3 0.4 0.8 0.3 0.6 0.6 0.3 0.2 0.3 0.2 0.0 0.2 0.5 0.0 0.2 0.0 0.0 0.0 0.4]
+## FX1. Card foil and the sensor (self-entered card)
+SENSORS: Accelerometer (handle=0x00000000, connectio;Accelerometer Uncalibrated ;Game Rotation Vector Sensor ;Gyroscope ;Gyroscope (uncalibrated) ;Gyroscope Bias (debug)    ;Gyroscope Sensor ;Magnetic field sensor ;Magnetic field sensor (uncalibrated) ;Rotation Vector Sensor ;Rotation Vector Sensor    ;accel
+emu console: sensor status → acceleration: enabled. gyroscope: enabled. 
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+SENSORS on the card screen (release): active connections mentioning the app: 0; lines: 0x5f676172) Game Rotation Vector Sensor | AOSP | ver: 3 | type: android.sensor.game_rotation_vector(15) | perm: n/a | flags: 0x00000000~Game Rotation Vector Sensor: last 10 events~	 Game Rotation Vector Sensor 0x5f676172 | status: active | pending flush events 0 ~
+ESHOT files: release-0.png release-0b.png release-acc-A.png release-acc-B.png release-gyro-A.png release-gyro-B.png release-gyro-C.png ; size of release-0: PNG-signature=yes size=1044584 B dims=1080x2400 mode=RGBA
+TILT2 release noise 0→0b (same tilt, 1.5 s): 0.42
+TILT2 release: acc A→B 2.32; 0→accA 3.20; gyro A→B 2.79; gyro B→C 2.10; 0→gyroA 2.54
+SENSOR events for the app (recent): 
+SENSORS on the card screen (release-full): active connections mentioning the app: 0; lines: 0x5f676172) Game Rotation Vector Sensor | AOSP | ver: 3 | type: android.sensor.game_rotation_vector(15) | perm: n/a | flags: 0x00000000~Game Rotation Vector Sensor: last 10 events~	 Game Rotation Vector Sensor 0x5f676172 | status: active | pending flush events 0 ~
+ESHOT files: release-0.png release-0b.png release-acc-A.png release-acc-B.png release-full-0.png release-full-0b.png release-full-acc-A.png release-full-acc-B.png release-full-gyro-A.png release-full-gyro-B.png release-full-gyro-C.png release-gyro-A.png release-gyro-B.png release-gyro-C.png ; size of release-full-0: PNG-signature=yes size=1052688 B dims=1080x2400 mode=RGBA
+TILT2 release-full noise 0→0b (same tilt, 1.5 s): 0.39
+TILT2 release-full: acc A→B 2.35; 0→accA 0.19; gyro A→B 2.91; gyro B→C 2.45; 0→gyroA 2.51
+SENSOR events for the app (recent): 
+## AR2. Article toolbar: the longest article, slow drags; screenshots of the bottom
+longest article: https://chyavorec.org/news/digitalen-klub-v-narodno-chitalishte-vasil-levski-1922
+AR2 after a slow 700 ms drag down (720 px): toolbar hidden
+AR2 after a fling down: toolbar VISIBLE
+AR2 after a drag up: toolbar visible
+## FX2. Catalogue filter 'Само налични' applied
+before: 108 results
+FILTER sheet after the chip: content-desc="Манипулатор за преместване с плъзгане" text="Филтри" text="Без филтри" text="Само налични" text="Вид документ" text="книга" text="видеодокумент" text="картографско издание" text="друго" text="електронен документ" text="графично издание" text="аудиодокумент" text="продължаващо издание" text="патент/стандарт" text="нотно издание" text="Раздел (жанр)" text="Общ отдел" text="Философия. Психология" text="Религия" text="Обществени науки" text="Природни науки" text="Приложни науки. Техник
+after closing the sheet: 108 results; 
+## FX3. Shelf view vs list: gfxinfo of the same flings
+GFX list-flings  frames=   58  janky=58 (100.00%)  p50=200ms p90=350ms p95=400ms p99=400ms  slowUI=25 slowDraw=58 highInput=1
+GFX shelf-flings frames=   73  janky=73 (100.00%)  p50=150ms p90=200ms p95=250ms p99=250ms  slowUI=22 slowDraw=73 highInput=0
+GFX shelf-idle-8s frames=   16  janky=16 (100.00%)  p50=32ms p90=34ms p95=34ms p99=34ms  slowUI=0 slowDraw=16 highInput=0
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 1 | Първи кадър: медиана 1951 мс, последен 1951 мс | Пълно показване: медиана 1951 мс, последно 1951 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 1" text="Първи кадър: медиана 1951 мс, последен 1951 мс" text="Пълно показване: медиана 1951 мс, последно 1951 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['6701']): 26 in 13 groups
+       6  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       6  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       2  W/Parcel: Expecting binder but got null!
+       2  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       1  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       1  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       1  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=b#eb#-#-#fb-#e-#a#a#f#, generation=#)
+       1  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+       1  W/g.chyavorec.app: No such thread id for suspend: #
+## COMPLETE
+## logcat findings
+app pids seen: ['6701']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=78 total=270
+== Davey: 9
+   davey events=9 max=1623ms median=782ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

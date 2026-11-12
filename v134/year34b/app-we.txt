@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5800', '7917', '8564', '13976']): 466 in 116 groups
+      12  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+      12  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+      12  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+      10  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      10  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       9  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+       8  W/Parcel: Expecting binder but got null!
+       8  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       8  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       6  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
+       6  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
+       5  W/BasicSecureTextField: 	at androidx.compose.ui.node.InnerNodeCoordinator$LookaheadDelegateImpl.measure-BRTryo#(InnerNodeCoordinator.k
+       5  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasureBlock$lambda$#(LookaheadPassDelegate.kt:#)
+       5  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate$$ExternalSyntheticLambda#.invoke(D#$$SyntheticClass:#)
+       5  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasure-BRTryo#$ui(LookaheadPassDelegate.kt:#)
+       5  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performLookaheadMeasure-BRTryo#$ui(LayoutNodeLayoutDeleg
+       5  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.remeasure-BRTryo#(LookaheadPassDelegate.kt:#)
+       5  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.measure-BRTryo#(LookaheadPassDelegate.kt:#)
+       5  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutModifierNodeCoordinator$LookaheadDelegateForLayoutModifierNode.measure-BRTr
+       5  W/BasicSecureTextField: 	at androidx.compose.ui.graphics.BlockGraphicsLayerModifier.measure-#p#s#s(GraphicsLayerModifier.kt:#)
+       4  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       4  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       4  W/Gralloc4: allocator #.x is not supported
+       4  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       4  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       4  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       4  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       4  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       4  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.foundation.text.PlatformPasswordVisibilitySettingImpl.getSystemShowPasswordSetting(BasicS
+       4  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextField_androidKt.rememberPlatformPasswordVisibilitySettings
+       4  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-ltb#GB#(BasicSecureTextField.
+       4  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-egD#TGM(BasicSecureTextField.
+       4  W/BasicSecureTextField: 	at androidx.compose.runtime.CompositionLocalKt.CompositionLocalProvider(CompositionLocal.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt.OutlinedSecureTextField-XvU#IwQ(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at org.chyavorec.app.ui.screens.my.LoginScreenKt.LoginScreen$lambda$#(LoginScreen.kt:#)
+       4  W/BasicSecureTextField: 	at org.chyavorec.app.ui.screens.my.LoginScreenKt$$ExternalSyntheticLambda#.invoke(D#$$SyntheticClass:#)

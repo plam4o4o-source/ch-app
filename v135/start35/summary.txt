@@ -1,0 +1,99 @@
+part start35; APK: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+base APK: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+installed:  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+block order (ABBA, each a fresh install): base new new base base new new base
+## S base-1: fresh install, first launch + catalogue, 2 excluded + 5 cold starts (TotalTime, Fully drawn)
+installed base-1: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-1 catalogue after 4810 ms
+base-1 dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+base-1: n=5 min=2374ms median=3196ms max=3481ms
+## S new-2: fresh install, first launch + catalogue, 2 excluded + 5 cold starts (TotalTime, Fully drawn)
+installed new-2: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682;  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-2 catalogue after 3187 ms
+new-2 dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+new-2: n=5 min=2079ms median=2406ms max=2559ms
+## S new-3: fresh install, first launch + catalogue, 2 excluded + 5 cold starts (TotalTime, Fully drawn)
+installed new-3: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682;  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-3 catalogue after 2971 ms
+new-3 dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+new-3: n=5 min=2062ms median=2335ms max=2532ms
+## S base-4: fresh install, first launch + catalogue, 2 excluded + 5 cold starts (TotalTime, Fully drawn)
+installed base-4: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-4 catalogue after 2987 ms
+base-4 dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+base-4: n=5 min=1985ms median=2288ms max=2370ms
+## S base-5: fresh install, first launch + catalogue, 2 excluded + 5 cold starts (TotalTime, Fully drawn)
+installed base-5: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-5 catalogue after 3261 ms
+base-5 dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+base-5: n=5 min=1992ms median=2346ms max=2810ms
+## S new-6: fresh install, first launch + catalogue, 2 excluded + 5 cold starts (TotalTime, Fully drawn)
+installed new-6: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682;  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-6 catalogue after 3189 ms
+new-6 dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+new-6: n=5 min=1957ms median=2407ms max=2795ms
+## S new-7: fresh install, first launch + catalogue, 2 excluded + 5 cold starts (TotalTime, Fully drawn)
+installed new-7: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682;  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-7 catalogue after 2653 ms
+new-7 dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+new-7: n=5 min=2191ms median=2336ms max=2758ms
+## S base-8: fresh install, first launch + catalogue, 2 excluded + 5 cold starts (TotalTime, Fully drawn)
+installed base-8: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-8 catalogue after 2898 ms
+base-8 dexopt: x86_64: [status=verify] x86_64: [status=verify] 
+base-8: n=5 min=1936ms median=2019ms max=2582ms
+## S totals (n=20 per app)
+START cold new           n=20 min=1957ms median=2356ms max=2795ms  all=[2406, 2079, 2559, 2419, 2238, 2062, 2532, 2240, 2335, 2376, 2407, 1957, 2795, 2601, 2103, 2316, 2758, 2336, 2191, 2594]  states=['COLD']
+DRAWN new: TotalTime n=20 min=1957ms median=2356ms max=2795ms; fully drawn n=20 median=3087ms min=2431 max=3674 all=[3221, 2431, 3530, 2888, 2453, 2586, 3298, 3215, 2620, 3647, 2864, 2632, 3122, 3674, 2615, 3535, 3539, 3052, 2434, 3446]; without line: 0
+START cold base          n=20 min=1936ms median=2346ms max=3481ms  all=[3392, 3481, 2374, 3097, 3196, 2346, 1985, 2088, 2370, 2288, 1992, 2036, 2358, 2810, 2346, 2108, 2019, 2582, 2003, 1936]  states=['COLD']
+DRAWN base: TotalTime n=20 min=1936ms median=2346ms max=3481ms; fully drawn n=20 median=2975ms min=2263 max=4552 all=[4207, 4552, 3735, 4082, 3797, 2970, 2625, 2512, 2889, 2553, 2263, 2351, 2850, 3059, 3706, 2980, 2465, 3585, 2997, 2273]; without line: 0
+AB TotalTime  : 1.2.35 n=20 median 2356 ms (mean 2365) | 1.2.34 n=20 median 2346 ms (mean 2440) | diff of medians +10 ms (+0.4%) | Mann-Whitney p=0.68
+AB Fully drawn: 1.2.35 n=20 median 3087 ms (mean 3040) | 1.2.34 n=20 median 2975 ms (mean 3123) | diff of medians +112 ms (+3.8%) | Mann-Whitney p=0.87
+SHADER DIAG start35: diagnostics log entries with shevitsa-shader/foil-shader: 0 (of 0); logcat error lines naming them: 0
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 8 | Първи кадър: медиана 1857 мс, последен 1816 мс | Пълно показване: медиана 2749 мс, последно 2158 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 8" text="Първи кадър: медиана 1857 мс, последен 1816 мс" text="Пълно показване: медиана 2749 мс, последно 2158 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['6005', '7299', '7509', '7601', '7771', '7898', '8063', '8252', '8516', '8885', '8966', '9028', '9096', '9157', '9244', '9303', '9482', '9890', '10028', '10088', '10150', '10210', '10272', '10335', '10514', '10841', '10902', '10961', '11024', '11083', '11141', '11200', '11396', '11693', '11798', '11859', '11916', '11973', '12031', '12091', '12386', '12692', '12753', '12813', '12873', '12933', '12995', '13059', '13240', '13553', '13614', '13674', '13735', '13795', '13853', '13918', '14106', '14531', '14589', '14648', '14713', '14771', '14831', '14890']): 457 in 15 groups
+      64  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      64  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      64  W/Parcel: Expecting binder but got null!
+      64  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      64  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      64  W/Gralloc4: allocator #.x is not supported
+      64  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#badfe-ed#-#d#-#a#-#d#b#ab, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=d#b#d-#a-#db-#-#bb#e#b, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#a#-aeae-#a#-bc#c-#f#bcde#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#d#aa#-d#ae-#dc#-#-#ad#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#d#-#-#c#-b#-bf#bf#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=b#d#d#c#-#f#-#c#-#-#e#e#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#-#e#-#a#-#bee-#dea#cf#b#, generation=#)
+## COMPLETE
+## logcat findings
+app pids seen: ['6005', '7299', '7509', '7601', '7771', '7898', '8063', '8252', '8516', '8885', '8966', '9028', '9096', '9157', '9244', '9303', '9482', '9890', '10028', '10088', '10150', '10210', '10272', '10335', '10514', '10841', '10902', '10961', '11024', '11083', '11141', '11200', '11396', '11693', '11798', '11859', '11916', '11973', '12031', '12091', '12386', '12692', '12753', '12813', '12873', '12933', '12995', '13059', '13240', '13553', '13614', '13674', '13735', '13795', '13853', '13918', '14106', '14531', '14589', '14648', '14713', '14771', '14831', '14890']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 179
+   skipped-frames events=179 max=136 total=8501
+== Davey: 308
+   davey events=308 max=2664ms median=1080ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

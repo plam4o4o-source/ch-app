@@ -1,0 +1,3 @@
+LIVE id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) template=String (android.app.Notification$BigTextStyle) progress=Integer (0) requestPromotedOngoing=- shortCriticalText=null chronometer=Boolean (false) flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+   android.shortCriticalText=null
+LIVE total for org.chyavorec.app: 1

@@ -1,0 +1,23 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 16:55:54.217  5810  5810 I PERFCHECK: section: Y0. devDebug org.chyavorec.app.dev, demo data
+   11-09 16:55:55.383  5879  5879 I PERFCHECK: section: W. First launch and warm-up
+   11-09 16:57:01.093  7326  7326 I PERFCHECK: section: Y1. Demo sign-in DEMO-0001 / demo
+   11-09 16:57:51.099  8246  8246 I PERFCHECK: section: Y2. Моето signed in and its screens
+   11-09 17:00:01.638  9170  9170 I PERFCHECK: section: Y3. Hold Заяви книгата on a book on the shelf
+   11-09 17:00:19.185  9292  9292 I PERFCHECK: section: Y4. Library card with the foil: two different tilts → pixel diff signed-in demo card
+   11-09 17:01:14.110  9424  9424 I PERFCHECK: section: Y5. „Моята читателска година“: loading time A: fresh process, catalogue not opened; B: after the catalogue tab; C: reopened
+   11-09 17:01:55.358  9682  9682 I PERFCHECK: y-A-fresh-process
+   11-09 17:03:34.429 10486 10486 I PERFCHECK: y-B-after-catalogue
+   11-09 17:04:57.583 10969 10969 I PERFCHECK: y-C-reopened
+   11-09 17:06:05.332 11375 11375 I PERFCHECK: section: Y6. Year story: closing with a swipe down fast 350/200/120 ms, short flick, slow 1200 ms control
+   11-09 17:08:40.455 12535 12535 I PERFCHECK: section: Y7. Accessibility tree of the story test service
+   11-09 17:08:40.467 12538 12538 I PERFCHECK: m-a11y-on
+   11-09 17:09:29.540 12767 12767 I PERFCHECK: section: Y8. Diagnostics › Бързодействие devDebug
+   11-09 17:10:19.912 13126 13126 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

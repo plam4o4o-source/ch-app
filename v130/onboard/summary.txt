@@ -1,0 +1,46 @@
+part onboard; APK: 1.2.30 bf10741 (Какво ново: версия 1.2.30); versionCode 1488543; x86_64 libs: 2 size 4505009 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104414 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## OB1. Fresh install, no notification permission: page 1 (welcome, three feature rows)
+fresh install; POST_NOTIFICATIONS: android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+ONB 01-page1: skip yes; text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" text="Официалното приложение на читалището — винаги актуално от сайта chyavorec.org." text="Новини и събития" text="Концерти, празници и срещи — с напомняне и добавяне в календара." text="Каталог и „Искам да прочета“" text="Търси книгите на библиотеката и си запази желаните — ще ти кажем, щом са на рафта." text="Читателска карта" text="Картата в телефона — с баркод, който се сканира на гишето." text="Напред" 
+page 1 features: news yes, catalogue yes, card yes
+## OB2. Page 2: text-size chips (apply at once), 'Разреши известията' → the system prompt (API 33)
+ONB 02-page2: skip yes; text="Пропусни" text="Удобно за теб" text="Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“." text="Размер на текста" text="Малък" text="Стандартен" text="Голям" text="Много голям" text="Известия" text="Сроковете на книгите, нови съобщения и събития." text="Разреши известията" text="Напред" 
+chips: Малък[checked=false,selected=false,] Стандартен[checked=true,selected=false,] Голям[checked=false,selected=false,] Много голям[checked=false,selected=false,] 
+ONB 03-page2-xlarge: skip yes; text="Пропусни" text="Удобно за теб" text="Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“." text="Размер на текста" text="Малък" text="Стандартен" text="Голям" text="Много голям" text="Известия" text="Сроковете на книгите, нови съобщения и събития." text="Разреши известията" text="Напред" 
+TEXT SIZE applied at once: title height 69.0 dp → 118.5 dp; chips: Стандартен[checked=false,selected=false,] Много голям[checked=true,selected=false,] 
+after 'Разреши известията': system dialog SHOWN; text="Allow Chitalishte Yavorets to send you notifications?" text="Allow" text="Don’t allow" 
+ONB 05-page2-after-allow: skip yes; text="Пропусни" text="Удобно за теб" text="Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“." text="Размер на текста" text="Малък" text="Стандартен" text="Голям" text="Много голям" text="Известия" text="Сроковете на книгите, нови съобщения и събития." text="Известията са включени" text="Напред" 
+status: text="Известията са включени"; android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+## OB3. Page 3: sign in / add a card; then the main screen does not ask again
+ONB 06-page3: skip yes; text="Пропусни" text="Вход и читателска карта" text="Влез с данните си от библиотеката или добави читателската си карта. Можеш и по-късно — от „Моето“." text="Вход с читателски данни" text="Продължи без вход" 
+MAIN 07-main-after-allow: system permission dialog no; in-app ask no; android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Ден на народните будители" text="Почит към будителите — и към всички, които и дн
+MAIN 08-main-restart: system permission dialog no; in-app ask no; android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Ден на народните будители" text="Почит към будителите — и към всички, които и дн
+## OB4. Deny in the onboarding: the main screen does not ask again
+fresh install; POST_NOTIFICATIONS: android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+ONB 11-page2-after-deny: skip yes; text="Пропусни" text="Удобно за теб" text="Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“." text="Размер на текста" text="Малък" text="Стандартен" text="Голям" text="Много голям" text="Известия" text="Сроковете на книгите, нови съобщения и събития." text="Засега без известия — включват се от „Настройки › Известия“." text="Напред" 
+status: text="Засега без известия — включват се от „Настройки › Известия“."; android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+ONB 12-page3: skip yes; text="Пропусни" text="Вход и читателска карта" text="Влез с данните си от библиотеката или добави читателската си карта. Можеш и по-късно — от „Моето“." text="Вход с читателски данни" text="Продължи без вход" 
+MAIN 13-main-after-deny: system permission dialog no; in-app ask no; android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Ден на народните будители" text="Почит към будителите — и към всички, които и дн
+MAIN 14-main-after-deny-restart: system permission dialog no; in-app ask no; android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Ден на народните будители" text="Почит към будителите — и към всички, които и дн
+## OB5. 'Пропусни' on page 1 (the permission not answered)
+fresh install; POST_NOTIFICATIONS: android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+MAIN 20-main-after-skip: system permission dialog no; in-app ask SHOWN; android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; text="Известия от читалището" text="Искаш ли известия за сроковете на книгите, нови съобщения и събития? Можеш да ги промениш по всяко време от „Настройки › Изв
+## COMPLETE
+## logcat findings
+app pids seen: ['5390', '7904', '8140', '8572', '8752']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=84 total=325
+== Davey: 8
+   davey events=8 max=2041ms median=854ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

@@ -1,0 +1,21 @@
+      AppSettings: org.chyavorec.app (10218) importance=DEFAULT userSet=false
+        NotificationChannel{mId='events', mName=Събития, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibrationPattern=null, mVibrationEffect=null, mUserLockedFields=0, mUserVisibleTaskShown=false, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mDeletedTimeMs=-1, mGroup='2_centre', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedDefaultApp=false, mOriginalImp=3, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false, mLastNotificationUpdateTimeMs=0}
+        NotificationChannel{mId='messages', mName=Съобщения, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibrationPattern=null, mVibrationEffect=null, mUserLockedFields=0, mUserVisibleTaskShown=false, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mDeletedTimeMs=-1, mGroup='2_centre', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedDefaultApp=false, mOriginalImp=3, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false, mLastNotificationUpdateTimeMs=0}
+        NotificationChannel{mId='updates', mName=Обновления, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibrationPattern=null, mVibrationEffect=null, mUserLockedFields=0, mUserVisibleTaskShown=false, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mDeletedTimeMs=-1, mGroup='3_app', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedDefaultApp=false, mOriginalImp=3, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false, mLastNotificationUpdateTimeMs=0}
+--
+    2026-11-09T16:55:29.530645 - config: org.chyavorec.app|removeAutomaticZenRules (ORIGIN_SYSTEM) no changes
+    2026-11-09T16:55:29.543576 - set_zen_mode: off,org.chyavorec.app|removeAutomaticZenRules
+    2026-11-09T16:55:29.552915 - set_zen_mode: off,updated setting
+    2026-11-09T16:55:35.760559 - config: zmc.onServiceAdded:ComponentInfo{com.google.android.gms/com.google.android.location.settings.DrivingConditionProvider} (ORIGIN_SYSTEM) no changes
+    2026-11-09T16:55:35.767126 - set_zen_mode: off,zmc.onServiceAdded:ComponentInfo{com.google.android.gms/com.google.android.location.settings.DrivingConditionProvider}
+--
+    2026-11-09T16:58:11.865778 - config: org.chyavorec.app|removeAutomaticZenRules (ORIGIN_SYSTEM) no changes
+    2026-11-09T16:58:11.865916 - set_zen_mode: off,org.chyavorec.app|removeAutomaticZenRules
+    2026-11-09T16:58:11.865930 - set_zen_mode: off,updated setting
+
+  Condition providers:
+--
+      key='org.chyavorec.app',
+      numEnqueuedByApp=76,
+      numPostedByApp=3,
+      numUpdatedByApp=72,

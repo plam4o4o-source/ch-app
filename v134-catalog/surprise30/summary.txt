@@ -1,0 +1,46 @@
+part surprise30; APK: wave20/catalog 33e130b built prodRelease x86_64 (throwaway key); versionCode 1500190 size 4286414 bytes
+base APK:  size  bytes
+host: 4 cpu, 15982 MB RAM
+android 11 sdk 30; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: wave20/catalog 33e130b built prodRelease x86_64 (throwaway key); versionCode 1500190 size 4286414 bytes
+installed:  versionCode=1500190 minSdk=26 targetSdk=37  versionName=1.0.0 
+app locale: 
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-nowidecg-lowdr-port-notnight-420dpi-finger-keysexposed-qwerty-navhidden-nonav-2274x1080-v30
+animator scale: 1 (0 = reduced motion: no fan/flip animation)
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2106 ms
+## SM0. Device memory: MemTotal: 2028632 kB; API 30
+## SM1. 'Изненадай ме' (dice): app RSS and MemAvailable every 0.25 s, 10 s
+before:  Graphics: 0 0; TOTAL PSS: 87438 TOTAL RSS: 202596 TOTAL SWAP PSS: 292;
+MEMPROBE dice-1: samples 45; app RSS 179→max 186 MB at +3629 ms; min MemAvailable 939 MB at +2230 ms
+after 10 s:  Graphics: 0 0; TOTAL PSS: 77799 TOTAL RSS: 193056 TOTAL SWAP PSS: 220;
+SM1 after 10 s: app in front; pid '5924'; scene shown; deaths: 1 ()
+## SM2. 'Изненадай ме' (dice): app RSS and MemAvailable every 0.25 s, 10 s
+before:  Graphics: 0 0; TOTAL PSS: 78035 TOTAL RSS: 193320 TOTAL SWAP PSS: 220;
+MEMPROBE dice-2: samples 44; app RSS 182→max 187 MB at +3220 ms; min MemAvailable 946 MB at +2210 ms
+after 10 s:  Graphics: 0 0; TOTAL PSS: 77314 TOTAL RSS: 192772 TOTAL SWAP PSS: 220;
+SM2 after 10 s: app in front; pid '5924'; scene shown; deaths: 0 ()
+## SM3. 'Изненадай ме' (dice): app RSS and MemAvailable every 0.25 s, 10 s
+before:  Graphics: 0 0; TOTAL PSS: 79085 TOTAL RSS: 194568 TOTAL SWAP PSS: 220;
+MEMPROBE dice-3: samples 44; app RSS 183→max 189 MB at +3889 ms; min MemAvailable 953 MB at +2219 ms
+after 10 s:  Graphics: 0 0; TOTAL PSS: 77228 TOTAL RSS: 192396 TOTAL SWAP PSS: 227;
+SM3 after 10 s: app in front; pid '5924'; scene shown; deaths: 2 ()
+## SM9. For comparison: open a book from the catalogue list (same memory probe)
+MEMPROBE book: samples 36; app RSS 186→max 190 MB at +2740 ms; min MemAvailable 961 MB at +1689 ms
+## COMPLETE
+## logcat findings
+app pids seen: ['5924']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=38 total=38
+== Davey: 1
+   davey events=1 max=876ms median=876ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

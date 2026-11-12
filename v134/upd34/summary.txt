@@ -1,0 +1,50 @@
+part upd34; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## U0. 1.2.34-pre (b06d1ce, versionCode 1500180) with the staged update.json → 1.2.34 (1500184)
+staged manifest: 1500184 1.2.34 4300842
+installed new-upd: 1.2.34-pre b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500180; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v134/update/42892028324/update.json size 4300938;  versionCode=1500180 minSdk=26 targetSdk=37  versionName=1.2.34-pre 
+UPDATE u dialog after 23867 ms: text="Нова версия 1.2.34" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• Читателската карта пести батерия — в покой вече не се рисува.&#10;• По-плавни анимации на по-стари телефони; „Изненадай ме“ — и на Android 8–11.&#10;• „Моята читателска година“ се отваря веднага и работи по-добре с голям шрифт.&#10;• Заявената книга остава отбелязана като „Заявена“; в Настройки — „Инсталирай“ за готово обновление.&#10;• Начален час на събитията и по-добър T
+downloaded files: 4300842 2026-11-10 20:20 update-1500184.apk;
+## U1. „По-късно“ + relaunch: no dialog; Settings › Обновления shows the ready card
+after 'По-късно' + relaunch: dialog not shown; on screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" 
+SETTINGS › Обновления: text="Версия 1.2.34 е готова" text="Изтеглена и проверена — инсталирането отнема само миг." text="Инсталирай" 
+## U2. Process death, then Settings again (the card restored)
+SETTINGS after a 2nd relaunch: text="Версия 1.2.34 е готова" text="Изтеглена и проверена — инсталирането отнема само миг." text="Инсталирай" 
+## U3. „Инсталирай“ on the card
+UPDATE via the settings card: installed  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: tab bar not reached
+WARN: Settings not found
+APP W/E lines (pids ['5347', '6608', '8121', '8717']): 37 in 10 groups
+       7  W/Parcel: Expecting binder but got null!
+       7  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       4  W/Gralloc4: allocator #.x is not supported
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void fb#.f(android.content.Context, cr#)(
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=b#ca#-f#c#-#f#-bcf#-#e#f#e#ac, generation=#)
+       1  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+## COMPLETE
+## logcat findings
+app pids seen: ['5347', '6608', '8121', '8717']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 24
+   skipped-frames events=24 max=178 total=1517
+== Davey: 69
+   davey events=69 max=4427ms median=854ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

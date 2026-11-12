@@ -1,0 +1,14 @@
+APP W/E lines (pids ['5440', '8382', '8501', '8653', '8782', '8917', '9035', '9158', '9286', '9561', '10504', '10634', '10749', '10868', '10983', '11147', '11268', '11425', '11834', '12580', '12693', '12809', '12923', '13053', '13174', '13295', '13494', '13725', '14508', '14621', '14741', '14862', '14976', '15093', '15221', '15340']): 271 in 13 groups
+      36  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      36  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      36  W/Parcel: Expecting binder but got null!
+      36  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      36  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      36  W/Gralloc4: allocator #.x is not supported
+      36  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       5  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       4  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       4  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       4  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object g#.s(java.lang.Object)(r
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#-d#-#ad-aedf-#cc#dd#ef#, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms

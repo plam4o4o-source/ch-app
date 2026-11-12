@@ -1,0 +1,133 @@
+part func; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3808 ms
+## PR. Pull-to-refresh rosette: slow 1500 ms pull from the top, screencaps on the device mid-gesture
+REFRESH news: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.00 0.00 0.00 0.00 0.00 0.00 
+REFRESH home: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 23.47 23.70 23.29 23.29 23.29 21.90 
+REFRESH calendar: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.00 0.00 0.00 0.00 0.00 0.02 
+REFRESH my: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 1.92 5.46 3.15 0.00 0.00 0.00 
+REFRESH gallery: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.05 0.42 0.39 0.00 0.00 0.00 
+REFRESH catalog: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.00 0.00 0.00 0.00 0.00 0.00 
+## PR2. The same pull on News, recorded (screenrecord, 8 fps)
+REC refresh-news: screenrecord gave no frames
+## C1. Catalogue: search, filter 'Само налични', sort, shelf view
+search '12': 108 results
+FILTERS sheet: content-desc="Манипулатор за преместване с плъзгане" text="Филтри" text="Без филтри" text="Само налични" text="Вид документ" text="книга" text="видеодокумент" text="картографско издание" text="друго" text="електронен документ" text="графично издание" text="аудиодокумент" text="продължаващо издание" text="патент/стандарт" text="нотно издание" text="Раздел (жанр)" text="Общ отдел" text="Философия. П
+FILTER 'Само налични': 108 → 108 results; chips: 
+SORT options: text="Най-подходящи  ✓" text="Заглавие (А–Я)" text="Автор (А–Я)" text="Година (нови първо)" text="Година (стари първо)" text="Нови постъпления" 
+after sort by year: text="12" content-desc="Изчисти" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="12 -те вятъра" text="108 резултата  ·  данни от InvLib към 06.11.2026" text="Дъхът на любовта" 
+GFX shelf-scroll frames=   61  janky=61 (100.00%)  p50=250ms p90=350ms p95=400ms p99=450ms  slowUI=19 slowDraw=61 highInput=0
+## B6. Book open: catalogue → book (cover rotates around the spine) and back (recording)
+REC bookopen: 41 frames @8 fps; motion 0 150 1080 2150: frames=41 moving-frames(>1.0)=6 max-step=21.9 max-vs-first=30.3 steps=[0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 18.4 0.6 0.0 0.0 16.8 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.2 0.0 21.9 0.0 0.0 8.5 0.0 18.7 0.0 0.0 0.2]
+BOOKOPEN after back: catalogue shown
+REC bookopen-home: 47 frames @8 fps; motion all: frames=47 moving-frames(>1.0)=0 max-step=0.1 max-vs-first=0.2 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0]
+## B12. 'Изненадай ме': the dice button in the catalogue
+REC surprise-dice: 50 frames @8 fps; motion all: frames=50 moving-frames(>1.0)=5 max-step=174.9 max-vs-first=203.5 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0 4.7 0.0 0.0 0.0 174.9 0.0 0.0 0.0 0.0 0.0 27.9 0.0 0.0 1.2 1.7 0.0 0.0 0.0 0.9 0.0 0.0]
+SURPRISE dice: text="Още една" text="Към книгата" ; bottom bar hidden
+SURPRISE 'Към книгата' → book screen yes: text="Черният зимата" text="Стефан Йорданов" text="Налична" 
+## B13. 'Изненадай ме' by shaking (emulator accelerometer: two peaks > 2.3 g within 0.7 s)
+accelerometer: 0000000000) Goldfish 3-axis Accelerometer | The Android Open Source Project | ver: 1 | type: android.sensor.acceleromete
+SHAKE one short peak (info; a peak held > 120 ms counts twice by design): not triggered
+SHAKE double peak: TRIGGERED; text="Към книгата" 
+## B13b. Shake on another tab (catalogue not resumed) must not trigger
+on Home before the shake: TAB selected: ['Начало']
+SHAKE on Home: not triggered
+## B4. Article: stitched progress thread, hero parallax, floating toolbar (Аа / bookmark / share / browser)
+ARTICLE toolbar at open: content-desc="Режим за четене" content-desc="Запази" content-desc="Сподели" content-desc="Отвори в сайта" 
+ARTICLE hero parallax: top area diff after a small scroll 92.01
+ARTICLE toolbar after a further short scroll down (~480 px): VISIBLE (expected hidden)
+ARTICLE toolbar after two long scrolls: visible
+ARTICLE toolbar after scrolling up: visible
+ARTICLE thread (top 260 px) changed with reading: 6.01
+## B3b. Reader text size (connected button group in the 'Аа' sheet)
+READER sizes: Малък шрифт[checked=false] Нормален шрифт[checked=true] Голям шрифт[checked=false] Много голям шрифт[checked=false] 
+READER after 'Голям шрифт': Нормален шрифт[checked=false] Голям шрифт[checked=true] 
+ARTICLE bookmark: now content-desc="Премахни от запазените"
+## B11c. Article toolbar: share as image
+SHARE article sheet: text="Сподели като картинка" text="Карта с QR код — за Instagram, Facebook, Viber…" text="Сподели връзката" text="Текст с адреса в сайта" 
+SHARE article: chooser OPEN after 2 s (fg android/com.android.internal.app.ChooserActivity); app log: 11-09 17:03:45.450 10787 10787 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@2ea70; boundsInParent: ~
+SHARE article cache/share: 1169798 2026-11-09 17:03 chyavorec-news-1794243833877.png;
+SHARE article PNG: chyavorec-news-1794243833877.png → PNG-signature=yes size=1169798 B dims=1080x1350 mode=RGBA
+SHARE article received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794243833877.png mime=image/png bytes=1169798 png=true dims=1080x1350 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026
+ARTICLE 'Отвори в сайта' → fg com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity
+## B5. Gallery viewer floating toolbar: share / open on site / photo info
+VIEWER toolbar: content-desc="Сподели" content-desc="Отвори в сайта" content-desc="За снимката" 
+VIEWER 'За снимката': content-desc="Сградата на читалището в Яворец" content-desc="Затвори" text="1 / 29  ·  Сградата на читалището в Яворец" text="Сградата на читалището в Яворец" content-desc="Сподели" content-desc="Отвори в сайта" content-desc="За снимката" 
+VIEWER after the 2nd 'За снимката' tap: viewer open
+VIEWER 'Сподели' → fg android/com.android.internal.app.ChooserActivity; sheet: 
+SHARE viewer received by the helper: action=android.intent.action.SEND type=text/plain flags=0x1b080001 clipItems=1 stream=null subject=Сградата на читалището в Яворец text=Сградата на читалището в Яворец https://chyavorec.org/fotodokumentalna-izlozhba
+VIEWER 'Отвори в сайта' → fg com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity
+## VZ. Gallery viewer: toolbar and zoom (double tap, pinch)
+touch device: /dev/input/event2 x-max=32767 y-max=32767 pressure=11
+VIEWER double tap: diff 71.40
+VIEWER pinch: diff 86.95
+## B10. Event: reminder set (confetti) and share as image
+EVENT: text="Панайот Пипков · Ден на семейството" text="21 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text
+REC confetti-reminder: 18 frames @8 fps; motion all: frames=18 moving-frames(>1.0)=2 max-step=10.3 max-vs-first=11.9 steps=[0.0 0.0 0.0 0.0 0.0 0.3 0.0 10.3 1.6 0.4 0.4 0.5 0.5 0.5 0.3 0.1 0.2]
+CONFETTI reminder: confetti-like new saturated points per frame (max 28): [0, 0, 0, 0, 0, 0, 0, 0, 5, 24, 14, 27, 27, 26, 28, 0, 0, 0]
+REMINDER: ; bell: on
+SHARE event sheet: text="Сподели като картинка" text="Карта с QR код — за Instagram, Facebook, Viber…" text="Сподели връзката" text="Текст с адреса в сайта" 
+SHARE event: chooser OPEN after 2 s (fg android/com.android.internal.app.ChooserActivity); app log: 
+SHARE event cache/share: 648766 2026-11-09 17:07 chyavorec-event-1794244046032.png;
+SHARE event PNG: chyavorec-event-1794244046032.png → PNG-signature=yes size=648766 B dims=1080x1920 mode=RGBA
+SHARE event received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-event-1794244046032.png mime=image/png bytes=648766 png=true dims=1080x1920 subject=Панайот Пипков · Ден на семейството text=Панайот Пипков · Ден на семейството 21 ноември 2026 НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец https://chyavorec.org/events
+## EV2. Event: „Маршрут“
+ROUTE ev1: fg com.google.android.apps.maps/com.google.android.maps.MapsActivity; geo intent: act=android.intent.action.VIEW dat=geo: flg=0x10000000 cmp=com.google.android.apps.maps/com.google.android.maps.MapsActivity}; cmp=com.google.android.apps.maps/com.google.android.maps.MapsActivity 
+## DOC. Documents: the list and opening a PDF
+DOCUMENTS: text="Документи" text="Исторически публикации" text="Декларации · 14.05.2026 · 4.1 MB" text="Декларация за частни интереси" text="Декларацията за частни интереси по чл. 19а ЗНЧ е официален документ, който членовете на ръководните органи на читалището подават, за да обявят дали имат частни интереси, които могат да повлияят на тяхната безпристрастност при вземане на решения. Тя е аналог на деклараци
+PDF doc1 +7845 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF doc1 +10688 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF doc1 +13543 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF doc1 +16400 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF doc1 +19237 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF doc1 final +27609 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; content-desc="&#13;&#10;" content-desc="&#13;&#10;" content-desc="&#13;&#10;" text="Декларация за частни интереси.pdf" content-desc="Find" content-desc="Add to Drive" 
+PDF doc1 FILE NAME shown: text="Декларация за частни интереси.pdf"; browser URL: text="Декларация за частни интереси.pdf"
+PDF doc1 logcat (toast/download): 11-09 17:08:23.280   483   746 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW dat=content://org.chyavorec.app.files/... typ=application/pdf flg=0x10000001 cmp=com.google.android.apps. 11-09 17:08:23.330   483   515 I ActivityManager: Start proc 13925:com.google.android.apps.docs/u0a122 for next-top-activity {com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActiv 11-09 17:08:24.962   483   515 I ActivityManager: Start proc 14011:com.google.android.apps.docs:com.google.android.apps.viewer.pdflib.PdfDocumentService/u0ai9000 for service {com.google.android.apps.d 11-09 17:08:24.968 14011 14011 I DocumentService: Using CollectorTypeCC GC. 
+## CT. Contacts: action buttons
+CONTACTS 40-standard: ROWS: 0 matches in 0 row(s) (tops []); ROWS: 0 matches in 0 row(s) (tops []) 
+## CARD. Self-entered card: foil with tilt
+SENSORS: Accelerometer (handle=0x00000000, connectio;Accelerometer Uncalibrated ;Game Rotation Vector Sensor ;Gyroscope ;Gyroscope (uncalibrated) ;Gyroscope Bias (debug)    ;Gyroscope Sensor ;Magnetic field sensor ;Magnetic field sensor (uncalibrated) ;Rotation Vector Sensor ;Rotation Vector Sensor    ;accel
+emu console: sensor status → acceleration: enabled. gyroscope: enabled. 
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+TILT release (card region 0 250 1080 1250; barcode at [121 784 959 900]): noise (same tilt, 1.5 s apart)=0.00; tilt A→B=0.00; B→C=0.00; A→flat=0.00; verdict: no clear change
+TILT release sensor status: acceleration: enabled. gyroscope: enabled. ; game rotation vector listeners: 0
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: Settings not found
+APP W/E lines (pids ['5651']): 43 in 12 groups
+      14  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       8  W/Parcel: Expecting binder but got null!
+       4  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       3  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       2  E/FrameEvents: updateAcquireFence: Did not find frame.
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       1  W/Gralloc4: allocator #.x is not supported
+       1  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+## COMPLETE
+## logcat findings
+app pids seen: ['5651']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 19
+   skipped-frames events=19 max=88 total=865
+== Davey: 47
+   davey events=47 max=2929ms median=859ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

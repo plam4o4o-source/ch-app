@@ -1,0 +1,38 @@
+app pids seen: ['8846', '9090', '9764', '10653', '10901', '11555']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=62 total=316
+   11-04 18:24:34.452  8846  8846 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-04 18:25:00.050  9090  9090 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-04 18:26:51.753  9764  9764 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-04 18:28:39.265 10653 10653 I Choreographer: Skipped 62 frames!  The application may be doing too much work on its main thread.
+   11-04 18:29:04.718 10901 10901 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-04 18:30:56.363 11555 11555 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-04 18:32:30.240 11555 11555 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 18
+   davey events=18 max=1249ms median=830ms
+   11-04 18:24:35.164  8846  8862 I OpenGLRenderer: Davey! duration=1249ms; Flags=1, FrameTimelineVsyncId=17165, IntendedVsync=249488115061, Vsync=250254781697, InputEventId=0, HandleInputStart=250264208012, AnimationStart=250264208714, Perfor
+   11-04 18:25:00.455  9090  9104 I OpenGLRenderer: Davey! duration=1059ms; Flags=1, FrameTimelineVsyncId=18658, IntendedVsync=275088114037, Vsync=275854780673, InputEventId=0, HandleInputStart=275863051502, AnimationStart=275863052043, Perfor
+   11-04 18:25:24.295  9090  9103 I OpenGLRenderer: Davey! duration=706ms; Flags=0, FrameTimelineVsyncId=20067, IntendedVsync=299171446407, Vsync=299321446401, InputEventId=-448717339, HandleInputStart=299323702225, AnimationStart=299325012537
+   11-04 18:25:27.312  9090  9103 I OpenGLRenderer: Davey! duration=802ms; Flags=0, FrameTimelineVsyncId=20347, IntendedVsync=302221446285, Vsync=302521446273, InputEventId=-669761785, HandleInputStart=302525779668, AnimationStart=302548043654
+   11-04 18:26:34.912  9090  9599 I OpenGLRenderer: Davey! duration=771ms; Flags=0, FrameTimelineVsyncId=24402, IntendedVsync=369688110253, Vsync=369971443575, InputEventId=0, HandleInputStart=369974684120, AnimationStart=369974684411, Perform
+   11-04 18:26:52.154  9764  9776 I OpenGLRenderer: Davey! duration=1081ms; Flags=1, FrameTimelineVsyncId=24931, IntendedVsync=386704776239, Vsync=387554776205, InputEventId=0, HandleInputStart=387565150595, AnimationStart=387565151526, Perfor
+   11-04 18:27:18.799  9764  9777 I OpenGLRenderer: Davey! duration=749ms; Flags=0, FrameTimelineVsyncId=26604, IntendedVsync=413671441827, Vsync=413971441815, InputEventId=-349848042, HandleInputStart=413975823941, AnimationStart=413976468673
+   11-04 18:28:08.422  9764  9776 I OpenGLRenderer: Davey! duration=744ms; Flags=0, FrameTimelineVsyncId=29606, IntendedVsync=463271439843, Vsync=463438106493, InputEventId=0, HandleInputStart=463448368855, AnimationStart=463448369176, Perform
+   11-04 18:28:11.165  9764  9775 I OpenGLRenderer: Davey! duration=705ms; Flags=0, FrameTimelineVsyncId=29782, IntendedVsync=466071439731, Vsync=466354773053, InputEventId=-425233658, HandleInputStart=466370307767, AnimationStart=466372505664
+   11-04 18:29:05.022 10901 10929 I OpenGLRenderer: Davey! duration=901ms; Flags=1, FrameTimelineVsyncId=32698, IntendedVsync=519838104247, Vsync=520521437553, InputEventId=0, HandleInputStart=520529791927, AnimationStart=520529792549, Perform
+   11-04 18:29:30.574 10901 10913 I OpenGLRenderer: Davey! duration=827ms; Flags=0, FrameTimelineVsyncId=34277, IntendedVsync=545371436559, Vsync=545638103215, InputEventId=0, HandleInputStart=545649590593, AnimationStart=545649598588, Perform
+   11-04 18:29:32.182 10901 10913 I OpenGLRenderer: Davey! duration=833ms; Flags=0, FrameTimelineVsyncId=34386, IntendedVsync=546521436513, Vsync=546988103161, InputEventId=-276969683, HandleInputStart=546992693446, AnimationStart=546996526632
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-04 18:22:05.469  5323  5323 I PERFCHECK: section: H1. Emulator graphics: renderer, gralloc, memtrack
+   11-04 18:22:08.782  5845  5845 I PERFCHECK: section: H2. Helper probe: 25 bitmaps 1024×1024 each 4 MB as ARGB_8888, 2 MB as RGB_565 — config and where the memory shows
+   11-04 18:22:09.855  5867  5867 I PERFCHECK: hw-sw8888
+   11-04 18:22:45.966  6873  6873 I PERFCHECK: hw-sw565
+   11-04 18:23:18.443  7683  7683 I PERFCHECK: hw-hw
+   11-04 18:23:40.724  8096  8096 I PERFCHECK: hw-dec8888
+   11-04 18:23:58.035  8405  8405 I PERFCHECK: hw-dec565
+   11-04 18:24:13.645  8572  8572 I PERFCHECK: hw-dechw
+   11-04 18:24:28.102  8716  8716 I PERFCHECK: section: H3. The app after the same tour of thumbnail screens Home carousel, News, Gallery, Catalogue: v1.2.31 vs v1.2.32

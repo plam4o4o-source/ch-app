@@ -1,0 +1,3 @@
+run 43258710930 @ 20c6592 (new 9295534, base 3812d8e): card35 old28s reg35 start35 
+run 43265809171 @ 33a6fa1 (new 9295534, base 3812d8e): full28 now35 
+run 43271392580 @ 71c9812 (new 9295534, base 3812d8e): start35b 

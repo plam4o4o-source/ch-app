@@ -1,0 +1,7 @@
+APP W/E lines (pids ['5538', '6681']): 10 in 6 groups
+       2  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       2  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#be#e-#-#fd#-b#b#-#ae#d#db#, generation=#)
+       1  W/g.chyavorec.ap: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void java.nio.file.attribute.FileTime.<in

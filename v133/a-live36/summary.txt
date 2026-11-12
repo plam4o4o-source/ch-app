@@ -1,0 +1,41 @@
+part live36; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## L0. Device: Android 16 (SDK 36), 13894323
+POST_PROMOTED_NOTIFICATIONS: 
+## L1. Update download as a Live Update: 1.2.33-pre (versionCode 1488545) → the staged test 1.2.33 (1488546), throttled
+staged: 1488546 1.2.33 4274690 urce/ch-app/emulator-results/v133/update/42388603303/app.apk
+installed new-upd: 1.2.33-pre 6d3a324; versionCode 1488545; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v133/update/42388603303/update.json size 4274666;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.33-pre 
+POST_PROMOTED_NOTIFICATIONS (pre build): 
+THROTTLE on: -P INPUT ACCEPT -A INPUT -p tcp -m tcp --sport 443 -m hashlimit --hashlimit-above 64kb/s --hashlimit-burst 64kb --hashlimit-mode srcip --hashlimit-name pcdl -j DROP -A INPUT -j oem_in 
+LIVE: no update dialog: text="Нова версия 1.2.33" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• „Моята читателска година“ — анимирана история за прочетеното през годината (
+THROTTLE off: 0 rules left
+## L2. Event reminder → event Live Update (60 min before; needs the event's start time)
+installed new: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+EVENT: text="Михаил В. Ломоносов" text="8 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Библиотека" text="НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец" text="315 г. 
+CAP event-reminder (+2650 ms after the tap; capture took 2560 ms): WorkSpec:  WorkName: 
+CAP event-reminder: jobs: 0 [ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~Pending queue:~Active jobs:~ Unsatisfied constraints:~ Unsatisfied constraints:~ Current work counts: Config={tot=12 mins={1=4, 2=2, 4=1, 8=1, 16=0, 32=0, 64=0~]; SystemForegroundService: 0 []; notif: ; dialog: 
+WORK after the reminder: c96786c7 ENQUEUED attempts=0 PeriodicSyncWorker periods=0 gen=0 enq=1794067886695;158a80d4 SUCCEEDED attempts=1 MessagePollWorker periods=0 gen=0 enq=1794067887286;86e5a4a2 ENQUEUED attempts=0 MessagePollWorker periods=0 gen=0 enq=1794067889972;
+EventLiveUpdateWorker scheduled: 0
+notifications now: LIVE total for org.chyavorec.app: 0
+## L3. API 36 smoke: ribbon and card foil render
+API36 ribbon mean=209.5 std=67.1 thread-px=26.8%; change 3→9 s 0.07
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## COMPLETE
+## logcat findings
+app pids seen: ['4020', '6476', '6972']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=52 total=262
+== Davey: 15
+   davey events=15 max=1399ms median=817ms
+== NativeLink: 3
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

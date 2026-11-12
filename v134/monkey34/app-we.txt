@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5115', '6401', '8556', '8846']): 4327 in 42 groups
+    3869  W/InputEventSender: Received 'finished' signal for unknown seq number = #
+     132  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      96  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+      41  W/Parcel: Expecting binder but got null!
+      41  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      30  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+      18  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+      10  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+      10  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+       7  W/System: A resource failed to call release. 
+       6  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       6  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/Gralloc4: allocator #.x is not supported
+       4  W/RemoteInputConnectionImpl: setComposingText on inactive InputConnection
+       3  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       3  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       3  W/RemoteInputConnectionImpl: commitText on inactive InputConnection
+       3  E/ViewRootImpl: Calling showInsets(#,true) on window that no longer has views.
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       2  W/InputMethodManager: Ignoring showSoftInput() as view=j#{# VFED..... .F....ID #,#-#,# aid=#} is not served.
+       2  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, sca
+       2  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       2  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at boolean android.os.MessageQueue.enqueueMe
+       2  W/RemoteInputConnectionImpl: beginBatchEdit on inactive InputConnection
+       2  W/RemoteInputConnectionImpl: endBatchEdit on inactive InputConnection
+       2  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y[#]=#.
+       2  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_MULTIPLE, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaS
+       2  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=
+       2  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanC
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=a#aa#fe-#c#-#-#e-f#eb#efa, generation=#)
+       1  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[#]=-#.
+       1  W/ViewRootImpl: Not reporting timeline because gpuCompletedTime is #.#E#ms ahead of presentTime. FRAME_TIMELINE_VSYNC_ID=#, IN
+       1  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#
+       1  W/RemoteInputConnectionImpl: sendKeyEvent on inactive InputConnection
+       1  W/InputMethodManager: Ignoring showSoftInput() as view=j#{#b#e# VFED..... ......ID #,#-#,# aid=#} is not served.
+       1  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[#]=#.#
+       1  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCod
+       1  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y[#]=-#

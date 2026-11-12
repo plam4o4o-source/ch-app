@@ -1,0 +1,53 @@
+app pids seen: ['5416', '6803', '7959']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 23
+   skipped-frames events=23 max=77 total=1165
+   11-07 16:48:48.607  5416  5416 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   11-07 16:48:49.333  5416  5416 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-07 16:48:52.137  5416  5416 I Choreographer: Skipped 76 frames!  The application may be doing too much work on its main thread.
+   11-07 16:48:53.156  5416  5416 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-07 16:48:54.783  5416  5416 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:03.788  5416  5416 I Choreographer: Skipped 77 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:05.530  5416  5416 I Choreographer: Skipped 66 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:31.567  5416  5416 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:32.360  5416  5416 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:38.563  5416  5416 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:56.115  6803  6803 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:57.854  6803  6803 I Choreographer: Skipped 66 frames!  The application may be doing too much work on its main thread.
+== Davey: 49
+   davey events=49 max=2110ms median=952ms
+   11-07 16:48:52.110  5416  5431 I OpenGLRenderer: Davey! duration=2110ms; Flags=1, FrameTimelineVsyncId=7406, IntendedVsync=95313877426, Vsync=95997210732, InputEventId=0, HandleInputStart=96012902312, AnimationStart=96012903263, PerformTrav
+   11-07 16:48:52.878  5416  5428 I OpenGLRenderer: Davey! duration=1624ms; Flags=0, FrameTimelineVsyncId=7587, IntendedVsync=97480544006, Vsync=97480544006, InputEventId=0, HandleInputStart=97481173678, AnimationStart=97481174570, PerformTrav
+   11-07 16:48:53.449  5416  5428 I OpenGLRenderer: Davey! duration=809ms; Flags=0, FrameTimelineVsyncId=7595, IntendedVsync=97497210672, Vsync=97530544004, InputEventId=0, HandleInputStart=97541834787, AnimationStart=97541835197, PerformTrave
+   11-07 16:48:53.886  5416  5431 I OpenGLRenderer: Davey! duration=2091ms; Flags=0, FrameTimelineVsyncId=7612, IntendedVsync=97547210670, Vsync=98813877286, InputEventId=0, HandleInputStart=98817166692, AnimationStart=98817167383, PerformTrav
+   11-07 16:48:54.781  5416  5431 I OpenGLRenderer: Davey! duration=2000ms; Flags=0, FrameTimelineVsyncId=7787, IntendedVsync=98830549497, Vsync=99830549397, InputEventId=0, HandleInputStart=99835371474, AnimationStart=99835372015, PerformTrav
+   11-07 16:48:55.241  5416  5431 I OpenGLRenderer: Davey! duration=1194ms; Flags=0, FrameTimelineVsyncId=7838, IntendedVsync=99847210578, Vsync=100163877232, InputEventId=0, HandleInputStart=100164876272, AnimationStart=100164877094, PerformT
+   11-07 16:48:55.321  5416  5431 I OpenGLRenderer: Davey! duration=867ms; Flags=0, FrameTimelineVsyncId=7872, IntendedVsync=100180549442, Vsync=100580549402, InputEventId=0, HandleInputStart=100587127798, AnimationStart=100587128609, PerformT
+   11-07 16:48:55.550  5416  5431 I OpenGLRenderer: Davey! duration=1111ms; Flags=0, FrameTimelineVsyncId=7893, IntendedVsync=100597210548, Vsync=101447210514, InputEventId=0, HandleInputStart=101462376741, AnimationStart=101462377052, Perform
+   11-07 16:48:55.685  5416  5428 I OpenGLRenderer: Davey! duration=800ms; Flags=0, FrameTimelineVsyncId=7916, IntendedVsync=101480543846, Vsync=101930543828, InputEventId=0, HandleInputStart=101931581242, AnimationStart=101931581703, PerformT
+   11-07 16:49:03.997  5416  5427 I OpenGLRenderer: Davey! duration=1612ms; Flags=0, FrameTimelineVsyncId=8871, IntendedVsync=108897210216, Vsync=109163876872, InputEventId=0, HandleInputStart=109167713178, AnimationStart=109167713499, Perform
+   11-07 16:49:04.409  5416  5427 I OpenGLRenderer: Davey! duration=1547ms; Flags=0, FrameTimelineVsyncId=8895, IntendedVsync=109180543538, Vsync=110463876820, InputEventId=0, HandleInputStart=110468214569, AnimationStart=110468215000, Perform
+   11-07 16:49:05.783  5416  5723 I OpenGLRenderer: Davey! duration=1389ms; Flags=0, FrameTimelineVsyncId=9113, IntendedVsync=110747210142, Vsync=110880543470, InputEventId=0, HandleInputStart=110895446480, AnimationStart=110895447301, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 16:48:45.609  5402  5402 I PERFCHECK: section: W. First launch and warm-up
+   11-07 16:49:50.817  6745  6745 I PERFCHECK: section: B1. Home ribbon „жива шевица“ AGSL, API 33: renders, sweeps ~24 s, then stops
+   11-07 16:51:05.524  7865  7865 I PERFCHECK: section: B1b. The first scroll stops the ribbon new process
+   11-07 16:51:24.904  8099  8099 I PERFCHECK: section: B1c. Once per process: back to Home from another tab — no new sweep
+   11-07 16:51:36.160  8189  8189 I PERFCHECK: section: B2. Bottom-nav rosette morph recording while switching tabs
+   11-07 16:52:01.023  8440  8440 I PERFCHECK: section: B7. Pull-to-refresh rosette News list, shots during a slow pull
+   11-07 16:52:19.986  8554  8554 I PERFCHECK: section: B4. Article: stitched progress thread, hero parallax, floating toolbar Аа / bookmark / share / browser
+   11-07 16:52:47.249  8755  8755 I PERFCHECK: section: B3b. Reader text size connected button group in the Аа sheet
+   11-07 16:53:13.159  9081  9081 I PERFCHECK: section: B11c. Article toolbar: share as image
+   11-07 16:53:15.177  9102  9102 I PERFCHECK: sh-article
+   11-07 16:53:57.952  9679  9679 I PERFCHECK: section: B5. Gallery viewer floating toolbar: share / open on site / photo info
+   11-07 16:54:50.384 10266 10266 I PERFCHECK: sh-viewer
+   11-07 16:55:29.832 11050 11050 I PERFCHECK: section: B6. Book open: catalogue → book cover rotates around the spine and back recording
+   11-07 16:56:11.605 11387 11387 I PERFCHECK: section: B10. Event: reminder set confetti and share as image
+   11-07 16:56:48.060 11658 11658 I PERFCHECK: sh-event
+   11-07 16:57:12.529 11915 11915 I PERFCHECK: section: B12. Изненадай ме: the dice button in the catalogue
+   11-07 16:58:00.174 12335 12335 I PERFCHECK: section: B13. Изненадай ме by shaking emulator accelerometer: two peaks > 2.3 g within 0.7 s
+   11-07 16:58:10.575 12427 12427 I PERFCHECK: shake1
+   11-07 16:58:31.167 12571 12571 I PERFCHECK: section: B13b. Shake on another tab catalogue not resumed must not trigger

@@ -1,0 +1,61 @@
+part tablet; APK: 1.2.30 bf10741 (Какво ново: версия 1.2.30); versionCode 1488543; x86_64 libs: 2 size 4505009 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104414 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+(dismissed '=По-късно': text="Нова версия 1.2.29" text="Излезе нова версия на приложението." text="Размер: 4,1 МБ" )
+first-install catalogue results after 3279 ms
+## TB1. Tablet: wm size 2560x1600, density 320 (1280x800 dp) — Catalogue → the book beside the list
+window 2560x1600 px = 1280x800 dp; tab labels: home catalog my news more 
+CATALOGUE + book: list yes; detail back/title yes; PANES left=38 right=24; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', '12']; right: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да прочета', 'Библиографски данни']
+## TB2. Back closes the detail first
+after Back: list yes; detail back/title no; PANES left=37 right=2; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', 'Всичко']; right: ['12', 'Инв. номер']
+## TB3. News → the article beside the list
+NEWS + article: list yes; detail back/title yes; PANES left=16 right=5; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', 'Календар']; right: ['Проекти', 'СЪБИТИЕ  ·  16 октомври ', 'Фолклорно пътешествие из', 'Днес в НЧ „Васил Левски ', 'Аа']
+after Back: list yes; detail back/title no; PANES left=13 right=1; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', 'Календар']; right: ['Проекти']
+## TB4. Моето › Искам да прочета → the book beside the list
+WANT + book: list yes; detail back/title yes; PANES left=9 right=24; left: ['Наличност към 28.10.2026', 'Плъзни книга настрани, з', 'Дългият любовта', 'Пенка Христова', 'Не е на рафта', '12 -те вятъра']; right: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да про
+after Back: list yes; detail back/title yes; PANES left=9 right=0; left: ['Наличност към 28.10.2026', 'Плъзни книга настрани, з', 'Дългият любовта', 'Пенка Христова', 'Не е на рафта', '12 -те вятъра']; right: []
+## TB5. Rotation with a book open (density 320: portrait is 800 dp wide)
+before rotation: list yes; detail back/title yes; PANES left=38 right=24; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', '12']; right: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да прочета', 'Библиографски данни']
+rotated (1600x2560 px = 800 dp wide): list yes; detail back/title yes; PANES left=15 right=9; left: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да прочета', 'Библиографски данни']; right: ['2011', 'български', 'книга', 'Език. Литература (УДК 8)', 'ЦБ/820(73)/Г 23', '399560']
+rotated back: list yes; detail back/title yes; PANES left=38 right=24; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', '12']; right: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да прочета', 'Библиографски данни']
+## TB6. Rotation at density 240 (1706x1066 dp; portrait 1066 dp wide — two panes both ways)
+density 240 landscape: list yes; detail back/title yes; PANES left=53 right=24; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', '12']; right: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да прочета', 'Библиографски данни']
+density 240 portrait (selection kept?): list yes; detail back/title yes; PANES left=89 right=26; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', '12']; right: ['Автор', 'ISBN', '12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026']
+density 240 back: list yes; detail back/title yes; PANES left=53 right=24; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', '12']; right: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да прочета', 'Библиографски данни']
+## TB7. Narrow the window (phone size) with the book open → the detail goes full screen
+narrowed: list yes; detail back/title yes; PANES left=9 right=15; left: ['Библиографски данни', 'Година', 'Език', 'Вид', 'Раздел', 'Сигнатура']; right: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да прочета', '2011']
+Back on the narrowed window: list yes; detail back/title no; PANES left=29 right=14; left: ['Всичко', 'Заглавие', '12 -те вятъра', 'Спомен за здрача', 'Веска Пенчева', 'Не е на рафта']; right: ['12', 'Автор', 'ISBN', 'Ключова дума', '108 резултата  ·  данни ', '1972 · графично издание ']
+## TB8. Keyboard (tablet size): Ctrl+1..5, Ctrl+F, '/', Esc
+Ctrl+2 → TAB selected: ['Каталог']
+Ctrl+3 → TAB selected: ['Моето']
+Ctrl+4 → TAB selected: ['Новини']
+Ctrl+5 → TAB selected: ['Още']
+Ctrl+1 → TAB selected: ['Начало']
+Ctrl+F on Home: expanded=yes query-12=no hint=yes tabbar=no app-in-front=yes IME mInputShown=true
+Esc: expanded=yes query-12=no hint=yes tabbar=no app-in-front=yes IME mInputShown=false
+Esc again: expanded=no query-12=no hint=yes tabbar=yes app-in-front=yes IME mInputShown=false
+'/' on Catalogue: focused field 0 IME mInputShown=true; focused="true"
+book open: list yes; detail back/title yes; PANES left=38 right=24; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', '12']; right: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да прочета', 'Библиографски данни']
+Esc on the book: list yes; detail back/title no; PANES left=37 right=2; left: ['Начало', 'Каталог', 'Моето', 'Новини', 'Още', 'Всичко']; right: ['12', 'Инв. номер']
+Ctrl+F on News: fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Всички" text="Книги" text="Новини" text="Събития" text="Страници" text="Какво търсиш?" 
+## TB9. Phone in landscape: unchanged (single pane)
+phone landscape 2400x1080: list yes; detail back/title yes; PANES left=7 right=1; left: ['12 -те вятъра', 'Гарфилд, Джудит и др.', 'Налична', 'Наличност към 28.10.2026', 'Искам да прочета', 'Библиографски данни']; right: ['2011']
+## COMPLETE
+## logcat findings
+app pids seen: ['5234', '7606', '9203', '9953', '10905']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 13
+   skipped-frames events=13 max=64 total=494
+== Davey: 20
+   davey events=20 max=1272ms median=944ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

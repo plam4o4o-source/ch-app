@@ -1,0 +1,11 @@
+{
+  "versionCode": 1500184,
+  "versionName": "1.2.34",
+  "apkUrl": "https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v134/update/42882812118/app.apk",
+  "sha256": "b1d46a92b16ba4eaa686d457e6f0ee8af9d20d4948ec22742213d779487c6834",
+  "size": 4300842,
+  "minSdk": 26,
+  "notes": "• Читателската карта пести батерия — в покой вече не се рисува.\n• По-плавни анимации на по-стари телефони; „Изненадай ме“ — и на Android 8–11.\n• „Моята читателска година“ се отваря веднага и работи по-добре с голям шрифт.\n• Заявената книга остава отбелязана като „Заявена“; в Настройки — „Инсталирай“ за готово обновление.\n• Начален час на събитията и по-добър TalkBack; разклащането може да се изключи.",
+  "notes_en": "• The library card saves battery — it no longer redraws when nothing moves.\n• Smoother animations on older phones; “Surprise me” now on Android 8–11 too.\n• “My reading year” opens instantly and works better with large text.\n• A held book stays marked as held; Settings shows “Install” for a ready update.\n• Event start times and better TalkBack support; shake can be turned off.",
+  "releaseUrl": "https://github.com/plam4o4o-source/ch-app/releases/tag/v1.2.34"
+}

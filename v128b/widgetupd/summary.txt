@@ -1,0 +1,51 @@
+part widgetupd; APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4 size 4323599 bytes
+base APK: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission:  android.permission.CAMERA: granted=false, flags=[ USER_FIXED]
+screen 1080x2400
+## U0. Install v1.2.27 (Glance widget)
+installed base: 1.2.27 8dc63c1 (Data safety: кориците от Open Library — „App activity → App ); versionCode 1484479; x86_64 libs: 4; update manifest: no-update stub size 4875530;  versionCode=1484479 minSdk=26 targetSdk=37  versionName=1.2.27 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3027 ms
+groups: NONE
+channels: events(Събития)->null; messages(Съобщения от читалището)->null; updates(Обновления)->null; news(Новини)->null; loans(Срокове за връщане)->null; library(Библиотека)->null; messages_important(Важни съобщения)->null
+## U1. v1.2.27: add the widget
+WIDGET base long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET base picker: our row @ 437 884; size label @ 540 1792; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
+WIDGET base after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
+WIDGET base: widgets of ours bound: 0 -> 1 (ids id=2 ); options: 
+WIDGET v1.2.27: views from org.chyavorec.app: 1 [ids: rootView ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Следващо събитие|Ден на народните будители|1 ноември 2026|; error text: 
+## U2. adb install -r v1.2.28 over v1.2.27 with the widget on the home screen (app not opened)
+after adb install -r:  versionCode=1488541 minSdk=26 targetSdk=37  versionName=1.2.28 
+WIDGET +3s after update: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event_column widget_event_date widget_event_title widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Следващо събитие|Ден на народните будители|1 ноември 2026|; error text: 
+WIDGET +15s after update: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event_column widget_event_date widget_event_title widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Следващо събитие|Ден на народните будители|1 ноември 2026|; error text: 
+WIDGET +45s after update: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event_column widget_event_date widget_event_title widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Следващо събитие|Ден на народните будители|1 ноември 2026|; error text: 
+widget ids before/after the update: [id=2 ] / [id=2 ]
+## U3. The kept widget after the update: clicks
+WIDGET click catalog (widget_catalog @ 900 595) → fg org.chyavorec.app/org.chyavorec.app.OpenLink; expected screen: YES; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+WIDGET click scan (widget_scan @ 699 595) → fg org.chyavorec.app/org.chyavorec.app.OpenLink; expected screen: YES; text="Нужен е достъп до камерата" text="Камерата се използва само за четене на баркода на телефона. Нищо не се снима и не се изпраща." text="Разреши камерата" text="Отвор
+WIDGET click event (widget_event @ 540 714) → fg org.chyavorec.app/org.chyavorec.app.OpenLink; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+WIDGET click app (t:Chitalishte Yavorets|Читалище Яворец @ 337 595) → fg org.chyavorec.app/org.chyavorec.app.OpenLink; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+## U4. App opened after the update: channel groups; widget
+groups: group_app=Приложението; group_my_library=Моята библиотека; group_centre=Читалището
+channels: events(Събития)->group_centre; messages(Съобщения от читалището)->group_centre; updates(Обновления)->group_app; news(Новини)->group_centre; loans(Срокове за връщане)->group_my_library; library(Библиотека)->group_my_library; messages_important(Важни съобщения)->group_centre
+SYSTEM notification settings: fg com.android.settings/com.android.settings.Settings$AppNotificationSettingsActivity; content-desc="Chitalishte Yavorets" content-desc="Navigate up" text="Chitalishte Yavorets" text="All Chitalishte Yavorets notifications" text="Приложението" text="Обновления" content-desc="Обновления" text="Читалището" text="Събития" content-desc="Събития" text="Съобщения от читалището" content-desc="Съобщения от читалището" content-desc="Важни съобщения" 
+SYSTEM notification settings (scrolled): content-desc="Chitalishte Yavorets" content-desc="Navigate up" text="Приложението" text="Обновления" content-desc="Обновления" text="Читалището" text="Събития" content-desc="Събития" text="Съобщения от читалището" content-desc="Съобщения от читалището" text="Важни съобщения" content-desc="Важни съобщения" text="Новини" content-desc="Новини" text="Моята библиотека" text="Библиотека" content-desc="Библиотека" text="Срокове за връщане" content-desc="Срокове за връщане" text="Allow notification dot"
+WIDGET after the app ran: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event_column widget_event_date widget_event_title widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Следващо събитие|Ден на народните будители|1 ноември 2026|; error text: 
+WIDGET dark after update: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event_column widget_event_date widget_event_title widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Следващо събитие|Ден на народните будители|1 ноември 2026|; error text: 
+## COMPLETE
+## logcat findings
+app pids seen: ['4916', '7971', '8544']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=104 total=325
+== Davey: 16
+   davey events=16 max=1254ms median=786ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

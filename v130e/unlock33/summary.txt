@@ -1,0 +1,100 @@
+part unlock33; APK: 1.2.30 f01e642 (Отключване: нов опит, ако системата затвори прозореца на миг); versionCode 1488543; x86_64 libs: 2 size 4138466 bytes
+base APK:  size  bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2698 ms
+## P0. Package (GitHub build): requested permissions
+requested permissions: android.permission.ACCESS_NETWORK_STATE android.permission.FOREGROUND_SERVICE android.permission.FOREGROUND_SERVICE_DATA_SYNC android.permission.INTERNET android.permission.POST_NOTIFICATIONS android.permission.RECEIVE_BOOT_COMPLETED android.permission.REQUEST_INSTALL_PACKAGES android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION android.permission.USE_BIOMETRIC android.permission.WAKE_LOCK 
+PERM android.permission.USE_BIOMETRIC: 1
+PERM android.permission.USE_FINGERPRINT: 0
+PERM android.permission.CAMERA: 0
+PERM android.permission.FOREGROUND_SERVICE: 1
+PERM android.permission.FOREGROUND_SERVICE_DATA_SYNC: 1
+APK uses-permission (aapt2): name='android.permission.INTERNET' name='android.permission.ACCESS_NETWORK_STATE' name='android.permission.POST_NOTIFICATIONS' name='android.permission.USE_BIOMETRIC' name='android.permission.REQUEST_INSTALL_PACKAGES' name='android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION' name='android.permission.FOREGROUND_SERVICE' name='android.permission.FOREGROUND_SERVICE_DATA_SYNC' name='android.permission.WAKE_LOCK' name='android.permission.RECEIVE_BOOT_COMPLETED' name='org.chyavorec.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION' 
+APK SystemForegroundService: foregroundServiceType(0x01010599)=0x00000001
+## P1. No screen lock: Settings › Поверителност — the switch is disabled with an explanation
+device secure:  lock: true
+SWITCH (no lock): SWITCH class=android.view.View checkable=true checked=false enabled=false clickable=true bounds=[0,2150][1080,2337] texts=['Искай отключване за личните екрани', 'Не може да се включи: телефонът няма заключване на екрана. Задай ПИН, фигура или парола в настройките на телефона.']
+explanation 'Не може да се включи…': SHOWN; group title 'Поверителност' yes
+tap on the disabled switch: SWITCH class=android.view.View checkable=true checked=false enabled=false clickable=true bounds=[0,2150][1080,2337] texts=['Искай отключване за личните екрани', 'Не може да се включи: телефонът няма заключване на екрана. Задай ПИН, фигура или парола в настройките на телефона.']; prompt absent; fg org.chyavorec.app/org.chyavorec.app.MainActivity; PROMPT packages=['org.chyavorec.app'] password-fields=0 texts=['Автоматично обновяване', 'Проверка при отваряне и два пъти дневно; и
+## P2. A self-entered card (before the switch is on)
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+card screen: card shown
+## P3. Device PIN 1234; the switch → the system prompt → PIN
+set-pin: Pin set to '1234'
+SWITCH (PIN set): SWITCH class=android.view.View checkable=true checked=false enabled=true clickable=true bounds=[0,1398][1080,1751] texts=['Искай отключване за личните екрани', 'Картата, заеманията, историята и личните съобщения се отварят след пръстов отпечатък, лице или ПИН-а на телефона.']
+SWITCH tapped → prompt SHOWN; fg BiometricPrompt; PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Искай отключване за личните екрани']
+PIN screen: PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Искай отключване за личните екрани']
+SWITCH after the PIN: SWITCH class=android.view.View checkable=true checked=true enabled=true clickable=true bounds=[0,1398][1080,1751] texts=['Искай отключване за личните екрани', 'Картата, заеманията, историята и личните съобщения се отварят след пръстов отпечатък, лице или ПИН-а на телефона.']; fg org.chyavorec.app/org.chyavorec.app.MainActivity
+## P4. New process: Моето › Читателска карта → prompt; Back (cancel) → Моето; PIN → the card
+GATE 20-card-prompt: prompt SHOWN; locked view no; card no; TAB selected: none; back arrow no; app in front NO; fg BiometricPrompt; content-desc="Tap to cancel authentication" text="Отключи личните екрани" text="Читателска карта, заемания, история и съобщения" 
+cancel: Back #1 → prompt still; IME mInputShown=false
+cancel: Back #2 → prompt gone; IME mInputShown=false
+GATE 21-after-cancel: prompt absent; locked view no; card no; TAB selected: ['Моето']; back arrow no; app in front yes; fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Здравей!" text="Новините, събитията, каталогът и информацията за читалището са достъпни и без вход." text="Вход" text="БИБЛИОТЕКА" text="Читателска карта" text="Въведена от теб карта" 
+cancel +6 s: prompt absent; TAB selected: ['Моето']; prompts since the cancel: 0 system lines
+PIN screen: PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Читателска карта, заемания, история и съобщения']
+GATE 22-after-pin: prompt absent; locked view no; card SHOWN; TAB selected: none; back arrow yes; app in front yes; fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+## P5. Background 20 s (< 60 s): no prompt; background 70 s (> 60 s): prompt
+GATE 30-after-20s-background: prompt absent; locked view no; card SHOWN; TAB selected: none; back arrow yes; app in front yes; fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+GATE 31-after-70s-background: prompt SHOWN; locked view no; card no; TAB selected: none; back arrow no; app in front NO; fg BiometricPrompt; content-desc="Tap to cancel authentication" text="Отключи личните екрани" text="Читателска карта, заемания, история и съобщения" 
+PIN screen: PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Читателска карта, заемания, история и съобщения']
+GATE 32-after-pin: prompt absent; locked view no; card SHOWN; TAB selected: none; back arrow yes; app in front yes; fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+## P6.1. Screen off and on (keyguard with the PIN) on the card: prompt again (attempt 1 of 3)
+before screen off #1: card SHOWN
+keyguard #1: prompt absent; fg NotificationShade; PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Configure physical keyboard', 'Alerted', 'Tap to select language and layout', 'Expand', '12:24',
+GATE 40-after-screen-off-1: prompt SHOWN; locked view no; card no; TAB selected: none; back arrow no; app in front NO; fg BiometricPrompt; content-desc="Tap to cancel authentication" text="Отключи личните екрани" text="Читателска карта, заемания, история и съобщения" 
+screen off #1 system log:    483   483 D BiometricService: Creating authSession with authRequest: BiometricRequested: true, StrengthRequested: 255, CredentialRequested: true, Eligible:{}, ~   483   483 D BiometricService/AuthSession: Creating AuthSession with: BiometricRequested: true, StrengthRequested: 255, CredentialRequested: true, Eligible:{}, ~   483  1942 D CoreBackPreview: Window{21c309a u0 BiometricPrompt}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallbac~  4585  4585 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.auth.cryptauth.cryptauthservice.START dat=chimera-action:/... cmp=com.google.android.gm~  4585  4585 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.auth.cryptauth.cryptauthservice.START dat=chimera-action:/...~   483  2245 D CoreBackPreview: Window{21c309a u0 BiometricPrompt}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallbac~
+PIN screen: PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Читателска карта, заемания, история и съобщения']
+GATE 41-after-pin-1: prompt absent; locked view no; card SHOWN; TAB selected: none; back arrow yes; app in front yes; fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+## P6.2. Screen off and on (keyguard with the PIN) on the card: prompt again (attempt 2 of 3)
+before screen off #2: card SHOWN
+keyguard #2: prompt absent; fg NotificationShade; PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Configure physical keyboard', 'Tap to select language and layout', 'Expand', '12:25', 'Mon, Nov 
+GATE 40-after-screen-off-2: prompt SHOWN; locked view no; card no; TAB selected: none; back arrow no; app in front NO; fg BiometricPrompt; content-desc="Tap to cancel authentication" text="Отключи личните екрани" text="Читателска карта, заемания, история и съобщения" 
+screen off #2 system log:    483   483 D BiometricService: Creating authSession with authRequest: BiometricRequested: true, StrengthRequested: 255, CredentialRequested: true, Eligible:{}, ~   483   483 D BiometricService/AuthSession: Creating AuthSession with: BiometricRequested: true, StrengthRequested: 255, CredentialRequested: true, Eligible:{}, ~   483  1951 D CoreBackPreview: Window{13e6d15 u0 BiometricPrompt}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallbac~   483  1769 D CoreBackPreview: Window{13e6d15 u0 BiometricPrompt}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallbac~
+PIN screen: PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Читателска карта, заемания, история и съобщения']
+GATE 41-after-pin-2: prompt absent; locked view no; card SHOWN; TAB selected: none; back arrow yes; app in front yes; fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+## P6.3. Screen off and on (keyguard with the PIN) on the card: prompt again (attempt 3 of 3)
+before screen off #3: card SHOWN
+keyguard #3: prompt absent; fg NotificationShade; PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Configure physical keyboard', 'Tap to select language and layout', 'Expand', '12:25', 'Mon, Nov 
+GATE 40-after-screen-off-3: prompt SHOWN; locked view no; card no; TAB selected: none; back arrow no; app in front NO; fg BiometricPrompt; content-desc="Tap to cancel authentication" text="Отключи личните екрани" text="Читателска карта, заемания, история и съобщения" 
+screen off #3 system log:    483   833 E AuthService: authenticateFastFail: Caller is not foreground: org.chyavorec.app~   483   483 D BiometricService: Creating authSession with authRequest: BiometricRequested: true, StrengthRequested: 255, CredentialRequested: true, Eligible:{}, ~   483   483 D BiometricService/AuthSession: Creating AuthSession with: BiometricRequested: true, StrengthRequested: 255, CredentialRequested: true, Eligible:{}, ~   483  1380 D CoreBackPreview: Window{1fe200e u0 BiometricPrompt}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallbac~   483  1380 D CoreBackPreview: Window{1fe200e u0 BiometricPrompt}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallbac~
+PIN screen: PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Читателска карта, заемания, история и съобщения']
+GATE 41-after-pin-3: prompt absent; locked view no; card SHOWN; TAB selected: none; back arrow yes; app in front yes; fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+## P7. Quick Settings tile → the card: the gate
+sysui_qs_tiles before: internet,bt,flashlight,dnd,alarm,airplane,controls,rotation,qr_code_scanner,battery,cast,screenrecord,custom(com.google.android.gms/.nearby.sharing.SharingTileService),mictoggle,cameratoggle,dbg:mem,ott
+add-tile org.chyavorec.app/.tile.CardTileService: ''
+sysui_qs_tiles after: custom(org.chyavorec.app/.tile.CardTileService),internet,bt,flashlight,dnd,alarm,airplane,controls,rotation,qr_code_scanner,battery,cast,screenrecord,custom(com.google.android.gms/.nearby.sharing.SharingTileService),mictoggle,cameratoggle,dbg:mem,ott
+QS gate: tile @ NOT FOUND (page 4):  texts: 
+QS gate: ours in sysui_qs_tiles: 1
+click-tile: 
+GATE 50-tile-tap: prompt SHOWN; locked view no; card no; TAB selected: none; back arrow no; app in front NO; fg BiometricPrompt; content-desc="Tap to cancel authentication" text="Отключи личните екрани" text="Читателска карта, заемания, история и съобщения" 
+cancel: Back #1 → prompt still; IME mInputShown=false
+cancel: Back #2 → prompt gone; IME mInputShown=false
+GATE 51-tile-after-cancel: prompt absent; locked view no; card no; TAB selected: ['Моето']; back arrow no; app in front yes; fg org.chyavorec.app/org.chyavorec.app.OpenLink; text="Здравей!" text="Новините, събитията, каталогът и информацията за читалището са достъпни и без вход." text="Вход" text="БИБЛИОТЕКА" text="Читателска карта" text="Въведена от теб карта" 
+QS gate2: tile @ 285 630 (page 1): MATCH class="android.widget.LinearLayout" text="" content-desc="Читателска карта" checkable="false" checked="false" clickable="true" bounds="[42,525][529,735]" | ACTIONABLE-ANCESTOR class="android.widget.LinearLayout" text="" content-desc="Читателска карта" checkable="false" checked="false" clickable="true" bounds="[42,525][529,735]" | ACTIONABLE-CHILD none MATCH class="android.widget.TextView" text="Читателска карта" content-desc="" checkable="false" checked="false" clickable="false" bounds="[163,579][418,630]" | ACTIONABLE-ANCESTOR class="android.widget.LinearLayout" text="" content-desc="Читателска карта" checkable="false" checked="false" clickable="true" bounds="[42,525][529,735]" | ACTIONABLE-CHILD none  texts: content-desc="Читателска карта" text="Читателска карта" text="Покажи на гишето" 
+QS gate2: ours in sysui_qs_tiles: 1
+PIN screen: PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Читателска карта, заемания, история и съобщения']
+GATE 52-tile-after-pin: prompt absent; locked view no; card SHOWN; TAB selected: none; back arrow yes; app in front yes; fg org.chyavorec.app/org.chyavorec.app.OpenLink; text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+## P8. Turning the switch off also asks for the PIN
+switch OFF tapped → prompt SHOWN; fg BiometricPrompt; PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Искай отключване за личните екрани']
+PIN screen: PROMPT packages=['com.android.systemui'] password-fields=1 texts=['Tap to cancel authentication', 'Отключи личните екрани', 'Искай отключване за личните екрани']
+SWITCH now: SWITCH class=android.view.View checkable=true checked=false enabled=true clickable=true bounds=[0,1874][1080,2227] texts=['Искай отключване за личните екрани', 'Картата, заеманията, историята и личните съобщения се отварят след пръстов отпечатък, лице или ПИН-а на телефона.']
+clear PIN: Lock credential cleared
+## COMPLETE
+## logcat findings
+app pids seen: ['4837', '7969', '9787']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=74 total=310
+== Davey: 14
+   davey events=14 max=1541ms median=795ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

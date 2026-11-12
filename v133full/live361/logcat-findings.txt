@@ -1,0 +1,21 @@
+app pids seen: ['4667', '5792', '5980', '6495']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=40 total=40
+   11-09 16:57:17.296  4667  4667 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=902ms median=788ms
+   11-09 16:55:14.894  4667  4675 I HWUI    : Davey! duration=788ms; Flags=0, FrameTimelineVsyncId=10481, IntendedVsync=122674675019, Vsync=122674675019, InputEventId=0, HandleInputStart=122674920447, AnimationStart=122674921178, PerformTraver
+   11-09 16:57:17.244  4667  5596 I HWUI    : Davey! duration=746ms; Flags=1, FrameTimelineVsyncId=16452, IntendedVsync=245008014560, Vsync=245024681225, InputEventId=0, HandleInputStart=245025835522, AnimationStart=245025836553, PerformTraver
+   11-09 16:57:17.530  4667  4690 I HWUI    : Davey! duration=902ms; Flags=1, FrameTimelineVsyncId=16452, IntendedVsync=245008014560, Vsync=245024681225, InputEventId=0, HandleInputStart=245025835522, AnimationStart=245025836553, PerformTraver
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 16:54:51.430  4254  4254 I PERFCHECK: section: L0. Device: Android 16 SDK 36, 14574095
+   11-09 16:54:52.004  4285  4285 I PERFCHECK: section: L1. Update download as a Live Update: 1.2.33-pre versionCode 1500182 → the staged test 1.2.33 1500183, throttled
+   11-09 16:57:08.790  5649  5649 I PERFCHECK: section: L1b. Install the downloaded update system installer → 1.2.33
+   11-09 16:57:24.719   692   729 I ActivityManager: Killing 4667:org.chyavorec.app/u0a227 (adj 0): stop org.chyavorec.app due to installPackageLI
+   11-09 16:57:29.613  5871  5871 I PERFCHECK: section: L2. Event reminder → event Live Update 60 min before; needs the events start time
+   11-09 16:58:20.815  6481  6481 I PERFCHECK: section: L3. API 36 smoke: ribbon and card foil render
+   11-09 16:59:09.309  6801  6801 I PERFCHECK: section: L4. Live Update evidence: raw notification records during the download, the apps notification settings

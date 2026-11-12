@@ -1,0 +1,51 @@
+app pids seen: ['6198', '7968', '8659', '10541', '13068']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 18
+   skipped-frames events=18 max=82 total=713
+   11-10 19:24:58.311  6198  6198 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-10 19:24:59.618  6198  6198 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:00.907  6198  6198 I Choreographer: Skipped 54 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:01.583  6198  6198 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:12.485  6198  6198 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:35.586  6198  6198 I Choreographer: Skipped 82 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:49.584  6198  6198 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-10 19:26:45.543  7968  7968 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-10 19:28:30.594  8659  8659 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-10 19:29:26.136  8659  8659 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-10 19:29:27.109  8659  8659 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   11-10 19:29:28.021  8659  8659 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 47
+   davey events=47 max=2525ms median=857ms
+   11-10 19:24:59.191  6198  6213 I OpenGLRenderer: Davey! duration=1292ms; Flags=1, FrameTimelineVsyncId=6770, IntendedVsync=86371932772, Vsync=86921932750, InputEventId=0, HandleInputStart=86942545863, AnimationStart=86942557480, PerformTrav
+   11-10 19:25:00.857  6198  6212 I OpenGLRenderer: Davey! duration=931ms; Flags=0, FrameTimelineVsyncId=6893, IntendedVsync=87621932722, Vsync=88238599364, InputEventId=0, HandleInputStart=88249807277, AnimationStart=88249809590, PerformTrave
+   11-10 19:25:01.468  6198  6212 I OpenGLRenderer: Davey! duration=1522ms; Flags=0, FrameTimelineVsyncId=6948, IntendedVsync=88271932696, Vsync=88488599354, InputEventId=0, HandleInputStart=88494698882, AnimationStart=88494701346, PerformTrav
+   11-10 19:25:01.616  6198  6211 I OpenGLRenderer: Davey! duration=733ms; Flags=0, FrameTimelineVsyncId=6978, IntendedVsync=88505266020, Vsync=88605266016, InputEventId=0, HandleInputStart=88606800854, AnimationStart=88606802517, PerformTrave
+   11-10 19:25:01.959  6198  6288 I OpenGLRenderer: Davey! duration=1375ms; Flags=0, FrameTimelineVsyncId=6985, IntendedVsync=88621932682, Vsync=89521932646, InputEventId=0, HandleInputStart=89538459892, AnimationStart=89538462105, PerformTrav
+   11-10 19:25:02.463  6198  6288 I OpenGLRenderer: Davey! duration=1276ms; Flags=0, FrameTimelineVsyncId=7149, IntendedVsync=89555265978, Vsync=90188599286, InputEventId=0, HandleInputStart=90214877916, AnimationStart=90214880500, PerformTrav
+   11-10 19:25:03.052  6198  6288 I OpenGLRenderer: Davey! duration=729ms; Flags=0, FrameTimelineVsyncId=7250, IntendedVsync=90621932602, Vsync=91088599250, InputEventId=0, HandleInputStart=91096522784, AnimationStart=91096525037, PerformTrave
+   11-10 19:25:11.326  6198  6213 I OpenGLRenderer: Davey! duration=2525ms; Flags=0, FrameTimelineVsyncId=8087, IntendedVsync=97138599008, Vsync=97138599008, InputEventId=0, HandleInputStart=97146266148, AnimationStart=97146268401, PerformTrav
+   11-10 19:25:12.561  6198  6213 I OpenGLRenderer: Davey! duration=939ms; Flags=0, FrameTimelineVsyncId=8486, IntendedVsync=100205265552, Vsync=100321932214, InputEventId=0, HandleInputStart=100322926669, AnimationStart=100322937786, PerformT
+   11-10 19:25:12.703  6198  6288 I OpenGLRenderer: Davey! duration=775ms; Flags=0, FrameTimelineVsyncId=8563, IntendedVsync=100488598874, Vsync=101105265516, InputEventId=0, HandleInputStart=101118014668, AnimationStart=101118017572, PerformT
+   11-10 19:25:35.829  6198  6288 I OpenGLRenderer: Davey! duration=1669ms; Flags=0, FrameTimelineVsyncId=11509, IntendedVsync=122605264656, Vsync=122821931314, InputEventId=0, HandleInputStart=122830110484, AnimationStart=122830112337, Perfor
+   11-10 19:25:36.182  6198  6210 I OpenGLRenderer: Davey! duration=1885ms; Flags=0, FrameTimelineVsyncId=11544, IntendedVsync=122838597980, Vsync=124205264592, InputEventId=0, HandleInputStart=124220137979, AnimationStart=124220140573, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-10 19:24:53.880  6190  6190 I PERFCHECK: section: W. First launch and warm-up
+   11-10 19:25:53.810  7449  7449 I PERFCHECK: section: B0. Demo sign-in with „Запомни ме“
+   11-10 19:26:40.725  7946  7946 I PERFCHECK: section: B1. Year story: time from the tap to the first slide device-side tap + screencaps with uptime
+   11-10 19:28:24.896  8642  8642 I PERFCHECK: section: B1b. The same with a screen recording 8 fps for the frames fresh process
+   11-10 19:29:04.371  8924  8924 I PERFCHECK: y-rec-fresh
+   11-10 19:30:01.128  9214  9214 I PERFCHECK: section: B2. Swipe-down dismiss: ≥140 dp at any speed, or a fast flick ≥700 dp/s after ≥32 dp
+   11-10 19:32:50.495 10407 10407 I PERFCHECK: section: B3. Offline: the story with airplane mode on fresh process
+   11-10 19:34:11.224 11222 11222 I PERFCHECK: section: B4. Landscape + font 1.3 + „Много голям“: each slide scrollable? clipped? ellipsized?
+   11-10 19:36:20.105 12157 12157 I PERFCHECK: section: B5. Portrait, font 1.3 + „Много голям“: the first slides
+   11-10 19:38:18.794 12915 12915 I PERFCHECK: section: B6. Hold: „Заяви книгата“ → „Заявена“; again after an app restart „Запомни ме“
+   11-10 19:39:21.091 13318 13318 I PERFCHECK: section: B7. Share files event card, year slide → logout → cache/share
+   11-10 19:39:40.076 13438 13438 I PERFCHECK: sh-ev1-dev
+   11-10 19:40:19.787 13744 13744 I PERFCHECK: sh-ev2-dev
+   11-10 19:40:58.613 14024 14024 I PERFCHECK: sh-ev3-dev
+   11-10 19:41:37.377 14327 14327 I PERFCHECK: sh-ev4-dev
+   11-10 19:42:15.997 14607 14607 I PERFCHECK: sh-ev5-dev
+   11-10 19:43:56.439 15420 15420 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

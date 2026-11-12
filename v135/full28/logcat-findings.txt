@@ -1,0 +1,24 @@
+app pids seen: ['5422', '6231']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 3
+   skipped-frames events=3 max=39 total=109
+   11-12 17:14:59.865  5422  5422 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-12 17:15:08.448  5422  5422 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-12 17:16:29.785  5422  5422 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 8
+   davey events=8 max=1142ms median=766ms
+   11-12 17:15:01.044  5422  5445 I OpenGLRenderer: Davey! duration=1142ms; Flags=1, IntendedVsync=133535203434, Vsync=133551870100, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=133555289460, AnimationStart=133555
+   11-12 17:15:08.630  5422  5445 I OpenGLRenderer: Davey! duration=756ms; Flags=1, IntendedVsync=141526584864, Vsync=142093251508, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=142108321670, AnimationStart=1421084
+   11-12 17:16:29.755  5422  5445 I OpenGLRenderer: Davey! duration=705ms; Flags=0, IntendedVsync=222644109191, Vsync=222744109187, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=222746953130, AnimationStart=2227469
+   11-12 17:16:38.887  5422  5445 I OpenGLRenderer: Davey! duration=789ms; Flags=0, IntendedVsync=231721524282, Vsync=232121524266, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=232123668580, AnimationStart=2321237
+   11-12 17:16:42.318  5422  5445 I OpenGLRenderer: Davey! duration=711ms; Flags=1, IntendedVsync=235263399074, Vsync=235580065728, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=235592576410, AnimationStart=2355927
+   11-12 17:17:27.954  5422  5445 I OpenGLRenderer: Davey! duration=777ms; Flags=0, IntendedVsync=280809217818, Vsync=281175884470, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=281183777240, AnimationStart=2811838
+   11-12 17:17:33.942  6231  6259 I OpenGLRenderer: Davey! duration=850ms; Flags=1, IntendedVsync=286749056657, Vsync=287082389977, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=287084397330, AnimationStart=2870844
+   11-12 17:18:10.095  6231  6259 I OpenGLRenderer: Davey! duration=733ms; Flags=0, IntendedVsync=322993350495, Vsync=323293350483, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=323302434540, AnimationStart=3233024
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 17:14:58.493  5417  5417 I PERFCHECK: section: W. First launch and warm-up
+   11-12 17:15:48.300  5741  5741 I PERFCHECK: section: F28. API 28: card added, then the fullscreen card ×3 by the buttons position, shots and frames at rest
+   11-12 17:17:30.331  1898  2735 I ActivityManager: Killing 5422:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app

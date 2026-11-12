@@ -1,0 +1,33 @@
+app pids seen: ['5576', '7115', '8184']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=69 total=260
+   10-31 22:25:52.674  5576  5576 I Choreographer: Skipped 69 frames!  The application may be doing too much work on its main thread.
+   10-31 22:25:53.233  5576  5576 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-31 22:26:03.930  5576  5576 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   10-31 22:26:37.113  7115  7115 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   10-31 22:26:59.198  7115  7115 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   10-31 22:27:34.368  8184  8184 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+== Davey: 10
+   davey events=10 max=1491ms median=822ms
+   10-31 22:25:53.994  5576  5607 I OpenGLRenderer: Davey! duration=1047ms; Flags=1, FrameTimelineVsyncId=6999, IntendedVsync=98492464789, Vsync=99042464734, InputEventId=0, HandleInputStart=99042681300, AnimationStart=99042681941, PerformTrav
+   10-31 22:26:01.816  5576  5587 I OpenGLRenderer: Davey! duration=842ms; Flags=0, FrameTimelineVsyncId=7931, IntendedVsync=106692464461, Vsync=106692464461, InputEventId=0, HandleInputStart=106692697687, AnimationStart=106692698368, PerformT
+   10-31 22:26:02.012  5576  5587 I OpenGLRenderer: Davey! duration=802ms; Flags=0, FrameTimelineVsyncId=7941, IntendedVsync=106742464459, Vsync=107209131107, InputEventId=0, HandleInputStart=107214261553, AnimationStart=107214262274, PerformT
+   10-31 22:26:04.211  5576  5670 I OpenGLRenderer: Davey! duration=791ms; Flags=1, FrameTimelineVsyncId=8368, IntendedVsync=108942469886, Vsync=109125803201, InputEventId=0, HandleInputStart=109126178736, AnimationStart=109126179648, PerformT
+   10-31 22:26:04.337  5576  5670 I OpenGLRenderer: Davey! duration=721ms; Flags=0, FrameTimelineVsyncId=8375, IntendedVsync=109175803196, Vsync=109725803141, InputEventId=0, HandleInputStart=109740930447, AnimationStart=109740930907, PerformT
+   10-31 22:26:05.269  5576  5670 I OpenGLRenderer: Davey! duration=771ms; Flags=0, FrameTimelineVsyncId=8468, IntendedVsync=109859131001, Vsync=110142464323, InputEventId=0, HandleInputStart=110155095988, AnimationStart=110155096379, PerformT
+   10-31 22:26:37.188  7115  7132 I OpenGLRenderer: Davey! duration=1098ms; Flags=1, FrameTimelineVsyncId=10471, IntendedVsync=141809129723, Vsync=141842463055, InputEventId=0, HandleInputStart=141858144882, AnimationStart=141858145523, Perfor
+   10-31 22:26:37.467  7115  7137 I OpenGLRenderer: Davey! duration=1293ms; Flags=0, FrameTimelineVsyncId=10540, IntendedVsync=141909129719, Vsync=142909129679, InputEventId=0, HandleInputStart=142923574718, AnimationStart=142923575069, Perfor
+   10-31 22:26:37.714  7115  7132 I OpenGLRenderer: Davey! duration=1491ms; Flags=1, FrameTimelineVsyncId=10540, IntendedVsync=141909129719, Vsync=142909129679, InputEventId=0, HandleInputStart=142923574718, AnimationStart=142923575069, Perfor
+   10-31 22:27:34.676  8184  8196 I OpenGLRenderer: Davey! duration=782ms; Flags=1, FrameTimelineVsyncId=13008, IntendedVsync=199609127411, Vsync=200175794055, InputEventId=0, HandleInputStart=200177680962, AnimationStart=200177681663, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 22:25:45.048  5397  5397 I PERFCHECK: section: U0. Staged manifest test v1.2.29 APK + the real 1.2.29 notes: tools/whats_new.py --section 1.2.29 store/whats-new.md
+   10-31 22:25:45.484  5408  5408 I PERFCHECK: section: U1. Install v1.2.28 update source build
+   10-31 22:26:07.409  6283  6283 I PERFCHECK: section: U2. The update dialog: the real list of 1.2.29 notes
+   10-31 22:26:22.299  7030  7030 I PERFCHECK: section: U3. Install through the system installer
+   10-31 22:26:23.118   483   517 I ActivityManager: Killing 5576:org.chyavorec.app/u0a175 (adj 0): stop org.chyavorec.app due to installPackageLI
+   10-31 22:26:34.827  7360  7360 I PERFCHECK: section: U4. Whats new sheet once after the update
+   10-31 22:28:15.798  8526  8526 I PERFCHECK: section: U5. Settings → update status after the update

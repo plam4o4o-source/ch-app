@@ -1,0 +1,76 @@
+part live361; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## L0. Device: Android 16 (SDK 36), 14574095
+POST_PROMOTED_NOTIFICATIONS: android.permission.POST_PROMOTED_NOTIFICATIONS: granted=true
+## L1. Update download as a Live Update: 1.2.33-pre (versionCode 1488545) → the staged test 1.2.33 (1488546), throttled
+staged: 1488546 1.2.33 4274690 urce/ch-app/emulator-results/v133/update/42392073324/app.apk
+installed new-upd: 1.2.33-pre 6d3a324; versionCode 1488545; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v133/update/42392073324/update.json size 4274666;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.33-pre 
+POST_PROMOTED_NOTIFICATIONS (pre build): android.permission.POST_PROMOTED_NOTIFICATIONS: granted=true
+network: wifi 0; Active default network: 101; 2 PROMOTED lines in dumpsys package
+hashlimit rule failed (hashlimit: Could not determine whether revision 3 is supported, assuming it is.
+iptables v1.8.11 (legacy): can't initialize iptables table `filter': Permission denied (you must be root)
+Perhaps iptables or your kernel needs to be upgraded.) — packet limit instead
+THROTTLE on: iptables v1.8.11 (legacy): can't initialize iptables table `filter': Permission denied (you must be root) Perhaps iptables or your kernel needs to be upgraded. 
+LIVE update notification at +3762 ms:
+LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 86%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (86) requestPromotedOngoing=Boolean (true) shortCriticalText=String (86%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+   android.requestPromotedOngoing=Boolean (true)
+   android.template=String (android.app.Notification$ProgressStyle)
+   android.shortCriticalText=String (86%)
+LIVE total for org.chyavorec.app: 1
+SHADE: text="Обновено до версия 1.2.33" 
+LIVE at +29721 ms: LIVE id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) template=String (android.app.Notification$BigTextStyle) progress=Integer (0) requestPromotedOngoing=- shortCriticalText=null chronometer=Boolean (false) flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+LIVE last capture: LIVE id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) template=String (android.app.Notification$BigTextStyle) progress=Integer (0) requestPromotedOngoing=- shortCriticalText=null chronometer=Boolean (false) flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+  dumpsys:      28                 android.shortCriticalText=null
+  dumpsys:       1     NotificationRecord(0x02d42266: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate
+  dumpsys:       1       originalFlags=ONGOING_EVENT|ONLY_ALERT_ONCE|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  dumpsys:       1       flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+  dumpsys:       1                 android.template=String (android.app.Notification$ProgressStyle)
+  dumpsys:       1                 android.shortCriticalText=String (86%)
+  dumpsys:       1                 android.requestPromotedOngoing=Boolean (true)
+THROTTLE off: 0 rules left
+l-finish +121262 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +145639 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +170013 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +194397 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +218770 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +243154 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +267561 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +291931 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +316302 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +340671 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish +365035 ms: NOTIF id=700 title=String (Обновено до версия 1.2.33) text=String (Докосни, за да отвориш приложението.) progress=Integer (0)/Integer (0) indeterminate=Boolean ; files [;]
+l-finish RESULT: none after 385292 ms (first progress notification at +never ms); app process '4926'; files [;]
+## L1b. Install the downloaded update (system installer) → 1.2.33
+no 'готова за инсталиране' in the shade: text="Обновено до версия 1.2.33" text="Докосни, за да отвориш приложението." text="Chitalishte Yavorets" text="•" text="6 minutes ago" content-desc="Collapse" text="Silent" content-desc="Clear all sil
+## L2. Event reminder → event Live Update (60 min before; needs the event's start time)
+installed new: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+(dismissed '=По-късно': text="Нова версия 1.2.32" text="Излезе нова версия на приложението." text="Размер: 4,2 MB" )
+EVENT: text="80 г. от създаването на ЮНЕСКО" text="16 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Библиотека" text="НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец" t
+REMINDER set: text="Ще получиш напомняне на 15 ноември 2026, 18:00."; bell: on
+CAP event-reminder (+2489 ms after the tap; capture took 2346 ms): WorkSpec:  WorkName: 
+CAP event-reminder: jobs: 0 [ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~ Unsatisfied constraints: TIMING_DELAY [0x80000000]~ Ready: false (job=false user=true !restricted=true !pending=true !active=tru~Pending queue:~Active jobs:~ Unsatisfied constraints:~ Unsatisfied constraints:~]; SystemForegroundService: 0 []; notif: ; dialog: 
+WORK after the reminder: 
+EventReminderWorker scheduled: 0; EventLiveUpdateWorker scheduled: 0
+notifications now: LIVE total for org.chyavorec.app: 0
+## L3. API 36 smoke: ribbon and card foil render
+API36 ribbon mean=209.5 std=67.0 thread-px=26.8%; change 3→9 s 0.00
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## COMPLETE
+## logcat findings
+app pids seen: ['4447', '4926', '6226', '6837']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=33 total=33
+== Davey: 5
+   davey events=5 max=804ms median=765ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

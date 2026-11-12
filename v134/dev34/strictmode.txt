@@ -1,0 +1,12 @@
+STRICT pids of org.chyavorec.app.dev: ['5912', '10285', '10819']; StrictMode/CloseGuard messages: 2
+     2x android.os.strictmode.LeakedClosableViolation @ at android.os.StrictMode$AndroidCloseGuardReporter.report(StrictMode.java:1991) (first non-platform: -)
+STACKS (one example per kind):
+--- 2x 11-10 19:38:28.417 pid 10285 tid 10294 StrictMode
+    StrictMode policy violation: android.os.strictmode.LeakedClosableViolation: A resource was acquired at attached stack trace but never released. See java.io.Closeable for information on avoiding resour
+    	at android.os.StrictMode$AndroidCloseGuardReporter.report(StrictMode.java:1991)
+    	at dalvik.system.CloseGuard.warnIfOpen(CloseGuard.java:338)
+    	at android.view.SurfaceControl.finalize(SurfaceControl.java:1682)
+    	at java.lang.Daemons$FinalizerDaemon.doFinalize(Daemons.java:319)
+    	at java.lang.Daemons$FinalizerDaemon.runInternal(Daemons.java:306)
+    	at java.lang.Daemons$Daemon.run(Daemons.java:140)
+    	at java.lang.Thread.run(Thread.java:1012)

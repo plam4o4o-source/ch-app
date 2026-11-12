@@ -1,0 +1,38 @@
+part emoji28; APK: 1.2.30 bf10741 (Какво ново: версия 1.2.30); versionCode 1488543; x86_64 libs: 2 size 4505009 bytes
+base APK: 1.2.29 b84650f (Профил за бърз старт: генериран на емулатор от 34b56df); versionCode 1488542; x86_64 libs: 2; update manifest: no-update stub size 4104414 bytes
+host: 4 cpu, 15983 MB RAM
+android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488543 minSdk=26 targetSdk=37  versionName=1.2.30 
+app locale: 
+camera permission: 
+screen 1080x2400
+## M0. Site data (host): texts with emoji
+SITE news.json: 25 items; keys of the first: ['author', 'category', 'content', 'cover', 'date', 'excerpt', 'id', 'tags', 'title']
+SITE events: 75, with a place: 75; places: ['НЧ „Васил Левски – 1922“, пл. 9-ти септември 3, 5334 с. Яворец']
+EMOJI news id=news-svetoven-den-na-hlyaba url=/news/svetoven-den-na-hlyaba 🍞🥖🫓 'Световен ден на хляба! 🍞🫓🥖'
+EMOJI news id=news-obuchenie-po-narodni-tantsi url=/news/obuchenie-po-narodni-tantsi 🕺 'Обучение по народни танци'
+EMOJI news id=news-mvbb0tp9hi2d url=None ❤️🍞🥖🫓 'Световен ден на хляба! 🍞🫓🥖'
+EMOJI news id=news-mt5mv5hvwdzg url=None 🇧🇬 'Танцовият клуб участие във VW Fest Узана'
+EMOJI news id=news-msuodcr0yrmu url=None 🔹🕺 'Обучение по народни танци'
+## W. First launch and warm-up
+(dismissed '=Skip': text="Skip" text="Chitalishte Yavorets" text="Community Centre “Vasil Levski – 1922”" )
+first-install catalogue results after 1349 ms
+## M1. Texts with emoji on API 28 (no EmojiCompat)
+EMOJI 1 (news news-svetoven-den-na-hlyaba): 
+EMOJI 2 (news news-obuchenie-po-narodni-tantsi): 
+EMOJI 3 (news news-mvbb0tp9hi2d): 
+EMOJI 4 (news news-mt5mv5hvwdzg): 
+EMOJI 5 (news news-msuodcr0yrmu): 
+## M2. Cold starts (10), API 28
+START cold API 28        n=10 min=732ms median=884ms max=1023ms  all=[851, 1023, 846, 904, 865, 1006, 787, 913, 732, 950]  states=[]
+## COMPLETE
+## logcat findings
+app pids seen: ['5372', '5979', '6024', '6073', '6121', '6161', '6216', '6258', '6306', '6346', '6399']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 1
+   davey events=1 max=875ms median=875ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

@@ -1,0 +1,39 @@
+part surprise28rm; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15983 MB RAM
+android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: 
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-lowdr-nowidecg-port-notnight-420dpi-finger-keysexposed-nokeys-navhidden-nonav-2274x1080-v28
+animator scale: 0 (0 = reduced motion: no fan/flip animation)
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 1484 ms
+## SM0. Device memory: MemTotal: 2046996 kB; API 28
+## SM1. 'Изненадай ме' (dice): app RSS and MemAvailable every 0.25 s, 10 s
+before:  TOTAL: 73651 TOTAL SWAP PSS: 0
+MEMPROBE dice-1: samples 46; app RSS 176→max 179 MB at +6479 ms; min MemAvailable 1114 MB at +2120 ms
+SM1 after 10 s: app in front; pid '5708'; scene shown; deaths: 2 ()
+## SM2. 'Изненадай ме' (dice): app RSS and MemAvailable every 0.25 s, 10 s
+before:  TOTAL: 72993 TOTAL SWAP PSS: 0
+MEMPROBE dice-2: samples 46; app RSS 176→max 178 MB at +5359 ms; min MemAvailable 1145 MB at +3780 ms
+SM2 after 10 s: app in front; pid '5708'; scene shown; deaths: 0 ()
+## SM3. 'Изненадай ме' (dice): app RSS and MemAvailable every 0.25 s, 10 s
+before:  TOTAL: 74039 TOTAL SWAP PSS: 0
+MEMPROBE dice-3: samples 46; app RSS 177→max 178 MB at +2420 ms; min MemAvailable 1144 MB at +2100 ms
+SM3 after 10 s: app in front; pid '5708'; scene shown; deaths: 0 ()
+## SM9. For comparison: open a book from the catalogue list (same memory probe)
+MEMPROBE book: samples 37; app RSS 179→max 182 MB at +1939 ms; min MemAvailable 1144 MB at +7980 ms
+## COMPLETE
+## logcat findings
+app pids seen: ['5708']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

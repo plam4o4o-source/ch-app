@@ -1,0 +1,18 @@
+A11Y demo/01-my: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[42,1995][524,2121]
+A11Y demo/01b-my-2: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/01c-my-3: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Кои да получаваш: срокове, съб' 184x27dp
+A11Y demo/02-loans: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0
+   SAME-LABEL: 'Удължи срока' x2
+A11Y demo/03-history: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/03b-history-2: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/04-messages: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/04b-message: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/05-Моето-членство: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/05-Моят-профил: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/05-Известия: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/06-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/07-book-hold-button: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/07b-after-hold: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y demo/08-year-story-slide: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

@@ -1,0 +1,15 @@
+== free
+               total        used        free      shared  buff/cache   available
+Mem:           15983        1040        4230          49       11106       14942
+Swap:           3071           0        3071
+== host kernel: oom / kvm / segfault
+[Sat Nov  7 16:44:22 2026] x86/fpu: Supporting XSAVE feature 0x1000: 'Control-flow Kernel registers (KVM only)'
+[Sat Nov  7 16:44:26 2026] kvm_amd: TSC scaling supported
+[Sat Nov  7 16:44:26 2026] kvm_amd: Nested Virtualization enabled
+[Sat Nov  7 16:44:26 2026] kvm_amd: Nested Paging enabled
+[Sat Nov  7 16:44:26 2026] kvm_amd: kvm_amd: Hyper-V enlightened NPT TLB flush enabled
+[Sat Nov  7 16:44:26 2026] kvm_amd: kvm_amd: Hyper-V Direct TLB Flush enabled
+[Sat Nov  7 16:44:26 2026] kvm_amd: Virtual VMLOAD VMSAVE supported
+[Sat Nov  7 16:44:26 2026] kvm_amd: PMU virtualization is disabled
+[Sat Nov  7 16:47:13 2026] kvm: kvm [5180]: vcpu0, guest rIP: 0xffffffffb4264d95 Unhandled WRMSR(0xc0010007) = 0xffff
+== emulator processes

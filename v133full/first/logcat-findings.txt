@@ -1,0 +1,44 @@
+app pids seen: ['5193', '7946', '8197', '8577', '8771', '9092', '9843', '10380']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 48
+   skipped-frames events=48 max=109 total=2485
+   11-09 16:55:57.505  5193  5193 I Choreographer: Skipped 76 frames!  The application may be doing too much work on its main thread.
+   11-09 16:55:58.708  5193  5193 I Choreographer: Skipped 65 frames!  The application may be doing too much work on its main thread.
+   11-09 16:55:59.713  5193  5193 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-09 16:56:00.381  5193  5193 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-09 16:56:01.262  5193  5193 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   11-09 16:56:03.184  5193  5193 I Choreographer: Skipped 109 frames!  The application may be doing too much work on its main thread.
+   11-09 16:56:03.731  5193  5193 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-09 16:56:04.449  5193  5193 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-09 16:57:28.476  5193  5193 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-09 16:57:48.009  7946  7946 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-09 16:57:49.333  7946  7946 I Choreographer: Skipped 78 frames!  The application may be doing too much work on its main thread.
+   11-09 16:57:50.665  7946  7946 I Choreographer: Skipped 75 frames!  The application may be doing too much work on its main thread.
+== Davey: 91
+   davey events=91 max=2838ms median=1023ms
+   11-09 16:56:00.365  5193  5214 I OpenGLRenderer: Davey! duration=2340ms; Flags=1, FrameTimelineVsyncId=6112, IntendedVsync=112746094732, Vsync=113829428022, InputEventId=0, HandleInputStart=113844703129, AnimationStart=113844704020, Perform
+   11-09 16:56:00.888  5193  5204 I OpenGLRenderer: Davey! duration=946ms; Flags=0, FrameTimelineVsyncId=6428, IntendedVsync=114862766841, Vsync=114896100171, InputEventId=0, HandleInputStart=114906569239, AnimationStart=114906569770, PerformT
+   11-09 16:56:03.172  5193  5288 I OpenGLRenderer: Davey! duration=1094ms; Flags=0, FrameTimelineVsyncId=6460, IntendedVsync=114929433501, Vsync=115512766776, InputEventId=0, HandleInputStart=115518014615, AnimationStart=115518014955, Perform
+   11-09 16:56:03.730  5193  5288 I OpenGLRenderer: Davey! duration=2838ms; Flags=0, FrameTimelineVsyncId=6562, IntendedVsync=115529427954, Vsync=116396094586, InputEventId=0, HandleInputStart=116398136264, AnimationStart=116398136835, Perform
+   11-09 16:56:03.890  5193  5205 I OpenGLRenderer: Davey! duration=701ms; Flags=0, FrameTimelineVsyncId=6610, IntendedVsync=116412761252, Vsync=116479427916, InputEventId=0, HandleInputStart=116482613127, AnimationStart=116482613948, PerformT
+   11-09 16:56:04.444  5193  5205 I OpenGLRenderer: Davey! duration=2404ms; Flags=0, FrameTimelineVsyncId=6643, IntendedVsync=116496094582, Vsync=118312761176, InputEventId=0, HandleInputStart=118320709798, AnimationStart=118320710129, Perform
+   11-09 16:56:04.646  5193  5205 I OpenGLRenderer: Davey! duration=1073ms; Flags=0, FrameTimelineVsyncId=6828, IntendedVsync=118329427842, Vsync=118862761154, InputEventId=0, HandleInputStart=118867928846, AnimationStart=118867929457, Perform
+   11-09 16:56:13.850  5193  5288 I OpenGLRenderer: Davey! duration=957ms; Flags=0, FrameTimelineVsyncId=7452, IntendedVsync=127862771799, Vsync=128262771735, InputEventId=0, HandleInputStart=128276179264, AnimationStart=128276180035, PerformT
+   11-09 16:57:19.078  5193  5214 I OpenGLRenderer: Davey! duration=746ms; Flags=0, FrameTimelineVsyncId=10521, IntendedVsync=193346091508, Vsync=193612758164, InputEventId=0, HandleInputStart=193620130629, AnimationStart=193620131059, Perform
+   11-09 16:57:28.640  5193  5204 I OpenGLRenderer: Davey! duration=1079ms; Flags=0, FrameTimelineVsyncId=10855, IntendedVsync=202579424472, Vsync=202612757804, InputEventId=0, HandleInputStart=202627494721, AnimationStart=202627495342, Perfor
+   11-09 16:57:28.997  5193  5204 I OpenGLRenderer: Davey! duration=1067ms; Flags=0, FrameTimelineVsyncId=10881, IntendedVsync=202746091132, Vsync=203596091098, InputEventId=0, HandleInputStart=203612450162, AnimationStart=203612450903, Perfor
+   11-09 16:57:31.659  5193  7843 I OpenGLRenderer: Davey! duration=850ms; Flags=0, FrameTimelineVsyncId=11180, IntendedVsync=205779424344, Vsync=205896091006, InputEventId=0, HandleInputStart=205900655130, AnimationStart=205900655501, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 16:55:50.050  5007  5007 I PERFCHECK: section: OB1. Fresh install, no notification permission: page 1 welcome, three feature rows
+   11-09 16:56:10.531  5484  5484 I PERFCHECK: section: OB2. Page 2: text-size chips apply at once, Разреши известията → the system prompt API 33
+   11-09 16:57:15.632  7530  7530 I PERFCHECK: section: OB3. Page 3: sign in / add a card; then the main screen does not ask again
+   11-09 16:58:07.625  8082  8082 I PERFCHECK: section: OB4. Deny in the onboarding: the main screen does not ask again
+   11-09 16:59:32.413  8665  8665 I PERFCHECK: section: OB5. Пропусни on page 1 the permission not answered
+   11-09 17:00:02.204  8953  8953 I PERFCHECK: section: F1. BrandIntro on the very first launch fresh install, animations ON: screen recording
+   11-09 17:00:29.141  9271  9271 I PERFCHECK: section: F2. Onboarding → Home guest: the шевица ribbon, carousel, feasts/events, „Нови постъпления“, the search bar
+   11-09 17:01:49.222  9790  9790 I PERFCHECK: section: F3. Second launch: no intro, no onboarding
+   11-09 17:02:22.333 10185 10185 I PERFCHECK: section: F4. First run offline with nothing cached fresh install, airplane mode: all tabs
+   11-09 17:06:18.758 12259 12259 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

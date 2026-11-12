@@ -1,0 +1,128 @@
+part hwprobe; APK: 1.2.32 c1b5ef5 (Какво ново: версия 1.2.32); versionCode 1488545; x86_64 libs: 2 size 4151654 bytes
+base APK: 1.2.31 6f44326 (Профил за бърз старт: генериран на емулатор от e20a974); versionCode 1488544; x86_64 libs: 2; update manifest: no-update stub size 4138646 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## H1. Emulator graphics: renderer, gralloc, memtrack
+GL: Sync configuration: [using: EGL_ANDROID_native_fence_sync] EGL implementation : 1.4 Android META-EGL 
+props: [debug.hwui.renderer]: [skiagl] [ro.boot.debug.hwui.renderer]: [skiagl] [ro.boot.qemu.gltransport.drawFlushInterval]: [800] [ro.boot.qemu.gltransport.name]: [pipe] [ro.hardware.egl]: [emulation] [ro.hardware.vulkan]: [ranchu] [ro.opengles.version]: [196609] 
+memtrack HAL: 147	memtrack.proxy: [android.hardware.memtrack.IMemtrack];
+system: Total RAM: 2,013,352K (status normal); Free RAM: 887,126K ( 530,046K cached pss + 216,340K cached kernel + 140,740K free);DMA-BUF: 0K ( 0K mapped + 0K unmapped);DMA-BUF Heaps: 0K;DMA-BUF Heaps pool: 0K; GPU: 0K; Used RAM: 1,496,702K (1,167,854K used pss + 328,848K kernel); Lost RAM: 58,236K;
+## H2. Helper probe: 25 bitmaps 1024×1024 each (4 MB as ARGB_8888, 2 MB as RGB_565) — config and where the memory shows
+MEMROW helper-sw8888-before   PSS=23.8  Java=1.2  Native=11.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.1  RSS=92.4
+  FDS total=93: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×5; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-sw8888-before: pipeline: Skia (OpenGL); GPU total: 2212312 bytes, 2.11 MB (64.00 KB is purgeable); textures: 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 527408 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+PROBE sw8888: PCHW mode=sw8888 n=25 size=1024 ok=25 fail=0 config=ARGB_8888 allocBytes=104857600 kept=25 ms=371
+MEMROW helper-sw8888-after    PSS=122.1  Java=1.2  Native=111.8  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.1  RSS=190.1
+  FDS total=93: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×5; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-sw8888-after: pipeline: Skia (OpenGL); GPU total: 6406616 bytes, 6.11 MB (64.00 KB is purgeable); textures: 4.00 MB (1 entry) | 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 477280 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+MEMROW helper-sw565-before    PSS=25.3  Java=1.2  Native=11.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.1  RSS=92.2
+  FDS total=93: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×5; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-sw565-before: pipeline: Skia (OpenGL); GPU total: 2212312 bytes, 2.11 MB (64.00 KB is purgeable); textures: 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 560844 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+PROBE sw565: PCHW mode=sw565 n=25 size=1024 ok=25 fail=0 config=RGB_565 allocBytes=52428800 kept=25 ms=207
+MEMROW helper-sw565-after     PSS=73.5  Java=1.2  Native=61.8  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.1  RSS=138.9
+  FDS total=93: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×5; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-sw565-after: pipeline: Skia (OpenGL); GPU total: 4309464 bytes, 4.11 MB (64.00 KB is purgeable); textures: 2.00 MB (1 entry) | 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 499412 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+MEMROW helper-hw-before       PSS=30.1  Java=1.2  Native=11.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.1  RSS=90.9
+  FDS total=93: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×5; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-hw-before: pipeline: Skia (OpenGL); GPU total: 2212312 bytes, 2.11 MB (64.00 KB is purgeable); textures: 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 591472 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+PROBE hw: PCHW mode=hw n=25 size=1024 ok=25 fail=0 config=HARDWARE allocBytes=104857600 kept=25 ms=555
+MEMROW helper-hw-after        PSS=125.3  Java=1.3  Native=115.9  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.1  RSS=176.4
+  FDS total=146: /dev/goldfish_pipe×33; /dev/goldfish_address_space×28; socket×11; /dev/null×10; anon_inode:sync_file×5; anon_inode:eventfd×5; anon_inode:eventpoll×3; /sys/kernel/tracing/trace_marker×2; pipe×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/
+  GFXMEM helper-hw-after: pipeline: Skia (OpenGL); GPU total: 2212312 bytes, 2.11 MB (64.00 KB is purgeable); textures: 0.00 bytes (1 entry) | 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 554300 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+MEMROW helper-dec8888-before  PSS=32.8  Java=1.3  Native=11.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.2  RSS=91.3
+  FDS total=94: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×6; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-dec8888-before: pipeline: Skia (OpenGL); GPU total: 2212312 bytes, 2.11 MB (64.00 KB is purgeable); textures: 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 597236 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+PROBE dec8888: PCHW mode=dec8888 n=25 size=1024 ok=25 fail=0 config=ARGB_8888 allocBytes=104857600 kept=25 ms=912
+MEMROW helper-dec8888-after   PSS=235.3  Java=3.2  Native=211.9  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.2  RSS=294.0
+  FDS total=94: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×6; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-dec8888-after: pipeline: Skia (OpenGL); GPU total: 6406616 bytes, 6.11 MB (4.06 MB is purgeable); textures: 4.00 MB (1 entry) | 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 436256 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+MEMROW helper-dec565-before   PSS=30.6  Java=1.2  Native=11.3  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.2  RSS=91.5
+  FDS total=93: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×5; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-dec565-before: pipeline: Skia (OpenGL); GPU total: 2212312 bytes, 2.11 MB (64.00 KB is purgeable); textures: 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 573844 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+PROBE dec565: PCHW mode=dec565 n=25 size=1024 ok=25 fail=0 config=RGB_565 allocBytes=52428800 kept=25 ms=687
+MEMROW helper-dec565-after    PSS=183.7  Java=3.2  Native=161.9  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.2  RSS=244.8
+  FDS total=93: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×5; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-dec565-after: pipeline: Skia (OpenGL); GPU total: 4309464 bytes, 4.11 MB (2.06 MB is purgeable); textures: 2.00 MB (1 entry) | 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 501168 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+MEMROW helper-dechw-before    PSS=30.7  Java=1.2  Native=11.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.2  RSS=91.6
+  FDS total=93: socket×11; /dev/null×10; /dev/goldfish_pipe×7; anon_inode:sync_file×5; anon_inode:eventfd×4; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; pipe×2; anon_inode:eventpoll×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/fra
+  GFXMEM helper-dechw-before: pipeline: Skia (OpenGL); GPU total: 2212312 bytes, 2.11 MB (64.00 KB is purgeable); textures: 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 578320 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+PROBE dechw: PCHW mode=dechw n=25 size=1024 ok=25 fail=0 config=HARDWARE allocBytes=104857600 kept=25 ms=925
+MEMROW helper-dechw-after     PSS=137.5  Java=3.2  Native=115.8  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=1.2  RSS=198.7
+  FDS total=146: /dev/goldfish_pipe×33; /dev/goldfish_address_space×28; socket×11; /dev/null×10; anon_inode:sync_file×5; anon_inode:eventfd×5; anon_inode:eventpoll×3; /sys/kernel/tracing/trace_marker×2; pipe×2; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /apex/com.android.art/javalib/apache-xml.jar×1; /system/framework/framework.jar×1; /system/framework/
+  GFXMEM helper-dechw-after: pipeline: Skia (OpenGL); GPU total: 2212312 bytes, 2.11 MB (64.00 KB is purgeable); textures: 0.00 bytes (1 entry) | 2.00 MB (2 entries); frames: 2
+  dmabuf_dump: 0 lines, ; MemAvailable: 535824 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 0;(deleted) 4 2;(deleted) 516 7;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+## H3. The app after the same tour of thumbnail screens (Home carousel, News, Gallery, Catalogue): v1.2.31 vs v1.2.32
+installed base: 1.2.31 6f44326 (Профил за бърз старт: генериран на емулатор от e20a974); versionCode 1488544; x86_64 libs: 2; update manifest: no-update stub size 4138646;  versionCode=1488544 minSdk=26 targetSdk=37  versionName=1.2.31 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+MEMROW app-base-raw           PSS=102.9  Java=11.5  Native=55.8  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=4.6  RSS=182.1
+  FDS total=225: /dev/goldfish_pipe×53; /dev/goldfish_address_space×41; anon_inode:sync_file×24; socket×12; /dev/null×10; /data/data/org.chyavorec.app/databases/…×10; anon_inode:eventfd×8; anon_inode:eventpoll×6; /data/data/org.chyavorec.app/no_backup/…×5; pipe×4; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×3; /data/data/org.chyavorec.app/cache/…×2; /sys/kernel/tracing/trace_marker×2; /apex/com.android.art
+  GFXMEM app-base-raw: pipeline: Skia (OpenGL); GPU total: 62407192 bytes, 59.52 MB (34.15 MB is purgeable); textures: 279.82 KB (48 entries) | 10.05 MB (71 entries); frames: 233
+  dmabuf_dump: 0 lines, ; MemAvailable: 497000 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 2;(deleted) 516 7;(deleted) 8 0;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+MEMROW app-base-trim          PSS=107.9  Java=11.5  Native=55.7  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=9.6  RSS=187.6
+  FDS total=225: /dev/goldfish_pipe×53; /dev/goldfish_address_space×41; anon_inode:sync_file×24; socket×12; /dev/null×10; /data/data/org.chyavorec.app/databases/…×10; anon_inode:eventfd×8; anon_inode:eventpoll×6; /data/data/org.chyavorec.app/no_backup/…×5; pipe×4; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×3; /data/data/org.chyavorec.app/cache/…×2; /sys/kernel/tracing/trace_marker×2; /apex/com.android.art
+  GFXMEM app-base-trim: pipeline: Skia (OpenGL); GPU total: 62407192 bytes, 59.52 MB (34.15 MB is purgeable); textures: 279.82 KB (48 entries) | 10.05 MB (71 entries); frames: 233
+  dmabuf_dump: 0 lines, ; MemAvailable: 495796 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 2;(deleted) 516 7;(deleted) 8 0;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+MEMROW app-base-raw2          PSS=98.6  Java=11.9  Native=51.3  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=5.2  RSS=177.7
+  FDS total=199: /dev/goldfish_pipe×40; /dev/goldfish_address_space×29; anon_inode:sync_file×24; socket×12; /dev/null×10; /data/data/org.chyavorec.app/databases/…×10; anon_inode:eventfd×8; anon_inode:eventpoll×6; /data/data/org.chyavorec.app/no_backup/…×5; pipe×4; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×3; /sys/kernel/tracing/trace_marker×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /data/data/
+  GFXMEM app-base-raw2: pipeline: Skia (OpenGL); GPU total: 60412296 bytes, 57.61 MB (34.75 MB is purgeable); textures: 287.57 KB (39 entries) | 8.86 MB (93 entries); frames: 233
+  dmabuf_dump: 0 lines, ; MemAvailable: 502264 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 2;(deleted) 516 7;(deleted) 8 0;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+installed new: 1.2.32 c1b5ef5 (Какво ново: версия 1.2.32); versionCode 1488545; x86_64 libs: 2 size 4151654;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+MEMROW app-new-raw            PSS=87.5  Java=14.2  Native=37.1  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.7  PrivOther=4.9  RSS=165.3
+  FDS total=141: anon_inode:sync_file×24; socket×12; /dev/null×10; /data/data/org.chyavorec.app/databases/…×10; anon_inode:eventfd×8; /dev/goldfish_pipe×7; anon_inode:eventpoll×6; /data/data/org.chyavorec.app/no_backup/…×5; pipe×4; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×3; /dev/goldfish_address_space×3; /data/data/org.chyavorec.app/cache/…×2; /sys/kernel/tracing/trace_marker×2; /apex/com.android.art/j
+  GFXMEM app-new-raw: pipeline: Skia (OpenGL); GPU total: 73524920 bytes, 70.12 MB (46.38 MB is purgeable); textures: 13.94 MB (53 entries) | 7.02 MB (69 entries); frames: 234
+  dmabuf_dump: 0 lines, ; MemAvailable: 531500 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 2;(deleted) 516 7;(deleted) 8 0;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+MEMROW app-new-trim           PSS=88.8  Java=11.8  Native=35.6  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.7  PrivOther=10.1  RSS=167.0
+  FDS total=141: anon_inode:sync_file×24; socket×12; /dev/null×10; /data/data/org.chyavorec.app/databases/…×10; anon_inode:eventfd×8; /dev/goldfish_pipe×7; anon_inode:eventpoll×6; /data/data/org.chyavorec.app/no_backup/…×5; pipe×4; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×3; /dev/goldfish_address_space×3; /data/data/org.chyavorec.app/cache/…×2; /sys/kernel/tracing/trace_marker×2; /apex/com.android.art/j
+  GFXMEM app-new-trim: pipeline: Skia (OpenGL); GPU total: 73524920 bytes, 70.12 MB (46.38 MB is purgeable); textures: 13.94 MB (53 entries) | 7.02 MB (69 entries); frames: 234
+  dmabuf_dump: 0 lines, ; MemAvailable: 540792 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 2;(deleted) 516 7;(deleted) 8 0;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s0
+MEMROW app-new-raw2           PSS=84.9  Java=14.3  Native=38.0  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.6  PrivOther=4.6  RSS=165.0
+  FDS total=138: anon_inode:sync_file×24; socket×12; /dev/null×10; /data/data/org.chyavorec.app/databases/…×10; anon_inode:eventfd×7; /dev/goldfish_pipe×7; anon_inode:eventpoll×5; /data/data/org.chyavorec.app/no_backup/…×5; pipe×4; /dev/ashmemc7bN-7cc5-N-add2-3c55e0bN×3; /dev/goldfish_address_space×3; /sys/kernel/tracing/trace_marker×2; /apex/com.android.art/javalib/bouncycastle.jar×1; /dev/goldfish
+  GFXMEM app-new-raw2: pipeline: Skia (OpenGL); GPU total: 71337120 bytes, 68.03 MB (37.67 MB is purgeable); textures: 287.57 KB (14 entries) | 3.59 MB (11 entries); frames: 219
+  dmabuf_dump: 0 lines, ; MemAvailable: 689260 kB
+  showmap (device / dmabuf / ashmem / gralloc mappings): (deleted) 4 2;(deleted) 516 16;(deleted) 8 0;/dev/__properties__/properties_serial 8 0;/dev/__properties__/property_info 140 0;/dev/__properties__/u:object_r:binder_cache_system_server_prop:s0 4 0;/dev/__properties__/u:object_r:boot_status_prop:s0 0 0;/dev/__properties__/u:object_r:bootloader_prop:s
+## COMPLETE
+## logcat findings
+app pids seen: ['8846', '9090', '9764', '10653', '10901', '11555']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=62 total=316
+== Davey: 18
+   davey events=18 max=1249ms median=830ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

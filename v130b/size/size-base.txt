@@ -1,0 +1,14 @@
+== base 1.2.29 b84650f: release-config APK (arm64-v8a + armeabi-v7a, minified, throwaway key)
+APK size: 4096702 bytes
+manifest:  A: http://schemas.android.com/apk/res/android:versionCode(0x0101021b)=1488542  A: http://schemas.android.com/apk/res/android:versionName(0x0101021c)="1.2.29" (Raw: "1.2.29")  A: http://schemas.android.com/apk/res/android:extractNativeLibs(0x010104ea)=true 
+uses-permission: 'android.permission.INTERNET' 'android.permission.ACCESS_NETWORK_STATE' 'android.permission.POST_NOTIFICATIONS' 'android.permission.REQUEST_INSTALL_PACKAGES' 'android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION' 'android.permission.WAKE_LOCK' 'android.permission.RECEIVE_BOOT_COMPLETED' 'android.permission.FOREGROUND_SERVICE' 'org.chyavorec.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION' 
+foreground services: 
+part                    compressed  uncompressed  files
+classes*.dex               3346135       6616220      2
+res                         468368        832408     57
+resources.arsc              217040        217040      1
+assets/                      19674         19674      2
+lib/arm64-v8a                 8642         20472      2
+lib/armeabi-v7a               6601         13116      2
+AndroidManifest.xml           5342         23192      1
+META-INF/                      846          1288      6

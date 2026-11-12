@@ -1,0 +1,8 @@
+LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 54%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (54) requestPromotedOngoing=Boolean (true) shortCriticalText=String (54%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+   raw: 0x0be5204b: pkg=org.chyavorec.app user=UserHandle{0} id=701 tag=null importance=3 key=0|org.chyavorec.app|701|null|10227: Notification(channel=updates shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=ONGOING_EVENT|ONL
+   raw: flags=ONGOING_EVENT|ONLY_ALERT_ONCE|NO_CLEAR|FOREGROUND_SERVICE|PROMOTED_ONGOING
+   raw: mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800(FLAG_MUTE_HAPTIC)  tags= bundle=null
+   android.requestPromotedOngoing=Boolean (true)
+   android.template=String (android.app.Notification$ProgressStyle)
+   android.shortCriticalText=String (54%)
+LIVE total for org.chyavorec.app: 1

@@ -1,0 +1,73 @@
+part card33; APK: 1.2.34-card 58b37b2 built prodRelease x86_64 (throwaway key); versionCode 1500190 size 4280898 bytes
+base APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183 size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34-card 58b37b2 built prodRelease x86_64 (throwaway key); versionCode 1500190 size 4280898 bytes
+installed:  versionCode=1500190 minSdk=26 targetSdk=37  versionName=1.2.34-card 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4895 ms
+SENSORS: Accelerometer (handle=0x00000000, connectio;Accelerometer Uncalibrated ;Game Rotation Vector Sensor ;Gyroscope ;Gyroscope (uncalibrated) ;Gyroscope Bias (debug)    ;Gyroscope Sensor ;Magnetic field sensor ;Magnetic field sensor (uncalibrated) ;Rotation Vector Sensor ;Rotation Vector Sensor    ;accel
+emu console: sensor status → acceleration: enabled. gyroscope: enabled. 
+## C1. Card screen: no input (frames, CPU, sensors)
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+IDLE card-0-15s (15 s, no input): frames +58; cpu=16.1% (ticks 241 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=15.7%, g.chyavorec.app=0.2%, binder:5377_7=0.1%, Profile Saver=0.1%; pid 5377
+SENSORS card-15s: lines with the app 0: 
+IDLE card-30-45s (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 5377
+IDLE card-45-60s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 5377
+SENSORS card-60s: lines with the app 0: 
+## C2. Card screen: tilt after the rest
+SENSORS card-woken: lines with the app 0: 
+TILT card: noise rest→rest-b 0.00; rest→accA 3.15; accA→accB 2.30; accB→back 0.00
+IDLE card-after-tilt-20-35s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 5377
+SENSORS card-after-tilt: lines with the app 0: 
+## C3. Fullscreen card: no input
+IDLE card-full-0-15s (15 s, no input): frames +72; cpu=24.2% (ticks 363 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=23.7%, g.chyavorec.app=0.4%, binder:5377_7=0.1%, Jit thread pool=0.1%; pid 5377
+SENSORS card-full-15s: lines with the app 0: 
+IDLE card-full-30-45s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 5377
+IDLE card-full-45-60s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 5377
+SENSORS card-full-60s: lines with the app 0: 
+## C4. Fullscreen card: tilt after the rest
+SENSORS card-full-woken: lines with the app 0: 
+TILT card-full: noise rest→rest-b 0.00; rest→accA 0.00; accA→accB 2.07; accB→back 0.00
+IDLE card-full-after-tilt-20-35s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 5377
+SENSORS card-full-after-tilt: lines with the app 0: 
+## C5. Fullscreen card: flip (tap) and rest after it
+IDLE card-full-flip-2-17s (15 s, no input): frames +0; cpu=0.3% (ticks 4 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.3%; pid 5377
+IDLE card-full-flip-22-37s (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 5377
+SENSORS card-full-flip: lines with the app 0: 
+## C6. Power saver switched on 3 s after opening the card (the weave stops at once?)
+power saver:  → 1
+IDLE card-powersave-4-19s (15 s, no input): frames +7; cpu=1.5% (ticks 23 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=1.3%, g.chyavorec.app=0.2%; pid 5377
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 1 | Първи кадър: медиана 2946 мс, последен 2946 мс | Пълно показване: медиана 2946 мс, последно 2946 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 1" text="Първи кадър: медиана 2946 мс, последен 2946 мс" text="Пълно показване: медиана 2946 мс, последно 2946 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5377']): 30 in 11 groups
+      10  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       9  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       2  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       1  W/Parcel: Expecting binder but got null!
+       1  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       1  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       1  W/Gralloc4: allocator #.x is not supported
+       1  E/OpenGLRenderer: Unable to match the desired swap behavior.
+## COMPLETE
+## logcat findings
+app pids seen: ['5377']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 17
+   skipped-frames events=17 max=162 total=867
+== Davey: 44
+   davey events=44 max=3545ms median=926ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

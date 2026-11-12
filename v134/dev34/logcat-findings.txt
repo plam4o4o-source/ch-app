@@ -1,0 +1,60 @@
+app pids seen: ['5912', '10285', '10819']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 16
+   11-10 19:38:28.417 10285 10294 D StrictMode: StrictMode policy violation: android.os.strictmode.LeakedClosableViolation: A resource was acquired at attached stack trace but never released. See java.io.Closeable for information on avoiding r
+   11-10 19:38:28.417 10285 10294 D StrictMode: 	at android.os.StrictMode$AndroidCloseGuardReporter.report(StrictMode.java:1991)
+   11-10 19:38:28.417 10285 10294 D StrictMode: 	at dalvik.system.CloseGuard.warnIfOpen(CloseGuard.java:338)
+   11-10 19:38:28.417 10285 10294 D StrictMode: 	at android.view.SurfaceControl.finalize(SurfaceControl.java:1682)
+   11-10 19:38:28.417 10285 10294 D StrictMode: 	at java.lang.Daemons$FinalizerDaemon.doFinalize(Daemons.java:319)
+   11-10 19:38:28.417 10285 10294 D StrictMode: 	at java.lang.Daemons$FinalizerDaemon.runInternal(Daemons.java:306)
+   11-10 19:38:28.417 10285 10294 D StrictMode: 	at java.lang.Daemons$Daemon.run(Daemons.java:140)
+   11-10 19:38:28.417 10285 10294 D StrictMode: 	at java.lang.Thread.run(Thread.java:1012)
+   11-10 19:42:11.759 10819 10828 D StrictMode: StrictMode policy violation: android.os.strictmode.LeakedClosableViolation: A resource was acquired at attached stack trace but never released. See java.io.Closeable for information on avoiding r
+   11-10 19:42:11.759 10819 10828 D StrictMode: 	at android.os.StrictMode$AndroidCloseGuardReporter.report(StrictMode.java:1991)
+   11-10 19:42:11.759 10819 10828 D StrictMode: 	at dalvik.system.CloseGuard.warnIfOpen(CloseGuard.java:338)
+   11-10 19:42:11.759 10819 10828 D StrictMode: 	at android.view.SurfaceControl.finalize(SurfaceControl.java:1682)
+== Skipped: 132
+   skipped-frames events=132 max=107 total=5272
+   11-10 19:25:11.988  5912  5912 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:13.004  5912  5912 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:15.071  5912  5912 I Choreographer: Skipped 68 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:16.184  5912  5912 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:17.071  5912  5912 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:24.471  5912  5912 I Choreographer: Skipped 107 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:25.897  5912  5912 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:36.675  5912  5912 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:51.373  5912  5912 I Choreographer: Skipped 106 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:52.582  5912  5912 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:59.563  5912  5912 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-10 19:26:07.017  5912  5912 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 376
+   davey events=376 max=2881ms median=842ms
+   11-10 19:25:13.040  5912  5924 I OpenGLRenderer: Davey! duration=959ms; Flags=1, FrameTimelineVsyncId=6746, IntendedVsync=105173933571, Vsync=105173933571, InputEventId=0, HandleInputStart=105175856474, AnimationStart=105175858207, PerformT
+   11-10 19:25:14.993  5912  5923 I OpenGLRenderer: Davey! duration=869ms; Flags=0, FrameTimelineVsyncId=6859, IntendedVsync=106373939067, Vsync=106607272377, InputEventId=0, HandleInputStart=106612446029, AnimationStart=106612448673, PerformT
+   11-10 19:25:15.560  5912  6015 I OpenGLRenderer: Davey! duration=1628ms; Flags=0, FrameTimelineVsyncId=6900, IntendedVsync=106623939042, Vsync=106707272372, InputEventId=0, HandleInputStart=106719154995, AnimationStart=106719156968, Perform
+   11-10 19:25:16.168  5912  6015 I OpenGLRenderer: Davey! duration=1352ms; Flags=0, FrameTimelineVsyncId=6913, IntendedVsync=106723933509, Vsync=107090600161, InputEventId=0, HandleInputStart=107093148387, AnimationStart=107093150320, Perform
+   11-10 19:25:17.070  5912  6015 I OpenGLRenderer: Davey! duration=2139ms; Flags=0, FrameTimelineVsyncId=6936, IntendedVsync=107107266827, Vsync=108240600115, InputEventId=0, HandleInputStart=108254398816, AnimationStart=108254401139, Perform
+   11-10 19:25:17.427  5912  6015 I OpenGLRenderer: Davey! duration=1366ms; Flags=0, FrameTimelineVsyncId=7111, IntendedVsync=108273944529, Vsync=108740611121, InputEventId=0, HandleInputStart=108750592547, AnimationStart=108750594670, Perform
+   11-10 19:25:17.638  5912  6015 I OpenGLRenderer: Davey! duration=1164ms; Flags=0, FrameTimelineVsyncId=7147, IntendedVsync=108757272311, Vsync=109357272251, InputEventId=0, HandleInputStart=109362183519, AnimationStart=109362184670, Perform
+   11-10 19:25:17.798  5912  6015 I OpenGLRenderer: Davey! duration=1243ms; Flags=0, FrameTimelineVsyncId=7192, IntendedVsync=109373933403, Vsync=110240600035, InputEventId=0, HandleInputStart=110249573876, AnimationStart=110249575118, Perform
+   11-10 19:25:17.988  5912  6015 I OpenGLRenderer: Davey! duration=750ms; Flags=0, FrameTimelineVsyncId=7289, IntendedVsync=110273933367, Vsync=110623933353, InputEventId=0, HandleInputStart=110625061501, AnimationStart=110625063143, PerformT
+   11-10 19:25:24.697  5912  5924 I OpenGLRenderer: Davey! duration=1998ms; Flags=0, FrameTimelineVsyncId=7796, IntendedVsync=115840599811, Vsync=115840599811, InputEventId=0, HandleInputStart=115846649992, AnimationStart=115846651124, Perform
+   11-10 19:25:24.983  5912  6015 I OpenGLRenderer: Davey! duration=2254ms; Flags=0, FrameTimelineVsyncId=7804, IntendedVsync=115857266477, Vsync=117640599739, InputEventId=0, HandleInputStart=117650000555, AnimationStart=117650002397, Perform
+   11-10 19:25:29.891  5912  6015 I OpenGLRenderer: Davey! duration=925ms; Flags=0, FrameTimelineVsyncId=8836, IntendedVsync=122107266227, Vsync=122290599553, InputEventId=0, HandleInputStart=122294818877, AnimationStart=122294819958, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-10 19:25:07.159  5906  5906 I PERFCHECK: section: W. First launch and warm-up
+   11-10 19:26:11.490  7225  7225 I PERFCHECK: section: E0. Demo sign-in
+   11-10 19:27:01.992  7793  7793 I PERFCHECK: section: E1. Short tour devDebug, StrictMode VM policy: leaked closables/registrations/SQLite
+   11-10 19:28:31.658  8358  8358 I PERFCHECK: sh-art-dev
+   11-10 19:29:08.263  8673  8673 I PERFCHECK: sh-ev1-dev
+   11-10 19:30:25.217  9214  9214 I PERFCHECK: pdf devdoc tap
+   11-10 19:32:32.282 10088 10088 I PERFCHECK: section: E2. Monkey on devDebug seed 1357, 6000 events
+   11-10 19:32:32.308 10093 10093 I PERFCHECK: section: W. First launch and warm-up
+   11-10 19:33:01.743 10248 10248 I PERFCHECK: section: K. Monkey 6000 events seed 1357, CAMERA revoked
+   11-10 19:33:27.035 10394 10394 I PERFCHECK: monkey start
+   11-10 19:38:36.193 10798 10798 I PERFCHECK: section: E3. Monkey on devDebug seed 24680, 4000 events
+   11-10 19:38:56.219 10920 10920 I PERFCHECK: monkey2 start
+   11-10 19:43:36.522 11578 11578 I PERFCHECK: section: E4. StrictMode / CloseGuard over the whole run devDebug only; stacks show where the resource was opened
+   11-10 19:43:38.231 11586 11586 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

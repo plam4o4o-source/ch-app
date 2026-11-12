@@ -1,0 +1,59 @@
+part idle19; APK: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690 bytes
+base APK: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## I-new. Install new, warm-up, library card
+installed new: 1.2.33 6d3a324 (Какво ново: версия 1.2.33; политика за поверителност — 7 ное); versionCode 1488546; x86_64 libs: 2 size 4274690;  versionCode=1488546 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## I-new. Home: cold start, 0-24 s (ribbon + carousel) and 37-67 s (should be ~0)
+IDLE new-home-0-25s (24 s, no input): frames +113; cpu=25.1% (ticks 603 in 24 s; 100 ticks = 1 cpu-s) threads: RenderThread=23.0%, g.chyavorec.app=1.3%, Jit thread pool=0.6%, HeapTaskDaemon=0.1%, DefaultExecutor=0.0%; pid 7378
+IDLE new-home-37-67s (30 s, no input): frames +94; cpu=15.8% (ticks 475 in 30 s; 100 ticks = 1 cpu-s) threads: RenderThread=15.4%, g.chyavorec.app=0.3%, Jit thread pool=0.1%, DefaultExecutor=0.0%; pid 7378
+  cpuinfo: 100% TOTAL: 51% user + 46% kernel + 2.2% softirq
+## I-new. Library card: first 30 s (shader budget), then 35-65 s, then with sensor jitter
+IDLE new-card-0-30s (30 s, no input): frames +140; cpu=26.4% (ticks 792 in 30 s; 100 ticks = 1 cpu-s) threads: RenderThread=25.7%, g.chyavorec.app=0.5%, Jit thread pool=0.2%, binder:7378_4=0.0%; pid 7378
+IDLE new-card-35-65s (30 s, no input): frames +128; cpu=20.0% (ticks 600 in 30 s; 100 ticks = 1 cpu-s) threads: RenderThread=19.3%, g.chyavorec.app=0.4%, Jit thread pool=0.2%, binder:7378_2=0.1%, DefaultExecutor=0.0%; pid 7378
+IDLE new-card-jitter (20 s, no input): frames +94; cpu=24.9% (ticks 497 in 20 s; 100 ticks = 1 cpu-s) threads: RenderThread=24.1%, g.chyavorec.app=0.4%, Profile Saver=0.1%, binder:7378_5=0.1%, binder:7378_4=0.1%; pid 7378
+## I-new. Other screens, 8 s after opening, 20 s each
+IDLE new-article (20 s, no input): frames +0; cpu=0.0% (ticks 0 in 20 s; 100 ticks = 1 cpu-s) threads: none; pid 7378
+IDLE new-catalog (20 s, no input): frames +0; cpu=0.1% (ticks 3 in 20 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%, Profile Saver=0.1%; pid 7378
+IDLE new-my (20 s, no input): frames +0; cpu=0.0% (ticks 0 in 20 s; 100 ticks = 1 cpu-s) threads: none; pid 7378
+IDLE new-news (20 s, no input): frames +0; cpu=0.0% (ticks 0 in 20 s; 100 ticks = 1 cpu-s) threads: none; pid 7378
+IDLE new-home-return (20 s, no input): frames +0; cpu=0.0% (ticks 0 in 20 s; 100 ticks = 1 cpu-s) threads: none; pid 7378
+## I-new. In the background (Home key)
+IDLE new-background (30 s, no input): frames +0; cpu=0.1% (ticks 2 in 30 s; 100 ticks = 1 cpu-s) threads: HeapTaskDaemon=0.1%; pid 7378
+## I-base. Install base, warm-up, library card
+installed base: 1.2.32 87ef20e (Профил за бърз старт: генериран на емулатор от ad28878); versionCode 1488545; x86_64 libs: 2; update manifest: no-update stub size 4160882;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+CARD added 'TEST-12345': text="Sat, Nov 7" content-desc="Sat, Nov 7" text="Gmail" content-desc="Gmail" text="Photos" content-desc="Photos" text="YouTube" content-desc="YouTube" content-desc="Home" text="Phone" 
+base: card not shown
+## I-base. Home: cold start, 0-24 s (ribbon + carousel) and 37-67 s (should be ~0)
+IDLE base-home-0-25s (24 s, no input): frames +128; cpu=30.5% (ticks 733 in 24 s; 100 ticks = 1 cpu-s) threads: RenderThread=28.2%, g.chyavorec.app=1.0%, Jit thread pool=1.0%, HeapTaskDaemon=0.1%, DefaultDispatch=0.1%; pid 9163
+IDLE base-home-37-67s (30 s, no input): frames +0; cpu=0.0% (ticks 0 in 30 s; 100 ticks = 1 cpu-s) threads: none; pid 9163
+  cpuinfo: 29% TOTAL: 4.8% user + 24% kernel + 0.4% iowait + 0.2% softirq
+## I-base. Library card: first 30 s (shader budget), then 35-65 s, then with sensor jitter
+CARD: no card-number field: text="Sat, Nov 7" content-desc="Sat, Nov 7" text="Gmail" content-desc="Gmail" text="Photos" content-desc="Photos" text="YouTube" content-desc="YouTube" 
+## I-base. Other screens, 8 s after opening, 20 s each
+IDLE base-article (20 s, no input): frames +0; cpu=0.0% (ticks 0 in 20 s; 100 ticks = 1 cpu-s) threads: none; pid 9538
+IDLE base-catalog (20 s, no input): frames +0; cpu=0.1% (ticks 1 in 20 s; 100 ticks = 1 cpu-s) threads: Jit thread pool=0.1%; pid 9538
+IDLE base-my (20 s, no input): frames +0; cpu=0.0% (ticks 0 in 20 s; 100 ticks = 1 cpu-s) threads: none; pid 9538
+IDLE base-news (20 s, no input): frames +0; cpu=0.0% (ticks 0 in 20 s; 100 ticks = 1 cpu-s) threads: none; pid 9538
+IDLE base-home-return (20 s, no input): frames +91; cpu=22.4% (ticks 447 in 20 s; 100 ticks = 1 cpu-s) threads: RenderThread=20.9%, g.chyavorec.app=0.6%, Jit thread pool=0.6%, binder:9538_1=0.1%, Profile Saver=0.1%; pid 9538
+## I-base. In the background (Home key)
+IDLE base-background (30 s, no input): frames +0; cpu=0.1% (ticks 2 in 30 s; 100 ticks = 1 cpu-s) threads: HeapTaskDaemon=0.1%; pid 9538
+## COMPLETE
+## logcat findings
+app pids seen: ['5246', '7378', '8654', '9077', '9163', '9337', '9418', '9538']
+== FATAL: 10
+== ANR: 0
+== StrictMode: 0
+== Skipped: 41
+   skipped-frames events=41 max=110 total=2182
+== Davey: 76
+   davey events=76 max=2715ms median=894ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

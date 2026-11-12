@@ -1,0 +1,25 @@
+APP W/E lines (pids ['5558', '6907', '8175', '9377']): 96 in 24 groups
+       8  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->getScaleX()F (dark greylist, linking)
+       8  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setPivotX(F)Z (dark greylist, linking)
+       5  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       4  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setScaleY(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->getMatrix(Landroid/graphics/Matrix;)V (dark greylist, linki
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setLayerPaint(Landroid/graphics/Paint;)Z (dark greylist, li
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setCameraDistance(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setRotationX(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setClipToOutline(Z)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setLayerType(I)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setRotationY(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setAlpha(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setElevation(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setRotation(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setTranslationY(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setOutline(Landroid/graphics/Outline;)Z (dark greylist, lin
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setScaleX(F)Z (dark greylist, linking)
+       4  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setTranslationX(F)Z (dark greylist, linking)
+       1  W/g.chyavorec.ap: Long monitor contention with owner main (#) at boolean android.os.BinderProxy.transactNative(int, android.os.P
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#-de#-#-a#-#c#a#daae#b#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=ebb#d#f-f#-#f-#e#-#e#c#e#, generation=#)

@@ -1,0 +1,39 @@
+APP W/E lines (pids ['5579', '6524', '7275']): 106 in 38 groups
+       9  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+       8  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+       7  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+       6  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+       4  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       4  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       4  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+       4  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+       4  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+       3  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       3  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+       3  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+       3  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+       3  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+       3  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+       3  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       2  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       2  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+       2  W/GooglePlayServicesUtil: Google Play services out of date for org.chyavorec.app.  Requires # but found #
+       2  W/GoogleApiManager: The service for ng# is not available: kr#{statusCode=SERVICE_VERSION_UPDATE_REQUIRED, resolution=null, message
+       2  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+       2  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanC
+       2  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCod
+       2  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+       2  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, 
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_MULTIPLE, keyCode=KEYCODE_DPAD_RIGHT, 
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scan
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCo
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanC
+       1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+       1  W/ConnectionStatusConfig: Dynamic lookup for intent failed for action: com.google.android.gms.chimera.container.moduleinstall.ModuleInst
+       1  W/GmsClient: unable to connect to service: com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.STAR
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, sca
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanC
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y

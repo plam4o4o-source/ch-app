@@ -1,0 +1,37 @@
+app pids seen: ['5148', '6356']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 110
+   skipped-frames events=110 max=74 total=4351
+   11-10 19:26:04.226  5148  5148 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   11-10 19:26:05.480  5148  5148 I Choreographer: Skipped 74 frames!  The application may be doing too much work on its main thread.
+   11-10 19:26:06.471  5148  5148 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   11-10 19:26:07.524  5148  5148 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-10 19:26:27.828  5148  5148 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-10 19:26:48.992  6356  6356 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-10 19:27:52.353  6356  6356 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-10 19:27:52.901  6356  6356 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-10 19:27:57.914  6356  6356 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-10 19:27:58.534  6356  6356 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-10 19:27:59.448  6356  6356 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-10 19:28:00.285  6356  6356 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+== Davey: 331
+   davey events=331 max=2234ms median=867ms
+   11-10 19:26:06.735  5148  5159 I OpenGLRenderer: Davey! duration=2234ms; Flags=1, FrameTimelineVsyncId=6228, IntendedVsync=112248893822, Vsync=113482227106, InputEventId=0, HandleInputStart=113485128426, AnimationStart=113485129097, Perform
+   11-10 19:26:06.965  5148  5159 I OpenGLRenderer: Davey! duration=1428ms; Flags=0, FrameTimelineVsyncId=6391, IntendedVsync=113532232647, Vsync=114465565887, InputEventId=0, HandleInputStart=114475540806, AnimationStart=114475541537, Perform
+   11-10 19:26:17.396  5148  5213 I OpenGLRenderer: Davey! duration=903ms; Flags=0, FrameTimelineVsyncId=6812, IntendedVsync=124248893342, Vsync=124498893332, InputEventId=0, HandleInputStart=124514697474, AnimationStart=124514697755, PerformT
+   11-10 19:26:17.569  5148  5213 I OpenGLRenderer: Davey! duration=880ms; Flags=0, FrameTimelineVsyncId=6835, IntendedVsync=124598898874, Vsync=124982232169, InputEventId=0, HandleInputStart=124995937497, AnimationStart=124995937947, PerformT
+   11-10 19:26:28.262  5148  5213 I OpenGLRenderer: Davey! duration=1345ms; Flags=0, FrameTimelineVsyncId=7250, IntendedVsync=134832226252, Vsync=135148892906, InputEventId=0, HandleInputStart=135154932902, AnimationStart=135154933734, Perform
+   11-10 19:26:28.512  5148  5213 I OpenGLRenderer: Davey! duration=1162ms; Flags=0, FrameTimelineVsyncId=7265, IntendedVsync=135182226238, Vsync=135832226212, InputEventId=0, HandleInputStart=135832741820, AnimationStart=135832742602, Perform
+   11-10 19:26:33.803  5148  5164 I OpenGLRenderer: Davey! duration=952ms; Flags=0, FrameTimelineVsyncId=7488, IntendedVsync=140732226016, Vsync=141165559332, InputEventId=0, HandleInputStart=141177060894, AnimationStart=141177061455, PerformT
+   11-10 19:26:49.964  6356  6369 I OpenGLRenderer: Davey! duration=844ms; Flags=1, FrameTimelineVsyncId=9244, IntendedVsync=157015558698, Vsync=157365558684, InputEventId=0, HandleInputStart=157375106034, AnimationStart=157375106695, PerformT
+   11-10 19:26:50.331  6356  6368 I OpenGLRenderer: Davey! duration=900ms; Flags=0, FrameTimelineVsyncId=9283, IntendedVsync=157398892016, Vsync=157832225332, InputEventId=0, HandleInputStart=157844226367, AnimationStart=157844227028, PerformT
+   11-10 19:27:25.994  6356  6368 I OpenGLRenderer: Davey! duration=942ms; Flags=0, FrameTimelineVsyncId=10414, IntendedVsync=192815557266, Vsync=193098890588, InputEventId=0, HandleInputStart=193108942019, AnimationStart=193108942671, Perform
+   11-10 19:27:26.478  6356  6368 I OpenGLRenderer: Davey! duration=718ms; Flags=0, FrameTimelineVsyncId=10478, IntendedVsync=193598890568, Vsync=193598890568, InputEventId=0, HandleInputStart=193601166458, AnimationStart=193601166748, Perform
+   11-10 19:27:26.481  6356  6368 I OpenGLRenderer: Davey! duration=865ms; Flags=0, FrameTimelineVsyncId=10485, IntendedVsync=193615557234, Vsync=194065557216, InputEventId=0, HandleInputStart=194072480684, AnimationStart=194072481135, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-10 19:26:02.071  5130  5130 I PERFCHECK: section: W. First launch and warm-up
+   11-10 19:26:45.822  6336  6336 I PERFCHECK: section: M. Memory over 30 cycles all tabs + a book + the gallery viewer + the expanded search, new
+   11-10 19:49:33.483 15849 15849 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

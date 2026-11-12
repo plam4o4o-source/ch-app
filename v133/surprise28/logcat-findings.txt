@@ -1,0 +1,30 @@
+app pids seen: ['5469', '7213', '8510', '9658']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=80 total=190
+   11-07 17:53:05.764  5469  5469 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-07 17:53:06.311  5469  5469 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-07 17:53:07.713  5469  5469 I Choreographer: Skipped 80 frames!  The application may be doing too much work on its main thread.
+   11-07 17:53:14.959  5469  5469 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+== Davey: 4
+   davey events=4 max=1594ms median=1134ms
+   11-07 17:53:07.385  5469  5509 I OpenGLRenderer: Davey! duration=1594ms; Flags=1, IntendedVsync=123095991324, Vsync=123612657970, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=123621106620, AnimationStart=123621
+   11-07 17:53:07.739  5469  5509 I OpenGLRenderer: Davey! duration=1372ms; Flags=1, IntendedVsync=123676917519, Vsync=125010250799, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=125023370690, AnimationStart=125023
+   11-07 17:53:14.986  5469  5509 I OpenGLRenderer: Davey! duration=756ms; Flags=0, IntendedVsync=131539000824, Vsync=131539000824, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=131540282140, AnimationStart=1315403
+   11-07 17:53:15.149  5469  5509 I OpenGLRenderer: Davey! duration=897ms; Flags=1, IntendedVsync=131560884507, Vsync=132260884479, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=132269275190, AnimationStart=1322693
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 17:53:04.129  5458  5458 I PERFCHECK: section: W. First launch and warm-up
+   11-07 17:53:46.285  6398  6398 I PERFCHECK: section: SM0. Device memory: MemTotal: 2046996 kB; API 28
+   11-07 17:53:46.334  6402  6402 I PERFCHECK: section: SM1. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-07 17:53:58.764  6519  6519 I PERFCHECK: sm-1
+   11-07 17:54:04.014  1964  2874 I ActivityManager: Process org.chyavorec.app (pid 5469) has died: fore TOP 
+   11-07 17:54:21.113  7405  7405 I PERFCHECK: section: SM2. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-07 17:54:35.271  7758  7758 I PERFCHECK: sm-2
+   11-07 17:54:40.552  1964  4527 I ActivityManager: Process org.chyavorec.app (pid 7213) has died: fore TOP 
+   11-07 17:54:56.707  8677  8677 I PERFCHECK: section: SM3. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-07 17:55:09.897  8942  8942 I PERFCHECK: sm-3
+   11-07 17:55:14.642  1964  2121 I ActivityManager: Process org.chyavorec.app (pid 8510) has died: fore TOP 
+   11-07 17:55:30.012  9805  9805 I PERFCHECK: section: SM9. For comparison: open a book from the catalogue list same memory probe

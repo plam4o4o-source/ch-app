@@ -1,0 +1,80 @@
+part monkey34; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3013 ms
+## K. Monkey 6000 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=6401
+MONKEY exit=0 duration=343 s; Events injected: 6000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '6401'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=74517KB  Java=18764KB  Native=12584KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=5)  RSS=109120KB  Views=21 Activities=1
+MEM after-monkey (trimmed) PSS=62436KB  Java=9448KB  Native=12740KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=5)  RSS=105644KB  Views=15 Activities=1
+## K-base. The same monkey on 1.2.33
+installed base: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2858 ms
+## K. Monkey 6000 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=8846
+MONKEY exit=0 duration=313 s; Events injected: 6000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '8846'; airplane=1; camera: 
+MEM after-monkey (raw) PSS=94230KB  Java=22320KB  Native=32612KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=11)  RSS=163572KB  Views=19 Activities=1
+MEM after-monkey (trimmed) PSS=77487KB  Java=9620KB  Native=18100KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=10)  RSS=141308KB  Views=15 Activities=1
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 2 | Първи кадър: медиана 1957 мс, последен 1915 мс | Пълно показване: медиана 2290 мс, последно 2581 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 2" text="Първи кадър: медиана 1957 мс, последен 1915 мс" text="Пълно показване: медиана 2290 мс, последно 2581 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5115', '6401', '8556', '8846']): 4327 in 42 groups
+    3869  W/InputEventSender: Received 'finished' signal for unknown seq number = #
+     132  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      96  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+      41  W/Parcel: Expecting binder but got null!
+      41  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      30  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+      18  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+      10  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+      10  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+       7  W/System: A resource failed to call release. 
+       6  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       6  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/Gralloc4: allocator #.x is not supported
+       4  W/RemoteInputConnectionImpl: setComposingText on inactive InputConnection
+       3  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       3  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       3  W/RemoteInputConnectionImpl: commitText on inactive InputConnection
+       3  E/ViewRootImpl: Calling showInsets(#,true) on window that no longer has views.
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       2  W/InputMethodManager: Ignoring showSoftInput() as view=j#{# VFED..... .F....ID #,#-#,# aid=#} is not served.
+       2  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, sca
+       2  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       2  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at boolean android.os.MessageQueue.enqueueMe
+       2  W/RemoteInputConnectionImpl: beginBatchEdit on inactive InputConnection
+       2  W/RemoteInputConnectionImpl: endBatchEdit on inactive InputConnection
+       2  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y[#]=#.
+       2  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_MULTIPLE, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaS
+## COMPLETE
+## logcat findings
+app pids seen: ['5115', '6401', '8556', '8846']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 122
+   skipped-frames events=122 max=78 total=5023
+== Davey: 390
+   davey events=390 max=1912ms median=873ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

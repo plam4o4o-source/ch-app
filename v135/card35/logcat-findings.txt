@@ -1,0 +1,40 @@
+app pids seen: ['5440', '8382', '8501', '8653', '8782', '8917', '9035', '9158', '9286', '9561', '10504', '10634', '10749', '10868', '10983', '11147', '11268', '11425', '11834', '12580', '12693', '12809', '12923', '13053', '13174', '13295', '13494', '13725', '14508', '14621', '14741', '14862', '14976', '15093', '15221', '15340']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 137
+   skipped-frames events=137 max=124 total=7686
+   11-12 16:36:31.006  5440  5440 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   11-12 16:36:31.786  5440  5440 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-12 16:36:32.793  5440  5440 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-12 16:36:34.324  5440  5440 I Choreographer: Skipped 86 frames!  The application may be doing too much work on its main thread.
+   11-12 16:36:36.244  5440  5440 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-12 16:36:36.872  5440  5440 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-12 16:36:37.399  5440  5440 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-12 16:36:38.225  5440  5440 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-12 16:36:38.786  5440  5440 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-12 16:36:44.624  5440  5440 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-12 16:37:17.050  5440  5440 I Choreographer: Skipped 78 frames!  The application may be doing too much work on its main thread.
+   11-12 16:37:17.584  5440  5440 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 229
+   davey events=229 max=3228ms median=1137ms
+   11-12 16:36:34.220  5440  5451 I OpenGLRenderer: Davey! duration=1859ms; Flags=1, FrameTimelineVsyncId=6492, IntendedVsync=110837277761, Vsync=111587277731, InputEventId=0, HandleInputStart=111596230512, AnimationStart=111596231343, Perform
+   11-12 16:36:34.825  5440  5451 I OpenGLRenderer: Davey! duration=1714ms; Flags=0, FrameTimelineVsyncId=6625, IntendedVsync=112620611023, Vsync=112620611023, InputEventId=0, HandleInputStart=112625070008, AnimationStart=112625070439, Perform
+   11-12 16:36:35.448  5440  5451 I OpenGLRenderer: Davey! duration=1924ms; Flags=0, FrameTimelineVsyncId=6656, IntendedVsync=112687277687, Vsync=114120610963, InputEventId=0, HandleInputStart=114230508450, AnimationStart=114230508980, Perform
+   11-12 16:36:36.222  5440  5451 I OpenGLRenderer: Davey! duration=1424ms; Flags=0, FrameTimelineVsyncId=6935, IntendedVsync=114337277621, Vsync=114737277605, InputEventId=0, HandleInputStart=114753913807, AnimationStart=114753914698, Perform
+   11-12 16:36:36.856  5440  5451 I OpenGLRenderer: Davey! duration=1338ms; Flags=0, FrameTimelineVsyncId=6973, IntendedVsync=114770610937, Vsync=114803944269, InputEventId=0, HandleInputStart=114806421761, AnimationStart=114806422061, Perform
+   11-12 16:36:37.398  5440  5452 I OpenGLRenderer: Davey! duration=1648ms; Flags=0, FrameTimelineVsyncId=6990, IntendedVsync=114820610935, Vsync=115253944251, InputEventId=0, HandleInputStart=115268978137, AnimationStart=115268978598, Perform
+   11-12 16:36:38.039  5440  5542 I OpenGLRenderer: Davey! duration=1796ms; Flags=0, FrameTimelineVsyncId=7010, IntendedVsync=115270610917, Vsync=116053944219, InputEventId=0, HandleInputStart=116054267781, AnimationStart=116054268362, Perform
+   11-12 16:36:38.717  5440  5451 I OpenGLRenderer: Davey! duration=1841ms; Flags=0, FrameTimelineVsyncId=7024, IntendedVsync=116070610885, Vsync=116670610861, InputEventId=0, HandleInputStart=116682245023, AnimationStart=116682245323, Perform
+   11-12 16:36:39.073  5440  5451 I OpenGLRenderer: Davey! duration=1233ms; Flags=0, FrameTimelineVsyncId=7062, IntendedVsync=116687277527, Vsync=117203944173, InputEventId=0, HandleInputStart=117209711140, AnimationStart=117209711731, Perform
+   11-12 16:36:39.185  5440  5451 I OpenGLRenderer: Davey! duration=1264ms; Flags=0, FrameTimelineVsyncId=7115, IntendedVsync=117220610839, Vsync=118020610807, InputEventId=0, HandleInputStart=118036685497, AnimationStart=118036686218, Perform
+   11-12 16:36:44.781  5440  5451 I OpenGLRenderer: Davey! duration=914ms; Flags=0, FrameTimelineVsyncId=7604, IntendedVsync=123553943919, Vsync=123553943919, InputEventId=0, HandleInputStart=123554130105, AnimationStart=123554130917, PerformT
+   11-12 16:36:45.445  5440  5452 I OpenGLRenderer: Davey! duration=1328ms; Flags=0, FrameTimelineVsyncId=7611, IntendedVsync=123570610585, Vsync=124420610551, InputEventId=0, HandleInputStart=124434304760, AnimationStart=124434305621, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 16:36:19.142  5163  5163 I PERFCHECK: section: C new-1: fresh install, card added by hand, then 5× cold start, 5 s, Моето › Читателска карта › Покажи картата + no-wait + cleared GL cache
+   11-12 16:42:04.139  9415  9415 I PERFCHECK: section: C base-2: fresh install, card added by hand, then 5× cold start, 5 s, Моето › Читателска карта › Покажи картата + no-wait + cleared GL cache
+   11-12 16:47:13.554 11531 11531 I PERFCHECK: section: C base-3: fresh install, card added by hand, then 5× cold start, 5 s, Моето › Читателска карта › Покажи картата + no-wait + cleared GL cache
+   11-12 16:52:19.172 13600 13600 I PERFCHECK: section: C new-4: fresh install, card added by hand, then 5× cold start, 5 s, Моето › Читателска карта › Покажи картата + no-wait + cleared GL cache
+   11-12 16:57:28.407 15445 15445 I PERFCHECK: section: C totals: per build and mode — the slowest frame of each open, the first 5 frames ms, IntendedVsync → FrameCompleted
+   11-12 16:57:28.515 15453 15453 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

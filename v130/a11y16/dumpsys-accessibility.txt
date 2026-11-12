@@ -1,0 +1,45 @@
+ACCESSIBILITY MANAGER (dumpsys accessibility)
+
+currentUserId=0
+hasWindowMagnificationConnection=false
+Magnifier on display#0
+    MagnificationConfig[mode: 1, scale: 1.0, centerX: 540.0, centerY: 1171.0] 
+    Magnification region=SkRegion((5,5,1075,2337))
+    IdOfLastServiceToMagnify=-1
+    SupportWindowMagnification=false
+    WindowMagnificationConnectionState=DISCONNECTED
+User state[
+     attributes:{id=0, touchExplorationEnabled=true, serviceHandlesDoubleTap=false, requestMultiFingerGestures=false, requestTwoFingerPassthrough=false, sendMotionEventsEnabledfalse, displayMagnificationEnabled=false, autoclickEnabled=false, nonInteractiveUiTimeout=0, interactiveUiTimeout=0, installedServiceCount=4, magnificationModes={0=1}, magnificationCapabilities=3, audioDescriptionByDefaultEnabled=false, magnificationFollowTypingEnabled=true}
+     shortcut key:{}
+     button:{}
+     button target:{null}
+     Bound services:{Service[label=PC a11y, feedbackType[FEEDBACK_SPOKEN], capabilities=3, eventTypes=TYPES_ALL_MASK, notificationTimeout=50, requestA11yBtn=false]}
+     Enabled services:{{org.pc.helper/org.pc.helper.A11y}}
+     Binding services:{}
+     Crashed services:{}
+     Client list info:{
+          Client list callbacks: 15
+          Client list killed: false
+          Client list broadcasts count: -1
+          Registered clients:{
+[com.google.android.deskclock][com.google.android.apps.messaging][com.google.android.googlequicksearchbox][org.pc.helper][com.google.android.apps.nexuslauncher][com.google.android.as][com.google.android.apps.youtube.music][com.google.android.apps.wellbeing][org.chyavorec.app][com.google.android.calendar][com.google.android.inputmethod.latin][com.google.android.contacts][com.google.android.apps.maps][com.google.android.apps.photos][com.google.android.youtube]}]
+Global Info [ Top focused display Id = 0
+     Active Window Id = 275
+     Top Focused Window Id = 275
+     Accessibility Focused Window Id = -1 ]
+
+Display[0] : 
+A11yWindow[AccessibilityWindowInfo[title=null, displayId=0, id=271, taskId=-1, type=TYPE_SYSTEM, layer=1, region=SkRegion((0,0,1080,128)), bounds=Rect(0, 0 - 1080, 128), focused=false, active=false, pictureInPicture=false, hasParent=false, isAnchored=false, hasChildren=false]]
+WindowInfo[WindowInfo[title=null, displayId=0, taskId=-1, type=2000, layer=0, token=android.os.BinderProxy@6d9de03, region=SkRegion((0,0,1080,128)), bounds=Rect(0, 0 - 1080, 128), parent=null, focused=false, children=null, accessibility anchor=9223372034707292159, pictureInPicture=false, watchOutsideTouch=false, mTransformMatrix=Matrix{[1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]}, mMagnificationSpec=<scale:1.0,offsetX:0.0,offsetY:0.0>]]
+,
+A11yWindow[AccessibilityWindowInfo[title=НЧ Яворец, displayId=0, id=275, taskId=12, type=TYPE_APPLICATION, layer=0, region=SkRegion((0,0,1080,2400)), bounds=Rect(0, 0 - 1080, 2400), focused=true, active=true, pictureInPicture=false, hasParent=false, isAnchored=false, hasChildren=false]]
+WindowInfo[WindowInfo[title=НЧ Яворец, displayId=0, taskId=12, type=1, layer=1, token=android.os.BinderProxy@69f015e, region=SkRegion((0,0,1080,2400)), bounds=Rect(0, 0 - 1080, 2400), parent=null, focused=true, children=null, accessibility anchor=9223372034707292159, pictureInPicture=false, watchOutsideTouch=false, mTransformMatrix=Matrix{[1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]}, mMagnificationSpec=<scale:1.0,offsetX:0.0,offsetY:0.0>]]
+
+A11yInputFilter Info : 
+Enabled features of Display [0] = [TouchExplorer]
+Global client list info:{
+    Client list callbacks: 7
+    Client list killed: false
+    Client list broadcasts count: -1
+    Registered clients:{
+[com.google.android.setupwizard][com.android.emulator.multidisplay, com.android.dynsystem, com.android.server.telecom, com.android.providers.settings, com.android.location.fused, com.android.wallpaperbackup, com.android.localtransport, android, com.android.settings, com.android.inputdevices, com.android.keychain][com.google.android.gms, com.google.android.gsf][com.android.systemui][com.android.emulator.multidisplay, com.android.dynsystem, com.android.server.telecom, com.android.providers.settings, com.android.location.fused, com.android.wallpaperbackup, com.android.localtransport, android, com.android.settings, com.android.inputdevices, com.android.keychain][com.google.android.permissioncontroller][com.google.android.documentsui]

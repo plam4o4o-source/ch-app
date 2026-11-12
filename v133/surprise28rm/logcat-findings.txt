@@ -1,0 +1,17 @@
+app pids seen: ['5708']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 18:12:06.091  5694  5694 I PERFCHECK: section: W. First launch and warm-up
+   11-07 18:12:36.658  6501  6501 I PERFCHECK: section: SM0. Device memory: MemTotal: 2046996 kB; API 28
+   11-07 18:12:36.682  6506  6506 I PERFCHECK: section: SM1. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-07 18:12:45.801  6621  6621 I PERFCHECK: sm-1
+   11-07 18:13:02.375  7076  7076 I PERFCHECK: section: SM2. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-07 18:13:11.449  7201  7201 I PERFCHECK: sm-2
+   11-07 18:13:28.071  7628  7628 I PERFCHECK: section: SM3. Изненадай ме dice: app RSS and MemAvailable every 0.25 s, 10 s
+   11-07 18:13:37.127  7748  7748 I PERFCHECK: sm-3
+   11-07 18:13:53.613  8173  8173 I PERFCHECK: section: SM9. For comparison: open a book from the catalogue list same memory probe

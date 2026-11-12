@@ -1,0 +1,71 @@
+part jank18-1; APK: 1.2.32 c1b5ef5 (Какво ново: версия 1.2.32); versionCode 1488545; x86_64 libs: 2 size 4151654 bytes
+base APK: 1.2.31 6f44326 (Профил за бърз старт: генериран на емулатор от e20a974); versionCode 1488544; x86_64 libs: 2; update manifest: no-update stub size 4138646 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 2000
+installed:  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## J-new. Install new, warm-up
+installed new: 1.2.32 c1b5ef5 (Какво ново: версия 1.2.32); versionCode 1488545; x86_64 libs: 2 size 4151654;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new first-install catalogue results after 2964 ms
+## D0. A few starts for the card: 4 cold + 3 warm
+## J-new. Scroll scenarios (animations ON, 1080x2400): ~10 flings each, gfxinfo reset before each
+new carousel card: 217 630 1045 1253 | СЪСТАВИ 45-ти общински фолклорен събор на народното творчество „От Тимок до Вита
+GFX new-carousel frames=   20  janky=20 (100.00%)  p50=300ms p90=600ms p95=650ms p99=650ms  slowUI=12 slowDraw=20 highInput=0
+  GFXMEM new-carousel: pipeline: Skia (OpenGL); GPU total: 24581480 bytes, 23.44 MB (19.34 MB is purgeable); textures: 3.27 MB (7 entries) | 6.56 MB (26 entries) | 4.00 MB (3 entries); frames: 20
+new news screen: --- screen: text="Календар" text="Новини" text="Търси в новините" text="Всички" text="Запазени" text="Събитие" 
+GFX new-news     frames=   76  janky=76 (100.00%)  p50=250ms p90=400ms p95=450ms p99=650ms  slowUI=34 slowDraw=76 highInput=0
+  GFXMEM new-news: pipeline: Skia (OpenGL); GPU total: 77068904 bytes, 73.50 MB (68.88 MB is purgeable); textures: 3.27 MB (7 entries) | 9.63 MB (50 entries) | 4.00 MB (3 entries); frames: 76
+GFX new-gallery  frames=   62  janky=62 (100.00%)  p50=250ms p90=400ms p95=450ms p99=500ms  slowUI=29 slowDraw=62 highInput=0
+  GFXMEM new-gallery: pipeline: Skia (OpenGL); GPU total: 83601696 bytes, 79.73 MB (74.89 MB is purgeable); textures: 7.97 MB (39 entries) | 7.63 MB (45 entries); frames: 62
+new album: photos on screen 18
+GFX new-album-grid frames=   75  janky=74 (98.67%)  p50=250ms p90=450ms p95=550ms p99=650ms  slowUI=31 slowDraw=74 highInput=1
+  GFXMEM new-album-grid: pipeline: Skia (OpenGL); GPU total: 87402456 bytes, 83.35 MB (80.45 MB is purgeable); textures: 7.96 MB (69 entries) | 7.97 MB (66 entries); frames: 75
+new catalog: 2446 results
+GFX new-catalog  frames=   61  janky=61 (100.00%)  p50=450ms p90=700ms p95=750ms p99=850ms  slowUI=35 slowDraw=61 highInput=0
+  GFXMEM new-catalog: pipeline: Skia (OpenGL); GPU total: 84637384 bytes, 80.72 MB (48.58 MB is purgeable); textures: 295.97 KB (18 entries) | 2.25 MB (3 entries); frames: 61
+MEM new-after-scroll (raw) PSS=95111KB  Java=21320KB  Native=44048KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=19)  RSS=173228KB  Views=10 Activities=1
+MEM new-after-scroll (trimmed) PSS=83962KB  Java=13716KB  Native=33132KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=15)  RSS=147140KB  Views=10 Activities=1
+## D. Diagnostics › „Бързодействие“ after the starts and the scroll scenarios
+PERF CARD new-filled: Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 6 | Първи кадър: медиана 2568 мс, последен 4744 мс | Пълно показване: медиана 3223 мс, последно 6470 мс | Насечени кадри по екрани | home: 5,2 % от 155 кадъра · най-бавен 2465 мс | news: 2,9 % от 34 кадъра · най-бавен 340 мс | catalog: 1,8 % от 55 кадъра · най-бавен 522 мс | album: 1,4 % от 69 кадъра · най-бавен 391 мс | article: 1,4 % от 72 кадъра · най-бавен 404 мс | Записи: 1 | 04.11.2026 20:25:20  ·  update.verify | signature mismatch | Диагностика
+PERF CARD new-filled (scrolled): Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 6 | Първи кадър: медиана 2568 мс, последен 4744 мс | Пълно показване: медиана 3223 мс, последно 6470 мс | Насечени кадри по екрани | home: 5,2 % от 155 кадъра · най-бавен 2465 мс | news: 2,9 % от 34 кадъра · най-бавен 340 мс | catalog: 1,8 % от 55 кадъра · най-бавен 522 мс | album: 1,4 % от 69 кадъра · най-бавен 391 мс | article: 1,4 % от 72 кадъра · най-бавен 404 мс | Записи: 1 | 04.11.2026 20:25:20  ·  update.verify | signature mismatch | Диагностика
+## D2. „Изчисти“ clears it
+PERF CARD after Изчисти: Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Още няма измервания. | Няма записани грешки. | Диагностика | Дневникът е изчистен; empty text SHOWN; snackbar yes
+PERF CARD new-after-clear-and-restart: Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Още няма измервания. | Няма записани грешки. | Диагностика
+PERF CARD new-after-clear-and-restart (scrolled): Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Още няма измервания. | Няма записани грешки. | Диагностика
+## J-base. Install base, warm-up
+installed base: 1.2.31 6f44326 (Профил за бърз старт: генериран на емулатор от e20a974); versionCode 1488544; x86_64 libs: 2; update manifest: no-update stub size 4138646;  versionCode=1488544 minSdk=26 targetSdk=37  versionName=1.2.31 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base first-install catalogue results after 2812 ms
+## J-base. Scroll scenarios (animations ON, 1080x2400): ~10 flings each, gfxinfo reset before each
+base carousel card: 126 630 954 1253 | СЪБИТИЕ С хоро и песен във Водица 26 септември 2026
+GFX base-carousel frames=   20  janky=20 (100.00%)  p50=300ms p90=500ms p95=550ms p99=550ms  slowUI=15 slowDraw=20 highInput=0
+  GFXMEM base-carousel: pipeline: Skia (OpenGL); GPU total: 15326013 bytes, 14.62 MB (10.51 MB is purgeable); textures: 2.83 MB (6 entries) | 311.24 KB (26 entries) | 4.00 MB (3 entries); frames: 20
+base news screen: --- screen: text="Календар" text="Новини" text="Търси в новините" text="Всички" text="Запазени" text="Събитие" 
+GFX base-news    frames=   84  janky=84 (100.00%)  p50=250ms p90=400ms p95=450ms p99=600ms  slowUI=40 slowDraw=84 highInput=1
+  GFXMEM base-news: pipeline: Skia (OpenGL); GPU total: 62149916 bytes, 59.27 MB (54.64 MB is purgeable); textures: 336.24 KB (41 entries) | 7.12 MB (23 entries); frames: 84
+GFX base-gallery frames=   68  janky=68 (100.00%)  p50=300ms p90=400ms p95=400ms p99=400ms  slowUI=26 slowDraw=68 highInput=0
+  GFXMEM base-gallery: pipeline: Skia (OpenGL); GPU total: 74197272 bytes, 70.76 MB (67.60 MB is purgeable); textures: 310.65 KB (48 entries) | 4.36 MB (39 entries); frames: 68
+base album: photos on screen 18
+GFX base-album-grid frames=   72  janky=72 (100.00%)  p50=200ms p90=450ms p95=450ms p99=500ms  slowUI=39 slowDraw=72 highInput=0
+  GFXMEM base-album-grid: pipeline: Skia (OpenGL); GPU total: 87783672 bytes, 83.72 MB (80.55 MB is purgeable); textures: 605.02 KB (108 entries) | 4.34 MB (33 entries); frames: 72
+base catalog: 2446 results
+GFX base-catalog frames=   52  janky=52 (100.00%)  p50=450ms p90=600ms p95=650ms p99=950ms  slowUI=33 slowDraw=52 highInput=0
+  GFXMEM base-catalog: pipeline: Skia (OpenGL); GPU total: 83031800 bytes, 79.19 MB (49.05 MB is purgeable); textures: 279.82 KB (42 entries) | 2.00 MB (2 entries); frames: 52
+MEM base-after-scroll (raw) PSS=114752KB  Java=14128KB  Native=66104KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=30)  RSS=199696KB  Views=10 Activities=1
+MEM base-after-scroll (trimmed) PSS=113696KB  Java=12824KB  Native=61240KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=30)  RSS=199032KB  Views=10 Activities=1
+## J. Totals
+## COMPLETE
+## logcat findings
+app pids seen: ['4509', '5826', '6327', '6633', '6967', '7415', '9965', '10318']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 21
+   skipped-frames events=21 max=137 total=1209
+== Davey: 41
+   davey events=41 max=3575ms median=872ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

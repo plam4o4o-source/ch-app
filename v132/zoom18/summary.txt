@@ -1,0 +1,57 @@
+part zoom18; APK: 1.2.32 c1b5ef5 (Какво ново: версия 1.2.32); versionCode 1488545; x86_64 libs: 2 size 4151654 bytes
+base APK: 1.2.31 6f44326 (Профил за бърз старт: генериран на емулатор от e20a974); versionCode 1488544; x86_64 libs: 2; update manifest: no-update stub size 4138646 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## Z-new. Viewer: pinch at off-centre points (zoom around the fingers?), double tap, pan, drag to dismiss
+installed new: 1.2.32 c1b5ef5 (Какво ново: версия 1.2.32); versionCode 1488545; x86_64 libs: 2 size 4151654;  versionCode=1488545 minSdk=26 targetSdk=37  versionName=1.2.32 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+touch device: /dev/input/event2 x-max=32767 y-max=32767 pressure=11
+new viewer: text="1 / 29  ·  Сградата на читалището в Яворец" screen 1080x2400
+ZOOMFIX new pinch #1 at (302,1200): scale≈1.77 fixed point≈(303,1204) fingers=(302,1200) |f-fingers|=4px |f-centre(540,1200)|=237px match=0.993 → AROUND THE FINGERS
+  after double tap on the zoomed photo: diff vs 1x 0.0 (≈0 = back at 1x); text="1 / 29  ·  Сградата на читалището в Яворец"
+ZOOMFIX new pinch #2 at (777,1056): scale≈1.77 fixed point≈(779,1057) fingers=(777,1056) |f-fingers|=3px |f-centre(540,1200)|=279px match=0.998 → AROUND THE FINGERS
+  after double tap on the zoomed photo: diff vs 1x 0.0 (≈0 = back at 1x); text="1 / 29  ·  Сградата на читалището в Яворец"
+ZOOMFIX new pinch #3 at (540,1200): scale≈1.77 fixed point≈(541,1204) fingers=(540,1200) |f-fingers|=4px |f-centre(540,1200)|=4px match=0.993 → unclear
+  after double tap on the zoomed photo: diff vs 1x 0.0 (≈0 = back at 1x); text="1 / 29  ·  Сградата на читалището в Яворец"
+## Z-new. Double tap at an off-centre point, pan while zoomed, double tap back
+ZOOMFIX new double tap at (324,1104): scale≈2.00 fixed point≈(326,1104) fingers=(324,1104) |f-fingers|=2px |f-centre(540,1200)|=235px match=0.995 → AROUND THE FINGERS
+PAN new: SHIFT pan: dx=-194px dy=-0px (response 0.74) (drag −216 px); page before 'text="1 / 29  ·  Сградата на читалището в Яворец"' after 'text="1 / 29  ·  Сградата на читалището в Яворец"'
+PAN-V new (zoomed, vertical drag must pan, not dismiss): SHIFT pan: dx=-0px dy=+325px (response 0.85); still in viewer: yes
+  after double tap back: diff vs 1x 0.0 (≈0 = 1x)
+## Z-new. Swipe to the next photo, then drag down to dismiss
+after swipe left: text="2 / 29  ·  Фолклорен състав при читалището"
+DISMISS new: viewer page text ''; photo cells 18; content-desc="Сградата на читалището в Яворец" content-desc="Фолклорен състав при читалището" content-desc="Хорът на сцена" content-desc="70-те години" content-
+## Z-base. Viewer: pinch at off-centre points (zoom around the fingers?), double tap, pan, drag to dismiss
+installed base: 1.2.31 6f44326 (Профил за бърз старт: генериран на емулатор от e20a974); versionCode 1488544; x86_64 libs: 2; update manifest: no-update stub size 4138646;  versionCode=1488544 minSdk=26 targetSdk=37  versionName=1.2.31 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base viewer: text="1 / 29  ·  Сградата на читалището в Яворец" screen 1080x2400
+ZOOMFIX base pinch #1 at (302,1200): scale≈1.77 fixed point≈(541,1199) fingers=(302,1200) |f-fingers|=239px |f-centre(540,1200)|=2px match=0.991 → AROUND THE CENTRE
+  after double tap on the zoomed photo: diff vs 1x 0.0 (≈0 = back at 1x); text="1 / 29  ·  Сградата на читалището в Яворец"
+ZOOMFIX base pinch #2 at (777,1056): scale≈1.77 fixed point≈(541,1199) fingers=(777,1056) |f-fingers|=276px |f-centre(540,1200)|=2px match=0.991 → AROUND THE CENTRE
+  after double tap on the zoomed photo: diff vs 1x 0.0 (≈0 = back at 1x); text="1 / 29  ·  Сградата на читалището в Яворец"
+ZOOMFIX base pinch #3 at (540,1200): scale≈1.77 fixed point≈(541,1199) fingers=(540,1200) |f-fingers|=2px |f-centre(540,1200)|=2px match=0.991 → unclear
+  after double tap on the zoomed photo: diff vs 1x 0.0 (≈0 = back at 1x); text="1 / 29  ·  Сградата на читалището в Яворец"
+## Z-base. Double tap at an off-centre point, pan while zoomed, double tap back
+ZOOMFIX base double tap at (324,1104): scale≈2.00 fixed point≈(326,1104) fingers=(324,1104) |f-fingers|=2px |f-centre(540,1200)|=235px match=0.995 → AROUND THE FINGERS
+PAN base: SHIFT pan: dx=-192px dy=-0px (response 0.74) (drag −216 px); page before 'text="1 / 29  ·  Сградата на читалището в Яворец"' after 'text="1 / 29  ·  Сградата на читалището в Яворец"'
+PAN-V base (zoomed, vertical drag must pan, not dismiss): SHIFT pan: dx=+0px dy=+339px (response 0.85); still in viewer: yes
+  after double tap back: diff vs 1x 0.0 (≈0 = 1x)
+## Z-base. Swipe to the next photo, then drag down to dismiss
+after swipe left: text="2 / 29  ·  Фолклорен състав при читалището"
+DISMISS base: viewer page text ''; photo cells 18; content-desc="Сградата на читалището в Яворец" content-desc="Фолклорен състав при читалището" content-desc="Хорът на сцена" content-desc="70-те години" content-
+## COMPLETE
+## logcat findings
+app pids seen: ['5665', '6563', '8412', '8592']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=37 total=37
+== Davey: 2
+   davey events=2 max=1030ms median=938ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

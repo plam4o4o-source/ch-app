@@ -1,0 +1,150 @@
+part now35; APK: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+base APK: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682 bytes
+installed:  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+block order: new base base new (each a fresh install; the card added by hand in each)
+## N new-1: fresh install, card added by hand; cold start straight into the card, „Покажи картата“ 0.5 s / 1.0 s after the first frame
+installed new-1: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682;  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+COORDS: My 540 2274, card tile 258 1182, show-card 582 1068
+COORDS: fullscreen card reached
+TRIAL new-1-1-now05: start (card shortcut) TotalTime: 3302; show tapped +1887 ms after the first frame; fullscreen reached: yes
+FS new-1-1-now05-full: n=13 slowest=795.4ms (frame #5; ui 338.6 rt 315.7 issue 204.3 flags 0) first5=[462, 496, 537, 778, 795] >32ms=13 >64ms=13 >100ms=13 span=2650ms
+TRIAL new-1-2-now10: start (card shortcut) TotalTime: 3291; show tapped +1833 ms after the first frame; fullscreen reached: yes
+FS new-1-2-now10-full: n=12 slowest=944.1ms (frame #5; ui 495.3 rt 382.9 issue 260.7 flags 0) first5=[586, 595, 591, 809, 944] >32ms=12 >64ms=12 >100ms=12 span=2550ms
+TRIAL new-1-3-now05: start (card shortcut) TotalTime: 2879; show tapped +1939 ms after the first frame; fullscreen reached: yes
+FS new-1-3-now05-full: n=13 slowest=138351947.0ms (frame #13; ui 6.8 rt 138351597.8 issue 61.7 flags 0) first5=[600, 606, 544, 794, 776] >32ms=13 >64ms=13 >100ms=13 span=2700ms
+TRIAL new-1-4-now10: start (card shortcut) TotalTime: 3084; show tapped +2072 ms after the first frame; fullscreen reached: yes
+FS new-1-4-now10-full: n=12 slowest=945.6ms (frame #5; ui 409.7 rt 373.8 issue 257.3 flags 0) first5=[747, 712, 589, 763, 946] >32ms=12 >64ms=12 >100ms=12 span=2933ms
+TRIAL new-1-5-now05-coldgl: start (card shortcut) TotalTime: 2493; show tapped +1734 ms after the first frame; fullscreen reached: yes
+FS new-1-5-now05-coldgl-full: n=10 slowest=1090.9ms (frame #5; ui 318.8 rt 708.5 issue 555.1 flags 0) first5=[1053, 411, 581, 844, 1091] >32ms=10 >64ms=10 >100ms=10 span=2750ms
+TRIAL new-1-6-now10-coldgl: start (card shortcut) TotalTime: 3108; show tapped +2310 ms after the first frame; fullscreen reached: yes
+FS new-1-6-now10-coldgl-full: n=13 slowest=930.3ms (frame #6; ui 555.6 rt 319.5 issue 206.5 flags 0) first5=[530, 671, 893, 838, 796] >32ms=13 >64ms=13 >100ms=13 span=2783ms
+TRIAL new-1-7-wait: start TotalTime: 3149; taps after the first frame: My +5657 ms, card +7720 ms, show +12258 ms; fullscreen reached: yes
+FS new-1-7-wait-cardscreen: n=15 slowest=756.4ms (frame #14; ui 256.1 rt 290.4 issue 72.7 flags 0) first5=[71, 131, 263, 652, 678] >32ms=15 >64ms=15 >100ms=14 span=2517ms
+FS new-1-7-wait-full: n=13 slowest=830.3ms (frame #6; ui 295.8 rt 385.8 issue 265.7 flags 0) first5=[294, 390, 496, 533, 750] >32ms=13 >64ms=13 >100ms=13 span=2467ms
+## N base-2: fresh install, card added by hand; cold start straight into the card, „Покажи картата“ 0.5 s / 1.0 s after the first frame
+installed base-2: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+COORDS: My 540 2274, card tile 258 1182, show-card 582 1068
+COORDS: fullscreen card reached
+TRIAL base-2-1-now05: start (card shortcut) TotalTime: 3764; show tapped +1962 ms after the first frame; fullscreen reached: yes
+FS base-2-1-now05-full: n=11 slowest=931.8ms (frame #6; ui 416.0 rt 376.1 issue 219.3 flags 0) first5=[895, 540, 642, 866, 931] >32ms=11 >64ms=11 >100ms=11 span=2650ms
+TRIAL base-2-2-now10: start (card shortcut) TotalTime: 3195; show tapped +2266 ms after the first frame; fullscreen reached: yes
+FS base-2-2-now10-full: n=13 slowest=999.8ms (frame #6; ui 494.1 rt 292.9 issue 172.9 flags 0) first5=[616, 499, 659, 702, 890] >32ms=13 >64ms=13 >100ms=13 span=2850ms
+TRIAL base-2-3-now05: start (card shortcut) TotalTime: 3230; show tapped +2385 ms after the first frame; fullscreen reached: yes
+FS base-2-3-now05-full: n=13 slowest=1008.5ms (frame #6; ui 604.5 rt 386.3 issue 287.9 flags 0) first5=[999, 544, 843, 582, 889] >32ms=13 >64ms=13 >100ms=13 span=3233ms
+TRIAL base-2-4-now10: start (card shortcut) TotalTime: 3272; show tapped +2047 ms after the first frame; fullscreen reached: yes
+FS base-2-4-now10-full: n=13 slowest=72057052969.4ms (frame #13; ui 187.8 rt 72057052626.3 issue 150.6 flags 0) first5=[510, 454, 519, 654, 829] >32ms=13 >64ms=13 >100ms=13 span=2617ms
+TRIAL base-2-5-now05-coldgl: start (card shortcut) TotalTime: 3092; show tapped +1904 ms after the first frame; fullscreen reached: yes
+FS base-2-5-now05-coldgl-full: n=10 slowest=928.3ms (frame #5; ui 456.8 rt 460.8 issue 354.0 flags 0) first5=[877, 510, 584, 893, 928] >32ms=10 >64ms=10 >100ms=10 span=2550ms
+TRIAL base-2-6-now10-coldgl: start (card shortcut) TotalTime: 3189; show tapped +1726 ms after the first frame; fullscreen reached: yes
+FS base-2-6-now10-coldgl-full: n=12 slowest=852.5ms (frame #5; ui 390.6 rt 261.2 issue 160.3 flags 0) first5=[642, 424, 617, 825, 852] >32ms=12 >64ms=12 >100ms=12 span=2550ms
+TRIAL base-2-7-wait: start TotalTime: 3350; taps after the first frame: My +5416 ms, card +7485 ms, show +11214 ms; fullscreen reached: yes
+FS base-2-7-wait-cardscreen: n=15 slowest=72903829103.1ms (frame #15; ui 3.0 rt 72903828927.6 issue 65.8 flags 0) first5=[97, 165, 391, 749, 688] >32ms=15 >64ms=15 >100ms=14 span=2617ms
+FS base-2-7-wait-full: n=13 slowest=1066.0ms (frame #5; ui 549.7 rt 399.0 issue 289.5 flags 0) first5=[272, 439, 518, 1058, 1066] >32ms=13 >64ms=13 >100ms=13 span=2333ms
+## N base-3: fresh install, card added by hand; cold start straight into the card, „Покажи картата“ 0.5 s / 1.0 s after the first frame
+installed base-3: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705 size 4316450;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+COORDS: My 540 2274, card tile 258 1182, show-card 582 1068
+COORDS: fullscreen card reached
+TRIAL base-3-1-now05: start (card shortcut) TotalTime: 3370; show tapped +1996 ms after the first frame; fullscreen reached: yes
+FS base-3-1-now05-full: n=13 slowest=1040.7ms (frame #5; ui 559.4 rt 272.5 issue 164.5 flags 0) first5=[501, 493, 447, 951, 1041] >32ms=13 >64ms=13 >100ms=13 span=2617ms
+TRIAL base-3-2-now10: start (card shortcut) TotalTime: 3103; show tapped +2161 ms after the first frame; fullscreen reached: yes
+FS base-3-2-now10-full: n=12 slowest=804.2ms (frame #5; ui 343.4 rt 257.1 issue 150.4 flags 0) first5=[510, 517, 545, 764, 804] >32ms=12 >64ms=12 >100ms=12 span=2550ms
+TRIAL base-3-3-now05: start (card shortcut) TotalTime: 3674; show tapped +1611 ms after the first frame; fullscreen reached: yes
+FS base-3-3-now05-full: n=13 slowest=693.1ms (frame #1; ui 404.6 rt 288.5 issue 147.4 flags 0) first5=[693, 532, 604, 607, 583] >32ms=13 >64ms=13 >100ms=13 span=2667ms
+TRIAL base-3-4-now10: start (card shortcut) TotalTime: 3278; show tapped +2130 ms after the first frame; fullscreen reached: yes
+FS base-3-4-now10-full: n=10 slowest=903.2ms (frame #5; ui 421.6 rt 288.2 issue 170.5 flags 0) first5=[766, 550, 630, 832, 903] >32ms=10 >64ms=10 >100ms=10 span=2117ms
+TRIAL base-3-5-now05-coldgl: start (card shortcut) TotalTime: 3026; show tapped +1955 ms after the first frame; fullscreen reached: yes
+FS base-3-5-now05-coldgl-full: n=11 slowest=935.4ms (frame #4; ui 399.1 rt 385.1 issue 219.8 flags 0) first5=[674, 412, 566, 935, 915] >32ms=11 >64ms=11 >100ms=11 span=2300ms
+TRIAL base-3-6-now10-coldgl: start (card shortcut) TotalTime: 3467; show tapped +2146 ms after the first frame; fullscreen reached: yes
+FS base-3-6-now10-coldgl-full: n=11 slowest=1072.9ms (frame #5; ui 562.7 rt 275.7 issue 155.2 flags 0) first5=[688, 453, 529, 880, 1073] >32ms=11 >64ms=11 >100ms=11 span=2450ms
+TRIAL base-3-7-wait: start TotalTime: 3282; taps after the first frame: My +5321 ms, card +7397 ms, show +11763 ms; fullscreen reached: yes
+FS base-3-7-wait-cardscreen: n=14 slowest=744.1ms (frame #11; ui 142.2 rt 306.5 issue 153.5 flags 0) first5=[99, 217, 425, 662, 625] >32ms=14 >64ms=14 >100ms=13 span=2233ms
+FS base-3-7-wait-full: n=13 slowest=901.7ms (frame #6; ui 331.8 rt 403.7 issue 258.7 flags 0) first5=[227, 360, 643, 483, 631] >32ms=13 >64ms=13 >100ms=13 span=2517ms
+## N new-4: fresh install, card added by hand; cold start straight into the card, „Покажи картата“ 0.5 s / 1.0 s after the first frame
+installed new-4: 1.2.35 9295534 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504706 size 4318682;  versionCode=1504706 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+COORDS: My 540 2274, card tile 258 1182, show-card 582 1068
+COORDS: fullscreen card reached
+TRIAL new-4-1-now05: start (card shortcut) TotalTime: 2957; show tapped +1688 ms after the first frame; fullscreen reached: yes
+FS new-4-1-now05-full: n=11 slowest=891.0ms (frame #1; ui 624.6 rt 266.4 issue 95.8 flags 0) first5=[891, 437, 727, 846, 870] >32ms=11 >64ms=11 >100ms=11 span=2450ms
+TRIAL new-4-2-now10: start (card shortcut) TotalTime: 3296; show tapped +2039 ms after the first frame; fullscreen reached: yes
+FS new-4-2-now10-full: n=13 slowest=72056589936.1ms (frame #13; ui 197.9 rt 72056589535.3 issue 140.9 flags 0) first5=[578, 616, 572, 822, 873] >32ms=13 >64ms=13 >100ms=13 span=2817ms
+TRIAL new-4-3-now05: start (card shortcut) TotalTime: 3189; show tapped +1696 ms after the first frame; fullscreen reached: yes
+FS new-4-3-now05-full: n=13 slowest=961.2ms (frame #6; ui 518.8 rt 386.5 issue 272.5 flags 0) first5=[760, 417, 695, 913, 858] >32ms=13 >64ms=13 >100ms=13 span=3050ms
+TRIAL new-4-4-now10: start (card shortcut) TotalTime: 3164; show tapped +2030 ms after the first frame; fullscreen reached: yes
+FS new-4-4-now10-full: n=12 slowest=759.3ms (frame #5; ui 344.9 rt 250.9 issue 182.6 flags 0) first5=[605, 587, 519, 692, 759] >32ms=12 >64ms=12 >100ms=12 span=2500ms
+TRIAL new-4-5-now05-coldgl: start (card shortcut) TotalTime: 2950; show tapped +1664 ms after the first frame; fullscreen reached: yes
+FS new-4-5-now05-coldgl-full: n=10 slowest=950.8ms (frame #4; ui 479.2 rt 272.0 issue 96.3 flags 0) first5=[823, 438, 845, 951, 921] >32ms=10 >64ms=10 >100ms=10 span=2450ms
+TRIAL new-4-6-now10-coldgl: start (card shortcut) TotalTime: 3281; show tapped +1790 ms after the first frame; fullscreen reached: yes
+FS new-4-6-now10-coldgl-full: n=11 slowest=959.7ms (frame #4; ui 544.4 rt 394.7 issue 283.7 flags 0) first5=[690, 561, 783, 960, 710] >32ms=11 >64ms=11 >100ms=11 span=2467ms
+TRIAL new-4-7-wait: start TotalTime: 2961; taps after the first frame: My +5570 ms, card +7634 ms, show +11597 ms; fullscreen reached: yes
+FS new-4-7-wait-cardscreen: n=15 slowest=767.4ms (frame #14; ui 265.0 rt 294.3 issue 138.1 flags 0) first5=[74, 127, 310, 650, 170] >32ms=15 >64ms=15 >100ms=14 span=2333ms
+FS new-4-7-wait-full: n=12 slowest=833.2ms (frame #5; ui 316.1 rt 363.6 issue 252.7 flags 0) first5=[298, 461, 429, 717, 833] >32ms=12 >64ms=12 >100ms=12 span=2267ms
+## N totals
+FSAGG full       now05       new  opens= 4  slowest frame: median  926.1 ms, mean 34588648.6, min  795.4, max 138351947.0  | frame 1 median  680.0 ms | frames 2-5 median 751.5 ms  | slowest per open: [795, 138351947, 891, 961] at frame # [5, 13, 1, 6]
+FSAGG full       now05       base opens= 4  slowest frame: median  970.1 ms, mean  918.5, min  693.1, max 1040.7  | frame 1 median  794.0 ms | frames 2-5 median 605.5 ms  | slowest per open: [932, 1008, 1041, 693] at frame # [6, 6, 5, 1]
+FSAGG full       now05-coldgl new  opens= 2  slowest frame: median 1020.9 ms, mean 1020.9, min  950.8, max 1090.9  | frame 1 median  938.0 ms | frames 2-5 median 844.5 ms  | slowest per open: [1091, 951] at frame # [5, 4]
+FSAGG full       now05-coldgl base opens= 2  slowest frame: median  931.8 ms, mean  931.8, min  928.3, max  935.4  | frame 1 median  775.5 ms | frames 2-5 median 738.5 ms  | slowest per open: [928, 935] at frame # [5, 4]
+FSAGG full       now10       new  opens= 4  slowest frame: median  944.9 ms, mean 18014148146.3, min  759.3, max 72056589936.1  | frame 1 median  595.5 ms | frames 2-5 median 702.0 ms  | slowest per open: [944, 946, 72056589936, 759] at frame # [5, 5, 13, 5]
+FSAGG full       now10       base opens= 4  slowest frame: median  951.5 ms, mean 18014263919.1, min  804.2, max 72057052969.4  | frame 1 median  563.0 ms | frames 2-5 median 656.5 ms  | slowest per open: [1000, 72057052969, 804, 903] at frame # [6, 13, 5, 5]
+FSAGG full       now10-coldgl new  opens= 2  slowest frame: median  945.0 ms, mean  945.0, min  930.3, max  959.7  | frame 1 median  610.0 ms | frames 2-5 median 789.5 ms  | slowest per open: [930, 960] at frame # [6, 4]
+FSAGG full       now10-coldgl base opens= 2  slowest frame: median  962.7 ms, mean  962.7, min  852.5, max 1072.9  | frame 1 median  665.0 ms | frames 2-5 median 721.0 ms  | slowest per open: [852, 1073] at frame # [5, 5]
+FSAGG full       wait5s      new  opens= 2  slowest frame: median  831.8 ms, mean  831.8, min  830.3, max  833.2  | frame 1 median  296.0 ms | frames 2-5 median 514.5 ms  | slowest per open: [830, 833] at frame # [6, 5]
+FSAGG full       wait5s      base opens= 2  slowest frame: median  983.9 ms, mean  983.9, min  901.7, max 1066.0  | frame 1 median  249.5 ms | frames 2-5 median 574.5 ms  | slowest per open: [1066, 902] at frame # [5, 6]
+FSAGG cardscreen wait5s      new  opens= 2  slowest frame: median  761.9 ms, mean  761.9, min  756.4, max  767.4  | frame 1 median   72.5 ms | frames 2-5 median 286.5 ms  | slowest per open: [756, 767] at frame # [14, 14]
+FSAGG cardscreen wait5s      base opens= 2  slowest frame: median 36451914923.6 ms, mean 36451914923.6, min  744.1, max 72903829103.1  | frame 1 median   98.0 ms | frames 2-5 median 525.0 ms  | slowest per open: [72903829103, 744] at frame # [15, 11]
+FSAGG first-5 frames per open (ms):
+   full new-1-1-now05          first5=[462, 496, 537, 778, 795] slowest=795 (#5, rt 316)
+   full new-1-3-now05          first5=[600, 606, 544, 794, 776] slowest=138351947 (#13, rt 138351598)
+   full new-4-1-now05          first5=[891, 437, 727, 846, 870] slowest=891 (#1, rt 266)
+   full new-4-3-now05          first5=[760, 417, 695, 913, 858] slowest=961 (#6, rt 386)
+   full base-2-1-now05         first5=[895, 540, 642, 866, 931] slowest=932 (#6, rt 376)
+   full base-2-3-now05         first5=[999, 544, 843, 582, 889] slowest=1008 (#6, rt 386)
+   full base-3-1-now05         first5=[501, 493, 447, 951, 1041] slowest=1041 (#5, rt 272)
+   full base-3-3-now05         first5=[693, 532, 604, 607, 583] slowest=693 (#1, rt 288)
+   full new-1-5-now05-coldgl   first5=[1053, 411, 581, 844, 1091] slowest=1091 (#5, rt 708)
+   full new-4-5-now05-coldgl   first5=[823, 438, 845, 951, 921] slowest=951 (#4, rt 272)
+   full base-2-5-now05-coldgl  first5=[877, 510, 584, 893, 928] slowest=928 (#5, rt 461)
+   full base-3-5-now05-coldgl  first5=[674, 412, 566, 935, 915] slowest=935 (#4, rt 385)
+   full new-1-2-now10          first5=[586, 595, 591, 809, 944] slowest=944 (#5, rt 383)
+   full new-1-4-now10          first5=[747, 712, 589, 763, 946] slowest=946 (#5, rt 374)
+   full new-4-2-now10          first5=[578, 616, 572, 822, 873] slowest=72056589936 (#13, rt 72056589535)
+   full new-4-4-now10          first5=[605, 587, 519, 692, 759] slowest=759 (#5, rt 251)
+   full base-2-2-now10         first5=[616, 499, 659, 702, 890] slowest=1000 (#6, rt 293)
+   full base-2-4-now10         first5=[510, 454, 519, 654, 829] slowest=72057052969 (#13, rt 72057052626)
+   full base-3-2-now10         first5=[510, 517, 545, 764, 804] slowest=804 (#5, rt 257)
+   full base-3-4-now10         first5=[766, 550, 630, 832, 903] slowest=903 (#5, rt 288)
+   full new-1-6-now10-coldgl   first5=[530, 671, 893, 838, 796] slowest=930 (#6, rt 320)
+   full new-4-6-now10-coldgl   first5=[690, 561, 783, 960, 710] slowest=960 (#4, rt 395)
+   full base-2-6-now10-coldgl  first5=[642, 424, 617, 825, 852] slowest=852 (#5, rt 261)
+   full base-3-6-now10-coldgl  first5=[688, 453, 529, 880, 1073] slowest=1073 (#5, rt 276)
+   full new-1-7-wait           first5=[294, 390, 496, 533, 750] slowest=830 (#6, rt 386)
+   full new-4-7-wait           first5=[298, 461, 429, 717, 833] slowest=833 (#5, rt 364)
+   full base-2-7-wait          first5=[272, 439, 518, 1058, 1066] slowest=1066 (#5, rt 399)
+   full base-3-7-wait          first5=[227, 360, 643, 483, 631] slowest=902 (#6, rt 404)
+SHADER DIAG now35: diagnostics log entries with shevitsa-shader/foil-shader: 0 (of 0); logcat error lines naming them: 0
+## COMPLETE
+## logcat findings
+app pids seen: ['5595', '8275', '8382', '8479', '8599', '8704', '8835', '8934', '9188', '10079', '10175', '10275', '10371', '10473', '10591', '10691', '10942', '11654', '11753', '11850', '11945', '12045', '12145', '12241', '12673', '13403', '13575', '13717', '13823', '13939', '14040', '14138']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 153
+   skipped-frames events=153 max=111 total=8193
+== Davey: 245
+   davey events=245 max=3308ms median=1115ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

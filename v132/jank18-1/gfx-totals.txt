@@ -1,0 +1,10 @@
+GFX base-album-grid frames=   72  janky=72 (100.00%)  p50=200ms p90=450ms p95=450ms p99=500ms  slowUI=39 slowDraw=72 highInput=0
+GFX base-carousel frames=   20  janky=20 (100.00%)  p50=300ms p90=500ms p95=550ms p99=550ms  slowUI=15 slowDraw=20 highInput=0
+GFX base-catalog frames=   52  janky=52 (100.00%)  p50=450ms p90=600ms p95=650ms p99=950ms  slowUI=33 slowDraw=52 highInput=0
+GFX base-gallery frames=   68  janky=68 (100.00%)  p50=300ms p90=400ms p95=400ms p99=400ms  slowUI=26 slowDraw=68 highInput=0
+GFX base-news    frames=   84  janky=84 (100.00%)  p50=250ms p90=400ms p95=450ms p99=600ms  slowUI=40 slowDraw=84 highInput=1
+GFX new-album-grid frames=   75  janky=74 (98.67%)  p50=250ms p90=450ms p95=550ms p99=650ms  slowUI=31 slowDraw=74 highInput=1
+GFX new-carousel frames=   20  janky=20 (100.00%)  p50=300ms p90=600ms p95=650ms p99=650ms  slowUI=12 slowDraw=20 highInput=0
+GFX new-catalog  frames=   61  janky=61 (100.00%)  p50=450ms p90=700ms p95=750ms p99=850ms  slowUI=35 slowDraw=61 highInput=0
+GFX new-gallery  frames=   62  janky=62 (100.00%)  p50=250ms p90=400ms p95=450ms p99=500ms  slowUI=29 slowDraw=62 highInput=0
+GFX new-news     frames=   76  janky=76 (100.00%)  p50=250ms p90=400ms p95=450ms p99=650ms  slowUI=34 slowDraw=76 highInput=0

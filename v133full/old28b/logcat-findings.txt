@@ -1,0 +1,26 @@
+app pids seen: ['5538', '6681']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=46 total=194
+   11-09 18:06:26.839  5538  5538 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-09 18:06:27.756  5538  5538 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-09 18:07:05.152  5538  5538 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-09 18:07:36.411  6681  6681 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-09 18:07:37.469  6681  6681 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+== Davey: 5
+   davey events=5 max=1500ms median=979ms
+   11-09 18:06:27.734  5538  5572 I OpenGLRenderer: Davey! duration=1500ms; Flags=1, IntendedVsync=143468132313, Vsync=144084798955, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=144085246010, AnimationStart=144085
+   11-09 18:06:27.996  5538  5572 I OpenGLRenderer: Davey! duration=1023ms; Flags=1, IntendedVsync=144218757316, Vsync=144985423952, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=145002097360, AnimationStart=145002
+   11-09 18:07:05.327  5538  5572 I OpenGLRenderer: Davey! duration=720ms; Flags=0, IntendedVsync=181853111205, Vsync=182386444517, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=182397996200, AnimationStart=1823980
+   11-09 18:07:37.404  6681  6707 I OpenGLRenderer: Davey! duration=952ms; Flags=1, IntendedVsync=213695510548, Vsync=213945510538, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=213958838740, AnimationStart=2139588
+   11-09 18:07:37.736  6681  6707 I OpenGLRenderer: Davey! duration=979ms; Flags=0, IntendedVsync=214002449017, Vsync=214702448989, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=214715722990, AnimationStart=2147157
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 18:06:24.377  5528  5528 I PERFCHECK: section: W. First launch and warm-up
+   11-09 18:07:09.722  6456  6456 I PERFCHECK: section: O28. Event share as image on API 28 round a: no choice sheet
+   11-09 18:07:31.630  6637  6637 I PERFCHECK: sh-ev28-1
+   11-09 18:07:33.755  6669  6669 I PERFCHECK: section: O28b. Home on API 28: frames with no input after 30 s no AGSL; carousel?
+   11-09 18:07:33.773  2005  2019 I ActivityManager: Killing 5538:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-09 18:08:34.052  6886  6886 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

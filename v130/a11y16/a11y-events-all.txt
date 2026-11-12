@@ -1,0 +1,16 @@
+11-01 20:00:38.361  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Начало] desc= pane=
+11-01 20:00:38.535  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Каталог] desc= pane=Каталог
+11-01 20:00:41.510  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Моето] desc= pane=Моето
+11-01 20:00:44.541  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Новини и събития] desc= pane=Новини и събития
+11-01 20:00:47.542  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Още] desc= pane=Още
+11-01 20:00:50.717  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Начало] desc= pane=Начало
+11-01 20:00:53.600  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=32 pkg=org.chyavorec.app cls=android.view.View text=[Начало] desc= pane=
+11-01 20:00:53.669  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[12 -те вятъра] desc= pane=12 -те вятъра
+11-01 20:00:57.550  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Каталог] desc= pane=Каталог
+11-01 20:00:59.673  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Новини и събития] desc= pane=Новини и събития
+11-01 20:01:04.756  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец.] desc= pane=Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец.
+11-01 20:01:08.701  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Новини и събития] desc= pane=Новини и събития
+11-01 20:01:10.743  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Още] desc= pane=Още
+11-01 20:01:13.586  7867  7867 I PCA11Y  : CLICK 'Настройки' -> true
+11-01 20:01:13.799  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Настройки] desc= pane=Настройки
+11-01 20:01:16.781  7867  7867 I PCA11Y  : ev=TYPE_WINDOW_STATE_CHANGED changes=16 pkg=org.chyavorec.app cls=android.view.View text=[Още] desc= pane=Още

@@ -1,0 +1,52 @@
+part shake34b; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4139 ms
+## SK1. Default setting: 3 peaks + stillness, ×4 (positive control)
+SHAKE def-1: not triggered
+SHAKE def-2: not triggered
+SHAKE def-3: TRIGGERED
+SHAKE def-4: TRIGGERED
+## SK2. Settings › Изглед: off; shake ×3 must do nothing
+setting now: CHECKSTATE 'Разклащане за „Изненадай ме“': checked=false (node itself/ancestor, clickable=true)
+SHAKE off-1: not triggered
+SHAKE off-2: not triggered
+SHAKE off-3: not triggered
+## SK3. Setting back on (after an app restart); shake ×2 opens again
+setting now: CHECKSTATE 'Разклащане за „Изненадай ме“': checked=true (node itself/ancestor, clickable=true)
+SHAKE on-1: TRIGGERED
+SHAKE on-2: TRIGGERED
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 5 | Първи кадър: медиана 2892 мс, последен 2411 мс | Пълно показване: медиана 3317 мс, последно 2977 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 5" text="Първи кадър: медиана 2892 мс, последен 2411 мс" text="Пълно показване: медиана 3317 мс, последно 2977 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5831', '8432', '8755', '9345', '9819']): 36 in 8 groups
+       5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/Parcel: Expecting binder but got null!
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       5  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=e#f-#b#a-#d#c-#f-fd#fe#c, generation=#)
+## COMPLETE
+## logcat findings
+app pids seen: ['5831', '8432', '8755', '9345', '9819']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 26
+   skipped-frames events=26 max=134 total=1412
+== Davey: 75
+   davey events=75 max=2791ms median=886ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

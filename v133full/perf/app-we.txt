@@ -1,0 +1,12 @@
+APP W/E lines (pids ['4448', '5741', '6140', '6606', '6875', '7131', '7206', '7325', '7466', '7534', '7589', '7651', '7709', '7764', '7846', '7903', '7964', '8022', '8080', '8134', '8188', '8254', '8309', '8738', '8794', '8849', '8904', '8961', '9017', '9074', '9131', '9220', '9293', '9350', '9407', '9462', '9517', '9572', '9635', '9707', '9762', '9817', '9874', '9928', '9983', '10597', '10695', '10752', '10806', '10861', '10916', '11210']): 416 in 11 groups
+      93  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      54  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      54  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      53  W/Parcel: Expecting binder but got null!
+      52  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      52  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      52  W/Gralloc4: allocator #.x is not supported
+       3  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#f-#c#-#a-b#d#-#d#e#adccc, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object f#.s(java.lang.Object)(r

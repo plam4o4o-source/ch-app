@@ -1,0 +1,121 @@
+part gfx34; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## G new1: gfxinfo per scenario (animations ON)
+installed new1: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842;  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new1 catalogue after 5127 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+GFX new1-home-scroll frames=   66  janky=65 (98.48%)  p50=350ms p90=550ms p95=550ms p99=650ms  slowUI=44 slowDraw=65 highInput=1
+  GFXMEM new1-home-scroll: pipeline: Skia (OpenGL); GPU total: 55743552 bytes, 53.16 MB (48.43 MB is purgeable); textures: 2.86 MB (8 entries) | 6.84 MB (36 entries) | 7.64 MB (29 entries); frames: 66
+GFX new1-news    frames=   64  janky=64 (100.00%)  p50=200ms p90=300ms p95=350ms p99=350ms  slowUI=37 slowDraw=64 highInput=1
+  GFXMEM new1-news: pipeline: Skia (OpenGL); GPU total: 84754456 bytes, 80.83 MB (76.07 MB is purgeable); textures: 13.85 KB (1 entry) | 9.55 MB (76 entries) | 10.49 MB (36 entries); frames: 64
+GFX new1-article frames=   73  janky=73 (100.00%)  p50=250ms p90=400ms p95=450ms p99=700ms  slowUI=37 slowDraw=73 highInput=0
+  GFXMEM new1-article: pipeline: Skia (OpenGL); GPU total: 86619440 bytes, 82.61 MB (79.85 MB is purgeable); textures: 27.70 KB (2 entries) | 10.81 MB (82 entries) | 10.48 MB (36 entries); frames: 73
+GFX new1-catalog frames=   56  janky=56 (100.00%)  p50=300ms p90=600ms p95=650ms p99=700ms  slowUI=30 slowDraw=56 highInput=0
+  GFXMEM new1-catalog: pipeline: Skia (OpenGL); GPU total: 83059808 bytes, 79.21 MB (44.94 MB is purgeable); textures: 334.61 KB (14 entries) | 2.00 MB (2 entries); frames: 56
+GFX new1-card-0-15s frames=   79  janky=79 (100.00%)  p50=250ms p90=350ms p95=450ms p99=700ms  slowUI=14 slowDraw=79 highInput=0
+GFX new1-cardfull-0-15s frames=   82  janky=82 (100.00%)  p50=200ms p90=300ms p95=350ms p99=900ms  slowUI=13 slowDraw=82 highInput=0
+GFX new1-viewer  frames=  154  janky=153 (99.35%)  p50=150ms p90=250ms p95=300ms p99=350ms  slowUI=79 slowDraw=153 highInput=1
+## G base1: gfxinfo per scenario (animations ON)
+installed base1: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base1 catalogue after 3499 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+GFX base1-home-scroll frames=   57  janky=57 (100.00%)  p50=350ms p90=600ms p95=650ms p99=750ms  slowUI=32 slowDraw=57 highInput=0
+  GFXMEM base1-home-scroll: pipeline: Skia (OpenGL); GPU total: 41269992 bytes, 39.36 MB (34.58 MB is purgeable); textures: 1.36 MB (3 entries) | 5.97 MB (33 entries) | 9.25 MB (26 entries); frames: 57
+GFX base1-news   frames=   79  janky=79 (100.00%)  p50=250ms p90=400ms p95=450ms p99=500ms  slowUI=38 slowDraw=79 highInput=0
+  GFXMEM base1-news: pipeline: Skia (OpenGL); GPU total: 79578320 bytes, 75.89 MB (70.91 MB is purgeable); textures: 1.37 MB (4 entries) | 8.62 MB (55 entries) | 9.25 MB (27 entries); frames: 79
+GFX base1-article frames=   71  janky=71 (100.00%)  p50=300ms p90=400ms p95=450ms p99=500ms  slowUI=26 slowDraw=71 highInput=0
+  GFXMEM base1-article: pipeline: Skia (OpenGL); GPU total: 88556512 bytes, 84.45 MB (81.96 MB is purgeable); textures: 1.39 MB (5 entries) | 7.85 MB (47 entries) | 5.50 MB (10 entries); frames: 71
+GFX base1-catalog frames=   64  janky=64 (100.00%)  p50=300ms p90=550ms p95=600ms p99=650ms  slowUI=31 slowDraw=64 highInput=0
+  GFXMEM base1-catalog: pipeline: Skia (OpenGL); GPU total: 88826192 bytes, 84.71 MB (52.54 MB is purgeable); textures: 299.84 KB (19 entries) | 4.25 MB (4 entries); frames: 64
+GFX base1-card-0-15s frames=   79  janky=79 (100.00%)  p50=300ms p90=450ms p95=500ms p99=650ms  slowUI=32 slowDraw=79 highInput=0
+GFX base1-cardfull-0-15s frames=   82  janky=82 (100.00%)  p50=250ms p90=400ms p95=400ms p99=1100ms  slowUI=26 slowDraw=82 highInput=0
+GFX base1-viewer frames=  162  janky=158 (97.53%)  p50=150ms p90=250ms p95=300ms p99=350ms  slowUI=78 slowDraw=158 highInput=4
+## G new2: gfxinfo per scenario (animations ON)
+installed new2: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842;  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new2 catalogue after 3193 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+GFX new2-home-scroll frames=   62  janky=62 (100.00%)  p50=300ms p90=500ms p95=500ms p99=750ms  slowUI=32 slowDraw=62 highInput=0
+  GFXMEM new2-home-scroll: pipeline: Skia (OpenGL); GPU total: 33578736 bytes, 32.02 MB (27.25 MB is purgeable); textures: 5.55 MB (28 entries) | 9.94 MB (23 entries); frames: 62
+GFX new2-news    frames=   84  janky=84 (100.00%)  p50=250ms p90=400ms p95=400ms p99=500ms  slowUI=49 slowDraw=84 highInput=0
+  GFXMEM new2-news: pipeline: Skia (OpenGL); GPU total: 88285408 bytes, 84.20 MB (79.42 MB is purgeable); textures: 13.85 KB (1 entry) | 8.47 MB (62 entries) | 9.94 MB (23 entries); frames: 84
+GFX new2-article frames=   76  janky=76 (100.00%)  p50=250ms p90=400ms p95=400ms p99=500ms  slowUI=34 slowDraw=76 highInput=0
+  GFXMEM new2-article: pipeline: Skia (OpenGL); GPU total: 88913776 bytes, 84.79 MB (82.01 MB is purgeable); textures: 27.70 KB (2 entries) | 9.03 MB (64 entries) | 9.95 MB (25 entries); frames: 76
+GFX new2-catalog frames=   59  janky=59 (100.00%)  p50=350ms p90=600ms p95=750ms p99=750ms  slowUI=31 slowDraw=59 highInput=0
+  GFXMEM new2-catalog: pipeline: Skia (OpenGL); GPU total: 87252992 bytes, 83.21 MB (50.95 MB is purgeable); textures: 354.64 KB (22 entries) | 4.25 MB (4 entries); frames: 59
+GFX new2-card-0-15s frames=   80  janky=80 (100.00%)  p50=250ms p90=350ms p95=450ms p99=500ms  slowUI=17 slowDraw=80 highInput=0
+GFX new2-cardfull-0-15s frames=   80  janky=80 (100.00%)  p50=250ms p90=350ms p95=400ms p99=750ms  slowUI=8 slowDraw=80 highInput=1
+GFX new2-viewer  frames=  150  janky=147 (98.00%)  p50=150ms p90=250ms p95=300ms p99=350ms  slowUI=75 slowDraw=147 highInput=3
+## G base2: gfxinfo per scenario (animations ON)
+installed base2: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base2 catalogue after 3208 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+GFX base2-home-scroll frames=   61  janky=61 (100.00%)  p50=350ms p90=500ms p95=550ms p99=650ms  slowUI=31 slowDraw=61 highInput=0
+  GFXMEM base2-home-scroll: pipeline: Skia (OpenGL); GPU total: 37649120 bytes, 35.90 MB (31.13 MB is purgeable); textures: 3.27 MB (7 entries) | 5.97 MB (33 entries) | 6.92 MB (16 entries); frames: 61
+GFX base2-news   frames=   84  janky=84 (100.00%)  p50=250ms p90=350ms p95=350ms p99=450ms  slowUI=41 slowDraw=84 highInput=0
+  GFXMEM base2-news: pipeline: Skia (OpenGL); GPU total: 79593456 bytes, 75.91 MB (70.90 MB is purgeable); textures: 3.29 MB (8 entries) | 8.78 MB (59 entries) | 6.93 MB (18 entries); frames: 84
+GFX base2-article frames=   83  janky=83 (100.00%)  p50=250ms p90=400ms p95=400ms p99=450ms  slowUI=24 slowDraw=83 highInput=0
+  GFXMEM base2-article: pipeline: Skia (OpenGL); GPU total: 80539328 bytes, 76.81 MB (74.30 MB is purgeable); textures: 968.70 KB (4 entries) | 6.93 MB (51 entries) | 4.01 MB (6 entries); frames: 83
+GFX base2-catalog frames=   56  janky=56 (100.00%)  p50=350ms p90=550ms p95=600ms p99=700ms  slowUI=27 slowDraw=56 highInput=0
+  GFXMEM base2-catalog: pipeline: Skia (OpenGL); GPU total: 85320240 bytes, 81.37 MB (47.10 MB is purgeable); textures: 334.61 KB (14 entries) | 2.00 MB (2 entries); frames: 56
+GFX base2-card-0-15s frames=   81  janky=81 (100.00%)  p50=300ms p90=450ms p95=450ms p99=600ms  slowUI=27 slowDraw=81 highInput=0
+GFX base2-cardfull-0-15s frames=   82  janky=82 (100.00%)  p50=250ms p90=450ms p95=500ms p99=850ms  slowUI=27 slowDraw=82 highInput=0
+GFX base2-viewer frames=  150  janky=147 (98.00%)  p50=150ms p90=250ms p95=250ms p99=300ms  slowUI=77 slowDraw=147 highInput=4
+## G totals (mean of 2 rounds per app; emulator swangle: janky% is high for both — compare frames and p50/p90)
+scenario          app     n   frames  janky%   p50   p90   p99
+article           new     2       74   100.0   250   400   600
+article           base    2       77   100.0   275   400   475
+card-0-15s        new     2       80   100.0   250   350   600
+card-0-15s        base    2       80   100.0   300   450   625
+cardfull-0-15s    new     2       81   100.0   225   325   825
+cardfull-0-15s    base    2       82   100.0   250   425   975
+catalog           new     2       58   100.0   325   600   725
+catalog           base    2       60   100.0   325   550   675
+home-scroll       new     2       64    99.2   325   525   700
+home-scroll       base    2       59   100.0   350   550   700
+news              new     2       74   100.0   225   350   425
+news              base    2       82   100.0   250   375   475
+viewer            new     2      152    98.7   150   250   350
+viewer            base    2      156    97.8   150   250   325
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 2 | Първи кадър: медиана 2810 мс, последен 2931 мс | Пълно показване: медиана 3388 мс, последно 4087 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 2" text="Първи кадър: медиана 2810 мс, последен 2931 мс" text="Пълно показване: медиана 3388 мс, последно 4087 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5314', '7118', '9261', '9928', '11399', '11851', '13167', '13609']): 86 in 14 groups
+      18  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      18  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       8  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       8  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       8  W/Parcel: Expecting binder but got null!
+       8  W/Gralloc4: allocator #.x is not supported
+       8  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       4  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object h#.s(java.lang.Object)(r
+       1  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#e#af#-#c#b-#e#-acf#-be#ccb#d#e, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void s#.b(h#, boolean)(r#-map-id-a#f#f#e#
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#e#-#bfc-#d#-#-#f#beae, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#a#b#-#-#dc-#d-#d#d#bbbc, generation=#)
+## COMPLETE
+## logcat findings
+app pids seen: ['5314', '7118', '9261', '9928', '11399', '11851', '13167', '13609']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 54
+   skipped-frames events=54 max=130 total=2983
+== Davey: 113
+   davey events=113 max=4121ms median=903ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

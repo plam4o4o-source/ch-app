@@ -1,0 +1,13 @@
+== new 1.2.29 7bd2513: release-config APK (arm64-v8a + armeabi-v7a, minified, throwaway key)
+APK size: 4092878 bytes
+manifest:  A: http://schemas.android.com/apk/res/android:versionCode(0x0101021b)=1488542  A: http://schemas.android.com/apk/res/android:versionName(0x0101021c)="1.2.29" (Raw: "1.2.29")  A: http://schemas.android.com/apk/res/android:extractNativeLibs(0x010104ea)=true 
+uses-permission: 'android.permission.INTERNET' 'android.permission.ACCESS_NETWORK_STATE' 'android.permission.POST_NOTIFICATIONS' 'android.permission.REQUEST_INSTALL_PACKAGES' 'android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION' 'android.permission.WAKE_LOCK' 'android.permission.RECEIVE_BOOT_COMPLETED' 'android.permission.FOREGROUND_SERVICE' 'org.chyavorec.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION' 
+part                    compressed  uncompressed  files
+classes*.dex               3342856       6610644      2
+res                         468368        832408     57
+resources.arsc              217040        217040      1
+assets/                      19129         19129      2
+lib/arm64-v8a                 8642         20472      2
+lib/armeabi-v7a               6601         13116      2
+AndroidManifest.xml           5342         23192      1
+META-INF/                      846          1288      6

@@ -1,0 +1,14 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-09 19:41:38.010  5067  5067 I PERFCHECK: section: W. First launch and warm-up
+   11-09 19:43:38.207  7233  7233 I PERFCHECK: section: Y2b. Year story: what is on the screen during the first 18 s screenshot each second
+   11-09 19:45:45.232  8119  8119 I PERFCHECK: section: Y6b. Short flick variants the 22% / 90 ms flick stayed open in round a
+   11-09 19:47:21.604  8721  8721 I PERFCHECK: section: Y4b. Demo card: foil and the sensor
+   11-09 19:48:01.447  8807  8807 I PERFCHECK: section: Y3b. Hold result
+   11-09 19:48:18.556  8943  8943 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

@@ -1,0 +1,74 @@
+part idle; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4525 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## I. CPU and frames with no input: 30 s after opening each screen, then a 15 s window (should be ~0 frames, ~0% CPU)
+IDLE home (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE catalog (15 s, no input): frames +31; cpu=1.0% (ticks 15 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=0.6%, g.chyavorec.app=0.3%, Jit thread pool=0.1%; pid 7323
+IDLE catalog-shelf (15 s, no input): frames +30; cpu=1.0% (ticks 15 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=0.7%, g.chyavorec.app=0.3%, FrameMetricsAgg=0.1%; pid 7323
+IDLE book (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE surprise-result (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE home-search-expanded (15 s, no input): frames +31; cpu=0.7% (ticks 11 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=0.6%, g.chyavorec.app=0.1%; pid 7323
+IDLE my (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE card (15 s, no input): frames +85; cpu=27.3% (ticks 409 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=26.7%, g.chyavorec.app=0.4%, binder:7323_6=0.1%, binder:7323_2=0.1%; pid 7323
+IDLE card-full (15 s, no input): frames +85; cpu=28.4% (ticks 426 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=27.8%, g.chyavorec.app=0.4%, binder:7323_2=0.1%, Jit thread pool=0.1%, FrameMetricsAgg=0.1%; pid 7323
+IDLE want (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE news (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE article (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE calendar (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE event (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE more (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE gallery (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE album (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE viewer (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE settings (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE diagnostics (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE contacts (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE documents (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7323
+IDLE background (30 s, no input): frames +0; cpu=0.1% (ticks 2 in 30 s; 100 ticks = 1 cpu-s) threads: HeapTaskDaemon=0.1%; pid 7323
+## I2. Screens that kept drawing (frames > 0 in the 15 s window)
+IDLE catalog (15 s, no input): frames +31; cpu=1.0% (ticks 15 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=0.6%, g.chyavorec.app=0.3%, Jit thread pool=0.1%; pid 7323
+IDLE catalog-shelf (15 s, no input): frames +30; cpu=1.0% (ticks 15 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=0.7%, g.chyavorec.app=0.3%, FrameMetricsAgg=0.1%; pid 7323
+IDLE home-search-expanded (15 s, no input): frames +31; cpu=0.7% (ticks 11 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=0.6%, g.chyavorec.app=0.1%; pid 7323
+IDLE card (15 s, no input): frames +85; cpu=27.3% (ticks 409 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=26.7%, g.chyavorec.app=0.4%, binder:7323_6=0.1%, binder:7323_2=0.1%; pid 7323
+IDLE card-full (15 s, no input): frames +85; cpu=28.4% (ticks 426 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=27.8%, g.chyavorec.app=0.4%, binder:7323_2=0.1%, Jit thread pool=0.1%, FrameMetric
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 2 | Първи кадър: медиана 2602 мс, последен 2445 мс | Пълно показване: медиана 3389 мс, последно 4020 мс | Топъл старт · 1 | Първи кадър: медиана 867 мс, последен 867 мс | Насечени кадри по екрани | more: 10,0 % от 110 кадъра · най-бавен 330 мс 
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 2" text="Първи кадър: медиана 2602 мс, последен 2445 мс" text="Пълно показване: медиана 3389 мс, последно 4020 мс" text="Топъл старт · 1" text="Първи кадър: медиана 867 мс, последен 867 мс" text="Насечени кад
+APP W/E lines (pids ['4803', '7323']): 26 in 12 groups
+       4  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       3  W/Parcel: Expecting binder but got null!
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       2  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/Gralloc4: allocator #.x is not supported
+       2  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       2  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       1  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+       1  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       1  W/g.chyavorec.app: Long monitor contention with owner binder:#_# (#) at boolean android.os.MessageQueue.enqueueMessage(android.os
+## COMPLETE
+## logcat findings
+app pids seen: ['4803', '7323']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 27
+   skipped-frames events=27 max=135 total=1361
+== Davey: 71
+   davey events=71 max=2837ms median=910ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

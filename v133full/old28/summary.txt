@@ -1,0 +1,170 @@
+part old28; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: not used in this part (built x86_64 app.apk)
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: 
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-lowdr-nowidecg-port-notnight-420dpi-finger-keysexposed-nokeys-navhidden-nonav-2274x1080-v28
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 5690 ms
+## P1. Home ribbon on API 28 (no AGSL): the still pattern, drawn once
+FB frames in 18 s: 180
+FB ribbon [0 215 1080 333] mean=208.8 std=67.2 thread-px=27.5%; change 3→10→18 s: 0.39 0.46
+## P2. Library card: fallback foil gradients
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+FB card: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+## P3. 'Изненадай ме'
+FB surprise: text="Към книгата" ; bottom bar hidden
+## P4. Book open
+REC fb-bookopen: 36 frames @8 fps; motion 0 150 1080 2150: frames=36 moving-frames(>1.0)=6 max-step=23.3 max-vs-first=30.4 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.4 20.0 0.4 18.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.3 23.3 0.0 12.8 16.7 0.4 0.2]
+## P5. Event: share as image
+SHARE fb-event: FAIL — no choice sheet ()
+## P6. Article: toolbar and thread
+FB article toolbar after scroll down: visible
+## O. Tour on API 28 (device language bg-BG via the helper)
+## T-api28-light. All screens (1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0)
+CAP api28-light/01-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP api28-light/01b-home-2: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Последни новини · С хоро и песен във Водица · 26 септември 2026 · Моите книги · Читателска карта · Искам да прочета
+CAP api28-light/01c-home-3: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=31 ellipsized=0 | 16 · НОЕ · 80 г. от създаването на ЮНЕС · Организацията на ООН за обра · БИБЛИОТЕКА · 21
+CAP api28-light/01d-home-4: targets=16 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | НАЙ-ЧЕТЕНИ И НОВИ · За теб · Пътят на пътя · Огънят на здрача · Дъхът на любовта · ВИТРИНА
+CAP api28-light/01e-search-12: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=40 ellipsized=0 | 12 · Лента за търсене · Назад · Изчисти · Всички · Книги
+CAP api28-light/02-catalog: targets=22 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=48 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP api28-light/02b-filters: targets=22 MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=26 ellipsized=0 | Манипулатор за преместване с · Филтри · Без филтри · Само налични · Вид документ · книга
+CAP api28-light/02c-filters-2: targets=24 MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=2 | front: app | texts=29 ellipsized=0 | Манипулатор за преместване с · продължаващо издание · патент/стандарт · нотно издание · Раздел (жанр) · Общ отдел
+CAP api28-light/02d-sort: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Най-подходящи  ✓ · Заглавие (А–Я) · Автор (А–Я) · Година (нови първо) · Година (стари първо) · Нови постъпления
+CAP api28-light/02e-shelf: targets=48 MISSING=0 DOUBLE=0 SAME-LABEL=4 SMALL(<48dp)=14 | front: app | texts=85 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP api28-light/02f-shelf-2: targets=45 MISSING=0 DOUBLE=0 SAME-LABEL=7 SMALL(<48dp)=22 | front: app | texts=72 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP api28-light/02g-search-12: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=44 ellipsized=0 | 12 · Изчисти · Всичко · Заглавие · Автор · ISBN
+CAP api28-light/03-book: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Спомен за здрача · Веска Пенчева · Не е на рафта · Наличност към 06.11.2026 · Искам да прочета · Попитай библиотеката
+CAP api28-light/03b-book-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=0 | Наличност към 06.11.2026 · Искам да прочета · Попитай библиотеката · Кажи ми, когато е на рафта · Библиографски данни · Издателство
+CAP api28-light/03c-book-3: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=0 | Наличност към 06.11.2026 · Искам да прочета · Попитай библиотеката · Кажи ми, когато е на рафта · Библиографски данни · Издателство
+CAP api28-light/04-surprise: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Предложение: Забравеният мор · Още една · Към книгата · Затвори
+CAP api28-light/05-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Здравей! · Новините, събитията, каталог · Вход · БИБЛИОТЕКА · Читателска карта · Въведена от теб карта
+CAP api28-light/05b-my-2: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Здравей! · Новините, събитията, каталог · Вход · БИБЛИОТЕКА · Читателска карта · Въведена от теб карта
+CAP api28-light/06-card: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345 · Покажи картата
+CAP api28-light/06b-card-full: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Затвори · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345
+CAP api28-light/07-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Списъкът е празен · Отбележи книга с „Искам да п · Назад · Искам да прочета
+CAP api28-light/08-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Събитие
+CAP api28-light/08b-news-2: targets=21 MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=3 | front: app | texts=26 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Събитие
+CAP api28-light/09-article: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Групата за народни танци при · СЪБИТИЕ  ·  25 юли 2026 · Групата за народни танци при · Групата за народни танци при · Режим за четене · Аа
+CAP api28-light/09b-article-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Групата за народни танци при · СЪБИТИЕ  ·  25 юли 2026 · Групата за народни танци при · Групата за народни танци при · Режим за четене · Аа
+CAP api28-light/09c-reader-sheet: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Затваряне на таблицата · Манипулатор за преместване с · Режим за четене · Размер на шрифта · Аа · Малък шрифт
+CAP api28-light/09d-share-sheet: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP api28-light/10-calendar: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=38 ellipsized=0 | Новини · Календар · Абонирай се за календара · Изглед календар · Всички · Библиотека
+CAP api28-light/11-event: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Панайот Пипков · Ден на семе · 21 ноември 2026 · Събитие от годишния календар · Читалище · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана
+CAP api28-light/11b-event-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Панайот Пипков · Ден на семе · 21 ноември 2026 · Събитие от годишния календар · Читалище · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана
+CAP api28-light/11c-event-share: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP api28-light/12-more: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP api28-light/12b-more-2: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Дейности · Групи, клубове, проекти · За читалището · История и мисия · Галерия · Снимки от сайта
+CAP api28-light/13-gallery: targets=9 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=14 ellipsized=0 | 29 снимки · Фотодокументална изложба · 4 снимки · Фолклорна група „Явор“ · 6 снимки · Клуб за народни танци
+CAP api28-light/14-album: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Сградата на читалището в Яво · Фолклорен състав при читалищ · Хорът на сцена · 70-те години · Сценичен ансамбъл Яворски хл · Фолклорна група Явор
+CAP api28-light/15-viewer: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | 70-те години · Затвори · 4 / 29  ·  70-те години · Сподели · Отвори в сайта · За снимката
+CAP api28-light/15b-viewer-info: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | 70-те години · Затвори · 4 / 29  ·  70-те години · 70-те години · Сподели · Отвори в сайта
+CAP api28-light/16-contacts: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=27 ellipsized=0 | НЧ „Васил Левски – 1922“ · Изпрати имейл на читалището · Имейл · Покажи читалището на картата · Карта · Отвори сайта на читалището
+CAP api28-light/16b-contacts-2: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Адрес · пл. 9-ти Септември 3, с. Яво · Лица за контакт · Председател: Пламен Христов · Секретар: Даниела Цвяткова · Имейл
+CAP api28-light/17-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF
+CAP api28-light/17b-documents-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF
+CAP api28-light/18-settings: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP api28-light/18b-settings-2: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Чисто черен фон в тъмната те · Език · Както системата · Сезонни украси · Празници, сезони и обичаи: п · Известия
+CAP api28-light/18c-settings-3: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Проверка при отваряне и два  · Провери за нова версия · Версия 1.2.33 · Данни · Корици от интернет · Корици по ISBN от covers.ope
+CAP api28-light/18d-settings-4: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | По мобилни данни — само вече · Изчисти временните данни · Новините, събитията, каталог · Поверителност · Искай отключване за личните  · Не може да се включи: телефо
+CAP api28-light/18e-text-size: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+CAP api28-light/18f-language: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Език · Както системата · Български · English · Затвори
+CAP api28-light/18g-theme: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Тема · Както системата · Светла · Тъмна · Затвори
+CAP api28-light/18h-notifications: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Известията се подготвят на с · Съобщения · Съобщения, изпратени от чита · Новини · Нова публикация в сайта · Събития
+CAP api28-light/18i-privacy-policy: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Виж и: Политика за поверител · Последна актуализация: 7 ное · Кой обработва данните · Приложението „Читалище Яворе · Принцип · Приложението събира възможно
+CAP api28-light/18j-terms: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Предназначение · Приложението предоставя инфо · Съдържание · Новините, събитията, снимкит · Наличност на книгите · Наличността в каталога е инф
+CAP api28-light/18k-about: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=11 ellipsized=0 | Читалище Яворец · НЧ „Васил Левски – 1922“ · Версия 1.2.33 (1500183) · Официалното мобилно приложен · Откъде идват данните · Новини, събития, снимки, док
+CAP api28-light/18l-diagnostics: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Тук приложението записва тех · Сподели · Изчисти · Бързодействие · Времената на стартиране и пл · Студен старт · 3
+CAP api28-light/18m-diagnostics-2: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Тук приложението записва тех · Сподели · Изчисти · Бързодействие · Времената на стартиране и пл · Студен старт · 3
+CAP api28-light/19-login: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Вход за читатели · Читателски номер · ПИН (от библиотеката) · Покажи ПИН-а · Запомни ме на това устройств · Вход
+CAP api28-light/20-scanner: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Отказ · Търси
+CAP api28-light/20b-scan-manual: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Отказ · Търси
+TOUR api28-light: A11Y AGG: 57 screens analysed, 0 dumps failed; totals MISSING=9 DOUBLE=0 SAME-LABEL=19 SMALL(<48dp)=52
+A11Y AGG: 57 screens analysed, 0 dumps failed; totals MISSING=9 DOUBLE=0 SAME-LABEL=19 SMALL(<48dp)=52
+== MISSING: 9 distinct
+   View@[42,0][378,21]  [1 screens: 01d-home-4]
+   View@[415,0][751,21]  [1 screens: 01d-home-4]
+   View@[788,0][1080,21]  [1 screens: 01d-home-4]
+   View@[0,1906][1080,2032]  [1 screens: 02-catalog]
+   View@[890,337][1027,463]  [1 screens: 02b-filters]
+   View@[53,2257][1027,2274]  [1 screens: 02c-filters-2]
+   View@[944,1][1070,127]  [1 screens: 08b-news-2]
+   View@[42,2256][524,2274]  [1 screens: 13-gallery]
+   View@[556,2256][1038,2274]  [1 screens: 13-gallery]
+== SMALL: 26 distinct
+   'Манипулатор за преместване с п'  [5 screens: 02b-filters, 02c-filters-2, 09c-reader-sheet, 09d-share-sheet, 11c-event-share]
+   ''  [2 screens: 02c-filters-2, 13-gallery]
+   'Бевълстоук : Кн. 1 - 2, Куин, '  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Безсрамна добродетел, Робъртс,'  [2 screens: 02e-shelf, 02f-shelf-2]
+   'Далечният морето'  [1 screens: 01c-home-3]
+   'Дългият пътя'  [1 screens: 01c-home-3]
+   '12 -те вятъра, Гарфилд, Джудит'  [1 screens: 02e-shelf]
+   'Аз обичам Ню Йорк, Келк, Линдз'  [1 screens: 02e-shelf]
+   'Ако върнеш времето назад, Потъ'  [1 screens: 02e-shelf]
+   'Алтъна, Никова, Ивелина Алтъна'  [1 screens: 02e-shelf]
+   'Анатомът, Андахази, Федерико А'  [1 screens: 02e-shelf]
+   'Белият дома, Николай Симеонов '  [1 screens: 02e-shelf]
+   'Белият звездите, Диана Христов'  [1 screens: 02e-shelf]
+   'Всичко'  [1 screens: 02f-shelf-2]
+   'Заглавие'  [1 screens: 02f-shelf-2]
+   'Автор'  [1 screens: 02f-shelf-2]
+   'ISBN'  [1 screens: 02f-shelf-2]
+   'Белият вятъра, Петър Здравков'  [1 screens: 02f-shelf-2]
+## O2. Rotation and process death on API 28 (book, catalogue)
+ROT book: pid 7384→7384 (same); landscape: kept 38% of 24 texts; lost e.g. ['Вид', 'Език', 'книга', 'Отдел']; back to portrait: kept 96% of 24 texts; lost e.g. ['Последна синхронизация: Преди ']
+PROCDEATH book: killed yes; new pid 12443; restored: kept 96% of 24 texts; lost e.g. ['Последна синхронизация: Преди ']; front app
+ROT catalog: pid 12443→12443 (same); landscape: kept 100% of 21 texts; back to portrait: kept 86% of 21 texts; lost e.g. ['ISBN', 'Автор', 'Ключова дума']
+PROCDEATH catalog: killed yes; new pid 12875; restored: kept 100% of 21 texts; front app
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 4 | Първи кадър: медиана 1255 мс, последен 1229 мс | Пълно показване: медиана 1712 мс, последно 2058 мс | Топъл старт · 1 | Първи кадър: медиана 636 мс, последен 636 мс | Пълно показване: медиана 636 мс, последно 636 мс | Насечени кадри по екра
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 4" text="Първи кадър: медиана 1255 мс, последен 1229 мс" text="Пълно показване: медиана 1712 мс, последно 2058 мс" text="Топъл старт · 1" text="Първи кадър: медиана 636 мс, последен 636 мс" text="Пълно показв
+APP W/E lines (pids ['5602', '6489', '7384', '12443', '12875']): 111 in 88 groups
+       7  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       5  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       2  W/BasicSecureTextField: 	at ow#.b(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       2  W/BasicSecureTextField: 	at x#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       2  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       2  W/GooglePlayServicesUtil: Google Play services out of date for org.chyavorec.app.  Requires # but found #
+       2  W/GoogleApiManager: The service for je# is not available: hr#{statusCode=SERVICE_VERSION_UPDATE_REQUIRED, resolution=null, message
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ee#-#aa#-#b-#fa-#f#f#daff#, generation=#)
+       1  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+       1  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+       1  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+       1  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+       1  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+       1  W/ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@f#b#
+       1  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       1  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       1  W/BasicSecureTextField: 	at yz#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at yz#.d(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at ow#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at aq#.invoke(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at on#.c(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at on#.invoke(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at j#.i(Unknown Source:#)
+       1  W/BasicSecureTextField: 	at bq#.a(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+       1  W/BasicSecureTextField: 	at h#.f(r#-map-id-a#f#f#e#a#ce#ca#c#d#f#e#e#dffa#c#e#ceb#e#a#:#)
+## COMPLETE
+## logcat findings
+app pids seen: ['5602', '6489', '7384', '12443', '12875']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=43 total=137
+== Davey: 7
+   davey events=7 max=883ms median=820ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

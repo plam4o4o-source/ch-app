@@ -1,0 +1,82 @@
+      ConnectionRecord{70e9fd5 u0 CR com.google.android.permissioncontroller/com.android.permissioncontroller.permission.service.PermissionControllerServiceImpl:@8e23c8c}
+
+  * ServiceRecord{607c1a6 u0 org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService}
+    intent={cmp=org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService}
+    packageName=org.chyavorec.app
+    processName=org.chyavorec.app
+    permission=android.permission.BIND_JOB_SERVICE
+    baseDir=/data/app/~~QkR7_c3pQQRgbkg_YUbvgg==/org.chyavorec.app-d_RMkIVBQ7xfLpry_ThO4Q==/base.apk
+    dataDir=/data/user/0/org.chyavorec.app
+    app=ProcessRecord{3b22c86 5589:org.chyavorec.app/u0a175}
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=android
+    recentCallingUid=1000
+    allowStartForeground=PROC_STATE_PERSISTENT
+    startForegroundCount=0
+    infoAllowStartForeground=[callingPackage: android; callingUid: 1000; uidState: PER ; intent: Intent { cmp=org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService }; code:PROC_STATE_PERSISTENT; tempAllowListReason:<null>; targetSdkVersion:37; callerTargetSdkVersion:33; startForegroundCount:0; bindFromPackage:null]
+    createTime=-6s52ms startingBgTimeout=--
+    lastActivity=-6s52ms restartTime=-6s52ms createdFromFg=true
+    Bindings:
+    * IntentBindRecord{1f06b70 CREATE}:
+      intent={cmp=org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService}
+      binder=android.os.BinderProxy@cba0ee9
+      requested=true received=true hasBound=true doRebind=false
+      * Client AppBindRecord{cf9876e ProcessRecord{d5d91a5 488:system/1000}}
+        Per-process Connections:
+          ConnectionRecord{1406f01 u0 CR !FG !PRCP org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService:@6825ce8}
+    All Connections:
+      ConnectionRecord{1406f01 u0 CR !FG !PRCP org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService:@6825ce8}
+
+  * ServiceRecord{1e7847c u0 com.google.android.gms/.nearby.exposurenotification.service.ExposureNotificationInternalService}
+    intent={act=com.google.android.gms.nearby.exposurenotification.service.ACTION_WAKE_UP cmp=com.google.android.gms/.nearby.exposurenotification.service.ExposureNotificationInternalService}
+    packageName=com.google.android.gms
+    processName=com.google.android.gms.persistent
+    baseDir=/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
+--
+      ConnectionRecord{801c71e u0 CR !FG !VIS com.google.android.gms/.location.geocode.GeocodeService:@fa1bf59}
+
+  * ServiceRecord{161f7e5 u0 org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService}
+    intent={act=ACTION_START_FOREGROUND cmp=org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService}
+    packageName=org.chyavorec.app
+    processName=org.chyavorec.app
+    baseDir=/data/app/~~QkR7_c3pQQRgbkg_YUbvgg==/org.chyavorec.app-d_RMkIVBQ7xfLpry_ThO4Q==/base.apk
+    dataDir=/data/user/0/org.chyavorec.app
+    app=ProcessRecord{3b22c86 5589:org.chyavorec.app/u0a175}
+    allowWhileInUsePermissionInFgs=true
+    recentCallingPackage=org.chyavorec.app
+    recentCallingUid=10175
+    allowStartForeground=PROC_STATE_TOP
+    startForegroundCount=1
+    infoAllowStartForeground=[callingPackage: org.chyavorec.app; callingUid: 10175; uidState: TOP ; intent: Intent { act=ACTION_START_FOREGROUND cmp=org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService (has extras) }; code:PROC_STATE_TOP; tempAllowListReason:<null>; targetSdkVersion:37; callerTargetSdkVersion:37; startForegroundCount:0; bindFromPackage:null]
+    isForeground=true foregroundId=701 foregroundNoti=Notification(channel=updates shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x6a color=0xff8b6914 category=progress groupKey=silent actions=1 vis=PUBLIC)
+    createTime=-5s416ms startingBgTimeout=--
+    lastActivity=-5s403ms restartTime=-5s416ms createdFromFg=true
+    startRequested=true delayedStop=false stopIfKilled=true callStart=true lastStartId=2
+    Delivered Starts:
+    #0 id=1 dur=-5s405ms dxc=1
+      intent=Intent { act=ACTION_START_FOREGROUND cmp=org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService (has extras) }
+    #1 id=2 dur=-5s403ms dxc=1
+      intent=Intent { act=ACTION_NOTIFY cmp=org.chyavorec.app/androidx.work.impl.foreground.SystemForegroundService (has extras) }
+
+  * ServiceRecord{579b2a4 u0 com.android.phone/com.android.internal.telephony.CellularNetworkService}
+    intent={act=android.telephony.NetworkService pkg=com.android.phone}
+    packageName=com.android.phone
+    processName=com.android.phone
+    permission=android.permission.BIND_TELEPHONY_NETWORK_SERVICE
+--
+    binding=AppBindRecord{536a2de com.google.android.gms/.chimera.PersistentApiService:com.google.android.gms}
+    conn=android.os.BinderProxy@66f105d flags=0x1081
+  * ConnectionRecord{1406f01 u0 CR !FG !PRCP org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService:@6825ce8}
+    binding=AppBindRecord{cf9876e org.chyavorec.app/androidx.work.impl.background.systemjob.SystemJobService:system}
+    conn=android.app.LoadedApk$ServiceDispatcher$InnerConnection@6825ce8 flags=0x8105
+  * ConnectionRecord{b4f34e u0 CR FGS CAPS com.google.android.as/com.google.android.apps.miphone.aiai.captions.SystemCaptionsManagerService:@6923e49}
+    binding=AppBindRecord{4d661d0 com.google.android.as/com.google.android.apps.miphone.aiai.captions.SystemCaptionsManagerService:system}
+    conn=android.app.LoadedApk$ServiceDispatcher$InnerConnection@6923e49 flags=0x4001001
+  * ConnectionRecord{5359228 u0 CR com.google.android.gms/com.google.location.nearby.direct.service.NearbyDirectService:@6ad084b}
+    binding=AppBindRecord{d6230f9 com.google.android.gms/com.google.location.nearby.direct.service.NearbyDirectService:com.google.android.gms.persistent}
+--
+
+Active foreground apps - user 0:
+  #0: org.chyavorec.app
+    mNumActive=1 mAppOnTop=true mShownWhileTop=true mShownWhileScreenOn=true
+    mStartTime=-4s756ms mStartVisibleTime=-4s756ms

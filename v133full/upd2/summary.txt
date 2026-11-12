@@ -1,0 +1,67 @@
+part upd2; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: not used in this part (built x86_64 app.apk)
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## UC0. Built v1.2.32 (tag 87ef20e, x86_64, versionCode 1495920) with update.json → built v1.2.33 (1500183)
+staged manifest: 1500183 1.2.33 4277262 6 note lines
+installed base-upd: 1.2.32 87ef20e built prodRelease x86_64 (throwaway key); versionCode 1495920; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v133full/update/42669062413/update.json size 4160942;  versionCode=1495920 minSdk=26 targetSdk=37  versionName=1.2.32 
+## UC1. The widget on the home screen before the first launch of v1.2.32
+WIDGET c132 long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET c132 picker: our row @ 437 539; size label @ 540 1447; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
+WIDGET c132 after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
+WIDGET c132: widgets of ours bound: 0 -> 1 (ids id=2 ); options: 
+WIDGET v1.2.32 (not launched yet): views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+## UC2. First launch of v1.2.32: onboarding skipped, the update dialog accepted
+UPDATE c dialog after 18605 ms: text="Нова версия 1.2.33" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• „Моята читателска година“ — анимирана история за прочетеното през годината (в „Моето“).&#10;• Сподели събитие, книга или новина като красива картинка с QR код.&#10;• „Изненадай ме“ в каталога — разклати телефона за случайна книга по твоя вкус.&#10;• Жива шевица и холографска читателска карта; розетка в долната лента.&#10;• Книгите се разгръщат при отваряне, а успехите — с б
+NOTES c-dialog: 6/6 lines of the real 1.2.30 notes visible
+UPDATE c: installed  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+## UC3. After the update: widget before reopening, „Какво ново“, widget after
+WIDGET after the update (before opening): views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WHATS-NEW c-30-whats-new: SHOWN: text="Какво ново във версия 1.2.33"
+NOTES sheet-c-30-whats-new: 6/6 lines of the real 1.2.30 notes visible
+NOTES c-sheet-scrolled: 6/6 lines of the real 1.2.30 notes visible
+relaunch: what's new again? no
+WIDGET after opening the app: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET click catalog (widget_catalog @ 900 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+WIDGET click scan (widget_scan @ 694 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Въведи номера на ръка" text="Скенерът на баркодове идва с Google Play услугите — тук те липсват или скенерът още се изтегля. Въведи номера на ръка или опитай пак сл
+WIDGET click event (widget_event @ 540 786) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+WIDGET click app (t:Chitalishte Yavorets|Читалище Яворец @ 337 599) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+## UD. 'По-късно' on the update dialog: what the app offers afterwards (Settings › Обновления)
+installed base-upd2: 1.2.32 87ef20e built prodRelease x86_64 (throwaway key); versionCode 1495920; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v133full/update/42669062413/update.json size 4160942;  versionCode=1495920 minSdk=26 targetSdk=37  versionName=1.2.32 
+UPDATE d dialog after 16390 ms: text="Нова версия 1.2.33" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• „Моята читателска година“ — анимирана история за прочетеното през годината (в „Моето“).&#10;• Сподели събитие, книга или новина като красива картинка с QR код.&#10;• „Изненадай ме“ в каталога — разклати телефона за случайна книга по твоя вкус.&#10;• Жива шевица и холографска читателска карта; розетка в долната лента.&#10;• Книгите се разгръщат при отваряне, а успехите — с б
+after 'По-късно' + relaunch: dialog not shown
+SETTINGS › Обновления: text="Обновления" text="Провери за нова версия" 
+after 'check now': dialog SHOWN; text="Нова версия 1.2.33" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• „Моята читателска година“ — анимирана история за прочетеното през годината (
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+(dismissed '=По-късно': text="Нова версия 1.2.33" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" )
+WARN: settings item =Диагностика|=Diagnostics not found
+APP W/E lines (pids ['7349', '7942', '8216', '8878', '9072']): 54 in 9 groups
+      16  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      10  W/Parcel: Expecting binder but got null!
+       5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       2  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+## COMPLETE
+## logcat findings
+app pids seen: ['7349', '7942', '8216', '8878', '9072']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 33
+   skipped-frames events=33 max=151 total=1761
+== Davey: 78
+   davey events=78 max=3341ms median=970ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

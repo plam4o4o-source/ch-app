@@ -1,0 +1,80 @@
+part ab34; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+block order: base-1 new-1 base-2 new-2 (each a fresh install)
+## AB base-1: fresh install, warm-up, 2 excluded + 10 cold (Fully drawn) + 10 warm; speed-profile: 2 excluded + 10 cold + 10 warm
+installed base-1: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-1 first-install catalogue results after 5216 ms
+base-1 dexopt as installed: x86_64: [status=verify] x86_64: [status=verify] 
+base-1 compile: Success; dexopt now: x86_64: [status=speed-profile] x86_64: [status=verify] 
+## AB new-1: fresh install, warm-up, 2 excluded + 10 cold (Fully drawn) + 10 warm; speed-profile: 2 excluded + 10 cold + 10 warm
+installed new-1: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842;  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-1 first-install catalogue results after 3812 ms
+new-1 dexopt as installed: x86_64: [status=verify] x86_64: [status=verify] 
+new-1 compile: Success; dexopt now: x86_64: [status=speed-profile] x86_64: [status=verify] 
+## AB base-2: fresh install, warm-up, 2 excluded + 10 cold (Fully drawn) + 10 warm; speed-profile: 2 excluded + 10 cold + 10 warm
+installed base-2: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262;  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+base-2 first-install catalogue results after 3416 ms
+base-2 dexopt as installed: x86_64: [status=verify] x86_64: [status=verify] 
+base-2 compile: Success; dexopt now: x86_64: [status=speed-profile] x86_64: [status=verify] 
+## AB new-2: fresh install, warm-up, 2 excluded + 10 cold (Fully drawn) + 10 warm; speed-profile: 2 excluded + 10 cold + 10 warm
+installed new-2: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842;  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+new-2 first-install catalogue results after 3379 ms
+new-2 dexopt as installed: x86_64: [status=verify] x86_64: [status=verify] 
+new-2 compile: Success; dexopt now: x86_64: [status=speed-profile] x86_64: [status=verify] 
+## AB totals (n=20 per app and mode)
+START cold new inst      n=20 min=2617ms median=3182ms max=3580ms  all=[3274, 3287, 2655, 3293, 3152, 3142, 3580, 3545, 3242, 3364, 3086, 2617, 2902, 3306, 2945, 2918, 3095, 3274, 3211, 3133]  states=['COLD']
+DRAWN new-inst: TotalTime n=20 min=2617ms median=3182ms max=3580ms; fully drawn n=20 median=4173ms min=2877 max=4960 all=[4462, 4767, 3241, 4147, 3760, 3649, 4528, 4960, 4577, 4279, 3853, 2877, 3757, 4199, 3932, 3904, 4025, 4567, 4217, 4565]; without line: 0
+START warm new inst      n=20 min=415ms median=850ms max=1466ms  all=[820, 1000, 1066, 863, 1018, 849, 1000, 415, 852, 859, 820, 885, 1466, 732, 790, 777, 718, 771, 709, 857]  states=['HOT']
+START cold base inst     n=20 min=2657ms median=3421ms max=5526ms  all=[5526, 3487, 3934, 3587, 4195, 3708, 3829, 3519, 3526, 3740, 2873, 2866, 3188, 3043, 3337, 3253, 3355, 2657, 3001, 3308]  states=['COLD']
+DRAWN base-inst: TotalTime n=20 min=2657ms median=3421ms max=5526ms; fully drawn n=20 median=4252ms min=3040 max=6991 all=[6991, 4161, 5418, 5511, 5366, 5031, 5789, 4592, 4502, 4921, 3329, 3417, 3571, 3825, 4042, 3886, 4344, 3040, 3383, 3850]; without line: 0
+START warm base inst     n=18 min=378ms median=792ms max=1037ms  all=[1037, 667, 881, 721, 797, 745, 468, 639, 788, 941, 981, 516, 378, 816, 969, 811, 910, 568]  states=['HOT', 'UNKNOWN']
+START cold new sp        n=20 min=2349ms median=2810ms max=3380ms  all=[2820, 2647, 2706, 2893, 3380, 2817, 3313, 2986, 2841, 3262, 3032, 2804, 2441, 2618, 2496, 2444, 2743, 2923, 2349, 2613]  states=['COLD']
+DRAWN new-sp: TotalTime n=20 min=2349ms median=2810ms max=3380ms; fully drawn n=20 median=3500ms min=2601 max=4584 all=[3083, 2953, 3695, 4052, 4388, 2970, 4584, 3201, 3914, 4392, 3254, 3611, 2601, 3799, 3693, 2616, 3874, 3390, 3149, 2879]; without line: 0
+START warm new sp        n=19 min=380ms median=591ms max=906ms  all=[875, 597, 865, 795, 866, 380, 532, 591, 508, 901, 906, 631, 409, 463, 481, 479, 677, 551, 553]  states=['HOT', 'UNKNOWN']
+START cold base sp       n=20 min=2309ms median=3000ms max=3783ms  all=[3476, 3783, 3205, 2871, 2985, 3123, 3240, 2885, 2506, 2755, 2795, 3321, 2415, 3016, 2766, 2309, 3052, 3288, 2440, 3072]  states=['COLD']
+DRAWN base-sp: TotalTime n=20 min=2309ms median=3000ms max=3783ms; fully drawn n=20 median=3730ms min=2652 max=4861 all=[4769, 4679, 3717, 3983, 3228, 4339, 4648, 3975, 3663, 3744, 3116, 4535, 2652, 3593, 3220, 3316, 3595, 4861, 2800, 4148]; without line: 0
+START warm base sp       n=18 min=106ms median=718ms max=1070ms  all=[737, 1070, 779, 546, 504, 506, 494, 775, 834, 827, 782, 106, 764, 698, 574, 603, 698, 860]  states=['HOT', 'UNKNOWN']
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: settings item =Диагностика|=Diagnostics not found
+APP W/E lines (pids ['4820', '6095', '6569', '6684', '6880', '6995', '7176', '7326', '7647', '7796', '7900', '7988', '8146', '8818', '9017', '9085', '9149', '9227', '9289', '9355', '9414', '9478', '9539', '9600', '9667', '10142', '10456', '10515', '10577', '10638', '10698', '10757', '10818', '10878', '10938', '10999', '11059', '11119', '11384', '11445', '11507', '11566', '11668', '11729', '11790', '11867', '11929', '11988', '12049', '12109', '12574', '12895', '12954', '13014', '13073', '13139', '13230', '13294', '13355', '13415', '13474', '13532', '13590', '13894', '13955', '14015', '14074', '14134', '14193', '14253', '14330', '14405', '14464', '14523', '14582', '14992', '15295', '15353', '15413', '15474', '15536', '15597', '15657', '15717', '15777', '15838', '15898', '15958', '16217', '16277', '16337', '16397', '16457', '16519', '16583', '16653', '16712', '16771', '16829', '16890']): 794 in 16 groups
+     180  E/OpenGLRenderer: Unable to match the desired swap behavior.
+     101  W/Parcel: Expecting binder but got null!
+     100  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+     100  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+     100  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+     100  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+     100  W/Gralloc4: allocator #.x is not supported
+       3  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object f#.s(java.lang.Object)(r
+       3  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/g.chyavorec.app: Long monitor contention with owner arch_disk_io_# (#) at android.database.sqlite.SQLiteConnection android.data
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=fac#f#-c#d-#f#-b#c-a#f#d#b#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object of#.getValue()(r#-map-id
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at yo# dj#.a(java.lang.Object, zr#, sa#)(r#-
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#ccd-e#b#-#c#f-b#fa-cf#c#f#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void w#.k()(r#-map-id-#a#f#e#f#e#fcb#cb#c
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void android.net.ConnectivityManager.unre
+## COMPLETE
+## logcat findings
+app pids seen: ['4820', '6095', '6569', '6684', '6880', '6995', '7176', '7326', '7647', '7796', '7900', '7988', '8146', '8818', '9017', '9085', '9149', '9227', '9289', '9355', '9414', '9478', '9539', '9600', '9667', '10142', '10456', '10515', '10577', '10638', '10698', '10757', '10818', '10878', '10938', '10999', '11059', '11119', '11384', '11445', '11507', '11566', '11668', '11729', '11790', '11867', '11929', '11988', '12049', '12109', '12574', '12895', '12954', '13014', '13073', '13139', '13230', '13294', '13355', '13415', '13474', '13532', '13590', '13894', '13955', '14015', '14074', '14134', '14193', '14253', '14330', '14405', '14464', '14523', '14582', '14992', '15295', '15353', '15413', '15474', '15536', '15597', '15657', '15717', '15777', '15838', '15898', '15958', '16217', '16277', '16337', '16397', '16457', '16519', '16583', '16653', '16712', '16771', '16829', '16890']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 411
+   skipped-frames events=411 max=166 total=22130
+== Davey: 648
+   davey events=648 max=3892ms median=1116ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

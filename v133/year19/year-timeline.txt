@@ -1,0 +1,14 @@
++5640 ms no-slide-state
++9197 ms no-slide-state
++11913 ms no-slide-state
++14692 ms no-slide-state
++17605 ms no-slide-state
++21524 ms state=Слайд 1 от 8
++26214 ms state=Слайд 1 от 8
++29713 ms state=Слайд 1 от 8
++33126 ms state=Слайд 1 от 8
++36055 ms state=Слайд 1 от 8
++39488 ms state=Слайд 1 от 8
++49512 ms state=Слайд 1 от 8
++53306 ms state=Слайд 1 от 8
++57155 ms state=Слайд 1 от 8

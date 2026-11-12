@@ -1,0 +1,20 @@
+app pids seen: ['5503']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=33 total=33
+   10-31 23:01:45.416  5503  5503 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 1
+   davey events=1 max=824ms median=824ms
+   10-31 23:01:45.815  5503  5542 I OpenGLRenderer: Davey! duration=824ms; Flags=1, FrameTimelineVsyncId=5733, IntendedVsync=80124556336, Vsync=80674556281, InputEventId=0, HandleInputStart=80680704374, AnimationStart=80680705045, PerformTrave
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   10-31 23:01:43.628  5491  5491 I PERFCHECK: section: W. First launch and warm-up
+   10-31 23:02:21.580  7213  7213 I PERFCHECK: section: T0. The tile service
+   10-31 23:02:21.626  7222  7222 I PERFCHECK: section: T1. No card: added with cmd statusbar add-tile → inactive
+   10-31 23:02:38.248  7366  7366 I PERFCHECK: section: T2. Tap without a card unlocked
+   10-31 23:02:46.389  7419  7419 I PERFCHECK: section: T3. Card-screen prompt Добави в бързите настройки API 33; the tile removed first
+   10-31 23:03:21.330  7865  7865 I PERFCHECK: section: T4. With a card: active
+   10-31 23:03:53.221  8117  8117 I PERFCHECK: section: T5. Tap unlocked → the card screen
+   10-31 23:04:03.401  8190  8190 I PERFCHECK: section: T6. Locked with a PIN: tap the tile → the unlock prompt first

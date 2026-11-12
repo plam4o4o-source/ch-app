@@ -1,0 +1,11 @@
+APP W/E lines (pids ['5347', '6608', '8121', '8717']): 37 in 10 groups
+       7  W/Parcel: Expecting binder but got null!
+       7  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       4  W/Gralloc4: allocator #.x is not supported
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void fb#.f(android.content.Context, cr#)(
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=b#ca#-f#c#-#f#-bcf#-#e#f#e#ac, generation=#)
+       1  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par

@@ -1,0 +1,10 @@
+APP W/E lines (pids ['7349', '7942', '8216', '8878', '9072']): 54 in 9 groups
+      16  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      10  W/Parcel: Expecting binder but got null!
+       5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       2  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner

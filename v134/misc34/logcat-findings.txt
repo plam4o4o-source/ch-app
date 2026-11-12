@@ -1,0 +1,63 @@
+app pids seen: ['5245', '14493']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 77
+   skipped-frames events=77 max=118 total=3323
+   11-10 19:25:07.669  5245  5245 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:09.143  5245  5245 I Choreographer: Skipped 78 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:12.671  5245  5245 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:14.662  5245  5245 I Choreographer: Skipped 118 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:15.313  5245  5245 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:16.371  5245  5245 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:17.232  5245  5245 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:22.651  5245  5245 I Choreographer: Skipped 57 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:23.276  5245  5245 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:24.566  5245  5245 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:27.366  5245  5245 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-10 19:25:27.983  5245  5245 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 159
+   davey events=159 max=3037ms median=896ms
+   11-10 19:25:11.964  5245  5258 I OpenGLRenderer: Davey! duration=1825ms; Flags=1, FrameTimelineVsyncId=6205, IntendedVsync=109316025200, Vsync=109316025200, InputEventId=0, HandleInputStart=109316573058, AnimationStart=109316573749, Perform
+   11-10 19:25:11.965  5245  5258 I OpenGLRenderer: Davey! duration=866ms; Flags=0, FrameTimelineVsyncId=6366, IntendedVsync=111116025128, Vsync=111116025128, InputEventId=0, HandleInputStart=111116228713, AnimationStart=111116229544, PerformT
+   11-10 19:25:12.579  5245  5258 I OpenGLRenderer: Davey! duration=824ms; Flags=0, FrameTimelineVsyncId=6373, IntendedVsync=111132691794, Vsync=111149358460, InputEventId=0, HandleInputStart=111152418293, AnimationStart=111152418604, PerformT
+   11-10 19:25:14.645  5245  5257 I OpenGLRenderer: Davey! duration=1361ms; Flags=0, FrameTimelineVsyncId=6394, IntendedVsync=111182691792, Vsync=111666025106, InputEventId=0, HandleInputStart=111675754551, AnimationStart=111675754902, Perform
+   11-10 19:25:15.254  5245  5356 I OpenGLRenderer: Davey! duration=2803ms; Flags=0, FrameTimelineVsyncId=6492, IntendedVsync=111782702860, Vsync=112166036155, InputEventId=0, HandleInputStart=112170135702, AnimationStart=112170136373, Perform
+   11-10 19:25:16.367  5245  5257 I OpenGLRenderer: Davey! duration=1785ms; Flags=0, FrameTimelineVsyncId=6508, IntendedVsync=112182691752, Vsync=112832691726, InputEventId=0, HandleInputStart=112838492559, AnimationStart=112838493291, Perform
+   11-10 19:25:17.041  5245  5257 I OpenGLRenderer: Davey! duration=3037ms; Flags=0, FrameTimelineVsyncId=6587, IntendedVsync=112849363940, Vsync=114816030410, InputEventId=0, HandleInputStart=114829158483, AnimationStart=114829158854, Perform
+   11-10 19:25:17.135  5245  5257 I OpenGLRenderer: Davey! duration=1313ms; Flags=0, FrameTimelineVsyncId=6804, IntendedVsync=114849358312, Vsync=115466024954, InputEventId=0, HandleInputStart=115480166960, AnimationStart=115480167431, Perform
+   11-10 19:25:17.881  5245  5257 I OpenGLRenderer: Davey! duration=1639ms; Flags=0, FrameTimelineVsyncId=6837, IntendedVsync=115566030487, Vsync=116532697057, InputEventId=0, HandleInputStart=116538320945, AnimationStart=116538321466, Perform
+   11-10 19:25:18.033  5245  5257 I OpenGLRenderer: Davey! duration=1501ms; Flags=0, FrameTimelineVsyncId=6868, IntendedVsync=116549358244, Vsync=117382691544, InputEventId=0, HandleInputStart=117398640097, AnimationStart=117398640748, Perform
+   11-10 19:25:23.634  5245  5457 I OpenGLRenderer: Davey! duration=1340ms; Flags=0, FrameTimelineVsyncId=7258, IntendedVsync=121866024698, Vsync=122816024660, InputEventId=0, HandleInputStart=122818148282, AnimationStart=122818148953, Perform
+   11-10 19:25:24.506  5245  5356 I OpenGLRenderer: Davey! duration=821ms; Flags=0, FrameTimelineVsyncId=7346, IntendedVsync=122832691326, Vsync=123432691302, InputEventId=0, HandleInputStart=123452172555, AnimationStart=123452173136, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-10 19:25:05.972  5239  5239 I PERFCHECK: section: W. First launch and warm-up
+   11-10 19:26:13.464  6433  6433 I PERFCHECK: section: C1-new. Event with a photo: share as image file in cache/share, MIME in the chooser
+   11-10 19:26:35.403  7214  7214 I PERFCHECK: sh-ev1-new
+   11-10 19:27:11.041  7836  7836 I PERFCHECK: sh-ev2-new
+   11-10 19:27:56.782  8391  8391 I PERFCHECK: sh-ev3-new
+   11-10 19:28:37.749  8697  8697 I PERFCHECK: sh-ev4-new
+   11-10 19:29:19.157  9012  9012 I PERFCHECK: sh-ev5-new
+   11-10 19:30:14.682  9374  9374 I PERFCHECK: section: C1b-new. Article: share as image photo card
+   11-10 19:30:22.384  9405  9405 I PERFCHECK: sh-art-new
+   11-10 19:30:56.131  9684  9684 I PERFCHECK: section: C2-new. Article toolbar share while scrolling during the render
+   11-10 19:31:03.668  9715  9715 I PERFCHECK: sh-as-new-1
+   11-10 19:31:43.280 10179 10179 I PERFCHECK: sh-as-new-2
+   11-10 19:32:14.993 10429 10429 I PERFCHECK: section: D1-new. Pull-to-refresh rosette mid-gesture slow pull, screencaps on the device
+   11-10 19:33:06.313 10785 10785 I PERFCHECK: section: SH1. Shake with the setting at its default: 3 peaks + stillness opens, the old 2-peak pattern
+   11-10 19:34:23.502 11313 11313 I PERFCHECK: section: SH2. Settings › Изглед › „Разклащане за „Изненадай ме““ off → shake does nothing
+   11-10 19:37:57.639 13018 13018 I PERFCHECK: section: D2-new. Accessibility: news bookmarks, documents, calendar with the collapsed bar, viewer pane title, „Само налични“, shelf spines
+   11-10 19:37:57.679 13026 13026 I PERFCHECK: m-a11y-on
+   11-10 19:40:46.913 14480 14480 I PERFCHECK: section: W. First launch and warm-up
+   11-10 19:41:39.332 14786 14786 I PERFCHECK: section: C1-base. Event with a photo: share as image file in cache/share, MIME in the chooser
+   11-10 19:41:58.878 14918 14918 I PERFCHECK: sh-ev1-base
+   11-10 19:42:29.045 15170 15170 I PERFCHECK: section: C1b-base. Article: share as image photo card
+   11-10 19:42:36.648 15200 15200 I PERFCHECK: sh-art-base
+   11-10 19:43:06.736 15427 15427 I PERFCHECK: section: C2-base. Article toolbar share while scrolling during the render
+   11-10 19:43:14.100 15456 15456 I PERFCHECK: sh-as-base-1
+   11-10 19:43:52.509 15770 15770 I PERFCHECK: sh-as-base-2
+   11-10 19:44:23.030 16025 16025 I PERFCHECK: section: D1-base. Pull-to-refresh rosette mid-gesture slow pull, screencaps on the device
+   11-10 19:45:14.144 16389 16389 I PERFCHECK: section: D2-base. Accessibility: news bookmarks, documents, calendar with the collapsed bar, viewer pane title, „Само налични“, shelf spines
+   11-10 19:45:14.188 16397 16397 I PERFCHECK: m-a11y-on
+   11-10 19:47:55.764 17374 17374 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

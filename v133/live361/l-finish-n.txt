@@ -1,0 +1,2 @@
+NOTIF id=700 title=String (Версия 1.2.33 е готова за инсталиране) text=String (Готово — докосни, за да инсталираш.) progress=Integer (0)/Integer (0) indeterminate=Boolean (false) ongoing=False fgs=False actions=[]
+NOTIF total for org.chyavorec.app: 1

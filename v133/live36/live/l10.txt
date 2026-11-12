@@ -1,0 +1,5 @@
+LIVE id=701 title=String (Изтегляне на версия 1.2.33 — 37%) text=- template=String (android.app.Notification$ProgressStyle) progress=Integer (37) requestPromotedOngoing=Boolean (true) shortCriticalText=String (37%) chronometer=- flags=0x800 FLAG_PROMOTED_ONGOING=no promotable=False ongoing=False
+   android.requestPromotedOngoing=Boolean (true)
+   android.template=String (android.app.Notification$ProgressStyle)
+   android.shortCriticalText=String (37%)
+LIVE total for org.chyavorec.app: 1

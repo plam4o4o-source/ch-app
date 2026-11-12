@@ -1,0 +1,192 @@
+part a11yt; APK: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+abilist: x86_64; native bridge: 0
+RELEASE APK install:  → built x86_64 app.apk
+APK for this part: 1.2.33 a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+installed:  versionCode=1500183 minSdk=26 targetSdk=37  versionName=1.2.33 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 5079 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## AT. Test accessibility service with touch exploration (TalkBack stand-in): what a screen reader gets
+A11Y service: 11-09 16:56:43.774  7510  7510 I PCA11Y  : connected flags=80
+touch exploration true: touchExplorationEnabled=true
+TREE home (131 lines):
+TREE nodes=128 windows: ['11-09 16:57:00.994  7510  7510 I PCDUMP  : thome W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:00.997  7510  7510 I PCDUMP  : thome W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=15 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Начало']; headings: ['', 'Предстоящи събития']
+TREE nodes with labelled (custom) actions: 2: 'Последни новини' [2131361799:Следваща новина;2131361800:Предишна новина] | '' [2131361799:Следваща новина;2131361800:Предишна новина]
+TREE carousel nodes 'Последни новини': 1; nodes with Следваща/Предишна новина: 2: 'Последни новини' clk=false b=[0,714][1080,1337] acts=[2131361799:Следваща новина;2131361800:Предишна новина] | '' clk=true b=[126,714][954,1337] acts=[2131361799:Следваща новина;2131361800:Предишна новина]
+TREE catalog (149 lines):
+TREE nodes=146 windows: ['11-09 16:57:15.710  7510  7510 I PCDUMP  : tcatalog W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:15.718  7510  7510 I PCDUMP  : tcatalog W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=22 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Каталог']; headings: ['Каталог']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE surprise (33 lines):
+TREE nodes=30 windows: ['11-09 16:57:24.687  7510  7510 I PCDUMP  : tsurprise W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:24.694  7510  7510 I PCDUMP  : tsurprise W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=3 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE book (62 lines):
+TREE nodes=59 windows: ['11-09 16:57:34.628  7510  7510 I PCDUMP  : tbook W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:34.630  7510  7510 I PCDUMP  : tbook W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=4 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', '12 -те вятъра']; headings: ['12 -те вятъра', 'Библиографски данни']
+TREE nodes with labelled (custom) actions: 3: '' [16:Търси книги от автора] | '' [32:Копирай] | '' [32:Копирай]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE book-share-sheet (29 lines):
+TREE nodes=26 windows: ['11-09 16:57:41.402  7510  7510 I PCDUMP  : tbook-share-sheet W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:41.937  7510  7510 I PCDUMP  : tbook-share-sheet W1 type=1 active=true focused=true title= pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=4 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Долен лист']; headings: ['Сподели']
+TREE nodes with labelled (custom) actions: 2: '' [32:показване на подсказка] | '' [1048576:Отхвърляне на долния лист]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE article (48 lines):
+TREE nodes=45 windows: ['11-09 16:57:55.161  7510  7510 I PCDUMP  : tarticle W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:55.164  7510  7510 I PCDUMP  : tarticle W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=6 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026']; headings: ['Групата за народни танци при ч']
+TREE nodes with labelled (custom) actions: 1: '' [16:Отвори снимката в цял екран]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE article-scrolled (48 lines):
+TREE nodes=45 windows: ['11-09 16:57:59.772  7510  7510 I PCDUMP  : tarticle-scrolled W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:59.775  7510  7510 I PCDUMP  : tarticle-scrolled W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=6 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026']; headings: ['Групата за народни танци при ч']
+TREE nodes with labelled (custom) actions: 1: '' [16:Отвори снимката в цял екран]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE reader-sheet (45 lines):
+TREE nodes=42 windows: ['11-09 16:58:06.592  7510  7510 I PCDUMP  : treader-sheet W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:58:06.624  7510  7510 I PCDUMP  : treader-sheet W1 type=1 active=true focused=true title= pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=6 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Долен лист']; headings: ['Режим за четене']
+TREE nodes with labelled (custom) actions: 2: '' [32:показване на подсказка] | '' [1048576:Отхвърляне на долния лист]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE event (47 lines):
+TREE nodes=44 windows: ['11-09 16:58:29.628  7510  7510 I PCDUMP  : tevent W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:58:29.632  7510  7510 I PCDUMP  : tevent W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=7 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', '80 г. от създаването на ЮНЕСКО']; headings: ['80 г. от създаването на ЮНЕСКО']
+TREE nodes with labelled (custom) actions: 1: '' [16:покажи мястото на картата]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE viewer (36 lines):
+TREE nodes=33 windows: ['11-09 16:58:59.289  7510  7510 I PCDUMP  : tviewer W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:58:59.291  7510  7510 I PCDUMP  : tviewer W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=4 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE card (54 lines):
+TREE nodes=51 windows: ['11-09 16:59:14.529  7510  7510 I PCDUMP  : tcard W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:59:14.943  7510  7510 I PCDUMP  : tcard W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=7 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Читателска карта']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+TREE settings (83 lines):
+TREE nodes=80 windows: ['11-09 16:59:34.313  7510  7510 I PCDUMP  : tsettings W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:59:34.315  7510  7510 I PCDUMP  : tsettings W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=10 UNLABELLED clickable=1 ['View [0,2317][1080,2400]']
+TREE pane titles: ['Status bar', 'Настройки']; headings: ['Изглед', 'Известия']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+touch exploration false: touchExplorationEnabled=false
+## AT2. Unlabelled / tiny targets as the service sees them (all trees)
+== a11ytree-article-scrolled
+TREE nodes=45 windows: ['11-09 16:57:59.772  7510  7510 I PCDUMP  : tarticle-scrolled W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:59.775  7510  7510 I PCDUMP  : tarticle-scrolled W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=6 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026']; headings: ['Групата за народни танци при ч']
+TREE nodes with labelled (custom) actions: 1: '' [16:Отвори снимката в цял екран]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-article
+TREE nodes=45 windows: ['11-09 16:57:55.161  7510  7510 I PCDUMP  : tarticle W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:55.164  7510  7510 I PCDUMP  : tarticle W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=6 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026']; headings: ['Групата за народни танци при ч']
+TREE nodes with labelled (custom) actions: 1: '' [16:Отвори снимката в цял екран]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-book-share-sheet
+TREE nodes=26 windows: ['11-09 16:57:41.402  7510  7510 I PCDUMP  : tbook-share-sheet W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:41.937  7510  7510 I PCDUMP  : tbook-share-sheet W1 type=1 active=true focused=true title= pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=4 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Долен лист']; headings: ['Сподели']
+TREE nodes with labelled (custom) actions: 2: '' [32:показване на подсказка] | '' [1048576:Отхвърляне на долния лист]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-book
+TREE nodes=59 windows: ['11-09 16:57:34.628  7510  7510 I PCDUMP  : tbook W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:34.630  7510  7510 I PCDUMP  : tbook W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=4 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', '12 -те вятъра']; headings: ['12 -те вятъра', 'Библиографски данни']
+TREE nodes with labelled (custom) actions: 3: '' [16:Търси книги от автора] | '' [32:Копирай] | '' [32:Копирай]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-card
+TREE nodes=51 windows: ['11-09 16:59:14.529  7510  7510 I PCDUMP  : tcard W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:59:14.943  7510  7510 I PCDUMP  : tcard W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=7 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Читателска карта']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-catalog
+TREE nodes=146 windows: ['11-09 16:57:15.710  7510  7510 I PCDUMP  : tcatalog W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:15.718  7510  7510 I PCDUMP  : tcatalog W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=22 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Каталог']; headings: ['Каталог']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-event
+TREE nodes=44 windows: ['11-09 16:58:29.628  7510  7510 I PCDUMP  : tevent W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:58:29.632  7510  7510 I PCDUMP  : tevent W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=7 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', '80 г. от създаването на ЮНЕСКО']; headings: ['80 г. от създаването на ЮНЕСКО']
+TREE nodes with labelled (custom) actions: 1: '' [16:покажи мястото на картата]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-home
+TREE nodes=128 windows: ['11-09 16:57:00.994  7510  7510 I PCDUMP  : thome W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:00.997  7510  7510 I PCDUMP  : thome W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=15 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Начало']; headings: ['', 'Предстоящи събития']
+TREE nodes with labelled (custom) actions: 2: 'Последни новини' [2131361799:Следваща новина;2131361800:Предишна новина] | '' [2131361799:Следваща новина;2131361800:Предишна новина]
+TREE carousel nodes 'Последни новини': 1; nodes with Следваща/Предишна новина: 2: 'Последни новини' clk=false b=[0,714][1080,1337] acts=[2131361799:Следваща новина;2131361800:Предишна новина] | '' clk=true b=[126,714][954,1337] acts=[2131361799:Следваща новина;2131361800:Предишна новина]
+== a11ytree-reader-sheet
+TREE nodes=42 windows: ['11-09 16:58:06.592  7510  7510 I PCDUMP  : treader-sheet W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:58:06.624  7510  7510 I PCDUMP  : treader-sheet W1 type=1 active=true focused=true title= pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=6 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar', 'Долен лист']; headings: ['Режим за четене']
+TREE nodes with labelled (custom) actions: 2: '' [32:показване на подсказка] | '' [1048576:Отхвърляне на долния лист]
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-settings
+TREE nodes=80 windows: ['11-09 16:59:34.313  7510  7510 I PCDUMP  : tsettings W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:59:34.315  7510  7510 I PCDUMP  : tsettings W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=10 UNLABELLED clickable=1 ['View [0,2317][1080,2400]']
+TREE pane titles: ['Status bar', 'Настройки']; headings: ['Изглед', 'Известия']
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-surprise
+TREE nodes=30 windows: ['11-09 16:57:24.687  7510  7510 I PCDUMP  : tsurprise W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:57:24.694  7510  7510 I PCDUMP  : tsurprise W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=3 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+== a11ytree-viewer
+TREE nodes=33 windows: ['11-09 16:58:59.289  7510  7510 I PCDUMP  : tviewer W0 type=3 active=false focused=false title= pkg=com.android.systemui b=[0,0][1080,128]', '11-09 16:58:59.291  7510  7510 I PCDUMP  : tviewer W1 type=1 active=true focused=true title=НЧ Яворец pkg=org.chyavorec.app b=[0,0][1080,2400]']
+TREE clickable=4 UNLABELLED clickable=0 []
+TREE pane titles: ['Status bar']; headings: []
+TREE nodes with labelled (custom) actions: 0: 
+TREE carousel nodes 'Последни новини': 0; nodes with Следваща/Предишна новина: 0: 
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 1 | Първи кадър: медиана 2312 мс, последен 2312 мс | Пълно показване: медиана 2312 мс, последно 2312 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 1" text="Първи кадър: медиана 2312 мс, последен 2312 мс" text="Пълно показване: медиана 2312 мс, последно 2312 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5203']): 63 in 10 groups
+      47  W/AccessibilityDelegate: Drawing order is not available, was AccessibilityNodeInfo requested for a child node before its parent?
+       3  W/Parcel: Expecting binder but got null!
+       3  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#e#afb-b#d-#b#-#-ef#c#ab, generation=#)
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       1  W/Gralloc4: allocator #.x is not supported
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+## COMPLETE
+## logcat findings
+app pids seen: ['5203']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 21
+   skipped-frames events=21 max=114 total=973
+== Davey: 51
+   davey events=51 max=2210ms median=873ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

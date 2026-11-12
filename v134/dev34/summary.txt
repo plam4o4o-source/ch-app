@@ -1,0 +1,107 @@
+part dev34; APK: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+base APK: 1.2.33 a830b51 built prodRelease, x86_64 added (throwaway key); versionCode 1500183; update manifest: the real one (releases/latest) size 4277262 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.34 b06d1ce built prodRelease, x86_64 added (throwaway key); versionCode 1500184; update manifest: the real one (releases/latest) size 4300842 bytes
+installed:  versionCode=1500184 minSdk=26 targetSdk=37  versionName=1.2.34 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+installed: devDebug b06d1ce (org.chyavorec.app.dev, demo sign-in DEMO-0001);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.34-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 6947 ms
+## E0. Demo sign-in
+MY after the demo sign-in: text="ДЕМО ДАННИ — само за разработка, не са реални" text="ДЧ" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" text="БИБЛИОТЕКА" text="Читателска карта" text="Покажи картата на гишето" text="Моите книги" text="Заети книги и срокове за връщане" text="Искам да прочета" text="Книги, ко
+## E1. Short tour (devDebug, StrictMode VM policy: leaked closables/registrations/SQLite)
+SHARE art-dev: chooser OPEN after 2 s; cache/share: 296537 2026-11-10 19:28 chyavorec-news-1794338921281.jpg;
+SHARE art-dev file: chyavorec-news-1794338921281.jpg 296537 B; JPEG (1080, 1350) RGB
+SHARE ev1-dev: chooser OPEN after 2 s; cache/share: 654869 2026-11-10 19:29 chyavorec-event-1794338957452.png;
+SHARE ev1-dev file: chyavorec-event-1794338957452.png 654869 B; PNG (1080, 1920) RGBA
+REFRESH dev-news: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.86 0.40 0.00 0.00 0.00 0.00 
+PDF devdoc +4332 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; 
+PDF devdoc +9579 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF devdoc +12409 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF devdoc +15268 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF devdoc +18081 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; text="Декларация за частни интереси.pdf" 
+PDF devdoc final +26445 ms: fg com.google.android.apps.docs/com.google.android.apps.viewer.PdfViewerActivity; content-desc="page 1" content-desc="page 2" content-desc="page 3" text="Декларация за частни интереси.pdf" content-desc="Find" content-desc="Add to Drive" 
+PDF devdoc FILE NAME shown: text="Декларация за частни интереси.pdf"; browser URL: text="Декларация за частни интереси.pdf"
+PDF devdoc logcat (toast/download): 11-10 19:30:26.271   484  1961 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW dat=content://org.chyavorec.app.dev.files/... typ=application/pdf flg=0x10000001 cmp=com.google.android.a 11-10 19:30:26.659  1935  9232 D DownloadManager: [4] Starting 11-10 19:30:26.696  1935  9231 D DownloadManager: [3] Starting 11-10 19:30:26.697  1935  9233 D DownloadManager: [5] Starting 
+tour done; StrictMode lines so far: 617
+STRICT pids of org.chyavorec.app.dev: ['5912']; StrictMode/CloseGuard messages: 0
+STACKS (one example per kind):
+## E2. Monkey on devDebug (seed 1357, 6000 events)
+## W. First launch and warm-up
+first-install catalogue results after 3060 ms
+## K. Monkey 6000 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=10285
+MONKEY exit=0 duration=294 s; Events injected: 6000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '10285'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=212592KB  Java=40692KB  Native=53024KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=30)  RSS=298948KB  Views=20 Activities=1
+MEM after-monkey (trimmed) PSS=184587KB  Java=20612KB  Native=41060KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=27)  RSS=272208KB  Views=14 Activities=1
+## E3. Monkey on devDebug (seed 24680, 4000 events)
+MONKEY 24680: Events injected: 4000 // Monkey finished ; CRASH=0 ANR=0
+## E4. StrictMode / CloseGuard over the whole run (devDebug only; stacks show where the resource was opened)
+STRICT pids of org.chyavorec.app.dev: ['5912', '10285', '10819']; StrictMode/CloseGuard messages: 2
+     2x android.os.strictmode.LeakedClosableViolation @ at android.os.StrictMode$AndroidCloseGuardReporter.report(StrictMode.java:1991) (first non-platform: -)
+STACKS (one example per kind):
+--- 2x 11-10 19:38:28.417 pid 10285 tid 10294 StrictMode
+    StrictMode policy violation: android.os.strictmode.LeakedClosableViolation: A resource was acquired at attached stack trace but never released. See java.io.Closeable for information on avoiding resour
+    	at android.os.StrictMode$AndroidCloseGuardReporter.report(StrictMode.java:1991)
+    	at dalvik.system.CloseGuard.warnIfOpen(CloseGuard.java:338)
+    	at android.view.SurfaceControl.finalize(SurfaceControl.java:1682)
+    	at java.lang.Daemons$FinalizerDaemon.doFinalize(Daemons.java:319)
+    	at java.lang.Daemons$FinalizerDaemon.runInternal(Daemons.java:306)
+    	at java.lang.Daemons$Daemon.run(Daemons.java:140)
+    	at java.lang.Thread.run(Thread.java:1012)
+W/System 'resource failed' lines (any pid): 15
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 3 | Първи кадър: медиана 4039 мс, последен 3670 мс | Пълно показване: медиана 5261 мс, последно 5379 мс | Топъл старт · 2 | Първи кадър: медиана 358 мс, последен 421 мс | Насечени кадри по екрани | more: 13,1 % от 61 кадъра · най-бавен 378 мс |
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 3" text="Първи кадър: медиана 4039 мс, последен 3670 мс" text="Пълно показване: медиана 5261 мс, последно 5379 мс" text="Топъл старт · 2" text="Първи кадър: медиана 358 мс, последен 421 мс" text="Насечени кад
+APP W/E lines (pids ['5912', '10285', '10819']): 3290 in 140 groups
+    2817  W/InputEventSender: Received 'finished' signal for unknown seq number = #
+      57  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      51  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+      31  W/Parcel: Expecting binder but got null!
+      31  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      11  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+       9  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       9  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       7  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+       6  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+       6  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       5  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, metaSta
+       4  W/ziparchive: Unable to open '/data/app/~~XIBQx-fscqDlzUczD#Madw==/org.chyavorec.app.dev-MvNeClxrSqe#Ua#uyyqlng==/base.dm': 
+       4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+       4  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       4  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       4  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       3  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       3  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       3  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       3  W/Gralloc4: allocator #.x is not supported
+       3  W/yavorec.app.dev: Accessing hidden method Landroid/view/ViewTreeObserver;->dispatchOnScrollChanged()V (unsupported, reflection, 
+       3  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+       3  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, metaSt
+       2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+## COMPLETE
+## logcat findings
+app pids seen: ['5912', '10285', '10819']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 16
+== Skipped: 132
+   skipped-frames events=132 max=107 total=5272
+== Davey: 376
+   davey events=376 max=2881ms median=842ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

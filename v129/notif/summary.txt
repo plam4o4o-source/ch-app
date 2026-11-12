@@ -1,0 +1,76 @@
+part notif; APK: 1.2.29 7bd2513 (NotifierTest: тестовете за снимки и действия — в NotifierTes); versionCode 1488542; x86_64 libs: 2 size 4100618 bytes
+base APK: 1.2.28 6e2c640 (Профил за бърз старт: генериран на емулатор от f6ddc53); versionCode 1488541; x86_64 libs: 4; update manifest: no-update stub size 4323595 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+installed:  versionCode=1488542 minSdk=26 targetSdk=37  versionName=1.2.29 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## N0. Handlers on the image; settings seeded before the first launch (last_news_id = a stale id)
+calendar (INSERT event) handlers: [    com.google.android.calendar/com.android.calendar.event.LaunchInfoActivity ]
+geo handlers: [    com.google.android.apps.maps/com.google.android.maps.MapsActivity ]
+prefs written: 38 bytes, 1 keys
+seeded: -rw------- 1 u0_a174 u0_a174 u:object_r:app_data_file:s0:c174,c256,c512,c768  38 2026-10-31 22:25 settings.preferences_pb
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2735 ms
+## N1. New-article notification (PeriodicSyncWorker; the stored newest id is stale)
+app jobs: 0 3 
+NOTIF total for org.chyavorec.app: 0
+jobscheduler run -f 0: Running job [FORCED]
+jobscheduler run -f 3: Running job [FORCED]
+NOTIF total for org.chyavorec.app: 0
+(the periodic work has a flex window: its first run is ~4 h after it is enqueued — moving it back in the WorkManager db)
+WorkManager db: -rw-rw---- 1 u0_a174 u0_a174 106496 2026-10-31 22:25 androidx.work.workdb -rw------- 1 u0_a174 u0_a174 32768 2026-10-31 22:26 androidx.work.workdb-shm -rw------- 1 u0_a174 u0_a174 424392 2026-10-31 22:26 androidx.work.workdb-wal 
+WORKSPEC PeriodicSyncWorker state 0 periods 0 last_enqueue 1793485526146 interval 21600000 flex 7200000
+WORKSPEC MessagePollWorker state 2 periods 0 last_enqueue 1793485527153 interval 0 flex 0
+WORKSPEC MessagePollWorker state 2 periods 0 last_enqueue 1793485528404 interval 0 flex 0
+WORKSPEC MessagePollWorker state 0 periods 0 last_enqueue 1793485586460 interval 0 flex 0
+WORK REWIND: PeriodicSyncWorker rows moved 7 h back: 1
+app jobs after the rewind: 6 7 
+jobscheduler run -f 6: Running job [FORCED]
+jobscheduler run -f 7: Running job [FORCED]
+NOTIF id=500 channel=news title=String (Нова публикация) text=String (Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец.) template=String (android.app.Notification$BigPictureStyle) picture=yes Bitmap (746x348) largeIcon=yes actions=1 ['Сподели']
+NOTIF total for org.chyavorec.app: 1
+settings after the sync: PREF last_news_id = news-mvbb3zcx3c3n PREF bg_step_news = 1793485620756 PREF bg_step_loans = 1793485620756 
+## N2. Shade: the new-article notification expanded
+SHADE 20-news expanded: buttons [text="Сподели" ]; big picture view yes; text="On" content-desc="Internet,AndroidWifi" text="Internet" text="On" content-desc="Bluetooth." text="Bluetooth" text="Flashlight" text="Off" content-desc="Do Not Disturb." text="Do Not Disturb" text="Silent" content-desc="Clear all silent notifications" text="Chitalishte Yavorets" text="•" text="now" content-desc="C
+ACTION 'Сподели' → fg android/com.android.internal.app.ChooserActivity; text="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец.&#10;https://chyavorec.org/news/folklorno-pateshestvie-iz-pirinska-rodopska-i-trakiyska-oblast-v-yavor" text="Copy" text="
+## N3. Event reminder: 'Напомни ми' on an upcoming event, then the work forced
+EVENT candidate 1: text="Ден на народните будители" text="1 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Национален" text="Тържество с ученически рецитали
+EVENT candidate 2: text="Михаил В. Ломоносов" text="8 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Библиотека" text="315 г. от рождението на Михаил В. Лом
+REMINDER set on: text="Михаил В. Ломоносов" text="8 ноември 2026" ; snackbar: text="Ще получиш напомняне на 7 ноември 2026, 18:00."; bell now: on; image on the event screen: 0
+EVENT candidate 3: text="80 г. от създаването на ЮНЕСКО" text="16 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Библиотека" text="Организацията на ООН за о
+REMINDER set on: text="80 г. от създаването на ЮНЕСКО" text="16 ноември 2026" ; snackbar: text="Ще получиш напомняне на 15 ноември 2026, 18:00."; bell now: on; image on the event screen: 0
+EVENT candidate 4: text="Панайот Пипков · Ден на семейството" text="21 ноември 2026" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="Читалище" text="155 г. от рождението н
+REMINDER set on: text="Панайот Пипков · Ден на семейството" text="21 ноември 2026" ; snackbar: text="Ще получиш напомняне на 20 ноември 2026, 18:00."; bell now: on; image on the event screen: 0
+REMINDER: yes
+app jobs: 9 10 11 12 13 
+jobscheduler run -f 9: Running job [FORCED]
+jobscheduler run -f 10: Running job [FORCED]
+jobscheduler run -f 11: Running job [FORCED]
+jobscheduler run -f 12: Running job [FORCED]
+jobscheduler run -f 13: Running job [FORCED]
+NOTIF id=37892 channel=events title=String (Напомняне за събитие) text=String (Панайот Пипков · Ден на семейството) template=String (android.app.Notification$BigTextStyle) picture=NO largeIcon=yes actions=1 ['Добави в календара']
+NOTIF id=37891 channel=events title=String (Напомняне за събитие) text=String (80 г. от създаването на ЮНЕСКО) template=String (android.app.Notification$BigTextStyle) picture=NO largeIcon=yes actions=1 ['Добави в календара']
+NOTIF id=37890 channel=events title=String (Напомняне за събитие) text=String (Михаил В. Ломоносов) template=String (android.app.Notification$BigTextStyle) picture=NO largeIcon=yes actions=1 ['Добави в календара']
+NOTIF id=2147483647 channel=news title=- text=- template=- picture=NO largeIcon=no actions=0 []
+NOTIF id=500 channel=news title=String (Нова публикация) text=String (Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец.) template=String (android.app.Notification$BigPictureStyle) picture=yes Bitmap (746x348) largeIcon=yes actions=1 ['Сподели']
+NOTIF total for org.chyavorec.app: 5
+## N4. Shade: the event reminder expanded; its buttons
+SHADE 40-event expanded: buttons []; big picture view no; text="On" content-desc="Internet,AndroidWifi" text="Internet" text="On" content-desc="Bluetooth." text="Bluetooth" text="Flashlight" text="Off" content-desc="Do Not Disturb." text="Do Not Disturb" text="Chitalishte Yavorets" content-desc="Collapse" text="Напомняне за събитие" text="•" text="now" text="Панайот Пипков · 
+ACTION 'Маршрут': no such button in the shade
+SHADE 42-event-again expanded: buttons [text="Добави в календара" ]; big picture view no; text="On" content-desc="Internet,AndroidWifi" text="Internet" text="On" content-desc="Bluetooth." text="Bluetooth" text="Flashlight" text="Off" content-desc="Do Not Disturb." text="Do Not Disturb" text="Chitalishte Yavorets" content-desc="Collapse" text="now" content-desc="Collapse" text="Напомняне за събитие" text="Па
+ACTION 'Добави в календара' → fg com.google.android.calendar/com.google.android.calendar.launch.oobe.WhatsNewFullScreen; text="Google Calendar" content-desc="Welcome to Google Calendar" text="Make the most of every day." content-desc="next page" 
+## COMPLETE
+## logcat findings
+app pids seen: ['5298', '7469']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=50 total=50
+== Davey: 2
+   davey events=2 max=1084ms median=942ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)

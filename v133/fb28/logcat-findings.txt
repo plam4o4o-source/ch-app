@@ -1,0 +1,32 @@
+app pids seen: ['5680', '6562', '7673']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=58 total=224
+   11-07 16:48:51.880  5680  5680 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-07 16:48:53.441  5680  5680 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:01.416  5680  5680 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:36.483  5680  5680 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:45.323  6562  6562 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-07 16:49:45.889  6562  6562 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 6
+   davey events=6 max=1133ms median=896ms
+   11-07 16:49:01.436  5680  5717 I OpenGLRenderer: Davey! duration=1008ms; Flags=0, IntendedVsync=152901022943, Vsync=152901022943, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=152903338380, AnimationStart=152903
+   11-07 16:49:01.580  5680  5717 I OpenGLRenderer: Davey! duration=1133ms; Flags=1, IntendedVsync=152918153575, Vsync=153884820203, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=153889305110, AnimationStart=153889
+   11-07 16:49:36.634  5680  5717 I OpenGLRenderer: Davey! duration=714ms; Flags=0, IntendedVsync=188389906941, Vsync=188956573585, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=188956732270, AnimationStart=1889567
+   11-07 16:49:45.757  6562  6586 I OpenGLRenderer: Davey! duration=1046ms; Flags=1, IntendedVsync=197182031316, Vsync=197782031292, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=197796234260, AnimationStart=197796
+   11-07 16:49:46.140  6562  6586 I OpenGLRenderer: Davey! duration=785ms; Flags=0, IntendedVsync=197826870337, Vsync=198360203649, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=198362522230, AnimationStart=1983625
+   11-07 16:51:13.861  7673  7698 I OpenGLRenderer: Davey! duration=785ms; Flags=0, IntendedVsync=285546997750, Vsync=285996997732, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=286000393820, AnimationStart=2860004
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-07 16:48:49.692  5670  5670 I PERFCHECK: section: W. First launch and warm-up
+   11-07 16:49:40.955  6543  6543 I PERFCHECK: section: P1. Home ribbon on API 28 no AGSL: the still pattern, drawn once
+   11-07 16:49:40.972  2008  2792 I ActivityManager: Killing 5680:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-07 16:50:06.985  6694  6694 I PERFCHECK: section: P2. Library card: fallback foil gradients
+   11-07 16:50:42.345  6946  6946 I PERFCHECK: section: P3. Изненадай ме
+   11-07 16:50:56.137  2008  2790 I ActivityManager: Process org.chyavorec.app (pid 6562) has died: fore TOP 
+   11-07 16:51:11.883  7667  7667 I PERFCHECK: section: P4. Book open
+   11-07 16:51:33.817  8003  8003 I PERFCHECK: section: P5. Event: share as image
+   11-07 16:51:48.294  8278  8278 I PERFCHECK: sh-fb-event
+   11-07 16:52:07.466  8567  8567 I PERFCHECK: section: P6. Article: toolbar and thread

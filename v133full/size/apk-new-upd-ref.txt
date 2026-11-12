@@ -1,0 +1,1 @@
+1.2.33-pre a830b51 built prodRelease x86_64 (throwaway key); versionCode 1500182; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v133full/update/42683799620/update.json
