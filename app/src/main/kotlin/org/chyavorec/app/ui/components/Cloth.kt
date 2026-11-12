@@ -12,7 +12,8 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.drawOutline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.addOutline
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.LocalThemeStyle
 import kotlin.math.roundToInt
@@ -99,9 +100,9 @@ fun Modifier.nightCloth(shape: Shape = RectangleShape): Modifier {
 
 private fun nightClothDraw(shape: Shape): Modifier = Modifier.drawWithCache {
     val brush = ShaderBrush(ImageShader(ClothWeave.night, TileMode.Repeated, TileMode.Repeated))
-    val outline = if (shape === RectangleShape) null else shape.createOutline(size, layoutDirection, this)
+    val path = if (shape === RectangleShape) null else Path().apply { addOutline(shape.createOutline(size, layoutDirection, this@drawWithCache)) }
     onDrawWithContent {
         drawContent()
-        if (outline == null) drawRect(brush, alpha = NIGHT_CLOTH_ALPHA) else drawOutline(outline, brush, alpha = NIGHT_CLOTH_ALPHA)
+        if (path == null) drawRect(brush, alpha = NIGHT_CLOTH_ALPHA) else drawPath(path, brush, alpha = NIGHT_CLOTH_ALPHA)
     }
 }
