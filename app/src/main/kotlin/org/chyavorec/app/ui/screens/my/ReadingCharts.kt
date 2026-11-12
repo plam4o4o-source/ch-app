@@ -7,6 +7,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -50,8 +51,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
@@ -67,7 +70,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.ui.components.StitchChart
+import org.chyavorec.app.ui.components.StitchCharts
 import org.chyavorec.app.ui.components.darkTopHighlight
+import org.chyavorec.app.ui.components.drawStitches
+import org.chyavorec.app.ui.components.stitchBurgundy
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.UdcCoverColors
@@ -79,8 +86,9 @@ import org.chyavorec.data.catalog.ReadingYear
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.HistoryItem
-import java.time.format.TextStyle
+import java.time.format.TextStyle as DateStyle
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 /**
  * „Моето четене“ в „Моето“: обобщението на историята за графиките ([ReadingStats]).
@@ -210,7 +218,10 @@ fun ReadingStatsCard(stats: ReadingStats.Summary, onOpenHistory: () -> Unit, mod
     }
 }
 
-/** Стълбчета за последните 12 месеца; текущият месец е в златно, броят — над стълбчето. */
+/**
+ * Месеците за последните 12 месеца като колони от кръстат бод — по един бод за книга; рекордният
+ * месец е в златен конец, текущият — с удебелена буква; броят — над колоната.
+ */
 @Composable
 private fun MonthBars(stats: ReadingStats.Summary, progress: () -> Float) {
     val locale = Formatters.uiLocale(LocalContext.current)
@@ -219,71 +230,177 @@ private fun MonthBars(stats: ReadingStats.Summary, progress: () -> Float) {
     val description = if (peak == null) {
         stringResource(R.string.reading_months_none_cd)
     } else {
-        val name = peak.month.month.getDisplayName(TextStyle.FULL_STANDALONE, locale)
+        val name = peak.month.month.getDisplayName(DateStyle.FULL_STANDALONE, locale)
         pluralStringResource(R.plurals.reading_months_cd, stats.lastMonthsTotal, stats.lastMonthsTotal, name)
     }
     val initials = remember(months, locale) {
-        months.map { it.month.month.getDisplayName(TextStyle.NARROW_STANDALONE, locale).uppercase(locale) }
+        months.map { it.month.month.getDisplayName(DateStyle.NARROW_STANDALONE, locale).uppercase(locale) }
     }
     val extended = LocalExtendedColors.current
-    val barColor = MaterialTheme.colorScheme.primary.copy(alpha = if (extended.isDark) 0.55f else 0.42f)
-    val currentColor = extended.gold
-    val baseline = MaterialTheme.colorScheme.outlineVariant
     val labelColor = MaterialTheme.colorScheme.onSurfaceVariant
     val labelStyle = MaterialTheme.typography.labelSmall.copy(color = labelColor)
-    val currentLabelStyle = labelStyle.copy(color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
+    val currentLabelStyle = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
+    val counts = remember(months) { months.map { it.count } }
+    Box(Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = description }) {
+        EmbroideredMonths(
+            counts = counts,
+            labels = initials,
+            progress = progress,
+            thread = stitchBurgundy(),
+            peak = extended.gold,
+            baseline = MaterialTheme.colorScheme.outlineVariant,
+            valueStyle = labelStyle.copy(fontWeight = FontWeight.Bold),
+            labelStyle = { i -> if (i == initials.lastIndex) currentLabelStyle else labelStyle },
+        )
+    }
+}
+
+/** Отсечките в пояса по раздели. */
+internal const val BELT_SEGMENTS = 40
+
+/** Схемата на месечните колони от кръстат бод — чисти функции (тестват се без рисуване). */
+internal object ChartStitches {
+    /** Над толкова реда клетката се смалява, та колоната да се побере в същата височина. */
+    const val FULL_ROWS = 9
+
+    /** Най-малко редове — за да не е плоска графиката при малки числа. */
+    private const val MIN_ROWS = 6
+
+    /** Редовете: най-високата колона и един ред над нея — за числото. */
+    fun rows(max: Int): Int = maxOf(MIN_ROWS, max + 1)
+
+    /** Колони: месец i е на всеки [pitch] колони (по подразбиране бод през пролука); крайни пролуки. */
+    fun columns(months: Int, pitch: Int = 2): Int = pitch * months + 1
+
+    /** Колоната на месец [i]: в средата на своето място. */
+    fun columnOf(i: Int, pitch: Int = 2): Int = pitch * i + (pitch + 1) / 2
+
+    /**
+     * Стъпката между колоните, когато клетката е смалена: колкото да се запълни ширината
+     * ([widthInCells] клетки), но между 2 и 6 — така колоните остават под буквите на месеците.
+     */
+    fun pitch(months: Int, widthInCells: Float): Int =
+        if (months <= 0) 2 else ((widthInCells - 1f) / months).toInt().coerceIn(2, 6)
+
+    /** Клетката се смалява, когато редовете са над [FULL_ROWS]; 1 — пълна. */
+    fun cellScale(rows: Int): Float = if (rows <= FULL_ROWS) 1f else FULL_ROWS.toFloat() / rows
+
+    /**
+     * Колко от [BELT_SEGMENTS] отсечки на пояса са за всеки раздел (по [counts]): пропорционално,
+     * но поне една за непразен раздел; сборът винаги е [BELT_SEGMENTS] (ако разделите са не повече от тях).
+     */
+    fun beltSegments(counts: List<Int>): IntArray {
+        val sum = counts.sumOf { it.coerceAtLeast(0) }.toDouble()
+        if (counts.isEmpty() || sum <= 0.0) return IntArray(counts.size)
+        val out = IntArray(counts.size) { i ->
+            if (counts[i] <= 0) 0 else maxOf(1, (counts[i] / sum * BELT_SEGMENTS).roundToInt())
+        }
+        // Изравняване до точния сбор: излишъкът се взема от най-голямата отсечка, липсата се дава на нея.
+        var diff = BELT_SEGMENTS - out.sum()
+        while (diff != 0) {
+            val big = out.indices.maxByOrNull { out[it] } ?: break
+            if (diff < 0 && out[big] <= 1) break
+            out[big] += if (diff > 0) 1 else -1
+            diff += if (diff > 0) -1 else 1
+        }
+        return out
+    }
+
+    /** Рекордният месец (при равенство — по-късният); -1 — няма книги. */
+    fun peakIndex(counts: List<Int>): Int {
+        val top = counts.maxOrNull() ?: return -1
+        return if (top <= 0) -1 else counts.lastIndexOf(top)
+    }
+
+    /**
+     * Схемата: по един бод за книга, отдолу нагоре, месец след месец отляво надясно.
+     * Рекордният месец е със златен конец ([StitchCharts.GOLD]), останалите — бордо.
+     */
+    fun chart(counts: List<Int>, pitch: Int = 2): StitchChart {
+        val n = counts.size
+        val rows = rows(counts.maxOrNull()?.coerceAtLeast(0) ?: 0)
+        val peak = peakIndex(counts)
+        val col = ArrayList<Int>()
+        val row = ArrayList<Int>()
+        val thread = ArrayList<Byte>()
+        counts.forEachIndexed { i, c ->
+            for (k in 0 until c.coerceAtLeast(0).coerceAtMost(rows - 1)) {
+                col += columnOf(i, pitch)
+                row += rows - 1 - k
+                thread += if (i == peak) StitchCharts.GOLD else StitchCharts.BURGUNDY
+            }
+        }
+        return StitchChart(
+            columns(n, pitch), rows, col.toIntArray(), row.toIntArray(), thread.toByteArray(),
+            FloatArray(col.size),
+        )
+    }
+}
+
+/**
+ * Колони от кръстат бод със стойности и етикети на месеците. Клетката е по ширината (най-много
+ * [maxCell]) и се смалява при колони над [ChartStitches.FULL_ROWS] бода; етикетите са точно под
+ * колоните. [valueStyle] `null` — без числа над колоните. Рисуването е само при [progress].
+ */
+@Composable
+internal fun EmbroideredMonths(
+    counts: List<Int>,
+    labels: List<String>,
+    progress: () -> Float,
+    thread: Color,
+    peak: Color,
+    baseline: Color,
+    modifier: Modifier = Modifier,
+    valueStyle: TextStyle? = null,
+    labelStyle: (Int) -> TextStyle,
+    maxCell: Dp = 16.dp,
+    labelColor: Color = Color.Unspecified,
+) {
     val measurer = rememberTextMeasurer()
-    val top = max(1, months.maxOf { it.count })
-    Column(Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = description }) {
-        Canvas(Modifier.fillMaxWidth().height(112.dp).padding(top = 4.dp)) {
-            val n = months.size
-            val slot = size.width / n
-            val barWidth = slot * 0.56f
-            val labelSpace = 18.dp.toPx()
-            val chartHeight = size.height - labelSpace
-            val radius = CornerRadius(barWidth / 2.6f)
-            val p = progress()
-            // Лека основна линия — празните месеци също се виждат.
-            drawLine(baseline, Offset(0f, size.height - 0.5f), Offset(size.width, size.height - 0.5f), strokeWidth = 1.dp.toPx())
-            months.forEachIndexed { i, m ->
-                // Стълбчетата израстват едно след друго (отляво надясно).
-                val local = ((p * 1.6f) - i * (0.6f / n)).coerceIn(0f, 1f)
-                val current = i == n - 1
-                val h = if (m.count == 0) 0f else max(4.dp.toPx(), chartHeight * m.count / top) * local
-                val x = i * slot + (slot - barWidth) / 2f
-                if (h > 0f) {
-                    // Заоблени са само горните ъгли: долните остават под основата (изрязани).
-                    clipRect(bottom = size.height) {
-                        drawRoundRect(
-                            color = if (current) currentColor else barColor,
-                            topLeft = Offset(x, size.height - h),
-                            size = Size(barWidth, h + radius.x),
-                            cornerRadius = radius,
+    BoxWithConstraints(modifier.fillMaxWidth()) {
+        val rows = ChartStitches.rows(counts.maxOrNull()?.coerceAtLeast(0) ?: 0)
+        val months = counts.size
+        val cell = minOf(maxWidth / ChartStitches.columns(months), maxCell) * ChartStitches.cellScale(rows)
+        // Смалена клетка — колоните се раздалечават, та да останат под буквите.
+        val pitch = ChartStitches.pitch(months, maxWidth / cell)
+        val chart = remember(counts, pitch) { ChartStitches.chart(counts, pitch) }
+        val total = chart.size
+        // Брой бодове до края на всяка колона — за появата на числата.
+        val ends = remember(counts) { counts.runningFold(0) { acc, c -> acc + c.coerceAtLeast(0).coerceAtMost(chart.rows - 1) }.drop(1) }
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Canvas(Modifier.padding(top = 6.dp).size(cell * chart.columns, cell * chart.rows)) {
+                val p = progress()
+                drawLine(baseline, Offset(0f, size.height - 0.5f), Offset(size.width, size.height - 0.5f), strokeWidth = 1.dp.toPx())
+                drawStitches(chart, p, gold = peak, burgundy = thread)
+                if (valueStyle != null) {
+                    val c = size.width / chart.columns
+                    counts.forEachIndexed { i, n ->
+                        if (n <= 0) return@forEachIndexed
+                        val shown = (p * total - ends[i] + 1f).coerceIn(0f, 1f)
+                        if (shown <= 0f) return@forEachIndexed
+                        val text = measurer.measure(n.toString(), valueStyle)
+                        val high = n.coerceAtMost(chart.rows - 1)
+                        drawText(
+                            text,
+                            topLeft = Offset((ChartStitches.columnOf(i, pitch) + 0.5f) * c - text.size.width / 2f, size.height - high * c - text.size.height - 1.dp.toPx()),
+                            alpha = shown,
                         )
                     }
                 }
-                if (m.count > 0 && local > 0.85f) {
-                    val text = measurer.measure(m.count.toString(), if (current) currentLabelStyle else labelStyle)
-                    drawText(
-                        text,
-                        topLeft = Offset(x + barWidth / 2f - text.size.width / 2f, size.height - h - text.size.height - 2.dp.toPx()),
-                        alpha = ((local - 0.85f) / 0.15f).coerceIn(0f, 1f),
-                    )
-                }
             }
-        }
-        Spacer(Modifier.height(4.dp))
-        Row(Modifier.fillMaxWidth()) {
-            initials.forEachIndexed { i, s ->
-                val current = i == initials.lastIndex
-                Text(
-                    s,
-                    style = if (current) MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold) else MaterialTheme.typography.labelSmall,
-                    color = if (current) MaterialTheme.colorScheme.onSurface else labelColor,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    modifier = Modifier.weight(1f),
-                )
+            Spacer(Modifier.height(4.dp))
+            // Етикетите: по едно място от [pitch] клетки, центрирани под колоната на месеца.
+            val offset = cell * ((pitch + 1) / 2 + 0.5f - pitch / 2f)
+            Box(Modifier.width(cell * chart.columns)) {
+                Row(Modifier.padding(start = offset).width(cell * (pitch * months))) {
+                    labels.forEachIndexed { i, s ->
+                        Text(
+                            s, style = labelStyle(i), textAlign = TextAlign.Center, maxLines = 1,
+                            color = labelColor,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                }
             }
         }
     }
@@ -313,6 +430,7 @@ private fun SectionRing(slices: List<Slice>, total: Int, progress: () -> Float) 
     val summary = slices.joinToString(", ") { "${it.label} – ${it.count}" }
     val description = stringResource(R.string.reading_sections_cd, summary)
     val track = MaterialTheme.colorScheme.surfaceContainerHighest
+    val segments = remember(slices) { ChartStitches.beltSegments(slices.map { it.count }) }
     Row(
         Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = description },
         verticalAlignment = Alignment.CenterVertically,
@@ -324,18 +442,26 @@ private fun SectionRing(slices: List<Slice>, total: Int, progress: () -> Float) 
                 val arcSize = Size(size.width - stroke, size.height - stroke)
                 val topLeft = Offset(inset, inset)
                 drawArc(track, 0f, 360f, useCenter = false, topLeft = topLeft, size = arcSize, style = Stroke(stroke))
-                val sum = slices.sumOf { it.count }.toFloat().coerceAtLeast(1f)
-                // Малка пролука между парчетата (без нея при едно-единствено парче).
-                val gap = if (slices.size > 1) 2.5f else 0f
-                val sweepAll = 360f * progress()
-                var start = -90f
-                for (s in slices) {
-                    val sweep = 360f * s.count / sum
-                    val visible = (minOf(start + sweep, -90f + sweepAll) - start - gap).coerceAtLeast(0f)
-                    if (visible > 0f) {
-                        drawArc(s.color, start + gap / 2f, visible, useCenter = false, topLeft = topLeft, size = arcSize, style = Stroke(stroke))
+                // Тъкан пояс: пръстенът е от кратки отсечки (по една „нишка“), цветът им — разделът;
+                // нечетните отсечки са по-тънки и по-светли — като преплетени нишки.
+                val sweep = 360f / BELT_SEGMENTS
+                val shown = BELT_SEGMENTS * progress()
+                val gap = 1.4f
+                var j = 0
+                for ((si, s) in slices.withIndex()) {
+                    repeat(segments[si]) {
+                        val visible = (shown - j).coerceIn(0f, 1f)
+                        if (visible > 0f) {
+                            val over = j % 2 == 0
+                            drawArc(
+                                if (over) s.color else lerp(s.color, Color.White, 0.22f),
+                                -90f + j * sweep + gap / 2f, (sweep - gap) * visible, useCenter = false,
+                                topLeft = topLeft, size = arcSize,
+                                style = Stroke(if (over) stroke else stroke * 0.72f),
+                            )
+                        }
+                        j++
                     }
-                    start += sweep
                 }
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

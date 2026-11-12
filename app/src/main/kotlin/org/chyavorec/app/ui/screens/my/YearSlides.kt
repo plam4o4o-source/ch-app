@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,6 +64,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.chyavorec.app.R
+import org.chyavorec.app.ui.components.DarkBurgundyThread
 import org.chyavorec.app.ui.components.ShevitsaStrip
 import org.chyavorec.app.ui.components.addShevitsaMotif
 import org.chyavorec.app.ui.share.BrandCardFrame
@@ -189,7 +191,9 @@ internal fun SlideBody(s: ReadingYear.Summary, kind: YearSlideKind, appear: () -
     BoxWithConstraints(modifier.fillMaxWidth().clearAndSetSemantics { }) {
         // Цифрите — в пълен размер от ~560 dp височина нагоре; в картата за споделяне — винаги.
         val scale = if (scroll == null) 1f else (maxHeight / SLIDE_DESIGN_HEIGHT).coerceIn(0.45f, 1f)
-        CompositionLocalProvider(LocalNumeralScale provides scale) {
+        // Широк и нисък слайд (телефон хоризонтално): текстът и графиката са един до друг.
+        val landscape = scroll != null && maxWidth >= 480.dp && maxWidth > maxHeight * 1.6f
+        CompositionLocalProvider(LocalNumeralScale provides scale, LocalSlideLandscape provides landscape, LocalSlideShare provides (scroll == null)) {
             Column(
                 (if (scroll != null) Modifier.verticalScroll(scroll) else Modifier).fillMaxWidth().heightIn(min = maxHeight),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -215,6 +219,12 @@ private val SLIDE_DESIGN_HEIGHT = 560.dp
 
 /** Колко от пълния си размер са големите цифри (по наличната височина). */
 private val LocalNumeralScale = staticCompositionLocalOf { 1f }
+
+/** Слайдът е широк и нисък (хоризонтално) — подрежда се на две колони. */
+private val LocalSlideLandscape = staticCompositionLocalOf { false }
+
+/** Слайдът се рисува за картата за споделяне (без превъртане): емблемата е вече в рамката. */
+private val LocalSlideShare = staticCompositionLocalOf { false }
 
 /**
  * Размерът на голяма цифра (годината, броят книги, месецът): [size] при обикновен шрифт —
@@ -455,6 +465,34 @@ private fun monthInitials(): List<String> {
 @Composable
 private fun MonthSlide(s: ReadingYear.Summary, appear: () -> Float) {
     val peak = s.peakMonth ?: return
+    val landscape = LocalSlideLandscape.current
+    // Месеците като колони от кръстат бод — по един бод за книга; рекордният е в злато.
+    val chart: @Composable (Modifier) -> Unit = { m ->
+        EmbroideredMonths(
+            counts = s.months,
+            labels = monthInitials(),
+            progress = { part(appear(), 0.25f, 0.9f) },
+            thread = DarkBurgundyThread,
+            peak = Brand.Gold,
+            baseline = GoldSoft.copy(alpha = 0.35f),
+            labelStyle = { i -> sans(12.sp, if (i == peak.value - 1) Brand.Gold else GoldSoft.copy(alpha = 0.7f), if (i == peak.value - 1) FontWeight.Bold else FontWeight.Normal) },
+            modifier = m,
+        )
+    }
+    if (landscape) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            Column(Modifier.weight(0.8f), horizontalAlignment = Alignment.CenterHorizontally) { MonthHeader(s, peak, appear) }
+            chart(Modifier.weight(1.2f))
+        }
+    } else {
+        MonthHeader(s, peak, appear)
+        Spacer(Modifier.height(26.dp))
+        chart(Modifier.widthIn(max = 340.dp))
+    }
+}
+
+@Composable
+private fun MonthHeader(s: ReadingYear.Summary, peak: Month, appear: () -> Float) {
     SlideLabel(stringResource(R.string.year_month_label), appear)
     val name = monthName(peak)
     // Дългите имена („Септември“) — по-дребно, за да са на един ред и в картата за споделяне.
@@ -465,42 +503,6 @@ private fun MonthSlide(s: ReadingYear.Summary, appear: () -> Float) {
         style = serif(26.sp, Paper),
         modifier = Modifier.rise(appear, 0.15f, 0.5f),
     )
-    Spacer(Modifier.height(26.dp))
-    // Стълбчетата по месеци „израстват“ едно след друго; рекордният — в злато.
-    val initials = monthInitials()
-    val top = s.months.max().coerceAtLeast(1)
-    val peakIndex = peak.value - 1
-    Column(Modifier.widthIn(max = 320.dp).fillMaxWidth()) {
-        Canvas(Modifier.fillMaxWidth().height(150.dp)) {
-            val slot = size.width / 12f
-            val bar = slot * 0.62f
-            val radius = CornerRadius(bar / 2.4f)
-            drawLine(GoldSoft.copy(alpha = 0.35f), Offset(0f, size.height), Offset(size.width, size.height), strokeWidth = 1.dp.toPx())
-            s.months.forEachIndexed { i, n ->
-                if (n == 0) return@forEachIndexed
-                val t = part(appear(), 0.25f + i * 0.035f, 0.6f + i * 0.035f)
-                val h = (size.height - 4.dp.toPx()) * n / top * t
-                if (h <= 0f) return@forEachIndexed
-                val x = i * slot + (slot - bar) / 2f
-                clipRect(bottom = size.height) {
-                    drawRoundRect(
-                        if (i == peakIndex) Brand.Gold else GoldSoft.copy(alpha = 0.38f),
-                        topLeft = Offset(x, size.height - h), size = Size(bar, h + radius.x), cornerRadius = radius,
-                    )
-                }
-            }
-        }
-        Spacer(Modifier.height(6.dp))
-        Row(Modifier.fillMaxWidth()) {
-            initials.forEachIndexed { i, label ->
-                Text(
-                    label,
-                    style = sans(12.sp, if (i == peakIndex) Brand.Gold else GoldSoft.copy(alpha = 0.7f), if (i == peakIndex) FontWeight.Bold else FontWeight.Normal),
-                    textAlign = TextAlign.Center, maxLines = 1, modifier = Modifier.weight(1f),
-                )
-            }
-        }
-    }
 }
 
 @Composable
@@ -586,16 +588,37 @@ private fun ArchetypeSlide(s: ReadingYear.Summary, appear: () -> Float) {
 
 @Composable
 private fun OutroSlide(s: ReadingYear.Summary, appear: () -> Float) {
-    Box(contentAlignment = Alignment.Center) {
+    val landscape = LocalSlideLandscape.current
+    // Лентата е „готова“ веднага, ако слайдът не се появява сега (картата за споделяне, излизащ слайд).
+    val still = remember { Snapshot.withoutReadObservation { appear() } >= 1f }
+    val band: @Composable (Modifier) -> Unit = { m ->
+        Column(m, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                stringResource(R.string.year_shevitsa_label).uppercase(),
+                style = sans(11.sp, Brand.Gold, FontWeight.Bold, spacing = 0.2f), textAlign = TextAlign.Center,
+                modifier = Modifier.rise(appear, 0.2f, 0.5f),
+            )
+            Spacer(Modifier.height(8.dp))
+            PersonalBand(s, Modifier.widthIn(max = 340.dp), still = still)
+        }
+    }
+    if (landscape) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            band(Modifier.weight(1f))
+            Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) { OutroTexts(s, appear, compact = true) }
+        }
+        return
+    }
+    if (!LocalSlideShare.current) Box(contentAlignment = Alignment.Center) {
         // Меко сияние зад емблемата.
         Spacer(
-            Modifier.size(200.dp).graphicsLayer { alpha = part(appear(), 0.1f, 0.6f) }.drawWithCache {
+            Modifier.size(150.dp).graphicsLayer { alpha = part(appear(), 0.1f, 0.6f) }.drawWithCache {
                 val glow = Brush.radialGradient(listOf(Brand.Gold.copy(alpha = 0.45f), Color.Transparent))
                 onDrawBehind { drawCircle(glow) }
             },
         )
         CardEmblem(
-            112.dp,
+            84.dp,
             Modifier.graphicsLayer {
                 val t = part(appear(), 0f, 0.5f)
                 alpha = t
@@ -604,24 +627,29 @@ private fun OutroSlide(s: ReadingYear.Summary, appear: () -> Float) {
             },
         )
     }
+    if (!LocalSlideShare.current) Spacer(Modifier.height(18.dp))
+    OutroTexts(s, appear, compact = false)
     Spacer(Modifier.height(22.dp))
+    band(Modifier.fillMaxWidth())
+}
+
+@Composable
+private fun OutroTexts(s: ReadingYear.Summary, appear: () -> Float, compact: Boolean) {
     Text(
         stringResource(R.string.year_outro_title),
-        style = serif(40.sp, Paper, lineHeight = 1.05f),
+        style = serif(if (compact) 30.sp else 40.sp, Paper, lineHeight = 1.05f),
         textAlign = TextAlign.Center,
         modifier = Modifier.rise(appear, 0.3f, 0.65f),
     )
-    Spacer(Modifier.height(16.dp))
-    ShevitsaStrip(ShevitsaMotif.ROSETTE, Brand.Gold, Modifier.width(220.dp).height(12.dp).stitchIn(appear, 0.45f, 0.85f))
-    Spacer(Modifier.height(18.dp))
+    Spacer(Modifier.height(if (compact) 8.dp else 14.dp))
     Text(
         stringResource(R.string.year_outro_text, s.year + 1),
-        style = sans(17.sp, GoldSoft),
+        style = sans(if (compact) 15.sp else 17.sp, GoldSoft),
         textAlign = TextAlign.Center,
         modifier = Modifier.rise(appear, 0.6f, 0.95f),
     )
-    Spacer(Modifier.height(10.dp))
-    Text("chyavorec.org", style = serif(22.sp, Brand.Gold), modifier = Modifier.rise(appear, 0.7f, 1f))
+    Spacer(Modifier.height(if (compact) 4.dp else 10.dp))
+    Text("chyavorec.org", style = serif(if (compact) 20.sp else 22.sp, Brand.Gold), modifier = Modifier.rise(appear, 0.7f, 1f))
 }
 
 /** Описанието на слайда за екранния четец — целият слайд е един възел. */
@@ -637,7 +665,8 @@ internal fun slideDescription(s: ReadingYear.Summary, kind: YearSlideKind): Stri
     YearSlideKind.MONTH -> s.peakMonth?.let { pluralStringResource(R.plurals.year_month_cd, s.peakCount, s.peakCount, monthName(it)) }.orEmpty()
     YearSlideKind.STREAK -> pluralStringResource(R.plurals.year_streak_cd, s.longestStreak, s.longestStreak)
     YearSlideKind.ARCHETYPE -> archetypeTexts(s.archetype).let { (t, d) -> stringResource(R.string.year_type_cd, stringResource(t), stringResource(d)) }
-    YearSlideKind.OUTRO -> stringResource(R.string.year_outro_title) + " " + stringResource(R.string.year_outro_text, s.year + 1)
+    YearSlideKind.OUTRO -> stringResource(R.string.year_outro_title) + " " + stringResource(R.string.year_outro_text, s.year + 1) + " " +
+        pluralStringResource(R.plurals.year_shevitsa_cd, s.books, s.books)
 }
 
 /**
@@ -647,7 +676,7 @@ internal fun slideDescription(s: ReadingYear.Summary, kind: YearSlideKind): Stri
 @Composable
 fun YearShareCard(s: ReadingYear.Summary, kind: YearSlideKind, url: String) {
     val look = lookOf(kind, s)
-    BrandCardFrame(ShareFormat.STORY, url, background = look.brush, motif = look.motif) {
+    BrandCardFrame(ShareFormat.STORY, url, background = look.brush, motif = look.motif, footerBand = if (kind == YearSlideKind.OUTRO) null else ({ PersonalBandStrip(s) })) {
         Box(Modifier.fillMaxWidth().weight(1f)) {
             SlideBackdrop(look, drift = { 0f }, fill = false)
             Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {

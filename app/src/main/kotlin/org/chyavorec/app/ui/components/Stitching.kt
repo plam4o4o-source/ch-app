@@ -209,7 +209,7 @@ object StitchMath {
 @Composable
 fun stitchBurgundy(): Color = if (LocalExtendedColors.current.isDark) DarkBurgundyThread else Brand.Burgundy
 
-private val DarkBurgundyThread = Color(0xFFC25B6B)
+internal val DarkBurgundyThread = Color(0xFFC25B6B)
 private val Sheen = Color.White
 
 /**
@@ -226,10 +226,11 @@ fun StitchedMotif(
     burgundy: Color = stitchBurgundy(),
     glowPhase: () -> Float = { -1f },
     alpha: () -> Float = { 1f },
+    sections: List<Color>? = null,
 ) {
     Spacer(
         modifier.clearAndSetSemantics { }.drawBehind {
-            drawStitches(chart, progress(), gold, burgundy, glowPhase(), alpha())
+            drawStitches(chart, progress(), gold, burgundy, glowPhase(), alpha(), sections)
         },
     )
 }
@@ -239,7 +240,13 @@ fun StitchedMotif(
  * екрана (и при намалено движение) — направо готовата. [stillProgress] — неподвижен кадър (тестове).
  */
 @Composable
-fun StitchInOrnament(chart: StitchChart, modifier: Modifier = Modifier, durationMs: Int = 1400, stillProgress: Float? = null) {
+fun StitchInOrnament(
+    chart: StitchChart,
+    modifier: Modifier = Modifier,
+    durationMs: Int = 1400,
+    stillProgress: Float? = null,
+    sections: List<Color>? = null,
+) {
     val reduced = rememberReducedMotion()
     var played by rememberSaveable { mutableStateOf(false) }
     val animate = !played && !reduced && stillProgress == null
@@ -250,7 +257,7 @@ fun StitchInOrnament(chart: StitchChart, modifier: Modifier = Modifier, duration
             played = true
         }
     }
-    StitchedMotif(chart, progress = { stillProgress ?: if (reduced) 1f else progress.value }, modifier = modifier)
+    StitchedMotif(chart, progress = { stillProgress ?: if (reduced) 1f else progress.value }, modifier = modifier, sections = sections)
 }
 
 /** Рисува [chart] до [progress]: всеки бод — две диагонали с тънък отблясък и „игла“ на текущия. */
@@ -261,6 +268,7 @@ fun DrawScope.drawStitches(
     burgundy: Color,
     glowPhase: Float = -1f,
     alpha: Float = 1f,
+    sections: List<Color>? = null,
 ) {
     val n = chart.size
     if (n == 0 || alpha <= 0f || progress <= 0f) return
@@ -280,7 +288,13 @@ fun DrawScope.drawStitches(
         val right = ox + (chart.col[i] + 1) * cell - inset
         val top = oy + chart.row[i] * cell + inset
         val bottom = oy + (chart.row[i] + 1) * cell - inset
-        val base = if (chart.thread[i] == StitchCharts.BURGUNDY) burgundy else gold
+        val th = chart.thread[i].toInt()
+        // Конец 0 — злато, 1 — бордо, 2+ — цвят от [sections] (раздел по УДК); без палитра — злато.
+        val base = when {
+            th == StitchCharts.BURGUNDY.toInt() -> burgundy
+            th >= 2 && sections != null -> sections.getOrNull(th - 2) ?: gold
+            else -> gold
+        }
         val glow = if (glowPhase >= 0f) StitchMath.runGlow(chart.angle[i], glowPhase) else 0f
         val color = if (glow > 0f) lerp(base, Sheen, 0.55f * glow) else base
         val a = StitchMath.firstLeg(f)

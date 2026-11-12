@@ -196,6 +196,7 @@ internal fun BrandCardFrame(
     modifier: Modifier = Modifier,
     background: Brush = Brush.verticalGradient(listOf(CardTop, Brand.Ink, CardBottom)),
     motif: ShevitsaMotif = ShevitsaMotif.ROSETTE,
+    footerBand: (@Composable () -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val feed = format == ShareFormat.FEED
@@ -205,7 +206,7 @@ internal fun BrandCardFrame(
             CardHeader()
             Spacer(Modifier.height(if (feed) 14.dp else 20.dp))
             Column(Modifier.weight(1f).fillMaxWidth(), content = content)
-            CardFooter(url, motif, qrSize = if (feed) 62.dp else 74.dp)
+            CardFooter(url, motif, qrSize = if (feed) 62.dp else 74.dp, band = footerBand)
         }
     }
 }
@@ -276,8 +277,9 @@ internal fun CardEmblem(size: Dp, modifier: Modifier = Modifier) {
 
 /** Лента шевица, сайтът и QR кодът към страницата. */
 @Composable
-private fun CardFooter(url: String, motif: ShevitsaMotif, qrSize: Dp) {
-    ShevitsaStrip(motif, Brand.Gold.copy(alpha = 0.85f), Modifier.fillMaxWidth().height(9.dp))
+private fun CardFooter(url: String, motif: ShevitsaMotif, qrSize: Dp, band: (@Composable () -> Unit)? = null) {
+    // Картата на читателската година има своя лента (личната шевица) вместо общата.
+    if (band != null) band() else ShevitsaStrip(motif, Brand.Gold.copy(alpha = 0.85f), Modifier.fillMaxWidth().height(9.dp))
     Spacer(Modifier.height(14.dp))
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {

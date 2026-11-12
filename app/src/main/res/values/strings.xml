@@ -1039,6 +1039,7 @@
     <string name="year_previous">Предишен слайд</string>
     <string name="year_section_label">Най-четен раздел</string>
     <string name="year_share_text">Моята читателска година %1$d в библиотеката на НЧ „Васил Левски – 1922“ — %2$s</string>
+    <string name="year_shevitsa_label">Твоята шевица</string>
     <string name="year_slide_state">Слайд %1$d от %2$d</string>
     <string name="year_streak_label">Най-дългата ти поредица</string>
     <string name="year_streak_text">Всеки месец — поне по една книга.</string>
@@ -1203,6 +1204,10 @@
     <plurals name="year_section_cd">
         <item quantity="one">Най-четен раздел: %2$s — %1$d книга.</item>
         <item quantity="other">Най-четен раздел: %2$s — %1$d книги.</item>
+    </plurals>
+    <plurals name="year_shevitsa_cd">
+        <item quantity="one">Твоята шевица: лента, избродирана от %1$d книга през годината.</item>
+        <item quantity="other">Твоята шевица: лента, избродирана от %1$d книги през годината.</item>
     </plurals>
     <plurals name="year_streak_cd">
         <item quantity="one">Най-дълга поредица: %1$d месец подред с поне една книга.</item>

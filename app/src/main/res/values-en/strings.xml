@@ -1039,6 +1039,7 @@
     <string name="year_previous">Previous slide</string>
     <string name="year_section_label">Most-read section</string>
     <string name="year_share_text">My %1$d reading year at the “Vasil Levski – 1922” library — %2$s</string>
+    <string name="year_shevitsa_label">Your own embroidery</string>
     <string name="year_slide_state">Slide %1$d of %2$d</string>
     <string name="year_streak_label">Your longest streak</string>
     <string name="year_streak_text">At least one book every month.</string>
@@ -1203,6 +1204,10 @@
     <plurals name="year_section_cd">
         <item quantity="one">Most-read section: %2$s — %1$d book.</item>
         <item quantity="other">Most-read section: %2$s — %1$d books.</item>
+    </plurals>
+    <plurals name="year_shevitsa_cd">
+        <item quantity="one">Your own embroidery: a band stitched from %1$d book this year.</item>
+        <item quantity="other">Your own embroidery: a band stitched from %1$d books this year.</item>
     </plurals>
     <plurals name="year_streak_cd">
         <item quantity="one">Longest streak: %1$d month in a row with at least one book.</item>
