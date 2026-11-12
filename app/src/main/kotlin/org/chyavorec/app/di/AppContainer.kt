@@ -444,6 +444,8 @@ class AppContainer(
         // Личните съобщения изчезват веднага и от паметта (кешът им е в readerCache).
         runCatching { messages.clearPersonal() }.logFailure("signout.messages")
         runCatching { settings.clearPersonal() }.logFailure("signout.settings")
+        // Читателският дневник (оценки и бележки) върви с историята на четенето — трие се при изход.
+        runCatching { database.readingDiary().clear() }.logFailure("signout.diary")
         // Напомнянията за срок на предишния читател — отменени, списъкът му — забравен.
         storedLoans.value = null
         runCatching { loanReminders.cancelAll() }.logFailure("signout.reminders")

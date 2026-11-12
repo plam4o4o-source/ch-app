@@ -69,6 +69,13 @@ interface CatalogSearcher {
     suspend fun authors(tokens: List<String>, limit: Int = 8): List<String>
     /** „Подобни книги“ по историята на четенето ([ReadingRecommender]). */
     suspend fun recommend(history: List<HistoryItem>, limit: Int = 12): List<CatalogBook>
+
+    /**
+     * Като [recommend], но с личните оценки от „Читателския дневник“ (ключ на книгата → 1–5) —
+     * харесаното тежи повече, нехаресаното по-малко. По подразбиране — без оценките.
+     */
+    suspend fun recommend(history: List<HistoryItem>, limit: Int, ratings: Map<String, Int>): List<CatalogBook> =
+        recommend(history, limit)
 }
 
 /** Търсене в индекса в паметта ([CatalogSearchEngine]). */
@@ -87,9 +94,11 @@ class EngineCatalogSearcher(val engine: CatalogSearchEngine) : CatalogSearcher {
     override suspend fun findByIsbn(raw: String?): CatalogBook? = engine.findByIsbn(raw)
     override suspend fun allByIsbn(raw: String?): List<CatalogBook> = engine.allByIsbn(raw)
     override suspend fun authors(tokens: List<String>, limit: Int): List<String> = engine.authors(tokens, limit)
-    override suspend fun recommend(history: List<HistoryItem>, limit: Int): List<CatalogBook> {
+    override suspend fun recommend(history: List<HistoryItem>, limit: Int): List<CatalogBook> = recommend(history, limit, emptyMap())
+
+    override suspend fun recommend(history: List<HistoryItem>, limit: Int, ratings: Map<String, Int>): List<CatalogBook> {
         val context = currentCoroutineContext()
-        return ReadingRecommender.recommend(engine.snapshot.books, history, engine::book, limit) { context.ensureActive() }
+        return ReadingRecommender.recommend(engine.snapshot.books, history, engine::book, limit, ratings) { context.ensureActive() }
     }
 }
 
@@ -272,11 +281,13 @@ class FtsCatalogSearcher(
         }
     }
 
-    override suspend fun recommend(history: List<HistoryItem>, limit: Int): List<CatalogBook> {
+    override suspend fun recommend(history: List<HistoryItem>, limit: Int): List<CatalogBook> = recommend(history, limit, emptyMap())
+
+    override suspend fun recommend(history: List<HistoryItem>, limit: Int, ratings: Map<String, Int>): List<CatalogBook> {
         if (history.isEmpty()) return emptyList()
-        return guarded({ ReadingRecommender.recommend(it, history, limit) }) {
+        return guarded({ ReadingRecommender.recommend(it, history, limit, ratings) }) {
             val read = books(history.mapNotNull { it.inv })
-            val pre = ReadingRecommender.prefilter(history, read::get) ?: return@guarded emptyList()
+            val pre = ReadingRecommender.prefilter(history, read::get, ratings) ?: return@guarded emptyList()
             // Само наличните книги, които изобщо могат да получат точки — не целият каталог.
             // Ако разделите на УДК и без това обхващат повечето книги — всички налични, без условия.
             val broad = ReadingRecommender.coversMost(pre.udcSections, state.availableBySection, state.facets.udcSections)
@@ -284,7 +295,7 @@ class FtsCatalogSearcher(
             else store.recommendationCandidates(pre.udcSections, pre.authorWords)
             withContext(work) {
                 val context = currentCoroutineContext()
-                ReadingRecommender.recommend(candidates, history, read::get, limit) { context.ensureActive() }
+                ReadingRecommender.recommend(candidates, history, read::get, limit, ratings) { context.ensureActive() }
             }
         }
     }

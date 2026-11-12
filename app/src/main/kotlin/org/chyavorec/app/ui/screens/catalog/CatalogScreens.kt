@@ -686,6 +686,8 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                     org.chyavorec.app.ui.screens.my.WantToReadToggle(b, snackbar, Modifier.padding(top = 8.dp))
                 }
             }
+            // „Читателски дневник“ — само за книга, която влезлият читател е прочел (върната).
+            org.chyavorec.app.ui.screens.my.BookDiarySection(b, share)
             val heldAt = ui.heldAt
             if (ui.canHold && heldAt != null) {
                 // Вече заявена от този телефон — не втори път; обяснение какво следва.

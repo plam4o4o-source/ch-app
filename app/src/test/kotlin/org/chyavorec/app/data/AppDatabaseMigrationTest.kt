@@ -113,6 +113,45 @@ class AppDatabaseMigrationTest {
         }
     }
 
+    @Test fun migration2To3AddsTheReadingDiaryAndKeepsData() {
+        helper.createDatabase(AppDatabase.NAME, 2).apply {
+            execSQL(
+                "INSERT INTO want_to_read (inv, title, author, addedAtMillis, notifyWhenAvailable, lastKnownAvailable) " +
+                    "VALUES (624, 'Белият дома', 'Николай Симеонов', 7, 1, 0)",
+            )
+            close()
+        }
+        // Миграцията дава точно схемата от 3.json (новата таблица, колоните, ключа).
+        helper.runMigrationsAndValidate(AppDatabase.NAME, 3, true, *AppDatabase.MIGRATIONS).apply {
+            execSQL(
+                "INSERT INTO reading_diary (bookKey, title, author, inv, rating, note, readYear, ratedAtMillis) " +
+                    "VALUES ('под игото вазов', 'Под игото', 'Вазов', NULL, 5, 'Прочетох я на един дъх', 2026, 9)",
+            )
+            close()
+        }
+        val db = AppDatabase.create(context)
+        try {
+            runBlocking {
+                assertEquals(listOf(624L), db.wantToRead().all().map { it.inv })
+                val entry = db.readingDiary().all().single()
+                assertEquals(5, entry.rating)
+                assertEquals(null, entry.inv)
+            }
+        } finally {
+            db.close()
+        }
+    }
+
+    @Test fun version3SchemaMatchesTheCode() {
+        helper.createDatabase(AppDatabase.NAME, 3).close()
+        val db = AppDatabase.create(context)
+        try {
+            runBlocking { assertTrue(db.readingDiary().all().isEmpty()) }
+        } finally {
+            db.close()
+        }
+    }
+
     @Test fun databaseErrorsDoNotCrashTheScreens() = runBlocking {
         // Грешка при отваряне/четене: потокът дава резервната стойност, записът връща false.
         val broken = flow<List<String>> { throw SQLiteCantOpenDatabaseException("unable to open database file") }

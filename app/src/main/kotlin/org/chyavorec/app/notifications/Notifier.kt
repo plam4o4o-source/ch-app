@@ -44,6 +44,8 @@ enum class Channel(val id: String, val nameRes: Int, val descRes: Int, val impor
     LIBRARY("library", R.string.channel_library, R.string.channel_library_desc, NotificationManager.IMPORTANCE_DEFAULT, ChannelGroup.MY_LIBRARY),
     MESSAGES("messages", R.string.channel_messages, R.string.channel_messages_desc, NotificationManager.IMPORTANCE_DEFAULT, ChannelGroup.CENTRE),
     MESSAGES_IMPORTANT("messages_important", R.string.channel_messages_important, R.string.channel_messages_important_desc, NotificationManager.IMPORTANCE_HIGH, ChannelGroup.CENTRE),
+    /** „Тази седмица в Яворец“ — тих седмичен преглед: без звук и вибрация. */
+    DIGEST("digest", R.string.channel_digest, R.string.channel_digest_desc, NotificationManager.IMPORTANCE_LOW, ChannelGroup.CENTRE),
     UPDATES("updates", R.string.channel_updates, R.string.channel_updates_desc, NotificationManager.IMPORTANCE_DEFAULT, ChannelGroup.APP),
 }
 
@@ -55,6 +57,8 @@ enum class Channel(val id: String, val nameRes: Int, val descRes: Int, val impor
  */
 object NotificationIds {
     const val NEWS = 500
+    /** Седмичният преглед „Тази седмица в Яворец“ — най-много един; следващият подменя предишния. */
+    const val DIGEST = 510
     const val UPDATE = 700
     /** Хода на изтеглянето на нова версия ([org.chyavorec.app.update.UpdateDownloadWorker]); резултатът е под [UPDATE]. */
     const val UPDATE_PROGRESS = 701
@@ -64,6 +68,7 @@ object NotificationIds {
     private const val MESSAGE_BASE = 40_000
     private const val RENEW_BASE = 50_000
     private const val WANT_TO_READ_BASE = 60_000
+    private const val TOMORROW_BASE = 70_000
     private const val MASK = 0x1FFF
     /** Обобщението на групата известия за заемания ([Notifier.LOANS_GROUP]). */
     const val LOANS_SUMMARY = 600
@@ -78,6 +83,8 @@ object NotificationIds {
     fun renew(loanId: String): Int = RENEW_BASE + (loanId.hashCode() and MASK)
     /** „Вече е на рафта“ — книга от „Искам да прочета“. */
     fun wantToRead(inv: Long): Int = WANT_TO_READ_BASE + (inv.hashCode() and MASK)
+    /** „Утре: …“ — напомняне ден преди събитие на читалището. */
+    fun tomorrow(eventId: String): Int = TOMORROW_BASE + (eventId.hashCode() and MASK)
 }
 
 object Notifier {
@@ -141,6 +148,8 @@ object Notifier {
         category: String? = if (channel == Channel.LOANS) NotificationCompat.CATEGORY_REMINDER else null,
         /** Снимката на новината/събитието ([RichNotifications.image]) — само в общите известия; иначе само текст. */
         image: Bitmap? = null,
+        /** Текстът на разгънатото известие, ако е различен от кратката [text] (седмичният преглед). */
+        bigText: String? = null,
     ) {
         if (!canNotify(context)) return
         // Каналите се създават във фон веднъж за версия (ChitalishteApp) — при много ранно
@@ -175,7 +184,7 @@ object Notifier {
             // Разгънато — голямата снимка и текстът (без малката снимка вдясно); свито — малката снимка.
             NotificationCompat.BigPictureStyle().bigPicture(picture).bigLargeIcon(null as Bitmap?).setSummaryText(text)
         } else {
-            NotificationCompat.BigTextStyle().bigText(text)
+            NotificationCompat.BigTextStyle().bigText(bigText ?: text)
         }
         val notification = NotificationCompat.Builder(context, channel.id)
             .setSmallIcon(R.drawable.ic_notification)

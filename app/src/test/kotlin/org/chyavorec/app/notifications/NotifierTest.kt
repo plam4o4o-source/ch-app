@@ -172,7 +172,7 @@ class NotifierTest {
         val expected = mapOf(
             "loans" to "1_my_library", "library" to "1_my_library",
             "news" to "2_centre", "events" to "2_centre",
-            "messages" to "2_centre", "messages_important" to "2_centre",
+            "messages" to "2_centre", "messages_important" to "2_centre", "digest" to "2_centre",
         ) + (if (selfUpdate) mapOf("updates" to "3_app") else emptyMap())
         assertEquals(expected, nm.notificationChannels.associate { it.id to it.group })
         val names = nm.notificationChannelGroups.sortedBy { it.id }.map { it.name.toString() }

@@ -220,6 +220,24 @@ S = {
 "history_source_note": ("Историята идва от библиотеката само за читатели, дали съгласие.", "History comes from the library only for readers who gave consent."),
 "history_similar": ("Подобни книги", "Similar books"),
 "history_similar_note": ("Подбрани на телефона по раздел и автор — нищо не се изпраща.", "Picked on your phone by section and author — nothing is sent anywhere."),
+# „Читателски дневник“: лични оценки (розетки) и бележки на ред — само на телефона.
+"diary_question": ("Хареса ли ти?", "Did you like it?"),
+"diary_rating_cd": ("Оценка на книгата", "Rating of the book"),
+"diary_rating_state": ("%1$d от 5", "%1$d of 5"),
+"diary_rating_none": ("Без оценка", "Not rated"),
+"diary_rate_cd": ("Оцени с %1$d от 5", "Rate %1$d of 5"),
+"diary_not_now": ("Не сега", "Not now"),
+"diary_note_label": ("Бележка (по желание)", "Note (optional)"),
+"diary_note_add": ("Добави бележка", "Add a note"),
+"diary_note_count": ("%1$d/%2$d", "%1$d/%2$d"),
+"diary_remove": ("Махни оценката", "Remove rating"),
+"diary_recommend": ("Препоръчай", "Recommend"),
+"diary_private": ("Оценките и бележките са само на телефона.", "Ratings and notes stay on your phone."),
+"diary_title": ("Читателски дневник", "Reading diary"),
+"diary_share_title": ("Препоръчай книгата", "Recommend this book"),
+"diary_share_include_note": ("Включи бележката", "Include my note"),
+"diary_share_note_hint": ("Бележката ти е лична — без този избор в картинката няма да я има.", "Your note is private — without this choice it won’t be on the image."),
+"diary_signin": ("Влез, за да водиш читателски дневник — оценки на прочетените книги, само на телефона.", "Sign in to keep a reading diary — ratings of the books you’ve read, kept on your phone only."),
 "reading_title": ("Моето четене", "My reading"),
 "reading_months_label": ("Книги по месеци", "Books per month"),
 "reading_sections_label": ("По раздели", "By section"),
@@ -281,6 +299,9 @@ S = {
 "share_card_news": ("Новина", "News"),
 "share_card_scan": ("Сканирай за повече", "Scan for more"),
 "share_card_book_cta": ("Търси я в библиотеката на читалището", "Find it at the community centre library"),
+"share_card_recommend": ("Препоръка от читател", "A reader recommends"),
+"share_card_recommend_by": ("препоръчва читател на %1$s", "recommended by a reader of %1$s"),
+"share_card_recommend_cta": ("Търси я в библиотеката на читалището", "Find it at the community centre library"),
 "history_range": ("взета %1$s · върната %2$s", "borrowed %1$s · returned %2$s"),
 "history_range_open": ("взета %1$s · още не е върната", "borrowed %1$s · not returned yet"),
 "scan_action": ("Сканирай баркод", "Scan barcode"),
@@ -814,6 +835,17 @@ S = {
 "notifications_intro": ("Известията се подготвят на самото устройство — без рекламни или проследяващи услуги.", "Notifications are prepared on the device itself — no advertising or tracking services."),
 "notifications_loans_na": ("Ще работи, когато библиотечната система предостави онлайн достъп.", "Will work once the library system offers online access."),
 "notifications_library_desc": ("Книги от „Искам да прочета“, които отново са на рафта", "Books from “Want to read” that are back on the shelf"),
+# Седмичен преглед „Тази седмица в Яворец“ и напомняне „Утре: …“ (Настройки › Известия).
+"digest_switch_title": ("Седмичен преглед", "Weekly digest"),
+"digest_switch_desc": ("Едно тихо известие в неделя вечер: събития, нови книги и новини — само ако има нещо. Изключено по подразбиране.", "One quiet notification on Sunday evening: events, new books and news — only if there is something. Off by default."),
+"digest_first_note": ("Първият преглед ще дойде в неделя вечер.", "The first digest arrives on Sunday evening."),
+"digest_sections_title": ("Любими раздели", "Favourite sections"),
+"digest_sections_desc": ("Ограничават реда „Нови на рафта“ в прегледа. Без избор — всички нови книги.", "Limit the “New on the shelf” line of the digest. With none selected, all new books are included."),
+"digest_tomorrow_title": ("Напомняне „Утре“", "“Tomorrow” reminder"),
+"digest_tomorrow_desc": ("Ден преди събитие на читалището с начален час — едно кратко известие. Изключено по подразбиране.", "The day before a centre event that has a start time — one short notification. Off by default."),
+"digest_open_events": ("Събития", "Events"),
+"digest_open_books": ("Нови книги", "New books"),
+"digest_open_news": ("Новини", "News"),
 "notifications_system": ("Системни настройки за известия", "System notification settings"),
 # Разрешение за известия: отказ, изключени в системата, обяснение при първото стартиране.
 "notifications_open_settings": ("Отвори настройките", "Open settings"),
@@ -838,6 +870,8 @@ S = {
 "channel_news_desc": ("Нова публикация в сайта", "A new post on the website"),
 "channel_library": ("Отново на рафта", "Back on the shelf"),
 "channel_library_desc": ("Книги от „Искам да прочета“, които отново са на рафта", "Books from “Want to read” that are back on the shelf"),
+"channel_digest": ("Седмичен преглед", "Weekly digest"),
+"channel_digest_desc": ("Тих преглед веднъж седмично: събития, нови книги и новини", "A quiet once-a-week summary: events, new books and news"),
 "channel_updates": ("Обновления", "Updates"),
 "channel_updates_desc": ("Нови версии на приложението", "New versions of the app"),
 "settings_updates": ("Обновления", "Updates"),
@@ -1111,7 +1145,7 @@ PRIVACY_BG = """Последна актуализация: 10 ноември 202
 
 Отключване на личните екрани (по избор, „Настройки › Поверителност“): картата, заеманията, историята и личните съобщения се отварят след отключване със заключването на телефона (пръстов отпечатък, лице или ПИН) — проверката прави системата на телефона, а приложението никога не получава биометрични данни.
 
-Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
+Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона. „Читателски дневник“: оценките и бележките ти за прочетени книги остават само на телефона, не се изпращат никъде и се изтриват при изход; в споделената картинка „Препоръчай“ влиза само оценката, а бележката — само ако я включиш.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
 Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб. Телефонът помни седмица, че си я заявил (шифровано, изтрива се при изход).
 
@@ -1127,7 +1161,7 @@ PRIVACY_BG = """Последна актуализация: 10 ноември 202
 
 # Известия
 
-Известията се подготвят на устройството (периодична проверка за нови публикации, съобщения, срокове и наличност на книгите от „Искам да прочета“). Не се използват сървъри за push известия. Когато заключеният екран е настроен да скрива чувствително съдържание, личните известия (за срокове на заети книги, лични съобщения и книги от „Искам да прочета“, върнати на рафта) показват там само общ текст (напр. „Наближава срок за връщане на книга“) — без заглавия и съдържание. Тази настройка е в системните настройки на телефона (известия на заключен екран); при показване на цялото съдържание се виждат и заглавията.
+Известията се подготвят на устройството (периодична проверка за нови публикации, съобщения, срокове и наличност на книгите от „Искам да прочета“). Не се използват сървъри за push известия. Незадължителният седмичен преглед „Тази седмица в Яворец“ се съставя на телефона от публичните събития, новини и каталог. Когато заключеният екран е настроен да скрива чувствително съдържание, личните известия (за срокове на заети книги, лични съобщения и книги от „Искам да прочета“, върнати на рафта) показват там само общ текст (напр. „Наближава срок за връщане на книга“) — без заглавия и съдържание. Тази настройка е в системните настройки на телефона (известия на заключен екран); при показване на цялото съдържание се виждат и заглавията.
 
 # Твоите права
 
@@ -1175,7 +1209,7 @@ Sign-in protection: after several failed sign-in attempts, sign-in is temporaril
 
 Unlock for personal screens (optional, “Settings › Privacy”): the card, loans, history and personal messages open only after unlocking with the phone’s screen lock (fingerprint, face or PIN) — the phone’s system does the check, and the app never receives any biometric data.
 
-Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
+Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only. Reading diary: your ratings and notes on books you have read stay on the phone only, are never sent anywhere and are deleted when you sign out; the shared “Recommend” image carries only the rating, and the note only if you include it.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
 Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you. The phone remembers for a week that you placed it (encrypted, deleted when you sign out).
 
@@ -1191,7 +1225,7 @@ Calendar subscription: if you add the centre’s calendar (https://chyavorec.org
 
 # Notifications
 
-Notifications are prepared on the device (periodic checks for new posts, messages, due dates and the availability of “Want to read” books). No push notification servers are used. When the lock screen is set to hide sensitive content, personal notifications (about due dates, personal messages and “Want to read” books back on the shelf) show only a generic text there (e.g. “A library book is due soon”) — no titles or content. This is chosen in the phone’s system settings (notifications on the lock screen); when all content is shown, titles are visible too.
+Notifications are prepared on the device (periodic checks for new posts, messages, due dates and the availability of “Want to read” books). No push notification servers are used. The optional weekly digest “This week in Yavorets” is put together on the phone from the public events, news and catalogue. When the lock screen is set to hide sensitive content, personal notifications (about due dates, personal messages and “Want to read” books back on the shelf) show only a generic text there (e.g. “A library book is due soon”) — no titles or content. This is chosen in the phone’s system settings (notifications on the lock screen); when all content is shown, titles are visible too.
 
 # Your rights
 

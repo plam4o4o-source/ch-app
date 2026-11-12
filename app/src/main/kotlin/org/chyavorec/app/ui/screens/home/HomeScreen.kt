@@ -202,6 +202,7 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
             it.newsRepository, it.eventsRepository, it.catalogRepository, it.siteRepository, it.clock,
             it.libraryRepository, it.authRepository,
             seasonal = it.settings.settings.map { s -> s.seasonal }, dismissedOccasion = it.settings.dismissedOccasion,
+            diaryRatings = { org.chyavorec.app.data.local.ReadingDiaryStore(it.database.readingDiary(), it.clock).ratings() },
         )
     }
     val state by vm.state.collectAsStateWithLifecycle()

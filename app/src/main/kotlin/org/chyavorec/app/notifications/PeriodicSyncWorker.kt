@@ -45,6 +45,8 @@ import java.util.concurrent.TimeUnit
  * - „Искам да прочета“ с „Кажи ми, когато е на рафта“ → известие — при всяко пускане, само ако има
  *   такава книга и известията „Отново на рафта“ са включени; каталогът се пита условно (ETag, 304 без тяло)
  *   и не по-често от веднъж на 30 минути ([WantToReadAlerts.refreshAndCheck]); не и ако приложението „спи“;
+ * - „Тази седмица в Яворец“ (седмичен преглед, [WeeklyDigestStep]) и „Утре: …“ — само при включена настройка
+ *   и разрешени известия, не и ако приложението „спи“; прегледът е един на седмица (неделя вечер), без аларми;
  * - събития — на 12 часа, само ако има уиджет (напомнянията за събития са
  *   локални аларми и не зависят от тази задача);
  * - проверка за нова версия — веднъж на 24 часа (само APK извън Google Play).
@@ -82,6 +84,14 @@ class PeriodicSyncWorker(context: Context, params: WorkerParameters) : Coroutine
         // приложението не „спи“ (14 дни неотваряно — както съобщенията от сайта). Каталогът — условна заявка (ETag).
         if (settings.notifyLibrary && canNotify && !MessagePollPolicy.isDormant(now, c.settings.messagePoll().lastOpen)) {
             step("sync.want-to-read") { WantToReadAlerts.refreshAndCheck(applicationContext, c) }
+        }
+
+        // Седмичен преглед и „Утре: …“ — по желание (изключени по подразбиране), не и ако приложението „спи“.
+        if ((settings.weeklyDigest || settings.tomorrowReminder) && canNotify &&
+            !MessagePollPolicy.isDormant(now, c.settings.messagePoll().lastOpen)
+        ) {
+            if (settings.weeklyDigest) step("sync.digest") { WeeklyDigestStep.run(applicationContext, c) }
+            if (settings.tomorrowReminder) step("sync.tomorrow") { WeeklyDigestStep.runTomorrow(applicationContext, c) }
         }
 
         // Събитията трябват само на уиджета (кеш до 5 минути — без излишни заявки).
