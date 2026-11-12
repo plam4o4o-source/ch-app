@@ -859,7 +859,8 @@ private fun NavGraphBuilder.screen(
             hem,
             progress = { if (reduced) 0f else corner.value.value / 28f },
             leaving = { transition.targetState == EnterExitState.PostExit },
-            seeking = { transition.isSeeking },
+            // Жестът държи прехода „на пауза“ (не тече анимация); след пускането анимацията тече, но подгъвът остава.
+            seeking = { !transition.isRunning },
         ),
     ) {
         // Една стойност за „разгръщането“ на корицата на дестинация — не по една на корица.

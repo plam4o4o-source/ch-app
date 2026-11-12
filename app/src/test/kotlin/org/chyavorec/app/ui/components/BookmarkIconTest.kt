@@ -41,10 +41,12 @@ class BookmarkIconTest {
             }
         }
         compose.mainClock.advanceTimeBy(50)
-        saved.value = !initiallySaved
+        compose.runOnUiThread { saved.value = !initiallySaved }
         compose.mainClock.advanceTimeBy(100)
+        compose.waitForIdle()
         val early = compose.onNodeWithTag("box").captureToImage().asAndroidBitmap().copy(android.graphics.Bitmap.Config.ARGB_8888, false)
         compose.mainClock.advanceTimeBy(600)
+        compose.waitForIdle()
         val end = compose.onNodeWithTag("box").captureToImage().asAndroidBitmap().copy(android.graphics.Bitmap.Config.ARGB_8888, false)
         return early to end
     }
