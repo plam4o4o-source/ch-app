@@ -1,0 +1,4 @@
+11-12 21:49:48.122  1773  6056 F libc    : Fatal signal 6 (SIGABRT), code -6 in tid 6056 (RenderThread)
+
+11-12 22:00:50.528 11003 11044 F libc    : Fatal signal 11 (SIGSEGV), code 1, fault addr 0x128 in tid 11044 (Binder:11003_4)
+

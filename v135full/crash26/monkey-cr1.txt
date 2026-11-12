@@ -1,0 +1,112 @@
+  bash arg: -p
+  bash arg: org.chyavorec.app
+  bash arg: --pct-syskeys
+  bash arg: 0
+  bash arg: --pct-anyevent
+  bash arg: 0
+  bash arg: --throttle
+  bash arg: 80
+  bash arg: -s
+  bash arg: 777
+  bash arg: -v
+  bash arg: 1500
+args: [-p, org.chyavorec.app, --pct-syskeys, 0, --pct-anyevent, 0, --throttle, 80, -s, 777, -v, 1500]
+ arg: "-p"
+ arg: "org.chyavorec.app"
+ arg: "--pct-syskeys"
+ arg: "0"
+ arg: "--pct-anyevent"
+ arg: "0"
+ arg: "--throttle"
+ arg: "80"
+ arg: "-s"
+ arg: "777"
+ arg: "-v"
+ arg: "1500"
+data="org.chyavorec.app"
+arg="--pct-syskeys" mCurArgData="null" mNextArg=3 argwas="--pct-syskeys" nextarg="0"
+data="0"
+arg="--pct-anyevent" mCurArgData="null" mNextArg=5 argwas="--pct-anyevent" nextarg="0"
+data="0"
+arg="--throttle" mCurArgData="null" mNextArg=7 argwas="--throttle" nextarg="80"
+data="80"
+data="777"
+:Monkey: seed=777 count=1500
+:AllowPackage: org.chyavorec.app
+:IncludeCategory: android.intent.category.LAUNCHER
+:IncludeCategory: android.intent.category.MONKEY
+// Event percentages:
+//   0: 17.64706%
+//   1: 11.764707%
+//   2: 2.3529413%
+//   3: 17.64706%
+//   4: -0.0%
+//   5: -0.0%
+//   6: 29.411766%
+//   7: 17.64706%
+//   8: -0.0%
+//   9: 2.3529413%
+//   10: 1.1764706%
+//   11: -0.0%
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(2.0,1368.0)
+:Sending Touch (ACTION_UP): 0:(13.376811,1350.7107)
+:Sending Touch (ACTION_DOWN): 0:(1057.0,1707.0)
+:Sending Touch (ACTION_UP): 0:(1051.0537,1718.1769)
+:Sending Touch (ACTION_DOWN): 0:(855.0,130.0)
+:Sending Touch (ACTION_UP): 0:(846.8329,135.07353)
+:Sending Touch (ACTION_DOWN): 0:(531.0,753.0)
+:Sending Touch (ACTION_UP): 0:(510.55478,800.3008)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,2.0)
+:Sending Flip keyboardOpen=false
+Got IOException performing flipjava.io.IOException: write failed: EINVAL (Invalid argument)
+    // Injection Failed
+:Sending Touch (ACTION_DOWN): 0:(545.0,907.0)
+:Sending Touch (ACTION_UP): 0:(527.12317,915.86176)
+:Sending Touch (ACTION_DOWN): 0:(980.0,1366.0)
+:Sending Touch (ACTION_UP): 0:(973.21967,1362.0701)
+:Sending Touch (ACTION_DOWN): 0:(409.0,678.0)
+:Sending Touch (ACTION_UP): 0:(390.182,677.2694)
+// CRASH: com.google.android.inputmethod.latin (pid 1773)
+// Short Msg: Native crash
+// Long Msg: Native crash: Aborted
+// Build Label: Android/sdk_gphone_x86_64/generic_x86_64:8.0.0/OSR1.180418.026/6741039:userdebug/dev-keys
+// Build Changelist: 6741039
+// Build Time: 1596716724000
+// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+// Build fingerprint: 'Android/sdk_gphone_x86_64/generic_x86_64:8.0.0/OSR1.180418.026/6741039:userdebug/dev-keys'
+// Revision: '0'
+// ABI: 'x86_64'
+// pid: 1773, tid: 6056, name: RenderThread  >>> com.google.android.inputmethod.latin <<<
+// signal 6 (SIGABRT), code -6 (SI_TKILL), fault addr --------
+// Abort message: 'Failed to create EGLSurface for window 0x77ca70eed010, eglErr = EGL_BAD_ALLOC'
+//     rax 0000000000000000  rbx 00000000000017a8  rcx ffffffffffffffff  rdx 0000000000000006
+//     rsi 00000000000017a8  rdi 00000000000006ed
+//     r8  000077ca72dfce50  r9  000077ca72dfce50  r10 0000000000000008  r11 0000000000000206
+//     r12 0000000000000000  r13 000077ca89a2f0c4  r14 00000000000006ed  r15 000077ca72dfcd58
+//     cs  0000000000000033  ss  000000000000002b
+//     rip 000077ca8a6c1817  rbp 000077ca70eed010  rsp 000077ca72dfcd28  eflags 0000000000000206
+// 
+// backtrace:
+//     #00 pc 000000000007a817  /system/lib64/libc.so (tgkill+7)
+//     #01 pc 000000000002779e  /system/lib64/libc.so (abort+94)
+//     #02 pc 0000000000007ddd  /system/lib64/liblog.so (__android_log_assert+365)
+//     #03 pc 00000000000534d1  /system/lib64/libhwui.so (_ZN7android10uirenderer12renderthread10EglManager13createSurfaceEP13ANativeWindow+209)
+//     #04 pc 00000000000518cb  /system/lib64/libhwui.so (_ZN7android10uirenderer12renderthread14OpenGLPipeline10setSurfaceEPNS_7SurfaceENS1_12SwapBehaviorE+59)
+//     #05 pc 000000000004e62d  /system/lib64/libhwui.so (_ZN7android10uirenderer12renderthread13CanvasContext10setSurfaceEPNS_7SurfaceE+125)
+//     #06 pc 00000000000567af  /system/lib64/libhwui.so (_ZN7android10uirenderer12renderthreadL17Bridge_initializeEPNS1_14initializeArgsE+15)
+//     #07 pc 000000000005820a  /system/lib64/libhwui.so (_ZN7android10uirenderer12renderthread22MethodInvokeRenderTask3runEv+10)
+//     #08 pc 00000000000592d9  /system/lib64/libhwui.so (_ZN7android10uirenderer12renderthread12RenderThread10threadLoopEv+425)
+//     #09 pc 0000000000011940  /system/lib64/libutils.so (_ZN7android6Thread11_threadLoopEPv+304)
+//     #10 pc 00000000000c46d3  /system/lib64/libandroid_runtime.so (_ZN7android14AndroidRuntime15javaThreadShellEPv+131)
+//     #11 pc 000000000007706b  /system/lib64/libc.so (_ZL15__pthread_startPv+27)
+//     #12 pc 0000000000028aad  /system/lib64/libc.so (__start_thread+61)
+//     #13 pc 0000000000027515  /system/lib64/libc.so (__bionic_clone+53)
+// 
+** Monkey aborted due to error.
+Events injected: 53
+:Sending rotation degree=0, persist=false
+:Dropped: keys=0 pointers=0 trackballs=0 flips=1 rotations=0
+## Network stats: elapsed time=8734ms (0ms mobile, 0ms wifi, 8734ms not connected)
+** System appears to have crashed at event 53 of 1500 using seed 777

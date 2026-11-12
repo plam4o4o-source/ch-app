@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5003', '5918', '6210', '7169', '8053', '8972', '9909', '10919', '11785', '12498', '13208']): 1024 in 44 groups
+     136  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+     121  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+     120  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+     118  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+     112  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+      42  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+      34  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+      30  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+      29  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      26  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+      24  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+      23  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+      22  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      20  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+      19  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+      18  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+      17  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+      14  E/eglCodecCommon: glUtilsParamSize: unknow param #
+      11  W/zygote64: Unexpected CPU variant for X# using defaults: x#_#
+      11  E/ResourceType: Style contains key with bad entry: #
+      11  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       9  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[
+       8  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       6  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       6  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y
+       6  W/IInputConnectionWrapper: setComposingText on inactive InputConnection
+       3  W/InputMethodManager: Ignoring onBind: cur seq=#, given seq=#
+       3  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_DOWN, actionButton=#, id[#]=#, x[#]=#.#, y[
+       3  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: MotionEvent { action=ACTION_CANCEL, actionButton=#, id[#]=#, x[#]=#.#
+       3  W/IInputConnectionWrapper: commitText on inactive InputConnection
+       2  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+       2  W/GooglePlayServicesUtil: Google Play services out of date for org.chyavorec.app.  Requires # but found #
+       2  W/GoogleApiManager: The service for lg# is not available: lr#{statusCode=SERVICE_VERSION_UPDATE_REQUIRED, resolution=null, message
+       2  W/IInputConnectionWrapper: getExtractedText on inactive InputConnection
+       2  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCo
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=f#f#b#-#-#ce-#f#d-#a#c#, generation=#)
+       1  W/InputEventSender: Failed to send key event on channel 'ClientState{# uid # pid #} (server)'.  status=-#
+       1  W/InputMethodManager: Unable to send input event to IME: com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCod
+       1  W/ConnectionStatusConfig: Dynamic lookup for intent failed for action: com.google.android.gms.chimera.container.moduleinstall.ModuleInst

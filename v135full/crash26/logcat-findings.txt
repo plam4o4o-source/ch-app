@@ -1,0 +1,51 @@
+app pids seen: ['5003', '5918', '6210', '7169', '8053', '8972', '9909', '10919', '11785', '12498', '13208']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 32
+   skipped-frames events=32 max=58 total=1240
+   11-12 21:49:30.107  5918  5918 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-12 21:49:42.553  5918  5918 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 21:49:54.893  6210  6210 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 21:49:56.009  6210  6210 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-12 21:49:56.884  6210  6210 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 21:51:40.155  6210  6210 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-12 21:51:53.968  7169  7169 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-12 21:52:26.655  7169  7169 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-12 21:52:39.711  7169  7169 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-12 21:53:17.348  8053  8053 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-12 21:53:34.336  8053  8053 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-12 21:53:52.936  8053  8053 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 21:48:50.932  4992  4992 I PERFCHECK: section: W. First launch and warm-up
+   11-12 21:49:26.961  5873  5873 I PERFCHECK: section: CR1. Monkey 1500 events, seed 777, plain the crash of round 2: seed 777, after 148 events
+   11-12 21:49:27.655  1624  4301 I ActivityManager: Killing 5003:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 21:49:39.538  5988  5988 I PERFCHECK: cr1
+   11-12 21:49:50.221  1624  2562 I ActivityManager: Killing 5918:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 21:49:52.368  6168  6168 I PERFCHECK: section: CR2. Monkey 1500 events, seed 777, rec the crash of round 2: seed 777, after 148 events
+   11-12 21:50:49.632  6479  6479 I PERFCHECK: cr2
+   11-12 21:51:49.169  1624  3206 I ActivityManager: Killing 6210:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 21:51:51.231  7130  7130 I PERFCHECK: section: CR3. Monkey 1500 events, seed 1357, rec the crash of round 2: seed 777, after 148 events
+   11-12 21:52:03.460  7252  7252 I PERFCHECK: cr3
+   11-12 21:53:12.488  1624  1802 I ActivityManager: Killing 7169:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 21:53:14.571  8015  8015 I PERFCHECK: section: CR4. Monkey 1500 events, seed 4242, rec the crash of round 2: seed 777, after 148 events
+   11-12 21:53:27.018  8132  8132 I PERFCHECK: cr4
+   11-12 21:55:04.123  1624  4323 I ActivityManager: Killing 8053:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 21:55:06.202  8934  8934 I PERFCHECK: section: CR5. Monkey 1500 events, seed 31337, rec the crash of round 2: seed 777, after 148 events
+   11-12 21:55:18.067  9055  9055 I PERFCHECK: cr5
+   11-12 21:57:08.683  1624  4764 I ActivityManager: Killing 8972:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 21:57:10.741  9871  9871 I PERFCHECK: section: CR6. Monkey 1500 events, seed 99, rec the crash of round 2: seed 777, after 148 events
+   11-12 21:57:22.710  9983  9983 I PERFCHECK: cr6
+   11-12 21:59:22.209  1624  1802 I ActivityManager: Killing 9909:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 21:59:24.269 10881 10881 I PERFCHECK: section: CR7. Monkey 1500 events, seed 2024, rec the crash of round 2: seed 777, after 148 events
+   11-12 21:59:36.759 10999 10999 I PERFCHECK: cr7
+   11-12 22:00:53.297  1624  4690 I ActivityManager: Killing 10919:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:00:55.407 11747 11747 I PERFCHECK: section: CR8. Monkey 1500 events, seed 5, rec the crash of round 2: seed 777, after 148 events
+   11-12 22:01:07.102 11876 11876 I PERFCHECK: cr8
+   11-12 22:02:03.218  1624  1801 I ActivityManager: Killing 11785:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:02:05.288 12460 12460 I PERFCHECK: section: CR9. Monkey 1500 events, seed 777, rec the crash of round 2: seed 777, after 148 events
+   11-12 22:02:18.236 12570 12570 I PERFCHECK: cr9
+   11-12 22:03:24.969  1624  3567 I ActivityManager: Killing 12498:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:03:27.174 13200 13200 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat
