@@ -5,7 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidBitmap
@@ -32,17 +37,17 @@ class BookmarkIconTest {
 
     private fun frames(reduced: Boolean, initiallySaved: Boolean = false): Pair<android.graphics.Bitmap, android.graphics.Bitmap> {
         compose.mainClock.autoAdvance = false
-        val saved = mutableStateOf(initiallySaved)
         compose.setContent {
             CompositionLocalProvider(LocalReducedMotion provides reduced) {
+                var saved by remember { mutableStateOf(initiallySaved) }
+                // Превключването е в самата композиция (по виртуалния часовник на теста), не отвън.
+                LaunchedEffect(Unit) { delay(50); saved = !initiallySaved }
                 Box(Modifier.size(80.dp).background(Color.White).testTag("box")) {
-                    BookmarkIcon(saved.value, null, Color.Black, Modifier.size(48.dp))
+                    BookmarkIcon(saved, null, Color.Black, Modifier.size(48.dp))
                 }
             }
         }
-        compose.mainClock.advanceTimeBy(50)
-        compose.runOnUiThread { saved.value = !initiallySaved }
-        compose.mainClock.advanceTimeBy(100)
+        compose.mainClock.advanceTimeBy(150)
         compose.waitForIdle()
         val early = compose.onNodeWithTag("box").captureToImage().asAndroidBitmap().copy(android.graphics.Bitmap.Config.ARGB_8888, false)
         compose.mainClock.advanceTimeBy(600)
