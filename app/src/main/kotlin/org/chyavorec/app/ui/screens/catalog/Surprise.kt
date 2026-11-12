@@ -13,12 +13,14 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -111,6 +113,9 @@ private val CardHeight = CardWidth * 1.42f
 private const val FAN_STEP = 46f
 private const val FAN_DROP = 9f
 private const val FAN_TILT = 9f
+
+/** Запазеното място на резултата под тестето (един ред заглавие, автор, бутони). */
+private val DetailsMinHeight = 200.dp
 
 /** Едно карта: отместване (dp), завъртане и прозрачност. */
 private class CardAnim(alpha: Float) {
@@ -232,7 +237,7 @@ fun SurpriseOverlay(
                     0f to Brand.Burgundy.copy(alpha = 0.55f),
                     0.45f to Brand.Burgundy.copy(alpha = 0.18f),
                     1f to Brand.Ink.copy(alpha = 0f),
-                    center = Offset(size.width / 2f, size.height * 0.22f),
+                    center = Offset(if (size.width >= size.height * 1.2f) size.width * 0.32f else size.width / 2f, size.height * 0.4f),
                     radius = size.width * 0.85f,
                 )
                 onDrawBehind {
@@ -246,7 +251,10 @@ fun SurpriseOverlay(
             .semantics { paneTitle = pane }
             .testTag("surprise"),
     ) {
-        Column(
+        // Сцената е по средата на екрана: тестето и под него резултатът — като група, центрирана
+        // вертикално (телефон и таблет, изправено) или тестето отляво и резултатът отдясно (легнало).
+        // Мястото на резултата е запазено още при разбъркването — тестето не „скача“ при появата му.
+        BoxWithConstraints(
             Modifier
                 .fillMaxSize()
                 .graphicsLayer {
@@ -258,12 +266,11 @@ fun SurpriseOverlay(
                         scaleY = 1f - 0.1f * p
                     }
                 }
-                .systemBarsPadding()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp, vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .systemBarsPadding(),
         ) {
-            Spacer(Modifier.height(40.dp))
+            val sideBySide = maxWidth >= 700.dp && maxWidth > maxHeight
+            val viewport = maxHeight
+            val deck: @Composable () -> Unit = {
             // Тестето: 5 карти една върху друга (средната — последна, най-отгоре).
             Box(
                 Modifier
@@ -314,7 +321,10 @@ fun SurpriseOverlay(
                     }
                 }
             }
-            Spacer(Modifier.height(20.dp))
+            }
+            val details: @Composable () -> Unit = {
+                // Запазено място: резултатът (заглавие, автор, бутони) расте надолу, без да мести тестето.
+                Box(Modifier.heightIn(min = DetailsMinHeight), contentAlignment = Alignment.TopCenter) {
             // TalkBack: възелът е тук от началото — смяната („Предложение: …“) се казва веднага.
             Box(Modifier.size(1.dp).semantics { liveRegion = LiveRegionMode.Assertive; contentDescription = status })
             AnimatedVisibility(
@@ -331,6 +341,33 @@ fun SurpriseOverlay(
                             style = MaterialTheme.typography.titleMedium,
                         )
                     }
+                }
+            }
+                }
+            }
+            if (sideBySide) {
+                Row(
+                    Modifier.fillMaxSize().padding(start = 32.dp, end = 32.dp, bottom = 40.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally),
+                ) {
+                    deck()
+                    Box(Modifier.weight(1f, fill = false).widthIn(max = 420.dp).verticalScroll(rememberScrollState())) { details() }
+                }
+            } else {
+                // Под тестето — празно място за лентата „няма връзка“ (долу), та групата да е малко над средата.
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                        .heightIn(min = viewport)
+                        .padding(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 56.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    deck()
+                    Spacer(Modifier.height(20.dp))
+                    details()
                 }
             }
         }

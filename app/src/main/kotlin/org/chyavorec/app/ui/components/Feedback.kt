@@ -62,6 +62,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
+import androidx.compose.foundation.BorderStroke
+import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.AppError
@@ -341,14 +343,18 @@ fun InfoBanner(icon: ImageVector, text: String, modifier: Modifier = Modifier) =
  * от краищата (като snackbar), в най-високия неутрален контейнер — а не ярка
  * inverseSurface ивица (в тъмна тема тя ставаше светъл пергамент на всеки екран).
  * [insetNavigation] — без долна лента под нея лентата сама отстъпва от системната навигация.
+ * [overDarkScene] — над тъмна сцена на цял екран („Изненадай ме“): малко тъмно хапче по средата,
+ * а не пергаментена ивица под сцената.
  */
 @Composable
-fun OfflineBar(insetNavigation: Boolean, modifier: Modifier = Modifier) {
+fun OfflineBar(insetNavigation: Boolean, modifier: Modifier = Modifier, overDarkScene: Boolean = false) {
     Surface(
-        color = MaterialTheme.colorScheme.surfaceContainerHighest,
-        contentColor = MaterialTheme.colorScheme.onSurface,
+        color = if (overDarkScene) Brand.InkRaised else MaterialTheme.colorScheme.surfaceContainerHighest,
+        contentColor = if (overDarkScene) Brand.Cream else MaterialTheme.colorScheme.onSurface,
         shape = MaterialTheme.shapes.small,
-        modifier = modifier.fillMaxWidth()
+        border = if (overDarkScene) BorderStroke(1.dp, Brand.Gold.copy(alpha = 0.35f)) else null,
+        modifier = modifier
+            .then(if (overDarkScene) Modifier else Modifier.fillMaxWidth())
             .then(if (insetNavigation) Modifier.navigationBarsPadding() else Modifier)
             .padding(horizontal = 12.dp, vertical = 6.dp)
             .semantics { liveRegion = LiveRegionMode.Polite },

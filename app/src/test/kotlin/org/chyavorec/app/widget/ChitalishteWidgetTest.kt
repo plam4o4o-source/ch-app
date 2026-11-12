@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.os.Bundle
 import android.os.LocaleList
 import android.os.Process
 import android.util.SizeF
@@ -24,6 +25,7 @@ import org.chyavorec.app.FlakyKeystoreCipher
 import org.chyavorec.app.MainActivity
 import org.chyavorec.app.R
 import org.chyavorec.app.TestBackend
+import org.chyavorec.app.TestResources
 import org.chyavorec.app.WorkerTestApp
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.navigation.LaunchIntents
@@ -498,6 +500,155 @@ class ChitalishteWidgetTest {
         assertTrue(WidgetUpdater.shouldPublishPreview("2:en", "2:bg", 0, 10 * day))
     }
 
+    // Фирмени цветове, динамични при настройка, заключен екран, „Книга на деня“, добавяне.
+
+    @Config(sdk = [30])
+    @Test fun brandColoursOnOldAndroid() = brandColours()
+
+    @Config(sdk = [34])
+    @Test fun brandColoursOnAndroid12PlusToo() = brandColours()
+
+    private fun brandColours() {
+        // Фирмената палитра е по подразбиране на всички версии: златотъмно заглавие, бордо дата на събитието.
+        assertEquals(Color.parseColor("#785A10"), app.getColor(R.color.widget_title))
+        assertEquals(Color.parseColor("#F5F0E8"), app.getColor(R.color.widget_bg))
+        val v = apply(WidgetViews.build(app, signedInState(), WidgetViews.FullWideSize))
+        assertEquals(app.getColor(R.color.widget_title), v.findViewById<TextView>(R.id.widget_title).currentTextColor)
+        assertEquals(app.getColor(R.color.widget_event_date), v.findViewById<TextView>(R.id.widget_event_date).currentTextColor)
+        assertEquals(app.getColor(R.color.widget_button_text), v.findViewById<TextView>(R.id.widget_scan).currentTextColor)
+    }
+
+    @Config(sdk = [34])
+    @Test fun dynamicColoursOnlyWhenTheSettingIsOn() {
+        val brand = apply(WidgetViews.build(app, signedInState(), WidgetViews.FullWideSize))
+        val dynamic = apply(WidgetViews.build(app, signedInState().copy(dynamic = true), WidgetViews.FullWideSize))
+        assertEquals(app.getColor(R.color.widget_title), brand.findViewById<TextView>(R.id.widget_title).currentTextColor)
+        assertEquals(app.getColor(R.color.widget_dyn_title), dynamic.findViewById<TextView>(R.id.widget_title).currentTextColor)
+        assertTrue(app.getColor(R.color.widget_dyn_title) != app.getColor(R.color.widget_title))
+        // Изключването връща фирмените и върху вече показан изглед (reapply) — цветът се задава винаги.
+        val reapplied = apply(WidgetViews.build(app, signedInState().copy(dynamic = true), WidgetViews.FullWideSize))
+        WidgetViews.build(app, signedInState(), WidgetViews.FullWideSize).reapply(app, reapplied)
+        assertEquals(app.getColor(R.color.widget_title), reapplied.findViewById<TextView>(R.id.widget_title).currentTextColor)
+    }
+
+    private fun keyguardOptions() = Bundle().apply {
+        putInt(AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD)
+    }
+
+    @Config(sdk = [30])
+    @Test fun lockScreenShowsOnlyTheNextEvent() {
+        val home = apply(WidgetViews.forWidget(app, signedInState(), Bundle()))
+        assertTrue(home.visible(R.id.widget_loans))
+        val locked = apply(WidgetViews.forWidget(app, signedInState(), keyguardOptions()))
+        // Без брой книги и срокове (и без изход към „Моите заемания“); следващото събитие остава.
+        assertFalse(locked.visible(R.id.widget_loans))
+        val texts = locked.texts()
+        assertTrue(texts.none { "връщане" in it || "след" in it || "просрочена" in it || "книг" in it }, texts.toString())
+        assertTrue("Литературна вечер" in texts, texts.toString())
+        assertTrue(WidgetViews.isKeyguard(keyguardOptions()))
+        assertFalse(WidgetViews.isKeyguard(Bundle()))
+        assertFalse(WidgetViews.isKeyguard(null))
+        assertFalse(signedInState().forKeyguard().hasLoans)
+    }
+
+    @Config(sdk = [34])
+    @Test fun lockScreenViewsOnAndroid12PlusHaveNoLoansInAnySize() {
+        assertNotNull(WidgetViews.forWidget(app, signedInState(), keyguardOptions()))
+        for (size in listOf(WidgetViews.SmallSize, WidgetViews.FullWideSize, WidgetViews.FullWideTallSize)) {
+            val v = apply(WidgetViews.build(app, signedInState().forKeyguard(), size))
+            assertTrue(v.texts().none { "връщане" in it || "след" in it }, v.texts().toString())
+        }
+    }
+
+    @Test fun bookWidgetShowsCoverTitleAndAuthorAndOpensTheBook() {
+        val v = apply(BookWidgetViews.build(app, BookWidgetState(BookPick(42, "Тютюн", "Димитър Димов", udcSection = 8))))
+        assertEquals("Книга на деня", v.text(R.id.widget_title))
+        assertEquals("Тютюн", v.text(R.id.widget_book_title))
+        assertEquals("Димитър Димов", v.text(R.id.widget_book_author))
+        assertTrue(v.visible(R.id.widget_book_cover))
+        assertFalse(v.visible(R.id.widget_book_empty))
+        assertLink("catalog/book/42", v.click(android.R.id.background))
+    }
+
+    @Test fun bookWidgetToleratesSparseRecords() {
+        // Оскъден запис: само заглавие, без автор и раздел — редът на автора се скрива, корицата пак се рисува.
+        val v = apply(BookWidgetViews.build(app, BookWidgetState(BookPick(7, "Без автор", ""))))
+        assertEquals("Без автор", v.text(R.id.widget_book_title))
+        assertFalse(v.visible(R.id.widget_book_author))
+        assertTrue(v.visible(R.id.widget_book_cover))
+    }
+
+    @Test fun bookWidgetWithoutCatalogueIsFriendly() {
+        val v = apply(BookWidgetViews.build(app, BookWidgetState(null)))
+        assertTrue(v.visible(R.id.widget_book_empty))
+        assertEquals(app.getString(R.string.widget_book_empty), v.text(R.id.widget_book_empty))
+        assertFalse(v.visible(R.id.widget_book_cover))
+        assertFalse(v.visible(R.id.widget_book_title))
+        assertLink("catalog", v.click(android.R.id.background))
+    }
+
+    @Test fun generatedCoverIsARoundedBitmapWithTheAuthorColour() {
+        val yavorets = org.chyavorec.app.ui.theme.ThemePalette.YAVORETS
+        val bmp = BookWidgetCover.render(app, BookPick(1, "Под игото", "Иван Вазов"), 186, yavorets, dark = false)
+        assertEquals(186, bmp.width)
+        assertEquals((186 * BookWidgetCover.RATIO).roundToInt(), bmp.height)
+        // Ъглите са изрязани (прозрачни), средата е непрозрачна.
+        assertEquals(0, Color.alpha(bmp.getPixel(0, 0)))
+        assertEquals(255, Color.alpha(bmp.getPixel(bmp.width / 2, bmp.height / 2)))
+        // Един автор — един фон (стабилен), независимо от заглавието.
+        val same = BookWidgetCover.render(app, BookPick(3, "Чичовци", "Иван Вазов"), 186, yavorets, dark = false)
+        assertEquals(bmp.getPixel(150, 6), same.getPixel(150, 6))
+    }
+
+    @Test fun bookOfTheDayComesFromTheCachedCatalogueAndStaysForTheDay() = runBlocking<Unit> {
+        val backend = TestBackend().start().also { backend = it }
+        TestBackend.allowNotificationsAndNetwork(app)
+        backend.json("/katalog.json", TestResources.text("katalog-sample.json"))
+        app.container = backend.container(app, clock)
+        val manager = AppWidgetManager.getInstance(app)
+        val id = 9
+        shadowOf(manager).bindAppWidgetId(id, ComponentName(app, BookOfTheDayWidgetReceiver::class.java))
+        assertTrue(WidgetUpdater.hasInstances(app))
+
+        // Каталогът още не е в кеша — приятелска бележка (не празно място).
+        WidgetUpdater.updateBooks(app, intArrayOf(id), fallback = true)
+        assertTrue(app.getString(R.string.widget_book_empty) in shadowOf(manager).getViewFor(id).texts())
+
+        assertIs<Outcome.Success<*>>(app.container.catalogRepository.searcher(force = true))
+        WidgetUpdater.updateBooks(app, intArrayOf(id), fallback = false)
+        val first = shadowOf(manager).getViewFor(id)
+        val title = first.findViewById<TextView>(R.id.widget_book_title).text.toString()
+        assertTrue(title.isNotBlank())
+        assertTrue(first.findViewById<View>(R.id.widget_book_cover).visibility == View.VISIBLE)
+        // Същият ден — същата книга (изборът се помни, не зависи от наличността).
+        WidgetUpdater.updateBooks(app, intArrayOf(id), fallback = false)
+        assertEquals(title, shadowOf(manager).getViewFor(id).findViewById<TextView>(R.id.widget_book_title).text.toString())
+        assertTrue(app.getString(R.string.widget_book_empty) !in shadowOf(manager).getViewFor(id).texts())
+        WidgetUpdater.awaitIdle()
+    }
+
+    @Config(sdk = [25])
+    @Test fun addingWidgetsIsHiddenWhereTheSystemCannotDoIt() {
+        assertFalse(WidgetPinning.supported(app))
+        assertFalse(WidgetPinning.request(app, WidgetKind.MAIN))
+    }
+
+    @Config(sdk = [34])
+    @Test fun addingWidgetRequestAgreesWithSupport() {
+        assertEquals(WidgetPinning.supported(app), WidgetPinning.request(app, WidgetKind.BOOK))
+    }
+
+    @Config(sdk = [35])
+    @Test fun generatedPreviewAlsoCoversTheBookWidget() {
+        val manager = AppWidgetManager.getInstance(app)
+        assertTrue(WidgetUpdater.publishPreview(app))
+        val preview = manager.getWidgetPreview(
+            ComponentName(app, BookOfTheDayWidgetReceiver::class.java), Process.myUserHandle(), AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN,
+        )
+        val texts = apply(assertNotNull(preview)).texts()
+        assertTrue(app.getString(R.string.widget_book_preview_title) in texts, texts.toString())
+    }
+
     // Снимки за визуален преглед (не сравняват пиксели).
 
     @Test fun shotWideLight() = shot("90-widget-wide", WidgetViews.build(app, signedInState(), WidgetViews.FullWideTallSize), 360, 180)
@@ -513,6 +664,25 @@ class ChitalishteWidgetTest {
     @Test fun shotNarrow() = shot("94-widget-narrow", WidgetViews.build(app, signedInState(), WidgetViews.WideSize), 270, 140)
 
     @Test fun shotSmallTallSignedOut() = shot("95-widget-small-tall", WidgetViews.build(app, signedOutState(), WidgetViews.SmallTallSize), 160, 200)
+
+    @Test fun shotBook() = shot("97-widget-book", BookWidgetViews.build(app, BookWidgetState(BookPick(42, "Под игото", "Иван Вазов", udcSection = 8))), 200, 110)
+
+    @Config(qualifiers = "+night")
+    @Test fun shotBookDark() = shot("97-widget-book-dark", BookWidgetViews.build(app, BookWidgetState(BookPick(42, "Тютюн", "Димитър Димов", udcSection = 8))), 200, 110)
+
+    /** Оскъден запис (само дълго заглавие, без автор). */
+    @Test fun shotBookSparse() = shot("97-widget-book-sparse", BookWidgetViews.build(app, BookWidgetState(BookPick(7, "Енциклопедия на българските народни обичаи и празници", ""))), 200, 110)
+
+    /** Каталогът още не е зареден — приятелска бележка. */
+    @Test fun shotBookEmpty() = shot("97-widget-book-empty", BookWidgetViews.build(app, BookWidgetState(null)), 200, 110)
+
+    /** Динамичните цветове от тапета (Android 12+, при включена настройка) — за сравнение с фирмените горе. */
+    @Config(sdk = [34])
+    @Test fun shotWideDynamic() = shot("97-widget-wide-dynamic", WidgetViews.build(app, signedInState().copy(dynamic = true), WidgetViews.FullWideSize), 360, 140)
+
+    /** Заключен екран: само следващото събитие. */
+    @Config(sdk = [30])
+    @Test fun shotLockScreen() = shot("97-widget-lockscreen", WidgetViews.forWidget(app, signedInState(), keyguardOptions()), 360, 140)
 
     /** Изгледът [wDp]×[hDp] върху „тапет“, с поле около уиджета. */
     private fun shot(name: String, views: RemoteViews, wDp: Int, hDp: Int) {
