@@ -243,8 +243,10 @@ private fun Medallion(label: String, modifier: Modifier = Modifier) {
     ) {
         // Украсният надпис не расте с шрифта над ~1.15: иначе годината не се събира в кръга.
         CompositionLocalProvider(LocalDensity provides Density(d.density, d.fontScale.coerceAtMost(1.15f))) {
+            // Периодът („1912–1918“) се чупи след тирето, а не насред годината.
             Text(
-                label, style = TextStyle(fontFamily = Cormorant, fontSize = if (label.length > 6) 15.sp else 22.sp, lineHeight = if (label.length > 6) 17.sp else 24.sp),
+                label.replace(Regex("\\s*([–-])\\s*"), "$1\n"),
+                style = TextStyle(fontFamily = Cormorant, fontSize = if (label.length > 6) 15.sp else 22.sp, lineHeight = if (label.length > 6) 17.sp else 24.sp),
                 color = Brand.Ink, textAlign = TextAlign.Center, maxLines = 3, modifier = Modifier.padding(horizontal = 4.dp),
             )
         }

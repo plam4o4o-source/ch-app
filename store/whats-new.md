@@ -13,6 +13,22 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.36
+
+### bg
+- Нови: „Познай Яворец“ (пет въпроса на ден), „Старият вестник“ за четене в приложението, „Лента на времето“, „Извези шевица“, честитка за празник и седмичен преглед.
+- „Твоята шевица“ в края на читателската година; печат „Върната“ и оценка „Хареса ли ти?“ за прочетените книги.
+- Събитието е като лист от стенен календар; новото въведение показва истинската карта.
+- Шевици и по-богат облик на всички екрани, по-хубав уиджет, нов уиджет „Книга на деня“ и уиджет на заключения екран.
+- По-бърз старт, по-малко дублирани записи и по-точно мерене в „Бързодействие“.
+
+### en
+- New: “Know Yavorets” (five questions a day), “The Old Newspaper” to read in the app, “Timeline”, “Embroider a pattern”, a holiday greeting card and a weekly digest.
+- “Your shevitsa” closes the reading year; a “Returned” stamp and a “Did you like it?” rating for books you have read.
+- An event looks like a wall-calendar leaf; the new welcome shows the real card.
+- Embroidery motifs and a richer look across every screen, a nicer widget, a new “Book of the day” widget and a lock-screen widget.
+- Faster start-up, fewer duplicate entries and more accurate measuring in “Performance”.
+
 ## 1.2.35
 
 ### bg
