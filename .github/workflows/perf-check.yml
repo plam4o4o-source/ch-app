@@ -100,8 +100,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # start35, card35, reg35 — API 33 google_apis x86_64; old28s — API 28. Всички с -gpu swangle_indirect.
-        part: [start35, card35, reg35, old28s]
+        # start35, card35, reg35, now35 — API 33 google_apis x86_64; old28s, full28 — API 28. Всички с -gpu swangle_indirect.
+        # Кръг 1 (43258710930): start35, card35, reg35, old28s.
+        part: [now35, full28]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -191,6 +192,13 @@ jobs:
             for a in app.apk app-base.apk; do [ -f "$W/apks/$a" ] && echo "$a $(stat -c %s "$W/apks/$a") bytes"; done > "$V/size/apk-size.txt" || true
             git show FETCH_HEAD:$V/runs.txt > "$V/runs.txt" 2>/dev/null || : > "$V/runs.txt"
             echo "run $RUN @ $SRC (new ${NEW_REF:0:7}, base ${BASE_REF:0:7}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
+            # Частите от по-ранни изпълнения: summary.txt и job-status.txt обратно на диска — за индекса (не се добавят наново).
+            for p in $(git ls-tree --name-only "FETCH_HEAD:$V" 2>/dev/null); do
+              [ -d "$W/results/$p" ] && continue
+              git cat-file -e "FETCH_HEAD:$V/$p/summary.txt" 2>/dev/null || continue
+              mkdir -p "$V/$p"; git show "FETCH_HEAD:$V/$p/summary.txt" > "$V/$p/summary.txt" || true
+              git show "FETCH_HEAD:$V/$p/job-status.txt" > "$V/$p/job-status.txt" 2>/dev/null || true
+            done
             (
               cd "$V"
               echo "# Emulator check of the v1.2.35 shaders (${NEW_REF:0:7}, versionCode 1504706) vs the released v1.2.34 (${BASE_REF:0:7}, 1504705)"
@@ -205,14 +213,14 @@ jobs:
                 echo "## $p"; echo; echo '```'; cat "$p/summary.txt"; echo '```'; echo
               done
               echo "## Files"; echo
-              find . -type f ! -name index.md -print | sort | sed 's|^\./||; s|.*|- [&](&)|'
+              { find . -type f ! -name index.md -print | sed 's|^\./||'; git -C .. ls-tree -r --name-only FETCH_HEAD -- "$V" | sed "s|^$V/||"; } | grep -v '^index.md$' | sort -u | sed 's|.*|- [&](&)|'
             ) > "$RUNNER_TEMP/v-index.md"
             mv "$RUNNER_TEMP/v-index.md" "$V/index.md"
             git show FETCH_HEAD:index.md > index.md
             grep -q "$V/index.md" index.md || { { head -1 index.md; echo; echo "v1.2.35 shaders (9295534 vs v1.2.34): [$V/index.md]($V/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
             for p in $(ls "$W/results"); do git add -A -- "$V/$p"; done
             git add -A -- "$V/size" "$V/runs.txt" "$V/index.md" index.md
-            C=$(git commit-tree "$(git write-tree)" -m "Emulator results $V for $SRC (run $RUN)")
+            C=$(git commit-tree "$(git write-tree)" -m "Emulator results $V for $SRC (run $RUN)") || { echo "write-tree/commit failed (promisor fetch?); retrying"; sleep $((try * 7)); continue; }
             git push --force-with-lease=refs/heads/emulator-results:$TIP origin "$C:refs/heads/emulator-results" && break
             echo "emulator-results moved; retrying on the new tip"; sleep $((try * 7))
           done

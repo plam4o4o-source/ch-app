@@ -66,7 +66,8 @@ def cmd_fsagg(path):
         if not m:
             continue
         k, blk, kind, scr, n, slow, idx, ui, rt, iss, first = m.groups()
-        mode = 'wait5s' if re.match(r'\d+-wait$', kind) else kind
+        mode = re.sub(r'^\d+-', '', kind)
+        mode = 'wait5s' if mode == 'wait' else mode
         f5 = [float(x) for x in first.split(',') if x.strip()]
         groups[(scr, mode, k)].append((float(slow), int(idx), f5, f"{k}-{blk}-{kind}", float(rt) if rt != 'nan' else float('nan')))
     if not groups:

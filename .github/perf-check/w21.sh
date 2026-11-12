@@ -11,7 +11,9 @@
 #   reg35   — регресии на 1.2.35: лентата на „Начало“ (0.5 s / 3 s / 70 s / 75 s), картата в покой (и на
 #             цял екран), monkey 2000, дневникът на грешките; лентата и на 1.2.34 за сравнение
 #   old28s  — API 28 (без AGSL): „Начало“ и картата (плочката), картата на цял екран, monkey 2000, без срив
-W21_PARTS=" start35 card35 reg35 old28s "
+#   now35   — кръг 2: без чакане (студен старт направо в картата, „Покажи картата“ 0.5/1.0 s след първия кадър)
+#   full28  — кръг 2: API 28, картата на цял екран (кръг 1 не стигна до нея)
+W21_PARTS=" start35 card35 reg35 old28s now35 full28 "
 W20_PARTS="$W20_PARTS $W21_PARTS"
 W21=$H_/w21.py
 L_ADDCARD='=Добави читателска карта|=Add library card'
@@ -214,9 +216,75 @@ part_old28s() {
   diag_end
 }
 
+# ---------------------------------------------------------------- КРЪГ 2
+# Без чакане: кръг 1 не стигна до картата (докосванията по „Моето“ още при зареждането на „Начало“ отвориха
+# статия). Сега студеният старт е направо в екрана на картата (прекия път chyavorec://app/my/card), а
+# „Покажи картата“ се докосва 0.5 s / 1.0 s след първия кадър — преди ShaderWarmup (2 s след старта).
+now_trial() {  # $1 — етикет, $2 — пауза (ms) след първия кадър, $3 — cold-gl
+  local L=$1 r t0 ts ok
+  a am force-stop $PKG; sleep 2
+  [ "${3:-}" = cold-gl ] && gl_cache rm
+  sleep 1
+  r=$(a am start -W -a org.chyavorec.app.SHORTCUT -d chyavorec://app/my/card -n $ACT 2>&1 | grep -oE 'TotalTime: [0-9]+'); t0=$(now_ms)
+  while [ $(( $(now_ms) - t0 )) -lt $2 ]; do sleep 0.05; done
+  gfx_reset; a input tap $SHOW_XY; ts=$(( $(now_ms) - t0 ))
+  sleep 2
+  a dumpsys gfxinfo $PKG framestats > $OUT/fs/$L-full.txt
+  ok=$(fullscreen_ok && echo yes || echo NO)
+  [ "$ok" = NO ] && { debug_ui now-$L; eshot now-$L >/dev/null; }
+  log "TRIAL $L: start (card shortcut) $r; show tapped +${ts} ms after the first frame; fullscreen reached: $ok"
+  [ "$ok" = yes ] && python3 $W21 fs $OUT/fs/$L-full.txt $L-full | tee -a $SUM
+}
+n_block() {  # $1 — new | base, $2 — блок
+  local K=$1 b=$2
+  sec "N $K-$b: fresh install, card added by hand; cold start straight into the card, „Покажи картата“ 0.5 s / 1.0 s after the first frame"
+  inst $(apk_of $K) $K-$b $(ref_of $K) || return
+  a input keyevent KEYCODE_HOME; sleep 2
+  launch >/dev/null; sleep 6; dismiss; ready; dims
+  tab catalog; waitfor "$RX_RESULTS" 150 >/dev/null; tab home; sleep 3
+  card_add_my || { log "$K-$b: card NOT added — block skipped"; return; }
+  card_coords || { log "$K-$b: coordinates not found — block skipped"; return; }
+  now_trial $K-$b-1-now05 500; now_trial $K-$b-2-now10 1000; now_trial $K-$b-3-now05 500; now_trial $K-$b-4-now10 1000
+  now_trial $K-$b-5-now05-coldgl 500 cold-gl; now_trial $K-$b-6-now10-coldgl 1000 cold-gl
+  fs_trial $K-$b-7-wait 5
+}
+part_now35() {
+  local b=0 K
+  anims 1
+  mkdir -p $OUT/fs
+  log "block order: new base base new (each a fresh install; the card added by hand in each)"
+  for K in new base base new; do b=$((b + 1)); n_block $K $b; done
+  sec "N totals"
+  python3 $W21 fsagg $SUM | tee $OUT/fs-agg.txt | tee -a $SUM
+  shader_diag now35
+}
+# API 28: кръг 1 не отвори картата на цял екран (докосването по текста); сега — по мястото на бутона.
+part_full28() {
+  local i p
+  anims 1
+  warmup
+  sec "F28. API $SDK: card added, then the fullscreen card ×3 (by the button's position), shots and frames at rest"
+  card_add28 || log "CARD28: not added"
+  leave; ready; tab my; sleep 2; tap text "$L_MYCARD" >/dev/null; sleep 3
+  dump; p=$(xy text "$L_CARDSHOW"); [ -z "$p" ] && p="582 1068"
+  log "show-card at $p"
+  for i in 1 2 3; do
+    a input tap $p; sleep 3; eshot full28-$i >/dev/null
+    log "FULL28 $i: fullscreen $(fullscreen_ok && echo yes || echo NO); app in front $(has "package=\"$PKG\"" && echo yes || echo NO)"
+    [ $i = 3 ] && { sleep 25; cpu_win full28-30-45s 15; }
+    back 2; dump
+  done
+  restart; card_screen; dump; p=$(xy text "$L_CARDSHOW"); [ -n "$p" ] && { a input tap $p; sleep 3; eshot full28-after-restart >/dev/null; log "FULL28 after a restart: fullscreen $(fullscreen_ok && echo yes || echo NO)"; }
+  leave
+  log "FATAL: $(grep -c 'FATAL EXCEPTION' $OUT/logcat-live.txt)"
+  shader_diag full28
+}
+
 part_w21() {
   case "$W21_PARTS" in *" $PART "*) ;; *) return 1;; esac
   case $PART in
+    now35) part_now35;;
+    full28) part_full28;;
     start35) part_start35;;
     card35) part_card35;;
     reg35) part_reg35;;
