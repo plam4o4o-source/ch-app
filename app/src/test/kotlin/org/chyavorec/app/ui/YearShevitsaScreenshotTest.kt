@@ -223,6 +223,12 @@ class YearShevitsaScreenshotTest {
         readingStats(listOf(3, 12, 0, 2, 16, 2, 1, 0, 2, 3, 5, 24), listOf(8 to 60)),
     )
 
+    /** Много книги в тъмна тема и едър шрифт: колоните остават под буквите на месеците. */
+    @Test fun chartsHugeDarkLargeFont() = charts(
+        ThemeMode.DARK, "w21ys-35-charts-huge-dark-large-font",
+        readingStats(listOf(3, 12, 0, 2, 16, 2, 1, 0, 2, 3, 5, 24), listOf(8 to 30, 9 to 20, 3 to 10)), fontScale = large,
+    )
+
     @Test fun chartsEmptyMonths() = charts(ThemeMode.DARK, "w21ys-34-charts-empty", readingStats(List(12) { 0 }.toMutableList().also { it[11] = 1 }, listOf(null to 1)))
 
     // ───────────── намалено движение (Robolectric) ─────────────
