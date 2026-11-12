@@ -16,6 +16,8 @@ import coil3.request.crossfade
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okio.Path.Companion.toOkioPath
@@ -86,6 +88,11 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
 
     private val uiStarted = AtomicBoolean(false)
 
+    private companion object {
+        /** Изчакване на KEEP планирането на проверката за съобщения, когато е стартиран интерфейс. */
+        const val KEEP_POLL_DELAY_MS = 3_000L
+    }
+
     /**
      * Стартира интерфейсът (MainActivity.onCreate), а не само фонова задача — веднъж за процес:
      * - подготовка за първия кадър ([warmUp]) — във фоновите събуждания не трябва;
@@ -115,27 +122,65 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
 
     /**
      * Подготовка за първия кадър извън главната нишка (паралелно със създаването на
-     * Activity). Нищо не се променя — само се изпълнява по-рано и на друга нишка:
-     * - OkHttp клиентът (`by lazy` в AppContainer): изграждането му зарежда TLS
-     *   (доверените сертификати на системата, SSLSocketFactory) — иначе това става на
-     *   главната нишка при създаването на ViewModel-а на началния екран;
+     * Activity). Нищо не се променя — само се изпълнява по-рано и на друга нишка. Три
+     * независими задачи, по реда на нуждата от тях:
      * - шрифтовете (Cormorant, Raleway): Compose ги зарежда блокиращо при първото
      *   измерване на текст през Resources.getFont — системата пази заредения Typeface в
-     *   свой кеш, така че първият кадър го взема наготово, без да разчита файла.
-     *   Без курсива: той е само за цитати и курсив в статиите (ContentBlocks) — не е нужен
-     *   за първия кадър, а би стоял в паметта и без да се отвори статия.
+     *   свой кеш, така че първият кадър го взема наготово. Първи и сами: ако главната нишка
+     *   стигне до текста преди тях, зарежда ги сама. Без курсива (само за цитати и статии);
+     * - OkHttp клиентът и кешираните данни на „Начало“ ([warmData]);
+     * - украсата на първите кадри ([warmDecor]) — шейдърът на шевицата, формите на раздела,
+     *   плочката на лентата. Шейдърът на фолиото се превежда едва след първия кадър (ShaderWarmup).
      */
     private fun warmUp() {
-        runCatching { container.http }
-        // Шейдърите на шевицата и фолиото — преведени предварително (ShaderPool), не в първия кадър.
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            runCatching { org.chyavorec.app.ui.components.ShaderPool.prepare() }
-        }
+        appScope.launch { warmFonts() }
+        appScope.launch { warmData() }
+        appScope.launch { warmDecor() }
+    }
+
+    private fun warmFonts() {
         for (family in listOf(Cormorant, Raleway)) {
             (family as? FontListFontFamily)?.fonts?.forEach { font ->
                 if (font is ResourceFont && font.style != FontStyle.Italic) runCatching { resources.getFont(font.resId) }
             }
         }
+    }
+
+    /**
+     * Мрежовият клиент (`by lazy` в AppContainer): изграждането му зарежда TLS (доверените
+     * сертификати на системата, SSLSocketFactory) — иначе това става на главната нишка при
+     * създаването на ViewModel-а на началния екран. После — кешираното, което ще чете
+     * „Начало“ (новини с пълните текстове, събития, обобщение на каталога): хранилищата и
+     * зависимостите им се строят тук, а `cached()` помни резултата в паметта — ViewModel-ът го
+     * взема без диск и без декодиране.
+     */
+    private suspend fun warmData() {
+        runCatching { container.http }
+        coroutineScope {
+            launch { runCatching { container.newsRepository.cached() }.logFailure("startup.warm-news") }
+            launch { runCatching { container.eventsRepository.cachedRolled() }.logFailure("startup.warm-events") }
+            launch { runCatching { container.catalogRepository.homeSummary() }.logFailure("startup.warm-catalog") }
+        }
+    }
+
+    private suspend fun warmDecor() {
+        // Шейдърът на шевицата (втората секунда на „Начало“) се превежда в нишката на пула, без да чакаме.
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            runCatching { org.chyavorec.app.ui.components.ShaderPool.prepare(org.chyavorec.app.ui.components.ShaderPool.WEAVE) }
+        }
+        // Формите на индикатора на раздела (graphics-shapes) са в първия кадър на лентата.
+        runCatching { org.chyavorec.app.ui.components.TabRosetteShapes.morph }
+        // Плочката на везаната лента на „Начало“ — иначе се рисува на главната нишка в първия кадър.
+        runCatching {
+            val dark = when (container.settings.current().themeMode) {
+                org.chyavorec.app.ui.theme.ThemeMode.LIGHT -> false
+                org.chyavorec.app.ui.theme.ThemeMode.DARK -> true
+                org.chyavorec.app.ui.theme.ThemeMode.SYSTEM ->
+                    (resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+                        android.content.res.Configuration.UI_MODE_NIGHT_YES
+            }
+            org.chyavorec.app.ui.screens.home.prewarmHomeBand(resources.displayMetrics.density, dark)
+        }.logFailure("startup.warm-band")
     }
 
     /**
@@ -154,6 +199,9 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         // еднократна задача за следващата дължима проверка (вж. MessagePollWorker). Старата
         // периодична (на всеки час) се отменя; KEEP — само ако веригата е изгубена.
         if (fresh) runCatching { MessagePollWorker.cancelLegacy(this) }.logFailure("startup.cancel-poll")
+        // При старт на интерфейс MainActivity.onStart планира проверката сама (REPLACE) — KEEP не е
+        // спешен и не се състезава с първия кадър за WorkManager и настройките.
+        if (!fresh && uiStarted.get()) delay(KEEP_POLL_DELAY_MS)
         val poll = runCatching { MessagePollWorker.schedule(this, container, keep = true) }.logFailure("startup.schedule-poll")
         if (fresh) {
             // Остатъците от по-старите версии: задачите на уиджета с Glance и динамичният „Искам да прочета“.

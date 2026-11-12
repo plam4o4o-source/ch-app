@@ -470,6 +470,16 @@ private fun HomeHeader(
 private val HomeBandHeight = 26.dp
 private const val HOME_BAND_PERIOD = 10
 
+/**
+ * Плочката на лентата, нарисувана предварително във фонова нишка (ChitalishteApp.warmUp) —
+ * първият кадър на „Начало“ я взема от кеша, а не я рисува на главната нишка. Височината в px е
+ * като при оразмеряването (dp × плътност, закръглено).
+ */
+internal fun prewarmHomeBand(density: Float, dark: Boolean) {
+    val heightPx = Math.round(HomeBandHeight.value * density)
+    org.chyavorec.app.ui.components.ShevitsaStill.prewarmRibbon(heightPx, HOME_BAND_PERIOD, ShevitsaPalettes.ribbon(dark))
+}
+
 /** Тъмен воал под текста на въртележката — еднакъв за всички страници, създава се веднъж. */
 private val HeroScrim = Brush.verticalGradient(
     0f to Color.Transparent, 0.3f to Color.Transparent,

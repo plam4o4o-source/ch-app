@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -24,10 +25,11 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import org.chyavorec.app.ui.components.GuardedShader
+import org.chyavorec.app.ui.components.ShaderDraws
 import org.chyavorec.app.ui.components.ShaderPool
+import org.chyavorec.app.ui.components.ShaderTags
 import org.chyavorec.app.ui.components.LocalAgslEnabled
 import org.chyavorec.app.ui.theme.Brand
-import org.chyavorec.app.ui.theme.ShevitsaShaders
 import kotlin.math.hypot
 
 /**
@@ -86,15 +88,24 @@ internal val LocalCardTilt = staticCompositionLocalOf<Tilt?> { null }
 internal fun CardFoilLayer(tilt: Tilt, modifier: Modifier = Modifier) {
     val agsl = LocalAgslEnabled.current && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     val shader = remember(agsl) { if (agsl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) FoilShader.createOrNull() else null }
+    // Връща се в резерва при изчезване на картата (отваряне на цял екран, обръщане) — без нов превод.
+    DisposableEffect(shader) {
+        onDispose { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) shader?.release() }
+    }
     val draw = remember(shader, tilt) {
         Modifier.drawWithCache {
             val ready = shader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && shader.resize(size.width, size.height)
             // Градиентите на резервата — веднъж за размера (и чак когато са нужни); наклонът само ги мести.
             val fallback = lazy(LazyThreadSafetyMode.NONE) { FallbackFoil(size.width, size.height) }
+            var noted = false
             onDrawBehind {
                 val s = tilt.shine
                 if (ready && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && shader!!.update(tilt.x, tilt.y, s)) {
                     drawRect(shader.brush, blendMode = BlendMode.Screen)
+                    if (!noted) {
+                        noted = true
+                        ShaderDraws.note(ShaderTags.FOIL)
+                    }
                 } else {
                     drawFallbackFoil(fallback.value, s)
                 }
@@ -164,8 +175,11 @@ internal class FoilShader private constructor(private val guarded: GuardedShader
         setFloatUniform("uGlintStrength", s.glintStrength)
     }
 
+    /** Картата изчезва — шейдърът се връща в [ShaderPool]. */
+    fun release() = guarded.release()
+
     companion object {
-        fun createOrNull(): FoilShader? = ShaderPool.take(ShevitsaShaders.FOIL, ShaderPool.FOIL)?.let(::FoilShader)
+        fun createOrNull(): FoilShader? = ShaderPool.take(ShaderPool.FOIL)?.let(::FoilShader)
     }
 }
 

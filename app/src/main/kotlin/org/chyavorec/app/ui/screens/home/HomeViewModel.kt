@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.coroutines.yield
 import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.toState
@@ -108,6 +109,10 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
+            // Кешът вече е прочетен във фонова нишка при старта (ChitalishteApp.warmData) и cached() се
+            // връща от паметта без да се спре — без yield() данните биха влезли още в първата
+            // композиция и биха натоварили първия кадър. Така той е лек, а данните идват в следващия.
+            yield()
             // Първо мигновено от кеша (трите едновременно и с ЕДНА промяна на състоянието —
             // една прекомпозиция вместо по една за всеки източник), после — мрежата.
             val cachedNews = async { news.cached() }

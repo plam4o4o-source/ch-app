@@ -95,7 +95,9 @@ class MainActivity : ComponentActivity() {
         // Сменен език (активността се пресъздава за него) — уиджетът също, не едва при следващия процес.
         WidgetUpdater.refreshIfLanguageChanged(this)
         val container = (application as ChitalishteApp).container
-        lifecycleScope.launch {
+        // Извън главната нишка: WorkManager.getInstance (първо използване = база данни) и четенето на
+        // настройките не бива да са в пътя на първите кадри (и да се състезават със setUpBackground).
+        lifecycleScope.launch(Dispatchers.Default) {
             runCatching {
                 container.settings.markAppOpened(container.clock.now().toEpochMilli(), MessagePollPolicy.BASE_MILLIS, OPEN_RECORD_GAP_MS)
             }
