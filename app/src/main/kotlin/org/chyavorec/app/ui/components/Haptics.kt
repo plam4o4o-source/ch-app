@@ -78,11 +78,25 @@ internal interface CompositionOutput {
 @RequiresApi(Build.VERSION_CODES.R)
 private class VibratorOutput(private val vibrator: Vibrator) : CompositionOutput {
     override fun supports(primitives: IntArray): Boolean =
-        runCatching { vibrator.hasVibrator() && vibrator.areAllPrimitivesSupported(*primitives) }.getOrDefault(false)
+        runCatching { vibrator.hasVibrator() && primitives.all { supported(it) } }.getOrDefault(false)
+
+    // Само известните примитиви, със самите константи на рамката (проверка WrongConstant).
+    private fun supported(primitive: Int): Boolean = when (primitive) {
+        HapticScores.THUD -> vibrator.areAllPrimitivesSupported(VibrationEffect.Composition.PRIMITIVE_THUD)
+        HapticScores.TICK -> vibrator.areAllPrimitivesSupported(VibrationEffect.Composition.PRIMITIVE_TICK)
+        else -> false
+    }
+
+    private fun VibrationEffect.Composition.add(n: HapticScores.Note) {
+        when (n.primitive) {
+            HapticScores.THUD -> addPrimitive(VibrationEffect.Composition.PRIMITIVE_THUD, n.scale, n.delayMs)
+            else -> addPrimitive(VibrationEffect.Composition.PRIMITIVE_TICK, n.scale, n.delayMs)
+        }
+    }
 
     override fun play(notes: List<HapticScores.Note>): Boolean = runCatching {
         val composition = VibrationEffect.startComposition()
-        for (n in notes) composition.addPrimitive(n.primitive, n.scale, n.delayMs)
+        for (n in notes) composition.add(n)
         val effect = composition.compose()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) vibrator.vibrate(effect, VibrationAttributes.createForUsage(VibrationAttributes.USAGE_TOUCH))
         else vibrator.vibrate(effect)
