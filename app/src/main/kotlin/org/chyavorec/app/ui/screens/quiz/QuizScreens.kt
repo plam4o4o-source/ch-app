@@ -42,6 +42,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -90,6 +91,7 @@ fun QuizScreen(onBack: () -> Unit) {
     }
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val resources = LocalResources.current
     val share = rememberShareImageState()
     Scaffold(topBar = { BackTopBar(stringResource(R.string.quiz_title), onBack) }) { padding ->
         ShareImageHost(share)
@@ -97,11 +99,11 @@ fun QuizScreen(onBack: () -> Unit) {
             QuizContent(
                 state, onChoose = vm::choose, onNext = vm::next, onRetry = vm::load,
                 onShare = { f ->
-                    val text = context.getString(R.string.quiz_share_text, f.results.count { it }, f.results.size, container.config.siteBaseUrl)
+                    val text = resources.getString(R.string.quiz_share_text, f.results.count { it }, f.results.size, container.config.siteBaseUrl)
                     share.share(
                         ShareImageRequest(
                             ContentShareCards.quiz(Formatters.date(context, f.quiz.date).orEmpty(), f.results, f.streak, container.config.siteBaseUrl),
-                            context.getString(R.string.quiz_title), text,
+                            resources.getString(R.string.quiz_title), text,
                         ),
                     )
                 },
