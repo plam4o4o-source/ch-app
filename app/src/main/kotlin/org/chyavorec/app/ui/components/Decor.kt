@@ -2,7 +2,11 @@ package org.chyavorec.app.ui.components
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
@@ -213,16 +217,20 @@ private class InputSync(var shown: String) {
 }
 
 /** Елемент от мрежата с плочки („Още“, „Моето“). */
-data class TileItem(val icon: ImageVector, val title: String, val subtitle: String?, val onClick: () -> Unit)
+data class TileItem(val icon: ImageVector, val title: String, val subtitle: String?, val motif: FolkMotif? = null, val onClick: () -> Unit)
 
 /**
  * Мрежа от плочки с еднаква височина на реда: 2 колони на телефон, 3 при ширина
  * от 600 dp и 4 от 840 dp (таблет, хоризонтално). Ширината се мери спрямо мащаба на
  * шрифта: при много едър системен шрифт на телефон плочките са в една колона (иконата
  * вляво от текста), за да не се пренасят думите по букви.
+ *
+ * Плочките са в народен вид: иконата е в плочка с форма по раздела ([motif], може да се
+ * смени за плочка с [TileItem.motif]) — осморъка, ромб или елбетица, — а по горния десен ъгъл
+ * минава пунктиран „бод“, който при натискане се „затяга“.
  */
 @Composable
-fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
+fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier, motif: FolkMotif = FolkMotif.ROSETTE) {
     BoxWithConstraints(modifier.fillMaxWidth()) {
         val textWidth = maxWidth / LocalDensity.current.fontScale.coerceAtLeast(1f)
         val columns = when {
@@ -241,13 +249,24 @@ fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     row.forEachIndexed { c, item ->
+                        val interaction = remember { MutableInteractionSource() }
+                        val pressed by interaction.collectIsPressedAsState()
+                        val reduced = rememberReducedMotion()
+                        // Ъгълът се „затяга“ ~120 ms; при намалено движение — веднага.
+                        val tighten = animateFloatAsState(if (pressed) 1f else 0f, if (reduced) snap() else tween(120), label = "tile-stitch")
+                        val shape = MaterialTheme.shapes.medium
+                        val tileMotif = item.motif ?: motif
+                        val plateContainer = MaterialTheme.colorScheme.primaryContainer
+                        val plateContent = MaterialTheme.colorScheme.onPrimaryContainer
                         Surface(
                             onClick = item.onClick,
-                            shape = MaterialTheme.shapes.medium,
+                            shape = shape,
                             color = MaterialTheme.colorScheme.surfaceContainerLow,
                             border = cardBorder(),
+                            interactionSource = interaction,
                             modifier = Modifier.weight(1f).fillMaxHeight().animateEntrance(r * columns + c)
-                                .darkTopHighlight(MaterialTheme.shapes.medium),
+                                .darkTopHighlight(shape).nightCloth(shape)
+                                .stitchedCorner(LocalExtendedColors.current.gold) { tighten.value },
                         ) {
                             // При едър шрифт (1.3×) текстът се пренася на още ред, вместо да се реже —
                             // редът от плочки е с височината на най-високата.
@@ -263,14 +282,14 @@ fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier) {
                             }
                             if (columns == 1) {
                                 Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    IconPlate(item.icon, size = 44.dp)
+                                    FolkIconPlate(item.icon, tileMotif, size = 48.dp, container = plateContainer, content = plateContent)
                                     Spacer(Modifier.width(14.dp))
                                     Column(Modifier.weight(1f)) { texts() }
                                 }
                             } else {
                                 Column(Modifier.padding(14.dp)) {
-                                    IconPlate(item.icon, size = 44.dp)
-                                    Spacer(Modifier.height(10.dp))
+                                    FolkIconPlate(item.icon, tileMotif, size = 48.dp, container = plateContainer, content = plateContent)
+                                    Spacer(Modifier.height(8.dp))
                                     texts()
                                 }
                             }

@@ -72,6 +72,7 @@ import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.rememberToday
 import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
 import org.chyavorec.app.ui.components.MembershipPill
@@ -162,11 +163,11 @@ fun MyHubScreen(navigate: (String) -> Unit) {
                 // „Искам да прочета“ — и без вход (списъкът е само на устройството).
                 add(TileItem(Icons.Outlined.BookmarkBorder, stringResource(R.string.want_title), wantToReadTileSubtitle()) { navigate(Routes.WANT_TO_READ) })
                 add(TileItem(Icons.Outlined.CardMembership, stringResource(R.string.my_membership), stringResource(R.string.my_membership_desc)) { navigate(Routes.MEMBERSHIP) })
-                if (signedIn) add(TileItem(Icons.Outlined.AutoStories, stringResource(R.string.history_title), stringResource(R.string.my_history_desc)) { navigate(Routes.HISTORY) })
-                if (signedIn) add(TileItem(Icons.Outlined.Person, stringResource(R.string.my_profile), stringResource(R.string.my_profile_desc)) { navigate(Routes.PROFILE) })
-                add(TileItem(Icons.Outlined.NotificationsNone, stringResource(R.string.my_notifications), stringResource(R.string.my_notifications_desc)) { navigate(Routes.NOTIFICATIONS) })
+                if (signedIn) add(TileItem(Icons.Outlined.AutoStories, stringResource(R.string.history_title), stringResource(R.string.my_history_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.HISTORY) })
+                if (signedIn) add(TileItem(Icons.Outlined.Person, stringResource(R.string.my_profile), stringResource(R.string.my_profile_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.PROFILE) })
+                add(TileItem(Icons.Outlined.NotificationsNone, stringResource(R.string.my_notifications), stringResource(R.string.my_notifications_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.NOTIFICATIONS) })
             }
-            TileGrid(tiles)
+            TileGrid(tiles, motif = FolkMotif.RHOMBUS)
             Spacer(Modifier.height(8.dp))
 
             // „Моето четене“ — само за влязъл читател с история (иначе нищо, без празно място).

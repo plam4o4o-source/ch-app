@@ -43,6 +43,7 @@ import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.ScreenGutter
+import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
 import org.chyavorec.app.ui.navigation.Routes
@@ -81,9 +82,9 @@ fun MoreScreen(navigate: (String) -> Unit) {
                 digitalClub?.let { l ->
                     add(TileItem(Icons.Outlined.Computer, l.title, stringResource(R.string.more_digital_desc)) { navigate(Routes.page(l.url, l.title)) })
                 }
-                add(TileItem(Icons.Outlined.Photo, stringResource(R.string.gallery_title), stringResource(R.string.more_gallery_desc)) { navigate(Routes.GALLERY) })
-                add(TileItem(Icons.Outlined.Folder, stringResource(R.string.documents_title), stringResource(R.string.more_documents_desc)) { navigate(Routes.DOCUMENTS) })
-                add(TileItem(Icons.Outlined.Place, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc)) { navigate(Routes.CONTACTS) })
+                add(TileItem(Icons.Outlined.Photo, stringResource(R.string.gallery_title), stringResource(R.string.more_gallery_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.GALLERY) })
+                add(TileItem(Icons.Outlined.Folder, stringResource(R.string.documents_title), stringResource(R.string.more_documents_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.DOCUMENTS) })
+                add(TileItem(Icons.Outlined.Place, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.CONTACTS) })
             }
             TileGrid(tiles)
             SectionLabel(stringResource(R.string.more_group_app), Modifier.padding(start = ScreenGutter, top = 28.dp, bottom = 4.dp))

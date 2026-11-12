@@ -51,6 +51,7 @@ import org.chyavorec.app.ui.components.windowHeight
 import org.chyavorec.app.ui.components.appFilterChipColors
 import org.chyavorec.app.ui.components.animateEntrance
 import org.chyavorec.app.ui.components.bookCoverShared
+import org.chyavorec.app.ui.components.goldSheen
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -663,7 +664,8 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                 BookCover(b, width = 124.dp, modifier = Modifier.bookCoverShared(b.inv), decorative = true)
                 Spacer(Modifier.width(18.dp))
                 Column(Modifier.weight(1f)) {
-                    Text(b.title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
+                    // Заглавието „хваща светлина“ веднъж, щом корицата се разгърне на мястото си (goldSheen).
+                    Text(b.title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() }.goldSheen(b.inv))
                     if (b.subtitle.isNotBlank()) Text(b.subtitle, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (b.author.isNotBlank()) {
                         Spacer(Modifier.height(2.dp))
