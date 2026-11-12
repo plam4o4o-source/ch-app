@@ -2,6 +2,7 @@ package org.chyavorec.app.widget
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.os.Build
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -24,6 +26,7 @@ import org.chyavorec.app.BuildConfig
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.di.AppContainerOwner
+import org.chyavorec.app.ui.theme.ThemePalette
 import org.chyavorec.app.util.AppLanguage
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.logFailure
@@ -31,7 +34,7 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * Опресняването на уиджета (AppWidgetManager.updateAppWidget): след синхронизация
+ * Опресняването на уиджетите „Читалище Яворец“ и „Книга на деня“ (AppWidgetManager.updateAppWidget): след синхронизация
  * (PeriodicSyncWorker), след зареждане на заеманията, при вход/изход, при старт на
  * приложението и при смяна на езика (и от системните настройки, при затворено приложение). Грешките се пренебрегват — уиджетът е допълнение.
  */
@@ -48,25 +51,38 @@ object WidgetUpdater {
      */
     private const val EVENTS_TIMEOUT_MS = 4_000L
     private const val LOANS_TIMEOUT_MS = 7_000L
+    private const val SETTINGS_TIMEOUT_MS = 2_000L
+    private const val BOOK_TIMEOUT_MS = 6_000L
 
     /** Събитията се теглят от мрежата във фон (без кеш) — едно теглене наведнъж. */
     private val fetchingEvents = AtomicBoolean(false)
 
     private fun provider(context: Context) = ComponentName(context, ChitalishteWidgetReceiver::class.java)
 
+    private fun bookProvider(context: Context) = ComponentName(context, BookOfTheDayWidgetReceiver::class.java)
+
     private fun manager(context: Context): AppWidgetManager? = runCatching { AppWidgetManager.getInstance(context) }.getOrNull()
 
-    private fun ids(context: Context): IntArray =
-        runCatching { manager(context)?.getAppWidgetIds(provider(context)) }.getOrNull() ?: IntArray(0)
+    private fun ids(context: Context, provider: ComponentName = provider(context)): IntArray =
+        runCatching { manager(context)?.getAppWidgetIds(provider) }.getOrNull() ?: IntArray(0)
 
-    /** Има ли поне едно копие на уиджета на началния екран (иначе фоновата задача не тегли данни за него). */
-    fun hasInstances(context: Context): Boolean = ids(context).isNotEmpty()
+    private fun bookIds(context: Context): IntArray = ids(context, bookProvider(context))
 
-    /** Опреснява всички копия; ако данните не се прочетат, остава показаното досега. */
+    /** Има ли поне едно копие на някой от уиджетите на началния екран (иначе фоновата задача не тегли данни за тях). */
+    fun hasInstances(context: Context): Boolean = ids(context).isNotEmpty() || bookIds(context).isNotEmpty()
+
+    /** Опреснява всички копия на двата уиджета; ако данните не се прочетат, остава показаното досега. */
     suspend fun refresh(context: Context) {
         val ids = ids(context)
         if (ids.isNotEmpty()) update(context, ids, fallback = false)
+        val books = bookIds(context)
+        if (books.isNotEmpty()) updateBooks(context, books, fallback = false)
     }
+
+    /** „Цветове от тапета“ са включени (и системата ги има — Android 12+); при грешка — фирмените. */
+    private suspend fun dynamicColors(c: AppContainer): Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            load(SETTINGS_TIMEOUT_MS, "widget.settings") { c.settings.settings.first().dynamicColor } == true
 
     /**
      * Чете данните и обновява копията [ids]. Ако заеманията не се прочетат (сесията временно
@@ -85,6 +101,7 @@ object WidgetUpdater {
             val state = if (c == null) {
                 if (fallback) EmptyWidgetState else return@withLock
             } else {
+                val dynamic = dynamicColors(c)
                 val (events, loans) = coroutineScope {
                     val e = async { load(EVENTS_TIMEOUT_MS, "widget.events") { loadWidgetEvents(c) } }
                     val l = async { load(LOANS_TIMEOUT_MS, "widget.loans") { loadWidgetLoans(c) } }
@@ -93,8 +110,8 @@ object WidgetUpdater {
                 if (events == null && fetchEvents) fetchEventsInBackground(context.applicationContext ?: context, c)
                 val today = c.clock.today()
                 when {
-                    loans != null -> widgetState(text, events, loans, today)
-                    fallback -> widgetState(text, events, emptyList(), today)
+                    loans != null -> widgetState(text, events, loans, today, dynamic)
+                    fallback -> widgetState(text, events, emptyList(), today, dynamic)
                     else -> return@withLock
                 }
             }
@@ -108,6 +125,40 @@ object WidgetUpdater {
             if (shown) runCatching { prefs(context).edit { putString(KEY_LANGUAGE, text.getString(R.string.ui_language)) } }
         }
     }
+
+    /**
+     * Опреснява копията [ids] на „Книга на деня“: книгата на деня от кеша на каталога (без мрежа,
+     * [loadBookOfTheDay]). Без каталог в кеша — приятелска бележка; ако четенето не успее (срок,
+     * грешка), остава показаното досега, освен при [fallback] (ново копие — старият изглед може да липсва).
+     */
+    internal suspend fun updateBooks(context: Context, ids: IntArray, fallback: Boolean) = withContext(Dispatchers.IO) {
+        mutex.withLock {
+            val manager = manager(context) ?: return@withLock
+            val c = (context.applicationContext as? AppContainerOwner)?.appContainer
+            val text = AppLanguage.localized(context.applicationContext ?: context)
+            val state = if (c == null) {
+                if (fallback) BookWidgetState(null) else return@withLock
+            } else {
+                val dynamic = dynamicColors(c)
+                val palette = load(SETTINGS_TIMEOUT_MS, "widget.settings") { c.settings.settings.first().themeStyle.palette }
+                val known = loadKnown(BOOK_TIMEOUT_MS, "widget.book") { loadBookOfTheDay(c, bookPrefs(context), c.clock.today()) }
+                when {
+                    known != null -> BookWidgetState(known.value?.toPick(), dynamic, palette ?: ThemePalette.YAVORETS)
+                    fallback -> BookWidgetState(null, dynamic, palette ?: ThemePalette.YAVORETS)
+                    else -> return@withLock
+                }
+            }
+            ids.forEach { id ->
+                runCatching { manager.updateAppWidget(id, BookWidgetViews.build(text, state)) }.logFailure("widget.book")
+            }
+        }
+    }
+
+    /** Прочетена стойност, която може да е `null` („няма“) — различава се от неуспешното четене. */
+    private class Known<T>(val value: T?)
+
+    private suspend fun <T> loadKnown(timeoutMs: Long, tag: String, block: suspend () -> T?): Known<T>? =
+        withTimeoutOrNull(timeoutMs) { runCatching { Known(block()) }.logFailure(tag).getOrNull() }
 
     /** [block] до [timeoutMs]; грешка или изтекъл срок — null (неизвестно). */
     private suspend fun <T> load(timeoutMs: Long, tag: String, block: suspend () -> T?): T? =
@@ -203,7 +254,7 @@ object WidgetUpdater {
 
     /**
      * Android 15+: генериран преглед в избора на уиджети — широкият изглед с примерните данни
-     * ([previewWidgetState]); цветовете се четат при показването (динамичните на системата).
+     * ([previewWidgetState]) и „Книга на деня“ с примерна корица; винаги във фирмените цветове.
      * setWidgetPreview може да върне false (ограничение на честотата) или да хвърли — тогава
      * остава previewLayout от widget_info.xml и се опитва пак по-късно.
      */
@@ -217,9 +268,29 @@ object WidgetUpdater {
         val ok = runCatching {
             val manager = manager(context) ?: return false
             val views = WidgetViews.build(context, previewWidgetState(context), WidgetViews.FullWideSize)
-            manager.setWidgetPreview(provider(context), AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN, views)
+            val book = BookWidgetViews.build(context, previewBookState(context))
+            val category = AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN
+            // И двата опита се правят; успехът е само ако са успели и двата (иначе — нов опит утре).
+            val main = manager.setWidgetPreview(provider(context), category, views)
+            val second = manager.setWidgetPreview(bookProvider(context), category, book)
+            main && second
         }.logFailure("widget.preview").getOrDefault(false)
         if (ok) prefs.edit { putString(KEY_STAMP, stamp) }
         return ok
+    }
+}
+
+/**
+ * Извън главната нишка; приемникът живее, докато [block] свърши (goAsync — до ~10 с).
+ * Извън истинско съобщение (напр. в тестовете) goAsync връща null.
+ */
+internal fun BroadcastReceiver.inWidgetScope(block: suspend () -> Unit) {
+    val pending: BroadcastReceiver.PendingResult? = goAsync()
+    WidgetUpdater.scope.launch {
+        try {
+            block()
+        } finally {
+            pending?.finish()
+        }
     }
 }

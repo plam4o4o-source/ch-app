@@ -9,6 +9,10 @@
   Размери: малък (2×2) — следващ срок или следващо събитие; широк (4×2, по подразбиране) —
   срокове, събитие и бутони „Сканирай“/„Каталог“. previewLayout — прегледът в избора на
   уиджети (Android 12–14, примерни данни); от Android 15 — генериран (WidgetUpdater.publishPreview).
+
+  Заключен екран (keyguard; на Pixel телефоните — по съобщения от Android 16 QPR2, не е проверено на устройство): когато
+  OPTION_APPWIDGET_HOST_CATEGORY е keyguard, копието показва само следващото събитие — без
+  срокове и брой заети книги (WidgetViews.forWidget).
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/widget_description"
@@ -22,4 +26,4 @@
     android:targetCellHeight="2"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"
-    android:widgetCategory="home_screen" />
+    android:widgetCategory="home_screen|keyguard" />

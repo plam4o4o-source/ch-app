@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Уиджет „Книга на деня“ (BookOfTheDayWidgetReceiver): всеки ден друга книга от каталога —
+  генерираната корица, заглавие и автор; докосването отваря книгата. Данните са публични
+  (каталогът), затова и на заключения екран. updatePeriodMillis = 0: опреснява се от общата
+  фонова задача на уиджетите (WidgetUpdater) — както уиджета „Читалище Яворец“, без отделна работа.
+  previewLayout — прегледът в избора (Android 12–14); от Android 15 — генериран (WidgetUpdater.publishPreview).
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_book_description"
+    android:initialLayout="@layout/widget_book"
+    android:previewLayout="@layout/widget_book_preview"
+    android:minWidth="180dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="180dp"
+    android:minResizeHeight="110dp"
+    android:targetCellWidth="3"
+    android:targetCellHeight="2"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen|keyguard" />

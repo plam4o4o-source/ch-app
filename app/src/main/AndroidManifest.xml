@@ -170,6 +170,19 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
+        <!-- Уиджет „Книга на деня“: книга от каталога по дата, с генерираната корица. -->
+        <receiver
+            android:name=".widget.BookOfTheDayWidgetReceiver"
+            android:exported="true"
+            android:label="@string/widget_book_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_book_info" />
+        </receiver>
+
         <!-- Резултат от инсталирането на обновление (само от системата). -->
         <receiver
             android:name=".update.UpdateInstallReceiver"

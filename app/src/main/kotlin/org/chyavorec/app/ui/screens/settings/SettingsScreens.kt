@@ -31,6 +31,7 @@ import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PersonRemove
 import androidx.compose.material.icons.outlined.PrivacyTip
+import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -93,6 +94,9 @@ import org.chyavorec.app.ui.theme.paletteAccent
 import org.chyavorec.app.ui.theme.paletteScheme
 import org.chyavorec.app.util.AppLanguage
 import org.chyavorec.app.util.Intents
+import org.chyavorec.app.widget.WidgetKind
+import org.chyavorec.app.widget.WidgetPinning
+import org.chyavorec.app.widget.WidgetUpdater
 
 @Composable
 private fun GroupTitle(text: String) = Text(
@@ -153,7 +157,8 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             }
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
                 SwitchItem(stringResource(R.string.settings_dynamic), stringResource(R.string.settings_dynamic_desc), s.dynamicColor) {
-                    scope.launch { c.settings.setDynamicColor(it) }
+                    // Уиджетът следва настройката — опреснява се веднага.
+                    scope.launch { c.settings.setDynamicColor(it); WidgetUpdater.refresh(context) }
                 }
             }
             NavItem(Icons.Outlined.Language, stringResource(R.string.settings_language), currentLanguageLabel()) { langDialog = true }
@@ -167,6 +172,26 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 s.shakeSurprise ?: shakeToSurpriseDefault(touchExploration),
             ) {
                 scope.launch { c.settings.setShakeSurprise(it) }
+            }
+
+            // Уиджети: само където началният екран позволява добавяне от приложението (Android 8+).
+            val pinFailed = stringResource(R.string.settings_widget_pin_failed)
+            if (remember(context) { WidgetPinning.supported(context) }) {
+                GroupTitle(stringResource(R.string.settings_widgets))
+                listOf(
+                    Triple(WidgetKind.MAIN, R.string.settings_widget_add, R.string.settings_widget_add_desc),
+                    Triple(WidgetKind.BOOK, R.string.settings_widget_book_add, R.string.settings_widget_book_add_desc),
+                ).forEach { (kind, title, desc) ->
+                    ListItem(
+                        headlineContent = { Text(stringResource(title)) },
+                        supportingContent = { Text(stringResource(desc)) },
+                        leadingContent = { Icon(Icons.Outlined.Widgets, null) },
+                        modifier = Modifier.clickable {
+                            // Успехът е системното прозорче на началния екран; бележка — само при отказ.
+                            if (!WidgetPinning.request(context, kind)) scope.launch { snackbar.showSnackbar(pinFailed) }
+                        },
+                    )
+                }
             }
 
             GroupTitle(stringResource(R.string.settings_notifications))

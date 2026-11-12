@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Уиджетът „Книга на деня“: генерираната корица отляво (Bitmap от BookWidgetCover), отдясно —
+  заглавката, заглавието и авторът; без каталог в кеша — приятелска бележка вместо тях.
+  Само изгледи, разрешени в RemoteViews.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    style="@style/Widget.Chitalishte.Root"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/widget_book_cover"
+        android:layout_width="62dp"
+        android:layout_height="88dp"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <include layout="@layout/widget_header" />
+
+        <TextView
+            android:id="@+id/widget_book_title"
+            style="@style/Widget.Chitalishte.Text.EventTitle"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/widget_book_author"
+            style="@style/Widget.Chitalishte.Text.Label"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/widget_book_empty"
+            style="@style/Widget.Chitalishte.Text.Label"
+            android:layout_marginTop="4dp"
+            android:maxLines="3"
+            android:text="@string/widget_book_empty"
+            android:textSize="13sp"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

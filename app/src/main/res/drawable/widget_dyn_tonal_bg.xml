@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Бутон „Каталог“ на уиджета с цветовете от тапета (виж widget_tonal_bg). -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetTop="10dp"
+    android:insetBottom="10dp">
+    <shape android:shape="rectangle">
+        <solid android:color="@color/widget_dyn_tonal_bg" />
+        <corners android:radius="14dp" />
+    </shape>
+</inset>

@@ -618,7 +618,7 @@
     <string name="settings_diagnostics">Диагностика</string>
     <string name="settings_diagnostics_desc">Дневник на грешките — само на това устройство</string>
     <string name="settings_dynamic">Цветове от тапета</string>
-    <string name="settings_dynamic_desc">Цветовете на телефона, взети от тапета, вместо тези на читалището</string>
+    <string name="settings_dynamic_desc">Цветовете на телефона, взети от тапета, вместо тези на читалището — и в уиджета</string>
     <string name="settings_language">Език</string>
     <string name="settings_legal">Информация</string>
     <string name="settings_notifications">Известия</string>
@@ -640,6 +640,12 @@
     <string name="settings_theme">Тема</string>
     <string name="settings_title">Настройки</string>
     <string name="settings_updates">Обновления</string>
+    <string name="settings_widget_add">Добави уиджета „Читалище Яворец“</string>
+    <string name="settings_widget_add_desc">Срокове за връщане, следващо събитие и бързо сканиране на началния екран</string>
+    <string name="settings_widget_book_add">Добави „Книга на деня“</string>
+    <string name="settings_widget_book_add_desc">Всеки ден друга книга от каталога на началния екран</string>
+    <string name="settings_widget_pin_failed">Началният екран не позволява добавяне оттук — добави уиджета с дълго натискане върху празно място.</string>
+    <string name="settings_widgets">Уиджети</string>
     <string name="share_as_image">Сподели като картинка</string>
     <string name="share_as_image_desc">Карта с QR код — за Instagram, Facebook, Viber…</string>
     <string name="share_as_link">Сподели връзката</string>
@@ -778,6 +784,11 @@
     <string name="want_title">Искам да прочета</string>
     <string name="want_undo">Отмени</string>
     <string name="whats_new_title">Какво ново във версия %1$s</string>
+    <string name="widget_book_description">Всеки ден друга книга от каталога на читалището — с корицата, заглавието и автора</string>
+    <string name="widget_book_empty">Отвори каталога в приложението, за да се зареди книга на деня</string>
+    <string name="widget_book_label">Книга на деня</string>
+    <string name="widget_book_preview_author">Иван Вазов</string>
+    <string name="widget_book_preview_title">Под игото</string>
     <string name="widget_description">Срокове за връщане, следващо събитие и бързо сканиране</string>
     <string name="widget_due_today">днес</string>
     <string name="widget_due_tomorrow">утре</string>

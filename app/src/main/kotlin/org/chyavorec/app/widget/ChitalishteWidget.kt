@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.util.Formatters
@@ -45,8 +44,13 @@ internal data class WidgetState(
     val loansTotal: String?,
     /** Сроковете, най-близкият пръв (заеманията без срок — накрая). */
     val groups: List<DueGroup>,
+    /** „Цветове от тапета“ са включени (Android 12+) — динамичните цветове на системата вместо фирмените. */
+    val dynamic: Boolean = false,
 ) {
     val hasLoans: Boolean get() = loansTotal != null && groups.isNotEmpty()
+
+    /** За заключения екран: само събитията — без брой книги и срокове (виж [WidgetViews.forWidget]). */
+    fun forKeyguard() = copy(loansTotal = null, groups = emptyList())
 }
 
 /** Без вход и без предстоящи събития. */
@@ -81,13 +85,13 @@ internal suspend fun loadWidgetLoans(c: AppContainer): List<Loan>? {
  * „просрочена“; без заглавия) и предстоящите събития. [context] е с езика на приложението
  * ([org.chyavorec.app.util.AppLanguage.localized]) — и надписите, и датите са на него.
  */
-internal fun widgetState(context: Context, events: List<Event>?, loans: List<Loan>, today: LocalDate): WidgetState {
+internal fun widgetState(context: Context, events: List<Event>?, loans: List<Loan>, today: LocalDate, dynamic: Boolean = false): WidgetState {
     val shown = events?.take(MAX_WIDGET_EVENTS)?.map { e ->
         WidgetEvent(e.title, listOfNotNull(Formatters.date(context, e.date), e.time).joinToString(", ").ifBlank { null })
     }
     val total = loans.size.takeIf { it > 0 }
         ?.let { context.resources.getQuantityString(R.plurals.widget_books_to_return, it, it) }
-    return WidgetState(shown, total, dueGroups(context, loans, today))
+    return WidgetState(shown, total, dueGroups(context, loans, today), dynamic)
 }
 
 /** Примерните данни на прегледа в избора на уиджети — като layout/widget_preview. */
@@ -154,23 +158,16 @@ class ChitalishteWidgetReceiver : AppWidgetProvider() {
         else super.onReceive(context, intent)
     }
 
-    /** Под Android 12 оформлението се избира по новия размер (от 12 — системата, от картата с размери). */
+    /**
+     * Под Android 12 оформлението се избира по новия размер (от 12 — системата, от картата с размери);
+     * копие, преместено на заключения екран, получава изглед без заемания.
+     */
     override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || WidgetViews.isKeyguard(newOptions)) {
             inBackground { WidgetUpdater.update(context, intArrayOf(appWidgetId), fallback = true) }
         }
     }
 
     /** Извън главната нишка; приемникът живее, докато [block] свърши (goAsync — до ~10 с). */
-    private fun inBackground(block: suspend () -> Unit) {
-        // Извън истинско съобщение (напр. в тестовете) — null.
-        val pending: PendingResult? = goAsync()
-        WidgetUpdater.scope.launch {
-            try {
-                block()
-            } finally {
-                pending?.finish()
-            }
-        }
-    }
+    private fun inBackground(block: suspend () -> Unit) = inWidgetScope(block)
 }

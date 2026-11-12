@@ -2,7 +2,7 @@
 <!--
   Фирмената палитра на уиджета (светла; тъмната е във values-night). Ползва се от
   оформленията на уиджета (layout/widget_*) и от фоновете им (drawable/widget_*).
-  От Android 12 — динамичните цветове на системата (values-v31, values-night-v31).
+  Динамичният вариант (Android 12+, при „Цветове от тапета“) — values-v31 и values-night-v31 (widget_dyn_*).
 -->
 <resources>
     <color name="widget_bg">#FFF5F0E8</color>
