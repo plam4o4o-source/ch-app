@@ -61,6 +61,7 @@ top_of() { local i; for i in 1 2 3 4; do sw_down 150; sleep 0.35; done; }
 tour() {  # $1 — етикет на конфигурацията
   CFG=$1; local p i
   restart; dims; DENS=$(dens)
+  [ -n "${TOUR_ROT:-}" ] && { rot $TOUR_ROT; sleep 2; ready >/dev/null; dims; log "TOUR_ROT=$TOUR_ROT: screen now ${W}x${H}"; }
   sec "T-$CFG. All screens ($(cfg_desc))"
   : > $OUT/a11y-$CFG.txt
   # Начало

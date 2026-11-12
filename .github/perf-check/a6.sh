@@ -13,7 +13,7 @@
 #            диалога на приложението и системния инсталатор; какво оцелява; „Настройки › Обновления“
 #   c26, c28, c36 — съвместимост: обиколка на всички екрани, завъртане и смърт на процеса, monkey 2000
 #            (c36: и предвиждащият жест „назад“ върху „Изненадай ме“)
-A6_PARTS=" a6new year35 yup35 land35 idle33 hi28 gfx35 upd35 c26 c28 c36 "
+A6_PARTS=" a6new year35 yup35 land35 crash26 idle33 hi28 gfx35 upd35 c26 c28 c36 "
 W20_PARTS="$W20_PARTS $A6_PARTS"
 A6=$H_/a6.py
 
@@ -444,6 +444,7 @@ part_a6() {
     gfx35) part_gfx35;;
     upd35) part_upd35;;
     c26|c28|c36) part_compat;;
+    crash26) part_crash26;;
   esac
   return 0
 }
@@ -454,19 +455,17 @@ part_land35() {
   anims 1
   warmup
   card_open >/dev/null; leave
-  sec "LD1. Landscape (rotation checked in the uiautomator hierarchy): the whole tour, light and dark"
-  if land_on; then
-    tour landscape-light
-    a cmd uimode night yes; sleep 3; tour landscape-dark; a cmd uimode night no; sleep 2
-    sec "LD2. The card and the fullscreen card in landscape (scrolled to the button)"
-    card_screen; sleep 2; dump; shot land/card-screen
-    for i in 1 2 3; do dump; p=$(xy text "$L_CARDSHOW"); [ -n "$p" ] && break; sw_up 300; sleep 1; done
-    shot land/card-screen-scrolled
-    if [ -n "$p" ]; then a input tap $p; sleep 3; eshot zz-land-fullscreen >/dev/null; log "fullscreen card in landscape: $(fullscreen_ok && echo yes || echo NO)"; back 1.5; else log "landscape: no 'Покажи картата' on the card screen: $(texts 8 | cut -c1-200)"; fi
-    sec "LD3. Year-less screens at 2400x1080: Home at rest after 30 s (frames)"
-    leave; ready; tab home; sleep 30; cpu_win land-home-30s 15
-    land_off
-  else log "LANDSCAPE: not achieved"; fi
+  sec "LD1. Landscape (rotation applied after each restart): the whole tour, light and dark"
+  TOUR_ROT=1 tour landscape-light
+  a cmd uimode night yes; sleep 3; TOUR_ROT=1 tour landscape-dark; a cmd uimode night no; sleep 2
+  sec "LD2. The card and the fullscreen card in landscape (scrolled to the button)"
+  rot 1; sleep 1; card_screen; sleep 2; dump; shot land/card-screen
+  for i in 1 2 3; do dump; p=$(xy text "$L_CARDSHOW"); [ -n "$p" ] && break; sw_up 300; sleep 1; done
+  shot land/card-screen-scrolled
+  if [ -n "$p" ]; then a input tap $p; sleep 3; shot land/card-fullscreen; log "fullscreen card in landscape: $(fullscreen_ok && echo yes || echo NO)"; back 1.5; else log "landscape: no 'Покажи картата' on the card screen: $(texts 8 | cut -c1-200)"; fi
+  sec "LD3. Home at rest after 30 s (frames)"
+  leave; ready; tab home; sleep 30; cpu_win land-home-30s 15
+  rot 0
   python3 $W20 a11yagg $OUT/a11y-*.txt | head -30 | tee -a $SUM
   all_sheets
   diag_end
@@ -508,4 +507,34 @@ part_yup35() {
   all_sheets
   diag_end
   use_pkg org.chyavorec.app
+}
+
+# ---------------------------------------------------------------- СРИВЪТ НА API 26: monkey със запис на екрана
+part_crash26() {
+  helper_install; dev_locale bg-BG || true
+  anims 1
+  warmup
+  local sd mode n=0 try crash rp
+  for try in 777:plain 777:rec 1357:rec 4242:rec 31337:rec 99:rec 2024:rec 5:rec 777:rec; do
+    IFS=: read sd mode <<< "$try"; n=$((n + 1))
+    sec "CR$n. Monkey 1500 events, seed $sd, $mode (the crash of round 2: seed 777, after 148 events)"
+    no_camera >/dev/null; restart
+    mark cr$n
+    if [ $mode = rec ]; then a "rm -f /sdcard/cr.mp4"; adb shell screenrecord --time-limit 150 --size 540x1200 --bit-rate 1500000 /sdcard/cr.mp4 >/dev/null 2>&1 & rp=$!; sleep 1; fi
+    timeout 900 adb shell monkey -p $PKG --pct-syskeys 0 --pct-anyevent 0 --throttle 80 -s $sd -v 1500 > $OUT/monkey-cr$n.txt 2>&1
+    crash=$(grep -c 'CRASH' $OUT/monkey-cr$n.txt)
+    log "CR$n seed $sd $mode: $(grep -E 'Events injected' $OUT/monkey-cr$n.txt | tr '\n' ' ') CRASH=$crash; FATAL in logcat since the start: $(since cr$n 'FATAL EXCEPTION' | wc -l)"
+    if [ $mode = rec ]; then
+      a "kill -2 \$(pidof screenrecord)" >/dev/null 2>&1; wait $rp 2>/dev/null; sleep 2
+      if [ "$crash" != 0 ]; then
+        mkdir -p $OUT/shots/crash26; timeout 60 adb pull /sdcard/cr.mp4 $OUT/cr$n.mp4 >/dev/null 2>&1
+        ffmpeg -loglevel error -sseof -6 -i $OUT/cr$n.mp4 -vf fps=3 $OUT/shots/crash26/cr$n-%02d.png 2>&1 | head -2
+        log "CR$n: $(ls $OUT/shots/crash26/cr$n-*.png 2>/dev/null | wc -l) frames of the last 6 s before the crash saved"
+      fi
+      rm -f $OUT/cr$n.mp4
+    fi
+    online; a am force-stop $PKG; sleep 2
+  done
+  all_sheets
+  diag_end
 }

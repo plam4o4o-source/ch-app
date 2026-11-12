@@ -179,7 +179,7 @@ jobs:
       fail-fast: false
       matrix:
         # API 33 google_apis x86_64, -gpu swangle_indirect; hi28, c28 — API 28; c26 — API 26; c36 — API 36.
-        part: [hi28, c26, land35, yup35, upd35]
+        part: [land35, crash26]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -202,7 +202,7 @@ jobs:
         env:
           STAGE_URL: https://raw.githubusercontent.com/${{ github.repository }}/emulator-results/${{ env.STAGE }}
         with:
-          api-level: ${{ matrix.part == 'c26' && '26' || contains(matrix.part, '28') && '28' || matrix.part == 'c36' && '36' || '33' }}
+          api-level: ${{ (matrix.part == 'c26' || matrix.part == 'crash26') && '26' || contains(matrix.part, '28') && '28' || matrix.part == 'c36' && '36' || '33' }}
           target: google_apis
           arch: x86_64
           profile: pixel_6
@@ -214,7 +214,7 @@ jobs:
         continue-on-error: true
         run: |
           O=out/${{ matrix.part }}; mkdir -p $O
-          echo "part=${{ matrix.part }} target=google_apis api=${{ matrix.part == 'c26' && '26' || contains(matrix.part, '28') && '28' || matrix.part == 'c36' && '36' || '33' }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > $O/job-status.txt
+          echo "part=${{ matrix.part }} target=google_apis api=${{ (matrix.part == 'c26' || matrix.part == 'crash26') && '26' || contains(matrix.part, '28') && '28' || matrix.part == 'c36' && '36' || '33' }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > $O/job-status.txt
           cat $O/job-status.txt
           rm -rf $O/rec $O/yr
           { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|segfault" | tail -20; } > $O/host-after-run.txt 2>&1 || true
