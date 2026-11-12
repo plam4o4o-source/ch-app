@@ -32,7 +32,7 @@ import kotlin.test.assertTrue
  * без нищо когато няма какво да се каже; не нощем; с изключена настройка — без заявки.
  */
 @RunWith(AndroidJUnit4::class)
-@Config(application = WorkerTestApp::class)
+@Config(application = WorkerTestApp::class, qualifiers = "bg")
 class WeeklyDigestStepTest {
     private val app get() = ApplicationProvider.getApplicationContext<WorkerTestApp>()
     private val nm get() = app.getSystemService(NotificationManager::class.java)
