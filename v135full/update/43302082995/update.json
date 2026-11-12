@@ -1,0 +1,11 @@
+{
+  "versionCode": 1507364,
+  "versionName": "1.2.35",
+  "apkUrl": "https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v135full/update/43302082995/app.apk",
+  "sha256": "3839eaf8e19495ea04fd75930fc031e7c833227f757fe4a768678af6fada376a",
+  "size": 4317894,
+  "minSdk": 26,
+  "notes": "• По-бърз старт и по-плавно първо отваряне на читателската карта.\n• Дребни подобрения и поправки.",
+  "notes_en": "• Faster start-up and a smoother first opening of the library card.\n• Minor improvements and fixes.",
+  "releaseUrl": "https://github.com/plam4o4o-source/ch-app/releases/tag/v1.2.35"
+}
