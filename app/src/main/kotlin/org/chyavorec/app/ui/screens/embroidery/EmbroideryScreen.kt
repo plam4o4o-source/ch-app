@@ -194,7 +194,7 @@ fun EmbroideryScreen(onBack: () -> Unit) {
         SavedPatternsSheet(
             vm.saved,
             onDismiss = { mine = false },
-            onOpen = { vm.editor.apply(it.pattern); mine = false },
+            onOpen = { vm.editor.load(it.pattern); mine = false },
             onDelete = { scope.launch { vm.delete(it.id); snackbar.showSnackbar(deletedMsg) } },
         )
     }
@@ -439,7 +439,7 @@ private fun TemplatePicker(editor: EmbroideryEditor) {
                 val pattern = remember(t) { t.pattern() }
                 Column(
                     Modifier.clip(RoundedCornerShape(10.dp))
-                        .clickable(onClickLabel = cd) { editor.apply(pattern) }
+                        .clickable(onClickLabel = cd) { editor.load(pattern) }
                         .semantics { contentDescription = cd }
                         .padding(4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,

@@ -110,7 +110,7 @@ class EmbroideryEditor(val board: StitchBoard = StitchBoard()) {
     }
 
     /** Мотив или запазена шевица върху платното — една стъпка, която се връща с „Върни“. */
-    fun apply(pattern: StitchPattern) {
+    fun load(pattern: StitchPattern) {
         if (board.load(pattern)) { drawVersion++; settled() }
     }
 

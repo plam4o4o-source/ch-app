@@ -152,7 +152,7 @@ class EmbroideryScreenshotTest {
 
     private fun withTemplate(t: EmbroideryTemplate, symmetry: Symmetry = Symmetry.NONE) = EmbroideryEditor().apply {
         setSymmetry(symmetry)
-        apply(t.pattern())
+        load(t.pattern())
     }
 
     @Test fun treeOfLifeLight() {
