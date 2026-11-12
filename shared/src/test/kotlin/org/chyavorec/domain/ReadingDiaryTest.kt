@@ -8,6 +8,7 @@ import org.chyavorec.domain.model.DiaryEntry
 import org.chyavorec.domain.model.HistoryItem
 import org.chyavorec.domain.model.ReadingDiary
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -145,5 +146,30 @@ class ReadingDiaryTest {
         assertTrue(plain.udcSections.containsAll(setOf(8, 5)))
         val rated = assertNotNull(ReadingRecommender.prefilter(historyBoth, engine::book, mapOf(vazov to 5, physics to 1)))
         assertEquals(setOf(8), rated.udcSections, "нехаресаният раздел не е кандидат")
+    }
+
+    private fun loan(id: String, title: String, back: String?, author: String = "Автор") = HistoryItem(id, null, title, author, "2026-10-01", back)
+
+    @Test fun promptsOnlyForRecentlyReturnedUnaskedBooksAtMostThree() {
+        val today = LocalDate.parse("2026-11-12")
+        val history = listOf(
+            loan("a", "Нова А", "2026-11-10"),
+            loan("b", "Нова Б", "2026-11-05"),
+            loan("c", "Нова В", "2026-11-01"),
+            loan("d", "Нова Г", "2026-10-20"),   // четвърта — над ограничението
+            loan("old", "Стара", "2026-08-01"),  // над месец
+            loan("open", "Още заета", null),
+            loan("future", "От бъдещето", "2026-12-01"),
+        )
+        assertEquals(setOf("a", "b", "c"), ReadingDiary.promptLoanIds(history, emptyList(), today))
+        // Питано веднъж („Не сега“ или оценка) — повече не.
+        val asked = listOf(entry("Нова А", 0, author = "Автор"), entry("Нова Б", 4, author = "Автор"))
+        assertEquals(setOf("c", "d"), ReadingDiary.promptLoanIds(history, asked, today))
+    }
+
+    @Test fun oneQuestionPerBookEvenWhenBorrowedTwice() {
+        val today = LocalDate.parse("2026-11-12")
+        val twice = listOf(loan("x1", "Двойна", "2026-11-10"), loan("x2", "Двойна", "2026-11-02"))
+        assertEquals(setOf("x1"), ReadingDiary.promptLoanIds(twice, emptyList(), today))
     }
 }

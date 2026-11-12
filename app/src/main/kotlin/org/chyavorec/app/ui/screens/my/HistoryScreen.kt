@@ -52,7 +52,21 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.chyavorec.app.R
+import org.chyavorec.app.data.local.ReadingDiaryEntity
+import org.chyavorec.app.data.local.ReadingDiaryStore
+import org.chyavorec.app.data.local.toEntry
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.ui.LocalAppContainer
+import org.chyavorec.app.ui.share.ShareImageHost
+import org.chyavorec.app.ui.share.rememberShareImageState
+import org.chyavorec.domain.model.ReadingDiary
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.BookCover
@@ -93,9 +107,20 @@ class HistoryViewModel(private val c: AppContainer) : ViewModel() {
     val selectedYear = MutableStateFlow<Int?>(null)
     val isDemo = c.readerServices.isDemo
 
+    /** „Читателски дневник“: оценките и бележките (само на телефона). */
+    val diary = ReadingDiaryStore(c.database.readingDiary(), c.clock)
+    val diaryEntries: StateFlow<List<ReadingDiaryEntity>> =
+        diary.entries.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
     @Volatile private var searcher: CatalogSearcher? = null
+    @Volatile private var lastHistory: List<HistoryItem>? = null
 
     init {
+        // Нова оценка променя „Подобни книги“ (харесаното тежи повече).
+        viewModelScope.launch {
+            diary.entries.map { ReadingDiary.ratings(it.map(ReadingDiaryEntity::toEntry)) }.distinctUntilChanged().drop(1)
+                .collect { lastHistory?.let { h -> recommend(h) } }
+        }
         viewModelScope.launch {
             if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
             c.authRepository.state.collect { s ->
@@ -133,8 +158,10 @@ class HistoryViewModel(private val c: AppContainer) : ViewModel() {
     private suspend fun recommend(history: List<HistoryItem>) {
         // През индекса в базата: само прочетените книги и кандидатите за препоръки, не целият каталог.
         val cat = searcher ?: c.catalogRepository.lookupSearcher()?.data?.also { searcher = it } ?: return
+        lastHistory = history
+        val ratings = diary.ratings()
         val (books, recs) = withContext(Dispatchers.Default) {
-            cat.books(history.mapNotNull { it.inv }.distinct()) to cat.recommend(history, limit = 12)
+            cat.books(history.mapNotNull { it.inv }.distinct()) to cat.recommend(history, 12, ratings)
         }
         _catalog.value = books
         _recommendations.value = recs
@@ -149,6 +176,18 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
     val catalog by vm.catalog.collectAsStateWithLifecycle()
     val year by vm.selectedYear.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
+    val c = LocalAppContainer.current
+    val context = LocalContext.current
+    val diaryEntries by vm.diaryEntries.collectAsStateWithLifecycle()
+    val entryByKey = remember(diaryEntries) { diaryEntries.associateBy { it.bookKey } }
+    // Въпросът „Хареса ли ти?“ — най-много за три наскоро върнати, още непитани книги.
+    val prompts = remember(state.data, diaryEntries) {
+        state.data?.let { ReadingDiary.promptLoanIds(it, diaryEntries.map(ReadingDiaryEntity::toEntry), c.clock.today()) }.orEmpty()
+    }
+    // „Препоръчай“ — картата се рисува извън екрана и се подава на системното „Сподели“.
+    val share = rememberShareImageState()
+    ShareImageHost(share)
+    var recommend by remember { mutableStateOf<ReadingDiaryEntity?>(null) }
     // Прочетените книги са лични — не в „Скорошни“ и в снимки на екрана.
     SecureScreen()
 
@@ -161,6 +200,14 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
                     val err = state.error
                     if (state.data == null && err != null && (err == AppError.Unauthorized || err is AppError.NotAvailable)) {
                         NeedsLogin(err, onLogin)
+                        // Гост: покана за дневника вместо оценки.
+                        if (err == AppError.Unauthorized) {
+                            Text(
+                                stringResource(R.string.diary_signin), style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 8.dp),
+                            )
+                        }
                         return@Column
                     }
                     SyncBanner(state.fromCache, state.syncedAt, state.refreshError)
@@ -209,7 +256,13 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
                                     }
                                 }
                                 itemsIndexedKeyed(list) { i, item ->
-                                    HistoryRow(item, catalog[item.inv], onOpen = { inv -> navigate(Routes.book(inv, personal = true)) }, modifier = Modifier.animateEntrance(i))
+                                    Column(Modifier.animateEntrance(i)) {
+                                        HistoryRow(item, catalog[item.inv], onOpen = { inv -> navigate(Routes.book(inv, personal = true)) })
+                                        HistoryDiary(
+                                            item, entryByKey[ReadingDiary.bookKey(item.title, item.author)], item.loanId in prompts,
+                                            vm.diary, onRecommend = { recommend = it },
+                                        )
+                                    }
                                 }
                             }
                             item("source") {
@@ -239,6 +292,12 @@ fun HistoryScreen(onBack: () -> Unit, navigate: (String) -> Unit, onLogin: () ->
                         }
                     }
                 }
+            }
+        }
+        recommend?.let { e ->
+            RecommendSheet(e, onDismiss = { recommend = null }) { include ->
+                recommend = null
+                share.share(recommendRequest(context, c.config.siteBaseUrl, e, include))
             }
         }
     }

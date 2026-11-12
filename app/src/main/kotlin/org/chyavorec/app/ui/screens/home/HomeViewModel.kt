@@ -82,6 +82,8 @@ class HomeViewModel(
     seasonal: Flow<Boolean>,
     /** Скритият с „×“ поздрав (вж. SettingsStore.dismissedOccasion). */
     dismissedOccasion: Flow<String?>,
+    /** Личните оценки от „Читателския дневник“ за препоръките „За теб“ (ключ на книгата → 1–5). */
+    private val diaryRatings: suspend () -> Map<String, Int> = { emptyMap() },
     /**
      * Колко най-много новините от кеша чакат обобщението на каталога, за да влязат в една
      * промяна. Тестовете подават минута — иначе резултатът им зависи от скоростта на диска.
@@ -296,7 +298,7 @@ class HomeViewModel(
      * свежестта на каталога се потвърждава често — препоръките се смятат наново само ако
      * нещо от тях наистина е различно.
      */
-    private class Recommendations(val readerId: String, val history: List<HistoryItem>, val catalog: Any, val books: List<CatalogBook>)
+    private class Recommendations(val readerId: String, val history: List<HistoryItem>, val catalog: Any, val books: List<CatalogBook>, val ratings: Map<String, Int> = emptyMap())
 
     @Volatile private var recommendations: Recommendations? = null
 
@@ -310,10 +312,12 @@ class HomeViewModel(
             val searcher = catalog.publishedSearcher()?.data ?: catalog.lookupSearcher(network = false)?.data
             searcher?.let {
                 val key: Any = (it as? FtsCatalogSearcher)?.state?.hash ?: it
-                val cached = recommendations?.takeIf { r -> r.readerId == readerId && r.catalog == key && r.history == history }
+                // Личните оценки от дневника тежат в препоръките — нова оценка прави кеша остарял.
+                val ratings = diaryRatings()
+                val cached = recommendations?.takeIf { r -> r.readerId == readerId && r.catalog == key && r.history == history && r.ratings == ratings }
                 withContext(Dispatchers.Default) {
-                    val recs = cached?.books ?: it.recommend(history, limit = ForYouPicks.LIMIT * 2)
-                        .also { books -> recommendations = Recommendations(readerId, history, key, books) }
+                    val recs = cached?.books ?: it.recommend(history, ForYouPicks.LIMIT * 2, ratings)
+                        .also { books -> recommendations = Recommendations(readerId, history, key, books, ratings) }
                     val read = history.mapNotNullTo(HashSet()) { h -> h.inv }
                     if (recs.isEmpty()) null else ForYouPicks.personal(recs, general, exclude = onHome + read)
                 }

@@ -59,6 +59,7 @@ import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.QrCodeView
 import org.chyavorec.app.ui.components.ShevitsaStrip
 import org.chyavorec.app.ui.components.addShevitsaMotif
+import org.chyavorec.app.ui.screens.my.RosetteMark
 import org.chyavorec.app.ui.screens.my.YearShareCard
 import org.chyavorec.app.ui.screens.my.YearSlideKind
 import org.chyavorec.app.ui.screens.my.shortAuthor
@@ -107,6 +108,13 @@ sealed interface ShareCard {
         override val fileName get() = "book-${book.inv}"
     }
 
+    /** „Препоръчай“ от читателския дневник: книгата с оценката; бележката — само ако читателят я е включил. */
+    data class Recommend(val book: CatalogBook, val rating: Int, val note: String?, override val url: String) : ShareCard {
+        override val format get() = ShareFormat.STORY
+        override val photoUrl: String? get() = null
+        override val fileName get() = "recommend"
+    }
+
     /** Новината — за лентата (4:5): там най-често се споделят новини. */
     data class News(val title: String, val dateLine: String?, val summary: String, override val photoUrl: String?, override val url: String) : ShareCard {
         override val format get() = ShareFormat.FEED
@@ -127,6 +135,7 @@ fun ShareCardContent(card: ShareCard, photo: ImageBitmap?) {
         is ShareCard.Event -> EventShareCard(card, photo)
         is ShareCard.Book -> BookShareCard(card, photo)
         is ShareCard.News -> NewsShareCard(card, photo)
+        is ShareCard.Recommend -> RecommendShareCard(card)
         is ShareCard.Year -> YearShareCard(card.summary, card.slide, card.url)
     }
 }
@@ -361,6 +370,44 @@ private fun BookShareCard(card: ShareCard.Book, photo: ImageBitmap?) {
         }
         Spacer(Modifier.weight(1f))
         Text(stringResource(R.string.share_card_book_cta), style = serif(18.sp, Paper, FontWeight.Normal), textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 14.dp))
+    }
+}
+
+/** „Препоръка от читател“: корица, заглавие, розетките и (по избор) бележката — без нищо друго лично. */
+@Composable
+private fun RecommendShareCard(card: ShareCard.Recommend) {
+    val b = card.book
+    BrandCardFrame(card.format, card.url, motif = ShevitsaMotif.ROSETTE) {
+        Spacer(Modifier.weight(0.4f))
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            ChitalishteTheme(mode = ThemeMode.LIGHT) { PersonalCovers { BookCover(b, width = 116.dp, showStatusDot = false, decorative = true) } }
+        }
+        Spacer(Modifier.height(18.dp))
+        CardLabel(stringResource(R.string.share_card_recommend), modifier = Modifier.align(Alignment.CenterHorizontally))
+        Spacer(Modifier.height(8.dp))
+        Text(b.title, style = serif(titleSize(b.title, 34f)), maxLines = 3, overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+        if (b.author.isNotBlank()) {
+            Spacer(Modifier.height(6.dp))
+            Text(b.authors.take(2).joinToString(", ") { shortAuthor(it) }, style = sans(15.sp, GoldSoft, FontWeight.SemiBold),
+                maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+        }
+        Spacer(Modifier.height(16.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            for (i in 1..5) {
+                RosetteMark(i <= card.rating, 34.dp, Brand.Gold, Brand.Gold.copy(alpha = 0.45f), Brand.Ink, Modifier.padding(horizontal = 3.dp))
+            }
+        }
+        card.note?.takeIf { it.isNotBlank() }?.let {
+            Spacer(Modifier.height(16.dp))
+            Text("“$it”", style = serif(19.sp, Paper, FontWeight.Normal), textAlign = TextAlign.Center, maxLines = 4,
+                overflow = TextOverflow.Ellipsis, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp))
+        }
+        Spacer(Modifier.weight(1f))
+        Text(stringResource(R.string.share_card_recommend_by, stringResource(R.string.org_short)), style = sans(13.sp, GoldSoft),
+            textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp))
+        Text(stringResource(R.string.share_card_recommend_cta), style = serif(17.sp, Paper, FontWeight.Normal), textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().padding(bottom = 14.dp))
     }
 }

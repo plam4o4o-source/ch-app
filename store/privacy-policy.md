@@ -38,7 +38,7 @@
 
 Скенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.
 
-История на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона.
+История на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона. „Читателски дневник“: оценките и бележките ти за прочетени книги остават само на телефона, не се изпращат никъде и се изтриват при изход; в споделената картинка „Препоръчай“ влиза само оценката, а бележката — само ако я включиш.
 
 Удължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
@@ -52,7 +52,7 @@
 
 ## Известия
 
-Известията се подготвят на устройството (периодична проверка за нови публикации, съобщения, срокове и наличност на книгите от „Искам да прочета“). Не се използват сървъри за push известия. Когато заключеният екран е настроен да скрива чувствително съдържание, личните известия (за срокове на заети книги, лични съобщения и книги от „Искам да прочета“, върнати на рафта) показват там само общ текст (напр. „Наближава срок за връщане на книга“) — без заглавия и съдържание. Тази настройка е в системните настройки на телефона (известия на заключен екран); при показване на цялото съдържание се виждат и заглавията.
+Известията се подготвят на устройството (периодична проверка за нови публикации, съобщения, срокове и наличност на книгите от „Искам да прочета“). Не се използват сървъри за push известия. Незадължителният седмичен преглед „Тази седмица в Яворец“ се съставя на телефона от публичните събития, новини и каталог. Когато заключеният екран е настроен да скрива чувствително съдържание, личните известия (за срокове на заети книги, лични съобщения и книги от „Искам да прочета“, върнати на рафта) показват там само общ текст (напр. „Наближава срок за връщане на книга“) — без заглавия и съдържание. Тази настройка е в системните настройки на телефона (известия на заключен екран); при показване на цялото съдържание се виждат и заглавията.
 
 ## Твоите права
 
@@ -108,7 +108,7 @@ Home-screen widget: if you add it, it shows only the number of books due and the
 
 Barcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.
 
-Reading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only.
+Reading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only. Reading diary: your ratings and notes on books you have read stay on the phone only, are never sent anywhere and are deleted when you sign out; the shared “Recommend” image carries only the rating, and the note only if you include it.
 
 Renewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
@@ -122,7 +122,7 @@ Calendar subscription: if you add the centre’s calendar (https://chyavorec.org
 
 ## Notifications
 
-Notifications are prepared on the device (periodic checks for new posts, messages, due dates and the availability of “Want to read” books). No push notification servers are used. When the lock screen is set to hide sensitive content, personal notifications (about due dates, personal messages and “Want to read” books back on the shelf) show only a generic text there (e.g. “A library book is due soon”) — no titles or content. This is chosen in the phone’s system settings (notifications on the lock screen); when all content is shown, titles are visible too.
+Notifications are prepared on the device (periodic checks for new posts, messages, due dates and the availability of “Want to read” books). No push notification servers are used. The optional weekly digest “This week in Yavorets” is put together on the phone from the public events, news and catalogue. When the lock screen is set to hide sensitive content, personal notifications (about due dates, personal messages and “Want to read” books back on the shelf) show only a generic text there (e.g. “A library book is due soon”) — no titles or content. This is chosen in the phone’s system settings (notifications on the lock screen); when all content is shown, titles are visible too.
 
 ## Your rights
 
