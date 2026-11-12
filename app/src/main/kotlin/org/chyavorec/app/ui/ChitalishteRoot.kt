@@ -452,12 +452,9 @@ private fun MainScaffold(
                     ) {
                         AppNavHost(nav, ::navigate, back, ::openLink, openExternal)
                     }
-                    AnimatedVisibility(
-                        visible = !online && chromeHidden.value,
-                        modifier = Modifier.align(Alignment.BottomCenter),
-                        enter = if (reduced) EnterTransition.None else fadeIn(),
-                        exit = if (reduced) ExitTransition.None else fadeOut(),
-                    ) { OfflineBar(insetNavigation = true, overDarkScene = true) }
+                    if (!online && chromeHidden.value) {
+                        OfflineBar(insetNavigation = true, overDarkScene = true, modifier = Modifier.align(Alignment.BottomCenter))
+                    }
                     // Веднъж след старта: шейдърите — подгрети във видеокартата (невидима точка).
                     ShaderWarmup()
                 }
