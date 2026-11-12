@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Динамичният вариант на уиджета (Android 12+, само когато „Цветове от тапета“ е включено в
+  настройките): ролите на Material 3 върху тоновете system_*; тъмните са във values-night-v31.
+  По подразбиране уиджетът е във фирмените цветове (values/widget_colors.xml). Без златен кант
+  и без лентата шевица. Просрочена книга — постоянните цветове за грешка на Material 3.
+-->
+<resources>
+    <color name="widget_dyn_bg">@android:color/system_neutral1_10</color>
+    <color name="widget_dyn_title">@android:color/system_accent1_600</color>
+    <color name="widget_dyn_text">@android:color/system_neutral1_900</color>
+    <color name="widget_dyn_muted">@android:color/system_neutral2_700</color>
+    <color name="widget_dyn_event_date">@android:color/system_accent2_600</color>
+    <color name="widget_dyn_button_bg">@android:color/system_accent1_600</color>
+    <color name="widget_dyn_button_text">@android:color/system_accent1_0</color>
+    <color name="widget_dyn_tonal_bg">@android:color/system_accent2_100</color>
+    <color name="widget_dyn_tonal_text">@android:color/system_accent2_900</color>
+    <color name="widget_dyn_overdue_bg">#FFF9DEDC</color>
+    <color name="widget_dyn_overdue_text">#FF410E0B</color>
+    <color name="widget_dyn_soon_bg">@android:color/system_accent3_100</color>
+    <color name="widget_dyn_soon_text">@android:color/system_accent3_900</color>
+    <color name="widget_dyn_ok_bg">@android:color/system_accent1_100</color>
+    <color name="widget_dyn_ok_text">@android:color/system_accent1_900</color>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Фон на уиджета с цветовете от тапета (Android 12+, настройка „Цветове от тапета“): без кант и без лентата шевица. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/widget_dyn_bg" />
+    <corners android:radius="20dp" />
+</shape>

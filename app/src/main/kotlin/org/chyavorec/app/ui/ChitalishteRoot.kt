@@ -3,6 +3,7 @@ package org.chyavorec.app.ui
 import org.chyavorec.app.ui.components.ProvidePowerSaveMode
 import org.chyavorec.app.ui.components.ShaderWarmup
 import org.chyavorec.app.ui.components.LocalAppChromeHidden
+import org.chyavorec.app.ui.components.LocalRailEmblemShown
 import android.net.Uri
 import android.os.Build
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -426,8 +427,9 @@ private fun MainScaffold(
                     Column {
                         // Без долна лента под нея лентата „няма връзка“ сама отстъпва от системната навигация.
                         val barBelow = topLevel && !wide
+                        // Сцена на цял екран (HideAppChrome) — лентата е тъмно хапче отгоре ѝ, не пергаментена ивица под нея.
                         AnimatedVisibility(
-                            !online,
+                            !online && !chromeHidden.value,
                             enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(),
                             exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
                         ) { OfflineBar(insetNavigation = !barBelow) }
@@ -449,8 +451,13 @@ private fun MainScaffold(
                         LocalTabReselect provides reselect,
                         LocalSearchShortcut provides searchShortcut,
                         LocalAppChromeHidden provides chromeHidden,
+                        // Таблет: емблемата е в страничната лента — не и в заглавката на раздела.
+                        LocalRailEmblemShown provides (wide && !compactHeight),
                     ) {
                         AppNavHost(nav, ::navigate, back, ::openLink, openExternal)
+                    }
+                    if (!online && chromeHidden.value) {
+                        OfflineBar(insetNavigation = true, overDarkScene = true, modifier = Modifier.align(Alignment.BottomCenter))
                     }
                     // Веднъж след старта: шейдърите — подгрети във видеокартата (невидима точка).
                     ShaderWarmup()

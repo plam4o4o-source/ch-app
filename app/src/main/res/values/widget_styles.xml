@@ -4,7 +4,7 @@
   избора на уиджети и началното (зареждане). Цветовете — от res/values*/widget_colors.xml.
 -->
 <resources>
-    <!-- Целият уиджет: фонът (заоблен; под Android 12 — със златен кант) и вътрешният отстъп. -->
+    <!-- Целият уиджет: фонът (заоблен, със златен кант и лента шевица) и вътрешният отстъп. -->
     <style name="Widget.Chitalishte.Root" parent="">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -23,11 +23,12 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!-- Името в заглавката — със системния serif (Cormorant не може в RemoteViews). -->
+    <!-- Името в заглавката — Cormorant (шрифт от ресурсите на приложението; началният екран
+         надува оформлението с ресурсите на приложението). По-едър от 15sp: Cormorant е дребен. -->
     <style name="Widget.Chitalishte.Text.Title">
-        <item name="android:fontFamily">serif</item>
+        <item name="android:fontFamily">@font/cormorant_garamond_semibold</item>
         <item name="android:textColor">@color/widget_title</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">17sp</item>
     </style>
 
     <!-- „Следващо събитие“, „2 книги за връщане“ … -->

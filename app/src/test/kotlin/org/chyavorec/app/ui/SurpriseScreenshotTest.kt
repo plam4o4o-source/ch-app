@@ -11,6 +11,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -149,6 +150,45 @@ class SurpriseScreenshotTest {
         // „Затвори“ — обратно в каталога.
         compose.onAllNodes(hasContentDescription("Затвори") and hasClickAction()).onFirst().performClick()
         compose.waitUntil(5_000) { compose.onAllNodes(hasText("Към книгата")).fetchSemanticsNodes().isEmpty() }
+    }
+
+    /**
+     * Изненадата е центрирана, а не залепена горе: на таблет (хоризонтално) тестето и резултатът са един до
+     * друг, на телефон хоризонтално — също; лентата „няма връзка“ е тъмно хапче върху сцената.
+     */
+    @Config(qualifiers = "bg-w1280dp-h800dp-land-hdpi")
+    @Test fun tabletLandscapeIsBalanced() {
+        launch()
+        surprise()
+        awaitReveal()
+        shot("99-surprise-tablet-landscape")
+        assertCentred()
+    }
+
+    @Config(qualifiers = "bg-w891dp-h411dp-land-xxhdpi")
+    @Test fun phoneLandscapeIsBalanced() {
+        launch()
+        surprise()
+        awaitReveal()
+        shot("99-surprise-phone-landscape")
+        assertCentred()
+    }
+
+    @Config(qualifiers = "bg-w800dp-h1280dp-xhdpi")
+    @Test fun tabletPortraitIsBalanced() {
+        launch()
+        surprise()
+        awaitReveal()
+        shot("99-surprise-tablet-portrait")
+        assertCentred()
+    }
+
+    /** Заглавието на предложението не е в горната четвърт и бутоните не са в долната — групата е по средата. */
+    private fun assertCentred() {
+        val root = compose.onRoot().fetchSemanticsNode().boundsInRoot
+        val buttons = compose.onAllNodes(hasText("Към книгата") and hasClickAction()).onFirst().fetchSemanticsNode().boundsInRoot
+        val centre = (buttons.top + buttons.bottom) / 2
+        check(centre > root.height * 0.3f && centre < root.height * 0.85f) { "бутоните са на $centre от ${root.height}" }
     }
 
     /** Намалено движение: без тесте — резултатът просто се появява. */

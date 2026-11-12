@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Тъмният вариант на динамичните цветове на уиджета (виж values-v31/widget_dyn_colors.xml). -->
+<resources>
+    <color name="widget_dyn_bg">@android:color/system_neutral1_900</color>
+    <color name="widget_dyn_title">@android:color/system_accent1_200</color>
+    <color name="widget_dyn_text">@android:color/system_neutral1_100</color>
+    <color name="widget_dyn_muted">@android:color/system_neutral2_200</color>
+    <color name="widget_dyn_event_date">@android:color/system_accent2_200</color>
+    <color name="widget_dyn_button_bg">@android:color/system_accent1_200</color>
+    <color name="widget_dyn_button_text">@android:color/system_accent1_800</color>
+    <color name="widget_dyn_tonal_bg">@android:color/system_accent2_700</color>
+    <color name="widget_dyn_tonal_text">@android:color/system_accent2_100</color>
+    <color name="widget_dyn_overdue_bg">#FF8C1D18</color>
+    <color name="widget_dyn_overdue_text">#FFF9DEDC</color>
+    <color name="widget_dyn_soon_bg">@android:color/system_accent3_700</color>
+    <color name="widget_dyn_soon_text">@android:color/system_accent3_100</color>
+    <color name="widget_dyn_ok_bg">@android:color/system_accent1_700</color>
+    <color name="widget_dyn_ok_text">@android:color/system_accent1_100</color>
+</resources>

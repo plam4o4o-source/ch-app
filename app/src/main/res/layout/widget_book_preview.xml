@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Преглед на „Книга на деня“ в избора на уиджети (android:previewLayout, Android 12–14): същото
+  оформление със статична корица и примерни текстове. От Android 15 прегледът се генерира
+  (WidgetUpdater.publishPreview) с корицата от BookWidgetCover.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    style="@style/Widget.Chitalishte.Root"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="56dp"
+        android:layout_height="80dp"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/widget_book_preview_cover" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/widget_title"
+            style="@style/Widget.Chitalishte.Text.Title"
+            android:text="@string/widget_book_label" />
+
+        <TextView
+            style="@style/Widget.Chitalishte.Text.EventTitle"
+            android:layout_marginTop="2dp"
+            android:text="@string/widget_book_preview_title" />
+
+        <TextView
+            style="@style/Widget.Chitalishte.Text.Label"
+            android:text="@string/widget_book_preview_author"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

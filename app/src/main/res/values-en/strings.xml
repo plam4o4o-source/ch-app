@@ -638,7 +638,7 @@
     <string name="settings_diagnostics">Diagnostics</string>
     <string name="settings_diagnostics_desc">Error log — kept on this device only</string>
     <string name="settings_dynamic">Colours from wallpaper</string>
-    <string name="settings_dynamic_desc">Material You colours from your wallpaper instead of the centre’s</string>
+    <string name="settings_dynamic_desc">Material You colours from your wallpaper instead of the centre’s — widgets too</string>
     <string name="settings_language">Language</string>
     <string name="settings_legal">Information</string>
     <string name="settings_notifications">Notifications</string>
@@ -660,6 +660,12 @@
     <string name="settings_theme">Theme</string>
     <string name="settings_title">Settings</string>
     <string name="settings_updates">Updates</string>
+    <string name="settings_widget_add">Add the “Chitalishte Yavorets” widget</string>
+    <string name="settings_widget_add_desc">Due dates, the next event and a quick scan on your home screen</string>
+    <string name="settings_widget_book_add">Add “Book of the day”</string>
+    <string name="settings_widget_book_add_desc">A different catalogue book on your home screen every day</string>
+    <string name="settings_widget_pin_failed">Your home screen can’t add it from here — long-press an empty spot to add the widget.</string>
+    <string name="settings_widgets">Widgets</string>
     <string name="share_as_image">Share as an image</string>
     <string name="share_as_image_desc">A card with a QR code — for Instagram, Facebook, Viber…</string>
     <string name="share_as_link">Share the link</string>
@@ -799,6 +805,11 @@
     <string name="want_title">Want to read</string>
     <string name="want_undo">Undo</string>
     <string name="whats_new_title">What’s new in version %1$s</string>
+    <string name="widget_book_description">A different book from the library catalogue every day, with its cover, title and author</string>
+    <string name="widget_book_empty">Open the catalogue in the app to load today’s book</string>
+    <string name="widget_book_label">Book of the day</string>
+    <string name="widget_book_preview_author">Ivan Vazov</string>
+    <string name="widget_book_preview_title">Under the Yoke</string>
     <string name="widget_description">Due dates, the next event and a quick scan</string>
     <string name="widget_due_today">today</string>
     <string name="widget_due_tomorrow">tomorrow</string>

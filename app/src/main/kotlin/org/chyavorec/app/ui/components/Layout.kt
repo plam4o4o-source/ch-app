@@ -241,8 +241,10 @@ fun AppTopBar(
         modifier = Modifier.screenPane(title).nightCloth(),
         title = {
             Row(hiddenSemantics, verticalAlignment = Alignment.CenterVertically) {
-                Emblem(34.dp)
-                Spacer(Modifier.width(12.dp))
+                if (!LocalRailEmblemShown.current) {
+                    Emblem(34.dp)
+                    Spacer(Modifier.width(12.dp))
+                }
                 // Заглавието на основен раздел — над заглавките на разделите под него. При едър шрифт
                 // по-дългото („Новини и събития“) се смалява до 3/4, вместо да се реже („Новини и съби…“);
                 // многоточие — само ако и така не стига (както етикетите на долната лента).
@@ -368,6 +370,9 @@ fun InfoRow(label: String, value: String?, modifier: Modifier = Modifier, copyab
 
 /** Скрити долна/странична лента на приложението (сцена на цял екран над раздела) — от корена. */
 val LocalAppChromeHidden = compositionLocalOf<MutableState<Boolean>?> { null }
+
+/** Страничната лента (таблет) вече показва емблемата — заглавката на раздела я пропуска (да няма две печата един до друг). */
+val LocalRailEmblemShown = compositionLocalOf { false }
 
 /** Докато е в композицията, лентите на приложението са скрити (напр. „Изненадай ме“). */
 @Composable
