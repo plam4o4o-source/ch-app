@@ -2,6 +2,147 @@
 # Генератор на values/strings.xml (bg) и values-en/strings.xml (en) — един източник за двата езика.
 # Изпълнение от корена на проекта: python3 tools/generate_strings.py
 # key: (bg, en)
+# Вълна 21 „greet“: честитки, преки пътища на началния екран, „Извези шевица“.
+_W21 = {
+"greeting_send": ("Изпрати честитка", "Send a greeting card"),
+"greeting_composer_title": ("Честитка от Яворец", "A greeting from Yavorets"),
+"greeting_composer_text": ("Картичката се създава на телефона и излиза от него само когато я споделите.", "The card is made on your phone and leaves it only when you share it."),
+"greeting_line_label": ("Лично за (по желание)", "Personal line (optional)"),
+"greeting_line_placeholder": ("Например: За баба Мария", "For example: For Grandma Maria"),
+"greeting_line_support": ("До %1$d знака — букви, цифри и обичайна пунктуация", "Up to %1$d characters — letters, digits and ordinary punctuation"),
+"greeting_share": ("Сподели картичката", "Share the card"),
+"greeting_card_label": ("Честитка", "Greeting"),
+"greeting_preview_cd": ("Преглед на картичката: %1$s. %2$s", "Card preview: %1$s. %2$s"),
+"greeting_title_spring": ("Честита пролет!", "Happy spring!"),
+"greeting_wish_spring": ("Нека новата пролет донесе светлина, здраве и радост във всеки дом.", "May the new spring bring light, health and joy to every home."),
+"greeting_title_summer": ("Хубаво лято!", "A lovely summer!"),
+"greeting_wish_summer": ("Най-дългият ден в годината — нека бъде светъл и за вас.", "The longest day of the year — may it be bright for you, too."),
+"greeting_title_autumn": ("Красива есен!", "A beautiful autumn!"),
+"greeting_wish_autumn": ("Нека есента ви донесе богата трапеза, топли вечери и хубави книги.", "May autumn bring you a rich table, warm evenings and good books."),
+"greeting_title_winter": ("Светла зима!", "A bright winter!"),
+"greeting_wish_winter": ("От днес денят расте. Нека светлината и топлината са с вас.", "From today the days grow longer. May light and warmth be with you."),
+"greeting_title_new_year": ("Честита Нова година!", "Happy New Year!"),
+"greeting_wish_new_year": ("Сурва, сурва година, весела година! Здраве, радост и късмет през цялата година.", "Surva, surva godina — a merry year! Health, joy and luck all year long."),
+"greeting_title_liberation": ("Честит 3 март!", "Happy 3 March!"),
+"greeting_wish_liberation": ("Честит Ден на Освобождението! Поклон пред всички, дали живота си за свободна България.", "Happy Liberation Day! Honour to all who gave their lives for a free Bulgaria."),
+"greeting_title_labour": ("Честит 1 май!", "Happy 1 May!"),
+"greeting_wish_labour": ("Честит празник на всички, които работят с ръце, ум и сърце!", "Happy holiday to everyone who works with hands, mind and heart!"),
+"greeting_title_gergyovden": ("Честит Гергьовден!", "Happy St George’s Day!"),
+"greeting_wish_gergyovden": ("Здраве, сила и берекет! Честит имен ден на Георги, Гергана и всички, които празнуват.", "Health, strength and abundance! Happy name day to Georgi, Gergana and everyone celebrating."),
+"greeting_title_may24": ("Честит 24 май!", "Happy 24 May!"),
+"greeting_wish_may24": ("Честит празник на българската азбука, на просветата и културата!", "Happy day of the Bulgarian alphabet, of education and culture!"),
+"greeting_title_unification": ("Честито Съединение!", "Happy Unification Day!"),
+"greeting_wish_unification": ("Съединението прави силата. Честит празник на всички българи!", "Unity makes strength. Happy holiday to all Bulgarians!"),
+"greeting_title_independence": ("Честита Независимост!", "Happy Independence Day!"),
+"greeting_wish_independence": ("Честит празник! Нека пазим свободата си и българското слово.", "Happy holiday! May we keep our freedom and the Bulgarian word."),
+"greeting_title_easter": ("Христос воскресе!", "Christ is risen!"),
+"greeting_wish_easter": ("Честит Великден! Нека червеното яйце донесе здраве, мир и радост във всеки дом.", "Happy Easter! May the red egg bring health, peace and joy to every home."),
+"greeting_title_christmas_eve": ("Весела Бъдни вечер!", "Happy Christmas Eve!"),
+"greeting_wish_christmas_eve": ("Нека трапезата е богата, а домът — топъл и пълен с обич.", "May the table be rich and the home warm and full of love."),
+"greeting_title_christmas": ("Христос се роди!", "Merry Christmas!"),
+"greeting_wish_christmas": ("Честито Рождество Христово! Мир, здраве и радост за вас и близките ви.", "Merry Christmas! Peace, health and joy to you and your loved ones."),
+"greeting_title_levski_birth": ("Ден на Апостола", "The Apostle’s birthday"),
+"greeting_wish_levski_birth": ("Днес е роден Васил Левски — Апостолът на свободата. Помним го с благодарност.", "Today Vasil Levski, the Apostle of Freedom, was born. We remember him with gratitude."),
+"greeting_title_enlighteners": ("Ден на будителите", "Enlighteners’ Day"),
+"greeting_wish_enlighteners": ("Почит към народните будители и към всички, които пазят българското слово живо!", "Honour to the national enlighteners and to everyone who keeps the Bulgarian word alive!"),
+"greeting_title_children_book": ("Ден на детската книга", "Children’s Book Day"),
+"greeting_wish_children_book": ("Нека всяко дете открие книга, която да обикне. Приятно четене!", "May every child find a book to love. Happy reading!"),
+"greeting_title_book_day": ("Честит Ден на книгата!", "Happy World Book Day!"),
+"greeting_wish_book_day": ("Нека до вас винаги има хубава книга. Приятно четене!", "May there always be a good book beside you. Happy reading!"),
+"greeting_title_children_day": ("Честит Ден на детето!", "Happy Children’s Day!"),
+"greeting_wish_children_day": ("Усмивки, игри, приказки и много обич за всички деца!", "Smiles, games, stories and lots of love for all children!"),
+"greeting_title_jordan": ("Честит Йордановден!", "Happy Epiphany!"),
+"greeting_wish_jordan": ("Богоявление Господне. Здраве и благослов за вас и близките ви! Честит имен ден на всички, които празнуват.", "The Epiphany of the Lord. Health and blessings to you and your loved ones! Happy name day to everyone celebrating."),
+"greeting_title_babinden": ("Честит Бабинден!", "Happy Babinden!"),
+"greeting_wish_babinden": ("Здраве и дълги години на всички баби и майки — с почит и обич!", "Health and long years to all grandmothers and mothers — with respect and love!"),
+"greeting_title_trifon": ("Наздраве за Трифон Зарезан!", "Cheers for Trifon Zarezan!"),
+"greeting_wish_trifon": ("Нека лозите родят, а чашите са пълни с радост. Наздраве!", "May the vines bear fruit and the glasses be full of joy. Cheers!"),
+"greeting_title_baba_marta": ("Честита Баба Марта!", "Happy Baba Marta!"),
+"greeting_wish_baba_marta": ("Бъдете здрави и честити! Нека мартеницата ви донесе здраве, късмет и усмивки.", "Be healthy and happy! May the martenitsa bring you health, luck and smiles."),
+"greeting_title_lazarovden": ("Честит Лазаровден!", "Happy Lazarus Day!"),
+"greeting_wish_lazarovden": ("Нека песента на лазарките донесе здраве и берекет. Честит имен ден на Лазар, Лазарина и всички, които празнуват!", "May the song of the Lazarki bring health and abundance. Happy name day to Lazar, Lazarina and everyone celebrating!"),
+"greeting_title_tsvetnitsa": ("Честита Цветница!", "Happy Palm Sunday!"),
+"greeting_wish_tsvetnitsa": ("Нека домът ви разцъфти от здраве и радост. Честит имен ден на всички с имена на цветя!", "May your home bloom with health and joy. Happy name day to everyone named after a flower!"),
+"greeting_title_forgiveness": ("Сирни заговезни", "Forgiveness Sunday"),
+"greeting_wish_forgiveness": ("Простено да ти е! Нека започнем наново — със светло сърце и мир в душата.", "You are forgiven! May we begin anew — with a bright heart and peace in the soul."),
+"greeting_title_ascension": ("Честит Спасовден!", "Happy Ascension Day!"),
+"greeting_wish_ascension": ("Възнесение Господне. Здраве и благослов! Честит имен ден на всички, които празнуват.", "The Ascension of the Lord. Health and blessings! Happy name day to everyone celebrating."),
+"greeting_title_enyovden": ("Честит Еньовден!", "Happy Enyovden!"),
+"greeting_wish_enyovden": ("Нека билките и утринната роса ви дарят със здраве и сила през цялата година.", "May the herbs and the morning dew give you health and strength all year."),
+"greeting_title_ilinden": ("Честит Илинден!", "Happy St Elijah’s Day!"),
+"greeting_wish_ilinden": ("Честит имен ден на Илия, Илияна и всички, които празнуват! Здраве и берекет.", "Happy name day to Iliya, Iliyana and everyone celebrating! Health and abundance."),
+"greeting_title_assumption": ("Честита Голяма Богородица!", "Happy Dormition Day!"),
+"greeting_wish_assumption": ("Успение на Пресвета Богородица. Здраве и благодат! Честит имен ден на Мария, Мариана и всички, които празнуват.", "The Dormition of the Most Holy Mother of God. Health and grace! Happy name day to Maria, Mariana and everyone celebrating."),
+"greeting_title_dimitrovden": ("Честит Димитровден!", "Happy St Demetrius’ Day!"),
+"greeting_wish_dimitrovden": ("Честит имен ден на Димитър, Димитрина, Митко и всички, които празнуват! Здраве и берекет.", "Happy name day to Dimitar, Dimitrina, Mitko and everyone celebrating! Health and abundance."),
+"greeting_title_nikulden": ("Честит Никулден!", "Happy St Nicholas’ Day!"),
+"greeting_wish_nikulden": ("Честит имен ден на Никола, Николай, Николина и всички, които празнуват! Спокойни води и богата трапеза.", "Happy name day to Nikola, Nikolay, Nikolina and everyone celebrating! Calm waters and a rich table."),
+"greeting_title_ignazhden": ("Честит Игнажден!", "Happy Ignazhden!"),
+"greeting_wish_ignazhden": ("Започват коледните празници. Нека първият гост донесе късмет и берекет в дома ви!", "The Christmas season begins. May your first guest bring luck and abundance to your home!"),
+# Закачане на пряк път на началния екран.
+"pin_add": ("Добави на началния екран", "Add to home screen"),
+"pin_more_cd": ("Още действия", "More actions"),
+"pin_sheet_text": ("Пряк път на началния екран на телефона, който отваря избраното с един допир. Етикетът не показва лични данни.", "A shortcut on your phone’s home screen that opens the chosen screen with one tap. The label shows no personal data."),
+"pin_failed": ("Прекият път не беше добавен.", "The shortcut wasn’t added."),
+"pin_my_books": ("Моите книги", "My books"),
+"pin_events": ("Събития", "Events"),
+"pin_news": ("Новини", "News"),
+"pin_card": ("Читателска карта", "Library card"),
+"pin_embroidery": ("Шевица", "Embroidery"),
+"pin_event_long": ("Събитие: %1$s", "Event: %1$s"),
+# „Извези шевица“.
+"embroidery_title": ("Извези шевица", "Embroider a pattern"),
+"more_embroidery_desc": ("Бод по бод, като на кърпа", "Stitch by stitch, like on a towel"),
+"embroidery_hint": ("Докоснете или плъзнете по платното, за да сложите бод. Докосване върху бод със същия цвят го маха.", "Tap or drag on the canvas to place a stitch. Tapping a stitch of the same colour removes it."),
+"embroidery_canvas_cd": ("Платно за шевица, %1$d на %2$d клетки, %3$d бода. Рисува се с пръст; за екранен четец има режим с курсор.", "Embroidery canvas, %1$d by %2$d cells, %3$d stitches. Draw with a finger; for screen readers there is a cursor mode."),
+"embroidery_colour_burgundy": ("Бордо", "Burgundy"),
+"embroidery_colour_gold": ("Злато", "Gold"),
+"embroidery_colour_black": ("Черно", "Black"),
+"embroidery_colour_cream": ("Кремаво", "Cream"),
+"embroidery_colour_green": ("Зелено", "Green"),
+"embroidery_colours": ("Цвят на конеца", "Thread colour"),
+"embroidery_tool_stitch": ("Бод", "Stitch"),
+"embroidery_tool_erase": ("Гума", "Eraser"),
+"embroidery_mirror": ("Огледало", "Mirror"),
+"embroidery_mirror_none": ("Без", "Off"),
+"embroidery_mirror_two": ("Двойно", "Two-way"),
+"embroidery_mirror_four": ("Четворно", "Four-way"),
+"embroidery_undo": ("Върни", "Undo"),
+"embroidery_redo": ("Повтори", "Redo"),
+"embroidery_clear": ("Изчисти платното", "Clear the canvas"),
+"embroidery_templates": ("Мотиви за начало", "Starting motifs"),
+"embroidery_tpl_rhombus": ("Ромб", "Rhombus"),
+"embroidery_tpl_rosette": ("Осморъка", "Rosette"),
+"embroidery_tpl_tree": ("Дърво на живота", "Tree of life"),
+"embroidery_tpl_zigzag": ("Кривулица", "Zigzag"),
+"embroidery_tpl_cd": ("Започни от мотива „%1$s“", "Start from the “%1$s” motif"),
+"embroidery_save": ("Запази шевицата", "Save the pattern"),
+"embroidery_saved": ("Шевицата е запазена", "Pattern saved"),
+"embroidery_save_empty": ("Първо извезете нещо.", "Stitch something first."),
+"embroidery_save_full": ("Може да пазите до %1$d шевици — изтрийте някоя.", "You can keep up to %1$d patterns — delete one first."),
+"embroidery_mine": ("Моите шевици", "My patterns"),
+"embroidery_mine_empty": ("Още няма запазени шевици.", "No saved patterns yet."),
+"embroidery_open_item": ("Отвори шевицата от %1$s", "Open the pattern from %1$s"),
+"embroidery_delete": ("Изтрий", "Delete"),
+"embroidery_deleted": ("Шевицата е изтрита", "Pattern deleted"),
+"embroidery_share": ("Сподели като картичка", "Share as a card"),
+"embroidery_share_empty": ("Първо извезете нещо, за да го споделите.", "Stitch something first to share it."),
+"embroidery_cursor": ("Курсор", "Cursor"),
+"embroidery_cursor_pos": ("Ред %1$d, колона %2$d: %3$s", "Row %1$d, column %2$d: %3$s"),
+"embroidery_cell_empty": ("празно", "empty"),
+"embroidery_cell_stitch": ("%1$s бод", "%1$s stitch"),
+"embroidery_up": ("Нагоре", "Up"),
+"embroidery_down": ("Надолу", "Down"),
+"embroidery_left": ("Наляво", "Left"),
+"embroidery_right": ("Надясно", "Right"),
+"embroidery_place": ("Постави бод", "Place stitch"),
+"embroidery_remove": ("Махни бод", "Remove stitch"),
+"embroidery_card_label": ("Моята шевица", "My embroidery"),
+"embroidery_card_note": ("Извезана в приложението на читалището", "Stitched in the community centre app"),
+"embroidery_card_cd": ("Шевица от %1$d бода", "Embroidery of %1$d stitches"),
+"embroidery_stitches": ("%1$d бода", "%1$d stitches"),
+}
+
 S = {
 "app_title": ("Читалище Яворец", "Chitalishte Yavorets"),
 "app_subtitle": ("НЧ „Васил Левски – 1922“", "Community Centre “Vasil Levski – 1922”"),
@@ -975,6 +1116,8 @@ PRIVACY_BG = """Последна актуализация: 10 ноември 202
 
 Картинки за споделяне: картинките (на събитие, книга, новина или от „Моята читателска година“) се създават на телефона и излизат от него само ако ти избереш да ги споделиш и къде.
 
+Честитки, шевици и преки пътища: личният ред на честитката не се пази; шевиците, които извезваш, се пазят само на телефона (до 8 и една чернова) и излизат от него само като картинка, ако ги споделиш; прекият път на началния екран е на телефона и носи заглавие на книга или събитие само ако сам го добавиш.
+
 Абонамент за календара: ако добавиш календара на читалището (https://chyavorec.org/events.ics) в приложение за календар, то или неговата услуга (напр. Google Календар) тегли файла от сайта по свой график — като обикновена заявка, без лични данни; приложението на читалището не участва в това.
 
 # Известия
@@ -1036,6 +1179,8 @@ Documents: “Open with a PDF app” downloads the document from chyavorec.org i
 “The old newspaper” downloads the article (PDF) from chyavorec.org into temporary data so you can read it offline; “Know Yavorets” builds its questions on the phone, and your results and streak stay only there.
 
 Share images: images (of an event, a book, a news story or from “My reading year”) are created on the phone and leave it only if you choose to share them, and where.
+
+Greeting cards, embroidery and shortcuts: the personal line of a greeting card is not stored; the patterns you embroider are kept only on the phone (up to 8 and one draft) and leave it only as an image if you share them; a home-screen shortcut lives on the phone and carries a book or event title only if you add it yourself.
 
 Calendar subscription: if you add the centre’s calendar (https://chyavorec.org/events.ics) to a calendar app, that app or its service (e.g. Google Calendar) fetches the file from the website on its own schedule — as a plain request, without personal data; the centre’s app is not involved.
 
@@ -1162,6 +1307,7 @@ P = {
 "event_in_days": (("след %1$d ден", "след %1$d дни"), ("in %1$d day", "in %1$d days")),
 "event_days_ago": (("преди %1$d ден", "преди %1$d дни"), ("%1$d day ago", "%1$d days ago")),
 }
+S.update(_W21)
 
 def esc(s):
     s = s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")

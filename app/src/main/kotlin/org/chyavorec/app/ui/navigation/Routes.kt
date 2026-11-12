@@ -53,6 +53,8 @@ object Routes {
     const val ACTIVITIES = "activities"
     const val PAGE = "page?url={url}&title={title}"
     const val GALLERY = "gallery"
+    /** „Извези шевица“ — платното за кръстат бод (под „Още“). */
+    const val EMBROIDERY = "embroidery"
     const val ALBUM = "album/{name}"
     const val VIEWER = "viewer?album={album}&index={index}&url={url}&alt={alt}&page={page}&title={title}"
     const val CONTACTS = "contacts"

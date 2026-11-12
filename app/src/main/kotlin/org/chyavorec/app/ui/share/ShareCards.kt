@@ -113,6 +113,29 @@ sealed interface ShareCard {
         override val fileName get() = "news"
     }
 
+    /** „Честитка от Яворец“ за празник: орнаментът на деня, пожеланието и личният ред (без лични данни). */
+    data class Greeting(
+        val occasionId: String,
+        val title: String,
+        val wish: String,
+        /** Личният ред („За баба Мария“) — вече изчистен ([org.chyavorec.domain.occasion.GreetingCards.sanitizeLine]). */
+        val line: String,
+        val ornament: org.chyavorec.domain.occasion.OccasionOrnament,
+        val motif: ShevitsaMotif,
+        override val url: String,
+    ) : ShareCard {
+        override val format get() = ShareFormat.STORY
+        override val photoUrl: String? get() = null
+        override val fileName get() = "greeting-$occasionId"
+    }
+
+    /** Шевицата, извезана в „Извези шевица“, като картичка за лентата (4:5). */
+    data class Embroidery(val pattern: org.chyavorec.domain.embroidery.StitchPattern, override val url: String) : ShareCard {
+        override val format get() = ShareFormat.FEED
+        override val photoUrl: String? get() = null
+        override val fileName get() = "embroidery"
+    }
+
     data class Year(val summary: ReadingYear.Summary, val slide: YearSlideKind, override val url: String) : ShareCard {
         override val format get() = ShareFormat.STORY
         override val photoUrl: String? get() = null
@@ -127,6 +150,8 @@ fun ShareCardContent(card: ShareCard, photo: ImageBitmap?) {
         is ShareCard.Event -> EventShareCard(card, photo)
         is ShareCard.Book -> BookShareCard(card, photo)
         is ShareCard.News -> NewsShareCard(card, photo)
+        is ShareCard.Greeting -> GreetingShareCard(card)
+        is ShareCard.Embroidery -> EmbroideryShareCard(card)
         is ShareCard.Year -> YearShareCard(card.summary, card.slide, card.url)
         is NewspaperShareCard -> NewspaperShareCardContent(card)
         is QuizShareCard -> QuizShareCardContent(card)

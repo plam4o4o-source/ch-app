@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Икона на пряк път: пергаментен диск + бордо ромб в ромба (шевица) в 24-единична мрежа. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path android:fillColor="@color/brand_parchment"
+        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0" />
+    <group android:translateX="12" android:translateY="12">
+        <path android:fillColor="@color/brand_burgundy" android:fillType="evenOdd"
+            android:pathData="M12,2L22,12L12,22L2,12ZM12,6L18,12L12,18L6,12ZM12,10L14,12L12,14L10,12Z" />
+    </group>
+</vector>

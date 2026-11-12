@@ -765,6 +765,7 @@ private fun AppNavHost(
             SitePageScreen(url, title, back, navigate, openLink)
         }
         screen(Routes.GALLERY) { GalleryScreen(back, navigate) }
+        screen(Routes.EMBROIDERY) { org.chyavorec.app.ui.screens.embroidery.EmbroideryScreen(back) }
         screen(Routes.ALBUM, arguments = listOf(navArgument("name") { type = NavType.StringType })) {
             AlbumScreen(Uri.decode(it.arguments?.getString("name").orEmpty()), back, navigate)
         }

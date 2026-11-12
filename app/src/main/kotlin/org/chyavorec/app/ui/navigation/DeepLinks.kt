@@ -36,6 +36,8 @@ object DeepLinks {
     const val MESSAGES = "messages"
     const val UPDATE = "update"
     const val WANT_TO_READ = "my/want-to-read"
+    /** „Извези шевица“ — само за закачен пряк път ([LaunchIntents.ACTION_PIN]). */
+    const val EMBROIDERY = "embroidery"
 
     private const val ARTICLE_PREFIX = "article/"
     private const val EVENT_PREFIX = "event/"
@@ -71,6 +73,7 @@ object DeepLinks {
             link == "my/history" -> LinkTarget.Screen(Routes.MY, listOf(Routes.HISTORY))
             link == WANT_TO_READ -> LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ))
             link == "catalog" -> LinkTarget.Screen(Routes.CATALOG)
+            link == EMBROIDERY -> LinkTarget.Screen(Routes.MORE, listOf(Routes.EMBROIDERY))
             link == "scan" -> LinkTarget.Screen(Routes.CATALOG, listOf(Routes.SCAN))
             // Книга от публичния каталог (не лична) — над каталога, както App Link-ът към нея.
             link.startsWith(CATALOG_BOOK_PREFIX) -> link.removePrefix(CATALOG_BOOK_PREFIX).toLongOrNull()?.takeIf { it > 0 }
