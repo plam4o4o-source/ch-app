@@ -1,0 +1,11 @@
+APP W/E lines (pids ['4842', '8885', '11626', '14912']): 31 in 10 groups
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/Parcel: Expecting binder but got null!
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       4  W/Gralloc4: allocator #.x is not supported
+       4  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=b#d#e#-e#da-#b#-#c#-#c#c#d#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=a#a#-c#-#-#bd-#fe#d#b#b#, generation=#)
+       1  W/g.chyavorec.app: No such thread id for suspend: #

@@ -1,0 +1,19 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 19:28:47.507  5797  5797 I PERFCHECK: section: W. First launch and warm-up
+   11-12 19:29:57.493  7221  7221 I PERFCHECK: section: Y0. Demo sign-in DEMO-0001 / demo, „Запомни ме“
+   11-12 19:30:50.617  8202  8202 I PERFCHECK: section: Y1. Моето signed in and its screens
+   11-12 19:31:55.217  8651  8651 I PERFCHECK: section: Y2. Year story: tap → first slide raw screencaps, fresh process ×2 and reopen ×2
+   11-12 19:36:30.248 10084 10084 I PERFCHECK: section: Y3. Every slide portrait, standard text: screenshot, scroll inside
+   11-12 19:37:45.996 10537 10537 I PERFCHECK: section: Y4. Swipe-down dismiss: each swipe from the first slide of a freshly opened story, twice
+   11-12 19:46:12.008 13899 13899 I PERFCHECK: section: Y5. Back key and the close button
+   11-12 19:47:11.351 14325 14325 I PERFCHECK: section: Y6. Dark theme: the first slides
+   11-12 19:49:26.315 15037 15037 I PERFCHECK: section: Y7. Share a slide as an image
+   11-12 19:50:14.055 15393 15393 I PERFCHECK: section: Y8. Signed-in card: fullscreen demo
+   11-12 19:50:46.311 15527 15527 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

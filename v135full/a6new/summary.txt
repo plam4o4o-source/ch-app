@@ -1,0 +1,159 @@
+part a6new; APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+base APK: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v135full/no-update.json size 4316418 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+installed:  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 7172 ms
+SENSORS: Accelerometer (handle=0x00000000, connectio;Accelerometer Uncalibrated ;Game Rotation Vector Sensor ;Gyroscope ;Gyroscope (uncalibrated) ;Gyroscope Bias (debug)    ;Gyroscope Sensor ;Magnetic field sensor ;Magnetic field sensor (uncalibrated) ;Rotation Vector Sensor ;Rotation Vector Sensor    ;accel
+emu console: sensor status → acceleration: enabled. gyroscope: enabled. 
+## N1. Card added by hand (Моето › Добави читателска карта)
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+## N2. Living шевица on Home: animates after a cold start, stops later (0 frames at rest)
+IDLE home-new-a-76-91s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7869
+RIBBON new-a [0 280 1080 398]: diff 0.5→3 s 4.11; 3→6 s 5.05; 70→75 s 0.00 (0 = still); pattern at 0.5 s: mean=209.5 std=67.1 thread-px=26.8%; at 75 s: mean=209.6 std=67.0 thread-px=26.7%
+## B1. Home ribbon „жива шевица“ (AGSL, API 33): renders, sweeps ~24 s, then stops
+RIBBON frames in the first 34 s: 138
+RIBBON box [0 280 1080 398] at 03 s: mean=209.5 std=67.1 thread-px=26.8%
+RIBBON box [0 280 1080 398] at 12 s: mean=209.4 std=67.0 thread-px=26.8%
+RIBBON box [0 280 1080 398] at 34 s: mean=209.6 std=67.0 thread-px=26.7%
+RIBBON change between shots (3,5,8,12,16,20,24,28,34 s): 0.79 4.02 4.02 4.30 4.61 4.62 3.95 0.22
+RIBBON still after the budget (34 s → 40 s): diff 0.00
+## B1b. The first scroll stops the ribbon (new process)
+RIBBON after the first scroll: change a→b→c 0.00 0.00 (≈0 = stopped)
+## B1c. Once per process: back to Home from another tab — no new sweep
+RIBBON after a tab round trip: change 43.25
+RIBBON shader errors in logcat: 1
+## N3. Card screen: frames/CPU at rest, tilt (foil)
+IDLE card-0-15s (15 s, no input): frames +84; cpu=29.5% (ticks 443 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=28.5%, g.chyavorec.app=0.5%, DefaultExecutor=0.2%, Jit thread pool=0.1%, HeapTaskDaemon=0.1%; pid 8705
+SENSORS card-15s: lines with the app 0: 
+IDLE card-30-45s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 8705
+IDLE card-45-60s (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 8705
+SENSORS card-60s: lines with the app 0: 
+SENSORS card-woken: lines with the app 0: 
+TILT card: noise rest→rest-b 0.00; rest→accA 3.15; accA→accB 2.30; accB→back 0.00
+IDLE card-after-tilt-20-35s (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 8705
+SENSORS card-after-tilt: lines with the app 0: 
+## N4. Fullscreen card: frames/CPU at rest, tilt, flip
+IDLE card-full-0-15s (15 s, no input): frames +82; cpu=27.1% (ticks 406 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=26.3%, g.chyavorec.app=0.5%, DefaultExecutor=0.1%, binder:8705_6=0.1%, Jit thread pool=0.1%; pid 8705
+SENSORS card-full-15s: lines with the app 0: 
+IDLE card-full-30-45s (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 8705
+IDLE card-full-45-60s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 8705
+SENSORS card-full-60s: lines with the app 0: 
+fullscreen card reached: yes
+SENSORS card-full-woken: lines with the app 0: 
+TILT card-full: noise rest→rest-b 0.00; rest→accA 0.00; accA→accB 2.07; accB→back 0.00
+IDLE card-full-after-tilt-20-35s (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 8705
+SENSORS card-full-after-tilt: lines with the app 0: 
+IDLE card-full-flip-2-17s (15 s, no input): frames +0; cpu=0.2% (ticks 3 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.2%; pid 8705
+after back from the fullscreen card: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" 
+fullscreen card opened in landscape: NO
+## N5. „Изненадай ме“: dice, shake, back
+## B12. 'Изненадай ме': the dice button in the catalogue
+REC surprise-dice: 42 frames @8 fps; motion all: frames=42 moving-frames(>1.0)=2 max-step=196.1 max-vs-first=201.0 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.0 4.6 0.0 0.0 0.0 0.0 196.1 0.0 0.0 0.0 0.0 0.0 0.3]
+SURPRISE dice: text="Още една" text="Към книгата" ; bottom bar hidden
+SURPRISE 'Към книгата' → book screen yes: text="Легенда за реката" text="Петър Колев" text="Налична" 
+## B13. 'Изненадай ме' by shaking (emulator accelerometer: two peaks > 2.3 g within 0.7 s)
+accelerometer: 0000000000) Goldfish 3-axis Accelerometer | The Android Open Source Project | ver: 1 | type: android.sensor.acceleromete
+SHAKE one short peak (info; a peak held > 120 ms counts twice by design): not triggered
+SHAKE double peak: TRIGGERED; text="Към книгата" 
+## B13b. Shake on another tab (catalogue not resumed) must not trigger
+on Home before the shake: TAB selected: ['Начало']
+SHAKE on Home: not triggered
+SURPRISE open: text="Още една" text="Към книгата" 
+SURPRISE 'Още една': content-desc="Предложение: Гласът на любовта — Симеон Василев" text="Още една" text="Към книгата" content-desc="Затвори" 
+SURPRISE after the back key: closed; catalogue shown; tab bar visible
+## N6. Share as image: an article, a book, an event (the files are in share/)
+SHARE art: chooser OPEN after 2 s; cache/share: 296537 2026-11-12 19:42 chyavorec-news-1794512565135.jpg;
+SHARE art file: chyavorec-news-1794512565135.jpg 296537 B; JPEG (1080, 1350) RGB
+SHARE art received by the helper: action=android.intent.action.SEND type=image/jpeg flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794512565135.jpg mime=image/jpeg bytes=296537 png=false dims=1080x1350 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026
+SHARE book: chooser OPEN after 3 s; cache/share: 774403 2026-11-12 19:43 chyavorec-book-399560-1794512603882.png;
+SHARE book file: chyavorec-book-399560-1794512603882.png 774403 B; PNG (1080, 1920) RGBA
+SHARE book received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-book-399560-1794512603882.png mime=image/png bytes=774403 png=true dims=1080x1920 subject=12 -те вятъра text=12 -те вятъра Гарфилд, Джудит и др. В електронния каталог: https://chyavorec.org/elektronen-katalog#zapis=399560
+SHARE book2: chooser OPEN after 2 s; cache/share: 790424 2026-11-12 19:43 chyavorec-book-1-1794512638472.png;
+SHARE book2 file: chyavorec-book-1-1794512638472.png 790424 B; PNG (1080, 1920) RGBA
+SHARE book2 received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-book-1-1794512638472.png mime=image/png bytes=790424 png=true dims=1080x1920 subject=Дългият любовта text=Дългият любовта Пенка Христова В електронния каталог: https://chyavorec.org/elektronen-katalog#zapis=1
+SHARE ev1-new: chooser OPEN after 2 s; cache/share: 654869 2026-11-12 19:44 chyavorec-event-1794512686986.png;
+SHARE ev1-new file: chyavorec-event-1794512686986.png 654869 B; PNG (1080, 1920) RGBA
+SHARE ev1-new: chyavorec-event-1794512686986.png (no photo?) text="80 г. от създаването на ЮНЕСКО" text="16 ноември 2026" 
+SHARE ev2-new: chooser OPEN after 2 s; cache/share: 648784 2026-11-12 19:45 chyavorec-event-1794512728140.png;
+SHARE ev2-new file: chyavorec-event-1794512728140.png 648784 B; PNG (1080, 1920) RGBA
+SHARE ev2-new: chyavorec-event-1794512728140.png (no photo?) text="Панайот Пипков · Ден на семейството" text="21 ноември 2026" 
+SHARE ev3-new: chooser OPEN after 2 s; cache/share: 643429 2026-11-12 19:46 chyavorec-event-1794512769082.png;
+SHARE ev3-new file: chyavorec-event-1794512769082.png 643429 B; PNG (1080, 1920) RGBA
+SHARE ev3-new: chyavorec-event-1794512769082.png (no photo?) text="Световен ден за борба срещу СПИН" text="1 декември 2026" 
+SHARE ev4-new: chooser OPEN after 2 s; cache/share: 645003 2026-11-12 19:46 chyavorec-event-1794512809955.png;
+SHARE ev4-new file: chyavorec-event-1794512809955.png 645003 B; PNG (1080, 1920) RGBA
+SHARE ev4-new: chyavorec-event-1794512809955.png (no photo?) text="Международен ден на инвалида" text="3 декември 2026" 
+SHARE new: event with a photo: none of the first 4
+SHARE art-dark: chooser OPEN after 1 s; cache/share: 296537 2026-11-12 19:47 chyavorec-news-1794512842085.jpg;
+SHARE art-dark file: chyavorec-news-1794512842085.jpg 296537 B; JPEG (1080, 1350) RGB
+SHARE art-dark received by the helper: action=android.intent.action.SEND type=image/jpeg flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-news-1794512842085.jpg mime=image/jpeg bytes=296537 png=false dims=1080x1350 subject=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 text=Групата за народни танци при читалището, ФФ „Врабево в ритми“ 2026 https://chyavorec.org/news/grupata-za-narodni-tantsi-pri-chitalishteto-ff-vrabevo-v-ritmi-2026
+SHARE book-dark: chooser OPEN after 2 s; cache/share: 774403 2026-11-12 19:47 chyavorec-book-399560-1794512873877.png;
+SHARE book-dark file: chyavorec-book-399560-1794512873877.png 774403 B; PNG (1080, 1920) RGBA
+SHARE book-dark received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-book-399560-1794512873877.png mime=image/png bytes=774403 png=true dims=1080x1920 subject=12 -те вятъра text=12 -те вятъра Гарфилд, Джудит и др. В електронния каталог: https://chyavorec.org/elektronen-katalog#zapis=399560
+## N7. Settings › Обновления
+UPDATES card light: text="Обновления" text="Автоматично обновяване" text="Провери за нова версия" 
+UPDATES after 'Провери за нова версия': text="Имаш последната версия (1.2.35)" 
+## N8. Catalogue: „Само налични“, sort, shelf
+## C1. Catalogue: search, filter 'Само налични', sort, shelf view
+search '12': 108 results
+FILTERS sheet: content-desc="Манипулатор за преместване с плъзгане" text="Филтри" text="Без филтри" text="Само налични" text="Вид документ" text="книга" text="видеодокумент" text="картографско издание" text="друго" text="електронен документ" text="графично издание" text="аудиодокумент" text="продължаващо издание" text="патент/стандарт" text="нотно издание" text="Раздел (жанр)" text="Общ отдел" text="Философия. П
+FILTER 'Само налични': 108 → 98 results; chips: 
+SORT options: text="Най-подходящи  ✓" text="Заглавие (А–Я)" text="Автор (А–Я)" text="Година (нови първо)" text="Година (стари първо)" text="Нови постъпления" 
+after sort by year: text="12" content-desc="Изчисти" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="12 -те вятъра" text="98 резултата  ·  данни от InvLib към 09.11.2026" text="Дъхът на любовта" 
+GFX shelf-scroll frames=   50  janky=50 (100.00%)  p50=300ms p90=450ms p95=450ms p99=550ms  slowUI=13 slowDraw=50 highInput=0
+catalogue after the filter (state kept?): text="12" content-desc="Изчисти" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="12 -те вятъра" text="98 резултата  ·  данни от InvLib към 09.11.2026" text="Дъхът на любовта" 
+## N9. Pull-to-refresh rosette
+## PR. Pull-to-refresh rosette: slow 1500 ms pull from the top, screencaps on the device mid-gesture
+REFRESH news: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.00 0.00 0.00 0.00 0.00 0.00 
+REFRESH home: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.04 0.58 0.00 0.02 0.02 0.02 
+REFRESH calendar: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.00 0.00 0.00 0.00 0.00 0.00 
+REFRESH my: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.00 0.00 0.00 0.00 0.00 0.00 
+REFRESH gallery: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.16 0.54 0.00 0.00 0.00 0.00 
+REFRESH catalog: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.00 0.00 0.00 0.00 0.00 0.00 
+## PR2. The same pull on News, recorded (screenrecord, 8 fps)
+REC refresh-news: screenrecord gave no frames
+REFRESH news-dark: top-area diff vs before (mid-pull 1,2,3 | released 4 | +0.5 s 5 | +1.7 s 6): 0.42 0.36 0.47 0.00 0.00 0.00 
+contact sheets: 14 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 5 | Първи кадър: медиана 2891 мс, последен 3657 мс | Пълно показване: медиана 3957 мс, последно 4703 мс | Топъл старт · 5 | Първи кадър: медиана 152 мс, последен 85 мс | Насечени кадри по екрани | article: 13,2 % от 53 кадъра · най-бавен 765 мс
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 5" text="Първи кадър: медиана 2891 мс, последен 3657 мс" text="Пълно показване: медиана 3957 мс, последно 4703 мс" text="Топъл старт · 5" text="Първи кадър: медиана 152 мс, последен 85 мс" text="Насечени кадр
+APP W/E lines (pids ['5394', '7869', '8284', '8494', '8705']): 100 in 15 groups
+      26  W/Parcel: Expecting binder but got null!
+      26  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       9  E/FrameEvents: updateAcquireFence: Did not find frame.
+       5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       4  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       4  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       2  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#cd#d-#-#f#-#dbc-c#dce#fb, generation=#)
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object g#.s(java.lang.Object)(r
+       1  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+contact sheets: 15 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5394', '7869', '8284', '8494', '8705']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 74
+   skipped-frames events=74 max=95 total=3202
+== Davey: 156
+   davey events=156 max=2814ms median=880ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt

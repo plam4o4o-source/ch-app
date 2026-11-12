@@ -1,0 +1,63 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 782777 Realtime: 782777
+
+** MEMINFO in pid 6646 [org.chyavorec.app] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap    19890    18724     1144    27428    20928    66876    41922    17591
+  Dalvik Heap    19750    13684     5752     1797    21156    24891    12446    12445
+ Dalvik Other     7569     3352      164       84    12764                           
+        Stack     1216     1180       36      256     1220                           
+       Ashmem        2        0        0        0       24                           
+    Other dev        8        0        8        0      256                           
+     .so mmap     2474      148      284      142    22504                           
+    .jar mmap     1450        0        4        0    18260                           
+    .apk mmap      280        0      188        0      728                           
+    .ttf mmap      176        0      176        0      176                           
+    .dex mmap     6583        0     6576       12     7024                           
+    .oat mmap      781        0        4        0    11600                           
+    .art mmap     2906     1056     1240      204    14256                           
+   Other mmap      157        8      132        0      348                           
+      Unknown      219      196       20      313      428                           
+        TOTAL    93697    38348    15728    30236   131672    91767    54368    30036
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:    15980                          35412
+         Native Heap:    18724                          20928
+                Code:     7548                          68520
+               Stack:     1180                           1220
+            Graphics:        0                              0
+       Private Other:    10644
+              System:    39621
+             Unknown:                                    5592
+ 
+           TOTAL PSS:    93697            TOTAL RSS:   131672       TOTAL SWAP PSS:    30236
+ 
+ Objects
+               Views:       22         ViewRootImpl:        2
+         AppContexts:        6           Activities:        1
+              Assets:       16        AssetManagers:        0
+       Local Binders:       67        Proxy Binders:       41
+       Parcel memory:       15         Parcel count:       58
+    Death Recipients:        1      OpenSSL Sockets:        1
+            WebViews:        0
+ 
+ SQL
+         MEMORY_USED:     2413
+  PAGECACHE_OVERFLOW:     1750          MALLOC_SIZE:       46
+ 
+ DATABASES
+      pgsz     dbsz   Lookaside(b)          cache  Dbname
+         4       40             85        34/68/9  /data/user/0/org.chyavorec.app/databases/com.google.android.datatransport.events
+         4       36             21         1/34/2  /data/user/0/org.chyavorec.app/databases/chitalishte.db
+         4        8                         0/0/0    (attached) temp
+         4       36             64         6/25/5  /data/user/0/org.chyavorec.app/databases/chitalishte.db (1)
+         4      104             42       71/91/25  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb
+         4        8                         0/0/0    (attached) temp
+         4      104             57         9/27/6  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb (1)
+         4     2064             17         0/25/1  /data/user/0/org.chyavorec.app/databases/catalog-index.db
+         4        8                         0/0/0    (attached) temp
+         4     2064            123       184/29/9  /data/user/0/org.chyavorec.app/databases/catalog-index.db (1)

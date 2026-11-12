@@ -1,0 +1,339 @@
+  bash arg: -p
+  bash arg: org.chyavorec.app
+  bash arg: --pct-syskeys
+  bash arg: 0
+  bash arg: --pct-anyevent
+  bash arg: 0
+  bash arg: --throttle
+  bash arg: 80
+  bash arg: -s
+  bash arg: 1357
+  bash arg: -v
+  bash arg: 2000
+args: [-p, org.chyavorec.app, --pct-syskeys, 0, --pct-anyevent, 0, --throttle, 80, -s, 1357, -v, 2000]
+ arg: "-p"
+ arg: "org.chyavorec.app"
+ arg: "--pct-syskeys"
+ arg: "0"
+ arg: "--pct-anyevent"
+ arg: "0"
+ arg: "--throttle"
+ arg: "80"
+ arg: "-s"
+ arg: "1357"
+ arg: "-v"
+ arg: "2000"
+data="org.chyavorec.app"
+arg="--pct-syskeys" mCurArgData="null" mNextArg=3 argwas="--pct-syskeys" nextarg="0"
+data="0"
+arg="--pct-anyevent" mCurArgData="null" mNextArg=5 argwas="--pct-anyevent" nextarg="0"
+data="0"
+arg="--throttle" mCurArgData="null" mNextArg=7 argwas="--throttle" nextarg="80"
+data="80"
+data="1357"
+:Monkey: seed=1357 count=2000
+:AllowPackage: org.chyavorec.app
+:IncludeCategory: android.intent.category.LAUNCHER
+:IncludeCategory: android.intent.category.MONKEY
+// Event percentages:
+//   0: 17.64706%
+//   1: 11.764707%
+//   2: 2.3529413%
+//   3: 17.64706%
+//   4: -0.0%
+//   5: -0.0%
+//   6: 29.411766%
+//   7: 17.64706%
+//   8: -0.0%
+//   9: 2.3529413%
+//   10: 1.1764706%
+//   11: -0.0%
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(655.0,1932.0)
+:Sending Touch (ACTION_UP): 0:(656.11774,1945.8602)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(103.0,1719.0)
+:Sending Touch (ACTION_UP): 0:(100.02136,1733.2289)
+:Sending Touch (ACTION_DOWN): 0:(771.0,922.0)
+:Sending Touch (ACTION_UP): 0:(799.0182,948.3397)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,1.0)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,-5.0)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(469.0,936.0)
+:Sending Touch (ACTION_UP): 0:(469.18033,952.1094)
+:Sending Touch (ACTION_DOWN): 0:(947.0,2124.0)
+:Sending Touch (ACTION_UP): 0:(947.19525,2136.6245)
+:Sending Touch (ACTION_DOWN): 0:(369.0,1753.0)
+:Sending Touch (ACTION_UP): 0:(387.08835,1740.3428)
+:Sending Touch (ACTION_DOWN): 0:(962.0,38.0)
+:Sending Touch (ACTION_UP): 0:(962.6355,44.941727)
+:Sending Flip keyboardOpen=false
+Got IOException performing flipjava.io.IOException: write failed: EINVAL (Invalid argument)
+    // Injection Failed
+:Sending Touch (ACTION_DOWN): 0:(20.0,1541.0)
+:Sending Touch (ACTION_UP): 0:(52.662186,1463.8131)
+:Sending Touch (ACTION_DOWN): 0:(1013.0,333.0)
+    //[calendar_time:2026-11-12 20:02:54.315  system_uptime:2109228]
+    // Sending event #100
+:Sending Touch (ACTION_UP): 0:(987.1646,385.1385)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-2.0)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(862.0,571.0)
+:Sending Touch (ACTION_UP): 0:(859.57434,592.16345)
+:Sending Touch (ACTION_DOWN): 0:(592.0,21.0)
+:Sending Touch (ACTION_UP): 0:(634.5384,40.54406)
+:Sending Touch (ACTION_DOWN): 0:(1025.0,511.0)
+:Sending Touch (ACTION_UP): 0:(1022.27966,502.47842)
+:Sending Touch (ACTION_DOWN): 0:(1049.0,762.0)
+:Sending Touch (ACTION_UP): 0:(1080.0,803.543)
+    // Rejecting start of Intent { act=android.settings.APPLICATION_DEVELOPMENT_SETTINGS cmp=com.android.settings/.Settings$DevelopmentSettingsActivity } in package com.android.settings
+:Sending Touch (ACTION_DOWN): 0:(101.0,1910.0)
+:Sending Touch (ACTION_UP): 0:(86.09653,1953.402)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,1.0)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,4.0)
+:Sending Touch (ACTION_DOWN): 0:(499.0,446.0)
+:Sending Touch (ACTION_UP): 0:(491.17334,451.04907)
+    // Rejecting start of Intent { act=android.settings.APPLICATION_DEVELOPMENT_SETTINGS cmp=com.android.settings/.Settings$DevelopmentSettingsActivity } in package com.android.settings
+:Sending Touch (ACTION_DOWN): 0:(56.0,217.0)
+:Sending Touch (ACTION_UP): 0:(45.1991,197.9824)
+    // Rejecting start of Intent { act=android.intent.action.SHOW_ALARMS cmp=com.google.android.deskclock/com.android.deskclock.HandleApiCalls } in package com.google.android.deskclock
+:Sending Touch (ACTION_DOWN): 0:(649.0,1816.0)
+:Sending Touch (ACTION_UP): 0:(668.7806,1812.8004)
+:Sending Touch (ACTION_DOWN): 0:(237.0,958.0)
+:Sending Touch (ACTION_UP): 0:(233.3313,915.5056)
+:Sending Touch (ACTION_DOWN): 0:(767.0,205.0)
+    //[calendar_time:2026-11-12 20:02:57.377  system_uptime:2112291]
+    // Sending event #200
+:Sending Touch (ACTION_UP): 0:(754.2581,209.72678)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(983.0,1303.0)
+:Sending Touch (ACTION_UP): 0:(962.15216,1284.2257)
+    // Rejecting start of Intent { act=android.intent.action.SENDTO dat=mailto: cmp=android/com.android.internal.app.ResolverActivity } in package android
+:Sending Touch (ACTION_DOWN): 0:(93.0,1195.0)
+:Sending Touch (ACTION_UP): 0:(94.77261,1209.0481)
+:Sending Touch (ACTION_DOWN): 0:(1075.0,1346.0)
+:Sending Touch (ACTION_UP): 0:(1076.7704,1347.256)
+:Sending Touch (ACTION_DOWN): 0:(1026.0,1225.0)
+:Sending Touch (ACTION_UP): 0:(995.17365,1236.1333)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,4.0)
+:Sending Touch (ACTION_DOWN): 0:(965.0,926.0)
+:Sending Touch (ACTION_UP): 0:(969.0209,920.95355)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-4.0)
+:Sending Trackball (ACTION_UP): 0:(0.0,0.0)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,-4.0)
+:Sending Touch (ACTION_DOWN): 0:(869.0,784.0)
+:Sending Touch (ACTION_UP): 0:(852.7254,780.3438)
+:Sending Touch (ACTION_DOWN): 0:(943.0,537.0)
+:Sending Touch (ACTION_UP): 0:(952.0769,538.48834)
+:Sending Touch (ACTION_DOWN): 0:(1052.0,2014.0)
+:Sending Touch (ACTION_UP): 0:(1045.6259,2007.7323)
+:Sending Touch (ACTION_DOWN): 0:(1003.0,1596.0)
+:Sending Touch (ACTION_UP): 0:(1003.3566,1599.1681)
+:Sending Touch (ACTION_DOWN): 0:(216.0,698.0)
+:Sending Touch (ACTION_UP): 0:(182.89853,695.33234)
+:Sending Touch (ACTION_DOWN): 0:(287.0,139.0)
+:Sending Touch (ACTION_UP): 0:(287.00305,128.33604)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-4.0)
+    //[calendar_time:2026-11-12 20:03:00.412  system_uptime:2115326]
+    // Sending event #300
+:Sending Touch (ACTION_DOWN): 0:(691.0,754.0)
+:Sending Touch (ACTION_UP): 0:(672.6473,755.3711)
+:Sending Touch (ACTION_DOWN): 0:(873.0,1847.0)
+:Sending Touch (ACTION_UP): 0:(878.368,1851.4558)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,0.0)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,4.0)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(420.0,1480.0)
+:Sending Touch (ACTION_UP): 0:(407.60947,1478.0277)
+:Sending Touch (ACTION_DOWN): 0:(560.0,2047.0)
+:Sending Touch (ACTION_UP): 0:(560.4554,2087.5771)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,-1.0)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-1.0)
+:Sending Trackball (ACTION_MOVE): 0:(0.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(454.0,1593.0)
+:Sending Touch (ACTION_UP): 0:(479.0129,1626.4213)
+    //[calendar_time:2026-11-12 20:03:03.045  system_uptime:2117959]
+    // Sending event #400
+    //[calendar_time:2026-11-12 20:03:03.126  system_uptime:2118040]
+    // Sending event #400
+:Sending Touch (ACTION_DOWN): 0:(856.0,461.0)
+:Sending Touch (ACTION_UP): 0:(856.4717,453.21048)
+:Sending Touch (ACTION_DOWN): 0:(785.0,2168.0)
+:Sending Touch (ACTION_UP): 0:(787.54755,2165.1692)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,-1.0)
+:Sending Trackball (ACTION_MOVE): 0:(0.0,-4.0)
+:Sending Touch (ACTION_DOWN): 0:(1010.0,2160.0)
+:Sending Touch (ACTION_UP): 0:(914.2513,2171.2966)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-3.0)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,4.0)
+:Sending Touch (ACTION_DOWN): 0:(631.0,537.0)
+:Sending Touch (ACTION_UP): 0:(632.9566,570.56836)
+:Sending Touch (ACTION_DOWN): 0:(602.0,1918.0)
+:Sending Touch (ACTION_UP): 0:(601.68195,1923.5039)
+:Sending Touch (ACTION_DOWN): 0:(590.0,2190.0)
+:Sending Touch (ACTION_UP): 0:(593.54895,2186.6936)
+:Sending Touch (ACTION_DOWN): 0:(994.0,1033.0)
+:Sending Touch (ACTION_UP): 0:(1015.6979,1032.5829)
+    //[calendar_time:2026-11-12 20:03:14.511  system_uptime:2129425]
+    // Sending event #500
+:Sending Touch (ACTION_DOWN): 0:(491.0,2201.0)
+:Sending Touch (ACTION_UP): 0:(475.33844,2184.8955)
+:Sending Touch (ACTION_DOWN): 0:(1043.0,1651.0)
+:Sending Touch (ACTION_UP): 0:(1037.4519,1651.1566)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(934.0,1824.0)
+:Sending Touch (ACTION_UP): 0:(950.2056,1819.2827)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(654.0,2088.0)
+:Sending Touch (ACTION_UP): 0:(645.0474,2075.982)
+:Sending Touch (ACTION_DOWN): 0:(41.0,1419.0)
+:Sending Touch (ACTION_UP): 0:(4.759203,1446.4785)
+:Sending Touch (ACTION_DOWN): 0:(592.0,205.0)
+:Sending Touch (ACTION_UP): 0:(582.37274,204.87584)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,3.0)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,-3.0)
+:Sending Touch (ACTION_DOWN): 0:(20.0,1777.0)
+:Sending Touch (ACTION_UP): 0:(19.64723,1777.3135)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(649.0,415.0)
+:Sending Touch (ACTION_UP): 0:(554.5501,511.4503)
+:Sending Touch (ACTION_DOWN): 0:(265.0,1635.0)
+:Sending Touch (ACTION_UP): 0:(357.3374,1594.0531)
+:Sending Touch (ACTION_DOWN): 0:(212.0,2223.0)
+:Sending Touch (ACTION_UP): 0:(211.51537,2202.8325)
+    //[calendar_time:2026-11-12 20:03:24.047  system_uptime:2138961]
+    // Sending event #600
+    //[calendar_time:2026-11-12 20:03:24.131  system_uptime:2139045]
+    // Sending event #600
+:Sending Touch (ACTION_DOWN): 0:(81.0,980.0)
+:Sending Touch (ACTION_UP): 0:(89.79293,986.73755)
+:Sending Touch (ACTION_DOWN): 0:(563.0,2193.0)
+:Sending Touch (ACTION_UP): 0:(569.507,2202.9717)
+:Sending Touch (ACTION_DOWN): 0:(696.0,41.0)
+:Sending Touch (ACTION_UP): 0:(691.9706,30.928473)
+:Sending Touch (ACTION_DOWN): 0:(1008.0,1517.0)
+:Sending Touch (ACTION_UP): 0:(961.12994,1573.2433)
+:Sending Touch (ACTION_DOWN): 0:(988.0,2232.0)
+:Sending Touch (ACTION_UP): 0:(988.88074,2220.7302)
+// CRASH: org.chyavorec.app (pid 19157)
+// Short Msg: java.lang.IllegalArgumentException
+// Long Msg: java.lang.IllegalArgumentException: layouts are not part of the same hierarchy
+// Build Label: Android/sdk_gphone_x86_64/generic_x86_64:8.0.0/OSR1.180418.026/6741039:userdebug/dev-keys
+// Build Changelist: 6741039
+// Build Time: 1596716724000
+// java.lang.IllegalArgumentException: layouts are not part of the same hierarchy
+// 	at dl1.k(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:3)
+// 	at cm3.c1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:90)
+// 	at cm3.K(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:33)
+// 	at cm3.w(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:2)
+// 	at a05.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:334)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at ak4.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:130)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+// 	at tj.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:243)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+// 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:49)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.l0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:33)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:59)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.l0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at aw2.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:186)
+// 	at yv2.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at fs2.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:35)
+// 	at zv2.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:3)
+// 	at hs2.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:16)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at mz3.q(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:22)
+// 	at mz3.t(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tj.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:21)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:45)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+// 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:49)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:315)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at yr2.U(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at wp1.o(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:144)
+// 	at j7.r(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:8)
+// 	at yr2.k(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at gw2.k(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:44)
+// 	at ot2.s(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:35)
+// 	at ot2.invoke(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:32)
+// 	at ue.s(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:1153)
+// 	at ue.invoke(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:228)
+// 	at vf3.s(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:133)
+// 	at vf3.invoke(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:13)
+// 	at gk4.j(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:38)
+// 	at wr0.m(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:11)
+// 	at ue.s(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:1094)
+// 	at ue.invoke(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:213)
+// 	at gk4.j(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:38)
+// 	at wr0.m(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:11)
+// 	at l51.e(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:12)
+// 	at gw2.e(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:100)
+// 	at gw2.j(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:13)
+// 	at f.s(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:498)
+// 	at ps.e(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:8)
+// 	at ea1.run(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:115)
+// 	at ad.Y(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at zc.run(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:3)
+// 	at android.os.Handler.handleCallback(Handler.java:789)
+// 	at android.os.Handler.dispatchMessage(Handler.java:98)
+// 	at android.os.Looper.loop(Looper.java:164)
+// 	at android.app.ActivityThread.main(ActivityThread.java:6541)
+// 	at java.lang.reflect.Method.invoke(Native Method)
+// 	at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
+// 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:767)
+// 	Suppressed: a81: [oc3@6d826b7, dd@e5e6e24, pq2@80b07fa, ua5{Cancelling}@79c0d8d, ad@1a0eb42]
+// 
+** Monkey aborted due to error.
+Events injected: 623
+:Sending rotation degree=0, persist=false
+:Dropped: keys=0 pointers=0 trackballs=0 flips=1 rotations=0
+## Network stats: elapsed time=36007ms (0ms mobile, 0ms wifi, 36007ms not connected)
+** System appears to have crashed at event 623 of 2000 using seed 1357

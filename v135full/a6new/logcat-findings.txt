@@ -1,0 +1,64 @@
+app pids seen: ['5394', '7869', '8284', '8494', '8705']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 74
+   skipped-frames events=74 max=95 total=3202
+   11-12 19:29:51.757  5394  5394 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:52.636  5394  5394 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:54.882  5394  5394 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:56.427  5394  5394 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:57.623  5394  5394 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:58.168  5394  5394 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-12 19:30:04.953  5394  5394 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   11-12 19:30:06.827  5394  5394 I Choreographer: Skipped 71 frames!  The application may be doing too much work on its main thread.
+   11-12 19:30:36.731  5394  5394 I Choreographer: Skipped 79 frames!  The application may be doing too much work on its main thread.
+   11-12 19:30:37.888  5394  5394 I Choreographer: Skipped 68 frames!  The application may be doing too much work on its main thread.
+   11-12 19:30:38.782  5394  5394 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   11-12 19:30:39.698  5394  5394 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 156
+   davey events=156 max=2814ms median=880ms
+   11-12 19:29:54.121  5394  5413 I OpenGLRenderer: Davey! duration=1259ms; Flags=1, FrameTimelineVsyncId=7625, IntendedVsync=110705354735, Vsync=110705354735, InputEventId=0, HandleInputStart=110706424890, AnimationStart=110706425121, Perform
+   11-12 19:29:55.354  5394  5413 I OpenGLRenderer: Davey! duration=1101ms; Flags=0, FrameTimelineVsyncId=7712, IntendedVsync=111905354687, Vsync=111905354687, InputEventId=0, HandleInputStart=111917209306, AnimationStart=111917209757, Perform
+   11-12 19:29:55.884  5394  5413 I OpenGLRenderer: Davey! duration=1030ms; Flags=0, FrameTimelineVsyncId=7727, IntendedVsync=111972021351, Vsync=112188688009, InputEventId=0, HandleInputStart=112200228890, AnimationStart=112200229541, Perform
+   11-12 19:29:56.707  5394  5438 I OpenGLRenderer: Davey! duration=1788ms; Flags=0, FrameTimelineVsyncId=7762, IntendedVsync=112205354675, Vsync=112938687979, InputEventId=0, HandleInputStart=112939318091, AnimationStart=112939318942, Perform
+   11-12 19:29:57.619  5394  5438 I OpenGLRenderer: Davey! duration=1737ms; Flags=0, FrameTimelineVsyncId=7806, IntendedVsync=112955354645, Vsync=113422021293, InputEventId=0, HandleInputStart=113438486368, AnimationStart=113438486989, Perform
+   11-12 19:29:58.166  5394  5438 I OpenGLRenderer: Davey! duration=1949ms; Flags=0, FrameTimelineVsyncId=7832, IntendedVsync=113455354625, Vsync=114472021251, InputEventId=0, HandleInputStart=114494134509, AnimationStart=114494135331, Perform
+   11-12 19:29:58.447  5394  5438 I OpenGLRenderer: Davey! duration=803ms; Flags=0, FrameTimelineVsyncId=7871, IntendedVsync=114522021249, Vsync=114772021239, InputEventId=0, HandleInputStart=114777268649, AnimationStart=114777269050, PerformT
+   11-12 19:29:58.945  5394  5413 I OpenGLRenderer: Davey! duration=1512ms; Flags=0, FrameTimelineVsyncId=7885, IntendedVsync=114788687905, Vsync=115672021203, InputEventId=0, HandleInputStart=115680397001, AnimationStart=115680397311, Perform
+   11-12 19:29:59.103  5394  5438 I OpenGLRenderer: Davey! duration=1417ms; Flags=0, FrameTimelineVsyncId=7928, IntendedVsync=115705354535, Vsync=116222021181, InputEventId=0, HandleInputStart=116225525428, AnimationStart=116225525968, Perform
+   11-12 19:30:05.302  5394  5413 I OpenGLRenderer: Davey! duration=1025ms; Flags=0, FrameTimelineVsyncId=8525, IntendedVsync=122105354279, Vsync=122122020945, InputEventId=0, HandleInputStart=122130859889, AnimationStart=122130860129, Perform
+   11-12 19:30:05.616  5394  5413 I OpenGLRenderer: Davey! duration=1086ms; Flags=0, FrameTimelineVsyncId=8533, IntendedVsync=122138687611, Vsync=123005354243, InputEventId=0, HandleInputStart=123009944893, AnimationStart=123009945294, Perform
+   11-12 19:30:06.948  5394  5413 I OpenGLRenderer: Davey! duration=1280ms; Flags=0, FrameTimelineVsyncId=8673, IntendedVsync=123405354227, Vsync=123438687559, InputEventId=0, HandleInputStart=123446712895, AnimationStart=123446713566, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 19:29:48.726  5385  5385 I PERFCHECK: section: W. First launch and warm-up
+   11-12 19:30:58.617  6718  6718 I PERFCHECK: section: N1. Card added by hand Моето › Добави читателска карта
+   11-12 19:31:51.539  7806  7806 I PERFCHECK: section: N2. Living шевица on Home: animates after a cold start, stops later 0 frames at rest
+   11-12 19:33:31.505  8257  8257 I PERFCHECK: section: B1. Home ribbon „жива шевица“ AGSL, API 33: renders, sweeps ~24 s, then stops
+   11-12 19:34:19.620  8477  8477 I PERFCHECK: section: B1b. The first scroll stops the ribbon new process
+   11-12 19:34:37.557  8606  8606 I PERFCHECK: section: B1c. Once per process: back to Home from another tab — no new sweep
+   11-12 19:34:48.886  8688  8688 I PERFCHECK: section: N3. Card screen: frames/CPU at rest, tilt foil
+   11-12 19:37:21.115  9167  9167 I PERFCHECK: section: N4. Fullscreen card: frames/CPU at rest, tilt, flip
+   11-12 19:40:18.709  9584  9584 I PERFCHECK: section: N5. „Изненадай ме“: dice, shake, back
+   11-12 19:40:18.739  9589  9589 I PERFCHECK: section: B12. Изненадай ме: the dice button in the catalogue
+   11-12 19:41:03.785  9999  9999 I PERFCHECK: section: B13. Изненадай ме by shaking emulator accelerometer: two peaks > 2.3 g within 0.7 s
+   11-12 19:41:14.307 10089 10089 I PERFCHECK: shake1
+   11-12 19:41:35.714 10230 10230 I PERFCHECK: section: B13b. Shake on another tab catalogue not resumed must not trigger
+   11-12 19:42:27.543 10577 10577 I PERFCHECK: section: N6. Share as image: an article, a book, an event the files are in share/
+   11-12 19:42:35.139 10612 10612 I PERFCHECK: sh-art
+   11-12 19:43:14.143 10923 10923 I PERFCHECK: sh-book
+   11-12 19:43:48.514 11164 11164 I PERFCHECK: sh-book2
+   11-12 19:44:37.549 11507 11507 I PERFCHECK: sh-ev1-new
+   11-12 19:45:18.684 11787 11787 I PERFCHECK: sh-ev2-new
+   11-12 19:45:59.323 12178 12178 I PERFCHECK: sh-ev3-new
+   11-12 19:46:40.452 12477 12477 I PERFCHECK: sh-ev4-new
+   11-12 19:47:12.694 12700 12700 I PERFCHECK: sh-art-dark
+   11-12 19:47:44.162 12930 12930 I PERFCHECK: sh-book-dark
+   11-12 19:48:15.777 13171 13171 I PERFCHECK: section: N7. Settings › Обновления
+   11-12 19:49:01.159 13463 13463 I PERFCHECK: section: N8. Catalogue: „Само налични“, sort, shelf
+   11-12 19:49:01.191 13468 13468 I PERFCHECK: section: C1. Catalogue: search, filter Само налични, sort, shelf view
+   11-12 19:50:33.642 14136 14136 I PERFCHECK: section: N9. Pull-to-refresh rosette
+   11-12 19:50:33.723 14141 14141 I PERFCHECK: section: PR. Pull-to-refresh rosette: slow 1500 ms pull from the top, screencaps on the device mid-gesture
+   11-12 19:52:45.879 15121 15121 I PERFCHECK: section: PR2. The same pull on News, recorded screenrecord, 8 fps
+   11-12 19:53:32.318 15366 15366 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

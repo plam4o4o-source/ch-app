@@ -1,5 +1,7 @@
 # Emulator results
 
+Full test of the released v1.2.35 (aef8910): [v135full/index.md](v135full/index.md)
+
 v1.2.35 shaders (9295534 vs v1.2.34): [v135/index.md](v135/index.md)
 
 v1.2.34 before release (b06d1ce vs v1.2.33): [v134/index.md](v134/index.md)

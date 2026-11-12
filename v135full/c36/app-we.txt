@@ -1,0 +1,41 @@
+APP W/E lines (pids ['4412', '5215', '10707', '15314', '17643', '18075', '18377', '18722']): 1990 in 160 groups
+     508  W/Codec2Client: query -- param skipped: index = #.
+     353  W/ColorUtils: expected specified color aspects (#:#:#:#)
+     184  W/HWUI: Image decoding logging dropped!
+     127  E/MediaCodec: Media Quality Service not found.
+     127  W/CCodec: This behavior is subject to change. It is recommended that app developers double check whether the requested m
+     127  E/g.chyavorec.app: Failed to query component interface for required system resources: #
+      38  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      33  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+      16  W/RemoteInputConnectionImpl: requestCursorUpdates on inactive InputConnection
+      13  W/HWUI: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      13  W/HWUI: Failed to initialize #-# format, error = EGL_SUCCESS
+      10  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#ece#
+       9  W/AMessage: failed to deliver message as target handler # is gone.
+       9  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       9  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       8  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       8  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, 
+       8  E/g.chyavorec.app: Not starting debugger since process cannot load the jdwp agent.
+       8  E/ashmem: Pinning is deprecated since Android Q. Please use trim or other methods.
+       8  W/HWUI: Unknown dataspace #
+       8  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       7  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       6  W/BasicSecureTextField: 	at o#.d(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       6  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#cb#f#d
+       5  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       5  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#f#
+       4  W/InteractionJankMonitor: Initializing without READ_DEVICE_CONFIG permission. enabled=true, interval=#, missedFrameThreshold=#, frameTim
+       4  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       4  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       4  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       4  W/BasicSecureTextField: 	at vy#.b(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ThreadedRenderer.updateViewTreeDisplayList(ThreadedRenderer.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ThreadedRenderer.updateRootDisplayList(ThreadedRenderer.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ThreadedRenderer.draw(ThreadedRenderer.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewRootImpl.draw(ViewRootImpl.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewRootImpl.performDraw(ViewRootImpl.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewRootImpl.performTraversals(ViewRootImpl.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewRootImpl.doTraversal(ViewRootImpl.java:#)

@@ -1,0 +1,111 @@
+app pids seen: ['5195', '6141', '8276', '12261', '17190', '19157']
+== FATAL: 4
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: FATAL EXCEPTION: main
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: Process: org.chyavorec.app, PID: 6141
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: java.lang.IllegalArgumentException: layouts are not part of the same hierarchy
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at dl1.k(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:3)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at cm3.c1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:90)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n53.K(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:25)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at q53.c(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:18)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at a05.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:168)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at m53.T0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:5)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at m53.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:9)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at mz3.l(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:12)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at o53.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:79)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at p53.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:127)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at p53.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:2)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:133)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at ak4.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:130)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: Process: org.chyavorec.app, PID: 6141
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: java.lang.IllegalArgumentException: layouts are not part of the same hierarchy
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at dl1.k(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:3)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at cm3.c1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:90)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n53.K(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:25)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at q53.c(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:18)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at a05.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:168)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at m53.T0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:5)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at m53.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:9)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at mz3.l(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:12)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at o53.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:79)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at p53.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:127)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at p53.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:2)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:133)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at ak4.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:130)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+   11-12 19:33:25.728  6141  6141 E AndroidRuntime: 	at tj.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:243)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: FATAL EXCEPTION: main
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: Process: org.chyavorec.app, PID: 19157
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: java.lang.IllegalArgumentException: layouts are not part of the same hierarchy
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at dl1.k(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:3)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at cm3.c1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:90)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at cm3.K(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:33)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at cm3.w(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:2)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at a05.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:334)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at ak4.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:130)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at tj.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:243)
+   11-12 20:03:26.200 19157 19157 E AndroidRuntime: 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:49)
+== ANR: 0
+== StrictMode: 0
+== Skipped: 8
+   skipped-frames events=8 max=51 total=319
+   11-12 19:30:15.027  6141  6141 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-12 19:31:15.176  6141  6141 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-12 19:31:36.819  6141  6141 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 19:38:40.189  8276  8276 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-12 19:46:51.281 12261 12261 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-12 19:56:45.064 17190 17190 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-12 20:02:40.941 19157 19157 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-12 20:03:03.114 19157 19157 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 19:29:36.230  5171  5171 I PERFCHECK: section: W. First launch and warm-up
+   11-12 19:30:12.538  6122  6122 I PERFCHECK: section: C1. Tour of all screens on API 26
+   11-12 19:30:12.600  1649  1988 I ActivityManager: Killing 5195:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 19:30:26.325  6264  6264 I PERFCHECK: section: T-api26-light. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-12 19:38:25.859  1649  2481 I ActivityManager: Killing 6141:org.chyavorec.app/u0a77 (adj 199): crash
+   11-12 19:46:48.977  1649  2481 I ActivityManager: Killing 8276:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 19:47:01.898 12391 12391 I PERFCHECK: section: T-api26-dark. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-12 19:56:40.618 17160 17160 I PERFCHECK: section: C2. Home ribbon and the card on API 26
+   11-12 19:56:40.634  1649  4857 I ActivityManager: Killing 12261:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 19:58:41.324 17464 17464 I PERFCHECK: section: C3. Surprise ×2, share a book as an image on API 26
+   11-12 19:59:20.677 17753 17753 I PERFCHECK: sh-book26
+   11-12 19:59:44.202 18045 18045 I PERFCHECK: section: C5. Rotation and process death on API 26 book, catalogue, article
+   11-12 20:02:13.000 18961 18961 I PERFCHECK: section: C6. Monkey 2000 seed 1357 on API 26
+   11-12 20:02:13.024 18966 18966 I PERFCHECK: section: W. First launch and warm-up
+   11-12 20:02:38.179 19107 19107 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-12 20:02:38.539  1649  5439 I ActivityManager: Killing 17190:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 20:02:49.934 19231 19231 I PERFCHECK: monkey start
+   11-12 20:03:47.808 19374 19374 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat
+   11-12 20:08:26.350  1649  6135 I ActivityManager: Killing 19157:org.chyavorec.app/u0a77 (adj 199): crash

@@ -1,0 +1,91 @@
+part robust; APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+base APK: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v135full/no-update.json size 4316418 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+installed:  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4209 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## RB. Rotation (portrait → landscape → portrait) and process death (Home, am kill, launcher) on every tab and the deep screens
+ROT home: pid 5313→5313 (same); landscape: kept 48% of 27 texts; lost e.g. ['Всички', 'СЪБИТИЕ', 'Контакти', 'КАЛЕНДАР']; back to portrait: kept 89% of 27 texts; lost e.g. ['СЪБИТИЕ', '27 септември 2026', 'Празника „38 читалища. Един де']
+PROCDEATH home: killed yes; new pid 7931; restored: kept 89% of 27 texts; lost e.g. ['СЪБИТИЕ', '27 септември 2026', 'Празника „38 читалища. Един де']; front app
+ROT catalog: pid 7931→7931 (same); landscape: kept 65% of 37 texts; lost e.g. ['Белият пътя', 'Белият дома', 'Ключова дума', 'Елена Русева']; back to portrait: kept 100% of 37 texts
+PROCDEATH catalog: killed yes; new pid 8389; restored: kept 100% of 37 texts; front app
+ROT my: pid 8389→8389 (same); landscape: kept 65% of 20 texts; lost e.g. ['Известия', 'Моето членство', '1 книга в списъка', 'Статус и валидност']; back to portrait: kept 100% of 20 texts
+PROCDEATH my: killed yes; new pid 8763; restored: kept 100% of 20 texts; front app
+ROT news: pid 8763→8763 (same); landscape: kept 68% of 19 texts; lost e.g. ['СЪБИТИЕ  ·  16 октомври 2026', 'БИБЛИОТЕКА  ·  11 ноември 2026', 'Четем заедно – мъдростта на по', 'Фолклорно пътешествие из Пирин']; back to portrait: kept 100% of 19 texts
+PROCDEATH news: killed yes; new pid 9067; restored: kept 100% of 19 texts; front app
+ROT more: pid 9067→9067 (same); landscape: kept 83% of 23 texts; lost e.g. ['Контакти', 'Настройки', 'ПРИЛОЖЕНИЕТО', 'Адрес, телефон, местоположение']; back to portrait: kept 100% of 23 texts
+PROCDEATH more: killed yes; new pid 9406; restored: kept 100% of 23 texts; front app
+ROT calendar: pid 9406→9406 (same); landscape: kept 72% of 29 texts; lost e.g. ['ДЕК', 'Никулден', 'НАРОДЕН ОБИЧАЙ', 'Международен ден на инвалида']; back to portrait: kept 100% of 29 texts
+PROCDEATH calendar: killed yes; new pid 9917; restored: kept 100% of 29 texts; front app
+ROT book: pid 9917→9917 (same); landscape: kept 38% of 24 texts; lost e.g. ['Вид', 'Език', 'книга', 'Отдел']; back to portrait: kept 100% of 24 texts
+PROCDEATH book: killed yes; new pid 10182; restored: kept 100% of 24 texts; front app
+ROT want: pid 10182→10182 (same); landscape: kept 100% of 9 texts; back to portrait: kept 100% of 9 texts
+PROCDEATH want: killed yes; new pid 10598; restored: kept 100% of 9 texts; front app
+ROT article: pid 10598→10598 (same); landscape: kept 78% of 9 texts; lost e.g. ['СЪБИТИЕ  ·  25 юли 2026', 'Групата за народни танци при Н']; back to portrait: kept 100% of 9 texts
+PROCDEATH article: killed yes; new pid 10917; restored: kept 100% of 9 texts; front app
+ROT event: pid 10917→10917 (same); landscape: kept 75% of 12 texts; lost e.g. ['Маршрут', 'Напомни ми', 'Виж публикацията']; back to portrait: kept 100% of 12 texts
+PROCDEATH event: killed yes; new pid 11357; restored: kept 100% of 12 texts; front app
+ROT gallery: pid 11357→11357 (same); landscape: kept 77% of 13 texts; lost e.g. ['5 снимки', 'Село Яворец', 'Природата край Яворец']; back to portrait: kept 100% of 13 texts
+PROCDEATH gallery: killed yes; new pid 11842; restored: kept 100% of 13 texts; front app
+ROT album: pid 11842→11842 (same); landscape: kept 100% of 20 texts; back to portrait: kept 100% of 20 texts
+PROCDEATH album: killed yes; new pid 12311; restored: kept 100% of 20 texts; front app
+ROT viewer: pid 12311→12311 (same); landscape: kept 100% of 6 texts; back to portrait: kept 100% of 6 texts
+PROCDEATH viewer: killed yes; new pid 12800; restored: kept 100% of 6 texts; front app
+ROT settings: pid 12800→12800 (same); landscape: kept 53% of 19 texts; lost e.g. ['Известия', 'Обновления', 'Версия 1.2.35', 'Избери известията']; back to portrait: kept 100% of 19 texts
+PROCDEATH settings: killed yes; new pid 13236; restored: kept 100% of 19 texts; front app
+ROT diagnostics: pid 13236→13236 (same); landscape: kept 71% of 17 texts; lost e.g. ['Няма записани грешки.', 'my: 8,5 % от 59 кадъра · най-б', 'album: 8,3 % от 36 кадъра · на', 'article: 7,9 % от 38 кадъра · ']; back to portrait: kept 100% of 17 texts
+PROCDEATH diagnostics: killed yes; new pid 13781; restored: kept 82% of 17 texts; lost e.g. ['Студен старт · 14', 'more: 11,4 % от 114 кадъра · н', 'Първи кадър: медиана 1652 мс, ']; front app
+ROT card: pid 13781→13781 (same); landscape: kept 36% of 14 texts; lost e.g. ['Промени', 'Премахни', 'Покажи картата', 'Не предлагай отново']; back to portrait: kept 100% of 14 texts
+PROCDEATH card: killed yes; new pid 14186; restored: kept 100% of 14 texts; front app
+ROT search: pid 14186→14186 (same); landscape: kept 60% of 30 texts; lost e.g. ['Белият пътя', 'Белият дома', 'Мартин Тонев', 'Белият здрача']; back to portrait: kept 100% of 30 texts
+PROCDEATH search: killed yes; new pid 14620; restored: kept 0% of 30 texts; lost e.g. ['·', 'Книги', 'Назад', 'Всички']; front OTHER
+ROT surprise: pid 14620→14620 (same); landscape: kept 50% of 4 texts; lost e.g. ['Още една', 'Към книгата']; back to portrait: kept 100% of 4 texts
+PROCDEATH surprise: killed yes; new pid 15046; restored: kept 100% of 4 texts; front app
+ROT contacts: pid 15046→15046 (same); landscape: kept 54% of 26 texts; lost e.g. ['В интернет', 'Работно време', 'Неделя: Почивен ден', 'Събота: Почивен ден']; back to portrait: kept 100% of 26 texts
+PROCDEATH contacts: killed yes; new pid 15346; restored: kept 100% of 26 texts; front app
+ROT documents: pid 15346→15346 (same); landscape: kept 75% of 16 texts; lost e.g. ['Устав', 'Отвори с приложение за PDF: Ус', 'Учредителни документи · 30.04.', 'Уставът представлява основният']; back to portrait: kept 100% of 16 texts
+PROCDEATH documents: killed yes; new pid 15666; restored: kept 100% of 16 texts; front app
+## RB2. Process death, back from Recents (article, viewer)
+PD book before: book title kept; back button yes
+PROCDEATH book (recents): killed yes; ; restored: book title kept; back button yes
+## RB3. Totals
+ROT not fully kept (<90%): ROT home 
+PROCDEATH not fully restored (<90%): PROCDEATH home PROCDEATH diagnostics PROCDEATH search PROCDEATH book (recents) 
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 20 | Първи кадър: медиана 1591 мс, последен 1472 мс | Пълно показване: медиана 7294 мс, последно 10897 мс | Насечени кадри по екрани | more: 11,5 % от 148 кадъра · най-бавен 1243 мс | catalog: 8,7 % от 150 кадъра · най-бавен 1153 мс | album: 8,
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 20" text="Първи кадър: медиана 1591 мс, последен 1472 мс" text="Пълно показване: медиана 7294 мс, последно 10897 мс" text="Насечени кадри по екрани" text="more: 11,5 % от 148 кадъра · най-бавен 1243 мс" text=
+APP W/E lines (pids ['5313', '7931', '8389', '8763', '9067', '9406', '9917', '10182', '10598', '10917', '11357', '11842', '12311', '12800', '13236', '13781', '14186', '14620', '15046', '15346', '15666', '15876']): 211 in 11 groups
+      66  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      25  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      25  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      24  W/Parcel: Expecting binder but got null!
+      22  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      22  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      22  W/Gralloc4: allocator #.x is not supported
+       2  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ce#-#eed-#b#-a#e-#e#d#d, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object g#.s(java.lang.Object)(r
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void z#.k()(r#-map-id-#a#f#e#bb#fa#d#ab#b
+contact sheets: 10 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5313', '7931', '8389', '8763', '9067', '9406', '9917', '10182', '10598', '10917', '11357', '11842', '12311', '12800', '13236', '13781', '14186', '14620', '15046', '15346', '15666', '15876']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 69
+   skipped-frames events=69 max=99 total=2959
+== Davey: 176
+   davey events=176 max=2958ms median=922ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt

@@ -1,0 +1,71 @@
+part monkey; APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+base APK: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v135full/no-update.json size 4316418 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+installed:  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3505 ms
+## K-1357. Monkey 8000 events (seed 1357, throttle 80 ms, CAMERA revoked)
+MONKEY 1357 exit=0 duration=610 s; Events injected: 8000 // Monkey finished 
+MONKEY 1357 markers: CRASH=0 ANR=0 FATAL since start: 0
+MEM after-monkey-1357 (raw) PSS=118470KB  Java=19956KB  Native=18840KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=8)  RSS=137136KB  Views=42 Activities=1
+MEM after-monkey-1357 (trimmed) PSS=93697KB  Java=15980KB  Native=18724KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=8)  RSS=131672KB  Views=22 Activities=1
+## K-24680. Monkey 8000 events (seed 24680, throttle 80 ms, CAMERA revoked)
+MONKEY 24680 exit=0 duration=431 s; Events injected: 8000 // Monkey finished 
+MONKEY 24680 markers: CRASH=0 ANR=0 FATAL since start: 0
+MEM after-monkey-24680 (raw) PSS=102778KB  Java=21496KB  Native=51136KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=14)  RSS=195700KB  Views=23 Activities=1
+MEM after-monkey-24680 (trimmed) PSS=97143KB  Java=14736KB  Native=47780KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=14)  RSS=190504KB  Views=14 Activities=1
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 3 | Първи кадър: медиана 2416 мс, последен 1470 мс | Пълно показване: медиана 2416 мс, последно 2140 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 3" text="Първи кадър: медиана 2416 мс, последен 1470 мс" text="Пълно показване: медиана 2416 мс, последно 2140 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5176', '6646', '9306']): 5448 in 61 groups
+    4775  W/InputEventSender: Received 'finished' signal for unknown seq number = #
+     176  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+     131  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+      62  W/Parcel: Expecting binder but got null!
+      62  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      27  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+      17  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+      17  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+      14  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, metaSta
+      12  W/System: A resource failed to call release. 
+      12  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+      12  W/RemoteInputConnectionImpl: setComposingText on inactive InputConnection
+      11  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       7  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       7  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       7  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, metaSta
+       6  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y[#]=-#
+       6  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       6  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#, metaS
+       4  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[#]=#.#
+       4  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=
+       4  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#, metaS
+       4  W/RemoteInputConnectionImpl: commitText on inactive InputConnection
+       3  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       3  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       3  W/Gralloc4: allocator #.x is not supported
+       3  E/ViewRootImpl: Calling showInsets(#,true) on window that no longer has views.
+       3  W/InputMethodManager: Ignoring showSoftInput() as view=j#{db#edd VFED..... .F...... #,#-#,# aid=#} is not served.
+       3  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, metaSt
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5176', '6646', '9306']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 509
+   skipped-frames events=509 max=165 total=21024
+== Davey: 1266
+   davey events=1266 max=3678ms median=923ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt

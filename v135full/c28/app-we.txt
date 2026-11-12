@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5457', '6288', '11584', '16707', '17699', '18099', '18355', '18665']): 455 in 105 groups
+      11  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+      11  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+      11  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+      11  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+      11  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+       9  W/BasicSecureTextField: 	at o#.d(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       8  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       8  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       8  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       8  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       8  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       8  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+       5  W/BasicSecureTextField: 	at ci#.d(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       5  W/BasicSecureTextField: 	at o#.a(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       5  W/BasicSecureTextField: 	at cs#.c(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       5  W/BasicSecureTextField: 	at p#.G#(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       5  W/BasicSecureTextField: 	at p#.d(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       5  W/BasicSecureTextField: 	at xx.c(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       5  W/BasicSecureTextField: 	at rr#.d(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+       4  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       4  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       4  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       4  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       4  W/BasicSecureTextField: 	at h#.a(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at vy#.b(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at vy#.a(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at jr#.invoke(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at sn#.c(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at sn#.invoke(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at g#.b(Unknown Source:#)
+       4  W/BasicSecureTextField: 	at kr#.a(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at a#.f(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at sn#.d(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at sn#.f(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at d#.invoke(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)
+       4  W/BasicSecureTextField: 	at al#.x(r#-map-id-#a#f#e#bb#fa#d#ab#b#c#cdb#b#aa#bf#ddf#c#:#)

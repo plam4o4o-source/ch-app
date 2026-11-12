@@ -1,0 +1,74 @@
+A11Y landscape-light/01-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/01b-home-2: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/01c-home-3: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/01d-home-4: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/01e-search-12: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/02-catalog: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/02b-filters: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y landscape-light/02c-filters-2: targets=23 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=3
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp; 'патент/стандарт' 180x41dp; 'нотно издание' 143x41dp
+A11Y landscape-light/02d-sort: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/02e-shelf: targets=48 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=14
+   SMALL: '12 -те вятъра, Гарфилд, Джудит' 34x125dp; 'Аз обичам Ню Йорк, Келк, Линдз' 34x125dp; 'Ако върнеш времето назад, Потъ' 35x145dp; 'Алтъна, Никова, Ивелина' 32x120dp; 'Анатомът, Андахази, Федерико' 38x135dp; 'Бевълстоук : Кн. 1 - 2, Куин, ' 36x125dp; 'Безсрамна добродетел, Робъртс,' 34x130dp; 'Белият дома, Николай Симеонов,' 32x120dp; 'Белият дома, Николай Симеонов,' 32x120dp; 'Белият звездите, Диана Христов' 35x117dp (+4)
+A11Y landscape-light/02f-shelf-2: targets=45 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=22
+   SMALL: 'Всичко' 83x24dp; 'Заглавие' 99x24dp; 'Автор' 82x24dp; 'ISBN' 65x24dp; 'Бевълстоук : Кн. 1 - 2, Куин, ' 36x93dp; 'Бевълстоук : Кн. 1 - 2, Куин, ' 35x93dp; 'Безсрамна добродетел, Робъртс,' 34x93dp; 'Белият вятъра, Петър Здравков' 34x93dp; 'Белият детството, Симеон Колев' 33x93dp; 'Белият дома, Николай Симеонов,' 32x93dp (+12)
+A11Y landscape-light/02g-search-12: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/03-book: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/03b-book-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/03c-book-3: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/04-surprise: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/05-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/05b-my-2: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/06-card: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/06b-card-full: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/07-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/08-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/08b-news-2: targets=21 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3
+   MISSING: View@[0,2047][1080,2127]
+   SMALL: 'Всички' 83x24dp; 'Запазени' 117x24dp; 'Библиотека' 123x24dp
+A11Y landscape-light/09-article: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/09b-article-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/09c-reader-sheet: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y landscape-light/09d-share-sheet: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y landscape-light/10-calendar: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/11-event: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/11b-event-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/11c-event-share: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y landscape-light/12-more: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/12b-more-2: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   MISSING: View@[556,296][1038,349]
+   SMALL: 'Съобщения и покани от читалище' 184x20dp; '' 184x20dp
+A11Y landscape-light/13-gallery: targets=9 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[42,2321][524,2400]; View@[556,2321][1038,2400]
+A11Y landscape-light/14-album: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/15-viewer: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/15b-viewer-info: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/16-contacts: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/16b-contacts-2: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/17-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/17b-documents-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18-settings: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18b-settings-2: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18c-settings-3: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18d-settings-4: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18e-text-size: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18f-language: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18g-theme: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18h-notifications: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18i-privacy-policy: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18j-terms: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18k-about: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18l-diagnostics: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/18m-diagnostics-2: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/19-login: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/20-scanner: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y landscape-light/20b-scan-manual: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

@@ -1,0 +1,84 @@
+A11Y font130-xlarge-en/01-home: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/01b-home-2: targets=13 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   MISSING: View@[1030,1529][1080,1975]
+   SMALL: 'Open catalogue' 211x13dp
+A11Y font130-xlarge-en/01c-home-3: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[1030,698][1080,1144]
+A11Y font130-xlarge-en/01d-home-4: targets=16 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   MISSING: View@[1030,0][1080,138]
+   SMALL: 'Далечният морето' 128x27dp; 'Дългият пътя' 128x27dp
+A11Y font130-xlarge-en/01e-search-12: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/02-catalog: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/02b-filters: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Drag handle' x2
+   SMALL: 'Drag handle' 32x48dp
+A11Y font130-xlarge-en/02c-filters-2: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=3
+   SAME-LABEL: 'Drag handle' x2
+   SMALL: 'Drag handle' 32x24dp; 'Drag handle' 48x24dp; 'аудиодокумент' 219x41dp
+A11Y font130-xlarge-en/02d-sort: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/02e-shelf: targets=47 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=14
+   SMALL: '12 -те вятъра, Гарфилд, Джудит' 34x125dp; 'Аз обичам Ню Йорк, Келк, Линдз' 34x125dp; 'Ако върнеш времето назад, Потъ' 35x145dp; 'Алтъна, Никова, Ивелина' 32x120dp; 'Анатомът, Андахази, Федерико' 38x135dp; 'Бевълстоук : Кн. 1 - 2, Куин, ' 36x125dp; 'Безсрамна добродетел, Робъртс,' 34x130dp; 'Белият дома, Николай Симеонов,' 32x120dp; 'Белият дома, Николай Симеонов,' 32x120dp; 'Белият звездите, Диана Христов' 35x67dp (+4)
+A11Y font130-xlarge-en/02f-shelf-2: targets=44 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=18
+   SMALL: 'Everything' 158x24dp; 'Title' 86x28dp; 'Author' 111x28dp; 'Бевълстоук : Кн. 1 - 2, Куин, ' 36x124dp; 'Бевълстоук : Кн. 1 - 2, Куин, ' 35x124dp; 'Безсрамна добродетел, Робъртс,' 34x124dp; 'Белият вятъра, Петър Здравков' 34x124dp; 'Белият детството, Симеон Колев' 33x124dp; 'Белият дома, Николай Симеонов,' 32x120dp; 'Белият дома, Николай Симеонов,' 32x120dp (+8)
+A11Y font130-xlarge-en/02g-search-12: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/03-book: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/03b-book-2: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/03c-book-3: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/04-surprise: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/05-my: targets=10 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   MISSING: View@[42,2039][1038,2127]
+   SMALL: '' 379x34dp
+A11Y font130-xlarge-en/05b-my-2: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/06-card: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/06b-card-full: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/07-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/08-news: targets=13 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[1051,653][1080,779]
+A11Y font130-xlarge-en/08b-news-2: targets=18 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=4
+   MISSING: View@[1051,485][1080,548]
+   SMALL: 'All' 64x24dp; 'Saved' 121x24dp; 'Библиотека' 175x24dp; 'Save: Празника „38 читалища. Е' 48x40dp
+A11Y font130-xlarge-en/09-article: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/09b-article-2: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/09c-reader-sheet: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Drag handle' x2
+   SMALL: 'Drag handle' 32x48dp
+A11Y font130-xlarge-en/09d-share-sheet: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Drag handle' x2
+   SMALL: 'Drag handle' 32x48dp
+A11Y font130-xlarge-en/10-calendar: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Международен ден на инвалида' 379x38dp
+A11Y font130-xlarge-en/11-event: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/11b-event-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/11c-event-share: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Drag handle' x2
+   SMALL: 'Drag handle' 32x48dp
+A11Y font130-xlarge-en/12-more: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   MISSING: View@[42,2028][1038,2127]
+   SMALL: '' 379x38dp
+A11Y font130-xlarge-en/12b-more-2: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Groups, clubs, projects' 379x25dp
+A11Y font130-xlarge-en/13-gallery: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/14-album: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/15-viewer: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/15b-viewer-info: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/16-contacts: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/16b-contacts-2: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/17-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/17b-documents-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18-settings: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18b-settings-2: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18c-settings-3: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18d-settings-4: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18e-text-size: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18f-language: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18g-theme: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18h-notifications: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18i-privacy-policy: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18j-terms: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18k-about: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18l-diagnostics: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/18m-diagnostics-2: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/19-login: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font130-xlarge-en/20-scanner: targets=3 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[381,1454][658,1580]
+A11Y font130-xlarge-en/20b-scan-manual: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

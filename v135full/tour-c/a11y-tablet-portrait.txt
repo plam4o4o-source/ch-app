@@ -1,0 +1,74 @@
+A11Y tablet-portrait/01-home: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/01b-home-2: targets=29 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/01c-home-3: targets=24 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/01d-home-4: targets=24 MISSING=5 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[192,0][448,90]; View@[476,0][732,90]; View@[760,0][1016,90]; View@[1044,0][1300,90]; View@[1328,0][1584,90]
+A11Y tablet-portrait/02-catalog: targets=28 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/02b-filters: targets=33 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y tablet-portrait/02c-filters-2: targets=33 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y tablet-portrait/02d-sort: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/02e-shelf: targets=57 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=17
+   SMALL: '12 -те вятъра, Гарфилд, Джудит' 34x125dp; 'Аз обичам Ню Йорк, Келк, Линдз' 34x125dp; 'Ако върнеш времето назад, Потъ' 34x145dp; 'Алтъна, Никова, Ивелина' 32x120dp; 'Анатомът, Андахази, Федерико' 38x135dp; 'Бевълстоук : Кн. 1 - 2, Куин, ' 36x125dp; 'Безсрамна добродетел, Робъртс,' 34x130dp; 'Белият дома, Николай Симеонов,' 32x120dp; 'Белият дома, Николай Симеонов,' 32x120dp; 'Белият звездите, Диана Христов' 35x120dp (+7)
+A11Y tablet-portrait/02f-shelf-2: targets=57 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=17
+   SMALL: '12 -те вятъра, Гарфилд, Джудит' 34x125dp; 'Аз обичам Ню Йорк, Келк, Линдз' 34x125dp; 'Ако върнеш времето назад, Потъ' 34x145dp; 'Алтъна, Никова, Ивелина' 32x120dp; 'Анатомът, Андахази, Федерико' 38x135dp; 'Бевълстоук : Кн. 1 - 2, Куин, ' 36x125dp; 'Безсрамна добродетел, Робъртс,' 34x130dp; 'Белият дома, Николай Симеонов,' 32x120dp; 'Белият дома, Николай Симеонов,' 32x120dp; 'Белият звездите, Диана Христов' 35x120dp (+7)
+A11Y tablet-portrait/02g-search-12: targets=29 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[160,2421][1600,2517]
+A11Y tablet-portrait/03-book: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/03b-book-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/03c-book-3: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/04-surprise: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/05-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/05b-my-2: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/06-card: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/06b-card-full: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/07-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/08-news: targets=23 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Запази: С хоро и песен във Вод' 48x24dp
+A11Y tablet-portrait/08b-news-2: targets=30 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=7
+   MISSING: View@[160,2366][1600,2462]; View@[1472,2426][1568,2462]
+   SMALL: 'Всички' 84x24dp; 'Запазени' 118x24dp; 'Библиотека' 124x24dp; 'Събитие' 100x24dp; 'Състави' 99x24dp; 'Проекти' 100x24dp; '' 48x18dp
+A11Y tablet-portrait/09-article: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/09b-article-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/09c-reader-sheet: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y tablet-portrait/09d-share-sheet: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y tablet-portrait/10-calendar: targets=24 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/11-event: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/11b-event-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/11c-event-share: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1
+   SAME-LABEL: 'Манипулатор за преместване с п' x2
+   SMALL: 'Манипулатор за преместване с п' 32x48dp
+A11Y tablet-portrait/12-more: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/12b-more-2: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/13-gallery: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/14-album: targets=30 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/15-viewer: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/15b-viewer-info: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/16-contacts: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/16b-contacts-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/17-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/17b-documents-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18-settings: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18b-settings-2: targets=13 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[0,2428][1440,2524]
+A11Y tablet-portrait/18c-settings-3: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18d-settings-4: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18e-text-size: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18f-language: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18g-theme: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18h-notifications: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18i-privacy-policy: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18j-terms: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18k-about: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18l-diagnostics: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/18m-diagnostics-2: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/19-login: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/20-scanner: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-portrait/20b-scan-manual: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

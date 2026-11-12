@@ -1,0 +1,140 @@
+part year35; APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+base APK: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v135full/no-update.json size 4316418 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+installed:  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+installed: devDebug 1.2.35 aef8910 (org.chyavorec.app.dev, demo sign-in DEMO-0001);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.35-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 6350 ms
+## Y0. Demo sign-in (DEMO-0001 / demo, „Запомни ме“)
+Запомни ме before: CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true)
+Запомни ме now: CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true)
+MY after the demo sign-in: text="ДЕМО ДАННИ — само за разработка, не са реални" text="ДЧ" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" text="БИБЛИОТЕКА" text="Читателска карта" text="Покажи картата на гишето" 
+## Y1. Моето (signed in) and its screens
+CAP demo/01-my: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · ДЧ · Демо Читател · Читателски № DEMO-0001 · Активно · БИБЛИОТЕКА
+CAP demo/01b-my-2: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=23 ellipsized=0 | Книги, които искаш да вземеш · Статус и валидност · Прочетени книги · Историята на четенето и подо · Моят профил · Читателски данни
+CAP demo/01c-my-3: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | МОЕТО ЧЕТЕНЕ · 2026 · Моята читателска година 2026 · 30 книги · виж историята · Книги по месеци · Цялата история
+CAP demo/02-loans: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Последна синхронизация: Пред · Демо заглавие (просрочено) · Демо автор · Взета на 03.10.2026 · Срокът изтече на 09.11.2026
+CAP demo/03-history: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=30 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Всички години · 2026 · 2025 · 2026 · 30 книги
+CAP demo/03b-history-2: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · взета 09.11.2026 · върната 1 · Чичовци · Вазов, Иван · взета 03.11.2026 · върната 1 · Железният светилник
+CAP demo/04-messages: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 12 ноември 2026, 19:30 · Ново · Запазената книга пристигна · Демо: книгата, която запазих · Лично · 7 ноември 2026, 21:30
+CAP demo/04b-message: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 12 ноември 2026, 19:30 · Ново · Запазената книга пристигна · Демо: книгата, която запазих · Лично · 7 ноември 2026, 21:30
+## Y2. Year story: tap → first slide (raw screencaps), fresh process ×2 and reopen ×2
+YR fresh-1: STORY window first seen: shot #3, 1180..1950 ms after the tap; FIRST SLIDE (content) seen: shot #3, 1180..1950 ms after the tap
+YR fresh-1 shots: #1 [0..570] black m=0 s=0 | #2 [570..1180] light m=105 s=61 | #3 [1180..1950] SLIDE m=52 s=23 | #4 [1950..2820] SLIDE m=54 s=28 | #5 [2820..3900] SLIDE m=55 s=29 | #6 [3900..4900] SLIDE m=55 s=29 | #7 [4900..5820] SLIDE m=55 s=29 | #8 [5820..6380] SLIDE m=55 s=29 | #9 [6380..7600] SLIDE m=55 s=29 | #10 [7600..8000] SLIDE m=55 s=29 | #11 [8000..8660] SLIDE m=45 s=28 | #12 [8660..9120] SLIDE m=45 s=29 | #13 [9120..9880] SLIDE m=46 s=30 | #14 [9880..10910] SLIDE m=46 s=30 | #15 [10910..12120] SLIDE m=46 s=30 | #16 [12120..12970] SLIDE m=46 s=30 | #17 [12970..13570] SLIDE m=46 s=30 | #18 [13570..14420] SLIDE m=44 s=27 | #19 [14420..15130] SLIDE m=46 s=31 | #20 [15130..16230] SLIDE m=47 s=32 | #2
+YR reopen-1: STORY window first seen: shot #2, 440..1280 ms after the tap; FIRST SLIDE (content) seen: shot #3, 1280..2030 ms after the tap
+YR reopen-1 shots: #1 [0..440] black m=0 s=0 | #2 [440..1280] story-dark/loader m=0 s=7 | #3 [1280..2030] SLIDE m=54 s=27 | #4 [2030..2850] SLIDE m=55 s=29 | #5 [2850..4120] SLIDE m=55 s=29 | #6 [4120..4830] SLIDE m=55 s=29 | #7 [4830..5830] SLIDE m=55 s=29 | #8 [5830..6380] SLIDE m=55 s=29 | #9 [6380..7090] SLIDE m=55 s=29 | #10 [7090..7660] SLIDE m=55 s=29 | #11 [7660..8390] SLIDE m=55 s=29 | #12 [8390..9130] SLIDE m=45 s=28 | #13 [9130..10070] SLIDE m=45 s=30 | #14 [10070..11020] SLIDE m=46 s=30 | #15 [11020..12220] SLIDE m=46 s=30 | #16 [12220..12890] SLIDE m=46 s=30 | #17 [12890..13640] SLIDE m=46 s=30 | #18 [13640..14170] SLIDE m=46 s=30 | #19 [14170..14860] SLIDE m=44 s=26 | #20 [14860..15530] SLIDE m=4
+YR fresh-2: STORY window first seen: shot #3, 1130..1940 ms after the tap; FIRST SLIDE (content) seen: shot #3, 1130..1940 ms after the tap
+YR fresh-2 shots: #1 [0..530] black m=0 s=0 | #2 [530..1130] black m=0 s=0 | #3 [1130..1940] SLIDE m=74 s=66 | #4 [1940..2640] SLIDE m=54 s=27 | #5 [2640..3770] SLIDE m=55 s=29 | #6 [3770..4790] SLIDE m=55 s=29 | #7 [4790..5690] SLIDE m=55 s=29 | #8 [5690..6490] SLIDE m=55 s=29 | #9 [6490..7420] SLIDE m=55 s=29 | #10 [7420..8250] SLIDE m=55 s=29 | #11 [8250..9010] SLIDE m=42 s=24 | #12 [9010..9500] SLIDE m=45 s=29 | #13 [9500..10020] SLIDE m=46 s=30 | #14 [10020..11290] SLIDE m=46 s=30 | #15 [11290..12080] SLIDE m=46 s=30 | #16 [12080..12720] SLIDE m=46 s=30 | #17 [12720..13350] SLIDE m=46 s=30 | #18 [13350..14220] SLIDE m=46 s=30 | #19 [14220..15140] SLIDE m=45 s=28 | #20 [15140..15840] SLIDE m=47 s=31 | #21
+YR reopen-2: STORY window first seen: shot #2, 660..1600 ms after the tap; FIRST SLIDE (content) seen: shot #2, 660..1600 ms after the tap
+YR reopen-2 shots: #1 [0..660] black m=0 s=0 | #2 [660..1600] SLIDE m=74 s=65 | #3 [1600..2330] SLIDE m=54 s=27 | #4 [2330..3690] SLIDE m=55 s=29 | #5 [3690..4230] SLIDE m=55 s=29 | #6 [4230..5150] SLIDE m=55 s=29 | #7 [5150..6340] SLIDE m=55 s=29 | #8 [6340..7190] SLIDE m=55 s=29 | #9 [7190..8240] SLIDE m=55 s=29 | #10 [8240..8760] SLIDE m=38 s=23 | #11 [8760..9040] SLIDE m=38 s=23 | #12 [9040..9730] SLIDE m=45 s=29 | #13 [9730..10420] SLIDE m=46 s=30 | #14 [10420..11310] SLIDE m=46 s=30 | #15 [11310..11940] SLIDE m=46 s=30 | #16 [11940..12820] SLIDE m=46 s=30 | #17 [12820..13790] SLIDE m=46 s=30 | #18 [13790..14430] SLIDE m=46 s=30 | #19 [14430..14850] SLIDE m=43 s=24 | #20 [14850..15450] SLIDE m=45 s=28 | #
+## Y3. Every slide (portrait, standard text): screenshot, scroll inside
+YEAR port slide 1: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Моята читателска година · 2026 · Затвори · Сподели
+  slide 1 after a slow drag up inside: diff 0.50
+YEAR port slide 2: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Най-четен раздел: Език. Литература — 2 к · Моята читателска година · 2026 · Затвори · Сподели
+  slide 2 after a slow drag up inside: diff 14.89
+YEAR port slide 3: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Най-дълга поредица: 11 месеца подред с п · Моята читателска година · 2026 · Затвори · Сподели
+  slide 3 after a slow drag up inside: diff 23.17
+YEAR port slide 4: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Благодарим ти, че четеш с нас! Библиотек · Моята читателска година · 2026 · Затвори · Сподели
+  slide 4 after a slow drag up inside: diff 0.14
+YEAR port slide 5: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Искам да прочета · Книги, които искаш да вземеш · Моето членство · Статус и валидност · Прочетени книги · Историята на четенето и подобни книги · Моят профил · Читателски данни
+  slide 5 after a slow drag up inside: diff 0.00
+  story closed at slide 5
+## Y4. Swipe-down dismiss: each swipe from the first slide of a freshly opened story, twice
+YEAR2 new swipe d200t150 (525 px ≈ 200 dp in 150 ms): open closed
+YEAR2 new swipe d200t300 (525 px ≈ 200 dp in 300 ms): open open
+YEAR2 new swipe d200t600 (525 px ≈ 200 dp in 600 ms): closed closed
+YEAR2 new swipe d120fast (315 px ≈ 120 dp in 70 ms): open open
+YEAR2 new swipe d120slow (315 px ≈ 120 dp in 900 ms): open open
+YEAR2 new swipe d40fast (105 px ≈ 40 dp in 45 ms): open open
+YEAR2 new swipe d20fast (52 px ≈ 19 dp in 45 ms): open open
+YEAR2 new swipe v133fast200 (1320 px ≈ 502 dp in 200 ms): closed closed
+## Y5. Back key and the close button
+YEAR back key: closed
+YEAR close button: closed
+## Y6. Dark theme: the first slides
+YEAR dark slide 1: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | 2026 — твоята година с книгите · Моята читателска година · 2026 · Затвори · Сподели
+  slide 1 after a slow drag up inside: diff 15.12
+YEAR dark slide 2: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Любим автор: Иван Вазов — 6 книги през г · Моята читателска година · 2026 · Затвори · Сподели
+  slide 2 after a slow drag up inside: diff 7.92
+YEAR dark slide 3: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Рекорден месец: Септември — 5 книги. · Моята читателска година · 2026 · Затвори · Сподели
+  slide 3 after a slow drag up inside: diff 16.88
+YEAR dark slide 4: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Твоят читателски тип: Книжен дракон. Пог · Моята читателска година · 2026 · Затвори · Сподели
+  slide 4 after a slow drag up inside: diff 28.06
+YEAR dark slide 5: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Искам да прочета · Книги, които искаш да вземеш · Моето членство · Статус и валидност · Прочетени книги · Историята на четенето и подобни книги · Моят профил · Читателски данни
+  slide 5 after a slow drag up inside: diff 0.00
+YEAR dark slide 6: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | 2026 — твоята година с книгите · Моята читателска година · 2026 · Затвори · Сподели
+  slide 6 after a slow drag up inside: diff 15.13
+YEAR dark slide 7: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Любим автор: Иван Вазов — 6 книги през г · Моята читателска година · 2026 · Затвори · Сподели
+  slide 7 after a slow drag up inside: diff 7.92
+YEAR dark slide 8: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Рекорден месец: Септември — 5 книги. · Моята читателска година · 2026 · Затвори · Сподели
+  slide 8 after a slow drag up inside: diff 16.89
+YEAR dark slide 9: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Твоят читателски тип: Книжен дракон. Пог · Моята читателска година · 2026 · Затвори · Сподели
+  slide 9 after a slow drag up inside: diff 5.40
+## Y7. Share a slide as an image
+YEAR share: fg android/com.android.internal.app.ChooserActivity; cache/share: 688161 2026-11-12 19:50 chyavorec-year-2026-author-1794513002246.png;
+## Y8. Signed-in card: fullscreen (demo)
+demo fullscreen card: yes
+A11Y AGG: 8 screens analysed, 0 dumps failed; totals MISSING=1 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=2
+== MISSING: 1 distinct
+   View@[42,1995][524,2121]  [1 screens: 01-my]
+== SMALL: 2 distinct
+   'Книги, които искаш да вземеш'  [1 screens: 01b-my-2]
+   'Статус и валидност'  [1 screens: 01b-my-2]
+== SAME-LABEL: 1 distinct
+   'Удължи срока' x2  [1 screens: 02-loans]
+== DOUBLE: 0 distinct
+contact sheets: 7 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 3 | Първи кадър: медиана 3673 мс, последен 3358 мс | Пълно показване: медиана 4813 мс, последно 4669 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 3" text="Първи кадър: медиана 3673 мс, последен 3358 мс" text="Пълно показване: медиана 4813 мс, последно 4669 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['5806', '8664', '9326']): 259 in 107 groups
+       6  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+       5  W/ziparchive: Unable to open '/data/app/~~Elb#og#L_#Ryts#uNf#WaQ==/org.chyavorec.app.dev-EGaPrexFSRFZ#oRQDaym#g==/base.dm': 
+       4  W/Parcel: Expecting binder but got null!
+       4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.ui.node.InnerNodeCoordinator$LookaheadDelegateImpl.measure-BRTryo#(InnerNodeCoordinator.k
+       4  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasureBlock$lambda$#(LookaheadPassDelegate.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate$$ExternalSyntheticLambda#.invoke(D#$$SyntheticClass:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasure-BRTryo#$ui(LookaheadPassDelegate.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performLookaheadMeasure-BRTryo#$ui(LayoutNodeLayoutDeleg
+       4  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.remeasure-BRTryo#(LookaheadPassDelegate.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.measure-BRTryo#(LookaheadPassDelegate.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutModifierNodeCoordinator$LookaheadDelegateForLayoutModifierNode.measure-BRTr
+       4  W/BasicSecureTextField: 	at androidx.compose.ui.graphics.BlockGraphicsLayerModifier.measure-#p#s#s(GraphicsLayerModifier.kt:#)
+       4  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       4  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       4  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       4  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       3  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       3  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       3  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       3  W/Gralloc4: allocator #.x is not supported
+       3  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       3  W/yavorec.app.dev: Accessing hidden method Landroid/view/ViewTreeObserver;->dispatchOnScrollChanged()V (unsupported, reflection, 
+       2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+contact sheets: 8 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt

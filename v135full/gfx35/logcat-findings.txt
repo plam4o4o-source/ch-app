@@ -1,0 +1,54 @@
+app pids seen: ['4778', '7315', '7435', '7509', '7589', '7706', '7773', '7980', '8150', '8320', '8403', '8473', '8536', '8809', '12528']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 76
+   skipped-frames events=76 max=114 total=4063
+   11-12 19:29:24.985  4778  4778 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:26.577  4778  4778 I Choreographer: Skipped 94 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:30.070  4778  4778 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:30.580  4778  4778 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:31.990  4778  4778 I Choreographer: Skipped 76 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:32.607  4778  4778 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:33.190  4778  4778 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:34.028  4778  4778 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:41.656  4778  4778 I Choreographer: Skipped 71 frames!  The application may be doing too much work on its main thread.
+   11-12 19:29:43.392  4778  4778 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-12 19:30:07.760  4778  4778 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   11-12 19:30:08.678  4778  4778 I Choreographer: Skipped 54 frames!  The application may be doing too much work on its main thread.
+== Davey: 157
+   davey events=157 max=3972ms median=949ms
+   11-12 19:29:29.247  4778  4792 I OpenGLRenderer: Davey! duration=3972ms; Flags=1, FrameTimelineVsyncId=5402, IntendedVsync=104589730332, Vsync=106156396936, InputEventId=0, HandleInputStart=106157103874, AnimationStart=106157104414, Perform
+   11-12 19:29:30.420  4778  4791 I OpenGLRenderer: Davey! duration=708ms; Flags=0, FrameTimelineVsyncId=5956, IntendedVsync=108589730172, Vsync=108623063504, InputEventId=0, HandleInputStart=108627197817, AnimationStart=108627198547, PerformT
+   11-12 19:29:30.549  4778  4791 I OpenGLRenderer: Davey! duration=1360ms; Flags=0, FrameTimelineVsyncId=5964, IntendedVsync=108639730170, Vsync=109639730130, InputEventId=0, HandleInputStart=109650572119, AnimationStart=109650573013, Perform
+   11-12 19:29:32.532  4778  4791 I OpenGLRenderer: Davey! duration=2313ms; Flags=0, FrameTimelineVsyncId=6066, IntendedVsync=109656396796, Vsync=110156396776, InputEventId=0, HandleInputStart=110160736495, AnimationStart=110160737355, Perform
+   11-12 19:29:33.187  4778  4791 I OpenGLRenderer: Davey! duration=1149ms; Flags=0, FrameTimelineVsyncId=6090, IntendedVsync=110173063442, Vsync=110273063438, InputEventId=0, HandleInputStart=110280700418, AnimationStart=110280700968, Perform
+   11-12 19:29:34.011  4778  4791 I OpenGLRenderer: Davey! duration=2371ms; Flags=0, FrameTimelineVsyncId=6098, IntendedVsync=110289730104, Vsync=111556396720, InputEventId=0, HandleInputStart=111570118161, AnimationStart=111570118716, Perform
+   11-12 19:29:34.294  4778  4791 I OpenGLRenderer: Davey! duration=1680ms; Flags=0, FrameTimelineVsyncId=6332, IntendedVsync=111623068928, Vsync=112173068873, InputEventId=0, HandleInputStart=112194233674, AnimationStart=112194234569, Perform
+   11-12 19:29:34.724  4778  4792 I OpenGLRenderer: Davey! duration=1148ms; Flags=0, FrameTimelineVsyncId=6384, IntendedVsync=112206396694, Vsync=112756396672, InputEventId=0, HandleInputStart=112770721387, AnimationStart=112770721883, Perform
+   11-12 19:29:34.928  4778  4792 I OpenGLRenderer: Davey! duration=1265ms; Flags=0, FrameTimelineVsyncId=6416, IntendedVsync=112773063338, Vsync=113606396638, InputEventId=0, HandleInputStart=113607992432, AnimationStart=113607992942, Perform
+   11-12 19:29:35.012  4778  4792 I OpenGLRenderer: Davey! duration=701ms; Flags=0, FrameTimelineVsyncId=6467, IntendedVsync=113623063304, Vsync=114089729952, InputEventId=0, HandleInputStart=114105565048, AnimationStart=114105566984, PerformT
+   11-12 19:29:41.878  4778  4792 I OpenGLRenderer: Davey! duration=1443ms; Flags=0, FrameTimelineVsyncId=7176, IntendedVsync=119773063058, Vsync=120023063048, InputEventId=0, HandleInputStart=120025078340, AnimationStart=120025079259, Perform
+   11-12 19:29:42.393  4778  5002 I OpenGLRenderer: Davey! duration=1718ms; Flags=0, FrameTimelineVsyncId=7206, IntendedVsync=120039729714, Vsync=121223063000, InputEventId=0, HandleInputStart=121236736455, AnimationStart=121236737103, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 19:29:23.169  4765  4765 I PERFCHECK: section: P0. Package: 1.2.35 aef8910 built prodRelease minified, x86_64 added throwaway key; versionCode 1507364; update manifest: the real one releases/latest; dexopt: x86_64:
+   11-12 19:29:23.257  4770  4770 I PERFCHECK: section: W. First launch and warm-up
+   11-12 19:31:21.861  7252  7252 I PERFCHECK: section: P1. 10 cold with Fully drawn + 10 warm starts, as installed
+   11-12 19:31:25.315  7303  7303 I PERFCHECK: fd-excluded-15322
+   11-12 19:31:37.927  7412  7412 I PERFCHECK: fd-excluded-31662
+   11-12 19:31:48.979  7503  7503 I PERFCHECK: fd-new-8880
+   11-12 19:32:01.568  7583  7583 I PERFCHECK: fd-new-1547
+   11-12 19:32:13.221  7700  7700 I PERFCHECK: fd-new-29125
+   11-12 19:32:24.861  7767  7767 I PERFCHECK: fd-new-3287
+   11-12 19:32:37.612  7970  7970 I PERFCHECK: fd-new-27215
+   11-12 19:32:50.827  8055  8055 I PERFCHECK: fd-new-9443
+   11-12 19:33:03.100  8313  8313 I PERFCHECK: fd-new-10390
+   11-12 19:33:14.634  8394  8394 I PERFCHECK: fd-new-15073
+   11-12 19:33:25.277  8467  8467 I PERFCHECK: fd-new-7700
+   11-12 19:33:36.610  8530  8530 I PERFCHECK: fd-new-8764
+   11-12 19:34:46.652  8793  8793 I PERFCHECK: section: G1. gfxinfo per scenario, round 1 animations ON, 1080x2400; slowest frames from framestats and the histogram
+   11-12 19:44:17.280 12515 12515 I PERFCHECK: section: G2. gfxinfo per scenario, round 2 animations ON, 1080x2400; slowest frames from framestats and the histogram
+   11-12 19:53:17.818 15948 15948 I PERFCHECK: section: P4. Totals
+   11-12 19:53:17.884 15953 15953 I PERFCHECK: section: P5. Diagnostics › „Бързодействие“ the apps own numbers, JankStats
+   11-12 19:54:15.901 16345 16345 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat
