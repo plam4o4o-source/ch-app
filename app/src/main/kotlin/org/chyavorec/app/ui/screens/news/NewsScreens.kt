@@ -228,7 +228,8 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
                         )
                     },
                     errorSubject = stringResource(R.string.subject_news),
-                ) { list ->
+                ) { all ->
+                    val list = remember(all) { all.distinctBy { it.id } }
                     // Редовете четат само своите стойности (не цялото състояние `ui`): писането в
                     // търсенето или опресняването не прекомпозира видимите редове наново.
                     val featured = ui.filter.query.isBlank() && !ui.filter.favoritesOnly

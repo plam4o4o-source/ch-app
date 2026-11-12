@@ -128,4 +128,100 @@ class PerfStatsTest {
         assertTrue("startup cold n=1: first frame median 1000 ms, last 1000 ms; fully drawn median 1500 ms, last 1500 ms" in text, text)
         assertTrue("frames book: 7/100 janky (7.0 %), worst 64 ms" in text, text)
     }
+
+    private fun at(v: Int, first: Long, drawn: Long? = null, cold: Boolean = true) = StartupSample(cold, first, drawn, versionCode = v)
+
+    @Test fun versionsAreNotMixedAndFirstStartAfterUpdateIsFlagged() {
+        var d = PerfData()
+        repeat(3) { i -> d = PerfStats.addStart(d, at(35, 245L + i, 317)) }
+        // Нова версия: първият студен старт е „след обновяване“ и не влиза в медианата.
+        d = PerfStats.addStart(d, at(36, 400, 500))
+        d = PerfStats.addStart(d, at(36, 200, 260))
+        d = PerfStats.addStart(d, at(36, 210, 270))
+        assertEquals(listOf(false, false, false, true, false, false), d.starts.map { it.afterUpdate })
+        val s = PerfStats.summary(d, currentVersion = 36)
+        assertEquals(36, s.versionCode)
+        assertEquals(StartupSample(true, 400, 500, 36, afterUpdate = true), s.afterUpdate)
+        assertEquals(StartStats(2, MedianLast(205, 210), MedianLast(265, 270)), s.cold)
+        // Предишната версия — за сравнение, със своите числа.
+        assertEquals(35, s.earlier!!.versionCode)
+        assertEquals(246L, s.earlier!!.cold!!.firstFrame.median)
+    }
+
+    @Test fun legacyDataWithoutVersionIsMigratedAsUnknown() {
+        val old = """{"starts":[{"cold":true,"firstFrameMs":900,"fullyDrawnMs":1200}],"routes":[{"route":"card/full","frames":100,"janky":5,"worstMs":159}]}"""
+        val file = tmp.newFile("old.json").apply { writeText(old) }
+        val d = PerfStore(file, Executor { it.run() }).read()
+        assertEquals(0, d.starts.single().versionCode)
+        assertEquals(0, d.routes.single().versionCode)
+        // Нова версия не наследява 159 ms; старото остава като „неизвестна версия“ за сравнение.
+        val after = PerfStats.addStart(d, at(36, 250, 300))
+        assertTrue(after.starts.last().afterUpdate)
+        val s = PerfStats.summary(after, 36)
+        assertTrue(s.topRoutes.isEmpty())
+        assertEquals(0, s.earlier!!.versionCode)
+        assertEquals(159L, s.earlier!!.topRoutes.single().worstMs)
+    }
+
+    @Test fun worstFrameResetsPerVersion() {
+        var d = PerfStats.addFrames(PerfData(), listOf(RouteFrames("card/full", 100, 5, 159, versionCode = 35)))
+        d = PerfStats.addFrames(d, listOf(RouteFrames("card/full", 100, 1, 40, versionCode = 36, worstTotalMs = 70, sumTotalMs = 1200)))
+        d = PerfStats.addFrames(d, listOf(RouteFrames("card/full", 100, 1, 30, versionCode = 36, worstTotalMs = 90, sumTotalMs = 1300)))
+        val cur = PerfStats.summary(d, 36).topRoutes.single()
+        assertEquals(RouteFrames("card/full", 200, 2, 40, 36, 90, 2500), cur)
+        assertEquals(12L, cur.meanTotalMs)
+        assertEquals(159L, PerfStats.summary(d, 36).earlier!!.topRoutes.single().worstMs)
+    }
+
+    @Test fun onlyTheNewestVersionsAreKept() {
+        var d = PerfData()
+        for (v in 30..35) d = PerfStats.addStart(d, at(v, 200L + v))
+        assertEquals(listOf(33, 34, 35), d.starts.map { it.versionCode })
+        for (v in 30..35) d = PerfStats.addFrames(d, listOf(RouteFrames("home", 40, 0, 10, versionCode = v)))
+        assertEquals(listOf(34, 35), d.routes.map { it.versionCode })
+    }
+
+    @Test fun freshDataIsNotFlaggedAsAfterUpdate() {
+        val d = PerfStats.addStart(PerfData(), at(36, 250, 300))
+        assertTrue(d.starts.none { it.afterUpdate })
+    }
+
+    @Test fun summaryOfNewVersionWithoutDataIsEmptyButShowsEarlier() {
+        val d = PerfStats.addStart(PerfData(), at(35, 250, 300))
+        val s = PerfStats.summary(d, 36, "1.2.36")
+        assertTrue(s.currentEmpty)
+        assertTrue(!s.isEmpty)
+        assertEquals("1.2.36", s.versionName)
+        assertEquals(35, s.earlier!!.versionCode)
+    }
+
+    @Test fun frameCounterKeepsTotalsAndVersion() {
+        val c = FrameCounter()
+        c.add("home", 8_000_000, jank = false, totalNanos = 20_000_000)
+        c.add("home", 9_000_000, jank = true, totalNanos = 40_000_000)
+        assertEquals(listOf(RouteFrames("home", 2, 1, 9, 36, worstTotalMs = 40, sumTotalMs = 60)), c.drain(36))
+    }
+
+    @Test fun exportCarriesVersionProfileAndEarlier() {
+        var d = PerfData()
+        d = PerfStats.noteVersion(d, 35, "1.2.35")
+        d = PerfStats.noteVersion(d, 36, "1.2.36")
+        d = PerfStats.addStart(d, at(35, 245, 317))
+        d = PerfStats.addStart(d, at(36, 300, 400))
+        d = PerfStats.addStart(d, at(36, 210, 270))
+        d = PerfStats.addFrames(d, listOf(RouteFrames("card/full", 100, 4, 30, 36, 80, 1500)))
+        val text = PerfStats.export(PerfStats.summary(d, 36), ProfileState.of(compiled = false, enqueued = true, code = 2))
+        assertTrue(text.startsWith("performance 1.2.36 (36)\n"), text)
+        assertTrue("profile: waiting for compilation (code 2)" in text, text)
+        assertTrue("startup cold first after update: first frame 300 ms; fully drawn 400 ms" in text, text)
+        assertTrue("startup cold n=1: first frame median 210 ms" in text, text)
+        assertTrue("total with render thread and GPU mean 15 ms, worst 80 ms" in text, text)
+        assertTrue("earlier 1.2.35 (35): startup cold n=1: first frame median 245 ms" in text, text)
+    }
+
+    @Test fun profileStateMapping() {
+        assertEquals(ProfileState.Kind.COMPILED, ProfileState.of(true, false, 1).kind)
+        assertEquals(ProfileState.Kind.PENDING, ProfileState.of(false, true, 2).kind)
+        assertEquals(ProfileState.Kind.NONE, ProfileState.of(false, false, 0).kind)
+    }
 }

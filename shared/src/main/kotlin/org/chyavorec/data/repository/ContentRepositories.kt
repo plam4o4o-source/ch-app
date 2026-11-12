@@ -84,7 +84,8 @@ class EventsRepository(
 
     private fun rollForward(events: List<Event>): List<Event> {
         val today = clock.today()
-        return events.map { e ->
+        // distinctBy: кешът от по-стара версия може да носи повторени id (ключове на списъци).
+        return events.distinctBy { it.id }.map { e ->
             val d = e.date?.let { runCatching { java.time.LocalDate.parse(it) }.getOrNull() }
             if (e.recurring && d != null && d.isBefore(today)) {
                 var next = d

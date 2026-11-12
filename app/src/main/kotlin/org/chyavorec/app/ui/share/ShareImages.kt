@@ -161,6 +161,8 @@ suspend fun loadSharePhoto(context: Context, url: String?): ImageBitmap? {
             (result as? SuccessResult)?.image?.toBitmap()?.let { return it.asImageBitmap() }
         } catch (e: CancellationException) {
             throw e
+        } catch (_: OutOfMemoryError) {
+            return null // картата се прави без снимка — по-добре от срив
         } catch (_: Exception) {
             // следващият адрес
         }
@@ -181,6 +183,8 @@ internal suspend fun GraphicsLayer.toShareBitmap(format: ShareFormat): Bitmap? {
         }
     } catch (e: CancellationException) {
         throw e
+    } catch (_: OutOfMemoryError) {
+        throw ShareOutOfMemoryException()
     } catch (_: Exception) {
         null
     }
@@ -193,10 +197,19 @@ internal suspend fun GraphicsLayer.toShareBitmap(format: ShareFormat): Bitmap? {
         bitmap
     } catch (e: CancellationException) {
         throw e
+    } catch (_: OutOfMemoryError) {
+        throw ShareOutOfMemoryException()
     } catch (_: Exception) {
-        viaLayer?.let { Bitmap.createScaledBitmap(it, format.widthPx, format.heightPx, true) }
+        try {
+            viaLayer?.let { Bitmap.createScaledBitmap(it, format.widthPx, format.heightPx, true) }
+        } catch (_: OutOfMemoryError) {
+            throw ShareOutOfMemoryException()
+        }
     }
 }
+
+/** Картата (~8 MB) не се побра в паметта — на екрана излиза спокойно съобщение, не срив. */
+internal class ShareOutOfMemoryException : Exception()
 
 /** Какво се споделя като картинка: картата, текстът с връзката и името на файла. */
 data class ShareImageRequest(val card: ShareCard, val subject: String, val text: String)
@@ -256,8 +269,8 @@ fun ShareImageHost(state: ShareImageState, onRendered: ((Bitmap, ShareImageReque
         var frames = 0
         while (!recorded.get() && frames++ < 60) withFrameNanos { }
         withFrameNanos { }
-        val bitmap = if (recorded.get()) layer.toShareBitmap(format) else null
         try {
+            val bitmap = if (recorded.get()) layer.toShareBitmap(format) else null
             when {
                 bitmap == null -> Toast.makeText(context, R.string.share_image_failed, Toast.LENGTH_SHORT).show()
                 onRendered != null -> onRendered(bitmap, request)
@@ -273,6 +286,11 @@ fun ShareImageHost(state: ShareImageState, onRendered: ((Bitmap, ShareImageReque
             }
         } catch (e: CancellationException) {
             throw e
+        } catch (_: ShareOutOfMemoryException) {
+            Toast.makeText(context, R.string.share_image_memory, Toast.LENGTH_LONG).show()
+        } catch (_: OutOfMemoryError) {
+            // Записът на файла (компресията) също иска памет.
+            Toast.makeText(context, R.string.share_image_memory, Toast.LENGTH_LONG).show()
         } catch (_: Exception) {
             Toast.makeText(context, R.string.share_image_failed, Toast.LENGTH_SHORT).show()
         } finally {

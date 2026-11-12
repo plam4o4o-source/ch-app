@@ -86,15 +86,17 @@ object KatalogParser {
     }
 
     private fun build(payload: Payload): CatalogSnapshot {
-        val books = payload.items.mapNotNull { it.toBook() }
+        // Инвентарният номер е уникален: повторен запис (грешка в данните) би счупил ключовете в списъците.
+        val books = payload.items.mapNotNull { it.toBook() }.distinctBy { it.inv }
         return CatalogSnapshot(
             library = payload.library.cleanLibraryName(),
             place = payload.place.trim().trimEnd(',').trim(),
             generatedOn = payload.generated,
             books = books,
             shelves = payload.shelves
-                .map { s -> CatalogShelf(s.name.trim(), s.items.mapNotNull { it.asLong() }) }
-                .filter { it.name.isNotBlank() && it.invNumbers.isNotEmpty() },
+                .map { s -> CatalogShelf(s.name.trim(), s.items.mapNotNull { it.asLong() }.distinct()) }
+                .filter { it.name.isNotBlank() && it.invNumbers.isNotEmpty() }
+                .distinctBy { it.name },
         )
     }
 

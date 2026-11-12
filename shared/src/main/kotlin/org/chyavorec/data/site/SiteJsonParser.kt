@@ -114,6 +114,8 @@ class SiteJsonParser(private val baseUrl: String) {
                     contentBlocks = extractor.extract(body),
                 )
             }
+            // Един ключ = един запис (ключовете в списъците са уникални, иначе Compose хвърля) — първият остава.
+            .distinctBy { it.id }
             .sortedByDescending { it.publishedAtMillis ?: 0 }
 
     private fun parseDate(iso: String): Long? = runCatching {
@@ -123,12 +125,12 @@ class SiteJsonParser(private val baseUrl: String) {
     fun parseIndex(text: String): List<SiteSearchDoc> =
         json.decodeFromString(IndexDto.serializer(), text).docs.filter { it.title.isNotBlank() }.map { d ->
             SiteSearchDoc(
-                id = d.id, type = d.type, title = d.title.trim(),
+                id = d.id.ifBlank { d.url.ifBlank { d.title.trim() } }, type = d.type, title = d.title.trim(),
                 url = abs(d.url) ?: d.url, excerpt = d.excerpt, text = d.text,
                 date = d.date ?: d.monthNum?.let { m -> d.day?.let { "--$m-$it" } },
                 category = d.category ?: d.badge, fileUrl = abs(d.fileUrl),
             )
-        }
+        }.distinctBy { it.id }
 
     /**
      * Събитията от годишния календар на сайта (`type = "event"`, ден + месец).
@@ -140,7 +142,8 @@ class SiteJsonParser(private val baseUrl: String) {
             val month = d.monthNum?.trim()?.toIntOrNull() ?: d.month?.let { BulgarianDates.monthIndex(it) } ?: return@mapNotNull null
             val date = nextOccurrence(month, day, today) ?: return@mapNotNull null
             Event(
-                id = d.id,
+                // Празен id (календарът няма задължителен) → стабилен ключ от заглавие и дата.
+                id = d.id.trim().ifBlank { "event-$month-$day-${d.title.trim()}" },
                 title = d.title.trim(),
                 date = date.toString(),
                 // Винаги HH:mm („18.30“ → „18:30“); празно или невалидно — без час.
@@ -154,7 +157,7 @@ class SiteJsonParser(private val baseUrl: String) {
                 recurring = true,
                 source = EventSource.CALENDAR,
             )
-        }.sortedBy { it.date }
+        }.distinctBy { it.id }.sortedBy { it.date }
 
     fun nextOccurrence(month: Int, day: Int, today: LocalDate): LocalDate? {
         val thisYear = runCatching { LocalDate.of(today.year, month, day) }.getOrNull()
@@ -166,10 +169,10 @@ class SiteJsonParser(private val baseUrl: String) {
     fun parseFiles(text: String): List<SiteDocument> =
         json.decodeFromString(ListSerializer(FileDto.serializer()), text).filter { it.url.isNotBlank() }.map { f ->
             SiteDocument(
-                id = f.id, title = f.title.trim(), url = abs(f.url) ?: f.url, date = f.date,
+                id = f.id.trim().ifBlank { f.url.trim() }, title = f.title.trim(), url = abs(f.url) ?: f.url, date = f.date,
                 category = f.category, size = f.size, description = f.description.trim(), kind = DocumentKind.DOCUMENT,
             )
-        }
+        }.distinctBy { it.id }
 
     /** Историческите публикации (PDF статии от юбилейния вестник) от индекса. */
     fun publications(docs: List<SiteSearchDoc>): List<SiteDocument> =
@@ -178,5 +181,5 @@ class SiteJsonParser(private val baseUrl: String) {
                 id = d.id, title = d.title, url = d.fileUrl!!, category = d.category,
                 description = d.excerpt, kind = DocumentKind.PUBLICATION,
             )
-        }
+        }.distinctBy { it.id }
 }
