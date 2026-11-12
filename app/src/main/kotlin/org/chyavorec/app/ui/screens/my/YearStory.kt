@@ -81,6 +81,7 @@ import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.pluralStringResource
@@ -472,15 +473,20 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
         Column(Modifier.fillMaxWidth().windowInsetsPadding(WindowInsets.safeDrawing).padding(horizontal = 12.dp, vertical = 8.dp)) {
             StoryProgress(slides.size, index, progress = { if (auto) timer.value else 1f })
             Spacer(Modifier.height(10.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                CardEmblem(32.dp)
-                Spacer(Modifier.width(10.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(stringResource(R.string.year_title), style = sans(13.sp, Brand.Parchment, FontWeight.SemiBold), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text(summary.year.toString(), style = sans(12.sp, Brand.GoldLight), maxLines = 1)
-                }
-                IconButton(onClick = onClose) {
-                    Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.action_close), tint = Brand.Parchment)
+            // Заглавката е украса над слайда: при най-едър шрифт расте до 1.3× (иначе се реже с „…“
+            // и измества слайда), а заглавието може да мине на втори ред.
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale = density.fontScale.coerceAtMost(1.3f))) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    CardEmblem(32.dp)
+                    Spacer(Modifier.width(10.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.year_title), style = sans(13.sp, Brand.Parchment, FontWeight.SemiBold), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(summary.year.toString(), style = sans(12.sp, Brand.GoldLight), maxLines = 1)
+                    }
+                    IconButton(onClick = onClose) {
+                        Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.action_close), tint = Brand.Parchment)
+                    }
                 }
             }
         }
