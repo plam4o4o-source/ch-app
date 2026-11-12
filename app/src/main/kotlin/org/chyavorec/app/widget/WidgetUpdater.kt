@@ -271,8 +271,8 @@ object WidgetUpdater {
             val book = BookWidgetViews.build(context, previewBookState(context))
             val category = AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN
             // И двата опита се правят; успехът е само ако са успели и двата (иначе — нов опит утре).
-            val main = manager.setWidgetPreview(provider(context), category, views)
             val second = manager.setWidgetPreview(bookProvider(context), category, book)
+            val main = manager.setWidgetPreview(provider(context), category, views)
             main && second
         }.logFailure("widget.preview").getOrDefault(false)
         if (ok) prefs.edit { putString(KEY_STAMP, stamp) }

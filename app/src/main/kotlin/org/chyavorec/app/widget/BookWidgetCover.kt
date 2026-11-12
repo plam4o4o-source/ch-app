@@ -2,13 +2,12 @@ package org.chyavorec.app.widget
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.graphics.RadialGradient
 import android.graphics.RectF
 import android.graphics.Shader
@@ -39,15 +38,14 @@ internal object BookWidgetCover {
         val w = max(widthPx, 24)
         val h = (w * RATIO).roundToInt()
         val u = w / 72f
-        val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bmp)
+        val content = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(content)
         val wf = w.toFloat()
         val hf = h.toFloat()
         val base = GeneratedCover.backgroundArgb(book.author.ifBlank { book.title }, palette.coverAnchors, dark)
         val ink = GeneratedCover.INK
 
-        // Всичко върху корицата — в слой, после заоблените ъгли (3 отляво, 8 отдясно) го изрязват с маска.
-        val layer = canvas.saveLayer(0f, 0f, wf, hf, null)
+        // Всичко върху корицата е в един Bitmap; заоблените ъгли (3 отляво, 8 отдясно) се изрязват при пренасянето му.
         val fill = Paint(Paint.ANTI_ALIAS_FLAG)
         fill.shader = LinearGradient(
             0f, 0f, 0f, hf,
@@ -102,14 +100,15 @@ internal object BookWidgetCover {
         fill.shader = LinearGradient(0f, 0f, 7 * u, 0f, Color.argb(71, 0, 0, 0), Color.TRANSPARENT, Shader.TileMode.CLAMP)
         canvas.drawRect(0f, 0f, 7 * u, hf, fill)
 
-        val mask = Paint(Paint.ANTI_ALIAS_FLAG).apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN) }
         val r3 = 3 * u
         val r8 = 8 * u
         val shape = Path().apply {
             addRoundRect(RectF(0f, 0f, wf, hf), floatArrayOf(r3, r3, r8, r8, r8, r8, r3, r3), Path.Direction.CW)
         }
-        canvas.drawPath(shape, mask)
-        canvas.restoreToCount(layer)
+        val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val cut = Paint(Paint.ANTI_ALIAS_FLAG).apply { shader = BitmapShader(content, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP) }
+        Canvas(bmp).drawPath(shape, cut)
+        content.recycle()
         return bmp
     }
 

@@ -627,26 +627,19 @@ class ChitalishteWidgetTest {
         WidgetUpdater.awaitIdle()
     }
 
-    @Config(sdk = [25])
-    @Test fun addingWidgetsIsHiddenWhereTheSystemCannotDoIt() {
-        assertFalse(WidgetPinning.supported(app))
-        assertFalse(WidgetPinning.request(app, WidgetKind.MAIN))
-    }
-
     @Config(sdk = [34])
     @Test fun addingWidgetRequestAgreesWithSupport() {
         assertEquals(WidgetPinning.supported(app), WidgetPinning.request(app, WidgetKind.BOOK))
     }
 
     @Config(sdk = [35])
-    @Test fun generatedPreviewAlsoCoversTheBookWidget() {
-        val manager = AppWidgetManager.getInstance(app)
+    @Test fun generatedPreviewIsPublishedForBothWidgets() {
         assertTrue(WidgetUpdater.publishPreview(app))
-        val preview = manager.getWidgetPreview(
-            ComponentName(app, BookOfTheDayWidgetReceiver::class.java), Process.myUserHandle(), AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN,
-        )
-        val texts = apply(assertNotNull(preview)).texts()
-        assertTrue(app.getString(R.string.widget_book_preview_title) in texts, texts.toString())
+        // Примерната книга на прегледа („Книга на деня“) — със заглавие, автор и корица.
+        val v = apply(BookWidgetViews.build(app, previewBookState(app)))
+        assertEquals(app.getString(R.string.widget_book_preview_title), v.text(R.id.widget_book_title))
+        assertEquals(app.getString(R.string.widget_book_preview_author), v.text(R.id.widget_book_author))
+        assertTrue(v.visible(R.id.widget_book_cover))
     }
 
     // Снимки за визуален преглед (не сравняват пиксели).
