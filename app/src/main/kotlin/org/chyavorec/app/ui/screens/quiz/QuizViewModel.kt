@@ -47,7 +47,7 @@ class AppQuizSources(
         val books = runCatching { catalog.lookupSearcher(network = false)?.data?.search(CatalogQuery()) }.getOrNull().orEmpty()
         // Снимките на изложбата — само ако галерията вече е в кеша (десет страници не се теглят заради викторина).
         val photos = runCatching {
-            site.cachedGallery()?.data.orEmpty().filter { it.album == EXHIBITION_ALBUM }.map { QuizPhoto(it.title, it.fullUrl) }
+            site.cachedGallery()?.data.orEmpty().filter { it.name == EXHIBITION_ALBUM }.flatMap { a -> a.photos }.map { QuizPhoto(it.title, it.fullUrl) }
         }.getOrNull().orEmpty()
         val questions = (custom.questions(false) as? Outcome.Success)?.value?.data ?: custom.cached()?.data.orEmpty()
         return QuizSources(entries, books, photos, questions)
