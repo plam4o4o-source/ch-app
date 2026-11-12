@@ -452,7 +452,7 @@ private fun MonthCalendar(ui: EventsUiState, onPrev: () -> Unit, onNext: () -> U
                                         // Бродиран ромб вместо точка: проява в този ден.
                                         StitchedRhombus(
                                             if (isSel) MaterialTheme.colorScheme.onPrimary else LocalExtendedColors.current.gold,
-                                            Modifier.align(Alignment.BottomCenter).padding(bottom = 3.dp).size(11.dp),
+                                            Modifier.align(Alignment.BottomCenter).padding(bottom = 3.dp).size(12.dp),
                                         )
                                     }
                                 }

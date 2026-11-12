@@ -193,17 +193,31 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
             // Заглавката: плетена бордо лента — шевица, месецът и годината, шевица.
             Column(Modifier.fillMaxWidth().background(Brand.Burgundy).padding(vertical = 6.dp)) {
                 ShevitsaStrip(motif, Brand.Gold, Modifier.fillMaxWidth().height(20.dp))
-                Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                val monthText: @Composable (Modifier) -> Unit = { m ->
                     Text(
                         monthYear, color = Brand.Parchment, fontFamily = Cormorant, fontWeight = FontWeight.SemiBold,
-                        fontSize = 22.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false),
+                        fontSize = 22.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = m,
                     )
+                }
+                val categoryText: @Composable (Modifier, TextAlign) -> Unit = { m, align ->
                     event.category?.takeIf { it.isNotBlank() }?.let {
-                        Spacer(Modifier.width(12.dp))
                         Text(
                             it.uppercase(), color = Brand.GoldLight, style = MaterialTheme.typography.labelSmall,
-                            maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.End, modifier = Modifier.weight(1f),
+                            maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = align, modifier = m,
                         )
+                    }
+                }
+                // При едър шрифт месецът и разделът не се събират един до друг — един под друг (месецът не се реже).
+                if (fontScale >= 1.3f) {
+                    Column(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 6.dp)) {
+                        monthText(Modifier)
+                        categoryText(Modifier, TextAlign.Start)
+                    }
+                } else {
+                    Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                        monthText(Modifier.weight(1f, fill = false))
+                        Spacer(Modifier.width(12.dp))
+                        categoryText(Modifier.weight(1f), TextAlign.End)
                     }
                 }
                 ShevitsaStrip(motif, Brand.Gold, Modifier.fillMaxWidth().height(20.dp))
