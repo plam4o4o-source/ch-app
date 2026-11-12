@@ -151,7 +151,7 @@ class EmbroideryScreenshotTest {
     }
 
     private fun withTemplate(t: EmbroideryTemplate, symmetry: Symmetry = Symmetry.NONE) = EmbroideryEditor().apply {
-        setSymmetry(symmetry)
+        chooseSymmetry(symmetry)
         load(t.pattern())
     }
 

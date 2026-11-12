@@ -358,7 +358,7 @@ private fun EmbroideryControls(editor: EmbroideryEditor, onSave: () -> Unit, onO
                 stringResource(R.string.embroidery_mirror), style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp),
             )
-            ConnectedButtonGroup(Symmetry.entries, editor.symmetry, editor::setSymmetry, Modifier.fillMaxWidth()) { s, _ ->
+            ConnectedButtonGroup(Symmetry.entries, editor.symmetry, editor::chooseSymmetry, Modifier.fillMaxWidth()) { s, _ ->
                 Text(
                     stringResource(
                         when (s) {

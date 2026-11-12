@@ -70,7 +70,7 @@ class EmbroideryEditor(val board: StitchBoard = StitchBoard()) {
     val canRedo: Boolean get() = historyVersion >= 0 && board.canRedo
     val stitchCount: Int get() = if (historyVersion >= 0) board.stitchCount else 0
 
-    fun setSymmetry(value: Symmetry) {
+    fun chooseSymmetry(value: Symmetry) {
         symmetry = value
         board.symmetry = value
         drawVersion++
