@@ -41,7 +41,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
@@ -51,11 +50,8 @@ import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.EventAvailable
 import androidx.compose.material.icons.outlined.EventRepeat
 import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.Directions
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Groups
-import androidx.compose.material.icons.outlined.NotificationsActive
-import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -130,12 +126,14 @@ import org.chyavorec.app.ui.share.ShareImageHost
 import org.chyavorec.app.ui.share.rememberShareImageState
 
 @Composable
-private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier) {
+private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier, eventId: String? = null) {
     // Плътна значка (бордо с пергамент, като в уиджета), а не розовият secondaryContainer.
     val (badge, onBadge) = paletteDateBadge(LocalThemeStyle.current.palette, LocalExtendedColors.current.isDark)
     // Минимален, а не фиксиран размер: при едър системен шрифт значката расте с текста, вместо да го реже.
+    // Значката „прелита“ към листа на събитието (същият ключ в EventDetailScreen).
+    val shared = if (eventId != null) Modifier.sharedBoundsKey("event-date-$eventId") else Modifier
     Column(
-        modifier.widthIn(min = 58.dp).heightIn(min = 58.dp).clip(MaterialTheme.shapes.small)
+        modifier.then(shared).widthIn(min = 58.dp).heightIn(min = 58.dp).clip(MaterialTheme.shapes.small)
             .background(badge).padding(horizontal = 6.dp, vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -154,7 +152,7 @@ fun EventCard(e: Event, onClick: () -> Unit, modifier: Modifier = Modifier, titl
     val date = e.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
     PressableCard(onClick = onClick, modifier = modifier) {
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            DateBadge(date)
+            DateBadge(date, eventId = e.id)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
                 Text(e.title, style = MaterialTheme.typography.titleMedium, maxLines = titleMaxLines, overflow = TextOverflow.Ellipsis, modifier = Modifier.sharedBoundsKey("event-title-${e.id}"))
@@ -451,8 +449,11 @@ private fun MonthCalendar(ui: EventsUiState, onPrev: () -> Unit, onNext: () -> U
                                         color = if (isSel) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
                                     )
                                     if (has) {
-                                        Box(Modifier.align(Alignment.BottomCenter).padding(bottom = 5.dp).size(5.dp)
-                                            .background(if (isSel) MaterialTheme.colorScheme.onPrimary else LocalExtendedColors.current.gold, CircleShape))
+                                        // Бродиран ромб вместо точка: проява в този ден.
+                                        StitchedRhombus(
+                                            if (isSel) MaterialTheme.colorScheme.onPrimary else LocalExtendedColors.current.gold,
+                                            Modifier.align(Alignment.BottomCenter).padding(bottom = 3.dp).size(11.dp),
+                                        )
                                     }
                                 }
                             }
@@ -530,70 +531,84 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
             }
             return@Scaffold
         }
-        Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 32.dp)) {
-            e.imageUrl?.let {
-                SiteImage(it, width = windowWidth() - 32.dp, contentDescription = null, modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f).padding(horizontal = 16.dp).clip(MaterialTheme.shapes.large))
+        val date = e.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
+        val today = LocalAppContainer.current.clock.today()
+        val place = e.place?.takeIf { it.isNotBlank() }
+        // Напомнянето: без разрешение (или с изключени известия за събития) то не би се показало —
+        // не се задава, а се казва защо (с бутон към настройките).
+        val onReminder: () -> Unit = {
+            if (hasReminder) vm.toggleReminder()
+            else permission.requestWithResult { access ->
+                val events = org.chyavorec.app.notifications.Channel.EVENTS
+                val status = org.chyavorec.app.ui.screens.settings.notificationStatus(context, listOf(events))
+                if (access == NotificationAccess.GRANTED && status.allows(events)) vm.toggleReminder()
+                else scope.launch {
+                    snackbar.showNotificationsBlocked(
+                        context,
+                        if (access == NotificationAccess.GRANTED) NotificationAccess.BLOCKED else access,
+                        msgBlocked,
+                        events.takeIf { !status.appBlocked },
+                    )
+                }
             }
-            Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(e.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.sharedBoundsKey("event-title-${e.id}").semantics { heading() })
-                DetailLine(Icons.Outlined.Event, Formatters.date(context, e.date) ?: stringResource(R.string.event_no_date))
-                if (e.recurring) {
-                    Text(stringResource(R.string.event_recurring), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                e.category?.let { DetailLine(Icons.Outlined.Sell, it) }
+        }
+        val actions: @Composable (Modifier) -> Unit = { m ->
+            EventActions(
+                showCalendar = e.date != null, onCalendar = { Intents.addToCalendar(context, e, zone) },
+                showReminder = vm.canRemind(e) || hasReminder, hasReminder = hasReminder, onReminder = onReminder,
+                showRoute = place != null, onRoute = { place?.let { Intents.map(context, Intents.placeQuery(it)) } },
+                onSource = { openLink(e.sourceUrl) }, modifier = m,
+            )
+        }
+        val photo: @Composable (Modifier) -> Unit = { m ->
+            e.imageUrl?.let {
+                SiteImage(it, width = windowWidth() - 32.dp, contentDescription = null, modifier = m.fillMaxWidth().aspectRatio(16f / 9f).clip(MaterialTheme.shapes.large))
+            }
+        }
+        val details: @Composable () -> Unit = {
+            Text(e.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.sharedBoundsKey("event-title-${e.id}").semantics { heading() })
+            // Датата и часът са на листа; без дата — старият ред.
+            if (date == null) {
+                DetailLine(Icons.Outlined.Event, stringResource(R.string.event_no_date))
                 e.time?.let { DetailLine(Icons.Outlined.AccessTime, it) }
-                // Мястото отваря картата (в селото — „<място>, с. Яворец“).
-                val place = e.place?.takeIf { it.isNotBlank() }
-                place?.let {
-                    DetailLine(
-                        Icons.Outlined.Place, it,
-                        onClickLabel = stringResource(R.string.event_open_map),
-                        trailing = Icons.Outlined.Map,
-                    ) { Intents.map(context, Intents.placeQuery(it)) }
+                e.category?.let { DetailLine(Icons.Outlined.Sell, it) }
+            }
+            if (e.recurring) {
+                Text(stringResource(R.string.event_recurring), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            // Мястото отваря картата (в селото — „<място>, с. Яворец“).
+            place?.let {
+                DetailLine(
+                    Icons.Outlined.Place, it,
+                    onClickLabel = stringResource(R.string.event_open_map),
+                    trailing = Icons.Outlined.Map,
+                ) { Intents.map(context, Intents.placeQuery(it)) }
+            }
+            e.organizer?.let { DetailLine(Icons.Outlined.Groups, it) }
+            if (e.description.isNotBlank()) {
+                Text(e.description, style = MaterialTheme.typography.bodyLarge)
+            }
+        }
+        val scroll = Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(bottom = 32.dp)
+        // От 720 dp (таблет, телефон хоризонтално) листът и действията са отляво, текстът — отдясно.
+        if (date != null && windowWidth() >= 720.dp) {
+            Row(scroll.padding(20.dp), horizontalArrangement = Arrangement.spacedBy(28.dp)) {
+                Column(Modifier.width(340.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                    EventLeaf(e, date, today)
+                    actions(Modifier)
                 }
-                e.organizer?.let { DetailLine(Icons.Outlined.Groups, it) }
-                if (e.description.isNotBlank()) {
-                    Text(e.description, style = MaterialTheme.typography.bodyLarge)
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    photo(Modifier)
+                    details()
                 }
+            }
+        } else {
+            Column(scroll.padding(horizontal = 20.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                if (date != null) EventLeaf(e, date, today, Modifier.align(Alignment.CenterHorizontally))
+                photo(Modifier)
+                details()
                 Spacer(Modifier.height(4.dp))
-                if (e.date != null) {
-                    Button(onClick = { Intents.addToCalendar(context, e, zone) }, modifier = Modifier.fillMaxWidth()) {
-                        Icon(Icons.Outlined.CalendarMonth, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.event_add_calendar))
-                    }
-                }
-                // „Маршрут“ — картата с мястото (същото като бутона в напомнянето).
-                place?.let {
-                    OutlinedButton(onClick = { Intents.map(context, Intents.placeQuery(it)) }, modifier = Modifier.fillMaxWidth()) {
-                        Icon(Icons.Outlined.Directions, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.notif_action_route))
-                    }
-                }
-                if (vm.canRemind(e) || hasReminder) {
-                    OutlinedButton(onClick = {
-                        if (hasReminder) vm.toggleReminder()
-                        // Без разрешение (или с изключени известия за събития) напомнянето не би се показало —
-                        // не се задава, а се казва защо (с бутон към настройките).
-                        else permission.requestWithResult { access ->
-                            val events = org.chyavorec.app.notifications.Channel.EVENTS
-                            val status = org.chyavorec.app.ui.screens.settings.notificationStatus(context, listOf(events))
-                            if (access == NotificationAccess.GRANTED && status.allows(events)) vm.toggleReminder()
-                            else scope.launch {
-                                snackbar.showNotificationsBlocked(
-                                    context,
-                                    if (access == NotificationAccess.GRANTED) NotificationAccess.BLOCKED else access,
-                                    msgBlocked,
-                                    events.takeIf { !status.appBlocked },
-                                )
-                            }
-                        }
-                    }, modifier = Modifier.fillMaxWidth()) {
-                        Icon(if (hasReminder) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsNone, null)
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(if (hasReminder) R.string.event_remove_reminder else R.string.event_remind))
-                    }
-                }
-                OutlinedButton(onClick = { openLink(e.sourceUrl) }, modifier = Modifier.fillMaxWidth()) {
-                    Icon(Icons.AutoMirrored.Outlined.OpenInNew, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.event_source))
-                }
+                actions(Modifier)
             }
         }
     }

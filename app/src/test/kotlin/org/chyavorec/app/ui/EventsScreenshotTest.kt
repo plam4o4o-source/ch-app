@@ -223,6 +223,30 @@ class EventsScreenshotTest {
         assertEquals(Intents.CENTRE_ADDRESS, started.data?.schemeSpecificPart?.substringAfter("q="))
     }
 
+    /** Листът се чете като едно цяло (описание със „след N дни“), а не като разпилени текстове. */
+    private fun assertLeaf(text: String) {
+        compose.waitForIdle()
+        if (compose.onAllNodes(hasContentDescription(text, substring = true)).fetchSemanticsNodes().isEmpty()) {
+            throw AssertionError("листът няма описание „$text“")
+        }
+    }
+
+    /** Листът на събитието в тъмна тема и на таблет (двуколонно) — със събитие от сайта. */
+    @Test fun eventLeafDetailDark() {
+        launch(ThemeMode.DARK, deepLink = "event/event-69")
+        waitFor("пл. 9-ти септември 3")
+        assertLeaf("след 66 дни")
+        shot("w21-event-leaf-detail-dark")
+    }
+
+    @Config(qualifiers = "bg-w1280dp-h800dp-land-xhdpi")
+    @Test fun eventLeafDetailTablet() {
+        launch(deepLink = "event/event-69")
+        waitFor("пл. 9-ти септември 3")
+        assertLeaf("след 66 дни")
+        shot("w21-event-leaf-detail-tablet")
+    }
+
     @Config(qualifiers = "en-w411dp-h1100dp-xhdpi")
     @Test fun calendarSegmentEnglishDark() {
         launch(ThemeMode.DARK, deepLink = "events")

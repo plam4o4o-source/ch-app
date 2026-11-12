@@ -240,6 +240,8 @@ S = {
 "event_remind": ("Напомни ми", "Remind me"),
 "event_remove_reminder": ("Премахни напомнянето", "Remove reminder"),
 "event_source": ("Виж публикацията", "View the post"),
+"event_weekdays": ("понеделник,вторник,сряда,четвъртък,петък,събота,неделя", "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"),
+"event_countdown_today": ("днес", "today"),
 "reminder_set": ("Ще получиш напомняне преди събитието.", "You’ll get a reminder before the event."),
 "reminder_removed": ("Напомнянето е премахнато.", "Reminder removed."),
 "reminder_past": ("Събитието е минало — не може да се зададе напомняне.", "The event has passed — a reminder can’t be set."),
@@ -1055,6 +1057,9 @@ P = {
 # Под брояча на „Начало“ (числото е отделно, над текста).
 "stat_books": (("документ в каталога", "документа в каталога"), ("catalogue item", "catalogue items")),
 "stat_events": (("събитие през следващите 30 дни", "събития през следващите 30 дни"), ("event in the next 30 days", "events in the next 30 days")),
+# Листът на събитието: колко дни остават/са минали.
+"event_in_days": (("след %1$d ден", "след %1$d дни"), ("in %1$d day", "in %1$d days")),
+"event_days_ago": (("преди %1$d ден", "преди %1$d дни"), ("%1$d day ago", "%1$d days ago")),
 }
 
 def esc(s):
