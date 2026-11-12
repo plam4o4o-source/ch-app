@@ -38,7 +38,7 @@ internal object HeroParallax {
         if (height <= 0f) MIN_SCALE else maxOf(MIN_SCALE, 1f + 2f * drift / height)
 
     /** Хоризонталното изместване на снимката (px), когато картата е на [cardOffset] px от центъра; не излиза от [margin]. */
-    fun swipeShift(cardOffset: Float, margin: Float): Float = (-cardOffset * SWIPE_SHARE).coerceIn(-margin, margin)
+    fun swipeShift(cardOffset: Float, margin: Float): Float = (0f - cardOffset * SWIPE_SHARE).coerceIn(-margin, margin)
 
     /** Вертикалното изместване (px) при превъртане: [scroll] е изминатото като дял от половин прозорец (−1..1). */
     fun scrollShift(scroll: Float, drift: Float, margin: Float): Float = (scroll.coerceIn(-1f, 1f) * drift).coerceIn(-margin, margin)

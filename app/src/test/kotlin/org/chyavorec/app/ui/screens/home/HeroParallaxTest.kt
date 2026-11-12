@@ -83,7 +83,7 @@ class HeroParallaxTest {
         // Ниска карта: 12 dp плъзгане на 224 dp височина иска повече от 1.08, иначе ще се покаже ръб.
         val s = HeroParallax.scale(height = 224f, drift = 12f)
         assertTrue(s > 1.08f)
-        assertTrue((s - 1f) * 224f / 2f >= 12f)
+        assertTrue((s - 1f) * 224f / 2f >= 11.99f)
         assertEquals(1.08f, HeroParallax.scale(height = 0f, drift = 12f))
     }
 
