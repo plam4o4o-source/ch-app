@@ -57,6 +57,12 @@ object Routes {
     const val VIEWER = "viewer?album={album}&index={index}&url={url}&alt={alt}&page={page}&title={title}"
     const val CONTACTS = "contacts"
     const val DOCUMENTS = "documents"
+    /** „Старият вестник“: списъкът и четецът на статия (PDF в приложението). */
+    const val NEWSPAPER = "newspaper"
+    const val NEWSPAPER_READ = "newspaper/read?url={url}&title={title}&sub={sub}"
+    /** „Лента на времето“ 1900 → днес и викторината „Познай Яворец“. */
+    const val TIMELINE = "timeline"
+    const val QUIZ = "quiz"
     const val MESSAGES = "messages"
     /** Съобщенията, превъртени до едно от тях (от известие). */
     const val MESSAGE = "messages/{id}"
@@ -74,6 +80,8 @@ object Routes {
     fun message(id: String) = "messages/" + Uri.encode(id)
     fun year(year: Int) = "my/year/$year"
     fun page(url: String, title: String) = "page?url=" + Uri.encode(url) + "&title=" + Uri.encode(title)
+    fun newspaperRead(url: String, title: String, sub: String? = null) =
+        "newspaper/read?url=" + Uri.encode(url) + "&title=" + Uri.encode(title) + "&sub=" + Uri.encode(sub.orEmpty())
     fun album(name: String) = "album/" + Uri.encode(name)
     fun viewer(album: String?, index: Int, url: String? = null, alt: String? = null, page: String? = null, title: String? = null) =
         "viewer?album=" + Uri.encode(album ?: "") + "&index=$index&url=" + Uri.encode(url ?: "") +

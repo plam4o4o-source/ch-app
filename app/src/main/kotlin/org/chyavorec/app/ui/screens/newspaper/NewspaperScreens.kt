@@ -25,7 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
-import androidx.compose.material.icons.outlined.Article
+import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.CloudOff
@@ -103,7 +103,7 @@ fun NewspaperScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 onRetry = { vm.refresh() },
                 isEmpty = { it.isEmpty() },
                 skeleton = { SkeletonList(withImage = false) },
-                empty = { EmptyView(stringResource(R.string.newspaper_empty), icon = Icons.Outlined.Article) },
+                empty = { EmptyView(stringResource(R.string.newspaper_empty), icon = Icons.AutoMirrored.Outlined.Article) },
                 errorSubject = stringResource(R.string.subject_documents),
             ) { docs ->
                 NewspaperList(docs, state.fromCache, state.syncedAt, state.refreshError) { d ->

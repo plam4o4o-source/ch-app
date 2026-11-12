@@ -169,6 +169,8 @@ import org.chyavorec.app.ui.components.SectionHeader
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.shimmer
 import org.chyavorec.app.ui.navigation.Routes
+import org.chyavorec.app.ui.screens.timeline.OnThisDayCard
+import org.chyavorec.domain.timeline.OnThisDay
 import org.chyavorec.app.ui.screens.events.EventCard
 import org.chyavorec.app.ui.screens.news.NewsRow
 import org.chyavorec.app.ui.screens.my.LoanDueCard
@@ -292,6 +294,8 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
                     )
                 }
             }
+            // „На този ден“ — само на 17.12. и 17.03. (иначе нищо не се чете и не се рисува).
+            if (OnThisDay.mayHaveEntry(today)) item("on-this-day") { OnThisDayCard(today, navigate, Modifier.animateItem()) }
             item("search") {
                 // Полето се разгръща в цялото търсене (със скенера в него) — виж HomeSearchBar.
                 HomeSearchBar(navigate, openExternal, openLink, Modifier.padding(horizontal = ScreenGutter, vertical = 6.dp))
@@ -388,7 +392,7 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
             }
             // Само числата — новини/рафтове не прекомпозират реда с броячите. Броят в каталога
             // е само тук (без повтарящ го ред отдолу).
-            item("stats") { StatsRow(state.yearsSinceFounding, state.catalogCount, state.eventsThisMonth) }
+            item("stats") { StatsRow(state.yearsSinceFounding, state.catalogCount, state.eventsThisMonth, onYears = { navigate(Routes.TIMELINE) }) }
         }
         // Началото няма горна лента: превъртяното съдържание минава под прозрачната лента на
         // състоянието — щом е превъртяно, под часовника и иконите се появява фон, за да се четат.
@@ -676,7 +680,7 @@ private fun EventsSkeleton(cardWidth: Dp, height: Dp) {
 
 /** „Читалището в числа“ — анимирани броячи (като на сайта); нулите не се показват („0 събития“). */
 @Composable
-private fun StatsRow(yearsSinceFounding: Int, catalogCount: Int?, eventsThisMonth: Int?) {
+private fun StatsRow(yearsSinceFounding: Int, catalogCount: Int?, eventsThisMonth: Int?, onYears: () -> Unit = {}) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainer,
         shape = MaterialTheme.shapes.medium,
@@ -692,7 +696,12 @@ private fun StatsRow(yearsSinceFounding: Int, catalogCount: Int?, eventsThisMont
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 val animate = countUp == true
-                AnimatedCounter(yearsSinceFounding, stringResource(R.string.stat_years), Modifier.weight(1f), animate = animate)
+                // „Години история“ отваря „Лентата на времето“.
+                Box(
+                    Modifier.weight(1f).heightIn(min = 48.dp).clip(MaterialTheme.shapes.small)
+                        .clickable(onClickLabel = stringResource(R.string.timeline_open), role = Role.Button, onClick = onYears),
+                    contentAlignment = Alignment.Center,
+                ) { AnimatedCounter(yearsSinceFounding, stringResource(R.string.stat_years), animate = animate) }
                 catalogCount?.takeIf { it > 0 }?.let { AnimatedCounter(it, pluralStringResource(R.plurals.stat_books, it), Modifier.weight(1f), animate = animate) }
                 // Събитията в следващите 30 дни (виж HomeViewModel.withEvents); без такива — без брояч.
                 eventsThisMonth?.takeIf { it > 0 }?.let { AnimatedCounter(it, pluralStringResource(R.plurals.stat_events, it), Modifier.weight(1f), animate = animate) }

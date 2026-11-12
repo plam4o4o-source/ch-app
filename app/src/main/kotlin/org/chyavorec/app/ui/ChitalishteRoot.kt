@@ -779,7 +779,21 @@ private fun AppNavHost(
             )
         }
         screen(Routes.CONTACTS) { ContactsScreen(back) }
-        screen(Routes.DOCUMENTS) { DocumentsScreen(back, openLink) }
+        screen(Routes.DOCUMENTS) { DocumentsScreen(back, openLink, navigate) }
+        screen(Routes.NEWSPAPER) { org.chyavorec.app.ui.screens.newspaper.NewspaperScreen(back, navigate) }
+        screen(
+            Routes.NEWSPAPER_READ,
+            arguments = listOf(
+                navArgument("url") { type = NavType.StringType; defaultValue = "" },
+                navArgument("title") { type = NavType.StringType; defaultValue = "" },
+                navArgument("sub") { type = NavType.StringType; defaultValue = "" },
+            ),
+        ) {
+            fun arg(name: String) = Uri.decode(it.arguments?.getString(name).orEmpty())
+            org.chyavorec.app.ui.screens.newspaper.NewspaperReaderScreen(arg("url"), arg("title"), arg("sub"), back, openLink)
+        }
+        screen(Routes.TIMELINE) { org.chyavorec.app.ui.screens.timeline.TimelineScreen(back, navigate) }
+        screen(Routes.QUIZ) { org.chyavorec.app.ui.screens.quiz.QuizScreen(back) }
         // Личните съобщения има само при вход — без него съобщенията са публични.
         screen(Routes.MESSAGES) { UnlockGate(leavePersonal, required = signedIn) { MessagesScreen(back, openLink) } }
         screen(Routes.MESSAGE, arguments = listOf(navArgument("id") { type = NavType.StringType })) {

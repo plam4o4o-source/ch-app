@@ -4,5 +4,6 @@
      за споделяне (share/*.png — създават се при „Сподели като картинка“, чистят се след ден). -->
 <paths>
     <cache-path name="documents" path="documents/" />
+    <cache-path name="vestnik" path="vestnik/" />
     <cache-path name="share" path="share/" />
 </paths>

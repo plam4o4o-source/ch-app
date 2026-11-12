@@ -10,6 +10,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.Article
+import androidx.compose.material.icons.outlined.HistoryEdu
+import androidx.compose.material.icons.outlined.Quiz
 import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material.icons.outlined.Computer
@@ -82,6 +85,9 @@ fun MoreScreen(navigate: (String) -> Unit) {
                     add(TileItem(Icons.Outlined.Computer, l.title, stringResource(R.string.more_digital_desc)) { navigate(Routes.page(l.url, l.title)) })
                 }
                 add(TileItem(Icons.Outlined.Photo, stringResource(R.string.gallery_title), stringResource(R.string.more_gallery_desc)) { navigate(Routes.GALLERY) })
+                add(TileItem(Icons.AutoMirrored.Outlined.Article, stringResource(R.string.newspaper_title), stringResource(R.string.more_newspaper_desc)) { navigate(Routes.NEWSPAPER) })
+                add(TileItem(Icons.Outlined.HistoryEdu, stringResource(R.string.timeline_title), stringResource(R.string.more_timeline_desc)) { navigate(Routes.TIMELINE) })
+                add(TileItem(Icons.Outlined.Quiz, stringResource(R.string.quiz_title), stringResource(R.string.more_quiz_desc)) { navigate(Routes.QUIZ) })
                 add(TileItem(Icons.Outlined.Folder, stringResource(R.string.documents_title), stringResource(R.string.more_documents_desc)) { navigate(Routes.DOCUMENTS) })
                 add(TileItem(Icons.Outlined.Place, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc)) { navigate(Routes.CONTACTS) })
             }

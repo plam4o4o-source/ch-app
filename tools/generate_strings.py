@@ -798,6 +798,70 @@ S = {
 "documents_tab_docs": ("Документи", "Documents"),
 "documents_tab_publications": ("Исторически публикации", "Historical articles"),
 "documents_empty": ("Няма документи за показване.", "No documents to show."),
+# --- Старият вестник, Лента на времето, Познай Яворец (wave 21 · content) ---
+"newspaper_title": ("Старият вестник", "The old newspaper"),
+"newspaper_subtitle": ("Юбилеен вестник · 1959", "Jubilee newspaper · 1959"),
+"newspaper_intro": ("Двадесет статии от юбилейния вестник — докосни, за да прочетеш. След първото отваряне се четат и без връзка.", "Twenty articles from the jubilee newspaper — tap to read. Once opened, they work offline."),
+"newspaper_empty": ("Няма статии за показване.", "No articles to show."),
+"newspaper_open": ("Прочети статията", "Read the article"),
+"newspaper_open_external": ("Отвори във външно приложение", "Open in another app"),
+"newspaper_page_desc": ("%1$s. Страница %2$d от %3$d. Щипни или докосни двукратно, за да увеличиш.", "%1$s. Page %2$d of %3$d. Pinch or double-tap to zoom."),
+"newspaper_page_of": ("Страница %1$d от %2$d", "Page %1$d of %2$d"),
+"newspaper_prev_page": ("Предишна страница", "Previous page"),
+"newspaper_next_page": ("Следваща страница", "Next page"),
+"newspaper_zoom_in": ("Увеличи", "Zoom in"),
+"newspaper_zoom_out": ("Намали", "Zoom out"),
+"newspaper_loading": ("Зареждам статията…", "Loading the article…"),
+"newspaper_error_title": ("Статията не се отвори", "The article didn’t open"),
+"newspaper_error_network": ("Не успяхме да изтеглим статията. Провери връзката и опитай пак.", "We couldn’t download the article. Check your connection and try again."),
+"newspaper_error_server": ("Сайтът не отговори както трябва. Опитай пак след малко.", "The website didn’t respond properly. Try again in a moment."),
+"newspaper_error_corrupt": ("Този файл не може да се покаже тук. Можеш да го отвориш във външно приложение.", "This file can’t be shown here. You can open it in another app."),
+"newspaper_error_password": ("Файлът е защитен с парола и не може да се покаже тук.", "The file is password-protected and can’t be shown here."),
+"newspaper_error_memory": ("Страницата е твърде голяма за този телефон. Опитай във външно приложение.", "The page is too large for this phone. Try another app."),
+"newspaper_page_failed": ("Страницата не се нарисува.", "The page couldn’t be drawn."),
+"more_newspaper_desc": ("Статии от юбилейния вестник", "Articles from the jubilee newspaper"),
+"share_card_newspaper": ("Старият вестник", "The old newspaper"),
+"share_card_newspaper_cta": ("Прочети цялата статия", "Read the whole article"),
+"timeline_title": ("Лента на времето", "Timeline"),
+"timeline_subtitle": ("От 1900 г. до днес", "From 1900 to today"),
+"timeline_page_title": ("История", "History"),
+"timeline_fallback_title": ("Лентата не се показва", "The timeline isn’t available"),
+"timeline_fallback": ("Страницата „История“ на сайта е с нов вид. Можеш да я прочетеш като обикновена страница.", "The website’s “History” page has changed. You can read it as a regular page."),
+"timeline_open_page": ("Отвори страницата „История“", "Open the “History” page"),
+"timeline_empty": ("Няма вехи за показване.", "No milestones to show."),
+"subject_history": ("историята", "the history"),
+"timeline_open": ("Отвори лентата на времето", "Open the timeline"),
+"timeline_on_this_day": ("На този ден · %1$d г.", "On this day · %1$d"),
+"more_timeline_desc": ("Историята на читалището от 1900 г.", "The history of the centre since 1900"),
+"quiz_title": ("Познай Яворец", "Know Yavorets"),
+"more_quiz_desc": ("Пет въпроса всеки ден", "Five questions every day"),
+"quiz_unavailable_title": ("Днес няма викторина", "No quiz today"),
+"quiz_unavailable": ("Не успяхме да съставим въпроси. Провери връзката и опитай пак.", "We couldn’t put the questions together. Check your connection and try again."),
+"quiz_question_of": ("Въпрос %1$d от %2$d", "Question %1$d of %2$d"),
+"quiz_photo_desc": ("Снимка от фотодокументалната изложба", "A photo from the photo-documentary exhibition"),
+"quiz_q_year": ("В коя година: „%1$s“?", "In which year: “%1$s”?"),
+"quiz_q_event": ("Какво се случва в читалището през %1$s г.?", "What happens at the centre in %1$s?"),
+"quiz_q_author": ("Кой е авторът на „%1$s“?", "Who wrote “%1$s”?"),
+"quiz_q_title": ("Коя от тези книги е написана от %1$s?", "Which of these books was written by %1$s?"),
+"quiz_q_photo": ("Какво е на снимката?", "What is in the photo?"),
+"quiz_progress_desc": ("%1$d верни от %2$d отговорени, общо %3$d въпроса", "%1$d correct out of %2$d answered, %3$d questions in all"),
+"quiz_state_correct": ("Верен отговор", "Correct answer"),
+"quiz_state_wrong": ("Грешен избор", "Wrong choice"),
+"quiz_right": ("Вярно!", "Correct!"),
+"quiz_wrong": ("Не точно", "Not quite"),
+"quiz_correct_was": ("Верният отговор е: %1$s", "The correct answer is: %1$s"),
+"quiz_see_result": ("Виж резултата", "See the result"),
+"quiz_next": ("Напред", "Next"),
+"quiz_result_perfect": ("Отлично! Познаваш Яворец!", "Excellent! You know Yavorets!"),
+"quiz_result_good": ("Добре! Почти всичко знаеш.", "Well done! You know most of it."),
+"quiz_result_try": ("Утре ще е по-добре — Яворец има още какво да разкаже.", "Tomorrow will be better — Yavorets has more to tell."),
+"quiz_best": ("Най-дълга серия: %1$d", "Longest streak: %1$d"),
+"quiz_come_back": ("Нови въпроси — утре.", "New questions tomorrow."),
+"quiz_share": ("Сподели резултата", "Share the result"),
+"quiz_share_text": ("Познай Яворец: %1$d от %2$d. Опитай и ти — %3$s", "Know Yavorets: %1$d out of %2$d. Give it a try — %3$s"),
+"share_card_quiz": ("Познай Яворец", "Know Yavorets"),
+"share_card_quiz_score": ("%1$d верни от %2$d", "%1$d correct out of %2$d"),
+"share_card_quiz_cta": ("Опитай и ти!", "Try it too!"),
 "pdf_open_with_app": ("Отвори с приложение за PDF", "Open with a PDF app"),
 "pdf_open_with_app_named": ("Отвори с приложение за PDF: %1$s", "Open with a PDF app: %1$s"),
 "pdf_downloading": ("Сваля се…", "Downloading…"),
@@ -875,6 +939,8 @@ PRIVACY_BG = """Последна актуализация: 10 ноември 202
 
 Документи: „Отвори с приложение за PDF“ сваля документа от chyavorec.org във временните данни на приложението (пази се до седмица) и го отваря в избрано от теб приложение за PDF на телефона.
 
+„Старият вестник“ сваля статията (PDF) от chyavorec.org във временните данни, за да я четеш и без връзка; „Познай Яворец“ съставя въпросите на телефона, а резултатите и серията ти се пазят само там.
+
 Картинки за споделяне: картинките (на събитие, книга, новина или от „Моята читателска година“) се създават на телефона и излизат от него само ако ти избереш да ги споделиш и къде.
 
 Абонамент за календара: ако добавиш календара на читалището (https://chyavorec.org/events.ics) в приложение за календар, то или неговата услуга (напр. Google Календар) тегли файла от сайта по свой график — като обикновена заявка, без лични данни; приложението на читалището не участва в това.
@@ -934,6 +1000,8 @@ Home-screen widget: if you add it, it shows only the number of books due and the
 Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you. The phone remembers for a week that you placed it (encrypted, deleted when you sign out).
 
 Documents: “Open with a PDF app” downloads the document from chyavorec.org into the app’s temporary data (kept for up to a week) and opens it in a PDF app of your choice on the phone.
+
+“The old newspaper” downloads the article (PDF) from chyavorec.org into temporary data so you can read it offline; “Know Yavorets” builds its questions on the phone, and your results and streak stay only there.
 
 Share images: images (of an event, a book, a news story or from “My reading year”) are created on the phone and leave it only if you choose to share them, and where.
 
@@ -1054,6 +1122,9 @@ P = {
 "year_card_books": (("%1$d книга · виж историята", "%1$d книги · виж историята"), ("%1$d book · watch the story", "%1$d books · watch the story")),
 # Под брояча на „Начало“ (числото е отделно, над текста).
 "stat_books": (("документ в каталога", "документа в каталога"), ("catalogue item", "catalogue items")),
+"timeline_years_ago": (("Преди %1$d година", "Преди %1$d години"), ("%1$d year ago", "%1$d years ago")),
+"quiz_streak": (("Серия: %1$d ден поред", "Серия: %1$d дни поред"), ("Streak: %1$d day in a row", "Streak: %1$d days in a row")),
+"share_card_quiz_streak": (("Серия: %1$d ден", "Серия: %1$d дни поред"), ("Streak: %1$d day", "Streak: %1$d days in a row")),
 "stat_events": (("събитие през следващите 30 дни", "събития през следващите 30 дни"), ("event in the next 30 days", "events in the next 30 days")),
 }
 

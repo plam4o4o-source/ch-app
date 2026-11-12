@@ -45,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.SkeletonList
@@ -60,7 +61,7 @@ import org.chyavorec.domain.model.DocumentKind
  * в браузъра/PDF четеца на устройството.
  */
 @Composable
-fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
+fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit, navigate: (String) -> Unit = {}) {
     val context = LocalContext.current
     val vm = appViewModel { DocumentsViewModel(it.siteRepository, it.documents, it.config.siteBaseUrl) }
     val state by vm.state.collectAsStateWithLifecycle()
@@ -108,7 +109,10 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                                 trailingContent = if (vm.canDownload(d.url)) {
                                     { PdfAppButton(d.title, download?.takeIf { it.url == d.url }, onOpen = { vm.openInPdfApp(d.url, d.title) }, onCancel = vm::cancelDownload) }
                                 } else null,
-                                modifier = Modifier.clickable { openLink(d.url) }.animateEntrance(i),
+                                modifier = Modifier.clickable {
+                                    // Статиите от юбилейния вестник — в четеца на приложението; всичко друго — както досега.
+                                    if (d.kind == DocumentKind.PUBLICATION && vm.canDownload(d.url)) navigate(Routes.newspaperRead(d.url, d.title, d.category)) else openLink(d.url)
+                                }.animateEntrance(i),
                             )
                         }
                     }
