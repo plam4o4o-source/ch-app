@@ -42,13 +42,19 @@ class ReducedMotionTest {
                 }
             }
         }
-        // Отблясъкът минава за 1.3 s — в няколко момента от цикъла всичко е в основния цвят.
+        // Отблясъкът минава за 1.3 s — в няколко момента от цикъла кадърът е един и същ.
+        // Фонът е „канава“ (бледа шевица при ~6%): близо до основния цвят, но не точно той.
+        var first: List<Int>? = null
         repeat(4) { step ->
             compose.mainClock.advanceTimeBy(350)
             val pixels = compose.onNodeWithTag("skeleton").captureToImage().toPixelMap()
-            val other = (0 until pixels.width).flatMap { x -> (0 until pixels.height).map { y -> pixels[x, y] } }
-                .count { it.toArgb() != base.toArgb() }
-            assertTrue(other == 0, "стъпка $step: $other точки в друг цвят (отблясък)")
+            val all = (0 until pixels.width).flatMap { x -> (0 until pixels.height).map { y -> pixels[x, y].toArgb() } }
+            val b = base.toArgb()
+            val far = all.count { c ->
+                (0..2).any { k -> kotlin.math.abs(((c shr (16 - 8 * k)) and 0xFF) - ((b shr (16 - 8 * k)) and 0xFF)) > 24 }
+            }
+            assertTrue(far == 0, "стъпка $step: $far точки далеч от основния цвят (отблясък)")
+            if (first == null) first = all else assertTrue(first == all, "стъпка $step: кадърът се е променил")
         }
     }
 }

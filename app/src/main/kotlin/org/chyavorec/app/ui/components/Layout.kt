@@ -1,6 +1,17 @@
 package org.chyavorec.app.ui.components
 
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.foundation.BorderStroke
@@ -67,17 +78,69 @@ import org.chyavorec.app.ui.theme.AppMotion
 /** Едно поле отстрани за всички екрани (заглавки на раздели, ленти, карти). */
 val ScreenGutter = 16.dp
 
-/** Етикет над заглавие (както на сайта: малки главни букви + златна линия). */
+/** Етикет над заглавие (както на сайта: малки главни букви + три кръстати бода в златно). */
 @Composable
 fun SectionLabel(text: String, modifier: Modifier = Modifier) {
     // Златото на темата — следва и палитрите „Левски“/„Шевица“.
     val gold = LocalExtendedColors.current.gold
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
-        androidx.compose.foundation.Canvas(Modifier.width(18.dp).height(1.dp)) {
-            drawRect(color = gold)
-        }
+        StitchMark(gold)
         Spacer(Modifier.width(8.dp))
         Text(text.uppercase(), style = MaterialTheme.typography.labelSmall, color = gold)
+    }
+}
+
+/** Трите бода пред етикета: колко от тях и как са „избродирани“ при напредък [progress] (0..1). */
+internal object CrossStitches {
+    const val COUNT = 3
+
+    /** Дял (0..1) от [index]-тия бод, избродиран при общ напредък [progress] — един след друг. */
+    fun fraction(progress: Float, index: Int): Float = (progress * COUNT - index).coerceIn(0f, 1f)
+
+    /** Колко време бродира (ms) — веднъж, при първото показване. */
+    const val DURATION_MS = 520
+}
+
+/**
+ * Три кръстати бода (кръстат бод — основният в шевиците), които се „бродират“ веднъж — при първото
+ * показване на етикета: всеки бод първо с една, после с другата диагонала. Флагът „показан“ е
+ * rememberSaveable (както [animateEntrance]) — при връщане към екрана и завъртане е веднага готов.
+ * При намалено движение — веднага готови. Напредъкът се чете само при рисуване.
+ */
+@Composable
+internal fun StitchMark(color: androidx.compose.ui.graphics.Color, modifier: Modifier = Modifier) {
+    val reduced = rememberReducedMotion()
+    var shown by rememberSaveable { mutableStateOf(false) }
+    val progress = remember { Animatable(if (reduced || shown) 1f else 0f) }
+    LaunchedEffect(reduced) {
+        if (reduced) progress.snapTo(1f)
+        else if (progress.value < 1f) progress.animateTo(1f, tween(CrossStitches.DURATION_MS, easing = FastOutSlowInEasing))
+        shown = true
+    }
+    androidx.compose.foundation.Canvas(modifier.size(20.dp, 8.dp).clearAndSetSemantics { }) {
+        val p = progress.value
+        val half = 2.5.dp.toPx()
+        val pitch = 7.dp.toPx()
+        val stroke = 1.4.dp.toPx()
+        val cy = size.height / 2f
+        for (i in 0 until CrossStitches.COUNT) {
+            val f = CrossStitches.fraction(p, i)
+            if (f <= 0f) continue
+            val cx = half + i * pitch
+            val a = (f * 2f).coerceAtMost(1f)
+            val b = (f * 2f - 1f).coerceAtLeast(0f)
+            // „\“ отгоре надолу, после „/“ — като при истински кръстат бод.
+            drawLine(
+                color, Offset(cx - half, cy - half), Offset(cx - half + 2 * half * a, cy - half + 2 * half * a),
+                stroke, StrokeCap.Round,
+            )
+            if (b > 0f) {
+                drawLine(
+                    color, Offset(cx + half, cy - half), Offset(cx + half - 2 * half * b, cy - half + 2 * half * b),
+                    stroke, StrokeCap.Round,
+                )
+            }
+        }
     }
 }
 
@@ -96,7 +159,8 @@ fun SectionHeader(
                 SectionLabel(label)
                 Spacer(Modifier.height(4.dp))
             }
-            Text(title, style = MaterialTheme.typography.sectionTitle, modifier = Modifier.semantics { heading() })
+            // В тъмна тема „Яворец“ заглавията са по-топли — златисто-пергаментови (heading).
+            Text(title, style = MaterialTheme.typography.sectionTitle, color = LocalExtendedColors.current.heading, modifier = Modifier.semantics { heading() })
         }
         if (actionLabel != null && onAction != null) {
             // Поне 48 dp за докосване и при едър шрифт (бутонът расте с текста, но не и минимумът).
@@ -127,7 +191,7 @@ fun BackTopBar(
     val titleSpec: AnimationSpec<Float> = if (reduced) snap() else AppMotion.defaultEffects()
     val titleAlpha by animateFloatAsState(if (titleShown) 1f else 0f, titleSpec, label = "bar-title")
     TopAppBar(
-        modifier = Modifier.screenPane(paneLabel),
+        modifier = Modifier.screenPane(paneLabel).nightCloth(),
         title = {
             Text(
                 title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleLarge,
@@ -174,7 +238,7 @@ fun AppTopBar(
     }
     val hiddenSemantics = if (hidden) Modifier.clearAndSetSemantics { } else Modifier
     TopAppBar(
-        modifier = Modifier.screenPane(title),
+        modifier = Modifier.screenPane(title).nightCloth(),
         title = {
             Row(hiddenSemantics, verticalAlignment = Alignment.CenterVertically) {
                 Emblem(34.dp)
@@ -185,7 +249,9 @@ fun AppTopBar(
                 val style = MaterialTheme.typography.headlineSmall
                 androidx.compose.foundation.text.BasicText(
                     title,
-                    style = style.copy(color = androidx.compose.material3.LocalContentColor.current),
+                    style = style.copy(
+                        color = LocalExtendedColors.current.heading.takeIf { it.isSpecified } ?: androidx.compose.material3.LocalContentColor.current,
+                    ),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(
@@ -235,7 +301,7 @@ fun AppCard(
 ) {
     val shape = MaterialTheme.shapes.medium
     val color = MaterialTheme.colorScheme.surfaceContainerLow
-    val m = modifier.darkTopHighlight(shape)
+    val m = modifier.darkTopHighlight(shape).nightCloth(shape)
     if (onClick != null) {
         Surface(onClick = onClick, shape = shape, color = color, border = cardBorder(), interactionSource = interactionSource, modifier = m) {
             Column(content = content)

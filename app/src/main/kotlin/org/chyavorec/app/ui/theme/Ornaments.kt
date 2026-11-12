@@ -81,6 +81,13 @@ object GeneratedCover {
      */
     const val LIGHTEST_OVERLAY = 0.18f
 
+    /**
+     * Плътността на ленената тъкан върху корицата (Overlay). Плочката е само със сиви стойности
+     * ≤ 50% — Overlay с тях никога не изсветлява, затова [LIGHTEST_OVERLAY] остава горна граница
+     * (проверено от ClothWeaveTest).
+     */
+    const val CLOTH_ALPHA = 0.5f
+
     /** FNV-1a (32 бита) — стабилен между версии и устройства (за разлика от реда в HashMap). */
     fun stableHash(text: String): Int {
         var h = 0x811C9DC5.toInt()

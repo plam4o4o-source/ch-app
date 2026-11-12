@@ -323,6 +323,8 @@ data class ExtendedColors(
     val bad: Color,
     val gold: Color,
     val isDark: Boolean,
+    /** Топлият златисто-пергаментов цвят на заглавията в тъмна „Яворец“; Unspecified — цветът на темата. */
+    val heading: Color = Color.Unspecified,
 )
 
 val LocalExtendedColors = staticCompositionLocalOf {
@@ -363,7 +365,9 @@ fun ChitalishteTheme(
     }
     val accent = paletteAccent(style.palette, dark)
     val extended = if (dark) {
-        ExtendedColors(StatusColors.OkDark, StatusColors.WarnDark, StatusColors.BadDark, accent, true)
+        // „Нощна черга“: заглавията в „Яворец“ са по-топли — между пергамент и светло злато (над 10:1 върху мастилото).
+        val heading = if (!dynamic && style.palette == ThemePalette.YAVORETS) lerp(Brand.Parchment, Brand.GoldLight, 0.45f) else Color.Unspecified
+        ExtendedColors(StatusColors.OkDark, StatusColors.WarnDark, StatusColors.BadDark, accent, true, heading)
     } else {
         ExtendedColors(StatusColors.OkLight, StatusColors.WarnLight, StatusColors.BadLight, accent, false)
     }

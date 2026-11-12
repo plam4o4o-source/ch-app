@@ -38,7 +38,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
@@ -266,8 +266,7 @@ fun coverColor(book: CatalogBook): Color = coverShade(UdcCoverColors[book.udcSec
  * Корица на книга. Почти няма сканирани корици в каталога, затова се рисува
  * генерирана „типографска“ корица: фон по автора (стабилен хеш → тон от палитрата
  * на темата), заглавие с Cormorant Garamond, автор с Raleway, тънка лента шевица с
- * мотив според раздела/вида документ и лека „хартиена“ текстура (само градиенти,
- * без bitmap-и). Сканираната корица, ако има, ляга отгоре. Ако книгата има ISBN и
+ * мотив според раздела/вида документ и ленена тъкан (една плочка 64 px за процеса). Сканираната корица, ако има, ляга отгоре. Ако книгата има ISBN и
  * настройката позволява, се опитва корица от Open Library (кешира се от Coil на
  * диска); при липса/грешка остава генерираната.
  *
@@ -342,26 +341,19 @@ fun BookCover(
             .clip(CoverShape)
             .background(background)
             .drawWithCache {
-                // „хартия“: мека светлина горе вляво + едва видими хоризонтални влакна
-                // (повтарящ се градиент — шейдър, без bitmap); гръбче отляво.
+                // „подвързия“: мека светлина горе вляво + ленена тъкан (платно бод, плочка 64 px от
+                // общия кеш, повторена с Overlay — без слой и без bitmap на корица); гръбче отляво.
                 val glow = Brush.radialGradient(
                     listOf(Color.White.copy(alpha = 0.10f), Color.Transparent),
                     center = Offset(size.width * 0.3f, size.height * 0.22f),
                     radius = size.maxDimension * 0.8f,
                 )
-                val grain = Brush.linearGradient(
-                    0f to Color.White.copy(alpha = 0.035f),
-                    0.5f to Color.Transparent,
-                    1f to Color.Black.copy(alpha = 0.035f),
-                    start = Offset.Zero,
-                    end = Offset(0f, 2.5.dp.toPx()),
-                    tileMode = TileMode.Repeated,
-                )
+                val cloth = linenBrush()
                 val spineWidth = 7.dp.toPx()
                 val spine = Brush.horizontalGradient(listOf(Color.Black.copy(alpha = 0.28f), Color.Transparent), 0f, spineWidth)
                 onDrawWithContent {
                     drawRect(glow)
-                    drawRect(grain)
+                    drawRect(cloth, alpha = GeneratedCover.CLOTH_ALPHA, blendMode = BlendMode.Overlay)
                     drawContent()
                     drawRect(spine, size = size.copy(width = spineWidth))
                 }
