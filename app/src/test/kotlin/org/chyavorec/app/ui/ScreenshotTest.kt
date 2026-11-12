@@ -279,8 +279,10 @@ class ScreenshotTest {
         tabSelected("Още")
         shown("Съобщения")
         shown("Настройки")
-        shown("Политика за поверителност")
         shot("05-more")
+        // С новите плочки („Вестник“, „Лента на времето“, „Викторина“, „Извези шевица“) редът е под сгъвката.
+        compose.onAllNodes(hasText("Политика за поверителност")).onFirst().performScrollTo()
+        shown("Политика за поверителност")
     }
 
     @Test fun emptyMessages() {
