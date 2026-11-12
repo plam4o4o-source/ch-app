@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
 
 /** Закачените преки пътища: какво се строи, как се чете обратно и какво никога не се отваря от чужд intent. */
 @RunWith(AndroidJUnit4::class)
-@Config(application = Application::class)
+@Config(application = Application::class, qualifiers = "bg")
 class PinnedShortcutsTest {
     private val context get() = ApplicationProvider.getApplicationContext<Application>()
     private val base = "https://chyavorec.org"
