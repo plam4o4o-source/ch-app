@@ -13,10 +13,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.metrics.performance.FrameData
+import androidx.metrics.performance.FrameDataApi24
+import androidx.profileinstaller.ProfileVerifier
 import androidx.metrics.performance.JankStats
 import androidx.metrics.performance.PerformanceMetricsState
+import org.chyavorec.app.BuildConfig
 import org.chyavorec.core.logFailure
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 /**
  * Измерванията за „Бързодействие“ (виж [PerfStats]) на ниво процес:
@@ -35,6 +39,10 @@ object AppPerf {
      * процесът е бил буден (фонова задача) и стартът се брои за топъл.
      */
     private const val COLD_GAP_MS = 5_000L
+
+    /** Версията на този билд — всяка проба и кадър я носят, за да личи дали една версия е помогнала. */
+    val versionCode: Int get() = BuildConfig.VERSION_CODE
+    val versionName: String get() = BuildConfig.VERSION_NAME
 
     @Volatile private var store: PerfStore? = null
     private val frames = FrameCounter()
@@ -64,8 +72,8 @@ object AppPerf {
                 stopped = true
                 jank?.isTrackingEnabled = false
                 // Веднъж при скриване — не при всеки кадър.
-                val delta = frames.drain()
-                if (delta.isNotEmpty()) store(activity).update { PerfStats.addFrames(it, delta) }
+                val delta = frames.drain(versionCode)
+                if (delta.isNotEmpty()) store(activity).update { PerfStats.addFrames(PerfStats.noteVersion(it, versionCode, versionName), delta) }
             }
         })
     }
@@ -131,8 +139,8 @@ object AppPerf {
             if (done) return
             done = true
             val first = firstFrameAt.takeIf { it != 0L } ?: fullyDrawnAt ?: return
-            val sample = StartupSample(cold, first - startAt, fullyDrawnAt?.let { maxOf(it, first) - startAt })
-            store(context).update { PerfStats.addStart(it, sample) }
+            val sample = StartupSample(cold, first - startAt, fullyDrawnAt?.let { maxOf(it, first) - startAt }, versionCode)
+            store(context).update { PerfStats.addStart(PerfStats.noteVersion(it, versionCode, versionName), sample) }
         }
     }
 
@@ -146,7 +154,9 @@ object AppPerf {
                     val s = states[i]
                     if (s.key == ROUTE_KEY) route = s.value
                 }
-                frames.add(route, volatileFrameData.frameDurationUiNanos, volatileFrameData.isJank)
+                // Целият кадър (с нишката за рендериране и видеокартата) — само от API 24; типова проверка, без заделяне.
+                val total = (volatileFrameData as? FrameDataApi24)?.frameDurationCpuNanos ?: 0L
+                frames.add(route, volatileFrameData.frameDurationUiNanos, volatileFrameData.isJank, total)
             }
         }
         val stats = JankStats.createAndTrack(activity.window, listener)
@@ -154,6 +164,16 @@ object AppPerf {
         stats.isTrackingEnabled = false
         return stats
     }
+
+    /**
+     * Какво казва ProfileVerifier за базовия профил на тази версия: компилиран, чака системната
+     * компилация (dexopt във фонов режим) или го няма. Блокира — вика се от фонова нишка, и то само
+     * при отваряне на „Диагностика“ (не на пътя на старта).
+     */
+    fun profileState(): ProfileState = runCatching {
+        val status = ProfileVerifier.getCompilationStatusAsync().get(10, TimeUnit.SECONDS)
+        ProfileState.of(status.isCompiledWithProfile, status.hasProfileEnqueuedForCompilation(), status.profileInstallResultCode)
+    }.logFailure("perf.profile").getOrDefault(ProfileState.Unknown)
 
     /** Изчиства натрупаното („Изчисти“ в „Диагностика“). */
     fun clear(context: Context) {

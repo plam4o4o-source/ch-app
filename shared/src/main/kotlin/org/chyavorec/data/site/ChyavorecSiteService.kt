@@ -323,7 +323,7 @@ class ChyavorecSiteService(
         }
         val publications = (index.await() as? Outcome.Success)?.value?.let { parser.publications(it) }.orEmpty()
         if (files.isEmpty() && publications.isEmpty()) Outcome.Failure(AppError.Network)
-        else Outcome.Success(files.sortedByDescending { it.date } + publications)
+        else Outcome.Success((files.sortedByDescending { it.date } + publications).distinctBy { it.id })
     }
 
     override suspend fun fetchFeast(date: String): Outcome<DailyFeast> =

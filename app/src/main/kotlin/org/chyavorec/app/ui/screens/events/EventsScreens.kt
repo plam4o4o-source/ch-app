@@ -309,7 +309,8 @@ private fun EventsState(ui: EventsUiState, vm: EventsViewModel, emptyIsContent: 
             )
         },
         errorSubject = stringResource(R.string.subject_events),
-        content = content,
+        // Ключовете в списъците са уникални, дори кешът да носи повторен id.
+        content = { list -> content(remember(list) { list.distinctBy { it.id } }) },
     )
 
 /** Най-широкият месечен календар — по-широк дава клетки, които не се събират на височина. */

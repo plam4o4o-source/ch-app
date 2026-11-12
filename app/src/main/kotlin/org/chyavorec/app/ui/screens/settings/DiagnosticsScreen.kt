@@ -23,6 +23,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,11 +38,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.chyavorec.app.R
 import org.chyavorec.app.diagnostics.AppDiagnostics
 import org.chyavorec.app.diagnostics.AppPerf
 import org.chyavorec.app.diagnostics.PerfData
+import org.chyavorec.app.diagnostics.ProfileState
 import org.chyavorec.app.diagnostics.PerfStats
 import org.chyavorec.app.diagnostics.PerfSummary
 import org.chyavorec.app.diagnostics.StartStats
@@ -68,7 +72,10 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
     // Най-новият запис отгоре.
     var entries by remember { mutableStateOf(log.entries().asReversed()) }
     // „Бързодействие“: стартовете и плавността (малък файл, вече в паметта след първия път).
-    var perf by remember { mutableStateOf(PerfStats.summary(AppPerf.store(context).read())) }
+    var perf by remember { mutableStateOf(PerfStats.summary(AppPerf.store(context).read(), AppPerf.versionCode, AppPerf.versionName)) }
+    // Профилът за бърз старт: компилиран ли е вече (null — още се чете, във фонова нишка).
+    var profile by remember { mutableStateOf<ProfileState?>(null) }
+    LaunchedEffect(Unit) { profile = withContext(Dispatchers.IO) { AppPerf.profileState() } }
     val hasData = entries.isNotEmpty() || !perf.isEmpty
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -97,7 +104,7 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
                         enabled = hasData,
                         onClick = {
                             val text = log.export(AppDiagnostics.header(c.config.versionName, c.config.versionCode), c.clock.zone()) +
-                                PerfStats.export(perf)
+                                PerfStats.export(perf, profile)
                             Intents.share(context, subject, text)
                         },
                     ) {
@@ -111,7 +118,7 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
                             entries = emptyList()
                             // И времената на стартиране, и плавността.
                             AppPerf.clear(context)
-                            perf = PerfStats.summary(PerfData())
+                            perf = PerfStats.summary(PerfData(), AppPerf.versionCode, AppPerf.versionName)
                             scope.launch { snackbar.showSnackbar(clearedMsg) }
                         },
                     ) {
@@ -120,7 +127,7 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
                     }
                 }
             }
-            item { PerfSection(perf) }
+            item { PerfSection(perf, profile) }
             if (entries.isEmpty()) {
                 // Празното състояние — като на всички екрани (илюстрация + заглавие).
                 item { EmptyView(stringResource(R.string.diagnostics_empty), icon = Icons.Outlined.TaskAlt) }
@@ -134,9 +141,12 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
     }
 }
 
-/** „Бързодействие“: медианата и последният старт (студен/топъл) и най-насечените екрани. */
+/**
+ * „Бързодействие“ за текущата версия: профилът, първият старт след обновяването, медианата и
+ * последният старт (студен/топъл), най-насечените екрани и — за сравнение — предишната версия.
+ */
 @Composable
-internal fun PerfSection(summary: PerfSummary, modifier: Modifier = Modifier) {
+internal fun PerfSection(summary: PerfSummary, profile: ProfileState? = null, modifier: Modifier = Modifier) {
     val locale = LocalConfiguration.current.locales[0]
     AppCard(modifier.fillMaxWidth()) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -153,24 +163,85 @@ internal fun PerfSection(summary: PerfSummary, modifier: Modifier = Modifier) {
             if (summary.isEmpty) {
                 Text(stringResource(R.string.perf_empty), style = MaterialTheme.typography.bodyMedium)
             }
-            summary.cold?.let { StartLines(stringResource(R.string.perf_cold, it.count), it) }
-            summary.warm?.let { StartLines(stringResource(R.string.perf_warm, it.count), it) }
-            if (summary.topRoutes.isNotEmpty()) {
+            if (summary.versionCode != 0 || !summary.isEmpty) {
+                Text(versionTitle(summary), style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 4.dp))
+            }
+            profile?.let {
+                Text(stringResource(R.string.perf_profile, profileText(it)), style = MaterialTheme.typography.bodyMedium)
+            }
+            VersionLines(summary, locale)
+            if (summary.currentEmpty && !summary.isEmpty) {
+                Text(stringResource(R.string.perf_no_current), style = MaterialTheme.typography.bodyMedium)
+            }
+            summary.earlier?.takeUnless { it.currentEmpty }?.let { e ->
                 Text(
-                    stringResource(R.string.perf_frames),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(top = 4.dp),
+                    stringResource(R.string.perf_earlier, versionTitle(e)),
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.padding(top = 12.dp),
                 )
-                for (r in summary.topRoutes) {
-                    Text(
-                        stringResource(
-                            R.string.perf_route, r.route, String.format(locale, "%.1f %%", r.jankyPercent), r.frames,
-                            stringResource(R.string.perf_ms, r.worstMs),
-                        ),
-                        style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
-                    )
-                }
+                VersionLines(e, locale)
+            }
+        }
+    }
+}
+
+@Composable
+private fun versionTitle(s: PerfSummary): String = when {
+    s.versionCode == 0 -> stringResource(R.string.perf_version_unknown)
+    s.versionName.isBlank() -> stringResource(R.string.perf_version_code, s.versionCode)
+    else -> stringResource(R.string.perf_version, s.versionName, s.versionCode)
+}
+
+@Composable
+private fun profileText(p: ProfileState): String = stringResource(
+    when (p.kind) {
+        ProfileState.Kind.COMPILED -> R.string.perf_profile_compiled
+        ProfileState.Kind.PENDING -> R.string.perf_profile_pending
+        ProfileState.Kind.NONE -> R.string.perf_profile_none
+        ProfileState.Kind.UNKNOWN -> R.string.perf_profile_unknown
+    },
+)
+
+/** Стартовете и най-насечените екрани на една версия. */
+@Composable
+private fun VersionLines(summary: PerfSummary, locale: java.util.Locale) {
+    summary.afterUpdate?.let { a ->
+        Text(
+            stringResource(R.string.perf_after_update),
+            style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(top = 4.dp),
+        )
+        val first = stringResource(R.string.perf_ms, a.firstFrameMs)
+        Text(
+            a.fullyDrawnMs?.let { stringResource(R.string.perf_one_start, first, stringResource(R.string.perf_ms, it)) }
+                ?: stringResource(R.string.perf_one_start_first, first),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+    }
+    summary.cold?.let { StartLines(stringResource(R.string.perf_cold, it.count), it) }
+    summary.warm?.let { StartLines(stringResource(R.string.perf_warm, it.count), it) }
+    if (summary.topRoutes.isNotEmpty()) {
+        Text(
+            stringResource(R.string.perf_frames),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(top = 4.dp),
+        )
+        for (r in summary.topRoutes) {
+            Text(
+                stringResource(
+                    R.string.perf_route, r.route, String.format(locale, "%.1f %%", r.jankyPercent), r.frames,
+                    stringResource(R.string.perf_ms, r.worstMs),
+                ),
+                style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+            )
+            // Целият кадър — с нишката за рендериране и видеокартата (там работи и ShaderWarmup).
+            if (r.hasTotal) {
+                Text(
+                    stringResource(R.string.perf_route_total, stringResource(R.string.perf_ms, r.meanTotalMs), stringResource(R.string.perf_ms, r.worstTotalMs)),
+                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 12.dp),
+                )
             }
         }
     }

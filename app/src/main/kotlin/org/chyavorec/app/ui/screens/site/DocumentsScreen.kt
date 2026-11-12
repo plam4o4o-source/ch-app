@@ -34,6 +34,7 @@ import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -93,7 +94,8 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit) {
                     skeleton = { SkeletonList(withImage = false) },
                     empty = { EmptyView(stringResource(R.string.documents_empty), icon = Icons.Outlined.Description) },
                     errorSubject = stringResource(R.string.subject_documents),
-                ) { docs ->
+                ) { all ->
+                    val docs = remember(all) { all.distinctBy { it.id } }
                     LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
                         item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
                         itemsIndexed(docs, key = { _, d -> d.id + tab }) { i, d ->

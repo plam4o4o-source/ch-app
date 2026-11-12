@@ -336,8 +336,10 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
                     if (state.upcoming.isEmpty()) {
                         EventsSkeleton(cardWidth, EventSkeletonHeight * scale)
                     } else {
+                        // Повторен id (стар кеш) хвърля „Key was already used“ — ключовете са уникални.
+                        val upcoming = remember(state.upcoming) { state.upcoming.distinctBy { it.id } }
                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            items(state.upcoming, key = { it.id }) { e ->
+                            items(upcoming, key = { it.id }) { e ->
                                 EventCard(e, onClick = { navigate(Routes.event(e.id)) }, modifier = Modifier.width(cardWidth), titleMaxLines = 3)
                             }
                         }
@@ -367,13 +369,13 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
                 // Подбрано по историята на читателя — без корици от Open Library (PersonalCovers).
                 item("for-you") { PersonalCovers { BookRow(state.forYou, Modifier.animateItem()) { navigate(Routes.book(it.inv, personal = true)) } } }
             }
-            state.shelves.forEach { (name, books) ->
+            state.shelves.distinctBy { it.first }.forEach { (name, books) ->
                 item("shelf-$name") {
                     SectionHeader(name.replaceFirstChar { it.uppercase() }, label = stringResource(R.string.label_shelf), modifier = Modifier.padding(top = 24.dp, bottom = 8.dp))
                     BookRow(books) { navigate(Routes.book(it.inv)) }
                 }
             }
-            val more = state.news.data?.drop(5)?.take(4).orEmpty()
+            val more = state.news.data?.drop(5)?.distinctBy { it.id }?.take(4).orEmpty()
             if (more.isNotEmpty()) {
                 item("news-h") {
                     SectionHeader(
@@ -761,7 +763,9 @@ private fun RowScope.QuickActionCell(action: QuickAction, i: Int, navigate: (Str
 }
 
 @Composable
-fun BookRow(books: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (CatalogBook) -> Unit) {
+fun BookRow(allBooks: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (CatalogBook) -> Unit) {
+    // Един инвентарен номер = една карта (повторен ключ срива списъка).
+    val books = remember(allBooks) { allBooks.distinctBy { it.inv } }
     // Генерираната корица вече носи заглавието и автора — надписът под нея се вижда само при
     // истинска (сканирана/Open Library) корица. Мястото му е запазено в целия ред, щом някоя
     // книга може да има такава: заредената корица не „бута“ съдържанието отдолу.
