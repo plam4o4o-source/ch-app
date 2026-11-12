@@ -38,7 +38,7 @@ internal fun DigestSettingsRows(
     SwitchItem(stringResource(R.string.digest_switch_title), stringResource(R.string.digest_switch_desc), digest, onChange = onDigest)
     if (digest) {
         Text(
-            stringResource(R.string.digest_sections_title), style = MaterialTheme.typography.titleSmall,
+            stringResource(R.string.digest_sections_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp).semantics { heading() },
         )
         Text(

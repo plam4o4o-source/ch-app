@@ -10,6 +10,8 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -180,6 +182,7 @@ fun RosetteRating(rating: Int, onRate: ((Int) -> Unit)?, modifier: Modifier = Mo
  * не е отговорено — [entry] без оценка), а след оценка — бележка на ред и „Препоръчай“. Не е
  * диалог: стои в страницата, може да се игнорира. Без състояние на базата — записът е в [DiaryActions].
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DiaryPanel(
     entry: ReadingDiaryEntity?,
@@ -211,13 +214,13 @@ fun DiaryPanel(
             RosetteRating(entry?.rating ?: 0, onRate = actions.rate)
             if (rated && entry != null) {
                 DiaryNote(entry.note, actions.note)
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                // При едър шрифт бутоните се пренасят на нов ред, а не се смачкват.
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.Center, itemVerticalAlignment = Alignment.CenterVertically) {
                     OutlinedButton(onClick = { onRecommend(entry) }, modifier = Modifier.heightIn(min = 48.dp)) {
                         Icon(Icons.Outlined.Share, null, Modifier.size(18.dp))
                         Spacer(Modifier.width(8.dp))
                         Text(stringResource(R.string.diary_recommend))
                     }
-                    Spacer(Modifier.weight(1f))
                     TextButton(onClick = actions.remove) { Text(stringResource(R.string.diary_remove)) }
                 }
                 Text(
