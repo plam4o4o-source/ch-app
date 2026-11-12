@@ -16,7 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -129,23 +132,23 @@ class ReturnStampScreenshotTest {
     /** Отметката по средата на падането (~60 ms) и поставена, в двете теми. */
     @Test fun bookmarkDrop() {
         compose.mainClock.autoAdvance = false
-        val saved = mutableStateOf(false)
         compose.setContent {
             CompositionLocalProvider(LocalReducedMotion provides false) {
+                var saved by remember { mutableStateOf(false) }
+                // Превключването е в композицията (по виртуалния часовник), иначе кадърът го пропуска.
+                LaunchedEffect(Unit) { delay(50); saved = true }
                 Column {
                     listOf(false, true).forEach { dark ->
                         ChitalishteTheme(mode = if (dark) ThemeMode.DARK else ThemeMode.LIGHT) {
                             Row(Modifier.fillMaxWidth().height(80.dp).background(MaterialTheme.colorScheme.background).padding(16.dp)) {
-                                BookmarkIcon(saved.value, "Запази", LocalExtendedColors.current.gold, Modifier.size(48.dp))
+                                BookmarkIcon(saved, "Запази", LocalExtendedColors.current.gold, Modifier.size(48.dp))
                             }
                         }
                     }
                 }
             }
         }
-        compose.mainClock.advanceTimeBy(50)
-        saved.value = true
-        compose.mainClock.advanceTimeBy(70)
+        compose.mainClock.advanceTimeBy(120)
         shot("w21-bookmark-01-mid-drop")
         compose.mainClock.advanceTimeBy(500)
         shot("w21-bookmark-02-settled")

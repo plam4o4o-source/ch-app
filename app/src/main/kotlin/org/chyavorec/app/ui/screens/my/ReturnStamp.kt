@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.ChevronRight
@@ -308,7 +309,8 @@ internal fun ReturnStampCard(
             )
             Spacer(Modifier.width(12.dp))
             Text(historyTitle, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
-            AnimatedCounter(counter, pluralStringResource(R.plurals.stamp_year_label, counter, year), animate = false)
+            // Подписът на брояча се пренася в тясна колона — при едър шрифт не изяжда заглавието.
+            AnimatedCounter(counter, pluralStringResource(R.plurals.stamp_year_label, counter, year), Modifier.widthIn(max = 120.dp), animate = false)
             if (onOpenHistory != null) {
                 Icon(Icons.Outlined.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -329,7 +331,7 @@ internal fun ReturnSeal(anim: StampAnim, modifier: Modifier = Modifier) {
     val density = LocalDensity.current
     // Текстът на печата е част от рисунката — не расте с големия шрифт (иначе излиза от кръга).
     fun fixed(size: Float) = with(density) { size.dp.toSp() }
-    val top = TextStyle(fontFamily = Cormorant, fontWeight = FontWeight.SemiBold, fontSize = fixed(15f), letterSpacing = fixed(1.1f), color = ink)
+    val top = TextStyle(fontFamily = Cormorant, fontWeight = FontWeight.SemiBold, fontSize = fixed(14f), letterSpacing = fixed(0.9f), color = ink)
     val bottom = TextStyle(fontFamily = Cormorant, fontStyle = FontStyle.Italic, fontSize = fixed(13f), color = ink)
     Box(
         modifier
