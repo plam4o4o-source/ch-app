@@ -513,6 +513,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
                         image = { ShareImageRequest(ShareCards.event(context, e), e.title, text) },
                         state = share,
                     )
+                    org.chyavorec.app.ui.components.PinShortcutMenu({ org.chyavorec.app.ui.navigation.PinnedShortcuts.event(context, e) }, snackbar)
                 }
             })
         },

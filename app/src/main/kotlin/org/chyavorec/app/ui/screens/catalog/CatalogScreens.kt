@@ -635,6 +635,8 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                     },
                     state = share,
                 )
+                // Закачен пряк път към книгата — не от личен списък (заглавието би издало избора).
+                if (!personal) org.chyavorec.app.ui.components.PinShortcutMenu({ org.chyavorec.app.ui.navigation.PinnedShortcuts.book(context, b) }, snackbar)
             }
         })
     }) { padding ->

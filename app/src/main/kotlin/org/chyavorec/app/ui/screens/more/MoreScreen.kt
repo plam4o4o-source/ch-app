@@ -11,7 +11,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.AccountBalance
+import androidx.compose.material.icons.outlined.AddHome
 import androidx.compose.material.icons.outlined.Campaign
+import androidx.compose.material.icons.outlined.Brush
 import androidx.compose.material.icons.outlined.Computer
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Folder
@@ -26,20 +28,27 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AppTopBar
+import org.chyavorec.app.ui.components.PinSectionsSheet
+import org.chyavorec.app.ui.navigation.PinnedShortcuts
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.ScreenGutter
@@ -70,7 +79,15 @@ fun MoreScreen(navigate: (String) -> Unit) {
         // „Дигитален клуб“ се показва само ако страницата съществува на сайта.
         digitalClub = (c.siteRepository.links(false) as? Outcome.Success)?.value?.data?.firstOrNull { it.kind == SiteSection.DIGITAL_CLUB }
     }
-    Scaffold(topBar = { AppTopBar(stringResource(R.string.tab_more), onSearch = { navigate(Routes.SEARCH) }) }) { padding ->
+    // „Добави на началния екран“ — само ако launcher-ът поддържа закачане.
+    val snackbar = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val canPin = remember(context) { PinnedShortcuts.supported(context) }
+    var pinSheet by remember { mutableStateOf(false) }
+    val pinFailed = stringResource(R.string.pin_failed)
+    if (pinSheet) PinSectionsSheet(onFailed = { scope.launch { snackbar.showSnackbar(pinFailed) } }, onDismiss = { pinSheet = false })
+    Scaffold(topBar = { AppTopBar(stringResource(R.string.tab_more), onSearch = { navigate(Routes.SEARCH) }) }, snackbarHost = { SnackbarHost(snackbar) }) { padding ->
         Column(Modifier.padding(padding).fillMaxSize().verticalScroll(scrollState)) {
             SectionLabel(stringResource(R.string.more_group_chitalishte), Modifier.padding(start = ScreenGutter, top = 8.dp, bottom = 12.dp))
             val tiles = buildList {
@@ -82,6 +99,7 @@ fun MoreScreen(navigate: (String) -> Unit) {
                     add(TileItem(Icons.Outlined.Computer, l.title, stringResource(R.string.more_digital_desc)) { navigate(Routes.page(l.url, l.title)) })
                 }
                 add(TileItem(Icons.Outlined.Photo, stringResource(R.string.gallery_title), stringResource(R.string.more_gallery_desc)) { navigate(Routes.GALLERY) })
+                add(TileItem(Icons.Outlined.Brush, stringResource(R.string.embroidery_title), stringResource(R.string.more_embroidery_desc)) { navigate(Routes.EMBROIDERY) })
                 add(TileItem(Icons.Outlined.Folder, stringResource(R.string.documents_title), stringResource(R.string.more_documents_desc)) { navigate(Routes.DOCUMENTS) })
                 add(TileItem(Icons.Outlined.Place, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc)) { navigate(Routes.CONTACTS) })
             }
@@ -89,6 +107,7 @@ fun MoreScreen(navigate: (String) -> Unit) {
             SectionLabel(stringResource(R.string.more_group_app), Modifier.padding(start = ScreenGutter, top = 28.dp, bottom = 4.dp))
             AppItem(Icons.Outlined.Settings, stringResource(R.string.settings_title)) { navigate(Routes.SETTINGS) }
             AppItem(Icons.Outlined.PrivacyTip, stringResource(R.string.privacy_title)) { navigate(Routes.PRIVACY) }
+            if (canPin) AppItem(Icons.Outlined.AddHome, stringResource(R.string.pin_add)) { pinSheet = true }
             AppItem(Icons.Outlined.Info, stringResource(R.string.about_title)) { navigate(Routes.ABOUT) }
             Spacer(Modifier.height(24.dp))
         }

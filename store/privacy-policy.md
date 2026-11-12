@@ -48,6 +48,8 @@
 
 Картинки за споделяне: картинките (на събитие, книга, новина или от „Моята читателска година“) се създават на телефона и излизат от него само ако ти избереш да ги споделиш и къде.
 
+Честитки, шевици и преки пътища: личният ред на честитката не се пази; шевиците, които извезваш, се пазят само на телефона (до 8 и една чернова) и излизат от него само като картинка, ако ги споделиш; прекият път на началния екран е на телефона и носи заглавие на книга или събитие само ако сам го добавиш.
+
 Абонамент за календара: ако добавиш календара на читалището (https://chyavorec.org/events.ics) в приложение за календар, то или неговата услуга (напр. Google Календар) тегли файла от сайта по свой график — като обикновена заявка, без лични данни; приложението на читалището не участва в това.
 
 ## Известия
@@ -117,6 +119,8 @@ Holds: if you place a hold on a book in the catalogue, the request (which book) 
 Documents: “Open with a PDF app” downloads the document from chyavorec.org into the app’s temporary data (kept for up to a week) and opens it in a PDF app of your choice on the phone.
 
 Share images: images (of an event, a book, a news story or from “My reading year”) are created on the phone and leave it only if you choose to share them, and where.
+
+Greeting cards, embroidery and shortcuts: the personal line of a greeting card is not stored; the patterns you embroider are kept only on the phone (up to 8 and one draft) and leave it only as an image if you share them; a home-screen shortcut lives on the phone and carries a book or event title only if you add it yourself.
 
 Calendar subscription: if you add the centre’s calendar (https://chyavorec.org/events.ics) to a calendar app, that app or its service (e.g. Google Calendar) fetches the file from the website on its own schedule — as a plain request, without personal data; the centre’s app is not involved.
 

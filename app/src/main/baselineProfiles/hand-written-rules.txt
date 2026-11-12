@@ -20,3 +20,9 @@ Lorg/chyavorec/app/ui/screens/my/SlideLook*;
 HSPLorg/chyavorec/app/ui/screens/my/SlideLook*;->**(**)**
 Lorg/chyavorec/data/catalog/ReadingYear*;
 HSPLorg/chyavorec/data/catalog/ReadingYear*;->**(**)**
+Lorg/chyavorec/app/ui/screens/embroidery/Embroidery*;
+HSPLorg/chyavorec/app/ui/screens/embroidery/Embroidery*;->**(**)**
+Lorg/chyavorec/app/ui/screens/embroidery/Stitch*;
+HSPLorg/chyavorec/app/ui/screens/embroidery/Stitch*;->**(**)**
+Lorg/chyavorec/domain/embroidery/Stitch*;
+HSPLorg/chyavorec/domain/embroidery/Stitch*;->**(**)**

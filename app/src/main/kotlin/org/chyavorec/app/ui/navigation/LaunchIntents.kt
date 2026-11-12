@@ -60,6 +60,21 @@ object LaunchIntents {
     fun isShortcutLink(link: String): Boolean = link in SHORTCUT_LINKS || SHORTCUT_BOOK.matches(link)
 
     /**
+     * Действието на закачените от потребителя преки пътища ([PinnedShortcuts]): раздел, книга от
+     * каталога, събитие, читателската карта или „Извези шевица“. Отделно от [ACTION_SHORTCUT] —
+     * неговият списък е затворен за статичните; тук връзката е в `data` и се проверява строго.
+     */
+    const val ACTION_PIN = "org.chyavorec.app.PIN_SHORTCUT"
+
+    /** Разделите, които може да се закачат (картата минава през заключването на личните екрани). */
+    val PINNED_LINKS = setOf("events", "news", "catalog", "my/card", DeepLinks.WANT_TO_READ, DeepLinks.EMBROIDERY)
+
+    /** Събитие по кодирания му идентификатор (Uri.encode — само безопасни знаци и %XX). */
+    private val PINNED_EVENT = Regex("event/[A-Za-z0-9._~%-]{1,300}")
+
+    fun isPinnedLink(link: String): Boolean = link in PINNED_LINKS || SHORTCUT_BOOK.matches(link) || PINNED_EVENT.matches(link)
+
+    /**
      * Известията до v1.2.25 включително са с `Intent(context, MainActivity)` — без действие и
      * без неекспортирания вход, само с extra „deep_link“. Вече показаните такива известия се
      * отварят, но само с връзки, които те са носили (заемите, съобщение, събитие, новина) —
@@ -104,6 +119,8 @@ object LaunchIntents {
             ACTION_OPEN_LINK -> intent.getStringExtra(Notifier.EXTRA_DEEP_LINK)
                 ?.takeIf { intent.component?.className == OPEN_LINK_ALIAS }
             ACTION_SHORTCUT -> data?.takeIf { it.scheme == SHORTCUT_SCHEME }?.path.orEmpty().trim('/').takeIf { isShortcutLink(it) }
+            // encodedPath — идентификаторът на събитие се кодира с Uri.encode и се чете така, както е записан.
+            ACTION_PIN -> data?.takeIf { it.scheme == SHORTCUT_SCHEME && it.host == "app" }?.encodedPath.orEmpty().trim('/').takeIf { isPinnedLink(it) }
             Intent.ACTION_VIEW -> data?.takeIf { it.scheme == "https" }?.toString()
                 ?.takeIf { DeepLinks.forUrl(it, siteBaseUrl) != null }
             null -> intent.getStringExtra(Notifier.EXTRA_DEEP_LINK)
