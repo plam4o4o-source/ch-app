@@ -13,7 +13,7 @@
 #            диалога на приложението и системния инсталатор; какво оцелява; „Настройки › Обновления“
 #   c26, c28, c36 — съвместимост: обиколка на всички екрани, завъртане и смърт на процеса, monkey 2000
 #            (c36: и предвиждащият жест „назад“ върху „Изненадай ме“)
-A6_PARTS=" a6new year35 idle33 hi28 gfx35 upd35 c26 c28 c36 "
+A6_PARTS=" a6new year35 yup35 land35 idle33 hi28 gfx35 upd35 c26 c28 c36 "
 W20_PARTS="$W20_PARTS $A6_PARTS"
 A6=$H_/a6.py
 
@@ -320,8 +320,9 @@ part_upd35() {
   dismiss
   if open_settings && settings_find 'е готова|Провери за нова версия|Налична е версия'; then sleep 2; dump; shot update/10-settings-card
     log "SETTINGS › Обновления: $(grep -oE 'text="[^"]*(е готова|Изтеглена и проверена|Инсталирай|Налична е версия|Провери за нова версия|Изтегли и инсталирай|Имаш последната)[^"]*"' $OUT/ui.xml | tr '\n' ' ')"
-    p=$(xy text '=Инсталирай|=Install'); [ -z "$p" ] && p=$(xy text '=Изтегли и инсталирай|=Download and install')
-    if [ -n "$p" ]; then a input tap $p
+    p=""; for i in 1 2 3 4 5; do dump; p=$(xy text '=Инсталирай|=Install'); [ -z "$p" ] && p=$(xy text '=Изтегли и инсталирай|=Download and install'); [ -n "$p" ] && break; sw_up 300; sleep 1; done
+    shot update/11-settings-card-scrolled
+    if [ -n "$p" ]; then a input tap $p; sleep 3; dump; shot update/12-after-install-tap; log "after the tap on Инсталирай: $(texts 8 | cut -c1-240)"
       if installer_confirm 1507364 u; then log "UPDATE via the settings card: installed $(ver)"; else log "UPDATE via the settings card: NOT installed: $(ver); $(texts 8 | cut -c1-200)"; fi
     else log "no install button on the settings card"; fi
   else log "Settings › Обновления: card not found"; fi
@@ -411,8 +412,22 @@ part_compat() {
   fi
   sec "C5. Rotation and process death on API $SDK (book, catalogue, article)"
   robx book; robx catalog; robx article
-  sec "C6. Monkey 2000 (seed 1357) on API $SDK"
-  MONKEY_N=2000 part_monkey
+  if [ "$SDK" -le 28 ]; then
+    sec "C5b. Scanner screen: manual entry and back ×2, repeated ×8 (the API 26 crash came right after this in round 1)"
+    for i in 1 2 3 4 5 6 7 8; do
+      scanner; sleep 3; dump
+      if tap text "$L_MANUAL" >/dev/null; then sleep 2; hide_ime; back 1.5; fi
+      back 1.5; dump; log "SCAN loop $i: app in front $(has "package=\"$PKG\"" && echo yes || echo NO); $(texts 3 | cut -c1-100)"
+      [ -n "$(pidof_app)" ] || { log "SCAN loop $i: the app process is GONE"; launch >/dev/null; sleep 4; }
+    done
+    ready >/dev/null
+  fi
+  local sd
+  for sd in 1357 4242 777; do
+    sec "C6. Monkey 2000 (seed $sd) on API $SDK"
+    MONKEY_N=2000 MONKEY_SEED=$sd part_monkey
+    cp $OUT/monkey.txt $OUT/monkey-$sd.txt 2>/dev/null
+  done
   all_sheets
   diag_end
 }
@@ -422,6 +437,8 @@ part_a6() {
   case $PART in
     a6new) part_a6new;;
     year35) part_year35;;
+    yup35) part_yup35;;
+    land35) part_land35;;
     idle33) part_idle33;;
     hi28) part_hi28;;
     gfx35) part_gfx35;;
@@ -429,4 +446,66 @@ part_a6() {
     c26|c28|c36) part_compat;;
   esac
   return 0
+}
+
+# ---------------------------------------------------------------- ХОРИЗОНТАЛНО (API 33)
+part_land35() {
+  helper_install
+  anims 1
+  warmup
+  card_open >/dev/null; leave
+  sec "LD1. Landscape (rotation checked in the uiautomator hierarchy): the whole tour, light and dark"
+  if land_on; then
+    tour landscape-light
+    a cmd uimode night yes; sleep 3; tour landscape-dark; a cmd uimode night no; sleep 2
+    sec "LD2. The card and the fullscreen card in landscape (scrolled to the button)"
+    card_screen; sleep 2; dump; shot land/card-screen
+    for i in 1 2 3; do dump; p=$(xy text "$L_CARDSHOW"); [ -n "$p" ] && break; sw_up 300; sleep 1; done
+    shot land/card-screen-scrolled
+    if [ -n "$p" ]; then a input tap $p; sleep 3; eshot zz-land-fullscreen >/dev/null; log "fullscreen card in landscape: $(fullscreen_ok && echo yes || echo NO)"; back 1.5; else log "landscape: no 'Покажи картата' on the card screen: $(texts 8 | cut -c1-200)"; fi
+    sec "LD3. Year-less screens at 2400x1080: Home at rest after 30 s (frames)"
+    leave; ready; tab home; sleep 30; cpu_win land-home-30s 15
+    land_off
+  else log "LANDSCAPE: not achieved"; fi
+  python3 $W20 a11yagg $OUT/a11y-*.txt | head -30 | tee -a $SUM
+  all_sheets
+  diag_end
+}
+
+# ---------------------------------------------------------------- ГОДИНАТА: плъзгане надолу по точни разстояния (devDebug)
+ydrag() {  # $1 — етикет, $2 — dp на последното UP, $3… — dp на MOVE по ред; DOWN на 30 % от височината
+  local lbl=$1 up=$2 d i dens px; shift 2
+  dens=$(dens | tr -dc 0-9); [ -n "$dens" ] || dens=420
+  local x=$((W / 2)) y0=$((H * 30 / 100))
+  { echo "input motionevent DOWN $x $y0"
+    for d in "$@"; do px=$((d * dens / 160)); echo "sleep 0.06; input motionevent MOVE $x $((y0 + px))"; done
+    px=$((up * dens / 160)); echo "sleep 0.06; input motionevent UP $x $((y0 + px))"
+  } > $OUT/yd.sh
+  timeout 20 adb push $OUT/yd.sh /data/local/tmp/yd.sh >/dev/null 2>&1
+  T=60 a sh /data/local/tmp/yd.sh
+  sleep 2.5; shot year/yd-$lbl >/dev/null
+  echo "$(ystate)"
+}
+part_yup35() {
+  local i r v
+  helper_install
+  dev_install
+  anims 1
+  warmup
+  demo_signin_remember
+  sec "YU1. Swipe-down dismiss with exact distances (motionevent): is the finger-up position counted? (the rule: ≥140 dp at any speed)"
+  for v in "A-moves-to-183-up-183:183:23 46 69 92 115 138 183" "B-last-move-114-up-183:183:23 46 69 92 114" "C-moves-to-160-up-160:160:40 80 120 160" "D-one-move-20-up-183:183:20" "E-moves-to-100-up-100:100:25 50 75 100" "F-moves-to-139-up-139:139:35 70 105 139"; do
+    IFS=: read lbl up mv <<< "$v"
+    r=""
+    for i in 1 2 3; do
+      year_open_fresh 25 || { r="$r no-open"; continue; }
+      sleep 1.2
+      r="$r $(ydrag $lbl-$i $up $mv | cut -d' ' -f1)"
+    done
+    log "YEAR3 $lbl (UP at $up dp; MOVE at: $mv dp):$r"
+  done
+  [ "$(ystate)" = open ] && back 2
+  all_sheets
+  diag_end
+  use_pkg org.chyavorec.app
 }

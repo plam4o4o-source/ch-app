@@ -256,7 +256,7 @@ setup() {
   # scan33keep — диагностичният APK (keep за регистраторите на ML Kit), иначе тестовото издание
   if [ "$PART" = scan33keep ]; then cp app-keep.apk app.apk; cp apk-keep-ref.txt apk-ref.txt; log "DIAGNOSTIC APK: $(cat apk-ref.txt)"; fi
   relprobe; log "APK for this part: $(cat apk-ref.txt 2>/dev/null) size $(stat -c %s app.apk) bytes"
-  timeout 180 adb install -r app.apk || { log "RESULT: install failed"; exit 1; }
+  timeout 180 adb install -r app.apk || { sleep 20; a pm path android >/dev/null 2>&1; timeout 180 adb install -r app.apk; } || { sleep 40; timeout 180 adb install -r app.apk; } || { log "RESULT: install failed"; exit 1; }
   log "installed: $(a dumpsys package $PKG | grep -m2 -E 'versionName|versionCode' | tr -s ' ' | tr -d '\r' | tr '\n' ' ')"
   a cmd locale set-app-locales $PKG --locales bg-BG; log "app locale: $(a cmd locale get-app-locales $PKG | tr -d '\r')"
   a pm grant $PKG android.permission.POST_NOTIFICATIONS || true
@@ -560,7 +560,7 @@ part_monkey() {
   log "monkey start pid=$(a pidof $PKG | tr -d '\r')"
   a log -t PERFCHECK "monkey start"
   local t0; t0=$(now_ms)
-  timeout 1800 adb shell monkey -p $PKG --pct-syskeys 0 --pct-anyevent 0 --throttle 80 -s 1357 -v $MN > $OUT/monkey.txt 2>&1
+  timeout 1800 adb shell monkey -p $PKG --pct-syskeys 0 --pct-anyevent 0 --throttle 80 -s ${MONKEY_SEED:-1357} -v $MN > $OUT/monkey.txt 2>&1
   log "MONKEY exit=$? duration=$(( ($(now_ms) - t0) / 1000 )) s; $(grep -E 'Events injected|Monkey finished|aborted' $OUT/monkey.txt | tr '\n' ' ')"
   log "MONKEY markers: CRASH=$(grep -c 'CRASH' $OUT/monkey.txt) ANR=$(grep -c 'NOT RESPONDING\|ANR in' $OUT/monkey.txt) FATAL=$(grep -c 'FATAL EXCEPTION' $OUT/monkey.txt)"
   grep -nE -A20 'CRASH|NOT RESPONDING|ANR in' $OUT/monkey.txt | head -60

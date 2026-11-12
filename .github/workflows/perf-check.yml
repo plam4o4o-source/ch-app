@@ -96,6 +96,7 @@ jobs:
           mkdir -p dist
           case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt;; base) O=app-base.apk; R=apk-base-ref.txt;; baseupd) O=app-base-upd.apk; R=apk-base-upd-ref.txt;; esac
           cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/$O
+          [ ${{ matrix.app }} = new ] && cp app/build/outputs/mapping/prodRelease/mapping.txt dist/app-mapping.txt || true
           echo "${{ matrix.vname }} $(git rev-parse --short HEAD) built prodRelease (minified), x86_64 added (throwaway key); versionCode ${{ matrix.vc }}; update manifest: ${UPDATE_MANIFEST_URL:-the real one (releases/latest)}" > dist/$R
           cat dist/*.txt; ls -l dist
       - name: devDebug (demo data)
@@ -178,7 +179,7 @@ jobs:
       fail-fast: false
       matrix:
         # API 33 google_apis x86_64, -gpu swangle_indirect; hi28, c28 — API 28; c26 — API 26; c36 — API 36.
-        part: [tour-a, tour-b, tour-c, robust, offline, a6new, year35, idle33, hi28, gfx35, mem, monkey, upd35, a11yt, c26, c28, c36]
+        part: [hi28, c26, land35, yup35, upd35]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -219,6 +220,9 @@ jobs:
           { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|segfault" | tail -20; } > $O/host-after-run.txt 2>&1 || true
           [ -f $O/logcat-all.txt ] || cat $O/logcat-live.txt $O/logcat-dump.txt 2>/dev/null | awk '!seen[$0]++' > $O/logcat-all.txt
           python3 .github/perf-check/a6.py crashes $O/logcat-all.txt $O/crashes.txt | tee -a $O/summary.txt || true
+          RT=$(ls $ANDROID_HOME/cmdline-tools/*/bin/retrace 2>/dev/null | head -1)
+          echo "retrace tool: ${RT:-none}; mapping: $(ls -l app-mapping.txt 2>&1 | cut -c1-80); crashes: $(wc -c < $O/crashes.txt) B" | tee -a $O/summary.txt
+          if [ -n "$RT" ] && [ -s app-mapping.txt ] && [ -s $O/crashes.txt ]; then "$RT" app-mapping.txt $O/crashes.txt > $O/crashes-retraced.txt 2>&1 || true; head -c 200 $O/crashes-retraced.txt | head -3; fi
           python3 .github/perf-check/a6post.py $O || true
           du -sh $O; find $O -type f | wc -l
       - uses: actions/upload-artifact@v7
@@ -272,6 +276,7 @@ jobs:
             for p in $(ls "$W/results"); do git rm -r -q --cached --ignore-unmatch "$V/$p"; done
             mkdir -p "$V"; cp -r "$W/results/." "$V/"
             mkdir -p "$V/size"; cp "$W"/apks/apk-*ref.txt "$V/size/" 2>/dev/null || true
+            [ -f "$W/apks/app-mapping.txt" ] && gzip -9 -c "$W/apks/app-mapping.txt" > "$V/size/app-mapping.txt.gz" || true
             for a in app.apk app-base.apk app-base-upd.apk app-dev.apk; do [ -f "$W/apks/$a" ] && echo "$a $(stat -c %s "$W/apks/$a") bytes"; done > "$V/size/apk-size.txt" || true
             git show FETCH_HEAD:$V/runs.txt > "$V/runs.txt" 2>/dev/null || : > "$V/runs.txt"
             echo "run $RUN @ $SRC (new ${NEW_REF:0:7}, base ${BASE_REF:0:7}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
