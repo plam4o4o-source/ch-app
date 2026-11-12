@@ -483,6 +483,10 @@
     <string name="onb_notif_off">No notifications for now — turn them on in Settings › Notifications.</string>
     <string name="onb_notif_on">Notifications are on</string>
     <string name="onb_notif_text">Book due dates, new messages and events.</string>
+    <string name="onb_page_of">Page %1$d of %2$d</string>
+    <string name="onb_sample_card_cd">Sample library card</string>
+    <string name="onb_sample_hint">This is how your card will look on your phone. Tilt it — the foil shines.</string>
+    <string name="onb_sample_name">Maria Ivanova</string>
     <string name="onb_settings_text">Text size and notifications — you can change them later in Settings too.</string>
     <string name="onb_settings_title">Make it yours</string>
     <string name="onb_signin_text">Sign in with your library details or add your library card. You can also do it later from “My library”.</string>

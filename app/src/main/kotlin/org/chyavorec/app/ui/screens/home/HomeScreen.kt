@@ -527,6 +527,19 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
     val titleLines = if (LocalDensity.current.fontScale >= 1.3f) 3 else 2
     val season = rememberSeason()
     val shape = MaterialTheme.shapes.large
+    // Дълбочина като през прозорец: снимката е малко по-едра и се движи по-бавно от картата, а златната
+    // рамка стои ([HeroParallax]); при намалено движение — без слой и без наблюдател.
+    val parallax = !reduced
+    val anchor = remember { HeroAnchor() }
+    // Ъглите на рамката се изрисуват веднъж за процеса (после — веднага цели).
+    val frameReveal = remember { Animatable(if (reduced || HeroFrameReveal.played) 1f else 0f) }
+    LaunchedEffect(Unit) {
+        if (frameReveal.value < 1f) {
+            HeroFrameReveal.played = true
+            delay(350)
+            frameReveal.animateTo(1f, tween(900))
+        }
+    }
     Column {
         // Пропорция 1.6:1 по ширината на лентата (без полетата), не по по-тясната голяма карта —
         // височината е като досега; при едър шрифт картата расте, вместо заглавието да се отреже
@@ -537,7 +550,8 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
             state = carousel,
             contentPadding = PaddingValues(horizontal = 16.dp),
             itemSpacing = 8.dp,
-            modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = carouselLabel; customActions = pageActions(current) }
+            modifier = Modifier.padding(top = 12.dp).heroContainer(anchor, parallax)
+                .semantics { contentDescription = carouselLabel; customActions = pageActions(current) }
                 .pointerInput(Unit) {
                     // Само наблюдава (Initial, без consume) — докосването и плъзгането стигат до картите.
                     awaitEachGesture {
@@ -554,6 +568,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                 },
         ) { page ->
             val a = items[page]
+            val shift = remember(page) { HeroShift() }
             val info = carouselItemDrawInfo
             // Текстът и украсата избледняват, докато картата се смалява встрани (маската я
             // реже) — четат се само в graphicsLayer, без прекомпозиция при плъзгане.
@@ -569,6 +584,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                 onClick = { onOpen(a) },
                 shape = shape,
                 modifier = Modifier.fillMaxWidth().heightIn(min = minHeight).maskClip(shape)
+                    .heroTrack(anchor, shift, parallax)
                     .darkTopHighlight(shape)
                     .semantics { if (page == current) customActions = pageActions(page) else hideFromAccessibility() },
             ) {
@@ -589,7 +605,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                             thumbnail = true,
                             // Без shared element: същият ключ има и списъкът „Новини“, а при смяна на
                             // таб двата източника биха се засекли.
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier.fillMaxSize().heroPhotoLayer(shift, parallax),
                         )
                         Box(Modifier.fillMaxSize().background(HeroScrim))
                     }
@@ -613,7 +629,7 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                     // не се застъпва с тях; златна шевица по ъглите.
                     Box(Modifier.matchParentSize().graphicsLayer { alpha = focal() }) {
                         if (season == Season.HARVEST) WheatEdge(Modifier.align(Alignment.TopCenter).padding(top = 10.dp))
-                        OrnamentFrame(Modifier.matchParentSize())
+                        OrnamentFrame(Modifier.matchParentSize(), progress = { frameReveal.value })
                     }
                 }
             }

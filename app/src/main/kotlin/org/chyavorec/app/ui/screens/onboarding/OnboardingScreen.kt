@@ -69,9 +69,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.data.local.TextScale
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.LocalAppContainer
-import org.chyavorec.app.ui.components.Emblem
-import org.chyavorec.app.ui.components.IconPlate
-import org.chyavorec.app.ui.components.PagerDots
+import org.chyavorec.app.ui.components.WeaveBudget
 import org.chyavorec.app.ui.screens.settings.NotificationAccess
 import org.chyavorec.app.ui.screens.settings.rememberNotificationPermission
 import org.chyavorec.app.ui.screens.settings.textScaleLabel
@@ -111,8 +109,11 @@ fun OnboardingScreen(onFinish: (link: String?) -> Unit) {
         large -> MaterialTheme.typography.headlineMedium
         else -> MaterialTheme.typography.displaySmall
     }
+    // Снопът светлина по шевицата около печата минава веднъж (за целия екран, не при всяко връщане към страницата).
+    val weave = remember { WeaveBudget(cycles = 1) }
     Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Brand.Ink, Color(0xFF2E1612), Brand.Burgundy)))) {
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
+            OnboardingRibbon(Modifier.padding(top = 6.dp))
             Row(Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.End) {
                 TextButton(onClick = { onFinish(null) }, colors = ButtonDefaults.textButtonColors(contentColor = Brand.GoldLight)) { Text(stringResource(R.string.onb_skip)) }
             }
@@ -126,17 +127,17 @@ fun OnboardingScreen(onFinish: (link: String?) -> Unit) {
                         verticalArrangement = Arrangement.Center,
                     ) {
                         when (page) {
-                            0 -> WelcomePage(large, titleStyle)
+                            0 -> WelcomePage(large, titleStyle, weave)
                             1 -> SettingsPage(large, titleStyle)
                             else -> SignInPage(large, titleStyle)
                         }
                     }
                 }
             }
-            PagerDots(
-                PAGES, pager.currentPage, Modifier.padding(bottom = 16.dp),
-                activeColor = Brand.Gold, inactiveColor = Brand.Parchment.copy(alpha = 0.35f),
-            )
+            // Нишка между три възела вместо точки: следва плъзгането и не иска прекомпозиция.
+            Box(Modifier.fillMaxWidth().padding(bottom = 12.dp), contentAlignment = Alignment.Center) {
+                ThreadDots(PAGES, position = { pager.currentPage + pager.currentPageOffsetFraction }, current = pager.currentPage)
+            }
             // Фонът е винаги тъмен (мастило → бордо), независимо от темата: бутоните са в злато
             // с мастило (8.1:1), а не основният цвят на темата (в светла — #785A10 върху бордо, 1.76:1).
             val primaryColors = ButtonDefaults.buttonColors(containerColor = Brand.Gold, contentColor = Brand.Ink)
@@ -176,9 +177,10 @@ private fun PageText(text: String) {
 
 /** Добре дошли: новини и събития, каталогът с „Искам да прочета“, читателската карта. */
 @Composable
-private fun WelcomePage(large: Boolean, titleStyle: TextStyle) {
-    Emblem(if (large) 72.dp else 104.dp)
-    Spacer(Modifier.height(if (large) 16.dp else 24.dp))
+private fun WelcomePage(large: Boolean, titleStyle: TextStyle, weave: WeaveBudget) {
+    // Печатът е в тъкана рамка от шевица (като във въведението на логото), а не гол върху тъмния фон.
+    SealMedallion(if (large) 150.dp else 216.dp, weave)
+    Spacer(Modifier.height(if (large) 12.dp else 20.dp))
     PageTitle(stringResource(R.string.onb_welcome_title), titleStyle)
     Text(
         stringResource(R.string.app_subtitle), style = MaterialTheme.typography.titleMedium, color = Brand.GoldLight,
@@ -198,7 +200,7 @@ private fun WelcomePage(large: Boolean, titleStyle: TextStyle) {
 @Composable
 private fun Feature(icon: ImageVector, title: Int, text: Int, large: Boolean) {
     Row(Modifier.fillMaxWidth().semantics(mergeDescendants = true) {}, verticalAlignment = Alignment.Top) {
-        IconPlate(icon, size = if (large) 40.dp else 48.dp, container = Brand.Gold, content = Brand.Ink)
+        KnotPlate(icon, size = if (large) 44.dp else 52.dp)
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
             Text(stringResource(title), style = MaterialTheme.typography.titleMedium, color = Brand.Parchment)
@@ -222,7 +224,7 @@ private fun SettingsPage(large: Boolean, titleStyle: TextStyle) {
     val permission = rememberNotificationPermission()
     var access by remember { mutableStateOf(if (Notifier.canNotify(context)) NotificationAccess.GRANTED else null) }
 
-    IconPlate(Icons.Outlined.FormatSize, size = if (large) 72.dp else 104.dp, container = Brand.Gold, content = Brand.Ink)
+    KnotPlate(Icons.Outlined.FormatSize, size = if (large) 72.dp else 104.dp)
     Spacer(Modifier.height(if (large) 16.dp else 24.dp))
     PageTitle(stringResource(R.string.onb_settings_title), titleStyle)
     Spacer(Modifier.height(12.dp))
@@ -296,8 +298,9 @@ private fun SectionTitle(text: String) {
 /** Вход с читателските данни или читателската карта (бутоните са отдолу). */
 @Composable
 private fun SignInPage(large: Boolean, titleStyle: TextStyle) {
-    IconPlate(Icons.Outlined.Badge, size = if (large) 84.dp else 120.dp, container = Brand.Gold, content = Brand.Ink)
-    Spacer(Modifier.height(if (large) 20.dp else 36.dp))
+    // Примерна карта с шевицата и фолиото — както ще изглежда в телефона; наклони телефона и блести.
+    SampleCard(large)
+    Spacer(Modifier.height(if (large) 20.dp else 28.dp))
     PageTitle(stringResource(R.string.onb_signin_title), titleStyle)
     Spacer(Modifier.height(16.dp))
     PageText(stringResource(R.string.onb_signin_text))

@@ -483,6 +483,10 @@
     <string name="onb_notif_off">Засега без известия — включват се от „Настройки › Известия“.</string>
     <string name="onb_notif_on">Известията са включени</string>
     <string name="onb_notif_text">Сроковете на книгите, нови съобщения и събития.</string>
+    <string name="onb_page_of">Страница %1$d от %2$d</string>
+    <string name="onb_sample_card_cd">Примерна читателска карта</string>
+    <string name="onb_sample_hint">Така ще изглежда картата ти в телефона. Наклони го — фолиото блести.</string>
+    <string name="onb_sample_name">Мария Иванова</string>
     <string name="onb_settings_text">Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“.</string>
     <string name="onb_settings_title">Удобно за теб</string>
     <string name="onb_signin_text">Влез с данните си от библиотеката или добави читателската си карта. Можеш и по-късно — от „Моето“.</string>
