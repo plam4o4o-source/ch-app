@@ -1,0 +1,7 @@
+APP W/E lines (pids ['6150', '6518', '6745', '6983', '7648', '7998', '8294', '8472', '8670', '9319', '9620', '9908', '10088', '10825', '11111', '11291']): 71 in 6 groups
+      20  E/eglCodecCommon: glUtilsParamSize: unknow param #
+      16  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+      16  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      16  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       2  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#e#cba-#cde-#b#-a#fe-a#fcde#e, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#-f#f-#a-ab#-d#d#b#, generation=#)

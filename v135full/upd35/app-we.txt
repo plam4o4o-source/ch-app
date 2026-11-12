@@ -1,15 +1,15 @@
-APP W/E lines (pids ['6481', '8604', '9577', '9941', '10268']): 65 in 14 groups
-      12  E/OpenGLRenderer: Unable to match the desired swap behavior.
-       8  W/Parcel: Expecting binder but got null!
-       8  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
-       7  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+APP W/E lines (pids ['5417', '8992', '9767', '10338', '10639']): 70 in 14 groups
+      14  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      10  W/Parcel: Expecting binder but got null!
+       7  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       6  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
        5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
        5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
        5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
        5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
        5  W/Gralloc4: allocator #.x is not supported
+       3  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       2  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object g#.s(java.lang.Object)(r
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#bc-#b#-#b#-#a#c-#ebcaf#, generation=#)
        1  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
-       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
-       1  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
        1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
-       1  W/g.chyavorec.app: No such thread id for suspend: #

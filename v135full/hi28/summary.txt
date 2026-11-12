@@ -4,5 +4,175 @@ host: 4 cpu, 15983 MB RAM
 android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 0
 RELEASE APK: rel-133.apk missing — built x86_64 app.apk
 APK for this part: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
-RESULT: install failed
+installed:  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: 
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-lowdr-nowidecg-port-notnight-420dpi-finger-keysexposed-nokeys-navhidden-nonav-2274x1080-v28
+## HI new-1: fresh install, warm-up, then Home at rest after a cold start (15 s windows at 20, 45 and 90 s): clean clean shots dump
+installed new-1: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+HI new-1-1-clean (clean): cold start TotalTime: 1363
+IDLE hi-new-1-1-clean-20-35s (15 s, no input): frames +44; cpu=14.4% (ticks 216 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=8.7%, Jit thread pool=3.5%, g.chyavorec.app=1.7%, HeapTaskDaemon=0.2%, DefaultExecutor=0.1%; pid 6518
+  new-1-1-clean 20-35s FSTL: 48 frames in the window, 3 group(s) [start×frames(length)]: +0.08s×21(1775ms); +7.86s×14(1029ms); +14.89s×13(989ms); gaps between group starts (s): 7.78 7.03; slowest 342 ms
+IDLE hi-new-1-1-clean-45-60s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 6518
+  new-1-1-clean 45-60s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+IDLE hi-new-1-1-clean-90-105s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 6518
+  new-1-1-clean 90-105s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+HI new-1-1-clean screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+HI new-1-2-clean (clean): cold start TotalTime: 1430
+IDLE hi-new-1-2-clean-20-35s (15 s, no input): frames +43; cpu=14.6% (ticks 219 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=8.3%, Jit thread pool=4.3%, g.chyavorec.app=1.7%, DefaultExecutor=0.3%, FrameMetricsAgg=0.1%; pid 6745
+  new-1-2-clean 20-35s FSTL: 45 frames in the window, 3 group(s) [start×frames(length)]: +0.07s×17(1367ms); +7.45s×14(951ms); +14.40s×14(921ms); gaps between group starts (s): 7.38 6.95; slowest 328 ms
+IDLE hi-new-1-2-clean-45-60s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 6745
+  new-1-2-clean 45-60s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+IDLE hi-new-1-2-clean-90-105s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 6745
+  new-1-2-clean 90-105s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+HI new-1-2-clean screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+HI new-1-3-shots (shots): cold start TotalTime: 1363
+IDLE hi-new-1-3-shots-20-35s (15 s, no input, 17 screenshots inside): frames +43
+  CHANGES: 4 of 16 consecutive pairs differ: 02:[0,116][1080,1328] 03:same 04:same 05:same 06:same 07:same 08:same 09:[0,648][1080,1276] 10:[0,648][1068,1328] 11:same 12:same 13:same 14:same 15:same 16:same 17:[0,648][1080,1328]
+  new-1-3-shots 20-35s FSTL: 43 frames in the window, 3 group(s) [start×frames(length)]: +0.15s×16(1446ms); +7.61s×14(1039ms); +14.65s×13(1022ms); gaps between group starts (s): 7.46 7.04; slowest 398 ms
+IDLE hi-new-1-3-shots-45-60s (15 s, no input, 19 screenshots inside): frames +0
+  CHANGES: 0 of 18 consecutive pairs differ: 02:same 03:same 04:same 05:same 06:same 07:same 08:same 09:same 10:same 11:same 12:same 13:same 14:same 15:same 16:same 17:same 18:same 19:same
+  new-1-3-shots 45-60s FSTL: 0 frames in the window (120 in the buffer; window 16.3 s)
+IDLE hi-new-1-3-shots-90-105s (15 s, no input, 19 screenshots inside): frames +0
+  CHANGES: 0 of 18 consecutive pairs differ: 02:same 03:same 04:same 05:same 06:same 07:same 08:same 09:same 10:same 11:same 12:same 13:same 14:same 15:same 16:same 17:same 18:same 19:same
+  new-1-3-shots 90-105s FSTL: 0 frames in the window (120 in the buffer; window 16.4 s)
+HI new-1-3-shots screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+HI new-1-4-dump (dump): cold start TotalTime: 1327
+IDLE hi-new-1-4-dump-20-35s (15 s, no input): frames +27; cpu=8.9% (ticks 133 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=5.5%, Jit thread pool=2.1%, g.chyavorec.app=1.1%, FrameMetricsAgg=0.1%, DefaultExecutor=0.1%; pid 7648
+  new-1-4-dump 20-35s FSTL: 27 frames in the window, 2 group(s) [start×frames(length)]: +5.14s×13(971ms); +12.07s×14(991ms); gaps between group starts (s): 6.93; slowest 350 ms
+IDLE hi-new-1-4-dump-45-60s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7648
+  new-1-4-dump 45-60s FSTL: 0 frames in the window (120 in the buffer; window 15.1 s)
+IDLE hi-new-1-4-dump-90-105s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7648
+  new-1-4-dump 90-105s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+HI new-1-4-dump screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+## HI base-1: fresh install, warm-up, then Home at rest after a cold start (15 s windows at 20, 45 and 90 s): clean clean shots dump
+installed base-1: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v135full/no-update.json size 4316418;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+HI base-1-1-clean (clean): cold start TotalTime: 1322
+IDLE hi-base-1-1-clean-20-35s (15 s, no input): frames +44; cpu=14.3% (ticks 214 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=9.1%, Jit thread pool=3.3%, g.chyavorec.app=1.5%, DefaultExecutor=0.2%, HeapTaskDaemon=0.1%; pid 8294
+  base-1-1-clean 20-35s FSTL: 45 frames in the window, 3 group(s) [start×frames(length)]: +0.11s×16(1321ms); +7.44s×15(1029ms); +14.47s×14(890ms); gaps between group starts (s): 7.33 7.03; slowest 348 ms
+IDLE hi-base-1-1-clean-45-60s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 8294
+  base-1-1-clean 45-60s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+IDLE hi-base-1-1-clean-90-105s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 8294
+  base-1-1-clean 90-105s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+HI base-1-1-clean screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+HI base-1-2-clean (clean): cold start TotalTime: 1496
+IDLE hi-base-1-2-clean-20-35s (15 s, no input): frames +41; cpu=13.3% (ticks 199 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=8.3%, Jit thread pool=3.0%, g.chyavorec.app=1.7%, DefaultExecutor=0.2%, FrameMetricsAgg=0.1%; pid 8472
+  base-1-2-clean 20-35s FSTL: 46 frames in the window, 3 group(s) [start×frames(length)]: +0.07s×17(1413ms); +7.49s×14(1002ms); +14.50s×15(1069ms); gaps between group starts (s): 7.42 7.01; slowest 352 ms
+IDLE hi-base-1-2-clean-45-60s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 8472
+  base-1-2-clean 45-60s FSTL: 0 frames in the window (120 in the buffer; window 15.1 s)
+IDLE hi-base-1-2-clean-90-105s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 8472
+  base-1-2-clean 90-105s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+HI base-1-2-clean screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+HI base-1-3-shots (shots): cold start TotalTime: 1538
+IDLE hi-base-1-3-shots-20-35s (15 s, no input, 17 screenshots inside): frames +42
+  CHANGES: 4 of 16 consecutive pairs differ: 02:[0,116][1080,1328] 03:same 04:same 05:same 06:same 07:same 08:same 09:[0,648][1080,1276] 10:[0,648][1080,1328] 11:same 12:same 13:same 14:same 15:same 16:same 17:[0,648][1080,1328]
+  base-1-3-shots 20-35s FSTL: 42 frames in the window, 3 group(s) [start×frames(length)]: +0.08s×17(1552ms); +7.65s×12(946ms); +14.59s×13(1101ms); gaps between group starts (s): 7.56 6.95; slowest 403 ms
+IDLE hi-base-1-3-shots-45-60s (15 s, no input, 19 screenshots inside): frames +0
+  CHANGES: 0 of 18 consecutive pairs differ: 02:same 03:same 04:same 05:same 06:same 07:same 08:same 09:same 10:same 11:same 12:same 13:same 14:same 15:same 16:same 17:same 18:same 19:same
+  base-1-3-shots 45-60s FSTL: 0 frames in the window (120 in the buffer; window 16.3 s)
+IDLE hi-base-1-3-shots-90-105s (15 s, no input, 19 screenshots inside): frames +0
+  CHANGES: 0 of 18 consecutive pairs differ: 02:same 03:same 04:same 05:same 06:same 07:same 08:same 09:same 10:same 11:same 12:same 13:same 14:same 15:same 16:same 17:same 18:same 19:same
+  base-1-3-shots 90-105s FSTL: 0 frames in the window (120 in the buffer; window 16.6 s)
+HI base-1-3-shots screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+HI base-1-4-dump (dump): cold start TotalTime: 1380
+IDLE hi-base-1-4-dump-20-35s (15 s, no input): frames +29; cpu=10.3% (ticks 155 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=6.3%, Jit thread pool=2.9%, g.chyavorec.app=1.1%, DefaultExecutor=0.1%; pid 9319
+  base-1-4-dump 20-35s FSTL: 29 frames in the window, 2 group(s) [start×frames(length)]: +5.14s×14(916ms); +12.04s×15(1029ms); gaps between group starts (s): 6.90; slowest 327 ms
+IDLE hi-base-1-4-dump-45-60s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 9319
+  base-1-4-dump 45-60s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+IDLE hi-base-1-4-dump-90-105s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 9319
+  base-1-4-dump 90-105s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+HI base-1-4-dump screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+## HI new-2: fresh install, warm-up, then Home at rest after a cold start (15 s windows at 20, 45 and 90 s): clean shots
+installed new-2: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+HI new-2-1-clean (clean): cold start TotalTime: 1516
+IDLE hi-new-2-1-clean-20-35s (15 s, no input): frames +41; cpu=14.7% (ticks 220 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=9.7%, Jit thread pool=3.1%, g.chyavorec.app=1.6%, DefaultExecutor=0.1%, FrameMetricsAgg=0.1%; pid 9908
+  new-2-1-clean 20-35s FSTL: 46 frames in the window, 3 group(s) [start×frames(length)]: +0.00s×19(1798ms); +7.82s×14(920ms); +14.73s×13(879ms); gaps between group starts (s): 7.82 6.91; slowest 376 ms
+IDLE hi-new-2-1-clean-45-60s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 9908
+  new-2-1-clean 45-60s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+IDLE hi-new-2-1-clean-90-105s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 9908
+  new-2-1-clean 90-105s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+HI new-2-1-clean screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+HI new-2-2-shots (shots): cold start TotalTime: 1349
+IDLE hi-new-2-2-shots-20-35s (15 s, no input, 16 screenshots inside): frames +35
+  CHANGES: 3 of 15 consecutive pairs differ: 02:[0,116][1080,1328] 03:same 04:same 05:same 06:same 07:same 08:same 09:[0,648][1080,1276] 10:[0,648][1080,1328] 11:same 12:same 13:same 14:same 15:same 16:same
+  new-2-2-shots 20-35s FSTL: 44 frames in the window, 3 group(s) [start×frames(length)]: +0.00s×18(1726ms); +7.74s×13(964ms); +14.71s×13(1017ms); gaps between group starts (s): 7.74 6.97; slowest 418 ms
+IDLE hi-new-2-2-shots-45-60s (15 s, no input, 19 screenshots inside): frames +0
+  CHANGES: 0 of 18 consecutive pairs differ: 02:same 03:same 04:same 05:same 06:same 07:same 08:same 09:same 10:same 11:same 12:same 13:same 14:same 15:same 16:same 17:same 18:same 19:same
+  new-2-2-shots 45-60s FSTL: 0 frames in the window (120 in the buffer; window 16.5 s)
+IDLE hi-new-2-2-shots-90-105s (15 s, no input, 19 screenshots inside): frames +0
+  CHANGES: 0 of 18 consecutive pairs differ: 02:same 03:same 04:same 05:same 06:same 07:same 08:same 09:same 10:same 11:same 12:same 13:same 14:same 15:same 16:same 17:same 18:same 19:same
+  new-2-2-shots 90-105s FSTL: 0 frames in the window (120 in the buffer; window 16.3 s)
+HI new-2-2-shots screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+## HI base-2: fresh install, warm-up, then Home at rest after a cold start (15 s windows at 20, 45 and 90 s): clean shots
+installed base-2: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v135full/no-update.json size 4316418;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+HI base-2-1-clean (clean): cold start TotalTime: 1337
+IDLE hi-base-2-1-clean-20-35s (15 s, no input): frames +42; cpu=12.8% (ticks 192 in 15 s; 100 ticks = 1 cpu-s) threads: RenderThread=8.9%, Jit thread pool=2.1%, g.chyavorec.app=1.5%, DefaultExecutor=0.2%, FrameMetricsAgg=0.1%; pid 11111
+  base-2-1-clean 20-35s FSTL: 46 frames in the window, 3 group(s) [start×frames(length)]: +0.14s×17(1412ms); +7.57s×14(995ms); +14.57s×15(971ms); gaps between group starts (s): 7.43 7.00; slowest 350 ms
+IDLE hi-base-2-1-clean-45-60s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 11111
+  base-2-1-clean 45-60s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+IDLE hi-base-2-1-clean-90-105s (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 11111
+  base-2-1-clean 90-105s FSTL: 0 frames in the window (120 in the buffer; window 15.2 s)
+HI base-2-1-clean screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+HI base-2-2-shots (shots): cold start TotalTime: 1207
+IDLE hi-base-2-2-shots-20-35s (15 s, no input, 17 screenshots inside): frames +40
+  CHANGES: 4 of 16 consecutive pairs differ: 02:[0,116][1080,1328] 03:same 04:same 05:same 06:same 07:same 08:same 09:[0,664][1080,1272] 10:[0,648][1080,1328] 11:same 12:same 13:same 14:same 15:same 16:same 17:[0,648][1080,1328]
+  base-2-2-shots 20-35s FSTL: 41 frames in the window, 3 group(s) [start×frames(length)]: +0.02s×15(1308ms); +7.36s×13(900ms); +14.24s×13(1072ms); gaps between group starts (s): 7.34 6.88; slowest 368 ms
+IDLE hi-base-2-2-shots-45-60s (15 s, no input, 19 screenshots inside): frames +0
+  CHANGES: 0 of 18 consecutive pairs differ: 02:same 03:same 04:same 05:same 06:same 07:same 08:same 09:same 10:same 11:same 12:same 13:same 14:same 15:same 16:same 17:same 18:same 19:same
+  base-2-2-shots 45-60s FSTL: 0 frames in the window (120 in the buffer; window 16.3 s)
+IDLE hi-base-2-2-shots-90-105s (15 s, no input, 19 screenshots inside): frames +0
+  CHANGES: 0 of 18 consecutive pairs differ: 02:same 03:same 04:same 05:same 06:same 07:same 08:same 09:same 10:same 11:same 12:same 13:same 14:same 15:same 16:same 17:same 18:same 19:same
+  base-2-2-shots 90-105s FSTL: 0 frames in the window (120 in the buffer; window 16.5 s)
+HI base-2-2-shots screen at the end: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св. Йоан Милостиви, патр. Александрийски. Преп. Нил Постник. Преп. Нил Мироточиви, Атонски. Св. прор. 
+## HI totals: frames in each 15 s window (label: build-block-run-mode)
+HI-TOTAL base clean 20-35s: 44 41 42
+HI-TOTAL base clean 45-60s: 0 0 0
+HI-TOTAL base clean 90-105s: 0 0 0
+HI-TOTAL base dump 20-35s: 29
+HI-TOTAL base dump 45-60s: 0
+HI-TOTAL base dump 90-105s: 0
+HI-TOTAL base shots 20-35s: 42 40
+HI-TOTAL base shots 45-60s: 0 0
+HI-TOTAL base shots 90-105s: 0 0
+HI-TOTAL new clean 20-35s: 44 43 41
+HI-TOTAL new clean 45-60s: 0 0 0
+HI-TOTAL new clean 90-105s: 0 0 0
+HI-TOTAL new dump 20-35s: 27
+HI-TOTAL new dump 45-60s: 0
+HI-TOTAL new dump 90-105s: 0
+HI-TOTAL new shots 20-35s: 43 35
+HI-TOTAL new shots 45-60s: 0 0
+HI-TOTAL new shots 90-105s: 0 0
+contact sheets: 3 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 3 | Първи кадър: медиана 1180 мс, последен 1154 мс | Пълно показване: медиана 1575 мс, последно 1575 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 3" text="Първи кадър: медиана 1180 мс, последен 1154 мс" text="Пълно показване: медиана 1575 мс, последно 1575 мс" text="Няма записани грешки." content-desc="Назад" text="Диагностика" 
+APP W/E lines (pids ['6150', '6518', '6745', '6983', '7648', '7998', '8294', '8472', '8670', '9319', '9620', '9908', '10088', '10825', '11111', '11291']): 71 in 6 groups
+      20  E/eglCodecCommon: glUtilsParamSize: unknow param #
+      16  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+      16  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      16  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       2  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#e#cba-#cde-#b#-a#fe-a#fcde#e, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#-f#f-#a-ab#-d#d#b#, generation=#)
+contact sheets: 4 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['6150', '6518', '6745', '6983', '7648', '7998', '8294', '8472', '8670', '9319', '9620', '9908', '10088', '10825', '11111', '11291']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 8
+   skipped-frames events=8 max=40 total=279
+== Davey: 16
+   davey events=16 max=1060ms median=764ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 83123049 Nov 12 20:46 app-mapping.txt; crashes: 0 B

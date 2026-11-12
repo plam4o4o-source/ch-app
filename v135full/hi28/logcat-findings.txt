@@ -1,0 +1,51 @@
+app pids seen: ['6150', '6518', '6745', '6983', '7648', '7998', '8294', '8472', '8670', '9319', '9620', '9908', '10088', '10825', '11111', '11291']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 8
+   skipped-frames events=8 max=40 total=279
+   11-12 20:50:29.773  6150  6150 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-12 20:51:13.817  6518  6518 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 20:53:07.295  6745  6745 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-12 20:53:07.878  6745  6745 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 20:55:01.809  6983  6983 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-12 21:07:57.594  9908  9908 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-12 21:11:47.715 10825 10825 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-12 21:14:23.480 11291 11291 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 16
+   davey events=16 max=1060ms median=764ms
+   11-12 20:50:30.640  6150  6179 I OpenGLRenderer: Davey! duration=834ms; Flags=1, IntendedVsync=142944213922, Vsync=143310880574, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=143327240390, AnimationStart=1433273
+   11-12 20:51:13.681  6518  6543 I OpenGLRenderer: Davey! duration=926ms; Flags=1, IntendedVsync=185894198733, Vsync=186377532047, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=186383069430, AnimationStart=1863831
+   11-12 20:53:07.730  6745  6770 I OpenGLRenderer: Davey! duration=1053ms; Flags=1, IntendedVsync=299815260308, Vsync=300431926950, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=300435689570, AnimationStart=300435
+   11-12 20:53:08.105  6745  6770 I OpenGLRenderer: Davey! duration=715ms; Flags=0, IntendedVsync=300515061621, Vsync=301015061601, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=301019103800, AnimationStart=3010191
+   11-12 20:55:01.660  6983  7006 I OpenGLRenderer: Davey! duration=727ms; Flags=1, IntendedVsync=414071969016, Vsync=414388635670, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=414391634090, AnimationStart=4143916
+   11-12 20:56:56.640  7648  7671 I OpenGLRenderer: Davey! duration=706ms; Flags=1, IntendedVsync=529072148014, Vsync=529372148002, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=529385304480, AnimationStart=5293853
+   11-12 20:56:57.042  7648  7671 I OpenGLRenderer: Davey! duration=718ms; Flags=0, IntendedVsync=529414763772, Vsync=529881430420, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=529889059680, AnimationStart=5298891
+   11-12 20:58:52.670  7998  8025 I OpenGLRenderer: Davey! duration=764ms; Flags=1, IntendedVsync=645044290203, Vsync=645427623521, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=645437029100, AnimationStart=6454370
+   11-12 20:59:35.090  8294  8317 I OpenGLRenderer: Davey! duration=700ms; Flags=1, IntendedVsync=687528296971, Vsync=687828296959, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=687833075890, AnimationStart=6878331
+   11-12 21:01:29.392  8472  8497 I OpenGLRenderer: Davey! duration=883ms; Flags=1, IntendedVsync=801646681546, Vsync=802080014862, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=802088544310, AnimationStart=8020886
+   11-12 21:03:23.620  8670  8693 I OpenGLRenderer: Davey! duration=765ms; Flags=1, IntendedVsync=915977882409, Vsync=916311215729, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=916318676490, AnimationStart=9163187
+   11-12 21:05:18.790  9319  9345 I OpenGLRenderer: Davey! duration=883ms; Flags=1, IntendedVsync=1031044794105, Vsync=1031461460755, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=1031476345610, AnimationStart=1031
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 20:50:16.926  5397  5397 I PERFCHECK: section: HI new-1: fresh install, warm-up, then Home at rest after a cold start 15 s windows at 20, 45 and 90 s: clean clean shots dump
+   11-12 20:51:06.880  1899  3419 I ActivityManager: Killing 6150:org.chyavorec.app/u0a88 (adj 0): stop org.chyavorec.app
+   11-12 20:53:00.791  1899  4359 I ActivityManager: Killing 6518:org.chyavorec.app/u0a88 (adj 0): stop org.chyavorec.app
+   11-12 20:54:54.723  1899  3602 I ActivityManager: Killing 6745:org.chyavorec.app/u0a88 (adj 0): stop org.chyavorec.app
+   11-12 20:56:49.963  1899  2691 I ActivityManager: Killing 6983:org.chyavorec.app/u0a88 (adj 0): stop org.chyavorec.app
+   11-12 20:58:45.505  7857  7857 I PERFCHECK: section: HI base-1: fresh install, warm-up, then Home at rest after a cold start 15 s windows at 20, 45 and 90 s: clean clean shots dump
+   11-12 20:58:45.523  1899  3433 I ActivityManager: Killing 7648:org.chyavorec.app/u0a88 (adj 0): stop org.chyavorec.app
+   11-12 20:59:28.190  1899  2065 I ActivityManager: Killing 7998:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-12 21:01:22.305  1899  2674 I ActivityManager: Killing 8294:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-12 21:03:16.619  1899  2674 I ActivityManager: Killing 8472:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-12 21:05:12.046  1899  2284 I ActivityManager: Killing 8670:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-12 21:07:07.635  9522  9522 I PERFCHECK: section: HI new-2: fresh install, warm-up, then Home at rest after a cold start 15 s windows at 20, 45 and 90 s: clean shots
+   11-12 21:07:07.653  1899  3416 I ActivityManager: Killing 9319:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-12 21:07:51.146  1899  2713 I ActivityManager: Killing 9620:org.chyavorec.app/u0a90 (adj 0): stop org.chyavorec.app
+   11-12 21:09:45.089  1899  3415 I ActivityManager: Killing 9908:org.chyavorec.app/u0a90 (adj 0): stop org.chyavorec.app
+   11-12 21:11:40.235 10711 10711 I PERFCHECK: section: HI base-2: fresh install, warm-up, then Home at rest after a cold start 15 s windows at 20, 45 and 90 s: clean shots
+   11-12 21:11:40.253  1899  3524 I ActivityManager: Killing 10088:org.chyavorec.app/u0a90 (adj 0): stop org.chyavorec.app
+   11-12 21:12:22.957  1899  3080 I ActivityManager: Killing 10825:org.chyavorec.app/u0a91 (adj 0): stop org.chyavorec.app
+   11-12 21:14:16.868  1899  4451 I ActivityManager: Killing 11111:org.chyavorec.app/u0a91 (adj 0): stop org.chyavorec.app
+   11-12 21:16:11.753 11921 11921 I PERFCHECK: section: HI totals: frames in each 15 s window label: build-block-run-mode
+   11-12 21:16:13.590 11927 11927 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

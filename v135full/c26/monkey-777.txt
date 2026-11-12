@@ -1,0 +1,347 @@
+  bash arg: -p
+  bash arg: org.chyavorec.app
+  bash arg: --pct-syskeys
+  bash arg: 0
+  bash arg: --pct-anyevent
+  bash arg: 0
+  bash arg: --throttle
+  bash arg: 80
+  bash arg: -s
+  bash arg: 777
+  bash arg: -v
+  bash arg: 2000
+args: [-p, org.chyavorec.app, --pct-syskeys, 0, --pct-anyevent, 0, --throttle, 80, -s, 777, -v, 2000]
+ arg: "-p"
+ arg: "org.chyavorec.app"
+ arg: "--pct-syskeys"
+ arg: "0"
+ arg: "--pct-anyevent"
+ arg: "0"
+ arg: "--throttle"
+ arg: "80"
+ arg: "-s"
+ arg: "777"
+ arg: "-v"
+ arg: "2000"
+data="org.chyavorec.app"
+arg="--pct-syskeys" mCurArgData="null" mNextArg=3 argwas="--pct-syskeys" nextarg="0"
+data="0"
+arg="--pct-anyevent" mCurArgData="null" mNextArg=5 argwas="--pct-anyevent" nextarg="0"
+data="0"
+arg="--throttle" mCurArgData="null" mNextArg=7 argwas="--throttle" nextarg="80"
+data="80"
+data="777"
+:Monkey: seed=777 count=2000
+:AllowPackage: org.chyavorec.app
+:IncludeCategory: android.intent.category.LAUNCHER
+:IncludeCategory: android.intent.category.MONKEY
+// Event percentages:
+//   0: 17.64706%
+//   1: 11.764707%
+//   2: 2.3529413%
+//   3: 17.64706%
+//   4: -0.0%
+//   5: -0.0%
+//   6: 29.411766%
+//   7: 17.64706%
+//   8: -0.0%
+//   9: 2.3529413%
+//   10: 1.1764706%
+//   11: -0.0%
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(2.0,1368.0)
+:Sending Touch (ACTION_UP): 0:(13.376811,1350.7107)
+:Sending Touch (ACTION_DOWN): 0:(1057.0,1707.0)
+:Sending Touch (ACTION_UP): 0:(1051.0537,1718.1769)
+:Sending Touch (ACTION_DOWN): 0:(855.0,130.0)
+:Sending Touch (ACTION_UP): 0:(846.8329,135.07353)
+:Sending Touch (ACTION_DOWN): 0:(531.0,753.0)
+:Sending Touch (ACTION_UP): 0:(510.55478,800.3008)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,2.0)
+:Sending Flip keyboardOpen=false
+Got IOException performing flipjava.io.IOException: write failed: EINVAL (Invalid argument)
+    // Injection Failed
+:Sending Touch (ACTION_DOWN): 0:(545.0,907.0)
+:Sending Touch (ACTION_UP): 0:(527.12317,915.86176)
+:Sending Touch (ACTION_DOWN): 0:(980.0,1366.0)
+:Sending Touch (ACTION_UP): 0:(973.21967,1362.0701)
+:Sending Touch (ACTION_DOWN): 0:(409.0,678.0)
+:Sending Touch (ACTION_UP): 0:(390.182,677.2694)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,4.0)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-2.0)
+:Sending Touch (ACTION_DOWN): 0:(967.0,711.0)
+:Sending Touch (ACTION_UP): 0:(953.88354,710.23065)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(31.0,297.0)
+:Sending Touch (ACTION_UP): 0:(40.173225,307.6916)
+:Sending Touch (ACTION_DOWN): 0:(930.0,190.0)
+:Sending Touch (ACTION_UP): 0:(935.24725,190.77393)
+    //[calendar_time:2026-11-12 21:23:35.566  system_uptime:2145003]
+    // Sending event #100
+    //[calendar_time:2026-11-12 21:23:35.646  system_uptime:2145084]
+    // Sending event #100
+:Sending Touch (ACTION_DOWN): 0:(70.0,58.0)
+:Sending Touch (ACTION_UP): 0:(85.98268,74.19982)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(329.0,240.0)
+:Sending Touch (ACTION_UP): 0:(335.4613,236.69939)
+:Sending Touch (ACTION_DOWN): 0:(235.0,848.0)
+:Sending Touch (ACTION_UP): 0:(229.04637,849.60767)
+:Sending Touch (ACTION_DOWN): 0:(860.0,1888.0)
+:Sending Touch (ACTION_UP): 0:(872.17773,1893.5524)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,-5.0)
+// CRASH: org.chyavorec.app (pid 20641)
+// Short Msg: java.lang.IllegalArgumentException
+// Long Msg: java.lang.IllegalArgumentException: layouts are not part of the same hierarchy
+// Build Label: Android/sdk_gphone_x86_64/generic_x86_64:8.0.0/OSR1.180418.026/6741039:userdebug/dev-keys
+// Build Changelist: 6741039
+// Build Time: 1596716724000
+// java.lang.IllegalArgumentException: layouts are not part of the same hierarchy
+// 	at dl1.k(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:3)
+// 	at cm3.c1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:90)
+// 	at n53.K(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:25)
+// 	at q53.c(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:18)
+// 	at a05.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:168)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m53.T0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:5)
+// 	at m53.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:9)
+// 	at mz3.l(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:12)
+// 	at o53.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:79)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at p53.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:127)
+// 	at p53.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:2)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:133)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at ak4.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:130)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+// 	at tj.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:243)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+// 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:49)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.l0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:33)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:59)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.l0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at aw2.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:186)
+// 	at yv2.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at fs2.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:35)
+// 	at zv2.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:3)
+// 	at hs2.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:16)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at mz3.q(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:22)
+// 	at mz3.t(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tj.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:21)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:45)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+// 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:49)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at ae.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:169)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at mz3.q(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:22)
+// 	at cj1.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at mz3.q(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:22)
+// 	at mz3.t(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tj.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:896)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at ti1.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at he.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:162)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at mz3.l(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:12)
+// 	at ne.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:79)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cd
+// [TRUNCATED 1405 CHARS]
+// 6794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.l(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:12)
+// 	at ux.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:49)
+// 	at wx.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:193)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+// 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:49)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at vx.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:85)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at wi2.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:46)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:103)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.q(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:22)
+// 	at yp4.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:223)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.l(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:12)
+// 	at ux.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:49)
+// 	at vx.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:116)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:103)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.o(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:72)
+// 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:37)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:241)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:246)
+// 	at n73.v(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:108)
+// 	at n73.A0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:142)
+// 	at di2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:41)
+// 	at mz3.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:24)
+// 	at y.i(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:65)
+// 	at j53.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:7)
+// 	at tr2.H1(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:93)
+// 	at tr2.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:30)
+// 	at m73.a(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:82)
+// 	at o95.d(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:315)
+// 	at n73.D0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:89)
+// 	at n73.F0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:154)
+// 	at n73.k0(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:6)
+// 	at mz3.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:71)
+// 	at wp1.t(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:137)
+// 	at wp1.n(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:158)
+// 	at j7.onLayout(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:14)
+// 	at android.view.View.layout(View.java:19590)
+// 	at android.view.ViewGroup.layout(ViewGroup.java:6053)
+// 	at x.h(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:28)
+// 	at x.onLayout(r8-map-id-2a14f314980e08bb7fa36794030d47ab3350b64c75cdb8b3aa7bf6320ddf3c17:1)
+// 	at android.view.View.layout(View.java:19590)
+// 	at android.view.ViewGroup.layout(ViewGroup.java:6053)
+// 	at android.widget.FrameLayout.layoutChildren(FrameLayout.java:323)
+// 	at android.widget.FrameLayout.onLayout(FrameLayout.java:261)
+// 	at android.view.View.layout(View.java:19590)
+// 	at android.view.ViewGroup.layout(ViewGroup.java:6053)
+// 	at android.widget.FrameLayout.layoutChildren(FrameLayout.java:323)
+// 	at android.widget.FrameLayout.onLayout(FrameLayout.java:261)
+// 	at android.view.View.layout(View.java:19590)
+// 	at android.view.ViewGroup.layout(ViewGroup.java:6053)
+// 	at android.widget.FrameLayout.layoutChildren(FrameLayout.java:323)
+// 	at android.widget.FrameLayout.onLayout(FrameLayout.java:261)
+// 	at com.android.internal.policy.DecorView.onLayout(DecorView.java:758)
+// 	at android.view.View.layout(View.java:19590)
+// 	at android.view.ViewGroup.layout(ViewGroup.java:6053)
+// 	at android.view.ViewRootImpl.performLayout(ViewRootImpl.java:2484)
+// 	at android.view.ViewRootImpl.performTraversals(ViewRootImpl.java:2200)
+// 	at android.view.ViewRootImpl.doTraversal(ViewRootImpl.java:1386)
+// 	at android.view.ViewRootImpl$TraversalRunnable.run(ViewRootImpl.java:6733)
+// 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:911)
+// 	at android.view.Choreographer.doCallbacks(Choreographer.java:723)
+// 	at android.view.Choreographer.doFrame(Choreographer.java:658)
+// 	at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:897)
+// 	at android.os.Handler.handleCallback(Handler.java:789)
+// 	at android.os.Handler.dispatchMessage(Handler.java:98)
+// 	at android.os.Looper.loop(Looper.java:164)
+// 	at android.app.ActivityThread.main(ActivityThread.java:6541)
+// 	at java.lang.reflect.Method.invoke(Native Method)
+// 	at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
+// 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:767)
+// 
+** Monkey aborted due to error.
+Events injected: 148
+:Sending rotation degree=0, persist=false
+:Dropped: keys=0 pointers=0 trackballs=0 flips=1 rotations=0
+## Network stats: elapsed time=8265ms (0ms mobile, 0ms wifi, 8265ms not connected)
+** System appears to have crashed at event 148 of 2000 using seed 777

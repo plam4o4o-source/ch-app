@@ -1,41 +1,40 @@
-app pids seen: ['6481', '8604', '9577', '9941', '10268']
+app pids seen: ['5417', '8992', '9767', '10338', '10639']
 == FATAL: 0
 == ANR: 0
 == StrictMode: 0
-== Skipped: 19
-   skipped-frames events=19 max=73 total=912
-   11-12 19:28:44.493  6481  6481 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
-   11-12 19:28:46.230  6481  6481 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
-   11-12 19:28:47.018  6481  6481 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
-   11-12 19:28:48.413  6481  6481 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
-   11-12 19:28:49.199  6481  6481 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
-   11-12 19:28:55.274  6481  6481 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
-   11-12 19:28:59.581  6481  6481 I Choreographer: Skipped 73 frames!  The application may be doing too much work on its main thread.
-   11-12 19:32:26.309  8604  8604 I Choreographer: Skipped 65 frames!  The application may be doing too much work on its main thread.
-   11-12 19:32:28.389  8604  8604 I Choreographer: Skipped 66 frames!  The application may be doing too much work on its main thread.
-   11-12 19:33:56.266  9577  9577 I Choreographer: Skipped 57 frames!  The application may be doing too much work on its main thread.
-   11-12 19:33:56.998  9577  9577 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
-   11-12 19:33:57.988  9577  9577 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
-== Davey: 32
-   davey events=32 max=1831ms median=1120ms
-   11-12 19:28:46.992  6481  6495 I OpenGLRenderer: Davey! duration=1730ms; Flags=1, FrameTimelineVsyncId=7803, IntendedVsync=91651611689, Vsync=91984945009, InputEventId=0, HandleInputStart=91994047718, AnimationStart=91994048820, PerformTrav
-   11-12 19:28:47.315  6481  6495 I OpenGLRenderer: Davey! duration=1023ms; Flags=0, FrameTimelineVsyncId=8062, IntendedVsync=93334944955, Vsync=93334944955, InputEventId=0, HandleInputStart=93348777764, AnimationStart=93348778115, PerformTrav
-   11-12 19:28:47.844  6481  6494 I OpenGLRenderer: Davey! duration=1046ms; Flags=0, FrameTimelineVsyncId=8079, IntendedVsync=93384944953, Vsync=94101611591, InputEventId=0, HandleInputStart=94111286735, AnimationStart=94111286986, PerformTrav
-   11-12 19:28:48.410  6481  6494 I OpenGLRenderer: Davey! duration=1101ms; Flags=0, FrameTimelineVsyncId=8227, IntendedVsync=94118278257, Vsync=94601611571, InputEventId=0, HandleInputStart=94604980889, AnimationStart=94604982011, PerformTrav
-   11-12 19:28:49.184  6481  6494 I OpenGLRenderer: Davey! duration=788ms; Flags=0, FrameTimelineVsyncId=8360, IntendedVsync=94634944903, Vsync=94934944891, InputEventId=0, HandleInputStart=94935792818, AnimationStart=94935793078, PerformTrave
-   11-12 19:28:49.260  6481  6494 I OpenGLRenderer: Davey! duration=1183ms; Flags=0, FrameTimelineVsyncId=8402, IntendedVsync=94951617101, Vsync=95501617046, InputEventId=0, HandleInputStart=95503756207, AnimationStart=95503756528, PerformTrav
-   11-12 19:28:50.087  6481  6495 I OpenGLRenderer: Davey! duration=1283ms; Flags=0, FrameTimelineVsyncId=8437, IntendedVsync=95684944861, Vsync=96284944837, InputEventId=0, HandleInputStart=96290032207, AnimationStart=96290032448, PerformTrav
-   11-12 19:28:55.734  6481  6718 I OpenGLRenderer: Davey! duration=768ms; Flags=0, FrameTimelineVsyncId=9245, IntendedVsync=101768277951, Vsync=102351611261, InputEventId=0, HandleInputStart=102369338941, AnimationStart=102369339822, PerformT
-   11-12 19:28:59.772  6481  6718 I OpenGLRenderer: Davey! duration=1623ms; Flags=0, FrameTimelineVsyncId=9982, IntendedVsync=105084944485, Vsync=105084944485, InputEventId=0, HandleInputStart=105090373713, AnimationStart=105090374495, Perform
-   11-12 19:29:00.017  6481  6495 I OpenGLRenderer: Davey! duration=1291ms; Flags=0, FrameTimelineVsyncId=10099, IntendedVsync=105451611137, Vsync=106668277755, InputEventId=0, HandleInputStart=106672636718, AnimationStart=106672637680, Perfor
-   11-12 19:29:00.383  6481  6718 I OpenGLRenderer: Davey! duration=754ms; Flags=0, FrameTimelineVsyncId=10263, IntendedVsync=106701611087, Vsync=106934944411, InputEventId=0, HandleInputStart=106951192204, AnimationStart=106951192845, Perform
-   11-12 19:32:26.346  8604  8728 I OpenGLRenderer: Davey! duration=1501ms; Flags=1, FrameTimelineVsyncId=26876, IntendedVsync=311868269547, Vsync=312184936201, InputEventId=0, HandleInputStart=312186899126, AnimationStart=312186899596, Perfor
+== Skipped: 37
+   skipped-frames events=37 max=94 total=1902
+   11-12 20:50:20.292  5417  5417 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:21.167  5417  5417 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:22.655  5417  5417 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:23.809  5417  5417 I Choreographer: Skipped 62 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:25.383  5417  5417 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:26.501  5417  5417 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:27.540  5417  5417 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:34.184  5417  5417 I Choreographer: Skipped 71 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:36.401  5417  5417 I Choreographer: Skipped 76 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:38.776  5417  5417 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:40.598  5417  5417 I Choreographer: Skipped 81 frames!  The application may be doing too much work on its main thread.
+   11-12 20:50:41.228  5417  5417 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 74
+   davey events=74 max=2514ms median=1096ms
+   11-12 20:50:23.406  5417  5459 I OpenGLRenderer: Davey! duration=2514ms; Flags=1, FrameTimelineVsyncId=6236, IntendedVsync=96159992332, Vsync=97009992298, InputEventId=0, HandleInputStart=97087101851, AnimationStart=97087102792, PerformTrav
+   11-12 20:50:23.819  5417  5459 I OpenGLRenderer: Davey! duration=1034ms; Flags=0, FrameTimelineVsyncId=6547, IntendedVsync=98509992238, Vsync=98509992238, InputEventId=0, HandleInputStart=98510563064, AnimationStart=98510563294, PerformTrav
+   11-12 20:50:25.366  5417  5438 I OpenGLRenderer: Davey! duration=1579ms; Flags=0, FrameTimelineVsyncId=6569, IntendedVsync=98609992234, Vsync=99643325526, InputEventId=0, HandleInputStart=99654454688, AnimationStart=99654455369, PerformTrav
+   11-12 20:50:25.777  5417  5438 I OpenGLRenderer: Davey! duration=1346ms; Flags=0, FrameTimelineVsyncId=6702, IntendedVsync=99660003290, Vsync=99726669950, InputEventId=0, HandleInputStart=99730124301, AnimationStart=99730124842, PerformTrav
+   11-12 20:50:26.493  5417  5438 I OpenGLRenderer: Davey! duration=1315ms; Flags=0, FrameTimelineVsyncId=6708, IntendedVsync=99743325522, Vsync=100209992170, InputEventId=0, HandleInputStart=100224160338, AnimationStart=100224160669, PerformT
+   11-12 20:50:26.752  5417  5459 I OpenGLRenderer: Davey! duration=1960ms; Flags=0, FrameTimelineVsyncId=6740, IntendedVsync=100226658836, Vsync=101226658796, InputEventId=0, HandleInputStart=101228229986, AnimationStart=101228230336, Perform
+   11-12 20:50:27.504  5417  5459 I OpenGLRenderer: Davey! duration=1089ms; Flags=0, FrameTimelineVsyncId=6914, IntendedVsync=101243325462, Vsync=101626658780, InputEventId=0, HandleInputStart=101632788239, AnimationStart=101632788559, Perform
+   11-12 20:50:27.859  5417  5438 I OpenGLRenderer: Davey! duration=1633ms; Flags=0, FrameTimelineVsyncId=6922, IntendedVsync=101643325446, Vsync=102343325418, InputEventId=0, HandleInputStart=102346353869, AnimationStart=102346354300, Perform
+   11-12 20:50:28.118  5417  5438 I OpenGLRenderer: Davey! duration=789ms; Flags=0, FrameTimelineVsyncId=6955, IntendedVsync=102359992084, Vsync=102609992074, InputEventId=0, HandleInputStart=102619536312, AnimationStart=102619536752, PerformT
+   11-12 20:50:28.273  5417  5438 I OpenGLRenderer: Davey! duration=1000ms; Flags=0, FrameTimelineVsyncId=6980, IntendedVsync=102676658738, Vsync=103376658710, InputEventId=0, HandleInputStart=103385411043, AnimationStart=103385411764, Perform
+   11-12 20:50:28.352  5417  5438 I OpenGLRenderer: Davey! duration=711ms; Flags=0, FrameTimelineVsyncId=7012, IntendedVsync=103393325376, Vsync=103726658696, InputEventId=0, HandleInputStart=103741788894, AnimationStart=103741789575, PerformT
+   11-12 20:50:34.614  5417  5459 I OpenGLRenderer: Davey! duration=1607ms; Flags=0, FrameTimelineVsyncId=7538, IntendedVsync=108659991832, Vsync=108826658492, InputEventId=0, HandleInputStart=108833507174, AnimationStart=108833507414, Perform
 == NativeLink: 0
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
-   11-12 19:28:38.738  6348  6348 I PERFCHECK: section: U0. v1.2.34 3812d8e, versionCode 1504705, staged update.json → the built 1.2.35, 1507364
-   11-12 19:28:42.981  6475  6475 I PERFCHECK: section: U1. Using 1.2.34: „По-късно“ on the update dialog, text size „Голям“, dark theme, a card, a book in „Искам да прочета“, the widget
-   11-12 19:33:53.630  9559  9559 I PERFCHECK: section: U2. Settings › Обновления on 1.2.34: the ready card → „Инсталирай“ → the system installer
-   11-12 19:34:45.200  9902  9902 I PERFCHECK: section: U2b. Fallback: adb install -r app.apk over 1.2.34
-   11-12 19:34:47.291   480   511 I ActivityManager: Killing 9577:org.chyavorec.app/u0a176 (adj 700): stop org.chyavorec.app due to installPackageLI
-   11-12 19:34:48.127  9971  9971 I PERFCHECK: section: U3. After the update: the widget before the app is opened, „Какво ново“, then what survived
-   11-12 19:38:47.815 11498 11498 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat
+   11-12 20:50:13.857  5279  5279 I PERFCHECK: section: U0. v1.2.34 3812d8e, versionCode 1504705, staged update.json → the built 1.2.35, 1507364
+   11-12 20:50:17.970  5410  5410 I PERFCHECK: section: U1. Using 1.2.34: „По-късно“ on the update dialog, text size „Голям“, dark theme, a card, a book in „Искам да прочета“, the widget
+   11-12 20:56:03.525  9743  9743 I PERFCHECK: section: U2. Settings › Обновления on 1.2.34: the ready card → „Инсталирай“ → the system installer
+   11-12 20:57:09.583   482   513 I ActivityManager: Killing 9767:org.chyavorec.app/u0a176 (adj 0): stop org.chyavorec.app due to installPackageLI
+   11-12 20:57:20.060 10486 10486 I PERFCHECK: section: U3. After the update: the widget before the app is opened, „Какво ново“, then what survived
+   11-12 21:00:59.005 11920 11920 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

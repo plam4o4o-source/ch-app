@@ -1,0 +1,11 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 20:49:47.242  5597  5597 I PERFCHECK: section: W. First launch and warm-up
+   11-12 20:51:48.408  8144  8144 I PERFCHECK: section: YU1. Swipe-down dismiss with exact distances motionevent: is the finger-up position counted? the rule: ≥140 dp at any speed
+   11-12 21:01:57.436 13200 13200 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

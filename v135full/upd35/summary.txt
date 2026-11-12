@@ -11,14 +11,14 @@ screen 1080x2400
 HELPER installed: package:org.pc.helper
 ## U0. v1.2.34 (3812d8e, versionCode 1504705, staged update.json → the built 1.2.35, 1507364)
 staged manifest: 1507364 1.2.35 4317894
-installed base-upd: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v135full/update/43288438193/update.json size 4316454;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
+installed base-upd: 1.2.34 3812d8e built prodRelease (minified), x86_64 added (throwaway key); versionCode 1504705; update manifest: https://raw.githubusercontent.com/plam4o4o-source/ch-app/emulator-results/v135full/update/43302082995/update.json size 4316454;  versionCode=1504705 minSdk=26 targetSdk=37  versionName=1.2.34 
 ## U1. Using 1.2.34: „По-късно“ on the update dialog, text size „Голям“, dark theme, a card, a book in „Искам да прочета“, the widget
-UPDATE first dialog after 15195 ms: text="Нова версия 1.2.35" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• По-бърз старт и по-плавно първо отваряне на читателската карта.&#10;• Дребни подобрения и поправки." text="По-късно" text="Инсталирай" 
+UPDATE first dialog after 24574 ms: text="Нова версия 1.2.35" text="Новата версия е изтеглена и проверена (контролна сума и подпис)." text="Какво ново" text="• По-бърз старт и по-плавно първо отваряне на читателската карта.&#10;• Дребни подобрения и поправки." text="По-късно" text="Инсталирай" 
 CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
 TEXT SIZE now: text="Голям" 
 theme options: text="Тема" text="Както системата" text="Светла" text="Тъмна" text="Затвори" 
 WIDGET b134 long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
-WIDGET b134 picker: our row @ 437 909; size label @ 540 1817; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
+WIDGET b134 picker: our row @ 437 935; size label @ 540 1843; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
 WIDGET b134 after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
 WIDGET b134: widgets of ours bound: 0 -> 1 (ids id=2 ); options: 
 WIDGET v1.2.34: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
@@ -27,59 +27,60 @@ STATE before night mode of the app window: ; app locale [bg-BG]
 STATE before card: shown (TEST-12345)
 STATE before want-to-read: book listed; text="Наличност към 09.11.2026" text="Плъзни книга настрани, за да я премахнеш." text="12 -те вятъра" text="Гарфилд, Джудит и др." text="налична" content-desc="Още действия" content-desc="Назад" text=
 ## U2. Settings › Обновления on 1.2.34: the ready card → „Инсталирай“ → the system installer
-downloaded files: 4317894 2026-11-12 19:28 update-1507364.apk;
+downloaded files: 4317894 2026-11-12 20:50 update-1507364.apk;
 relaunch after 'По-късно': dialog not shown
 SETTINGS › Обновления: text="Версия 1.2.35 е готова" text="Изтеглена и проверена — инсталирането отнема само миг." 
-no install button on the settings card
-## U2b. Fallback: adb install -r app.apk over 1.2.34
-after adb install -r:  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+after the tap on Инсталирай: text="Thu, Nov 12" content-desc="Thu, Nov 12" content-desc="Chitalishte Yavorets" text="Читалище Яворец" text="Сканирай" text="Каталог" text="Предстоящи събития" text="80 г. от създаването на ЮНЕСКО" 
+UPDATE via the settings card: installed  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
 ## U3. After the update: the widget before the app is opened, „Какво ново“, then what survived
 WIDGET after the update (app not opened): views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
 widget ids before/after: [id=2 ] / [id=2 ]
-WHATS-NEW 30-whats-new: not shown; screen: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="12 ноември 2026 · Св
+WHATS-NEW 30-whats-new: SHOWN: text="Какво ново във версия 1.2.35"
+NOTES sheet-30-whats-new: 2/2 lines of the real 1.2.30 notes visible
 relaunch: what's new again? no; update dialog not shown
 STATE after settings: text="Тъмна" text="Голям" 
 STATE after night mode of the app window: ; app locale [bg-BG]
 STATE after card: shown (TEST-12345)
 STATE after want-to-read: book listed; text="Наличност към 09.11.2026" text="Плъзни книга настрани, за да я премахнеш." text="12 -те вятъра" text="Гарфилд, Джудит и др." text="налична" content-desc="Още действия" content-desc="Назад" text=
 WIDGET after opening the app: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
-WIDGET click catalog (widget_catalog @ 900 600) → fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; expected screen: YES; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
-WIDGET click scan (widget_scan @ 694 600) → fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; expected screen: YES; text="Въведи номера на ръка" text="Скенерът на баркодове идва с Google Play услугите — тук те липсват или скенерът още се изтегля. Въведи номера на ръка или опитай пак сл
-WIDGET click event (widget_event @ 540 786) → fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
-WIDGET click app (t:Chitalishte Yavorets|Читалище Яворец @ 337 599) → fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+WIDGET click catalog (widget_catalog @ 900 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+WIDGET click scan (widget_scan @ 694 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Въведи номера на ръка" text="Скенерът на баркодове идва с Google Play услугите — тук те липсват или скенерът още се изтегля. Въведи номера на ръка или опитай пак сл
+WIDGET click event (widget_event @ 540 786) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+WIDGET click app (t:Chitalishte Yavorets|Читалище Яворец @ 337 599) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
 SETTINGS › Обновления after the update: text="Провери за нова версия" 
 leftover update files: ''
 contact sheets: 4 in sheets/
 ## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
 DIAGLOG: empty (no entries)
-DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 3 | Първи кадър: медиана 1977 мс, последен 2029 мс | Пълно показване: медиана 2790 мс, последно 3262 мс | Топъл старт · 6 | Първи кадър: медиана 340 мс, последен 80 мс | Пълно показване: медиана 2487 мс, последно 2487 мс | Насечени кадри по екр
-DIAG SCREEN (scrolled): text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 3" text="Първи кадър: медиана 1977 мс, последен 2029 мс" text="Пълно показване: медиана 2790 мс, последно 3262 мс" text="Топъл старт · 6" text="Първи кадър: медиана 340 мс, последен 80 мс" text="Пълно показване: медиана 2487 мс, последно 2487 мс" text="Насечени кадри по екрани" text="my: 15,2 % от 33 кадъра · най-бавен 220 мс" text="home: 0,0 % от 433 кадъра · най-бавен 1011 мс" text="settings: 0,0 % от 110 кадъра · най-бавен 178 мс" text="card: 0,0 % от 95 кадъра · най-бавен 208 мс" text="more: 0,0 % от 61 кадъра · най-бавен 271 мс" text="Ням
-APP W/E lines (pids ['6481', '8604', '9577', '9941', '10268']): 65 in 14 groups
-      12  E/OpenGLRenderer: Unable to match the desired swap behavior.
-       8  W/Parcel: Expecting binder but got null!
-       8  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
-       7  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Студен старт · 3 | Първи кадър: медиана 2335 мс, последен 2145 мс | Пълно показване: медиана 3264 мс, последно 3515 мс | Топъл старт · 6 | Първи кадър: медиана 648 мс, последен 649 мс | Пълно показване: медиана 3719 мс, последно 4391 мс | Насечени кадри по ек
+DIAG SCREEN (scrolled): text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Студен старт · 3" text="Първи кадър: медиана 2335 мс, последен 2145 мс" text="Пълно показване: медиана 3264 мс, последно 3515 мс" text="Топъл старт · 6" text="Първи кадър: медиана 648 мс, последен 649 мс" text="Пълно показване: медиана 3719 мс, последно 4391 мс" text="Насечени кадри по екрани" text="home: 0,5 % от 185 кадъра · най-бавен 1107 мс" text="card: 0,0 % от 75 кадъра · най-бавен 242 мс" text="settings: 0,0 % от 39 кадъра · най-бавен 230 мс" text="more: 0,0 % от 32 кадъра · най-бавен 303 мс" text="Няма записани грешки." content-desc="Назад" text="Диа
+APP W/E lines (pids ['5417', '8992', '9767', '10338', '10639']): 70 in 14 groups
+      14  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      10  W/Parcel: Expecting binder but got null!
+       7  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       6  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
        5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
        5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
        5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
        5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
        5  W/Gralloc4: allocator #.x is not supported
+       3  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       2  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object g#.s(java.lang.Object)(r
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#bc-#b#-#b#-#a#c-#ebcaf#, generation=#)
        1  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
-       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
-       1  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
        1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
-       1  W/g.chyavorec.app: No such thread id for suspend: #
 contact sheets: 5 in sheets/
 ## COMPLETE
 ## logcat findings
-app pids seen: ['6481', '8604', '9577', '9941', '10268']
+app pids seen: ['5417', '8992', '9767', '10338', '10639']
 == FATAL: 0
 == ANR: 0
 == StrictMode: 0
-== Skipped: 19
-   skipped-frames events=19 max=73 total=912
-== Davey: 32
-   davey events=32 max=1831ms median=1120ms
+== Skipped: 37
+   skipped-frames events=37 max=94 total=1902
+== Davey: 74
+   davey events=74 max=2514ms median=1096ms
 == NativeLink: 0
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 83123049 Nov 12 20:46 app-mapping.txt; crashes: 0 B
