@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -231,8 +232,8 @@ class YearShevitsaScreenshotTest {
         CompositionLocalProvider(LocalReducedMotion provides reduced) {
             ChitalishteTheme(mode = ThemeMode.DARK) {
                 Column(Modifier.background(Brand.Ink)) {
-                    Box(Modifier.testTag("live")) { PersonalBand(ShareFixtures.year, Modifier.width(380.dp)) }
-                    Box(Modifier.testTag("still")) { PersonalBand(ShareFixtures.year, Modifier.width(380.dp), still = true) }
+                    Box(Modifier.size(380.dp, 140.dp).testTag("live")) { PersonalBand(ShareFixtures.year, Modifier.width(380.dp)) }
+                    Box(Modifier.size(380.dp, 140.dp).testTag("still")) { PersonalBand(ShareFixtures.year, Modifier.width(380.dp), still = true) }
                 }
             }
         }
