@@ -12,21 +12,26 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.CardGiftcard
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,9 +48,14 @@ import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequest
 import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
+import org.chyavorec.app.ui.share.GreetingComposerSheet
+import org.chyavorec.app.ui.share.ShareImageHost
+import org.chyavorec.app.ui.share.rememberShareImageState
 import org.chyavorec.app.ui.theme.LocalExtendedColors
+import org.chyavorec.app.ui.theme.ShevitsaCalendar
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.domain.occasion.DayDecor
+import org.chyavorec.domain.occasion.GreetingCards
 import org.chyavorec.domain.occasion.HolidayCalendar
 import org.chyavorec.domain.occasion.Occasion
 import org.chyavorec.domain.occasion.OccasionLink
@@ -164,6 +174,14 @@ fun HolidayGreeting(
     val gold = LocalExtendedColors.current.gold
     val accent = if (decor.quiet) MaterialTheme.colorScheme.onSurfaceVariant else gold
     val reduced = rememberReducedMotion()
+    // „Изпрати честитка“: редакторът и споделянето като картинка (извън анимираната карта).
+    val canSend = remember(decor) { GreetingCards.available(decor) }
+    var composer by remember { mutableStateOf(false) }
+    val share = rememberShareImageState()
+    ShareImageHost(share)
+    if (composer) {
+        GreetingComposerSheet(occasion, decor.ornament, ShevitsaCalendar.motifFor(today), container.config.siteBaseUrl, share) { composer = false }
+    }
     AnimatedVisibility(
         visible = dismissed != null && dismissed != key,
         enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(expandFrom = Alignment.Top),
@@ -201,6 +219,17 @@ fun HolidayGreeting(
                             Text(stringResource(R.string.occ_open_books), style = MaterialTheme.typography.labelMedium, color = if (decor.quiet) accent else MaterialTheme.colorScheme.primary)
                             Spacer(Modifier.width(4.dp))
                             Icon(Icons.AutoMirrored.Outlined.ArrowForward, null, tint = if (decor.quiet) accent else MaterialTheme.colorScheme.primary, modifier = Modifier.size(14.dp))
+                        }
+                    }
+                    if (canSend) {
+                        TextButton(
+                            onClick = { composer = true },
+                            modifier = Modifier.heightIn(min = 48.dp),
+                            contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 0.dp, end = 12.dp),
+                        ) {
+                            Icon(Icons.Outlined.CardGiftcard, null, Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(stringResource(R.string.greeting_send), style = MaterialTheme.typography.labelLarge)
                         }
                     }
                 }
