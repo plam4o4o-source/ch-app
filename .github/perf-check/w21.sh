@@ -13,7 +13,8 @@
 #   old28s  — API 28 (без AGSL): „Начало“ и картата (плочката), картата на цял екран, monkey 2000, без срив
 #   now35   — кръг 2: без чакане (студен старт направо в картата, „Покажи картата“ 0.5/1.0 s след първия кадър)
 #   full28  — кръг 2: API 28, картата на цял екран (кръг 1 не стигна до нея)
-W21_PARTS=" start35 card35 reg35 old28s now35 full28 "
+#   start35b — кръг 3: студеният старт отново, с блок за загряване на емулатора (не се брои) и обратен ред
+W21_PARTS=" start35 card35 reg35 old28s now35 full28 start35b "
 W20_PARTS="$W20_PARTS $W21_PARTS"
 W21=$H_/w21.py
 L_ADDCARD='=Добави читателска карта|=Add library card'
@@ -51,10 +52,17 @@ s_block() {  # $1 — new | base, $2 — блок
   log "$K-$b: $(python3 $H_/parse.py starts $OUT/drawn-$K-$b.txt x | grep -oE 'n=.*max=[0-9]+ms')"
 }
 part_start35() {
-  local b=0 K
+  local b=0 K order="base new new base base new new base"
   anims 1
-  log "block order (ABBA, each a fresh install): base new new base base new new base"
-  for K in base new new base base new new base; do b=$((b + 1)); s_block $K $b; done
+  if [ $PART = start35b ]; then
+    # В кръг 1 първият блок (base-1) беше бавен за всички: емулаторът още загрява. Сега той не се брои.
+    order="new base base new new base base new"
+    sec "S0. Emulator warm-up block (not counted): both apps, 2 installs × 5 cold starts"
+    for K in base new; do inst $(apk_of $K) warm-$K $(ref_of $K) >/dev/null; launch >/dev/null; sleep 6; dismiss; ready; tab catalog; waitfor "$RX_RESULTS" 150 >/dev/null; for b in 1 2 3 4 5; do cold_drawn warm-$K >/dev/null; done; done
+    b=0
+  fi
+  log "block order (each a fresh install): $order"
+  for K in $order; do b=$((b + 1)); s_block $K $b; done
   sec "S totals (n=20 per app)"
   for K in new base; do
     python3 $H_/parse.py starts $OUT/drawn-$K.txt "cold $K" | tee -a $SUM
@@ -285,7 +293,7 @@ part_w21() {
   case $PART in
     now35) part_now35;;
     full28) part_full28;;
-    start35) part_start35;;
+    start35|start35b) part_start35;;
     card35) part_card35;;
     reg35) part_reg35;;
     old28s) part_old28s;;

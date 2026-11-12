@@ -102,7 +102,8 @@ jobs:
       matrix:
         # start35, card35, reg35, now35 — API 33 google_apis x86_64; old28s, full28 — API 28. Всички с -gpu swangle_indirect.
         # Кръг 1 (43258710930): start35, card35, reg35, old28s.
-        part: [now35, full28]
+        # Кръг 2 (43265809171): now35, full28.
+        part: [start35b]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
