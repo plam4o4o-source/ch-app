@@ -1,0 +1,26 @@
+FATAL EXCEPTION: main
+Process: org.chyavorec.app, PID: 8654
+java.lang.IllegalArgumentException
+	at android.graphics.LinearGradient.nativeCreate(Native Method)
+	at android.graphics.LinearGradient.createNativeInstance(LinearGradient.java:158)
+	at android.graphics.Shader.getNativeInstance(Shader.java:191)
+	at android.graphics.Paint.getNativeInstance(Paint.java:733)
+	at android.graphics.BaseRecordingCanvas.drawRect(BaseRecordingCanvas.java:368)
+	at m6.q(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:7)
+	at l30.w0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:68)
+	at vp2.w0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:3)
+	at pd1.P0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:42)
+	at s.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:788)
+	at ud1.c0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:3)
+	at vp2.c(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:50)
+	at vp2.a(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:93)
+	at tr.c0(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:313)
+	at dj3.a1(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:50)
+	at yi3.a(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:25)
+	at y45.d(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:315)
+	at s8.invoke(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:243)
+	at u3.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:338)
+	at n22.c(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:47)
+	at ae.i(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:68)
+	at u22.q(r8-map-id-03435a9f0f5b97a7ae6676926f36be805160fe0e7bb5a33d71259e3901c6d439:77)
+Process: org.chyavorec.app, PID: 8654
