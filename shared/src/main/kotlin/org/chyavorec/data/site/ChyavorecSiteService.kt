@@ -68,6 +68,9 @@ class ChyavorecSiteService(
 
     private companion object {
         const val RSS_FRESH = 24 * 60 * 60 * 1000L
+
+        /** В запомнения „хеш“ на news.json: `<sha256>#<ETag>` — ETag-ът е за условна заявка (If-None-Match). */
+        const val ETAG_SEPARATOR = '#'
     }
 
     private val parser = SiteJsonParser(baseUrl)
@@ -146,20 +149,35 @@ class ChyavorecSiteService(
      * байтове се различава от [knownHash]; иначе — [Fetched.Unchanged], без разчитане и без rss.xml.
      * Хешът се връща само при пълни данни: ако rss.xml не е наличен и някоя новина е без
      * публичен адрес, следващото сваляне пак разчита файла (и опитва rss.xml отново).
+     *
+     * Сайтът праща файловете в /data с `no-store`, затова HTTP кешът не помага; ако сървърът все пак връща
+     * `ETag`, той се запомня до хеша ([ETAG_SEPARATOR]) и следващата заявка е условна — 304 е
+     * без тяло, без разчитане и без rss.xml. Без ETag поведението е както досега (пълно сваляне,
+     * сравнение по хеш). rss.xml се тегли едва щом файлът е нов (при непознат хеш — паралелно).
      */
     override suspend fun fetchLatestIfChanged(knownHash: String?): Outcome<Fetched<List<NewsArticle>>> = coroutineScope {
         val now = clock.now().toEpochMilli()
         val known = rssMutex.withLock { rssLinks?.takeIf { now - rssAt in 0 until RSS_FRESH }?.let { it to rssMissing } }
-        val rss = if (known == null) async { http.get(url("/rss.xml")) } else null
-        when (val r = http.get(url("/data/news.json"))) {
+        val knownSha = knownHash?.substringBefore(ETAG_SEPARATOR)
+        val knownEtag = knownHash?.substringAfter(ETAG_SEPARATOR, "")?.takeIf { it.isNotEmpty() }
+        // Без запомнен хеш файлът със сигурност е „нов“ — rss.xml тръгва веднага; иначе — след отговора.
+        val rss = if (known == null && knownSha == null) async { http.get(url("/rss.xml")) } else null
+        val headers = knownEtag?.let { mapOf("If-None-Match" to it) }.orEmpty()
+        when (val r = http.get(url("/data/news.json"), headers, skipBodyIfNotModified = knownEtag != null)) {
             is Outcome.Failure -> { rss?.cancel(); r }
             is Outcome.Success -> {
-                val raw = raw(r.value)
-                if (knownHash != null && raw.hash == knownHash) {
+                if (knownEtag != null && r.value.notModified) {
+                    // 304 на нашата условна заявка: непроменен (тяло няма).
                     rss?.cancel()
                     return@coroutineScope Outcome.Success(Fetched.Unchanged)
                 }
-                val links = known?.first ?: rssLinksFrom(rss?.await())
+                val raw = raw(r.value)
+                val etag = r.value.etag
+                if (knownSha != null && raw.hash == knownSha) {
+                    rss?.cancel()
+                    return@coroutineScope Outcome.Success(Fetched.Unchanged)
+                }
+                val links = known?.first ?: rssLinksFrom(rss?.await() ?: http.get(url("/rss.xml")))
                 var complete = links != null
                 when (val parsed = parse("news.json") { newsParses++; parser.parseNews(raw.text, links.orEmpty()) }) {
                     is Outcome.Failure -> parsed
@@ -177,7 +195,8 @@ class ChyavorecSiteService(
                                 complete = false
                             }
                         }
-                        Outcome.Success(Fetched.Changed(articles, raw.hash.takeIf { complete }))
+                        val stored = if (etag != null) "${raw.hash}$ETAG_SEPARATOR$etag" else raw.hash
+                        Outcome.Success(Fetched.Changed(articles, stored.takeIf { complete }))
                     }
                 }
             }

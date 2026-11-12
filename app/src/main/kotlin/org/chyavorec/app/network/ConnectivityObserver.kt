@@ -6,10 +6,12 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 
 /** Наблюдава дали устройството има интернет (за офлайн лентата). */
 class ConnectivityObserver(context: Context) {
@@ -39,7 +41,8 @@ class ConnectivityObserver(context: Context) {
         val request = NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
         runCatching { cm?.registerNetworkCallback(request, callback) }
         awaitClose { runCatching { cm?.unregisterNetworkCallback(callback) } }
-    }.distinctUntilChanged()
+        // Регистрацията и първото четене (IPC към системата) не са на главната нишка, откъдето се събира.
+    }.flowOn(Dispatchers.Default).distinctUntilChanged()
 
     /** Дали активната мрежа е с отчитане на трафика (мобилни данни, точка за достъп). */
     fun isMetered(): Boolean {
@@ -56,7 +59,7 @@ class ConnectivityObserver(context: Context) {
         trySend(isMetered())
         runCatching { cm?.registerDefaultNetworkCallback(callback) }
         awaitClose { runCatching { cm?.unregisterNetworkCallback(callback) } }
-    }.distinctUntilChanged()
+    }.flowOn(Dispatchers.Default).distinctUntilChanged()
 
     private fun meteredOf(caps: NetworkCapabilities): Boolean = CoverNetworkPolicy.metered(
         notMetered = caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED),

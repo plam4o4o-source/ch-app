@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.ShaderBrush
 import org.chyavorec.core.Diagnostics
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
 
 /**
@@ -34,6 +33,11 @@ internal class GuardedShader private constructor(val shader: RuntimeShader, val 
         }
     }
 
+    /** Връща шейдъра в [ShaderPool] (екранът го е спрял да го рисува) — следващият не го превежда наново. */
+    fun release() {
+        if (!broken) ShaderPool.release(this)
+    }
+
     @PublishedApi internal fun markBroken(e: Throwable) {
         broken = true
         ShaderReport.record(tag, e)
@@ -55,40 +59,61 @@ internal object ShaderReport {
 }
 
 /**
- * Готови шейдъри, създадени във фонов режим (при старта, [prepare]): екранът ги взима
- * наготово и първият му кадър не чака превода на AGSL кода. Взетият се допълва отново
- * във фонова нишка; ако резервът е празен — създава се на място, както преди.
+ * Готови шейдъри, създадени във фонов режим ([prepare]): екранът ги взима наготово и първият
+ * му кадър не чака превода на AGSL кода. Взетият се връща с [GuardedShader.release] при
+ * изчезването на екрана — отварянето на картата, обръщането ѝ и връщането към „Начало“ не
+ * превеждат шейдър наново. Ако резервът е празен, а превод във фона тече — [take] изчаква него
+ * ([InstancePool]); иначе се създава на място, както преди.
  */
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 internal object ShaderPool {
+    const val WEAVE = ShaderTags.WEAVE
+    const val FOIL = ShaderTags.FOIL
+
+    // Нормален приоритет: главната нишка може да чака този превод (фонов приоритет го бави много).
+    private val executor = Executors.newSingleThreadExecutor { r ->
+        Thread(r, "shader-pool").apply { isDaemon = true }
+    }
+    private val pools = mapOf(
+        WEAVE to InstancePool({ GuardedShader.create(org.chyavorec.app.ui.theme.ShevitsaShaders.WEAVE, WEAVE) }, executor),
+        FOIL to InstancePool({ GuardedShader.create(org.chyavorec.app.ui.theme.ShevitsaShaders.FOIL, FOIL) }, executor),
+    )
+
+    /** Един шейдър от вида [tag] в резерва (или на път към него) — във фонова нишка. */
+    fun prepare(tag: String) {
+        pools[tag]?.prepare()
+    }
+
+    fun take(tag: String): GuardedShader? = pools[tag]?.take()
+
+    fun release(shader: GuardedShader) {
+        pools[shader.tag]?.release(shader)
+    }
+}
+
+/**
+ * Колко пъти е рисуван шейдър от даден вид в този процес (без връзка с Android API —
+ * чете се и от кода за по-стари версии). Нарастването показва, че нещо наистина е нарисувано:
+ * подгряването ([ShaderWarmup]) се брои за свършено едва тогава, а шевицата започва „жива“
+ * веднага, щом видеокартата вече е превела шейдъра.
+ */
+internal object ShaderDraws {
+    @Volatile private var weave = 0
+    @Volatile private var foil = 0
+
+    fun note(tag: String) {
+        if (tag == ShaderTags.WEAVE) weave++ else foil++
+    }
+
+    fun count(tag: String): Int = if (tag == ShaderTags.WEAVE) weave else foil
+
+    fun total(): Int = weave + foil
+
+    fun hasDrawn(tag: String): Boolean = count(tag) > 0
+}
+
+/** Видовете шейдъри (без зависимост от API). */
+internal object ShaderTags {
     const val WEAVE = "shevitsa-shader"
     const val FOIL = "foil-shader"
-
-    private val ready = ConcurrentHashMap<String, ConcurrentLinkedQueue<GuardedShader>>()
-    private val refill = Executors.newSingleThreadExecutor { r ->
-        Thread(r, "shader-pool").apply {
-            isDaemon = true
-            priority = Thread.MIN_PRIORITY
-        }
-    }
-
-    /** По един от всеки вид — във фонова нишка (ChitalishteApp.warmUp). */
-    fun prepare() {
-        fill(org.chyavorec.app.ui.theme.ShevitsaShaders.WEAVE, WEAVE)
-        fill(org.chyavorec.app.ui.theme.ShevitsaShaders.FOIL, FOIL)
-    }
-
-    fun take(source: String, tag: String): GuardedShader? {
-        val pooled = ready[tag]?.poll()
-        runCatching { refill.execute { fill(source, tag) } }
-        return pooled ?: GuardedShader.create(source, tag)
-    }
-
-    /** Готов шейдър от резерва (остава там) — само за подгряването на видеокартата. */
-    fun peek(tag: String): GuardedShader? = ready[tag]?.peek()
-
-    private fun fill(source: String, tag: String) {
-        val queue = ready.getOrPut(tag) { ConcurrentLinkedQueue() }
-        if (queue.isEmpty()) GuardedShader.create(source, tag)?.let(queue::add)
-    }
 }

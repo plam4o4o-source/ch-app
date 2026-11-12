@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui
 
+import org.chyavorec.app.ui.components.ProvidePowerSaveMode
 import org.chyavorec.app.ui.components.ShaderWarmup
 import org.chyavorec.app.ui.components.LocalAppChromeHidden
 import android.net.Uri
@@ -226,6 +227,8 @@ fun ChitalishteRoot(
         LocalSeasonalDecor provides settings.seasonal,
         LocalRequireUnlock provides settings.requireUnlock,
     ) {
+        // Един приемник за режима за пестене на батерията — за всички шевици под корена.
+        ProvidePowerSaveMode {
         // Конфетито за успех (заявка, удължаване…) — над всички екрани, от мястото на докосването.
         ConfettiHost(Modifier.fillMaxSize()) {
             if (!settings.onboardingDone) {
@@ -247,6 +250,7 @@ fun ChitalishteRoot(
                 intro = false
                 scope.launch { container.settings.setIntroShown() }
             })
+        }
         }
     }
 }

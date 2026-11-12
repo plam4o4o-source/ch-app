@@ -2,6 +2,8 @@ package org.chyavorec.app.data.local
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import org.chyavorec.app.data.security.BytesCipher
@@ -32,8 +34,32 @@ class SecureSessionStore(
     /** Последното четене е спряло на временна грешка (файлът е запазен). */
     @Volatile private var transientFailure = false
 
+    /** Едно четене наведнъж: останалите изчакват него и вземат резултата му (вж. [load]). */
+    private val loadLock = Mutex()
+    @Volatile private var loadsDone = 0
+    @Volatile private var lastLoad: AuthSession? = null
+
+    /**
+     * Старт на процеса: сесията се иска едновременно от няколко места (възстановяване, „Начало“,
+     * заеманията, съобщенията, уиджетът). Четенето е едно (файл + Keystore, при временна грешка
+     * — и своето изчакване); който е чакал, докато то тече, взема резултата му, а не започва ново.
+     * Последователно извикване (след приключилото) чете наново — както преди.
+     */
     override suspend fun load(): AuthSession? {
         memory?.let { return it }
+        val ticket = loadsDone
+        return loadLock.withLock {
+            // Докато сме чакали, друго четене е приключило — неговият резултат (save/clear го опресняват).
+            if (loadsDone != ticket) return@withLock memory ?: lastLoad
+            memory?.let { return@withLock it }
+            val result = readFromDisk()
+            lastLoad = result
+            loadsDone++
+            result
+        }
+    }
+
+    private suspend fun readFromDisk(): AuthSession? {
         return withContext(Dispatchers.IO) {
             if (!file.exists()) {
                 transientFailure = false
@@ -62,6 +88,7 @@ class SecureSessionStore(
 
     override suspend fun save(session: AuthSession, persist: Boolean) {
         memory = session
+        lastLoad = session
         transientFailure = false
         withContext(Dispatchers.IO) {
             if (persist) {
@@ -76,6 +103,7 @@ class SecureSessionStore(
 
     override suspend fun clear() {
         memory = null
+        lastLoad = null
         transientFailure = false
         withContext(Dispatchers.IO) { file.delete() }
     }

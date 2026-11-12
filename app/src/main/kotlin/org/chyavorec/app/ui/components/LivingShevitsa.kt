@@ -1,7 +1,9 @@
 package org.chyavorec.app.ui.components
 
-import androidx.compose.ui.draw.drawBehind
+import androidx.activity.compose.LocalFullyDrawnReporterOwner
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -17,6 +19,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +55,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeoutOrNull
+import org.chyavorec.app.ui.screens.my.CardFoilLayer
+import org.chyavorec.app.ui.screens.my.Tilt
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.ShevitsaPattern
 import org.chyavorec.app.ui.theme.ShevitsaShaders
@@ -111,6 +119,12 @@ class WeaveBudget(cycles: Int = (MotionBudget.DECOR_MS / (ShevitsaShaders.SWEEP_
         private set
     val exhausted get() = seconds >= totalSeconds
 
+    /**
+     * Снопът е извън кадъра (начало или край на цикъл): шейдърът рисува същото като неподвижната
+     * плочка — при „намалено движение“ / пестене на батерията не му трябва шейдър.
+     */
+    val atRest get() = seconds <= 0f || exhausted
+
     /** Добавя [dt] секунди (не над бюджета). */
     fun advance(dt: Float) {
         seconds = min(seconds + dt, totalSeconds)
@@ -131,11 +145,27 @@ object WeaveSession {
 private const val WEAVE_FRAME_DELAY_MS = 30L
 
 /**
+ * Режимът за пестене на батерията от корена на интерфейса ([ProvidePowerSaveMode]) — един
+ * приемник за всички шевици, а не по един на екземпляр. Без доставчик (тестове, отделни
+ * екрани) [rememberPowerSaveMode] си слуша сам.
+ */
+private val LocalPowerSaveMode = compositionLocalOf<Boolean?> { null }
+
+/** Включва общия наблюдател на режима за пестене на батерията за съдържанието. */
+@Composable
+fun ProvidePowerSaveMode(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalPowerSaveMode provides rememberPowerSaveReceiver(), content = content)
+}
+
+/**
  * Режимът за пестене на батерията — следи се (ACTION_POWER_SAVE_MODE_CHANGED), не се
  * чете веднъж: включен по средата на тъкането, го спира; изключен — го пуска пак.
  */
 @Composable
-internal fun rememberPowerSaveMode(): Boolean {
+internal fun rememberPowerSaveMode(): Boolean = LocalPowerSaveMode.current ?: rememberPowerSaveReceiver()
+
+@Composable
+private fun rememberPowerSaveReceiver(): Boolean {
     val context = LocalContext.current
     val power = remember(context) { context.getSystemService(PowerManager::class.java) }
     var on by remember(power) { mutableStateOf(power?.isPowerSaveMode == true) }
@@ -170,10 +200,7 @@ internal class WeaveClock(start: Float) {
  * не е изчерпан; [speed] ускорява (въведението). Чете се само при рисуване.
  */
 @Composable
-private fun rememberWeaveClock(budget: WeaveBudget, speed: Float, stopWhen: () -> Boolean): WeaveClock {
-    val reduced = rememberReducedMotion()
-    val powerSave = rememberPowerSaveMode()
-    val still = reduced || powerSave
+private fun rememberWeaveClock(budget: WeaveBudget, speed: Float, still: Boolean, stopWhen: () -> Boolean): WeaveClock {
     val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
     val resumed = lifecycle.isAtLeast(Lifecycle.State.RESUMED)
     val clock = remember(budget) { WeaveClock(budget.seconds) }
@@ -238,17 +265,30 @@ fun LivingShevitsa(
     still: Boolean = true,
 ) {
     val agsl = LocalAgslEnabled.current && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-    val clock = rememberWeaveClock(budget, speed, stopWhen)
+    val reduced = rememberReducedMotion()
+    val powerSave = rememberPowerSaveMode()
+    val quiet = reduced || powerSave
+    val clock = rememberWeaveClock(budget, speed, quiet, stopWhen)
     // Първият кадър — с готовата плочка, живата шевица — от следващия: видеокартата превежда
-    // шейдъра при първото му рисуване и това не бива да е в първия кадър на екрана.
-    var live by remember { mutableStateOf(!still) }
+    // шейдъра при първото му рисуване и това не бива да е в първия кадър на екрана. Щом шейдърът
+    // вече е рисуван в този процес (връщане към „Начало“ по средата на снопа), е жива веднага —
+    // иначе един кадър би бил без снопа.
+    val primed = agsl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ShaderDraws.hasDrawn(ShaderTags.WEAVE)
+    var live by remember { mutableStateOf(!still || primed) }
     LaunchedEffect(Unit) {
         if (!live) {
             withFrameNanos { }
             live = true
         }
     }
-    val shader = remember(agsl, live) { if (live && agsl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) WeaveShader.createOrNull() else null }
+    // Шейдър само когато може да се движи: без движение и със сноп извън кадъра (начало/край на цикъла)
+    // той би нарисувал същото като плочката — нито превод, нито слой за него.
+    val wantsShader = live && agsl && !(still && quiet && budget.atRest)
+    val shader = remember(wantsShader) { if (wantsShader && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) WeaveShader.createOrNull() else null }
+    // Шейдърът се връща в резерва, когато шевицата изчезне — не се превежда наново при следващото появяване.
+    DisposableEffect(shader) {
+        onDispose { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) shader?.release() }
+    }
     val currentAlpha by rememberUpdatedState(alpha)
     // Пресмята се веднъж за размера и параметрите; времето и плътността се четат при рисуване.
     val draw = remember(shader, clock, cell, period, ribbon, intensity, clearCenter, colors, still) {
@@ -259,12 +299,17 @@ fun LivingShevitsa(
             // Резервата се взима чак когато е нужна (без шейдър или при грешка по-късно); плочката е от общия
             // кеш — смяна на размера (прехода на картата) не я рисува наново.
             val fallback = if (still) lazy(LazyThreadSafetyMode.NONE) { ShevitsaStill.paint(spec) } else null
+            var noted = false
             onDrawBehind {
                 if (size.width < 1f || size.height < 1f) return@onDrawBehind
                 val a = currentAlpha().coerceIn(0f, 1f)
                 if (a <= 0f) return@onDrawBehind
                 if (ready && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && shader!!.setTime(clock.time.floatValue)) {
                     drawRect(shader.brush, alpha = a)
+                    if (!noted) {
+                        noted = true
+                        ShaderDraws.note(ShaderTags.WEAVE)
+                    }
                 } else if (fallback != null) {
                     drawStill(fallback.value, a)
                 }
@@ -321,8 +366,11 @@ internal class WeaveShader private constructor(private val guarded: GuardedShade
 
     fun setTime(t: Float): Boolean = guarded.guard { setFloatUniform("uTime", t) }
 
+    /** Шевицата изчезва — шейдърът се връща в [ShaderPool]. */
+    fun release() = guarded.release()
+
     companion object {
-        fun createOrNull(): WeaveShader? = ShaderPool.take(ShevitsaShaders.WEAVE, ShaderPool.WEAVE)?.let(::WeaveShader)
+        fun createOrNull(): WeaveShader? = ShaderPool.take(ShaderPool.WEAVE)?.let(::WeaveShader)
     }
 }
 
@@ -382,6 +430,17 @@ internal object ShevitsaStill {
         val t = render(k)
         synchronized(cache) { cache[k] = t }
         return t
+    }
+
+    /**
+     * Плочката на лентата с височина [heightPx] (px) — нарисувана предварително (от фоновата
+     * подготовка на старта), за да не се рисува в първия кадър. Същата ключова пресметка като
+     * при рисуването: клетката е височина / редове, широчината не влиза в ключа.
+     */
+    fun prewarmRibbon(heightPx: Int, period: Int, colors: ShevitsaColors) {
+        val h = heightPx.toFloat().coerceAtLeast(1f)
+        val cell = (h / ShevitsaPattern.ribbonRows(period)).coerceAtLeast(1f)
+        tile(WeaveSpec(h, h, cell, period.toFloat(), true, 1f, 0f, colors))
     }
 
     /** Четката за изгледа [s]: плочката, повторена от клетката в средата (както uOrigin на шейдъра). */
@@ -509,31 +568,56 @@ internal object ShevitsaStill {
 @Volatile private var shadersWarmed = false
 
 /**
- * Видеокартата превежда шейдъра при първото му рисуване (десетки ms). Веднъж за процеса,
- * ~2 s след старта (на спокойствие), шевицата и фолиото се рисуват в невидима точка —
- * първият кадър на картата (и на шевицата) ги намира готови.
+ * Видеокартата превежда шейдъра при първото му рисуване (десетки ms) — и поотделно за всяка
+ * комбинация от изрязване и смесване. Веднъж за процеса, два кадъра след пълното показване
+ * на началния екран (на спокойствие), се рисуват същите [LivingShevitsa] и [CardFoilLayer] като
+ * в картата, в малка кутия със същото изрязване със заоблени ъгли и почти прозрачна — първото
+ * отваряне на картата ги намира готови. Фолиото се превежда във фонов режим едва след първия кадър.
+ * Подгряването се брои за свършено само ако нещо наистина е нарисувано с шейдър.
  */
 @Composable
 fun ShaderWarmup(modifier: Modifier = Modifier) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || !LocalAgslEnabled.current) return
     var show by remember { mutableStateOf(false) }
+    val reporter = LocalFullyDrawnReporterOwner.current?.fullyDrawnReporter
     LaunchedEffect(Unit) {
         if (shadersWarmed) return@LaunchedEffect
-        delay(2_000)
+        // Първият кадър е зад гърба ни: фолиото се превежда във фона, не в него.
+        withFrameNanos { }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) ShaderPool.prepare(ShaderPool.FOIL)
+        if (reporter != null) {
+            val drawn = CompletableDeferred<Unit>()
+            reporter.addOnReportDrawnListener { drawn.complete(Unit) }
+            // Ако пълното показване се забави (или го няма) — след 8 s подгряваме така или иначе.
+            withTimeoutOrNull(8_000) { drawn.await() }
+        } else {
+            delay(2_000)
+        }
+        withFrameNanos { }
+        withFrameNanos { }
+        val before = ShaderDraws.total()
         show = true
-        withFrameNanos { }
-        withFrameNanos { }
+        repeat(3) { withFrameNanos { } }
         show = false
-        shadersWarmed = true
+        if (ShaderDraws.total() > before) shadersWarmed = true
     }
-    if (show) {
-        Spacer(
-            modifier.size(1.dp).clearAndSetSemantics { }.graphicsLayer { alpha = 0.01f }.drawBehind {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    ShaderPool.peek(ShaderPool.WEAVE)?.let { drawRect(it.brush) }
-                    ShaderPool.peek(ShaderPool.FOIL)?.let { drawRect(it.brush, blendMode = BlendMode.Screen) }
-                }
-            },
-        )
+    if (show) WarmupBox(modifier)
+}
+
+/** Като картата: шевица и фолио в кутия с изрязване 20 dp; почти прозрачна (без отделен слой за прозрачността). */
+@Composable
+private fun WarmupBox(modifier: Modifier) {
+    val tilt = remember { Tilt() }
+    Box(
+        modifier.size(72.dp, 44.dp).clearAndSetSemantics { }.graphicsLayer {
+            alpha = 0.01f
+            compositingStrategy = CompositingStrategy.ModulateAlpha
+            clip = true
+            shape = RoundedCornerShape(20.dp)
+        },
+        propagateMinConstraints = true,
+    ) {
+        LivingShevitsa(ShevitsaPalettes.card, Modifier.matchParentSize(), cell = 2.4.dp, intensity = 0.9f, still = false)
+        CardFoilLayer(tilt, Modifier.matchParentSize())
     }
 }
