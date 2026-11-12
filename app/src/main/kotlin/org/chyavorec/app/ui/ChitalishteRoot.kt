@@ -642,7 +642,8 @@ private fun AppNavHost(
     val signedIn = auth.state.collectAsState().value is AuthState.SignedIn
 
     SharedTransitionLayout {
-    CompositionLocalProvider(LocalSharedScope provides this, LocalSharedTransitionsEnabled provides !tabSwitch) {
+    // На Android 8 (API 26–27) преходите със споделени елементи понякога хвърлят „layouts are not part of the same hierarchy“ — без тях там.
+    CompositionLocalProvider(LocalSharedScope provides this, LocalSharedTransitionsEnabled provides (!tabSwitch && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P)) {
     NavHost(
         navController = nav,
         startDestination = Routes.HOME,

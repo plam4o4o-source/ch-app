@@ -376,7 +376,11 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
                         val change = awaitPointerEvent(PointerEventPass.Initial).changes.firstOrNull { it.id == down.id } ?: break
                         tracker.addPosition(change.uptimeMillis, change.position)
                         if (!change.pressed) {
-                            if (pulling) release(tracker.calculateVelocity().y)
+                            if (pulling) {
+                                // Последната стъпка до пръста нагоре се отчита преди решението (иначе 183 dp се броят за ~114).
+                                pull(change.position.y - last)
+                                release(tracker.calculateVelocity().y)
+                            }
                             break
                         }
                         if (!pulling) {
