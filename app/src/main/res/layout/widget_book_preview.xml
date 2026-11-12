@@ -11,8 +11,8 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="62dp"
-        android:layout_height="88dp"
+        android:layout_width="56dp"
+        android:layout_height="80dp"
         android:contentDescription="@null"
         android:scaleType="fitCenter"
         android:src="@drawable/widget_book_preview_cover" />
@@ -24,11 +24,14 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <include layout="@layout/widget_header" />
+        <TextView
+            android:id="@+id/widget_title"
+            style="@style/Widget.Chitalishte.Text.Title"
+            android:text="@string/widget_book_label" />
 
         <TextView
             style="@style/Widget.Chitalishte.Text.EventTitle"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:text="@string/widget_book_preview_title" />
 
         <TextView

@@ -72,8 +72,8 @@ internal fun bookPrefs(context: Context): SharedPreferences = context.getSharedP
 
 /** RemoteViews на уиджета „Книга на деня“ (layout/widget_book). Един размер — от 3×2 нагоре. */
 internal object BookWidgetViews {
-    /** Корицата в оформлението е 62×88 dp — битмапът е с тази ширина в пиксели на екрана. */
-    private const val COVER_DP = 62f
+    /** Корицата в оформлението е 56×80 dp — битмапът е с тази ширина в пиксели на екрана. */
+    private const val COVER_DP = 56f
 
     fun build(context: Context, state: BookWidgetState): RemoteViews {
         val v = RemoteViews(context.packageName, R.layout.widget_book)

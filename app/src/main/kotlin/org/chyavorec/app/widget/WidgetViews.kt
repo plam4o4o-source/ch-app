@@ -261,6 +261,11 @@ internal object WidgetViews {
         GroupRows.forEach { (_, _, text) -> v.tone(context, text, Tone.TEXT, dynamic) }
         v.setInt(R.id.widget_scan, "setBackgroundResource", if (dynamic) R.drawable.widget_dyn_button_bg else R.drawable.widget_button_bg)
         v.tone(context, R.id.widget_scan, Tone.BUTTON_TEXT, dynamic)
+        // Смяната на фона (drawable с отстъп) нулира вътрешния отстъп на бутона — връща се: 10 dp от всички страни
+        // (отгоре и отдолу е отстъпът на фона = видимото хапче 28 dp в поле 48 dp).
+        val pad = (10 * context.resources.displayMetrics.density).roundToInt()
+        v.setViewPadding(R.id.widget_scan, pad, pad, pad, pad)
+        v.setViewPadding(R.id.widget_catalog, pad, pad, pad, pad)
         v.setInt(R.id.widget_catalog, "setBackgroundResource", if (dynamic) R.drawable.widget_dyn_tonal_bg else R.drawable.widget_tonal_bg)
         v.tone(context, R.id.widget_catalog, Tone.TONAL_TEXT, dynamic)
     }
