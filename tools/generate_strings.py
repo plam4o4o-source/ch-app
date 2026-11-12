@@ -241,6 +241,8 @@ S = {
 "event_remind": ("Напомни ми", "Remind me"),
 "event_remove_reminder": ("Премахни напомнянето", "Remove reminder"),
 "event_source": ("Виж публикацията", "View the post"),
+"event_weekdays": ("понеделник,вторник,сряда,четвъртък,петък,събота,неделя", "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"),
+"event_countdown_today": ("днес", "today"),
 "reminder_set": ("Ще получиш напомняне преди събитието.", "You’ll get a reminder before the event."),
 "reminder_removed": ("Напомнянето е премахнато.", "Reminder removed."),
 "reminder_past": ("Събитието е минало — не може да се зададе напомняне.", "The event has passed — a reminder can’t be set."),
@@ -787,6 +789,10 @@ S = {
 "onb_notif_allow": ("Разреши известията", "Allow notifications"),
 "onb_notif_on": ("Известията са включени", "Notifications are on"),
 "onb_notif_off": ("Засега без известия — включват се от „Настройки › Известия“.", "No notifications for now — turn them on in Settings › Notifications."),
+"onb_page_of": ("Страница %1$d от %2$d", "Page %1$d of %2$d"),
+"onb_sample_name": ("Мария Иванова", "Maria Ivanova"),
+"onb_sample_card_cd": ("Примерна читателска карта", "Sample library card"),
+"onb_sample_hint": ("Така ще изглежда картата ти в телефона. Наклони го — фолиото блести.", "This is how your card will look on your phone. Tilt it — the foil shines."),
 "onb_signin_title": ("Вход и читателска карта", "Sign in and library card"),
 "onb_signin_text": ("Влез с данните си от библиотеката или добави читателската си карта. Можеш и по-късно — от „Моето“.", "Sign in with your library details or add your library card. You can also do it later from “My library”."),
 "home_carousel": ("Последни новини", "Latest news"),
@@ -1070,6 +1076,9 @@ P = {
 # Под брояча на „Начало“ (числото е отделно, над текста).
 "stat_books": (("документ в каталога", "документа в каталога"), ("catalogue item", "catalogue items")),
 "stat_events": (("събитие през следващите 30 дни", "събития през следващите 30 дни"), ("event in the next 30 days", "events in the next 30 days")),
+# Листът на събитието: колко дни остават/са минали.
+"event_in_days": (("след %1$d ден", "след %1$d дни"), ("in %1$d day", "in %1$d days")),
+"event_days_ago": (("преди %1$d ден", "преди %1$d дни"), ("%1$d day ago", "%1$d days ago")),
 }
 
 def esc(s):

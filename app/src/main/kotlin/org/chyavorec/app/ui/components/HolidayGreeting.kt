@@ -78,6 +78,18 @@ private fun greetingTexts(o: Occasion): Pair<String, String>? {
     return stringResource(title) to stringResource(text)
 }
 
+/**
+ * Заглавието на най-важния празник или повод на [date] (за листа на събитие) или `null`, ако
+ * денят е обикновен. Периодите без поздрав (мартеничка, сняг…) не се броят.
+ */
+@Composable
+fun rememberOccasionTitle(date: LocalDate): String? {
+    val occasion = remember(date) {
+        HolidayCalendar.occasionsOn(date).firstOrNull { it.greeting && (it.custom != null || greetingRes(it.id) != null) }
+    }
+    return occasion?.let { greetingTexts(it)?.first }
+}
+
 private fun greetingRes(id: String): Pair<Int, Int>? = when (id) {
     "spring" -> R.string.occ_spring_title to R.string.occ_spring_text
     "summer" -> R.string.occ_summer_title to R.string.occ_summer_text

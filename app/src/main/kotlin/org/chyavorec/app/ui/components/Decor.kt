@@ -49,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -309,8 +310,10 @@ fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier, motif: FolkMo
  * `Modifier.matchParentSize()`; не носи семантика.
  */
 @Composable
-fun OrnamentFrame(modifier: Modifier = Modifier, alpha: Float = 0.35f) {
+fun OrnamentFrame(modifier: Modifier = Modifier, alpha: Float = 0.35f, progress: (() -> Float)? = null) {
     val motif = rememberShevitsaMotif()
+    // Рамката се „изрисува“ веднъж ([progress] 0..1, чете се само при рисуване): линиите растат от ъглите, мотивите проявяват.
+    val currentProgress by rememberUpdatedState(progress)
     val draw = remember(motif, alpha) {
         val color = Brand.Gold.copy(alpha = alpha)
         Modifier.drawWithCache {
@@ -336,8 +339,26 @@ fun OrnamentFrame(modifier: Modifier = Modifier, alpha: Float = 0.35f) {
             }
             val line = Stroke(width = 1.5.dp.toPx())
             onDrawBehind {
-                drawPath(frame, color, style = line)
-                drawPath(motifs, color)
+                val p = currentProgress?.invoke()?.coerceIn(0f, 1f) ?: 1f
+                if (p >= 1f) {
+                    drawPath(frame, color, style = line)
+                    drawPath(motifs, color)
+                } else if (p > 0f && w > 2 * gap && h > 2 * gap) {
+                    // Всяка страна расте от двата си края към средата; мотивите в ъглите се проявяват първи.
+                    val grow = p * 0.5f
+                    val lw = line.width
+                    fun side(x1: Float, y1: Float, x2: Float, y2: Float) {
+                        val a = Offset(x1, y1)
+                        val b = Offset(x2, y2)
+                        drawLine(color, a, a + (b - a) * grow, strokeWidth = lw)
+                        drawLine(color, b, b + (a - b) * grow, strokeWidth = lw)
+                    }
+                    side(gap, inset, w - gap, inset)
+                    side(gap, h - inset, w - gap, h - inset)
+                    side(inset, gap, inset, h - gap)
+                    side(w - inset, gap, w - inset, h - gap)
+                    drawPath(motifs, color.copy(alpha = color.alpha * (p * 2.5f).coerceAtMost(1f)))
+                }
             }
         }
     }

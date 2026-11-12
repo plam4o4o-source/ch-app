@@ -173,12 +173,14 @@
     <string name="error_title">Something went wrong</string>
     <string name="error_unauthorized">Your session has expired. Please sign in again.</string>
     <string name="event_add_calendar">Add to calendar</string>
+    <string name="event_countdown_today">today</string>
     <string name="event_no_date">Date not announced</string>
     <string name="event_open_map">show the place on the map</string>
     <string name="event_recurring">An event from the centre’s annual calendar — it recurs every year on this date.</string>
     <string name="event_remind">Remind me</string>
     <string name="event_remove_reminder">Remove reminder</string>
     <string name="event_source">View the post</string>
+    <string name="event_weekdays">Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</string>
     <string name="events_calendar_view">Calendar view</string>
     <string name="events_empty">No events to show</string>
     <string name="events_empty_hint">Events come from the annual calendar on the centre’s website.</string>
@@ -481,6 +483,10 @@
     <string name="onb_notif_off">No notifications for now — turn them on in Settings › Notifications.</string>
     <string name="onb_notif_on">Notifications are on</string>
     <string name="onb_notif_text">Book due dates, new messages and events.</string>
+    <string name="onb_page_of">Page %1$d of %2$d</string>
+    <string name="onb_sample_card_cd">Sample library card</string>
+    <string name="onb_sample_hint">This is how your card will look on your phone. Tilt it — the foil shines.</string>
+    <string name="onb_sample_name">Maria Ivanova</string>
     <string name="onb_settings_text">Text size and notifications — you can change them later in Settings too.</string>
     <string name="onb_settings_title">Make it yours</string>
     <string name="onb_signin_text">Sign in with your library details or add your library card. You can also do it later from “My library”.</string>
@@ -869,6 +875,14 @@
     <plurals name="due_overdue_days">
         <item quantity="one">%1$d day overdue</item>
         <item quantity="other">%1$d days overdue</item>
+    </plurals>
+    <plurals name="event_days_ago">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+    <plurals name="event_in_days">
+        <item quantity="one">in %1$d day</item>
+        <item quantity="other">in %1$d days</item>
     </plurals>
     <plurals name="history_year_count">
         <item quantity="one">%1$d book</item>

@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
@@ -77,15 +78,7 @@ fun BrandIntro(onFinished: () -> Unit) {
         )
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Box(contentAlignment = Alignment.Center) {
-                Canvas(Modifier.size(196.dp)) {
-                    drawArc(
-                        brush = Brush.sweepGradient(listOf(Brand.GoldLight, Brand.Gold, Brand.GoldDark, Brand.Gold, Brand.GoldLight)),
-                        startAngle = -90f,
-                        sweepAngle = 360f * ring.value,
-                        useCenter = false,
-                        style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round),
-                    )
-                }
+                Canvas(Modifier.size(196.dp)) { drawGoldRing(ring.value) }
                 Emblem(
                     168.dp,
                     Modifier.graphicsLayer {
@@ -108,4 +101,15 @@ fun BrandIntro(onFinished: () -> Unit) {
             }
         }
     }
+}
+
+/** Златният пръстен около логото: [progress] 0..1 — колко от окръжността е изписана (въведението и въведението на приложението). */
+internal fun DrawScope.drawGoldRing(progress: Float, strokeWidth: Float = 3.dp.toPx()) {
+    drawArc(
+        brush = Brush.sweepGradient(listOf(Brand.GoldLight, Brand.Gold, Brand.GoldDark, Brand.Gold, Brand.GoldLight)),
+        startAngle = -90f,
+        sweepAngle = 360f * progress,
+        useCenter = false,
+        style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
+    )
 }

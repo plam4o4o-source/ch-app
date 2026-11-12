@@ -210,6 +210,14 @@ class LargeFontScreenshotTest {
         shot("59-font2-news-title")
     }
 
+    /** Листът на събитието и кръглите действия при 2×: нищо не се реже, действията се пренасят. */
+    @Test fun eventLeafLarge() {
+        launch(deepLink = "event/event-69")
+        waitFor("пл. 9-ти септември 3")
+        waitFor("Маршрут")
+        shot("w21-font2-event-leaf")
+    }
+
     /** Текстът [label] (етикет на сегмент) е на един ред и без многоточие. */
     private fun assertNotCut(label: String) {
         compose.waitForIdle()

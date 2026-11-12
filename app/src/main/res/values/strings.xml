@@ -173,12 +173,14 @@
     <string name="error_title">Нещо се обърка</string>
     <string name="error_unauthorized">Сесията е изтекла. Моля, влез отново.</string>
     <string name="event_add_calendar">Добави в календара</string>
+    <string name="event_countdown_today">днес</string>
     <string name="event_no_date">Без обявена дата</string>
     <string name="event_open_map">покажи мястото на картата</string>
     <string name="event_recurring">Събитие от годишния календар на читалището — повтаря се всяка година на тази дата.</string>
     <string name="event_remind">Напомни ми</string>
     <string name="event_remove_reminder">Премахни напомнянето</string>
     <string name="event_source">Виж публикацията</string>
+    <string name="event_weekdays">понеделник,вторник,сряда,четвъртък,петък,събота,неделя</string>
     <string name="events_calendar_view">Изглед календар</string>
     <string name="events_empty">Няма събития за показване</string>
     <string name="events_empty_hint">Събитията идват от годишния календар на сайта на читалището.</string>
@@ -481,6 +483,10 @@
     <string name="onb_notif_off">Засега без известия — включват се от „Настройки › Известия“.</string>
     <string name="onb_notif_on">Известията са включени</string>
     <string name="onb_notif_text">Сроковете на книгите, нови съобщения и събития.</string>
+    <string name="onb_page_of">Страница %1$d от %2$d</string>
+    <string name="onb_sample_card_cd">Примерна читателска карта</string>
+    <string name="onb_sample_hint">Така ще изглежда картата ти в телефона. Наклони го — фолиото блести.</string>
+    <string name="onb_sample_name">Мария Иванова</string>
     <string name="onb_settings_text">Размерът на текста и известията — можеш да ги смениш и по-късно от „Настройки“.</string>
     <string name="onb_settings_title">Удобно за теб</string>
     <string name="onb_signin_text">Влез с данните си от библиотеката или добави читателската си карта. Можеш и по-късно — от „Моето“.</string>
@@ -869,6 +875,14 @@
     <plurals name="due_overdue_days">
         <item quantity="one">просрочена с %1$d ден</item>
         <item quantity="other">просрочена с %1$d дни</item>
+    </plurals>
+    <plurals name="event_days_ago">
+        <item quantity="one">преди %1$d ден</item>
+        <item quantity="other">преди %1$d дни</item>
+    </plurals>
+    <plurals name="event_in_days">
+        <item quantity="one">след %1$d ден</item>
+        <item quantity="other">след %1$d дни</item>
     </plurals>
     <plurals name="history_year_count">
         <item quantity="one">%1$d книга</item>
