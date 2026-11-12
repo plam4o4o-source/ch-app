@@ -21,6 +21,7 @@ import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.limitedInput
 import org.chyavorec.core.AppError
+import org.chyavorec.core.Diagnostics
 import org.chyavorec.core.Outcome
 import org.chyavorec.core.Synced
 import org.chyavorec.data.repository.AuthState
@@ -30,6 +31,7 @@ import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.Membership
 import org.chyavorec.domain.model.ReaderProfile
+import org.chyavorec.domain.model.ReturnStamps
 import org.chyavorec.domain.model.SelfDeclaredCard
 import org.chyavorec.domain.model.ServiceCapabilities
 
@@ -365,6 +367,15 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
     /** Инвентарните номера на заетите книги, които ги има в каталога (само те водят към страницата на книгата). */
     val inCatalog: StateFlow<Set<Long>> = _inCatalog.asStateFlow()
 
+    private val _stamps = MutableStateFlow<StampShow?>(null)
+    /** Върнатите книги, които се празнуват при това отваряне (печат „Върната“); `null` — няма какво. */
+    val stamps: StateFlow<StampShow?> = _stamps.asStateFlow()
+
+    /** Печатите са показани. */
+    fun stampsDone() {
+        _stamps.value = null
+    }
+
     init {
         viewModelScope.launch { canRenew.value = c.authRepository.capabilities().renew }
         // Следва входа: зарежда при вход (и при нов вход), изчиства при изход.
@@ -405,6 +416,16 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
         val r = c.libraryRepository.loans(force)
         _state.update { it.with(r) }
         _state.value.data?.let { resolveCatalog(it) }
+        // Пресен успешен списък → кои книги са върнати от последното отваряне (печатът „Върната“).
+        if (r is Outcome.Success && !r.value.fromCache && r.value.refreshError == null) {
+            try {
+                celebrateReturns(r.value.data)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Diagnostics.record("loans.stamps", e)
+            }
+        }
         // Уиджетът показва броя и най-близкия срок — да не остава със стари данни.
         if (r is Outcome.Success && r.value.data != before) runCatching { c.refreshWidget() }
     }
@@ -433,6 +454,29 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
                 _renewing.update { it - loan.loanId }
             }
         }
+    }
+
+    /**
+     * Печатът „Върната“ ([ReturnStamps]): само за влязъл читател, от пресен списък и с потвърждение
+     * от историята (при изчезнало заемане тя се тегли наново). Неуспешно теглене на историята не
+     * празнува нищо — книгата чака следващото отваряне. Отпразнуваните се записват веднага
+     * (най-много веднъж, дори процесът да умре по средата на анимацията).
+     */
+    private suspend fun celebrateReturns(loans: List<Loan>) {
+        if (isDemo || c.authRepository.state.value !is AuthState.SignedIn) return
+        val today = c.clock.today()
+        val before = c.settings.returnStamps()
+        val gone = before.known.orEmpty().any { id -> loans.none { it.loanId == id } } || before.pending.isNotEmpty()
+        val history = if (gone) (c.libraryRepository.history(force = true) as? Outcome.Success)?.value?.data else null
+        val celebrate = c.settings.updateReturnStamps { st ->
+            ReturnStamps.step(st, loans, history, today).let { it.state to it.celebrate }
+        }
+        if (celebrate.isEmpty() || history == null) return
+        val year = today.year
+        val total = ReturnStamps.returnedInYear(history, year)
+        val inYear = celebrate.count { it.dateIn?.take(4)?.toIntOrNull() == year }
+        val show = StampShow(celebrate, year, (total - inYear).coerceAtLeast(0))
+        _stamps.update { old -> if (old == null) show else old.copy(books = old.books + show.books) }
     }
 
     /**

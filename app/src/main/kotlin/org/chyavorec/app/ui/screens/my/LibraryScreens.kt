@@ -85,6 +85,7 @@ import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.SyncStamp
 import org.chyavorec.app.ui.components.errorMessage
 import org.chyavorec.app.ui.components.bookCoverShared
+import org.chyavorec.app.ui.components.HapticSignature
 import org.chyavorec.app.ui.components.rememberSuccessFeedback
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.AppError
@@ -110,26 +111,28 @@ internal fun NeedsLogin(error: AppError, onLogin: () -> Unit) {
 }
 
 @Composable
-fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((Long) -> Unit)? = null) {
+fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((Long) -> Unit)? = null, onOpenHistory: (() -> Unit)? = null) {
     // Заетите книги са лични — не в „Скорошни“ и в снимки на екрана.
     SecureScreen()
     // …и без корици от интернет (адресът на корицата би издал коя книга е заета).
-    PersonalCovers { LoansContent(onBack, onLogin, onOpenBook) }
+    PersonalCovers { LoansContent(onBack, onLogin, onOpenBook, onOpenHistory) }
 }
 
 @Composable
-private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((Long) -> Unit)?) {
+private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((Long) -> Unit)?, onOpenHistory: (() -> Unit)?) {
     val vm = appViewModel(key = "loans") { LoansViewModel(it) }
     val state by vm.state.collectAsStateWithLifecycle()
     val canRenew by vm.canRenew.collectAsStateWithLifecycle()
     val renewing by vm.renewing.collectAsStateWithLifecycle()
     val inCatalog by vm.inCatalog.collectAsStateWithLifecycle()
     val renew by vm.renewResult.collectAsStateWithLifecycle()
+    val stamps by vm.stamps.collectAsStateWithLifecycle()
     val today = LocalAppContainer.current.clock.today()
     val calc = LoanDueCalculator()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val success = rememberSuccessFeedback()
+    // Удължаването е „печат“ (вж. HapticSignature.SEAL).
+    val success = rememberSuccessFeedback(HapticSignature.SEAL)
     val context = LocalContext.current
     val resources = LocalResources.current
     // Успешното удължаване — кратко съобщение, потвърждение с вибрация и шевичено конфети, без диалог за затваряне.
@@ -157,6 +160,8 @@ private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((
                 }
                 SyncBanner(state.fromCache, state.syncedAt, state.refreshError)
                 if (!state.fromCache && state.data != null) SyncStamp(state.syncedAt)
+                // Върната книга от последното отваряне: печат „Върната“ (вж. ReturnStamps).
+                stamps?.let { ReturnStampPanel(it, onOpenHistory, onDone = { vm.stampsDone() }) }
                 StateContent(
                     state = state,
                     onRetry = { vm.refresh() },

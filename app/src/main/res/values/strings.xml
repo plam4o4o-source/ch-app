@@ -881,6 +881,10 @@
     <string name="sort_year_asc">Година (стари първо)</string>
     <string name="sort_year_desc">Година (нови първо)</string>
     <string name="stale_banner">Временно не можем да обновим данните. Показваме последно наличните.</string>
+    <string name="stamp_a11y">Върната: %1$s</string>
+    <string name="stamp_returned_on">Върната на %1$s</string>
+    <string name="stamp_seal_bottom">Благодарим</string>
+    <string name="stamp_seal_top">ВЪРНАТА</string>
     <string name="stat_years">години история</string>
     <string name="status_available">Налична</string>
     <string name="status_not_on_shelf">Не е на рафта</string>
@@ -1140,6 +1144,10 @@
     <plurals name="share_card_quiz_streak">
         <item quantity="one">Серия: %1$d ден</item>
         <item quantity="other">Серия: %1$d дни поред</item>
+    </plurals>
+    <plurals name="stamp_year_label">
+        <item quantity="one">върната книга през %1$d г.</item>
+        <item quantity="other">върнати книги през %1$d г.</item>
     </plurals>
     <plurals name="stat_books">
         <item quantity="one">документ в каталога</item>

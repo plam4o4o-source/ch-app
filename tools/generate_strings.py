@@ -582,6 +582,10 @@ S = {
 "loan_due_overdue": ("Срокът изтече на %1$s", "Was due on %1$s"),
 "loan_renewing": ("Изпраща се заявка за удължаване", "Sending the renewal request"),
 "loan_open_book": ("Отвори книгата в каталога", "Open the book in the catalogue"),
+"stamp_seal_top": ("ВЪРНАТА", "RETURNED"),
+"stamp_seal_bottom": ("Благодарим", "Thank you"),
+"stamp_a11y": ("Върната: %1$s", "Returned: %1$s"),
+"stamp_returned_on": ("Върната на %1$s", "Returned on %1$s"),
 "home_loans_label_next": ("Следващ срок", "Next due"),
 "home_loans_label_overdue": ("Просрочено", "Overdue"),
 "home_loans_return_by": ("Върни до %1$s: %2$s", "Return by %1$s: %2$s"),
@@ -1267,6 +1271,7 @@ S["about_body"] = (ABOUT_BG, ABOUT_EN)
 
 P = {
 "history_year_count": (("%1$d книга", "%1$d книги"), ("%1$d book", "%1$d books")),
+"stamp_year_label": (("върната книга през %1$d г.", "върнати книги през %1$d г."), ("book returned in %1$d", "books returned in %1$d")),
 "my_want_count": (("%1$d книга в списъка", "%1$d книги в списъка"), ("%1$d book on your list", "%1$d books on your list")),
 "book_available_copies": (("%1$d наличен", "%1$d налични"), ("%1$d available", "%1$d available")),
 "book_copies": (("%1$d екземпляр", "%1$d екземпляра"), ("%1$d copy", "%1$d copies")),

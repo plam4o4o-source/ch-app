@@ -1,5 +1,7 @@
 package org.chyavorec.app.ui.screens.news
 
+import org.chyavorec.app.ui.components.BookmarkIcon
+import org.chyavorec.app.ui.components.rememberAppHaptics
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.sharedBoundsKey
 import org.chyavorec.app.ui.components.appFilterChipColors
@@ -358,9 +360,10 @@ fun NewsRow(
             Text(a.title, style = MaterialTheme.typography.titleMedium, maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.sharedBoundsKey("news-title-${a.id}"))
         }
         if (isFavorite != null && onToggleFavorite != null) {
-            IconButton(onClick = onToggleFavorite) {
-                Icon(
-                    if (isFavorite) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+            val haptics = rememberAppHaptics()
+            IconButton(onClick = { haptics.save(!isFavorite); onToggleFavorite() }) {
+                BookmarkIcon(
+                    isFavorite,
                     // С заглавието — в списъка TalkBack иначе чете само „Запази“ при всяка новина.
                     contentDescription = stringResource(if (isFavorite) R.string.action_unsave_named else R.string.action_save_named, a.title),
                     tint = if (isFavorite) LocalExtendedColors.current.gold else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -376,6 +379,7 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
     val vm = appViewModel(key = "article-$id") { ArticleViewModel(id, it.newsRepository, it.database.favorites(), it.clock) }
     val state by vm.state.collectAsStateWithLifecycle()
     val fav by vm.isFavorite.collectAsStateWithLifecycle()
+    val haptics = rememberAppHaptics()
     val context = LocalContext.current
     val scroll = TopAppBarDefaults.pinnedScrollBehavior()
     var readerSheet by rememberSaveable { mutableStateOf(false) }
@@ -497,9 +501,9 @@ fun ArticleScreen(id: String, onBack: () -> Unit, navigate: (String) -> Unit, op
                     modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp),
                 ) {
                     ReaderModeButton(onClick = { readerSheet = true })
-                    IconButton(onClick = { vm.toggleFavorite() }) {
-                        Icon(
-                            if (fav) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                    IconButton(onClick = { haptics.save(!fav); vm.toggleFavorite() }) {
+                        BookmarkIcon(
+                            fav,
                             contentDescription = stringResource(if (fav) R.string.action_unsave else R.string.action_save),
                             tint = if (fav) LocalExtendedColors.current.gold else LocalContentColor.current,
                         )
