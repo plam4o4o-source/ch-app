@@ -54,6 +54,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import org.chyavorec.app.ui.components.HapticSignature
+import org.chyavorec.app.ui.components.rememberAppHaptics
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
@@ -152,6 +154,7 @@ fun SurpriseOverlay(
     // Сцената е на цял екран — без долната лента на приложението под нея.
     HideAppChrome()
     val haptic = LocalHapticFeedback.current
+    val haptics = rememberAppHaptics()
     // Без разбъркване: намалено движение / екранен четец, или резултатът вече е бил показан.
     val still = remember(ui.round) { motion == SurpriseMotion.STILL || ui.revealed }
     val lite = motion == SurpriseMotion.LITE
@@ -185,11 +188,12 @@ fun SurpriseOverlay(
         delay(260)
         // 2. Три размествания — по две карти си сменят местата (пружината продължава с инерцията).
         val random = Random(ui.round)
+        // Разлистване: нарастващи тикове през трите размествания (на 8–10 — тик на всяко, както преди).
+        haptics.play(HapticSignature.SHUFFLE)
         repeat(3) {
             val a = random.nextInt(CARDS)
             val b = (a + 1 + random.nextInt(CARDS - 1)) % CARDS
             slots = slots.copyOf().also { s -> val t = s[a]; s[a] = s[b]; s[b] = t }
-            haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
             moveTo(cards[a], slots[a], swapSpring)
             moveTo(cards[b], slots[b], swapSpring)
             // Повдигане на разместваните — „прескачат“ една през друга.

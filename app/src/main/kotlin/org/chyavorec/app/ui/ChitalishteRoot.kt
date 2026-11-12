@@ -1,5 +1,7 @@
 package org.chyavorec.app.ui
 
+import org.chyavorec.app.ui.components.HemState
+import org.chyavorec.app.ui.components.stitchedHem
 import org.chyavorec.app.ui.components.ShaderWarmup
 import org.chyavorec.app.ui.components.LocalAppChromeHidden
 import android.net.Uri
@@ -725,7 +727,7 @@ private fun AppNavHost(
         screen(Routes.CARD_FULL) { UnlockGate(leavePersonal) { CardFullscreen(onClose = back) } }
         screen(Routes.LOANS) {
             UnlockGate(leavePersonal) {
-                LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }, onOpenBook = { navigate(Routes.book(it, personal = true)) })
+                LoansScreen(back, onLogin = { nav.navigate(Routes.LOGIN) }, onOpenBook = { navigate(Routes.book(it, personal = true)) }, onOpenHistory = { navigate(Routes.HISTORY) })
             }
         }
         screen(Routes.HISTORY) { UnlockGate(leavePersonal) { HistoryScreen(back, navigate, onLogin = { nav.navigate(Routes.LOGIN) }) } }
@@ -842,6 +844,8 @@ private fun NavGraphBuilder.screen(
         transitionSpec = { if (reduced) snap() else tween(280) },
         label = "screen-corner",
     ) { state -> if (state == EnterExitState.Visible || reduced) 0.dp else 28.dp }
+    // Подгъв от бодове по ръба при излизане с жест „назад“ (Android 14+, вж. Hem.kt).
+    val hem = remember { HemState() }
     Box(
         Modifier.fillMaxSize().graphicsLayer {
             val r = corner.value.toPx()
@@ -851,7 +855,12 @@ private fun NavGraphBuilder.screen(
             } else {
                 clip = false
             }
-        },
+        }.stitchedHem(
+            hem,
+            progress = { if (reduced) 0f else corner.value.value / 28f },
+            leaving = { transition.targetState == EnterExitState.PostExit },
+            seeking = { transition.isSeeking },
+        ),
     ) {
         // Една стойност за „разгръщането“ на корицата на дестинация — не по една на корица.
         val fold = rememberBookFold(this@composable, active = !reduced && LocalSharedTransitionsEnabled.current)

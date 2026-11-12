@@ -80,14 +80,16 @@ val LocalConfetti = staticCompositionLocalOf<ConfettiState?> { null }
 /**
  * Обратната връзка за успех: тактилно потвърждение и (без намалено движение) конфети от мястото
  * на действието. Извиква се, когато действието наистина е успяло — не при натискането.
+ * [signature] — подписът на вибрацията ([HapticSignature]); без него — обичайното потвърждение.
  */
 @Composable
-fun rememberSuccessFeedback(): () -> Unit {
+fun rememberSuccessFeedback(signature: HapticSignature? = null): () -> Unit {
     val confetti = LocalConfetti.current
     val haptic = LocalHapticFeedback.current
-    return remember(confetti, haptic) {
+    val haptics = rememberAppHaptics()
+    return remember(confetti, haptic, haptics, signature) {
         {
-            haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+            if (signature != null) haptics.play(signature) else haptic.performHapticFeedback(HapticFeedbackType.Confirm)
             confetti?.burst()
         }
     }

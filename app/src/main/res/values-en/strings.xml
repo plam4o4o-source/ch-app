@@ -666,6 +666,10 @@
     <string name="sort_year_asc">Year (oldest first)</string>
     <string name="sort_year_desc">Year (newest first)</string>
     <string name="stale_banner">We can’t refresh the data right now. Showing the last available data.</string>
+    <string name="stamp_a11y">Returned: %1$s</string>
+    <string name="stamp_returned_on">Returned on %1$s</string>
+    <string name="stamp_seal_bottom">Thank you</string>
+    <string name="stamp_seal_top">RETURNED</string>
     <string name="stat_years">years of history</string>
     <string name="status_available">Available</string>
     <string name="status_not_on_shelf">Not on the shelf</string>
@@ -894,6 +898,10 @@
     <plurals name="reading_streak_months">
         <item quantity="one">%1$d month</item>
         <item quantity="other">%1$d months</item>
+    </plurals>
+    <plurals name="stamp_year_label">
+        <item quantity="one">book returned in %1$d</item>
+        <item quantity="other">books returned in %1$d</item>
     </plurals>
     <plurals name="stat_books">
         <item quantity="one">catalogue item</item>

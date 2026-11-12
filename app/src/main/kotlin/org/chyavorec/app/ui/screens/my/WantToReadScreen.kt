@@ -128,6 +128,8 @@ import org.chyavorec.app.ui.components.PersonalCovers
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.bookCoverShared
+import org.chyavorec.app.ui.components.BookmarkIcon
+import org.chyavorec.app.ui.components.HapticSignature
 import org.chyavorec.app.ui.components.rememberSuccessFeedback
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.settings.NotificationAccess
@@ -494,8 +496,7 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
     val scope = rememberCoroutineScope()
     val resources = LocalResources.current
     val haptic = LocalHapticFeedback.current
-    val reduced = rememberReducedMotion()
-    val success = rememberSuccessFeedback()
+    val success = rememberSuccessFeedback(HapticSignature.STITCH)
     FilterChip(
         selected = saved != null,
         onClick = {
@@ -524,12 +525,12 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
             )
         },
         leadingIcon = {
-            AnimatedContent(saved != null, transitionSpec = { stateChange(reduced) }, label = "want-chip") { inList ->
-                Icon(
-                    if (inList) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder, contentDescription = null,
-                    modifier = Modifier.size(FilterChipDefaults.IconSize),
-                )
-            }
+            // Панделката „пада“ при запазване (вж. BookmarkIcon).
+            BookmarkIcon(
+                saved != null, contentDescription = null, tint = LocalContentColor.current,
+                modifier = Modifier.size(FilterChipDefaults.IconSize),
+                savedIcon = Icons.Outlined.Bookmark, unsavedIcon = Icons.Outlined.BookmarkBorder,
+            )
         },
         modifier = modifier.heightIn(min = 48.dp),
     )

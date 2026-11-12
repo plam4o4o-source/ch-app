@@ -129,6 +129,9 @@ class SettingsStore(private val context: Context) {
         val textScale = stringPreferencesKey("text_scale")
         val loanReminderPlan = stringSetPreferencesKey("loan_reminder_plan")
         val loanReminderPlanVersion = intPreferencesKey("loan_reminder_plan_version")
+        val returnStampKnown = stringSetPreferencesKey("return_stamp_known")
+        val returnStampPending = stringSetPreferencesKey("return_stamp_pending")
+        val returnStampDone = stringSetPreferencesKey("return_stamp_done")
         val backgroundSetup = stringPreferencesKey("background_setup")
         val lastAppOpen = longPreferencesKey("last_app_open")
         val messagePollAt = longPreferencesKey("message_poll_at")
@@ -287,6 +290,33 @@ class SettingsStore(private val context: Context) {
         if (versionCode != null) it[Keys.loanReminderPlanVersion] = versionCode
     }
 
+    /**
+     * Печатът „Върната“ ([org.chyavorec.domain.model.ReturnStamps]): прочита състоянието, прилага [block]
+     * и го записва в една атомарна транзакция — само идентификатори на заемания, без заглавия.
+     */
+    suspend fun <R> updateReturnStamps(block: (org.chyavorec.domain.model.ReturnStamps.State) -> Pair<org.chyavorec.domain.model.ReturnStamps.State, R>): R {
+        var out: Any? = null
+        context.dataStore.edit {
+            val (next, result) = block(returnStampsOf(it))
+            val known = next.known
+            if (known != null) it[Keys.returnStampKnown] = known else it.remove(Keys.returnStampKnown)
+            it[Keys.returnStampPending] = org.chyavorec.domain.model.ReturnStamps.encode(next.pending)
+            it[Keys.returnStampDone] = org.chyavorec.domain.model.ReturnStamps.encode(next.done)
+            out = result
+        }
+        @Suppress("UNCHECKED_CAST")
+        return out as R
+    }
+
+    /** Текущото състояние на печатите — без запис. */
+    suspend fun returnStamps(): org.chyavorec.domain.model.ReturnStamps.State = returnStampsOf(context.dataStore.data.first())
+
+    private fun returnStampsOf(p: Preferences) = org.chyavorec.domain.model.ReturnStamps.State(
+        known = p[Keys.returnStampKnown],
+        pending = org.chyavorec.domain.model.ReturnStamps.decode(p[Keys.returnStampPending]),
+        done = org.chyavorec.domain.model.ReturnStamps.decode(p[Keys.returnStampDone]),
+    )
+
     /** „версия:език“, за която периодичните задачи и каналите за известия вече са настроени. */
     suspend fun backgroundSetup(): String? = context.dataStore.data.first()[Keys.backgroundSetup]
     suspend fun setBackgroundSetup(stamp: String) = context.dataStore.edit { it[Keys.backgroundSetup] = stamp }
@@ -387,6 +417,9 @@ class SettingsStore(private val context: Context) {
         it.remove(Keys.loanNotificationLog)
         it.remove(Keys.renewWatch)
         it.remove(Keys.renewNotified)
+        it.remove(Keys.returnStampKnown)
+        it.remove(Keys.returnStampPending)
+        it.remove(Keys.returnStampDone)
         it.remove(Keys.personalReadPending)
         it.remove(Keys.personalMessagesInitialized)
         it[Keys.readMessages] = it[Keys.readMessages].orEmpty().filterNot { id -> id.startsWith(PERSONAL_ID_PREFIX) }.toSet()
