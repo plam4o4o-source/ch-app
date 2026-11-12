@@ -269,8 +269,18 @@ internal object ChartStitches {
     /** Редовете: най-високата колона и един ред над нея — за числото. */
     fun rows(max: Int): Int = maxOf(MIN_ROWS, max + 1)
 
-    /** Колони: бод през пролука — месец i е в колона 2i+1. */
-    fun columns(months: Int): Int = 2 * months + 1
+    /** Колони: месец i е на всеки [pitch] колони (по подразбиране бод през пролука); крайни пролуки. */
+    fun columns(months: Int, pitch: Int = 2): Int = pitch * months + 1
+
+    /** Колоната на месец [i]: в средата на своето място. */
+    fun columnOf(i: Int, pitch: Int = 2): Int = pitch * i + (pitch + 1) / 2
+
+    /**
+     * Стъпката между колоните, когато клетката е смалена: колкото да се запълни ширината
+     * ([widthInCells] клетки), но между 2 и 6 — така колоните остават под буквите на месеците.
+     */
+    fun pitch(months: Int, widthInCells: Float): Int =
+        if (months <= 0) 2 else ((widthInCells - 1f) / months).toInt().coerceIn(2, 6)
 
     /** Клетката се смалява, когато редовете са над [FULL_ROWS]; 1 — пълна. */
     fun cellScale(rows: Int): Float = if (rows <= FULL_ROWS) 1f else FULL_ROWS.toFloat() / rows
@@ -306,7 +316,7 @@ internal object ChartStitches {
      * Схемата: по един бод за книга, отдолу нагоре, месец след месец отляво надясно.
      * Рекордният месец е със златен конец ([StitchCharts.GOLD]), останалите — бордо.
      */
-    fun chart(counts: List<Int>): StitchChart {
+    fun chart(counts: List<Int>, pitch: Int = 2): StitchChart {
         val n = counts.size
         val rows = rows(counts.maxOrNull()?.coerceAtLeast(0) ?: 0)
         val peak = peakIndex(counts)
@@ -315,13 +325,13 @@ internal object ChartStitches {
         val thread = ArrayList<Byte>()
         counts.forEachIndexed { i, c ->
             for (k in 0 until c.coerceAtLeast(0).coerceAtMost(rows - 1)) {
-                col += 2 * i + 1
+                col += columnOf(i, pitch)
                 row += rows - 1 - k
                 thread += if (i == peak) StitchCharts.GOLD else StitchCharts.BURGUNDY
             }
         }
         return StitchChart(
-            columns(n), rows, col.toIntArray(), row.toIntArray(), thread.toByteArray(),
+            columns(n, pitch), rows, col.toIntArray(), row.toIntArray(), thread.toByteArray(),
             FloatArray(col.size),
         )
     }
@@ -346,13 +356,17 @@ internal fun EmbroideredMonths(
     maxCell: Dp = 16.dp,
     labelColor: Color = Color.Unspecified,
 ) {
-    val chart = remember(counts) { ChartStitches.chart(counts) }
     val measurer = rememberTextMeasurer()
-    val total = chart.size
-    // Накъде е свършила всяка колона (брой бодове до нея) — за появата на числата.
-    val ends = remember(counts) { counts.runningFold(0) { acc, c -> acc + c.coerceAtLeast(0).coerceAtMost(chart.rows - 1) }.drop(1) }
     BoxWithConstraints(modifier.fillMaxWidth()) {
-        val cell = minOf(maxWidth / chart.columns, maxCell) * ChartStitches.cellScale(chart.rows)
+        val rows = ChartStitches.rows(counts.maxOrNull()?.coerceAtLeast(0) ?: 0)
+        val months = counts.size
+        val cell = minOf(maxWidth / ChartStitches.columns(months), maxCell) * ChartStitches.cellScale(rows)
+        // Смалена клетка — колоните се раздалечават, та да останат под буквите.
+        val pitch = ChartStitches.pitch(months, maxWidth / cell)
+        val chart = remember(counts, pitch) { ChartStitches.chart(counts, pitch) }
+        val total = chart.size
+        // Брой бодове до края на всяка колона — за появата на числата.
+        val ends = remember(counts) { counts.runningFold(0) { acc, c -> acc + c.coerceAtLeast(0).coerceAtMost(chart.rows - 1) }.drop(1) }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Canvas(Modifier.padding(top = 6.dp).size(cell * chart.columns, cell * chart.rows)) {
                 val p = progress()
@@ -365,23 +379,27 @@ internal fun EmbroideredMonths(
                         val shown = (p * total - ends[i] + 1f).coerceIn(0f, 1f)
                         if (shown <= 0f) return@forEachIndexed
                         val text = measurer.measure(n.toString(), valueStyle)
-                        val rows = (n.coerceAtMost(chart.rows - 1))
+                        val high = n.coerceAtMost(chart.rows - 1)
                         drawText(
                             text,
-                            topLeft = Offset((2 * i + 1.5f) * c - text.size.width / 2f, size.height - rows * c - text.size.height - 1.dp.toPx()),
+                            topLeft = Offset((ChartStitches.columnOf(i, pitch) + 0.5f) * c - text.size.width / 2f, size.height - high * c - text.size.height - 1.dp.toPx()),
                             alpha = shown,
                         )
                     }
                 }
             }
             Spacer(Modifier.height(4.dp))
-            Row(Modifier.width(cell * (chart.columns - 1))) {
-                labels.forEachIndexed { i, s ->
-                    Text(
-                        s, style = labelStyle(i), textAlign = TextAlign.Center, maxLines = 1,
-                        color = labelColor,
-                        modifier = Modifier.weight(1f),
-                    )
+            // Етикетите: по едно място от [pitch] клетки, центрирани под колоната на месеца.
+            val offset = cell * ((pitch + 1) / 2 + 0.5f - pitch / 2f)
+            Box(Modifier.width(cell * chart.columns)) {
+                Row(Modifier.padding(start = offset).width(cell * (pitch * months))) {
+                    labels.forEachIndexed { i, s ->
+                        Text(
+                            s, style = labelStyle(i), textAlign = TextAlign.Center, maxLines = 1,
+                            color = labelColor,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
                 }
             }
         }

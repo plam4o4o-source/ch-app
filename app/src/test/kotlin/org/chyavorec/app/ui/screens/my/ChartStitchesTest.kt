@@ -42,6 +42,26 @@ class ChartStitchesTest {
         assertEquals(ChartStitches.FULL_ROWS.toFloat(), rows * ChartStitches.cellScale(rows), 0.001f)
     }
 
+    @Test fun smallCellsSpreadTheColumnsToKeepThemUnderTheLabels() {
+        // Пълна клетка: ширина 25 клетки за 12 месеца — стъпка 2 (бод през пролука).
+        assertEquals(2, ChartStitches.pitch(12, 25f))
+        // Смалена клетка: повече клетки на ширина — по-голяма стъпка, но не над 6.
+        assertEquals(4, ChartStitches.pitch(12, 50f))
+        assertEquals(6, ChartStitches.pitch(12, 500f))
+        assertEquals(2, ChartStitches.pitch(12, 5f))
+        assertEquals(2, ChartStitches.pitch(0, 40f))
+        val counts = listOf(3, 24, 0, 5)
+        for (pitch in 2..6) {
+            val c = ChartStitches.chart(counts, pitch)
+            assertEquals(pitch * counts.size + 1, c.columns)
+            for (i in 0 until c.size) {
+                assertTrue(c.col[i] in 0 until c.columns && c.row[i] in 0 until c.rows)
+                val month = (0 until counts.size).single { ChartStitches.columnOf(it, pitch) == c.col[i] }
+                assertTrue(counts[month] > 0)
+            }
+        }
+    }
+
     @Test fun hugeAndEmptyCountsStayInBounds() {
         for (counts in listOf(List(12) { 0 }, List(12) { 1_000 }, listOf(-3, 4, 0), emptyList())) {
             val c = ChartStitches.chart(counts)
