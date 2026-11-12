@@ -104,7 +104,7 @@ internal fun GreetingShareCard(card: ShareCard.Greeting) {
     BrandCardFrame(card.format, card.url, background = GreetingBackground, motif = card.motif) {
         Spacer(Modifier.weight(0.35f))
         Box(
-            Modifier.fillMaxWidth().height(138.dp).drawWithCache {
+            Modifier.fillMaxWidth().height(112.dp).drawWithCache {
                 val r = size.height / 2f
                 val glow = Brush.radialGradient(
                     listOf(Brand.Gold.copy(alpha = 0.30f), Color.Transparent),
@@ -114,7 +114,7 @@ internal fun GreetingShareCard(card: ShareCard.Greeting) {
             },
             contentAlignment = Alignment.Center,
         ) { GreetingArt(card.ornament, card.motif) }
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(8.dp))
         CardLabel(stringResource(R.string.greeting_card_label), modifier = Modifier.align(Alignment.CenterHorizontally))
         Spacer(Modifier.height(8.dp))
         Text(
@@ -129,9 +129,9 @@ internal fun GreetingShareCard(card: ShareCard.Greeting) {
                 maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
             )
         }
-        Spacer(Modifier.height(14.dp))
+        Spacer(Modifier.height(10.dp))
         GreetingDivider(Modifier.align(Alignment.CenterHorizontally))
-        Spacer(Modifier.height(14.dp))
+        Spacer(Modifier.height(10.dp))
         Text(
             card.wish, style = sans(15.sp, Paper.copy(alpha = 0.92f)).copy(lineHeight = 22.sp), maxLines = 7, overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
@@ -146,7 +146,7 @@ private fun GreetingArt(ornament: OccasionOrnament, motif: org.chyavorec.app.ui.
     val base = LocalDensity.current
     val scaled = Density(base.density * ART_SCALE, 1f)
     when (ornament) {
-        OccasionOrnament.NONE -> Canvas(Modifier.size(104.dp).clearAndSetSemantics { }) {
+        OccasionOrnament.NONE -> Canvas(Modifier.size(96.dp).clearAndSetSemantics { }) {
             val s = size.minDimension
             val ring = Stroke(1.2.dp.toPx())
             drawCircle(Brand.Gold.copy(alpha = 0.7f), radius = s / 2f, style = ring)
@@ -180,4 +180,4 @@ private fun GreetingDivider(modifier: Modifier = Modifier) {
     }
 }
 
-private const val ART_SCALE = 4.3f
+private const val ART_SCALE = 3.5f

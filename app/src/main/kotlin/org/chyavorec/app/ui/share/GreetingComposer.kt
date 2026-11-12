@@ -134,7 +134,7 @@ fun GreetingComposerBody(
             placeholder = { Text(stringResource(R.string.greeting_line_placeholder)) },
             supportingText = {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.greeting_line_support, GreetingCards.MAX_LINE), Modifier.weight(1f))
+                    Text(stringResource(R.string.greeting_line_support), Modifier.weight(1f))
                     Text("${line.text.length}/${GreetingCards.MAX_LINE}")
                 }
             },

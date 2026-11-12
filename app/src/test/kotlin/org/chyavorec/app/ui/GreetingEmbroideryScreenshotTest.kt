@@ -105,7 +105,7 @@ class GreetingCardScreenshotTest {
         ChitalishteTheme(mode = if (dark) ThemeMode.DARK else ThemeMode.LIGHT) {
             val density = LocalDensity.current
             CompositionLocalProvider(LocalDensity provides Density(density.density, scale)) {
-                Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceContainerLow).testTag("card")) {
+                androidx.compose.material3.Surface(Modifier.fillMaxSize().testTag("card"), color = MaterialTheme.colorScheme.surfaceContainerLow) {
                     val line = rememberTextFieldState(text)
                     GreetingComposerBody(
                         babaMarta.title, babaMarta.wish, "baba_marta", OccasionOrnament.MARTENITSA, ShevitsaMotif.RHOMBUS, url,

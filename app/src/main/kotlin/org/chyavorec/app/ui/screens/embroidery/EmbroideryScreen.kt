@@ -359,14 +359,17 @@ private fun EmbroideryControls(editor: EmbroideryEditor, onSave: () -> Unit, onO
                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp),
             )
             ConnectedButtonGroup(Symmetry.entries, editor.symmetry, editor::chooseSymmetry, Modifier.fillMaxWidth()) { s, _ ->
+                // Кратък надпис (при едър шрифт „Четворно“ се чупи по букви); пълното име — за екранния четец.
+                val name = stringResource(
+                    when (s) {
+                        Symmetry.NONE -> R.string.embroidery_mirror_none
+                        Symmetry.MIRROR -> R.string.embroidery_mirror_two
+                        Symmetry.QUAD -> R.string.embroidery_mirror_four
+                    },
+                )
                 Text(
-                    stringResource(
-                        when (s) {
-                            Symmetry.NONE -> R.string.embroidery_mirror_none
-                            Symmetry.MIRROR -> R.string.embroidery_mirror_two
-                            Symmetry.QUAD -> R.string.embroidery_mirror_four
-                        },
-                    ),
+                    when (s) { Symmetry.NONE -> name; Symmetry.MIRROR -> "×2"; Symmetry.QUAD -> "×4" },
+                    modifier = Modifier.semantics { contentDescription = name },
                 )
             }
         }
