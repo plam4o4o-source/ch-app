@@ -1,0 +1,21 @@
+APP W/E lines (pids ['5803', '6800', '7186', '7420', '7564', '7825', '8062', '8499', '8559', '8626', '8685', '8744', '8928', '9269', '9334', '9396', '9456', '9516', '9575', '9637', '9815', '10281', '10344', '10404', '10468', '10530', '10590', '10652', '10835', '11144', '11205', '11264', '11326', '11387', '11446', '11507', '11691', '12058', '12120', '12181', '12240', '12300', '12363', '12424', '12715', '13023', '13082', '13141', '13204', '13263', '13324', '13385', '13563', '13871', '13932', '13994', '14056', '14116', '14176', '14237', '14420', '14834', '14895', '14970', '15029', '15090', '15150', '15211', '15392', '15685', '15745', '15804', '15863', '15924', '15983', '16041']): 547 in 20 groups
+      76  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      76  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      76  W/Parcel: Expecting binder but got null!
+      76  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      76  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      76  W/Gralloc4: allocator #.x is not supported
+      76  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object d#.s(java.lang.Object)(r
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#a#-#b#-#d#-#fa-ed#f#b#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#e#d-bf#-#a#f-#d#-#d#ad#be#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=a#b#d#f-a#ee-#d#-#d#-f#cb#cfb#dd#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ce#-d#c#-#a-ab#c-a#fe#cbd, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=ee#d#c-#f-#-aacf-#ce#d#ef#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#fbfa-ff#-#-be#-#e#bd#d#c, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#fb#-#a#-#d#-abc#-e#a#b#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object xs#.getValue()(r#-map-id
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=bcbfaaa#-#-#b-#d#-#eb#ef#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#a#a#-#-#df#-ba#-b#b#ad#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#d-#af#-#f-#f-c#af#d#, generation=#)

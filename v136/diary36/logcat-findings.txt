@@ -1,0 +1,20 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 22:20:27.903  5561  5561 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:21:37.981  6831  6831 I PERFCHECK: section: D0. Demo sign-in DEMO-0001 / demo
+   11-12 22:22:32.789  7929  7929 I PERFCHECK: d36
+   11-12 22:22:33.323  7934  7934 I PERFCHECK: section: D1. Моето and „История“ reading diary prompts, the „Върната“ stamp
+   11-12 22:23:39.928  8520  8520 I PERFCHECK: section: D2. The diary survives a process death; a book screen shows the diary section
+   11-12 22:23:42.225   479   571 I ActivityManager: Killing 5570:org.chyavorec.app.dev/u0a176 (adj 700): kill background
+   11-12 22:24:06.322  8670  8670 I PERFCHECK: section: D3. Year story: „Твоята шевица“ and the embroidered charts portrait; dark
+   11-12 22:28:00.038 10136 10136 I PERFCHECK: section: D4. Signed-in card, fullscreen
+   11-12 22:28:59.943 10440 10440 I PERFCHECK: section: NP-demo-new brief. New screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0
+   11-12 22:28:59.976 10443 10443 I PERFCHECK: np-demo-new
+   11-12 22:30:36.419 11263 11263 I PERFCHECK: np-read-demo-new
+   11-12 22:35:33.924 13926 13926 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

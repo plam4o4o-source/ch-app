@@ -1,0 +1,73 @@
+part onb36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## O1. Fresh install of 1.2.36: BrandIntro (recorded) and onboarding pages
+installed new: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798;  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+REC brandintro: 36 frames @8 fps; motion all: frames=36 moving-frames(>1.0)=2 max-step=103.7 max-vs-first=161.8 steps=[0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.1 0.0 0.0 0.0 0.2 0.0 0.0 0.0 0.0 0.0 0.0 103.7 62.5 0.0 0.0 0.0 0.2 0.0 0.0 0.0 0.0 0.0 0.0 0.0]
+CAP onb-default/p1-welcome: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Пропусни · Читалище Яворец · НЧ „Васил Левски – 1922“ · Официалното приложение на чи · Новини и събития · Концерти, празници и срещи —
+CAP onb-default/p1b-welcome-scrolled: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Пропусни · Читалище Яворец · НЧ „Васил Левски – 1922“ · Официалното приложение на чи · Новини и събития · Концерти, празници и срещи —
+CAP onb-default/p2-settings: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пропусни · Удобно за теб · Размерът на текста и извести · Размер на текста · Малък · Стандартен
+CAP onb-default/p2b-xlarge: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пропусни · Удобно за теб · Размерът на текста и извести · Размер на текста · Малък · Стандартен
+CAP onb-default/p3-signin: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пропусни · Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001
+CAP onb-default/p3b-sample-card-tilt: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пропусни · Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001
+CAP onb-default/p4-home-first: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+ONB default: FATAL/ANR FATAL(any process)=0 of the app=0 ANR=0; main screen after: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="13 ноември 2026 · *С
+catalogue (first install) after 3025 ms
+PERF CARD fresh: Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 2926 мс, последен 2926 мс | Пълно показване: медиана 2926 мс, последно 2926 мс | Няма записани грешки. | Диагностика
+PERF CARD fresh (scrolled): Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 2926 мс, последен 2926 мс | Пълно показване: медиана 2926 мс, последно 2926 мс | Няма записани грешки. | Диагностика
+## O2. Onboarding again (data cleared): font 1.3 + English; then landscape; then a skip on page 1
+CAP onb-font130-en/p1-welcome: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Skip · Chitalishte Yavorets · Community Centre “Vasil Levs · The centre’s official app —  · News and events · Concerts, celebrations and m
+CAP onb-font130-en/p1b-welcome-scrolled: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Skip · Chitalishte Yavorets · Community Centre “Vasil Levs · The centre’s official app —  · News and events · Concerts, celebrations and m
+CAP onb-font130-en/p2-settings: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Skip · Make it yours · Text size and notifications  · Text size · Small · Standard
+CAP onb-font130-en/p2b-scrolled: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Skip · Make it yours · Text size and notifications  · Text size · Small · Standard
+CAP onb-font130-en/p3-signin: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Skip · Sample library card · LIBRARY CARD · “Vasil Levski – 1922” · Maria Ivanova · Reader no. 19220001
+CAP onb-font130-en/p3b-scrolled: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Skip · Sample library card · LIBRARY CARD · “Vasil Levski – 1922” · Maria Ivanova · Reader no. 19220001
+CAP onb-landscape/p1-welcome: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Пропусни · Читалище Яворец · НЧ „Васил Левски – 1922“ · Официалното приложение на чи · Новини и събития · Концерти, празници и срещи —
+CAP onb-landscape/p1b-welcome-scrolled: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Пропусни · Читалище Яворец · НЧ „Васил Левски – 1922“ · Официалното приложение на чи · Новини и събития · Концерти, празници и срещи —
+CAP onb-landscape/p2-settings: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пропусни · Удобно за теб · Размерът на текста и извести · Размер на текста · Малък · Стандартен
+CAP onb-landscape/p3-signin: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пропусни · Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001
+after 'Пропусни' on page 1: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" text="13 ноември 2026 · *С
+ONB part: FATAL/ANR FATAL(any process)=0 of the app=0 ANR=0
+A11Y AGG: 17 screens analysed, 0 dumps failed; totals MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+== MISSING: 0 distinct
+== SMALL: 0 distinct
+== SAME-LABEL: 0 distinct
+== DOUBLE: 0 distinct
+contact sheets: 6 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 1833 мс, последен 1833 мс | Пълно показване: медиана 1833 мс, последно 1833 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36 (1507400)" text="Профил: чака" text="Студен старт · 1" text="Първи кадър: медиана 1833 мс, последен 1833 мс" text="Пълно показване: медиана 1833 мс, последно 1833 мс" text="Няма записани грешки." content-desc=
+APP W/E lines (pids ['6134', '8660', '9123', '9458']): 30 in 9 groups
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/Parcel: Expecting binder but got null!
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       4  W/Gralloc4: allocator #.x is not supported
+       4  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#bff#c#e-c#-#cf#-#d-#dbc#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=b#b#bc-#bdf-#fe#-#c-#a#, generation=#)
+contact sheets: 7 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['6134', '8660', '9123', '9458']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 19
+   skipped-frames events=19 max=130 total=1017
+== Davey: 44
+   davey events=44 max=3894ms median=1096ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B

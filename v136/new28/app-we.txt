@@ -1,0 +1,9 @@
+APP W/E lines (pids ['5772', '6822', '11662', '14708']): 21 in 8 groups
+       5  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       4  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       1  W/g.chyavorec.ap: Verification of void om#.onBlockedStatusChanged(android.net.Network, boolean) took #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=f#e#e#c#-#-#d#d-a#d-#b#f#e#c#da#, generation=#)
+       1  W/g.chyavorec.ap: Long monitor contention with owner OkHttp https://chyavorec.org/... (#) at void ra#.<init>(p#, java.lang.Strin
+       1  W/g.chyavorec.ap: Long monitor contention with owner DefaultDispatcher-worker-# (#) at boolean android.os.BinderProxy.transactNa

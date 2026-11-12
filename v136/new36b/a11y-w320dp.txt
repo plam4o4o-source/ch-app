@@ -1,0 +1,27 @@
+A11Y w320dp/01-home: targets=12 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   MISSING: View@[54,1958][540,2049]; View@[540,1958][1026,2049]
+   SMALL: '' 144x27dp; '' 144x27dp
+A11Y w320dp/02-more: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/em-01-open: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/em-02-stitched: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/em-06-after-save: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=5
+   SMALL: 'Бордо' 52x46dp; 'Злато' 52x46dp; 'Черно' 52x46dp; 'Кремаво' 52x46dp; 'Зелено' 52x46dp
+A11Y w320dp/np-01-list: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/qz-01-q1: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0
+   SAME-LABEL: 'Назад' x2
+A11Y w320dp/qz-01-answered: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   MISSING: View@[54,344][519,438]
+   SMALL: '' 138x28dp; 'Бод по бод, като на кърпа' 138x28dp
+A11Y w320dp/qz-06-result: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   MISSING: View@[54,344][519,479]
+   SMALL: '' 138x40dp; 'Устав, отчети, юбилейният вест' 138x40dp
+A11Y w320dp/st-01: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/st-02: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/st-03: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/st-04: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y w320dp/11-event: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

@@ -1,0 +1,106 @@
+11-12 22:20:47.774   650  4007 E ActivityManager: ANR in com.google.android.gms.persistent
+11-12 22:20:47.774   650  4007 E ActivityManager: PID: 1352
+11-12 22:20:47.774   650  4007 E ActivityManager: Reason: Broadcast of Intent { act=android.intent.action.DOMAINS_NEED_VERIFICATION flg=0x10000010 xflg=0x4 cmp=com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver (has extras) }
+11-12 22:20:47.774   650  4007 E ActivityManager: ErrorId: a77a0da8-724e-4b4c-9fce-a36de16a3dcd
+11-12 22:20:47.774   650  4007 E ActivityManager: Frozen: false
+11-12 22:20:47.774   650  4007 E ActivityManager: Load: 0.0 / 0.0 / 0.0
+11-12 22:20:47.774   650  4007 E ActivityManager: ----- Output from /proc/pressure/memory -----
+11-12 22:20:47.774   650  4007 E ActivityManager: some avg10=27.31 avg60=11.35 avg300=3.33 total=12104840
+11-12 22:20:47.774   650  4007 E ActivityManager: full avg10=2.23 avg60=0.97 avg300=0.26 total=1320494
+11-12 22:20:47.774   650  4007 E ActivityManager: ----- End output from /proc/pressure/memory -----
+11-12 22:20:47.774   650  4007 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+11-12 22:20:47.774   650  4007 E ActivityManager: some avg10=91.81 avg60=72.66 avg300=25.70 total=90624597
+11-12 22:20:47.774   650  4007 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+11-12 22:20:47.774   650  4007 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+11-12 22:20:47.774   650  4007 E ActivityManager: ----- Output from /proc/pressure/io -----
+11-12 22:20:47.774   650  4007 E ActivityManager: some avg10=24.67 avg60=18.88 avg300=7.49 total=27563989
+11-12 22:20:47.774   650  4007 E ActivityManager: full avg10=0.00 avg60=0.86 avg300=0.72 total=3215779
+11-12 22:20:47.774   650  4007 E ActivityManager: ----- End output from /proc/pressure/io -----
+11-12 22:20:47.774   650  4007 E ActivityManager: 
+11-12 22:20:47.774   650  4007 E ActivityManager: CPU usage from 88252ms to -24ms ago (2026-11-12 22:19:14.562 to 2026-11-12 22:20:42.838):
+11-12 22:20:47.774   650  4007 E ActivityManager:   27% 650/system_server: 20% user + 6.9% kernel / faults: 174318 minor 2461 major
+11-12 22:20:47.774   650  4007 E ActivityManager:   24% 526/surfaceflinger: 0.5% user + 23% kernel / faults: 2716 minor 397 major
+11-12 22:20:47.774   650  4007 E ActivityManager:   8.9% 497/android.hardware.graphics.composer3-service.ranchu: 0.7% user + 8.2% kernel / faults: 37 minor 147 major
+11-12 22:20:47.774   650  4007 E ActivityManager:   3.3% 470/android.hardware.graphics.allocator-service.ranchu: 0% user + 3.2% kernel / faults: 128 major
+11-12 22:20:47.774   650  4007 E ActivityManager:   3.4% 591/logcat: 0.2% user + 3.2% kernel / faults: 7 minor 1 major
+11-12 22:20:47.774   650  4007 E ActivityManager:   2.2% 43/kswapd0: 0% user + 2.2% kernel
+11-12 22:20:47.774   650  4007 E ActivityManager:   1.6% 226/kworker/1:2-virtio_vsock: 0% user + 1.6% kernel
+11-12 22:20:47.774   650  4007 E ActivityManager:   1.3% 26/ksoftirqd/1: 0% user + 1.3% kernel
+11-12 22:20:47.774   650  4007 E ActivityManager:   1.3% 210/logd: 0.3% user + 0.9% kernel / faults: 2744 minor 19 major
+11-12 22:20:47.774   650  4007 E ActivityManager:   0.7% 76/kworker/1:6H+kverityd: 0% user + 0.7% kernel
+11-12 22:20:47.774   650  4007 E ActivityManager: 99% TOTAL: 45% user + 52% kernel + 0.3% iowait + 1.9% softirq
+11-12 22:20:47.774   650  4007 E ActivityManager: CPU usage from 123487ms to 123487ms ago (1970-01-01 00:00:00.000 to 1970-01-01 00:00:00.000) with 0% awake:
+11-12 22:20:47.774   650  4007 E ActivityManager: 0% TOTAL: 0% user + 0% kernel
+
+11-12 23:11:02.359   650   765 I WindowManager: ANR in Window{99fac44 u0 org.chyavorec.app/org.chyavorec.app.MainActivity}. Reason:Input dispatching timed out (99fac44 org.chyavorec.app/org.chyavorec.app.MainActivity is not responding. Waited 5000ms for KeyEvent(deviceId=-1, eventTime=3137528000000, source=KEYBOARD, displayId=-1, action=UP, flags=0x00000008, keyCode=DPAD_DOWN(20), scanCode=0, meta
+
+11-12 23:11:05.239   650 22849 E ActivityManager: ANR in org.chyavorec.app (org.chyavorec.app/.MainActivity)
+11-12 23:11:05.239   650 22849 E ActivityManager: PID: 22414
+11-12 23:11:05.239   650 22849 E ActivityManager: Reason: Input dispatching timed out (99fac44 org.chyavorec.app/org.chyavorec.app.MainActivity is not responding. Waited 5000ms for KeyEvent(deviceId=-1, eventTime=3137528000000, source=KEYBOARD, displayId=-1, action=UP, flags=0x00000008, keyCode=DPAD_DOWN(20), scanCode=0, metaState=0x00000000, repeatCount=0), policyFlags=0x6b000000).
+11-12 23:11:05.239   650 22849 E ActivityManager: Parent: org.chyavorec.app/.MainActivity
+11-12 23:11:05.239   650 22849 E ActivityManager: ErrorId: 1796868c-b42c-4d1f-b18a-c73e78dffdf3
+11-12 23:11:05.239   650 22849 E ActivityManager: Frozen: false
+11-12 23:11:05.239   650 22849 E ActivityManager: Load: 0.0 / 0.0 / 0.0
+11-12 23:11:05.239   650 22849 E ActivityManager: ----- Output from /proc/pressure/memory -----
+11-12 23:11:05.239   650 22849 E ActivityManager: some avg10=1.06 avg60=0.46 avg300=0.22 total=34592609
+11-12 23:11:05.239   650 22849 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=4274313
+11-12 23:11:05.239   650 22849 E ActivityManager: ----- End output from /proc/pressure/memory -----
+11-12 23:11:05.239   650 22849 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+11-12 23:11:05.239   650 22849 E ActivityManager: some avg10=76.21 avg60=47.36 avg300=31.95 total=1087474140
+11-12 23:11:05.239   650 22849 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+11-12 23:11:05.239   650 22849 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+11-12 23:11:05.239   650 22849 E ActivityManager: ----- Output from /proc/pressure/io -----
+11-12 23:11:05.239   650 22849 E ActivityManager: some avg10=7.29 avg60=3.94 avg300=2.59 total=117035889
+11-12 23:11:05.239   650 22849 E ActivityManager: full avg10=0.00 avg60=0.05 avg300=0.08 total=11366484
+11-12 23:11:05.239   650 22849 E ActivityManager: ----- End output from /proc/pressure/io -----
+11-12 23:11:05.239   650 22849 E ActivityManager: 
+11-12 23:11:05.239   650 22849 E ActivityManager: CPU usage from 97430ms to -1ms ago (2026-11-12 23:09:25.053 to 2026-11-12 23:11:02.485):
+11-12 23:11:05.239   650 22849 E ActivityManager:   24% 22414/org.chyavorec.app: 1.6% user + 22% kernel / faults: 23562 minor 4 major
+11-12 23:11:05.239   650 22849 E ActivityManager:   23% 497/android.hardware.graphics.composer3-service.ranchu: 0.1% user + 23% kernel / faults: 1 minor
+11-12 23:11:05.239   650 22849 E ActivityManager:   8% 1491/com.google.android.inputmethod.latin: 3% user + 5% kernel / faults: 65667 minor 5 major
+11-12 23:11:05.239   650 22849 E ActivityManager:   5.6% 1014/com.android.systemui: 0.5% user + 5.1% kernel / faults: 5709 minor 15 major
+11-12 23:11:05.239   650 22849 E ActivityManager:   4.7% 1276/com.google.android.apps.nexuslauncher: 0.2% user + 4.4% kernel / faults: 1287 minor
+11-12 23:11:05.239   650 22849 E ActivityManager:   3.9% 526/surfaceflinger: 0.3% user + 3.5% kernel / faults: 81 minor 17 major
+11-12 23:11:05.239   650 22849 E ActivityManager:   2% 650/system_server: 1.2% user + 0.8% kernel / faults: 14613 minor 42 major
+11-12 23:11:05.239   650 22849 E ActivityManager:   1.1% 470/android.hardware.graphics.allocator-service.ranchu: 0% user + 1.1% kernel
+11-12 23:11:05.239   650 22849 E ActivityManager:   0.9% 591/logcat: 0% user + 0.8% kernel
+11-12 23:11:05.239   650 22849 E ActivityManager:   0.3% 1687/adbd: 0.1% user + 0.1% kernel / faults: 19574 minor
+11-12 23:11:05.239   650 22849 E ActivityManager: 50% TOTAL: 5.7% user + 44% kernel + 0.1% iowait + 0.1% softirq
+11-12 23:11:05.239   650 22849 E ActivityManager: CPU usage from 3143157ms to 3143157ms ago (1970-01-01 00:00:00.000 to 1970-01-01 00:00:00.000) with 0% awake:
+11-12 23:11:05.239   650 22849 E ActivityManager: 0% TOTAL: 0% user + 0% kernel
+
+11-12 23:11:05.244 22749 22759 W Monkey  : ANR in org.chyavorec.app (org.chyavorec.app/.MainActivity)
+11-12 23:11:05.244 22749 22759 W Monkey  : PID: 22414
+11-12 23:11:05.244 22749 22759 W Monkey  : Reason: Input dispatching timed out (99fac44 org.chyavorec.app/org.chyavorec.app.MainActivity is not responding. Waited 5000ms for KeyEvent(deviceId=-1, eventTime=3137528000000, source=KEYBOARD, displayId=-1, action=UP, flags=0x00000008, keyCode=DPAD_DOWN(20), scanCode=0, metaState=0x00000000, repeatCount=0), policyFlags=0x6b000000).
+11-12 23:11:05.244 22749 22759 W Monkey  : Parent: org.chyavorec.app/.MainActivity
+11-12 23:11:05.244 22749 22759 W Monkey  : ErrorId: 1796868c-b42c-4d1f-b18a-c73e78dffdf3
+11-12 23:11:05.244 22749 22759 W Monkey  : Frozen: false
+11-12 23:11:05.244 22749 22759 W Monkey  : Load: 0.0 / 0.0 / 0.0
+11-12 23:11:05.244 22749 22759 W Monkey  : ----- Output from /proc/pressure/memory -----
+11-12 23:11:05.244 22749 22759 W Monkey  : some avg10=1.06 avg60=0.46 avg300=0.22 total=34592609
+11-12 23:11:05.244 22749 22759 W Monkey  : full avg10=0.00 avg60=0.00 avg300=0.00 total=4274313
+11-12 23:11:05.244 22749 22759 W Monkey  : ----- End output from /proc/pressure/memory -----
+11-12 23:11:05.244 22749 22759 W Monkey  : ----- Output from /proc/pressure/cpu -----
+11-12 23:11:05.244 22749 22759 W Monkey  : some avg10=76.21 avg60=47.36 avg300=31.95 total=1087474140
+11-12 23:11:05.244 22749 22759 W Monkey  : full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+11-12 23:11:05.244 22749 22759 W Monkey  : ----- End output from /proc/pressure/cpu -----
+11-12 23:11:05.244 22749 22759 W Monkey  : ----- Output from /proc/pressure/io -----
+11-12 23:11:05.244 22749 22759 W Monkey  : some avg10=7.29 avg60=3.94 avg300=2.59 total=117035889
+11-12 23:11:05.244 22749 22759 W Monkey  : full avg10=0.00 avg60=0.05 avg300=0.08 total=11366484
+11-12 23:11:05.244 22749 22759 W Monkey  : ----- End output from /proc/pressure/io -----
+11-12 23:11:05.244 22749 22759 W Monkey  : 
+11-12 23:11:05.244 22749 22759 W Monkey  : CPU usage from 97430ms to -1ms ago (2026-11-12 23:09:25.053 to 2026-11-12 23:11:02.485):
+11-12 23:11:05.244 22749 22759 W Monkey  :   24% 22414/org.chyavorec.app: 1.6% user + 22% kernel / faults: 23562 minor 4 major
+11-12 23:11:05.244 22749 22759 W Monkey  :   23% 497/android.hardware.graphics.composer3-service.ranchu: 0.1% user + 23% kernel / faults: 1 minor
+11-12 23:11:05.244 22749 22759 W Monkey  :   8% 1491/com.google.android.inputmethod.latin: 3% user + 5% kernel / faults: 65667 minor 5 major
+11-12 23:11:05.244 22749 22759 W Monkey  :   5.6% 1014/com.android.systemui: 0.5% user + 5.1% kernel / faults: 5709 minor 15 major
+11-12 23:11:05.244 22749 22759 W Monkey  :   4.7% 1276/com.google.android.apps.nexuslauncher: 0.2% user + 4.4% kernel / faults: 1287 minor
+11-12 23:11:05.244 22749 22759 W Monkey  :   3.9% 526/surfaceflinger: 0.3% user + 3.5% kernel / faults: 81 minor 17 major
+11-12 23:11:05.244 22749 22759 W Monkey  :   2% 650/system_server: 1.2% user + 0.8% kernel / faults: 14613 minor 42 major
+11-12 23:11:05.244 22749 22759 W Monkey  :   1.1% 470/android.hardware.graphics.allocator-service.ranchu: 0% user + 1.1% kernel
+11-12 23:11:05.244 22749 22759 W Monkey  :   0.9% 591/logcat: 0% user + 0.8% kernel
+11-12 23:11:05.244 22749 22759 W Monkey  :   0.3% 1687/adbd: 0.1% user + 0.1% kernel / faults: 19574 minor
+11-12 23:11:05.244 22749 22759 W Monkey  : 50% TOTAL: 5.7% user + 44% kernel + 0.1% iowait + 0.1% softirq
+11-12 23:11:05.244 22749 22759 W Monkey  : CPU usage from 3143157ms to 3143157ms ago (1970-01-01 00:00:00.000 to 1970-01-01 00:00:00.000) with 0% awake:
+11-12 23:11:05.244 22749 22759 W Monkey  : 0% TOTAL: 0% user + 0% kernel
+

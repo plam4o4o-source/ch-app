@@ -1,0 +1,83 @@
+part mon36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3889 ms
+## K. Monkey 6000 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=7236
+MONKEY exit=0 duration=304 s; Events injected: 6000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '7236'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=95465KB  Java=23768KB  Native=23304KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=9)  RSS=137300KB  Views=19 Activities=1
+MEM after-monkey (trimmed) PSS=75146KB  Java=9240KB  Native=21836KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=9)  RSS=128572KB  Views=15 Activities=1
+MON36 round 1 (seed 1357): whole log so far: FATAL=0
+## K2. Monkey 6000 events, seed 4242
+## W. First launch and warm-up
+first-install catalogue results after 2874 ms
+## K. Monkey 6000 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=8842
+MONKEY exit=0 duration=332 s; Events injected: 6000 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '8842'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=110894KB  Java=20536KB  Native=49228KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=26)  RSS=196452KB  Views=30 Activities=1
+MEM after-monkey (trimmed) PSS=103506KB  Java=13100KB  Native=48068KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=22)  RSS=194360KB  Views=24 Activities=1
+MON36 round 2 done: whole log FATAL=0 ANR lines=0
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: tab bar not reached
+WARN: Settings not found
+APP W/E lines (pids ['5871', '7236', '8596', '8842']): 3925 in 43 groups
+    3556  W/InputEventSender: Received 'finished' signal for unknown seq number = #
+      94  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      75  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+      41  W/Parcel: Expecting binder but got null!
+      41  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      16  W/System: A resource failed to call release. 
+       9  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       9  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       9  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+       8  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       5  W/RemoteInputConnectionImpl: setComposingText on inactive InputConnection
+       5  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, metaSt
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/Gralloc4: allocator #.x is not supported
+       4  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, metaSta
+       4  W/InputMethodManager: Timeout waiting for IME to handle input event after # ms: com.google.android.inputmethod.latin/com.android.inp
+       4  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       3  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       3  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[#]=-#.
+       2  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       2  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCod
+       2  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scan
+       2  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCo
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#d#-c#ca-#b-#b#-#a#f#f, generation=#)
+       1  W/VRI[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, 
+       1  W/VRI[MainActivity]: Dropping event (no window focus):MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[#]=#.#
+       1  W/InputMethodManager: Ignoring showSoftInput() as view=k#{e#c# VFED..... ......ID #,#-#,# aid=#} is not served.
+       1  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_DOWN, actionButton=#, id[#]=#, x[#]
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5871', '7236', '8596', '8842']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 67
+   skipped-frames events=67 max=106 total=2574
+== Davey: 173
+   davey events=173 max=2510ms median=817ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B

@@ -1,0 +1,37 @@
+could not get driver version for /dev/input/mouse0, Not a typewriter
+add device 1: /dev/input/event0
+  name:     "Power Button"
+  events:
+    KEY (0001): KEY_POWER            
+  input props:
+    <none>
+add device 2: /dev/input/event2
+  name:     "goldfish_rotary"
+  events:
+    REL (0002): REL_WHEEL            
+  input props:
+    <none>
+add device 3: /dev/input/event1
+  name:     "qwerty2"
+  events:
+    KEY (0001): KEY_HOME              KEY_END               KEY_VOLUMEDOWN        KEY_VOLUMEUP         
+                KEY_POWER             KEY_SCALE             KEY_SLEEP             KEY_BACK             
+                KEY_SEARCH            KEY_KBDILLUMDOWN      KEY_KBDILLUMUP        KEY_SEND             
+                BTN_TOOL_RUBBER       BTN_STYLUS            KEY_APPSELECT         KEY_SCREENSAVER      
+                KEY_VOICECOMMAND      0247                  0248                 
+    ABS (0003): ABS_X                 : value 0, min 0, max 32767, fuzz 0, flat 0, resolution 0
+                ABS_Y                 : value 0, min 0, max 32767, fuzz 0, flat 0, resolution 0
+                ABS_Z                 : value 0, min 0, max 1, fuzz 0, flat 0, resolution 0
+                ABS_MT_SLOT           : value 0, min 0, max 10, fuzz 0, flat 0, resolution 0
+                ABS_MT_TOUCH_MAJOR    : value 0, min 0, max 2147483647, fuzz 0, flat 0, resolution 0
+                ABS_MT_TOUCH_MINOR    : value 0, min 0, max 2147483647, fuzz 0, flat 0, resolution 0
+                ABS_MT_ORIENTATION    : value 0, min 0, max 90, fuzz 0, flat 0, resolution 0
+                ABS_MT_POSITION_X     : value 0, min 0, max 32767, fuzz 0, flat 0, resolution 0
+                ABS_MT_POSITION_Y     : value 0, min 0, max 32767, fuzz 0, flat 0, resolution 0
+                ABS_MT_TOOL_TYPE      : value 0, min 0, max 15, fuzz 0, flat 0, resolution 0
+                ABS_MT_TRACKING_ID    : value 0, min 0, max 11, fuzz 0, flat 0, resolution 0
+                ABS_MT_PRESSURE       : value 0, min 0, max 1024, fuzz 0, flat 0, resolution 0
+    SW  (0005): SW_LID                SW_HEADPHONE_INSERT   SW_MICROPHONE_INSERT 
+  input props:
+    <none>
+could not get driver version for /dev/input/mice, Not a typewriter

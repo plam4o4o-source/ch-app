@@ -1,0 +1,169 @@
+part gfxb36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+BASE APK as the tested app: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest)
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+installed:  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## P0. Package: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest); dexopt: x86_64: [status=verify] x86_64: [status=verify] ; baseline profile in the APK: assets/dexopt/baseline.prof assets/dexopt/baseline.profm 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4797 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## P1. 10 cold (with 'Fully drawn') + 10 warm starts, as installed
+START cold new           n=10 min=3048ms median=3431ms max=3896ms  all=[3701, 3650, 3663, 3896, 3048, 3440, 3104, 3320, 3243, 3422]  states=['COLD']
+DRAWN new: TotalTime n=10 min=3048ms median=3431ms max=3896ms; fully drawn n=10 median=4436ms min=3567 max=5727 all=[5061, 4211, 5727, 5469, 4471, 3567, 4392, 4828, 3769, 4401]; without line: 0
+START warm new           n=10 min=608ms median=962ms max=1231ms  all=[1231, 1060, 789, 941, 986, 608, 1193, 749, 984, 621]  states=['HOT']
+## G1. gfxinfo per scenario, round 1 (animations ON, 1080x2400); slowest frames from framestats and the histogram
+GFX r1-home-scroll frames=   52  janky=52 (100.00%)  p50=400ms p90=650ms p95=700ms p99=900ms  slowUI=31 slowDraw=52 highInput=0
+  GFXMEM r1-home-scroll: pipeline: Skia (OpenGL); GPU total: 48992008 bytes, 46.72 MB (37.42 MB is purgeable); textures: 3.27 MB (7 entries) | 6.17 MB (34 entries) | 12.38 MB (24 entries); frames: 52
+  FS r1-home-scroll: n=51 slowest=1090.7ms (frame #48; ui 321.5 rt 565.1 issue 298.7 flags 0) first5=[206, 632, 877, 842, 841] >32ms=51 >64ms=51 >100ms=51 span=11733ms
+  r1-home-scroll HIST: frames=52 slowest-bucket=900ms ≥50ms=52 ≥100ms=52 ≥200ms=45 ≥500ms=20
+GFX r1-carousel  frames=   16  janky=16 (100.00%)  p50=350ms p90=400ms p95=700ms p99=700ms  slowUI=12 slowDraw=16 highInput=0
+  GFXMEM r1-carousel: pipeline: Skia (OpenGL); GPU total: 50407900 bytes, 48.07 MB (39.09 MB is purgeable); textures: 1.84 MB (4 entries) | 6.97 MB (31 entries) | 14.07 MB (33 entries); frames: 16
+  FS r1-carousel: n=16 slowest=717.0ms (frame #11; ui 274.6 rt 425.9 issue 193.3 flags 0) first5=[131, 227, 392, 582, 568] >32ms=16 >64ms=16 >100ms=16 span=2417ms
+  r1-carousel HIST: frames=16 slowest-bucket=700ms ≥50ms=16 ≥100ms=16 ≥200ms=13 ≥500ms=1
+GFX r1-news      frames=   83  janky=82 (98.80%)  p50=200ms p90=350ms p95=400ms p99=450ms  slowUI=54 slowDraw=82 highInput=1
+  GFXMEM r1-news: pipeline: Skia (OpenGL); GPU total: 99194248 bytes, 94.60 MB (85.60 MB is purgeable); textures: 1.84 MB (4 entries) | 10.44 MB (92 entries) | 13.84 MB (32 entries); frames: 83
+  FS r1-news: n=84 slowest=691.9ms (frame #69; ui 190.8 rt 253.4 issue 137.8 flags 0) first5=[60, 109, 303, 341, 437] >32ms=84 >64ms=77 >100ms=76 span=13433ms
+  r1-news HIST: frames=83 slowest-bucket=450ms ≥50ms=78 ≥100ms=74 ≥200ms=54 ≥500ms=0
+GFX r1-article   frames=   67  janky=67 (100.00%)  p50=300ms p90=400ms p95=450ms p99=550ms  slowUI=24 slowDraw=67 highInput=0
+  GFXMEM r1-article: pipeline: Skia (OpenGL); GPU total: 113686544 bytes, 108.42 MB (103.41 MB is purgeable); textures: 13.85 KB (1 entry) | 11.34 MB (63 entries) | 16.04 MB (72 entries); frames: 67
+  FS r1-article: n=67 slowest=702.7ms (frame #49; ui 252.0 rt 312.6 issue 180.7 flags 0) first5=[54, 254, 326, 479, 644] >32ms=67 >64ms=66 >100ms=63 span=11867ms
+  r1-article HIST: frames=67 slowest-bucket=550ms ≥50ms=67 ≥100ms=63 ≥200ms=55 ≥500ms=3
+GFX r1-calendar  frames=   76  janky=76 (100.00%)  p50=250ms p90=400ms p95=450ms p99=500ms  slowUI=49 slowDraw=76 highInput=0
+  GFXMEM r1-calendar: pipeline: Skia (OpenGL); GPU total: 113344536 bytes, 108.09 MB (103.84 MB is purgeable); textures: 9.44 MB (51 entries) | 10.27 MB (57 entries); frames: 76
+  FS r1-calendar: n=76 slowest=615.6ms (frame #35; ui 178.2 rt 259.8 issue 72.9 flags 0) first5=[66, 169, 280, 347, 385] >32ms=76 >64ms=74 >100ms=73 span=11383ms
+  r1-calendar HIST: frames=76 slowest-bucket=500ms ≥50ms=75 ≥100ms=73 ≥200ms=60 ≥500ms=1
+GFX r1-catalog   frames=   57  janky=57 (100.00%)  p50=400ms p90=550ms p95=650ms p99=700ms  slowUI=33 slowDraw=57 highInput=0
+  GFXMEM r1-catalog: pipeline: Skia (OpenGL); GPU total: 113659816 bytes, 108.39 MB (72.10 MB is purgeable); textures: 303.72 KB (20 entries) | 4.32 MB (4 entries); frames: 57
+  FS r1-catalog: n=57 slowest=1005.1ms (frame #21; ui 359.4 rt 384.0 issue 191.3 flags 0) first5=[147, 410, 552, 865, 870] >32ms=57 >64ms=57 >100ms=57 span=12750ms
+  r1-catalog HIST: frames=57 slowest-bucket=700ms ≥50ms=57 ≥100ms=57 ≥200ms=54 ≥500ms=17
+GFX r1-my        frames=   72  janky=71 (98.61%)  p50=300ms p90=400ms p95=450ms p99=500ms  slowUI=29 slowDraw=71 highInput=1
+  GFXMEM r1-my: pipeline: Skia (OpenGL); GPU total: 109759816 bytes, 104.68 MB (86.34 MB is purgeable); textures: 570.06 KB (29 entries) | 4.67 MB (44 entries); frames: 72
+  FS r1-my: n=72 slowest=693.1ms (frame #5; ui 255.4 rt 256.5 issue 138.2 flags 0) first5=[49, 287, 388, 553, 693] >32ms=72 >64ms=71 >100ms=71 span=12183ms
+  r1-my HIST: frames=72 slowest-bucket=500ms ≥50ms=71 ≥100ms=71 ≥200ms=60 ≥500ms=2
+GFX r1-more      frames=   69  janky=69 (100.00%)  p50=250ms p90=450ms p95=500ms p99=550ms  slowUI=27 slowDraw=69 highInput=0
+  GFXMEM r1-more: pipeline: Skia (OpenGL); GPU total: 111685224 bytes, 106.51 MB (87.90 MB is purgeable); textures: 624.15 KB (45 entries) | 4.64 MB (36 entries); frames: 69
+  FS r1-more: n=69 slowest=757.5ms (frame #42; ui 199.7 rt 385.2 issue 163.4 flags 0) first5=[52, 156, 335, 617, 677] >32ms=69 >64ms=67 >100ms=67 span=12217ms
+  r1-more HIST: frames=69 slowest-bucket=550ms ≥50ms=67 ≥100ms=67 ≥200ms=57 ≥500ms=4
+GFX r1-gallery   frames=   73  janky=73 (100.00%)  p50=250ms p90=400ms p95=450ms p99=550ms  slowUI=36 slowDraw=73 highInput=0
+  GFXMEM r1-gallery: pipeline: Skia (OpenGL); GPU total: 106967496 bytes, 102.01 MB (89.34 MB is purgeable); textures: 5.36 MB (33 entries) | 4.71 MB (57 entries); frames: 73
+  FS r1-gallery: n=74 slowest=694.4ms (frame #42; ui 188.0 rt 169.8 issue 55.4 flags 0) first5=[62, 110, 207, 311, 343] >32ms=74 >64ms=72 >100ms=70 span=12817ms
+  r1-gallery HIST: frames=73 slowest-bucket=550ms ≥50ms=73 ≥100ms=69 ≥200ms=59 ≥500ms=2
+GFX r1-album-grid frames=   77  janky=76 (98.70%)  p50=250ms p90=450ms p95=500ms p99=650ms  slowUI=42 slowDraw=76 highInput=1
+  GFXMEM r1-album-grid: pipeline: Skia (OpenGL); GPU total: 110100440 bytes, 105.00 MB (100.27 MB is purgeable); textures: 7.12 MB (92 entries) | 4.29 MB (21 entries); frames: 77
+  FS r1-album-grid: n=76 slowest=883.7ms (frame #31; ui 365.1 rt 128.1 issue 83.9 flags 0) first5=[174, 205, 367, 308, 180] >32ms=76 >64ms=73 >100ms=72 span=11883ms
+  r1-album-grid HIST: frames=77 slowest-bucket=650ms ≥50ms=73 ≥100ms=71 ≥200ms=49 ≥500ms=4
+GFX r1-viewer    frames=  145  janky=144 (99.31%)  p50=150ms p90=250ms p95=300ms p99=350ms  slowUI=63 slowDraw=144 highInput=1
+  r1-viewer HIST: frames=145 slowest-bucket=350ms ≥50ms=135 ≥100ms=119 ≥200ms=63 ≥500ms=0
+GFX r1-settings  frames=   88  janky=86 (97.73%)  p50=250ms p90=400ms p95=400ms p99=500ms  slowUI=33 slowDraw=86 highInput=3
+  GFXMEM r1-settings: pipeline: Skia (OpenGL); GPU total: 86001512 bytes, 82.02 MB (77.60 MB is purgeable); textures: 7.14 MB (111 entries) | 4.10 MB (10 entries); frames: 88
+  FS r1-settings: n=87 slowest=655.5ms (frame #59; ui 168.4 rt 245.2 issue 137.7 flags 0) first5=[117, 211, 276, 209, 379] >32ms=86 >64ms=85 >100ms=83 span=12650ms
+  r1-settings HIST: frames=88 slowest-bucket=500ms ≥50ms=85 ≥100ms=82 ≥200ms=66 ≥500ms=1
+GFX r1-tab-switch frames=   71  janky=71 (100.00%)  p50=200ms p90=600ms p95=750ms p99=1050ms  slowUI=40 slowDraw=71 highInput=0
+  r1-tab-switch HIST: frames=71 slowest-bucket=1050ms ≥50ms=70 ≥100ms=65 ≥200ms=47 ≥500ms=13
+GFX r1-book-open-x5 frames=   78  janky=77 (98.72%)  p50=300ms p90=500ms p95=600ms p99=750ms  slowUI=57 slowDraw=77 highInput=2
+  r1-book-open-x5 HIST: frames=78 slowest-bucket=750ms ≥50ms=78 ≥100ms=72 ≥200ms=63 ≥500ms=14
+GFX r1-surprise-x3 frames=   64  janky=64 (100.00%)  p50=850ms p90=1200ms p95=1300ms p99=1350ms  slowUI=46 slowDraw=64 highInput=0
+  r1-surprise-x3 HIST: frames=64 slowest-bucket=1350ms ≥50ms=64 ≥100ms=64 ≥200ms=60 ≥500ms=46
+GFX r1-cardfull-open-12s frames=   54  janky=53 (98.15%)  p50=300ms p90=450ms p95=550ms p99=850ms  slowUI=8 slowDraw=53 highInput=2
+  FS r1-cardfull: n=55 slowest=799.1ms (frame #3; ui 268.8 rt 257.8 issue 74.8 flags 0) first5=[515, 775, 799, 479, 540] >32ms=55 >64ms=55 >100ms=55 span=12550ms
+MEM after-round-1 (raw) PSS=76220KB  Java=16232KB  Native=25572KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=5)  RSS=159792KB  Views=13 Activities=1
+MEM after-round-1 (trimmed) PSS=72551KB  Java=9996KB  Native=23072KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=5)  RSS=156656KB  Views=13 Activities=1
+## G2. gfxinfo per scenario, round 2 (animations ON, 1080x2400); slowest frames from framestats and the histogram
+GFX r2-home-scroll frames=   68  janky=68 (100.00%)  p50=350ms p90=500ms p95=550ms p99=600ms  slowUI=47 slowDraw=68 highInput=0
+  GFXMEM r2-home-scroll: pipeline: Skia (OpenGL); GPU total: 70534488 bytes, 67.27 MB (62.51 MB is purgeable); textures: 2.35 MB (5 entries) | 7.12 MB (39 entries) | 5.90 MB (13 entries); frames: 68
+  FS r2-home-scroll: n=67 slowest=792.8ms (frame #9; ui 270.6 rt 307.9 issue 104.3 flags 0) first5=[348, 620, 736, 752, 626] >32ms=67 >64ms=67 >100ms=67 span=12300ms
+  r2-home-scroll HIST: frames=68 slowest-bucket=600ms ≥50ms=68 ≥100ms=68 ≥200ms=61 ≥500ms=10
+GFX r2-news      frames=   84  janky=84 (100.00%)  p50=250ms p90=400ms p95=450ms p99=500ms  slowUI=43 slowDraw=84 highInput=0
+  GFXMEM r2-news: pipeline: Skia (OpenGL); GPU total: 88670720 bytes, 84.56 MB (80.31 MB is purgeable); textures: 13.85 KB (1 entry) | 6.25 MB (31 entries) | 7.60 MB (35 entries); frames: 84
+  FS r2-news: n=84 slowest=641.2ms (frame #56; ui 214.5 rt 248.5 issue 68.0 flags 0) first5=[52, 171, 202, 372, 417] >32ms=84 >64ms=83 >100ms=82 span=12267ms
+  r2-news HIST: frames=84 slowest-bucket=500ms ≥50ms=84 ≥100ms=82 ≥200ms=65 ≥500ms=2
+GFX r2-article   frames=   62  janky=62 (100.00%)  p50=250ms p90=450ms p95=450ms p99=500ms  slowUI=23 slowDraw=62 highInput=0
+  GFXMEM r2-article: pipeline: Skia (OpenGL); GPU total: 87815152 bytes, 83.75 MB (79.49 MB is purgeable); textures: 27.70 KB (2 entries) | 7.51 MB (36 entries) | 6.84 MB (29 entries); frames: 62
+  FS r2-article: n=62 slowest=721.0ms (frame #44; ui 119.8 rt 279.1 issue 149.5 flags 0) first5=[49, 231, 400, 562, 603] >32ms=62 >64ms=61 >100ms=61 span=10683ms
+  r2-article HIST: frames=62 slowest-bucket=500ms ≥50ms=61 ≥100ms=61 ≥200ms=47 ≥500ms=2
+GFX r2-calendar  frames=   49  janky=49 (100.00%)  p50=250ms p90=400ms p95=400ms p99=500ms  slowUI=33 slowDraw=49 highInput=0
+  GFXMEM r2-calendar: pipeline: Skia (OpenGL); GPU total: 89164344 bytes, 85.03 MB (82.78 MB is purgeable); textures: 4.24 MB (24 entries) | 4.32 MB (21 entries); frames: 49
+  FS r2-calendar: n=49 slowest=646.6ms (frame #35; ui 176.8 rt 239.8 issue 131.0 flags 0) first5=[68, 93, 188, 299, 414] >32ms=49 >64ms=48 >100ms=45 span=7100ms
+  r2-calendar HIST: frames=49 slowest-bucket=500ms ≥50ms=49 ≥100ms=45 ≥200ms=36 ≥500ms=1
+GFX r2-catalog   frames=   60  janky=60 (100.00%)  p50=400ms p90=700ms p95=800ms p99=900ms  slowUI=41 slowDraw=60 highInput=0
+  GFXMEM r2-catalog: pipeline: Skia (OpenGL); GPU total: 80225880 bytes, 76.51 MB (50.35 MB is purgeable); textures: 299.84 KB (20 entries) | 2.42 MB (32 entries); frames: 60
+  FS r2-catalog: n=61 slowest=1320.4ms (frame #58; ui 546.1 rt 375.0 issue 143.9 flags 0) first5=[153, 288, 589, 752, 819] >32ms=61 >64ms=61 >100ms=61 span=13617ms
+  r2-catalog HIST: frames=60 slowest-bucket=900ms ≥50ms=60 ≥100ms=60 ≥200ms=56 ≥500ms=24
+GFX r2-shelf     frames=    0  janky=0 (0.00%)  p50=4950ms p90=4950ms p95=4950ms p99=4950ms  slowUI=0 slowDraw=0 highInput=0
+  GFXMEM r2-shelf: pipeline: Skia (OpenGL); GPU total: 80523928 bytes, 76.79 MB (50.54 MB is purgeable); textures: 303.72 KB (21 entries) | 2.42 MB (32 entries); frames: 0
+  FS r2-shelf: no frames
+  r2-shelf HIST: frames=0 slowest-bucket=0ms ≥50ms=0 ≥100ms=0 ≥200ms=0 ≥500ms=0
+GFX r2-my        frames=   65  janky=65 (100.00%)  p50=300ms p90=400ms p95=400ms p99=500ms  slowUI=27 slowDraw=65 highInput=0
+  GFXMEM r2-my: pipeline: Skia (OpenGL); GPU total: 84227784 bytes, 80.33 MB (54.07 MB is purgeable); textures: 573.94 KB (31 entries) | 2.25 MB (3 entries); frames: 65
+  FS r2-my: n=65 slowest=737.2ms (frame #61; ui 249.9 rt 269.5 issue 88.2 flags 0) first5=[120, 224, 390, 568, 564] >32ms=65 >64ms=65 >100ms=65 span=11533ms
+  r2-my HIST: frames=65 slowest-bucket=500ms ≥50ms=65 ≥100ms=65 ≥200ms=54 ≥500ms=1
+GFX r2-more      frames=   80  janky=80 (100.00%)  p50=300ms p90=450ms p95=450ms p99=500ms  slowUI=29 slowDraw=80 highInput=0
+  GFXMEM r2-more: pipeline: Skia (OpenGL); GPU total: 86186056 bytes, 82.19 MB (55.66 MB is purgeable); textures: 628.03 KB (47 entries) | 2.25 MB (3 entries); frames: 80
+  FS r2-more: n=80 slowest=683.3ms (frame #29; ui 308.6 rt 192.2 issue 65.2 flags 0) first5=[56, 89, 324, 434, 545] >32ms=80 >64ms=79 >100ms=77 span=13067ms
+  r2-more HIST: frames=80 slowest-bucket=500ms ≥50ms=80 ≥100ms=77 ≥200ms=65 ≥500ms=3
+GFX r2-gallery   frames=   62  janky=62 (100.00%)  p50=300ms p90=450ms p95=450ms p99=700ms  slowUI=31 slowDraw=62 highInput=0
+  GFXMEM r2-gallery: pipeline: Skia (OpenGL); GPU total: 73046592 bytes, 69.66 MB (59.12 MB is purgeable); textures: 5.06 MB (14 entries) | 2.60 MB (41 entries); frames: 62
+  FS r2-gallery: n=62 slowest=783.8ms (frame #11; ui 260.8 rt 191.6 issue 1.6 flags 0) first5=[52, 91, 250, 381, 434] >32ms=62 >64ms=58 >100ms=55 span=12367ms
+  r2-gallery HIST: frames=62 slowest-bucket=700ms ≥50ms=59 ≥100ms=55 ≥200ms=44 ≥500ms=3
+GFX r2-album-grid frames=   78  janky=77 (98.72%)  p50=250ms p90=400ms p95=450ms p99=450ms  slowUI=34 slowDraw=77 highInput=2
+  GFXMEM r2-album-grid: pipeline: Skia (OpenGL); GPU total: 85324024 bytes, 81.37 MB (70.77 MB is purgeable); textures: 6.67 MB (49 entries) | 2.59 MB (40 entries); frames: 78
+  FS r2-album-grid: n=77 slowest=630.4ms (frame #73; ui 190.0 rt 264.2 issue 66.9 flags 0) first5=[167, 266, 382, 415, 345] >32ms=77 >64ms=74 >100ms=73 span=11967ms
+  r2-album-grid HIST: frames=78 slowest-bucket=450ms ≥50ms=75 ≥100ms=72 ≥200ms=59 ≥500ms=0
+GFX r2-viewer    frames=  154  janky=153 (99.35%)  p50=150ms p90=250ms p95=300ms p99=350ms  slowUI=71 slowDraw=153 highInput=3
+  r2-viewer HIST: frames=154 slowest-bucket=350ms ≥50ms=145 ≥100ms=133 ≥200ms=73 ≥500ms=0
+GFX r2-settings  frames=   74  janky=72 (97.30%)  p50=250ms p90=400ms p95=400ms p99=450ms  slowUI=28 slowDraw=72 highInput=4
+  GFXMEM r2-settings: pipeline: Skia (OpenGL); GPU total: 70111624 bytes, 66.86 MB (64.45 MB is purgeable); textures: 6.18 MB (110 entries) | 2.09 MB (8 entries); frames: 74
+  FS r2-settings: n=73 slowest=641.5ms (frame #41; ui 172.9 rt 228.6 issue 54.3 flags 0) first5=[130, 234, 317, 25, 44] >32ms=70 >64ms=67 >100ms=67 span=11633ms
+  r2-settings HIST: frames=74 slowest-bucket=450ms ≥50ms=67 ≥100ms=67 ≥200ms=50 ≥500ms=0
+GFX r2-tab-switch frames=  116  janky=113 (97.41%)  p50=200ms p90=450ms p95=500ms p99=550ms  slowUI=64 slowDraw=113 highInput=4
+  r2-tab-switch HIST: frames=116 slowest-bucket=600ms ≥50ms=115 ≥100ms=109 ≥200ms=71 ≥500ms=6
+GFX r2-book-open-x5 frames=   78  janky=78 (100.00%)  p50=300ms p90=550ms p95=550ms p99=700ms  slowUI=61 slowDraw=78 highInput=0
+  r2-book-open-x5 HIST: frames=78 slowest-bucket=700ms ≥50ms=78 ≥100ms=73 ≥200ms=64 ≥500ms=15
+GFX r2-surprise-x3 frames=   66  janky=66 (100.00%)  p50=600ms p90=1000ms p95=1050ms p99=1250ms  slowUI=31 slowDraw=66 highInput=0
+  r2-surprise-x3 HIST: frames=66 slowest-bucket=1250ms ≥50ms=66 ≥100ms=66 ≥200ms=58 ≥500ms=41
+GFX r2-cardfull-open-12s frames=   56  janky=56 (100.00%)  p50=250ms p90=400ms p95=650ms p99=750ms  slowUI=7 slowDraw=56 highInput=0
+  FS r2-cardfull: n=57 slowest=853.8ms (frame #3; ui 296.5 rt 416.5 issue 178.2 flags 0) first5=[553, 781, 854, 623, 746] >32ms=57 >64ms=57 >100ms=57 span=12417ms
+MEM after-round-2 (raw) PSS=88792KB  Java=17496KB  Native=41372KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=183420KB  Views=13 Activities=1
+MEM after-round-2 (trimmed) PSS=82457KB  Java=10396KB  Native=37348KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=177584KB  Views=13 Activities=1
+## P4. Totals
+scenario          app     n   frames  janky%   p50   p90   p99
+## P5. Diagnostics › „Бързодействие“ (the app's own numbers, JankStats)
+WARN: settings item =Диагностика|=Diagnostics not found
+contact sheets: 4 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: settings item =Диагностика|=Diagnostics not found
+APP W/E lines (pids ['4992', '7287', '7448', '7650', '7769', '7937', '8039', '8116', '8175', '8233', '8348', '8427', '8485', '8733', '12643']): 138 in 11 groups
+      29  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      21  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      21  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      18  W/Parcel: Expecting binder but got null!
+      15  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      15  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      15  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=ff#e#ff-a#e-#e#-#f#f-d#eb#d#, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object g#.s(java.lang.Object)(r
+       1  W/g.chyavorec.app: Long monitor contention with owner OkHttp https://chyavorec.org/... (#) at android.security.net.config.Network
+contact sheets: 4 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4992', '7287', '7448', '7650', '7769', '7937', '8039', '8116', '8175', '8233', '8348', '8427', '8485', '8733', '12643']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 104
+   skipped-frames events=104 max=126 total=5041
+== Davey: 236
+   davey events=236 max=3142ms median=966ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:18 app-mapping.txt; crashes: 0 B

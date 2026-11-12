@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5480', '6228', '11577', '16769', '17769', '18163', '18416', '19562', '20030', '20481']): 783 in 117 groups
+      38  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+      35  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+      31  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+      27  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      26  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+      25  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+      24  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+      24  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+      23  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+      23  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+      22  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+      22  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+      21  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+      19  W/GooglePlayServicesUtil: Google Play services out of date for org.chyavorec.app.  Requires # but found #
+      19  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+      19  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      18  W/GoogleApiManager: The service for mu# is not available: ss#{statusCode=SERVICE_VERSION_UPDATE_REQUIRED, resolution=null, message
+      15  E/eglCodecCommon: glUtilsParamSize: unknow param #
+      14  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[
+      13  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+      13  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+      12  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y
+      10  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+      10  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      10  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+      10  W/ConnectionStatusConfig: Dynamic lookup for intent failed for action: com.google.android.gms.chimera.container.moduleinstall.ModuleInst
+      10  W/GmsClient: unable to connect to service: com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.STAR
+       6  W/BasicSecureTextField: 	at uk#.d(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       6  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       4  W/BasicSecureTextField: 	at qw#.b(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       4  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: MotionEvent { action=ACTION_CANCEL, actionButton=#, id[#]=#, x[#]=#.#
+       3  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       3  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       3  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       3  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       3  W/BasicSecureTextField: 	at y#.a(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       3  W/BasicSecureTextField: 	at qw#.a(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       3  W/BasicSecureTextField: 	at f#.invoke(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       3  W/BasicSecureTextField: 	at yo#.c(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)

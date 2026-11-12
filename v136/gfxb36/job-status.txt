@@ -1,0 +1,1 @@
+part=gfxb36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success

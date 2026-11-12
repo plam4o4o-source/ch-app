@@ -1,0 +1,10 @@
+APP W/E lines (pids ['6536', '6961', '7155', '7359', '7998', '8349', '8647', '8829', '9009', '9628', '9941', '10238', '10426', '11135', '11440', '11618']): 70 in 9 groups
+      17  E/eglCodecCommon: glUtilsParamSize: unknow param #
+      16  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+      16  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      16  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#c#f-caa#-#e#-#fd#-fbb#e#, generation=#)
+       1  W/g.chyavorec.ap: Long monitor contention with owner DefaultDispatcher-worker-# (#) at void java.lang.Object.wait()(Object.java:
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#-#ec-#f#b-#e#-eaf#b#e#a, generation=#)
+       1  W/g.chyavorec.ap: No such thread id for suspend: #
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=ad#a#f#-#d-#-b#cf-b#e#f#, generation=#)

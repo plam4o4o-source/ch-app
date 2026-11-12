@@ -1,0 +1,1 @@
+/data/data/org.chyavorec.app/files: datastore profileInstalled profileinstaller_profileWrittenFor_lastUpdateTime.dat  /data/data/org.chyavorec.app/shared_prefs: app_shortcuts.xml cover_misses.xml stats_anim.xml widget.xml 

@@ -1,0 +1,65 @@
+app pids seen: ['5480', '6228', '11577', '16769', '17769', '18163', '18416', '19562', '20030', '20481']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 21
+   skipped-frames events=21 max=64 total=790
+   11-12 22:20:03.383  5480  5480 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 22:20:04.767  5480  5480 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-12 22:20:05.426  5480  5480 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-12 22:23:38.199  6228  6228 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-12 22:30:46.715 11577 11577 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-12 22:31:46.087 11577 11577 I Choreographer: Skipped 59 frames!  The application may be doing too much work on its main thread.
+   11-12 22:33:45.747 11577 11577 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-12 22:40:55.113 16769 16769 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-12 22:45:07.991 18163 18163 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-12 22:45:08.592 18163 18163 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 22:45:48.027 18416 18416 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   11-12 22:48:15.861 19562 19562 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 23
+   davey events=23 max=1442ms median=890ms
+   11-12 22:20:04.747  5480  5507 I OpenGLRenderer: Davey! duration=1337ms; Flags=1, IntendedVsync=92495017617, Vsync=92828350937, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=92838106115, AnimationStart=928381217
+   11-12 22:20:05.348  5480  5507 I OpenGLRenderer: Davey! duration=1102ms; Flags=1, IntendedVsync=93338152920, Vsync=93854819566, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=93860200726, AnimationStart=938602185
+   11-12 22:20:40.367  6228  6254 I OpenGLRenderer: Davey! duration=826ms; Flags=1, IntendedVsync=128630485858, Vsync=129080485840, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=129093569518, AnimationStart=1290935
+   11-12 22:23:38.195  6228  6254 I OpenGLRenderer: Davey! duration=731ms; Flags=0, IntendedVsync=306534951889, Vsync=306684951883, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=306689746296, AnimationStart=3066897
+   11-12 22:23:38.589  6228  6254 I OpenGLRenderer: Davey! duration=924ms; Flags=0, IntendedVsync=306721139376, Vsync=307287806020, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=307291751005, AnimationStart=3072917
+   11-12 22:26:32.495  6228  6254 I OpenGLRenderer: Davey! duration=747ms; Flags=0, IntendedVsync=480811177562, Vsync=481227844212, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=481239796319, AnimationStart=4812398
+   11-12 22:30:47.568 11577 11601 I OpenGLRenderer: Davey! duration=815ms; Flags=1, IntendedVsync=735841764019, Vsync=736291764001, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=736292862795, AnimationStart=7362928
+   11-12 22:40:55.588 16769 16793 I OpenGLRenderer: Davey! duration=967ms; Flags=1, IntendedVsync=1343681330497, Vsync=1344197997143, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=1344206232666, AnimationStart=1344
+   11-12 22:40:56.031 16769 16793 I OpenGLRenderer: Davey! duration=836ms; Flags=0, IntendedVsync=1344287715090, Vsync=1344737715072, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=1344751853453, AnimationStart=1344
+   11-12 22:43:13.214 16769 16793 I OpenGLRenderer: Davey! duration=706ms; Flags=0, IntendedVsync=1481591512933, Vsync=1481908179587, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=1481921579100, AnimationStart=1481
+   11-12 22:45:08.518 18163 18186 I OpenGLRenderer: Davey! duration=1191ms; Flags=1, IntendedVsync=1596415859576, Vsync=1597082526216, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=1597084428639, AnimationStart=159
+   11-12 22:45:48.361 18416 18442 I OpenGLRenderer: Davey! duration=1214ms; Flags=1, IntendedVsync=1636228068993, Vsync=1637111402291, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=1637119918483, AnimationStart=163
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 22:20:02.023  5469  5469 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:20:37.861  6213  6213 I PERFCHECK: section: C1. Tour of all screens on API 28
+   11-12 22:20:37.928  1946  4359 I ActivityManager: Killing 5480:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-12 22:20:49.902  6334  6334 I PERFCHECK: section: T-api28-light. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-12 22:30:44.676  1946  2088 I ActivityManager: Killing 6228:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-12 22:30:56.891 11689 11689 I PERFCHECK: section: T-api28-dark. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-12 22:40:51.015 16735 16735 I PERFCHECK: section: C2. Home ribbon and the card on API 28
+   11-12 22:40:51.031  1946  2799 I ActivityManager: Killing 11577:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-12 22:42:51.486 17054 17054 I PERFCHECK: section: C3. Surprise ×2, share a book as an image on API 28
+   11-12 22:43:27.148 17350 17350 I PERFCHECK: sh-book28
+   11-12 22:43:48.948 17618 17618 I PERFCHECK: section: C5. Rotation and process death on API 28 book, catalogue, article
+   11-12 22:44:12.889  1946  4247 I ActivityManager: Killing 16769:org.chyavorec.app/u0a86 (adj 700): kill background
+   11-12 22:45:04.538  1946  2712 I ActivityManager: Killing 17769:org.chyavorec.app/u0a86 (adj 700): kill background
+   11-12 22:45:44.362  1946  2774 I ActivityManager: Killing 18163:org.chyavorec.app/u0a86 (adj 700): kill background
+   11-12 22:45:59.324 18534 18534 I PERFCHECK: section: C5b. Scanner screen: manual entry and back ×2, repeated ×8 the API 26 crash came right after this in round 1
+   11-12 22:47:48.562 19369 19369 I PERFCHECK: section: C6. Monkey 2000 seed 1357 on API 28
+   11-12 22:47:48.587 19374 19374 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:48:13.073 19530 19530 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-12 22:48:13.402  1946  4770 I ActivityManager: Killing 18416:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-12 22:48:24.591 19631 19631 I PERFCHECK: monkey start
+   11-12 22:50:22.908 19760 19760 I PERFCHECK: section: C6. Monkey 2000 seed 4242 on API 28
+   11-12 22:50:22.932 19765 19765 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:50:57.362 19997 19997 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-12 22:50:57.453  1946  5073 I ActivityManager: Killing 19562:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-12 22:51:09.276 20111 20111 I PERFCHECK: monkey start
+   11-12 22:52:54.176 20249 20249 I PERFCHECK: section: C6. Monkey 2000 seed 777 on API 28
+   11-12 22:52:54.200 20254 20254 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:53:23.921 20445 20445 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-12 22:53:24.006  1946  4359 I ActivityManager: Killing 20030:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-12 22:53:35.077 20558 20558 I PERFCHECK: monkey start
+   11-12 22:55:08.161 20681 20681 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

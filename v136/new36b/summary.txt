@@ -1,0 +1,367 @@
+part new36b; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 6169 ms
+TEXT SIZE now: text="Много голям" 
+## NP-font130-xlarge (brief). New screens (1080x2400 px, density 420, font_scale 1.3, night no, app locale [bg-BG], rotation 0)
+CAP font130-xlarge/01-home: targets=12 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP font130-xlarge/02-more: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP font130-xlarge/em-01-open: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB stitches: start 0 → after 6 taps + a stroke 17
+CAP font130-xlarge/em-02-stitched: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB undo: 17 → 6
+EMB redo: 6 → 17
+EMB save: text="Моите шевици" 
+CAP font130-xlarge/em-06-after-save: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=0 | Цвят на конеца · Бордо · Злато · Черно · Кремаво · Зелено
+EMB share: chooser OPEN after 2 s; fg android/com.android.internal.app.ChooserActivity
+EMB end: front app
+CAP font130-xlarge/np-01-list: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Старият вестник · Юбилеен вестник · 1959 · Двадесет статии от юбилейния · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
+NEWSPAPER first open: page label after 4316 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP font130-xlarge/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=225 std=29.4
+NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+NEWSPAPER: no next-page button (one page?)
+NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
+offline: airplane=1
+NEWSPAPER reopened OFFLINE: after 2596 ms: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP font130-xlarge/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER offline page content: mean=225 std=29.4
+CAP font130-xlarge/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
+CAP font130-xlarge/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 1909. Организирано читалищно · Влади Илиев, Христо Лалев и  · 1912–1918. Прекъсване от вой · Прекъсване от войните · Балканската война (1912) пре · 17 дек. 1922. Възстановяване
+CAP font130-xlarge/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 1923–1924. Устав и държавно  · Устав и държавно признание · Уставът е приет на 22 януари · 1927. Въздържателно дружеств · Въздържателно дружество „Бор · Основано от активни читалищн
+QUIZ ready after 2001 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Какво се случва в читалището през 1947 г.?" text="Първа копка" text="Въздържателно дружество „Борба“" text="Общностен и информационен център" text="Решение за
+CAP font130-xlarge/qz-01-q1: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Първа копка · Въздържателно дружество „Бор · Общностен и информационен це
+CAP font130-xlarge/qz-01-answered: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | 0 верни от 1 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Първа копка · Въздържателно дружество „Бор · Общностен и информационен це
+CAP font130-xlarge/qz-06-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Сподели резултата
+QUIZ result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Назад" content-desc="Назад" text="Познай Яворец" 
+QUIZ share: chooser OPEN after 2 s; fg android/com.android.internal.app.ChooserActivity
+CAP font130-xlarge/st-01: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Много голям · Палитра
+CAP font130-xlarge/st-02: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Яворец · Злато и жито · Левски · Зелено и сребро · Шевица · Червено, черно и слонова кос
+CAP font130-xlarge/st-03: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Цветовете на телефона, взети · Език · Български · Сезонни украси · Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“
+CAP font130-xlarge/st-04: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“ · Разклати телефона в каталога · Уиджети · Добави уиджета „Читалище Яво · Срокове за връщане, следващо
+WARN: settings item Седмичен преглед|Weekly digest not found
+SETTINGS: no digest row
+CAP font130-xlarge/11-event: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Назад
+NP font130-xlarge: FATAL(any process)=0 of the app=0 ANR=0; app process 7253; logcat app errors: 0
+## NP-font130-xlarge-en (brief). New screens (1080x2400 px, density 420, font_scale 1.3, night no, app locale [en-US], rotation 0)
+CAP font130-xlarge-en/01-home: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=1 [Search books, news, events…] | “Vasil Levski – 1922” · Yavorets village · Messages · Search · Search books, news, events… · Scan barcode
+CAP font130-xlarge-en/02-more: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | THE CENTRE · Messages · Announcements and invitation · Events · Community centre calendar · Activities
+CAP font130-xlarge-en/em-01-open: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Embroidery canvas, 15 by 15  · Thread colour · Burgundy · Gold · Black · Cream
+EMB stitches: start 14 → after 6 taps + a stroke 2
+CAP font130-xlarge-en/em-02-stitched: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Embroidery canvas, 15 by 15  · Thread colour · Burgundy · Gold · Black · Cream
+EMB undo: 2 → 12
+EMB redo: 12 → 2
+EMB save: text="My patterns" 
+CAP font130-xlarge-en/em-06-after-save: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Embroidery canvas, 15 by 15  · Thread colour · Burgundy · Gold · Black · Cream
+EMB share: chooser NOT open after 12 s; fg org.chyavorec.app/org.chyavorec.app.MainActivity
+EMB end: front app
+CAP font130-xlarge-en/np-01-list: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | The old newspaper · Jubilee newspaper · 1959 · Twenty articles from the jub · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
+NEWSPAPER first open: page label after 2598 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Page 1 of 1. Pinch or double-tap to zoom." content-desc="Back" text="Баба Дамяна разказва" content-desc="Open in another app" content-desc="Share" 
+CAP font130-xlarge-en/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Page 1 · Back · Баба Дамяна разказва · Open in another app · Share
+NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=225 std=29.4
+NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Page 1 of 1. Pinch or double-tap to zoom." content-desc="Back" text="Баба Дамяна разказва" content-desc="Open in another app" content-desc="Share" 
+NEWSPAPER: no next-page button (one page?)
+NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
+offline: airplane=1
+NEWSPAPER reopened OFFLINE: after 2586 ms: content-desc="Баба Дамяна разказва. Page 1 of 1. Pinch or double-tap to zoom." content-desc="Back" text="Баба Дамяна разказва" content-desc="Open in another app" content-desc="Share" 
+CAP font130-xlarge-en/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Page 1 · Back · Баба Дамяна разказва · Open in another app · Share
+NEWSPAPER offline page content: mean=225 std=29.4
+CAP font130-xlarge-en/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Timeline · From 1900 to today · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
+CAP font130-xlarge-en/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 1909. Организирано читалищно · Влади Илиев, Христо Лалев и  · 1912–1918. Прекъсване от вой · Прекъсване от войните · Балканската война (1912) пре · 17 дек. 1922. Възстановяване
+CAP font130-xlarge-en/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 1923–1924. Устав и държавно  · Уставът е приет на 22 януари · 1927. Въздържателно дружеств · Въздържателно дружество „Бор · Основано от активни читалищн · 1934. Първият радиоапарат в 
+QUIZ: no question in 45 s: text="Tomorrow will be better — Yavorets has more to tell." text="1/5" text="1 correct out of 5" text="Streak: 1 day in a row" text="New questions tomorrow." text="Share the result" text="Back" content-desc="Back" 
+CAP font130-xlarge-en/qz-01-q1: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Tomorrow will be better — Ya · 1/5 · 1 correct out of 5 · Streak: 1 day in a row · New questions tomorrow. · Share the result
+CAP font130-xlarge-en/qz-01-answered: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Activities · Groups, clubs, projects · About us · History and mission · Gallery · Photos from the website
+QUIZ q1: no next button: text="The history of the centre since 1900" text="Know Yavorets" text="Five questions every day" text="Documents &amp; archive" text="Statute, reports, jubilee newspaper" text="Contacts" text="Address, phone, location" text="THE APP" text="Settings" text="Priv
+CAP font130-xlarge-en/qz-06-result: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | The history of the centre si · Know Yavorets · Five questions every day · Documents & archive · Statute, reports, jubilee ne · Contacts
+QUIZ result: text="The history of the centre since 1900" text="Know Yavorets" text="Five questions every day" text="Documents &amp; archive" text="Statute, reports, jubilee newspaper" text="Contacts" text="Address, phone, location" text="THE APP" text="Settings" text="Privacy policy" text="Add to home screen" te
+QUIZ: no share button: text="The history of the centre since 1900" text="Know Yavorets" text="Five questions every day" text="Documents &amp; archive" text="Statute, reports, jubilee newspaper" text="Contacts" text="Address, phone, location" text="THE APP" text="
+CAP font130-xlarge-en/st-01: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Appearance · Theme · System default · Text size · Extra large · Palette
+CAP font130-xlarge-en/st-02: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Gold and wheat · Green and silver · Red, black and ivory · Black (OLED) · Pure black background in the · Colours from wallpaper
+CAP font130-xlarge-en/st-03: targets=7 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Language · English · Seasonal decorations · Holidays, seasons and tradit · Shake for “Surprise me” · Shake the phone in the catal
+CAP font130-xlarge-en/st-04: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Shake the phone in the catal · Widgets · Add the “Chitalishte Yavoret · Due dates, the next event an · Add “Book of the day” · A different catalogue book o
+WARN: settings item Седмичен преглед|Weekly digest not found
+SETTINGS: no digest row
+CAP font130-xlarge-en/11-event: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Monday, November 16, 2026, i · 80 г. от създаването на ЮНЕС · An event from the centre’s a · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Back
+NP font130-xlarge-en: FATAL(any process)=0 of the app=0 ANR=0; app process 11009; logcat app errors: 0
+TEXT SIZE now: text="Стандартен" 
+## NP-landscape-light (brief). New screens (2400x1080 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 1)
+CAP landscape-light/01-home: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=1 [Търси книга, новина, събитие…] | Начало · Каталог · Моето · Новини · Още · НЧ „Васил Левски – 1922“
+CAP landscape-light/02-more: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP landscape-light/em-01-open: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB stitches: start 0 → after 6 taps + a stroke 15
+CAP landscape-light/em-02-stitched: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB undo: 15 → 6
+EMB redo: 6 → 15
+EMB save: text="Шевицата е запазена" 
+CAP landscape-light/em-06-after-save: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB share: chooser OPEN after 3 s; fg android/com.android.internal.app.ChooserActivity
+EMB end: front app
+CAP landscape-light/np-01-list: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Старият вестник · Юбилеен вестник · 1959 · Двадесет статии от юбилейния · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
+NEWSPAPER first open: page label after 3001 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP landscape-light/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=234 std=20.3
+NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+NEWSPAPER: no next-page button (one page?)
+NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
+offline: airplane=1
+NEWSPAPER reopened OFFLINE: after 2824 ms: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" text="Няма интернет връзк
+CAP landscape-light/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели · Няма интернет връзка
+NEWSPAPER offline page content: mean=235 std=15.9
+CAP landscape-light/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
+CAP landscape-light/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 1909. Организирано читалищно · 1912–1918. Прекъсване от вой · Прекъсване от войните · Балканската война (1912) пре · 17 дек. 1922. Възстановяване · Възстановяване и официално у
+CAP landscape-light/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 1934. Първият радиоапарат в  · Първият радиоапарат в селото · Закупен от читалището. По вр · 1936. Дружество „Воля“. Ново · Дружество „Воля“ · Ново въздържателно дружество
+QUIZ ready after 1967 ms: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." content-desc="Назад" text="Познай Яворец" 
+CAP landscape-light/qz-01-q1: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Назад
+QUIZ q1: no answer buttons: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." content-desc="Назад" text="Познай Яворец" 
+CAP landscape-light/qz-06-result: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Назад
+QUIZ result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." content-desc="Назад" text="Познай Яворец" 
+QUIZ: no share button: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." content-desc="Назад" text="Познай Яворец" 
+CAP landscape-light/st-01: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP landscape-light/st-02: targets=7 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=14 ellipsized=0 | Палитра · Яворец · Яворец · Злато и жито · Левски · Зелено и сребро
+CAP landscape-light/st-03: targets=8 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=10 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+CAP landscape-light/st-04: targets=6 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=10 ellipsized=0 | Цветовете на телефона, взети · Език · Български · Сезонни украси · Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“
+WARN: settings item Седмичен преглед|Weekly digest not found
+SETTINGS: no digest row
+CAP landscape-light/11-event: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Назад
+NP landscape-light: FATAL(any process)=0 of the app=0 ANR=0; app process 15312; logcat app errors: 0
+## NP-landscape-dark (brief). New screens (2400x1080 px, density 420, font_scale 1.0, night yes, app locale [bg-BG], rotation 1)
+CAP landscape-dark/01-home: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=1 [Търси книга, новина, събитие…] | Начало · Каталог · Моето · Новини · Още · НЧ „Васил Левски – 1922“
+CAP landscape-dark/02-more: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP landscape-dark/em-01-open: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB stitches: start 19 → after 6 taps + a stroke 4
+CAP landscape-dark/em-02-stitched: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB undo: 4 → 13
+EMB redo: 13 → 4
+EMB save: 
+CAP landscape-dark/em-06-after-save: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB share: chooser OPEN after 2 s; fg android/com.android.internal.app.ChooserActivity
+EMB end: front app
+CAP landscape-dark/np-01-list: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Старият вестник · Юбилеен вестник · 1959 · Двадесет статии от юбилейния · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
+NEWSPAPER first open: page label after 2763 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP landscape-dark/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=28 std=17.5
+NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+NEWSPAPER: no next-page button (one page?)
+NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
+offline: airplane=1
+NEWSPAPER reopened OFFLINE: after 2334 ms: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP landscape-dark/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER offline page content: mean=28 std=17.5
+CAP landscape-dark/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
+CAP landscape-dark/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | 1909. Организирано читалищно · 1912–1918. Прекъсване от вой · Прекъсване от войните · Балканската война (1912) пре · 17 дек. 1922. Възстановяване · Възстановяване и официално у
+CAP landscape-dark/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 1934. Първият радиоапарат в  · Закупен от читалището. По вр · 1936. Дружество „Воля“. Ново · Дружество „Воля“ · Ново въздържателно дружество · 1947. Решение за собствена с
+QUIZ ready after 1963 ms: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." content-desc="Назад" text="Познай Яворец" 
+CAP landscape-dark/qz-01-q1: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Назад
+QUIZ q1: no answer buttons: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." content-desc="Назад" text="Познай Яворец" 
+CAP landscape-dark/qz-06-result: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Назад
+QUIZ result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." content-desc="Назад" text="Познай Яворец" 
+QUIZ: no share button: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." content-desc="Назад" text="Познай Яворец" 
+CAP landscape-dark/st-01: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP landscape-dark/st-02: targets=7 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=14 ellipsized=0 | Палитра · Яворец · Яворец · Злато и жито · Левски · Зелено и сребро
+CAP landscape-dark/st-03: targets=6 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+CAP landscape-dark/st-04: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Език · Български · Сезонни украси · Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“ · Разклати телефона в каталога
+WARN: settings item Седмичен преглед|Weekly digest not found
+SETTINGS: no digest row
+CAP landscape-dark/11-event: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Назад
+NP landscape-dark: FATAL(any process)=0 of the app=0 ANR=0; app process 18871; logcat app errors: 0
+## NP-w320dp (brief). New screens (1080x2400 px, density 540, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
+CAP w320dp/01-home: targets=12 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=18 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP w320dp/02-more: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP w320dp/em-01-open: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB stitches: start 8 → after 6 taps + a stroke 25
+CAP w320dp/em-02-stitched: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB undo: 25 → 14
+EMB redo: 14 → 25
+EMB save: text="Моите шевици" text="Шевицата е запазена" 
+CAP w320dp/em-06-after-save: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=5 | front: app | texts=27 ellipsized=0 | Бордо · Злато · Черно · Кремаво · Зелено · Бод
+EMB share: chooser OPEN after 2 s; fg android/com.android.internal.app.ChooserActivity
+EMB end: front app
+CAP w320dp/np-01-list: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Старият вестник · Юбилеен вестник · 1959 · Двадесет статии от юбилейния · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
+NEWSPAPER first open: page label after 2589 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP w320dp/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=225 std=29.2
+NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+NEWSPAPER: no next-page button (one page?)
+NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
+offline: airplane=1
+NEWSPAPER reopened OFFLINE: after 2291 ms: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP w320dp/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER offline page content: mean=225 std=29.2
+CAP w320dp/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
+CAP w320dp/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 1909. Организирано читалищно · Влади Илиев, Христо Лалев и  · 1912–1918. Прекъсване от вой · Прекъсване от войните · Балканската война (1912) пре · 17 дек. 1922. Възстановяване
+CAP w320dp/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 1927. Въздържателно дружеств · Основано от активни читалищн · 1934. Първият радиоапарат в  · Първият радиоапарат в селото · Закупен от читалището. По вр · 1936. Дружество „Воля“. Ново
+QUIZ ready after 1960 ms: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Назад" content-desc="Назад" 
+CAP w320dp/qz-01-q1: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Сподели резултата
+CAP w320dp/qz-01-answered: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=17 ellipsized=0 | Бод по бод, като на кърпа · Старият вестник · Статии от юбилейния вестник · Лента на времето · Историята на читалището от 1 · Познай Яворец
+QUIZ q1: no next button: text="Устав, отчети, юбилейният вестник" text="Контакти" text="Адрес, телефон, местоположение" text="ПРИЛОЖЕНИЕТО" text="Настройки" text="Политика за поверителност" text="Добави на началния екран" text="За приложението" text="Още" content-desc="Търсене" text="
+CAP w320dp/qz-06-result: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=15 ellipsized=0 | Устав, отчети, юбилейният ве · Контакти · Адрес, телефон, местоположен · ПРИЛОЖЕНИЕТО · Настройки · Политика за поверителност
+QUIZ result: text="Устав, отчети, юбилейният вестник" text="Контакти" text="Адрес, телефон, местоположение" text="ПРИЛОЖЕНИЕТО" text="Настройки" text="Политика за поверителност" text="Добави на началния екран" text="За приложението" text="Още" content-desc="Търсене" text="Начало" text="Каталог" 
+QUIZ: no share button: text="Устав, отчети, юбилейният вестник" text="Контакти" text="Адрес, телефон, местоположение" text="ПРИЛОЖЕНИЕТО" text="Настройки" text="Политика за поверителност" text="Добави на началния екран" text="За приложението" text="Още" content-d
+CAP w320dp/st-01: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP w320dp/st-02: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Злато и жито · Зелено и сребро · Червено, черно и слонова кос · Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета
+CAP w320dp/st-03: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | Цветовете на телефона, взети · Език · Български · Сезонни украси · Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“
+CAP w320dp/st-04: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | Разклати телефона в каталога · Уиджети · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“ · Всеки ден друга книга от кат
+WARN: settings item Седмичен преглед|Weekly digest not found
+SETTINGS: no digest row
+CAP w320dp/11-event: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Назад · Сподели
+NP w320dp: FATAL(any process)=0 of the app=0 ANR=0; app process 22105; logcat app errors: 0
+## NP-tablet-1280x800dp (brief). New screens (2560x1600 px, density 320, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
+CAP tablet-1280x800dp/01-home: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=1 [Търси книга, новина, събитие…] | Начало · Каталог · Моето · Новини · Още · НЧ „Васил Левски – 1922“
+CAP tablet-1280x800dp/02-more: targets=20 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=34 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP tablet-1280x800dp/em-01-open: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB stitches: start 25 → after 6 taps + a stroke 18
+CAP tablet-1280x800dp/em-02-stitched: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB undo: 18 → 25
+EMB redo: 25 → 18
+EMB save: text="Моите шевици" 
+CAP tablet-1280x800dp/em-06-after-save: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB share: chooser OPEN after 3 s; fg android/com.android.internal.app.ChooserActivity
+EMB end: front app
+CAP tablet-1280x800dp/np-01-list: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Старият вестник · Юбилеен вестник · 1959 · Двадесет статии от юбилейния · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
+NEWSPAPER first open: page label after 2694 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP tablet-1280x800dp/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=229 std=32.1
+NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+NEWSPAPER: no next-page button (one page?)
+NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
+offline: airplane=1
+NEWSPAPER reopened OFFLINE: after 2453 ms: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP tablet-1280x800dp/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER offline page content: mean=229 std=32.1
+CAP tablet-1280x800dp/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
+CAP tablet-1280x800dp/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | 1927. Въздържателно дружеств · 1934. Първият радиоапарат в  · Първият радиоапарат в селото · Закупен от читалището. По вр · 1936. Дружество „Воля“. Ново · Дружество „Воля“
+CAP tablet-1280x800dp/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | 1936. Дружество „Воля“. Ново · 1947. Решение за собствена с · Решение за собствена сграда · Започва отчуждаване на терен · 17 март 1958. Първа копка. С · Първа копка
+QUIZ ready after 1958 ms: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Назад" content-desc="Назад" 
+CAP tablet-1280x800dp/qz-01-q1: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Сподели резултата
+CAP tablet-1280x800dp/qz-01-answered: targets=20 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=34 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+QUIZ q1: no next button: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" text="За читалището" 
+CAP tablet-1280x800dp/qz-06-result: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=34 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Съобщения
+QUIZ result: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" text="За читалището" 
+QUIZ: no share button: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" text="За читалището" 
+CAP tablet-1280x800dp/st-01: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP tablet-1280x800dp/st-02: targets=9 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+CAP tablet-1280x800dp/st-03: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Разклати телефона в каталога · Уиджети · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“ · Всеки ден друга книга от кат
+CAP tablet-1280x800dp/st-04: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Проверка при отваряне и два  · Провери за нова версия · Версия 1.2.36 · Данни · Корици от интернет · Корици по ISBN от covers.ope
+WARN: settings item Седмичен преглед|Weekly digest not found
+SETTINGS: no digest row
+CAP tablet-1280x800dp/11-event: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · Добави в календара · Напомни ми · Маршрут · Виж публикацията · 80 г. от създаването на ЮНЕС
+NP tablet-1280x800dp: FATAL(any process)=0 of the app=0 ANR=0; app process 25628; logcat app errors: 0
+## NP-tablet-landscape (brief). New screens (1600x2560 px, density 320, font_scale 1.0, night no, app locale [bg-BG], rotation 1)
+CAP tablet-landscape/01-home: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=43 ellipsized=1 [Търси книга, новина, събитие…] | Начало · Каталог · Моето · Новини · Още · НЧ „Васил Левски – 1922“
+CAP tablet-landscape/02-more: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP tablet-landscape/em-01-open: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB stitches: start 18 → after 6 taps + a stroke 25
+CAP tablet-landscape/em-02-stitched: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB undo: 25 → 18
+EMB redo: 18 → 25
+EMB save: text="Моите шевици" 
+CAP tablet-landscape/em-06-after-save: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB share: chooser OPEN after 2 s; fg android/com.android.internal.app.ChooserActivity
+EMB end: front app
+CAP tablet-landscape/np-01-list: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | Старият вестник · Юбилеен вестник · 1959 · Двадесет статии от юбилейния · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
+NEWSPAPER first open: page label after 2439 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP tablet-landscape/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=228 std=34.8
+NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+NEWSPAPER: no next-page button (one page?)
+NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
+offline: airplane=1
+NEWSPAPER reopened OFFLINE: after 2581 ms: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" text="Няма интернет връзк
+CAP tablet-landscape/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели · Няма интернет връзка
+NEWSPAPER offline page content: mean=229 std=35.1
+CAP tablet-landscape/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=30 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
+CAP tablet-landscape/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=30 ellipsized=0 | 1923–1924. Устав и държавно  · 1927. Въздържателно дружеств · Въздържателно дружество „Бор · Основано от активни читалищн · 1934. Първият радиоапарат в  · Първият радиоапарат в селото
+CAP tablet-landscape/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=30 ellipsized=0 | 1923–1924. Устав и държавно  · 1927. Въздържателно дружеств · Въздържателно дружество „Бор · Основано от активни читалищн · 1934. Първият радиоапарат в  · Първият радиоапарат в селото
+QUIZ ready after 1997 ms: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Назад" content-desc="Назад" 
+CAP tablet-landscape/qz-01-q1: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Сподели резултата
+CAP tablet-landscape/qz-01-answered: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+QUIZ q1: no next button: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ЧИТАЛИЩЕТО" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" 
+CAP tablet-landscape/qz-06-result: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+QUIZ result: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ЧИТАЛИЩЕТО" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" 
+QUIZ: no share button: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ЧИТАЛИЩЕТО" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" 
+CAP tablet-landscape/st-01: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP tablet-landscape/st-02: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=31 ellipsized=0 | Сезонни украси · Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“ · Разклати телефона в каталога · Уиджети · Добави уиджета „Читалище Яво
+CAP tablet-landscape/st-03: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | Известия · Избери известията · Заемания, събития, съобщения · Обновления · Автоматично обновяване · Проверка при отваряне и два 
+CAP tablet-landscape/st-04: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | Известия · Избери известията · Заемания, събития, съобщения · Обновления · Автоматично обновяване · Проверка при отваряне и два 
+WARN: settings item Седмичен преглед|Weekly digest not found
+SETTINGS: no digest row
+CAP tablet-landscape/11-event: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Събота, 21 ноември 2026, сле · Добави в календара · Напомни ми · Маршрут · Виж публикацията · Панайот Пипков · Ден на семе
+NP tablet-landscape: FATAL(any process)=0 of the app=0 ANR=0; app process 28799; logcat app errors: 0
+## NA. Accessibility over all new screens
+A11Y AGG: 131 screens analysed, 0 dumps failed; totals MISSING=17 DOUBLE=0 SAME-LABEL=5 SMALL(<48dp)=18
+== MISSING: 16 distinct
+   View@[160,1455][2560,1551]  [2 screens: 02-more, qz-01-answered]
+   View@[0,296][1080,312]  [1 screens: st-03]
+   View@[42,1974][540,2127]  [1 screens: 01-home]
+   View@[540,1974][1038,2127]  [1 screens: 01-home]
+   View@[128,231][2018,233]  [1 screens: st-02]
+   View@[128,1009][2018,1080]  [1 screens: st-03]
+   View@[128,231][2018,239]  [1 screens: st-02]
+   View@[170,231][754,238]  [1 screens: st-03]
+   View@[780,231][1365,238]  [1 screens: st-03]
+   View@[1391,231][1976,238]  [1 screens: st-03]
+   View@[128,994][2018,1080]  [1 screens: st-04]
+   View@[0,1454][1440,1550]  [1 screens: st-02]
+   View@[54,1958][540,2049]  [1 screens: 01-home]
+   View@[540,1958][1026,2049]  [1 screens: 01-home]
+   View@[54,344][519,438]  [1 screens: qz-01-answered]
+   View@[54,344][519,479]  [1 screens: qz-06-result]
+== SMALL: 10 distinct
+   ''  [5 screens: 01-home, qz-01-answered, qz-06-result, st-02, st-03]
+   'Цветовете на телефона, взети о'  [1 screens: st-04]
+   'Сезонни украси Празници, сезон'  [1 screens: st-02]
+   'Бордо'  [1 screens: em-06-after-save]
+   'Злато'  [1 screens: em-06-after-save]
+   'Черно'  [1 screens: em-06-after-save]
+   'Кремаво'  [1 screens: em-06-after-save]
+   'Зелено'  [1 screens: em-06-after-save]
+   'Бод по бод, като на кърпа'  [1 screens: qz-01-answered]
+   'Устав, отчети, юбилейният вест'  [1 screens: qz-06-result]
+== SAME-LABEL: 2 distinct
+   'Назад' x2  [2 screens: qz-01-q1, qz-06-result]
+   'Back' x2  [1 screens: qz-01-q1]
+== DOUBLE: 0 distinct
+contact sheets: 16 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 8 | Първи кадър: медиана 2734 мс, последен 1143 мс | Пълно показване: медиана 2975 мс, последно 1836 мс | Насечени кадри по екрани | embroidery: 9,1 % от 197 кадъра · най-бавен 692 мс | общо с видеокарта
+DIAG SCREEN (scrolled): text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36 (1507400)" text="Профил: чака" text="Студен старт · 8" text="Първи кадър: медиана 2734 мс, последен 1143 мс" text="Пълно показване: медиана 2975 мс, последно 1836 мс" text="Насечени кадри по екрани" text="embroidery: 9,1 % от 197 кадъра · най-бавен 692 мс" text="общо с видеокартата: средно 249 мс, най-бавен 733 мс" text="more: 5,2 % от 305 кадъра · най-бавен 585 мс" text="общо с видеокартата: средно 290 мс, най-бавен 787 мс" text="newspaper/read: 1,9 % от 52 кадъра · най-бавен 310 мс" text="общо с видеокартата: средно 335 мс, най-бавен 715 мс" 
+APP W/E lines (pids ['5375', '7253', '11009', '15312', '18871', '22105', '25628', '28799']): 95 in 12 groups
+      22  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      21  W/Parcel: Expecting binder but got null!
+       8  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       8  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       8  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       8  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       8  W/Gralloc4: allocator #.x is not supported
+       7  E/FrameEvents: updateAcquireFence: Did not find frame.
+       2  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=ab#da-c#-#e-#b#-#a#a#bd#e, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner main (#) at void ed.Y()(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#f
+       1  W/g.chyavorec.app: No such thread id for suspend: #
+contact sheets: 17 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5375', '7253', '11009', '15312', '18871', '22105', '25628', '28799']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 44
+   skipped-frames events=44 max=112 total=2184
+== Davey: 78
+   davey events=78 max=2532ms median=933ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B

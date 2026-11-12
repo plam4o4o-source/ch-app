@@ -1,0 +1,100 @@
+app pids seen: ['5162', '6171', '8335', '12353', '17300', '20041', '20602', '21115']
+== FATAL: 2
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: FATAL EXCEPTION: main
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: Process: org.chyavorec.app, PID: 6171
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: java.lang.IllegalArgumentException: layouts are not part of the same hierarchy
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at to1.j(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:3)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at ps3.f1(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:90)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at lb3.N(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:25)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at ob3.c(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:18)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at gb5.j(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:168)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at hb3.d(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:7)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at kb3.W0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:5)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at kb3.h0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:9)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at d74.i(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:12)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at mb3.a(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:79)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at uk5.d(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:246)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at nb3.G0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:127)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at nb3.h0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:2)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at d74.h(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:24)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at md3.G0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:133)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at md3.h0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:6)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at wu4.j(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:130)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at ld3.a(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:241)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at md3.w(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:108)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at md3.B0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:142)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at jn2.h0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:41)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at d74.k(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:71)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: Process: org.chyavorec.app, PID: 6171
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: java.lang.IllegalArgumentException: layouts are not part of the same hierarchy
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at to1.j(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:3)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at ps3.f1(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:90)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at lb3.N(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:25)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at ob3.c(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:18)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at gb5.j(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:168)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at hb3.d(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:7)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at kb3.W0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:5)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at kb3.h0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:9)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at d74.i(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:12)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at mb3.a(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:79)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at uk5.d(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:246)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at nb3.G0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:127)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at nb3.h0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:2)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at d74.h(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:24)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at md3.G0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:133)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at md3.h0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:6)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at wu4.j(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:130)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at ld3.a(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:241)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at md3.w(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:108)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at md3.B0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:142)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at jn2.h0(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:41)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at d74.k(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:71)
+   11-12 22:23:52.282  6171  6171 E AndroidRuntime: 	at yj.j(r8-map-id-ccf44fe4c19ee3d569b2f51db0cfd22ad530fa00c14125f4ae3b5561670fc914:244)
+== ANR: 0
+== StrictMode: 0
+== Skipped: 14
+   skipped-frames events=14 max=51 total=518
+   11-12 22:20:49.914  6171  6171 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-12 22:29:05.816  8335  8335 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-12 22:37:07.901 12353 12353 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-12 22:46:50.329 17300 17300 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-12 22:54:29.849 20041 20041 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-12 22:54:59.802 20041 20041 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 22:55:06.872 20041 20041 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-12 22:56:56.482 20602 20602 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-12 22:59:52.005 21115 21115 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-12 23:00:56.379 21115 21115 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-12 23:01:01.398 21115 21115 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-12 23:01:06.886 21115 21115 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 22:20:12.971  5140  5140 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:20:47.565  6152  6152 I PERFCHECK: section: C1. Tour of all screens on API 26
+   11-12 22:20:47.608  1613  2070 I ActivityManager: Killing 5162:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:20:59.747  6305  6305 I PERFCHECK: section: T-api26-light. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-12 22:28:52.618  1613  3666 I ActivityManager: Killing 6171:org.chyavorec.app/u0a77 (adj 199): crash
+   11-12 22:37:05.670  1613  3645 I ActivityManager: Killing 8335:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:37:17.947 12478 12478 I PERFCHECK: section: T-api26-dark. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-12 22:46:46.064 17278 17278 I PERFCHECK: section: C2. Home ribbon and the card on API 26
+   11-12 22:46:46.077  1613  4275 I ActivityManager: Killing 12353:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:48:45.965 17565 17565 I PERFCHECK: section: C3. Surprise ×2, share a book as an image on API 26
+   11-12 22:49:24.097 17851 17851 I PERFCHECK: sh-book26
+   11-12 22:49:46.655 18142 18142 I PERFCHECK: section: C5. Rotation and process death on API 26 book, catalogue, article
+   11-12 22:52:12.677 19033 19033 I PERFCHECK: section: C5b. Scanner screen: manual entry and back ×2, repeated ×8 the API 26 crash came right after this in round 1
+   11-12 22:54:02.763 19845 19845 I PERFCHECK: section: C6. Monkey 2000 seed 1357 on API 26
+   11-12 22:54:02.783 19850 19850 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:54:27.138 19993 19993 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-12 22:54:27.443  1613  4140 I ActivityManager: Killing 17300:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:54:37.932 20118 20118 I PERFCHECK: monkey start
+   11-12 22:56:18.461 20313 20313 I PERFCHECK: section: C6. Monkey 2000 seed 4242 on API 26
+   11-12 22:56:18.481 20318 20318 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:56:53.904 20554 20554 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-12 22:56:54.251  1613  4272 I ActivityManager: Killing 20041:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:57:04.919 20671 20671 I PERFCHECK: monkey start
+   11-12 22:59:18.938 20877 20877 I PERFCHECK: section: C6. Monkey 2000 seed 777 on API 26
+   11-12 22:59:18.969 20882 20882 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:59:49.395 21065 21065 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-12 22:59:49.721  1613  1994 I ActivityManager: Killing 20602:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 23:00:00.324 21196 21196 I PERFCHECK: monkey start
+   11-12 23:01:50.788 21359 21359 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

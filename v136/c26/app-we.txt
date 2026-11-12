@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5162', '6171', '8335', '12353', '17300', '20041', '20602', '21115']): 1087 in 191 groups
+      98  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+      91  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+      89  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+      86  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+      82  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+      20  W/GooglePlayServicesUtil: Google Play services out of date for org.chyavorec.app.  Requires # but found #
+      20  W/GoogleApiManager: The service for mu# is not available: ss#{statusCode=SERVICE_VERSION_UPDATE_REQUIRED, resolution=null, message
+      18  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      16  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+      14  E/ResourceType: Style contains key with bad entry: #
+      14  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+      13  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+      12  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+      12  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+      12  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+      11  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      10  W/ConnectionStatusConfig: Dynamic lookup for intent failed for action: com.google.android.gms.chimera.container.moduleinstall.ModuleInst
+      10  W/GmsClient: unable to connect to service: com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.STAR
+       9  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       9  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+       9  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       9  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+       8  W/zygote64: Unexpected CPU variant for X# using defaults: x#_#
+       8  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       8  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       7  W/BasicSecureTextField: 	at uk#.d(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       7  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       7  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       6  E/AndroidRuntime: 	at ld#.a(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       6  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[
+       5  E/AndroidRuntime: 	at y.j(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       5  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y
+       4  W/BasicSecureTextField: 	at qw#.b(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at in#.d(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at mb#.a(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at px#.c(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at nb#.I#(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at nb#.d(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at qy.c(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at ex#.d(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)

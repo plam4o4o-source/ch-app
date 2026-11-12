@@ -1,0 +1,30 @@
+app pids seen: ['5347', '6130', '11172', '14352']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=41 total=177
+   11-12 22:20:33.134  5347  5347 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-12 22:21:08.509  6130  6130 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-12 22:29:15.763 11172 11172 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-12 22:34:53.336 14352 14352 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-12 22:34:53.885 14352 14352 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 22:20:31.350  5304  5304 I PERFCHECK: section: W. First launch and warm-up
+   11-12 22:21:06.264  1614  2562 I ActivityManager: Killing 5347:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:21:18.557  6256  6256 I PERFCHECK: section: NP-bg-light full. New screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-12 22:21:18.579  6259  6259 I PERFCHECK: np-bg-light
+   11-12 22:23:27.854  7775  7775 I PERFCHECK: np-read-bg-light
+   11-12 22:29:13.531  1614  3934 I ActivityManager: Killing 6130:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:29:26.080 11290 11290 I PERFCHECK: section: NP-bg-dark brief. New screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-12 22:29:26.112 11293 11293 I PERFCHECK: np-bg-dark
+   11-12 22:30:41.714 12019 12019 I PERFCHECK: np-read-bg-dark
+   11-12 22:34:51.426  1614  1791 I ActivityManager: Killing 11172:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-12 22:35:04.132 14478 14478 I PERFCHECK: section: NP-en-light brief. New screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-12 22:35:04.162 14481 14481 I PERFCHECK: np-en-light
+   11-12 22:36:20.025 15208 15208 I PERFCHECK: np-read-en-light
+   11-12 22:39:56.477 17274 17274 I PERFCHECK: section: NA. Accessibility over all new screens
+   11-12 22:39:56.521 17279 17279 I PERFCHECK: section: NP-D. Diagnostics › Бързодействие
+   11-12 22:40:44.266 17670 17670 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

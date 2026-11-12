@@ -1,0 +1,41 @@
+APP W/E lines (pids ['3844', '5346', '11155', '16017', '18396', '18811', '19097', '19464', '20483', '22414']): 2525 in 216 groups
+     640  W/Codec2Client: query -- param skipped: index = #.
+     469  W/ColorUtils: expected specified color aspects (#:#:#:#)
+     217  W/HWUI: Image decoding logging dropped!
+     162  E/MediaCodec: Media Quality Service not found.
+     162  W/CCodec: This behavior is subject to change. It is recommended that app developers double check whether the requested m
+     162  E/g.chyavorec.app: Failed to query component interface for required system resources: #
+      49  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+      41  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      20  W/RemoteInputConnectionImpl: requestCursorUpdates on inactive InputConnection
+      17  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@c#bbad#
+      16  W/HWUI: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      16  W/HWUI: Failed to initialize #-# format, error = EGL_SUCCESS
+      12  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#fa#b#d
+      10  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      10  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, 
+      10  E/g.chyavorec.app: Not starting debugger since process cannot load the jdwp agent.
+      10  E/ashmem: Pinning is deprecated since Android Q. Please use trim or other methods.
+      10  W/HWUI: Unknown dataspace #
+       8  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=tv#@#e#
+       8  W/BasicSecureTextField: 	at uk#.d(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       8  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       8  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, metaSt
+       6  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       6  W/InteractionJankMonitor: Initializing without READ_DEVICE_CONFIG permission. enabled=true, interval=#, missedFrameThreshold=#, frameTim
+       6  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       6  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@bfd#e#c
+       5  W/g.chyavorec.app: Missing inline cache for java.lang.Object rn.s(java.lang.Object)
+       5  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       5  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       5  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#a#b#d
+       5  E/FrameTracker: force finish cuj, time out: J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       4  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       4  W/g.chyavorec.app: Missing inline cache for void wm#.u()
+       4  W/BasicSecureTextField: 	at qw#.b(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at in#.d(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at mb#.a(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at px#.c(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at nb#.I#(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at nb#.d(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       4  W/BasicSecureTextField: 	at qy.c(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)

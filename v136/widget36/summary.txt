@@ -1,0 +1,73 @@
+part widget36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3507 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## W1. Launcher icon (all apps) and the widget list
+LAUNCHER drawer: label @ not found; text="Calendar" content-desc="Calendar" text="Camera" content-desc="Camera" text="Chrome" content-desc="Chrome" text="Clock" content-desc="Clock" text="Contacts" content-desc="Contacts" text="Drive" content-desc="Drive" 
+WIDGET n36 long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET n36 picker: our row @ 437 927; size label @ 540 1835; texts: Chitalishte Yavorets|3 × 2|Chitalishte Yavorets|Chitalishte Yavorets|
+## W2. Widgets added from Settings (the pin buttons)
+WIDGET button 'Книга на деня' present; now tapping
+PIN book dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Book of the day" text="Book of the day" text="Under the Yoke" text="Ivan Vazov" text="Book of the day" content-desc="Book of the day widget" text="3 × 2" content-desc="3 wide by 2 high" tex
+PIN book: no confirm button
+HOME after the Book-of-the-day pin: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+widgets of ours bound: 
+WIDGET button 'Читалище Яворец' tapped
+PIN main dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Chitalishte Yavorets" text="Chitalishte Yavorets" text="Scan" text="Catalogue" text="2 books to return" text="in 3 days" text="Oct 15" text="Next event" text="Literary evening" text="Octobe
+PIN main: no confirm button
+HOME after both pins: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+widgets of ours bound: 
+WIDGET dark: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+## W3. Widget click-through; the Book-of-the-day widget after the catalogue is loaded
+WIDGET after the catalogue loaded: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET click catalog: 'widget_catalog' not on the home screen
+WIDGET click scan: 'widget_scan' not on the home screen
+WIDGET click event: 'widget_event' not on the home screen
+WIDGET click app: 't:Chitalishte Yavorets|Читалище Яворец' not on the home screen
+## W4. Pinned shortcut „Шевица“ from Още › Добави на началния екран
+PIN sheet: content-desc="Затваряне на таблицата" content-desc="Манипулатор за преместване с плъзгане" text="Добави на началния екран" text="Пряк път на началния екран на телефона, който отваря избраното с един допир. Етикетът не показва лични данни." text="Моите книги" text="Събития" text="Новини" text="Читате
+PIN shortcut dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" text="Шевица" content-desc="Шевица widget" text="1 × 1" content-desc="1 wide by 1 high" text="Cancel" text="Add to home screen" 
+PIN shortcut: no confirm button
+shortcut icon on home: not found
+WIDGET36: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 3 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 1542 мс, последен 1542 мс | Пълно показване: медиана 1542 мс, последно 1542 мс | Топъл старт · 5 | Първи кадър: медиана 359 мс, последен 404 мс | Насечени кадри по екрани | more:
+DIAG SCREEN (scrolled): text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36 (1507400)" text="Профил: чака" text="Студен старт · 1" text="Първи кадър: медиана 1542 мс, последен 1542 мс" text="Пълно показване: медиана 1542 мс, последно 1542 мс" text="Топъл старт · 5" text="Първи кадър: медиана 359 мс, последен 404 мс" text="Насечени кадри по екрани" text="more: 7,5 % от 80 кадъра · най-бавен 421 мс" text="общо с видеокартата: средно 222 мс, най-бавен 561 мс" text="onboarding: 4,3 % от 47 кадъра · най-бавен 682 мс" text="общо с видеокартата: средно 441 мс, най-бавен 1426 мс" text="settings: 3,0 % от 134 кадъра · най-бавен
+APP W/E lines (pids ['5984']): 17 in 9 groups
+       7  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/Parcel: Expecting binder but got null!
+       2  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       1  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       1  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       1  W/Gralloc4: allocator #.x is not supported
+       1  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+contact sheets: 4 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5984']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=100 total=209
+== Davey: 11
+   davey events=11 max=2124ms median=992ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B

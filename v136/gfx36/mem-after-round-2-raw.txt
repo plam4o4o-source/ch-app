@@ -1,0 +1,62 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 1498808 Realtime: 1498808
+
+** MEMINFO in pid 12438 [org.chyavorec.app] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap    34543    34476       24       47    35660    44976    16279     5317
+  Dalvik Heap    18302    17900      192      191    19580    17644     8822     8822
+ Dalvik Other     7730     3320       16       35    13172                           
+        Stack     1248     1248        0        0     1252                           
+       Ashmem       18        0        0        0      532                           
+    Other dev        9        4        4        0      292                           
+     .so mmap     6217      288     1992       18    35948                           
+    .jar mmap     4057        0      900        0    30452                           
+    .apk mmap      568        0      288        0     1656                           
+    .ttf mmap      990        0      884        0     1192                           
+    .dex mmap     7490       12     7460        0     7992                           
+    .oat mmap     1058        0        8        0    13916                           
+    .art mmap     2001     1160      252      196    12952                           
+   Other mmap     1137        8      936        0     2360                           
+      Unknown      546      528        0        0      844                           
+        TOTAL    86401    58944    12956      487   177800    62620    25101    14139
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:    19312                          32532
+         Native Heap:    34476                          35660
+                Code:    11848                          99904
+               Stack:     1248                           1252
+            Graphics:        0                              0
+       Private Other:     5016
+              System:    14501
+             Unknown:                                    8452
+ 
+           TOTAL PSS:    86401            TOTAL RSS:   177800       TOTAL SWAP PSS:      487
+ 
+ Objects
+               Views:       13         ViewRootImpl:        1
+         AppContexts:        5           Activities:        1
+              Assets:       16        AssetManagers:        0
+       Local Binders:       72        Proxy Binders:       51
+       Parcel memory:        8         Parcel count:       32
+    Death Recipients:        0      OpenSSL Sockets:        2
+            WebViews:        0
+ 
+ SQL
+         MEMORY_USED:     2294
+  PAGECACHE_OVERFLOW:     1631          MALLOC_SIZE:       46
+ 
+ DATABASES
+      pgsz     dbsz   Lookaside(b)          cache  Dbname
+         4      104             85       68/85/25  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb
+         4        8                         0/0/0    (attached) temp
+         4      104             57         7/24/6  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb (1)
+         4     2064             17         0/20/1  /data/user/0/org.chyavorec.app/databases/catalog-index.db
+         4        8                         0/0/0    (attached) temp
+         4     2064            123       52/34/17  /data/user/0/org.chyavorec.app/databases/catalog-index.db (1)
+         4       44             29         9/99/4  /data/user/0/org.chyavorec.app/databases/chitalishte.db
+         4        8                         0/0/0    (attached) temp
+         4       44             96        35/25/8  /data/user/0/org.chyavorec.app/databases/chitalishte.db (1)

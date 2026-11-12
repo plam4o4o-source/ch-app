@@ -1,0 +1,10 @@
+APP W/E lines (pids ['5984']): 17 in 9 groups
+       7  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/Parcel: Expecting binder but got null!
+       2  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       1  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       1  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       1  W/Gralloc4: allocator #.x is not supported
+       1  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)

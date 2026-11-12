@@ -1,0 +1,50 @@
+app pids seen: ['6000', '8777', '9921', '10994', '11471', '11529', '11687', '12180']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 27
+   skipped-frames events=27 max=88 total=1282
+   11-12 22:32:14.856  6000  6000 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-12 22:32:17.194  6000  6000 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-12 22:32:26.699  6000  6000 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
+   11-12 22:32:27.650  6000  6000 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-12 22:32:55.384  6000  6000 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-12 22:32:56.317  6000  6000 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-12 22:36:12.719  8777  8777 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-12 22:36:14.224  8777  8777 I Choreographer: Skipped 88 frames!  The application may be doing too much work on its main thread.
+   11-12 22:36:16.106  8777  8777 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-12 22:38:21.988  9921  9921 I Choreographer: Skipped 82 frames!  The application may be doing too much work on its main thread.
+   11-12 22:38:23.159  9921  9921 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-12 22:40:37.921 10994 10994 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+== Davey: 44
+   davey events=44 max=2550ms median=1105ms
+   11-12 22:32:16.408  6000  6015 I OpenGLRenderer: Davey! duration=1383ms; Flags=1, FrameTimelineVsyncId=5336, IntendedVsync=84215344975, Vsync=84215344975, InputEventId=0, HandleInputStart=84215450956, AnimationStart=84215451136, PerformTrav
+   11-12 22:32:17.680  6000  6015 I OpenGLRenderer: Davey! duration=859ms; Flags=0, FrameTimelineVsyncId=5603, IntendedVsync=85598678253, Vsync=86015344903, InputEventId=0, HandleInputStart=86017886725, AnimationStart=86017887146, PerformTrave
+   11-12 22:32:18.146  6000  6013 I OpenGLRenderer: Davey! duration=1091ms; Flags=0, FrameTimelineVsyncId=5662, IntendedVsync=86032011569, Vsync=86548678215, InputEventId=0, HandleInputStart=86550849774, AnimationStart=86550850635, PerformTrav
+   11-12 22:32:18.970  6000  6013 I OpenGLRenderer: Davey! duration=961ms; Flags=0, FrameTimelineVsyncId=5794, IntendedVsync=86648678211, Vsync=87032011529, InputEventId=0, HandleInputStart=87040693037, AnimationStart=87040693437, PerformTrave
+   11-12 22:32:19.216  6000  6013 I OpenGLRenderer: Davey! duration=914ms; Flags=0, FrameTimelineVsyncId=5844, IntendedVsync=87048678195, Vsync=87498678177, InputEventId=0, HandleInputStart=87506577261, AnimationStart=87506577471, PerformTrave
+   11-12 22:32:19.443  6000  6013 I OpenGLRenderer: Davey! duration=744ms; Flags=0, FrameTimelineVsyncId=5921, IntendedVsync=87532011509, Vsync=87865344829, InputEventId=0, HandleInputStart=87872531009, AnimationStart=87872531230, PerformTrave
+   11-12 22:32:26.861  6000  6013 I OpenGLRenderer: Davey! duration=1203ms; Flags=0, FrameTimelineVsyncId=6708, IntendedVsync=94865344549, Vsync=94865344549, InputEventId=0, HandleInputStart=94865519911, AnimationStart=94865520321, PerformTrav
+   11-12 22:32:27.067  6000  6013 I OpenGLRenderer: Davey! duration=1380ms; Flags=0, FrameTimelineVsyncId=6715, IntendedVsync=94882011215, Vsync=96048677835, InputEventId=0, HandleInputStart=96055245870, AnimationStart=96055246521, PerformTrav
+   11-12 22:32:55.752  6000  6604 I OpenGLRenderer: Davey! duration=885ms; Flags=0, FrameTimelineVsyncId=10009, IntendedVsync=124148676711, Vsync=124732010021, InputEventId=0, HandleInputStart=124741280507, AnimationStart=124741281128, Perform
+   11-12 22:32:56.940  6000  6014 I OpenGLRenderer: Davey! duration=995ms; Flags=0, FrameTimelineVsyncId=10111, IntendedVsync=125015343343, Vsync=125665343317, InputEventId=0, HandleInputStart=125673694109, AnimationStart=125673695111, Perform
+   11-12 22:36:14.265  8777  8790 I OpenGLRenderer: Davey! duration=2005ms; Flags=1, FrameTimelineVsyncId=26215, IntendedVsync=321498668817, Vsync=322065335461, InputEventId=0, HandleInputStart=322075037291, AnimationStart=322075037601, Perfor
+   11-12 22:36:14.872  8777  8788 I OpenGLRenderer: Davey! duration=1800ms; Flags=0, FrameTimelineVsyncId=26402, IntendedVsync=322098668793, Vsync=323565335401, InputEventId=0, HandleInputStart=323580658933, AnimationStart=323580659584, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 22:32:09.170  5873  5873 I PERFCHECK: section: U0. Install 1.2.35 1.2.35 aef8910 built prodRelease minified, x86_64 added throwaway key; versionCode 150 as a fresh install
+   11-12 22:33:03.860  7317  7317 I PERFCHECK: section: U1. State on 1.2.35: books in „Искам да прочета“, a card by hand, text size „Голям“, dark theme, the widget, a few screens
+   11-12 22:38:03.856  9888  9888 I PERFCHECK: section: U2. adb install -r of 1.2.36 over 1.2.35 same signing key
+   11-12 22:38:05.888  9896  9896 I PERFCHECK: upd-pre
+   11-12 22:38:18.824 10042 10042 I PERFCHECK: section: U3. First launch of 1.2.36 on the old data
+   11-12 22:38:18.835 10045 10045 I PERFCHECK: upd-first
+   11-12 22:40:34.446 10965 10965 I PERFCHECK: section: U4. Database and files after the update
+   11-12 22:40:55.804 11110 11110 I PERFCHECK: section: U5. Widget after opening the app; Diagnostics › Бързодействие after the update; new screens on the migrated data
+   11-12 22:41:55.257 11465 11465 I PERFCHECK: fd-upd-18348
+   11-12 22:42:04.463 11523 11523 I PERFCHECK: fd-upd-13865
+   11-12 22:42:14.747 11681 11681 I PERFCHECK: fd-upd-26643
+   11-12 22:43:48.286 12323 12323 I PERFCHECK: section: NP-after-update brief. New screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0
+   11-12 22:43:48.308 12327 12327 I PERFCHECK: np-after-update
+   11-12 22:45:23.034 13135 13135 I PERFCHECK: np-read-after-update
+   11-12 22:50:18.274 16006 16006 I PERFCHECK: section: U6. Logcat of the whole part
+   11-12 22:50:20.777 16011 16011 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

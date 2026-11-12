@@ -1,0 +1,15 @@
+APP W/E lines (pids ['5658', '6725', '6972', '7261', '7417', '7826', '8058', '8703', '8768', '8830', '8890', '8951', '9172', '9489', '9558', '9620', '9681', '9820', '9965', '10036', '10219', '10555', '10617', '10677', '10741', '10802', '10881', '10939', '11124', '11439', '11497', '11558', '11620', '11679', '11776', '11860', '12141', '12453', '12514', '12576', '12639', '12702', '12761', '12821', '13069', '13372', '13433', '13494', '13555', '13616', '13677', '13738', '13929', '14309', '14376', '14456', '14517', '14574', '14639', '14697', '14877', '15191', '15250', '15311', '15370', '15429', '15546', '15674', '15882', '16204', '16267', '16327', '16389', '16449', '16510', '16577']): 539 in 14 groups
+      76  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      76  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      76  W/Parcel: Expecting binder but got null!
+      76  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      76  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      76  W/Gralloc4: allocator #.x is not supported
+      76  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ca#-#f#-#fc#-#cfd-caa#c#aeaa#a, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ea#c#-#-#f#-#-a#ba#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#df#-#cc#-#a#b-b#a-de#f#ada, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#adf#-#fd#-#b#-#ab-#a#ca#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=af#a#f#-#d-#ba-a#b-ee#f#c, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#fa#-#d#e-#-#aa#-e#d#b#a#, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms

@@ -1,0 +1,5 @@
+Fully drawn org.chyavorec.app/.MainActivity: +5s572ms
+Fully drawn org.chyavorec.app/.MainActivity: +4s566ms
+Fully drawn org.chyavorec.app/.MainActivity: +4s313ms
+Fully drawn org.chyavorec.app/.MainActivity: +4s760ms
+Fully drawn org.chyavorec.app/.MainActivity: +4s654ms

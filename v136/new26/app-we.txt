@@ -1,0 +1,7 @@
+APP W/E lines (pids ['5347', '6130', '11172', '14352']): 21 in 6 groups
+       4  W/zygote64: Unexpected CPU variant for X# using defaults: x#_#
+       4  E/ResourceType: Style contains key with bad entry: #
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       4  W/ImageReader_JNI: Unable to acquire a buffer item, very likely client tried to acquire more than maxImages buffers
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ee#c-#d#b-#f#-bbdc-#fc#b#b#, generation=#)

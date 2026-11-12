@@ -1,0 +1,14 @@
+APP W/E lines (pids ['4929', '6131', '7826', '8086', '8743', '9315', '9629', '9800', '10054', '10853', '11174', '11770']): 95 in 13 groups
+      14  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      13  W/Parcel: Expecting binder but got null!
+      13  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      13  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      12  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      12  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      12  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=f#b-#b#-#-b#-#dd#b#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner OkHttp https://chyavorec.org/... (#) at android.security.net.config.Network
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#fa#-fb#-#-#a-#c#ed#b#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=b#fae#c-#c#-#f#b-abb#-#af#b#d#, generation=#)
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object d#.s(java.lang.Object)(r

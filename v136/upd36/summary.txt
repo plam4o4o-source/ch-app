@@ -1,0 +1,135 @@
+part upd36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## U0. Install 1.2.35 (1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 150) as a fresh install
+installed base: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## U1. State on 1.2.35: books in „Искам да прочета“, a card by hand, text size „Голям“, dark theme, the widget, a few screens
+ADD by hand: text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" 
+TEXT SIZE now: text="Голям" 
+WIDGET b135 long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET b135 picker: our row @ 437 893; size label @ 540 1801; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
+WIDGET b135 after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
+WIDGET b135: widgets of ours bound: 0 -> 1 (ids id=2 ); options: 
+WIDGET on 1.2.35: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+locale before the update: Locales for org.chyavorec.app for user 0 are [en-US]
+STATE before settings: 
+STATE before night mode of the app window: ; app locale [en-US]
+STATE before card: shown (TEST-12345)
+STATE before want-to-read: book listed; text="Availability as of Nov 9, 2026" text="Swipe a book aside to remove it." text="Последният мечтите" text="Соня Петрова" text="available" content-desc="More actions" text="Дългият любовта" text="Пе
+DB[before] files: 4096 chitalishte.db;32768 chitalishte.db-shm;61832 chitalishte.db-wal;0 ls.txt;
+DB chitalishte.db: user_version=2 identity_hash=de965857dbc324c1f39366be6acfbef1; tables: event_reminders=0 favorite_news=0 room_master_table=1 want_to_read=3; want_to_read: 1:Дългият любовта; 2:Последният мечтите; 399560:12 -те вятъра
+FILES[before]: 27 files: databases/catalog-index.db databases/chitalishte.db files/datastore/settings.preferences_pb files/profileInstalled files/profileinstaller_profileWrittenFor_lastUpdateTime.dat no_backup/androidx.work.workdb no_backup/androidx.work.workdb-shm no_backup/androidx.work.workdb-wal no_backup/cache/public/1ebfb91784270a823e84c3bd83429c0268dd92904a2dd8e1a4dfd63aad2c1839.json no_backup/cache/public/288782f6475e076286d714aeb0dda24f43f1298026ee7a45902c0407942f5c8d.json no_backup/cache/public/3111e84832a5450
+prefs/datastore files before: /data/data/org.chyavorec.app/files: datastore profileInstalled profileinstaller_profileWrittenFor_lastUpdateTime.dat  /data/data/org.chyavorec.app/shared_prefs: app_shortcuts.xml cover_misses.xml stats_anim.xml widget.xml 
+## U2. adb install -r of 1.2.36 over 1.2.35 (same signing key)
+adb install -r 1.2.36: Success; now:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+WIDGET after the update (app not opened): views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Chitalishte Yavorets|Scan|Catalogue|Upcoming events|80 г. от създаването на ЮНЕСКО|November 16, 2026|Панайот Пипков · Ден на семейството|November 21, 2026|; error text: 
+widget ids before/after: [id=2 ] / [id=2 ]
+logcat since the install (app not opened): FATAL(any process)=0 of the app=0 ANR=0
+## U3. First launch of 1.2.36 on the old data
+first launch after the update: Status: ok LaunchState: WARM TotalTime: 2646 WaitTime: 2652 
+first screen: text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" content-desc="Search" text="Search books, news, events…" content-desc="Scan barcode" text="November 13, 2026 · *Св. Йоан Златоуст, архиеп. Константинополски (Тип. с. 116)" content-desc="Latest news" text="БИБЛИОТЕКА" text="
+WHATS-NEW 31-whats-new: not shown; screen: text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" content-desc="Search" text="Search books, news, events…" content-desc="Scan barcode" text="November 13, 2026 · *Св. Йоан Зл
+logcat since the first launch: FATAL(any process)=0 of the app=0 ANR=0; process 9921
+Room/migration lines: 
+locale after the update: Locales for org.chyavorec.app for user 0 are [en-US] (UI shows: text="“Vasil Levski – 1922”" text="Yavorets village" content-desc="Messages" content-desc="Search" )
+STATE after settings: text="Тъмна" text="Голям" 
+STATE after night mode of the app window: ; app locale [bg-BG]
+STATE after card: shown (TEST-12345)
+STATE after want-to-read: book listed; text="Наличност към 09.11.2026" text="Плъзни книга настрани, за да я премахнеш." text="Последният мечтите" text="Соня Петрова" text="налична" content-desc="Още действия" text="Дългият любовта" text="П
+## U4. Database and files after the update
+DB[after] files: 45056 chitalishte.db;32768 chitalishte.db-shm;0 ls.txt;
+DB chitalishte.db: user_version=3 identity_hash=58c41260b36c41894669690a8febdb1a; tables: event_reminders=0 favorite_news=0 reading_diary=0 room_master_table=1 want_to_read=3; want_to_read: 1:Дългият любовта; 2:Последният мечтите; 399560:12 -те вятъра
+FILES[after]: 27 files: databases/catalog-index.db databases/chitalishte.db files/datastore/settings.preferences_pb files/profileInstalled files/profileinstaller_profileWrittenFor_lastUpdateTime.dat no_backup/androidx.work.workdb no_backup/androidx.work.workdb-shm no_backup/androidx.work.workdb-wal no_backup/cache/public/1ebfb91784270a823e84c3bd83429c0268dd92904a2dd8e1a4dfd63aad2c1839.json no_backup/cache/public/288782f6475e076286d714aeb0dda24f43f1298026ee7a45902c0407942f5c8d.json no_backup/cache/public/3111e84832a5450
+FILES before 27, after 27; removed 0: ; new 0: ; size changed 3: ./databases/chitalishte.db ./no_backup/androidx.work.workdb-wal ./no_backup/diagnostics/perf.json
+## U5. Widget after opening the app; Diagnostics › Бързодействие after the update; new screens on the migrated data
+WIDGET after opening the app: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WIDGET click catalog (widget_catalog @ 900 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+WIDGET click scan (widget_scan @ 694 600) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Въведи номера на ръка" text="Скенерът на баркодове идва с Google Play услугите — тук те липсват или скенерът още се изтегля. Въведи номера на ръка или опитай пак сл
+WIDGET click event (widget_event @ 540 786) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+WIDGET click app (t:Chitalishte Yavorets|Читалище Яворец @ 349 599) → fg org.chyavorec.app/org.chyavorec.app.MainActivity; expected screen: YES; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+PERF CARD after-update: Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 4 | Първи кадър: медиана 1904 мс, последен 1984 мс | Пълно показване: медиана 2126 мс, последно 2219 мс | Топъл старт · 5 | Първи кадър: медиана 160 мс, последен 519 мс | Пълно показване: медиана 2616 мс, последно 2616 мс | Насечени кадри по екрани | home: 0,3 % от 388 кадъра · най-бавен 1723 мс | общо с видеокартата: средно 282 мс, най-бавен 2478 мс | Диагностика
+PERF CARD after-update (scrolled): (card not on screen) Студен старт · 4 | Първи кадър: медиана 1904 мс, последен 1984 мс | Пълно показване: медиана 2126 мс, последно 2219 мс | Топъл старт · 5 | Първи кадър: медиана 160 мс, последен 519 мс | Пълно показване: медиана 2616 мс, последно 2616 мс | Насечени кадри по екрани | home: 0,3 % от 388 кадъра · най-бавен 1723 мс | общо с видеокартата: средно 282 мс, най-бавен 2478 мс | scan: 0,0 % от 32 кадъра · най-бавен 373 мс | общо с видеокартата: средно 228 мс, най-бавен 909 мс | Преди това · Версия: неизвестна (по-стари измервания)
+## NP-after-update (brief). New screens (1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
+CAP after-update/01-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP after-update/02-more: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP after-update/em-01-open: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB stitches: start 0 → after 6 taps + a stroke 16
+CAP after-update/em-02-stitched: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB undo: 16 → 6
+EMB redo: 6 → 16
+EMB save: text="Моите шевици" 
+CAP after-update/em-06-after-save: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
+EMB share: chooser OPEN after 3 s; fg android/com.android.internal.app.ChooserActivity
+EMB end: front app
+CAP after-update/np-01-list: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Старият вестник · Юбилеен вестник · 1959 · Двадесет статии от юбилейния · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
+NEWSPAPER first open: page label after 2325 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP after-update/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=30 std=25.1
+NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+NEWSPAPER: no next-page button (one page?)
+NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
+offline: airplane=1
+NEWSPAPER reopened OFFLINE: after 2610 ms: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
+CAP after-update/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
+NEWSPAPER offline page content: mean=30 std=25.1
+CAP after-update/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
+CAP after-update/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 1912–1918. Прекъсване от вой · 17 дек. 1922. Възстановяване · Възстановяване и официално у · Дейността се възобновява под · 1923–1924. Устав и държавно  · Устав и държавно признание
+CAP after-update/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | 1947. Решение за собствена с · Решение за собствена сграда · Започва отчуждаване на терен · 17 март 1958. Първа копка. С · Първа копка · Самооблагане 3% по Закона за
+QUIZ ready after 1948 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Какво се случва в читалището през 1947 г.?" text="Първа копка" text="Въздържателно дружество „Борба“" text="Общностен и информационен център" text="Решение за
+CAP after-update/qz-01-q1: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Първа копка · Въздържателно дружество „Бор · Общностен и информационен це
+CAP after-update/qz-01-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 0 верни от 1 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Първа копка · Въздържателно дружество „Бор · Общностен и информационен це
+CAP after-update/qz-06-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Сподели резултата
+QUIZ result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Назад" content-desc="Назад" text="Познай Яворец" 
+QUIZ share: chooser OPEN after 2 s; fg android/com.android.internal.app.ChooserActivity
+CAP after-update/st-01: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | Изглед · Тема · Тъмна · Размер на текста · Голям · Палитра
+CAP after-update/st-02: targets=11 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=17 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+CAP after-update/st-03: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Разклащане за „Изненадай ме“ · Разклати телефона в каталога · Уиджети · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“
+CAP after-update/st-04: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Избери известията · Заемания, събития, съобщения · Обновления · Автоматично обновяване · Проверка при отваряне и два  · Провери за нова версия
+WARN: settings item Седмичен преглед|Weekly digest not found
+SETTINGS: no digest row
+CAP after-update/11-event: targets=8 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+NP after-update: FATAL(any process)=0 of the app=0 ANR=0; app process 12180; logcat app errors: 0
+## U6. Logcat of the whole part
+FATAL/ANR since the install: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 9 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 5 | Първи кадър: медиана 1824 мс, последен 1323 мс | Пълно показване: медиана 2034 мс, последно 1403 мс | Топъл старт · 5 | Първи кадър: медиана 160 мс, последен 519 мс | Пълно показване: медиана 2616 мс
+DIAG SCREEN (scrolled): text="Студен старт · 5" text="Първи кадър: медиана 1824 мс, последен 1323 мс" text="Пълно показване: медиана 2034 мс, последно 1403 мс" text="Топъл старт · 5" text="Първи кадър: медиана 160 мс, последен 519 мс" text="Пълно показване: медиана 2616 мс, последно 2616 мс" text="Насечени кадри по екрани" text="home: 0,3 % от 388 кадъра · най-бавен 1723 мс" text="общо с видеокартата: средно 282 мс, най-бавен 2478 мс" text="scan: 0,0 % от 32 кадъра · най-бавен 373 мс" text="общо с видеокартата: средно 228 мс, най-бавен 909 мс" text="Преди това · Версия: неизвестна (по-стари измервания)" text="Студен старт · 1" text="Първи кадър: медиана 1507 мс, последен 1507 мс" text="Пълно показване: медиана 1507
+APP W/E lines (pids ['6000', '8777', '9921', '10994', '11471', '11529', '11687', '12180']): 79 in 12 groups
+      16  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      14  W/Parcel: Expecting binder but got null!
+       8  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       8  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       8  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       8  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       8  W/Gralloc4: allocator #.x is not supported
+       3  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       2  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       2  E/FrameEvents: updateAcquireFence: Did not find frame.
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#cf-#a#-#ba#-#-bf#e#e, generation=#)
+       1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+contact sheets: 10 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['6000', '8777', '9921', '10994', '11471', '11529', '11687', '12180']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 27
+   skipped-frames events=27 max=88 total=1282
+== Davey: 44
+   davey events=44 max=2550ms median=1105ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:27 app-mapping.txt; crashes: 0 B
