@@ -108,6 +108,13 @@ class UxScreenshotTest {
         compose.onAllNodes(hasText(text, substring = true) and hasClickAction()).onFirst().performClick()
     }
 
+    /** Като [click], но първо превърта до реда — при „Много голям“ шрифт „Още“ е по-дълъг от екрана. */
+    private fun clickScrolling(text: String) {
+        waitFor(text)
+        val m = hasText(text, substring = true) and hasClickAction()
+        compose.onAllNodes(m).onFirst().performScrollTo().performClick()
+    }
+
     private fun tab(label: String) {
         val m = hasText(label) and isSelectable()
         compose.waitUntil(10_000) { compose.onAllNodes(m).fetchSemanticsNodes().isNotEmpty() }
@@ -134,7 +141,7 @@ class UxScreenshotTest {
     @Test fun settingsExtraLargeText() {
         launch()
         tab("Още")
-        click("Настройки")
+        clickScrolling("Настройки")
         waitFor("Размер на текста")
         // След прехода към „Настройки“ — елементът е в първия екран, не само в дървото.
         compose.waitForIdle()
@@ -157,7 +164,7 @@ class UxScreenshotTest {
     @Test fun textSizeDialogExtraLarge() {
         launch()
         tab("Още")
-        click("Настройки")
+        clickScrolling("Настройки")
         click("Размер на текста")
         val option = hasText("Стандартен") and hasAnyAncestor(isDialog())
         compose.waitUntil(10_000) { compose.onAllNodes(option, useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
