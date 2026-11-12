@@ -41,6 +41,8 @@ class FileDownloader(
     private val maxBytes: Long = MAX_BYTES,
     /** Откъде може да е файлът — и адресът, и крайният след пренасочванията (напр. само сайтът). */
     private val allowedUrl: (HttpUrl) -> Boolean = { true },
+    /** Колко време свален файл остава в [prune] (седмица; „Старият вестник“ — дълго, за да се чете офлайн). */
+    private val retainMillis: Long = WEEK,
 ) {
     /**
      * Мястото на файла за [url]: папката е по адреса (един и същ документ не се тегли
@@ -159,7 +161,7 @@ class FileDownloader(
      * по възраст, за да не се пипне текущо сваляне, а с [dropPartial] (при стартиране, когато
      * сваляне още няма) — всички. Блокиращо: извън главната нишка.
      */
-    fun prune(maxAgeMillis: Long = WEEK, keep: File? = null, dropPartial: Boolean = false) {
+    fun prune(maxAgeMillis: Long = retainMillis, keep: File? = null, dropPartial: Boolean = false) {
         val files = dir.walk().filter { it.isFile && it != keep }.toList()
         val time = now()
         fun old(f: File) = time - f.lastModified() !in 0 until maxAgeMillis
