@@ -241,7 +241,21 @@ class YearShevitsaScreenshotTest {
 
     private fun frame(tag: String): Bitmap = compose.onNodeWithTag(tag).captureToImage().asAndroidBitmap()
 
-    private fun Bitmap.sameAs2(other: Bitmap): Boolean = width == other.width && height == other.height && sameAs(other)
+    /** Дял на различаващите се пиксели (над прага на канал) — изглаждането по ръбовете може да се разминава с пиксел-два. */
+    private fun Bitmap.diff(other: Bitmap): Double {
+        if (width != other.width || height != other.height) return 1.0
+        val a = IntArray(width * height).also { getPixels(it, 0, width, 0, 0, width, height) }
+        val b = IntArray(width * height).also { other.getPixels(it, 0, width, 0, 0, width, height) }
+        var n = 0
+        for (i in a.indices) {
+            val x = a[i]; val y = b[i]
+            if (kotlin.math.abs((x shr 16 and 255) - (y shr 16 and 255)) > 24 || kotlin.math.abs((x shr 8 and 255) - (y shr 8 and 255)) > 24 ||
+                kotlin.math.abs((x and 255) - (y and 255)) > 24) n++
+        }
+        return n.toDouble() / a.size
+    }
+
+    private fun Bitmap.sameAs2(other: Bitmap): Boolean = diff(other).also { println("diff=$it") } < 0.002
 
     /** При намалено движение лентата е готова от първия кадър (и е същата като неподвижната). */
     @Test fun reducedMotionShowsTheFinishedBandImmediately() {
