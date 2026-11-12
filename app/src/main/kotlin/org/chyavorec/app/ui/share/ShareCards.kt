@@ -128,6 +128,8 @@ fun ShareCardContent(card: ShareCard, photo: ImageBitmap?) {
         is ShareCard.Book -> BookShareCard(card, photo)
         is ShareCard.News -> NewsShareCard(card, photo)
         is ShareCard.Year -> YearShareCard(card.summary, card.slide, card.url)
+        is NewspaperShareCard -> NewspaperShareCardContent(card)
+        is QuizShareCard -> QuizShareCardContent(card)
     }
 }
 

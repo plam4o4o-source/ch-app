@@ -74,6 +74,10 @@ import org.chyavorec.data.http.FileDownloader
 import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.data.invlib.RemoteInvLibClient
 import org.chyavorec.data.invlib.UnavailableInvLibServices
+import org.chyavorec.app.ui.screens.quiz.QuizStore
+import org.chyavorec.data.repository.QuizQuestionsRepository
+import org.chyavorec.data.repository.TimelineRepository
+import org.chyavorec.data.site.SiteExtrasService
 import org.chyavorec.data.repository.AuthRepository
 import org.chyavorec.data.repository.AuthState
 import org.chyavorec.data.repository.CatalogRepository
@@ -218,6 +222,19 @@ class AppContainer(
     val eventsRepository by lazy { EventsRepository(siteService, publicCache, clock) }
     val catalogRepository by lazy { CatalogRepository(catalogService, publicCache, clock, index = RoomCatalogIndexStore(recreate = { CatalogDatabase.recreate(context) }) { catalogDatabase }) }
     val siteRepository by lazy { SiteRepository(siteService, publicCache, clock, newsRepository) }
+
+    // „Старият вестник“, „Лента на времето“, „Познай Яворец“.
+    /** Статиите от юбилейния вестник (PDF) за четеца — отделна папка, пази се дълго (офлайн четене). */
+    val newspaper by lazy {
+        FileDownloader(
+            documentsHttp, File(context.cacheDir, "vestnik"), maxBytes = 20L * 1024 * 1024, retainMillis = 365L * 24 * 60 * 60 * 1000,
+            allowedUrl = { TrustedLinks.isSiteUrl(it.toString(), config.siteBaseUrl) },
+        )
+    }
+    private val siteExtras by lazy { SiteExtrasService(http, config.siteBaseUrl) }
+    val timelineRepository by lazy { TimelineRepository(siteExtras, publicCache, clock) }
+    val quizQuestionsRepository by lazy { QuizQuestionsRepository(siteExtras, publicCache, clock) }
+    val quizStore by lazy { QuizStore(context) }
 
     val authRepository by lazy {
         AuthRepository(
@@ -581,6 +598,7 @@ class AppContainer(
                     runCatching { publicCache.clear() }.logFailure("cache.public")
                     runCatching { okHttp.cache?.evictAll() }
                     runCatching { documents.clear() }.logFailure("cache.documents")
+                    runCatching { newspaper.clear() }.logFailure("cache.newspaper")
                     runCatching { ShareFiles.clear(context) }.logFailure("cache.share")
                     runCatching { AppShortcuts.removeLastBook(context) }.logFailure("cache.shortcut")
                     clearImageCaches()

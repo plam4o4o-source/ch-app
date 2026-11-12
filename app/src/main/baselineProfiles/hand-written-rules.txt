@@ -20,3 +20,7 @@ Lorg/chyavorec/app/ui/screens/my/SlideLook*;
 HSPLorg/chyavorec/app/ui/screens/my/SlideLook*;->**(**)**
 Lorg/chyavorec/data/catalog/ReadingYear*;
 HSPLorg/chyavorec/data/catalog/ReadingYear*;->**(**)**
+Lorg/chyavorec/app/ui/screens/newspaper/PaperSheet*;
+HSPLorg/chyavorec/app/ui/screens/newspaper/PaperSheet*;->**(**)**
+Lorg/chyavorec/app/ui/screens/timeline/Timeline*;
+HSPLorg/chyavorec/app/ui/screens/timeline/Timeline*;->**(**)**
