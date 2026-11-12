@@ -215,9 +215,9 @@
     <string name="embroidery_mine">Моите шевици</string>
     <string name="embroidery_mine_empty">Още няма запазени шевици.</string>
     <string name="embroidery_mirror">Огледало</string>
-    <string name="embroidery_mirror_four">Четворно</string>
+    <string name="embroidery_mirror_four">Четворно огледало</string>
     <string name="embroidery_mirror_none">Без</string>
-    <string name="embroidery_mirror_two">Двойно</string>
+    <string name="embroidery_mirror_two">Двойно огледало</string>
     <string name="embroidery_open_item">Отвори шевицата от %1$s</string>
     <string name="embroidery_place">Постави бод</string>
     <string name="embroidery_redo">Повтори</string>
@@ -284,7 +284,7 @@
     <string name="greeting_composer_title">Честитка от Яворец</string>
     <string name="greeting_line_label">Лично за (по желание)</string>
     <string name="greeting_line_placeholder">Например: За баба Мария</string>
-    <string name="greeting_line_support">До %1$d знака — букви, цифри и обичайна пунктуация</string>
+    <string name="greeting_line_support">Букви, цифри и обичайна пунктуация</string>
     <string name="greeting_preview_cd">Преглед на картичката: %1$s. %2$s</string>
     <string name="greeting_send">Изпрати честитка</string>
     <string name="greeting_share">Сподели картичката</string>

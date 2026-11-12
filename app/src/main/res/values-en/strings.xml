@@ -215,9 +215,9 @@
     <string name="embroidery_mine">My patterns</string>
     <string name="embroidery_mine_empty">No saved patterns yet.</string>
     <string name="embroidery_mirror">Mirror</string>
-    <string name="embroidery_mirror_four">Four-way</string>
+    <string name="embroidery_mirror_four">Four-way mirror</string>
     <string name="embroidery_mirror_none">Off</string>
-    <string name="embroidery_mirror_two">Two-way</string>
+    <string name="embroidery_mirror_two">Two-way mirror</string>
     <string name="embroidery_open_item">Open the pattern from %1$s</string>
     <string name="embroidery_place">Place stitch</string>
     <string name="embroidery_redo">Redo</string>
@@ -284,7 +284,7 @@
     <string name="greeting_composer_title">A greeting from Yavorets</string>
     <string name="greeting_line_label">Personal line (optional)</string>
     <string name="greeting_line_placeholder">For example: For Grandma Maria</string>
-    <string name="greeting_line_support">Up to %1$d characters — letters, digits and ordinary punctuation</string>
+    <string name="greeting_line_support">Letters, digits and ordinary punctuation</string>
     <string name="greeting_preview_cd">Card preview: %1$s. %2$s</string>
     <string name="greeting_send">Send a greeting card</string>
     <string name="greeting_share">Share the card</string>
