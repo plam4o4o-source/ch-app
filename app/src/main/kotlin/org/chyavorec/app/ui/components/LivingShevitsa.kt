@@ -1,5 +1,7 @@
 package org.chyavorec.app.ui.components
 
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.foundation.layout.size
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -237,7 +239,16 @@ fun LivingShevitsa(
 ) {
     val agsl = LocalAgslEnabled.current && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     val clock = rememberWeaveClock(budget, speed, stopWhen)
-    val shader = remember(agsl) { if (agsl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) WeaveShader.createOrNull() else null }
+    // Първият кадър — с готовата плочка, живата шевица — от следващия: видеокартата превежда
+    // шейдъра при първото му рисуване и това не бива да е в първия кадър на екрана.
+    var live by remember { mutableStateOf(!still) }
+    LaunchedEffect(Unit) {
+        if (!live) {
+            withFrameNanos { }
+            live = true
+        }
+    }
+    val shader = remember(agsl, live) { if (live && agsl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) WeaveShader.createOrNull() else null }
     val currentAlpha by rememberUpdatedState(alpha)
     // Пресмята се веднъж за размера и параметрите; времето и плътността се четат при рисуване.
     val draw = remember(shader, clock, cell, period, ribbon, intensity, clearCenter, colors, still) {
@@ -311,7 +322,7 @@ internal class WeaveShader private constructor(private val guarded: GuardedShade
     fun setTime(t: Float): Boolean = guarded.guard { setFloatUniform("uTime", t) }
 
     companion object {
-        fun createOrNull(): WeaveShader? = GuardedShader.create(ShevitsaShaders.WEAVE, "shevitsa-shader")?.let(::WeaveShader)
+        fun createOrNull(): WeaveShader? = ShaderPool.take(ShevitsaShaders.WEAVE, ShaderPool.WEAVE)?.let(::WeaveShader)
     }
 }
 
@@ -491,5 +502,38 @@ internal object ShevitsaStill {
     private fun smooth(e0: Float, e1: Float, x: Float): Float {
         val t = ((x - e0) / (e1 - e0)).coerceIn(0f, 1f)
         return t * t * (3f - 2f * t)
+    }
+}
+
+/** Видеокартата е подгрята веднъж за процеса ([ShaderWarmup]). */
+@Volatile private var shadersWarmed = false
+
+/**
+ * Видеокартата превежда шейдъра при първото му рисуване (десетки ms). Веднъж за процеса,
+ * ~2 s след старта (на спокойствие), шевицата и фолиото се рисуват в невидима точка —
+ * първият кадър на картата (и на шевицата) ги намира готови.
+ */
+@Composable
+fun ShaderWarmup(modifier: Modifier = Modifier) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || !LocalAgslEnabled.current) return
+    var show by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if (shadersWarmed) return@LaunchedEffect
+        delay(2_000)
+        show = true
+        withFrameNanos { }
+        withFrameNanos { }
+        show = false
+        shadersWarmed = true
+    }
+    if (show) {
+        Spacer(
+            modifier.size(1.dp).clearAndSetSemantics { }.graphicsLayer { alpha = 0.01f }.drawBehind {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    ShaderPool.peek(ShaderPool.WEAVE)?.let { drawRect(it.brush) }
+                    ShaderPool.peek(ShaderPool.FOIL)?.let { drawRect(it.brush, blendMode = BlendMode.Screen) }
+                }
+            },
+        )
     }
 }

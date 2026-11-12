@@ -24,6 +24,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import org.chyavorec.app.ui.components.GuardedShader
+import org.chyavorec.app.ui.components.ShaderPool
 import org.chyavorec.app.ui.components.LocalAgslEnabled
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.ShevitsaShaders
@@ -164,7 +165,7 @@ internal class FoilShader private constructor(private val guarded: GuardedShader
     }
 
     companion object {
-        fun createOrNull(): FoilShader? = GuardedShader.create(ShevitsaShaders.FOIL, "foil-shader")?.let(::FoilShader)
+        fun createOrNull(): FoilShader? = ShaderPool.take(ShevitsaShaders.FOIL, ShaderPool.FOIL)?.let(::FoilShader)
     }
 }
 

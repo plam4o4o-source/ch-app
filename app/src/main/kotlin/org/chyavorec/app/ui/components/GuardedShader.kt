@@ -6,6 +6,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.ShaderBrush
 import org.chyavorec.core.Diagnostics
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.Executors
 
 /**
  * AGSL шейдър с предпазител (API 33+): грешка при създаването или при задаване на
@@ -49,5 +51,44 @@ internal object ShaderReport {
 
     fun record(tag: String, error: Throwable) {
         if (reported.add(tag)) Diagnostics.record(tag, error)
+    }
+}
+
+/**
+ * Готови шейдъри, създадени във фонов режим (при старта, [prepare]): екранът ги взима
+ * наготово и първият му кадър не чака превода на AGSL кода. Взетият се допълва отново
+ * във фонова нишка; ако резервът е празен — създава се на място, както преди.
+ */
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+internal object ShaderPool {
+    const val WEAVE = "shevitsa-shader"
+    const val FOIL = "foil-shader"
+
+    private val ready = ConcurrentHashMap<String, ConcurrentLinkedQueue<GuardedShader>>()
+    private val refill = Executors.newSingleThreadExecutor { r ->
+        Thread(r, "shader-pool").apply {
+            isDaemon = true
+            priority = Thread.MIN_PRIORITY
+        }
+    }
+
+    /** По един от всеки вид — във фонова нишка (ChitalishteApp.warmUp). */
+    fun prepare() {
+        fill(org.chyavorec.app.ui.theme.ShevitsaShaders.WEAVE, WEAVE)
+        fill(org.chyavorec.app.ui.theme.ShevitsaShaders.FOIL, FOIL)
+    }
+
+    fun take(source: String, tag: String): GuardedShader? {
+        val pooled = ready[tag]?.poll()
+        runCatching { refill.execute { fill(source, tag) } }
+        return pooled ?: GuardedShader.create(source, tag)
+    }
+
+    /** Готов шейдър от резерва (остава там) — само за подгряването на видеокартата. */
+    fun peek(tag: String): GuardedShader? = ready[tag]?.peek()
+
+    private fun fill(source: String, tag: String) {
+        val queue = ready.getOrPut(tag) { ConcurrentLinkedQueue() }
+        if (queue.isEmpty()) GuardedShader.create(source, tag)?.let(queue::add)
     }
 }

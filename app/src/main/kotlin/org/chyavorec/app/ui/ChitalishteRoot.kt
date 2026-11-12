@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui
 
+import org.chyavorec.app.ui.components.ShaderWarmup
 import org.chyavorec.app.ui.components.LocalAppChromeHidden
 import android.net.Uri
 import android.os.Build
@@ -447,6 +448,8 @@ private fun MainScaffold(
                     ) {
                         AppNavHost(nav, ::navigate, back, ::openLink, openExternal)
                     }
+                    // Веднъж след старта: шейдърите — подгрети във видеокартата (невидима точка).
+                    ShaderWarmup()
                 }
             }
         }

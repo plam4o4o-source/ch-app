@@ -127,6 +127,10 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
      */
     private fun warmUp() {
         runCatching { container.http }
+        // Шейдърите на шевицата и фолиото — преведени предварително (ShaderPool), не в първия кадър.
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            runCatching { org.chyavorec.app.ui.components.ShaderPool.prepare() }
+        }
         for (family in listOf(Cormorant, Raleway)) {
             (family as? FontListFontFamily)?.fonts?.forEach { font ->
                 if (font is ResourceFont && font.style != FontStyle.Italic) runCatching { resources.getFont(font.resId) }
