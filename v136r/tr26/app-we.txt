@@ -1,0 +1,40 @@
+APP W/E lines (pids ['4966', '8009', '8573']): 346 in 39 groups
+      37  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+      31  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+      31  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+      31  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+      29  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+      13  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+      12  W/GooglePlayServicesUtil: Google Play services out of date for org.chyavorec.app.  Requires # but found #
+      12  W/GoogleApiManager: The service for mu# is not available: ss#{statusCode=SERVICE_VERSION_UPDATE_REQUIRED, resolution=null, message
+      12  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+      11  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+      11  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+      10  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+      10  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+       9  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+       9  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+       8  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+       8  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+       6  W/ConnectionStatusConfig: Dynamic lookup for intent failed for action: com.google.android.gms.chimera.container.moduleinstall.ModuleInst
+       6  W/GmsClient: unable to connect to service: com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.STAR
+       6  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+       5  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       5  W/InputMethodManager: Unable to send input event to IME: com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
+       4  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+       3  W/zygote64: Unexpected CPU variant for X# using defaults: x#_#
+       3  E/ResourceType: Style contains key with bad entry: #
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       3  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+       2  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+       2  W/InputEventSender: Failed to send key event on channel 'ClientState{cfec#de uid # pid #} (server)'.  status=-#
+       2  W/IInputConnectionWrapper: setComposingRegion on inactive InputConnection
+       2  W/IInputConnectionWrapper: setComposingText on inactive InputConnection
+       1  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       1  W/InputEventSender: Failed to send motion event sample on channel 'ClientState{cfec#de uid # pid #} (server)'.  status=-#
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_MULTIPLE, keyCode=KEYCODE_DPAD_UP, scanCode=#,
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=#.#, y[
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCod
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to root view being removed: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=
+       1  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]=-#.#, y

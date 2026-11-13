@@ -1,0 +1,35 @@
+APP W/E lines (pids ['3943']): 234 in 34 groups
+      49  W/Codec2Client: query -- param skipped: index = #.
+      36  W/ColorUtils: expected specified color aspects (#:#:#:#)
+      23  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+      22  W/HWUI: Image decoding logging dropped!
+      21  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      13  E/MediaCodec: Media Quality Service not found.
+      13  W/CCodec: This behavior is subject to change. It is recommended that app developers double check whether the requested m
+      13  E/g.chyavorec.app: Failed to query component interface for required system resources: #
+       6  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#b#c#f
+       4  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=tv#@#f#
+       3  W/HWUI: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/HWUI: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/JobInfo: Requested important-while-foreground flag for job# is ignored and takes no effect
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       2  W/RemoteInputConnectionImpl: requestCursorUpdates on inactive InputConnection
+       2  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       2  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       2  W/g.chyavorec.app: Missing inline cache for void wm#.u()
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, 
+       1  E/g.chyavorec.app: Not starting debugger since process cannot load the jdwp agent.
+       1  E/ashmem: Pinning is deprecated since Android Q. Please use trim or other methods.
+       1  W/HWUI: Unknown dataspace #
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#bf#-#a#-#a#-#a#-#a#e, generation=#)
+       1  W/g.chyavorec.app: Missing inline cache for java.lang.Object y#.s(java.lang.Object)
+       1  W/InteractionJankMonitor: Initializing without READ_DEVICE_CONFIG permission. enabled=true, interval=#, missedFrameThreshold=#, frameTim
+       1  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@e#
+       1  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       1  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       1  W/g.chyavorec.app: Missing inline cache for java.lang.Object rn.s(java.lang.Object)
+       1  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.app.Activity$$ExternalSyntheticLambda#@#b#
+       1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+       1  E/FrameTracker: force finish cuj, time out: J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       1  W/FrameTracker: Missed App frame:JANK_APPLICATION, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>

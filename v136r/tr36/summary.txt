@@ -1,0 +1,89 @@
+part tr36; APK: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 5165 ms
+## TR1. Transitions recorded at 12 fps (animations ON, API 36): 10 frames from the start of the motion, in sheets/tr
+TREC a-book-open: frames=43 motion-start=#26 moving-frames=2 (span 6) kept #25..#34; diffs: 0 18 1 0 0 0 16 0 0 0
+TR book: book screen open: text="Джиан, Филип" text="Налична" text="Наличност към 09.11.2026" text="Искам да прочета" 
+TREC b-book-back: frames=45 motion-start=#32 moving-frames=3 (span 7) kept #31..#40; diffs: 0 19 0 0 0 0 18 3 0 0
+TREC c-event-open: frames=39 motion-start=#25 moving-frames=4 (span 9) kept #24..#33; diffs: 0 2 0 0 26 0 0 20 0 8
+TR event: event screen open: content-desc="Понеделник, 16 ноември 2026, след 3 дни" text="80 г. от създаването на ЮНЕСКО" text="Събитие от годишния к
+TREC d-event-back: frames=37 motion-start=#22 moving-frames=5 (span 13) kept #21..#30; diffs: 0 2 0 0 0 9 0 0 0 31
+TREC e-article-open: frames=41 motion-start=#24 moving-frames=8 (span 17) kept #23..#32; diffs: 0 3 50 0 7 0 4 4 0 0
+TR article: article open: content-desc="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец." text="СЪБИТИЕ  ·  16 октомври 20
+TREC f-article-back: frames=36 motion-start=#20 moving-frames=5 (span 12) kept #19..#28; diffs: 0 4 0 0 1 0 0 8 0 57
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+TREC g-card-full: frames=62 motion-start=#0 moving-frames=0 (span 0) kept #0..#9; diffs: 0 0 0 0 0 0 0 0 0 0
+TR card fullscreen: yes
+TREC h-card-back: frames=71 motion-start=#0 moving-frames=0 (span 0) kept #0..#9; diffs: 0 0 0 0 0 0 0 0 0 0
+TR part so far: FATAL(any process)=0 of the app=0 ANR=0
+## TR2. Quick open/back ×12 on a book and an event (the shared-element crash on API 26 came during navigation)
+after 12 quick book open/back: app in front NO; pid 3943; FATAL(any process)=0 of the app=0 ANR=0
+after 6 scanner/manual loops: app in front yes; pid 3943; FATAL(any process)=0 of the app=0 ANR=0
+## TR5. Widget providers on API 36 (categories: 1 = home screen, 2 = keyguard)
+min=(57345x12801) widgetCategory=1 initialLayout=#7f0e0070 min=(64001x28161) widgetCategory=3 initialLayout=#7f0d0031 min=(46081x28161) widgetCategory=3 initialLayout=#7f0d002d 
+
+lock-screen widgets feature: config false; communal null
+TR part: FATAL(any process)=0 of the app=0 ANR=0; FATAL lines in the whole log: 1
+contact sheets: 8 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: 1 entries, 1 distinct
+     1  update.verify: signature mismatch
+   keys of an entry: at, error, tag
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 2771 мс, последен 2771 мс | Пълно показване: медиана 2771 мс, последно 2771 мс | Топъл старт · 1 | Първи кадър: медиана 2485 мс, последен 2485 мс | Пълно показване: медиана 2644 
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36 (1507400)" text="Профил: чака" text="Студен старт · 1" text="Първи кадър: медиана 2771 мс, последен 2771 мс" text="Пълно показване: медиана 2771 мс, последно 2771 мс" text="Топъл старт · 1" text="Първи кадър: 
+APP W/E lines (pids ['3943']): 234 in 34 groups
+      49  W/Codec2Client: query -- param skipped: index = #.
+      36  W/ColorUtils: expected specified color aspects (#:#:#:#)
+      23  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+      22  W/HWUI: Image decoding logging dropped!
+      21  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      13  E/MediaCodec: Media Quality Service not found.
+      13  W/CCodec: This behavior is subject to change. It is recommended that app developers double check whether the requested m
+      13  E/g.chyavorec.app: Failed to query component interface for required system resources: #
+       6  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#b#c#f
+       4  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=tv#@#f#
+       3  W/HWUI: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/HWUI: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/JobInfo: Requested important-while-foreground flag for job# is ignored and takes no effect
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       2  W/RemoteInputConnectionImpl: requestCursorUpdates on inactive InputConnection
+       2  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       2  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       2  W/g.chyavorec.app: Missing inline cache for void wm#.u()
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, 
+       1  E/g.chyavorec.app: Not starting debugger since process cannot load the jdwp agent.
+       1  E/ashmem: Pinning is deprecated since Android Q. Please use trim or other methods.
+       1  W/HWUI: Unknown dataspace #
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#bf#-#a#-#a#-#a#-#a#e, generation=#)
+       1  W/g.chyavorec.app: Missing inline cache for java.lang.Object y#.s(java.lang.Object)
+       1  W/InteractionJankMonitor: Initializing without READ_DEVICE_CONFIG permission. enabled=true, interval=#, missedFrameThreshold=#, frameTim
+       1  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@e#
+       1  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       1  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+contact sheets: 9 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['3943']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 23
+   skipped-frames events=23 max=171 total=1160
+== Davey: 68
+   davey events=68 max=3213ms median=857ms
+== NativeLink: 1
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'FATAL': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91354008 Nov 13 16:25 app-mapping.txt; crashes: 1520 B

@@ -1,0 +1,47 @@
+app pids seen: ['4706', '8381', '9350', '10166', '13050']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 46
+   skipped-frames events=46 max=127 total=2299
+   11-13 16:31:56.058  4706  4706 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-13 16:31:56.826  4706  4706 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-13 16:31:59.264  4706  4706 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:00.739  4706  4706 I Choreographer: Skipped 75 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:01.570  4706  4706 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:02.242  4706  4706 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:02.796  4706  4706 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:03.624  4706  4706 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:14.365  4706  4706 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:15.032  4706  4706 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:15.775  4706  4706 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:42.403  4706  4706 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+== Davey: 95
+   davey events=95 max=3912ms median=1014ms
+   11-13 16:31:58.901  4706  4719 I OpenGLRenderer: Davey! duration=1911ms; Flags=1, FrameTimelineVsyncId=9426, IntendedVsync=141141563135, Vsync=141141563135, InputEventId=0, HandleInputStart=141141750969, AnimationStart=141141751792, Perform
+   11-13 16:32:01.532  4706  4719 I OpenGLRenderer: Davey! duration=2366ms; Flags=0, FrameTimelineVsyncId=9598, IntendedVsync=142808240798, Vsync=143541574014, InputEventId=0, HandleInputStart=143550878652, AnimationStart=143550879184, Perform
+   11-13 16:32:02.217  4706  4719 I OpenGLRenderer: Davey! duration=1328ms; Flags=0, FrameTimelineVsyncId=9629, IntendedVsync=143558229705, Vsync=143708229699, InputEventId=0, HandleInputStart=143714399754, AnimationStart=143714400694, Perform
+   11-13 16:32:02.641  4706  4719 I OpenGLRenderer: Davey! duration=2365ms; Flags=0, FrameTimelineVsyncId=9648, IntendedVsync=143774896363, Vsync=145024896313, InputEventId=0, HandleInputStart=145025453970, AnimationStart=145025454598, Perform
+   11-13 16:32:03.519  4706  4719 I OpenGLRenderer: Davey! duration=1752ms; Flags=0, FrameTimelineVsyncId=9858, IntendedVsync=145041562979, Vsync=145841562947, InputEventId=0, HandleInputStart=145856385984, AnimationStart=145856387002, Perform
+   11-13 16:32:03.915  4706  4737 I OpenGLRenderer: Davey! duration=1750ms; Flags=0, FrameTimelineVsyncId=9978, IntendedVsync=145874896279, Vsync=146524896253, InputEventId=0, HandleInputStart=146528404439, AnimationStart=146528405007, Perform
+   11-13 16:32:04.169  4706  4719 I OpenGLRenderer: Davey! duration=1097ms; Flags=0, FrameTimelineVsyncId=10079, IntendedVsync=146541562919, Vsync=147074896231, InputEventId=0, HandleInputStart=147087111046, AnimationStart=147087111961, Perfor
+   11-13 16:32:04.723  4706  4852 I OpenGLRenderer: Davey! duration=1225ms; Flags=0, FrameTimelineVsyncId=10115, IntendedVsync=147108229563, Vsync=147908229531, InputEventId=0, HandleInputStart=147910320807, AnimationStart=147910321613, Perfor
+   11-13 16:32:05.325  4706  4718 I OpenGLRenderer: Davey! duration=914ms; Flags=0, FrameTimelineVsyncId=10252, IntendedVsync=148691562833, Vsync=149074896151, InputEventId=0, HandleInputStart=149086882306, AnimationStart=149086883164, Perform
+   11-13 16:32:15.028  4706  4718 I OpenGLRenderer: Davey! duration=1174ms; Flags=0, FrameTimelineVsyncId=11008, IntendedVsync=157391562485, Vsync=157808229135, InputEventId=0, HandleInputStart=157817035811, AnimationStart=157817036443, Perfor
+   11-13 16:32:15.759  4706  4718 I OpenGLRenderer: Davey! duration=841ms; Flags=0, FrameTimelineVsyncId=11071, IntendedVsync=157824895801, Vsync=157841562467, InputEventId=0, HandleInputStart=157852530869, AnimationStart=157852531417, Perform
+   11-13 16:32:16.004  4706  4718 I OpenGLRenderer: Davey! duration=1693ms; Flags=0, FrameTimelineVsyncId=11080, IntendedVsync=157858229133, Vsync=158641562435, InputEventId=0, HandleInputStart=158653458336, AnimationStart=158653458757, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-13 16:31:53.567  4695  4695 I PERFCHECK: section: W. First launch and warm-up
+   11-13 16:33:01.883  5808  5808 I PERFCHECK: ng
+   11-13 16:33:02.587  5864  5864 I PERFCHECK: section: NG1. A quick swipe down that starts on a row at the top of a list: does it open the row? 1.2.36, then 1.2.35
+   11-13 16:38:12.905  9635  9635 I PERFCHECK: section: NG2. Settings › Избери известията: the weekly digest switch permission granted
+   11-13 16:38:12.923  9638  9638 I PERFCHECK: ng2
+   11-13 16:39:18.954 10142 10142 I PERFCHECK: section: NG3. The same switch without the notification permission revoked, flags cleared: is the system prompt shown?
+   11-13 16:39:19.001   489   546 I ActivityManager: Killing 9350:org.chyavorec.app/u0a177 (adj 0): permissions revoked
+   11-13 16:41:45.232 11233 11233 I PERFCHECK: section: NG4. Digest notification: the clock jumps to Sunday 6 Dec 2026 18:30 also Никулден, the periodic worker runs
+   12-06 18:30:09.191 12250 12250 I PERFCHECK: ng4
+   12-06 18:31:38.034 13036 13036 I PERFCHECK: section: NG5. Никулден 6 Dec: the greeting on Home, „Честитка“, the composer, share as an image
+   12-06 18:31:38.198 13039 13039 I PERFCHECK: ng5
+   12-06 18:32:48.107 13402 13402 I PERFCHECK: sh-greet
+   12-06 18:33:40.602 14088 14088 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

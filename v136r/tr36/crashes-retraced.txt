@@ -1,0 +1,14 @@
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: FATAL EXCEPTION: main
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: PID: 4425
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: java.lang.RuntimeException: java.util.concurrent.TimeoutException: Timeout while connecting UiAutomation@caf235[id=-1, displayId=0, flags=0]
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: 	at android.app.UiAutomation.connect(UiAutomation.java:333)
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: 	at com.android.uiautomator.core.UiAutomationShellWrapper.connect(UiAutomationShellWrapper.java:36)
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: 	at com.android.commands.uiautomator.DumpCommand.run(DumpCommand.java:78)
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: 	at com.android.commands.uiautomator.Launcher.main(Launcher.java:83)
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.nativeFinishInit(Native Method)
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.main(RuntimeInit.java:371)
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: Caused by: java.util.concurrent.TimeoutException: Timeout while connecting UiAutomation@caf235[id=-1, displayId=0, flags=0]
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: 	at android.app.UiAutomation.connectWithTimeout(UiAutomation.java:410)
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: 	at android.app.UiAutomation.connect(UiAutomation.java:331)
+11-13 16:29:52.773  4425  4425 E AndroidRuntime: 	... 5 more
+

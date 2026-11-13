@@ -1,0 +1,28 @@
+app pids seen: ['4966', '8009', '8573']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=41 total=137
+   11-13 16:28:53.783  4966  4966 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-13 16:33:55.732  8009  8009 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-13 16:34:23.489  8009  8009 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-13 16:35:53.115  8573  8573 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-13 16:28:52.788  4955  4955 I PERFCHECK: section: W. First launch and warm-up
+   11-13 16:29:26.058  6030  6030 I PERFCHECK: tr
+   11-13 16:29:26.627  6035  6035 I PERFCHECK: section: TR1. Transitions recorded at 12 fps animations ON, API 26: 10 frames from the start of the motion, in sheets/tr
+   11-13 16:31:51.808  6898  6898 I PERFCHECK: section: TR2. Quick open/back ×12 on a book and an event the shared-element crash on API 26 came during navigation
+   11-13 16:33:28.800  7808  7808 I PERFCHECK: section: TR4. Monkey 2000 seed 31337 on API 26
+   11-13 16:33:28.821  7813  7813 I PERFCHECK: section: W. First launch and warm-up
+   11-13 16:33:53.028  7962  7962 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-13 16:33:53.524  1634  4488 I ActivityManager: Killing 4966:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-13 16:34:04.044  8079  8079 I PERFCHECK: monkey start
+   11-13 16:35:12.119  8241  8241 I PERFCHECK: section: TR4. Monkey 2000 seed 99 on API 26
+   11-13 16:35:12.144  8246  8246 I PERFCHECK: section: W. First launch and warm-up
+   11-13 16:35:50.637  8523  8523 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-13 16:35:50.909  1634  2586 I ActivityManager: Killing 8009:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-13 16:36:01.258  8646  8646 I PERFCHECK: monkey start
+   11-13 16:37:23.205  8800  8800 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

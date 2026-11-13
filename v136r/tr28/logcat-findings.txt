@@ -1,0 +1,35 @@
+app pids seen: ['5980']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=164 total=369
+   11-13 16:31:13.560  5980  5980 I Choreographer: Skipped 164 frames!  The application may be doing too much work on its main thread.
+   11-13 16:31:21.215  5980  5980 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-13 16:31:29.097  5980  5980 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-13 16:32:33.017  5980  5980 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-13 16:34:12.937  5980  5980 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-13 16:34:34.143  5980  5980 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-13 16:37:00.740  5980  5980 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+== Davey: 19
+   davey events=19 max=3086ms median=771ms
+   11-13 16:31:13.316  5980  6006 I OpenGLRenderer: Davey! duration=3000ms; Flags=1, IntendedVsync=232169974586, Vsync=232486641240, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=232501278680, AnimationStart=232501
+   11-13 16:31:13.903  5980  6006 I OpenGLRenderer: Davey! duration=3086ms; Flags=1, IntendedVsync=232681399259, Vsync=235414732483, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=235425664040, AnimationStart=235425
+   11-13 16:31:15.676  5980  6006 I OpenGLRenderer: Davey! duration=806ms; Flags=0, IntendedVsync=236728873647, Vsync=237095540299, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=237095672650, AnimationStart=2370957
+   11-13 16:31:16.057  5980  6006 I OpenGLRenderer: Davey! duration=779ms; Flags=0, IntendedVsync=237129218504, Vsync=237529218488, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=237543064580, AnimationStart=2375431
+   11-13 16:31:16.482  5980  6006 I OpenGLRenderer: Davey! duration=736ms; Flags=0, IntendedVsync=237574145404, Vsync=237957478722, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=237960315160, AnimationStart=2379603
+   11-13 16:31:21.446  5980  6006 I OpenGLRenderer: Davey! duration=865ms; Flags=1, IntendedVsync=242445715788, Vsync=243079049096, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=243081234210, AnimationStart=2430822
+   11-13 16:31:29.116  5980  6006 I OpenGLRenderer: Davey! duration=795ms; Flags=0, IntendedVsync=250185049299, Vsync=250401715957, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=250413140250, AnimationStart=2504131
+   11-13 16:31:29.396  5980  6006 I OpenGLRenderer: Davey! duration=787ms; Flags=0, IntendedVsync=250429718944, Vsync=250946385590, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=250962534150, AnimationStart=2509625
+   11-13 16:34:12.906  5980  6006 I OpenGLRenderer: Davey! duration=806ms; Flags=0, IntendedVsync=413924104521, Vsync=414157437845, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=414164931440, AnimationStart=4141649
+   11-13 16:34:13.135  5980  6006 I OpenGLRenderer: Davey! duration=771ms; Flags=0, IntendedVsync=414216032020, Vsync=414799365330, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=414802958680, AnimationStart=4148030
+   11-13 16:34:34.719  5980  6006 I OpenGLRenderer: Davey! duration=751ms; Flags=0, IntendedVsync=435447976802, Vsync=435997976780, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=436009213080, AnimationStart=4360092
+   11-13 16:34:34.900  5980  6006 I OpenGLRenderer: Davey! duration=740ms; Flags=1, IntendedVsync=436020295908, Vsync=436386962560, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=436401057550, AnimationStart=4364011
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-13 16:31:07.628  5971  5971 I PERFCHECK: section: W. First launch and warm-up
+   11-13 16:32:06.825  6665  6665 I PERFCHECK: tr
+   11-13 16:32:07.358  6670  6670 I PERFCHECK: section: TR1. Transitions recorded at 12 fps animations ON, API 28: 10 frames from the start of the motion, in sheets/tr
+   11-13 16:34:44.026  7634  7634 I PERFCHECK: section: TR2. Quick open/back ×12 on a book and an event the shared-element crash on API 26 came during navigation
+   11-13 16:36:30.115  8519  8519 I PERFCHECK: section: TR3. „Старият вестник“ on API 28: double tap with two overlapping input tap sendevent was too slow on old images
+   11-13 16:37:07.942  8831  8831 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

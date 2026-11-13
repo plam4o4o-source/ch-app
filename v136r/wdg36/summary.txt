@@ -1,0 +1,72 @@
+part wdg36; APK: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 5087 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## WD1. The main widget from Settings › Уиджети › „Добави уиджета „Читалище Яворец““
+PIN main dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Chitalishte Yavorets" text="Chitalishte Yavorets" text="Scan" text="Catalogue" text="2 books to return" text="in 3 days" text="Oct 15" text="Next event" text="Literary evening" text="Octobe
+HOME after the main pin: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 223 1023 809]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+widgets of ours bound: id=2 
+## WD2. „Книга на деня“ from Settings
+PIN book dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Book of the day" text="Book of the day" text="Under the Yoke" text="Ivan Vazov" text="Book of the day" content-desc="Book of the day widget" text="3 × 2" content-desc="3 wide by 2 high" tex
+HOME after both pins: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 223 1023 809]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Книга на деня|Легенда за полето|Петър Николов|; error text: 
+widgets of ours bound: id=2 id=3 
+      1     provider=ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}
+      1     provider=ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}
+widgetCategory=1 widgetCategory=3 
+
+## WD3. After the catalogue is loaded; dark theme (10 s, 40 s and 90 s after the switch); light again
+WARN: tab bar not reached
+WIDGET after the catalogue loaded: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 223 1023 809]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Книга на деня|Легенда за полето|Петър Николов|; error text: 
+WIDGET dark after 10 s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET dark after 40 s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET dark after 90 s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET light again: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+## WD4. Click-through
+WIDGET click catalog: 'widget_catalog' not on the home screen
+WIDGET click scan: 'widget_scan' not on the home screen
+WIDGET click event: 'widget_event' not on the home screen
+WIDGET click app: 't:Chitalishte Yavorets|Читалище Яворец' not on the home screen
+WDG part: FATAL(any process)=0 of the app=0 ANR=0; FATAL lines in the whole log: 0
+contact sheets: 3 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: 1 entries, 1 distinct
+     1  update.verify: signature mismatch
+   keys of an entry: at, error, tag
+WARN: settings item =Диагностика|=Diagnostics not found
+APP W/E lines (pids ['5225', '7541', '8361']): 28 in 10 groups
+       6  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       4  W/Parcel: Expecting binder but got null!
+       3  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       3  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       3  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=bcd#bc-d#-#d#-#-b#a#ea#, generation=#)
+       1  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+contact sheets: 3 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5225', '7541', '8361']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 34
+   skipped-frames events=34 max=182 total=1908
+== Davey: 62
+   davey events=62 max=4939ms median=983ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91354008 Nov 13 16:25 app-mapping.txt; crashes: 0 B

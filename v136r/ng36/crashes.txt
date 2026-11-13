@@ -1,0 +1,2 @@
+12-06 18:33:25.705  1858  1858 F libc    : Fatal signal 4 (SIGILL), code 2 (ILL_ILLOPN), fault addr 0x7d489bb17769 in tid 1858 (earchbox:search), pid 1858 (earchbox:search)
+

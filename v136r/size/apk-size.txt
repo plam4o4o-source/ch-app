@@ -1,0 +1,3 @@
+app.apk 4583950 bytes
+app-base.apk 4317894 bytes
+app-dev.apk 28595555 bytes

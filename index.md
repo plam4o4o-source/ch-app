@@ -1,5 +1,7 @@
 # Emulator results
 
+v1.2.36 released (6432ef1), re-check of the after-merge fixes: [v136r/index.md](v136r/index.md)
+
 v1.2.36 candidate (80efffa) vs v1.2.35: [v136/index.md](v136/index.md)
 
 Full test of the released v1.2.35 (aef8910): [v135full/index.md](v135full/index.md)

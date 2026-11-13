@@ -1,0 +1,17 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-13 16:29:15.568  6200  6200 I PERFCHECK: section: W. First launch and warm-up
+   11-13 16:31:02.864  7438  7438 I PERFCHECK: yup
+   11-13 16:31:03.393  7443  7443 I PERFCHECK: section: YU1. Swipe-down dismiss with exact distances motionevent, ×3: the rule is ≥140 dp at any speed; the finger-up position must count
+   11-13 16:43:12.125 13552 13552 I PERFCHECK: section: YU2. input swipe ×3 each: 200 dp in 300 / 150 / 600 ms, 120 dp slow, 150 dp in 300 ms
+   11-13 16:51:45.551 17234 17234 I PERFCHECK: section: YU3. Every slide by auto-advance no touches; 5.5 s per slide: an emulator screenshot every ~2.5 s
+   11-13 16:53:05.218 17466 17466 I PERFCHECK: section: YU4. The last slide by 7 quick taps on the right, its texts, share as an image
+   11-13 16:54:11.352 17942 17942 I PERFCHECK: sh-year
+   11-13 16:54:43.684 18211 18211 I PERFCHECK: section: YU5. Dark theme: the last slide
+   11-13 16:55:41.638 18538 18538 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

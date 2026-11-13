@@ -1,0 +1,71 @@
+part tr28; APK: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15982 MB RAM
+android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: 
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-lowdr-nowidecg-port-notnight-420dpi-finger-keysexposed-nokeys-navhidden-nonav-2274x1080-v28
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 8802 ms
+## TR1. Transitions recorded at 12 fps (animations ON, API 28): 10 frames from the start of the motion, in sheets/tr
+TREC a-book-open: frames=46 motion-start=#25 moving-frames=2 (span 7) kept #24..#33; diffs: 0 18 0 0 0 0 0 15 0 0
+TR book: book screen open: text="Джиан, Филип" text="Налична" text="Наличност към 09.11.2026" text="Искам да прочета" 
+TREC b-book-back: frames=38 motion-start=#30 moving-frames=3 (span 4) kept #28..#37; diffs: 0 0 18 8 0 11 0 0 0 0
+TREC c-event-open: frames=36 motion-start=#27 moving-frames=4 (span 5) kept #26..#35; diffs: 0 21 16 0 14 11 0 0 0 0
+TR event: event screen open: content-desc="Събота, 21 ноември 2026, след 8 дни" text="Панайот Пипков · Ден на семейството" text="Събитие от годишния 
+TREC d-event-back: frames=38 motion-start=#20 moving-frames=4 (span 13) kept #19..#28; diffs: 0 8 0 0 0 0 0 37 0 0
+TREC e-article-open: frames=36 motion-start=#25 moving-frames=6 (span 8) kept #24..#33; diffs: 0 3 48 0 12 43 0 11 9 0
+TR article: article open: content-desc="Фолклорно пътешествие из Пиринска, Родопска и Тракийска област в Яворец." text="СЪБИТИЕ  ·  16 октомври 20
+TREC f-article-back: frames=37 motion-start=#21 moving-frames=5 (span 15) kept #20..#29; diffs: 0 4 0 0 0 1 24 0 0 0
+CARD28 try 1 (field 540 691, save 540 1104): text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+CARD28: card shown
+TREC g-card-full: frames=46 motion-start=#0 moving-frames=0 (span 0) kept #0..#9; diffs: 0 0 0 0 0 0 0 0 0 0
+TR card fullscreen: yes
+TREC h-card-back: frames=50 motion-start=#0 moving-frames=0 (span 0) kept #0..#9; diffs: 0 0 0 0 0 0 0 0 0 0
+TR part so far: FATAL(any process)=0 of the app=0 ANR=0
+## TR2. Quick open/back ×12 on a book and an event (the shared-element crash on API 26 came during navigation)
+after 12 quick book open/back: app in front yes; pid 5980; FATAL(any process)=0 of the app=0 ANR=0
+after 6 scanner/manual loops: app in front yes; pid 5980; FATAL(any process)=0 of the app=0 ANR=0
+## TR3. „Старият вестник“ on API 28: double tap with two overlapping 'input tap' (sendevent was too slow on old images)
+NEWSPAPER double tap try 1 (API 28): diff vs the page 28.00
+NEWSPAPER double tap try 2 (API 28): diff vs the page 0.47
+NEWSPAPER double tap try 3 (API 28): diff vs the page 28.00
+TR part: FATAL(any process)=0 of the app=0 ANR=0; FATAL lines in the whole log: 0
+contact sheets: 10 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 2719 мс, последен 2719 мс | Пълно показване: медиана 2719 мс, последно 2719 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36 (1507400)" text="Профил: чака" text="Студен старт · 1" text="Първи кадър: медиана 2719 мс, последен 2719 мс" text="Пълно показване: медиана 2719 мс, последно 2719 мс" text="Няма записани грешки." content-desc=
+APP W/E lines (pids ['5980']): 43 in 11 groups
+      12  W/GooglePlayServicesUtil: Google Play services out of date for org.chyavorec.app.  Requires # but found #
+      12  W/GoogleApiManager: The service for mu# is not available: ss#{statusCode=SERVICE_VERSION_UPDATE_REQUIRED, resolution=null, message
+       6  W/ConnectionStatusConfig: Dynamic lookup for intent failed for action: com.google.android.gms.chimera.container.moduleinstall.ModuleInst
+       6  W/GmsClient: unable to connect to service: com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.STAR
+       1  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+       1  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       1  E/eglCodecCommon: glUtilsParamSize: unknow param #
+       1  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=d#b#cf-#-#b#-#-d#c#e#e#, generation=#)
+       1  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       1  W/LibraryVersion: Failed to get app version for libraryName: play-services-code-scanner
+contact sheets: 11 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5980']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 7
+   skipped-frames events=7 max=164 total=369
+== Davey: 19
+   davey events=19 max=3086ms median=771ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91354008 Nov 13 16:25 app-mapping.txt; crashes: 0 B

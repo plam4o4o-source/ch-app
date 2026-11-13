@@ -1,0 +1,72 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 2268504 Realtime: 2268504
+
+** MEMINFO in pid 20317 [org.chyavorec.app] **
+                   Pss  Private  Private  SwapPss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------
+  Native Heap    36724    36428        0        0    54272    42266    12005
+  Dalvik Heap     6342     6312        0        0    12239     6120     6119
+ Dalvik Other    11085    11084        0        0                           
+        Stack     1128     1128        0        0                           
+       Ashmem        5        0        0        0                           
+    Other dev       13        0       12        0                           
+     .so mmap     3166      268       80        0                           
+    .apk mmap      683        0       48        0                           
+    .ttf mmap      179        0        0        0                           
+    .dex mmap    11328        4     9576        0                           
+    .oat mmap     2589        0        4        0                           
+    .art mmap     1622     1048       12        0                           
+   Other mmap      970        4      472        0                           
+      Unknown      784      764        0        0                           
+        TOTAL    76618    57040    10204        0    66511    48386    18124
+ 
+ App Summary
+                       Pss(KB)
+                        ------
+           Java Heap:     7372
+         Native Heap:    36428
+                Code:     9980
+               Stack:     1128
+            Graphics:        0
+       Private Other:    12336
+              System:     9374
+ 
+               TOTAL:    76618       TOTAL SWAP PSS:        0
+ 
+ Objects
+               Views:       15         ViewRootImpl:        1
+         AppContexts:        2           Activities:        1
+              Assets:       12        AssetManagers:        3
+       Local Binders:       40        Proxy Binders:       28
+       Parcel memory:        9         Parcel count:       39
+    Death Recipients:        0      OpenSSL Sockets:        2
+            WebViews:        0
+ 
+ SQL
+         MEMORY_USED:     3218
+  PAGECACHE_OVERFLOW:     2062          MALLOC_SIZE:      117
+ 
+ DATABASES
+      pgsz     dbsz   Lookaside(b)          cache  Dbname
+         4      104             45       71/93/25  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb
+         4        8                         0/0/0    (attached) temp
+         4      104             59         7/27/6  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb (1)
+         4     2064             19         0/25/1  /data/user/0/org.chyavorec.app/databases/catalog-index.db
+         4        8                         0/0/0    (attached) temp
+         4     2064            109       51/36/16  /data/user/0/org.chyavorec.app/databases/catalog-index.db (1)
+         4       44             27         2/49/3  /data/user/0/org.chyavorec.app/databases/chitalishte.db
+         4        8                         0/0/0    (attached) temp
+         4       44             84        11/26/6  /data/user/0/org.chyavorec.app/databases/chitalishte.db (1)
+ 
+ Asset Allocations
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/EG.ttf: 124K
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/5Z.ttf: 124K
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/X9.ttf: 64K
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/nw.ttf: 64K
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/w2.ttf: 64K
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/5Z.ttf: 124K
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/nw.ttf: 64K
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/X9.ttf: 64K
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/w2.ttf: 64K
+    zip:/data/app/org.chyavorec.app-x6l0rAss8G03n67V_PRJTA==/base.apk:/res/EG.ttf: 124K

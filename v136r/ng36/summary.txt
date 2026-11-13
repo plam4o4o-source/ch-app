@@ -1,0 +1,110 @@
+part ng36; APK: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 5282 ms
+## NG1. A quick swipe down that starts on a row at the top of a list: does it open the row? 1.2.36, then 1.2.35
+SWIPE new Settings, down from 25% to 75% of the height in 200 ms: nothing opened
+SWIPE new Settings, down from 25% to 75% of the height in 80 ms: nothing opened
+SWIPE new Settings, down from 25% to 75% of the height in 600 ms: nothing opened
+SWIPE new Settings, down from 30% to 60% of the height in 120 ms: nothing opened
+SWIPE new Settings, down from 22% to 80% of the height in 300 ms: nothing opened
+SWIPE new Още, down from 30% to 75% in 200 ms: nothing opened
+SWIPE new Още, down from 30% to 75% in 80 ms: nothing opened
+SWIPE new Каталог, down from 45% to 85% in 200 ms: nothing opened
+SWIPE new Каталог, down from 45% to 85% in 80 ms: nothing opened
+installed base: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+SWIPE base Settings, down from 25% to 75% of the height in 200 ms: nothing opened
+SWIPE base Settings, down from 25% to 75% of the height in 80 ms: nothing opened
+SWIPE base Settings, down from 25% to 75% of the height in 600 ms: nothing opened
+SWIPE base Settings, down from 30% to 60% of the height in 120 ms: nothing opened
+SWIPE base Settings, down from 22% to 80% of the height in 300 ms: nothing opened
+SWIPE base Още, down from 30% to 75% in 200 ms: nothing opened
+SWIPE base Още, down from 30% to 75% in 80 ms: nothing opened
+SWIPE base Каталог, down from 45% to 85% in 200 ms: nothing opened
+SWIPE base Каталог, down from 45% to 85% in 80 ms: nothing opened
+installed new: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950;  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## NG2. Settings › Избери известията: the weekly digest switch (permission granted)
+NOTIF screen: text="Известията се подготвят на самото устройство — без рекламни или проследяващи услуги." text="Съобщения" text="Съобщения, изпратени от читалището до потребителите на приложението" text="Новини" text="Нова публикация в сайта" text="Събития" text="Напомняния за събития" text="Срокове за връщане" text="Наближаващ или изтекъл срок на заета книга" text="Отново на рафта" text="Книги от „Искам да прочета“, които отново са на рафта" text="Седмичен преглед" text="Едно тихо известие в неделя вечер: събития, нови книги и новини — само ако има нещо. Изключено по подразбиране." text="Напомняне „Утре“" text="Ден преди събитие на читалището с начален час — едно кратко известие. Изключено по подразбиран
+DIGEST row before: 'Седмичен преглед': checked=false (node itself/ancestor, clickable=true); sections row absent
+DIGEST after the tap: 'Седмичен преглед': checked=true (node itself/ancestor, clickable=true); fg org.chyavorec.app/org.chyavorec.app.MainActivity; texts: text="Седмичен преглед" text="Едно тихо известие в неделя вечер: събития, нови книги и новини — само ако има нещо. Изключено по подразбиране." text="Ограничават реда „Нови на рафта“ в прегледа. Без избор — всички нови книги." 
+below the digest row: text="Нова публикация в сайта" text="Събития" text="Напомняния за събития" text="Срокове за връщане" text="Наближаващ или изтекъл срок на заета книга" text="Отново на рафта" text="Книги от „Искам да прочета“, които отново са на рафта" text="Седмичен преглед" text="Едно тихо известие в неделя вечер: събития, нови книги и новини — само ако има нещо. Изключено по подразбиране." text="Любими раздели" text="Ограничават реда „Нови на рафта“ в прегледа. Без избор — всички нови книги." text="Общ отдел" 
+favourite sections: text="Нова публикация в сайта" text="Събития" text="Напомняния за събития" text="Срокове за връщане" text="Наближаващ или изтекъл срок на заета книга" text="Отново на рафта" text="Книги от „Искам да прочета“, които отново са на рафта" text="Седмичен преглед" text="Едно тихо известие в неделя вечер: събития, нови книги и новини — само ако има нещо. Изключено по подразбиране." text="Любими раздели" 
+## NG3. The same switch without the notification permission (revoked, flags cleared): is the system prompt shown?
+permission now: android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+NOTIF screen without the permission: text="Известията са изключени за приложението — нищо от изброеното долу няма да се показва." text="Отвори настройките" text="Известията се подготвят на самото устройство — без рекламни или проследяващи услуги." text="Съобщения" text="Съобщения, изпратени от читалището до потребителите на приложението" text="Новини" text="Нова публикация в сайта" text="Събития" text="Напомняния за събития" text="Ср
+DIGEST row (no permission): 'Седмичен преглед': checked=true (node itself/ancestor, clickable=true)
+DIGEST switched off first: 'Седмичен преглед': checked=false (node itself/ancestor, clickable=true)
+after the tap: fg com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity; text="Allow Chitalishte Yavorets to send you notifications?" text="Allow" text="Don’t allow" 
+system prompt → Allow; permission android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]; DIGEST row: 'Седмичен преглед': checked=true (node itself/ancestor, clickable=true)
+DIGEST row before the clock jump: 'Седмичен преглед': checked=true (node itself/ancestor, clickable=true)
+## NG4. Digest notification: the clock jumps to Sunday 6 Dec 2026 18:30 (also Никулден), the periodic worker runs
+device date before: Fri Nov 13 16:41:45 UTC 2026; tz Etc/UTC
+device date now: Sun Dec  6 18:30:09 UTC 2026
+jobs: 0 4 
+jobscheduler run -f 0: Running job [FORCED]
+jobscheduler run -f 4: Running job [FORCED]
+NOTIF id=700 channel=updates title=String (Налична е нова версия 1.2.36) text=String (Докосни, за да обновиш приложението.) template=String (android.app.Notification$BigTextStyle) picture=NO largeIcon=yes actions=0 []
+NOTIF total for org.chyavorec.app: 1
+SHADE digest: 'Тази седмица|This week|седмица|Седмичен' not in the shade: text="On" content-desc="Internet,AndroidWifi" text="Internet" text="On" content-desc="Bluetooth." text="Bluetooth" text="Flashlight" text="Off" content-desc="Do Not Disturb." text="Do Not Disturb" text="Chitalishte Yavorets" text="•" text="now" content-desc="Collapse" 
+DIGEST: not in the shade
+jobscheduler run -f 0: Running job [FORCED]
+NOTIF id=700 channel=updates title=String (Налична е нова версия 1.2.36) text=String (Докосни, за да обновиш приложението.) template=String (android.app.Notification$BigTextStyle) picture=NO largeIcon=yes actions=0 []
+NOTIF total for org.chyavorec.app: 1
+DIGEST logcat: ; FATAL(any process)=0 of the app=0 ANR=0
+## NG5. Никулден (6 Dec): the greeting on Home, „Честитка“, the composer, share as an image
+HOME on 6 Dec: text="НЧ „Васил Левски – 1922“" text="с. Яворец" content-desc="Съобщения" text="Честит Никулден!" text="Ден на рибарите и моряците. Честит имен ден на всички, които празнуват!" text="*Св. Йоан Златоуст, архиеп. Константинополски (Тип. с. 116)" text="Изпрати честитка" content-desc="Скрий поздрава" content-desc="Лента за търсене" text="Търси книга, новина, събитие…" content-desc="Сканирай баркод" content-desc="Последни новини" text="СЪБИТИЕ" text="С хоро и песен във Водица" 
+GREETING composer: content-desc="Затваряне на таблицата" content-desc="Манипулатор за преместване с плъзгане" text="Честитка от Яворец" text="Картичката се създава на телефона и излиза от него само когато я споделите." content-desc="Преглед на картичката: Честит Никулден!. Честит имен ден на Никола, Николай, Николина и всички, които празнуват! Спокойни води и богата трапеза." 
+GREETING composer (scrolled): content-desc="Затваряне на таблицата" content-desc="Манипулатор за преместване с плъзгане" text="Честитка от Яворец" text="Картичката се създава на телефона и излиза от него само когато я споделите." content-desc="Преглед на картичката: Честит Никулден!. Честит имен ден на Никола, Николай, Николина и всички, които празнуват! Спокойни води и богата трапеза." text="Лично за (по желание)" text="Букви, цифри и обичайна пунктуация" text="0/60" text="Сподели картичката" 
+GREETING share: chooser OPEN after 5 s; fg android/com.android.internal.app.ChooserActivity; file chyavorec-greeting-nikulden-1796581973092.png
+GREETING file: 50 B; PIL.UnidentifiedImageError: cannot identify image file 'out/ng36/share/greeting-chyavorec-greeting-nikulden-1796581973092.png'
+SHARE greet received by the helper: action=android.intent.action.SEND type=image/png flags=0x1b080001 clipItems=1 stream=content://org.chyavorec.app.files/share/chyavorec-greeting-nikulden-1796581973092.png mime=image/png bytes=676272 png=true dims=1080x1920 subject=Честит Никулден! text=Честит Никулден! Честит имен ден на Никола, Николай, Николина и всички, които празнуват! Спокойни води и богата трапеза. https://chyavorec.org
+NG part: FATAL(any process)=0 of the app=0 ANR=0; FATAL lines in the whole log: 0
+contact sheets: 4 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: 1 entries, 1 distinct
+     1  update.verify: signature mismatch
+   keys of an entry: at, count, error, tag
+DIAG SCREEN: text="Записи: 1"  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 3 | Първи кадър: медиана 3450 мс, последен 3750 мс | Пълно показване: медиана 4220 мс, последно 4449 мс | Топъл старт · 1 | Първи кадър: медиана 387 мс, последен 387 мс | Насечени кадри по екрани | notif
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36 (1507400)" text="Профил: чака" text="Студен старт · 3" text="Първи кадър: медиана 3450 мс, последен 3750 мс" text="Пълно показване: медиана 4220 мс, последно 4449 мс" text="Топъл старт · 1" text="Първи кадър: 
+APP W/E lines (pids ['4706', '8381', '9350', '10166', '13050']): 52 in 14 groups
+       8  W/Parcel: Expecting binder but got null!
+       8  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       4  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       2  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=ab#b#b-#d#-#a#d-#-#ca#c#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#-#c-#cc-#c#-#d#cfc#ccf, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=c#c#a-bb#-#d#-#b#-#d#bf, generation=#)
+       1  E/FrameEvents: updateAcquireFence: Did not find frame.
+       1  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+contact sheets: 5 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4706', '8381', '9350', '10166', '13050']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 46
+   skipped-frames events=46 max=127 total=2299
+== Davey: 95
+   davey events=95 max=3912ms median=1014ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'SIGNAL': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91354008 Nov 13 16:25 app-mapping.txt; crashes: 174 B

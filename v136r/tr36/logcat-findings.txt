@@ -1,0 +1,41 @@
+app pids seen: ['3943']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 23
+   skipped-frames events=23 max=171 total=1160
+   11-13 16:29:21.840  3943  3943 I Choreographer: Skipped 65 frames!  The application may be doing too much work on its main thread.
+   11-13 16:29:24.819  3943  3943 I Choreographer: Skipped 171 frames!  The application may be doing too much work on its main thread.
+   11-13 16:29:25.618  3943  3943 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-13 16:29:26.484  3943  3943 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-13 16:29:27.208  3943  3943 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-13 16:29:27.931  3943  3943 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-13 16:29:35.568  3943  3943 I Choreographer: Skipped 77 frames!  The application may be doing too much work on its main thread.
+   11-13 16:29:36.097  3943  3943 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-13 16:29:36.854  3943  3943 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-13 16:29:37.710  3943  3943 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-13 16:30:04.842  3943  3943 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-13 16:30:10.967  3943  3943 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+== Davey: 68
+   davey events=68 max=3213ms median=857ms
+   11-13 16:29:21.891  3943  3970 I HWUI    : Davey! duration=1405ms; Flags=1, FrameTimelineVsyncId=8200, IntendedVsync=115081412648, Vsync=115131412646, InputEventId=0, HandleInputStart=115145245129, AnimationStart=115145245640, PerformTraver
+   11-13 16:29:24.511  3943  3970 I HWUI    : Davey! duration=2534ms; Flags=0, FrameTimelineVsyncId=8261, IntendedVsync=116564745922, Vsync=116564745922, InputEventId=0, HandleInputStart=116574869459, AnimationStart=116574870100, PerformTraver
+   11-13 16:29:25.208  3943  3998 I HWUI    : Davey! duration=3213ms; Flags=0, FrameTimelineVsyncId=8284, IntendedVsync=116648079252, Vsync=119498079138, InputEventId=0, HandleInputStart=119508471837, AnimationStart=119508472278, PerformTraver
+   11-13 16:29:26.177  3943  3998 I HWUI    : Davey! duration=1325ms; Flags=0, FrameTimelineVsyncId=8564, IntendedVsync=119514745804, Vsync=119531412470, InputEventId=0, HandleInputStart=119546091116, AnimationStart=119546091617, PerformTraver
+   11-13 16:29:26.980  3943  3954 I HWUI    : Davey! duration=1429ms; Flags=0, FrameTimelineVsyncId=8572, IntendedVsync=119548079136, Vsync=119581412468, InputEventId=0, HandleInputStart=119590525947, AnimationStart=119590526508, PerformTraver
+   11-13 16:29:27.894  3943  3998 I HWUI    : Davey! duration=2266ms; Flags=0, FrameTimelineVsyncId=8580, IntendedVsync=119598079134, Vsync=120298079106, InputEventId=0, HandleInputStart=120317463415, AnimationStart=120317464116, PerformTraver
+   11-13 16:29:28.342  3943  3998 I HWUI    : Davey! duration=1890ms; Flags=0, FrameTimelineVsyncId=8626, IntendedVsync=120331412438, Vsync=121164745738, InputEventId=0, HandleInputStart=121180913790, AnimationStart=121180914651, PerformTraver
+   11-13 16:29:28.627  3943  3998 I HWUI    : Davey! duration=1456ms; Flags=0, FrameTimelineVsyncId=8648, IntendedVsync=121181412404, Vsync=121881412376, InputEventId=0, HandleInputStart=121905429337, AnimationStart=121905429908, PerformTraver
+   11-13 16:29:28.895  3943  3955 I HWUI    : Davey! duration=1279ms; Flags=0, FrameTimelineVsyncId=8663, IntendedVsync=121914745708, Vsync=122614745680, InputEventId=0, HandleInputStart=122622483631, AnimationStart=122622484232, PerformTraver
+   11-13 16:29:29.156  3943  3955 I HWUI    : Davey! duration=942ms; Flags=0, FrameTimelineVsyncId=8692, IntendedVsync=122631412346, Vsync=123114745660, InputEventId=0, HandleInputStart=123134042758, AnimationStart=123134043189, PerformTravers
+   11-13 16:29:29.491  3943  3955 I HWUI    : Davey! duration=741ms; Flags=0, FrameTimelineVsyncId=8728, IntendedVsync=123148078992, Vsync=123431412314, InputEventId=0, HandleInputStart=123439204032, AnimationStart=123439204753, PerformTravers
+   11-13 16:29:32.299  3943  3954 I HWUI    : Davey! duration=850ms; Flags=0, FrameTimelineVsyncId=8961, IntendedVsync=125798078886, Vsync=126081412208, InputEventId=0, HandleInputStart=126099615174, AnimationStart=126099616176, PerformTravers
+== NativeLink: 1
+   11-13 16:29:42.490  3943  4349 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-13 16:29:16.320  3935  3935 I PERFCHECK: section: W. First launch and warm-up
+   11-13 16:30:34.261  5273  5273 I PERFCHECK: tr
+   11-13 16:30:34.861  5278  5278 I PERFCHECK: section: TR1. Transitions recorded at 12 fps animations ON, API 36: 10 frames from the start of the motion, in sheets/tr
+   11-13 16:33:58.813  6919  6919 I PERFCHECK: section: TR2. Quick open/back ×12 on a book and an event the shared-element crash on API 26 came during navigation
+   11-13 16:36:02.766  7708  7708 I PERFCHECK: section: TR5. Widget providers on API 36 categories: 1 = home screen, 2 = keyguard
+   11-13 16:36:04.910  7725  7725 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat
