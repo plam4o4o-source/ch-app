@@ -6,7 +6,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.chyavorec.app.MainDispatcherRule
 import org.chyavorec.app.ui.screens.newspaper.NewspaperListViewModel
@@ -104,10 +106,15 @@ class ContentScreensLogicTest {
 
     private class FakePages(val count: Int = 2, var failRender: Boolean = false) : PdfPages {
         var closed = false
+        /** Всички нарисувани картинки — за проверка кои са освободени. */
+        val made = mutableListOf<Bitmap>()
+        /** Ако е зададено, рисуването чака тук (и не се отменя — като платформената страница, която вече е готова). */
+        var gate: kotlinx.coroutines.CompletableDeferred<Unit>? = null
         override val pageCount = count
         override suspend fun render(index: Int, targetWidthPx: Int, maxPixels: Int): Bitmap {
             if (failRender) throw PdfReadException(PdfProblem.MEMORY)
-            return Bitmap.createBitmap(10, 14, Bitmap.Config.ARGB_8888)
+            gate?.let { g -> kotlinx.coroutines.withContext(kotlinx.coroutines.NonCancellable) { g.await() } }
+            return Bitmap.createBitmap(10, 14, Bitmap.Config.ARGB_8888).also { made += it }
         }
         override fun close() { closed = true }
     }
@@ -171,6 +178,60 @@ class ContentScreensLogicTest {
         val vm = reader({ Outcome.Success(File("a.pdf")) }, { throw PdfReadException(PdfProblem.PASSWORD) })
         advanceUntilIdle()
         assertEquals(ReaderState.Failed(ReaderProblem.PASSWORD), vm.state.value)
+    }
+
+
+    @Test fun aRenderCancelledWhileDrawingRecyclesItsBitmap() = runTest(dispatcher) {
+        val pages = FakePages()
+        val vm = reader({ Outcome.Success(File("a.pdf")) }, { pages })
+        advanceUntilIdle()
+        val gate = kotlinx.coroutines.CompletableDeferred<Unit>()
+        pages.gate = gate
+        vm.render(0, 1000)
+        runCurrent()
+        pages.gate = null
+        vm.render(1, 1000) // отменя първата, която още чака
+        advanceUntilIdle()
+        gate.complete(Unit)
+        advanceUntilIdle()
+        assertEquals(2, pages.made.size)
+        // made[0] е на втората заявка (текущата), made[1] — на отменената, довършена след това.
+        assertTrue(pages.made[1].isRecycled, "картинката на отменената заявка е освободена")
+        assertEquals(1, vm.page.value?.index)
+        assertTrue(!pages.made[0].isRecycled)
+    }
+
+    @Test fun quickPageTurnsStillRecycleEveryReplacedBitmapAfterTheDelay() = runTest(dispatcher) {
+        val pages = FakePages(4)
+        val vm = reader({ Outcome.Success(File("a.pdf")) }, { pages })
+        advanceUntilIdle()
+        vm.render(0, 1000); runCurrent()
+        vm.render(1, 1000); runCurrent()
+        // Следващото прелистване идва, преди да е минало закъснението на първото освобождаване.
+        vm.render(2, 1000); runCurrent()
+        vm.render(3, 1000); runCurrent()
+        assertEquals(4, pages.made.size)
+        assertTrue(pages.made.take(3).none { it.isRecycled }, "още може да са в кадъра, който се рисува")
+        advanceTimeBy(NewspaperReaderViewModel.RECYCLE_DELAY_MS + 50); runCurrent()
+        assertTrue(pages.made.take(3).all { it.isRecycled }, "и трите сменени са освободени")
+        assertTrue(!pages.made[3].isRecycled, "текущата не се пипа")
+    }
+
+    @Test fun clearingTheReaderRecyclesPendingAndCurrentBitmaps() = runTest(dispatcher) {
+        val pages = FakePages(3)
+        val vm = reader({ Outcome.Success(File("a.pdf")) }, { pages })
+        advanceUntilIdle()
+        vm.render(0, 1000); runCurrent()
+        vm.render(1, 1000); runCurrent()
+        vm.render(2, 1000); runCurrent()
+        assertTrue(pages.made.none { it.isRecycled })
+        val store = androidx.lifecycle.ViewModelStore()
+        @Suppress("UNCHECKED_CAST")
+        androidx.lifecycle.ViewModelProvider(store, object : androidx.lifecycle.ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T = vm as T
+        })[NewspaperReaderViewModel::class.java]
+        store.clear()
+        assertTrue(pages.made.all { it.isRecycled })
     }
 
     @Test fun aPageThatCannotBeDrawnKeepsTheReaderAndOffersRetry() = runTest(dispatcher) {

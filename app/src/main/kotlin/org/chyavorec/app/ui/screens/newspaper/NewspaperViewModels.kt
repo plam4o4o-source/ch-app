@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -94,6 +95,8 @@ class NewspaperReaderViewModel(
     /** Последната нарисувана заявка (страница, поискана ширина) и тази, която тече. */
     private var served: Pair<Int, Int>? = null
     private var inFlight: Pair<Int, Int>? = null
+    /** Сменените картинки, чакащи освобождаване (само главната нишка) — [onCleared] ги освобождава всичките. */
+    private val retiring = HashSet<Bitmap>()
 
     init { load() }
 
@@ -171,13 +174,18 @@ class NewspaperReaderViewModel(
             try {
                 val maxPixels = if (boost) BOOST_PIXELS else BASE_PIXELS
                 val bitmap = p.render(index.coerceIn(0, p.pageCount - 1), widthPx, maxPixels)
+                // Заявката е отменена, докато е рисувала — картинката никому не трябва (15–40 MB за GC).
+                if (!isActive) {
+                    bitmap.recycle()
+                    return@launch
+                }
                 val next = RenderedPage(index, bitmap.asImageBitmap(), bitmap.width, bitmap.height, bitmap)
                 val old = _page.value
                 _page.value = next
                 this@NewspaperReaderViewModel.served = index to widthPx
                 _pageFailed.value = false
                 // Старата картинка още може да е в кадъра, който се рисува — освобождава се малко по-късно.
-                if (old != null) launch { delay(RECYCLE_DELAY_MS); old.bitmap.recycle() }
+                if (old != null) retire(old.bitmap)
             } catch (e: CancellationException) {
                 throw e
             } catch (_: Exception) {
@@ -187,6 +195,23 @@ class NewspaperReaderViewModel(
                 if (inFlight?.first == index) inFlight = null
             }
         }
+    }
+
+    /**
+     * Освобождава [bitmap] след [RECYCLE_DELAY_MS]. Закъснението е във [viewModelScope], не в заявката за
+     * рисуване: следващата заявка (бързо прелистване, прерисуване по-едро) го отменя и картинката остава за GC.
+     */
+    private fun retire(bitmap: Bitmap) {
+        retiring += bitmap
+        viewModelScope.launch {
+            delay(RECYCLE_DELAY_MS)
+            release(bitmap)
+        }
+    }
+
+    private fun release(bitmap: Bitmap) {
+        retiring -= bitmap
+        if (!bitmap.isRecycled) bitmap.recycle()
     }
 
     /** „Опитай пак“ на страницата, която не се е нарисувала. */
@@ -214,6 +239,7 @@ class NewspaperReaderViewModel(
         renderJob?.cancel()
         closePages()
         _page.value?.bitmap?.let { if (!it.isRecycled) it.recycle() }
+        retiring.toList().forEach(::release)
     }
 
     companion object {

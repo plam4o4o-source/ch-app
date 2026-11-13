@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -163,11 +164,16 @@ fun ZoomablePaper(
             }
         }
 
+        // Жестовете са по ключ от страницата и прозореца; пропорцията идва от картинката и при по-едро
+        // прерисуване се променя с пиксел — ключ по нея би рестартирал детекторите под пръста.
+        val clampNow by rememberUpdatedState { clampAll() }
+        val zoomToNow by rememberUpdatedState<(Float, Offset) -> Unit> { target, focus -> zoomTo(target, focus) }
+
         val w = with(density) { sheetW.toDp() }
         val h = with(density) { sheetH.toDp() }
         Box(
             Modifier.fillMaxSize()
-                .pointerInput(pageKey, viewW, viewH, aspect) {
+                .pointerInput(pageKey, viewW, viewH) {
                     detectTransformGestures { centroid, pan, zoom, _ ->
                         val s0 = scale
                         val s1 = PageGeometry.clampScale(s0 * zoom)
@@ -176,11 +182,11 @@ fun ZoomablePaper(
                         tx = PageGeometry.zoomAbout(tx, cx, s0, s1) + pan.x
                         ty = PageGeometry.zoomAbout(ty, cy, s0, s1) + pan.y
                         scale = s1
-                        clampAll()
+                        clampNow()
                     }
                 }
-                .pointerInput(pageKey, viewW, viewH, aspect) {
-                    detectTapGestures(onDoubleTap = { at -> zoomTo(if (scale > 1.2f) 1f else PageGeometry.DOUBLE_TAP_SCALE, at) })
+                .pointerInput(pageKey, viewW, viewH) {
+                    detectTapGestures(onDoubleTap = { at -> zoomToNow(if (scale > 1.2f) 1f else PageGeometry.DOUBLE_TAP_SCALE, at) })
                 }
                 .semantics {
                     contentDescription = description

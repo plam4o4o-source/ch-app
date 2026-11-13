@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,16 +69,27 @@ class PlatformPdfPages private constructor(
 
     override val pageCount: Int = renderer.pageCount
 
-    override suspend fun render(index: Int, targetWidthPx: Int, maxPixels: Int): Bitmap = withContext(io) {
+    override suspend fun render(index: Int, targetWidthPx: Int, maxPixels: Int): Bitmap {
+        var produced: Bitmap? = null
         try {
-            renderOnce(index, targetWidthPx, maxPixels)
-        } catch (_: OutOfMemoryError) {
-            // Втори опит — със 70 % от ширината (половината пиксели); после — приятелска грешка.
-            try {
-                renderOnce(index, targetWidthPx * 7 / 10, maxPixels / 2)
-            } catch (e: OutOfMemoryError) {
-                throw PdfReadException(PdfProblem.MEMORY, e)
+            return withContext(io) {
+                val bitmap = try {
+                    renderOnce(index, targetWidthPx, maxPixels)
+                } catch (_: OutOfMemoryError) {
+                    // Втори опит — със 70 % от ширината (половината пиксели); после — приятелска грешка.
+                    try {
+                        renderOnce(index, targetWidthPx * 7 / 10, maxPixels / 2)
+                    } catch (e: OutOfMemoryError) {
+                        throw PdfReadException(PdfProblem.MEMORY, e)
+                    }
+                }
+                produced = bitmap
+                bitmap
             }
+        } catch (e: CancellationException) {
+            // Отменено, след като картинката вече е готова: withContext я хвърля — освобождава се тук.
+            produced?.let { if (!it.isRecycled) it.recycle() }
+            throw e
         }
     }
 

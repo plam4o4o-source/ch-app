@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
@@ -39,6 +41,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -96,7 +99,11 @@ private const val FILE_MAX_AGE = Long.MAX_VALUE / 4
 fun NewspaperScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     val vm = appViewModel { NewspaperListViewModel(it.siteRepository) }
     val state by vm.state.collectAsStateWithLifecycle()
-    Scaffold(topBar = { BackTopBar(stringResource(R.string.newspaper_title), onBack) }) { padding ->
+    val listState = rememberLazyListState()
+    // Голямото заглавие („шапката“) е в списъка; в лентата заглавието се показва, щом то излезе (или няма списък).
+    val headerGone by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+    val listShown = state.data?.isNotEmpty() == true
+    Scaffold(topBar = { BackTopBar(stringResource(R.string.newspaper_title), onBack, titleShown = !listShown || headerGone) }) { padding ->
         LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             StateContent(
                 state = state,
@@ -106,7 +113,7 @@ fun NewspaperScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 empty = { EmptyView(stringResource(R.string.newspaper_empty), icon = Icons.AutoMirrored.Outlined.Article) },
                 errorSubject = stringResource(R.string.subject_documents),
             ) { docs ->
-                NewspaperList(docs, state.fromCache, state.syncedAt, state.refreshError) { d ->
+                NewspaperList(docs, state.fromCache, state.syncedAt, state.refreshError, listState = listState) { d ->
                     navigate(Routes.newspaperRead(d.url, d.title, d.category))
                 }
             }
@@ -121,9 +128,10 @@ fun NewspaperList(
     fromCache: Boolean = false,
     syncedAt: java.time.Instant? = null,
     refreshError: org.chyavorec.core.AppError? = null,
+    listState: LazyListState = rememberLazyListState(),
     onOpen: (SiteDocument) -> Unit,
 ) {
-    LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
+    LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
         item("masthead") { Masthead() }
         item("sync") { SyncBanner(fromCache, syncedAt, refreshError) }
         itemsIndexed(docs, key = { _, d -> d.id }) { i, d ->

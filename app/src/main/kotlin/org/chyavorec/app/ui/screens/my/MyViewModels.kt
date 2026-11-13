@@ -371,6 +371,11 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
     /** Върнатите книги, които се празнуват при това отваряне (печат „Върната“); `null` — няма какво. */
     val stamps: StateFlow<StampShow?> = _stamps.asStateFlow()
 
+    /** Печатът на тази книга е изигран докрай — махa се от опашката (при връщане не се играе пак). */
+    fun stampShown(loanId: String) {
+        _stamps.update { it?.afterShown(loanId) }
+    }
+
     /** Печатите са показани. */
     fun stampsDone() {
         _stamps.value = null

@@ -224,4 +224,18 @@ class FileDownloaderTest {
         downloader.prune()
         assertTrue(!done.parentFile.exists())
     }
+
+    /** „Старият вестник“ пази готовите статии година — недосвалените `.part` не бива да стоят толкова. */
+    @Test fun yearLongRetentionStillDropsPartialFilesAtStartup() = runBlocking {
+        now = System.currentTimeMillis()
+        val year = 365L * 24 * 60 * 60 * 1000
+        val longLived = FileDownloader(client, dir, now = { now }, io = Dispatchers.IO, maxBytes = 1_000_000, retainMillis = year)
+        val part = java.io.File(dir, "0123456789abcdef01234567/Вестник.pdf.part").apply { parentFile.mkdirs(); writeBytes(ByteArray(10)); setLastModified(now - 60 * 24 * 60 * 60 * 1000L) }
+        val done = java.io.File(dir, "fedcba9876543210fedcba98/Статия.pdf").apply { parentFile.mkdirs(); writeBytes(ByteArray(10)); setLastModified(now - 60 * 24 * 60 * 60 * 1000L) }
+        longLived.prune()
+        assertTrue(part.exists(), "само по възраст — още е в рамките на годината")
+        longLived.prune(dropPartial = true)
+        assertTrue(!part.exists() && !part.parentFile.exists())
+        assertTrue(done.exists(), "готовата статия остава")
+    }
 }

@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -35,6 +37,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -127,7 +130,11 @@ fun TimelineScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     val state by vm.state.collectAsStateWithLifecycle()
     val historyUrl = LocalAppContainer.current.config.siteBaseUrl.trimEnd('/') + "/history"
     val pageTitle = stringResource(R.string.timeline_page_title)
-    Scaffold(topBar = { BackTopBar(stringResource(R.string.timeline_title), onBack) }) { padding ->
+    val listState = rememberLazyListState()
+    // Голямото заглавие е в списъка; в лентата заглавието се показва, щом то излезе (или няма списък).
+    val headerGone by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+    val listShown = state.data?.isNotEmpty() == true
+    Scaffold(topBar = { BackTopBar(stringResource(R.string.timeline_title), onBack, titleShown = !listShown || headerGone) }) { padding ->
         LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             if (state.error is AppError.Parse && state.data == null) {
                 MessageView(
@@ -142,7 +149,7 @@ fun TimelineScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     empty = { EmptyView(stringResource(R.string.timeline_empty), icon = Icons.Outlined.HistoryEdu) },
                     errorSubject = stringResource(R.string.subject_history),
                 ) { entries ->
-                    Timeline(entries, state.fromCache, state.syncedAt, state.refreshError)
+                    Timeline(entries, state.fromCache, state.syncedAt, state.refreshError, listState = listState)
                 }
             }
         }
@@ -157,8 +164,9 @@ fun Timeline(
     syncedAt: java.time.Instant? = null,
     refreshError: AppError? = null,
     staticFrame: Boolean = false,
+    listState: LazyListState = rememberLazyListState(),
 ) {
-    LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
+    LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 32.dp)) {
         item("head") { TimelineHeader() }
         item("sync") { SyncBanner(fromCache, syncedAt, refreshError) }
         itemsIndexed(entries, key = { i, e -> "$i-${e.label}" }) { i, e ->

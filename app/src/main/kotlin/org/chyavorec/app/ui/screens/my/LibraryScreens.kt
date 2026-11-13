@@ -161,7 +161,7 @@ private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((
                 SyncBanner(state.fromCache, state.syncedAt, state.refreshError)
                 if (!state.fromCache && state.data != null) SyncStamp(state.syncedAt)
                 // Върната книга от последното отваряне: печат „Върната“ (вж. ReturnStamps).
-                stamps?.let { ReturnStampPanel(it, onOpenHistory, onDone = { vm.stampsDone() }) }
+                stamps?.let { ReturnStampPanel(it, onOpenHistory, onBookShown = vm::stampShown, onDone = { vm.stampsDone() }) }
                 StateContent(
                     state = state,
                     onRetry = { vm.refresh() },

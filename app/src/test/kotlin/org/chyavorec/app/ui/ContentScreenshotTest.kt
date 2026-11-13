@@ -144,22 +144,22 @@ class ContentScreenshotTest {
     )
 
     @Test fun newspaperListLight() {
-        compose.setContent { Frame(dark = false) { Scaffold(topBar = { BackTopBar("Старият вестник", {}) }) { p -> Box(Modifier.padding(p)) { NewspaperList(articles) {} } } } }
+        compose.setContent { Frame(dark = false) { Scaffold(topBar = { BackTopBar("Старият вестник", {}, titleShown = false) }) { p -> Box(Modifier.padding(p)) { NewspaperList(articles) {} } } } }
         shot("c21-03-newspaper-list-light")
     }
 
     @Test fun newspaperListDarkLargeFont() {
-        compose.setContent { Frame(dark = true, fontScale = 1.3f) { Scaffold(topBar = { BackTopBar("Старият вестник", {}) }) { p -> Box(Modifier.padding(p)) { NewspaperList(articles) {} } } } }
+        compose.setContent { Frame(dark = true, fontScale = 1.3f) { Scaffold(topBar = { BackTopBar("Старият вестник", {}, titleShown = false) }) { p -> Box(Modifier.padding(p)) { NewspaperList(articles) {} } } } }
         shot("c21-04-newspaper-list-dark-font13")
     }
 
     @Test fun timelineLight() {
-        compose.setContent { Frame(dark = false) { Scaffold(topBar = { BackTopBar("Лента на времето", {}) }) { p -> Box(Modifier.padding(p)) { Timeline(QuizDefaults.timeline, staticFrame = true) } } } }
+        compose.setContent { Frame(dark = false) { Scaffold(topBar = { BackTopBar("Лента на времето", {}, titleShown = false) }) { p -> Box(Modifier.padding(p)) { Timeline(QuizDefaults.timeline, staticFrame = true) } } } }
         shot("c21-05-timeline-light")
     }
 
     @Test fun timelineDarkLargeFont() {
-        compose.setContent { Frame(dark = true, fontScale = 1.3f) { Scaffold(topBar = { BackTopBar("Лента на времето", {}) }) { p -> Box(Modifier.padding(p)) { Timeline(QuizDefaults.timeline, staticFrame = true) } } } }
+        compose.setContent { Frame(dark = true, fontScale = 1.3f) { Scaffold(topBar = { BackTopBar("Лента на времето", {}, titleShown = false) }) { p -> Box(Modifier.padding(p)) { Timeline(QuizDefaults.timeline, staticFrame = true) } } } }
         shot("c21-06-timeline-dark-font13")
     }
 
