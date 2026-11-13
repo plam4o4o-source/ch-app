@@ -67,8 +67,12 @@ class ReturnStampPanelTest {
 
     private fun leaveAndComeBack() {
         compose.runOnUiThread { present = false }
-        compose.mainClock.advanceTimeBy(50)
+        // Кадри, докато композицията наистина се разруши (без тях не се рекомпозира).
+        repeat(5) { compose.mainClock.advanceTimeByFrame() }
+        assertEquals(0, compose.onAllNodesWithContentDescription("Върната: Под игото").fetchSemanticsNodes().size +
+            compose.onAllNodesWithContentDescription("Върната: Тютюн").fetchSemanticsNodes().size, "композицията е разрушена")
         compose.runOnUiThread { present = true }
+        repeat(3) { compose.mainClock.advanceTimeByFrame() }
     }
 
     private fun assertNoStamp(title: String) =
