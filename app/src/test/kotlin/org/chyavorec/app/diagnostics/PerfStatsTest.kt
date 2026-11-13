@@ -150,7 +150,7 @@ class PerfStatsTest {
 
     /** Записаното „общо време“ (всъщност CPU времето на кадъра) се чете и нататък със същите полета и се казва правилно. */
     @Test fun storedFrameTotalsStillReadAndAreLabelledAsCpuTime() {
-        val stored = """{"routes":[{"route":"home","frames":10,"janky":1,"worstMs":40,"versionCode":36,"worstTotalMs":66,"sumTotalMs":150}]}"""
+        val stored = """{"routes":[{"route":"home","frames":100,"janky":1,"worstMs":40,"versionCode":36,"worstTotalMs":66,"sumTotalMs":1500}]}"""
         val file = tmp.newFile("totals.json").apply { writeText(stored) }
         val d = PerfStore(file, Executor { it.run() }).read()
         val r = d.routes.single()
