@@ -13,6 +13,22 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.37
+
+### bg
+- Оценките и бележките в читателския дневник се виждат само при отключено приложение; уиджетът на заключения екран е само „Книга на деня“.
+- „Книга на деня“ избира истински книги; седмичният преглед не пропуска новините от деня.
+- Печатът „Върната“ не се повтаря; по-плавно и по-леко четене на „Старият вестник“.
+- По-добре с голям шрифт: герой, листът на събитието, корици на книги и детайли.
+- По-малко сривове на Android 8 и по-точно затваряне на годишната история с плъзгане.
+
+### en
+- Reading-diary ratings and notes show only when the app is unlocked; the lock-screen widget is only “Book of the day”.
+- “Book of the day” picks real books; the weekly digest no longer misses same-day news.
+- The “Returned” stamp no longer replays; smoother, lighter reading of “The Old Newspaper”.
+- Better with large text: hero, event leaf, book covers and details.
+- Fewer crashes on Android 8 and a more accurate swipe-down to close the year story.
+
 ## 1.2.36
 
 ### bg
