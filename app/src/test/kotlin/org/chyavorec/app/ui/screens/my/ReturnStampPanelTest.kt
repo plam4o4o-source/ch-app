@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import org.chyavorec.app.ui.components.ConfettiState
@@ -66,12 +67,12 @@ class ReturnStampPanelTest {
     }
 
     private fun leaveAndComeBack() {
-        compose.runOnUiThread { present = false }
+        compose.runOnUiThread { present = false; Snapshot.sendApplyNotifications() }
         // Кадри, докато композицията наистина се разруши (без тях не се рекомпозира).
         repeat(5) { compose.mainClock.advanceTimeByFrame() }
         assertEquals(0, compose.onAllNodesWithContentDescription("Върната: Под игото").fetchSemanticsNodes().size +
             compose.onAllNodesWithContentDescription("Върната: Тютюн").fetchSemanticsNodes().size, "композицията е разрушена")
-        compose.runOnUiThread { present = true }
+        compose.runOnUiThread { present = true; Snapshot.sendApplyNotifications() }
         repeat(3) { compose.mainClock.advanceTimeByFrame() }
     }
 
