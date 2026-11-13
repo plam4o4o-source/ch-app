@@ -116,7 +116,7 @@ jobs:
       fail-fast: false
       matrix:
         # API 33 google_apis x86_64, -gpu swangle_indirect; частите с име на 28 — API 28; на 26 — API 26; c36 — API 36.
-        part: [c26, tr26, tr28, tr36, yup36, ng36, wdg36]
+        part: [wdn36, wdn36b]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8

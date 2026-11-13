@@ -8,7 +8,7 @@
 #   ng36           — Настройки: плъзгане надолу в началото на списъка (1.2.36 срещу 1.2.35), седмичен преглед,
 #                    разрешението за известия, честитката за Никулден (датата на устройството)
 #   wdg36          — уиджетите от бутоните в Настройки (двата), тъмна тема, докосвания
-A7_PARTS=" tr26 tr28 tr36 yup36 ng36 wdg36 "
+A7_PARTS=" tr26 tr28 tr36 yup36 ng36 wdg36 wdn36 wdn36b "
 W20_PARTS="$W20_PARTS $A7_PARTS"
 A7=$H_/a7.py
 
@@ -335,6 +335,33 @@ part_wdg36() {
   diag_end
 }
 
+# ---------------------------------------------------------------- УИДЖЕТЪТ СЛЕД СМЯНА НА НОЩНИЯ РЕЖИМ (1.2.36 срещу 1.2.35)
+wd_night() {  # $1 — new | base
+  local K=$1 i t
+  inst $(apk_of $K) $K $(ref_of $K) || return 1
+  a input keyevent KEYCODE_HOME; sleep 2; launch >/dev/null; sleep 6; dismiss; ready; dims
+  tab catalog >/dev/null; waitfor "$RX_RESULTS" 120 >/dev/null; tab home >/dev/null; sleep 3
+  a am force-stop $PKG
+  widget_add n-$K || { log "WDN $K: widget not added"; return 1; }
+  go_home 3; log "WDN $K home before: $(wstate)"; shot wdn/$K-0-before >/dev/null
+  wcount $K-b >/dev/null; log "WDN $K bound before: [$(wids)]"
+  mark wdn-$K
+  a cmd uimode night yes; t0=$(now_ms)
+  for t in 3 10 30; do while [ $(( $(now_ms) - t0 )) -lt $((t * 1000)) ]; do sleep 0.3; done; go_home 1; dump; shot wdn/$K-1-dark-${t}s >/dev/null; log "WDN $K dark +${t}s: widget views $(grep -c "resource-id=\"$PKG:id/" $OUT/ui.xml); bound [$(wcount $K-d$t >/dev/null; wids)]"; done
+  log "WDN $K launcher/appwidget log after the switch: $(since wdn-$K 'AppWidget|appwidget|Launcher.*widget|removeAppWidget|deleteAppWidget|onDeleted|unbind' | grep -v PERFCHECK | head -8 | cut -c1-220 | tr '\n' '|')"
+  a cmd uimode night no; sleep 12; go_home 3; dump; shot wdn/$K-2-light-again >/dev/null; log "WDN $K light again: widget views $(grep -c "resource-id=\"$PKG:id/" $OUT/ui.xml); bound [$(wcount $K-l >/dev/null; wids)]"
+  a dumpsys appwidget 2>/dev/null | tr -d '\r' | grep -E 'provider=.*org\.chyavorec|id=' | head -6 | cut -c1-200 | tee -a $SUM
+}
+part_wdn36() {
+  helper_install
+  anims 1
+  wd_night base
+  wd_night new
+  log "WDN part: $(since_fatal wdn); FATAL lines: $(grep -c 'FATAL EXCEPTION' $OUT/logcat-live.txt)"
+  all_sheets
+  diag_end
+}
+
 part_a7() {
   case "$A7_PARTS" in *" $PART "*) ;; *) return 1;; esac
   case $PART in
@@ -342,6 +369,7 @@ part_a7() {
     yup36) part_yup36;;
     ng36) part_ng36;;
     wdg36) part_wdg36;;
+    wdn36|wdn36b) part_wdn36;;
   esac
   return 0
 }
