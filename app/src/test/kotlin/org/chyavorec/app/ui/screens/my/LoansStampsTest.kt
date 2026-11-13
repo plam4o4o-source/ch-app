@@ -99,6 +99,25 @@ class LoansStampsTest {
         assertNull(again.stamps.value)
     }
 
+    @Test fun shownBooksLeaveTheQueueAndAdvanceTheCounter() {
+        val vm = loaded()
+        backend.loans(loan("L3", 3))
+        backend.json("$api/v1/me/history", """{"items":[${hist("L1", 1, "2026-10-16")},${hist("L2", 2, "2026-10-16")}]}""")
+        refreshAndWait(vm, 1)
+        until { vm.stamps.value != null }
+        val before = assertNotNull(vm.stamps.value)
+        assertEquals(2, before.books.size)
+        vm.stampShown(before.books.first().loanId)
+        val after = assertNotNull(vm.stamps.value)
+        assertEquals(before.books.drop(1), after.books)
+        assertEquals(before.yearBefore + 1, after.yearBefore)
+        // Повторно съобщение за същата книга нищо не променя.
+        vm.stampShown(before.books.first().loanId)
+        assertEquals(after, vm.stamps.value)
+        vm.stampsDone()
+        assertNull(vm.stamps.value)
+    }
+
     @Test fun historyThatCannotBeFetchedCelebratesNothingAndKeepsTheBookQueued() {
         val vm = loaded()
         backend.loans(loan("L2", 2))

@@ -103,7 +103,15 @@ import org.chyavorec.domain.model.HistoryItem
  */
 
 /** Какво се празнува при това отваряне: книгите, годината и числото на брояча преди първия печат. */
-data class StampShow(val books: List<HistoryItem>, val year: Int, val yearBefore: Int)
+data class StampShow(val books: List<HistoryItem>, val year: Int, val yearBefore: Int) {
+    /**
+     * Книгата е изиграна докрай: маха се от опашката, а годишният брояч вече е „след нея“. Така при
+     * завъртане на екрана или излизане по средата завършилите книги не се играят отново.
+     */
+    fun afterShown(loanId: String): StampShow =
+        if (books.none { it.loanId == loanId }) this
+        else copy(books = books.filterNot { it.loanId == loanId }, yearBefore = yearBefore + 1)
+}
 
 /** Времената на анимацията (ms) — на едно място за изгледа и тестовете. */
 internal object StampTiming {
@@ -155,6 +163,7 @@ internal class StampGeometry {
 internal fun ReturnStampPanel(
     show: StampShow,
     onOpenHistory: (() -> Unit)?,
+    onBookShown: (String) -> Unit,
     onDone: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -163,24 +172,35 @@ internal fun ReturnStampPanel(
     val confetti = LocalConfetti.current
     val anim = remember { StampAnim() }
     val geo = remember { StampGeometry() }
-    var index by remember { mutableIntStateOf(0) }
+    // Книгата, която се играе в момента (опашката е във ViewModel: завършилите се махат от нея).
+    var current by remember { mutableStateOf<HistoryItem?>(null) }
     var counter by remember { mutableIntStateOf(show.yearBefore) }
     var visible by remember { mutableStateOf(false) }
     val latest by rememberUpdatedState(show)
     val currentOnDone by rememberUpdatedState(onDone)
+    val currentOnShown by rememberUpdatedState(onBookShown)
 
     LaunchedEffect(Unit) {
+        if (latest.books.isEmpty()) { // всичко е изиграно, преди екранът да се върне
+            currentOnDone()
+            return@LaunchedEffect
+        }
         visible = true
+        // Основата на брояча се чете веднъж: ViewModel я придвижва след всяка книга.
+        val base = latest.yearBefore
+        val shown = HashSet<String>()
         var i = 0
         // Книгите могат да се допълнят, докато върви (ново опресняване) — цикълът ги догонва.
-        while (i < latest.books.size) {
-            index = i
+        while (true) {
+            val b = latest.books.firstOrNull { it.loanId !in shown } ?: break
+            current = b
             anim.reset()
             if (reduced) {
                 anim.settle()
-                counter = latest.yearBefore + i + 1
+                counter = base + i + 1
                 haptics.play(HapticSignature.SEAL)
                 delay(StampTiming.staticMs(i))
+                currentOnShown(b.loanId)
             } else {
                 anim.enter.animateTo(1f, tween(StampTiming.ENTER))
                 delay(80)
@@ -197,9 +217,12 @@ internal fun ReturnStampPanel(
                     delay(StampTiming.HOLD)
                 }
                 anim.slide.animateTo(1f, tween(StampTiming.SLIDE, easing = FastOutSlowInEasing))
-                counter = latest.yearBefore + i + 1
+                counter = base + i + 1
+                // Броячът се е завъртял — книгата е готова и не се играе повторно, ако екранът се напусне.
+                currentOnShown(b.loanId)
                 delay(StampTiming.ROLL)
             }
+            shown += b.loanId
             i++
         }
         visible = false
@@ -207,7 +230,7 @@ internal fun ReturnStampPanel(
         currentOnDone()
     }
 
-    val book = latest.books.getOrNull(index) ?: return
+    val book = current ?: return
     AnimatedVisibility(
         visible,
         modifier,
