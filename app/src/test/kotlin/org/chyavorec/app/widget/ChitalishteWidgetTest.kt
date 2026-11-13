@@ -535,6 +535,15 @@ class ChitalishteWidgetTest {
         putInt(AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD)
     }
 
+    /** Главният уиджет (заемания) е само за началния екран; на заключения — само публичната „Книга на деня“. */
+    @Test fun onlyTheBookOfTheDayWidgetMayBeOnTheLockScreen() {
+        fun category(file: String) = Regex("""android:widgetCategory="([^"]*)"""")
+            .find(java.io.File("src/main/res/xml/$file").readText())!!.groupValues[1]
+        assertEquals("home_screen", category("widget_info.xml"))
+        assertEquals("home_screen|keyguard", category("widget_book_info.xml"))
+    }
+
+    /** Предпазният клон: ако домакинът все пак съобщи keyguard, няма данни за заемания. */
     @Config(sdk = [30])
     @Test fun lockScreenShowsOnlyTheNextEvent() {
         val home = apply(WidgetViews.forWidget(app, signedInState(), Bundle()))
@@ -673,7 +682,7 @@ class ChitalishteWidgetTest {
     @Config(sdk = [34])
     @Test fun shotWideDynamic() = shot("97-widget-wide-dynamic", WidgetViews.build(app, signedInState().copy(dynamic = true), WidgetViews.FullWideSize), 360, 140)
 
-    /** Заключен екран: само следващото събитие. */
+    /** Предпазният клон за заключен екран: само следващото събитие. */
     @Config(sdk = [30])
     @Test fun shotLockScreen() = shot("97-widget-lockscreen", WidgetViews.forWidget(app, signedInState(), keyguardOptions()), 360, 140)
 

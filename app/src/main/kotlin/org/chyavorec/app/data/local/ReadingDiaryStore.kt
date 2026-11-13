@@ -1,6 +1,8 @@
 package org.chyavorec.app.data.local
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.chyavorec.core.AppClock
 import org.chyavorec.domain.model.DiaryEntry
 import org.chyavorec.domain.model.ReadingDiary
@@ -26,27 +28,28 @@ class ReadingDiaryStore(private val dao: ReadingDiaryDao, private val clock: App
     suspend fun ratings(): Map<String, Int> =
         runCatching { ReadingDiary.ratings(dao.all().map { it.toEntry() }) }.getOrDefault(emptyMap())
 
-    /** Оценка 1–5; бележката на книгата се пази. */
-    suspend fun rate(book: DiaryBook, rating: Int) = write(book) { old -> (old ?: blank(book)).copy(rating = ReadingDiary.clampRating(rating)) }
+    /** Оценка 1–5; бележката на книгата се пази. Един атомарен запис, който пипа само оценката. */
+    suspend fun rate(book: DiaryBook, rating: Int) = write { dao.saveRating(blank(book), ReadingDiary.clampRating(rating), now()) }
 
-    /** Бележка (един ред, най-много [ReadingDiary.MAX_NOTE] знака); без оценка се записва като „пропусната“ (0). */
-    suspend fun setNote(book: DiaryBook, note: String) = write(book) { old -> (old ?: blank(book)).copy(note = ReadingDiary.cleanNote(note)) }
+    /** Бележка (един ред, най-много [ReadingDiary.MAX_NOTE] знака); без оценка се записва като „пропусната“ (0). Пипа само бележката. */
+    suspend fun setNote(book: DiaryBook, note: String) = write { dao.saveNote(blank(book), ReadingDiary.cleanNote(note), now()) }
 
     /** „Не сега“ — повече не се пита за тази книга; оценка няма. */
-    suspend fun dismiss(book: DiaryBook) = write(book) { old -> old ?: blank(book) }
+    suspend fun dismiss(book: DiaryBook) = write { dao.touch(blank(book), now()) }
 
     suspend fun remove(book: DiaryBook) {
         dbWrite { dao.delete(book.key) }
     }
 
+    private fun now() = clock.now().toEpochMilli()
+
     private fun blank(book: DiaryBook) =
         ReadingDiaryEntity(book.key, book.title, book.author, book.inv, rating = 0, note = "", readYear = book.readYear, ratedAtMillis = 0)
 
-    private suspend fun write(book: DiaryBook, change: (ReadingDiaryEntity?) -> ReadingDiaryEntity) {
-        dbWrite {
-            val old = dao.get(book.key)
-            val next = change(old)
-            dao.upsert(next.copy(inv = book.inv ?: next.inv, readYear = book.readYear ?: next.readYear, ratedAtMillis = clock.now().toEpochMilli()))
-        }
+    /** Записите вървят един по един, в реда на повикване (бързи докосвания не се разменят). */
+    private val order = Mutex()
+
+    private suspend fun write(block: suspend () -> Unit) {
+        dbWrite { order.withLock { block() } }
     }
 }

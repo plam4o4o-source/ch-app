@@ -153,6 +153,7 @@ class SettingsStore(private val context: Context) {
         val digestSections = stringSetPreferencesKey("digest_sections")
         val digestBaseline = longPreferencesKey("digest_baseline")
         val digestLastSlot = longPreferencesKey("digest_last_slot")
+        val digestShown = stringPreferencesKey("digest_shown")
         val tomorrowReminder = booleanPreferencesKey("tomorrow_reminder")
         val tomorrowReminded = stringSetPreferencesKey("tomorrow_reminded")
     }
@@ -439,6 +440,8 @@ class SettingsStore(private val context: Context) {
             it.remove(Keys.digestBaseline)
             it.remove(Keys.digestLastSlot)
         }
+        // Ново включване (и изключване) е „първо“: без вече показано.
+        it.remove(Keys.digestShown)
     }
 
     suspend fun setDigestSections(sections: Set<String>) = context.dataStore.edit { it[Keys.digestSections] = sections }
@@ -448,11 +451,24 @@ class SettingsStore(private val context: Context) {
         org.chyavorec.domain.model.WeeklyDigest.State(it[Keys.digestBaseline], it[Keys.digestLastSlot])
     }
 
-    /** След обработен слот: [baselineMillis] се сменя само ако е подаден (при показан/празен преглед). */
-    suspend fun markDigestSlot(slotMillis: Long, baselineMillis: Long? = null) = context.dataStore.edit {
+    /**
+     * След обработен слот: [baselineMillis] се сменя само ако е подаден (при показан/празен преглед).
+     * [shown] — ключовете на вече показаното (виж [digestShown]); без него — непроменени. [resetShown] —
+     * начална точка без история (първо пускане): следващият преглед е „първи“.
+     */
+    suspend fun markDigestSlot(slotMillis: Long, baselineMillis: Long? = null, shown: List<String>? = null, resetShown: Boolean = false) = context.dataStore.edit {
         it[Keys.digestLastSlot] = slotMillis
         if (baselineMillis != null) it[Keys.digestBaseline] = baselineMillis
+        if (resetShown) it.remove(Keys.digestShown)
+        if (shown != null) it[Keys.digestShown] = shown.joinToString("\n") { k -> k.replace('\n', ' ') }
     }
+
+    /**
+     * Ключовете на новините и книгите, показани в предишните прегледи (подредени, най-новите накрая;
+     * най-много [org.chyavorec.domain.model.WeeklyDigest.MAX_SHOWN]). `null` — още не е показван преглед
+     * от това включване: първият преглед брои само СЛЕД началната точка (без наводняване).
+     */
+    suspend fun digestShown(): List<String>? = context.dataStore.data.first()[Keys.digestShown]?.split('\n')?.filter { it.isNotEmpty() }
 
     suspend fun setTomorrowReminder(on: Boolean) = context.dataStore.edit { it[Keys.tomorrowReminder] = on }
     suspend fun tomorrowReminded(): Set<String> = context.dataStore.data.first()[Keys.tomorrowReminded].orEmpty()

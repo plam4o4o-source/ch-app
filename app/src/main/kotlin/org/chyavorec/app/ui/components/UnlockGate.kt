@@ -30,6 +30,18 @@ import org.chyavorec.app.ui.LocalAppContainer
 val LocalRequireUnlock = staticCompositionLocalOf { false }
 
 /**
+ * Отворена ли е личната зона за лични данни върху ПУБЛИЧЕН екран (страница на книга и т.н.), който не
+ * е зад [UnlockGate]: настройката е изключена, личното е отключено или телефонът няма заключване на
+ * екрана (както в [UnlockGate] — няма с какво да се провери).
+ */
+@Composable
+fun rememberPersonalAreaOpen(): Boolean {
+    val container = LocalAppContainer.current
+    val unlocked by container.personalUnlock.unlocked.collectAsState()
+    return !LocalRequireUnlock.current || unlocked || !container.deviceUnlock.available()
+}
+
+/**
  * Личен екран (картата, заеманията, историята, личните съобщения): при включено „Искай
  * отключване…“ съдържанието се показва едва след проверка със заключването на телефона;
  * отказът води назад ([onCancel]). Отключването важи за всички лични екрани, докато не изтече

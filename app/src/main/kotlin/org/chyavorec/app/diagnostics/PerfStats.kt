@@ -32,8 +32,9 @@ data class StartupSample(
 
 /**
  * Кадрите на един маршрут и една версия (натрупано между сесиите). [worstMs] е само работата
- * в нишката на интерфейса; [worstTotalMs]/[sumTotalMs] — целият кадър с нишката за рендериране
- * и видеокартата (FrameDataApi24; 0 — не е измерено).
+ * в нишката на интерфейса; [worstTotalMs]/[sumTotalMs] — CPU времето на кадъра: интерфейс плюс
+ * нишката за рендериране, БЕЗ видеокартата (FrameDataApi24.frameDurationCpuNanos; 0 — не е измерено).
+ * Имената на полетата са стари и остават (така се четат вече записаните данни).
  */
 @Immutable
 @Serializable
@@ -251,7 +252,7 @@ object PerfStats {
         line("", "warm", s.warm)
         for (r in s.topRoutes) {
             append("frames ${r.route}: ${r.janky}/${r.frames} janky (${"%.1f".format(java.util.Locale.ROOT, r.jankyPercent)} %), worst ${r.worstMs} ms")
-            if (r.hasTotal) append("; total with render thread and GPU mean ${r.meanTotalMs} ms, worst ${r.worstTotalMs} ms")
+            if (r.hasTotal) append("; frame CPU time (UI + render thread, no GPU) mean ${r.meanTotalMs} ms, worst ${r.worstTotalMs} ms")
             appendLine()
         }
         if (s.currentEmpty) appendLine("no measurements for this version yet")
@@ -260,7 +261,7 @@ object PerfStats {
             e.afterUpdate?.let { appendLine("${p}startup first after update: first frame ${it.firstFrameMs} ms") }
             line(p, "cold", e.cold)
             line(p, "warm", e.warm)
-            e.worstRoute?.let { appendLine("${p}worst frame ${it.worstMs} ms on ${it.route}" + if (it.hasTotal) ", total ${it.worstTotalMs} ms" else "") }
+            e.worstRoute?.let { appendLine("${p}worst frame ${it.worstMs} ms on ${it.route}" + if (it.hasTotal) ", frame CPU time ${it.worstTotalMs} ms" else "") }
         }
     }
 }
@@ -316,10 +317,10 @@ class PerfStore(
  */
 class FrameCounter {
     private val lock = Any()
-    /** [кадри, насечени, най-бавен интерфейс (ns), сбор на целия кадър (ns), най-бавен цял кадър (ns)] по маршрут. */
+    /** [кадри, насечени, най-бавен интерфейс (ns), сбор на CPU времето на кадъра (ns), най-бавно CPU време (ns)] по маршрут. */
     private val counts = HashMap<String, LongArray>()
 
-    /** [totalNanos] — целият кадър с нишката за рендериране и видеокартата (0 — не е измерен). */
+    /** [totalNanos] — CPU времето на кадъра (интерфейс и нишка за рендериране, без видеокартата; 0 — не е измерено). */
     fun add(route: String, durationNanos: Long, jank: Boolean, totalNanos: Long = 0) = synchronized(lock) {
         val c = counts[route] ?: LongArray(5).also { if (counts.size < PerfStats.MAX_ROUTES) counts[route] = it }
         c[0]++

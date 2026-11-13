@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.Transaction
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CancellationException
@@ -137,29 +138,68 @@ interface WantToReadDao {
     suspend fun clear()
 }
 
+/**
+ * Записите на дневника са АТОМАРНИ и пипат само променяната колона: оценка и бележка, записани
+ * почти едновременно, не си пренаписват стойностите (преди — чети–промени–запиши). Схемата на
+ * Room не се променя (само заявки), затова няма нова версия и миграция.
+ */
 @Dao
-interface ReadingDiaryDao {
+abstract class ReadingDiaryDao {
     @Query("SELECT * FROM reading_diary ORDER BY ratedAtMillis DESC")
-    fun observeAll(): Flow<List<ReadingDiaryEntity>>
+    abstract fun observeAll(): Flow<List<ReadingDiaryEntity>>
 
     @Query("SELECT * FROM reading_diary")
-    suspend fun all(): List<ReadingDiaryEntity>
+    abstract suspend fun all(): List<ReadingDiaryEntity>
 
     @Query("SELECT * FROM reading_diary WHERE bookKey = :key")
-    suspend fun get(key: String): ReadingDiaryEntity?
+    abstract suspend fun get(key: String): ReadingDiaryEntity?
 
     /** Записът за книгата — по ключа или (друго заглавие в историята, същият екземпляр) по инв. №. */
     @Query("SELECT * FROM reading_diary WHERE bookKey = :key OR (:inv IS NOT NULL AND inv = :inv) ORDER BY ratedAtMillis DESC LIMIT 1")
-    fun observeFor(key: String, inv: Long?): Flow<ReadingDiaryEntity?>
+    abstract fun observeFor(key: String, inv: Long?): Flow<ReadingDiaryEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(item: ReadingDiaryEntity)
+    abstract suspend fun upsert(item: ReadingDiaryEntity)
+
+    /** Празен запис, само ако книгата още няма такъв (съществуващият не се пипа). */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    abstract suspend fun insertIfMissing(item: ReadingDiaryEntity): Long
+
+    @Query("UPDATE reading_diary SET rating = :rating, inv = COALESCE(:inv, inv), readYear = COALESCE(:readYear, readYear), ratedAtMillis = :at WHERE bookKey = :key")
+    abstract suspend fun updateRating(key: String, rating: Int, inv: Long?, readYear: Int?, at: Long)
+
+    @Query("UPDATE reading_diary SET note = :note, inv = COALESCE(:inv, inv), readYear = COALESCE(:readYear, readYear), ratedAtMillis = :at WHERE bookKey = :key")
+    abstract suspend fun updateNote(key: String, note: String, inv: Long?, readYear: Int?, at: Long)
+
+    @Query("UPDATE reading_diary SET inv = COALESCE(:inv, inv), readYear = COALESCE(:readYear, readYear), ratedAtMillis = :at WHERE bookKey = :key")
+    abstract suspend fun updateMeta(key: String, inv: Long?, readYear: Int?, at: Long)
+
+    /** Оценка: записът се създава при нужда, бележката остава каквато е. [blank] — празният запис за книгата. */
+    @Transaction
+    open suspend fun saveRating(blank: ReadingDiaryEntity, rating: Int, at: Long) {
+        insertIfMissing(blank)
+        updateRating(blank.bookKey, rating, blank.inv, blank.readYear, at)
+    }
+
+    /** Бележка: записът се създава при нужда, оценката остава каквато е. */
+    @Transaction
+    open suspend fun saveNote(blank: ReadingDiaryEntity, note: String, at: Long) {
+        insertIfMissing(blank)
+        updateNote(blank.bookKey, note, blank.inv, blank.readYear, at)
+    }
+
+    /** „Не сега“: записът се създава при нужда (без оценка), иначе само се опреснява. */
+    @Transaction
+    open suspend fun touch(blank: ReadingDiaryEntity, at: Long) {
+        insertIfMissing(blank)
+        updateMeta(blank.bookKey, blank.inv, blank.readYear, at)
+    }
 
     @Query("DELETE FROM reading_diary WHERE bookKey = :key")
-    suspend fun delete(key: String)
+    abstract suspend fun delete(key: String)
 
     @Query("DELETE FROM reading_diary")
-    suspend fun clear()
+    abstract suspend fun clear()
 }
 
 /**

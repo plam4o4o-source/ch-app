@@ -220,6 +220,65 @@ class WeeklyDigestTest {
         assertEquals(listOf("newer", "new"), WeeklyDigest.newArticles(news, 200L).map { it.id })
     }
 
+    /** Новина с дата (полунощ в София) от деня на предишния преглед, качена СЛЕД него — влиза в следващия. */
+    @Test fun aSameDayArticlePostedAfterTheLastDigestIsCountedOnce() {
+        val sent = at("2026-11-08", "18:00") // предишният преглед
+        val midnight = at("2026-11-08", "00:00").toEpochMilli()
+        val beforeTheDigest = article("morning", midnight)
+        val afterTheDigest = article("evening", midnight)
+        // Старото правило („след момента на прегледа“) губи и двете — полунощ е преди 18:00.
+        assertTrue(WeeklyDigest.newArticles(listOf(beforeTheDigest, afterTheDigest), sent.toEpochMilli()).isEmpty())
+        val day = LocalDate.parse("2026-11-08")
+        // Сутрешната вече е била в прегледа; вечерната — не.
+        val shown = setOf(WeeklyDigest.articleKey(beforeTheDigest))
+        assertEquals(listOf("evening"), WeeklyDigest.newArticlesSinceDay(listOf(beforeTheDigest, afterTheDigest), day, shown).map { it.id })
+        // Нищо не се брои два пъти: след запомняне и вечерната отпада.
+        val shownNow = shown + WeeklyDigest.articleKey(afterTheDigest)
+        assertTrue(WeeklyDigest.newArticlesSinceDay(listOf(beforeTheDigest, afterTheDigest), day, shownNow).isEmpty())
+    }
+
+    @Test fun articlesBeforeTheBaselineDayStayOutAndDatesAreSofiaMidnight() {
+        val day = LocalDate.parse("2026-11-08")
+        val dayBefore = article("before", at("2026-11-07", "00:00").toEpochMilli())
+        val onDay = article("on-day", at("2026-11-08", "00:00").toEpochMilli())
+        val later = article("later", at("2026-11-12", "00:00").toEpochMilli())
+        val undated = article("undated", null)
+        assertEquals(listOf("later", "on-day"), WeeklyDigest.newArticlesSinceDay(listOf(dayBefore, onDay, later, undated), day, emptySet()).map { it.id })
+    }
+
+    @Test fun aSameDayBookRegisteredAfterTheLastDigestIsCountedOnce() {
+        val baseline = LocalDate.parse("2026-11-08")
+        val early = book(1, "Сутрешна", "2026-11-08", author = "А")
+        val late = book(2, "Вечерна", "2026-11-08", author = "Б")
+        val older = book(3, "Стара", "2026-11-07", author = "В")
+        val all = listOf(early, late, older)
+        // Първо включване / първи преглед (без „показано“): само СЛЕД деня — нищо от същия ден.
+        assertEquals(NewBooks.NONE, NewBooks.since(all, baseline))
+        // Следващ преглед: от деня включително, без вече показаните.
+        val first = NewBooks.since(all, baseline, shown = emptySet())
+        assertEquals(2, first.count)
+        assertEquals(listOf(WeeklyDigest.bookKey(early), WeeklyDigest.bookKey(late)).toSet(), first.keys.toSet())
+        val second = NewBooks.since(all, baseline, shown = setOf(WeeklyDigest.bookKey(early)))
+        assertEquals(1, second.count)
+        assertEquals(listOf("Вечерна"), second.titles)
+        assertEquals(NewBooks.NONE, NewBooks.since(all, baseline, shown = first.keys.toSet()))
+    }
+
+    @Test fun shownKeysAreBoundedAndKeepTheNewest() {
+        val many = (1..WeeklyDigest.MAX_SHOWN + 50).map { "b:$it" }
+        val kept = WeeklyDigest.remember(emptyList(), many)
+        assertEquals(WeeklyDigest.MAX_SHOWN, kept.size)
+        assertEquals("b:${WeeklyDigest.MAX_SHOWN + 50}", kept.last())
+        assertFalse("b:1" in kept)
+        // Без повторения; повторено се премества като най-ново.
+        assertEquals(listOf("b:2", "b:3", "b:1"), WeeklyDigest.remember(listOf("b:1", "b:2", "b:3"), listOf("b:1")))
+    }
+
+    @Test fun fakePastDatesNeverFloodASecondDigestEither() {
+        val test = (1L..500).map { book(it, "Заглавие $it", "2023-0${1 + (it % 9).toInt()}-1${(it % 9).toInt()}", author = "А$it") }
+        assertEquals(NewBooks.NONE, NewBooks.since(test, LocalDate.parse("2026-11-08"), shown = emptySet()))
+    }
+
     @Test fun tomorrowReminderPicksCentreEventsWithATimeOnly() {
         val today = LocalDate.parse("2026-11-15")
         val events = listOf(

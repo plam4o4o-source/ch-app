@@ -234,7 +234,7 @@ private fun VersionLines(summary: PerfSummary, locale: java.util.Locale) {
                 ),
                 style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
             )
-            // Целият кадър — с нишката за рендериране и видеокартата (там работи и ShaderWarmup).
+            // CPU времето на кадъра — интерфейс и нишка за рендериране (там работи и ShaderWarmup), без видеокартата.
             if (r.hasTotal) {
                 Text(
                     stringResource(R.string.perf_route_total, stringResource(R.string.perf_ms, r.meanTotalMs), stringResource(R.string.perf_ms, r.worstTotalMs)),

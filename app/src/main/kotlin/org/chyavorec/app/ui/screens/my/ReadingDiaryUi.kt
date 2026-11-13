@@ -39,7 +39,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -81,6 +80,7 @@ import org.chyavorec.app.data.local.ReadingDiaryStore
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AppBottomSheet
 import org.chyavorec.app.ui.components.TabRosetteShapes
+import org.chyavorec.app.ui.components.rememberPersonalAreaOpen
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.ui.share.ShareCard
@@ -278,11 +278,14 @@ class DiaryActions(
     val remove: () -> Unit,
 )
 
-/** Действията за [book], записани в [store] от обхвата на екрана. */
+/**
+ * Действията за [book], записани в [store] от обхвата на процеса: докосване и веднага „назад“ не
+ * отменя записа по средата (екранният обхват се отменя със смяната на екрана).
+ */
 @Composable
 fun rememberDiaryActions(store: ReadingDiaryStore, book: DiaryBook): DiaryActions {
-    val scope = rememberCoroutineScope()
-    return remember(store, book) {
+    val scope = LocalAppContainer.current.appScope
+    return remember(store, book, scope) {
         DiaryActions(
             rate = { scope.launch { store.rate(book, it) } },
             note = { scope.launch { store.setNote(book, it) } },
@@ -357,12 +360,15 @@ fun HistoryDiary(
 /**
  * Дневникът на страницата на книга, която читателят е прочел (върната, по историята в кеша). Влязъл
  * читател и върната книга — иначе нищо (гост не знае дали е чел; той вижда поканата в историята).
+ * При „Искай отключване“ и заключено лично — също нищо.
  */
 @Composable
 fun BookDiarySection(book: CatalogBook, share: ShareImageState, modifier: Modifier = Modifier) {
     val c = LocalAppContainer.current
     val auth by c.authRepository.state.collectAsStateWithLifecycle()
     if (auth !is AuthState.SignedIn) return
+    // Страницата на книгата е публична (без UnlockGate): личната оценка и бележка чакат отключването.
+    if (!rememberPersonalAreaOpen()) return
     val key = ReadingDiary.bookKey(book.title, book.author)
     val read by produceState<HistoryItem?>(null, book.inv, auth) {
         value = c.libraryRepository.cachedHistory()?.data

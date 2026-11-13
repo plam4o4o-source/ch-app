@@ -154,7 +154,8 @@ object AppPerf {
                     val s = states[i]
                     if (s.key == ROUTE_KEY) route = s.value
                 }
-                // Целият кадър (с нишката за рендериране и видеокартата) — само от API 24; типова проверка, без заделяне.
+                // CPU времето на кадъра (интерфейс + нишка за рендериране, без видеокартата) — само от API 24; типова проверка, без заделяне.
+                // Истинско общо време (с видеокартата) JankStats 1.0.0 не дава: FrameDataApi31 има само frameOverrunNanos.
                 val total = (volatileFrameData as? FrameDataApi24)?.frameDurationCpuNanos ?: 0L
                 frames.add(route, volatileFrameData.frameDurationUiNanos, volatileFrameData.isJank, total)
             }

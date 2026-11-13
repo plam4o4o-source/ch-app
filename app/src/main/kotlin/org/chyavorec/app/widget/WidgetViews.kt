@@ -30,7 +30,8 @@ import kotlin.math.roundToInt
  * по-рано — по размера от опциите на копието, отделно за хоризонтален и вертикален екран.
  * Цветове: фирмените (пергамент, злато, бордо; ден/нощ) на всички версии; само при включено
  * „Цветове от тапета“ (Android 12+, [WidgetState.dynamic]) — динамичните на системата (widget_dyn_*).
- * В заключен екран (OPTION_APPWIDGET_HOST_CATEGORY = keyguard) — без данни за заемания.
+ * Предпазен клон: ако домакинът въпреки това съобщи keyguard (OPTION_APPWIDGET_HOST_CATEGORY), копието е
+ * без данни за заемания. Уиджетът е само за началния екран (widget_info.xml), клонът е вторична защита.
  * Текстовете — от подадения контекст: той е с езика на приложението (WidgetUpdater).
  */
 internal object WidgetViews {
@@ -80,7 +81,7 @@ internal object WidgetViews {
         else RemoteViews(build(context, state, landscape), build(context, state, portrait))
     }
 
-    /** Копието е на заключения екран (Android 16+ на телефоните; по-рано — таблети със скрийнсейвър). */
+    /** Копието е на заключения екран (предпазно: уиджетът е само `home_screen`; домакин може да съобщи keyguard, напр. таблет със скрийнсейвър). */
     internal fun isKeyguard(options: Bundle?): Boolean =
         options?.getInt(AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, -1) == AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD
 
