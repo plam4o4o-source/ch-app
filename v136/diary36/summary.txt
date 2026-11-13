@@ -12,147 +12,76 @@ HELPER installed: package:org.pc.helper
 installed: devDebug 1.2.36 80efffa (org.chyavorec.app.dev, demo sign-in DEMO-0001);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.36-dev 
 ## W. First launch and warm-up
 (dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
-first-install catalogue results after 5057 ms
+first-install catalogue results after 6573 ms
 ## D0. Demo sign-in (DEMO-0001 / demo)
 Запомни ме before: CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true)
 Запомни ме now: CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true)
 MY after the demo sign-in: text="ДЕМО ДАННИ — само за разработка, не са реални" text="ДЧ" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" text="БИБЛИОТЕКА" text="Читателска карта" text="Покажи картата на гишето" 
-## D1. Моето and „История“ (reading diary prompts, the „Върната“ stamp)
-CAP demo36/01-my: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=25 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · ДЧ · Демо Читател · Читателски № DEMO-0001 · Активно · БИБЛИОТЕКА
-CAP demo36/01b-my-2: targets=14 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=24 ellipsized=0 | Искам да прочета · Книги, които искаш да вземеш · Моето членство · Статус и валидност · Прочетени книги · Историята на четенето и подо
-CAP demo36/01c-my-3: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=24 ellipsized=0 | Кои да получаваш: срокове, с · МОЕТО ЧЕТЕНЕ · 2026 · Моята читателска година 2026 · 30 книги · виж историята · Книги по месеци
-CAP demo36/02-loans: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Последна синхронизация: Пред · Демо заглавие (просрочено) · Демо автор · Взета на 04.10.2026 · Срокът изтече на 10.11.2026
-CAP demo36/03-history: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Всички години · 2026 · 2025 · 2026 · 30 книги
-CAP demo36/03b-history-2: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · взета 10.11.2026 · върната 1 · Хареса ли ти? · Не сега · Оценка на книгата · Чичовци
-CAP demo36/03c-history-3: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=28 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Железният светилник · Талев, Димитър · взета 28.10.2026 · върната 1 · Хареса ли ти? · Не сега
-HISTORY: diary prompts '1', rating marks '0', stamp 'Върната' '0'
-DIARY: no 'Препоръчай': text="ДЕМО ДАННИ — само за разработка, не са реални" text="Всички години" text="2026" text="2025" text="2026" text="30 книги" text="Под игото" text="Иван Вазов" text="взета 14.09.2026 · върната 14.10.2026" text="Демо заглавие (прочетено)" text="Демо автор" tex
+## D1. Моето and „История“ (these screens are FLAG_SECURE: emulator screenshots)
+HISTORY: diary prompts '1', rating nodes '1', texts: text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Оценка на книгата" text="Чичовци" text="Вазов, Иван" text="взета 04.11.2026 · върната 13.11.2026" text="Хареса ли ти?" text="Не сега" content-desc="Оценка на книгата" text="Железният светилник" text="Талев, Димитър" text="взета 28.10.2026 · върната 13.11.2026" text="Хареса ли ти?" text="Не сега" content-desc="Оценка на книгата" text="Бай Ганьо" text="Константинов, Алеко" text="взета 20.10.2026 · върната 06.11.2026" text="Тютюн" t
+DIARY rating node [237 385 867 463]
+DIARY after rating: text="ДЕМО ДАННИ — само за разработка, не са реални" text="Добави бележка" text="Препоръчай" text="Махни оценката" text="Оценките и бележките са само на телефона." text="Чичовци" text="Вазов, Иван" text="взета 04.11.2026 · върната 13.11.2026" text="Хареса ли ти?" text="Не сега" content-desc="Оценка на книгата" text="Железният светилник" text="Талев, Димитър" text="взета 28.10.2026 · върната 13.11.
+DIARY recommend share: chooser OPEN after 2 s
 DIARY: FATAL(any process)=0 of the app=0 ANR=0
-## D2. The diary survives a process death; a book screen shows the diary section
-CAP demo36/06-history-after-kill: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Всички години · 2026 · 2025 · 2026 · 30 книги
-HISTORY after kill: rating state 'content-desc="Оценка на книгата" content-desc="Оценка на книгата" '
-## D3. Year story: „Твоята шевица“ and the embroidered charts (portrait; dark)
-YEAR port slide 1: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | През 2026 г. взе 30 книги от библиотекат · Моята читателска година · 2026 · Затвори · Сподели
-  slide 1 after a slow drag up inside: diff 8.91
-YEAR port slide 2: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Най-четен раздел: Език. Литература — 2 к · Моята читателска година · 2026 · Затвори · Сподели
-  slide 2 after a slow drag up inside: diff 13.08
-YEAR port slide 3: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Най-дълга поредица: 11 месеца подред с п · Моята читателска година · 2026 · Затвори · Сподели
-  slide 3 after a slow drag up inside: diff 23.16
-YEAR port slide 4: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Благодарим ти, че четеш с нас! Библиотек · Моята читателска година · 2026 · Затвори · Сподели
-  slide 4 after a slow drag up inside: diff 0.14
-YEAR port slide 5: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Искам да прочета · Книги, които искаш да вземеш · Моето членство · Статус и валидност · Прочетени книги · Историята на четенето и подобни книги · Моят профил · Читателски данни
-  slide 5 after a slow drag up inside: diff 0.00
-  story closed at slide 5
-YEAR dark slide 1: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | 2026 — твоята година с книгите · Моята читателска година · 2026 · Затвори · Сподели
-  slide 1 after a slow drag up inside: diff 10.17
-YEAR dark slide 2: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Твоят читателски тип: Книжен дракон. Пог · Моята читателска година · 2026 · Затвори · Сподели
-  slide 2 after a slow drag up inside: diff 0.76
-YEAR dark slide 3: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Покажи картата на гишето · Искам да прочета · Книги, които искаш да вземеш · Моето членство · Статус и валидност · Прочетени книги · Историята на четенето и подобни книги · Моят профил
-  slide 3 after a slow drag up inside: diff 0.01
-YEAR dark slide 4: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | 2026 — твоята година с книгите · Моята читателска година · 2026 · Затвори · Сподели
-  slide 4 after a slow drag up inside: diff 15.14
-YEAR dark slide 5: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Любим автор: Иван Вазов — 6 книги през г · Моята читателска година · 2026 · Затвори · Сподели
-  slide 5 after a slow drag up inside: diff 7.93
-YEAR dark slide 6: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Рекорден месец: Септември — 5 книги. · Моята читателска година · 2026 · Затвори · Сподели
-  slide 6 after a slow drag up inside: diff 15.52
-YEAR dark slide 7: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Твоят читателски тип: Книжен дракон. Пог · Моята читателска година · 2026 · Затвори · Сподели
-  slide 7 after a slow drag up inside: diff 29.10
-YEAR dark slide 8: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Прочетени книги · Историята на четенето и подобни книги · Моят профил · Читателски данни · Известия · Кои да получаваш: срокове, събития, нови · МОЕТО ЧЕТЕНЕ · 2026
-  slide 8 after a slow drag up inside: diff 0.00
-YEAR dark slide 9: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Известия · Кои да получаваш: срокове, събития, нови · МОЕТО ЧЕТЕНЕ · 2026 · Моята читателска година 2026 · 30 книги · виж историята · Книги по месеци · Цялата история
-  slide 9 after a slow drag up inside: diff 0.00
+## D2. The diary survives a process death
+HISTORY after kill: content-desc="Оценка на книгата" text="very_good" 
+## D3. Year story, every slide one by one (taps on the right side; emulator screenshots, no drags)
+YEAR light slide 1: content-desc="2026 — твоята година с книгите" text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR light slide 2: content-desc="Любим автор: Иван Вазов — 6 книги през годината." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR light slide 3: content-desc="Рекорден месец: Септември — 5 книги." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR light slide 4: content-desc="Твоят читателски тип: Книжен дракон. Поглъщаш книга след книга — рафтовете едва смогват." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR light slide 5: text="Искам да прочета" text="Книги, които искаш да вземеш" text="Моето членство" text="Статус и валидност" text="Прочетени книги" text="Историята на четенето и подобни книги" text="Моят профил" text="Читателски данни" 
+YEAR light: story no longer open at 5
+YEAR dark slide 1: content-desc="2026 — твоята година с книгите" text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR dark slide 2: content-desc="Любим автор: Иван Вазов — 6 книги през годината." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR dark slide 3: content-desc="Рекорден месец: Септември — 5 книги." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR dark slide 4: content-desc="Твоят читателски тип: Книжен дракон. Поглъщаш книга след книга — рафтовете едва смогват." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR dark slide 5: text="Искам да прочета" text="Книги, които искаш да вземеш" text="Моето членство" text="Статус и валидност" text="Прочетени книги" text="Историята на четенето и подобни книги" text="Моят профил" text="Читателски данни" 
+YEAR dark: story no longer open at 5
 ## D4. Signed-in card, fullscreen
 demo fullscreen card: yes
-## NP-demo-new (brief). New screens (1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
-CAP demo-new/01-home: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения (1 непрочетено) · 1 · Лента за търсене · Търси книга, новина, събитие
-CAP demo-new/02-more: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=28 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
-CAP demo-new/em-01-open: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
-EMB stitches: start 0 → after 6 taps + a stroke 16
-CAP demo-new/em-02-stitched: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
-EMB undo: 16 → 6
-EMB redo: 6 → 16
-EMB save: text="Моите шевици" 
-CAP demo-new/em-06-after-save: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
-EMB share: chooser OPEN after 3 s; fg android/com.android.internal.app.ChooserActivity
-EMB end: front app
-CAP demo-new/np-01-list: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Старият вестник · Юбилеен вестник · 1959 · Двадесет статии от юбилейния · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
-NEWSPAPER first open: page label after 2579 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
-CAP demo-new/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
-NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=225 std=29.4
-NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
-NEWSPAPER: no next-page button (one page?)
-NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
-offline: airplane=1
-NEWSPAPER reopened OFFLINE: after 2478 ms: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" text="Няма интернет връзк
-CAP demo-new/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели · Няма интернет връзка
-NEWSPAPER offline page content: mean=225 std=29.4
-CAP demo-new/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
-CAP demo-new/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | 17 дек. 1922. Възстановяване · Дейността се възобновява под · 1923–1924. Устав и държавно  · Устав и държавно признание · Уставът е приет на 22 януари · 1927. Въздържателно дружеств
-CAP demo-new/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | 17 март 1958. Първа копка. С · Самооблагане 3% по Закона за · 1961. Открита читалищната сг · Открита читалищната сграда · Нова сграда с библиотека, го · След 1989. Трудни години — у
-QUIZ ready after 1983 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Какво се случва в читалището през 1947 г.?" text="Първа копка" text="Въздържателно дружество „Борба“" text="Общностен и информационен център" text="Решение за
-CAP demo-new/qz-01-q1: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Първа копка · Въздържателно дружество „Бор · Общностен и информационен це
-CAP demo-new/qz-01-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 0 верни от 1 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Първа копка · Въздържателно дружество „Бор · Общностен и информационен це
-CAP demo-new/qz-06-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Сподели резултата
-QUIZ result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Назад" content-desc="Назад" text="Познай Яворец" 
-QUIZ share: chooser OPEN after 2 s; fg android/com.android.internal.app.ChooserActivity
-CAP demo-new/st-01: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
-CAP demo-new/st-02: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
-CAP demo-new/st-03: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Разклати телефона в каталога · Уиджети · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“ · Всеки ден друга книга от кат
-CAP demo-new/st-04: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Обновления · Автоматичното обновяване раб · Данни · Корици от интернет · Корици по ISBN от covers.ope · Корици само по Wi-Fi
-WARN: settings item Седмичен преглед|Weekly digest not found
-SETTINGS: no digest row
-CAP demo-new/11-event: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
-NP demo-new: FATAL(any process)=0 of the app=0 ANR=0; app process 10295; logcat app errors: 0
 DIARY36 part: FATAL(any process)=0 of the app=0 ANR=0
-A11Y AGG: 8 screens analysed, 0 dumps failed; totals MISSING=3 DOUBLE=0 SAME-LABEL=4 SMALL(<48dp)=4
-== MISSING: 3 distinct
-   View@[42,2010][524,2127]  [1 screens: 01-my]
-   View@[42,296][524,302]  [1 screens: 01b-my-2]
-   View@[556,296][1038,302]  [1 screens: 01b-my-2]
-== SMALL: 2 distinct
-   ''  [2 screens: 01-my, 01b-my-2]
-   'Кои да получаваш: срокове, съб'  [1 screens: 01c-my-3]
-== SAME-LABEL: 3 distinct
-   'Не сега' x2  [2 screens: 03-history, 06-history-after-kill]
-   'Удължи срока' x2  [1 screens: 02-loans]
-   'Не сега' x3  [1 screens: 03b-history-2]
+A11Y AGG: 0 screens analysed, 0 dumps failed; totals 
+== MISSING: 0 distinct
+== SMALL: 0 distinct
+== SAME-LABEL: 0 distinct
 == DOUBLE: 0 distinct
-contact sheets: 9 in sheets/
+contact sheets: 4 in sheets/
 ## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
 DIAGLOG: empty (no entries)
-DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36-dev (1) | Профил: чака | Студен старт · 3 | Първи кадър: медиана 4088 мс, последен 4088 мс | Пълно показване: медиана 5145 мс, последно 5145 мс | Насечени кадри по екрани | login: 16,7 % от 84 кадъра · най-бавен 504 мс | общо с видеокартата: сре
-DIAG SCREEN (scrolled): text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36-dev (1)" text="Профил: чака" text="Студен старт · 3" text="Първи кадър: медиана 4088 мс, последен 4088 мс" text="Пълно показване: медиана 5145 мс, последно 5145 мс" text="Насечени кадри по екрани" text="login: 16,7 % от 84 кадъра · най-бавен 504 мс" text="общо с видеокартата: средно 181 мс, най-бавен 687 мс" text="my: 14,0 % от 107 кадъра · най-бавен 1109 мс" text="общо с видеокартата: средно 298 мс, най-бавен 1239 мс" text="onboarding: 2,6 % от 39 кадъра · най-бавен 857 мс" text="общо с видеокартата: средно 576 мс, най-бав
-APP W/E lines (pids ['5570', '8558', '10295']): 251 in 110 groups
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36-dev (1) | Профил: чака | Студен старт · 2 | Първи кадър: медиана 3180 мс, последен 2590 мс | Пълно показване: медиана 40407 мс, последно 77045 мс | Насечени кадри по екрани | catalog: 32,3 % от 31 кадъра · най-бавен 2192 мс | общо с видеокартата
+DIAG SCREEN (scrolled): text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36-dev (1)" text="Профил: чака" text="Студен старт · 2" text="Първи кадър: медиана 3180 мс, последен 2590 мс" text="Пълно показване: медиана 40407 мс, последно 77045 мс" text="Насечени кадри по екрани" text="catalog: 32,3 % от 31 кадъра · най-бавен 2192 мс" text="общо с видеокартата: средно 434 мс, най-бавен 2468 мс" text="my: 13,6 % от 125 кадъра · най-бавен 879 мс" text="общо с видеокартата: средно 253 мс, най-бавен 997 мс" text="login: 13,3 % от 83 кадъра · най-бавен 631 мс" text="общо с видеокартата: средно 142 мс, най-бавен 746 мс" text="home
+APP W/E lines (pids ['5448', '8597']): 231 in 104 groups
        6  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
        6  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
        6  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
-       5  W/Parcel: Expecting binder but got null!
-       5  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
        5  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
-       4  W/ziparchive: Unable to open '/data/app/~~#JrFTam#qM#Cee#wNAERhw==/org.chyavorec.app.dev-#gCI#hPIAD#K#K#IqAMJbg==/base.dm': 
+       4  W/Parcel: Expecting binder but got null!
        4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
        4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
-       3  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
-       3  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
-       3  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
-       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
-       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
-       3  W/Gralloc4: allocator #.x is not supported
+       3  W/ziparchive: Unable to open '/data/app/~~nflKSsGDYgLn#itJUn#Y#w==/org.chyavorec.app.dev-#F_ZdkkeJmAafgD#WtTjg==/base.dm': N
        3  E/OpenGLRenderer: Unable to match the desired swap behavior.
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.InnerNodeCoordinator$LookaheadDelegateImpl.measure-BRTryo#(InnerNodeCoordinator.k
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasureBlock$lambda$#(LookaheadPassDelegate.kt:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate$$ExternalSyntheticLambda#.invoke(D#$$SyntheticClass:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasure-BRTryo#$ui(LookaheadPassDelegate.kt:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performLookaheadMeasure-BRTryo#$ui(LayoutNodeLayoutDeleg
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.remeasure-BRTryo#(LookaheadPassDelegate.kt:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.measure-BRTryo#(LookaheadPassDelegate.kt:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutModifierNodeCoordinator$LookaheadDelegateForLayoutModifierNode.measure-BRTr
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.graphics.BlockGraphicsLayerModifier.measure-#p#s#s(GraphicsLayerModifier.kt:#)
        3  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
        3  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
-       3  W/yavorec.app.dev: Accessing hidden method Landroid/view/ViewTreeObserver;->dispatchOnScrollChanged()V (unsupported, reflection, 
+       3  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       3  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       3  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       2  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       2  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/Gralloc4: allocator #.x is not supported
        2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
-contact sheets: 10 in sheets/
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       2  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.PlatformPasswordVisibilitySettingImpl.getSystemShowPasswordSetting(BasicS
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextField_androidKt.rememberPlatformPasswordVisibilitySettings
+contact sheets: 5 in sheets/
 ## COMPLETE
 ## logcat findings
 app pids seen: []
@@ -164,4 +93,4 @@ app pids seen: []
 == NativeLink: 0
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
-retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 23:27 app-mapping.txt; crashes: 0 B

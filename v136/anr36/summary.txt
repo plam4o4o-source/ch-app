@@ -1,0 +1,152 @@
+part anr36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 7946 ms
+## AN new-1: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-new-1: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798;  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 3266 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=6199
+MONKEY exit=0 duration=178 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '6199'; airplane=1; camera: 
+MEM after-monkey (raw) PSS=85505KB  Java=20704KB  Native=39548KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=26)  RSS=202004KB  Views=27 Activities=1
+MEM after-monkey (trimmed) PSS=79377KB  Java=14416KB  Native=34980KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=26)  RSS=196708KB  Views=15 Activities=1
+AN new-1: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN base-1: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-base-1: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 3221 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=7600
+MONKEY exit=0 duration=159 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '7600'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=107490KB  Java=23200KB  Native=53652KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=66)  RSS=223736KB  Views=25 Activities=1
+MEM after-monkey (trimmed) PSS=96266KB  Java=12572KB  Native=48132KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=66)  RSS=213108KB  Views=15 Activities=1
+AN base-1: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN new-2: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-new-2: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798;  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 3250 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=8626
+MONKEY exit=0 duration=141 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '8626'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=116583KB  Java=27500KB  Native=56472KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=62)  RSS=234044KB  Views=25 Activities=1
+MEM after-monkey (trimmed) PSS=109948KB  Java=17292KB  Native=55280KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=62)  RSS=228344KB  Views=25 Activities=1
+AN new-2: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN base-2: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-base-2: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 2848 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=9738
+MONKEY exit=0 duration=164 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '9738'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=109421KB  Java=26448KB  Native=52780KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=62)  RSS=225884KB  Views=35 Activities=1
+MEM after-monkey (trimmed) PSS=97742KB  Java=14308KB  Native=48328KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=62)  RSS=214808KB  Views=16 Activities=1
+AN base-2: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN new-3: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-new-3: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798;  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 3013 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=10744
+MONKEY exit=0 duration=137 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '10744'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=92451KB  Java=15568KB  Native=46564KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=58)  RSS=209176KB  Views=25 Activities=1
+MEM after-monkey (trimmed) PSS=88881KB  Java=11188KB  Native=42316KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=58)  RSS=206148KB  Views=15 Activities=1
+AN new-3: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN base-3: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-base-3: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 2880 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=11707
+MONKEY exit=0 duration=166 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '11707'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=86109KB  Java=18316KB  Native=38604KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=58)  RSS=202244KB  Views=14 Activities=1
+MEM after-monkey (trimmed) PSS=80679KB  Java=11560KB  Native=35060KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=58)  RSS=197440KB  Views=14 Activities=1
+AN base-3: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: tab bar not reached
+WARN: Settings not found
+APP W/E lines (pids ['3599', '5127', '6199', '7182', '7600', '8210', '8626', '9331', '9738', '10310', '10744', '11279', '11707']): 2591 in 248 groups
+     581  W/Codec2Client: query -- param skipped: index = #.
+     422  W/ColorUtils: expected specified color aspects (#:#:#:#)
+     209  W/HWUI: Image decoding logging dropped!
+     146  E/MediaCodec: Media Quality Service not found.
+     146  W/CCodec: This behavior is subject to change. It is recommended that app developers double check whether the requested m
+     146  E/g.chyavorec.app: Failed to query component interface for required system resources: #
+      47  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      47  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+      32  W/RemoteInputConnectionImpl: requestCursorUpdates on inactive InputConnection
+      27  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+      21  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      20  W/HWUI: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      20  W/HWUI: Failed to initialize #-# format, error = EGL_SUCCESS
+      20  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@d#b#a#
+      14  W/JobInfo: Requested important-while-foreground flag for job# is ignored and takes no effect
+      14  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+      13  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      13  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, 
+      13  E/g.chyavorec.app: Not starting debugger since process cannot load the jdwp agent.
+      13  E/ashmem: Pinning is deprecated since Android Q. Please use trim or other methods.
+      13  W/HWUI: Unknown dataspace #
+      12  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+      12  E/FrameTracker: force finish cuj, time out: J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      11  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+      10  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@f#df#d
+       9  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       9  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       9  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#f#ec#
+       9  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#c#adbf
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['3599', '5127', '6199', '7182', '7600', '8210', '8626', '9331', '9738', '10310', '10744', '11279', '11707']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 451
+   skipped-frames events=451 max=266 total=24739
+== Davey: 1116
+   davey events=1116 max=5459ms median=1110ms
+== NativeLink: 13
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'ANR': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 23:27 app-mapping.txt; crashes: 3553 B

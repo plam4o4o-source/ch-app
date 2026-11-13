@@ -1,0 +1,78 @@
+app pids seen: ['3599', '5127', '6199', '7182', '7600', '8210', '8626', '9331', '9738', '10310', '10744', '11279', '11707']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 451
+   skipped-frames events=451 max=266 total=24739
+   11-12 23:30:39.675  3599  3599 I Choreographer: Skipped 73 frames!  The application may be doing too much work on its main thread.
+   11-12 23:30:43.684  3599  3599 I Choreographer: Skipped 89 frames!  The application may be doing too much work on its main thread.
+   11-12 23:30:47.001  3599  3599 I Choreographer: Skipped 187 frames!  The application may be doing too much work on its main thread.
+   11-12 23:30:48.111  3599  3599 I Choreographer: Skipped 55 frames!  The application may be doing too much work on its main thread.
+   11-12 23:30:48.983  3599  3599 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-12 23:30:49.888  3599  3599 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   11-12 23:30:50.868  3599  3599 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   11-12 23:30:52.739  3599  3599 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-12 23:30:56.596  3599  3599 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-12 23:30:59.032  3599  3599 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-12 23:31:01.757  3599  3599 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   11-12 23:31:02.566  3599  3599 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 1116
+   davey events=1116 max=5459ms median=1110ms
+   11-12 23:30:43.709  3599  3692 I HWUI    : Davey! duration=1918ms; Flags=1, FrameTimelineVsyncId=6999, IntendedVsync=114333234490, Vsync=114716567808, InputEventId=0, HandleInputStart=114723052590, AnimationStart=114723053361, PerformTraver
+   11-12 23:30:47.002  3599  3692 I HWUI    : Davey! duration=3209ms; Flags=0, FrameTimelineVsyncId=7096, IntendedVsync=116349901076, Vsync=116483234404, InputEventId=0, HandleInputStart=116484723279, AnimationStart=116484724281, PerformTraver
+   11-12 23:30:47.650  3599  3692 I HWUI    : Davey! duration=923ms; Flags=0, FrameTimelineVsyncId=7125, IntendedVsync=116499901070, Vsync=116516567736, InputEventId=0, HandleInputStart=116524176368, AnimationStart=116524176709, PerformTravers
+   11-12 23:30:48.849  3599  3692 I HWUI    : Davey! duration=4941ms; Flags=0, FrameTimelineVsyncId=7132, IntendedVsync=116533234402, Vsync=119649900944, InputEventId=0, HandleInputStart=119659984541, AnimationStart=119659985283, PerformTraver
+   11-12 23:30:49.865  3599  3692 I HWUI    : Davey! duration=1835ms; Flags=0, FrameTimelineVsyncId=7391, IntendedVsync=119666567610, Vsync=119816567604, InputEventId=0, HandleInputStart=119834175878, AnimationStart=119834176539, PerformTraver
+   11-12 23:30:50.287  3599  3692 I HWUI    : Davey! duration=2210ms; Flags=0, FrameTimelineVsyncId=7407, IntendedVsync=119849900936, Vsync=120766567566, InputEventId=0, HandleInputStart=120768774238, AnimationStart=120768774790, PerformTraver
+   11-12 23:30:50.679  3599  3608 I HWUI    : Davey! duration=1607ms; Flags=0, FrameTimelineVsyncId=7447, IntendedVsync=120783234232, Vsync=121633234198, InputEventId=0, HandleInputStart=121642151290, AnimationStart=121642151761, PerformTraver
+   11-12 23:30:51.029  3599  3611 I HWUI    : Davey! duration=1449ms; Flags=0, FrameTimelineVsyncId=7470, IntendedVsync=121649900864, Vsync=122533234162, InputEventId=0, HandleInputStart=122546364491, AnimationStart=122546365072, PerformTraver
+   11-12 23:30:51.703  3599  3611 I HWUI    : Davey! duration=1459ms; Flags=0, FrameTimelineVsyncId=7486, IntendedVsync=122549900828, Vsync=123516567456, InputEventId=0, HandleInputStart=123526264234, AnimationStart=123526264905, PerformTraver
+   11-12 23:30:53.488  3599  3608 I HWUI    : Davey! duration=964ms; Flags=0, FrameTimelineVsyncId=7666, IntendedVsync=124749900740, Vsync=125383234048, InputEventId=0, HandleInputStart=125396676124, AnimationStart=125396676705, PerformTravers
+   11-12 23:30:56.643  3599  3608 I HWUI    : Davey! duration=837ms; Flags=0, FrameTimelineVsyncId=7830, IntendedVsync=128083233940, Vsync=128349900596, InputEventId=-140105962, HandleInputStart=128365824633, AnimationStart=128365825224, Perfo
+   11-12 23:30:57.051  3599  3611 I HWUI    : Davey! duration=751ms; Flags=0, FrameTimelineVsyncId=7845, IntendedVsync=128383233928, Vsync=128699900582, InputEventId=0, HandleInputStart=128709636801, AnimationStart=128709637231, PerformTravers
+== NativeLink: 13
+   11-12 23:31:06.251  3599  4023 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:32:32.660  5127  5461 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:33:42.853  6199  6246 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:37:44.437  7182  7298 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:38:47.448  7600  7645 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:42:29.026  8210  8326 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:43:30.936  8626  8664 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:46:59.703  9331  9437 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:48:05.427  9738  9798 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:51:48.310 10310 10423 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:52:55.813 10744 10785 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-12 23:56:09.100 11279 11396 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-12 23:30:36.604  3589  3589 I PERFCHECK: section: W. First launch and warm-up
+   11-12 23:31:54.378  4915  4915 I PERFCHECK: section: AN new-1: fresh install, monkey 2500 events seed 777 the ANR of c36, /data/anr collected
+   11-12 23:33:02.597  5977  5977 I PERFCHECK: anr-new-1
+   11-12 23:33:03.175  5986  5986 I PERFCHECK: section: W. First launch and warm-up
+   11-12 23:33:34.979  6164  6164 I PERFCHECK: section: K. Monkey 2500 events seed 1357, CAMERA revoked
+   11-12 23:34:04.059  6382  6382 I PERFCHECK: monkey start
+   11-12 23:37:18.402  7066  7066 I PERFCHECK: section: AN base-1: fresh install, monkey 2500 events seed 777 the ANR of c36, /data/anr collected
+   11-12 23:38:10.333  7407  7407 I PERFCHECK: anr-base-1
+   11-12 23:38:10.870  7412  7412 I PERFCHECK: section: W. First launch and warm-up
+   11-12 23:38:41.346  7568  7568 I PERFCHECK: section: K. Monkey 2500 events seed 1357, CAMERA revoked
+   11-12 23:39:07.648  7704  7704 I PERFCHECK: monkey start
+   11-12 23:42:01.284  8087  8087 I PERFCHECK: section: AN new-2: fresh install, monkey 2500 events seed 777 the ANR of c36, /data/anr collected
+   11-12 23:42:53.895  8437  8437 I PERFCHECK: anr-new-2
+   11-12 23:42:54.432  8442  8442 I PERFCHECK: section: W. First launch and warm-up
+   11-12 23:43:24.551  8593  8593 I PERFCHECK: section: K. Monkey 2500 events seed 1357, CAMERA revoked
+   11-12 23:43:55.171  8727  8727 I PERFCHECK: monkey start
+   11-12 23:46:33.128  9215  9215 I PERFCHECK: section: AN base-2: fresh install, monkey 2500 events seed 777 the ANR of c36, /data/anr collected
+   11-12 23:47:26.939  9548  9548 I PERFCHECK: anr-base-2
+   11-12 23:47:27.476  9553  9553 I PERFCHECK: section: W. First launch and warm-up
+   11-12 23:47:57.254  9707  9707 I PERFCHECK: section: K. Monkey 2500 events seed 1357, CAMERA revoked
+   11-12 23:48:19.363  9868  9868 I PERFCHECK: monkey start
+   11-12 23:51:17.515 10190 10190 I PERFCHECK: section: AN new-3: fresh install, monkey 2500 events seed 777 the ANR of c36, /data/anr collected
+   11-12 23:52:17.220 10552 10552 I PERFCHECK: anr-new-3
+   11-12 23:52:17.760 10557 10557 I PERFCHECK: section: W. First launch and warm-up
+   11-12 23:52:47.854 10709 10709 I PERFCHECK: section: K. Monkey 2500 events seed 1357, CAMERA revoked
+   11-12 23:53:13.133 10844 10844 I PERFCHECK: monkey start
+   11-12 23:55:43.980 11160 11160 I PERFCHECK: section: AN base-3: fresh install, monkey 2500 events seed 777 the ANR of c36, /data/anr collected
+   11-12 23:56:33.165 11506 11506 I PERFCHECK: anr-base-3
+   11-12 23:56:33.702 11511 11511 I PERFCHECK: section: W. First launch and warm-up
+   11-12 23:57:03.656 11676 11676 I PERFCHECK: section: K. Monkey 2500 events seed 1357, CAMERA revoked
+   11-12 23:57:24.133 11807 11807 I PERFCHECK: monkey start
+   11-13 00:00:24.471 12122 12122 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

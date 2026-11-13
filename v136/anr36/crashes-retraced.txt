@@ -1,0 +1,34 @@
+11-12 23:30:15.123   643  2939 E ActivityManager: ANR in com.google.android.gms.persistent
+11-12 23:30:15.123   643  2939 E ActivityManager: PID: 1342
+11-12 23:30:15.123   643  2939 E ActivityManager: Reason: Broadcast of Intent { act=android.intent.action.SIM_STATE_CHANGED flg=0x15000010 xflg=0x4 cmp=com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver (has extras) }
+11-12 23:30:15.123   643  2939 E ActivityManager: ErrorId: 7611c8c2-c5dc-4bb1-8df6-2d2a23628872
+11-12 23:30:15.123   643  2939 E ActivityManager: Frozen: false
+11-12 23:30:15.123   643  2939 E ActivityManager: Load: 0.0 / 0.0 / 0.0
+11-12 23:30:15.123   643  2939 E ActivityManager: ----- Output from /proc/pressure/memory -----
+11-12 23:30:15.123   643  2939 E ActivityManager: some avg10=7.33 avg60=4.53 avg300=1.31 total=4527840
+11-12 23:30:15.123   643  2939 E ActivityManager: full avg10=0.45 avg60=0.22 avg300=0.06 total=438522
+11-12 23:30:15.123   643  2939 E ActivityManager: ----- End output from /proc/pressure/memory -----
+11-12 23:30:15.123   643  2939 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+11-12 23:30:15.123   643  2939 E ActivityManager: some avg10=93.75 avg60=57.18 avg300=16.81 total=55797943
+11-12 23:30:15.123   643  2939 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+11-12 23:30:15.123   643  2939 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+11-12 23:30:15.123   643  2939 E ActivityManager: ----- Output from /proc/pressure/io -----
+11-12 23:30:15.123   643  2939 E ActivityManager: some avg10=23.41 avg60=20.59 avg300=6.50 total=21865093
+11-12 23:30:15.123   643  2939 E ActivityManager: full avg10=0.04 avg60=1.64 avg300=0.85 total=3369873
+11-12 23:30:15.123   643  2939 E ActivityManager: ----- End output from /proc/pressure/io -----
+11-12 23:30:15.123   643  2939 E ActivityManager: 
+11-12 23:30:15.123   643  2939 E ActivityManager: CPU usage from 49718ms to -4ms ago (2026-11-12 23:29:22.764 to 2026-11-12 23:30:12.487):
+11-12 23:30:15.123   643  2939 E ActivityManager:   38% 521/surfaceflinger: 0.9% user + 37% kernel / faults: 2585 minor
+11-12 23:30:15.123   643  2939 E ActivityManager:   22% 643/system_server: 16% user + 6% kernel / faults: 94151 minor 598 major
+11-12 23:30:15.123   643  2939 E ActivityManager:   8.7% 483/android.hardware.graphics.composer3-service.ranchu: 0% user + 8.6% kernel / faults: 21 minor
+11-12 23:30:15.123   643  2939 E ActivityManager:   3.3% 462/android.hardware.graphics.allocator-service.ranchu: 0% user + 3.2% kernel
+11-12 23:30:15.123   643  2939 E ActivityManager:   3.9% 583/logcat: 0.2% user + 3.6% kernel / faults: 6 minor
+11-12 23:30:15.123   643  2939 E ActivityManager:   1.3% 42/kworker/1:1H-kverityd: 0% user + 1.3% kernel
+11-12 23:30:15.123   643  2939 E ActivityManager:   1% 43/kswapd0: 0% user + 1% kernel
+11-12 23:30:15.123   643  2939 E ActivityManager:   0.9% 208/logd: 0.3% user + 0.6% kernel / faults: 1955 minor 3 major
+11-12 23:30:15.123   643  2939 E ActivityManager:   0.6% 38/kworker/1:1-virtio_vsock: 0% user + 0.6% kernel
+11-12 23:30:15.123   643  2939 E ActivityManager:   0.7% 210/servicemanager: 0.1% user + 0.6% kernel / faults: 14 minor
+11-12 23:30:15.123   643  2939 E ActivityManager: 99% TOTAL: 33% user + 64% kernel + 0.2% iowait + 1.7% softirq
+11-12 23:30:15.123   643  2939 E ActivityManager: CPU usage from 85140ms to 85140ms ago (1970-01-01 00:00:00.000 to 1970-01-01 00:00:00.000) with 0% awake:
+11-12 23:30:15.123   643  2939 E ActivityManager: 0% TOTAL: 0% user + 0% kernel
+

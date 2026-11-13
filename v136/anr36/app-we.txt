@@ -1,0 +1,41 @@
+APP W/E lines (pids ['3599', '5127', '6199', '7182', '7600', '8210', '8626', '9331', '9738', '10310', '10744', '11279', '11707']): 2591 in 248 groups
+     581  W/Codec2Client: query -- param skipped: index = #.
+     422  W/ColorUtils: expected specified color aspects (#:#:#:#)
+     209  W/HWUI: Image decoding logging dropped!
+     146  E/MediaCodec: Media Quality Service not found.
+     146  W/CCodec: This behavior is subject to change. It is recommended that app developers double check whether the requested m
+     146  E/g.chyavorec.app: Failed to query component interface for required system resources: #
+      47  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      47  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+      32  W/RemoteInputConnectionImpl: requestCursorUpdates on inactive InputConnection
+      27  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+      21  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      20  W/HWUI: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      20  W/HWUI: Failed to initialize #-# format, error = EGL_SUCCESS
+      20  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@d#b#a#
+      14  W/JobInfo: Requested important-while-foreground flag for job# is ignored and takes no effect
+      14  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+      13  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      13  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, 
+      13  E/g.chyavorec.app: Not starting debugger since process cannot load the jdwp agent.
+      13  E/ashmem: Pinning is deprecated since Android Q. Please use trim or other methods.
+      13  W/HWUI: Unknown dataspace #
+      12  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+      12  E/FrameTracker: force finish cuj, time out: J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      11  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+      10  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@f#df#d
+       9  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       9  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       9  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#f#ec#
+       9  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#c#adbf
+       8  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       8  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       7  W/RemoteInputConnectionImpl: commitText on inactive InputConnection
+       7  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@d#f#a
+       7  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=tv#@b#e#e#c
+       7  W/BasicSecureTextField: 	at uk#.d(r#-map-id-ccf#fe#c#ee#d#b#f#db#cfd#ad#fa#c#f#ae#b#fc#:#)
+       7  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@b#
+       6  W/InteractionJankMonitor: Initializing without READ_DEVICE_CONFIG permission. enabled=true, interval=#, missedFrameThreshold=#, frameTim
+       6  W/VRI[MainActivity]: Dropping event (no window focus):KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+       6  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       6  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)

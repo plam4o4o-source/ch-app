@@ -1,9 +1,10 @@
 # Emulator check of the v1.2.36 candidate (80efffa, versionCode 1507400) against the released v1.2.35 (aef8910, 1507364)
 
-debug/w22-check (runs in runs.txt, latest 43317392091 @ 9791f43). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part says otherwise (parts ending in 28: API 28; in 26: API 26; c36: API 36). Built prodRelease (minified) x86_64 with a throwaway key; diary36: devDebug. In the A/B parts new = 1.2.36 and base = 1.2.35. Screenshots are JPEG, scaled down (sheets/ = contact sheets). Earlier: [../v135full/index.md](../v135full/index.md), [../v135/index.md](../v135/index.md).
+debug/w22-check (runs in runs.txt, latest 43328193293 @ ec25a65). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part says otherwise (parts ending in 28: API 28; in 26: API 26; c36: API 36). Built prodRelease (minified) x86_64 with a throwaway key; diary36: devDebug. In the A/B parts new = 1.2.36 and base = 1.2.35. Screenshots are JPEG, scaled down (sheets/ = contact sheets). Earlier: [../v135full/index.md](../v135full/index.md), [../v135/index.md](../v135/index.md).
 
 | part | status |
 |---|---|
+| anr36 | COMPLETE; part=anr36 target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
 | c26 | COMPLETE; part=c26 target=google_apis api=26 gpu=swangle_indirect emulator-step=success |
 | c28 | COMPLETE; part=c28 target=google_apis api=28 gpu=swangle_indirect emulator-step=success |
 | c36 | COMPLETE; part=c36 target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
@@ -13,13 +14,17 @@ debug/w22-check (runs in runs.txt, latest 43317392091 @ 9791f43). API 33 google_
 | hi28 | COMPLETE; part=hi28 target=google_apis api=28 gpu=swangle_indirect emulator-step=success |
 | idle33 | COMPLETE; part=idle33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | mem36 | COMPLETE; part=mem36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| memL36 | COMPLETE; part=memL36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | memb36 | COMPLETE; part=memb36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| membL36 | COMPLETE; part=membL36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | mon36 | COMPLETE; part=mon36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | new26 | COMPLETE; part=new26 target=google_apis api=26 gpu=swangle_indirect emulator-step=success |
 | new28 | COMPLETE; part=new28 target=google_apis api=28 gpu=swangle_indirect emulator-step=success |
 | new36 | COMPLETE; part=new36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | new36b | COMPLETE; part=new36b target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | onb36 | COMPLETE; part=onb36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| perf36 | COMPLETE; part=perf36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| set36 | COMPLETE; part=set36 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | start36a | COMPLETE; part=start36a target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | start36b | COMPLETE; part=start36b target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | upd28 | COMPLETE; part=upd28 target=google_apis api=28 gpu=swangle_indirect emulator-step=success |
@@ -33,6 +38,163 @@ devDebug 1.2.36 80efffa (org.chyavorec.app.dev, demo sign-in DEMO-0001)
 app.apk 4583798 bytes
 app-base.apk 4317894 bytes
 app-dev.apk 28595559 bytes
+```
+
+## anr36
+
+```
+part anr36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 7946 ms
+## AN new-1: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-new-1: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798;  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 3266 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=6199
+MONKEY exit=0 duration=178 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '6199'; airplane=1; camera: 
+MEM after-monkey (raw) PSS=85505KB  Java=20704KB  Native=39548KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=26)  RSS=202004KB  Views=27 Activities=1
+MEM after-monkey (trimmed) PSS=79377KB  Java=14416KB  Native=34980KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=26)  RSS=196708KB  Views=15 Activities=1
+AN new-1: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN base-1: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-base-1: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 3221 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=7600
+MONKEY exit=0 duration=159 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '7600'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=107490KB  Java=23200KB  Native=53652KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=66)  RSS=223736KB  Views=25 Activities=1
+MEM after-monkey (trimmed) PSS=96266KB  Java=12572KB  Native=48132KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=66)  RSS=213108KB  Views=15 Activities=1
+AN base-1: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN new-2: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-new-2: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798;  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 3250 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=8626
+MONKEY exit=0 duration=141 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '8626'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=116583KB  Java=27500KB  Native=56472KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=62)  RSS=234044KB  Views=25 Activities=1
+MEM after-monkey (trimmed) PSS=109948KB  Java=17292KB  Native=55280KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=62)  RSS=228344KB  Views=25 Activities=1
+AN new-2: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN base-2: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-base-2: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 2848 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=9738
+MONKEY exit=0 duration=164 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '9738'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=109421KB  Java=26448KB  Native=52780KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=62)  RSS=225884KB  Views=35 Activities=1
+MEM after-monkey (trimmed) PSS=97742KB  Java=14308KB  Native=48328KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=62)  RSS=214808KB  Views=16 Activities=1
+AN base-2: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN new-3: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-new-3: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798;  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 3013 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=10744
+MONKEY exit=0 duration=137 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '10744'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=92451KB  Java=15568KB  Native=46564KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=58)  RSS=209176KB  Views=25 Activities=1
+MEM after-monkey (trimmed) PSS=88881KB  Java=11188KB  Native=42316KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=58)  RSS=206148KB  Views=15 Activities=1
+AN new-3: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## AN base-3: fresh install, monkey 2500 events seed 777 (the ANR of c36), /data/anr collected
+installed anr-base-3: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+## W. First launch and warm-up
+first-install catalogue results after 2880 ms
+## K. Monkey 2500 events (seed 1357, CAMERA revoked)
+camera permission before monkey: 
+monkey start pid=11707
+MONKEY exit=0 duration=166 s; Events injected: 2500 // Monkey finished 
+MONKEY markers: CRASH=0 ANR=0 FATAL=0
+pid after monkey: '11707'; airplane=0; camera: 
+MEM after-monkey (raw) PSS=86109KB  Java=18316KB  Native=38604KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=58)  RSS=202244KB  Views=14 Activities=1
+MEM after-monkey (trimmed) PSS=80679KB  Java=11560KB  Native=35060KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=58)  RSS=197440KB  Views=14 Activities=1
+AN base-3: Events injected: 2500  ANR=0 CRASH=0; logcat ANR lines since: 0; app FATAL 0
+  /data/anr: 
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: tab bar not reached
+WARN: Settings not found
+APP W/E lines (pids ['3599', '5127', '6199', '7182', '7600', '8210', '8626', '9331', '9738', '10310', '10744', '11279', '11707']): 2591 in 248 groups
+     581  W/Codec2Client: query -- param skipped: index = #.
+     422  W/ColorUtils: expected specified color aspects (#:#:#:#)
+     209  W/HWUI: Image decoding logging dropped!
+     146  E/MediaCodec: Media Quality Service not found.
+     146  W/CCodec: This behavior is subject to change. It is recommended that app developers double check whether the requested m
+     146  E/g.chyavorec.app: Failed to query component interface for required system resources: #
+      47  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      47  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+      32  W/RemoteInputConnectionImpl: requestCursorUpdates on inactive InputConnection
+      27  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+      21  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      20  W/HWUI: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      20  W/HWUI: Failed to initialize #-# format, error = EGL_SUCCESS
+      20  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@d#b#a#
+      14  W/JobInfo: Requested important-while-foreground flag for job# is ignored and takes no effect
+      14  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+      13  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      13  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, 
+      13  E/g.chyavorec.app: Not starting debugger since process cannot load the jdwp agent.
+      13  E/ashmem: Pinning is deprecated since Android Q. Please use trim or other methods.
+      13  W/HWUI: Unknown dataspace #
+      12  W/VRI[MainActivity]: Cancelling event (no window focus):KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, metaState
+      12  E/FrameTracker: force finish cuj, time out: J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      11  W/VRI[MainActivity]: Dropping event due to root view being removed: MotionEvent { action=ACTION_MOVE, actionButton=#, id[#]=#, x[#]
+      10  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@f#df#d
+       9  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       9  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       9  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#f#ec#
+       9  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#c#adbf
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['3599', '5127', '6199', '7182', '7600', '8210', '8626', '9331', '9738', '10310', '10744', '11279', '11707']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 451
+   skipped-frames events=451 max=266 total=24739
+== Davey: 1116
+   davey events=1116 max=5459ms median=1110ms
+== NativeLink: 13
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'ANR': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 23:27 app-mapping.txt; crashes: 3553 B
 ```
 
 ## c26
@@ -886,147 +1048,76 @@ HELPER installed: package:org.pc.helper
 installed: devDebug 1.2.36 80efffa (org.chyavorec.app.dev, demo sign-in DEMO-0001);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.36-dev 
 ## W. First launch and warm-up
 (dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
-first-install catalogue results after 5057 ms
+first-install catalogue results after 6573 ms
 ## D0. Demo sign-in (DEMO-0001 / demo)
 Запомни ме before: CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true)
 Запомни ме now: CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true)
 MY after the demo sign-in: text="ДЕМО ДАННИ — само за разработка, не са реални" text="ДЧ" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" text="БИБЛИОТЕКА" text="Читателска карта" text="Покажи картата на гишето" 
-## D1. Моето and „История“ (reading diary prompts, the „Върната“ stamp)
-CAP demo36/01-my: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=25 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · ДЧ · Демо Читател · Читателски № DEMO-0001 · Активно · БИБЛИОТЕКА
-CAP demo36/01b-my-2: targets=14 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=24 ellipsized=0 | Искам да прочета · Книги, които искаш да вземеш · Моето членство · Статус и валидност · Прочетени книги · Историята на четенето и подо
-CAP demo36/01c-my-3: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=24 ellipsized=0 | Кои да получаваш: срокове, с · МОЕТО ЧЕТЕНЕ · 2026 · Моята читателска година 2026 · 30 книги · виж историята · Книги по месеци
-CAP demo36/02-loans: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Последна синхронизация: Пред · Демо заглавие (просрочено) · Демо автор · Взета на 04.10.2026 · Срокът изтече на 10.11.2026
-CAP demo36/03-history: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Всички години · 2026 · 2025 · 2026 · 30 книги
-CAP demo36/03b-history-2: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · взета 10.11.2026 · върната 1 · Хареса ли ти? · Не сега · Оценка на книгата · Чичовци
-CAP demo36/03c-history-3: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=28 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Железният светилник · Талев, Димитър · взета 28.10.2026 · върната 1 · Хареса ли ти? · Не сега
-HISTORY: diary prompts '1', rating marks '0', stamp 'Върната' '0'
-DIARY: no 'Препоръчай': text="ДЕМО ДАННИ — само за разработка, не са реални" text="Всички години" text="2026" text="2025" text="2026" text="30 книги" text="Под игото" text="Иван Вазов" text="взета 14.09.2026 · върната 14.10.2026" text="Демо заглавие (прочетено)" text="Демо автор" tex
+## D1. Моето and „История“ (these screens are FLAG_SECURE: emulator screenshots)
+HISTORY: diary prompts '1', rating nodes '1', texts: text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Оценка на книгата" text="Чичовци" text="Вазов, Иван" text="взета 04.11.2026 · върната 13.11.2026" text="Хареса ли ти?" text="Не сега" content-desc="Оценка на книгата" text="Железният светилник" text="Талев, Димитър" text="взета 28.10.2026 · върната 13.11.2026" text="Хареса ли ти?" text="Не сега" content-desc="Оценка на книгата" text="Бай Ганьо" text="Константинов, Алеко" text="взета 20.10.2026 · върната 06.11.2026" text="Тютюн" t
+DIARY rating node [237 385 867 463]
+DIARY after rating: text="ДЕМО ДАННИ — само за разработка, не са реални" text="Добави бележка" text="Препоръчай" text="Махни оценката" text="Оценките и бележките са само на телефона." text="Чичовци" text="Вазов, Иван" text="взета 04.11.2026 · върната 13.11.2026" text="Хареса ли ти?" text="Не сега" content-desc="Оценка на книгата" text="Железният светилник" text="Талев, Димитър" text="взета 28.10.2026 · върната 13.11.
+DIARY recommend share: chooser OPEN after 2 s
 DIARY: FATAL(any process)=0 of the app=0 ANR=0
-## D2. The diary survives a process death; a book screen shows the diary section
-CAP demo36/06-history-after-kill: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Всички години · 2026 · 2025 · 2026 · 30 книги
-HISTORY after kill: rating state 'content-desc="Оценка на книгата" content-desc="Оценка на книгата" '
-## D3. Year story: „Твоята шевица“ and the embroidered charts (portrait; dark)
-YEAR port slide 1: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | През 2026 г. взе 30 книги от библиотекат · Моята читателска година · 2026 · Затвори · Сподели
-  slide 1 after a slow drag up inside: diff 8.91
-YEAR port slide 2: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Най-четен раздел: Език. Литература — 2 к · Моята читателска година · 2026 · Затвори · Сподели
-  slide 2 after a slow drag up inside: diff 13.08
-YEAR port slide 3: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Най-дълга поредица: 11 месеца подред с п · Моята читателска година · 2026 · Затвори · Сподели
-  slide 3 after a slow drag up inside: diff 23.16
-YEAR port slide 4: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Благодарим ти, че четеш с нас! Библиотек · Моята читателска година · 2026 · Затвори · Сподели
-  slide 4 after a slow drag up inside: diff 0.14
-YEAR port slide 5: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Искам да прочета · Книги, които искаш да вземеш · Моето членство · Статус и валидност · Прочетени книги · Историята на четенето и подобни книги · Моят профил · Читателски данни
-  slide 5 after a slow drag up inside: diff 0.00
-  story closed at slide 5
-YEAR dark slide 1: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | 2026 — твоята година с книгите · Моята читателска година · 2026 · Затвори · Сподели
-  slide 1 after a slow drag up inside: diff 10.17
-YEAR dark slide 2: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Твоят читателски тип: Книжен дракон. Пог · Моята читателска година · 2026 · Затвори · Сподели
-  slide 2 after a slow drag up inside: diff 0.76
-YEAR dark slide 3: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Покажи картата на гишето · Искам да прочета · Книги, които искаш да вземеш · Моето членство · Статус и валидност · Прочетени книги · Историята на четенето и подобни книги · Моят профил
-  slide 3 after a slow drag up inside: diff 0.01
-YEAR dark slide 4: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | 2026 — твоята година с книгите · Моята читателска година · 2026 · Затвори · Сподели
-  slide 4 after a slow drag up inside: diff 15.14
-YEAR dark slide 5: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Любим автор: Иван Вазов — 6 книги през г · Моята читателска година · 2026 · Затвори · Сподели
-  slide 5 after a slow drag up inside: diff 7.93
-YEAR dark slide 6: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Рекорден месец: Септември — 5 книги. · Моята читателска година · 2026 · Затвори · Сподели
-  slide 6 after a slow drag up inside: diff 15.52
-YEAR dark slide 7: YS state=- error=no scrollable=0 ellipsized=0 beyond-screen=0 [] | Твоят читателски тип: Книжен дракон. Пог · Моята читателска година · 2026 · Затвори · Сподели
-  slide 7 after a slow drag up inside: diff 29.10
-YEAR dark slide 8: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Прочетени книги · Историята на четенето и подобни книги · Моят профил · Читателски данни · Известия · Кои да получаваш: срокове, събития, нови · МОЕТО ЧЕТЕНЕ · 2026
-  slide 8 after a slow drag up inside: diff 0.00
-YEAR dark slide 9: YS state=- error=no scrollable=1 ellipsized=0 beyond-screen=0 [] | Известия · Кои да получаваш: срокове, събития, нови · МОЕТО ЧЕТЕНЕ · 2026 · Моята читателска година 2026 · 30 книги · виж историята · Книги по месеци · Цялата история
-  slide 9 after a slow drag up inside: diff 0.00
+## D2. The diary survives a process death
+HISTORY after kill: content-desc="Оценка на книгата" text="very_good" 
+## D3. Year story, every slide one by one (taps on the right side; emulator screenshots, no drags)
+YEAR light slide 1: content-desc="2026 — твоята година с книгите" text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR light slide 2: content-desc="Любим автор: Иван Вазов — 6 книги през годината." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR light slide 3: content-desc="Рекорден месец: Септември — 5 книги." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR light slide 4: content-desc="Твоят читателски тип: Книжен дракон. Поглъщаш книга след книга — рафтовете едва смогват." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR light slide 5: text="Искам да прочета" text="Книги, които искаш да вземеш" text="Моето членство" text="Статус и валидност" text="Прочетени книги" text="Историята на четенето и подобни книги" text="Моят профил" text="Читателски данни" 
+YEAR light: story no longer open at 5
+YEAR dark slide 1: content-desc="2026 — твоята година с книгите" text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR dark slide 2: content-desc="Любим автор: Иван Вазов — 6 книги през годината." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR dark slide 3: content-desc="Рекорден месец: Септември — 5 книги." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR dark slide 4: content-desc="Твоят читателски тип: Книжен дракон. Поглъщаш книга след книга — рафтовете едва смогват." text="Моята читателска година" text="2026" content-desc="Затвори" text="Сподели" 
+YEAR dark slide 5: text="Искам да прочета" text="Книги, които искаш да вземеш" text="Моето членство" text="Статус и валидност" text="Прочетени книги" text="Историята на четенето и подобни книги" text="Моят профил" text="Читателски данни" 
+YEAR dark: story no longer open at 5
 ## D4. Signed-in card, fullscreen
 demo fullscreen card: yes
-## NP-demo-new (brief). New screens (1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
-CAP demo-new/01-home: targets=13 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения (1 непрочетено) · 1 · Лента за търсене · Търси книга, новина, събитие
-CAP demo-new/02-more: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=28 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
-CAP demo-new/em-01-open: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
-EMB stitches: start 0 → after 6 taps + a stroke 16
-CAP demo-new/em-02-stitched: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
-EMB undo: 16 → 6
-EMB redo: 6 → 16
-EMB save: text="Моите шевици" 
-CAP demo-new/em-06-after-save: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Платно за шевица, 15 на 15 к · Цвят на конеца · Бордо · Злато · Черно · Кремаво
-EMB share: chooser OPEN after 3 s; fg android/com.android.internal.app.ChooserActivity
-EMB end: front app
-CAP demo-new/np-01-list: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Старият вестник · Юбилеен вестник · 1959 · Двадесет статии от юбилейния · СТАТИЯ 01 · СПОМЕНИ · Баба Дамяна разказва · Спомен от Освобождението — д
-NEWSPAPER first open: page label after 2579 ms (-1 = none in 100 s): content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
-CAP demo-new/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели
-NEWSPAPER page content (std of the brightness, ≈0 = blank): mean=225 std=29.4
-NEWSPAPER: no zoom button: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" 
-NEWSPAPER: no next-page button (one page?)
-NEWSPAPER logcat: ; FATAL(any process)=0 of the app=0 ANR=0
-offline: airplane=1
-NEWSPAPER reopened OFFLINE: after 2478 ms: content-desc="Баба Дамяна разказва. Страница 1 от 1. Щипни или докосни двукратно, за да увеличиш." content-desc="Назад" text="Баба Дамяна разказва" content-desc="Отвори във външно приложение" content-desc="Сподели" text="Няма интернет връзк
-CAP demo-new/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Баба Дамяна разказва. Страни · Назад · Баба Дамяна разказва · Отвори във външно приложение · Сподели · Няма интернет връзка
-NEWSPAPER offline page content: mean=225 std=29.4
-CAP demo-new/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
-CAP demo-new/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | 17 дек. 1922. Възстановяване · Дейността се възобновява под · 1923–1924. Устав и държавно  · Устав и държавно признание · Уставът е приет на 22 януари · 1927. Въздържателно дружеств
-CAP demo-new/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | 17 март 1958. Първа копка. С · Самооблагане 3% по Закона за · 1961. Открита читалищната сг · Открита читалищната сграда · Нова сграда с библиотека, го · След 1989. Трудни години — у
-QUIZ ready after 1983 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Какво се случва в читалището през 1947 г.?" text="Първа копка" text="Въздържателно дружество „Борба“" text="Общностен и информационен център" text="Решение за
-CAP demo-new/qz-01-q1: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Първа копка · Въздържателно дружество „Бор · Общностен и информационен це
-CAP demo-new/qz-01-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 0 верни от 1 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Първа копка · Въздържателно дружество „Бор · Общностен и информационен це
-CAP demo-new/qz-06-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Утре ще е по-добре — Яворец  · 1/5 · 1 верни от 5 · Серия: 1 ден поред · Нови въпроси — утре. · Сподели резултата
-QUIZ result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="1/5" text="1 верни от 5" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Назад" content-desc="Назад" text="Познай Яворец" 
-QUIZ share: chooser OPEN after 2 s; fg android/com.android.internal.app.ChooserActivity
-CAP demo-new/st-01: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Изглед · Тема · Както системата · Размер на текста · Стандартен · Палитра
-CAP demo-new/st-02: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
-CAP demo-new/st-03: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Разклати телефона в каталога · Уиджети · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“ · Всеки ден друга книга от кат
-CAP demo-new/st-04: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Обновления · Автоматичното обновяване раб · Данни · Корици от интернет · Корици по ISBN от covers.ope · Корици само по Wi-Fi
-WARN: settings item Седмичен преглед|Weekly digest not found
-SETTINGS: no digest row
-CAP demo-new/11-event: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
-NP demo-new: FATAL(any process)=0 of the app=0 ANR=0; app process 10295; logcat app errors: 0
 DIARY36 part: FATAL(any process)=0 of the app=0 ANR=0
-A11Y AGG: 8 screens analysed, 0 dumps failed; totals MISSING=3 DOUBLE=0 SAME-LABEL=4 SMALL(<48dp)=4
-== MISSING: 3 distinct
-   View@[42,2010][524,2127]  [1 screens: 01-my]
-   View@[42,296][524,302]  [1 screens: 01b-my-2]
-   View@[556,296][1038,302]  [1 screens: 01b-my-2]
-== SMALL: 2 distinct
-   ''  [2 screens: 01-my, 01b-my-2]
-   'Кои да получаваш: срокове, съб'  [1 screens: 01c-my-3]
-== SAME-LABEL: 3 distinct
-   'Не сега' x2  [2 screens: 03-history, 06-history-after-kill]
-   'Удължи срока' x2  [1 screens: 02-loans]
-   'Не сега' x3  [1 screens: 03b-history-2]
+A11Y AGG: 0 screens analysed, 0 dumps failed; totals 
+== MISSING: 0 distinct
+== SMALL: 0 distinct
+== SAME-LABEL: 0 distinct
 == DOUBLE: 0 distinct
-contact sheets: 9 in sheets/
+contact sheets: 4 in sheets/
 ## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
 DIAGLOG: empty (no entries)
-DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36-dev (1) | Профил: чака | Студен старт · 3 | Първи кадър: медиана 4088 мс, последен 4088 мс | Пълно показване: медиана 5145 мс, последно 5145 мс | Насечени кадри по екрани | login: 16,7 % от 84 кадъра · най-бавен 504 мс | общо с видеокартата: сре
-DIAG SCREEN (scrolled): text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36-dev (1)" text="Профил: чака" text="Студен старт · 3" text="Първи кадър: медиана 4088 мс, последен 4088 мс" text="Пълно показване: медиана 5145 мс, последно 5145 мс" text="Насечени кадри по екрани" text="login: 16,7 % от 84 кадъра · най-бавен 504 мс" text="общо с видеокартата: средно 181 мс, най-бавен 687 мс" text="my: 14,0 % от 107 кадъра · най-бавен 1109 мс" text="общо с видеокартата: средно 298 мс, най-бавен 1239 мс" text="onboarding: 2,6 % от 39 кадъра · най-бавен 857 мс" text="общо с видеокартата: средно 576 мс, най-бав
-APP W/E lines (pids ['5570', '8558', '10295']): 251 in 110 groups
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36-dev (1) | Профил: чака | Студен старт · 2 | Първи кадър: медиана 3180 мс, последен 2590 мс | Пълно показване: медиана 40407 мс, последно 77045 мс | Насечени кадри по екрани | catalog: 32,3 % от 31 кадъра · най-бавен 2192 мс | общо с видеокартата
+DIAG SCREEN (scrolled): text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36-dev (1)" text="Профил: чака" text="Студен старт · 2" text="Първи кадър: медиана 3180 мс, последен 2590 мс" text="Пълно показване: медиана 40407 мс, последно 77045 мс" text="Насечени кадри по екрани" text="catalog: 32,3 % от 31 кадъра · най-бавен 2192 мс" text="общо с видеокартата: средно 434 мс, най-бавен 2468 мс" text="my: 13,6 % от 125 кадъра · най-бавен 879 мс" text="общо с видеокартата: средно 253 мс, най-бавен 997 мс" text="login: 13,3 % от 83 кадъра · най-бавен 631 мс" text="общо с видеокартата: средно 142 мс, най-бавен 746 мс" text="home
+APP W/E lines (pids ['5448', '8597']): 231 in 104 groups
        6  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
        6  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
        6  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
-       5  W/Parcel: Expecting binder but got null!
-       5  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
        5  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
-       4  W/ziparchive: Unable to open '/data/app/~~#JrFTam#qM#Cee#wNAERhw==/org.chyavorec.app.dev-#gCI#hPIAD#K#K#IqAMJbg==/base.dm': 
+       4  W/Parcel: Expecting binder but got null!
        4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
        4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
-       3  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
-       3  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
-       3  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
-       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
-       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
-       3  W/Gralloc4: allocator #.x is not supported
+       3  W/ziparchive: Unable to open '/data/app/~~nflKSsGDYgLn#itJUn#Y#w==/org.chyavorec.app.dev-#F_ZdkkeJmAafgD#WtTjg==/base.dm': N
        3  E/OpenGLRenderer: Unable to match the desired swap behavior.
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.InnerNodeCoordinator$LookaheadDelegateImpl.measure-BRTryo#(InnerNodeCoordinator.k
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasureBlock$lambda$#(LookaheadPassDelegate.kt:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate$$ExternalSyntheticLambda#.invoke(D#$$SyntheticClass:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasure-BRTryo#$ui(LookaheadPassDelegate.kt:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performLookaheadMeasure-BRTryo#$ui(LayoutNodeLayoutDeleg
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.remeasure-BRTryo#(LookaheadPassDelegate.kt:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.measure-BRTryo#(LookaheadPassDelegate.kt:#)
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutModifierNodeCoordinator$LookaheadDelegateForLayoutModifierNode.measure-BRTr
-       3  W/BasicSecureTextField: 	at androidx.compose.ui.graphics.BlockGraphicsLayerModifier.measure-#p#s#s(GraphicsLayerModifier.kt:#)
        3  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
        3  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
-       3  W/yavorec.app.dev: Accessing hidden method Landroid/view/ViewTreeObserver;->dispatchOnScrollChanged()V (unsupported, reflection, 
+       3  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       3  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       3  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       2  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       2  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/Gralloc4: allocator #.x is not supported
        2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
-contact sheets: 10 in sheets/
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       2  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.PlatformPasswordVisibilitySettingImpl.getSystemShowPasswordSetting(BasicS
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextField_androidKt.rememberPlatformPasswordVisibilitySettings
+contact sheets: 5 in sheets/
 ## COMPLETE
 ## logcat findings
 app pids seen: []
@@ -1038,7 +1129,7 @@ app pids seen: []
 == NativeLink: 0
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
-retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 23:27 app-mapping.txt; crashes: 0 B
 ```
 
 ## gfx36
@@ -1840,6 +1931,81 @@ CRASHES: 0 block(s)  → crashes.txt
 retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B
 ```
 
+## memL36
+
+```
+part memL36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15987 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 2975 ms
+## M. Memory over 30 cycles (all tabs + a book + the gallery viewer + the expanded search), new
+tab home @ 99 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=49519KB  Java=7116KB  Native=12640KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=9)  RSS=89236KB  Views=9 Activities=1
+MEM c00 (trimmed)    PSS=57112KB  Java=7640KB  Native=12724KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=9)  RSS=98268KB  Views=9 Activities=1
+cycle 1: book screen opened
+MEM c05 (trimmed)    PSS=90502KB  Java=12156KB  Native=36188KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=160660KB  Views=13 Activities=1
+cycles done: 10, gallery viewer reached in 10, search expanded in 10
+MEM c10 (raw)        PSS=104788KB  Java=17328KB  Native=39428KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=160340KB  Views=20 Activities=1
+MEM c10 (trimmed)    PSS=96427KB  Java=11212KB  Native=36692KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=152236KB  Views=13 Activities=1
+MEM c15 (trimmed)    PSS=105911KB  Java=11180KB  Native=44908KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=163268KB  Views=13 Activities=1
+cycles done: 20, gallery viewer reached in 20, search expanded in 20
+MEM c20 (raw)        PSS=126751KB  Java=15812KB  Native=60028KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=185044KB  Views=20 Activities=1
+MEM c20 (trimmed)    PSS=119050KB  Java=11184KB  Native=57144KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=177344KB  Views=13 Activities=1
+MEM c25 (trimmed)    PSS=124785KB  Java=11292KB  Native=62132KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=13)  RSS=183832KB  Views=13 Activities=1
+cycles done: 30, gallery viewer reached in 30, search expanded in 30
+MEM c30 (raw)        PSS=129896KB  Java=17676KB  Native=60936KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=190372KB  Views=20 Activities=1
+MEM c30 (trimmed)    PSS=119714KB  Java=11256KB  Native=57372KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=180188KB  Views=13 Activities=1
+cycles done: 40, gallery viewer reached in 40, search expanded in 40
+MEM c40 (raw)        PSS=139119KB  Java=24084KB  Native=63332KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=200500KB  Views=20 Activities=1
+MEM c40 (trimmed)    PSS=120791KB  Java=11372KB  Native=57976KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=182172KB  Views=13 Activities=1
+cycles done: 50, gallery viewer reached in 50, search expanded in 50
+MEM c50 (raw)        PSS=140719KB  Java=25204KB  Native=62652KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=202508KB  Views=20 Activities=1
+MEM c50 (trimmed)    PSS=122235KB  Java=11452KB  Native=58148KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=184032KB  Views=13 Activities=1
+cycles done: 60, gallery viewer reached in 60, search expanded in 60
+MEM c60 (raw)        PSS=125838KB  Java=13416KB  Native=60396KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=189200KB  Views=20 Activities=1
+MEM c60 (trimmed)    PSS=123125KB  Java=11348KB  Native=59768KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=186488KB  Views=13 Activities=1
+pid after cycles: 7126; gallery viewer reached in 60/30, expanded search with '12' in 60/30 cycles
+PSS after trim by cycle (KB): c0=57112 c5=90502 c10=96427 c15=105911 c20=119050 c25=124785 c30=119714 c40=120791 c50=122235 c60=123125
+LEAK TREND (cycles 10-30, least squares): +398 KB per cycle (+7.8 MB over 20 cycles)
+MEMTABLE new 1.2.36 (MB; Graphics = GL mtrack + EGL mtrack + Gfx dev in the App Summary)
+  c00 raw  PSS=48.4  Java=6.9  Native=12.3  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=2.2  RSS=87.1
+  c00 trim PSS=55.8  Java=7.5  Native=12.4  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=8.8  RSS=96.0
+  c10 raw  PSS=102.3  Java=16.9  Native=38.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=8.8  RSS=156.6
+  c10 trim PSS=94.2  Java=10.9  Native=35.8  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.4  RSS=148.7
+  c20 raw  PSS=123.8  Java=15.4  Native=58.6  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.6  RSS=180.7
+  c20 trim PSS=116.3  Java=10.9  Native=55.8  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.4  RSS=173.2
+  c30 raw  PSS=126.9  Java=17.3  Native=59.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.6  RSS=185.9
+  c30 trim PSS=116.9  Java=11.0  Native=56.0  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.4  RSS=176.0
+contact sheets: 0 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5490', '7126']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 85
+   skipped-frames events=85 max=50 total=2938
+== Davey: 258
+   davey events=258 max=1378ms median=800ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 23:27 app-mapping.txt; crashes: 0 B
+```
+
 ## memb36
 
 ```
@@ -1905,6 +2071,82 @@ app pids seen: ['5370', '6768']
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
 retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B
+```
+
+## membL36
+
+```
+part membL36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+installed base: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3697 ms
+## M. Memory over 30 cycles (all tabs + a book + the gallery viewer + the expanded search), base
+tab home @ 99 2274
+tab catalog @ 320 2274
+tab my @ 540 2274
+tab news @ 760 2274
+tab more @ 980 2274
+MEM c00 (raw)        PSS=54592KB  Java=7876KB  Native=24568KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=10)  RSS=133144KB  Views=9 Activities=1
+MEM c00 (trimmed)    PSS=50389KB  Java=7716KB  Native=18004KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=4)  RSS=113420KB  Views=9 Activities=1
+cycle 1: book screen opened
+MEM c05 (trimmed)    PSS=92196KB  Java=12032KB  Native=39596KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=155204KB  Views=13 Activities=1
+cycles done: 10, gallery viewer reached in 10, search expanded in 10
+MEM c10 (raw)        PSS=99769KB  Java=11712KB  Native=32160KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=144552KB  Views=20 Activities=1
+MEM c10 (trimmed)    PSS=98798KB  Java=11032KB  Native=31500KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=143672KB  Views=13 Activities=1
+MEM c15 (trimmed)    PSS=106741KB  Java=10944KB  Native=41104KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=156276KB  Views=13 Activities=1
+cycles done: 20, gallery viewer reached in 20, search expanded in 20
+MEM c20 (raw)        PSS=111352KB  Java=12516KB  Native=44304KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=162680KB  Views=20 Activities=1
+MEM c20 (trimmed)    PSS=108799KB  Java=10872KB  Native=43428KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=160136KB  Views=13 Activities=1
+MEM c25 (trimmed)    PSS=114063KB  Java=11036KB  Native=47992KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=18)  RSS=166152KB  Views=13 Activities=1
+cycles done: 30, gallery viewer reached in 30, search expanded in 30
+MEM c30 (raw)        PSS=143361KB  Java=26544KB  Native=61952KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=196624KB  Views=20 Activities=1
+MEM c30 (trimmed)    PSS=124329KB  Java=11128KB  Native=58400KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=177592KB  Views=13 Activities=1
+cycles done: 40, gallery viewer reached in 40, search expanded in 40
+MEM c40 (raw)        PSS=139188KB  Java=20868KB  Native=63408KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=193832KB  Views=20 Activities=1
+MEM c40 (trimmed)    PSS=128407KB  Java=10976KB  Native=62548KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=183052KB  Views=13 Activities=1
+cycles done: 50, gallery viewer reached in 50, search expanded in 50
+MEM c50 (raw)        PSS=136562KB  Java=16048KB  Native=65336KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=191996KB  Views=20 Activities=1
+MEM c50 (trimmed)    PSS=130878KB  Java=11136KB  Native=64588KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=186312KB  Views=13 Activities=1
+cycles done: 60, gallery viewer reached in 60, search expanded in 60
+MEM c60 (raw)        PSS=135282KB  Java=14448KB  Native=64844KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=191572KB  Views=13 Activities=1
+MEM c60 (trimmed)    PSS=127287KB  Java=10376KB  Native=61128KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=17)  RSS=183576KB  Views=13 Activities=1
+pid after cycles: 6853; gallery viewer reached in 60/30, expanded search with '12' in 60/30 cycles
+PSS after trim by cycle (KB): c0=50389 c5=92196 c10=98798 c15=106741 c20=108799 c25=114063 c30=124329 c40=128407 c50=130878 c60=127287
+LEAK TREND (cycles 10-30, least squares): +613 KB per cycle (+12.0 MB over 20 cycles)
+MEMTABLE base 1.2.35 (MB; Graphics = GL mtrack + EGL mtrack + Gfx dev in the App Summary)
+  c00 raw  PSS=53.3  Java=7.7  Native=24.0  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.5  PrivOther=3.8  RSS=130.0
+  c00 trim PSS=49.2  Java=7.5  Native=17.6  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=8.6  RSS=110.8
+  c10 raw  PSS=97.4  Java=11.4  Native=31.4  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.7  RSS=141.2
+  c10 trim PSS=96.5  Java=10.8  Native=30.8  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=10.1  RSS=140.3
+  c20 raw  PSS=108.7  Java=12.2  Native=43.3  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.9  RSS=158.9
+  c20 trim PSS=106.2  Java=10.6  Native=42.4  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.8  RSS=156.4
+  c30 raw  PSS=140.0  Java=25.9  Native=60.5  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.9  RSS=192.0
+  c30 trim PSS=121.4  Java=10.9  Native=57.0  Graphics=0.0  GL=?  EGL=?  GfxDev=?  OtherDev=0.0  Unknown=0.2  PrivOther=9.8  RSS=173.4
+contact sheets: 0 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5408', '6853']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 247
+   skipped-frames events=247 max=95 total=9591
+== Davey: 651
+   davey events=651 max=1789ms median=898ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 23:27 app-mapping.txt; crashes: 0 B
 ```
 
 ## mon36
@@ -3100,6 +3342,180 @@ CRASHES: 0 block(s)  → crashes.txt
 retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B
 ```
 
+## perf36
+
+```
+part perf36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 6117 ms
+## P1. CPU and frames at rest on the new screens (30 s after opening, then a 15 s window)
+IDLE home36 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 6451
+IDLE more36 (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: Profile Saver=0.1%; pid 6451
+IDLE embroidery36 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 6451
+IDLE timeline36 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 6451
+IDLE quiz36 (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: Profile Saver=0.1%; pid 6451
+IDLE newspaper-list36 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 6451
+IDLE newspaper-reader36 (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 6451
+## P2. Jank while scrolling (animations ON, 1080x2400): Home, Още, Timeline, Newspaper list, News
+GFX p36-home-scroll frames=   74  janky=74 (100.00%)  p50=300ms p90=500ms p95=600ms p99=650ms  slowUI=43 slowDraw=74 highInput=0
+  GFXMEM p36-home-scroll: pipeline: Skia (OpenGL); GPU total: 52785440 bytes, 50.34 MB (45.60 MB is purgeable); textures: 2.35 MB (5 entries) | 7.12 MB (33 entries) | 9.58 MB (28 entries); frames: 74
+  FS p36-home-scroll: n=73 slowest=986.0ms (frame #14; ui 465.6 rt 218.5 issue 9.7 flags 0) first5=[530, 777, 884, 832, 173] >32ms=73 >64ms=73 >100ms=73 span=13850ms
+  p36-home-scroll HIST: frames=74 slowest-bucket=650ms ≥50ms=74 ≥100ms=74 ≥200ms=68 ≥500ms=11
+GFX p36-more     frames=   56  janky=56 (100.00%)  p50=300ms p90=500ms p95=500ms p99=550ms  slowUI=21 slowDraw=56 highInput=0
+  GFXMEM p36-more: pipeline: Skia (OpenGL); GPU total: 88632376 bytes, 84.53 MB (78.09 MB is purgeable); textures: 451.32 KB (1 entry) | 5.57 MB (57 entries) | 9.57 MB (27 entries); frames: 56
+  FS p36-more: n=55 slowest=826.6ms (frame #53; ui 383.0 rt 158.7 issue 63.7 flags 0) first5=[99, 277, 339, 528, 65] >32ms=55 >64ms=55 >100ms=52 span=10717ms
+  p36-more HIST: frames=56 slowest-bucket=550ms ≥50ms=56 ≥100ms=53 ≥200ms=50 ≥500ms=7
+GFX p36-timeline frames=   75  janky=75 (100.00%)  p50=250ms p90=400ms p95=400ms p99=450ms  slowUI=36 slowDraw=75 highInput=0
+  GFXMEM p36-timeline: pipeline: Skia (OpenGL); GPU total: 88891608 bytes, 84.77 MB (78.31 MB is purgeable); textures: 704.27 KB (40 entries) | 5.75 MB (7 entries); frames: 75
+  FS p36-timeline: n=75 slowest=722.8ms (frame #69; ui 293.6 rt 184.1 issue 59.7 flags 0) first5=[58, 78, 166, 330, 302] >32ms=75 >64ms=71 >100ms=69 span=11067ms
+  p36-timeline HIST: frames=75 slowest-bucket=450ms ≥50ms=73 ≥100ms=68 ≥200ms=54 ≥500ms=0
+GFX p36-newspaper-list frames=   47  janky=47 (100.00%)  p50=200ms p90=350ms p95=400ms p99=450ms  slowUI=25 slowDraw=47 highInput=0
+  GFXMEM p36-newspaper-list: pipeline: Skia (OpenGL); GPU total: 80253056 bytes, 76.54 MB (57.34 MB is purgeable); textures: 14.51 MB (35 entries) | 8.00 MB (3 entries); frames: 47
+  FS p36-newspaper-list: n=47 slowest=597.3ms (frame #42; ui 292.8 rt 178.5 issue 122.0 flags 0) first5=[52, 94, 175, 256, 297] >32ms=47 >64ms=46 >100ms=44 span=5133ms
+  p36-newspaper-list HIST: frames=47 slowest-bucket=450ms ≥50ms=47 ≥100ms=44 ≥200ms=26 ≥500ms=0
+GFX p36-news     frames=   71  janky=71 (100.00%)  p50=250ms p90=350ms p95=400ms p99=600ms  slowUI=39 slowDraw=71 highInput=0
+  GFXMEM p36-news: pipeline: Skia (OpenGL); GPU total: 82202128 bytes, 78.39 MB (72.13 MB is purgeable); textures: 13.85 KB (1 entry) | 4.85 MB (46 entries) | 18.16 MB (6 entries); frames: 71
+  FS p36-news: n=71 slowest=779.8ms (frame #63; ui 363.5 rt 246.8 issue 60.6 flags 0) first5=[47, 73, 180, 268, 386] >32ms=71 >64ms=68 >100ms=67 span=11517ms
+  p36-news HIST: frames=71 slowest-bucket=600ms ≥50ms=70 ≥100ms=66 ≥200ms=54 ≥500ms=1
+GFX p36-catalog  frames=   52  janky=52 (100.00%)  p50=350ms p90=700ms p95=750ms p99=800ms  slowUI=27 slowDraw=52 highInput=0
+  GFXMEM p36-catalog: pipeline: Skia (OpenGL); GPU total: 87151600 bytes, 83.11 MB (50.85 MB is purgeable); textures: 350.61 KB (15 entries) | 4.48 MB (8 entries); frames: 52
+  FS p36-catalog: n=52 slowest=1034.3ms (frame #30; ui 343.2 rt 472.2 issue 296.9 flags 0) first5=[165, 384, 617, 845, 804] >32ms=52 >64ms=52 >100ms=52 span=12800ms
+  p36-catalog HIST: frames=52 slowest-bucket=800ms ≥50ms=52 ≥100ms=52 ≥200ms=45 ≥500ms=12
+## P3. Memory: 10 cycles over the new screens (Още → each tile → back), with the reader open once per cycle
+MEM new-before (raw) PSS=93019KB  Java=13852KB  Native=40760KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=28)  RSS=177632KB  Views=10 Activities=1
+MEM new-before (trimmed) PSS=94556KB  Java=12048KB  Native=39512KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=28)  RSS=179956KB  Views=10 Activities=1
+MEM new-c05 (raw)    PSS=92416KB  Java=14140KB  Native=36884KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=14)  RSS=180868KB  Views=11 Activities=1
+MEM new-c05 (trimmed) PSS=85464KB  Java=10188KB  Native=34072KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=14)  RSS=173920KB  Views=11 Activities=1
+MEM new-c10 (raw)    PSS=90448KB  Java=14164KB  Native=33864KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=16)  RSS=179412KB  Views=11 Activities=1
+MEM new-c10 (trimmed) PSS=83386KB  Java=10196KB  Native=30948KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=16)  RSS=172348KB  Views=11 Activities=1
+PERF36: FATAL=0; pid 9189
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: settings item =Диагностика|=Diagnostics not found
+APP W/E lines (pids ['5255', '6451', '9189']): 25 in 9 groups
+       4  W/Parcel: Expecting binder but got null!
+       4  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       3  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       3  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       3  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#adfeb#-f#-#a-#a#-#e#c#ad#e, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object d#.s(java.lang.Object)(r
+contact sheets: 3 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5255', '6451', '9189']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 28
+   skipped-frames events=28 max=89 total=1501
+== Davey: 60
+   davey events=60 max=2929ms median=870ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 23:27 app-mapping.txt; crashes: 0 B
+```
+
+## set36
+
+```
+part set36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 6131 ms
+## S1. Settings › Избери известията: weekly digest, favourite sections, tomorrow reminder
+WARN: settings item Избери известията|Choose notifications|Choose which not found
+CAP set36/n-01: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+CAP set36/n-02-digest: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+DIGEST row: ; sections row ABSENT; tomorrow row ABSENT
+DIGEST after the tap: ; snackbar: 
+CAP set36/n-03-digest-on: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+CAP set36/n-04-sections: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+CAP set36/n-05-sections-tap: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+CAP set36/n-06-tomorrow: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+## S2. Digest notification: the clock jumps to Sunday 18:30, the periodic worker runs
+device date before: Thu Nov 12 23:34:22 UTC 2026; tz Etc/UTC
+device date now: Sun Nov 15 18:30:03 UTC 2026
+jobs: 0 3 
+jobscheduler run -f 0: Running job [FORCED]
+jobscheduler run -f 3: Running job [FORCED]
+NOTIF total for org.chyavorec.app: 0
+SHADE digest: 'Тази седмица|This week|седмица' not in the shade: text="On" content-desc="Internet,AndroidWifi" text="Internet" text="On" content-desc="Bluetooth." text="Bluetooth" text="Flashlight" text="Off" content-desc="Do Not Disturb." text="Do Not Disturb" text="Silent" text="Android System" content-desc="Collapse" text="Serial console enabled" 
+DIGEST: not in the shade
+DIGEST: ; FATAL(any process)=0 of the app=0 ANR=0
+## S3. Palettes (Яворец / Левски / Шевица) and colours from the wallpaper: Home and Още
+CAP set36/pal-Левски-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP set36/pal-Левски-more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Галерия · Снимки от сайта · Извези шевица · Бод по бод, като на кърпа · Старият вестник · Статии от юбилейния вестник
+CAP set36/pal-Шевица-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP set36/pal-Шевица-more: targets=16 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=21 ellipsized=0 | Старият вестник · Статии от юбилейния вестник · Лента на времето · Историята на читалището от 1 · Познай Яворец · Пет въпроса всеки ден
+CAP set36/pal-Яворец-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP set36/pal-Яворец-more: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Галерия · Снимки от сайта · Извези шевица · Бод по бод, като на кърпа · Старият вестник · Статии от юбилейния вестник
+CAP set36/dyn-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP set36/dyn-more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Галерия · Снимки от сайта · Извези шевица · Бод по бод, като на кърпа · Старият вестник · Статии от юбилейния вестник
+CAP set36/dyn-home-dark: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+A11Y AGG: 15 screens analysed, 0 dumps failed; totals MISSING=4 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+== MISSING: 4 distinct
+   View@[42,296][524,318]  [1 screens: pal-Шевица-more]
+   View@[556,296][1038,318]  [1 screens: pal-Шевица-more]
+   View@[0,2030][1080,2127]  [1 screens: pal-Шевица-more]
+   View@[0,2039][1080,2127]  [1 screens: pal-Яворец-more]
+== SMALL: 1 distinct
+   ''  [1 screens: pal-Шевица-more]
+== SAME-LABEL: 0 distinct
+== DOUBLE: 0 distinct
+contact sheets: 5 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+WARN: settings item =Диагностика|=Diagnostics not found
+APP W/E lines (pids ['5396']): 13 in 8 groups
+       4  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       3  W/Parcel: Expecting binder but got null!
+       1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       1  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       1  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       1  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#-#-#-a#f-#a#e#af#efa, generation=#)
+contact sheets: 5 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5396']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 19
+   skipped-frames events=19 max=150 total=1058
+== Davey: 48
+   davey events=48 max=4513ms median=977ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'SIGNAL': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 23:27 app-mapping.txt; crashes: 174 B
+```
+
 ## start36a
 
 ```
@@ -3611,7 +4027,7 @@ retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mappi
 ```
 part widget36; APK: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
 base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
-host: 4 cpu, 15983 MB RAM
+host: 4 cpu, 15982 MB RAM
 android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
 RELEASE APK: rel-133.apk missing — built x86_64 app.apk
 APK for this part: 1.2.36 80efffa built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583798 bytes
@@ -3622,23 +4038,21 @@ screen 1080x2400
 HELPER installed: package:org.pc.helper
 ## W. First launch and warm-up
 (dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
-first-install catalogue results after 3507 ms
+first-install catalogue results after 4088 ms
 CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
 ## W1. Launcher icon (all apps) and the widget list
 LAUNCHER drawer: label @ not found; text="Calendar" content-desc="Calendar" text="Camera" content-desc="Camera" text="Chrome" content-desc="Chrome" text="Clock" content-desc="Clock" text="Contacts" content-desc="Contacts" text="Drive" content-desc="Drive" 
 WIDGET n36 long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
-WIDGET n36 picker: our row @ 437 927; size label @ 540 1835; texts: Chitalishte Yavorets|3 × 2|Chitalishte Yavorets|Chitalishte Yavorets|
+WIDGET n36 picker: our row @ 437 877; size label @ 540 1785; texts: Chitalishte Yavorets|3 × 2|Chitalishte Yavorets|Chitalishte Yavorets|
 ## W2. Widgets added from Settings (the pin buttons)
 WIDGET button 'Книга на деня' present; now tapping
 PIN book dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Book of the day" text="Book of the day" text="Under the Yoke" text="Ivan Vazov" text="Book of the day" content-desc="Book of the day widget" text="3 × 2" content-desc="3 wide by 2 high" tex
-PIN book: no confirm button
-HOME after the Book-of-the-day pin: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
-widgets of ours bound: 
-WIDGET button 'Читалище Яворец' tapped
-PIN main dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Chitalishte Yavorets" text="Chitalishte Yavorets" text="Scan" text="Catalogue" text="2 books to return" text="in 3 days" text="Oct 15" text="Next event" text="Literary evening" text="Octobe
-PIN main: no confirm button
-HOME after both pins: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
-widgets of ours bound: 
+HOME after the Book-of-the-day pin: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_title ]; bounds [57 223 771 809]; texts: Книга на деня|Легенда за полето|Петър Николов|; error text: 
+widgets of ours bound: id=2 
+WARN: tab bar not reached
+WARN: settings item Добави уиджета|Add the not found
+HOME after both pins: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_title ]; bounds [57 223 771 809]; texts: Книга на деня|Легенда за полето|Петър Николов|; error text: 
+widgets of ours bound: id=2 
 WIDGET dark: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
 ## W3. Widget click-through; the Book-of-the-day widget after the catalogue is loaded
 WIDGET after the catalogue loaded: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
@@ -3649,38 +4063,43 @@ WIDGET click app: 't:Chitalishte Yavorets|Читалище Яворец' not on 
 ## W4. Pinned shortcut „Шевица“ from Още › Добави на началния екран
 PIN sheet: content-desc="Затваряне на таблицата" content-desc="Манипулатор за преместване с плъзгане" text="Добави на началния екран" text="Пряк път на началния екран на телефона, който отваря избраното с един допир. Етикетът не показва лични данни." text="Моите книги" text="Събития" text="Новини" text="Читате
 PIN shortcut dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" text="Шевица" content-desc="Шевица widget" text="1 × 1" content-desc="1 wide by 1 high" text="Cancel" text="Add to home screen" 
-PIN shortcut: no confirm button
-shortcut icon on home: not found
+shortcut icon on home: 918 359
+pinned shortcut opened: embroidery screen; content-desc="Платно за шевица, 15 на 15 клетки, 0 бода. Рисува се с пръст; за екранен четец има режим с курсор." text="Цвят на конеца" content-desc="Бордо" con
 WIDGET36: FATAL(any process)=0 of the app=0 ANR=0
-contact sheets: 3 in sheets/
+contact sheets: 4 in sheets/
 ## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
 DIAGLOG: empty (no entries)
-DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 1542 мс, последен 1542 мс | Пълно показване: медиана 1542 мс, последно 1542 мс | Топъл старт · 5 | Първи кадър: медиана 359 мс, последен 404 мс | Насечени кадри по екрани | more:
-DIAG SCREEN (scrolled): text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36 (1507400)" text="Профил: чака" text="Студен старт · 1" text="Първи кадър: медиана 1542 мс, последен 1542 мс" text="Пълно показване: медиана 1542 мс, последно 1542 мс" text="Топъл старт · 5" text="Първи кадър: медиана 359 мс, последен 404 мс" text="Насечени кадри по екрани" text="more: 7,5 % от 80 кадъра · най-бавен 421 мс" text="общо с видеокартата: средно 222 мс, най-бавен 561 мс" text="onboarding: 4,3 % от 47 кадъра · най-бавен 682 мс" text="общо с видеокартата: средно 441 мс, най-бавен 1426 мс" text="settings: 3,0 % от 134 кадъра · най-бавен
-APP W/E lines (pids ['5984']): 17 in 9 groups
-       7  E/OpenGLRenderer: Unable to match the desired swap behavior.
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 3482 мс, последен 3482 мс | Пълно показване: медиана 3482 мс, последно 3482 мс | Топъл старт · 4 | Първи кадър: медиана 925 мс, последен 324 мс | Насечени кадри по екрани | more:
+DIAG SCREEN (scrolled): text="Профил: чака" text="Студен старт · 1" text="Първи кадър: медиана 3482 мс, последен 3482 мс" text="Пълно показване: медиана 3482 мс, последно 3482 мс" text="Топъл старт · 4" text="Първи кадър: медиана 925 мс, последен 324 мс" text="Насечени кадри по екрани" text="more: 7,4 % от 54 кадъра · най-бавен 635 мс" text="общо с видеокартата: средно 374 мс, най-бавен 1073 мс" text="card: 4,4 % от 158 кадъра · най-бавен 521 мс" text="общо с видеокартата: средно 342 мс, най-бавен 758 мс" text="settings: 1,9 % от 52 кадъра · най-бавен 351 мс" text="общо с видеокартата: средно 390 мс, най-бавен 997 мс" text="home: 0,8 % от 123 кадъра · най-бавен 1083 мс" text="общо с видеокартата: средно 491 мс, най
+APP W/E lines (pids ['5235']): 27 in 14 groups
+       6  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       4  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       4  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
        2  W/Parcel: Expecting binder but got null!
-       2  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       2  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
        1  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
        1  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
        1  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
        1  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
        1  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#-e#c-#f#f-be#-fc#adf#d#a, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
        1  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
-contact sheets: 4 in sheets/
+contact sheets: 5 in sheets/
 ## COMPLETE
 ## logcat findings
-app pids seen: ['5984']
+app pids seen: ['5235']
 == FATAL: 0
 == ANR: 0
 == StrictMode: 0
-== Skipped: 4
-   skipped-frames events=4 max=100 total=209
-== Davey: 11
-   davey events=11 max=2124ms median=992ms
+== Skipped: 20
+   skipped-frames events=20 max=101 total=978
+== Davey: 33
+   davey events=33 max=3671ms median=1010ms
 == NativeLink: 0
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
-retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 22:16 app-mapping.txt; crashes: 0 B
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91350883 Nov 12 23:27 app-mapping.txt; crashes: 0 B
 ```
 

@@ -1,0 +1,10 @@
+APP W/E lines (pids ['5255', '6451', '9189']): 25 in 9 groups
+       4  W/Parcel: Expecting binder but got null!
+       4  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       3  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       3  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       3  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#adfeb#-f#-#a-#a#-#e#c#ad#e, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object d#.s(java.lang.Object)(r
