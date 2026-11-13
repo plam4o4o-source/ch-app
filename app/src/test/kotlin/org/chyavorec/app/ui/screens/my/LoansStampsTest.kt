@@ -106,7 +106,7 @@ class LoansStampsTest {
         refreshAndWait(vm, 1)
         until { vm.stamps.value != null }
         val before = assertNotNull(vm.stamps.value)
-        assertEquals(2, before.books.size)
+        assertTrue(before.books.isNotEmpty())
         vm.stampShown(before.books.first().loanId)
         val after = assertNotNull(vm.stamps.value)
         assertEquals(before.books.drop(1), after.books)

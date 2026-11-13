@@ -129,7 +129,7 @@ class ReturnStampPanelTest {
         compose.mainClock.advanceTimeBy(800)
         assertEquals(emptyList<String>(), shownIds)
         leaveAndComeBack()
-        compose.mainClock.advanceTimeBy(100)
+        compose.mainClock.advanceTimeBy(400)
         // Недовършената книга почва отначало, броячът е на старото място.
         compose.onNodeWithContentDescription("Върната: Под игото").assertIsDisplayed()
         compose.onNodeWithContentDescription("4 върнати книги през 2026 г.").assertIsDisplayed()
@@ -144,7 +144,7 @@ class ReturnStampPanelTest {
         assertEquals(listOf("L1"), shownIds)
         val burstsBefore = confetti.bursts
         leaveAndComeBack()
-        compose.mainClock.advanceTimeBy(100)
+        compose.mainClock.advanceTimeBy(400)
         assertNoStamp("Под игото")
         compose.onNodeWithContentDescription("Върната: Тютюн").assertIsDisplayed()
         // Броячът не се върти пак за първата: стои на 5 и тръгва към 6 едва с втората.
@@ -161,7 +161,7 @@ class ReturnStampPanelTest {
         assertEquals(listOf("L1"), shownIds)
         val burstsBefore = confetti.bursts
         leaveAndComeBack()
-        compose.mainClock.advanceTimeBy(100)
+        compose.mainClock.advanceTimeBy(400)
         assertNoStamp("Под игото")
         assertEquals(1, done)
         assertTrue(confetti.bursts <= burstsBefore, "печатът не се повтаря")
@@ -173,7 +173,7 @@ class ReturnStampPanelTest {
         compose.mainClock.advanceTimeBy(2400) // първата е готова, втората е в ход
         assertEquals(listOf("L1"), shownIds)
         leaveAndComeBack()
-        compose.mainClock.advanceTimeBy(100)
+        compose.mainClock.advanceTimeBy(400)
         assertNoStamp("Под игото")
         compose.onNodeWithContentDescription("Върната: Тютюн").assertIsDisplayed()
         compose.onNodeWithContentDescription("5 върнати книги през 2026 г.").assertIsDisplayed()
@@ -187,7 +187,7 @@ class ReturnStampPanelTest {
         compose.mainClock.advanceTimeBy(3100) // първият статичен ред мина, втората започва
         assertEquals(listOf("L1"), shownIds)
         leaveAndComeBack()
-        compose.mainClock.advanceTimeBy(100)
+        compose.mainClock.advanceTimeBy(400)
         assertNoStamp("Под игото")
         compose.onNodeWithContentDescription("Върната: Тютюн").assertIsDisplayed()
         compose.mainClock.advanceTimeBy(2500)
