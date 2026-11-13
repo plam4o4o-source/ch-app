@@ -6,7 +6,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.test.StateRestorationTester
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import org.chyavorec.app.ui.components.ConfettiState
 import org.chyavorec.app.ui.components.LocalConfetti
@@ -169,13 +168,11 @@ class ReturnStampPanelTest {
     }
 
     @Test fun rotationResumesWithTheQueueNotFromTheStart() {
-        val restoration = StateRestorationTester(compose)
-        queue = StampShow(listOf(book, other, third), 2026, 4)
-        compose.mainClock.autoAdvance = false
-        restoration.setContent { Host(reduced = false) }
+        // Завъртането унищожава композицията (remember се губи), а опашката във ViewModel остава.
+        show(reduced = false, books = listOf(book, other, third))
         compose.mainClock.advanceTimeBy(2400) // първата е готова, втората е в ход
         assertEquals(listOf("L1"), shownIds)
-        restoration.emulateSavedInstanceStateRestore()
+        leaveAndComeBack()
         compose.mainClock.advanceTimeBy(100)
         assertNoStamp("Под игото")
         compose.onNodeWithContentDescription("Върната: Тютюн").assertIsDisplayed()
