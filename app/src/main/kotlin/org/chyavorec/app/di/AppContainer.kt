@@ -290,7 +290,8 @@ class AppContainer(
     /** Последно записаните в кеша заемания (`null` = още няма запис в този процес). */
     private val storedLoans = MutableStateFlow<List<Loan>?>(null)
 
-    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    /** Обхватът на процеса: работа, която не бива да спира със смяната на екрана (напр. запис в дневника). */
+    val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     /**
      * „Връзката се върна“ — по едно събитие при преход офлайн → онлайн, стабилен 2 s

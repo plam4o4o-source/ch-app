@@ -2,6 +2,14 @@ package org.chyavorec.app.ui.screens.my
 
 import android.app.Application
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.performSemanticsAction
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeout
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.core.app.ApplicationProvider
@@ -61,11 +69,13 @@ class BookDiaryUnlockTest {
 
     @After fun tearDown() = backend.shutdown()
 
+    private var onScreen by mutableStateOf(true)
+
     private fun show(requireUnlock: Boolean) {
         compose.setContent {
             CompositionLocalProvider(LocalAppContainer provides c, LocalRequireUnlock provides requireUnlock) {
                 ChitalishteTheme(mode = ThemeMode.LIGHT) {
-                    BookDiarySection(CatalogBook(inv = 123456L, author = "Иван Вазов", title = "Под игото"), ShareImageState())
+                    if (onScreen) BookDiarySection(CatalogBook(inv = 123456L, author = "Иван Вазов", title = "Под игото"), ShareImageState())
                 }
             }
         }
@@ -91,6 +101,21 @@ class BookDiaryUnlockTest {
     @Test fun settingOffShowsTheDiary() {
         show(requireUnlock = false)
         compose.waitUntil(10_000) { question() }
+    }
+
+    /** Докосване и веднага излизане от екрана: записът не се отменя заедно с екрана. */
+    @Test fun aRatingTappedJustBeforeLeavingTheScreenIsStillSaved() {
+        c.personalUnlock.unlock()
+        show(requireUnlock = false)
+        compose.waitUntil(10_000) { question() }
+        compose.onNode(SemanticsMatcher.keyIsDefined(SemanticsActions.SetProgress)).performSemanticsAction(SemanticsActions.SetProgress) { it(4f) }
+        compose.runOnIdle { onScreen = false }
+        compose.waitForIdle()
+        runBlocking {
+            withTimeout(10_000) {
+                while (c.database.readingDiary().all().none { it.rating == 4 }) delay(20)
+            }
+        }
     }
 
     @Test fun lockingAgainHidesTheDiary() {
