@@ -353,7 +353,10 @@ fun BookCover(
                 val spine = Brush.horizontalGradient(listOf(Color.Black.copy(alpha = 0.28f), Color.Transparent), 0f, spineWidth)
                 onDrawWithContent {
                     drawRect(glow)
-                    drawRect(cloth, alpha = GeneratedCover.CLOTH_ALPHA, blendMode = BlendMode.Overlay)
+                    // На Android 8–9 Overlay се връща към сива плътна заливка (корицата става бледа) — там без плетка.
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                        drawRect(cloth, alpha = GeneratedCover.CLOTH_ALPHA, blendMode = BlendMode.Overlay)
+                    }
                     drawContent()
                     drawRect(spine, size = size.copy(width = spineWidth))
                 }
