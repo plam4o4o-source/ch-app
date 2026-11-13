@@ -8,7 +8,7 @@
 #   ng36           — Настройки: плъзгане надолу в началото на списъка (1.2.36 срещу 1.2.35), седмичен преглед,
 #                    разрешението за известия, честитката за Никулден (датата на устройството)
 #   wdg36          — уиджетите от бутоните в Настройки (двата), тъмна тема, докосвания
-A7_PARTS=" tr26 tr28 tr36 yup36 ng36 wdg36 wdn36 wdn36b "
+A7_PARTS=" tr26 tr28 tr36 yup36 ng36 wdg36 wdn36 dig36 "
 W20_PARTS="$W20_PARTS $A7_PARTS"
 A7=$H_/a7.py
 
@@ -362,6 +362,38 @@ part_wdn36() {
   diag_end
 }
 
+# ---------------------------------------------------------------- СЕДМИЧНИЯТ ПРЕГЛЕД: часовникът в неделя 18:30 на същата седмица (не >14 дни — иначе приложението „спи“)
+part_dig36() {
+  local i
+  helper_install
+  anims 1
+  warmup
+  mark dg
+  sec "DG1. Switch the weekly digest on (permission granted), then the app stays open once"
+  if notif_screen && find_slow 'Седмичен преглед|Weekly digest'; then
+    digest_row | grep -q 'checked=true' || { tap text 'Седмичен преглед|Weekly digest' >/dev/null; sleep 1.5; }
+    log "DIGEST row: $(digest_row)"
+  else log "DIGEST: row not found"; fi
+  leave; a am force-stop $PKG; sleep 2
+  sec "DG2. The clock jumps to Sunday 15 Nov 2026 18:30 (2 days after switching on); the periodic worker runs"
+  a settings put global auto_time 0; a settings put global auto_time_zone 0
+  log "device date before: $(a date | tr -d '\r'); tz $(a getprop persist.sys.timezone | tr -d '\r')"
+  a date 111518302026.00 >/dev/null 2>&1; a am broadcast -a android.intent.action.TIME_SET >/dev/null 2>&1; sleep 3
+  log "device date now: $(a date | tr -d '\r')"
+  launch >/dev/null; sleep 6; dismiss; go_home 2
+  mark dg2
+  log "jobs: $(app_jobs)"; run_jobs; sleep 40
+  notifs digest | cut -c1-700 | tee -a $SUM
+  shade_expand 'Тази седмица|This week|седмица|Седмичен' digest || { log "DIGEST: not in the shade"; run_jobs; sleep 30; notifs digest2 | cut -c1-500 | tee -a $SUM; }
+  a cmd statusbar collapse; go_home 2
+  log "DIGEST logcat: $(since dg2 'WeeklyDigest|digest|PeriodicSync|WM-' | head -8 | cut -c1-220 | tr '\n' '|'); $(since_fatal dg2)"
+  sec "DG3. Same jump with a Tuesday: no digest expected (control)"
+  a date 111718302026.00 >/dev/null 2>&1; a am broadcast -a android.intent.action.TIME_SET >/dev/null 2>&1; sleep 3
+  mark dg3; run_jobs; sleep 25; notifs control | cut -c1-300 | tee -a $SUM
+  all_sheets
+  diag_end
+}
+
 part_a7() {
   case "$A7_PARTS" in *" $PART "*) ;; *) return 1;; esac
   case $PART in
@@ -369,7 +401,8 @@ part_a7() {
     yup36) part_yup36;;
     ng36) part_ng36;;
     wdg36) part_wdg36;;
-    wdn36|wdn36b) part_wdn36;;
+    wdn36) part_wdn36;;
+    dig36) part_dig36;;
   esac
   return 0
 }
