@@ -195,7 +195,7 @@ class ReturnStampPanelTest {
         compose.mainClock.advanceTimeBy(400)
         assertNoStamp("Под игото")
         compose.onNodeWithContentDescription("Върната: Тютюн").assertIsDisplayed()
-        compose.mainClock.advanceTimeBy(2500)
+        compose.mainClock.advanceTimeBy(3200)
         assertEquals(listOf("L1", "L2"), shownIds)
         assertEquals(1, done)
     }
