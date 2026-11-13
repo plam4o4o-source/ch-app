@@ -533,7 +533,8 @@ private fun MacrobenchmarkScope.calendarSegment() {
 /** „Моето“ → „Искам да прочета“ (с книгата, отбелязана в каталога) → назад. */
 fun MacrobenchmarkScope.wantToReadJourney() {
     if (!openTab(TAB_MY)) return
-    val tile = findScrolling(By.text(WANT_TO_READ)) ?: return note("want-to-read tile not found")
+    // В „Моето“ има повече редове (печат, дневник, шевица) — плочката е по-надолу.
+    val tile = findScrolling(By.text(WANT_TO_READ), swipes = 7) ?: return note("want-to-read tile not found")
     tile.click()
     device.waitForIdle()
     Thread.sleep(1_500)
