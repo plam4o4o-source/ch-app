@@ -81,6 +81,7 @@ import org.chyavorec.app.data.local.ReadingDiaryStore
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AppBottomSheet
 import org.chyavorec.app.ui.components.TabRosetteShapes
+import org.chyavorec.app.ui.components.rememberPersonalAreaOpen
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.ui.share.ShareCard
@@ -357,12 +358,15 @@ fun HistoryDiary(
 /**
  * Дневникът на страницата на книга, която читателят е прочел (върната, по историята в кеша). Влязъл
  * читател и върната книга — иначе нищо (гост не знае дали е чел; той вижда поканата в историята).
+ * При „Искай отключване“ и заключено лично — също нищо.
  */
 @Composable
 fun BookDiarySection(book: CatalogBook, share: ShareImageState, modifier: Modifier = Modifier) {
     val c = LocalAppContainer.current
     val auth by c.authRepository.state.collectAsStateWithLifecycle()
     if (auth !is AuthState.SignedIn) return
+    // Страницата на книгата е публична (без UnlockGate): личната оценка и бележка чакат отключването.
+    if (!rememberPersonalAreaOpen()) return
     val key = ReadingDiary.bookKey(book.title, book.author)
     val read by produceState<HistoryItem?>(null, book.inv, auth) {
         value = c.libraryRepository.cachedHistory()?.data

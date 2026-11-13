@@ -10,9 +10,11 @@
   срокове, събитие и бутони „Сканирай“/„Каталог“. previewLayout — прегледът в избора на
   уиджети (Android 12–14, примерни данни); от Android 15 — генериран (WidgetUpdater.publishPreview).
 
-  Заключен екран (keyguard; на Pixel телефоните — по съобщения от Android 16 QPR2, не е проверено на устройство): когато
-  OPTION_APPWIDGET_HOST_CATEGORY е keyguard, копието показва само следващото събитие — без
-  срокове и брой заети книги (WidgetViews.forWidget).
+  Само началния екран (home_screen): уиджетът носи лични данни (срокове, брой заети книги), а
+  дали домакинът наистина съобщава OPTION_APPWIDGET_HOST_CATEGORY = keyguard не е проверено на
+  устройство — затова на заключения екран не се предлага. Предпазният клон в WidgetViews.forWidget
+  (на keyguard — само следващото събитие, без заемания) остава, но не разчитаме на него.
+  На заключения екран може публичният уиджет „Книга на деня“ (widget_book_info.xml).
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/widget_description"
@@ -26,4 +28,4 @@
     android:targetCellHeight="2"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"
-    android:widgetCategory="home_screen|keyguard" />
+    android:widgetCategory="home_screen" />

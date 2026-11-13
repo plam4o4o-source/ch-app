@@ -1,6 +1,7 @@
 package org.chyavorec.domain.quiz
 
 import org.chyavorec.core.TextNormalizer
+import org.chyavorec.data.catalog.RealRecords
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.timeline.TimelineEntry
 import java.time.LocalDate
@@ -21,12 +22,6 @@ object QuizGenerator {
     private const val MAX_CATALOG = 2
     private const val MAX_PHOTO = 1
     private const val MIN_YEAR = 1850
-
-    /** Инвентарните номера на истинските записи са шестцифрени (тестовите са 1–4 цифри). */
-    private val REAL_INV = 100_000L..999_999L
-
-    /** Тестови записи, които може да са със „истински“ номер. */
-    private val JUNK = listOf("тест", "test", "проба", "асдф", "xxx", "lorem")
 
     fun generate(date: LocalDate, sources: QuizSources, count: Int = COUNT): Quiz? {
         val rng = Random(seedOf(date))
@@ -111,10 +106,10 @@ object QuizGenerator {
     internal class Usable(val inv: Long, val title: String, val author: String)
 
     internal fun usableBooks(books: List<CatalogBook>): List<Usable> = books.mapNotNull { b ->
-        if (b.inv !in REAL_INV) return@mapNotNull null
+        if (!RealRecords.isRealInv(b.inv)) return@mapNotNull null
         val author = displayAuthor(b.author) ?: return@mapNotNull null
         val title = cleanTitle(b.title) ?: return@mapNotNull null
-        if (JUNK.any { title.lowercase().contains(it) || author.lowercase().contains(it) }) return@mapNotNull null
+        if (RealRecords.looksLikeTest(title, author)) return@mapNotNull null
         Usable(b.inv, title, author)
     }
 
