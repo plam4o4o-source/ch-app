@@ -21,8 +21,9 @@ fun ComposeTestRule.assertNoMidWordBreak(label: String, maxLines: Int = Int.MAX_
     if (layouts.isEmpty()) throw AssertionError("няма текст „$label“")
     layouts.forEach { l ->
         val text = l.layoutInput.text.text
-        if (l.hasVisualOverflow || (0 until l.lineCount).any { l.isLineEllipsized(it) }) throw AssertionError(
-            "„$label“ се реже: overflow=${l.hasVisualOverflow} ellipsized=${(0 until l.lineCount).map { l.isLineEllipsized(it) }} " +
+        // hasVisualOverflow тук не ставa: при центриран/обгърнат текст дава фалшиво „true“ (ширина на абзаца ≠ на възела).
+        if (l.multiParagraph.didExceedMaxLines || (0 until l.lineCount).any { l.isLineEllipsized(it) }) throw AssertionError(
+            "„$label“ се реже: exceeded=${l.multiParagraph.didExceedMaxLines} ellipsized=${(0 until l.lineCount).map { l.isLineEllipsized(it) }} " +
                 "lines=${l.lineCount} size=${l.size} maxWidth=${l.layoutInput.constraints.maxWidth} maxHeight=${l.layoutInput.constraints.maxHeight} " +
                 "density=${l.layoutInput.density.fontScale} text=\"$text\"",
         )
