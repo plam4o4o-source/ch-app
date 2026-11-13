@@ -210,6 +210,35 @@ class LargeFontScreenshotTest {
         shot("59-font2-news-title")
     }
 
+    /** Harvest (26 септември): текстът на първата карта при 1.3× е под житните класове, не върху тях. */
+    @Test fun homeFont13Harvest() {
+        launch(fontScale = 1.3f)
+        waitFor("45-ти")
+        shot("w22-home-font13-harvest")
+    }
+
+    /**
+     * Страницата на книгата при 1.0, 1.3 (+ „Много голям“ в настройките) и 2×: „Издателство“ и
+     * „Искам да прочета“ не се режат и не се късат насред дума.
+     */
+    private fun bookDetails(name: String, fontScale: Float, xl: Boolean = false) {
+        val settings = AppSettings(onboardingDone = true, introShown = true, textScale = if (xl) TextScale.XLARGE else TextScale.STANDARD)
+        launch(fontScale = fontScale, settings = settings, deepLink = bookOnLoan)
+        waitFor("Издателство")
+        compose.assertNoMidWordBreak("Издателство", maxLines = 1)
+        compose.assertNoMidWordBreak("Искам да прочета", maxLines = if (fontScale >= 1.3f) 2 else 1)
+        shot(name)
+    }
+
+    @Test fun bookDetailsFont1() = bookDetails("w22-book-font1", 1f)
+
+    @Test fun bookDetailsFont13Xlarge() = bookDetails("w22-book-font13-xl", 1.3f, xl = true)
+
+    @Test fun bookDetailsFont2() = bookDetails("w22-book-font2", 2f)
+
+    @Config(qualifiers = "bg-w360dp-h1100dp-xhdpi")
+    @Test fun bookDetailsFont2Narrow() = bookDetails("w22-book-font2-narrow", 2f)
+
     /** Листът на събитието и кръглите действия при 2×: нищо не се реже, действията се пренасят. */
     @Test fun eventLeafLarge() {
         launch(deepLink = "event/event-69")

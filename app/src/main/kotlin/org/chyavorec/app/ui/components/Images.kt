@@ -373,8 +373,8 @@ fun BookCover(
             // по-тъмно дъно — авторът се чете и върху по-светлите тонове
             Box(Modifier.fillMaxSize().background(CoverBottomShade))
             Column(Modifier.fillMaxSize().padding(start = (12 * scale).dp, end = (7 * scale).dp, top = (9 * scale).dp, bottom = (10 * scale).dp)) {
-                // Малките корици (в списъци) получават по-дребен шрифт. Сричкопренасяне — само
-                // при големите: в малките то само оскъпява подреждането на текста в списъка.
+                // Малките корици (в списъци) получават по-дребен шрифт. Сричкопренасяне — и в малките:
+                // без него тясната колона къса думите насред („Армени|я“) без тире.
                 Text(
                     book.title,
                     color = CoverInk,
@@ -385,7 +385,7 @@ fun BookCover(
                     maxLines = if (width < 72.dp) 3 else 4,
                     overflow = TextOverflow.Ellipsis,
                     style = LocalTextStyle.current.copy(
-                        hyphens = if (width >= 100.dp) Hyphens.Auto else Hyphens.None,
+                        hyphens = Hyphens.Auto,
                         lineBreak = LineBreak.Heading,
                     ),
                 )

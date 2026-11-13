@@ -83,6 +83,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -515,12 +516,13 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
             }
         },
         label = {
-            // На един ред: до корицата на тесен телефон (360 dp) „Искам да прочета“ иначе се пренася.
+            // На един ред (смалява се до 0.8×): до корицата на тесен телефон (360 dp) иначе се пренася.
+            // При едър шрифт (≥ 1.3) — до два реда по думи, вместо „Искам да проче…“.
             val style = LocalTextStyle.current
             val max = if (style.fontSize.isSpecified) style.fontSize else 14.sp
             BasicText(
                 stringResource(R.string.want_title), style = style.copy(color = LocalContentColor.current),
-                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                maxLines = if (LocalDensity.current.fontScale >= 1.3f) 2 else 1, overflow = TextOverflow.Ellipsis,
                 autoSize = TextAutoSize.StepBased(minFontSize = max * 0.8f, maxFontSize = max, stepSize = 0.25.sp),
             )
         },
