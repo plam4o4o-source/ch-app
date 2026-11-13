@@ -706,7 +706,7 @@
     <string name="perf_profile_pending">чака</string>
     <string name="perf_profile_unknown">неизвестен</string>
     <string name="perf_route">%1$s: %2$s от %3$d кадъра · най-бавен %4$s</string>
-    <string name="perf_route_total">CPU време на кадъра (интерфейс и нишка за рендериране, без видеокартата): средно %1$s, най-бавен %2$s</string>
+    <string name="perf_route_total">CPU време на кадъра (без видеокартата): средно %1$s, най-бавен %2$s</string>
     <string name="perf_title">Бързодействие</string>
     <string name="perf_version">Версия %1$s (%2$d)</string>
     <string name="perf_version_code">Версия с код %1$d</string>
