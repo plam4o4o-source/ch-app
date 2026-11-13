@@ -1,0 +1,67 @@
+part dig36; APK: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4463 ms
+## DG1. Switch the weekly digest on (permission granted), then the app stays open once
+DIGEST row: 'Седмичен преглед': checked=true (node itself/ancestor, clickable=true)
+## DG2. The clock jumps to Sunday 15 Nov 2026 18:30 (2 days after switching on); the periodic worker runs
+device date before: Fri Nov 13 17:41:02 UTC 2026; tz Etc/UTC
+device date now: Sun Nov 15 18:30:04 UTC 2026
+jobs: 5 6 
+jobscheduler run -f 5: Running job [FORCED]
+jobscheduler run -f 6: Running job [FORCED]
+NOTIF id=510 channel=digest title=String (Тази седмица в Яворец) text=String (2 събития · 3 нови книги) template=String (android.app.Notification$BigTextStyle) picture=NO largeIcon=yes actions=1 ['Нови книги']
+NOTIF total for org.chyavorec.app: 1
+SHADE digest expanded: buttons []; big picture view no; text="On" content-desc="Internet,AndroidWifi" text="Internet" text="On" content-desc="Bluetooth." text="Bluetooth" text="Flashlight" text="Off" content-desc="Do Not Disturb." text="Do Not Disturb" text="Silent" content-desc="Clear all silent notifications" text="Digital Wellbeing" content-desc="Collapse" text="Need tim
+DIGEST logcat: 11-15 18:31:13.311  1469  1490 I WM-WorkerWrapper: Worker result RETRY for Work [ id=61b3554c-4311-4d63-9e57-ad3e42626209, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker, TikTokWorker#com.android.diale|11-15 18:31:13.378  1469  1490 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=449ddaf0-06cc-4e69-9d3c-b8ec66bfa930, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker, TikTokWorker#com.android.dia|11-15 18:31:13.388  1469  1490 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=02c51d99-41e6-4835-96dc-d7ef19414d68, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker, TikTokWorker#com.android.dia|11-15 18:31:13.390  1469  1490 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=101e2607-8acf-4873-a683-58086e38ee7b, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker, TikTokWorker#com.android.inc|11-15 18:31:13.422  1469  1490 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=a0189e36-3111-4db8-97f8-575efb3ffaac, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker, TikTokWorker#com.google.apps|11-15 18:31:13.458  1469  1494 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=9f2fcd15-f090-4ce7-9713-a8b0396c66b3, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker, VvmDailyWorkerTag, TikTokWor|11-15 18:31:13.460  1469  1494 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=37badcbc-fe49-4b47-9ce2-f50f140fd02a, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker, TikTokWorker#com.android.dia|; FATAL(any process)=0 of the app=0 ANR=0
+## DG3. Same jump with a Tuesday: no digest expected (control)
+jobscheduler run -f 7: Running job [FORCED]
+jobscheduler run -f 8: Running job [FORCED]
+NOTIF id=2147483647 channel=digest title=- text=- template=- picture=NO largeIcon=no actions=0 []
+NOTIF id=700 channel=updates title=String (Налична е нова версия 1.2.36) text=String (Докосни, за да обновиш приложението.) template=String (android.app.Notification$BigTextStyle) picture=NO largeIcon=yes actions=0 []
+NOTIF id=510 channel=digest title=String (Тази седмица в Яворец) text=String (2 събития · 3 нови книги) template=String (android.app.Notification$BigTextStyle) picture=NO largeIcon=yes actions=1 ['Нови книги']
+NOTIF total for org.chyavorec.app: 3
+contact sheets: 1 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: 1 entries, 1 distinct
+     1  update.verify: signature mismatch
+   keys of an entry: at, count, error, tag
+DIAG SCREEN: text="Записи: 1"  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 2 | Първи кадър: медиана 3737 мс, последен 3230 мс | Пълно показване: медиана 3988 мс, последно 3731 мс | Топъл старт · 1 | Първи кадър: медиана 881 мс, последен 881 мс | Насечени кадри по екрани | home:
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36 (1507400)" text="Профил: чака" text="Студен старт · 2" text="Първи кадър: медиана 3737 мс, последен 3230 мс" text="Пълно показване: медиана 3988 мс, последно 3731 мс" text="Топъл старт · 1" text="Първи кадър: 
+APP W/E lines (pids ['4976', '7629']): 21 in 11 groups
+       3  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       3  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       2  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       2  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/Parcel: Expecting binder but got null!
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/Gralloc4: allocator #.x is not supported
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#b#-#b#d-#d#-#c#-#c#b#c, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=da#a#bf-#c#-#-#a-#dc#c#c, generation=#)
+contact sheets: 2 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4976', '7629']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 21
+   skipped-frames events=21 max=128 total=1250
+== Davey: 42
+   davey events=42 max=3758ms median=1084ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91354008 Nov 13 17:34 app-mapping.txt; crashes: 0 B

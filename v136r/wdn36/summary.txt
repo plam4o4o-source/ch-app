@@ -1,0 +1,76 @@
+part wdn36; APK: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+base APK: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950 bytes
+installed:  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+installed base: 1.2.35 aef8910 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507364; update manifest: the real one (releases/latest) size 4317894;  versionCode=1507364 minSdk=26 targetSdk=37  versionName=1.2.35 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+WIDGET n-base long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET n-base picker: our row @ 437 1010; size label @ 540 1918; texts: Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets|Chitalishte Yavorets widget|4 × 2|
+WIDGET n-base after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
+WIDGET n-base: widgets of ours bound: 0 -> 1 (ids id=2 ); options: 
+WDN base home before: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 537 1023 1123]; texts: Читалище Яворец|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; error text: 
+WDN base bound before: [id=2 ]
+WDN base dark +3s: widget views 1; bound [id=2 ]
+WDN base dark +10s: widget views 1; bound [id=2 ]
+WDN base dark +30s: widget views 1; bound [id=2 ]
+WDN base launcher/appwidget log after the switch: 11-13 17:41:33.645  1030  1030 I LauncherAppWidgetHostView: App widget created with id: 2|11-13 17:41:33.646  1030  1030 I LauncherAppWidgetHostView: App widget with id: 2 loaded|11-13 17:41:38.734  8508  8508 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@b9647; boundsInParent: Rect(0, 0 - 0, 49); boundsInScreen: Rect(57, 378 - 57, 427);|11-13 17:41:45.778  8550  8550 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@b9656; boundsInParent: Rect(0, 0 - 0, 49); boundsInScreen: Rect(57, 378 - 57, 427);|11-13 17:42:02.274  6917  6917 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.scheduler.ACTION_PROXY_SCHEDULE dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }|11-13 17:42:05.443  6917  6917 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.clearcut.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentDirectBootAwareApiService }|11-13 17:42:05.771  8595  8595 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@b965e; boundsInParent: Rect(0, 0 - 0, 49); boundsInScreen: Rect(57, 378 - 57, 427);|
+WDN base light again: widget views 1; bound [id=2 ]
+  [0] id=2
+    provider=ProviderId{user:0, app:10176, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}
+installed new: 1.2.36 6432ef1 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1507400; update manifest: the real one (releases/latest) size 4583950;  versionCode=1507400 minSdk=26 targetSdk=37  versionName=1.2.36 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+WIDGET n-new long-press menu: content-desc="Wallpaper" content-desc="Bird’s-Eye View, Zion National Park" content-desc="Light the Way, Schwyz" content-desc="White Sands, Sonoran Desert" text="Wallpaper &amp; style" text="Widgets" 
+WIDGET n-new picker: our row @ 437 887; size label @ 540 1795; texts: Chitalishte Yavorets|3 × 2|Chitalishte Yavorets|Chitalishte Yavorets|
+WIDGET n-new after drop: fg com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity; 
+WIDGET n-new: widgets of ours bound: 0 -> 1 (ids id=3 ); options: 
+WDN new home before: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_title ]; bounds [309 537 1023 1123]; texts: Книга на деня|Легенда за полето|Петър Николов|; error text: 
+WDN new bound before: [id=3 ]
+WDN new dark +3s: widget views 1; bound [id=3 ]
+WDN new dark +10s: widget views 1; bound [id=3 ]
+WDN new dark +30s: widget views 1; bound [id=3 ]
+WDN new launcher/appwidget log after the switch: 11-13 17:44:12.089   482  1949 W system_server: Long monitor contention with owner android.bg (536) at void com.android.server.appwidget.AppWidgetServiceImpl$SaveStateRunnable.run()(AppWidgetServiceImpl.java:4489) waiter|11-13 17:44:12.095  1030  1030 I LauncherAppWidgetHostView: App widget created with id: 3|11-13 17:44:12.096  1030  1030 I LauncherAppWidgetHostView: App widget with id: 3 loaded|11-13 17:44:17.210  9543  9543 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16c3a9; boundsInParent: Rect(0, 0 - 0, 49); boundsInScreen: Rect(57, 378 - 57, 427)|11-13 17:44:24.325  9586  9586 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16c3b5; boundsInParent: Rect(0, 0 - 0, 49); boundsInScreen: Rect(57, 378 - 57, 427)|11-13 17:44:44.074  9639  9639 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@16c3c1; boundsInParent: Rect(0, 0 - 0, 49); boundsInScreen: Rect(57, 378 - 57, 427)|
+WDN new light again: widget views 1; bound [id=3 ]
+  [0] id=3
+    provider=ProviderId{user:0, app:10177, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}
+WDN part: FATAL(any process)=0 of the app=0 ANR=0; FATAL lines: 0
+contact sheets: 2 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: 1 entries, 1 distinct
+     1  update.verify: signature mismatch
+   keys of an entry: at, error, tag
+DIAG SCREEN: text="Записи: 1"  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.36 (1507400) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 1319 мс, последен 1319 мс | Пълно показване: медиана 1319 мс, последно 1319 мс | Топъл старт · 1 | Първи кадър: медиана 2567 мс, последен 2567 мс | Пълно показване: медиана 2966 
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.36 (1507400)" text="Профил: чака" text="Студен старт · 1" text="Първи кадър: медиана 1319 мс, последен 1319 мс" text="Пълно показване: медиана 1319 мс, последно 1319 мс" text="Топъл старт · 1" text="Първи кадър: 
+APP W/E lines (pids ['5902', '8326', '8829', '9404']): 28 in 11 groups
+       4  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       4  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       3  W/Parcel: Expecting binder but got null!
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       3  W/Gralloc4: allocator #.x is not supported
+       3  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=f#cf-#a#-#-a#c-ca#cfc#fc#, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#cb#-#e#f-#e#-#-#ef#d#fadbe#, generation=#)
+contact sheets: 3 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5902', '8326', '8829', '9404']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 16
+   skipped-frames events=16 max=123 total=891
+== Davey: 28
+   davey events=28 max=2304ms median=1140ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 91354008 Nov 13 17:34 app-mapping.txt; crashes: 0 B
