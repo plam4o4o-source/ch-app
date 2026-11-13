@@ -110,6 +110,8 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
         appScope.launch { warmUp() }
         // Свалените PDF-и: по-старите от седмица, над 50 MB общо и прекъснатите (.part) — вън.
         appScope.launch(Dispatchers.IO) { runCatching { container.documents.prune(dropPartial = true) }.logFailure("startup.documents") }
+        // Вестникът пази готовите статии година (офлайн четене), но недосвалените .part не бива да стоят толкова.
+        appScope.launch(Dispatchers.IO) { runCatching { container.newspaper.prune(dropPartial = true) }.logFailure("startup.newspaper") }
         // Картинките за споделяне (и личните слайдове от „Моята читателска година“) — по-старите от час.
         appScope.launch(Dispatchers.IO) { runCatching { ShareFiles.prune(this@ChitalishteApp) }.logFailure("startup.share") }
         // Само тук нечетимата сесия се брои към изхода — фоновите събуждания не броят.
