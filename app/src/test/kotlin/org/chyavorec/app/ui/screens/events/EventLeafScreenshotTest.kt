@@ -134,20 +134,20 @@ class EventLeafScreenshotTest {
 
     /** Етикетите на действията не се късат насред дума при 1.0, 1.3 и 2× (светла и тъмна тема). */
     @Test fun actionLabelsNeverBreakMidWord() {
-        var scale by androidx.compose.runtime.mutableStateOf(1f)
-        var dark by androidx.compose.runtime.mutableStateOf(false)
-        compose.setContent { Page(dark = dark, fontScale = scale) { Actions() } }
+        val scale = androidx.compose.runtime.mutableStateOf(1f)
+        val dark = androidx.compose.runtime.mutableStateOf(false)
+        compose.setContent { Page(dark = dark.value, fontScale = scale.value) { Actions() } }
         for (d in listOf(false, true)) for (s in listOf(1f, 1.15f, 1.3f, 1.5f, 2f)) {
-            dark = d
-            scale = s
+            dark.value = d
+            scale.value = s
             compose.waitForIdle()
             for (label in listOf("Напомни ми", "Маршрут", "Виж публикацията")) {
                 compose.assertNoMidWordBreak(label)
                 compose.onNode(hasText(label) and hasClickAction()).assertIsDisplayed().assertHeightIsAtLeast(48.dp).assertWidthIsAtLeast(48.dp)
             }
         }
-        scale = 2f
-        dark = false
+        scale.value = 2f
+        dark.value = false
         shot("w22-event-actions-font2-wide")
     }
 
