@@ -1099,7 +1099,7 @@ S = {
 "perf_after_update": ("Първи старт след обновяването", "First start after the update"),
 "perf_one_start": ("Първи кадър %1$s, пълно показване %2$s", "First frame %1$s, fully drawn %2$s"),
 "perf_one_start_first": ("Първи кадър %1$s", "First frame %1$s"),
-"perf_route_total": ("общо с видеокартата: средно %1$s, най-бавен %2$s", "total with the GPU: mean %1$s, slowest %2$s"),
+"perf_route_total": ("CPU време на кадъра (интерфейс и нишка за рендериране, без видеокартата): средно %1$s, най-бавен %2$s", "frame CPU time (UI and render thread, without the GPU): mean %1$s, slowest %2$s"),
 "perf_profile": ("Профил: %1$s", "Profile: %1$s"),
 "perf_profile_compiled": ("компилиран", "compiled"),
 "perf_profile_pending": ("чака", "waiting"),

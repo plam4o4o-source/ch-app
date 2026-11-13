@@ -148,6 +148,20 @@ class PerfStatsTest {
         assertEquals(246L, s.earlier!!.cold!!.firstFrame.median)
     }
 
+    /** Записаното „общо време“ (всъщност CPU времето на кадъра) се чете и нататък със същите полета и се казва правилно. */
+    @Test fun storedFrameTotalsStillReadAndAreLabelledAsCpuTime() {
+        val stored = """{"routes":[{"route":"home","frames":10,"janky":1,"worstMs":40,"versionCode":36,"worstTotalMs":66,"sumTotalMs":150}]}"""
+        val file = tmp.newFile("totals.json").apply { writeText(stored) }
+        val d = PerfStore(file, Executor { it.run() }).read()
+        val r = d.routes.single()
+        assertEquals(66L, r.worstTotalMs)
+        assertEquals(15L, r.meanTotalMs)
+        assertTrue(r.hasTotal)
+        val text = PerfStats.export(PerfStats.summary(d, 36), ProfileState.Unknown)
+        assertTrue("frame CPU time (UI + render thread, no GPU) mean 15 ms, worst 66 ms" in text, text)
+        assertTrue("GPU mean" !in text && "total with" !in text, text)
+    }
+
     @Test fun legacyDataWithoutVersionIsMigratedAsUnknown() {
         val old = """{"starts":[{"cold":true,"firstFrameMs":900,"fullyDrawnMs":1200}],"routes":[{"route":"card/full","frames":100,"janky":5,"worstMs":159}]}"""
         val file = tmp.newFile("old.json").apply { writeText(old) }
@@ -215,7 +229,7 @@ class PerfStatsTest {
         assertTrue("profile: waiting for compilation (code 2)" in text, text)
         assertTrue("startup cold first after update: first frame 300 ms; fully drawn 400 ms" in text, text)
         assertTrue("startup cold n=1: first frame median 210 ms" in text, text)
-        assertTrue("total with render thread and GPU mean 15 ms, worst 80 ms" in text, text)
+        assertTrue("frame CPU time (UI + render thread, no GPU) mean 15 ms, worst 80 ms" in text, text)
         assertTrue("earlier 1.2.35 (35): startup cold n=1: first frame median 245 ms" in text, text)
     }
 

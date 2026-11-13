@@ -706,7 +706,7 @@
     <string name="perf_profile_pending">waiting</string>
     <string name="perf_profile_unknown">unknown</string>
     <string name="perf_route">%1$s: %2$s of %3$d frames · slowest %4$s</string>
-    <string name="perf_route_total">total with the GPU: mean %1$s, slowest %2$s</string>
+    <string name="perf_route_total">frame CPU time (UI and render thread, without the GPU): mean %1$s, slowest %2$s</string>
     <string name="perf_title">Performance</string>
     <string name="perf_version">Version %1$s (%2$d)</string>
     <string name="perf_version_code">Version code %1$d</string>
