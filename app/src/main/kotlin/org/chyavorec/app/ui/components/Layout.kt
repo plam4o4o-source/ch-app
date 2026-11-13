@@ -343,6 +343,9 @@ fun LimitFontScale(max: Float, content: @Composable () -> Unit) {
     else CompositionLocalProvider(LocalDensity provides Density(d.density, fontScale = max), content = content)
 }
 
+/** От този мащаб на шрифта [InfoRow] подрежда етикета над стойността. */
+private const val INFO_ROW_STACK_FONT_SCALE = 1.3f
+
 /** Ред „етикет — стойност“. [copyable] — дълго натискане копира стойността (сигнатура, инв. №). */
 @Composable
 fun InfoRow(label: String, value: String?, modifier: Modifier = Modifier, copyable: Boolean = false) {
@@ -362,6 +365,14 @@ fun InfoRow(label: String, value: String?, modifier: Modifier = Modifier, copyab
             .heightIn(min = 48.dp)
             .wrapContentHeight(Alignment.CenterVertically)
     } else Modifier
+    if (LocalDensity.current.fontScale >= INFO_ROW_STACK_FONT_SCALE) {
+        // Едър шрифт: етикетът е над стойността на цялата ширина — „Издателство“ не се къса насред.
+        Column(modifier.fillMaxWidth().then(copy).padding(vertical = 7.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(value, style = MaterialTheme.typography.bodyMedium)
+        }
+        return
+    }
     Row(modifier.fillMaxWidth().then(copy).padding(vertical = 7.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(0.42f))
         Text(value, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(0.58f))

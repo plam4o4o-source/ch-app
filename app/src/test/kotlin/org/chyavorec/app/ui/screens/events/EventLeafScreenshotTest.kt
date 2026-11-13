@@ -29,6 +29,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.chyavorec.app.ui.assertNoMidWordBreak
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.ThemeMode
 import org.chyavorec.domain.model.Event
@@ -124,6 +125,30 @@ class EventLeafScreenshotTest {
     @Test fun leafLargeFont() {
         compose.setContent { Page(fontScale = 2f) { Column { LeafAndActions(concert, "2026-12-25") } } }
         shot("w21-event-leaf-5-large-font")
+    }
+
+    @Test fun leafFont13() {
+        compose.setContent { Page(fontScale = 1.3f) { Column { LeafAndActions(concert, "2026-12-25") } } }
+        shot("w22-event-leaf-font13")
+    }
+
+    /** Етикетите на действията не се късат насред дума при 1.0, 1.3 и 2× (светла и тъмна тема). */
+    @Test fun actionLabelsNeverBreakMidWord() {
+        val scale = androidx.compose.runtime.mutableStateOf(1f)
+        val dark = androidx.compose.runtime.mutableStateOf(false)
+        compose.setContent { Page(dark = dark.value, fontScale = scale.value) { Actions() } }
+        for (d in listOf(false, true)) for (s in listOf(1f, 1.15f, 1.3f, 1.5f, 2f)) {
+            dark.value = d
+            scale.value = s
+            compose.waitForIdle()
+            for (label in listOf("Напомни ми", "Маршрут", "Виж публикацията")) {
+                compose.assertNoMidWordBreak(label)
+                compose.onNode(hasText(label) and hasClickAction()).assertIsDisplayed().assertHeightIsAtLeast(48.dp).assertWidthIsAtLeast(48.dp)
+            }
+        }
+        scale.value = 2f
+        dark.value = false
+        shot("w22-event-actions-font2-wide")
     }
 
     /** Минало и днешно събитие: „преди N дни“ и „днес“ в отрязъка. */

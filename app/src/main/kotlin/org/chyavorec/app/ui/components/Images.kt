@@ -372,38 +372,41 @@ fun BookCover(
             )
             // по-тъмно дъно — авторът се чете и върху по-светлите тонове
             Box(Modifier.fillMaxSize().background(CoverBottomShade))
-            Column(Modifier.fillMaxSize().padding(start = (12 * scale).dp, end = (7 * scale).dp, top = (9 * scale).dp, bottom = (10 * scale).dp)) {
-                // Малките корици (в списъци) получават по-дребен шрифт. Сричкопренасяне — само
-                // при големите: в малките то само оскъпява подреждането на текста в списъка.
-                Text(
-                    book.title,
-                    color = CoverInk,
-                    fontFamily = Cormorant,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = (13.5f * scale).coerceAtLeast(10.5f).sp,
-                    lineHeight = (14.5f * scale).coerceAtLeast(11.5f).sp,
-                    maxLines = if (width < 72.dp) 3 else 4,
-                    overflow = TextOverflow.Ellipsis,
-                    style = LocalTextStyle.current.copy(
-                        hyphens = if (width >= 100.dp) Hyphens.Auto else Hyphens.None,
-                        lineBreak = LineBreak.Heading,
-                    ),
-                )
-                Box(Modifier.weight(1f))
-                ShevitsaStrip(
-                    motif,
-                    CoverStrip,
-                    Modifier.padding(bottom = (5 * scale).dp).fillMaxWidth().height((6 * scale).coerceAtLeast(4f).dp),
-                )
-                Text(
-                    book.author,
-                    color = CoverInk.copy(alpha = 0.92f),
-                    fontFamily = Raleway,
-                    fontSize = maxOf(9f, 8.5f * scale).sp,
-                    lineHeight = maxOf(11f, 10f * scale).sp,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
+            // Корицата е рисунка с твърд размер: шрифтът ѝ расте най-много до 1.15× (иначе заглавието е „Ар-ме…“).
+            LimitFontScale(1.15f) {
+                Column(Modifier.fillMaxSize().padding(start = (12 * scale).dp, end = (7 * scale).dp, top = (9 * scale).dp, bottom = (10 * scale).dp)) {
+                    // Малките корици (в списъци) получават по-дребен шрифт. Сричкопренасяне — и в малките:
+                    // без него тясната колона къса думите насред („Армени|я“) без тире.
+                    Text(
+                        book.title,
+                        color = CoverInk,
+                        fontFamily = Cormorant,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = (13.5f * scale).coerceAtLeast(10.5f).sp,
+                        lineHeight = (14.5f * scale).coerceAtLeast(11.5f).sp,
+                        maxLines = if (width < 72.dp) 3 else 4,
+                        overflow = TextOverflow.Ellipsis,
+                        style = LocalTextStyle.current.copy(
+                            hyphens = Hyphens.Auto,
+                            lineBreak = LineBreak.Heading,
+                        ),
+                    )
+                    Box(Modifier.weight(1f))
+                    ShevitsaStrip(
+                        motif,
+                        CoverStrip,
+                        Modifier.padding(bottom = (5 * scale).dp).fillMaxWidth().height((6 * scale).coerceAtLeast(4f).dp),
+                    )
+                    Text(
+                        book.author,
+                        color = CoverInk.copy(alpha = 0.92f),
+                        fontFamily = Raleway,
+                        fontSize = maxOf(9f, 8.5f * scale).sp,
+                        lineHeight = maxOf(11f, 10f * scale).sp,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
         if (url != null) {

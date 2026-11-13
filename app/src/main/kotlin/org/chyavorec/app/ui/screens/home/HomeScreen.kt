@@ -627,7 +627,9 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
                         Box(Modifier.fillMaxSize().background(HeroScrim))
                     }
                     }
-                    Column(Modifier.align(Alignment.BottomStart).padding(18.dp).graphicsLayer { alpha = focal() }) {
+                    // Житните класове (горе, 10 dp + 22 dp) са над текста: при едър шрифт колоната расте нагоре —
+                    // резервира им място, за да не ги застъпва.
+                    Column(Modifier.align(Alignment.BottomStart).padding(start = 18.dp, end = 18.dp, bottom = 18.dp, top = if (season == Season.HARVEST) HeroWheatReserve else 18.dp).graphicsLayer { alpha = focal() }) {
                         Text(
                             (a.category ?: stringResource(R.string.label_news)).uppercase(),
                             style = MaterialTheme.typography.labelSmall, color = Brand.GoldLight,
@@ -666,6 +668,9 @@ internal fun heroMinHeight(width: Dp, windowHeight: Dp): Dp =
     minOf(width.coerceAtMost(720.dp) / 1.6f, windowHeight * HERO_MAX_WINDOW_FRACTION)
 
 private const val HERO_MAX_WINDOW_FRACTION = 0.48f
+
+/** Горният отстъп на текста в картата през жътвата: 10 dp до житото + 22 dp негова височина + въздух. */
+private val HeroWheatReserve = 38.dp
 
 /**
  * Православният празник за деня — един ред под търсенето (от /api/calendar на сайта);
