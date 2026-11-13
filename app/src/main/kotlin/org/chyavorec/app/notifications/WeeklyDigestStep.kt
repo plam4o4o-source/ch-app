@@ -45,25 +45,39 @@ object WeeklyDigestStep {
         when (val decision = WeeklyDigest.decide(now, zone, state)) {
             WeeklyDigest.Decision.None -> Unit
             // Първо пускане без начална точка (напр. след възстановяване на данни): само се записва.
-            is WeeklyDigest.Decision.Baseline -> c.settings.markDigestSlot(decision.slot.toEpochMilli(), baselineMillis = now.toEpochMilli())
+            is WeeklyDigest.Decision.Baseline -> c.settings.markDigestSlot(decision.slot.toEpochMilli(), baselineMillis = now.toEpochMilli(), resetShown = true)
             is WeeklyDigest.Decision.Skip -> c.settings.markDigestSlot(decision.slot.toEpochMilli())
             is WeeklyDigest.Decision.Send -> {
                 val baseline = state.baselineMillis ?: now.toEpochMilli()
-                val sent = compose(context, c, settings.digestSections, baseline, LocalDateTime.ofInstant(now, zone))
+                val shown = c.settings.digestShown()
+                val composed = compose(context, c, settings.digestSections, baseline, shown?.toSet(), LocalDateTime.ofInstant(now, zone))
                 // Първо записът, после известието: прекъсване между двете губи един преглед, но не го повтаря.
-                c.settings.markDigestSlot(decision.slot.toEpochMilli(), baselineMillis = now.toEpochMilli())
-                sent?.let { show(context, it) }
+                // Показаното се помни (ограничено), за да не се брои пак от същия ден на следващия преглед.
+                c.settings.markDigestSlot(
+                    decision.slot.toEpochMilli(), baselineMillis = now.toEpochMilli(),
+                    shown = WeeklyDigest.remember(shown.orEmpty(), composed.keys),
+                )
+                composed.digest?.let { show(context, it) }
             }
         }
     }
 
+    /** Съставеният преглед (`null` — няма какво да се каже) и ключовете на всичко, което е влязло в него. */
+    private class Composed(val digest: org.chyavorec.domain.model.Digest?, val keys: List<String>)
+
+    /**
+     * [shown] `null` — първият преглед след включване: само СЛЕД началната точка (тестовите дати в
+     * миналото не заливат). Иначе — от деня на предишния преглед включително, без вече показаното:
+     * дата без час не различава „преди“ от „след“ прегледа в същия ден.
+     */
     private suspend fun compose(
         context: Context,
         c: AppContainer,
         sections: Set<String>,
         baselineMillis: Long,
+        shown: Set<String>?,
         now: LocalDateTime,
-    ): org.chyavorec.domain.model.Digest? {
+    ): Composed {
         val zone = c.clock.zone()
         val lang = if (Formatters.isBulgarian(context)) DigestLanguage.BG else DigestLanguage.EN
         val events = (c.eventsRepository.cachedRolled()?.data
@@ -71,16 +85,14 @@ object WeeklyDigestStep {
         val news = (c.newsRepository.cached()?.data
             ?: (c.newsRepository.latest(force = false) as? Outcome.Success)?.value?.data).orEmpty()
         val baselineDate = java.time.Instant.ofEpochMilli(baselineMillis).atZone(zone).toLocalDate()
-        return WeeklyDigest.compose(
-            WeeklyDigest.upcomingEvents(events, now),
-            newBooks(c, baselineDate, sections),
-            WeeklyDigest.newArticles(news, baselineMillis),
-            lang,
-        )
+        val books = newBooks(c, baselineDate, sections, shown)
+        val articles = if (shown == null) WeeklyDigest.newArticles(news, baselineMillis) else WeeklyDigest.newArticlesSinceDay(news, baselineDate, shown)
+        val digest = WeeklyDigest.compose(WeeklyDigest.upcomingEvents(events, now), books, articles, lang)
+        return Composed(digest, articles.map { WeeklyDigest.articleKey(it) } + books.keys)
     }
 
     /** От каталога: условна заявка не по-често от веднъж на денонощие, иначе — каквото е на диска. */
-    private suspend fun newBooks(c: AppContainer, baseline: java.time.LocalDate, sections: Set<String>): NewBooks {
+    private suspend fun newBooks(c: AppContainer, baseline: java.time.LocalDate, sections: Set<String>, shown: Set<String>?): NewBooks {
         val nowMs = c.clock.now().toEpochMilli()
         val last = c.settings.lastSyncStep(STEP_CATALOG)
         if (last > nowMs || nowMs - last >= CATALOG_CHECK_MS) {
@@ -88,7 +100,7 @@ object WeeklyDigestStep {
         }
         val searcher = (c.catalogRepository.latestLookup() ?: c.catalogRepository.lookupSearcher(network = false))?.data ?: return NewBooks.NONE
         val newest = searcher.searchFirst(CatalogQuery(sort = CatalogSort.NEWEST), NEWEST_WINDOW).books.take(NEWEST_WINDOW)
-        return NewBooks.since(newest, baseline, sections)
+        return NewBooks.since(newest, baseline, sections, shown)
     }
 
     private fun show(context: Context, digest: org.chyavorec.domain.model.Digest) {

@@ -105,6 +105,55 @@ class WeeklyDigestStepTest {
         assertTrue(digest().isEmpty())
     }
 
+    private fun text(shown: android.service.notification.StatusBarNotification) =
+        shown.notification.extras.getCharSequence(android.app.Notification.EXTRA_TEXT).toString()
+
+    private fun bigText(shown: android.service.notification.StatusBarNotification) =
+        shown.notification.extras.getCharSequence(android.app.Notification.EXTRA_BIG_TEXT).toString()
+
+    /** Дата без час: книга/новина от деня на предишния преглед, качена след него, влиза в следващия — веднъж. */
+    @Test fun aSameDayItemAfterTheLastDigestIsCountedInTheNextOneAndNothingTwice() = runBlocking<Unit> {
+        backend.json("/data/news.json", """[{"id":"n1","title":"Новина от неделя","date":"2026-11-15","content":"<p>x</p>"}]""")
+        // Първо включване: нищо „показано“ още — първият преглед брои само СЛЕД началната точка.
+        assertEquals(null, settings.digestShown())
+        run()
+        assertEquals("1 нова книга · 1 нова новина", text(digest().single()))
+        val shownAfterFirst = assertNotNull(settings.digestShown())
+        assertTrue("b:2" in shownAfterFirst && "n:n1" in shownAfterFirst, shownAfterFirst.toString())
+
+        // След седмица: още една книга със същата дата като първия преглед; старите не се броят пак.
+        nm.cancelAll()
+        backend.json("/katalog.json", catalog(item(1, "Стара книга", "2023-07-13"), item(2, "Нова книга", "2026-11-10"), item(3, "Вечерна книга", "2026-11-15")))
+        clock.advanceSeconds(7 * 24 * 3600)
+        run()
+        val second = digest().single()
+        assertEquals("1 нова книга", text(second))
+        assertTrue("Вечерна книга" in bigText(second) && "Нова книга" !in bigText(second) && "Новина" !in bigText(second), bigText(second))
+        assertTrue("b:3" in assertNotNull(settings.digestShown()))
+
+        // И още една седмица без нищо ново — тих слот, нищо не се повтаря.
+        nm.cancelAll()
+        clock.advanceSeconds(7 * 24 * 3600)
+        run()
+        assertTrue(digest().isEmpty())
+    }
+
+    @Test fun anEmptyFirstDigestStillSwitchesToTheSameDayRule() = runBlocking<Unit> {
+        backend.json("/katalog.json", catalog(item(1, "Стара книга", "2023-07-13")))
+        run()
+        assertTrue(digest().isEmpty())
+        assertEquals(emptyList(), settings.digestShown())
+    }
+
+    @Test fun reEnablingForgetsWhatWasShown() = runBlocking<Unit> {
+        run()
+        assertNotNull(settings.digestShown())
+        settings.setWeeklyDigest(false, 0, 0)
+        assertEquals(null, settings.digestShown())
+        enable(baseline, previousSlot)
+        assertEquals(null, settings.digestShown())
+    }
+
     @Test fun enablingJustBeforeTheSlotNeverFloods() = runBlocking<Unit> {
         // Включен току-що (началната точка е сега): слотът е по-малко от денонощие след нея — прескача се.
         enable(clock.now().toEpochMilli(), previousSlot)

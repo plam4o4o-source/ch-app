@@ -44,8 +44,11 @@ object FavouriteSections {
     }
 }
 
-/** Новите книги спрямо началото на периода. */
-data class NewBooks(val count: Int, val titles: List<String>, val capped: Boolean) {
+/**
+ * Новите книги спрямо началото на периода. [keys] — ключовете ([WeeklyDigest.bookKey]) на всички
+ * годни книги (преди да се махнат повторените заглавия) — за „вече показаното“.
+ */
+data class NewBooks(val count: Int, val titles: List<String>, val capped: Boolean, val keys: List<String> = emptyList()) {
     companion object {
         /** Над толкова не се брои — „над 99 нови книги“. */
         const val MAX = 99
@@ -57,19 +60,28 @@ data class NewBooks(val count: Int, val titles: List<String>, val capped: Boolea
          * Книгите, постъпили СЛЕД [baseline] (датата на предишния преглед или на включването му),
          * от [sections] (празно — всички). Един екземпляр на заглавие. Каталогът е предимно тестови
          * данни със стари дати на постъпване — затова се гледа само „след“, а не „последните“.
+         *
+         * [shown] `null` — първият преглед след включване: само книги СЛЕД деня на началната точка.
+         * Иначе (следващите прегледи) — от самия ден на началната точка включително, защото дата без
+         * час не казва дали книгата е дошла преди или след предишния преглед; вече показаните
+         * ([shown], ключове от [WeeklyDigest.bookKey]) не се броят пак.
          */
-        fun since(books: List<CatalogBook>, baseline: LocalDate, sections: Set<String> = emptySet()): NewBooks {
-            val seen = HashSet<String>()
-            val fresh = books.asSequence()
-                .filter { b -> registered(b)?.isAfter(baseline) == true && FavouriteSections.matches(sections, b) }
+        fun since(books: List<CatalogBook>, baseline: LocalDate, sections: Set<String> = emptySet(), shown: Set<String>? = null): NewBooks {
+            val titles = HashSet<String>()
+            val candidates = books.filter { b ->
+                val date = registered(b) ?: return@filter false
+                val inPeriod = if (shown == null) date.isAfter(baseline) else !date.isBefore(baseline) && WeeklyDigest.bookKey(b) !in shown
+                inPeriod && FavouriteSections.matches(sections, b)
+            }
+            val fresh = candidates
                 .sortedWith(compareByDescending<CatalogBook> { it.registeredOn }.thenByDescending { it.inv })
-                .filter { seen.add(ReadingRecommender.titleKey(it.title, it.author)) }
-                .toList()
+                .filter { titles.add(ReadingRecommender.titleKey(it.title, it.author)) }
             if (fresh.isEmpty()) return NONE
             return NewBooks(
                 minOf(fresh.size, MAX),
                 fresh.take(TITLES).map { it.title.trim() }.filter { it.isNotEmpty() },
                 fresh.size > MAX,
+                candidates.map { WeeklyDigest.bookKey(it) },
             )
         }
 
@@ -163,6 +175,30 @@ object WeeklyDigest {
     /** Новините, публикувани СЛЕД [sinceMillis] (началото на периода). */
     fun newArticles(news: List<NewsArticle>, sinceMillis: Long): List<NewsArticle> =
         news.filter { (it.publishedAtMillis ?: 0L) > sinceMillis }.sortedByDescending { it.publishedAtMillis }
+
+    /** Новинарските дати са без час — полунощ по Софийско време ([org.chyavorec.data.site.SiteJsonParser]). */
+    private val NEWS_ZONE: ZoneId = ZoneId.of("Europe/Sofia")
+
+    /**
+     * Новините от следващите прегледи: от началото на деня [baselineDay] (деня на предишния преглед)
+     * включително — новина с дата от същия ден, качена СЛЕД прегледа, иначе никога не влиза, защото
+     * датата й е полунощ. Вече показаните ([shown], ключове от [articleKey]) не се броят пак.
+     */
+    fun newArticlesSinceDay(news: List<NewsArticle>, baselineDay: LocalDate, shown: Set<String>): List<NewsArticle> {
+        val from = baselineDay.atStartOfDay(NEWS_ZONE).toInstant().toEpochMilli()
+        return news.filter { (it.publishedAtMillis ?: 0L) >= from && articleKey(it) !in shown }.sortedByDescending { it.publishedAtMillis }
+    }
+
+    /** Ключовете в „вече показаното“ на прегледа. */
+    fun articleKey(a: NewsArticle): String = "n:" + a.id
+    fun bookKey(b: CatalogBook): String = "b:" + b.inv
+
+    /** Най-много толкова ключове се помнят (старите отпадат): достатъчно за няколко седмици. */
+    const val MAX_SHOWN = 200
+
+    /** Предишните ключове плюс новите, най-много [MAX_SHOWN] — най-старите отпадат, без повторения. */
+    fun remember(previous: List<String>, added: List<String>): List<String> =
+        (previous + added).asReversed().distinct().take(MAX_SHOWN).asReversed()
 
     /** `null`, когато няма какво да се каже — тогава известие не се показва. */
     fun compose(events: List<Event>, books: NewBooks, news: List<NewsArticle>, lang: DigestLanguage): Digest? {
