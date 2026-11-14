@@ -100,19 +100,74 @@ object SearchAggregator {
             events = corpus.events.asSequence().filter { matches(it.second) }.take(limitPerType).map { SearchHit.EventHit(it.first) }.toList(),
             // Страници, архив, публикации и документи от търсещия индекс на сайта.
             pages = corpus.pages.asSequence().filter { matches(it.second) }.take(limitPerType).map { (d, _) ->
-                SearchHit.Page(d, snippet(d.text.ifBlank { d.excerpt }, tokens.first()))
+                SearchHit.Page(d, snippet(d.text.ifBlank { d.excerpt }, tokens.first(), lead = listOfNotNull(d.title, d.category)))
             }.toList(),
         )
     }
 
-    fun snippet(text: String, token: String, radius: Int = 70): String {
-        val norm = TextNormalizer.normalize(text)
-        val idx = norm.indexOf(token)
-        if (idx < 0) return text.take(radius * 2).trim()
-        // Нормализираният текст е почти със същата дължина — достатъчно за откъс.
-        val start = (idx - radius).coerceAtLeast(0)
-        val end = (idx + radius).coerceAtMost(text.length)
-        return (if (start > 0) "…" else "") + text.substring(start.coerceAtMost(text.length), end).replace('\n', ' ').trim() +
-            (if (end < text.length) "…" else "")
+    /**
+     * Откъс около първото съвпадение: само цели думи, без нови редове и двойни интервали. Ако
+     * текстът започва със заглавието/категорията на страницата ([lead] — те вече са на реда),
+     * те се изпускат. Преди съвпадението — до половин [radius] (или от началото на изречението),
+     * общо — до 2 × [radius] знака; „…“ само там, където текстът продължава.
+     */
+    fun snippet(text: String, token: String, radius: Int = 70, lead: List<String> = emptyList()): String {
+        val all = WORD.findAll(text).map { it.value }.toList()
+        if (all.isEmpty()) return ""
+        var words = all
+        // Заглавието и категорията — по нормализирани думи (без „·“, тирета и т.н.), до три пъти.
+        repeat(3) {
+            val cut = lead.maxOfOrNull { leadingWords(words, it) } ?: 0
+            if (cut in 1 until words.size) words = words.drop(cut)
+        }
+        val norm = words.map { TextNormalizer.normalize(it) }
+        val hit = norm.indexOfFirst { w -> w.split(' ').any { it.startsWith(token) } }
+            .takeIf { it >= 0 } ?: norm.indexOfFirst { it.contains(token) }
+        var from = hit.coerceAtLeast(0)
+        if (hit > 0) {
+            var before = 0
+            while (from > 0) {
+                val prev = words[from - 1]
+                // Началото на изречение е добро начало на откъса.
+                if (SENTENCE_END.any { prev.endsWith(it) }) break
+                if (before + prev.length + 1 > radius / 2) break
+                before += prev.length + 1
+                from--
+            }
+        }
+        var to = from
+        var length = 0
+        while (to < words.size && (to == from || length + words[to].length + 1 <= radius * 2)) {
+            length += words[to].length + 1
+            to++
+        }
+        val body = words.subList(from, to).joinToString(" ")
+        return buildString {
+            if (from > 0) append('…')
+            if (to < words.size) append(body.trimEnd(',', ';', ':', '—', '–', '-', '·').trimEnd()).append('…') else append(body)
+        }
     }
+
+    /** Колко от първите думи на [words] са точно [phrase] (по нормализирани думи); 0 — ако не започват с нея. */
+    private fun leadingWords(words: List<String>, phrase: String): Int {
+        val want = TextNormalizer.tokens(phrase)
+        if (want.isEmpty()) return 0
+        var matched = 0
+        var i = 0
+        while (i < words.size && matched < want.size) {
+            val got = TextNormalizer.tokens(words[i])
+            for (t in got) {
+                if (matched >= want.size || t != want[matched]) return 0
+                matched++
+            }
+            i++
+        }
+        if (matched < want.size) return 0
+        // И разделителите след фразата („·“, „—“).
+        while (i < words.size && TextNormalizer.tokens(words[i]).isEmpty()) i++
+        return i
+    }
+
+    private val WORD = Regex("\\S+")
+    private val SENTENCE_END = listOf(".", "!", "?", "…")
 }

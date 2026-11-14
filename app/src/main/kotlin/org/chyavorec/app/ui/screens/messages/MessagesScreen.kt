@@ -1,5 +1,9 @@
 package org.chyavorec.app.ui.screens.messages
 
+import org.chyavorec.app.ui.components.FolkIconPlate
+import org.chyavorec.app.ui.components.FolkIcons
+import org.chyavorec.app.ui.components.FolkMotif
+import org.chyavorec.app.ui.components.PageEndMark
 import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +20,6 @@ import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.PriorityHigh
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Badge
@@ -175,6 +178,8 @@ fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit, focusId: Stri
                             modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp),
                         )
                     }
+                    // Краят на списъка — тих знак (шевица), както в „Настройки“.
+                    item { PageEndMark() }
                 }
             }
         }
@@ -190,15 +195,15 @@ private fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Uni
     AppCard(modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Icon(
-                    when {
-                        high -> Icons.Outlined.PriorityHigh
-                        m.personal -> Icons.Outlined.Person
-                        else -> Icons.Outlined.Campaign
-                    },
-                    null,
-                    tint = if (high) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-                )
+                // Плочката като навсякъде: розетка — от читалището, ромб — лично от библиотеката; важното — в цвета на грешката.
+                when {
+                    high -> FolkIconPlate(
+                        FolkIcons.Messages, FolkMotif.ROSETTE, size = 28.dp,
+                        container = MaterialTheme.colorScheme.errorContainer, content = MaterialTheme.colorScheme.onErrorContainer,
+                    )
+                    m.personal -> FolkIconPlate(FolkIcons.Profile, FolkMotif.RHOMBUS, size = 28.dp)
+                    else -> FolkIconPlate(FolkIcons.Messages, FolkMotif.ROSETTE, size = 28.dp)
+                }
                 Text(
                     if (m.createdAt.isBlank()) "" else Formatters.dateTime(context, AppMessagesParser.createdAt(m)),
                     style = MaterialTheme.typography.labelMedium,

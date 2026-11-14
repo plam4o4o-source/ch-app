@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,9 +24,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.icons.outlined.Event
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.FilterChip
@@ -50,6 +49,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
@@ -76,6 +76,10 @@ import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.appViewModelWithState
 import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.components.EmptyView
+import org.chyavorec.app.ui.components.FolkIconPlate
+import org.chyavorec.app.ui.components.FolkIcons
+import org.chyavorec.app.ui.components.FolkMotif
+import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.SearchInput
 import org.chyavorec.app.ui.components.SearchShortcutEffect
 import org.chyavorec.app.ui.components.appFilterChipColors
@@ -85,12 +89,12 @@ import org.chyavorec.app.ui.screens.catalog.CatalogSearchRequests
 import org.chyavorec.app.util.Formatters
 import androidx.compose.ui.platform.LocalContext
 import org.chyavorec.app.ui.screens.news.NewsRow
-import org.chyavorec.app.ui.screens.site.sectionIcon
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.SearchAggregator
 import org.chyavorec.data.SearchCorpus
 import org.chyavorec.data.SearchResults
 import org.chyavorec.data.site.SiteLinkClassifier
+import org.chyavorec.domain.model.SiteSection
 
 enum class SearchScope { ALL, BOOKS, NEWS, EVENTS, PAGES }
 
@@ -236,8 +240,8 @@ internal fun GlobalSearchContent(
             }
         }
     }
-    // Редовете — върху фона на контейнера (в разгънатото поле на „Начало“ той е
-    // surfaceContainerHigh), а не със свой цвят surface (по-светли ивици).
+    // Редовете — върху фона на контейнера (и в разгънатото поле на „Начало“ — обичайният фон),
+    // а не със свой цвят surface.
     val itemColors = ListItemDefaults.colors(containerColor = Color.Transparent)
     Box(modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize()) {
@@ -259,14 +263,16 @@ internal fun GlobalSearchContent(
                     LazyColumn(Modifier.fillMaxSize()) {
                         if (recent.isNotEmpty()) {
                             item {
-                                ListItem(
-                                    headlineContent = { Text(stringResource(R.string.search_recent), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() }) },
-                                    trailingContent = { TextButton(onClick = clearRecent) { Text(stringResource(R.string.action_clear)) } },
-                                    colors = itemColors,
-                                )
+                                Row(
+                                    Modifier.fillMaxWidth().heightIn(min = 48.dp).padding(start = 16.dp, end = 4.dp, top = 4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    SectionLabel(stringResource(R.string.search_recent), Modifier.weight(1f).semantics { heading() })
+                                    TextButton(onClick = clearRecent) { Text(stringResource(R.string.action_clear)) }
+                                }
                             }
                             items(recent) { q ->
-                                ListItem(headlineContent = { Text(q) }, leadingContent = { Icon(Icons.Outlined.History, null) },
+                                ListItem(headlineContent = { Text(q) }, leadingContent = { Icon(FolkIcons.History, null, Modifier.size(22.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant) },
                                     modifier = Modifier.clickable { onRecent(q) }, colors = itemColors)
                             }
                         } else {
@@ -314,7 +320,7 @@ private fun Results(
         if (show(SearchScope.BOOKS) && r.authors.isNotEmpty()) {
             item { Header(stringResource(R.string.search_authors), more(r.authors.size, SearchScope.BOOKS)) }
             items(r.authors.take(limit), key = { "a-$it" }) { a ->
-                ListItem(headlineContent = { Text(a) }, leadingContent = { Icon(Icons.Outlined.Person, null) },
+                ListItem(headlineContent = { Text(a) }, leadingContent = { ResultPlate(FolkIcons.Profile, FolkMotif.RHOMBUS) },
                     // Книгите на автора — каталогът с филтър „Автор“.
                     modifier = Modifier.clickable { onOpen(); CatalogSearchRequests.byAuthor(a, navigate) }.animateItem(), colors = itemColors)
             }
@@ -338,7 +344,7 @@ private fun Results(
                     headlineContent = { Text(hit.event.title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
                     // Датата в езика на приложението („17 октомври 2026 г.“ / „October 17, 2026“), не ISO.
                     supportingContent = Formatters.date(context, hit.event.date)?.let { d -> { Text(listOfNotNull(d, hit.event.time).joinToString(" · ")) } },
-                    leadingContent = { Icon(Icons.Outlined.Event, null) },
+                    leadingContent = { ResultPlate(FolkIcons.Events, FolkMotif.ROSETTE) },
                     modifier = Modifier.clickable { onOpen(); navigate(Routes.event(hit.event.id)) }.animateItem(),
                     colors = itemColors,
                 )
@@ -351,8 +357,9 @@ private fun Results(
                 ListItem(
                     overlineContent = hit.doc.category?.let { { Text(it) } },
                     headlineContent = { Text(hit.doc.title) },
-                    supportingContent = { Text(hit.snippet, maxLines = 2, overflow = TextOverflow.Ellipsis) },
-                    leadingContent = { Icon(sectionIcon(link.kind), null) },
+                    supportingContent = hit.snippet.takeIf { it.isNotBlank() }?.let { snip -> { Text(snip, maxLines = 2, overflow = TextOverflow.Ellipsis) } },
+                    // Страниците на библиотеката — ромб (както книгите); всичко друго от сайта — розетка.
+                    leadingContent = { ResultPlate(pageIcon(link.kind), if (link.kind.isLibrary()) FolkMotif.RHOMBUS else FolkMotif.ROSETTE) },
                     modifier = Modifier.clickable {
                         onOpen()
                         // Документ/публикация → PDF файлът; иначе страницата (или котвата в нея).
@@ -369,12 +376,33 @@ private fun Results(
 /** Колко резултата от раздел се показват в обхвата „Всички“. */
 internal const val ALL_SCOPE_LIMIT = 5
 
-/** Заглавката на раздел; [more] — („Покажи всички“, общият брой), ако не всички са показани. */
+/** Заглавката на раздел — стебният етикет като навсякъде; [more] — („Покажи всички“, общият брой), ако не всички са показани. */
 @Composable
 private fun Header(text: String, more: Pair<() -> Unit, Int>? = null) = Row(
-    Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp, top = 16.dp, bottom = 4.dp),
+    Modifier.fillMaxWidth().heightIn(min = 48.dp).padding(start = 16.dp, end = 4.dp, top = 12.dp),
     verticalAlignment = Alignment.CenterVertically,
 ) {
-    Text(text, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() })
+    SectionLabel(text, Modifier.weight(1f).semantics { heading() })
     more?.let { (open, total) -> TextButton(onClick = open) { Text(stringResource(R.string.search_show_all, total)) } }
+}
+
+/** Малката плочка пред резултат (28 dp): ромб — библиотеката, розетка — читалището и сайтът. */
+@Composable
+private fun ResultPlate(icon: ImageVector, motif: FolkMotif) = FolkIconPlate(icon, motif, size = 28.dp)
+
+private fun SiteSection.isLibrary() = this == SiteSection.LIBRARY || this == SiteSection.CATALOG
+
+/** Иконата („Бод“) за страница от сайта — най-близката от набора; останалите — читалището. */
+internal fun pageIcon(kind: SiteSection): ImageVector = when (kind) {
+    SiteSection.LIBRARY, SiteSection.CATALOG -> FolkIcons.Books
+    SiteSection.HISTORY -> FolkIcons.Timeline
+    SiteSection.EVENTS -> FolkIcons.Events
+    SiteSection.NEWS -> FolkIcons.News
+    SiteSection.GALLERY, SiteSection.EXHIBITION -> FolkIcons.Gallery
+    SiteSection.CONTACTS -> FolkIcons.Pin
+    SiteSection.DOCUMENTS -> FolkIcons.Documents
+    SiteSection.PUBLICATIONS -> FolkIcons.Newspaper
+    SiteSection.DIGITAL_CLUB -> FolkIcons.Computer
+    SiteSection.FOLKLORE, SiteSection.ENSEMBLE, SiteSection.DANCE, SiteSection.CLUBS, SiteSection.PROJECTS -> FolkIcons.Activities
+    else -> FolkIcons.Chitalishte
 }

@@ -101,7 +101,7 @@ class UnlockGateTest {
     @Test fun cancelGoesBack() {
         val unlock = FakeDeviceUnlock(true, false)
         val container = launch(unlock)
-        waitFor(app.getString(R.string.guest_title))
+        waitFor(app.getString(R.string.guest_card_hint))
         compose.waitForIdle()
         assertEquals(1, unlock.calls)
         assertTrue(!container.personalUnlock.unlocked.value)

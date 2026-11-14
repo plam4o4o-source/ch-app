@@ -79,7 +79,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.DemoBanner
-import org.chyavorec.app.ui.components.Emblem
+import org.chyavorec.app.ui.components.PageEndMark
 import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.errorMessage
 import org.chyavorec.app.ui.components.notAvailableMessage
@@ -100,6 +100,8 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
     val passwords = LocalAppContainer.current.passwords
     // Системният прозорец на мениджъра на пароли се показва над activity-то.
     val activity = LocalActivity.current ?: LocalContext.current
+    // Успех: навигацията тръгва веднага; „Картата е издадена“ (повдигане, отблясък и прелитане
+    // към плочката на „Моето“, виж SampleCardPreview) е само украса върху нея.
     LaunchedEffect(ui.success) {
         if (ui.success) {
             haptic.performHapticFeedback(HapticFeedbackType.Confirm)
@@ -133,7 +135,8 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             DemoBanner(vm.isDemo)
-            Emblem(84.dp)
+            // Картата, която читателят ще има в телефона — както на „Моето“ (прелита оттам).
+            SampleCardPreview(Modifier.padding(top = 4.dp, bottom = 6.dp), issued = ui.success)
             Text(stringResource(R.string.login_heading), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
             val status = capsStatus
             val c = (status as? CapabilitiesStatus.Known)?.caps
@@ -265,6 +268,8 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
                     Text(stringResource(R.string.login_privacy_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
+            // Краят на страницата — тих знак (шевица), както в „Настройки“.
+            PageEndMark()
         }
     }
     if (showForgot) {

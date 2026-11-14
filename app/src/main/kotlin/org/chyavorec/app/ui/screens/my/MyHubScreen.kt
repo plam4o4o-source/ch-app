@@ -50,8 +50,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
@@ -150,7 +148,9 @@ fun MyHubScreen(navigate: (String) -> Unit) {
             val booksLine = loanSummaryLine(remember(cachedLoans, today) { LoanSummary.of(cachedLoans, today) }, cachedLoans)
             val tiles = buildList {
                 add(TileItem(FolkIcons.Card, stringResource(R.string.my_card),
-                    if (signedIn) stringResource(R.string.my_card_desc) else if (selfCard != null) stringResource(R.string.my_card_self_desc) else stringResource(R.string.my_card_add_desc)) {
+                    if (signedIn) stringResource(R.string.my_card_desc) else if (selfCard != null) stringResource(R.string.my_card_self_desc) else stringResource(R.string.my_card_add_desc),
+                    // След входа картата прелита тук; докато е показана примерната карта — ключът е неин.
+                    sharedKey = if (signedIn || selfCard != null) LIBRARY_CARD_KEY else null) {
                     navigate(Routes.CARD)
                 })
                 // Влязъл читател — следващият срок / просрочените (от кеша); иначе общото описание.
@@ -188,41 +188,48 @@ fun MyHubScreen(navigate: (String) -> Unit) {
     }
 }
 
+/**
+ * Читател без вход: вместо плоска карта „Здравей!“ — примерната читателска карта (същата като
+ * във въведението, [SampleCardPreview]) с „Така ще изглежда картата ти“ и под нея входът или
+ * добавянето на карта. С вече въведена карта примерът не се показва (картата е в плочката).
+ */
 @Composable
 private fun GuestCard(caps: CapabilitiesStatus, hasCard: Boolean, onLogin: () -> Unit, onAddCard: () -> Unit, onRetry: () -> Unit) {
-    // Плоска (без сянка) — сянка има само въртележката на „Начало“.
-    Surface(
-        color = MaterialTheme.colorScheme.primaryContainer,
-        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier.fillMaxWidth().padding(ScreenGutter),
+    Column(
+        Modifier.fillMaxWidth().padding(start = ScreenGutter, end = ScreenGutter, top = 12.dp, bottom = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(Modifier.padding(20.dp)) {
-            Text(stringResource(R.string.guest_title), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
-            Spacer(Modifier.height(6.dp))
-            Text(stringResource(R.string.guest_text), style = MaterialTheme.typography.bodyMedium)
-            Spacer(Modifier.height(14.dp))
-            when {
-                caps is CapabilitiesStatus.Known && caps.caps.login -> Button(onClick = onLogin) {
+        if (!hasCard) {
+            SampleCardPreview()
+            Spacer(Modifier.height(16.dp))
+        }
+        when {
+            caps is CapabilitiesStatus.Known && caps.caps.login -> Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Button(onClick = onLogin, modifier = Modifier.heightIn(min = 48.dp)) {
                     Icon(Icons.AutoMirrored.Outlined.Login, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.action_login))
                 }
-                // Без връзка не знаем дали входът е включен — не казваме „не е включен“. Картата
-                // се добавя и без връзка, затова бутонът остава; бележката е кратка (лентата
-                // „Няма интернет връзка“ вече казва останалото).
-                caps is CapabilitiesStatus.Failed -> Column {
-                    if (!hasCard) AddCardButton(onAddCard)
-                    InlineNotice(
-                        Icons.Outlined.CloudOff, stringResource(R.string.login_caps_failed_short),
-                        actionLabel = stringResource(R.string.action_retry), onAction = onRetry,
-                    )
+                // Картата се въвежда и без онлайн вход.
+                if (!hasCard) {
+                    TextButton(onClick = onAddCard, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.action_add_card)) }
                 }
-                // Входът не е включен: вместо вход — дигиталната карта (ако още не е въведена).
-                caps is CapabilitiesStatus.Known -> Column {
-                    if (!hasCard) AddCardButton(onAddCard)
-                    InlineNotice(Icons.Outlined.Info, stringResource(R.string.na_login))
-                }
-                // Още се пита (обикновено от кеша — за миг): без съобщение, вместо грешното „не е включен“.
-                else -> Unit
             }
+            // Без връзка не знаем дали входът е включен — не казваме „не е включен“. Картата
+            // се добавя и без връзка, затова бутонът остава; бележката е кратка (лентата
+            // „Няма интернет връзка“ вече казва останалото).
+            caps is CapabilitiesStatus.Failed -> Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                if (!hasCard) AddCardButton(onAddCard)
+                InlineNotice(
+                    Icons.Outlined.CloudOff, stringResource(R.string.login_caps_failed_short),
+                    actionLabel = stringResource(R.string.action_retry), onAction = onRetry,
+                )
+            }
+            // Входът не е включен: вместо вход — дигиталната карта (ако още не е въведена).
+            caps is CapabilitiesStatus.Known -> Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                if (!hasCard) AddCardButton(onAddCard)
+                InlineNotice(Icons.Outlined.Info, stringResource(R.string.na_login))
+            }
+            // Още се пита (обикновено от кеша — за миг): без съобщение, вместо грешното „не е включен“.
+            else -> Unit
         }
     }
 }
