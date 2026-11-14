@@ -1,5 +1,7 @@
 package org.chyavorec.app.ui.screens.events
 
+import androidx.compose.ui.graphics.StrokeCap
+import org.chyavorec.app.ui.components.StitchSpec
 import android.content.res.Resources
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -31,9 +33,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
@@ -248,9 +248,11 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
             Modifier.fillMaxWidth().shadow(4.dp, stubShape).background(paper)
                 .drawBehind {
                     val n = LeafNotch.toPx()
+                    // Перфорацията — тропосване ([StitchSpec.Basting]).
+                    val bod = StitchSpec.Basting.stroke(density)
                     drawLine(
-                        dash, Offset(n + 6.dp.toPx(), 0f), Offset(size.width - n - 6.dp.toPx(), 0f), strokeWidth = 1.5.dp.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(5.dp.toPx(), 4.dp.toPx())),
+                        dash, Offset(n + 6.dp.toPx(), 0f), Offset(size.width - n - 6.dp.toPx(), 0f), strokeWidth = bod.width,
+                        cap = StrokeCap.Round, pathEffect = bod.pathEffect,
                     )
                 }
                 .padding(horizontal = 20.dp, vertical = 14.dp),
@@ -277,16 +279,15 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
 internal fun StitchedRhombus(color: Color, modifier: Modifier = Modifier) {
     Canvas(modifier.clearAndSetSemantics { }) {
         val s = size.minDimension
-        val stroke = (s * 0.11f).coerceAtLeast(1f)
+        // Тичащ бод ([StitchSpec.Running]) — като контурите на розетките и печата.
+        val bod = StitchSpec.Running.stroke(density)
+        val stroke = bod.width
         val half = s / 2f - stroke
         val c = Offset(size.width / 2f, size.height / 2f)
         val outline = Path().apply {
             moveTo(c.x, c.y - half); lineTo(c.x + half, c.y); lineTo(c.x, c.y + half); lineTo(c.x - half, c.y); close()
         }
-        drawPath(
-            outline, color,
-            style = Stroke(width = stroke, pathEffect = PathEffect.dashPathEffect(floatArrayOf(stroke * 1.8f, stroke * 1.2f))),
-        )
+        drawPath(outline, color, style = bod)
         val dot = Path()
         val r = s * 0.14f
         dot.moveTo(c.x, c.y - r); dot.lineTo(c.x + r, c.y); dot.lineTo(c.x, c.y + r); dot.lineTo(c.x - r, c.y); dot.close()

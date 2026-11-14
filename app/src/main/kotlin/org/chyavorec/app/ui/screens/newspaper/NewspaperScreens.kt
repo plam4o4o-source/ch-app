@@ -1,7 +1,7 @@
 package org.chyavorec.app.ui.screens.newspaper
 
+import org.chyavorec.app.ui.theme.FolkTokens
 import android.app.ActivityManager
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -178,12 +178,14 @@ private fun Modifier.decorative(): Modifier = this.clearAndSetSemantics { }
 private fun ArticleCard(d: SiteDocument, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val dark = LocalExtendedColors.current.isDark
     val paper = if (dark) PaperColors.SheetDark else PaperColors.Sheet
-    val ink = if (dark) androidx.compose.ui.graphics.Color(0xFFEDDEBD) else androidx.compose.ui.graphics.Color(0xFF2A1E12)
-    val shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+    val ink = if (dark) PaperColors.InkOnDark else PaperColors.Ink
+    // Документирано изключение от [AppCard]: това е лист хартия — почти прав ъгъл и лека сянка;
+    // рамката е общата златна ([FolkTokens.goldBorder]).
+    val shape = FolkTokens.PaperShape
     val open = stringResource(R.string.newspaper_open)
     Surface(
         color = paper, contentColor = ink, shape = shape, shadowElevation = 1.dp,
-        border = BorderStroke(1.dp, LocalExtendedColors.current.gold.copy(alpha = 0.55f)),
+        border = FolkTokens.goldBorder(),
         modifier = modifier.fillMaxWidth().heightIn(min = 56.dp).clip(shape)
             .clickable(onClickLabel = open, onClick = onClick),
     ) {

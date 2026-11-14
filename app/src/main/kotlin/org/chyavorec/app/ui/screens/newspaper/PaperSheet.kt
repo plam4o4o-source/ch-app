@@ -78,6 +78,10 @@ object PaperColors {
     val Desk = Color(0xFFE6DAC0)
     val DeskDark = Color(0xFF15110A)
     val SheetDark = Color(0xFF211A10)
+
+    /** Мастилото на текста върху хартията (картите на статиите): светла и тъмна тема. */
+    val Ink = Color(0xFF2A1E12)
+    val InkOnDark = Color(0xFFEDDEBD)
     private val InkDark = floatArrayOf(0.93f, 0.87f, 0.74f)
     private val PaperDark = floatArrayOf(0.13f, 0.105f, 0.07f)
 

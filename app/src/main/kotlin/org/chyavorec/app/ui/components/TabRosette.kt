@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -90,8 +89,6 @@ private class RosetteCache {
     private val platformPath = android.graphics.Path()
     private val path = platformPath.asComposePath()
     private var last = -1f
-    private var strokeWidth = -1f
-    private var stroke: Stroke? = null
 
     fun pathAt(progress: Float): androidx.compose.ui.graphics.Path {
         if (progress != last) {
@@ -101,11 +98,6 @@ private class RosetteCache {
         return path
     }
 
-    /** Пунктир в единиците на формата (0.12 ≈ 2 dp бод), създава се веднъж за дебелината. */
-    fun stitchStroke(width: Float): Stroke {
-        val s = stroke
-        if (s != null && width == strokeWidth) return s
-        strokeWidth = width
-        return Stroke(width, pathEffect = PathEffect.dashPathEffect(floatArrayOf(0.12f, 0.08f))).also { stroke = it }
-    }
+    /** Тичащият бод ([StitchSpec.Running]) в единиците на формата: [pxPerDp] — колко единици е 1 dp. */
+    fun stitchStroke(pxPerDp: Float): Stroke = StitchSpec.Running.stroke(pxPerDp)
 }

@@ -1,5 +1,9 @@
 package org.chyavorec.app.ui.screens.embroidery
 
+import androidx.compose.ui.unit.sp
+import org.chyavorec.app.ui.theme.FolkTokens
+import org.chyavorec.app.ui.components.PillToggle
+import org.chyavorec.app.ui.components.appTonalButtonColors
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +18,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -28,7 +33,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
@@ -44,7 +48,6 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -268,7 +271,7 @@ internal fun StitchEditorCanvas(editor: EmbroideryEditor, modifier: Modifier = M
     val n = editor.board.size
     val gold = LocalExtendedColors.current.gold
     val description = stringResource(R.string.embroidery_canvas_cd, n, n, editor.stitchCount)
-    val shape = RoundedCornerShape(8.dp)
+    val shape = FolkTokens.SmallShape
     Box(
         modifier.aspectRatio(1f).clip(shape).border(2.dp, gold, shape)
             .semantics { contentDescription = description }
@@ -373,16 +376,21 @@ private fun EmbroideryControls(editor: EmbroideryEditor, onSave: () -> Unit, onO
                 )
             }
         }
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            FilterChip(
+        // Четирите действия — мрежа 2×2 с еднакво широки хапчета (без „стъпала“ от различни дължини).
+        FlowRow(
+            Modifier.fillMaxWidth(), maxItemsInEachRow = 2,
+            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            // Превключвател-хапче (като другите бутони тук), за TalkBack — избираем като чип.
+            PillToggle(
                 selected = editor.cursorMode, onClick = { editor.cursorMode = !editor.cursorMode },
                 label = { Text(stringResource(R.string.embroidery_cursor)) },
                 leadingIcon = { Icon(Icons.Outlined.TouchApp, null, Modifier.size(18.dp)) },
-                modifier = Modifier.heightIn(min = 48.dp),
+                modifier = Modifier.weight(1f),
             )
-            ActionButton(Icons.Outlined.Save, R.string.embroidery_save, onSave)
-            ActionButton(Icons.Outlined.FolderOpen, R.string.embroidery_mine, onOpenMine)
-            ActionButton(Icons.Outlined.DeleteOutline, R.string.embroidery_clear, editor::clear)
+            ActionButton(Icons.Outlined.Save, R.string.embroidery_save, onSave, Modifier.weight(1f))
+            ActionButton(Icons.Outlined.FolderOpen, R.string.embroidery_mine, onOpenMine, Modifier.weight(1f))
+            ActionButton(Icons.Outlined.DeleteOutline, R.string.embroidery_clear, editor::clear, Modifier.weight(1f))
         }
         TemplatePicker(editor)
         Text(
@@ -393,8 +401,8 @@ private fun EmbroideryControls(editor: EmbroideryEditor, onSave: () -> Unit, onO
 }
 
 @Composable
-private fun ActionButton(icon: ImageVector, label: Int, onClick: () -> Unit) {
-    OutlinedButton(onClick = onClick, modifier = Modifier.heightIn(min = 48.dp)) {
+private fun ActionButton(icon: ImageVector, label: Int, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    OutlinedButton(onClick = onClick, modifier = modifier.heightIn(min = 48.dp), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)) {
         Icon(icon, null, Modifier.size(18.dp))
         Spacer(Modifier.size(8.dp))
         Text(stringResource(label))
@@ -441,18 +449,36 @@ private fun TemplatePicker(editor: EmbroideryEditor) {
                 val cd = stringResource(R.string.embroidery_tpl_cd, name)
                 val pattern = remember(t) { t.pattern() }
                 Column(
-                    Modifier.clip(RoundedCornerShape(10.dp))
+                    Modifier.clip(FolkTokens.SmallShape)
                         .clickable(onClickLabel = cd) { editor.load(pattern) }
                         .semantics { contentDescription = cd }
                         .padding(4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     StitchPicture(pattern, Modifier.size(80.dp))
-                    Text(name, style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(top = 4.dp).widthIn(max = 88.dp), maxLines = 2)
+                    TemplateName(name)
                 }
             }
         }
     }
+}
+
+/**
+ * Името на мотива под картинката: пренася се само между думите. Една дума („Осморъка“) е на
+ * един ред и при нужда се смалява до 0.75×, вместо да се къса („Осморъ/ка“); повече думи — до
+ * два реда („Дърво на / живота“).
+ */
+@Composable
+private fun TemplateName(name: String) {
+    val words = remember(name) { name.trim().split(Regex("\\s+")).size }
+    val style = MaterialTheme.typography.labelMedium
+    androidx.compose.foundation.text.BasicText(
+        name,
+        style = style.copy(color = MaterialTheme.colorScheme.onSurface, textAlign = androidx.compose.ui.text.style.TextAlign.Center),
+        maxLines = minOf(words, 2),
+        autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = style.fontSize * 0.75f, maxFontSize = style.fontSize, stepSize = 0.25.sp),
+        modifier = Modifier.padding(top = 4.dp).widthIn(max = 104.dp),
+    )
 }
 
 /**
@@ -476,7 +502,7 @@ private fun CursorPad(editor: EmbroideryEditor) {
         PadButton(Icons.Outlined.KeyboardArrowUp, R.string.embroidery_up) { editor.moveCursor(0, -1) }
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
             PadButton(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, R.string.embroidery_left) { editor.moveCursor(-1, 0) }
-            FilledTonalButton(onClick = { editor.placeAtCursor() }, modifier = Modifier.heightIn(min = 56.dp)) {
+            FilledTonalButton(onClick = { editor.placeAtCursor() }, modifier = Modifier.heightIn(min = 56.dp), colors = appTonalButtonColors()) {
                 Text(stringResource(if (removes && cell != 0) R.string.embroidery_remove else R.string.embroidery_place))
             }
             PadButton(Icons.AutoMirrored.Outlined.KeyboardArrowRight, R.string.embroidery_right) { editor.moveCursor(1, 0) }
@@ -487,7 +513,7 @@ private fun CursorPad(editor: EmbroideryEditor) {
 
 @Composable
 private fun PadButton(icon: ImageVector, label: Int, onClick: () -> Unit) {
-    FilledTonalButton(onClick = onClick, modifier = Modifier.size(56.dp), contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)) {
+    FilledTonalButton(onClick = onClick, modifier = Modifier.size(56.dp), contentPadding = PaddingValues(0.dp), colors = appTonalButtonColors()) {
         Icon(icon, contentDescription = stringResource(label), modifier = Modifier.size(28.dp))
     }
 }
@@ -519,7 +545,7 @@ private fun SavedPatternsSheet(
                 val open = stringResource(R.string.embroidery_open_item, date)
                 Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Row(
-                        Modifier.weight(1f).heightIn(min = 64.dp).clip(RoundedCornerShape(12.dp)).clickable(onClickLabel = open) { onOpen(item) }
+                        Modifier.weight(1f).heightIn(min = 64.dp).clip(FolkTokens.SmallShape).clickable(onClickLabel = open) { onOpen(item) }
                             .padding(8.dp).semantics(mergeDescendants = true) { contentDescription = open },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(16.dp),

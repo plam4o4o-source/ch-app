@@ -30,7 +30,6 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ImageShader
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.TileMode
@@ -107,8 +106,10 @@ fun Modifier.shimmer(stitch: Boolean = false): Modifier = composed {
     val goldColors = remember(gold) { listOf(gold.copy(alpha = 0f), gold.copy(alpha = 0.8f), gold.copy(alpha = 0f)) }
     drawWithCache {
         val canvas = SkeletonCanvas.brush(SkeletonCanvas.CELL_DP.dp.toPx(), ext.isDark)
-        val thread = 1.5.dp.toPx()
-        val dash = PathEffect.dashPathEffect(floatArrayOf(7.dp.toPx(), 5.dp.toPx()))
+        // Бодът през средата — тропосване ([StitchSpec.Basting]), както подгъвът.
+        val bod = StitchSpec.Basting.stroke(density)
+        val thread = bod.width
+        val dash = bod.pathEffect
         onDrawBehind {
             drawRect(base)
             drawRect(canvas, alpha = SkeletonCanvas.ALPHA)

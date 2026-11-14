@@ -6,9 +6,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.PathMeasure
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -27,9 +25,6 @@ internal object HemSpec {
     /** Колко навътре от ръба е редът, и радиусът на ъглите му (ъгълът на екрана е 28 dp). */
     const val INSET_DP = 6f
     const val CORNER_DP = 22f
-    const val DASH_DP = 7f
-    const val GAP_DP = 5f
-    const val WIDTH_DP = 1.6f
 
     /** Колко от реда е още зашит при прогрес [p] на заобляне (0..1): от цял до почти нищо. */
     fun stitched(p: Float): Float = (1f - 0.92f * p).coerceIn(0.08f, 1f)
@@ -58,11 +53,8 @@ private fun Density.hemGeometry(width: Float, height: Float): HemGeometry {
         addRoundRect(RoundRect(inset, inset, (width - inset).coerceAtLeast(inset), (height - inset).coerceAtLeast(inset), CornerRadius(HemSpec.CORNER_DP.dp.toPx())))
     }
     val measure = PathMeasure().also { it.setPath(path, false) }
-    val stroke = Stroke(
-        width = HemSpec.WIDTH_DP.dp.toPx(),
-        cap = StrokeCap.Round,
-        pathEffect = PathEffect.dashPathEffect(floatArrayOf(HemSpec.DASH_DP.dp.toPx(), HemSpec.GAP_DP.dp.toPx())),
-    )
+    // Подгъвът е тропосване — общият бод за подгъви и перфорации.
+    val stroke = StitchSpec.Basting.stroke(density)
     return HemGeometry(path, measure, measure.length, Path(), stroke)
 }
 

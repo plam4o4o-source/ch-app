@@ -1,12 +1,12 @@
 package org.chyavorec.app.ui.screens.timeline
 
+import org.chyavorec.app.ui.components.AppCard
+import org.chyavorec.app.ui.components.StitchSpec
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +33,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +45,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -55,7 +53,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -203,9 +200,8 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
     }
     val ext = LocalExtendedColors.current
     val thread = if (ext.isDark) Brand.Gold.copy(alpha = 0.75f) else Brand.GoldDark.copy(alpha = 0.8f)
-    val stitchLen = with(LocalDensity.current) { 7.dp.toPx() }
-    val gap = with(LocalDensity.current) { 6.dp.toPx() }
-    val strokeW = with(LocalDensity.current) { 2.5.dp.toPx() }
+    // Конецът между вехите — тропосване ([StitchSpec.Basting]), готовият бод от общия речник.
+    val bod = StitchSpec.Basting.stroke(LocalDensity.current.density)
     val railX = with(LocalDensity.current) { (RailWidth / 2).toPx() }
     val top = with(LocalDensity.current) { MedallionSize.toPx() }
     val description = listOf(e.label, e.title, e.description).filter { it.isNotBlank() }.joinToString(". ")
@@ -213,14 +209,11 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
         Modifier.fillMaxWidth().height(IntrinsicSize.Min)
             .semantics(mergeDescendants = true) { contentDescription = description }
             .drawBehind {
-                // Конецът: къси бодове надолу от медалията до края на реда (и през него — до следващата).
+                // Конецът: бодове надолу от медалията до края на реда (и през него — до следващата).
                 if (last) return@drawBehind
+                val start = top + bod.width * 2
                 val end = top + (size.height - top) * progress.value
-                var y = top + gap / 2
-                while (y + stitchLen <= end) {
-                    drawLine(thread, Offset(railX, y), Offset(railX, y + stitchLen), strokeWidth = strokeW, cap = StrokeCap.Round)
-                    y += stitchLen + gap
-                }
+                if (end > start) drawLine(thread, Offset(railX, start), Offset(railX, end), strokeWidth = bod.width, cap = StrokeCap.Round, pathEffect = bod.pathEffect)
             },
     ) {
         Box(Modifier.width(RailWidth), contentAlignment = Alignment.TopCenter) {
@@ -267,10 +260,7 @@ private fun medallionBrush(dark: Boolean) = androidx.compose.ui.graphics.Brush.l
 
 @Composable
 private fun EntryCard(e: TimelineEntry, modifier: Modifier) {
-    Surface(
-        color = MaterialTheme.colorScheme.surfaceContainerHigh, shape = MaterialTheme.shapes.medium,
-        border = BorderStroke(1.dp, LocalExtendedColors.current.gold.copy(alpha = 0.4f)), modifier = modifier.fillMaxWidth(),
-    ) {
+    AppCard(modifier.fillMaxWidth(), accent = true) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(e.title, style = MaterialTheme.typography.titleLarge)
             if (e.description.isNotBlank()) Text(e.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -296,13 +286,10 @@ fun OnThisDayCard(today: LocalDate, navigate: (String) -> Unit, modifier: Modifi
 @Composable
 fun OnThisDayContent(entry: TimelineEntry, today: LocalDate, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val years = OnThisDay.yearsAgo(entry, today)
-    val shape = MaterialTheme.shapes.medium
     val open = stringResource(R.string.timeline_open)
-    Surface(
-        color = MaterialTheme.colorScheme.surfaceContainerHigh, shape = shape,
-        border = BorderStroke(1.dp, LocalExtendedColors.current.gold.copy(alpha = 0.55f)),
-        modifier = modifier.fillMaxWidth().padding(horizontal = ScreenGutter, vertical = 6.dp).heightIn(min = 56.dp).clip(shape)
-            .clickable(onClickLabel = open, role = Role.Button, onClick = onClick).semantics(mergeDescendants = true) {},
+    AppCard(
+        modifier.fillMaxWidth().padding(horizontal = ScreenGutter, vertical = 6.dp).heightIn(min = 56.dp).semantics(mergeDescendants = true) {},
+        onClick = onClick, onClickLabel = open, accent = true,
     ) {
         Row(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             StitchInOrnament(StitchCharts.rosette(5), Modifier.size(44.dp))

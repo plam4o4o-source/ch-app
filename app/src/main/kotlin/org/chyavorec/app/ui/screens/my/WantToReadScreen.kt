@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.my
 
+import org.chyavorec.app.ui.components.PillToggle
 import android.content.res.Resources
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ContentTransform
@@ -40,8 +41,6 @@ import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -489,7 +488,10 @@ class BookWantToReadViewModel(private val inv: Long, private val c: AppContainer
 @Composable
 private fun bookWantToReadViewModel(inv: Long): BookWantToReadViewModel = appViewModel(key = "want-$inv") { BookWantToReadViewModel(inv, it) }
 
-/** Отметката „Искам да прочета“ на страницата на книгата (запълнена — в списъка е). */
+/**
+ * Отметката „Искам да прочета“ на страницата на книгата (запълнена — в списъка е): хапче като
+ * другите бутони ([PillToggle]), за TalkBack — избираема, както беше чипът.
+ */
 @Composable
 fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: Modifier = Modifier) {
     val vm = bookWantToReadViewModel(book.inv)
@@ -498,7 +500,7 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
     val resources = LocalResources.current
     val haptic = LocalHapticFeedback.current
     val success = rememberSuccessFeedback(HapticSignature.STITCH)
-    FilterChip(
+    PillToggle(
         selected = saved != null,
         onClick = {
             // Добавянето е успех — вибрацията (и конфетито) идват, щом книгата е записана.
@@ -530,11 +532,11 @@ fun WantToReadToggle(book: CatalogBook, snackbar: SnackbarHostState, modifier: M
             // Панделката „пада“ при запазване (вж. BookmarkIcon).
             BookmarkIcon(
                 saved != null, contentDescription = null, tint = LocalContentColor.current,
-                modifier = Modifier.size(FilterChipDefaults.IconSize),
+                modifier = Modifier.size(18.dp),
                 savedIcon = Icons.Outlined.Bookmark, unsavedIcon = Icons.Outlined.BookmarkBorder,
             )
         },
-        modifier = modifier.heightIn(min = 48.dp),
+        modifier = modifier,
     )
 }
 
@@ -567,8 +569,9 @@ fun NotifyWhenAvailableButton(
     val colors = MaterialTheme.colorScheme
     val colorSpec: AnimationSpec<Color> = if (reduced) snap() else AppMotion.defaultEffects()
     // Цветовете се четат само при рисуване — преходът не прекомпозира бутона.
-    val container = animateColorAsState(if (on) colors.secondaryContainer else colors.secondaryContainer.copy(alpha = 0f), colorSpec, label = "notify-bg")
-    val content = animateColorAsState(if (on) colors.onSecondaryContainer else colors.primary, colorSpec, label = "notify-fg")
+    // Тоналните цветове на приложението (като [PillToggle]): златен контейнер, мастилен текст.
+    val container = animateColorAsState(if (on) colors.primaryContainer else colors.primaryContainer.copy(alpha = 0f), colorSpec, label = "notify-bg")
+    val content = animateColorAsState(if (on) colors.onPrimaryContainer else colors.primary, colorSpec, label = "notify-fg")
     val border = animateColorAsState(if (on) colors.outline.copy(alpha = 0f) else colors.outline, colorSpec, label = "notify-border")
     val label = stringResource(R.string.want_notify)
     Row(

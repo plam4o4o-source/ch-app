@@ -1,5 +1,7 @@
 package org.chyavorec.app.ui.screens.embroidery
 
+import org.chyavorec.app.ui.components.drawCrossStitches
+import org.chyavorec.app.ui.components.CrossStitchBatch
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -9,8 +11,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -52,34 +52,26 @@ internal object StitchPalette {
     }
 }
 
-/** Петте пътя (по един на конец) — преизползват се между кадрите. */
+/** Петте пътя (по един на конец) — общият кръстат бод ([CrossStitchBatch]), преизползва се между кадрите. */
 internal class StitchPaths {
-    val paths = Array(StitchColor.entries.size) { Path() }
+    val batch = CrossStitchBatch(StitchColor.entries.size)
 }
 
 /**
- * Рисува всички бодове с по два прохода на цвят: по-тъмен кант, после конецът. Бодът е „X“
- * в клетка; пътищата се строят наново при всяко рисуване (до 225 клетки — пренебрежимо).
+ * Рисува всички бодове с общия кръстат бод на приложението ([drawCrossStitches] — същите
+ * пропорции и отблясък като шевиците по екраните), с по-тъмен кант, за да се виждат и
+ * кремавият, и златният конец върху ленената кърпа. Пътищата се строят наново при всяко
+ * рисуване (до 225 клетки — пренебрежимо).
  */
 internal fun DrawScope.drawStitches(paths: StitchPaths, n: Int, origin: Offset, cell: Float, get: (Int, Int) -> Int) {
-    for (p in paths.paths) p.rewind()
-    val inset = cell * 0.17f
+    val batch = paths.batch
+    batch.reset()
     for (y in 0 until n) for (x in 0 until n) {
         val code = get(x, y)
-        if (code !in 1..paths.paths.size) continue
-        val p = paths.paths[code - 1]
-        val x0 = origin.x + x * cell + inset
-        val y0 = origin.y + y * cell + inset
-        val x1 = origin.x + (x + 1) * cell - inset
-        val y1 = origin.y + (y + 1) * cell - inset
-        p.moveTo(x0, y0); p.lineTo(x1, y1)
-        p.moveTo(x1, y0); p.lineTo(x0, y1)
+        if (code !in 1..StitchColor.entries.size) continue
+        batch.add(code - 1, origin.x + x * cell, origin.y + y * cell, cell)
     }
-    val thread = cell * 0.24f
-    val edge = Stroke(thread * 1.5f, cap = StrokeCap.Round, join = StrokeJoin.Round)
-    val body = Stroke(thread, cap = StrokeCap.Round, join = StrokeJoin.Round)
-    for (i in paths.paths.indices) if (!paths.paths[i].isEmpty) drawPath(paths.paths[i], StitchPalette.edge(i + 1), style = edge)
-    for (i in paths.paths.indices) if (!paths.paths[i].isEmpty) drawPath(paths.paths[i], StitchPalette.thread(i + 1), style = body)
+    drawCrossStitches(batch, cell, thread = { StitchPalette.thread(it + 1) }, outline = { StitchPalette.edge(it + 1) })
 }
 
 /** Кърпата с мрежа: тънки линии между клетките, по-плътни на всеки пети ред/колона (за броене). */
