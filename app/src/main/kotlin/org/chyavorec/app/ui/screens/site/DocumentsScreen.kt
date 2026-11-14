@@ -30,6 +30,7 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import org.chyavorec.app.ui.components.PageEndMark
 import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -97,7 +98,7 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit, navigate: (S
                     errorSubject = stringResource(R.string.subject_documents),
                 ) { all ->
                     val docs = remember(all) { all.distinctBy { it.id } }
-                    LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
+                    LazyColumn(contentPadding = PaddingValues(bottom = 8.dp)) {
                         item { SyncBanner(state.fromCache, state.syncedAt, state.refreshError) }
                         itemsIndexed(docs, key = { _, d -> d.id + tab }) { i, d ->
                             ListItem(
@@ -117,6 +118,8 @@ fun DocumentsScreen(onBack: () -> Unit, openLink: (String) -> Unit, navigate: (S
                                 }.animateEntrance(i),
                             )
                         }
+                        // Краят на списъка — тих знак (шевица).
+                        item { PageEndMark() }
                     }
                 }
             }

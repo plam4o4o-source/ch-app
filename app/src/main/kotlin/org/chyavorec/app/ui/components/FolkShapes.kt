@@ -17,11 +17,8 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
@@ -144,32 +141,16 @@ internal fun Modifier.stitchedCorner(thread: ThreadColors, tighten: () -> Float)
                 arcTo(Rect(w - inset - 2 * r, inset, w - inset, inset + 2 * r), -90f, 90f, false)
                 lineTo(w - inset, inset + r + arm)
             }
-            val dash = 3.dp.toPx()
-            val gap = 1.6.dp.toPx()
-            val second = thread.second
-            // Една нишка — плътен пунктир; усукана — бодовете се редуват (вторият е отместен с един бод).
-            val dense = if (second == null) Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash, gap)))
-            else Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash, 2 * gap + dash)))
-            val twist = Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash, 2 * gap + dash), dash + gap))
-            val edge = Stroke(1.8.dp.toPx(), cap = StrokeCap.Round, pathEffect = twist.pathEffect)
+            // Тичащ бод ([StitchSpec.Running]) — като пунктирите навсякъде другаде; в сезонния конец —
+            // усукан на две нишки ([StitchSpec.RunningTwisted]) или със звезден бод в началото (Коледа).
             val starAt = Offset(w - inset - r - arm, inset)
             val starR = 2.6.dp.toPx()
             onDrawWithContent {
                 drawContent()
                 val t = currentTighten.value().coerceIn(0f, 1f)
                 if (t > 0f) {
-                    drawPath(path, thread.primary, alpha = 0.75f * t, style = dense)
-                    if (second != null) {
-                        thread.secondEdge?.let { drawPath(path, it, alpha = 0.75f * t, style = edge) }
-                        drawPath(path, second, alpha = 0.9f * t, style = twist)
-                    }
-                    // Звездният бод в началото на ъгъла (Коледа).
-                    if (thread.star) {
-                        starStitchCross(starAt.x - starR, starAt.y - starR, starAt.x + starR, starAt.y + starR, thread.primary, 1.dp.toPx(), alpha = 0.85f * t)
-                        val d = starR * 0.7f
-                        drawLine(thread.primary, Offset(starAt.x - d, starAt.y - d), Offset(starAt.x + d, starAt.y + d), strokeWidth = 1.dp.toPx(), cap = StrokeCap.Round, alpha = 0.85f * t)
-                        drawLine(thread.primary, Offset(starAt.x - d, starAt.y + d), Offset(starAt.x + d, starAt.y - d), strokeWidth = 1.dp.toPx(), cap = StrokeCap.Round, alpha = 0.85f * t)
-                    }
+                    drawThread(path, thread.primary, thread.second, thread.secondEdge, alpha = 0.75f * t)
+                    if (thread.star) drawStarStitch(starAt, starR, thread.primary, 1.dp.toPx(), alpha = 0.85f * t)
                 }
             }
         }
@@ -186,14 +167,12 @@ internal object FolkLoaderShapes {
     val count get() = polygons.size
 }
 
-/** Пътят на междинната форма и пунктирът — един и същ обект, строи се наново само при нов прогрес. */
+/** Пътят на междинната форма — един и същ обект, строи се наново само при нов прогрес. */
 internal class FolkLoaderCache {
     private val platformPath = android.graphics.Path()
     private val path = platformPath.asComposePath()
     private var lastIndex = -1
     private var lastProgress = -1f
-    private var strokeWidth = -1f
-    private var stroke: Stroke? = null
 
     fun pathAt(index: Int, progress: Float): Path {
         if (index != lastIndex || progress != lastProgress) {
@@ -203,20 +182,12 @@ internal class FolkLoaderCache {
         }
         return path
     }
-
-    /** Пунктир в единиците на формата, създава се веднъж за дебелината. */
-    fun dashed(width: Float, dash: Float, gap: Float): Stroke {
-        val s = stroke
-        if (s != null && width == strokeWidth) return s
-        strokeWidth = width
-        return Stroke(width, cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash, gap))).also { stroke = it }
-    }
 }
 
 /**
  * Кадър на индикатора при фаза [phase] (0 .. [FolkLoaderShapes.count], цяло число = форма в покой):
- * пълната форма и около нея — пунктиран „бод“, който се върти обратно. Без заделяне на памет
- * (освен пътя в [cache] при нов прогрес).
+ * пълната форма и около нея — тичащ бод ([StitchSpec.Running]), който се върти обратно. Без
+ * заделяне на памет (освен пътя в [cache] при нов прогрес; бодът е готов за мащаба).
  */
 internal fun DrawScope.drawFolkLoader(cache: FolkLoaderCache, phase: Float, color: Color, spin: Boolean = true) {
     val count = FolkLoaderShapes.count
@@ -235,8 +206,8 @@ internal fun DrawScope.drawFolkLoader(cache: FolkLoaderCache, phase: Float, colo
         }
         rotate(-turn, pivot = androidx.compose.ui.geometry.Offset.Zero) {
             scale(ring, ring, pivot = androidx.compose.ui.geometry.Offset.Zero) {
-                val w = 1.4.dp.toPx() / ring
-                drawPath(path, color, alpha = 0.6f, style = cache.dashed(w, 2.6.dp.toPx() / ring, 2.4.dp.toPx() / ring))
+                // Пътят е в единици на формата — бодът се мащабира обратно (1 dp = 1.dp.toPx() / ring).
+                drawPath(path, color, alpha = 0.6f, style = StitchSpec.Running.stroke(1.dp.toPx() / ring))
             }
         }
     }

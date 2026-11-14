@@ -356,8 +356,7 @@
     <string name="greeting_wish_tsvetnitsa">Нека домът ви разцъфти от здраве и радост. Честит имен ден на всички с имена на цветя!</string>
     <string name="greeting_wish_unification">Съединението прави силата. Честит празник на всички българи!</string>
     <string name="greeting_wish_winter">От днес денят расте. Нека светлината и топлината са с вас.</string>
-    <string name="guest_text">Новините, събитията, каталогът и информацията за читалището са достъпни и без вход.</string>
-    <string name="guest_title">Здравей!</string>
+    <string name="guest_card_hint">Така ще изглежда картата ти</string>
     <string name="history_empty">Още няма прочетени книги</string>
     <string name="history_empty_hint">Върнатите книги ще се появят тук след следващото обновяване от библиотеката.</string>
     <string name="history_range">взета %1$s · върната %2$s</string>
@@ -752,6 +751,8 @@
     <string name="qa_card">Читателска карта</string>
     <string name="qa_contacts">Контакти</string>
     <string name="qa_scan">Сканирай</string>
+    <string name="quiz_band_done">Шевицата е цяла!</string>
+    <string name="quiz_band_title">Избродирай отговорите</string>
     <string name="quiz_best">Най-дълга серия: %1$d</string>
     <string name="quiz_come_back">Нови въпроси — утре.</string>
     <string name="quiz_correct_was">Верният отговор е: %1$s</string>
@@ -964,6 +965,7 @@
     <string name="tile_card_label">Читателска карта</string>
     <string name="tile_card_subtitle">Покажи на гишето</string>
     <string name="tile_card_subtitle_add">Добави картата</string>
+    <string name="timeline_decade">%1$d-те</string>
     <string name="timeline_empty">Няма вехи за показване.</string>
     <string name="timeline_fallback">Страницата „История“ на сайта е с нов вид. Можеш да я прочетеш като обикновена страница.</string>
     <string name="timeline_fallback_title">Лентата не се показва</string>

@@ -4,10 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.theme.BgHoliday
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -93,13 +90,4 @@ fun rememberSeasonalThread(): ThreadColors {
     return remember(date, ext.gold, ext.isDark) {
         threadColors(date?.let { SeasonalThread.forDate(it) } ?: SeasonalThread.GOLD, ext.gold, ext.isDark)
     }
-}
-
-/** Изправеният „+“ на звездния бод над вече избродиран кръст в [left]..[right] × [top]..[bottom]. */
-internal fun DrawScope.starStitchCross(left: Float, top: Float, right: Float, bottom: Float, color: Color, stroke: Float, alpha: Float = 1f) {
-    val cx = (left + right) / 2f
-    val cy = (top + bottom) / 2f
-    val r = (minOf(right - left, bottom - top) / 2f) * 1.15f
-    drawLine(color, Offset(cx - r, cy), Offset(cx + r, cy), strokeWidth = stroke, cap = StrokeCap.Round, alpha = alpha)
-    drawLine(color, Offset(cx, cy - r), Offset(cx, cy + r), strokeWidth = stroke, cap = StrokeCap.Round, alpha = alpha)
 }

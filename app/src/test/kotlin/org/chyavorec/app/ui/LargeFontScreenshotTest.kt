@@ -315,7 +315,7 @@ class LargeFontScreenshotTest {
     @Test fun myHubLarge() {
         launch()
         tab("Моето")
-        waitFor("Здравей!")
+        waitFor("Така ще изглежда картата ти")
         shot("56-font2-my")
     }
 

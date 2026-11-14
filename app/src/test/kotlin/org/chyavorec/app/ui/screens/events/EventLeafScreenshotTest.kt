@@ -151,6 +151,19 @@ class EventLeafScreenshotTest {
         shot("w22-event-actions-font2-wide")
     }
 
+    /** 320 dp: „Ноември 2026“ се събира цял, а разделът слиза под него, ако не стига място. */
+    @Config(qualifiers = "bg-w320dp-h640dp-xhdpi")
+    @Test fun leafNarrow() {
+        compose.setContent { Page { EventLeaf(concert.copy(date = "2026-11-28"), LocalDate.parse("2026-11-28"), today) } }
+        shot("c23-12-event-leaf-320")
+    }
+
+    @Config(qualifiers = "bg-w320dp-h640dp-xhdpi")
+    @Test fun leafNarrowLargeFont() {
+        compose.setContent { Page(fontScale = 1.3f) { EventLeaf(concert.copy(date = "2026-09-28", category = "Литературно четене"), LocalDate.parse("2026-09-28"), today) } }
+        shot("c23-13-event-leaf-320-font13")
+    }
+
     /** Минало и днешно събитие: „преди N дни“ и „днес“ в отрязъка. */
     @Test fun leafPastAndToday() {
         compose.setContent {

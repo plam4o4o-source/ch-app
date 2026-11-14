@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.site
 
+import org.chyavorec.app.ui.components.PageEndMark
 import org.chyavorec.app.ui.components.appTonalButtonColors
 import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.layout.Arrangement
@@ -69,7 +70,7 @@ fun ContactsScreen(onBack: () -> Unit) {
         LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             StateContent(state = state, onRetry = { vm.refresh() }, isEmpty = { false }, skeleton = { SkeletonCards() }, empty = {},
                 errorSubject = stringResource(R.string.subject_contacts)) { c ->
-                Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom = 32.dp)) {
+                Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom = 8.dp)) {
                     SyncBanner(state.fromCache, state.syncedAt, state.refreshError)
                     // Вградените основни данни (без връзка и без запазени от сайта) — бележката е най-отгоре.
                     if (!c.fromSite) InfoBanner(
@@ -105,6 +106,8 @@ fun ContactsScreen(onBack: () -> Unit) {
                             c.sourceUrl?.let { AssistChip(onClick = { Intents.openUrl(context, it) }, label = { Text(stringResource(R.string.contacts_source)) }) }
                         }
                     }
+                    // Краят на страницата — тих знак (шевица).
+                    PageEndMark(Modifier.widthIn(max = 720.dp))
                 }
             }
         }

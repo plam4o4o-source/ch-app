@@ -37,6 +37,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalView
 import android.view.View
 import org.chyavorec.app.ui.LocalAppContainer
+import org.chyavorec.app.ui.components.LocalReducedMotion
+import androidx.compose.ui.test.hasContentDescription
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.core.FixedClock
 import org.chyavorec.data.repository.AuthState
@@ -116,8 +118,16 @@ class LoginPasswordManagerTest {
     /** Изгледът на Compose — за възлите, които виждат TalkBack и uiautomator. */
     private var view: View? = null
 
-    /** [savedBefore] — от приложението вече е запазван вход в мениджъра на пароли. */
-    private fun launch(passwords: FakeSystemPasswords, savedBefore: Boolean = true): AppContainer {
+    /**
+     * [savedBefore] — от приложението вече е запазван вход в мениджъра на пароли; [reduced] —
+     * „Премахни анимациите“ (`null` — както системата); [onLoggedIn] — навигацията след входа.
+     */
+    private fun launch(
+        passwords: FakeSystemPasswords,
+        savedBefore: Boolean = true,
+        reduced: Boolean? = null,
+        onLoggedIn: () -> Unit = {},
+    ): AppContainer {
         val config = AppConfig(
             siteBaseUrl = "https://chyavorec.org", catalogUrls = emptyList(), inflibApiUrl = "https://chyavorec.org/api",
             environment = "test", useMockData = false, versionName = "test", versionCode = 1,
@@ -131,8 +141,8 @@ class LoginPasswordManagerTest {
         compose.setContent {
             view = LocalView.current
             ChitalishteTheme {
-                CompositionLocalProvider(LocalAppContainer provides container) {
-                    LoginScreen(onBack = {}, onLoggedIn = {}, onAddCard = {})
+                CompositionLocalProvider(LocalAppContainer provides container, LocalReducedMotion provides reduced) {
+                    LoginScreen(onBack = {}, onLoggedIn = onLoggedIn, onAddCard = {})
                 }
             }
         }
@@ -224,4 +234,28 @@ class LoginPasswordManagerTest {
         // Входът е от мениджъра — не се предлага да се запази отново.
         assertTrue(passwords.offered.isEmpty())
     }
+
+    /** Вход с карта и ПИН от формата; връща колко пъти е извикана навигацията след входа. */
+    private fun signInNavigates(reduced: Boolean?) {
+        var navigated = 0
+        val container = launch(FakeSystemPasswords(), savedBefore = false, reduced = reduced, onLoggedIn = { navigated++ })
+        waitForForm()
+        // Примерната карта („Така ще изглежда картата ти“) е над формата.
+        assertTrue(compose.onAllNodes(hasContentDescription("Примерна читателска карта")).fetchSemanticsNodes().isNotEmpty())
+        compose.onAllNodes(hasSetTextAction())[0].performTextInput("1024-5678")
+        compose.onAllNodes(hasSetTextAction())[1].performTextInput("1234")
+        compose.onAllNodes(hasSetTextAction())[1].performImeAction()
+        pumpUntil { navigated > 0 }
+        assertIs<AuthState.SignedIn>(container.authRepository.state.value)
+        // „Картата е издадена“ е само украса — навигацията е веднъж и не чака анимацията.
+        pumpUntil(1_000) { true }
+        compose.waitForIdle()
+        assertEquals(1, navigated)
+    }
+
+    /** Без анимации (Достъпност) входът пак води към „Моето“ — веднага, без повдигане и отблясък. */
+    @Test fun loginNavigatesWithAnimationsOff() = signInNavigates(reduced = true)
+
+    /** С анимациите — същото: картата се повдига и блести, докато навигацията вече тече. */
+    @Test fun loginNavigatesWithAnimationsOn() = signInNavigates(reduced = false)
 }

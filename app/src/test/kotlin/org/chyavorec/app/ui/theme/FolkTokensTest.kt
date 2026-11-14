@@ -77,8 +77,6 @@ class FolkTokensTest {
         "onboarding/OnboardingScreen.kt" to (0 to 1),
         // Листът с резултата от сканирането (горни ъгли като на лист отдолу).
         "scan/ScanScreen.kt" to (1 to 0),
-        // Медалията с годината: златен градиент.
-        "timeline/TimelineScreens.kt" to (0 to 4),
     )
 
     private val dash = Regex("""dashPathEffect\(""")
@@ -98,6 +96,19 @@ class FolkTokensTest {
             radius.findAll(text).count().let { if (it > maxRadius) problems += "$key: $it× RoundedCornerShape(N.dp) (позволени $maxRadius) — FolkTokens.Radius*/MaterialTheme.shapes" }
             color.findAll(text).count().let { if (it > maxColor) problems += "$key: $it× Color(0x…) (позволени $maxColor) — цветовете на темата/Brand" }
         }
+        assertEquals(emptyList<String>(), problems)
+    }
+
+    /**
+     * И общите компоненти (`ui/components/`, вкл. FolkShapes.kt — плочките и индикатора) не
+     * рисуват свои пунктири: единственият източник е Stitching.kt ([StitchSpec]).
+     */
+    @Test fun componentsDrawNoRawDashes() {
+        val root = File("src/main/kotlin")
+        val components = root.walk().filter { it.isFile && it.extension == "kt" && it.invariantSeparatorsPath.contains("/ui/components/") }.toList()
+        assertTrue(components.any { it.name == "FolkShapes.kt" }, "няма FolkShapes.kt в ${root.absolutePath}")
+        val problems = components.filter { it.name != "Stitching.kt" }
+            .mapNotNull { f -> dash.findAll(f.readText()).count().takeIf { it > 0 }?.let { "${f.name}: $it× dashPathEffect( — ползвай StitchSpec.Running/Basting" } }
         assertEquals(emptyList<String>(), problems)
     }
 }

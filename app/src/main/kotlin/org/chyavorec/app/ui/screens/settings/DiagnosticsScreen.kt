@@ -51,6 +51,8 @@ import org.chyavorec.app.diagnostics.PerfSummary
 import org.chyavorec.app.diagnostics.StartStats
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AppCard
+import org.chyavorec.app.ui.components.PageEndMark
+import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.util.Intents
@@ -132,10 +134,16 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
                 // Празното състояние — като на всички екрани (илюстрация + заглавие).
                 item { EmptyView(stringResource(R.string.diagnostics_empty), icon = Icons.Outlined.TaskAlt) }
             } else {
+                // Записите — под стебния етикет като разделите навсякъде; в края — тихият знак.
                 item {
-                    Text(stringResource(R.string.diagnostics_count, entries.size), style = MaterialTheme.typography.labelLarge)
+                    SectionLabel(
+                        stringResource(R.string.diagnostics_count, entries.size),
+                        Modifier.padding(top = 10.dp).semantics { heading() },
+                    )
                 }
                 items(entries) { e -> EntryCard(e, c.clock.zone()) }
+                // При празен дневник лентата е под илюстрацията — втора не слагаме.
+                item { PageEndMark() }
             }
         }
     }

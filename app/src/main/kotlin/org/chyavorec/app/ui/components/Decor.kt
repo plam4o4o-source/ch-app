@@ -204,7 +204,10 @@ private class InputSync(var shown: String) {
  * Елемент от мрежата с плочки („Още“, „Моето“). [motif] — формата на плочката с иконата,
  * ако е различна от тази на цялата мрежа.
  */
-data class TileItem(val icon: ImageVector, val title: String, val subtitle: String?, val motif: FolkMotif? = null, val onClick: () -> Unit)
+/** [sharedKey] — ключ на shared bounds прехода (напр. картата прелита в плочката „Читателска карта“ след входа). */
+data class TileItem(
+    val icon: ImageVector, val title: String, val subtitle: String?, val motif: FolkMotif? = null, val sharedKey: String? = null, val onClick: () -> Unit,
+)
 
 /**
  * Мрежа от плочки с еднаква височина на реда: 2 колони на телефон, 3 при ширина
@@ -278,7 +281,7 @@ private fun Tile(item: TileItem, motif: FolkMotif, wide: Boolean, columns: Int, 
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         border = cardBorder(),
         interactionSource = interaction,
-        modifier = modifier.darkTopHighlight(shape).nightCloth(shape)
+        modifier = modifier.then(item.sharedKey?.let { Modifier.sharedBoundsKey(it) } ?: Modifier).darkTopHighlight(shape).nightCloth(shape)
             .stitchedCorner(rememberSeasonalThread()) { tighten.value },
     ) {
         // При едър шрифт (1.3×) текстът се пренася на още ред, вместо да се реже —

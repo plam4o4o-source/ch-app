@@ -206,8 +206,8 @@ class CardBandViewModel(private val c: AppContainer) : ViewModel() {
 @Composable
 private fun cardBandViewModel(): CardBandViewModel = appViewModel(key = "card-band") { CardBandViewModel(it) }
 
-/** Ключ на shared element прехода „карта → карта на цял екран“. */
-private const val LIBRARY_CARD_KEY = "library-card"
+/** Ключ на shared element прехода „карта → карта на цял екран“ (и примерната карта → плочката на „Моето“, виж SampleCardPreview). */
+internal const val LIBRARY_CARD_KEY = "library-card"
 
 /**
  * Рамката на картата (размер ID-1, мастилено-бордо градиент, златен кант) — обща за двете страни.

@@ -1,22 +1,23 @@
 package org.chyavorec.app.ui.screens.quiz
 
-import androidx.compose.ui.graphics.Color
-import org.chyavorec.app.ui.theme.FolkTokens
-import org.chyavorec.app.ui.components.AppCard
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -32,12 +33,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.key
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -59,6 +63,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.appViewModel
+import org.chyavorec.app.ui.components.AppCard
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.components.MessageView
@@ -66,17 +71,19 @@ import org.chyavorec.app.ui.components.ScreenGutter
 import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.StitchCharts
 import org.chyavorec.app.ui.components.StitchInOrnament
+import org.chyavorec.app.ui.components.StitchSpec
 import org.chyavorec.app.ui.components.StitchedMotif
+import org.chyavorec.app.ui.components.drawStitches
+import org.chyavorec.app.ui.components.stitchBurgundy
 import org.chyavorec.app.ui.share.ContentShareCards
 import org.chyavorec.app.ui.share.ShareImageHost
 import org.chyavorec.app.ui.share.ShareImageRequest
 import org.chyavorec.app.ui.share.rememberShareImageState
+import org.chyavorec.app.ui.theme.FolkTokens
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Formatters
-import org.chyavorec.domain.quiz.Quiz
 import org.chyavorec.domain.quiz.QuizKind
 import org.chyavorec.domain.quiz.QuizQuestion
-import org.chyavorec.domain.quiz.QuizStreak
 
 /** „Познай Яворец“ — пет въпроса на ден (от историята на читалището, каталога и снимките от изложбата). */
 @Composable
@@ -133,38 +140,125 @@ fun QuizContent(
     }
 }
 
+/** Широк екран (таблет, телефон хоризонтално): въпросът вляво, отговорът и лентата — вдясно. */
+private val WideQuiz = 600.dp
+private val QuizMaxWidth = 1040.dp
+private val BandMaxWidth = 360.dp
+private val BandCompactWidth = 260.dp
+private val CompactQuiz = 620.dp
+
 @Composable
 private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: () -> Unit) {
     val q = s.quiz.questions[s.index]
-    val total = s.quiz.questions.size
     val haptic = LocalHapticFeedback.current
     val correct = s.chosen == q.correctIndex
     LaunchedEffect(s.index, s.chosen) {
         if (s.chosen != null) haptic.performHapticFeedback(if (correct) HapticFeedbackType.Confirm else HapticFeedbackType.Reject)
     }
-    Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = ScreenGutter, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
-    ) {
-        Progress(s.results, s.index, total, s.chosen != null)
-        Text(
-            stringResource(R.string.quiz_question_of, s.index + 1, total), style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+    // Всеки въпрос започва отгоре.
+    val scroll = key(s.index) { rememberScrollState() }
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        // Нисък екран (телефон с едър шрифт): по-малка лента без надпис, за да остане място за въпроса.
+        val compact = maxHeight < CompactQuiz
+        val feedbackMax = maxHeight * if (compact) 0.22f else 0.3f
+        if (maxWidth >= WideQuiz) {
+            Row(Modifier.align(Alignment.TopCenter).widthIn(max = QuizMaxWidth).fillMaxSize()) {
+                Column(
+                    Modifier.weight(1.15f).fillMaxHeight().verticalScroll(scroll).padding(start = ScreenGutter, end = 12.dp, top = 8.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                ) { QuestionPart(s, onChoose) }
+                Column(
+                    Modifier.weight(1f).fillMaxHeight().padding(start = 12.dp, end = ScreenGutter, top = 8.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    Progress(s.results, s.index, s.quiz.questions.size, s.chosen != null)
+                    // Бележката е над лентата и се превърта сама, ако е дълга — бутонът не мърда.
+                    Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.BottomStart) {
+                        if (s.chosen != null) key(q.id) { Feedback(q, correct, Modifier.verticalScroll(rememberScrollState())) }
+                    }
+                    BandAndNext(s, onNext, compact)
+                }
+            }
+        } else {
+            Column(Modifier.fillMaxSize()) {
+                Column(
+                    Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).padding(horizontal = ScreenGutter, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                ) {
+                    Progress(s.results, s.index, s.quiz.questions.size, s.chosen != null)
+                    QuestionPart(s, onChoose)
+                }
+                // Долната част е неподвижна: отговорът, лентата и „Напред“ винаги на едно място.
+                Column(
+                    Modifier.fillMaxWidth().padding(start = ScreenGutter, end = ScreenGutter, top = 8.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    if (s.chosen != null) key(q.id) { Feedback(q, correct, Modifier.heightIn(max = feedbackMax).verticalScroll(rememberScrollState())) }
+                    BandAndNext(s, onNext, compact)
+                }
+            }
+        }
+    }
+}
+
+/** Номерът, снимката, въпросът и отговорите. */
+@Composable
+private fun QuestionPart(s: QuizUi.Playing, onChoose: (Int) -> Unit) {
+    val q = s.quiz.questions[s.index]
+    Text(
+        stringResource(R.string.quiz_question_of, s.index + 1, s.quiz.questions.size), style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    q.imageUrl?.let { url ->
+        SiteImage(
+            url, 640.dp, stringResource(R.string.quiz_photo_desc),
+            Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.medium), ContentScale.Crop,
         )
-        q.imageUrl?.let { url ->
-            SiteImage(
-                url, 640.dp, stringResource(R.string.quiz_photo_desc),
-                Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.medium), ContentScale.Crop,
+    }
+    Text(questionText(q), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
+    q.options.forEachIndexed { i, text ->
+        AnswerButton(text, i, q.correctIndex, s.chosen, onClick = { onChoose(i) })
+    }
+}
+
+/** „Избродирай отговорите“ и „Напред“ (неактивен, докато няма отговор — за да не „изскача“). */
+@Composable
+private fun BandAndNext(s: QuizUi.Playing, onNext: () -> Unit, compact: Boolean) {
+    val total = s.quiz.questions.size
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        AnswersBand(s.results, total, current = if (s.chosen == null) s.index else null, compact = compact)
+        Button(onClick = onNext, enabled = s.chosen != null, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
+            Text(stringResource(if (s.index + 1 >= total) R.string.quiz_see_result else R.string.quiz_next))
+        }
+    }
+}
+
+/** Лентата с надписа над нея; при всички верни — „Шевицата е цяла!“. */
+@Composable
+private fun AnswersBand(results: List<Boolean>, total: Int, current: Int?, modifier: Modifier = Modifier, compact: Boolean = false) {
+    val closed = QuizBandCharts.closed(results, total)
+    Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        if (!compact) {
+            Text(
+                stringResource(if (closed) R.string.quiz_band_done else R.string.quiz_band_title), style = MaterialTheme.typography.labelMedium,
+                color = if (closed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
             )
         }
-        Text(questionText(q), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
-        q.options.forEachIndexed { i, text ->
-            AnswerButton(text, i, q.correctIndex, s.chosen, onClick = { onChoose(i) })
-        }
-        if (s.chosen != null) {
-            key(q.id) { Feedback(q, correct, last = s.index + 1 >= total, onNext = onNext) }
-        }
-        Spacer(Modifier.size(12.dp))
+        QuizBand(results, total, current, quizBandColors(), Modifier.widthIn(max = if (compact) BandCompactWidth else BandMaxWidth).fillMaxWidth().aspectRatio(QuizBandCharts.aspect(total)))
+    }
+}
+
+/** Цветовете на лентата в темата на екрана. */
+@Composable
+private fun quizBandColors(): QuizBandColors {
+    val ext = LocalExtendedColors.current
+    val scheme = MaterialTheme.colorScheme
+    val burgundy = stitchBurgundy()
+    return remember(ext, scheme, burgundy) {
+        QuizBandColors(
+            gold = ext.gold, burgundy = burgundy, holes = scheme.onSurfaceVariant.copy(alpha = 0.5f), current = ext.gold,
+            cloth = scheme.surfaceContainer, hem = ext.gold.copy(alpha = FolkTokens.GOLD_BORDER_ALPHA),
+        )
     }
 }
 
@@ -178,7 +272,7 @@ private fun questionText(q: QuizQuestion): String = when (q.kind) {
     QuizKind.CUSTOM -> q.subject
 }
 
-/** Петте въпроса като бродирани точки: верен — избродирана розетка, грешен — празен кръг, текущият — с рамка. */
+/** Петте въпроса като бродирани знаци: верен — избродирана розетка, грешен — „разпорен“ кръг, текущият — с рамка. */
 @Composable
 private fun Progress(results: List<Boolean>, index: Int, total: Int, answered: Boolean) {
     val gold = LocalExtendedColors.current.gold
@@ -191,10 +285,31 @@ private fun Progress(results: List<Boolean>, index: Int, total: Int, answered: B
                 contentAlignment = Alignment.Center,
             ) {
                 if (done && results[i]) StitchedMotif(StitchCharts.rosette(5), progress = { 1f }, modifier = Modifier.size(32.dp))
-                else if (done) Box(Modifier.size(10.dp).background(MaterialTheme.colorScheme.error.copy(alpha = 0.7f), CircleShape))
+                else if (done) UnpickedMark(Modifier.size(32.dp))
             }
         }
     }
+}
+
+/** Колко от розетката остава на „разпорения“ знак — цели бодове (без игла насред бод). */
+internal fun unpickedProgress(count: Int, keep: Float = 0.45f): Float = if (count <= 0) 0f else (count * keep).toInt().toFloat() / count
+
+/**
+ * Грешният отговор: розетка, бродирана до половината и разпорена — тичащ бод в кръг и
+ * останалите бодове в цвета на грешката. Същият размер като верния знак.
+ */
+@Composable
+private fun UnpickedMark(modifier: Modifier = Modifier) {
+    val bad = LocalExtendedColors.current.bad
+    val chart = remember { StitchCharts.rosette(5) }
+    val progress = remember(chart) { unpickedProgress(chart.size) }
+    Spacer(
+        modifier.clearAndSetSemantics { }.drawBehind {
+            val ring = StitchSpec.Running.stroke(density)
+            drawCircle(bad, radius = size.minDimension / 2f - ring.width, alpha = 0.55f, style = ring)
+            inset(size.minDimension * 0.1f) { drawStitches(chart, progress, bad, bad.copy(alpha = 0.7f)) }
+        },
+    )
 }
 
 @Composable
@@ -232,14 +347,14 @@ private fun AnswerButton(text: String, index: Int, correctIndex: Int, chosen: In
     }
 }
 
-/** „Вярно!“ / „Не точно“ с бродираната розетка и бележката; обявява се от екранния четец. */
+/** „Вярно!“ / „Не точно“ с бродирания знак и бележката; обявява се от екранния четец. */
 @Composable
-private fun Feedback(q: QuizQuestion, correct: Boolean, last: Boolean, onNext: () -> Unit) {
+private fun Feedback(q: QuizQuestion, correct: Boolean, modifier: Modifier = Modifier) {
     val ext = LocalExtendedColors.current
-    Column(Modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Polite }, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Polite }, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (correct) StitchInOrnament(StitchCharts.rosette(6), Modifier.size(44.dp))
-            else StitchInOrnament(StitchCharts.rhombus(6), Modifier.size(44.dp))
+            if (correct) StitchInOrnament(StitchCharts.rosette(6), Modifier.size(40.dp))
+            else StitchInOrnament(StitchCharts.rhombus(6), Modifier.size(40.dp))
             Spacer(Modifier.width(12.dp))
             Column {
                 Text(
@@ -250,9 +365,6 @@ private fun Feedback(q: QuizQuestion, correct: Boolean, last: Boolean, onNext: (
             }
         }
         q.note?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-        Button(onClick = onNext, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
-            Text(stringResource(if (last) R.string.quiz_see_result else R.string.quiz_next))
-        }
     }
 }
 
@@ -265,42 +377,47 @@ private fun ResultContent(f: QuizUi.Finished, onShare: () -> Unit, onBack: () ->
         score * 2 >= total -> R.string.quiz_result_good
         else -> R.string.quiz_result_try
     }
-    Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = ScreenGutter, vertical = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        AppCard(Modifier.fillMaxWidth(), accent = true) {
-            Column(Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Text(stringResource(headline), style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
-                Text("$score/$total", style = MaterialTheme.typography.displayLarge, color = LocalExtendedColors.current.gold)
-                Text(stringResource(R.string.share_card_quiz_score, score, total), style = MaterialTheme.typography.bodyLarge)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 4.dp).clearAndSetSemantics { }) {
-                    f.results.forEach { ok ->
-                        Box(
-                            Modifier.size(40.dp).then(if (ok) Modifier else Modifier.border(FolkTokens.goldBorder(), CircleShape)),
-                            contentAlignment = Alignment.Center,
-                        ) { if (ok) StitchInOrnament(StitchCharts.rosette(5), Modifier.size(38.dp)) }
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val viewport = maxHeight
+        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
+            // Картата е по средата на свободното място, бутоните — долу (без празнина под тях).
+            Column(
+                Modifier.heightIn(min = viewport).widthIn(max = ResultMaxWidth).fillMaxWidth().padding(horizontal = ScreenGutter, vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Spacer(Modifier.height(0.dp))
+                AppCard(Modifier.fillMaxWidth().padding(vertical = 16.dp), accent = true) {
+                    Column(Modifier.fillMaxWidth().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Text(stringResource(headline), style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
+                        Text("$score/$total", style = MaterialTheme.typography.displayLarge, color = LocalExtendedColors.current.gold)
+                        Text(stringResource(R.string.share_card_quiz_score, score, total), style = MaterialTheme.typography.bodyLarge)
+                        AnswersBand(f.results, total, current = null, modifier = Modifier.padding(vertical = 6.dp))
+                        if (f.streak > 0) {
+                            Text(pluralStringResource(R.plurals.quiz_streak, f.streak, f.streak), style = MaterialTheme.typography.titleMedium)
+                            if (f.best > f.streak) Text(stringResource(R.string.quiz_best, f.best), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Text(
+                            stringResource(R.string.quiz_come_back), style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
+                        )
                     }
                 }
-                if (f.streak > 0) {
-                    Text(
-                        pluralStringResource(R.plurals.quiz_streak, f.streak, f.streak), style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(top = 6.dp),
-                    )
-                    if (f.best > f.streak) Text(stringResource(R.string.quiz_best, f.best), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Button(onClick = onShare, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
+                        Icon(Icons.Outlined.Share, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.quiz_share))
+                    }
+                    // „Затвори“, не второ „Назад“ — TalkBack не чете две еднакви действия (стрелката горе е „Назад“).
+                    // Рамката е в основния цвят: в тъмна тема сивата почти не се вижда.
+                    OutlinedButton(
+                        onClick = onBack, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                    ) { Text(stringResource(R.string.action_close)) }
                 }
-                Text(
-                    stringResource(R.string.quiz_come_back), style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
-                )
             }
         }
-        Button(onClick = onShare, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
-            Icon(Icons.Outlined.Share, null, Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text(stringResource(R.string.quiz_share))
-        }
-        // „Затвори“, не второ „Назад“ — TalkBack не чете две еднакви действия (стрелката горе е „Назад“).
-        OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.action_close)) }
     }
 }
+
+private val ResultMaxWidth = 560.dp

@@ -2,16 +2,13 @@ package org.chyavorec.app.ui.share
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,8 +24,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.chyavorec.app.R
-import org.chyavorec.app.ui.components.StitchCharts
-import org.chyavorec.app.ui.components.StitchedMotif
+import org.chyavorec.app.ui.components.DarkBurgundyThread
+import org.chyavorec.app.ui.screens.quiz.QuizBandCanvas
+import org.chyavorec.app.ui.screens.quiz.QuizBandCharts
+import org.chyavorec.app.ui.screens.quiz.QuizBandColors
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.ShevitsaMotif
 
@@ -61,6 +60,12 @@ object ContentShareCards {
 }
 
 private val InkOnPaper = Color(0xFF2A1E12)
+
+/** Лентата на картата: винаги върху тъмната рамка. */
+private val ShareBandColors = QuizBandColors(
+    gold = Brand.Gold, burgundy = DarkBurgundyThread, holes = Brand.Parchment.copy(alpha = 0.45f), current = Brand.Gold,
+    cloth = Color.White.copy(alpha = 0.05f), hem = Brand.Gold.copy(alpha = 0.5f),
+)
 private val SheetTone = Color(0xFFF4ECD8)
 
 @Composable
@@ -118,22 +123,20 @@ internal fun QuizShareCardContent(card: QuizShareCard) {
             stringResource(R.string.share_card_quiz_score, card.score, card.results.size), style = serif(22.sp, Brand.Parchment, FontWeight.Normal),
             textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(Modifier.height(28.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
-            card.results.forEach { ok ->
-                Box(Modifier.size(46.dp).then(if (ok) Modifier else Modifier.border(1.dp, Brand.Gold.copy(alpha = 0.4f), CircleShape)), contentAlignment = Alignment.Center) {
-                    if (ok) StitchedMotif(StitchCharts.rosette(5), progress = { 1f }, modifier = Modifier.size(44.dp), gold = Brand.Gold, burgundy = Color(0xFFC25B6B))
-                }
-            }
-        }
         if (card.streak > 1) {
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(20.dp))
             Text(
                 pluralStringResource(R.plurals.share_card_quiz_streak, card.streak, card.streak), style = sans(15.sp, Brand.GoldLight, FontWeight.SemiBold),
                 textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
             )
         }
         Spacer(Modifier.weight(1f))
+        // Долу — избродираната лента от викторината (същата като на екрана): мотив за всеки верен отговор.
+        QuizBandCanvas(
+            card.results, card.results.size, current = null, colors = ShareBandColors,
+            modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth(0.86f).aspectRatio(QuizBandCharts.aspect(card.results.size)),
+        )
+        Spacer(Modifier.height(18.dp))
         Text(
             stringResource(R.string.share_card_quiz_cta), style = serif(20.sp, Brand.Parchment, FontWeight.Normal), textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().padding(bottom = 14.dp),
