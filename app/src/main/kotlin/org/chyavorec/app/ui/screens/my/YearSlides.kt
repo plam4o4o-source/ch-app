@@ -2,10 +2,12 @@ package org.chyavorec.app.ui.screens.my
 
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,18 +16,22 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.Snapshot
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -55,14 +61,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.Month
+import java.time.format.TextStyle as DateStyle
+import kotlin.math.roundToInt
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.DarkBurgundyThread
 import org.chyavorec.app.ui.components.ShevitsaStrip
@@ -81,9 +85,6 @@ import org.chyavorec.app.util.Formatters
 import org.chyavorec.app.util.UdcLabels
 import org.chyavorec.data.catalog.ReadingYear
 import org.chyavorec.data.catalog.ReadingYear.Archetype
-import java.time.Month
-import java.time.format.TextStyle as DateStyle
-import kotlin.math.roundToInt
 
 /** Слайдовете на „Моята читателска година“ — показват се само тези, за които има данни ([yearSlides]). */
 enum class YearSlideKind { INTRO, BOOKS, AUTHOR, SECTION, MONTH, STREAK, ARCHETYPE, OUTRO }
@@ -426,23 +427,41 @@ private fun SectionSlide(s: ReadingYear.Summary, appear: () -> Float) {
         modifier = Modifier.rise(appear, 0.45f, 0.8f),
     )
     if (s.sections.size >= 2) {
-        Spacer(Modifier.height(26.dp))
+        Spacer(Modifier.height(28.dp))
         val rows = s.sections.take(3)
-        val max = rows.maxOf { it.count }.toFloat()
-        Column(Modifier.widthIn(max = 300.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        // Тъканият пояс от „Моето“ (ChartStitches.beltSegments) — изпънат в права лента: отсечките
+        // са по разделите, нечетните са по-тънки и по-светли, като преплетени нишки.
+        val colors = rows.map { sc -> lerp(sc.section?.let { UdcCoverColors[it] } ?: Brand.Muted, Color.White, 0.25f) }
+        val segments = remember(rows) { ChartStitches.beltSegments(rows.map { it.count }) }
+        Column(Modifier.widthIn(max = 300.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Canvas(Modifier.fillMaxWidth().height(18.dp).rise(appear, 0.5f, 0.8f)) {
+                val total = segments.sum().coerceAtLeast(1)
+                val step = size.width / total
+                val gap = 1.5.dp.toPx()
+                val shown = total * part(appear(), 0.55f, 0.95f)
+                var j = 0
+                for ((si, n) in segments.withIndex()) {
+                    repeat(n) {
+                        val visible = (shown - j).coerceIn(0f, 1f)
+                        if (visible > 0f) {
+                            val over = j % 2 == 0
+                            val h = if (over) size.height else size.height * 0.72f
+                            drawRoundRect(
+                                if (over) colors[si] else lerp(colors[si], Color.White, 0.22f),
+                                topLeft = Offset(j * step + gap / 2f, (size.height - h) / 2f),
+                                size = Size((step - gap) * visible, h), cornerRadius = CornerRadius(gap),
+                            )
+                        }
+                        j++
+                    }
+                }
+            }
             rows.forEachIndexed { i, sc ->
-                val color = lerp(sc.section?.let { UdcCoverColors[it] } ?: Brand.Muted, Color.White, 0.25f)
-                Column(Modifier.rise(appear, 0.5f + i * 0.08f, 0.8f + i * 0.08f)) {
-                    Row {
-                        Text(stringResource(UdcLabels.res(sc.section)), style = sans(13.sp, Paper), maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-                        Text(sc.count.toString(), style = sans(13.sp, GoldSoft, FontWeight.Bold))
-                    }
-                    Spacer(Modifier.height(4.dp))
-                    Canvas(Modifier.fillMaxWidth().height(8.dp)) {
-                        val t = part(appear(), 0.55f + i * 0.08f, 0.95f)
-                        drawRoundRect(Color.White.copy(alpha = 0.1f), cornerRadius = CornerRadius(size.height / 2f))
-                        drawRoundRect(color, size = Size(size.width * sc.count / max * t, size.height), cornerRadius = CornerRadius(size.height / 2f))
-                    }
+                Row(Modifier.rise(appear, 0.6f + i * 0.08f, 0.9f + i * 0.05f), verticalAlignment = Alignment.CenterVertically) {
+                    Box(Modifier.size(10.dp).background(colors[i], CircleShape))
+                    Spacer(Modifier.width(10.dp))
+                    Text(stringResource(UdcLabels.res(sc.section)), style = sans(13.sp, Paper), maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                    Text(sc.count.toString(), style = sans(13.sp, GoldSoft, FontWeight.Bold))
                 }
             }
         }

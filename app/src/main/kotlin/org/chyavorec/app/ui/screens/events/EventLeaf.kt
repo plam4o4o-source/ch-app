@@ -1,13 +1,13 @@
 package org.chyavorec.app.ui.screens.events
 
-import androidx.compose.ui.graphics.StrokeCap
-import org.chyavorec.app.ui.components.StitchSpec
 import android.content.res.Resources
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
@@ -48,8 +49,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.ShevitsaStrip
+import org.chyavorec.app.ui.components.StitchSpec
 import org.chyavorec.app.ui.components.rememberOccasionTitle
 import org.chyavorec.app.ui.components.sharedBoundsKey
 import org.chyavorec.app.ui.theme.Brand
@@ -60,8 +64,6 @@ import org.chyavorec.app.ui.theme.ShevitsaMotif
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.core.BulgarianDates
 import org.chyavorec.domain.model.Event
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 /**
  * Колко дни има до събитието — думите на листа („след 19 дни“, „днес“, „преди 3 дни“).
@@ -156,6 +158,7 @@ private class LeafHalfShape(private val top: Boolean, private val corner: Dp, pr
  * с „след 19 дни“ и часа (ако има). [sharedBoundsKey] „event-date-<id>“ свързва листа със значката
  * на датата в списъка — тя „прелита“ и израства в него (без движение при намалено движение).
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -193,31 +196,21 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
             // Заглавката: плетена бордо лента — шевица, месецът и годината, шевица.
             Column(Modifier.fillMaxWidth().background(Brand.Burgundy).padding(vertical = 6.dp)) {
                 ShevitsaStrip(motif, Brand.Gold, Modifier.fillMaxWidth().height(20.dp))
-                val monthText: @Composable (Modifier) -> Unit = { m ->
+                // Месецът и разделът — на един ред, ако се събират; иначе разделът слиза под месеца
+                // (тесен екран 320 dp, едър шрифт). Месецът никога не се реже.
+                FlowRow(
+                    Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 6.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween, itemVerticalAlignment = Alignment.CenterVertically,
+                ) {
                     Text(
                         monthYear, color = Brand.Parchment, fontFamily = Cormorant, fontWeight = FontWeight.SemiBold,
-                        fontSize = 22.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = m,
+                        fontSize = 22.sp, lineHeight = 26.sp, modifier = Modifier.padding(end = 12.dp),
                     )
-                }
-                val categoryText: @Composable (Modifier, TextAlign) -> Unit = { m, align ->
                     event.category?.takeIf { it.isNotBlank() }?.let {
                         Text(
                             it.uppercase(), color = Brand.GoldLight, style = MaterialTheme.typography.labelSmall,
-                            maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = align, modifier = m,
+                            maxLines = 1, overflow = TextOverflow.Ellipsis,
                         )
-                    }
-                }
-                // При едър шрифт месецът и разделът не се събират един до друг — един под друг (месецът не се реже).
-                if (fontScale >= 1.3f) {
-                    Column(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 6.dp)) {
-                        monthText(Modifier)
-                        categoryText(Modifier, TextAlign.Start)
-                    }
-                } else {
-                    Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                        monthText(Modifier.weight(1f, fill = false))
-                        Spacer(Modifier.width(12.dp))
-                        categoryText(Modifier.weight(1f), TextAlign.End)
                     }
                 }
                 ShevitsaStrip(motif, Brand.Gold, Modifier.fillMaxWidth().height(20.dp))
