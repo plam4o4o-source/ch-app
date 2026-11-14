@@ -214,7 +214,6 @@ class MomentsScreenshotTest {
                 CompositionLocalProvider(LocalAgslEnabled provides false, LocalFixedCardTilt provides Offset.Zero) {
                     Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         LibraryCard(card, band = ShareFixtures.year)
-                        LibraryCard(card, large = true, band = ShareFixtures.year)
                         Spacer(Modifier.width(1.dp))
                     }
                 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -358,7 +359,8 @@ class TabletLayoutTest {
         tab("Още").performClick()
         waitFor("Познай Яворец")
         shown("Избери раздел вляво")
-        click("Настройки")
+        // „Настройки“ е под плочките — първо се превърта до него.
+        compose.onAllNodes(hasText("Настройки") and hasClickAction()).onFirst().performScrollTo().performClick()
         waitFor("Сезонни украси")
         onTab("Още")
         shown("Познай Яворец")
