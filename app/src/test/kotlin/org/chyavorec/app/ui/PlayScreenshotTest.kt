@@ -21,6 +21,8 @@ import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
@@ -315,7 +317,8 @@ class PlayScreenshotTest {
         )
         tab("Моето")
         waitFor("5 книги в списъка")
-        compose.onAllNodes(hasText("Искам да прочета")).onFirst().performClick()
+        // Плочката може да е под примерната карта (360×640) — първо се превърта до нея.
+        compose.onAllNodes(hasText("Искам да прочета") and hasClickAction()).onFirst().performScrollTo().performClick()
         waitFor("Анатомът")
         shown("Искам да прочета")
         shown("Белият детството")
