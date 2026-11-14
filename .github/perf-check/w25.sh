@@ -12,7 +12,7 @@
 #   mem33a/b   — памет: 30 цикъла, meminfo след trim + GC на всеки 5
 #   wd33/wd36x — уиджетите от „Настройки“ след тъмна тема (на приложението и на системата)
 #   fs33       — шрифт 2.0: викторина, лента на времето, настройки, вход
-W25_PARTS=" cf33 cf28 cf36x dev33 fr33a fr33b at33t at33h mem33a mem33b wd33 wd36x fs33 "
+W25_PARTS=" wdb33 wdb36x leaf33 at33m at33q fr28 fr36x cf33 cf28 cf36x dev33 fr33a fr33b at33t at33h mem33a mem33b wd33 wd36x fs33 "
 W20_PARTS="$W20_PARTS $W25_PARTS"
 W25=$H_/w25.py
 RX_QUESTION='Въпрос [0-9]+ от|Question [0-9]+ of'
@@ -332,6 +332,38 @@ part_dev() {
   use_pkg org.chyavorec.app
 }
 
+# „Нов лист“ (кръг 2): в кръг 1 първият бутон „Удължи срока“ беше на demo-2 (чака) — demo-1 („Под игото“) е последен
+part_leaf() {
+  local p i
+  helper_install
+  dev_install
+  anims 1
+  warmup
+  CFG=leaf33; DENS=$(dens); dims; : > $OUT/a11y-$CFG.txt; mark lf
+  sec "L1. Sign-in with the button"
+  dev_signin no || dev_signin no || { log "DEMO sign-in FAILED twice"; return; }
+  sec "L2. Loans: „Удължи срока“ on demo-1 „Под игото“ (the LAST renew button; debug branch: accepted at once, new due date) → „Нов лист“"
+  open_link_dev my/loans; sleep 3
+  for i in 1 2 3; do dump; has 'Под игото' && [ -n "$(xy text '=Удължи срока|=Renew' --last)" ] && break; sw_up 500; sleep 1.2; done
+  eshot lf/01-loans >/dev/null; cp $OUT/ui.xml $OUT/loans-before.xml
+  log "LOANS: renew buttons at: $(xy --all text '=Удължи срока|=Renew' | tr '\n' ';'); „Под игото“ at: $(xy text 'Под игото'); due texts: $(grep -oE 'text="(Връщане|Срок)[^"]*"' $OUT/ui.xml | tr '\n' ' ' | cut -c1-300)"
+  p=$(xy text '=Удължи срока|=Renew' --last)
+  if [ -n "$p" ]; then
+    REC_W=864 rec_cmd renew-leaf emu 6 a input tap $p
+    eshot lf/02-after-renew >/dev/null; dump; cp $OUT/ui.xml $OUT/loans-after-renew.xml
+    log "RENEW demo-1: leaf node $(has 'Нов срок:' && echo "PRESENT: $(grep -oE 'content-desc="Нов срок:[^"]*"' $OUT/ui.xml | head -1)" || echo absent); texts: $(texts 40 | grep -oE '(Заявено удължаване|Удължено|Срокът е удължен|чака библиотеката|Удължаването)[^"]*' | head -3 | tr '\n' '|')"
+    log "W25 log after the renew tap (confetti of the success):"; w25_since renew-leaf 12
+    [ -d $OUT/frames/renew-leaf ] && log "FRAMES renew-leaf: $(python3 $W25 motion $OUT/frames/renew-leaf 2>&1 | tail -1 | cut -c1-700)"
+    # връщане към екрана: листът не се обръща втори път
+    back 1.5; open_link_dev my/loans; sleep 3; eshot lf/03-reopened >/dev/null; dump
+    log "LOANS reopened: leaf node $(has 'Нов срок:' && echo present || echo absent); due texts: $(grep -oE '(text|content-desc)="(Връщане|Нов срок)[^"]*"' $OUT/ui.xml | tr '\n' ' ' | cut -c1-300)"
+  else log "RENEW: no 'Удължи срока' button: $(texts 30 | cut -c1-500)"; fi
+  back 1.5
+  log "LEAF part: $(since_fatal lf)"
+  all_sheets
+  use_pkg org.chyavorec.app
+}
+
 # ================================================================= 3. ВРЕМЕ ЗА КАДЪР (framestats)
 gest_init() {  # жестовете — един скрипт на устройството (без закъсненията на adb между тях)
   local x=$((W/2)) y1=$((H*75/100)) y2=$((H*25/100))
@@ -399,6 +431,7 @@ fr_rep() {
 }
 fr_setup() {  # $1… — изданията: инсталиране, първо пускане, speed-profile
   local K
+  [ "$SDK" -lt 33 ] && { helper_install; dev_locale bg-BG || true; }
   anims 1
   for K in "$@"; do x_install $K && x_compile; done
   x_use new; dims; gest_init
@@ -416,7 +449,7 @@ part_fr() {
     for K in $order; do fr_rep $K $K $r "" "home more timeline quiz"; done
   done
   sec "F3. Totals (rep 0 is excluded)"
-  python3 $W25 fsagg $OUT/frames.csv $OUT/frames.md | tee -a $SUM
+  python3 $W25 fsagg $OUT/frames.csv $OUT/frames.md base | tee -a $SUM
   x_use new
   log "FR part: FATAL lines $(grep -c 'FATAL EXCEPTION' $OUT/logcat-live.txt); host load: $(cut -d' ' -f1-3 /proc/loadavg)"
 }
@@ -434,8 +467,33 @@ at_round() {  # $1 — сценариите, $2 — повторения, $3… 
     done
   done
 }
+trace_tl() {  # $1 — етикет, $2 — издание, $3 — флагове: atrace (gfx, view) на едно превъртане на лентата
+  local pid
+  x_use $2; x_stop_all; sleep 1; launch_f "$3"; sleep 8; dismiss; ready >/dev/null
+  more_tile "$L_TIMELINE" || return 1
+  sleep 4; pid=$(pidof_app)
+  a atrace --async_start -b 32768 gfx view >/dev/null 2>&1; sleep 1
+  gest g-scroll; sleep 1
+  T=90 a atrace --async_stop > $OUT/trace-$1.txt 2>/dev/null
+  log "TRACE $1 ($2, flags '${3:-none}', pid $pid, $(wc -c < $OUT/trace-$1.txt) bytes):"
+  python3 $W25 atrace $OUT/trace-$1.txt $pid | cut -c1-200 | tee -a $SUM
+  rm -f $OUT/trace-$1.txt
+  leave; a am force-stop $PKG
+}
 part_at() {
-  if [ $PART = at33t ]; then
+  if [ $PART = at33m ]; then
+    sec "AM0. Timeline, round 2: which part of the medallion costs (hook build flags), with 1.2.38 and 1.2.37 as references"
+    fr_setup new base hook
+    at_round "timeline" 5 new:new: base:base: hk:hook: medal:hook:plainmedal noring:hook:noring solidring:hook:solidring flat:hook:flatmedal flatnoring:hook:flatmedal,noring
+    sec "AM8. atrace slice summary of one timeline scroll: 1.2.37, the hook build, the hook build with a plain medallion"
+    trace_tl base base ""; trace_tl hk hook ""; trace_tl medal hook plainmedal
+    AT_REF=base
+  elif [ $PART = at33q ]; then
+    sec "AQ0. Quiz, round 2: which part of the band costs (hook build flags), with 1.2.38 and 1.2.37 as references"
+    fr_setup new base hook
+    at_round "quiz" 5 new:new: base:base: hk:hook: noband:hook:noband nohem:hook:nohem solidhem:hook:solidhem nostitch:hook:nostitch layer:hook:bandlayer
+    AT_REF=base
+  elif [ $PART = at33t ]; then
     sec "AT0. Timeline and quiz: one suspect at a time (hook build flags), with 1.2.38 and 1.2.37 as references"
     fr_setup new base hook
     at_round "timeline" 5 new:new: base:base: hk:hook: scrub:hook:noscrub medal:hook:plainmedal thread:hook:solidthread card:hook:plaincard enter:hook:noenter all:hook:noscrub,plainmedal,nothread,plaincard,noenter
@@ -446,7 +504,7 @@ part_at() {
     at_round "home more" 5 new:new: base:base: hk:hook: plate:hook:plainplate icon:hook:noicon both:hook:plainplate,noicon
   fi
   sec "A9. Totals (rep 0 is excluded)"
-  python3 $W25 fsagg $OUT/frames.csv $OUT/frames.md | tee -a $SUM
+  python3 $W25 fsagg $OUT/frames.csv $OUT/frames.md ${AT_REF:-} | tee -a $SUM
   x_use new
   log "AT part: FATAL lines $(grep -c 'FATAL EXCEPTION' $OUT/logcat-live.txt); host load: $(cut -d' ' -f1-3 /proc/loadavg)"
 }
@@ -494,13 +552,26 @@ part_memx() {
 }
 
 # ================================================================= 5a. УИДЖЕТИТЕ СЛЕД ТЪМНА ТЕМА
+app_front() { launch >/dev/null; sleep 4; dismiss; ready >/dev/null; }
+wd_theme() {  # $1 — етикетът на темата: Настройки › Тема (приложението се пуска изрично — виж app_front)
+  local i p=""
+  app_front
+  open_settings || { log "THEME: settings not opened"; return 1; }
+  for i in 1 2 3; do dump; p=$(xy text '=Тема|=Theme'); [ -n "$p" ] && break; sw_down 300; sleep 1; done
+  [ -n "$p" ] || { log "THEME: row 'Тема' not found: $(texts 12 | cut -c1-240)"; debug_ui theme; return 1; }
+  a input tap $p; sleep 2; dump; shot widget/theme-dialog-$(echo "$1" | tr -dc 'a-zA-Z' | cut -c1-8) >/dev/null
+  p=$(xy text "$1" --last); [ -n "$p" ] || { log "THEME: option '$1' not found: $(texts 14 | cut -c1-240)"; back 1.5; return 1; }
+  a input tap $p; sleep 2.5; dump
+  log "THEME → $1: Settings now shows: $(grep -oE 'text="(Тъмна|Светла|Както системата|Dark|Light)[^"]*"' $OUT/ui.xml | head -3 | tr '\n' ' '); app night mode: $(a dumpsys activity activities 2>/dev/null | tr -d '\r' | grep -m1 -oE 'mCurrentConfig=.*' | grep -oE '(not)?night' | head -1)"
+  shot widget/theme-set-$(echo "$1" | tr -dc 'a-zA-Z' | cut -c1-8) >/dev/null
+}
 wd_state() {  # $1 — етикет
   go_home 3; shot widget/$1 >/dev/null
   log "WIDGET $1: $(wstate | cut -c1-420)"
   log "WIDGET $1: bound ids [$(wcount $1 >/dev/null; wids)]; providers: $(grep -oE 'ComponentInfo\{org\.chyavorec[^}]*' $OUT/appwidget-$1.txt | sort | uniq -c | tr -s ' ' | tr '\n' ' ' | cut -c1-260)"
 }
 part_wd() {
-  local t t0
+  local t t0 p
   helper_install
   [ "$SDK" -lt 33 ] && { dev_locale bg-BG || true; }
   anims 1
@@ -512,9 +583,10 @@ part_wd() {
   sec "WD1. Both widgets pinned from Settings › Уиджети (the launcher's pin dialog)"
   pin_from_settings 'Добави уиджета|Add the .* widget|Add the widget' main; wd_state 10-main
   pin_from_settings 'Добави „Книга на деня“|Книга на деня|Book of the day' book; wd_state 20-both
-  ready >/dev/null; tab catalog >/dev/null; waitfor "$RX_RESULTS" 100 >/dev/null; wd_state 21-after-catalog
+  app_front; tab catalog >/dev/null; waitfor "$RX_RESULTS" 100 >/dev/null; wd_state 21-after-catalog
+  sleep 20; wd_state 22-still-light-20s
   sec "WD2. App theme → „Тъмна“ (Settings › Тема), system still light: 5 s, 40 s"
-  app_theme '=Тъмна|=Dark'; sleep 3; wd_state 30-app-dark-5s; sleep 33; wd_state 31-app-dark-40s
+  wd_theme '=Тъмна|=Dark'; sleep 3; wd_state 30-app-dark-5s; sleep 33; wd_state 31-app-dark-40s
   sec "WD3. System dark mode on as well: 10 s, 40 s, 90 s"
   a cmd uimode night yes; t0=$(now_ms)
   for t in 10 40 90; do while [ $(( $(now_ms) - t0 )) -lt $((t * 1000)) ]; do sleep 0.5; done; wd_state 40-sys-dark-${t}s; done
@@ -522,7 +594,9 @@ part_wd() {
   sec "WD4. Launcher restarted in dark (force-stop of the launcher), then system light and app theme „Както системата“"
   a am force-stop $(launcher | cut -d/ -f1) >/dev/null 2>&1; sleep 2; wd_state 50-launcher-restarted
   a cmd uimode night no; sleep 12; wd_state 60-sys-light
-  app_theme '=Както системата|=Same as the system|=System'; sleep 3; wd_state 61-app-system
+  wd_theme '=Както системата|=Same as the system|=System'; sleep 3; wd_state 61-app-system
+  sec "WD5. Does a widget tap still open the app (if the widgets are there)"
+  go_home 3; dump; p=$(xy resource-id "$PKG:id/widget_catalog"); [ -n "$p" ] && { a input tap $p; sleep 4; dump; log "widget 'Каталог' tap → fg $(fg); $(texts 6 | cut -c1-160)"; go_home 2; }
   a dumpsys appwidget 2>/dev/null | tr -d '\r' | grep -E 'provider=.*org\.chyavorec|^ *\[[0-9]+\] id=|host=' | head -12 | cut -c1-200 | tee -a $SUM
   log "WD part: $(since_fatal wd)"
   all_sheets
@@ -590,10 +664,11 @@ part_w25() {
   case $PART in
     cf33|cf28|cf36x) part_cf;;
     dev33) part_dev;;
-    fr33a|fr33b) part_fr;;
-    at33t|at33h) part_at;;
+    leaf33) part_leaf;;
+    fr33a|fr33b|fr28|fr36x) part_fr;;
+    at33t|at33h|at33m|at33q) part_at;;
     mem33a|mem33b) part_memx;;
-    wd33|wd36x) part_wd;;
+    wd33|wd36x|wdb33|wdb36x) part_wd;;
     fs33) part_fs;;
   esac
   return 0

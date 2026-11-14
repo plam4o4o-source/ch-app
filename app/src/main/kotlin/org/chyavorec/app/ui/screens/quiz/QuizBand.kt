@@ -18,6 +18,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PointMode
 import androidx.compose.ui.graphics.StrokeCap
@@ -175,8 +177,10 @@ internal fun QuizBandCanvas(
 ) {
     val n = total.coerceAtLeast(1)
     val (segments, closing) = remember(n) { QuizBandCharts.of(n) }
+    // ВРЕМЕННО (кръг 2): „bandlayer“ — лентата в собствен слой (растеризира се само когато се промени).
+    val layered = if (W25.on("bandlayer")) modifier.graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen } else modifier
     Spacer(
-        modifier.clearAndSetSemantics { }.drawWithCache {
+        layered.clearAndSetSemantics { }.drawWithCache {
             val cell = minOf(size.width / QuizBandCharts.columns(n), size.height / QuizBandCharts.ROWS)
             val ox = (size.width - cell * QuizBandCharts.columns(n)) / 2f
             val oy = (size.height - cell * QuizBandCharts.ROWS) / 2f
@@ -190,15 +194,19 @@ internal fun QuizBandCanvas(
             onDrawBehind {
                 drawRoundRect(colors.cloth, Offset(ox, clothTop), clothSize, CornerRadius(cell * 0.6f))
                 // Подгъвите на плата — тичащ бод.
-                for (y in floatArrayOf(oy + cell * 0.95f, oy + cell * (QuizBandCharts.ROWS - 0.95f))) {
-                    drawLine(colors.hem, Offset(ox + cell * 0.6f, y), Offset(ox + clothSize.width - cell * 0.6f, y), strokeWidth = hem.width, cap = StrokeCap.Round, pathEffect = hem.pathEffect)
+                // ВРЕМЕННО (debug/w25-check, кръг 2): „nohem“ — без подгъвите; „solidhem“ — плътни линии вместо бод.
+                if (!W25.on("nohem")) {
+                    for (y in floatArrayOf(oy + cell * 0.95f, oy + cell * (QuizBandCharts.ROWS - 0.95f))) {
+                        drawLine(colors.hem, Offset(ox + cell * 0.6f, y), Offset(ox + clothSize.width - cell * 0.6f, y), strokeWidth = hem.width, cap = StrokeCap.Round, pathEffect = if (W25.on("solidhem")) null else hem.pathEffect)
+                    }
                 }
                 val anim = stitchingIndex()
                 for (i in 0 until n) {
                     val left = ox + i * QuizBandCharts.PERIOD * cell
                     val answer = results.getOrNull(i)
                     when {
-                        answer == true -> stitchesIn(segments[i], left, oy + cell, cell, if (i == anim) stitchProgress() else 1f, colors)
+                        // ВРЕМЕННО (кръг 2): „nostitch“ — без избродираните мотиви.
+                        answer == true -> if (!W25.on("nostitch")) stitchesIn(segments[i], left, oy + cell, cell, if (i == anim) stitchProgress() else 1f, colors)
                         answer == false -> {
                             drawPoints(holes[i], PointMode.Points, colors.holes, strokeWidth = cell * 0.24f, cap = StrokeCap.Round)
                             drawPath(threads[i], colors.gold, alpha = 0.9f, style = threadStroke)

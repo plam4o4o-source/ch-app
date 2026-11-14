@@ -312,11 +312,16 @@ private fun Modifier.rosettePlate(): Modifier {
                 val bod = StitchSpec.Running.stroke(density)
                 onDrawBehind {
                     // ВРЕМЕННО (debug/w25-check): „plainmedal“ — обикновен кръг вместо осморъка с пръстен от бод.
+                    // Кръг 2: „flatmedal“ — формата без градиент; „noring“ — без пръстена; „solidring“ — плътен пръстен (без бод).
                     if (W25.on("plainmedal")) {
                         drawCircle(container, radius = r * 0.9f)
                     } else {
-                        drawPath(outer, fill)
-                        drawCircle(ring, radius = r * 0.74f, style = bod)
+                        if (W25.on("flatmedal")) drawPath(outer, container) else drawPath(outer, fill)
+                        if (W25.on("solidring")) {
+                            drawCircle(ring, radius = r * 0.74f, style = androidx.compose.ui.graphics.drawscope.Stroke(bod.width))
+                        } else if (!W25.on("noring")) {
+                            drawCircle(ring, radius = r * 0.74f, style = bod)
+                        }
                     }
                 }
             }

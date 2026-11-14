@@ -153,6 +153,8 @@ def load_csv(csv):
         if len(v) != len(head):
             continue
         d = dict(zip(head, v))
+        if d.get('rep') == '0':
+            continue
         try:
             data[(d['scen'], d['ver'])][d['rep']].append({k: float(d[k]) for k in PARTS})
         except ValueError:
@@ -160,10 +162,12 @@ def load_csv(csv):
     return data
 
 
-def cmd_fsagg(csv, md=None):
+def cmd_fsagg(csv, md=None, ref=None):
     data = load_csv(csv)
     scens = sorted({s for s, _ in data})
     vers = sorted({v for _, v in data})
+    if ref and ref in vers:  # the reference version first
+        vers = [ref] + [v for v in vers if v != ref]
     out = []
     out.append("| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |")
     out.append("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
@@ -181,6 +185,41 @@ def cmd_fsagg(csv, md=None):
             g = lambda xs: statistics.median(xs) if xs else float('nan')
             out.append(f"| {s} | {v} | {len(keys)} | {g([len(reps[r]) for r in keys]):.0f} | **{g(m['total']):.1f}** ({min(m['total']):.1f}..{max(m['total']):.1f}) | {g(p90):.0f} | {g(p99):.0f} | "
                        f"{g(m['ui']):.1f} | {g(m['rt']):.1f} | {g(m['layout']):.1f} | {g(m['draw']):.1f} | {g(m['sync']):.1f} | {g(m['issue']):.1f} | {g(m['swap']):.1f} |")
+    out.append("")
+    out.append("RenderThread work per repetition (the same scripted gestures): sum of rt over the frames, ms; frames; median rt per frame:")
+    out.append("")
+    out.append("| scenario | version | sum of RT ms, median (min..max) | frames, median (min..max) | median RT per frame (min..max) | sum of swap ms, median | sum of issue ms, median |")
+    out.append("|---|---|---|---|---|---|---|")
+    sums = {}
+    for s in scens:
+        for v in vers:
+            reps = data.get((s, v))
+            if not reps:
+                continue
+            keys = sorted(reps, key=lambda r: int(re.sub(r'\D', '', r) or 0))
+            fin = lambda xs: [x for x in xs if x == x]
+            srt = [sum(fin([f['rt'] for f in reps[r]])) for r in keys]
+            ssw = [sum(fin([f['swap'] for f in reps[r]])) for r in keys]
+            sis = [sum(fin([f['issue'] for f in reps[r]])) for r in keys]
+            nfr = [len(reps[r]) for r in keys]
+            mrt = [pct([f['rt'] for f in reps[r]], 50) for r in keys]
+            sums[(s, v)] = (srt, mrt)
+            mdn = statistics.median
+            out.append(f"| {s} | {v} | **{mdn(srt):.0f}** ({min(srt):.0f}..{max(srt):.0f}) | {mdn(nfr):.0f} ({min(nfr)}..{max(nfr)}) | **{mdn(mrt):.1f}** ({min(mrt):.1f}..{max(mrt):.1f}) | {mdn(ssw):.0f} | {mdn(sis):.0f} |")
+    out.append("")
+    for s in scens:
+        ref = None
+        for v in vers:
+            if (s, v) not in sums:
+                continue
+            if ref is None:
+                ref = v
+                continue
+            for name, i in (('sum of RT', 0), ('median RT per frame', 1)):
+                a, b = sums[(s, v)][i], sums[(s, ref)][i]
+                u, p = mwu_exact(a, b)
+                sep = 'ranges do NOT overlap' if (min(a) > max(b) or max(a) < min(b)) else 'ranges overlap'
+                out.append(f"- {s} / {v} vs {ref}, {name}: {statistics.median(a):.1f} vs {statistics.median(b):.1f} ({(statistics.median(a) / statistics.median(b) - 1) * 100:+.0f}%); U={u:.1f}, p={p:.3f}; {sep}")
     out.append("")
     out.append("Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:")
     out.append("")
@@ -207,6 +246,53 @@ def cmd_fsagg(csv, md=None):
     print(text)
     if md:
         open(md, 'w', encoding='utf-8').write(text + '\n')
+
+
+# ---------------------------------------------------------------- atrace (text ftrace)
+def cmd_atrace(path, pid):
+    """Slices (B|pid|name ... E) of one process from a text atrace: per thread and name - count, total and mean ms."""
+    rx = re.compile(r'^\s*(.+?)-(\d+)\s+\(\s*([\d-]+)\)\s+\[\d+\]\s+\S+\s+([\d.]+): tracing_mark_write: ([BE])\|(\d+)\|?(.*)$')
+    stacks = defaultdict(list)
+    agg = defaultdict(lambda: [0, 0.0, 0.0])  # (thread, name) -> count, total, self
+    names = {}
+    t_first = t_last = None
+    try:
+        f = open(path, encoding='utf-8', errors='replace')
+    except OSError:
+        print('atrace: no file')
+        return
+    for l in f:
+        m = rx.match(l)
+        if not m:
+            continue
+        comm, tid, tgid, ts, kind, p, name = m.groups()
+        if p != str(pid):
+            continue
+        ts = float(ts) * 1000.0
+        t_first = ts if t_first is None else t_first
+        t_last = ts
+        thread = re.sub(r'[-\d ]+$', '', comm.strip()) or comm.strip()
+        names[tid] = thread
+        st = stacks[tid]
+        if kind == 'B':
+            st.append([name.strip(), ts, 0.0])
+        elif st:
+            nm, t0, child = st.pop()
+            d = ts - t0
+            nm = re.sub(r'\d{4,}', '#', nm)[:60]
+            a = agg[(thread, nm)]
+            a[0] += 1; a[1] += d; a[2] += d - child
+            if st:
+                st[-1][2] += d
+    if not agg:
+        print(f"atrace: no slices of pid {pid}")
+        return
+    print(f"atrace window {((t_last or 0) - (t_first or 0)) / 1000:.1f} s; slices of pid {pid} by total time (thread | slice | count | total ms | self ms | mean ms):")
+    for thread in ('RenderThread', None):
+        rows = [(k, v) for k, v in agg.items() if (k[0] == thread if thread else k[0] != 'RenderThread')]
+        rows.sort(key=lambda kv: -kv[1][1])
+        for (th, nm), (c, tot, self_) in rows[:14 if thread else 10]:
+            print(f"  {th:<14} | {nm:<44} | {c:>5} | {tot:>9.0f} | {self_:>9.0f} | {tot / c:>7.1f}")
 
 
 # ---------------------------------------------------------------- meminfo
@@ -484,5 +570,5 @@ def cmd_clipped(path, W, H):
 
 if __name__ == '__main__':
     c, *a = sys.argv[1:]
-    {'fs': cmd_fs, 'fsagg': cmd_fsagg, 'mem': cmd_mem, 'memagg': cmd_memagg, 'confetti': cmd_confetti, 'panes': cmd_panes,
+    {'fs': cmd_fs, 'fsagg': cmd_fsagg, 'atrace': cmd_atrace, 'mem': cmd_mem, 'memagg': cmd_memagg, 'confetti': cmd_confetti, 'panes': cmd_panes,
      'loginbtn': cmd_loginbtn, 'motion': cmd_motion, 'w25log': cmd_w25log, 'slidedesc': cmd_slidedesc, 'clipped': cmd_clipped}[c](*a)
