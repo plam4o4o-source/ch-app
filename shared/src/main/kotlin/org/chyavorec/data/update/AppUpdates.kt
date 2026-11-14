@@ -6,6 +6,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -40,9 +41,32 @@ data class UpdateInfo(
     val paused: Boolean = false,
     /** „Какво ново“ на английски (`notes_en`); празно — само българският текст. */
     val notesEn: String = "",
+    /** Профилът за бърз старт като dex metadata (`dm`) — по един за всеки формат на ART; по желание. */
+    val dexMetadata: List<DexMetadata> = emptyList(),
 ) {
     /** Бележките на езика на интерфейса; без английски текст — българският. */
     fun notesFor(english: Boolean): String = if (english && notesEn.isNotBlank()) notesEn else notes
+
+    /** .dm файлът за този Android (първият, чиито граници го включват); под Android 9 — никой. */
+    fun dexMetadataFor(sdkInt: Int): DexMetadata? =
+        if (sdkInt < DexMetadata.MIN_SDK) null else dexMetadata.firstOrNull { it.matches(sdkInt) }
+}
+
+/**
+ * Dex metadata (`.dm`) към APK-а на версията: профилът за бърз старт във формата на ART за
+ * Android [minSdk]..[maxSdk] (`null` — и всички по-нови). Инсталира се заедно с APK-а и тогава
+ * приложението е компилирано още при обновяването. Само подобрение: без него (или при грешка)
+ * обновяването е същото.
+ */
+data class DexMetadata(val minSdk: Int, val maxSdk: Int?, val url: String, val sha256: String, val sizeBytes: Long?) {
+    fun matches(sdkInt: Int): Boolean = sdkInt >= minSdk && (maxSdk == null || sdkInt <= maxSdk)
+
+    companion object {
+        /** Инсталиране на .dm през PackageInstaller — Android 9+. */
+        const val MIN_SDK = 28
+        /** Профилите са стотици KB; по-голям файл не е наш. */
+        const val MAX_BYTES = 16L * 1024 * 1024
+    }
 }
 
 object UpdateManifestParser {
@@ -80,8 +104,35 @@ object UpdateManifestParser {
                 releaseUrl = str("releaseUrl")?.takeIf { it.startsWith("https://") },
                 paused = flag(o["paused"]),
                 notesEn = str("notes_en").orEmpty(),
+                dexMetadata = dexMetadata(o["dm"], manifestUrl),
             ),
         )
+    }
+
+    /**
+     * Списъкът `dm` — по желание: липсващ, повреден или с непознат вид — празен (старите
+     * update.json и старите версии на приложението не го познават). Запис без валидни граници,
+     * HTTPS адрес от същия хост или сума се пропуска; останалите остават.
+     */
+    private fun dexMetadata(e: JsonElement?, manifestUrl: String): List<DexMetadata> {
+        val entries = runCatching { e?.jsonArray }.getOrNull() ?: return emptyList()
+        return entries.mapNotNull { item ->
+            runCatching {
+                val o = item.jsonObject
+                fun str(key: String): String? = o[key]?.jsonPrimitive?.takeIf { it.isString }?.content?.trim()?.takeIf { it.isNotEmpty() }
+                val min = o["minSdk"]?.jsonPrimitive?.intOrNull ?: return@runCatching null
+                val max = o["maxSdk"]?.jsonPrimitive?.intOrNull
+                val url = str("url") ?: return@runCatching null
+                val sha = str("sha256")?.lowercase() ?: return@runCatching null
+                val size = o["size"]?.jsonPrimitive?.longOrNull
+                when {
+                    min < DexMetadata.MIN_SDK || (max != null && max < min) -> null
+                    !SHA256.matches(sha) || !trustedApkUrl(url, manifestUrl) -> null
+                    size != null && (size <= 0 || size > DexMetadata.MAX_BYTES) -> null
+                    else -> DexMetadata(min, max, url, sha, size)
+                }
+            }.getOrNull()
+        }
     }
 
     /** `true`, `"true"` или `1` → да; липсващо, `null` или каквото и да е друго → не. */

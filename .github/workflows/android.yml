@@ -374,12 +374,31 @@ jobs:
             echo "::error::Unused USE_FINGERPRINT permission in the GitHub APK"; exit 1
           fi
 
+      # Размерът на APK-а и разликата спрямо последното издание (полето „size“ от update.json —
+      # без теглене на APK-а) — в лога и в обобщението. Само за сведение: не спира build-а; над
+      # +150 KB — предупреждение. Подписът тук е временен — разликата от него е няколко байта.
+      - name: APK size vs latest release
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/scripts/apk-size.sh app/build/outputs/apk/prod/release/app-prod-release.apk
+
+      # Dex metadata (.dm) за самообновяването — същият скрипт като в release.yml (там .dm-ите
+      # отиват в изданието и в update.json). Тук само проверка, че profgen ги прави (съдържание
+      # и размер — в лога и в обобщението); никога не спира build-а.
+      - name: Dex metadata (.dm) dry run
+        if: always()
+        continue-on-error: true
+        run: bash .github/scripts/dex-metadata.sh app/build/outputs/apk/prod/release/app-prod-release.apk dm-dist app-prod-release
+
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-${{ env.SIGNING_KIND }}
           path: |
             app/build/outputs/bundle/prodPlay/*.aab
             app/build/outputs/apk/prod/release/*.apk
+            dm-dist/
             app/build/outputs/mapping/prodRelease/mapping.txt
             app/build/outputs/mapping/prodPlay/mapping.txt
 

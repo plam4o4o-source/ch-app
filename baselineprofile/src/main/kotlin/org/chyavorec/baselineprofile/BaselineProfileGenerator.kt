@@ -56,6 +56,10 @@ class BaselineProfileGenerator {
         optional("my") { myGuestJourney() }
         optional("more") { moreJourney() }
         optional("gallery") { galleryJourney() }
+        optional("newspaper") { newspaperJourney() }
+        optional("timeline") { timelineJourney() }
+        optional("quiz") { quizJourney() }
+        optional("embroidery") { embroideryJourney() }
         optional("card") { cardJourney() }
         optional("surprise") { surpriseJourney() }
         optional("share") { shareJourney() }

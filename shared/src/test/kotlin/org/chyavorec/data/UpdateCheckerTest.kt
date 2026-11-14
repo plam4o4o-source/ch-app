@@ -104,6 +104,57 @@ class UpdateCheckerTest {
         assertTrue(UpdateChecker.isNewer(info.copy(paused = false), installedVersionCode = 4, sdkInt = 34))
     }
 
+    private val dmBase = "https://github.com/plam4o4o-source/ch-app/releases/download/v1.1.0/app"
+
+    private fun dmInfo(dm: String) = (UpdateManifestParser.parse(manifest(extra = """, "dm": $dm"""), manifestUrl) as Outcome.Success).value
+
+    @Test fun dexMetadataParsedAndSelectedBySdk() {
+        val info = dmInfo(
+            """[{"minSdk": 28, "maxSdk": 30, "url": "$dmBase.v0_1_0_p.dm", "sha256": "${"b".repeat(64)}", "size": 2048},
+                {"minSdk": 31, "maxSdk": null, "url": "$dmBase.v0_1_5_s.dm", "sha256": "${"C".repeat(64)}", "size": 4096, "format": "v0_1_5_s"}]""",
+        )
+        assertEquals(2, info.dexMetadata.size)
+        // Под Android 9 — никой (PackageInstaller не приема .dm).
+        assertNull(info.dexMetadataFor(26))
+        assertNull(info.dexMetadataFor(27))
+        assertEquals("$dmBase.v0_1_0_p.dm", info.dexMetadataFor(28)?.url)
+        assertEquals("$dmBase.v0_1_0_p.dm", info.dexMetadataFor(30)?.url)
+        assertEquals("$dmBase.v0_1_5_s.dm", info.dexMetadataFor(31)?.url)
+        // Без горна граница — и бъдещите версии.
+        assertEquals("$dmBase.v0_1_5_s.dm", info.dexMetadataFor(40)?.url)
+        assertEquals("c".repeat(64), info.dexMetadataFor(36)?.sha256)
+        assertEquals(2048L, info.dexMetadataFor(29)?.sizeBytes)
+    }
+
+    @Test fun dexMetadataIsOptionalAndNeverBreaksTheManifest() {
+        // Липсва (всички досегашни update.json), не е списък или е повреден — обновяването е същото, без .dm.
+        assertTrue(dmInfo("[]").dexMetadata.isEmpty())
+        assertTrue((UpdateManifestParser.parse(manifest(), manifestUrl) as Outcome.Success).value.dexMetadata.isEmpty())
+        assertTrue(dmInfo("null").dexMetadata.isEmpty())
+        assertTrue(dmInfo("\"x\"").dexMetadata.isEmpty())
+        assertTrue(dmInfo("""{"minSdk": 28}""").dexMetadata.isEmpty())
+        assertTrue(dmInfo("[1, \"a\", null, []]").dexMetadata.isEmpty())
+        val good = """{"minSdk": 31, "url": "$dmBase.s.dm", "sha256": "${"d".repeat(64)}"}"""
+        // Лошите записи се пропускат, добрите остават.
+        val info = dmInfo(
+            """[
+                {"minSdk": 28, "maxSdk": 30, "url": "https://evil.example/x.dm", "sha256": "${"a".repeat(64)}"},
+                {"minSdk": 28, "maxSdk": 30, "url": "http://github.com/x.dm", "sha256": "${"a".repeat(64)}"},
+                {"minSdk": 28, "maxSdk": 30, "url": "$dmBase.p.dm", "sha256": "xyz"},
+                {"minSdk": 26, "maxSdk": 27, "url": "$dmBase.o.dm", "sha256": "${"a".repeat(64)}"},
+                {"minSdk": 30, "maxSdk": 28, "url": "$dmBase.p.dm", "sha256": "${"a".repeat(64)}"},
+                {"minSdk": 28, "maxSdk": 30, "url": "$dmBase.p.dm", "sha256": "${"a".repeat(64)}", "size": 999999999},
+                {"maxSdk": 30, "url": "$dmBase.p.dm", "sha256": "${"a".repeat(64)}"},
+                {"minSdk": 28, "maxSdk": 30, "url": 5, "sha256": "${"a".repeat(64)}"},
+                $good
+            ]""",
+        )
+        assertEquals(listOf("$dmBase.s.dm"), info.dexMetadata.map { it.url })
+        assertNull(info.dexMetadataFor(30))
+        assertNull(info.dexMetadataFor(31)?.sizeBytes)
+        assertEquals(5, info.versionCode)
+    }
+
     @Test fun checksum() {
         assertEquals(
             "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
