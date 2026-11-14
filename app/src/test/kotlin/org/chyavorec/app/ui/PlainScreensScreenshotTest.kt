@@ -31,6 +31,7 @@ import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
@@ -182,6 +183,8 @@ class PlainScreensScreenshotTest {
     /** До края на най-горния превъртащ се списък (тихият знак в края е без семантика). */
     private fun scrollToEnd() {
         compose.waitForIdle()
+        // Без списък (напр. празен екран) — няма какво да се превърта.
+        if (compose.onAllNodes(hasScrollAction()).fetchSemanticsNodes().isEmpty()) return
         repeat(8) { compose.onAllNodes(hasScrollAction()).onLast().performTouchInput { swipeUp() } }
         compose.waitForIdle()
     }
@@ -372,9 +375,10 @@ class PlainScreensScreenshotTest {
 
     @Test fun searchPagesFont13() {
         search(fontScale = 1.3f)
-        // Обхватът „Страници“ — откъсите от сайта.
-        compose.onAllNodes(hasText("Страници") and hasClickAction()).onFirst().performClick()
-        compose.waitForIdle()
+        // При шрифт 1.3 чипът „Страници“ е извън лентата — превърта се до групата в „Всички“.
+        compose.waitUntil(10_000) {
+            runCatching { compose.onAllNodes(hasScrollAction()).onLast().performScrollToNode(hasText("СТРАНИЦИ")) }.isSuccess
+        }
         shot("w23p-31-search-pages-font13")
     }
 
