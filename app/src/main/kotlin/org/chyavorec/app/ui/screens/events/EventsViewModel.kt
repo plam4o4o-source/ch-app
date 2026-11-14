@@ -3,6 +3,7 @@ package org.chyavorec.app.ui.screens.events
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -103,6 +104,23 @@ class EventDetailViewModel(
 
     /** null — няма резултат; true/false — напомнянето е включено/изключено. */
     val reminderResult = MutableStateFlow<Boolean?>(null)
+
+    /** „Добави в календара“ отвори календара; при връщането отрязъкът на листа се откъсва. */
+    private var calendarOpened = false
+    private val _torn = MutableStateFlow(false)
+    /** Събитието е добавено в календара в този екран — отрязъкът е откъснат (веднъж, без повторение). */
+    val torn: StateFlow<Boolean> = _torn.asStateFlow()
+
+    fun calendarOpened() {
+        calendarOpened = true
+    }
+
+    /** Екранът е отново отпред: ако календарът е бил отворен — отрязъкът се откъсва. */
+    fun resumed() {
+        if (!calendarOpened) return
+        calendarOpened = false
+        _torn.value = true
+    }
 
     init { load() }
 

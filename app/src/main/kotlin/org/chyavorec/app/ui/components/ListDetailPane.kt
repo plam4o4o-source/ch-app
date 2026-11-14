@@ -43,7 +43,9 @@ fun isTwoPaneWindow(): Boolean = windowWidth() >= 840.dp && windowHeight() >= 48
  * на списъка в навигацията, затова се пази при завъртане, смяна на раздела и след спиране на
  * процеса. „Назад“ първо затваря детайла, после списъка. На тесен прозорец (завъртане,
  * разделен екран) избраният детайл продължава на цял екран над списъка ([navigate]).
- * TalkBack чете първо списъка, после детайла.
+ * TalkBack чете първо списъка, после детайла. С [placeholder] дясната част е винаги там (на
+ * широк прозорец) и без избран детайл показва него — за разделите-хъбове, чиито плочки иначе
+ * биха се разтеглили по целия таблет.
  */
 @Composable
 fun ListDetailPane(
@@ -51,6 +53,7 @@ fun ListDetailPane(
     navigate: (String) -> Unit,
     detail: @Composable (route: String, close: () -> Unit) -> Unit,
     twoPane: Boolean = isTwoPaneWindow(),
+    placeholder: (@Composable () -> Unit)? = null,
     list: @Composable () -> Unit,
 ) {
     val selectedFlow = remember(state) { state.getStateFlow<String?>(DETAIL_KEY, null) }
@@ -83,6 +86,10 @@ fun ListDetailPane(
     // Списъкът е винаги първото дете — при избор не губи превъртането и състоянието си.
     Row(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f).fillMaxHeight().semantics { isTraversalGroup = true; traversalIndex = 0f }) { list() }
+        if (shown == null && twoPane && placeholder != null) {
+            VerticalDivider()
+            Box(Modifier.weight(1.4f).fillMaxHeight().semantics { isTraversalGroup = true; traversalIndex = 1f }) { placeholder() }
+        }
         if (shown != null) {
             VerticalDivider()
             Box(

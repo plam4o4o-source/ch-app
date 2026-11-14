@@ -279,7 +279,7 @@ private fun Tile(item: TileItem, motif: FolkMotif, wide: Boolean, columns: Int, 
         border = cardBorder(),
         interactionSource = interaction,
         modifier = modifier.darkTopHighlight(shape).nightCloth(shape)
-            .stitchedCorner(LocalExtendedColors.current.gold) { tighten.value },
+            .stitchedCorner(rememberSeasonalThread()) { tighten.value },
     ) {
         // При едър шрифт (1.3×) текстът се пренася на още ред, вместо да се реже —
         // редът от плочки е с височината на най-високата.

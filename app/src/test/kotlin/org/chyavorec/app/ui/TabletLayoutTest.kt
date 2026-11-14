@@ -222,7 +222,7 @@ class TabletLayoutTest {
         onTab("Начало")
     }
 
-    /** „Още“ на таблет: плочките в 4 колони, двете групи; сама плочка в последния ред — на целия ред. */
+    /** „Още“ на таблет: плочките вляво (двете групи), отдясно — подсказка, докато няма избран раздел. */
     @Test fun moreTilesOnTablet() {
         launch()
         tab("Още").performClick()
@@ -350,5 +350,40 @@ class TabletLayoutTest {
         onTab("Каталог")
         press(KeyEvent.KEYCODE_ESCAPE)
         onTab("Начало")
+    }
+
+    /** „Още“ на таблет: разделът се отваря отдясно на плочките; „Назад“ първо го затваря. */
+    @Test fun moreSectionOpensBesideTheTiles() {
+        launch()
+        tab("Още").performClick()
+        waitFor("Познай Яворец")
+        shown("Избери раздел вляво")
+        click("Настройки")
+        waitFor("Сезонни украси")
+        onTab("Още")
+        shown("Познай Яворец")
+        gone("Избери раздел вляво")
+        shot("w23-tablet-more-settings")
+        back()
+        gone("Сезонни украси")
+        onTab("Още")
+        shown("Избери раздел вляво")
+    }
+
+    /** „Моето“ на таблет: същото — „Известия“ отдясно на плочките. */
+    @Test fun mySectionOpensBesideTheTiles() {
+        launch()
+        tab("Моето").performClick()
+        waitFor("Известия")
+        shown("Избери раздел вляво")
+        shot("w23-tablet-my-placeholder")
+        click("Известия")
+        waitFor("Съобщения, изпратени от читалището")
+        onTab("Моето")
+        gone("Избери раздел вляво")
+        shot("w23-tablet-my-notifications")
+        back()
+        onTab("Моето")
+        shown("Избери раздел вляво")
     }
 }

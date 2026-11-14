@@ -1,6 +1,17 @@
 package org.chyavorec.app.ui.screens.events
 
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.StitchSpec
 import android.content.res.Resources
 import androidx.compose.foundation.Canvas
@@ -107,8 +118,8 @@ internal fun leafMotif(category: String?, date: LocalDate?): ShevitsaMotif {
     }
 }
 
-/** Хартията на листа в светла тема — топла слонова кост (в тъмна — повърхността на темата). */
-private val LeafPaper = Color(0xFFFFFCF4)
+/** Хартията на листа в светла тема — топла слонова кост (в тъмна — повърхността на темата). Общ и с „Нов лист“ при удължаване. */
+internal val LeafPaper = Color(0xFFFFFCF4)
 
 /** Радиусът на ъглите и на прорезите на перфорацията. */
 private val LeafCorner = 18.dp
@@ -118,7 +129,7 @@ private val LeafNotch = 9.dp
  * Едната половина на листа: горната (заглавка и ден) е със заоблени горни и „прегризани“ долни
  * ъгли, долната (отрязъкът) — обратно; заедно са един лист, скъсан по перфорацията.
  */
-private class LeafHalfShape(private val top: Boolean, private val corner: Dp, private val notch: Dp) : Shape {
+internal class LeafHalfShape(private val top: Boolean, private val corner: Dp, private val notch: Dp) : Shape {
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
         val w = size.width
         val h = size.height
@@ -155,9 +166,10 @@ private class LeafHalfShape(private val top: Boolean, private val corner: Dp, pr
  * огромна цифра на деня (Cormorant), денят от седмицата, празникът за деня, перфорация и отрязък
  * с „след 19 дни“ и часа (ако има). [sharedBoundsKey] „event-date-<id>“ свързва листа със значката
  * на датата в списъка — тя „прелита“ и израства в него (без движение при намалено движение).
+ * [torn] — събитието е добавено в календара: отрязъкът се „откъсва“ (виж [TornStub]).
  */
 @Composable
-internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier: Modifier = Modifier) {
+internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier: Modifier = Modifier, torn: Boolean = false) {
     val context = LocalContext.current
     val resources = LocalResources.current
     val dark = LocalExtendedColors.current.isDark
@@ -175,8 +187,9 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
     val countdown = EventCountdown.label(resources, EventCountdown.days(date, today))
     val clock = eventClock(event.time)
     val motif = leafMotif(event.category, date)
+    val added = if (torn) resources.getString(R.string.event_added_calendar) else null
     val description = listOfNotNull(
-        weekday.replaceFirstChar { it.uppercase() }, Formatters.date(context, date), feast, countdown, clock,
+        weekday.replaceFirstChar { it.uppercase() }, Formatters.date(context, date), feast, countdown, clock, added,
     ).joinToString(", ")
     // Цифрата е огромна, но не расте с шрифта над 1.3× (иначе не се събира); текстът до нея — расте.
     val fontScale = LocalDensity.current.fontScale
@@ -244,8 +257,18 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
             }
         }
         // Отрязъкът: перфорацията е горният му ръб, а прорезите — в ъглите на двете половини.
+        val tear = rememberStubTear(torn)
+        val reduced = rememberReducedMotion()
         Row(
-            Modifier.fillMaxWidth().shadow(4.dp, stubShape).background(paper)
+            Modifier.fillMaxWidth()
+                .graphicsLayer {
+                    // Откъснат: пада с 4 dp и увисва на десния си край (−3°).
+                    val t = tear.value
+                    transformOrigin = TransformOrigin(1f, 0f)
+                    translationY = 4.dp.toPx() * t
+                    rotationZ = -3f * t
+                }
+                .shadow(4.dp, stubShape).background(paper)
                 .drawBehind {
                     val n = LeafNotch.toPx()
                     // Перфорацията — тропосване ([StitchSpec.Basting]).
@@ -258,6 +281,11 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
                 .padding(horizontal = 20.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            // При намалено движение листът не се откъсва — отметка на отрязъка.
+            if (torn && reduced) {
+                Icon(Icons.Outlined.Check, contentDescription = null, tint = accent, modifier = Modifier.size(22.dp))
+                Spacer(Modifier.width(8.dp))
+            }
             Text(
                 countdown, color = accent, fontFamily = Cormorant, fontWeight = FontWeight.SemiBold, fontSize = 24.sp,
                 modifier = Modifier.weight(1f),
@@ -269,6 +297,29 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
             }
         }
     }
+}
+
+/**
+ * Откъсването на отрязъка (0 — на място, 1 — откъснат): веднъж, когато [torn] стане вярно
+ * (след „Добави в календара“), на пружина и с лек тик. Вече откъснат при първа композиция
+ * (завъртане, връщане към екрана) — направо в крайно положение, без повторение; при намалено
+ * движение не се движи (отметката е на отрязъка).
+ */
+@Composable
+private fun rememberStubTear(torn: Boolean): Animatable<Float, AnimationVector1D> {
+    val reduced = rememberReducedMotion()
+    val haptic = LocalHapticFeedback.current
+    val tear = remember { Animatable(if (torn && !reduced) 1f else 0f) }
+    LaunchedEffect(torn, reduced) {
+        when {
+            !torn || reduced -> tear.snapTo(0f)
+            tear.value < 1f -> {
+                haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                tear.animateTo(1f, spring(dampingRatio = 0.45f, stiffness = Spring.StiffnessLow))
+            }
+        }
+    }
+    return tear
 }
 
 /**

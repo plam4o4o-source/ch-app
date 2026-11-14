@@ -113,6 +113,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CancellationException
+import org.chyavorec.app.data.local.toEntry
+import org.chyavorec.domain.model.ReadingDiary
 import org.chyavorec.app.R
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.LocalAppContainer
@@ -205,7 +208,23 @@ class ReadingYearViewModel(private val year: Int, private val c: AppContainer) :
     fun load() {
         if (job?.isActive == true) return
         _state.value = YearStoryState.Loading
-        job = viewModelScope.launch { _state.value = compute() }
+        job = viewModelScope.launch {
+            val r = compute()
+            // Любимата книга от дневника — при всяко отваряне (оценките се менят; паметта е без нея).
+            _state.value = if (r is YearStoryState.Ready) YearStoryState.Ready(withFavourite(r.summary)) else r
+        }
+    }
+
+    /** [ReadingDiary.withFavourite]: само заглавие, автор и оценка — без личната бележка. */
+    private suspend fun withFavourite(s: ReadingYear.Summary): ReadingYear.Summary = withContext(Dispatchers.Default) {
+        val entries = try {
+            c.database.readingDiary().all().map { it.toEntry() }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            emptyList()
+        }
+        ReadingDiary.withFavourite(s, entries, c.clock.zone())
     }
 
     private suspend fun compute(): YearStoryState = withContext(Dispatchers.Default) {

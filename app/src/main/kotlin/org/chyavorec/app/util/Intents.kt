@@ -27,12 +27,18 @@ object Intents {
     const val ACCOUNT_DELETION_URL = "https://chyavorec.org/app-delete"
 
     private fun Context.safeStart(intent: Intent) {
+        startOrToast(intent)
+    }
+
+    /** `true` — приложението е отворено; `false` — няма такова (кратко съобщение). */
+    private fun Context.startOrToast(intent: Intent): Boolean =
         try {
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            true
         } catch (_: ActivityNotFoundException) {
             Toast.makeText(this, getString(R.string.error_no_app), Toast.LENGTH_SHORT).show()
+            false
         }
-    }
 
     /** Отваря адрес в Custom Tab (в цветовете на приложението), а не в WebView. */
     fun openUrl(context: Context, url: String) {
@@ -180,9 +186,9 @@ object Intents {
     }
 
     /** Добавя събитие в календара на Android (без разрешения — през системния екран). */
-    fun addToCalendar(context: Context, event: Event, zone: ZoneId) {
-        calendarIntent(event, zone)?.let { context.safeStart(it) }
-    }
+    /** `true` — календарът е отворен с новото събитие. */
+    fun addToCalendar(context: Context, event: Event, zone: ZoneId): Boolean =
+        calendarIntent(event, zone)?.let { context.startOrToast(it) } ?: false
 
     /** Системният екран „ново събитие в календара“ за [event]; `null` — събитието е без дата. */
     fun calendarIntent(event: Event, zone: ZoneId): Intent? {

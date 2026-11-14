@@ -51,6 +51,9 @@ object ShareFixtures {
 
     val year: ReadingYear.Summary = requireNotNull(ReadingYear.compute(history, catalog, today.year))
 
+    /** Същата година с най-харесана книга от дневника (5 розетки). */
+    val yearWithFavourite: ReadingYear.Summary = year.copy(favourite = ReadingYear.Favourite("Под игото", "Вазов, Иван", 5))
+
     val book = CatalogBook(inv = 1234, author = "Талев, Димитър", title = "Железният светилник", publisher = "Български писател", year = "1952", udc = "821.163.2-31")
 
     /** „Снимка“ без мрежа: залез над хълмове (градиенти) — за картите със снимка. */

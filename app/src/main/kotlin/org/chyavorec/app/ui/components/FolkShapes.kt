@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -125,9 +126,13 @@ fun FolkIconPlate(
  * модификаторът е запомнен — рекомпозицията не гради кеша наново.
  */
 @Composable
-internal fun Modifier.stitchedCorner(color: Color, tighten: () -> Float): Modifier {
+internal fun Modifier.stitchedCorner(color: Color, tighten: () -> Float): Modifier = stitchedCorner(ThreadColors(color), tighten)
+
+/** Същият ъгъл в сезонния конец ([rememberSeasonalThread]): усукан на две нишки или със звездичка. */
+@Composable
+internal fun Modifier.stitchedCorner(thread: ThreadColors, tighten: () -> Float): Modifier {
     val currentTighten = rememberUpdatedState(tighten)
-    val corner = remember(color) {
+    val corner = remember(thread) {
         Modifier.drawWithCache {
             val w = size.width
             val inset = 6.dp.toPx()
@@ -139,11 +144,33 @@ internal fun Modifier.stitchedCorner(color: Color, tighten: () -> Float): Modifi
                 arcTo(Rect(w - inset - 2 * r, inset, w - inset, inset + 2 * r), -90f, 90f, false)
                 lineTo(w - inset, inset + r + arm)
             }
-            val dense = Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(3.dp.toPx(), 1.6.dp.toPx())))
+            val dash = 3.dp.toPx()
+            val gap = 1.6.dp.toPx()
+            val second = thread.second
+            // Една нишка — плътен пунктир; усукана — бодовете се редуват (вторият е отместен с един бод).
+            val dense = if (second == null) Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash, gap)))
+            else Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash, 2 * gap + dash)))
+            val twist = Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash, 2 * gap + dash), dash + gap))
+            val edge = Stroke(1.8.dp.toPx(), cap = StrokeCap.Round, pathEffect = twist.pathEffect)
+            val starAt = Offset(w - inset - r - arm, inset)
+            val starR = 2.6.dp.toPx()
             onDrawWithContent {
                 drawContent()
                 val t = currentTighten.value().coerceIn(0f, 1f)
-                if (t > 0f) drawPath(path, color, alpha = 0.75f * t, style = dense)
+                if (t > 0f) {
+                    drawPath(path, thread.primary, alpha = 0.75f * t, style = dense)
+                    if (second != null) {
+                        thread.secondEdge?.let { drawPath(path, it, alpha = 0.75f * t, style = edge) }
+                        drawPath(path, second, alpha = 0.9f * t, style = twist)
+                    }
+                    // Звездният бод в началото на ъгъла (Коледа).
+                    if (thread.star) {
+                        starStitchCross(starAt.x - starR, starAt.y - starR, starAt.x + starR, starAt.y + starR, thread.primary, 1.dp.toPx(), alpha = 0.85f * t)
+                        val d = starR * 0.7f
+                        drawLine(thread.primary, Offset(starAt.x - d, starAt.y - d), Offset(starAt.x + d, starAt.y + d), strokeWidth = 1.dp.toPx(), cap = StrokeCap.Round, alpha = 0.85f * t)
+                        drawLine(thread.primary, Offset(starAt.x - d, starAt.y + d), Offset(starAt.x + d, starAt.y - d), strokeWidth = 1.dp.toPx(), cap = StrokeCap.Round, alpha = 0.85f * t)
+                    }
+                }
             }
         }
     }
