@@ -1,0 +1,94 @@
+part dev38; APK: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+base APK: 1.2.37 ebf1720 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510000; update manifest: the real one (releases/latest) size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+installed:  versionCode=1510100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+installed: devDebug 1.2.38 de2e156 (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.38-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4092 ms
+## DV1. Моето as a guest and the login screen (FLAG_SECURE: emulator screenshots)
+CAP dev38/my-guest: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001
+## DV2. „Картата е издадена“: the sign-in tap recorded from outside (the card lifts, then flies to the hub tile)
+EREC login-fly: 50 frames; frames 50; changed between consecutive frames: 1; max diff 0.9; frames=50 motion-start=#5 moving-frames=0 (span 0) kept #4..#15; diffs: 0 1 0 0 0 0 0 0 0 0 0 0
+after the sign-in: text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" text="Така ще изглежда картата ти" text="Вход за читатели" t
+CAP dev38/my-signed-in: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | ДЕМО ДАННИ — само за разрабо · Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001
+MY signed in: text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" text="Така ще изглежда картата ти" text="Вход" text="Добави читателска карта" text="БИБЛИОТЕКА" text="Читателска карта" text="Добави номера от своята карта" tex
+## DV3. Loans and renewal (demo: renew → pending, no new due date → no „Нов лист“ expected)
+LOANS: text="ДЕМО ДАННИ — само за разработка, не са реални" text="Нещо се обърка" text="Сесията е изтекла. Моля, влез отново." text="Вход" content-desc="Назад" text="Моите книги" 
+RENEW: no 'Удължи срока' button
+## DV4. Messages
+MESSAGES: entry not found in Моето: content-desc="Примерна читателска карта" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" text="Така ще изглежда картата ти" text="Вход" text="Добави читателска карта" text="БИБЛИОТЕКА" text="Читателска карта" text="Добави номера от своята 
+## DV5. Diary: 5 rosettes on the first book, then the year story (favourite slide)
+DIARY: no rating node
+YEAR: story did not open
+## DV6. The card on 10 December (the „Твоята шевица“ strip) and in fullscreen; 20 January; 14 November (no strip)
+device date now: Thu Dec 10 10:00:02 UTC 2026
+CARD dec: band node absent
+device date now: Wed Jan 20 10:00:07 UTC 2027
+CARD jan: band node absent
+device date now: Sat Nov 14 14:11:35 UTC 2026
+CARD nov: band node absent
+## DV7. Tablet landscape: two panes in Моето signed in
+TABLET after '=Заети книги|=Loans|Заети': text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил
+TABLET after '=Читателска карта|=Library card': text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил
+DEV38 part: FATAL(any process)=0 of the app=0 ANR=0
+A11Y AGG: 2 screens analysed, 0 dumps failed; totals MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+== MISSING: 0 distinct
+== SMALL: 0 distinct
+== SAME-LABEL: 0 distinct
+== DOUBLE: 0 distinct
+contact sheets: 5 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.38-dev (1) | Профил: чака | Студен старт · 4 | Първи кадър: медиана 4284 мс, последен 2157 мс | Пълно показване: медиана 4877 мс, последно 2723 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.38-dev (1)" text="Профил: чака" text="Студен старт · 4" text="Първи кадър: медиана 4284 мс, последен 2157 мс" text="Пълно показване: медиана 4877 мс, последно 2723 мс" text="Няма записани грешки." content-desc="Н
+APP W/E lines (pids ['5984', '8611', '9167', '9953']): 252 in 107 groups
+       8  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       6  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       6  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+       6  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       5  W/ziparchive: Unable to open '/data/app/~~vTrd#YOchL#IY#vjL#X#KA==/org.chyavorec.app.dev-#u-#r#CMr#LPMk#e_Gg==/base.dm': No 
+       4  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       4  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       4  W/Parcel: Expecting binder but got null!
+       4  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       4  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       4  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       4  W/Gralloc4: allocator #.x is not supported
+       4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
+       4  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
+       4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       2  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.PlatformPasswordVisibilitySettingImpl.getSystemShowPasswordSetting(BasicS
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextField_androidKt.rememberPlatformPasswordVisibilitySettings
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-ltb#GB#(BasicSecureTextField.
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-egD#TGM(BasicSecureTextField.
+       2  W/BasicSecureTextField: 	at androidx.compose.runtime.CompositionLocalKt.CompositionLocalProvider(CompositionLocal.kt:#)
+contact sheets: 6 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'SIGNAL': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 92642141 Nov 14 14:03 app-mapping.txt; crashes: 174 B

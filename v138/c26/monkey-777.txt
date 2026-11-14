@@ -1,0 +1,544 @@
+  bash arg: -p
+  bash arg: org.chyavorec.app
+  bash arg: --pct-syskeys
+  bash arg: 0
+  bash arg: --pct-anyevent
+  bash arg: 0
+  bash arg: --throttle
+  bash arg: 80
+  bash arg: -s
+  bash arg: 777
+  bash arg: -v
+  bash arg: 2000
+args: [-p, org.chyavorec.app, --pct-syskeys, 0, --pct-anyevent, 0, --throttle, 80, -s, 777, -v, 2000]
+ arg: "-p"
+ arg: "org.chyavorec.app"
+ arg: "--pct-syskeys"
+ arg: "0"
+ arg: "--pct-anyevent"
+ arg: "0"
+ arg: "--throttle"
+ arg: "80"
+ arg: "-s"
+ arg: "777"
+ arg: "-v"
+ arg: "2000"
+data="org.chyavorec.app"
+arg="--pct-syskeys" mCurArgData="null" mNextArg=3 argwas="--pct-syskeys" nextarg="0"
+data="0"
+arg="--pct-anyevent" mCurArgData="null" mNextArg=5 argwas="--pct-anyevent" nextarg="0"
+data="0"
+arg="--throttle" mCurArgData="null" mNextArg=7 argwas="--throttle" nextarg="80"
+data="80"
+data="777"
+:Monkey: seed=777 count=2000
+:AllowPackage: org.chyavorec.app
+:IncludeCategory: android.intent.category.LAUNCHER
+:IncludeCategory: android.intent.category.MONKEY
+// Event percentages:
+//   0: 17.64706%
+//   1: 11.764707%
+//   2: 2.3529413%
+//   3: 17.64706%
+//   4: -0.0%
+//   5: -0.0%
+//   6: 29.411766%
+//   7: 17.64706%
+//   8: -0.0%
+//   9: 2.3529413%
+//   10: 1.1764706%
+//   11: -0.0%
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(2.0,1368.0)
+:Sending Touch (ACTION_UP): 0:(13.376811,1350.7107)
+:Sending Touch (ACTION_DOWN): 0:(1057.0,1707.0)
+:Sending Touch (ACTION_UP): 0:(1051.0537,1718.1769)
+:Sending Touch (ACTION_DOWN): 0:(855.0,130.0)
+:Sending Touch (ACTION_UP): 0:(846.8329,135.07353)
+:Sending Touch (ACTION_DOWN): 0:(531.0,753.0)
+:Sending Touch (ACTION_UP): 0:(510.55478,800.3008)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,2.0)
+:Sending Flip keyboardOpen=false
+Got IOException performing flipjava.io.IOException: write failed: EINVAL (Invalid argument)
+    // Injection Failed
+:Sending Touch (ACTION_DOWN): 0:(545.0,907.0)
+:Sending Touch (ACTION_UP): 0:(527.12317,915.86176)
+:Sending Touch (ACTION_DOWN): 0:(980.0,1366.0)
+:Sending Touch (ACTION_UP): 0:(973.21967,1362.0701)
+:Sending Touch (ACTION_DOWN): 0:(409.0,678.0)
+:Sending Touch (ACTION_UP): 0:(390.182,677.2694)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,4.0)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-2.0)
+:Sending Touch (ACTION_DOWN): 0:(967.0,711.0)
+:Sending Touch (ACTION_UP): 0:(953.88354,710.23065)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(31.0,297.0)
+:Sending Touch (ACTION_UP): 0:(40.173225,307.6916)
+:Sending Touch (ACTION_DOWN): 0:(930.0,190.0)
+:Sending Touch (ACTION_UP): 0:(935.24725,190.77393)
+    //[calendar_time:2026-11-14 14:42:42.088  system_uptime:2210536]
+    // Sending event #100
+    //[calendar_time:2026-11-14 14:42:42.169  system_uptime:2210616]
+    // Sending event #100
+:Sending Touch (ACTION_DOWN): 0:(70.0,58.0)
+:Sending Touch (ACTION_UP): 0:(85.98268,74.19982)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(329.0,240.0)
+:Sending Touch (ACTION_UP): 0:(335.4613,236.69939)
+:Sending Touch (ACTION_DOWN): 0:(235.0,848.0)
+:Sending Touch (ACTION_UP): 0:(229.04637,849.60767)
+:Sending Touch (ACTION_DOWN): 0:(860.0,1888.0)
+:Sending Touch (ACTION_UP): 0:(872.17773,1893.5524)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,-5.0)
+:Sending Flip keyboardOpen=true
+Got IOException performing flipjava.io.IOException: write failed: EINVAL (Invalid argument)
+    // Injection Failed
+:Sending Touch (ACTION_DOWN): 0:(784.0,1708.0)
+:Sending Touch (ACTION_UP): 0:(808.3669,1708.6989)
+:Sending Touch (ACTION_DOWN): 0:(763.0,417.0)
+:Sending Touch (ACTION_UP): 0:(826.5383,316.4819)
+:Sending Touch (ACTION_DOWN): 0:(426.0,85.0)
+:Sending Touch (ACTION_UP): 0:(395.99222,144.45718)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,0.0)
+    //[calendar_time:2026-11-14 14:42:49.081  system_uptime:2217528]
+    // Sending event #200
+:Sending Touch (ACTION_DOWN): 0:(730.0,1293.0)
+:Sending Touch (ACTION_UP): 0:(727.2571,1292.4177)
+:Sending Touch (ACTION_DOWN): 0:(229.0,1502.0)
+:Sending Touch (ACTION_UP): 0:(229.45894,1489.0374)
+:Sending Trackball (ACTION_MOVE): 0:(0.0,-2.0)
+:Sending Touch (ACTION_DOWN): 0:(676.0,1273.0)
+:Sending Touch (ACTION_UP): 0:(676.1845,1275.804)
+:Sending Touch (ACTION_DOWN): 0:(540.0,1533.0)
+:Sending Touch (ACTION_UP): 0:(540.18634,1523.2905)
+    // Rejecting start of Intent { cmp=com.google.android.inputmethod.latin/com.google.android.apps.inputmethod.libs.framework.core.PermissionsActivity } in package com.google.android.inputmethod.latin
+:Sending Trackball (ACTION_MOVE): 0:(2.0,-1.0)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-3.0)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,-3.0)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(334.0,2214.0)
+:Sending Touch (ACTION_UP): 0:(374.81314,2175.9343)
+:Sending Touch (ACTION_DOWN): 0:(230.0,221.0)
+    //[calendar_time:2026-11-14 14:42:53.249  system_uptime:2221697]
+    // Sending event #300
+:Sending Touch (ACTION_UP): 0:(242.74261,235.64427)
+:Sending Touch (ACTION_DOWN): 0:(456.0,1167.0)
+:Sending Touch (ACTION_UP): 0:(433.8243,1148.4006)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-3.0)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,-3.0)
+:Sending Touch (ACTION_DOWN): 0:(1003.0,372.0)
+:Sending Touch (ACTION_UP): 0:(977.8616,463.46695)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,4.0)
+:Sending Touch (ACTION_DOWN): 0:(232.0,1604.0)
+:Sending Touch (ACTION_UP): 0:(230.3523,1611.1802)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,-4.0)
+:Sending Touch (ACTION_DOWN): 0:(241.0,1141.0)
+:Sending Touch (ACTION_UP): 0:(247.56656,1141.8938)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,4.0)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,0.0)
+    //[calendar_time:2026-11-14 14:42:57.974  system_uptime:2226422]
+    // Sending event #400
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(339.0,523.0)
+:Sending Touch (ACTION_UP): 0:(332.79663,549.8497)
+:Sending Touch (ACTION_DOWN): 0:(691.0,1265.0)
+:Sending Touch (ACTION_UP): 0:(690.29047,1269.0831)
+:Sending Touch (ACTION_DOWN): 0:(293.0,385.0)
+:Sending Touch (ACTION_UP): 0:(416.86346,312.18964)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,3.0)
+:Sending Touch (ACTION_DOWN): 0:(900.0,138.0)
+:Sending Touch (ACTION_UP): 0:(904.27,119.80601)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,1.0)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(466.0,305.0)
+:Sending Touch (ACTION_UP): 0:(465.34802,305.02417)
+:Sending Touch (ACTION_DOWN): 0:(371.0,1279.0)
+:Sending Touch (ACTION_UP): 0:(390.8675,1274.9331)
+:Sending Touch (ACTION_DOWN): 0:(519.0,291.0)
+:Sending Touch (ACTION_UP): 0:(474.6353,278.16016)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,-5.0)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,4.0)
+    //[calendar_time:2026-11-14 14:43:00.508  system_uptime:2228956]
+    // Sending event #500
+:Sending Touch (ACTION_DOWN): 0:(650.0,1523.0)
+:Sending Touch (ACTION_UP): 0:(642.1187,1505.6332)
+:Sending Touch (ACTION_DOWN): 0:(489.0,1543.0)
+:Sending Touch (ACTION_UP): 0:(493.5344,1538.0499)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,1.0)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(177.0,1287.0)
+:Sending Touch (ACTION_UP): 0:(175.63416,1287.0538)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,-4.0)
+:Sending Touch (ACTION_DOWN): 0:(743.0,1716.0)
+:Sending Touch (ACTION_UP): 0:(736.7046,1727.0502)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(788.0,468.0)
+:Sending Touch (ACTION_UP): 0:(724.5786,427.20032)
+:Sending Touch (ACTION_DOWN): 0:(320.0,1934.0)
+:Sending Touch (ACTION_UP): 0:(313.92432,1943.1384)
+:Sending Touch (ACTION_DOWN): 0:(220.0,1433.0)
+:Sending Touch (ACTION_UP): 0:(200.76547,1434.0422)
+:Sending Touch (ACTION_DOWN): 0:(220.0,974.0)
+    //[calendar_time:2026-11-14 14:43:04.994  system_uptime:2233442]
+    // Sending event #600
+:Sending Touch (ACTION_UP): 0:(228.74571,966.2773)
+:Sending Touch (ACTION_DOWN): 0:(1062.0,1781.0)
+:Sending Touch (ACTION_UP): 0:(1018.4837,1816.5905)
+:Sending Touch (ACTION_DOWN): 0:(532.0,1480.0)
+:Sending Touch (ACTION_UP): 0:(525.98895,1483.1509)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(491.0,533.0)
+:Sending Touch (ACTION_UP): 0:(437.94772,568.1799)
+:Sending Touch (ACTION_DOWN): 0:(915.0,1448.0)
+:Sending Touch (ACTION_UP): 0:(930.6054,1447.9637)
+:Sending Touch (ACTION_DOWN): 0:(1013.0,712.0)
+:Sending Touch (ACTION_UP): 0:(1022.61615,719.95245)
+:Sending Touch (ACTION_DOWN): 0:(1037.0,779.0)
+:Sending Touch (ACTION_UP): 0:(1030.9376,790.9213)
+:Sending Touch (ACTION_DOWN): 0:(1008.0,1114.0)
+:Sending Touch (ACTION_UP): 0:(1047.9697,1153.4286)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,-1.0)
+:Sending Touch (ACTION_DOWN): 0:(817.0,1726.0)
+:Sending Touch (ACTION_UP): 0:(837.1093,1803.9126)
+:Sending Touch (ACTION_DOWN): 0:(834.0,1244.0)
+:Sending Touch (ACTION_UP): 0:(806.40546,1278.3408)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(650.0,40.0)
+    //[calendar_time:2026-11-14 14:43:08.835  system_uptime:2237282]
+    // Sending event #700
+:Sending Touch (ACTION_UP): 0:(755.1237,0.0)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,4.0)
+:Sending Touch (ACTION_DOWN): 0:(441.0,623.0)
+:Sending Touch (ACTION_UP): 0:(442.5657,625.7246)
+:Sending Touch (ACTION_DOWN): 0:(315.0,1116.0)
+:Sending Touch (ACTION_UP): 0:(307.065,1144.2839)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-1.0)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(198.0,503.0)
+:Sending Touch (ACTION_UP): 0:(163.35718,520.9724)
+:Sending Touch (ACTION_DOWN): 0:(778.0,2236.0)
+:Sending Touch (ACTION_UP): 0:(774.85345,2234.6526)
+:Sending Touch (ACTION_DOWN): 0:(579.0,1889.0)
+:Sending Touch (ACTION_UP): 0:(575.83716,1891.4149)
+:Sending Touch (ACTION_DOWN): 0:(109.0,624.0)
+:Sending Touch (ACTION_UP): 0:(112.07158,616.00336)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,3.0)
+:Sending Trackball (ACTION_MOVE): 0:(0.0,0.0)
+:Sending Touch (ACTION_DOWN): 0:(129.0,716.0)
+:Sending Touch (ACTION_UP): 0:(123.23709,702.5427)
+:Sending Touch (ACTION_DOWN): 0:(888.0,1655.0)
+:Sending Touch (ACTION_UP): 0:(939.736,1671.434)
+:Sending Touch (ACTION_DOWN): 0:(759.0,976.0)
+    //[calendar_time:2026-11-14 14:43:11.863  system_uptime:2240310]
+    // Sending event #800
+:Sending Touch (ACTION_UP): 0:(799.62085,1066.815)
+:Sending Touch (ACTION_DOWN): 0:(716.0,1435.0)
+:Sending Touch (ACTION_UP): 0:(708.67346,1436.2909)
+:Sending Touch (ACTION_DOWN): 0:(436.0,473.0)
+:Sending Touch (ACTION_UP): 0:(439.151,474.90067)
+:Sending Touch (ACTION_DOWN): 0:(498.0,1728.0)
+:Sending Touch (ACTION_UP): 0:(620.3618,1692.877)
+:Sending Touch (ACTION_DOWN): 0:(480.0,636.0)
+:Sending Touch (ACTION_UP): 0:(476.34683,622.1819)
+:Sending Touch (ACTION_DOWN): 0:(765.0,2004.0)
+:Sending Touch (ACTION_UP): 0:(756.3967,2039.349)
+:Sending Touch (ACTION_DOWN): 0:(327.0,1475.0)
+:Sending Touch (ACTION_UP): 0:(356.31992,1420.5922)
+:Sending Touch (ACTION_DOWN): 0:(1073.0,1852.0)
+:Sending Touch (ACTION_UP): 0:(1080.0,1933.392)
+:Sending Touch (ACTION_DOWN): 0:(447.0,1390.0)
+:Sending Touch (ACTION_UP): 0:(444.56903,1397.601)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,-3.0)
+:Sending Touch (ACTION_DOWN): 0:(530.0,126.0)
+:Sending Touch (ACTION_UP): 0:(515.1339,112.45198)
+:Sending Touch (ACTION_DOWN): 0:(787.0,2189.0)
+:Sending Touch (ACTION_UP): 0:(726.25543,2142.8525)
+:Sending Trackball (ACTION_MOVE): 0:(0.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(97.0,125.0)
+:Sending Touch (ACTION_UP): 0:(96.24322,197.43413)
+:Sending Touch (ACTION_DOWN): 0:(1038.0,1990.0)
+:Sending Touch (ACTION_UP): 0:(1037.5157,1992.6228)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,0.0)
+    //[calendar_time:2026-11-14 14:43:15.817  system_uptime:2244264]
+    // Sending event #900
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,0.0)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(217.0,1092.0)
+:Sending Touch (ACTION_UP): 0:(348.3769,1196.911)
+:Sending Touch (ACTION_DOWN): 0:(239.0,473.0)
+:Sending Touch (ACTION_UP): 0:(229.08803,492.94235)
+:Sending Touch (ACTION_DOWN): 0:(412.0,1249.0)
+:Sending Touch (ACTION_UP): 0:(424.52197,1259.136)
+:Sending Touch (ACTION_DOWN): 0:(577.0,1569.0)
+:Sending Touch (ACTION_UP): 0:(578.5045,1569.3247)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,-4.0)
+:Sending Touch (ACTION_DOWN): 0:(519.0,1283.0)
+:Sending Touch (ACTION_UP): 0:(502.28714,1282.3342)
+:Sending Touch (ACTION_DOWN): 0:(93.0,798.0)
+:Sending Touch (ACTION_UP): 0:(92.743355,801.46216)
+:Sending Touch (ACTION_DOWN): 0:(198.0,304.0)
+:Sending Touch (ACTION_UP): 0:(244.35333,305.93857)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,-3.0)
+:Sending Touch (ACTION_DOWN): 0:(507.0,511.0)
+:Sending Touch (ACTION_UP): 0:(477.92905,537.7226)
+:Sending Touch (ACTION_DOWN): 0:(726.0,883.0)
+:Sending Touch (ACTION_UP): 0:(730.3501,886.7049)
+:Sending Touch (ACTION_DOWN): 0:(212.0,200.0)
+:Sending Touch (ACTION_UP): 0:(212.29134,193.6512)
+:Sending Touch (ACTION_DOWN): 0:(159.0,1291.0)
+:Sending Touch (ACTION_UP): 0:(201.94983,1243.4564)
+:Sending Touch (ACTION_DOWN): 0:(799.0,1623.0)
+    //[calendar_time:2026-11-14 14:43:18.753  system_uptime:2247200]
+    // Sending event #1000
+:Sending Touch (ACTION_UP): 0:(818.9681,1536.114)
+:Sending Touch (ACTION_DOWN): 0:(926.0,472.0)
+:Sending Touch (ACTION_UP): 0:(916.1853,470.29327)
+:Sending Touch (ACTION_DOWN): 0:(980.0,536.0)
+:Sending Touch (ACTION_UP): 0:(975.6922,549.91016)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-2.0)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,-3.0)
+:Sending Trackball (ACTION_UP): 0:(0.0,0.0)
+    // Rejecting start of Intent { act=android.intent.action.CHOOSER cmp=android/com.android.internal.app.ChooserActivity } in package android
+:Sending Touch (ACTION_DOWN): 0:(158.0,2248.0)
+:Sending Touch (ACTION_UP): 0:(153.16034,2244.8777)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,1.0)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-4.0)
+:Sending Touch (ACTION_DOWN): 0:(275.0,1766.0)
+:Sending Touch (ACTION_UP): 0:(262.03754,1765.1483)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,4.0)
+:Sending Touch (ACTION_DOWN): 0:(504.0,1111.0)
+:Sending Touch (ACTION_UP): 0:(499.06586,1183.111)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,-4.0)
+    //[calendar_time:2026-11-14 14:43:21.377  system_uptime:2249825]
+    // Sending event #1100
+:Sending Touch (ACTION_DOWN): 0:(179.0,606.0)
+:Sending Touch (ACTION_UP): 0:(174.4891,609.46027)
+:Sending Touch (ACTION_DOWN): 0:(868.0,12.0)
+:Sending Touch (ACTION_UP): 0:(865.0706,0.43735695)
+:Sending Touch (ACTION_DOWN): 0:(611.0,866.0)
+:Sending Touch (ACTION_UP): 0:(528.8186,846.17896)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,2.0)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,2.0)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(283.0,328.0)
+:Sending Touch (ACTION_UP): 0:(280.4681,315.77765)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,2.0)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-2.0)
+:Sending Touch (ACTION_DOWN): 0:(787.0,1303.0)
+:Sending Touch (ACTION_UP): 0:(790.118,1301.6553)
+:Sending Touch (ACTION_DOWN): 0:(906.0,482.0)
+:Sending Touch (ACTION_UP): 0:(906.2294,485.6453)
+:Sending Touch (ACTION_DOWN): 0:(53.0,2055.0)
+    //[calendar_time:2026-11-14 14:43:23.997  system_uptime:2252444]
+    // Sending event #1200
+:Sending Touch (ACTION_UP): 0:(89.04364,2077.7156)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(143.0,319.0)
+:Sending Touch (ACTION_UP): 0:(209.68011,377.87946)
+:Sending Touch (ACTION_DOWN): 0:(551.0,947.0)
+:Sending Touch (ACTION_UP): 0:(548.2891,949.45325)
+:Sending Touch (ACTION_DOWN): 0:(521.0,2263.0)
+:Sending Touch (ACTION_UP): 0:(513.2574,2263.0515)
+:Sending Touch (ACTION_DOWN): 0:(169.0,1212.0)
+:Sending Touch (ACTION_UP): 0:(180.49297,1200.7642)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,4.0)
+:Sending Touch (ACTION_DOWN): 0:(542.0,1522.0)
+:Sending Touch (ACTION_UP): 0:(554.72375,1510.5702)
+:Sending Touch (ACTION_DOWN): 0:(9.0,2092.0)
+:Sending Touch (ACTION_UP): 0:(9.120051,2092.9448)
+:Sending Touch (ACTION_DOWN): 0:(112.0,674.0)
+:Sending Touch (ACTION_UP): 0:(84.86118,647.88495)
+:Sending Touch (ACTION_DOWN): 0:(433.0,232.0)
+:Sending Touch (ACTION_UP): 0:(430.36575,220.47269)
+:Sending Touch (ACTION_DOWN): 0:(778.0,632.0)
+:Sending Touch (ACTION_UP): 0:(870.3172,676.16486)
+:Sending Touch (ACTION_DOWN): 0:(758.0,1123.0)
+    //[calendar_time:2026-11-14 14:43:27.849  system_uptime:2256297]
+    // Sending event #1300
+:Sending Touch (ACTION_UP): 0:(648.79987,1111.433)
+:Sending Touch (ACTION_DOWN): 0:(12.0,342.0)
+:Sending Touch (ACTION_UP): 0:(43.45074,286.16684)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,3.0)
+:Sending Trackball (ACTION_UP): 0:(0.0,0.0)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,3.0)
+:Sending Trackball (ACTION_UP): 0:(0.0,0.0)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(1057.0,348.0)
+:Sending Touch (ACTION_UP): 0:(1048.9152,348.42422)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(998.0,100.0)
+:Sending Touch (ACTION_UP): 0:(998.69366,97.493416)
+:Sending Touch (ACTION_DOWN): 0:(173.0,881.0)
+:Sending Touch (ACTION_UP): 0:(200.74796,876.2638)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,-2.0)
+:Sending Touch (ACTION_DOWN): 0:(277.0,383.0)
+:Sending Touch (ACTION_UP): 0:(413.47736,465.97937)
+:Sending Touch (ACTION_DOWN): 0:(721.0,652.0)
+    //[calendar_time:2026-11-14 14:43:30.627  system_uptime:2259075]
+    // Sending event #1400
+:Sending Touch (ACTION_UP): 0:(787.40735,581.6232)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(280.0,53.0)
+:Sending Touch (ACTION_UP): 0:(316.76587,37.439835)
+:Sending Touch (ACTION_DOWN): 0:(235.0,1062.0)
+:Sending Touch (ACTION_UP): 0:(275.3328,1044.6891)
+:Sending Touch (ACTION_DOWN): 0:(301.0,190.0)
+:Sending Touch (ACTION_UP): 0:(277.34796,197.34943)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(185.0,1133.0)
+:Sending Touch (ACTION_UP): 0:(107.28129,1109.3177)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,0.0)
+:Sending Touch (ACTION_DOWN): 0:(107.0,1548.0)
+:Sending Touch (ACTION_UP): 0:(110.725006,1547.1383)
+:Sending Touch (ACTION_DOWN): 0:(29.0,2103.0)
+:Sending Touch (ACTION_UP): 0:(37.556084,2098.256)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-3.0)
+:Sending Touch (ACTION_DOWN): 0:(543.0,2168.0)
+:Sending Touch (ACTION_UP): 0:(542.7536,2118.7476)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(713.0,356.0)
+:Sending Touch (ACTION_UP): 0:(713.47205,356.15323)
+    //[calendar_time:2026-11-14 14:43:33.018  system_uptime:2261465]
+    // Sending event #1500
+:Sending Touch (ACTION_DOWN): 0:(342.0,785.0)
+:Sending Touch (ACTION_UP): 0:(341.78668,782.7996)
+:Sending Touch (ACTION_DOWN): 0:(78.0,1196.0)
+:Sending Touch (ACTION_UP): 0:(52.700737,1204.2533)
+:Sending Touch (ACTION_DOWN): 0:(24.0,1190.0)
+:Sending Touch (ACTION_UP): 0:(26.42397,1177.3918)
+:Sending Touch (ACTION_DOWN): 0:(475.0,512.0)
+:Sending Touch (ACTION_UP): 0:(421.00854,579.10046)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,-5.0)
+:Sending Trackball (ACTION_UP): 0:(0.0,0.0)
+:Sending Touch (ACTION_DOWN): 0:(545.0,1031.0)
+:Sending Touch (ACTION_UP): 0:(680.12506,1019.1264)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,1.0)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-2.0)
+:Sending Touch (ACTION_DOWN): 0:(934.0,506.0)
+:Sending Touch (ACTION_UP): 0:(917.1677,493.3153)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(61.0,1190.0)
+:Sending Touch (ACTION_UP): 0:(62.69081,1180.3295)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(116.0,151.0)
+:Sending Touch (ACTION_UP): 0:(126.06755,139.41672)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-3.0)
+    //[calendar_time:2026-11-14 14:43:36.749  system_uptime:2265197]
+    // Sending event #1600
+:Sending Touch (ACTION_DOWN): 0:(166.0,2102.0)
+:Sending Touch (ACTION_UP): 0:(158.20276,2078.7742)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,3.0)
+:Sending Touch (ACTION_DOWN): 0:(456.0,630.0)
+:Sending Touch (ACTION_UP): 0:(483.01562,623.9643)
+:Sending Touch (ACTION_DOWN): 0:(501.0,634.0)
+:Sending Touch (ACTION_UP): 0:(484.13138,634.4641)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-3.0)
+:Sending Touch (ACTION_DOWN): 0:(351.0,181.0)
+:Sending Touch (ACTION_UP): 0:(352.16495,201.86893)
+:Sending Touch (ACTION_DOWN): 0:(1014.0,619.0)
+:Sending Touch (ACTION_UP): 0:(967.5522,589.82324)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(64.0,335.0)
+:Sending Touch (ACTION_UP): 0:(74.742516,326.1381)
+:Sending Touch (ACTION_DOWN): 0:(100.0,1854.0)
+:Sending Touch (ACTION_UP): 0:(104.685616,1854.0304)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(84.0,1082.0)
+:Sending Touch (ACTION_UP): 0:(61.813133,1042.8765)
+:Sending Touch (ACTION_DOWN): 0:(939.0,970.0)
+:Sending Touch (ACTION_UP): 0:(945.2773,970.3057)
+:Sending Touch (ACTION_DOWN): 0:(925.0,190.0)
+:Sending Touch (ACTION_UP): 0:(945.8106,190.27863)
+:Sending Touch (ACTION_DOWN): 0:(218.0,275.0)
+:Sending Touch (ACTION_UP): 0:(217.88643,284.21622)
+    //[calendar_time:2026-11-14 14:43:40.927  system_uptime:2269374]
+    // Sending event #1700
+    //[calendar_time:2026-11-14 14:43:41.028  system_uptime:2269476]
+    // Sending event #1700
+:Sending Touch (ACTION_DOWN): 0:(121.0,2137.0)
+:Sending Touch (ACTION_UP): 0:(122.75528,2136.6868)
+:Sending Touch (ACTION_DOWN): 0:(637.0,2232.0)
+:Sending Touch (ACTION_UP): 0:(596.11914,2193.5159)
+:Sending Touch (ACTION_DOWN): 0:(526.0,710.0)
+:Sending Touch (ACTION_UP): 0:(535.933,711.37756)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(542.0,1079.0)
+:Sending Touch (ACTION_UP): 0:(526.62665,1075.7478)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(439.0,1398.0)
+:Sending Touch (ACTION_UP): 0:(433.20557,1417.7076)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,3.0)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-4.0)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,1.0)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,2.0)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,0.0)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-4.0)
+    //[calendar_time:2026-11-14 14:43:43.823  system_uptime:2272270]
+    // Sending event #1800
+:Sending Touch (ACTION_DOWN): 0:(412.0,950.0)
+:Sending Touch (ACTION_UP): 0:(408.54037,956.4406)
+:Sending Touch (ACTION_DOWN): 0:(324.0,847.0)
+:Sending Touch (ACTION_UP): 0:(359.95615,870.1674)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(76.0,1574.0)
+:Sending Touch (ACTION_UP): 0:(82.51291,1576.6262)
+:Sending Touch (ACTION_DOWN): 0:(611.0,1159.0)
+:Sending Touch (ACTION_UP): 0:(599.6691,1144.4958)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,1.0)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(171.0,1111.0)
+:Sending Touch (ACTION_UP): 0:(175.42603,1127.6066)
+:Sending Touch (ACTION_DOWN): 0:(696.0,149.0)
+:Sending Touch (ACTION_UP): 0:(694.2886,147.75838)
+:Sending Touch (ACTION_DOWN): 0:(302.0,608.0)
+:Sending Touch (ACTION_UP): 0:(297.3343,613.485)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-4.0)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Touch (ACTION_DOWN): 0:(221.0,379.0)
+:Sending Touch (ACTION_UP): 0:(217.54695,376.32605)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,-1.0)
+    //[calendar_time:2026-11-14 14:43:46.719  system_uptime:2275166]
+    // Sending event #1900
+:Sending Touch (ACTION_DOWN): 0:(489.0,1955.0)
+:Sending Touch (ACTION_UP): 0:(492.3162,1956.6724)
+    // Rejecting start of Intent { act=android.intent.action.INSERT dat=content://com.android.calendar/events cmp=android/com.android.internal.app.ResolverActivity } in package android
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-2.0)
+:Sending Trackball (ACTION_UP): 0:(0.0,0.0)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,3.0)
+    // Rejecting start of Intent { act=android.content.pm.action.CONFIRM_PIN_SHORTCUT cmp=com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity } in package com.google.android.apps.nexuslauncher
+:Sending Touch (ACTION_DOWN): 0:(1058.0,1734.0)
+:Sending Touch (ACTION_UP): 0:(1080.0,1875.2188)
+:Sending Touch (ACTION_DOWN): 0:(981.0,1544.0)
+:Sending Touch (ACTION_UP): 0:(971.82886,1519.2292)
+:Sending Touch (ACTION_DOWN): 0:(468.0,1384.0)
+:Sending Touch (ACTION_UP): 0:(468.20352,1397.7397)
+:Sending Touch (ACTION_DOWN): 0:(968.0,2019.0)
+:Sending Touch (ACTION_UP): 0:(967.283,2008.4904)
+:Sending Touch (ACTION_DOWN): 0:(807.0,1875.0)
+:Sending Touch (ACTION_UP): 0:(887.6298,1804.2506)
+:Sending Touch (ACTION_DOWN): 0:(234.0,293.0)
+:Sending Touch (ACTION_UP): 0:(227.28351,304.20544)
+:Sending Touch (ACTION_DOWN): 0:(853.0,2117.0)
+:Sending Touch (ACTION_UP): 0:(849.0504,2117.8284)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=org.chyavorec.app/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=org.chyavorec.app/.MainActivity } in package org.chyavorec.app
+:Sending Trackball (ACTION_MOVE): 0:(2.0,0.0)
+Events injected: 2000
+:Sending rotation degree=0, persist=false
+:Dropped: keys=0 pointers=0 trackballs=0 flips=2 rotations=0
+## Network stats: elapsed time=74668ms (0ms mobile, 0ms wifi, 74668ms not connected)
+// Monkey finished

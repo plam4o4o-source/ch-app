@@ -1,0 +1,21 @@
+APP W/E lines (pids ['5945', '6654', '6851', '7122', '7439', '7640', '7942', '8582', '8836', '8958', '9157', '9220', '9427', '9737', '9792', '9847', '9904', '10002', '10057', '10120', '10297', '10595', '10657', '10714', '10771', '10827', '10909', '10969', '11141', '11436', '11493', '11555', '11613', '11672', '11729', '11784', '12104', '12410', '12469', '12524', '12579', '12636', '12747', '12802', '12985', '13275', '13332', '13389', '13445', '13499', '13556', '13611', '13779', '14090', '14151', '14277', '14333', '14406', '14462', '14517', '14697', '14996', '15054', '15110', '15168', '15225', '15282', '15343', '15515', '15825', '15879', '15934', '15991', '16067', '16124', '16186']): 546 in 20 groups
+      76  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      76  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      76  W/Parcel: Expecting binder but got null!
+      76  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      76  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      76  W/Gralloc4: allocator #.x is not supported
+      76  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object f#.s(java.lang.Object)(r
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#fe#-cc#-#b#-#e-aa#a#fab#a#, generation=#)
+       1  W/g.chyavorec.app: Suspending all threads took: #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#d#f#f#-e#af-#e-b#-#d#cc#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner OkHttp https://chyavorec.org/... (#) at mo# ys#.d()(r#-map-id-#f#a#cd#e#b#d
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#-#ad-#ee-#-f#f#db#e, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#bee#efc-b#c-#c#-#f#-ecd#afbe#b, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=c#cf-#a#-#-b#-#db#fbc#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=dc#b#f-#afb-#a#d-#a#-#e#ae#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#fb#-e#-#d#-#fb-f#c#eb#b, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#d#-#cc-#c#d-a#d#-#b#ca#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ffca#aa-#df#-#-b#e-c#c#d#ecf#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=f#ac#-#d#-#b#-#ad-caac#cf#a, generation=#)

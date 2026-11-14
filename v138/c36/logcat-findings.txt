@@ -1,0 +1,68 @@
+app pids seen: ['4173', '5200', '10845', '15715', '18047', '18456', '18743', '19088', '19972', '21878']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 252
+   skipped-frames events=252 max=202 total=12986
+   11-14 14:07:53.826  4173  4173 I Choreographer: Skipped 134 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:54.698  4173  4173 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:10.243  4173  4173 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:35.035  4173  4173 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:48.865  4173  4173 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-14 14:09:00.140  5200  5200 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-14 14:09:01.647  5200  5200 I Choreographer: Skipped 62 frames!  The application may be doing too much work on its main thread.
+   11-14 14:09:02.425  5200  5200 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-14 14:10:00.259  5200  5200 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-14 14:10:04.366  5200  5200 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-14 14:10:05.393  5200  5200 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-14 14:10:06.423  5200  5200 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+== Davey: 709
+   davey events=709 max=4480ms median=992ms
+   11-14 14:07:51.447  4173  4186 I HWUI    : Davey! duration=967ms; Flags=1, FrameTimelineVsyncId=5720, IntendedVsync=104935918320, Vsync=104935918320, InputEventId=0, HandleInputStart=104936235634, AnimationStart=104936235834, PerformTravers
+   11-14 14:07:53.863  4173  4219 I HWUI    : Davey! duration=2426ms; Flags=0, FrameTimelineVsyncId=5754, IntendedVsync=105985918278, Vsync=106002584944, InputEventId=0, HandleInputStart=106016532349, AnimationStart=106016532580, PerformTraver
+   11-14 14:07:54.410  4173  4183 I HWUI    : Davey! duration=751ms; Flags=0, FrameTimelineVsyncId=5776, IntendedVsync=106019251610, Vsync=106135918272, InputEventId=0, HandleInputStart=106146979340, AnimationStart=106146979701, PerformTravers
+   11-14 14:07:55.134  4173  4183 I HWUI    : Davey! duration=3396ms; Flags=0, FrameTimelineVsyncId=5821, IntendedVsync=106152584938, Vsync=108385918182, InputEventId=0, HandleInputStart=108393419289, AnimationStart=108393420050, PerformTraver
+   11-14 14:07:55.563  4173  4183 I HWUI    : Davey! duration=1005ms; Flags=0, FrameTimelineVsyncId=6054, IntendedVsync=108402584848, Vsync=108535918176, InputEventId=0, HandleInputStart=108536663803, AnimationStart=108536664163, PerformTraver
+   11-14 14:07:56.059  4173  4219 I HWUI    : Davey! duration=1609ms; Flags=0, FrameTimelineVsyncId=6070, IntendedVsync=108552584842, Vsync=109252584814, InputEventId=0, HandleInputStart=109262841495, AnimationStart=109262842056, PerformTraver
+   11-14 14:07:56.257  4173  4219 I HWUI    : Davey! duration=1066ms; Flags=0, FrameTimelineVsyncId=6110, IntendedVsync=109269251480, Vsync=109702584796, InputEventId=0, HandleInputStart=109713160387, AnimationStart=109713160747, PerformTraver
+   11-14 14:07:56.475  4173  4183 I HWUI    : Davey! duration=796ms; Flags=0, FrameTimelineVsyncId=6133, IntendedVsync=109719251462, Vsync=110169251444, InputEventId=0, HandleInputStart=110179536195, AnimationStart=110179536605, PerformTravers
+   11-14 14:08:00.616  4173  4219 I HWUI    : Davey! duration=756ms; Flags=0, FrameTimelineVsyncId=6552, IntendedVsync=114119251286, Vsync=114452584606, InputEventId=0, HandleInputStart=114456390791, AnimationStart=114456391122, PerformTravers
+   11-14 14:08:05.257  4173  4219 I HWUI    : Davey! duration=773ms; Flags=0, FrameTimelineVsyncId=6960, IntendedVsync=119035917756, Vsync=119385917742, InputEventId=0, HandleInputStart=119401795230, AnimationStart=119401795700, PerformTravers
+   11-14 14:08:06.160  4173  4219 I HWUI    : Davey! duration=798ms; Flags=0, FrameTimelineVsyncId=7058, IntendedVsync=119469251072, Vsync=119735917728, InputEventId=0, HandleInputStart=119741766142, AnimationStart=119741766493, PerformTravers
+   11-14 14:08:06.334  4173  4219 I HWUI    : Davey! duration=825ms; Flags=0, FrameTimelineVsyncId=7096, IntendedVsync=119752584394, Vsync=120185917710, InputEventId=0, HandleInputStart=120197184505, AnimationStart=120197185236, PerformTravers
+== NativeLink: 9
+   11-14 14:08:10.186  4173  4450 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 14:09:01.863  5200  5250 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 14:22:23.457 10845 10898 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 14:34:52.168 15715 15771 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 14:42:26.688 18456 18559 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 14:43:02.110 18743 18776 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 14:43:51.164 19088 19128 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 14:47:32.504 19972 20020 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 14:54:26.824 21878 21920 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 14:07:46.853  4146  4146 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:08:53.346  5187  5187 I PERFCHECK: section: C1. Tour of all screens on API 36
+   11-14 14:09:21.751  5417  5417 I PERFCHECK: section: T-api36-light. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0
+   11-14 14:22:37.948 11001 11001 I PERFCHECK: section: T-api36-dark. All screens 1080x2400 px, density 420, font_scale 1.0, night yes, app locale [bg-BG], rotation 0
+   11-14 14:34:44.790 15697 15697 I PERFCHECK: section: C2. Home ribbon and the card on API 36
+   11-14 14:36:59.172 16164 16164 I PERFCHECK: section: C3. Surprise ×2, share a book as an image on API 36
+   11-14 14:37:47.345 16460 16460 I PERFCHECK: sh-book36
+   11-14 14:38:25.957 16767 16767 I PERFCHECK: section: C4. Predictive back gesture navigation on API 36: „Изненадай ме“, a book, an article
+   11-14 14:40:41.138 17890 17890 I PERFCHECK: section: C5. Rotation and process death on API 36 book, catalogue, article
+   11-14 14:41:08.078   635  1461 I ActivityManager: Killing 15715:org.chyavorec.app/u0a216 (adj 700): kill background
+   11-14 14:42:12.069   635  2023 I ActivityManager: Killing 18047:org.chyavorec.app/u0a216 (adj 700): kill background
+   11-14 14:42:57.312   635  2032 I ActivityManager: Killing 18456:org.chyavorec.app/u0a216 (adj 700): kill background
+   11-14 14:43:15.458 18877 18877 I PERFCHECK: section: C6. Monkey 2000 seed 1357 on API 36
+   11-14 14:43:15.491 18882 18882 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:43:45.318 19053 19053 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-14 14:44:05.929 19191 19191 I PERFCHECK: monkey start
+   11-14 14:46:40.584 19628 19628 I PERFCHECK: section: C6. Monkey 2000 seed 4242 on API 36
+   11-14 14:46:40.615 19633 19633 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:47:28.654 19930 19930 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-14 14:47:43.622 20090 20090 I PERFCHECK: monkey start
+   11-14 14:50:31.142 20394 20394 I PERFCHECK: section: C6. Monkey 2000 seed 777 on API 36
+   11-14 14:50:31.169 20399 20399 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:54:23.755 21843 21843 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-14 14:55:29.964 22209 22209 I PERFCHECK: monkey start
+   11-14 14:58:00.012 22546 22546 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

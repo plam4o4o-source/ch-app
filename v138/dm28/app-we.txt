@@ -1,0 +1,37 @@
+APP W/E lines (pids ['5585', '5771', '5923', '5985', '6130', '6286', '6333', '6392', '6541', '6882', '6980', '7036', '7094', '7247', '7486', '7659', '7711', '7767', '7920', '8211', '8387', '8449', '8499', '8655', '9035', '9117', '9167', '9219', '9367', '9690', '9776', '9827', '9886']): 757 in 36 groups
+      60  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->getScaleX()F (dark greylist, linking)
+      41  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setPivotX(F)Z (dark greylist, linking)
+      38  E/eglCodecCommon: glUtilsParamSize: unknow param #
+      35  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setClipToOutline(Z)Z (dark greylist, linking)
+      34  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setLayerType(I)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Unexpected CPU variant for X# using defaults: x#_#
+      33  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      33  E/eglCodecCommon: GoldfishAddressSpaceHostMemoryAllocator: ioctl_ping failed for device_type=#, ret=-#
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setScaleY(F)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->getMatrix(Landroid/graphics/Matrix;)V (dark greylist, linki
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setCameraDistance(F)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setRotationX(F)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setRotationY(F)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setAlpha(F)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setLayerPaint(Landroid/graphics/Paint;)Z (dark greylist, li
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setElevation(F)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setRotation(F)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setTranslationY(F)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setOutline(Landroid/graphics/Outline;)Z (dark greylist, lin
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setScaleX(F)Z (dark greylist, linking)
+      33  W/g.chyavorec.ap: Accessing hidden method Landroid/view/RenderNode;->setTranslationX(F)Z (dark greylist, linking)
+       5  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       2  W/g.chyavorec.ap: Suspending all threads took: #.#ms
+       2  W/ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@#d#
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=c#e#-#e#-#-b#e#-#a#e#a#f, generation=#)
+       1  W/g.chyavorec.ap: Long monitor contention with owner DefaultDispatcher-worker-# (#) at android.content.SharedPreferences android
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#dd#c-#bd#-#d#a-a#-#fde, generation=#)
+       1  W/g.chyavorec.ap: Verification of tj# f#.f(javax.net.ssl.SSLException) took #.#ms
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=c#eb#f#-#e#-#bc-a#ba-fa#f#e#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#c#ec-#e#f-#e#-#-#c#f#e, generation=#)
+       1  W/g.chyavorec.ap: Long monitor contention with owner DefaultDispatcher-worker-# (#) at boolean android.os.BinderProxy.transactNa
+       1  W/g.chyavorec.ap: Long wait of #.#ms for Thread[#,tid=#,Suspended,Thread*=#,peer=#,"Jit thread pool worker thread #"] suspension
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#e#b#c#-#c#-#de-#b-#f#a#b#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=bf#eefae-f#-#b#-af#e-#cbc#f#a, generation=#)
+       1  W/g.chyavorec.ap: Long monitor contention with owner main (#) at void android.content.res.AssetManager.nativeThemeApplyStyle(lon
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=beb#bbdd-#-#e#e-aec#-#cd#, generation=#)

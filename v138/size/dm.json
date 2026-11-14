@@ -1,0 +1,18 @@
+[
+  {
+    "format": "v0_1_0_p",
+    "minSdk": 28,
+    "maxSdk": 30,
+    "file": "app.v0_1_0_p.dm",
+    "sha256": "155d23acd08de5ac5171fc750bd6e3e87b03b35afe62538a354412ab1e971ebb",
+    "size": 21550
+  },
+  {
+    "format": "v0_1_5_s",
+    "minSdk": 31,
+    "maxSdk": null,
+    "file": "app.v0_1_5_s.dm",
+    "sha256": "eb62490b8422f97bc9e9061cd26f722f2144707fc9638d0c0e93a3045403b752",
+    "size": 21188
+  }
+]

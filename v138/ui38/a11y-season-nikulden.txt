@@ -1,0 +1,8 @@
+A11Y season-nikulden/home: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: '6 Никулден' 280x31dp
+A11Y season-nikulden/home-2: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y season-nikulden/home-3: targets=17 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   MISSING: View@[42,2107][378,2127]; View@[415,2107][751,2127]; View@[788,2107][1080,2127]
+   SMALL: '' 128x8dp; '' 128x8dp
+A11Y season-nikulden/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y season-nikulden/my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

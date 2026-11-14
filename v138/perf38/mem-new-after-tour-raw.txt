@@ -1,0 +1,63 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 3035359 Realtime: 3035359
+
+** MEMINFO in pid 19582 [org.chyavorec.app] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap    51723    51636       24       60    52860    64716    43867     8207
+  Dalvik Heap    10214     9868       48      235    11608    20223    10112    10111
+ Dalvik Other     7860     3600        0       43    13108                           
+        Stack     1140     1140        0        0     1144                           
+       Ashmem       60        0        0        0      384                           
+    Other dev       19        0       16        0      312                           
+     .so mmap     6086      288     1952       23    35600                           
+    .jar mmap     3824        0      756        0    32216                           
+    .apk mmap      569        0      284        0     1620                           
+    .ttf mmap     1281        0     1132        0     1532                           
+    .dex mmap     7648       12     7620        0     8200                           
+    .oat mmap     1128        0       16        0    14312                           
+    .art mmap     2217     1300      248      221    13464                           
+   Other mmap     1826        8     1432        0     3552                           
+      Unknown      552      540        4        0      844                           
+        TOTAL    96729    68392    13532      582   190756    84939    53979    18318
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:    11416                          25072
+         Native Heap:    51636                          52860
+                Code:    12080                         101968
+               Stack:     1140                           1144
+            Graphics:        0                              0
+       Private Other:     5652
+              System:    14805
+             Unknown:                                    9712
+ 
+           TOTAL PSS:    96729            TOTAL RSS:   190756       TOTAL SWAP PSS:      582
+ 
+ Objects
+               Views:       13         ViewRootImpl:        1
+         AppContexts:        5           Activities:        1
+              Assets:       16        AssetManagers:        0
+       Local Binders:       46        Proxy Binders:       50
+       Parcel memory:       10         Parcel count:       42
+    Death Recipients:        2      OpenSSL Sockets:        1
+            WebViews:        0
+ 
+ SQL
+         MEMORY_USED:     2449
+  PAGECACHE_OVERFLOW:     1716          MALLOC_SIZE:       46
+ 
+ DATABASES
+      pgsz     dbsz   Lookaside(b)          cache  Dbname
+         4       40             85        34/65/9  /data/user/0/org.chyavorec.app/databases/com.google.android.datatransport.events
+         4       44             29         5/73/4  /data/user/0/org.chyavorec.app/databases/chitalishte.db
+         4        8                         0/0/0    (attached) temp
+         4       44            108        28/26/9  /data/user/0/org.chyavorec.app/databases/chitalishte.db (1)
+         4      104            122      115/94/25  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb
+         4        8                         0/0/0    (attached) temp
+         4      104             57        11/24/6  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb (1)
+         4     2064             17         0/20/1  /data/user/0/org.chyavorec.app/databases/catalog-index.db
+         4        8                         0/0/0    (attached) temp
+         4     2064            123       23/33/16  /data/user/0/org.chyavorec.app/databases/catalog-index.db (1)

@@ -1,0 +1,1 @@
+4096 chitalishte.db;32768 chitalishte.db-shm;78312 chitalishte.db-wal;0 ls.txt;

@@ -1,0 +1,111 @@
+app pids seen: ['5945', '6654', '6851', '7122', '7439', '7640', '7942', '8582', '8836', '8958', '9157', '9220', '9427', '9737', '9792', '9847', '9904', '10002', '10057', '10120', '10297', '10595', '10657', '10714', '10771', '10827', '10909', '10969', '11141', '11436', '11493', '11555', '11613', '11672', '11729', '11784', '12104', '12410', '12469', '12524', '12579', '12636', '12747', '12802', '12985', '13275', '13332', '13389', '13445', '13499', '13556', '13611', '13779', '14090', '14151', '14277', '14333', '14406', '14462', '14517', '14697', '14996', '15054', '15110', '15168', '15225', '15282', '15343', '15515', '15825', '15879', '15934', '15991', '16067', '16124', '16186']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 248
+   skipped-frames events=248 max=111 total=12597
+   11-14 14:07:37.628  5945  5945 I Choreographer: Skipped 77 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:41.395  5945  5945 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:42.443  5945  5945 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:44.095  5945  5945 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:44.729  5945  5945 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:52.573  5945  5945 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:20.632  5945  5945 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:29.927  6654  6654 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:30.615  6654  6654 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:31.560  6654  6654 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:32.765  6654  6654 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:40.201  6851  6851 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+== Davey: 363
+   davey events=363 max=3097ms median=1213ms
+   11-14 14:07:40.053  5945  5956 I OpenGLRenderer: Davey! duration=2313ms; Flags=1, FrameTimelineVsyncId=6580, IntendedVsync=97953579578, Vsync=98353579562, InputEventId=0, HandleInputStart=98357061498, AnimationStart=98357062400, PerformTrav
+   11-14 14:07:41.614  5945  5956 I OpenGLRenderer: Davey! duration=1250ms; Flags=0, FrameTimelineVsyncId=6816, IntendedVsync=100503585026, Vsync=100503585026, InputEventId=0, HandleInputStart=100505981736, AnimationStart=100505981976, Perform
+   11-14 14:07:42.430  5945  5956 I OpenGLRenderer: Davey! duration=1138ms; Flags=0, FrameTimelineVsyncId=6830, IntendedVsync=100520251691, Vsync=100970251646, InputEventId=0, HandleInputStart=100974343598, AnimationStart=100974344450, Perform
+   11-14 14:07:43.148  5945  5956 I OpenGLRenderer: Davey! duration=1740ms; Flags=0, FrameTimelineVsyncId=6891, IntendedVsync=100986918325, Vsync=101670251590, InputEventId=0, HandleInputStart=101671315806, AnimationStart=101671316176, Perform
+   11-14 14:07:43.292  5945  5956 I OpenGLRenderer: Davey! duration=932ms; Flags=0, FrameTimelineVsyncId=6986, IntendedVsync=101686912762, Vsync=101903579420, InputEventId=0, HandleInputStart=101909322343, AnimationStart=101909323134, PerformT
+   11-14 14:07:44.091  5945  6051 I OpenGLRenderer: Davey! duration=1551ms; Flags=0, FrameTimelineVsyncId=7035, IntendedVsync=101920246086, Vsync=102703579388, InputEventId=0, HandleInputStart=102850586274, AnimationStart=102850587216, Perform
+   11-14 14:07:44.702  5945  5985 I OpenGLRenderer: Davey! duration=1537ms; Flags=0, FrameTimelineVsyncId=7221, IntendedVsync=102953579378, Vsync=103420246026, InputEventId=0, HandleInputStart=103426997752, AnimationStart=103426998072, Perform
+   11-14 14:07:44.876  5945  5985 I OpenGLRenderer: Davey! duration=797ms; Flags=0, FrameTimelineVsyncId=7248, IntendedVsync=103436912692, Vsync=103586912686, InputEventId=0, HandleInputStart=103587300850, AnimationStart=103587301310, PerformT
+   11-14 14:07:45.067  5945  5985 I OpenGLRenderer: Davey! duration=942ms; Flags=0, FrameTimelineVsyncId=7261, IntendedVsync=103603584899, Vsync=104370251489, InputEventId=0, HandleInputStart=104371689808, AnimationStart=104371690169, PerformT
+   11-14 14:07:45.264  5945  5985 I OpenGLRenderer: Davey! duration=812ms; Flags=0, FrameTimelineVsyncId=7317, IntendedVsync=104386923731, Vsync=105003590299, InputEventId=0, HandleInputStart=105005119008, AnimationStart=105005119869, PerformT
+   11-14 14:07:52.747  5945  5985 I OpenGLRenderer: Davey! duration=779ms; Flags=0, FrameTimelineVsyncId=8073, IntendedVsync=112236912340, Vsync=112236912340, InputEventId=-1054193825, HandleInputStart=112237098038, AnimationStart=112237098628
+   11-14 14:07:53.229  5945  5957 I OpenGLRenderer: Davey! duration=884ms; Flags=0, FrameTimelineVsyncId=8080, IntendedVsync=112253579006, Vsync=112836912316, InputEventId=0, HandleInputStart=112849717962, AnimationStart=112849718763, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 14:07:31.923  5837  5837 I PERFCHECK: section: S0. Emulator warm-up block not counted: both apps, 2 installs × 5 cold starts
+   11-14 14:08:27.333  6648  6648 I PERFCHECK: fd-warm-base-5366
+   11-14 14:08:38.410  6838  6838 I PERFCHECK: fd-warm-base-24588
+   11-14 14:08:49.190  7036  7036 I PERFCHECK: fd-warm-base-28254
+   11-14 14:09:00.557  7366  7366 I PERFCHECK: fd-warm-base-12660
+   11-14 14:09:11.862  7634  7634 I PERFCHECK: fd-warm-base-177
+   11-14 14:10:16.507  8576  8576 I PERFCHECK: fd-warm-new-19267
+   11-14 14:10:27.411  8830  8830 I PERFCHECK: fd-warm-new-24989
+   11-14 14:10:38.112  8952  8952 I PERFCHECK: fd-warm-new-5902
+   11-14 14:10:48.285  9130  9130 I PERFCHECK: fd-warm-new-5701
+   11-14 14:10:58.528  9208  9208 I PERFCHECK: fd-warm-new-26459
+   11-14 14:11:06.010  9288  9288 I PERFCHECK: section: S new-1: fresh install, first launch + catalogue, 2 excluded + 5 cold starts TotalTime, Fully drawn
+   11-14 14:12:11.341  9731  9731 I PERFCHECK: fd-excl-new-10815
+   11-14 14:12:20.947  9786  9786 I PERFCHECK: fd-excl-new-15586
+   11-14 14:12:30.486  9841  9841 I PERFCHECK: fd-new-27866
+   11-14 14:12:40.973  9898  9898 I PERFCHECK: fd-new-11409
+   11-14 14:12:51.891  9996  9996 I PERFCHECK: fd-new-22985
+   11-14 14:13:02.037 10051 10051 I PERFCHECK: fd-new-18073
+   11-14 14:13:12.069 10114 10114 I PERFCHECK: fd-new-28492
+   11-14 14:13:19.450 10165 10165 I PERFCHECK: section: S base-2: fresh install, first launch + catalogue, 2 excluded + 5 cold starts TotalTime, Fully drawn
+   11-14 14:14:18.364 10589 10589 I PERFCHECK: fd-excl-base-17192
+   11-14 14:14:28.017 10650 10650 I PERFCHECK: fd-excl-base-32556
+   11-14 14:14:36.972 10708 10708 I PERFCHECK: fd-base-3507
+   11-14 14:14:46.897 10765 10765 I PERFCHECK: fd-base-28807
+   11-14 14:14:56.901 10821 10821 I PERFCHECK: fd-base-6208
+   11-14 14:15:08.123 10903 10903 I PERFCHECK: fd-base-12563
+   11-14 14:15:17.922 10963 10963 I PERFCHECK: fd-base-5977
+   11-14 14:15:24.615 11014 11014 I PERFCHECK: section: S base-3: fresh install, first launch + catalogue, 2 excluded + 5 cold starts TotalTime, Fully drawn
+   11-14 14:16:18.887 11430 11430 I PERFCHECK: fd-excl-base-7223
+   11-14 14:16:28.673 11487 11487 I PERFCHECK: fd-excl-base-19169
+   11-14 14:16:38.604 11549 11549 I PERFCHECK: fd-base-30636
+   11-14 14:16:48.921 11607 11607 I PERFCHECK: fd-base-20705
+   11-14 14:16:58.851 11666 11666 I PERFCHECK: fd-base-5988
+   11-14 14:17:08.705 11723 11723 I PERFCHECK: fd-base-4352
+   11-14 14:17:18.423 11778 11778 I PERFCHECK: fd-base-22109
+   11-14 14:17:25.337 11831 11831 I PERFCHECK: section: S new-4: fresh install, first launch + catalogue, 2 excluded + 5 cold starts TotalTime, Fully drawn
+   11-14 14:18:26.077 12404 12404 I PERFCHECK: fd-excl-new-23903
+   11-14 14:18:34.988 12463 12463 I PERFCHECK: fd-excl-new-31531
+   11-14 14:18:44.909 12518 12518 I PERFCHECK: fd-new-26706
+   11-14 14:18:54.889 12573 12573 I PERFCHECK: fd-new-11287
+   11-14 14:19:05.051 12630 12630 I PERFCHECK: fd-new-19799
+   11-14 14:19:14.845 12741 12741 I PERFCHECK: fd-new-32342
+   11-14 14:19:25.003 12796 12796 I PERFCHECK: fd-new-2539
+   11-14 14:19:32.906 12847 12847 I PERFCHECK: section: S new-5: fresh install, first launch + catalogue, 2 excluded + 5 cold starts TotalTime, Fully drawn
+   11-14 14:20:27.099 13269 13269 I PERFCHECK: fd-excl-new-32397
+   11-14 14:20:37.138 13326 13326 I PERFCHECK: fd-excl-new-27235
+   11-14 14:20:46.937 13383 13383 I PERFCHECK: fd-new-22565
+   11-14 14:20:56.592 13439 13439 I PERFCHECK: fd-new-50
+   11-14 14:21:06.474 13493 13493 I PERFCHECK: fd-new-29790
+   11-14 14:21:16.368 13550 13550 I PERFCHECK: fd-new-16731
+   11-14 14:21:25.649 13605 13605 I PERFCHECK: fd-new-22096
+   11-14 14:21:32.639 13657 13657 I PERFCHECK: section: S base-6: fresh install, first launch + catalogue, 2 excluded + 5 cold starts TotalTime, Fully drawn
+   11-14 14:22:35.511 14084 14084 I PERFCHECK: fd-excl-base-11196
+   11-14 14:22:44.984 14145 14145 I PERFCHECK: fd-excl-base-20388
+   11-14 14:22:54.894 14267 14267 I PERFCHECK: fd-base-3086
+   11-14 14:23:04.702 14327 14327 I PERFCHECK: fd-base-26100
+   11-14 14:23:14.860 14400 14400 I PERFCHECK: fd-base-29234
+   11-14 14:23:24.536 14456 14456 I PERFCHECK: fd-base-24775
+   11-14 14:23:34.260 14511 14511 I PERFCHECK: fd-base-24347
+   11-14 14:23:40.841 14566 14566 I PERFCHECK: section: S base-7: fresh install, first launch + catalogue, 2 excluded + 5 cold starts TotalTime, Fully drawn
+   11-14 14:24:41.294 14990 14990 I PERFCHECK: fd-excl-base-5397
+   11-14 14:24:50.938 15048 15048 I PERFCHECK: fd-excl-base-2223
+   11-14 14:25:00.422 15104 15104 I PERFCHECK: fd-base-26899
+   11-14 14:25:10.393 15162 15162 I PERFCHECK: fd-base-2321
+   11-14 14:25:20.732 15219 15219 I PERFCHECK: fd-base-29205
+   11-14 14:25:30.466 15276 15276 I PERFCHECK: fd-base-19443
+   11-14 14:25:40.327 15337 15337 I PERFCHECK: fd-base-29024
+   11-14 14:25:47.388 15391 15391 I PERFCHECK: section: S new-8: fresh install, first launch + catalogue, 2 excluded + 5 cold starts TotalTime, Fully drawn
+   11-14 14:26:50.618 15818 15818 I PERFCHECK: fd-excl-new-1668
+   11-14 14:27:00.390 15873 15873 I PERFCHECK: fd-excl-new-5030
+   11-14 14:27:10.730 15928 15928 I PERFCHECK: fd-new-26887
+   11-14 14:27:20.422 15985 15985 I PERFCHECK: fd-new-8171
+   11-14 14:27:30.369 16061 16061 I PERFCHECK: fd-new-5465
+   11-14 14:27:40.087 16118 16118 I PERFCHECK: fd-new-24218
+   11-14 14:27:50.131 16180 16180 I PERFCHECK: fd-new-24634
+   11-14 14:27:57.105 16229 16229 I PERFCHECK: section: S totals n=20 per app
+   11-14 14:27:57.456 16235 16235 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

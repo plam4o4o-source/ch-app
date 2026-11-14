@@ -1,0 +1,2 @@
+12-10 10:00:08.217  1698  1698 F libc    : Fatal signal 4 (SIGILL), code 2 (ILL_ILLOPN), fault addr 0x74e3cb68f769 in tid 1698 (earchbox:search), pid 1698 (earchbox:search)
+

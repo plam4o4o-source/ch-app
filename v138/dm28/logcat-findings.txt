@@ -1,0 +1,103 @@
+app pids seen: ['5585', '5771', '5923', '5985', '6130', '6286', '6333', '6392', '6541', '6882', '6980', '7036', '7094', '7247', '7486', '7659', '7711', '7767', '7920', '8211', '8387', '8449', '8499', '8655', '9035', '9117', '9167', '9219', '9367', '9690', '9776', '9827', '9886']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 10
+   skipped-frames events=10 max=44 total=362
+   11-14 14:07:44.538  5585  5585 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:00.045  5771  5771 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-14 14:09:25.110  6882  6882 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-14 14:09:43.848  7036  7036 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-14 14:10:20.747  7486  7486 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-14 14:11:25.468  8211  8211 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-14 14:11:44.448  8449  8449 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-14 14:12:33.166  9117  9117 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-14 14:12:50.380  9219  9219 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-14 14:13:39.126  9827  9827 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+== Davey: 20
+   davey events=20 max=1171ms median=786ms
+   11-14 14:08:00.313  5771  5795 I OpenGLRenderer: Davey! duration=857ms; Flags=1, IntendedVsync=110638929449, Vsync=111222262759, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=111232513930, AnimationStart=1112325
+   11-14 14:08:47.013  6333  6356 I OpenGLRenderer: Davey! duration=732ms; Flags=1, IntendedVsync=157465126520, Vsync=157815126506, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=157826237141, AnimationStart=1578262
+   11-14 14:09:03.533  6541  6567 I OpenGLRenderer: Davey! duration=715ms; Flags=1, IntendedVsync=174002496980, Vsync=174369163632, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=174381141760, AnimationStart=1743811
+   11-14 14:09:44.114  7036  7059 I OpenGLRenderer: Davey! duration=789ms; Flags=1, IntendedVsync=214501653090, Vsync=215034986402, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=215035413033, AnimationStart=2150354
+   11-14 14:09:59.873  7247  7273 I OpenGLRenderer: Davey! duration=713ms; Flags=1, IntendedVsync=230343514594, Vsync=230726847912, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=230741503232, AnimationStart=2307415
+   11-14 14:10:20.683  7486  7597 I OpenGLRenderer: Davey! duration=846ms; Flags=1, IntendedVsync=251020238467, Vsync=251170238461, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=251185762428, AnimationStart=2511857
+   11-14 14:10:20.855  7486  7597 I OpenGLRenderer: Davey! duration=782ms; Flags=0, IntendedVsync=251259500608, Vsync=251926167248, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=251933933407, AnimationStart=2519339
+   11-14 14:10:31.553  7659  7685 I OpenGLRenderer: Davey! duration=726ms; Flags=1, IntendedVsync=262011357181, Vsync=262328023835, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=262343760893, AnimationStart=2623437
+   11-14 14:10:39.953  7711  7734 I OpenGLRenderer: Davey! duration=711ms; Flags=1, IntendedVsync=270408621081, Vsync=270725287735, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=270740829684, AnimationStart=2707408
+   11-14 14:10:48.434  7767  7793 I OpenGLRenderer: Davey! duration=756ms; Flags=1, IntendedVsync=278862289215, Vsync=279245622533, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=279246878448, AnimationStart=2792468
+   11-14 14:10:56.493  7920  7945 I OpenGLRenderer: Davey! duration=762ms; Flags=1, IntendedVsync=286915349709, Vsync=287198683031, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=287204150185, AnimationStart=2872041
+   11-14 14:11:25.443  8211  8334 I OpenGLRenderer: Davey! duration=863ms; Flags=1, IntendedVsync=315751574247, Vsync=315851574243, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=315863945845, AnimationStart=3158639
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 14:07:36.059  5344  5344 I PERFCHECK: section: DM0. Files and the local HTTPS server runner 10.0.2.2:8443, test CA in the system store
+   11-14 14:07:38.329  5371  5371 I PERFCHECK: section: DM1. Control: pm install session with base.apk + base.dm no app code, then the same without .dm
+   11-14 14:07:38.872  5490  5490 I PERFCHECK: ctl-with-dm
+   11-14 14:07:55.616  1985  2774 I ActivityManager: Killing 5585:org.chyavorec.app/u0a87 (adj 0): stop org.chyavorec.app
+   11-14 14:07:58.723  5766  5766 I PERFCHECK: fd-ctl-with-dm-5610
+   11-14 14:08:03.421  1985  2774 I ActivityManager: Killing 5771:org.chyavorec.app/u0a87 (adj 0): stop org.chyavorec.app
+   11-14 14:08:06.473  5889  5889 I PERFCHECK: fd-ctl-with-dm-2728
+   11-14 14:08:11.460  1985  4399 I ActivityManager: Killing 5923:org.chyavorec.app/u0a87 (adj 0): stop org.chyavorec.app
+   11-14 14:08:14.528  5980  5980 I PERFCHECK: fd-ctl-with-dm-4388
+   11-14 14:08:19.256  1985  1996 I ActivityManager: Killing 5985:org.chyavorec.app/u0a87 (adj 0): stop org.chyavorec.app
+   11-14 14:08:20.228  6088  6088 I PERFCHECK: ctl-without-dm
+   11-14 14:08:34.004  1985  3734 I ActivityManager: Killing 6130:org.chyavorec.app/u0a88 (adj 0): stop org.chyavorec.app
+   11-14 14:08:37.044  6281  6281 I PERFCHECK: fd-ctl-without-dm-14302
+   11-14 14:08:42.304  1985  2349 I ActivityManager: Killing 6286:org.chyavorec.app/u0a88 (adj 0): stop org.chyavorec.app
+   11-14 14:08:45.366  6328  6328 I PERFCHECK: fd-ctl-without-dm-9078
+   11-14 14:08:50.669  1985  3572 I ActivityManager: Killing 6333:org.chyavorec.app/u0a88 (adj 0): stop org.chyavorec.app
+   11-14 14:08:53.706  6387  6387 I PERFCHECK: fd-ctl-without-dm-29614
+   11-14 14:08:59.317  6428  6428 I PERFCHECK: section: DM-good. In-app update 1.2.38-local vc 1510099 → 1.2.38 vc 1510100 from https://10.0.2.2:8443; dm: 28:30:dm/app.v0_1_0_p.dm 31::dm/app.v0_1_5_s.dm
+   11-14 14:08:59.387  1985  4399 I ActivityManager: Killing 6392:org.chyavorec.app/u0a88 (adj 0): stop org.chyavorec.app
+   11-14 14:09:01.887  6530  6530 I PERFCHECK: dm-good
+   11-14 14:09:17.832  1985  2001 I ActivityManager: Killing 6541:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-14 14:09:23.248  1985  2014 I ActivityManager: Killing 0:org.chyavorec.app/u0a89 (adj -10000): stop org.chyavorec.app
+   11-14 14:09:31.054  1985  3734 I ActivityManager: Killing 6882:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-14 14:09:34.214  6975  6975 I PERFCHECK: fd-dm-good-25941
+   11-14 14:09:39.406  1985  1997 I ActivityManager: Killing 6980:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-14 14:09:42.459  7031  7031 I PERFCHECK: fd-dm-good-22762
+   11-14 14:09:47.743  1985  2758 I ActivityManager: Killing 7036:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-14 14:09:50.801  7089  7089 I PERFCHECK: fd-dm-good-3760
+   11-14 14:09:55.484  7132  7132 I PERFCHECK: section: DM-badsha. In-app update 1.2.38-local vc 1510099 → 1.2.38 vc 1510100 from https://10.0.2.2:8443; dm: 28:30:dm/app.v0_1_0_p.dm:00000000000000000000000000000000000000000
+   11-14 14:09:55.561  1985  3264 I ActivityManager: Killing 7094:org.chyavorec.app/u0a89 (adj 0): stop org.chyavorec.app
+   11-14 14:09:58.155  7237  7237 I PERFCHECK: dm-badsha
+   11-14 14:10:13.400  1985  2001 I ActivityManager: Killing 7247:org.chyavorec.app/u0a90 (adj 0): stop org.chyavorec.app
+   11-14 14:10:26.804  1985  4683 I ActivityManager: Killing 7486:org.chyavorec.app/u0a90 (adj 0): stop org.chyavorec.app
+   11-14 14:10:29.912  7653  7653 I PERFCHECK: fd-dm-badsha-1933
+   11-14 14:10:35.224  1985  2481 I ActivityManager: Killing 7659:org.chyavorec.app/u0a90 (adj 0): stop org.chyavorec.app
+   11-14 14:10:38.279  7706  7706 I PERFCHECK: fd-dm-badsha-4897
+   11-14 14:10:43.702  1985  4678 I ActivityManager: Killing 7711:org.chyavorec.app/u0a90 (adj 0): stop org.chyavorec.app
+   11-14 14:10:46.746  7762  7762 I PERFCHECK: fd-dm-badsha-29209
+   11-14 14:10:52.158  7805  7805 I PERFCHECK: section: DM-junk. In-app update 1.2.38-local vc 1510099 → 1.2.38 vc 1510100 from https://10.0.2.2:8443; dm: 28:30:/home/runner/upc-srv/junk.v0_1_0_p.dm 31::/home/runner/upc-srv
+   11-14 14:10:52.241  1985  2339 I ActivityManager: Killing 7767:org.chyavorec.app/u0a90 (adj 0): stop org.chyavorec.app
+   11-14 14:10:54.733  7909  7909 I PERFCHECK: dm-junk
+   11-14 14:11:18.326  1985  2001 I ActivityManager: Killing 7920:org.chyavorec.app/u0a91 (adj 0): stop org.chyavorec.app
+   11-14 14:11:31.481  1985  2352 I ActivityManager: Killing 8211:org.chyavorec.app/u0a91 (adj 0): stop org.chyavorec.app
+   11-14 14:11:34.638  8382  8382 I PERFCHECK: fd-dm-junk-10057
+   11-14 14:11:39.992  1985  2481 I ActivityManager: Killing 8387:org.chyavorec.app/u0a91 (adj 0): stop org.chyavorec.app
+   11-14 14:11:43.094  8443  8443 I PERFCHECK: fd-dm-junk-21176
+   11-14 14:11:48.543  1985  2589 I ActivityManager: Killing 8449:org.chyavorec.app/u0a91 (adj 0): stop org.chyavorec.app
+   11-14 14:11:51.707  8494  8494 I PERFCHECK: fd-dm-junk-28564
+   11-14 14:11:57.013  8539  8539 I PERFCHECK: section: DM-old137. In-app update 1.2.38-local vc 1510099 → 1.2.38 vc 1510100 from https://10.0.2.2:8443; dm: 28:30:dm-base/app-base.v0_1_0_p.dm
+   11-14 14:11:57.091  1985  2590 I ActivityManager: Killing 8499:org.chyavorec.app/u0a91 (adj 0): stop org.chyavorec.app
+   11-14 14:11:59.841  8644  8644 I PERFCHECK: dm-old137
+   11-14 14:12:15.533  1985  2001 I ActivityManager: Killing 8655:org.chyavorec.app/u0a92 (adj 0): stop org.chyavorec.app
+   11-14 14:12:18.484  1985  2014 I ActivityManager: Killing 0:org.chyavorec.app/u0a92 (adj -10000): stop org.chyavorec.app
+   11-14 14:12:28.794  1985  4657 I ActivityManager: Killing 9035:org.chyavorec.app/u0a92 (adj 0): stop org.chyavorec.app
+   11-14 14:12:31.827  9112  9112 I PERFCHECK: fd-dm-old137-7313
+   11-14 14:12:37.194  1985  3572 I ActivityManager: Killing 9117:org.chyavorec.app/u0a92 (adj 0): stop org.chyavorec.app
+   11-14 14:12:40.364  9162  9162 I PERFCHECK: fd-dm-old137-17222
+   11-14 14:12:45.763  1985  1997 I ActivityManager: Killing 9167:org.chyavorec.app/u0a92 (adj 0): stop org.chyavorec.app
+   11-14 14:12:48.804  9214  9214 I PERFCHECK: fd-dm-old137-27260
+   11-14 14:12:54.444  9257  9257 I PERFCHECK: section: DM-none. In-app update 1.2.38-local vc 1510099 → 1.2.38 vc 1510100 from https://10.0.2.2:8443; dm: none
+   11-14 14:12:54.509  1985  2035 I ActivityManager: Killing 9219:org.chyavorec.app/u0a92 (adj 0): stop org.chyavorec.app
+   11-14 14:12:56.892  9356  9356 I PERFCHECK: dm-none
+   11-14 14:13:12.672  1985  2001 I ActivityManager: Killing 9367:org.chyavorec.app/u0a93 (adj 0): stop org.chyavorec.app
+   11-14 14:13:15.095  1985  2014 I ActivityManager: Killing 0:org.chyavorec.app/u0a93 (adj -10000): stop org.chyavorec.app
+   11-14 14:13:26.010  1985  2339 I ActivityManager: Killing 9690:org.chyavorec.app/u0a93 (adj 0): stop org.chyavorec.app
+   11-14 14:13:29.076  9771  9771 I PERFCHECK: fd-dm-none-19387
+   11-14 14:13:34.517  1985  2765 I ActivityManager: Killing 9776:org.chyavorec.app/u0a93 (adj 0): stop org.chyavorec.app
+   11-14 14:13:37.573  9822  9822 I PERFCHECK: fd-dm-none-17667
+   11-14 14:13:43.202  1985  3734 I ActivityManager: Killing 9827:org.chyavorec.app/u0a93 (adj 0): stop org.chyavorec.app
+   11-14 14:13:46.242  9881  9881 I PERFCHECK: fd-dm-none-7748
+   11-14 14:13:51.551  9923  9923 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

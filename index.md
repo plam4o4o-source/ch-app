@@ -1,5 +1,7 @@
 # Emulator results
 
+v1.2.38 candidate (de2e156, wave 23) vs v1.2.37: [v138/index.md](v138/index.md)
+
 v1.2.36 released (6432ef1), re-check of the after-merge fixes: [v136r/index.md](v136r/index.md)
 
 v1.2.36 candidate (80efffa) vs v1.2.35: [v136/index.md](v136/index.md)

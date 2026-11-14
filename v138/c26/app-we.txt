@@ -1,0 +1,41 @@
+APP W/E lines (pids ['4949', '5902', '11454', '17147', '19941', '20442', '20896']): 1542 in 124 groups
+      75  W/IInputConnectionWrapper: endBatchEdit on inactive InputConnection
+      73  W/IInputConnectionWrapper: getSelectedText on inactive InputConnection
+      68  W/IInputConnectionWrapper: getTextAfterCursor on inactive InputConnection
+      57  W/IInputConnectionWrapper: beginBatchEdit on inactive InputConnection
+      56  W/IInputConnectionWrapper: getTextBeforeCursor on inactive InputConnection
+      28  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+      26  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+      26  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+      24  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_UP, scanCode=#, met
+      23  W/BasicSecureTextField: 	at tn#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      22  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+      21  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+      20  W/GooglePlayServicesUtil: Google Play services out of date for org.chyavorec.app.  Requires # but found #
+      20  W/GoogleApiManager: The service for sx# is not available: ft#{statusCode=SERVICE_VERSION_UPDATE_REQUIRED, resolution=null, message
+      20  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_DOWN, scanCode=#, m
+      18  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_CENTER, scanCode=#,
+      18  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+      15  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MENU, scanCode=#, metaSt
+      15  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      15  W/ViewRootImpl[MainActivity]: Dropping event due to no window focus: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_DPAD_LEFT, scanCode=#, m
+      14  E/ResourceType: Style contains key with bad entry: #
+      12  W/BasicSecureTextField: 	at b#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      12  W/BasicSecureTextField: 	at yo#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      12  W/BasicSecureTextField: 	at hd#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      12  W/BasicSecureTextField: 	at fz#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      12  W/BasicSecureTextField: 	at id#.H#(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      12  W/BasicSecureTextField: 	at id#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      12  W/BasicSecureTextField: 	at ty.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      12  W/BasicSecureTextField: 	at uy#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      12  W/ViewRootImpl[MainActivity]: Cancelling event due to no window focus: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_DPAD_RIGHT, scanCode=#, 
+      12  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+      11  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+      11  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+      11  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+      11  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+      11  W/BasicSecureTextField: 	at da#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      11  W/BasicSecureTextField: 	at b#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      11  W/BasicSecureTextField: 	at a#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      11  W/BasicSecureTextField: 	at mp#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+      11  W/BasicSecureTextField: 	at mp#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)

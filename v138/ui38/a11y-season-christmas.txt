@@ -1,0 +1,8 @@
+A11Y season-christmas/home: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: '6 Богоявление' 280x31dp
+A11Y season-christmas/home-2: targets=18 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[903,0][1029,28]
+A11Y season-christmas/home-3: targets=16 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[291,0][540,1]; View@[540,0][789,1]
+A11Y season-christmas/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y season-christmas/my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

@@ -1,0 +1,23 @@
+TOTAL compressed entries: new 4614609 B, base 4565645 B, delta +48964 B
+ARSC resources by type (new/base/delta): string 1146/1136/+10
+ARSC string configurations: new 2, base 2; only in new: []
+RES files, top growth by resource-name prefix (compressed B, new/base):
+      +562  drawable/widget_*  (4949/4387)
+        +1  layout/widget_*  (4314/4313)
+RES resources with files only in new: 0; sample: []
+DEX classes (mapping.txt): new 9140, base 9075; top growth by package:
+     +57  org.chyavorec.app  (1473/1416)
+      +7  androidx.compose.foundation  (1048/1041)
+      +2  org.chyavorec.data  (396/394)
+      +1  org.chyavorec.core  (37/36)
+      +1  com.google.mlkit  (32/31)
+      +1  coil3.network  (36/35)
+      +1  androidx.work.impl  (136/135)
+      +1  androidx.savedstate.SavedStateReader  (1/0)
+      +1  androidx.room.util  (20/19)
+      +1  androidx.room.TransactorKt$$ExternalSyntheticLambda0  (1/0)
+      +1  androidx.room.RoomDatabaseKt__RoomDatabase_androidKt  (1/0)
+      +1  androidx.navigation.internal  (7/6)
+      +1  androidx.navigation.compose  (30/29)
+      +1  androidx.lifecycle.viewmodel  (17/16)
+      +1  androidx.compose.material3  (513/512)

@@ -1,0 +1,14 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 14:07:38.721  5627  5627 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:08:45.543  7225  7225 I PERFCHECK: section: DD1. State on devDebug 1.2.37: demo sign-in remember me, 5 rosettes + a note in the diary, „Искам да прочета“, text size „Голям“
+   11-14 14:12:38.018  9389  9389 I PERFCHECK: section: DD2. adb install -r devDebug 1.2.38
+   11-14 14:12:38.032  9392  9392 I PERFCHECK: dd-pre
+   11-14 14:15:10.885 10550 10550 I PERFCHECK: section: DD3. The year story on the migrated diary favourite slide
+   11-14 14:16:26.684 10906 10906 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

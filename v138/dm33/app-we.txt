@@ -1,0 +1,17 @@
+APP W/E lines (pids ['5822', '6825', '6970', '7188', '7438', '7705', '7852', '7932', '8136', '8342', '8554', '8624', '8686', '8884', '9072', '9275', '9340', '9419', '9614', '9912', '10078', '10144', '10204', '10387', '10576', '10902', '10966', '11031', '11241', '11430', '11632', '11694', '11756']): 269 in 16 groups
+      48  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      43  W/Parcel: Expecting binder but got null!
+      33  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      33  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      33  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      33  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      33  W/Gralloc4: allocator #.x is not supported
+       5  W/PackageParser: Unknown element under <manifest>: queries at /data/user/#/org.chyavorec.app/no_backup/updates/update-#.apk.par
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#e#-#c#c-#-#a#-bedfc#ccac#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ad#cc#-c#e#-#e#-#b-b#d#f#b, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=b#a#-d#-#b#e-b#a-e#f#ab#af#d, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object xv#.getValue()(r#-map-id
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=e#e#f-cf#-#bb#-#a#-#fdc#b#c#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=ee#a-e#c-#d#-#df#-#fb#ee#de, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#d#c#c-#a-#efe-a#f-d#e#db#b, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#c#-#b#-#c#-af#e-f#ae#dd#d#, generation=#)

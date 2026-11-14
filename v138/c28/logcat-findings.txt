@@ -1,0 +1,55 @@
+app pids seen: ['5547', '6544', '12359', '17414', '18459', '18868', '19122', '20235', '22398', '22921']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 6
+   skipped-frames events=6 max=60 total=226
+   11-14 14:07:13.418  5547  5547 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:14.564  5547  5547 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:49.985  6544  6544 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-14 14:19:12.464 12359 12359 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-14 14:35:44.306 20235 20235 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-14 14:42:19.838 22921 22921 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 8
+   davey events=8 max=1394ms median=812ms
+   11-14 14:07:14.246  5547  5574 I OpenGLRenderer: Davey! duration=1394ms; Flags=1, IntendedVsync=118448087374, Vsync=119014754018, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=119017164530, AnimationStart=119017
+   11-14 14:07:14.587  5547  5574 I OpenGLRenderer: Davey! duration=1035ms; Flags=1, IntendedVsync=119150095055, Vsync=120150095015, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=120162776620, AnimationStart=120162
+   11-14 14:07:50.352  6544  6569 I OpenGLRenderer: Davey! duration=949ms; Flags=1, IntendedVsync=154985881213, Vsync=155569214523, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=155583661880, AnimationStart=1555836
+   11-14 14:18:20.932 12359 12382 I OpenGLRenderer: Davey! duration=799ms; Flags=1, IntendedVsync=785729181834, Vsync=786179181816, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=786184609670, AnimationStart=7861846
+   11-14 14:19:12.636 12359 12382 I OpenGLRenderer: Davey! duration=726ms; Flags=0, IntendedVsync=837459995021, Vsync=838059994997, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=838063049070, AnimationStart=8380631
+   11-14 14:31:48.873 18868 18892 I OpenGLRenderer: Davey! duration=825ms; Flags=1, IntendedVsync=1593644615516, Vsync=1594127948830, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=1594144118460, AnimationStart=1594
+   11-14 14:42:01.172 22921 22945 I OpenGLRenderer: Davey! duration=728ms; Flags=1, IntendedVsync=2206007022803, Vsync=2206440356119, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=2206449128530, AnimationStart=2206
+   11-14 14:42:19.837 22921 22945 I OpenGLRenderer: Davey! duration=722ms; Flags=0, IntendedVsync=2224573881678, Vsync=2224740548338, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=2224744486880, AnimationStart=2224
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 14:07:12.019  5521  5521 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:07:47.795  6522  6522 I PERFCHECK: section: C1. Tour of all screens on API 28
+   11-14 14:07:47.831  1969  2212 I ActivityManager: Killing 5547:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 14:07:59.031  6649  6649 I PERFCHECK: section: T-api28-light. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-14 14:18:18.722  1969  3148 I ActivityManager: Killing 6544:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 14:18:29.086 12473 12473 I PERFCHECK: section: T-api28-dark. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-14 14:27:38.780 17379 17379 I PERFCHECK: section: C2. Home ribbon and the card on API 28
+   11-14 14:27:38.792  1969  4832 I ActivityManager: Killing 12359:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 14:29:37.936 17694 17694 I PERFCHECK: section: C3. Surprise ×2, share a book as an image on API 28
+   11-14 14:30:11.497 17987 17987 I PERFCHECK: sh-book28
+   11-14 14:30:31.628 18306 18306 I PERFCHECK: section: C5. Rotation and process death on API 28 book, catalogue, article
+   11-14 14:30:55.062  1969  2713 I ActivityManager: Killing 17414:org.chyavorec.app/u0a86 (adj 700): kill background
+   11-14 14:31:45.208  1969  4958 I ActivityManager: Killing 18459:org.chyavorec.app/u0a86 (adj 700): kill background
+   11-14 14:32:23.503  1969  2667 I ActivityManager: Killing 18868:org.chyavorec.app/u0a86 (adj 700): kill background
+   11-14 14:32:37.481 19232 19232 I PERFCHECK: section: C5b. Scanner screen: manual entry and back ×2, repeated ×8 the API 26 crash came right after this in round 1
+   11-14 14:34:19.137 20031 20031 I PERFCHECK: section: C6. Monkey 2000 seed 1357 on API 28
+   11-14 14:34:19.156 20036 20036 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:34:42.951 20196 20196 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-14 14:34:43.175  1969  4958 I ActivityManager: Killing 19122:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 14:34:53.317 20308 20308 I PERFCHECK: monkey start
+   11-14 14:36:20.481 20484 20484 I PERFCHECK: section: C6. Monkey 2000 seed 4242 on API 28
+   11-14 14:36:20.558 20489 20489 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:39:54.579 22355 22355 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-14 14:39:54.643  1969  4832 I ActivityManager: Killing 20235:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 14:40:04.582 22478 22478 I PERFCHECK: monkey start
+   11-14 14:41:21.067 22611 22611 I PERFCHECK: section: C6. Monkey 2000 seed 777 on API 28
+   11-14 14:41:21.086 22616 22616 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:41:58.839 22886 22886 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-14 14:41:58.905  1969  2616 I ActivityManager: Killing 22398:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 14:42:10.618 22999 22999 I PERFCHECK: monkey start
+   11-14 14:43:30.636 23138 23138 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

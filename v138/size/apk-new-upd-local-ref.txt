@@ -1,0 +1,1 @@
+1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510099; update manifest: https://10.0.2.2:8443/update.json (local test server)

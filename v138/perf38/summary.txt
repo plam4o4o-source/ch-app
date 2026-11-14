@@ -1,0 +1,163 @@
+part perf38; APK: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+base APK: 1.2.37 ebf1720 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510000; update manifest: the real one (releases/latest) size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+installed:  versionCode=1510100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## P0. Fresh install of new (1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versi), first launch, catalogue, a card by hand
+installed new: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810;  versionCode=1510100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+## P1. CPU and frames at rest (30 s after opening, then a 15 s window): Home after a cold start (~45 s), the card, fullscreen card, Още, Моето, quiz, timeline
+IDLE home38-new (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7760
+IDLE card38-new (15 s, no input): frames +0; cpu=0.1% (ticks 2 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 7760
+IDLE cardfull38-new (15 s, no input): frames +0; cpu=0.1% (ticks 1 in 15 s; 100 ticks = 1 cpu-s) threads: g.chyavorec.app=0.1%; pid 7760
+IDLE more38-new (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7760
+IDLE my38-new (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7760
+IDLE quiz38-new (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7760
+IDLE timeline38-new (15 s, no input): frames +0; cpu=0.0% (ticks 0 in 15 s; 100 ticks = 1 cpu-s) threads: none; pid 7760
+## P2. Jank (animations ON, 1080x2400): Home, Още, Моето, timeline, quiz answering
+GFX p38-new-home-scroll frames=   64  janky=63 (98.44%)  p50=400ms p90=600ms p95=700ms p99=750ms  slowUI=47 slowDraw=63 highInput=1
+  GFXMEM p38-new-home-scroll: pipeline: Skia (OpenGL); GPU total: 43920416 bytes, 41.89 MB (35.57 MB is purgeable); textures: 2.83 MB (6 entries) | 7.14 MB (40 entries) | 5.42 MB (12 entries); frames: 64
+  FS p38-new-home-scroll: n=63 slowest=967.8ms (frame #51; ui 330.7 rt 441.8 issue 331.1 flags 0) first5=[479, 736, 883, 815, 828] >32ms=63 >64ms=62 >100ms=62 span=12533ms
+  p38-new-home-scroll HIST: frames=64 slowest-bucket=750ms ≥50ms=63 ≥100ms=63 ≥200ms=59 ≥500ms=14
+WARN: tab bar not reached
+GFX p38-new-more frames=   72  janky=72 (100.00%)  p50=250ms p90=350ms p95=350ms p99=500ms  slowUI=30 slowDraw=72 highInput=0
+  GFXMEM p38-new-more: pipeline: Skia (OpenGL); GPU total: 78761168 bytes, 75.11 MB (70.76 MB is purgeable); textures: 13.85 KB (1 entry) | 6.85 MB (25 entries) | 8.57 MB (39 entries); frames: 72
+  FS p38-new-more: n=72 slowest=644.8ms (frame #37; ui 295.0 rt 178.4 issue 63.8 flags 0) first5=[69, 102, 254, 288, 341] >32ms=72 >64ms=71 >100ms=69 span=11833ms
+  p38-new-more HIST: frames=72 slowest-bucket=500ms ≥50ms=71 ≥100ms=69 ≥200ms=52 ≥500ms=1
+GFX p38-new-my   frames=    0  janky=0 (0.00%)  p50=4950ms p90=4950ms p95=4950ms p99=4950ms  slowUI=0 slowDraw=0 highInput=0
+  GFXMEM p38-new-my: pipeline: Skia (OpenGL); GPU total: 82949432 bytes, 79.11 MB (74.92 MB is purgeable); textures: 13.85 KB (1 entry) | 1.82 MB (33 entries) | 7.81 MB (26 entries); frames: 0
+  FS p38-new-my: no frames
+  p38-new-my HIST: frames=0 slowest-bucket=0ms ≥50ms=0 ≥100ms=0 ≥200ms=0 ≥500ms=0
+GFX p38-new-timeline frames=   79  janky=79 (100.00%)  p50=300ms p90=400ms p95=500ms p99=550ms  slowUI=42 slowDraw=79 highInput=0
+  GFXMEM p38-new-timeline: pipeline: Skia (OpenGL); GPU total: 88207616 bytes, 84.12 MB (70.79 MB is purgeable); textures: 693.48 KB (35 entries) | 2.80 MB (20 entries); frames: 79
+  FS p38-new-timeline: n=81 slowest=771.4ms (frame #73; ui 176.0 rt 376.3 issue 242.6 flags 0) first5=[104, 176, 381, 563, 574] >32ms=81 >64ms=81 >100ms=79 span=13233ms
+  p38-new-timeline HIST: frames=79 slowest-bucket=550ms ≥50ms=79 ≥100ms=77 ≥200ms=63 ≥500ms=5
+GFX p38-new-quizflow frames=   97  janky=97 (100.00%)  p50=300ms p90=500ms p95=600ms p99=650ms  slowUI=39 slowDraw=97 highInput=0
+  GFXMEM p38-new-quizflow: pipeline: Skia (OpenGL); GPU total: 87397960 bytes, 83.35 MB (68.81 MB is purgeable); textures: 371.13 KB (37 entries) | 2.02 MB (7 entries); frames: 97
+## P3. Memory: 12 cycles over Още/Моето/quiz/timeline/card/embroidery, then a full tour
+MEM new-c00 (raw)    PSS=63204KB  Java=10416KB  Native=24612KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=25)  RSS=149316KB  Views=7 Activities=1
+MEM new-c00 (trimmed) PSS=68109KB  Java=9808KB  Native=24612KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=25)  RSS=155000KB  Views=7 Activities=1
+MEM new-c04 (raw)    PSS=77750KB  Java=15024KB  Native=28280KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=7)  RSS=168800KB  Views=10 Activities=1
+MEM new-c04 (trimmed) PSS=70422KB  Java=9712KB  Native=26280KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=7)  RSS=161472KB  Views=10 Activities=1
+MEM new-c08 (raw)    PSS=79325KB  Java=14916KB  Native=28928KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=7)  RSS=171136KB  Views=10 Activities=1
+MEM new-c08 (trimmed) PSS=72177KB  Java=9780KB  Native=26936KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=7)  RSS=163988KB  Views=10 Activities=1
+MEM new-c12 (raw)    PSS=83335KB  Java=17488KB  Native=29144KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=7)  RSS=175452KB  Views=10 Activities=1
+MEM new-c12 (trimmed) PSS=73095KB  Java=9916KB  Native=26652KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=7)  RSS=165212KB  Views=10 Activities=1
+## T-perf-new. All screens (1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
+CAP perf-new/01-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP perf-new/01b-home-2: targets=16 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=30 ellipsized=0 | 14 ноември 2026 · *Св. ап. Ф · Последни новини · Моите книги · Читателска карта · Искам да прочета · Контакти
+CAP perf-new/01c-home-3: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Моите книги · Читателска карта · Искам да прочета · Контакти · КАЛЕНДАР · Предстоящи събития
+CAP perf-new/01d-home-4: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | БИБЛИОТЕКА · Нови постъпления · Към каталога · Дъхът на спомените — том 3 · Гласът на реката · Забравеният морето — том 3
+CAP perf-new/01e-search-12: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=36 ellipsized=1 [Търси книга, новина, събитие…] | Лента за търсене · Търси книга, новина, събитие · Сканирай баркод · 14 ноември 2026 · *Св. ап. Ф · Последни новини · БИБЛИОТЕКА
+CAP perf-new/02-catalog: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP perf-new/02b-filters: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=26 ellipsized=0 | Манипулатор за преместване с · Филтри · Без филтри · Само налични · Вид документ · книга
+CAP perf-new/02c-filters-2: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=27 ellipsized=0 | Манипулатор за преместване с · Раздел (жанр) · Общ отдел · Философия. Психология · Религия · Обществени науки
+CAP perf-new/02d-sort: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Най-подходящи  ✓ · Заглавие (А–Я) · Автор (А–Я) · Година (нови първо) · Година (стари първо) · Нови постъпления
+CAP perf-new/02e-shelf: targets=48 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=14 | front: app | texts=51 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP perf-new/02f-shelf-2: targets=45 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=22 | front: app | texts=47 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP perf-new/02g-search-12: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=48 ellipsized=0 | 12 · Изчисти · Всичко · Заглавие · Автор · ISBN
+CAP perf-new/03-book: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Спомен за здрача · Веска Пенчева · Не е на рафта · Наличност към 09.11.2026 · Искам да прочета · Попитай библиотеката
+CAP perf-new/03b-book-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Наличност към 09.11.2026 · Искам да прочета · Попитай библиотеката · Кажи ми, когато е на рафта · Библиографски данни · Издателство
+CAP perf-new/03c-book-3: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Наличност към 09.11.2026 · Искам да прочета · Попитай библиотеката · Кажи ми, когато е на рафта · Библиографски данни · Издателство
+CAP perf-new/04-surprise: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Предложение: Дългият войната · Още една · Към книгата · Затвори
+CAP perf-new/05-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Вход · БИБЛИОТЕКА · Читателска карта · Въведена от теб карта · Моите книги · Заети книги и срокове за връ
+CAP perf-new/05b-my-2: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Вход · БИБЛИОТЕКА · Читателска карта · Въведена от теб карта · Моите книги · Заети книги и срокове за връ
+CAP perf-new/06-card: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345 · Покажи картата
+CAP perf-new/06b-card-full: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Затвори · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · — · Читателски № TEST-12345 · Баркод на карта TEST-12345
+CAP perf-new/07-want: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Списъкът е празен · Отбележи книга с „Искам да п · Назад · Искам да прочета
+CAP perf-new/08-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP perf-new/08b-news-2: targets=19 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=24 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP perf-new/09-article: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Групата за народни танци при · СЪБИТИЕ  ·  25 юли 2026 · Групата за народни танци при · Групата за народни танци при · Режим за четене · Аа
+CAP perf-new/09b-article-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Групата за народни танци при · СЪБИТИЕ  ·  25 юли 2026 · Групата за народни танци при · Групата за народни танци при · Режим за четене · Аа
+CAP perf-new/09c-reader-sheet: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Затваряне на таблицата · Манипулатор за преместване с · Режим за четене · Размер на шрифта · Аа · Малък шрифт
+CAP perf-new/09d-share-sheet: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP perf-new/10-calendar: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=40 ellipsized=0 | Новини · Календар · Абонирай се за календара · Изглед календар · Всички · Библиотека
+CAP perf-new/11-event: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+CAP perf-new/11b-event-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+CAP perf-new/11c-event-share: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=1 SMALL(<48dp)=1 | front: app | texts=7 ellipsized=1 [Карта с QR код — за Instagram,] | Затваряне на таблицата · Манипулатор за преместване с · Сподели · Сподели като картинка · Карта с QR код — за Instagra · Сподели връзката
+CAP perf-new/12-more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP perf-new/12b-more-2: targets=16 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=24 ellipsized=0 | Устав, отчети, юбилейният ве · Контакти · Адрес, телефон, местоположен · ЗАНИМАНИЯ · Извези шевица · Бод по бод, като на кърпа
+CAP perf-new/13-gallery: targets=9 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 29 снимки · Фотодокументална изложба · 4 снимки · Фолклорна група „Явор“ · 6 снимки · Клуб за народни танци
+CAP perf-new/14-album: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Сградата на читалището в Яво · Фолклорен състав при читалищ · Хорът на сцена · 70-те години · Сценичен ансамбъл Яворски хл · Фолклорна група Явор
+CAP perf-new/15-viewer: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Сградата на читалището в Яво · Затвори · 1 / 29  ·  Сградата на читал · Сподели · Отвори в сайта · За снимката
+CAP perf-new/15b-viewer-info: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Сградата на читалището в Яво · Затвори · 1 / 29  ·  Сградата на читал · Сградата на читалището в Яво · Сподели · Отвори в сайта
+CAP perf-new/16-contacts: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | НЧ „Васил Левски – 1922“ · Изпрати имейл на читалището · Имейл · Покажи читалището на картата · Карта · Отвори сайта на читалището
+CAP perf-new/16b-contacts-2: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | пл. 9-ти Септември 3, с. Яво · Лица за контакт · Председател: Пламен Христов · Секретар: Даниела Цвяткова · Имейл · chitalishte_yavorec@abv.bg
+CAP perf-new/17-documents: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF: 
+CAP perf-new/17b-documents-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Документи · Исторически публикации · Декларации · 14.05.2026 · 4. · Декларация за частни интерес · Декларацията за частни интер · Отвори с приложение за PDF: 
+CAP perf-new/18-settings: targets=11 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP perf-new/18b-settings-2: targets=12 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=19 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+CAP perf-new/18c-settings-3: targets=8 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Разклащане за „Изненадай ме“ · Разклати телефона в каталога · УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“
+CAP perf-new/18d-settings-4: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Избери известията · Заемания, събития, съобщения · ОБНОВЛЕНИЯ · Автоматично обновяване · Проверка при отваряне и два  · Провери за нова версия
+CAP perf-new/18e-text-size: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Размер на текста · Умножава размера на шрифта о · Малък · Стандартен · Голям · Много голям
+CAP perf-new/18f-language: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Език · Както системата · Български · English · Затвори
+CAP perf-new/18g-theme: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Тема · Както системата · Светла · Тъмна · Затвори
+CAP perf-new/18h-notifications: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Известията се подготвят на с · Съобщения · Съобщения, изпратени от чита · Новини · Нова публикация в сайта · Събития
+CAP perf-new/18i-privacy-policy: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Виж и: Политика за поверител · Последна актуализация: 12 но · Кой обработва данните · Приложението „Читалище Яворе · Принцип · Приложението събира възможно
+CAP perf-new/18j-terms: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Предназначение · Приложението предоставя инфо · Съдържание · Новините, събитията, снимкит · Наличност на книгите · Наличността в каталога е инф
+CAP perf-new/18k-about: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Читалище Яворец · НЧ „Васил Левски – 1922“ · Версия 1.2.38 (1510100) · Официалното мобилно приложен · Откъде идват данните · Новини, събития, снимки, док
+CAP perf-new/18l-diagnostics: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Тук приложението записва тех · Сподели · Изчисти · Бързодействие · Времената на стартиране и пл · Версия 1.2.38 (1510100)
+CAP perf-new/18m-diagnostics-2: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Тук приложението записва тех · Сподели · Изчисти · Бързодействие · Времената на стартиране и пл · Версия 1.2.38 (1510100)
+CAP perf-new/19-login: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001 · Баркод на карта 19220001
+CAP perf-new/20-scanner: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Отказ · Търси
+CAP perf-new/20b-scan-manual: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Въведи номера на ръка · Скенерът на баркодове идва с · ISBN-ът (10 или 13 цифри под · ISBN или инвентарен номер · Отказ · Търси
+TOUR perf-new: A11Y AGG: 57 screens analysed, 0 dumps failed; totals MISSING=10 DOUBLE=0 SAME-LABEL=5 SMALL(<48dp)=51
+MEM new-after-tour (raw) PSS=96729KB  Java=11416KB  Native=51636KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=19)  RSS=190756KB  Views=13 Activities=1
+MEM new-after-tour (trimmed) PSS=99274KB  Java=11044KB  Native=51636KB  Graphics=0KB (GL=? EGL=? GfxDev=? OtherDev=19)  RSS=196852KB  Views=13 Activities=1
+PERF38 new: FATAL=0; pid 19582
+contact sheets: 9 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.38 (1510100) | Профил: чака | Студен старт · 5 | Първи кадър: медиана 3819 мс, последен 3819 мс | Пълно показване: медиана 4534 мс, последно 4874 мс | Топъл старт · 1 | Първи кадър: медиана 962 мс, последен 962 мс | Насечени кадри по екрани | home:
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.38 (1510100)" text="Профил: чака" text="Студен старт · 5" text="Първи кадър: медиана 3819 мс, последен 3819 мс" text="Пълно показване: медиана 4534 мс, последно 4874 мс" text="Топъл старт · 1" text="Първи кадър: 
+APP W/E lines (pids ['5316', '7760', '9187', '10845', '19582']): 237 in 90 groups
+      15  E/OpenGLRenderer: Unable to match the desired swap behavior.
+      14  W/Parcel: Expecting binder but got null!
+       7  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       7  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       6  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+       5  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       5  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/Gralloc4: allocator #.x is not supported
+       5  W/BasicSecureTextField: 	at tn#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       4  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       4  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       3  W/BasicSecureTextField: 	at yo#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       3  W/BasicSecureTextField: 	at hd#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       3  W/BasicSecureTextField: 	at fz#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       3  W/BasicSecureTextField: 	at id#.H#(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       3  W/BasicSecureTextField: 	at id#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       3  W/BasicSecureTextField: 	at ty.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       3  W/BasicSecureTextField: 	at uy#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       2  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       2  W/BasicSecureTextField: 	at da#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at b#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at b#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at a#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+contact sheets: 10 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5316', '7760', '9187', '10845', '19582']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 48
+   skipped-frames events=48 max=127 total=2517
+== Davey: 138
+   davey events=138 max=3664ms median=888ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'ANR': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 92642141 Nov 14 14:04 app-mapping.txt; crashes: 9097 B

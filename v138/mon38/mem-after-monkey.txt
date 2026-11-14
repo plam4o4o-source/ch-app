@@ -1,0 +1,64 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 991831 Realtime: 991831
+
+** MEMINFO in pid 9120 [org.chyavorec.app] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap    79233    79096       72       43    80340   253040    67019   172607
+  Dalvik Heap    14880     9352     5152       39    16276    19813     9907     9906
+ Dalvik Other     9337     3612       52       33    16128                           
+        Stack     1980     1980        0        0     1984                           
+       Ashmem       77        0        0        0      384                           
+    Other dev       27        4       12        0      308                           
+     .so mmap     8220      296     2676       17    35700                           
+    .jar mmap     4864        0      840        0    31028                           
+    .apk mmap      672        0      348        0     1716                           
+    .ttf mmap     2193        0     1992        0     2444                           
+    .dex mmap     7604       12     7552        0     8136                           
+    .oat mmap     1407        0       16        0    14248                           
+    .art mmap     3419     1332     1360      140    14708                           
+   Other mmap     1925        8     1396        0     3496                           
+      Unknown      590      536        4        0      844                           
+        TOTAL   136700    96228    21472      272   227740   272853    76926   182513
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:    12044                          30984
+         Native Heap:    79096                          80340
+                Code:    13768                         104640
+               Stack:     1980                           1984
+            Graphics:        0                              0
+       Private Other:    10812
+              System:    19000
+             Unknown:                                    9792
+ 
+           TOTAL PSS:   136700            TOTAL RSS:   227740       TOTAL SWAP PSS:      272
+ 
+ Objects
+               Views:       15         ViewRootImpl:        1
+         AppContexts:        6           Activities:        1
+              Assets:       16        AssetManagers:        0
+       Local Binders:      112        Proxy Binders:       44
+       Parcel memory:       14         Parcel count:       58
+    Death Recipients:        2      OpenSSL Sockets:        2
+            WebViews:        0
+ 
+ SQL
+         MEMORY_USED:     2633
+  PAGECACHE_OVERFLOW:     1852          MALLOC_SIZE:       46
+ 
+ DATABASES
+      pgsz     dbsz   Lookaside(b)          cache  Dbname
+         4     2064             17         0/25/1  /data/user/0/org.chyavorec.app/databases/catalog-index.db
+         4        8                         0/0/0    (attached) temp
+         4     2064             53        10/32/2  /data/user/0/org.chyavorec.app/databases/catalog-index.db (2)
+         4     2064            123      111/33/13  /data/user/0/org.chyavorec.app/databases/catalog-index.db (1)
+         4       40             85        34/68/9  /data/user/0/org.chyavorec.app/databases/com.google.android.datatransport.events
+         4      104             42       69/91/25  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb
+         4        8                         0/0/0    (attached) temp
+         4      104             57         9/27/6  /data/user/0/org.chyavorec.app/no_backup/androidx.work.workdb (1)
+         4       44             89        10/61/7  /data/user/0/org.chyavorec.app/databases/chitalishte.db
+         4        8                         0/0/0    (attached) temp
+         4       44             84        61/26/6  /data/user/0/org.chyavorec.app/databases/chitalishte.db (1)

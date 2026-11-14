@@ -1,0 +1,22 @@
+A11Y after-update/01-home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/02-more: targets=14 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[42,2001][524,2127]; View@[556,2001][1038,2127]
+A11Y after-update/em-01-open: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/em-02-stitched: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/em-06-after-save: targets=21 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/np-01-list: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/np-02-reader: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/np-05-offline: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/tl-01: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/tl-03: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/tl-06: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/qz-01-q1: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/qz-01-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/qz-06-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/st-01: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/st-02: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/st-03: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y after-update/st-04: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Разклати телефона в каталога з' 379x17dp
+A11Y after-update/11-event: targets=8 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[95,2242][349,2368]; View@[390,2242][606,2368]; View@[648,2242][986,2368]

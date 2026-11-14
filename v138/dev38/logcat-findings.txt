@@ -1,0 +1,18 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 14:07:12.171  5977  5977 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:08:12.049  7264  7264 I PERFCHECK: dv
+   11-14 14:08:12.576  7269  7269 I PERFCHECK: section: DV1. Моето as a guest and the login screen FLAG_SECURE: emulator screenshots
+   11-14 14:09:05.544  7755  7755 I PERFCHECK: section: DV2. „Картата е издадена“: the sign-in tap recorded from outside the card lifts, then flies to the hub tile
+   11-14 14:09:55.451  7967  7967 I PERFCHECK: section: DV3. Loans and renewal demo: renew → pending, no new due date → no „Нов лист“ expected
+   11-14 14:10:05.202  8004  8004 I PERFCHECK: section: DV4. Messages
+   11-14 14:10:30.415  8149  8149 I PERFCHECK: section: DV5. Diary: 5 rosettes on the first book, then the year story favourite slide
+   11-14 14:11:32.663  8556  8556 I PERFCHECK: section: DV6. The card on 10 December the „Твоята шевица“ strip and in fullscreen; 20 January; 14 November no strip
+   11-14 14:13:17.309  9795  9795 I PERFCHECK: section: DV7. Tablet landscape: two panes in Моето signed in
+   11-14 14:14:16.816 10402 10402 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

@@ -1,0 +1,18 @@
+APP W/E lines (pids ['5739', '6812', '7003', '7372', '7522', '7712', '7920', '8531', '8703', '8817', '8883', '8955', '9176', '9492', '9561', '9625', '9688', '9746', '9812', '9900', '10090', '10409', '10470', '10538', '10598', '10674', '10733', '10795', '10977', '11278', '11339', '11398', '11458', '11517', '11580', '11688', '11970', '12278', '12342', '12402', '12464', '12524', '12585', '12645', '12878', '13185', '13248', '13310', '13370', '13430', '13489', '13551', '13747', '14130', '14215', '14274', '14332', '14392', '14453', '14516', '14686', '14986', '15047', '15108', '15167', '15229', '15288', '15352', '15529', '15845', '15909', '15969', '16029', '16088', '16148', '16212']): 542 in 17 groups
+      76  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      76  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+      76  W/Parcel: Expecting binder but got null!
+      76  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      76  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+      76  W/Gralloc4: allocator #.x is not supported
+      76  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=fb#e-fc#f-#d#-#ee#-f#ad#e#aa#bd, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#d#b#-a#f-#f#-bfd#-f#f#ccefc, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#b#ffb#-#-#fbf-b#a#-#ffa#a#ef#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#abc#-b#-#d#e-ad#-#cc#d#da#f#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ee#b-f#d#-#-#b-#e#c#f#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#f#d#-aa#a-#eb#-#e-#c#ea#c, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object qt#.getValue()(r#-map-id
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#d#dd-d#a-#-#ccc-#c#e#cb#, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=aab#b#f-#b#-#f#-#-cae#f#ca, generation=#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#ad#ddf#-#b#-#dd-be#e-#c#c#cacab#, generation=#)

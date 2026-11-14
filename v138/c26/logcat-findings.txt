@@ -1,0 +1,49 @@
+app pids seen: ['4949', '5902', '11454', '17147', '19941', '20442', '20896']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 21
+   skipped-frames events=21 max=59 total=792
+   11-14 14:07:06.623  4949  4949 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:07.189  4949  4949 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:43.095  5902  5902 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-14 14:18:27.582 11454 11454 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-14 14:29:48.834 17147 17147 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-14 14:37:37.302 19941 19941 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-14 14:38:39.676 19941 19941 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-14 14:38:47.411 19941 19941 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-14 14:39:59.060 20442 20442 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-14 14:40:13.939 20442 20442 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-14 14:40:19.559 20442 20442 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-14 14:40:40.539 20442 20442 I Choreographer: Skipped 59 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 14:07:05.185  4936  4936 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:07:41.061  5866  5866 I PERFCHECK: section: C1. Tour of all screens on API 26
+   11-14 14:07:41.201  1631  4032 I ActivityManager: Killing 4949:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-14 14:07:54.299  6023  6023 I PERFCHECK: section: T-api26-light. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-14 14:18:25.177  1631  4032 I ActivityManager: Killing 5902:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-14 14:18:39.124 11585 11585 I PERFCHECK: section: T-api26-dark. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-14 14:29:44.849 17119 17119 I PERFCHECK: section: C2. Home ribbon and the card on API 26
+   11-14 14:29:44.865  1631  1643 I ActivityManager: Killing 11454:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-14 14:31:45.587 17420 17420 I PERFCHECK: section: C3. Surprise ×2, share a book as an image on API 26
+   11-14 14:32:26.694 17708 17708 I PERFCHECK: sh-book26
+   11-14 14:32:50.661 18004 18004 I PERFCHECK: section: C5. Rotation and process death on API 26 book, catalogue, article
+   11-14 14:35:18.566 18922 18922 I PERFCHECK: section: C5b. Scanner screen: manual entry and back ×2, repeated ×8 the API 26 crash came right after this in round 1
+   11-14 14:37:10.029 19739 19739 I PERFCHECK: section: C6. Monkey 2000 seed 1357 on API 26
+   11-14 14:37:10.054 19744 19744 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:37:34.688 19889 19889 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-14 14:37:35.035  1631  4034 I ActivityManager: Killing 17147:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-14 14:37:46.531 20016 20016 I PERFCHECK: monkey start
+   11-14 14:39:31.613 20228 20228 I PERFCHECK: section: C6. Monkey 2000 seed 4242 on API 26
+   11-14 14:39:31.637 20233 20233 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:39:56.284 20393 20393 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-14 14:39:56.683  1631  4676 I ActivityManager: Killing 19941:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-14 14:40:08.834 20520 20520 I PERFCHECK: monkey start
+   11-14 14:41:52.220 20655 20655 I PERFCHECK: section: C6. Monkey 2000 seed 777 on API 26
+   11-14 14:41:52.247 20663 20663 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:42:23.397 20848 20848 I PERFCHECK: section: K. Monkey 2000 events seed 1357, CAMERA revoked
+   11-14 14:42:23.774  1631  1783 I ActivityManager: Killing 20442:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-14 14:42:35.369 20971 20971 I PERFCHECK: monkey start
+   11-14 14:44:10.263 21128 21128 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

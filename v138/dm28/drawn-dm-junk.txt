@@ -1,0 +1,3 @@
+Status: ok TotalTime: 1197 WaitTime: 1227  | Fully drawn org.chyavorec.app/.MainActivity: +1s427ms
+Status: ok TotalTime: 1231 WaitTime: 1310  | Fully drawn org.chyavorec.app/.MainActivity: +1s522ms
+Status: ok TotalTime: 1107 WaitTime: 1126  | Fully drawn org.chyavorec.app/.MainActivity: +1s359ms

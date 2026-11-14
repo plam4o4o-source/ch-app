@@ -1,0 +1,72 @@
+11-14 14:07:51.110   485  3508 E ActivityManager: ANR in com.google.android.gms.persistent
+11-14 14:07:51.110   485  3508 E ActivityManager: PID: 1083
+11-14 14:07:51.110   485  3508 E ActivityManager: Reason: Broadcast of Intent { act=android.intent.action.DOMAINS_NEED_VERIFICATION flg=0x10000010 cmp=com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver (has extras) }
+11-14 14:07:51.110   485  3508 E ActivityManager: ErrorId: cf5f01d9-b64b-44bc-99ce-b811c109613f
+11-14 14:07:51.110   485  3508 E ActivityManager: Frozen: false
+11-14 14:07:51.110   485  3508 E ActivityManager: Load: 0.0 / 0.0 / 0.0
+11-14 14:07:51.110   485  3508 E ActivityManager: ----- Output from /proc/pressure/memory -----
+11-14 14:07:51.110   485  3508 E ActivityManager: some avg10=55.19 avg60=18.68 avg300=4.53 total=15297554
+11-14 14:07:51.110   485  3508 E ActivityManager: full avg10=4.44 avg60=1.78 avg300=0.46 total=1939855
+11-14 14:07:51.110   485  3508 E ActivityManager: ----- End output from /proc/pressure/memory -----
+11-14 14:07:51.110   485  3508 E ActivityManager: 
+11-14 14:07:51.110   485  3508 E ActivityManager: CPU usage from 8875ms to 3806ms ago (2026-11-14 14:07:41.128 to 2026-11-14 14:07:46.197):
+11-14 14:07:51.110   485  3508 E ActivityManager:   27% 485/system_server: 19% user + 7.9% kernel / faults: 7424 minor 735 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   24% 368/surfaceflinger: 0.8% user + 23% kernel / faults: 6 minor 1 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   14% 1840/com.google.android.googlequicksearchbox:search: 10% user + 4.9% kernel / faults: 13236 minor 679 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   12% 1055/com.google.android.apps.nexuslauncher: 7.1% user + 5.1% kernel / faults: 17100 minor 284 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   11% 1719/com.google.android.as: 9.6% user + 2% kernel / faults: 8643 minor 160 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   10% 43/kswapd0: 0% user + 10% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   7.3% 1812/com.google.android.apps.youtube.music: 5.3% user + 2% kernel / faults: 2059 minor 21 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   6.9% 1646/com.google.android.inputmethod.latin: 5.1% user + 1.8% kernel / faults: 2545 minor 54 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   5.3% 1083/com.google.android.gms.persistent: 3.8% user + 1.4% kernel / faults: 5256 minor 320 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   3.8% 1337/com.google.android.gms: 3% user + 0.8% kernel / faults: 1363 minor 167 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   3.6% 426/logcat: 0.2% user + 3.4% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   3.8% 2111/com.google.android.apps.messaging: 2.5% user + 1.2% kernel / faults: 2737 minor 193 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   3.2% 3007/kworker/1:7H-kverityd: 0% user + 3.2% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   2.6% 796/com.google.android.permissioncontroller: 1.6% user + 1% kernel / faults: 1426 minor 436 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   2.7% 1845/com.google.android.youtube: 1.9% user + 0.8% kernel / faults: 2249 minor 56 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   2.7% 2210/com.google.android.gm: 1.9% user + 0.8% kernel / faults: 2807 minor 106 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   2.4% 791/com.android.systemui: 1.6% user + 0.8% kernel / faults: 2249 minor 247 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   2.2% 1017/com.android.phone: 1.6% user + 0.6% kernel / faults: 1459 minor 225 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   2% 1672/com.google.android.apps.wellbeing: 1.4% user + 0.6% kernel / faults: 666 minor 103 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   1.8% 1577/com.google.android.ims: 1% user + 0.8% kernel / faults: 1564 minor 193 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   1.7% 2746/com.google.android.apps.wallpaper: 1.4% user + 0.2% kernel / faults: 2567 minor 16 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   1.4% 938/com.android.networkstack.process: 0.8% user + 0.6% kernel / faults: 537 minor 315 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   1.2% 2728/com.google.android.as.oss: 0.8% user + 0.4% kernel / faults: 676 minor 6 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0% 27/kworker/1:0H-kverityd: 0% user + 0% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   1% 124/logd: 0.4% user + 0.6% kernel / faults: 182 minor 6 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   1% 179/jbd2/dm-34-8: 0% user + 1% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   1% 491/kworker/1:3H-kverityd: 0% user + 1% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   1% 2934/com.android.chrome: 0.6% user + 0.4% kernel / faults: 875 minor 82 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.7% 52/kworker/0:1H-kverityd: 0% user + 0.7% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.8% 282/statsd: 0.4% user + 0.4% kernel / faults: 39 minor 16 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.8% 1910/zygote64: 0.4% user + 0.4% kernel / faults: 124 minor 16 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.6% 138/kworker/u4:2-loop15: 0% user + 0.6% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.3% 286/netd: 0.1% user + 0.2% kernel / faults: 247 minor 109 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.6% 1730/com.google.android.googlequicksearchbox:interactor: 0.4% user + 0.2% kernel / faults: 178 minor 27 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.6% 1952/adbd: 0.2% user + 0.4% kernel / faults: 7750 minor
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.3% 1/init: 0.3% user + 0% kernel / faults: 2 minor 6 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0% 10/kworker/u4:1-ext4-rsv-conversion: 0% user + 0% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.1% 44/kworker/u5:0-hci0: 0% user + 0.1% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.4% 125/lmkd: 0% user + 0.4% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.4% 325/android.hardware.graphics.composer@2.4-service: 0% user + 0.4% kernel / faults: 127 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.4% 2374/android.process.media: 0.2% user + 0.2% kernel / faults: 72 minor
+11-14 14:07:51.110   485  3508 E ActivityManager:   0% 13/ksoftirqd/0: 0% user + 0% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0% 14/rcu_preempt: 0% user + 0% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.1% 25/ksoftirqd/1: 0% user + 0.1% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.1% 38/kworker/1:1-events: 0% user + 0.1% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.2% 182/kworker/u5:2-blk_crypto_wq: 0% user + 0.2% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.2% 339/android.hardware.sensors@2.1-service.multihal: 0% user + 0.2% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.2% 360/audioserver: 0% user + 0.2% kernel / faults: 6 minor 28 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0% 444/wificond: 0% user + 0% kernel / faults: 11 minor 66 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.2% 1547/android.process.acore: 0% user + 0.2% kernel / faults: 68 minor 17 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0.2% 1729/com.google.android.providers.media.module: 0.2% user + 0% kernel / faults: 145 minor 16 major
+11-14 14:07:51.110   485  3508 E ActivityManager:   0% 1754/com.android.emulator.multidisplay: 0% user + 0% kernel / faults: 400 minor 247 major
+11-14 14:07:51.110   485  3508 E ActivityManager:  +0% 3049/sh: 0% user + 0% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:  +0% 3057/cmd: 0% user + 0% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:  +0% 3067/com.google.android.deskclock: 0% user + 0% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager:  +0% 3238/com.google.android.webview:webview_service: 0% user + 0% kernel
+11-14 14:07:51.110   485  3508 E ActivityManager: 100% TOTAL: 48% user + 49% kernel + 1.3% irq + 0.8% softirq
+11-14 14:07:51.110   485  3508 E ActivityManager: CPU usage from 121374ms to 121374ms ago (1970-01-01 00:00:00.000 to 1970-01-01 00:00:00.000) with 0% awake:
+11-14 14:07:51.110   485  3508 E ActivityManager: 0% TOTAL: 0% user + 0% kernel
+

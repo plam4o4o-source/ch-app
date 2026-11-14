@@ -1,0 +1,7 @@
+A11Y season-christmas-dark/home: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: '6 Богоявление' 280x31dp
+A11Y season-christmas-dark/home-2: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y season-christmas-dark/home-3: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   SMALL: 'Далечният морето' 128x41dp; 'Дългият пътя' 128x41dp
+A11Y season-christmas-dark/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y season-christmas-dark/my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

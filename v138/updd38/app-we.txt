@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5637', '9464', '10462']): 242 in 113 groups
+       6  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+       6  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       5  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       4  W/Parcel: Expecting binder but got null!
+       4  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+       4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       3  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       3  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       3  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       3  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       3  W/Gralloc4: allocator #.x is not supported
+       3  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       3  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
+       3  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
+       3  W/yavorec.app.dev: Accessing hidden method Landroid/view/ViewTreeObserver;->dispatchOnScrollChanged()V (unsupported, reflection, 
+       3  W/ziparchive: Unable to open '/data/app/~~Q#_s#SDhkJ#JQovBP_dq_g==/org.chyavorec.app.dev-ZjWT#whkMldrz#f#UtodA==/base.dm': N
+       2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       2  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.PlatformPasswordVisibilitySettingImpl.getSystemShowPasswordSetting(BasicS
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextField_androidKt.rememberPlatformPasswordVisibilitySettings
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-ltb#GB#(BasicSecureTextField.
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-egD#TGM(BasicSecureTextField.
+       2  W/BasicSecureTextField: 	at androidx.compose.runtime.CompositionLocalKt.CompositionLocalProvider(CompositionLocal.kt:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt.OutlinedSecureTextField-XvU#IwQ(SecureTextField.kt:#)
+       2  W/BasicSecureTextField: 	at org.chyavorec.app.ui.screens.my.LoginScreenKt.LoginScreen$lambda$#(LoginScreen.kt:#)
+       2  W/BasicSecureTextField: 	at org.chyavorec.app.ui.screens.my.LoginScreenKt$$ExternalSyntheticLambda#.invoke(D#$$SyntheticClass:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.material#.ScaffoldKt$ScaffoldLayout$bodyContent$#$#.invoke(Scaffold.kt:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.Expect_jvmKt.invokeComposable(Expect.jvmAndAndroid.kt:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.runtime.GapComposer.doCompose-aFTiNEg(GapComposer.kt:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.runtime.GapComposer.composeContent--ZbOJvo$runtime(GapComposer.kt:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.runtime.CompositionImpl.composeContent(Composition.kt:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.runtime.Recomposer.composeInitial$runtime(Recomposer.kt:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.runtime.GapComposer$CompositionContextImpl.composeInitial$runtime(GapComposer.kt:#)

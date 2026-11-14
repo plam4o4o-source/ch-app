@@ -1,0 +1,2 @@
+12-25 10:00:11.940  1734  1734 F libc    : Fatal signal 4 (SIGILL), code 2 (ILL_ILLOPN), fault addr 0x72f3c71ce769 in tid 1734 (earchbox:search), pid 1734 (earchbox:search)
+

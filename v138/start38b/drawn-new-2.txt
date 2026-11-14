@@ -1,0 +1,5 @@
+Status: ok LaunchState: COLD TotalTime: 2746 WaitTime: 2771  | Fully drawn org.chyavorec.app/.MainActivity: +3s178ms
+Status: ok LaunchState: COLD TotalTime: 3055 WaitTime: 3096  | Fully drawn org.chyavorec.app/.MainActivity: +3s414ms
+Status: ok LaunchState: COLD TotalTime: 2555 WaitTime: 2555  | Fully drawn org.chyavorec.app/.MainActivity: +2s859ms
+Status: ok LaunchState: COLD TotalTime: 2577 WaitTime: 2584  | Fully drawn org.chyavorec.app/.MainActivity: +2s769ms
+Status: ok LaunchState: COLD TotalTime: 2684 WaitTime: 2693  | Fully drawn org.chyavorec.app/.MainActivity: +3s28ms

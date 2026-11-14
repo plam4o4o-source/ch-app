@@ -1,0 +1,46 @@
+app pids seen: ['5626', '10469', '14414', '16003', '16891', '17786', '18634']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 32
+   skipped-frames events=32 max=113 total=1728
+   11-14 14:07:39.395  5626  5626 I Choreographer: Skipped 63 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:40.053  5626  5626 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:41.411  5626  5626 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:43.605  5626  5626 I Choreographer: Skipped 65 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:45.007  5626  5626 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:53.808  5626  5626 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:55.303  5626  5626 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-14 14:07:56.010  5626  5626 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-14 14:14:37.602 10469 10469 I Choreographer: Skipped 96 frames!  The application may be doing too much work on its main thread.
+   11-14 14:14:38.607 10469 10469 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-14 14:14:39.723 10469 10469 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-14 14:14:40.359 10469 10469 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 53
+   davey events=53 max=3836ms median=1006ms
+   11-14 14:07:41.605  5626  5639 I OpenGLRenderer: Davey! duration=2081ms; Flags=1, FrameTimelineVsyncId=6958, IntendedVsync=92712500626, Vsync=93345833934, InputEventId=0, HandleInputStart=93352425654, AnimationStart=93352426289, PerformTrav
+   11-14 14:07:42.479  5626  5638 I OpenGLRenderer: Davey! duration=733ms; Flags=0, FrameTimelineVsyncId=7216, IntendedVsync=94729167212, Vsync=94812500542, InputEventId=0, HandleInputStart=94817361719, AnimationStart=94817362713, PerformTrave
+   11-14 14:07:43.928  5626  5639 I OpenGLRenderer: Davey! duration=1756ms; Flags=0, FrameTimelineVsyncId=7283, IntendedVsync=95029167200, Vsync=95412500518, InputEventId=0, HandleInputStart=95420622534, AnimationStart=95420623379, PerformTrav
+   11-14 14:07:44.340  5626  5638 I OpenGLRenderer: Davey! duration=1054ms; Flags=0, FrameTimelineVsyncId=7347, IntendedVsync=95429167184, Vsync=95795833836, InputEventId=0, HandleInputStart=95797249706, AnimationStart=95797250163, PerformTrav
+   11-14 14:07:45.006  5626  5638 I OpenGLRenderer: Davey! duration=1823ms; Flags=0, FrameTimelineVsyncId=7384, IntendedVsync=95812500502, Vsync=96895833792, InputEventId=0, HandleInputStart=96902187761, AnimationStart=96902188216, PerformTrav
+   11-14 14:07:45.140  5626  5639 I OpenGLRenderer: Davey! duration=991ms; Flags=0, FrameTimelineVsyncId=7608, IntendedVsync=96912500458, Vsync=97245833778, InputEventId=0, HandleInputStart=97253021215, AnimationStart=97253021760, PerformTrave
+   11-14 14:07:45.654  5626  5638 I OpenGLRenderer: Davey! duration=913ms; Flags=0, FrameTimelineVsyncId=7652, IntendedVsync=97262500444, Vsync=97645833762, InputEventId=0, HandleInputStart=97654441588, AnimationStart=97654442013, PerformTrave
+   11-14 14:07:45.821  5626  5638 I OpenGLRenderer: Davey! duration=1132ms; Flags=0, FrameTimelineVsyncId=7714, IntendedVsync=97662500428, Vsync=98295833736, InputEventId=0, HandleInputStart=98304342852, AnimationStart=98304343358, PerformTrav
+   11-14 14:07:54.201  5626  5638 I OpenGLRenderer: Davey! duration=1072ms; Flags=0, FrameTimelineVsyncId=8680, IntendedVsync=106262500084, Vsync=106262500084, InputEventId=0, HandleInputStart=106262699066, AnimationStart=106262699570, Perform
+   11-14 14:07:54.625  5626  5640 I OpenGLRenderer: Davey! duration=1079ms; Flags=0, FrameTimelineVsyncId=8687, IntendedVsync=106279166750, Vsync=107095833384, InputEventId=0, HandleInputStart=107107713138, AnimationStart=107107713753, Perform
+   11-14 14:07:55.264  5626  5640 I OpenGLRenderer: Davey! duration=834ms; Flags=0, FrameTimelineVsyncId=8781, IntendedVsync=107162500048, Vsync=107429166672, InputEventId=0, HandleInputStart=107441706393, AnimationStart=107441706947, PerformT
+   11-14 14:07:55.991  5626  5640 I OpenGLRenderer: Davey! duration=873ms; Flags=0, FrameTimelineVsyncId=8853, IntendedVsync=107445833370, Vsync=107545833366, InputEventId=0, HandleInputStart=107547552761, AnimationStart=107547553214, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 14:07:37.552  5617  5617 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:08:38.266  6949  6949 I PERFCHECK: u38
+   11-14 14:08:38.842  6961  6961 I PERFCHECK: section: U1. Tabs with the „Бод“ icons: every tab, light and dark fresh install, no card
+   11-14 14:12:29.604  9401  9401 I PERFCHECK: section: U2. Login screen guest, the sample card on it
+   11-14 14:12:55.304  9535  9535 I PERFCHECK: section: U3. Quiz: pass 1 first options: right/wrong marks, the band, then data cleared and pass 2 with the learned answers 5/5, confetti
+   11-14 14:14:33.580   483  1540 I ActivityManager: Killing 5626:org.chyavorec.app/u0a174 (adj 0): stop org.chyavorec.app due to clear data
+   11-14 14:17:07.752 11602 11602 I PERFCHECK: section: U4. Timeline: the decade scrubber while scrolling recorded, after the scroll stops 0, 1.5, 4 s
+   11-14 14:17:53.932 12000 12000 I PERFCHECK: section: U5. Event leaf: add to calendar the helper catches the intent, back → the stub tears off recorded
+   11-14 14:18:20.335 12216 12216 I PERFCHECK: ev-cal
+   11-14 14:18:53.384 12487 12487 I PERFCHECK: section: U6. Search snippets/plates, settings in cards, the end strip
+   11-14 14:21:24.655 13600 13600 I PERFCHECK: section: U7. Feast greeting as an icon 6 Dec, seasonal thread: 3 March twisted red-white, 25 Dec Christmas star, 1 May 2027 Easter, green
+   11-14 14:29:06.464 19679 19679 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

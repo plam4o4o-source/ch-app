@@ -1,0 +1,29 @@
+14:07:53.600 server on :8443, dir /home/runner/upc-srv/www
+=== good
+14:09:47.900 GET /update.json Range=None If-Range=None -> 200 sent 722/722 B in 0.0 s (rate 0 B/s)
+14:09:47.985 GET /app.apk Range=None If-Range=None -> 200 START (4640810 B)
+14:09:48.038 GET /app.apk Range=None If-Range=None -> 200 sent 4640810/4640810 B in 0.1 s (rate 0 B/s)
+14:09:49.117 GET /app.v0_1_5_s.dm Range=None If-Range=None -> 200 START (21188 B)
+14:09:49.117 GET /app.v0_1_5_s.dm Range=None If-Range=None -> 200 sent 21188/21188 B in 0.0 s (rate 0 B/s)
+=== badsha
+14:10:45.455 GET /update.json Range=None If-Range=None -> 200 sent 722/722 B in 0.0 s (rate 0 B/s)
+14:10:45.564 GET /app.apk Range=None If-Range=None -> 200 START (4640810 B)
+14:10:45.590 GET /app.apk Range=None If-Range=None -> 200 sent 4640810/4640810 B in 0.0 s (rate 0 B/s)
+14:10:46.717 GET /app.v0_1_5_s.dm Range=None If-Range=None -> 200 START (21188 B)
+14:10:46.717 GET /app.v0_1_5_s.dm Range=None If-Range=None -> 200 sent 21188/21188 B in 0.0 s (rate 0 B/s)
+=== junk
+14:11:42.271 GET /update.json Range=None If-Range=None -> 200 sent 724/724 B in 0.0 s (rate 0 B/s)
+14:11:42.334 GET /app.apk Range=None If-Range=None -> 200 START (4640810 B)
+14:11:42.817 GET /app.apk Range=None If-Range=None -> 200 sent 4640810/4640810 B in 0.5 s (rate 0 B/s)
+14:11:43.410 GET /junk.v0_1_5_s.dm Range=None If-Range=None -> 200 START (24000 B)
+14:11:43.410 GET /junk.v0_1_5_s.dm Range=None If-Range=None -> 200 sent 24000/24000 B in 0.0 s (rate 0 B/s)
+=== old137
+14:12:44.260 GET /update.json Range=None If-Range=None -> 200 sent 535/535 B in 0.0 s (rate 0 B/s)
+14:12:44.325 GET /app.apk Range=None If-Range=None -> 200 START (4640810 B)
+14:12:44.804 GET /app.apk Range=None If-Range=None -> 200 sent 4640810/4640810 B in 0.5 s (rate 0 B/s)
+14:12:45.659 GET /app-base.v0_1_5_s.dm Range=None If-Range=None -> 200 START (20743 B)
+14:12:45.660 GET /app-base.v0_1_5_s.dm Range=None If-Range=None -> 200 sent 20743/20743 B in 0.0 s (rate 0 B/s)
+=== none
+14:13:42.438 GET /update.json Range=None If-Range=None -> 200 sent 324/324 B in 0.0 s (rate 0 B/s)
+14:13:42.503 GET /app.apk Range=None If-Range=None -> 200 START (4640810 B)
+14:13:42.558 GET /app.apk Range=None If-Range=None -> 200 sent 4640810/4640810 B in 0.1 s (rate 0 B/s)

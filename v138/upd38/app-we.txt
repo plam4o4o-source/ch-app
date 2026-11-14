@@ -1,0 +1,15 @@
+APP W/E lines (pids ['5068', '8999', '10016', '11198', '11489', '11553', '11670', '11993']): 79 in 14 groups
+      16  W/Parcel: Expecting binder but got null!
+      15  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       8  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       8  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       8  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       8  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       8  W/Gralloc4: allocator #.x is not supported
+       2  E/FrameEvents: updateAcquireFence: Did not find frame.
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#d#c#-#ea-#-bde#-#bf#e#, generation=#)
+       1  W/RemoteInputConnectionImpl: clearMetaKeyStates on inactive InputConnection
+       1  W/RemoteInputConnectionImpl: setComposingRegion on inactive InputConnection
+       1  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object s#.s(java.lang.Object)(r
+       1  W/g.chyavorec.app: No such thread id for suspend: #

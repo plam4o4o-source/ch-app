@@ -1,0 +1,5 @@
+app.apk 4640810 bytes
+app-base.apk 4591454 bytes
+app-new-upd-local.apk 4640582 bytes
+app-dev.apk 28796723 bytes
+app-dev-base.apk 28628359 bytes

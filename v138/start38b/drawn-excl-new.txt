@@ -1,0 +1,8 @@
+Status: ok LaunchState: COLD TotalTime: 2978 WaitTime: 3014  | Fully drawn org.chyavorec.app/.MainActivity: +3s204ms
+Status: ok LaunchState: COLD TotalTime: 2677 WaitTime: 2681  | Fully drawn org.chyavorec.app/.MainActivity: +2s992ms
+Status: ok LaunchState: COLD TotalTime: 3149 WaitTime: 3165  | Fully drawn org.chyavorec.app/.MainActivity: +3s549ms
+Status: ok LaunchState: COLD TotalTime: 2544 WaitTime: 2547  | Fully drawn org.chyavorec.app/.MainActivity: +2s809ms
+Status: ok LaunchState: COLD TotalTime: 3045 WaitTime: 3058  | Fully drawn org.chyavorec.app/.MainActivity: +3s388ms
+Status: ok LaunchState: COLD TotalTime: 2865 WaitTime: 2871  | Fully drawn org.chyavorec.app/.MainActivity: +3s116ms
+Status: ok LaunchState: COLD TotalTime: 2760 WaitTime: 2766  | Fully drawn org.chyavorec.app/.MainActivity: +3s121ms
+Status: ok LaunchState: COLD TotalTime: 2295 WaitTime: 2297  | Fully drawn org.chyavorec.app/.MainActivity: +2s609ms

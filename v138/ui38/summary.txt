@@ -1,0 +1,222 @@
+part ui38; APK: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+base APK: 1.2.37 ebf1720 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510000; update manifest: the real one (releases/latest) size 4591454 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+installed:  versionCode=1510100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4131 ms
+## U1. Tabs with the „Бод“ icons: every tab, light and dark (fresh install, no card)
+CAP tabs-light/home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP tabs-light/catalog: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP tabs-light/my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001 · Баркод на карта 19220001
+CAP tabs-light/news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP tabs-light/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP tabs-light/more-2: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | Контакти · Адрес, телефон, местоположен · ЗАНИМАНИЯ · Извези шевица · Бод по бод, като на кърпа · Старият вестник
+CAP tabs-light/more-3: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=23 ellipsized=0 | Контакти · Адрес, телефон, местоположен · ЗАНИМАНИЯ · Извези шевица · Бод по бод, като на кърпа · Старият вестник
+CAP tabs-light/my-2: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Примерна читателска карта · Читателски № 19220001 · Баркод на карта 19220001 · Така ще изглежда картата ти · Вход · Добави читателска карта
+MY guest (light): sample card hint SHOWN; content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" text="Така ще изглежда картата ти" text="Вход" text="Добави читателска карта" text="БИБЛИОТЕКА" text="Читателска 
+CAP tabs-dark/home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP tabs-dark/catalog: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP tabs-dark/my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001 · Баркод на карта 19220001
+CAP tabs-dark/news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP tabs-dark/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP tabs-dark/more-2: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Галерия · Снимки от сайта · Документи и архив · Устав, отчети, юбилейният ве · Контакти · Адрес, телефон, местоположен
+CAP tabs-dark/more-3: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=23 ellipsized=0 | Контакти · Адрес, телефон, местоположен · ЗАНИМАНИЯ · Извези шевица · Бод по бод, като на кърпа · Старият вестник
+CAP tabs-dark/my-2: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=24 ellipsized=0 | Примерна читателска карта · Читателски № 19220001 · Баркод на карта 19220001 · Така ще изглежда картата ти · Вход · Добави читателска карта
+MY guest (dark): sample card hint SHOWN; content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" text="Така ще изглежда картата ти" text="Вход" text="Добави читателска карта" text="БИБЛИОТЕКА" text="Читателска 
+## U2. Login screen (guest), the sample card on it
+LOGIN: content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" text="Така ще изглежда картата ти" text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" c
+## U3. Quiz: pass 1 (first options: right/wrong marks, the band), then data cleared and pass 2 with the learned answers (5/5, confetti)
+QUIZ1 ready after 2039 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Коя от тези книги е написана от Максим Якубовски?" text="Колекционерът" text="Робинята" text="Един ден в древен Рим" t
+CAP ui38/qz1-q0: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ1 q1 options: Колекционерът|Робинята|Един ден в древен Рим|Прокудените|
+CAP ui38/qz1-q1-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 0 верни от 1 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ1 q1: WRONG	Робинята; band: content-desc="0 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q2 options: Проект „Глобални библиотеки“|Решение за собствена сграда|Възстановяване и официално учредяване|Устав и държавно признание|
+CAP ui38/qz1-q2-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 0 верни от 2 отговорени, общ · Въпрос 2 от 5 · Какво се случва в читалището · Проект „Глобални библиотеки“ · Решение за собствена сграда · Възстановяване и официално у
+QUIZ1 q2: WRONG	Решение за собствена сграда; band: content-desc="0 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q3 options: Трудни години — устояване|Първият радиоапарат в селото|Първа копка|Проект „Глобални библиотеки“|
+CAP ui38/qz1-q3-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 0 верни от 3 отговорени, общ · Въпрос 3 от 5 · Какво се случва в читалището · Трудни години — устояване · Първият радиоапарат в селото · Първа копка
+QUIZ1 q3: WRONG	Първа копка; band: content-desc="0 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q4 options: Устав и държавно признание|Дружество „Воля“|Трудни години — устояване|Прекъсване от войните|
+CAP ui38/qz1-q4-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 0 верни от 4 отговорени, общ · Въпрос 4 от 5 · Какво се случва в читалището · Устав и държавно признание · Дружество „Воля“ · Трудни години — устояване
+QUIZ1 q4: WRONG	Дружество „Воля“; band: content-desc="0 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q5 options: Очи с цвят на вода|Загадката на Мари Роже|Ритуал в смъртта|Дързост и мечти|
+CAP ui38/qz1-q5-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 0 верни от 5 отговорени, общ · Въпрос 5 от 5 · Коя от тези книги е написана · Очи с цвят на вода · Загадката на Мари Роже · Ритуал в смъртта
+QUIZ1 q5: WRONG	Загадката на Мари Роже; band: content-desc="0 верни от 5 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+TREC quiz-result-1: 31 frames; frames 31; changed between consecutive frames: 1; max diff 24.6; frames=31 motion-start=#15 moving-frames=1 (span 1) kept #14..#25; diffs: 0 24 0 0 0 0 0 0 0 0 0 0
+CAP ui38/qz1-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Утре ще е по-добре — Яворец  · 0/5 · 0 верни от 5 · Избродирай отговорите · Серия: 1 ден поред · Нови въпроси — утре.
+QUIZ1 result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="0/5" text="0 верни от 5" text="Избродирай отговорите" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ answers learned: Робинята|Решение за собствена сграда|Първа копка|Дружество „Воля“|Загадката на Мари Роже|
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+QUIZ2 ready after 1993 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Коя от тези книги е написана от Максим Якубовски?" text="Колекционерът" text="Робинята" text="Един ден в древен Рим" t
+CAP ui38/qz2-q0: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ2 q1 options: Колекционерът|Робинята|Един ден в древен Рим|Прокудените|
+CAP ui38/qz2-q1-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | 1 верни от 1 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ2 q1: RIGHT; band: content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q2 options: Проект „Глобални библиотеки“|Решение за собствена сграда|Възстановяване и официално учредяване|Устав и държавно признание|
+CAP ui38/qz2-q2-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 2 верни от 2 отговорени, общ · Въпрос 2 от 5 · Какво се случва в читалището · Проект „Глобални библиотеки“ · Решение за собствена сграда · Възстановяване и официално у
+QUIZ2 q2: RIGHT; band: content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q3 options: Трудни години — устояване|Първият радиоапарат в селото|Първа копка|Проект „Глобални библиотеки“|
+CAP ui38/qz2-q3-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 3 верни от 3 отговорени, общ · Въпрос 3 от 5 · Какво се случва в читалището · Трудни години — устояване · Първият радиоапарат в селото · Първа копка
+QUIZ2 q3: RIGHT; band: content-desc="3 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q4 options: Устав и държавно признание|Дружество „Воля“|Трудни години — устояване|Прекъсване от войните|
+CAP ui38/qz2-q4-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 4 верни от 4 отговорени, общ · Въпрос 4 от 5 · Какво се случва в читалището · Устав и държавно признание · Дружество „Воля“ · Трудни години — устояване
+QUIZ2 q4: RIGHT; band: content-desc="4 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q5 options: Очи с цвят на вода|Загадката на Мари Роже|Ритуал в смъртта|Дързост и мечти|
+TREC quiz-band-5of5: 55 frames; frames 55; changed between consecutive frames: 1; max diff 9.6; frames=55 motion-start=#18 moving-frames=1 (span 1) kept #17..#28; diffs: 0 10 0 0 0 0 0 0 0 0 0 0
+CAP ui38/qz2-q5-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | 5 верни от 5 отговорени, общ · Въпрос 5 от 5 · Коя от тези книги е написана · Очи с цвят на вода · Загадката на Мари Роже · Ритуал в смъртта
+QUIZ2 q5: RIGHT; band: content-desc="5 верни от 5 отговорени, общо 5 въпроса" text="Шевицата е цяла!" 
+TREC quiz-result-2: 21 frames; frames 21; changed between consecutive frames: 1; max diff 23.2; frames=21 motion-start=#18 moving-frames=1 (span 1) kept #9..#20; diffs: 0 0 0 0 0 0 0 0 0 23 0 0
+CAP ui38/qz2-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Отлично! Познаваш Яворец! · 5/5 · 5 верни от 5 · Шевицата е цяла! · Серия: 1 ден поред · Нови въпроси — утре.
+QUIZ2 result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+## U4. Timeline: the decade scrubber while scrolling (recorded), after the scroll stops (0, 1.5, 4 s)
+CAP ui38/tl-00: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно
+TREC timeline-scroll: 58 frames; frames 58; changed between consecutive frames: 20; max diff 15.8; frames=58 motion-start=#17 moving-frames=17 (span 39) kept #16..#27; diffs: 0 14 14 13 0 0 14 0 14 14 0 1
+TIMELINE decades: 
+## U5. Event leaf: add to calendar (the helper catches the intent), back → the stub tears off (recorded)
+CAP ui38/ev-01: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+CAP ui38/ev-02-button: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+CALENDAR: fg android/com.android.internal.app.ResolverActivity; helper: 
+TREC event-tear: 26 frames; frames 26; changed between consecutive frames: 4; max diff 47.4; frames=26 motion-start=#14 moving-frames=4 (span 8) kept #13..#24; diffs: 0 2 0 0 0 46 14 0 46 0 0 0
+CAP ui38/ev-04-after: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=40 ellipsized=0 | Новини · Календар · Абонирай се за календара · Изглед календар · Всички · Библиотека
+EVENT after return: ''; text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" text="Читалище" text="Народен обичай" text="16" text="НОЕ" 
+CAP ui38/ev-05-after-2: targets=19 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=4 | front: app | texts=43 ellipsized=0 | Новини · Календар · Абонирай се за календара · Изглед календар · Всички · Библиотека
+## U6. Search (snippets/plates), settings in cards, the end strip
+CAP ui38/search-2025: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=2 […561 Жители (2025) 10 км от Се; Отчетът за дейността през 2025] | Всички · Книги · Новини · Събития · Страници · КНИГИ
+CAP ui38/search-2025-b: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=2 […561 Жители (2025) 10 км от Се; Отчетът за дейността през 2025] | Всички · Книги · Новини · Събития · Страници · КНИГИ
+SEARCH 2025: text="Всички" text="Книги" text="Новини" text="Събития" text="Страници" text="КНИГИ" text="Изгубеният изгрева" text="Красимир Маринов" text="налична" text="  ·  " text="2025 · книга · справочен" text="СТРАНИЦИ" text="село Яворец - история" text="…561 Жители (2025) 10 км от Севлиево 18 км от Габрово 702 м Витата стена Въведение Сърцето на Централния Балкан Село Яворец е на 10 км…" text="Годишни отч
+CAP ui38/homesearch-12: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=40 ellipsized=0 | 12 · Лента за търсене · Назад · Изчисти · Всички · Книги
+CAP ui38/set-1: targets=11 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP ui38/set-2: targets=12 MISSING=4 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=18 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+CAP ui38/set-3: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Разклащане за „Изненадай ме“ · Разклати телефона в каталога · УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“
+CAP ui38/set-4: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Избери известията · Заемания, събития, съобщения · ОБНОВЛЕНИЯ · Автоматично обновяване · Проверка при отваряне и два  · Провери за нова версия
+CAP ui38/set-5: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Корици от интернет · Корици по ISBN от covers.ope · Корици само по Wi-Fi · По мобилни данни — само вече · Изчисти временните данни · Новините, събитията, каталог
+CAP ui38/set-6: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Новините, събитията, каталог · ПОВЕРИТЕЛНОСТ · Искай отключване за личните  · Не може да се включи: телефо · ИНФОРМАЦИЯ · Политика за поверителност
+CAP ui38/set-end: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Новините, събитията, каталог · ПОВЕРИТЕЛНОСТ · Искай отключване за личните  · Не може да се включи: телефо · ИНФОРМАЦИЯ · Политика за поверителност
+CAP ui38/news-end: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=44 ellipsized=0 | Новини · Календар · Абонирай се за календара · Изглед календар · Всички · Библиотека
+## U7. Feast greeting as an icon (6 Dec), seasonal thread: 3 March (twisted red-white), 25 Dec (Christmas star), 1 May 2027 (Easter, green)
+device date now: Sun Dec  6 10:00:06 UTC 2026
+CAP season-nikulden/home: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=30 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Честит Никулден! · Ден на рибарите и моряците.  · Изпрати честитка
+CAP season-nikulden/home-2: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Последни новини · БИБЛИОТЕКА · Четем заедно – мъдростта на  · 11 ноември 2026 · Сканирай · Читателска карта
+CAP season-nikulden/home-3: targets=17 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=31 ellipsized=0 | КАЛЕНДАР · Предстоящи събития · Всички · 6 · ДЕК · Никулден
+CAP season-nikulden/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP season-nikulden/my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001 · Баркод на карта 19220001
+SEASON nikulden: greeting/feast texts: 
+device date now: Fri Dec 25 10:00:15 UTC 2026
+CAP season-christmas/home: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Честито Рождество Христово! · Весела Коледа на всички от ч · Изпрати честитка
+CAP season-christmas/home-2: targets=18 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Лента за търсене · Последни новини · БИБЛИОТЕКА · Четем заедно – мъдростта на  · 11 ноември 2026 · Сканирай
+CAP season-christmas/home-3: targets=16 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=30 ellipsized=0 | КАЛЕНДАР · Предстоящи събития · Всички · 6 · ЯНУ · Богоявление
+CAP season-christmas/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP season-christmas/my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001 · Баркод на карта 19220001
+SEASON christmas: greeting/feast texts: 
+device date now: Wed Mar  3 10:00:10 UTC 2027
+CAP season-march/home: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · 3 март – Ден на Освобождение · Национален празник на Българ · Към книгите
+CAP season-march/home-2: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=34 ellipsized=0 | Няма интернет връзка. Показв · Последна синхронизация: 25.1 · Последни новини · БИБЛИОТЕКА · Четем заедно – мъдростта на  · 11 ноември 2026
+CAP season-march/home-3: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Сканирай · Читателска карта · Искам да прочета · Контакти · КАЛЕНДАР · Предстоящи събития
+CAP season-march/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP season-march/my: targets=11 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001 · Баркод на карта 19220001
+SEASON march: greeting/feast texts: 
+device date now: Sat May  1 10:00:08 UTC 2027
+CAP season-easter/home: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=27 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · 1 май – Ден на труда · Честит празник на всички, ко · Изпрати честитка
+CAP season-easter/home-2: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Последни новини · БИБЛИОТЕКА · Четем заедно – мъдростта на  · 11 ноември 2026 · Сканирай · Читателска карта
+CAP season-easter/home-3: targets=18 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=0 | Читателска карта · Искам да прочета · КАЛЕНДАР · Предстоящи събития · Всички · 6
+CAP season-easter/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP season-easter/my: targets=11 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001 · Баркод на карта 19220001
+SEASON easter: greeting/feast texts: 
+device date now: Fri Dec 25 10:00:07 UTC 2026
+CAP season-christmas-dark/home: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=29 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Честито Рождество Христово! · Весела Коледа на всички от ч · Изпрати честитка
+CAP season-christmas-dark/home-2: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | Последни новини · БИБЛИОТЕКА · Четем заедно – мъдростта на  · 11 ноември 2026 · Сканирай · Читателска карта
+CAP season-christmas-dark/home-3: targets=16 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=31 ellipsized=0 | 6 · ЯНУ · Богоявление · Традиционен народен и религи · НАРОДЕН ОБИЧАЙ · 7
+CAP season-christmas-dark/more: targets=14 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP season-christmas-dark/my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001 · Баркод на карта 19220001
+SEASON christmas-dark: greeting/feast texts: 
+device date now: Sat Nov 14 14:21:29 UTC 2026
+UI38 part: FATAL(any process)=0 of the app=0 ANR=0
+A11Y AGG: 71 screens analysed, 0 dumps failed; totals MISSING=19 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=20
+== MISSING: 17 distinct
+   View@[903,0][1029,28]  [1 screens: home-2]
+   View@[291,0][540,1]  [1 screens: home-3]
+   View@[540,0][789,1]  [1 screens: home-3]
+   View@[871,2101][1069,2127]  [1 screens: home]
+   View@[42,0][291,23]  [1 screens: home-3]
+   View@[789,0][1038,23]  [1 screens: home-3]
+   View@[42,1929][524,2064]  [1 screens: my]
+   View@[556,1929][1038,2064]  [1 screens: my]
+   View@[42,2107][378,2127]  [1 screens: home-3]
+   View@[415,2107][751,2127]  [1 screens: home-3]
+   View@[788,2107][1080,2127]  [1 screens: home-3]
+   View@[42,2062][1038,2127]  [1 screens: ev-05-after-2]
+   View@[42,2320][1038,2400]  [1 screens: set-1]
+   View@[84,296][370,320]  [1 screens: set-2]
+   View@[396,296][683,320]  [1 screens: set-2]
+   View@[709,296][996,320]  [1 screens: set-2]
+   View@[42,2314][1038,2400]  [1 screens: set-2]
+== SMALL: 9 distinct
+   ''  [4 screens: ev-05-after-2, home, home-3, set-2]
+   'Всички'  [2 screens: ev-05-after-2, news-end]
+   'Библиотека'  [2 screens: ev-05-after-2, news-end]
+   'Читалище'  [2 screens: ev-05-after-2, news-end]
+   '6 Богоявление'  [1 screens: home]
+   'Далечният морето'  [1 screens: home-3]
+   'Дългият пътя'  [1 screens: home-3]
+   '6 Никулден'  [1 screens: home]
+   'Контакти Адрес, телефон, место'  [1 screens: more-3]
+== SAME-LABEL: 0 distinct
+contact sheets: 19 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN:  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.38 (1510100) | Профил: чака | Студен старт · 6 | Първи кадър: медиана 3287 мс, последен 1790 мс | Пълно показване: медиана 3653 мс, последно 2933 мс | Топъл старт · 1 | Първи кадър: медиана 907 мс, последен 907 мс | Насечени кадри по екрани | event
+DIAG SCREEN (scrolled): text="Версия 1.2.38 (1510100)" text="Профил: чака" text="Студен старт · 6" text="Първи кадър: медиана 3287 мс, последен 1790 мс" text="Пълно показване: медиана 3653 мс, последно 2933 мс" text="Топъл старт · 1" text="Първи кадър: медиана 907 мс, последен 907 мс" text="Насечени кадри по екрани" text="event: 5,6 % от 36 кадъра · най-бавен 280 мс" text="CPU време на кадъра (без видеокартата): средно 326 мс, най-бавен 648 мс" text="more: 4,1 % от 74 кадъра · най-бавен 241 мс" text="CPU време на кадъра (без видеокартата): средно 233 мс, най-бавен 528 мс" text="quiz: 3,7 % от 135 кадъра · най-бавен 363 мс" text="CPU време на кадъра (без видеокартата): средно 348 мс, най-бавен 819 мс" text="search: 
+APP W/E lines (pids ['5626', '10469', '14414', '16003', '16891', '17786', '18634']): 224 in 93 groups
+       9  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       8  W/Parcel: Expecting binder but got null!
+       7  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       7  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       7  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       7  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       7  W/Gralloc4: allocator #.x is not supported
+       4  W/BasicSecureTextField: 	at tn#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       4  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       4  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       2  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       2  W/BasicSecureTextField: 	at da#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at b#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at b#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at a#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at mp#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at mp#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at py#.r(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at yr#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at b#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at lb#.f(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at mp#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at mp#.f(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+contact sheets: 20 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5626', '10469', '14414', '16003', '16891', '17786', '18634']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 32
+   skipped-frames events=32 max=113 total=1728
+== Davey: 53
+   davey events=53 max=3836ms median=1006ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'SIGNAL': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 92642141 Nov 14 14:04 app-mapping.txt; crashes: 174 B

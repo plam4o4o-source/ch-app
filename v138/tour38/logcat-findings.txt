@@ -1,0 +1,45 @@
+app pids seen: ['5585', '6790', '13240', '18439', '23811']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 92
+   skipped-frames events=92 max=142 total=4136
+   11-14 14:08:13.379  5585  5585 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:14.002  5585  5585 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:16.424  5585  5585 I Choreographer: Skipped 63 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:17.475  5585  5585 I Choreographer: Skipped 62 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:19.419  5585  5585 I Choreographer: Skipped 107 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:20.307  5585  5585 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:21.116  5585  5585 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:22.089  5585  5585 I Choreographer: Skipped 57 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:26.809  5585  5585 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:31.198  5585  5585 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:32.183  5585  5585 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   11-14 14:08:32.745  5585  5585 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 277
+   davey events=277 max=4675ms median=884ms
+   11-14 14:08:16.699  5585  5611 I OpenGLRenderer: Davey! duration=2284ms; Flags=1, FrameTimelineVsyncId=12418, IntendedVsync=154866775730, Vsync=155450109040, InputEventId=0, HandleInputStart=155457295813, AnimationStart=155457296514, Perfor
+   11-14 14:08:16.699  5585  5611 I OpenGLRenderer: Davey! duration=1331ms; Flags=0, FrameTimelineVsyncId=12555, IntendedVsync=156733442322, Vsync=156750108988, InputEventId=0, HandleInputStart=156758502397, AnimationStart=156758502838, Perfor
+   11-14 14:08:17.654  5585  5611 I OpenGLRenderer: Davey! duration=1252ms; Flags=0, FrameTimelineVsyncId=12569, IntendedVsync=156766775654, Vsync=156800108986, InputEventId=0, HandleInputStart=156800240990, AnimationStart=156800241892, Perfor
+   11-14 14:08:19.409  5585  5611 I OpenGLRenderer: Davey! duration=1643ms; Flags=0, FrameTimelineVsyncId=12576, IntendedVsync=156816775652, Vsync=157866775610, InputEventId=0, HandleInputStart=157878882988, AnimationStart=157878883530, Perfor
+   11-14 14:08:19.531  5585  5605 I OpenGLRenderer: Davey! duration=2895ms; Flags=0, FrameTimelineVsyncId=12635, IntendedVsync=157883442276, Vsync=158916775568, InputEventId=0, HandleInputStart=158930144618, AnimationStart=158930145250, Perfor
+   11-14 14:08:20.305  5585  5611 I OpenGLRenderer: Davey! duration=923ms; Flags=0, FrameTimelineVsyncId=12690, IntendedVsync=158933442234, Vsync=159066775562, InputEventId=0, HandleInputStart=159071449381, AnimationStart=159071449771, Perform
+   11-14 14:08:21.112  5585  5611 I OpenGLRenderer: Davey! duration=3095ms; Flags=0, FrameTimelineVsyncId=12733, IntendedVsync=159083442228, Vsync=160866775490, InputEventId=0, HandleInputStart=160873906282, AnimationStart=160873906643, Perfor
+   11-14 14:08:21.999  5585  5611 I OpenGLRenderer: Davey! duration=1780ms; Flags=0, FrameTimelineVsyncId=12949, IntendedVsync=160883442156, Vsync=161050108816, InputEventId=0, HandleInputStart=161061088737, AnimationStart=161061089038, Perfor
+   11-14 14:08:22.776  5585  5611 I OpenGLRenderer: Davey! duration=2111ms; Flags=0, FrameTimelineVsyncId=12965, IntendedVsync=161066775482, Vsync=161750108788, InputEventId=0, HandleInputStart=161761979567, AnimationStart=161761979928, Perfor
+   11-14 14:08:23.107  5585  5611 I OpenGLRenderer: Davey! duration=1672ms; Flags=0, FrameTimelineVsyncId=13008, IntendedVsync=161766775454, Vsync=162566775422, InputEventId=0, HandleInputStart=162570407719, AnimationStart=162570408140, Perfor
+   11-14 14:08:23.181  5585  5670 I OpenGLRenderer: Davey! duration=706ms; Flags=0, FrameTimelineVsyncId=13135, IntendedVsync=163566780928, Vsync=163933447558, InputEventId=0, HandleInputStart=163942110885, AnimationStart=163942111225, Perform
+   11-14 14:08:28.169  5585  5670 I OpenGLRenderer: Davey! duration=865ms; Flags=0, FrameTimelineVsyncId=13586, IntendedVsync=168533441850, Vsync=168900108502, InputEventId=0, HandleInputStart=168902658240, AnimationStart=168902658491, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 14:08:10.488  5574  5574 I PERFCHECK: section: W. First launch and warm-up
+   11-14 14:09:56.024  7181  7181 I PERFCHECK: section: T-bg-light. All screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0
+   11-14 14:22:51.835 13381 13381 I PERFCHECK: section: NP-bg-light full. New screens 1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0
+   11-14 14:22:51.882 13384 13384 I PERFCHECK: np-bg-light
+   11-14 14:25:50.599 14851 14851 I PERFCHECK: np-read-bg-light
+   11-14 14:33:21.516 18573 18573 I PERFCHECK: section: T-bg-dark. All screens 1080x2400 px, density 420, font_scale 1.0, night yes, app locale [bg-BG], rotation 0
+   11-14 14:46:38.955 23947 23947 I PERFCHECK: section: NP-bg-dark brief. New screens 1080x2400 px, density 420, font_scale 1.0, night yes, app locale [bg-BG], rotation 0
+   11-14 14:46:39.002 23950 23950 I PERFCHECK: np-bg-dark
+   11-14 14:48:31.150 24768 24768 I PERFCHECK: np-read-bg-dark
+   11-14 14:53:23.379 27210 27210 I PERFCHECK: section: TA. Accessibility over the tours
+   11-14 14:53:35.655 27216 27216 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

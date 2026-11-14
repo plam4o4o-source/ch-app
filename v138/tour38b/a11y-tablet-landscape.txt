@@ -1,0 +1,4 @@
+A11Y tablet-landscape/01-home: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y tablet-landscape/02-more: targets=14 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[192,1379][647,1480]; View@[671,1379][1127,1480]
+A11Y tablet-landscape/11-event: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

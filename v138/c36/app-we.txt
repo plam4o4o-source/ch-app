@@ -1,0 +1,41 @@
+APP W/E lines (pids ['4173', '5200', '10845', '15715', '18047', '18456', '18743', '19088', '19972', '21878']): 2595 in 214 groups
+     639  W/Codec2Client: query -- param skipped: index = #.
+     458  W/ColorUtils: expected specified color aspects (#:#:#:#)
+     224  W/HWUI: Image decoding logging dropped!
+     160  E/MediaCodec: Media Quality Service not found.
+     160  W/CCodec: This behavior is subject to change. It is recommended that app developers double check whether the requested m
+     160  E/g.chyavorec.app: Failed to query component interface for required system resources: #
+      55  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+      50  W/FrameTracker: Missed SF frame:JANK_COMPOSER, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+      30  W/RemoteInputConnectionImpl: requestCursorUpdates on inactive InputConnection
+      17  W/HWUI: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+      17  W/HWUI: Failed to initialize #-# format, error = EGL_SUCCESS
+      16  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#b#a#
+      14  W/RemoteInputConnectionImpl: getSurroundingText on inactive InputConnection
+      14  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#ea#f
+      10  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+      10  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, 
+      10  E/g.chyavorec.app: Not starting debugger since process cannot load the jdwp agent.
+      10  E/ashmem: Pinning is deprecated since Android Q. Please use trim or other methods.
+      10  W/HWUI: Unknown dataspace #
+      10  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#b#
+      10  W/RemoteInputConnectionImpl: getTextBeforeCursor on inactive InputConnection
+       9  W/AMessage: failed to deliver message as target handler # is gone.
+       8  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@#e#
+       8  W/InputEventReceiver: Attempted to finish an input event but the input event receiver has already been disposed.
+       8  E/FrameTracker: force finish cuj, time out: J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       7  W/BasicSecureTextField: 	at tn#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       7  E/ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: #
+       7  W/System: A resource failed to call release. 
+       6  W/InteractionJankMonitor: Initializing without READ_DEVICE_CONFIG permission. enabled=true, interval=#, missedFrameThreshold=#, frameTim
+       6  W/g.chyavorec.app: Cleared Reference was only reachable from finalizer (only reported once)
+       6  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       6  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       6  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       6  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_HIDE_ANIMATION::#@#@org.chyavorec.app>
+       5  W/g.chyavorec.app: Missing inline cache for void ro#.u()
+       5  W/FrameTracker: Missed App frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       5  W/FrameTracker: Missed SF frame:UNKNOWN: #, #, #, CUJ=J<IME_INSETS_SHOW_ANIMATION::#@#@org.chyavorec.app>
+       5  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=rx#@#b#b
+       5  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=rx#@#c#d#
+       5  W/WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=rx#@a#e#d
