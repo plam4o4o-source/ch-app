@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Помощно приложение САМО за проверката на емулатор (ВРЕМЕННО, debug/wave16-check):
+     хваща имейл намерения (за да се видят extras), тестова услуга за достъпност (събития,
+     дърво с действията, режим „изследване чрез докосване“ като при TalkBack) и смяна на езика
+     на устройството без рестарт. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.pc.helper">
+    <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="30" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <application android:label="PC helper">
+        <activity android:name=".Catch" android:exported="true" android:label="PC catcher">
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="mailto" />
+            </intent-filter>
+            <!-- debug/w24-check: „Добави в календара“ (ACTION_INSERT, CalendarContract.Events) — образът няма календар. -->
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.dir/event" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" android:host="com.android.calendar" />
+            </intent-filter>
+        </activity>
+        <!-- Вълна 19: „Сподели като картинка“ / „Сподели връзката“ — какво стига до получателя. -->
+        <activity android:name=".Share" android:exported="true" android:label="PC share">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+        <service android:name=".A11y" android:exported="true" android:label="PC a11y"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/a11y" />
+        </service>
+        <!-- Вълна 18: HARDWARE / софтуерни bitmap-и и паметта им (dumpsys meminfo). -->
+        <activity android:name=".HwProbe" android:exported="true" android:label="PC hw probe" />
+        <receiver android:name=".Cmd" android:exported="true">
+            <intent-filter>
+                <action android:name="org.pc.helper.LOCALE" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
