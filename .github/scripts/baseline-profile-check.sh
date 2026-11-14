@@ -32,7 +32,7 @@ KEYS=(
   # Картата без вход (ръчно въведена) — не зависи от мрежата.
   "CardScreen|CardScreensKt(;->|\\$)CardScreen"
   "CardFullscreen|CardScreensKt(;->|\\$)CardFullscreen"
-  # „Извези шевица“ — изцяло на телефона.
+  # „Извези шевица“ — изцяло на телефона (ръчните правила за нея вече не са нужни).
   "EmbroideryScreen|EmbroideryScreenKt"
 )
 # Само за сведение (не спират профила).
@@ -55,9 +55,11 @@ INFO=(
   "QuizScreen|QuizScreensKt"
   "EventDetailScreen|EventsScreensKt(;->|\\$)EventDetailScreen"
   "EventLeaf|EventLeafKt"
+  "StitchPattern|domain/embroidery/Stitch"
 )
-# Ръчните правила (историята на годината, неподвижните шевици до API 32) не са в генерирания
-# профил — те са в app/src/main/baselineProfiles/ и AGP ги слива с него при сглобяване.
+# Ръчните правила (историята на годината, неподвижните шевици до API 32, вестникът и лентата на
+# времето — те зависят от сайта) не са в генерирания профил — те са в app/src/main/baselineProfiles/
+# и AGP ги слива с него при сглобяване.
 
 if [ ! -s "$NEW" ]; then
   echo "::error::baseline-prof.txt was not generated"

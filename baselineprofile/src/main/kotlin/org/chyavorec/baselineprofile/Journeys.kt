@@ -388,6 +388,9 @@ private fun MacrobenchmarkScope.openTab(label: Pattern): Boolean {
     val tab = device.findObjects(By.text(label)).maxByOrNull { it.visibleBounds.centerY() } ?: return false
     tab.click()
     device.waitForIdle()
+    // Повторно докосване на отворения раздел превърта съдържанието му догоре (анимирано) —
+    // елемент, намерен по време на това превъртане, после не е там.
+    settle()
     return true
 }
 
@@ -614,7 +617,6 @@ private fun MacrobenchmarkScope.calendarSegment() {
 /** „Моето“ → „Искам да прочета“ (с книгата, отбелязана в каталога) → назад. */
 fun MacrobenchmarkScope.wantToReadJourney() {
     if (!openTab(TAB_MY)) return
-    wantToReadEvidence()
     // В „Моето“ има повече редове (печат, дневник, шевица) — плочката е по-надолу.
     if (findScrolling(By.text(WANT_TO_READ), swipes = 7) == null) return note("want-to-read tile not found")
     try {
@@ -626,32 +628,6 @@ fun MacrobenchmarkScope.wantToReadJourney() {
         // Към „Моето“.
         backToTab()
     }
-}
-
-/** ВРЕМЕННО (проверка на причината): старият начин — докосване веднага след превъртането. */
-private var evidenceDone = false
-
-private fun MacrobenchmarkScope.wantToReadEvidence() {
-    if (evidenceDone) return
-    evidenceDone = true
-    repeat(3) { swipeDown() }
-    var tapped = false
-    for (i in 0..7) {
-        val tile = device.findObject(By.text(WANT_TO_READ))
-        if (tile != null) {
-            val b1 = tile.visibleBounds
-            tile.click()
-            val opened = poll(4_000) { innerScreenShown().takeIf { it } } != null
-            Log.i(TAG, "evidence: immediate tap after $i swipe(s) at $b1 opened=$opened")
-            tapped = true
-            if (opened) backToTab()
-            break
-        }
-        device.swipe(device.displayWidth / 2, device.displayHeight * 3 / 4, device.displayWidth / 2, device.displayHeight / 4, 20)
-        device.waitForIdle()
-    }
-    if (!tapped) Log.i(TAG, "evidence: tile not found the old way")
-    repeat(3) { swipeDown() }
 }
 
 /** „Моето“ без вход (гост). */
