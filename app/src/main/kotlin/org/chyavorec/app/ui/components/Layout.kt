@@ -109,6 +109,10 @@ internal object CrossStitches {
  * При намалено движение — веднага готови. Напредъкът се чете само при рисуване.
  */
 @Composable
+internal fun StitchMark(color: androidx.compose.ui.graphics.Color, modifier: Modifier = Modifier) = StitchMark(ThreadColors(color), modifier)
+
+/** Същите бодове в сезонния конец ([rememberSeasonalThread]): усукана мартеница или звезден бод. */
+@Composable
 internal fun StitchMark(thread: ThreadColors, modifier: Modifier = Modifier) {
     val reduced = rememberReducedMotion()
     var shown by rememberSaveable { mutableStateOf(false) }
