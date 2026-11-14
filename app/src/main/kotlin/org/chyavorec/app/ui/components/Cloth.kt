@@ -5,6 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.Shape
@@ -14,6 +17,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.addOutline
+import androidx.compose.ui.graphics.toArgb
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.LocalThemeStyle
 import kotlin.math.roundToInt
@@ -58,11 +62,35 @@ internal object ClothWeave {
     val linen: ImageBitmap by lazy {
         val px = IntArray(TILE * TILE)
         for (y in 0 until TILE) for (x in 0 until TILE) {
-            val g = (0.275f + 0.225f * height(x, y)) * 255f
-            val v = g.toInt().coerceIn(0, LINEN_MAX)
+            val v = linenGray(x, y)
             px[y * TILE + x] = (0xFF shl 24) or (v shl 16) or (v shl 8) or v
         }
         Bitmap.createBitmap(px, TILE, TILE, Bitmap.Config.ARGB_8888).asImageBitmap()
+    }
+
+    /** Сивата стойност на ленената плочка в точка (70..[LINEN_MAX]). */
+    fun linenGray(x: Int, y: Int): Int = ((0.275f + 0.225f * height(x, y)) * 255f).toInt().coerceIn(0, LINEN_MAX)
+
+    /**
+     * Сянката на лена — това, което рисува корицата: черно с плътност 255 − 2·сиво (1..115).
+     * Overlay със сиво s ≤ 50% затъмнява канал d с (1 − 2s)·min(d, 1 − d); SrcOver с тази плътност
+     * и цвят [linenTint] на корицата дава същото — без смесване, което чете от екрана.
+     */
+    val linenShade: ImageBitmap by lazy {
+        val px = IntArray(TILE * TILE)
+        for (y in 0 until TILE) for (x in 0 until TILE) {
+            px[y * TILE + x] = (255 - 2 * linenGray(x, y)) shl 24
+        }
+        Bitmap.createBitmap(px, TILE, TILE, Bitmap.Config.ARGB_8888).asImageBitmap()
+    }
+
+    /**
+     * Цветът на сянката за корица с фон [base] (ARGB): във всеки канал max(0, 2d − 1) — черно за
+     * тъмните канали, а светлите (над 50%) се затъмняват по-малко, точно като с Overlay.
+     */
+    fun linenTint(base: Int): Int {
+        fun ch(shift: Int) = (2 * ((base shr shift) and 0xFF) - 255).coerceAtLeast(0)
+        return (0xFF shl 24) or (ch(16) shl 16) or (ch(8) shl 8) or ch(0)
     }
 
     /** Нощната плочка: златист плат, чиято плътност (алфа) следва височината — рисува се при ~4%. */
@@ -80,8 +108,14 @@ internal object ClothWeave {
     private const val NIGHT_THREAD = 0xE6C97A
 }
 
-/** Четката с повтаряща се ленена плочка — за корицата (за рисуване с BlendMode.Overlay). */
-internal fun linenBrush(): ShaderBrush = ShaderBrush(ImageShader(ClothWeave.linen, TileMode.Repeated, TileMode.Repeated))
+/** Четката с повтаряща се сянка на лена — за корицата (обикновено SrcOver, с [linenTintFilter]). */
+internal fun linenBrush(): ShaderBrush = ShaderBrush(ImageShader(ClothWeave.linenShade, TileMode.Repeated, TileMode.Repeated))
+
+/** Оцветяването на сянката за фона [base]; null — тъмен фон (сянката си остава черна). */
+internal fun linenTintFilter(base: Color): ColorFilter? {
+    val tint = ClothWeave.linenTint(base.toArgb())
+    return if (tint and 0xFFFFFF == 0) null else ColorFilter.tint(Color(tint), BlendMode.SrcIn)
+}
 
 /** Плътността на нощната тъкан (дял от плочката) — „едва забележима“, 3–4%. */
 internal const val NIGHT_CLOTH_ALPHA = 0.04f

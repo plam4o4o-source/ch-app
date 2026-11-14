@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.asCoroutineDispatcher
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.Event
 import org.junit.Test
@@ -100,5 +101,48 @@ class PinnedShortcutsTest {
 
     @Test fun requestWithoutAShortcutDoesNothing() {
         assertEquals(false, PinnedShortcuts.request(context, null))
+    }
+
+    /**
+     * Списъкът на закачаемите връзки — поименно: всеки нов раздел се добавя тук съзнателно, а
+     * действието е същото, каквото пазят вече закачените преки пътища в launcher-а.
+     */
+    @Test fun pinnedAllowlistIsExactlyTheseLinksByName() {
+        assertEquals("org.chyavorec.app.PIN_SHORTCUT", LaunchIntents.ACTION_PIN)
+        assertTrue(LaunchIntents.ACTION_PIN != LaunchIntents.ACTION_SHORTCUT)
+        assertEquals(setOf("events", "news", "catalog", "my/card", "my/want-to-read", "embroidery"), LaunchIntents.PINNED_LINKS)
+        for (section in PinSection.entries) assertTrue(LaunchIntents.isPinnedLink(section.link), section.name)
+        for (ok in listOf("catalog/book/1", "catalog/book/399666", "event/e1", "event/%D1%81%D1%8A%D0%B1%D0%BE%D1%80")) {
+            assertTrue(LaunchIntents.isPinnedLink(ok), ok)
+        }
+        // Личните и действащите връзки не се отварят от закачен пряк път (той идва от launcher-а — друго приложение).
+        for (bad in listOf(
+            "my/loans", "my/history", "my/messages", "messages", "login", "update", "settings", "settings/diagnostics", "scan", "my",
+            "catalog/book/-1", "catalog/book/01", "event/a?b", "event/a/b", "events/x", "news/1", " news", "NEWS",
+        )) assertTrue(!LaunchIntents.isPinnedLink(bad), bad)
+        // „Извези шевица“ е само закачаема — статичният пряк път не я отваря.
+        val asStatic = Intent(LaunchIntents.ACTION_SHORTCUT, Uri.parse("chyavorec://app/embroidery")).setClassName(context, "org.chyavorec.app.MainActivity")
+        assertNull(LaunchIntents.linkOf(asStatic, base))
+    }
+
+    /** Поддръжката на закачане се пита веднъж за процеса и не в главната нишка. */
+    @Test fun pinSupportAsksOnceOffTheCallingThread() {
+        val calls = java.util.concurrent.atomic.AtomicInteger()
+        val threads = java.util.Collections.synchronizedList(ArrayList<String>())
+        val support = PinSupport { calls.incrementAndGet(); threads += Thread.currentThread().name; true }
+        assertNull(support.known.value)
+        val io = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "pin-probe") }
+        try {
+            val dispatcher = io.asCoroutineDispatcher()
+            kotlinx.coroutines.runBlocking {
+                support.ensure(context, dispatcher)
+                support.ensure(context, dispatcher)
+            }
+        } finally {
+            io.shutdownNow()
+        }
+        assertEquals(true, support.known.value)
+        assertEquals(1, calls.get())
+        assertEquals(listOf("pin-probe"), threads)
     }
 }

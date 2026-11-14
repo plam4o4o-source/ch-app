@@ -1,148 +1,104 @@
 #!/usr/bin/env python3
-"""Лентата шевица на уиджета (6 dp, повтаряща се плочка) — същата шарка и бод като
-ShevitsaStill.render (LivingShevitsa.kt), нарисувана като плочка на лента: период 4 бода,
-9 реда по 2 px при xxhdpi (18 px = 6 dp). Пише:
-  app/src/main/res/drawable-xxhdpi/widget_ribbon.png        (светла тема)
-  app/src/main/res/drawable-night-xxhdpi/widget_ribbon.png  (тъмна тема)
+"""Лентата шевица на уиджета: една верига от ромбове на кръстат бод (повтаряща се плочка).
+
+Ромбът е 5×5 бода (контур |dx|+|dy| = 2, в средата — едно зрънце), съседните се допират с
+върховете: период 4 бода. Бодът е 1 dp — по 2/3/4 px при xhdpi/xxhdpi/xxxhdpi (по-дребен бод
+на истински размер е кафяво петно). Плочката е 4×5 dp; в widget_background.xml лентата е 5 dp.
+Пише (светла и тъмна тема):
+  app/src/main/res/drawable-{xhdpi,xxhdpi,xxxhdpi}/widget_ribbon.png
+  app/src/main/res/drawable-night-{xhdpi,xxhdpi,xxxhdpi}/widget_ribbon.png
 Пускане: python3 tools/gen_widget_ribbon.py
 """
-import math
 import os
 import struct
 import zlib
 
-CELL = 2.0
-PERIOD = 4
-ROWS = PERIOD + 5          # ShevitsaPattern.ribbonRows
-COLS = 2 * PERIOD          # ShevitsaStill.tileCells(ribbon)
-W = int(round(COLS * CELL))
-H = int(round(ROWS * CELL))
-ORIGIN_Y = int(math.floor(ROWS * 0.5))
+PERIOD = 4   # бода по дължина (ромбовете се допират с върховете)
+ROWS = 5     # бода на височина
+DENSITIES = {"xhdpi": 2, "xxhdpi": 3, "xxxhdpi": 4}  # px на бод (1 dp)
 
-EMPTY, RED, INK, GOLD = 0, 1, 2, 3
+EMPTY, OUTLINE, CENTER = 0, 1, 2
 
 
-def kind(cx, cy, p):
-    r = p * 0.5
-    u, v = cx + cy, cx - cy
-    mu, mv = u % p, v % p
-    du, dv = min(mu, p - mu), min(mv, p - mv)
-    node = max(du, dv) < 1.5
-    ay = abs(cy)
-    if ay > r + 0.5:
-        if ay < r + 1.5:
-            return GOLD if node else EMPTY
-        if ay < r + 2.5:
-            return RED
-        return EMPTY
-    if node:
-        return INK if du + dv < 0.5 else GOLD
-    if du < 0.5 or dv < 0.5:
-        return RED
-    i, j = math.floor(u / p), math.floor(v / p)
-    if abs(i - j) > 0.5:
-        return EMPTY
-    lu, lv = mu - r, mv - r
-    manh = max(abs(lu), abs(lv))
-    sel = i % 2
-    s = r
-    if sel < 0.5:
-        if manh < 0.5:
-            return GOLD
-        if manh < 1.5:
-            return INK
-        ax, by = abs(lu + lv) * 0.5, abs(lu - lv) * 0.5
-        along = (ax + by) * 0.5 - s * 0.375
-        across = abs(ax - by) * 0.5
-        if abs(along) / (s * 0.275) + across / (s * 0.1) <= 1:
-            return GOLD
-        ma, mi = max(ax, by), min(ax, by)
-        if abs(ma - s * 0.5) / (s * 0.4) + mi / (s * 0.2) <= 1:
-            return RED
-        return EMPTY
-    b = math.floor(s * 0.75 + 0.01)
-    if abs(manh - b) < 0.1:
-        return RED
-    if abs(manh - math.floor(b * 0.5)) < 0.1:
-        return GOLD
-    if manh < 0.1:
-        return INK
+def kind(cx, cy):
+    """Бодът в клетка (cx, cy): cx 0..PERIOD-1, cy 0..ROWS-1; ромбът е с център (2, 2)."""
+    dx = abs(cx - 2)
+    dx = min(dx, PERIOD - dx)  # върхът на съседния ромб (cx = 0) е общ
+    dy = abs(cy - 2)
+    if dx + dy == 2:
+        return OUTLINE
+    if dx == 0 and dy == 0:
+        return CENTER
     return EMPTY
 
 
-def smooth(e0, e1, x):
-    t = min(max((x - e0) / (e1 - e0), 0.0), 1.0)
-    return t * t * (3 - 2 * t)
+def coverage(px, py, s):
+    """Колко от пиксела (px, py) в бод от s×s px покрива бодът: квадрат с леко заоблени ъгли.
+    Ъглите остават почти плътни — съседните по диагонал бодове се допират и контурът е линия."""
+    n = 8
+    r = 0.22 * s  # радиус на заоблянето
+    hit = 0
+    for i in range(n):
+        for j in range(n):
+            x = px + (i + 0.5) / n
+            y = py + (j + 0.5) / n
+            # Разстояние до най-близкия ъгъл, ако точката е в ъгловото квадратче.
+            qx = min(x, s - x)
+            qy = min(y, s - y)
+            if qx < r and qy < r:
+                if (r - qx) ** 2 + (r - qy) ** 2 > r * r:
+                    continue
+            hit += 1
+    return hit / (n * n)
 
 
-def render(threads):
-    aa = 1.0 / CELL
-    tw2 = 0.21
-    sx, sy = COLS * CELL / W, ROWS * CELL / H
+def render(colors, s):
+    w, h = PERIOD * s, ROWS * s
     rows = []
-    for y in range(H):
-        gy = (y + 0.5) * sy / CELL
-        cy_raw = math.floor(gy)
-        qy = gy - cy_raw
-        cy = cy_raw - ORIGIN_Y
+    for y in range(h):
         row = []
-        for x in range(W):
-            gx = (x + 0.5) * sx / CELL
-            cxi = min(max(int(math.floor(gx)), 0), COLS - 1)
-            qx = gx - math.floor(gx)
-            k = kind(cxi, cy, PERIOD)
-            cov, lit = 0.0, 1.0
-            if k != EMPTY:
-                dA = abs(qx - qy) * 0.7071
-                tA = (qx + qy) * 0.5
-                dB = abs(qx + qy - 1) * 0.7071
-                tB = (qx - qy) * 0.5 + 0.5
-                endA = smooth(0.03, 0.1, tA) * (1 - smooth(0.9, 0.97, tA))
-                endB = smooth(0.03, 0.1, tB) * (1 - smooth(0.9, 0.97, tB))
-                covA = (1 - smooth(tw2 - aa, tw2 + aa, dA)) * endA
-                covB = (1 - smooth(tw2 - aa, tw2 + aa, dB)) * endB
-                nA, nB = dA / tw2, dB / tw2
-                shA = math.sqrt(min(max(1 - nA * nA, 0), 1))
-                shB = math.sqrt(min(max(1 - nB * nB, 0), 1))
-                twA = 0.9 + 0.1 * math.sin((tA * 7 + dA * 9) * 6.2832)
-                twB = 0.9 + 0.1 * math.sin((tB * 7 + dB * 9) * 6.2832)
-                shd = 1 - 0.35 * (1 - smooth(tw2, tw2 + 0.12, dB)) * endB
-                litA = (0.5 + 0.62 * shA) * twA * shd
-                litB = (0.5 + 0.62 * shB) * twB
-                lit = litB * covB + litA * (1 - covB)
-                cov = min(max(covA + covB - covA * covB, 0), 1)
-            if cov <= 0.001:
+        cy, py = divmod(y, s)
+        for x in range(w):
+            cx, px = divmod(x, s)
+            k = kind(cx, cy)
+            if k == EMPTY:
                 row.append((0, 0, 0, 0))
                 continue
-            t = threads[k - 1]
-            row.append(tuple(min(max(int(round(c * lit)), 0), 255) for c in t) + (int(round(cov * 255)),))
+            a = coverage(px, py, s)
+            # Лек релеф на конеца: горният ляв край — малко по-светъл, долният десен — по-тъмен.
+            lit = 1.0 + 0.08 * (((s - 1) / 2 - (px + py) / 2) / max(s - 1, 1))
+            r, g, b = (min(255, max(0, round(c * lit))) for c in colors[k])
+            row.append((r, g, b, round(a * 255)))
         rows.append(row)
     return rows
 
 
 def png(path, rows):
+    h = len(rows)
+    w = len(rows[0])
     raw = b"".join(b"\x00" + b"".join(bytes(px) for px in row) for row in rows)
 
     def chunk(tag, data):
         c = struct.pack(">I", len(data)) + tag + data
         return c + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
 
-    data = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", W, H, 8, 6, 0, 0, 0))
+    data = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0))
     data += chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b"")
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "wb") as f:
         f.write(data)
 
 
-def hexrgb(h):
-    return ((h >> 16) & 255, (h >> 8) & 255, h & 255)
+def hexrgb(v):
+    return ((v >> 16) & 255, (v >> 8) & 255, v & 255)
 
 
 if __name__ == "__main__":
     root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "app", "src", "main", "res")
-    # (червено, мастило, злато) — ShevitsaPalettes.ribbon(светла/тъмна) без канавата
-    light = [hexrgb(0x6B1F2A), hexrgb(0x1A1208), hexrgb(0xC9A84C)]
-    dark = [hexrgb(0xC0566A), hexrgb(0xE8D5A3), hexrgb(0xC9A84C)]
-    png(os.path.join(root, "drawable-xxhdpi", "widget_ribbon.png"), render(light))
-    png(os.path.join(root, "drawable-night-xxhdpi", "widget_ribbon.png"), render(dark))
-    print("ribbon", W, "x", H)
+    # {вид: цвят}: светла — бордо с злато (като канта), тъмна — злато с розово бордо.
+    light = {OUTLINE: hexrgb(0x6B1F2A), CENTER: hexrgb(0xC9A84C)}
+    dark = {OUTLINE: hexrgb(0xC9A84C), CENTER: hexrgb(0xC0566A)}
+    for name, s in DENSITIES.items():
+        png(os.path.join(root, f"drawable-{name}", "widget_ribbon.png"), render(light, s))
+        png(os.path.join(root, f"drawable-night-{name}", "widget_ribbon.png"), render(dark, s))
+        print("ribbon", name, PERIOD * s, "x", ROWS * s)

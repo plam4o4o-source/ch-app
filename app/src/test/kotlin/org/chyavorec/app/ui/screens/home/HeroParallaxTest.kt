@@ -29,6 +29,10 @@ import java.io.File
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import kotlinx.coroutines.runBlocking
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -97,6 +101,51 @@ class HeroParallaxTest {
         assertSame(Modifier, Modifier.heroPhotoLayer(shift, enabled = false))
         assertSame(Modifier, Modifier.heroTrack(HeroAnchor(), shift, enabled = false))
         assertSame(Modifier, Modifier.heroContainer(HeroAnchor(), enabled = false))
+    }
+
+    @Test fun anchorRestIsExactWhileTheFirstRowIsVisibleAndKeptOtherwise() {
+        var top: Int? = 120
+        val a = HeroAnchor().also { it.topScroll = { top } }
+        // Списъкът е превъртян с 120 px, картата е на 380 px → покоят е 500, превъртането — 120.
+        assertEquals(120f, a.scrolledBy(380f))
+        top = null
+        // Първият ред вече не се вижда: покоят се пази (500), картата е на −100 → 600 px превъртане.
+        assertEquals(600f, a.scrolledBy(-100f))
+        // Запазеният покой (смяна на раздела, превъртян „Начало“) — без първия ред пак е точен.
+        val b = HeroAnchor(a.rest)
+        assertEquals(500f - 260f, b.scrolledBy(260f))
+        // Непознат покой и непознат списък — първото видяно място (както преди).
+        assertEquals(0f, HeroAnchor().scrolledBy(42f))
+    }
+
+    /** Въртележката излиза от списъка и се връща / „Начало“ се отваря превъртяно: най-горе снимката е в покой. */
+    @Test fun photoRestsAtZeroAfterTheCarouselReentersOrStartsScrolled() {
+        val shift = HeroShift()
+        lateinit var list: LazyListState
+        compose.setContent {
+            // Като при връщане към раздела: списъкът е вече превъртян, когато въртележката се появи за първи път.
+            list = rememberLazyListState(0, 600)
+            val anchor = rememberHeroAnchor(list)
+            LazyColumn(Modifier.size(300.dp, 500.dp).heroList(anchor), state = list) {
+                item("header") { Box(Modifier.fillMaxWidth().height(320.dp)) }
+                item("hero") { Box(Modifier.fillMaxWidth().height(160.dp).heroTrack(anchor, shift, enabled = true)) }
+                items(20) { Box(Modifier.fillMaxWidth().height(200.dp)) }
+            }
+        }
+        fun scrollTo(index: Int, offset: Int = 0) {
+            compose.runOnIdle { runBlocking { list.scrollToItem(index, offset) } }
+            compose.waitForIdle()
+        }
+        compose.waitForIdle()
+        assertTrue(shift.scroll > 0f, "превъртяно: снимката е отместена (${shift.scroll})")
+        scrollTo(0)
+        assertEquals(0f, shift.scroll, 0.003f, "най-горе — покой")
+        // Далеч надолу (редът на въртележката излиза от композицията) и обратно.
+        scrollTo(15)
+        scrollTo(1, 40)
+        assertTrue(shift.scroll > 0f, "въртележката е горе на екрана: снимката е отместена (${shift.scroll})")
+        scrollTo(0)
+        assertEquals(0f, shift.scroll, 0.003f, "след връщане — пак покой")
     }
 
     private val enabled = mutableStateOf(false)

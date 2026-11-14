@@ -36,6 +36,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -85,6 +86,8 @@ import org.chyavorec.app.ui.components.GuardedShader
 import org.chyavorec.app.ui.components.HapticSignature
 import org.chyavorec.app.ui.components.LocalAgslEnabled
 import org.chyavorec.app.ui.components.LocalConfetti
+import org.chyavorec.app.ui.components.ShaderPool
+import org.chyavorec.app.ui.components.ShaderTags
 import org.chyavorec.app.ui.components.rememberAppHaptics
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.theme.Brand
@@ -350,7 +353,11 @@ internal fun ReturnStampCard(
 internal fun ReturnSeal(anim: StampAnim, modifier: Modifier = Modifier) {
     val ink = if (LocalExtendedColors.current.isDark) Brand.GoldLight else Brand.Burgundy
     val agsl = LocalAgslEnabled.current && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    // От [ShaderPool] (преведен във фона при отварянето на „Моите книги“ — [PrepareStampInk]); връща се там.
     val shader = remember(agsl) { if (agsl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) InkShader.createOrNull() else null }
+    DisposableEffect(shader) {
+        onDispose { if (shader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) shader.release() }
+    }
     val density = LocalDensity.current
     // Текстът на печата е част от рисунката — не расте с големия шрифт (иначе излиза от кръга).
     fun fixed(size: Float) = with(density) { size.dp.toSp() }
@@ -365,7 +372,10 @@ internal fun ReturnSeal(anim: StampAnim, modifier: Modifier = Modifier) {
                 scaleY = s
                 rotationZ = -16f + 8f * p
                 // Без шейдър мастилото е само прозрачност (по-светло, докато се „попива“).
-                alpha = (p * 4f).coerceAtMost(1f) * (if (shader == null) 0.45f + 0.55f * anim.ink.value else 1f)
+                // Със шейдър печатът се рисува и преди удара (маската при 0 е изцяло прозрачна) — видеокартата
+                // превежда програмата още в началото на появата на картата, не в мига на удара.
+                alpha = if (shader == null) (p * 4f).coerceAtMost(1f) * (0.45f + 0.55f * anim.ink.value)
+                else (p * 4f).coerceIn(if (anim.ink.value < 1f) 0.01f else 0f, 1f)
                 compositingStrategy = if (anim.ink.value < 1f && shader != null) CompositingStrategy.Offscreen else CompositingStrategy.Auto
             }
             .drawWithContent {
@@ -457,8 +467,20 @@ internal class InkShader private constructor(private val guarded: GuardedShader)
         setFloatUniform("uProgress", progress)
     }
 
+    /** Печатът изчезва — шейдърът се връща в [ShaderPool]. */
+    fun release() = guarded.release()
+
     companion object {
-        const val TAG = "ink-shader"
-        fun createOrNull(): InkShader? = GuardedShader.create(InkShaders.BLEED, TAG)?.let(::InkShader)
+        const val TAG = ShaderTags.INK
+        fun createOrNull(): InkShader? = ShaderPool.take(ShaderPool.INK)?.let(::InkShader)
+    }
+}
+
+/** „Моите книги“ се отварят: мастилото на печата „Върната“ се превежда във фона (печатът идва след зареждането). */
+@Composable
+internal fun PrepareStampInk() {
+    val agsl = LocalAgslEnabled.current
+    LaunchedEffect(agsl) {
+        if (agsl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) ShaderPool.prepare(ShaderPool.INK)
     }
 }

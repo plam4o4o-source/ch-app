@@ -9,11 +9,21 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.net.Uri
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.IconCompat
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.withContext
 import org.chyavorec.app.MainActivity
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.theme.GeneratedCover
@@ -45,6 +55,20 @@ object PinnedShortcuts {
     internal const val ICON_PX = 216
 
     fun supported(context: Context): Boolean = runCatching { ShortcutManagerCompat.isRequestPinShortcutSupported(context) }.getOrDefault(false)
+
+    /** [supported] за екраните — веднъж за процеса, извън главната нишка. */
+    internal val support = PinSupport(::supported)
+
+    /**
+     * Поддържа ли launcher-ът закачане — за менюто и „Още“: питането към системата (binder) е
+     * веднъж за процеса и във фонова нишка, не в композицията; до отговора — false (менюто се появява миг по-късно).
+     */
+    @Composable
+    fun rememberSupported(context: Context): Boolean {
+        val known by support.known.collectAsState()
+        LaunchedEffect(Unit) { support.ensure(context.applicationContext) }
+        return known == true
+    }
 
     /** Intent-ът на закачения пряк път към [link] — изрично към MainActivity. */
     fun intent(context: Context, link: String): Intent =
@@ -127,5 +151,18 @@ object PinnedShortcuts {
             canvas.drawPath(d, paint)
         }
         return bitmap
+    }
+}
+
+/** Отговорът на [probe] (поддържа ли launcher-ът закачане), запомнен за процеса; null — още не е известен. */
+internal class PinSupport(private val probe: (Context) -> Boolean) {
+    private val state = MutableStateFlow<Boolean?>(null)
+    val known: StateFlow<Boolean?> = state.asStateFlow()
+
+    /** Пита веднъж (в [dispatcher]); следващите извиквания не правят нищо. */
+    suspend fun ensure(context: Context, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+        if (state.value != null) return
+        val answer = withContext(dispatcher) { probe(context) }
+        state.compareAndSet(null, answer)
     }
 }

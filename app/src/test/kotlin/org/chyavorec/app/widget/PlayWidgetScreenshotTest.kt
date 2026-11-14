@@ -95,7 +95,8 @@ class PlayWidgetScreenshotTest {
         canvas.drawText("събота, 26 септември", dp(28f), dp(146f), white)
 
         val state = state()
-        val wide = draw(canvas, WidgetViews.build(app, state, WidgetViews.FullWideTallSize), 7, 176, 346, 168)
+        // 4 клетки на телефон с 360 dp — размерът, който уиджетът сам избира за тази ширина.
+        val wide = draw(canvas, WidgetViews.build(app, state, WidgetViews.pick(android.util.SizeF(346f, 168f))), 7, 176, 346, 168)
         val small = draw(canvas, WidgetViews.build(app, state, WidgetViews.SmallSize), 7, 360, 166, 144)
 
         // Иконата на приложението вдясно от малкия уиджет: емблемата върху бял кръг и името.

@@ -1,11 +1,14 @@
 package org.chyavorec.app.ui.components
 
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,12 +32,12 @@ import org.chyavorec.app.ui.theme.Brand
 /**
  * Златният отблясък по заглавието на книгата: един път (~500 ms), когато преходът „разгръщане
  * на книга“ е стигнал до края си, ивица светлина минава през буквите и ги „позлатява“.
- * API 33+: малък AGSL шейдър през [GuardedShader] (ивица с горещо ядро); API 26–32 и при грешка —
+ * API 33+: малък AGSL шейдър от [ShaderPool] (ивица с горещо ядро); API 26–32 и при грешка —
  * обикновен градиент със същото движение. При намалено движение — без отблясък. Слоят и
  * рисуването съществуват само докато отблясъкът тече; после модификаторът не добавя нищо.
  */
 internal object GoldSheen {
-    const val TAG = "sheen-shader"
+    const val TAG = ShaderTags.SHEEN
     const val DURATION_MS = 500
     const val START_DELAY_MS = 120L
 
@@ -84,8 +87,13 @@ fun Modifier.goldSheen(key: Any): Modifier {
         done = true
     }
     val agsl = LocalAgslEnabled.current && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    // Готов от [ShaderPool] (преведен във фона след първия кадър) — не в композицията на прехода.
     val shader = remember(agsl) {
-        if (agsl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) GuardedShader.create(GoldSheen.SOURCE, GoldSheen.TAG) else null
+        if (agsl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) ShaderPool.take(ShaderPool.SHEEN) else null
+    }
+    // Отблясъкът свърши или екранът се затвори — шейдърът се връща за следващата книга.
+    DisposableEffect(shader) {
+        onDispose { if (shader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) shader.release() }
     }
     val gold = Brand.GoldLight
     val fadeColors = remember {
@@ -117,4 +125,31 @@ fun Modifier.goldSheen(key: Any): Modifier {
                 }
             }
         }
+}
+
+/**
+ * За [ShaderWarmup]: отблясъкът веднъж, както при книгата (слой извън екрана, SrcAtop) — видеокартата
+ * превежда програмата му на спокойствие, не по време на прехода към книгата. Без шейдър — нищо.
+ */
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@Composable
+internal fun GoldSheenWarmup(modifier: Modifier) {
+    val shader = remember { ShaderPool.take(ShaderPool.SHEEN) } ?: return
+    DisposableEffect(shader) { onDispose { shader.release() } }
+    val gold = Brand.GoldLight
+    Spacer(
+        modifier
+            .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
+            .drawWithCache {
+                val ready = shader.guard {
+                    setFloatUniform("uResolution", size.width.coerceAtLeast(1f), size.height.coerceAtLeast(1f))
+                    setColorUniform("uGold", gold.toArgb())
+                    setFloatUniform("uProgress", 0.5f)
+                }
+                onDrawBehind {
+                    drawRect(gold)
+                    if (ready) drawRect(shader.brush, blendMode = BlendMode.SrcAtop)
+                }
+            },
+    )
 }
