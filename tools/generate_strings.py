@@ -371,6 +371,7 @@ S = {
 "home_search_hint": ("Търси книга, новина, събитие…", "Search books, news, events…"),
 "more_group_chitalishte": ("Читалището", "The centre"),
 "more_group_app": ("Приложението", "The app"),
+"more_group_pastimes": ("Занимания", "Pastimes"),
 "home_upcoming": ("Предстоящи събития", "Upcoming events"),
 "home_new_books": ("Нови постъпления", "New arrivals"),
 "home_for_you": ("За теб", "For you"),

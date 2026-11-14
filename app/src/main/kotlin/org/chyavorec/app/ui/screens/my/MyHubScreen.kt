@@ -26,15 +26,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.material.icons.automirrored.outlined.Logout
-import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.Badge
-import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.outlined.CardMembership
 import androidx.compose.material.icons.outlined.CloudOff
-import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.NotificationsNone
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -72,6 +66,7 @@ import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.rememberToday
 import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.FolkIcons
 import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
@@ -154,18 +149,18 @@ fun MyHubScreen(navigate: (String) -> Unit) {
             val today = rememberToday()
             val booksLine = loanSummaryLine(remember(cachedLoans, today) { LoanSummary.of(cachedLoans, today) }, cachedLoans)
             val tiles = buildList {
-                add(TileItem(Icons.Outlined.Badge, stringResource(R.string.my_card),
+                add(TileItem(FolkIcons.Card, stringResource(R.string.my_card),
                     if (signedIn) stringResource(R.string.my_card_desc) else if (selfCard != null) stringResource(R.string.my_card_self_desc) else stringResource(R.string.my_card_add_desc)) {
                     navigate(Routes.CARD)
                 })
                 // Влязъл читател — следващият срок / просрочените (от кеша); иначе общото описание.
-                add(TileItem(Icons.Outlined.CollectionsBookmark, stringResource(R.string.my_books), booksLine ?: stringResource(R.string.my_books_desc)) { navigate(Routes.LOANS) })
+                add(TileItem(FolkIcons.Books, stringResource(R.string.my_books), booksLine ?: stringResource(R.string.my_books_desc)) { navigate(Routes.LOANS) })
                 // „Искам да прочета“ — и без вход (списъкът е само на устройството).
-                add(TileItem(Icons.Outlined.BookmarkBorder, stringResource(R.string.want_title), wantToReadTileSubtitle()) { navigate(Routes.WANT_TO_READ) })
-                add(TileItem(Icons.Outlined.CardMembership, stringResource(R.string.my_membership), stringResource(R.string.my_membership_desc)) { navigate(Routes.MEMBERSHIP) })
-                if (signedIn) add(TileItem(Icons.Outlined.AutoStories, stringResource(R.string.history_title), stringResource(R.string.my_history_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.HISTORY) })
-                if (signedIn) add(TileItem(Icons.Outlined.Person, stringResource(R.string.my_profile), stringResource(R.string.my_profile_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.PROFILE) })
-                add(TileItem(Icons.Outlined.NotificationsNone, stringResource(R.string.my_notifications), stringResource(R.string.my_notifications_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.NOTIFICATIONS) })
+                add(TileItem(FolkIcons.Bookmark, stringResource(R.string.want_title), wantToReadTileSubtitle()) { navigate(Routes.WANT_TO_READ) })
+                add(TileItem(FolkIcons.Membership, stringResource(R.string.my_membership), stringResource(R.string.my_membership_desc)) { navigate(Routes.MEMBERSHIP) })
+                if (signedIn) add(TileItem(FolkIcons.History, stringResource(R.string.history_title), stringResource(R.string.my_history_desc)) { navigate(Routes.HISTORY) })
+                if (signedIn) add(TileItem(FolkIcons.Profile, stringResource(R.string.my_profile), stringResource(R.string.my_profile_desc)) { navigate(Routes.PROFILE) })
+                add(TileItem(FolkIcons.Notifications, stringResource(R.string.my_notifications), stringResource(R.string.my_notifications_desc)) { navigate(Routes.NOTIFICATIONS) })
             }
             TileGrid(tiles, motif = FolkMotif.RHOMBUS)
             Spacer(Modifier.height(8.dp))

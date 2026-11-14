@@ -1,12 +1,12 @@
 package org.chyavorec.app.ui.components
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
@@ -66,6 +66,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -92,24 +93,6 @@ fun PagerDots(
                     .background(if (current == i) activeColor else inactiveColor),
             )
         }
-    }
-}
-
-/** Плочка с икона (бързи действия, „Още“, въведението) — един стил навсякъде. */
-@Composable
-fun IconPlate(
-    icon: ImageVector,
-    modifier: Modifier = Modifier,
-    size: Dp = 56.dp,
-    container: Color = MaterialTheme.colorScheme.primaryContainer,
-    content: Color = MaterialTheme.colorScheme.onPrimaryContainer,
-) {
-    Box(
-        modifier.size(size).clip(MaterialTheme.shapes.medium)
-            .background(Brush.linearGradient(listOf(container, container.copy(alpha = 0.55f)))),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(size * 0.46f))
     }
 }
 
@@ -217,21 +200,27 @@ private class InputSync(var shown: String) {
     }
 }
 
-/** Елемент от мрежата с плочки („Още“, „Моето“). */
+/**
+ * Елемент от мрежата с плочки („Още“, „Моето“). [motif] — формата на плочката с иконата,
+ * ако е различна от тази на цялата мрежа.
+ */
 data class TileItem(val icon: ImageVector, val title: String, val subtitle: String?, val motif: FolkMotif? = null, val onClick: () -> Unit)
 
 /**
  * Мрежа от плочки с еднаква височина на реда: 2 колони на телефон, 3 при ширина
  * от 600 dp и 4 от 840 dp (таблет, хоризонтално). Ширината се мери спрямо мащаба на
  * шрифта: при много едър системен шрифт на телефон плочките са в една колона (иконата
- * вляво от текста), за да не се пренасят думите по букви.
+ * вляво от текста), за да не се пренасят думите по букви. Непълният последен ред не оставя
+ * дупка: плочките в него се разпределят по цялата ширина, а сама плочка е „широка“ (иконата
+ * вляво, както в една колона).
  *
- * Плочките са в народен вид: иконата е в плочка с форма по раздела ([motif], може да се
- * смени за плочка с [TileItem.motif]) — осморъка, ромб или елбетица, — а по горния десен ъгъл
- * минава пунктиран „бод“, който при натискане се „затяга“.
+ * Плочките са спокойни: рамка, плочка с икона в народна форма ([motif]: осморъка — читалището,
+ * ромб — библиотеката и „моето“) и текст. Пунктираният „бод“ в горния ъгъл се появява само
+ * докато плочката е натисната. [firstIndex] — поредният номер на първата плочка за
+ * появяването една след друга (при няколко мрежи на един екран).
  */
 @Composable
-fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier, motif: FolkMotif = FolkMotif.ROSETTE) {
+fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier, motif: FolkMotif = FolkMotif.ROSETTE, firstIndex: Int = 0) {
     BoxWithConstraints(modifier.fillMaxWidth()) {
         val textWidth = maxWidth / LocalDensity.current.fontScale.coerceAtLeast(1f)
         val columns = when {
@@ -250,54 +239,70 @@ fun TileGrid(items: List<TileItem>, modifier: Modifier = Modifier, motif: FolkMo
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     row.forEachIndexed { c, item ->
-                        val interaction = remember { MutableInteractionSource() }
-                        val pressed by interaction.collectIsPressedAsState()
-                        val reduced = rememberReducedMotion()
-                        // Ъгълът се „затяга“ ~120 ms; при намалено движение — веднага.
-                        val tighten = animateFloatAsState(if (pressed) 1f else 0f, if (reduced) snap() else tween(120), label = "tile-stitch")
-                        val shape = MaterialTheme.shapes.medium
-                        val tileMotif = item.motif ?: motif
-                        val plateContainer = MaterialTheme.colorScheme.primaryContainer
-                        val plateContent = MaterialTheme.colorScheme.onPrimaryContainer
-                        Surface(
-                            onClick = item.onClick,
-                            shape = shape,
-                            color = MaterialTheme.colorScheme.surfaceContainerLow,
-                            border = cardBorder(),
-                            interactionSource = interaction,
-                            modifier = Modifier.weight(1f).fillMaxHeight().animateEntrance(r * columns + c)
-                                .darkTopHighlight(shape).nightCloth(shape)
-                                .stitchedCorner(LocalExtendedColors.current.gold) { tighten.value },
-                        ) {
-                            // При едър шрифт (1.3×) текстът се пренася на още ред, вместо да се реже —
-                            // редът от плочки е с височината на най-високата.
-                            val texts: @Composable () -> Unit = {
-                                Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 3, overflow = TextOverflow.Ellipsis)
-                                item.subtitle?.let {
-                                    Spacer(Modifier.height(2.dp))
-                                    Text(
-                                        it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        maxLines = if (columns == 1) 4 else 3, overflow = TextOverflow.Ellipsis,
-                                    )
-                                }
-                            }
-                            if (columns == 1) {
-                                Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    FolkIconPlate(item.icon, tileMotif, size = 48.dp, container = plateContainer, content = plateContent)
-                                    Spacer(Modifier.width(14.dp))
-                                    Column(Modifier.weight(1f)) { texts() }
-                                }
-                            } else {
-                                Column(Modifier.padding(14.dp)) {
-                                    FolkIconPlate(item.icon, tileMotif, size = 48.dp, container = plateContainer, content = plateContent)
-                                    Spacer(Modifier.height(8.dp))
-                                    texts()
-                                }
-                            }
-                        }
+                        Tile(
+                            item, item.motif ?: motif, wide = row.size == 1, columns = columns,
+                            modifier = Modifier.weight(1f).fillMaxHeight().animateEntrance(firstIndex + r * columns + c),
+                        )
                     }
-                    repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
                 }
+            }
+        }
+    }
+}
+
+/** Една плочка от [TileGrid]; [wide] — иконата вляво от текста (една колона или сама в реда). */
+@Composable
+private fun Tile(item: TileItem, motif: FolkMotif, wide: Boolean, columns: Int, modifier: Modifier) {
+    val interaction = remember { MutableInteractionSource() }
+    val reduced = rememberReducedMotion()
+    // Натискането не прекомпозира: ъгълът се „затяга“ (~120 ms; при намалено движение — веднага),
+    // а стойността се чете само при рисуване.
+    val tighten = remember { Animatable(0f) }
+    LaunchedEffect(interaction, reduced) {
+        interaction.interactions.collect { i ->
+            val target = when (i) {
+                is PressInteraction.Press -> 1f
+                is PressInteraction.Release, is PressInteraction.Cancel -> 0f
+                else -> return@collect
+            }
+            launch { if (reduced) tighten.snapTo(target) else tighten.animateTo(target, tween(120)) }
+        }
+    }
+    val shape = MaterialTheme.shapes.medium
+    val plateContainer = MaterialTheme.colorScheme.primaryContainer
+    val plateContent = MaterialTheme.colorScheme.onPrimaryContainer
+    Surface(
+        onClick = item.onClick,
+        shape = shape,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        border = cardBorder(),
+        interactionSource = interaction,
+        modifier = modifier.darkTopHighlight(shape).nightCloth(shape)
+            .stitchedCorner(LocalExtendedColors.current.gold) { tighten.value },
+    ) {
+        // При едър шрифт (1.3×) текстът се пренася на още ред, вместо да се реже —
+        // редът от плочки е с височината на най-високата.
+        val texts: @Composable () -> Unit = {
+            Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 3, overflow = TextOverflow.Ellipsis)
+            item.subtitle?.let {
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = if (columns == 1) 4 else 3, overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
+        if (wide) {
+            Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                FolkIconPlate(item.icon, motif, size = 48.dp, container = plateContainer, content = plateContent)
+                Spacer(Modifier.width(14.dp))
+                Column(Modifier.weight(1f)) { texts() }
+            }
+        } else {
+            Column(Modifier.padding(14.dp)) {
+                FolkIconPlate(item.icon, motif, size = 48.dp, container = plateContainer, content = plateContent)
+                Spacer(Modifier.height(8.dp))
+                texts()
             }
         }
     }

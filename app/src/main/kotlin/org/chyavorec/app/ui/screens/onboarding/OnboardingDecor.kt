@@ -1,7 +1,6 @@
 package org.chyavorec.app.ui.screens.onboarding
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Badge
+import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +36,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.Emblem
+import org.chyavorec.app.ui.components.FolkIconPlate
+import org.chyavorec.app.ui.components.FolkIcons
+import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.components.LivingShevitsa
 import org.chyavorec.app.ui.components.ShevitsaPalettes
 import org.chyavorec.app.ui.components.WeaveBudget
@@ -62,28 +66,25 @@ internal fun SealMedallion(size: Dp, budget: WeaveBudget, modifier: Modifier = M
 }
 
 /**
- * Възел вместо квадратна плочка с икона: кръг от бродирани черти (прекъснат златен контур) около
- * иконата. [size] е външният размер; иконата е светло злато върху полупрозрачно мастило.
+ * Плочката с икона във въведението — същата [FolkIconPlate] като в приложението, в злато върху
+ * тъмния фон. Възможностите на приложението са с иконите от набора „Бод“ ([folkFeature]):
+ * новините и събитията — осморъка (читалището), каталогът и картата — ромб (библиотеката).
  */
 @Composable
 internal fun KnotPlate(icon: ImageVector, size: Dp, modifier: Modifier = Modifier) {
-    Box(
-        modifier.size(size).clip(CircleShape).background(Brand.Ink.copy(alpha = 0.45f)).clearAndSetSemantics { },
-        contentAlignment = Alignment.Center,
-    ) {
-        Canvas(Modifier.size(size)) {
-            val stroke = (this.size.minDimension * 0.045f).coerceAtLeast(1.5f)
-            val r = this.size.minDimension / 2f - stroke
-            drawCircle(
-                Brand.Gold, radius = r, style = Stroke(
-                    width = stroke, cap = StrokeCap.Round,
-                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(stroke * 2.2f, stroke * 1.6f)),
-                ),
-            )
-            drawCircle(Brand.Gold.copy(alpha = 0.35f), radius = r - stroke * 2.6f, style = Stroke(width = stroke * 0.5f))
-        }
-        Icon(icon, contentDescription = null, tint = Brand.GoldLight, modifier = Modifier.size(size * 0.46f))
-    }
+    val (folk, motif) = folkFeature(icon)
+    FolkIconPlate(
+        folk, motif, modifier.clearAndSetSemantics { }, size = size,
+        container = Brand.Gold.copy(alpha = 0.22f), content = Brand.GoldLight,
+    )
+}
+
+/** Стандартната икона на възможност → иконата „Бод“ и формата на плочката (другите остават). */
+private fun folkFeature(icon: ImageVector): Pair<ImageVector, FolkMotif> = when (icon) {
+    Icons.Outlined.Event -> FolkIcons.Events to FolkMotif.ROSETTE
+    Icons.AutoMirrored.Outlined.MenuBook -> FolkIcons.Catalog to FolkMotif.RHOMBUS
+    Icons.Outlined.Badge -> FolkIcons.Card to FolkMotif.RHOMBUS
+    else -> icon to FolkMotif.ROSETTE
 }
 
 /**

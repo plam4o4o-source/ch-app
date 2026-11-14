@@ -153,7 +153,7 @@ class UxScreenshotTest {
     @Test fun textSizeChoice() {
         launch(TextScale.STANDARD)
         tab("Още")
-        click("Настройки")
+        clickScrolling("Настройки")
         click("Размер на текста")
         waitFor("Много голям")
         compose.onNode(isDialog()).assertExists()

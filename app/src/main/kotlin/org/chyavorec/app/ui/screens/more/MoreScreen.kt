@@ -10,22 +10,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.automirrored.outlined.Article
-import androidx.compose.material.icons.outlined.HistoryEdu
-import androidx.compose.material.icons.outlined.Quiz
-import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.AddHome
-import androidx.compose.material.icons.outlined.Campaign
-import androidx.compose.material.icons.outlined.Brush
-import androidx.compose.material.icons.outlined.Computer
-import androidx.compose.material.icons.outlined.Event
-import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Photo
-import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.TheaterComedy
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -55,7 +43,7 @@ import org.chyavorec.app.ui.navigation.PinnedShortcuts
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.ScreenGutter
-import org.chyavorec.app.ui.components.FolkMotif
+import org.chyavorec.app.ui.components.FolkIcons
 import org.chyavorec.app.ui.components.TileGrid
 import org.chyavorec.app.ui.components.TileItem
 import org.chyavorec.app.ui.navigation.Routes
@@ -72,7 +60,7 @@ private fun AppItem(icon: ImageVector, title: String, onClick: () -> Unit) = Lis
     modifier = Modifier.clickable(onClick = onClick),
 )
 
-/** „Още“: разделите на читалището като плочки и настройките на приложението като списък. */
+/** „Още“: читалището и заниманията като плочки, настройките на приложението като списък. */
 @Composable
 fun MoreScreen(navigate: (String) -> Unit) {
     val c = LocalAppContainer.current
@@ -93,24 +81,29 @@ fun MoreScreen(navigate: (String) -> Unit) {
     if (pinSheet) PinSectionsSheet(onFailed = { scope.launch { snackbar.showSnackbar(pinFailed) } }, onDismiss = { pinSheet = false })
     Scaffold(topBar = { AppTopBar(stringResource(R.string.tab_more), onSearch = { navigate(Routes.SEARCH) }) }, snackbarHost = { SnackbarHost(snackbar) }) { padding ->
         Column(Modifier.padding(padding).fillMaxSize().verticalScroll(scrollState)) {
+            // Две групи: читалището (осморъка — общността) и заниманията в приложението.
             SectionLabel(stringResource(R.string.more_group_chitalishte), Modifier.padding(start = ScreenGutter, top = 8.dp, bottom = 12.dp))
-            val tiles = buildList {
-                add(TileItem(Icons.Outlined.Campaign, stringResource(R.string.messages_title), stringResource(R.string.more_messages_desc)) { navigate(Routes.MESSAGES) })
-                add(TileItem(Icons.Outlined.Event, stringResource(R.string.events_title), stringResource(R.string.more_events_desc)) { navigate(Routes.EVENTS) })
-                add(TileItem(Icons.Outlined.TheaterComedy, stringResource(R.string.activities_title), stringResource(R.string.more_activities_desc)) { navigate(Routes.ACTIVITIES) })
-                add(TileItem(Icons.Outlined.AccountBalance, stringResource(R.string.qa_about), stringResource(R.string.more_about_desc)) { navigate(Routes.ABOUT_CHITALISHTE) })
+            val centre = buildList {
+                add(TileItem(FolkIcons.Messages, stringResource(R.string.messages_title), stringResource(R.string.more_messages_desc)) { navigate(Routes.MESSAGES) })
+                add(TileItem(FolkIcons.Events, stringResource(R.string.events_title), stringResource(R.string.more_events_desc)) { navigate(Routes.EVENTS) })
+                add(TileItem(FolkIcons.Activities, stringResource(R.string.activities_title), stringResource(R.string.more_activities_desc)) { navigate(Routes.ACTIVITIES) })
+                add(TileItem(FolkIcons.Chitalishte, stringResource(R.string.qa_about), stringResource(R.string.more_about_desc)) { navigate(Routes.ABOUT_CHITALISHTE) })
                 digitalClub?.let { l ->
-                    add(TileItem(Icons.Outlined.Computer, l.title, stringResource(R.string.more_digital_desc)) { navigate(Routes.page(l.url, l.title)) })
+                    add(TileItem(FolkIcons.Computer, l.title, stringResource(R.string.more_digital_desc)) { navigate(Routes.page(l.url, l.title)) })
                 }
-                add(TileItem(Icons.Outlined.Photo, stringResource(R.string.gallery_title), stringResource(R.string.more_gallery_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.GALLERY) })
-                add(TileItem(Icons.Outlined.Brush, stringResource(R.string.embroidery_title), stringResource(R.string.more_embroidery_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.EMBROIDERY) })
-                add(TileItem(Icons.AutoMirrored.Outlined.Article, stringResource(R.string.newspaper_title), stringResource(R.string.more_newspaper_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.NEWSPAPER) })
-                add(TileItem(Icons.Outlined.HistoryEdu, stringResource(R.string.timeline_title), stringResource(R.string.more_timeline_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.TIMELINE) })
-                add(TileItem(Icons.Outlined.Quiz, stringResource(R.string.quiz_title), stringResource(R.string.more_quiz_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.QUIZ) })
-                add(TileItem(Icons.Outlined.Folder, stringResource(R.string.documents_title), stringResource(R.string.more_documents_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.DOCUMENTS) })
-                add(TileItem(Icons.Outlined.Place, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc), motif = FolkMotif.ELBETITSA) { navigate(Routes.CONTACTS) })
+                add(TileItem(FolkIcons.Gallery, stringResource(R.string.gallery_title), stringResource(R.string.more_gallery_desc)) { navigate(Routes.GALLERY) })
+                add(TileItem(FolkIcons.Documents, stringResource(R.string.documents_title), stringResource(R.string.more_documents_desc)) { navigate(Routes.DOCUMENTS) })
+                add(TileItem(FolkIcons.Pin, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc)) { navigate(Routes.CONTACTS) })
             }
-            TileGrid(tiles)
+            TileGrid(centre)
+            SectionLabel(stringResource(R.string.more_group_pastimes), Modifier.padding(start = ScreenGutter, top = 28.dp, bottom = 12.dp))
+            val pastimes = listOf(
+                TileItem(FolkIcons.Embroider, stringResource(R.string.embroidery_title), stringResource(R.string.more_embroidery_desc)) { navigate(Routes.EMBROIDERY) },
+                TileItem(FolkIcons.Newspaper, stringResource(R.string.newspaper_title), stringResource(R.string.more_newspaper_desc)) { navigate(Routes.NEWSPAPER) },
+                TileItem(FolkIcons.Timeline, stringResource(R.string.timeline_title), stringResource(R.string.more_timeline_desc)) { navigate(Routes.TIMELINE) },
+                TileItem(FolkIcons.Quiz, stringResource(R.string.quiz_title), stringResource(R.string.more_quiz_desc)) { navigate(Routes.QUIZ) },
+            )
+            TileGrid(pastimes, firstIndex = centre.size)
             SectionLabel(stringResource(R.string.more_group_app), Modifier.padding(start = ScreenGutter, top = 28.dp, bottom = 4.dp))
             AppItem(Icons.Outlined.Settings, stringResource(R.string.settings_title)) { navigate(Routes.SETTINGS) }
             AppItem(Icons.Outlined.PrivacyTip, stringResource(R.string.privacy_title)) { navigate(Routes.PRIVACY) }

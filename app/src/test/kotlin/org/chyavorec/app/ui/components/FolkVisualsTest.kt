@@ -16,6 +16,7 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.chyavorec.app.ui.theme.ChitalishteTheme
@@ -213,7 +214,7 @@ class FolkVisualsTest {
         }
     }
 
-    @Test fun pressedCornerIsDenserThanTheRestingOne() {
+    @Test fun cornerIsDrawnOnlyWhilePressed() {
         val t = androidx.compose.runtime.mutableFloatStateOf(0f)
         compose.setContent {
             Box(Modifier.size(96.dp, 64.dp).background(Color.White).testTag("tile").stitchedCorner(Color.Black) { t.floatValue })
@@ -222,7 +223,28 @@ class FolkVisualsTest {
         t.floatValue = 1f
         compose.waitForIdle()
         val pressed = pixels("tile").sumOf { 255 - (it and 0xFF) }
-        assertTrue(rest > 0, "ъгълът в покой се вижда")
-        assertTrue(pressed > rest, "затегнатият е по-плътен: $pressed срещу $rest")
+        assertEquals(0, rest, "в покой ъгълът не се рисува")
+        assertTrue(pressed > 0, "при натискане ъгълът се вижда")
+    }
+
+    /** Нечетната последна плочка не оставя дупка: на телефон (2 колони) е на цялата ширина. */
+    @Test @Config(qualifiers = "bg-w411dp-h891dp")
+    fun oddLastTileSpansTheRow() {
+        compose.setContent {
+            ChitalishteTheme(mode = ThemeMode.LIGHT) {
+                TileGrid(
+                    listOf(
+                        TileItem(FolkIcons.Messages, "Първа", null) {},
+                        TileItem(FolkIcons.Events, "Втора", null) {},
+                        TileItem(FolkIcons.Pin, "Трета", null) {},
+                    ),
+                )
+            }
+        }
+        fun width(text: String) = compose.onNodeWithText(text).fetchSemanticsNode().boundsInRoot.width
+        val half = width("Първа")
+        assertEquals(half, width("Втора"), 1f)
+        val full = width("Трета")
+        assertTrue(full > half * 1.8f, "последната е на целия ред: $full срещу $half")
     }
 }

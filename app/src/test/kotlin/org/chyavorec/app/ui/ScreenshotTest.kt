@@ -278,9 +278,15 @@ class ScreenshotTest {
         waitFor("Настройки")
         tabSelected("Още")
         shown("Съобщения")
-        shown("Настройки")
+        shown("ЧИТАЛИЩЕТО")
         shot("05-more")
-        // С новите плочки („Вестник“, „Лента на времето“, „Викторина“, „Извези шевица“) редът е под сгъвката.
+        // Двете групи плочки („Читалището“, „Занимания“) — настройките са под сгъвката.
+        compose.onAllNodes(hasText("ЗАНИМАНИЯ")).onFirst().performScrollTo()
+        shown("ЗАНИМАНИЯ")
+        shown("Извези шевица")
+        shot("05b-more-pastimes")
+        compose.onAllNodes(hasText("Настройки")).onFirst().performScrollTo()
+        shown("Настройки")
         compose.onAllNodes(hasText("Политика за поверителност")).onFirst().performScrollTo()
         shown("Политика за поверителност")
     }
@@ -419,7 +425,7 @@ class ScreenshotTest {
         launch()
         tab("Още")
         waitFor("Настройки")
-        compose.onAllNodes(hasText("Настройки")).onFirst().performClick()
+        compose.onAllNodes(hasText("Настройки")).onFirst().performScrollTo().performClick()
         waitFor("Диагностика")
         compose.onAllNodes(hasText("Диагностика")).onFirst().performScrollTo().performClick()
         waitFor("Сподели")
