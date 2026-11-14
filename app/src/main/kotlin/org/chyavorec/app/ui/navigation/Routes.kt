@@ -1,19 +1,9 @@
 package org.chyavorec.app.ui.navigation
 
 import android.net.Uri
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.Newspaper
-import androidx.compose.material.icons.filled.Widgets
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.automirrored.outlined.MenuBook
-import androidx.compose.material.icons.outlined.Newspaper
-import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.chyavorec.app.R
+import org.chyavorec.app.ui.components.FolkIcons
 
 object Routes {
     const val HOME = "home"
@@ -101,10 +91,11 @@ object Routes {
         )
 }
 
+/** Разделите на лентата; иконите са от набора „Бод“ ([FolkIcons]) — контур, а избраният — плътен. */
 enum class TopTab(val route: String, val labelRes: Int, val icon: ImageVector, val selectedIcon: ImageVector) {
-    HOME(Routes.HOME, R.string.tab_home, Icons.Outlined.Home, Icons.Filled.Home),
-    CATALOG(Routes.CATALOG, R.string.tab_catalog, Icons.AutoMirrored.Outlined.MenuBook, Icons.AutoMirrored.Filled.MenuBook),
-    MY(Routes.MY, R.string.tab_my, Icons.Outlined.AccountCircle, Icons.Filled.AccountCircle),
-    NEWS(Routes.NEWS, R.string.tab_news, Icons.Outlined.Newspaper, Icons.Filled.Newspaper),
-    MORE(Routes.MORE, R.string.tab_more, Icons.Outlined.Widgets, Icons.Filled.Widgets),
+    HOME(Routes.HOME, R.string.tab_home, FolkIcons.Home, FolkIcons.HomeSelected),
+    CATALOG(Routes.CATALOG, R.string.tab_catalog, FolkIcons.Catalog, FolkIcons.CatalogSelected),
+    MY(Routes.MY, R.string.tab_my, FolkIcons.My, FolkIcons.MySelected),
+    NEWS(Routes.NEWS, R.string.tab_news, FolkIcons.News, FolkIcons.NewsSelected),
+    MORE(Routes.MORE, R.string.tab_more, FolkIcons.More, FolkIcons.MoreSelected),
 }

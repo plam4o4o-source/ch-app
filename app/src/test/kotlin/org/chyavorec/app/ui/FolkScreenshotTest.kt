@@ -14,14 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AutoStories
-import androidx.compose.material.icons.outlined.Badge
-import androidx.compose.material.icons.outlined.Campaign
-import androidx.compose.material.icons.outlined.Event
-import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.outlined.Photo
-import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,6 +34,7 @@ import org.chyavorec.app.ui.components.AppCard
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.components.ClothWeave
+import org.chyavorec.app.ui.components.FolkIcons
 import org.chyavorec.app.ui.components.FolkLoaderFrame
 import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.components.LocalReducedMotion
@@ -101,13 +94,14 @@ class FolkScreenshotTest {
     private fun Label(text: String) = Text(text, fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
     private fun tiles() = listOf(
-        TileItem(Icons.Outlined.Campaign, "Съобщения", "Съобщения и покани от читалището") {},
-        TileItem(Icons.Outlined.Event, "Събития", "Календар на читалището") {},
-        TileItem(Icons.Outlined.Photo, "Галерия", "Снимки от сайта", motif = FolkMotif.ELBETITSA) {},
-        TileItem(Icons.Outlined.Folder, "Документи", "Устав, отчети", motif = FolkMotif.ELBETITSA) {},
+        TileItem(FolkIcons.Messages, "Съобщения", "Съобщения и покани от читалището") {},
+        TileItem(FolkIcons.Events, "Събития", "Календар на читалището") {},
+        TileItem(FolkIcons.Gallery, "Галерия", "Снимки от сайта") {},
+        TileItem(FolkIcons.Documents, "Документи", "Устав, отчети") {},
+        TileItem(FolkIcons.Pin, "Контакти", "Сама в последния ред — на цялата ширина") {},
     )
 
-    /** Етикет с бодове, заглавка на раздел, плочки (осморъка / ромб / елбетица), ъгълът в покой и „затегнат“, карта. */
+    /** Етикет с бодове, заглавка на раздел, плочки (осморъка / ромб, широка последна), ъгълът в покой (няма го) и „затегнат“, карта. */
     private fun sections(look: Look) {
         compose.setContent {
             CompositionLocalProvider(LocalReducedMotion provides true) {
@@ -117,8 +111,8 @@ class FolkScreenshotTest {
                     SectionLabel("Моето", Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp))
                     TileGrid(
                         listOf(
-                            TileItem(Icons.Outlined.Badge, "Моята карта", "Номер и баркод") {},
-                            TileItem(Icons.Outlined.AutoStories, "История", "Прочетено", motif = FolkMotif.ELBETITSA) {},
+                            TileItem(FolkIcons.Card, "Моята карта", "Номер и баркод") {},
+                            TileItem(FolkIcons.History, "История", "Прочетено") {},
                         ),
                         motif = FolkMotif.RHOMBUS,
                     )

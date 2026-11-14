@@ -1,10 +1,7 @@
 package org.chyavorec.app.ui.screens.events
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,16 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Directions
-import androidx.compose.material.icons.outlined.NotificationsActive
-import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,11 +29,14 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
+import org.chyavorec.app.ui.components.FolkIconPlate
+import org.chyavorec.app.ui.components.FolkIcons
+import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 
 /**
- * Действията на събитието: едно основно (добави в календара) и три кръгли с етикет под тях —
+ * Действията на събитието: едно основно (добави в календара) и три плочки с етикет под тях —
  * напомняне, маршрут, публикацията. Споделянето е в горната лента. Всяко е поне 48 dp.
  */
 @Composable
@@ -69,13 +64,14 @@ internal fun EventActions(
         val wide = LocalDensity.current.fontScale >= WIDE_ACTIONS_FONT_SCALE
         val actions: @Composable () -> Unit = {
             if (showReminder) {
+                // Звънчето и маршрутът — от набора „Бод“; „публикацията“ е помощно действие (стандартна икона).
                 RoundAction(
-                    if (hasReminder) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsNone,
+                    FolkIcons.Notifications,
                     stringResource(if (hasReminder) R.string.event_remove_reminder else R.string.event_remind),
                     onReminder, active = hasReminder, wide = wide,
                 )
             }
-            if (showRoute) RoundAction(Icons.Outlined.Directions, stringResource(R.string.notif_action_route), onRoute, wide = wide)
+            if (showRoute) RoundAction(FolkIcons.Pin, stringResource(R.string.notif_action_route), onRoute, wide = wide)
             RoundAction(Icons.AutoMirrored.Outlined.OpenInNew, stringResource(R.string.event_source), onSource, wide = wide)
         }
         if (wide) {
@@ -90,12 +86,11 @@ internal fun EventActions(
 internal const val WIDE_ACTIONS_FONT_SCALE = 1.3f
 
 /**
- * Кръгъл бутон (56 dp) със златен кант и етикет под него (при [wide] — вдясно от него);
+ * Бутон-плочка (56 dp) с етикет под нея (при [wide] — вдясно от нея);
  * целият стълб е докосваем и се чете като бутон.
  */
 @Composable
 private fun RoundAction(icon: ImageVector, label: String, onClick: () -> Unit, active: Boolean = false, wide: Boolean = false) {
-    val gold = LocalExtendedColors.current.gold
     if (wide) {
         Row(
             Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium)
@@ -124,15 +119,12 @@ private fun RoundAction(icon: ImageVector, label: String, onClick: () -> Unit, a
     }
 }
 
+/**
+ * Плочката на действието — същата като навсякъде, където икона стои над етикет: осморъка
+ * (събитията са на читалището). Включеното напомняне е плътно злато.
+ */
 @Composable
 private fun ActionCircle(icon: ImageVector, active: Boolean) {
-    val gold = LocalExtendedColors.current.gold
-    Box(
-        Modifier.size(56.dp).clip(CircleShape)
-            .background(if (active) gold else MaterialTheme.colorScheme.surfaceContainerHigh)
-            .border(1.dp, gold, CircleShape),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(icon, contentDescription = null, tint = if (active) Brand.Ink else MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
-    }
+    if (active) FolkIconPlate(icon, FolkMotif.ROSETTE, size = 56.dp, container = LocalExtendedColors.current.gold, content = Brand.Ink)
+    else FolkIconPlate(icon, FolkMotif.ROSETTE, size = 56.dp)
 }

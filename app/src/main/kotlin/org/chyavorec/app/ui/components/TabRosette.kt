@@ -16,11 +16,9 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.unit.dp
-import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.Morph
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.circle
-import androidx.graphics.shapes.star
 import androidx.graphics.shapes.toPath
 
 /**
@@ -34,13 +32,10 @@ internal object TabRosetteShapes {
     /** Кръг с 8 върха — всеки лъч на розетката „израства“ от свой връх. */
     val circle: RoundedPolygon = RoundedPolygon.circle(numVertices = 8, radius = 0.86f)
 
-    /** Осморъка: 8 заоблени лъча, вътрешният радиус е голям — мека „розетка“, не бодлива звезда. */
-    val rosette: RoundedPolygon = RoundedPolygon.star(
-        numVerticesPerRadius = 8, radius = 1f, innerRadius = 0.8f,
-        rounding = CornerRounding(0.2f, smoothing = 0.5f), innerRounding = CornerRounding(0.1f),
-    )
+    /** Осморъката — същата като на плочките ([FolkShapes.rosette]), една за цялото приложение. */
+    val rosette: RoundedPolygon get() = FolkShapes.rosette
 
-    val morph = Morph(circle, rosette)
+    val morph = Morph(circle, FolkShapes.rosette)
 }
 
 /**

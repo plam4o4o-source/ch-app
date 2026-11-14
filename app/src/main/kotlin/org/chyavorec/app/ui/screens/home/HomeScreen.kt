@@ -37,7 +37,9 @@ import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AnimatedCounter
 import org.chyavorec.app.ui.components.prepareCountUpToday
 import org.chyavorec.app.ui.components.rememberCountUpToday
-import org.chyavorec.app.ui.components.IconPlate
+import org.chyavorec.app.ui.components.FolkIconPlate
+import org.chyavorec.app.ui.components.FolkIcons
+import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.components.OrnamentFrame
 import org.chyavorec.app.ui.components.Season
 import org.chyavorec.app.ui.components.HolidayGreeting
@@ -94,12 +96,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalance
-import androidx.compose.material.icons.outlined.Badge
-import androidx.compose.material.icons.outlined.CollectionsBookmark
-import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Newspaper
-import androidx.compose.material.icons.outlined.Place
-import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.TheaterComedy
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -181,7 +178,8 @@ import org.chyavorec.data.repository.AuthState
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.NewsArticle
 
-private data class QuickAction(val labelRes: Int, val icon: ImageVector, val route: String)
+/** [motif] — формата на плочката: ромб за библиотеката и „моето“, осморъка за читалището. */
+private data class QuickAction(val labelRes: Int, val icon: ImageVector, val route: String, val motif: FolkMotif = FolkMotif.RHOMBUS)
 
 /**
  * Четири основни действия — останалите са в долната лента или в „Още“. Първото не е
@@ -189,9 +187,9 @@ private data class QuickAction(val labelRes: Int, val icon: ImageVector, val rou
  * Без „Събития“: те са точно отдолу („Предстоящи събития · Всички“) и в „Новини“.
  */
 private val quickActionsTail = listOf(
-    QuickAction(R.string.qa_card, Icons.Outlined.Badge, Routes.CARD),
-    QuickAction(R.string.want_title, Icons.Outlined.BookmarkBorder, Routes.WANT_TO_READ),
-    QuickAction(R.string.qa_contacts, Icons.Outlined.Place, Routes.CONTACTS),
+    QuickAction(R.string.qa_card, FolkIcons.Card, Routes.CARD),
+    QuickAction(R.string.want_title, FolkIcons.Bookmark, Routes.WANT_TO_READ),
+    QuickAction(R.string.qa_contacts, FolkIcons.Pin, Routes.CONTACTS, FolkMotif.ROSETTE),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -757,8 +755,8 @@ private fun rememberQuickActions(): List<QuickAction> {
     LaunchedEffect(Unit) { c.selfCardRepository.load() }
     val reader = auth is AuthState.SignedIn || selfCard != null
     return remember(reader) {
-        val first = if (reader) QuickAction(R.string.my_books, Icons.Outlined.CollectionsBookmark, Routes.LOANS)
-        else QuickAction(R.string.qa_scan, Icons.Outlined.QrCodeScanner, Routes.SCAN)
+        val first = if (reader) QuickAction(R.string.my_books, FolkIcons.Books, Routes.LOANS)
+        else QuickAction(R.string.qa_scan, FolkIcons.Scan, Routes.SCAN)
         listOf(first) + quickActionsTail
     }
 }
@@ -796,7 +794,7 @@ private fun RowScope.QuickActionCell(action: QuickAction, i: Int, navigate: (Str
             .padding(vertical = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        IconPlate(action.icon)
+        FolkIconPlate(action.icon, action.motif)
         Spacer(Modifier.height(6.dp))
         Text(stringResource(action.labelRes), style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center)

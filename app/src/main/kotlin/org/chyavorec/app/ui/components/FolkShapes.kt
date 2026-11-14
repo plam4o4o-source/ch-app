@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -33,18 +35,26 @@ import androidx.graphics.shapes.star
 import androidx.graphics.shapes.toPath
 import kotlin.math.min
 
-/** Народните форми за плочките и индикатора: осморъка, ромб и елбетица (четирилъчен „рог“). */
-enum class FolkMotif { ROSETTE, RHOMBUS, ELBETITSA }
+/**
+ * Двете форми на плочката с икона ([FolkIconPlate]) — всяка със свой смисъл, за да не са
+ * украса „на сляпо“: осморъката е читалището и общността (събития, дейности, контакти),
+ * ромбът — библиотеката и „моето“ (карта, книги, списъци).
+ */
+enum class FolkMotif { ROSETTE, RHOMBUS }
 
 /**
  * Контурите на трите форми като [RoundedPolygon] с радиус 1 (в единици = радиусът на плочката).
  * Строят се веднъж за процеса; пътят за конкретен размер — веднъж в drawWithCache.
  */
 internal object FolkShapes {
-    /** Осморъка: пълна, заоблена розетка — иконата в средата има място. */
+    /**
+     * Осморъка: 8 заоблени лъча с голям вътрешен радиус — мека розетка, не бодлива звезда.
+     * Единствената в приложението: и плочката, и индикаторът на разделите ([TabRosetteShapes]),
+     * и оценката в дневника, и медальонът на иконата на приложението (tools/gen_icon_rosette.py).
+     */
     val rosette: RoundedPolygon = RoundedPolygon.star(
-        numVerticesPerRadius = 8, radius = 1f, innerRadius = 0.76f,
-        rounding = CornerRounding(0.12f, smoothing = 0.4f), innerRounding = CornerRounding(0.08f),
+        numVerticesPerRadius = 8, radius = 1f, innerRadius = 0.8f,
+        rounding = CornerRounding(0.2f, smoothing = 0.5f), innerRounding = CornerRounding(0.1f),
     )
 
     /** Ромб — най-старият „пазещ“ знак, с меки върхове. */
@@ -65,7 +75,6 @@ internal object FolkShapes {
     fun of(motif: FolkMotif): RoundedPolygon = when (motif) {
         FolkMotif.ROSETTE -> rosette
         FolkMotif.RHOMBUS -> rhombus
-        FolkMotif.ELBETITSA -> elbetitsa
     }
 }
 
@@ -80,26 +89,11 @@ internal fun RoundedPolygon.scaledPath(radius: Float, cx: Float, cy: Float): Pat
 }
 
 /**
- * Плочка с народна форма вместо заоблен квадрат: градиентен пълнеж и тънък пунктиран „бод“
- * малко навътре. Пътищата се строят веднъж за размера; в покой — нищо по кадри.
+ * Плочката с икона — една и съща навсякъде, където икона стои над етикет (бързите действия на
+ * „Начало“, плочките на „Още“ и „Моето“, действията на събитието, въведението): народна форма
+ * ([motif]) с лек градиент и иконата в средата. Без пунктир — бодът е в самите икони („Бод“,
+ * [FolkIcons]). Пътят се строи веднъж за размера (drawWithCache, запомнен); в покой — нищо по кадри.
  */
-internal fun Modifier.folkPlate(motif: FolkMotif, container: Color, stitch: Color): Modifier = drawWithCache {
-    val c = size.minDimension / 2f
-    val poly = FolkShapes.of(motif)
-    val outer = poly.scaledPath(c * 0.98f, size.width / 2f, size.height / 2f)
-    val inner = poly.scaledPath(c * 0.80f, size.width / 2f, size.height / 2f)
-    val fill = Brush.linearGradient(listOf(container, container.copy(alpha = 0.55f)))
-    val line = Stroke(
-        width = 1.dp.toPx(), cap = StrokeCap.Round,
-        pathEffect = PathEffect.dashPathEffect(floatArrayOf(2.5.dp.toPx(), 2.dp.toPx())),
-    )
-    onDrawBehind {
-        drawPath(outer, fill)
-        drawPath(inner, stitch.copy(alpha = 0.4f), style = line)
-    }
-}
-
-/** [IconPlate] в народна форма ([motif]); без [motif] — както досега (заоблен квадрат). */
 @Composable
 fun FolkIconPlate(
     icon: ImageVector,
@@ -109,36 +103,51 @@ fun FolkIconPlate(
     container: Color = MaterialTheme.colorScheme.primaryContainer,
     content: Color = MaterialTheme.colorScheme.onPrimaryContainer,
 ) {
-    Box(modifier.size(size).folkPlate(motif, container, content), contentAlignment = Alignment.Center) {
-        Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(size * 0.42f))
+    val plate = remember(motif, container) {
+        Modifier.drawWithCache {
+            val c = this.size.minDimension / 2f
+            val outer = FolkShapes.of(motif).scaledPath(c * 0.98f, this.size.width / 2f, this.size.height / 2f)
+            val fill = Brush.linearGradient(listOf(container, container.copy(alpha = container.alpha * 0.55f)))
+            onDrawBehind { drawPath(outer, fill) }
+        }
+    }
+    // Ромбът е по-тесен от осморъката — иконата в него е малко по-малка, за да не опира в ръбовете.
+    val iconSize = size * if (motif == FolkMotif.RHOMBUS) 0.46f else 0.5f
+    Box(modifier.size(size).then(plate), contentAlignment = Alignment.Center) {
+        Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(iconSize))
     }
 }
 
 /**
- * Пунктираният ъгъл на плочка (горе вдясно): два коротки „бода“ по заобляне на рамката.
- * При натискане [tighten] (0..1) ги „затяга“ — по-близо до ръба и по-гъсти. Само рисуване:
- * двата пътя са готови за размера, а в покой не се чете нищо по кадри.
+ * Пунктираният ъгъл на плочка (горе вдясно) — само докато плочката е натисната: [tighten]
+ * (0..1, четено само при рисуване) го проявява и „затяга“ към ръба. В покой (0) не се рисува
+ * нищо — 11 плочки не носят 11 пунктирни ъгъла. Пътят е готов за размера, а
+ * модификаторът е запомнен — рекомпозицията не гради кеша наново.
  */
-internal fun Modifier.stitchedCorner(color: Color, tighten: () -> Float): Modifier = drawWithCache {
-    fun corner(inset: Float, r: Float, arm: Float): Path {
-        val w = size.width
-        return Path().apply {
-            moveTo(w - inset - r - arm, inset)
-            lineTo(w - inset - r, inset)
-            arcTo(Rect(w - inset - 2 * r, inset, w - inset, inset + 2 * r), -90f, 90f, false)
-            lineTo(w - inset, inset + r + arm)
+@Composable
+internal fun Modifier.stitchedCorner(color: Color, tighten: () -> Float): Modifier {
+    val currentTighten = rememberUpdatedState(tighten)
+    val corner = remember(color) {
+        Modifier.drawWithCache {
+            val w = size.width
+            val inset = 6.dp.toPx()
+            val r = 14.dp.toPx()
+            val arm = 18.dp.toPx()
+            val path = Path().apply {
+                moveTo(w - inset - r - arm, inset)
+                lineTo(w - inset - r, inset)
+                arcTo(Rect(w - inset - 2 * r, inset, w - inset, inset + 2 * r), -90f, 90f, false)
+                lineTo(w - inset, inset + r + arm)
+            }
+            val dense = Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(3.dp.toPx(), 1.6.dp.toPx())))
+            onDrawWithContent {
+                drawContent()
+                val t = currentTighten.value().coerceIn(0f, 1f)
+                if (t > 0f) drawPath(path, color, alpha = 0.75f * t, style = dense)
+            }
         }
     }
-    val wide = corner(7.dp.toPx(), 13.dp.toPx(), 14.dp.toPx())
-    val tight = corner(6.dp.toPx(), 14.dp.toPx(), 18.dp.toPx())
-    val loose = Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(3.dp.toPx(), 3.5.dp.toPx())))
-    val dense = Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(3.dp.toPx(), 1.6.dp.toPx())))
-    onDrawWithContent {
-        drawContent()
-        val t = tighten().coerceIn(0f, 1f)
-        if (t < 1f) drawPath(wide, color, alpha = 0.4f * (1f - t), style = loose)
-        if (t > 0f) drawPath(tight, color, alpha = 0.75f * t, style = dense)
-    }
+    return this.then(corner)
 }
 
 /* ---- Индикаторът „зарежда се“: кръг → осморъка → ромб → елбетица ---- */
@@ -209,6 +218,6 @@ internal fun DrawScope.drawFolkLoader(cache: FolkLoaderCache, phase: Float, colo
 /** Неподвижен кадър на индикатора (за тестове и намалено движение) — [phase] както в [drawFolkLoader]. */
 @Composable
 internal fun FolkLoaderFrame(phase: Float, color: Color, modifier: Modifier = Modifier) {
-    val cache = androidx.compose.runtime.remember { FolkLoaderCache() }
+    val cache = remember { FolkLoaderCache() }
     Canvas(modifier) { drawFolkLoader(cache, phase, color, spin = false) }
 }
