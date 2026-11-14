@@ -299,7 +299,8 @@ internal fun LibraryCard(
         if (band != null) {
             // „Твоята шевица“ — пришита над името като етикет; за екранния четец — с годината.
             val label = stringResource(R.string.card_band_cd, band.year)
-            PersonalBandStrip(band, Modifier.fillMaxWidth(0.62f).semantics { contentDescription = label })
+            // Отстъп отгоре — на тесен телефон няма празно място и лентата иначе би опряла заглавката.
+            PersonalBandStrip(band, Modifier.padding(top = 8.dp).fillMaxWidth(0.5f).semantics { contentDescription = label })
             Spacer(Modifier.height(if (large) 10.dp else 6.dp))
         }
         EmbossedText(data.holder.ifBlank { "—" }, Brand.Parchment, TextStyle(fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp))

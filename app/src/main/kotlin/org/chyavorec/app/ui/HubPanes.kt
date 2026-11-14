@@ -96,7 +96,7 @@ internal fun HubPaneDetail(route: String, close: () -> Unit, a: HubPaneActions) 
 /** Отдясно, докато няма избран раздел: тиха розетка и подсказка (вместо широки празни плочки). */
 @Composable
 internal fun HubPanePlaceholder() {
-    Surface(color = MaterialTheme.colorScheme.surfaceContainerLowest, modifier = Modifier.fillMaxSize()) {
+    Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
         Box(Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
             Column(
                 Modifier.widthIn(max = 360.dp),

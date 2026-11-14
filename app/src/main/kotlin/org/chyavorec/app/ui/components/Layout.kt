@@ -145,8 +145,8 @@ internal fun StitchMark(thread: ThreadColors, modifier: Modifier = Modifier) {
                 crossStitch(left, top, right, bottom, a, cell, StitchMath.firstLeg(f), 0f, outline = edgeA)
                 crossStitch(left, top, right, bottom, b, cell, 0f, StitchMath.secondLeg(f), outline = edgeB)
             }
-            // Звездният бод (Коледа): изправен „+“ над готовия кръст.
-            if (thread.star && f >= 1f) starStitchCross(left, top, right, bottom, thread.primary, cell * StitchSpec.Cross.STROKE * 0.7f)
+            // Звездният бод (Коледа): изправен „+“ над готовия среден кръст — звезда между два кръста.
+            if (thread.star && i == CrossStitches.COUNT / 2 && f >= 1f) starStitchCross(left, top, right, bottom, thread.primary, cell * StitchSpec.Cross.STROKE * 0.7f)
         }
     }
 }

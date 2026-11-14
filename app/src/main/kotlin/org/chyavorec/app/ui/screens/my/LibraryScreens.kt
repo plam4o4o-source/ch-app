@@ -7,6 +7,8 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.rememberUpdatedState
@@ -504,6 +506,7 @@ internal object DueLeafTiming {
  * Веднъж ([DueLeaf.played]); при намалено движение — само преливане. Снекбарът остава — той
  * съобщава срока и на екранния четец; редът се чете като „Нов срок: … (беше …)“.
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun RenewedDueLine(leaf: DueLeaf, oldText: String, newText: String, onPlayed: () -> Unit) {
     val reduced = rememberReducedMotion()
@@ -523,16 +526,17 @@ private fun RenewedDueLine(leaf: DueLeaf, oldText: String, newText: String, onPl
     // Старият лист излиза от композицията веднага щом е обърнат — в покой е само новият.
     val turning by remember { derivedStateOf { flip.value < 1f } }
     val description = stringResource(R.string.renew_leaf_cd, newText, oldText)
-    Row(
+    // При много едър шрифт листът минава на нов ред под „Връщане:“.
+    FlowRow(
         Modifier.padding(top = 2.dp).clearAndSetSemantics { contentDescription = description },
-        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Text(
             stringResource(R.string.loan_due, "").trim(), style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.align(Alignment.CenterVertically),
         )
-        Spacer(Modifier.width(8.dp))
-        Box {
+        Box(Modifier.align(Alignment.CenterVertically)) {
             DueLeafChip(newText, Modifier.graphicsLayer { if (reduced) alpha = flip.value })
             if (turning) {
                 DueLeafChip(

@@ -177,7 +177,7 @@ class MomentsScreenshotTest {
     @Test fun renewedLeafMidFlip() {
         compose.mainClock.autoAdvance = false
         loans(leafPlayed.copy(played = false), reduced = false)
-        compose.mainClock.advanceTimeBy(220L + 300L)
+        compose.mainClock.advanceTimeBy(220L + 160L)
         shot("w23-loan-new-leaf-midflip")
     }
 
