@@ -143,6 +143,8 @@ class PinnedShortcutsTest {
         }
         assertEquals(true, support.known.value)
         assertEquals(1, calls.get())
-        assertEquals(listOf("pin-probe"), threads)
+        // Имената носят и „@coroutine#N“ (отладъчният режим на корутините в тестовете).
+        assertEquals(1, threads.size)
+        assertTrue(threads.single().startsWith("pin-probe"), threads.toString())
     }
 }
