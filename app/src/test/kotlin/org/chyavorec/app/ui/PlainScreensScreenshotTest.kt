@@ -17,7 +17,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasClickAction
@@ -390,7 +389,6 @@ class PlainScreensScreenshotTest {
         val send = compose.onAllNodes(hasContentDescription("Изпрати честитка") and hasClickAction()).onFirst().fetchSemanticsNode()
         val min = with(compose.density) { 48.dp.toPx() } - 1f
         assertTrue(maxOf(send.size.width, send.layoutInfo.width) >= min && maxOf(send.size.height, send.layoutInfo.height) >= min, "${send.size}")
-        assertTrue(send.config.getOrNull(SemanticsProperties.ContentDescription).orEmpty().isNotEmpty())
     }
 
     @Test fun homeBabaMartaDark() {
