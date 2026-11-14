@@ -203,8 +203,8 @@ object FolkIcons {
     /** Лента на времето. */
     val Timeline: ImageVector by lazy {
         bod("Timeline") {
-            s(2.5f, 12f, 20.5f, 12f); f(17.5f, 8f, 22f, 12f, 17.5f, 16f); d(5.5f, 12f, 2.2f); d(12.5f, 12f, 2.2f)
-            s(5.5f, 4.5f, 5.5f, 7.5f); s(3.5f, 4.5f, 7.5f, 4.5f); s(12.5f, 16.5f, 12.5f, 19.5f); s(10.5f, 19.5f, 14.5f, 19.5f)
+            s(6f, 2.5f, 6f, 21.5f); d(6f, 6f, 2.6f); d(6f, 12f, 2.6f); d(6f, 18f, 2.6f); s(10.5f, 6f, 20.5f, 6f)
+            s(10.5f, 12f, 17.5f, 12f); s(10.5f, 18f, 19.5f, 18f)
         }
     }
 

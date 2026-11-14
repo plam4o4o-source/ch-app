@@ -75,7 +75,7 @@ internal fun KnotPlate(icon: ImageVector, size: Dp, modifier: Modifier = Modifie
     val (folk, motif) = folkFeature(icon)
     FolkIconPlate(
         folk, motif, modifier.clearAndSetSemantics { }, size = size,
-        container = Brand.Gold.copy(alpha = 0.22f), content = Brand.GoldLight,
+        container = Brand.Gold.copy(alpha = 0.3f), content = Brand.GoldLight,
     )
 }
 

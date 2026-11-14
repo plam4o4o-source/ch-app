@@ -222,6 +222,15 @@ class TabletLayoutTest {
         onTab("Начало")
     }
 
+    /** „Още“ на таблет: плочките в 4 колони, двете групи; сама плочка в последния ред — на целия ред. */
+    @Test fun moreTilesOnTablet() {
+        launch()
+        tab("Още").performClick()
+        waitFor("Познай Яворец")
+        onTab("Още")
+        shot("86b-tablet-more")
+    }
+
     @Test fun newsArticleOpensBesideTheList() {
         launch()
         tab("Новини").performClick()
