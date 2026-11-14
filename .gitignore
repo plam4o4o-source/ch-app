@@ -2,6 +2,7 @@
 .gradle/
 build/
 **/build/
+.kotlin/
 !gradle/wrapper/gradle-wrapper.jar
 captures/
 .externalNativeBuild/
