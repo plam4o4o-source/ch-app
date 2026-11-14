@@ -70,33 +70,34 @@ class QuizBandTest {
     @Test fun theFifthRightAnswerClosesTheBandWithConfettiOnce() {
         val confetti = ConfettiState(seed = 1)
         val results = mutableStateOf(List(4) { true })
-        compose.mainClock.autoAdvance = false
         compose.setContent {
             CompositionLocalProvider(LocalReducedMotion provides false, LocalConfetti provides confetti) {
                 QuizBand(results.value, 5, current = 4, colors = colors, modifier = Modifier.size(300.dp, 66.dp))
             }
         }
-        compose.mainClock.advanceTimeBy(100)
+        compose.waitForIdle()
         assertEquals(0, confetti.bursts, "вече отговорените не се бродират наново")
-        results.value = List(5) { true }
+        compose.runOnIdle { results.value = List(5) { true } }
+        // Часовникът върви сам: бродирането (~0.9 s) и затварящият бод свършват, после — конфети.
         compose.mainClock.advanceTimeBy(2_000)
+        compose.waitForIdle()
         assertEquals(1, confetti.bursts)
         compose.mainClock.advanceTimeBy(2_000)
+        compose.waitForIdle()
         assertEquals(1, confetti.bursts, "само веднъж")
     }
 
     @Test fun aWrongLastAnswerOrReducedMotionMeansNoConfetti() {
         val confetti = ConfettiState(seed = 1)
         val results = mutableStateOf(List(4) { true })
-        val reduced = mutableStateOf(false)
-        compose.mainClock.autoAdvance = false
         compose.setContent {
-            CompositionLocalProvider(LocalReducedMotion provides reduced.value, LocalConfetti provides confetti) {
+            CompositionLocalProvider(LocalReducedMotion provides false, LocalConfetti provides confetti) {
                 QuizBand(results.value, 5, current = null, colors = colors, modifier = Modifier.size(300.dp, 66.dp))
             }
         }
-        results.value = List(4) { true } + false
+        compose.runOnIdle { results.value = List(4) { true } + false }
         compose.mainClock.advanceTimeBy(2_000)
+        compose.waitForIdle()
         assertEquals(0, confetti.bursts)
     }
 
@@ -108,7 +109,7 @@ class QuizBandTest {
                 QuizBand(results.value, 5, current = null, colors = colors, modifier = Modifier.size(300.dp, 66.dp))
             }
         }
-        results.value = List(5) { true }
+        compose.runOnIdle { results.value = List(5) { true } }
         compose.waitForIdle()
         assertEquals(0, confetti.bursts)
     }
