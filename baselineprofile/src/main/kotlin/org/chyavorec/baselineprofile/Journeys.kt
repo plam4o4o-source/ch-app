@@ -270,14 +270,13 @@ private fun MacrobenchmarkScope.findScrolling(selector: BySelector, swipes: Int 
     device.findObject(selector)?.let { return it }
     repeat(swipes) { i ->
         swipeUp(settle = false)
-        val moving = device.findObject(selector) ?: return@repeat
-        val before = runCatching { moving.visibleBounds }.getOrNull()
+        val before = runCatching { device.findObject(selector)?.visibleBounds }.getOrNull()
+        // И когато още не се вижда: без изчакване следващото плъзгане (с инерцията) би го прескочило.
         settle()
         val found = device.findObject(selector) ?: return@repeat
         Log.i(TAG, "found after ${i + 1} swipe(s); moved ${before?.let { kotlin.math.abs(it.top - found.visibleBounds.top) } ?: -1} px while the list settled")
         return found
     }
-    settle()
     return device.findObject(selector)
 }
 
