@@ -13,6 +13,24 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.38
+
+### bg
+- Нов облик: собствени икони „Бод“, един вид бод навсякъде и по-спокойни „Още“ и „Моето“.
+- „Познай Яворец“: всеки верен отговор извезва част от лента — при 5 от 5 шевицата е цяла.
+- „Нов лист“ при удължаване на книга; листът на събитието се откъсва, а нишката се сменя със сезона.
+- Картата се вижда още преди вход; „Твоята шевица“ на картата през декември и януари; най-харесаната книга в годишната история.
+- Довършени Търсене, Настройки, Съобщения и Вход; два панела на таблет; лентата на времето с десетилетия.
+- По-бързо отваряне след обновяване и по-плавни анимации.
+
+### en
+- A new look: our own “Bod” icons, one stitch style everywhere and calmer “More” and “My” screens.
+- “Know Yavorets”: every right answer embroiders part of a band — at 5 out of 5 the pattern is complete.
+- A “new leaf” when you renew a book; the event leaf tears off, and the thread changes with the season.
+- See the card before you sign in; “Your shevitsa” on the card in December and January; your favourite book in the reading year.
+- Finished Search, Settings, Messages and Sign-in; two panes on tablets; the timeline by decades.
+- Faster opening after an update and smoother animations.
+
 ## 1.2.37
 
 ### bg
