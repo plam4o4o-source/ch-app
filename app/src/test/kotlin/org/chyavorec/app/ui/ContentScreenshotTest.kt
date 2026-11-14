@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -214,6 +215,87 @@ class ContentScreenshotTest {
         compose.setContent { Frame(dark = false) { Scaffold(topBar = { BackTopBar("Познай Яворец", {}) }) { p -> Box(Modifier.padding(p)) { QuizContent(QuizUi.Unavailable, {}, {}, {}, {}, {}) } } } }
         shot("c21-13-quiz-unavailable")
     }
+
+    // --- „Избродирай отговорите“, широк екран, тесен екран (вълна 23) ---
+
+    @Composable
+    private fun QuizPage(state: QuizUi) = Scaffold(topBar = { BackTopBar("Познай Яворец", {}) }) { p -> Box(Modifier.padding(p)) { QuizContent(state, {}, {}, {}, {}, {}) } }
+
+    /** По средата: два избродирани мотива, празно място с увиснал конец и текущият мотив „на иглата“. */
+    @Test fun quizBandMidway() {
+        compose.setContent { Frame(dark = false) { QuizPage(QuizUi.Playing(quiz, 3, null, listOf(true, false, true))) } }
+        shot("c23-01-quiz-band-midway")
+    }
+
+    @Config(qualifiers = "bg-w1280dp-h800dp-land-xhdpi")
+    @Test fun quizTabletWrong() {
+        compose.setContent { Frame(dark = false) { QuizPage(QuizUi.Playing(quiz, 0, 3, listOf(false))) } }
+        shot("c23-02-quiz-tablet-wrong")
+    }
+
+    @Config(qualifiers = "bg-w891dp-h411dp-land-xhdpi")
+    @Test fun quizLandscapeDark() {
+        compose.setContent { Frame(dark = true) { QuizPage(QuizUi.Playing(quiz, 0, 3, listOf(false))) } }
+        shot("c23-03-quiz-landscape-dark")
+    }
+
+    @Config(qualifiers = "bg-w320dp-h640dp-xhdpi")
+    @Test fun quizNarrowLargeFont() {
+        compose.setContent { Frame(dark = false, fontScale = 1.3f) { QuizPage(QuizUi.Playing(quiz, 0, 3, listOf(false))) } }
+        shot("c23-04-quiz-320-font13")
+    }
+
+    @Test fun quizResultPerfectDark() {
+        compose.setContent { Frame(dark = true) { QuizPage(QuizUi.Finished(quiz, List(5) { true }, 4, 4)) } }
+        shot("c23-05-quiz-result-perfect-dark")
+    }
+
+    @Config(qualifiers = "bg-w1280dp-h800dp-land-xhdpi")
+    @Test fun quizResultTablet() {
+        compose.setContent { Frame(dark = false) { QuizPage(QuizUi.Finished(quiz, listOf(true, true, false, true, true), 3, 5)) } }
+        shot("c23-06-quiz-result-tablet")
+    }
+
+    /** Петият верен отговор затваря лентата (намалено движение — направо готова). */
+    @Test fun quizClosedBand() {
+        compose.setContent { Frame(dark = false) { QuizPage(QuizUi.Playing(quiz, 4, 0, List(5) { true })) } }
+        shot("c23-07-quiz-closed-band")
+    }
+
+    @Config(qualifiers = "bg-w1280dp-h800dp-land-xhdpi")
+    @Test fun timelineTablet() {
+        compose.setContent { Frame(dark = false) { Scaffold(topBar = { BackTopBar("Лента на времето", {}, titleShown = false) }) { p -> Box(Modifier.padding(p)) { Timeline(QuizDefaults.timeline, staticFrame = true, thisYear = 2026) } } } }
+        shot("c23-08-timeline-tablet")
+    }
+
+    @Test fun timelineScrubber() {
+        compose.setContent {
+            Frame(dark = false) {
+                Scaffold(topBar = { BackTopBar("Лента на времето", {}) }) { p ->
+                    Box(Modifier.padding(p)) {
+                        Timeline(QuizDefaults.timeline, staticFrame = true, listState = rememberLazyListState(7), showScrubber = true, thisYear = 2026)
+                    }
+                }
+            }
+        }
+        shot("c23-09-timeline-scrubber")
+    }
+
+    @Config(qualifiers = "bg-w320dp-h640dp-xhdpi")
+    @Test fun timelineNarrowDarkLargeFont() {
+        compose.setContent {
+            Frame(dark = true, fontScale = 1.3f) {
+                Scaffold(topBar = { BackTopBar("Лента на времето", {}) }) { p ->
+                    Box(Modifier.padding(p)) {
+                        Timeline(QuizDefaults.timeline, staticFrame = true, listState = rememberLazyListState(3), showScrubber = true, thisYear = 2026)
+                    }
+                }
+            }
+        }
+        shot("c23-10-timeline-320-dark-font13")
+    }
+
+    @Test fun quizShareCardPerfect() = card(ContentShareCards.quiz("14 ноември 2026", List(5) { true }, 6, "https://chyavorec.org"), "c23-11-share-quiz-perfect")
 
     // --- карти за споделяне (1080×1350 и 1080×1920 при плътност 3) ---
 

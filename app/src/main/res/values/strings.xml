@@ -749,6 +749,8 @@
     <string name="qa_card">Читателска карта</string>
     <string name="qa_contacts">Контакти</string>
     <string name="qa_scan">Сканирай</string>
+    <string name="quiz_band_done">Шевицата е цяла!</string>
+    <string name="quiz_band_title">Избродирай отговорите</string>
     <string name="quiz_best">Най-дълга серия: %1$d</string>
     <string name="quiz_come_back">Нови въпроси — утре.</string>
     <string name="quiz_correct_was">Верният отговор е: %1$s</string>
@@ -960,6 +962,7 @@
     <string name="tile_card_label">Читателска карта</string>
     <string name="tile_card_subtitle">Покажи на гишето</string>
     <string name="tile_card_subtitle_add">Добави картата</string>
+    <string name="timeline_decade">%1$d-те</string>
     <string name="timeline_empty">Няма вехи за показване.</string>
     <string name="timeline_fallback">Страницата „История“ на сайта е с нов вид. Можеш да я прочетеш като обикновена страница.</string>
     <string name="timeline_fallback_title">Лентата не се показва</string>

@@ -749,6 +749,8 @@
     <string name="qa_card">Library card</string>
     <string name="qa_contacts">Contacts</string>
     <string name="qa_scan">Scan</string>
+    <string name="quiz_band_done">The embroidery is complete!</string>
+    <string name="quiz_band_title">Embroider your answers</string>
     <string name="quiz_best">Longest streak: %1$d</string>
     <string name="quiz_come_back">New questions tomorrow.</string>
     <string name="quiz_correct_was">The correct answer is: %1$s</string>
@@ -960,6 +962,7 @@
     <string name="tile_card_label">Library card</string>
     <string name="tile_card_subtitle">Show at the desk</string>
     <string name="tile_card_subtitle_add">Add your card</string>
+    <string name="timeline_decade">%1$ds</string>
     <string name="timeline_empty">No milestones to show.</string>
     <string name="timeline_fallback">The website’s “History” page has changed. You can read it as a regular page.</string>
     <string name="timeline_fallback_title">The timeline isn’t available</string>

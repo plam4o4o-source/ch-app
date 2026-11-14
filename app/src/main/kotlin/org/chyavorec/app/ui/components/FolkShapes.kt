@@ -16,11 +16,8 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
@@ -139,11 +136,12 @@ internal fun Modifier.stitchedCorner(color: Color, tighten: () -> Float): Modifi
                 arcTo(Rect(w - inset - 2 * r, inset, w - inset, inset + 2 * r), -90f, 90f, false)
                 lineTo(w - inset, inset + r + arm)
             }
-            val dense = Stroke(1.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(3.dp.toPx(), 1.6.dp.toPx())))
+            // Тичащ бод ([StitchSpec.Running]) — като пунктирите навсякъде другаде.
+            val bod = StitchSpec.Running.stroke(density)
             onDrawWithContent {
                 drawContent()
                 val t = currentTighten.value().coerceIn(0f, 1f)
-                if (t > 0f) drawPath(path, color, alpha = 0.75f * t, style = dense)
+                if (t > 0f) drawPath(path, color, alpha = 0.75f * t, style = bod)
             }
         }
     }
@@ -159,14 +157,12 @@ internal object FolkLoaderShapes {
     val count get() = polygons.size
 }
 
-/** Пътят на междинната форма и пунктирът — един и същ обект, строи се наново само при нов прогрес. */
+/** Пътят на междинната форма — един и същ обект, строи се наново само при нов прогрес. */
 internal class FolkLoaderCache {
     private val platformPath = android.graphics.Path()
     private val path = platformPath.asComposePath()
     private var lastIndex = -1
     private var lastProgress = -1f
-    private var strokeWidth = -1f
-    private var stroke: Stroke? = null
 
     fun pathAt(index: Int, progress: Float): Path {
         if (index != lastIndex || progress != lastProgress) {
@@ -176,20 +172,12 @@ internal class FolkLoaderCache {
         }
         return path
     }
-
-    /** Пунктир в единиците на формата, създава се веднъж за дебелината. */
-    fun dashed(width: Float, dash: Float, gap: Float): Stroke {
-        val s = stroke
-        if (s != null && width == strokeWidth) return s
-        strokeWidth = width
-        return Stroke(width, cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash, gap))).also { stroke = it }
-    }
 }
 
 /**
  * Кадър на индикатора при фаза [phase] (0 .. [FolkLoaderShapes.count], цяло число = форма в покой):
- * пълната форма и около нея — пунктиран „бод“, който се върти обратно. Без заделяне на памет
- * (освен пътя в [cache] при нов прогрес).
+ * пълната форма и около нея — тичащ бод ([StitchSpec.Running]), който се върти обратно. Без
+ * заделяне на памет (освен пътя в [cache] при нов прогрес; бодът е готов за мащаба).
  */
 internal fun DrawScope.drawFolkLoader(cache: FolkLoaderCache, phase: Float, color: Color, spin: Boolean = true) {
     val count = FolkLoaderShapes.count
@@ -208,8 +196,8 @@ internal fun DrawScope.drawFolkLoader(cache: FolkLoaderCache, phase: Float, colo
         }
         rotate(-turn, pivot = androidx.compose.ui.geometry.Offset.Zero) {
             scale(ring, ring, pivot = androidx.compose.ui.geometry.Offset.Zero) {
-                val w = 1.4.dp.toPx() / ring
-                drawPath(path, color, alpha = 0.6f, style = cache.dashed(w, 2.6.dp.toPx() / ring, 2.4.dp.toPx() / ring))
+                // Пътят е в единици на формата — бодът се мащабира обратно (1 dp = 1.dp.toPx() / ring).
+                drawPath(path, color, alpha = 0.6f, style = StitchSpec.Running.stroke(1.dp.toPx() / ring))
             }
         }
     }
