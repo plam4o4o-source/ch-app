@@ -72,8 +72,8 @@ internal fun KnotPlate(icon: ImageVector, size: Dp, modifier: Modifier = Modifie
         contentAlignment = Alignment.Center,
     ) {
         Canvas(Modifier.size(size)) {
-            // Тропосване ([StitchSpec.Basting]), уедрено с плочката (при 52 dp — ~1.5×).
-            val bod = StitchSpec.Basting.stroke(density, scale = (size / 36.dp).coerceAtLeast(1f))
+            // Тропосване ([StitchSpec.Basting]); при едрата плочка — най-много 1.5× (иначе бодовете стават груби).
+            val bod = StitchSpec.Basting.stroke(density, scale = (size / 64.dp).coerceIn(1f, 1.5f))
             val stroke = bod.width
             val r = this.size.minDimension / 2f - stroke
             drawCircle(Brand.Gold, radius = r, style = bod)

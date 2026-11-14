@@ -376,9 +376,10 @@ private fun EmbroideryControls(editor: EmbroideryEditor, onSave: () -> Unit, onO
                 )
             }
         }
-        // Четирите действия — мрежа 2×2 с еднакво широки хапчета (без „стъпала“ от различни дължини).
+        // Четирите действия — пълни редове (всяко хапче дели остатъка от реда), без „стъпала“; при
+        // тесен екран/едър шрифт надписът не се къса насред дума — хапчето минава на нов ред.
         FlowRow(
-            Modifier.fillMaxWidth(), maxItemsInEachRow = 2,
+            Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             // Превключвател-хапче (като другите бутони тук), за TalkBack — избираем като чип.

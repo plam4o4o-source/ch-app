@@ -221,10 +221,11 @@ private fun AnswerButton(text: String, index: Int, correctIndex: Int, chosen: In
         else -> null
     }
     AppCard(
-        Modifier.fillMaxWidth().heightIn(min = 60.dp).semantics { if (state != null) stateDescription = state },
+        Modifier.fillMaxWidth().semantics { if (state != null) stateDescription = state },
         onClick = onClick, enabled = !revealed, accent = !revealed, accentColor = accent, color = container,
     ) {
-        Row(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+        // Поне 60 dp, текстът — центриран по височина.
+        Row(Modifier.heightIn(min = 60.dp).padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(text, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             if (isCorrect) Icon(Icons.Outlined.CheckCircle, null, tint = ext.ok, modifier = Modifier.padding(start = 8.dp))
         }
