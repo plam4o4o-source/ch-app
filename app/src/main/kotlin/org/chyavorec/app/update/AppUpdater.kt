@@ -46,6 +46,7 @@ import org.chyavorec.core.logFailure
 import org.chyavorec.data.http.HttpFetcher
 import org.chyavorec.data.update.ApkSigners
 import org.chyavorec.data.update.Checksums
+import org.chyavorec.data.update.DexMetadata
 import org.chyavorec.data.update.SigningCheck
 import org.chyavorec.data.update.UpdateChecker
 import org.chyavorec.data.update.UpdateInfo
@@ -346,7 +347,11 @@ class AppUpdater(
      */
     suspend fun download(info: UpdateInfo): File? = mutex.withLock {
         withContext(Dispatchers.IO) {
-            verifiedFile(info)?.let { _state.value = UpdateState.Ready(info); return@withContext it }
+            verifiedFile(info)?.let {
+                fetchDexMetadata(info)
+                _state.value = UpdateState.Ready(info)
+                return@withContext it
+            }
             _state.value = UpdateState.Downloading(info, if (info.sizeBytes != null) 0f else null)
             dir.mkdirs()
             val part = File(dir, "update-${info.versionCode}.apk.part")
@@ -407,6 +412,7 @@ class AppUpdater(
             }
             // Сумата току-що е сметната — файлът не се хешира повторно (виж [sha256Of]).
             verified = VerifiedApk(target.absolutePath, target.length(), target.lastModified(), sha)
+            fetchDexMetadata(info)
             _state.value = UpdateState.Ready(info)
             target
         }
@@ -505,6 +511,76 @@ class AppUpdater(
     private class TooLargeException : IOException("too large")
     private class CancelledException : IOException("cancelled")
 
+    /** Android-ът, за който се избира .dm; тестовете го подменят. */
+    @VisibleForTesting
+    internal var sdkInt: Int = Build.VERSION.SDK_INT
+
+    private fun dmFile(info: UpdateInfo) = File(dir, "update-${info.versionCode}.dm")
+
+    /** Белег: инсталиране с .dm на тази версия вече е опитано — следващите опити са без него. */
+    private fun dmTried(info: UpdateInfo) = File(dir, "update-${info.versionCode}.dm.tried")
+
+    /**
+     * Профилът за бърз старт за този Android ([UpdateInfo.dexMetadataFor]) — по желание: изтегля
+     * се след APK-а, проверява се сумата му и всяка грешка просто го пропуска (обновяването е
+     * същото и без него). Вече изтеглен и проверен файл не се тегли пак.
+     * @return проверения файл или `null`.
+     */
+    internal fun fetchDexMetadata(info: UpdateInfo): File? {
+        if (!DEX_METADATA_ENABLED) return null
+        val dm = info.dexMetadataFor(sdkInt) ?: return null
+        if (dmTried(info).exists()) return null
+        val target = dmFile(info)
+        val part = File(dir, "update-${info.versionCode}.dm.part")
+        return try {
+            if (target.isFile && Checksums.sha256(target) == dm.sha256) return target
+            target.delete()
+            dir.mkdirs()
+            val request = Request.Builder().url(dm.url).header("User-Agent", "ChitalishteYavorec-Android/${config.versionName}").build()
+            val digest = MessageDigest.getInstance("SHA-256")
+            downloadClient.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
+                response.body.byteStream().use { input ->
+                    DigestOutputStream(FileOutputStream(part), digest).use { out ->
+                        val buf = ByteArray(64 * 1024)
+                        var read = 0L
+                        while (true) {
+                            val n = input.read(buf)
+                            if (n < 0) break
+                            read += n
+                            if (read > DexMetadata.MAX_BYTES) throw IOException("dm too large")
+                            out.write(buf, 0, n)
+                        }
+                    }
+                }
+            }
+            if (digest.digest().joinToString("") { "%02x".format(it) } != dm.sha256) throw IOException("dm checksum mismatch")
+            if (!part.renameTo(target)) throw IOException("dm rename failed")
+            target
+        } catch (e: Exception) {
+            // Само белег в локалния дневник: без .dm обновяването продължава както досега.
+            Diagnostics.note("update.dm", e.message ?: e.javaClass.simpleName)
+            part.delete()
+            target.delete()
+            null
+        }
+    }
+
+    /** Изтегленият и проверен .dm за инсталиране, ако има такъв и още не е опитван (Android 9+). */
+    internal fun dexMetadataForInstall(info: UpdateInfo): File? {
+        if (!DEX_METADATA_ENABLED || sdkInt < DexMetadata.MIN_SDK || dmTried(info).exists()) return null
+        val dm = info.dexMetadataFor(sdkInt) ?: return null
+        val f = dmFile(info).takeIf { it.isFile } ?: return null
+        return if (runCatching { Checksums.sha256(f) }.getOrNull() == dm.sha256) f else { f.delete(); null }
+    }
+
+    /** Записът на .dm в сесията не стана — сесията се изоставя и се прави нова без него. */
+    private class DexMetadataWriteException(cause: Throwable) : IOException(cause)
+
+    /** Последната сесия съдържаше .dm (за [onInstallResult]: при неуспех — още веднъж без него). */
+    @Volatile private var lastSessionHadDm = false
+    @Volatile private var lastInstallBackground = false
+
     /**
      * Инсталиране на изтеглената версия. При [background] = true (фонова задача)
      * се допуска само тихо обновяване; ако системата поиска потвърждение,
@@ -532,29 +608,15 @@ class AppUpdater(
             }
         }
         try {
-            val installer = context.packageManager.packageInstaller
-            val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL).apply {
-                setAppPackageName(context.packageName)
-                setSize(file.length())
-                setInstallReason(PackageManager.INSTALL_REASON_USER)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED)
-                }
-            }
-            val sessionId = installer.createSession(params)
-            installer.openSession(sessionId).use { session ->
-                session.openWrite("base.apk", 0, file.length()).use { out ->
-                    file.inputStream().use { it.copyTo(out) }
-                    session.fsync(out)
-                }
-                val intent = Intent(context, UpdateInstallReceiver::class.java)
-                    .setPackage(context.packageName)
-                    .putExtra(UpdateInstallReceiver.EXTRA_BACKGROUND, background)
-                // Системата добавя статуса като extra, затова PendingIntent-ът трябва да е mutable (изричен Intent).
-                val flags = PendingIntent.FLAG_UPDATE_CURRENT or
-                    (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0)
-                val pending = PendingIntent.getBroadcast(context, sessionId, intent, flags)
-                session.commit(pending.intentSender)
+            lastInstallBackground = background
+            val dm = runCatching { dexMetadataForInstall(info) }.getOrNull()
+            try {
+                commitSession(file, dm?.let { it to dmTried(info) }, background)
+            } catch (e: DexMetadataWriteException) {
+                // .dm не се записа (напр. системата не го приема) — същото обновяване без него.
+                Diagnostics.note("update.dm", "write: ${e.cause?.javaClass?.simpleName}")
+                runCatching { dm?.delete() }
+                commitSession(file, null, background)
             }
             true
         } catch (e: Exception) {
@@ -565,9 +627,72 @@ class AppUpdater(
         }
     }
 
+    /**
+     * Сесия на PackageInstaller с APK-а и (Android 9+, ако има) .dm до него — `base.dm` до
+     * `base.apk`; системата компилира приложението по профила още при инсталирането. [dm] е
+     * файлът и белегът му ([dmTried]). Записът на .dm е отделно: грешка в него изоставя сесията
+     * ([DexMetadataWriteException]) и [install] прави нова само с APK-а.
+     */
+    private fun commitSession(file: File, dm: Pair<File, File>?, background: Boolean) {
+        val installer = context.packageManager.packageInstaller
+        val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL).apply {
+            setAppPackageName(context.packageName)
+            setSize(file.length() + (dm?.first?.length() ?: 0L))
+            setInstallReason(PackageManager.INSTALL_REASON_USER)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED)
+            }
+        }
+        val sessionId = installer.createSession(params)
+        installer.openSession(sessionId).use { session ->
+            session.openWrite("base.apk", 0, file.length()).use { out ->
+                file.inputStream().use { it.copyTo(out) }
+                session.fsync(out)
+            }
+            if (dm != null) {
+                val (metadata, tried) = dm
+                try {
+                    session.openWrite("base.dm", 0, metadata.length()).use { out ->
+                        metadata.inputStream().use { it.copyTo(out) }
+                        session.fsync(out)
+                    }
+                } catch (e: Exception) {
+                    runCatching { session.abandon() }
+                    throw DexMetadataWriteException(e)
+                }
+                // Само веднъж на версия: ако инсталирането с него пропадне, следващото е без него.
+                runCatching { tried.createNewFile() }
+            }
+            lastSessionHadDm = dm != null
+            val intent = Intent(context, UpdateInstallReceiver::class.java)
+                .setPackage(context.packageName)
+                .putExtra(UpdateInstallReceiver.EXTRA_BACKGROUND, background)
+            // Системата добавя статуса като extra, затова PendingIntent-ът трябва да е mutable (изричен Intent).
+            val flags = PendingIntent.FLAG_UPDATE_CURRENT or
+                (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0)
+            val pending = PendingIntent.getBroadcast(context, sessionId, intent, flags)
+            session.commit(pending.intentSender)
+        }
+    }
+
     /** Отговор от системата след инсталиране (виж [UpdateInstallReceiver]). */
     fun onInstallResult(status: Int) {
         val info = currentInfo() ?: return
+        // Неуспех на сесия с .dm: още веднъж, само с APK-а (белегът [dmTried] вече е сложен) —
+        // обновяването никога не пропада заради профила. Отказ от потребителя — не е неуспех.
+        if (lastSessionHadDm && status != PackageInstaller.STATUS_SUCCESS && status != PackageInstaller.STATUS_FAILURE_ABORTED) {
+            lastSessionHadDm = false
+            Diagnostics.note("update.dm", "install with dm failed ($status), retrying without it")
+            runCatching { dmFile(info).delete() }
+            _state.value = UpdateState.Ready(info)
+            scope.launch { install(lastInstallBackground) }
+            return
+        }
+        if (status == PackageInstaller.STATUS_FAILURE_ABORTED && lastSessionHadDm) {
+            // Отказ в системния диалог: следващият опит може пак с .dm.
+            lastSessionHadDm = false
+            runCatching { dmTried(info).delete() }
+        }
         _state.value = when (status) {
             PackageInstaller.STATUS_SUCCESS -> UpdateState.Idle
             // Потребителят отказа в системния диалог — не е грешка, файлът остава готов.
@@ -580,7 +705,12 @@ class AppUpdater(
 
     /** Фоновата задача остави инсталирането за по-късно (нужно е потвърждение). */
     fun onNeedsConfirmation() {
-        currentInfo()?.let { _state.value = UpdateState.Ready(it) }
+        currentInfo()?.let {
+            // Сесията от фона е изоставена, без да е опитана — .dm остава за следващия опит.
+            if (lastSessionHadDm) runCatching { dmTried(it).delete() }
+            lastSessionHadDm = false
+            _state.value = UpdateState.Ready(it)
+        }
     }
 
     fun dismissError() {
@@ -726,5 +856,10 @@ class AppUpdater(
         /** Автоматичната проверка при стартиране — най-много веднъж на 12 часа. */
         private const val LAUNCH_CHECK_INTERVAL_MS = 12 * 60 * 60 * 1000L
         private const val MAX_APK_BYTES = 200L * 1024 * 1024
+        /**
+         * Профилът за бърз старт (.dm от update.json) се инсталира заедно с APK-а. Изключване —
+         * тук, ако някога пречи (тогава update.json може да го съдържа, приложението го пропуска).
+         */
+        internal const val DEX_METADATA_ENABLED = true
     }
 }

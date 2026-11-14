@@ -1,0 +1,124 @@
+name: Dex metadata install check (temporary)
+# ВРЕМЕННО (само клонът wave23/ci): инсталиране на APK + .dm на емулатор (Android 11, 13 и 15) —
+# дали ART приема профила (status=speed-profile, reason=install-dm) спрямо инсталиране без .dm.
+# Махa се преди сливане.
+on:
+  push:
+    branches: [wave23/ci]
+    paths: [.github/workflows/w23-dm-check.yml]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+      - name: prodRelease with x86_64 (emulator only, not committed), throwaway key
+        run: |
+          sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64")|' app/build.gradle.kts
+          grep -n '^val releaseAbis' app/build.gradle.kts
+          K="$RUNNER_TEMP/k.jks"; P=$(openssl rand -hex 16)
+          keytool -genkeypair -noprompt -keystore "$K" -storepass "$P" -keypass "$P" -alias t -keyalg RSA -keysize 2048 -validity 2 -dname "CN=emulator test, O=not for release"
+          export SIGNING_STORE_FILE="$K" SIGNING_STORE_PASSWORD="$P" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$P"
+          ./gradlew --no-daemon assembleProdRelease
+          mkdir -p out
+          cp app/build/outputs/apk/prod/release/app-prod-release.apk out/app.apk
+      - name: .dm files
+        run: |
+          bash .github/scripts/dex-metadata.sh out/app.apk out app
+          ls -l out
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dm-check-apk
+          path: out/
+          retention-days: 2
+
+  emulator:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { api: 30, fmt: v0_1_0_p }
+          - { api: 33, fmt: v0_1_5_s }
+          - { api: 35, fmt: v0_1_5_s }
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dm-check-apk
+          path: out
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          cp out/app.${{ matrix.fmt }}.dm out/app.dm
+          ls -l out
+          cat > check.sh <<'EOF'
+          set -x
+          P=org.chyavorec.app
+          state() {
+            echo "===== $1"
+            adb shell getprop ro.build.version.sdk
+            if [ "$(adb shell getprop ro.build.version.sdk | tr -d '\r')" -ge 34 ]; then
+              adb shell pm art dump $P | head -30
+            else
+              adb shell dumpsys package dexopt | grep -A6 "\[$P\]"
+            fi
+            adb shell ls -l /data/misc/profiles/ref/$P/ 2>&1
+            adb shell ls -l /data/misc/profiles/cur/0/$P/ 2>&1
+          }
+          adb root || true
+          sleep 3
+          adb wait-for-device
+          adb install out/app.apk
+          state "WITHOUT .dm"
+          adb uninstall $P
+          adb install-multiple out/app.apk out/app.dm
+          state "WITH .dm (install-multiple)"
+          adb uninstall $P
+          # Същото като сесията на приложението: base.apk + base.dm в една сесия на PackageInstaller.
+          SID=$(adb shell pm install-create -S $(( $(stat -c %s out/app.apk) + $(stat -c %s out/app.dm) )) | tr -d '\r' | sed -n 's/.*\[\([0-9]*\)\].*/\1/p')
+          adb push out/app.apk /data/local/tmp/base.apk
+          adb push out/app.dm /data/local/tmp/base.dm
+          adb shell pm install-write -S $(stat -c %s out/app.apk) $SID base.apk /data/local/tmp/base.apk
+          adb shell pm install-write -S $(stat -c %s out/app.dm) $SID base.dm /data/local/tmp/base.dm
+          adb shell pm install-commit $SID
+          state "WITH .dm (session: base.apk + base.dm)"
+          # Обновяване (същият подпис) със сесия с .dm над вече инсталирана версия.
+          SID=$(adb shell pm install-create -r -S $(( $(stat -c %s out/app.apk) + $(stat -c %s out/app.dm) )) | tr -d '\r' | sed -n 's/.*\[\([0-9]*\)\].*/\1/p')
+          adb shell pm install-write -S $(stat -c %s out/app.apk) $SID base.apk /data/local/tmp/base.apk
+          adb shell pm install-write -S $(stat -c %s out/app.dm) $SID base.dm /data/local/tmp/base.dm
+          adb shell pm install-commit $SID
+          state "UPDATE with .dm (session, -r)"
+          # Повреден .dm: инсталирането пропада ли? (тогава приложението опитва пак без него)
+          head -c 100 out/app.apk > out/bad.dm
+          adb push out/bad.dm /data/local/tmp/bad.dm
+          SID=$(adb shell pm install-create -r | tr -d '\r' | sed -n 's/.*\[\([0-9]*\)\].*/\1/p')
+          adb shell pm install-write -S $(stat -c %s out/app.apk) $SID base.apk /data/local/tmp/base.apk
+          adb shell pm install-write -S 100 $SID base.dm /data/local/tmp/bad.dm
+          adb shell pm install-commit $SID
+          state "UPDATE with a CORRUPT .dm"
+          adb shell am start -W -n $P/.MainActivity || adb shell monkey -p $P -c android.intent.category.LAUNCHER 1
+          sleep 8
+          adb logcat -d | grep -iE "ProfileInstaller|dex2oat|dexopt|artd|install-dm|DexMetadata" | tail -60
+          EOF
+      - name: Install with and without .dm (API ${{ matrix.api }})
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: ${{ matrix.api }}
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -no-window -no-snapshot -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: bash check.sh

@@ -35,22 +35,42 @@ class AppUpdaterTest {
     private val apkBytes = "definitely not an apk".toByteArray()
     private var manifestCode = 5
     private var manifestSha = Checksums.sha256(apkBytes.inputStream())
+    private val dmBytes = "primary.prof".toByteArray()
+    private var dmSha = Checksums.sha256(dmBytes.inputStream())
+    /** Списъкът „dm“ в update.json (празно — без него, както досегашните). */
+    private var withDm = false
 
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse = when (request.path) {
                 "/releases/latest/download/update.json" -> MockResponse().setBody(
                     """{"versionCode": $manifestCode, "versionName": "1.1.0", "apkUrl": "${server.url("/app.apk")}",
-                        "sha256": "$manifestSha", "size": ${apkBytes.size}, "minSdk": 26, "notes": "Ново"}""",
+                        "sha256": "$manifestSha", "size": ${apkBytes.size}, "minSdk": 26, "notes": "Ново"${dmField()}}""",
                 )
                 "/app.apk" -> MockResponse().setBody(Buffer().write(apkBytes))
+                "/app.s.dm" -> MockResponse().setBody(Buffer().write(dmBytes))
                 else -> MockResponse().setResponseCode(404)
             }
         }
         server.start()
     }
 
-    @After fun stop() = server.shutdown()
+    @After fun stop() {
+        server.shutdown()
+        updatesDir().deleteRecursively()
+    }
+
+    private fun dmField(): String = if (!withDm) "" else
+        """, "dm": [{"minSdk": 28, "maxSdk": 30, "url": "${server.url("/app.p.dm")}", "sha256": "${"0".repeat(64)}"},
+                    {"minSdk": 31, "url": "${server.url("/app.s.dm")}", "sha256": "$dmSha", "size": ${dmBytes.size}}]"""
+
+    private fun dmRequests(): Int {
+        var n = 0
+        while (true) {
+            val r = server.takeRequest(10, java.util.concurrent.TimeUnit.MILLISECONDS) ?: return n
+            if (r.path.orEmpty().endsWith(".dm")) n++
+        }
+    }
 
     private fun updater(selfUpdate: Boolean = true): AppUpdater = container(selfUpdate).updater
 
@@ -186,5 +206,80 @@ class AppUpdaterTest {
         assertFalse(u.restoreDownloaded())
         assertEquals(requests, server.requestCount)
         updatesDir().deleteRecursively()
+    }
+
+    /** .dm за Android 12+: изтегля се след APK-а, сумата се проверява, и е готов за сесията. */
+    @Test fun downloadsMatchingDexMetadataAfterTheApk() = runTest {
+        withDm = true
+        val u = updater()
+        u.sdkInt = 34
+        u.apkCheck = { _, _ -> AppUpdater.ApkCheck.OK }
+        val info = requireNotNull(u.check(userInitiated = true))
+        assertEquals(2, info.dexMetadata.size)
+        assertTrue(u.download(info) != null)
+        assertEquals(UpdateState.Ready(info), u.state.value)
+        val dm = File(updatesDir(), "update-5.dm")
+        assertTrue(dm.readBytes().contentEquals(dmBytes))
+        assertEquals(dm, u.dexMetadataForInstall(info))
+        // Вече изтеглен — не се тегли пак.
+        dmRequests()
+        assertEquals(dm, u.fetchDexMetadata(info))
+        assertEquals(0, dmRequests())
+    }
+
+    /** Грешна сума на .dm — без него; APK-ът и обновяването са както винаги. */
+    @Test fun dexMetadataWithWrongChecksumIsSkipped() = runTest {
+        withDm = true
+        dmSha = "f".repeat(64)
+        val u = updater()
+        u.sdkInt = 34
+        u.apkCheck = { _, _ -> AppUpdater.ApkCheck.OK }
+        val info = requireNotNull(u.check(userInitiated = true))
+        assertTrue(u.download(info) != null)
+        assertEquals(UpdateState.Ready(info), u.state.value)
+        assertFalse(File(updatesDir(), "update-5.dm").exists())
+        assertFalse(File(updatesDir(), "update-5.dm.part").exists())
+        assertNull(u.dexMetadataForInstall(info))
+    }
+
+    /** Под Android 9, без „dm“ в update.json, недостъпен файл или вече опитан — нищо не се тегли/записва. */
+    @Test fun dexMetadataSkipPaths() = runTest {
+        withDm = true
+        val u = updater()
+        u.apkCheck = { _, _ -> AppUpdater.ApkCheck.OK }
+        val info = requireNotNull(u.check(userInitiated = true))
+        dmRequests()
+        u.sdkInt = 27
+        assertNull(u.fetchDexMetadata(info))
+        assertNull(u.dexMetadataForInstall(info))
+        assertEquals(0, dmRequests())
+        // Android 10: записът за 28–30 сочи несъществуващ файл (404) — без .dm, без грешка.
+        u.sdkInt = 29
+        assertNull(u.fetchDexMetadata(info))
+        assertEquals(1, dmRequests())
+        assertTrue(updatesDir().listFiles().orEmpty().none { it.name.contains(".dm") })
+        // Без „dm“ в update.json — нито заявка.
+        assertNull(u.fetchDexMetadata(info.copy(dexMetadata = emptyList())))
+        assertEquals(0, dmRequests())
+        // Вече опитано инсталиране с .dm на тази версия — следващите са без него.
+        u.sdkInt = 34
+        assertTrue(u.fetchDexMetadata(info) != null)
+        File(updatesDir(), "update-5.dm.tried").createNewFile()
+        assertNull(u.dexMetadataForInstall(info))
+        dmRequests()
+        assertNull(u.fetchDexMetadata(info))
+        assertEquals(0, dmRequests())
+    }
+
+    /** Подменен файл след изтеглянето (друга сума) не стига до сесията и се изтрива. */
+    @Test fun tamperedDexMetadataIsNotInstalled() = runTest {
+        withDm = true
+        val u = updater()
+        u.sdkInt = 31
+        val info = requireNotNull(u.check(userInitiated = true))
+        val dm = requireNotNull(u.fetchDexMetadata(info))
+        dm.writeBytes("something else".toByteArray())
+        assertNull(u.dexMetadataForInstall(info))
+        assertFalse(dm.exists())
     }
 }

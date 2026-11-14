@@ -240,6 +240,20 @@ jobs:
           mkdir -p dev-dist
           cp app/build/outputs/apk/dev/debug/app-dev-debug.apk "dev-dist/chitalishte-yavorets-$VERSION-dev-debug.apk"
 
+      # Профилът за бърз старт като dex metadata (.dm) — по един за всеки формат на ART (Android
+      # 9–11 и 12+), направен от profgen спрямо самия APK (виж скрипта). Самообновяването го
+      # инсталира заедно с APK-а (update.json → „dm“). Само подобрение: при грешка изданието
+      # излиза без .dm (стъпката не спира нищо) и обновяването е както преди.
+      - name: Dex metadata (.dm)
+        continue-on-error: true
+        run: |
+          bash .github/scripts/dex-metadata.sh "dist/chitalishte-yavorets-$VERSION.apk" dm-dist "chitalishte-yavorets-$VERSION"
+          if [ "$(jq length dm-dist/dm.json)" -gt 0 ]; then
+            jq -r '.[].file' dm-dist/dm.json | while read -r f; do cp "dm-dist/$f" dist/; done
+            (cd dist && sha256sum -- *.apk *.aab *.dm > SHA256SUMS.txt)
+            ls -l dist
+          fi
+
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dev-debug-apk-${{ env.VERSION }}
@@ -251,7 +265,8 @@ jobs:
       # Публикува се САМО при постоянен ключ: APK, подписан с различен (временен)
       # ключ, не може да замени инсталираното приложение.
       # „notes“ е на български (старите версии на приложението четат само него), „notes_en“ —
-      # на английски; приложението избира по езика на интерфейса.
+      # на английски; приложението избира по езика на интерфейса. „dm“ (по желание) — .dm
+      # файловете от предишната стъпка; старите версии на приложението не го познават и го пропускат.
       - name: Update manifest
         if: env.SIGNING_KIND == 'upload-key'
         run: |
@@ -271,6 +286,23 @@ jobs:
               "notes_en": notes("en"),
               "releaseUrl": f"https://github.com/{repo}/releases/tag/v{v}",
           }
+          dm = []
+          try:
+              for e in json.load(open("dm-dist/dm.json", encoding="utf-8")):
+                  path = os.path.join("dist", e["file"])
+                  if os.path.isfile(path):
+                      dm.append({
+                          "minSdk": e["minSdk"],
+                          "maxSdk": e["maxSdk"],
+                          "url": f"https://github.com/{repo}/releases/download/v{v}/{e['file']}",
+                          "sha256": hashlib.sha256(open(path, "rb").read()).hexdigest(),
+                          "size": os.path.getsize(path),
+                      })
+          except (OSError, ValueError, KeyError, TypeError) as err:
+              print(f"::warning::update.json без „dm“: {err}")
+              dm = []
+          if dm:
+              data["dm"] = dm
           json.dump(data, open("dist/update.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
           print(json.dumps(data, ensure_ascii=False, indent=2))
           PY
@@ -306,6 +338,9 @@ jobs:
             printf '\nПромени (технически):\n%s\n' "$CHANGES" >> notes.md
           fi
           sed -i 's/^          //' notes.md
+          if ls dist/*.dm >/dev/null 2>&1; then
+            sed -i "/^- SHA256SUMS.txt/i - chitalishte-yavorets-$VERSION.*.dm — профил за бърз старт за автоматичното обновяване (Android 9+)" notes.md
+          fi
 
       # Чернова (draft) не се връща от /releases/latest, така че update.json не стига
       # до инсталираните приложения, докато човек не натисне „Publish release“.
