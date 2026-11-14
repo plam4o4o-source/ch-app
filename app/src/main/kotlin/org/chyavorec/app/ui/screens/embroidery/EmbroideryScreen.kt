@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -347,7 +345,6 @@ internal fun StitchEditorCanvas(editor: EmbroideryEditor, modifier: Modifier = M
 }
 
 /** Всичко под платното: курсор (при нужда), цветове, бод/гума, огледало, действия, мотиви, подсказка. */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun EmbroideryControls(editor: EmbroideryEditor, onSave: () -> Unit, onOpenMine: () -> Unit, onShare: () -> Unit) {
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -376,22 +373,18 @@ private fun EmbroideryControls(editor: EmbroideryEditor, onSave: () -> Unit, onO
                 )
             }
         }
-        // Четирите действия — пълни редове (всяко хапче дели остатъка от реда), без „стъпала“; при
+        // Четирите действия — пълни редове (хапчетата делят остатъка от реда), без „стъпала“; при
         // тесен екран/едър шрифт надписът не се къса насред дума — хапчето минава на нов ред.
-        FlowRow(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
+        FillRows {
             // Превключвател-хапче (като другите бутони тук), за TalkBack — избираем като чип.
             PillToggle(
                 selected = editor.cursorMode, onClick = { editor.cursorMode = !editor.cursorMode },
                 label = { Text(stringResource(R.string.embroidery_cursor)) },
                 leadingIcon = { Icon(Icons.Outlined.TouchApp, null, Modifier.size(18.dp)) },
-                modifier = Modifier.weight(1f),
             )
-            ActionButton(Icons.Outlined.Save, R.string.embroidery_save, onSave, Modifier.weight(1f))
-            ActionButton(Icons.Outlined.FolderOpen, R.string.embroidery_mine, onOpenMine, Modifier.weight(1f))
-            ActionButton(Icons.Outlined.DeleteOutline, R.string.embroidery_clear, editor::clear, Modifier.weight(1f))
+            ActionButton(Icons.Outlined.Save, R.string.embroidery_save, onSave)
+            ActionButton(Icons.Outlined.FolderOpen, R.string.embroidery_mine, onOpenMine)
+            ActionButton(Icons.Outlined.DeleteOutline, R.string.embroidery_clear, editor::clear)
         }
         TemplatePicker(editor)
         Text(
@@ -401,9 +394,53 @@ private fun EmbroideryControls(editor: EmbroideryEditor, onSave: () -> Unit, onO
     }
 }
 
+/**
+ * Редове по естествената ширина на бутоните (колкото се съберат), а остатъкът от реда се дели
+ * поравно — всеки ред е пълен, бутоните в него са еднакво високи. Бутон, по-широк от реда, е сам
+ * на реда с цялата ширина (надписът му се пренася между думите).
+ */
 @Composable
-private fun ActionButton(icon: ImageVector, label: Int, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    OutlinedButton(onClick = onClick, modifier = modifier.heightIn(min = 48.dp), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)) {
+private fun FillRows(gap: androidx.compose.ui.unit.Dp = 8.dp, content: @Composable () -> Unit) {
+    androidx.compose.ui.layout.Layout(content, Modifier.fillMaxWidth()) { measurables, constraints ->
+        val g = gap.roundToPx()
+        val width = constraints.maxWidth
+        val natural = measurables.map { minOf(it.maxIntrinsicWidth(androidx.compose.ui.unit.Constraints.Infinity), width) }
+        val rows = mutableListOf<IntRange>()
+        var start = 0
+        var used = 0
+        for (i in measurables.indices) {
+            val add = natural[i] + if (i > start) g else 0
+            if (i > start && used + add > width) {
+                rows += start until i
+                start = i
+                used = natural[i]
+            } else {
+                used += add
+            }
+        }
+        if (measurables.isNotEmpty()) rows += start until measurables.size
+        val placed = rows.map { r ->
+            val n = r.count()
+            val extra = (width - r.sumOf { natural[it] } - g * (n - 1)).coerceAtLeast(0)
+            val widths = r.mapIndexed { k, i -> natural[i] + extra / n + if (k == n - 1) extra % n else 0 }
+            val h = r.mapIndexed { k, i -> measurables[i].maxIntrinsicHeight(widths[k]) }.max()
+            r.mapIndexed { k, i -> measurables[i].measure(androidx.compose.ui.unit.Constraints.fixed(widths[k], h)) }
+        }
+        val height = placed.sumOf { row -> row.maxOf { it.height } } + g * (placed.size - 1).coerceAtLeast(0)
+        layout(width, height) {
+            var y = 0
+            for (row in placed) {
+                var x = 0
+                for (p in row) { p.placeRelative(x, y); x += p.width + g }
+                y += row.maxOf { it.height } + g
+            }
+        }
+    }
+}
+
+@Composable
+private fun ActionButton(icon: ImageVector, label: Int, onClick: () -> Unit) {
+    OutlinedButton(onClick = onClick, modifier = Modifier.heightIn(min = 48.dp), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)) {
         Icon(icon, null, Modifier.size(18.dp))
         Spacer(Modifier.size(8.dp))
         Text(stringResource(label))
