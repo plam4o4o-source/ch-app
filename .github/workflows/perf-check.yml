@@ -65,10 +65,7 @@ jobs:
       matrix:
         include:
           - { app: new, vname: "1.2.38", vc: "1510100" }
-          - { app: base, vname: "1.2.37", vc: "1510000" }
-          - { app: local, vname: "1.2.38", vc: "1510099" }
           - { app: dev, vname: "1.2.38", vc: "1" }
-          - { app: devbase, vname: "1.2.37", vc: "1" }
     steps:
       - uses: actions/checkout@v7
         with:
@@ -138,7 +135,8 @@ jobs:
       fail-fast: false
       matrix:
         # API 33 google_apis x86_64, -gpu swangle_indirect; частите с име на 28 — API 28; на 26 — API 26; c36 — API 36.
-        part: [tour38, tour38b, ui38, dev38, mon38, upd38, updd38, dm33, dm28, start38a, start38b, perf38, perfb38, c26, c28, c36]
+        # Кръг 2: само поправените части (кръг 1 — всички 16, резултатите остават в v138/)
+        part: [ui38b, dev38b]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -272,7 +270,8 @@ jobs:
             git show FETCH_HEAD:index.md > index.md
             grep -q "$V/index.md" index.md || { { head -1 index.md; echo; echo "v1.2.38 candidate (de2e156, wave 23) vs v1.2.37: [$V/index.md]($V/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
             for p in $(ls "$W/results"); do git add -A -- "$V/$p"; done
-            git add -A -- "$V/size" "$V/runs.txt" "$V/index.md" index.md
+            # Кръг 2 събира само две APK — size/ от кръг 1 остава (не се добавя наново)
+            git add -A -- "$V/runs.txt" "$V/index.md" index.md
             C=$(git commit-tree "$(git write-tree)" -p "$TIP" -m "Emulator results $V for $SRC (run $RUN)") || { echo "write-tree/commit failed (promisor fetch?); retrying"; sleep $((try * 7)); continue; }
             git push origin "$C:refs/heads/emulator-results" && break
             echo "emulator-results moved; retrying on the new tip"; sleep $((try * 7))

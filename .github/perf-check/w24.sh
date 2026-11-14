@@ -16,7 +16,7 @@
 #              верен .dm, грешна сума, повреден .dm (сумата вярна), .dm от 1.2.37; dumpsys package dexopt
 #   start38a/b — студен старт A/B (n=20 на издание във всяка)
 #   perf38/perfb38 — покой (Начало ~45 s, картата, Още, Моето, викторината, лентата), плавност, памет след обиколки
-W24_PARTS=" tour38 tour38b ui38 dev38 mon38 upd38 updd38 dm33 dm28 start38a start38b perf38 perfb38 "
+W24_PARTS=" ui38b dev38b tour38 tour38b ui38 dev38 mon38 upd38 updd38 dm33 dm28 start38a start38b perf38 perfb38 "
 W20_PARTS="$W20_PARTS $W24_PARTS"
 W24=$H_/w24.py
 VC_NEW=${VC_NEW:-1507400}
@@ -85,7 +85,7 @@ quiz_pass() {  # $1 — 1: първите отговори (научава ве�
     [ -z "$o" ] && o=$(grep -m1 '^A' $OUT/qo.txt | cut -f1)
     [ -n "$o" ] || { log "QUIZ$P q$i: no answer buttons: $(texts 12 | cut -c1-260)"; debug_ui quiz$P-$i; break; }
     o=${o#A }
-    if [ $P = 2 ] && [ $i = 5 ]; then trec_do quiz-band-5of5 a input tap $o; else a input tap $o; sleep 0.5; shot quiz/$X-q$i-a >/dev/null; sleep 1.2; fi
+    if [ $P = 2 ] && [ $i = 5 ] && [ "${QUIZ_REC:-}" = win ]; then recwin quiz-5of5 0.6 2.4 8 adb a input tap $o; elif [ $P = 2 ] && [ $i = 5 ]; then trec_do quiz-band-5of5 a input tap $o; else a input tap $o; sleep 0.5; shot quiz/$X-q$i-a >/dev/null; sleep 1.2; fi
     cap $X-q$i-answered 0.3
     right=$(python3 $W24 quizres $OUT/ui.xml)
     log "QUIZ$P q$i: $right; band: $(grep -oE '(text|content-desc)="[^"]*(Избродирай|Шевицата е цяла|верни от)[^"]*"' $OUT/ui.xml | head -3 | tr '\n' ' ')"
@@ -497,12 +497,164 @@ part_perf38() {
   diag_end
 }
 
+# ================================================================= КРЪГ 2 (ui38b, dev38b)
+# eshot с подпапка в името (кръг 1: mv в несъществуваща папка → снимките липсваха)
+eshot() {
+  local d f; d=$(realpath -m $OUT/shots/eshot); mkdir -p "$(dirname "$d/$1")"; rm -f $d/Screenshot*.png
+  timeout 20 adb emu screenrecord screenshot $d >/dev/null 2>&1; sleep 1
+  f=$(ls -t $d/Screenshot*.png 2>/dev/null | head -1)
+  [ -n "$f" ] && mv "$f" "$d/$1.png" && echo "$d/$1.png"
+}
+# Прозорец от запис: $1 — име, $2 — от (s след командата), $3 — колко s, $4 — кадри/s, $5 — out (adb | emu), $6… — командата
+recwin() {
+  local name=$1 from=$2 dur=$3 fps=$4 how=$5 f off n; shift 5
+  mkdir -p $OUT/rec $OUT/shots/win/$name
+  if [ $how = emu ]; then
+    f=$(realpath -m $OUT/rec/$name.webm); rm -f $f
+    timeout 10 adb emu screenrecord start --time-limit 7 $f >/dev/null 2>&1; off=1.0; sleep 1.0
+    "$@"; sleep 7; timeout 10 adb emu screenrecord stop >/dev/null 2>&1; sleep 2.5
+  else
+    f=$OUT/rec/$name.mp4; a rm -f /sdcard/rec.mp4
+    adb shell screenrecord --time-limit 7 --size 540x1200 --bit-rate 3000000 /sdcard/rec.mp4 >/dev/null 2>&1 &
+    RECPID=$!; off=1.6; sleep 1.6
+    "$@"; wait $RECPID 2>/dev/null; sleep 1
+    timeout 30 adb pull /sdcard/rec.mp4 $f >/dev/null 2>&1
+  fi
+  if [ -s $f ]; then
+    ffmpeg -loglevel error -ss $(python3 -c "print($off+$from)") -t $dur -i $f -vf fps=$fps $OUT/shots/win/$name/f%02d.png
+    n=$(ls $OUT/shots/win/$name 2>/dev/null | wc -l)
+    log "RECWIN $name ($how, +${from}s for ${dur}s at ${fps} fps): $n frames; $(python3 $W24 frames $OUT/shots/win/$name 2>&1 | tail -1)"
+  else log "RECWIN $name: no recording"; fi
+  rm -f $f
+}
+dev_login() {  # вход DEMO-0001 / demo с проверка на полетата; $1 — записва ли се докосването (rec | no)
+  local p1 p2 i v
+  ready; tab my; sleep 3; tap text "$L_SIGNIN" >/dev/null; sleep 3; eshot dv2/02-login >/dev/null
+  for i in 1 2; do
+    dump; p1=$(xy --all class EditText | sed -n 1p); p2=$(xy --all class EditText | sed -n 2p)
+    [ -n "$p1" ] && [ -n "$p2" ] || { log "LOGIN: fields not found: $(texts 12 | cut -c1-200)"; return 1; }
+    a input tap $p1; sleep 1; a input keyevent KEYCODE_MOVE_END; for v in 1 2 3 4 5 6 7 8 9 10 11 12 13 14; do a input keyevent KEYCODE_DEL; done
+    a input text DEMO-000; sleep 0.5; a input text 1; sleep 1; hide_ime; sleep 1
+    dump; p2=$(xy --all class EditText | sed -n 2p); a input tap $p2; sleep 1; a input text demo; sleep 1; hide_ime; sleep 1
+    dump; v=$(grep -oE 'text="DEMO-0001"' $OUT/ui.xml | head -1)
+    log "LOGIN try $i: card field $( [ -n "$v" ] && echo OK || echo "WRONG ($(grep -oE 'text="DEMO[^"]*"' $OUT/ui.xml | head -1))")"
+    [ -n "$v" ] && break
+  done
+  python3 $WF checkstate $OUT/ui.xml 'Запомни ме' | grep -q 'checked=false' && { tap text 'Запомни ме' >/dev/null; sleep 1; dump; }
+  eshot dv2/03-login-filled >/dev/null
+  p1=$(xy text '=Вход' --last)
+  if [ "$1" = rec ]; then recwin login-fly 0 2.6 5 emu a input tap $p1; else a input tap $p1; sleep 6; fi
+  ready; tab my; sleep 3; dump
+  log "MY after the sign-in: $(has 'Демо Читател' && echo 'SIGNED IN' || echo 'NOT signed in'): $(texts 10 | cut -c1-240)"
+  has 'Демо Читател'
+}
+part_ui38b() {
+  local p i
+  helper_install
+  a am force-stop $PKG
+  anims 1
+  warmup
+  CFG=ui38b; DENS=$(dens); dims; : > $OUT/a11y-$CFG.txt; mark u38b
+  sec "UB1. Event leaf: „Добави в календара“ → the helper („Just once“) → back: the stub tears off"
+  if open_event 1; then
+    cap ev-01 1.5
+    dump; p=$(xy text '=Добави в календара|=Add to calendar' --maxy $((H*93/100)))
+    if [ -n "$p" ]; then
+      mark ev-cal; a input tap $p; sleep 3; dump
+      if has 'PC helper|Complete action|Open with|Отваряне с'; then shot evb/02-chooser >/dev/null; tap text '=PC helper' >/dev/null; sleep 1; tap text '=Just once|=Само веднъж' >/dev/null; sleep 2.5; fi
+      log "CALENDAR: fg $(fg); helper: $(since ev-cal 'PCCATCH' | head -1 | cut -c1-300)"
+      shot evb/03-helper >/dev/null
+      recwin event-tear 0 2.4 8 adb a input keyevent KEYCODE_BACK
+      sleep 1; cap ev-04-after 0.5; dump
+      log "EVENT after return: '$(grep -oE '(text|content-desc)="[^"]*(Добавено в календара|Added to calendar)[^"]*"' $OUT/ui.xml | head -1)'; on the event screen $(has "$RX_BACK" && echo yes || echo NO)"
+      sleep 3; cap ev-05-rest 0.5
+    else log "EVENT: no 'Добави в календара'"; fi
+    leave
+  fi
+  sec "UB2. Quiz 5/5: frames 0.8–2.6 s after the last answer (stitch, close, confetti)"
+  quiz_pass 1 qz1 >/dev/null
+  a pm clear $PKG >/dev/null; a pm grant $PKG android.permission.POST_NOTIFICATIONS; a cmd locale set-app-locales $PKG --locales bg-BG; no_camera >/dev/null
+  launch >/dev/null; sleep 6; dismiss; ready; tab catalog; waitfor "$RX_RESULTS" 150 >/dev/null; tab news; sleep 4; tab home; sleep 3
+  QUIZ_REC=win quiz_pass 2 qz2
+  sec "UB3. Login screen as a guest (FLAG_SECURE: emulator screenshot)"
+  ready; tab my; sleep 2; tap text "$L_SIGNIN" >/dev/null && { sleep 3; hide_ime; sleep 1; eshot ub/login-guest >/dev/null; back 2; }
+  log "UI38B part: $(since_fatal u38b)"
+  all_sheets
+  diag_end
+}
+part_dev38b() {
+  local p b l t r bt i D0 x
+  helper_install
+  dev_install
+  anims 1
+  warmup
+  CFG=dev38b; DENS=$(dens); dims; : > $OUT/a11y-$CFG.txt; mark dvb
+  sec "DB1. Sign-in (fields checked), the „Картата е издадена“ tap recorded from outside (5 fps, 0–2.6 s)"
+  ready; tab my; sleep 3; eshot dv2/01-my-guest >/dev/null
+  dev_login rec || dev_login no || log "DEMO sign-in FAILED twice"
+  eshot dv2/04-my-signed-in >/dev/null; sw_up 500; sleep 1; eshot dv2/05-my-signed-in-2 >/dev/null; top_of
+  sec "DB2. Loans: renew (demo → pending)"
+  open_link_dev my/loans; sleep 2; eshot dv2/06-loans >/dev/null; dump; log "LOANS: $(texts 24 | cut -c1-500)"
+  p=$(xy text '=Удължи срока|=Renew')
+  if [ -n "$p" ]; then a input tap $p; sleep 0.6; eshot dv2/07-renew-0.6s >/dev/null; sleep 1.5; eshot dv2/08-renew-2s >/dev/null; dump; log "RENEW: $(texts 30 | grep -oE '(Заявено удължаване|Удължено|Нов срок|чака библиотеката|Удължаването|Удължи)[^"]*' | head -4 | tr '\n' '|'); leaf node $(has 'Нов срок:' && echo PRESENT || echo absent)"
+  else log "RENEW: no 'Удължи срока' button"; fi
+  back 1.5
+  sec "DB3. Messages (Още › Съобщения)"
+  if more_tile '=Съобщения|=Messages'; then sleep 2; cap messages 0.5; eshot dv2/09-messages >/dev/null; log "MESSAGES: $(texts 16 | cut -c1-300)"
+    dump; p=$(python3 $H_/find.py $OUT/ui.xml --first-clickable $((H/5)) $((H*85/100)) 120); [ -n "$p" ] && { a input tap $p; sleep 2.5; cap message-open 0.5; back 1.5; }
+    leave; fi
+  sec "DB4. Diary: 5 rosettes, then the year story slide by slide (content descriptions)"
+  open_link_dev my/history 5; sleep 1
+  for i in 1 2 3 4; do dump; b=$(xy --bounds content-desc 'Оценка на книгата|Book rating'); [ -n "$b" ] && break; sw_up 400; sleep 1; done
+  if [ -n "$b" ]; then read l t r bt <<< "$b"; a input tap $(( r - (r - l) * 6 / 100 )) $(( (t + bt) / 2 )); sleep 2; eshot dv2/10-rated >/dev/null; fi
+  back 1.5
+  if year_open_fresh 25; then
+    for i in $(seq 1 12); do
+      dump; x=$(grep -oE 'content-desc="[^"]{12,}"' $OUT/ui.xml | grep -vE 'Затвори|Сподели|Следващ|Предишен' | head -1 | cut -c1-200)
+      log "YEAR $i: $x"
+      echo "$x" | grep -q 'Най-харесана' && eshot dv2/y-favourite >/dev/null
+      grep -q 'Затвори' $OUT/ui.xml || break
+      a input tap $((W*88/100)) $((H/2)); sleep 0.7
+    done
+    [ "$(ystate)" = open ] && back 2
+  else log "YEAR: story did not open"; fi
+  sec "DB5. The card on 10 December and 20 January (the strip), 14 November (none)"
+  D0=$(a date +%m%d%H%M%Y.%S | tr -d '\r')
+  for t in 121010002026.00:dec 012010002027.00:jan; do
+    set_date ${t%%:*}; a am force-stop $PKG; sleep 1; launch >/dev/null; sleep 6; dismiss
+    card_screen; sleep 3; eshot dv2/card-${t##*:} >/dev/null; dump; log "CARD ${t##*:}: band $(has 'Твоята шевица за' && echo PRESENT || echo absent)"
+    tap text "$L_CARDSHOW" >/dev/null && { sleep 3; eshot dv2/card-full-${t##*:} >/dev/null; dump; log "CARD full ${t##*:}: band $(has 'Твоята шевица за' && echo PRESENT || echo absent)"; back 1.5; }
+    leave
+  done
+  set_date $D0; a settings put global auto_time 1
+  a am force-stop $PKG; launch >/dev/null; sleep 5; card_screen; sleep 3; eshot dv2/card-nov >/dev/null; dump; log "CARD nov: band $(has 'Твоята шевица за' && echo PRESENT || echo absent)"; leave
+  sec "DB6. Tablet landscape (1280×800 dp): two panes in Още and Моето, signed in"
+  a wm size 2560x1600; a wm density 320; sleep 4; dims; restart; dims
+  ready; tab more; sleep 2.5; eshot dv2/t-more >/dev/null
+  for t in "$L_QUIZ" "$L_TIMELINE" '=Съобщения|=Messages'; do
+    dump; p=$(xy text "$t")
+    [ -n "$p" ] || { a input swipe $((W*28/100)) $((H*75/100)) $((W*28/100)) $((H*30/100)) 500; sleep 1.5; dump; p=$(xy text "$t"); }
+    [ -n "$p" ] && { a input tap $p; sleep 3; x=$(echo "$t" | tr -dc 'a-zA-Z' | cut -c1-10); eshot dv2/t-more-$x >/dev/null; dump; log "TABLET Още › '$t': tabs $(has 'text="(Начало|Home)"' && echo visible || echo hidden); $(texts 8 | cut -c1-200)"; } || log "TABLET: '$t' not found in the left pane"
+  done
+  leave; ready; tab my; sleep 3; eshot dv2/t-my >/dev/null
+  for t in '=Моите книги|=My books' '=Читателска карта|=Library card' '=Моето членство|=My membership'; do
+    dump; p=$(xy text "$t"); [ -n "$p" ] && { a input tap $p; sleep 3; x=$(echo "$t" | tr -dc 'a-zA-Z' | cut -c1-10); eshot dv2/t-my-$x >/dev/null; dump; log "TABLET Моето › '$t': tabs $(has 'text="(Начало|Home)"' && echo visible || echo hidden); $(texts 8 | cut -c1-200)"; }
+  done
+  a wm size reset; a wm density reset; sleep 3
+  log "DEV38B part: $(since_fatal dvb)"
+  all_sheets
+  diag_end
+  use_pkg org.chyavorec.app
+}
+
 # ---------------------------------------------------------------- маршрутизация
 part_w24() {
   case "$W24_PARTS" in *" $PART "*) ;; *) return 1;; esac
   case $PART in
     tour38|tour38b) part_tour38;;
     ui38) part_ui38;;
+    ui38b) part_ui38b;;
+    dev38b) part_dev38b;;
     dev38) part_dev38;;
     mon38) part_mon36;;
     upd38) part_upd36;;
