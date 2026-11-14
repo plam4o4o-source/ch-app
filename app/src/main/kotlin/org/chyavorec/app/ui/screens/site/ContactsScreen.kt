@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.site
 
+import org.chyavorec.app.ui.components.appTonalButtonColors
 import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -114,6 +115,8 @@ fun ContactsScreen(onBack: () -> Unit) {
 private fun ActionButton(icon: ImageVector, text: String, description: String, onClick: () -> Unit) {
     FilledTonalButton(
         onClick = onClick, modifier = Modifier.semantics { contentDescription = description },
+        // Тоналните цветове на приложението (злато + мастило), не бордо върху пергамент.
+        colors = appTonalButtonColors(),
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
     ) {
         Icon(icon, null, modifier = Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(text)

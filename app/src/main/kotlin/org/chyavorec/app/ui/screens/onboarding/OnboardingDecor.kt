@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.onboarding
 
+import org.chyavorec.app.ui.components.StitchSpec
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +23,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -105,9 +105,9 @@ internal fun ThreadDots(count: Int, position: () -> Float, modifier: Modifier = 
         val y = size.height / 2f
         val stroke = 2.dp.toPx()
         val pos = position().coerceIn(0f, (count - 1).toFloat())
-        val dash = PathEffect.dashPathEffect(floatArrayOf(5.dp.toPx(), 4.dp.toPx()))
-        // Нишката: бродирана (прекъсната) отдолу, плътно злато до изминатото.
-        drawLine(dim, Offset(x0, y), Offset(x0 + gap * (count - 1), y), strokeWidth = stroke, pathEffect = dash, cap = StrokeCap.Butt)
+        val bod = StitchSpec.Basting.stroke(density)
+        // Нишката: бродирана (тропосване) отдолу, плътно злато до изминатото.
+        drawLine(dim, Offset(x0, y), Offset(x0 + gap * (count - 1), y), strokeWidth = bod.width, pathEffect = bod.pathEffect, cap = StrokeCap.Round)
         if (pos > 0f) drawLine(Brand.Gold, Offset(x0, y), Offset(x0 + gap * pos, y), strokeWidth = stroke, cap = StrokeCap.Round)
         for (i in 0 until count) {
             val cx = x0 + gap * i

@@ -1,9 +1,10 @@
 package org.chyavorec.app.ui.screens.quiz
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.ui.graphics.Color
+import org.chyavorec.app.ui.theme.FolkTokens
+import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +46,6 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -188,7 +187,7 @@ private fun Progress(results: List<Boolean>, index: Int, total: Int, answered: B
         repeat(total) { i ->
             val done = i < results.size && (i < index || answered)
             Box(
-                Modifier.size(34.dp).then(if (!done) Modifier.border(if (i == index) 2.dp else 1.dp, gold.copy(alpha = if (i == index) 1f else 0.4f), CircleShape) else Modifier),
+                Modifier.size(34.dp).then(if (!done) Modifier.border(if (i == index) 2.dp else 1.dp, gold.copy(alpha = if (i == index) 1f else FolkTokens.GOLD_BORDER_ALPHA), CircleShape) else Modifier),
                 contentAlignment = Alignment.Center,
             ) {
                 if (done && results[i]) StitchedMotif(StitchCharts.rosette(5), progress = { 1f }, modifier = Modifier.size(32.dp))
@@ -204,30 +203,29 @@ private fun AnswerButton(text: String, index: Int, correctIndex: Int, chosen: In
     val revealed = chosen != null
     val isCorrect = revealed && index == correctIndex
     val isWrongChoice = revealed && index == chosen && index != correctIndex
+    // Обща карта ([AppCard]): преди отговора — със златна рамка; след него верният и грешният
+    // избор са в цвета на състоянието, а останалите — обикновени карти.
     val accent = when {
         isCorrect -> ext.ok
         isWrongChoice -> ext.bad
-        else -> ext.gold
+        else -> Color.Unspecified
     }
     val container = when {
         isCorrect -> ext.ok.copy(alpha = 0.14f)
         isWrongChoice -> ext.bad.copy(alpha = 0.12f)
-        else -> MaterialTheme.colorScheme.surfaceContainerHigh
+        else -> MaterialTheme.colorScheme.surfaceContainerLow
     }
     val state = when {
         isCorrect -> stringResource(R.string.quiz_state_correct)
         isWrongChoice -> stringResource(R.string.quiz_state_wrong)
         else -> null
     }
-    val shape = MaterialTheme.shapes.medium
-    Surface(
-        color = container, contentColor = MaterialTheme.colorScheme.onSurface, shape = shape,
-        border = BorderStroke(if (isCorrect || isWrongChoice) 2.dp else 1.dp, accent.copy(alpha = if (revealed && !isCorrect && !isWrongChoice) 0.25f else 0.85f)),
-        modifier = Modifier.fillMaxWidth().heightIn(min = 60.dp).clip(shape)
-            .clickable(enabled = !revealed, role = Role.Button, onClick = onClick)
-            .semantics { if (state != null) stateDescription = state },
+    AppCard(
+        Modifier.fillMaxWidth().semantics { if (state != null) stateDescription = state },
+        onClick = onClick, enabled = !revealed, accent = !revealed, accentColor = accent, color = container,
     ) {
-        Row(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+        // Поне 60 dp, текстът — центриран по височина.
+        Row(Modifier.heightIn(min = 60.dp).padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(text, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             if (isCorrect) Icon(Icons.Outlined.CheckCircle, null, tint = ext.ok, modifier = Modifier.padding(start = 8.dp))
         }
@@ -271,10 +269,7 @@ private fun ResultContent(f: QuizUi.Finished, onShare: () -> Unit, onBack: () ->
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = ScreenGutter, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Surface(
-            color = MaterialTheme.colorScheme.surfaceContainerHigh, shape = MaterialTheme.shapes.large,
-            border = BorderStroke(1.dp, LocalExtendedColors.current.gold.copy(alpha = 0.6f)), modifier = Modifier.fillMaxWidth(),
-        ) {
+        AppCard(Modifier.fillMaxWidth(), accent = true) {
             Column(Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(headline), style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
                 Text("$score/$total", style = MaterialTheme.typography.displayLarge, color = LocalExtendedColors.current.gold)
@@ -282,7 +277,7 @@ private fun ResultContent(f: QuizUi.Finished, onShare: () -> Unit, onBack: () ->
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 4.dp).clearAndSetSemantics { }) {
                     f.results.forEach { ok ->
                         Box(
-                            Modifier.size(40.dp).then(if (ok) Modifier else Modifier.border(1.dp, LocalExtendedColors.current.gold.copy(alpha = 0.4f), CircleShape)),
+                            Modifier.size(40.dp).then(if (ok) Modifier else Modifier.border(FolkTokens.goldBorder(), CircleShape)),
                             contentAlignment = Alignment.Center,
                         ) { if (ok) StitchInOrnament(StitchCharts.rosette(5), Modifier.size(38.dp)) }
                     }

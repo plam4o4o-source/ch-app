@@ -9,8 +9,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
@@ -70,6 +68,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.clip
+import org.chyavorec.app.ui.theme.FolkTokens
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.sectionTitle
 import org.chyavorec.app.util.Intents
@@ -119,27 +120,16 @@ internal fun StitchMark(color: androidx.compose.ui.graphics.Color, modifier: Mod
     }
     androidx.compose.foundation.Canvas(modifier.size(20.dp, 8.dp).clearAndSetSemantics { }) {
         val p = progress.value
-        val half = 2.5.dp.toPx()
-        val pitch = 7.dp.toPx()
-        val stroke = 1.4.dp.toPx()
-        val cy = size.height / 2f
+        // Същият кръстат бод като в шевиците ([crossStitch]): три клетки една до друга.
+        val cell = minOf(size.width / CrossStitches.COUNT, size.height)
+        val inset = cell * StitchSpec.Cross.INSET
+        val top = (size.height - cell) / 2f + inset
+        val bottom = top + cell - 2 * inset
         for (i in 0 until CrossStitches.COUNT) {
             val f = CrossStitches.fraction(p, i)
             if (f <= 0f) continue
-            val cx = half + i * pitch
-            val a = (f * 2f).coerceAtMost(1f)
-            val b = (f * 2f - 1f).coerceAtLeast(0f)
-            // „\“ отгоре надолу, после „/“ — като при истински кръстат бод.
-            drawLine(
-                color, Offset(cx - half, cy - half), Offset(cx - half + 2 * half * a, cy - half + 2 * half * a),
-                stroke, StrokeCap.Round,
-            )
-            if (b > 0f) {
-                drawLine(
-                    color, Offset(cx + half, cy - half), Offset(cx + half - 2 * half * b, cy - half + 2 * half * b),
-                    stroke, StrokeCap.Round,
-                )
-            }
+            val left = i * cell + inset
+            crossStitch(left, top, left + cell - 2 * inset, bottom, color, cell, StitchMath.firstLeg(f), StitchMath.secondLeg(f))
         }
     }
 }
@@ -191,7 +181,8 @@ fun BackTopBar(
     val titleSpec: AnimationSpec<Float> = if (reduced) snap() else AppMotion.defaultEffects()
     val titleAlpha by animateFloatAsState(if (titleShown) 1f else 0f, titleSpec, label = "bar-title")
     TopAppBar(
-        modifier = Modifier.screenPane(paneLabel).nightCloth(),
+        // Без „нощна черга“: лентата е от плата на екрана (с черга изглеждаше залепена ивица).
+        modifier = Modifier.screenPane(paneLabel),
         title = {
             Text(
                 title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleLarge,
@@ -238,7 +229,7 @@ fun AppTopBar(
     }
     val hiddenSemantics = if (hidden) Modifier.clearAndSetSemantics { } else Modifier
     TopAppBar(
-        modifier = Modifier.screenPane(title).nightCloth(),
+        modifier = Modifier.screenPane(title),
         title = {
             Row(hiddenSemantics, verticalAlignment = Alignment.CenterVertically) {
                 if (!LocalRailEmblemShown.current) {
@@ -288,28 +279,47 @@ private fun Modifier.screenPane(label: String): Modifier =
 
 /** Тънката рамка на картите (outlineVariant, леко приглушена). */
 @Composable
-fun cardBorder(): BorderStroke = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f))
+fun cardBorder(): BorderStroke = BorderStroke(FolkTokens.BorderWidth, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f))
 
 /**
  * Единственият вид карта в приложението: запълнена (surfaceContainerLow) с тънка рамка
  * и без сянка — сянка има само въртележката на „Начало“. С [onClick] картата е бутон.
+ * [accent] — златна рамка ([FolkTokens.goldBorder]) за картите-акцент (веха, „На този ден“,
+ * резултат); [accentColor] — рамка в цвят на състояние (вярно/грешно) със същата дебелина.
+ * [onClickLabel] — какво казва TalkBack за докосването („Отвори…“).
  */
 @Composable
 fun AppCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
+    accent: Boolean = false,
+    accentColor: androidx.compose.ui.graphics.Color = androidx.compose.ui.graphics.Color.Unspecified,
+    color: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.surfaceContainerLow,
+    onClickLabel: String? = null,
+    enabled: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val shape = MaterialTheme.shapes.medium
-    val color = MaterialTheme.colorScheme.surfaceContainerLow
+    val border = when {
+        accentColor.isSpecified -> BorderStroke(FolkTokens.BorderWidth, accentColor)
+        accent -> FolkTokens.goldBorder()
+        else -> cardBorder()
+    }
     val m = modifier.darkTopHighlight(shape).nightCloth(shape)
-    if (onClick != null) {
-        Surface(onClick = onClick, shape = shape, color = color, border = cardBorder(), interactionSource = interactionSource, modifier = m) {
-            Column(content = content)
-        }
-    } else {
-        Surface(shape = shape, color = color, border = cardBorder(), modifier = m) { Column(content = content) }
+    when {
+        onClick == null -> Surface(shape = shape, color = color, border = border, modifier = m) { Column(content = content) }
+        onClickLabel == null -> Surface(
+            onClick = onClick, enabled = enabled, shape = shape, color = color, border = border, interactionSource = interactionSource, modifier = m,
+        ) { Column(content = content) }
+        // С име на действието: същата повърхност, докосването е със собствен етикет за TalkBack.
+        else -> Surface(
+            shape = shape, color = color, border = border,
+            modifier = m.clip(shape).clickable(
+                interactionSource = interactionSource, indication = androidx.compose.material3.ripple(),
+                enabled = enabled, onClickLabel = onClickLabel, role = androidx.compose.ui.semantics.Role.Button, onClick = onClick,
+            ),
+        ) { Column(content = content) }
     }
 }
 

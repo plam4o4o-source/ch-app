@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.screens.my
 
+import org.chyavorec.app.ui.components.StitchSpec
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
@@ -54,7 +55,6 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.boundsInRoot
@@ -387,7 +387,7 @@ internal fun ReturnSeal(anim: StampAnim, modifier: Modifier = Modifier) {
             }
             .drawWithCache {
                 val ring = Stroke(2.6.dp.toPx())
-                val thin = Stroke(1.1.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(3.dp.toPx(), 3.dp.toPx())))
+                val thin = StitchSpec.Running.stroke(1.dp.toPx())
                 val r = size.minDimension / 2f
                 onDrawBehind {
                     drawCircle(ink, radius = r - ring.width / 2f, style = ring)

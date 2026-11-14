@@ -21,7 +21,12 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.assertHeightIsAtLeast
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Density
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.chyavorec.app.ui.screens.embroidery.EmbroideryEditor
@@ -174,6 +179,25 @@ class EmbroideryScreenshotTest {
         val editor = withTemplate(EmbroideryTemplate.RHOMBUS).apply { cursorMode = true; moveCursor(-3, -2) }
         compose.setContent { Screen(editor, dark = false, scale = 1f) }
         shot("embroidery-04-cursor")
+    }
+
+    /**
+     * Тесен телефон (320 dp) и шрифт 1.3: имената на мотивите се пренасят само между думите
+     * („Осморъка“ — на един ред, „Дърво на / живота“), а действията са мрежа от хапчета ≥ 48 dp.
+     */
+    @Config(qualifiers = "bg-w320dp-h1400dp-xhdpi")
+    @Test fun narrowFont13TemplateNamesKeepWords() {
+        compose.setContent { Screen(withTemplate(EmbroideryTemplate.TREE), dark = false, scale = 1.3f) }
+        compose.assertNoMidWordBreak("Осморъка", maxLines = 1)
+        compose.assertNoMidWordBreak("Дърво на живота", maxLines = 2)
+        compose.assertNoMidWordBreak("Кривулица", maxLines = 1)
+        compose.assertNoMidWordBreak("Изчисти платното")
+        compose.assertNoMidWordBreak("Запази шевицата")
+        compose.assertNoMidWordBreak("Моите шевици")
+        compose.onNode(hasText("Изчисти платното") and hasClickAction()).assertHeightIsAtLeast(48.dp)
+        compose.onNode(hasText("Курсор") and hasClickAction()).assertHeightIsAtLeast(48.dp)
+        compose.onNode(hasText("Осморъка")).performScrollTo()
+        shot("embroidery-05-narrow-font13")
     }
 
     /** Курсорът слага и маха бод; „Върни“ работи през бутона в лентата. */

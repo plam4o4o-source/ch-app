@@ -16,8 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import org.chyavorec.app.ui.theme.Brand
@@ -260,6 +265,111 @@ fun StitchInOrnament(
     StitchedMotif(chart, progress = { stillProgress ?: if (reduced) 1f else progress.value }, modifier = modifier, sections = sections)
 }
 
+/*
+ * Един речник на бода за цялото приложение ([StitchSpec]): тичащ бод (тънки къси черти),
+ * „тропосване“ (по-дълги, по-плътни) и кръстат бод. Всеки пунктир, конец и „X“ на екраните
+ * идва оттук — затова изглеждат еднакво навсякъде.
+ */
+
+/** Трите вида бод. */
+enum class StitchKind { RUNNING, BASTING, CROSS }
+
+/**
+ * Пунктирен бод: дебелина [widthDp], видима черта [dashDp] и видима празнина [gapDp] (с кръглите
+ * краища — интервалите на ефекта са съответно по-къси/по-дълги). [stroke] пази готовите обекти
+ * за последните няколко мащаба — при рисуване не се алокира нищо.
+ */
+class DashStitch internal constructor(
+    val kind: StitchKind,
+    val widthDp: Float,
+    val dashDp: Float,
+    val gapDp: Float,
+) {
+    private val keys = FloatArray(CACHE) { -1f }
+    private val strokes = arrayOfNulls<Stroke>(CACHE)
+    private var next = 0
+
+    /**
+     * Готовият [Stroke] при [pxPerDp] пиксела на dp (обикновено `density`; в мащабиран път —
+     * `1.dp.toPx() / мащаба`). [scale] увеличава целия бод пропорционално (едра украса).
+     */
+    fun stroke(pxPerDp: Float, scale: Float = 1f): Stroke {
+        val k = pxPerDp * scale
+        for (i in 0 until CACHE) if (keys[i] == k) return strokes[i]!!
+        val w = widthDp * k
+        val made = Stroke(
+            width = w,
+            cap = StrokeCap.Round,
+            join = StrokeJoin.Round,
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf((dashDp * k - w).coerceAtLeast(0.01f * k), gapDp * k + w)),
+        )
+        keys[next] = k
+        strokes[next] = made
+        next = (next + 1) % CACHE
+        return made
+    }
+
+    /** Само ефектът (за drawLine с четка). */
+    fun pathEffect(pxPerDp: Float, scale: Float = 1f): PathEffect = stroke(pxPerDp, scale).pathEffect!!
+
+    private companion object {
+        const val CACHE = 4
+    }
+}
+
+/** Пропорциите на кръстатия бод — дялове от клетката. */
+object CrossStitchSpec {
+    /** Дебелината на конеца. */
+    const val STROKE = 0.26f
+
+    /** Отстъпът на „X“ от ръба на клетката. */
+    const val INSET = 0.12f
+
+    /** Кантът (по желание): малко по-широк от конеца, рисува се под него. */
+    const val OUTLINE = 1.3f
+
+    /** Отблясъкът: тънка светла линия малко над средата на конеца. */
+    const val SHINE = 0.32f
+    const val LIFT = 0.16f
+    const val SHINE_ALPHA = 0.28f
+}
+
+/** Единственият източник на бодовете (пунктири и „X“). */
+object StitchSpec {
+    /** Тичащ бод: ~1 dp, 3/3 — тънки контури, печати, малки знаци. */
+    val Running = DashStitch(StitchKind.RUNNING, widthDp = 1.2f, dashDp = 3f, gapDp = 3f)
+
+    /** Тропосване: ~2 dp, 6/5 — подгъви, перфорации, нишки на голяма площ. */
+    val Basting = DashStitch(StitchKind.BASTING, widthDp = 1.6f, dashDp = 6f, gapDp = 5f)
+
+    /** Кръстат бод — пропорциите са в [CrossStitchSpec]. */
+    val Cross = CrossStitchSpec
+}
+
+/**
+ * Един кръстат бод в клетка [left]..[right] × [top]..[bottom] (вече отстъпени с [CrossStitchSpec.INSET]):
+ * първо „/“ (до [first]), после „\“ (до [second]) — като на ръка; с отблясък и, по желание, кант [outline].
+ */
+fun DrawScope.crossStitch(
+    left: Float, top: Float, right: Float, bottom: Float,
+    color: Color, cell: Float,
+    first: Float = 1f, second: Float = 1f,
+    alpha: Float = 1f, outline: Color? = null,
+) {
+    val stroke = cell * CrossStitchSpec.STROKE
+    if (outline != null) {
+        val w = stroke * CrossStitchSpec.OUTLINE
+        leg(left, bottom, right, top, first, outline, w, 0f, 0f, alpha)
+        leg(left, top, right, bottom, second, outline, w, 0f, 0f, alpha)
+    }
+    val shine = stroke * CrossStitchSpec.SHINE
+    val lift = stroke * CrossStitchSpec.LIFT
+    // „/“ — от долу-ляво нагоре-дясно.
+    leg(left, bottom, right, top, first, color, stroke, shine, lift, alpha)
+    // „\“ — отгоре, от горе-ляво надолу-дясно.
+    leg(left, top, right, bottom, second, color, stroke, shine, lift, alpha)
+}
+
 /** Рисува [chart] до [progress]: всеки бод — две диагонали с тънък отблясък и „игла“ на текущия. */
 fun DrawScope.drawStitches(
     chart: StitchChart,
@@ -276,10 +386,8 @@ fun DrawScope.drawStitches(
     if (cell <= 0f) return
     val ox = (size.width - cell * chart.columns) / 2f
     val oy = (size.height - cell * chart.rows) / 2f
-    val inset = cell * 0.12f
-    val stroke = cell * 0.26f
-    val shine = stroke * 0.32f
-    val lift = stroke * 0.16f
+    val inset = cell * CrossStitchSpec.INSET
+    val stroke = cell * CrossStitchSpec.STROKE
     val done = progress.coerceIn(0f, 1f) * n
     for (i in 0 until n) {
         val f = (done - i).coerceIn(0f, 1f)
@@ -299,16 +407,66 @@ fun DrawScope.drawStitches(
         val color = if (glow > 0f) lerp(base, Sheen, 0.55f * glow) else base
         val a = StitchMath.firstLeg(f)
         val b = StitchMath.secondLeg(f)
-        // „/“ — от долу-ляво нагоре-дясно.
-        leg(left, bottom, right, top, a, color, stroke, shine, lift, alpha)
-        // „\“ — отгоре, от горе-ляво надолу-дясно.
-        if (b > 0f) leg(left, top, right, bottom, b, color, stroke, shine, lift, alpha)
+        crossStitch(left, top, right, bottom, color, cell, a, b, alpha)
         if (f < 1f) {
             // Иглата: светла точка в края на конеца, който се бродира в момента.
             val head = if (b > 0f) Offset(left + (right - left) * b, top + (bottom - top) * b)
             else Offset(left + (right - left) * a, bottom + (top - bottom) * a)
             drawCircle(Sheen, stroke * 0.55f, head, alpha = 0.85f * alpha)
         }
+    }
+}
+
+/**
+ * Много кръстати бода наведнъж (платното на „Извези шевица“, до 225 клетки): по един път на
+ * конец, всички канти под всички конци — съседните бодове се сливат като истински конец.
+ * Пътищата се преизползват между кадрите.
+ */
+class CrossStitchBatch(threads: Int) {
+    internal val paths = Array(threads) { Path() }
+    private var strokeCell = -1f
+    internal var edge = Stroke(0f)
+    internal var body = Stroke(0f)
+    internal var shine = Stroke(0f)
+
+    /** Конецът, кантът и отблясъкът за клетка [cell] — строят се наново само при нов размер. */
+    internal fun strokesFor(cell: Float) {
+        if (cell == strokeCell) return
+        strokeCell = cell
+        val w = cell * CrossStitchSpec.STROKE
+        edge = Stroke(w * CrossStitchSpec.OUTLINE, cap = StrokeCap.Round, join = StrokeJoin.Round)
+        body = Stroke(w, cap = StrokeCap.Round, join = StrokeJoin.Round)
+        shine = Stroke(w * CrossStitchSpec.SHINE, cap = StrokeCap.Round, join = StrokeJoin.Round)
+    }
+
+    fun reset() {
+        for (p in paths) p.rewind()
+    }
+
+    /** Бод с конец [thread] (0..threads-1) в клетката с горен ляв ъгъл ([x], [y]) и страна [cell]. */
+    fun add(thread: Int, x: Float, y: Float, cell: Float) {
+        val p = paths.getOrNull(thread) ?: return
+        val inset = cell * CrossStitchSpec.INSET
+        val x0 = x + inset
+        val y0 = y + inset
+        val x1 = x + cell - inset
+        val y1 = y + cell - inset
+        p.moveTo(x0, y1); p.lineTo(x1, y0)
+        p.moveTo(x0, y0); p.lineTo(x1, y1)
+    }
+}
+
+/** Рисува [batch]: кант ([outline], по желание), конецът ([thread]) и отблясъкът — същият бод като [crossStitch]. */
+fun DrawScope.drawCrossStitches(batch: CrossStitchBatch, cell: Float, thread: (Int) -> Color, outline: ((Int) -> Color)? = null) {
+    val w = cell * CrossStitchSpec.STROKE
+    val paths = batch.paths
+    batch.strokesFor(cell)
+    if (outline != null) {
+        for (i in paths.indices) if (!paths[i].isEmpty) drawPath(paths[i], outline(i), style = batch.edge)
+    }
+    for (i in paths.indices) if (!paths[i].isEmpty) drawPath(paths[i], thread(i), style = batch.body)
+    translate(top = -w * CrossStitchSpec.LIFT) {
+        for (i in paths.indices) if (!paths[i].isEmpty) drawPath(paths[i], Sheen, alpha = CrossStitchSpec.SHINE_ALPHA, style = batch.shine)
     }
 }
 
@@ -321,5 +479,7 @@ private fun DrawScope.leg(
     val ey = y0 + (y1 - y0) * t
     drawLine(color, Offset(x0, y0), Offset(ex, ey), strokeWidth = stroke, cap = StrokeCap.Round, alpha = alpha)
     // Отблясък по конеца — малко над средата му (светлината идва отгоре).
-    drawLine(Sheen, Offset(x0, y0 - lift), Offset(ex, ey - lift), strokeWidth = shine, cap = StrokeCap.Round, alpha = 0.28f * alpha)
+    if (shine > 0f) {
+        drawLine(Sheen, Offset(x0, y0 - lift), Offset(ex, ey - lift), strokeWidth = shine, cap = StrokeCap.Round, alpha = CrossStitchSpec.SHINE_ALPHA * alpha)
+    }
 }
