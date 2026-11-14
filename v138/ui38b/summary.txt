@@ -1,0 +1,117 @@
+part ui38b; APK: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+installed:  versionCode=1510100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install: NO catalogue results
+## UB1. Event leaf: „Добави в календара“ → the helper („Just once“) → back: the stub tears off
+CAP ui38b/ev-01: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+CALENDAR: fg org.pc.helper/org.pc.helper.Catch; helper: 11-14 15:32:47.569  8896  8896 I PCCATCH : action=android.intent.action.INSERT data=content://com.android.calendar/events | description=Организацията на ООН за образование, наука и култура е основана на 16 ноември 1946 г.
+RECWIN event-tear (adb, +0s for 2.4s at 8 fps): 17 frames; frames 17; changed between consecutive frames: 1; max diff 0.8
+CAP ui38b/ev-04-after: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+EVENT after return: 'content-desc="Понеделник, 16 ноември 2026, след 2 дни, Добавено в календара"'; on the event screen yes
+CAP ui38b/ev-05-rest: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+## UB2. Quiz 5/5: frames 0.8–2.6 s after the last answer (stitch, close, confetti)
+QUIZ1 ready after 3122 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Коя от тези книги е написана от Максим Якубовски?" text="Колекционерът" text="Робинята" text="Един ден в древен Рим" t
+CAP ui38b/qz1-q0: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ1 q1 options: Колекционерът|Робинята|Един ден в древен Рим|Прокудените|
+CAP ui38b/qz1-q1-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 0 верни от 1 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ1 q1: WRONG	Робинята; band: content-desc="0 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q2 options: Проект „Глобални библиотеки“|Решение за собствена сграда|Възстановяване и официално учредяване|Устав и държавно признание|
+CAP ui38b/qz1-q2-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 0 верни от 2 отговорени, общ · Въпрос 2 от 5 · Какво се случва в читалището · Проект „Глобални библиотеки“ · Решение за собствена сграда · Възстановяване и официално у
+QUIZ1 q2: WRONG	Решение за собствена сграда; band: content-desc="0 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q3 options: Трудни години — устояване|Първият радиоапарат в селото|Първа копка|Проект „Глобални библиотеки“|
+CAP ui38b/qz1-q3-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 0 верни от 3 отговорени, общ · Въпрос 3 от 5 · Какво се случва в читалището · Трудни години — устояване · Първият радиоапарат в селото · Първа копка
+QUIZ1 q3: WRONG	Първа копка; band: content-desc="0 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q4 options: Устав и държавно признание|Дружество „Воля“|Трудни години — устояване|Прекъсване от войните|
+CAP ui38b/qz1-q4-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 0 верни от 4 отговорени, общ · Въпрос 4 от 5 · Какво се случва в читалището · Устав и държавно признание · Дружество „Воля“ · Трудни години — устояване
+QUIZ1 q4: WRONG	Дружество „Воля“; band: content-desc="0 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q5 options: Очи с цвят на вода|Загадката на Мари Роже|Ритуал в смъртта|Дързост и мечти|
+CAP ui38b/qz1-q5-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 0 верни от 5 отговорени, общ · Въпрос 5 от 5 · Коя от тези книги е написана · Очи с цвят на вода · Загадката на Мари Роже · Ритуал в смъртта
+QUIZ1 q5: WRONG	Загадката на Мари Роже; band: content-desc="0 верни от 5 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+TREC quiz-result-1: 32 frames; frames 32; changed between consecutive frames: 1; max diff 24.6; frames=32 motion-start=#16 moving-frames=1 (span 1) kept #15..#26; diffs: 0 24 0 0 0 0 0 0 0 0 0 0
+CAP ui38b/qz1-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Утре ще е по-добре — Яворец  · 0/5 · 0 верни от 5 · Избродирай отговорите · Серия: 1 ден поред · Нови въпроси — утре.
+QUIZ1 result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="0/5" text="0 верни от 5" text="Избродирай отговорите" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ answers learned: Робинята|Решение за собствена сграда|Първа копка|Дружество „Воля“|Загадката на Мари Роже|
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+QUIZ2 ready after 1996 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Коя от тези книги е написана от Максим Якубовски?" text="Колекционерът" text="Робинята" text="Един ден в древен Рим" t
+CAP ui38b/qz2-q0: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ2 q1 options: Колекционерът|Робинята|Един ден в древен Рим|Прокудените|
+CAP ui38b/qz2-q1-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | 1 верни от 1 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ2 q1: RIGHT; band: content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q2 options: Проект „Глобални библиотеки“|Решение за собствена сграда|Възстановяване и официално учредяване|Устав и държавно признание|
+CAP ui38b/qz2-q2-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 2 верни от 2 отговорени, общ · Въпрос 2 от 5 · Какво се случва в читалището · Проект „Глобални библиотеки“ · Решение за собствена сграда · Възстановяване и официално у
+QUIZ2 q2: RIGHT; band: content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q3 options: Трудни години — устояване|Първият радиоапарат в селото|Първа копка|Проект „Глобални библиотеки“|
+CAP ui38b/qz2-q3-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 3 верни от 3 отговорени, общ · Въпрос 3 от 5 · Какво се случва в читалището · Трудни години — устояване · Първият радиоапарат в селото · Първа копка
+QUIZ2 q3: RIGHT; band: content-desc="3 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q4 options: Устав и държавно признание|Дружество „Воля“|Трудни години — устояване|Прекъсване от войните|
+CAP ui38b/qz2-q4-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 4 верни от 4 отговорени, общ · Въпрос 4 от 5 · Какво се случва в читалището · Устав и държавно признание · Дружество „Воля“ · Трудни години — устояване
+QUIZ2 q4: RIGHT; band: content-desc="4 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q5 options: Очи с цвят на вода|Загадката на Мари Роже|Ритуал в смъртта|Дързост и мечти|
+RECWIN quiz-5of5 (adb, +0.6s for 2.4s at 8 fps): 20 frames; frames 20; changed between consecutive frames: 0; max diff 0.5
+CAP ui38b/qz2-q5-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | 5 верни от 5 отговорени, общ · Въпрос 5 от 5 · Коя от тези книги е написана · Очи с цвят на вода · Загадката на Мари Роже · Ритуал в смъртта
+QUIZ2 q5: RIGHT; band: content-desc="5 верни от 5 отговорени, общо 5 въпроса" text="Шевицата е цяла!" 
+TREC quiz-result-2: 107 frames; frames 107; changed between consecutive frames: 1; max diff 23.2; frames=107 motion-start=#16 moving-frames=1 (span 1) kept #15..#26; diffs: 0 23 0 0 0 0 0 0 0 0 0 0
+CAP ui38b/qz2-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Отлично! Познаваш Яворец! · 5/5 · 5 верни от 5 · Шевицата е цяла! · Серия: 1 ден поред · Нови въпроси — утре.
+QUIZ2 result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+## UB3. Login screen as a guest (FLAG_SECURE: emulator screenshot)
+UI38B part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 12 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.38 (1510100) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 3510 мс, последен 3510 мс | Пълно показване: медиана 3510 мс, последно 3510 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.38 (1510100)" text="Профил: чака" text="Студен старт · 1" text="Първи кадър: медиана 3510 мс, последен 3510 мс" text="Пълно показване: медиана 3510 мс, последно 3510 мс" text="Няма записани грешки." content-desc=
+APP W/E lines (pids ['5139', '10183']): 103 in 89 groups
+       3  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       2  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/Parcel: Expecting binder but got null!
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/Gralloc4: allocator #.x is not supported
+       2  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#bcfec#-a#ca-#e#c-#-#b#f#, generation=#)
+       2  W/BasicSecureTextField: 	at b#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at tn#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       2  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       2  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#fac#-#-#adb-b#a-ed#da#fa#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object s#.s(java.lang.Object)(r
+       1  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       1  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       1  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       1  W/BasicSecureTextField: 	at da#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at da#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at b#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at a#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at mp#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at mp#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at py#.r(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at yr#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+contact sheets: 13 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5139', '10183']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 26
+   skipped-frames events=26 max=147 total=1449
+== Davey: 74
+   davey events=74 max=3231ms median=936ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 92642132 Nov 14 15:25 app-mapping.txt; crashes: 0 B

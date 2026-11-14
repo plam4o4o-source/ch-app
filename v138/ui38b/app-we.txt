@@ -1,0 +1,41 @@
+APP W/E lines (pids ['5139', '10183']): 103 in 89 groups
+       3  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       2  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/Parcel: Expecting binder but got null!
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/Gralloc4: allocator #.x is not supported
+       2  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#bcfec#-a#ca-#e#c-#-#b#f#, generation=#)
+       2  W/BasicSecureTextField: 	at b#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at tn#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       2  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       2  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#fac#-#-#adb-b#a-ed#da#fa#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object s#.s(java.lang.Object)(r
+       1  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       1  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       1  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       1  W/BasicSecureTextField: 	at da#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at da#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at b#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at a#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at mp#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at mp#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at py#.r(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at yr#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at b#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at lb#.f(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at mp#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at mp#.f(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at e#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at qt#.K(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at i#.o(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at zr#.j(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at pp#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at g#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at zr#.A(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)

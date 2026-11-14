@@ -1,0 +1,93 @@
+part dev38b; APK: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+installed:  versionCode=1510100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+installed: devDebug 1.2.38 de2e156 (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.38-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 7466 ms
+## DB1. Sign-in (fields checked), the „Картата е издадена“ tap recorded from outside (5 fps, 0–2.6 s)
+LOGIN try 1: card field OK
+RECWIN login-fly (emu, +0s for 2.6s at 5 fps): 13 frames; frames 13; changed between consecutive frames: 0; max diff 0.2
+MY after the sign-in: NOT signed in: text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" 
+LOGIN try 1: card field OK
+MY after the sign-in: NOT signed in: text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" 
+DEMO sign-in FAILED twice
+## DB2. Loans: renew (demo → pending)
+LOANS: text="ДЕМО ДАННИ — само за разработка, не са реални" text="Нещо се обърка" text="Сесията е изтекла. Моля, влез отново." text="Вход" content-desc="Назад" text="Моите книги" 
+RENEW: no 'Удължи срока' button
+## DB3. Messages (Още › Съобщения)
+CAP dev38b/messages: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Няма съобщения от читалището · Някои съобщения са само за ч · Назад · Съобщения
+MESSAGES: text="Няма съобщения от читалището" text="Някои съобщения са само за членове. Въведи читателската си карта (или влез) в „Моето“, за да ги виждаш." content-desc="Назад" text="Съобщения" 
+## DB4. Diary: 5 rosettes, then the year story slide by slide (content descriptions)
+YEAR: story did not open
+## DB5. The card on 10 December and 20 January (the strip), 14 November (none)
+device date now: Thu Dec 10 10:00:02 UTC 2026
+CARD dec: band absent
+device date now: Wed Jan 20 10:00:07 UTC 2027
+CARD jan: band absent
+device date now: Sat Nov 14 15:35:50 UTC 2026
+CARD nov: band absent
+## DB6. Tablet landscape (1280×800 dp): two panes in Още and Моето, signed in
+TABLET Още › 'Познай Яворец|Know Yavorets': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="Галерия" text="Снимки от сайта" text="Документи и архив" 
+TABLET Още › 'Лента на времето|Timeline': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="Галерия" text="Снимки от сайта" text="Документи и архив" 
+TABLET: '=Съобщения|=Messages' not found in the left pane
+TABLET Моето › '=Моите книги|=My books': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" 
+TABLET Моето › '=Читателска карта|=Library card': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" 
+TABLET Моето › '=Моето членство|=My membership': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" 
+DEV38B part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 6 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.38-dev (1) | Профил: чака | Студен старт · 5 | Първи кадър: медиана 6099 мс, последен 4012 мс | Пълно показване: медиана 6705 мс, последно 4320 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.38-dev (1)" text="Профил: чака" text="Студен старт · 5" text="Първи кадър: медиана 6099 мс, последен 4012 мс" text="Пълно показване: медиана 6705 мс, последно 4320 мс" text="Няма записани грешки." content-desc="Н
+APP W/E lines (pids ['5245', '9663', '10297', '10874', '11238']): 489 in 127 groups
+      12  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+      12  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+      12  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+      10  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+      10  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       8  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       8  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       8  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       6  W/Parcel: Expecting binder but got null!
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.InnerNodeCoordinator$LookaheadDelegateImpl.measure-BRTryo#(InnerNodeCoordinator.k
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasureBlock$lambda$#(LookaheadPassDelegate.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate$$ExternalSyntheticLambda#.invoke(D#$$SyntheticClass:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasure-BRTryo#$ui(LookaheadPassDelegate.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performLookaheadMeasure-BRTryo#$ui(LayoutNodeLayoutDeleg
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.remeasure-BRTryo#(LookaheadPassDelegate.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.measure-BRTryo#(LookaheadPassDelegate.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutModifierNodeCoordinator$LookaheadDelegateForLayoutModifierNode.measure-BRTr
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.graphics.BlockGraphicsLayerModifier.measure-#p#s#s(GraphicsLayerModifier.kt:#)
+       6  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
+       6  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
+       5  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       5  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/ziparchive: Unable to open '/data/app/~~cRZMBfN_#RZ#BQ#_mhImuw==/org.chyavorec.app.dev-qmFuALLyNjdX#pn#jzM#Qg==/base.dm': 
+       5  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       4  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       4  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+contact sheets: 7 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'SIGNAL': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 92642132 Nov 14 15:25 app-mapping.txt; crashes: 174 B

@@ -1,6 +1,6 @@
 # Emulator check of the v1.2.38 candidate (de2e156, wave 23) against the released v1.2.37 (ebf1720)
 
-debug/w24-check (runs in runs.txt, latest 43602331263 @ 07eda83). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part says otherwise (parts ending in 28: API 28; in 26: API 26; c36: API 36). Built prodRelease (minified) x86_64 with a throwaway key; dev38/updd38: devDebug. In the A/B parts new = 1.2.38 and base = 1.2.37. dm33/dm28: the self-update with dex metadata from a local HTTPS server. Screenshots are JPEG, scaled down (sheets/ = contact sheets). Earlier: [../v136r/index.md](../v136r/index.md), [../v136/index.md](../v136/index.md).
+debug/w24-check (runs in runs.txt, latest 43609408217 @ 590c0f8). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part says otherwise (parts ending in 28: API 28; in 26: API 26; c36: API 36). Built prodRelease (minified) x86_64 with a throwaway key; dev38/updd38: devDebug. In the A/B parts new = 1.2.38 and base = 1.2.37. dm33/dm28: the self-update with dex metadata from a local HTTPS server. Screenshots are JPEG, scaled down (sheets/ = contact sheets). Earlier: [../v136r/index.md](../v136r/index.md), [../v136/index.md](../v136/index.md).
 
 | part | status |
 |---|---|
@@ -8,6 +8,7 @@ debug/w24-check (runs in runs.txt, latest 43602331263 @ 07eda83). API 33 google_
 | c28 | COMPLETE; part=c28 target=google_apis api=28 gpu=swangle_indirect emulator-step=success |
 | c36 | COMPLETE; part=c36 target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
 | dev38 | COMPLETE; part=dev38 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| dev38b | COMPLETE; part=dev38b target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | dm28 | COMPLETE; part=dm28 target=google_apis api=28 gpu=swangle_indirect emulator-step=success |
 | dm33 | COMPLETE; part=dm33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | mon38 | COMPLETE; part=mon38 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
@@ -18,20 +19,15 @@ debug/w24-check (runs in runs.txt, latest 43602331263 @ 07eda83). API 33 google_
 | tour38 | COMPLETE; part=tour38 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | tour38b | COMPLETE; part=tour38b target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | ui38 | COMPLETE; part=ui38 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| ui38b | COMPLETE; part=ui38b target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | upd38 | COMPLETE; part=upd38 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | updd38 | COMPLETE; part=updd38 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 
 ```
-1.2.37 ebf1720 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510000; update manifest: the real one (releases/latest)
-devDebug 1.2.37 ebf1720 (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key)
 devDebug 1.2.38 de2e156 (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key)
-1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510099; update manifest: https://10.0.2.2:8443/update.json (local test server)
 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest)
 app.apk 4640810 bytes
-app-base.apk 4591454 bytes
-app-new-upd-local.apk 4640582 bytes
 app-dev.apk 28796723 bytes
-app-dev-base.apk 28628359 bytes
 ```
 
 ## c26
@@ -961,6 +957,104 @@ app pids seen: []
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 1 block(s) {'SIGNAL': 1} → crashes.txt
 retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 92642141 Nov 14 14:03 app-mapping.txt; crashes: 174 B
+```
+
+## dev38b
+
+```
+part dev38b; APK: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+installed:  versionCode=1510100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+installed: devDebug 1.2.38 de2e156 (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.38-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 7466 ms
+## DB1. Sign-in (fields checked), the „Картата е издадена“ tap recorded from outside (5 fps, 0–2.6 s)
+LOGIN try 1: card field OK
+RECWIN login-fly (emu, +0s for 2.6s at 5 fps): 13 frames; frames 13; changed between consecutive frames: 0; max diff 0.2
+MY after the sign-in: NOT signed in: text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" 
+LOGIN try 1: card field OK
+MY after the sign-in: NOT signed in: text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" 
+DEMO sign-in FAILED twice
+## DB2. Loans: renew (demo → pending)
+LOANS: text="ДЕМО ДАННИ — само за разработка, не са реални" text="Нещо се обърка" text="Сесията е изтекла. Моля, влез отново." text="Вход" content-desc="Назад" text="Моите книги" 
+RENEW: no 'Удължи срока' button
+## DB3. Messages (Още › Съобщения)
+CAP dev38b/messages: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Няма съобщения от читалището · Някои съобщения са само за ч · Назад · Съобщения
+MESSAGES: text="Няма съобщения от читалището" text="Някои съобщения са само за членове. Въведи читателската си карта (или влез) в „Моето“, за да ги виждаш." content-desc="Назад" text="Съобщения" 
+## DB4. Diary: 5 rosettes, then the year story slide by slide (content descriptions)
+YEAR: story did not open
+## DB5. The card on 10 December and 20 January (the strip), 14 November (none)
+device date now: Thu Dec 10 10:00:02 UTC 2026
+CARD dec: band absent
+device date now: Wed Jan 20 10:00:07 UTC 2027
+CARD jan: band absent
+device date now: Sat Nov 14 15:35:50 UTC 2026
+CARD nov: band absent
+## DB6. Tablet landscape (1280×800 dp): two panes in Още and Моето, signed in
+TABLET Още › 'Познай Яворец|Know Yavorets': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="Галерия" text="Снимки от сайта" text="Документи и архив" 
+TABLET Още › 'Лента на времето|Timeline': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="Галерия" text="Снимки от сайта" text="Документи и архив" 
+TABLET: '=Съобщения|=Messages' not found in the left pane
+TABLET Моето › '=Моите книги|=My books': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" 
+TABLET Моето › '=Читателска карта|=Library card': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" 
+TABLET Моето › '=Моето членство|=My membership': tabs visible; text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ДЕМО ДАННИ — само за разработка, не са реални" content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" 
+DEV38B part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 6 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.38-dev (1) | Профил: чака | Студен старт · 5 | Първи кадър: медиана 6099 мс, последен 4012 мс | Пълно показване: медиана 6705 мс, последно 4320 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.38-dev (1)" text="Профил: чака" text="Студен старт · 5" text="Първи кадър: медиана 6099 мс, последен 4012 мс" text="Пълно показване: медиана 6705 мс, последно 4320 мс" text="Няма записани грешки." content-desc="Н
+APP W/E lines (pids ['5245', '9663', '10297', '10874', '11238']): 489 in 127 groups
+      12  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+      12  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+      12  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+      10  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+      10  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       8  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       8  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       8  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       6  W/Parcel: Expecting binder but got null!
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.InnerNodeCoordinator$LookaheadDelegateImpl.measure-BRTryo#(InnerNodeCoordinator.k
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasureBlock$lambda$#(LookaheadPassDelegate.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate$$ExternalSyntheticLambda#.invoke(D#$$SyntheticClass:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.performMeasure-BRTryo#$ui(LookaheadPassDelegate.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performLookaheadMeasure-BRTryo#$ui(LayoutNodeLayoutDeleg
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.remeasure-BRTryo#(LookaheadPassDelegate.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LookaheadPassDelegate.measure-BRTryo#(LookaheadPassDelegate.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.node.LayoutModifierNodeCoordinator$LookaheadDelegateForLayoutModifierNode.measure-BRTr
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.graphics.BlockGraphicsLayerModifier.measure-#p#s#s(GraphicsLayerModifier.kt:#)
+       6  W/BasicSecureTextField: 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:#)
+       6  W/BasicSecureTextField: 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:#)
+       5  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       5  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       5  W/ziparchive: Unable to open '/data/app/~~cRZMBfN_#RZ#BQ#_mhImuw==/org.chyavorec.app.dev-qmFuALLyNjdX#pn#jzM#Qg==/base.dm': 
+       5  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       5  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       5  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       5  W/Gralloc4: allocator #.x is not supported
+       4  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       4  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+contact sheets: 7 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'SIGNAL': 1} → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 92642132 Nov 14 15:25 app-mapping.txt; crashes: 174 B
 ```
 
 ## dm28
@@ -2817,6 +2911,128 @@ app pids seen: ['5626', '10469', '14414', '16003', '16891', '17786', '18634']
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 1 block(s) {'SIGNAL': 1} → crashes.txt
 retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 92642141 Nov 14 14:04 app-mapping.txt; crashes: 174 B
+```
+
+## ui38b
+
+```
+part ui38b; APK: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+base APK:  size  bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 de2e156 built prodRelease (minified), x86_64 added (throwaway key); versionCode 1510100; update manifest: the real one (releases/latest) size 4640810 bytes
+installed:  versionCode=1510100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install: NO catalogue results
+## UB1. Event leaf: „Добави в календара“ → the helper („Just once“) → back: the stub tears off
+CAP ui38b/ev-01: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+CALENDAR: fg org.pc.helper/org.pc.helper.Catch; helper: 11-14 15:32:47.569  8896  8896 I PCCATCH : action=android.intent.action.INSERT data=content://com.android.calendar/events | description=Организацията на ООН за образование, наука и култура е основана на 16 ноември 1946 г.
+RECWIN event-tear (adb, +0s for 2.4s at 8 fps): 17 frames; frames 17; changed between consecutive frames: 1; max diff 0.8
+CAP ui38b/ev-04-after: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+EVENT after return: 'content-desc="Понеделник, 16 ноември 2026, след 2 дни, Добавено в календара"'; on the event screen yes
+CAP ui38b/ev-05-rest: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+## UB2. Quiz 5/5: frames 0.8–2.6 s after the last answer (stitch, close, confetti)
+QUIZ1 ready after 3122 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Коя от тези книги е написана от Максим Якубовски?" text="Колекционерът" text="Робинята" text="Един ден в древен Рим" t
+CAP ui38b/qz1-q0: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ1 q1 options: Колекционерът|Робинята|Един ден в древен Рим|Прокудените|
+CAP ui38b/qz1-q1-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 0 верни от 1 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ1 q1: WRONG	Робинята; band: content-desc="0 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q2 options: Проект „Глобални библиотеки“|Решение за собствена сграда|Възстановяване и официално учредяване|Устав и държавно признание|
+CAP ui38b/qz1-q2-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 0 верни от 2 отговорени, общ · Въпрос 2 от 5 · Какво се случва в читалището · Проект „Глобални библиотеки“ · Решение за собствена сграда · Възстановяване и официално у
+QUIZ1 q2: WRONG	Решение за собствена сграда; band: content-desc="0 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q3 options: Трудни години — устояване|Първият радиоапарат в селото|Първа копка|Проект „Глобални библиотеки“|
+CAP ui38b/qz1-q3-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 0 верни от 3 отговорени, общ · Въпрос 3 от 5 · Какво се случва в читалището · Трудни години — устояване · Първият радиоапарат в селото · Първа копка
+QUIZ1 q3: WRONG	Първа копка; band: content-desc="0 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q4 options: Устав и държавно признание|Дружество „Воля“|Трудни години — устояване|Прекъсване от войните|
+CAP ui38b/qz1-q4-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 0 верни от 4 отговорени, общ · Въпрос 4 от 5 · Какво се случва в читалището · Устав и държавно признание · Дружество „Воля“ · Трудни години — устояване
+QUIZ1 q4: WRONG	Дружество „Воля“; band: content-desc="0 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ1 q5 options: Очи с цвят на вода|Загадката на Мари Роже|Ритуал в смъртта|Дързост и мечти|
+CAP ui38b/qz1-q5-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 0 верни от 5 отговорени, общ · Въпрос 5 от 5 · Коя от тези книги е написана · Очи с цвят на вода · Загадката на Мари Роже · Ритуал в смъртта
+QUIZ1 q5: WRONG	Загадката на Мари Роже; band: content-desc="0 верни от 5 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+TREC quiz-result-1: 32 frames; frames 32; changed between consecutive frames: 1; max diff 24.6; frames=32 motion-start=#16 moving-frames=1 (span 1) kept #15..#26; diffs: 0 24 0 0 0 0 0 0 0 0 0 0
+CAP ui38b/qz1-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Утре ще е по-добре — Яворец  · 0/5 · 0 верни от 5 · Избродирай отговорите · Серия: 1 ден поред · Нови въпроси — утре.
+QUIZ1 result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="0/5" text="0 верни от 5" text="Избродирай отговорите" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ answers learned: Робинята|Решение за собствена сграда|Първа копка|Дружество „Воля“|Загадката на Мари Роже|
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+QUIZ2 ready after 1996 ms: content-desc="0 верни от 0 отговорени, общо 5 въпроса" text="Въпрос 1 от 5" text="Коя от тези книги е написана от Максим Якубовски?" text="Колекционерът" text="Робинята" text="Един ден в древен Рим" t
+CAP ui38b/qz2-q0: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ2 q1 options: Колекционерът|Робинята|Един ден в древен Рим|Прокудените|
+CAP ui38b/qz2-q1-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | 1 верни от 1 отговорени, общ · Въпрос 1 от 5 · Коя от тези книги е написана · Колекционерът · Робинята · Един ден в древен Рим
+QUIZ2 q1: RIGHT; band: content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q2 options: Проект „Глобални библиотеки“|Решение за собствена сграда|Възстановяване и официално учредяване|Устав и държавно признание|
+CAP ui38b/qz2-q2-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 2 верни от 2 отговорени, общ · Въпрос 2 от 5 · Какво се случва в читалището · Проект „Глобални библиотеки“ · Решение за собствена сграда · Възстановяване и официално у
+QUIZ2 q2: RIGHT; band: content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q3 options: Трудни години — устояване|Първият радиоапарат в селото|Първа копка|Проект „Глобални библиотеки“|
+CAP ui38b/qz2-q3-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 3 верни от 3 отговорени, общ · Въпрос 3 от 5 · Какво се случва в читалището · Трудни години — устояване · Първият радиоапарат в селото · Първа копка
+QUIZ2 q3: RIGHT; band: content-desc="3 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q4 options: Устав и държавно признание|Дружество „Воля“|Трудни години — устояване|Прекъсване от войните|
+CAP ui38b/qz2-q4-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | 4 верни от 4 отговорени, общ · Въпрос 4 от 5 · Какво се случва в читалището · Устав и държавно признание · Дружество „Воля“ · Трудни години — устояване
+QUIZ2 q4: RIGHT; band: content-desc="4 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ2 q5 options: Очи с цвят на вода|Загадката на Мари Роже|Ритуал в смъртта|Дързост и мечти|
+RECWIN quiz-5of5 (adb, +0.6s for 2.4s at 8 fps): 20 frames; frames 20; changed between consecutive frames: 0; max diff 0.5
+CAP ui38b/qz2-q5-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | 5 верни от 5 отговорени, общ · Въпрос 5 от 5 · Коя от тези книги е написана · Очи с цвят на вода · Загадката на Мари Роже · Ритуал в смъртта
+QUIZ2 q5: RIGHT; band: content-desc="5 верни от 5 отговорени, общо 5 въпроса" text="Шевицата е цяла!" 
+TREC quiz-result-2: 107 frames; frames 107; changed between consecutive frames: 1; max diff 23.2; frames=107 motion-start=#16 moving-frames=1 (span 1) kept #15..#26; diffs: 0 23 0 0 0 0 0 0 0 0 0 0
+CAP ui38b/qz2-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Отлично! Познаваш Яворец! · 5/5 · 5 верни от 5 · Шевицата е цяла! · Серия: 1 ден поред · Нови въпроси — утре.
+QUIZ2 result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+## UB3. Login screen as a guest (FLAG_SECURE: emulator screenshot)
+UI38B part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 12 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.38 (1510100) | Профил: чака | Студен старт · 1 | Първи кадър: медиана 3510 мс, последен 3510 мс | Пълно показване: медиана 3510 мс, последно 3510 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.38 (1510100)" text="Профил: чака" text="Студен старт · 1" text="Първи кадър: медиана 3510 мс, последен 3510 мс" text="Пълно показване: медиана 3510 мс, последно 3510 мс" text="Няма записани грешки." content-desc=
+APP W/E lines (pids ['5139', '10183']): 103 in 89 groups
+       3  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       2  W/g.chyavorec.app: Unexpected CPU variant for x#: x#_#.
+       2  W/g.chyavorec.app: Known variants: atom, sandybridge, silvermont, kabylake, default
+       2  W/Parcel: Expecting binder but got null!
+       2  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       2  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       2  W/Gralloc4: allocator #.x is not supported
+       2  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#bcfec#-a#ca-#e#c-#-#b#f#, generation=#)
+       2  W/BasicSecureTextField: 	at b#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at tn#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       2  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       2  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       2  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       1  W/WM-Processor: Didn't find WorkSpec for id WorkGenerationalId(workSpecId=#c#fac#-#-#adb-b#a-ed#da#fa#, generation=#)
+       1  W/g.chyavorec.app: Long monitor contention with owner DefaultDispatcher-worker-# (#) at java.lang.Object s#.s(java.lang.Object)(r
+       1  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       1  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       1  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       1  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       1  W/BasicSecureTextField: 	at da#.a(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at da#.d(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at b#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at a#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at mp#.c(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at mp#.invoke(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at py#.r(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+       1  W/BasicSecureTextField: 	at yr#.b(r#-map-id-#f#a#cd#e#b#d#c#c#dcc#a#e#f#e#a#:#)
+contact sheets: 13 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5139', '10183']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 26
+   skipped-frames events=26 max=147 total=1449
+== Davey: 74
+   davey events=74 max=3231ms median=936ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+retrace tool: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/retrace; mapping: -rw-r--r-- 1 runner runner 92642132 Nov 14 15:25 app-mapping.txt; crashes: 0 B
 ```
 
 ## upd38

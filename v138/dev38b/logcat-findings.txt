@@ -1,0 +1,17 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 15:28:36.720  5234  5234 I PERFCHECK: section: W. First launch and warm-up
+   11-14 15:29:57.689  6327  6327 I PERFCHECK: dvb
+   11-14 15:29:58.235  6418  6418 I PERFCHECK: section: DB1. Sign-in fields checked, the „Картата е издадена“ tap recorded from outside 5 fps, 0–2.6 s
+   11-14 15:33:47.842  8727  8727 I PERFCHECK: section: DB2. Loans: renew demo → pending
+   11-14 15:33:59.359  8764  8764 I PERFCHECK: section: DB3. Messages Още › Съобщения
+   11-14 15:34:34.401  9008  9008 I PERFCHECK: section: DB4. Diary: 5 rosettes, then the year story slide by slide content descriptions
+   11-14 15:35:44.869  9604  9604 I PERFCHECK: section: DB5. The card on 10 December and 20 January the strip, 14 November none
+   11-14 15:38:05.569 11128 11128 I PERFCHECK: section: DB6. Tablet landscape 1280×800 dp: two panes in Още and Моето, signed in
+   11-14 15:40:13.651 11901 11901 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

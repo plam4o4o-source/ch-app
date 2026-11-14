@@ -1,0 +1,2 @@
+12-10 10:00:09.414  1832  1832 F libc    : Fatal signal 4 (SIGILL), code 2 (ILL_ILLOPN), fault addr 0x70da12c40769 in tid 1832 (earchbox:search), pid 1832 (earchbox:search)
+
