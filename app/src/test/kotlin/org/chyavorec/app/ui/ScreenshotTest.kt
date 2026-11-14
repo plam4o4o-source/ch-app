@@ -192,9 +192,12 @@ class ScreenshotTest {
         launch(now = "2026-03-01T09:00:00Z")
         waitFor("Баба Марта")
         shown("Баба Марта", substring = true)
-        // Празникът за деня е ред в поздрава (не отделен ред под търсенето); снимката — със заредената въртележка.
-        waitFor("Йоан Богослов")
+        // „Изпрати честитка“ е иконка в поздрава (с етикет), не цял ред; имения ден в празник не показваме.
+        compose.waitUntil(10_000) { compose.onAllNodes(androidx.compose.ui.test.hasContentDescription("Изпрати честитка")).fetchSemanticsNodes().isNotEmpty() }
         waitFor("45-ти")
+        if (compose.onAllNodes(hasText("Йоан Богослов", substring = true)).fetchSemanticsNodes().isNotEmpty()) {
+            throw AssertionError("в празник имения ден не се показва")
+        }
         shot("22-home-baba-marta")
     }
 
@@ -239,9 +242,9 @@ class ScreenshotTest {
     @Test fun my() {
         launch()
         tab("Моето")
-        waitFor("Здравей!")
+        waitFor("Така ще изглежда картата ти")
         tabSelected("Моето")
-        shown("Здравей!")
+        shown("Така ще изглежда картата ти")
         shown("Читателска карта")
         shown("Моите книги")
         shot("04-my")
@@ -266,7 +269,7 @@ class ScreenshotTest {
         tab("Моето")
         // Кратка бележка (лентата „Няма интернет връзка“ казва останалото), а картата се добавя и без връзка.
         waitFor("Не можем да проверим дали онлайн входът е включен")
-        shown("Здравей!")
+        shown("Така ще изглежда картата ти")
         shown("Опитай отново")
         shown("Добави читателска карта")
         shot("14-my-offline")

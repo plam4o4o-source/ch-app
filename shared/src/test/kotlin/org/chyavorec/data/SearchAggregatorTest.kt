@@ -36,4 +36,38 @@ class SearchAggregatorTest {
         )
         assertEquals(listOf("b"), SearchAggregator.search("левски", null, emptyList(), events, emptyList()).events.map { it.event.id })
     }
+
+    /** Откъсът е от цели думи: без „…частника“, без заглавието отпред, „…“ само където текстът продължава. */
+    @Test fun snippetKeepsWholeWords() {
+        val text = "Клубове и кръжоци Клубът е създаден за участниците.\n\n  Дигиталният клуб събира младежи всеки ден след училище, " +
+            "за да учат програмиране, фотография и работа с компютри в библиотеката на читалището."
+        val s = SearchAggregator.snippet(text, "дигитал", radius = 40, lead = listOf("Клубове и кръжоци"))
+        // Изречението на съвпадението започва след точката — откъсът тръгва оттам, не от средата на дума.
+        assertTrue(s.startsWith("…Дигиталният клуб"), s)
+        assertTrue(s.endsWith("…"), s)
+        assertTrue(!s.contains("\n") && !s.contains("  "), s)
+        val words = s.trim('…').split(' ')
+        words.forEach { w -> assertTrue(text.contains(w), "„$w“ не е цяла дума от текста") }
+        assertTrue(text.split(Regex("\\s+")).containsAll(words), s)
+    }
+
+    @Test fun snippetDropsLeadingTitleAndCategory() {
+        val text = "Баба Дамяна разказва Статия 01 · Спомени Спомен от Освобождението — десетгодишно момиче вижда руските войници."
+        val s = SearchAggregator.snippet(text, "спомен", lead = listOf("Баба Дамяна разказва", "Статия 01 · Спомени"))
+        assertEquals("Спомен от Освобождението — десетгодишно момиче вижда руските войници.", s)
+    }
+
+    @Test fun snippetFromStartHasNoLeadingEllipsis() {
+        assertEquals("Кратък текст за деня.", SearchAggregator.snippet("Кратък текст   за деня.", "ден"))
+        // Без съвпадение (напр. само в заглавието) — началото на текста.
+        assertEquals("Кратък текст за деня.", SearchAggregator.snippet("Кратък текст за деня.", "липсва"))
+        assertEquals("", SearchAggregator.snippet("   ", "ден"))
+    }
+
+    @Test fun snippetPrefersWordStart() {
+        // „ден“ е и в „създаден“, но откъсът е около думата, която започва с него.
+        val text = "Клубът е създаден отдавна. " + "Много думи тук. ".repeat(12) + "Денят на будителите е празник."
+        val s = SearchAggregator.snippet(text, "ден", radius = 30)
+        assertTrue(s.startsWith("…Денят на будителите"), s)
+    }
 }

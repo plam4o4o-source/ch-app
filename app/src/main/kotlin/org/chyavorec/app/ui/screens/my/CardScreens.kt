@@ -145,8 +145,8 @@ private fun rememberCardData(vm: AccountViewModel): CardData? {
     }
 }
 
-/** Ключ на shared element прехода „карта → карта на цял екран“. */
-private const val LIBRARY_CARD_KEY = "library-card"
+/** Ключ на shared element прехода „карта → карта на цял екран“ (и примерната карта → плочката на „Моето“, виж SampleCardPreview). */
+internal const val LIBRARY_CARD_KEY = "library-card"
 
 /**
  * Рамката на картата (размер ID-1, мастилено-бордо градиент, златен кант) — обща за двете страни.

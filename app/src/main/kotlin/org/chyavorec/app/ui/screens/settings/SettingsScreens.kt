@@ -6,6 +6,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,7 @@ import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -71,6 +73,10 @@ import org.chyavorec.app.notifications.Channel
 import org.chyavorec.core.logFailure
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.AppAlertDialog
+import org.chyavorec.app.ui.components.AppCard
+import org.chyavorec.app.ui.components.PageEndMark
+import org.chyavorec.app.ui.components.ScreenGutter
+import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.updateStatusText
 import org.chyavorec.app.ui.components.UpdateReadyCard
@@ -99,11 +105,22 @@ import org.chyavorec.app.widget.WidgetKind
 import org.chyavorec.app.widget.WidgetPinning
 import org.chyavorec.app.widget.WidgetUpdater
 
+/** Заглавката на група — стебният етикет като на „Начало“ и „Още“ (не отделен златен шрифт). */
 @Composable
-private fun GroupTitle(text: String) = Text(
-    text, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
-    modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 4.dp).semantics { heading() },
+private fun GroupTitle(text: String) = SectionLabel(
+    text, Modifier.padding(start = ScreenGutter, end = ScreenGutter, top = 22.dp, bottom = 10.dp).semantics { heading() },
 )
+
+/** Група настройки: етикет и под него една карта ([AppCard]) с редовете на групата. */
+@Composable
+private fun SettingsGroup(title: String, content: @Composable ColumnScope.() -> Unit) {
+    GroupTitle(title)
+    AppCard(Modifier.fillMaxWidth().padding(horizontal = ScreenGutter), content = content)
+}
+
+/** Редовете в картите на групите — без собствен фон (картата е фонът). */
+@Composable
+internal fun settingsItemColors() = ListItemDefaults.colors(containerColor = Color.Transparent)
 
 @Composable
 private fun NavItem(icon: ImageVector, title: String, subtitle: String? = null, onClick: () -> Unit) = ListItem(
@@ -112,6 +129,7 @@ private fun NavItem(icon: ImageVector, title: String, subtitle: String? = null, 
     leadingContent = { Icon(icon, null) },
     trailingContent = { Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, null) },
     modifier = Modifier.clickable(onClick = onClick),
+    colors = settingsItemColors(),
 )
 
 @Composable
@@ -120,6 +138,7 @@ internal fun SwitchItem(title: String, subtitle: String?, checked: Boolean, enab
     supportingContent = subtitle?.let { { Text(it) } },
     trailingContent = { Switch(checked, onCheckedChange = null, enabled = enabled) },
     modifier = Modifier.selectable(checked, enabled = enabled, role = Role.Switch, onClick = { onChange(!checked) }),
+    colors = settingsItemColors(),
 )
 
 @Composable
@@ -138,116 +157,131 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.settings_title), onBack) }, snackbarHost = { SnackbarHost(snackbar) }) { padding ->
         Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).widthIn(max = 720.dp)) {
-            GroupTitle(stringResource(R.string.settings_appearance))
-            // Изборът е светла/тъмна/както системата — иконата е „яркост“, не само луната на тъмната.
-            NavItem(Icons.Outlined.BrightnessMedium, stringResource(R.string.settings_theme), themeLabel(s.themeMode)) { themeDialog = true }
-            NavItem(Icons.Outlined.FormatSize, stringResource(R.string.settings_text_size), textScaleLabel(s.textScale)) { textSizeDialog = true }
-            val dynamicOn = s.dynamicColor && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.settings_palette)) },
-                supportingContent = { Text(if (dynamicOn) stringResource(R.string.palette_dynamic_note) else paletteLabel(s.themeStyle.palette)) },
-                leadingContent = { Icon(Icons.Outlined.Palette, null) },
-            )
-            PalettePicker(selected = s.themeStyle.palette, enabled = !dynamicOn) { palette ->
-                scope.launch { c.settings.setThemeStyle(s.themeStyle.copy(palette = palette)) }
-            }
-            if (s.themeMode != ThemeMode.LIGHT) {
-                SwitchItem(stringResource(R.string.settings_oled), stringResource(R.string.settings_oled_desc), s.themeStyle.oledBlack) {
-                    scope.launch { c.settings.setThemeStyle(s.themeStyle.copy(oledBlack = it)) }
+            SettingsGroup(stringResource(R.string.settings_appearance)) {
+                // Изборът е светла/тъмна/както системата — иконата е „яркост“, не само луната на тъмната.
+                NavItem(Icons.Outlined.BrightnessMedium, stringResource(R.string.settings_theme), themeLabel(s.themeMode)) { themeDialog = true }
+                NavItem(Icons.Outlined.FormatSize, stringResource(R.string.settings_text_size), textScaleLabel(s.textScale)) { textSizeDialog = true }
+                val dynamicOn = s.dynamicColor && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_palette)) },
+                    supportingContent = { Text(if (dynamicOn) stringResource(R.string.palette_dynamic_note) else paletteLabel(s.themeStyle.palette)) },
+                    leadingContent = { Icon(Icons.Outlined.Palette, null) },
+                    colors = settingsItemColors(),
+                )
+                PalettePicker(selected = s.themeStyle.palette, enabled = !dynamicOn) { palette ->
+                    scope.launch { c.settings.setThemeStyle(s.themeStyle.copy(palette = palette)) }
                 }
-            }
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                SwitchItem(stringResource(R.string.settings_dynamic), stringResource(R.string.settings_dynamic_desc), s.dynamicColor) {
-                    // Уиджетът следва настройката — опреснява се веднага.
-                    scope.launch { c.settings.setDynamicColor(it); WidgetUpdater.refresh(context) }
+                if (s.themeMode != ThemeMode.LIGHT) {
+                    SwitchItem(stringResource(R.string.settings_oled), stringResource(R.string.settings_oled_desc), s.themeStyle.oledBlack) {
+                        scope.launch { c.settings.setThemeStyle(s.themeStyle.copy(oledBlack = it)) }
+                    }
                 }
-            }
-            NavItem(Icons.Outlined.Language, stringResource(R.string.settings_language), currentLanguageLabel()) { langDialog = true }
-            SwitchItem(stringResource(R.string.settings_seasonal), stringResource(R.string.settings_seasonal_desc), s.seasonal) {
-                scope.launch { c.settings.setSeasonal(it) }
-            }
-            // Още неизбрано — както при първото ползване: изкл., ако е включен TalkBack.
-            val touchExploration = rememberIsTouchExplorationEnabled()
-            SwitchItem(
-                stringResource(R.string.settings_shake_surprise), stringResource(R.string.settings_shake_surprise_desc),
-                s.shakeSurprise ?: shakeToSurpriseDefault(touchExploration),
-            ) {
-                scope.launch { c.settings.setShakeSurprise(it) }
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                    SwitchItem(stringResource(R.string.settings_dynamic), stringResource(R.string.settings_dynamic_desc), s.dynamicColor) {
+                        // Уиджетът следва настройката — опреснява се веднага.
+                        scope.launch { c.settings.setDynamicColor(it); WidgetUpdater.refresh(context) }
+                    }
+                }
+                NavItem(Icons.Outlined.Language, stringResource(R.string.settings_language), currentLanguageLabel()) { langDialog = true }
+                SwitchItem(stringResource(R.string.settings_seasonal), stringResource(R.string.settings_seasonal_desc), s.seasonal) {
+                    scope.launch { c.settings.setSeasonal(it) }
+                }
+                // Още неизбрано — както при първото ползване: изкл., ако е включен TalkBack.
+                val touchExploration = rememberIsTouchExplorationEnabled()
+                SwitchItem(
+                    stringResource(R.string.settings_shake_surprise), stringResource(R.string.settings_shake_surprise_desc),
+                    s.shakeSurprise ?: shakeToSurpriseDefault(touchExploration),
+                ) {
+                    scope.launch { c.settings.setShakeSurprise(it) }
+                }
             }
 
             // Уиджети: само където началният екран позволява добавяне от приложението (Android 8+).
             val pinFailed = stringResource(R.string.settings_widget_pin_failed)
             if (remember(context) { WidgetPinning.supported(context) }) {
-                GroupTitle(stringResource(R.string.settings_widgets))
-                listOf(
-                    Triple(WidgetKind.MAIN, R.string.settings_widget_add, R.string.settings_widget_add_desc),
-                    Triple(WidgetKind.BOOK, R.string.settings_widget_book_add, R.string.settings_widget_book_add_desc),
-                ).forEach { (kind, title, desc) ->
-                    ListItem(
-                        headlineContent = { Text(stringResource(title)) },
-                        supportingContent = { Text(stringResource(desc)) },
-                        leadingContent = { Icon(Icons.Outlined.Widgets, null) },
-                        modifier = Modifier.clickable {
-                            // Успехът е системното прозорче на началния екран; бележка — само при отказ.
-                            if (!WidgetPinning.request(context, kind)) scope.launch { snackbar.showSnackbar(pinFailed) }
-                        },
-                    )
+                SettingsGroup(stringResource(R.string.settings_widgets)) {
+                    listOf(
+                        Triple(WidgetKind.MAIN, R.string.settings_widget_add, R.string.settings_widget_add_desc),
+                        Triple(WidgetKind.BOOK, R.string.settings_widget_book_add, R.string.settings_widget_book_add_desc),
+                    ).forEach { (kind, title, desc) ->
+                        ListItem(
+                            headlineContent = { Text(stringResource(title)) },
+                            supportingContent = { Text(stringResource(desc)) },
+                            leadingContent = { Icon(Icons.Outlined.Widgets, null) },
+                            modifier = Modifier.clickable {
+                                // Успехът е системното прозорче на началния екран; бележка — само при отказ.
+                                if (!WidgetPinning.request(context, kind)) scope.launch { snackbar.showSnackbar(pinFailed) }
+                            },
+                            colors = settingsItemColors(),
+                        )
+                    }
                 }
             }
 
-            GroupTitle(stringResource(R.string.settings_notifications))
-            NavItem(Icons.Outlined.NotificationsNone, stringResource(R.string.settings_notifications_choose), stringResource(R.string.settings_notifications_desc)) {
-                navigate(Routes.NOTIFICATIONS)
+            SettingsGroup(stringResource(R.string.settings_notifications)) {
+                NavItem(Icons.Outlined.NotificationsNone, stringResource(R.string.settings_notifications_choose), stringResource(R.string.settings_notifications_desc)) {
+                    navigate(Routes.NOTIFICATIONS)
+                }
             }
 
-            GroupTitle(stringResource(R.string.settings_updates))
             val updater = c.updater
             if (updater.enabled) {
                 val updateState by updater.state.collectAsStateWithLifecycle()
                 // Изтеглена версия от предишно пускане (отложена с „По-късно“) — да се види и тук.
                 LaunchedEffect(updater) { updater.restoreDownloadedAsync() }
-                UpdateReadyCard(updateState, updater, Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
-                SwitchItem(stringResource(R.string.update_auto), stringResource(R.string.update_auto_desc), s.autoUpdate) { on ->
-                    scope.launch { c.settings.setAutoUpdate(on) }
-                }
-                NavItem(Icons.Outlined.SystemUpdate, stringResource(R.string.update_check_now), updateStatusText(updateState, updater)) {
-                    updater.checkNow()
-                    updater.showPrompt()
+                GroupTitle(stringResource(R.string.settings_updates))
+                // Готовата версия — своя карта над групата (не карта в картата).
+                UpdateReadyCard(updateState, updater, Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp))
+                AppCard(Modifier.fillMaxWidth().padding(horizontal = ScreenGutter)) {
+                    SwitchItem(stringResource(R.string.update_auto), stringResource(R.string.update_auto_desc), s.autoUpdate) { on ->
+                        scope.launch { c.settings.setAutoUpdate(on) }
+                    }
+                    NavItem(Icons.Outlined.SystemUpdate, stringResource(R.string.update_check_now), updateStatusText(updateState, updater)) {
+                        updater.checkNow()
+                        updater.showPrompt()
+                    }
                 }
             } else {
-                // Версията е в „За приложението“ по-долу — тук само как се обновява.
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(if (c.config.buildType == "play") R.string.update_disabled_play else R.string.update_disabled_dev))
-                    },
-                    leadingContent = { Icon(Icons.Outlined.SystemUpdate, null) },
-                )
+                SettingsGroup(stringResource(R.string.settings_updates)) {
+                    // Версията е в „За приложението“ по-долу — тук само как се обновява.
+                    ListItem(
+                        headlineContent = {
+                            Text(stringResource(if (c.config.buildType == "play") R.string.update_disabled_play else R.string.update_disabled_dev))
+                        },
+                        leadingContent = { Icon(Icons.Outlined.SystemUpdate, null) },
+                        colors = settingsItemColors(),
+                    )
+                }
             }
 
-            GroupTitle(stringResource(R.string.settings_data))
-            SwitchItem(stringResource(R.string.settings_covers_online), stringResource(R.string.settings_covers_online_desc), s.coversOnline) {
-                scope.launch { c.settings.setCoversOnline(it) }
+            SettingsGroup(stringResource(R.string.settings_data)) {
+                SwitchItem(stringResource(R.string.settings_covers_online), stringResource(R.string.settings_covers_online_desc), s.coversOnline) {
+                    scope.launch { c.settings.setCoversOnline(it) }
+                }
+                SwitchItem(stringResource(R.string.settings_covers_wifi_only), stringResource(R.string.settings_covers_wifi_only_desc), s.coversWifiOnly) {
+                    scope.launch { c.settings.setCoversWifiOnly(it) }
+                }
+                NavItem(Icons.Outlined.DeleteSweep, stringResource(R.string.settings_clear_cache), stringResource(R.string.settings_clear_cache_desc)) { clearDialog = true }
             }
-            SwitchItem(stringResource(R.string.settings_covers_wifi_only), stringResource(R.string.settings_covers_wifi_only_desc), s.coversWifiOnly) {
-                scope.launch { c.settings.setCoversWifiOnly(it) }
-            }
-            NavItem(Icons.Outlined.DeleteSweep, stringResource(R.string.settings_clear_cache), stringResource(R.string.settings_clear_cache_desc)) { clearDialog = true }
 
-            GroupTitle(stringResource(R.string.settings_privacy))
-            RequireUnlockItem(s.requireUnlock)
+            SettingsGroup(stringResource(R.string.settings_privacy)) {
+                RequireUnlockItem(s.requireUnlock)
+            }
 
-            GroupTitle(stringResource(R.string.settings_legal))
-            NavItem(Icons.Outlined.PrivacyTip, stringResource(R.string.privacy_title)) { navigate(Routes.PRIVACY) }
-            NavItem(Icons.Outlined.PersonRemove, stringResource(R.string.account_delete_web), stringResource(R.string.account_delete_web_desc)) {
-                Intents.openUrl(context, Intents.ACCOUNT_DELETION_URL)
+            SettingsGroup(stringResource(R.string.settings_legal)) {
+                NavItem(Icons.Outlined.PrivacyTip, stringResource(R.string.privacy_title)) { navigate(Routes.PRIVACY) }
+                NavItem(Icons.Outlined.PersonRemove, stringResource(R.string.account_delete_web), stringResource(R.string.account_delete_web_desc)) {
+                    Intents.openUrl(context, Intents.ACCOUNT_DELETION_URL)
+                }
+                NavItem(Icons.Outlined.Description, stringResource(R.string.terms_title)) { navigate(Routes.TERMS) }
+                NavItem(Icons.Outlined.Info, stringResource(R.string.about_title), stringResource(R.string.about_version, c.config.versionName)) { navigate(Routes.ABOUT) }
+                // Локалният дневник на грешките — вижда се и се споделя само по избор на читателя.
+                NavItem(Icons.Outlined.BugReport, stringResource(R.string.settings_diagnostics), stringResource(R.string.settings_diagnostics_desc)) {
+                    navigate(Routes.DIAGNOSTICS)
+                }
             }
-            NavItem(Icons.Outlined.Description, stringResource(R.string.terms_title)) { navigate(Routes.TERMS) }
-            NavItem(Icons.Outlined.Info, stringResource(R.string.about_title), stringResource(R.string.about_version, c.config.versionName)) { navigate(Routes.ABOUT) }
-            // Локалният дневник на грешките — вижда се и се споделя само по избор на читателя.
-            NavItem(Icons.Outlined.BugReport, stringResource(R.string.settings_diagnostics), stringResource(R.string.settings_diagnostics_desc)) {
-                navigate(Routes.DIAGNOSTICS)
-            }
-            Spacer(Modifier.height(24.dp))
+            // Краят на страницата — тих знак (единствената лента на екрана).
+            PageEndMark()
         }
     }
 

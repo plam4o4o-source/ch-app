@@ -354,8 +354,7 @@
     <string name="greeting_wish_tsvetnitsa">May your home bloom with health and joy. Happy name day to everyone named after a flower!</string>
     <string name="greeting_wish_unification">Unity makes strength. Happy holiday to all Bulgarians!</string>
     <string name="greeting_wish_winter">From today the days grow longer. May light and warmth be with you.</string>
-    <string name="guest_text">News, events, the catalogue and information about the centre are available without signing in.</string>
-    <string name="guest_title">Welcome!</string>
+    <string name="guest_card_hint">This is how your card will look</string>
     <string name="history_empty">No books read yet</string>
     <string name="history_empty_hint">Returned books will appear here after the library’s next update.</string>
     <string name="history_range">borrowed %1$s · returned %2$s</string>

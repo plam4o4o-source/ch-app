@@ -527,8 +527,8 @@ S = {
 "my_profile_desc": ("Читателски данни", "Reader details"),
 "my_notifications": ("Известия", "Notifications"),
 "my_notifications_desc": ("Кои да получаваш: срокове, събития, новини", "Choose which: due dates, events, news"),
-"guest_title": ("Здравей!", "Welcome!"),
-"guest_text": ("Новините, събитията, каталогът и информацията за читалището са достъпни и без вход.", "News, events, the catalogue and information about the centre are available without signing in."),
+# Вълна 23 (plain): примерната карта за читател без вход („Моето“ и входът)
+"guest_card_hint": ("Така ще изглежда картата ти", "This is how your card will look"),
 "reader_number": ("Читателски № %1$s", "Reader no. %1$s"),
 "logout_title": ("Изход от профила?", "Sign out?"),
 "logout_text": ("Сесията и всички запазени на устройството читателски данни ще бъдат изтрити.", "Your session and all reader data stored on this device will be deleted."),

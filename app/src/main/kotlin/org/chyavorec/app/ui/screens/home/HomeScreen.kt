@@ -290,10 +290,8 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
             // Ако поздравът дойде след първия кадър (местен празник от сайта), се появява плавно.
             if (decor.greeting != null) {
                 item("greeting") {
-                    HolidayGreeting(
-                        decor, navigate, Modifier.animateItem(), dismissed = dismissedGreeting, today = today,
-                        feast = state.feast?.takeIf { greetingShown }?.line,
-                    )
+                    // Без реда с празника за деня: в празник имения ден не показваме (виж FeastLine).
+                    HolidayGreeting(decor, navigate, Modifier.animateItem(), dismissed = dismissedGreeting, today = today)
                 }
             }
             // „На този ден“ — само на 17.12. и 17.03. (иначе нищо не се чете и не се рисува).
@@ -673,8 +671,8 @@ private const val HERO_MAX_WINDOW_FRACTION = 0.48f
 private val HeroWheatReserve = 38.dp
 
 /**
- * Православният празник за деня — един ред под търсенето (от /api/calendar на сайта);
- * при празничен поздрав е ред в него ([HolidayGreeting]). Без [feast] (още се зарежда) —
+ * Православният празник за деня (имен ден) — един ред под търсенето (от /api/calendar на сайта);
+ * само в ден без празничен поздрав ([HolidayGreeting]) — в празник над въртележката е тясно. Без [feast] (още се зарежда) —
  * само датата, с височината на два реда (колкото е обикновено празникът на телефон).
  */
 @Composable

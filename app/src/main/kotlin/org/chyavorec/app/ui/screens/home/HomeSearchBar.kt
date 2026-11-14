@@ -166,7 +166,11 @@ fun HomeSearchBar(
     }
 
     SearchBar(state = state, inputField = inputField, modifier = modifier.fillMaxWidth())
-    ExpandedFullScreenSearchBar(state = state, inputField = inputField) {
+    // Разгърнато — върху обичайния фон на екраните (не по-тъмния surfaceContainerHigh по подразбиране).
+    ExpandedFullScreenSearchBar(
+        state = state, inputField = inputField,
+        colors = SearchBarDefaults.colors(containerColor = MaterialTheme.colorScheme.background),
+    ) {
         KeepDensity(density) {
             val vm = appViewModelWithState(key = "home-search") { c, saved -> GlobalSearchViewModel(c, saved) }
             // Полето е източникът на текста; търсенето го следва.

@@ -12,20 +12,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
-import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.CardGiftcard
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,7 +37,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.map
@@ -162,6 +160,9 @@ fun rememberDismissedOccasion(): String? {
 /**
  * Празничен поздрав под заглавката: затваря се с „×“ за деня; ако има връзка —
  * натискането отваря подходящите книги. В паметни дни ([quiet]) е в приглушени цветове.
+ * „Изпрати честитка“ е кръгъл бутон с иконка отдясно (48 dp, с етикет за TalkBack), не цял
+ * ред — в празник над въртележката има и без това герб, орнамент и шевица. Празникът за деня
+ * (имен ден) тук не се показва: в празник е излишен ред, в обикновен ден е под търсенето.
  *
  * [dismissed] — скритият днес поздрав (`null` = още не е прочетен); началният екран го
  * държи в своя ViewModel, за да е известен още в първия кадър. Ако стане известен по-късно,
@@ -174,8 +175,6 @@ fun HolidayGreeting(
     modifier: Modifier = Modifier,
     dismissed: String? = rememberDismissedOccasion(),
     today: LocalDate = rememberToday(),
-    /** Празникът за деня (/api/calendar, „…**Празник**…“) — ред в поздрава вместо отделен ред на „Начало“. */
-    feast: String? = null,
 ) {
     val occasion = decor.greeting ?: return
     val container = LocalAppContainer.current
@@ -219,13 +218,6 @@ fun HolidayGreeting(
                     if (text.isNotEmpty()) {
                         Text(text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                    if (feast != null) {
-                        Row(Modifier.padding(top = 4.dp)) {
-                            Icon(Icons.Outlined.AutoAwesome, null, tint = gold, modifier = Modifier.padding(top = 1.dp).size(14.dp))
-                            Spacer(Modifier.width(6.dp))
-                            Text(boldMarkdown(feast), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                        }
-                    }
                     if (link != null) {
                         Row(Modifier.padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                             Text(stringResource(R.string.occ_open_books), style = MaterialTheme.typography.labelMedium, color = if (decor.quiet) accent else MaterialTheme.colorScheme.primary)
@@ -233,16 +225,16 @@ fun HolidayGreeting(
                             Icon(Icons.AutoMirrored.Outlined.ArrowForward, null, tint = if (decor.quiet) accent else MaterialTheme.colorScheme.primary, modifier = Modifier.size(14.dp))
                         }
                     }
-                    if (canSend) {
-                        TextButton(
-                            onClick = { composer = true },
-                            modifier = Modifier.heightIn(min = 48.dp),
-                            contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 0.dp, end = 12.dp),
-                        ) {
-                            Icon(Icons.Outlined.CardGiftcard, null, Modifier.size(18.dp))
-                            Spacer(Modifier.width(8.dp))
-                            Text(stringResource(R.string.greeting_send), style = MaterialTheme.typography.labelLarge)
-                        }
+                }
+                if (canSend) {
+                    // Златна плочка с подаръка — главното действие, но тихо: само иконка с етикет.
+                    FilledTonalIconButton(
+                        onClick = { composer = true },
+                        colors = IconButtonDefaults.filledTonalIconButtonColors(
+                            containerColor = accent.copy(alpha = 0.16f), contentColor = if (decor.quiet) accent else MaterialTheme.colorScheme.primary,
+                        ),
+                    ) {
+                        Icon(Icons.Outlined.CardGiftcard, contentDescription = stringResource(R.string.greeting_send), modifier = Modifier.size(22.dp))
                     }
                 }
                 IconButton(onClick = {
