@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import org.chyavorec.app.W25
 import org.chyavorec.app.ui.components.CrossStitchSpec
 import org.chyavorec.app.ui.components.HapticSignature
 import org.chyavorec.app.ui.components.LocalConfetti
@@ -119,21 +120,35 @@ internal fun QuizBand(results: List<Boolean>, total: Int, current: Int?, colors:
     val haptics = rememberAppHaptics()
     val bounds = remember { arrayOfNulls<Rect>(1) }
     LaunchedEffect(results.size, total) {
-        if (results.size <= seen) {
+        // ВРЕМЕННО (debug/w25-check): дневник на ефекта — иска ли се конфетито при 5 от 5.
+        val t0 = android.os.SystemClock.uptimeMillis()
+        val at = { android.os.SystemClock.uptimeMillis() - t0 }
+        W25.log("QB effect start size=${results.size} total=$total seen=$seen reduced=$reduced closed=${QuizBandCharts.closed(results, total)} confetti=${confetti != null}")
+        try {
+            if (results.size <= seen) {
+                seen = results.size
+                W25.log("QB effect: nothing new (size <= seen)")
+                return@LaunchedEffect
+            }
+            val i = results.size - 1
             seen = results.size
-            return@LaunchedEffect
-        }
-        val i = results.size - 1
-        seen = results.size
-        if (results.getOrNull(i) == true && !reduced) {
-            stitching = i
-            stitch.snapTo(0f)
-            stitch.animateTo(1f, tween(STITCH_MS, easing = LinearOutSlowInEasing))
-        }
-        if (QuizBandCharts.closed(results, total)) {
-            if (reduced) close.snapTo(1f) else close.animateTo(1f, tween(CLOSE_MS))
-            haptics.play(HapticSignature.SEAL)
-            if (!reduced) confetti?.burst(bounds[0]?.center ?: Offset.Unspecified)
+            if (results.getOrNull(i) == true && !reduced) {
+                stitching = i
+                stitch.snapTo(0f)
+                stitch.animateTo(1f, tween(STITCH_MS, easing = LinearOutSlowInEasing))
+                W25.log("QB after stitch i=$i +${at()}ms")
+            }
+            if (QuizBandCharts.closed(results, total)) {
+                if (reduced) close.snapTo(1f) else close.animateTo(1f, tween(CLOSE_MS))
+                W25.log("QB after close +${at()}ms")
+                haptics.play(HapticSignature.SEAL)
+                W25.log("QB after haptics +${at()}ms")
+                val o = bounds[0]?.center ?: Offset.Unspecified
+                if (!reduced) confetti?.burst(o)
+                W25.log("QB burst called=${!reduced && confetti != null} origin=$o bounds=${bounds[0]} bursts=${confetti?.bursts} +${at()}ms")
+            }
+        } finally {
+            W25.log("QB effect end size=${results.size} +${at()}ms active=${this.coroutineContext[kotlinx.coroutines.Job]?.isActive}")
         }
     }
     QuizBandCanvas(

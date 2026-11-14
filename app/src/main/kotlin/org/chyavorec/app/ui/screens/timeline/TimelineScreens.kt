@@ -110,6 +110,7 @@ import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.scaledPath
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.theme.Brand
+import org.chyavorec.app.W25
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.FolkTokens
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -211,7 +212,8 @@ fun Timeline(
                 TimelineItem("$i-${e.label}", e, last = i == entries.lastIndex, staticFrame = staticFrame, side = side)
             }
         }
-        DecadeScrubber(years, listState, showScrubber, Modifier.align(Alignment.TopEnd))
+        // ВРЕМЕННО (debug/w25-check): флаг „noscrub“ — без плъзгача (за измерване на кадрите).
+        if (!W25.on("noscrub")) DecadeScrubber(years, listState, showScrubber, Modifier.align(Alignment.TopEnd))
     }
 }
 
@@ -242,9 +244,10 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
     val reduced = rememberReducedMotion()
     // Показана веднъж — оцелява при превъртане и при връщане към екрана (rememberSaveable по ключа на реда).
     var shown by rememberSaveable(key) { mutableStateOf(false) }
-    val progress = remember { Animatable(if (shown || reduced || staticFrame) 1f else 0f) }
+    // ВРЕМЕННО (debug/w25-check): „noenter“ — вехите са готови веднага (без влизането за 1 s).
+    val progress = remember { Animatable(if (shown || reduced || staticFrame || W25.on("noenter")) 1f else 0f) }
     LaunchedEffect(Unit) {
-        if (!shown && !reduced && !staticFrame) progress.animateTo(1f, tween(1000, easing = FastOutSlowInEasing))
+        if (!shown && !reduced && !staticFrame && !W25.on("noenter")) progress.animateTo(1f, tween(1000, easing = FastOutSlowInEasing))
         shown = true
     }
     val ext = LocalExtendedColors.current
@@ -268,7 +271,9 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
                 val railX = if (side == null) railHalf else size.width / 2f
                 val start = top + bod.width * 2
                 val end = top + (size.height - top) * progress.value
-                if (end > start) drawLine(thread, Offset(railX, start), Offset(railX, end), strokeWidth = bod.width, cap = StrokeCap.Round, pathEffect = bod.pathEffect)
+                // ВРЕМЕННО (debug/w25-check): „nothread“ — без конеца; „solidthread“ — плътна линия вместо бодове.
+                if (W25.on("nothread")) return@drawBehind
+                if (end > start) drawLine(thread, Offset(railX, start), Offset(railX, end), strokeWidth = bod.width, cap = StrokeCap.Round, pathEffect = if (W25.on("solidthread")) null else bod.pathEffect)
             },
     ) {
         val medallion = Modifier.graphicsLayer {
@@ -306,8 +311,13 @@ private fun Modifier.rosettePlate(): Modifier {
                 val fill = Brush.linearGradient(listOf(container, container.copy(alpha = container.alpha * 0.55f)))
                 val bod = StitchSpec.Running.stroke(density)
                 onDrawBehind {
-                    drawPath(outer, fill)
-                    drawCircle(ring, radius = r * 0.74f, style = bod)
+                    // ВРЕМЕННО (debug/w25-check): „plainmedal“ — обикновен кръг вместо осморъка с пръстен от бод.
+                    if (W25.on("plainmedal")) {
+                        drawCircle(container, radius = r * 0.9f)
+                    } else {
+                        drawPath(outer, fill)
+                        drawCircle(ring, radius = r * 0.74f, style = bod)
+                    }
                 }
             }
         },
@@ -336,7 +346,8 @@ private fun Medallion(label: String, modifier: Modifier = Modifier) {
 
 @Composable
 private fun EntryCard(e: TimelineEntry, modifier: Modifier) {
-    AppCard(modifier.fillMaxWidth(), accent = true) {
+    // ВРЕМЕННО (debug/w25-check): „plaincard“ — без златната рамка на картата.
+    AppCard(modifier.fillMaxWidth(), accent = !W25.on("plaincard")) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(e.title, style = MaterialTheme.typography.titleLarge)
             if (e.description.isNotBlank()) Text(e.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

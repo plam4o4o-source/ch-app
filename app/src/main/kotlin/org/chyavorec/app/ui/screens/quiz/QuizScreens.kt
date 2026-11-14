@@ -244,7 +244,8 @@ private fun AnswersBand(results: List<Boolean>, total: Int, current: Int?, modif
                 color = if (closed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
             )
         }
-        QuizBand(results, total, current, quizBandColors(), Modifier.widthIn(max = if (compact) BandCompactWidth else BandMaxWidth).fillMaxWidth().aspectRatio(QuizBandCharts.aspect(total)))
+        // ВРЕМЕННО (debug/w25-check): „noband“ — без лентата „Избродирай отговорите“.
+        if (!org.chyavorec.app.W25.on("noband")) QuizBand(results, total, current, quizBandColors(), Modifier.widthIn(max = if (compact) BandCompactWidth else BandMaxWidth).fillMaxWidth().aspectRatio(QuizBandCharts.aspect(total)))
     }
 }
 

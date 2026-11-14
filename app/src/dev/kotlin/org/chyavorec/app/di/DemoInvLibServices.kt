@@ -65,7 +65,8 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
         val t = today()
         return Outcome.Success(
             listOf(
-                Loan("demo-1", null, "Под игото", "Иван Вазов", null, t.minusDays(14).toString(), t.plusDays(7).toString(), 0, true),
+                // ВРЕМЕННО (debug/w25-check): „demo-1“ се удължава веднага (нов срок) — за „Нов лист“ на емулатора.
+                Loan("demo-1", null, "Под игото", "Иван Вазов", null, t.minusDays(14).toString(), t.plusDays(if ("demo-1" in renewedNow) 21L else 7L).toString(), if ("demo-1" in renewedNow) 1 else 0, "demo-1" !in renewedNow),
                 Loan("demo-2", null, "Демо заглавие (наближава срок)", "Демо автор", null, t.minusDays(28).toString(), t.plusDays(2).toString(), 1, true,
                     renewPending = pendingRenew.contains("demo-2")),
                 Loan("demo-3", null, "Демо заглавие (просрочено)", "Демо автор", null, t.minusDays(40).toString(), t.minusDays(3).toString(), 2, false,
@@ -77,12 +78,20 @@ class DemoInvLibServices(private val clock: AppClock) : AuthenticationService, R
     /** Заявените удължавания в демо режим — остават „чакащи“ (както при истинския мост до синхронизацията на InvLib). */
     private val pendingRenew = java.util.concurrent.CopyOnWriteArraySet<String>()
 
+    /** ВРЕМЕННО (debug/w25-check): удължените веднага (без чакане) демо заемания. */
+    private val renewedNow = java.util.concurrent.CopyOnWriteArraySet<String>()
+
     override suspend fun placeHold(session: AuthSession, inv: Long) = Outcome.Success(Unit)
     override suspend fun renew(session: AuthSession, loanId: String): Outcome<Loan> {
         if (loanId in pendingRenew) return Outcome.Failure(AppError.Conflict(AppError.Conflict.PENDING))
         val loan = (loans(session) as Outcome.Success).value.firstOrNull { it.loanId == loanId }
             ?: return Outcome.Failure(AppError.NotFound)
         if (!loan.canRenew) return Outcome.Failure(AppError.Conflict(AppError.Conflict.NOT_ALLOWED))
+        // ВРЕМЕННО (debug/w25-check): „demo-1“ — прието удължаване с нов срок (+14 дни), не „чака библиотеката“.
+        if (loanId == "demo-1") {
+            renewedNow += loanId
+            return Outcome.Success((loans(session) as Outcome.Success).value.first { it.loanId == loanId })
+        }
         pendingRenew += loanId
         return Outcome.Success(loan.copy(renewPending = true))
     }

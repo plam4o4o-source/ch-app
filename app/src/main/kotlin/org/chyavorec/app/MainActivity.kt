@@ -50,6 +50,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
+        W25.read(intent) // ВРЕМЕННО (debug/w25-check): тестови флагове от `--es w25`
         // Кратък splash: държим го само докато настройките се заредят (милисекунди).
         splash.setKeepOnScreenCondition { !ready }
         // От край до край без оттеглените в Android 15 API (виж EdgeToEdge).

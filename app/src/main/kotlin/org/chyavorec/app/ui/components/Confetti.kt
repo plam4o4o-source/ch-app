@@ -28,8 +28,10 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import org.chyavorec.app.W25
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import kotlin.math.PI
@@ -95,6 +97,12 @@ fun rememberSuccessFeedback(signature: HapticSignature? = null): () -> Unit {
     }
 }
 
+/** ВРЕМЕННО (debug/w25-check): брояч на рисуванията на слоя с конфетито. */
+internal object W25Confetti {
+    @JvmField
+    var draws = 0
+}
+
 /** Продължителността на едно избухване. */
 internal const val CONFETTI_MS = 1100
 
@@ -114,11 +122,17 @@ fun ConfettiHost(
     val reduced by rememberUpdatedState(rememberReducedMotion())
     val progress = remember { mutableFloatStateOf(0f) }
     val particles = remember { ConfettiParticles(CONFETTI_PARTICLES) }
+    // ВРЕМЕННО (debug/w25-check): дневник — стига ли избухването до домакина и рисува ли се.
+    val hostSize = remember { arrayOfNulls<androidx.compose.ui.unit.IntSize>(1) }
     LaunchedEffect(state, state.bursts) {
+        W25.log("CH effect bursts=${state.bursts} reduced=$reduced isPlaying=${state.isPlaying} host=${hostSize[0]} origin=${state.origin} lastTap=${state.lastTap}")
         if (state.bursts == 0 || reduced) return@LaunchedEffect
         particles.reset(Random((state.seed ?: System.nanoTime()) + state.bursts))
         state.isPlaying = true
         state.played++
+        W25Confetti.draws = 0
+        var frames = 0
+        val t0 = android.os.SystemClock.uptimeMillis()
         try {
             // Собствен часовник от кадрите (не tween): физиката е във време, не в мащаба на анимациите.
             progress.floatValue = 0f
@@ -126,13 +140,16 @@ fun ConfettiHost(
             do {
                 val elapsedMs = (withFrameNanos { it } - start) / 1_000_000f
                 progress.floatValue = (elapsedMs / CONFETTI_MS).coerceAtMost(1f)
+                frames++
+                W25.log("CH frame $frames progress=${progress.floatValue} +${android.os.SystemClock.uptimeMillis() - t0}ms draws=${W25Confetti.draws}")
             } while (progress.floatValue < 1f)
         } finally {
             state.isPlaying = false
+            W25.log("CH effect end bursts=${state.bursts} frames=$frames draws=${W25Confetti.draws} +${android.os.SystemClock.uptimeMillis() - t0}ms progress=${progress.floatValue}")
         }
     }
     Box(
-        modifier.pointerInput(state) {
+        modifier.onSizeChanged { hostSize[0] = it }.pointerInput(state) {
             awaitPointerEventScope {
                 while (true) {
                     val event = awaitPointerEvent(PointerEventPass.Initial)
@@ -164,6 +181,9 @@ private fun ConfettiLayer(particles: ConfettiParticles, origin: () -> Offset, pr
     Canvas(modifier.clearAndSetSemantics { }) {
         val o = origin()
         val at = if (o.isSpecified) o else Offset(size.width / 2f, size.height * 0.8f)
+        // ВРЕМЕННО (debug/w25-check): всяко рисуване на слоя.
+        W25Confetti.draws++
+        W25.log("CL draw #${W25Confetti.draws} size=$size at=$at progress=${progress()} alpha=${ConfettiPhysics.alpha(progress())}")
         particles.draw(this, at, progress(), colors)
     }
 }

@@ -106,13 +106,15 @@ fun FolkIconPlate(
             val c = this.size.minDimension / 2f
             val outer = FolkShapes.of(motif).scaledPath(c * 0.98f, this.size.width / 2f, this.size.height / 2f)
             val fill = Brush.linearGradient(listOf(container, container.copy(alpha = container.alpha * 0.55f)))
-            onDrawBehind { drawPath(outer, fill) }
+            // ВРЕМЕННО (debug/w25-check): „plainplate“ — обикновен кръг вместо народната форма с градиент.
+            onDrawBehind { if (org.chyavorec.app.W25.on("plainplate")) drawCircle(container, radius = c * 0.9f) else drawPath(outer, fill) }
         }
     }
     // Ромбът е по-тесен от осморъката — иконата в него е малко по-малка, за да не опира в ръбовете.
     val iconSize = size * if (motif == FolkMotif.RHOMBUS) 0.46f else 0.5f
     Box(modifier.size(size).then(plate), contentAlignment = Alignment.Center) {
-        Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(iconSize))
+        // ВРЕМЕННО (debug/w25-check): „noicon“ — без иконата „Бод“ в плочката.
+        if (!org.chyavorec.app.W25.on("noicon")) Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(iconSize))
     }
 }
 
