@@ -1,0 +1,37 @@
+11-14 22:03:42.732  7785  7785 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:07:46.590  9410  9410 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:10:50.727 10461 10461 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:12:24.225 11073 11073 W W25     : flags=[plainplate]
+11-14 22:12:26.401 11073 11073 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:13:56.955 11583 11583 W W25     : flags=[noicon]
+11-14 22:13:58.777 11583 11583 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:15:29.610 12084 12084 W W25     : flags=[plainplate, noicon]
+11-14 22:15:31.442 12084 12084 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:18:39.720 13203 13203 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:20:08.679 13706 13706 W W25     : flags=[plainplate]
+11-14 22:20:10.874 13706 13706 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:21:40.078 14230 14230 W W25     : flags=[noicon]
+11-14 22:21:42.156 14230 14230 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:23:14.925 14737 14737 W W25     : flags=[plainplate, noicon]
+11-14 22:23:16.363 14737 14737 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:27:56.984 16255 16255 W W25     : flags=[plainplate]
+11-14 22:27:58.853 16255 16255 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:29:29.244 16760 16760 W W25     : flags=[noicon]
+11-14 22:29:31.201 16760 16760 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:31:00.993 17272 17272 W W25     : flags=[plainplate, noicon]
+11-14 22:31:03.094 17272 17272 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:35:50.214 18850 18850 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:38:09.630 19637 19637 W W25     : flags=[noicon]
+11-14 22:38:11.283 19637 19637 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:39:43.527 20144 20144 W W25     : flags=[plainplate, noicon]
+11-14 22:39:45.578 20144 20144 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:44:30.768 21648 21648 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:46:02.879 22201 22201 W W25     : flags=[plainplate]
+11-14 22:46:04.996 22201 22201 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:47:37.393 22707 22707 W W25     : flags=[plainplate, noicon]
+11-14 22:47:39.225 22707 22707 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:52:16.485 24225 24225 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:53:47.383 24732 24732 W W25     : flags=[plainplate]
+11-14 22:53:49.267 24732 24732 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:55:20.151 25235 25235 W W25     : flags=[noicon]
+11-14 22:55:21.966 25235 25235 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified

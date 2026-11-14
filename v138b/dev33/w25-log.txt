@@ -1,0 +1,40 @@
+11-14 22:01:27.257  6162  6162 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:04:13.173  6162  6162 W W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(417.0, 1481.0) lastTap=Offset(417.0, 1481.0)
+11-14 22:04:13.179  6162  6162 W W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(417.0, 1481.0) progress=0.0 alpha=1.0
+11-14 22:04:13.644  6162  6162 W W25     : CH frame 1 progress=0.18181819 +470ms draws=1
+11-14 22:04:13.646  6162  6162 W W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(417.0, 1481.0) progress=0.18181819 alpha=1.0
+11-14 22:04:13.805  6162  6162 W W25     : CH frame 2 progress=0.43939894 +631ms draws=2
+11-14 22:04:13.807  6162  6162 W W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(417.0, 1481.0) progress=0.43939894 alpha=1.0
+11-14 22:04:14.020  6162  6162 W W25     : CH frame 3 progress=0.57575756 +846ms draws=3
+11-14 22:04:14.022  6162  6162 W W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(417.0, 1481.0) progress=0.57575756 alpha=1.0
+11-14 22:04:14.422  6162  6162 W W25     : CH frame 4 progress=0.7727272 +1248ms draws=4
+11-14 22:04:14.424  6162  6162 W W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(417.0, 1481.0) progress=0.7727272 alpha=0.6493509
+11-14 22:04:14.430  6162  6162 W W25     : CH frame 5 progress=1.0 +1256ms draws=5
+11-14 22:04:14.431  6162  6162 W W25     : CH effect end bursts=1 frames=5 draws=5 +1257ms progress=1.0
+11-14 22:04:25.377  6162  6162 W W25     : CH effect bursts=2 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(417.0, 1999.0) lastTap=Offset(417.0, 1999.0)
+11-14 22:04:25.381  6162  6162 W W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.0 alpha=1.0
+11-14 22:04:25.619  6162  6162 W W25     : CH frame 1 progress=0.12121212 +242ms draws=1
+11-14 22:04:25.623  6162  6162 W W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.12121212 alpha=1.0
+11-14 22:04:25.718  6162  6162 W W25     : CH frame 2 progress=0.2121212 +341ms draws=2
+11-14 22:04:25.720  6162  6162 W W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.2121212 alpha=1.0
+11-14 22:04:25.822  6162  6162 W W25     : CH frame 3 progress=0.30303028 +445ms draws=3
+11-14 22:04:25.826  6162  6162 W W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.30303028 alpha=1.0
+11-14 22:04:25.942  6162  6162 W W25     : CH frame 4 progress=0.39393938 +565ms draws=4
+11-14 22:04:25.945  6162  6162 W W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.39393938 alpha=1.0
+11-14 22:04:26.061  6162  6162 W W25     : CH frame 5 progress=0.5151515 +683ms draws=5
+11-14 22:04:26.062  6162  6162 W W25     : CL draw #6 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.5151515 alpha=1.0
+11-14 22:04:26.150  6162  6162 W W25     : CH frame 6 progress=0.6212121 +774ms draws=6
+11-14 22:04:26.152  6162  6162 W W25     : CL draw #7 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.6212121 alpha=1.0
+11-14 22:04:26.334  6162  6162 W W25     : CH frame 7 progress=0.6969697 +957ms draws=7
+11-14 22:04:26.340  6162  6162 W W25     : CL draw #8 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.6969697 alpha=0.8658009
+11-14 22:04:26.422  6162  6162 W W25     : CH frame 8 progress=0.8636363 +1045ms draws=8
+11-14 22:04:26.430  6162  6162 W W25     : CL draw #9 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.8636363 alpha=0.38961053
+11-14 22:04:26.524  6162  6162 W W25     : CH frame 9 progress=0.9393939 +1147ms draws=9
+11-14 22:04:26.525  6162  6162 W W25     : CL draw #10 size=Size(1080.0, 2400.0) at=Offset(417.0, 1999.0) progress=0.9393939 alpha=0.17316034
+11-14 22:04:26.628  6162  6162 W W25     : CH frame 10 progress=1.0 +1251ms draws=10
+11-14 22:04:26.628  6162  6162 W W25     : CH effect end bursts=2 frames=10 draws=10 +1252ms progress=1.0
+11-14 22:06:42.396  9193  9193 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=2560 x 1600 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:08:05.696  9698  9698 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:08:36.757  9862  9862 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+12-15 10:00:07.452 10255 10255 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+01-15 10:00:08.188 10951 10951 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified

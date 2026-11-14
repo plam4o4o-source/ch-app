@@ -1,0 +1,18 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 22:01:21.753  6152  6152 I PERFCHECK: section: W. First launch and warm-up
+   11-14 22:02:24.546  7286  7286 I PERFCHECK: dv
+   11-14 22:02:25.075  7291  7291 I PERFCHECK: section: D1. Sign-in with the BUTTON; „Картата е издадена“ recorded from the host 10 frames/s
+   11-14 22:03:33.266  7862  7862 I PERFCHECK: login-fly
+   11-14 22:04:02.194  7988  7988 I PERFCHECK: section: D2. Loans: „Удължи срока“ on demo-1 debug branch: accepted at once, new due date → „Нов лист“, host recording
+   11-14 22:04:13.062  8014  8014 I PERFCHECK: renew-leaf
+   11-14 22:04:33.263  8099  8099 I PERFCHECK: section: D3. Diary: 5 rosettes on the first book, then the year story with no taps slides change by themselves
+   11-14 22:06:34.438  9094  9094 I PERFCHECK: section: D4. Tablet landscape 1280x800 dp, signed in: two panes in Моето uiautomator, the card pane is FLAG_SECURE
+   11-14 22:08:32.521  9844  9844 I PERFCHECK: section: D5. The card: 14 November no band, 15 December and 15 January the „Твоята шевица“ band
+   11-14 22:12:19.645 12348 12348 I PERFCHECK: section: Z. The apps local diagnostics log Settings › Информация › Диагностика and app W/E lines in logcat

@@ -1,0 +1,211 @@
+11-14 22:01:27.905   481  2741 E ActivityManager: ANR in com.google.android.apps.nexuslauncher (com.google.android.apps.nexuslauncher/.NexusLauncherActivity)
+11-14 22:01:27.905   481  2741 E ActivityManager: PID: 1032
+11-14 22:01:27.905   481  2741 E ActivityManager: Reason: Input dispatching timed out (Application does not have a focused window)
+11-14 22:01:27.905   481  2741 E ActivityManager: Parent: com.google.android.apps.nexuslauncher/.NexusLauncherActivity
+11-14 22:01:27.905   481  2741 E ActivityManager: ErrorId: 2e970439-355c-4678-bfa7-4cacb1cda982
+11-14 22:01:27.905   481  2741 E ActivityManager: Frozen: false
+11-14 22:01:27.905   481  2741 E ActivityManager: Load: 6.99 / 1.68 / 0.56
+11-14 22:01:27.905   481  2741 E ActivityManager: ----- Output from /proc/pressure/memory -----
+11-14 22:01:27.905   481  2741 E ActivityManager: some avg10=24.46 avg60=6.00 avg300=1.33 total=4444518
+11-14 22:01:27.905   481  2741 E ActivityManager: full avg10=4.12 avg60=1.17 avg300=0.27 total=961574
+11-14 22:01:27.905   481  2741 E ActivityManager: ----- End output from /proc/pressure/memory -----
+11-14 22:01:27.905   481  2741 E ActivityManager: 
+11-14 22:01:27.905   481  2741 E ActivityManager: CPU usage from 2585ms to -20111ms ago (2026-11-14 22:01:05.167 to 2026-11-14 22:01:27.864):
+11-14 22:01:27.905   481  2741 E ActivityManager:   21% 481/system_server: 14% user + 7% kernel / faults: 40652 minor 2519 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   20% 362/surfaceflinger: 0.9% user + 19% kernel / faults: 947 minor 315 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   10% 1878/com.google.android.googlequicksearchbox:search: 6.6% user + 3.6% kernel / faults: 40728 minor 1953 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   9.7% 1032/com.google.android.apps.nexuslauncher: 5.9% user + 3.8% kernel / faults: 62356 minor 662 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   9.3% 1064/com.google.android.gms.persistent: 6.7% user + 2.6% kernel / faults: 31476 minor 1263 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   9.3% 1602/com.google.android.inputmethod.latin: 7.3% user + 2% kernel / faults: 29921 minor 677 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   8.6% 43/kswapd0: 0% user + 8.6% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   5.9% 1274/com.google.android.gms: 4.6% user + 1.2% kernel / faults: 18212 minor 923 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   5.8% 1685/com.google.android.as: 4.3% user + 1.4% kernel / faults: 20642 minor 727 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   5.3% 762/com.android.systemui: 3% user + 2.2% kernel / faults: 16343 minor 2874 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   4.9% 1862/com.google.android.apps.youtube.music: 3.9% user + 1% kernel / faults: 17426 minor 565 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   3.4% 2131/com.google.android.apps.messaging: 2.3% user + 1.1% kernel / faults: 11885 minor 1040 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   3% 323/android.hardware.graphics.allocator@3.0-service: 0% user + 3% kernel / faults: 1 minor 132 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   2.6% 1879/com.google.android.youtube: 2% user + 0.5% kernel / faults: 11297 minor 347 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   2.4% 324/android.hardware.graphics.composer@2.4-service: 0% user + 2.4% kernel / faults: 18 minor 281 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   2.3% 414/logcat: 0.1% user + 2.2% kernel / faults: 3 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   2.3% 2098/com.google.android.gm: 1.5% user + 0.7% kernel / faults: 7852 minor 511 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   1.9% 1629/com.google.android.apps.wellbeing: 1.3% user + 0.5% kernel / faults: 7569 minor 549 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   1.8% 764/com.google.android.permissioncontroller: 1.2% user + 0.5% kernel / faults: 4645 minor 158 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   1.3% 494/kworker/1:10H+kverityd: 0% user + 1.3% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   1.2% 993/com.android.phone: 0.8% user + 0.3% kernel / faults: 3136 minor 597 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.4% 492/kworker/1:8H-kverityd: 0% user + 0.4% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   1% 1549/com.google.android.ims: 0.5% user + 0.4% kernel / faults: 3964 minor 348 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.9% 123/logd: 0.4% user + 0.4% kernel / faults: 1011 minor 192 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.8% 179/jbd2/dm-34-8: 0% user + 0.8% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.8% 1/init: 0.1% user + 0.6% kernel / faults: 94 minor 45 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.7% 50/kworker/0:1H-kverityd: 0% user + 0.7% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.7% 1738/com.google.android.googlequicksearchbox:interactor: 0.6% user + 0.1% kernel / faults: 2736 minor 61 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.7% 1773/com.google.process.gservices: 0.5% user + 0.2% kernel / faults: 1119 minor 213 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.7% 26/kworker/1:0-events_power_efficient: 0% user + 0.7% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.7% 282/statsd: 0.2% user + 0.4% kernel / faults: 240 minor 36 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.5% 497/kworker/1:11H-kverityd: 0% user + 0.5% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.4% 493/kworker/1:9H-kverityd: 0% user + 0.4% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.4% 25/ksoftirqd/1: 0% user + 0.4% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.4% 1720/com.google.android.providers.media.module: 0.2% user + 0.2% kernel / faults: 1253 minor 429 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.3% 124/lmkd: 0% user + 0.3% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.3% 193/kworker/u4:2-ext4-rsv-conversion: 0% user + 0.3% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.3% 574/kworker/1:3-kdmflush: 0% user + 0.3% kernel
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.2% 283/netd: 0% user + 0.2% kernel / faults: 676 minor 46 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.2% 284/zygote64: 0% user + 0.2% kernel / faults: 528 minor 9 major
+11-14 22:01:27.905   481  2741 E ActivityManager:   0.1% 428/media.extractor: 0% user + 0% kernel / faults: 1504 minor 263 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.1% 442/media.swcodec: 0% user + 0% kernel / faults: 2243 minor 77 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.2% 921/com.android.networkstack.process: 0.1% user + 0% kernel / faults: 1502 minor 297 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.2% 1445/com.google.android.dialer: 0.1% user + 0% kernel / faults: 1282 minor 287 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.2% 1888/com.google.android.contacts: 0.1% user + 0% kernel / faults: 1140 minor 694 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.2% 2262/android.process.media: 0.1% user + 0.1% kernel / faults: 823 minor 307 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 8/kworker/u4:0-loop4: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.2% 339/android.hardware.sensors@2.1-service.multihal: 0% user + 0.1% kernel / faults: 4 minor 29 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.1% 437/mediaserver: 0% user + 0% kernel / faults: 315 minor 351 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.2% 1513/android.process.acore: 0% user + 0.1% kernel / faults: 912 minor 468 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.1% 174/kworker/u5:1-hci0: 0% user + 0.1% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.1% 175/kworker/u5:2-blk_crypto_wq: 0% user + 0.1% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 270/dhcpclient: 0% user + 0% kernel / faults: 10 minor 26 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.1% 963/com.google.android.bluetooth: 0.1% user + 0% kernel / faults: 191 minor 383 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.1% 1900/com.google.process.gapps: 0% user + 0% kernel / faults: 509 minor 370 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 13/ksoftirqd/0: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.1% 125/servicemanager: 0% user + 0% kernel / faults: 2 minor 7 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0.1% 1772/com.android.emulator.multidisplay: 0.1% user + 0% kernel / faults: 1125 minor 248 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 14/rcu_preempt: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 122/kworker/0:2-events: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 196/kworker/u4:3-ext4-rsv-conversion: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 420/cameraserver: 0% user + 0% kernel / faults: 134 minor 31 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 979/com.android.se: 0% user + 0% kernel / faults: 1102 minor 316 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 1059/com.android.bluetooth: 0% user + 0% kernel / faults: 340 minor 61 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 1938/com.android.keychain: 0% user + 0% kernel / faults: 643 minor 381 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 10/kworker/u4:1-loop8: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 116/prng_seeder: 0% user + 0% kernel / faults: 1 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 126/hwservicemanager: 0% user + 0% kernel / faults: 1 minor 4 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 147/android.system.suspend@1.0-service: 0% user + 0% kernel / faults: 26 minor 56 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 293/iptables-restore: 0% user + 0% kernel / faults: 3 minor 20 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 327/android.hardware.health@2.1-service: 0% user + 0% kernel / faults: 13 minor 73 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 335/android.hardware.neuralnetworks@1.3-service-sample-limited: 0% user + 0% kernel / faults: 30 minor 63 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 359/audioserver: 0% user + 0% kernel / faults: 96 minor 109 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 403/mdnsd: 0% user + 0% kernel / faults: 14 minor 33 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 440/wificond: 0% user + 0% kernel / faults: 12 minor 52 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 995/com.google.android.setupwizard: 0% user + 0% kernel / faults: 52 minor 127 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 1392/com.google.android.cellbroadcastreceiver: 0% user + 0% kernel / faults: 18 minor 37 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 1624/com.google.android.ext.services: 0% user + 0% kernel / faults: 411 minor 244 major
+11-14 22:01:27.908   481  2741 E ActivityManager:   0% 1877/com.android.printspooler: 0% user + 0% kernel / faults: 235 minor 2 major
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 2616/com.google.android.apps.wallpaper: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 2773/com.google.android.gms.unstable: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 2802/com.google.android.as.oss: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 2846/adbd: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3006/com.google.android.webview:webview_service: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3009/com.android.chrome: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3097/com.google.android.deskclock: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3198/abb: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3412/kworker/u4:4-writeback: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3513/sh: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3517/cmd: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3549/com.google.android.projection.gearhead:car: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3559/com.google.android.partnersetup: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3615/com.android.providers.calendar: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3653/com.android.externalstorage: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3702/com.google.android.apps.photos: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3807/logcat: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3809/sh: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:  +0% 3813/cmd: 0% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager: 98% TOTAL: 48% user + 47% kernel + 0.4% iowait + 1.1% irq + 1% softirq
+11-14 22:01:27.908   481  2741 E ActivityManager: CPU usage from 21ms to 766ms later (2026-11-14 22:01:07.773 to 2026-11-14 22:01:08.519):
+11-14 22:01:27.908   481  2741 E ActivityManager:   25% 1602/com.google.android.inputmethod.latin: 25% user + 0% kernel / faults: 1135 minor 15 major
+11-14 22:01:27.908   481  2741 E ActivityManager:     24% 1817/Light-P0-1: 24% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:     1.1% 1791/ExeSeq-P10-1: 1.1% user + 0% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:   23% 481/system_server: 15% user + 8.2% kernel / faults: 2543 minor 68 major
+11-14 22:01:27.908   481  2741 E ActivityManager:     6.8% 2741/AnrConsumer: 4.1% user + 2.7% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:     2.7% 513/android.display: 1.3% user + 1.3% kernel
+11-14 22:01:27.908   481  2741 E ActivityManager:     1.3% 481/system_server: 1.3% user + 0% kernel
+
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: FATAL EXCEPTION: main
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: PID: 10252
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.CharSequence android.view.accessibility.AccessibilityNodeInfo.getContentDescription()' on a null object reference
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.childNafCheck(AccessibilityNodeInfoDumper.java:296)
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.childNafCheck(AccessibilityNodeInfoDumper.java:300)
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.nafCheck(AccessibilityNodeInfoDumper.java:276)
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpNodeRec(AccessibilityNodeInfoDumper.java:200)
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpNodeRec(AccessibilityNodeInfoDumper.java:225)
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpWindowToFile(AccessibilityNodeInfoDumper.java:96)
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.commands.uiautomator.DumpCommand.run(DumpCommand.java:111)
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.commands.uiautomator.Launcher.main(Launcher.java:83)
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.nativeFinishInit(Native Method)
+11-14 22:11:17.028 10252 10252 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.main(RuntimeInit.java:355)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: Error reporting crash
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: java.lang.RuntimeException: Bad file descriptor
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.os.BinderProxy.transactNative(Native Method)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.os.IServiceManager$Stub$Proxy.checkService(IServiceManager.java:421)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.os.ServiceManagerProxy.getService(ServiceManagerNative.java:63)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.os.ServiceManager.rawGetService(ServiceManager.java:372)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.os.ServiceManager.getService(ServiceManager.java:147)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.app.ActivityManager$1.create(ActivityManager.java:4690)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.app.ActivityManager$1.create(ActivityManager.java:4687)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.util.Singleton.get(Singleton.java:43)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at android.app.ActivityManager.getService(ActivityManager.java:4678)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$KillApplicationHandler.uncaughtException(RuntimeInit.java:156)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1073)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1068)
+11-14 22:11:17.034 10252 10252 E AndroidRuntime: 	at java.lang.Thread.dispatchUncaughtException(Thread.java:2306)
+
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: FATAL EXCEPTION: main
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: PID: 14096
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.CharSequence android.view.accessibility.AccessibilityNodeInfo.getContentDescription()' on a null object reference
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.childNafCheck(AccessibilityNodeInfoDumper.java:296)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.childNafCheck(AccessibilityNodeInfoDumper.java:300)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.nafCheck(AccessibilityNodeInfoDumper.java:276)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpNodeRec(AccessibilityNodeInfoDumper.java:200)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpNodeRec(AccessibilityNodeInfoDumper.java:225)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpWindowToFile(AccessibilityNodeInfoDumper.java:96)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.commands.uiautomator.DumpCommand.run(DumpCommand.java:111)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.commands.uiautomator.Launcher.main(Launcher.java:83)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.nativeFinishInit(Native Method)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.main(RuntimeInit.java:355)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: Error reporting crash
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: java.lang.RuntimeException: Bad file descriptor
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.os.BinderProxy.transactNative(Native Method)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.os.IServiceManager$Stub$Proxy.checkService(IServiceManager.java:421)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.os.ServiceManagerProxy.getService(ServiceManagerNative.java:63)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.os.ServiceManager.rawGetService(ServiceManager.java:372)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.os.ServiceManager.getService(ServiceManager.java:147)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.app.ActivityManager$1.create(ActivityManager.java:4690)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.app.ActivityManager$1.create(ActivityManager.java:4687)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.util.Singleton.get(Singleton.java:43)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at android.app.ActivityManager.getService(ActivityManager.java:4678)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$KillApplicationHandler.uncaughtException(RuntimeInit.java:156)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1073)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1068)
+11-14 22:22:22.053 14096 14096 E AndroidRuntime: 	at java.lang.Thread.dispatchUncaughtException(Thread.java:2306)
+
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: FATAL EXCEPTION: main
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: PID: 30956
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.CharSequence android.view.accessibility.AccessibilityNodeInfo.getContentDescription()' on a null object reference
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.childNafCheck(AccessibilityNodeInfoDumper.java:296)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.childNafCheck(AccessibilityNodeInfoDumper.java:300)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.nafCheck(AccessibilityNodeInfoDumper.java:276)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpNodeRec(AccessibilityNodeInfoDumper.java:200)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpNodeRec(AccessibilityNodeInfoDumper.java:225)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpWindowToFile(AccessibilityNodeInfoDumper.java:96)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.commands.uiautomator.DumpCommand.run(DumpCommand.java:111)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.commands.uiautomator.Launcher.main(Launcher.java:83)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.nativeFinishInit(Native Method)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.main(RuntimeInit.java:355)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: Error reporting crash
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: java.lang.RuntimeException: Bad file descriptor
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.os.BinderProxy.transactNative(Native Method)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.os.BinderProxy.transact(BinderProxy.java:584)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.os.IServiceManager$Stub$Proxy.checkService(IServiceManager.java:421)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.os.ServiceManagerProxy.getService(ServiceManagerNative.java:63)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.os.ServiceManager.rawGetService(ServiceManager.java:372)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.os.ServiceManager.getService(ServiceManager.java:147)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.app.ActivityManager$1.create(ActivityManager.java:4690)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.app.ActivityManager$1.create(ActivityManager.java:4687)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.util.Singleton.get(Singleton.java:43)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at android.app.ActivityManager.getService(ActivityManager.java:4678)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$KillApplicationHandler.uncaughtException(RuntimeInit.java:156)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1073)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1068)
+11-14 23:15:10.871 30956 30956 E AndroidRuntime: 	at java.lang.Thread.dispatchUncaughtException(Thread.java:2306)
+

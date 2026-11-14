@@ -1,0 +1,193 @@
+11-14 22:05:04.413  8136  8136 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:08:35.770  9312  9312 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:11:02.467 10171 10171 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:12:09.528 10575 10575 W W25     : flags=[noscrub]
+11-14 22:12:12.856 10575 10575 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:13:24.095 10991 10991 W W25     : flags=[plainmedal]
+11-14 22:13:27.431 10991 10991 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:14:34.644 11418 11418 W W25     : flags=[solidthread]
+11-14 22:14:38.197 11418 11418 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:15:46.443 11797 11797 W W25     : flags=[plaincard]
+11-14 22:15:49.822 11797 11797 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:16:57.793 12186 12186 W W25     : flags=[noenter]
+11-14 22:17:01.073 12186 12186 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:18:12.321 12579 12579 W W25     : flags=[noscrub, plainmedal, nothread, plaincard, noenter]
+11-14 22:18:15.310 12579 12579 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:20:41.852 13460 13460 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:21:57.639 14013 14013 W W25     : flags=[noscrub]
+11-14 22:22:00.264 14013 14013 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:23:16.116 14422 14422 W W25     : flags=[plainmedal]
+11-14 22:23:19.084 14422 14422 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:24:29.379 14800 14800 W W25     : flags=[solidthread]
+11-14 22:24:32.881 14800 14800 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:25:39.945 15168 15168 W W25     : flags=[plaincard]
+11-14 22:25:43.037 15168 15168 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:26:52.766 15539 15539 W W25     : flags=[noenter]
+11-14 22:26:55.590 15539 15539 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:28:06.063 15917 15917 W W25     : flags=[noscrub, plainmedal, nothread, plaincard, noenter]
+11-14 22:28:09.776 15917 15917 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:31:39.155 17023 17023 W W25     : flags=[noscrub]
+11-14 22:31:41.934 17023 17023 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:32:50.004 17449 17449 W W25     : flags=[plainmedal]
+11-14 22:32:53.437 17449 17449 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:34:01.573 17820 17820 W W25     : flags=[solidthread]
+11-14 22:34:04.760 17820 17820 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:35:13.934 18194 18194 W W25     : flags=[plaincard]
+11-14 22:35:17.226 18194 18194 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:36:27.815 18578 18578 W W25     : flags=[noenter]
+11-14 22:36:30.842 18578 18578 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:37:39.421 18954 18954 W W25     : flags=[noscrub, plainmedal, nothread, plaincard, noenter]
+11-14 22:37:42.569 18954 18954 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:41:20.364 20097 20097 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:42:30.620 20467 20467 W W25     : flags=[plainmedal]
+11-14 22:42:34.018 20467 20467 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:43:41.604 20834 20834 W W25     : flags=[solidthread]
+11-14 22:43:45.288 20834 20834 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:44:56.894 21214 21214 W W25     : flags=[plaincard]
+11-14 22:44:59.518 21214 21214 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:46:09.234 21581 21581 W W25     : flags=[noenter]
+11-14 22:46:12.500 21581 21581 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:47:23.668 21957 21957 W W25     : flags=[noscrub, plainmedal, nothread, plaincard, noenter]
+11-14 22:47:26.080 21957 21957 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:51:05.475 23072 23072 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:52:17.594 23445 23445 W W25     : flags=[noscrub]
+11-14 22:52:20.888 23445 23445 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:53:31.164 23824 23824 W W25     : flags=[solidthread]
+11-14 22:53:34.231 23824 23824 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:54:43.772 24187 24187 W W25     : flags=[plaincard]
+11-14 22:54:46.833 24187 24187 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:55:57.109 24599 24599 W W25     : flags=[noenter]
+11-14 22:56:00.189 24599 24599 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:57:11.625 24968 24968 W W25     : flags=[noscrub, plainmedal, nothread, plaincard, noenter]
+11-14 22:57:14.192 24968 24968 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:00:50.867 26139 26139 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:02:01.496 26504 26504 W W25     : flags=[noscrub]
+11-14 23:02:04.809 26504 26504 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:03:13.841 26896 26896 W W25     : flags=[plainmedal]
+11-14 23:03:16.736 26896 26896 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:04:28.351 27286 27286 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:05:13.122 27286 27286 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:05:13.123 27286 27286 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:05:13.123 27286 27286 W W25     : QB effect end size=0 +0ms active=true
+11-14 23:05:17.682 27286 27286 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:05:18.780 27286 27286 W W25     : QB after stitch i=0 +1097ms
+11-14 23:05:18.780 27286 27286 W W25     : QB effect end size=1 +1098ms active=true
+11-14 23:05:26.198 27286 27286 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:05:27.370 27286 27286 W W25     : QB after stitch i=1 +1172ms
+11-14 23:05:27.370 27286 27286 W W25     : QB effect end size=2 +1172ms active=true
+11-14 23:05:34.914 27286 27286 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:05:34.915 27286 27286 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:05:43.431 27286 27286 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:05:43.431 27286 27286 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:05:52.116 27286 27286 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:05:52.116 27286 27286 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:05:56.431 27286 27286 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:05:56.431 27286 27286 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:05:56.431 27286 27286 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:06:08.548 27880 27880 W W25     : flags=[noband]
+11-14 23:06:11.832 27880 27880 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:07:47.527 28504 28504 W W25     : flags=[noband]
+11-14 23:07:50.996 28504 28504 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:09:17.340 28967 28967 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:10:00.327 28967 28967 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:10:00.328 28967 28967 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:10:00.328 28967 28967 W W25     : QB effect end size=0 +1ms active=true
+11-14 23:10:07.016 28967 28967 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:10:08.204 28967 28967 W W25     : QB after stitch i=0 +1188ms
+11-14 23:10:08.204 28967 28967 W W25     : QB effect end size=1 +1188ms active=true
+11-14 23:10:11.367 28967 28967 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:10:12.773 28967 28967 W W25     : QB after stitch i=1 +1406ms
+11-14 23:10:12.773 28967 28967 W W25     : QB effect end size=2 +1406ms active=true
+11-14 23:10:15.615 28967 28967 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:10:15.616 28967 28967 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:10:20.049 28967 28967 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:10:20.049 28967 28967 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:10:24.381 28967 28967 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:10:24.381 28967 28967 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:10:26.915 28967 28967 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:10:26.916 28967 28967 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:10:26.917 28967 28967 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:10:42.574 29633 29633 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:11:22.963 29633 29633 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:11:22.963 29633 29633 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:11:22.964 29633 29633 W W25     : QB effect end size=0 +1ms active=true
+11-14 23:11:29.832 29633 29633 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:11:31.136 29633 29633 W W25     : QB after stitch i=0 +1303ms
+11-14 23:11:31.139 29633 29633 W W25     : QB effect end size=1 +1306ms active=true
+11-14 23:11:34.182 29633 29633 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:11:35.514 29633 29633 W W25     : QB after stitch i=1 +1332ms
+11-14 23:11:35.515 29633 29633 W W25     : QB effect end size=2 +1332ms active=true
+11-14 23:11:38.499 29633 29633 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:11:38.500 29633 29633 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:11:42.835 29633 29633 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:11:42.835 29633 29633 W W25     : QB effect end size=4 +1ms active=true
+11-14 23:11:47.115 29633 29633 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:11:47.115 29633 29633 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:11:49.944 29633 29633 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:11:49.944 29633 29633 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:11:49.945 29633 29633 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:12:01.117 30085 30085 W W25     : flags=[noband]
+11-14 23:12:04.164 30085 30085 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:13:26.936 30492 30492 W W25     : flags=[noband]
+11-14 23:13:29.821 30492 30492 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:14:56.442 30898 30898 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:15:39.828 30898 30898 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:15:39.828 30898 30898 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:15:39.832 30898 30898 W W25     : QB effect end size=0 +4ms active=true
+11-14 23:15:46.447 30898 30898 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:15:47.673 30898 30898 W W25     : QB after stitch i=0 +1227ms
+11-14 23:15:47.673 30898 30898 W W25     : QB effect end size=1 +1227ms active=true
+11-14 23:15:50.718 30898 30898 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:15:51.970 30898 30898 W W25     : QB after stitch i=1 +1252ms
+11-14 23:15:51.971 30898 30898 W W25     : QB effect end size=2 +1253ms active=true
+11-14 23:15:54.983 30898 30898 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:15:54.983 30898 30898 W W25     : QB effect end size=3 +1ms active=true
+11-14 23:15:59.382 30898 30898 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:15:59.382 30898 30898 W W25     : QB effect end size=4 +1ms active=true
+11-14 23:16:03.665 30898 30898 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:16:03.665 30898 30898 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:16:06.216 30898 30898 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:16:06.216 30898 30898 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:16:06.216 30898 30898 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:16:20.822 31322 31322 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:17:03.729 31322 31322 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:17:03.730 31322 31322 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:17:03.730 31322 31322 W W25     : QB effect end size=0 +0ms active=true
+11-14 23:17:10.481 31322 31322 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:17:11.696 31322 31322 W W25     : QB after stitch i=0 +1216ms
+11-14 23:17:11.696 31322 31322 W W25     : QB effect end size=1 +1216ms active=true
+11-14 23:17:14.864 31322 31322 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:17:16.136 31322 31322 W W25     : QB after stitch i=1 +1273ms
+11-14 23:17:16.136 31322 31322 W W25     : QB effect end size=2 +1273ms active=true
+11-14 23:17:19.182 31322 31322 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:17:19.182 31322 31322 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:17:23.499 31322 31322 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:17:23.500 31322 31322 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:17:27.815 31322 31322 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:17:27.815 31322 31322 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:17:31.252 31322 31322 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:17:31.252 31322 31322 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:17:31.252 31322 31322 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:17:41.906 31723 31723 W W25     : flags=[noband]
+11-14 23:17:44.402 31723 31723 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:19:05.054 32130 32130 W W25     : flags=[noband]
+11-14 23:19:08.020 32130 32130 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:20:29.892 32529 32529 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:21:11.202 32529 32529 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:21:11.203 32529 32529 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:21:11.203 32529 32529 W W25     : QB effect end size=0 +1ms active=true
+11-14 23:21:17.966 32529 32529 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:21:19.366 32529 32529 W W25     : QB after stitch i=0 +1399ms
+11-14 23:21:19.366 32529 32529 W W25     : QB effect end size=1 +1399ms active=true
+11-14 23:21:22.250 32529 32529 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:21:23.617 32529 32529 W W25     : QB after stitch i=1 +1366ms
+11-14 23:21:23.618 32529 32529 W W25     : QB effect end size=2 +1367ms active=true
+11-14 23:21:26.681 32529 32529 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:21:26.681 32529 32529 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:21:31.071 32529 32529 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:21:31.071 32529 32529 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:21:35.482 32529 32529 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:21:35.482 32529 32529 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:21:37.764 32529 32529 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:21:37.764 32529 32529 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:21:37.765 32529 32529 W W25     : QB effect end size=5 +1ms active=true

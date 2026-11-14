@@ -1,0 +1,51 @@
+app pids seen: ['12138', '12515', '13322']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 25
+   skipped-frames events=25 max=191 total=1386
+   11-14 22:13:47.791 12138 12138 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+   11-14 22:13:51.181 12138 12138 I Choreographer: Skipped 191 frames!  The application may be doing too much work on its main thread.
+   11-14 22:13:52.209 12138 12138 I Choreographer: Skipped 54 frames!  The application may be doing too much work on its main thread.
+   11-14 22:13:53.032 12138 12138 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+   11-14 22:13:54.667 12138 12138 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+   11-14 22:13:55.296 12138 12138 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-14 22:13:55.880 12138 12138 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-14 22:14:05.221 12138 12138 I Choreographer: Skipped 69 frames!  The application may be doing too much work on its main thread.
+   11-14 22:14:05.955 12138 12138 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-14 22:15:00.987 12138 12138 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-14 22:15:04.364 12515 12515 I Choreographer: Skipped 75 frames!  The application may be doing too much work on its main thread.
+   11-14 22:15:06.674 12515 12515 I Choreographer: Skipped 126 frames!  The application may be doing too much work on its main thread.
+== Davey: 52
+   davey events=52 max=4431ms median=1064ms
+   11-14 22:13:52.204 12138 12152 I OpenGLRenderer: Davey! duration=4431ms; Flags=1, FrameTimelineVsyncId=52926, IntendedVsync=867613747388, Vsync=868630414014, InputEventId=0, HandleInputStart=868632766185, AnimationStart=868632767097, Perfor
+   11-14 22:13:52.991 12138 12152 I OpenGLRenderer: Davey! duration=1437ms; Flags=0, FrameTimelineVsyncId=53602, IntendedVsync=872063752755, Vsync=872113752750, InputEventId=0, HandleInputStart=872129450738, AnimationStart=872129451028, Perfor
+   11-14 22:13:53.395 12138 12244 I OpenGLRenderer: Davey! duration=791ms; Flags=0, FrameTimelineVsyncId=53623, IntendedVsync=872130413874, Vsync=872130413874, InputEventId=0, HandleInputStart=872135514546, AnimationStart=872135514806, Perform
+   11-14 22:13:53.576 12138 12151 I OpenGLRenderer: Davey! duration=1327ms; Flags=0, FrameTimelineVsyncId=53638, IntendedVsync=872147080540, Vsync=873047080504, InputEventId=0, HandleInputStart=873051466055, AnimationStart=873051466486, Perfor
+   11-14 22:13:54.663 12138 12151 I OpenGLRenderer: Davey! duration=1532ms; Flags=0, FrameTimelineVsyncId=53793, IntendedVsync=873063747170, Vsync=873863747138, InputEventId=0, HandleInputStart=873873615216, AnimationStart=873873615617, Perfor
+   11-14 22:13:55.236 12138 12244 I OpenGLRenderer: Davey! duration=1467ms; Flags=0, FrameTimelineVsyncId=53826, IntendedVsync=873880413804, Vsync=874247080456, InputEventId=0, HandleInputStart=874261383190, AnimationStart=874261383580, Perfor
+   11-14 22:13:55.879 12138 12244 I OpenGLRenderer: Davey! duration=733ms; Flags=0, FrameTimelineVsyncId=53845, IntendedVsync=874263747122, Vsync=874413747116, InputEventId=0, HandleInputStart=874420332676, AnimationStart=874420333017, Perform
+   11-14 22:13:56.330 12138 12244 I OpenGLRenderer: Davey! duration=1721ms; Flags=0, FrameTimelineVsyncId=53857, IntendedVsync=874430413782, Vsync=875497080406, InputEventId=0, HandleInputStart=875509519210, AnimationStart=875509519811, Perfor
+   11-14 22:13:56.674 12138 12244 I OpenGLRenderer: Davey! duration=1076ms; Flags=0, FrameTimelineVsyncId=53899, IntendedVsync=875513747072, Vsync=876130413714, InputEventId=0, HandleInputStart=876137662324, AnimationStart=876137662875, Perfor
+   11-14 22:13:56.755 12138 12244 I OpenGLRenderer: Davey! duration=924ms; Flags=0, FrameTimelineVsyncId=53916, IntendedVsync=876147080380, Vsync=876713747024, InputEventId=0, HandleInputStart=876722138848, AnimationStart=876722139329, Perform
+   11-14 22:13:57.197 12138 12244 I OpenGLRenderer: Davey! duration=808ms; Flags=0, FrameTimelineVsyncId=53926, IntendedVsync=876730413690, Vsync=877163747006, InputEventId=0, HandleInputStart=877173381297, AnimationStart=877173381608, Perform
+   11-14 22:14:04.037 12138 12151 I OpenGLRenderer: Davey! duration=804ms; Flags=0, FrameTimelineVsyncId=54595, IntendedVsync=883730424505, Vsync=884197091097, InputEventId=0, HandleInputStart=884197987157, AnimationStart=884197987688, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 22:01:08.641  5000  5000 I PERFCHECK: section: CF0. The hook build same code as 1.2.38 + Log.w lines, first launch
+   11-14 22:02:30.949  6556  6556 I PERFCHECK: cf
+   11-14 22:02:31.538  6596  6596 I PERFCHECK: section: CF1. Control: confetti on „Искам да прочета“ host recording, hook build
+   11-14 22:02:41.418  6812  6812 I PERFCHECK: want-hook
+   11-14 22:03:02.174  7410  7410 I PERFCHECK: section: CF2. Quiz pass 1 hook: the first options, the right answers are learned
+   11-14 22:05:04.453  8723  8723 I PERFCHECK: section: CF3. Quiz 5/5 on the hook build, no recording pure timing from the log
+   11-14 22:06:43.844  9357  9357 I PERFCHECK: q5-hk-none
+   11-14 22:07:08.572  9503  9503 I PERFCHECK: section: CF4. Quiz 5/5 on the hook build, recorded from the host adb emu screenrecord
+   11-14 22:08:46.407 10308 10308 I PERFCHECK: q5-hk-emu
+   11-14 22:09:19.660 10457 10457 I PERFCHECK: section: CF5. Quiz 5/5 on the hook build, recorded in the guest screenrecord 540x1200 — loads the software GPU
+   11-14 22:10:56.305 11130 11130 I PERFCHECK: q5-hk-adb
+   11-14 22:11:27.485 11330 11330 I PERFCHECK: section: CF6. Quiz 5/5 on the hook build, „Виж резултата“ NOT tapped for 12 s, host recording second sample
+   11-14 22:13:05.809 11942 11942 I PERFCHECK: q5-hk-long
+   11-14 22:13:45.545 12122 12122 I PERFCHECK: section: CF7. The released 1.2.38 itself no log lines: control and quiz 5/5, host recording
+   11-14 22:14:44.613 12463 12463 I PERFCHECK: want-new
+   11-14 22:16:37.722 13133 13133 I PERFCHECK: q5-new-e1
+   11-14 22:18:49.940 13921 13921 I PERFCHECK: q5-new-e2

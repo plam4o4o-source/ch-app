@@ -1,0 +1,48 @@
+app pids seen: ['5081', '8543', '13022', '16283', '19344', '22334', '25348']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 35
+   skipped-frames events=35 max=119 total=2080
+   11-14 22:02:04.900  5081  5081 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:05.644  5081  5081 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:07.037  5081  5081 I Choreographer: Skipped 71 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:09.385  5081  5081 I Choreographer: Skipped 119 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:10.632  5081  5081 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:11.300  5081  5081 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:12.138  5081  5081 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:23.602  5081  5081 I Choreographer: Skipped 90 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:25.503  5081  5081 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:26.604  5081  5081 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:38.670  5081  5081 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-14 22:02:45.962  5081  5081 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+== Davey: 61
+   davey events=61 max=3248ms median=991ms
+   11-14 22:02:09.323  5081  5095 I OpenGLRenderer: Davey! duration=2271ms; Flags=1, FrameTimelineVsyncId=8088, IntendedVsync=115502624406, Vsync=116235957710, InputEventId=0, HandleInputStart=116243647916, AnimationStart=116243648874, Perform
+   11-14 22:02:09.830  5081  5095 I OpenGLRenderer: Davey! duration=2442ms; Flags=0, FrameTimelineVsyncId=8291, IntendedVsync=117635957654, Vsync=117685957652, InputEventId=0, HandleInputStart=117693647113, AnimationStart=117693647646, Perform
+   11-14 22:02:10.038  5081  5094 I OpenGLRenderer: Davey! duration=817ms; Flags=0, FrameTimelineVsyncId=8316, IntendedVsync=117702624318, Vsync=117969290974, InputEventId=0, HandleInputStart=117982578092, AnimationStart=117982578590, PerformT
+   11-14 22:02:10.620  5081  5094 I OpenGLRenderer: Davey! duration=2692ms; Flags=0, FrameTimelineVsyncId=8345, IntendedVsync=117985957640, Vsync=119969290894, InputEventId=0, HandleInputStart=119978593138, AnimationStart=119978594035, Perform
+   11-14 22:02:11.262  5081  5094 I OpenGLRenderer: Davey! duration=1025ms; Flags=0, FrameTimelineVsyncId=8636, IntendedVsync=120435957542, Vsync=120435957542, InputEventId=0, HandleInputStart=120436776548, AnimationStart=120436777292, Perform
+   11-14 22:02:12.131  5081  5094 I OpenGLRenderer: Davey! duration=1402ms; Flags=0, FrameTimelineVsyncId=8644, IntendedVsync=120452624208, Vsync=120652624200, InputEventId=0, HandleInputStart=120664604875, AnimationStart=120664605316, Perform
+   11-14 22:02:12.391  5081  5094 I OpenGLRenderer: Davey! duration=1434ms; Flags=0, FrameTimelineVsyncId=8676, IntendedVsync=120669290866, Vsync=121219290844, InputEventId=0, HandleInputStart=121227390883, AnimationStart=121227391637, Perform
+   11-14 22:02:12.447  5081  5095 I OpenGLRenderer: Davey! duration=925ms; Flags=0, FrameTimelineVsyncId=8712, IntendedVsync=121235957510, Vsync=121885957484, InputEventId=0, HandleInputStart=121893681678, AnimationStart=121893682618, PerformT
+   11-14 22:02:12.909  5081  5095 I OpenGLRenderer: Davey! duration=1115ms; Flags=0, FrameTimelineVsyncId=8728, IntendedVsync=121902624150, Vsync=122719290784, InputEventId=0, HandleInputStart=122732224964, AnimationStart=122732225565, Perform
+   11-14 22:02:12.923  5081  5094 I OpenGLRenderer: Davey! duration=705ms; Flags=0, FrameTimelineVsyncId=8797, IntendedVsync=122752624116, Vsync=122985957440, InputEventId=0, HandleInputStart=122990957701, AnimationStart=122990958193, PerformT
+   11-14 22:02:23.990  5081  5094 I OpenGLRenderer: Davey! duration=1568ms; Flags=0, FrameTimelineVsyncId=9545, IntendedVsync=132652623720, Vsync=132669290386, InputEventId=0, HandleInputStart=132672814153, AnimationStart=132672814639, Perform
+   11-14 22:02:24.399  5081  5255 I OpenGLRenderer: Davey! duration=1954ms; Flags=0, FrameTimelineVsyncId=9552, IntendedVsync=132685957052, Vsync=134185956992, InputEventId=0, HandleInputStart=134196336861, AnimationStart=134196337469, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 22:02:00.151  4903  4903 I PERFCHECK: section: AT0. Timeline and quiz: one suspect at a time hook build flags, with 1.2.38 and 1.2.37 as references
+   11-14 22:06:09.751  8520  8520 I PERFCHECK: section: A. Repetition 0 of: timeline configs rotated by 0
+   11-14 22:09:48.539  9733  9733 I PERFCHECK: section: A. Repetition 1 of: timeline configs rotated by 1
+   11-14 22:20:36.125 13394 13394 I PERFCHECK: section: A. Repetition 2 of: timeline configs rotated by 2
+   11-14 22:31:36.525 17000 17000 I PERFCHECK: section: A. Repetition 3 of: timeline configs rotated by 3
+   11-14 22:42:28.464 20444 20444 I PERFCHECK: section: A. Repetition 4 of: timeline configs rotated by 4
+   11-14 22:53:28.967 23798 23798 I PERFCHECK: section: A. Repetition 5 of: timeline configs rotated by 5
+   11-14 23:04:23.660 27260 27260 I PERFCHECK: section: A. Repetition 0 of: quiz configs rotated by 0
+   11-14 23:07:45.168 28471 28471 I PERFCHECK: section: A. Repetition 1 of: quiz configs rotated by 1
+   11-14 23:10:36.884 29606 29606 I PERFCHECK: section: A. Repetition 2 of: quiz configs rotated by 2
+   11-14 23:13:24.571 30465 30465 I PERFCHECK: section: A. Repetition 3 of: quiz configs rotated by 3
+   11-14 23:16:15.655 31295 31295 I PERFCHECK: section: A. Repetition 4 of: quiz configs rotated by 4
+   11-14 23:19:02.908 32104 32104 I PERFCHECK: section: A. Repetition 5 of: quiz configs rotated by 5
+   11-14 23:21:47.555   684   684 I PERFCHECK: section: A9. Totals rep 0 is excluded

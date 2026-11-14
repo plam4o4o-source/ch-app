@@ -1,0 +1,99 @@
+part fs33; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4950 ms
+font_scale 2.0; 1080x2400 px, density 420, font_scale 2.0, night no, app locale [bg-BG], rotation 0
+## FS1. Quiz at font scale 2.0: question, answered (feedback + band + Напред), result
+CAP font200/quiz-q1: targets=5 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 0 верни от 0 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Решение за собствена сграда · Въздържателно дружество „Бор · Общностен и информационен це
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+QUIZ options visible without scrolling: 4 of 4; next button: 1
+CAP font200/quiz-q1-scrolled: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Какво се случва в читалището · Решение за собствена сграда · Въздържателно дружество „Бор · Общностен и информационен це · Трудни години — устояване · Избродирай отговорите
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/quiz-q1-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 1 верни от 1 отговорени, общ · Въпрос 1 от 5 · Какво се случва в читалището · Решение за собствена сграда · Вярно! · Започва отчуждаване на терен
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/quiz-q2-answered: targets=2 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 2 верни от 2 отговорени, общ · Въпрос 2 от 5 · Какво се случва в читалището · Първият радиоапарат в селото · Вярно! · Закупен от читалището. По вр
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/quiz-result: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Утре ще е по-добре — Яворец  · 2/5 · 2 верни от 5 · Избродирай отговорите · Серия: 1 ден поред · Нови въпроси — утре.
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/quiz-result-2: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Утре ще е по-добре — Яворец  · 2/5 · 2 верни от 5 · Избродирай отговорите · Серия: 1 ден поред · Нови въпроси — утре.
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+## FS2. Timeline at font scale 2.0: top, while scrolling (the decade scrubber), further down
+CAP font200/tl-1: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=6 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · Назад
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/tl-3: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · Ученици от Севлиевската гимн · 1909. Организирано читалищно · Организирано читалищно дело · Влади Илиев, Христо Лалев и 
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/tl-4: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн · 1909. Организирано читалищно · Организирано читалищно дело · Влади Илиев, Христо Лалев и  · 1912–1918. Прекъсване от вой
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/tl-6: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | 1909. Организирано читалищно · Организирано читалищно дело · Влади Илиев, Христо Лалев и  · 1912–1918. Прекъсване от вой · Прекъсване от войните · Балканската война (1912) пре
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+## FS3. Settings at font scale 2.0 (every screenful)
+CAP font200/set-1: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/set-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Размер на текста · Стандартен · Палитра · Яворец · Яворец · Злато и жито
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/set-3: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Злато и жито · Зелено и сребро · Червено, черно и слонова кос · Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/set-4: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български · Сезонни украси
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/set-5: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Цветове от тапета · Цветовете на телефона, взети · Език · Български · Сезонни украси · Празници, сезони и обичаи: п
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/set-6: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=11 ellipsized=0 | Цветовете на телефона, взети · Език · Български · Сезонни украси · Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“
+    CLIP: cut 0, squeezed 1, overlapping clickables 0: 'Добави уиджета „Читалище' only 13px high
+CAP font200/set-7: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“ · Разклати телефона в каталога · УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо
+    CLIP: cut 0, squeezed 1, overlapping clickables 0: 'Добави „Книга на деня“' only 23px high
+CAP font200/set-8: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Разклати телефона в каталога · УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“ · Всеки ден друга книга от кат
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/set-9: targets=4 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“ · Всеки ден друга книга от кат · ИЗВЕСТИЯ
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/set-10: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“ · Всеки ден друга книга от кат · ИЗВЕСТИЯ · Избери известията
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+## FS4. Login at font scale 2.0 (FLAG_SECURE: host screenshots + uiautomator)
+CAP font200/my-1: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Примерна читателска карта · ЧИТАТЕЛСКА КАРТА · НЧ „Васил Левски – 1922“ · Мария Иванова · Читателски № 19220001 · Баркод на карта 19220001
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+CAP font200/my-2: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=18 ellipsized=0 | Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта · Добави номера от своята карт · Моите книги
+    CLIP: cut 0, squeezed 1, overlapping clickables 0: 'Вход' only 5px high
+LOGIN font 2.0, screenful 1: CLIP: cut 0, squeezed 0, overlapping clickables 0; sign-in button: ; texts: content-desc="Примерна читателска карта" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Мария Иванова" text="Читателски № 19220001" content-desc="Баркод на карта 19220001" text="Така ще изглежда картата ти" text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройст
+LOGIN font 2.0, screenful 2: CLIP: cut 0, squeezed 0, overlapping clickables 0; sign-in button: 540 1570 enabled=false class=android.view.View bounds=(63, 1500, 1017, 1640); texts: text="Така ще изглежда картата ти" text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore." content-desc="Назад" text="Вход" 
+LOGIN font 2.0, screenful 3: CLIP: cut 0, squeezed 0, overlapping clickables 0; sign-in button: 540 1456 enabled=false class=android.view.View bounds=(63, 1386, 1017, 1526); texts: text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore." content-desc="Назад" text="Вход" 
+LOGIN font 2.0, screenful 4: CLIP: cut 0, squeezed 0, overlapping clickables 0; sign-in button: 540 1456 enabled=false class=android.view.View bounds=(63, 1386, 1017, 1526); texts: text="Вход за читатели" text="Читателски номер" text="ПИН (от библиотеката)" content-desc="Покажи ПИН-а" text="Запомни ме на това устройство" text="Вход" text="Забравен ПИН?" text="ПИН-ът не се съхранява на устройството. Сесията се пази шифрована с ключ от Android Keystore." content-desc="Назад" text="Вход" 
+## FS5. The same four at „Много голям“ in the app + system 2.0 is capped at 2.0 — only Home for reference
+CAP font200/home-1: targets=12 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=18 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+    CLIP: cut 0, squeezed 0, overlapping clickables 0
+A11Y AGG: 23 screens analysed, 0 dumps failed; totals MISSING=4 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=5
+== MISSING: 4 distinct
+   View@[42,1799][1038,1925]  [1 screens: quiz-q1]
+   View@[42,2032][1038,2127]  [1 screens: my-2]
+   View@[42,2080][540,2127]  [1 screens: home-1]
+   View@[540,2080][1038,2127]  [1 screens: home-1]
+== SMALL: 3 distinct
+   ''  [2 screens: home-1, my-2]
+   'Цветовете на телефона, взети о'  [1 screens: set-6]
+   'Вход'  [1 screens: my-2]
+== SAME-LABEL: 0 distinct
+== DOUBLE: 0 distinct
+FS part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 4 in sheets/
+contact sheets: 4 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4861', '6110']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 22
+   skipped-frames events=22 max=112 total=1127
+== Davey: 48
+   davey events=48 max=4042ms median=886ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'ANR': 1} → crashes.txt

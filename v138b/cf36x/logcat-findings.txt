@@ -1,0 +1,47 @@
+app pids seen: ['9451', '9803', '10526']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 5
+   skipped-frames events=5 max=91 total=323
+   11-14 22:13:07.955  9451  9451 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+   11-14 22:13:10.852  9451  9451 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-14 22:14:17.718  9803  9803 I Choreographer: Skipped 66 frames!  The application may be doing too much work on its main thread.
+   11-14 22:16:22.748 10526 10526 I Choreographer: Skipped 91 frames!  The application may be doing too much work on its main thread.
+   11-14 22:16:24.924 10526 10526 I Choreographer: Skipped 72 frames!  The application may be doing too much work on its main thread.
+== Davey: 32
+   davey events=32 max=1781ms median=864ms
+   11-14 22:13:08.188  9451  9462 I HWUI    : Davey! duration=1402ms; Flags=0, FrameTimelineVsyncId=57849, IntendedVsync=814469561532, Vsync=814602894860, InputEventId=0, HandleInputStart=814614958740, AnimationStart=814614959374, PerformTrave
+   11-14 22:13:08.722  9451  9503 I HWUI    : Davey! duration=1615ms; Flags=0, FrameTimelineVsyncId=57914, IntendedVsync=814652894858, Vsync=815719561482, InputEventId=0, HandleInputStart=815732840345, AnimationStart=815732841371, PerformTrave
+   11-14 22:13:09.156  9451  9459 I HWUI    : Davey! duration=887ms; Flags=0, FrameTimelineVsyncId=58074, IntendedVsync=815736228148, Vsync=815969561472, InputEventId=0, HandleInputStart=815981701040, AnimationStart=815981701592, PerformTraver
+   11-14 22:13:09.615  9451  9459 I HWUI    : Davey! duration=1036ms; Flags=0, FrameTimelineVsyncId=58089, IntendedVsync=815986228138, Vsync=816302894792, InputEventId=0, HandleInputStart=816309693798, AnimationStart=816309694462, PerformTrave
+   11-14 22:13:09.948  9451  9503 I HWUI    : Davey! duration=1042ms; Flags=0, FrameTimelineVsyncId=58135, IntendedVsync=816319561458, Vsync=816636228112, InputEventId=0, HandleInputStart=816637638461, AnimationStart=816637639145, PerformTrave
+   11-14 22:13:10.293  9451  9503 I HWUI    : Davey! duration=975ms; Flags=0, FrameTimelineVsyncId=58157, IntendedVsync=816652894778, Vsync=816986228098, InputEventId=0, HandleInputStart=816997487542, AnimationStart=816997488107, PerformTraver
+   11-14 22:13:10.795  9451  9462 I HWUI    : Davey! duration=1088ms; Flags=0, FrameTimelineVsyncId=58186, IntendedVsync=817002894764, Vsync=817419561414, InputEventId=0, HandleInputStart=817427664487, AnimationStart=817427665125, PerformTrave
+   11-14 22:13:10.880  9451  9459 I HWUI    : Davey! duration=842ms; Flags=0, FrameTimelineVsyncId=58229, IntendedVsync=817436228080, Vsync=817752894734, InputEventId=0, HandleInputStart=817765442252, AnimationStart=817765442901, PerformTraver
+   11-14 22:13:17.842  9451  9503 I HWUI    : Davey! duration=798ms; Flags=0, FrameTimelineVsyncId=58930, IntendedVsync=824769561120, Vsync=825019561110, InputEventId=0, HandleInputStart=825021025241, AnimationStart=825021025582, PerformTraver
+   11-14 22:13:18.181  9451  9503 I HWUI    : Davey! duration=709ms; Flags=0, FrameTimelineVsyncId=59044, IntendedVsync=825152894438, Vsync=825552894422, InputEventId=0, HandleInputStart=825558950849, AnimationStart=825558951409, PerformTraver
+   11-14 22:13:20.244  9451  9590 I HWUI    : Davey! duration=749ms; Flags=0, FrameTimelineVsyncId=59239, IntendedVsync=827169561024, Vsync=827469561012, InputEventId=0, HandleInputStart=827476609574, AnimationStart=827476610377, PerformTraver
+   11-14 22:14:17.716  9803  9812 I HWUI    : Davey! duration=1592ms; Flags=0, FrameTimelineVsyncId=63520, IntendedVsync=883886225422, Vsync=883986225418, InputEventId=0, HandleInputStart=883992345526, AnimationStart=883992345961, PerformTrave
+== NativeLink: 3
+   11-14 22:13:20.043  9451  9596 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 22:14:16.488  9803  9844 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 22:16:23.757 10526 10573 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 22:01:10.946  4134  4134 I PERFCHECK: section: CF0. The hook build same code as 1.2.38 + Log.w lines, first launch
+   11-14 22:02:19.549  5168  5168 I PERFCHECK: cf
+   11-14 22:02:20.105  5173  5173 I PERFCHECK: section: CF1. Control: confetti on „Искам да прочета“ host recording, hook build
+   11-14 22:02:29.119  5210  5210 I PERFCHECK: want-hook
+   11-14 22:02:45.325  5311  5311 I PERFCHECK: section: CF2. Quiz pass 1 hook: the first options, the right answers are learned
+   11-14 22:04:38.524  6391  6391 I PERFCHECK: section: CF3. Quiz 5/5 on the hook build, no recording pure timing from the log
+   11-14 22:06:12.110  7008  7008 I PERFCHECK: q5-hk-none
+   11-14 22:06:37.001  7155  7155 I PERFCHECK: section: CF4. Quiz 5/5 on the hook build, recorded from the host adb emu screenrecord
+   11-14 22:08:11.465  7764  7764 I PERFCHECK: q5-hk-emu
+   11-14 22:08:43.454  7899  7899 I PERFCHECK: section: CF5. Quiz 5/5 on the hook build, recorded in the guest screenrecord 540x1200 — loads the software GPU
+   11-14 22:10:18.740  8544  8544 I PERFCHECK: q5-hk-adb
+   11-14 22:10:48.876  8733  8733 I PERFCHECK: section: CF6. Quiz 5/5 on the hook build, „Виж резултата“ NOT tapped for 12 s, host recording second sample
+   11-14 22:12:24.365  9304  9304 I PERFCHECK: q5-hk-long
+   11-14 22:13:02.451  9439  9439 I PERFCHECK: section: CF7. The released 1.2.38 itself no log lines: control and quiz 5/5, host recording
+   11-14 22:13:56.121  9757  9757 I PERFCHECK: want-new
+   11-14 22:15:46.102 10361 10361 I PERFCHECK: q5-new-e1
+   11-14 22:17:55.591 11076 11076 I PERFCHECK: q5-new-e2

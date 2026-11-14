@@ -1,0 +1,38 @@
+app pids seen: ['10265', '10584', '11276']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=32 total=32
+   11-14 22:09:45.844 10265 10265 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 2
+   davey events=2 max=842ms median=800ms
+   11-14 22:09:46.142 10265 10289 I OpenGLRenderer: Davey! duration=842ms; Flags=1, IntendedVsync=640626710868, Vsync=641160044180, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=641172061510, AnimationStart=6411721
+   11-14 22:10:35.982 10584 10607 I OpenGLRenderer: Davey! duration=758ms; Flags=1, IntendedVsync=690550515002, Vsync=690933848320, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=690943818700, AnimationStart=6909438
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 22:01:01.534  5725  5725 I PERFCHECK: section: CF0. The hook build same code as 1.2.38 + Log.w lines, first launch
+   11-14 22:01:51.017  6543  6543 I PERFCHECK: cf
+   11-14 22:01:51.610  6547  6547 I PERFCHECK: section: CF1. Control: confetti on „Искам да прочета“ host recording, hook build
+   11-14 22:01:59.531  6572  6572 I PERFCHECK: want-hook
+   11-14 22:02:14.083  6630  6630 I PERFCHECK: section: CF2. Quiz pass 1 hook: the first options, the right answers are learned
+   11-14 22:02:14.095  2003  2015 I ActivityManager: Killing 6126:org.chyavorec.app.hk/u0a88 (adj 0): stop org.chyavorec.app.hk
+   11-14 22:03:34.575  7339  7339 I PERFCHECK: section: CF3. Quiz 5/5 on the hook build, no recording pure timing from the log
+   11-14 22:03:34.590  2003  3346 I ActivityManager: Killing 6652:org.chyavorec.app.hk/u0a88 (adj 0): stop org.chyavorec.app.hk
+   11-14 22:04:39.672  7935  7935 I PERFCHECK: q5-hk-none
+   11-14 22:04:59.728  8070  8070 I PERFCHECK: section: CF4. Quiz 5/5 on the hook build, recorded from the host adb emu screenrecord
+   11-14 22:04:59.741  2003  4312 I ActivityManager: Killing 7362:org.chyavorec.app.hk/u0a88 (adj 0): stop org.chyavorec.app.hk
+   11-14 22:06:06.156  8626  8626 I PERFCHECK: q5-hk-emu
+   11-14 22:06:32.879  8775  8775 I PERFCHECK: section: CF5. Quiz 5/5 on the hook build, recorded in the guest screenrecord 540x1200 — loads the software GPU
+   11-14 22:06:32.890  2003  4115 I ActivityManager: Killing 8092:org.chyavorec.app.hk/u0a88 (adj 0): stop org.chyavorec.app.hk
+   11-14 22:07:42.019  9373  9373 I PERFCHECK: q5-hk-adb
+   11-14 22:08:06.703  9541  9541 I PERFCHECK: section: CF6. Quiz 5/5 on the hook build, „Виж резултата“ NOT tapped for 12 s, host recording second sample
+   11-14 22:08:06.716  2003  4294 I ActivityManager: Killing 8799:org.chyavorec.app.hk/u0a88 (adj 0): stop org.chyavorec.app.hk
+   11-14 22:09:13.157 10116 10116 I PERFCHECK: q5-hk-long
+   11-14 22:09:44.659 10256 10256 I PERFCHECK: section: CF7. The released 1.2.38 itself no log lines: control and quiz 5/5, host recording
+   11-14 22:09:44.672  2003  2663 I ActivityManager: Killing 9565:org.chyavorec.app.hk/u0a88 (adj 0): stop org.chyavorec.app.hk
+   11-14 22:10:19.484 10525 10525 I PERFCHECK: want-new
+   11-14 22:10:33.632  2003  4361 I ActivityManager: Killing 10265:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 22:11:38.625 11115 11115 I PERFCHECK: q5-new-e1
+   11-14 22:12:06.520  2003  2014 I ActivityManager: Killing 10584:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 22:13:12.417 11792 11792 I PERFCHECK: q5-new-e2

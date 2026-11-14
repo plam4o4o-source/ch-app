@@ -1,0 +1,275 @@
+part cf28; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: 
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-lowdr-nowidecg-port-notnight-420dpi-finger-keysexposed-nokeys-navhidden-nonav-2274x1080-v28
+animations: animator_duration_scale=1 transition=1 window=1
+## CF0. The hook build (same code as 1.2.38 + Log.w lines), first launch
+X installed hook: 1.2.38 1dd4ccb prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101;  versionCode=1990101 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X hook: catalogue after 2115 ms
+anim after the first launch: animator_duration_scale=1 transition=1 window=1
+## CF1. Control: confetti on „Искам да прочета“ (host recording), hook build
+CONTROL hook: want-to-read before: checked=false selected=false bounds=[426,673][926,799]
+REC want-hook (emu): marker 1529 ms after the recording start; 57 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+W25 log after the control tap (hook):
++   162 ms  W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(705.0, 736.0) lastTap=Offset(705.0, 736.0)
++   171 ms  W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.0 alpha=1.0
++   434 ms  W25     : CH frame 1 progress=0.090914525 +272ms draws=1
++   435 ms  W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.090914525 alpha=1.0
++   468 ms  W25     : CH frame 2 progress=0.24450614 +306ms draws=2
++   469 ms  W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.24450614 alpha=1.0
++   648 ms  W25     : CH frame 3 progress=0.2767965 +486ms draws=3
++   649 ms  W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.2767965 alpha=1.0
++   761 ms  W25     : CH frame 4 progress=0.44388375 +599ms draws=4
++   764 ms  W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.44388375 alpha=1.0
++   808 ms  W25     : CH frame 5 progress=0.53702027 +646ms draws=5
++   810 ms  W25     : CL draw #6 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.53702027 alpha=1.0
++   965 ms  W25     : CH frame 6 progress=0.5840636 +803ms draws=6
++   966 ms  W25     : CL draw #7 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.5840636 alpha=1.0
++   966 ms  W25     : CH frame 7 progress=0.7206398 +805ms draws=7
++   972 ms  W25     : CL draw #8 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.7206398 alpha=0.79817194
++  1052 ms  W25     : CH frame 8 progress=0.73764867 +891ms draws=8
++  1053 ms  W25     : CL draw #9 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.73764867 alpha=0.74957526
++  1170 ms  W25     : CH frame 9 progress=0.7984312 +1009ms draws=9
++  1171 ms  W25     : CL draw #10 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.7984312 alpha=0.5759108
++  1287 ms  W25     : CH frame 10 progress=0.9053359 +1125ms draws=10
++  1287 ms  W25     : CL draw #11 size=Size(1080.0, 2400.0) at=Offset(705.0, 736.0) progress=0.9053359 alpha=0.27046886
++  1336 ms  W25     : CH frame 11 progress=1.0 +1174ms draws=11
++  1336 ms  W25     : CH effect end bursts=1 frames=11 draws=11 +1174ms progress=1.0
+FRAMES want-hook: confetti-like new saturated points outside the band, per frame (level at the end 98; peak #16 = 246; frames with >=6: 47, first #11, last #57): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 25, 98, 245, 230, 246, 192, 182, 124, 122, 101, 101, 102, 102, 101, 97, 98, 98, 98, 98, 101, 100, 100, 100, 100, 95, 99, 100, 100, 99, 97, 97, 97, 97, 97, 98, 98, 98, 98, 98, 98, 98, 98, 98, 98, 98, 98] vertical span of those points: 30-31% 30-31% 30-31% 25-31% 20-32% 20-33% 25-40% 27-48% 30-56% 30-57% 30-31% 30-31% 
+CONTROL hook: want-to-read after: checked=true selected=false bounds=[426,673][926,799]
+## CF2. Quiz pass 1 (hook): the first options, the right answers are learned
+QUIZ learn q1: RIGHT; content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ learn q2: RIGHT; content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ learn q3: WRONG	Катрин Уеб; content-desc="2 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ learn q4: WRONG	Даниъл Дж. Бурстин; content-desc="2 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ learn q5: WRONG	1922; content-desc="2 верни от 5 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ learn result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ answers learned: Решение за собствена сграда|Първият радиоапарат в селото|Катрин Уеб|Даниъл Дж. Бурстин|1922|
+## CF3. Quiz 5/5 on the hook build, no recording (pure timing from the log)
+QUIZ hk-none q1: RIGHT; content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-none q2: RIGHT; content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-none q3: RIGHT; content-desc="3 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-none q4: RIGHT; content-desc="4 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-none q5: answer at [540 910]; band label bounds [327 1808 753 1845]; next button y 2163; animator_duration_scale=1 transition=1 window=1
+W25 log after the 5th answer (hk-none; times from the marker just before 'input tap'):
++    96 ms  W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=true confetti=true
++  1073 ms  W25     : QB after stitch i=4 +977ms
++  1468 ms  W25     : QB after close +1371ms
++  1468 ms  W25     : QB after haptics +1372ms
++  1469 ms  W25     : QB burst called=true origin=Offset(540.5, 1959.5) bounds=Rect.fromLTRB(68.0, 1856.0, 1013.0, 2063.0) bursts=1 +1372ms
++  1469 ms  W25     : QB effect end size=5 +1372ms active=true
++  1574 ms  W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(540.5, 1959.5) lastTap=Offset(540.0, 910.0)
++  1576 ms  W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.0 alpha=1.0
++  1612 ms  W25     : CH frame 1 progress=0.03165625 +37ms draws=1
++  1616 ms  W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.03165625 alpha=1.0
++  1714 ms  W25     : CH frame 2 progress=0.047147032 +139ms draws=2
++  1723 ms  W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.047147032 alpha=1.0
++  1742 ms  W25     : CH frame 3 progress=0.13829194 +167ms draws=3
++  1742 ms  W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.13829194 alpha=1.0
++  1848 ms  W25     : CH frame 4 progress=0.15479775 +273ms draws=4
++  1849 ms  W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.15479775 alpha=1.0
++  1877 ms  W25     : CH frame 5 progress=0.24594268 +302ms draws=5
++  1877 ms  W25     : CL draw #6 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.24594268 alpha=1.0
++  1988 ms  W25     : CH frame 6 progress=0.27764127 +413ms draws=6
++  1988 ms  W25     : CL draw #7 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.27764127 alpha=1.0
++  2011 ms  W25     : CH frame 7 progress=0.38413176 +436ms draws=7
++  2011 ms  W25     : CL draw #8 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.38413176 alpha=1.0
++  2114 ms  W25     : CH frame 8 progress=0.40088767 +539ms draws=8
++  2115 ms  W25     : CL draw #9 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.40088767 alpha=1.0
++  2141 ms  W25     : CH frame 9 progress=0.49203125 +567ms draws=9
++  2142 ms  W25     : CL draw #10 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.49203125 alpha=1.0
++  2257 ms  W25     : CH frame 10 progress=0.5237091 +682ms draws=10
++  2257 ms  W25     : CL draw #11 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.5237091 alpha=1.0
++  2271 ms  W25     : CH frame 11 progress=0.6302223 +697ms draws=11
++  2273 ms  W25     : CL draw #12 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.6302223 alpha=1.0
++  2372 ms  W25     : CH frame 12 progress=0.64700156 +797ms draws=12
++  2377 ms  W25     : CL draw #13 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.64700156 alpha=1.0
++  2399 ms  W25     : CH frame 13 progress=0.72299206 +824ms draws=13
++  2400 ms  W25     : CL draw #14 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.72299206 alpha=0.7914513
++  2503 ms  W25     : CH frame 14 progress=0.75468796 +928ms draws=14
++  2503 ms  W25     : CL draw #15 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.75468796 alpha=0.70089155
++  2529 ms  W25     : CH frame 15 progress=0.8458282 +955ms draws=15
++  2530 ms  W25     : CL draw #16 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.8458282 alpha=0.44049093
++  2638 ms  W25     : CH frame 16 progress=0.87773985 +1063ms draws=16
++  2646 ms  W25     : CL draw #17 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.87773985 alpha=0.34931472
++  2667 ms  W25     : CH frame 17 progress=0.9840312 +1092ms draws=17
++  2668 ms  W25     : CL draw #18 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.9840312 alpha=0.045625143
++  2766 ms  W25     : CH frame 18 progress=1.0 +1192ms draws=18
++  2766 ms  W25     : CH effect end bursts=1 frames=18 draws=18 +1192ms progress=1.0
+QUIZ hk-none q5: RIGHT; content-desc="5 верни от 5 отговорени, общо 5 въпроса" text="Шевицата е цяла!" 
+QUIZ hk-none result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+## CF4. Quiz 5/5 on the hook build, recorded from the host (adb emu screenrecord)
+QUIZ hk-emu q1: RIGHT; content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-emu q2: RIGHT; content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-emu q3: RIGHT; content-desc="3 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-emu q4: RIGHT; content-desc="4 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-emu q5: answer at [540 910]; band label bounds [327 1808 753 1845]; next button y 2163; animator_duration_scale=1 transition=1 window=1
+REC q5-hk-emu (emu): marker 1532 ms after the recording start; 86 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+W25 log after the 5th answer (hk-emu; times from the marker just before 'input tap'):
++   137 ms  W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=true confetti=true
++  1289 ms  W25     : QB after stitch i=4 +1152ms
++  1792 ms  W25     : QB after close +1656ms
++  1794 ms  W25     : QB after haptics +1657ms
++  1794 ms  W25     : QB burst called=true origin=Offset(540.5, 1959.5) bounds=Rect.fromLTRB(68.0, 1856.0, 1013.0, 2063.0) bursts=1 +1657ms
++  1794 ms  W25     : QB effect end size=5 +1658ms active=true
++  1796 ms  W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(540.5, 1959.5) lastTap=Offset(540.0, 910.0)
++  1818 ms  W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.0 alpha=1.0
++  1994 ms  W25     : CH frame 1 progress=0.16786312 +198ms draws=1
++  2009 ms  W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.16786312 alpha=1.0
++  2071 ms  W25     : CH frame 2 progress=0.1796776 +274ms draws=2
++  2071 ms  W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.1796776 alpha=1.0
++  2274 ms  W25     : CH frame 3 progress=0.22632647 +478ms draws=3
++  2275 ms  W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.22632647 alpha=1.0
++  2429 ms  W25     : CH frame 4 progress=0.41168043 +633ms draws=4
++  2430 ms  W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.41168043 alpha=1.0
++  2508 ms  W25     : CH frame 5 progress=0.5610528 +712ms draws=5
++  2509 ms  W25     : CL draw #6 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.5610528 alpha=1.0
++  2755 ms  W25     : CH frame 6 progress=0.63230664 +959ms draws=6
++  2756 ms  W25     : CL draw #7 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.63230664 alpha=1.0
++  2861 ms  W25     : CH frame 7 progress=0.8491575 +1064ms draws=7
++  2861 ms  W25     : CL draw #8 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.8491575 alpha=0.43097854
++  3050 ms  W25     : CH frame 8 progress=0.9577409 +1254ms draws=8
++  3051 ms  W25     : CL draw #9 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.9577409 alpha=0.12074028
++  3198 ms  W25     : CH frame 9 progress=1.0 +1401ms draws=9
++  3198 ms  W25     : CH effect end bursts=1 frames=9 draws=9 +1402ms progress=1.0
+FRAMES q5-hk-emu: confetti-like new saturated points outside the band, per frame (level at the end 4699; peak #38 = 4719; frames with >=6: 78, first #9, last #86): [0, 0, 0, 0, 0, 0, 0, 0, 4697, 4695, 4699, 4697, 4697, 4695, 4698, 4697, 4695, 4696, 4702, 4697, 4695, 4695, 4701, 4700, 4699, 4698, 4698, 4699, 4699, 4698, 4697, 4697, 4698, 4697, 4698, 4699, 4714, 4719, 4701, 4701, 4698, 4699, 4698, 4699, 4699, 4699, 4698, 4698, 4699, 4699, 4699, 4698, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699] vertical span of those points: 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 37-92% 38-92% 38-92% 38-92% 38-92% 38-92% 
+QUIZ hk-emu q5: RIGHT; content-desc="5 верни от 5 отговорени, общо 5 въпроса" text="Шевицата е цяла!" 
+QUIZ hk-emu result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+## CF5. Quiz 5/5 on the hook build, recorded in the guest (screenrecord 540x1200 — loads the software GPU)
+QUIZ hk-adb q1: RIGHT; content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-adb q2: RIGHT; content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-adb q3: RIGHT; content-desc="3 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-adb q4: RIGHT; content-desc="4 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-adb q5: answer at [540 910]; band label bounds [327 1808 753 1845]; next button y 2163; animator_duration_scale=1 transition=1 window=1
+REC q5-hk-adb (adb): marker 2017 ms after the recording start; 29 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+W25 log after the 5th answer (hk-adb; times from the marker just before 'input tap'):
++    93 ms  W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=true confetti=true
++  1146 ms  W25     : QB after stitch i=4 +1052ms
++  1512 ms  W25     : QB after close +1419ms
++  1516 ms  W25     : QB after haptics +1422ms
++  1516 ms  W25     : QB burst called=true origin=Offset(540.5, 1959.5) bounds=Rect.fromLTRB(68.0, 1856.0, 1013.0, 2063.0) bursts=1 +1422ms
++  1516 ms  W25     : QB effect end size=5 +1422ms active=true
++  1605 ms  W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(540.5, 1959.5) lastTap=Offset(540.0, 910.0)
++  1629 ms  W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.0 alpha=1.0
++  1697 ms  W25     : CH frame 1 progress=0.07751444 +91ms draws=1
++  1708 ms  W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.07751444 alpha=1.0
++  1745 ms  W25     : CH frame 2 progress=0.09483724 +140ms draws=2
++  1746 ms  W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.09483724 alpha=1.0
++  1889 ms  W25     : CH frame 3 progress=0.12558016 +284ms draws=3
++  1890 ms  W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.12558016 alpha=1.0
++  1992 ms  W25     : CH frame 4 progress=0.26282474 +387ms draws=4
++  1993 ms  W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.26282474 alpha=1.0
++  2078 ms  W25     : CH frame 5 progress=0.35765338 +473ms draws=5
++  2079 ms  W25     : CL draw #6 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.35765338 alpha=1.0
++  2146 ms  W25     : CH frame 6 progress=0.4360418 +541ms draws=6
++  2147 ms  W25     : CL draw #7 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.4360418 alpha=1.0
++  2253 ms  W25     : CH frame 7 progress=0.4988393 +648ms draws=7
++  2306 ms  W25     : CL draw #8 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.4988393 alpha=1.0
++  2386 ms  W25     : CH frame 8 progress=0.6369086 +781ms draws=8
++  2387 ms  W25     : CL draw #9 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.6369086 alpha=1.0
++  2496 ms  W25     : CH frame 9 progress=0.7166151 +890ms draws=9
++  2499 ms  W25     : CL draw #10 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.7166151 alpha=0.8096712
++  2529 ms  W25     : CH frame 10 progress=0.809716 +924ms draws=10
++  2530 ms  W25     : CL draw #11 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.809716 alpha=0.5436686
++  2716 ms  W25     : CH frame 11 progress=0.84261936 +1110ms draws=11
++  2726 ms  W25     : CL draw #12 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.84261936 alpha=0.449659
++  2798 ms  W25     : CH frame 12 progress=1.0 +1192ms draws=12
++  2798 ms  W25     : CH effect end bursts=1 frames=12 draws=12 +1192ms progress=1.0
+FRAMES q5-hk-adb: confetti-like new saturated points outside the band, per frame (level at the end 32; peak #26 = 51; frames with >=6: 26, first #4, last #29): [0, 0, 2, 8, 10, 15, 15, 18, 22, 22, 23, 23, 22, 26, 25, 31, 31, 31, 31, 31, 31, 31, 37, 44, 44, 51, 32, 31, 31] vertical span of those points: 60-62% 60-62% 60-62% 60-62% 60-62% 60-62% 60-62% 60-62% 60-62% 60-62% 60-62% 60-62% 
+QUIZ hk-adb q5: RIGHT; content-desc="5 верни от 5 отговорени, общо 5 въпроса" text="Шевицата е цяла!" 
+QUIZ hk-adb result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+## CF6. Quiz 5/5 on the hook build, „Виж резултата“ NOT tapped for 12 s, host recording (second sample)
+QUIZ hk-long q1: RIGHT; content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-long q2: RIGHT; content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-long q3: RIGHT; content-desc="3 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-long q4: RIGHT; content-desc="4 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ hk-long q5: answer at [540 910]; band label bounds [327 1808 753 1845]; next button y 2163; animator_duration_scale=1 transition=1 window=1
+REC q5-hk-long (emu): marker 1543 ms after the recording start; 127 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+W25 log after the 5th answer (hk-long; times from the marker just before 'input tap'):
++   149 ms  W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=true confetti=true
++  1293 ms  W25     : QB after stitch i=4 +1143ms
++  1882 ms  W25     : QB after close +1732ms
++  1884 ms  W25     : QB after haptics +1735ms
++  1884 ms  W25     : QB burst called=true origin=Offset(540.5, 1959.5) bounds=Rect.fromLTRB(68.0, 1856.0, 1013.0, 2063.0) bursts=1 +1735ms
++  1885 ms  W25     : QB effect end size=5 +1735ms active=true
++  1886 ms  W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(540.5, 1959.5) lastTap=Offset(540.0, 910.0)
++  1903 ms  W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.0 alpha=1.0
++  1933 ms  W25     : CH frame 1 progress=0.030645603 +47ms draws=1
++  1950 ms  W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.030645603 alpha=1.0
++  2074 ms  W25     : CH frame 2 progress=0.04669974 +188ms draws=2
++  2075 ms  W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.04669974 alpha=1.0
++  2291 ms  W25     : CH frame 3 progress=0.15321118 +405ms draws=3
++  2291 ms  W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.15321118 alpha=1.0
++  2394 ms  W25     : CH frame 4 progress=0.35330394 +508ms draws=4
++  2394 ms  W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.35330394 alpha=1.0
++  2614 ms  W25     : CH frame 5 progress=0.44983664 +728ms draws=5
++  2614 ms  W25     : CL draw #6 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.44983664 alpha=1.0
++  2753 ms  W25     : CH frame 6 progress=0.64944464 +867ms draws=6
++  2753 ms  W25     : CL draw #7 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.64944464 alpha=1.0
++  2885 ms  W25     : CH frame 7 progress=0.7763598 +999ms draws=7
++  2886 ms  W25     : CL draw #8 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.7763598 alpha=0.63897204
++  2931 ms  W25     : CH frame 8 progress=0.8859165 +1046ms draws=8
++  2932 ms  W25     : CL draw #9 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.8859165 alpha=0.32595295
++  3157 ms  W25     : CH frame 9 progress=0.9346278 +1271ms draws=9
++  3160 ms  W25     : CL draw #10 size=Size(1080.0, 2400.0) at=Offset(540.5, 1959.5) progress=0.9346278 alpha=0.1867778
++  3271 ms  W25     : CH frame 10 progress=1.0 +1386ms draws=10
++  3271 ms  W25     : CH effect end bursts=1 frames=10 draws=10 +1386ms progress=1.0
+FRAMES q5-hk-long: confetti-like new saturated points outside the band, per frame (level at the end 4699; peak #38 = 4704; frames with >=6: 118, first #10, last #127): [0, 0, 0, 0, 0, 0, 0, 0, 0, 4694, 4696, 4695, 4694, 4695, 4695, 4698, 4697, 4699, 4697, 4698, 4698, 4699, 4701, 4701, 4700, 4699, 4700, 4699, 4698, 4698, 4698, 4697, 4697, 4697, 4698, 4696, 4698, 4704, 4699, 4699, 4697, 4698, 4697, 4697, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4698, 4698, 4698, 4698, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4698, 4698, 4 vertical span of those points: 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 
+QUIZ hk-long q5: RIGHT; content-desc="5 верни от 5 отговорени, общо 5 въпроса" text="Шевицата е цяла!" 
+QUIZ hk-long result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+CF hook: FATAL(any process)=0 of the app=0 ANR=0
+## CF7. The released 1.2.38 itself (no log lines): control and quiz 5/5, host recording
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+CONTROL new: want-to-read before: checked=false selected=false bounds=[426,673][926,799]
+REC want-new (emu): marker 1526 ms after the recording start; 57 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+W25 log after the control tap (new):
+(no W25 lines after the marker want-new)
+FRAMES want-new: confetti-like new saturated points outside the band, per frame (level at the end 98; peak #15 = 240; frames with >=6: 49, first #9, last #57): [0, 0, 0, 0, 0, 0, 0, 0, 24, 23, 25, 188, 235, 235, 240, 172, 195, 212, 211, 97, 101, 101, 102, 102, 102, 97, 98, 99, 99, 99, 101, 100, 101, 101, 101, 95, 99, 100, 100, 99, 97, 97, 97, 97, 95, 98, 98, 98, 98, 98, 98, 98, 104, 98, 98, 98, 98] vertical span of those points: 30-31% 30-31% 30-31% 29-31% 21-31% 21-31% 22-36% 23-38% 25-41% 29-49% 29-49% 30-31% 
+CONTROL new: want-to-read after: checked=true selected=false bounds=[426,673][926,799]
+QUIZ new-e1 q1: RIGHT; content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ new-e1 q2: RIGHT; content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ new-e1 q3: RIGHT; content-desc="3 верни от 3 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ new-e1 q4: RIGHT; content-desc="4 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ new-e1 q5: answer at [540 910]; band label bounds [327 1808 753 1845]; next button y 2163; animator_duration_scale=1 transition=1 window=1
+REC q5-new-e1 (emu): marker 1533 ms after the recording start; 97 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+W25 log after the 5th answer (new-e1; times from the marker just before 'input tap'):
+(no W25 lines after the marker q5-new-e1)
+FRAMES q5-new-e1: confetti-like new saturated points outside the band, per frame (level at the end 4699; peak #37 = 4716; frames with >=6: 88, first #10, last #97): [0, 0, 0, 0, 0, 0, 0, 0, 0, 4696, 4696, 4695, 4695, 4696, 4697, 4698, 4699, 4700, 4700, 4701, 4701, 4699, 4698, 4699, 4698, 4700, 4699, 4698, 4698, 4698, 4698, 4698, 4698, 4699, 4698, 4715, 4716, 4701, 4698, 4698, 4697, 4698, 4696, 4696, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4698, 4698, 4698, 4699, 4699, 4699, 4699, 4699, 4699, 4699, 4698, 4698, 4698, 4698, 4699, 4699, 4699, 4699, 4699, 4699, 4698, 4698, 4698, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 469 vertical span of those points: 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 37-92% 38-92% 38-92% 38-92% 38-92% 38-92% 
+QUIZ new-e1 q5: RIGHT; content-desc="5 верни от 5 отговорени, общо 5 въпроса" text="Шевицата е цяла!" 
+QUIZ new-e1 result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ new-e2 q1: RIGHT; content-desc="1 верни от 1 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ new-e2 q2: RIGHT; content-desc="2 верни от 2 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ new-e2 q3: UNKNOWN; 
+QUIZ new-e2 q4: RIGHT; content-desc="4 верни от 4 отговорени, общо 5 въпроса" text="Избродирай отговорите" 
+QUIZ new-e2 q5: answer at [540 910]; band label bounds [327 1808 753 1845]; next button y 2163; animator_duration_scale=1 transition=1 window=1
+REC q5-new-e2 (emu): marker 1529 ms after the recording start; 97 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+W25 log after the 5th answer (new-e2; times from the marker just before 'input tap'):
+(no W25 lines after the marker q5-new-e2)
+FRAMES q5-new-e2: confetti-like new saturated points outside the band, per frame (level at the end 4699; peak #37 = 4715; frames with >=6: 88, first #10, last #97): [0, 0, 0, 0, 0, 0, 0, 0, 0, 4696, 4696, 4697, 4695, 4695, 4697, 4697, 4699, 4698, 4701, 4700, 4702, 4698, 4698, 4699, 4700, 4699, 4699, 4698, 4699, 4698, 4698, 4698, 4698, 4698, 4712, 4711, 4715, 4699, 4698, 4698, 4696, 4696, 4696, 4696, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4699, 4699, 4698, 4699, 4699, 4698, 4699, 4698, 4699, 4699, 4698, 4698, 4698, 4698, 4699, 4698, 4698, 4698, 4698, 4699, 4698, 4698, 4699, 4699, 4699, 4698, 4698, 4699, 4699, 4699, 4699, 4699, 469 vertical span of those points: 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 38-92% 
+QUIZ new-e2 q5: RIGHT; content-desc="5 верни от 5 отговорени, общо 5 въпроса" text="Шевицата е цяла!" 
+QUIZ new-e2 result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+CF part: FATAL(any process)=0 of the app=0 ANR=0; Davey lines of the apps: 7
+contact sheets: 44 in sheets/
+contact sheets: 44 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['10265', '10584', '11276']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=32 total=32
+== Davey: 2
+   davey events=2 max=842ms median=800ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt

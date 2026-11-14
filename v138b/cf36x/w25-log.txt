@@ -1,0 +1,188 @@
+11-14 22:01:18.899  4245  4245 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:02:29.413  4245  4245 W W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(702.0, 801.0) lastTap=Offset(702.0, 801.0)
+11-14 22:02:29.420  4245  4245 W W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(702.0, 801.0) progress=0.0 alpha=1.0
+11-14 22:02:29.848  4245  4245 W W25     : CH frame 1 progress=0.30303028 +435ms draws=1
+11-14 22:02:29.850  4245  4245 W W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(702.0, 801.0) progress=0.30303028 alpha=1.0
+11-14 22:02:30.118  4245  4245 W W25     : CH frame 2 progress=0.39393938 +704ms draws=2
+11-14 22:02:30.119  4245  4245 W W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(702.0, 801.0) progress=0.39393938 alpha=1.0
+11-14 22:02:30.311  4245  4245 W W25     : CH frame 3 progress=0.6363636 +898ms draws=3
+11-14 22:02:30.316  4245  4245 W W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(702.0, 801.0) progress=0.6363636 alpha=1.0
+11-14 22:02:30.629  4245  4245 W W25     : CH frame 4 progress=0.81818175 +1215ms draws=4
+11-14 22:02:30.629  4245  4245 W W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(702.0, 801.0) progress=0.81818175 alpha=0.5194807
+11-14 22:02:30.782  4245  4245 W W25     : CH frame 5 progress=1.0 +1369ms draws=5
+11-14 22:02:30.782  4245  4245 W W25     : CH effect end bursts=1 frames=5 draws=5 +1369ms progress=1.0
+11-14 22:02:49.900  5325  5325 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:03:32.808  5325  5325 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:03:32.811  5325  5325 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:03:32.811  5325  5325 W W25     : QB effect end size=0 +4ms active=true
+11-14 22:03:38.085  5325  5325 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:03:39.273  5325  5325 W W25     : QB after stitch i=0 +1188ms
+11-14 22:03:39.274  5325  5325 W W25     : QB effect end size=1 +1189ms active=true
+11-14 22:03:48.638  5325  5325 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 22:03:49.748  5325  5325 W W25     : QB after stitch i=1 +1109ms
+11-14 22:03:49.748  5325  5325 W W25     : QB effect end size=2 +1109ms active=true
+11-14 22:03:59.385  5325  5325 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 22:03:59.385  5325  5325 W W25     : QB effect end size=3 +0ms active=true
+11-14 22:04:10.050  5325  5325 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 22:04:10.051  5325  5325 W W25     : QB effect end size=4 +0ms active=true
+11-14 22:04:20.638  5325  5325 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 22:04:20.638  5325  5325 W W25     : QB effect end size=5 +0ms active=true
+11-14 22:04:27.494  5325  5325 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 22:04:27.494  5325  5325 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:04:27.494  5325  5325 W W25     : QB effect end size=5 +0ms active=true
+11-14 22:04:43.285  6410  6410 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:05:23.360  6410  6410 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:05:23.360  6410  6410 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:05:23.360  6410  6410 W W25     : QB effect end size=0 +0ms active=true
+11-14 22:05:29.508  6410  6410 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:05:30.675  6410  6410 W W25     : QB after stitch i=0 +1168ms
+11-14 22:05:30.675  6410  6410 W W25     : QB effect end size=1 +1168ms active=true
+11-14 22:05:40.051  6410  6410 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 22:05:41.225  6410  6410 W W25     : QB after stitch i=1 +1174ms
+11-14 22:05:41.225  6410  6410 W W25     : QB effect end size=2 +1174ms active=true
+11-14 22:05:50.567  6410  6410 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 22:05:51.792  6410  6410 W W25     : QB after stitch i=2 +1225ms
+11-14 22:05:51.793  6410  6410 W W25     : QB effect end size=3 +1226ms active=true
+11-14 22:06:01.220  6410  6410 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 22:06:02.479  6410  6410 W W25     : QB after stitch i=3 +1260ms
+11-14 22:06:02.480  6410  6410 W W25     : QB effect end size=4 +1261ms active=true
+11-14 22:06:12.175  6410  6410 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=true confetti=true
+11-14 22:06:13.440  6410  6410 W W25     : QB after stitch i=4 +1265ms
+11-14 22:06:13.941  6410  6410 W W25     : QB after close +1766ms
+11-14 22:06:13.947  6410  6410 W W25     : QB after haptics +1772ms
+11-14 22:06:13.948  6410  6410 W W25     : QB burst called=true origin=Offset(540.5, 2022.5) bounds=Rect.fromLTRB(68.0, 1919.0, 1013.0, 2126.0) bursts=1 +1772ms
+11-14 22:06:13.948  6410  6410 W W25     : QB effect end size=5 +1772ms active=true
+11-14 22:06:13.950  6410  6410 W W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(540.5, 2022.5) lastTap=Offset(540.0, 975.0)
+11-14 22:06:13.961  6410  6410 W W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.0 alpha=1.0
+11-14 22:06:14.143  6410  6410 W W25     : CH frame 1 progress=0.15151514 +193ms draws=1
+11-14 22:06:14.144  6410  6410 W W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.15151514 alpha=1.0
+11-14 22:06:14.406  6410  6410 W W25     : CH frame 2 progress=0.16666666 +456ms draws=2
+11-14 22:06:14.407  6410  6410 W W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.16666666 alpha=1.0
+11-14 22:06:14.538  6410  6410 W W25     : CH frame 3 progress=0.39393938 +588ms draws=3
+11-14 22:06:14.539  6410  6410 W W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.39393938 alpha=1.0
+11-14 22:06:14.751  6410  6410 W W25     : CH frame 4 progress=0.5151515 +801ms draws=4
+11-14 22:06:14.752  6410  6410 W W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.5151515 alpha=1.0
+11-14 22:06:14.943  6410  6410 W W25     : CH frame 5 progress=0.7121212 +993ms draws=5
+11-14 22:06:14.944  6410  6410 W W25     : CL draw #6 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.7121212 alpha=0.8225109
+11-14 22:06:15.232  6410  6410 W W25     : CH frame 6 progress=0.8939394 +1282ms draws=6
+11-14 22:06:15.233  6410  6410 W W25     : CL draw #7 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.8939394 alpha=0.30303037
+11-14 22:06:15.346  6410  6410 W W25     : CH frame 7 progress=1.0 +1395ms draws=7
+11-14 22:06:15.346  6410  6410 W W25     : CH effect end bursts=1 frames=7 draws=7 +1395ms progress=1.0
+11-14 22:06:25.785  6410  6410 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=true confetti=true
+11-14 22:06:25.786  6410  6410 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:06:25.786  6410  6410 W W25     : QB effect end size=5 +0ms active=true
+11-14 22:06:41.809  7169  7169 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:07:21.953  7169  7169 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:07:21.953  7169  7169 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:07:21.953  7169  7169 W W25     : QB effect end size=0 +1ms active=true
+11-14 22:07:27.361  7169  7169 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:07:28.435  7169  7169 W W25     : QB after stitch i=0 +1073ms
+11-14 22:07:28.435  7169  7169 W W25     : QB effect end size=1 +1073ms active=true
+11-14 22:07:37.839  7169  7169 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 22:07:38.982  7169  7169 W W25     : QB after stitch i=1 +1143ms
+11-14 22:07:38.983  7169  7169 W W25     : QB effect end size=2 +1144ms active=true
+11-14 22:07:48.401  7169  7169 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 22:07:49.694  7169  7169 W W25     : QB after stitch i=2 +1293ms
+11-14 22:07:49.697  7169  7169 W W25     : QB effect end size=3 +1295ms active=true
+11-14 22:07:58.968  7169  7169 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 22:08:00.068  7169  7169 W W25     : QB after stitch i=3 +1101ms
+11-14 22:08:00.069  7169  7169 W W25     : QB effect end size=4 +1101ms active=true
+11-14 22:08:11.529  7169  7169 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=true confetti=true
+11-14 22:08:13.044  7169  7169 W W25     : QB after stitch i=4 +1515ms
+11-14 22:08:13.774  7169  7169 W W25     : QB after close +2245ms
+11-14 22:08:13.777  7169  7169 W W25     : QB after haptics +2248ms
+11-14 22:08:13.777  7169  7169 W W25     : QB burst called=true origin=Offset(540.5, 2022.5) bounds=Rect.fromLTRB(68.0, 1919.0, 1013.0, 2126.0) bursts=1 +2248ms
+11-14 22:08:13.777  7169  7169 W W25     : QB effect end size=5 +2248ms active=true
+11-14 22:08:13.779  7169  7169 W W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(540.5, 2022.5) lastTap=Offset(540.0, 975.0)
+11-14 22:08:13.802  7169  7169 W W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.0 alpha=1.0
+11-14 22:08:14.143  7169  7169 W W25     : CH frame 1 progress=0.3181818 +364ms draws=1
+11-14 22:08:14.161  7169  7169 W W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.3181818 alpha=1.0
+11-14 22:08:14.483  7169  7169 W W25     : CH frame 2 progress=0.3333333 +704ms draws=2
+11-14 22:08:14.484  7169  7169 W W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.3333333 alpha=1.0
+11-14 22:08:14.834  7169  7169 W W25     : CH frame 3 progress=0.6212121 +1055ms draws=3
+11-14 22:08:14.836  7169  7169 W W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.6212121 alpha=1.0
+11-14 22:08:15.207  7169  7169 W W25     : CH frame 4 progress=0.9393939 +1428ms draws=4
+11-14 22:08:15.208  7169  7169 W W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.9393939 alpha=0.17316034
+11-14 22:08:15.529  7169  7169 W W25     : CH frame 5 progress=1.0 +1749ms draws=5
+11-14 22:08:15.530  7169  7169 W W25     : CH effect end bursts=1 frames=5 draws=5 +1750ms progress=1.0
+11-14 22:08:32.450  7169  7169 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=true confetti=true
+11-14 22:08:32.450  7169  7169 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:08:32.451  7169  7169 W W25     : QB effect end size=5 +0ms active=true
+11-14 22:08:48.270  7931  7931 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:09:28.740  7931  7931 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:09:28.740  7931  7931 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:09:28.740  7931  7931 W W25     : QB effect end size=0 +0ms active=true
+11-14 22:09:34.337  7931  7931 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:09:35.449  7931  7931 W W25     : QB after stitch i=0 +1112ms
+11-14 22:09:35.449  7931  7931 W W25     : QB effect end size=1 +1112ms active=true
+11-14 22:09:44.800  7931  7931 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 22:09:45.901  7931  7931 W W25     : QB after stitch i=1 +1101ms
+11-14 22:09:45.901  7931  7931 W W25     : QB effect end size=2 +1101ms active=true
+11-14 22:09:55.253  7931  7931 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 22:09:56.420  7931  7931 W W25     : QB after stitch i=2 +1168ms
+11-14 22:09:56.420  7931  7931 W W25     : QB effect end size=3 +1168ms active=true
+11-14 22:10:05.807  7931  7931 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 22:10:06.856  7931  7931 W W25     : QB after stitch i=3 +1049ms
+11-14 22:10:06.856  7931  7931 W W25     : QB effect end size=4 +1049ms active=true
+11-14 22:10:18.785  7931  7931 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=true confetti=true
+11-14 22:10:20.030  7931  7931 W W25     : QB after stitch i=4 +1245ms
+11-14 22:10:20.539  7931  7931 W W25     : QB after close +1754ms
+11-14 22:10:20.561  7931  7931 W W25     : QB after haptics +1775ms
+11-14 22:10:20.561  7931  7931 W W25     : QB burst called=true origin=Offset(540.5, 2022.5) bounds=Rect.fromLTRB(68.0, 1919.0, 1013.0, 2126.0) bursts=1 +1776ms
+11-14 22:10:20.561  7931  7931 W W25     : QB effect end size=5 +1776ms active=true
+11-14 22:10:20.823  7931  7931 W W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(540.5, 2022.5) lastTap=Offset(540.0, 975.0)
+11-14 22:10:20.825  7931  7931 W W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.0 alpha=1.0
+11-14 22:10:20.972  7931  7931 W W25     : CH frame 1 progress=0.13636364 +149ms draws=1
+11-14 22:10:20.976  7931  7931 W W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.13636364 alpha=1.0
+11-14 22:10:21.274  7931  7931 W W25     : CH frame 2 progress=0.15151514 +450ms draws=2
+11-14 22:10:21.275  7931  7931 W W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.15151514 alpha=1.0
+11-14 22:10:21.345  7931  7931 W W25     : CH frame 3 progress=0.40909088 +521ms draws=3
+11-14 22:10:21.345  7931  7931 W W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.40909088 alpha=1.0
+11-14 22:10:21.744  7931  7931 W W25     : CH frame 4 progress=0.48484847 +921ms draws=4
+11-14 22:10:21.745  7931  7931 W W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.48484847 alpha=1.0
+11-14 22:10:21.770  7931  7931 W W25     : CH frame 5 progress=0.8484848 +946ms draws=5
+11-14 22:10:21.770  7931  7931 W W25     : CL draw #6 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.8484848 alpha=0.43290055
+11-14 22:10:22.119  7931  7931 W W25     : CH frame 6 progress=0.8636363 +1296ms draws=6
+11-14 22:10:22.120  7931  7931 W W25     : CL draw #7 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.8636363 alpha=0.38961053
+11-14 22:10:22.259  7931  7931 W W25     : CH frame 7 progress=1.0 +1435ms draws=7
+11-14 22:10:22.259  7931  7931 W W25     : CH effect end bursts=1 frames=7 draws=7 +1435ms progress=1.0
+11-14 22:10:38.011  7931  7931 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=true confetti=true
+11-14 22:10:38.011  7931  7931 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:10:38.011  7931  7931 W W25     : QB effect end size=5 +0ms active=true
+11-14 22:10:53.317  8748  8748 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 22:11:34.170  8748  8748 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:11:34.172  8748  8748 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:11:34.172  8748  8748 W W25     : QB effect end size=0 +5ms active=true
+11-14 22:11:40.401  8748  8748 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 22:11:41.600  8748  8748 W W25     : QB after stitch i=0 +1198ms
+11-14 22:11:41.600  8748  8748 W W25     : QB effect end size=1 +1198ms active=true
+11-14 22:11:50.869  8748  8748 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 22:11:51.990  8748  8748 W W25     : QB after stitch i=1 +1121ms
+11-14 22:11:51.990  8748  8748 W W25     : QB effect end size=2 +1121ms active=true
+11-14 22:12:01.351  8748  8748 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 22:12:02.642  8748  8748 W W25     : QB after stitch i=2 +1290ms
+11-14 22:12:02.643  8748  8748 W W25     : QB effect end size=3 +1292ms active=true
+11-14 22:12:11.868  8748  8748 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 22:12:13.159  8748  8748 W W25     : QB after stitch i=3 +1292ms
+11-14 22:12:13.159  8748  8748 W W25     : QB effect end size=4 +1292ms active=true
+11-14 22:12:24.451  8748  8748 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=true confetti=true
+11-14 22:12:25.726  8748  8748 W W25     : QB after stitch i=4 +1276ms
+11-14 22:12:26.451  8748  8748 W W25     : QB after close +2000ms
+11-14 22:12:26.456  8748  8748 W W25     : QB after haptics +2006ms
+11-14 22:12:26.457  8748  8748 W W25     : QB burst called=true origin=Offset(540.5, 2022.5) bounds=Rect.fromLTRB(68.0, 1919.0, 1013.0, 2126.0) bursts=1 +2006ms
+11-14 22:12:26.457  8748  8748 W W25     : QB effect end size=5 +2006ms active=true
+11-14 22:12:26.458  8748  8748 W W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(540.5, 2022.5) lastTap=Offset(540.0, 975.0)
+11-14 22:12:26.461  8748  8748 W W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.0 alpha=1.0
+11-14 22:12:26.822  8748  8748 W W25     : CH frame 1 progress=0.3181818 +364ms draws=1
+11-14 22:12:26.843  8748  8748 W W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.3181818 alpha=1.0
+11-14 22:12:27.168  8748  8748 W W25     : CH frame 2 progress=0.34848484 +710ms draws=2
+11-14 22:12:27.169  8748  8748 W W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.34848484 alpha=1.0
+11-14 22:12:27.549  8748  8748 W W25     : CH frame 3 progress=0.6363636 +1090ms draws=3
+11-14 22:12:27.550  8748  8748 W W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.6363636 alpha=1.0
+11-14 22:12:27.859  8748  8748 W W25     : CH frame 4 progress=0.98484844 +1400ms draws=4
+11-14 22:12:27.860  8748  8748 W W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(540.5, 2022.5) progress=0.98484844 alpha=0.04329017
+11-14 22:12:28.308  8748  8748 W W25     : CH frame 5 progress=1.0 +1849ms draws=5
+11-14 22:12:28.309  8748  8748 W W25     : CH effect end bursts=1 frames=5 draws=5 +1850ms progress=1.0
+11-14 22:12:51.592  8748  8748 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=true confetti=true
+11-14 22:12:51.592  8748  8748 W W25     : QB effect: nothing new (size <= seen)
+11-14 22:12:51.592  8748  8748 W W25     : QB effect end size=5 +0ms active=true

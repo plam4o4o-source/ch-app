@@ -1,0 +1,43 @@
+app pids seen: ['4835', '8003', '10531', '13953', '14974', '18788', '19818', '23096']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 40
+   skipped-frames events=40 max=110 total=2320
+   11-14 22:00:57.837  4835  4835 I Choreographer: Skipped 77 frames!  The application may be doing too much work on its main thread.
+   11-14 22:00:58.889  4835  4835 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:00.636  4835  4835 I Choreographer: Skipped 90 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:01.604  4835  4835 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:02.684  4835  4835 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:04.573  4835  4835 I Choreographer: Skipped 110 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:05.916  4835  4835 I Choreographer: Skipped 80 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:06.805  4835  4835 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:16.715  4835  4835 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:18.578  4835  4835 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:44.635  4835  4835 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-14 22:01:45.594  4835  4835 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+== Davey: 116
+   davey events=116 max=3542ms median=822ms
+   11-14 22:01:01.579  4835  4849 I OpenGLRenderer: Davey! duration=2932ms; Flags=1, FrameTimelineVsyncId=5603, IntendedVsync=97928201342, Vsync=98944867907, InputEventId=0, HandleInputStart=98960692522, AnimationStart=98960693433, PerformTrav
+   11-14 22:01:01.947  4835  4849 I OpenGLRenderer: Davey! duration=1250ms; Flags=0, FrameTimelineVsyncId=5924, IntendedVsync=100728190131, Vsync=100878190125, InputEventId=0, HandleInputStart=100886349087, AnimationStart=100886349848, Perform
+   11-14 22:01:02.567  4835  4849 I OpenGLRenderer: Davey! duration=824ms; Flags=0, FrameTimelineVsyncId=5932, IntendedVsync=100928190123, Vsync=100961523455, InputEventId=0, HandleInputStart=100969019098, AnimationStart=100969019448, PerformT
+   11-14 22:01:04.550  4835  4849 I OpenGLRenderer: Davey! duration=1718ms; Flags=0, FrameTimelineVsyncId=5956, IntendedVsync=100978190121, Vsync=101661523427, InputEventId=0, HandleInputStart=101674735500, AnimationStart=101674735871, Perform
+   11-14 22:01:05.866  4835  4849 I OpenGLRenderer: Davey! duration=3542ms; Flags=0, FrameTimelineVsyncId=5999, IntendedVsync=101678190093, Vsync=102744856717, InputEventId=0, HandleInputStart=102754066964, AnimationStart=102754067525, Perform
+   11-14 22:01:06.018  4835  4991 I OpenGLRenderer: Davey! duration=1332ms; Flags=0, FrameTimelineVsyncId=6035, IntendedVsync=102778190049, Vsync=102778190049, InputEventId=0, HandleInputStart=102779062729, AnimationStart=102779063139, Perform
+   11-14 22:01:06.874  4835  4991 I OpenGLRenderer: Davey! duration=2671ms; Flags=0, FrameTimelineVsyncId=6043, IntendedVsync=102794856715, Vsync=104628189975, InputEventId=0, HandleInputStart=104643729245, AnimationStart=104643729877, Perform
+   11-14 22:01:07.689  4835  4991 I OpenGLRenderer: Davey! duration=2440ms; Flags=0, FrameTimelineVsyncId=6292, IntendedVsync=104644856641, Vsync=105978189921, InputEventId=0, HandleInputStart=105986311768, AnimationStart=105986312339, Perform
+   11-14 22:01:07.763  4835  4929 I OpenGLRenderer: Davey! duration=1165ms; Flags=0, FrameTimelineVsyncId=6382, IntendedVsync=106044856585, Vsync=106294856575, InputEventId=0, HandleInputStart=106303900506, AnimationStart=106303900886, Perform
+   11-14 22:01:08.158  4835  4929 I OpenGLRenderer: Davey! duration=887ms; Flags=0, FrameTimelineVsyncId=6391, IntendedVsync=106311534310, Vsync=106861534222, InputEventId=0, HandleInputStart=106876799661, AnimationStart=106876800603, PerformT
+   11-14 22:01:16.698  4835  4991 I OpenGLRenderer: Davey! duration=875ms; Flags=0, FrameTimelineVsyncId=7205, IntendedVsync=115878189525, Vsync=115878189525, InputEventId=-496288603, HandleInputStart=115878476511, AnimationStart=115878477042,
+   11-14 22:01:17.505  4835  4991 I OpenGLRenderer: Davey! duration=1027ms; Flags=0, FrameTimelineVsyncId=7219, IntendedVsync=116194856179, Vsync=116778189489, InputEventId=0, HandleInputStart=116785889953, AnimationStart=116785890483, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 22:00:53.775  4711  4711 I PERFCHECK: section: F0. 1.2.38 org.chyavorec.app and 1.2.37 org.chyavorec.app.b37 side by side, both compiled speed-profile
+   11-14 22:03:41.349  7980  7980 I PERFCHECK: section: F1. Warm-up rep 0, not counted: every scenario once; the quiz taps are learned
+   11-14 22:10:24.363 10505 10505 I PERFCHECK: section: F2. Repetition 1, order: new base a fresh process for each; Home, Още, timeline, quiz
+   11-14 22:17:19.133 12939 12939 I PERFCHECK: section: F2. Repetition 2, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-14 22:23:28.537 14951 14951 I PERFCHECK: section: F2. Repetition 3, order: new base a fresh process for each; Home, Още, timeline, quiz
+   11-14 22:31:06.369 17484 17484 I PERFCHECK: section: F2. Repetition 4, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-14 22:38:07.926 19791 19791 I PERFCHECK: section: F2. Repetition 5, order: new base a fresh process for each; Home, Още, timeline, quiz
+   11-14 22:44:20.747 21820 21820 I PERFCHECK: section: F2. Repetition 6, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-14 22:52:11.496 24319 24319 I PERFCHECK: section: F3. Totals rep 0 is excluded

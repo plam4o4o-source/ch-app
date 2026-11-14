@@ -1,0 +1,123 @@
+part dev33; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+installed: devDebug 1.2.38 1dd4ccb (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key; demo-1 renews at once);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.38-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 4355 ms
+## D1. Sign-in with the BUTTON; „Картата е издадена“ recorded from the host (10 frames/s)
+LOGIN try 1: card field OK
+LOGIN: remember-me CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true); the sign-in BUTTON: 540 1776 enabled=true class=android.view.View bounds=(63, 1708, 1017, 1845); all 'Вход' nodes: class="android.widget.TextView" text="Вход" content-desc="" checkable="false" checked="false" clickable="false" selected="false" bounds="[494,1750][586,1803]"|class="android.widget.TextView" text="Вход" content-desc="" checkable="false" checked="false" clickable="false" selected="false" bounds="[148,177][261,247]"|
+REC login-fly (emu): marker 1531 ms after the recording start; 66 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+MY after the sign-in: SIGNED IN: text="ДЕМО ДАННИ — само за разработка, не са реални" text="ДЧ" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" text="БИБЛИОТЕКА" text="Читателска карта" text="Покажи картата на гишето" text="Моите книги" text="1 книга е просрочена" text="Искам да прочета" text="Книги, които искаш да
+FRAMES login-fly: frames 66; frames that differ from the previous one (>0.35): 6, first #9, last #43; diffs: 0.1 0.3 0.3 0.1 0.2 0.0 0.1 6.5 0.1 0.1 0.1 0.2 0.1 0.1 0.2 0.2 0.1 0.2 0.1 0.0 0.1 0.0 0.0 0.1 0.1 0.1 0.1 0.1 0.1 0.6 0.1 0.1 0.0 0.0 11.6 0.0 27.0 0.0 0.0 13.0 0.0 0.7 0.0 0.3 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+## D2. Loans: „Удължи срока“ on demo-1 (debug branch: accepted at once, new due date) → „Нов лист“, host recording
+LOANS: text="ДЕМО ДАННИ — само за разработка, не са реални" text="Последна синхронизация: Преди 0 минути" text="Демо заглавие (просрочено)" text="Демо автор" text="Взета на 06.10.2026" text="Срокът изтече на 12.11.2026" text="просрочена с 3 дни" text="Удължавана 2 пъти" text="Удължаването е отказано: Книгата е заявена от друг читател." text="Демо заглавие (наближава срок)" text="Демо автор" text="Взета на 18.10.2026" text="Връщане: 17.11.2026" text="остават 2 дни" text="Удължавана 1 път" text="Удължи с
+REC renew-leaf (emu): marker 1543 ms after the recording start; 55 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+RENEW: leaf node absent; Удължаването е отказано: Книгата е заявена от друг читател.|Заявено удължаване · чака библиотеката|
+FRAMES renew-leaf: frames 55; frames that differ from the previous one (>0.35): 6, first #8, last #23; diffs: 0.1 0.1 0.1 0.2 0.0 0.0 2.6 0.0 0.1 0.1 0.1 0.1 0.1 18.7 0.0 0.4 0.0 0.6 0.0 0.7 0.1 0.5 0.0 0.2 0.0 0.1 0.1 0.0 0.0 0.0 0.1 0.1 0.0 0.0 0.0 0.1 0.1 0.0 0.0 0.0 0.1 0.1 0.0 0.1 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.0 0.0 0.0
+RENEW second loan (pending): leaf nodes 1; Заявено удължаване · чака библиотеката|
+## D3. Diary: 5 rosettes on the first book, then the year story with no taps (slides change by themselves)
+DIARY rated: content-desc="Оценка на книгата" 
+YEAR slide #1 at +4 s: 2026 — твоята година с книгите
+YEAR slide #2 at +8 s: През 2026 г. взе 30 книги от библиотеката. в 11 различни месеца
+YEAR slide #3 at +13 s: Любим автор: Иван Вазов — 6 книги през годината.
+YEAR slide #4 at +22 s: Най-харесана книга: Немили-недраги, Иван Вазов — 5 от 5 розетки в дневника.
+YEAR: the favourite-book slide is #4
+YEAR slide #5 at +27 s: Най-четен раздел: Език. Литература — 2 книги.
+YEAR slide #6 at +32 s: Рекорден месец: Септември — 5 книги.
+YEAR slide #7 at +36 s: Най-дълга поредица: 11 месеца подред с поне една книга.
+YEAR slide #8 at +45 s: Твоят читателски тип: Книжен дракон. Поглъщаш книга след книга — рафтовете едва смогват.
+YEAR slide #9 at +50 s: Благодарим ти, че четеш с нас! Библиотеката на читалището те очаква и през 2027 г. Твоята шевица: лента, избродирана от 30 книги през годината.
+YEAR walk: 9 distinct slides in 81 s (26 polls, 0 failed dumps)
+## D4. Tablet landscape (1280x800 dp), signed in: two panes in Моето (uiautomator, the card pane is FLAG_SECURE)
+TABLET Моето (2560 x 1600): signed in
+PANES: left 24 texts, right 2 texts; likely pane border x=696 (27% of 2560)
+  LEFT: Начало | Каталог | Моето | Новини | Още | ДЕМО ДАННИ — само за разработка, не са р | ДЧ | Демо Читател | Читателски № DEMO-0001 | Активно | БИБЛИОТЕКА | Читателска карта | Покажи картата на гишето | Моите книги | 1 книга е просрочена | Искам да прочета | Книги, които искаш да вземеш | Моето членство | Статус и валидност | Прочетени книги | Историята на четенето и подобни книги | Моят профил
+  RIGHT: Търсене | Избери раздел вляво — той ще се отвори т
+TABLET Моето › '=Моите книги|=My books' (tapped at 793 797): tabs visible; back arrow yes
+PANES: left 24 texts, right 26 texts; likely pane border x=1376 (53% of 2560)
+  LEFT: Начало | Каталог | Моето | Новини | Още | ДЕМО ДАННИ — само за разработка, не са р | ДЧ | Демо Читател | Читателски № DEMO-0001 | Активно | БИБЛИОТЕКА | Читателска карта | Покажи картата на гишето | Моите книги | 1 книга е просрочена | Искам да прочета | Книги, които искаш да вземеш | Моето членство | Статус и валидност | Прочетени книги | Историята на четенето и подобни книги | Моят профил
+  RIGHT: Търсене | ДЕМО ДАННИ — само за разработка, не са р | Последна синхронизация: Преди 2 минути | Демо заглавие (просрочено) | Демо автор | Взета на 06.10.2026 | Срокът изтече на 12.11.2026 | просрочена с 3 дни | Удължавана 2 пъти | Удължаването е отказано: Книгата е заяве | Демо заглавие (наближава срок) | Демо автор | Взета на 18.10.2026 | Връщане: 17.11.2026 | остават 2 дни | Удължавана 1 път | Заявено удължаване · чака библиотеката | Под игото | Иван Вазов | Взета на 01.11.2026 | Връщане: 06.12.2026 | остават 21 дни
+TABLET Моето › '=Читателска карта|=Library card' (tapped at 360 797): tabs visible; back arrow yes
+PANES: left 24 texts, right 13 texts; likely pane border x=696 (27% of 2560)
+  LEFT: Начало | Каталог | Моето | Новини | Още | ДЕМО ДАННИ — само за разработка, не са р | ДЧ | Демо Читател | Читателски № DEMO-0001 | Активно | БИБЛИОТЕКА | Читателска карта | Покажи картата на гишето | Моите книги | 1 книга е просрочена | Искам да прочета | Книги, които искаш да вземеш | Моето членство | Статус и валидност | Прочетени книги | Историята на четенето и подобни книги | Моят профил
+  RIGHT: Търсене | ДЕМО ДАННИ — само за разработка, не са р | ЧИТАТЕЛСКА КАРТА | НЧ „Васил Левски – 1922“ | Демо Читател | Читателски № DEMO-0001 | Активно | Баркод на карта DEMO-0001 | Покажи картата | Последна синхронизация: Преди 3 минути | Покажи картата на библиотекаря; баркодът | Назад | Читателска карта
+TABLET Моето › '=Моето членство|=My membership' (tapped at 823 1055): tabs visible; back arrow yes
+PANES: left 24 texts, right 14 texts; likely pane border x=696 (27% of 2560)
+  LEFT: Начало | Каталог | Моето | Новини | Още | ДЕМО ДАННИ — само за разработка, не са р | ДЧ | Демо Читател | Читателски № DEMO-0001 | Активно | БИБЛИОТЕКА | Читателска карта | Покажи картата на гишето | Моите книги | 1 книга е просрочена | Искам да прочета | Книги, които искаш да вземеш | Моето членство | Статус и валидност | Прочетени книги | Историята на четенето и подобни книги | Моят профил
+  RIGHT: Търсене | ДЕМО ДАННИ — само за разработка, не са р | Демо Читател | Активно | Членски номер | DEMO-0001 | Член от | 15 ноември 2024 | Валидно до | 31 декември 2026 | QR код на картата | Последна синхронизация: Преди 3 минути | Назад | Моето членство
+TABLET: '=История|=Reading history|История на заемане' not found in Моето: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="Покажи картата на гишето" text="1 книга е просрочена" text="Искам да прочета" text="Книги, които искаш да вземеш" text="Моето членство" text="Статус и валидност" text="Прочетени книги" text="Историята на четенето и подобни книг
+TABLET Моето › '=Искам да прочета|=Want to read' (tapped at 351 440): tabs hidden; back arrow yes
+PANES: left 2 texts, right 2 texts; likely pane border x=1096 (42% of 2560)
+  LEFT: Назад | Искам да прочета
+  RIGHT: Списъкът е празен | Отбележи книга с „Искам да прочета“ на с
+## D5. The card: 14 November (no band), 15 December and 15 January (the „Твоята шевица“ band)
+CARD nov: Моето: signed in
+CARD nov (2026-11-14): band absent; text="ДЕМО ДАННИ — само за разработка, не са реални" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" content-desc="Баркод на карта DEMO-0001" text="Покажи картата" tex
+CARD full nov: band absent
+device date now: Tue Dec 15 10:00:02 UTC 2026
+CARD dec: Моето: signed in
+CARD dec (2026-12-15): band PRESENT (content-desc="Твоята шевица за 2026"); text="ДЕМО ДАННИ — само за разработка, не са реални" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" content-desc="Твоята шевица за 2026" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" content-desc="Баркод на карта
+CARD full dec: band PRESENT
+device date now: Fri Jan 15 10:00:02 UTC 2027
+CARD jan: Моето: signed in
+CARD jan (2027-01-15): band PRESENT (content-desc="Твоята шевица за 2026"); text="ДЕМО ДАННИ — само за разработка, не са реални" text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" content-desc="Твоята шевица за 2026" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" content-desc="Баркод на карта
+CARD full jan: band PRESENT
+device date now: Sat Nov 14 22:08:36 UTC 2026
+DEV part: FATAL(any process)=1 of the app=0 ANR=0
+contact sheets: 14 in sheets/
+## Z. The app's local diagnostics log (Settings › Информация › Диагностика) and app W/E lines in logcat
+DIAGLOG: empty (no entries)
+DIAG SCREEN: text="Няма записани грешки."  Бързодействие | Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни. | Версия 1.2.38-dev (1) | Профил: чака | Студен старт · 6 | Първи кадър: медиана 3190 мс, последен 3086 мс | Пълно показване: медиана 3814 мс, последно 3981 мс | Няма записани грешки. | Диагностика
+DIAG SCREEN (scrolled): text="Тук приложението записва техническите грешки (време, място в кода и вид на грешката), за да могат да се открият и поправят. Без лични данни: номерата, ПИН-овете, имената и адресите се премахват. Дневникът остава само на устройството — напуска го единствено ако решиш да го споделиш." text="Сподели" text="Изчисти" text="Бързодействие" text="Времената на стартиране и плавността на екраните, измерени на това устройство — само имената на екраните, без лични данни." text="Версия 1.2.38-dev (1)" text="Профил: чака" text="Студен старт · 6" text="Първи кадър: медиана 3190 мс, последен 3086 мс" text="Пълно показване: медиана 3814 мс, последно 3981 мс" text="Няма записани грешки." content-desc="Н
+APP W/E lines (pids ['6162', '9193', '9698', '9862', '10255', '10951']): 313 in 125 groups
+      15  W/W25: CL draw ## size=Size(#.#, #.#) at=Offset(#.#, #.#) progress=#.# alpha=#.#
+      15  W/W25: CH frame # progress=#.# +#ms draws=#
+       8  W/ziparchive: Unable to open '/data/app/~~YdktRVIuS#ewPYYRcZSjg==/org.chyavorec.app.dev-bfk_ifYh#tjuRPRrT#tPbw==/base.dm': N
+       8  E/OpenGLRenderer: Unable to match the desired swap behavior.
+       6  W/yavorec.app.dev: Unexpected CPU variant for x#: x#_#.
+       6  W/yavorec.app.dev: Known variants: atom, sandybridge, silvermont, kabylake, default
+       6  W/Parcel: Expecting binder but got null!
+       6  W/yavorec.app.dev: Accessing hidden method Landroid/os/SystemProperties;->addChangeCallback(Ljava/lang/Runnable;)V (unsupported, 
+       6  W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+       6  W/OpenGLRenderer: Failed to initialize #-# format, error = EGL_SUCCESS
+       6  W/Gralloc4: allocator #.x is not supported
+       6  W/W25: CH effect bursts=# reduced=false isPlaying=false host=# x # origin=Offset.Unspecified lastTap=Offset.Unspecifi
+       6  W/BasicSecureTextField: 	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:#)
+       6  W/BasicSecureTextField: 	at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.material#.SecureTextFieldKt$OutlinedSecureTextField$#.invoke(SecureTextField.kt:#)
+       4  W/BasicSecureTextField: 	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:#)
+       4  W/BasicSecureTextField: 	at android.view.View.draw(View.java:#)
+       4  W/BasicSecureTextField: 	at android.view.View.updateDisplayListIfDirty(View.java:#)
+       4  W/BasicSecureTextField: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:#)
+       3  W/yavorec.app.dev: Accessing hidden method Landroid/view/ViewTreeObserver;->dispatchOnScrollChanged()V (unsupported, reflection, 
+       2  W/BasicSecureTextField: Failed to fetch show password setting, using value: true
+       2  W/BasicSecureTextField: android.provider.Settings$SettingNotFoundException: show_password
+       2  W/BasicSecureTextField: 	at android.provider.Settings.parseIntSetting(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings.-$$Nest$smparseIntSetting(Unknown Source:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getIntForUser(Settings.java:#)
+       2  W/BasicSecureTextField: 	at android.provider.Settings$System.getInt(Settings.java:#)
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.PlatformPasswordVisibilitySettingImpl.getSystemShowPasswordSetting(BasicS
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextField_androidKt.rememberPlatformPasswordVisibilitySettings
+       2  W/BasicSecureTextField: 	at androidx.compose.foundation.text.BasicSecureTextFieldKt.BasicSecureTextField-ltb#GB#(BasicSecureTextField.
+contact sheets: 15 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'FATAL': 1} → crashes.txt

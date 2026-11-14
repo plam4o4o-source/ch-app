@@ -1,0 +1,143 @@
+part at33h; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## AH0. Home and Още: one suspect at a time (hook build flags), with 1.2.38 and 1.2.37 as references
+X installed new: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 3826 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~M24F7RGMn0_zg6TyKhMvmw==/org.chyavorec.app-9KoZo6_NCSSqwtam_YY-sQ==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed base: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000;  versionCode=1990000 minSdk=26 targetSdk=37  versionName=1.2.37 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 3022 ms
+X compile org.chyavorec.app.b37: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~o0DFhkp-kGe728EUSKCBJA==/org.chyavorec.app.b37-hvQ4iEjCSHTIPxO0-40H_A==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/VpnDialogs/VpnDialogs.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed hook: 1.2.38 1dd4ccb prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101;  versionCode=1990101 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X hook: catalogue after 2839 ms
+X compile org.chyavorec.app.hk: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~blSdHWdO0wZXps_Pd4tWcw==/org.chyavorec.app.hk-qm1FdibzIA2ypACGASH4zw==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /product/overlay/TelephonyProvider__auto_generated_rro_product.apk| x86_64: [status=run-from-apk] [reason=unknown]|
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+animations: animator_duration_scale=1 transition=1 window=1; host load: 4.79 3.41 1.58
+## A. Repetition 0 of: home more (configs rotated by 0)
+  FS home new rep0: n=64 (+0 flagged) total p50=436 p90=601 p99=669 max=686 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.0 draw 0.2) rt=189.9 (sync 0.1 issue 53.1 swap 112.0) start-delay=96.7 queue=121.5
+  FS more new rep0: n=50 (+4 flagged) total p50=377 p90=506 p99=624 max=633 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=142.5 (sync 0.1 issue 47.8 swap 87.3) start-delay=87.6 queue=102.9
+  FS home base rep0: n=74 (+0 flagged) total p50=465 p90=607 p99=683 max=732 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=192.4 (sync 0.1 issue 53.5 swap 111.4) start-delay=140.5 queue=146.3
+  FS more base rep0: n=64 (+0 flagged) total p50=418 p90=564 p99=630 max=639 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=164.0 (sync 0.1 issue 49.1 swap 110.4) start-delay=113.5 queue=125.6
+  FS home hk rep0: n=79 (+0 flagged) total p50=450 p90=557 p99=684 max=691 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=158.9 (sync 0.1 issue 47.8 swap 105.6) start-delay=140.1 queue=149.7
+  FS more hk rep0: n=42 (+3 flagged) total p50=405 p90=574 p99=665 max=670 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=160.8 (sync 0.1 issue 50.0 swap 105.2) start-delay=100.5 queue=95.5
+## A. Repetition 1 of: home more (configs rotated by 1)
+  FS home base rep1: n=74 (+0 flagged) total p50=453 p90=562 p99=621 max=625 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=185.9 (sync 0.1 issue 51.2 swap 110.2) start-delay=127.0 queue=139.4
+  FS more base rep1: n=68 (+2 flagged) total p50=474 p90=611 p99=985 max=993 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=183.9 (sync 0.1 issue 53.9 swap 114.1) start-delay=129.8 queue=127.1
+  FS home hk rep1: n=70 (+0 flagged) total p50=451 p90=591 p99=735 max=813 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=193.8 (sync 0.1 issue 52.6 swap 110.0) start-delay=113.2 queue=134.2
+  FS more hk rep1: n=81 (+0 flagged) total p50=409 p90=513 p99=554 max=557 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=159.4 (sync 0.1 issue 53.9 swap 101.1) start-delay=121.3 queue=130.4
+  FS home plate rep1: n=78 (+0 flagged) total p50=428 p90=529 p99=647 max=652 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=161.5 (sync 0.1 issue 48.6 swap 104.7) start-delay=125.0 queue=137.8
+  FS more plate rep1: n=59 (+3 flagged) total p50=413 p90=502 p99=733 max=801 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=153.0 (sync 0.4 issue 49.7 swap 93.6) start-delay=112.4 queue=120.3
+  FS home icon rep1: n=69 (+0 flagged) total p50=451 p90=571 p99=728 max=750 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=159.5 (sync 0.1 issue 48.9 swap 109.0) start-delay=137.9 queue=147.9
+  FS more icon rep1: n=64 (+2 flagged) total p50=409 p90=598 p99=725 max=734 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=159.4 (sync 0.1 issue 50.5 swap 104.6) start-delay=110.9 queue=110.5
+  FS home both rep1: n=80 (+0 flagged) total p50=446 p90=526 p99=590 max=619 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=155.7 (sync 0.1 issue 48.3 swap 105.4) start-delay=134.7 queue=143.2
+  FS more both rep1: n=53 (+4 flagged) total p50=383 p90=464 p99=631 max=667 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=142.7 (sync 0.1 issue 48.5 swap 94.2) start-delay=86.0 queue=115.2
+  FS home new rep1: n=69 (+0 flagged) total p50=421 p90=585 p99=676 max=681 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=195.4 (sync 0.1 issue 52.8 swap 112.2) start-delay=105.1 queue=116.5
+  FS more new rep1: n=59 (+2 flagged) total p50=415 p90=549 p99=645 max=694 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=155.5 (sync 0.4 issue 53.4 swap 104.0) start-delay=101.1 queue=114.4
+## A. Repetition 2 of: home more (configs rotated by 2)
+  FS home hk rep2: n=68 (+0 flagged) total p50=467 p90=618 p99=752 max=754 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=181.7 (sync 0.1 issue 49.8 swap 110.1) start-delay=111.1 queue=124.0
+  FS more hk rep2: n=85 (+0 flagged) total p50=399 p90=548 p99=633 max=729 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=161.1 (sync 0.1 issue 52.0 swap 104.6) start-delay=98.1 queue=120.9
+  FS home plate rep2: n=77 (+0 flagged) total p50=440 p90=559 p99=689 max=706 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=159.8 (sync 0.1 issue 49.4 swap 107.0) start-delay=126.4 queue=136.5
+  FS more plate rep2: n=58 (+3 flagged) total p50=366 p90=501 p99=740 max=801 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=144.6 (sync 0.1 issue 47.0 swap 93.7) start-delay=89.9 queue=96.1
+  FS home icon rep2: n=82 (+0 flagged) total p50=463 p90=549 p99=619 max=629 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=190.0 (sync 0.1 issue 54.1 swap 109.7) start-delay=129.0 queue=142.5
+  FS more icon rep2: n=46 (+3 flagged) total p50=411 p90=546 p99=683 max=709 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=155.7 (sync 0.1 issue 50.1 swap 96.8) start-delay=111.3 queue=120.9
+  FS home both rep2: n=73 (+0 flagged) total p50=449 p90=555 p99=684 max=689 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=159.9 (sync 0.1 issue 50.7 swap 106.8) start-delay=141.1 queue=147.8
+  FS more both rep2: n=57 (+1 flagged) total p50=416 p90=506 p99=754 max=768 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=146.7 (sync 0.4 issue 47.7 swap 96.3) start-delay=127.1 queue=133.0
+  FS home new rep2: n=68 (+0 flagged) total p50=436 p90=534 p99=586 max=592 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=161.0 (sync 0.1 issue 48.5 swap 109.5) start-delay=99.1 queue=112.0
+  FS more new rep2: n=83 (+0 flagged) total p50=429 p90=526 p99=571 max=633 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=160.8 (sync 0.1 issue 49.7 swap 105.5) start-delay=106.6 queue=114.6
+  FS home base rep2: n=74 (+0 flagged) total p50=446 p90=599 p99=690 max=709 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=172.8 (sync 0.1 issue 50.3 swap 109.9) start-delay=123.9 queue=118.6
+  FS more base rep2: n=71 (+0 flagged) total p50=408 p90=582 p99=724 max=778 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=167.5 (sync 0.1 issue 50.0 swap 111.1) start-delay=105.7 queue=123.0
+## A. Repetition 3 of: home more (configs rotated by 3)
+  FS home plate rep3: n=69 (+0 flagged) total p50=450 p90=536 p99=615 max=651 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=170.4 (sync 0.1 issue 48.8 swap 109.2) start-delay=141.0 queue=148.7
+  FS more plate rep3: n=64 (+1 flagged) total p50=385 p90=451 p99=692 max=730 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=144.9 (sync 0.1 issue 47.6 swap 95.5) start-delay=126.5 queue=131.8
+  FS home icon rep3: n=63 (+0 flagged) total p50=447 p90=592 p99=680 max=705 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=166.1 (sync 0.1 issue 49.5 swap 108.2) start-delay=138.8 queue=142.7
+  FS more icon rep3: n=48 (+1 flagged) total p50=446 p90=560 p99=772 max=775 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=158.2 (sync 0.4 issue 51.2 swap 102.9) start-delay=127.8 queue=131.2
+  FS home both rep3: n=75 (+0 flagged) total p50=434 p90=548 p99=627 max=680 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=160.1 (sync 0.1 issue 48.7 swap 107.5) start-delay=131.8 queue=141.0
+  FS more both rep3: n=64 (+1 flagged) total p50=419 p90=512 p99=628 max=633 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=150.0 (sync 0.1 issue 49.4 swap 96.0) start-delay=114.1 queue=127.9
+  FS home new rep3: n=68 (+0 flagged) total p50=463 p90=614 p99=698 max=750 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=191.6 (sync 0.1 issue 69.7 swap 108.0) start-delay=124.3 queue=112.0
+  FS more new rep3: n=76 (+0 flagged) total p50=446 p90=533 p99=604 max=626 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=173.5 (sync 0.1 issue 56.2 swap 103.5) start-delay=119.8 queue=123.5
+  FS home base rep3: n=72 (+0 flagged) total p50=407 p90=563 p99=835 max=900 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=158.0 (sync 0.1 issue 48.0 swap 98.6) start-delay=98.3 queue=123.7
+  FS more base rep3: n=78 (+0 flagged) total p50=454 p90=581 p99=676 max=702 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=181.4 (sync 0.1 issue 52.4 swap 112.2) start-delay=128.6 queue=144.5
+  FS home hk rep3: n=86 (+0 flagged) total p50=401 p90=557 p99=650 max=660 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=153.1 (sync 0.1 issue 48.1 swap 100.5) start-delay=129.2 queue=138.9
+WARN: tab bar not reached
+  FS more hk rep3: n=76 (+0 flagged) total p50=352 p90=497 p99=598 max=644 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=141.0 (sync 0.1 issue 49.6 swap 83.4) start-delay=95.4 queue=105.9
+## A. Repetition 4 of: home more (configs rotated by 4)
+  FS home icon rep4: n=81 (+0 flagged) total p50=478 p90=576 p99=677 max=685 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=164.0 (sync 0.1 issue 49.4 swap 107.0) start-delay=139.9 queue=146.4
+  FS more icon rep4: n=64 (+2 flagged) total p50=414 p90=583 p99=706 max=775 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=166.8 (sync 0.1 issue 60.6 swap 100.1) start-delay=103.1 queue=111.1
+  FS home both rep4: n=78 (+0 flagged) total p50=452 p90=567 p99=689 max=710 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=156.8 (sync 0.1 issue 50.5 swap 104.8) start-delay=114.0 queue=136.1
+  FS more both rep4: n=77 (+2 flagged) total p50=372 p90=513 p99=729 max=767 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=145.8 (sync 0.1 issue 49.0 swap 94.3) start-delay=92.7 queue=101.2
+  FS home new rep4: n=73 (+0 flagged) total p50=441 p90=609 p99=670 max=701 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=181.7 (sync 0.1 issue 49.8 swap 108.9) start-delay=137.9 queue=142.6
+  FS more new rep4: n=62 (+2 flagged) total p50=440 p90=558 p99=877 max=986 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=169.6 (sync 0.1 issue 49.5 swap 106.8) start-delay=118.9 queue=113.9
+  FS home base rep4: n=65 (+0 flagged) total p50=458 p90=616 p99=737 max=744 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=183.5 (sync 0.1 issue 50.4 swap 109.7) start-delay=132.4 queue=136.3
+  FS more base rep4: n=64 (+0 flagged) total p50=436 p90=558 p99=642 max=642 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=166.9 (sync 0.1 issue 50.9 swap 108.5) start-delay=105.6 queue=138.0
+  FS home hk rep4: n=73 (+0 flagged) total p50=458 p90=571 p99=650 max=660 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=158.1 (sync 0.1 issue 49.3 swap 109.2) start-delay=141.7 queue=144.0
+  FS more hk rep4: n=51 (+2 flagged) total p50=420 p90=522 p99=624 max=685 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=159.8 (sync 0.1 issue 50.0 swap 100.8) start-delay=92.5 queue=111.5
+  FS home plate rep4: n=75 (+0 flagged) total p50=474 p90=603 p99=711 max=803 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=200.8 (sync 0.2 issue 52.3 swap 112.2) start-delay=130.8 queue=148.9
+  FS more plate rep4: n=62 (+2 flagged) total p50=383 p90=540 p99=791 max=850 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=145.4 (sync 0.1 issue 47.5 swap 93.5) start-delay=95.5 queue=107.2
+## A. Repetition 5 of: home more (configs rotated by 5)
+  FS home both rep5: n=72 (+0 flagged) total p50=456 p90=569 p99=619 max=632 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=166.8 (sync 0.1 issue 50.0 swap 107.9) start-delay=139.0 queue=148.6
+  FS more both rep5: n=48 (+2 flagged) total p50=387 p90=579 p99=860 max=917 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=143.5 (sync 0.1 issue 49.0 swap 93.0) start-delay=87.9 queue=107.0
+  FS home new rep5: n=77 (+0 flagged) total p50=454 p90=584 p99=675 max=680 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=174.6 (sync 0.1 issue 49.1 swap 111.5) start-delay=134.6 queue=147.1
+  FS more new rep5: n=61 (+1 flagged) total p50=398 p90=538 p99=721 max=768 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=166.2 (sync 0.1 issue 48.3 swap 106.3) start-delay=107.6 queue=106.7
+  FS home base rep5: n=63 (+0 flagged) total p50=483 p90=560 p99=723 max=725 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=210.8 (sync 0.1 issue 70.2 swap 112.5) start-delay=138.2 queue=129.3
+  FS more base rep5: n=60 (+1 flagged) total p50=433 p90=602 p99=827 max=912 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=177.8 (sync 0.1 issue 59.9 swap 105.4) start-delay=100.7 queue=113.7
+  FS home hk rep5: n=67 (+0 flagged) total p50=417 p90=576 p99=621 max=624 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=197.2 (sync 0.1 issue 54.2 swap 109.8) start-delay=102.3 queue=110.6
+  FS more hk rep5: n=41 (+2 flagged) total p50=399 p90=561 p99=702 max=708 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=156.9 (sync 0.1 issue 49.7 swap 98.7) start-delay=103.3 queue=111.7
+  FS home plate rep5: n=81 (+0 flagged) total p50=424 p90=543 p99=669 max=700 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=155.8 (sync 0.1 issue 48.7 swap 105.0) start-delay=130.2 queue=141.9
+  FS more plate rep5: n=74 (+0 flagged) total p50=376 p90=480 p99=546 max=568 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=144.6 (sync 0.1 issue 47.5 swap 96.7) start-delay=95.6 queue=105.2
+  FS home icon rep5: n=74 (+0 flagged) total p50=470 p90=593 p99=714 max=758 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=173.2 (sync 0.1 issue 49.1 swap 109.7) start-delay=136.5 queue=144.4
+  FS more icon rep5: n=79 (+0 flagged) total p50=417 p90=510 p99=560 max=562 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=154.6 (sync 0.1 issue 48.8 swap 100.6) start-delay=118.8 queue=127.3
+## A9. Totals (rep 0 is excluded)
+| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| home | base | 6 | 73 | **455.5** (406.7..482.7) | 581 | 707 | 0.4 | 184.7 | 0.0 | 0.2 | 0.1 | 50.8 | 110.0 |
+| home | both | 5 | 75 | **449.4** (434.2..456.5) | 555 | 627 | 0.4 | 159.8 | 0.0 | 0.2 | 0.1 | 50.0 | 106.8 |
+| home | hk | 6 | 72 | **450.2** (401.0..466.5) | 574 | 667 | 0.4 | 170.3 | 0.0 | 0.2 | 0.1 | 49.5 | 109.5 |
+| home | icon | 5 | 74 | **463.4** (447.0..477.9) | 576 | 680 | 0.3 | 166.1 | 0.0 | 0.2 | 0.1 | 49.4 | 109.0 |
+| home | new | 6 | 68 | **438.7** (421.3..463.2) | 593 | 672 | 0.4 | 185.8 | 0.0 | 0.2 | 0.1 | 51.3 | 110.5 |
+| home | plate | 5 | 77 | **439.7** (424.1..473.7) | 543 | 669 | 0.3 | 161.5 | 0.0 | 0.2 | 0.1 | 48.8 | 107.0 |
+| more | base | 6 | 66 | **434.5** (408.5..474.1) | 582 | 700 | 0.3 | 172.7 | 0.0 | 0.1 | 0.1 | 51.6 | 110.8 |
+| more | both | 5 | 57 | **387.1** (371.6..419.2) | 512 | 729 | 0.2 | 145.8 | 0.0 | 0.1 | 0.1 | 49.0 | 94.3 |
+| more | hk | 6 | 64 | **402.4** (351.6..419.7) | 535 | 629 | 0.3 | 159.6 | 0.0 | 0.1 | 0.1 | 50.0 | 100.9 |
+| more | icon | 5 | 64 | **414.1** (409.1..446.5) | 560 | 706 | 0.3 | 158.2 | 0.0 | 0.1 | 0.1 | 50.5 | 100.6 |
+| more | new | 6 | 62 | **422.1** (376.8..445.9) | 535 | 634 | 0.3 | 163.5 | 0.0 | 0.1 | 0.1 | 49.6 | 104.8 |
+| more | plate | 5 | 62 | **383.3** (366.0..412.6) | 501 | 733 | 0.3 | 144.9 | 0.0 | 0.1 | 0.1 | 47.5 | 93.7 |
+
+Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:
+
+- home / base: [464.8, 453.1, 446.4, 406.7, 457.9, 482.7]
+- home / both: [445.5, 449.4, 434.2, 452.0, 456.5] vs base: median diff -6.1 ms (UI -0.0, RT -24.9, issue -0.9); Mann-Whitney U=9.0, p=0.329; ranges overlap
+- home / hk: [449.9, 450.6, 466.5, 401.0, 457.7, 416.8] vs base: median diff -5.2 ms (UI +0.0, RT -14.4, issue -1.3); Mann-Whitney U=13.0, p=0.485; ranges overlap
+- home / icon: [451.3, 463.4, 447.0, 477.9, 469.8] vs base: median diff +8.0 ms (UI -0.1, RT -18.6, issue -1.4); Mann-Whitney U=18.0, p=0.662; ranges overlap
+- home / new: [435.8, 421.3, 436.1, 463.2, 441.3, 453.8] vs base: median diff -16.8 ms (UI +0.0, RT +1.1, issue +0.4); Mann-Whitney U=11.0, p=0.310; ranges overlap
+- home / plate: [428.3, 439.7, 449.6, 473.7, 424.1] vs base: median diff -15.8 ms (UI -0.1, RT -23.2, issue -2.1); Mann-Whitney U=10.0, p=0.429; ranges overlap
+- more / base: [417.8, 474.1, 408.5, 454.3, 435.6, 433.4]
+- more / both: [383.4, 415.6, 419.2, 371.6, 387.1] vs base: median diff -47.4 ms (UI -0.0, RT -26.8, issue -2.6); Mann-Whitney U=3.0, p=0.030; ranges overlap
+- more / hk: [405.3, 408.9, 398.6, 351.6, 419.7, 399.5] vs base: median diff -32.1 ms (UI +0.0, RT -13.0, issue -1.6); Mann-Whitney U=3.0, p=0.015; ranges overlap
+- more / icon: [409.1, 410.6, 446.5, 414.1, 416.6] vs base: median diff -20.4 ms (UI -0.0, RT -14.5, issue -1.1); Mann-Whitney U=8.0, p=0.247; ranges overlap
+- more / new: [376.8, 415.0, 429.1, 445.9, 439.6, 397.9] vs base: median diff -12.4 ms (UI +0.0, RT -9.2, issue -2.1); Mann-Whitney U=11.0, p=0.310; ranges overlap
+- more / plate: [412.6, 366.0, 384.9, 383.3, 375.9] vs base: median diff -51.2 ms (UI +0.0, RT -27.8, issue -4.1); Mann-Whitney U=1.0, p=0.009; ranges overlap
+AT part: FATAL lines 0; host load: 4.35 4.44 4.41
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5832', '8140', '12680', '15239', '17777', '20646', '23215']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 24
+   skipped-frames events=24 max=104 total=1281
+== Davey: 38
+   davey events=38 max=2495ms median=1183ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt

@@ -1,0 +1,34 @@
+11-14 22:00:41.726   626  2736 E ActivityManager: ANR in com.google.android.as
+11-14 22:00:41.726   626  2736 E ActivityManager: PID: 1653
+11-14 22:00:41.726   626  2736 E ActivityManager: Reason: No response to onStartJob
+11-14 22:00:41.726   626  2736 E ActivityManager: ErrorId: 2c252ba6-6bbc-4d04-b8de-9c2fb90a362c
+11-14 22:00:41.726   626  2736 E ActivityManager: Frozen: false
+11-14 22:00:41.726   626  2736 E ActivityManager: Load: 0.0 / 0.0 / 0.0
+11-14 22:00:41.726   626  2736 E ActivityManager: ----- Output from /proc/pressure/memory -----
+11-14 22:00:41.726   626  2736 E ActivityManager: some avg10=4.56 avg60=2.38 avg300=0.64 total=2221955
+11-14 22:00:41.726   626  2736 E ActivityManager: full avg10=0.33 avg60=0.13 avg300=0.03 total=293905
+11-14 22:00:41.726   626  2736 E ActivityManager: ----- End output from /proc/pressure/memory -----
+11-14 22:00:41.726   626  2736 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+11-14 22:00:41.726   626  2736 E ActivityManager: some avg10=90.69 avg60=48.26 avg300=13.30 total=42590740
+11-14 22:00:41.726   626  2736 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+11-14 22:00:41.726   626  2736 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+11-14 22:00:41.726   626  2736 E ActivityManager: ----- Output from /proc/pressure/io -----
+11-14 22:00:41.726   626  2736 E ActivityManager: some avg10=24.63 avg60=15.07 avg300=4.30 total=14087963
+11-14 22:00:41.726   626  2736 E ActivityManager: full avg10=0.11 avg60=1.31 avg300=0.55 total=2189953
+11-14 22:00:41.726   626  2736 E ActivityManager: ----- End output from /proc/pressure/io -----
+11-14 22:00:41.726   626  2736 E ActivityManager: 
+11-14 22:00:41.726   626  2736 E ActivityManager: CPU usage from 37423ms to -1ms ago (2026-11-14 22:00:02.809 to 2026-11-14 22:00:40.233):
+11-14 22:00:41.726   626  2736 E ActivityManager:   39% 518/surfaceflinger: 1.5% user + 37% kernel / faults: 2563 minor
+11-14 22:00:41.726   626  2736 E ActivityManager:   23% 626/system_server: 16% user + 6% kernel / faults: 82942 minor 554 major
+11-14 22:00:41.726   626  2736 E ActivityManager:   10% 482/android.hardware.graphics.composer3-service.ranchu: 0.1% user + 10% kernel / faults: 26 minor
+11-14 22:00:41.726   626  2736 E ActivityManager:   3.5% 471/android.hardware.graphics.allocator-service.ranchu: 0% user + 3.4% kernel / faults: 1 minor
+11-14 22:00:41.726   626  2736 E ActivityManager:   3.2% 584/logcat: 0.2% user + 2.9% kernel / faults: 6 minor
+11-14 22:00:41.726   626  2736 E ActivityManager:   1% 209/servicemanager: 0% user + 0.9% kernel / faults: 15 minor
+11-14 22:00:41.726   626  2736 E ActivityManager:   0.9% 43/kswapd0: 0% user + 0.9% kernel
+11-14 22:00:41.726   626  2736 E ActivityManager:   0.9% 205/logd: 0.4% user + 0.5% kernel / faults: 1840 minor 1 major
+11-14 22:00:41.726   626  2736 E ActivityManager:   0.9% 649/kworker/1:7H-kverityd: 0% user + 0.9% kernel
+11-14 22:00:41.726   626  2736 E ActivityManager:   0.8% 1/init: 0% user + 0.7% kernel / faults: 959 minor
+11-14 22:00:41.726   626  2736 E ActivityManager: 99% TOTAL: 31% user + 65% kernel + 0.6% iowait + 1.1% irq + 0.5% softirq
+11-14 22:00:41.726   626  2736 E ActivityManager: CPU usage from 68009ms to 68009ms ago (1970-01-01 00:00:00.000 to 1970-01-01 00:00:00.000) with 0% awake:
+11-14 22:00:41.726   626  2736 E ActivityManager: 0% TOTAL: 0% user + 0% kernel
+

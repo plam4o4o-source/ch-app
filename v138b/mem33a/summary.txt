@@ -1,0 +1,87 @@
+part mem33a; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15982 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## M0. Both versions installed side by side (speed-profile)
+X installed new: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 4779 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~uPviQnFJY4kTbyDlbt6u6Q==/org.chyavorec.app-wROQu-Tp1K-v5WcanE0jxw==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed base: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000;  versionCode=1990000 minSdk=26 targetSdk=37  versionName=1.2.37 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 3588 ms
+X compile org.chyavorec.app.b37: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~x2ksKr92EAEc3pY0IrGKyw==/org.chyavorec.app.b37-gprN6ldOapoedlYCK8tsHA==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/VpnDialogs/VpnDialogs.apk| x86_64: [status=verify] [reason=prebuilt]|
+## M1. new: 30 cycles (timeline + 2 scrolls, quiz, Още + scroll, book details), meminfo after trim + GC every 5
+MEM new c0: PSS=77650 Java=10980 Native=23984 Graphics=0 Code=30436 PrivOther=2416 System=9110 | DalvikAlloc=6368 NativeAlloc=26351 | Views=9 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=152080 (KB) pid 8014
+MEM new c5: PSS=93658 Java=14548 Native=32700 Graphics=0 Code=26076 PrivOther=8108 System=11458 | DalvikAlloc=8187 NativeAlloc=25431 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=171532 (KB) pid 8014
+MEM new c10: PSS=93251 Java=14580 Native=33132 Graphics=0 Code=25696 PrivOther=7984 System=11107 | DalvikAlloc=8234 NativeAlloc=19707 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=172596 (KB) pid 8014
+MEM new c15: PSS=92820 Java=14644 Native=33360 Graphics=0 Code=25724 PrivOther=7988 System=10320 | DalvikAlloc=8336 NativeAlloc=13513 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=173520 (KB) pid 8014
+MEM new c20: PSS=93384 Java=14648 Native=33688 Graphics=0 Code=25916 PrivOther=7988 System=10328 | DalvikAlloc=8343 NativeAlloc=7286 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=174220 (KB) pid 8014
+MEM new c25: PSS=92550 Java=14756 Native=33336 Graphics=0 Code=25500 PrivOther=7916 System=10262 | DalvikAlloc=8488 NativeAlloc=662 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=174196 (KB) pid 8014
+MEM new c30: PSS=92979 Java=14768 Native=33660 Graphics=0 Code=25552 PrivOther=7920 System=10299 | DalvikAlloc=8477 NativeAlloc=0 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=174676 (KB) pid 8014
+MEM new: pid at the end 8014; process deaths during the run: 0
+## M1. base: 30 cycles (timeline + 2 scrolls, quiz, Още + scroll, book details), meminfo after trim + GC every 5
+MEM base c0: PSS=80083 Java=12200 Native=25008 Graphics=0 Code=28376 PrivOther=3068 System=10055 | DalvikAlloc=7375 NativeAlloc=26974 | Views=9 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=161380 (KB) pid 25356
+MEM base c5: PSS=97574 Java=14420 Native=33220 Graphics=0 Code=30000 PrivOther=8324 System=10850 | DalvikAlloc=8309 NativeAlloc=17946 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=181488 (KB) pid 25356
+MEM base c10: PSS=97739 Java=14412 Native=33532 Graphics=0 Code=29816 PrivOther=8332 System=10899 | DalvikAlloc=8306 NativeAlloc=4470 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=182052 (KB) pid 25356
+MEM base c15: PSS=97737 Java=14528 Native=33732 Graphics=0 Code=29804 PrivOther=8364 System=10533 | DalvikAlloc=8413 NativeAlloc=0 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=182584 (KB) pid 25356
+MEM base c20: PSS=98398 Java=14536 Native=34224 Graphics=0 Code=29820 PrivOther=8364 System=10674 | DalvikAlloc=8418 NativeAlloc=0 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=183608 (KB) pid 25356
+MEM base c25: PSS=97588 Java=14532 Native=34100 Graphics=0 Code=29748 PrivOther=8316 System=10112 | DalvikAlloc=8436 NativeAlloc=0 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=183692 (KB) pid 25356
+MEM base c30: PSS=96969 Java=14672 Native=34060 Graphics=0 Code=28992 PrivOther=8264 System=10189 | DalvikAlloc=8566 NativeAlloc=0 | Views=11 ViewRootImpl=1 Activities=1 AppContexts=5 RSS=183112 (KB) pid 25356
+MEM base: pid at the end 25356; process deaths during the run: 0
+## M2. Totals
+
+new: after trim + GC, KB (cycle: 0 5 10 15 20 25 30)
+| bucket | c0 | c5 | c10 | c15 | c20 | c25 | c30 | c0→last | last third slope, KB/cycle | whole slope |
+|---|---|---|---|---|---|---|---|---|---|---|
+| TOTAL PSS | 77650 | 93658 | 93251 | 92820 | 93384 | 92550 | 92979 | +15329 | -40.5 | +313.6 |
+| Java Heap | 10980 | 14548 | 14580 | 14644 | 14648 | 14756 | 14768 | +3788 | +12.0 | +84.6 |
+| Native Heap | 23984 | 32700 | 33132 | 33360 | 33688 | 33336 | 33660 | +9676 | -2.8 | +220.4 |
+| Graphics | 0 | 0 | 0 | 0 | 0 | 0 | 0 | +0 | +0.0 | +0.0 |
+| Code | 30436 | 26076 | 25696 | 25724 | 25916 | 25500 | 25552 | -4884 | -36.4 | -111.3 |
+| Private Other | 2416 | 8108 | 7984 | 7988 | 7988 | 7916 | 7920 | +5504 | -6.8 | +115.2 |
+| System | 9110 | 11458 | 11107 | 10320 | 10328 | 10262 | 10299 | +1189 | -2.9 | +2.8 |
+| Dalvik Heap alloc | 6368 | 8187 | 8234 | 8336 | 8343 | 8488 | 8477 | +2109 | +13.4 | +50.3 |
+| Native Heap alloc | 26351 | 25431 | 19707 | 13513 | 7286 | 662 | 0 | -26351 | -728.6 | -1007.2 |
+| Views | 9 | 11 | 11 | 11 | 11 | 11 | 11 | +2 | +0.0 | +0.0 |
+| ViewRootImpl | 1 | 1 | 1 | 1 | 1 | 1 | 1 | +0 | +0.0 | +0.0 |
+| Activities | 1 | 1 | 1 | 1 | 1 | 1 | 1 | +0 | +0.0 | +0.0 |
+| AppContexts | 5 | 5 | 5 | 5 | 5 | 5 | 5 | +0 | +0.0 | +0.0 |
+
+base: after trim + GC, KB (cycle: 0 5 10 15 20 25 30)
+| bucket | c0 | c5 | c10 | c15 | c20 | c25 | c30 | c0→last | last third slope, KB/cycle | whole slope |
+|---|---|---|---|---|---|---|---|---|---|---|
+| TOTAL PSS | 80083 | 97574 | 97739 | 97737 | 98398 | 97588 | 96969 | +16886 | -142.9 | +366.8 |
+| Java Heap | 12200 | 14420 | 14412 | 14528 | 14536 | 14532 | 14672 | +2472 | +13.6 | +55.5 |
+| Native Heap | 25008 | 33220 | 33532 | 33732 | 34224 | 34100 | 34060 | +9052 | -16.4 | +211.5 |
+| Graphics | 0 | 0 | 0 | 0 | 0 | 0 | 0 | +0 | +0.0 | +0.0 |
+| Code | 28376 | 30000 | 29816 | 29804 | 29820 | 29748 | 28992 | +616 | -82.8 | +9.6 |
+| Private Other | 3068 | 8324 | 8332 | 8364 | 8364 | 8316 | 8264 | +5196 | -10.0 | +111.5 |
+| System | 10055 | 10850 | 10899 | 10533 | 10674 | 10112 | 10189 | +134 | -48.5 | -9.3 |
+| Dalvik Heap alloc | 7375 | 8309 | 8306 | 8413 | 8418 | 8436 | 8566 | +1191 | +14.8 | +28.1 |
+| Native Heap alloc | 26974 | 17946 | 4470 | 0 | 0 | 0 | 0 | -26974 | +0.0 | -866.3 |
+| Views | 9 | 11 | 11 | 11 | 11 | 11 | 11 | +2 | +0.0 | +0.0 |
+| ViewRootImpl | 1 | 1 | 1 | 1 | 1 | 1 | 1 | +0 | +0.0 | +0.0 |
+| Activities | 1 | 1 | 1 | 1 | 1 | 1 | 1 | +0 | +0.0 | +0.0 |
+| AppContexts | 5 | 5 | 5 | 5 | 5 | 5 | 5 | +0 | +0.0 | +0.0 |
+MEM part: FATAL lines 0
+contact sheets: 0 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4984', '8014']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 20
+   skipped-frames events=20 max=109 total=1058
+== Davey: 66
+   davey events=66 max=3297ms median=774ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
