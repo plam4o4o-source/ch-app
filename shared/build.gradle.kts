@@ -41,4 +41,11 @@ tasks.test {
     useJUnit()
     // Класовете — в до 2 JVM (MockWebServer е на случаен порт).
     maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceIn(1, 2)
+    // Имена на файлове на кирилица (FileDownloaderTest): в среда без UTF-8 локал (LANG/LC_ALL празни —
+    // sun.jnu.encoding=ANSI_X3.4-1968) JVM ги записва като „?“. На Linux тестовете вървят с C.UTF-8;
+    // където средата вече е UTF-8 (CI, macOS), нищо не се променя.
+    val jnu = System.getProperty("sun.jnu.encoding").orEmpty()
+    if (System.getProperty("os.name").orEmpty().startsWith("Linux") && !jnu.equals("UTF-8", ignoreCase = true)) {
+        environment("LC_ALL", "C.UTF-8")
+    }
 }

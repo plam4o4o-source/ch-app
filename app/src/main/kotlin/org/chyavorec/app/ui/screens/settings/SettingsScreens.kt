@@ -327,8 +327,10 @@ private fun RequireUnlockItem(on: Boolean) {
             // Без заключване на телефона няма с какво да се провери — изключва се направо.
             val ok = !available || c.deviceUnlock.authenticate(activity, title, subtitle)
             if (!ok) return@launch
-            c.settings.setRequireUnlock(want)
+            // Първо отключено, после изискването: няма миг, в който то е включено, а сесията — заключена
+            // (записът в DataStore се вижда преди продължението тук да се изпълни).
             if (want) c.personalUnlock.unlock()
+            c.settings.setRequireUnlock(want)
         }
     }
 }

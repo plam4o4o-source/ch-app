@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   Фон на уиджета: пергамент (нощем — тъмно мастило), златен кант, заоблени ъгли и долу —
-  6 dp лента шевица на кръстат бод (повтаряща се плочка widget_ribbon от ShevitsaStill,
-  tools/gen_widget_ribbon.py), в долния отстъп на уиджета. Динамичният вариант е widget_dyn_background.
+  5 dp верига от ромбове на кръстат бод (повтаряща се плочка widget_ribbon, бод 1 dp,
+  tools/gen_widget_ribbon.py) като подгъв точно над канта. Динамичният вариант е widget_dyn_background.
 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
@@ -13,11 +13,11 @@
         </shape>
     </item>
     <item
-        android:bottom="4dp"
-        android:end="22dp"
+        android:bottom="3dp"
+        android:end="20dp"
         android:gravity="bottom|fill_horizontal"
-        android:height="6dp"
-        android:start="22dp">
+        android:height="5dp"
+        android:start="20dp">
         <bitmap
             android:src="@drawable/widget_ribbon"
             android:tileMode="repeat" />

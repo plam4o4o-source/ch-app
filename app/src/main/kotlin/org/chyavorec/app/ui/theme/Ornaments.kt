@@ -82,9 +82,8 @@ object GeneratedCover {
     const val LIGHTEST_OVERLAY = 0.18f
 
     /**
-     * Плътността на ленената тъкан върху корицата (Overlay). Плочката е само със сиви стойности
-     * ≤ 50% — Overlay с тях никога не изсветлява, затова [LIGHTEST_OVERLAY] остава горна граница
-     * (проверено от ClothWeaveTest).
+     * Плътността на ленената тъкан върху корицата (сянката на лена, като Overlay със сиво ≤ 50%).
+     * Тя само затъмнява, затова [LIGHTEST_OVERLAY] остава горна граница (проверено от FolkVisualsTest).
      */
     const val CLOTH_ALPHA = 0.5f
 

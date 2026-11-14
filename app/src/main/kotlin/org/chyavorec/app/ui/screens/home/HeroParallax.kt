@@ -1,13 +1,21 @@
 package org.chyavorec.app.ui.screens.home
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.findRootCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.unit.dp
 import kotlin.math.abs
@@ -20,7 +28,7 @@ import kotlin.math.abs
  *
  * Всичко е в слоя на снимката (graphicsLayer) и се чете само при рисуване: без прекомпозиция и
  * без работа в покой. Изместванията ги пише `onGloballyPositioned` (след подредбата, само при
- * промяна на положението), затова първият кадър е неподвижен — нулата е мястото в покой.
+ * промяна на положението); нулата е мястото на картата, когато списъкът е най-горе ([HeroAnchor]).
  * При намалено движение няма нито слой, нито наблюдател (снимката е както досега).
  */
 internal object HeroParallax {
@@ -47,12 +55,51 @@ internal object HeroParallax {
     fun moved(old: Float, new: Float, eps: Float): Boolean = abs(new - old) > eps
 }
 
-/** Общите за въртележката мерки: центърът на лентата и мястото на първото ѝ показване (нулата на превъртането). */
+/**
+ * Общите за въртележката мерки: центърът на лентата и покоят на картата (нулата на превъртането).
+ * Живее над списъка ([rememberHeroAnchor]) — не се губи, когато редът на въртележката излезе от
+ * екрана и се върне, нито при смяна на раздела (пази се в състоянието на екрана).
+ */
 @Stable
-internal class HeroAnchor {
+internal class HeroAnchor(rest: Float = Float.NaN) {
     var centerX = Float.NaN
-    var baseY = Float.NaN
+
+    /** Горният ръб на картата спрямо списъка (px), когато списъкът е най-горе. */
+    var rest = rest
+        private set
+
+    /** Списъкът — превъртането се мери спрямо него, не спрямо прозореца (преходите местят и двата). */
+    var list: LayoutCoordinates? = null
+
+    /** Точното превъртане на списъка (px), докато първият му ред се вижда; иначе null. */
+    var topScroll: () -> Int? = { null }
+
+    /**
+     * Колко е превъртяна картата от покоя (px), когато е на [y] px под горния ръб на списъка.
+     * Покоят се (пре)смята точно, докато първият ред се вижда; иначе — запазеният; ако го няма
+     * (непознат списък), е първото видяно място, както преди.
+     */
+    fun scrolledBy(y: Float): Float {
+        topScroll()?.let { rest = y + it }
+        if (rest.isNaN()) rest = y
+        return rest - y
+    }
+
+    companion object {
+        val Saver: Saver<HeroAnchor, Float> = Saver(save = { it.rest }, restore = { HeroAnchor(it) })
+    }
 }
+
+/** [HeroAnchor] за въртележката в списъка [list] — създава се над него (вж. [heroList]). */
+@Composable
+internal fun rememberHeroAnchor(list: LazyListState): HeroAnchor {
+    val anchor = rememberSaveable(saver = HeroAnchor.Saver) { HeroAnchor() }
+    anchor.topScroll = remember(list) { { if (list.firstVisibleItemIndex == 0) list.firstVisibleItemScrollOffset else null } }
+    return anchor
+}
+
+/** Списъкът, в който е въртележката — еталонът на превъртането за [heroTrack]. */
+internal fun Modifier.heroList(anchor: HeroAnchor): Modifier = onPlaced { anchor.list = it }
 
 /** Изместването на една карта спрямо покой — пише се от [heroTrack], чете се в слоя на снимката. */
 @Stable
@@ -60,7 +107,7 @@ internal class HeroShift {
     /** Центърът на картата спрямо центъра на лентата (px): 0 в покой, ± при плъзгане. */
     var cardOffset by mutableFloatStateOf(0f)
 
-    /** Превъртането на страницата от първото показване, като дял от половин прозорец. */
+    /** Превъртането на страницата от покоя, като дял от половин прозорец. */
     var scroll by mutableFloatStateOf(0f)
 }
 
@@ -74,10 +121,11 @@ internal fun Modifier.heroContainer(anchor: HeroAnchor, enabled: Boolean): Modif
 internal fun Modifier.heroTrack(anchor: HeroAnchor, shift: HeroShift, enabled: Boolean): Modifier =
     if (!enabled) this else onGloballyPositioned { c ->
         val p = c.positionInWindow()
-        if (anchor.baseY.isNaN()) anchor.baseY = p.y
+        val list = anchor.list?.takeIf { it.isAttached }
+        val y = if (list != null) list.localPositionOf(c, Offset.Zero).y else p.y
         val half = (c.findRootCoordinates().size.height / 2f).coerceAtLeast(1f)
         val offset = if (anchor.centerX.isNaN()) 0f else p.x + c.size.width / 2f - anchor.centerX
-        val scroll = (anchor.baseY - p.y) / half
+        val scroll = anchor.scrolledBy(y) / half
         if (HeroParallax.moved(shift.cardOffset, offset, 0.25f)) shift.cardOffset = offset
         if (HeroParallax.moved(shift.scroll, scroll, 0.002f)) shift.scroll = scroll
     }

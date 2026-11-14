@@ -29,6 +29,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import kotlin.math.abs
+import kotlin.math.roundToInt
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
@@ -137,6 +139,42 @@ class FolkVisualsTest {
             }
             assertTrue(GeneratedCover.readableOn(base))
         }
+    }
+
+    /**
+     * Сянката на лена (SrcOver, без четене от екрана) дава същия цвят като предишния Overlay със
+     * сивата плочка — за тъмни, средни и светли канали; и никога не изсветлява корицата.
+     */
+    @Test fun linenShadeMatchesTheOverlayItReplaces() {
+        val shade = ClothWeave.linenShade.toPixelMap()
+        val a0 = GeneratedCover.CLOTH_ALPHA
+        val bases = buildList {
+            for (palette in ThemePalette.entries) for (dark in listOf(false, true)) for (seed in 0 until 12) {
+                add(GeneratedCover.backgroundArgb("автор $seed", palette.coverAnchors, dark))
+            }
+            // И светли/наситени фонове (канали над 50%) — там Overlay затъмнява по-малко.
+            addAll(listOf(0xFFC9A84C.toInt(), 0xFFFFFBF3.toInt(), 0xFF6B1F2A.toInt(), 0xFF2E7D5B.toInt(), 0xFF808080.toInt()))
+        }
+        var worst = 0f
+        for (y in 0 until ClothWeave.TILE step 3) for (x in 0 until ClothWeave.TILE step 3) {
+            val gray = ClothWeave.linenGray(x, y)
+            val alpha = (shade[x, y].alpha * 255f).roundToInt()
+            assertEquals(255 - 2 * gray, alpha, "плътност в ($x, $y)")
+            val s = gray / 255f
+            val k = a0 * alpha / 255f
+            for (base in bases) {
+                val tint = ClothWeave.linenTint(base)
+                for (shift in intArrayOf(16, 8, 0)) {
+                    val d = ((base shr shift) and 0xFF) / 255f
+                    val overlay = if (d <= 0.5f) 2f * d * s else 1f - 2f * (1f - d) * (1f - s)
+                    val old = (1f - a0) * d + a0 * overlay
+                    val new = d * (1f - k) + ((tint shr shift) and 0xFF) / 255f * k
+                    worst = maxOf(worst, abs(old - new))
+                    assertTrue(new <= d + 1e-6f, "сянката не изсветлява: $d → $new")
+                }
+            }
+        }
+        assertTrue(worst <= 1.01f / 255f, "най-голямата разлика спрямо Overlay: ${worst * 255f}/255")
     }
 
     @Test fun sheenShaderDeclaresItsUniforms() {

@@ -69,15 +69,16 @@ internal object ShaderReport {
 internal object ShaderPool {
     const val WEAVE = ShaderTags.WEAVE
     const val FOIL = ShaderTags.FOIL
+    const val SHEEN = ShaderTags.SHEEN
+    const val INK = ShaderTags.INK
 
     // Нормален приоритет: главната нишка може да чака този превод (фонов приоритет го бави много).
     private val executor = Executors.newSingleThreadExecutor { r ->
         Thread(r, "shader-pool").apply { isDaemon = true }
     }
-    private val pools = mapOf(
-        WEAVE to InstancePool({ GuardedShader.create(org.chyavorec.app.ui.theme.ShevitsaShaders.WEAVE, WEAVE) }, executor),
-        FOIL to InstancePool({ GuardedShader.create(org.chyavorec.app.ui.theme.ShevitsaShaders.FOIL, FOIL) }, executor),
-    )
+    private val pools = ShaderTags.ALL.associateWith { tag ->
+        InstancePool({ ShaderTags.source(tag)?.let { GuardedShader.create(it, tag) } }, executor)
+    }
 
     /** Един шейдър от вида [tag] в резерва (или на път към него) — във фонова нишка. */
     fun prepare(tag: String) {
@@ -102,10 +103,17 @@ internal object ShaderDraws {
     @Volatile private var foil = 0
 
     fun note(tag: String) {
-        if (tag == ShaderTags.WEAVE) weave++ else foil++
+        when (tag) {
+            ShaderTags.WEAVE -> weave++
+            ShaderTags.FOIL -> foil++
+        }
     }
 
-    fun count(tag: String): Int = if (tag == ShaderTags.WEAVE) weave else foil
+    fun count(tag: String): Int = when (tag) {
+        ShaderTags.WEAVE -> weave
+        ShaderTags.FOIL -> foil
+        else -> 0
+    }
 
     fun total(): Int = weave + foil
 
@@ -116,4 +124,18 @@ internal object ShaderDraws {
 internal object ShaderTags {
     const val WEAVE = "shevitsa-shader"
     const val FOIL = "foil-shader"
+    const val SHEEN = "sheen-shader"
+    const val INK = "ink-shader"
+
+    /** Всички видове в [ShaderPool]. */
+    val ALL = listOf(WEAVE, FOIL, SHEEN, INK)
+
+    /** AGSL кодът на вида (null — непознат). */
+    fun source(tag: String): String? = when (tag) {
+        WEAVE -> org.chyavorec.app.ui.theme.ShevitsaShaders.WEAVE
+        FOIL -> org.chyavorec.app.ui.theme.ShevitsaShaders.FOIL
+        SHEEN -> GoldSheen.SOURCE
+        INK -> org.chyavorec.app.ui.screens.my.InkShaders.BLEED
+        else -> null
+    }
 }

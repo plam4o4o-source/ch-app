@@ -44,7 +44,7 @@ import org.chyavorec.app.ui.navigation.PinnedShortcuts
 @Composable
 fun PinShortcutMenu(info: () -> ShortcutInfoCompat?, snackbar: SnackbarHostState) {
     val context = LocalContext.current
-    if (!remember(context) { PinnedShortcuts.supported(context) }) return
+    if (!PinnedShortcuts.rememberSupported(context)) return
     var open by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val failed = stringResource(R.string.pin_failed)

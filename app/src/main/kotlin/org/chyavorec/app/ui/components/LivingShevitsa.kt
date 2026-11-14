@@ -572,7 +572,7 @@ internal object ShevitsaStill {
  * комбинация от изрязване и смесване. Веднъж за процеса, два кадъра след пълното показване
  * на началния екран (на спокойствие), се рисуват същите [LivingShevitsa] и [CardFoilLayer] като
  * в картата, в малка кутия със същото изрязване със заоблени ъгли и почти прозрачна — първото
- * отваряне на картата ги намира готови. Фолиото се превежда във фонов режим едва след първия кадър.
+ * отваряне на картата ги намира готови; също и отблясъкът по заглавието на книгата ([GoldSheenWarmup]). Фолиото се превежда във фонов режим едва след първия кадър.
  * Подгряването се брои за свършено само ако нещо наистина е нарисувано с шейдър.
  */
 @Composable
@@ -584,7 +584,11 @@ fun ShaderWarmup(modifier: Modifier = Modifier) {
         if (shadersWarmed) return@LaunchedEffect
         // Първият кадър е зад гърба ни: фолиото се превежда във фона, не в него.
         withFrameNanos { }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) ShaderPool.prepare(ShaderPool.FOIL)
+        // Фолиото (картата) и отблясъкът по заглавието на книгата (преходът към книга).
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ShaderPool.prepare(ShaderPool.FOIL)
+            ShaderPool.prepare(ShaderPool.SHEEN)
+        }
         if (reporter != null) {
             val drawn = CompletableDeferred<Unit>()
             reporter.addOnReportDrawnListener { drawn.complete(Unit) }
@@ -619,5 +623,6 @@ private fun WarmupBox(modifier: Modifier) {
     ) {
         LivingShevitsa(ShevitsaPalettes.card, Modifier.matchParentSize(), cell = 2.4.dp, intensity = 0.9f, still = false)
         CardFoilLayer(tilt, Modifier.matchParentSize())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) GoldSheenWarmup(Modifier.matchParentSize())
     }
 }

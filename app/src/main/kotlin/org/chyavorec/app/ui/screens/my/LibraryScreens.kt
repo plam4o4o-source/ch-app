@@ -114,6 +114,8 @@ internal fun NeedsLogin(error: AppError, onLogin: () -> Unit) {
 fun LoansScreen(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((Long) -> Unit)? = null, onOpenHistory: (() -> Unit)? = null) {
     // Заетите книги са лични — не в „Скорошни“ и в снимки на екрана.
     SecureScreen()
+    // Мастилото на печата „Върната“ — преведено във фона, докато книгите се зареждат.
+    PrepareStampInk()
     // …и без корици от интернет (адресът на корицата би издал коя книга е заета).
     PersonalCovers { LoansContent(onBack, onLogin, onOpenBook, onOpenHistory) }
 }

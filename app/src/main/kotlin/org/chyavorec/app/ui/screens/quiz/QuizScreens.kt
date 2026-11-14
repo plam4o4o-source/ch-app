@@ -305,6 +305,7 @@ private fun ResultContent(f: QuizUi.Finished, onShare: () -> Unit, onBack: () ->
             Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.quiz_share))
         }
-        OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.action_back)) }
+        // „Затвори“, не второ „Назад“ — TalkBack не чете две еднакви действия (стрелката горе е „Назад“).
+        OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text(stringResource(R.string.action_close)) }
     }
 }

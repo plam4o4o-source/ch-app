@@ -75,7 +75,7 @@ fun MoreScreen(navigate: (String) -> Unit) {
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val canPin = remember(context) { PinnedShortcuts.supported(context) }
+    val canPin = PinnedShortcuts.rememberSupported(context)
     var pinSheet by remember { mutableStateOf(false) }
     val pinFailed = stringResource(R.string.pin_failed)
     if (pinSheet) PinSectionsSheet(onFailed = { scope.launch { snackbar.showSnackbar(pinFailed) } }, onDismiss = { pinSheet = false })

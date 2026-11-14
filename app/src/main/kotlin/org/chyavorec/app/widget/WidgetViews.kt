@@ -43,8 +43,8 @@ internal object WidgetViews {
     /** Широк с място за краткото име до бутоните (по-тесният — само емблемата). */
     private const val SHORT_TITLE_WIDTH = 300f
 
-    /** Широк с място за цялото име до бутоните — 4 клетки на повечето телефони. */
-    private const val FULL_TITLE_WIDTH = 345f
+    /** Широк с място за цялото име до бутоните без свиване на „Каталог“ (по-тесният 4×N — краткото име). */
+    private const val FULL_TITLE_WIDTH = 380f
     val FullWideSize = SizeF(FULL_TITLE_WIDTH, 100f)
     val FullWideTallSize = SizeF(FULL_TITLE_WIDTH, 150f)
 

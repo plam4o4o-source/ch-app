@@ -212,6 +212,8 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
         news.data != null || news.error != null || !news.loading || (!state.feastPending && !state.eventsPending)
     }
     val listState = rememberLazyListState()
+    // Покоят на снимката във въртележката — над списъка (редът ѝ излиза от композицията при превъртане).
+    val heroAnchor = rememberHeroAnchor(listState)
     TabReselectEffect(Routes.HOME) { listState.animateScrollToItem(0) }
     // Дали броячите „отброяват“ днес — прочита се отрано и извън главната нишка.
     val appContext = LocalContext.current.applicationContext
@@ -237,6 +239,7 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
             modifier = Modifier.align(Alignment.TopCenter)
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.End))
                 .widthIn(max = 840.dp).fillMaxSize()
+                .heroList(heroAnchor)
                 .semantics { paneTitle = paneLabel },
         ) {
             item("header") { Column {
@@ -311,7 +314,7 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
             item("hero") {
                 val top = state.news.data?.take(5).orEmpty()
                 when {
-                    top.isNotEmpty() -> HeroCarousel(top, onOpen = { navigate(Routes.article(it.id)) })
+                    top.isNotEmpty() -> HeroCarousel(top, heroAnchor, onOpen = { navigate(Routes.article(it.id)) })
                     state.news.showSkeleton -> {
                         val windowH = windowHeight()
                         BoxWithConstraints(Modifier.padding(16.dp).fillMaxWidth()) {
@@ -501,7 +504,7 @@ private val HeroScrim = Brush.verticalGradient(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit) {
+private fun HeroCarousel(items: List<NewsArticle>, anchor: HeroAnchor, onOpen: (NewsArticle) -> Unit) {
     val carousel = rememberCarouselState { items.size }
     val reduced = rememberReducedMotion()
     // Пръст върху лентата (и без плъзгане) — следващата смяна изчаква пускането.
@@ -545,7 +548,6 @@ private fun HeroCarousel(items: List<NewsArticle>, onOpen: (NewsArticle) -> Unit
     // Дълбочина като през прозорец: снимката е малко по-едра и се движи по-бавно от картата, а златната
     // рамка стои ([HeroParallax]); при намалено движение — без слой и без наблюдател.
     val parallax = !reduced
-    val anchor = remember { HeroAnchor() }
     // Ъглите на рамката се изрисуват веднъж за процеса (после — веднага цели).
     val frameReveal = remember { Animatable(if (reduced || HeroFrameReveal.played) 1f else 0f) }
     LaunchedEffect(Unit) {

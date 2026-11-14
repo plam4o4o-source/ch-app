@@ -260,9 +260,21 @@ class ChitalishteWidgetTest {
         assertEquals("Читалище Яворец", full.text(R.id.widget_title))
         assertEquals(null, full.findViewById<View>(R.id.widget_logo).contentDescription)
         // Където е избрано, името се събира до бутоните (без „…“) — на най-тясната ширина на размера.
-        for ((size, wDp) in listOf(WidgetViews.FullWideSize to 345, SizeF(300f, 100f) to 300, WidgetViews.SmallSize to 150)) {
+        for ((size, wDp) in listOf(WidgetViews.FullWideSize to 380, SizeF(300f, 100f) to 379, SizeF(300f, 100f) to 300, WidgetViews.SmallSize to 150)) {
             val title = layOut(WidgetViews.build(app, signedInState(), size), wDp, 130).findViewById<TextView>(R.id.widget_title)
             assertEquals(0, title.layout.getEllipsisCount(0), "${title.text} в $wDp dp")
+        }
+    }
+
+    /** „Каталог“ не опира в ръбовете си: на всяка ширина (по избрания за нея размер) текстът е цял и с полетата си. */
+    @Test fun catalogPillKeepsItsPaddingAtEveryWidth() {
+        for (wDp in listOf(420, 380, 379, 360, 345, 300, 250)) {
+            val v = layOut(WidgetViews.build(app, signedInState(), WidgetViews.pick(SizeF(wDp.toFloat(), 140f))), wDp, 140)
+            val catalog = v.findViewById<TextView>(R.id.widget_catalog)
+            assertEquals(0, catalog.layout.getEllipsisCount(0), "„${catalog.text}“ в $wDp dp")
+            val room = catalog.width - catalog.paddingLeft - catalog.paddingRight
+            assertTrue(room + 1 >= catalog.paint.measureText(catalog.text.toString()), "„Каталог“ в $wDp dp: $room px")
+            assertTrue(catalog.offsetIn(v).first + catalog.width <= v.width - v.paddingRight, "„Каталог“ излиза вдясно в $wDp dp")
         }
     }
 
@@ -280,7 +292,7 @@ class ChitalishteWidgetTest {
 
     @Test fun buttonsAreAtLeast48dpApart() {
         val density = app.resources.displayMetrics.density
-        val v = layOut(WidgetViews.build(app, signedInState(), WidgetViews.FullWideSize), 360, 140)
+        val v = layOut(WidgetViews.build(app, signedInState(), WidgetViews.FullWideSize), 380, 140)
         val scan = v.findViewById<View>(R.id.widget_scan)
         val catalog = v.findViewById<View>(R.id.widget_catalog)
         for (b in listOf(scan, catalog)) {
@@ -299,8 +311,11 @@ class ChitalishteWidgetTest {
         assertEquals(WidgetViews.SmallSize, WidgetViews.pick(SizeF(180f, 120f)))
         assertEquals(WidgetViews.WideSize, WidgetViews.pick(SizeF(260f, 120f)))
         assertEquals(WidgetViews.WideTallSize, WidgetViews.pick(SizeF(260f, 200f)))
-        assertEquals(WidgetViews.FullWideSize, WidgetViews.pick(SizeF(360f, 120f)))
-        assertEquals(WidgetViews.FullWideTallSize, WidgetViews.pick(SizeF(360f, 200f)))
+        assertEquals(WidgetViews.FullWideSize, WidgetViews.pick(SizeF(390f, 120f)))
+        assertEquals(WidgetViews.FullWideTallSize, WidgetViews.pick(SizeF(390f, 200f)))
+        // 4 клетки на 360 dp: краткото име — бутоните са с полетата си.
+        assertEquals(SizeF(300f, 100f), WidgetViews.pick(SizeF(360f, 120f)))
+        assertEquals(SizeF(300f, 150f), WidgetViews.pick(SizeF(360f, 200f)))
         // По-малко от най-малкия — най-малкият.
         assertEquals(WidgetViews.SmallSize, WidgetViews.pick(SizeF(60f, 60f)))
     }
@@ -653,14 +668,17 @@ class ChitalishteWidgetTest {
 
     // Снимки за визуален преглед (не сравняват пиксели).
 
-    @Test fun shotWideLight() = shot("90-widget-wide", WidgetViews.build(app, signedInState(), WidgetViews.FullWideTallSize), 360, 180)
+    @Test fun shotWideLight() = shot("90-widget-wide", WidgetViews.build(app, signedInState(), WidgetViews.FullWideTallSize), 380, 180)
+
+    /** 4 клетки на телефон с 360 dp: краткото име до бутоните. */
+    @Test fun shotWideShort() = shot("90-widget-wide-360", WidgetViews.build(app, signedInState(), WidgetViews.pick(SizeF(360f, 180f))), 360, 180)
 
     @Config(qualifiers = "+night")
-    @Test fun shotWideDark() = shot("91-widget-wide-dark", WidgetViews.build(app, signedInState(), WidgetViews.FullWideSize), 360, 140)
+    @Test fun shotWideDark() = shot("91-widget-wide-dark", WidgetViews.build(app, signedInState(), WidgetViews.FullWideSize), 380, 140)
 
     @Test fun shotSmall() = shot("92-widget-small", WidgetViews.build(app, signedInState(), WidgetViews.SmallSize), 160, 150)
 
-    @Test fun shotSignedOut() = shot("93-widget-wide-signed-out", WidgetViews.build(app, signedOutState(), WidgetViews.FullWideTallSize), 360, 180)
+    @Test fun shotSignedOut() = shot("93-widget-wide-signed-out", WidgetViews.build(app, signedOutState(), WidgetViews.FullWideTallSize), 380, 180)
 
     /** 3×2: до бутоните — само емблемата. */
     @Test fun shotNarrow() = shot("94-widget-narrow", WidgetViews.build(app, signedInState(), WidgetViews.WideSize), 270, 140)
@@ -680,7 +698,7 @@ class ChitalishteWidgetTest {
 
     /** Динамичните цветове от тапета (Android 12+, при включена настройка) — за сравнение с фирмените горе. */
     @Config(sdk = [34])
-    @Test fun shotWideDynamic() = shot("97-widget-wide-dynamic", WidgetViews.build(app, signedInState().copy(dynamic = true), WidgetViews.FullWideSize), 360, 140)
+    @Test fun shotWideDynamic() = shot("97-widget-wide-dynamic", WidgetViews.build(app, signedInState().copy(dynamic = true), WidgetViews.FullWideSize), 380, 140)
 
     /** Предпазният клон за заключен екран: само следващото събитие. */
     @Config(sdk = [30])

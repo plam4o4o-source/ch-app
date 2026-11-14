@@ -38,7 +38,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
@@ -302,6 +301,7 @@ fun BookCover(
     val background = remember(base) {
         Brush.linearGradient(listOf(lerp(base, Color.White, 0.08f), base, base.darken()), Offset.Zero, Offset(0f, Float.POSITIVE_INFINITY))
     }
+    val clothTint = remember(base) { linenTintFilter(base) }
 
     val context = LocalContext.current
     val online = LocalOnlineCovers.current
@@ -342,7 +342,8 @@ fun BookCover(
             .background(background)
             .drawWithCache {
                 // „подвързия“: мека светлина горе вляво + ленена тъкан (платно бод, плочка 64 px от
-                // общия кеш, повторена с Overlay — без слой и без bitmap на корица); гръбче отляво.
+                // общия кеш — сянката на лена, обикновено наслагване като Overlay, но без четене от
+                // екрана, без слой и без bitmap на корица; еднаква на всички версии); гръбче отляво.
                 val glow = Brush.radialGradient(
                     listOf(Color.White.copy(alpha = 0.10f), Color.Transparent),
                     center = Offset(size.width * 0.3f, size.height * 0.22f),
@@ -353,10 +354,7 @@ fun BookCover(
                 val spine = Brush.horizontalGradient(listOf(Color.Black.copy(alpha = 0.28f), Color.Transparent), 0f, spineWidth)
                 onDrawWithContent {
                     drawRect(glow)
-                    // На Android 8 (API 26–27) Overlay се връща към сива плътна заливка (корицата става бледа) — там без плетка.
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                        drawRect(cloth, alpha = GeneratedCover.CLOTH_ALPHA, blendMode = BlendMode.Overlay)
-                    }
+                    drawRect(cloth, alpha = GeneratedCover.CLOTH_ALPHA, colorFilter = clothTint)
                     drawContent()
                     drawRect(spine, size = size.copy(width = spineWidth))
                 }
