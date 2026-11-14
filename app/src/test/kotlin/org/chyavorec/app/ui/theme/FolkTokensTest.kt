@@ -34,11 +34,11 @@ class FolkTokensTest {
     }
 
     @Test fun stitchStrokesAreCachedPerScale() {
-        val a = StitchSpec.Running.stroke(2.75f)
-        assertSame(a, StitchSpec.Running.stroke(2.75f), "без алокация при същата плътност")
-        assertNotSame(a, StitchSpec.Running.stroke(2.75f, scale = 2f))
-        assertSame(a, StitchSpec.Running.stroke(2.75f), "кешът пази няколко мащаба")
-        assertEquals(StitchSpec.Running.widthDp * 2.75f, a.width, 1e-4f)
+        val a = StitchSpec.Running.stroke(3.17f)
+        assertSame(a, StitchSpec.Running.stroke(3.17f), "без алокация при същата плътност")
+        assertNotSame(a, StitchSpec.Running.stroke(3.17f, scale = 2f))
+        assertSame(a, StitchSpec.Running.stroke(3.17f), "кешът пази няколко мащаба")
+        assertEquals(StitchSpec.Running.widthDp * 3.17f, a.width, 1e-4f)
         assertEquals(StrokeCap.Round, a.cap)
         assertEquals(StitchKind.RUNNING, StitchSpec.Running.kind)
         assertEquals(StitchKind.BASTING, StitchSpec.Basting.kind)

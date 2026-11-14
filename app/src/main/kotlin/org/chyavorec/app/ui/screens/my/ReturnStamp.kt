@@ -377,7 +377,7 @@ internal fun ReturnSeal(anim: StampAnim, modifier: Modifier = Modifier) {
             }
             .drawWithCache {
                 val ring = Stroke(2.6.dp.toPx())
-                val thin = StitchSpec.Running.stroke(density)
+                val thin = StitchSpec.Running.stroke(1.dp.toPx())
                 val r = size.minDimension / 2f
                 onDrawBehind {
                     drawCircle(ink, radius = r - ring.width / 2f, style = ring)
