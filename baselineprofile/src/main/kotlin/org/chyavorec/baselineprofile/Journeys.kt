@@ -1,5 +1,6 @@
 package org.chyavorec.baselineprofile
 
+import android.graphics.Rect
 import android.util.Log
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
@@ -60,9 +61,8 @@ private val CALENDAR_VIEW = exactly("Изглед календар", "Calendar v
 private val LIST_VIEW = exactly("Изглед списък", "List view")
 /** Отметката на страницата на книгата и плочката в „Моето“. */
 private val WANT_TO_READ = exactly("Искам да прочета", "Want to read")
-/** Плочката „Галерия“ в „Още“ — заглавието и описанието ѝ (то е само в „Още“). */
+/** Плочката „Галерия“ в „Още“. */
 private val GALLERY = exactly("Галерия", "Gallery")
-private val GALLERY_DESC = exactly("Снимки от сайта", "Photos from the website")
 /** Броят снимки върху албума в галерията: „12 снимки“ / „12 photos“. */
 private val PHOTOS_COUNT = Pattern.compile("^[0-9]+\\s+(снимк|photo).*", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
 private val MESSAGES = containing("Съобщения", "съобщени", "Messages", "message")
@@ -80,6 +80,16 @@ private val SURPRISE_AGAIN = exactly("Още една", "Another one")
 /** „Сподели“ в лентата на статията и „Сподели като картинка“ в листа с избор. */
 private val SHARE = exactly("Сподели", "Share")
 private val SHARE_IMAGE = exactly("Сподели като картинка", "Share as an image")
+/** Плочките в „Още“ за вестника, лентата на времето, викторината и шевицата. */
+private val NEWSPAPER = exactly("Старият вестник", "The old newspaper")
+private val TIMELINE = exactly("Лента на времето", "Timeline")
+private val QUIZ = exactly("Познай Яворец", "Know Yavorets")
+private val EMBROIDERY = exactly("Извези шевица", "Embroider a pattern")
+/** Страницата на статия от вестника (contentDescription на листа) и „Следваща страница“. */
+private val PAPER_PAGE = containing("Щипни или докосни двукратно", "Pinch or double-tap to zoom")
+private val NEXT_PAGE = exactly("Следваща страница", "Next page")
+/** Платното на „Извези шевица“ (contentDescription). */
+private val EMBROIDERY_CANVAS = containing("Платно за шевица", "Embroidery canvas")
 /** Измислен номер за собствената карта (само на емулатора; Code 39 — главни букви и цифри). */
 private const val PROFILE_CARD_NUMBER = "BP2026"
 
@@ -194,12 +204,18 @@ private fun MacrobenchmarkScope.waitForAny(selectors: List<BySelector>, timeout:
     return selectors.any { device.hasObject(it) }
 }
 
-/** Плъзгане по екрана (превърта списъци, без да зависи от конкретен елемент). */
-private fun MacrobenchmarkScope.swipeUp() {
+/**
+ * Плъзгане по екрана (превърта списъци, без да зависи от конкретен елемент). После се изчаква
+ * списъкът да спре ([settle]): докосване на още движещ се списък само го спира — Compose не
+ * праща щракване на елемента под пръста, т.е. екранът не се отваря (така пропадаше пътят до
+ * „Искам да прочета“ от 1.2.36 нататък — плочката вече е под първия екран на „Моето“).
+ */
+private fun MacrobenchmarkScope.swipeUp(settle: Boolean = true) {
     val w = device.displayWidth
     val h = device.displayHeight
     device.swipe(w / 2, h * 3 / 4, w / 2, h / 4, 20)
     device.waitForIdle()
+    if (settle) settle()
 }
 
 private fun MacrobenchmarkScope.swipeDown() {
@@ -207,6 +223,7 @@ private fun MacrobenchmarkScope.swipeDown() {
     val h = device.displayHeight
     device.swipe(w / 2, h / 4, w / 2, h * 3 / 4, 20)
     device.waitForIdle()
+    settle()
 }
 
 /** Бързо плъзгане с пръст нагоре (fling): списъкът продължава по инерция надолу. */
@@ -216,6 +233,7 @@ private fun MacrobenchmarkScope.flingUp() {
     device.swipe(w / 2, h * 4 / 5, w / 2, h / 5, 4)
     Thread.sleep(800)
     device.waitForIdle()
+    settle()
 }
 
 private fun MacrobenchmarkScope.flingDown() {
@@ -224,15 +242,76 @@ private fun MacrobenchmarkScope.flingDown() {
     device.swipe(w / 2, h / 5, w / 2, h * 4 / 5, 4)
     Thread.sleep(800)
     device.waitForIdle()
+    settle()
 }
 
-/** Търси [selector] на екрана, а ако го няма — превърта надолу до [swipes] пъти. */
-private fun MacrobenchmarkScope.findScrolling(selector: BySelector, swipes: Int = 3): UiObject2? {
-    repeat(swipes) {
-        device.findObject(selector)?.let { return it }
-        swipeUp()
+/** Местата на докосваемите елементи на приложението — за [settle]. */
+private fun MacrobenchmarkScope.clickableBounds(): List<Rect>? =
+    runCatching { device.findObjects(By.clickable(true).pkg(packageName)).map { it.visibleBounds } }.getOrNull()
+
+/** Изчаква превъртането (инерцията) да спре: две поредни снимки на елементите са еднакви. */
+private fun MacrobenchmarkScope.settle(maxMs: Long = 3_000) {
+    val end = System.currentTimeMillis() + maxMs
+    var last = clickableBounds()
+    while (System.currentTimeMillis() < end) {
+        Thread.sleep(200)
+        val now = clickableBounds()
+        if (now != null && now == last) return
+        last = now
     }
+}
+
+/**
+ * Търси [selector] на екрана, а ако го няма — превърта надолу до [swipes] пъти. Намереният след
+ * превъртане елемент се взима наново, след като списъкът спре (в logcat — с колко се е мръднал
+ * дотогава: толкова би сбъркало докосване веднага след намирането).
+ */
+private fun MacrobenchmarkScope.findScrolling(selector: BySelector, swipes: Int = 3): UiObject2? {
+    device.findObject(selector)?.let { return it }
+    repeat(swipes) { i ->
+        swipeUp(settle = false)
+        val moving = device.findObject(selector) ?: return@repeat
+        val before = runCatching { moving.visibleBounds }.getOrNull()
+        settle()
+        val found = device.findObject(selector) ?: return@repeat
+        Log.i(TAG, "found after ${i + 1} swipe(s); moved ${before?.let { kotlin.math.abs(it.top - found.visibleBounds.top) } ?: -1} px while the list settled")
+        return found
+    }
+    settle()
     return device.findObject(selector)
+}
+
+/** Отворен е вътрешен екран (със стрелка „назад“ в заглавката) — не основен раздел. */
+private fun MacrobenchmarkScope.innerScreenShown(): Boolean = inApp() && device.hasObject(By.desc(BACK).pkg(packageName))
+
+/**
+ * Докосва елемента от [find] (самия докосваем възел) и изчаква [opened]. Ако след [timeout] ms
+ * екранът не се е сменил — още един опит (наново намерен елемент, след като всичко спре).
+ * Неуспех е бележка, т.е. пътят е „incomplete“ в CI, не тихо „ok“.
+ */
+private fun MacrobenchmarkScope.tapAndWait(
+    what: String,
+    timeout: Long = TIMEOUT,
+    opened: () -> Boolean = { innerScreenShown() },
+    find: () -> UiObject2?,
+): Boolean {
+    repeat(2) { attempt ->
+        settle()
+        val target = runCatching(find).getOrNull()?.clickableAncestor()
+        if (target == null) {
+            note("$what: not found")
+            return false
+        }
+        target.click()
+        if (poll(timeout) { opened().takeIf { it } } != null) {
+            if (attempt > 0) Log.i(TAG, "$what: opened on the second tap")
+            device.waitForIdle()
+            return true
+        }
+        Log.w(TAG, "$what: tap ${attempt + 1} did not open the screen")
+    }
+    note("$what: not opened")
+    return false
 }
 
 /** Долният край на заглавната лента („назад“); без нея — горната десета от екрана. */
@@ -487,9 +566,8 @@ fun MacrobenchmarkScope.newsJourney() {
 
 private fun MacrobenchmarkScope.openNewsArticle() {
     val field = device.findObject(EDIT_TEXT) ?: return
-    val item = largestClickableBelow(field.visibleBounds.bottom) ?: return note("no news to open")
-    item.click()
-    if (device.wait(Until.gone(EDIT_TEXT), TIMEOUT) != true) return note("article not opened")
+    largestClickableBelow(field.visibleBounds.bottom) ?: return note("no news to open")
+    if (!tapAndWait("article") { device.findObject(EDIT_TEXT)?.let { largestClickableBelow(it.visibleBounds.bottom) } }) return
     // Текстът на статията се зарежда от сайта.
     Thread.sleep(2_000)
     swipeUp()
@@ -520,11 +598,14 @@ private fun MacrobenchmarkScope.calendarSegment() {
         device.waitForIdle()
     }
     // Първото събитие от списъка.
-    val top = device.findObjects(By.text(SEGMENT_CALENDAR)).minByOrNull { it.visibleBounds.top }?.visibleBounds?.bottom ?: return
-    val event = largestClickableBelow(top) ?: return note("no event to open")
-    event.click()
-    if (device.wait(Until.gone(By.text(SEGMENT_CALENDAR)), TIMEOUT) != true) return note("event not opened")
-    Thread.sleep(1_000)
+    // Първото събитие от списъка → екранът му (листът от календара, EventLeaf).
+    val firstEvent = {
+        device.findObjects(By.text(SEGMENT_CALENDAR)).minByOrNull { it.visibleBounds.top }?.visibleBounds?.bottom
+            ?.let { largestClickableBelow(it) }
+    }
+    firstEvent() ?: return note("no event to open")
+    if (!tapAndWait("event", find = firstEvent)) return backUntil(By.text(SEGMENT_CALENDAR))
+    Thread.sleep(1_500)
     swipeUp()
     swipeDown()
     backUntil(By.text(SEGMENT_CALENDAR))
@@ -533,15 +614,44 @@ private fun MacrobenchmarkScope.calendarSegment() {
 /** „Моето“ → „Искам да прочета“ (с книгата, отбелязана в каталога) → назад. */
 fun MacrobenchmarkScope.wantToReadJourney() {
     if (!openTab(TAB_MY)) return
+    wantToReadEvidence()
     // В „Моето“ има повече редове (печат, дневник, шевица) — плочката е по-надолу.
-    val tile = findScrolling(By.text(WANT_TO_READ), swipes = 7) ?: return note("want-to-read tile not found")
-    tile.click()
-    device.waitForIdle()
-    Thread.sleep(1_500)
-    swipeUp()
-    swipeDown()
-    // Към „Моето“.
-    backToTab()
+    if (findScrolling(By.text(WANT_TO_READ), swipes = 7) == null) return note("want-to-read tile not found")
+    try {
+        if (!tapAndWait("want-to-read screen") { device.findObject(By.text(WANT_TO_READ)) }) return
+        Thread.sleep(1_500)
+        swipeUp()
+        swipeDown()
+    } finally {
+        // Към „Моето“.
+        backToTab()
+    }
+}
+
+/** ВРЕМЕННО (проверка на причината): старият начин — докосване веднага след превъртането. */
+private var evidenceDone = false
+
+private fun MacrobenchmarkScope.wantToReadEvidence() {
+    if (evidenceDone) return
+    evidenceDone = true
+    repeat(3) { swipeDown() }
+    var tapped = false
+    for (i in 0..7) {
+        val tile = device.findObject(By.text(WANT_TO_READ))
+        if (tile != null) {
+            val b1 = tile.visibleBounds
+            tile.click()
+            val opened = poll(4_000) { innerScreenShown().takeIf { it } } != null
+            Log.i(TAG, "evidence: immediate tap after $i swipe(s) at $b1 opened=$opened")
+            tapped = true
+            if (opened) backToTab()
+            break
+        }
+        device.swipe(device.displayWidth / 2, device.displayHeight * 3 / 4, device.displayWidth / 2, device.displayHeight / 4, 20)
+        device.waitForIdle()
+    }
+    if (!tapped) Log.i(TAG, "evidence: tile not found the old way")
+    repeat(3) { swipeDown() }
 }
 
 /** „Моето“ без вход (гост). */
@@ -563,10 +673,9 @@ fun MacrobenchmarkScope.moreJourney() {
 /** „Още“ → „Галерия“ → албум → снимка (и следващата) → назад до „Още“. */
 fun MacrobenchmarkScope.galleryJourney() {
     if (!openTab(TAB_MORE)) return
-    val tile = findScrolling(By.text(GALLERY)) ?: return note("gallery tile not found")
-    tile.click()
-    if (device.wait(Until.gone(By.text(GALLERY_DESC)), TIMEOUT) != true) return note("gallery not opened")
+    findScrolling(By.text(GALLERY)) ?: return note("gallery tile not found")
     try {
+        if (!tapAndWait("gallery") { device.findObject(By.text(GALLERY)) }) return
         // Албумите идват от сайта — изчакваме броя снимки върху първия.
         if (device.wait(Until.hasObject(By.text(PHOTOS_COUNT)), CONTENT_TIMEOUT) != true) return note("gallery not loaded")
         swipeUp()
@@ -587,6 +696,98 @@ fun MacrobenchmarkScope.galleryJourney() {
         Thread.sleep(1_500)
         // Следващата снимка (плъзгане настрани).
         device.findObject(By.scrollable(true))?.fling(Direction.RIGHT)
+        Thread.sleep(1_000)
+    } finally {
+        backToTab()
+    }
+}
+
+/** Плочка в „Още“ → нейният екран; false (с бележка), ако не се е отворил. */
+private fun MacrobenchmarkScope.openMoreTile(label: Pattern, what: String): Boolean {
+    if (!openTab(TAB_MORE)) return false
+    // Новите плочки са в долната част на мрежата.
+    findScrolling(By.text(label), swipes = 5) ?: run {
+        note("$what tile not found")
+        return false
+    }
+    return tapAndWait(what) { device.findObject(By.text(label)) }
+}
+
+/** Най-горната широка (карта, ред) докосваема част на съдържанието под [belowY]. */
+private fun MacrobenchmarkScope.topWideClickableBelow(belowY: Int): UiObject2? {
+    val navTop = device.findObjects(By.text(TAB_HOME)).maxByOrNull { it.visibleBounds.centerY() }?.visibleBounds?.top
+        ?: device.displayHeight
+    return device.findObjects(By.clickable(true).pkg(packageName))
+        .filter { val b = it.visibleBounds; b.top >= belowY && b.bottom <= navTop && b.width() >= device.displayWidth * 2 / 3 }
+        .minByOrNull { it.visibleBounds.top }
+}
+
+/**
+ * „Още“ → „Старият вестник“ (списъкът със статии от сайта) → първата статия (PDF-ът се тегли
+ * и рисува; следващата страница, ако има) → назад до „Още“.
+ */
+fun MacrobenchmarkScope.newspaperJourney() {
+    try {
+        if (!openMoreTile(NEWSPAPER, "newspaper")) return
+        // Статиите идват от сайта; „шапката“ на вестника може да заема целия първи екран.
+        val firstArticle = { topWideClickableBelow(belowTopBar()) }
+        if (poll(CONTENT_TIMEOUT) { firstArticle() } == null) {
+            swipeUp()
+            if (firstArticle() == null) return note("newspaper not loaded")
+        }
+        swipeUp()
+        swipeDown()
+        if (poll(TIMEOUT) { firstArticle() } == null) swipeUp()
+        // Списъкът винаги показва „Старият вестник“ (в „шапката“ или в заглавката), четецът — заглавието на статията.
+        val readerShown = { !device.hasObject(By.text(NEWSPAPER).pkg(packageName)) }
+        if (!tapAndWait("newspaper article", opened = readerShown, find = firstArticle)) return
+        // Изтеглянето и първата страница.
+        if (waitFor(By.desc(PAPER_PAGE).pkg(packageName), CONTENT_TIMEOUT) == null) return note("newspaper page not shown")
+        Thread.sleep(1_500)
+        device.findObject(By.desc(NEXT_PAGE).pkg(packageName))?.let {
+            it.click()
+            device.waitForIdle()
+            Thread.sleep(1_500)
+        }
+    } finally {
+        backToTab()
+    }
+}
+
+/** „Още“ → „Лента на времето“ → до долу и обратно → назад. */
+fun MacrobenchmarkScope.timelineJourney() {
+    try {
+        if (!openMoreTile(TIMELINE, "timeline")) return
+        // Вехите идват от страницата „История“ на сайта (или от кеша).
+        Thread.sleep(2_000)
+        repeat(2) { flingUp() }
+        repeat(2) { flingDown() }
+    } finally {
+        backToTab()
+    }
+}
+
+/** „Още“ → „Познай Яворец“ — само отваряне (без отговори: серията и резултатът остават непокътнати). */
+fun MacrobenchmarkScope.quizJourney() {
+    try {
+        if (!openMoreTile(QUIZ, "quiz")) return
+        // Въпросите се съставят от каталога, събитията и снимките (или „Днес няма викторина“).
+        Thread.sleep(2_500)
+        swipeUp()
+        swipeDown()
+    } finally {
+        backToTab()
+    }
+}
+
+/** „Още“ → „Извези шевица“ → един бод (следващото повторение го маха) → назад. */
+fun MacrobenchmarkScope.embroideryJourney() {
+    try {
+        if (!openMoreTile(EMBROIDERY, "embroidery")) return
+        val canvas = waitFor(By.desc(EMBROIDERY_CANVAS).pkg(packageName)) ?: return note("embroidery canvas not found")
+        Thread.sleep(500)
+        canvas.click()
+        device.waitForIdle()
         Thread.sleep(1_000)
     } finally {
         backToTab()
@@ -621,8 +822,7 @@ fun MacrobenchmarkScope.cardJourney() {
         Thread.sleep(1_000)
         swipeUp()
         swipeDown()
-        device.findObject(By.text(CARD_SHOW))?.clickableAncestor()?.click() ?: return note("show card button not found")
-        if (waitFor(By.desc(CLOSE).pkg(packageName)) == null) return note("fullscreen card not shown")
+        if (!tapAndWait("fullscreen card", opened = { device.hasObject(By.desc(CLOSE).pkg(packageName)) }) { device.findObject(By.text(CARD_SHOW)) }) return
         // Влизането (3D обръщане) и яркостта.
         Thread.sleep(1_500)
         // Обръщане към гърба и обратно. Самата карта е най-големият докосваем елемент (освен нея
