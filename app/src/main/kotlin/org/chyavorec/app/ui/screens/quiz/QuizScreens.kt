@@ -270,7 +270,7 @@ private fun ResultContent(f: QuizUi.Finished, onShare: () -> Unit, onBack: () ->
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         AppCard(Modifier.fillMaxWidth(), accent = true) {
-            Column(Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(Modifier.fillMaxWidth().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(stringResource(headline), style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
                 Text("$score/$total", style = MaterialTheme.typography.displayLarge, color = LocalExtendedColors.current.gold)
                 Text(stringResource(R.string.share_card_quiz_score, score, total), style = MaterialTheme.typography.bodyLarge)
