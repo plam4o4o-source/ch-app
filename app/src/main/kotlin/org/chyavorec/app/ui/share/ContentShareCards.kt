@@ -63,7 +63,7 @@ private val InkOnPaper = Color(0xFF2A1E12)
 
 /** Лентата на картата: винаги върху тъмната рамка. */
 private val ShareBandColors = QuizBandColors(
-    gold = Brand.Gold, burgundy = DarkBurgundyThread, holes = Brand.Parchment.copy(alpha = 0.3f), current = Brand.Gold,
+    gold = Brand.Gold, burgundy = DarkBurgundyThread, holes = Brand.Parchment.copy(alpha = 0.45f), current = Brand.Gold,
     cloth = Color.White.copy(alpha = 0.05f), hem = Brand.Gold.copy(alpha = 0.5f),
 )
 private val SheetTone = Color(0xFFF4ECD8)

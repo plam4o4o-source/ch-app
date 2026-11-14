@@ -143,7 +143,9 @@ fun QuizContent(
 /** Широк екран (таблет, телефон хоризонтално): въпросът вляво, отговорът и лентата — вдясно. */
 private val WideQuiz = 600.dp
 private val QuizMaxWidth = 1040.dp
-private val BandMaxWidth = 320.dp
+private val BandMaxWidth = 360.dp
+private val BandCompactWidth = 260.dp
+private val CompactQuiz = 620.dp
 
 @Composable
 private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: () -> Unit) {
@@ -156,7 +158,9 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
     // Всеки въпрос започва отгоре.
     val scroll = key(s.index) { rememberScrollState() }
     BoxWithConstraints(Modifier.fillMaxSize()) {
-        val feedbackMax = maxHeight * 0.3f
+        // Нисък екран (телефон с едър шрифт): по-малка лента без надпис, за да остане място за въпроса.
+        val compact = maxHeight < CompactQuiz
+        val feedbackMax = maxHeight * if (compact) 0.22f else 0.3f
         if (maxWidth >= WideQuiz) {
             Row(Modifier.align(Alignment.TopCenter).widthIn(max = QuizMaxWidth).fillMaxSize()) {
                 Column(
@@ -172,7 +176,7 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
                     Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.BottomStart) {
                         if (s.chosen != null) key(q.id) { Feedback(q, correct, Modifier.verticalScroll(rememberScrollState())) }
                     }
-                    BandAndNext(s, onNext)
+                    BandAndNext(s, onNext, compact)
                 }
             }
         } else {
@@ -190,7 +194,7 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     if (s.chosen != null) key(q.id) { Feedback(q, correct, Modifier.heightIn(max = feedbackMax).verticalScroll(rememberScrollState())) }
-                    BandAndNext(s, onNext)
+                    BandAndNext(s, onNext, compact)
                 }
             }
         }
@@ -219,10 +223,10 @@ private fun QuestionPart(s: QuizUi.Playing, onChoose: (Int) -> Unit) {
 
 /** „Избродирай отговорите“ и „Напред“ (неактивен, докато няма отговор — за да не „изскача“). */
 @Composable
-private fun BandAndNext(s: QuizUi.Playing, onNext: () -> Unit) {
+private fun BandAndNext(s: QuizUi.Playing, onNext: () -> Unit, compact: Boolean) {
     val total = s.quiz.questions.size
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        AnswersBand(s.results, total, current = if (s.chosen == null) s.index else null)
+        AnswersBand(s.results, total, current = if (s.chosen == null) s.index else null, compact = compact)
         Button(onClick = onNext, enabled = s.chosen != null, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
             Text(stringResource(if (s.index + 1 >= total) R.string.quiz_see_result else R.string.quiz_next))
         }
@@ -231,14 +235,16 @@ private fun BandAndNext(s: QuizUi.Playing, onNext: () -> Unit) {
 
 /** Лентата с надписа над нея; при всички верни — „Шевицата е цяла!“. */
 @Composable
-private fun AnswersBand(results: List<Boolean>, total: Int, current: Int?, modifier: Modifier = Modifier) {
+private fun AnswersBand(results: List<Boolean>, total: Int, current: Int?, modifier: Modifier = Modifier, compact: Boolean = false) {
     val closed = QuizBandCharts.closed(results, total)
     Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(
-            stringResource(if (closed) R.string.quiz_band_done else R.string.quiz_band_title), style = MaterialTheme.typography.labelMedium,
-            color = if (closed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
-        )
-        QuizBand(results, total, current, quizBandColors(), Modifier.widthIn(max = BandMaxWidth).fillMaxWidth().aspectRatio(QuizBandCharts.aspect(total)))
+        if (!compact) {
+            Text(
+                stringResource(if (closed) R.string.quiz_band_done else R.string.quiz_band_title), style = MaterialTheme.typography.labelMedium,
+                color = if (closed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
+            )
+        }
+        QuizBand(results, total, current, quizBandColors(), Modifier.widthIn(max = if (compact) BandCompactWidth else BandMaxWidth).fillMaxWidth().aspectRatio(QuizBandCharts.aspect(total)))
     }
 }
 
@@ -250,7 +256,7 @@ private fun quizBandColors(): QuizBandColors {
     val burgundy = stitchBurgundy()
     return remember(ext, scheme, burgundy) {
         QuizBandColors(
-            gold = ext.gold, burgundy = burgundy, holes = scheme.onSurfaceVariant.copy(alpha = 0.35f), current = ext.gold,
+            gold = ext.gold, burgundy = burgundy, holes = scheme.onSurfaceVariant.copy(alpha = 0.5f), current = ext.gold,
             cloth = scheme.surfaceContainer, hem = ext.gold.copy(alpha = FolkTokens.GOLD_BORDER_ALPHA),
         )
     }
@@ -286,7 +292,7 @@ private fun Progress(results: List<Boolean>, index: Int, total: Int, answered: B
 }
 
 /** Колко от розетката остава на „разпорения“ знак — цели бодове (без игла насред бод). */
-internal fun unpickedProgress(count: Int, keep: Float = 0.4f): Float = if (count <= 0) 0f else (count * keep).toInt().toFloat() / count
+internal fun unpickedProgress(count: Int, keep: Float = 0.45f): Float = if (count <= 0) 0f else (count * keep).toInt().toFloat() / count
 
 /**
  * Грешният отговор: розетка, бродирана до половината и разпорена — тичащ бод в кръг и
@@ -300,8 +306,8 @@ private fun UnpickedMark(modifier: Modifier = Modifier) {
     Spacer(
         modifier.clearAndSetSemantics { }.drawBehind {
             val ring = StitchSpec.Running.stroke(density)
-            drawCircle(bad, radius = size.minDimension / 2f - ring.width, alpha = 0.7f, style = ring)
-            inset(size.minDimension * 0.17f) { drawStitches(chart, progress, bad, bad.copy(alpha = 0.6f), alpha = 0.85f) }
+            drawCircle(bad, radius = size.minDimension / 2f - ring.width, alpha = 0.55f, style = ring)
+            inset(size.minDimension * 0.1f) { drawStitches(chart, progress, bad, bad.copy(alpha = 0.7f)) }
         },
     )
 }

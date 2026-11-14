@@ -258,7 +258,9 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
     val enterFrom = if (side == Side.START) -1f else 1f
     val cardMotion = Modifier.graphicsLayer { alpha = progress.value; translationX = enterFrom * (1f - progress.value) * 24.dp.toPx() }
     Row(
-        Modifier.fillMaxWidth().height(IntrinsicSize.Min)
+        // На широк екран — без собствени размери (IntrinsicSize): картата с widthIn се мери по
+        // по-голямата ширина и текстът ѝ се реже; редът и така е висок колкото картата.
+        Modifier.fillMaxWidth().then(if (side == null) Modifier.height(IntrinsicSize.Min) else Modifier)
             .semantics(mergeDescendants = true) { contentDescription = description }
             .drawBehind {
                 // Конецът: бодове надолу от медалията до края на реда (и през него — до следващата).

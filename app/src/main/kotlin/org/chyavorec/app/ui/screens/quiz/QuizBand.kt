@@ -185,15 +185,15 @@ internal fun QuizBandCanvas(
                     when {
                         answer == true -> stitchesIn(segments[i], left, oy + cell, cell, if (i == anim) stitchProgress() else 1f, colors)
                         answer == false -> {
-                            drawPoints(holes[i], PointMode.Points, colors.holes, strokeWidth = cell * 0.2f, cap = StrokeCap.Round)
+                            drawPoints(holes[i], PointMode.Points, colors.holes, strokeWidth = cell * 0.24f, cap = StrokeCap.Round)
                             drawPath(threads[i], colors.gold, alpha = 0.9f, style = threadStroke)
                         }
-                        else -> drawPoints(holes[i], PointMode.Points, if (i == current) colors.current else colors.holes, strokeWidth = cell * 0.2f, cap = StrokeCap.Round)
+                        else -> drawPoints(holes[i], PointMode.Points, if (i == current) colors.current else colors.holes, strokeWidth = cell * 0.24f, cap = StrokeCap.Round)
                     }
                 }
                 val c = closeProgress()
                 if (c > 0f) stitchesIn(closing, ox + n * QuizBandCharts.PERIOD * cell, oy + cell, cell, c, colors)
-                else drawPoints(closingHole, PointMode.Points, colors.holes, strokeWidth = cell * 0.2f, cap = StrokeCap.Round)
+                else drawPoints(closingHole, PointMode.Points, colors.holes, strokeWidth = cell * 0.24f, cap = StrokeCap.Round)
             }
         },
     )
