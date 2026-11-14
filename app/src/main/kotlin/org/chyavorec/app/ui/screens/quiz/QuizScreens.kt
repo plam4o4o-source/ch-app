@@ -156,6 +156,7 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
     // Всеки въпрос започва отгоре.
     val scroll = key(s.index) { rememberScrollState() }
     BoxWithConstraints(Modifier.fillMaxSize()) {
+        val feedbackMax = maxHeight * 0.3f
         if (maxWidth >= WideQuiz) {
             Row(Modifier.align(Alignment.TopCenter).widthIn(max = QuizMaxWidth).fillMaxSize()) {
                 Column(
@@ -188,7 +189,7 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
                     Modifier.fillMaxWidth().padding(start = ScreenGutter, end = ScreenGutter, top = 8.dp, bottom = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    if (s.chosen != null) key(q.id) { Feedback(q, correct, Modifier.heightIn(max = maxHeight * 0.3f).verticalScroll(rememberScrollState())) }
+                    if (s.chosen != null) key(q.id) { Feedback(q, correct, Modifier.heightIn(max = feedbackMax).verticalScroll(rememberScrollState())) }
                     BandAndNext(s, onNext)
                 }
             }
