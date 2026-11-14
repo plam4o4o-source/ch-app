@@ -344,6 +344,75 @@ object StitchSpec {
 
     /** Кръстат бод — пропорциите са в [CrossStitchSpec]. */
     val Cross = CrossStitchSpec
+
+    /** Тичащ бод в усукан конец от две нишки (мартеница) — бодовете се редуват ([TwistedStitch]). */
+    val RunningTwisted = TwistedStitch(Running)
+}
+
+/** Двете нишки на усукания конец и кантът на втората (по-широк, рисува се под нея). */
+class TwistedStrands internal constructor(val first: Stroke, val second: Stroke, val edge: Stroke)
+
+/**
+ * Усуканият конец: бодовете на [base] (същата дебелина и стъпка) се редуват между две нишки —
+ * първата е на нечетните, втората (отместена с един бод) — на четните. Готовите обекти се пазят
+ * за последните няколко плътности — при рисуване не се алокира нищо.
+ */
+class TwistedStitch internal constructor(val base: DashStitch) {
+    private val keys = FloatArray(CACHE) { -1f }
+    private val made = arrayOfNulls<TwistedStrands>(CACHE)
+    private var next = 0
+
+    fun strands(pxPerDp: Float): TwistedStrands {
+        for (i in 0 until CACHE) if (keys[i] == pxPerDp) return made[i]!!
+        val w = base.widthDp * pxPerDp
+        val on = (base.dashDp * pxPerDp - w).coerceAtLeast(0.01f * pxPerDp)
+        val period = (base.dashDp + base.gapDp) * pxPerDp
+        // Един бод — и празнина колкото бод на другата нишка.
+        val intervals = floatArrayOf(on, 2 * period - on)
+        fun stroke(width: Float, phase: Float) =
+            Stroke(width, cap = StrokeCap.Round, join = StrokeJoin.Round, pathEffect = PathEffect.dashPathEffect(intervals, phase))
+        val strands = TwistedStrands(stroke(w, 0f), stroke(w, period), stroke(w * 1.6f, period))
+        keys[next] = pxPerDp
+        made[next] = strands
+        next = (next + 1) % CACHE
+        return strands
+    }
+
+    private companion object {
+        const val CACHE = 4
+    }
+}
+
+/**
+ * Пунктир по [path] с тичащ бод: в един цвят ([primary]) или — с [second] — усукан конец
+ * ([StitchSpec.RunningTwisted]); [secondEdge] — кант на втората нишка (бялото на светъл фон).
+ */
+fun DrawScope.drawThread(path: Path, primary: Color, second: Color?, secondEdge: Color?, alpha: Float = 1f) {
+    if (second == null) {
+        drawPath(path, primary, alpha = alpha, style = StitchSpec.Running.stroke(density))
+        return
+    }
+    val s = StitchSpec.RunningTwisted.strands(density)
+    drawPath(path, primary, alpha = alpha, style = s.first)
+    if (secondEdge != null) drawPath(path, secondEdge, alpha = alpha, style = s.edge)
+    drawPath(path, second, alpha = (alpha * 1.2f).coerceAtMost(1f), style = s.second)
+}
+
+/** Изправеният „+“ на звездния бод над вече избродиран кръст в [left]..[right] × [top]..[bottom]. */
+fun DrawScope.starStitchCross(left: Float, top: Float, right: Float, bottom: Float, color: Color, stroke: Float, alpha: Float = 1f) {
+    val cx = (left + right) / 2f
+    val cy = (top + bottom) / 2f
+    val r = (minOf(right - left, bottom - top) / 2f) * 1.15f
+    drawLine(color, Offset(cx - r, cy), Offset(cx + r, cy), strokeWidth = stroke, cap = StrokeCap.Round, alpha = alpha)
+    drawLine(color, Offset(cx, cy - r), Offset(cx, cy + r), strokeWidth = stroke, cap = StrokeCap.Round, alpha = alpha)
+}
+
+/** Звезден бод (осем лъча: кръст и „+“) с център [c] и радиус [r]. */
+fun DrawScope.drawStarStitch(c: Offset, r: Float, color: Color, stroke: Float, alpha: Float = 1f) {
+    starStitchCross(c.x - r, c.y - r, c.x + r, c.y + r, color, stroke, alpha)
+    val d = r * 0.7f
+    drawLine(color, Offset(c.x - d, c.y - d), Offset(c.x + d, c.y + d), strokeWidth = stroke, cap = StrokeCap.Round, alpha = alpha)
+    drawLine(color, Offset(c.x - d, c.y + d), Offset(c.x + d, c.y - d), strokeWidth = stroke, cap = StrokeCap.Round, alpha = alpha)
 }
 
 /**

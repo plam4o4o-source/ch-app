@@ -1,6 +1,7 @@
 package org.chyavorec.domain.model
 
 import org.chyavorec.data.catalog.ReadingRecommender
+import org.chyavorec.data.catalog.ReadingYear
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -97,6 +98,13 @@ object ReadingDiary {
     fun favorite(entries: Collection<DiaryEntry>, year: Int, zone: ZoneId = ReadingZone): DiaryEntry? =
         entries.filter { it.rating >= LIKED && yearOf(it, zone) == year }
             .maxWithOrNull(compareBy<DiaryEntry> { it.rating }.thenBy { it.ratedAtMillis }.thenBy { it.bookKey })
+
+    /**
+     * [summary] с любимата книга на годината ([favorite]) — за историята „Моята читателска година“.
+     * Бележката НЕ минава: [ReadingYear.Favourite] няма поле за нея (картата се споделя).
+     */
+    fun withFavourite(summary: ReadingYear.Summary, entries: Collection<DiaryEntry>, zone: ZoneId = ReadingZone): ReadingYear.Summary =
+        summary.copy(favourite = favorite(entries, summary.year, zone)?.let { ReadingYear.Favourite(it.title, it.author, it.rating) })
 
     private fun yearOf(e: DiaryEntry, zone: ZoneId): Int = e.readYear ?: Instant.ofEpochMilli(e.ratedAtMillis).atZone(zone).year
 

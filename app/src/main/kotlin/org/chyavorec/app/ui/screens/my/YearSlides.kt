@@ -85,15 +85,20 @@ import org.chyavorec.app.util.Formatters
 import org.chyavorec.app.util.UdcLabels
 import org.chyavorec.data.catalog.ReadingYear
 import org.chyavorec.data.catalog.ReadingYear.Archetype
+import org.chyavorec.domain.model.ReadingDiary
 
 /** Слайдовете на „Моята читателска година“ — показват се само тези, за които има данни ([yearSlides]). */
-enum class YearSlideKind { INTRO, BOOKS, AUTHOR, SECTION, MONTH, STREAK, ARCHETYPE, OUTRO }
+enum class YearSlideKind { INTRO, BOOKS, AUTHOR, FAVOURITE, SECTION, MONTH, STREAK, ARCHETYPE, OUTRO }
 
-/** Слайдовете за [s]: любим автор — при поне 2 книги от него; раздел — ако каталогът го знае; поредица — от 2 месеца. */
+/**
+ * Слайдовете за [s]: любим автор — при поне 2 книги от него; най-харесана книга — ако в дневника
+ * има оценена с поне 4 розетки; раздел — ако каталогът го знае; поредица — от 2 месеца.
+ */
 fun yearSlides(s: ReadingYear.Summary): List<YearSlideKind> = buildList {
     add(YearSlideKind.INTRO)
     add(YearSlideKind.BOOKS)
     if (s.favouriteAuthor != null) add(YearSlideKind.AUTHOR)
+    if (s.favourite != null) add(YearSlideKind.FAVOURITE)
     if (s.topSection != null) add(YearSlideKind.SECTION)
     if (s.books >= 2 && s.peakMonth != null) add(YearSlideKind.MONTH)
     if (s.longestStreak >= 2) add(YearSlideKind.STREAK)
@@ -110,6 +115,8 @@ internal fun lookOf(kind: YearSlideKind, s: ReadingYear.Summary): SlideLook = wh
     YearSlideKind.INTRO -> SlideLook(Brand.Burgundy, Brand.Ink, ShevitsaMotif.ROSETTE)
     YearSlideKind.BOOKS -> SlideLook(Color(0xFF2A1D10), Brand.Ink, ShevitsaMotif.RHOMBUS)
     YearSlideKind.AUTHOR -> SlideLook(Color(0xFF4A1520), Color(0xFF1A0C0A), ShevitsaMotif.TREE_OF_LIFE)
+    // Най-харесаната книга: топло бордо към мастило, с розетката на оценките.
+    YearSlideKind.FAVOURITE -> SlideLook(lerp(Brand.Burgundy, Brand.Gold, 0.12f), lerp(Brand.Ink, Brand.Burgundy, 0.18f), ShevitsaMotif.ROSETTE)
     YearSlideKind.SECTION -> {
         val section = s.topSection?.section
         val tint = section?.let { UdcCoverColors[it] } ?: Brand.Burgundy
@@ -204,6 +211,7 @@ internal fun SlideBody(s: ReadingYear.Summary, kind: YearSlideKind, appear: () -
                     YearSlideKind.INTRO -> IntroSlide(s, appear)
                     YearSlideKind.BOOKS -> BooksSlide(s, appear)
                     YearSlideKind.AUTHOR -> AuthorSlide(s, appear)
+                    YearSlideKind.FAVOURITE -> FavouriteSlide(s, appear)
                     YearSlideKind.SECTION -> SectionSlide(s, appear)
                     YearSlideKind.MONTH -> MonthSlide(s, appear)
                     YearSlideKind.STREAK -> StreakSlide(s, appear)
@@ -392,6 +400,55 @@ private fun AuthorSlide(s: ReadingYear.Summary, appear: () -> Float) {
     Text(
         pluralStringResource(R.plurals.history_year_count, s.favouriteAuthorCount, s.favouriteAuthorCount),
         style = sans(18.sp, GoldSoft, FontWeight.SemiBold),
+        modifier = Modifier.rise(appear, 0.7f, 1f),
+    )
+}
+
+/**
+ * Най-харесаната книга от „Читателския дневник“: заглавието, авторът и оценката в розетки, които
+ * „разцъфват“ една след друга. Само заглавие, автор и оценка — бележката е лична и не стига дотук.
+ */
+@Composable
+private fun FavouriteSlide(s: ReadingYear.Summary, appear: () -> Float) {
+    val fav = s.favourite ?: return
+    SlideLabel(stringResource(R.string.year_favourite_label), appear)
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        repeat(ReadingDiary.MAX_RATING) { i ->
+            val start = 0.1f + i * 0.07f
+            RosetteMark(
+                filled = i < fav.rating, size = 34.dp, fill = Brand.Gold, empty = GoldSoft.copy(alpha = 0.4f), stitch = Brand.Ink.copy(alpha = 0.55f),
+                modifier = Modifier.graphicsLayer {
+                    val t = part(appear(), start, start + 0.3f)
+                    alpha = t
+                    scaleX = 0.4f + 0.6f * t
+                    scaleY = scaleX
+                    rotationZ = -45f * (1f - t)
+                },
+            )
+        }
+    }
+    Spacer(Modifier.height(26.dp))
+    Text(
+        "„" + fav.title + "“",
+        style = serif(if (fav.title.length > 28) 36.sp else 46.sp, Paper, lineHeight = 1.05f).copy(fontStyle = FontStyle.Italic),
+        textAlign = TextAlign.Center,
+        maxLines = 4,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.rise(appear, 0.35f, 0.7f),
+    )
+    if (fav.author.isNotBlank()) {
+        Spacer(Modifier.height(10.dp))
+        Text(
+            shortAuthor(fav.author), style = sans(18.sp, GoldSoft, FontWeight.SemiBold), textAlign = TextAlign.Center,
+            maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.rise(appear, 0.45f, 0.8f),
+        )
+    }
+    Spacer(Modifier.height(20.dp))
+    ShevitsaStrip(ShevitsaMotif.ROSETTE, Brand.Gold, Modifier.width(180.dp).height(12.dp).stitchIn(appear, 0.55f, 0.9f))
+    Spacer(Modifier.height(16.dp))
+    Text(
+        stringResource(R.string.year_favourite_text, fav.rating, ReadingDiary.MAX_RATING),
+        style = sans(16.sp, GoldSoft), textAlign = TextAlign.Center,
         modifier = Modifier.rise(appear, 0.7f, 1f),
     )
 }
@@ -678,6 +735,10 @@ internal fun slideDescription(s: ReadingYear.Summary, kind: YearSlideKind): Stri
     YearSlideKind.BOOKS -> pluralStringResource(R.plurals.year_books_cd, s.books, s.books, s.year) + " " +
         pluralStringResource(R.plurals.year_books_months, s.activeMonths, s.activeMonths)
     YearSlideKind.AUTHOR -> stringResource(R.string.year_author_cd, shortAuthor(s.favouriteAuthor.orEmpty()), s.favouriteAuthorCount)
+    YearSlideKind.FAVOURITE -> s.favourite?.let { f ->
+        val book = if (f.author.isBlank()) f.title else f.title + ", " + shortAuthor(f.author)
+        stringResource(R.string.year_favourite_cd, book, f.rating, ReadingDiary.MAX_RATING)
+    }.orEmpty()
     YearSlideKind.SECTION -> s.topSection?.let {
         pluralStringResource(R.plurals.year_section_cd, it.count, it.count, stringResource(UdcLabels.res(it.section)))
     }.orEmpty()

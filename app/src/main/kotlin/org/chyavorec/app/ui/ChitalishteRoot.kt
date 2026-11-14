@@ -640,6 +640,10 @@ private fun AppNavHost(
     }
     val auth = LocalAppContainer.current.authRepository
     val signedIn = auth.state.collectAsState().value is AuthState.SignedIn
+    val hubActions = HubPaneActions(
+        navigate, openLink, openExternal,
+        onLogin = { nav.navigate(Routes.LOGIN) }, onCardFullscreen = { nav.navigate(Routes.CARD_FULL) }, signedIn = signedIn,
+    )
 
     SharedTransitionLayout {
     // На Android 8 (API 26–27) преходите със споделени елементи понякога хвърлят „layouts are not part of the same hierarchy“ — без тях там.
@@ -698,13 +702,22 @@ private fun AppNavHost(
         screen(Routes.CATALOG) {
             ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> PaneDetail(r, close, navigate, openLink) }) { CatalogScreen(navigate) }
         }
-        screen(Routes.MY) { MyHubScreen(navigate) }
+        // Таблет: разделите на „Моето“ и „Още“ — отдясно на плочките (виж HubPanes.kt).
+        screen(Routes.MY) {
+            ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> HubPaneDetail(r, close, hubActions) }, placeholder = { HubPanePlaceholder() }) {
+                MyHubScreen(navigate)
+            }
+        }
         screen(Routes.NEWS) {
             ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> PaneDetail(r, close, navigate, openLink) }) {
                 NewsListScreen(navigate, it.savedStateHandle)
             }
         }
-        screen(Routes.MORE) { MoreScreen(navigate) }
+        screen(Routes.MORE) {
+            ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> HubPaneDetail(r, close, hubActions) }, placeholder = { HubPanePlaceholder() }) {
+                MoreScreen(navigate)
+            }
+        }
 
         screen(Routes.ARTICLE, arguments = listOf(navArgument("id") { type = NavType.StringType })) {
             val id = Uri.decode(it.arguments?.getString("id").orEmpty())

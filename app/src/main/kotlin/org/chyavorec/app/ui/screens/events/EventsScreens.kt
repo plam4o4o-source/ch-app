@@ -474,6 +474,9 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
     val loadError by vm.error.collectAsStateWithLifecycle()
     val hasReminder by vm.hasReminder.collectAsStateWithLifecycle()
     val result by vm.reminderResult.collectAsStateWithLifecycle()
+    // Върнали сме се от календара — отрязъкът на листа се откъсва (веднъж).
+    val torn by vm.torn.collectAsStateWithLifecycle()
+    androidx.lifecycle.compose.LifecycleEventEffect(androidx.lifecycle.Lifecycle.Event.ON_RESUME) { vm.resumed() }
     val context = LocalContext.current
     val zone = LocalAppContainer.current.clock.zone()
     val snackbar = remember { SnackbarHostState() }
@@ -556,7 +559,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
         }
         val actions: @Composable (Modifier) -> Unit = { m ->
             EventActions(
-                showCalendar = e.date != null, onCalendar = { Intents.addToCalendar(context, e, zone) },
+                showCalendar = e.date != null, onCalendar = { if (Intents.addToCalendar(context, e, zone)) vm.calendarOpened() },
                 showReminder = vm.canRemind(e) || hasReminder, hasReminder = hasReminder, onReminder = onReminder,
                 showRoute = place != null, onRoute = { place?.let { Intents.map(context, Intents.placeQuery(it)) } },
                 onSource = { openLink(e.sourceUrl) }, modifier = m,
@@ -596,7 +599,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
         if (date != null && windowWidth() >= 720.dp) {
             Row(scroll.padding(20.dp), horizontalArrangement = Arrangement.spacedBy(28.dp)) {
                 Column(Modifier.width(340.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-                    EventLeaf(e, date, today)
+                    EventLeaf(e, date, today, torn = torn)
                     actions(Modifier)
                 }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -606,7 +609,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
             }
         } else {
             Column(scroll.padding(horizontal = 20.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                if (date != null) EventLeaf(e, date, today, Modifier.align(Alignment.CenterHorizontally))
+                if (date != null) EventLeaf(e, date, today, Modifier.align(Alignment.CenterHorizontally), torn = torn)
                 photo(Modifier)
                 details()
                 Spacer(Modifier.height(4.dp))

@@ -116,6 +116,22 @@ import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.SystemBarIcons
 import org.chyavorec.data.repository.AuthState
+import org.chyavorec.data.catalog.ReadingYear
+import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.ui.appViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.compose.ui.semantics.contentDescription
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.Month
 import org.chyavorec.data.repository.SelfCardRepository
 import org.chyavorec.domain.model.MembershipStatus
 
@@ -144,6 +160,51 @@ private fun rememberCardData(vm: AccountViewModel): CardData? {
         else -> null
     }
 }
+
+/** Месецът на „Твоята шевица“ върху картата: декември — тази година, януари — току-що отминалата. */
+internal fun cardBandYear(today: LocalDate): Int? = when (today.month) {
+    Month.DECEMBER -> today.year
+    Month.JANUARY -> today.year - 1
+    else -> null
+}
+
+/**
+ * Годината за лентата на картата ([cardBandYear]) — само за влязъл читател с книги през нея.
+ * От паметта на „Моето“ ([ReadingYearMemo]) или от кешираната история (без мрежа), извън главната
+ * нишка; изчислената година остава в паметта за историята и следващото отваряне.
+ */
+class CardBandViewModel(private val c: AppContainer) : ViewModel() {
+    private val _band = MutableStateFlow<ReadingYear.Summary?>(null)
+    val band: StateFlow<ReadingYear.Summary?> = _band.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            if (c.authRepository.state.value is AuthState.Unknown) c.authRepository.restore()
+            combine(c.authRepository.state, c.libraryRepository.historyVersion) { a, _ -> a }.collectLatest { a ->
+                val year = cardBandYear(c.clock.today())
+                if (a !is AuthState.SignedIn || year == null) {
+                    _band.value = null
+                    return@collectLatest
+                }
+                _band.value = withContext(Dispatchers.Default) {
+                    try {
+                        val version = c.libraryRepository.historyVersion.value
+                        c.readingYears.get(version, year) ?: c.libraryRepository.cachedHistory()?.data?.takeIf { it.isNotEmpty() }?.let { history ->
+                            ReadingYear.compute(history, readingBooks(c, history), year, c.clock.zone())?.also { c.readingYears.put(version, listOf(it)) }
+                        }
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (_: Exception) {
+                        null
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun cardBandViewModel(): CardBandViewModel = appViewModel(key = "card-band") { CardBandViewModel(it) }
 
 /** Ключ на shared element прехода „карта → карта на цял екран“ (и примерната карта → плочката на „Моето“, виж SampleCardPreview). */
 internal const val LIBRARY_CARD_KEY = "library-card"
@@ -211,10 +272,20 @@ private fun Modifier.cardProportions() = layout { measurable, constraints ->
 /** Размерът ID-1 на банковите и библиотечните карти: 85.6 × 54 мм. */
 private const val CARD_RATIO = 1.586f
 
-/** Дигитална читателска карта — оформена като истинска библиотечна карта (лице с баркод). */
+/**
+ * Дигитална читателска карта — оформена като истинска библиотечна карта (лице с баркод).
+ * [band] — годината на читателя: тясната лента „Твоята шевица“ над името (декември–януари, вж.
+ * [CardBandViewModel]). Неподвижна — картата в покой не рисува кадри.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: Boolean = false, motion: CardMotion? = null) {
+internal fun LibraryCard(
+    data: CardData,
+    modifier: Modifier = Modifier,
+    large: Boolean = false,
+    motion: CardMotion? = null,
+    band: ReadingYear.Summary? = null,
+) {
     CardFrame(modifier, large, motion) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Emblem(if (large) 44.dp else 34.dp)
@@ -225,6 +296,13 @@ internal fun LibraryCard(data: CardData, modifier: Modifier = Modifier, large: B
             }
         }
         Spacer(Modifier.weight(1f))
+        if (band != null) {
+            // „Твоята шевица“ — пришита над името като етикет; за екранния четец — с годината.
+            val label = stringResource(R.string.card_band_cd, band.year)
+            // Отстъп отгоре — на тесен телефон няма празно място и лентата иначе би опряла заглавката.
+            PersonalBandStrip(band, Modifier.padding(top = 8.dp).fillMaxWidth(0.5f).semantics { contentDescription = label })
+            Spacer(Modifier.height(if (large) 10.dp else 6.dp))
+        }
         EmbossedText(data.holder.ifBlank { "—" }, Brand.Parchment, TextStyle(fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp))
         // Номерът не се съкращава: ако до него няма място за статуса, той минава на нов ред.
         FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -286,6 +364,7 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
     val auth by vm.authState.collectAsStateWithLifecycle()
     val caps by vm.capabilities.collectAsStateWithLifecycle()
     val profile by vm.profile.collectAsStateWithLifecycle()
+    val band by cardBandViewModel().band.collectAsStateWithLifecycle()
     var editing by rememberSaveable { mutableStateOf(false) }
     var confirmRemove by remember { mutableStateOf(false) }
     val haptic = LocalHapticFeedback.current
@@ -316,7 +395,7 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
                 }
             } else {
                 // Картата „прелита“ към екрана на цял екран (общи граници, виж CardFullscreen).
-                LibraryCard(data, Modifier.sharedBoundsKey(LIBRARY_CARD_KEY).clickable(onClick = onFullscreen))
+                LibraryCard(data, Modifier.sharedBoundsKey(LIBRARY_CARD_KEY).clickable(onClick = onFullscreen), band = band)
                 Button(onClick = onFullscreen, modifier = Modifier.fillMaxWidth()) {
                     Icon(Icons.Outlined.Fullscreen, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.card_show))
                 }
@@ -405,6 +484,7 @@ fun CardFullscreen(onClose: () -> Unit) {
     SystemBarIcons(darkStatusBackground = false, darkNavigationBackground = false)
     val vm = accountViewModel()
     val data = rememberCardData(vm)
+    val band by cardBandViewModel().band.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val reduced = rememberReducedMotion()
     // При shared element прехода картата „долита“ от предишния екран — без 3D влизане.
@@ -491,7 +571,7 @@ fun CardFullscreen(onClose: () -> Unit) {
                         // Гърбът е завъртян още 180°, за да не се чете огледално.
                         LibraryCardBack(data, Modifier.graphicsLayer { rotationY = 180f }, large = true, motion = motion)
                     } else {
-                        LibraryCard(data, large = true, motion = motion)
+                        LibraryCard(data, large = true, motion = motion, band = band)
                     }
                 }
             }

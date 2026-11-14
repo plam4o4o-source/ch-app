@@ -81,6 +81,7 @@
     <string name="card_add_manual">Add library card</string>
     <string name="card_add_text">Enter the number from your library card. The app shows a barcode in the same format (Code 39) the library prints on cards.</string>
     <string name="card_add_title">Digital card</string>
+    <string name="card_band_cd">Your own embroidery for %1$d</string>
     <string name="card_barcode_desc">Barcode for card %1$s</string>
     <string name="card_flip">Flip the card</string>
     <string name="card_flip_hint">Tap the card to see the number in large print</string>
@@ -251,6 +252,7 @@
     <string name="error_title">Something went wrong</string>
     <string name="error_unauthorized">Your session has expired. Please sign in again.</string>
     <string name="event_add_calendar">Add to calendar</string>
+    <string name="event_added_calendar">Added to calendar</string>
     <string name="event_countdown_today">today</string>
     <string name="event_no_date">Date not announced</string>
     <string name="event_open_map">show the place on the map</string>
@@ -381,6 +383,7 @@
     <string name="home_new_books">New arrivals</string>
     <string name="home_search_hint">Search books, news, events…</string>
     <string name="home_upcoming">Upcoming events</string>
+    <string name="hub_pane_hint">Pick a section on the left — it opens here.</string>
     <string name="ics_copy_link">Copy link</string>
     <string name="ics_google_hint">Google Calendar on Android can’t subscribe directly. Copy the link and add it at calendar.google.com under “Other calendars › From URL” — the calendar then shows on your phone too.</string>
     <string name="ics_link_label">Community centre calendar</string>
@@ -806,6 +809,7 @@
     <string name="renew_conflict_not_allowed">This book can’t be renewed online. Please ask at the library.</string>
     <string name="renew_conflict_other">The renewal wasn’t accepted. Please try again later.</string>
     <string name="renew_conflict_pending">A renewal is already requested and waiting for the library.</string>
+    <string name="renew_leaf_cd">New due date: %1$s (was %2$s)</string>
     <string name="renew_ok">Renewed until %1$s.</string>
     <string name="renew_requested">Request sent. The library will extend the due date at its program’s next update.</string>
     <string name="scan_action">Scan barcode</string>
@@ -1068,6 +1072,9 @@
     <string name="year_card_text">Your books, favourite author and record month — as a full-screen story.</string>
     <string name="year_empty">No books borrowed this year yet.</string>
     <string name="year_error_title">Couldn’t load the story</string>
+    <string name="year_favourite_cd">Favourite book: %1$s — %2$d of %3$d rosettes in your diary.</string>
+    <string name="year_favourite_label">Your favourite</string>
+    <string name="year_favourite_text">%1$d of %2$d rosettes in your reading diary</string>
     <string name="year_intro_cd">%1$d — your year in books</string>
     <string name="year_intro_title">your year in books</string>
     <string name="year_month_label">Record month</string>

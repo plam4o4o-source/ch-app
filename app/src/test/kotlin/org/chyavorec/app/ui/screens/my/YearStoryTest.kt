@@ -59,7 +59,11 @@ class YearStoryTest {
 
     @Test fun demoYearHasEverySlide() {
         assertEquals(ReadingYear.Archetype.BOOKWORM, year.archetype)
-        assertEquals(YearSlideKind.entries.toList(), yearSlides(year), "демо годината показва всички слайдове")
+        // Най-харесаната книга идва от дневника на телефона — демо годината я няма.
+        assertEquals(YearSlideKind.entries - YearSlideKind.FAVOURITE, yearSlides(year))
+        val liked = year.copy(favourite = ReadingYear.Favourite("Под игото", "Вазов, Иван", 5))
+        assertEquals(YearSlideKind.entries.toList(), yearSlides(liked), "с любима книга — всички слайдове")
+        assertEquals(YearSlideKind.AUTHOR, yearSlides(liked)[yearSlides(liked).indexOf(YearSlideKind.FAVOURITE) - 1])
     }
 
     @Test fun slidesWithoutDataAreSkipped() {

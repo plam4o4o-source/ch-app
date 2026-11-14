@@ -381,6 +381,15 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
         _stamps.value = null
     }
 
+    private val _leaves = MutableStateFlow<Map<String, DueLeaf>>(emptyMap())
+    /** „Нов лист“: удължените в този екран заемания (по `loanId`) — старият и новият срок. */
+    val leaves: StateFlow<Map<String, DueLeaf>> = _leaves.asStateFlow()
+
+    /** Листът на [loanId] е обърнат — при завъртане и връщане остава на новата дата, без да се повтаря. */
+    fun leafPlayed(loanId: String) {
+        _leaves.update { m -> m[loanId]?.let { m + (loanId to it.copy(played = true)) } ?: m }
+    }
+
     init {
         viewModelScope.launch { canRenew.value = c.authRepository.capabilities().renew }
         // Следва входа: зарежда при вход (и при нов вход), изчиства при изход.
@@ -453,6 +462,11 @@ class LoansViewModel(private val c: AppContainer) : ViewModel() {
                 renewResult.value = r
                 if (r is Outcome.Success) {
                     val updated = r.value
+                    // Удължено веднага (не заявка) и с нов срок — листът се обръща от стария на новия.
+                    val newDue = updated.dueOn
+                    if (!updated.renewPending && newDue != null && newDue != loan.dueOn) {
+                        _leaves.update { it + (loan.loanId to DueLeaf(loan.dueOn, newDue)) }
+                    }
                     _state.update { s -> s.copy(data = s.data?.map { if (it.loanId == loan.loanId) updated else it }) }
                 }
             } finally {

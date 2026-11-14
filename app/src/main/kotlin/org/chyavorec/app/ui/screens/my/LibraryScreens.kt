@@ -2,6 +2,30 @@ package org.chyavorec.app.ui.screens.my
 
 import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.AppCard
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import kotlinx.coroutines.delay
+import org.chyavorec.app.ui.components.StitchSpec
+import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.screens.events.LeafHalfShape
+import org.chyavorec.app.ui.screens.events.LeafPaper
+import org.chyavorec.app.ui.theme.Brand
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -129,6 +153,7 @@ private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((
     val inCatalog by vm.inCatalog.collectAsStateWithLifecycle()
     val renew by vm.renewResult.collectAsStateWithLifecycle()
     val stamps by vm.stamps.collectAsStateWithLifecycle()
+    val leaves by vm.leaves.collectAsStateWithLifecycle()
     val today = LocalAppContainer.current.clock.today()
     val calc = LoanDueCalculator()
     val snackbar = remember { SnackbarHostState() }
@@ -189,6 +214,8 @@ private fun LoansContent(onBack: () -> Unit, onLogin: () -> Unit, onOpenBook: ((
                                 renewing = loan.loanId in renewing,
                                 onRenew = { vm.renew(loan) },
                                 onOpen = open,
+                                leaf = leaves[loan.loanId],
+                                onLeafPlayed = { vm.leafPlayed(loan.loanId) },
                             )
                         }
                     }
@@ -221,6 +248,8 @@ internal fun LoanCard(
     renewing: Boolean,
     onRenew: () -> Unit,
     onOpen: (() -> Unit)?,
+    leaf: DueLeaf? = null,
+    onLeafPlayed: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val due = LoanDueCalculator.parse(loan.dueOn)
@@ -252,11 +281,17 @@ internal fun LoanCard(
                 )
                 // Срокът е най-важното на картата: по-едър и удебелен; просрочен — в цвета за грешка.
                 val dueText = Formatters.shortDate(context, loan.dueOn) ?: "—"
-                Text(
-                    if (overdue) stringResource(R.string.loan_due_overdue, dueText) else stringResource(R.string.loan_due, dueText),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = if (overdue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
-                )
+                // Току-що удължено: срокът е „нов лист“ от календара (само докато е същият срок).
+                val renewed = leaf?.takeIf { !overdue && it.newDue == loan.dueOn }
+                if (renewed != null) {
+                    RenewedDueLine(renewed, oldText = Formatters.shortDate(context, renewed.oldDue) ?: "—", newText = dueText, onPlayed = onLeafPlayed)
+                } else {
+                    Text(
+                        if (overdue) stringResource(R.string.loan_due_overdue, dueText) else stringResource(R.string.loan_due, dueText),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = if (overdue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                    )
+                }
                 // Срокът с думи и колко остава — без отделна лента за изминалото време (същото трети път).
                 if (status != null) DuePill(status, calc.daysLeft(due, today), Modifier.padding(top = 4.dp))
                 if (loan.renewals > 0) {
@@ -447,6 +482,103 @@ fun ProfileScreen(onBack: () -> Unit) {
             onDismissRequest = { vm.deletion.value = null },
             confirmButton = { TextButton(onClick = { vm.deletion.value = null }) { Text(stringResource(R.string.action_ok)) } },
             text = { Text(if (r is Outcome.Success) stringResource(R.string.profile_delete_sent) else errorMessage((r as Outcome.Failure).error)) },
+        )
+    }
+}
+
+/**
+ * „Нов лист“: заемане, удължено в този екран — [oldDue] и [newDue] са сроковете от сървъра;
+ * [played] — листът вече е обърнат (състоянието е във ViewModel-а, както печатът „Върната“:
+ * не се повтаря при рекомпозиция, завъртане и превъртане на списъка).
+ */
+data class DueLeaf(val oldDue: String?, val newDue: String, val played: Boolean = false)
+
+/** Колко трае обръщането на листа (и колко чака, преди да започне — снекбарът и печатът вървят заедно с него). */
+internal object DueLeafTiming {
+    const val DELAY_MS = 220L
+    const val FLIP_MS = 640
+    const val FADE_MS = 320
+}
+
+/**
+ * Срокът след удължаване — като откъснат лист от стенния календар ([LeafHalfShape] и хартията на
+ * листа на събитието): старата дата се обръща нагоре около горния си ръб и открива новата отдолу.
+ * Веднъж ([DueLeaf.played]); при намалено движение — само преливане. Снекбарът остава — той
+ * съобщава срока и на екранния четец; редът се чете като „Нов срок: … (беше …)“.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun RenewedDueLine(leaf: DueLeaf, oldText: String, newText: String, onPlayed: () -> Unit) {
+    val reduced = rememberReducedMotion()
+    val flip = remember { Animatable(if (leaf.played) 1f else 0f) }
+    val played by rememberUpdatedState(onPlayed)
+    LaunchedEffect(Unit) {
+        if (flip.value < 1f) {
+            if (reduced) {
+                flip.animateTo(1f, tween(DueLeafTiming.FADE_MS))
+            } else {
+                delay(DueLeafTiming.DELAY_MS)
+                flip.animateTo(1f, tween(DueLeafTiming.FLIP_MS, easing = FastOutSlowInEasing))
+            }
+        }
+        played()
+    }
+    // Старият лист излиза от композицията веднага щом е обърнат — в покой е само новият.
+    val turning by remember { derivedStateOf { flip.value < 1f } }
+    val description = stringResource(R.string.renew_leaf_cd, newText, oldText)
+    // При много едър шрифт листът минава на нов ред под „Връщане:“.
+    FlowRow(
+        Modifier.padding(top = 2.dp).clearAndSetSemantics { contentDescription = description },
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Text(
+            stringResource(R.string.loan_due, "").trim(), style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.align(Alignment.CenterVertically),
+        )
+        Box(Modifier.align(Alignment.CenterVertically)) {
+            DueLeafChip(newText, Modifier.graphicsLayer { if (reduced) alpha = flip.value })
+            if (turning) {
+                DueLeafChip(
+                    oldText,
+                    Modifier.graphicsLayer {
+                        val t = flip.value
+                        if (reduced) {
+                            alpha = 1f - t
+                        } else {
+                            // Листът се обръща нагоре и назад около горния си ръб, накрая — избледнява.
+                            transformOrigin = TransformOrigin(0.5f, 0f)
+                            cameraDistance = 10f * density
+                            rotationX = 110f * t
+                            alpha = (1f - (t - 0.6f) / 0.4f).coerceIn(0f, 1f)
+                        }
+                    },
+                )
+            }
+        }
+    }
+}
+
+/** Малкият лист с дата: бордо горен ръб, хартия, „прегризани“ долни ъгли и перфорация отдолу. */
+@Composable
+private fun DueLeafChip(text: String, modifier: Modifier = Modifier) {
+    val dark = LocalExtendedColors.current.isDark
+    val paper = if (dark) MaterialTheme.colorScheme.surfaceContainerHigh else LeafPaper
+    val ink = if (dark) MaterialTheme.colorScheme.onSurface else Brand.Ink
+    val shape = remember { LeafHalfShape(top = true, corner = 6.dp, notch = 3.dp) }
+    Column(
+        modifier.width(IntrinsicSize.Max).shadow(2.dp, shape).background(paper)
+            .drawBehind {
+                // Перфорацията по долния ръб — тичащ бод.
+                val bod = StitchSpec.Running.stroke(density)
+                val y = size.height - 1.dp.toPx()
+                drawLine(ink.copy(alpha = 0.3f), Offset(4.dp.toPx(), y), Offset(size.width - 4.dp.toPx(), y), strokeWidth = bod.width, cap = StrokeCap.Round, pathEffect = bod.pathEffect)
+            },
+    ) {
+        Box(Modifier.fillMaxWidth().height(4.dp).background(Brand.Burgundy))
+        Text(
+            text, style = MaterialTheme.typography.titleSmall, color = ink, maxLines = 1,
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 2.dp, bottom = 5.dp),
         )
     }
 }

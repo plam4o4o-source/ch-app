@@ -81,6 +81,7 @@
     <string name="card_add_manual">Добави читателска карта</string>
     <string name="card_add_text">Въведи номера от своята читателска карта. Приложението ще покаже баркод в същия формат (Code 39), в който библиотеката печата картите.</string>
     <string name="card_add_title">Дигитална карта</string>
+    <string name="card_band_cd">Твоята шевица за %1$d</string>
     <string name="card_barcode_desc">Баркод на карта %1$s</string>
     <string name="card_flip">Обърни картата</string>
     <string name="card_flip_hint">Докосни картата, за да видиш номера едро</string>
@@ -251,6 +252,7 @@
     <string name="error_title">Нещо се обърка</string>
     <string name="error_unauthorized">Сесията е изтекла. Моля, влез отново.</string>
     <string name="event_add_calendar">Добави в календара</string>
+    <string name="event_added_calendar">Добавено в календара</string>
     <string name="event_countdown_today">днес</string>
     <string name="event_no_date">Без обявена дата</string>
     <string name="event_open_map">покажи мястото на картата</string>
@@ -381,6 +383,7 @@
     <string name="home_new_books">Нови постъпления</string>
     <string name="home_search_hint">Търси книга, новина, събитие…</string>
     <string name="home_upcoming">Предстоящи събития</string>
+    <string name="hub_pane_hint">Избери раздел вляво — той ще се отвори тук.</string>
     <string name="ics_copy_link">Копирай връзката</string>
     <string name="ics_google_hint">Google Календар на Android не може да се абонира направо. Копирай връзката и я добави от calendar.google.com в „Други календари › От URL адрес“ — после календарът се вижда и на телефона.</string>
     <string name="ics_link_label">Календар на читалището</string>
@@ -806,6 +809,7 @@
     <string name="renew_conflict_not_allowed">Тази книга не може да се удължи онлайн. Попитай в библиотеката.</string>
     <string name="renew_conflict_other">Удължаването не беше прието. Опитай отново по-късно.</string>
     <string name="renew_conflict_pending">Удължаването вече е заявено и чака библиотеката.</string>
+    <string name="renew_leaf_cd">Нов срок: %1$s (беше %2$s)</string>
     <string name="renew_ok">Удължено до %1$s.</string>
     <string name="renew_requested">Заявката е изпратена. Библиотеката ще удължи срока при следващото обновяване на програмата си.</string>
     <string name="scan_action">Сканирай баркод</string>
@@ -1068,6 +1072,9 @@
     <string name="year_card_text">Книгите ти, любимият автор и рекордният месец — като история на цял екран.</string>
     <string name="year_empty">През тази година още няма взети книги.</string>
     <string name="year_error_title">Историята не се зареди</string>
+    <string name="year_favourite_cd">Най-харесана книга: %1$s — %2$d от %3$d розетки в дневника.</string>
+    <string name="year_favourite_label">Най-харесана</string>
+    <string name="year_favourite_text">%1$d от %2$d розетки в читателския ти дневник</string>
     <string name="year_intro_cd">%1$d — твоята година с книгите</string>
     <string name="year_intro_title">твоята година с книгите</string>
     <string name="year_month_label">Рекорден месец</string>

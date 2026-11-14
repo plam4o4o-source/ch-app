@@ -48,6 +48,7 @@ import org.chyavorec.app.ui.share.ShareFormat
 import org.chyavorec.app.ui.share.ShareImageRequest
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.ThemeMode
+import org.chyavorec.data.catalog.ReadingYear
 import org.junit.Test
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -73,15 +74,15 @@ class YearStoryScreenshotTest {
         compose.waitUntil(10_000) { compose.onAllNodes(hasText(text, substring = true) or hasContentDescription(text, substring = true)).fetchSemanticsNodes().isNotEmpty() }
 
     /** Слайдът [kind] в средата на своя таймер: влизането е завършило, лентичката — наполовина. */
-    private fun slide(kind: YearSlideKind, name: String, summaryText: String, fontScale: Float = 1f) {
-        val index = yearSlides(ShareFixtures.year).indexOf(kind)
+    private fun slide(kind: YearSlideKind, name: String, summaryText: String, fontScale: Float = 1f, summary: ReadingYear.Summary = ShareFixtures.year) {
+        val index = yearSlides(summary).indexOf(kind)
         compose.mainClock.autoAdvance = false
         compose.setContent {
             val d = LocalDensity.current
             CompositionLocalProvider(LocalDensity provides Density(d.density, fontScale)) {
                 ChitalishteTheme(mode = ThemeMode.LIGHT) {
                     CompositionLocalProvider(LocalReducedMotion provides false) {
-                        YearStory(ShareFixtures.year, onClose = {}, siteUrl = "https://chyavorec.org", initialSlide = index)
+                        YearStory(summary, onClose = {}, siteUrl = "https://chyavorec.org", initialSlide = index)
                     }
                 }
             }
@@ -106,6 +107,15 @@ class YearStoryScreenshotTest {
     @Test fun archetype() = slide(YearSlideKind.ARCHETYPE, "year-07-archetype", "Книжен дракон")
 
     @Test fun outro() = slide(YearSlideKind.OUTRO, "year-08-outro", "Благодарим ти")
+
+    /** Най-харесаната книга от дневника (4+ розетки) — след любимия автор. */
+    @Test fun favourite() = slide(YearSlideKind.FAVOURITE, "w23-year-favourite", "Под игото", summary = ShareFixtures.yearWithFavourite)
+
+    @Test fun favouriteLargeFont() =
+        slide(YearSlideKind.FAVOURITE, "w23-year-favourite-large-font", "Под игото", fontScale = large, summary = ShareFixtures.yearWithFavourite)
+
+    @Config(qualifiers = "bg-w891dp-h411dp-land-xhdpi")
+    @Test fun favouriteLandscape() = slide(YearSlideKind.FAVOURITE, "w23-year-favourite-landscape", "Под игото", summary = ShareFixtures.yearWithFavourite)
 
     /** Хоризонтално: по-тесни отстъпи, по-малки цифри, а каквото не се побира — превърта се. */
     @Config(qualifiers = "bg-w891dp-h411dp-land-xhdpi")
@@ -215,6 +225,10 @@ class ShareCardsScreenshotTest {
     )
 
     @Test fun yearSlide() = card(ShareCard.Year(ShareFixtures.year, YearSlideKind.MONTH, "https://chyavorec.org"), "share-05-year-month", photo = false)
+
+    /** Картата за споделяне на най-харесаната книга — без бележката от дневника. */
+    @Test fun yearFavourite() =
+        card(ShareCard.Year(ShareFixtures.yearWithFavourite, YearSlideKind.FAVOURITE, "https://chyavorec.org"), "w23-share-year-favourite", photo = false)
 
     @Test fun formatsMatchTheirPixels() {
         kotlin.test.assertEquals(360f to 640f, ShareFormat.STORY.widthDp.value to ShareFormat.STORY.heightDp.value)

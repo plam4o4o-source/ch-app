@@ -2,6 +2,7 @@ package org.chyavorec.domain
 
 import org.chyavorec.data.catalog.CatalogSearchEngine
 import org.chyavorec.data.catalog.ReadingRecommender
+import org.chyavorec.data.catalog.ReadingYear
 import org.chyavorec.domain.model.CatalogBook
 import org.chyavorec.domain.model.CatalogSnapshot
 import org.chyavorec.domain.model.DiaryEntry
@@ -55,6 +56,18 @@ class ReadingDiaryTest {
         assertEquals("Пет нова", ReadingDiary.favorite(entries, 2026)?.title)
         assertEquals("Друга година", ReadingDiary.favorite(entries, 2025)?.title)
         assertNull(ReadingDiary.favorite(entries, 2024))
+    }
+
+    @Test fun yearSummaryGetsTheFavouriteWithoutTheNote() {
+        val summary = ReadingYear.Summary(2026, 3, List(12) { if (it < 3) 1 else 0 }, null, 0, 3, emptyList(), 3, ReadingYear.Archetype.CURIOUS)
+        val entries = listOf(entry("Под игото", 5, note = "Лична бележка", author = "Иван Вазов"), entry("Средна", 3))
+        val with = ReadingDiary.withFavourite(summary, entries, zone)
+        assertEquals(ReadingYear.Favourite("Под игото", "Иван Вазов", 5), with.favourite)
+        assertFalse("Лична бележка" in with.toString(), "бележката не стига до историята и картата за споделяне")
+        // Без харесана книга (под 4 розетки) — нищо; останалото е същото.
+        val none = ReadingDiary.withFavourite(summary, listOf(entry("Средна", 3)), zone)
+        assertNull(none.favourite)
+        assertEquals(summary, none)
     }
 
     @Test fun favouriteNeedsAtLeastALikedRating() {

@@ -82,10 +82,10 @@ val ScreenGutter = 16.dp
 /** Етикет над заглавие (както на сайта: малки главни букви + три кръстати бода в златно). */
 @Composable
 fun SectionLabel(text: String, modifier: Modifier = Modifier) {
-    // Златото на темата — следва и палитрите „Левски“/„Шевица“.
+    // Златото на темата — следва и палитрите „Левски“/„Шевица“; бодовете — сезонния конец.
     val gold = LocalExtendedColors.current.gold
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
-        StitchMark(gold)
+        StitchMark(rememberSeasonalThread())
         Spacer(Modifier.width(8.dp))
         Text(text.uppercase(), style = MaterialTheme.typography.labelSmall, color = gold)
     }
@@ -109,7 +109,11 @@ internal object CrossStitches {
  * При намалено движение — веднага готови. Напредъкът се чете само при рисуване.
  */
 @Composable
-internal fun StitchMark(color: androidx.compose.ui.graphics.Color, modifier: Modifier = Modifier) {
+internal fun StitchMark(color: androidx.compose.ui.graphics.Color, modifier: Modifier = Modifier) = StitchMark(ThreadColors(color), modifier)
+
+/** Същите бодове в сезонния конец ([rememberSeasonalThread]): усукана мартеница или звезден бод. */
+@Composable
+internal fun StitchMark(thread: ThreadColors, modifier: Modifier = Modifier) {
     val reduced = rememberReducedMotion()
     var shown by rememberSaveable { mutableStateOf(false) }
     val progress = remember { Animatable(if (reduced || shown) 1f else 0f) }
@@ -125,11 +129,24 @@ internal fun StitchMark(color: androidx.compose.ui.graphics.Color, modifier: Mod
         val inset = cell * StitchSpec.Cross.INSET
         val top = (size.height - cell) / 2f + inset
         val bottom = top + cell - 2 * inset
+        val second = thread.second
         for (i in 0 until CrossStitches.COUNT) {
             val f = CrossStitches.fraction(p, i)
             if (f <= 0f) continue
             val left = i * cell + inset
-            crossStitch(left, top, left + cell - 2 * inset, bottom, color, cell, StitchMath.firstLeg(f), StitchMath.secondLeg(f))
+            val right = left + cell - 2 * inset
+            if (second == null) {
+                crossStitch(left, top, right, bottom, thread.primary, cell, StitchMath.firstLeg(f), StitchMath.secondLeg(f))
+            } else {
+                // Усуканият конец (мартеница): двете диагонали в двата цвята, разменени от бод на бод.
+                val (a, b) = if (i % 2 == 0) thread.primary to second else second to thread.primary
+                val edgeA = thread.secondEdge.takeIf { a == second }
+                val edgeB = thread.secondEdge.takeIf { b == second }
+                crossStitch(left, top, right, bottom, a, cell, StitchMath.firstLeg(f), 0f, outline = edgeA)
+                crossStitch(left, top, right, bottom, b, cell, 0f, StitchMath.secondLeg(f), outline = edgeB)
+            }
+            // Звездният бод (Коледа): изправен „+“ над готовия среден кръст — звезда между два кръста.
+            if (thread.star && i == CrossStitches.COUNT / 2 && f >= 1f) starStitchCross(left, top, right, bottom, thread.primary, cell * StitchSpec.Cross.STROKE * 0.7f)
         }
     }
 }

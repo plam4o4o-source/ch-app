@@ -70,8 +70,18 @@ object ListDetail {
     fun accepts(host: String?, route: String): Boolean = when (host) {
         Routes.CATALOG, Routes.WANT_TO_READ -> route.startsWith("book/")
         Routes.NEWS -> route.startsWith("article/")
+        // „Още“ и „Моето“: разделите им (плочките) — отдясно; по-дълбоките екрани — на цял екран.
+        Routes.MORE -> route in MoreSections || route.startsWith("page?")
+        Routes.MY -> route in MySections
         else -> false
     }
+
+    private val MoreSections = setOf(
+        Routes.MESSAGES, Routes.ACTIVITIES, Routes.ABOUT_CHITALISHTE, Routes.GALLERY, Routes.DOCUMENTS, Routes.CONTACTS,
+        Routes.EMBROIDERY, Routes.NEWSPAPER, Routes.TIMELINE, Routes.QUIZ, Routes.SETTINGS, Routes.PRIVACY, Routes.ABOUT,
+    )
+
+    private val MySections = setOf(Routes.CARD, Routes.LOANS, Routes.HISTORY, Routes.MEMBERSHIP, Routes.PROFILE, Routes.NOTIFICATIONS)
 }
 
 /** Списъкът [host] да покаже [route] отдясно (`null` — без детайл). Списъкът трябва да е в стека. */
