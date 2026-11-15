@@ -1,0 +1,42 @@
+app pids seen: ['5505', '8507', '16798', '19700', '22962', '25796', '28874']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 22
+   skipped-frames events=22 max=80 total=1101
+   11-14 23:36:25.263  5505  5505 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-14 23:36:25.935  5505  5505 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-14 23:36:27.481  5505  5505 I Choreographer: Skipped 80 frames!  The application may be doing too much work on its main thread.
+   11-14 23:36:28.600  5505  5505 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-14 23:36:29.472  5505  5505 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-14 23:36:30.284  5505  5505 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-14 23:36:41.145  5505  5505 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-14 23:37:01.586  5505  5505 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-14 23:39:24.437  8507  8507 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-14 23:39:25.565  8507  8507 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-14 23:39:26.347  8507  8507 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-15 00:00:35.349 16798 16798 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+== Davey: 32
+   davey events=32 max=2169ms median=1196ms
+   11-14 23:36:27.582  5505  5523 I OpenGLRenderer: Davey! duration=2169ms; Flags=1, FrameTimelineVsyncId=7914, IntendedVsync=105480028919, Vsync=106130028893, InputEventId=0, HandleInputStart=106143155166, AnimationStart=106143155636, Perform
+   11-14 23:36:29.629  5505  5523 I OpenGLRenderer: Davey! duration=1461ms; Flags=0, FrameTimelineVsyncId=8280, IntendedVsync=108196695477, Vsync=108796695453, InputEventId=0, HandleInputStart=108806660064, AnimationStart=108806660735, Perform
+   11-14 23:36:30.331  5505  5523 I OpenGLRenderer: Davey! duration=1352ms; Flags=0, FrameTimelineVsyncId=8326, IntendedVsync=108963362113, Vsync=109663362085, InputEventId=0, HandleInputStart=109681669245, AnimationStart=109681669996, Perform
+   11-14 23:36:31.073  5505  5523 I OpenGLRenderer: Davey! duration=1291ms; Flags=0, FrameTimelineVsyncId=8559, IntendedVsync=109880028743, Vsync=110480028719, InputEventId=0, HandleInputStart=110490645794, AnimationStart=110490646185, Perform
+   11-14 23:36:31.482  5505  5523 I OpenGLRenderer: Davey! duration=711ms; Flags=0, FrameTimelineVsyncId=8645, IntendedVsync=110546695383, Vsync=110896695369, InputEventId=0, HandleInputStart=110907288895, AnimationStart=110907289486, PerformT
+   11-14 23:36:41.394  5505  5522 I OpenGLRenderer: Davey! duration=787ms; Flags=0, FrameTimelineVsyncId=9977, IntendedVsync=120280028327, Vsync=120346694991, InputEventId=0, HandleInputStart=120353154690, AnimationStart=120353155070, PerformT
+   11-14 23:36:41.641  5505  5522 I OpenGLRenderer: Davey! duration=863ms; Flags=0, FrameTimelineVsyncId=10001, IntendedVsync=120363372754, Vsync=120730039362, InputEventId=0, HandleInputStart=120744417185, AnimationStart=120744417736, Perform
+   11-14 23:36:41.722  5505  5583 I OpenGLRenderer: Davey! duration=815ms; Flags=0, FrameTimelineVsyncId=10058, IntendedVsync=120763361641, Vsync=121346694951, InputEventId=0, HandleInputStart=121354512526, AnimationStart=121354512817, Perform
+   11-14 23:37:01.793  5505  5871 I OpenGLRenderer: Davey! duration=707ms; Flags=0, FrameTimelineVsyncId=12633, IntendedVsync=141030027497, Vsync=141196694157, InputEventId=0, HandleInputStart=141206656385, AnimationStart=141206656766, Perform
+   11-14 23:37:02.188  5505  5522 I OpenGLRenderer: Davey! duration=1024ms; Flags=0, FrameTimelineVsyncId=12654, IntendedVsync=141213360823, Vsync=141780027467, InputEventId=0, HandleInputStart=141794035305, AnimationStart=141794036327, Perfor
+   11-14 23:39:25.646  8507  8520 I OpenGLRenderer: Davey! duration=1103ms; Flags=1, FrameTimelineVsyncId=29324, IntendedVsync=284646688419, Vsync=284896688409, InputEventId=0, HandleInputStart=284903606371, AnimationStart=284903606801, Perfor
+   11-14 23:39:26.419  8507  8518 I OpenGLRenderer: Davey! duration=1453ms; Flags=0, FrameTimelineVsyncId=29436, IntendedVsync=284913355075, Vsync=285763355041, InputEventId=0, HandleInputStart=285781578757, AnimationStart=285781578937, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 23:36:22.363  5438  5438 I PERFCHECK: section: AQ0. Quiz, round 2: which part of the band costs hook build flags, with 1.2.38 and 1.2.37 as references
+   11-14 23:39:22.076  8483  8483 I PERFCHECK: section: A. Repetition 0 of: quiz configs rotated by 0
+   11-14 23:51:42.200 13666 13666 I PERFCHECK: section: A. Repetition 1 of: quiz configs rotated by 1
+   11-15 00:01:50.915 17210 17210 I PERFCHECK: section: A. Repetition 2 of: quiz configs rotated by 2
+   11-15 00:12:14.308 20614 20614 I PERFCHECK: section: A. Repetition 3 of: quiz configs rotated by 3
+   11-15 00:22:32.862 24156 24156 I PERFCHECK: section: A. Repetition 4 of: quiz configs rotated by 4
+   11-15 00:32:35.598 27579 27579 I PERFCHECK: section: A. Repetition 5 of: quiz configs rotated by 5
+   11-15 00:42:45.595 30904 30904 I PERFCHECK: section: A9. Totals rep 0 is excluded

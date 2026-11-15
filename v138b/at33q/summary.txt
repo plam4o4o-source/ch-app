@@ -1,0 +1,144 @@
+part at33q; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## AQ0. Quiz, round 2: which part of the band costs (hook build flags), with 1.2.38 and 1.2.37 as references
+X installed new: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 3508 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~MxjsVlrBSIAA3ltz9zlVwA==/org.chyavorec.app-okOU0KSSVOgvBWWt5VoI1w==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed base: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000;  versionCode=1990000 minSdk=26 targetSdk=37  versionName=1.2.37 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 3136 ms
+X compile org.chyavorec.app.b37: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~QSiccmVTz0WhjyQmkIQN7A==/org.chyavorec.app.b37-hR3egBLraautDpzT_wJsBg==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/VpnDialogs/VpnDialogs.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed hook: 1.2.38 17f0e40 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101;  versionCode=1990101 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X hook: catalogue after 2822 ms
+X compile org.chyavorec.app.hk: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~Y0q5x1vLyuk0JFwdvU70YQ==/org.chyavorec.app.hk-18Ht-MmLEjA6FupAR6TRyQ==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /product/overlay/TelephonyProvider__auto_generated_rro_product.apk| x86_64: [status=run-from-apk] [reason=unknown]|
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+animations: animator_duration_scale=1 transition=1 window=1; host load: 4.19 3.36 1.56
+## A. Repetition 0 of: quiz (configs rotated by 0)
+QUIZ taps new: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps base: 5 questions learned: input tap 540 780; sleep 2; input tap 540 1863; sleep 2.2~input tap 540 780; sleep 2; input tap 540 1863; sleep 2.2~input tap 540 706; sleep 2; input tap 540 1612; sleep 2.2~input tap 540 706; sleep 2; input tap 540 1612; sleep 2.2~input tap 540 780; sleep 2; input tap 540 1919; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Серия: 1 ден поред" 
+QUIZ taps hk: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps noband: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps nohem: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps solidhem: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps nostitch: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps layer: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+## A. Repetition 1 of: quiz (configs rotated by 1)
+  FS quiz base rep1: n=120 (+0 flagged) BUFFER-FULL total p50=248 p90=309 p99=334 max=343 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=101.1 (sync 0.1 issue 37.2 swap 47.8) start-delay=68.1 queue=76.0
+  FS quiz hk rep1: n=113 (+7 flagged) BUFFER-FULL total p50=332 p90=434 p99=489 max=524 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=138.9 (sync 0.1 issue 40.1 swap 81.6) start-delay=87.2 queue=108.5
+  FS quiz noband rep1: n=105 (+15 flagged) BUFFER-FULL total p50=249 p90=307 p99=384 max=397 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=106.1 (sync 0.1 issue 40.1 swap 48.0) start-delay=55.0 queue=73.8
+  FS quiz nohem rep1: n=102 (+18 flagged) BUFFER-FULL total p50=287 p90=374 p99=426 max=434 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=117.8 (sync 0.1 issue 40.6 swap 63.7) start-delay=69.7 queue=85.6
+  FS quiz solidhem rep1: n=104 (+16 flagged) BUFFER-FULL total p50=296 p90=360 p99=394 max=397 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=131.5 (sync 0.1 issue 42.8 swap 67.3) start-delay=62.9 queue=85.4
+  FS quiz nostitch rep1: n=110 (+9 flagged) total p50=341 p90=447 p99=479 max=500 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=155.1 (sync 0.1 issue 41.7 swap 90.9) start-delay=94.1 queue=110.9
+  FS quiz layer rep1: n=102 (+17 flagged) total p50=267 p90=355 p99=409 max=443 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=116.7 (sync 0.1 issue 42.8 swap 57.4) start-delay=65.5 queue=82.9
+  FS quiz new rep1: n=108 (+6 flagged) total p50=366 p90=487 p99=544 max=558 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=157.5 (sync 0.1 issue 41.8 swap 94.6) start-delay=90.8 queue=116.3
+## A. Repetition 2 of: quiz (configs rotated by 2)
+  FS quiz hk rep2: n=106 (+7 flagged) total p50=367 p90=493 p99=528 max=557 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=159.7 (sync 0.1 issue 44.0 swap 96.1) start-delay=98.7 queue=116.2
+  FS quiz noband rep2: n=104 (+16 flagged) BUFFER-FULL total p50=249 p90=299 p99=335 max=342 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=102.0 (sync 0.1 issue 38.3 swap 46.7) start-delay=57.2 queue=74.7
+  FS quiz nohem rep2: n=102 (+18 flagged) BUFFER-FULL total p50=290 p90=351 p99=409 max=429 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=119.9 (sync 0.1 issue 40.5 swap 60.0) start-delay=67.8 queue=82.1
+  FS quiz solidhem rep2: n=101 (+18 flagged) total p50=266 p90=344 p99=409 max=417 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=114.1 (sync 0.1 issue 39.4 swap 58.1) start-delay=68.9 queue=79.2
+  FS quiz nostitch rep2: n=110 (+8 flagged) total p50=343 p90=448 p99=495 max=526 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=153.7 (sync 0.1 issue 41.1 swap 95.7) start-delay=94.6 queue=110.3
+  FS quiz layer rep2: n=101 (+19 flagged) BUFFER-FULL total p50=265 p90=336 p99=407 max=420 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=113.8 (sync 0.1 issue 42.5 swap 57.0) start-delay=72.1 queue=80.1
+  FS quiz new rep2: n=107 (+7 flagged) total p50=361 p90=444 p99=566 max=620 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=154.2 (sync 0.1 issue 41.7 swap 90.0) start-delay=98.3 queue=114.6
+  FS quiz base rep2: n=119 (+0 flagged) total p50=240 p90=294 p99=334 max=352 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=89.7 (sync 0.1 issue 37.2 swap 46.3) start-delay=67.3 queue=75.6
+## A. Repetition 3 of: quiz (configs rotated by 3)
+  FS quiz noband rep3: n=103 (+16 flagged) total p50=275 p90=333 p99=384 max=454 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=118.3 (sync 0.1 issue 39.0 swap 51.1) start-delay=71.8 queue=83.9
+  FS quiz nohem rep3: n=105 (+15 flagged) BUFFER-FULL total p50=290 p90=370 p99=438 max=467 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=128.2 (sync 0.1 issue 42.8 swap 62.1) start-delay=69.6 queue=86.5
+  FS quiz solidhem rep3: n=102 (+18 flagged) BUFFER-FULL total p50=282 p90=365 p99=403 max=431 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=120.5 (sync 0.1 issue 42.3 swap 59.9) start-delay=73.5 queue=82.1
+  FS quiz nostitch rep3: n=111 (+7 flagged) total p50=362 p90=450 p99=532 max=537 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=152.3 (sync 0.1 issue 41.6 swap 88.1) start-delay=94.2 queue=111.8
+  FS quiz layer rep3: n=105 (+14 flagged) total p50=272 p90=354 p99=381 max=401 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=113.2 (sync 0.1 issue 42.2 swap 52.7) start-delay=69.5 queue=80.1
+  FS quiz new rep3: n=105 (+7 flagged) total p50=358 p90=471 p99=552 max=569 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=149.0 (sync 0.1 issue 41.4 swap 90.1) start-delay=87.9 queue=113.5
+  FS quiz base rep3: n=120 (+0 flagged) BUFFER-FULL total p50=250 p90=301 p99=346 max=385 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=107.2 (sync 0.1 issue 37.1 swap 47.0) start-delay=64.9 queue=72.6
+  FS quiz hk rep3: n=109 (+9 flagged) total p50=346 p90=433 p99=495 max=507 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=147.5 (sync 0.1 issue 39.9 swap 85.6) start-delay=93.0 queue=106.3
+## A. Repetition 4 of: quiz (configs rotated by 4)
+  FS quiz nohem rep4: n=103 (+17 flagged) BUFFER-FULL total p50=279 p90=335 p99=354 max=367 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=121.9 (sync 0.1 issue 39.7 swap 58.7) start-delay=73.2 queue=87.0
+  FS quiz solidhem rep4: n=102 (+17 flagged) total p50=260 p90=366 p99=431 max=443 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=118.9 (sync 0.1 issue 40.4 swap 56.0) start-delay=65.7 queue=81.4
+  FS quiz nostitch rep4: n=108 (+12 flagged) BUFFER-FULL total p50=323 p90=427 p99=471 max=477 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=134.3 (sync 0.1 issue 38.3 swap 76.4) start-delay=85.9 queue=103.1
+  FS quiz layer rep4: n=103 (+16 flagged) total p50=274 p90=362 p99=446 max=450 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=116.3 (sync 0.1 issue 40.8 swap 56.0) start-delay=73.8 queue=84.1
+  FS quiz new rep4: n=110 (+8 flagged) total p50=357 p90=443 p99=532 max=561 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=152.4 (sync 0.1 issue 42.4 swap 85.0) start-delay=90.0 queue=111.8
+  FS quiz base rep4: n=120 (+0 flagged) BUFFER-FULL total p50=244 p90=301 p99=341 max=372 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=97.9 (sync 0.1 issue 38.3 swap 47.8) start-delay=63.7 queue=75.6
+  FS quiz hk rep4: n=109 (+10 flagged) total p50=350 p90=466 p99=521 max=527 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=142.4 (sync 0.1 issue 39.9 swap 86.2) start-delay=86.6 queue=106.2
+  FS quiz noband rep4: n=104 (+16 flagged) BUFFER-FULL total p50=248 p90=309 p99=350 max=370 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=99.4 (sync 0.1 issue 38.0 swap 48.8) start-delay=73.1 queue=80.3
+## A. Repetition 5 of: quiz (configs rotated by 5)
+  FS quiz solidhem rep5: n=102 (+18 flagged) BUFFER-FULL total p50=282 p90=347 p99=372 max=376 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=119.5 (sync 0.1 issue 39.5 swap 59.9) start-delay=65.8 queue=82.6
+  FS quiz nostitch rep5: n=110 (+10 flagged) BUFFER-FULL total p50=334 p90=412 p99=482 max=495 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=138.9 (sync 0.1 issue 37.8 swap 76.5) start-delay=80.8 queue=104.2
+  FS quiz layer rep5: n=103 (+16 flagged) total p50=255 p90=341 p99=436 max=474 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=110.2 (sync 0.1 issue 41.3 swap 53.5) start-delay=69.9 queue=80.4
+  FS quiz new rep5: n=108 (+9 flagged) total p50=354 p90=457 p99=493 max=500 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=143.9 (sync 0.1 issue 41.6 swap 87.4) start-delay=91.2 queue=106.7
+  FS quiz base rep5: n=120 (+0 flagged) BUFFER-FULL total p50=247 p90=297 p99=347 max=368 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=101.5 (sync 0.1 issue 36.5 swap 47.2) start-delay=65.2 queue=75.0
+  FS quiz hk rep5: n=109 (+8 flagged) total p50=364 p90=458 p99=518 max=564 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=154.9 (sync 0.1 issue 44.8 swap 86.4) start-delay=90.2 queue=112.1
+  FS quiz noband rep5: n=105 (+15 flagged) BUFFER-FULL total p50=251 p90=316 p99=366 max=385 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=105.5 (sync 0.1 issue 40.1 swap 49.9) start-delay=58.2 queue=75.0
+  FS quiz nohem rep5: n=105 (+15 flagged) BUFFER-FULL total p50=272 p90=358 p99=380 max=382 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=120.2 (sync 0.1 issue 43.5 swap 60.5) start-delay=66.4 queue=79.8
+## A9. Totals (rep 0 is excluded)
+| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| quiz | base | 5 | 120 | **247.2** (239.7..250.1) | 301 | 341 | 0.6 | 101.1 | 0.0 | 0.5 | 0.1 | 37.2 | 47.2 |
+| quiz | hk | 5 | 109 | **349.8** (332.0..367.5) | 458 | 518 | 0.4 | 147.5 | 0.0 | 0.3 | 0.1 | 40.1 | 86.2 |
+| quiz | layer | 5 | 103 | **267.2** (254.8..274.0) | 354 | 409 | 0.4 | 113.8 | 0.0 | 0.3 | 0.1 | 42.2 | 56.0 |
+| quiz | new | 5 | 108 | **358.1** (353.9..366.1) | 457 | 544 | 0.4 | 152.4 | 0.0 | 0.3 | 0.1 | 41.7 | 90.0 |
+| quiz | noband | 5 | 104 | **249.4** (248.0..275.1) | 309 | 366 | 0.4 | 105.5 | 0.0 | 0.2 | 0.1 | 39.0 | 48.8 |
+| quiz | nohem | 5 | 103 | **287.2** (271.6..290.0) | 358 | 409 | 0.4 | 120.2 | 0.0 | 0.3 | 0.1 | 40.6 | 60.5 |
+| quiz | nostitch | 5 | 110 | **340.8** (323.2..361.5) | 447 | 482 | 0.4 | 152.3 | 0.0 | 0.3 | 0.1 | 41.1 | 88.1 |
+| quiz | solidhem | 5 | 102 | **281.6** (259.6..296.5) | 360 | 403 | 0.4 | 119.5 | 0.0 | 0.3 | 0.1 | 40.4 | 59.9 |
+
+RenderThread work per repetition (the same scripted gestures): sum of rt over the frames, ms; frames; median rt per frame:
+
+| scenario | version | sum of RT ms, median (min..max) | frames, median (min..max) | median RT per frame (min..max) | sum of swap ms, median | sum of issue ms, median |
+|---|---|---|---|---|---|---|
+| quiz | base | **11835** (11401..11951) | 120 (119..120) | **101.1** (89.7..107.2) | 6855 | 4964 |
+| quiz | hk | **16192** (15714..16954) | 109 (106..113) | **147.5** (138.8..159.7) | 10549 | 5609 |
+| quiz | layer | **11849** (11373..12084) | 103 (101..105) | **113.8** (110.2..116.7) | 6673 | 5136 |
+| quiz | new | **16447** (15979..17408) | 108 (105..110) | **152.4** (143.9..157.6) | 10710 | 5725 |
+| quiz | noband | **11048** (10493..11224) | 104 (103..105) | **105.5** (99.4..118.3) | 6396 | 4631 |
+| quiz | nohem | **12352** (11982..12776) | 103 (102..105) | **120.2** (117.8..128.2) | 7459 | 4886 |
+| quiz | nostitch | **16308** (14624..16877) | 110 (108..111) | **152.3** (134.3..155.1) | 10672 | 5452 |
+| quiz | solidhem | **11850** (11424..12989) | 102 (101..104) | **119.5** (114.1..131.5) | 7003 | 4823 |
+
+- quiz / hk vs base, sum of RT: 16191.7 vs 11835.2 (+37%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / hk vs base, median RT per frame: 147.5 vs 101.1 (+46%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / layer vs base, sum of RT: 11848.8 vs 11835.2 (+0%); U=15.0, p=0.690; ranges overlap
+- quiz / layer vs base, median RT per frame: 113.8 vs 101.1 (+13%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / new vs base, sum of RT: 16447.2 vs 11835.2 (+39%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / new vs base, median RT per frame: 152.4 vs 101.1 (+51%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / noband vs base, sum of RT: 11047.6 vs 11835.2 (-7%); U=0.0, p=0.008; ranges do NOT overlap
+- quiz / noband vs base, median RT per frame: 105.5 vs 101.1 (+4%); U=19.0, p=0.222; ranges overlap
+- quiz / nohem vs base, sum of RT: 12352.0 vs 11835.2 (+4%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / nohem vs base, median RT per frame: 120.2 vs 101.1 (+19%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / nostitch vs base, sum of RT: 16308.2 vs 11835.2 (+38%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / nostitch vs base, median RT per frame: 152.3 vs 101.1 (+51%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / solidhem vs base, sum of RT: 11850.0 vs 11835.2 (+0%); U=15.0, p=0.690; ranges overlap
+- quiz / solidhem vs base, median RT per frame: 119.5 vs 101.1 (+18%); U=25.0, p=0.008; ranges do NOT overlap
+
+Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:
+
+- quiz / base: [247.8, 239.7, 250.1, 244.1, 247.2]
+- quiz / hk: [332.0, 367.5, 346.0, 349.8, 364.0] vs base: median diff +102.6 ms (UI -0.2, RT +46.4, issue +2.9); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / layer: [267.2, 265.3, 272.4, 274.0, 254.8] vs base: median diff +20.1 ms (UI -0.2, RT +12.7, issue +5.0); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / new: [366.1, 360.6, 358.1, 357.4, 353.9] vs base: median diff +110.9 ms (UI -0.2, RT +51.3, issue +4.5); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / noband: [249.4, 249.2, 275.1, 248.0, 250.9] vs base: median diff +2.2 ms (UI -0.2, RT +4.4, issue +1.8); Mann-Whitney U=22.0, p=0.056; ranges overlap
+- quiz / nohem: [287.2, 290.0, 289.8, 279.1, 271.6] vs base: median diff +40.0 ms (UI -0.2, RT +19.1, issue +3.4); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / nostitch: [340.8, 342.6, 361.5, 323.2, 333.7] vs base: median diff +93.6 ms (UI -0.2, RT +51.2, issue +3.9); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / solidhem: [296.5, 266.0, 282.4, 259.6, 281.6] vs base: median diff +34.4 ms (UI -0.2, RT +18.4, issue +3.2); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+AT part: FATAL lines 0; host load: 3.63 4.10 3.97
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5505', '8507', '16798', '19700', '22962', '25796', '28874']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 22
+   skipped-frames events=22 max=80 total=1101
+== Davey: 32
+   davey events=32 max=2169ms median=1196ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt

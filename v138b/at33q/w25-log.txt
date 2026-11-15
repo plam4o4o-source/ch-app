@@ -1,0 +1,607 @@
+11-14 23:38:30.215  8166  8166 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:42:26.445  9975  9975 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:43:07.145  9975  9975 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:43:07.146  9975  9975 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:43:07.146  9975  9975 W W25     : QB effect end size=0 +0ms active=true
+11-14 23:43:12.564  9975  9975 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:43:13.736  9975  9975 W W25     : QB after stitch i=0 +1173ms
+11-14 23:43:13.737  9975  9975 W W25     : QB effect end size=1 +1173ms active=true
+11-14 23:43:20.746  9975  9975 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:43:21.849  9975  9975 W W25     : QB after stitch i=1 +1102ms
+11-14 23:43:21.849  9975  9975 W W25     : QB effect end size=2 +1102ms active=true
+11-14 23:43:28.911  9975  9975 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:43:28.911  9975  9975 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:43:37.079  9975  9975 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:43:37.079  9975  9975 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:43:45.278  9975  9975 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:43:45.278  9975  9975 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:43:49.377  9975  9975 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:43:49.377  9975  9975 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:43:49.377  9975  9975 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:44:00.573 10601 10601 W W25     : flags=[noband]
+11-14 23:44:01.973 10601 10601 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:45:33.501 11234 11234 W W25     : flags=[nohem]
+11-14 23:45:35.165 11234 11234 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:46:14.945 11234 11234 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:46:14.945 11234 11234 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:46:14.945 11234 11234 W W25     : QB effect end size=0 +1ms active=true
+11-14 23:46:20.961 11234 11234 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:46:21.995 11234 11234 W W25     : QB after stitch i=0 +1034ms
+11-14 23:46:21.995 11234 11234 W W25     : QB effect end size=1 +1034ms active=true
+11-14 23:46:29.145 11234 11234 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:46:30.222 11234 11234 W W25     : QB after stitch i=1 +1076ms
+11-14 23:46:30.222 11234 11234 W W25     : QB effect end size=2 +1076ms active=true
+11-14 23:46:37.295 11234 11234 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:46:37.295 11234 11234 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:46:45.461 11234 11234 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:46:45.461 11234 11234 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:46:53.630 11234 11234 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:46:53.630 11234 11234 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:46:57.627 11234 11234 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:46:57.627 11234 11234 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:46:57.627 11234 11234 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:47:08.960 11883 11883 W W25     : flags=[solidhem]
+11-14 23:47:10.441 11883 11883 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:47:44.554 11883 11883 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:47:44.555 11883 11883 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:47:44.555 11883 11883 W W25     : QB effect end size=0 +0ms active=true
+11-14 23:47:50.595 11883 11883 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:47:51.585 11883 11883 W W25     : QB after stitch i=0 +989ms
+11-14 23:47:51.585 11883 11883 W W25     : QB effect end size=1 +989ms active=true
+11-14 23:47:58.811 11883 11883 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:47:59.867 11883 11883 W W25     : QB after stitch i=1 +1056ms
+11-14 23:47:59.867 11883 11883 W W25     : QB effect end size=2 +1056ms active=true
+11-14 23:48:06.995 11883 11883 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:48:06.995 11883 11883 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:48:15.178 11883 11883 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:48:15.179 11883 11883 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:48:23.344 11883 11883 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:48:23.345 11883 11883 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:48:27.327 11883 11883 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:48:27.327 11883 11883 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:48:27.328 11883 11883 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:48:38.152 12470 12470 W W25     : flags=[nostitch]
+11-14 23:48:39.974 12470 12470 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:49:16.846 12470 12470 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:49:16.846 12470 12470 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:49:16.846 12470 12470 W W25     : QB effect end size=0 +0ms active=true
+11-14 23:49:22.646 12470 12470 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:49:23.671 12470 12470 W W25     : QB after stitch i=0 +1025ms
+11-14 23:49:23.671 12470 12470 W W25     : QB effect end size=1 +1025ms active=true
+11-14 23:49:30.811 12470 12470 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:49:31.834 12470 12470 W W25     : QB after stitch i=1 +1023ms
+11-14 23:49:31.835 12470 12470 W W25     : QB effect end size=2 +1023ms active=true
+11-14 23:49:38.978 12470 12470 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:49:38.978 12470 12470 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:49:47.144 12470 12470 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:49:47.144 12470 12470 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:49:55.311 12470 12470 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:49:55.311 12470 12470 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:49:59.294 12470 12470 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:49:59.294 12470 12470 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:49:59.294 12470 12470 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:50:10.021 13069 13069 W W25     : flags=[bandlayer]
+11-14 23:50:11.859 13069 13069 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:50:50.195 13069 13069 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:50:50.195 13069 13069 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:50:50.195 13069 13069 W W25     : QB effect end size=0 +0ms active=true
+11-14 23:50:56.228 13069 13069 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:50:57.287 13069 13069 W W25     : QB after stitch i=0 +1059ms
+11-14 23:50:57.287 13069 13069 W W25     : QB effect end size=1 +1059ms active=true
+11-14 23:51:04.361 13069 13069 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:51:05.441 13069 13069 W W25     : QB after stitch i=1 +1079ms
+11-14 23:51:05.441 13069 13069 W W25     : QB effect end size=2 +1079ms active=true
+11-14 23:51:12.561 13069 13069 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:51:12.561 13069 13069 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:51:20.712 13069 13069 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:51:20.712 13069 13069 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:51:28.878 13069 13069 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:51:28.878 13069 13069 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:51:32.844 13069 13069 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:51:32.844 13069 13069 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:51:32.844 13069 13069 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:52:58.062 14179 14179 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:53:36.720 14179 14179 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:53:36.721 14179 14179 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:53:36.721 14179 14179 W W25     : QB effect end size=0 +0ms active=true
+11-14 23:53:44.011 14179 14179 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:53:45.154 14179 14179 W W25     : QB after stitch i=0 +1143ms
+11-14 23:53:45.154 14179 14179 W W25     : QB effect end size=1 +1144ms active=true
+11-14 23:53:48.227 14179 14179 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:53:49.303 14179 14179 W W25     : QB after stitch i=1 +1075ms
+11-14 23:53:49.303 14179 14179 W W25     : QB effect end size=2 +1075ms active=true
+11-14 23:53:52.462 14179 14179 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:53:52.463 14179 14179 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:53:56.694 14179 14179 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:53:56.694 14179 14179 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:54:00.911 14179 14179 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:54:00.911 14179 14179 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:54:02.927 14179 14179 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:54:02.927 14179 14179 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:54:02.927 14179 14179 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:54:14.224 14655 14655 W W25     : flags=[noband]
+11-14 23:54:16.120 14655 14655 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:55:31.242 15076 15076 W W25     : flags=[nohem]
+11-14 23:55:33.011 15076 15076 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:56:07.057 15076 15076 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:56:07.058 15076 15076 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:56:07.058 15076 15076 W W25     : QB effect end size=0 +0ms active=true
+11-14 23:56:14.228 15076 15076 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:56:15.313 15076 15076 W W25     : QB after stitch i=0 +1085ms
+11-14 23:56:15.313 15076 15076 W W25     : QB effect end size=1 +1086ms active=true
+11-14 23:56:18.461 15076 15076 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:56:19.580 15076 15076 W W25     : QB after stitch i=1 +1119ms
+11-14 23:56:19.580 15076 15076 W W25     : QB effect end size=2 +1120ms active=true
+11-14 23:56:22.677 15076 15076 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:56:22.677 15076 15076 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:56:26.912 15076 15076 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:56:26.912 15076 15076 W W25     : QB effect end size=4 +1ms active=true
+11-14 23:56:31.145 15076 15076 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:56:31.145 15076 15076 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:56:33.144 15076 15076 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:56:33.144 15076 15076 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:56:33.144 15076 15076 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:56:44.389 15516 15516 W W25     : flags=[solidhem]
+11-14 23:56:46.074 15516 15516 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:57:19.783 15516 15516 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:57:19.783 15516 15516 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:57:19.783 15516 15516 W W25     : QB effect end size=0 +0ms active=true
+11-14 23:57:27.128 15516 15516 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:57:28.202 15516 15516 W W25     : QB after stitch i=0 +1074ms
+11-14 23:57:28.202 15516 15516 W W25     : QB effect end size=1 +1075ms active=true
+11-14 23:57:31.362 15516 15516 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:57:32.468 15516 15516 W W25     : QB after stitch i=1 +1105ms
+11-14 23:57:32.468 15516 15516 W W25     : QB effect end size=2 +1105ms active=true
+11-14 23:57:35.578 15516 15516 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:57:35.578 15516 15516 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:57:39.811 15516 15516 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:57:39.811 15516 15516 W W25     : QB effect end size=4 +0ms active=true
+11-14 23:57:44.028 15516 15516 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:57:44.028 15516 15516 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:57:46.044 15516 15516 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:57:46.044 15516 15516 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:57:46.044 15516 15516 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:57:57.609 15932 15932 W W25     : flags=[nostitch]
+11-14 23:57:59.151 15932 15932 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:58:40.071 15932 15932 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:58:40.071 15932 15932 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:58:40.071 15932 15932 W W25     : QB effect end size=0 +1ms active=true
+11-14 23:58:47.262 15932 15932 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:58:48.280 15932 15932 W W25     : QB after stitch i=0 +1018ms
+11-14 23:58:48.280 15932 15932 W W25     : QB effect end size=1 +1018ms active=true
+11-14 23:58:51.511 15932 15932 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-14 23:58:52.619 15932 15932 W W25     : QB after stitch i=1 +1107ms
+11-14 23:58:52.620 15932 15932 W W25     : QB effect end size=2 +1109ms active=true
+11-14 23:58:55.730 15932 15932 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-14 23:58:55.730 15932 15932 W W25     : QB effect end size=3 +0ms active=true
+11-14 23:58:59.962 15932 15932 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-14 23:58:59.962 15932 15932 W W25     : QB effect end size=4 +1ms active=true
+11-14 23:59:04.178 15932 15932 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-14 23:59:04.178 15932 15932 W W25     : QB effect end size=5 +0ms active=true
+11-14 23:59:06.194 15932 15932 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-14 23:59:06.195 15932 15932 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:59:06.195 15932 15932 W W25     : QB effect end size=5 +1ms active=true
+11-14 23:59:17.554 16345 16345 W W25     : flags=[bandlayer]
+11-14 23:59:19.634 16345 16345 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:59:56.253 16345 16345 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-14 23:59:56.253 16345 16345 W W25     : QB effect: nothing new (size <= seen)
+11-14 23:59:56.253 16345 16345 W W25     : QB effect end size=0 +1ms active=true
+11-15 00:00:03.579 16345 16345 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:00:04.671 16345 16345 W W25     : QB after stitch i=0 +1092ms
+11-15 00:00:04.671 16345 16345 W W25     : QB effect end size=1 +1092ms active=true
+11-15 00:00:07.794 16345 16345 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:00:08.964 16345 16345 W W25     : QB after stitch i=1 +1170ms
+11-15 00:00:08.965 16345 16345 W W25     : QB effect end size=2 +1171ms active=true
+11-15 00:00:12.033 16345 16345 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:00:12.033 16345 16345 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:00:16.285 16345 16345 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:00:16.286 16345 16345 W W25     : QB effect end size=4 +1ms active=true
+11-15 00:00:20.528 16345 16345 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:00:20.529 16345 16345 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:00:22.586 16345 16345 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:00:22.586 16345 16345 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:00:22.587 16345 16345 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:01:54.362 17235 17235 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:02:33.383 17235 17235 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:02:33.383 17235 17235 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:02:33.383 17235 17235 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:02:40.645 17235 17235 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:02:41.766 17235 17235 W W25     : QB after stitch i=0 +1121ms
+11-15 00:02:41.766 17235 17235 W W25     : QB effect end size=1 +1121ms active=true
+11-15 00:02:44.878 17235 17235 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:02:46.045 17235 17235 W W25     : QB after stitch i=1 +1166ms
+11-15 00:02:46.045 17235 17235 W W25     : QB effect end size=2 +1166ms active=true
+11-15 00:02:49.097 17235 17235 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:02:49.097 17235 17235 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:02:53.328 17235 17235 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:02:53.328 17235 17235 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:02:57.561 17235 17235 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:02:57.561 17235 17235 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:02:59.577 17235 17235 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:02:59.577 17235 17235 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:02:59.577 17235 17235 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:03:10.901 17659 17659 W W25     : flags=[noband]
+11-15 00:03:12.408 17659 17659 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:04:30.582 18060 18060 W W25     : flags=[nohem]
+11-15 00:04:32.410 18060 18060 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:05:11.993 18060 18060 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:05:11.993 18060 18060 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:05:11.993 18060 18060 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:05:19.495 18060 18060 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:05:20.574 18060 18060 W W25     : QB after stitch i=0 +1080ms
+11-15 00:05:20.574 18060 18060 W W25     : QB effect end size=1 +1080ms active=true
+11-15 00:05:23.727 18060 18060 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:05:24.776 18060 18060 W W25     : QB after stitch i=1 +1049ms
+11-15 00:05:24.776 18060 18060 W W25     : QB effect end size=2 +1049ms active=true
+11-15 00:05:27.961 18060 18060 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:05:27.961 18060 18060 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:05:32.179 18060 18060 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:05:32.179 18060 18060 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:05:36.411 18060 18060 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:05:36.411 18060 18060 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:05:38.427 18060 18060 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:05:38.427 18060 18060 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:05:38.427 18060 18060 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:05:49.465 18474 18474 W W25     : flags=[solidhem]
+11-15 00:05:50.945 18474 18474 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:06:26.694 18474 18474 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:06:26.694 18474 18474 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:06:26.694 18474 18474 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:06:33.860 18474 18474 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:06:34.916 18474 18474 W W25     : QB after stitch i=0 +1056ms
+11-15 00:06:34.916 18474 18474 W W25     : QB effect end size=1 +1056ms active=true
+11-15 00:06:38.078 18474 18474 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:06:39.179 18474 18474 W W25     : QB after stitch i=1 +1101ms
+11-15 00:06:39.180 18474 18474 W W25     : QB effect end size=2 +1101ms active=true
+11-15 00:06:42.311 18474 18474 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:06:42.311 18474 18474 W W25     : QB effect end size=3 +1ms active=true
+11-15 00:06:46.544 18474 18474 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:06:46.545 18474 18474 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:06:50.760 18474 18474 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:06:50.761 18474 18474 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:06:52.777 18474 18474 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:06:52.778 18474 18474 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:06:52.778 18474 18474 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:07:03.765 18876 18876 W W25     : flags=[nostitch]
+11-15 00:07:05.091 18876 18876 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:07:43.014 18876 18876 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:07:43.014 18876 18876 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:07:43.014 18876 18876 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:07:50.462 18876 18876 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:07:51.510 18876 18876 W W25     : QB after stitch i=0 +1049ms
+11-15 00:07:51.510 18876 18876 W W25     : QB effect end size=1 +1049ms active=true
+11-15 00:07:54.677 18876 18876 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:07:55.907 18876 18876 W W25     : QB after stitch i=1 +1230ms
+11-15 00:07:55.907 18876 18876 W W25     : QB effect end size=2 +1230ms active=true
+11-15 00:07:58.911 18876 18876 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:07:58.911 18876 18876 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:08:03.128 18876 18876 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:08:03.128 18876 18876 W W25     : QB effect end size=4 +1ms active=true
+11-15 00:08:07.378 18876 18876 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:08:07.379 18876 18876 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:08:09.377 18876 18876 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:08:09.377 18876 18876 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:08:09.378 18876 18876 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:08:20.565 19293 19293 W W25     : flags=[bandlayer]
+11-15 00:08:22.544 19293 19293 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:09:01.627 19293 19293 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:09:01.627 19293 19293 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:09:01.627 19293 19293 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:09:08.846 19293 19293 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:09:09.908 19293 19293 W W25     : QB after stitch i=0 +1062ms
+11-15 00:09:09.909 19293 19293 W W25     : QB effect end size=1 +1062ms active=true
+11-15 00:09:13.081 19293 19293 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:09:14.209 19293 19293 W W25     : QB after stitch i=1 +1127ms
+11-15 00:09:14.209 19293 19293 W W25     : QB effect end size=2 +1128ms active=true
+11-15 00:09:17.298 19293 19293 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:09:17.298 19293 19293 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:09:21.530 19293 19293 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:09:21.530 19293 19293 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:09:25.744 19293 19293 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:09:25.744 19293 19293 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:09:27.760 19293 19293 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:09:27.761 19293 19293 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:09:27.761 19293 19293 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:12:15.855 20640 20640 W W25     : flags=[noband]
+11-15 00:12:17.585 20640 20640 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:13:35.249 21068 21068 W W25     : flags=[nohem]
+11-15 00:13:36.805 21068 21068 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:14:17.109 21068 21068 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:14:17.110 21068 21068 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:14:17.110 21068 21068 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:14:24.344 21068 21068 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:14:25.390 21068 21068 W W25     : QB after stitch i=0 +1046ms
+11-15 00:14:25.390 21068 21068 W W25     : QB effect end size=1 +1046ms active=true
+11-15 00:14:28.578 21068 21068 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:14:29.613 21068 21068 W W25     : QB after stitch i=1 +1035ms
+11-15 00:14:29.613 21068 21068 W W25     : QB effect end size=2 +1035ms active=true
+11-15 00:14:32.811 21068 21068 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:14:32.812 21068 21068 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:14:37.047 21068 21068 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:14:37.047 21068 21068 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:14:41.261 21068 21068 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:14:41.262 21068 21068 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:14:43.277 21068 21068 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:14:43.277 21068 21068 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:14:43.277 21068 21068 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:14:54.516 21466 21466 W W25     : flags=[solidhem]
+11-15 00:14:55.988 21466 21466 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:15:32.884 21466 21466 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:15:32.884 21466 21466 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:15:32.884 21466 21466 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:15:40.071 21466 21466 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:15:41.134 21466 21466 W W25     : QB after stitch i=0 +1063ms
+11-15 00:15:41.134 21466 21466 W W25     : QB effect end size=1 +1064ms active=true
+11-15 00:15:44.295 21466 21466 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:15:45.323 21466 21466 W W25     : QB after stitch i=1 +1029ms
+11-15 00:15:45.324 21466 21466 W W25     : QB effect end size=2 +1030ms active=true
+11-15 00:15:48.528 21466 21466 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:15:48.528 21466 21466 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:15:52.761 21466 21466 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:15:52.762 21466 21466 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:15:56.979 21466 21466 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:15:56.979 21466 21466 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:15:58.993 21466 21466 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:15:58.994 21466 21466 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:15:58.994 21466 21466 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:16:09.979 21872 21872 W W25     : flags=[nostitch]
+11-15 00:16:11.705 21872 21872 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:16:50.037 21872 21872 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:16:50.037 21872 21872 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:16:50.037 21872 21872 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:16:57.527 21872 21872 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:16:58.665 21872 21872 W W25     : QB after stitch i=0 +1137ms
+11-15 00:16:58.665 21872 21872 W W25     : QB effect end size=1 +1138ms active=true
+11-15 00:17:01.745 21872 21872 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:17:02.909 21872 21872 W W25     : QB after stitch i=1 +1164ms
+11-15 00:17:02.909 21872 21872 W W25     : QB effect end size=2 +1164ms active=true
+11-15 00:17:05.977 21872 21872 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:17:05.977 21872 21872 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:17:10.194 21872 21872 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:17:10.194 21872 21872 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:17:14.428 21872 21872 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:17:14.428 21872 21872 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:17:16.444 21872 21872 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:17:16.444 21872 21872 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:17:16.444 21872 21872 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:17:27.726 22546 22546 W W25     : flags=[bandlayer]
+11-15 00:17:29.472 22546 22546 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:18:08.305 22546 22546 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:18:08.305 22546 22546 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:18:08.305 22546 22546 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:18:15.561 22546 22546 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:18:16.640 22546 22546 W W25     : QB after stitch i=0 +1078ms
+11-15 00:18:16.640 22546 22546 W W25     : QB effect end size=1 +1079ms active=true
+11-15 00:18:19.777 22546 22546 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:18:20.858 22546 22546 W W25     : QB after stitch i=1 +1081ms
+11-15 00:18:20.858 22546 22546 W W25     : QB effect end size=2 +1081ms active=true
+11-15 00:18:24.030 22546 22546 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:18:24.030 22546 22546 W W25     : QB effect end size=3 +1ms active=true
+11-15 00:18:28.244 22546 22546 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:18:28.244 22546 22546 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:18:32.478 22546 22546 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:18:32.479 22546 22546 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:18:34.535 22546 22546 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:18:34.536 22546 22546 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:18:34.536 22546 22546 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:21:20.744 23774 23774 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:21:56.995 23774 23774 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:21:56.995 23774 23774 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:21:56.995 23774 23774 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:22:04.361 23774 23774 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:22:05.427 23774 23774 W W25     : QB after stitch i=0 +1066ms
+11-15 00:22:05.427 23774 23774 W W25     : QB effect end size=1 +1066ms active=true
+11-15 00:22:08.577 23774 23774 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:22:09.695 23774 23774 W W25     : QB after stitch i=1 +1117ms
+11-15 00:22:09.695 23774 23774 W W25     : QB effect end size=2 +1118ms active=true
+11-15 00:22:12.811 23774 23774 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:22:12.811 23774 23774 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:22:17.029 23774 23774 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:22:17.029 23774 23774 W W25     : QB effect end size=4 +1ms active=true
+11-15 00:22:21.261 23774 23774 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:22:21.262 23774 23774 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:22:23.294 23774 23774 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:22:23.294 23774 23774 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:22:23.294 23774 23774 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:22:34.700 24182 24182 W W25     : flags=[nohem]
+11-15 00:22:35.945 24182 24182 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:23:12.496 24182 24182 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:23:12.497 24182 24182 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:23:12.497 24182 24182 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:23:19.828 24182 24182 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:23:20.887 24182 24182 W W25     : QB after stitch i=0 +1059ms
+11-15 00:23:20.887 24182 24182 W W25     : QB effect end size=1 +1059ms active=true
+11-15 00:23:24.061 24182 24182 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:23:25.185 24182 24182 W W25     : QB after stitch i=1 +1123ms
+11-15 00:23:25.185 24182 24182 W W25     : QB effect end size=2 +1123ms active=true
+11-15 00:23:28.279 24182 24182 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:23:28.279 24182 24182 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:23:32.512 24182 24182 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:23:32.512 24182 24182 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:23:36.744 24182 24182 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:23:36.744 24182 24182 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:23:38.760 24182 24182 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:23:38.760 24182 24182 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:23:38.760 24182 24182 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:23:50.044 24600 24600 W W25     : flags=[solidhem]
+11-15 00:23:51.144 24600 24600 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:24:28.701 24600 24600 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:24:28.701 24600 24600 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:24:28.701 24600 24600 W W25     : QB effect end size=0 +2ms active=true
+11-15 00:24:35.977 24600 24600 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:24:37.050 24600 24600 W W25     : QB after stitch i=0 +1073ms
+11-15 00:24:37.050 24600 24600 W W25     : QB effect end size=1 +1073ms active=true
+11-15 00:24:40.195 24600 24600 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:24:41.285 24600 24600 W W25     : QB after stitch i=1 +1090ms
+11-15 00:24:41.285 24600 24600 W W25     : QB effect end size=2 +1090ms active=true
+11-15 00:24:44.427 24600 24600 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:24:44.428 24600 24600 W W25     : QB effect end size=3 +1ms active=true
+11-15 00:24:48.662 24600 24600 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:24:48.662 24600 24600 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:24:52.879 24600 24600 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:24:52.879 24600 24600 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:24:54.963 24600 24600 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:24:54.963 24600 24600 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:24:54.963 24600 24600 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:25:05.991 24997 24997 W W25     : flags=[nostitch]
+11-15 00:25:07.622 24997 24997 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:25:41.764 24997 24997 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:25:41.765 24997 24997 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:25:41.765 24997 24997 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:25:49.211 24997 24997 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:25:50.286 24997 24997 W W25     : QB after stitch i=0 +1075ms
+11-15 00:25:50.286 24997 24997 W W25     : QB effect end size=1 +1075ms active=true
+11-15 00:25:53.444 24997 24997 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:25:54.495 24997 24997 W W25     : QB after stitch i=1 +1052ms
+11-15 00:25:54.496 24997 24997 W W25     : QB effect end size=2 +1052ms active=true
+11-15 00:25:57.678 24997 24997 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:25:57.679 24997 24997 W W25     : QB effect end size=3 +1ms active=true
+11-15 00:26:01.904 24997 24997 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:26:01.904 24997 24997 W W25     : QB effect end size=4 +9ms active=true
+11-15 00:26:06.128 24997 24997 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:26:06.128 24997 24997 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:26:08.144 24997 24997 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:26:08.144 24997 24997 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:26:08.145 24997 24997 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:26:19.257 25396 25396 W W25     : flags=[bandlayer]
+11-15 00:26:20.895 25396 25396 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:26:58.728 25396 25396 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:26:58.728 25396 25396 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:26:58.728 25396 25396 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:27:05.811 25396 25396 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:27:06.906 25396 25396 W W25     : QB after stitch i=0 +1095ms
+11-15 00:27:06.906 25396 25396 W W25     : QB effect end size=1 +1095ms active=true
+11-15 00:27:10.061 25396 25396 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:27:11.117 25396 25396 W W25     : QB after stitch i=1 +1055ms
+11-15 00:27:11.117 25396 25396 W W25     : QB effect end size=2 +1056ms active=true
+11-15 00:27:14.278 25396 25396 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:27:14.279 25396 25396 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:27:18.512 25396 25396 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:27:18.512 25396 25396 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:27:22.746 25396 25396 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:27:22.746 25396 25396 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:27:24.799 25396 25396 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:27:24.800 25396 25396 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:27:24.800 25396 25396 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:30:10.403 26780 26780 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:30:46.685 26780 26780 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:30:46.686 26780 26780 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:30:46.686 26780 26780 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:30:54.015 26780 26780 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:30:55.105 26780 26780 W W25     : QB after stitch i=0 +1091ms
+11-15 00:30:55.106 26780 26780 W W25     : QB effect end size=1 +1091ms active=true
+11-15 00:30:58.245 26780 26780 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:30:59.339 26780 26780 W W25     : QB after stitch i=1 +1094ms
+11-15 00:30:59.339 26780 26780 W W25     : QB effect end size=2 +1094ms active=true
+11-15 00:31:02.461 26780 26780 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:31:02.461 26780 26780 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:31:06.695 26780 26780 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:31:06.695 26780 26780 W W25     : QB effect end size=4 +1ms active=true
+11-15 00:31:10.912 26780 26780 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:31:10.912 26780 26780 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:31:12.927 26780 26780 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:31:12.927 26780 26780 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:31:12.928 26780 26780 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:31:24.238 27199 27199 W W25     : flags=[noband]
+11-15 00:31:25.765 27199 27199 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:32:37.221 27604 27604 W W25     : flags=[solidhem]
+11-15 00:32:38.995 27604 27604 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:33:15.479 27604 27604 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:33:15.479 27604 27604 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:33:15.479 27604 27604 W W25     : QB effect end size=0 +0ms active=true
+11-15 00:33:22.861 27604 27604 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:33:23.913 27604 27604 W W25     : QB after stitch i=0 +1053ms
+11-15 00:33:23.913 27604 27604 W W25     : QB effect end size=1 +1053ms active=true
+11-15 00:33:27.094 27604 27604 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:33:28.225 27604 27604 W W25     : QB after stitch i=1 +1132ms
+11-15 00:33:28.226 27604 27604 W W25     : QB effect end size=2 +1132ms active=true
+11-15 00:33:31.311 27604 27604 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:33:31.311 27604 27604 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:33:35.544 27604 27604 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:33:35.544 27604 27604 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:33:39.761 27604 27604 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:33:39.761 27604 27604 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:33:41.777 27604 27604 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:33:41.777 27604 27604 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:33:41.777 27604 27604 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:33:52.742 28011 28011 W W25     : flags=[nostitch]
+11-15 00:33:54.627 28011 28011 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:34:34.918 28011 28011 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:34:34.919 28011 28011 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:34:34.919 28011 28011 W W25     : QB effect end size=0 +2ms active=true
+11-15 00:34:42.177 28011 28011 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:34:43.317 28011 28011 W W25     : QB after stitch i=0 +1140ms
+11-15 00:34:43.318 28011 28011 W W25     : QB effect end size=1 +1140ms active=true
+11-15 00:34:46.397 28011 28011 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:34:47.480 28011 28011 W W25     : QB after stitch i=1 +1083ms
+11-15 00:34:47.480 28011 28011 W W25     : QB effect end size=2 +1083ms active=true
+11-15 00:34:50.627 28011 28011 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:34:50.627 28011 28011 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:34:54.844 28011 28011 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:34:54.844 28011 28011 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:34:59.077 28011 28011 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:34:59.077 28011 28011 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:35:01.077 28011 28011 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:35:01.077 28011 28011 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:35:01.077 28011 28011 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:35:12.311 28410 28410 W W25     : flags=[bandlayer]
+11-15 00:35:13.711 28410 28410 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:35:48.032 28410 28410 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:35:48.032 28410 28410 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:35:48.032 28410 28410 W W25     : QB effect end size=0 +1ms active=true
+11-15 00:35:55.578 28410 28410 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:35:56.663 28410 28410 W W25     : QB after stitch i=0 +1085ms
+11-15 00:35:56.663 28410 28410 W W25     : QB effect end size=1 +1085ms active=true
+11-15 00:35:59.811 28410 28410 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:36:01.071 28410 28410 W W25     : QB after stitch i=1 +1260ms
+11-15 00:36:01.071 28410 28410 W W25     : QB effect end size=2 +1261ms active=true
+11-15 00:36:04.028 28410 28410 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:36:04.028 28410 28410 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:36:08.261 28410 28410 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:36:08.261 28410 28410 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:36:12.498 28410 28410 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:36:12.499 28410 28410 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:36:14.551 28410 28410 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:36:14.551 28410 28410 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:36:14.551 28410 28410 W W25     : QB effect end size=5 +1ms active=true
+11-15 00:38:58.143 29692 29692 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:39:34.576 29692 29692 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:39:34.576 29692 29692 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:39:34.576 29692 29692 W W25     : QB effect end size=0 +1ms active=true
+11-15 00:39:41.778 29692 29692 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:39:42.875 29692 29692 W W25     : QB after stitch i=0 +1098ms
+11-15 00:39:42.876 29692 29692 W W25     : QB effect end size=1 +1099ms active=true
+11-15 00:39:45.994 29692 29692 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:39:47.082 29692 29692 W W25     : QB after stitch i=1 +1087ms
+11-15 00:39:47.082 29692 29692 W W25     : QB effect end size=2 +1087ms active=true
+11-15 00:39:50.231 29692 29692 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:39:50.231 29692 29692 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:39:54.447 29692 29692 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:39:54.447 29692 29692 W W25     : QB effect end size=4 +0ms active=true
+11-15 00:39:58.679 29692 29692 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:39:58.679 29692 29692 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:40:00.710 29692 29692 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:40:00.711 29692 29692 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:40:00.711 29692 29692 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:40:12.013 30095 30095 W W25     : flags=[noband]
+11-15 00:40:13.649 30095 30095 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:41:29.652 30496 30496 W W25     : flags=[nohem]
+11-15 00:41:31.004 30496 30496 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:42:09.648 30496 30496 W W25     : QB effect start size=0 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:42:09.649 30496 30496 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:42:09.649 30496 30496 W W25     : QB effect end size=0 +1ms active=true
+11-15 00:42:17.045 30496 30496 W W25     : QB effect start size=1 total=5 seen=0 reduced=false closed=false confetti=true
+11-15 00:42:18.056 30496 30496 W W25     : QB after stitch i=0 +1012ms
+11-15 00:42:18.057 30496 30496 W W25     : QB effect end size=1 +1012ms active=true
+11-15 00:42:21.261 30496 30496 W W25     : QB effect start size=2 total=5 seen=1 reduced=false closed=false confetti=true
+11-15 00:42:22.258 30496 30496 W W25     : QB after stitch i=1 +997ms
+11-15 00:42:22.258 30496 30496 W W25     : QB effect end size=2 +997ms active=true
+11-15 00:42:25.498 30496 30496 W W25     : QB effect start size=3 total=5 seen=2 reduced=false closed=false confetti=true
+11-15 00:42:25.499 30496 30496 W W25     : QB effect end size=3 +0ms active=true
+11-15 00:42:29.711 30496 30496 W W25     : QB effect start size=4 total=5 seen=3 reduced=false closed=false confetti=true
+11-15 00:42:29.712 30496 30496 W W25     : QB effect end size=4 +1ms active=true
+11-15 00:42:33.944 30496 30496 W W25     : QB effect start size=5 total=5 seen=4 reduced=false closed=false confetti=true
+11-15 00:42:33.944 30496 30496 W W25     : QB effect end size=5 +0ms active=true
+11-15 00:42:35.960 30496 30496 W W25     : QB effect start size=5 total=5 seen=5 reduced=false closed=false confetti=true
+11-15 00:42:35.960 30496 30496 W W25     : QB effect: nothing new (size <= seen)
+11-15 00:42:35.961 30496 30496 W W25     : QB effect end size=5 +0ms active=true

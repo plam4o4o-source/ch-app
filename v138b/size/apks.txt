@@ -1,8 +1,8 @@
 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000
-devDebug 1.2.38 1dd4ccb (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key; demo-1 renews at once)
-1.2.38 1dd4ccb prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101
+devDebug 1.2.38 17f0e40 (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key; demo-1 renews at once)
+1.2.38 17f0e40 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101
 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100
 app.apk 4641014 bytes
 app-base.apk 4591454 bytes
-app-hook.apk 4642934 bytes
+app-hook.apk 4643638 bytes
 app-dev.apk 28796723 bytes

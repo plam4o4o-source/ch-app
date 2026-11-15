@@ -1,0 +1,218 @@
+part at33m; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## AM0. Timeline, round 2: which part of the medallion costs (hook build flags), with 1.2.38 and 1.2.37 as references
+X installed new: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 7685 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~7223XNWNLAYA-iw76G5JyQ==/org.chyavorec.app-A9WCn1pbRNKHGgl6LV9BtA==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed base: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000;  versionCode=1990000 minSdk=26 targetSdk=37  versionName=1.2.37 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 4293 ms
+X compile org.chyavorec.app.b37: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~5QTAq_t_HlZbkWKVCBASnw==/org.chyavorec.app.b37-1Avr7CqSMbwP13dK3EP4WQ==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/VpnDialogs/VpnDialogs.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed hook: 1.2.38 17f0e40 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101;  versionCode=1990101 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X hook: catalogue after 3487 ms
+X compile org.chyavorec.app.hk: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~FLflwjfeGkBxBUR12UmGnQ==/org.chyavorec.app.hk-QpgsqV05XdULbBro0mmMdQ==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /product/overlay/TelephonyProvider__auto_generated_rro_product.apk| x86_64: [status=run-from-apk] [reason=unknown]|
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+animations: animator_duration_scale=1 transition=1 window=1; host load: 4.73 3.57 1.72
+## A. Repetition 0 of: timeline (configs rotated by 0)
+  FS timeline new rep0: n=69 (+0 flagged) total p50=550 p90=792 p99=890 max=893 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=226.4 (sync 0.4 issue 79.3 swap 110.2) start-delay=145.1 queue=163.3
+  FS timeline base rep0: n=70 (+0 flagged) total p50=346 p90=529 p99=593 max=624 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=117.0 (sync 0.1 issue 64.8 swap 52.8) start-delay=97.3 queue=105.9
+  FS timeline hk rep0: n=77 (+0 flagged) total p50=461 p90=773 p99=985 max=1087 ms | medians: ui=0.7 (input 0.0 anim 0.5 layout 0.0 draw 0.1) rt=167.6 (sync 0.1 issue 67.2 swap 92.6) start-delay=131.9 queue=143.9
+## A. Repetition 1 of: timeline (configs rotated by 1)
+  FS timeline base rep1: n=81 (+0 flagged) total p50=431 p90=574 p99=660 max=662 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=173.9 (sync 0.1 issue 66.0 swap 106.3) start-delay=127.1 queue=131.2
+  FS timeline hk rep1: n=69 (+0 flagged) total p50=524 p90=701 p99=861 max=901 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.2) rt=224.4 (sync 0.1 issue 77.7 swap 103.8) start-delay=140.7 queue=147.3
+  FS timeline medal rep1: n=93 (+0 flagged) total p50=345 p90=555 p99=607 max=629 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=149.7 (sync 0.1 issue 63.9 swap 61.9) start-delay=99.0 queue=110.0
+  FS timeline noring rep1: n=84 (+0 flagged) total p50=394 p90=516 p99=553 max=561 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=144.5 (sync 0.1 issue 65.8 swap 75.8) start-delay=104.4 queue=122.9
+  FS timeline solidring rep1: n=75 (+0 flagged) total p50=456 p90=707 p99=878 max=885 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=190.1 (sync 0.1 issue 68.8 swap 88.1) start-delay=123.5 queue=139.8
+  FS timeline flat rep1: n=64 (+0 flagged) total p50=437 p90=679 p99=796 max=806 ms | medians: ui=0.7 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=188.8 (sync 0.1 issue 66.7 swap 87.1) start-delay=124.4 queue=144.3
+  FS timeline flatnoring rep1: n=80 (+0 flagged) total p50=409 p90=623 p99=723 max=740 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=177.7 (sync 0.1 issue 66.5 swap 74.8) start-delay=115.1 queue=122.7
+  FS timeline new rep1: n=74 (+0 flagged) total p50=468 p90=650 p99=843 max=851 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=178.7 (sync 0.1 issue 68.5 swap 94.4) start-delay=132.5 queue=142.9
+## A. Repetition 2 of: timeline (configs rotated by 2)
+  FS timeline hk rep2: n=67 (+0 flagged) total p50=430 p90=658 p99=748 max=782 ms | medians: ui=0.7 (input 0.0 anim 0.5 layout 0.0 draw 0.1) rt=190.3 (sync 0.1 issue 68.1 swap 87.9) start-delay=109.5 queue=141.6
+  FS timeline medal rep2: n=81 (+0 flagged) total p50=375 p90=650 p99=750 max=780 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=161.4 (sync 0.1 issue 66.6 swap 61.1) start-delay=93.8 queue=105.3
+  FS timeline noring rep2: n=73 (+0 flagged) total p50=466 p90=664 p99=727 max=750 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=200.6 (sync 0.1 issue 68.1 swap 127.2) start-delay=137.0 queue=135.5
+  FS timeline solidring rep2: n=75 (+0 flagged) total p50=397 p90=679 p99=780 max=800 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=155.8 (sync 0.1 issue 66.6 swap 77.4) start-delay=113.4 queue=124.6
+  FS timeline flat rep2: n=68 (+0 flagged) total p50=506 p90=775 p99=848 max=858 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=220.4 (sync 0.3 issue 81.1 swap 128.1) start-delay=137.4 queue=147.6
+  FS timeline flatnoring rep2: n=84 (+0 flagged) total p50=376 p90=602 p99=700 max=747 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=137.1 (sync 0.1 issue 66.1 swap 68.6) start-delay=99.8 queue=114.6
+  FS timeline new rep2: n=80 (+0 flagged) total p50=461 p90=681 p99=779 max=855 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=181.8 (sync 0.1 issue 71.0 swap 95.5) start-delay=134.9 queue=148.1
+  FS timeline base rep2: n=81 (+0 flagged) total p50=431 p90=599 p99=643 max=646 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=168.2 (sync 0.1 issue 64.4 swap 101.9) start-delay=116.0 queue=127.7
+## A. Repetition 3 of: timeline (configs rotated by 3)
+  FS timeline medal rep3: n=73 (+0 flagged) total p50=406 p90=613 p99=720 max=741 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=171.0 (sync 0.1 issue 68.9 swap 97.4) start-delay=96.6 queue=108.4
+  FS timeline noring rep3: n=65 (+0 flagged) total p50=460 p90=699 p99=788 max=798 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=199.8 (sync 0.4 issue 69.1 swap 129.1) start-delay=128.5 queue=137.9
+  FS timeline solidring rep3: n=83 (+0 flagged) total p50=448 p90=668 p99=772 max=873 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.2) rt=187.0 (sync 0.1 issue 68.0 swap 84.7) start-delay=127.2 queue=136.7
+  FS timeline flat rep3: n=60 (+0 flagged) total p50=484 p90=751 p99=823 max=833 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=212.4 (sync 0.1 issue 71.3 swap 100.9) start-delay=133.7 queue=146.3
+  FS timeline flatnoring rep3: n=78 (+0 flagged) total p50=450 p90=686 p99=798 max=814 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=194.8 (sync 0.1 issue 67.6 swap 77.4) start-delay=103.2 queue=132.8
+  FS timeline new rep3: n=72 (+0 flagged) total p50=497 p90=729 p99=897 max=900 ms | medians: ui=0.7 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=165.4 (sync 0.1 issue 67.5 swap 90.3) start-delay=140.5 queue=144.8
+  FS timeline base rep3: n=82 (+0 flagged) total p50=396 p90=596 p99=655 max=661 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=169.2 (sync 0.1 issue 65.9 swap 103.3) start-delay=109.1 queue=124.5
+  FS timeline hk rep3: n=62 (+0 flagged) total p50=523 p90=740 p99=836 max=852 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.2) rt=213.3 (sync 0.1 issue 67.8 swap 98.2) start-delay=140.9 queue=148.9
+## A. Repetition 4 of: timeline (configs rotated by 4)
+  FS timeline noring rep4: n=79 (+0 flagged) total p50=450 p90=638 p99=763 max=811 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=179.0 (sync 0.1 issue 67.7 swap 80.5) start-delay=122.2 queue=131.3
+  FS timeline solidring rep4: n=70 (+0 flagged) total p50=449 p90=674 p99=746 max=775 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=197.9 (sync 0.1 issue 70.0 swap 81.4) start-delay=120.6 queue=127.0
+  FS timeline flat rep4: n=82 (+0 flagged) total p50=444 p90=612 p99=807 max=834 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=163.4 (sync 0.1 issue 69.2 swap 86.0) start-delay=134.0 queue=144.8
+  FS timeline flatnoring rep4: n=78 (+0 flagged) total p50=445 p90=677 p99=865 max=881 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=192.2 (sync 0.2 issue 69.3 swap 95.6) start-delay=124.8 queue=138.2
+  FS timeline new rep4: n=76 (+0 flagged) total p50=472 p90=687 p99=770 max=836 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=187.5 (sync 0.1 issue 68.6 swap 92.0) start-delay=134.3 queue=145.2
+  FS timeline base rep4: n=82 (+0 flagged) total p50=395 p90=585 p99=697 max=735 ms | medians: ui=0.3 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=172.2 (sync 0.1 issue 64.7 swap 106.6) start-delay=100.4 queue=112.5
+  FS timeline hk rep4: n=67 (+0 flagged) total p50=564 p90=787 p99=848 max=872 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.2) rt=230.8 (sync 0.1 issue 70.1 swap 140.5) start-delay=158.9 queue=166.2
+  FS timeline medal rep4: n=86 (+0 flagged) total p50=368 p90=575 p99=649 max=656 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=168.5 (sync 0.1 issue 64.8 swap 94.5) start-delay=94.0 queue=109.1
+## A. Repetition 5 of: timeline (configs rotated by 5)
+  FS timeline solidring rep5: n=80 (+0 flagged) total p50=455 p90=656 p99=791 max=817 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=168.6 (sync 0.1 issue 67.5 swap 80.8) start-delay=124.7 queue=138.2
+  FS timeline flat rep5: n=70 (+0 flagged) total p50=472 p90=749 p99=880 max=900 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=169.1 (sync 0.1 issue 66.8 swap 100.5) start-delay=131.3 queue=144.7
+  FS timeline flatnoring rep5: n=84 (+0 flagged) total p50=390 p90=607 p99=704 max=723 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=165.5 (sync 0.1 issue 66.6 swap 69.3) start-delay=109.2 queue=118.9
+  FS timeline new rep5: n=69 (+0 flagged) total p50=538 p90=702 p99=812 max=820 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.2) rt=225.2 (sync 0.3 issue 68.1 swap 154.6) start-delay=155.7 queue=165.1
+  FS timeline base rep5: n=76 (+0 flagged) total p50=435 p90=571 p99=637 max=684 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=170.5 (sync 0.1 issue 64.7 swap 105.4) start-delay=121.9 queue=129.3
+  FS timeline hk rep5: n=65 (+0 flagged) total p50=460 p90=693 p99=785 max=807 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=176.0 (sync 0.4 issue 70.5 swap 92.3) start-delay=129.1 queue=142.8
+  FS timeline medal rep5: n=78 (+0 flagged) total p50=372 p90=559 p99=703 max=766 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=139.8 (sync 0.1 issue 66.1 swap 54.8) start-delay=90.6 queue=105.7
+  FS timeline noring rep5: n=88 (+0 flagged) total p50=382 p90=507 p99=625 max=661 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=143.2 (sync 0.1 issue 66.2 swap 73.7) start-delay=95.1 queue=114.9
+## AM8. atrace slice summary of one timeline scroll: 1.2.37, the hook build, the hook build with a plain medallion
+TRACE base (base, flags 'none', pid 25512, 22649757 bytes):
+atrace window 13.4 s; slices of pid 25512 by total time (thread | slice | count | total ms | self ms | mean ms):
+  RenderThread   | DrawFrames #                                 |    89 |     12919 |        53 |   145.2
+  RenderThread   | Drawing  0.00  0.00 #.00 #.00                |    89 |     12852 |        60 |   144.4
+  RenderThread   | dequeueBuffer                                |   178 |      9586 |      4793 |    53.9
+  RenderThread   | eglSwapBuffersWithDamageKHR                  |    89 |      6139 |        29 |    69.0
+  RenderThread   | virtual void skgpu::v1::OpsTask::onPrepare(GrOpFlushState *) |   171 |      4591 |         8 |    26.8
+  RenderThread   | glBufferDataSyncAEMU encode                  |   369 |      4470 |      4470 |    12.1
+  RenderThread   | flush commands                               |    89 |      3416 |        14 |    38.4
+  RenderThread   | flush layers                                 |    44 |      3224 |         4 |    73.3
+  RenderThread   | CircularRRectOp                              |  1040 |      2834 |        11 |     2.7
+  RenderThread   | rcCreateSyncKHR encode                       |    89 |      1286 |      1286 |    14.4
+  RenderThread   | PathStencilCoverOp                           |    50 |      1280 |         6 |    25.6
+  RenderThread   | glGenBuffers encode                          |    25 |      1267 |      1267 |    50.7
+  RenderThread   | glGenTextures encode                         |    11 |       402 |       402 |    36.6
+  RenderThread   | virtual bool skgpu::v1::OpsTask::onExecute(GrOpFlushState *) |   171 |       373 |        10 |     2.2
+  yavorec.app.b  | Choreographer#doFrame #                      |    93 |     12152 |         1 |   130.7
+  yavorec.app.b  | traversal                                    |    89 |     12051 |         3 |   135.4
+  yavorec.app.b  | draw                                         |    89 |     12048 |        51 |   135.4
+  yavorec.app.b  | postAndWait                                  |    89 |     11974 |     11974 |   134.5
+  GPU completion | waitForever                                  |    89 |      6421 |      6421 |    72.1
+  HWC release    | waitForever                                  |    70 |      4588 |      4588 |    65.5
+  HWC release    | waiting for HWC release 14                   |     1 |       170 |         0 |   170.4
+  HWC release    | waiting for HWC release 84                   |     1 |       145 |         0 |   144.9
+  GPU completion | waiting for GPU completion 53                |     1 |       136 |         0 |   135.8
+  GPU completion | waiting for GPU completion 67                |     1 |       133 |         0 |   133.3
+TRACE hk (hook, flags 'none', pid 25860, 21888386 bytes):
+atrace window 12.8 s; slices of pid 25860 by total time (thread | slice | count | total ms | self ms | mean ms):
+  RenderThread   | DrawFrames #                                 |    75 |     11786 |        54 |   157.2
+  RenderThread   | Drawing  0.00  0.00 #.00 #.00                |    73 |     11727 |        77 |   160.6
+  RenderThread   | dequeueBuffer                                |   146 |      6539 |      3268 |    44.8
+  RenderThread   | eglSwapBuffersWithDamageKHR                  |    73 |      5320 |        16 |    72.9
+  RenderThread   | flush commands                               |    73 |      4622 |        11 |    63.3
+  RenderThread   | virtual void skgpu::v1::OpsTask::onPrepare(GrOpFlushState *) |   201 |      4031 |         8 |    20.1
+  RenderThread   | PathStencilCoverOp                           |   188 |      4015 |        20 |    21.4
+  RenderThread   | glGenBuffers encode                          |   101 |      2832 |      2832 |    28.0
+  RenderThread   | glBufferDataSyncAEMU encode                  |   363 |      2498 |      2498 |     6.9
+  RenderThread   | rcCreateSyncKHR encode                       |    73 |      1988 |      1988 |    27.2
+  RenderThread   | flush layers                                 |    22 |      1698 |         3 |    77.2
+  RenderThread   | virtual bool skgpu::v1::OpsTask::onExecute(GrOpFlushState *) |   201 |       613 |        13 |     3.1
+  RenderThread   | shader_compile                               |     2 |       331 |         1 |   165.3
+  RenderThread   | cache_miss                                   |     2 |       325 |         1 |   162.3
+  hyavorec.app.hk | Choreographer#doFrame #                      |    89 |     10864 |         1 |   122.1
+  hyavorec.app.hk | traversal                                    |    75 |     10792 |        36 |   143.9
+  hyavorec.app.hk | draw                                         |    75 |     10756 |        65 |   143.4
+  hyavorec.app.hk | postAndWait                                  |    75 |     10668 |     10668 |   142.2
+  GPU completion | waitForever                                  |    73 |      5816 |      5816 |    79.7
+  HWC release    | waitForever                                  |    51 |      2931 |      2931 |    57.5
+  GPU completion | waiting for GPU completion 65                |     1 |       217 |         0 |   216.9
+  GPU completion | waiting for GPU completion 58                |     1 |       175 |         0 |   175.0
+  GPU completion | waiting for GPU completion 42                |     1 |       156 |         0 |   155.8
+  GPU completion | waiting for GPU completion 41                |     1 |       142 |         0 |   142.0
+TRACE medal (hook, flags 'plainmedal', pid 26239, 12980385 bytes):
+atrace window 10.8 s; slices of pid 26239 by total time (thread | slice | count | total ms | self ms | mean ms):
+  RenderThread   | DrawFrames #                                 |    74 |      9198 |        21 |   124.3
+  RenderThread   | Drawing  0.00  0.00 #.00 #.00                |    74 |      9172 |        85 |   124.0
+  RenderThread   | dequeueBuffer                                |   148 |      6629 |      3315 |    44.8
+  RenderThread   | glBufferDataSyncAEMU encode                  |   290 |      4506 |      4506 |    15.5
+  RenderThread   | eglSwapBuffersWithDamageKHR                  |    74 |      3827 |        20 |    51.7
+  RenderThread   | virtual void skgpu::v1::OpsTask::onPrepare(GrOpFlushState *) |   196 |      3156 |         4 |    16.1
+  RenderThread   | AtlasTextOp                                  |   924 |      3021 |        13 |     3.3
+  RenderThread   | flush layers                                 |    34 |      2680 |         4 |    78.8
+  RenderThread   | flush commands                               |    74 |      2570 |         6 |    34.7
+  RenderThread   | rcCreateSyncKHR encode                       |    74 |       466 |       466 |     6.3
+  RenderThread   | glGenTextures encode                         |    16 |       346 |       346 |    21.6
+  RenderThread   | virtual bool skgpu::v1::OpsTask::onExecute(GrOpFlushState *) |   196 |       266 |         6 |     1.4
+  RenderThread   | CircleOp                                     |   316 |       137 |         3 |     0.4
+  RenderThread   | FillRectOp                                   |   360 |        95 |         5 |     0.3
+  hyavorec.app.hk | Choreographer#doFrame #                      |    84 |      8218 |         1 |    97.8
+  hyavorec.app.hk | traversal                                    |    74 |      8158 |         2 |   110.2
+  hyavorec.app.hk | draw                                         |    74 |      8157 |         1 |   110.2
+  hyavorec.app.hk | postAndWait                                  |    74 |      8135 |      8135 |   109.9
+  GPU completion | waitForever                                  |    74 |      4838 |      4838 |    65.4
+  HWC release    | waitForever                                  |    57 |      3343 |      3343 |    58.7
+  GPU completion | waiting for GPU completion 35                |     1 |       188 |         0 |   188.1
+  GPU completion | waiting for GPU completion 63                |     1 |       141 |         0 |   140.6
+  GPU completion | waiting for GPU completion 33                |     1 |       135 |         0 |   135.3
+  GPU completion | waiting for GPU completion 65                |     1 |       130 |         0 |   130.3
+## A9. Totals (rep 0 is excluded)
+| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| timeline | base | 5 | 81 | **430.6** (395.3..434.7) | 585 | 655 | 0.4 | 170.5 | 0.0 | 0.1 | 0.1 | 64.7 | 105.4 |
+| timeline | flat | 5 | 68 | **472.1** (437.0..506.4) | 749 | 823 | 0.5 | 188.8 | 0.0 | 0.1 | 0.1 | 69.2 | 100.5 |
+| timeline | flatnoring | 5 | 80 | **408.6** (375.5..449.8) | 623 | 723 | 0.5 | 177.7 | 0.0 | 0.1 | 0.1 | 66.6 | 74.8 |
+| timeline | hk | 5 | 67 | **523.2** (429.5..564.1) | 701 | 836 | 0.6 | 213.3 | 0.0 | 0.1 | 0.1 | 70.1 | 98.2 |
+| timeline | medal | 5 | 81 | **371.6** (345.2..406.0) | 575 | 703 | 0.5 | 161.4 | 0.0 | 0.1 | 0.1 | 66.1 | 61.9 |
+| timeline | new | 5 | 74 | **472.4** (460.9..538.0) | 687 | 812 | 0.6 | 181.8 | 0.0 | 0.1 | 0.1 | 68.5 | 94.4 |
+| timeline | noring | 5 | 79 | **449.7** (381.7..466.1) | 638 | 727 | 0.5 | 179.0 | 0.0 | 0.1 | 0.1 | 67.7 | 80.5 |
+| timeline | solidring | 5 | 75 | **449.5** (397.3..456.4) | 674 | 780 | 0.5 | 187.0 | 0.0 | 0.1 | 0.1 | 68.0 | 81.4 |
+
+RenderThread work per repetition (the same scripted gestures): sum of rt over the frames, ms; frames; median rt per frame:
+
+| scenario | version | sum of RT ms, median (min..max) | frames, median (min..max) | median RT per frame (min..max) | sum of swap ms, median | sum of issue ms, median |
+|---|---|---|---|---|---|---|
+| timeline | base | **13530** (12439..13781) | 81 (76..82) | **170.5** (168.2..173.9) | 7455 | 6002 |
+| timeline | flat | **14477** (12170..15671) | 68 (60..82) | **188.8** (163.4..220.4) | 8408 | 5988 |
+| timeline | flatnoring | **14779** (13724..15611) | 80 (78..84) | **177.7** (137.1..194.8) | 8015 | 6670 |
+| timeline | hk | **13061** (12704..15441) | 67 (62..69) | **213.3** (176.0..230.8) | 7556 | 5586 |
+| timeline | medal | **13274** (12201..13912) | 81 (73..93) | **161.4** (139.8..171.0) | 6916 | 6222 |
+| timeline | new | **14982** (14864..16295) | 74 (69..80) | **181.8** (165.4..225.2) | 8695 | 6544 |
+| timeline | noring | **14125** (12780..15138) | 79 (65..88) | **179.0** (143.2..200.6) | 7809 | 6080 |
+| timeline | solidring | **14602** (13495..15959) | 75 (70..83) | **187.0** (155.8..197.9) | 8046 | 6410 |
+
+- timeline / flat vs base, sum of RT: 14476.9 vs 13530.5 (+7%); U=16.0, p=0.548; ranges overlap
+- timeline / flat vs base, median RT per frame: 188.8 vs 170.5 (+11%); U=16.0, p=0.548; ranges overlap
+- timeline / flatnoring vs base, sum of RT: 14779.0 vs 13530.5 (+9%); U=24.0, p=0.016; ranges overlap
+- timeline / flatnoring vs base, median RT per frame: 177.7 vs 170.5 (+4%); U=15.0, p=0.690; ranges overlap
+- timeline / hk vs base, sum of RT: 13060.6 vs 13530.5 (-3%); U=13.0, p=1.000; ranges overlap
+- timeline / hk vs base, median RT per frame: 213.3 vs 170.5 (+25%); U=25.0, p=0.008; ranges do NOT overlap
+- timeline / medal vs base, sum of RT: 13274.0 vs 13530.5 (-2%); U=8.0, p=0.421; ranges overlap
+- timeline / medal vs base, median RT per frame: 161.4 vs 170.5 (-5%); U=4.0, p=0.095; ranges overlap
+- timeline / new vs base, sum of RT: 14982.1 vs 13530.5 (+11%); U=25.0, p=0.008; ranges do NOT overlap
+- timeline / new vs base, median RT per frame: 181.8 vs 170.5 (+7%); U=20.0, p=0.151; ranges overlap
+- timeline / noring vs base, sum of RT: 14124.7 vs 13530.5 (+4%); U=20.0, p=0.151; ranges overlap
+- timeline / noring vs base, median RT per frame: 179.0 vs 170.5 (+5%); U=15.0, p=0.690; ranges overlap
+- timeline / solidring vs base, sum of RT: 14602.2 vs 13530.5 (+8%); U=22.0, p=0.056; ranges overlap
+- timeline / solidring vs base, median RT per frame: 187.0 vs 170.5 (+10%); U=16.0, p=0.548; ranges overlap
+
+Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:
+
+- timeline / base: [430.6, 430.6, 396.0, 395.3, 434.7]
+- timeline / flat: [437.0, 506.4, 484.4, 444.4, 472.1] vs base: median diff +41.5 ms (UI +0.1, RT +18.3, issue +4.5); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- timeline / flatnoring: [408.6, 375.5, 449.8, 445.1, 390.4] vs base: median diff -22.0 ms (UI +0.1, RT +7.2, issue +1.9); Mann-Whitney U=12.0, p=1.000; ranges overlap
+- timeline / hk: [523.8, 429.5, 523.2, 564.1, 459.9] vs base: median diff +92.6 ms (UI +0.2, RT +42.8, issue +5.4); Mann-Whitney U=22.0, p=0.056; ranges overlap
+- timeline / medal: [345.2, 375.1, 406.0, 368.4, 371.6] vs base: median diff -58.9 ms (UI +0.1, RT -9.1, issue +1.4); Mann-Whitney U=2.0, p=0.032; ranges overlap
+- timeline / new: [467.7, 460.9, 497.4, 472.4, 538.0] vs base: median diff +41.8 ms (UI +0.2, RT +11.3, issue +3.8); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- timeline / noring: [393.9, 466.1, 460.2, 449.7, 381.7] vs base: median diff +19.1 ms (UI +0.1, RT +8.5, issue +3.0); Mann-Whitney U=15.0, p=0.690; ranges overlap
+- timeline / solidring: [456.4, 397.3, 448.4, 449.5, 455.4] vs base: median diff +18.9 ms (UI +0.1, RT +16.5, issue +3.3); Mann-Whitney U=22.0, p=0.056; ranges overlap
+AT part: FATAL lines 0; host load: 3.63 4.38 4.43
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4722', '8344', '12465', '15230', '17918', '20766', '23633']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 36
+   skipped-frames events=36 max=149 total=2152
+== Davey: 75
+   davey events=75 max=3680ms median=1068ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt

@@ -1,0 +1,39 @@
+app pids seen: ['5479', '6739', '10807', '13281', '15688', '18095', '20482', '22873']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=38 total=38
+   11-14 23:36:23.424  5479  5479 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+== Davey: 3
+   davey events=3 max=839ms median=740ms
+   11-14 23:36:24.501  5479  5514 I OpenGLRenderer: Davey! duration=740ms; Flags=1, IntendedVsync=127897792164, Vsync=128331125480, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=128343235620, AnimationStart=1283432
+   11-14 23:46:34.603 10807 10830 I OpenGLRenderer: Davey! duration=710ms; Flags=1, IntendedVsync=738028235309, Vsync=738444901959, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=738456460380, AnimationStart=7384564
+   11-14 23:51:59.016 13281 13305 I OpenGLRenderer: Davey! duration=839ms; Flags=1, IntendedVsync=1062312516119, Vsync=1062729182769, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=1062733605160, AnimationStart=1062
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 23:36:18.354  5296  5296 I PERFCHECK: section: F0. 1.2.38 org.chyavorec.app and 1.2.37 org.chyavorec.app.b37 side by side, both compiled speed-profile
+   11-14 23:37:05.943  2005  2167 I ActivityManager: Killing 5479:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 23:37:57.977  2005  3379 I ActivityManager: Killing 6404:org.chyavorec.app.b37/u0a88 (adj 0): stop org.chyavorec.app.b37
+   11-14 23:38:06.855  6720  6720 I PERFCHECK: section: F1. Warm-up rep 0, not counted: every scenario once; the quiz taps are learned
+   11-14 23:41:04.199  2005  3066 I ActivityManager: Killing 6739:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 23:43:51.842  2005  2283 I ActivityManager: Killing 8179:org.chyavorec.app.b37/u0a88 (adj 0): stop org.chyavorec.app.b37
+   11-14 23:43:51.984  9516  9516 I PERFCHECK: section: F2. Repetition 1, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-14 23:46:31.504  2005  4490 I ActivityManager: Killing 9544:org.chyavorec.app.b37/u0a88 (adj 0): stop org.chyavorec.app.b37
+   11-14 23:49:17.356  2005  3462 I ActivityManager: Killing 10807:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 23:49:17.454 12052 12052 I PERFCHECK: section: F2. Repetition 2, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-14 23:51:55.737  2005  2754 I ActivityManager: Killing 12086:org.chyavorec.app.b37/u0a88 (adj 0): stop org.chyavorec.app.b37
+   11-14 23:54:36.375  2005  4490 I ActivityManager: Killing 13281:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 23:54:36.552 14470 14470 I PERFCHECK: section: F2. Repetition 3, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-14 23:57:15.717  2005  2283 I ActivityManager: Killing 14504:org.chyavorec.app.b37/u0a88 (adj 0): stop org.chyavorec.app.b37
+   11-14 23:59:57.807  2005  3376 I ActivityManager: Killing 15688:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-14 23:59:57.912 16864 16864 I PERFCHECK: section: F2. Repetition 4, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 00:02:37.223  2005  2755 I ActivityManager: Killing 16895:org.chyavorec.app.b37/u0a88 (adj 0): stop org.chyavorec.app.b37
+   11-15 00:05:19.764  2005  3378 I ActivityManager: Killing 18095:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-15 00:05:19.991 19259 19259 I PERFCHECK: section: F2. Repetition 5, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 00:07:58.886  2005  3378 I ActivityManager: Killing 19286:org.chyavorec.app.b37/u0a88 (adj 0): stop org.chyavorec.app.b37
+   11-15 00:10:42.608  2005  2388 I ActivityManager: Killing 20482:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-15 00:10:42.947 21660 21660 I PERFCHECK: section: F2. Repetition 6, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 00:13:21.998  2005  2167 I ActivityManager: Killing 21688:org.chyavorec.app.b37/u0a88 (adj 0): stop org.chyavorec.app.b37
+   11-15 00:16:03.981  2005  4362 I ActivityManager: Killing 22873:org.chyavorec.app/u0a86 (adj 0): stop org.chyavorec.app
+   11-15 00:16:04.259 24052 24052 I PERFCHECK: section: F3. Totals rep 0 is excluded

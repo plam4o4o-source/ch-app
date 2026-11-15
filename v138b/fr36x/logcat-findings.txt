@@ -1,0 +1,51 @@
+app pids seen: ['4254', '5916', '9808', '12104', '14303', '16451', '18571', '20618']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 22
+   skipped-frames events=22 max=89 total=1029
+   11-14 23:35:55.271  4254  4254 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-14 23:35:56.101  4254  4254 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-14 23:35:56.750  4254  4254 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-14 23:35:57.838  4254  4254 I Choreographer: Skipped 57 frames!  The application may be doing too much work on its main thread.
+   11-14 23:36:08.045  4254  4254 I Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+   11-14 23:36:33.172  4254  4254 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-14 23:36:34.137  4254  4254 I Choreographer: Skipped 54 frames!  The application may be doing too much work on its main thread.
+   11-14 23:38:01.000  5916  5916 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-14 23:38:02.787  5916  5916 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-14 23:39:23.502  5916  5916 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-14 23:39:24.795  5916  5916 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-14 23:47:43.917  9808  9808 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+== Davey: 54
+   davey events=54 max=1825ms median=942ms
+   11-14 23:35:55.346  4254  4263 I HWUI    : Davey! duration=1004ms; Flags=1, FrameTimelineVsyncId=6964, IntendedVsync=99962362734, Vsync=100029029398, InputEventId=0, HandleInputStart=100041422166, AnimationStart=100041422599, PerformTravers
+   11-14 23:35:56.542  4254  4262 I HWUI    : Davey! duration=937ms; Flags=0, FrameTimelineVsyncId=7032, IntendedVsync=101029029358, Vsync=101095696022, InputEventId=0, HandleInputStart=101106575914, AnimationStart=101106576254, PerformTravers
+   11-14 23:35:57.016  4254  4262 I HWUI    : Davey! duration=1095ms; Flags=0, FrameTimelineVsyncId=7069, IntendedVsync=101145696020, Vsync=101845695992, InputEventId=0, HandleInputStart=101851528468, AnimationStart=101851529286, PerformTraver
+   11-14 23:35:58.047  4254  4325 I HWUI    : Davey! duration=1825ms; Flags=0, FrameTimelineVsyncId=7146, IntendedVsync=101862362658, Vsync=102495695966, InputEventId=0, HandleInputStart=102501169979, AnimationStart=102501171017, PerformTraver
+   11-14 23:35:58.465  4254  4325 I HWUI    : Davey! duration=799ms; Flags=0, FrameTimelineVsyncId=7171, IntendedVsync=102512362632, Vsync=102612362628, InputEventId=0, HandleInputStart=102627363286, AnimationStart=102627363782, PerformTravers
+   11-14 23:35:58.940  4254  4325 I HWUI    : Davey! duration=1663ms; Flags=0, FrameTimelineVsyncId=7193, IntendedVsync=102629029294, Vsync=103579029256, InputEventId=0, HandleInputStart=103593239668, AnimationStart=103593264080, PerformTraver
+   11-14 23:35:59.246  4254  4325 I HWUI    : Davey! duration=1013ms; Flags=0, FrameTimelineVsyncId=7416, IntendedVsync=103595695922, Vsync=103879029244, InputEventId=0, HandleInputStart=103891573327, AnimationStart=103891573984, PerformTraver
+   11-14 23:35:59.625  4254  4325 I HWUI    : Davey! duration=1099ms; Flags=0, FrameTimelineVsyncId=7431, IntendedVsync=103895695910, Vsync=104262362562, InputEventId=0, HandleInputStart=104277046517, AnimationStart=104277047464, PerformTraver
+   11-14 23:35:59.834  4254  4325 I HWUI    : Davey! duration=897ms; Flags=0, FrameTimelineVsyncId=7456, IntendedVsync=104279029228, Vsync=104662362546, InputEventId=0, HandleInputStart=104671758330, AnimationStart=104671759152, PerformTravers
+   11-14 23:36:08.499  4254  4373 I HWUI    : Davey! duration=1238ms; Flags=0, FrameTimelineVsyncId=8195, IntendedVsync=112762362222, Vsync=113779028848, InputEventId=0, HandleInputStart=113797317931, AnimationStart=113797318874, PerformTraver
+   11-14 23:36:09.101  4254  4373 I HWUI    : Davey! duration=898ms; Flags=0, FrameTimelineVsyncId=8286, IntendedVsync=113829028846, Vsync=114162362166, InputEventId=0, HandleInputStart=114179246487, AnimationStart=114179247370, PerformTravers
+   11-14 23:36:09.855  4254  4325 I HWUI    : Davey! duration=1033ms; Flags=0, FrameTimelineVsyncId=8397, IntendedVsync=114279028828, Vsync=114662362146, InputEventId=0, HandleInputStart=114677001291, AnimationStart=114677001955, PerformTraver
+== NativeLink: 8
+   11-14 23:36:12.862  4254  4539 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 23:38:02.083  5916  5961 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 23:47:43.609  9808  9856 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-14 23:54:02.169 12104 12152 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 00:00:11.111 14303 14355 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 00:06:21.291 16451 16505 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 00:12:25.996 18571 18618 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 00:18:30.682 20618 20660 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 23:35:50.952  4191  4191 I PERFCHECK: section: F0. 1.2.38 org.chyavorec.app and 1.2.37 org.chyavorec.app.b37 side by side, both compiled speed-profile
+   11-14 23:37:58.531  5893  5893 I PERFCHECK: section: F1. Warm-up rep 0, not counted: every scenario once; the quiz taps are learned
+   11-14 23:44:39.861  8647  8647 I PERFCHECK: section: F2. Repetition 1, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-14 23:50:50.204 10968 10968 I PERFCHECK: section: F2. Repetition 2, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-14 23:57:06.197 13241 13241 I PERFCHECK: section: F2. Repetition 3, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 00:03:11.299 15343 15343 I PERFCHECK: section: F2. Repetition 4, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 00:09:20.257 17502 17502 I PERFCHECK: section: F2. Repetition 5, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 00:15:26.866 19598 19598 I PERFCHECK: section: F2. Repetition 6, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 00:21:29.534 21626 21626 I PERFCHECK: section: F3. Totals rep 0 is excluded

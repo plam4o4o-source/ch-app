@@ -4,32 +4,39 @@ Status: run 1 in progress — the findings will be written here when the runs ar
 
 ## Runs and parts
 
-debug/w25-check (runs in runs.txt, latest 43645027104 @ 1dd4ccb). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 28 (API 28) or 36x (API 36). prodRelease (minified) x86_64 builds with a throwaway key, installed side by side: new = 1.2.38 as released (org.chyavorec.app), base = 1.2.37 (org.chyavorec.app.b37), hook = the debug branch with log lines and test flags (org.chyavorec.app.hk); dev33: devDebug of the debug branch. Screenshots are JPEG, scaled down (sheets/ = contact sheets). The earlier check: [../v138/index.md](../v138/index.md).
+debug/w25-check (runs in runs.txt, latest 43653304542 @ 17f0e40). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 28 (API 28) or 36x (API 36). prodRelease (minified) x86_64 builds with a throwaway key, installed side by side: new = 1.2.38 as released (org.chyavorec.app), base = 1.2.37 (org.chyavorec.app.b37), hook = the debug branch with log lines and test flags (org.chyavorec.app.hk); dev33: devDebug of the debug branch. Screenshots are JPEG, scaled down (sheets/ = contact sheets). The earlier check: [../v138/index.md](../v138/index.md).
 
 | part | status |
 |---|---|
 | at33h | COMPLETE; part=at33h target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| at33m | COMPLETE; part=at33m target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| at33q | COMPLETE; part=at33q target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | at33t | COMPLETE; part=at33t target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | cf28 | COMPLETE; part=cf28 target=google_apis api=28 gpu=swangle_indirect emulator-step=success |
 | cf33 | COMPLETE; part=cf33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | cf36x | COMPLETE; part=cf36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
 | dev33 | COMPLETE; part=dev33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| fr28 | COMPLETE; part=fr28 target=google_apis api=28 gpu=swangle_indirect emulator-step=success |
 | fr33a | COMPLETE; part=fr33a target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | fr33b | COMPLETE; part=fr33b target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| fr36x | COMPLETE; part=fr36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
 | fs33 | COMPLETE; part=fs33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| leaf33 | COMPLETE; part=leaf33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | mem33a | COMPLETE; part=mem33a target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | mem33b | COMPLETE; part=mem33b target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | wd33 | COMPLETE; part=wd33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | wd36x | COMPLETE; part=wd36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
+| wdb33 | COMPLETE; part=wdb33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| wdb36x | COMPLETE; part=wdb36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
 
 ```
 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000
-devDebug 1.2.38 1dd4ccb (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key; demo-1 renews at once)
-1.2.38 1dd4ccb prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101
+devDebug 1.2.38 17f0e40 (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key; demo-1 renews at once)
+1.2.38 17f0e40 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101
 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100
 app.apk 4641014 bytes
 app-base.apk 4591454 bytes
-app-hook.apk 4642934 bytes
+app-hook.apk 4643638 bytes
 app-dev.apk 28796723 bytes
 ```
 
@@ -176,6 +183,378 @@ app pids seen: ['5832', '8140', '12680', '15239', '17777', '20646', '23215']
    skipped-frames events=24 max=104 total=1281
 == Davey: 38
    davey events=38 max=2495ms median=1183ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+```
+
+## at33m
+
+```
+part at33m; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## AM0. Timeline, round 2: which part of the medallion costs (hook build flags), with 1.2.38 and 1.2.37 as references
+X installed new: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 7685 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~7223XNWNLAYA-iw76G5JyQ==/org.chyavorec.app-A9WCn1pbRNKHGgl6LV9BtA==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed base: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000;  versionCode=1990000 minSdk=26 targetSdk=37  versionName=1.2.37 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 4293 ms
+X compile org.chyavorec.app.b37: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~5QTAq_t_HlZbkWKVCBASnw==/org.chyavorec.app.b37-1Avr7CqSMbwP13dK3EP4WQ==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/VpnDialogs/VpnDialogs.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed hook: 1.2.38 17f0e40 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101;  versionCode=1990101 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X hook: catalogue after 3487 ms
+X compile org.chyavorec.app.hk: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~FLflwjfeGkBxBUR12UmGnQ==/org.chyavorec.app.hk-QpgsqV05XdULbBro0mmMdQ==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /product/overlay/TelephonyProvider__auto_generated_rro_product.apk| x86_64: [status=run-from-apk] [reason=unknown]|
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+animations: animator_duration_scale=1 transition=1 window=1; host load: 4.73 3.57 1.72
+## A. Repetition 0 of: timeline (configs rotated by 0)
+  FS timeline new rep0: n=69 (+0 flagged) total p50=550 p90=792 p99=890 max=893 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=226.4 (sync 0.4 issue 79.3 swap 110.2) start-delay=145.1 queue=163.3
+  FS timeline base rep0: n=70 (+0 flagged) total p50=346 p90=529 p99=593 max=624 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=117.0 (sync 0.1 issue 64.8 swap 52.8) start-delay=97.3 queue=105.9
+  FS timeline hk rep0: n=77 (+0 flagged) total p50=461 p90=773 p99=985 max=1087 ms | medians: ui=0.7 (input 0.0 anim 0.5 layout 0.0 draw 0.1) rt=167.6 (sync 0.1 issue 67.2 swap 92.6) start-delay=131.9 queue=143.9
+## A. Repetition 1 of: timeline (configs rotated by 1)
+  FS timeline base rep1: n=81 (+0 flagged) total p50=431 p90=574 p99=660 max=662 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=173.9 (sync 0.1 issue 66.0 swap 106.3) start-delay=127.1 queue=131.2
+  FS timeline hk rep1: n=69 (+0 flagged) total p50=524 p90=701 p99=861 max=901 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.2) rt=224.4 (sync 0.1 issue 77.7 swap 103.8) start-delay=140.7 queue=147.3
+  FS timeline medal rep1: n=93 (+0 flagged) total p50=345 p90=555 p99=607 max=629 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=149.7 (sync 0.1 issue 63.9 swap 61.9) start-delay=99.0 queue=110.0
+  FS timeline noring rep1: n=84 (+0 flagged) total p50=394 p90=516 p99=553 max=561 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=144.5 (sync 0.1 issue 65.8 swap 75.8) start-delay=104.4 queue=122.9
+  FS timeline solidring rep1: n=75 (+0 flagged) total p50=456 p90=707 p99=878 max=885 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=190.1 (sync 0.1 issue 68.8 swap 88.1) start-delay=123.5 queue=139.8
+  FS timeline flat rep1: n=64 (+0 flagged) total p50=437 p90=679 p99=796 max=806 ms | medians: ui=0.7 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=188.8 (sync 0.1 issue 66.7 swap 87.1) start-delay=124.4 queue=144.3
+  FS timeline flatnoring rep1: n=80 (+0 flagged) total p50=409 p90=623 p99=723 max=740 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=177.7 (sync 0.1 issue 66.5 swap 74.8) start-delay=115.1 queue=122.7
+  FS timeline new rep1: n=74 (+0 flagged) total p50=468 p90=650 p99=843 max=851 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=178.7 (sync 0.1 issue 68.5 swap 94.4) start-delay=132.5 queue=142.9
+## A. Repetition 2 of: timeline (configs rotated by 2)
+  FS timeline hk rep2: n=67 (+0 flagged) total p50=430 p90=658 p99=748 max=782 ms | medians: ui=0.7 (input 0.0 anim 0.5 layout 0.0 draw 0.1) rt=190.3 (sync 0.1 issue 68.1 swap 87.9) start-delay=109.5 queue=141.6
+  FS timeline medal rep2: n=81 (+0 flagged) total p50=375 p90=650 p99=750 max=780 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=161.4 (sync 0.1 issue 66.6 swap 61.1) start-delay=93.8 queue=105.3
+  FS timeline noring rep2: n=73 (+0 flagged) total p50=466 p90=664 p99=727 max=750 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=200.6 (sync 0.1 issue 68.1 swap 127.2) start-delay=137.0 queue=135.5
+  FS timeline solidring rep2: n=75 (+0 flagged) total p50=397 p90=679 p99=780 max=800 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=155.8 (sync 0.1 issue 66.6 swap 77.4) start-delay=113.4 queue=124.6
+  FS timeline flat rep2: n=68 (+0 flagged) total p50=506 p90=775 p99=848 max=858 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=220.4 (sync 0.3 issue 81.1 swap 128.1) start-delay=137.4 queue=147.6
+  FS timeline flatnoring rep2: n=84 (+0 flagged) total p50=376 p90=602 p99=700 max=747 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=137.1 (sync 0.1 issue 66.1 swap 68.6) start-delay=99.8 queue=114.6
+  FS timeline new rep2: n=80 (+0 flagged) total p50=461 p90=681 p99=779 max=855 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=181.8 (sync 0.1 issue 71.0 swap 95.5) start-delay=134.9 queue=148.1
+  FS timeline base rep2: n=81 (+0 flagged) total p50=431 p90=599 p99=643 max=646 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=168.2 (sync 0.1 issue 64.4 swap 101.9) start-delay=116.0 queue=127.7
+## A. Repetition 3 of: timeline (configs rotated by 3)
+  FS timeline medal rep3: n=73 (+0 flagged) total p50=406 p90=613 p99=720 max=741 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=171.0 (sync 0.1 issue 68.9 swap 97.4) start-delay=96.6 queue=108.4
+  FS timeline noring rep3: n=65 (+0 flagged) total p50=460 p90=699 p99=788 max=798 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=199.8 (sync 0.4 issue 69.1 swap 129.1) start-delay=128.5 queue=137.9
+  FS timeline solidring rep3: n=83 (+0 flagged) total p50=448 p90=668 p99=772 max=873 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.2) rt=187.0 (sync 0.1 issue 68.0 swap 84.7) start-delay=127.2 queue=136.7
+  FS timeline flat rep3: n=60 (+0 flagged) total p50=484 p90=751 p99=823 max=833 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=212.4 (sync 0.1 issue 71.3 swap 100.9) start-delay=133.7 queue=146.3
+  FS timeline flatnoring rep3: n=78 (+0 flagged) total p50=450 p90=686 p99=798 max=814 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=194.8 (sync 0.1 issue 67.6 swap 77.4) start-delay=103.2 queue=132.8
+  FS timeline new rep3: n=72 (+0 flagged) total p50=497 p90=729 p99=897 max=900 ms | medians: ui=0.7 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=165.4 (sync 0.1 issue 67.5 swap 90.3) start-delay=140.5 queue=144.8
+  FS timeline base rep3: n=82 (+0 flagged) total p50=396 p90=596 p99=655 max=661 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=169.2 (sync 0.1 issue 65.9 swap 103.3) start-delay=109.1 queue=124.5
+  FS timeline hk rep3: n=62 (+0 flagged) total p50=523 p90=740 p99=836 max=852 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.2) rt=213.3 (sync 0.1 issue 67.8 swap 98.2) start-delay=140.9 queue=148.9
+## A. Repetition 4 of: timeline (configs rotated by 4)
+  FS timeline noring rep4: n=79 (+0 flagged) total p50=450 p90=638 p99=763 max=811 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=179.0 (sync 0.1 issue 67.7 swap 80.5) start-delay=122.2 queue=131.3
+  FS timeline solidring rep4: n=70 (+0 flagged) total p50=449 p90=674 p99=746 max=775 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=197.9 (sync 0.1 issue 70.0 swap 81.4) start-delay=120.6 queue=127.0
+  FS timeline flat rep4: n=82 (+0 flagged) total p50=444 p90=612 p99=807 max=834 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=163.4 (sync 0.1 issue 69.2 swap 86.0) start-delay=134.0 queue=144.8
+  FS timeline flatnoring rep4: n=78 (+0 flagged) total p50=445 p90=677 p99=865 max=881 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=192.2 (sync 0.2 issue 69.3 swap 95.6) start-delay=124.8 queue=138.2
+  FS timeline new rep4: n=76 (+0 flagged) total p50=472 p90=687 p99=770 max=836 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=187.5 (sync 0.1 issue 68.6 swap 92.0) start-delay=134.3 queue=145.2
+  FS timeline base rep4: n=82 (+0 flagged) total p50=395 p90=585 p99=697 max=735 ms | medians: ui=0.3 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=172.2 (sync 0.1 issue 64.7 swap 106.6) start-delay=100.4 queue=112.5
+  FS timeline hk rep4: n=67 (+0 flagged) total p50=564 p90=787 p99=848 max=872 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.2) rt=230.8 (sync 0.1 issue 70.1 swap 140.5) start-delay=158.9 queue=166.2
+  FS timeline medal rep4: n=86 (+0 flagged) total p50=368 p90=575 p99=649 max=656 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=168.5 (sync 0.1 issue 64.8 swap 94.5) start-delay=94.0 queue=109.1
+## A. Repetition 5 of: timeline (configs rotated by 5)
+  FS timeline solidring rep5: n=80 (+0 flagged) total p50=455 p90=656 p99=791 max=817 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=168.6 (sync 0.1 issue 67.5 swap 80.8) start-delay=124.7 queue=138.2
+  FS timeline flat rep5: n=70 (+0 flagged) total p50=472 p90=749 p99=880 max=900 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=169.1 (sync 0.1 issue 66.8 swap 100.5) start-delay=131.3 queue=144.7
+  FS timeline flatnoring rep5: n=84 (+0 flagged) total p50=390 p90=607 p99=704 max=723 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=165.5 (sync 0.1 issue 66.6 swap 69.3) start-delay=109.2 queue=118.9
+  FS timeline new rep5: n=69 (+0 flagged) total p50=538 p90=702 p99=812 max=820 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.2) rt=225.2 (sync 0.3 issue 68.1 swap 154.6) start-delay=155.7 queue=165.1
+  FS timeline base rep5: n=76 (+0 flagged) total p50=435 p90=571 p99=637 max=684 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=170.5 (sync 0.1 issue 64.7 swap 105.4) start-delay=121.9 queue=129.3
+  FS timeline hk rep5: n=65 (+0 flagged) total p50=460 p90=693 p99=785 max=807 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=176.0 (sync 0.4 issue 70.5 swap 92.3) start-delay=129.1 queue=142.8
+  FS timeline medal rep5: n=78 (+0 flagged) total p50=372 p90=559 p99=703 max=766 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=139.8 (sync 0.1 issue 66.1 swap 54.8) start-delay=90.6 queue=105.7
+  FS timeline noring rep5: n=88 (+0 flagged) total p50=382 p90=507 p99=625 max=661 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=143.2 (sync 0.1 issue 66.2 swap 73.7) start-delay=95.1 queue=114.9
+## AM8. atrace slice summary of one timeline scroll: 1.2.37, the hook build, the hook build with a plain medallion
+TRACE base (base, flags 'none', pid 25512, 22649757 bytes):
+atrace window 13.4 s; slices of pid 25512 by total time (thread | slice | count | total ms | self ms | mean ms):
+  RenderThread   | DrawFrames #                                 |    89 |     12919 |        53 |   145.2
+  RenderThread   | Drawing  0.00  0.00 #.00 #.00                |    89 |     12852 |        60 |   144.4
+  RenderThread   | dequeueBuffer                                |   178 |      9586 |      4793 |    53.9
+  RenderThread   | eglSwapBuffersWithDamageKHR                  |    89 |      6139 |        29 |    69.0
+  RenderThread   | virtual void skgpu::v1::OpsTask::onPrepare(GrOpFlushState *) |   171 |      4591 |         8 |    26.8
+  RenderThread   | glBufferDataSyncAEMU encode                  |   369 |      4470 |      4470 |    12.1
+  RenderThread   | flush commands                               |    89 |      3416 |        14 |    38.4
+  RenderThread   | flush layers                                 |    44 |      3224 |         4 |    73.3
+  RenderThread   | CircularRRectOp                              |  1040 |      2834 |        11 |     2.7
+  RenderThread   | rcCreateSyncKHR encode                       |    89 |      1286 |      1286 |    14.4
+  RenderThread   | PathStencilCoverOp                           |    50 |      1280 |         6 |    25.6
+  RenderThread   | glGenBuffers encode                          |    25 |      1267 |      1267 |    50.7
+  RenderThread   | glGenTextures encode                         |    11 |       402 |       402 |    36.6
+  RenderThread   | virtual bool skgpu::v1::OpsTask::onExecute(GrOpFlushState *) |   171 |       373 |        10 |     2.2
+  yavorec.app.b  | Choreographer#doFrame #                      |    93 |     12152 |         1 |   130.7
+  yavorec.app.b  | traversal                                    |    89 |     12051 |         3 |   135.4
+  yavorec.app.b  | draw                                         |    89 |     12048 |        51 |   135.4
+  yavorec.app.b  | postAndWait                                  |    89 |     11974 |     11974 |   134.5
+  GPU completion | waitForever                                  |    89 |      6421 |      6421 |    72.1
+  HWC release    | waitForever                                  |    70 |      4588 |      4588 |    65.5
+  HWC release    | waiting for HWC release 14                   |     1 |       170 |         0 |   170.4
+  HWC release    | waiting for HWC release 84                   |     1 |       145 |         0 |   144.9
+  GPU completion | waiting for GPU completion 53                |     1 |       136 |         0 |   135.8
+  GPU completion | waiting for GPU completion 67                |     1 |       133 |         0 |   133.3
+TRACE hk (hook, flags 'none', pid 25860, 21888386 bytes):
+atrace window 12.8 s; slices of pid 25860 by total time (thread | slice | count | total ms | self ms | mean ms):
+  RenderThread   | DrawFrames #                                 |    75 |     11786 |        54 |   157.2
+  RenderThread   | Drawing  0.00  0.00 #.00 #.00                |    73 |     11727 |        77 |   160.6
+  RenderThread   | dequeueBuffer                                |   146 |      6539 |      3268 |    44.8
+  RenderThread   | eglSwapBuffersWithDamageKHR                  |    73 |      5320 |        16 |    72.9
+  RenderThread   | flush commands                               |    73 |      4622 |        11 |    63.3
+  RenderThread   | virtual void skgpu::v1::OpsTask::onPrepare(GrOpFlushState *) |   201 |      4031 |         8 |    20.1
+  RenderThread   | PathStencilCoverOp                           |   188 |      4015 |        20 |    21.4
+  RenderThread   | glGenBuffers encode                          |   101 |      2832 |      2832 |    28.0
+  RenderThread   | glBufferDataSyncAEMU encode                  |   363 |      2498 |      2498 |     6.9
+  RenderThread   | rcCreateSyncKHR encode                       |    73 |      1988 |      1988 |    27.2
+  RenderThread   | flush layers                                 |    22 |      1698 |         3 |    77.2
+  RenderThread   | virtual bool skgpu::v1::OpsTask::onExecute(GrOpFlushState *) |   201 |       613 |        13 |     3.1
+  RenderThread   | shader_compile                               |     2 |       331 |         1 |   165.3
+  RenderThread   | cache_miss                                   |     2 |       325 |         1 |   162.3
+  hyavorec.app.hk | Choreographer#doFrame #                      |    89 |     10864 |         1 |   122.1
+  hyavorec.app.hk | traversal                                    |    75 |     10792 |        36 |   143.9
+  hyavorec.app.hk | draw                                         |    75 |     10756 |        65 |   143.4
+  hyavorec.app.hk | postAndWait                                  |    75 |     10668 |     10668 |   142.2
+  GPU completion | waitForever                                  |    73 |      5816 |      5816 |    79.7
+  HWC release    | waitForever                                  |    51 |      2931 |      2931 |    57.5
+  GPU completion | waiting for GPU completion 65                |     1 |       217 |         0 |   216.9
+  GPU completion | waiting for GPU completion 58                |     1 |       175 |         0 |   175.0
+  GPU completion | waiting for GPU completion 42                |     1 |       156 |         0 |   155.8
+  GPU completion | waiting for GPU completion 41                |     1 |       142 |         0 |   142.0
+TRACE medal (hook, flags 'plainmedal', pid 26239, 12980385 bytes):
+atrace window 10.8 s; slices of pid 26239 by total time (thread | slice | count | total ms | self ms | mean ms):
+  RenderThread   | DrawFrames #                                 |    74 |      9198 |        21 |   124.3
+  RenderThread   | Drawing  0.00  0.00 #.00 #.00                |    74 |      9172 |        85 |   124.0
+  RenderThread   | dequeueBuffer                                |   148 |      6629 |      3315 |    44.8
+  RenderThread   | glBufferDataSyncAEMU encode                  |   290 |      4506 |      4506 |    15.5
+  RenderThread   | eglSwapBuffersWithDamageKHR                  |    74 |      3827 |        20 |    51.7
+  RenderThread   | virtual void skgpu::v1::OpsTask::onPrepare(GrOpFlushState *) |   196 |      3156 |         4 |    16.1
+  RenderThread   | AtlasTextOp                                  |   924 |      3021 |        13 |     3.3
+  RenderThread   | flush layers                                 |    34 |      2680 |         4 |    78.8
+  RenderThread   | flush commands                               |    74 |      2570 |         6 |    34.7
+  RenderThread   | rcCreateSyncKHR encode                       |    74 |       466 |       466 |     6.3
+  RenderThread   | glGenTextures encode                         |    16 |       346 |       346 |    21.6
+  RenderThread   | virtual bool skgpu::v1::OpsTask::onExecute(GrOpFlushState *) |   196 |       266 |         6 |     1.4
+  RenderThread   | CircleOp                                     |   316 |       137 |         3 |     0.4
+  RenderThread   | FillRectOp                                   |   360 |        95 |         5 |     0.3
+  hyavorec.app.hk | Choreographer#doFrame #                      |    84 |      8218 |         1 |    97.8
+  hyavorec.app.hk | traversal                                    |    74 |      8158 |         2 |   110.2
+  hyavorec.app.hk | draw                                         |    74 |      8157 |         1 |   110.2
+  hyavorec.app.hk | postAndWait                                  |    74 |      8135 |      8135 |   109.9
+  GPU completion | waitForever                                  |    74 |      4838 |      4838 |    65.4
+  HWC release    | waitForever                                  |    57 |      3343 |      3343 |    58.7
+  GPU completion | waiting for GPU completion 35                |     1 |       188 |         0 |   188.1
+  GPU completion | waiting for GPU completion 63                |     1 |       141 |         0 |   140.6
+  GPU completion | waiting for GPU completion 33                |     1 |       135 |         0 |   135.3
+  GPU completion | waiting for GPU completion 65                |     1 |       130 |         0 |   130.3
+## A9. Totals (rep 0 is excluded)
+| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| timeline | base | 5 | 81 | **430.6** (395.3..434.7) | 585 | 655 | 0.4 | 170.5 | 0.0 | 0.1 | 0.1 | 64.7 | 105.4 |
+| timeline | flat | 5 | 68 | **472.1** (437.0..506.4) | 749 | 823 | 0.5 | 188.8 | 0.0 | 0.1 | 0.1 | 69.2 | 100.5 |
+| timeline | flatnoring | 5 | 80 | **408.6** (375.5..449.8) | 623 | 723 | 0.5 | 177.7 | 0.0 | 0.1 | 0.1 | 66.6 | 74.8 |
+| timeline | hk | 5 | 67 | **523.2** (429.5..564.1) | 701 | 836 | 0.6 | 213.3 | 0.0 | 0.1 | 0.1 | 70.1 | 98.2 |
+| timeline | medal | 5 | 81 | **371.6** (345.2..406.0) | 575 | 703 | 0.5 | 161.4 | 0.0 | 0.1 | 0.1 | 66.1 | 61.9 |
+| timeline | new | 5 | 74 | **472.4** (460.9..538.0) | 687 | 812 | 0.6 | 181.8 | 0.0 | 0.1 | 0.1 | 68.5 | 94.4 |
+| timeline | noring | 5 | 79 | **449.7** (381.7..466.1) | 638 | 727 | 0.5 | 179.0 | 0.0 | 0.1 | 0.1 | 67.7 | 80.5 |
+| timeline | solidring | 5 | 75 | **449.5** (397.3..456.4) | 674 | 780 | 0.5 | 187.0 | 0.0 | 0.1 | 0.1 | 68.0 | 81.4 |
+
+RenderThread work per repetition (the same scripted gestures): sum of rt over the frames, ms; frames; median rt per frame:
+
+| scenario | version | sum of RT ms, median (min..max) | frames, median (min..max) | median RT per frame (min..max) | sum of swap ms, median | sum of issue ms, median |
+|---|---|---|---|---|---|---|
+| timeline | base | **13530** (12439..13781) | 81 (76..82) | **170.5** (168.2..173.9) | 7455 | 6002 |
+| timeline | flat | **14477** (12170..15671) | 68 (60..82) | **188.8** (163.4..220.4) | 8408 | 5988 |
+| timeline | flatnoring | **14779** (13724..15611) | 80 (78..84) | **177.7** (137.1..194.8) | 8015 | 6670 |
+| timeline | hk | **13061** (12704..15441) | 67 (62..69) | **213.3** (176.0..230.8) | 7556 | 5586 |
+| timeline | medal | **13274** (12201..13912) | 81 (73..93) | **161.4** (139.8..171.0) | 6916 | 6222 |
+| timeline | new | **14982** (14864..16295) | 74 (69..80) | **181.8** (165.4..225.2) | 8695 | 6544 |
+| timeline | noring | **14125** (12780..15138) | 79 (65..88) | **179.0** (143.2..200.6) | 7809 | 6080 |
+| timeline | solidring | **14602** (13495..15959) | 75 (70..83) | **187.0** (155.8..197.9) | 8046 | 6410 |
+
+- timeline / flat vs base, sum of RT: 14476.9 vs 13530.5 (+7%); U=16.0, p=0.548; ranges overlap
+- timeline / flat vs base, median RT per frame: 188.8 vs 170.5 (+11%); U=16.0, p=0.548; ranges overlap
+- timeline / flatnoring vs base, sum of RT: 14779.0 vs 13530.5 (+9%); U=24.0, p=0.016; ranges overlap
+- timeline / flatnoring vs base, median RT per frame: 177.7 vs 170.5 (+4%); U=15.0, p=0.690; ranges overlap
+- timeline / hk vs base, sum of RT: 13060.6 vs 13530.5 (-3%); U=13.0, p=1.000; ranges overlap
+- timeline / hk vs base, median RT per frame: 213.3 vs 170.5 (+25%); U=25.0, p=0.008; ranges do NOT overlap
+- timeline / medal vs base, sum of RT: 13274.0 vs 13530.5 (-2%); U=8.0, p=0.421; ranges overlap
+- timeline / medal vs base, median RT per frame: 161.4 vs 170.5 (-5%); U=4.0, p=0.095; ranges overlap
+- timeline / new vs base, sum of RT: 14982.1 vs 13530.5 (+11%); U=25.0, p=0.008; ranges do NOT overlap
+- timeline / new vs base, median RT per frame: 181.8 vs 170.5 (+7%); U=20.0, p=0.151; ranges overlap
+- timeline / noring vs base, sum of RT: 14124.7 vs 13530.5 (+4%); U=20.0, p=0.151; ranges overlap
+- timeline / noring vs base, median RT per frame: 179.0 vs 170.5 (+5%); U=15.0, p=0.690; ranges overlap
+- timeline / solidring vs base, sum of RT: 14602.2 vs 13530.5 (+8%); U=22.0, p=0.056; ranges overlap
+- timeline / solidring vs base, median RT per frame: 187.0 vs 170.5 (+10%); U=16.0, p=0.548; ranges overlap
+
+Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:
+
+- timeline / base: [430.6, 430.6, 396.0, 395.3, 434.7]
+- timeline / flat: [437.0, 506.4, 484.4, 444.4, 472.1] vs base: median diff +41.5 ms (UI +0.1, RT +18.3, issue +4.5); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- timeline / flatnoring: [408.6, 375.5, 449.8, 445.1, 390.4] vs base: median diff -22.0 ms (UI +0.1, RT +7.2, issue +1.9); Mann-Whitney U=12.0, p=1.000; ranges overlap
+- timeline / hk: [523.8, 429.5, 523.2, 564.1, 459.9] vs base: median diff +92.6 ms (UI +0.2, RT +42.8, issue +5.4); Mann-Whitney U=22.0, p=0.056; ranges overlap
+- timeline / medal: [345.2, 375.1, 406.0, 368.4, 371.6] vs base: median diff -58.9 ms (UI +0.1, RT -9.1, issue +1.4); Mann-Whitney U=2.0, p=0.032; ranges overlap
+- timeline / new: [467.7, 460.9, 497.4, 472.4, 538.0] vs base: median diff +41.8 ms (UI +0.2, RT +11.3, issue +3.8); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- timeline / noring: [393.9, 466.1, 460.2, 449.7, 381.7] vs base: median diff +19.1 ms (UI +0.1, RT +8.5, issue +3.0); Mann-Whitney U=15.0, p=0.690; ranges overlap
+- timeline / solidring: [456.4, 397.3, 448.4, 449.5, 455.4] vs base: median diff +18.9 ms (UI +0.1, RT +16.5, issue +3.3); Mann-Whitney U=22.0, p=0.056; ranges overlap
+AT part: FATAL lines 0; host load: 3.63 4.38 4.43
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4722', '8344', '12465', '15230', '17918', '20766', '23633']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 36
+   skipped-frames events=36 max=149 total=2152
+== Davey: 75
+   davey events=75 max=3680ms median=1068ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+```
+
+## at33q
+
+```
+part at33q; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## AQ0. Quiz, round 2: which part of the band costs (hook build flags), with 1.2.38 and 1.2.37 as references
+X installed new: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 3508 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~MxjsVlrBSIAA3ltz9zlVwA==/org.chyavorec.app-okOU0KSSVOgvBWWt5VoI1w==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed base: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000;  versionCode=1990000 minSdk=26 targetSdk=37  versionName=1.2.37 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 3136 ms
+X compile org.chyavorec.app.b37: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~QSiccmVTz0WhjyQmkIQN7A==/org.chyavorec.app.b37-hR3egBLraautDpzT_wJsBg==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/VpnDialogs/VpnDialogs.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed hook: 1.2.38 17f0e40 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101;  versionCode=1990101 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X hook: catalogue after 2822 ms
+X compile org.chyavorec.app.hk: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~Y0q5x1vLyuk0JFwdvU70YQ==/org.chyavorec.app.hk-18Ht-MmLEjA6FupAR6TRyQ==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /product/overlay/TelephonyProvider__auto_generated_rro_product.apk| x86_64: [status=run-from-apk] [reason=unknown]|
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+animations: animator_duration_scale=1 transition=1 window=1; host load: 4.19 3.36 1.56
+## A. Repetition 0 of: quiz (configs rotated by 0)
+QUIZ taps new: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps base: 5 questions learned: input tap 540 780; sleep 2; input tap 540 1863; sleep 2.2~input tap 540 780; sleep 2; input tap 540 1863; sleep 2.2~input tap 540 706; sleep 2; input tap 540 1612; sleep 2.2~input tap 540 706; sleep 2; input tap 540 1612; sleep 2.2~input tap 540 780; sleep 2; input tap 540 1919; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Серия: 1 ден поред" 
+QUIZ taps hk: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps noband: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps nohem: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps solidhem: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps nostitch: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+QUIZ taps layer: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+## A. Repetition 1 of: quiz (configs rotated by 1)
+  FS quiz base rep1: n=120 (+0 flagged) BUFFER-FULL total p50=248 p90=309 p99=334 max=343 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=101.1 (sync 0.1 issue 37.2 swap 47.8) start-delay=68.1 queue=76.0
+  FS quiz hk rep1: n=113 (+7 flagged) BUFFER-FULL total p50=332 p90=434 p99=489 max=524 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=138.9 (sync 0.1 issue 40.1 swap 81.6) start-delay=87.2 queue=108.5
+  FS quiz noband rep1: n=105 (+15 flagged) BUFFER-FULL total p50=249 p90=307 p99=384 max=397 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=106.1 (sync 0.1 issue 40.1 swap 48.0) start-delay=55.0 queue=73.8
+  FS quiz nohem rep1: n=102 (+18 flagged) BUFFER-FULL total p50=287 p90=374 p99=426 max=434 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=117.8 (sync 0.1 issue 40.6 swap 63.7) start-delay=69.7 queue=85.6
+  FS quiz solidhem rep1: n=104 (+16 flagged) BUFFER-FULL total p50=296 p90=360 p99=394 max=397 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=131.5 (sync 0.1 issue 42.8 swap 67.3) start-delay=62.9 queue=85.4
+  FS quiz nostitch rep1: n=110 (+9 flagged) total p50=341 p90=447 p99=479 max=500 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=155.1 (sync 0.1 issue 41.7 swap 90.9) start-delay=94.1 queue=110.9
+  FS quiz layer rep1: n=102 (+17 flagged) total p50=267 p90=355 p99=409 max=443 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=116.7 (sync 0.1 issue 42.8 swap 57.4) start-delay=65.5 queue=82.9
+  FS quiz new rep1: n=108 (+6 flagged) total p50=366 p90=487 p99=544 max=558 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=157.5 (sync 0.1 issue 41.8 swap 94.6) start-delay=90.8 queue=116.3
+## A. Repetition 2 of: quiz (configs rotated by 2)
+  FS quiz hk rep2: n=106 (+7 flagged) total p50=367 p90=493 p99=528 max=557 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=159.7 (sync 0.1 issue 44.0 swap 96.1) start-delay=98.7 queue=116.2
+  FS quiz noband rep2: n=104 (+16 flagged) BUFFER-FULL total p50=249 p90=299 p99=335 max=342 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=102.0 (sync 0.1 issue 38.3 swap 46.7) start-delay=57.2 queue=74.7
+  FS quiz nohem rep2: n=102 (+18 flagged) BUFFER-FULL total p50=290 p90=351 p99=409 max=429 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=119.9 (sync 0.1 issue 40.5 swap 60.0) start-delay=67.8 queue=82.1
+  FS quiz solidhem rep2: n=101 (+18 flagged) total p50=266 p90=344 p99=409 max=417 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=114.1 (sync 0.1 issue 39.4 swap 58.1) start-delay=68.9 queue=79.2
+  FS quiz nostitch rep2: n=110 (+8 flagged) total p50=343 p90=448 p99=495 max=526 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=153.7 (sync 0.1 issue 41.1 swap 95.7) start-delay=94.6 queue=110.3
+  FS quiz layer rep2: n=101 (+19 flagged) BUFFER-FULL total p50=265 p90=336 p99=407 max=420 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=113.8 (sync 0.1 issue 42.5 swap 57.0) start-delay=72.1 queue=80.1
+  FS quiz new rep2: n=107 (+7 flagged) total p50=361 p90=444 p99=566 max=620 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=154.2 (sync 0.1 issue 41.7 swap 90.0) start-delay=98.3 queue=114.6
+  FS quiz base rep2: n=119 (+0 flagged) total p50=240 p90=294 p99=334 max=352 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=89.7 (sync 0.1 issue 37.2 swap 46.3) start-delay=67.3 queue=75.6
+## A. Repetition 3 of: quiz (configs rotated by 3)
+  FS quiz noband rep3: n=103 (+16 flagged) total p50=275 p90=333 p99=384 max=454 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=118.3 (sync 0.1 issue 39.0 swap 51.1) start-delay=71.8 queue=83.9
+  FS quiz nohem rep3: n=105 (+15 flagged) BUFFER-FULL total p50=290 p90=370 p99=438 max=467 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=128.2 (sync 0.1 issue 42.8 swap 62.1) start-delay=69.6 queue=86.5
+  FS quiz solidhem rep3: n=102 (+18 flagged) BUFFER-FULL total p50=282 p90=365 p99=403 max=431 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=120.5 (sync 0.1 issue 42.3 swap 59.9) start-delay=73.5 queue=82.1
+  FS quiz nostitch rep3: n=111 (+7 flagged) total p50=362 p90=450 p99=532 max=537 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=152.3 (sync 0.1 issue 41.6 swap 88.1) start-delay=94.2 queue=111.8
+  FS quiz layer rep3: n=105 (+14 flagged) total p50=272 p90=354 p99=381 max=401 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=113.2 (sync 0.1 issue 42.2 swap 52.7) start-delay=69.5 queue=80.1
+  FS quiz new rep3: n=105 (+7 flagged) total p50=358 p90=471 p99=552 max=569 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=149.0 (sync 0.1 issue 41.4 swap 90.1) start-delay=87.9 queue=113.5
+  FS quiz base rep3: n=120 (+0 flagged) BUFFER-FULL total p50=250 p90=301 p99=346 max=385 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=107.2 (sync 0.1 issue 37.1 swap 47.0) start-delay=64.9 queue=72.6
+  FS quiz hk rep3: n=109 (+9 flagged) total p50=346 p90=433 p99=495 max=507 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=147.5 (sync 0.1 issue 39.9 swap 85.6) start-delay=93.0 queue=106.3
+## A. Repetition 4 of: quiz (configs rotated by 4)
+  FS quiz nohem rep4: n=103 (+17 flagged) BUFFER-FULL total p50=279 p90=335 p99=354 max=367 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=121.9 (sync 0.1 issue 39.7 swap 58.7) start-delay=73.2 queue=87.0
+  FS quiz solidhem rep4: n=102 (+17 flagged) total p50=260 p90=366 p99=431 max=443 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=118.9 (sync 0.1 issue 40.4 swap 56.0) start-delay=65.7 queue=81.4
+  FS quiz nostitch rep4: n=108 (+12 flagged) BUFFER-FULL total p50=323 p90=427 p99=471 max=477 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=134.3 (sync 0.1 issue 38.3 swap 76.4) start-delay=85.9 queue=103.1
+  FS quiz layer rep4: n=103 (+16 flagged) total p50=274 p90=362 p99=446 max=450 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=116.3 (sync 0.1 issue 40.8 swap 56.0) start-delay=73.8 queue=84.1
+  FS quiz new rep4: n=110 (+8 flagged) total p50=357 p90=443 p99=532 max=561 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=152.4 (sync 0.1 issue 42.4 swap 85.0) start-delay=90.0 queue=111.8
+  FS quiz base rep4: n=120 (+0 flagged) BUFFER-FULL total p50=244 p90=301 p99=341 max=372 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=97.9 (sync 0.1 issue 38.3 swap 47.8) start-delay=63.7 queue=75.6
+  FS quiz hk rep4: n=109 (+10 flagged) total p50=350 p90=466 p99=521 max=527 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=142.4 (sync 0.1 issue 39.9 swap 86.2) start-delay=86.6 queue=106.2
+  FS quiz noband rep4: n=104 (+16 flagged) BUFFER-FULL total p50=248 p90=309 p99=350 max=370 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=99.4 (sync 0.1 issue 38.0 swap 48.8) start-delay=73.1 queue=80.3
+## A. Repetition 5 of: quiz (configs rotated by 5)
+  FS quiz solidhem rep5: n=102 (+18 flagged) BUFFER-FULL total p50=282 p90=347 p99=372 max=376 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=119.5 (sync 0.1 issue 39.5 swap 59.9) start-delay=65.8 queue=82.6
+  FS quiz nostitch rep5: n=110 (+10 flagged) BUFFER-FULL total p50=334 p90=412 p99=482 max=495 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=138.9 (sync 0.1 issue 37.8 swap 76.5) start-delay=80.8 queue=104.2
+  FS quiz layer rep5: n=103 (+16 flagged) total p50=255 p90=341 p99=436 max=474 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=110.2 (sync 0.1 issue 41.3 swap 53.5) start-delay=69.9 queue=80.4
+  FS quiz new rep5: n=108 (+9 flagged) total p50=354 p90=457 p99=493 max=500 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=143.9 (sync 0.1 issue 41.6 swap 87.4) start-delay=91.2 queue=106.7
+  FS quiz base rep5: n=120 (+0 flagged) BUFFER-FULL total p50=247 p90=297 p99=347 max=368 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=101.5 (sync 0.1 issue 36.5 swap 47.2) start-delay=65.2 queue=75.0
+  FS quiz hk rep5: n=109 (+8 flagged) total p50=364 p90=458 p99=518 max=564 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=154.9 (sync 0.1 issue 44.8 swap 86.4) start-delay=90.2 queue=112.1
+  FS quiz noband rep5: n=105 (+15 flagged) BUFFER-FULL total p50=251 p90=316 p99=366 max=385 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=105.5 (sync 0.1 issue 40.1 swap 49.9) start-delay=58.2 queue=75.0
+  FS quiz nohem rep5: n=105 (+15 flagged) BUFFER-FULL total p50=272 p90=358 p99=380 max=382 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=120.2 (sync 0.1 issue 43.5 swap 60.5) start-delay=66.4 queue=79.8
+## A9. Totals (rep 0 is excluded)
+| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| quiz | base | 5 | 120 | **247.2** (239.7..250.1) | 301 | 341 | 0.6 | 101.1 | 0.0 | 0.5 | 0.1 | 37.2 | 47.2 |
+| quiz | hk | 5 | 109 | **349.8** (332.0..367.5) | 458 | 518 | 0.4 | 147.5 | 0.0 | 0.3 | 0.1 | 40.1 | 86.2 |
+| quiz | layer | 5 | 103 | **267.2** (254.8..274.0) | 354 | 409 | 0.4 | 113.8 | 0.0 | 0.3 | 0.1 | 42.2 | 56.0 |
+| quiz | new | 5 | 108 | **358.1** (353.9..366.1) | 457 | 544 | 0.4 | 152.4 | 0.0 | 0.3 | 0.1 | 41.7 | 90.0 |
+| quiz | noband | 5 | 104 | **249.4** (248.0..275.1) | 309 | 366 | 0.4 | 105.5 | 0.0 | 0.2 | 0.1 | 39.0 | 48.8 |
+| quiz | nohem | 5 | 103 | **287.2** (271.6..290.0) | 358 | 409 | 0.4 | 120.2 | 0.0 | 0.3 | 0.1 | 40.6 | 60.5 |
+| quiz | nostitch | 5 | 110 | **340.8** (323.2..361.5) | 447 | 482 | 0.4 | 152.3 | 0.0 | 0.3 | 0.1 | 41.1 | 88.1 |
+| quiz | solidhem | 5 | 102 | **281.6** (259.6..296.5) | 360 | 403 | 0.4 | 119.5 | 0.0 | 0.3 | 0.1 | 40.4 | 59.9 |
+
+RenderThread work per repetition (the same scripted gestures): sum of rt over the frames, ms; frames; median rt per frame:
+
+| scenario | version | sum of RT ms, median (min..max) | frames, median (min..max) | median RT per frame (min..max) | sum of swap ms, median | sum of issue ms, median |
+|---|---|---|---|---|---|---|
+| quiz | base | **11835** (11401..11951) | 120 (119..120) | **101.1** (89.7..107.2) | 6855 | 4964 |
+| quiz | hk | **16192** (15714..16954) | 109 (106..113) | **147.5** (138.8..159.7) | 10549 | 5609 |
+| quiz | layer | **11849** (11373..12084) | 103 (101..105) | **113.8** (110.2..116.7) | 6673 | 5136 |
+| quiz | new | **16447** (15979..17408) | 108 (105..110) | **152.4** (143.9..157.6) | 10710 | 5725 |
+| quiz | noband | **11048** (10493..11224) | 104 (103..105) | **105.5** (99.4..118.3) | 6396 | 4631 |
+| quiz | nohem | **12352** (11982..12776) | 103 (102..105) | **120.2** (117.8..128.2) | 7459 | 4886 |
+| quiz | nostitch | **16308** (14624..16877) | 110 (108..111) | **152.3** (134.3..155.1) | 10672 | 5452 |
+| quiz | solidhem | **11850** (11424..12989) | 102 (101..104) | **119.5** (114.1..131.5) | 7003 | 4823 |
+
+- quiz / hk vs base, sum of RT: 16191.7 vs 11835.2 (+37%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / hk vs base, median RT per frame: 147.5 vs 101.1 (+46%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / layer vs base, sum of RT: 11848.8 vs 11835.2 (+0%); U=15.0, p=0.690; ranges overlap
+- quiz / layer vs base, median RT per frame: 113.8 vs 101.1 (+13%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / new vs base, sum of RT: 16447.2 vs 11835.2 (+39%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / new vs base, median RT per frame: 152.4 vs 101.1 (+51%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / noband vs base, sum of RT: 11047.6 vs 11835.2 (-7%); U=0.0, p=0.008; ranges do NOT overlap
+- quiz / noband vs base, median RT per frame: 105.5 vs 101.1 (+4%); U=19.0, p=0.222; ranges overlap
+- quiz / nohem vs base, sum of RT: 12352.0 vs 11835.2 (+4%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / nohem vs base, median RT per frame: 120.2 vs 101.1 (+19%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / nostitch vs base, sum of RT: 16308.2 vs 11835.2 (+38%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / nostitch vs base, median RT per frame: 152.3 vs 101.1 (+51%); U=25.0, p=0.008; ranges do NOT overlap
+- quiz / solidhem vs base, sum of RT: 11850.0 vs 11835.2 (+0%); U=15.0, p=0.690; ranges overlap
+- quiz / solidhem vs base, median RT per frame: 119.5 vs 101.1 (+18%); U=25.0, p=0.008; ranges do NOT overlap
+
+Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:
+
+- quiz / base: [247.8, 239.7, 250.1, 244.1, 247.2]
+- quiz / hk: [332.0, 367.5, 346.0, 349.8, 364.0] vs base: median diff +102.6 ms (UI -0.2, RT +46.4, issue +2.9); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / layer: [267.2, 265.3, 272.4, 274.0, 254.8] vs base: median diff +20.1 ms (UI -0.2, RT +12.7, issue +5.0); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / new: [366.1, 360.6, 358.1, 357.4, 353.9] vs base: median diff +110.9 ms (UI -0.2, RT +51.3, issue +4.5); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / noband: [249.4, 249.2, 275.1, 248.0, 250.9] vs base: median diff +2.2 ms (UI -0.2, RT +4.4, issue +1.8); Mann-Whitney U=22.0, p=0.056; ranges overlap
+- quiz / nohem: [287.2, 290.0, 289.8, 279.1, 271.6] vs base: median diff +40.0 ms (UI -0.2, RT +19.1, issue +3.4); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / nostitch: [340.8, 342.6, 361.5, 323.2, 333.7] vs base: median diff +93.6 ms (UI -0.2, RT +51.2, issue +3.9); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+- quiz / solidhem: [296.5, 266.0, 282.4, 259.6, 281.6] vs base: median diff +34.4 ms (UI -0.2, RT +18.4, issue +3.2); Mann-Whitney U=25.0, p=0.008; ranges do NOT overlap
+AT part: FATAL lines 0; host load: 3.63 4.10 3.97
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5505', '8507', '16798', '19700', '22962', '25796', '28874']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 22
+   skipped-frames events=22 max=80 total=1101
+== Davey: 32
+   davey events=32 max=2169ms median=1196ms
 == NativeLink: 0
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
@@ -1247,6 +1626,156 @@ app pids seen: []
 CRASHES: 1 block(s) {'FATAL': 1} → crashes.txt
 ```
 
+## fr28
+
+```
+part fr28; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 9 sdk 28; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: 
+camera permission: 
+screen 1080x2400
+## F0. 1.2.38 (org.chyavorec.app) and 1.2.37 (org.chyavorec.app.b37) side by side, both compiled speed-profile
+HELPER installed: package:org.pc.helper
+DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-lowdr-nowidecg-port-notnight-420dpi-finger-keysexposed-nokeys-navhidden-nonav-2274x1080-v28
+X installed new: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 3244 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/org.chyavorec.app-ohUMXp8Fz5dGWkIF9E38OA==/base.apk| x86_64: [status=speed-profile] [reason=unknown]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=quicken] [reason=prebuilt]|
+X installed base: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000;  versionCode=1990000 minSdk=26 targetSdk=37  versionName=1.2.37 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 1947 ms
+X compile org.chyavorec.app.b37: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/org.chyavorec.app.b37-WMp5SpnOoeGR5b4t3hrc7Q==/base.apk| x86_64: [status=speed-profile] [reason=unknown]| path: /system/priv-app/VpnDialogs/VpnDialogs.apk| x86_64: [status=quicken] [reason=prebuilt]|
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+animations: animator_duration_scale=1 transition=1 window=1; host load: 4.55 2.57 1.09
+## F1. Warm-up (rep 0, not counted): every scenario once; the quiz taps are learned
+  FS home new rep0: n=120 (+0 flagged) BUFFER-FULL total p50=173 p90=310 p99=351 max=360 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.1 draw 0.2) rt=60.9 (sync 0.1 issue 2.1 swap 58.7) start-delay=27.3 queue=35.5
+  FS more new rep0: n=120 (+0 flagged) BUFFER-FULL total p50=161 p90=221 p99=243 max=245 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=62.7 (sync 0.2 issue 1.4 swap 60.8) start-delay=31.1 queue=33.7
+  FS timeline new rep0: n=120 (+0 flagged) BUFFER-FULL total p50=159 p90=203 p99=226 max=229 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=60.3 (sync 0.1 issue 2.8 swap 57.9) start-delay=30.3 queue=36.5
+QUIZ taps new: 5 questions learned: input tap 540 715; sleep 2; input tap 540 2163; sleep 2.2~input tap 540 715; sleep 2; input tap 540 2163; sleep 2.2~input tap 540 641; sleep 2; input tap 540 2163; sleep 2.2~input tap 540 641; sleep 2; input tap 540 2163; sleep 2.2~input tap 540 715; sleep 2; input tap 540 2163; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+  FS home base rep0: n=120 (+0 flagged) BUFFER-FULL total p50=180 p90=309 p99=358 max=396 ms | medians: ui=0.7 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=54.8 (sync 0.1 issue 1.8 swap 46.5) start-delay=26.9 queue=36.3
+  FS more base rep0: n=120 (+0 flagged) BUFFER-FULL total p50=171 p90=227 p99=240 max=246 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=65.7 (sync 0.1 issue 1.8 swap 63.4) start-delay=29.4 queue=46.1
+  FS timeline base rep0: n=120 (+0 flagged) BUFFER-FULL total p50=148 p90=210 p99=223 max=232 ms | medians: ui=0.7 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=53.9 (sync 0.1 issue 2.4 swap 52.7) start-delay=27.5 queue=41.0
+QUIZ taps base: 5 questions learned: input tap 540 715; sleep 2; input tap 540 1798; sleep 2.2~input tap 540 715; sleep 2; input tap 540 1798; sleep 2.2~input tap 540 641; sleep 2; input tap 540 1547; sleep 2.2~input tap 540 641; sleep 2; input tap 540 1547; sleep 2.2~input tap 540 715; sleep 2; input tap 540 1854; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Серия: 1 ден поред" 
+## F2. Repetition 1, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep1: n=120 (+0 flagged) BUFFER-FULL total p50=177 p90=284 p99=344 max=348 ms | medians: ui=0.7 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=64.8 (sync 0.1 issue 1.9 swap 60.9) start-delay=27.8 queue=38.7
+  FS more base rep1: n=120 (+0 flagged) BUFFER-FULL total p50=168 p90=229 p99=254 max=261 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=62.3 (sync 0.1 issue 1.9 swap 60.8) start-delay=26.1 queue=34.8
+  FS timeline base rep1: n=120 (+0 flagged) BUFFER-FULL total p50=148 p90=204 p99=220 max=221 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.1 draw 0.2) rt=58.1 (sync 0.1 issue 1.9 swap 56.6) start-delay=27.4 queue=44.3
+  FS quiz base rep1: n=120 (+0 flagged) BUFFER-FULL total p50=159 p90=215 p99=244 max=252 ms | medians: ui=1.0 (input 0.0 anim 0.3 layout 0.1 draw 0.5) rt=51.4 (sync 0.1 issue 5.0 swap 47.7) start-delay=31.3 queue=35.1
+  FS home new rep1: n=120 (+0 flagged) BUFFER-FULL total p50=173 p90=281 p99=356 max=371 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=56.9 (sync 0.1 issue 1.7 swap 55.3) start-delay=32.5 queue=41.3
+  FS more new rep1: n=120 (+0 flagged) BUFFER-FULL total p50=125 p90=168 p99=179 max=180 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=48.4 (sync 0.1 issue 0.7 swap 46.5) start-delay=25.2 queue=34.0
+  FS timeline new rep1: n=120 (+0 flagged) BUFFER-FULL total p50=147 p90=212 p99=228 max=239 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=57.4 (sync 0.1 issue 3.0 swap 55.3) start-delay=25.6 queue=36.5
+  FS quiz new rep1: n=104 (+16 flagged) BUFFER-FULL total p50=164 p90=234 p99=265 max=268 ms | medians: ui=0.7 (input 0.0 anim 0.3 layout 0.1 draw 0.3) rt=40.7 (sync 0.1 issue 8.8 swap 29.4) start-delay=26.9 queue=34.0
+## F2. Repetition 2, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep2: n=120 (+0 flagged) BUFFER-FULL total p50=171 p90=289 p99=360 max=372 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=62.0 (sync 0.1 issue 1.7 swap 59.3) start-delay=36.2 queue=34.9
+  FS more base rep2: n=120 (+0 flagged) BUFFER-FULL total p50=168 p90=227 p99=244 max=255 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=65.5 (sync 0.1 issue 1.7 swap 64.0) start-delay=26.8 queue=34.3
+  FS timeline base rep2: n=120 (+0 flagged) BUFFER-FULL total p50=154 p90=204 p99=231 max=241 ms | medians: ui=0.6 (input 0.0 anim 0.1 layout 0.1 draw 0.2) rt=60.1 (sync 0.1 issue 2.2 swap 58.3) start-delay=27.2 queue=38.0
+  FS quiz base rep2: n=120 (+0 flagged) BUFFER-FULL total p50=149 p90=217 p99=230 max=235 ms | medians: ui=0.9 (input 0.0 anim 0.3 layout 0.1 draw 0.5) rt=38.3 (sync 0.1 issue 5.0 swap 32.8) start-delay=28.3 queue=34.1
+  FS home new rep2: n=120 (+0 flagged) BUFFER-FULL total p50=183 p90=302 p99=348 max=352 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=64.9 (sync 0.1 issue 1.8 swap 63.1) start-delay=28.4 queue=35.6
+  FS more new rep2: n=120 (+0 flagged) BUFFER-FULL total p50=167 p90=225 p99=247 max=249 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=67.3 (sync 0.1 issue 1.5 swap 66.2) start-delay=31.6 queue=37.2
+  FS timeline new rep2: n=120 (+0 flagged) BUFFER-FULL total p50=150 p90=207 p99=230 max=232 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=55.2 (sync 0.1 issue 3.5 swap 51.0) start-delay=27.9 queue=41.9
+  FS quiz new rep2: n=106 (+14 flagged) BUFFER-FULL total p50=161 p90=236 p99=249 max=264 ms | medians: ui=0.8 (input 0.0 anim 0.3 layout 0.1 draw 0.3) rt=51.7 (sync 0.1 issue 8.7 swap 33.2) start-delay=21.3 queue=32.9
+## F2. Repetition 3, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep3: n=120 (+0 flagged) BUFFER-FULL total p50=172 p90=303 p99=360 max=435 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=60.1 (sync 0.2 issue 1.8 swap 57.9) start-delay=28.3 queue=51.6
+  FS more base rep3: n=120 (+0 flagged) BUFFER-FULL total p50=161 p90=226 p99=245 max=258 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=67.9 (sync 0.2 issue 1.9 swap 64.6) start-delay=27.1 queue=32.7
+  FS timeline base rep3: n=120 (+0 flagged) BUFFER-FULL total p50=149 p90=204 p99=231 max=264 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.1 draw 0.2) rt=52.8 (sync 0.1 issue 2.1 swap 47.4) start-delay=29.9 queue=42.6
+  FS quiz base rep3: n=119 (+1 flagged) BUFFER-FULL total p50=153 p90=222 p99=244 max=271 ms | medians: ui=0.9 (input 0.0 anim 0.3 layout 0.1 draw 0.5) rt=42.5 (sync 0.1 issue 5.0 swap 32.4) start-delay=24.2 queue=30.9
+  FS home new rep3: n=101 (+0 flagged) total p50=190 p90=323 p99=377 max=412 ms | medians: ui=0.7 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=50.8 (sync 0.1 issue 2.2 swap 35.3) start-delay=25.6 queue=31.2
+  FS more new rep3: n=120 (+0 flagged) BUFFER-FULL total p50=166 p90=228 p99=250 max=261 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=67.8 (sync 0.1 issue 1.5 swap 65.8) start-delay=28.9 queue=37.4
+  FS timeline new rep3: n=120 (+0 flagged) BUFFER-FULL total p50=156 p90=218 p99=231 max=252 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=59.7 (sync 0.1 issue 3.1 swap 56.6) start-delay=23.6 queue=35.5
+  FS quiz new rep3: n=104 (+16 flagged) BUFFER-FULL total p50=168 p90=236 p99=252 max=252 ms | medians: ui=0.8 (input 0.0 anim 0.3 layout 0.1 draw 0.3) rt=41.2 (sync 0.1 issue 8.7 swap 28.7) start-delay=28.9 queue=36.1
+## F2. Repetition 4, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep4: n=120 (+0 flagged) BUFFER-FULL total p50=172 p90=307 p99=356 max=357 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.1 draw 0.2) rt=64.4 (sync 0.1 issue 1.6 swap 62.3) start-delay=25.9 queue=40.6
+  FS more base rep4: n=120 (+0 flagged) BUFFER-FULL total p50=168 p90=231 p99=253 max=269 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=65.7 (sync 0.2 issue 1.9 swap 64.0) start-delay=29.5 queue=42.7
+  FS timeline base rep4: n=120 (+0 flagged) BUFFER-FULL total p50=154 p90=212 p99=235 max=236 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=59.4 (sync 0.1 issue 2.3 swap 57.5) start-delay=27.6 queue=38.6
+  FS quiz base rep4: n=120 (+0 flagged) BUFFER-FULL total p50=161 p90=218 p99=229 max=230 ms | medians: ui=1.0 (input 0.0 anim 0.3 layout 0.1 draw 0.5) rt=45.3 (sync 0.1 issue 5.5 swap 41.0) start-delay=30.0 queue=34.3
+  FS home new rep4: n=120 (+0 flagged) BUFFER-FULL total p50=175 p90=262 p99=337 max=352 ms | medians: ui=0.8 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=63.7 (sync 0.1 issue 1.8 swap 61.8) start-delay=26.9 queue=34.5
+  FS more new rep4: n=120 (+0 flagged) BUFFER-FULL total p50=174 p90=292 p99=342 max=348 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=61.1 (sync 0.1 issue 1.9 swap 59.3) start-delay=24.6 queue=33.2
+  FS timeline new rep4: n=120 (+0 flagged) BUFFER-FULL total p50=156 p90=212 p99=238 max=249 ms | medians: ui=0.7 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=57.6 (sync 0.1 issue 3.0 swap 52.5) start-delay=23.0 queue=49.4
+  FS quiz new rep4: n=105 (+15 flagged) BUFFER-FULL total p50=156 p90=235 p99=255 max=266 ms | medians: ui=0.8 (input 0.0 anim 0.3 layout 0.1 draw 0.3) rt=41.4 (sync 0.1 issue 8.9 swap 24.7) start-delay=21.2 queue=32.5
+## F2. Repetition 5, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep5: n=113 (+0 flagged) total p50=194 p90=314 p99=371 max=436 ms | medians: ui=0.8 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=41.9 (sync 0.2 issue 2.3 swap 33.3) start-delay=21.2 queue=34.7
+  FS more base rep5: n=120 (+0 flagged) BUFFER-FULL total p50=160 p90=227 p99=246 max=257 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=65.5 (sync 0.1 issue 1.7 swap 63.8) start-delay=19.3 queue=37.1
+  FS timeline base rep5: n=120 (+0 flagged) BUFFER-FULL total p50=156 p90=210 p99=241 max=245 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=60.3 (sync 0.3 issue 1.5 swap 59.1) start-delay=30.3 queue=39.6
+  FS quiz base rep5: n=119 (+0 flagged) total p50=163 p90=215 p99=228 max=229 ms | medians: ui=1.0 (input 0.0 anim 0.3 layout 0.1 draw 0.4) rt=39.8 (sync 0.1 issue 5.1 swap 31.9) start-delay=30.0 queue=36.9
+  FS home new rep5: n=120 (+0 flagged) BUFFER-FULL total p50=176 p90=302 p99=340 max=345 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.1 draw 0.2) rt=63.4 (sync 0.1 issue 1.8 swap 60.4) start-delay=29.4 queue=31.6
+  FS more new rep5: n=120 (+0 flagged) BUFFER-FULL total p50=172 p90=308 p99=340 max=344 ms | medians: ui=0.5 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=58.9 (sync 0.1 issue 1.8 swap 57.3) start-delay=27.2 queue=34.5
+  FS timeline new rep5: n=120 (+0 flagged) BUFFER-FULL total p50=152 p90=209 p99=229 max=237 ms | medians: ui=0.7 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=49.1 (sync 0.1 issue 3.7 swap 44.0) start-delay=24.2 queue=32.3
+  FS quiz new rep5: n=103 (+16 flagged) total p50=161 p90=235 p99=244 max=249 ms | medians: ui=0.7 (input 0.0 anim 0.3 layout 0.1 draw 0.3) rt=39.0 (sync 0.1 issue 8.6 swap 25.4) start-delay=25.5 queue=35.2
+## F2. Repetition 6, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep6: n=120 (+0 flagged) BUFFER-FULL total p50=178 p90=283 p99=409 max=412 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=63.3 (sync 0.1 issue 1.9 swap 59.5) start-delay=30.1 queue=37.0
+  FS more base rep6: n=120 (+0 flagged) BUFFER-FULL total p50=163 p90=228 p99=251 max=271 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=68.6 (sync 0.1 issue 1.8 swap 66.9) start-delay=32.6 queue=35.9
+  FS timeline base rep6: n=120 (+0 flagged) BUFFER-FULL total p50=152 p90=213 p99=229 max=234 ms | medians: ui=0.7 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=58.3 (sync 0.2 issue 2.5 swap 57.7) start-delay=25.9 queue=41.6
+  FS quiz base rep6: n=120 (+0 flagged) BUFFER-FULL total p50=157 p90=220 p99=233 max=236 ms | medians: ui=0.9 (input 0.0 anim 0.3 layout 0.1 draw 0.4) rt=56.8 (sync 0.1 issue 5.3 swap 44.3) start-delay=31.1 queue=35.9
+  FS home new rep6: n=120 (+0 flagged) BUFFER-FULL total p50=190 p90=316 p99=362 max=363 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.1 draw 0.2) rt=61.0 (sync 0.1 issue 1.8 swap 59.4) start-delay=25.3 queue=34.1
+  FS more new rep6: n=120 (+0 flagged) BUFFER-FULL total p50=160 p90=227 p99=240 max=242 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.1 draw 0.2) rt=62.8 (sync 0.1 issue 1.4 swap 59.8) start-delay=23.7 queue=34.5
+  FS timeline new rep6: n=120 (+0 flagged) BUFFER-FULL total p50=150 p90=206 p99=227 max=228 ms | medians: ui=0.7 (input 0.0 anim 0.3 layout 0.1 draw 0.2) rt=56.9 (sync 0.1 issue 2.7 swap 52.9) start-delay=25.5 queue=33.2
+  FS quiz new rep6: n=106 (+14 flagged) BUFFER-FULL total p50=162 p90=230 p99=249 max=251 ms | medians: ui=0.8 (input 0.0 anim 0.3 layout 0.1 draw 0.3) rt=55.2 (sync 0.1 issue 8.5 swap 27.9) start-delay=26.8 queue=34.1
+## F3. Totals (rep 0 is excluded)
+| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| home | base | 6 | 120 | **174.9** (171.0..194.1) | 296 | 360 | 0.6 | 62.6 | 0.1 | 0.2 | 0.1 | 1.8 | 59.4 |
+| home | new | 6 | 120 | **179.1** (173.4..190.1) | 302 | 352 | 0.6 | 62.2 | 0.1 | 0.2 | 0.1 | 1.8 | 59.9 |
+| more | base | 6 | 120 | **165.5** (160.2..168.5) | 227 | 248 | 0.4 | 65.6 | 0.1 | 0.2 | 0.1 | 1.8 | 64.0 |
+| more | new | 6 | 120 | **166.8** (125.3..173.6) | 227 | 248 | 0.4 | 62.0 | 0.1 | 0.2 | 0.1 | 1.5 | 59.6 |
+| quiz | base | 6 | 120 | **158.1** (149.3..162.9) | 218 | 231 | 0.9 | 43.9 | 0.1 | 0.5 | 0.1 | 5.1 | 36.9 |
+| quiz | new | 6 | 104 | **161.6** (156.4..168.0) | 235 | 251 | 0.8 | 41.3 | 0.1 | 0.3 | 0.1 | 8.7 | 28.3 |
+| timeline | base | 6 | 120 | **152.6** (147.9..156.4) | 207 | 231 | 0.6 | 58.8 | 0.1 | 0.2 | 0.1 | 2.2 | 57.6 |
+| timeline | new | 6 | 120 | **151.4** (147.2..156.2) | 211 | 229 | 0.6 | 57.1 | 0.1 | 0.2 | 0.1 | 3.1 | 52.7 |
+
+RenderThread work per repetition (the same scripted gestures): sum of rt over the frames, ms; frames; median rt per frame:
+
+| scenario | version | sum of RT ms, median (min..max) | frames, median (min..max) | median RT per frame (min..max) | sum of swap ms, median | sum of issue ms, median |
+|---|---|---|---|---|---|---|
+| home | base | **8237** (7914..8423) | 120 (113..120) | **62.6** (41.9..64.8) | 7448 | 520 |
+| home | new | **8030** (7558..8505) | 120 (101..120) | **62.2** (50.8..64.9) | 7349 | 506 |
+| more | base | **7573** (7389..7592) | 120 (120..120) | **65.6** (62.3..68.6) | 7061 | 396 |
+| more | new | **7553** (5785..8168) | 120 (120..120) | **62.0** (48.4..67.8) | 7117 | 355 |
+| quiz | base | **7135** (7022..7245) | 120 (119..120) | **43.9** (38.3..56.8) | 6136 | 891 |
+| quiz | new | **6709** (6632..6804) | 104 (103..106) | **41.3** (39.0..55.2) | 5229 | 1409 |
+| timeline | base | **6910** (6753..6980) | 120 (120..120) | **58.8** (52.8..60.3) | 6338 | 464 |
+| timeline | new | **6892** (6826..7052) | 120 (120..120) | **57.1** (49.1..59.7) | 6168 | 635 |
+
+- home / new vs base, sum of RT: 8030.2 vs 8236.8 (-3%); U=12.0, p=0.394; ranges overlap
+- home / new vs base, median RT per frame: 62.2 vs 62.6 (-1%); U=18.0, p=1.000; ranges overlap
+- more / new vs base, sum of RT: 7552.9 vs 7573.2 (-0%); U=21.0, p=0.699; ranges overlap
+- more / new vs base, median RT per frame: 62.0 vs 65.6 (-6%); U=9.0, p=0.180; ranges overlap
+- quiz / new vs base, sum of RT: 6709.3 vs 7135.4 (-6%); U=0.0, p=0.002; ranges do NOT overlap
+- quiz / new vs base, median RT per frame: 41.3 vs 43.9 (-6%); U=17.0, p=0.937; ranges overlap
+- timeline / new vs base, sum of RT: 6892.1 vs 6909.9 (-0%); U=20.0, p=0.818; ranges overlap
+- timeline / new vs base, median RT per frame: 57.1 vs 58.8 (-3%); U=8.0, p=0.132; ranges overlap
+
+Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:
+
+- home / base: [177.4, 171.0, 172.3, 172.4, 194.1, 178.4]
+- home / new: [173.4, 182.5, 189.6, 175.1, 175.7, 190.1] vs base: median diff +4.2 ms (UI -0.0, RT -0.4, issue -0.0); Mann-Whitney U=24.0, p=0.394; ranges overlap
+- more / base: [168.5, 168.5, 160.7, 167.8, 160.2, 163.1]
+- more / new: [125.3, 167.5, 166.2, 173.6, 171.9, 160.4] vs base: median diff +1.4 ms (UI +0.0, RT -3.6, issue -0.3); Mann-Whitney U=19.0, p=0.937; ranges overlap
+- quiz / base: [158.9, 149.3, 153.0, 161.4, 162.9, 157.3]
+- quiz / new: [164.1, 160.6, 168.0, 156.4, 160.6, 162.5] vs base: median diff +3.4 ms (UI -0.2, RT -2.6, issue +3.7); Mann-Whitney U=27.0, p=0.180; ranges overlap
+- timeline / base: [147.9, 153.6, 149.2, 153.7, 156.4, 151.6]
+- timeline / new: [147.2, 150.4, 156.2, 155.5, 152.3, 150.1] vs base: median diff -1.2 ms (UI +0.1, RT -1.7, issue +0.9); Mann-Whitney U=17.0, p=0.937; ranges overlap
+FR part: FATAL lines 0; host load: 3.18 3.24 3.10
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5479', '6739', '10807', '13281', '15688', '18095', '20482', '22873']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 1
+   skipped-frames events=1 max=38 total=38
+== Davey: 3
+   davey events=3 max=839ms median=740ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+```
+
 ## fr33a
 
 ```
@@ -1507,6 +2036,154 @@ app pids seen: ['5155', '7644', '11294', '12326', '15655', '16662', '19618', '20
 CRASHES: 0 block(s)  → crashes.txt
 ```
 
+## fr36x
+
+```
+part fr36x; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15700 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## F0. 1.2.38 (org.chyavorec.app) and 1.2.37 (org.chyavorec.app.b37) side by side, both compiled speed-profile
+X installed new: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 6379 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~oEAqydtDJfpgBwnwwXiojw==/org.chyavorec.app-YLY7Mk2-3bRqKHYUenTrAg==/base.apk| x86_64: [status=speed-profile] [reason=cmdline] [primary-abi]|
+X installed base: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000;  versionCode=1990000 minSdk=26 targetSdk=37  versionName=1.2.37 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 2917 ms
+X compile org.chyavorec.app.b37: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~wCRcApRPnaK3iG2-mQHZvg==/org.chyavorec.app.b37-ciJsyR4C5ah2DspcuEOwHw==/base.apk| x86_64: [status=speed-profile] [reason=cmdline] [primary-abi]|
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+animations: animator_duration_scale=1 transition=1 window=1; host load: 5.92 3.17 1.32
+## F1. Warm-up (rep 0, not counted): every scenario once; the quiz taps are learned
+  FS home new rep0: n=84 (+1 flagged) total p50=417 p90=536 p99=580 max=586 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=202.4 (sync 0.1 issue 119.3 swap 87.8) start-delay=109.8 queue=117.1
+  FS more new rep0: n=63 (+6 flagged) total p50=448 p90=528 p99=1121 max=1167 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=205.4 (sync 0.1 issue 122.2 swap 84.4) start-delay=112.8 queue=123.1
+  FS timeline new rep0: n=92 (+0 flagged) total p50=379 p90=457 p99=589 max=627 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=176.5 (sync 0.1 issue 85.2 swap 77.3) start-delay=85.2 queue=97.6
+QUIZ taps new: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+  FS home base rep0: n=78 (+0 flagged) total p50=459 p90=565 p99=663 max=700 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=220.9 (sync 0.1 issue 122.9 swap 97.3) start-delay=116.5 queue=127.7
+  FS more base rep0: n=84 (+0 flagged) total p50=470 p90=570 p99=641 max=681 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=217.6 (sync 0.1 issue 122.6 swap 86.2) start-delay=121.3 queue=133.3
+  FS timeline base rep0: n=93 (+0 flagged) total p50=312 p90=479 p99=527 max=533 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=136.3 (sync 0.1 issue 79.2 swap 68.5) start-delay=77.1 queue=85.1
+QUIZ taps base: 5 questions learned: input tap 540 780; sleep 2; input tap 540 1863; sleep 2.2~input tap 540 780; sleep 2; input tap 540 1863; sleep 2.2~input tap 540 706; sleep 2; input tap 540 1612; sleep 2.2~input tap 540 706; sleep 2; input tap 540 1612; sleep 2.2~input tap 540 780; sleep 2; input tap 540 1919; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Серия: 1 ден поред" 
+## F2. Repetition 1, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep1: n=65 (+0 flagged) total p50=435 p90=546 p99=630 max=672 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=225.0 (sync 0.1 issue 125.0 swap 96.0) start-delay=104.5 queue=119.8
+  FS more base rep1: n=74 (+0 flagged) total p50=447 p90=594 p99=678 max=693 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=207.1 (sync 0.1 issue 120.3 swap 79.1) start-delay=113.9 queue=132.4
+  FS timeline base rep1: n=96 (+0 flagged) total p50=334 p90=447 p99=495 max=500 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=145.0 (sync 0.1 issue 85.1 swap 68.4) start-delay=78.8 queue=92.9
+  FS quiz base rep1: n=105 (+0 flagged) total p50=328 p90=377 p99=409 max=411 ms | medians: ui=0.7 (input 0.0 anim 0.1 layout 0.0 draw 0.5) rt=137.8 (sync 0.1 issue 83.9 swap 52.1) start-delay=84.0 queue=86.9
+  FS home new rep1: n=81 (+1 flagged) total p50=443 p90=574 p99=633 max=686 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=212.3 (sync 0.1 issue 124.1 swap 93.4) start-delay=113.6 queue=127.1
+  FS more new rep1: n=61 (+6 flagged) total p50=450 p90=524 p99=1055 max=1063 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=206.4 (sync 0.1 issue 115.3 swap 83.0) start-delay=113.3 queue=123.9
+  FS timeline new rep1: n=86 (+0 flagged) total p50=366 p90=442 p99=486 max=506 ms | medians: ui=0.7 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=175.0 (sync 0.1 issue 99.9 swap 70.1) start-delay=85.8 queue=103.7
+  FS quiz new rep1: n=101 (+4 flagged) total p50=478 p90=558 p99=610 max=623 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.3) rt=203.5 (sync 0.1 issue 99.2 swap 94.2) start-delay=95.8 queue=141.8
+## F2. Repetition 2, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep2: n=84 (+1 flagged) total p50=415 p90=519 p99=608 max=646 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=201.2 (sync 0.1 issue 117.9 swap 88.4) start-delay=111.1 queue=118.9
+  FS more base rep2: n=75 (+0 flagged) total p50=455 p90=571 p99=644 max=661 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=218.6 (sync 0.1 issue 123.7 swap 85.5) start-delay=111.9 queue=138.7
+  FS timeline base rep2: n=75 (+0 flagged) total p50=298 p90=460 p99=504 max=510 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=138.7 (sync 0.1 issue 81.5 swap 69.6) start-delay=71.3 queue=79.5
+  FS quiz base rep2: n=105 (+0 flagged) total p50=331 p90=378 p99=404 max=408 ms | medians: ui=0.8 (input 0.0 anim 0.2 layout 0.0 draw 0.6) rt=144.8 (sync 0.1 issue 86.4 swap 52.9) start-delay=84.6 queue=91.1
+  FS home new rep2: n=89 (+0 flagged) total p50=429 p90=540 p99=719 max=754 ms | medians: ui=0.8 (input 0.0 anim 0.3 layout 0.0 draw 0.2) rt=214.4 (sync 0.1 issue 127.1 swap 90.5) start-delay=112.9 queue=124.2
+  FS more new rep2: n=82 (+3 flagged) total p50=443 p90=520 p99=785 max=887 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=213.3 (sync 0.1 issue 126.2 swap 82.9) start-delay=118.2 queue=127.3
+  FS timeline new rep2: n=86 (+0 flagged) total p50=402 p90=477 p99=613 max=626 ms | medians: ui=0.7 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=183.5 (sync 0.1 issue 95.1 swap 78.3) start-delay=103.3 queue=109.5
+  FS quiz new rep2: n=100 (+5 flagged) total p50=474 p90=575 p99=613 max=656 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=206.6 (sync 0.1 issue 101.0 swap 96.9) start-delay=91.3 queue=134.0
+## F2. Repetition 3, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep3: n=70 (+0 flagged) total p50=476 p90=620 p99=713 max=722 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=232.4 (sync 0.1 issue 130.3 swap 100.3) start-delay=126.3 queue=139.3
+  FS more base rep3: n=75 (+0 flagged) total p50=479 p90=580 p99=664 max=686 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=223.3 (sync 0.1 issue 120.3 swap 93.1) start-delay=111.1 queue=127.6
+  FS timeline base rep3: n=85 (+0 flagged) total p50=245 p90=366 p99=504 max=536 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=107.6 (sync 0.1 issue 72.1 swap 43.0) start-delay=67.1 queue=71.5
+  FS quiz base rep3: n=106 (+0 flagged) total p50=333 p90=372 p99=404 max=405 ms | medians: ui=0.8 (input 0.0 anim 0.2 layout 0.0 draw 0.6) rt=141.2 (sync 0.1 issue 86.1 swap 51.7) start-delay=88.4 queue=90.2
+  FS home new rep3: n=74 (+0 flagged) total p50=450 p90=567 p99=626 max=644 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=225.1 (sync 0.1 issue 129.6 swap 97.2) start-delay=114.9 queue=130.2
+  FS more new rep3: n=70 (+5 flagged) total p50=444 p90=540 p99=876 max=928 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=205.5 (sync 0.1 issue 115.0 swap 86.1) start-delay=118.9 queue=119.3
+  FS timeline new rep3: n=101 (+0 flagged) total p50=401 p90=487 p99=561 max=572 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=181.5 (sync 0.1 issue 100.8 swap 84.1) start-delay=101.4 queue=108.4
+  FS quiz new rep3: n=100 (+5 flagged) total p50=473 p90=568 p99=601 max=616 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.0 draw 0.3) rt=202.1 (sync 0.1 issue 98.4 swap 95.7) start-delay=100.4 queue=139.9
+## F2. Repetition 4, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep4: n=90 (+0 flagged) total p50=432 p90=511 p99=546 max=553 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=205.3 (sync 0.1 issue 116.7 swap 86.2) start-delay=110.9 queue=121.1
+  FS more base rep4: n=71 (+0 flagged) total p50=430 p90=555 p99=616 max=644 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=209.5 (sync 0.1 issue 118.1 swap 78.7) start-delay=111.9 queue=121.1
+  FS timeline base rep4: n=102 (+0 flagged) total p50=304 p90=430 p99=467 max=488 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=137.0 (sync 0.1 issue 77.9 swap 57.3) start-delay=72.4 queue=79.7
+  FS quiz base rep4: n=111 (+0 flagged) total p50=325 p90=370 p99=396 max=398 ms | medians: ui=0.8 (input 0.0 anim 0.2 layout 0.0 draw 0.5) rt=135.3 (sync 0.1 issue 83.2 swap 49.8) start-delay=82.6 queue=91.5
+  FS home new rep4: n=77 (+0 flagged) total p50=488 p90=625 p99=692 max=695 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=234.8 (sync 0.1 issue 140.2 swap 102.3) start-delay=129.4 queue=132.9
+  FS more new rep4: n=66 (+4 flagged) total p50=441 p90=530 p99=917 max=921 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=210.2 (sync 0.1 issue 118.7 swap 85.9) start-delay=98.8 queue=113.5
+  FS timeline new rep4: n=91 (+0 flagged) total p50=413 p90=572 p99=636 max=643 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=189.8 (sync 0.1 issue 110.5 swap 82.2) start-delay=110.3 queue=114.2
+  FS quiz new rep4: n=101 (+4 flagged) total p50=484 p90=589 p99=670 max=678 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.0 draw 0.3) rt=203.7 (sync 0.1 issue 97.2 swap 96.9) start-delay=100.4 queue=141.1
+## F2. Repetition 5, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep5: n=64 (+0 flagged) total p50=439 p90=571 p99=599 max=626 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.0 draw 0.2) rt=234.4 (sync 0.1 issue 131.9 swap 99.3) start-delay=99.4 queue=125.6
+  FS more base rep5: n=77 (+0 flagged) total p50=466 p90=584 p99=649 max=676 ms | medians: ui=0.5 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=224.5 (sync 0.1 issue 121.0 swap 86.6) start-delay=119.6 queue=123.3
+  FS timeline base rep5: n=105 (+0 flagged) total p50=342 p90=462 p99=500 max=543 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=152.7 (sync 0.1 issue 86.7 swap 66.4) start-delay=81.6 queue=88.4
+  FS quiz base rep5: n=104 (+0 flagged) total p50=340 p90=387 p99=421 max=427 ms | medians: ui=0.8 (input 0.0 anim 0.2 layout 0.0 draw 0.6) rt=142.1 (sync 0.1 issue 88.0 swap 52.7) start-delay=88.5 queue=97.8
+  FS home new rep5: n=65 (+0 flagged) total p50=425 p90=570 p99=719 max=737 ms | medians: ui=0.9 (input 0.2 anim 0.4 layout 0.0 draw 0.2) rt=233.2 (sync 0.1 issue 135.2 swap 95.5) start-delay=70.2 queue=121.4
+  FS more new rep5: n=78 (+2 flagged) total p50=443 p90=536 p99=913 max=978 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=205.3 (sync 0.1 issue 113.7 swap 87.5) start-delay=111.0 queue=118.5
+  FS timeline new rep5: n=87 (+0 flagged) total p50=394 p90=502 p99=616 max=635 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=177.9 (sync 0.1 issue 90.4 swap 78.6) start-delay=92.1 queue=107.1
+  FS quiz new rep5: n=102 (+3 flagged) total p50=477 p90=579 p99=632 max=659 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.3) rt=202.8 (sync 0.1 issue 96.9 swap 99.7) start-delay=97.0 queue=139.3
+## F2. Repetition 6, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep6: n=64 (+0 flagged) total p50=422 p90=554 p99=605 max=614 ms | medians: ui=0.6 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=215.5 (sync 0.1 issue 106.4 swap 94.8) start-delay=99.2 queue=112.3
+  FS more base rep6: n=77 (+1 flagged) total p50=476 p90=590 p99=670 max=675 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=216.3 (sync 0.1 issue 129.0 swap 83.4) start-delay=116.6 queue=131.9
+  FS timeline base rep6: n=95 (+0 flagged) total p50=334 p90=446 p99=507 max=509 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=147.1 (sync 0.1 issue 88.3 swap 68.4) start-delay=89.8 queue=97.4
+  FS quiz base rep6: n=107 (+0 flagged) total p50=329 p90=368 p99=393 max=417 ms | medians: ui=0.7 (input 0.0 anim 0.2 layout 0.0 draw 0.5) rt=140.1 (sync 0.1 issue 85.6 swap 49.9) start-delay=84.2 queue=89.9
+  FS home new rep6: n=66 (+0 flagged) total p50=434 p90=548 p99=591 max=597 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=235.2 (sync 0.1 issue 122.2 swap 98.0) start-delay=97.2 queue=129.1
+  FS more new rep6: n=64 (+6 flagged) total p50=422 p90=550 p99=1049 max=1169 ms | medians: ui=0.4 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=200.2 (sync 0.1 issue 111.6 swap 73.3) start-delay=107.9 queue=119.8
+  FS timeline new rep6: n=90 (+0 flagged) total p50=414 p90=598 p99=681 max=682 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=188.5 (sync 0.1 issue 111.1 swap 80.2) start-delay=109.7 queue=119.1
+  FS quiz new rep6: n=100 (+4 flagged) total p50=473 p90=563 p99=610 max=628 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=196.6 (sync 0.1 issue 96.2 swap 98.0) start-delay=92.8 queue=139.3
+## F3. Totals (rep 0 is excluded)
+| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| home | base | 6 | 68 | **433.5** (415.1..476.4) | 550 | 607 | 0.5 | 220.3 | 0.0 | 0.2 | 0.1 | 121.5 | 95.4 |
+| home | new | 6 | 76 | **438.6** (424.7..487.7) | 569 | 662 | 0.5 | 229.1 | 0.0 | 0.2 | 0.1 | 128.3 | 96.4 |
+| more | base | 6 | 75 | **460.7** (430.5..478.7) | 582 | 656 | 0.3 | 217.4 | 0.0 | 0.2 | 0.1 | 120.6 | 84.4 |
+| more | new | 6 | 68 | **443.1** (421.8..450.1) | 533 | 915 | 0.4 | 206.0 | 0.0 | 0.2 | 0.1 | 115.1 | 84.5 |
+| quiz | base | 6 | 106 | **330.0** (324.7..340.1) | 374 | 404 | 0.8 | 140.6 | 0.0 | 0.5 | 0.1 | 85.8 | 51.9 |
+| quiz | new | 6 | 100 | **475.4** (472.9..483.9) | 571 | 612 | 0.5 | 203.1 | 0.0 | 0.3 | 0.1 | 97.8 | 96.9 |
+| timeline | base | 6 | 96 | **318.9** (245.4..341.8) | 447 | 502 | 0.4 | 141.8 | 0.0 | 0.1 | 0.1 | 83.3 | 67.4 |
+| timeline | new | 6 | 88 | **401.2** (366.5..414.1) | 494 | 614 | 0.6 | 182.5 | 0.0 | 0.1 | 0.1 | 100.4 | 79.4 |
+
+RenderThread work per repetition (the same scripted gestures): sum of rt over the frames, ms; frames; median rt per frame:
+
+| scenario | version | sum of RT ms, median (min..max) | frames, median (min..max) | median RT per frame (min..max) | sum of swap ms, median | sum of issue ms, median |
+|---|---|---|---|---|---|---|
+| home | base | **14543** (13008..17192) | 68 (64..90) | **220.3** (201.2..234.4) | 6543 | 7952 |
+| home | new | **16178** (14165..18014) | 76 (65..89) | **229.1** (212.3..235.2) | 7379 | 8699 |
+| more | base | **15631** (13783..16374) | 75 (71..77) | **217.4** (207.1..224.6) | 6697 | 8699 |
+| more | new | **13230** (11564..16204) | 68 (61..82) | **206.0** (200.2..213.3) | 5586 | 7629 |
+| quiz | base | **14087** (13878..14305) | 106 (104..111) | **140.6** (135.3..144.8) | 5959 | 8146 |
+| quiz | new | **20568** (20188..21131) | 100 (100..102) | **203.1** (196.6..206.6) | 10404 | 10123 |
+| timeline | base | **14112** (9818..15824) | 96 (75..105) | **141.8** (107.6..152.7) | 6036 | 8057 |
+| timeline | new | **16784** (14422..18510) | 88 (86..101) | **182.5** (175.0..189.8) | 7834 | 8833 |
+
+- home / new vs base, sum of RT: 16177.7 vs 14543.0 (+11%); U=26.0, p=0.240; ranges overlap
+- home / new vs base, median RT per frame: 229.1 vs 220.3 (+4%); U=25.0, p=0.310; ranges overlap
+- more / new vs base, sum of RT: 13230.2 vs 15630.7 (-15%); U=7.0, p=0.093; ranges overlap
+- more / new vs base, median RT per frame: 206.0 vs 217.4 (-5%); U=4.0, p=0.026; ranges overlap
+- quiz / new vs base, sum of RT: 20568.3 vs 14087.5 (+46%); U=36.0, p=0.002; ranges do NOT overlap
+- quiz / new vs base, median RT per frame: 203.1 vs 140.6 (+44%); U=36.0, p=0.002; ranges do NOT overlap
+- timeline / new vs base, sum of RT: 16784.0 vs 14111.8 (+19%); U=32.0, p=0.026; ranges overlap
+- timeline / new vs base, median RT per frame: 182.5 vs 141.8 (+29%); U=36.0, p=0.002; ranges do NOT overlap
+
+Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:
+
+- home / base: [435.4, 415.1, 476.4, 431.6, 439.4, 422.1]
+- home / new: [443.3, 429.2, 450.0, 487.7, 424.7, 434.0] vs base: median diff +5.1 ms (UI +0.0, RT +8.9, issue +6.9); Mann-Whitney U=23.0, p=0.485; ranges overlap
+- more / base: [447.2, 455.2, 478.7, 430.5, 466.3, 476.1]
+- more / new: [450.1, 442.9, 444.3, 441.3, 443.3, 421.8] vs base: median diff -17.7 ms (UI +0.0, RT -11.4, issue -5.5); Mann-Whitney U=6.0, p=0.065; ranges overlap
+- quiz / base: [328.1, 330.6, 332.9, 324.7, 340.1, 329.3]
+- quiz / new: [478.0, 474.0, 472.9, 483.9, 476.7, 472.9] vs base: median diff +145.4 ms (UI -0.2, RT +62.5, issue +11.9); Mann-Whitney U=36.0, p=0.002; ranges do NOT overlap
+- timeline / base: [333.9, 298.1, 245.4, 304.1, 341.8, 333.8]
+- timeline / new: [366.5, 401.8, 400.6, 413.3, 394.0, 414.1] vs base: median diff +82.3 ms (UI +0.2, RT +40.7, issue +17.1); Mann-Whitney U=36.0, p=0.002; ranges do NOT overlap
+FR part: FATAL lines 0; host load: 3.19 3.73 3.62
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4254', '5916', '9808', '12104', '14303', '16451', '18571', '20618']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 22
+   skipped-frames events=22 max=89 total=1029
+== Davey: 54
+   davey events=54 max=1825ms median=942ms
+== NativeLink: 8
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+```
+
 ## fs33
 
 ```
@@ -1609,6 +2286,63 @@ app pids seen: ['4861', '6110']
 == NativeLink: 0
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 1 block(s) {'ANR': 1} → crashes.txt
+```
+
+## leaf33
+
+```
+part leaf33; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+installed: devDebug 1.2.38 17f0e40 (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key; demo-1 renews at once);  versionCode=1 minSdk=26 targetSdk=37  versionName=1.2.38-dev 
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3773 ms
+## L1. Sign-in with the button
+LOGIN try 1: card field OK
+LOGIN: remember-me CHECKSTATE 'Запомни ме': checked=true (node itself/ancestor, clickable=true); the sign-in BUTTON: 540 1791 enabled=true class=android.view.View bounds=(63, 1723, 1017, 1860); all 'Вход' nodes: class="android.widget.TextView" text="Вход" content-desc="" checkable="false" checked="false" clickable="false" selected="false" bounds="[494,1765][586,1818]"|class="android.widget.TextView" text="Вход" content-desc="" checkable="false" checked="false" clickable="false" selected="false" bounds="[148,177][261,247]"|
+MY after the sign-in: SIGNED IN: text="ДЕМО ДАННИ — само за разработка, не са реални" text="ДЧ" text="Демо Читател" text="Читателски № DEMO-0001" text="Активно" text="БИБЛИОТЕКА" text="Читателска карта" text="Покажи картата на гишето" text="Моите книги" text="Заети книги и срокове за връщане" text="Искам да прочета" text="Книги, ко
+## L2. Loans: „Удължи срока“ on demo-1 „Под игото“ (the LAST renew button; debug branch: accepted at once, new due date) → „Нов лист“
+LOANS: renew buttons at: 417 1481;417 2008;; „Под игото“ at: 398 1674; due texts: text="Срокът изтече на 12.11.2026" text="Връщане: 17.11.2026" text="Връщане: 22.11.2026" 
+REC renew-leaf (emu): marker 1537 ms after the recording start; 66 frames at 10/s from 0.5 s before the marker (frame k ≈ marker + (k-6)*100 ms; the command itself needs ~0.5-1 s to deliver the tap)
+RENEW demo-1: leaf node PRESENT: content-desc="Нов срок: 06.12.2026 (беше 22.11.2026)"; texts: Удължаването е отказано: Книгата е заявена от друг читател.|
+W25 log after the renew tap (confetti of the success):
++   565 ms  W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(417.0, 2008.0) lastTap=Offset(417.0, 2008.0)
++   572 ms  W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.0 alpha=1.0
++   961 ms  W25     : CH frame 1 progress=0.19696969 +396ms draws=1
++   963 ms  W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.19696969 alpha=1.0
++  1258 ms  W25     : CH frame 2 progress=0.36363637 +693ms draws=2
++  1261 ms  W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.36363637 alpha=1.0
++  1552 ms  W25     : CH frame 3 progress=0.6363636 +987ms draws=3
++  1558 ms  W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.6363636 alpha=1.0
++  1726 ms  W25     : CH frame 4 progress=0.9090959 +1161ms draws=4
++  1728 ms  W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.9090959 alpha=0.25972605
++  1918 ms  W25     : CH frame 5 progress=1.0 +1353ms draws=5
++  1918 ms  W25     : CH effect end bursts=1 frames=5 draws=5 +1353ms progress=1.0
+FRAMES renew-leaf: frames 66; frames that differ from the previous one (>0.35): 9, first #13, last #59; diffs: 0.0 0.1 0.1 0.1 0.0 0.0 0.1 0.1 0.2 0.1 0.0 1.8 0.0 0.0 0.0 0.1 0.1 0.0 11.7 0.1 0.1 0.5 0.0 0.5 0.0 0.4 0.0 0.3 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.0 0.0 0.0 3.5 4.2 0.0 2.4 0.0 1.6 0.0 0.0 0.1 0.1 0.0 0.0 0.0
+LOANS reopened: leaf node absent; due texts: text="Връщане: 17.11.2026" text="Връщане: 06.12.2026" 
+LEAF part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 7 in sheets/
+contact sheets: 7 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
 ```
 
 ## mem33a
@@ -1944,6 +2678,160 @@ app pids seen: ['4154', '5807', '6356']
    skipped-frames events=38 max=237 total=2181
 == Davey: 102
    davey events=102 max=3633ms median=930ms
+== NativeLink: 3
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+```
+
+## wdb33
+
+```
+part wdb33; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3883 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+launcher: com.google.android.apps.nexuslauncher
+## WD1. Both widgets pinned from Settings › Уиджети (the launcher's pin dialog)
+PIN main dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Chitalishte Yavorets" text="Chitalishte Yavorets" text="Scan" text="Catalogue" text="2 books to return" text="in 3 days" text="Oct 15" text="Next event" text="Literary evening" text="Octobe
+WIDGET 10-main: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 223 1023 809]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; e
+WIDGET 10-main: bound ids [id=2 ]; providers:  1 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+PIN book dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Book of the day" text="Book of the day" text="Under the Yoke" text="Ivan Vazov" text="Book of the day" content-desc="Book of the day widget" text="3 × 2" content-desc="3 wide by 2 high" tex
+WIDGET 20-both: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 223 1023 809]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 20-both: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 21-after-catalog: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 223 1023 809]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 21-after-catalog: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 22-still-light-20s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 22-still-light-20s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD2. App theme → „Тъмна“ (Settings › Тема), system still light: 5 s, 40 s
+THEME → =Тъмна|=Dark: Settings now shows: text="Тъмна" ; app night mode: 
+WIDGET 30-app-dark-5s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 30-app-dark-5s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 31-app-dark-40s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 31-app-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD3. System dark mode on as well: 10 s, 40 s, 90 s
+WIDGET 40-sys-dark-10s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 40-sys-dark-10s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-40s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 40-sys-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-90s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 40-sys-dark-90s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+launcher/appwidget log since the pins: 11-14 23:38:13.772  4525  4525 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.phenotype.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }|11-14 23:38:20.583  4525  4525 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.scheduler.ACTION_PROXY_SCHEDULE dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }|11-14 23:38:39.812  4525  4525 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.clearcut.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentDirectBootAwareApiService }|11-14 23:38:54.806  4607  4607 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }|11-14 23:39:04.249   489   922 I AppWidgetServiceImpl: Bound widget 2 to provider ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}|11-14 23:40:05.774   489  1714 I AppWidgetServiceImpl: Bound widget 3 to provider ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}|11-14 23:40:29.783   489  2167 I ExplicitHealthCheckController: No more health check requests, unbinding...|11-14 23:40:29.800   489  1714 I ExplicitHealthCheckController: No more health check requests, unbinding...|11-14 23:40:29.849   489  1361 I ExplicitHealthCheckController: N
+## WD4. Launcher restarted in dark (force-stop of the launcher), then system light and app theme „Както системата“
+WIDGET 50-launcher-restarted: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 50-launcher-restarted: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 60-sys-light: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 60-sys-light: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+THEME → =Както системата|=Same as the system|=System: Settings now shows: text="Както системата" ; app night mode: 
+WIDGET 61-app-system: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 61-app-system: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD5. Does a widget tap still open the app (if the widgets are there)
+  [0] id=2
+    host=HostId{user:0, app:10153, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}
+  [1] id=3
+    host=HostId{user:0, app:10153, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}
+WD part: FATAL(any process)=1 of the app=0 ANR=0
+contact sheets: 2 in sheets/
+contact sheets: 2 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4867', '7042', '7456']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 19
+   skipped-frames events=19 max=89 total=939
+== Davey: 30
+   davey events=30 max=2484ms median=974ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'FATAL': 1} → crashes.txt
+```
+
+## wdb36x
+
+```
+part wdb36x; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15982 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 7133 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+launcher: com.google.android.apps.nexuslauncher
+## WD1. Both widgets pinned from Settings › Уиджети (the launcher's pin dialog)
+PIN main dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Chitalishte Yavorets widget, 4 wide by 2 high Due dates, the next event and a quick scan" content-desc="Chitalishte Yavorets" text="Читалище Яворец" text="Сканирай" text="Каталог" text="2 к
+WIDGET 10-main: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; e
+WIDGET 10-main: bound ids [id=2 ]; providers:  1 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+PIN book dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Book of the day widget, 3 wide by 2 high A different book from the library catalogue every day, with its cover, title and author" content-desc="Book of the day" text="Книга на деня" text="П
+WIDGET 20-both: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 20-both: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 21-after-catalog: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 21-after-catalog: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 22-still-light-20s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 22-still-light-20s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD2. App theme → „Тъмна“ (Settings › Тема), system still light: 5 s, 40 s
+THEME → =Тъмна|=Dark: Settings now shows: text="Тъмна" ; app night mode: 
+WIDGET 30-app-dark-5s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 30-app-dark-5s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 31-app-dark-40s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 31-app-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD3. System dark mode on as well: 10 s, 40 s, 90 s
+WIDGET 40-sys-dark-10s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 40-sys-dark-10s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-40s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 40-sys-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-90s: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 40-sys-dark-90s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+launcher/appwidget log since the pins: 11-14 23:39:32.842   581  1921 I AppWidgetServiceImpl: startListening() 0|11-14 23:39:32.962   581   974 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_RESTARTED on user 0|11-14 23:39:32.965   581   974 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10216 package org.chyavorec.app isStopped true|11-14 23:39:32.971   581   974 I AppWidgetServiceImpl: cancelBroadcastsLocked() for Provider{ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}}|11-14 23:39:32.973   581   974 I AppWidgetServiceImpl: cancelBroadcastsLocked() for Provider{ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}}|11-14 23:39:33.801   581  2019 I AppWidgetServiceImpl: getAppWidgetIds() 0|11-14 23:39:34.203   581   974 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0|11-14 23:39:34.203   581   974 D AppWidgetServiceImpl: Trying to notify widget providers changed|11-14 23:39:34.726   581   974 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_UNSTOPPED on user 0|11-14 23:39:34.726   581   974 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10216 package org.chyavorec.app isStopped false|
+## WD4. Launcher restarted in dark (force-stop of the launcher), then system light and app theme „Както системата“
+WIDGET 50-launcher-restarted: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 50-launcher-restarted: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 60-sys-light: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 60-sys-light: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+THEME → =Както системата|=Same as the system|=System: Settings now shows: text="Както системата" ; app night mode: 
+WIDGET 61-app-system: views from org.chyavorec.app: 0 [ids: ]; bounds []; texts: |; error text: 
+WIDGET 61-app-system: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD5. Does a widget tap still open the app (if the widgets are there)
+  [0] id=2
+    host=HostId{user:0, app:10183, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}
+  [1] id=3
+    host=HostId{user:0, app:10183, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}
+WD part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 2 in sheets/
+contact sheets: 2 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['3962', '5861', '6369']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 51
+   skipped-frames events=51 max=132 total=2635
+== Davey: 170
+   davey events=170 max=3020ms median=882ms
 == NativeLink: 3
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt

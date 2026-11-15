@@ -1,0 +1,13 @@
+11-14 23:36:09.069  6545  6545 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-14 23:38:35.333  6545  6545 W W25     : CH effect bursts=1 reduced=false isPlaying=false host=1080 x 2400 origin=Offset(417.0, 2008.0) lastTap=Offset(417.0, 2008.0)
+11-14 23:38:35.340  6545  6545 W W25     : CL draw #1 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.0 alpha=1.0
+11-14 23:38:35.729  6545  6545 W W25     : CH frame 1 progress=0.19696969 +396ms draws=1
+11-14 23:38:35.731  6545  6545 W W25     : CL draw #2 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.19696969 alpha=1.0
+11-14 23:38:36.026  6545  6545 W W25     : CH frame 2 progress=0.36363637 +693ms draws=2
+11-14 23:38:36.029  6545  6545 W W25     : CL draw #3 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.36363637 alpha=1.0
+11-14 23:38:36.320  6545  6545 W W25     : CH frame 3 progress=0.6363636 +987ms draws=3
+11-14 23:38:36.326  6545  6545 W W25     : CL draw #4 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.6363636 alpha=1.0
+11-14 23:38:36.494  6545  6545 W W25     : CH frame 4 progress=0.9090959 +1161ms draws=4
+11-14 23:38:36.496  6545  6545 W W25     : CL draw #5 size=Size(1080.0, 2400.0) at=Offset(417.0, 2008.0) progress=0.9090959 alpha=0.25972605
+11-14 23:38:36.686  6545  6545 W W25     : CH frame 5 progress=1.0 +1353ms draws=5
+11-14 23:38:36.686  6545  6545 W W25     : CH effect end bursts=1 frames=5 draws=5 +1353ms progress=1.0

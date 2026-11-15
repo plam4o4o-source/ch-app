@@ -1,0 +1,13 @@
+app pids seen: []
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 0
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-14 23:36:04.143  6537  6537 I PERFCHECK: section: W. First launch and warm-up
+   11-14 23:37:01.896  7530  7530 I PERFCHECK: lf
+   11-14 23:37:02.762  7539  7539 I PERFCHECK: section: L1. Sign-in with the button
+   11-14 23:38:22.968  8205  8205 I PERFCHECK: section: L2. Loans: „Удължи срока“ on demo-1 „Под игото“ the LAST renew button; debug branch: accepted at once, new due date → „Нов лист“
+   11-14 23:38:34.768  8230  8230 I PERFCHECK: renew-leaf
