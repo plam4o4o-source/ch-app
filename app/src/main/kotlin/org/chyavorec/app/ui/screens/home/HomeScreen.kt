@@ -592,6 +592,8 @@ private fun HeroCarousel(items: List<NewsArticle>, anchor: HeroAnchor, onOpen: (
             // Снимката 16:9 и надписът под нея — или един до друг, ако двете не се събират в
             // ~половин прозорец (хоризонтално, таблет легнал): тогава картата е с височината отпреди.
             val sideBySide = heroSideBySide(maxWidth, windowH, LocalDensity.current.fontScale)
+            // Хоризонтално: снимката 16:9 по височината на картата, но не по-широка от 60 % от нея.
+            val sidePhotoWidth = minOf(minHeight * 16f / 9f, maxWidth * 0.6f)
             Surface(
                 onClick = { onOpen(a) },
                 shape = shape,
@@ -631,7 +633,7 @@ private fun HeroCarousel(items: List<NewsArticle>, anchor: HeroAnchor, onOpen: (
                 Box {
                     if (sideBySide) {
                         Row(Modifier.fillMaxSize()) {
-                            photo(Modifier.fillMaxHeight().width(minOf(minHeight * 16f / 9f, maxWidth * 0.6f)))
+                            photo(Modifier.fillMaxHeight().width(sidePhotoWidth))
                             caption(Modifier.weight(1f).fillMaxHeight())
                         }
                     } else {
