@@ -53,6 +53,11 @@ import org.chyavorec.domain.model.Event
 import org.chyavorec.domain.model.Loan
 import org.chyavorec.domain.model.LoanDueCalculator
 import org.chyavorec.domain.model.MembershipStatus
+import androidx.test.core.app.ApplicationProvider
+import okhttp3.OkHttpClient
+import org.chyavorec.app.AppConfig
+import org.chyavorec.app.XorTestCipher
+import org.chyavorec.app.di.AppContainer
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -208,9 +213,17 @@ class MomentsScreenshotTest {
     private val card = CardData(holder = "Мария Петрова", number = "1024-5678", barcode = "10245678", status = MembershipStatus.ACTIVE, verified = true)
 
     private fun cardBand(name: String, fontScale: Float = 1f, dark: Boolean = false) {
+        // Шевицата по ъглите на голямата карта чете настройките от контейнера.
+        val config = AppConfig(
+            siteBaseUrl = "https://chyavorec.org", catalogUrls = emptyList(), inflibApiUrl = "",
+            environment = "test", useMockData = false, versionName = "test", versionCode = 1,
+        )
+        val container = AppContainer(ApplicationProvider.getApplicationContext(), config, cipherOverride = XorTestCipher(), okHttpOverride = OkHttpClient())
         compose.setContent {
             Page(dark = dark, fontScale = fontScale) {
-                CompositionLocalProvider(LocalAgslEnabled provides false, LocalFixedCardTilt provides Offset.Zero) {
+                CompositionLocalProvider(
+                    LocalAgslEnabled provides false, LocalFixedCardTilt provides Offset.Zero, LocalAppContainer provides container,
+                ) {
                     Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         // Малката карта („Читателска карта“) — без лентата: там бодовете биха били шум.
                         LibraryCard(card, band = ShareFixtures.year)

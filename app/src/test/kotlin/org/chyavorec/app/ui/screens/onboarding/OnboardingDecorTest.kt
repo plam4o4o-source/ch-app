@@ -62,9 +62,10 @@ class OnboardingDecorTest {
         // Стига се до покой (waitForIdle не виси на безкрайна анимация) и картата е примерната.
         compose.waitForIdle()
         compose.onNodeWithContentDescription("Примерна читателска карта с име, номер и баркод").assertIsDisplayed()
-        // За TalkBack картата е едно изречение: името, номерът и баркодът не се четат поотделно.
-        compose.onAllNodesWithText("Мария Иванова", useUnmergedTree = true).assertCountEquals(0)
-        compose.onAllNodesWithContentDescription("Баркод", substring = true, useUnmergedTree = true).assertCountEquals(0)
+        // За TalkBack (слятото дърво) картата е едно изречение: името, номерът и баркодът не се четат поотделно.
+        compose.onAllNodesWithText("Мария Иванова").assertCountEquals(0)
+        compose.onAllNodesWithText("19220001", substring = true).assertCountEquals(0)
+        compose.onAllNodesWithContentDescription("Баркод", substring = true).assertCountEquals(0)
     }
 
     /** Снимка за преглед: печатът, възлите, нишката в три положения и примерната карта — тъмен фон като във въведението. */
