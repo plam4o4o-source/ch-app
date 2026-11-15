@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
@@ -34,7 +35,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.chyavorec.app.ui.components.CrossStitchSpec
 import org.chyavorec.app.ui.components.HapticSignature
@@ -182,7 +182,10 @@ internal fun QuizBand(results: List<Boolean>, total: Int, current: Int?, colors:
                 }
             }
             if (closes) {
-                delay(CLOSE_LEAD_MS)
+                // По кадрите (не delay): иглата и без това рисува всеки кадър, а часовникът е този на анимациите.
+                val start = withFrameMillis { it }
+                var elapsed = 0L
+                while (elapsed < CLOSE_LEAD_MS) elapsed = withFrameMillis { it } - start
                 closePhase = 1
                 confetti?.burst(QuizBandCharts.confettiOrigin(bounds[0], lift))
                 try {
