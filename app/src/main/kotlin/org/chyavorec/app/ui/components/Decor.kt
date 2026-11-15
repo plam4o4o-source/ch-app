@@ -70,6 +70,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.chyavorec.app.ui.LocalAppContainer
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.ShevitsaCalendar
@@ -271,7 +272,7 @@ private fun Tile(item: TileItem, motif: FolkMotif, wide: Boolean, columns: Int, 
                 is PressInteraction.Release, is PressInteraction.Cancel -> 0f
                 else -> return@collect
             }
-            launch { if (reduced) tighten.snapTo(target) else tighten.animateTo(target, tween(120)) }
+            launch { if (reduced) tighten.snapTo(target) else tighten.animateTo(target, tween(AppMotion.QuickMs)) }
         }
     }
     val shape = MaterialTheme.shapes.medium

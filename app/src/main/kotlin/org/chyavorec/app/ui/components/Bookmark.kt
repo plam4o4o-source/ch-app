@@ -18,13 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import org.chyavorec.app.ui.theme.AppMotion
 
 /** Движението на панделката на отметката — чиста логика (тества се без Compose). */
 internal object BookmarkDrop {
     /** Колко трае „падането“ с превишаване. */
-    const val MS = 260
+    const val MS = AppMotion.ShortMs
     /** Кога панделката стига най-ниската си точка (превишаването). */
-    const val OVERSHOOT_AT_MS = 150
+    const val OVERSHOOT_AT_MS = AppMotion.QuickMs
     const val OVERSHOOT = 1.12f
 
     /** Вертикално отместване (дял от височината на иконата) при прогрес [p]: 0 → издърпана нагоре, 1 → на място. */
@@ -36,7 +37,7 @@ internal object BookmarkDrop {
 
 /**
  * Отметка, която „пада“ като панделка: при запазване иконата идва отгоре, разтегната, и
- * се закрепва с кратко превишаване (~150 ms); при отмяна — веднага. Без анимация при първото
+ * се закрепва с кратко превишаване (~120 ms); при отмяна — веднага. Без анимация при първото
  * показване (списъкът не трябва да „пада“ при скролиране) и при намалено движение.
  */
 @Composable

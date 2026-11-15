@@ -27,10 +27,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 
 /**
- * Златният отблясък по заглавието на книгата: един път (~500 ms), когато преходът „разгръщане
+ * Златният отблясък по заглавието на книгата: един път (~0,5 s), когато преходът „разгръщане
  * на книга“ е стигнал до края си, ивица светлина минава през буквите и ги „позлатява“.
  * API 33+: малък AGSL шейдър от [ShaderPool] (ивица с горещо ядро); API 26–32 и при грешка —
  * обикновен градиент със същото движение. При намалено движение — без отблясък. Слоят и
@@ -38,8 +39,8 @@ import org.chyavorec.app.ui.theme.Brand
  */
 internal object GoldSheen {
     const val TAG = ShaderTags.SHEEN
-    const val DURATION_MS = 500
-    const val START_DELAY_MS = 120L
+    const val DURATION_MS = AppMotion.LongMs
+    const val START_DELAY_MS = AppMotion.QuickMs.toLong()
 
     /** Центърът на ивицата (дял от ширината, извън кадъра в двата края) при напредък [p]. */
     fun center(p: Float): Float = -0.3f + 1.6f * p

@@ -43,6 +43,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 
 /**
@@ -111,6 +112,11 @@ fun rememberCountUpToday(): Boolean? {
  * и докъде да се завърти всяко колелце.
  */
 internal object Odometer {
+    /** Първото „превъртане“ от нула (церемониално — по-дълго от всяка стъпка на скалата). */
+    const val INTRO_MS = AppMotion.StitchMs + AppMotion.ShortMs
+    /** Смяна на стойността след това. */
+    const val ROLL_MS = AppMotion.LongMs + AppMotion.QuickMs
+
     /** Цифрите на |[value]| от най-старшата към най-младшата; 0 → [0]. */
     fun digits(value: Int): IntArray {
         // Long — за да е коректно и за Int.MIN_VALUE.
@@ -209,10 +215,10 @@ private fun OdometerDigit(
         }
         if (intro[0]) {
             intro[0] = false
-            pos.animateTo(Odometer.introTarget(digit, place), tween(1100, easing = FastOutSlowInEasing))
+            pos.animateTo(Odometer.introTarget(digit, place), tween(Odometer.INTRO_MS, easing = FastOutSlowInEasing))
         } else {
             val target = Odometer.rollTarget(pos.value, digit, up)
-            if (target != pos.value) pos.animateTo(target, tween(650, easing = FastOutSlowInEasing))
+            if (target != pos.value) pos.animateTo(target, tween(Odometer.ROLL_MS, easing = FastOutSlowInEasing))
         }
         // Нормализиране (позицията остава малко число, цифрата — същата).
         pos.snapTo(digit.toFloat())

@@ -37,6 +37,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.chyavorec.app.ui.theme.AppMotion
 
 /**
  * Флагът „намалено движение“, прочетен веднъж в корена ([observeReducedMotion]) и
@@ -133,7 +134,7 @@ fun Modifier.animateEntrance(index: Int, maxStaggered: Int = 10): Modifier {
     if (rememberReducedMotion()) return this
     var shown by rememberSaveable { mutableStateOf(index >= maxStaggered) }
     if (shown) return this
-    return this then EntranceElement(delayMillis = index * 45L, onFinished = { shown = true })
+    return this then EntranceElement(delayMillis = index * AppMotion.StaggerMs.toLong(), onFinished = { shown = true })
 }
 
 private class EntranceElement(
@@ -164,7 +165,7 @@ private class EntranceNode(private val delayMillis: Long, var onFinished: () -> 
     override fun onAttach() {
         coroutineScope.launch {
             delay(delayMillis)
-            progress.animateTo(1f, tween(420, easing = FastOutSlowInEasing))
+            progress.animateTo(1f, tween(AppMotion.MediumMs + AppMotion.QuickMs, easing = FastOutSlowInEasing))
             onFinished()
         }
     }
@@ -211,7 +212,7 @@ fun sharedTransitionsActive(): Boolean {
 /**
  * Свързва елемент с общ [key] между два екрана (напр. корицата на книга в
  * списъка и в детайлите), така че да „прелети“ при навигация. Ключовете са
- * стабилни идентификатори: `book-<инв. №>`, `news-<id>`, `event-title-<id>`…
+ * стабилни идентификатори: `book-<инв. №>`, `news-<id>`, `news-title-<id>`, `library-card`.
  * Извън навигация (preview, тестове) и при намалено движение е no-op.
  */
 @OptIn(ExperimentalSharedTransitionApi::class)

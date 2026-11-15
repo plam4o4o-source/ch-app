@@ -112,6 +112,7 @@ import org.chyavorec.app.ui.components.OrnamentFrame
 import org.chyavorec.app.ui.components.QrCodeView
 import org.chyavorec.app.ui.components.SecureScreen
 import org.chyavorec.app.ui.components.SyncStamp
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.SystemBarIcons
@@ -505,7 +506,7 @@ fun CardFullscreen(onClose: () -> Unit) {
     val scope = rememberCoroutineScope()
     val window = remember(context) { (context as? Activity)?.window }
 
-    // Яркост: от текущата към максимална за ~300 ms вместо рязък скок.
+    // Яркост: от текущата към максимална за ~0,3 s вместо рязък скок.
     val brightness = remember { Animatable(initialBrightness(context, window)) }
     DisposableEffect(window) {
         val old = window?.attributes?.screenBrightness
@@ -527,7 +528,7 @@ fun CardFullscreen(onClose: () -> Unit) {
         if (reduced) {
             brightness.snapTo(WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL)
         } else {
-            brightness.animateTo(WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL, tween(300, easing = LinearEasing))
+            brightness.animateTo(WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL, tween(AppMotion.MediumMs, easing = LinearEasing))
         }
     }
 
@@ -541,7 +542,7 @@ fun CardFullscreen(onClose: () -> Unit) {
     LaunchedEffect(hasCard) {
         if (!hasCard || entered) return@LaunchedEffect
         haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-        if (reduced || shared) entry.snapTo(0f) else entry.animateTo(0f, tween(350, easing = FastOutSlowInEasing))
+        if (reduced || shared) entry.snapTo(0f) else entry.animateTo(0f, tween(AppMotion.MediumMs, easing = FastOutSlowInEasing))
         entered = true
     }
     val flipLabel = stringResource(R.string.card_flip)
@@ -575,7 +576,7 @@ fun CardFullscreen(onClose: () -> Unit) {
                             haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
                             val target = if (showBack) 180f else 0f
                             scope.launch {
-                                if (reduced) flip.snapTo(target) else flip.animateTo(target, tween(450, easing = FastOutSlowInEasing))
+                                if (reduced) flip.snapTo(target) else flip.animateTo(target, tween(AppMotion.MediumMs + AppMotion.QuickMs, easing = FastOutSlowInEasing))
                             }
                         },
                 ) {

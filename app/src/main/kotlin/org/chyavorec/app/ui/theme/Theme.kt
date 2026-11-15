@@ -340,7 +340,7 @@ val LocalThemeStyle = staticCompositionLocalOf { ThemeStyle() }
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
 /** Продължителност на прехода между две схеми (смяна на палитра/тема, цветове от корица). */
-private const val SCHEME_ANIMATION_MS = 450
+private const val SCHEME_ANIMATION_MS = AppMotion.MediumMs + AppMotion.QuickMs
 
 @Composable
 fun ChitalishteTheme(

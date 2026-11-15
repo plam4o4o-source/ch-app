@@ -81,6 +81,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.components.HideAppChrome
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.util.udcSectionName
 import org.chyavorec.domain.model.CatalogBook
@@ -115,6 +116,8 @@ private val CardHeight = CardWidth * 1.42f
 private const val FAN_STEP = 46f
 private const val FAN_DROP = 9f
 private const val FAN_TILT = 9f
+/** Една стъпка на разбъркването и половината обръщане на предложението. */
+private const val SHUFFLE_STEP_MS = AppMotion.QuickMs + AppMotion.StaggerMs
 
 /** Запазеното място на резултата под тестето (един ред заглавие, автор, бутони). */
 private val DetailsMinHeight = 200.dp
@@ -176,7 +179,7 @@ fun SurpriseOverlay(
             snapshotFlow { latest.loading }.first { !it }
             revealed = true
             onRevealed(ui.round)
-            if (latest.pick != null) cards[HERO].alpha.animateTo(1f, tween(220))
+            if (latest.pick != null) cards[HERO].alpha.animateTo(1f, tween(AppMotion.ShortMs))
             return@LaunchedEffect
         }
         val fanSpring = spring<Float>(dampingRatio = 0.68f, stiffness = Spring.StiffnessMediumLow)
@@ -190,7 +193,7 @@ fun SurpriseOverlay(
         // 1. Тестето се разперва ветрило.
         var slots = IntArray(CARDS) { it }
         cards.forEachIndexed { i, c -> moveTo(c, slots[i], fanSpring) }
-        delay(260)
+        delay(AppMotion.ShortMs + AppMotion.StaggerMs.toLong())
         // 2. Три размествания — по две карти си сменят местата (пружината продължава с инерцията).
         val random = Random(ui.round)
         // Разлистване: нарастващи тикове през трите размествания (на 8–10 — тик на всяко, както преди).
@@ -203,18 +206,18 @@ fun SurpriseOverlay(
             moveTo(cards[b], slots[b], swapSpring)
             // Повдигане на разместваните — „прескачат“ една през друга.
             launch { cards[a].y.animateTo(-18f, swapSpring); cards[a].y.animateTo(abs(slots[a] - HERO) * FAN_DROP, swapSpring) }
-            delay(160)
+            delay(SHUFFLE_STEP_MS.toLong())
         }
         // 3. Събират се в купчина; средната (предложението) — отгоре.
         cards.forEach { c -> moveTo(c, HERO, fanSpring) }
-        delay(200)
+        delay(AppMotion.ShortMs.toLong())
         snapshotFlow { latest.loading }.first { !it }
         // 4. Останалите изчезват, предложението се обръща и излиза напред.
-        cards.forEachIndexed { i, c -> if (i != HERO) launch { c.alpha.animateTo(0f, tween(180)) } }
+        cards.forEachIndexed { i, c -> if (i != HERO) launch { c.alpha.animateTo(0f, tween(AppMotion.ShortMs)) } }
         if (latest.pick != null) {
             launch { zoom.animateTo(1.25f, spring(dampingRatio = 0.6f, stiffness = Spring.StiffnessMediumLow)) }
             launch { cards[HERO].y.animateTo(-6f, fanSpring) }
-            flip.animateTo(90f, tween(150))
+            flip.animateTo(90f, tween(SHUFFLE_STEP_MS))
             haptic.performHapticFeedback(HapticFeedbackType.Confirm)
             flip.animateTo(0f, spring(dampingRatio = 0.7f, stiffness = Spring.StiffnessMedium))
         }
@@ -229,9 +232,9 @@ fun SurpriseOverlay(
     }
     // Заглавието на „прозореца“ за TalkBack: сцената, после резултатът.
     val pane = stringResource(if (revealed && ui.pick != null) R.string.surprise_label else R.string.surprise_action)
-    // Тъмната сцена се появява за ~0.16 s; зад тестето — топъл отблясък (бордо и злато).
+    // Тъмната сцена се появява за ~0,2 s; зад тестето — топъл отблясък (бордо и злато).
     val appear = remember { Animatable(0f) }
-    LaunchedEffect(Unit) { appear.animateTo(1f, tween(160)) }
+    LaunchedEffect(Unit) { appear.animateTo(1f, tween(AppMotion.ShortMs)) }
     Box(
         Modifier
             .fillMaxSize()
@@ -333,7 +336,7 @@ fun SurpriseOverlay(
             Box(Modifier.size(1.dp).semantics { liveRegion = LiveRegionMode.Assertive; contentDescription = status })
             AnimatedVisibility(
                 visible = revealed,
-                enter = if (still) fadeIn(tween(220)) else fadeIn(tween(220)) + slideInVertically(tween(260)) { it / 6 },
+                enter = if (still) fadeIn(tween(AppMotion.ShortMs)) else fadeIn(tween(AppMotion.ShortMs)) + slideInVertically(tween(AppMotion.ShortMs)) { it / 6 },
             ) {
                 val pick = ui.pick
                 if (pick != null) {

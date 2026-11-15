@@ -11,6 +11,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -134,6 +135,7 @@ import org.chyavorec.app.ui.share.ShareImageRequest
 import org.chyavorec.app.ui.share.rememberShareImageState
 import org.chyavorec.app.ui.share.sans
 import org.chyavorec.app.ui.share.serif
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.ShevitsaMotif
 import org.chyavorec.app.ui.theme.SystemBarIcons
@@ -144,6 +146,9 @@ import org.chyavorec.data.repository.AuthState
 
 /** Колко трае един слайд при автоматично превъртане. */
 internal const val SLIDE_MS = 5_500
+
+/** За това време елементите на слайда влизат един след друг (всеки — в свой дял от него). */
+private const val APPEAR_MS = AppMotion.StitchMs * 2
 
 /**
  * Състоянието на историята: още се изчислява, готова, празна (няма книги през годината) или
@@ -338,7 +343,7 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
     val timer = remember(index, restart) { Animatable(0f) }
     val appear = remember(index) { Animatable(if (reduced) 1f else 0f) }
     LaunchedEffect(index, reduced) {
-        if (reduced) appear.snapTo(1f) else appear.animateTo(1f, tween(1_800, easing = LinearEasing))
+        if (reduced) appear.snapTo(1f) else appear.animateTo(1f, tween(APPEAR_MS, easing = LinearEasing))
     }
     var scrolling by remember { mutableStateOf(false) }
     val paused = held || scrolling || share.busy || !resumed.isAtLeast(Lifecycle.State.RESUMED)
@@ -445,7 +450,7 @@ fun YearStory(summary: ReadingYear.Summary, onClose: () -> Unit, siteUrl: String
     ) {
         AnimatedContent(
             targetState = index,
-            transitionSpec = { if (reduced) fadeIn(tween(0)) togetherWith fadeOut(tween(0)) else fadeIn(tween(260)) togetherWith fadeOut(tween(200)) },
+            transitionSpec = { if (reduced) fadeIn(snap()) togetherWith fadeOut(snap()) else fadeIn(tween(AppMotion.ShortMs)) togetherWith fadeOut(tween(AppMotion.ShortMs)) },
             label = "year-slide",
         ) { i ->
             val k = slides[i]
