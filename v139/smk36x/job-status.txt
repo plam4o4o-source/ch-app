@@ -1,1 +1,1 @@
-part=smk36x target=google_apis api=36 gpu=swangle_indirect emulator-step=failure
+part=smk36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success

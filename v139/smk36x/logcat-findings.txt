@@ -1,0 +1,67 @@
+app pids seen: ['3826', '5060', '7162', '7871', '9496', '10306', '13517', '15216', '16033']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 51
+   skipped-frames events=51 max=219 total=2803
+   11-15 14:19:59.069  3826  3826 I Choreographer: Skipped 88 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:00.783  3826  3826 I Choreographer: Skipped 92 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:01.394  3826  3826 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:02.402  3826  3826 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:03.288  3826  3826 I Choreographer: Skipped 52 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:04.199  3826  3826 I Choreographer: Skipped 54 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:04.802  3826  3826 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:05.596  3826  3826 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:16.540  3826  3826 I Choreographer: Skipped 94 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:17.068  3826  3826 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:17.894  3826  3826 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:18.936  3826  3826 I Choreographer: Skipped 62 frames!  The application may be doing too much work on its main thread.
+== Davey: 120
+   davey events=120 max=3231ms median=890ms
+   11-15 14:19:59.016  3826  3839 I HWUI    : Davey! duration=1936ms; Flags=1, FrameTimelineVsyncId=9197, IntendedVsync=114641828743, Vsync=114958495397, InputEventId=0, HandleInputStart=114967222914, AnimationStart=114967223595, PerformTraver
+   11-15 14:20:01.112  3826  3838 I HWUI    : Davey! duration=1942ms; Flags=0, FrameTimelineVsyncId=9276, IntendedVsync=116741828659, Vsync=116741828659, InputEventId=0, HandleInputStart=116749868222, AnimationStart=116749868473, PerformTraver
+   11-15 14:20:01.721  3826  3911 I HWUI    : Davey! duration=1217ms; Flags=0, FrameTimelineVsyncId=9284, IntendedVsync=116758495325, Vsync=116891828653, InputEventId=0, HandleInputStart=116900942638, AnimationStart=116900943089, PerformTraver
+   11-15 14:20:03.213  3826  3840 I HWUI    : Davey! duration=3231ms; Flags=0, FrameTimelineVsyncId=9321, IntendedVsync=116908495319, Vsync=118441828591, InputEventId=0, HandleInputStart=118445066554, AnimationStart=118445066874, PerformTraver
+   11-15 14:20:03.988  3826  3838 I HWUI    : Davey! duration=2144ms; Flags=0, FrameTimelineVsyncId=9431, IntendedVsync=118458495257, Vsync=119041828567, InputEventId=0, HandleInputStart=119055361051, AnimationStart=119055361492, PerformTraver
+   11-15 14:20:04.712  3826  3911 I HWUI    : Davey! duration=2429ms; Flags=0, FrameTimelineVsyncId=9489, IntendedVsync=119058495233, Vsync=120058495193, InputEventId=0, HandleInputStart=120068179739, AnimationStart=120068180180, PerformTraver
+   11-15 14:20:05.505  3826  3911 I HWUI    : Davey! duration=2221ms; Flags=0, FrameTimelineVsyncId=9603, IntendedVsync=120075161859, Vsync=120941828491, InputEventId=0, HandleInputStart=120955687491, AnimationStart=120955687942, PerformTraver
+   11-15 14:20:06.192  3826  3911 I HWUI    : Davey! duration=2233ms; Flags=0, FrameTimelineVsyncId=9654, IntendedVsync=120958495157, Vsync=121858495121, InputEventId=0, HandleInputStart=121861263915, AnimationStart=121861264336, PerformTraver
+   11-15 14:20:06.769  3826  3911 I HWUI    : Davey! duration=1424ms; Flags=0, FrameTimelineVsyncId=9692, IntendedVsync=121875161787, Vsync=122458495097, InputEventId=0, HandleInputStart=122464087097, AnimationStart=122464087598, PerformTraver
+   11-15 14:20:06.776  3826  3911 I HWUI    : Davey! duration=1830ms; Flags=0, FrameTimelineVsyncId=9707, IntendedVsync=122475161763, Vsync=123241828399, InputEventId=0, HandleInputStart=123276263425, AnimationStart=123276264246, PerformTraver
+   11-15 14:20:11.817  3826  3838 I HWUI    : Davey! duration=774ms; Flags=0, FrameTimelineVsyncId=10092, IntendedVsync=128691828181, Vsync=128975161503, InputEventId=0, HandleInputStart=128988446010, AnimationStart=128988446602, PerformTraver
+   11-15 14:20:16.947  3826  3989 I HWUI    : Davey! duration=2154ms; Flags=0, FrameTimelineVsyncId=10284, IntendedVsync=132325161369, Vsync=132608494691, InputEventId=0, HandleInputStart=132610818055, AnimationStart=132610818456, PerformTrave
+== NativeLink: 9
+   11-15 14:20:25.961  3826  4235 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 14:21:20.473  5060  5152 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 14:24:41.241  7162  7227 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 14:26:35.149  7871  7922 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 14:31:25.068  9496  9784 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 14:32:49.697 10306 10362 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 14:41:25.394 13517 13567 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 14:46:18.854 15216 15497 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 14:47:32.353 16033 16092 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-15 14:19:51.589  3791  3791 I PERFCHECK: smk
+   11-15 14:19:52.172  3814  3814 I PERFCHECK: section: W. First launch and warm-up
+   11-15 14:21:09.855  5042  5042 I PERFCHECK: sm-light
+   11-15 14:21:39.666  5337  5337 I PERFCHECK: section: S1-light. Main screens, timeline scroll + scrubber drag, quiz to 5/5, event, „Дари спомен“, share, settings 1080x2400 px, density 420, font_scale 1.0, night no, app lo
+   11-15 14:28:03.922  8444  8444 I PERFCHECK: q5-r5-light
+   11-15 14:29:12.813  8870  8870 I PERFCHECK: ev-cal-light
+   11-15 14:30:15.142  9294  9294 I PERFCHECK: dn-light
+   11-15 14:30:37.770  9479  9479 I PERFCHECK: section: SH-light. Sharing a photo to the app ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/21
+   11-15 14:30:39.550  9489  9489 I PERFCHECK: sh-light-am
+   11-15 14:31:26.957  9802  9802 I PERFCHECK: sh-light-helper
+   11-15 14:31:49.216  9939  9939 I PERFCHECK: sh-light-nogrant
+   11-15 14:32:39.348 10278 10278 I PERFCHECK: sm-dark
+   11-15 14:33:06.858 10461 10461 I PERFCHECK: section: S2-dark. Dark theme 1080x2400 px, density 420, font_scale 1.0, night yes, app locale [bg-BG], rotation 0
+   11-15 14:40:12.396 13023 13023 I PERFCHECK: dn-dark
+   11-15 14:41:15.019 13480 13480 I PERFCHECK: sm-font200
+   11-15 14:41:38.150 13664 13664 I PERFCHECK: section: S3-font200. Font scale 2.0 1080x2400 px, density 420, font_scale 2.0, night no, app locale [bg-BG], rotation 0
+   11-15 14:45:08.391 15030 15030 I PERFCHECK: dn-font200
+   11-15 14:45:30.617 15194 15194 I PERFCHECK: section: SH-font200. Sharing a photo to the app ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/21
+   11-15 14:45:32.145 15204 15204 I PERFCHECK: sh-font200-am
+   11-15 14:46:20.832 15517 15517 I PERFCHECK: sh-font200-helper
+   11-15 14:47:26.945 15983 15983 I PERFCHECK: sm-tablet-landscape
+   11-15 14:47:51.013 16216 16216 I PERFCHECK: section: TB-tablet-landscape. Tablet two-pane 2560x1600 px, density 320, font_scale 1.0, night no, app locale [bg-BG], rotation 0
+   11-15 14:49:12.352 16784 16784 I PERFCHECK: sm-tablet-landscape-b
+   11-15 14:50:13.586 17278 17278 I PERFCHECK: section: S9. Crashes and ANRs of the whole part

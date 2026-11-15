@@ -1,0 +1,51 @@
+app pids seen: ['5033', '5903', '7132', '7789', '9416', '10428', '12736', '14490', '15227']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 10
+   skipped-frames events=10 max=57 total=402
+   11-15 14:19:41.841  5033  5033 I Choreographer: Skipped 57 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:22.633  5903  5903 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-15 14:22:33.781  7132  7132 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-15 14:23:58.187  7789  7789 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-15 14:27:11.400  9416  9416 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-15 14:29:17.579 10428 10428 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-15 14:33:33.234 12736 12736 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-15 14:36:42.498 14490 14490 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-15 14:36:43.066 14490 14490 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-15 14:38:13.440 15227 15227 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-15 14:19:39.367  5011  5011 I PERFCHECK: smk
+   11-15 14:19:40.001  5028  5028 I PERFCHECK: section: W. First launch and warm-up
+   11-15 14:20:19.608  5886  5886 I PERFCHECK: sm-light
+   11-15 14:20:20.164  1646  1971 I ActivityManager: Killing 5033:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-15 14:20:32.547  6011  6011 I PERFCHECK: section: S1-light. Main screens, timeline scroll + scrubber drag, quiz to 5/5, event, „Дари спомен“, share, settings 1080x2400 px, density 420, font_scale 1.0, night no, app lo
+   11-15 14:22:31.243  1646  3064 I ActivityManager: Killing 5903:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-15 14:23:55.789  1646  3064 I ActivityManager: Killing 7132:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-15 14:25:06.602  8320  8320 I PERFCHECK: q5-r5-light
+   11-15 14:26:02.403  8694  8694 I PERFCHECK: ev-cal-light
+   11-15 14:26:50.833  9162  9162 I PERFCHECK: dn-light
+   11-15 14:27:08.564  9394  9394 I PERFCHECK: section: SH-light. Sharing a photo to the app ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/35
+   11-15 14:27:08.580  1646  2627 I ActivityManager: Killing 7789:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-15 14:27:09.619  9411  9411 I PERFCHECK: sh-light-am
+   11-15 14:27:45.371  9662  9662 I PERFCHECK: sh-light-helper
+   11-15 14:28:03.289  9798  9798 I PERFCHECK: sh-light-nogrant
+   11-15 14:28:43.370 10142 10142 I PERFCHECK: sm-dark
+   11-15 14:29:15.181  1646  3765 I ActivityManager: Killing 9416:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-15 14:29:27.583 10535 10535 I PERFCHECK: section: S2-dark. Dark theme 1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0
+   11-15 14:32:06.791 11957 11957 I PERFCHECK: dn-dark
+   11-15 14:33:27.167 12648 12648 I PERFCHECK: sm-font200
+   11-15 14:33:30.724  1646  2627 I ActivityManager: Killing 10428:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-15 14:33:42.558 12856 12856 I PERFCHECK: section: S3-font200. Font scale 2.0 1080x2400 px, density 420, font_scale 2.0, night no, app locale , rotation 0
+   11-15 14:36:22.665 14325 14325 I PERFCHECK: dn-font200
+   11-15 14:36:40.052 14466 14466 I PERFCHECK: section: SH-font200. Sharing a photo to the app ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/35
+   11-15 14:36:40.068  1646  2556 I ActivityManager: Killing 12736:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-15 14:36:41.129 14485 14485 I PERFCHECK: sh-font200-am
+   11-15 14:37:15.949 14734 14734 I PERFCHECK: sh-font200-helper
+   11-15 14:38:09.913 15188 15188 I PERFCHECK: sm-tablet-landscape
+   11-15 14:38:10.433  1646  4415 I ActivityManager: Killing 14490:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-15 14:38:23.682 15349 15349 I PERFCHECK: section: TB-tablet-landscape. Tablet two-pane 2160x1600 px, density 320, font_scale 1.0, night no, app locale , rotation 0
+   11-15 14:39:22.193 15847 15847 I PERFCHECK: sm-tablet-landscape-b
+   11-15 14:40:11.111 16327 16327 I PERFCHECK: section: S9. Crashes and ANRs of the whole part

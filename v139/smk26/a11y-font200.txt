@@ -1,0 +1,28 @@
+A11Y font200/01-home: targets=10 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2
+   MISSING: View@[42,2013][540,2064]; View@[540,2013][1038,2064]
+   SMALL: '' 190x19dp; '' 190x19dp
+A11Y font200/01b-home-2: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font200/02-catalog: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font200/03-my: targets=9 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+   MISSING: View@[42,1913][1038,2039]
+A11Y font200/04-news: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font200/05-more: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font200/05b-more-2: targets=11 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   MISSING: View@[42,231][1038,256]
+   SMALL: '' 379x10dp
+A11Y font200/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font200/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font200/30-donate: targets=4 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   MISSING: EditText@[84,2197][996,2274]
+   SMALL: '' 347x29dp
+A11Y font200/30e-after-cancel: targets=4 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   MISSING: EditText@[84,2200][996,2274]
+   SMALL: '' 347x28dp
+A11Y font200/31-shared-font200-am: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0
+A11Y font200/31-shared-font200-helper: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Кога (приблизително)' 347x32dp
+A11Y font200/40-settings: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Черно (OLED)' 379x34dp
+A11Y font200/40b-settings-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1
+   SMALL: 'Злато и жито' 347x30dp
+A11Y font200/40c-settings-3: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0

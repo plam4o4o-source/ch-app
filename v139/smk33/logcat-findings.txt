@@ -1,0 +1,60 @@
+app pids seen: ['5303', '6130', '8979', '9697', '11424', '12440', '14981', '16996', '17801', '18340']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 61
+   skipped-frames events=61 max=194 total=3432
+   11-15 14:20:29.472  5303  5303 I Choreographer: Skipped 76 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:30.478  5303  5303 I Choreographer: Skipped 58 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:32.986  5303  5303 I Choreographer: Skipped 130 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:33.789  5303  5303 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:34.816  5303  5303 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:35.989  5303  5303 I Choreographer: Skipped 68 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:36.707  5303  5303 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:37.577  5303  5303 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:38.171  5303  5303 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:38.972  5303  5303 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:47.812  5303  5303 I Choreographer: Skipped 68 frames!  The application may be doing too much work on its main thread.
+   11-15 14:20:49.949  5303  5303 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+== Davey: 113
+   davey events=113 max=3941ms median=950ms
+   11-15 14:20:33.343  5303  5314 I OpenGLRenderer: Davey! duration=3643ms; Flags=1, FrameTimelineVsyncId=5759, IntendedVsync=107812707192, Vsync=108779373820, InputEventId=0, HandleInputStart=108785739129, AnimationStart=108785739848, Perform
+   11-15 14:20:34.811  5303  5314 I OpenGLRenderer: Davey! duration=1097ms; Flags=0, FrameTimelineVsyncId=6150, IntendedVsync=111296040386, Vsync=111312707052, InputEventId=0, HandleInputStart=111325950708, AnimationStart=111325951436, Perform
+   11-15 14:20:35.962  5303  5350 I OpenGLRenderer: Davey! duration=1757ms; Flags=0, FrameTimelineVsyncId=6161, IntendedVsync=111346040384, Vsync=112079373688, InputEventId=0, HandleInputStart=112095976447, AnimationStart=112095977507, Perform
+   11-15 14:20:36.684  5303  5350 I OpenGLRenderer: Davey! duration=1877ms; Flags=0, FrameTimelineVsyncId=6231, IntendedVsync=112112707020, Vsync=112312707012, InputEventId=0, HandleInputStart=112315646604, AnimationStart=112315647426, Perform
+   11-15 14:20:37.571  5303  5350 I OpenGLRenderer: Davey! duration=1960ms; Flags=0, FrameTimelineVsyncId=6244, IntendedVsync=112329373678, Vsync=113112706980, InputEventId=0, HandleInputStart=113122990327, AnimationStart=113122990813, Perform
+   11-15 14:20:38.106  5303  5350 I OpenGLRenderer: Davey! duration=2102ms; Flags=0, FrameTimelineVsyncId=6287, IntendedVsync=113162706978, Vsync=114296040266, InputEventId=0, HandleInputStart=114296398237, AnimationStart=114296399038, Perform
+   11-15 14:20:38.278  5303  5350 I OpenGLRenderer: Davey! duration=1113ms; Flags=0, FrameTimelineVsyncId=6470, IntendedVsync=114446040260, Vsync=115012706904, InputEventId=0, HandleInputStart=115016982182, AnimationStart=115016982819, Perform
+   11-15 14:20:38.969  5303  5314 I OpenGLRenderer: Davey! duration=1436ms; Flags=0, FrameTimelineVsyncId=6484, IntendedVsync=115029373570, Vsync=115879373536, InputEventId=0, HandleInputStart=115884241143, AnimationStart=115884241618, Perform
+   11-15 14:20:39.123  5303  5314 I OpenGLRenderer: Davey! duration=1301ms; Flags=0, FrameTimelineVsyncId=6519, IntendedVsync=115896040202, Vsync=116462706846, InputEventId=0, HandleInputStart=116478895842, AnimationStart=116478896786, Perform
+   11-15 14:20:39.558  5303  5350 I OpenGLRenderer: Davey! duration=865ms; Flags=0, FrameTimelineVsyncId=6565, IntendedVsync=116729384577, Vsync=117262717825, InputEventId=0, HandleInputStart=117279046495, AnimationStart=117279046954, PerformT
+   11-15 14:20:48.412  5303  5314 I OpenGLRenderer: Davey! duration=1399ms; Flags=0, FrameTimelineVsyncId=7227, IntendedVsync=124946039840, Vsync=124962706506, InputEventId=0, HandleInputStart=124969841172, AnimationStart=124969841809, Perform
+   11-15 14:20:49.299  5303  5314 I OpenGLRenderer: Davey! duration=1039ms; Flags=0, FrameTimelineVsyncId=7332, IntendedVsync=126179373124, Vsync=126546039776, InputEventId=0, HandleInputStart=126547061796, AnimationStart=126547062815, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-15 14:20:26.795  5254  5254 I PERFCHECK: smk
+   11-15 14:20:27.354  5283  5283 I PERFCHECK: section: W. First launch and warm-up
+   11-15 14:21:31.896  6091  6091 I PERFCHECK: sm-light
+   11-15 14:22:05.321  6767  6767 I PERFCHECK: section: S1-light. Main screens, timeline scroll + scrubber drag, quiz to 5/5, event, „Дари спомен“, share, settings 1080x2400 px, density 420, font_scale 1.0, night no, app lo
+   11-15 14:28:26.061 10498 10498 I PERFCHECK: q5-r5-light
+   11-15 14:29:17.602 10748 10748 I PERFCHECK: ev-open-light
+   11-15 14:29:54.095 10947 10947 I PERFCHECK: ev-cal-light
+   11-15 14:30:49.430 11404 11404 I PERFCHECK: section: SH-light. Sharing a photo to the app ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/1000000020
+   11-15 14:30:50.517 11418 11418 I PERFCHECK: sh-light-am
+   11-15 14:31:39.198 11777 11777 I PERFCHECK: sh-light-helper
+   11-15 14:32:01.720 11938 11938 I PERFCHECK: sh-light-nogrant
+   11-15 14:32:52.047 12387 12387 I PERFCHECK: sm-dark
+   11-15 14:33:14.646 12706 12706 I PERFCHECK: section: S2-dark. Dark theme 1080x2400 px, density 420, font_scale 1.0, night yes, app locale [bg-BG], rotation 0
+   11-15 14:36:40.468 14453 14453 I PERFCHECK: dn-dark
+   11-15 14:37:41.024 14932 14932 I PERFCHECK: sm-font200
+   11-15 14:38:05.559 15101 15101 I PERFCHECK: section: S3-font200. Font scale 2.0 1080x2400 px, density 420, font_scale 2.0, night no, app locale [bg-BG], rotation 0
+   11-15 14:42:01.157 16832 16832 I PERFCHECK: dn-font200
+   11-15 14:42:22.117 16975 16975 I PERFCHECK: section: SH-font200. Sharing a photo to the app ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/1000000020
+   11-15 14:42:23.275 16990 16990 I PERFCHECK: sh-font200-am
+   11-15 14:43:09.595 17304 17304 I PERFCHECK: sh-font200-helper
+   11-15 14:44:10.660 17759 17759 I PERFCHECK: sm-font130
+   11-15 14:44:37.697 17940 17940 I PERFCHECK: section: S3b-font130. Font scale 1.3: the timeline medallions 1080x2400 px, density 420, font_scale 1.3, night no, app locale [bg-BG], rotation 0
+   11-15 14:45:30.500 18317 18317 I PERFCHECK: sm-tablet-landscape
+   11-15 14:45:47.202 18485 18485 I PERFCHECK: section: TB-tablet-landscape. Tablet two-pane 2560x1600 px, density 320, font_scale 1.0, night no, app locale [bg-BG], rotation 0
+   11-15 14:47:07.379 19044 19044 I PERFCHECK: sm-tablet-landscape-b
+   11-15 14:48:08.667 19518 19518 I PERFCHECK: section: S9. Crashes and ANRs of the whole part

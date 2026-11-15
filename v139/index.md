@@ -6,16 +6,16 @@
 
 ## Runs and parts
 
-debug/w26-check (runs in runs.txt, latest 43711037340 @ afb71c5). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 26 (API 26) or 36x (API 36). prodRelease (minified) x86_64 builds with a throwaway key: new = the 1.2.39 candidate (org.chyavorec.app), base = 1.2.38 as released (org.chyavorec.app.b38, side by side for the A/B), base-upd = 1.2.38 as org.chyavorec.app (the update test). No app-code changes on the debug branch. Screenshots are JPEG, scaled down (sheets/ = contact sheets). The earlier checks: [../v138b/index.md](../v138b/index.md), [../v138/index.md](../v138/index.md).
+debug/w26-check (runs in runs.txt, latest 43722779976 @ 0faf3fd). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 26 (API 26) or 36x (API 36). prodRelease (minified) x86_64 builds with a throwaway key: new = the 1.2.39 candidate (org.chyavorec.app), base = 1.2.38 as released (org.chyavorec.app.b38, side by side for the A/B), base-upd = 1.2.38 as org.chyavorec.app (the update test). No app-code changes on the debug branch. Screenshots are JPEG, scaled down (sheets/ = contact sheets). The earlier checks: [../v138b/index.md](../v138b/index.md), [../v138/index.md](../v138/index.md).
 
 | part | status |
 |---|---|
 | fr33a | COMPLETE; part=fr33a target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | fr33b | COMPLETE; part=fr33b target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | fr36x | COMPLETE; part=fr36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
-| smk26 | incomplete; part=smk26 target=google_apis api=26 gpu=swangle_indirect emulator-step=failure |
-| smk33 | incomplete; part=smk33 target=google_apis api=33 gpu=swangle_indirect emulator-step=failure |
-| smk36x | incomplete; part=smk36x target=google_apis api=36 gpu=swangle_indirect emulator-step=failure |
+| smk26 | COMPLETE; part=smk26 target=google_apis api=26 gpu=swangle_indirect emulator-step=success |
+| smk33 | COMPLETE; part=smk33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| smk36x | COMPLETE; part=smk36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
 | upd33 | COMPLETE; part=upd33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 
 ```
@@ -498,20 +498,179 @@ HELPER installed: package:org.pc.helper
 DEVICE locale -> bg-BG: data="LOCALE ok bg-BG"; config now: config: mcc310-mnc260-bg-rBG-ldltr-sw411dp-w411dp-h842dp-normal-long-notround-lowdr-nowidecg-port-notnight-420dpi-finger-keysexposed-nokeys-navhidden-nonav-v26
 ## W. First launch and warm-up
 (dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
-first-install catalogue results after 2078 ms
+first-install catalogue results after 2249 ms
 ## S1-light. Main screens, timeline (scroll + scrubber drag), quiz to 5/5, event, „Дари спомен“, share, settings (1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0)
 CAP light/01-home: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=23 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
-CAP light/01b-home-2: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Последни новини · СЪБИТИЕ · · 26 септември 2026 · С хоро и песен във Водица · Сканирай · Читателска карта
-CAP light/01c-home-3: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=36 ellipsized=0 | Предстоящи събития · Всички · 16 · НОЕ · 80 г. от създаването на ЮНЕС · Организацията на ООН за обра
+CAP light/01b-home-2: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=34 ellipsized=0 | Последни новини · СЪБИТИЕ · · 26 септември 2026 · С хоро и песен във Водица · Сканирай · Читателска карта
+CAP light/01c-home-3: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=34 ellipsized=0 | 16 · НОЕ · 80 г. от създаването на ЮНЕС · Организацията на ООН за обра · БИБЛИОТЕКА · 21
 CAP light/02-catalog: targets=22 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=48 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
 CAP light/03-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Примерна читателска карта с  · Така ще изглежда картата ти · Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта
 CAP light/04-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
 CAP light/05-more: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
-CAP light/05b-more-2: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=24 ellipsized=0 | Стари снимки за фотоархива · Документи и архив · Устав, отчети, юбилейният ве · Контакти · Адрес, телефон, местоположен · ЗАНИМАНИЯ
+CAP light/05b-more-2: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Галерия · Снимки от сайта · Дари спомен · Стари снимки за фотоархива · Документи и архив · Устав, отчети, юбилейният ве
 CAP light/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
 TIMELINE light top: first=1900 min=1900 max=1922 n=13; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1909. Организирано читалищно дело" content-desc="1912–1918. Прек
-CAP light/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | 1923–1924. Устав и държавно  · 1923–1924 · Устав и държавно признание · Уставът е приет на 22 януари · 1927. Въздържателно дружеств · Въздържателно дружество „Бор
+CAP light/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | 1923–1924. Устав и държавно  · 1923–1924 · Устав и държавно признание · Уставът е приет на 22 януари · 1927. Въздържателно дружеств · Въздържателно дружество „Бор
 TIMELINE light after 3 swipes: first=1923 min=1920 max=1947 n=17; content-desc="1923–1924. Устав и държавно признание. Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." text="1923–1924" text="Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." content-desc="1927. Въздържателно дружество „Борба“. Основано от активни читалищни дейци с председател Илия Христов. Беседи, реферати и театрални постановки." content-desc="1927. Въздържателно дружество „Борба“" content-desc
+TL-DRAG light thumb at 44 dp below the list top (x=68 y=346, list 231..2274): before [first=1900 min=1900 max=1922 n=13] after [first=1923 min=1920 max=1947 n=17]
+TL-DRAG light: scrubber CAUGHT (list jumped 1900 → 1923) ; FATAL(any process)=0 of the app=0 ANR=0
+QUIZ learn-light q1: RIGHT; content-desc="Избродирай отговорите. 1 верни от 1 отговорени, общо 5 въпроса" 
+QUIZ learn-light q2: RIGHT; content-desc="Избродирай отговорите. 2 верни от 2 отговорени, общо 5 въпроса" 
+QUIZ learn-light q3: WRONG	Катрин Уеб; content-desc="Избродирай отговорите. 2 верни от 3 отговорени, общо 5 въпроса" 
+QUIZ learn-light q4: WRONG	Даниъл Дж. Бурстин; content-desc="Избродирай отговорите. 2 верни от 4 отговорени, общо 5 въпроса" 
+QUIZ learn-light q5: WRONG	1922; content-desc="Избродирай отговорите. 2 верни от 5 отговорени, общо 5 въпроса" 
+QUIZ learn-light result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ answers learned: Решение за собствена сграда|Първият радиоапарат в селото|Катрин Уеб|Даниъл Дж. Бурстин|1922|
+QUIZ r5-light q1: RIGHT; content-desc="Избродирай отговорите. 1 верни от 1 отговорени, общо 5 въпроса" 
+QUIZ r5-light q2: RIGHT; content-desc="Избродирай отговорите. 2 верни от 2 отговорени, общо 5 въпроса" 
+QUIZ r5-light q3: RIGHT; content-desc="Избродирай отговорите. 3 верни от 3 отговорени, общо 5 въпроса" 
+QUIZ r5-light q4: RIGHT; content-desc="Избродирай отговорите. 4 верни от 4 отговорени, общо 5 въпроса" 
+QUIZ r5-light q5: answer at [540 784]; band label bounds []; next button y 2163; animator_duration_scale=1 transition=1 window=1
+W25 log after the 5th answer (r5-light; times from the marker just before 'input tap'):
+QUIZ r5-light q5: RIGHT; content-desc="Шевицата е цяла!. 5 верни от 5 отговорени, общо 5 въпроса" 
+QUIZ r5-light result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ light after the 5/5 pass: text="Галерия" text="Снимки от сайта" text="Дари спомен" text="Стари снимки за фотоархива" text="Документи и архив" text="Устав, отчети, юбилейният вестник" text="Контакти" text="Адрес, телефон, местоположение" text="ЗАНИМАНИЯ" text="Извези шевица" 
+CAP light/20-event: targets=7 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Събота, 21 ноември 2026, сле · Панайот Пипков · Ден на семе · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана · Добави в календара
+EVENT light back from the leaf: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+CALENDAR light: fg android/com.android.internal.app.ResolverActivity; helper: 
+CAP light/20c-event-after-calendar: targets=7 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=9 ellipsized=0 | Събота, 21 ноември 2026, сле · Панайот Пипков · Ден на семе · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · 155 г. от рождението на Пана · Добави в календара
+EVENT light after the calendar: ''; content-desc="Събота, 21 ноември 2026, след 6 дни, Отворено в календара" text="Панайот Пипков · Ден на семейството" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="НЧ „Васил Левски – 1922“, пл
+CAP light/30-donate: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+CAP light/30b-donate-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката · Кога (приблизително) · Къде
+CAP light/30c-donate-3: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката · Кога (приблизително) · Къде
+DONATE light: text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" text="Съгласен/съгласна съм читалището да покаже снимките в архива и на сайта си." content-desc="Назад" text="Дари спомен" 
+DONATE light picker: fg com.android.documentsui/com.android.documentsui.picker.PickActivity; content-desc="Показване на основните елементи" text="Скорошни" content-desc="Списъчен изглед" content-desc="Още опции" text="Променено" content-desc="Низходящ ред" 
+DONATE light after cancelling the picker: front app; donate screen yes; photo none; FATAL(any process)=0 of the app=0 ANR=0
+CAP light/30e-after-cancel: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+SHARE: test photo 190442 B → content://media/external/images/media/35
+## SH-light. Sharing a photo to the app (ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/35)
+SHARE am start (cold, --grant-read-uri-permission): Status: ok TotalTime: 1177 
+CAP light/31-shared-light-am: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=14 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · 1 снимка не се прочете · ЗА СНИМКИТЕ
+SHARE light-am: front app; donate screen yes; PHOTO none; count ''; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="1 снимка не се прочете" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" text="С; FATAL(any process)=0 of the app=0 ANR=0
+SHARE helper: uri=content://media/external/images/media/35 pkg=org.chyavorec.app helper-read=190442 started
+CAP light/31-shared-light-helper: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · Снимка 1 · Махни снимка 1 · Добави още · 1 от 10
+SHARE light-helper: front app; donate screen yes; PHOTO SHOWN; count 'text="1 от 10"'; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" content-desc="Снимка 1" content-desc="Махни снимка 1" content-desc="Добави още" text="1 от 10" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" ; FATAL(any process)=0 of the app=0 ANR=0
+CAP light/31b-shared-scrolled: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Снимка 1 · Махни снимка 1 · Добави още · 1 от 10 · ЗА СНИМКИТЕ · Кой е на снимката
+SHARE am start WITHOUT a read grant (warm): Status: ok 
+CAP light/31-shared-light-nogrant: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · Снимка 1 · Махни снимка 1 · Добави още · 1 от 10
+SHARE light-nogrant: front app; donate screen yes; PHOTO SHOWN; count 'text="1 от 10"'; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" content-desc="Снимка 1" content-desc="Махни снимка 1" content-desc="Добави още" text="1 от 10" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" ; FATAL(any process)=0 of the app=0 ANR=0
+CAP light/40-settings: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP light/40b-settings-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Език · Както системата · Сезонни украси · Празници, сезони и обичаи: п
+CAP light/40c-settings-3: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“ · Всеки ден друга книга от кат · ИЗВЕСТИЯ
+SMOKE light: FATAL(any process)=0 of the app=0 ANR=0; app process 9416
+app theme → =Тъмна|=Dark: text="ИЗГЛЕД" text="Тема" text="Тъмна" text="Размер на текста" 
+## S2-dark. Dark theme (1080x2400 px, density 420, font_scale 1.0, night no, app locale , rotation 0)
+CAP dark/01-home: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=23 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP dark/01b-home-2: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=33 ellipsized=0 | Последни новини · СЪБИТИЕ · · 27 септември 2026 · Празника „38 читалища. Един  · Сканирай · Читателска карта
+CAP dark/02-catalog: targets=22 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=48 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP dark/03-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Примерна читателска карта с  · Така ще изглежда картата ти · Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта
+CAP dark/04-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP dark/05-more: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP dark/05b-more-2: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Галерия · Снимки от сайта · Дари спомен · Стари снимки за фотоархива · Документи и архив · Устав, отчети, юбилейният ве
+CAP dark/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
+TIMELINE dark top: first=1900 min=1900 max=1922 n=13; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1909. Организирано читалищно дело" content-desc="1912–1918. Прек
+CAP dark/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | 1923–1924. Устав и държавно  · 1923–1924 · Устав и държавно признание · Уставът е приет на 22 януари · 1927. Въздържателно дружеств · Въздържателно дружество „Бор
+TIMELINE dark after 3 swipes: first=1923 min=1920 max=1947 n=17; content-desc="1923–1924. Устав и държавно признание. Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." text="1923–1924" text="Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." content-desc="1927. Въздържателно дружество „Борба“. Основано от активни читалищни дейци с председател Илия Христов. Беседи, реферати и театрални постановки." content-desc="1927. Въздържателно дружество „Борба“" content-desc
+TL-DRAG dark thumb at 44 dp below the list top (x=68 y=346, list 231..2274): before [first=1900 min=1900 max=1922 n=13] after [first=1900 min=1900 max=1922 n=13]
+TL-DRAG dark thumb at 32 dp below the list top (x=68 y=315, list 231..2274): before [first=1900 min=1900 max=1922 n=13] after [first=1923 min=1920 max=1947 n=17]
+TL-DRAG dark: scrubber CAUGHT (list jumped 1900 → 1923) ; FATAL(any process)=0 of the app=0 ANR=0
+QUIZ: no question: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+CAP dark/30-donate: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+DONATE dark: text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" text="Съгласен/съгласна съм читалището да покаже снимките в архива и на сайта си." content-desc="Назад" text="Дари спомен" 
+DONATE dark picker: fg com.android.documentsui/com.android.documentsui.picker.PickActivity; content-desc="Показване на основните елементи" text="Скорошни" content-desc="Списъчен изглед" content-desc="Още опции" text="Променено" content-desc="Низходящ ред" 
+DONATE dark after cancelling the picker: front app; donate screen yes; photo none; FATAL(any process)=0 of the app=0 ANR=0
+CAP dark/30e-after-cancel: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+CAP dark/40-settings: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | ИЗГЛЕД · Тема · Тъмна · Размер на текста · Стандартен · Палитра
+CAP dark/40b-settings-2: targets=11 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=18 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Език · Както системата · Сезонни украси · Празници, сезони и обичаи: п
+CAP dark/40c-settings-3: targets=8 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=18 ellipsized=0 | УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“ · Всеки ден друга книга от кат · ИЗВЕСТИЯ
+SMOKE dark: FATAL(any process)=0 of the app=0 ANR=0; app process 10428
+app theme → =Както системата|=System default: text="ИЗГЛЕД" text="Тема" text="Както системата" text="Размер на текста" 
+## S3-font200. Font scale 2.0 (1080x2400 px, density 420, font_scale 2.0, night no, app locale , rotation 0)
+CAP font200/01-home: targets=10 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=15 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP font200/01b-home-2: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Последни новини · · 27 септември 2026 · Празника „38 читалища. Един  · Сканирай · Читателска карта · Искам да прочета
+CAP font200/02-catalog: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=36 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · 2446 резултата  ·  данни от 
+CAP font200/03-my: targets=9 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | Примерна читателска карта с  · Така ще изглежда картата ти · Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта
+CAP font200/04-news: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP font200/05-more: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP font200/05b-more-2: targets=11 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=18 ellipsized=0 | За читалището · История и мисия · Галерия · Снимки от сайта · Дари спомен · Стари снимки за фотоархива
+CAP font200/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
+TIMELINE font200 top: first=1900 min=1900 max=1900 n=3; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" 
+CAP font200/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | 1909. Организирано читалищно · Влади Илиев, Христо Лалев и  · 1912–1918. Прекъсване от вой · 1912–1918 · Прекъсване от войните · Балканската война (1912) пре
+TIMELINE font200 after 3 swipes: first=1909 min=1900 max=1918 n=8; content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1912–1918. Прекъсване от войните. Балканската война (1912) прекъсва дейността. Читалището не функционира и по времето на Първата световна война." text="1912–1918" text="Балканската война (1912) прекъсва дейността. Читалището не функционира и по времето на Първата световна война." content-desc="Лента на времето, 1900-те години" 
+TL-DRAG font200 thumb at 44 dp below the list top (x=68 y=346, list 231..2274): before [first=1900 min=1900 max=1900 n=3] after [first=1927 min=1920 max=1934 n=5]
+TL-DRAG font200: scrubber CAUGHT (list jumped 1900 → 1927) ; FATAL(any process)=0 of the app=0 ANR=0
+QUIZ: no question: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+CAP font200/30-donate: targets=4 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=8 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+DONATE font200: text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" text="Кой е на снимката" content-desc="Назад" text="Дари спомен" 
+DONATE font200 picker: fg com.android.documentsui/com.android.documentsui.picker.PickActivity; content-desc="Показване на основните елементи" text="Скорошни" content-desc="Списъчен изглед" content-desc="Още опции" text="Променено" content-desc="Низходящ ред" 
+DONATE font200 after cancelling the picker: front app; donate screen yes; photo none; FATAL(any process)=0 of the app=0 ANR=0
+CAP font200/30e-after-cancel: targets=4 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=8 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+## SH-font200. Sharing a photo to the app (ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/35)
+SHARE am start (cold, --grant-read-uri-permission): Status: ok TotalTime: 1333 
+CAP font200/31-shared-font200-am: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · 1 снимка не се прочете · ЗА СНИМКИТЕ
+SHARE font200-am: front app; donate screen yes; PHOTO none; count ''; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="1 снимка не се прочете" text="ЗА СНИМКИТЕ" text="Кой е на снимката" content-desc="Назад" text="Дари спомен" ; FATAL(any process)=0 of the app=0 ANR=0
+SHARE helper: uri=content://media/external/images/media/35 pkg=org.chyavorec.app helper-read=190442 started
+CAP font200/31-shared-font200-helper: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=11 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · Снимка 1 · Махни снимка 1 · Добави още · 1 от 10
+SHARE font200-helper: front app; donate screen yes; PHOTO SHOWN; count 'text="1 от 10"'; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" content-desc="Снимка 1" content-desc="Махни снимка 1" content-desc="Добави още" text="1 от 10" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" content-desc="Назад" text="Дари спомен" ; FATAL(any process)=0 of the app=0 ANR=0
+CAP font200/40-settings: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=16 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP font200/40b-settings-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=13 ellipsized=0 | Злато и жито · Левски · Зелено и сребро · Шевица · Червено, черно и слонова кос · Черно (OLED)
+CAP font200/40c-settings-3: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Чисто черен фон в тъмната те · Език · Както системата · Сезонни украси · Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“
+SMOKE font200: FATAL(any process)=0 of the app=0 ANR=0; app process 14490
+## TB-tablet-landscape. Tablet two-pane (2160x1600 px, density 320, font_scale 1.0, night no, app locale , rotation 0)
+CAP tablet-landscape/tab-l-more: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=26 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP tablet-landscape/tab-l-more-Gallery: targets=25 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=42 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+HUB tab-l after '=Галерия|=Gallery': back arrow yes; tabs visible
+CAP tablet-landscape/tab-l-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Примерна читателска карта с 
+CAP tablet-landscape/tab-l-my-Wanttoread: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Списъкът е празен · Отбележи книга с „Искам да п · Назад · Искам да прочета
+CAP tablet-landscape-b/50-tablet-donate: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+TABLET donate pane: back arrow yes; tabs hidden; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" tex
+MORE: tile 'Лента на времето|Timeline' not found: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ЧИТАЛИЩЕТО" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" text="За читалището" text="История и мисия" text="Галерия" text="С
+SMOKE tablet-landscape-b: FATAL(any process)=0 of the app=0 ANR=0; app process 15227
+## S9. Crashes and ANRs of the whole part
+SMOKE TOTAL (smk26, API 26): FATAL(any process)=0 of the app=0 ANR=0; FATAL lines 0, app FATAL 0, ANR 0
+A11Y AGG: 58 screens analysed, 0 dumps failed; totals MISSING=30 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=29
+== MISSING: 23 distinct
+   View@[192,1458][564,1504]  [2 screens: tab-l-more, tab-l-more-Gallery]
+   View@[588,1458][961,1504]  [2 screens: tab-l-more, tab-l-more-Gallery]
+   View@[42,2050][777,2064]  [1 screens: 01-home]
+   View@[809,2050][1080,2064]  [1 screens: 01-home]
+   View@[0,1906][1080,2032]  [1 screens: 02-catalog]
+   View@[42,1917][524,2043]  [1 screens: 05-more]
+   View@[556,1917][1038,2043]  [1 screens: 05-more]
+   View@[0,1903][1080,2029]  [1 screens: 05b-more-2]
+   View@[84,231][370,258]  [1 screens: 40b-settings-2]
+   View@[396,231][683,258]  [1 screens: 40b-settings-2]
+   View@[709,231][996,258]  [1 screens: 40b-settings-2]
+   View@[42,231][1038,248]  [1 screens: 40c-settings-3]
+   View@[42,2013][540,2064]  [1 screens: 01-home]
+   View@[540,2013][1038,2064]  [1 screens: 01-home]
+   View@[42,1913][1038,2039]  [1 screens: 03-my]
+   View@[42,231][1038,256]  [1 screens: 05b-more-2]
+   EditText@[84,2197][996,2274]  [1 screens: 30-donate]
+   EditText@[84,2200][996,2274]  [1 screens: 30e-after-cancel]
+   View@[0,1894][1080,2020]  [1 screens: 05b-more-2]
+   View@[187,2124][406,2274]  [1 screens: 20-event]
+   View@[689,2124][878,2274]  [1 screens: 20-event]
+   View@[187,2155][406,2274]  [1 screens: 20c-event-after-calendar]
+   View@[689,2155][878,2274]  [1 screens: 20c-event-after-calendar]
+== SMALL: 10 distinct
+   ''  [9 screens: 01-home, 05b-more-2, 20c-event-after-calendar, 30-donate, 30e-after-cancel, 40b-settings-2 …]
+   'Съгласен/съгласна съм читалище'  [3 screens: 31-shared-light-am, 31-shared-light-helper, 31-shared-light-nogrant]
+   'Дъхът на спомените — том 3'  [1 screens: 01b-home-2]
+   'Гласът на реката'  [1 screens: 01b-home-2]
+contact sheets: 15 in sheets/
+contact sheets: 15 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5033', '5903', '7132', '7789', '9416', '10428', '12736', '14490', '15227']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 10
+   skipped-frames events=10 max=57 total=402
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
 ```
 
@@ -520,7 +679,7 @@ CRASHES: 0 block(s)  → crashes.txt
 ```
 part smk33; APK: 1.2.39 696e57d prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 size 4681342 bytes
 base APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b38, throwaway key, versionCode 1990100 size 4641014 bytes
-host: 4 cpu, 15983 MB RAM
+host: 4 cpu, 15982 MB RAM
 android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
 RELEASE APK: rel-133.apk missing — built x86_64 app.apk
 APK for this part: 1.2.39 696e57d prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 size 4681342 bytes
@@ -531,20 +690,176 @@ screen 1080x2400
 HELPER installed: package:org.pc.helper
 ## W. First launch and warm-up
 (dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
-first-install catalogue results after 5207 ms
+first-install catalogue results after 3712 ms
 ## S1-light. Main screens, timeline (scroll + scrubber drag), quiz to 5/5, event, „Дари спомен“, share, settings (1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
 CAP light/01-home: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=23 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
-CAP light/01b-home-2: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=0 | Лента за търсене · 15 ноември 2026 · + 8 Неделя · Последни новини · БИБЛИОТЕКА · · 11 ноември 2026 · Четем заедно – мъдростта на 
-CAP light/01c-home-3: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Последни новини · БИБЛИОТЕКА · · 11 ноември 2026 · Четем заедно – мъдростта на  · Сканирай · Читателска карта
+CAP light/01b-home-2: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Последни новини · БИБЛИОТЕКА · · 11 ноември 2026 · Четем заедно – мъдростта на  · Сканирай · Читателска карта
+CAP light/01c-home-3: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | Сканирай · Читателска карта · Искам да прочета · Контакти · КАЛЕНДАР · Предстоящи събития
 CAP light/02-catalog: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
 CAP light/03-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Примерна читателска карта с  · Така ще изглежда картата ти · Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта
 CAP light/04-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
 CAP light/05-more: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
-CAP light/05b-more-2: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Галерия · Снимки от сайта · Дари спомен · Стари снимки за фотоархива · Документи и архив · Устав, отчети, юбилейният ве
+CAP light/05b-more-2: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | Галерия · Снимки от сайта · Дари спомен · Стари снимки за фотоархива · Документи и архив · Устав, отчети, юбилейният ве
 CAP light/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
 TIMELINE light top: first=1900 min=1900 max=1922 n=13; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1909. Организирано читалищно дело" content-desc="1912–1918. Прек
 CAP light/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | 17 дек. 1922. Възстановяване · Дейността се възобновява под · 1923–1924. Устав и държавно  · 1923–1924 · Устав и държавно признание · Уставът е приет на 22 януари
 TIMELINE light after 3 swipes: first=1922 min=1920 max=1936 n=16; content-desc="17 дек. 1922. Възстановяване и официално учредяване. Дейността се възобновява под името НЧ „Васил Левски“. По инициатива на Христо Лалев читалището се отделя в самостоятелна институция, настанена в Общината." content-desc="1923–1924. Устав и държавно признание. Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." text="1923–1924" text="Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." c
+TL-DRAG light thumb at 44 dp below the list top (x=68 y=411, list 296..2337): before [first=1900 min=1900 max=1924 n=20] after [first=1900 min=1900 max=1922 n=13]
+TL-DRAG light thumb at 32 dp below the list top (x=68 y=380, list 296..2337): before [first=1900 min=1900 max=1922 n=13] after [first=1922 min=1920 max=1936 n=16]
+TL-DRAG light: scrubber CAUGHT (list jumped 1900 → 1922) ; FATAL(any process)=0 of the app=0 ANR=0
+QUIZ learn-light q1: RIGHT; content-desc="Избродирай отговорите. 1 верни от 1 отговорени, общо 5 въпроса" 
+QUIZ learn-light q2: RIGHT; content-desc="Избродирай отговорите. 2 верни от 2 отговорени, общо 5 въпроса" 
+QUIZ learn-light q3: WRONG	Катрин Уеб; content-desc="Избродирай отговорите. 2 верни от 3 отговорени, общо 5 въпроса" 
+QUIZ learn-light q4: WRONG	Даниъл Дж. Бурстин; content-desc="Избродирай отговорите. 2 верни от 4 отговорени, общо 5 въпроса" 
+QUIZ learn-light q5: WRONG	1922; content-desc="Избродирай отговорите. 2 верни от 5 отговорени, общо 5 въпроса" 
+QUIZ learn-light result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ answers learned: Решение за собствена сграда|Първият радиоапарат в селото|Катрин Уеб|Даниъл Дж. Бурстин|1922|
+QUIZ r5-light q1: RIGHT; content-desc="Избродирай отговорите. 1 верни от 1 отговорени, общо 5 въпроса" 
+QUIZ r5-light q2: RIGHT; content-desc="Избродирай отговорите. 2 верни от 2 отговорени, общо 5 въпроса" 
+QUIZ r5-light q3: RIGHT; content-desc="Избродирай отговорите. 3 верни от 3 отговорени, общо 5 въпроса" 
+QUIZ r5-light q4: RIGHT; content-desc="Избродирай отговорите. 4 верни от 4 отговорени, общо 5 въпроса" 
+QUIZ r5-light q5: answer at [540 849]; band label bounds []; next button y 2226; animator_duration_scale=1 transition=1 window=1
+REC q5-r5-light (emu): marker 1571 ms after the recording start; 130 frames at 20/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+W25 log after the 5th answer (r5-light; times from the marker just before 'input tap'):
+CFTIME q5-r5-light: cftime: 130 frames at 20/s; band 75-91% of the height; transient saturated points outside the band per frame: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 23, 23, 22, 22, 22, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 77, 74, 78, 78, 77, 77, 14, 14, 14, 14, 14, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] cftime: tap response at frame #18; first confetti frame #56 = 1900 ms after it (±50 ms); peak #74 (78 points, 2800 ms); last #84 (3300 ms); frames with confetti 29 cftime: first confetti frame spans 71-72% of the height (band top 75%); highest point in the first 4 confetti frames 71%; starts ABOVE the band 
+FRAMES q5-r5-light: confetti-like new saturated points outside the band, per frame (level at the end 5165; peak #74 = 5250; frames with >=6: 113, first #18, last #130): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5051, 5051, 5051, 5050, 5050, 5055, 5055, 5052, 5053, 5053, 5053, 5053, 5053, 5053, 5052, 5053, 5053, 5053, 5053, 5090, 5091, 5092, 5092, 5092, 5092, 5150, 5148, 5152, 5152, 5149, 5157, 5157, 5162, 5157, 5157, 5157, 5158, 5158, 5185, 5185, 5183, 5186, 5187, 5187, 5185, 5185, 5187, 5187, 5186, 5187, vertical span of those points: 35-95% 35-95% 35-95% 35-95% 35-95% 35-95% 35-95% 35-95% 35-95% 35-95% 35-95% 35-95% 
+QUIZ r5-light q5: RIGHT; content-desc="Шевицата е цяла!. 5 верни от 5 отговорени, общо 5 въпроса" 
+QUIZ r5-light result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ light after the 5/5 pass: text="Документи и архив" text="Устав, отчети, юбилейният вестник" text="Контакти" text="Адрес, телефон, местоположение" text="ЗАНИМАНИЯ" text="Извези шевица" text="Бод по бод, като на кърпа" text="Старият вестник" text="Статии от юбилейния вестник" text="Лента на времето" 
+REC ev-open-light (emu): marker 1570 ms after the recording start; 49 frames at 20/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+CAP light/20-event: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+EVENT light back from the leaf: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+CALENDAR light: fg android/com.android.internal.app.ResolverActivity; helper: 
+CAP light/20c-event-after-calendar: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+EVENT light after the calendar: ''; content-desc="Понеделник, 16 ноември 2026, след 1 ден, Отворено в календара" text="80 г. от създаването на ЮНЕСКО" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="НЧ „Васил Левски – 1922“, пл.
+MORE: tile '=Дари спомен|=Donate a memory' not found: text="Устав, отчети, юбилейният вестник" text="Адрес, телефон, местоположение" text="ЗАНИМАНИЯ" text="Извези шевица" text="Бод по бод, като на кърпа" text="Старият вестник" text="Статии от юбилейния вестник" text="Лента на времето" text="Историята на читалището от 1900 г." text="Познай Яворец" text=
+SHARE: test photo 190442 B → content://media/external/images/media/1000000020
+## SH-light. Sharing a photo to the app (ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/1000000020)
+SHARE am start (cold, --grant-read-uri-permission): Status: ok TotalTime: 4293 
+CAP light/31-shared-light-am: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · 1 снимка не се прочете · ЗА СНИМКИТЕ
+SHARE light-am: front app; donate screen yes; PHOTO none; count ''; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="1 снимка не се прочете" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" text="С; FATAL(any process)=0 of the app=0 ANR=0
+SHARE helper: uri=content://media/external/images/media/1000000020 pkg=org.chyavorec.app helper-read=190442 started
+CAP light/31-shared-light-helper: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · Снимка 1 · Махни снимка 1 · Добави още · 1 от 10
+SHARE light-helper: front app; donate screen yes; PHOTO SHOWN; count 'text="1 от 10"'; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" content-desc="Снимка 1" content-desc="Махни снимка 1" content-desc="Добави още" text="1 от 10" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" ; FATAL(any process)=0 of the app=0 ANR=0
+CAP light/31b-shared-scrolled: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Снимка 1 · Махни снимка 1 · Добави още · 1 от 10 · ЗА СНИМКИТЕ · Кой е на снимката
+SHARE am start WITHOUT a read grant (warm): Status: ok 
+CAP light/31-shared-light-nogrant: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · Снимка 1 · Махни снимка 1 · Добави още · 1 от 10
+SHARE light-nogrant: front app; donate screen yes; PHOTO SHOWN; count 'text="1 от 10"'; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" content-desc="Снимка 1" content-desc="Махни снимка 1" content-desc="Добави още" text="1 от 10" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" ; FATAL(any process)=0 of the app=0 ANR=0
+CAP light/40-settings: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP light/40b-settings-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+CAP light/40c-settings-3: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Разклащане за „Изненадай ме“ · Разклати телефона в каталога · УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“
+SMOKE light: FATAL(any process)=0 of the app=0 ANR=0; app process 11424
+## S2-dark. Dark theme (1080x2400 px, density 420, font_scale 1.0, night yes, app locale [bg-BG], rotation 0)
+CAP dark/01-home: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=23 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP dark/01b-home-2: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Последни новини · БИБЛИОТЕКА · · 11 ноември 2026 · Четем заедно – мъдростта на  · Сканирай · Читателска карта
+CAP dark/02-catalog: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP dark/03-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Примерна читателска карта с  · Така ще изглежда картата ти · Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта
+CAP dark/04-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP dark/05-more: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP dark/05b-more-2: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | Галерия · Снимки от сайта · Дари спомен · Стари снимки за фотоархива · Документи и архив · Устав, отчети, юбилейният ве
+CAP dark/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
+TIMELINE dark top: first=1900 min=1900 max=1922 n=13; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1909. Организирано читалищно дело" content-desc="1912–1918. Прек
+CAP dark/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | 17 дек. 1922. Възстановяване · Дейността се възобновява под · 1923–1924. Устав и държавно  · 1923–1924 · Устав и държавно признание · Уставът е приет на 22 януари
+TIMELINE dark after 3 swipes: first=1922 min=1920 max=1936 n=16; content-desc="17 дек. 1922. Възстановяване и официално учредяване. Дейността се възобновява под името НЧ „Васил Левски“. По инициатива на Христо Лалев читалището се отделя в самостоятелна институция, настанена в Общината." content-desc="1923–1924. Устав и държавно признание. Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." text="1923–1924" text="Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." c
+TL-DRAG dark thumb at 44 dp below the list top (x=68 y=411, list 296..2337): before [first=1900 min=1900 max=1922 n=13] after [first=1922 min=1920 max=1936 n=16]
+TL-DRAG dark: scrubber CAUGHT (list jumped 1900 → 1922) ; FATAL(any process)=0 of the app=0 ANR=0
+QUIZ: no question: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+CAP dark/30-donate: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+DONATE dark: text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" text="Съгласен/съгласна съм читалището да покаже снимките в архива и на сайта си." content-desc="Назад" text="Дари спомен" 
+DONATE dark picker: fg com.google.android.providers.media.module/com.android.providers.media.photopicker.PhotoPickerActivity; text="This app can only access the photos you select" text="Recent" content-desc="Photo taken on Nov 15, 2026, 2:36:34 PM" content-desc="Photo taken on Nov 15, 2026, 2:35:42 PM" content-desc="Photo ta
+DONATE dark after cancelling the picker: front app; donate screen yes; photo none; FATAL(any process)=0 of the app=0 ANR=0
+CAP dark/30e-after-cancel: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+CAP dark/40-settings: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP dark/40b-settings-2: targets=11 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=18 ellipsized=0 | Червено, черно и слонова кос · Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език
+CAP dark/40c-settings-3: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=18 ellipsized=0 | Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“ · Разклати телефона в каталога · УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо
+SMOKE dark: FATAL(any process)=0 of the app=0 ANR=0; app process 12440
+## S3-font200. Font scale 2.0 (1080x2400 px, density 420, font_scale 2.0, night no, app locale [bg-BG], rotation 0)
+CAP font200/01-home: targets=10 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=16 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP font200/01b-home-2: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=17 ellipsized=0 | Последни новини · СЪБИТИЕ · · 26 септември 2026 · С хоро и песен във Водица · Сканирай · Читателска карта
+CAP font200/02-catalog: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=37 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · 2446 резултата  ·  данни от 
+CAP font200/03-my: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Примерна читателска карта с  · Така ще изглежда картата ти · Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта
+CAP font200/04-news: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP font200/05-more: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=19 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP font200/05b-more-2: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Дейности · Групи, клубове, проекти · За читалището · История и мисия · Галерия · Снимки от сайта
+CAP font200/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
+TIMELINE font200 top: first=1900 min=1900 max=1900 n=3; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" 
+CAP font200/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | 1909. Организирано читалищно · Организирано читалищно дело · 1909. Организирано читалищно · Влади Илиев, Христо Лалев и  · 1912–1918. Прекъсване от вой · 1912–1918
+TIMELINE font200 after 3 swipes: first=1909 min=1900 max=1918 n=9; content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1909. Организирано читалищно дело" content-desc="1912–1918. Прекъсване от войните. Балканската война (1912) прекъсва дейността. Читалището не функционира и по времето на Първата световна война." text="1912–1918" text="Балканската война (1912) прекъсва дейността. Читалището не функционира и по времето на Първата световна война." content-desc="Лента на времето, 1900-те години" 
+TL-DRAG font200 thumb at 44 dp below the list top (x=68 y=411, list 296..2337): before [first=1900 min=1900 max=1900 n=3] after [first=1923 min=1920 max=1934 n=11]
+TL-DRAG font200: scrubber CAUGHT (list jumped 1900 → 1923) ; FATAL(any process)=0 of the app=0 ANR=0
+QUIZ: no question: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+CAP font200/30-donate: targets=4 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+DONATE font200: text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" text="Кой е на снимката" content-desc="Назад" text="Дари спомен" 
+DONATE font200 picker: fg com.google.android.providers.media.module/com.android.providers.media.photopicker.PhotoPickerActivity; text="This app can only access the photos you select" text="Recent" content-desc="Photo taken on Nov 15, 2026, 2:40:56 PM" content-desc="Photo taken on Nov 15, 2026, 2:36:34 PM" content-desc="Photo ta
+DONATE font200 after cancelling the picker: front app; donate screen yes; photo none; FATAL(any process)=0 of the app=0 ANR=0
+CAP font200/30e-after-cancel: targets=4 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+## SH-font200. Sharing a photo to the app (ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/1000000020)
+SHARE am start (cold, --grant-read-uri-permission): Status: ok TotalTime: 3193 
+CAP font200/31-shared-font200-am: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · 1 снимка не се прочете · ЗА СНИМКИТЕ
+SHARE font200-am: front app; donate screen yes; PHOTO none; count ''; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="1 снимка не се прочете" text="ЗА СНИМКИТЕ" text="Кой е на снимката" content-desc="Назад" text="Дари спомен" ; FATAL(any process)=0 of the app=0 ANR=0
+SHARE helper: uri=content://media/external/images/media/1000000020 pkg=org.chyavorec.app helper-read=190442 started
+CAP font200/31-shared-font200-helper: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · Снимка 1 · Махни снимка 1 · Добави още · 1 от 10
+SHARE font200-helper: front app; donate screen yes; PHOTO SHOWN; count 'text="1 от 10"'; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" content-desc="Снимка 1" content-desc="Махни снимка 1" content-desc="Добави още" text="1 от 10" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" content-desc="Назад" text="Дари спомен" ; FATAL(any process)=0 of the app=0 ANR=0
+CAP font200/40-settings: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP font200/40b-settings-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Яворец · Злато и жито · Левски · Зелено и сребро · Шевица · Червено, черно и слонова кос
+CAP font200/40c-settings-3: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+SMOKE font200: FATAL(any process)=0 of the app=0 ANR=0; app process 16996
+## S3b-font130. Font scale 1.3: the timeline medallions (1080x2400 px, density 420, font_scale 1.3, night no, app locale [bg-BG], rotation 0)
+CAP font130/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
+CAP font130/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | 1912–1918. Прекъсване от вой · 17 дек. 1922. Възстановяване · 17 дек. 1922 · Възстановяване и официално у · Дейността се възобновява под · 1923–1924. Устав и държавно 
+SMOKE font130: FATAL(any process)=0 of the app=0 ANR=0; app process 17801
+## TB-tablet-landscape. Tablet two-pane (2560x1600 px, density 320, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
+CAP tablet-landscape/tab-l-more: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP tablet-landscape/tab-l-more-Gallery: targets=25 MISSING=5 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=39 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+HUB tab-l after '=Галерия|=Gallery': back arrow yes; tabs visible
+CAP tablet-landscape/tab-l-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Примерна читателска карта с 
+CAP tablet-landscape/tab-l-my-Wanttoread: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Списъкът е празен · Отбележи книга с „Искам да п · Назад · Искам да прочета
+CAP tablet-landscape-b/50-tablet-donate: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+TABLET donate pane: back arrow yes; tabs hidden; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" tex
+MORE: tile 'Лента на времето|Timeline' not found: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ЧИТАЛИЩЕТО" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" text="За читалището" text="История и мисия" text="Галерия" text="С
+SMOKE tablet-landscape-b: FATAL(any process)=0 of the app=0 ANR=0; app process 18340
+## S9. Crashes and ANRs of the whole part
+SMOKE TOTAL (smk33, API 33): FATAL(any process)=0 of the app=0 ANR=0; FATAL lines 0, app FATAL 0, ANR 0
+A11Y AGG: 56 screens analysed, 0 dumps failed; totals MISSING=22 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=11
+== MISSING: 15 distinct
+   EditText@[84,2262][996,2388]  [2 screens: 30-donate, 30e-after-cancel]
+   View@[192,1461][647,1557]  [2 screens: tab-l-more, tab-l-more-Gallery]
+   View@[671,1461][1127,1557]  [2 screens: tab-l-more, tab-l-more-Gallery]
+   View@[42,2115][777,2127]  [1 screens: 01-home]
+   View@[809,2115][1080,2127]  [1 screens: 01-home]
+   View@[42,1982][524,2108]  [1 screens: 05-more]
+   View@[556,1982][1038,2108]  [1 screens: 05-more]
+   View@[84,296][370,382]  [1 screens: 40b-settings-2]
+   View@[396,296][683,382]  [1 screens: 40b-settings-2]
+   View@[42,2075][540,2127]  [1 screens: 01-home]
+   View@[540,2075][1038,2127]  [1 screens: 01-home]
+   View@[1030,2085][1080,2127]  [1 screens: 01b-home-2]
+   View@[1193,1385][1622,1481]  [1 screens: tab-l-more-Gallery]
+   View@[1646,1385][2075,1481]  [1 screens: tab-l-more-Gallery]
+   View@[2099,1385][2528,1481]  [1 screens: tab-l-more-Gallery]
+== SMALL: 6 distinct
+   ''  [2 screens: 01-home, 40b-settings-2]
+   'Червено, черно и слонова кост'  [1 screens: 40b-settings-2]
+   'Празници, сезони и обичаи: поз'  [1 screens: 40c-settings-3]
+   '80 г. от създаването на ЮНЕСКО'  [1 screens: 01b-home-2]
+   'Дари спомен'  [1 screens: 05-more]
+   'Махни снимка 1'  [1 screens: 31b-shared-scrolled]
+== SAME-LABEL: 0 distinct
+== DOUBLE: 0 distinct
+contact sheets: 30 in sheets/
+contact sheets: 30 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5303', '6130', '8979', '9697', '11424', '12440', '14981', '16996', '17801', '18340']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 61
+   skipped-frames events=61 max=194 total=3432
+== Davey: 113
+   davey events=113 max=3941ms median=950ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
 ```
 
@@ -564,20 +879,182 @@ screen 1080x2400
 HELPER installed: package:org.pc.helper
 ## W. First launch and warm-up
 (dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
-first-install catalogue results after 5514 ms
+first-install catalogue results after 8281 ms
 ## S1-light. Main screens, timeline (scroll + scrubber drag), quiz to 5/5, event, „Дари спомен“, share, settings (1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
 CAP light/01-home: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=23 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
-CAP light/01b-home-2: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Последни новини · БИБЛИОТЕКА · · 11 ноември 2026 · Четем заедно – мъдростта на  · Сканирай · Читателска карта
-CAP light/01c-home-3: targets=20 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=36 ellipsized=0 | Предстоящи събития · Всички · 16 · НОЕ · 80 г. от създаването на ЮНЕС · Организацията на ООН за обра
+CAP light/01b-home-2: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=35 ellipsized=0 | Последни новини · БИБЛИОТЕКА · · 11 ноември 2026 · Четем заедно – мъдростта на  · Сканирай · Читателска карта
+CAP light/01c-home-3: targets=19 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=32 ellipsized=0 | 16 · НОЕ · Организацията на ООН за обра · БИБЛИОТЕКА · 21 · НОЕ
 CAP light/02-catalog: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
 CAP light/03-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Примерна читателска карта с  · Така ще изглежда картата ти · Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта
 CAP light/04-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
 CAP light/05-more: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
-CAP light/05b-more-2: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=27 ellipsized=0 | Галерия · Снимки от сайта · Дари спомен · Стари снимки за фотоархива · Документи и архив · Устав, отчети, юбилейният ве
+CAP light/05b-more-2: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Галерия · Снимки от сайта · Дари спомен · Стари снимки за фотоархива · Документи и архив · Устав, отчети, юбилейният ве
 CAP light/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
 TIMELINE light top: first=1900 min=1900 max=1922 n=13; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1909. Организирано читалищно дело" content-desc="1912–1918. Прек
-CAP light/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | 1923–1924. Устав и държавно  · 1923–1924 · Устав и държавно признание · Уставът е приет на 22 януари · 1927. Въздържателно дружеств · Въздържателно дружество „Бор
+CAP light/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=22 ellipsized=0 | 1923–1924. Устав и държавно  · 1923–1924 · Устав и държавно признание · Уставът е приет на 22 януари · 1927. Въздържателно дружеств · Въздържателно дружество „Бор
 TIMELINE light after 3 swipes: first=1923 min=1920 max=1947 n=17; content-desc="1923–1924. Устав и държавно признание. Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." text="1923–1924" text="Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." content-desc="1927. Въздържателно дружество „Борба“. Основано от активни читалищни дейци с председател Илия Христов. Беседи, реферати и театрални постановки." content-desc="1927. Въздържателно дружество „Борба“" content-desc
+TL-DRAG light thumb at 44 dp below the list top (x=68 y=411, list 296..2337): before [first=1900 min=1900 max=1924 n=20] after [first=1900 min=1900 max=1922 n=13]
+TL-DRAG light thumb at 32 dp below the list top (x=68 y=380, list 296..2337): before [first=1900 min=1900 max=1922 n=13] after [first=1922 min=1920 max=1936 n=16]
+TL-DRAG light: scrubber CAUGHT (list jumped 1900 → 1922) ; FATAL(any process)=0 of the app=0 ANR=0
+QUIZ learn-light q1: RIGHT; content-desc="Избродирай отговорите. 1 верни от 1 отговорени, общо 5 въпроса" 
+QUIZ learn-light q2: RIGHT; content-desc="Избродирай отговорите. 2 верни от 2 отговорени, общо 5 въпроса" 
+QUIZ learn-light q3: WRONG	Катрин Уеб; content-desc="Избродирай отговорите. 2 верни от 3 отговорени, общо 5 въпроса" 
+QUIZ learn-light q4: WRONG	Даниъл Дж. Бурстин; content-desc="Избродирай отговорите. 2 верни от 4 отговорени, общо 5 въпроса" 
+QUIZ learn-light q5: WRONG	1922; content-desc="Избродирай отговорите. 2 верни от 5 отговорени, общо 5 въпроса" 
+QUIZ learn-light result: text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ answers learned: Решение за собствена сграда|Първият радиоапарат в селото|Катрин Уеб|Даниъл Дж. Бурстин|1922|
+QUIZ r5-light q1: RIGHT; content-desc="Избродирай отговорите. 1 верни от 1 отговорени, общо 5 въпроса" 
+QUIZ r5-light q2: RIGHT; content-desc="Избродирай отговорите. 2 верни от 2 отговорени, общо 5 въпроса" 
+QUIZ r5-light q3: RIGHT; content-desc="Избродирай отговорите. 3 верни от 3 отговорени, общо 5 въпроса" 
+QUIZ r5-light q4: RIGHT; content-desc="Избродирай отговорите. 4 верни от 4 отговорени, общо 5 въпроса" 
+QUIZ r5-light q5: answer at [540 849]; band label bounds []; next button y 2226; animator_duration_scale=1 transition=1 window=1
+W25 log after the 5th answer (r5-light; times from the marker just before 'input tap'):
+QUIZ r5-light q5: RIGHT; content-desc="Шевицата е цяла!. 5 верни от 5 отговорени, общо 5 въпроса" 
+QUIZ r5-light result: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+QUIZ light after the 5/5 pass: text="Галерия" text="Снимки от сайта" text="Дари спомен" text="Стари снимки за фотоархива" text="Документи и архив" text="Устав, отчети, юбилейният вестник" text="Контакти" text="Адрес, телефон, местоположение" text="ЗАНИМАНИЯ" text="Извези шевица" 
+CAP light/20-event: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+EVENT light back from the leaf: text="Новини" text="Календар" content-desc="Абонирай се за календара" content-desc="Изглед календар" text="Всички" text="Библиотека" 
+CALENDAR light: fg android/com.android.internal.app.ResolverActivity; helper: 
+CAP light/20c-event-after-calendar: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Понеделник, 16 ноември 2026, · 80 г. от създаването на ЮНЕС · Събитие от годишния календар · НЧ „Васил Левски – 1922“, пл · Организацията на ООН за обра · Добави в календара
+EVENT light after the calendar: ''; content-desc="Понеделник, 16 ноември 2026, след 1 ден, Отворено в календара" text="80 г. от създаването на ЮНЕСКО" text="Събитие от годишния календар на читалището — повтаря се всяка година на тази дата." text="НЧ „Васил Левски – 1922“, пл.
+CAP light/30-donate: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+CAP light/30b-donate-2: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката · Кога (приблизително) · Къде
+CAP light/30c-donate-3: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката · Кога (приблизително) · Къде
+DONATE light: text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" text="Съгласен/съгласна съм читалището да покаже снимките в архива и на сайта си." content-desc="Назад" text="Дари спомен" 
+DONATE light picker: fg com.google.android.photopicker/com.android.photopicker.MainActivity; content-desc="Drag handle" text="Photos" text="Albums" content-desc="More" text="Chitalishte Yavorets will only have access to the photos you select" text="Dismiss" 
+DONATE light after cancelling the picker: front app; donate screen yes; photo none; FATAL(any process)=0 of the app=0 ANR=0
+CAP light/30e-after-cancel: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+SHARE: test photo 190442 B → content://media/external/images/media/21
+## SH-light. Sharing a photo to the app (ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/21)
+SHARE am start (cold, --grant-read-uri-permission): Status: ok TotalTime: 2772 
+CAP light/31-shared-light-am: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=14 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · 1 снимка не се прочете · ЗА СНИМКИТЕ
+SHARE light-am: front app; donate screen yes; PHOTO none; count ''; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="1 снимка не се прочете" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" text="С; FATAL(any process)=0 of the app=0 ANR=0
+SHARE helper: uri=content://media/external/images/media/21 pkg=org.chyavorec.app helper-read=190442 started
+CAP light/31-shared-light-helper: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · Снимка 1 · Махни снимка 1 · Добави още · 1 от 10
+SHARE light-helper: front app; donate screen yes; PHOTO SHOWN; count 'text="1 от 10"'; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" content-desc="Снимка 1" content-desc="Махни снимка 1" content-desc="Добави още" text="1 от 10" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" ; FATAL(any process)=0 of the app=0 ANR=0
+CAP light/31b-shared-scrolled: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=15 ellipsized=0 | Снимка 1 · Махни снимка 1 · Добави още · 1 от 10 · ЗА СНИМКИТЕ · Кой е на снимката
+SHARE am start WITHOUT a read grant (warm): Status: ok 
+CAP light/31-shared-light-nogrant: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · Снимка 1 · Махни снимка 1 · Добави още · 1 от 10
+SHARE light-nogrant: front app; donate screen yes; PHOTO SHOWN; count 'text="1 от 10"'; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" content-desc="Снимка 1" content-desc="Махни снимка 1" content-desc="Добави още" text="1 от 10" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" ; FATAL(any process)=0 of the app=0 ANR=0
+CAP light/40-settings: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP light/40b-settings-2: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български · Сезонни украси
+CAP light/40c-settings-3: targets=8 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=18 ellipsized=0 | Разклащане за „Изненадай ме“ · Разклати телефона в каталога · УИДЖЕТИ · Добави уиджета „Читалище Яво · Срокове за връщане, следващо · Добави „Книга на деня“
+SMOKE light: FATAL(any process)=0 of the app=0 ANR=0; app process 9496
+## S2-dark. Dark theme (1080x2400 px, density 420, font_scale 1.0, night yes, app locale [bg-BG], rotation 0)
+CAP dark/01-home: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=23 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP dark/01b-home-2: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=34 ellipsized=0 | Последни новини · БИБЛИОТЕКА · · 11 ноември 2026 · Четем заедно – мъдростта на  · Сканирай · Читателска карта
+WARN: tab bar not reached
+CAP dark/02-catalog: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Снимка 1 от 1 – Четем заедно · Затвори · 1 / 1 · Сподели · Отвори в сайта
+WARN: tab bar not reached
+CAP dark/03-my: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Снимка 1 от 1 – Четем заедно · Затвори · 1 / 1 · Сподели · Отвори в сайта
+WARN: tab bar not reached
+CAP dark/04-news: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Снимка 1 от 1 – Четем заедно · Затвори · 1 / 1 · Сподели · Отвори в сайта
+WARN: tab bar not reached
+CAP dark/05-more: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=5 ellipsized=0 | Снимка 1 от 1 – Четем заедно · Затвори · 1 / 1 · Сподели · Отвори в сайта
+CAP dark/05b-more-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=10 ellipsized=0 | Четем заедно – мъдростта на  · БИБЛИОТЕКА  ·  11 ноември 20 · Четем заедно – мъдростта на  · НЧ „Васил Левски – 1922“ – с · Режим за четене · Аа
+CAP dark/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
+TIMELINE dark top: first=1900 min=1900 max=1922 n=13; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1909. Организирано читалищно дело" content-desc="1912–1918. Прек
+CAP dark/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | 17 дек. 1922. Възстановяване · Дейността се възобновява под · 1923–1924. Устав и държавно  · 1923–1924 · Устав и държавно признание · Уставът е приет на 22 януари
+TIMELINE dark after 3 swipes: first=1922 min=1920 max=1936 n=16; content-desc="17 дек. 1922. Възстановяване и официално учредяване. Дейността се възобновява под името НЧ „Васил Левски“. По инициатива на Христо Лалев читалището се отделя в самостоятелна институция, настанена в Общината." content-desc="1923–1924. Устав и държавно признание. Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." text="1923–1924" text="Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." c
+TL-DRAG dark thumb at 44 dp below the list top (x=68 y=411, list 296..2337): before [first=1900 min=1900 max=1922 n=13] after [first=1922 min=1920 max=1936 n=16]
+TL-DRAG dark: scrubber CAUGHT (list jumped 1900 → 1922) ; FATAL(any process)=0 of the app=0 ANR=0
+QUIZ: no question: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+CAP dark/30-donate: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+DONATE dark: text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" text="Къде" text="ВРЪЗКА С ТЕБ" text="Твоето име и телефон (по желание)" text="Съгласен/съгласна съм читалището да покаже снимките в архива и на сайта си." content-desc="Назад" text="Дари спомен" 
+DONATE dark picker: fg com.google.android.photopicker/com.android.photopicker.MainActivity; content-desc="Drag handle" text="Photos" text="Albums" content-desc="More" text="Chitalishte Yavorets will only have access to the photos you select" text="Dismiss" 
+DONATE dark after cancelling the picker: front app; donate screen yes; photo none; FATAL(any process)=0 of the app=0 ANR=0
+CAP dark/30e-after-cancel: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=13 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+CAP dark/40-settings: targets=10 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=23 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP dark/40b-settings-2: targets=11 MISSING=3 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=3 | front: app | texts=17 ellipsized=0 | Черно (OLED) · Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български
+CAP dark/40c-settings-3: targets=8 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=19 ellipsized=0 | Език · Български · Сезонни украси · Празници, сезони и обичаи: п · Разклащане за „Изненадай ме“ · Разклати телефона в каталога
+SMOKE dark: FATAL(any process)=0 of the app=0 ANR=0; app process 10306
+## S3-font200. Font scale 2.0 (1080x2400 px, density 420, font_scale 2.0, night no, app locale [bg-BG], rotation 0)
+CAP font200/01-home: targets=10 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=2 | front: app | texts=16 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP font200/01b-home-2: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=17 ellipsized=0 | Последни новини · СЪБИТИЕ · · 26 септември 2026 · С хоро и песен във Водица · Сканирай · Читателска карта
+CAP font200/02-catalog: targets=18 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=37 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · 2446 резултата  ·  данни от 
+CAP font200/03-my: targets=9 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=15 ellipsized=0 | Примерна читателска карта с  · Така ще изглежда картата ти · Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта
+CAP font200/04-news: targets=12 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP font200/05-more: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=19 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP font200/05b-more-2: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=18 ellipsized=0 | Дейности · Групи, клубове, проекти · За читалището · История и мисия · Галерия · Снимки от сайта
+CAP font200/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=7 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
+TIMELINE font200 top: first=1900 min=1900 max=1900 n=3; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" 
+CAP font200/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | 1900. Театрален кръжец и зар · 1909. Организирано читалищно · Организирано читалищно дело · 1909. Организирано читалищно · Влади Илиев, Христо Лалев и  · 1912–1918. Прекъсване от вой
+TIMELINE font200 after 3 swipes: first=1900 min=1900 max=1918 n=10; content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1909. Организирано читалищно дело" content-desc="1912–1918. Прекъсване от войните. Балканската война (1912) прекъсва дейността. Читалището не функцион
+TL-DRAG font200 thumb at 44 dp below the list top (x=68 y=411, list 296..2337): before [first=1900 min=1900 max=1900 n=3] after [first=1927 min=1920 max=1934 n=5]
+TL-DRAG font200: scrubber CAUGHT (list jumped 1900 → 1927) ; FATAL(any process)=0 of the app=0 ANR=0
+QUIZ: no question: text="Отлично! Познаваш Яворец!" text="5/5" text="5 верни от 5" text="Шевицата е цяла!" text="Серия: 1 ден поред" text="Нови въпроси — утре." text="Сподели резултата" text="Затвори" content-desc="Назад" text="Познай Яворец" 
+CAP font200/30-donate: targets=4 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+DONATE font200: text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" text="Кой е на снимката" content-desc="Назад" text="Дари спомен" 
+DONATE font200 picker: fg com.google.android.photopicker/com.android.photopicker.MainActivity; content-desc="Drag handle" text="Photos" text="Albums" content-desc="More" text="Chitalishte Yavorets will only have access to the photos you select" text="Dismiss" 
+DONATE font200 after cancelling the picker: front app; donate screen yes; photo none; FATAL(any process)=0 of the app=0 ANR=0
+CAP font200/30e-after-cancel: targets=4 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=8 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+## SH-font200. Sharing a photo to the app (ACTION_SEND image/jpeg, EXTRA_STREAM content://media/external/images/media/21)
+SHARE am start (cold, --grant-read-uri-permission): Status: ok TotalTime: 3809 
+CAP font200/31-shared-font200-am: targets=3 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · 1 снимка не се прочете · ЗА СНИМКИТЕ
+SHARE font200-am: front app; donate screen yes; PHOTO none; count ''; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="1 снимка не се прочете" text="ЗА СНИМКИТЕ" text="Кой е на снимката" content-desc="Назад" text="Дари спомен" ; FATAL(any process)=0 of the app=0 ANR=0
+SHARE helper: uri=content://media/external/images/media/21 pkg=org.chyavorec.app helper-read=190442 started
+CAP font200/31-shared-font200-helper: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=11 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · Снимка 1 · Махни снимка 1 · Добави още · 1 от 10
+SHARE font200-helper: front app; donate screen yes; PHOTO SHOWN; count 'text="1 от 10"'; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" content-desc="Снимка 1" content-desc="Махни снимка 1" content-desc="Добави още" text="1 от 10" text="ЗА СНИМКИТЕ" text="Кой е на снимката" text="Кога (приблизително)" content-desc="Назад" text="Дари спомен" ; FATAL(any process)=0 of the app=0 ANR=0
+CAP font200/40-settings: targets=7 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=16 ellipsized=0 | ИЗГЛЕД · Тема · Както системата · Размер на текста · Стандартен · Палитра
+CAP font200/40b-settings-2: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=11 ellipsized=0 | Злато и жито · Левски · Зелено и сребро · Шевица · Червено, черно и слонова кос · Черно (OLED)
+CAP font200/40c-settings-3: targets=5 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=9 ellipsized=0 | Чисто черен фон в тъмната те · Цветове от тапета · Цветовете на телефона, взети · Език · Български · Сезонни украси
+SMOKE font200: FATAL(any process)=0 of the app=0 ANR=0; app process 15216
+## TB-tablet-landscape. Tablet two-pane (2560x1600 px, density 320, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
+CAP tablet-landscape/tab-l-more: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+CAP tablet-landscape/tab-l-more-Gallery: targets=25 MISSING=5 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=39 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · ЧИТАЛИЩЕТО
+HUB tab-l after '=Галерия|=Gallery': back arrow yes; tabs visible
+CAP tablet-landscape/tab-l-my: targets=12 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=21 ellipsized=0 | Начало · Каталог · Моето · Новини · Още · Примерна читателска карта с 
+CAP tablet-landscape/tab-l-my-Wanttoread: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=4 ellipsized=0 | Списъкът е празен · Отбележи книга с „Искам да п · Назад · Искам да прочета
+CAP tablet-landscape-b/50-tablet-donate: targets=6 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=12 ellipsized=0 | Пазиш ли стари снимки от Яво · СНИМКИ · До 10 снимки от галерията на · Избери снимки · ЗА СНИМКИТЕ · Кой е на снимката
+TABLET donate pane: back arrow yes; tabs hidden; text="Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото." text="СНИМКИ" text="До 10 снимки от галерията на телефона." text="Избери снимки" text="ЗА СНИМКИТЕ" tex
+MORE: tile 'Лента на времето|Timeline' not found: text="Начало" text="Каталог" text="Моето" text="Новини" text="Още" text="ЧИТАЛИЩЕТО" text="Съобщения" text="Съобщения и покани от читалището" text="Събития" text="Календар на читалището" text="Дейности" text="Групи, клубове, проекти" text="За читалището" text="История и мисия" text="Галерия" text="С
+SMOKE tablet-landscape-b: FATAL(any process)=0 of the app=0 ANR=0; app process 16033
+## S9. Crashes and ANRs of the whole part
+SMOKE TOTAL (smk36x, API 36): FATAL(any process)=0 of the app=0 ANR=0; FATAL lines 0, app FATAL 0, ANR 0
+A11Y AGG: 58 screens analysed, 0 dumps failed; totals MISSING=25 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=12
+== MISSING: 20 distinct
+   EditText@[84,2262][996,2388]  [2 screens: 30-donate, 30e-after-cancel]
+   View@[192,1461][647,1557]  [2 screens: tab-l-more, tab-l-more-Gallery]
+   View@[671,1461][1127,1557]  [2 screens: tab-l-more, tab-l-more-Gallery]
+   View@[42,2115][777,2127]  [1 screens: 01-home]
+   View@[809,2115][1080,2127]  [1 screens: 01-home]
+   View@[84,296][370,324]  [1 screens: 40b-settings-2]
+   View@[396,296][683,324]  [1 screens: 40b-settings-2]
+   View@[709,296][996,324]  [1 screens: 40b-settings-2]
+   View@[42,2075][540,2127]  [1 screens: 01-home]
+   View@[540,2075][1038,2127]  [1 screens: 01-home]
+   View@[1030,2058][1080,2127]  [1 screens: 01b-home-2]
+   View@[42,296][1038,331]  [1 screens: 05b-more-2]
+   View@[42,1982][524,2108]  [1 screens: 05-more]
+   View@[556,1982][1038,2108]  [1 screens: 05-more]
+   View@[0,2052][1080,2127]  [1 screens: 05b-more-2]
+   View@[42,2332][1038,2400]  [1 screens: 40c-settings-3]
+   View@[1193,1385][1622,1536]  [1 screens: tab-l-more-Gallery]
+   View@[1646,1385][2075,1536]  [1 screens: tab-l-more-Gallery]
+   View@[2099,1385][2528,1536]  [1 screens: tab-l-more-Gallery]
+   View@[192,1524][1127,1600]  [1 screens: tab-l-my]
+== SMALL: 5 distinct
+   ''  [3 screens: 01-home, 05b-more-2, 40b-settings-2]
+   '80 г. от създаването на ЮНЕСКО'  [1 screens: 01b-home-2]
+   'Дари спомен'  [1 screens: 05-more]
+   'Злато и жито'  [1 screens: 40b-settings-2]
+   'Махни снимка 1'  [1 screens: 31b-shared-scrolled]
+== SAME-LABEL: 0 distinct
+== DOUBLE: 0 distinct
+contact sheets: 17 in sheets/
+contact sheets: 17 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['3826', '5060', '7162', '7871', '9496', '10306', '13517', '15216', '16033']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 51
+   skipped-frames events=51 max=219 total=2803
+== Davey: 120
+   davey events=120 max=3231ms median=890ms
+== NativeLink: 9
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt
 ```
 
