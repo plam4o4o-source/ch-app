@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.share
 
 import android.content.ClipData
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -48,6 +49,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import org.chyavorec.app.MainActivity
 import org.chyavorec.app.R
 import org.chyavorec.app.util.Intents
 import org.chyavorec.data.site.SiteImageUrls
@@ -143,6 +145,8 @@ object ShareFiles {
     fun chooser(context: Context, uri: Uri, subject: String, text: String, mime: String = "image/png"): Intent =
         Intent.createChooser(sendIntent(uri, subject, text, mime), context.getString(R.string.action_share))
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            // Без самото приложение в избора („Дари спомен“ приема снимки) — картата е за другите.
+            .putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, arrayOf(ComponentName(context, MainActivity::class.java)))
 }
 
 /**

@@ -24,6 +24,7 @@ import org.chyavorec.app.messages.MessagePollWorker
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.ChitalishteRoot
 import org.chyavorec.app.ui.navigation.AppShortcuts
+import org.chyavorec.app.ui.screens.donate.DonateIntake
 import org.chyavorec.app.ui.navigation.KeyCommand
 import org.chyavorec.app.ui.navigation.KeyboardShortcuts
 import org.chyavorec.app.ui.navigation.LaunchIntents
@@ -141,7 +142,8 @@ class MainActivity : ComponentActivity() {
     private fun consumeDeepLink(intent: Intent?) {
         if (intent == null) return
         val siteBaseUrl = (application as ChitalishteApp).container.config.siteBaseUrl
-        val link = LaunchIntents.linkOf(intent, siteBaseUrl)
+        // „Сподели → Читалище Яворец“ от галерията: снимките чакат екрана „Дари спомен“.
+        val link = DonateIntake.receive(this, intent) ?: LaunchIntents.linkOf(intent, siteBaseUrl)
         deepLink.value = link
         // Отворено от пряк път — ползването му се отчита (извън главната нишка — IPC към системата).
         if (link != null && intent.action == LaunchIntents.ACTION_SHORTCUT) {

@@ -38,6 +38,8 @@ object DeepLinks {
     const val WANT_TO_READ = "my/want-to-read"
     /** „Извези шевица“ — само за закачен пряк път ([LaunchIntents.ACTION_PIN]). */
     const val EMBROIDERY = "embroidery"
+    /** „Дари спомен“ — снимки, споделени към приложението от галерията (виж DonateIntake). */
+    const val DONATE = "donate"
 
     private const val ARTICLE_PREFIX = "article/"
     private const val EVENT_PREFIX = "event/"
@@ -74,6 +76,7 @@ object DeepLinks {
             link == WANT_TO_READ -> LinkTarget.Screen(Routes.MY, listOf(Routes.WANT_TO_READ))
             link == "catalog" -> LinkTarget.Screen(Routes.CATALOG)
             link == EMBROIDERY -> LinkTarget.Screen(Routes.MORE, listOf(Routes.EMBROIDERY))
+            link == DONATE -> LinkTarget.Screen(Routes.MORE, listOf(Routes.DONATE))
             link == "scan" -> LinkTarget.Screen(Routes.CATALOG, listOf(Routes.SCAN))
             // Книга от публичния каталог (не лична) — над каталога, както App Link-ът към нея.
             link.startsWith(CATALOG_BOOK_PREFIX) -> link.removePrefix(CATALOG_BOOK_PREFIX).toLongOrNull()?.takeIf { it > 0 }

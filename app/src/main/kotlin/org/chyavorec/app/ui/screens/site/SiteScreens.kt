@@ -76,6 +76,8 @@ import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.navigation.Routes
+import org.chyavorec.app.ui.screens.donate.DonateEntry
+import org.chyavorec.app.ui.screens.donate.DonateMemoryLink
 import org.chyavorec.app.util.Intents
 import org.chyavorec.core.AppError
 import org.chyavorec.core.TrustedLinks
@@ -202,6 +204,10 @@ fun SitePageScreen(url: String, title: String, onBack: () -> Unit, navigate: (St
                                 imageFallbackDescription = title.ifBlank { page.title }.ifBlank { null },
                             )
                         }
+                    }
+                    // Фотодокументалната изложба: „Имаш стари снимки? Дари спомен“.
+                    if (DonateEntry.isExhibitionPage(url)) {
+                        item { DonateMemoryLink(onClick = { navigate(Routes.DONATE) }, Modifier.padding(horizontal = 8.dp)) }
                     }
                     item {
                         Text(stringResource(R.string.page_source, url), style = MaterialTheme.typography.labelMedium,

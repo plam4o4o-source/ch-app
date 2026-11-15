@@ -603,6 +603,7 @@ class AppContainer(
                     runCatching { documents.clear() }.logFailure("cache.documents")
                     runCatching { newspaper.clear() }.logFailure("cache.newspaper")
                     runCatching { ShareFiles.clear(context) }.logFailure("cache.share")
+                    runCatching { org.chyavorec.app.ui.screens.donate.DonationPhotos.clear(context) }.logFailure("cache.donate")
                     runCatching { AppShortcuts.removeLastBook(context) }.logFailure("cache.shortcut")
                     clearImageCaches()
                 }
