@@ -2,6 +2,7 @@ package org.chyavorec.app.ui.screens.events
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,8 +17,11 @@ import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,8 +40,9 @@ import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 
 /**
- * Действията на събитието: едно основно (добави в календара) и три плочки с етикет под тях —
- * напомняне, маршрут, публикацията. Споделянето е в горната лента. Всяко е поне 48 dp.
+ * Действията на събитието: едно основно (добави в календара), плочки с етикет под тях —
+ * напомняне и маршрут — и „Виж публикацията“ като обикновена текстова връзка (помощно действие,
+ * не плочка). Споделянето е в горната лента. Всяко е поне 48 dp.
  */
 @Composable
 internal fun EventActions(
@@ -59,63 +64,75 @@ internal fun EventActions(
                 Text(stringResource(R.string.event_add_calendar))
             }
         }
-        // При едър шрифт три колони не побират думи като „публикацията“ — етикетите са отделни
-        // редове на цялата ширина (бутонът отляво, текстът до него).
+        // При едър шрифт колоните не побират етикетите — те са отделни редове на цялата ширина
+        // (плочката отляво, текстът до нея).
         val wide = LocalDensity.current.fontScale >= WIDE_ACTIONS_FONT_SCALE
-        val actions: @Composable () -> Unit = {
-            if (showReminder) {
-                // Звънчето и маршрутът — от набора „Бод“; „публикацията“ е помощно действие (стандартна икона).
-                RoundAction(
-                    FolkIcons.Notifications,
-                    stringResource(if (hasReminder) R.string.event_remove_reminder else R.string.event_remind),
-                    onReminder, active = hasReminder, wide = wide,
-                )
-            }
-            if (showRoute) RoundAction(FolkIcons.Pin, stringResource(R.string.notif_action_route), onRoute, wide = wide)
-            RoundAction(Icons.AutoMirrored.Outlined.OpenInNew, stringResource(R.string.event_source), onSource, wide = wide)
-        }
+        // Звънчето и маршрутът — от набора „Бод“, в осморъките плочки.
+        val reminderLabel = stringResource(if (hasReminder) R.string.event_remove_reminder else R.string.event_remind)
+        val routeLabel = stringResource(R.string.notif_action_route)
         if (wide) {
-            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) { actions() }
-        } else {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.Top) { actions() }
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                if (showReminder) WideAction(FolkIcons.Notifications, reminderLabel, onReminder, active = hasReminder)
+                if (showRoute) WideAction(FolkIcons.Pin, routeLabel, onRoute)
+            }
+        } else if (showReminder || showRoute) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
+                if (showReminder) RoundAction(FolkIcons.Notifications, reminderLabel, onReminder, active = hasReminder)
+                if (showRoute) RoundAction(FolkIcons.Pin, routeLabel, onRoute)
+            }
         }
+        SourceLink(onSource, Modifier.align(if (wide) Alignment.Start else Alignment.CenterHorizontally))
+    }
+}
+
+/** „Виж публикацията“ — текстова връзка с малка стрелка навън (отваря сайта). */
+@Composable
+private fun SourceLink(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    TextButton(onClick = onClick, modifier = modifier.heightIn(min = 48.dp)) {
+        Text(stringResource(R.string.event_source), style = MaterialTheme.typography.labelLarge)
+        Spacer(Modifier.width(6.dp))
+        Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = null, modifier = Modifier.size(16.dp))
     }
 }
 
 /** От този мащаб на шрифта действията са редове на цялата ширина, не колони. */
 internal const val WIDE_ACTIONS_FONT_SCALE = 1.3f
 
-/**
- * Бутон-плочка (56 dp) с етикет под нея (при [wide] — вдясно от нея);
- * целият стълб е докосваем и се чете като бутон.
- */
+/** Бутон-плочка (56 dp) с етикет вдясно от нея — ред на цялата ширина при едър шрифт. */
 @Composable
-private fun RoundAction(icon: ImageVector, label: String, onClick: () -> Unit, active: Boolean = false, wide: Boolean = false) {
-    if (wide) {
-        Row(
-            Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium)
-                .clickable(role = Role.Button, onClick = onClick).padding(horizontal = 4.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            ActionCircle(icon, active)
-            Spacer(Modifier.width(14.dp))
-            Text(label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
-        }
-        return
-    }
-    // Ширината расте с шрифта (112 dp при 1.0), иначе „Напомни ми“ се къса насред думата.
-    val maxWidth = (112 * LocalDensity.current.fontScale.coerceIn(1f, 2f)).dp
-    Column(
-        Modifier.widthIn(min = 72.dp, max = maxWidth).clip(MaterialTheme.shapes.medium)
+private fun WideAction(icon: ImageVector, label: String, onClick: () -> Unit, active: Boolean = false) {
+    Row(
+        Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium)
             .clickable(role = Role.Button, onClick = onClick).padding(horizontal = 4.dp, vertical = 4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         ActionCircle(icon, active)
-        Spacer(Modifier.height(6.dp))
-        Text(
-            label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center, maxLines = 3,
-        )
+        Spacer(Modifier.width(14.dp))
+        Text(label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+    }
+}
+
+/**
+ * Бутон-плочка (56 dp) с етикет под нея: плочките делят реда поравно, а докосваемият стълб
+ * (по ширината на етикета) е в средата на своя дял и се чете като бутон.
+ */
+@Composable
+private fun RowScope.RoundAction(icon: ImageVector, label: String, onClick: () -> Unit, active: Boolean = false) {
+    // Ширината расте с шрифта (112 dp при 1.0), иначе „Напомни ми“ се къса насред думата.
+    val maxWidth = (112 * LocalDensity.current.fontScale.coerceIn(1f, 2f)).dp
+    Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
+        Column(
+            Modifier.widthIn(min = 72.dp, max = maxWidth).clip(MaterialTheme.shapes.medium)
+                .clickable(role = Role.Button, onClick = onClick).padding(horizontal = 4.dp, vertical = 4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            ActionCircle(icon, active)
+            Spacer(Modifier.height(6.dp))
+            Text(
+                label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center, maxLines = 3,
+            )
+        }
     }
 }
 

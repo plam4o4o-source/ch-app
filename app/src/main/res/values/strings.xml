@@ -252,10 +252,10 @@
     <string name="error_title">Нещо се обърка</string>
     <string name="error_unauthorized">Сесията е изтекла. Моля, влез отново.</string>
     <string name="event_add_calendar">Добави в календара</string>
-    <string name="event_added_calendar">Добавено в календара</string>
     <string name="event_countdown_today">днес</string>
     <string name="event_no_date">Без обявена дата</string>
     <string name="event_open_map">покажи мястото на картата</string>
+    <string name="event_opened_calendar">Отворено в календара</string>
     <string name="event_recurring">Събитие от годишния календар на читалището — повтаря се всяка година на тази дата.</string>
     <string name="event_remind">Напомни ми</string>
     <string name="event_remove_reminder">Премахни напомнянето</string>

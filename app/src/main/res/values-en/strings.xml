@@ -252,10 +252,10 @@
     <string name="error_title">Something went wrong</string>
     <string name="error_unauthorized">Your session has expired. Please sign in again.</string>
     <string name="event_add_calendar">Add to calendar</string>
-    <string name="event_added_calendar">Added to calendar</string>
     <string name="event_countdown_today">today</string>
     <string name="event_no_date">Date not announced</string>
     <string name="event_open_map">show the place on the map</string>
+    <string name="event_opened_calendar">Opened in calendar</string>
     <string name="event_recurring">An event from the centre’s annual calendar — it recurs every year on this date.</string>
     <string name="event_remind">Remind me</string>
     <string name="event_remove_reminder">Remove reminder</string>

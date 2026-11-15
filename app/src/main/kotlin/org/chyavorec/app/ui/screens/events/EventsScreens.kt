@@ -1,7 +1,6 @@
 package org.chyavorec.app.ui.screens.events
 
 import org.chyavorec.app.ui.components.AppBottomSheet
-import org.chyavorec.app.ui.components.sharedBoundsKey
 import org.chyavorec.app.ui.components.appFilterChipColors
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -126,14 +125,13 @@ import org.chyavorec.app.ui.share.ShareImageHost
 import org.chyavorec.app.ui.share.rememberShareImageState
 
 @Composable
-private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier, eventId: String? = null) {
+private fun DateBadge(date: LocalDate?, modifier: Modifier = Modifier) {
     // Плътна значка (бордо с пергамент, като в уиджета), а не розовият secondaryContainer.
     val (badge, onBadge) = paletteDateBadge(LocalThemeStyle.current.palette, LocalExtendedColors.current.isDark)
     // Минимален, а не фиксиран размер: при едър системен шрифт значката расте с текста, вместо да го реже.
-    // Значката „прелита“ към листа на събитието (същият ключ в EventDetailScreen).
-    val shared = if (eventId != null) Modifier.sharedBoundsKey("event-date-$eventId") else Modifier
+    // Значката не „прелита“ към листа (би се разтеглила в него): листът сам „пада“ при отваряне.
     Column(
-        modifier.then(shared).widthIn(min = 58.dp).heightIn(min = 58.dp).clip(MaterialTheme.shapes.small)
+        modifier.widthIn(min = 58.dp).heightIn(min = 58.dp).clip(MaterialTheme.shapes.small)
             .background(badge).padding(horizontal = 6.dp, vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -152,10 +150,10 @@ fun EventCard(e: Event, onClick: () -> Unit, modifier: Modifier = Modifier, titl
     val date = e.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
     PressableCard(onClick = onClick, modifier = modifier) {
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            DateBadge(date, eventId = e.id)
+            DateBadge(date)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text(e.title, style = MaterialTheme.typography.titleMedium, maxLines = titleMaxLines, overflow = TextOverflow.Ellipsis, modifier = Modifier.sharedBoundsKey("event-title-${e.id}"))
+                Text(e.title, style = MaterialTheme.typography.titleMedium, maxLines = titleMaxLines, overflow = TextOverflow.Ellipsis)
                 // Мястото е почти винаги читалището — в картата е описанието, а мястото — в подробностите.
                 val meta = listOfNotNull(e.time, e.description.ifBlank { e.place.orEmpty() }.ifBlank { null }).joinToString(" · ")
                 if (meta.isNotBlank()) {
@@ -474,7 +472,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
     val loadError by vm.error.collectAsStateWithLifecycle()
     val hasReminder by vm.hasReminder.collectAsStateWithLifecycle()
     val result by vm.reminderResult.collectAsStateWithLifecycle()
-    // Върнали сме се от календара — отрязъкът на листа се откъсва (веднъж).
+    // Върнали сме се от календара — отрязъкът на листа се откъсва (веднъж; дали е запазено там, не се знае).
     val torn by vm.torn.collectAsStateWithLifecycle()
     androidx.lifecycle.compose.LifecycleEventEffect(androidx.lifecycle.Lifecycle.Event.ON_RESUME) { vm.resumed() }
     val context = LocalContext.current
@@ -571,7 +569,7 @@ fun EventDetailScreen(id: String, onBack: () -> Unit, openLink: (String) -> Unit
             }
         }
         val details: @Composable () -> Unit = {
-            Text(e.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.sharedBoundsKey("event-title-${e.id}").semantics { heading() })
+            Text(e.title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
             // Датата и часът са на листа; без дата — старият ред.
             if (date == null) {
                 DetailLine(Icons.Outlined.Event, stringResource(R.string.event_no_date))

@@ -1,9 +1,13 @@
 package org.chyavorec.app.ui.screens.events
 
+import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.State
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.layout.layout
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.TransformOrigin
@@ -66,7 +70,8 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.ShevitsaStrip
 import org.chyavorec.app.ui.components.StitchSpec
 import org.chyavorec.app.ui.components.rememberOccasionTitle
-import org.chyavorec.app.ui.components.sharedBoundsKey
+import org.chyavorec.app.ui.components.LocalNavAnimatedScope
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -166,9 +171,9 @@ internal class LeafHalfShape(private val top: Boolean, private val corner: Dp, p
 /**
  * Събитието като откъсващ се лист от стенен календар: плетена бордо заглавка с шевица по раздела,
  * огромна цифра на деня (Cormorant), денят от седмицата, празникът за деня, перфорация и отрязък
- * с „след 19 дни“ и часа (ако има). [sharedBoundsKey] „event-date-<id>“ свързва листа със значката
- * на датата в списъка — тя „прелита“ и израства в него (без движение при намалено движение).
- * [torn] — събитието е добавено в календара: отрязъкът се „откъсва“ (виж [TornStub]).
+ * с „след 19 дни“ и часа (ако има). При отваряне листът „пада“ отгоре около горния си ръб
+ * ([rememberLeafTurn]); значката в списъка не се разтяга в него.
+ * [torn] — събитието е отворено в календара: отрязъкът се „откъсва“ (виж [rememberStubTear]).
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -190,7 +195,8 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
     val countdown = EventCountdown.label(resources, EventCountdown.days(date, today))
     val clock = eventClock(event.time)
     val motif = leafMotif(event.category, date)
-    val added = if (torn) resources.getString(R.string.event_added_calendar) else null
+    // Календарът не казва дали събитието е запазено — само че е било отворено там.
+    val added = if (torn) resources.getString(R.string.event_opened_calendar) else null
     val description = listOfNotNull(
         weekday.replaceFirstChar { it.uppercase() }, Formatters.date(context, date), feast, countdown, clock, added,
     ).joinToString(", ")
@@ -200,9 +206,26 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
     val topShape = remember { LeafHalfShape(top = true, LeafCorner, LeafNotch) }
     val stubShape = remember { LeafHalfShape(top = false, LeafCorner, LeafNotch) }
     val dash = ink.copy(alpha = 0.35f)
+    val turn = rememberLeafTurn()
+    val turnReduced = rememberReducedMotion()
 
     Column(
-        modifier.widthIn(max = 360.dp).fillMaxWidth().sharedBoundsKey("event-date-${event.id}")
+        modifier.widthIn(max = 360.dp).fillMaxWidth()
+            .then(
+                if (turn == null) Modifier
+                else Modifier.graphicsLayer {
+                    // Листът се „обръща надолу“ около горния ръб; при намалено движение — само проява.
+                    val p = turn.value
+                    transformOrigin = TransformOrigin(0.5f, 0f)
+                    // Далечна камера — лека перспектива, долният ръб не излиза извън екрана.
+                    cameraDistance = 32f * density
+                    if (turnReduced) alpha = p.coerceIn(0f, 1f)
+                    else {
+                        rotationX = leafTurnDegrees(p)
+                        alpha = (p / 0.35f).coerceIn(0f, 1f)
+                    }
+                },
+            )
             .clearAndSetSemantics { contentDescription = description },
     ) {
         Column(Modifier.shadow(4.dp, topShape).background(paper)) {
@@ -254,22 +277,25 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
         val reduced = rememberReducedMotion()
         Row(
             Modifier.fillMaxWidth()
+                // Мястото под откъснатия отрязък е запазено — не ляга върху заглавието под листа.
+                .layout { measurable, constraints ->
+                    val placeable = measurable.measure(constraints)
+                    val reserve = (STUB_RESERVE.toPx() * tear.value.coerceIn(0f, 1f)).toInt()
+                    layout(placeable.width, placeable.height + reserve) { placeable.place(0, 0) }
+                }
                 .graphicsLayer {
-                    // Откъснат: пада с 4 dp и увисва на десния си край (−3°).
+                    // Откъснат: слиза с 6 dp и леко се накланя (−1,5°) около средата на горния ръб
+                    // (левият край слиза до ~10 dp — в запазените 12 dp).
                     val t = tear.value
-                    transformOrigin = TransformOrigin(1f, 0f)
-                    translationY = 4.dp.toPx() * t
-                    rotationZ = -3f * t
+                    transformOrigin = TransformOrigin(0.5f, 0f)
+                    translationY = 6.dp.toPx() * t
+                    rotationZ = STUB_TILT_DEG * t
                 }
                 .shadow(4.dp, stubShape).background(paper)
                 .drawBehind {
                     val n = LeafNotch.toPx()
                     // Перфорацията — тропосване ([StitchSpec.Basting]).
-                    val bod = StitchSpec.Basting.stroke(density)
-                    drawLine(
-                        dash, Offset(n + 6.dp.toPx(), 0f), Offset(size.width - n - 6.dp.toPx(), 0f), strokeWidth = bod.width,
-                        cap = StrokeCap.Round, pathEffect = bod.pathEffect,
-                    )
+                    drawBasting(dash, 0f, n + 6.dp.toPx(), size.width - n - 6.dp.toPx())
                 }
                 .padding(horizontal = 20.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -292,9 +318,59 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
     }
 }
 
+/** Наклонът на откъснатия отрязък (°) и мястото, запазено под него. */
+private const val STUB_TILT_DEG = -1.5f
+private val STUB_RESERVE = 12.dp
+
+/**
+ * Перфорацията като отделни бодове на [StitchSpec.Basting] (същата дебелина и стъпка) —
+ * обикновени черти, без ефект на четката при всяко рисуване.
+ */
+private fun DrawScope.drawBasting(color: Color, y: Float, from: Float, to: Float) {
+    val b = StitchSpec.Basting
+    val w = b.widthDp * density
+    // С кръглите краища видимата черта е dashDp, а празнината — gapDp.
+    val on = (b.dashDp * density - w).coerceAtLeast(0.01f * density)
+    val period = (b.dashDp + b.gapDp) * density
+    var x = from
+    while (x < to) {
+        drawLine(color, Offset(x, y), Offset(minOf(x + on, to), y), strokeWidth = w, cap = StrokeCap.Round)
+        x += period
+    }
+}
+
+/**
+ * Наклонът на листа (°) при напредък [p] на отварянето: 75° в началото — повдигнат към читателя
+ * (долният ръб е по-близо, по-широк), 0° — легнал на стената.
+ */
+internal const val LEAF_TURN_DEG = 75f
+
+internal fun leafTurnDegrees(p: Float): Float = LEAF_TURN_DEG * (1f - p)
+
+/**
+ * Напредъкът на „падането“ на листа (0 — обърнат нагоре, 1 — на място) от прехода на екрана:
+ * при отваряне — пружина, при „назад“ — обратно (и жестът го превърта, защото е част от
+ * прехода). При намалено движение — еднократна кратка проява само при отваряне. Извън
+ * навигация (тестове, preview) — null: листът е неподвижен.
+ */
+@Composable
+internal fun rememberLeafTurn(): State<Float>? {
+    val nav = LocalNavAnimatedScope.current ?: return null
+    if (rememberReducedMotion()) {
+        // Само при влизане в екрана (не при завъртане или връщане към него).
+        val fade = remember { Animatable(if (nav.transition.currentState == EnterExitState.PreEnter) 0f else 1f) }
+        LaunchedEffect(Unit) { fade.animateTo(1f, tween(AppMotion.ShortMs)) }
+        return fade.asState()
+    }
+    return nav.transition.animateFloat(
+        transitionSpec = { if (targetState == EnterExitState.Visible) AppMotion.defaultSpatial() else tween(AppMotion.ShortMs) },
+        label = "event-leaf-turn",
+    ) { if (it == EnterExitState.Visible) 1f else 0f }
+}
+
 /**
  * Откъсването на отрязъка (0 — на място, 1 — откъснат): веднъж, когато [torn] стане вярно
- * (след „Добави в календара“), на пружина и с лек тик. Вече откъснат при първа композиция
+ * (след връщане от календара), на пружина и с лек тик. Вече откъснат при първа композиция
  * (завъртане, връщане към екрана) — направо в крайно положение, без повторение; при намалено
  * движение не се движи (отметката е на отрязъка).
  */
@@ -308,7 +384,7 @@ private fun rememberStubTear(torn: Boolean): Animatable<Float, AnimationVector1D
             !torn || reduced -> tear.snapTo(0f)
             tear.value < 1f -> {
                 haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                tear.animateTo(1f, spring(dampingRatio = 0.45f, stiffness = Spring.StiffnessLow))
+                tear.animateTo(1f, AppMotion.defaultSpatial())
             }
         }
     }
