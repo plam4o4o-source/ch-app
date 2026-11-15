@@ -108,6 +108,8 @@ import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.navigation.Routes
+import org.chyavorec.app.ui.screens.donate.DonateEntry
+import org.chyavorec.app.ui.screens.donate.DonateMemoryLink
 import org.chyavorec.app.ui.screens.site.GalleryViewModel
 import org.chyavorec.app.util.Intents
 import org.chyavorec.domain.model.GalleryAlbum
@@ -185,6 +187,12 @@ fun AlbumScreen(name: String, onBack: () -> Unit, navigate: (String) -> Unit) {
         ) { photos ->
             val cell = adaptiveCellWidth(windowWidth() - 8.dp, minSize = 110.dp)
             LazyVerticalGrid(GridCells.Adaptive(110.dp), contentPadding = PaddingValues(4.dp)) {
+                // Изложбата: „Имаш стари снимки? Дари спомен“ — тихо, над снимките.
+                if (name == DonateEntry.EXHIBITION_ALBUM) {
+                    item(key = "donate", span = { GridItemSpan(maxLineSpan) }, contentType = "donate") {
+                        DonateMemoryLink(onClick = { navigate(Routes.DONATE) }, Modifier.padding(horizontal = 4.dp))
+                    }
+                }
                 itemsIndexed(photos, key = { _, p -> p.id }, contentType = { _, _ -> "photo" }) { i, p ->
                     PhotoTile(
                         p.thumbUrl, width = cell, contentDescription = p.title.ifBlank { stringResource(R.string.photo_n, i + 1) }, reload = reconnects,

@@ -826,6 +826,7 @@ private fun AppNavHost(
         }
         screen(Routes.TIMELINE) { org.chyavorec.app.ui.screens.timeline.TimelineScreen(back, navigate) }
         screen(Routes.QUIZ) { org.chyavorec.app.ui.screens.quiz.QuizScreen(back) }
+        screen(Routes.DONATE) { org.chyavorec.app.ui.screens.donate.DonateMemoryScreen(back) }
         // Личните съобщения има само при вход — без него съобщенията са публични.
         screen(Routes.MESSAGES) { UnlockGate(leavePersonal, required = signedIn) { MessagesScreen(back, openLink) } }
         screen(Routes.MESSAGE, arguments = listOf(navArgument("id") { type = NavType.StringType })) {

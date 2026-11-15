@@ -55,6 +55,8 @@ object Routes {
     /** „Лента на времето“ 1900 → днес и викторината „Познай Яворец“. */
     const val TIMELINE = "timeline"
     const val QUIZ = "quiz"
+    /** „Дари спомен“ — стари снимки за фотоархива (и от „Сподели“ в галерията). */
+    const val DONATE = "donate"
     const val MESSAGES = "messages"
     /** Съобщенията, превъртени до едно от тях (от известие). */
     const val MESSAGE = "messages/{id}"

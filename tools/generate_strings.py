@@ -1044,6 +1044,33 @@ S = {
 "more_timeline_desc": ("Историята на читалището от 1900 г.", "The history of the centre since 1900"),
 "quiz_title": ("Познай Яворец", "Know Yavorets"),
 "more_quiz_desc": ("Пет въпроса всеки ден", "Five questions every day"),
+# „Дари спомен“ — стари снимки за фотоархива, писмо през приложението за имейл
+"donate_title": ("Дари спомен", "Donate a memory"),
+"more_donate_desc": ("Стари снимки за фотоархива", "Old photos for the archive"),
+"donate_intro": ("Пазиш ли стари снимки от Яворец — хора, празници, къщи, улици? Изпрати ги на читалището и те ще останат във фотоархива на селото.", "Do you keep old photos of Yavorets — people, feasts, houses, streets? Send them to the community centre and they will stay in the village’s photo archive."),
+"donate_photos_label": ("Снимки", "Photos"),
+"donate_photos_empty": ("До 10 снимки от галерията на телефона.", "Up to 10 photos from your phone’s gallery."),
+"donate_pick": ("Избери снимки", "Choose photos"),
+"donate_pick_more": ("Добави още", "Add more"),
+"donate_photos_count": ("%1$d от %2$d", "%1$d of %2$d"),
+"donate_remove_photo": ("Махни снимка %1$d", "Remove photo %1$d"),
+"donate_preparing": ("Снимката се подготвя", "Preparing the photo"),
+"donate_about_label": ("За снимките", "About the photos"),
+"donate_who": ("Кой е на снимката", "Who is in the photo"),
+"donate_when": ("Кога (приблизително)", "When (roughly)"),
+"donate_where": ("Къде", "Where"),
+"donate_contact_label": ("Връзка с теб", "How to reach you"),
+"donate_contact": ("Твоето име и телефон (по желание)", "Your name and phone (optional)"),
+"donate_consent": ("Съгласен/съгласна съм читалището да покаже снимките в архива и на сайта си.", "I agree that the community centre may show the photos in its archive and on its website."),
+"donate_need_photos": ("Избери поне една снимка.", "Choose at least one photo."),
+"donate_need_consent": ("Отбележи съгласието, за да изпратиш.", "Tick the consent to send."),
+"donate_send_note": ("Ще се отвори твоето приложение за имейл с писмо до читалището. Приложението само не качва нищо.", "Your e-mail app will open with a message to the community centre. The app itself uploads nothing."),
+"donate_chooser": ("Изпрати с…", "Send with…"),
+"donate_mail_subject": ("Дари спомен — %1$s", "Donate a memory — %1$s"),
+"donate_mail_greeting": ("Здравейте,", "Hello,"),
+"donate_mail_from": ("Изпраща", "From"),
+"donate_mail_footer": ("Изпратено от приложението „Читалище Яворец“.", "Sent from the “Chitalishte Yavorets” app."),
+"donate_exhibit_link": ("Имаш стари снимки? Дари спомен", "Have old photos? Donate a memory"),
 "quiz_unavailable_title": ("Днес няма викторина", "No quiz today"),
 "quiz_unavailable": ("Не успяхме да съставим въпроси. Провери връзката и опитай пак.", "We couldn’t put the questions together. Check your connection and try again."),
 "quiz_question_of": ("Въпрос %1$d от %2$d", "Question %1$d of %2$d"),
@@ -1168,6 +1195,8 @@ PRIVACY_BG = """Последна актуализация: 12 ноември 202
 
 Картинки за споделяне: картинките (на събитие, книга, новина или от „Моята читателска година“) се създават на телефона и излизат от него само ако ти избереш да ги споделиш и къде.
 
+„Дари спомен“: снимките и текстът, които избереш, излизат от телефона само с писмо от твоето приложение за имейл до читалището — приложението само не качва нищо.
+
 Честитки, шевици и преки пътища: личният ред на честитката не се пази; шевиците, които извезваш, се пазят само на телефона (до 8 и една чернова) и излизат от него само като картинка, ако ги споделиш; прекият път на началния екран е на телефона и носи заглавие на книга или събитие само ако сам го добавиш.
 
 Абонамент за календара: ако добавиш календара на читалището (https://chyavorec.org/events.ics) в приложение за календар, то или неговата услуга (напр. Google Календар) тегли файла от сайта по свой график — като обикновена заявка, без лични данни; приложението на читалището не участва в това.
@@ -1231,6 +1260,8 @@ Documents: “Open with a PDF app” downloads the document from chyavorec.org i
 “The old newspaper” downloads the article (PDF) from chyavorec.org into temporary data so you can read it offline; “Know Yavorets” builds its questions on the phone, and your results and streak stay only there.
 
 Share images: images (of an event, a book, a news story or from “My reading year”) are created on the phone and leave it only if you choose to share them, and where.
+
+“Donate a memory”: the photos and text you choose leave the phone only in an e-mail sent by your own e-mail app to the community centre — the app itself uploads nothing.
 
 Greeting cards, embroidery and shortcuts: the personal line of a greeting card is not stored; the patterns you embroider are kept only on the phone (up to 8 and one draft) and leave it only as an image if you share them; a home-screen shortcut lives on the phone and carries a book or event title only if you add it yourself.
 
@@ -1333,6 +1364,8 @@ P = {
 "widget_due_in_days": (("след %1$d ден", "след %1$d дни"), ("in %1$d day", "in %1$d days")),
 "widget_due_overdue": (("просрочена", "просрочени"), ("overdue", "overdue")),
 "photos_count": (("%1$d снимка", "%1$d снимки"), ("%1$d photo", "%1$d photos")),
+"donate_failed": (("%1$d снимка не се прочете", "%1$d снимки не се прочетоха"), ("%1$d photo couldn’t be read", "%1$d photos couldn’t be read")),
+"donate_mail_intro": (("Изпращам %1$d стара снимка за фотоархива на читалището.", "Изпращам %1$d стари снимки за фотоархива на читалището."), ("I’m sending %1$d old photo for the community centre’s photo archive.", "I’m sending %1$d old photos for the community centre’s photo archive.")),
 "wait_seconds": (("%1$d секунда", "%1$d секунди"), ("%1$d second", "%1$d seconds")),
 "wait_minutes": (("%1$d минута", "%1$d минути"), ("%1$d minute", "%1$d minutes")),
 "wait_hours": (("%1$d час", "%1$d часа"), ("%1$d hour", "%1$d hours")),

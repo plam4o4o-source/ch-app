@@ -130,6 +130,15 @@
                 <data android:path="/dostapnost" />
                 <data android:pathPrefix="/news/" />
             </intent-filter>
+            <!-- „Сподели → Читалище Яворец“ от галерията: снимките отиват в „Дари спомен“ (писмо до
+                 читалището през приложението за имейл). Приемат се само чужди content:// адреси
+                 (виж DonateIntake); приложението не качва нищо само. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
             <!-- Статични преки пътища при задържане на иконата (отделен файл за всеки flavor
                  заради различния applicationId). -->
             <meta-data

@@ -92,6 +92,8 @@ fun MoreScreen(navigate: (String) -> Unit) {
                     add(TileItem(FolkIcons.Computer, l.title, stringResource(R.string.more_digital_desc)) { navigate(Routes.page(l.url, l.title)) })
                 }
                 add(TileItem(FolkIcons.Gallery, stringResource(R.string.gallery_title), stringResource(R.string.more_gallery_desc)) { navigate(Routes.GALLERY) })
+                // „Дари спомен“ — до галерията: стари снимки за фотоархива (рамкираният портрет — старата снимка).
+                add(TileItem(FolkIcons.Profile, stringResource(R.string.donate_title), stringResource(R.string.more_donate_desc)) { navigate(Routes.DONATE) })
                 add(TileItem(FolkIcons.Documents, stringResource(R.string.documents_title), stringResource(R.string.more_documents_desc)) { navigate(Routes.DOCUMENTS) })
                 add(TileItem(FolkIcons.Pin, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc)) { navigate(Routes.CONTACTS) })
             }
