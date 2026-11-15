@@ -61,6 +61,9 @@ internal object TiltLogic {
     /** След толкова време без движение бързият сензор спира. */
     const val REST_AFTER_MS = 15_000L
 
+    /** Примерната карта (без вход): само след докосване и заспива по-рано. */
+    const val PREVIEW_REST_AFTER_MS = 4_000L
+
     /** В покой: наклон над ≈2.5° спрямо положението при заспиването буди сензора. */
     val WAKE_COS: Float = cos(Math.toRadians(2.5)).toFloat()
 
@@ -82,8 +85,8 @@ internal object TiltLogic {
     }
 }
 
-/** Таймерът на покоя: [resting] става true след [TiltLogic.REST_AFTER_MS] без движение над [TiltLogic.MOVE]. */
-internal class RestTimer {
+/** Таймерът на покоя: [resting] става true след [restAfterMs] без движение над [TiltLogic.MOVE]. */
+internal class RestTimer(private val restAfterMs: Long = TiltLogic.REST_AFTER_MS) {
     private var anchorX = 0f
     private var anchorY = 0f
     private var since = 0L
@@ -99,25 +102,26 @@ internal class RestTimer {
             reset(now, x, y)
             return false
         }
-        return now - since >= TiltLogic.REST_AFTER_MS
+        return now - since >= restAfterMs
     }
 }
 
 /**
  * Сензорите на наклона. Докато картата се движи — векторът на завъртане (≈30 Hz, на
- * порции); наклонът се записва само над мъртвата зона. След ~15 s покой той спира и
- * остава само рядка проверка с акселерометъра, която го буди при наклон. Будят го и
- * докосване на картата, и връщане към екрана. В покой: нула кадри.
+ * порции); наклонът се записва само над мъртвата зона. След [restAfterMs] покой той спира и
+ * остава само рядка проверка с акселерометъра ([gravity]), която го буди при наклон. Будят го и
+ * докосване на картата, и връщане към екрана. В покой: нула кадри; без [gravity] — и нула сензори.
  */
 private class TiltSensors(
     private val manager: SensorManager,
     private val rotation: Sensor,
     private val gravity: Sensor?,
     private val tilt: Tilt,
+    restAfterMs: Long,
 ) {
     private val matrix = FloatArray(9)
     private val orientation = FloatArray(3)
-    private val rest = RestTimer()
+    private val rest = RestTimer(restAfterMs)
     private val ref = FloatArray(3)
     private var hasRef = false
     private var sx = tilt.x
@@ -199,20 +203,27 @@ private class TiltSensors(
  * движение. Сензорът е включен само докато екранът е на преден план (ON_RESUME …
  * ON_PAUSE) — не и при заключен екран или приложение във фона, — а събитията се
  * доставят на порции, за да не се буди процесорът за всяко поотделно.
+ *
+ * [preview] — примерната карта: сензорът тръгва чак при докосване, заспива след
+ * [TiltLogic.PREVIEW_REST_AFTER_MS] и в покой не остава нищо включено. [paused] — наклонът
+ * застива както е (напр. докато се пише във формата за вход).
  */
 @Composable
-private fun rememberTilt(): Tilt {
+private fun rememberTilt(preview: Boolean = false, paused: Boolean = false): Tilt {
     val context = LocalContext.current
     val reduced = rememberReducedMotion()
     val fixed = LocalFixedCardTilt.current
     val tilt = remember(fixed) { Tilt().apply { fixed?.let { x = it.x; y = it.y } } }
-    LifecycleResumeEffect(tilt, reduced, fixed) {
-        if (reduced || fixed != null) return@LifecycleResumeEffect onPauseOrDispose {}
+    LifecycleResumeEffect(tilt, reduced, fixed, preview, paused) {
+        if (reduced || fixed != null || paused) return@LifecycleResumeEffect onPauseOrDispose {}
         val manager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
         val rotation = manager?.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) ?: manager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
         if (manager == null || rotation == null) return@LifecycleResumeEffect onPauseOrDispose {}
-        val sensors = TiltSensors(manager, rotation, manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), tilt)
-        sensors.wake()
+        val sensors = if (preview) {
+            TiltSensors(manager, rotation, gravity = null, tilt, TiltLogic.PREVIEW_REST_AFTER_MS)
+        } else {
+            TiltSensors(manager, rotation, manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), tilt, TiltLogic.REST_AFTER_MS).also { it.wake() }
+        }
         tilt.wake = sensors::wake
         onPauseOrDispose {
             tilt.wake = {}
@@ -236,6 +247,23 @@ internal class CardMotion(val tilt: Tilt, val budget: WeaveBudget)
 internal fun rememberCardMotion(): CardMotion {
     val tilt = rememberTilt()
     return remember(tilt) { CardMotion(tilt, WeaveBudget()) }
+}
+
+/** „Тъкането“ на примерната карта — един цикъл на процес, колкото и пъти да се покаже картата. */
+private object PreviewWeave {
+    val budget = WeaveBudget(cycles = 1)
+}
+
+/**
+ * Наклонът и шевицата на примерната карта („Моето“ без вход, входът, въведението): шевицата
+ * тъче веднъж на процес; сензорът — само след докосване на картата и заспива след ~4 s.
+ * [live] — сензорът както на истинската карта (въведението кани да се наклони телефонът);
+ * [paused] — наклонът застива (докато се пише във формата за вход).
+ */
+@Composable
+internal fun rememberSampleCardMotion(live: Boolean = false, paused: Boolean = false): CardMotion {
+    val tilt = rememberTilt(preview = !live, paused = paused)
+    return remember(tilt) { CardMotion(tilt, PreviewWeave.budget) }
 }
 
 /** Всяко докосване на картата буди сензора (без да пречи на щракването — само гледа събитията). */

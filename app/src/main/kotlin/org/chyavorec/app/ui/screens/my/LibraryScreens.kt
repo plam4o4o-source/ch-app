@@ -3,6 +3,9 @@ package org.chyavorec.app.ui.screens.my
 import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.AppCard
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.runtime.Stable
+import org.chyavorec.app.ui.theme.AppMotion
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -15,7 +18,9 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -283,8 +288,11 @@ internal fun LoanCard(
                 val dueText = Formatters.shortDate(context, loan.dueOn) ?: "—"
                 // Току-що удължено: срокът е „нов лист“ от календара (само докато е същият срок).
                 val renewed = leaf?.takeIf { !overdue && it.newDue == loan.dueOn }
-                if (renewed != null) {
-                    RenewedDueLine(renewed, oldText = Formatters.shortDate(context, renewed.oldDue) ?: "—", newText = dueText, onPlayed = onLeafPlayed)
+                val flip = if (renewed != null) rememberLeafFlip(renewed, onLeafPlayed) else null
+                // Чипът „остават N дни“ показва стария срок до средата на обръщането — сменя се заедно с листа.
+                val pillDue = if (renewed != null && flip?.turned == false) LoanDueCalculator.parse(renewed.oldDue) ?: due else due
+                if (renewed != null && flip != null) {
+                    RenewedDueLine(flip, oldText = Formatters.shortDate(context, renewed.oldDue) ?: "—", newText = dueText)
                 } else {
                     Text(
                         if (overdue) stringResource(R.string.loan_due_overdue, dueText) else stringResource(R.string.loan_due, dueText),
@@ -293,7 +301,7 @@ internal fun LoanCard(
                     )
                 }
                 // Срокът с думи и колко остава — без отделна лента за изминалото време (същото трети път).
-                if (status != null) DuePill(status, calc.daysLeft(due, today), Modifier.padding(top = 4.dp))
+                if (pillDue != null) DuePill(calc.status(pillDue, today), calc.daysLeft(pillDue, today), Modifier.padding(top = 4.dp))
                 if (loan.renewals > 0) {
                     Text(
                         pluralStringResource(R.plurals.loan_renewed_times, loan.renewals, loan.renewals),
@@ -495,9 +503,42 @@ data class DueLeaf(val oldDue: String?, val newDue: String, val played: Boolean 
 
 /** Колко трае обръщането на листа (и колко чака, преди да започне — снекбарът и печатът вървят заедно с него). */
 internal object DueLeafTiming {
-    const val DELAY_MS = 220L
-    const val FLIP_MS = 640
-    const val FADE_MS = 320
+    const val DELAY_MS = AppMotion.ShortMs.toLong()
+    const val FLIP_MS = AppMotion.LongMs + AppMotion.QuickMs
+    const val FADE_MS = AppMotion.MediumMs
+
+    /** Средата на обръщането: тук листът е „откъснат“ и чипът с дните минава на новия срок. */
+    const val TURNED_AT = 0.5f
+}
+
+/**
+ * Обръщането на листа (0..1) — едно за листа и чипа с дните под него. Веднъж ([DueLeaf.played]);
+ * при намалено движение — преливане, а чипът е на новия срок веднага.
+ */
+@Stable
+internal class LeafFlip(val progress: Animatable<Float, AnimationVector1D>, val reduced: Boolean) {
+    /** Старата дата вече е обърната (или няма анимация) — чипът показва новия срок. */
+    val turned: Boolean by derivedStateOf { reduced || progress.value >= DueLeafTiming.TURNED_AT }
+}
+
+@Composable
+private fun rememberLeafFlip(leaf: DueLeaf, onPlayed: () -> Unit): LeafFlip {
+    val reduced = rememberReducedMotion()
+    val flip = remember { LeafFlip(Animatable(if (leaf.played) 1f else 0f), reduced) }
+    val played by rememberUpdatedState(onPlayed)
+    LaunchedEffect(Unit) {
+        val p = flip.progress
+        if (p.value < 1f) {
+            if (reduced) {
+                p.animateTo(1f, tween(DueLeafTiming.FADE_MS))
+            } else {
+                delay(DueLeafTiming.DELAY_MS)
+                p.animateTo(1f, tween(DueLeafTiming.FLIP_MS, easing = FastOutSlowInEasing))
+            }
+        }
+        played()
+    }
+    return flip
 }
 
 /**
@@ -508,21 +549,9 @@ internal object DueLeafTiming {
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun RenewedDueLine(leaf: DueLeaf, oldText: String, newText: String, onPlayed: () -> Unit) {
-    val reduced = rememberReducedMotion()
-    val flip = remember { Animatable(if (leaf.played) 1f else 0f) }
-    val played by rememberUpdatedState(onPlayed)
-    LaunchedEffect(Unit) {
-        if (flip.value < 1f) {
-            if (reduced) {
-                flip.animateTo(1f, tween(DueLeafTiming.FADE_MS))
-            } else {
-                delay(DueLeafTiming.DELAY_MS)
-                flip.animateTo(1f, tween(DueLeafTiming.FLIP_MS, easing = FastOutSlowInEasing))
-            }
-        }
-        played()
-    }
+private fun RenewedDueLine(leafFlip: LeafFlip, oldText: String, newText: String) {
+    val reduced = leafFlip.reduced
+    val flip = leafFlip.progress
     // Старият лист излиза от композицията веднага щом е обърнат — в покой е само новият.
     val turning by remember { derivedStateOf { flip.value < 1f } }
     val description = stringResource(R.string.renew_leaf_cd, newText, oldText)
@@ -570,9 +599,7 @@ private fun DueLeafChip(text: String, modifier: Modifier = Modifier) {
         modifier.width(IntrinsicSize.Max).shadow(2.dp, shape).background(paper)
             .drawBehind {
                 // Перфорацията по долния ръб — тичащ бод.
-                val bod = StitchSpec.Running.stroke(density)
-                val y = size.height - 1.dp.toPx()
-                drawLine(ink.copy(alpha = 0.3f), Offset(4.dp.toPx(), y), Offset(size.width - 4.dp.toPx(), y), strokeWidth = bod.width, cap = StrokeCap.Round, pathEffect = bod.pathEffect)
+                drawRunningStitch(ink.copy(alpha = 0.3f), 4.dp.toPx(), size.width - 4.dp.toPx(), size.height - 1.dp.toPx())
             },
     ) {
         Box(Modifier.fillMaxWidth().height(4.dp).background(Brand.Burgundy))
@@ -580,5 +607,23 @@ private fun DueLeafChip(text: String, modifier: Modifier = Modifier) {
             text, style = MaterialTheme.typography.titleSmall, color = ink, maxLines = 1,
             modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 2.dp, bottom = 5.dp),
         )
+    }
+}
+
+/**
+ * Хоризонтален тичащ бод ([StitchSpec.Running]) от [start] до [end] на височина [y] — същите черти
+ * и празнини като пунктирния му ефект, но като отделни заоблени правоъгълници (без алокации).
+ */
+private fun DrawScope.drawRunningStitch(color: Color, start: Float, end: Float, y: Float) {
+    val spec = StitchSpec.Running
+    val w = spec.widthDp * density
+    val dash = spec.dashDp * density
+    val period = (spec.dashDp + spec.gapDp) * density
+    val corner = CornerRadius(w / 2f)
+    var x = start
+    while (x < end) {
+        val len = minOf(dash, end - x)
+        if (len >= w) drawRoundRect(color, Offset(x, y - w / 2f), Size(len, w), corner)
+        x += period
     }
 }

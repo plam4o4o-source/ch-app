@@ -64,6 +64,14 @@ class CardTiltTest {
         assertTrue(t.resting(15_000L, 0.1f, 0.11f))
     }
 
+    /** Примерната карта (без вход) заспива след ~4 s, не след 15. */
+    @Test fun sampleCardRestsAfterFourSeconds() {
+        val t = RestTimer(TiltLogic.PREVIEW_REST_AFTER_MS)
+        t.reset(0L, 0.1f, 0.1f)
+        assertFalse(t.resting(3_999L, 0.105f, 0.1f))
+        assertTrue(t.resting(4_000L, 0.1f, 0.11f))
+    }
+
     @Test fun movementRestartsTheRestTimer() {
         val t = RestTimer()
         t.reset(0L, 0f, 0f)
