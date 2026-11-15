@@ -93,7 +93,7 @@ tl_drag() {
     a input swipe $((W/2)) $((H*62/100)) $((W/2)) $((H*54/100)) 200
     ( sleep 1.3; timeout 15 adb shell screencap -p /sdcard/mid.png ) &
     a input swipe $x $y $x $((y + (bot - top) * 45 / 100)) 2400
-    wait
+    wait $!  # само снимката; голо wait чака и фоновия adb logcat завинаги
     mkdir -p $OUT/shots/tour/$CFG; timeout 20 adb pull /sdcard/mid.png $OUT/shots/tour/$CFG/10c-drag-mid-${off}dp.png >/dev/null 2>&1
     sleep 0.4; post=$(tl_years); shot tour/$CFG/10d-drag-after-${off}dp >/dev/null
     y0=$(echo "$pre" | grep -oE 'first=[0-9]+' | cut -d= -f2); y1=$(echo "$post" | grep -oE 'first=[0-9]+' | cut -d= -f2)
