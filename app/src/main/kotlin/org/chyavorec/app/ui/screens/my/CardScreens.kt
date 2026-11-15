@@ -116,6 +116,7 @@ import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.SystemBarIcons
 import org.chyavorec.data.repository.AuthState
+import org.chyavorec.data.catalog.PersonalShevitsa
 import org.chyavorec.data.catalog.ReadingYear
 import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.appViewModel
@@ -272,10 +273,14 @@ private fun Modifier.cardProportions() = layout { measurable, constraints ->
 /** Размерът ID-1 на банковите и библиотечните карти: 85.6 × 54 мм. */
 private const val CARD_RATIO = 1.586f
 
+/** Бодът на „Твоята шевица“ върху картата — двойният на шевицата на фона на цял екран (3 dp). */
+private val BAND_CELL = 6.dp
+
 /**
  * Дигитална читателска карта — оформена като истинска библиотечна карта (лице с баркод).
- * [band] — годината на читателя: тясната лента „Твоята шевица“ над името (декември–януари, вж.
- * [CardBandViewModel]). Неподвижна — картата в покой не рисува кадри.
+ * [band] — годината на читателя: лентата „Твоята шевица“ като подгъв над баркода (декември–януари,
+ * вж. [CardBandViewModel]) — само на цял екран ([large]); на малката карта бодовете биха били шум.
+ * Неподвижна — картата в покой не рисува кадри.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -296,13 +301,6 @@ internal fun LibraryCard(
             }
         }
         Spacer(Modifier.weight(1f))
-        if (band != null) {
-            // „Твоята шевица“ — пришита над името като етикет; за екранния четец — с годината.
-            val label = stringResource(R.string.card_band_cd, band.year)
-            // Отстъп отгоре — на тесен телефон няма празно място и лентата иначе би опряла заглавката.
-            PersonalBandStrip(band, Modifier.padding(top = 8.dp).fillMaxWidth(0.5f).semantics { contentDescription = label })
-            Spacer(Modifier.height(if (large) 10.dp else 6.dp))
-        }
         EmbossedText(data.holder.ifBlank { "—" }, Brand.Parchment, TextStyle(fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp))
         // Номерът не се съкращава: ако до него няма място за статуса, той минава на нов ред.
         FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -312,7 +310,20 @@ internal fun LibraryCard(
             )
             data.status?.let { OnDarkSurfaceStatuses { MembershipPill(it) } }
         }
-        Spacer(Modifier.height(8.dp))
+        if (large && band != null) {
+            // „Твоята шевица“ — подгъв над баркода, с бод двойно по-едър от шевицата на фона; не опира
+            // в белия фон на баркода (тихите му зони остават чисти). За екранния четец — с годината.
+            val label = stringResource(R.string.card_band_cd, band.year)
+            Spacer(Modifier.height(12.dp))
+            PersonalBandStrip(
+                band,
+                Modifier.align(Alignment.CenterHorizontally).widthIn(max = BAND_CELL * PersonalShevitsa.COLUMNS)
+                    .semantics { contentDescription = label },
+            )
+            Spacer(Modifier.height(10.dp))
+        } else {
+            Spacer(Modifier.height(8.dp))
+        }
         Surface(color = Color.White, shape = RoundedCornerShape(8.dp)) {
             LinearBarcode(
                 data.barcode,
@@ -364,7 +375,6 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
     val auth by vm.authState.collectAsStateWithLifecycle()
     val caps by vm.capabilities.collectAsStateWithLifecycle()
     val profile by vm.profile.collectAsStateWithLifecycle()
-    val band by cardBandViewModel().band.collectAsStateWithLifecycle()
     var editing by rememberSaveable { mutableStateOf(false) }
     var confirmRemove by remember { mutableStateOf(false) }
     val haptic = LocalHapticFeedback.current
@@ -395,7 +405,7 @@ fun CardScreen(onBack: () -> Unit, onFullscreen: () -> Unit, onLogin: () -> Unit
                 }
             } else {
                 // Картата „прелита“ към екрана на цял екран (общи граници, виж CardFullscreen).
-                LibraryCard(data, Modifier.sharedBoundsKey(LIBRARY_CARD_KEY).clickable(onClick = onFullscreen), band = band)
+                LibraryCard(data, Modifier.sharedBoundsKey(LIBRARY_CARD_KEY).clickable(onClick = onFullscreen))
                 Button(onClick = onFullscreen, modifier = Modifier.fillMaxWidth()) {
                     Icon(Icons.Outlined.Fullscreen, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.card_show))
                 }

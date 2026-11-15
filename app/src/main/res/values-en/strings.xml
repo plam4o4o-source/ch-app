@@ -665,7 +665,7 @@
     <string name="onb_notif_on">Notifications are on</string>
     <string name="onb_notif_text">Book due dates, new messages and events.</string>
     <string name="onb_page_of">Page %1$d of %2$d</string>
-    <string name="onb_sample_card_cd">Sample library card</string>
+    <string name="onb_sample_card_cd">Sample library card with name, number and barcode</string>
     <string name="onb_sample_hint">This is how your card will look on your phone. Tilt it — the foil shines.</string>
     <string name="onb_sample_name">Maria Ivanova</string>
     <string name="onb_settings_text">Text size and notifications — you can change them later in Settings too.</string>

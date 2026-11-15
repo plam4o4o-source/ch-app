@@ -272,7 +272,7 @@ class PlainScreensScreenshotTest {
         waitFor("Така ще изглежда картата ти")
         // Входът е включен (capabilities) — бутонът „Вход“ под картата.
         compose.waitUntil(15_000) { compose.onAllNodes(hasText("Вход") and hasClickAction()).fetchSemanticsNodes().isNotEmpty() }
-        assertTrue(compose.onAllNodes(hasContentDescription("Примерна читателска карта")).fetchSemanticsNodes().isNotEmpty())
+        assertTrue(compose.onAllNodes(hasContentDescription("Примерна читателска карта с име, номер и баркод")).fetchSemanticsNodes().isNotEmpty())
     }
 
     @Test fun myGuestLight() {

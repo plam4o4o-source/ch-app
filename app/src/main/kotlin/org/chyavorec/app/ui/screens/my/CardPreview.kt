@@ -3,8 +3,6 @@ package org.chyavorec.app.ui.screens.my
 import android.os.Build
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,8 +30,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
@@ -42,9 +41,10 @@ import org.chyavorec.app.ui.components.LocalAgslEnabled
 import org.chyavorec.app.ui.components.ShaderPool
 import org.chyavorec.app.ui.components.rememberReducedMotion
 import org.chyavorec.app.ui.components.sharedBoundsKey
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 
-/** Примерните данни на картата за читател без вход (същите като във въведението). */
+/** Примерните данни на картата за читател без вход (и във въведението). */
 @Composable
 internal fun sampleCardData(): CardData = CardData(
     holder = stringResource(R.string.onb_sample_name), number = SAMPLE_CARD_NUMBER, barcode = SAMPLE_CARD_NUMBER,
@@ -59,41 +59,67 @@ internal object CardIssue {
     const val LIFT_DP = 10f
     const val GROW = 0.03f
 
-    /** Един отблясък на фолиото — колкото трае и прелитането към „Моето“. */
-    const val SWEEP_MS = 520
+    /** Един отблясък на фолиото. */
+    const val SWEEP_MS = AppMotion.LongMs
+
+    /**
+     * Колко чака навигацията към „Моето“ след успешен вход: отблясъкът минава целия и картата
+     * постоява миг повдигната — после прелита в плочката. Без анимации и с TalkBack — веднага.
+     */
+    const val SHOW_MS = AppMotion.LongMs + AppMotion.QuickMs
+
+    fun navigationDelayMs(reduced: Boolean, touchExploration: Boolean): Long =
+        if (reduced || touchExploration) 0L else SHOW_MS.toLong()
 
     /** Плътността на отблясъка върху картата (по-слаб от златото по буквите на заглавие). */
     const val SWEEP_ALPHA = 0.5f
 }
 
 /**
- * Примерната карта за читател без вход („Моето“ и входът): истинският [LibraryCard] със
- * същата шевица и фолио по наклона, както във въведението — сензорът е включен само докато
- * екранът е на преден план и заспива в покой; без шейдър (до Android 12L) фолиото е резервното,
- * при намалено движение картата е неподвижна. Отдолу — „Така ще изглежда картата ти“.
+ * Примерната карта (с примерни данни) за читател без вход — „Моето“, входът и въведението (едно
+ * изпълнение за трите): истинският [LibraryCard] със същата шевица и фолио по наклона. Шевицата
+ * тъче веднъж на процес, а сензорът се включва чак при докосване на картата и заспива след ~4 s
+ * ([rememberSampleCardMotion]; [live] — както на истинската карта, за въведението). [tiltPaused] —
+ * наклонът застива (докато се пише във формата за вход). Без шейдър (до Android 12L) фолиото е
+ * резервното, при намалено движение картата е неподвижна. За TalkBack картата е едно изречение,
+ * а не името, номерът и баркодът поотделно. Отдолу — [hint] (по подразбиране „Така ще изглежда
+ * картата ти“); [onDark] — върху тъмния фон на въведението.
  *
  * [sharedKey] — картата прелита между „Моето“ и входа, а след входа — в плочката „Читателска
  * карта“ ([LIBRARY_CARD_KEY]; на Android 8 и при намалено движение преходите са без нея).
- * [issued] — входът е успешен: картата се повдига леко и по нея минава веднъж отблясък. Само
- * украса върху вече започналата навигация — нищо не я чака.
+ * [issued] — входът е успешен: картата се повдига леко и по нея минава веднъж отблясък; входът
+ * чака отблясъка ([CardIssue.SHOW_MS]), преди да отведе към „Моето“.
  */
 @Composable
-internal fun SampleCardPreview(modifier: Modifier = Modifier, sharedKey: String? = LIBRARY_CARD_KEY, issued: Boolean = false) {
+internal fun SampleCardPreview(
+    modifier: Modifier = Modifier,
+    sharedKey: String? = LIBRARY_CARD_KEY,
+    issued: Boolean = false,
+    tiltPaused: Boolean = false,
+    live: Boolean = false,
+    maxWidth: Dp = 300.dp,
+    hint: String = stringResource(R.string.guest_card_hint),
+    onDark: Boolean = false,
+) {
     val description = stringResource(R.string.onb_sample_card_cd)
     val data = sampleCardData()
+    val motion = rememberSampleCardMotion(live = live, paused = tiltPaused)
     Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
-            Modifier.widthIn(max = 300.dp).fillMaxWidth()
+            Modifier.widthIn(max = maxWidth).fillMaxWidth()
                 .then(if (sharedKey != null) Modifier.sharedBoundsKey(sharedKey) else Modifier)
                 .issueMotion(issued)
-                .semantics { contentDescription = description },
+                .clearAndSetSemantics { contentDescription = description },
         ) {
-            LibraryCard(data, Modifier.fillMaxWidth())
+            LibraryCard(data, Modifier.fillMaxWidth(), motion = motion)
         }
         Spacer(Modifier.height(10.dp))
         Text(
-            stringResource(R.string.guest_card_hint), style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
+            hint,
+            style = if (onDark) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium,
+            color = if (onDark) Brand.GoldLight else MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.widthIn(max = 340.dp),
         )
     }
 }
@@ -111,7 +137,7 @@ private fun Modifier.issueMotion(issued: Boolean): Modifier {
     val lift = remember { Animatable(0f) }
     val sweep = remember { Animatable(0f) }
     LaunchedEffect(Unit) {
-        launch { lift.animateTo(1f, spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessMediumLow)) }
+        launch { lift.animateTo(1f, AppMotion.defaultSpatial()) }
         sweep.animateTo(1f, tween(CardIssue.SWEEP_MS, easing = FastOutSlowInEasing))
     }
     val agsl = LocalAgslEnabled.current && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU

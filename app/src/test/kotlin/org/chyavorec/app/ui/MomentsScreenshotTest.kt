@@ -7,12 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +21,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -213,8 +212,10 @@ class MomentsScreenshotTest {
             Page(dark = dark, fontScale = fontScale) {
                 CompositionLocalProvider(LocalAgslEnabled provides false, LocalFixedCardTilt provides Offset.Zero) {
                     Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        // Малката карта („Читателска карта“) — без лентата: там бодовете биха били шум.
                         LibraryCard(card, band = ShareFixtures.year)
-                        Spacer(Modifier.width(1.dp))
+                        // На цял екран (бял фон, отстъп 24 dp от ръба) — лентата е подгъв над баркода.
+                        Box(Modifier.background(Color.White).padding(8.dp)) { LibraryCard(card, large = true, band = ShareFixtures.year) }
                     }
                 }
             }
@@ -222,12 +223,12 @@ class MomentsScreenshotTest {
         shot(name)
     }
 
-    @Test fun cardBandLight() = cardBand("w23-card-band-light")
+    @Test fun cardBandLight() = cardBand("w24-card-band-light")
 
-    @Test fun cardBandDark() = cardBand("w23-card-band-dark", dark = true)
+    @Test fun cardBandDark() = cardBand("w24-card-band-dark", dark = true)
 
-    @Test fun cardBandLargeFont() = cardBand("w23-card-band-font130", fontScale = 1.3f)
+    @Test fun cardBandLargeFont() = cardBand("w24-card-band-font130", fontScale = 1.3f)
 
     @Config(qualifiers = "bg-w360dp-h800dp-xhdpi")
-    @Test fun cardBandNarrow() = cardBand("w23-card-band-narrow")
+    @Test fun cardBandNarrow() = cardBand("w24-card-band-narrow")
 }

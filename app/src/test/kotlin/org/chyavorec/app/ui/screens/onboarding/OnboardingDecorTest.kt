@@ -19,7 +19,9 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -57,10 +59,12 @@ class OnboardingDecorTest {
                 ChitalishteTheme(mode = ThemeMode.DARK) { SampleCard(large = false) }
             }
         }
-        // Стига се до покой (waitForIdle не виси на безкрайна анимация) и данните са примерните.
+        // Стига се до покой (waitForIdle не виси на безкрайна анимация) и картата е примерната.
         compose.waitForIdle()
-        compose.onNodeWithContentDescription("Примерна читателска карта").assertIsDisplayed()
-        compose.onNodeWithText("Мария Иванова", useUnmergedTree = true).assertIsDisplayed()
+        compose.onNodeWithContentDescription("Примерна читателска карта с име, номер и баркод").assertIsDisplayed()
+        // За TalkBack картата е едно изречение: името, номерът и баркодът не се четат поотделно.
+        compose.onAllNodesWithText("Мария Иванова", useUnmergedTree = true).assertCountEquals(0)
+        compose.onAllNodesWithContentDescription("Баркод", substring = true, useUnmergedTree = true).assertCountEquals(0)
     }
 
     /** Снимка за преглед: печатът, възлите, нишката в три положения и примерната карта — тъмен фон като във въведението. */

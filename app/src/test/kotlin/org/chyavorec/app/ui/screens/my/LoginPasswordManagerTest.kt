@@ -11,7 +11,9 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isNotEnabled
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -235,27 +237,62 @@ class LoginPasswordManagerTest {
         assertTrue(passwords.offered.isEmpty())
     }
 
-    /** Вход с карта и ПИН от формата; връща колко пъти е извикана навигацията след входа. */
-    private fun signInNavigates(reduced: Boolean?) {
+    /**
+     * Вход с карта и ПИН от формата; връща колко ms (по часовника на Compose) минават от успеха до
+     * навигацията към „Моето“. Навигацията е точно веднъж. Без „Запомни ме“ — без предложение за
+     * запазване (системен прозорец), така че навигацията чака само „Картата е издадена“.
+     */
+    private fun signInWaitMs(reduced: Boolean): Long {
         var navigated = 0
         val container = launch(FakeSystemPasswords(), savedBefore = false, reduced = reduced, onLoggedIn = { navigated++ })
         waitForForm()
         // Примерната карта („Така ще изглежда картата ти“) е над формата.
-        assertTrue(compose.onAllNodes(hasContentDescription("Примерна читателска карта")).fetchSemanticsNodes().isNotEmpty())
+        assertTrue(compose.onAllNodes(hasContentDescription("Примерна читателска карта с име, номер и баркод")).fetchSemanticsNodes().isNotEmpty())
+        compose.onNode(hasText("Запомни ме", substring = true) and isToggleable()).performClick()
         compose.onAllNodes(hasSetTextAction())[0].performTextInput("1024-5678")
         compose.onAllNodes(hasSetTextAction())[1].performTextInput("1234")
+        // Часовникът на Compose — на ръка: времето тече само с кадрите по-долу.
+        compose.mainClock.autoAdvance = false
         compose.onAllNodes(hasSetTextAction())[1].performImeAction()
-        pumpUntil { navigated > 0 }
-        assertIs<AuthState.SignedIn>(container.authRepository.state.value)
-        // „Картата е издадена“ е само украса — навигацията е веднъж и не чака анимацията.
-        pumpUntil(1_000) { true }
-        compose.waitForIdle()
+        // Успехът: влязъл читател, а бутонът отново е „Вход“ (не индикатор) и е изключен (ПИН-ът е изчистен).
+        val doneButton = hasText("Вход") and hasClickAction() and isNotEnabled()
+        val deadline = System.currentTimeMillis() + 15_000
+        while (container.authRepository.state.value !is AuthState.SignedIn || compose.onAllNodes(doneButton).fetchSemanticsNodes().isEmpty()) {
+            check(System.currentTimeMillis() < deadline) { "входът не завърши" }
+            shadowOf(Looper.getMainLooper()).idle()
+            compose.mainClock.advanceTimeByFrame()
+            Thread.sleep(5)
+        }
+        val start = compose.mainClock.currentTime
+        while (navigated == 0 && compose.mainClock.currentTime - start < 3_000) {
+            shadowOf(Looper.getMainLooper()).idle()
+            compose.mainClock.advanceTimeByFrame()
+        }
+        val waited = compose.mainClock.currentTime - start
+        compose.mainClock.advanceTimeBy(1_000)
+        shadowOf(Looper.getMainLooper()).idle()
         assertEquals(1, navigated)
+        return waited
     }
 
-    /** Без анимации (Достъпност) входът пак води към „Моето“ — веднага, без повдигане и отблясък. */
-    @Test fun loginNavigatesWithAnimationsOff() = signInNavigates(reduced = true)
+    /** Без анимации (Достъпност) входът води към „Моето“ веднага — без повдигане и отблясък. */
+    @Test fun loginNavigatesAtOnceWithAnimationsOff() {
+        val waited = signInWaitMs(reduced = true)
+        assertTrue(waited <= 50, "навигацията чака $waited ms без анимации")
+    }
 
-    /** С анимациите — същото: картата се повдига и блести, докато навигацията вече тече. */
-    @Test fun loginNavigatesWithAnimationsOn() = signInNavigates(reduced = false)
+    /** С анимациите навигацията чака „Картата е издадена“ (отблясъка) — и после тръгва сама. */
+    @Test fun loginWaitsForTheIssuedCard() {
+        val waited = signInWaitMs(reduced = false)
+        assertTrue(waited >= CardIssue.SHOW_MS - 20, "навигацията тръгна след $waited ms — преди отблясъка")
+        assertTrue(waited <= CardIssue.SHOW_MS + 100, "навигацията чака $waited ms")
+    }
+
+    @Test fun issuedCardDelayIsSkippedForReducedMotionAndTalkBack() {
+        assertEquals(CardIssue.SHOW_MS.toLong(), CardIssue.navigationDelayMs(reduced = false, touchExploration = false))
+        assertEquals(0L, CardIssue.navigationDelayMs(reduced = true, touchExploration = false))
+        assertEquals(0L, CardIssue.navigationDelayMs(reduced = false, touchExploration = true))
+        // ≈600–800 ms: отблясъкът минава целия, после — към „Моето“.
+        assertTrue(CardIssue.SHOW_MS in 600..800 && CardIssue.SHOW_MS > CardIssue.SWEEP_MS)
+    }
 }

@@ -3,19 +3,14 @@ package org.chyavorec.app.ui.screens.onboarding
 import org.chyavorec.app.ui.components.StitchSpec
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.Event
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
@@ -43,8 +37,7 @@ import org.chyavorec.app.ui.components.LivingShevitsa
 import org.chyavorec.app.ui.components.ShevitsaPalettes
 import org.chyavorec.app.ui.components.WeaveBudget
 import org.chyavorec.app.ui.components.drawGoldRing
-import org.chyavorec.app.ui.screens.my.CardData
-import org.chyavorec.app.ui.screens.my.LibraryCard
+import org.chyavorec.app.ui.screens.my.SampleCardPreview
 import org.chyavorec.app.ui.theme.Brand
 import kotlin.math.max
 
@@ -128,31 +121,16 @@ private fun DrawScope.diamond(cx: Float, cy: Float, r: Float, color: Color, fill
 }
 
 /**
- * Примерна читателска карта (с примерни данни) — същата, която читателят ще има в телефона:
- * шевица, холографско фолио, което блести с наклона на телефона. Картата е истинският
- * [LibraryCard] — със същата шевица (неподвижна плочка в първия кадър), същия наклон и спиране
- * в покой; без шейдър (до Android 12L) и при намалено движение е неподвижна.
+ * Примерната читателска карта на въведението — същата като на „Моето“ и входа ([SampleCardPreview]),
+ * върху тъмния фон; сензорът тръгва с появата (страницата кани да се наклони телефонът).
  */
 @Composable
 internal fun SampleCard(large: Boolean, modifier: Modifier = Modifier) {
-    val data = CardData(
-        holder = stringResource(R.string.onb_sample_name), number = SAMPLE_NUMBER, barcode = SAMPLE_NUMBER,
-        status = null, verified = false,
+    SampleCardPreview(
+        modifier, sharedKey = null, live = true, maxWidth = if (large) 300.dp else 340.dp,
+        hint = stringResource(R.string.onb_sample_hint), onDark = true,
     )
-    val description = stringResource(R.string.onb_sample_card_cd)
-    Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(Modifier.widthIn(max = if (large) 300.dp else 340.dp).fillMaxWidth().semantics { contentDescription = description }) {
-            LibraryCard(data, Modifier.fillMaxWidth())
-        }
-        Spacer(Modifier.height(10.dp))
-        Text(
-            stringResource(R.string.onb_sample_hint), style = MaterialTheme.typography.bodySmall,
-            color = Brand.GoldLight, textAlign = TextAlign.Center, modifier = Modifier.widthIn(max = 340.dp),
-        )
-    }
 }
-
-private const val SAMPLE_NUMBER = "19220001"
 
 /** Тънка лента шевица най-горе — първото, което се вижда: фирменият знак още от първия екран. */
 @Composable

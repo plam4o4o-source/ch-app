@@ -12,7 +12,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.isImeVisible
+import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
+import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.theme.AppMotion
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import java.util.Locale
 import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.components.LibraryContactSheet
@@ -87,6 +96,7 @@ import org.chyavorec.core.AppError
 import org.chyavorec.core.Feature
 import org.chyavorec.data.repository.CapabilitiesStatus
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Unit) {
     // Въведеният (или показан с „окото“) ПИН не бива да остава в „Скорошни“ и в снимки на екрана.
@@ -100,13 +110,26 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
     val passwords = LocalAppContainer.current.passwords
     // Системният прозорец на мениджъра на пароли се показва над activity-то.
     val activity = LocalActivity.current ?: LocalContext.current
-    // Успех: навигацията тръгва веднага; „Картата е издадена“ (повдигане, отблясък и прелитане
-    // към плочката на „Моето“, виж SampleCardPreview) е само украса върху нея.
+    // Успех: „Картата е издадена“ — картата се повдига и по нея минава отблясък (SampleCardPreview),
+    // после навигацията към „Моето“ и картата прелита в плочката. Без анимации и с TalkBack — веднага.
+    val reduced = rememberReducedMotion()
+    val touchExploration = rememberIsTouchExplorationEnabled()
+    val keyboard = LocalSoftwareKeyboardController.current
+    val scroll = rememberScrollState()
     LaunchedEffect(ui.success) {
         if (ui.success) {
             haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-            // „Запази паролата?“ — системата пита; отказът е тих. Приложението не пази ПИН-а.
-            vm.offerSave { passwords.offerSave(activity, it) }
+            val wait = CardIssue.navigationDelayMs(reduced, touchExploration)
+            coroutineScope {
+                // „Запази паролата?“ — системата пита; отказът е тих. Приложението не пази ПИН-а.
+                launch { vm.offerSave { passwords.offerSave(activity, it) } }
+                if (wait > 0) {
+                    // Картата трябва да се вижда: клавиатурата се скрива, а формата се връща най-горе.
+                    keyboard?.hide()
+                    launch { scroll.animateScrollTo(0, AppMotion.defaultSpatial()) }
+                    delay(wait)
+                }
+            }
             onLoggedIn()
         }
     }
@@ -130,13 +153,14 @@ fun LoginScreen(onBack: () -> Unit, onLoggedIn: () -> Unit, onAddCard: () -> Uni
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.login_title), onBack) }) { padding ->
         Column(
-            Modifier.padding(padding).imePadding().verticalScroll(rememberScrollState()).padding(24.dp).widthIn(max = 560.dp),
+            Modifier.padding(padding).imePadding().verticalScroll(scroll).padding(24.dp).widthIn(max = 560.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             DemoBanner(vm.isDemo)
             // Картата, която читателят ще има в телефона — както на „Моето“ (прелита оттам).
-            SampleCardPreview(Modifier.padding(top = 4.dp, bottom = 6.dp), issued = ui.success)
+            // Докато се пише (клавиатурата е отворена) — наклонът застива: без сензор над формата.
+            SampleCardPreview(Modifier.padding(top = 4.dp, bottom = 6.dp), issued = ui.success, tiltPaused = WindowInsets.isImeVisible)
             Text(stringResource(R.string.login_heading), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
             val status = capsStatus
             val c = (status as? CapabilitiesStatus.Known)?.caps
