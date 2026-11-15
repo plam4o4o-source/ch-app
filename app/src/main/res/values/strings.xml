@@ -975,6 +975,7 @@
     <string name="timeline_page_title">История</string>
     <string name="timeline_subtitle">От 1900 г. до днес</string>
     <string name="timeline_title">Лента на времето</string>
+    <string name="timeline_title_decade">Лента на времето, %1$d-те години</string>
     <string name="udc_0">Общ отдел</string>
     <string name="udc_1">Философия. Психология</string>
     <string name="udc_2">Религия</string>

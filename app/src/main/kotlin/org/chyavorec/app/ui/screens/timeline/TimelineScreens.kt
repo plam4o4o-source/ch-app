@@ -1,13 +1,18 @@
 package org.chyavorec.app.ui.screens.timeline
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -35,16 +40,21 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.HistoryEdu
-import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -53,25 +63,27 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -92,9 +104,7 @@ import org.chyavorec.app.ui.LocalAppContainer
 import org.chyavorec.app.ui.RefreshOnReconnect
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.AppCard
-import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.EmptyView
-import org.chyavorec.app.ui.components.FolkShapes
 import org.chyavorec.app.ui.components.LeafRefreshBox
 import org.chyavorec.app.ui.components.MessageView
 import org.chyavorec.app.ui.components.ScreenGutter
@@ -107,8 +117,8 @@ import org.chyavorec.app.ui.components.StitchSpec
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.rememberIsTouchExplorationEnabled
 import org.chyavorec.app.ui.components.rememberReducedMotion
-import org.chyavorec.app.ui.components.scaledPath
 import org.chyavorec.app.ui.navigation.Routes
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.FolkTokens
@@ -149,10 +159,7 @@ fun TimelineScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     val historyUrl = LocalAppContainer.current.config.siteBaseUrl.trimEnd('/') + "/history"
     val pageTitle = stringResource(R.string.timeline_page_title)
     val listState = rememberLazyListState()
-    // Голямото заглавие е в списъка; в лентата заглавието се показва, щом то излезе (или няма списък).
-    val headerGone by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
-    val listShown = state.data?.isNotEmpty() == true
-    Scaffold(topBar = { BackTopBar(stringResource(R.string.timeline_title), onBack, titleShown = !listShown || headerGone) }) { padding ->
+    Scaffold(topBar = { TimelineTopBar(state.data, listState, onBack) }) { padding ->
         LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             if (state.error is AppError.Parse && state.data == null) {
                 MessageView(
@@ -174,6 +181,99 @@ fun TimelineScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     }
 }
 
+/**
+ * Лентата на екрана: „Лента на времето · 1940-те“. Голямото заглавие е в списъка — тук то се
+ * показва, щом онова излезе (или няма списък). Десетилетието е на вехата, която се чете (на
+ * третина от горния край), и се сменя с кратко плъзгане нагоре/надолу; за TalkBack — едно
+ * изречение („Лента на времето, 1940-те години“), без обявяване при всяка смяна.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun TimelineTopBar(
+    entries: List<TimelineEntry>?,
+    listState: LazyListState,
+    onBack: () -> Unit,
+    thisYear: Int = remember { LocalDate.now().year },
+) {
+    val title = stringResource(R.string.timeline_title)
+    val listShown = !entries.isNullOrEmpty()
+    val years = remember(entries, thisYear) { if (entries.isNullOrEmpty()) IntArray(0) else TimelineScrub.years(entries, thisYear) }
+    val headerGone by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+    val decade by rememberReadingDecade(years, listState)
+    val shown = !listShown || headerGone
+    val reduced = rememberReducedMotion()
+    val titleSpec: AnimationSpec<Float> = if (reduced) snap() else AppMotion.defaultEffects()
+    val titleAlpha by animateFloatAsState(if (shown) 1f else 0f, titleSpec, label = "bar-title")
+    val shownDecade = decade.takeIf { listShown }
+    val spoken = shownDecade?.let { stringResource(R.string.timeline_title_decade, it) } ?: title
+    TopAppBar(
+        // Името на екрана не следва десетилетието — иначе TalkBack би го обявявал при превъртане.
+        modifier = Modifier.semantics { paneTitle = title },
+        title = {
+            Row(
+                Modifier
+                    .graphicsLayer {
+                        alpha = titleAlpha
+                        translationY = (1f - titleAlpha) * 6.dp.toPx()
+                    }
+                    .clearAndSetSemantics { if (shown) contentDescription = spoken },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                val style = MaterialTheme.typography.titleLarge
+                Text(title, style = style, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                if (shownDecade != null) {
+                    Text(" · ", style = style, color = MaterialTheme.colorScheme.primary, maxLines = 1)
+                    DecadeTick(shownDecade, reduced, style)
+                }
+            }
+        },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = stringResource(R.string.action_back))
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        ),
+    )
+}
+
+/** Десетилетието в лентата: новото идва отдолу при превъртане надолу (отгоре — нагоре) и избледнява старото. */
+@Composable
+private fun DecadeTick(decade: Int, reduced: Boolean, style: TextStyle) {
+    val color = MaterialTheme.colorScheme.primary
+    if (reduced) {
+        Text(stringResource(R.string.timeline_decade, decade), style = style, color = color, maxLines = 1)
+        return
+    }
+    AnimatedContent(
+        targetState = decade,
+        transitionSpec = {
+            val dir = if (targetState > initialState) 1 else -1
+            (slideInVertically(tween(AppMotion.ShortMs)) { dir * it / 2 } + fadeIn(tween(AppMotion.ShortMs)))
+                .togetherWith(slideOutVertically(tween(AppMotion.ShortMs)) { -dir * it / 2 } + fadeOut(tween(AppMotion.QuickMs)))
+                .using(SizeTransform(clip = false))
+        },
+        label = "decade",
+    ) { d ->
+        Text(stringResource(R.string.timeline_decade, d), style = style, color = color, maxLines = 1)
+    }
+}
+
+/** Десетилетието на вехата, която се чете — сменя се само при ново десетилетие (без рекомпозиция на кадър). */
+@Composable
+private fun rememberReadingDecade(years: IntArray, listState: LazyListState): State<Int?> = remember(years, listState) {
+    derivedStateOf {
+        if (years.isEmpty()) {
+            null
+        } else {
+            val i = TimelineScrub.readingEntry(listState.readingItem(), years.size, listState.canScrollBackward, listState.canScrollForward)
+            TimelineScrub.decade(years[i])
+        }
+    }
+}
+
 /** От тази ширина вехите са от двете страни на конеца (таблет, хоризонтално). */
 private val WideTimeline = 720.dp
 private val WideCardMax = 440.dp
@@ -183,7 +283,8 @@ private const val HEAD_ITEMS = 2
 
 /**
  * Лентата; без ViewModel — за тестовете със снимки. [staticFrame] — всичко вече е избродирано;
- * [showScrubber] — плъзгачът с десетилетието се вижда и в покой (тестове); [thisYear] — „Днес“.
+ * [showScrubber] — дръжката на плъзгача се вижда и в покой, а [showDecadePill] — и надписът с
+ * десетилетието като при влачене (тестове); [thisYear] — „Днес“.
  */
 @Composable
 fun Timeline(
@@ -195,8 +296,10 @@ fun Timeline(
     listState: LazyListState = rememberLazyListState(),
     showScrubber: Boolean = false,
     thisYear: Int = remember { LocalDate.now().year },
+    showDecadePill: Boolean = false,
 ) {
     val years = remember(entries, thisYear) { TimelineScrub.years(entries, thisYear) }
+    val plates = rememberRosettePlates()
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val wide = maxWidth >= WideTimeline
         LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(bottom = 32.dp)) {
@@ -208,10 +311,10 @@ fun Timeline(
                     i % 2 == 0 -> Side.START
                     else -> Side.END
                 }
-                TimelineItem("$i-${e.label}", e, last = i == entries.lastIndex, staticFrame = staticFrame, side = side)
+                TimelineItem("$i-${e.label}", e, last = i == entries.lastIndex, staticFrame = staticFrame, side = side, plates = plates)
             }
         }
-        DecadeScrubber(years, listState, showScrubber, Modifier.align(Alignment.TopEnd))
+        DecadeScrubber(years, listState, plates, showScrubber, showDecadePill, Modifier.align(Alignment.TopStart))
     }
 }
 
@@ -227,8 +330,14 @@ private fun TimelineHeader() {
     }
 }
 
-private val RailWidth = 92.dp
-private val MedallionSize = 76.dp
+/** Лявото поле на телефона: там се плъзга дръжката (малка осморъка), без да закрива медалиите. */
+private val ScrubGutter = 28.dp
+/** Медалията: годината е в нея, а цялата дата — в картата. */
+private val MedallionSize = 64.dp
+private val MedallionTop = 4.dp
+/** Колоната на медалията на телефона (след полето); на широк екран — по средата. */
+private val MedallionRail = 68.dp
+private val WideRail = 92.dp
 
 /** От коя страна на конеца е картата на широк екран. */
 private enum class Side { START, END }
@@ -238,21 +347,21 @@ private enum class Side { START, END }
  * избродира веднъж. На широк екран ([side] ≠ null) конецът е по средата, а картите се редуват.
  */
 @Composable
-private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFrame: Boolean, side: Side?) {
+private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFrame: Boolean, side: Side?, plates: RosettePlates) {
     val reduced = rememberReducedMotion()
     // Показана веднъж — оцелява при превъртане и при връщане към екрана (rememberSaveable по ключа на реда).
     var shown by rememberSaveable(key) { mutableStateOf(false) }
     val progress = remember { Animatable(if (shown || reduced || staticFrame) 1f else 0f) }
     LaunchedEffect(Unit) {
-        if (!shown && !reduced && !staticFrame) progress.animateTo(1f, tween(1000, easing = FastOutSlowInEasing))
+        if (!shown && !reduced && !staticFrame) progress.animateTo(1f, tween(AppMotion.MediumMs, easing = FastOutSlowInEasing))
         shown = true
     }
     val ext = LocalExtendedColors.current
     val thread = if (ext.isDark) Brand.Gold.copy(alpha = 0.75f) else Brand.GoldDark.copy(alpha = 0.8f)
-    // Конецът между вехите — тропосване ([StitchSpec.Basting]), готовият бод от общия речник.
-    val bod = StitchSpec.Basting.stroke(LocalDensity.current.density)
-    val railHalf = with(LocalDensity.current) { (RailWidth / 2).toPx() }
-    val top = with(LocalDensity.current) { MedallionSize.toPx() }
+    val d = LocalDensity.current
+    // Средата на конеца на телефона и долният край на медалията.
+    val railX = with(d) { (ScrubGutter + MedallionRail / 2).toPx() }
+    val top = with(d) { (MedallionTop + MedallionSize).toPx() }
     val description = listOf(e.label, e.title, e.description).filter { it.isNotBlank() }.joinToString(". ")
     // Картата „влиза“ откъм своята страна.
     val enterFrom = if (side == Side.START) -1f else 1f
@@ -263,12 +372,12 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
         Modifier.fillMaxWidth().then(if (side == null) Modifier.height(IntrinsicSize.Min) else Modifier)
             .semantics(mergeDescendants = true) { contentDescription = description }
             .drawBehind {
-                // Конецът: бодове надолу от медалията до края на реда (и през него — до следващата).
+                // Конецът (тропосване, [StitchSpec.Basting]): бодове надолу от медалията до края на реда.
                 if (last) return@drawBehind
-                val railX = if (side == null) railHalf else size.width / 2f
-                val start = top + bod.width * 2
+                val x = if (side == null) railX else size.width / 2f
+                val start = top + StitchSpec.Basting.widthDp * density * 2
                 val end = top + (size.height - top) * progress.value
-                if (end > start) drawLine(thread, Offset(railX, start), Offset(railX, end), strokeWidth = bod.width, cap = StrokeCap.Round, pathEffect = bod.pathEffect)
+                if (end > start) drawStitchRun(StitchSpec.Basting, thread, x, start, end)
             },
     ) {
         val medallion = Modifier.graphicsLayer {
@@ -276,13 +385,15 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
             scaleX = 0.6f + 0.4f * p; scaleY = scaleX; alpha = (p * 3f).coerceAtMost(1f)
         }
         if (side == null) {
-            Box(Modifier.width(RailWidth), contentAlignment = Alignment.TopCenter) { Medallion(e.label, medallion) }
+            Spacer(Modifier.width(ScrubGutter))
+            Box(Modifier.width(MedallionRail), contentAlignment = Alignment.TopCenter) { Medallion(e, plates, medallion) }
             EntryCard(e, Modifier.weight(1f).padding(end = ScreenGutter, top = 6.dp, bottom = 22.dp).then(cardMotion))
         } else {
-            Box(Modifier.weight(1f).padding(start = ScreenGutter, top = 6.dp, bottom = 22.dp), contentAlignment = Alignment.TopEnd) {
+            // Отляво остава поле за дръжката на плъзгача.
+            Box(Modifier.weight(1f).padding(start = ScrubGutter + 4.dp, top = 6.dp, bottom = 22.dp), contentAlignment = Alignment.TopEnd) {
                 if (side == Side.START) EntryCard(e, Modifier.widthIn(max = WideCardMax).then(cardMotion))
             }
-            Box(Modifier.width(RailWidth), contentAlignment = Alignment.TopCenter) { Medallion(e.label, medallion) }
+            Box(Modifier.width(WideRail), contentAlignment = Alignment.TopCenter) { Medallion(e, plates, medallion) }
             Box(Modifier.weight(1f).padding(end = ScreenGutter, top = 6.dp, bottom = 22.dp), contentAlignment = Alignment.TopStart) {
                 if (side == Side.END) EntryCard(e, Modifier.widthIn(max = WideCardMax).then(cardMotion))
             }
@@ -291,53 +402,38 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
 }
 
 /**
- * Плочка-осморъка като [org.chyavorec.app.ui.components.FolkIconPlate] (същата форма и градиент) с
- * пръстен от тичащ бод — медалията с годината и дръжката на плъзгача. Пътят — веднъж за размера.
+ * Медалията: само годината, едро (Cormorant ~21 sp), върху готовата осморъка. Украса — TalkBack не я
+ * чете, а надписът не расте с шрифта (цялата дата е в картата и расте там): така не прелива никога.
  */
 @Composable
-private fun Modifier.rosettePlate(): Modifier {
-    val container = MaterialTheme.colorScheme.primaryContainer
-    val ring = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.5f)
-    return this.then(
-        remember(container, ring) {
-            Modifier.drawWithCache {
-                val r = size.minDimension / 2f
-                val outer = FolkShapes.rosette.scaledPath(r * 0.98f, size.width / 2f, size.height / 2f)
-                val fill = Brush.linearGradient(listOf(container, container.copy(alpha = container.alpha * 0.55f)))
-                val bod = StitchSpec.Running.stroke(density)
-                onDrawBehind {
-                    drawPath(outer, fill)
-                    drawCircle(ring, radius = r * 0.74f, style = bod)
-                }
-            }
-        },
-    )
-}
-
-/** Медалията с годината: осморъка с пръстен от бод, Cormorant; размерът на текста е ограничен (украса, а текстът е и в картата). */
-@Composable
-private fun Medallion(label: String, modifier: Modifier = Modifier) {
+private fun Medallion(e: TimelineEntry, plates: RosettePlates, modifier: Modifier = Modifier) {
     val d = LocalDensity.current
+    val text = TimelineScrub.medallionText(e)
     Box(
-        modifier.padding(top = 2.dp).size(MedallionSize - 4.dp).clearAndSetSemantics { }.rosettePlate(),
+        modifier.padding(top = MedallionTop).size(MedallionSize).clearAndSetSemantics { }.rosettePlate(plates),
         contentAlignment = Alignment.Center,
     ) {
-        // Украсният надпис не расте с шрифта над ~1.15: иначе годината не се събира в пръстена.
-        CompositionLocalProvider(LocalDensity provides Density(d.density, d.fontScale.coerceAtMost(1.15f))) {
-            // Периодът („1912–1918“) се чупи след тирето, а не насред годината.
+        CompositionLocalProvider(LocalDensity provides Density(d.density, 1f)) {
+            val (fontSize, lineHeight) = when {
+                text.length <= 4 -> 21.sp to 23.sp
+                text.length <= 6 -> 16.sp to 18.sp
+                else -> 12.sp to 14.sp
+            }
             Text(
-                label.replace(Regex("\\s*([–-])\\s*"), "$1\n"),
-                style = TextStyle(fontFamily = Cormorant, fontSize = if (label.length > 6) 14.sp else 21.sp, lineHeight = if (label.length > 6) 16.sp else 23.sp),
-                color = MaterialTheme.colorScheme.onPrimaryContainer, textAlign = TextAlign.Center, maxLines = 3, modifier = Modifier.padding(horizontal = 8.dp),
+                text, style = TextStyle(fontFamily = Cormorant, fontSize = fontSize, lineHeight = lineHeight),
+                color = MaterialTheme.colorScheme.onPrimaryContainer, textAlign = TextAlign.Center,
+                maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 9.dp),
             )
         }
     }
 }
 
+/** Картата на вехата: цялата дата („17 март 1958“, „1912–1918“) като златен надред, заглавие и текст. */
 @Composable
 private fun EntryCard(e: TimelineEntry, modifier: Modifier) {
     AppCard(modifier.fillMaxWidth(), accent = true) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(e.label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
             Text(e.title, style = MaterialTheme.typography.titleLarge)
             if (e.description.isNotBlank()) Text(e.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
@@ -363,6 +459,19 @@ internal object TimelineScrub {
     }
 
     fun decade(year: Int): Int = Math.floorDiv(year, 10) * 10
+
+    /** Надписът в медалията: само годината (началната при период); без година — етикетът („Днес“). */
+    fun medallionText(e: TimelineEntry): String = e.year?.toString() ?: e.label.trim()
+
+    /**
+     * Вехата, която се чете: тази на реда [item] от списъка (заглавните редове — първата); в
+     * началото — първата, а в края на списъка — последната (иначе „Днес“ може и да не дойде).
+     */
+    fun readingEntry(item: Int, count: Int, canBack: Boolean, canForward: Boolean): Int = when {
+        count <= 0 || !canBack -> 0
+        !canForward -> count - 1
+        else -> (item - HEAD_ITEMS).coerceIn(0, count - 1)
+    }
 
     /** Вехата при положение [fraction] (0 — горе, 1 — долу) от [count] вехи. */
     fun indexAt(fraction: Float, count: Int): Int = if (count <= 0) 0 else (fraction.coerceIn(0f, 1f) * (count - 1)).roundToInt()
@@ -402,23 +511,49 @@ private fun LazyListState.averageItemSize(): Float {
 
 private fun LazyListState.viewportSize(): Int = layoutInfo.viewportEndOffset - layoutInfo.viewportStartOffset
 
+/** Редът, който пресича линията на третина от горния край на списъка (без алокации). */
+private fun LazyListState.readingItem(): Int {
+    val info = layoutInfo
+    val items = info.visibleItemsInfo
+    if (items.isEmpty()) return firstVisibleItemIndex
+    val line = info.viewportStartOffset + (info.viewportEndOffset - info.viewportStartOffset) / 3
+    for (i in items.indices) {
+        val item = items[i]
+        if (item.offset + item.size > line) return item.index
+    }
+    return items[items.lastIndex].index
+}
+
 private fun LazyListState.scrollFraction(): Float = TimelineScrub.fraction(
     firstVisibleItemIndex, firstVisibleItemScrollOffset, layoutInfo.totalItemsCount, averageItemSize(), viewportSize(),
     canScrollBackward, canScrollForward,
 )
 
-/** Колко трае плъзгачът след края на превъртането. */
+/** Колко трае дръжката след края на превъртането. */
 private const val SCRUBBER_HIDE_MS = 1200L
-private val ScrubberThumb = 48.dp
+/** Докосваемата дръжка (48 dp) и видимата осморъка в нея. */
+private val ThumbTouch = 48.dp
+private val ThumbSize = 24.dp
+/** Надписът с десетилетието не расте над това (за да не стигне текста на картите). */
+private const val PILL_MAX_FONT_SCALE = 1.3f
 
 /**
- * Малка осморъка вдясно, която показва десетилетието, докато списъкът се превърта, и може да се
- * влачи от 1900 г. до днес. В покой я няма. Положението се чете при подреждането (без
- * рекомпозиция на кадър), а надписът се сменя само при ново десетилетие. С TalkBack не се
- * показва — списъкът се обхожда сам, ред по ред.
+ * Плъзгачът в лявото поле: малка осморъка, която се появява, докато списъкът се превърта, и може
+ * да се влачи от 1900 г. до днес. Надписът с десетилетието („1940-те“) излиза само докато се влачи
+ * — над пръста, в колоната на медалиите, без да закрива текста на картите; при превъртане
+ * десетилетието е в лентата отгоре. При нов десетилетие под пръста — лек тик. В покой не се
+ * рисува нищо; положението се чете при подреждането (без рекомпозиция на кадър), а появата е
+ * само прозрачност на малките слоеве. С TalkBack го няма — списъкът се обхожда сам, ред по ред.
  */
 @Composable
-private fun DecadeScrubber(years: IntArray, listState: LazyListState, alwaysShown: Boolean, modifier: Modifier = Modifier) {
+private fun DecadeScrubber(
+    years: IntArray,
+    listState: LazyListState,
+    plates: RosettePlates,
+    alwaysShown: Boolean,
+    pillAlwaysShown: Boolean,
+    modifier: Modifier = Modifier,
+) {
     if (years.size < TimelineScrub.MIN_ENTRIES || rememberIsTouchExplorationEnabled()) return
     val reduced = rememberReducedMotion()
     var dragging by remember { mutableStateOf(false) }
@@ -433,20 +568,37 @@ private fun DecadeScrubber(years: IntArray, listState: LazyListState, alwaysShow
             visible = false
         }
     }
+    val shown = visible && scrollable
+    val thumbAlpha = animateFloatAsState(if (shown) 1f else 0f, if (reduced) snap() else tween(AppMotion.ShortMs), label = "scrub-thumb")
+    val pillAlpha = animateFloatAsState(
+        if (shown && (dragging || pillAlwaysShown)) 1f else 0f, if (reduced) snap() else tween(AppMotion.QuickMs), label = "scrub-pill",
+    )
+    val pillComposed by remember { derivedStateOf { pillAlpha.value > 0f } }
+    val decadeState = rememberReadingDecade(years, listState)
+    // Тик при ново десетилетие — само докато се влачи (при обикновено превъртане — тишина).
+    val haptic = LocalHapticFeedback.current
+    LaunchedEffect(decadeState) {
+        var last: Int? = null
+        snapshotFlow { decadeState.value }.collect { d ->
+            if (last != null && d != last && dragging) haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+            last = d
+        }
+    }
     val fraction = remember(listState) { { if (dragging) drag.floatValue else listState.scrollFraction() } }
-    AnimatedVisibility(
-        visible && scrollable, modifier = modifier.fillMaxHeight(),
-        enter = if (reduced) EnterTransition.None else fadeIn(), exit = if (reduced) ExitTransition.None else fadeOut(),
-    ) {
-        val decade by remember(years) { derivedStateOf { TimelineScrub.decade(years[TimelineScrub.indexAt(fraction(), years.size)]) } }
-        val thumbPx = with(LocalDensity.current) { ScrubberThumb.roundToPx() }
-        val padPx = with(LocalDensity.current) { 8.dp.roundToPx() }
-        BoxWithConstraints(Modifier.fillMaxHeight().clearAndSetSemantics { }) {
-            val track = (constraints.maxHeight - thumbPx - 2 * padPx).coerceAtLeast(1)
-            Row(
-                Modifier.offset { IntOffset(0, padPx + (fraction() * track).roundToInt()) }
-                    .height(ScrubberThumb).padding(end = 6.dp)
-                    .pointerInput(listState, track) {
+    val d = LocalDensity.current
+    val touchPx = with(d) { ThumbTouch.roundToPx() }
+    val thumbPx = with(d) { ThumbSize.roundToPx() }
+    val padPx = with(d) { 8.dp.roundToPx() }
+    val gapPx = with(d) { 6.dp.roundToPx() }
+    val startPx = with(d) { 2.dp.roundToPx() }
+    BoxWithConstraints(modifier.fillMaxHeight().clearAndSetSemantics { }) {
+        val track = (constraints.maxHeight - touchPx - 2 * padPx).coerceAtLeast(1)
+        val thumbY = { padPx + (fraction() * track).roundToInt() }
+        Box(
+            Modifier.offset { IntOffset(0, thumbY()) }.size(ThumbTouch)
+                .graphicsLayer { alpha = thumbAlpha.value }
+                .then(
+                    if (!shown) Modifier else Modifier.pointerInput(listState, track) {
                         detectVerticalDragGestures(
                             onDragStart = { drag.floatValue = listState.scrollFraction(); dragging = true },
                             onDragEnd = { dragging = false },
@@ -460,17 +612,35 @@ private fun DecadeScrubber(years: IntArray, listState: LazyListState, alwaysShow
                             listState.requestScrollToItem(index, offset)
                         }
                     },
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    stringResource(R.string.timeline_decade, decade),
-                    style = TextStyle(fontFamily = Cormorant, fontSize = 18.sp, fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface, maxLines = 1,
-                    modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh, CircleShape)
-                        .border(FolkTokens.goldBorder(), CircleShape).padding(horizontal = 12.dp, vertical = 2.dp),
-                )
-                Spacer(Modifier.width(6.dp))
-                Box(Modifier.size(34.dp).rosettePlate())
+                ),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            Box(Modifier.padding(start = 2.dp).size(ThumbSize).rosettePlate(plates))
+        }
+        if (pillComposed) {
+            val decade = decadeState.value
+            if (decade != null) {
+                CompositionLocalProvider(LocalDensity provides Density(d.density, d.fontScale.coerceAtMost(PILL_MAX_FONT_SCALE))) {
+                    Text(
+                        stringResource(R.string.timeline_decade, decade),
+                        style = TextStyle(fontFamily = Cormorant, fontSize = 17.sp, fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onSurface, maxLines = 1,
+                        modifier = Modifier
+                            .layout { measurable, constraints ->
+                                // Над осморъката (над пръста); съвсем горе — под нея.
+                                val p = measurable.measure(constraints.copy(minWidth = 0, minHeight = 0))
+                                layout(p.width, p.height) {
+                                    val y0 = thumbY()
+                                    val above = y0 + (touchPx - thumbPx) / 2 - gapPx - p.height
+                                    p.place(startPx, if (above >= 0) above else y0 + (touchPx + thumbPx) / 2 + gapPx)
+                                }
+                            }
+                            .graphicsLayer { alpha = pillAlpha.value }
+                            .background(MaterialTheme.colorScheme.surfaceContainerHigh, CircleShape)
+                            .border(FolkTokens.goldBorder(), CircleShape)
+                            .padding(horizontal = 10.dp, vertical = 1.dp),
+                    )
+                }
             }
         }
     }
