@@ -224,10 +224,10 @@ class EventLeafScreenshotTest {
         val torn = mutableStateOf(false)
         compose.setContent { Page { LeafAndTitle(torn.value) } }
         val leaf = compose.onNode(hasContentDescription("18:30", substring = true))
-        val before = leaf.getUnclippedBoundsInRoot().height
+        val before = leaf.getUnclippedBoundsInRoot().let { it.bottom - it.top }
         torn.value = true
         compose.waitForIdle()
-        val after = leaf.getUnclippedBoundsInRoot().height
+        val after = leaf.getUnclippedBoundsInRoot().let { it.bottom - it.top }
         assertEquals((before + 12.dp).value, after.value, 0.6f)
         compose.onNode(hasContentDescription("Отворено в календара", substring = true)).assertExists()
         compose.onNode(hasContentDescription("Добавено", substring = true)).assertDoesNotExist()
