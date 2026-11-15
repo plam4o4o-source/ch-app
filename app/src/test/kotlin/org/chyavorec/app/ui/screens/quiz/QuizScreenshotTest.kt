@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
@@ -107,7 +108,7 @@ class QuizScreenshotTest {
         compose.setContent { Page(ui, reduced = false, confetti = confetti) }
         compose.waitForIdle()
         compose.mainClock.autoAdvance = false
-        ui = QuizUi.Playing(quiz, 4, 0, List(5) { true })
+        compose.runOnUiThread { ui = QuizUi.Playing(quiz, 4, 0, List(5) { true }); Snapshot.sendApplyNotifications() }
         compose.mainClock.advanceTimeBy(CLOSE_LEAD_MS + 260)
         val early = capture()
         compose.mainClock.advanceTimeBy(260)
@@ -122,7 +123,7 @@ class QuizScreenshotTest {
         compose.setContent { Page(ui, reduced = false) }
         compose.waitForIdle()
         compose.mainClock.autoAdvance = false
-        ui = QuizUi.Playing(quiz, 4, 0, List(5) { true })
+        compose.runOnUiThread { ui = QuizUi.Playing(quiz, 4, 0, List(5) { true }); Snapshot.sendApplyNotifications() }
         compose.mainClock.advanceTimeBy(1_120)
         val frames = listOf(0L, 110L, 110L, 110L, 600L).map { t ->
             compose.mainClock.advanceTimeBy(t)

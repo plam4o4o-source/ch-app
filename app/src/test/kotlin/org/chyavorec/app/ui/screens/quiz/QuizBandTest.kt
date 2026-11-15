@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.isSpecified
@@ -102,7 +103,7 @@ class QuizBandTest {
         compose.waitForIdle()
         assertEquals(0, confetti.bursts, "вече отговорените не се бродират наново")
         compose.mainClock.autoAdvance = false
-        compose.runOnIdle { results.value = List(5) { true } }
+        compose.runOnUiThread { results.value = List(5) { true }; Snapshot.sendApplyNotifications() }
         // Конфетито тръгва със затварящия бод — докато иглата довършва петия мотив, не след нея.
         compose.mainClock.advanceTimeBy(CLOSE_LEAD_MS - 100)
         assertEquals(0, confetti.bursts)
