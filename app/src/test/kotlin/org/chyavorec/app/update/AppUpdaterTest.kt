@@ -1,6 +1,7 @@
 package org.chyavorec.app.update
 
 import android.app.Application
+import android.content.pm.PackageInstaller
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.test.runTest
@@ -281,5 +282,81 @@ class AppUpdaterTest {
         dm.writeBytes("something else".toByteArray())
         assertNull(u.dexMetadataForInstall(info))
         assertFalse(dm.exists())
+    }
+    /** Без .dm се опитва пак само при обща грешка или неприет пакет — иначе веднага истинската причина. */
+    @Test fun retryWithoutDexMetadataOnlyForFailuresItMayCause() {
+        val retry = setOf(PackageInstaller.STATUS_FAILURE, PackageInstaller.STATUS_FAILURE_INVALID)
+        for (status in retry) {
+            assertEquals(InstallOutcome.RETRY_WITHOUT_DM, AppUpdater.installOutcome(status, hadDm = true))
+            assertEquals(InstallOutcome.FAILED, AppUpdater.installOutcome(status, hadDm = false))
+        }
+        val expected = mapOf(
+            PackageInstaller.STATUS_SUCCESS to InstallOutcome.DONE,
+            PackageInstaller.STATUS_FAILURE_ABORTED to InstallOutcome.DECLINED,
+            PackageInstaller.STATUS_FAILURE_CONFLICT to InstallOutcome.SIGNATURE,
+            PackageInstaller.STATUS_FAILURE_INCOMPATIBLE to InstallOutcome.SIGNATURE,
+            PackageInstaller.STATUS_FAILURE_STORAGE to InstallOutcome.FAILED,
+            PackageInstaller.STATUS_FAILURE_BLOCKED to InstallOutcome.FAILED,
+        )
+        for ((status, outcome) in expected) for (hadDm in listOf(true, false)) {
+            assertEquals("статус $status, с .dm: $hadDm", outcome, AppUpdater.installOutcome(status, hadDm))
+        }
+    }
+
+    /** Изтеглена версия 5 с .dm, вече опитан в сесия (белегът е сложен) — както след commitSession. */
+    private suspend fun readyWithTriedDm(u: AppUpdater): Pair<File, File> {
+        updatesDir().mkdirs()
+        File(updatesDir(), "update-5.apk").writeBytes(apkBytes)
+        val dm = File(updatesDir(), "update-5.dm").apply { writeBytes(dmBytes) }
+        val tried = File(updatesDir(), "update-5.dm.tried").apply { createNewFile() }
+        assertTrue(u.restoreDownloaded())
+        u.lastSessionHadDm = true
+        return dm to tried
+    }
+
+    /** Място, блокиране… със сесия с .dm: веднага грешката, без нов опит (втори системен диалог). */
+    @Test fun failureNotFromDexMetadataIsShownAtOnce() = runTest {
+        for (status in listOf(PackageInstaller.STATUS_FAILURE_STORAGE, PackageInstaller.STATUS_FAILURE_BLOCKED)) {
+            val u = updater()
+            val (dm, tried) = readyWithTriedDm(u)
+            val info = requireNotNull(u.currentInfo())
+            u.onInstallResult(status)
+            assertEquals(UpdateState.Failed(UpdateFailure.INSTALL, info), u.state.value)
+            assertFalse(u.lastSessionHadDm)
+            // Следващият опит (от потребителя) — без .dm: белегът остава.
+            assertTrue(dm.exists())
+            assertTrue(tried.exists())
+            updatesDir().deleteRecursively()
+        }
+    }
+
+    @Test fun signatureConflictWithDexMetadataIsASignatureFailure() = runTest {
+        val u = updater()
+        readyWithTriedDm(u)
+        val info = requireNotNull(u.currentInfo())
+        u.onInstallResult(PackageInstaller.STATUS_FAILURE_CONFLICT)
+        assertEquals(UpdateState.Failed(UpdateFailure.SIGNATURE, info), u.state.value)
+    }
+
+    /** Отказ в системния диалог: готово за нов опит, пак с .dm (белегът се маха). */
+    @Test fun declinedWithDexMetadataStaysReadyAndKeepsTheProfile() = runTest {
+        val u = updater()
+        val (dm, tried) = readyWithTriedDm(u)
+        val info = requireNotNull(u.currentInfo())
+        u.onInstallResult(PackageInstaller.STATUS_FAILURE_ABORTED)
+        assertEquals(UpdateState.Ready(info), u.state.value)
+        assertTrue(dm.exists())
+        assertFalse(tried.exists())
+    }
+
+    /** Обща грешка със сесия с .dm: профилът се маха и инсталирането тръгва пак, само с APK-а. */
+    @Test fun genericFailureWithDexMetadataRetriesWithoutIt() = runTest {
+        val u = updater()
+        val (dm, _) = readyWithTriedDm(u)
+        u.onInstallResult(PackageInstaller.STATUS_FAILURE)
+        assertFalse(dm.exists())
+        assertFalse(u.lastSessionHadDm)
+        // Новият опит е във фон (тук — без разрешение за инсталиране); грешка не се показва.
+        assertFalse("${u.state.value}", u.state.value is UpdateState.Failed)
     }
 }

@@ -60,8 +60,10 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -281,8 +283,9 @@ private fun Tile(item: TileItem, motif: FolkMotif, wide: Boolean, columns: Int, 
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         border = cardBorder(),
         interactionSource = interaction,
+        // Surface(onClick) не казва ролята — плочката е бутон за TalkBack.
         modifier = modifier.then(item.sharedKey?.let { Modifier.sharedBoundsKey(it) } ?: Modifier).darkTopHighlight(shape).nightCloth(shape)
-            .stitchedCorner(rememberSeasonalThread()) { tighten.value },
+            .stitchedCorner(rememberSeasonalThread()) { tighten.value }.semantics { role = Role.Button },
     ) {
         // При едър шрифт (1.3×) текстът се пренася на още ред, вместо да се реже —
         // редът от плочки е с височината на най-високата.

@@ -43,8 +43,8 @@ internal object WidgetViews {
     /** Широк с място за краткото име до бутоните (по-тесният — само емблемата). */
     private const val SHORT_TITLE_WIDTH = 300f
 
-    /** Широк с място за цялото име до бутоните без свиване на „Каталог“ (по-тесният 4×N — краткото име). */
-    private const val FULL_TITLE_WIDTH = 380f
+    /** Широк с място за цялото име до бутоните (с полетата им) — 4 клетки на повечето телефони. */
+    private const val FULL_TITLE_WIDTH = 345f
     val FullWideSize = SizeF(FULL_TITLE_WIDTH, 100f)
     val FullWideTallSize = SizeF(FULL_TITLE_WIDTH, 150f)
 
@@ -261,14 +261,14 @@ internal object WidgetViews {
         }
         GroupRows.forEach { (_, _, text) -> v.tone(context, text, Tone.TEXT, dynamic) }
         v.setInt(R.id.widget_scan, "setBackgroundResource", if (dynamic) R.drawable.widget_dyn_button_bg else R.drawable.widget_button_bg)
+        v.setInt(R.id.widget_catalog, "setBackgroundResource", if (dynamic) R.drawable.widget_dyn_tonal_bg else R.drawable.widget_tonal_bg)
         v.tone(context, R.id.widget_scan, Tone.BUTTON_TEXT, dynamic)
-        // Смяната на фона (drawable с отстъп) нулира вътрешния отстъп на бутона — връща се: 10 dp от всички страни
-        // (отгоре и отдолу е отстъпът на фона = видимото хапче 28 dp в поле 48 dp).
+        v.tone(context, R.id.widget_catalog, Tone.TONAL_TEXT, dynamic)
+        // Смяната на фона (drawable с отстъп) нулира вътрешния отстъп на бутона — затова отстъпът СЛЕД фона:
+        // 10 dp от всички страни (отгоре и отдолу е отстъпът на фона = видимото хапче 28 dp в поле 48 dp).
         val pad = (10 * context.resources.displayMetrics.density).roundToInt()
         v.setViewPadding(R.id.widget_scan, pad, pad, pad, pad)
         v.setViewPadding(R.id.widget_catalog, pad, pad, pad, pad)
-        v.setInt(R.id.widget_catalog, "setBackgroundResource", if (dynamic) R.drawable.widget_dyn_tonal_bg else R.drawable.widget_tonal_bg)
-        v.tone(context, R.id.widget_catalog, Tone.TONAL_TEXT, dynamic)
     }
 
     /**

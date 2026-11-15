@@ -577,8 +577,8 @@ class AppUpdater(
     /** Записът на .dm в сесията не стана — сесията се изоставя и се прави нова без него. */
     private class DexMetadataWriteException(cause: Throwable) : IOException(cause)
 
-    /** Последната сесия съдържаше .dm (за [onInstallResult]: при неуспех — още веднъж без него). */
-    @Volatile private var lastSessionHadDm = false
+    /** Последната сесия съдържаше .dm (за [onInstallResult]: при неуспех заради него — още веднъж без него). */
+    @Volatile internal var lastSessionHadDm = false
     @Volatile private var lastInstallBackground = false
 
     /**
@@ -645,9 +645,15 @@ class AppUpdater(
         }
         val sessionId = installer.createSession(params)
         installer.openSession(sessionId).use { session ->
-            session.openWrite("base.apk", 0, file.length()).use { out ->
-                file.inputStream().use { it.copyTo(out) }
-                session.fsync(out)
+            try {
+                session.openWrite("base.apk", 0, file.length()).use { out ->
+                    file.inputStream().use { it.copyTo(out) }
+                    session.fsync(out)
+                }
+            } catch (e: Exception) {
+                // Недописана сесия не остава да заема място до рестарт — изоставя се; грешката е за [install].
+                runCatching { session.abandon() }
+                throw e
             }
             if (dm != null) {
                 val (metadata, tried) = dm
@@ -678,28 +684,26 @@ class AppUpdater(
     /** Отговор от системата след инсталиране (виж [UpdateInstallReceiver]). */
     fun onInstallResult(status: Int) {
         val info = currentInfo() ?: return
-        // Неуспех на сесия с .dm: още веднъж, само с APK-а (белегът [dmTried] вече е сложен) —
-        // обновяването никога не пропада заради профила. Отказ от потребителя — не е неуспех.
-        if (lastSessionHadDm && status != PackageInstaller.STATUS_SUCCESS && status != PackageInstaller.STATUS_FAILURE_ABORTED) {
-            lastSessionHadDm = false
-            Diagnostics.note("update.dm", "install with dm failed ($status), retrying without it")
-            runCatching { dmFile(info).delete() }
-            _state.value = UpdateState.Ready(info)
-            scope.launch { install(lastInstallBackground) }
-            return
-        }
-        if (status == PackageInstaller.STATUS_FAILURE_ABORTED && lastSessionHadDm) {
-            // Отказ в системния диалог: следващият опит може пак с .dm.
-            lastSessionHadDm = false
-            runCatching { dmTried(info).delete() }
-        }
-        _state.value = when (status) {
-            PackageInstaller.STATUS_SUCCESS -> UpdateState.Idle
-            // Потребителят отказа в системния диалог — не е грешка, файлът остава готов.
-            PackageInstaller.STATUS_FAILURE_ABORTED -> UpdateState.Ready(info)
-            // Различен подпис от инсталираното приложение.
-            PackageInstaller.STATUS_FAILURE_CONFLICT, PackageInstaller.STATUS_FAILURE_INCOMPATIBLE -> UpdateState.Failed(UpdateFailure.SIGNATURE, info)
-            else -> UpdateState.Failed(UpdateFailure.INSTALL, info)
+        val hadDm = lastSessionHadDm
+        lastSessionHadDm = false
+        when (installOutcome(status, hadDm)) {
+            InstallOutcome.RETRY_WITHOUT_DM -> {
+                // Сесията с .dm пропадна по причина, която може да е от профила: още веднъж, само с APK-а
+                // (белегът [dmTried] вече е сложен) — обновяването никога не пропада заради профила.
+                Diagnostics.note("update.dm", "install with dm failed ($status), retrying without it")
+                runCatching { dmFile(info).delete() }
+                _state.value = UpdateState.Ready(info)
+                scope.launch { install(lastInstallBackground) }
+            }
+            InstallOutcome.DECLINED -> {
+                // Отказ в системния диалог — не е грешка, файлът остава готов; следващият опит може пак с .dm.
+                if (hadDm) runCatching { dmTried(info).delete() }
+                _state.value = UpdateState.Ready(info)
+            }
+            InstallOutcome.DONE -> _state.value = UpdateState.Idle
+            // Истинската причина веднага, без втори системен диалог (белегът остава — следващият опит е без .dm).
+            InstallOutcome.SIGNATURE -> _state.value = UpdateState.Failed(UpdateFailure.SIGNATURE, info)
+            InstallOutcome.FAILED -> _state.value = UpdateState.Failed(UpdateFailure.INSTALL, info)
         }
     }
 
@@ -861,5 +865,24 @@ class AppUpdater(
          * тук, ако някога пречи (тогава update.json може да го съдържа, приложението го пропуска).
          */
         internal const val DEX_METADATA_ENABLED = true
+
+        /**
+         * Какво следва от статуса на сесията. Без .dm се опитва пак само при обща грешка
+         * (STATUS_FAILURE) или неприет пакет (STATUS_FAILURE_INVALID — напр. лош профил); отказ,
+         * конфликт, място, несъвместимост, блокиране… не са от профила — повторът само би показал
+         * втори системен диалог преди истинската причина.
+         */
+        internal fun installOutcome(status: Int, hadDm: Boolean): InstallOutcome = when (status) {
+            PackageInstaller.STATUS_SUCCESS -> InstallOutcome.DONE
+            PackageInstaller.STATUS_FAILURE_ABORTED -> InstallOutcome.DECLINED
+            PackageInstaller.STATUS_FAILURE, PackageInstaller.STATUS_FAILURE_INVALID ->
+                if (hadDm) InstallOutcome.RETRY_WITHOUT_DM else InstallOutcome.FAILED
+            // Различен подпис от инсталираното приложение.
+            PackageInstaller.STATUS_FAILURE_CONFLICT, PackageInstaller.STATUS_FAILURE_INCOMPATIBLE -> InstallOutcome.SIGNATURE
+            else -> InstallOutcome.FAILED
+        }
     }
 }
+
+/** Изходът от сесия на PackageInstaller ([AppUpdater.installOutcome]). */
+internal enum class InstallOutcome { DONE, DECLINED, RETRY_WITHOUT_DM, SIGNATURE, FAILED }

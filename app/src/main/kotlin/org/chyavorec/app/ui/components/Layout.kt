@@ -62,6 +62,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.paneTitle
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.text.style.TextOverflow
@@ -79,12 +80,15 @@ import org.chyavorec.app.ui.theme.AppMotion
 /** Едно поле отстрани за всички екрани (заглавки на раздели, ленти, карти). */
 val ScreenGutter = 16.dp
 
-/** Етикет над заглавие (както на сайта: малки главни букви + три кръстати бода в златно). */
+/**
+ * Етикет над заглавие (както на сайта: малки главни букви + три кръстати бода в златно).
+ * Редът е един възел за TalkBack — `heading()` от [modifier] стои на него заедно с текста.
+ */
 @Composable
 fun SectionLabel(text: String, modifier: Modifier = Modifier) {
     // Златото на темата — следва и палитрите „Левски“/„Шевица“; бодовете — сезонния конец.
     val gold = LocalExtendedColors.current.gold
-    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier.semantics(mergeDescendants = true) {}, verticalAlignment = Alignment.CenterVertically) {
         StitchMark(rememberSeasonalThread())
         Spacer(Modifier.width(8.dp))
         Text(text.uppercase(), style = MaterialTheme.typography.labelSmall, color = gold)
@@ -326,8 +330,10 @@ fun AppCard(
     val m = modifier.darkTopHighlight(shape).nightCloth(shape)
     when {
         onClick == null -> Surface(shape = shape, color = color, border = border, modifier = m) { Column(content = content) }
+        // Surface(onClick) не казва ролята — TalkBack: „бутон“, като в клона с етикет долу.
         onClickLabel == null -> Surface(
-            onClick = onClick, enabled = enabled, shape = shape, color = color, border = border, interactionSource = interactionSource, modifier = m,
+            onClick = onClick, enabled = enabled, shape = shape, color = color, border = border, interactionSource = interactionSource,
+            modifier = m.semantics { role = androidx.compose.ui.semantics.Role.Button },
         ) { Column(content = content) }
         // С име на действието: същата повърхност, докосването е със собствен етикет за TalkBack.
         else -> Surface(
@@ -373,7 +379,10 @@ fun LimitFontScale(max: Float, content: @Composable () -> Unit) {
 /** От този мащаб на шрифта [InfoRow] подрежда етикета над стойността. */
 private const val INFO_ROW_STACK_FONT_SCALE = 1.3f
 
-/** Ред „етикет — стойност“. [copyable] — дълго натискане копира стойността (сигнатура, инв. №). */
+/**
+ * Ред „етикет — стойност“. [copyable] — дълго натискане копира стойността (сигнатура, инв. №).
+ * Всички редове са с един ритъм: поне 40 dp (едноредовият — точно толкова), текстът е по средата.
+ */
 @Composable
 fun InfoRow(label: String, value: String?, modifier: Modifier = Modifier, copyable: Boolean = false) {
     if (value.isNullOrBlank()) return
@@ -385,22 +394,22 @@ fun InfoRow(label: String, value: String?, modifier: Modifier = Modifier, copyab
             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             Intents.copy(context, label, value)
         }
-        // Целият ред, поне 48 dp висок — удобен за задържане; текстът е центриран по височина.
+        // Задържането — на целия ред (на цялата ширина), не само върху текста.
         Modifier
             .pointerInput(value) { detectTapGestures(onLongPress = { doCopy() }) }
             .semantics { onLongClick(copyLabel) { doCopy(); true } }
-            .heightIn(min = 48.dp)
-            .wrapContentHeight(Alignment.CenterVertically)
     } else Modifier
+    // Еднакво за копируемите и останалите (досега копируемите бяха с 48 dp и още отстъп — неравен ред).
+    val rhythm = Modifier.fillMaxWidth().then(copy).heightIn(min = 40.dp).wrapContentHeight(Alignment.CenterVertically).padding(vertical = 9.dp)
     if (LocalDensity.current.fontScale >= INFO_ROW_STACK_FONT_SCALE) {
         // Едър шрифт: етикетът е над стойността на цялата ширина — „Издателство“ не се къса насред.
-        Column(modifier.fillMaxWidth().then(copy).padding(vertical = 7.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Column(modifier.then(rhythm), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(value, style = MaterialTheme.typography.bodyMedium)
         }
         return
     }
-    Row(modifier.fillMaxWidth().then(copy).padding(vertical = 7.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+    Row(modifier.then(rhythm), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(0.42f))
         Text(value, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(0.58f))
     }
