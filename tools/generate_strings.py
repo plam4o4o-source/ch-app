@@ -1037,6 +1037,7 @@ S = {
 "timeline_open_page": ("Отвори страницата „История“", "Open the “History” page"),
 "timeline_empty": ("Няма вехи за показване.", "No milestones to show."),
 "timeline_decade": ("%1$d-те", "%1$ds"),
+"timeline_title_decade": ("Лента на времето, %1$d-те години", "Timeline, the %1$ds"),
 "subject_history": ("историята", "the history"),
 "timeline_open": ("Отвори лентата на времето", "Open the timeline"),
 "timeline_on_this_day": ("На този ден · %1$d г.", "On this day · %1$d"),

@@ -49,4 +49,25 @@ class TimelineScrubTest {
         assertEquals(0 to 0, TimelineScrub.target(0f, 20, 100f, 800))
         assertEquals(0 to 0, TimelineScrub.target(0.4f, 0, 100f, 800))
     }
+
+    @Test fun medallionShowsOnlyTheYear() {
+        val byLabel = QuizDefaults.timeline.associate { it.label to TimelineScrub.medallionText(it) }
+        assertEquals("1958", byLabel["17 март 1958"])
+        assertEquals("1922", byLabel["17 дек. 1922"])
+        assertEquals("1912", byLabel["1912–1918"])
+        assertEquals("1989", byLabel["След 1989"])
+        assertEquals("Днес", byLabel["Днес"])
+        // В медалията — най-много 4 знака от вградената хронология (едрият надпис се събира в пръстена).
+        assertTrue(byLabel.values.all { it.length <= 4 }, "$byLabel")
+    }
+
+    @Test fun readingEntryFollowsTheListAndPinsTheEnds() {
+        // Редове 0 и 1 са заглавието и лентата за синхронизация.
+        assertEquals(0, TimelineScrub.readingEntry(1, 15, canBack = true, canForward = true))
+        assertEquals(3, TimelineScrub.readingEntry(5, 15, canBack = true, canForward = true))
+        assertEquals(0, TimelineScrub.readingEntry(9, 15, canBack = false, canForward = true))
+        assertEquals(14, TimelineScrub.readingEntry(9, 15, canBack = true, canForward = false))
+        assertEquals(14, TimelineScrub.readingEntry(40, 15, canBack = true, canForward = true))
+        assertEquals(0, TimelineScrub.readingEntry(3, 0, canBack = true, canForward = true))
+    }
 }
