@@ -1,0 +1,43 @@
+app pids seen: ['5469', '7909', '11876', '12919', '16038', '17045', '20098', '21146']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 29
+   skipped-frames events=29 max=92 total=1462
+   11-15 12:03:45.012  5469  5469 I Choreographer: Skipped 92 frames!  The application may be doing too much work on its main thread.
+   11-15 12:03:46.110  5469  5469 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+   11-15 12:03:48.643  5469  5469 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-15 12:03:49.584  5469  5469 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-15 12:03:50.297  5469  5469 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-15 12:03:50.992  5469  5469 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-15 12:04:21.958  5469  5469 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-15 12:05:57.415  7909  7909 I Choreographer: Skipped 54 frames!  The application may be doing too much work on its main thread.
+   11-15 12:05:58.344  7909  7909 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   11-15 12:05:59.359  7909  7909 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
+   11-15 12:15:43.250 11876 11876 I Choreographer: Skipped 55 frames!  The application may be doing too much work on its main thread.
+   11-15 12:15:43.869 11876 11876 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+== Davey: 38
+   davey events=38 max=2582ms median=1129ms
+   11-15 12:03:48.291  5469  5483 I OpenGLRenderer: Davey! duration=2582ms; Flags=1, FrameTimelineVsyncId=6687, IntendedVsync=96283514699, Vsync=97350181323, InputEventId=0, HandleInputStart=97366051629, AnimationStart=97366053112, PerformTrav
+   11-15 12:03:50.245  5469  5483 I OpenGLRenderer: Davey! duration=1803ms; Flags=0, FrameTimelineVsyncId=7292, IntendedVsync=99316847911, Vsync=99883514555, InputEventId=0, HandleInputStart=99890925726, AnimationStart=99890926630, PerformTrav
+   11-15 12:03:50.360  5469  5483 I OpenGLRenderer: Davey! duration=738ms; Flags=0, FrameTimelineVsyncId=7302, IntendedVsync=99900186766, Vsync=99950186761, InputEventId=0, HandleInputStart=99964469328, AnimationStart=99964469705, PerformTrave
+   11-15 12:03:50.987  5469  5482 I OpenGLRenderer: Davey! duration=1292ms; Flags=0, FrameTimelineVsyncId=7347, IntendedVsync=100000186756, Vsync=100816853341, InputEventId=0, HandleInputStart=100831679561, AnimationStart=100831680173, Perform
+   11-15 12:03:51.116  5469  5482 I OpenGLRenderer: Davey! duration=1290ms; Flags=0, FrameTimelineVsyncId=7508, IntendedVsync=100850181183, Vsync=101533514489, InputEventId=0, HandleInputStart=101545051018, AnimationStart=101545052016, Perform
+   11-15 12:03:51.768  5469  5482 I OpenGLRenderer: Davey! duration=1150ms; Flags=0, FrameTimelineVsyncId=7534, IntendedVsync=101666858912, Vsync=102233525488, InputEventId=0, HandleInputStart=102240644144, AnimationStart=102240644761, Perform
+   11-15 12:03:52.185  5469  5482 I OpenGLRenderer: Davey! duration=702ms; Flags=0, FrameTimelineVsyncId=7572, IntendedVsync=102383520004, Vsync=102766853299, InputEventId=0, HandleInputStart=102768493256, AnimationStart=102768494016, PerformT
+   11-15 12:04:00.508  5469  5482 I OpenGLRenderer: Davey! duration=700ms; Flags=0, FrameTimelineVsyncId=8647, IntendedVsync=110983514111, Vsync=111300180765, InputEventId=0, HandleInputStart=111305952294, AnimationStart=111305953063, PerformT
+   11-15 12:04:22.196  5469  5480 I OpenGLRenderer: Davey! duration=887ms; Flags=0, FrameTimelineVsyncId=11183, IntendedVsync=132450185469, Vsync=132583518789, InputEventId=0, HandleInputStart=132596305448, AnimationStart=132596306213, Perform
+   11-15 12:04:22.278  5469  5480 I OpenGLRenderer: Davey! duration=808ms; Flags=0, FrameTimelineVsyncId=11212, IntendedVsync=132616846579, Vsync=133200179889, InputEventId=0, HandleInputStart=133206335043, AnimationStart=133206335758, Perform
+   11-15 12:05:58.410  7909  7942 I OpenGLRenderer: Davey! duration=1897ms; Flags=1, FrameTimelineVsyncId=19778, IntendedVsync=227750176107, Vsync=228650176071, InputEventId=0, HandleInputStart=228663318965, AnimationStart=228663319633, Perfor
+   11-15 12:05:59.259  7909  7942 I OpenGLRenderer: Davey! duration=1169ms; Flags=0, FrameTimelineVsyncId=19968, IntendedVsync=228700176069, Vsync=229583509367, InputEventId=0, HandleInputStart=229593247275, AnimationStart=229593247749, Perfor
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-15 12:03:42.511  5395  5395 I PERFCHECK: section: F0. The candidate 1.2.39 org.chyavorec.app and 1.2.38 org.chyavorec.app.b38 side by side, both compiled speed-profile
+   11-15 12:05:54.530  7890  7890 I PERFCHECK: section: F1. Warm-up rep 0, not counted: every scenario once; the quiz taps are learned
+   11-15 12:12:28.922 10623 10623 I PERFCHECK: section: F2. Repetition 1, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 12:18:36.127 12897 12897 I PERFCHECK: section: F2. Repetition 2, order: new base a fresh process for each; Home, Още, timeline, quiz
+   11-15 12:24:33.933 15020 15020 I PERFCHECK: section: F2. Repetition 3, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 12:30:33.199 17024 17024 I PERFCHECK: section: F2. Repetition 4, order: new base a fresh process for each; Home, Още, timeline, quiz
+   11-15 12:36:32.779 19052 19052 I PERFCHECK: section: F2. Repetition 5, order: base new a fresh process for each; Home, Още, timeline, quiz
+   11-15 12:42:36.722 21124 21124 I PERFCHECK: section: F2. Repetition 6, order: new base a fresh process for each; Home, Още, timeline, quiz
+   11-15 12:48:34.676 23171 23171 I PERFCHECK: section: F3. Totals rep 0 is excluded; new = 1.2.39 candidate, base = 1.2.38

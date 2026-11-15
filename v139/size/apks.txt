@@ -1,0 +1,6 @@
+1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b38, throwaway key, versionCode 1990100
+1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100
+1.2.39 696e57d prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200
+app.apk 4681342 bytes
+app-base.apk 4641014 bytes
+app-base-upd.apk 4641014 bytes

@@ -1,0 +1,28 @@
+part smk33; APK: 1.2.39 696e57d prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 size 4681342 bytes
+base APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b38, throwaway key, versionCode 1990100 size 4641014 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.39 696e57d prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 size 4681342 bytes
+installed:  versionCode=1990200 minSdk=26 targetSdk=37  versionName=1.2.39 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 5207 ms
+## S1-light. Main screens, timeline (scroll + scrubber drag), quiz to 5/5, event, „Дари спомен“, share, settings (1080x2400 px, density 420, font_scale 1.0, night no, app locale [bg-BG], rotation 0)
+CAP light/01-home: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=1 | front: app | texts=23 ellipsized=1 [Търси книга, новина, събитие…] | НЧ „Васил Левски – 1922“ · с. Яворец · Съобщения · Лента за търсене · Търси книга, новина, събитие · Сканирай баркод
+CAP light/01b-home-2: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=31 ellipsized=0 | Лента за търсене · 15 ноември 2026 · + 8 Неделя · Последни новини · БИБЛИОТЕКА · · 11 ноември 2026 · Четем заедно – мъдростта на 
+CAP light/01c-home-3: targets=17 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=33 ellipsized=0 | Последни новини · БИБЛИОТЕКА · · 11 ноември 2026 · Четем заедно – мъдростта на  · Сканирай · Читателска карта
+CAP light/02-catalog: targets=22 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=49 ellipsized=0 | Търси навсякъде · Сканирай баркод · Всичко · Заглавие · Автор · ISBN
+CAP light/03-my: targets=11 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Примерна читателска карта с  · Така ще изглежда картата ти · Вход · Добави читателска карта · БИБЛИОТЕКА · Читателска карта
+CAP light/04-news: targets=15 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | Новини · Календар · Търси в новините · Всички · Запазени · Библиотека
+CAP light/05-more: targets=15 MISSING=2 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=25 ellipsized=0 | ЧИТАЛИЩЕТО · Съобщения · Съобщения и покани от читали · Събития · Календар на читалището · Дейности
+CAP light/05b-more-2: targets=15 MISSING=1 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=26 ellipsized=0 | Галерия · Снимки от сайта · Дари спомен · Стари снимки за фотоархива · Документи и архив · Устав, отчети, юбилейният ве
+CAP light/10-timeline: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=17 ellipsized=0 | Лента на времето · От 1900 г. до днес · 1900. Театрален кръжец и зар · Театрален кръжец и зараждане · 1900. Театрален кръжец и зар · Ученици от Севлиевската гимн
+TIMELINE light top: first=1900 min=1900 max=1922 n=13; text="От 1900 г. до днес" content-desc="1900. Театрален кръжец и зараждане на идеята. Ученици от Севлиевската гимназия основават театрална група. Успехът на пиесата „Левски“ ги навежда на мисълта да основат читалище „Васил Левски“. Петко Владов дарява първите книги." content-desc="1900. Театрален кръжец и зараждане на идеята" content-desc="1909. Организирано читалищно дело. Влади Илиев, Христо Лалев и Недко Станчев поставят по-трайно начало. Дарени 50–60 тома, по-късно още 25–30. Библиотеката е в дома на Хр. Лалев." content-desc="1909. Организирано читалищно дело" content-desc="1912–1918. Прек
+CAP light/10b-timeline-scrolled: targets=1 MISSING=0 DOUBLE=0 SAME-LABEL=0 SMALL(<48dp)=0 | front: app | texts=20 ellipsized=0 | 17 дек. 1922. Възстановяване · Дейността се възобновява под · 1923–1924. Устав и държавно  · 1923–1924 · Устав и държавно признание · Уставът е приет на 22 януари
+TIMELINE light after 3 swipes: first=1922 min=1920 max=1936 n=16; content-desc="17 дек. 1922. Възстановяване и официално учредяване. Дейността се възобновява под името НЧ „Васил Левски“. По инициатива на Христо Лалев читалището се отделя в самостоятелна институция, настанена в Общината." content-desc="1923–1924. Устав и държавно признание. Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." text="1923–1924" text="Уставът е приет на 22 януари 1923 г. Министерството на просветата го утвърждава на 1 май 1924 г. Читалището става член на национален читалищен съюз." c
+CRASHES: 0 block(s)  → crashes.txt

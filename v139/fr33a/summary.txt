@@ -1,0 +1,143 @@
+part fr33a; APK: 1.2.39 696e57d prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 size 4681342 bytes
+base APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b38, throwaway key, versionCode 1990100 size 4641014 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.39 696e57d prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 size 4681342 bytes
+installed:  versionCode=1990200 minSdk=26 targetSdk=37  versionName=1.2.39 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## F0. The candidate 1.2.39 (org.chyavorec.app) and 1.2.38 (org.chyavorec.app.b38) side by side, both compiled speed-profile
+X installed new: 1.2.39 696e57d prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200;  versionCode=1990200 minSdk=26 targetSdk=37  versionName=1.2.39 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 3566 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~NxoF6TWc0QlsCq25nh909w==/org.chyavorec.app-_ggznyAD_FsxgWK92lY89g==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed base: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b38, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 2699 ms
+X compile org.chyavorec.app.b38: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~-6DwBZxxfPeobHnqzl-9mw==/org.chyavorec.app.b38-S2uuoqDTEC49mh54jp-fKw==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/VpnDialogs/VpnDialogs.apk| x86_64: [status=verify] [reason=prebuilt]|
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+animations: animator_duration_scale=1 transition=1 window=1; host load: 4.87 2.83 1.20
+## F1. Warm-up (rep 0, not counted): every scenario once; the quiz taps are learned
+  FS home new rep0: n=86 (+0 flagged) total p50=322 p90=438 p99=492 max=534 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=131.4 (sync 0.1 issue 36.3 swap 87.6) start-delay=93.5 queue=101.7
+  FS more new rep0: n=101 (+0 flagged) total p50=297 p90=365 p99=402 max=445 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=111.0 (sync 0.1 issue 38.1 swap 68.1) start-delay=86.3 queue=94.2
+  FS timeline new rep0: n=120 (+0 flagged) BUFFER-FULL total p50=241 p90=305 p99=349 max=402 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=93.3 (sync 0.1 issue 35.6 swap 55.8) start-delay=67.5 queue=76.3
+QUIZ taps new: 5 questions learned: input tap 540 654; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 654; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 580; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 580; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 654; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+  FS home base rep0: n=77 (+0 flagged) total p50=333 p90=449 p99=538 max=552 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=119.2 (sync 0.5 issue 36.6 swap 79.9) start-delay=101.7 queue=108.0
+  FS more base rep0: n=87 (+7 flagged) total p50=321 p90=417 p99=619 max=733 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=121.8 (sync 0.1 issue 45.8 swap 73.2) start-delay=75.6 queue=84.1
+  FS timeline base rep0: n=97 (+0 flagged) total p50=310 p90=432 p99=479 max=511 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=127.1 (sync 0.1 issue 40.4 swap 68.3) start-delay=85.6 queue=89.1
+QUIZ taps base: 5 questions learned: input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 706; sleep 2; input tap 540 2226; sleep 2.2~input tap 540 780; sleep 2; input tap 540 2226; sleep 2.2~; result: UNKNOWN text="Утре ще е по-добре — Яворец има още какво да разкаже." text="2/5" text="2 верни от 5" text="Избродирай отговорите"
+## F2. Repetition 1, order: new base (a fresh process for each; Home, Още, timeline, quiz)
+  FS home new rep1: n=86 (+0 flagged) total p50=285 p90=417 p99=509 max=545 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=109.0 (sync 0.1 issue 33.7 swap 67.4) start-delay=79.3 queue=88.3
+  FS more new rep1: n=105 (+0 flagged) total p50=274 p90=337 p99=362 max=382 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=102.4 (sync 0.1 issue 34.2 swap 65.8) start-delay=79.8 queue=91.9
+  FS timeline new rep1: n=120 (+0 flagged) BUFFER-FULL total p50=242 p90=302 p99=357 max=379 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=94.6 (sync 0.1 issue 34.8 swap 55.8) start-delay=67.3 queue=74.6
+  FS quiz new rep1: n=74 (+43 flagged) total p50=127 p90=245 p99=267 max=269 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=64.1 (sync 0.1 issue 32.5 swap 31.9) start-delay=5.7 queue=50.4
+  FS home base rep1: n=96 (+0 flagged) total p50=330 p90=397 p99=480 max=493 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=128.4 (sync 0.1 issue 35.7 swap 78.2) start-delay=90.4 queue=105.5
+  FS more base rep1: n=101 (+2 flagged) total p50=298 p90=372 p99=418 max=472 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=116.8 (sync 0.1 issue 36.7 swap 72.7) start-delay=81.7 queue=96.9
+  FS timeline base rep1: n=106 (+0 flagged) total p50=261 p90=375 p99=450 max=455 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=105.3 (sync 0.1 issue 37.4 swap 58.1) start-delay=71.2 queue=78.9
+  FS quiz base rep1: n=111 (+7 flagged) total p50=344 p90=457 p99=495 max=532 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=148.1 (sync 0.1 issue 41.5 swap 85.4) start-delay=95.1 queue=114.5
+## F2. Repetition 2, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep2: n=83 (+0 flagged) total p50=313 p90=377 p99=459 max=501 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=115.2 (sync 0.1 issue 34.5 swap 75.1) start-delay=94.1 queue=98.6
+  FS more base rep2: n=93 (+0 flagged) total p50=303 p90=361 p99=383 max=418 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=106.0 (sync 0.1 issue 34.5 swap 70.8) start-delay=84.5 queue=98.0
+  FS timeline base rep2: n=105 (+0 flagged) total p50=271 p90=347 p99=416 max=483 ms | medians: ui=0.4 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=101.3 (sync 0.1 issue 37.6 swap 58.3) start-delay=79.3 queue=85.2
+  FS quiz base rep2: n=109 (+8 flagged) total p50=347 p90=440 p99=590 max=596 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=146.6 (sync 0.1 issue 40.1 swap 83.8) start-delay=86.9 queue=108.5
+  FS home new rep2: n=83 (+0 flagged) total p50=302 p90=434 p99=480 max=493 ms | medians: ui=0.3 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=123.0 (sync 0.1 issue 36.5 swap 86.3) start-delay=83.8 queue=92.0
+  FS more new rep2: n=112 (+0 flagged) total p50=266 p90=324 p99=413 max=418 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=100.5 (sync 0.1 issue 34.2 swap 63.3) start-delay=75.9 queue=89.7
+  FS timeline new rep2: n=120 (+0 flagged) BUFFER-FULL total p50=242 p90=295 p99=366 max=369 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=92.8 (sync 0.1 issue 34.9 swap 56.2) start-delay=67.4 queue=77.2
+  FS quiz new rep2: n=79 (+41 flagged) BUFFER-FULL total p50=150 p90=227 p99=292 max=304 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=73.0 (sync 0.1 issue 35.8 swap 35.9) start-delay=5.5 queue=55.9
+## F2. Repetition 3, order: new base (a fresh process for each; Home, Още, timeline, quiz)
+  FS home new rep3: n=98 (+0 flagged) total p50=285 p90=379 p99=477 max=503 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=102.9 (sync 0.1 issue 35.4 swap 66.6) start-delay=77.6 queue=88.5
+  FS more new rep3: n=97 (+0 flagged) total p50=283 p90=342 p99=385 max=421 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=105.7 (sync 0.1 issue 35.7 swap 66.9) start-delay=80.1 queue=94.5
+  FS timeline new rep3: n=119 (+0 flagged) total p50=199 p90=301 p99=345 max=405 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=84.1 (sync 0.1 issue 33.4 swap 49.7) start-delay=54.7 queue=60.0
+  FS quiz new rep3: n=73 (+47 flagged) BUFFER-FULL total p50=139 p90=233 p99=290 max=300 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=64.8 (sync 0.1 issue 32.3 swap 32.8) start-delay=4.9 queue=47.0
+  FS home base rep3: n=59 (+0 flagged) total p50=302 p90=406 p99=505 max=517 ms | medians: ui=0.5 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=113.4 (sync 0.1 issue 35.3 swap 76.4) start-delay=83.1 queue=99.3
+  FS more base rep3: n=100 (+0 flagged) total p50=316 p90=384 p99=446 max=461 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=120.4 (sync 0.1 issue 45.0 swap 75.8) start-delay=88.2 queue=104.0
+  FS timeline base rep3: n=92 (+0 flagged) total p50=317 p90=433 p99=495 max=523 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=134.9 (sync 0.1 issue 37.8 swap 76.7) start-delay=92.1 queue=102.7
+  FS quiz base rep3: n=108 (+8 flagged) total p50=373 p90=460 p99=546 max=567 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=154.7 (sync 0.1 issue 40.4 swap 95.5) start-delay=95.1 queue=111.6
+## F2. Repetition 4, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep4: n=88 (+0 flagged) total p50=325 p90=403 p99=455 max=489 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=122.4 (sync 0.1 issue 37.1 swap 75.9) start-delay=98.5 queue=104.5
+  FS more base rep4: n=95 (+0 flagged) total p50=321 p90=378 p99=440 max=457 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.2) rt=116.6 (sync 0.1 issue 38.6 swap 73.3) start-delay=86.7 queue=96.5
+  FS timeline base rep4: n=104 (+0 flagged) total p50=300 p90=389 p99=477 max=500 ms | medians: ui=0.4 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=121.0 (sync 0.1 issue 36.0 swap 77.4) start-delay=75.6 queue=90.0
+  FS quiz base rep4: n=108 (+10 flagged) total p50=353 p90=449 p99=496 max=550 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=149.5 (sync 0.1 issue 40.2 swap 85.3) start-delay=86.2 queue=105.5
+  FS home new rep4: n=92 (+0 flagged) total p50=352 p90=437 p99=531 max=536 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=137.9 (sync 0.1 issue 37.8 swap 90.8) start-delay=94.2 queue=101.9
+  FS more new rep4: n=104 (+0 flagged) total p50=270 p90=335 p99=388 max=402 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=100.9 (sync 0.1 issue 35.4 swap 63.4) start-delay=71.9 queue=85.8
+  FS timeline new rep4: n=120 (+0 flagged) BUFFER-FULL total p50=233 p90=305 p99=348 max=385 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=91.2 (sync 0.1 issue 34.1 swap 52.1) start-delay=56.9 queue=70.3
+  FS quiz new rep4: n=74 (+46 flagged) BUFFER-FULL total p50=145 p90=234 p99=266 max=283 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=64.5 (sync 0.1 issue 33.1 swap 32.0) start-delay=9.1 queue=53.8
+## F2. Repetition 5, order: new base (a fresh process for each; Home, Още, timeline, quiz)
+  FS home new rep5: n=99 (+0 flagged) total p50=272 p90=376 p99=429 max=473 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=109.0 (sync 0.1 issue 35.8 swap 67.3) start-delay=68.8 queue=71.5
+  FS more new rep5: n=99 (+0 flagged) total p50=282 p90=343 p99=377 max=382 ms | medians: ui=0.3 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=104.2 (sync 0.1 issue 36.2 swap 65.2) start-delay=81.4 queue=91.5
+  FS timeline new rep5: n=120 (+0 flagged) BUFFER-FULL total p50=222 p90=298 p99=337 max=341 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=87.6 (sync 0.1 issue 34.5 swap 52.7) start-delay=58.9 queue=72.4
+  FS quiz new rep5: n=73 (+46 flagged) total p50=150 p90=231 p99=262 max=272 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=67.8 (sync 0.1 issue 33.2 swap 34.4) start-delay=5.2 queue=52.2
+  FS home base rep5: n=80 (+0 flagged) total p50=312 p90=389 p99=442 max=466 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=113.6 (sync 0.1 issue 34.2 swap 71.9) start-delay=89.0 queue=98.9
+  FS more base rep5: n=104 (+0 flagged) total p50=302 p90=369 p99=415 max=426 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=114.7 (sync 0.1 issue 36.0 swap 71.6) start-delay=86.2 queue=93.8
+  FS timeline base rep5: n=94 (+0 flagged) total p50=262 p90=380 p99=469 max=500 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=111.8 (sync 0.1 issue 35.1 swap 61.8) start-delay=59.0 queue=77.5
+  FS quiz base rep5: n=108 (+8 flagged) total p50=360 p90=445 p99=579 max=590 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=152.3 (sync 0.1 issue 39.3 swap 87.4) start-delay=86.2 queue=112.6
+## F2. Repetition 6, order: base new (a fresh process for each; Home, Още, timeline, quiz)
+  FS home base rep6: n=92 (+0 flagged) total p50=320 p90=403 p99=461 max=511 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=118.2 (sync 0.1 issue 34.9 swap 74.8) start-delay=94.4 queue=102.9
+  FS more base rep6: n=104 (+0 flagged) total p50=306 p90=364 p99=386 max=396 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=117.5 (sync 0.1 issue 36.4 swap 72.5) start-delay=77.1 queue=94.2
+  FS timeline base rep6: n=112 (+0 flagged) total p50=282 p90=395 p99=468 max=481 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=113.4 (sync 0.1 issue 35.9 swap 66.3) start-delay=73.0 queue=83.5
+  FS quiz base rep6: n=106 (+7 flagged) total p50=362 p90=474 p99=576 max=591 ms | medians: ui=0.5 (input 0.0 anim 0.1 layout 0.0 draw 0.3) rt=142.3 (sync 0.1 issue 41.6 swap 88.2) start-delay=92.5 queue=116.7
+  FS home new rep6: n=79 (+0 flagged) total p50=336 p90=416 p99=465 max=490 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=130.0 (sync 0.1 issue 37.2 swap 88.7) start-delay=103.0 queue=121.2
+  FS more new rep6: n=99 (+0 flagged) total p50=291 p90=353 p99=388 max=396 ms | medians: ui=0.2 (input 0.0 anim 0.0 layout 0.0 draw 0.1) rt=108.8 (sync 0.1 issue 35.7 swap 67.1) start-delay=81.2 queue=92.9
+  FS timeline new rep6: n=119 (+0 flagged) total p50=219 p90=303 p99=331 max=361 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=87.9 (sync 0.1 issue 33.4 swap 52.7) start-delay=54.3 queue=64.4
+  FS quiz new rep6: n=79 (+41 flagged) BUFFER-FULL total p50=154 p90=237 p99=273 max=286 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=65.9 (sync 0.1 issue 33.4 swap 33.9) start-delay=4.2 queue=49.8
+## F3. Totals (rep 0 is excluded; new = 1.2.39 candidate, base = 1.2.38)
+| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| home | base | 6 | 86 | **316.6** (301.8..330.1) | 400 | 460 | 0.4 | 116.7 | 0.0 | 0.2 | 0.1 | 35.1 | 75.5 |
+| home | new | 6 | 89 | **293.6** (271.7..352.4) | 417 | 479 | 0.4 | 116.0 | 0.0 | 0.2 | 0.1 | 36.2 | 76.8 |
+| more | base | 6 | 100 | **304.4** (298.0..320.8) | 371 | 417 | 0.2 | 116.7 | 0.0 | 0.1 | 0.1 | 36.5 | 72.6 |
+| more | new | 6 | 102 | **277.8** (266.2..291.4) | 340 | 386 | 0.2 | 103.3 | 0.0 | 0.1 | 0.1 | 35.6 | 65.5 |
+| quiz | base | 6 | 108 | **356.7** (344.0..373.0) | 453 | 561 | 0.4 | 148.8 | 0.0 | 0.3 | 0.1 | 40.3 | 86.4 |
+| quiz | new | 6 | 74 | **147.4** (127.4..153.7) | 234 | 270 | 0.3 | 65.4 | 0.0 | 0.2 | 0.1 | 33.2 | 33.3 |
+| timeline | base | 6 | 104 | **276.4** (261.3..316.6) | 384 | 468 | 0.4 | 112.6 | 0.0 | 0.1 | 0.1 | 36.7 | 64.0 |
+| timeline | new | 6 | 120 | **227.5** (198.9..242.2) | 302 | 346 | 0.4 | 89.6 | 0.0 | 0.1 | 0.1 | 34.3 | 52.7 |
+
+RenderThread work per repetition (the same scripted gestures): sum of rt over the frames, ms; frames; median rt per frame:
+
+| scenario | version | sum of RT ms, median (min..max) | frames, median (min..max) | median RT per frame (min..max) | sum of swap ms, median | sum of issue ms, median |
+|---|---|---|---|---|---|---|
+| home | base | **10670** (7186..12311) | 86 (59..96) | **116.7** (113.4..128.4) | 6753 | 3912 |
+| home | new | **11020** (10382..13110) | 89 (79..99) | **116.0** (102.9..137.9) | 6730 | 4121 |
+| more | base | **12096** (10660..12699) | 100 (93..104) | **116.7** (106.0..120.4) | 7224 | 4845 |
+| more | new | **10832** (10389..11437) | 102 (97..112) | **103.3** (100.5..108.8) | 6555 | 4233 |
+| quiz | base | **16222** (15953..16749) | 108 (106..111) | **148.8** (142.4..154.7) | 10590 | 5718 |
+| quiz | new | **5257** (5181..6125) | 74 (73..79) | **65.4** (64.1..73.0) | 2827 | 2524 |
+| timeline | base | **12208** (11042..13373) | 104 (92..112) | **112.6** (101.3..134.9) | 7317 | 4693 |
+| timeline | new | **10679** (9893..11391) | 120 (119..120) | **89.6** (84.1..94.6) | 6019 | 4462 |
+
+- home / new vs base, sum of RT: 11019.7 vs 10670.3 (+3%); U=21.0, p=0.699; ranges overlap
+- home / new vs base, median RT per frame: 116.0 vs 116.7 (-1%); U=17.0, p=0.937; ranges overlap
+- more / new vs base, sum of RT: 10832.5 vs 12096.3 (-10%); U=4.0, p=0.026; ranges overlap
+- more / new vs base, median RT per frame: 103.3 vs 116.7 (-11%); U=1.0, p=0.004; ranges overlap
+- quiz / new vs base, sum of RT: 5257.5 vs 16222.4 (-68%); U=0.0, p=0.002; ranges do NOT overlap
+- quiz / new vs base, median RT per frame: 65.4 vs 148.8 (-56%); U=0.0, p=0.002; ranges do NOT overlap
+- timeline / new vs base, sum of RT: 10679.4 vs 12207.6 (-13%); U=3.0, p=0.015; ranges overlap
+- timeline / new vs base, median RT per frame: 89.6 vs 112.6 (-20%); U=0.0, p=0.002; ranges do NOT overlap
+
+Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:
+
+- home / base: [330.1, 313.1, 301.8, 325.2, 312.2, 320.0]
+- home / new: [284.8, 302.1, 285.0, 352.4, 271.7, 336.5] vs base: median diff -23.0 ms (UI -0.0, RT -0.7, issue +1.1); Mann-Whitney U=13.0, p=0.485; ranges overlap
+- more / base: [298.0, 302.6, 315.7, 320.8, 301.6, 306.1]
+- more / new: [273.6, 266.2, 283.4, 269.9, 282.0, 291.4] vs base: median diff -26.6 ms (UI +0.0, RT -13.4, issue -0.9); Mann-Whitney U=0.0, p=0.002; ranges do NOT overlap
+- quiz / base: [344.0, 346.6, 373.0, 353.0, 360.5, 361.8]
+- quiz / new: [127.4, 150.1, 139.3, 144.8, 150.1, 153.7] vs base: median diff -209.3 ms (UI -0.1, RT -83.4, issue -7.2); Mann-Whitney U=0.0, p=0.002; ranges do NOT overlap
+- timeline / base: [261.3, 271.2, 316.6, 300.3, 261.8, 281.7]
+- timeline / new: [242.2, 241.8, 198.9, 232.9, 222.2, 219.1] vs base: median diff -48.9 ms (UI -0.1, RT -23.0, issue -2.4); Mann-Whitney U=0.0, p=0.002; ranges do NOT overlap
+FR part: FATAL lines 0, ANR 0; host load: 1.94 2.75 2.89
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['6142', '8100', '10816', '14169', '15206', '18417', '19432', '22519']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 24
+   skipped-frames events=24 max=77 total=1211
+== Davey: 36
+   davey events=36 max=2142ms median=1062ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
