@@ -406,7 +406,9 @@ class TabletLayoutTest {
         shot("w24-tablet-more-pane-link")
         back()
         gone("Кой обработва данните")
-        shown("Сезонни украси")
+        // Отново „Настройки“ — и на същото място на превъртането (редът, от който е тръгнала връзката, се вижда).
+        compose.waitUntil(5_000) { compose.onAllNodes(hasText("Сезонни украси")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(hasText("Политика за поверителност") and hasClickAction()).onLast().assertIsDisplayed()
         onTab("Още")
         back()
         gone("Сезонни украси")
