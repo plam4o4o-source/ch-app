@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeJoin
@@ -335,7 +336,7 @@ private fun WrongMark(color: Color, modifier: Modifier = Modifier) {
         modifier.clearAndSetSemantics { }.drawWithCache {
             val line = 2.dp.toPx()
             val half = size.minDimension / 2f - line
-            val c = center
+            val c = Offset(size.width / 2f, size.height / 2f)
             val rhombus = Path().apply {
                 moveTo(c.x, c.y - half); lineTo(c.x + half, c.y); lineTo(c.x, c.y + half); lineTo(c.x - half, c.y); close()
             }
