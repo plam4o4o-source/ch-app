@@ -14,8 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Canvas as BitmapCanvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -23,7 +28,9 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.Morph
@@ -31,7 +38,9 @@ import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.circle
 import androidx.graphics.shapes.star
 import androidx.graphics.shapes.toPath
+import kotlin.math.ceil
 import kotlin.math.min
+import org.chyavorec.app.ui.theme.LocalExtendedColors
 
 /**
  * Двете форми на плочката с икона ([FolkIconPlate]) — всяка със свой смисъл, за да не са
@@ -90,7 +99,11 @@ internal fun RoundedPolygon.scaledPath(radius: Float, cx: Float, cy: Float): Pat
  * Плочката с икона — една и съща навсякъде, където икона стои над етикет (бързите действия на
  * „Начало“, плочките на „Още“ и „Моето“, действията на събитието, въведението): народна форма
  * ([motif]) с лек градиент и иконата в средата. Без пунктир — бодът е в самите икони („Бод“,
- * [FolkIcons]). Пътят се строи веднъж за размера (drawWithCache, запомнен); в покой — нищо по кадри.
+ * [FolkIcons]). В тъмна тема (и с полупрозрачен [container]) формата е плътна и с тънък ръб в
+ * цвета на иконата: тъмнозлатното върху мастило иначе се слива и осморъката не се различава от
+ * ромба. Самата плочка е готова картинка от общ кеш ([FolkPlateBitmaps]) — в списък всички еднакви
+ * плочки са една и съща картинка, без пътища при рисуване; в покой — нищо по кадри.
+ * [iconSize] — изрично (напр. [FolkListPlate]); иначе по размера на плочката.
  */
 @Composable
 fun FolkIconPlate(
@@ -100,19 +113,74 @@ fun FolkIconPlate(
     size: Dp = 56.dp,
     container: Color = MaterialTheme.colorScheme.primaryContainer,
     content: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+    iconSize: Dp = Dp.Unspecified,
 ) {
-    val plate = remember(motif, container) {
+    val dark = LocalExtendedColors.current.isDark
+    val rim = if (dark || container.alpha < 1f) content.copy(alpha = FolkPlateBitmaps.RIM_ALPHA) else Color.Unspecified
+    val plate = remember(motif, container, rim, dark) {
         Modifier.drawWithCache {
-            val c = this.size.minDimension / 2f
-            val outer = FolkShapes.of(motif).scaledPath(c * 0.98f, this.size.width / 2f, this.size.height / 2f)
-            val fill = Brush.linearGradient(listOf(container, container.copy(alpha = container.alpha * 0.55f)))
-            onDrawBehind { drawPath(outer, fill) }
+            val bitmap = FolkPlateBitmaps.get(motif, this.size, container, rim, solid = dark, density = this)
+            onDrawBehind { drawImage(bitmap) }
         }
     }
     // Ромбът е по-тесен от осморъката — иконата в него е малко по-малка, за да не опира в ръбовете.
-    val iconSize = size * if (motif == FolkMotif.RHOMBUS) 0.46f else 0.5f
+    val glyph = if (iconSize != Dp.Unspecified) iconSize else size * if (motif == FolkMotif.RHOMBUS) 0.46f else 0.5f
     Box(modifier.size(size).then(plate), contentAlignment = Alignment.Center) {
-        Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(iconSize))
+        Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(glyph))
+    }
+}
+
+/** Малката плочка в списъци (търсене, съобщения): 36 dp, икона 20 dp (в ромба — 18 dp). */
+@Composable
+fun FolkListPlate(
+    icon: ImageVector,
+    motif: FolkMotif,
+    modifier: Modifier = Modifier,
+    container: Color = MaterialTheme.colorScheme.primaryContainer,
+    content: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+) = FolkIconPlate(
+    icon, motif, modifier, size = 36.dp, container = container, content = content,
+    iconSize = if (motif == FolkMotif.RHOMBUS) 18.dp else 20.dp,
+)
+
+/**
+ * Готовите картинки на плочките — по форма, размер в px и цветове; общи за процеса (малък LRU).
+ * В списък с 20 плочки формата се рисува веднъж, после е само drawImage (без запълване на път).
+ */
+internal object FolkPlateBitmaps {
+    /** Непрозрачността на ръба (цветът на иконата) — около 3:1 спрямо мастилото в тъмна тема. */
+    const val RIM_ALPHA = 0.5f
+
+    private const val MAX = 16
+
+    private data class Key(val motif: FolkMotif, val w: Int, val h: Int, val fill: Color, val rim: Color, val solid: Boolean, val rimPx: Float)
+
+    private val cache = object : LinkedHashMap<Key, ImageBitmap>(MAX, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Key, ImageBitmap>?) = size > MAX
+    }
+
+    /** Колко картинки има в кеша (за тестове). */
+    internal val count: Int get() = synchronized(cache) { cache.size }
+
+    fun get(motif: FolkMotif, size: Size, fill: Color, rim: Color, solid: Boolean, density: Density): ImageBitmap {
+        val w = ceil(size.width).toInt().coerceAtLeast(1)
+        val h = ceil(size.height).toInt().coerceAtLeast(1)
+        val rimPx = if (rim != Color.Unspecified) with(density) { 1.dp.toPx() } else 0f
+        val key = Key(motif, w, h, fill, rim, solid, rimPx)
+        return synchronized(cache) { cache.getOrPut(key) { draw(key, density) } }
+    }
+
+    private fun draw(k: Key, density: Density): ImageBitmap {
+        val bitmap = ImageBitmap(k.w, k.h)
+        CanvasDrawScope().draw(density, LayoutDirection.Ltr, BitmapCanvas(bitmap), Size(k.w.toFloat(), k.h.toFloat())) {
+            val c = min(k.w, k.h) / 2f
+            // Ръбът е изцяло вътре в картинката.
+            val outer = FolkShapes.of(k.motif).scaledPath(c * 0.98f - k.rimPx / 2f, k.w / 2f, k.h / 2f)
+            if (k.solid) drawPath(outer, k.fill)
+            else drawPath(outer, Brush.linearGradient(listOf(k.fill, k.fill.copy(alpha = k.fill.alpha * 0.55f))))
+            if (k.rimPx > 0f) drawPath(outer, k.rim, style = Stroke(k.rimPx))
+        }
+        return bitmap
     }
 }
 

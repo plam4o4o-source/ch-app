@@ -29,7 +29,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.Event
-import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -57,6 +56,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -69,6 +69,9 @@ import org.chyavorec.app.R
 import org.chyavorec.app.data.local.TextScale
 import org.chyavorec.app.notifications.Notifier
 import org.chyavorec.app.ui.LocalAppContainer
+import org.chyavorec.app.ui.components.FolkIconPlate
+import org.chyavorec.app.ui.components.FolkIcons
+import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.components.WeaveBudget
 import org.chyavorec.app.ui.screens.settings.NotificationAccess
 import org.chyavorec.app.ui.screens.settings.rememberNotificationPermission
@@ -224,7 +227,11 @@ private fun SettingsPage(large: Boolean, titleStyle: TextStyle) {
     val permission = rememberNotificationPermission()
     var access by remember { mutableStateOf(if (Notifier.canNotify(context)) NotificationAccess.GRANTED else null) }
 
-    KnotPlate(Icons.Outlined.FormatSize, size = if (large) 72.dp else 104.dp)
+    // Плочката „Бод“ с голямо и малко „А“ — ромб: настройката е „моя“ (като плочките на „Моето“).
+    FolkIconPlate(
+        FolkIcons.TextSize, FolkMotif.RHOMBUS, Modifier.clearAndSetSemantics { }, size = if (large) 72.dp else 104.dp,
+        container = Brand.Gold.copy(alpha = 0.3f), content = Brand.GoldLight,
+    )
     Spacer(Modifier.height(if (large) 16.dp else 24.dp))
     PageTitle(stringResource(R.string.onb_settings_title), titleStyle)
     Spacer(Modifier.height(12.dp))

@@ -7,7 +7,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -199,19 +196,25 @@ fun HolidayGreeting(
         exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
         modifier = modifier,
     ) {
-        Surface(
-            color = if (decor.quiet) MaterialTheme.colorScheme.surfaceContainer else MaterialTheme.colorScheme.surfaceContainerLow,
-            shape = MaterialTheme.shapes.large,
+        // Картата-акцент като навсякъде (златна рамка в празник, обикновена в паметен ден) и
+        // плочката на читалището — осморъката с календара — вместо цветна черта.
+        val openBooks = stringResource(R.string.occ_open_books)
+        AppCard(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+            onClick = if (link != null) ({ openOccasionLink(link, navigate) }) else null,
+            onClickLabel = if (link != null) openBooks else null,
+            accent = !decor.quiet,
+            color = if (decor.quiet) MaterialTheme.colorScheme.surfaceContainer else MaterialTheme.colorScheme.surfaceContainerLow,
         ) {
             Row(
-                Modifier
-                    .then(if (link != null) Modifier.clickable(role = Role.Button) { openOccasionLink(link, navigate) } else Modifier)
-                    .padding(start = 14.dp, top = 10.dp, bottom = 10.dp, end = 4.dp),
+                Modifier.padding(start = 12.dp, top = 10.dp, bottom = 10.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // Тънка цветна черта отляво — златна в празник, сива в паметен ден.
-                Surface(color = accent, shape = MaterialTheme.shapes.small, modifier = Modifier.size(width = 3.dp, height = 36.dp)) {}
+                FolkIconPlate(
+                    FolkIcons.Events, FolkMotif.ROSETTE, size = 40.dp,
+                    container = if (decor.quiet) MaterialTheme.colorScheme.surfaceContainerHighest else MaterialTheme.colorScheme.primaryContainer,
+                    content = if (decor.quiet) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onPrimaryContainer,
+                )
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
                     Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
@@ -220,7 +223,7 @@ fun HolidayGreeting(
                     }
                     if (link != null) {
                         Row(Modifier.padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(R.string.occ_open_books), style = MaterialTheme.typography.labelMedium, color = if (decor.quiet) accent else MaterialTheme.colorScheme.primary)
+                            Text(openBooks, style = MaterialTheme.typography.labelMedium, color = if (decor.quiet) accent else MaterialTheme.colorScheme.primary)
                             Spacer(Modifier.width(4.dp))
                             Icon(Icons.AutoMirrored.Outlined.ArrowForward, null, tint = if (decor.quiet) accent else MaterialTheme.colorScheme.primary, modifier = Modifier.size(14.dp))
                         }
