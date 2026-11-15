@@ -1,7 +1,6 @@
 package org.chyavorec.app.ui.screens.quiz
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -39,9 +37,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.inset
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -50,6 +51,7 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -66,14 +68,13 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.AppCard
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.ChLoadingIndicator
+import org.chyavorec.app.ui.components.CrossStitchSpec
 import org.chyavorec.app.ui.components.MessageView
 import org.chyavorec.app.ui.components.ScreenGutter
 import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.StitchCharts
-import org.chyavorec.app.ui.components.StitchInOrnament
-import org.chyavorec.app.ui.components.StitchSpec
 import org.chyavorec.app.ui.components.StitchedMotif
-import org.chyavorec.app.ui.components.drawStitches
+import org.chyavorec.app.ui.components.crossStitch
 import org.chyavorec.app.ui.components.stitchBurgundy
 import org.chyavorec.app.ui.share.ContentShareCards
 import org.chyavorec.app.ui.share.ShareImageHost
@@ -171,7 +172,6 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
                     Modifier.weight(1f).fillMaxHeight().padding(start = 12.dp, end = ScreenGutter, top = 8.dp, bottom = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Progress(s.results, s.index, s.quiz.questions.size, s.chosen != null)
                     // Бележката е над лентата и се превърта сама, ако е дълга — бутонът не мърда.
                     Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.BottomStart) {
                         if (s.chosen != null) key(q.id) { Feedback(q, correct, Modifier.verticalScroll(rememberScrollState())) }
@@ -184,10 +184,7 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
                 Column(
                     Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).padding(horizontal = ScreenGutter, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp),
-                ) {
-                    Progress(s.results, s.index, s.quiz.questions.size, s.chosen != null)
-                    QuestionPart(s, onChoose)
-                }
+                ) { QuestionPart(s, onChoose) }
                 // Долната част е неподвижна: отговорът, лентата и „Напред“ винаги на едно място.
                 Column(
                     Modifier.fillMaxWidth().padding(start = ScreenGutter, end = ScreenGutter, top = 8.dp, bottom = 16.dp),
@@ -226,21 +223,35 @@ private fun QuestionPart(s: QuizUi.Playing, onChoose: (Int) -> Unit) {
 private fun BandAndNext(s: QuizUi.Playing, onNext: () -> Unit, compact: Boolean) {
     val total = s.quiz.questions.size
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        AnswersBand(s.results, total, current = if (s.chosen == null) s.index else null, compact = compact)
+        // Лентата е и напредъкът: TalkBack чете колко са верните (знаците над въпроса ги няма — само „Въпрос N от M“).
+        AnswersBand(s.results, total, current = if (s.chosen == null) s.index else null, compact = compact, describeProgress = true)
         Button(onClick = onNext, enabled = s.chosen != null, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
             Text(stringResource(if (s.index + 1 >= total) R.string.quiz_see_result else R.string.quiz_next))
         }
     }
 }
 
-/** Лентата с надписа над нея; при всички верни — „Шевицата е цяла!“. */
+/**
+ * Лентата с надписа над нея; при всички верни — „Шевицата е цяла!“. [describeProgress] — за
+ * TalkBack лентата е напредъкът („N верни от M отговорени…“), с надписа пред него.
+ */
 @Composable
-private fun AnswersBand(results: List<Boolean>, total: Int, current: Int?, modifier: Modifier = Modifier, compact: Boolean = false) {
+private fun AnswersBand(
+    results: List<Boolean>,
+    total: Int,
+    current: Int?,
+    modifier: Modifier = Modifier,
+    compact: Boolean = false,
+    describeProgress: Boolean = false,
+) {
     val closed = QuizBandCharts.closed(results, total)
-    Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    val label = stringResource(if (closed) R.string.quiz_band_done else R.string.quiz_band_title)
+    val progress = stringResource(R.string.quiz_progress_desc, results.count { it }, results.size, total)
+    val a11y = if (describeProgress) Modifier.clearAndSetSemantics { contentDescription = "$label. $progress" } else Modifier
+    Column(modifier.fillMaxWidth().then(a11y), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         if (!compact) {
             Text(
-                stringResource(if (closed) R.string.quiz_band_done else R.string.quiz_band_title), style = MaterialTheme.typography.labelMedium,
+                label, style = MaterialTheme.typography.labelMedium,
                 color = if (closed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
             )
         }
@@ -272,57 +283,21 @@ private fun questionText(q: QuizQuestion): String = when (q.kind) {
     QuizKind.CUSTOM -> q.subject
 }
 
-/** Петте въпроса като бродирани знаци: верен — избродирана розетка, грешен — „разпорен“ кръг, текущият — с рамка. */
-@Composable
-private fun Progress(results: List<Boolean>, index: Int, total: Int, answered: Boolean) {
-    val gold = LocalExtendedColors.current.gold
-    val desc = stringResource(R.string.quiz_progress_desc, results.count { it }, results.size, total)
-    Row(Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = desc }, horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-        repeat(total) { i ->
-            val done = i < results.size && (i < index || answered)
-            Box(
-                Modifier.size(34.dp).then(if (!done) Modifier.border(if (i == index) 2.dp else 1.dp, gold.copy(alpha = if (i == index) 1f else FolkTokens.GOLD_BORDER_ALPHA), CircleShape) else Modifier),
-                contentAlignment = Alignment.Center,
-            ) {
-                if (done && results[i]) StitchedMotif(StitchCharts.rosette(5), progress = { 1f }, modifier = Modifier.size(32.dp))
-                else if (done) UnpickedMark(Modifier.size(32.dp))
-            }
-        }
-    }
-}
-
-/** Колко от розетката остава на „разпорения“ знак — цели бодове (без игла насред бод). */
-internal fun unpickedProgress(count: Int, keep: Float = 0.45f): Float = if (count <= 0) 0f else (count * keep).toInt().toFloat() / count
-
 /**
- * Грешният отговор: розетка, бродирана до половината и разпорена — тичащ бод в кръг и
- * останалите бодове в цвета на грешката. Същият размер като верния знак.
+ * Отговор — бутон (Role.Button) със състояние след избора. Преди отговора рамката е в цвета на
+ * контура на темата (златото с 50 % прозрачност е твърде бледо като единствен ръб); след него
+ * верният и грешният избор са в цвета на състоянието, с ✓ или ✕ в ромб.
  */
-@Composable
-private fun UnpickedMark(modifier: Modifier = Modifier) {
-    val bad = LocalExtendedColors.current.bad
-    val chart = remember { StitchCharts.rosette(5) }
-    val progress = remember(chart) { unpickedProgress(chart.size) }
-    Spacer(
-        modifier.clearAndSetSemantics { }.drawBehind {
-            val ring = StitchSpec.Running.stroke(density)
-            drawCircle(bad, radius = size.minDimension / 2f - ring.width, alpha = 0.55f, style = ring)
-            inset(size.minDimension * 0.1f) { drawStitches(chart, progress, bad, bad.copy(alpha = 0.7f)) }
-        },
-    )
-}
-
 @Composable
 private fun AnswerButton(text: String, index: Int, correctIndex: Int, chosen: Int?, onClick: () -> Unit) {
     val ext = LocalExtendedColors.current
     val revealed = chosen != null
     val isCorrect = revealed && index == correctIndex
     val isWrongChoice = revealed && index == chosen && index != correctIndex
-    // Обща карта ([AppCard]): преди отговора — със златна рамка; след него верният и грешният
-    // избор са в цвета на състоянието, а останалите — обикновени карти.
     val accent = when {
         isCorrect -> ext.ok
         isWrongChoice -> ext.bad
+        !revealed -> MaterialTheme.colorScheme.outline
         else -> Color.Unspecified
     }
     val container = when {
@@ -336,16 +311,50 @@ private fun AnswerButton(text: String, index: Int, correctIndex: Int, chosen: In
         else -> null
     }
     AppCard(
-        Modifier.fillMaxWidth().semantics { if (state != null) stateDescription = state },
-        onClick = onClick, enabled = !revealed, accent = !revealed, accentColor = accent, color = container,
+        Modifier.fillMaxWidth().semantics {
+            role = Role.Button
+            if (state != null) stateDescription = state
+        },
+        onClick = onClick, enabled = !revealed, accentColor = accent, color = container,
     ) {
         // Поне 60 dp, текстът — центриран по височина.
         Row(Modifier.heightIn(min = 60.dp).padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(text, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             if (isCorrect) Icon(Icons.Outlined.CheckCircle, null, tint = ext.ok, modifier = Modifier.padding(start = 8.dp))
+            if (isWrongChoice) WrongMark(ext.bad, Modifier.padding(start = 8.dp).size(24.dp))
         }
     }
 }
+
+/**
+ * Грешният избор: малък ромб с кръстат бод „✕“ в него (до текста, като ✓ на верния) — същата
+ * дебелина като контурната икона; ✕ е общият кръстат бод ([crossStitch]). Декоративен — без семантика.
+ */
+@Composable
+private fun WrongMark(color: Color, modifier: Modifier = Modifier) {
+    Spacer(
+        modifier.clearAndSetSemantics { }.drawWithCache {
+            val line = 2.dp.toPx()
+            val half = size.minDimension / 2f - line
+            val c = Offset(size.width / 2f, size.height / 2f)
+            val rhombus = Path().apply {
+                moveTo(c.x, c.y - half); lineTo(c.x + half, c.y); lineTo(c.x, c.y + half); lineTo(c.x - half, c.y); close()
+            }
+            val outline = Stroke(line, join = StrokeJoin.Round)
+            // Клетката на бода — такава, че конецът да е колкото контура.
+            val cell = line / CrossStitchSpec.STROKE
+            val k = half * 0.34f
+            onDrawBehind {
+                drawPath(rhombus, color, style = outline)
+                crossStitch(c.x - k, c.y - k, c.x + k, c.y + k, color, cell)
+            }
+        },
+    )
+}
+
+/** Знакът на бележката — готова шевица (неподвижна: движението е в лентата). */
+private val RightSign = StitchCharts.rosette(6)
+private val WrongSign = StitchCharts.rhombus(6)
 
 /** „Вярно!“ / „Не точно“ с бродирания знак и бележката; обявява се от екранния четец. */
 @Composable
@@ -353,8 +362,7 @@ private fun Feedback(q: QuizQuestion, correct: Boolean, modifier: Modifier = Mod
     val ext = LocalExtendedColors.current
     Column(modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Polite }, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (correct) StitchInOrnament(StitchCharts.rosette(6), Modifier.size(40.dp))
-            else StitchInOrnament(StitchCharts.rhombus(6), Modifier.size(40.dp))
+            StitchedMotif(if (correct) RightSign else WrongSign, progress = { 1f }, modifier = Modifier.size(40.dp))
             Spacer(Modifier.width(12.dp))
             Column {
                 Text(
