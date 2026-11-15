@@ -63,6 +63,7 @@ import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.time.Instant
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * „Начало“ с истински на вид плакати във въртележката (собствен текст горе и долу — като
@@ -80,6 +81,9 @@ class LookScreenshotTest {
     private val outDir = File("build/reports/screenshots").apply { mkdirs() }
     private val poster: ByteArray by lazy { posterPng() }
 
+    /** Кога сървърът за пръв път е дал плаката (System.nanoTime), 0 — още не. */
+    private val posterServedAt = AtomicLong(0)
+
     @OptIn(DelicateCoilApi::class, ExperimentalCoilApi::class)
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
@@ -93,7 +97,10 @@ class LookScreenshotTest {
                     path == "/api/calendar" -> MockResponse().setBody("""{"date":"2026-9-26","line":"Преставяне на св. апостол и евангелист **Йоан Богослов**"}""")
                     path == "/data/app-messages.json" -> MockResponse().setBody("[]")
                     // Снимките на новините — един и същ „плакат“.
-                    path.startsWith("/assets/") -> MockResponse().setHeader("Content-Type", "image/png").setBody(Buffer().write(poster))
+                    path.startsWith("/assets/") -> {
+                        posterServedAt.compareAndSet(0, System.nanoTime())
+                        MockResponse().setHeader("Content-Type", "image/png").setBody(Buffer().write(poster))
+                    }
                     else -> MockResponse().setResponseCode(404)
                 }
             }
@@ -181,8 +188,13 @@ class LookScreenshotTest {
         launch(mode)
         waitFor("45-ти")
         waitFor("Йоан Богослов")
-        // Плакатът е зареден (иначе е фирменият фон).
-        compose.waitUntil(15_000) { server.requestCount > 0 && compose.onAllNodes(hasText("Нови постъпления")).fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(15_000) { compose.onAllNodes(hasText("Нови постъпления")).fetchSemanticsNodes().isNotEmpty() }
+        // Плакатът е даден от сървъра и Coil е имал време да го декодира и покаже (главната нишка
+        // се изпълнява, докато waitUntil чака).
+        compose.waitUntil(20_000) {
+            val at = posterServedAt.get()
+            at != 0L && System.nanoTime() - at > 2_000_000_000L
+        }
         compose.mainClock.advanceTimeBy(2_000)
         shot("$name-top")
         // „Нови постъпления“ — кориците без рамка.

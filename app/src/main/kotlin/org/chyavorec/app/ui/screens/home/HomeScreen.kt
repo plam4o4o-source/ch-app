@@ -597,7 +597,8 @@ private fun HeroCarousel(items: List<NewsArticle>, anchor: HeroAnchor, onOpen: (
             Surface(
                 onClick = { onOpen(a) },
                 shape = shape,
-                color = Brand.Ink,
+                // Мастило; в тъмна тема — малко по-светло, за да не се слее с фона (и плоскостта с него).
+                color = if (LocalExtendedColors.current.isDark) Brand.InkRaised else Brand.Ink,
                 modifier = Modifier.fillMaxWidth().then(if (sideBySide) Modifier.height(minHeight) else Modifier).maskClip(shape)
                     .heroTrack(anchor, shift, parallax)
                     .darkTopHighlight(shape)
