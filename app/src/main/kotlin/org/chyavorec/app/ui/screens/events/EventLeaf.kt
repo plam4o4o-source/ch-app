@@ -217,7 +217,8 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
                     // Листът се „обръща надолу“ около горния ръб; при намалено движение — само проява.
                     val p = turn.value
                     transformOrigin = TransformOrigin(0.5f, 0f)
-                    cameraDistance = 16f * density
+                    // Далечна камера — лека перспектива, долният ръб не излиза извън екрана.
+                    cameraDistance = 32f * density
                     if (turnReduced) alpha = p.coerceIn(0f, 1f)
                     else {
                         rotationX = leafTurnDegrees(p)
