@@ -4,10 +4,11 @@ Status: run 1 in progress — the findings will be written here when the runs ar
 
 ## Runs and parts
 
-debug/w25-check (runs in runs.txt, latest 43653304542 @ 17f0e40). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 28 (API 28) or 36x (API 36). prodRelease (minified) x86_64 builds with a throwaway key, installed side by side: new = 1.2.38 as released (org.chyavorec.app), base = 1.2.37 (org.chyavorec.app.b37), hook = the debug branch with log lines and test flags (org.chyavorec.app.hk); dev33: devDebug of the debug branch. Screenshots are JPEG, scaled down (sheets/ = contact sheets). The earlier check: [../v138/index.md](../v138/index.md).
+debug/w25-check (runs in runs.txt, latest 43656877226 @ 00d20db). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 28 (API 28) or 36x (API 36). prodRelease (minified) x86_64 builds with a throwaway key, installed side by side: new = 1.2.38 as released (org.chyavorec.app), base = 1.2.37 (org.chyavorec.app.b37), hook = the debug branch with log lines and test flags (org.chyavorec.app.hk); dev33: devDebug of the debug branch. Screenshots are JPEG, scaled down (sheets/ = contact sheets). The earlier check: [../v138/index.md](../v138/index.md).
 
 | part | status |
 |---|---|
+| at33f | COMPLETE; part=at33f target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | at33h | COMPLETE; part=at33h target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | at33m | COMPLETE; part=at33m target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | at33q | COMPLETE; part=at33q target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
@@ -28,16 +29,138 @@ debug/w25-check (runs in runs.txt, latest 43653304542 @ 17f0e40). API 33 google_
 | wd36x | COMPLETE; part=wd36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
 | wdb33 | COMPLETE; part=wdb33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
 | wdb36x | COMPLETE; part=wdb36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
+| wdc33 | COMPLETE; part=wdc33 target=google_apis api=33 gpu=swangle_indirect emulator-step=success |
+| wdc36x | COMPLETE; part=wdc36x target=google_apis api=36 gpu=swangle_indirect emulator-step=success |
 
 ```
 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000
-devDebug 1.2.38 17f0e40 (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key; demo-1 renews at once)
-1.2.38 17f0e40 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101
+devDebug 1.2.38 00d20db (org.chyavorec.app.dev, demo sign-in DEMO-0001, shared debug key; demo-1 renews at once)
+1.2.38 00d20db prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101
 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100
 app.apk 4641014 bytes
 app-base.apk 4591454 bytes
-app-hook.apk 4643638 bytes
+app-hook.apk 4644290 bytes
 app-dev.apk 28796723 bytes
+```
+
+## at33f
+
+```
+part at33f; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+## AF0. Timeline, round 3: a candidate fix — the medallion in its own offscreen layer (hook flag „medallayer“), against 1.2.38, 1.2.37 and the plain circle
+X installed new: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100;  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 4662 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~zbmxTr803oGvb3MrAwPixg==/org.chyavorec.app-6P1_HqndcisgXIZ1QD3rgQ==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed base: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000;  versionCode=1990000 minSdk=26 targetSdk=37  versionName=1.2.37 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 5474 ms
+X compile org.chyavorec.app.b37: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~Zk8Ur1QT4WSfm80wZRODUA==/org.chyavorec.app.b37-1X2_01VHfQOG7Yg2zHZTeQ==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/VpnDialogs/VpnDialogs.apk| x86_64: [status=verify] [reason=prebuilt]|
+X installed hook: 1.2.38 00d20db prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.hk, throwaway key, versionCode 1990101;  versionCode=1990101 minSdk=26 targetSdk=37  versionName=1.2.38 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X hook: catalogue after 3626 ms
+X compile org.chyavorec.app.hk: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~VNy5XjkEt3_7QFJ0Hq4k2w==/org.chyavorec.app.hk-BBH9iaNb6ZClzSLymMRz2A==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /product/overlay/TelephonyProvider__auto_generated_rro_product.apk| x86_64: [status=run-from-apk] [reason=unknown]|
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+animations: animator_duration_scale=1 transition=1 window=1; host load: 5.50 4.10 1.93
+## A. Repetition 0 of: timeline (configs rotated by 0)
+  FS timeline new rep0: n=62 (+0 flagged) total p50=475 p90=682 p99=749 max=757 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=169.1 (sync 0.1 issue 68.8 swap 90.0) start-delay=140.7 queue=150.1
+  FS timeline base rep0: n=76 (+0 flagged) total p50=453 p90=610 p99=710 max=770 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=184.7 (sync 0.1 issue 70.7 swap 97.9) start-delay=125.3 queue=135.0
+  FS timeline hk rep0: n=70 (+0 flagged) total p50=507 p90=766 p99=838 max=859 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=219.5 (sync 0.1 issue 72.5 swap 95.1) start-delay=130.1 queue=142.6
+## A. Repetition 1 of: timeline (configs rotated by 1)
+  FS timeline base rep1: n=71 (+0 flagged) total p50=383 p90=610 p99=688 max=725 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=172.6 (sync 0.1 issue 65.0 swap 104.4) start-delay=102.5 queue=112.9
+  FS timeline hk rep1: n=79 (+0 flagged) total p50=475 p90=654 p99=829 max=833 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=213.8 (sync 0.1 issue 69.9 swap 98.2) start-delay=139.2 queue=148.1
+  FS timeline layer rep1: n=78 (+0 flagged) total p50=433 p90=587 p99=632 max=647 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.0 draw 0.2) rt=173.5 (sync 0.1 issue 65.9 swap 105.8) start-delay=129.4 queue=133.9
+  FS timeline medal rep1: n=76 (+0 flagged) total p50=383 p90=601 p99=683 max=699 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=169.5 (sync 0.1 issue 65.9 swap 86.4) start-delay=102.3 queue=111.1
+  FS timeline new rep1: n=74 (+0 flagged) total p50=505 p90=699 p99=797 max=814 ms | medians: ui=0.6 (input 0.0 anim 0.5 layout 0.0 draw 0.1) rt=183.5 (sync 0.4 issue 71.3 swap 97.7) start-delay=140.4 queue=147.9
+## A. Repetition 2 of: timeline (configs rotated by 2)
+  FS timeline hk rep2: n=67 (+0 flagged) total p50=467 p90=733 p99=844 max=863 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=218.3 (sync 0.1 issue 69.9 swap 96.8) start-delay=133.3 queue=145.6
+  FS timeline layer rep2: n=83 (+0 flagged) total p50=444 p90=584 p99=742 max=784 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=179.9 (sync 0.1 issue 67.5 swap 104.2) start-delay=129.4 queue=133.0
+  FS timeline medal rep2: n=86 (+0 flagged) total p50=423 p90=555 p99=623 max=669 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=169.7 (sync 0.1 issue 65.7 swap 97.8) start-delay=119.1 queue=126.4
+  FS timeline new rep2: n=69 (+0 flagged) total p50=469 p90=621 p99=885 max=900 ms | medians: ui=0.6 (input 0.0 anim 0.5 layout 0.0 draw 0.1) rt=184.5 (sync 0.1 issue 70.4 swap 90.2) start-delay=123.9 queue=138.6
+  FS timeline base rep2: n=76 (+0 flagged) total p50=450 p90=616 p99=712 max=741 ms | medians: ui=0.4 (input 0.0 anim 0.1 layout 0.0 draw 0.1) rt=175.2 (sync 0.1 issue 67.4 swap 106.2) start-delay=128.3 queue=133.1
+## A. Repetition 3 of: timeline (configs rotated by 3)
+  FS timeline layer rep3: n=92 (+0 flagged) total p50=306 p90=463 p99=639 max=658 ms | medians: ui=0.4 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=109.2 (sync 0.1 issue 64.0 swap 45.1) start-delay=90.4 queue=102.7
+  FS timeline medal rep3: n=87 (+0 flagged) total p50=429 p90=594 p99=661 max=661 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=177.3 (sync 0.1 issue 67.8 swap 106.0) start-delay=127.3 queue=125.8
+  FS timeline new rep3: n=59 (+0 flagged) total p50=510 p90=728 p99=837 max=868 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=194.5 (sync 0.1 issue 76.9 swap 93.3) start-delay=139.4 queue=148.2
+  FS timeline base rep3: n=78 (+0 flagged) total p50=403 p90=655 p99=786 max=793 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=169.2 (sync 0.1 issue 66.9 swap 102.7) start-delay=105.3 queue=121.6
+  FS timeline hk rep3: n=75 (+0 flagged) total p50=466 p90=762 p99=874 max=893 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=221.2 (sync 0.1 issue 70.3 swap 102.6) start-delay=143.4 queue=147.6
+## A. Repetition 4 of: timeline (configs rotated by 4)
+  FS timeline medal rep4: n=90 (+0 flagged) total p50=392 p90=574 p99=641 max=647 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.2) rt=173.2 (sync 0.1 issue 66.2 swap 98.9) start-delay=103.0 queue=115.9
+  FS timeline new rep4: n=77 (+0 flagged) total p50=537 p90=751 p99=863 max=884 ms | medians: ui=0.7 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=219.7 (sync 0.1 issue 69.6 swap 117.5) start-delay=147.3 queue=150.4
+  FS timeline base rep4: n=67 (+0 flagged) total p50=450 p90=609 p99=667 max=686 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.2) rt=174.5 (sync 0.3 issue 67.4 swap 106.3) start-delay=117.2 queue=133.4
+  FS timeline hk rep4: n=64 (+0 flagged) total p50=518 p90=821 p99=1025 max=1087 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=211.1 (sync 0.1 issue 80.5 swap 113.3) start-delay=137.4 queue=150.6
+  FS timeline layer rep4: n=76 (+0 flagged) total p50=449 p90=625 p99=716 max=730 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=181.8 (sync 0.1 issue 66.9 swap 110.8) start-delay=110.2 queue=133.4
+## A. Repetition 5 of: timeline (configs rotated by 5)
+  FS timeline new rep5: n=67 (+0 flagged) total p50=517 p90=751 p99=825 max=925 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=220.2 (sync 0.1 issue 70.3 swap 98.2) start-delay=154.2 queue=156.8
+  FS timeline base rep5: n=66 (+0 flagged) total p50=429 p90=594 p99=654 max=661 ms | medians: ui=0.4 (input 0.0 anim 0.2 layout 0.0 draw 0.1) rt=178.4 (sync 0.2 issue 64.2 swap 108.9) start-delay=126.7 queue=127.5
+  FS timeline hk rep5: n=69 (+0 flagged) total p50=478 p90=694 p99=817 max=825 ms | medians: ui=0.6 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=219.9 (sync 0.1 issue 73.4 swap 89.6) start-delay=117.6 queue=143.1
+  FS timeline layer rep5: n=101 (+0 flagged) total p50=302 p90=392 p99=633 max=700 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=107.9 (sync 0.1 issue 61.1 swap 45.3) start-delay=74.5 queue=92.2
+  FS timeline medal rep5: n=82 (+0 flagged) total p50=420 p90=616 p99=701 max=717 ms | medians: ui=0.6 (input 0.0 anim 0.3 layout 0.0 draw 0.2) rt=176.5 (sync 0.1 issue 67.3 swap 104.5) start-delay=120.0 queue=126.2
+## A. Repetition 6 of: timeline (configs rotated by 6)
+  FS timeline base rep6: n=77 (+0 flagged) total p50=454 p90=625 p99=700 max=787 ms | medians: ui=0.3 (input 0.0 anim 0.1 layout 0.0 draw 0.2) rt=172.2 (sync 0.1 issue 65.9 swap 108.3) start-delay=119.9 queue=136.7
+  FS timeline hk rep6: n=65 (+0 flagged) total p50=450 p90=722 p99=818 max=889 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=172.6 (sync 0.1 issue 67.1 swap 89.4) start-delay=120.4 queue=147.0
+  FS timeline layer rep6: n=88 (+0 flagged) total p50=400 p90=561 p99=671 max=702 ms | medians: ui=0.5 (input 0.0 anim 0.3 layout 0.0 draw 0.2) rt=172.4 (sync 0.1 issue 65.6 swap 78.1) start-delay=108.4 queue=125.8
+  FS timeline medal rep6: n=87 (+0 flagged) total p50=420 p90=605 p99=675 max=728 ms | medians: ui=0.4 (input 0.0 anim 0.3 layout 0.0 draw 0.1) rt=170.5 (sync 0.1 issue 67.7 swap 100.7) start-delay=107.9 queue=133.4
+  FS timeline new rep6: n=73 (+0 flagged) total p50=479 p90=698 p99=827 max=844 ms | medians: ui=0.5 (input 0.0 anim 0.4 layout 0.0 draw 0.1) rt=216.9 (sync 0.1 issue 66.5 swap 98.2) start-delay=128.6 queue=151.1
+## A9. Totals (rep 0 is excluded)
+| scenario | version | reps | frames/rep | median of rep medians, ms (min..max) | p90 (median of reps) | p99 | UI thread | RenderThread | layout | draw(record) | sync | issue | swap |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| timeline | hk | 6 | 68 | **470.8** (449.6..518.1) | 728 | 836 | 0.6 | 216.1 | 0.0 | 0.1 | 0.1 | 70.1 | 97.5 |
+| timeline | base | 6 | 74 | **439.1** (383.3..454.0) | 613 | 694 | 0.4 | 173.5 | 0.0 | 0.1 | 0.1 | 66.4 | 106.2 |
+| timeline | layer | 6 | 86 | **416.6** (302.1..449.3) | 572 | 655 | 0.5 | 173.0 | 0.0 | 0.1 | 0.1 | 65.7 | 91.2 |
+| timeline | medal | 6 | 86 | **419.6** (383.0..429.1) | 597 | 668 | 0.5 | 171.9 | 0.0 | 0.1 | 0.1 | 66.7 | 99.8 |
+| timeline | new | 6 | 71 | **507.3** (469.3..536.7) | 713 | 832 | 0.6 | 205.7 | 0.0 | 0.1 | 0.1 | 70.3 | 98.0 |
+
+RenderThread work per repetition (the same scripted gestures): sum of rt over the frames, ms; frames; median rt per frame:
+
+| scenario | version | sum of RT ms, median (min..max) | frames, median (min..max) | median RT per frame (min..max) | sum of swap ms, median | sum of issue ms, median |
+|---|---|---|---|---|---|---|
+| timeline | hk | **14822** (12626..16836) | 68 (64..79) | **216.1** (172.6..221.2) | 8040 | 6723 |
+| timeline | base | **12653** (11407..13831) | 74 (66..78) | **173.5** (169.2..178.4) | 6814 | 5623 |
+| timeline | layer | **13642** (11976..14764) | 86 (76..101) | **173.0** (107.9..181.8) | 7618 | 6268 |
+| timeline | medal | **14480** (12656..15098) | 86 (76..90) | **171.9** (169.5..177.3) | 7813 | 6584 |
+| timeline | new | **14527** (12265..16982) | 71 (59..77) | **205.7** (183.5..220.2) | 8274 | 6179 |
+
+- timeline / base vs hk, sum of RT: 12653.2 vs 14822.0 (-15%); U=3.0, p=0.015; ranges overlap
+- timeline / base vs hk, median RT per frame: 173.5 vs 216.1 (-20%); U=3.0, p=0.015; ranges overlap
+- timeline / layer vs hk, sum of RT: 13642.2 vs 14822.0 (-8%); U=7.0, p=0.093; ranges overlap
+- timeline / layer vs hk, median RT per frame: 173.0 vs 216.1 (-20%); U=3.0, p=0.015; ranges overlap
+- timeline / medal vs hk, sum of RT: 14480.4 vs 14822.0 (-2%); U=14.0, p=0.589; ranges overlap
+- timeline / medal vs hk, median RT per frame: 171.9 vs 216.1 (-20%); U=3.0, p=0.015; ranges overlap
+- timeline / new vs hk, sum of RT: 14526.8 vs 14822.0 (-2%); U=16.0, p=0.818; ranges overlap
+- timeline / new vs hk, median RT per frame: 205.7 vs 216.1 (-5%); U=15.0, p=0.699; ranges overlap
+
+Per-repetition medians of the total frame time (ms) and the rank test against the first listed version:
+
+- timeline / hk: [474.6, 467.0, 466.3, 518.1, 478.4, 449.6]
+- timeline / base: [383.3, 450.2, 403.1, 449.7, 428.6, 454.0] vs hk: median diff -31.6 ms (UI -0.2, RT -42.5, issue -3.7); Mann-Whitney U=3.0, p=0.015; ranges overlap
+- timeline / layer: [432.7, 443.5, 306.4, 449.3, 302.1, 400.4] vs hk: median diff -54.2 ms (UI -0.1, RT -43.1, issue -4.4); Mann-Whitney U=0.0, p=0.002; ranges do NOT overlap
+- timeline / medal: [383.0, 422.6, 429.1, 391.7, 419.6, 419.7] vs hk: median diff -51.1 ms (UI -0.1, RT -44.2, issue -3.4); Mann-Whitney U=0.0, p=0.002; ranges do NOT overlap
+- timeline / new: [504.8, 469.3, 509.9, 536.7, 517.3, 479.4] vs hk: median diff +36.6 ms (UI +0.0, RT -10.3, issue +0.2); Mann-Whitney U=29.0, p=0.093; ranges overlap
+AT part: FATAL lines 0; host load: 5.24 4.76 4.46
+contact sheets: 1 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4986', '8466', '11404', '13040', '14535', '16020', '17511', '20952']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 33
+   skipped-frames events=33 max=93 total=2013
+== Davey: 71
+   davey events=71 max=3391ms median=1030ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
 ```
 
 ## at33h
@@ -2832,6 +2955,192 @@ app pids seen: ['3962', '5861', '6369']
    skipped-frames events=51 max=132 total=2635
 == Davey: 170
    davey events=170 max=3020ms median=882ms
+== NativeLink: 3
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+```
+
+## wdc33
+
+```
+part wdc33; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 3348 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+launcher: com.google.android.apps.nexuslauncher
+## WD1. Both widgets pinned from Settings › Уиджети (the launcher's pin dialog)
+PIN main dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Chitalishte Yavorets" text="Chitalishte Yavorets" text="Scan" text="Catalogue" text="2 books to return" text="in 3 days" text="Oct 15" text="Next event" text="Literary evening" text="Octobe
+WIDGET 10-main: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 10-main: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [57 158 1023 746]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; e
+WIDGET 10-main: bound ids [id=2 ]; providers:  1 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+PIN book dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Book of the day" text="Book of the day" text="Under the Yoke" text="Ivan Vazov" text="Book of the day" content-desc="Book of the day widget" text="3 × 2" content-desc="3 wide by 2 high" tex
+WIDGET 20-both: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 20-both: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 746]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 20-both: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 21-after-catalog: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 21-after-catalog: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 746]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 21-after-catalog: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 22-still-light-20s: found after 1 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 22-still-light-20s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 746]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 22-still-light-20s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD2. App theme → „Тъмна“ (Settings › Тема), system still light: 5 s, 40 s
+THEME → =Тъмна|=Dark: Settings now shows: text="Тъмна" ; app night mode: 
+WIDGET 30-app-dark-5s: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 30-app-dark-5s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 746]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 30-app-dark-5s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 31-app-dark-40s: found after 1 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 31-app-dark-40s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 746]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 31-app-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD3. System dark mode on as well: 10 s, 40 s, 90 s
+WIDGET 40-sys-dark-10s: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 40-sys-dark-10s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 746]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 40-sys-dark-10s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-40s: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 40-sys-dark-40s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 746]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 40-sys-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-90s: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 40-sys-dark-90s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 746]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 40-sys-dark-90s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+launcher/appwidget log since the pins: 11-15 00:23:25.534  6295  6295 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.clearcut.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentDirectBootAwareApiService }|11-15 00:23:59.793   479  1086 I AppWidgetServiceImpl: Bound widget 2 to provider ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}|11-15 00:23:59.891  6367  6367 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }|11-15 00:24:32.494  6367  6367 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }|11-15 00:24:47.518  6367  6367 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.constellation.service.START pkg=com.google.android.gms }|11-15 00:25:03.135   479  2169 I AppWidgetServiceImpl: Bound widget 3 to provider ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}|11-15 00:25:21.686  6367  6367 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }|11-15 00:25:42.858   479  2185 I ExplicitHealthCheckController: No more health check requests, unbinding...|11-15
+## WD4. Launcher restarted in dark (force-stop of the launcher), then system light and app theme „Както системата“
+WIDGET 50-launcher-restarted: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 50-launcher-restarted: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 744]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 50-launcher-restarted: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 60-sys-light: found after 1 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 60-sys-light: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 744]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 60-sys-light: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+THEME → =Както системата|=Same as the system|=System: Settings now shows: text="Както системата" ; app night mode: 
+WIDGET 61-app-system: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 61-app-system: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 744]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 61-app-system: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD5. Does a widget tap still open the app (if the widgets are there)
+WIDGET 70-before-tap: found after 1 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 70-before-tap: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [57 158 1023 744]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 70-before-tap: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+widget 'Каталог' tap → fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+  [0] id=2
+    host=HostId{user:0, app:10153, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}
+  [1] id=3
+    host=HostId{user:0, app:10153, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10174, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}
+WD part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 3 in sheets/
+contact sheets: 3 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['6180', '7578', '8004']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 15
+   skipped-frames events=15 max=112 total=705
+== Davey: 24
+   davey events=24 max=2468ms median=881ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
+```
+
+## wdc36x
+
+```
+part wdc36x; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 6080 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+launcher: com.google.android.apps.nexuslauncher
+## WD1. Both widgets pinned from Settings › Уиджети (the launcher's pin dialog)
+PIN main dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Chitalishte Yavorets widget, 4 wide by 2 high Due dates, the next event and a quick scan" content-desc="Chitalishte Yavorets" text="Читалище Яворец" text="Сканирай" text="Каталог" text="2 к
+WIDGET 10-main: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 10-main: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; e
+WIDGET 10-main: bound ids [id=2 ]; providers:  1 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+PIN book dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Book of the day widget, 3 wide by 2 high A different book from the library catalogue every day, with its cover, title and author" content-desc="Book of the day" text="Книга на деня" text="П
+WIDGET 20-both: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 20-both: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 20-both: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 21-after-catalog: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 21-after-catalog: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 21-after-catalog: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 22-still-light-20s: found after 1 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 22-still-light-20s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 22-still-light-20s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD2. App theme → „Тъмна“ (Settings › Тема), system still light: 5 s, 40 s
+THEME → =Тъмна|=Dark: Settings now shows: text="Тъмна" ; app night mode: 
+WIDGET 30-app-dark-5s: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 30-app-dark-5s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 30-app-dark-5s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 31-app-dark-40s: found after 1 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 31-app-dark-40s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 31-app-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD3. System dark mode on as well: 10 s, 40 s, 90 s
+WIDGET 40-sys-dark-10s: found after 0 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 40-sys-dark-10s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 40-sys-dark-10s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-40s: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 40-sys-dark-40s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 40-sys-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-90s: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 40-sys-dark-90s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 40-sys-dark-90s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+launcher/appwidget log since the pins: 11-15 00:23:51.083   642  1907 I AppWidgetServiceImpl: startListening() 0|11-15 00:23:51.125   642   946 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_RESTARTED on user 0|11-15 00:23:51.125   642   946 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10216 package org.chyavorec.app isStopped true|11-15 00:23:51.126   642   946 I AppWidgetServiceImpl: cancelBroadcastsLocked() for Provider{ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}}|11-15 00:23:51.126   642   946 I AppWidgetServiceImpl: cancelBroadcastsLocked() for Provider{ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}}|11-15 00:23:54.733   642   946 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_UNSTOPPED on user 0|11-15 00:23:54.733   642   946 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10216 package org.chyavorec.app isStopped false|11-15 00:23:57.822   642  1064 I AppWidgetServiceImpl: getAppWidgetIds() 0|11-15 00:23:57.823   642  1064 I AppWidgetServiceImpl: getAppWidgetIds() 0|11-15 00:23:57.825   642  1064 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0|
+## WD4. Launcher restarted in dark (force-stop of the launcher), then system light and app theme „Както системата“
+WIDGET 50-launcher-restarted: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 50-launcher-restarted: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 50-launcher-restarted: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 60-sys-light: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 60-sys-light: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 60-sys-light: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+THEME → =Както системата|=Same as the system|=System: Settings now shows: text="Както системата" ; app night mode: 
+WIDGET 61-app-system: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 61-app-system: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 61-app-system: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD5. Does a widget tap still open the app (if the widgets are there)
+WIDGET 70-before-tap: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 70-before-tap: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 70-before-tap: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+widget 'Каталог' tap → fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+  [0] id=2
+    host=HostId{user:0, app:10180, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}
+  [1] id=3
+    host=HostId{user:0, app:10180, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}
+WD part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 3 in sheets/
+contact sheets: 3 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4025', '5684', '6439']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 35
+   skipped-frames events=35 max=136 total=1917
+== Davey: 115
+   davey events=115 max=3789ms median=904ms
 == NativeLink: 3
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
 CRASHES: 0 block(s)  → crashes.txt

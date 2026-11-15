@@ -1,0 +1,44 @@
+app pids seen: ['4025', '5684', '6439']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 35
+   skipped-frames events=35 max=136 total=1917
+   11-15 00:21:41.765  4025  4025 I Choreographer: Skipped 120 frames!  The application may be doing too much work on its main thread.
+   11-15 00:21:47.899  4025  4025 I Choreographer: Skipped 136 frames!  The application may be doing too much work on its main thread.
+   11-15 00:21:48.565  4025  4025 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-15 00:21:49.379  4025  4025 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-15 00:21:50.130  4025  4025 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+   11-15 00:21:51.388  4025  4025 I Choreographer: Skipped 74 frames!  The application may be doing too much work on its main thread.
+   11-15 00:22:02.141  4025  4025 I Choreographer: Skipped 104 frames!  The application may be doing too much work on its main thread.
+   11-15 00:22:03.352  4025  4025 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-15 00:22:03.868  4025  4025 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-15 00:22:05.056  4025  4025 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-15 00:22:09.262  4025  4025 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-15 00:22:09.879  4025  4025 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+== Davey: 115
+   davey events=115 max=3789ms median=904ms
+   11-15 00:21:44.410  4025  4038 I HWUI    : Davey! duration=1547ms; Flags=1, FrameTimelineVsyncId=6934, IntendedVsync=117206950521, Vsync=117206950521, InputEventId=0, HandleInputStart=117215552683, AnimationStart=117215553244, PerformTraver
+   11-15 00:21:45.489  4025  4047 I HWUI    : Davey! duration=1588ms; Flags=0, FrameTimelineVsyncId=6971, IntendedVsync=118540283801, Vsync=118756950459, InputEventId=0, HandleInputStart=118774172364, AnimationStart=118774173186, PerformTraver
+   11-15 00:21:48.333  4025  4072 I HWUI    : Davey! duration=3269ms; Flags=0, FrameTimelineVsyncId=7001, IntendedVsync=118790283791, Vsync=119056950447, InputEventId=0, HandleInputStart=119063043733, AnimationStart=119063044966, PerformTraver
+   11-15 00:21:49.355  4025  4104 I HWUI    : Davey! duration=1527ms; Flags=0, FrameTimelineVsyncId=7093, IntendedVsync=120140283737, Vsync=120256950399, InputEventId=0, HandleInputStart=120270970709, AnimationStart=120270972132, PerformTraver
+   11-15 00:21:50.089  4025  4047 I HWUI    : Davey! duration=3789ms; Flags=0, FrameTimelineVsyncId=7108, IntendedVsync=120273617065, Vsync=122540283641, InputEventId=0, HandleInputStart=122549265469, AnimationStart=122549266881, PerformTraver
+   11-15 00:21:50.909  4025  4047 I HWUI    : Davey! duration=2142ms; Flags=0, FrameTimelineVsyncId=7401, IntendedVsync=122556950307, Vsync=123206950281, InputEventId=0, HandleInputStart=123244207041, AnimationStart=123244208453, PerformTraver
+   11-15 00:21:51.802  4025  4104 I HWUI    : Davey! duration=2426ms; Flags=0, FrameTimelineVsyncId=7416, IntendedVsync=123256950279, Vsync=124023616915, InputEventId=0, HandleInputStart=124031159505, AnimationStart=124031160847, PerformTraver
+   11-15 00:21:52.166  4025  4104 I HWUI    : Davey! duration=1462ms; Flags=0, FrameTimelineVsyncId=7432, IntendedVsync=124040283581, Vsync=124773616885, InputEventId=0, HandleInputStart=124781664254, AnimationStart=124781665456, PerformTraver
+   11-15 00:21:52.537  4025  4104 I HWUI    : Davey! duration=1849ms; Flags=0, FrameTimelineVsyncId=7447, IntendedVsync=124790283551, Vsync=126023616835, InputEventId=0, HandleInputStart=126037663211, AnimationStart=126037663952, PerformTraver
+   11-15 00:21:52.760  4025  4104 I HWUI    : Davey! duration=1012ms; Flags=0, FrameTimelineVsyncId=7484, IntendedVsync=126040283501, Vsync=126506950149, InputEventId=0, HandleInputStart=126521054441, AnimationStart=126521055352, PerformTraver
+   11-15 00:21:53.371  4025  4104 I HWUI    : Davey! duration=884ms; Flags=0, FrameTimelineVsyncId=7514, IntendedVsync=126523616815, Vsync=126923616799, InputEventId=0, HandleInputStart=126936286913, AnimationStart=126936287494, PerformTravers
+   11-15 00:21:57.621  4025  4072 I HWUI    : Davey! duration=900ms; Flags=0, FrameTimelineVsyncId=7842, IntendedVsync=130956949971, Vsync=131323616623, InputEventId=0, HandleInputStart=131343838346, AnimationStart=131343841242, PerformTravers
+== NativeLink: 3
+   11-15 00:22:10.434  4025  4499 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 00:24:01.206  5684  5732 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-15 00:25:16.892  6439  6482 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-15 00:21:36.529  4012  4012 I PERFCHECK: section: W. First launch and warm-up
+   11-15 00:23:50.468  5645  5645 I PERFCHECK: wd
+   11-15 00:23:51.034  5668  5668 I PERFCHECK: section: WD1. Both widgets pinned from Settings › Уиджети the launchers pin dialog
+   11-15 00:27:33.531  7219  7219 I PERFCHECK: section: WD2. App theme → „Тъмна“ Settings › Тема, system still light: 5 s, 40 s
+   11-15 00:29:11.494  7614  7614 I PERFCHECK: section: WD3. System dark mode on as well: 10 s, 40 s, 90 s
+   11-15 00:30:56.288  7891  7891 I PERFCHECK: section: WD4. Launcher restarted in dark force-stop of the launcher, then system light and app theme „Както системата“
+   11-15 00:32:47.507  8530  8530 I PERFCHECK: section: WD5. Does a widget tap still open the app if the widgets are there

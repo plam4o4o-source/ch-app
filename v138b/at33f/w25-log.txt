@@ -1,0 +1,32 @@
+11-15 00:24:46.997  8090  8090 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:28:11.610  9244  9244 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:30:37.836 10084 10084 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:31:45.963 10497 10497 W W25     : flags=[medallayer]
+11-15 00:31:48.728 10497 10497 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:32:59.736 10926 10926 W W25     : flags=[plainmedal]
+11-15 00:33:02.624 10926 10926 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:35:23.009 11800 11800 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:36:34.572 12181 12181 W W25     : flags=[medallayer]
+11-15 00:36:37.066 12181 12181 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:37:44.835 12597 12597 W W25     : flags=[plainmedal]
+11-15 00:37:47.958 12597 12597 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:41:19.380 13772 13772 W W25     : flags=[medallayer]
+11-15 00:41:22.230 13772 13772 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:42:29.713 14152 14152 W W25     : flags=[plainmedal]
+11-15 00:42:32.072 14152 14152 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:46:02.997 15264 15264 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:47:10.187 15645 15645 W W25     : flags=[plainmedal]
+11-15 00:47:12.915 15645 15645 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:50:47.429 16747 16747 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:51:51.957 17128 17128 W W25     : flags=[medallayer]
+11-15 00:51:54.515 17128 17128 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:55:22.350 18259 18259 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:56:30.567 18650 18650 W W25     : flags=[medallayer]
+11-15 00:56:33.605 18650 18650 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 00:57:42.237 19032 19032 W W25     : flags=[plainmedal]
+11-15 00:57:44.874 19032 19032 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 01:00:02.071 19777 19777 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 01:01:12.464 20194 20194 W W25     : flags=[medallayer]
+11-15 01:01:14.987 20194 20194 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified
+11-15 01:02:21.904 20570 20570 W W25     : flags=[plainmedal]
+11-15 01:02:24.504 20570 20570 W W25     : CH effect bursts=0 reduced=false isPlaying=false host=1080 x 2400 origin=Offset.Unspecified lastTap=Offset.Unspecified

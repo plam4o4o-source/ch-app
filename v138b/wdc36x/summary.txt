@@ -1,0 +1,88 @@
+part wdc36x; APK: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+base APK: 1.2.37 ebf1720 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b37, throwaway key, versionCode 1990000 size 4591454 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.38 f57962b prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990100 size 4641014 bytes
+installed:  versionCode=1990100 minSdk=26 targetSdk=37  versionName=1.2.38 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+## W. First launch and warm-up
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+first-install catalogue results after 6080 ms
+CARD added 'TEST-12345': text="ЧИТАТЕЛСКА КАРТА" text="НЧ „Васил Левски – 1922“" text="—" text="Читателски № TEST-12345" content-desc="Баркод на карта TEST-12345" text="Покажи картата" text="Номерът е въведен от теб и не е проверен от библиотеката. Пази се шифрован само на това устрой
+launcher: com.google.android.apps.nexuslauncher
+## WD1. Both widgets pinned from Settings › Уиджети (the launcher's pin dialog)
+PIN main dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Chitalishte Yavorets widget, 4 wide by 2 high Due dates, the next event and a quick scan" content-desc="Chitalishte Yavorets" text="Читалище Яворец" text="Сканирай" text="Каталог" text="2 к
+WIDGET 10-main: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 10-main: views from org.chyavorec.app: 1 [ids: widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_logo widget_next_event_label widget_scan widget_title ]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|; e
+WIDGET 10-main: bound ids [id=2 ]; providers:  1 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+PIN book dialog: fg com.google.android.apps.nexuslauncher/com.android.launcher3.dragndrop.AddItemActivity; text="Chitalishte Yavorets" text="Touch &amp; hold the widget to move it around the home screen" content-desc="Book of the day widget, 3 wide by 2 high A different book from the library catalogue every day, with its cover, title and author" content-desc="Book of the day" text="Книга на деня" text="П
+WIDGET 20-both: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 20-both: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 20-both: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 21-after-catalog: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 21-after-catalog: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 21-after-catalog: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 22-still-light-20s: found after 1 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 22-still-light-20s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 22-still-light-20s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD2. App theme → „Тъмна“ (Settings › Тема), system still light: 5 s, 40 s
+THEME → =Тъмна|=Dark: Settings now shows: text="Тъмна" ; app night mode: 
+WIDGET 30-app-dark-5s: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 30-app-dark-5s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 30-app-dark-5s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 31-app-dark-40s: found after 1 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 31-app-dark-40s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 31-app-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD3. System dark mode on as well: 10 s, 40 s, 90 s
+WIDGET 40-sys-dark-10s: found after 0 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 40-sys-dark-10s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 40-sys-dark-10s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-40s: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 40-sys-dark-40s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 40-sys-dark-40s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 40-sys-dark-90s: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 40-sys-dark-90s: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 40-sys-dark-90s: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+launcher/appwidget log since the pins: 11-15 00:23:51.083   642  1907 I AppWidgetServiceImpl: startListening() 0|11-15 00:23:51.125   642   946 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_RESTARTED on user 0|11-15 00:23:51.125   642   946 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10216 package org.chyavorec.app isStopped true|11-15 00:23:51.126   642   946 I AppWidgetServiceImpl: cancelBroadcastsLocked() for Provider{ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}}|11-15 00:23:51.126   642   946 I AppWidgetServiceImpl: cancelBroadcastsLocked() for Provider{ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}}|11-15 00:23:54.733   642   946 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_UNSTOPPED on user 0|11-15 00:23:54.733   642   946 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10216 package org.chyavorec.app isStopped false|11-15 00:23:57.822   642  1064 I AppWidgetServiceImpl: getAppWidgetIds() 0|11-15 00:23:57.823   642  1064 I AppWidgetServiceImpl: getAppWidgetIds() 0|11-15 00:23:57.825   642  1064 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0|
+## WD4. Launcher restarted in dark (force-stop of the launcher), then system light and app theme „Както системата“
+WIDGET 50-launcher-restarted: found after 1 page swipe(s) from the first home page; night: Night mode: yes
+WIDGET 50-launcher-restarted: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 50-launcher-restarted: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+WIDGET 60-sys-light: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 60-sys-light: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 60-sys-light: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+THEME → =Както системата|=Same as the system|=System: Settings now shows: text="Както системата" ; app night mode: 
+WIDGET 61-app-system: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 61-app-system: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 61-app-system: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+## WD5. Does a widget tap still open the app (if the widgets are there)
+WIDGET 70-before-tap: found after 0 page swipe(s) from the first home page; night: Night mode: no
+WIDGET 70-before-tap: views from org.chyavorec.app: 1 [ids: widget_book_author widget_book_cover widget_book_title widget_catalog widget_event widget_event2 widget_event2_date widget_event2_title widget_event_column widget_event_date widget_event_title widget_]; bounds [67 223 1013 811]; texts: Читалище|Сканирай|Каталог|Предстоящи събития|80 г. от създаването на ЮНЕСКО|16 ноември 2026|Панайот Пипков · Ден на семейството|21 ноември 2026|Кн
+WIDGET 70-before-tap: bound ids [id=2 id=3 ]; providers:  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver  2 ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver 
+widget 'Каталог' tap → fg org.chyavorec.app/org.chyavorec.app.MainActivity; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+  [0] id=2
+    host=HostId{user:0, app:10180, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.ChitalishteWidgetReceiver}}
+  [1] id=3
+    host=HostId{user:0, app:10180, hostId:1024, pkg:com.google.android.apps.nexuslauncher}
+    provider=ProviderId{user:0, app:10216, cmp:ComponentInfo{org.chyavorec.app/org.chyavorec.app.widget.BookOfTheDayWidgetReceiver}}
+WD part: FATAL(any process)=0 of the app=0 ANR=0
+contact sheets: 3 in sheets/
+contact sheets: 3 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4025', '5684', '6439']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 35
+   skipped-frames events=35 max=136 total=1917
+== Davey: 115
+   davey events=115 max=3789ms median=904ms
+== NativeLink: 3
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
