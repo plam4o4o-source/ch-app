@@ -111,4 +111,56 @@ class FolkTokensTest {
             .mapNotNull { f -> dash.findAll(f.readText()).count().takeIf { it > 0 }?.let { "${f.name}: $it× dashPathEffect( — ползвай StitchSpec.Running/Basting" } }
         assertEquals(emptyList<String>(), problems)
     }
+
+    @Test fun motionScaleIsOrdered() {
+        val scale = listOf(AppMotion.StaggerMs, AppMotion.QuickMs, AppMotion.ShortMs, AppMotion.MediumMs, AppMotion.LongMs, AppMotion.StitchMs)
+        assertEquals(scale.sorted(), scale)
+        assertEquals(scale.size, scale.toSet().size)
+    }
+
+    /**
+     * Изключенията от скалата на движението: файл (под `ui/`) → суровите числа в tween/durationMillis/
+     * delayMillis и защо. Само цикли — еднократните движения са стъпки от [AppMotion] или изрази от тях.
+     */
+    private val motionAllowed: Map<String, Pair<Set<Int>, String>> = mapOf(
+        "components/Skeleton.kt" to (setOf(1300) to "безкрайният цикъл на отблясъка на скелета, не еднократно движение"),
+        "components/LeafRefresh.kt" to (setOf(1300) to "безкрайният цикъл на конеца при опресняване (в такт със скелета)"),
+    )
+
+    // Низовете се прескачат цели (иначе "image/*" би започнал „коментар“).
+    private val comments = Regex(""""(?:\\.|[^"\\\n])*"|/\*[\s\S]*?\*/|//[^\n]*""")
+    private val rawDuration = Regex("""\btween\s*(?:<[^>()]*>)?\s*\(\s*(?:durationMillis\s*=\s*)?(\d[\d_]*)|\b(?:durationMillis|delayMillis)\s*=\s*(\d[\d_]*)""")
+
+    /**
+     * Една скала на движението: в `ui/` (екраните, общите компоненти, навигацията) няма
+     * `tween(<число>)`, `tween<T>(<число>)`, `durationMillis = <число>` или `delayMillis = <число>` —
+     * само [AppMotion] (QuickMs/ShortMs/MediumMs/LongMs/StitchMs/StaggerMs) или изрази от тях.
+     */
+    @Test fun motionUsesTheDurationScale() {
+        val root = File("src/main/kotlin")
+        val files = root.walk().filter { it.isFile && it.extension == "kt" && it.invariantSeparatorsPath.contains("/ui/") }.toList()
+        assertTrue(files.count { it.invariantSeparatorsPath.contains("/ui/screens/") } > 30, "няма екрани в ${root.absolutePath}")
+        assertTrue(files.any { it.invariantSeparatorsPath.endsWith("/ui/components/Motion.kt") }, "няма ui/components/Motion.kt")
+        val problems = mutableListOf<String>()
+        val used = mutableMapOf<String, MutableSet<Int>>()
+        for (f in files) {
+            val key = f.invariantSeparatorsPath.substringAfter("/ui/")
+            // Коментарите не се броят (редовете остават на мястото си).
+            val code = comments.replace(f.readText()) { m -> if (m.value.startsWith('"')) m.value else m.value.filter { it == '\n' } }
+            val allowed = motionAllowed[key]?.first.orEmpty()
+            for (m in rawDuration.findAll(code)) {
+                val n = (m.groupValues[1].ifEmpty { m.groupValues[2] }).replace("_", "").toInt()
+                if (n in allowed) { used.getOrPut(key) { mutableSetOf() } += n; continue }
+                val line = code.substring(0, m.range.first).count { it == '\n' } + 1
+                problems += "ui/$key:$line: „${m.value.trim()}“ — ползвай AppMotion.QuickMs/ShortMs/MediumMs/LongMs/StitchMs/StaggerMs " +
+                    "(или израз като LongMs + QuickMs); цикъл или нарочно време извън скалата — в motionAllowed с причина"
+            }
+        }
+        // И обратното: изключение, което вече не е нужно, се маха (иначе остава вратичка).
+        for ((key, v) in motionAllowed) {
+            val stale = v.first - used[key].orEmpty()
+            if (stale.isNotEmpty()) problems += "ui/$key: изключението $stale вече не се ползва — махни го от motionAllowed"
+        }
+        assertEquals(emptyList<String>(), problems)
+    }
 }

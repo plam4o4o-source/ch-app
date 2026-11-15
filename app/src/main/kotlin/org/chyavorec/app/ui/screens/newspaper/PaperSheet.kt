@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import kotlin.math.max
 
@@ -159,7 +160,7 @@ fun ZoomablePaper(
                 scale = s1; tx = x1; ty = y1
             } else {
                 scope.launch {
-                    animate(0f, 1f, animationSpec = tween(240)) { f, _ ->
+                    animate(0f, 1f, animationSpec = tween(AppMotion.ShortMs)) { f, _ ->
                         scale = s0 + (s1 - s0) * f
                         tx = x0 + (x1 - x0) * f
                         ty = y0 + (y1 - y0) * f

@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.ShevitsaMotif
@@ -248,7 +249,7 @@ fun StitchedMotif(
 fun StitchInOrnament(
     chart: StitchChart,
     modifier: Modifier = Modifier,
-    durationMs: Int = 1400,
+    durationMs: Int = AppMotion.StitchMs + AppMotion.LongMs,
     stillProgress: Float? = null,
     sections: List<Color>? = null,
 ) {

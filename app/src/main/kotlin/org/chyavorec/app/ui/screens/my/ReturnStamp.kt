@@ -90,6 +90,7 @@ import org.chyavorec.app.ui.components.ShaderPool
 import org.chyavorec.app.ui.components.ShaderTags
 import org.chyavorec.app.ui.components.rememberAppHaptics
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.Cormorant
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -118,13 +119,18 @@ data class StampShow(val books: List<HistoryItem>, val year: Int, val yearBefore
 
 /** Времената на анимацията (ms) — на едно място за изгледа и тестовете. */
 internal object StampTiming {
-    const val ENTER = 220
-    const val PRESS = 130
-    const val INK = 520
-    const val HOLD = 550L
-    const val SLIDE = 560
-    const val ROLL = 700L
-    const val OUT = 320L
+    const val ENTER = AppMotion.ShortMs
+    /** Миг „прицелване“ между появата и удара. */
+    const val AIM = AppMotion.StaggerMs * 2L
+    const val PRESS = AppMotion.QuickMs
+    /** Мигновеното сплескване при удара (после — пружина). */
+    const val SQUASH = AppMotion.QuickMs / 2
+    const val INK = AppMotion.LongMs
+    /** Мастилото попива ([INK]) и още миг — после печатът се плъзга. */
+    const val HOLD = INK + AppMotion.StaggerMs.toLong()
+    const val SLIDE = AppMotion.LongMs + AppMotion.StaggerMs
+    const val ROLL = AppMotion.LongMs + AppMotion.ShortMs.toLong()
+    const val OUT = AppMotion.MediumMs.toLong()
 
     /** Статичният ред при намалено движение: първата книга по-дълго, следващите — по-кратко. */
     fun staticMs(index: Int): Long = if (index == 0) 3000L else 2000L
@@ -206,7 +212,7 @@ internal fun ReturnStampPanel(
                 currentOnShown(b.loanId)
             } else {
                 anim.enter.animateTo(1f, tween(StampTiming.ENTER))
-                delay(80)
+                delay(StampTiming.AIM)
                 anim.press.animateTo(1f, tween(StampTiming.PRESS, easing = FastOutLinearInEasing))
                 // Ударът: вибрация „печат“ и (за първата книга) шевичено конфети от печата.
                 haptics.play(HapticSignature.SEAL)
@@ -214,7 +220,7 @@ internal fun ReturnStampPanel(
                 coroutineScope {
                     launch { anim.ink.animateTo(1f, tween(StampTiming.INK)) }
                     launch {
-                        anim.squash.animateTo(0.93f, tween(60))
+                        anim.squash.animateTo(0.93f, tween(StampTiming.SQUASH))
                         anim.squash.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium))
                     }
                     delay(StampTiming.HOLD)
@@ -237,8 +243,8 @@ internal fun ReturnStampPanel(
     AnimatedVisibility(
         visible,
         modifier,
-        enter = if (reduced) EnterTransition.None else expandVertically(tween(260)) + fadeIn(tween(200)),
-        exit = if (reduced) ExitTransition.None else shrinkVertically(tween(300)) + fadeOut(tween(200)),
+        enter = if (reduced) EnterTransition.None else expandVertically(tween(AppMotion.ShortMs)) + fadeIn(tween(AppMotion.ShortMs)),
+        exit = if (reduced) ExitTransition.None else shrinkVertically(tween(AppMotion.MediumMs)) + fadeOut(tween(AppMotion.ShortMs)),
     ) {
         ReturnStampCard(book, anim, geo, counter, latest.year, onOpenHistory)
     }

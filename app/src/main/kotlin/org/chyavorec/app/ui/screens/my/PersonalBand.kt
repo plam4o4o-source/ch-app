@@ -20,6 +20,7 @@ import org.chyavorec.app.ui.components.StitchChart
 import org.chyavorec.app.ui.components.StitchMath
 import org.chyavorec.app.ui.components.StitchedMotif
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.UdcCoverColors
 import org.chyavorec.data.catalog.PersonalShevitsa
@@ -63,7 +64,7 @@ internal fun PersonalBand(
     s: ReadingYear.Summary,
     modifier: Modifier = Modifier,
     still: Boolean = false,
-    durationMs: Int = 2_500,
+    durationMs: Int = AppMotion.StitchMs * 3,
 ) {
     val reduced = rememberReducedMotion()
     val chart = remember(s) { bandChart(s) }

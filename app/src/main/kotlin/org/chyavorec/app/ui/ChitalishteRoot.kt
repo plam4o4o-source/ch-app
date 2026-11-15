@@ -601,7 +601,7 @@ private fun AppNavHost(
     openLink: (String) -> Unit,
     openExternal: (String) -> Unit,
 ) {
-    val dur = 280
+    val dur = AppMotion.MediumMs
     // При изключени анимации (Достъпност) екраните се сменят без преход.
     val reduced = rememberReducedMotion()
     // Детайлните екрани с shared element (корица/снимка) влизат с пружина — в
@@ -613,11 +613,11 @@ private fun AppNavHost(
     // на раздела; излизащият изчезва бързо, влизащият се появява след него.
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val axisPx = with(LocalDensity.current) { 30.dp.roundToPx() } * (if (rtl) -1 else 1)
-    val axisSlide = tween<IntOffset>(300, easing = FastOutSlowInEasing)
+    val axisSlide = tween<IntOffset>(AppMotion.MediumMs, easing = FastOutSlowInEasing)
     fun axisEnter(dir: Int): EnterTransition =
-        slideInHorizontally(axisSlide) { dir * axisPx } + fadeIn(tween(210, delayMillis = 90, easing = LinearOutSlowInEasing))
+        slideInHorizontally(axisSlide) { dir * axisPx } + fadeIn(tween(AppMotion.MediumMs - AppMotion.QuickMs, delayMillis = AppMotion.QuickMs, easing = LinearOutSlowInEasing))
     fun axisExit(dir: Int): ExitTransition =
-        slideOutHorizontally(axisSlide) { -dir * axisPx } + fadeOut(tween(90, easing = FastOutLinearInEasing))
+        slideOutHorizontally(axisSlide) { -dir * axisPx } + fadeOut(tween(AppMotion.QuickMs, easing = FastOutLinearInEasing))
 
     // Смяна на раздел → без shared element (виж LocalSharedTransitionsEnabled).
     var tabSwitch by remember { mutableStateOf(false) }
@@ -886,7 +886,7 @@ private fun NavGraphBuilder.screen(
 ) = composable(route, arguments) { entry ->
     val reduced = rememberReducedMotion()
     val corner = transition.animateDp(
-        transitionSpec = { if (reduced) snap() else tween(280) },
+        transitionSpec = { if (reduced) snap() else tween(AppMotion.MediumMs) },
         label = "screen-corner",
     ) { state -> if (state == EnterExitState.Visible || reduced) 0.dp else 28.dp }
     // Подгъв от бодове по ръба при излизане с жест „назад“ (Android 14+, вж. Hem.kt).

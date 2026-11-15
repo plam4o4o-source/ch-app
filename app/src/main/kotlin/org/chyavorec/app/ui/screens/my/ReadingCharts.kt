@@ -76,6 +76,7 @@ import org.chyavorec.app.ui.components.darkTopHighlight
 import org.chyavorec.app.ui.components.drawStitches
 import org.chyavorec.app.ui.components.stitchBurgundy
 import org.chyavorec.app.ui.components.rememberReducedMotion
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.UdcCoverColors
 import org.chyavorec.app.util.Formatters
@@ -179,7 +180,7 @@ fun ReadingStatsCard(stats: ReadingStats.Summary, onOpenHistory: () -> Unit, mod
     var played by rememberSaveable { mutableStateOf(false) }
     val progress = remember { Animatable(if (reduced || played) 1f else 0f) }
     LaunchedEffect(Unit) {
-        if (progress.value < 1f) progress.animateTo(1f, tween(durationMillis = 1_100, easing = FastOutSlowInEasing))
+        if (progress.value < 1f) progress.animateTo(1f, tween(durationMillis = AppMotion.StitchMs + AppMotion.ShortMs, easing = FastOutSlowInEasing))
         played = true
     }
     Surface(

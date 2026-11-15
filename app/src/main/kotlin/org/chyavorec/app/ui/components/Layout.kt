@@ -103,7 +103,7 @@ internal object CrossStitches {
     fun fraction(progress: Float, index: Int): Float = (progress * COUNT - index).coerceIn(0f, 1f)
 
     /** Колко време бродира (ms) — веднъж, при първото показване. */
-    const val DURATION_MS = 520
+    const val DURATION_MS = AppMotion.LongMs
 }
 
 /**

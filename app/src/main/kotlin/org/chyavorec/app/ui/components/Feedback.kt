@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
 import androidx.compose.foundation.BorderStroke
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.util.Formatters
@@ -436,9 +437,9 @@ fun <T> StateContent(
             if (reduced) {
                 (fadeIn(snap()) togetherWith fadeOut(snap())).using(SizeTransform(clip = false) { _, _ -> snap() })
             } else {
-                (fadeIn(tween(320, delayMillis = 40)) + scaleIn(tween(320), initialScale = 0.985f))
-                    .togetherWith(fadeOut(tween(180)))
-                    .using(SizeTransform(clip = false) { _, _ -> tween(320) })
+                (fadeIn(tween(AppMotion.MediumMs, delayMillis = AppMotion.StaggerMs)) + scaleIn(tween(AppMotion.MediumMs), initialScale = 0.985f))
+                    .togetherWith(fadeOut(tween(AppMotion.ShortMs)))
+                    .using(SizeTransform(clip = false) { _, _ -> tween(AppMotion.MediumMs) })
             }
         },
         label = "state",

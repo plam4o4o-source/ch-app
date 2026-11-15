@@ -32,12 +32,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import org.chyavorec.app.R
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.ui.theme.ShevitsaShaders
 import org.chyavorec.app.ui.theme.SystemBarIcons
 
 /**
- * Кратко анимирано въведение след системния splash (≈1,2 s, само при първото
+ * Кратко анимирано въведение след системния splash (≈1,4 s, само при първото
  * стартиране): логото „изплува“, около него се изписва златен пръстен и се
  * появява „живата шевица“ по краищата, после името на читалището. При изключени
  * анимации се пропуска изцяло.
@@ -54,13 +55,13 @@ fun BrandIntro(onFinished: () -> Unit) {
     LaunchedEffect(Unit) {
         if (reduced) { onFinished(); return@LaunchedEffect }
         coroutineScope {
-            val a = async { logo.animateTo(1f, tween(520, easing = FastOutSlowInEasing)) }
-            val b = async { delay(180); ring.animateTo(1f, tween(700, easing = LinearOutSlowInEasing)) }
-            val c = async { delay(380); text.animateTo(1f, tween(460, easing = FastOutSlowInEasing)) }
+            val a = async { logo.animateTo(1f, tween(AppMotion.LongMs, easing = FastOutSlowInEasing)) }
+            val b = async { delay(AppMotion.QuickMs.toLong()); ring.animateTo(1f, tween(AppMotion.LongMs + AppMotion.ShortMs, easing = LinearOutSlowInEasing)) }
+            val c = async { delay(AppMotion.MediumMs.toLong()); text.animateTo(1f, tween(AppMotion.LongMs, easing = FastOutSlowInEasing)) }
             a.await(); b.await(); c.await()
         }
-        delay(220)
-        exit.animateTo(0f, tween(280))
+        delay(AppMotion.ShortMs.toLong())
+        exit.animateTo(0f, tween(AppMotion.MediumMs))
         onFinished()
     }
     Box(

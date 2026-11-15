@@ -475,6 +475,9 @@ private fun HomeHeader(
 private val HomeBandHeight = 26.dp
 private const val HOME_BAND_PERIOD = 10
 
+/** Смяната на страницата във въртележката (сама и от действията на четеца на екрана). */
+private const val CAROUSEL_PAGE_MS = AppMotion.LongMs + AppMotion.ShortMs
+
 /**
  * Плочката на лентата, нарисувана предварително във фонова нишка (ChitalishteApp.warmUp) —
  * първият кадър на „Начало“ я взема от кеша, а не я рисува на главната нишка. Височината в px е
@@ -515,7 +518,7 @@ private fun HeroCarousel(items: List<NewsArticle>, anchor: HeroAnchor, onOpen: (
     LaunchedEffect(auto, advances, items.size) {
         if (!auto) return@LaunchedEffect
         delay(MotionBudget.CAROUSEL_INTERVAL_MS)
-        carousel.animateScrollToItem((carousel.currentItem + 1) % items.size, animationSpec = tween(700))
+        carousel.animateScrollToItem((carousel.currentItem + 1) % items.size, animationSpec = tween(CAROUSEL_PAGE_MS))
         advances++
     }
     val windowH = windowHeight()
@@ -524,7 +527,7 @@ private fun HeroCarousel(items: List<NewsArticle>, anchor: HeroAnchor, onOpen: (
     val scope = rememberCoroutineScope()
     val nextLabel = stringResource(R.string.home_carousel_next)
     val prevLabel = stringResource(R.string.home_carousel_prev)
-    val pageSpec: AnimationSpec<Float> = if (reduced) snap() else tween(700)
+    val pageSpec: AnimationSpec<Float> = if (reduced) snap() else tween(CAROUSEL_PAGE_MS)
     val pageActions = { page: Int ->
         listOfNotNull(
             CustomAccessibilityAction(nextLabel) { scope.launch { carousel.animateScrollToItem(page + 1, pageSpec) }; true }
@@ -545,8 +548,8 @@ private fun HeroCarousel(items: List<NewsArticle>, anchor: HeroAnchor, onOpen: (
     LaunchedEffect(Unit) {
         if (frameReveal.value < 1f) {
             HeroFrameReveal.played = true
-            delay(350)
-            frameReveal.animateTo(1f, tween(900))
+            delay(AppMotion.MediumMs.toLong())
+            frameReveal.animateTo(1f, tween(AppMotion.StitchMs))
         }
     }
     Column {
