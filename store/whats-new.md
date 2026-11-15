@@ -13,6 +13,22 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.39
+
+### bg
+- Ново: „Дари спомен“ — изпрати стари снимки на читалището направо от телефона (и чрез „Сподели“ от галерията).
+- „Лента на времето“: едра година в медальона, десетилетието в заглавието и по-плавно превъртане.
+- „Познай Яворец“ — по-спокоен вид, конфетите идват по-рано и по-високо, златен отблясък при 5 от 5.
+- Листът на събитието се обръща при отваряне; при вход картата наистина „излита“; по-ясен начален екран.
+- По-ясни рамки и икони, по-добре с TalkBack, на таблет и на тесен екран; примерната карта пести батерия.
+
+### en
+- New: “Donate a memory” — send old photos to the community centre right from your phone (also via “Share” from the gallery).
+- “Timeline”: a large year in each medallion, the decade in the title and smoother scrolling.
+- “Know Yavorets”: a calmer look, confetti comes sooner and higher, a gold shine at 5 out of 5.
+- The event leaf turns as it opens; at sign-in the card really “flies in”; a clearer home screen.
+- Clearer borders and icons, better with TalkBack, on tablets and on narrow screens; the sample card saves battery.
+
 ## 1.2.38
 
 ### bg
