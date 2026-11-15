@@ -2,6 +2,10 @@ package org.chyavorec.app.ui.screens.events
 
 import android.app.Application
 import android.graphics.Bitmap
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,8 +15,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
@@ -21,7 +28,9 @@ import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
@@ -30,6 +39,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.chyavorec.app.ui.assertNoMidWordBreak
+import org.chyavorec.app.ui.components.LocalNavAnimatedScope
+import org.chyavorec.app.ui.components.LocalReducedMotion
 import org.chyavorec.app.ui.theme.ChitalishteTheme
 import org.chyavorec.app.ui.theme.ThemeMode
 import org.chyavorec.domain.model.Event
@@ -41,6 +52,8 @@ import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.time.LocalDate
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 /**
  * Листът на събитието (празник и час на листа, празен ден), кръглите действия и бродираният
@@ -67,10 +80,10 @@ class EventLeafScreenshotTest {
     }
 
     @Composable
-    private fun Page(dark: Boolean = false, fontScale: Float = 1f, content: @Composable () -> Unit) {
+    private fun Page(dark: Boolean = false, fontScale: Float = 1f, reduced: Boolean = false, content: @Composable () -> Unit) {
         ChitalishteTheme(mode = if (dark) ThemeMode.DARK else ThemeMode.LIGHT) {
             val d = LocalDensity.current
-            CompositionLocalProvider(LocalDensity provides Density(d.density, fontScale)) {
+            CompositionLocalProvider(LocalDensity provides Density(d.density, fontScale), LocalReducedMotion provides reduced) {
                 Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(20.dp), contentAlignment = Alignment.TopCenter) {
                     content()
                 }
@@ -193,4 +206,107 @@ class EventLeafScreenshotTest {
         }
         assertEquals(listOf("calendar", "reminder", "route", "source"), clicked)
     }
+
+    // --- Откъснатият отрязък (след връщане от календара) ---
+
+    /** Листът и заглавието под него — както в подробностите (12 dp между тях). */
+    @Composable
+    private fun LeafAndTitle(torn: Boolean) = Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        EventLeaf(concert, LocalDate.parse("2026-12-25"), today, torn = torn)
+        Text(concert.title, style = MaterialTheme.typography.headlineLarge)
+    }
+
+    /**
+     * Отрязъкът се откъсва на пружина и запазва място под себе си (+12 dp), за да не легне върху
+     * заглавието; думите са „Отворено в календара“ — не се знае дали там е запазено.
+     */
+    @Test fun tornStubKeepsClearOfTheTitleAndSaysOpened() {
+        val torn = mutableStateOf(false)
+        compose.setContent { Page { LeafAndTitle(torn.value) } }
+        val leaf = compose.onNode(hasContentDescription("18:30", substring = true))
+        val before = leaf.getUnclippedBoundsInRoot().height
+        torn.value = true
+        compose.waitForIdle()
+        val after = leaf.getUnclippedBoundsInRoot().height
+        assertEquals((before + 12.dp).value, after.value, 0.6f)
+        compose.onNode(hasContentDescription("Отворено в календара", substring = true)).assertExists()
+        compose.onNode(hasContentDescription("Добавено", substring = true)).assertDoesNotExist()
+        shot("w24-event-leaf-stub-torn")
+    }
+
+    @Test fun tornStubDark() {
+        compose.setContent { Page(dark = true) { LeafAndTitle(torn = true) } }
+        shot("w24-event-leaf-stub-torn-dark")
+    }
+
+    @Config(qualifiers = "en-w411dp-h891dp-xhdpi")
+    @Test fun tornStubSaysOpenedInEnglish() {
+        compose.setContent { Page { LeafAndTitle(torn = true) } }
+        compose.onNode(hasContentDescription("Opened in calendar", substring = true)).assertExists()
+    }
+
+    // --- „Падането“ на листа при отваряне на екрана ---
+
+    /** Листът в преход на екран (като в навигацията): [visible] е състоянието на прехода. */
+    private fun turnPage(visible: MutableTransitionState<Boolean>, reduced: Boolean, probe: (State<Float>?) -> Unit) {
+        compose.mainClock.autoAdvance = false
+        compose.setContent {
+            Page(reduced = reduced) {
+                AnimatedVisibility(visibleState = visible, enter = EnterTransition.None, exit = ExitTransition.None) {
+                    CompositionLocalProvider(LocalNavAnimatedScope provides this) {
+                        probe(rememberLeafTurn())
+                        LeafAndTitle(torn = false)
+                    }
+                }
+            }
+        }
+    }
+
+    /** Отваряне: от −75° (обърнат нагоре) към 0° на пружина; „назад“ — обратно нагоре. */
+    @Test fun leafTurnsDownWhenTheScreenOpensAndBackOnBack() {
+        val visible = MutableTransitionState(false)
+        var turn: State<Float>? = null
+        turnPage(visible, reduced = false) { turn = it }
+        visible.targetState = true
+        compose.mainClock.advanceTimeByFrame()
+        compose.mainClock.advanceTimeBy(80)
+        val mid = assertNotNull(turn).value
+        assertTrue(mid > 0.05f && mid < 0.95f, "по средата на падането: $mid")
+        assertTrue(leafTurnDegrees(mid) < -3f && leafTurnDegrees(mid) > LEAF_TURN_DEG)
+        shot("w24-event-leaf-turn-mid")
+        compose.mainClock.advanceTimeBy(1500)
+        assertEquals(1f, turn!!.value, 1e-3f)
+        assertEquals(0f, leafTurnDegrees(turn!!.value), 0.1f)
+        shot("w24-event-leaf-turn-end")
+        // „Назад“: листът се обръща обратно нагоре, докато екранът излиза.
+        visible.targetState = false
+        compose.mainClock.advanceTimeByFrame()
+        compose.mainClock.advanceTimeBy(100)
+        val back = turn!!.value
+        assertTrue(back < 0.95f, "при „назад“ листът се връща нагоре: $back")
+    }
+
+    /** Намалено движение: без завъртане — само кратка проява при отваряне. */
+    @Test fun reducedMotionOnlyFadesTheLeafIn() {
+        val visible = MutableTransitionState(false)
+        var turn: State<Float>? = null
+        turnPage(visible, reduced = true) { turn = it }
+        visible.targetState = true
+        compose.mainClock.advanceTimeByFrame()
+        assertTrue(assertNotNull(turn).value < 1f, "в началото листът е прозрачен")
+        compose.mainClock.advanceTimeBy(1000)
+        assertEquals(1f, turn!!.value, 1e-3f)
+    }
+
+    /** Екранът вече е видим (завъртане, връщане към него) — листът е на мястото си, без повторение. */
+    private fun inPlaceWhenAlreadyVisible(reduced: Boolean) {
+        var turn: State<Float>? = null
+        turnPage(MutableTransitionState(true), reduced = reduced) { turn = it }
+        compose.mainClock.advanceTimeByFrame()
+        assertEquals(1f, assertNotNull(turn).value, 1e-3f)
+    }
+
+    @Test fun leafIsInPlaceWhenTheScreenIsAlreadyVisible() = inPlaceWhenAlreadyVisible(reduced = false)
+
+    @Test fun leafIsInPlaceWhenAlreadyVisibleReducedMotion() = inPlaceWhenAlreadyVisible(reduced = true)
 }

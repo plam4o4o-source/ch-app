@@ -105,22 +105,15 @@ class EventDetailViewModel(
     /** null — няма резултат; true/false — напомнянето е включено/изключено. */
     val reminderResult = MutableStateFlow<Boolean?>(null)
 
-    /** „Добави в календара“ отвори календара; при връщането отрязъкът на листа се откъсва. */
-    private var calendarOpened = false
-    private val _torn = MutableStateFlow(false)
-    /** Събитието е добавено в календара в този екран — отрязъкът е откъснат (веднъж, без повторение). */
-    val torn: StateFlow<Boolean> = _torn.asStateFlow()
+    private val stub = CalendarStub()
+    /** Събитието е отворено в календара от този екран — отрязъкът е откъснат (веднъж, без повторение). */
+    val torn: StateFlow<Boolean> = stub.torn
 
-    fun calendarOpened() {
-        calendarOpened = true
-    }
+    /** „Добави в календара“ отвори приложението за календар. */
+    fun calendarOpened() = stub.opened()
 
     /** Екранът е отново отпред: ако календарът е бил отворен — отрязъкът се откъсва. */
-    fun resumed() {
-        if (!calendarOpened) return
-        calendarOpened = false
-        _torn.value = true
-    }
+    fun resumed() = stub.resumed()
 
     init { load() }
 
@@ -167,5 +160,27 @@ class EventDetailViewModel(
         } else {
             reminderResult.value = reminders.schedule(e)
         }
+    }
+}
+
+/**
+ * Отрязъкът на листа и календарът. Намерението „добави в календара“ не връща резултат —
+ * не се знае дали човекът е запазил събитието или се е отказал. Затова отрязъкът се откъсва
+ * при връщането от календара, а думите на листа са „Отворено в календара“, не „Добавено“.
+ */
+internal class CalendarStub {
+    private var opened = false
+    private val _torn = MutableStateFlow(false)
+    val torn: StateFlow<Boolean> = _torn.asStateFlow()
+
+    fun opened() {
+        opened = true
+    }
+
+    /** Връщане към екрана: само след отворен календар (не при всяко ON_RESUME). */
+    fun resumed() {
+        if (!opened) return
+        opened = false
+        _torn.value = true
     }
 }

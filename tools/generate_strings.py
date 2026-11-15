@@ -406,7 +406,7 @@ S = {
 "events_list_view": ("Изглед списък", "List view"),
 "event_no_date": ("Без обявена дата", "Date not announced"),
 "event_add_calendar": ("Добави в календара", "Add to calendar"),
-"event_added_calendar": ("Добавено в календара", "Added to calendar"),
+"event_opened_calendar": ("Отворено в календара", "Opened in calendar"),
 "event_remind": ("Напомни ми", "Remind me"),
 "event_remove_reminder": ("Премахни напомнянето", "Remove reminder"),
 "event_source": ("Виж публикацията", "View the post"),
