@@ -78,7 +78,8 @@ class DonateMemoryTest {
         assertEquals("Дари спомен — 1 снимка", send.getStringExtra(Intent.EXTRA_SUBJECT))
         val body = send.getStringExtra(Intent.EXTRA_TEXT).orEmpty()
         assertFalse(body.contains("Кой е на снимката"), body)
-        assertFalse(body.contains("Изпраща"), body)
+        assertFalse(body.contains("Изпраща:"), body)
+        assertFalse(body.contains("\n\n\n"), "без празни редове от празните полета")
         assertContains(body, "Изпращам 1 стара снимка")
         // Без „кой“ — мястото; дългото се съкращава.
         val long = DonationForm(place = "Нагоре по реката, при старата воденица на дядо Стоян, където са сенокосите", consent = true)

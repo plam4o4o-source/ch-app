@@ -234,14 +234,13 @@ object DonationMail {
         appendLine(context.getString(R.string.donate_mail_greeting))
         appendLine(context.resources.getQuantityString(R.plurals.donate_mail_intro, photos, photos))
         appendLine()
-        fun line(label: Int, value: String) {
-            if (value.isNotBlank()) appendLine(context.getString(label) + ": " + value.trim())
-        }
-        line(R.string.donate_who, form.who)
-        line(R.string.donate_when, form.time)
-        line(R.string.donate_where, form.place)
-        line(R.string.donate_mail_from, form.contact)
-        appendLine()
+        // Само попълнените полета (без празни редове от празните).
+        val fields = listOf(
+            R.string.donate_who to form.who, R.string.donate_when to form.time,
+            R.string.donate_where to form.place, R.string.donate_mail_from to form.contact,
+        ).filter { it.second.isNotBlank() }
+        fields.forEach { (label, value) -> appendLine(context.getString(label) + ": " + value.trim()) }
+        if (fields.isNotEmpty()) appendLine()
         appendLine(context.getString(R.string.donate_consent))
         appendLine()
         append(context.getString(R.string.donate_mail_footer))
