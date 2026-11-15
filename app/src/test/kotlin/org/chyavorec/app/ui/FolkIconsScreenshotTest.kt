@@ -231,11 +231,14 @@ class FolkIconsScreenshotTest {
                 }
             }
         }
+        // Плочките се рисуват (и картинките им се правят) едва при кадър — снимката го изисква.
         compose.waitForIdle()
+        compose.onRoot().captureToImage()
         val before = FolkPlateBitmaps.count
-        assertTrue(before >= 2)
+        assertTrue(before >= 2, "$before")
         second.value = true
         compose.waitForIdle()
+        compose.onRoot().captureToImage()
         // Същите форми, размер и цветове (иконата е отделно) — нищо ново.
         assertEquals(before, FolkPlateBitmaps.count)
     }
